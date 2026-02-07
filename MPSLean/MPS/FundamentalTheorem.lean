@@ -51,6 +51,69 @@ lemma traceMulRightPi_apply (A : MPSTensor d D)
   simp [traceMulRightPi, Matrix.traceLinearMap_apply]
 
 /-!
+## Shared helper lemmas for the linear extension construction
+
+These factor out the repeated arguments that appear in both `linearExtension_exists_unique`
+and `linearExtension_mul`.
+-/
+
+/-- `SameMPV` implies agreement of traces for all length-2 words. -/
+lemma sameMPV_trace_word2 {A B : MPSTensor d D} (hAB : SameMPV A B) (i j : Fin d) :
+    Matrix.trace (A i * A j) = Matrix.trace (B i * B j) := by
+  have h := SameMPV.trace_evalWord (d := d) (D := D) (A := A) (B := B) hAB [i, j]
+  simpa [evalWord, Matrix.mul_assoc] using h
+
+/-- If `A` is injective, then `traceMulRightPi A` has trivial kernel.
+
+The proof uses nondegeneracy of the trace pairing: if `trace (M * A i) = 0` for all `i`,
+and the `A i` span the full matrix algebra, then `trace (M * N) = 0` for all `N`, hence `M = 0`. -/
+theorem traceMulRightPi_ker_eq_bot {A : MPSTensor d D} (hA : IsInjective A) :
+    (traceMulRightPi (d := d) (D := D) A).ker = ⊥ := by
+  classical
+  let V := Matrix (Fin D) (Fin D) ℂ
+  let ΦA : V →ₗ[ℂ] (Fin d → ℂ) := traceMulRightPi (d := d) (D := D) A
+  have hSpanA : Submodule.span ℂ (Set.range A) = (⊤ : Submodule ℂ V) := by
+    simpa [IsInjective, V] using hA
+  apply (LinearMap.ker_eq_bot').2
+  intro M hM
+  -- Define the linear functional `N ↦ trace (M * N)`.
+  let φ : V →ₗ[ℂ] ℂ :=
+    (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ M)
+  have hφ : φ = 0 := by
+    apply LinearMap.ext_on_range (v := A) (hv := hSpanA)
+    intro i
+    -- `φ (A i) = trace (M * A i)`, and this is `0` since `M ∈ ker ΦA`.
+    have hi : Matrix.trace (M * A i) = 0 := by
+      have := congrArg (fun f : Fin d → ℂ => f i) hM
+      simpa [ΦA] using this
+    simp [φ, hi]
+  -- Use trace nondegeneracy.
+  exact trace_mul_right_eq_zero (D := D) (M := M) fun N => by
+    simpa [φ, Matrix.traceLinearMap_apply] using congrArg (· N) hφ
+
+/-- If `ΦA` is injective and `range ΦA ≤ range ΦB`, then `ΦB` has trivial kernel.
+
+This is the "finrank dance": `ker ΦA = ⊥` implies `finrank (range ΦA) = finrank V`,
+and the range inclusion forces `finrank (range ΦB) ≥ finrank V`, so by rank-nullity `ker ΦB = ⊥`. -/
+theorem ker_bot_of_range_le {V W : Type*} [AddCommGroup V] [Module ℂ V] [Module.Finite ℂ V]
+    [AddCommGroup W] [Module ℂ W]
+    (ΦA ΦB : V →ₗ[ℂ] W) (hKerA : ΦA.ker = ⊥) (hRange : ΦA.range ≤ ΦB.range) :
+    ΦB.ker = ⊥ := by
+  -- From ker ΦA = ⊥, get finrank(range ΦA) = finrank V.
+  have hFinrankRangeA : Module.finrank ℂ ↥ΦA.range = Module.finrank ℂ V := by
+    have hRN := LinearMap.finrank_range_add_finrank_ker (f := ΦA)
+    simp [hKerA] at hRN; omega
+  -- Range inclusion gives finrank(range ΦB) ≥ finrank V.
+  have hFinrankRangeB_ge : Module.finrank ℂ V ≤ Module.finrank ℂ ↥ΦB.range := by
+    calc Module.finrank ℂ V = Module.finrank ℂ ↥ΦA.range := hFinrankRangeA.symm
+    _ ≤ Module.finrank ℂ ↥ΦB.range := Submodule.finrank_mono hRange
+  -- By rank-nullity, finrank(range ΦB) ≤ finrank V, so finrank(ker ΦB) = 0.
+  have hRN := LinearMap.finrank_range_add_finrank_ker (f := ΦB)
+  have hle : Module.finrank ℂ ↥ΦB.range ≤ Module.finrank ℂ V := LinearMap.finrank_range_le ΦB
+  have : Module.finrank ℂ ↥ΦB.ker = 0 := by omega
+  exact (Submodule.finrank_eq_zero (S := ΦB.ker)).1 this
+
+/-!
 ## Linear extension and multiplicativity
 
 The next two lemmas are the key algebraic steps in the single-block Fundamental Theorem.
@@ -85,96 +148,25 @@ theorem linearExtension_exists_unique {A B : MPSTensor d D}
     simpa [hSpanA] using
       (span_range_eq_top_iff_surjective_fintypeLinearCombination (R := ℂ) (v := A))
 
-  -- From `SameMPV`, we get agreement of traces of all length-2 words.
-  have htr2 : ∀ i j : Fin d, Matrix.trace (A i * A j) = Matrix.trace (B i * B j) := by
-    intro i j
-    have h := SameMPV.trace_evalWord (d := d) (D := D) (A := A) (B := B) hAB [i, j]
-    simpa [evalWord, Matrix.mul_assoc] using h
-
   -- The two "Gram matrix" maps `Φ ∘ lc` coincide.
   have hComp : (ΦA ∘ₗ lcA) = (ΦB ∘ₗ lcB) := by
     ext c j
     simp [ΦA, ΦB, lcA, lcB, Fintype.linearCombination_apply, Finset.sum_mul,
-      Matrix.trace_sum, Matrix.trace_smul, htr2]
+      Matrix.trace_sum, Matrix.trace_smul, sameMPV_trace_word2 hAB]
 
-  -- `ΦA` has the same range as `ΦA ∘ lcA` because `lcA` is surjective.
-  have hRangeΦA : ΦA.range = (ΦA ∘ₗ lcA).range := by
-    have hTop : lcA.range = ⊤ := LinearMap.range_eq_top.2 hSurj_lcA
-    -- `range (ΦA ∘ lcA) = map ΦA (range lcA) = map ΦA ⊤ = range ΦA`.
-    have : (ΦA ∘ₗ lcA).range = ΦA.range := by
-      calc
-        (ΦA ∘ₗ lcA).range = Submodule.map ΦA lcA.range := by
-          simp [LinearMap.range_comp]
-        _ = Submodule.map ΦA ⊤ := by
-          simp [hTop]
-        _ = ΦA.range := (LinearMap.range_eq_map ΦA).symm
-    exact this.symm
-
-  -- Therefore `range ΦA ≤ range ΦB`.
+  -- `range ΦA ≤ range ΦB` because `ΦA ∘ lcA = ΦB ∘ lcB` and `lcA` is surjective.
   have hRangeLe : ΦA.range ≤ ΦB.range := by
+    have hTop : lcA.range = ⊤ := LinearMap.range_eq_top.2 hSurj_lcA
     calc
-      ΦA.range = (ΦA ∘ₗ lcA).range := hRangeΦA
-      _ = (ΦB ∘ₗ lcB).range := by
-            simpa [hComp] using congrArg LinearMap.range hComp
+      ΦA.range = Submodule.map ΦA ⊤ := (LinearMap.range_eq_map ΦA)
+      _ = Submodule.map ΦA lcA.range := by rw [hTop]
+      _ = (ΦA ∘ₗ lcA).range := by simp [LinearMap.range_comp]
+      _ = (ΦB ∘ₗ lcB).range := by rw [hComp]
       _ ≤ ΦB.range := LinearMap.range_comp_le_range lcB ΦB
 
-  -- `ΦA` is injective: if `trace (M * A i) = 0` for all `i`, then `M = 0`.
-  have hKerΦA : ΦA.ker = ⊥ := by
-    apply LinearMap.ker_eq_bot.2
-    intro M hM
-    -- Define the linear functional `N ↦ trace (M * N)`.
-    let tr : V →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
-    let φ : V →ₗ[ℂ] ℂ := tr.comp (LinearMap.mulLeft ℂ M)
-    have hφ : φ = 0 := by
-      apply LinearMap.ext_on_range (v := A) (hv := hSpanA)
-      intro i
-      -- `φ (A i) = trace (M * A i)`, and this is `0` since `M ∈ ker ΦA`.
-      have hi : Matrix.trace (M * A i) = 0 := by
-        have := congrArg (fun f : Fin d → ℂ => f i) (show ΦA M = 0 by simpa [LinearMap.mem_ker] using hM)
-        simpa [ΦA] using this
-      simp [φ, tr, hi]
-    have hAll : ∀ N : V, Matrix.trace (M * N) = 0 := by
-      intro N
-      have : φ N = 0 := by
-        simp [hφ]
-      simpa [φ, tr, Matrix.traceLinearMap_apply] using this
-    -- Use trace nondegeneracy.
-    exact trace_mul_right_eq_zero (D := D) (M := M) hAll
-
-  have hFinrankKerΦA : Module.finrank ℂ ↥ΦA.ker = 0 := by
-    have hEq : Module.finrank ℂ ↥ΦA.ker = Module.finrank ℂ ↥(⊥ : Submodule ℂ V) :=
-      LinearEquiv.finrank_eq (LinearEquiv.ofEq ΦA.ker (⊥ : Submodule ℂ V) hKerΦA)
-    simpa [finrank_bot] using hEq
-
-  have hFinrankRangeΦA : Module.finrank ℂ ↥ΦA.range = Module.finrank ℂ V := by
-    have hRN := LinearMap.finrank_range_add_finrank_ker (f := ΦA)
-    have : Module.finrank ℂ ↥ΦA.range + 0 = Module.finrank ℂ V := by
-      simpa [hFinrankKerΦA] using hRN
-    simpa using this
-
-  -- Compare finranks to conclude `ker ΦB = ⊥`.
-  have hFinrankRangeLe : Module.finrank ℂ ↥ΦA.range ≤ Module.finrank ℂ ↥ΦB.range :=
-    Submodule.finrank_mono (hst := hRangeLe)
-
-  have hFinrankRangeΦB_ge : Module.finrank ℂ V ≤ Module.finrank ℂ ↥ΦB.range := by
-    simpa [hFinrankRangeΦA] using hFinrankRangeLe
-
-  have hFinrankRangeΦB_le : Module.finrank ℂ ↥ΦB.range ≤ Module.finrank ℂ V :=
-    Nat.le.intro (Module.finrank ℂ ↥ΦB.ker) (LinearMap.finrank_range_add_finrank_ker (f := ΦB))
-
-  have hFinrankRangeΦB : Module.finrank ℂ ↥ΦB.range = Module.finrank ℂ V :=
-    le_antisymm hFinrankRangeΦB_le hFinrankRangeΦB_ge
-
-  have hFinrankKerΦB : Module.finrank ℂ ↥ΦB.ker = 0 := by
-    -- rank-nullity + `finrank range = finrank V`
-    have hRN := LinearMap.finrank_range_add_finrank_ker (f := ΦB)
-    have hRN' : Module.finrank ℂ V + Module.finrank ℂ ↥ΦB.ker = Module.finrank ℂ V := by
-      simpa [hFinrankRangeΦB] using hRN
-    have hRN'' : Module.finrank ℂ V + Module.finrank ℂ ↥ΦB.ker = Module.finrank ℂ V + 0 := by
-      simpa using hRN'
-    exact Nat.add_left_cancel hRN''
-
-  have hKerΦB : ΦB.ker = ⊥ := (Submodule.finrank_eq_zero (S := ΦB.ker)).1 hFinrankKerΦB
+  -- `ΦA` is injective, and the range inclusion forces `ΦB` to be injective too.
+  have hKerΦA : ΦA.ker = ⊥ := traceMulRightPi_ker_eq_bot hA
+  have hKerΦB : ΦB.ker = ⊥ := ker_bot_of_range_le ΦA ΦB hKerΦA hRangeLe
 
   -- Choose a left inverse `g` of `ΦB`.
   obtain ⟨g, hg⟩ := ΦB.exists_leftInverse_of_injective hKerΦB
@@ -185,13 +177,14 @@ theorem linearExtension_exists_unique {A B : MPSTensor d D}
     -- First show `ΦA (A i) = ΦB (B i)` componentwise.
     have hΦ : ΦA (A i) = ΦB (B i) := by
       ext j
-      simpa [ΦA, ΦB, htr2 i j] using (rfl : (Matrix.trace (A i * A j)) = Matrix.trace (A i * A j))
+      simpa [ΦA, ΦB, sameMPV_trace_word2 hAB i j] using
+        (rfl : (Matrix.trace (A i * A j)) = Matrix.trace (A i * A j))
     -- Now apply the left inverse property.
     have : (g.comp ΦB) (B i) = B i := by
       simpa using congrArg (fun f => f (B i)) hg
     calc
       T (A i) = g (ΦA (A i)) := rfl
-      _ = g (ΦB (B i)) := by simpa [hΦ]
+      _ = g (ΦB (B i)) := by rw [hΦ]
       _ = (g.comp ΦB) (B i) := rfl
       _ = B i := this
 
@@ -230,12 +223,7 @@ theorem linearExtension_mul {A B : MPSTensor d D}
   have hSpanA : Submodule.span ℂ (Set.range A) = (⊤ : Submodule ℂ V) := by
     simpa [IsInjective, V] using hA
 
-  -- Trace identities for length-2 and length-3 words.
-  have htr2 : ∀ i j : Fin d, Matrix.trace (A i * A j) = Matrix.trace (B i * B j) := by
-    intro i j
-    have h := SameMPV.trace_evalWord (d := d) (D := D) (A := A) (B := B) hAB [i, j]
-    simpa [evalWord, Matrix.mul_assoc] using h
-
+  -- Trace identities for length-3 words.
   have htr3 : ∀ i j k : Fin d,
       Matrix.trace (A i * A j * A k) = Matrix.trace (B i * B j * B k) := by
     intro i j k
@@ -248,67 +236,18 @@ theorem linearExtension_mul {A B : MPSTensor d D}
     intro i
     ext j
     -- Reduce to the length-2 trace identity.
-    simpa [ΦA, ΦB, LinearMap.comp_apply, hT i] using (htr2 i j).symm
+    simpa [ΦA, ΦB, LinearMap.comp_apply, hT i] using (sameMPV_trace_word2 hAB i j).symm
 
   have hΦ_apply : ∀ M : V, ΦB (T M) = ΦA M := by
     intro M
-    -- Apply the linear-map equality at `M`.
     simpa [LinearMap.comp_apply] using congrArg (fun f => f M) hΦComp
 
-  -- `ΦA` is injective (nondegeneracy of trace + spanning of `A`).
-  have hKerΦA : ΦA.ker = ⊥ := by
-    apply (LinearMap.ker_eq_bot').2
-    intro M hM
-    -- Define the linear functional `N ↦ trace (M * N)`.
-    let tr : V →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
-    let φ : V →ₗ[ℂ] ℂ := tr.comp (LinearMap.mulLeft ℂ M)
-    have hφ : φ = 0 := by
-      apply LinearMap.ext_on_range (v := A) (hv := hSpanA)
-      intro i
-      have hi : Matrix.trace (M * A i) = 0 := by
-        have := congrArg (fun f : Fin d → ℂ => f i) hM
-        simpa [ΦA] using this
-      simp [φ, tr, hi]
-    have hAll : ∀ N : V, Matrix.trace (M * N) = 0 := by
-      intro N
-      have : φ N = 0 := by
-        simp [hφ]
-      simpa [φ, tr, Matrix.traceLinearMap_apply] using this
-    -- Use trace nondegeneracy.
-    exact trace_mul_right_eq_zero (D := D) (M := M) hAll
-
-  have hFinrankRangeΦA : Module.finrank ℂ ↥ΦA.range = Module.finrank ℂ V := by
-    have hRN := LinearMap.finrank_range_add_finrank_ker (f := ΦA)
-    have : Module.finrank ℂ ↥ΦA.range + 0 = Module.finrank ℂ V := by
-      simpa [hKerΦA] using hRN
-    simpa using this
-
-  -- Range inclusion `range ΦA ≤ range ΦB` is immediate from `ΦA = ΦB ∘ T`.
+  -- `ΦA` is injective, and `ΦA = ΦB ∘ T` forces `ΦB` to be injective too.
+  have hKerΦA : ΦA.ker = ⊥ := traceMulRightPi_ker_eq_bot hA
   have hRangeLe : ΦA.range ≤ ΦB.range := by
     have : (ΦB ∘ₗ T).range ≤ ΦB.range := LinearMap.range_comp_le_range T ΦB
     simpa [hΦComp] using this
-
-  -- Therefore `ΦB` is injective (dimension count).
-  have hFinrankRangeΦB_ge : Module.finrank ℂ V ≤ Module.finrank ℂ ↥ΦB.range := by
-    have hmono : Module.finrank ℂ ↥ΦA.range ≤ Module.finrank ℂ ↥ΦB.range :=
-      Submodule.finrank_mono (hst := hRangeLe)
-    simpa [hFinrankRangeΦA] using hmono
-
-  have hFinrankRangeΦB_le : Module.finrank ℂ ↥ΦB.range ≤ Module.finrank ℂ V :=
-    LinearMap.finrank_range_le (f := ΦB)
-
-  have hFinrankRangeΦB : Module.finrank ℂ ↥ΦB.range = Module.finrank ℂ V :=
-    le_antisymm hFinrankRangeΦB_le hFinrankRangeΦB_ge
-
-  have hFinrankKerΦB : Module.finrank ℂ ↥ΦB.ker = 0 := by
-    have hRN := LinearMap.finrank_range_add_finrank_ker (f := ΦB)
-    have hRN' : Module.finrank ℂ V + Module.finrank ℂ ↥ΦB.ker = Module.finrank ℂ V := by
-      simpa [hFinrankRangeΦB] using hRN
-    have hRN'' : Module.finrank ℂ V + Module.finrank ℂ ↥ΦB.ker = Module.finrank ℂ V + 0 := by
-      simpa using hRN'
-    exact Nat.add_left_cancel hRN''
-
-  have hKerΦB : ΦB.ker = ⊥ := (Submodule.finrank_eq_zero (S := ΦB.ker)).1 hFinrankKerΦB
+  have hKerΦB : ΦB.ker = ⊥ := ker_bot_of_range_le ΦA ΦB hKerΦA hRangeLe
   have hΦB_inj : Function.Injective ΦB := (LinearMap.ker_eq_bot).1 hKerΦB
 
   -- First, multiplicativity on generators.
@@ -383,25 +322,13 @@ theorem linear_mul_endomorphism_bijective
       have hker : TwoSidedIdeal.ker f = ⊥ := by
         rcases (eq_bot_or_eq_top (TwoSidedIdeal.ker f)) with h | h
         · exact h
-        · have hTzero : T = 0 := by
-            apply LinearMap.ext
-            intro A
-            have hA : f A = 0 := by
-              have hAker : A ∈ TwoSidedIdeal.ker f := by
-                -- `A ∈ ⊤`, then rewrite using `h : ker f = ⊤`.
-                simpa [h] using (show A ∈ (⊤ : TwoSidedIdeal _) from by simp)
-              exact (TwoSidedIdeal.mem_ker (f := f)).1 hAker
-            simpa [f] using hA
-          exact (hNonzero hTzero).elim
+        · exact absurd (LinearMap.ext fun A => by
+            simpa [f] using (TwoSidedIdeal.mem_ker (f := f)).1
+              (by simpa [h] using (show A ∈ (⊤ : TwoSidedIdeal _) from by simp))) hNonzero
 
-      have hinj : Function.Injective T := by
-        -- `ker f = ⊥` implies `f` is injective.
-        simpa [f] using (TwoSidedIdeal.ker_eq_bot (f := f)).1 hker
-
-      have hsurj : Function.Surjective T :=
-        LinearMap.surjective_of_injective (f := T) hinj
-
-      exact ⟨hinj, hsurj⟩
+      exact ⟨by simpa [f] using (TwoSidedIdeal.ker_eq_bot (f := f)).1 hker,
+             LinearMap.surjective_of_injective (by simpa [f] using
+               (TwoSidedIdeal.ker_eq_bot (f := f)).1 hker)⟩
 
 /-- Lemma 6 (Skolem–Noether for matrices, *proved*): any `ℂ`-algebra automorphism of
 `Matrix n n ℂ` is inner.
@@ -476,8 +403,6 @@ theorem skolemNoether_matrix {n : Type*} [Fintype n] [DecidableEq n]
   -- Left: `e (f M)`
   -- Right: `e (X * M * X⁻¹)`
   -- Use multiplicativity of `e` and the `conjAlgEquiv` formula.
-  --
-  -- Start from `e (f M)` and rewrite.
   calc
     e (f M)
         = fEnd (e M) := by simpa [hfEnd]
@@ -504,8 +429,7 @@ In the full paper proof, the key steps are:
 3. Use simplicity of `Matrix (Fin D) (Fin D) ℂ` to show `T` is bijective.
 4. Apply Skolem–Noether to conclude `T` is conjugation by an invertible matrix.
 
-At the moment, steps (1), (2), (3) are recorded as axioms above; step (4) is proved as
-`skolemNoether_matrix`.
+All four steps are fully proved as the lemmas above.
 -/
 
 /-- Build an `ℂ`-algebra homomorphism from a multiplicative `ℂ`-linear map.
@@ -521,15 +445,14 @@ noncomputable def linearMapToAlgHom
   -- First prove `T 1 = 1`.
   have hOne : T (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
     rcases hSurj (1 : Matrix (Fin D) (Fin D) ℂ) with ⟨x, hx⟩
-    have hx' : T x = (1 : Matrix (Fin D) (Fin D) ℂ) := hx
-    have hxMul : T x = T x * T (1 : Matrix (Fin D) (Fin D) ℂ) := by
-      simpa [mul_one] using (hMul x (1 : Matrix (Fin D) (Fin D) ℂ))
-    have : (1 : Matrix (Fin D) (Fin D) ℂ) = (1 : Matrix (Fin D) (Fin D) ℂ) * T 1 := by
-      simpa [hx'] using hxMul
-    -- `1 * T 1 = T 1`.
-    have : (1 : Matrix (Fin D) (Fin D) ℂ) = T (1 : Matrix (Fin D) (Fin D) ℂ) := by
-      simpa using this
-    simpa using this.symm
+    have : (1 : Matrix (Fin D) (Fin D) ℂ) = T 1 := by
+      calc (1 : Matrix (Fin D) (Fin D) ℂ)
+          = T x := hx.symm
+        _ = T (x * 1) := by rw [mul_one]
+        _ = T x * T 1 := hMul x 1
+        _ = 1 * T 1 := by rw [hx]
+        _ = T 1 := one_mul _
+    exact this.symm
 
   -- Now package as an algebra hom.
   refine
@@ -545,6 +468,36 @@ noncomputable def linearMapToAlgHom
   intro c
   -- `algebraMap` is `c • 1`, and `T` is `ℂ`-linear.
   simp [Algebra.algebraMap_eq_smul_one, hOne]
+
+/-- If `T = 0` and `T(A i) = B i` with `SameMPV A B`, then `trace 1 = 0`, contradicting `D > 0`.
+
+This is the `T ≠ 0` argument used in the single-block theorem: `T = 0` forces `B = 0`, hence
+`trace (A i) = 0` for all `i`; since the `A i` span, this means `trace` vanishes on everything,
+but `trace 1 = D ≠ 0`. -/
+private theorem linearExtension_nonzero {A B : MPSTensor d (Nat.succ D')}
+    (hA : IsInjective A) (hAB : SameMPV A B)
+    {T : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ →ₗ[ℂ]
+         Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ}
+    (hT : ∀ i : Fin d, T (A i) = B i) : T ≠ 0 := by
+  intro h0
+  -- `T = 0` implies `B i = 0` for all `i`.
+  have hBzero : ∀ i : Fin d, B i = 0 := fun i => by simpa [h0] using (hT i).symm
+  -- Hence `trace (A i) = 0` for all `i` (from `SameMPV` on length-one words).
+  have hTraceA : ∀ i : Fin d, Matrix.trace (A i) = 0 := fun i => by
+    have htr := SameMPV.trace_evalWord (d := d) (D := Nat.succ D') hAB [i]
+    simpa [evalWord, hBzero i] using htr
+  -- The trace linear functional vanishes on a spanning set, hence on everything.
+  let tr := Matrix.traceLinearMap (Fin (Nat.succ D')) ℂ ℂ
+  have htr_zero : tr = 0 := by
+    apply LinearMap.ext_on_range (v := A)
+      (hv := by simpa [IsInjective] using hA)
+    intro i; simpa [tr, Matrix.traceLinearMap_apply] using hTraceA i
+  -- But `trace 1 = D' + 1 ≠ 0`.
+  have : Matrix.trace (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 0 := by
+    simpa [tr, Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
+  exact absurd this (by
+    simpa [Matrix.trace_one, Fintype.card_fin] using
+      (Nat.cast_ne_zero (R := ℂ) (n := Nat.succ D')).2 (Nat.succ_ne_zero D'))
 
 /-- Single-block (injective) Fundamental Theorem of MPS:
 
@@ -569,55 +522,7 @@ theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
           T (M * N) = T M * T N :=
         linearExtension_mul (d := d) (D := Nat.succ D') (A := A) (B := B) hA hAB (T := T) hT
       -- `T` is nonzero: if `T = 0` then all `trace (A i) = 0`, contradicting injectivity.
-      have hNonzero : T ≠ 0 := by
-        intro h0
-        -- Then `B i = 0` for all `i`.
-        have hBzero : ∀ i : Fin d, B i = 0 := by
-          intro i
-          simpa [h0] using (hT i).symm
-        -- Hence `trace (A i) = 0` for all `i` (from `SameMPV` on length-one words).
-        have hTraceA : ∀ i : Fin d, Matrix.trace (A i) = 0 := by
-          intro i
-          have htr := SameMPV.trace_evalWord (d := d) (D := Nat.succ D') (A := A) (B := B) hAB [i]
-          -- `evalWord A [i] = A i` and `evalWord B [i] = B i`.
-          simpa [evalWord, hBzero i] using htr
-        -- Consider the trace as a linear functional.
-        let tr : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ →ₗ[ℂ] ℂ :=
-          Matrix.traceLinearMap (Fin (Nat.succ D')) ℂ ℂ
-        have hRange : Set.range A ⊆ (tr.ker : Set (Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) := by
-          rintro M ⟨i, rfl⟩
-          -- Show `tr (A i) = 0`.
-          have : tr (A i) = 0 := by
-            simpa [tr, Matrix.traceLinearMap_apply, hTraceA i]
-          simpa [LinearMap.mem_ker] using this
-        have hSpanLe :
-            Submodule.span ℂ (Set.range A)
-              ≤ (tr.ker : Submodule ℂ (Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) :=
-          (Submodule.span_le.2 hRange)
-        have hTopLe :
-            (⊤ : Submodule ℂ (Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) ≤ tr.ker := by
-          -- Rewrite the left-hand side using injectivity (`span (range A) = ⊤`).
-          have hAspan :
-              Submodule.span ℂ (Set.range A) =
-                (⊤ : Submodule ℂ (Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) := by
-            simpa [IsInjective] using hA
-          -- Now the claim is exactly `hSpanLe`.
-          -- (`rw [← hAspan]` turns `⊤ ≤ tr.ker` into `span (range A) ≤ tr.ker`.)
-          simpa [← hAspan] using hSpanLe
-        have hOneMem : (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) ∈ tr.ker :=
-          hTopLe (by simp)
-        have hTraceOne : Matrix.trace (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 0 := by
-          -- Membership in the kernel means `tr 1 = 0`.
-          have : tr (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 0 := by
-            simpa [LinearMap.mem_ker] using hOneMem
-          simpa [tr, Matrix.traceLinearMap_apply] using this
-        -- But `trace 1 = card (Fin (succ D'))` is nonzero.
-        have hCard : (Matrix.trace (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) ≠ 0 := by
-          -- `trace 1 = (succ D' : ℂ)`.
-          simpa [Matrix.trace_one, Fintype.card_fin] using
-            (Nat.cast_ne_zero (R := ℂ) (n := Nat.succ D')).2 (Nat.succ_ne_zero D')
-        exact hCard hTraceOne
-
+      have hNonzero : T ≠ 0 := linearExtension_nonzero hA hAB hT
       have hBij : Function.Bijective T :=
         linear_mul_endomorphism_bijective (D := Nat.succ D') T hMul hNonzero
       -- Promote `T` to an algebra equivalence.

@@ -1,5 +1,4 @@
 import Mathlib.Data.Complex.Basic
-import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Matrix.Trace
 
