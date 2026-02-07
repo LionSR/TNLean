@@ -4,23 +4,11 @@ open scoped Matrix
 
 namespace MPSTensor
 
-open scoped BigOperators
-
 variable {d D : ℕ}
 
 section
 
 variable {A B : MPSTensor d D}
-
-/-- Helper lemma: if `X ∈ GL(D,ℂ)` then (viewed as matrices) we have `(X⁻¹) * X = 1`. -/
-lemma coe_inv_mul (X : GL (Fin D) ℂ) :
-    ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  simp
-
-/-- Helper lemma: if `X ∈ GL(D,ℂ)` then (viewed as matrices) we have `X * (X⁻¹) = 1`. -/
-lemma coe_mul_inv (X : GL (Fin D) ℂ) :
-    (X : Matrix (Fin D) (Fin D) ℂ) * ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  simp
 
 /-- If `B i = X * A i * X⁻¹`, then word evaluation is conjugated:
 `evalWord B w = X * evalWord A w * X⁻¹`. -/
@@ -59,8 +47,7 @@ theorem GaugeEquiv.sameMPV {A B : MPSTensor d D} : GaugeEquiv A B → SameMPV A 
   -- Unfold the MPV coefficient into a trace of a word evaluation.
   simp only [mpv, coeff]
   -- Rewrite `evalWord B` as a conjugation of `evalWord A`.
-  have hw := evalWord_gauge (A := A) (B := B) X hX (List.ofFn σ)
-  rw [hw]
+  rw [evalWord_gauge (A := A) (B := B) X hX (List.ofFn σ)]
   -- Now use cyclicity of trace to remove the conjugation.
   simpa using (trace_conj_eq X (evalWord A (List.ofFn σ))).symm
 

@@ -11,8 +11,6 @@ abbrev MPSTensor (d D : ℕ) := Fin d → Matrix (Fin D) (Fin D) ℂ
 
 namespace MPSTensor
 
-open scoped BigOperators
-
 variable {d D : ℕ}
 
 /-- Evaluate a word `w = [i₁, i₂, …, iₙ]` by multiplying the corresponding matrices

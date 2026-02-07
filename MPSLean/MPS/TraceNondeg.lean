@@ -2,7 +2,7 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Matrix.Trace
 
-open scoped Matrix BigOperators
+open scoped Matrix
 
 namespace Matrix
 

@@ -1,15 +1,11 @@
 import MPSLean.MPS.Defs
 
 import Mathlib.Analysis.Complex.Basic
-import Mathlib.Analysis.RCLike.Basic
-import Mathlib.LinearAlgebra.Matrix.ConjTranspose
 import Mathlib.LinearAlgebra.Matrix.PosDef
 
-open scoped Matrix ComplexOrder
+open scoped Matrix ComplexOrder BigOperators
 
 namespace MPSTensor
-
-open scoped BigOperators
 
 variable {d D : ℕ}
 
