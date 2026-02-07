@@ -1,0 +1,31 @@
+# Lake build artifacts
+/.lake/
+
+# LaTeX compilation artifacts
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+
+# Compiled PDFs (regenerable)
+presentation*.pdf
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Intermediate / generated analysis docs
+FINAL_STATUS.md
+STATUS_UPDATE.md
+PRESENTATION_README.md
+TIKZ_VALIDATION_REPORT.md
+tikz_analysis.md
+improved_mps_tikz.tex
