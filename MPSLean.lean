@@ -3,6 +3,7 @@ import MPSLean.MPS.GaugeInvariance
 import MPSLean.MPS.Transfer
 import MPSLean.MPS.Injective
 import MPSLean.MPS.CanonicalForm
+import MPSLean.MPS.MultiBlock
 import MPSLean.MPS.TraceNondeg
 import MPSLean.MPS.TracePairing
 import MPSLean.MPS.LinearExtension

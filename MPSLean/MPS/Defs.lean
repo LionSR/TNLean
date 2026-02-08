@@ -51,3 +51,21 @@ def SameMPV (A B : MPSTensor d D) : Prop :=
   ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ
 
 end MPSTensor
+
+namespace MPSTensor
+
+/-- MPV equality for possibly different bond dimensions. -/
+def SameMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
+  ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ
+
+/-- Proportionality of MPVs: for each N there exists c_N with V_N(A) = c_N · V_N(B). -/
+def ProportionalMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
+  ∀ N : ℕ, ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
+
+/-- Gauge equivalence up to a global phase. -/
+def GaugePhaseEquiv {d D : ℕ} (A B : MPSTensor d D) : Prop :=
+  ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ∀ i : Fin d,
+    B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
+      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+
+end MPSTensor
