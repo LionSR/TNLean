@@ -339,4 +339,123 @@ theorem fundamentalTheorem_multiBlock_global
 
 end FundamentalTheoremMulti
 
+/-!
+## Bridge to `CanonicalForm`
+
+We show that `CanonicalForm.toTensor` and `toTensorFromBlocks` agree, then lift the multi-block
+theorem to the `CanonicalForm` API.
+-/
+
+section CanonicalFormBridge
+
+open CanonicalForm
+
+/-- `CanonicalForm.toTensor` agrees with `toTensorFromBlocks`. -/
+theorem CanonicalForm.toTensor_eq_toTensorFromBlocks (C : CanonicalForm d) :
+    C.toTensor = toTensorFromBlocks C.μ C.blockTensor := by
+  rfl
+
+/-- If two block-tensor families over the same skeleton have pairwise `SameMPV`,
+the induced block-diagonal tensors are gauge equivalent. -/
+theorem fundamentalTheorem_canonicalForm_sameStructure
+    (C : CanonicalForm d)
+    (B : (k : Fin C.numBlocks) → MPSTensor d (C.blockDim k))
+    (hB_inj : ∀ k, IsInjective (C.blockTensor k))
+    (hSame : ∀ k, SameMPV (C.blockTensor k) (B k)) :
+    GaugeEquiv (C.toTensor) (toTensorFromBlocks C.μ B) := by
+  rw [C.toTensor_eq_toTensorFromBlocks]
+  exact fundamentalTheorem_multiBlock_global C.μ C.blockTensor B hB_inj hSame
+
+end CanonicalFormBridge
+
+/-!
+## Converse and global `SameMPV` transfer
+
+The converse direction: global gauge equivalence implies global `SameMPV` (unconditional).
+Also: per-block `SameMPV` implies global `SameMPV` for the block-diagonal tensors.
+-/
+
+section Converse
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+
+/-- Global gauge equivalence of block-diagonal tensors implies they generate the same MPV
+family. This is an immediate consequence of `GaugeEquiv.sameMPV`. -/
+theorem gaugeEquiv_toTensorFromBlocks_implies_sameMPV
+    (μ : Fin r → ℂ) (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hGauge : GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+    SameMPV (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
+  GaugeEquiv.sameMPV hGauge
+
+/-- Per-block `SameMPV` implies global `SameMPV` for the block-diagonal tensors.
+
+The proof goes through `mpv_toTensor_eq_sum` on both sides: each MPV expands as
+`∑ k, μ_k^N · mpv(blockTensor_k)(σ)`, and the per-block hypothesis makes the summands agree. -/
+theorem sameMPV_toTensorFromBlocks_of_blockSameMPV
+    (μ : Fin r → ℂ) (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hSame : ∀ k, SameMPV (A k) (B k)) :
+    SameMPV (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) := by
+  -- Build canonical forms to use `mpv_toTensor_eq_sum`.
+  -- We work directly with `toTensorFromBlocks` and expand both sides.
+  intro N σ
+  -- Build CanonicalForms for A and B sides (with dummy injectivity).
+  -- Instead, unfold everything manually.
+  -- Both sides equal `∑ k, μ_k^N • mpv(A_k or B_k)(σ)` via `mpv_toTensor_eq_sum`.
+  --
+  -- We use the fact that `toTensorFromBlocks μ A = (C_A).toTensor` for an appropriate
+  -- `CanonicalForm`, but constructing a `CanonicalForm` requires `block_injective`.
+  -- Instead, we replicate the calculation directly.
+  --
+  -- Actually, `mpv_toTensor_eq_sum` requires a `CanonicalForm` which bundles injectivity.
+  -- We don't have injectivity here. So we prove it directly by unfolding.
+  simp only [mpv, coeff]
+  -- Let `w` be the word for σ.
+  set w := List.ofFn σ
+  have hwlen : w.length = N := by simp [w]
+  -- Abbreviations for the `Σ`-type index.
+  let α := (k : Fin r) × Fin (dim k)
+  let e : α ≃ Fin (∑ k, dim k) := finSigmaFinEquiv (m := r) (n := dim)
+  -- Both `toTensorFromBlocks μ X` unfold to `reindex e e ∘ blockDiagonal' (fun k => μ k • X k i)`.
+  -- Trace is invariant under reindex.
+  -- evalWord commutes with reindex.
+  -- evalWord of blockDiagonal' with scaling gives blockDiagonal' with μ^N scaling.
+  -- Trace of blockDiagonal' is sum of traces.
+  let BD_A : Fin d → Matrix α α ℂ := fun i => Matrix.blockDiagonal' (fun k => μ k • A k i)
+  let BD_B : Fin d → Matrix α α ℂ := fun i => Matrix.blockDiagonal' (fun k => μ k • B k i)
+  -- Step 1: evalWord of toTensorFromBlocks = reindex of evalWord of BD
+  have hEvalA : MPSTensor.evalWord (toTensorFromBlocks μ A) w =
+      (Matrix.reindex e e) (_root_.evalWord BD_A w) := by
+    have hTensorA : (fun i : Fin d => toTensorFromBlocks μ A i) =
+        fun i => (Matrix.reindex e e) (BD_A i) := by
+      funext i; simp [toTensorFromBlocks, BD_A, e]; rfl
+    simpa [hTensorA] using (evalWord_reindex (d := d) (e := e) (A := BD_A) w)
+  have hEvalB : MPSTensor.evalWord (toTensorFromBlocks μ B) w =
+      (Matrix.reindex e e) (_root_.evalWord BD_B w) := by
+    have hTensorB : (fun i : Fin d => toTensorFromBlocks μ B i) =
+        fun i => (Matrix.reindex e e) (BD_B i) := by
+      funext i; simp [toTensorFromBlocks, BD_B, e]; rfl
+    simpa [hTensorB] using (evalWord_reindex (d := d) (e := e) (A := BD_B) w)
+  rw [hEvalA, hEvalB]
+  -- Step 2: Remove reindex from trace
+  rw [Matrix.trace_reindex, Matrix.trace_reindex]
+  -- Step 3: Expand evalWord of BD into blockDiagonal'
+  have hBDA : _root_.evalWord BD_A w =
+      Matrix.blockDiagonal' (fun k => (μ k) ^ w.length • _root_.evalWord (A k) w) := by
+    simpa [BD_A] using (evalWord_blockDiagonal'_smul (μ := μ) (A := A) w)
+  have hBDB : _root_.evalWord BD_B w =
+      Matrix.blockDiagonal' (fun k => (μ k) ^ w.length • _root_.evalWord (B k) w) := by
+    simpa [BD_B] using (evalWord_blockDiagonal'_smul (μ := μ) (A := B) w)
+  rw [hBDA, hBDB]
+  -- Step 4: Trace of blockDiagonal' = sum of traces
+  rw [Matrix.trace_blockDiagonal', Matrix.trace_blockDiagonal']
+  -- Step 5: Per-block SameMPV makes the summands equal
+  congr 1; funext k
+  rw [Matrix.trace_smul, Matrix.trace_smul, hwlen]
+  congr 1
+  -- Convert _root_.evalWord to MPSTensor.evalWord, then use hSame
+  simp only [evalWord_aux_eq]
+  exact (hSame k N σ)
+
+end Converse
+
 end MPSTensor
