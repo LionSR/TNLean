@@ -72,7 +72,7 @@
 \newcommand{\GLC}{\mathrm{GL}}
 
 \title{\textbf{Formalizing the Fundamental Theorem of\\Matrix Product States}}
-\subtitle{{\small 1228 lines $\cdot$ 12 modules $\cdot$ 0 sorries\;\;$\cdot$\;\;Mathlib v4.27.0\;\;$\cdot$\;\;arXiv:2011.12127}}
+\subtitle{{\small 1595 lines $\cdot$ 13 modules $\cdot$ 0 sorries\;\;$\cdot$\;\;Mathlib v4.27.0\;\;$\cdot$\;\;arXiv:2011.12127}}
 \date{}
 \author{}
 
@@ -217,8 +217,8 @@ V^{(N)} = \textstyle\sum_k \mu_k^N \cdot V_k^{(N)}
 
 \vspace{0.5em}
 \proved{Single-block theorem}\\
-\inprog{Multi-block decomposition}\\
-\future{Full corollary}
+\proved{Multi-block decomposition}\\
+\proved{Full corollary}
 \end{columns}
 \end{frame}
 
@@ -430,7 +430,7 @@ theorem riemann_hypothesis : RiemannHypothesis := by
 \end{itemize}
 
 \vspace{0.3em}
-\textbf{Expansion factor:} $\sim$3 pages of paper proof $ \longrightarrow $ 1228 lines of Lean $ \approx  10\times$ (typical)
+\textbf{Expansion factor:} $\sim$3 pages of paper proof $ \longrightarrow $ 1595 lines of Lean $ \approx  10\times$ (typical)
 \end{frame}
 
 %======================================================================
@@ -932,9 +932,9 @@ If block MPVs are nonzero and $\mu_k$ distinct, blocks can be separated.}
 \node[box,done] (s2) at (0,2.4) {\proved{Canonical form + toTensor construction}};
 \node[box,done] (s3) at (0,1.6) {\proved{MPV decomposition: $V^{(N)} = \sum_k \mu_k^N V_k^{(N)}$}};
 \node[box,done] (s4) at (0,0.8) {\proved{Vandermonde separation of blocks}};
-\node[box,next] (s5) at (0,0) {\inprog{Block matching: equal sums $\Rightarrow$ pairwise match}};
-\node[box,next] (s6) at (0,-0.8) {\inprog{Apply single-block theorem per matched pair}};
-\node[box,fut] (s7) at (0,-1.6) {\future{Assemble global gauge transform (full Corollary 4.2)}};
+\node[box,done] (s5) at (0,0) {\proved{Block matching: equal sums $\Rightarrow$ pairwise match}};
+\node[box,done] (s6) at (0,-0.8) {\proved{Apply single-block theorem per matched pair}};
+\node[box,done] (s7) at (0,-1.6) {\proved{Assemble global gauge transform}};
 \end{tikzpicture}
 \end{center}
 
@@ -1033,6 +1033,7 @@ If block MPVs are nonzero and $\mu_k$ distinct, blocks can be separated.}
 \node[mod] (mb) at (6,3.9) {MultiBlk (285)};
 \node[mod,fill=leangreen!40!black] (ft) at (1.5,5.2) {\textbf{FundThm (78)}};
 \node[mod,fill=amber!40!black] (bn) at (5,5.2) {BasisNorm (162)};
+\node[mod,fill=leangreen!40!black] (ftm) at (3.5,6.5) {\textbf{FundThmMulti (354)}};
 \draw[arr] (defs) -- (gauge);
 \draw[arr] (defs) -- (trans);
 \draw[arr] (defs) -- (inj);
@@ -1046,6 +1047,8 @@ If block MPVs are nonzero and $\mu_k$ distinct, blocks can be separated.}
 \draw[arr] (cf) -- (mb);
 \draw[arr] (gauge) -- (mb);
 \draw[arr] (mb) -- (bn);
+\draw[arr] (ft) -- (ftm);
+\draw[arr] (mb) -- (ftm);
 \end{tikzpicture}
 \end{center}
 
@@ -1056,8 +1059,8 @@ If block MPVs are nonzero and $\mu_k$ distinct, blocks can be separated.}
 \hline
 \textbf{Metric} & \textbf{Value} \\
 \hline
-Total lines of Lean 4 & 1228 \\
-Modules & 12 \\
+Total lines of Lean 4 & 1595 \\
+Modules & 13 \\
 Axioms / sorries & \textcolor{leangreen}{0 / 0} \\
 Mathlib version & v4.27.0 \\
 Expansion factor & $\sim$10$\times$ \\
@@ -1067,8 +1070,9 @@ Expansion factor & $\sim$10$\times$ \\
 \vspace{0.3em}
 {\small\textbf{Largest modules:}}\\
 {\footnotesize
-\texttt{MultiBlock} 285\,l,
-\texttt{BasisNormal} 162\,l,\\
+\texttt{FundTheoremMulti} 354\,l,
+\texttt{MultiBlock} 285\,l,\\
+\texttt{BasisNormal} 162\,l,
 \texttt{LinExt} 159\,l,
 \texttt{SkolNoeth} 152\,l}
 \end{columns}
@@ -1144,7 +1148,7 @@ Expansion factor & $\sim$10$\times$ \\
 {\small Reference: Cirac, P\'erez-Garc\'ia, Schuch \& Verstraete\;\;$\cdot$\;\;\texttt{arXiv:2011.12127}}
 
 \vspace{0.8em}
-\textcolor{leangreen}{\textbf{1228 lines\quad$\cdot$\quad 12 modules\quad$\cdot$\quad 0 sorries\quad$\cdot$\quad 0 axioms}}
+\textcolor{leangreen}{\textbf{1595 lines\quad$\cdot$\quad 13 modules\quad$\cdot$\quad 0 sorries\quad$\cdot$\quad 0 axioms}}
 \end{center}
 \end{frame}
 

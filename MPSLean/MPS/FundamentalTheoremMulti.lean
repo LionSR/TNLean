@@ -79,7 +79,7 @@ noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
                 (M := fun k => (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
                 (N := fun k => ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ))).symm
       _ = 1 := by
-            simp
+            simp only [Matrix.mul_inv_of_invertible]
             change
               (Matrix.blockDiagonal'
                   (1 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) = 1
@@ -98,7 +98,7 @@ noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
                 (M := fun k => ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
                 (N := fun k => (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ))).symm
       _ = 1 := by
-            simp
+            simp only [Matrix.inv_mul_of_invertible]
             change
               (Matrix.blockDiagonal'
                   (1 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) = 1
@@ -179,7 +179,6 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
   let XBDinv : Matrix α α ℂ :=
     Matrix.blockDiagonal' (fun k : Fin r =>
       ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
-
   -- Unfold the `Fin`-indexed block-diagonal tensors as reindexings of the `α`-indexed ones.
   have htoA : toTensorFromBlocks (d := d) (μ := μ) A i = f BD_A := by
     simp [toTensorFromBlocks, BD_A, f, e]
@@ -187,7 +186,6 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
   have htoB : toTensorFromBlocks (d := d) (μ := μ) B i = f BD_B := by
     simp [toTensorFromBlocks, BD_B, f, e]
     rfl
-
   -- Blockwise scaling + conjugation.
   have hblock :
       (fun k : Fin r => (μ k) • (B k i)) =
@@ -200,7 +198,7 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
     have hBk : B k i =
         (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * A k i *
           (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) := by
-      simpa using hX k i
+      simp [hX]
     -- Now manipulate the scalar factor.
     calc
       (μ k) • (B k i) =
@@ -212,20 +210,13 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
           ((μ k) • ((X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * A k i)) *
             (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) := by
             -- Pull the scalar out of the right multiplication.
-            simpa [Matrix.mul_assoc] using
-              (Matrix.smul_mul (μ k)
-                ((X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * A k i)
-                (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)).symm
+            simp [Matrix.mul_assoc]
       _ =
           ((X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * ((μ k) • (A k i))) *
             (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) := by
             -- Move the scalar onto `A k i`.
             -- `X * (μ • A) = μ • (X * A)`.
-            simpa [Matrix.mul_assoc] using
-              congrArg (fun M : Matrix (Fin (dim k)) (Fin (dim k)) ℂ =>
-                M * (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
-                (Matrix.mul_smul
-                  (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (μ k) (A k i) |>.symm)
+            simp [Matrix.mul_assoc]
       _ =
           (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) *
             ((μ k) • (A k i)) *
@@ -236,8 +227,7 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
             ((μ k) • (A k i)) *
               ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) := by
             -- Convert the inverse coming from `GL` into the matrix inverse.
-            simpa [Matrix.GeneralLinearGroup.coe_inv]
-
+            simp
   -- Factor the block diagonal into a product of block diagonals.
   have hBD : BD_B = XBD * BD_A * XBDinv := by
     have hrewrite :
@@ -283,8 +273,7 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
                       (μ k) • (A k i)))
             rw [hleft]
       _ = XBD * BD_A * XBDinv := by
-            simp [Matrix.mul_assoc, Matrix.GeneralLinearGroup.coe_inv]
-
+            simp [Matrix.mul_assoc]
   -- Push the `α`-indexed equality through `f` (i.e. through `reindex`).
   rw [htoB, htoA]
   have hXfin :
@@ -294,10 +283,9 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
       ((Xfin⁻¹ : GL (Fin (∑ k : Fin r, dim k)) ℂ) :
         Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ) = f XBDinv := by
     simp [Xfin, Xσ, XBDinv, f, blockDiagonalGL]
-
   calc
     f BD_B = f (XBD * BD_A * XBDinv) := by
-          simpa [hBD]
+          simp [hBD]
     _ = f XBD * f BD_A * f XBDinv := by
           -- `f` is multiplicative.
           simp [Matrix.mul_assoc, map_mul]

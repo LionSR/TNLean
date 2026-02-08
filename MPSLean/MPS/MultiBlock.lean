@@ -46,11 +46,10 @@ lemma evalWord_blockDiagonal'
   induction w with
   | nil =>
       -- `evalWord` is `1` and `blockDiagonal'` of identity blocks is again `1`.
-      simp [evalWord]
+      simp only [evalWord]
       change (1 : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) =
         Matrix.blockDiagonal' (1 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
-      simpa using
-        (Matrix.blockDiagonal'_one (o := Fin r) (m' := fun k => Fin (dim k)) (α := ℂ)).symm
+      simp
   | cons i w ih =>
       simp [evalWord, ih]
 
@@ -67,14 +66,13 @@ lemma evalWord_blockDiagonal'_smul
   induction w with
   | nil =>
       -- `evalWord` is `1` and `blockDiagonal'` of identity blocks is again `1`.
-      simp [evalWord]
+      simp only [List.length_nil, pow_zero, one_smul]
       change (1 : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) =
         Matrix.blockDiagonal' (1 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
-      simpa using
-        (Matrix.blockDiagonal'_one (o := Fin r) (m' := fun k => Fin (dim k)) (α := ℂ)).symm
+      simp
   | cons i w ih =>
       -- Expand one step of the recursion and insert the induction hypothesis.
-      simp [evalWord, ih, List.length_cons]
+      simp only [List.length_cons, pow_succ']
       -- Use `blockDiagonal'_mul` to multiply blockwise.
       have hmul :
           Matrix.blockDiagonal' (fun k => μ k • A k i) *
@@ -87,8 +85,9 @@ lemma evalWord_blockDiagonal'_smul
       -- Rewrite the blockwise product into a single scalar power.
       -- Key identity: `(μ • M₁) * (μ^n • M₂) = μ^(n+1) • (M₁ * M₂)`.
       -- Then fold back the recursive definition of `evalWord`.
-      simp [hmul, evalWord, Matrix.smul_mul, Matrix.mul_smul, smul_smul, pow_succ'] <;>
-        (funext k; simp [mul_comm, mul_left_comm, mul_assoc])
+      simp only [evalWord, ih, hmul, Algebra.mul_smul_comm, Algebra.smul_mul_assoc,
+        smul_smul, Matrix.blockDiagonal'_inj]
+      funext k; simp only [mul_comm]
 
 end BlockDiagonal
 
@@ -121,8 +120,8 @@ lemma evalWord_reindex {d D : ℕ} {m : Type*} [Fintype m] [DecidableEq m]
   | nil =>
       -- `reindex` is an algebra equivalence, so it preserves `1`.
       have h1 : (Matrix.reindex e e) (1 : Matrix m m ℂ) = (1 : Matrix (Fin D) (Fin D) ℂ) := by
-        simpa [Matrix.reindexAlgEquiv_apply] using (Matrix.reindexAlgEquiv ℂ ℂ e).map_one
-      simpa [MPSTensor.evalWord, _root_.evalWord, h1]
+        simp
+      simp [MPSTensor.evalWord, _root_.evalWord, h1]
   | cons i w ih =>
       -- One step of the recursion, then use multiplicativity of `reindex`.
       -- `reindexAlgEquiv` is an algebra equivalence, so it preserves multiplication.
@@ -133,7 +132,7 @@ lemma evalWord_reindex {d D : ℕ} {m : Type*} [Fintype m] [DecidableEq m]
         have :=
           (Matrix.reindexAlgEquiv_mul (R := ℂ) (A := ℂ) e (A i) (_root_.evalWord A w))
         -- Convert `reindexAlgEquiv` to `reindex`.
-        simpa [Matrix.reindexAlgEquiv_apply] using this.symm
+        simp
       -- Finish by unfolding `evalWord` on both sides, but without unfolding `Matrix.reindex`.
       simp only [MPSTensor.evalWord, _root_.evalWord, ih]
       exact hmul
@@ -147,9 +146,9 @@ theorem mpv_toTensor_eq_sum (C : CanonicalForm d) {N : ℕ} (σ : Fin N → Fin 
   -- Let `w` be the word corresponding to `σ`.
   let w : List (Fin d) := List.ofFn σ
   have hwlen : w.length = N := by
-    simpa [w] using (List.length_ofFn σ)
+    simp [w]
   -- Unfold the MPV coefficient into a trace of a word evaluation.
-  simp [MPSTensor.mpv, MPSTensor.coeff, w]
+  simp only [MPSTensor.mpv, MPSTensor.coeff]
   -- Unfold `toTensor` and pull `reindex` out of the word evaluation.
   -- The inner tensor lives on the `Σ`-type indices of `blockDiagonal'`.
   classical
@@ -201,17 +200,15 @@ theorem mpv_toTensor_eq_sum (C : CanonicalForm d) {N : ℕ} (σ : Fin N → Fin 
         = Matrix.trace
             (Matrix.blockDiagonal'
               (fun k => (C.μ k) ^ w.length • _root_.evalWord (C.blockTensor k) w)) := by
-            simpa [hBD]
+            simp [hBD]
     _ = ∑ k : Fin C.numBlocks,
           Matrix.trace ((C.μ k) ^ w.length • _root_.evalWord (C.blockTensor k) w) := by
-          simpa using (Matrix.trace_blockDiagonal'
-            (M := fun k => (C.μ k) ^ w.length • _root_.evalWord (C.blockTensor k) w))
+          simp [Matrix.trace_blockDiagonal']
     _ = ∑ k : Fin C.numBlocks,
           (C.μ k) ^ w.length • Matrix.trace (_root_.evalWord (C.blockTensor k) w) := by
           refine Finset.sum_congr rfl ?_
-          intro k hk
-          simpa using
-            (Matrix.trace_smul ((C.μ k) ^ w.length) (_root_.evalWord (C.blockTensor k) w))
+          intro k _hk
+          simp [Matrix.trace_smul]
     _ = ∑ k : Fin C.numBlocks,
           (C.μ k) ^ N • Matrix.trace (MPSTensor.evalWord (C.blockTensor k) w) := by
           -- Replace `w.length` by `N` and convert `_root_.evalWord` on each block.
@@ -245,12 +242,12 @@ theorem GaugePhaseEquiv.proportionalMPV₂_right {d D : ℕ} {A B : MPSTensor d 
     | cons i w ih =>
         -- One step: insert the gauge+phase relation and use associativity.
         simp [MPSTensor.evalWord, hX, ih, Matrix.mul_assoc, pow_succ',
-          Matrix.smul_mul, Matrix.mul_smul, smul_smul] <;>
-          simpa [mul_comm, mul_left_comm, mul_assoc]
+          smul_smul] ;
+          simp [mul_comm]
   -- Take traces: trace of conjugation is invariant, and trace is linear in scalar factors.
   -- Also `w.length = N`.
   have hwlen : w.length = N := by
-    simpa [w] using (List.length_ofFn σ)
+    simp [w]
   -- Use `hEval` and simplify.
   -- First pull out the scalar factor, then remove the conjugation.
   --
@@ -269,17 +266,14 @@ theorem GaugePhaseEquiv.proportionalMPV₂_right {d D : ℕ} {A B : MPSTensor d 
           Matrix.trace
             ((X : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
               ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
-          simpa using (Matrix.trace_smul (ζ ^ w.length)
-            ((X : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
-              ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
+          simp
     _ = (ζ ^ w.length) • Matrix.trace (MPSTensor.evalWord A w) := by
           -- Remove the conjugation via cyclicity of trace.
           -- We reuse the lemma from `GaugeInvariance`.
           -- Scale the equality from `trace_conj_eq`.
-          simpa using
-            congrArg (fun t : ℂ => (ζ ^ w.length) • t)
-              (trace_conj_eq (D := D) X (MPSTensor.evalWord A w))
+          congr 1
+          exact trace_conj_eq (D := D) X (MPSTensor.evalWord A w)
     _ = (ζ ^ N) • Matrix.trace (MPSTensor.evalWord A w) := by
-          simpa [hwlen]
+          simp [hwlen]
 
 end MPSTensor
