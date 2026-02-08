@@ -1,6 +1,10 @@
-import MPSLean.Basic
-
 import MPSLean.MPS.Defs
 import MPSLean.MPS.GaugeInvariance
 import MPSLean.MPS.Transfer
 import MPSLean.MPS.Injective
+import MPSLean.MPS.CanonicalForm
+import MPSLean.MPS.TraceNondeg
+import MPSLean.MPS.TracePairing
+import MPSLean.MPS.LinearExtension
+import MPSLean.MPS.SkolemNoether
+import MPSLean.MPS.FundamentalTheorem
