@@ -10,3 +10,4 @@ import MPSLean.MPS.TracePairing
 import MPSLean.MPS.LinearExtension
 import MPSLean.MPS.SkolemNoether
 import MPSLean.MPS.FundamentalTheorem
+import MPSLean.MPS.FundamentalTheoremMulti
