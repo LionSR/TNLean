@@ -34,24 +34,20 @@ private theorem linearExtension_nonzero {A B : MPSTensor d (Nat.succ D')}
          Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ}
     (hT : ∀ i : Fin d, T (A i) = B i) : T ≠ 0 := by
   intro h0
-  -- `T = 0` implies `B i = 0` for all `i`.
-  have hBzero : ∀ i : Fin d, B i = 0 := fun i => by simpa [h0] using (hT i).symm
-  -- Hence `trace (A i) = 0` for all `i` (from `SameMPV` on length-one words).
-  have hTraceA : ∀ i : Fin d, Matrix.trace (A i) = 0 := fun i => by
-    have htr := SameMPV.trace_evalWord (d := d) (D := Nat.succ D') hAB [i]
-    simpa [evalWord, hBzero i] using htr
-  -- The trace linear functional vanishes on a spanning set, hence on everything.
-  let tr := Matrix.traceLinearMap (Fin (Nat.succ D')) ℂ ℂ
-  have htr_zero : tr = 0 := by
-    apply LinearMap.ext_on_range (v := A)
-      (hv := by simpa [IsInjective] using hA)
-    intro i; simpa [tr, Matrix.traceLinearMap_apply] using hTraceA i
+  -- `T = 0` implies `B i = 0`, hence `trace (A i) = 0` for all `i`.
+  have hBzero : ∀ i, B i = 0 := fun i => by simpa [h0] using (hT i).symm
+  have hTraceA : ∀ i, Matrix.trace (A i) = 0 := fun i => by
+    simpa [evalWord, hBzero i] using hAB.trace_evalWord [i]
+  -- The trace functional vanishes on a spanning set, hence on everything.
+  have htr_zero : Matrix.traceLinearMap (Fin (Nat.succ D')) ℂ ℂ = 0 := by
+    apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
+    intro i; simpa [Matrix.traceLinearMap_apply] using hTraceA i
   -- But `trace 1 = D' + 1 ≠ 0`.
   have : Matrix.trace (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 0 := by
-    simpa [tr, Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
+    simpa [Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
   exact absurd this (by
     simpa [Matrix.trace_one, Fintype.card_fin] using
-      (Nat.cast_ne_zero (R := ℂ) (n := Nat.succ D')).2 (Nat.succ_ne_zero D'))
+      (Nat.cast_ne_zero (R := ℂ)).2 (Nat.succ_ne_zero D'))
 
 /-- Single-block (injective) Fundamental Theorem of MPS:
 
@@ -60,41 +56,23 @@ meaning `B i = X * A i * X⁻¹` for some invertible matrix `X`. -/
 theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
     (hA : IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B := by
   classical
-  -- The bond dimension `D = 0` is a degenerate subsingleton case.
   cases D with
   | zero =>
-      refine ⟨1, ?_⟩
-      intro i
       -- All `0×0` matrices are equal.
-      simpa using (Subsingleton.elim (B i) (A i))
+      exact ⟨1, fun i => by simpa using Subsingleton.elim (B i) (A i)⟩
   | succ D' =>
       -- Obtain the linear extension `T` with `T (A i) = B i`.
-      rcases (linearExtension_exists_unique hA hAB) with
-        ⟨T, hT, -⟩
-      -- Multiplicativity.
-      have hMul : ∀ M N : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ,
-          T (M * N) = T M * T N :=
-        linearExtension_mul hA hAB hT
-      -- `T` is nonzero: if `T = 0` then all `trace (A i) = 0`, contradicting injectivity.
-      have hNonzero : T ≠ 0 := linearExtension_nonzero hA hAB hT
-      have hBij : Function.Bijective T :=
-        linear_mul_endomorphism_bijective (D := Nat.succ D') T hMul hNonzero
-      -- Promote `T` to an algebra equivalence.
-      let fHom : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ →ₐ[ℂ]
-          Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ :=
-        linearMapToAlgHom (D := Nat.succ D') T hMul hBij.surjective
-      let f : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ ≃ₐ[ℂ]
-          Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ :=
-        AlgEquiv.ofBijective fHom hBij
-      -- Apply Skolem–Noether.
-      rcases skolemNoether_matrix (n := Fin (Nat.succ D')) f with ⟨X, hX⟩
-      refine ⟨X, ?_⟩
-      intro i
+      rcases linearExtension_exists_unique hA hAB with ⟨T, hT, -⟩
+      -- Multiplicativity + nonzero → bijective.
+      have hMul := linearExtension_mul hA hAB hT
+      have hBij := linear_mul_endomorphism_bijective T hMul (linearExtension_nonzero hA hAB hT)
+      -- Promote `T` to an algebra equivalence and apply Skolem–Noether.
+      let fHom := linearMapToAlgHom T hMul hBij.surjective
+      let f := AlgEquiv.ofBijective fHom hBij
+      rcases skolemNoether_matrix f with ⟨X, hX⟩
+      refine ⟨X, fun i => ?_⟩
       -- `B i = T (A i) = f (A i) = X * A i * X⁻¹`.
-      have hfi : f (A i) = B i := by
-        -- `simp` uses `AlgEquiv.ofBijective_apply`.
-        simpa [f, fHom] using (hT i)
-      -- Use the conjugation formula from Skolem–Noether.
-      simpa [hfi] using (hX (A i))
+      have hfi : f (A i) = B i := by simpa [f, fHom] using hT i
+      simpa [hfi] using hX (A i)
 
 end MPSTensor

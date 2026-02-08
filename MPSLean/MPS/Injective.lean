@@ -9,6 +9,10 @@ algebra `Matrix (Fin D) (Fin D) ℂ`. -/
 def IsInjective (A : MPSTensor d D) : Prop :=
   Submodule.span ℂ (Set.range A) = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
 
+/-- Unfolded form of `IsInjective`: the span of the range of `A` equals `⊤`. -/
+lemma IsInjective.span_eq_top {A : MPSTensor d D} (hA : IsInjective A) :
+    Submodule.span ℂ (Set.range A) = ⊤ := hA
+
 /-- `N`-block injectivity: after blocking `N` sites, the set of all products
 `A^{i₁} * ⋯ * A^{i_N}` spans the full matrix algebra.
 

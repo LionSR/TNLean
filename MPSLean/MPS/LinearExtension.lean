@@ -36,17 +36,13 @@ theorem linearExtension_exists_unique {A B : MPSTensor d D}
     ∃! T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
       (∀ i : Fin d, T (A i) = B i) := by
   classical
-  let V := Matrix (Fin D) (Fin D) ℂ
   -- Shorthand for the key linear maps.
-  let ΦA : V →ₗ[ℂ] (Fin d → ℂ) := traceMulRightPi (d := d) (D := D) A
-  let ΦB : V →ₗ[ℂ] (Fin d → ℂ) := traceMulRightPi (d := d) (D := D) B
-  let lcA : (Fin d → ℂ) →ₗ[ℂ] V := Fintype.linearCombination ℂ A
-  let lcB : (Fin d → ℂ) →ₗ[ℂ] V := Fintype.linearCombination ℂ B
-  have hSpanA : Submodule.span ℂ (Set.range A) = (⊤ : Submodule ℂ V) := by
-    simpa [IsInjective, V] using hA
-  have hSurj_lcA : Function.Surjective (Fintype.linearCombination ℂ A) := by
-    -- `IsInjective` is exactly the spanning condition needed for surjectivity.
-    simpa [hSpanA] using
+  let ΦA := traceMulRightPi (d := d) (D := D) A
+  let ΦB := traceMulRightPi (d := d) (D := D) B
+  let lcA := Fintype.linearCombination ℂ A
+  let lcB := Fintype.linearCombination ℂ B
+  have hSurj_lcA : Function.Surjective lcA := by
+    simpa [hA.span_eq_top] using
       (span_range_eq_top_iff_surjective_fintypeLinearCombination (R := ℂ) (v := A))
   -- The two "Gram matrix" maps `Φ ∘ lc` coincide.
   have hComp : (ΦA ∘ₗ lcA) = (ΦB ∘ₗ lcB) := by
@@ -66,36 +62,29 @@ theorem linearExtension_exists_unique {A B : MPSTensor d D}
       _ = (ΦB ∘ₗ lcB).range := by rw [hComp]
       _ ≤ ΦB.range := LinearMap.range_comp_le_range lcB ΦB
   -- `ΦA` is injective, and the range inclusion forces `ΦB` to be injective too.
-  have hKerΦA : ΦA.ker = ⊥ := traceMulRightPi_ker_eq_bot hA
-  have hKerΦB : ΦB.ker = ⊥ := ker_bot_of_range_le ΦA ΦB hKerΦA hRangeLe
+  have hKerΦB : ΦB.ker = ⊥ :=
+    ker_bot_of_range_le ΦA ΦB (traceMulRightPi_ker_eq_bot hA) hRangeLe
   -- Choose a left inverse `g` of `ΦB`.
   obtain ⟨g, hg⟩ := ΦB.exists_leftInverse_of_injective hKerΦB
-  let T : V →ₗ[ℂ] V := g.comp ΦA
+  let T := g.comp ΦA
   have hT : ∀ i : Fin d, T (A i) = B i := by
     intro i
     -- First show `ΦA (A i) = ΦB (B i)` componentwise.
     have hΦ : ΦA (A i) = ΦB (B i) := by
       ext j
       -- Unfold `ΦA`/`ΦB` explicitly so `traceMulRightPi_apply` fires.
-      change traceMulRightPi (d := d) (D := D) A (A i) j =
-           traceMulRightPi (d := d) (D := D) B (B i) j
+      change traceMulRightPi A (A i) j = traceMulRightPi B (B i) j
       simp [sameMPV_trace_word2 hAB i j]
-    -- Now apply the left inverse property.
-    have : (g.comp ΦB) (B i) = B i := by
-      simpa using congrArg (fun f => f (B i)) hg
-    calc
-      T (A i) = g (ΦA (A i)) := rfl
+    -- Now apply the left inverse property: `g ∘ ΦB = id`.
+    calc T (A i) = g (ΦA (A i)) := rfl
       _ = g (ΦB (B i)) := by rw [hΦ]
-      _ = (g.comp ΦB) (B i) := rfl
-      _ = B i := this
+      _ = B i := by simpa using congrArg (· (B i)) hg
   refine ⟨T, hT, ?_⟩
-  intro T' hT'
   -- Uniqueness: two linear maps agreeing on a spanning family are equal.
-  apply LinearMap.ext_on_range (v := A) (hv := hSpanA)
+  intro T' hT'
+  apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
   intro i
-  calc
-    T' (A i) = B i := hT' i
-    _ = T (A i) := (hT i).symm
+  simp [hT' i, hT i]
 
 /-- Lemma 4 (paper proof sketch, now proved):
 
@@ -119,68 +108,52 @@ theorem linearExtension_mul {A B : MPSTensor d D}
     (hT : ∀ i : Fin d, T (A i) = B i) :
     ∀ M N : Matrix (Fin D) (Fin D) ℂ, T (M * N) = T M * T N := by
   classical
-  let V := Matrix (Fin D) (Fin D) ℂ
-  let ΦA : V →ₗ[ℂ] (Fin d → ℂ) := traceMulRightPi (d := d) (D := D) A
-  let ΦB : V →ₗ[ℂ] (Fin d → ℂ) := traceMulRightPi (d := d) (D := D) B
-  have hSpanA : Submodule.span ℂ (Set.range A) = (⊤ : Submodule ℂ V) := by
-    simpa [IsInjective, V] using hA
+  let ΦA := traceMulRightPi (d := d) (D := D) A
+  let ΦB := traceMulRightPi (d := d) (D := D) B
   -- Trace identities for length-3 words.
   have htr3 : ∀ i j k : Fin d,
       Matrix.trace (A i * A j * A k) = Matrix.trace (B i * B j * B k) := by
     intro i j k
-    have h := SameMPV.trace_evalWord (d := d) (D := D) hAB [i, j, k]
+    have h := hAB.trace_evalWord [i, j, k]
     simpa [evalWord, Matrix.mul_assoc] using h
   -- Compatibility of the trace pairing: `ΦB ∘ T = ΦA`.
   have hΦComp : (ΦB ∘ₗ T) = ΦA := by
-    apply LinearMap.ext_on_range (v := A) (hv := hSpanA)
+    apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
     intro i; ext j
     -- Reduce to the length-2 trace identity.
-    change traceMulRightPi (d := d) (D := D) B (T (A i)) j =
-         traceMulRightPi (d := d) (D := D) A (A i) j
+    change traceMulRightPi B (T (A i)) j = traceMulRightPi A (A i) j
     simp [hT i, sameMPV_trace_word2 hAB i j]
-  have hΦ_apply : ∀ M : V, ΦB (T M) = ΦA M := by
-    intro M
-    simpa [LinearMap.comp_apply] using congrArg (fun f => f M) hΦComp
-  -- `ΦA` is injective, and `ΦA = ΦB ∘ T` forces `ΦB` to be injective too.
-  have hKerΦA : ΦA.ker = ⊥ := traceMulRightPi_ker_eq_bot hA
+  -- `ΦA = ΦB ∘ T` forces `range ΦA ≤ range ΦB`.
   have hRangeLe : ΦA.range ≤ ΦB.range := by
-    have : (ΦB ∘ₗ T).range ≤ ΦB.range := LinearMap.range_comp_le_range T ΦB
-    simpa [hΦComp] using this
-  have hKerΦB : ΦB.ker = ⊥ := ker_bot_of_range_le ΦA ΦB hKerΦA hRangeLe
-  have hΦB_inj : Function.Injective ΦB := (LinearMap.ker_eq_bot).1 hKerΦB
-  -- First, multiplicativity on generators.
+    simpa [hΦComp] using LinearMap.range_comp_le_range T ΦB
+  have hΦB_inj : Function.Injective ΦB :=
+    (LinearMap.ker_eq_bot).1 (ker_bot_of_range_le ΦA ΦB (traceMulRightPi_ker_eq_bot hA) hRangeLe)
+  -- First, multiplicativity on generators: `T(Ai * Aj) = Bi * Bj`.
   have hMul_gen : ∀ i j : Fin d, T (A i * A j) = B i * B j := by
     intro i j; apply hΦB_inj; ext k
-    calc
-      ΦB (T (A i * A j)) k
+    calc ΦB (T (A i * A j)) k
           = ΦA (A i * A j) k := by
-              simpa using congrArg (· k) (hΦ_apply (A i * A j))
-      _   = Matrix.trace ((A i * A j) * A k) := by
-              rw [show ΦA = traceMulRightPi A from rfl, traceMulRightPi_apply]
-      _   = Matrix.trace (A i * A j * A k) := by ring_nf
-      _   = Matrix.trace (B i * B j * B k) := htr3 i j k
-      _   = Matrix.trace ((B i * B j) * B k) := by ring_nf
-      _   = ΦB (B i * B j) k := by
-              rw [show ΦB = traceMulRightPi B from rfl, traceMulRightPi_apply]
-  -- Extend to all right factors (first for generators, then by spanning).
-  have hMul_right_gen : ∀ j : Fin d, ∀ M : V, T (M * A j) = T M * B j := by
+              simpa using congrArg (· k) (congrArg (· (A i * A j)) hΦComp)
+      _ = Matrix.trace (A i * A j * A k) := by
+              change traceMulRightPi A _ k = _; simp [Matrix.mul_assoc]
+      _ = Matrix.trace (B i * B j * B k) := htr3 i j k
+      _ = ΦB (B i * B j) k := by
+              change _ = traceMulRightPi B _ k; simp [Matrix.mul_assoc]
+  -- Extend to all right factors by spanning in the first argument.
+  have hMul_right_gen : ∀ j : Fin d, ∀ M, T (M * A j) = T M * B j := by
     intro j
-    have hfg :
-        T.comp (LinearMap.mulRight ℂ (A j)) =
-          (LinearMap.mulRight ℂ (B j)).comp T := by
-      apply LinearMap.ext_on_range (v := A) (hv := hSpanA)
+    have hfg : T.comp (LinearMap.mulRight ℂ (A j)) = (LinearMap.mulRight ℂ (B j)).comp T := by
+      apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
       intro i
-      simpa [LinearMap.comp_apply, hT i] using (hMul_gen i j)
+      simpa [LinearMap.comp_apply, hT i] using hMul_gen i j
     intro M
-    simpa [LinearMap.comp_apply] using congrArg (fun f => f M) hfg
+    simpa [LinearMap.comp_apply] using congrArg (· M) hfg
   -- Now extend to all left factors by spanning in the second argument.
   intro M N
-  have hfg :
-      T.comp (LinearMap.mulLeft ℂ M) =
-        (LinearMap.mulLeft ℂ (T M)).comp T := by
-    apply LinearMap.ext_on_range (v := A) (hv := hSpanA)
+  have hfg : T.comp (LinearMap.mulLeft ℂ M) = (LinearMap.mulLeft ℂ (T M)).comp T := by
+    apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
     intro j
-    simpa [LinearMap.comp_apply, hT j] using (hMul_right_gen j M)
-  simpa [LinearMap.comp_apply] using congrArg (fun f => f N) hfg
+    simpa [LinearMap.comp_apply, hT j] using hMul_right_gen j M
+  simpa [LinearMap.comp_apply] using congrArg (· N) hfg
 
 end MPSTensor

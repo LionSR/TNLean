@@ -57,7 +57,7 @@ lemma traceMulRightPi_apply (A : MPSTensor d D)
 /-- `SameMPV` implies agreement of traces for all length-2 words. -/
 lemma sameMPV_trace_word2 {A B : MPSTensor d D} (hAB : SameMPV A B) (i j : Fin d) :
     Matrix.trace (A i * A j) = Matrix.trace (B i * B j) := by
-  have h := SameMPV.trace_evalWord (d := d) (D := D) (A := A) (B := B) hAB [i, j]
+  have h := hAB.trace_evalWord [i, j]
   simpa [evalWord, Matrix.mul_assoc] using h
 
 /-- If `A` is injective, then `traceMulRightPi A` has trivial kernel.
@@ -65,28 +65,18 @@ lemma sameMPV_trace_word2 {A B : MPSTensor d D} (hAB : SameMPV A B) (i j : Fin d
 The proof uses nondegeneracy of the trace pairing: if `trace (M * A i) = 0` for all `i`,
 and the `A i` span the full matrix algebra, then `trace (M * N) = 0` for all `N`, hence `M = 0`. -/
 theorem traceMulRightPi_ker_eq_bot {A : MPSTensor d D} (hA : IsInjective A) :
-    (traceMulRightPi (d := d) (D := D) A).ker = ⊥ := by
+    (traceMulRightPi A).ker = ⊥ := by
   classical
-  let V := Matrix (Fin D) (Fin D) ℂ
-  let ΦA : V →ₗ[ℂ] (Fin d → ℂ) := traceMulRightPi (d := d) (D := D) A
-  have hSpanA : Submodule.span ℂ (Set.range A) = (⊤ : Submodule ℂ V) := by
-    simpa [IsInjective, V] using hA
   apply (LinearMap.ker_eq_bot').2
   intro M hM
-  -- Define the linear functional `N ↦ trace (M * N)`.
-  let φ : V →ₗ[ℂ] ℂ :=
-    (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ M)
-  have hφ : φ = 0 := by
-    apply LinearMap.ext_on_range (v := A) (hv := hSpanA)
+  -- The linear functional `N ↦ trace (M * N)` vanishes on the spanning set `{A i}`, hence is zero.
+  have hφ : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ M) = 0 := by
+    apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
     intro i
-    -- `φ (A i) = trace (M * A i)`, and this is `0` since `M ∈ ker ΦA`.
-    have hi : Matrix.trace (M * A i) = 0 := by
-      have := congrArg (fun f : Fin d → ℂ => f i) hM
-      simpa [ΦA] using this
-    simp [φ, hi]
+    simpa using congrArg (· i) hM
   -- Use trace nondegeneracy.
-  exact trace_mul_right_eq_zero (D := D) (M := M) fun N => by
-    simpa [φ, Matrix.traceLinearMap_apply] using congrArg (· N) hφ
+  exact trace_mul_right_eq_zero fun N => by
+    simpa [Matrix.traceLinearMap_apply] using congrArg (· N) hφ
 
 /-- If `ΦA` is injective and `range ΦA ≤ range ΦB`, then `ΦB` has trivial kernel.
 
@@ -97,17 +87,13 @@ theorem ker_bot_of_range_le {V W : Type*} [AddCommGroup V] [Module ℂ V] [Modul
     (ΦA ΦB : V →ₗ[ℂ] W) (hKerA : ΦA.ker = ⊥) (hRange : ΦA.range ≤ ΦB.range) :
     ΦB.ker = ⊥ := by
   -- From ker ΦA = ⊥, get finrank(range ΦA) = finrank V.
-  have hFinrankRangeA : Module.finrank ℂ ↥ΦA.range = Module.finrank ℂ V := by
-    have hRN := LinearMap.finrank_range_add_finrank_ker (f := ΦA)
-    rw [hKerA, finrank_bot] at hRN; omega
+  have hRN_A := LinearMap.finrank_range_add_finrank_ker (f := ΦA)
+  rw [hKerA, finrank_bot] at hRN_A
   -- Range inclusion gives finrank(range ΦB) ≥ finrank V.
-  have hFinrankRangeB_ge : Module.finrank ℂ V ≤ Module.finrank ℂ ↥ΦB.range := by
-    calc Module.finrank ℂ V = Module.finrank ℂ ↥ΦA.range := hFinrankRangeA.symm
-    _ ≤ Module.finrank ℂ ↥ΦB.range := Submodule.finrank_mono hRange
-  -- By rank-nullity, finrank(range ΦB) ≤ finrank V, so finrank(ker ΦB) = 0.
-  have hRN := LinearMap.finrank_range_add_finrank_ker (f := ΦB)
+  have hRN_B := LinearMap.finrank_range_add_finrank_ker (f := ΦB)
   have hle : Module.finrank ℂ ↥ΦB.range ≤ Module.finrank ℂ V := LinearMap.finrank_range_le ΦB
-  have : Module.finrank ℂ ↥ΦB.ker = 0 := by omega
-  exact (Submodule.finrank_eq_zero (S := ΦB.ker)).1 this
+  have hmono : Module.finrank ℂ ↥ΦA.range ≤ Module.finrank ℂ ↥ΦB.range :=
+    Submodule.finrank_mono hRange
+  exact (Submodule.finrank_eq_zero (S := ΦB.ker)).1 (by omega)
 
 end MPSTensor
