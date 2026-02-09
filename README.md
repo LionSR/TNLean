@@ -40,6 +40,23 @@ theorem fundamentalTheorem_multiBlock_global
 
 **Statement:** Given block-diagonal MPS tensors `⊕_k μ_k A_k` and `⊕_k μ_k B_k`, if each block `A_k` is injective and generates the same MPV as `B_k`, then the block-diagonal tensors are globally gauge equivalent via a block-diagonal gauge transform.
 
+### Block Permutation Decomposition
+
+```lean
+theorem algEquiv_pi_matrix_decomposition (φ : (∀ k, Matrix (Fin (D k)) (Fin (D k)) ℂ) ≃ₐ[ℂ]
+    (∀ k, Matrix (Fin (D k)) (Fin (D k)) ℂ)) :
+    ∃ (σ : Equiv.Perm (Fin r)) (hσ : ∀ k, D (σ k) = D k)
+      (X : ∀ k, GL (Fin (D k)) ℂ), …
+```
+
+**Statement:** Any ℂ-algebra automorphism of `∏_k M_{D_k}(ℂ)` decomposes as a block permutation `σ` (preserving dimensions) composed with per-block inner automorphisms (Skolem–Noether). This factors automorphisms of products of simple algebras into a combinatorial part (which blocks map to which) and a continuous part (conjugation within each block).
+
+**Proof chain:**
+1. **Block ideal characterization** → the block ideals of `∏ M_{D_k}(ℂ)` are precisely the coordinate projections
+2. **Ring equivalences permute simple factors** → any `≃+*` sends block ideals to block ideals, inducing a permutation `σ`
+3. **Dimension preservation** → the permutation satisfies `D(σ k) = D k` (from the algebra structure)
+4. **Skolem–Noether per block** → the restricted automorphism on each block is inner
+
 ### Additional Results
 
 - **Gauge invariance** (`GaugeEquiv.sameMPV`): gauge-equivalent tensors generate the same MPVs
@@ -52,8 +69,9 @@ theorem fundamentalTheorem_multiBlock_global
 
 | Metric | Value |
 |--------|-------|
-| Lean modules | 13 |
-| Total lines of Lean | ~1,680 |
+| Lean modules | 15 |
+| Total lines of Lean | ~2,300 |
+| Build jobs | 2,096 |
 | `sorry` | 0 |
 | `axiom` | 0 |
 | Linter warnings | 0 |
@@ -75,7 +93,9 @@ MPSLean/MPS/
 ├── FundamentalTheorem.lean — Single-block Fundamental Theorem assembly
 ├── MultiBlock.lean        — Block-diagonal MPV decomposition infrastructure
 ├── BasisNormal.lean       — Vandermonde separation of block MPVs
-└── FundamentalTheoremMulti.lean — Multi-block gauge assembly + global theorem
+├── FundamentalTheoremMulti.lean — Multi-block gauge assembly + global theorem
+├── BlockPermutation.lean    — Automorphisms of ∏ simple rings permute factors
+└── BlockPermutationMPS.lean — Per-block decomposition via Skolem–Noether
 ```
 
 ## Key Design Decisions
@@ -86,9 +106,29 @@ MPSLean/MPS/
 - **Sigma-type indices**: Block-diagonal proofs work on `(k : Fin r) × Fin (dim k)` and reindex to `Fin (∑ k, dim k)` only at the boundary.
 - **`GL (Fin D) ℂ`**: Gauge transforms are elements of the general linear group, ensuring invertibility by construction.
 
+## Proof Architecture
+
+The formalization is organized into three layers:
+
+**Layer 1 — Single-Block Fundamental Theorem** (10 modules, ~730 lines)
+`Defs → GaugeInvariance → Transfer → Injective → TraceNondeg → TracePairing → LinearExtension → SkolemNoether → FundamentalTheorem`
+
+**Layer 2 — Multi-Block Assembly** (3 modules, ~950 lines)
+`CanonicalForm → MultiBlock → BasisNormal → FundamentalTheoremMulti`
+
+**Layer 3 — Block Permutation** (2 modules, ~610 lines)
+`BlockPermutation → BlockPermutationMPS`
+Factors automorphisms of `∏ M_{D_k}(ℂ)` into block permutations + per-block inner automorphisms.
+
 ## The Remaining Gap
 
-The multi-block theorem currently takes per-block `SameMPV` as a *hypothesis*. In the physics literature, this is derived from total MPV equality using the spectral theory of mixed transfer operators (requiring quantum Perron–Frobenius, which is not available in Mathlib). An alternative algebraic approach via semisimple ring homomorphism theory may be possible but has not yet been formalized. The theorem as stated is still highly nontrivial: it includes the full single-block proof and the complete block-diagonal assembly machinery.
+The gap has **narrowed significantly**. We now have:
+
+- ✅ Full single-block Fundamental Theorem (SameMPV → GaugeEquiv)
+- ✅ Multi-block gauge assembly (per-block SameMPV → global GaugeEquiv)
+- ✅ Block permutation decomposition (any algebra automorphism of `∏ M_{D_k}(ℂ)` = permutation + per-block inner automorphisms)
+
+**What remains:** constructing the linear extension `T` on the Pi algebra `∏_k M_{D_k}(ℂ)` from `SameMPV₂` (total MPV equality at the block-diagonal level). This follows the same mathematical pattern as the single-block proof — extending a linear map from generators, showing multiplicativity via trace nondegeneracy — but on the product algebra rather than a single matrix ring. Once `T` is constructed as a ring automorphism, the block permutation decomposition theorem applies directly to decompose it into a permutation of blocks plus per-block gauge transforms.
 
 ## Building
 
