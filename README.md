@@ -64,23 +64,20 @@ theorem algEquiv_pi_matrix_decomposition (φ : (∀ k, Matrix (Fin (D k)) (Fin (
 - **Vandermonde separation** (`block_mpvs_lin_indep_at_fixed_size`): block MPVs with distinct eigenvalues are linearly independent
 - **Block-diagonal gauge assembly**: blockwise gauge transforms assemble into a global block-diagonal gauge transform
 - **Per-block SameMPV → global SameMPV** (`sameMPV_toTensorFromBlocks_of_blockSameMPV`)
+- **Single-block closure** (`sameMPV₂_single_block`): for single-block canonical forms (`r = 1`), `SameMPV₂` with `μ₀ ≠ 0` immediately gives per-block `SameMPV`
+- **End-to-end pipeline** (`fundamentalTheorem_multiBlock_fromSameMPV₂`): complete multi-block FT from `SameMPV₂` with explicit separation hypothesis
 
 ## Project Statistics
 
 | Metric | Value |
 |--------|-------|
 | Lean modules | 14 |
-| Total lines of Lean | 2,221 |
+| Total lines of Lean | 2,396 |
 | Build jobs | 2,095 |
 | `sorry` | 0 |
 | `axiom` | 0 |
 | Linter warnings | 0 |
 | Mathlib version | v4.27.0 |
-
-> **Note (Feb 2026):** A simplification pass (commit `b86cdb4`) consolidated
-> `Injective.lean` and `GaugeInvariance.lean` into `Defs.lean`, merged duplicate
-> lemmas, and added `PiAlgebraExtension.lean` — reducing the codebase by ~20%
-> (from 2,816 → 2,221 lines, 15 → 14 modules) with zero loss of proven results.
 
 ## File Structure
 
@@ -99,7 +96,7 @@ MPSLean/MPS/
 ├── FundamentalTheoremMulti.lean — Multi-block gauge assembly + global theorem (237 l)
 ├── BlockPermutation.lean        — Automorphisms of ∏ simple rings permute factors (223 l)
 ├── BlockPermutationMPS.lean     — Per-block decomposition via Skolem–Noether (336 l)
-└── PiAlgebraExtension.lean      — Linear extension on ∏ M_{D_k}(ℂ) from SameMPV₂ (370 l)
+└── PiAlgebraExtension.lean      — Linear extension on ∏ M_{D_k}(ℂ), single-block closure, gap analysis (545 l)
 ```
 
 ## Key Design Decisions
@@ -131,8 +128,12 @@ The gap has **narrowed significantly**. We now have:
 - ✅ Full single-block Fundamental Theorem (SameMPV → GaugeEquiv)
 - ✅ Multi-block gauge assembly (per-block SameMPV → global GaugeEquiv)
 - ✅ Block permutation decomposition (any algebra automorphism of `∏ M_{D_k}(ℂ)` = permutation + per-block inner automorphisms)
+- ✅ Pi-algebra automorphism from per-block SameMPV, with full decomposition
+- ✅ **Single-block case closed**: `sameMPV₂_single_block` proves that for `r = 1`, `SameMPV₂` directly gives per-block `SameMPV` (no PF theory needed)
 
-**What remains:** constructing the linear extension `T` on the Pi algebra `∏_k M_{D_k}(ℂ)` from `SameMPV₂` (total MPV equality at the block-diagonal level). This follows the same mathematical pattern as the single-block proof — extending a linear map from generators, showing multiplicativity via trace nondegeneracy — but on the product algebra rather than a single matrix ring. Once `T` is constructed as a ring automorphism, the block permutation decomposition theorem applies directly to decompose it into a permutation of blocks plus per-block gauge transforms.
+**What remains for `r ≥ 2`:** The step from `SameMPV₂` (global MPV equality of block-diagonal tensors) to per-block `SameMPV` (MPV equality within each block independently). This *block separation* step requires spectral analysis of the transfer operator (quantum Perron–Frobenius theory), which is not yet available in Mathlib. Our formalization isolates this as an explicit hypothesis.
+
+The difficulty is that `SameMPV₂` gives equations `∑_k μ_k^N · Δ_k(σ) = 0` where the exponent `N` is coupled to the configuration type `σ : Fin N → Fin d`, preventing direct application of Vandermonde-type linear independence arguments. See the detailed analysis in `PiAlgebraExtension.lean`.
 
 ## Building
 
