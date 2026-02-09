@@ -19,11 +19,7 @@ Given a ℂ-algebra automorphism `T` of `∏_i M_{D_i}(ℂ)`, we decompose it as
 ## Main results
 
 * `mem_blockIdeal_iff` — block ideal membership characterisation
-* `ringEquiv_maps_single_support` — T maps Pi.single into the correct block
-* `ringEquiv_single_one_eq` — T (Pi.single i 1) = Pi.single (σ i) 1
 * `componentMap` — the per-block map extracted from T
-* `componentMap_bijective` — the per-block map is bijective
-* `dim_preserved` — the permutation preserves dimensions
 * `algEquiv_pi_matrix_decomposition` — the main decomposition theorem
 -/
 
@@ -66,25 +62,21 @@ theorem pi_single_mem_blockIdeal {i : ι} (M : R i) :
   mem_blockIdeal_iff.mpr (fun _ hj => Pi.single_eq_of_ne hj M)
 
 theorem ringEquiv_maps_single_support
-    (T : (∀ j, R j) ≃+* (∀ j, R j))
-    (σ : ι ≃ ι)
+    (T : (∀ j, R j) ≃+* (∀ j, R j)) (σ : ι ≃ ι)
     (hσ : ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i))
     {i : ι} (M : R i) (j : ι) (hj : j ≠ σ i) :
     T (Pi.single i M) j = 0 := by
-  have hT_mem : T (Pi.single i M) ∈ blockIdeal R (σ i) := by
+  have : T (Pi.single i M) ∈ blockIdeal R (σ i) := by
     rw [← hσ i, RingEquiv.mapTwoSidedIdeal_apply, TwoSidedIdeal.mem_comap]
     simp [pi_single_mem_blockIdeal M]
-  exact (mem_blockIdeal_iff.mp hT_mem) j hj
+  exact (mem_blockIdeal_iff.mp this) j hj
 
 theorem ringEquiv_symm_maps_blockIdeal
-    (T : (∀ j, R j) ≃+* (∀ j, R j))
-    (σ : ι ≃ ι)
-    (hσ : ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i))
-    (i : ι) :
+    (T : (∀ j, R j) ≃+* (∀ j, R j)) (σ : ι ≃ ι)
+    (hσ : ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i)) (i : ι) :
     T.symm.mapTwoSidedIdeal (blockIdeal R (σ i)) = blockIdeal R i := by
   rw [← hσ i]; ext x
-  rw [RingEquiv.mapTwoSidedIdeal_apply, TwoSidedIdeal.mem_comap,
-      RingEquiv.mapTwoSidedIdeal_apply, TwoSidedIdeal.mem_comap]; simp
+  simp [RingEquiv.mapTwoSidedIdeal_apply, TwoSidedIdeal.mem_comap]
 
 end BlockIdealMembership
 
@@ -96,30 +88,26 @@ variable {R : ι → Type*} [∀ i, Ring (R i)] [∀ i, IsSimpleRing (R i)]
 
 /-- A ring automorphism maps `Pi.single i 1` to `Pi.single (σ i) 1`. -/
 theorem ringEquiv_single_one_eq
-    (T : (∀ j, R j) ≃+* (∀ j, R j))
-    (σ : ι ≃ ι)
-    (hσ : ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i))
-    (i : ι) :
+    (T : (∀ j, R j) ≃+* (∀ j, R j)) (σ : ι ≃ ι)
+    (hσ : ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i)) (i : ι) :
     T (Pi.single i (1 : R i)) = Pi.single (σ i) (1 : R (σ i)) := by
   have h_support : ∀ j, j ≠ σ i → T (Pi.single i (1 : R i)) j = 0 :=
     fun j hj => ringEquiv_maps_single_support T σ hσ 1 j hj
   have h_eq_single : T (Pi.single i (1 : R i)) =
       Pi.single (σ i) (T (Pi.single i (1 : R i)) (σ i)) := by
     ext j; by_cases hj : j = σ i
-    · subst hj; simp [Pi.single_eq_same]
+    · subst hj; simp
     · rw [h_support j hj, Pi.single_eq_of_ne hj]
-  have h_sum : ∑ j : ι, Pi.single j (1 : R j) = (1 : ∀ i, R i) := by
-    simpa using Finset.univ_sum_single (1 : ∀ i, R i)
   have h_eval : T (Pi.single i (1 : R i)) (σ i) = 1 := by
     have h_T_sum : ∑ j : ι, T (Pi.single j (1 : R j)) = 1 := by
-      rw [← map_sum, h_sum, map_one]
+      rw [← map_sum, show ∑ j : ι, Pi.single j (1 : R j) = 1 from by
+        simpa using Finset.univ_sum_single (1 : ∀ i, R i), map_one]
     have h_at : (∑ j : ι, T (Pi.single j (1 : R j))) (σ i) =
         T (Pi.single i (1 : R i)) (σ i) := by
       simp only [Finset.sum_apply]
-      rw [Finset.sum_eq_single i]
-      · intro j _ hj
-        exact ringEquiv_maps_single_support T σ hσ 1 (σ i) (fun h => hj (σ.injective h.symm))
-      · intro hi; exact absurd (Finset.mem_univ i) hi
+      rw [Finset.sum_eq_single i (fun j _ hj =>
+        ringEquiv_maps_single_support T σ hσ 1 (σ i) (fun h => hj (σ.injective h.symm)))
+        (fun hi => absurd (Finset.mem_univ i) hi)]
     rw [h_T_sum] at h_at; simpa using h_at.symm
   rw [h_eq_single, h_eval]
 
@@ -145,39 +133,36 @@ noncomputable def componentMap
     Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ :=
   T (Pi.single i M) (σ i)
 
-theorem componentMap_map_zero
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+*
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι} {i : ι} :
+private theorem componentMap_map_zero
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι} :
     componentMap T σ i 0 = 0 := by
   simp [componentMap, Pi.single_zero, map_zero]
 
-theorem componentMap_map_add
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+*
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι} {i : ι} (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
+private theorem componentMap_map_add
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
+    (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T σ i (M + N) = componentMap T σ i M + componentMap T σ i N := by
   simp [componentMap, Pi.single_add, map_add, Pi.add_apply]
 
+-- Helper: Pi.single distributes over multiplication
+private theorem pi_single_mul {i : ι} (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
+    (Pi.single i (M * N) : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) =
+      Pi.single i M * Pi.single i N := by
+  funext j; simp only [Pi.mul_apply]
+  by_cases hj : j = i
+  · subst hj; simp
+  · simp [Pi.single_eq_of_ne hj]
+
 theorem componentMap_map_mul
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+*
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι} {i : ι} (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
+    (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T σ i (M * N) = componentMap T σ i M * componentMap T σ i N := by
   show T (Pi.single i (M * N)) (σ i) =
     T (Pi.single i M) (σ i) * T (Pi.single i N) (σ i)
-  have h : (Pi.single i (M * N) : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) =
-      Pi.single i M * Pi.single i N := by
-    funext j; simp only [Pi.mul_apply]
-    by_cases hj : j = i
-    · subst hj; simp [Pi.single_eq_same]
-    · simp [Pi.single_eq_of_ne hj]
-  rw [h, map_mul, Pi.mul_apply]
+  rw [pi_single_mul, map_mul, Pi.mul_apply]
 
 theorem componentMap_map_one
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+*
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι}
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
     (hσ : ∀ i, T.mapTwoSidedIdeal
         (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
@@ -186,49 +171,41 @@ theorem componentMap_map_one
   show T (Pi.single i 1) (σ i) = 1
   rw [ringEquiv_single_one_eq T σ hσ i, Pi.single_eq_same]
 
-theorem componentMap_map_sub
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+*
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι} {i : ι} (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
+private theorem componentMap_map_sub
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
+    (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T σ i (M - N) = componentMap T σ i M - componentMap T σ i N := by
   show T (Pi.single i (M - N)) (σ i) =
     T (Pi.single i M) (σ i) - T (Pi.single i N) (σ i)
-  have h : (Pi.single i (M - N) : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) =
+  have : (Pi.single i (M - N) : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) =
       Pi.single i M - Pi.single i N := by
     funext j; simp only [Pi.sub_apply]
     by_cases hj : j = i
-    · subst hj; simp [Pi.single_eq_same]
+    · subst hj; simp
     · simp [Pi.single_eq_of_ne hj]
-  rw [h, map_sub, Pi.sub_apply]
+  rw [this, map_sub, Pi.sub_apply]
 
 /-- The component map commutes with ℂ-scalar multiplication when T is a ℂ-algebra map. -/
 theorem componentMap_map_smul_of_algEquiv
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃ₐ[ℂ]
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι} {i : ι} (c : ℂ) (M : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃ₐ[ℂ] _} {σ : ι ≃ ι} {i : ι}
+    (c : ℂ) (M : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T.toRingEquiv σ i (c • M) = c • componentMap T.toRingEquiv σ i M := by
   show T (Pi.single i (c • M)) (σ i) = c • T (Pi.single i M) (σ i)
-  -- Key: Pi.single i (c • M) = (algebraMap c) * Pi.single i M
   have h : Pi.single i (c • M) =
-      (algebraMap ℂ (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) c) *
-        Pi.single i M := by
+      (algebraMap ℂ (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) c) * Pi.single i M := by
     funext j; simp only [Pi.mul_apply, Algebra.algebraMap_eq_smul_one, Pi.smul_apply, Pi.one_apply]
     by_cases hj : j = i
-    · subst hj; simp [Pi.single_eq_same]
+    · subst hj; simp
     · simp [Pi.single_eq_of_ne hj, mul_zero]
   rw [h, map_mul, T.commutes, Pi.mul_apply, Algebra.algebraMap_eq_smul_one,
       Pi.smul_apply, Pi.one_apply, smul_mul_assoc, one_mul]
 
-noncomputable def componentMapRingHom
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+*
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι}
+private noncomputable def componentMapRingHom
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
     (hσ : ∀ i, T.mapTwoSidedIdeal
         (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
-    (i : ι) :
-    Matrix (Fin (D i)) (Fin (D i)) ℂ →+*
-    Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ where
+    (i : ι) : Matrix (Fin (D i)) (Fin (D i)) ℂ →+* Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ where
   toFun := componentMap T σ i
   map_one' := componentMap_map_one hσ i
   map_mul' := componentMap_map_mul
@@ -236,19 +213,14 @@ noncomputable def componentMapRingHom
   map_add' := componentMap_map_add
 
 theorem componentMap_injective
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+*
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι}
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
     (hσ : ∀ i, T.mapTwoSidedIdeal
         (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
-    (i : ι) :
-    Function.Injective (componentMap T σ i) := by
+    (i : ι) : Function.Injective (componentMap T σ i) := by
   let f := componentMapRingHom hσ i
-  have hker : TwoSidedIdeal.ker (f : Matrix (Fin (D i)) (Fin (D i)) ℂ →+*
-      Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ) = ⊥ := by
-    rcases eq_bot_or_eq_top (TwoSidedIdeal.ker (f : Matrix (Fin (D i)) (Fin (D i)) ℂ →+*
-        Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ)) with h | h
+  have hker : TwoSidedIdeal.ker (f : Matrix _ _ ℂ →+* Matrix _ _ ℂ) = ⊥ := by
+    rcases eq_bot_or_eq_top (TwoSidedIdeal.ker (f : Matrix _ _ ℂ →+* Matrix _ _ ℂ)) with h | h
     · exact h
     · exfalso
       have h1 : (1 : Matrix (Fin (D i)) (Fin (D i)) ℂ) ∈ (⊤ : TwoSidedIdeal _) := trivial
@@ -256,58 +228,44 @@ theorem componentMap_injective
       change componentMap T σ i 1 = 0 at h1
       rw [componentMap_map_one hσ i] at h1; exact one_ne_zero h1
   intro x y hxy
-  have hsub : x - y ∈ TwoSidedIdeal.ker (f : Matrix (Fin (D i)) (Fin (D i)) ℂ →+*
-      Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ) := by
-    rw [TwoSidedIdeal.mem_ker]
-    change componentMap T σ i (x - y) = 0
+  have hsub : x - y ∈ TwoSidedIdeal.ker (f : Matrix _ _ ℂ →+* Matrix _ _ ℂ) := by
+    rw [TwoSidedIdeal.mem_ker]; change componentMap T σ i (x - y) = 0
     rw [componentMap_map_sub, sub_eq_zero]; exact hxy
   rw [hker, TwoSidedIdeal.mem_bot] at hsub; exact sub_eq_zero.mp hsub
 
 theorem componentMap_surjective
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+*
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι}
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
     (hσ : ∀ i, T.mapTwoSidedIdeal
         (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
-    (i : ι) :
-    Function.Surjective (componentMap T σ i) := by
+    (i : ι) : Function.Surjective (componentMap T σ i) := by
   intro N
   haveI : Finite ι := Finite.of_fintype ι
   have h_symm_support : ∀ j, j ≠ i → T.symm (Pi.single (σ i) N) j = 0 := by
     intro j hj
-    have hmem : T.symm (Pi.single (σ i) N) ∈
-        blockIdeal (fun k => Matrix (Fin (D k)) (Fin (D k)) ℂ) i := by
+    exact (mem_blockIdeal_iff.mp (by
       rw [← ringEquiv_symm_maps_blockIdeal T σ hσ i,
           RingEquiv.mapTwoSidedIdeal_apply, TwoSidedIdeal.mem_comap]
       simp only [RingEquiv.symm_symm, RingEquiv.apply_symm_apply]
-      exact @pi_single_mem_blockIdeal ι _ _ (fun k => Matrix (Fin (D k)) (Fin (D k)) ℂ) _ _
-        (σ i) N
-    exact (mem_blockIdeal_iff.mp hmem) j hj
+      exact @pi_single_mem_blockIdeal ι _ _
+        (fun k => Matrix (Fin (D k)) (Fin (D k)) ℂ) _ _ (σ i) N)) j hj
   have h_eq : T.symm (Pi.single (σ i) N) =
       Pi.single i (T.symm (Pi.single (σ i) N) i) := by
     ext j; by_cases hj : j = i
-    · subst hj; simp [Pi.single_eq_same]
+    · subst hj; simp
     · rw [h_symm_support j hj, Pi.single_eq_of_ne hj]
   refine ⟨T.symm (Pi.single (σ i) N) i, ?_⟩
   show T (Pi.single i (T.symm (Pi.single (σ i) N) i)) (σ i) = N
-  have h1 : T (Pi.single i (T.symm (Pi.single (σ i) N) i)) =
-      T (T.symm (Pi.single (σ i) N)) := by rw [← h_eq]
-  have h2 : T (T.symm (Pi.single (σ i) N)) = Pi.single (σ i) N :=
-    RingEquiv.apply_symm_apply T (Pi.single (σ i) N)
   rw [show T (Pi.single i (T.symm (Pi.single (σ i) N) i)) (σ i) =
-      (T (Pi.single i (T.symm (Pi.single (σ i) N) i))) (σ i) from rfl, h1, h2,
-      Pi.single_eq_same]
+      (T (T.symm (Pi.single (σ i) N))) (σ i) from by rw [← h_eq],
+    T.apply_symm_apply, Pi.single_eq_same]
 
 theorem componentMap_bijective
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+*
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι}
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
     (hσ : ∀ i, T.mapTwoSidedIdeal
         (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
-    (i : ι) :
-    Function.Bijective (componentMap T σ i) :=
+    (i : ι) : Function.Bijective (componentMap T σ i) :=
   ⟨componentMap_injective hσ i, componentMap_surjective hσ i⟩
 
 end ComponentMap
@@ -320,23 +278,19 @@ variable {D : ι → ℕ} [∀ i, NeZero (D i)]
 
 /-- The permutation preserves block dimensions. -/
 theorem dim_preserved
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃ₐ[ℂ]
-         (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)}
-    {σ : ι ≃ ι}
+    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃ₐ[ℂ] _} {σ : ι ≃ ι}
     (hσ : ∀ i, T.toRingEquiv.mapTwoSidedIdeal
         (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
     (i : ι) : D (σ i) = D i := by
-  have h_bij := componentMap_bijective hσ i
-  let φ : Matrix (Fin (D i)) (Fin (D i)) ℂ →ₗ[ℂ]
-      Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ :=
+  let φ : Matrix (Fin (D i)) (Fin (D i)) ℂ →ₗ[ℂ] Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ :=
     { toFun := componentMap T.toRingEquiv σ i
-      map_add' := fun M N => componentMap_map_add M N
-      map_smul' := fun c M => componentMap_map_smul_of_algEquiv c M }
-  have h_finrank := (LinearEquiv.ofBijective φ h_bij).finrank_eq
-  rw [Module.finrank_matrix, Module.finrank_matrix] at h_finrank
-  simp only [Module.finrank_self, Fintype.card_fin, mul_one] at h_finrank
-  exact (Nat.mul_self_inj.mp h_finrank).symm
+      map_add' := componentMap_map_add
+      map_smul' := componentMap_map_smul_of_algEquiv }
+  have h := (LinearEquiv.ofBijective φ (componentMap_bijective hσ i)).finrank_eq
+  rw [Module.finrank_matrix, Module.finrank_matrix] at h
+  simp only [Module.finrank_self, Fintype.card_fin, mul_one] at h
+  exact (Nat.mul_self_inj.mp h).symm
 
 end DimPreservation
 
@@ -347,11 +301,7 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable {D : ι → ℕ} [∀ i, NeZero (D i)]
 
 /-- **Main theorem**: Any ℂ-algebra automorphism of `∏_i M_{D_i}(ℂ)` decomposes as a block
-permutation composed with per-block inner automorphisms (Skolem–Noether).
-
-There exists a permutation `σ` preserving dimensions, and per-block invertible matrices `X i`,
-such that the action of `T` on block `i` (projected to block `σ i`) is conjugation by `X i`,
-after reindexing by `finCongr (hDeq i)`. -/
+permutation composed with per-block inner automorphisms (Skolem–Noether). -/
 theorem algEquiv_pi_matrix_decomposition
     (T : (∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ) ≃ₐ[ℂ]
          (∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)) :
@@ -364,26 +314,21 @@ theorem algEquiv_pi_matrix_decomposition
           ((X i)⁻¹ : GL (Fin (D i)) ℂ) := by
   obtain ⟨σ, hσ⟩ := ringEquiv_pi_simple_permutes_blockIdeals T.toRingEquiv
   have hDeq : ∀ i, D (σ i) = D i := fun i => dim_preserved hσ i
-  -- For each i, compose componentMap with reindexAlgEquiv to get M_{D i} →ₐ M_{D i}
   let reind (i : ι) := Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDeq i))
-  let castMap (i : ι) : Matrix (Fin (D i)) (Fin (D i)) ℂ →ₐ[ℂ]
-      Matrix (Fin (D i)) (Fin (D i)) ℂ :=
+  let castMap (i : ι) : Matrix (Fin (D i)) (Fin (D i)) ℂ →ₐ[ℂ] _ :=
     (reind i).toAlgHom.comp
     { toFun := componentMap T.toRingEquiv σ i
       map_one' := componentMap_map_one hσ i
-      map_mul' := fun M N => componentMap_map_mul M N
+      map_mul' := componentMap_map_mul
       map_zero' := componentMap_map_zero
-      map_add' := fun M N => componentMap_map_add M N
+      map_add' := componentMap_map_add
       commutes' := fun c => by
         simp only [Algebra.algebraMap_eq_smul_one]
         rw [componentMap_map_smul_of_algEquiv, componentMap_map_one hσ i] }
-  have castMap_bij : ∀ i, Function.Bijective (castMap i) := by
-    intro i; exact (reind i).bijective.comp (componentMap_bijective hσ i)
-  have h_skolem : ∀ i, ∃ X : GL (Fin (D i)) ℂ,
-      ∀ M, castMap i M = (X : Matrix _ _ ℂ) * M * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
-    intro i
-    exact skolemNoether_matrix (AlgEquiv.ofBijective (castMap i) (castMap_bij i))
-  choose X hX using h_skolem
+  have castMap_bij : ∀ i, Function.Bijective (castMap i) :=
+    fun i => (reind i).bijective.comp (componentMap_bijective hσ i)
+  choose X hX using fun i =>
+    skolemNoether_matrix (AlgEquiv.ofBijective (castMap i) (castMap_bij i))
   exact ⟨σ, hDeq, X, fun i M => hX i M⟩
 
 end MainDecomposition

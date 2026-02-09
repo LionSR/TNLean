@@ -131,14 +131,11 @@ noncomputable def linearMapToAlgHom
     (hSurj : Function.Surjective T) :
     Matrix (Fin D) (Fin D) ℂ →ₐ[ℂ] Matrix (Fin D) (Fin D) ℂ := by
   classical
-  -- First prove `T 1 = 1`: choose `x` with `T x = 1`, then `1 = T x = T(x*1) = Tx * T1 = T1`.
   have hOne : T 1 = 1 := by
     obtain ⟨x, hx⟩ := hSurj 1
-    calc (T 1 : Matrix (Fin D) (Fin D) ℂ)
-        = 1 * T 1 := (one_mul _).symm
+    calc T 1 = 1 * T 1 := (one_mul _).symm
       _ = T x * T 1 := by rw [hx]
-      _ = T (x * 1) := (hMul x 1).symm
-      _ = T x := by rw [mul_one]
+      _ = T x := by rw [← hMul, mul_one]
       _ = 1 := hx
   exact
     { toRingHom :=
