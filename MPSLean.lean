@@ -11,3 +11,4 @@ import MPSLean.MPS.LinearExtension
 import MPSLean.MPS.SkolemNoether
 import MPSLean.MPS.FundamentalTheorem
 import MPSLean.MPS.FundamentalTheoremMulti
+import MPSLean.MPS.BlockPermutation
