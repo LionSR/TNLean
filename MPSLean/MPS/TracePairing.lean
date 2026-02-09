@@ -1,5 +1,4 @@
 import MPSLean.MPS.Defs
-import MPSLean.MPS.Injective
 import MPSLean.MPS.TraceNondeg
 
 import Mathlib.LinearAlgebra.Dimension.Finite

@@ -1,5 +1,4 @@
 import MPSLean.MPS.CanonicalForm
-import MPSLean.MPS.GaugeInvariance
 
 import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.Reindex
