@@ -69,33 +69,37 @@ theorem algEquiv_pi_matrix_decomposition (φ : (∀ k, Matrix (Fin (D k)) (Fin (
 
 | Metric | Value |
 |--------|-------|
-| Lean modules | 15 |
-| Total lines of Lean | ~2,300 |
-| Build jobs | 2,096 |
+| Lean modules | 14 |
+| Total lines of Lean | 2,221 |
+| Build jobs | 2,095 |
 | `sorry` | 0 |
 | `axiom` | 0 |
 | Linter warnings | 0 |
 | Mathlib version | v4.27.0 |
 
+> **Note (Feb 2026):** A simplification pass (commit `b86cdb4`) consolidated
+> `Injective.lean` and `GaugeInvariance.lean` into `Defs.lean`, merged duplicate
+> lemmas, and added `PiAlgebraExtension.lean` — reducing the codebase by ~20%
+> (from 2,816 → 2,221 lines, 15 → 14 modules) with zero loss of proven results.
+
 ## File Structure
 
 ```
 MPSLean/MPS/
-├── Defs.lean              — MPSTensor, evalWord, mpv, GaugeEquiv, SameMPV
-├── GaugeInvariance.lean   — GaugeEquiv implies SameMPV
-├── Transfer.lean          — Transfer map, gauge covariance, positivity
-├── Injective.lean         — IsInjective, IsNBlkInjective, IsNormal
-├── TraceNondeg.lean       — Trace nondegeneracy: tr(MN)=0 ∀N ⟹ M=0
-├── CanonicalForm.lean     — CanonicalForm structure, toTensor
-├── TracePairing.lean      — Trace pairing bilinear form infrastructure
-├── LinearExtension.lean   — Unique linear extension T with T(Aⁱ)=Bⁱ, multiplicativity
-├── SkolemNoether.lean     — Simplicity of M_D(ℂ), Skolem–Noether theorem
-├── FundamentalTheorem.lean — Single-block Fundamental Theorem assembly
-├── MultiBlock.lean        — Block-diagonal MPV decomposition infrastructure
-├── BasisNormal.lean       — Vandermonde separation of block MPVs
-├── FundamentalTheoremMulti.lean — Multi-block gauge assembly + global theorem
-├── BlockPermutation.lean    — Automorphisms of ∏ simple rings permute factors
-└── BlockPermutationMPS.lean — Per-block decomposition via Skolem–Noether
+├── Defs.lean                    — MPSTensor, IsInjective, GaugeEquiv, SameMPV, gauge invariance (128 l)
+├── Transfer.lean                — Transfer map, gauge covariance, positivity (45 l)
+├── TraceNondeg.lean             — Trace nondegeneracy: tr(MN)=0 ∀N ⟹ M=0 (22 l)
+├── TracePairing.lean            — Trace pairing bilinear form infrastructure (98 l)
+├── LinearExtension.lean         — Unique linear extension T with T(Aⁱ)=Bⁱ, multiplicativity (159 l)
+├── SkolemNoether.lean           — Simplicity of M_D(ℂ), Skolem–Noether theorem (149 l)
+├── FundamentalTheorem.lean      — Single-block Fundamental Theorem assembly (78 l)
+├── CanonicalForm.lean           — CanonicalForm structure, toTensor (51 l)
+├── MultiBlock.lean              — Block-diagonal MPV decomposition infrastructure (163 l)
+├── BasisNormal.lean             — Vandermonde separation of block MPVs (162 l)
+├── FundamentalTheoremMulti.lean — Multi-block gauge assembly + global theorem (237 l)
+├── BlockPermutation.lean        — Automorphisms of ∏ simple rings permute factors (223 l)
+├── BlockPermutationMPS.lean     — Per-block decomposition via Skolem–Noether (336 l)
+└── PiAlgebraExtension.lean      — Linear extension on ∏ M_{D_k}(ℂ) from SameMPV₂ (370 l)
 ```
 
 ## Key Design Decisions
@@ -110,15 +114,15 @@ MPSLean/MPS/
 
 The formalization is organized into three layers:
 
-**Layer 1 — Single-Block Fundamental Theorem** (10 modules, ~730 lines)
-`Defs → GaugeInvariance → Transfer → Injective → TraceNondeg → TracePairing → LinearExtension → SkolemNoether → FundamentalTheorem`
+**Layer 1 — Single-Block Fundamental Theorem** (7 modules, ~679 lines)
+`Defs → Transfer → TraceNondeg → TracePairing → LinearExtension → SkolemNoether → FundamentalTheorem`
 
-**Layer 2 — Multi-Block Assembly** (3 modules, ~950 lines)
+**Layer 2 — Multi-Block Assembly** (4 modules, ~613 lines)
 `CanonicalForm → MultiBlock → BasisNormal → FundamentalTheoremMulti`
 
-**Layer 3 — Block Permutation** (2 modules, ~610 lines)
-`BlockPermutation → BlockPermutationMPS`
-Factors automorphisms of `∏ M_{D_k}(ℂ)` into block permutations + per-block inner automorphisms.
+**Layer 3 — Block Permutation + Pi-Algebra Extension** (3 modules, ~929 lines)
+`BlockPermutation → BlockPermutationMPS → PiAlgebraExtension`
+Factors automorphisms of `∏ M_{D_k}(ℂ)` into block permutations + per-block inner automorphisms, and constructs the linear extension on the product algebra.
 
 ## The Remaining Gap
 
