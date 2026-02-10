@@ -1,0 +1,1064 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\usepackage{amsmath,amssymb,braket}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc,decorations.pathreplacing,fit,backgrounds,matrix}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{appendixnumberbeamer}
+\usepackage[style=numeric-comp,backend=biber,sorting=none,maxbibnames=4]{biblatex}
+\addbibresource{references.bib}
+
+% ── Color scheme (matches presentation20260208.tex) ──
+\definecolor{leangreen}{RGB}{34,180,34}
+\definecolor{leanblue}{RGB}{70,130,180}
+\definecolor{amber}{RGB}{255,191,0}
+\definecolor{softred}{RGB}{220,80,80}
+\definecolor{darkbg}{RGB}{15,15,15}
+\definecolor{cardbg}{RGB}{30,30,30}
+\definecolor{dimwhite}{RGB}{180,180,180}
+\definecolor{deepblue}{RGB}{50,100,170}
+\definecolor{mintgreen}{RGB}{100,210,130}
+
+\setbeamercolor{background canvas}{bg=darkbg}
+\setbeamercolor{normal text}{fg=white}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{frametitle}{fg=white,bg=darkbg}
+\setbeamercolor{block title}{fg=white,bg=gray!30!black}
+\setbeamercolor{block body}{fg=white,bg=cardbg}
+\setbeamercolor{alerted text}{fg=amber}
+\setbeamercolor{example text}{fg=leangreen}
+\setbeamercolor{itemize item}{fg=leangreen}
+\setbeamercolor{itemize subitem}{fg=dimwhite}
+\setbeamercolor{enumerate item}{fg=leangreen}
+\setbeamercolor{progress bar}{fg=leangreen}
+\setbeamercolor{title separator}{fg=leangreen}
+\setbeamercolor{footline}{fg=dimwhite,bg=darkbg}
+
+% ── Footer with page number / total ──
+\setbeamertemplate{footline}{%
+  \hfill%
+  \usebeamercolor[fg]{footline}%
+  \usebeamerfont{footline}%
+  \insertframenumber\,/\,\inserttotalframenumber%
+  \hspace*{6pt}\vspace{4pt}\par%
+}
+
+% ── Lean listing ──
+\lstdefinelanguage{Lean}{
+  keywords={theorem, lemma, def, abbrev, variable, namespace, end, open, import,
+            noncomputable, private, section, structure, where, let, have, exact,
+            intro, apply, simp, rw, rcases, refine, classical, cases, with,
+            fun, forall, exists, Prop, Type, require},
+  keywordstyle=\color{leanblue}\bfseries,
+  keywords=[2]{IsInjective, SameMPV, SameMPV2, GaugeEquiv, MPSTensor, Matrix, Fin, GL,
+               CanonicalForm, transferMap, HopfieldNet, CPTPMap, IsCompletelyPositive,
+               choi_PSD_iff_CP_map, pft_irreducible, spectral_dominance_of_primitive,
+               IsIrreducible, IsPrimitive, PosSemidef},
+  keywordstyle=[2]\color{leangreen},
+  comment=[l]{--},
+  commentstyle=\color{gray}\itshape,
+  string=[b]",
+  stringstyle=\color{orange},
+  basicstyle=\ttfamily\scriptsize\color{white},
+  backgroundcolor=\color{cardbg},
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{gray!50!black},
+  showstringspaces=false,
+  escapeinside={(*@}{@*)},
+}
+\lstset{language=Lean}
+
+% ── Global TikZ styles (must be outside frames to avoid beamer # issues) ──
+\tikzset{
+  stdbox/.style={rectangle, rounded corners=3pt, draw=gray!50, fill=cardbg,
+              text=white, font=\scriptsize, minimum width=3.3cm,
+              minimum height=0.55cm, align=center},
+  gapbox/.style={stdbox, draw=softred, fill=softred!15!cardbg, text=softred!80!white},
+  stepgreen/.style={rectangle, rounded corners=3pt, draw=leangreen!60, fill=leangreen!15!cardbg,
+               text=white, font=\tiny, minimum width=1.9cm,
+               minimum height=0.6cm, align=center},
+  stepamber/.style={rectangle, rounded corners=3pt, draw=amber!60, fill=amber!15!cardbg,
+               text=white, font=\tiny, minimum width=1.9cm,
+               minimum height=0.6cm, align=center},
+  stepsoftred/.style={rectangle, rounded corners=3pt, draw=softred!60, fill=softred!15!cardbg,
+               text=white, font=\tiny, minimum width=1.9cm,
+               minimum height=0.6cm, align=center},
+  stdarr/.style={-{Stealth[length=3pt]}, gray!60, thick},
+  boxgreen/.style={rectangle, rounded corners=3pt, draw=leangreen!60, fill=leangreen!12!cardbg,
+              text=white, font=\tiny, minimum width=2.4cm,
+              minimum height=0.5cm, align=center},
+  boxamber/.style={rectangle, rounded corners=3pt, draw=amber!60, fill=amber!12!cardbg,
+              text=white, font=\tiny, minimum width=2.4cm,
+              minimum height=0.5cm, align=center},
+  boxleanblue/.style={rectangle, rounded corners=3pt, draw=leanblue!60, fill=leanblue!12!cardbg,
+              text=white, font=\tiny, minimum width=2.4cm,
+              minimum height=0.5cm, align=center},
+  boxdimwhite/.style={rectangle, rounded corners=3pt, draw=dimwhite!60, fill=dimwhite!12!cardbg,
+              text=white, font=\tiny, minimum width=2.4cm,
+              minimum height=0.5cm, align=center},
+  boxsoftred/.style={rectangle, rounded corners=3pt, draw=softred!60, fill=softred!12!cardbg,
+              text=white, font=\tiny, minimum width=2.4cm,
+              minimum height=0.5cm, align=center},
+  cardgreen/.style={rectangle, rounded corners=4pt, draw=leangreen!50, fill=leangreen!10!cardbg,
+               text=white, font=\scriptsize, minimum width=4.0cm,
+               minimum height=3.4cm, align=left, text width=3.8cm},
+  cardblue/.style={rectangle, rounded corners=4pt, draw=leanblue!50, fill=leanblue!10!cardbg,
+               text=white, font=\scriptsize, minimum width=4.0cm,
+               minimum height=3.4cm, align=left, text width=3.8cm},
+  cardgray/.style={rectangle, rounded corners=4pt, draw=gray!50, fill=gray!10!cardbg,
+               text=white, font=\scriptsize, minimum width=4.0cm,
+               minimum height=3.4cm, align=left, text width=3.8cm},
+  archbox/.style={rectangle, rounded corners=3pt, draw=gray!60, fill=gray!12!cardbg,
+              text=white, font=\tiny, minimum width=2.6cm,
+              minimum height=0.55cm, align=center},
+  bridgearr/.style={-{Stealth[length=4pt]}, gray!50, thick},
+  lbarr/.style={font=\tiny},
+  roadstep/.style={rectangle, rounded corners=3pt, draw=gray!60, fill=gray!12!cardbg,
+               text=white, font=\scriptsize, minimum width=10cm,
+               minimum height=0.65cm, align=left, text width=9.7cm},
+  tierbox/.style={rectangle, rounded corners=4pt, draw=gray!50, fill=gray!10!cardbg,
+               text=white, font=\small, minimum width=13cm,
+               minimum height=1.1cm, align=left, text width=12.7cm},
+  qibox/.style={rectangle, rounded corners=2pt, draw=leanblue!50, fill=leanblue!10!cardbg,
+              text=white, font=\tiny, minimum width=2cm, align=center},
+}
+
+% ── Macros ──
+\newcommand{\proved}[1]{\textcolor{leangreen}{\checkmark\  #1}}
+\newcommand{\inprog}[1]{\textcolor{amber}{$\circ$\  #1}}
+\newcommand{\future}[1]{\textcolor{gray}{$\diamond$\  #1}}
+\newcommand{\notproved}[1]{\textcolor{softred}{$\boldsymbol{\times}$\  #1}}
+\newcommand{\community}[1]{\textcolor{deepblue}{$\blacklozenge$\  #1}}
+\newcommand{\MD}{M_D(\mathbb{C})}
+\newcommand{\GLC}{\mathrm{GL}}
+\newcommand{\tr}{\mathrm{tr}}
+
+\title{\textbf{Closing the Gap:\\The Physics Proof \& Community Resources}}
+\subtitle{{\small From transfer operators to Perron--Frobenius  $\cdot$  What we can reuse  $\cdot$  A roadmap}}
+\date{February 9, 2026}
+\author{}
+
+\begin{document}
+
+%======================================================================
+% SLIDE 1 - Title
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+\vspace{-2em}
+\maketitle
+\vspace{-2em}
+\begin{center}
+{\footnotesize Lean~4 + Mathlib v4.27.0\quad$\cdot$\quad arXiv:2011.12127\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}}
+\end{center}
+\end{frame}
+}
+
+%======================================================================
+% SLIDE 2 - Where We Stand
+%======================================================================
+\begin{frame}{Where We Stand: The One Remaining Gap}
+
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\textbf{Fully formalized} (0 sorries, 14 modules, 2396 LoC):
+\begin{itemize}
+  \item \proved{Single-block FT: \texttt{SameMPV} $\Rightarrow$ \texttt{GaugeEquiv}}
+  \item \proved{Multi-block gauge assembly}
+  \item \proved{Block permutation decomposition}
+  \item \proved{Pi-algebra automorphism structure}
+  \item \proved{Single-block closure ($r=1$)}
+\end{itemize}
+
+\vspace{0.6em}
+\textbf{The gap} ($r \geq 2$):
+\begin{itemize}
+  \item \notproved{\texttt{SameMPV$\_2$} $\Rightarrow$ per-block \texttt{SameMPV}}
+\end{itemize}
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{tikzpicture}[
+  node distance=0.6cm,
+]
+  \node[stdbox, fill=leangreen!20!cardbg, draw=leangreen!50] (s2) {SameMPV$_2$(global)};
+  \node[gapbox, below=of s2] (gap) {\textbf{THE GAP}\\block separation};
+  \node[stdbox, fill=leangreen!20!cardbg, draw=leangreen!50, below=of gap] (pb) {Per-block SameMPV};
+  \node[stdbox, fill=leangreen!20!cardbg, draw=leangreen!50, below=of pb] (ft) {Per-block GaugeEquiv};
+  \node[stdbox, fill=leangreen!20!cardbg, draw=leangreen!50, below=of ft] (gl) {Global GaugeEquiv};
+  \draw[stdarr] (s2) -- (gap);
+  \draw[stdarr, softred] (gap) -- (pb);
+  \draw[stdarr] (pb) -- (ft);
+  \draw[stdarr] (ft) -- (gl);
+\end{tikzpicture}
+\end{column}
+\end{columns}
+
+\vspace{0.3em}
+{\footnotesize \textcolor{dimwhite}{Today's talk: How does the physics paper close this gap, and can we formalize it?}}
+\end{frame}
+
+%======================================================================
+% SLIDE 3 - The Physics Proof: Overview
+%======================================================================
+\begin{frame}{The Physics Proof: Six Steps to Block Separation}
+
+The standard proof \cite{Perez-Garcia2007Matrix,Cirac2021Matrix} uses \alert{transfer operator spectral theory}:
+
+\vspace{0.4em}
+\begin{tikzpicture}[
+  node distance=0.4cm and 0.25cm,
+]
+  \node[stepgreen] (s1) {1. Transfer\\operator $E_A$};
+  \node[stepgreen, right=of s1] (s2) {2. Complete\\positivity};
+  \node[stepamber, right=of s2] (s3) {3. Irreducibility\\of $E_A$};
+  \node[stepsoftred, right=of s3] (s4) {4. Quantum\\Perron--Frobenius};
+  \node[stepsoftred, right=of s4] (s5) {5. Spectral gap\\$|\lambda| < 1$};
+  \node[stepsoftred, right=of s5] (s6) {6. Block\\separation};
+
+  \draw[stdarr] (s1) -- (s2);
+  \draw[stdarr] (s2) -- (s3);
+  \draw[stdarr] (s3) -- (s4);
+  \draw[stdarr] (s4) -- (s5);
+  \draw[stdarr] (s5) -- (s6);
+
+  \node[below=0.25cm of s1, font=\tiny, text=leangreen] {\textbf{Done}};
+  \node[below=0.25cm of s2, font=\tiny, text=leangreen] {\textbf{Done}};
+  \node[below=0.25cm of s3, font=\tiny, text=amber] {\textbf{Partial}};
+  \node[below=0.25cm of s4, font=\tiny, text=softred] {\textbf{Missing}};
+  \node[below=0.25cm of s5, font=\tiny, text=softred] {\textbf{Missing}};
+  \node[below=0.25cm of s6, font=\tiny, text=softred] {\textbf{Missing}};
+\end{tikzpicture}
+
+\vspace{0.5em}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textcolor{leangreen}{\textbf{Already in MPSLean:}}
+\begin{itemize}\small
+  \item Transfer map: $E_A(X) = \sum_i A_i X A_i^\dagger$
+  \item Positivity: $X \geq 0 \Rightarrow E_A(X) \geq 0$
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textcolor{softred}{\textbf{Not in Mathlib or any Lean project:}}
+\begin{itemize}\small
+  \item Quantum Perron--Frobenius theorem
+  \item Spectral gap for CP maps
+  \item Choi--Jamio\l kowski isomorphism
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 4 - Step 1: Transfer Operator
+%======================================================================
+\begin{frame}{Step 1: The Transfer Operator}
+
+For each block $k$ with matrices $\{A_k^\sigma\}_\sigma$, define:
+\[
+E_k(X) =  \sum_{\sigma=1}^{d} A_k^\sigma \,X\, (A_k^\sigma)^\dagger
+\qquad\qquad E_k : M_{D_k}(\mathbb{C}) \to M_{D_k}(\mathbb{C})
+\]
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Key properties:}
+\begin{itemize}
+  \item \proved{Positive: $X \geq 0 \implies E_k(X) \geq 0$}
+  \item \proved{Linear map on $D_k^2$-dimensional space}
+  \item Completely positive (Kraus form)
+  \item If $\sum_\sigma (A_k^\sigma)^\dagger A_k^\sigma = I$: trace-preserving
+\end{itemize}
+
+\vspace{0.2em}
+\textbf{Why it matters:}
+\begin{itemize}\small\itemsep0pt
+  \item Powers of $E_k$ encode the MPV generating function
+  \item $\tr(E_k^N(\rho))$ expands as a sum over all $\sigma$-configurations
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{tikzpicture}[scale=0.75]
+  % Transfer operator diagram
+  \draw[gray!50, thick, rounded corners=5pt] (-0.3,-0.3) rectangle (4.0,3.3);
+  \node[text=dimwhite, font=\scriptsize] at (1.85, 3.55) {$E_k : M_{D_k}(\mathbb{C}) \to M_{D_k}(\mathbb{C})$};
+
+  % Input
+  \node[rectangle, draw=leanblue, fill=leanblue!20!cardbg, minimum width=0.8cm, minimum height=0.8cm, text=white, font=\scriptsize] (X) at (0.4, 1.5) {$X$};
+
+  % Kraus operators
+  \foreach \i/\y in {1/2.5, 2/1.5, 3/0.5} {
+    \node[font=\tiny, text=amber] at (2, \y) {$A_k^{\i} X (A_k^{\i})^\dagger$};
+  }
+
+  % Sum arrow
+  \node[font=\scriptsize, text=leangreen] at (3.3, 1.5) {$\sum$};
+  \draw[-{Stealth[length=3pt]}, leangreen, thick] (3.55, 1.5) -- (3.85, 1.5);
+\end{tikzpicture}
+
+\vspace{0.3em}
+{\scriptsize \textcolor{dimwhite}{Already formalized in \texttt{Transfer.lean} (45 lines)}}
+\end{column}
+\end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 5 - Step 2-3: CP Maps and Irreducibility
+%======================================================================
+\begin{frame}{Steps 2--3: Complete Positivity and Irreducibility}
+
+\textbf{Step 2: Complete positivity.}\quad
+$E_k$ has Kraus form $\{A_k^\sigma\}_\sigma$, so it is automatically \alert{completely positive (CP)}:
+\[
+E_k \otimes \mathrm{id}_n : M_{D_k \cdot n}(\mathbb{C}) \to M_{D_k \cdot n}(\mathbb{C}) \quad\text{preserves}\quad X \geq 0.
+\]
+This is stronger than just ``positive'': it means $E_k$ preserves entanglement structure.
+
+\vspace{0.6em}
+\textbf{Step 3: Irreducibility.}\quad
+When the block tensor $A_k$ is \emph{injective} (its matrices span $M_{D_k}(\mathbb{C})$), the transfer operator $E_k$ is \alert{irreducible} as a positive map:
+
+\begin{block}{Irreducibility of CP maps}
+The only subspace $V \subseteq \mathbb{C}^{D_k}$ with $A_k^\sigma(V) \subseteq V$ for all $\sigma$ is $V = \{0\}$ or $V = \mathbb{C}^{D_k}$.
+
+Equivalently: the only $E_k$-invariant faces of the PSD cone are $\{0\}$ and the full cone.
+\end{block}
+
+\vspace{0.3em}
+\textcolor{dimwhite}{\footnotesize This connects our algebraic condition (\texttt{IsInjective}) to the spectral-theoretic framework. Mathlib has the \emph{definition} of \texttt{Matrix.IsIrreducible} but not the eigenvalue consequences.}
+\end{frame}
+
+%======================================================================
+% SLIDE 6 - Step 4: Quantum Perron-Frobenius
+%======================================================================
+\begin{frame}{Step 4: The Quantum Perron--Frobenius Theorem}
+
+\begin{block}{Theorem (Evans--H{\o}egh-Krohn \cite{Evans1978Spectral}; Wolf \cite{Wolf2012Quantum})}
+Let $E : M_D(\mathbb{C}) \to M_D(\mathbb{C})$ be an \alert{irreducible completely positive} map. Then:
+\begin{enumerate}\itemsep0pt
+  \item The spectral radius $\rho(E) > 0$ is an eigenvalue.
+  \item The eigenspace for $\rho(E)$ is \textbf{one-dimensional}.
+  \item The unique eigenvector (up to scaling) is \textbf{positive definite}: $\Lambda > 0$.
+  \item No other eigenvalue of modulus $\rho(E)$ has a PSD eigenvector.
+\end{enumerate}
+\end{block}
+
+\vspace{0.2em}
+\textbf{For our transfer operator $E_k$:}
+\begin{itemize}\itemsep0pt
+  \item In canonical form, $E_k(I) = I$ (trace-preserving), so $\rho(E_k) = 1$
+  \item The unique fixed point $\Lambda_k > 0$ with $E_k(\Lambda_k) = \Lambda_k$
+  \item \alert{All other eigenvalues satisfy $|\lambda| < 1$} (spectral gap!)
+\end{itemize}
+
+\vspace{0.2em}
+\begin{center}
+\textcolor{softred}{\textbf{This theorem has never been formally verified in any proof assistant.}}\\[2pt]
+{\footnotesize \textcolor{dimwhite}{Not in Lean, not in Isabelle, not in Coq. It's the key missing piece.}}
+\end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 7 - Steps 5-6: Spectral Gap and Block Separation
+%======================================================================
+\begin{frame}{Steps 5--6: Spectral Gap $\implies$ Block Separation}
+
+\textbf{Step 5: Spectral gap.}\quad After normalizing so $\rho(E_k) = 1$:
+\[
+E_k^N(X) \xrightarrow{N\to\infty}  \tr(X) \cdot \Lambda_k
+\]
+The convergence rate is $|\lambda_2|^N$ where $|\lambda_2| < 1$ is the second-largest eigenvalue modulus.
+
+\vspace{0.5em}
+\textbf{Step 6: Block separation.}\quad The SameMPV$_2$ equation says:
+\[
+\sum_k \mu_k^N \cdot \underbrace{[\tr(A_k^{\sigma_1}\cdots A_k^{\sigma_N}) - \tr(B_k^{\sigma_1}\cdots B_k^{\sigma_N})]}_{\text{involves } E_k^N}= 0 \quad \forall\, N, \sigma
+\]
+
+\begin{enumerate}\small
+  \item For distinct $|\mu_k|$: divide by $\mu_1^N$, take $N \to \infty$ $\implies$ block 1 separates
+  \item By induction on $k$: all blocks separate
+  \item For equal $|\mu_k|$ with different phases: secondary Vandermonde on the unit circle
+\end{enumerate}
+
+\vspace{0.3em}
+{\footnotesize \textcolor{dimwhite}{The spectral gap ensures the $E_k^N$ terms converge, giving us ``fixed coefficients'' for the Vandermonde argument that was otherwise blocked by the $N$--$\sigma$ coupling.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 8 - The Choi Bridge
+%======================================================================
+\begin{frame}{The Key Insight: Choi--Jamio\l kowski Bridge}
+
+\textbf{The vectorization identity} (already in Mathlib):\quad
+$\mathrm{vec}(AXB^T) = (B \otimes A) \cdot \mathrm{vec}(X)$
+
+\vspace{0.2em}
+Applying to the transfer operator:
+\vspace{-0.3em}
+\[
+\mathrm{vec}(E_A(X)) = \underbrace{\left(\sum_i \overline{A_i} \otimes A_i\right)}_{T_A =  \text{``Choi matrix''}} \cdot \mathrm{vec}(X)
+\]
+
+\vspace{-0.3em}
+\begin{columns}[T]
+\begin{column}{0.45\textwidth}
+\textbf{Properties of $T_A$:}
+\begin{itemize}\itemsep0pt
+  \item $D^2 \times D^2$ matrix
+  \item $T_A$ is \alert{positive semidefinite} (sum of rank-1 PSD terms)
+  \item Eigenvalues of $T_A$ = eigenvalues of $E_A$
+  \item $T_A$ irreducible $\iff$ $E_A$ irreducible
+\end{itemize}
+\end{column}
+\begin{column}{0.52\textwidth}
+\begin{tikzpicture}[
+  choibox/.style={rectangle, rounded corners=3pt, text=white, font=\scriptsize,
+              minimum width=2.6cm, minimum height=0.8cm, align=center},
+]
+  \node[choibox, draw=amber!60, fill=amber!15!cardbg] (cp) {CP map $E_A$\\on $M_D(\mathbb{C})$};
+  \node[choibox, draw=leangreen!60, fill=leangreen!15!cardbg, right=1.2cm of cp] (cl) {Nonneg matrix $T_A$\\on $\mathbb{R}^{D^2}$};
+  \node[choibox, draw=softred!60, fill=softred!15!cardbg, below=0.8cm of cp] (qpf) {Quantum PF\\(unknown territory)};
+  \node[choibox, draw=leangreen!60, fill=leangreen!15!cardbg, below=0.8cm of cl] (cpf) {Classical PF\\(\textbf{HopfieldNet}!)};
+
+  \draw[-{Stealth[length=4pt]}, leanblue, thick] (cp) -- node[above, font=\tiny, text=leanblue] {Choi} (cl);
+  \draw[-{Stealth[length=4pt]}, gray!50, thick, dashed] (cp) -- (qpf);
+  \draw[-{Stealth[length=4pt]}, leangreen, thick] (cl) -- (cpf);
+  \draw[-{Stealth[length=4pt]}, leanblue, thick, dashed] (cpf) -- node[below, font=\tiny, text=leanblue] {transfer back} (qpf);
+\end{tikzpicture}
+
+\vspace{0.1em}
+{\scriptsize \textcolor{leangreen}{$\blacklozenge$ Classical PF applied to $T_A$ gives quantum PF for $E_A$!}}
+\end{column}
+\end{columns}
+
+\vspace{0.2em}
+{\footnotesize This \alert{reduction to classical PF} is the most practical formalization path.}
+\end{frame}
+
+%======================================================================
+% SLIDE 9 - Community Resources Overview
+%======================================================================
+\begin{frame}{What the Community Has Built}
+
+\begin{center}
+\begin{tikzpicture}
+  \node[cardgreen] (hf) at (0,0) {%
+    \textcolor{leangreen}{\textbf{HopfieldNet}} \hfill {\tiny MIT}\\[1pt]
+    Karatarakis, Cipollina, Wiedijk\\
+    {\tiny Radboud Univ.\ \cite{Cipollina2025Formalized}}\\[2pt]
+    \textcolor{amber}{8,302 lines} $\cdot$ 416 thms\\
+    \textcolor{leangreen}{Full classical PF}:\\
+     \checkmark\ Perron root existence\\
+     \checkmark\ Unique positive eigvec\\
+     \checkmark\ Spectral dominance\\
+     \checkmark\ \textbf{Same Lean + Mathlib!}
+  };
+
+  \node[cardblue, right=0.2cm of hf] (lqi) {%
+    \textcolor{leanblue}{\textbf{Lean-QuantumInfo}} \hfill {\tiny MIT}\\[1pt]
+    Meiburg et al.\\
+    {\tiny \cite{Meiburg2025Formalization}, 101$\bigstar$}\\[2pt]
+    \textcolor{amber}{20,434 lines} $\cdot$ 1,059 thms\\
+    \textcolor{leanblue}{CP map infrastructure}:\\
+     \checkmark\ Choi's thm (sorry-free)\\
+     \checkmark\ Kraus decomposition\\
+     \checkmark\ CPTP type hierarchy\\
+     \textcolor{softred}{$\times$}\ Lean v4.24.0 (behind)
+  };
+
+  \node[cardgray, right=0.2cm of lqi] (ml) {%
+    \textcolor{dimwhite}{\textbf{Mathlib v4.27.0}} \hfill {\tiny Apache-2}\\[1pt]
+    Community\\
+    \textcolor{dimwhite}{Already imported}:\\[2pt]
+     \checkmark\ Spectral theory\\
+     \checkmark\ \texttt{IsIrreducible}\\
+     \checkmark\ \texttt{CPMap} (minimal)\\
+     \checkmark\ Kronecker/vec\\
+     \textcolor{softred}{$\times$}\ No PF eigenvalue thm
+  };
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 10 - HopfieldNet Deep Dive
+%======================================================================
+\begin{frame}[fragile]{HopfieldNet: Full Classical PF in Lean 4}
+
+\textbf{The big surprise:} the paper said ``stochastic matrices,'' but the code proves PF for \alert{general irreducible nonneg real matrices}.
+
+\vspace{0.3em}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Key theorems proved:}
+\begin{itemize}\small
+  \item \texttt{pft\_irreducible}: full PF for irreducible
+  \item \texttt{spectral\_dominance\_of\_primitive'}: \\$\mu \neq r \implies |\mu| < r$
+  \item \texttt{uniqueness\_of\_positive\_eigenvector}: \\unique up to scaling
+  \item \texttt{perron\_root\_is\_spectral\_radius}
+  \item \texttt{eigenvalue\_abs\_le\_perron\_root}: \\$|\mu| \leq r$ for all eigenvalues
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Version compatibility:}
+
+\vspace{0.3em}
+\begin{tabular}{lcc}
+  & \textbf{HopfieldNet} & \textbf{MPSLean} \\
+  \hline\\
+  Lean & v4.27.0-rc1 & v4.27.0 \\
+  Mathlib & \texttt{910dac3f} & \texttt{910dac3f} \\
+  License & MIT & --- \\
+\end{tabular}
+
+\vspace{0.5em}
+\textcolor{leangreen}{\textbf{Identical Mathlib revision!}}
+
+\vspace{0.3em}
+Import with one line:
+\begin{lstlisting}
+-- lakefile.toml:
+[[require]]
+name = "HopfieldNet"
+git = "https://github.com/
+  mkaratarakis/HopfieldNet.git"
+\end{lstlisting}
+\end{column}
+\end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 11 - HopfieldNet Architecture
+%======================================================================
+\begin{frame}{HopfieldNet: Proof Architecture}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=0.5cm and 0.5cm,
+]
+  % Level 1
+  \node[boxamber] (cw) {CollatzWielandt.lean\\{\tiny 888 lines}};
+  \node[boxdimwhite, right=of cw] (spec) {Spectrum.lean\\{\tiny 696 lines}};
+  \node[boxdimwhite, right=of spec] (lem) {Lemmas.lean\\{\tiny 447 lines}};
+
+  % Level 2
+  \node[boxamber, below=of cw] (prim) {Primitive.lean\\{\tiny 308 lines}};
+  \node[boxleanblue, below=of spec] (uniq) {Uniqueness.lean\\{\tiny 97 lines}};
+
+  % Level 3
+  \node[boxgreen, below=of prim] (irr) {Irreducible.lean\\{\tiny 622 lines}};
+
+  % Level 4
+  \node[boxgreen, below right=0.5cm and -0.3cm of irr] (dom) {\textbf{Dominance.lean}\\{\tiny 1,242 lines --- THE MAIN FILE}};
+
+  % Level 5
+  \node[boxdimwhite, below=of dom] (stoch) {Stochastic.lean\\{\tiny 81 lines}};
+
+  \draw[stdarr] (cw) -- (prim);
+  \draw[stdarr] (spec) -- (prim);
+  \draw[stdarr] (prim) -- (irr);
+  \draw[stdarr] (uniq) -- (irr);
+  \draw[stdarr] (lem) -- (uniq);
+  \draw[stdarr] (irr) -- (dom);
+  \draw[stdarr] (spec) -- (dom);
+  \draw[stdarr] (dom) -- (stoch);
+
+  % Annotation
+  \node[right=0.8cm of dom, text=leangreen, font=\scriptsize, text width=3cm, align=left] {%
+    $|\mu| \leq r$ \checkmark\\
+    $r = $ spectral radius \checkmark\\
+    $\mu \neq r \implies |\mu| < r$ \checkmark
+  };
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3em}
+\textbf{Total:} 8,302 lines, 416 theorems, 40 definitions, \textcolor{leangreen}{1 sorry} (minor path lemma)
+
+\vspace{0.2em}
+{\footnotesize \textcolor{dimwhite}{Uses Collatz--Wielandt characterization on the simplex + compactness (Brouwer). Dominance via phase alignment argument.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 12 - Lean-QuantumInfo Deep Dive
+%======================================================================
+\begin{frame}{Lean-QuantumInfo: CP Map Infrastructure}
+
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\textbf{What we'd use} (all sorry-free):
+\begin{itemize}\small\itemsep1pt
+  \item \texttt{choi\_PSD\_iff\_CP\_map}:\\ $\Phi$ is CP $\iff$ Choi$(\Phi)$ is PSD
+  \item \texttt{exists\_kraus\_of\_choi\_PSD}:\\ Choi PSD $\implies \exists$ Kraus operators
+  \item \texttt{of\_kraus\_CP}: Kraus $\implies$ CP
+  \item \texttt{of\_kraus\_isTracePreserving}:\\ $\sum K_i^\dagger K_i = I \iff$ TP
+  \item \texttt{choi\_equiv}:
+    $\mathrm{Maps}(M_A, M_B) \simeq M_{A \times B}$
+\end{itemize}
+
+\vspace{0.2em}
+\textbf{Type match:}
+\begin{itemize}\small\itemsep1pt
+  \item Their \texttt{MatrixMap (Fin D) (Fin D) $\mathbb{C}$}
+  \item $=$ Our \texttt{transferMap} type exactly
+  \item \texttt{of\_kraus Ks X = $\sum_i K_i X K_i^\dagger$}
+  \item $=$ Our transfer operator exactly
+\end{itemize}
+\end{column}
+\begin{column}{0.42\textwidth}
+\textbf{Type hierarchy:}
+\begin{tikzpicture}[
+  node distance=0.35cm,
+]
+  \node[qibox] (hp) {HPMap};
+  \node[qibox, below=of hp] (pm) {PMap};
+  \node[qibox, below=of pm] (cp) {CPMap};
+  \node[qibox, below left=0.3cm and -0.3cm of cp] (cptp) {\textbf{CPTPMap}};
+  \node[qibox, below right=0.3cm and -0.3cm of cp] (cpu) {CPUMap};
+  \draw[-{Stealth[length=2pt]}, gray!50] (hp) -- (pm);
+  \draw[-{Stealth[length=2pt]}, gray!50] (pm) -- (cp);
+  \draw[-{Stealth[length=2pt]}, gray!50] (cp) -- (cptp);
+  \draw[-{Stealth[length=2pt]}, gray!50] (cp) -- (cpu);
+\end{tikzpicture}
+
+\vspace{0.5em}
+\textcolor{softred}{\textbf{Version gap:}}\\
+{\small Lean v4.24.0 vs our v4.27.0}\\
+{\small $\implies$ Cannot import directly}\\
+{\small $\implies$ Guided rewrite needed}
+
+\vspace{0.3em}
+\textcolor{dimwhite}{\footnotesize But: every key theorem is sorry-free, so rewriting is safe.}
+\end{column}
+\end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 13 - What's Missing
+%======================================================================
+\begin{frame}{What's Missing: The Honest Gap Map}
+\vspace{-0.5em}
+\begin{center}
+\renewcommand{\arraystretch}{1.0}
+\begin{tabular}{>{\scriptsize}l >{\scriptsize}c >{\scriptsize}c >{\scriptsize}c}
+\textbf{Component} & \textbf{HopfieldNet} & \textbf{Lean-QI} & \textbf{Mathlib} \\
+\midrule
+Classical PF eigenvalue theorem & \textcolor{leangreen}{\checkmark\,\textbf{full}} & --- & \textcolor{softred}{$\times$} \\
+Spectral dominance (primitive) & \textcolor{leangreen}{\checkmark\,\textbf{full}} & --- & \textcolor{softred}{$\times$} \\
+Choi--Jamio\l kowski isomorphism & --- & \textcolor{leangreen}{\checkmark} & \textcolor{softred}{$\times$} \\
+Kraus representation & --- & \textcolor{leangreen}{\checkmark} & \textcolor{softred}{$\times$} \\
+CP map definitions & --- & \textcolor{leangreen}{\checkmark} & \textcolor{amber}{minimal} \\
+\texttt{Matrix.IsIrreducible} & uses it & --- & \textcolor{leangreen}{\checkmark\,def} \\
+Spectral theory & \textcolor{leangreen}{\checkmark} & --- & \textcolor{leangreen}{\checkmark} \\
+\midrule
+\textcolor{softred}{Quantum PF theorem} & \textcolor{softred}{$\times$} & \textcolor{softred}{$\times$} & \textcolor{softred}{$\times$} \\
+\textcolor{softred}{CP map irreducibility bridge} & \textcolor{softred}{$\times$} & \textcolor{softred}{$\times$} & \textcolor{softred}{$\times$} \\
+\textcolor{softred}{Spectral gap for CP maps} & \textcolor{softred}{$\times$} & \textcolor{softred}{$\times$} & \textcolor{softred}{$\times$} \\
+\textcolor{softred}{Block separation lemma} & \textcolor{softred}{$\times$} & \textcolor{softred}{$\times$} & \textcolor{softred}{$\times$} \\
+\end{tabular}
+\end{center}
+
+\vspace{0.1em}
+\begin{center}
+\textcolor{amber}{\textbf{The two halves of the bridge exist separately. Nobody has connected them.}}
+\end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 14 - The Bridge: Full Architecture
+%======================================================================
+\begin{frame}{The Formalization Path: Connecting the Pieces}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=0.3cm and 0.5cm,
+  archboxG/.style={rectangle, rounded corners=3pt, draw=leangreen!60, fill=leangreen!12!cardbg,
+              text=white, font=\tiny, minimum width=2.5cm, minimum height=0.5cm, align=center},
+  archboxA/.style={rectangle, rounded corners=3pt, draw=amber!60, fill=amber!12!cardbg,
+              text=white, font=\tiny, minimum width=2.5cm, minimum height=0.5cm, align=center},
+  archboxR/.style={rectangle, rounded corners=3pt, draw=softred!60, fill=softred!12!cardbg,
+              text=white, font=\tiny, minimum width=2.5cm, minimum height=0.5cm, align=center},
+]
+  % Left column: MPSLean
+  \node[archboxG] (tf) {Transfer operator $E_A$\\{\tiny MPSLean/Transfer.lean}};
+  \node[archboxG, below=of tf] (pos) {$E_A$ is positive\\{\tiny transferMap\_pos}};
+
+  % Middle column: New code (bridge)
+  \node[archboxA, right=1.5cm of tf] (cp) {$E_A$ is CP\\{\tiny from Kraus form}};
+  \node[archboxA, below=of cp] (choi) {Choi matrix $T_A$ is PSD\\{\tiny Choi's theorem}};
+  \node[archboxA, below=of choi] (vec) {$\mathrm{vec}(E_A(X)) = T_A \cdot \mathrm{vec}(X)$\\{\tiny vectorization}};
+  \node[archboxR, below=of vec] (irr) {$T_A$ is irreducible\\{\tiny \textbf{HARDEST STEP}}};
+
+  % Right column: HopfieldNet
+  \node[archboxG, right=1.5cm of irr] (pf) {Classical PF on $T_A$\\{\tiny HopfieldNet}};
+  \node[archboxG, below=of pf] (gap) {Spectral gap $|\lambda_2| < 1$\\{\tiny spectral\_dominance}};
+  \node[archboxG, below=of gap] (sep) {Block separation\\{\tiny + Vandermonde}};
+
+  % Arrows
+  \draw[stdarr] (tf) -- (pos);
+  \draw[stdarr] (tf) -- (cp);
+  \draw[stdarr, leanblue] (cp) -- node[right, font=\tiny, text=leanblue] {Lean-QI guided} (choi);
+  \draw[stdarr] (choi) -- (vec);
+  \draw[stdarr, softred] (vec) -- (irr);
+  \draw[stdarr] (irr) -- (pf);
+  \draw[stdarr, leangreen] (pf) -- (gap);
+  \draw[stdarr] (gap) -- (sep);
+
+  % Source labels
+  \node[left=0.3cm of tf, font=\tiny, text=leangreen, rotate=90, anchor=south] {\textbf{MPSLean}};
+  \node[left=0.3cm of choi, font=\tiny, text=amber, rotate=90, anchor=south] {\textbf{New code}};
+  \node[right=0.3cm of gap, font=\tiny, text=leangreen, rotate=90, anchor=north] {\textbf{HopfieldNet}};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 15 - The Irreducibility Bridge (Hardest Step)
+%======================================================================
+\begin{frame}{The Hardest Step: The Irreducibility Bridge}
+
+\textbf{We need:}\quad Injectivity of $A_k$ $\implies$ $T_A = \sum_i \overline{A_i} \otimes A_i$ is an irreducible nonneg matrix.
+
+\vspace{0.3em}
+\textbf{Why this is hard:}
+\begin{itemize}\itemsep1pt
+  \item ``Irreducible'' for CP maps: no nontrivial $E_A$-invariant face of the PSD cone
+  \item ``Irreducible'' for nonneg matrices: no nontrivial invariant index subset (graph-theoretic)
+  \item These are \emph{different concepts} --- connecting them requires careful analysis
+\end{itemize}
+
+\vspace{0.2em}
+\textbf{Two approaches:}
+
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\textbf{A: Via Choi matrix structure}
+\begin{itemize}\small\itemsep1pt
+  \item $T_A$ is PSD $\implies$ entries $\geq 0$?
+  \item \textcolor{softred}{Not automatic!} PSD $\not\Rightarrow$ nonneg
+  \item Need nonneg in a \emph{suitable} basis (e.g.\ rank-1 PSD matrices)
+  \item Estimated: \textbf{2--4 weeks}
+\end{itemize}
+\end{column}
+\begin{column}{0.47\textwidth}
+\textbf{B: Direct quantum PF (bypass)}
+\begin{itemize}\small\itemsep1pt
+  \item Prove quantum PF directly using:
+    \begin{itemize}\scriptsize\itemsep0pt
+      \item Compactness of state space
+      \item Brouwer FPT (in Mathlib!)
+      \item Irreducibility $\implies$ interior fixed pt
+    \end{itemize}
+  \item \textcolor{leangreen}{Avoids classical PF bridge entirely}
+  \item Estimated: \textbf{3--4 weeks}
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 16 - Approach A: Vectorization Bridge
+%======================================================================
+\begin{frame}{Approach A: The Vectorization Bridge}
+
+\begin{center}
+\begin{tikzpicture}[
+  roadG/.style={rectangle, rounded corners=3pt, draw=leangreen!60, fill=leangreen!12!cardbg,
+               text=white, font=\scriptsize, minimum width=10cm,
+               minimum height=0.65cm, align=left, text width=9.7cm},
+  roadB/.style={rectangle, rounded corners=3pt, draw=leanblue!60, fill=leanblue!12!cardbg,
+               text=white, font=\scriptsize, minimum width=10cm,
+               minimum height=0.65cm, align=left, text width=9.7cm},
+  roadA/.style={rectangle, rounded corners=3pt, draw=amber!60, fill=amber!12!cardbg,
+               text=white, font=\scriptsize, minimum width=10cm,
+               minimum height=0.65cm, align=left, text width=9.7cm},
+  roadR/.style={rectangle, rounded corners=3pt, draw=softred!60, fill=softred!12!cardbg,
+               text=white, font=\scriptsize, minimum width=10cm,
+               minimum height=0.65cm, align=left, text width=9.7cm},
+]
+  \node[roadG] (s1) at (0,0)
+    {\textbf{Week 1:}  Import HopfieldNet as Lake dependency \hfill \textcolor{leangreen}{0 new LoC}};
+  \node[roadB, below=0.2cm of s1] (s2)
+    {\textbf{Weeks 2--3:}  Rewrite CP map basics (guided by Lean-QuantumInfo) \hfill \textcolor{amber}{400--600 LoC}};
+  \node[roadA, below=0.2cm of s2] (s3)
+    {\textbf{Weeks 4--5:}  Vectorization: $E_A \mapsto T_A$, eigenvalue correspondence \hfill \textcolor{amber}{200--400 LoC}};
+  \node[roadR, below=0.2cm of s3] (s4)
+    {\textbf{Weeks 6--8:}  Irreducibility bridge: CP irreducible $\to$ classical irreducible \hfill \textcolor{softred}{500--800 LoC}};
+  \node[roadG, below=0.2cm of s4] (s5)
+    {\textbf{Week 9:}  Apply HopfieldNet's PF $\to$ spectral gap \hfill \textcolor{leangreen}{100--200 LoC}};
+  \node[roadG, below=0.2cm of s5] (s6)
+    {\textbf{Week 10:}  Block separation + cleanup \hfill \textcolor{leangreen}{100--200 LoC}};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+\begin{center}
+\textbf{Total: 7--10 weeks, 1,100--1,800 new LoC}\\
+{\footnotesize vs.\ 15--18 weeks / 3,100--4,700 LoC without community resources \quad(\textcolor{leangreen}{$\sim$50\% savings})}
+\end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 17 - Approach B: Direct Quantum PF
+%======================================================================
+\begin{frame}{Approach B: Direct Quantum PF (Bypass Classical)}
+
+Skip the classical $\to$ quantum bridge entirely. Prove quantum PF from first principles:
+
+\vspace{0.3em}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{enumerate}\small\itemsep2pt
+  \item \textbf{Fixed point existence} (1 wk, 150--250 LoC)
+    \begin{itemize}\scriptsize\itemsep0pt
+      \item $\mathcal{S} = \{\rho \geq 0 : \tr(\rho)=1\}$ is compact convex
+      \item Brouwer FPT $\implies \exists\,\Lambda$ with $E_A(\Lambda)=\Lambda$
+    \end{itemize}
+  \item \textbf{Positive definiteness} (1 wk, 200--300 LoC)
+    \begin{itemize}\scriptsize\itemsep0pt
+      \item Irreducibility $\implies$ $\Lambda > 0$ (strictly PD)
+      \item If $\ker(\Lambda) \neq \{0\}$, it would be $E_A$-invariant
+    \end{itemize}
+  \item \textbf{Uniqueness} (1 wk, 150--300 LoC)
+    \begin{itemize}\scriptsize\itemsep0pt
+      \item Hilbert projective metric: $E_A$ is contraction
+      \item $\implies$ unique fixed point
+    \end{itemize}
+  \item \textbf{Spectral gap} (1 wk, 100--200 LoC)
+    \begin{itemize}\scriptsize\itemsep0pt
+      \item Gelfand formula $+$ uniqueness $\implies |\lambda| < 1$
+    \end{itemize}
+\end{enumerate}
+\end{column}
+\begin{column}{0.42\textwidth}
+\textbf{Advantages:}
+\begin{itemize}\small\itemsep1pt
+  \item \textcolor{leangreen}{Shorter}: 5--6 weeks
+  \item \textcolor{leangreen}{Self-contained}: no external PF
+  \item \textcolor{leangreen}{More general}: works for CP maps
+\end{itemize}
+
+\vspace{0.3em}
+\textbf{Disadvantages:}
+\begin{itemize}\small\itemsep1pt
+  \item \textcolor{softred}{Hilbert metric not in Mathlib}
+  \item \textcolor{softred}{More abstract argument}
+  \item \textcolor{softred}{Less modular}
+\end{itemize}
+
+\vspace{0.3em}
+\textbf{Total: 5--6 weeks, 600--1,000 LoC}\\
+{\footnotesize HopfieldNet as reference/fallback}
+\end{column}
+\end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 18 - Side-by-Side Comparison
+%======================================================================
+\begin{frame}{Effort Comparison: All Approaches}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{>{\small}l >{\small}c >{\small}c >{\small}c}
+\textbf{Approach} & \textbf{Timeline} & \textbf{New LoC} & \textbf{Risk} \\
+\midrule
+\textcolor{dimwhite}{From scratch (no community)} & \textcolor{softred}{15--18 weeks} & \textcolor{softred}{3,100--4,700} & High \\
+\midrule
+\textbf{A: Vectorization + HopfieldNet PF} & 7--10 weeks & 1,100--1,800 & Medium \\
+\textbf{B: Direct quantum PF} & \textcolor{leangreen}{\textbf{5--6 weeks}} & \textcolor{leangreen}{\textbf{600--1,000}} & Medium \\
+\textbf{C: Direct algebraic (distinct $|\mu_k|$)} & 4--6 weeks & 800--1,500 & Medium \\
+\midrule
+\textcolor{dimwhite}{Current axiomatic (keep gap)} & \textcolor{leangreen}{Done} & \textcolor{leangreen}{0} & None \\
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+\textbf{Key insight:} Community resources cut the ``from scratch'' estimate by \alert{50--70\%}.
+
+\vspace{0.2em}
+\begin{itemize}\small\itemsep1pt
+  \item \textbf{HopfieldNet} saves 2--3 months of classical PF formalization (8,302 lines free)
+  \item \textbf{Lean-QuantumInfo} saves 2--3 weeks of CP map foundations (as blueprint)
+  \item \textbf{Mathlib} provides spectral theory, Brouwer, Kronecker (months of infrastructure)
+\end{itemize}
+\end{frame}
+
+%======================================================================
+% SLIDE 19 - Recommended Strategy
+%======================================================================
+\begin{frame}{Recommended Strategy: Three Tiers}
+
+\begin{tikzpicture}[
+  tierG/.style={rectangle, rounded corners=4pt, draw=leangreen!50, fill=leangreen!10!cardbg,
+               text=white, font=\footnotesize, minimum width=12.5cm,
+               minimum height=0.8cm, align=left, text width=12.2cm},
+  tierA/.style={rectangle, rounded corners=4pt, draw=amber!50, fill=amber!10!cardbg,
+               text=white, font=\footnotesize, minimum width=12.5cm,
+               minimum height=0.8cm, align=left, text width=12.2cm},
+  tierB/.style={rectangle, rounded corners=4pt, draw=leanblue!50, fill=leanblue!10!cardbg,
+               text=white, font=\footnotesize, minimum width=12.5cm,
+               minimum height=0.8cm, align=left, text width=12.2cm},
+]
+  \node[tierG] (t1) at (0,0) {%
+    \textcolor{leangreen}{\textbf{Tier 1: Now}} \hfill \textcolor{dimwhite}{0 effort}\\
+    {\small Keep current axiomatic interface. Project is sorry-free, publishable, correct.\\
+    Import HopfieldNet as Lake dependency (1 day) --- makes classical PF available.}
+  };
+
+  \node[tierA, below=0.25cm of t1] (t2) {%
+    \textcolor{amber}{\textbf{Tier 2: Next 5--6 weeks}} \hfill \textcolor{dimwhite}{600--1,000 LoC}\\
+    {\small Pursue \textbf{Approach B} (direct quantum PF) for full block separation.
+    Cherry-pick Choi defs from Lean-QI as blueprint ($\sim$200 lines).
+    HopfieldNet as reference/fallback.}
+  };
+
+  \node[tierB, below=0.25cm of t2] (t3) {%
+    \textcolor{leanblue}{\textbf{Tier 3: Months 3--6}} \hfill \textcolor{dimwhite}{community contribution}\\
+    {\small Contribute quantum PF to Mathlib/HopfieldNet. Classical PF closing issue \#6091.
+    Full Choi--Jamio\l kowski isomorphism. Quantum channel API.}
+  };
+\end{tikzpicture}
+
+\vspace{0.5em}
+\textbf{Decision point:}  After Tier 2, the gap is \textcolor{leangreen}{fully closed}. Tier 3 is for community impact.
+\end{frame}
+
+%======================================================================
+% SLIDE 20 - What We'd Prove (The Theorems)
+%======================================================================
+\begin{frame}[fragile]{What We'd Prove: The New Theorems}
+\vspace{-0.3em}
+\begin{lstlisting}[basicstyle=\ttfamily\fontsize{6.5}{8}\selectfont\color{white}]
+-- Week 1: Import classical PF
+import MCMC.PF.LinearAlgebra.Matrix.PerronFrobenius.Dominance
+
+-- Weeks 2-3: Transfer operator is CPTP (guided by Lean-QuantumInfo)
+theorem transferMap_isCompletelyPositive (A : MPSTensor d D) :
+    IsCompletelyPositive (transferMap A) := by ...
+
+theorem transferMap_isTracePreserving (A : MPSTensor d D)
+    (h : (*@$\sum$@*) i, (A i)(*@$^\dagger$@*) * A i = 1) :
+    IsTracePreserving (transferMap A) := by ...
+
+-- Weeks 3-4: Quantum PF via Brouwer fixed point
+theorem quantum_pf (E : CPTPMap D D)
+    (hIrr : IsIrreducible_CP E) :
+    (*@$\exists$@*) (*@$\Lambda$@*) : Matrix (Fin D) (Fin D) (*@$\mathbb{C}$@*),
+      (*@$\Lambda$@*).PosDef (*@$\wedge$@*) E (*@$\Lambda$@*) = (*@$\Lambda$@*) (*@$\wedge$@*) (*@$\forall$@*) X, E X = X (*@$\to$@*) X = (*@$\Lambda$@*).trace (*@$\bullet$@*) (*@$\Lambda$@*) := by ...
+
+-- Weeks 5-6: THE GOAL
+theorem sameMPV2_implies_perBlock_sameMPV
+    (h(*@$\mu$@*) : Function.Injective (*@$\mu$@*))
+    (hSame : SameMPV2 (toTensorFromBlocks (*@$\mu$@*) A) (toTensorFromBlocks (*@$\mu$@*) B))
+    (hA : (*@$\forall$@*) k, IsInjective (A k)) :
+    (*@$\forall$@*) k, SameMPV (A k) (B k) := by ...
+\end{lstlisting}
+\end{frame}
+
+%======================================================================
+% SLIDE 21 - Risk Assessment
+%======================================================================
+\begin{frame}{Risks and Mitigations}
+
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{>{\footnotesize}p{3.4cm} >{\footnotesize}c >{\footnotesize}c >{\footnotesize}p{4.2cm}}
+\textbf{Risk} & \textbf{Likelihood} & \textbf{Impact} & \textbf{Mitigation} \\
+\midrule
+HopfieldNet repo removed & Low & High & Fork now; MIT license allows full copy \\
+Irreducibility bridge harder & \textcolor{amber}{Medium} & \textcolor{amber}{Medium} & Fall back to Approach B (direct quantum PF) \\
+Hilbert projective metric painful & \textcolor{amber}{Medium} & Low & Contraction on compact set instead \\
+Lean-QI port breaks on v4.27 & Low & Low & Guided rewrite, not literal port \\
+Version drift in HopfieldNet & \textcolor{amber}{Medium} & Low & Pin to specific commit \\
+Brouwer not strong enough & Low & \textcolor{amber}{Medium} & Schauder FPT also in Mathlib \\
+\end{tabular}
+
+\vspace{0.4em}
+\textbf{Overall risk:} \textcolor{amber}{Medium}. Multiple fallback paths exist at every stage.
+\end{frame}
+
+%======================================================================
+% SLIDE 22 - Impact
+%======================================================================
+\begin{frame}{Impact: Beyond MPSLean}
+
+Closing this gap produces \textbf{the first formally verified quantum Perron--Frobenius theorem} in any proof assistant.
+
+\vspace{0.3em}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{For MPSLean:}
+\begin{itemize}\small\itemsep0pt
+  \item Full FT of MPS: 0 sorries, 0 axioms
+  \item First formalization of a non-trivial quantum many-body theorem
+  \item Opens path to DMRG, SPT phases
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{For the community:}
+\begin{itemize}\small\itemsep0pt
+  \item \textbf{Mathlib}: Classical PF on ``100 theorems'' list (\#6091)
+  \item \textbf{Quantum info}: First formal quantum channel spectral theory
+  \item \textbf{Lean ecosystem}: Bridge HopfieldNet + Lean-QuantumInfo
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.4em}
+\begin{center}
+\begin{tikzpicture}
+\node[rectangle, rounded corners=5pt, draw=leangreen!50, fill=leangreen!10!cardbg,
+      text=white, font=\small, minimum width=10cm, align=center, inner sep=6pt,
+      text width=9.5cm] {%
+  \textcolor{leangreen}{\textbf{The Lean 4 ecosystem is 5--6 weeks away from the first formally verified quantum PF theorem.}}
+};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 23 - Thank You
+%======================================================================
+\begin{frame}
+
+\vfill
+\begin{center}
+{\Large\textbf{Summary}}
+
+\vspace{1em}
+
+\begin{tikzpicture}
+\node[rectangle, rounded corners=6pt, draw=gray!40, fill=cardbg,
+      text=white, font=\small, minimum width=11cm, align=left,
+      inner sep=10pt, text width=10.5cm] {%
+  \proved{14 modules, 2,396 lines, 0 sorries, 0 axioms}\\[1pt]
+  \proved{Single-block Fundamental Theorem fully closed}\\[1pt]
+  \proved{Multi-block pipeline complete (conditional on separation)}\\[3pt]
+  \community{HopfieldNet: 8,302 lines of classical PF, \textbf{same versions}}\\[1pt]
+  \community{Lean-QuantumInfo: Choi's theorem + Kraus decomposition}\\[1pt]
+  \community{Combined: \textbf{50--70\% reduction} in formalization effort}\\[3pt]
+  \inprog{Recommended: Direct quantum PF, 5--6 weeks, 600--1000 LoC}\\[1pt]
+  \inprog{Would produce \textbf{first} formally verified quantum PF}
+};
+\end{tikzpicture}
+
+\vspace{0.7em}
+{\scriptsize \texttt{github.com/LionSR/MPSLean} $\cdot$ \texttt{github.com/mkaratarakis/HopfieldNet} $\cdot$ \texttt{github.com/Timeroot/Lean-QuantumInfo}}
+\end{center}
+\vfill
+\end{frame}
+
+%======================================================================
+% REFERENCES
+%======================================================================
+\begin{frame}[allowframebreaks]{References}
+\printbibliography[heading=none]
+\end{frame}
+
+\end{document}

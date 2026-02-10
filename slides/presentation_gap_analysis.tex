@@ -7,6 +7,8 @@
 \usepackage{array}
 \usepackage{listings}
 \usepackage{appendixnumberbeamer}
+\usepackage[style=numeric-comp,backend=biber,sorting=none,maxbibnames=4]{biblatex}
+\addbibresource{references.bib}
 
 % ── Color scheme (matches presentation20260208.tex) ──
 \definecolor{leangreen}{RGB}{34,180,34}
@@ -92,7 +94,7 @@
 \maketitle
 \vspace{-2em}
 \begin{center}
-{\footnotesize Lean~4 + Mathlib v4.27.0\quad$\cdot$\quad arXiv:2011.12127\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}}
+{\footnotesize Lean~4 + Mathlib v4.27.0\quad$\cdot$\quad \cite{Cirac2021Matrix}\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}}
 \end{center}
 \end{frame}
 }
@@ -743,7 +745,7 @@ Pi-tensors don't span product algebra \\
 %======================================================================
 \begin{frame}{What the Physics Paper Does: Transfer Operators}
 \vspace{-0.3em}
-{\small In arXiv:2011.12127, \S IV, the separation uses the \textbf{transfer operator} (quantum channel):}
+{\small In \cite{Cirac2021Matrix}, \S IV, the separation uses the \textbf{transfer operator} (quantum channel):}
 \[
 \mathcal{E}_A(\rho) = \sum_{i=1}^d A^i \rho (A^i)^\dagger
 \]
@@ -1074,7 +1076,7 @@ Let $V_k : \mathbb{N} \to \mathcal{H}_\bullet$ where $\mathcal{H}_N = (\mathrm{F
 \normalsize Built on Lean 4 + Mathlib v4.27.0
 
 \vspace{0.3em}
-{\small Reference: Cirac, P\'erez-Garc\'ia, Schuch \& Verstraete  $\cdot$  \texttt{arXiv:2011.12127}}
+{\small Reference: Cirac, P{\'e}rez-Garc{\'i}a, Schuch \& Verstraete \cite{Cirac2021Matrix}}
 
 \vspace{0.6em}
 \textcolor{leangreen}{\textbf{2792 lines\quad$\cdot$\quad 16 modules\quad$\cdot$\quad 0 sorries\quad$\cdot$\quad 0 axioms}}
@@ -1088,6 +1090,14 @@ Let $V_k : \mathbb{N} \to \mathcal{H}_\bullet$ where $\mathcal{H}_N = (\mathrm{F
 };
 \end{tikzpicture}
 \end{center}
+\end{frame}
+
+
+%======================================================================
+% REFERENCES
+%======================================================================
+\begin{frame}[allowframebreaks]{References}
+\printbibliography[heading=none]
 \end{frame}
 
 \end{document}

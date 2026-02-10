@@ -6,6 +6,8 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{appendixnumberbeamer}
+\usepackage[style=numeric-comp,backend=biber,sorting=none,maxbibnames=4]{biblatex}
+\addbibresource{references.bib}
 
 % ── Color scheme ──
 \definecolor{leangreen}{RGB}{34,180,34}
@@ -72,7 +74,7 @@
 \newcommand{\GLC}{\mathrm{GL}}
 
 \title{\textbf{Formalizing the Fundamental Theorem of\\Matrix Product States}}
-\subtitle{{\small 2,221 lines $\cdot$ 14 modules $\cdot$ 0 sorries\;\;$\cdot$\;\;Mathlib v4.27.0\;\;$\cdot$\;\;arXiv:2011.12127}}
+\subtitle{{\small 2,221 lines $\cdot$ 14 modules $\cdot$ 0 sorries\;\;$\cdot$\;\;Mathlib v4.27.0\;\;$\cdot$\;\;\cite{Cirac2021Matrix}}}
 \date{February 8, 2026}
 \author{}
 
@@ -161,7 +163,7 @@ $B^i = X A^i X^{-1}$ with $X\in\GLC(D,\mathbb{C})$ leaves \emph{every} coefficie
 % SLIDE 3 - The Fundamental Theorem
 %======================================================================
 \begin{frame}{The Fundamental Theorem of MPS}
-\begin{block}{Theorem (Single-block, injective case) \hfill{\small [arXiv:2011.12127, Thm\,4.1]}}
+\begin{block}{Theorem (Single-block, injective case) \hfill{\small [\cite{Cirac2021Matrix}, Thm\,4.1]}}
 Let $A=\{A^i\}_{i=1}^d$ be \textbf{injective}: the matrices $\{A^i\}$ span the full algebra $\MD$.
 
 If tensors $A$ and $B$ generate the \textbf{same MPV family} for all system sizes $N$, then they are \textbf{gauge equivalent}:
@@ -1122,7 +1124,7 @@ Expansion factor & $\sim$10$\times$ \\
 \node[rectangle,rounded corners,draw=leangreen,fill=cardbg,
       text=white,font=\scriptsize,align=center,
       minimum width=3.6cm,minimum height=0.9cm] {
-  \texttt{arXiv:2011.12127}\\[0.1em]
+  \cite{Cirac2021Matrix}\\[0.1em]
   Thm 4.1: \textcolor{leangreen}{\textbf{VERIFIED}}\;\;
   Cor 4.2: \textcolor{amber}{\textbf{IN PROGRESS}}
 };
@@ -1153,7 +1155,7 @@ Expansion factor & $\sim$10$\times$ \\
 \normalsize Built on Lean 4 + Mathlib v4.27.0
 
 \vspace{0.3em}
-{\small Reference: Cirac, P\'erez-Garc\'ia, Schuch \& Verstraete\;\;$\cdot$\;\;\texttt{arXiv:2011.12127}}
+{\small Reference: Cirac, P{\'e}rez-Garc{\'i}a, Schuch \& Verstraete \cite{Cirac2021Matrix}}
 
 \vspace{0.8em}
 \textcolor{leangreen}{\textbf{2,221 lines\quad$\cdot$\quad 14 modules\quad$\cdot$\quad 0 sorries\quad$\cdot$\quad 0 axioms}}
@@ -1163,6 +1165,14 @@ Expansion factor & $\sim$10$\times$ \\
 %======================================================================
 %  BACKUP / APPENDIX SLIDES
 %======================================================================
+
+%======================================================================
+% REFERENCES
+%======================================================================
+\begin{frame}[allowframebreaks]{References}
+\printbibliography[heading=none]
+\end{frame}
+
 \appendix
 
 %======================================================================
