@@ -5,6 +5,8 @@
 \usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc}
 \usepackage{xcolor}
 \usepackage{listings}
+\usepackage[style=numeric-comp,backend=biber,sorting=none,maxbibnames=4]{biblatex}
+\addbibresource{references.bib}
 
 \definecolor{leangreen}{RGB}{34,139,34}
 \definecolor{leanblue}{RGB}{70,130,180}
@@ -41,8 +43,8 @@
 \begin{center}
 \huge\textcolor{leangreen}{\textbf{642 lines. 18 theorems. 0 axioms.}}
 
-\vspace{1em}
-\large Quantum many-body physics meets formal proof
+\vspace{0.5em}
+{\footnotesize \cite{Cirac2021Matrix}\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}}
 \end{center}
 \end{frame}
 
@@ -94,8 +96,7 @@ abbrev MPSTensor (d D : $\mathbb{N}$) :=\\
 \hspace*{0.5em}Fin d $\to$ Matrix (Fin D) (Fin D) $\mathbb{C}$
 }
 
-\vspace{0.5em}
-\textbf{Clean. Type-safe. Mathlib-powered.}
+
 \end{center}
 \end{columns}
 \end{frame}
@@ -144,12 +145,12 @@ abbrev MPSTensor (d D : $\mathbb{N}$) :=\\
 \end{center}
 
 \vspace{0.3em}
-\textbf{\Large Big Wins:}
+\textbf{\Large Highlights:}
 \begin{itemize}
-  \item[\textbf{\textcolor{leangreen}{$\checkmark$}}] \textbf{Skolem-Noether:} 84 lines via \texttt{AlgEquiv.eq\_linearEquivConjAlgEquiv}
-  \item[\textbf{\textcolor{leangreen}{$\checkmark$}}] \textbf{Simplicity of $M_n(\mathbb{C})$:} Used \texttt{TwoSidedIdeal.ker}
-  \item[\textbf{\textcolor{leangreen}{$\checkmark$}}] \textbf{Trace nondegeneracy:} 15 lines with single-entry matrices
-  \item[\textbf{\textcolor{leangreen}{$\checkmark$}}] \textbf{Algebraic injectivity:} Bypassed Perron-Frobenius entirely!
+  \item[\textcolor{leangreen}{$\checkmark$}] Skolem-Noether: 84 lines via \texttt{AlgEquiv.eq\_linearEquivConjAlgEquiv}
+  \item[\textcolor{leangreen}{$\checkmark$}] Simplicity of $M_n(\mathbb{C})$: used \texttt{TwoSidedIdeal.ker}
+  \item[\textcolor{leangreen}{$\checkmark$}] Trace nondegeneracy: 15 lines with single-entry matrices
+  \item[\textcolor{leangreen}{$\checkmark$}] Algebraic injectivity: bypassed Perron-Frobenius
 \end{itemize}
 \end{frame}
 
@@ -164,7 +165,7 @@ abbrev MPSTensor (d D : $\mathbb{N}$) :=\\
   future/.style={fill=gray!50!black}
 ]
 
-\node[box,done] (current) at (0,3.6) {Single-block Fundamental Theorem (100\% PROVED!)};
+\node[box,done] (current) at (0,3.6) {Single-block Fundamental Theorem (proved)};
 \node[box,next] (axioms) at (0,2.6) {NEXT: Multi-block (canonical form) + Basis of Normal Tensors};
 \node[box,future] (full) at (0,1.6) {Full Fundamental Theorem (Corollary 2, Theorem 1)};
 \node[box,future] (app) at (0,0.6) {Applications: Parent Hamiltonians, PEPS, SPT phases};
@@ -184,38 +185,35 @@ abbrev MPSTensor (d D : $\mathbb{N}$) :=\\
 \end{itemize}
 
 \column{0.48\textwidth}
-\textbf{\Large The Vision:}
+\textbf{\Large Next:}
 \begin{itemize}
-  \item Formal quantum many-body theory
-  \item Verified tensor network proofs
-  \item Bridge to topological order
-  \item Foundation for quantum algorithms
+  \item Multi-block (canonical form)
+  \item Parent Hamiltonians
+  \item SPT phases
 \end{itemize}
 \end{columns}
 
 \vspace{0.8em}
-\begin{center}
-\large\textbf{\textcolor{leangreen}{First complete formal proof of the Fundamental Theorem of MPS.}}
-\end{center}
+
 \end{frame}
 
 \begin{frame}
 \begin{center}
 \Huge\textbf{\textcolor{leangreen}{MPSLean}}
 
-\vspace{1em}
-\Large Bridging quantum many-body physics\\and formal mathematics
-
-\vspace{2em}
-\LARGE\texttt{github.com/[your-repo]/MPSLean}
+\vspace{1.5em}
+\LARGE\texttt{github.com/LionSR/MPSLean}
 
 \vspace{1em}
-\large Built on Mathlib v4.27.0\\
-Lean 4 proving quantum information theory
+\large Lean 4 + Mathlib v4.27.0
 
-\vspace{2em}
-\textbf{\textcolor{leangreen}{The future is formally verified.}}
+\vspace{1.5em}
+\textcolor{leangreen}{\textbf{642 lines\quad$\cdot$\quad 8 modules\quad$\cdot$\quad 0 sorries}}
 \end{center}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+\printbibliography[heading=none]
 \end{frame}
 
 \end{document}

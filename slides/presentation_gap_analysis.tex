@@ -137,8 +137,8 @@
 \end{center}
 
 \vspace{0.1em}
-{\small \textbf{Score:} \textcolor{leangreen}{2792 lines, 16 modules, 0 sorries, 0 axioms.}\quad
-The gap is \emph{not} a sorry --- it's a hypothesis we can't yet derive.}
+{\small \textcolor{leangreen}{2792 lines, 16 modules, 0 sorries, 0 axioms.}\quad
+The gap is a hypothesis we can't yet derive, not a sorry.}
 \end{frame}
 
 %======================================================================
@@ -228,7 +228,7 @@ theorem sameMPV2_summed_blocks
 {\small \textbf{Want:} $\delta_k(N, \sigma) = 0$ for all $k$, $N$, $\sigma$.}
 
 \vspace{0.2em}
-{\small At first glance, this looks like Vandermonde invertibility. It is not.}
+{\small This looks like Vandermonde invertibility, but it isn't.}
 \end{frame}
 
 %======================================================================
@@ -272,7 +272,7 @@ V = \begin{pmatrix}
 \end{columns}
 
 \vspace{0.5em}
-{\small\textbf{Intuition:} Each column of $V$ records the powers of a different base. When the bases are distinct, these ``exponential signatures'' are linearly independent --- no column can be written as a combination of the others.}
+{\small Distinct bases $\Rightarrow$ linearly independent columns.}
 \end{frame}
 
 %======================================================================
@@ -280,7 +280,7 @@ V = \begin{pmatrix}
 %======================================================================
 \begin{frame}{Why Vandermonde Matrices Matter for Our Problem}
 \vspace{-0.5em}
-{\small\textbf{The key consequence:} If $V$ is invertible, $V \cdot c = 0$ has \textbf{only} the trivial solution $c = 0$.}
+{\small If $V$ is invertible, $V \cdot c = 0$ implies $c = 0$.}
 
 \vspace{0.1em}
 \begin{center}
@@ -320,9 +320,7 @@ V = \begin{pmatrix}
 \end{center}
 
 \vspace{-0.3em}
-{\small\textbf{In plain English:} If someone tells you
-$c_1 \cdot \mu_1^N + c_2 \cdot \mu_2^N + \cdots + c_r \cdot \mu_r^N = 0$
-for $N = 0, 1, \dots, r{-}1$ and the $\mu_k$ are all different, then every $c_k = 0$. Distinct exponentials cannot conspire to cancel at $r$ consecutive powers.}
+{\small If $\sum_k c_k \mu_k^N = 0$ for $N = 0, \dots, r{-}1$ and the $\mu_k$ are distinct, then every $c_k = 0$.}
 
 \vspace{0.3em}
 \begin{center}
@@ -473,7 +471,7 @@ for $N = 0, 1, \dots, r{-}1$ and the $\mu_k$ are all different, then every $c_k 
 \end{center}
 
 \vspace{-0.2em}
-{\small\textbf{The issue:} Each row of the ``Vandermonde system'' has $d^N$ equations (one per $\sigma$), but the $\sigma$-spaces for different $N$ are unrelated. We cannot form a single matrix equation $V \cdot c = 0$.}
+{\small Each row has $d^N$ equations, but the $\sigma$-spaces for different $N$ are unrelated.}
 \end{frame}
 
 %======================================================================
@@ -537,7 +535,7 @@ for $N = 0, 1, \dots, r{-}1$ and the $\mu_k$ are all different, then every $c_k 
 {\small\textbf{\textcolor{leangreen}{What's good:}}}
 \begin{itemize}
   \item Same type for all $m$: $w^m : \mathrm{Fin}(mL) \to \mathrm{Fin}\,d$
-  \item Exponents are $(\mu_k^L)^m$ --- geometric!
+  \item Exponents are $(\mu_k^L)^m$ --- geometric
   \item Coefficients are scalar-valued
 \end{itemize}
 
@@ -633,9 +631,9 @@ But $\delta_{r+1}$ still couples $N$ and $\sigma$.}
 \notproved{Inductive step requires the very separation we seek.}
 \end{columns}
 
-\vspace{0.5em}
+\vspace{0.3em}
 \begin{center}
-{\small Both inductions fail because the coupling between $N$ and $\sigma$ is fundamental, not a matter of proof strategy.}
+{\small Both fail: the $N$--$\sigma$ coupling is structural.}
 \end{center}
 \end{frame}
 
@@ -764,31 +762,40 @@ Pi-tensors don't span product algebra \\
 \column{0.44\textwidth}
 \begin{center}
 \begin{tikzpicture}[scale=0.7]
-% Transfer operator diagram
+% Transfer operator tensor network:
+%   E_A(rho) = sum_i A^i rho (A^i)^dag
+%
+% Layout:  rho on left, A on top, A^dag on bottom
+% Physical index i contracted vertically between A and A^dag
+% Left virtual indices connect to rho
+% Right virtual indices are the output
+%
 \node[rectangle,draw=white,fill=leangreen!30!black,minimum size=0.6cm,
   font=\scriptsize\bfseries] (A1) at (0,0) {$A$};
 \node[rectangle,draw=white,fill=leangreen!30!black,minimum size=0.6cm,
-  font=\scriptsize\bfseries] (A2) at (0,-1.5) {$A^\dagger$};
+  font=\scriptsize\bfseries] (A2) at (0,-1.8) {$\bar{A}$};
 \node[rectangle,draw=white,fill=amber!30!black,minimum size=0.6cm,
-  font=\scriptsize\bfseries] (rho) at (-1.8,-0.75) {$\rho$};
-% Wires
-\draw[-,white,thick] (A1.west) -- (rho.north east);
-\draw[-,white,thick] (A2.west) -- (rho.south east);
-\draw[-,white,thick] (A1.north) -- ++(0,0.4) -- ++(1.2,0) -- ++(0,-1.15)
-  -- (A2.north);
-\draw[-,white,thick] (A1.east) -- ++(0.6,0);
-\draw[-,white,thick] (A2.east) -- ++(0.6,0);
-\node[font=\scriptsize,white,right] at (0.7,-0.3) {output};
-\node[font=\scriptsize,white,right] at (0.7,-1.2) {output};
-\node[font=\tiny,amber] at (0.3,0.65) {$\sum_i$};
+  font=\scriptsize\bfseries] (rho) at (-1.8,-0.9) {$\rho$};
+% Left virtual: rho -> A (top) and rho -> A^dag (bottom)
+\draw[-,white,thick] (rho.north east) -- (A1.west);
+\draw[-,white,thick] (rho.south east) -- (A2.west);
+% Physical index i: contracted between A and A^dag
+\draw[-,white,thick] (A1.south) -- (A2.north);
+\node[font=\tiny,amber,right] at (0.05,-0.9) {$\scriptstyle\sum_i$};
+% Right virtual: output indices
+\draw[-,white,thick] (A1.east) -- ++(0.8,0);
+\draw[-,white,thick] (A2.east) -- ++(0.8,0);
+% Output brace
+\draw[decorate,decoration={brace,amplitude=3pt,mirror},white]
+  (1.0,0.1) -- (1.0,-1.9) node[midway,right=4pt,font=\tiny,white]{$\mathcal{E}_A(\rho)$};
 % Label
-\node[font=\scriptsize,white] at (-0.5,-2.5) {Transfer operator $\mathcal{E}_A$};
+\node[font=\scriptsize,white] at (-0.5,-3.0) {Transfer operator $\mathcal{E}_A$};
 \end{tikzpicture}
 \end{center}
 \end{columns}
 
 \vspace{0.3em}
-{\small\textbf{The key insight:} As $N \to \infty$, the dominant block ($|\mu_k|$ largest) dominates the sum $\sum_k \mu_k^N \cdot V_k^{(N)}$. The spectral gap ensures exponential decay of subdominant contributions. Iterating, each block can be extracted.}
+{\small As $N \to \infty$, the dominant block dominates. The spectral gap ensures exponential decay of the rest. Iterate to extract each block.}
 \end{frame}
 
 %======================================================================
@@ -826,9 +833,8 @@ Pi-tensors don't span product algebra \\
 \begin{tikzpicture}
 \node[rectangle,rounded corners,draw=amber,fill=cardbg,text=white,
   font=\small,align=center,minimum width=11cm,minimum height=0.9cm] {
-  \textbf{The physics proof fundamentally uses \emph{analysis}:}\\
-  spectral theory + positivity + convergence of operator powers.\\
-  This is the precise point where the algebraic bypass reaches its limit.
+  The physics proof uses analysis (spectral theory + positivity + convergence)\\
+  --- the point where the algebraic bypass reaches its limit.
 };
 \end{tikzpicture}
 \end{center}
@@ -864,7 +870,7 @@ theorem vandermonde_separation_fun {n : (*@$\mathbb{N}$@*)} {(*@$\alpha$@*) : Ty
 {\small\textbf{These apply when:} the ``coefficient'' $v_k$ is \textbf{independent of} the Vandermonde index $N$.}
 
 \vspace{0.15em}
-{\small\textbf{The gap is precisely:} our $\delta_k(N, \sigma)$ \emph{does} depend on $N$, which serves double duty as the Vandermonde exponent and the configuration space size.}
+{\small The gap: $\delta_k(N, \sigma)$ depends on $N$, which is both the Vandermonde exponent and the configuration space size.}
 
 \vspace{0.1em}
 {\small\proved{162 lines of Vandermonde infrastructure in \texttt{BasisNormal.lean}}\quad\proved{Used in \texttt{FundamentalTheoremMulti.lean}}}
@@ -895,18 +901,16 @@ Let $V_k : \mathbb{N} \to \mathcal{H}_\bullet$ where $\mathcal{H}_N = (\mathrm{F
 \end{center}
 
 \vspace{-0.2em}
-{\small This is \textbf{not} a standard Vandermonde problem because $V_k(N)$ and $V_k(N')$ live in \emph{different} vector spaces for $N \neq N'$. It is a problem about a \textbf{graded family} of equations.}
+{\small Not a standard Vandermonde problem: $V_k(N)$ and $V_k(N')$ live in different spaces for $N \neq N'$.}
 
 \vspace{0.15em}
-{\small\textbf{What makes it true} (in the MPS context):}
+{\small\textbf{Why it's still true:}}
 \vspace{-0.2em}
 \begin{itemize}\itemsep0em
-  \item {\small The maps $N \mapsto V_k(N)$ are not arbitrary --- they arise from \textbf{matrix traces}}
-  \item {\small The transfer operator $\mathcal{E}_{A_k}$ governs the asymptotic behavior of $V_k(N)$ as $N \to \infty$}
-  \item {\small The spectral gap of $\mathcal{E}_{A_k}$ provides exponential convergence, allowing block extraction}
+  \item {\small $N \mapsto V_k(N)$ arises from matrix traces, not arbitrary}
+  \item {\small Transfer operator $\mathcal{E}_{A_k}$ governs asymptotics as $N \to \infty$}
+  \item {\small Spectral gap gives exponential convergence $\to$ block extraction}
 \end{itemize}
-\vspace{-0.1em}
-{\small The truth depends on the \textbf{analytic structure} of MPVs, not just their algebraic properties.}
 \end{frame}
 
 %======================================================================
@@ -1020,10 +1024,7 @@ Let $V_k : \mathbb{N} \to \mathcal{H}_\bullet$ where $\mathcal{H}_N = (\mathrm{F
 \end{columns}
 
 \vspace{0.5em}
-{\small\textbf{For the formalization:} We have documented this gap transparently. The final theorems take per-block \texttt{SameMPV} as a hypothesis, which is exactly the setting where two canonical forms with identified block correspondence are given. The gap is the bridge from global to local MPV equality.}
-
-\vspace{0.3em}
-{\small\textbf{Either} a purely algebraic proof is found (closing the gap in $\sim$100--200 lines of Lean), \textbf{or} Mathlib's functional analysis library grows to support the spectral argument ($\sim$3000--5000 lines).}
+{\small The final theorems take per-block \texttt{SameMPV} as hypothesis. Either a purely algebraic proof closes the gap ($\sim$100--200 lines), or Mathlib's functional analysis grows to support the spectral argument ($\sim$3000--5000 lines).}
 \end{frame}
 
 %======================================================================
@@ -1055,7 +1056,7 @@ Let $V_k : \mathbb{N} \to \mathcal{H}_\bullet$ where $\mathcal{H}_N = (\mathrm{F
 \end{tikzpicture}
 \end{center}
 \vspace{-0.3em}
-{\small \textbf{Everything above and below the gap is machine-verified.} The gap is a single logical step: separating the weighted sum into per-block equalities.}
+{\small Everything above and below the gap is machine-verified.}
 \end{frame}
 
 %======================================================================

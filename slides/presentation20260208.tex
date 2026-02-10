@@ -174,12 +174,12 @@ B^i = X\, A^i\, X^{-1} \quad\text{for some } X\in\GLC(D,\mathbb{C})
 \end{block}
 
 \vspace{0.5em}
-\textbf{Why does this matter?}
+\textbf{Why it matters:}
 \begin{itemize}
-\item \textbf{Classification of gapped phases:} gauge equivalence $\Leftrightarrow$ same phase
-\item \textbf{SPT order:} symmetry action on gauge d.o.f.\ classifies SPT phases via $H^2(G,U(1))$
-\item \textbf{Renormalization:} injective MPS are fixed points of the RG flow
-\item \textbf{Parent Hamiltonians:} unique ground state iff injective --- gauge freedom is the \emph{only} ambiguity
+\item Gauge equivalence $\Leftrightarrow$ same gapped phase
+\item SPT order: symmetry action on gauge d.o.f.\ classifies phases via $H^2(G,U(1))$
+\item Injective MPS are fixed points of the RG flow
+\item Parent Hamiltonians: unique ground state iff injective; gauge freedom is the only ambiguity
 \end{itemize}
 \end{frame}
 
@@ -231,37 +231,27 @@ V^{(N)} = \textstyle\sum_k \mu_k^N \cdot V_k^{(N)}
 \vspace{-0.3em}
 \begin{columns}[T]
 \column{0.48\textwidth}
-{\small\textbf{\textcolor{softred}{The problem with physics proofs:}}}
+{\small\textbf{\textcolor{softred}{Physics proof issues:}}}
 \begin{itemize}\itemsep0.1em
 \item {\small ``It is easy to see that\dots''}
-\item {\small Index manipulations by hand}
-\item {\small Implicit assumptions ($D>0$, fields algebraically closed, \dots)}
-\item {\small Proofs build on each other --- errors propagate}
-\end{itemize}
-
-\vspace{0.3em}
-{\small\textbf{This proof specifically:}}
-\begin{itemize}\itemsep0.1em
-\item {\small Uses deep algebra (Skolem--Noether!)}
-\item {\small Requires careful handling of ring simplicity}
-\item {\small SPT classification \emph{depends} on correctness}
+\item {\small Implicit assumptions ($D>0$, algebraically closed, \dots)}
+\item {\small Deep algebra (Skolem--Noether, ring simplicity)}
+\item {\small SPT classification depends on correctness}
 \end{itemize}
 
 \column{0.48\textwidth}
-{\small\textbf{\textcolor{leangreen}{What formalization guarantees:}}}
+{\small\textbf{\textcolor{leangreen}{What formalization gives:}}}
 \begin{itemize}\itemsep0.1em
-\item {\small Every logical step machine-checked}
-\item {\small All hypotheses made explicit}
-\item {\small No ``exercise for the reader''}
-\item {\small \textbf{0 sorries} = zero gaps}
+\item {\small Every step machine-checked, all hypotheses explicit}
+\item {\small 0 sorries = no gaps}
 \end{itemize}
 
 \vspace{0.3em}
 {\small\textbf{What we found:}}
 \begin{itemize}\itemsep0.1em
-\item {\small The paper proof is \emph{correct}}
-\item {\small Many ``obvious'' steps are genuinely nontrivial}
-\item {\small Precise hypotheses matter: $D>0$ needed in 6+ places}
+\item {\small The paper proof is correct}
+\item {\small ``Obvious'' steps are genuinely nontrivial}
+\item {\small $D>0$ needed in 6+ places}
 \item {\small The algebraic bypass is essential}
 \end{itemize}
 \end{columns}
@@ -289,19 +279,8 @@ V^{(N)} = \textstyle\sum_k \mu_k^N \cdot V_k^{(N)}
 \end{center}
 
 \vspace{0.3em}
-{\small\textbf{Key analogy:} A proof assistant is a \emph{compiler for mathematics}.}
-\begin{itemize}\itemsep0.05em
-  \item {\small Compiler checks \emph{code} for type errors $ \longrightarrow $ Proof assistant checks \emph{proofs} for logical errors}
-  \item {\small If it compiles, the proof is correct. Period.}
-\end{itemize}
-
-\vspace{0.2em}
-{\small\textbf{What it is NOT:}}
-\begin{itemize}\itemsep0.05em
-  \item {\small Not computer algebra (Mathematica) --- those compute, not \emph{prove}}
-  \item {\small Not automated theorem proving --- the human writes the proof, the machine \emph{verifies}}
-  \item {\small Not just ``type-checking'' --- the type system encodes all of logic}
-\end{itemize}
+{\small\textbf{Analogy:} A proof assistant is a compiler for mathematics.
+If it compiles, the proof is correct.}
 \end{frame}
 
 %======================================================================
@@ -324,30 +303,19 @@ V^{(N)} = \textstyle\sum_k \mu_k^N \cdot V_k^{(N)}
   \item {\small $>$\,1\,000\,000 lines of formalized math}
   \item {\small $\sim$700 contributors}
   \item {\small Covers: linear algebra, ring theory, topology, measure theory, \dots}
-  \item {\small Crucially for us: \textbf{matrix algebras}, \textbf{simple rings}, \textbf{Skolem--Noether}}
+  \item {\small For us: matrix algebras, simple rings, Skolem--Noether}
 \end{itemize}
 
 \column{0.46\textwidth}
 {\small\textbf{Recent successes:}}
 \begin{itemize}\itemsep0.1em
-  \item {\small\textbf{Liquid Tensor Experiment} (Scholze, 2022)}
-  \item {\small\textbf{PFR Conjecture} (Tao et al., 2023)}
-  \item {\small\textbf{Sphere eversion} (2023)}
+  \item {\small Liquid Tensor Experiment (Scholze, 2022)}
+  \item {\small PFR Conjecture (Tao et al., 2023)}
+  \item {\small Sphere eversion (2023)}
 \end{itemize}
 
 \vspace{0.4em}
-\begin{center}
-\begin{tikzpicture}
-\node[rectangle,rounded corners,draw=leangreen,fill=cardbg,
-      text=white,font=\small,align=center,
-      minimum width=4.2cm,minimum height=1.3cm] {
-  \textbf{Our project:}\\[0.1em]
-  Lean 4 + Mathlib v4.27.0\\[0.1em]
-  \textcolor{leangreen}{First formalization from}\\
-  \textcolor{leangreen}{quantum many-body physics}
-};
-\end{tikzpicture}
-\end{center}
+{\small\textbf{Our project:} Lean 4 + Mathlib v4.27.0}
 \end{columns}
 \end{frame}
 
@@ -395,7 +363,7 @@ theorem riemann_hypothesis : RiemannHypothesis := by
 \end{center}
 
 \vspace{0.3em}
-\textbf{Compare:} a typical proof says ``by a standard argument, $T$ is multiplicative.''  Our formalization: \textbf{159 lines} for multiplicativity alone.
+{\small Compare: ``by a standard argument, $T$ is multiplicative'' $\to$ 159 lines.}
 \end{frame}
 
 %======================================================================
@@ -432,7 +400,7 @@ theorem riemann_hypothesis : RiemannHypothesis := by
 \end{itemize}
 
 \vspace{0.3em}
-\textbf{Expansion factor:} $\sim$3 pages of paper proof $ \longrightarrow $ 2,221 lines of Lean $ \approx  10\times$ (typical)
+Expansion factor: $\sim$3 pages $\to$ 2,221 lines ($\approx 10\times$)
 \end{frame}
 
 %======================================================================
@@ -461,16 +429,14 @@ def GaugeEquiv (A B : MPSTensor d D) :=
 \end{lstlisting}
 
 \column{0.48\textwidth}
-\textbf{Deliberate design decisions:}
+\textbf{Design decisions:}
 \begin{itemize}
-  \item \textbf{Algebraic injectivity:} $\{A^i\}$ span $\MD$\\
+  \item Algebraic injectivity: $\{A^i\}$ span $\MD$\\
     {\small (avoids CP maps, Perron--Frobenius)}
-  \item \textbf{$\GLC(D,\mathbb{C})$} for gauge transforms\\
-    {\small (Mathlib's \texttt{GeneralLinearGroup})}
-  \item \textbf{Sigma-type indices} for block-diagonal\\
-    {\small (avoids painful \texttt{Fin} arithmetic)}
-  \item \textbf{Word evaluation} via lists\\
-    {\small (natural recursion)}
+  \item $\GLC(D,\mathbb{C})$ for gauge transforms
+  \item Sigma-type indices for block-diagonal\\
+    {\small (avoids \texttt{Fin} arithmetic)}
+  \item Word evaluation via lists
 \end{itemize}
 \end{columns}
 \end{frame}
@@ -518,7 +484,7 @@ def GaugeEquiv (A B : MPSTensor d D) :=
 
 \vspace{0.1em}
 \begin{center}
-{\small\textbf{Key:} Pure algebra --- traces, spanning, ring theory.\\No wavefunctions, no channels, no spectral theory.}
+{\small Pure algebra --- no wavefunctions, no channels, no spectral theory.}
 \end{center}
 \end{frame}
 
@@ -792,7 +758,7 @@ theorem fundamentalTheorem_singleBlock
 \item Trace identities $\Rightarrow$ multiplicativity
 \item Simple ring $\Rightarrow$ bijectivity
 \item Skolem--Noether $\Rightarrow$ inner
-\item Pure linear algebra!
+\item Pure linear algebra
 \end{itemize}
 \end{block}
 \end{columns}
@@ -800,10 +766,9 @@ theorem fundamentalTheorem_singleBlock
 \vspace{0.5em}
 \textbf{Why the bypass?}
 \begin{itemize}
-  \item Perron--Frobenius for CP maps is \textbf{not in Mathlib}
-  \item The algebraic route uses only linear algebra + ring theory --- all well-covered
-  \item Already noted in the paper: injective case doesn't need channel theory
-  \item \textbf{Bonus:} the algebraic proof is arguably \emph{cleaner}
+  \item Perron--Frobenius for CP maps is not in Mathlib
+  \item The algebraic route uses only linear algebra + ring theory
+  \item The paper already notes: injective case doesn't need channel theory
 \end{itemize}
 \end{frame}
 
@@ -862,7 +827,7 @@ $\bigsqcup_k \mathrm{Fin}(D_k)$, then reindex to $\mathrm{Fin}(\sum_k D_k)$.}
 \end{enumerate}
 
 \vspace{0.1em}
-{\small This is the \textbf{computational backbone}: reduces multi-block questions to single-block questions weighted by powers of $\mu_k$.}
+{\small Reduces multi-block to single-block weighted by $\mu_k^N$.}
 
 \vspace{0.1em}
 {\small\textcolor{leangreen}{\checkmark}  \texttt{mpv\_toTensor\_eq\_sum} --- proved}
@@ -880,7 +845,7 @@ $\bigsqcup_k \mathrm{Fin}(D_k)$, then reindex to $\mathrm{Fin}(\sum_k D_k)$.}
 \]
 \vspace{-0.7em}
 
-{\small\textbf{Key insight:} If $\{\mu_k\}$ are \emph{distinct}, this is a Vandermonde system!}
+{\small If $\{\mu_k\}$ are distinct, this is a Vandermonde system.}
 
 \vspace{0.1em}
 \begin{columns}[T]
@@ -942,10 +907,10 @@ If block MPVs are nonzero and $\mu_k$ distinct, blocks can be separated.}
 \end{center}
 
 \vspace{0.15em}
-{\small\textbf{New result --- Block Permutation Theorem:} automorphisms of $\prod_k M_{n_k}(\mathbb{C})$ must permute the simple factors.  Strategy: two-sided ideal classification $+$ atoms $+$ \texttt{OrderIso.isAtom\_iff}.}
+{\small Block Permutation Theorem: automorphisms of $\prod_k M_{n_k}(\mathbb{C})$ permute simple factors (two-sided ideal classification $+$ atoms).}
 
 \vspace{0.1em}
-{\small\textbf{Remaining gap:} constructing the linear extension $T$ on the full semisimple algebra (the multi-block analogue of Steps 2--4).}
+{\small Remaining: linear extension $T$ on the full semisimple algebra (multi-block Steps 2--4).}
 \end{frame}
 
 %======================================================================
@@ -974,10 +939,7 @@ If block MPVs are nonzero and $\mu_k$ distinct, blocks can be separated.}
 \end{columns}
 
 \vspace{0.4em}
-{\small\textbf{This is sound:} we make hypotheses \emph{explicit}. The single-block theorem has \textbf{zero} axiomatization --- fully proven from Mathlib foundations.}
-
-\vspace{0.3em}
-{\small The formalization boundary is set by Mathlib's coverage of functional analysis, not by any fundamental limitation.}
+{\small Hypotheses are explicit. The single-block theorem is fully proven from Mathlib.}
 
 \vspace{0.3em}
 {\small\textbf{What would unlock the rest:}}
@@ -995,7 +957,7 @@ If block MPVs are nonzero and $\mu_k$ distinct, blocks can be separated.}
 \column{0.48\textwidth}
 \textbf{\textcolor{leangreen}{Surprises (positive):}}
 \begin{enumerate}
-  \item Mathlib's abstract algebra is \textbf{remarkably complete}
+  \item Mathlib's abstract algebra coverage is extensive
   \item The \textbf{algebraic bypass} was essential and elegant
   \item \textbf{Sigma-type indices} for block-diagonal work beautifully
   \item Lean 4's tactic mode is pleasant for mathematical reasoning
@@ -1012,7 +974,7 @@ If block MPVs are nonzero and $\mu_k$ distinct, blocks can be separated.}
 \end{columns}
 
 \vspace{0.8em}
-\textbf{Key finding:} The paper proof is \emph{correct}. Formalization found no errors, but forced precision about every hypothesis (especially $D>0$).
+The paper proof is correct. Formalization found no errors, but forced precision about every hypothesis (especially $D>0$).
 \end{frame}
 
 %======================================================================
@@ -1091,34 +1053,26 @@ Expansion factor & $\sim$10$\times$ \\
 %======================================================================
 % SLIDE 26 - Vision
 %======================================================================
-\begin{frame}{Vision: Towards Formal Quantum Many-Body Theory}
-\vspace{-0.5em}
-\begin{center}
-{\textcolor{leangreen}{\normalsize First machine-checked proof of a foundational theorem in quantum many-body physics}}
-\end{center}
-
-\vspace{-0.1em}
+\begin{frame}{What's Next}
+\vspace{-0.3em}
 \begin{columns}[T]
 \column{0.48\textwidth}
-{\small\textbf{This opens the door to:}}
+{\small\textbf{Near-term:}}
 \begin{itemize}\itemsep0.05em
-  \item {\small\textbf{Verified parent Hamiltonians}}
-  \item {\small\textbf{Formal SPT classification} --- $H^2(G,U(1))$}
-  \item {\small\textbf{Verified PEPS theorems} --- higher-dim TNs}
-  \item {\small\textbf{Formal quantum channels} --- CP maps}
+  \item {\small Parent Hamiltonians}
+  \item {\small SPT classification --- $H^2(G,U(1))$}
+  \item {\small PEPS (higher-dim tensor networks)}
 \end{itemize}
 
 \column{0.48\textwidth}
-{\small\textbf{Long-term vision:}}
+{\small\textbf{Longer-term:}}
 \begin{itemize}\itemsep0.05em
-  \item {\small A \textbf{Mathlib-style library} for quantum information}
-  \item {\small Bridge algebra/analysis to quantum physics}
-  \item {\small Formal verification as \textbf{standard tool} in math-phys}
-  \item {\small Community effort: contribute back to Mathlib}
+  \item {\small Quantum channel library}
+  \item {\small Contribute back to Mathlib}
 \end{itemize}
 \end{columns}
 
-\vspace{0.3em}
+\vspace{0.5em}
 \begin{center}
 \begin{tikzpicture}
 \node[rectangle,rounded corners,draw=leangreen,fill=cardbg,
@@ -1129,11 +1083,6 @@ Expansion factor & $\sim$10$\times$ \\
   Cor 4.2: \textcolor{amber}{\textbf{IN PROGRESS}}
 };
 \end{tikzpicture}
-\end{center}
-
-\vspace{0.1em}
-\begin{center}
-{\small\textbf{\textcolor{leangreen}{The future of mathematical physics is formally verified.}}}
 \end{center}
 \end{frame}
 
@@ -1195,12 +1144,12 @@ A multiplicative linear map need not preserve~$1$!}
 \end{enumerate}
 
 \vspace{0.12em}
-{\small\textbf{Crucially uses:}
+{\small\textbf{Uses:}
 \begin{itemize}\itemsep0.01em
-  \item \textbf{Surjectivity} (to find $x$)
-  \item \textbf{Multiplicativity} ($T(x\cdot 1) = T(x)T(1)$)
+  \item Surjectivity (to find $x$)
+  \item Multiplicativity ($T(x\cdot 1) = T(x)T(1)$)
 \end{itemize}
-This is why Step~3 must come \emph{before} Skolem--Noether.}
+This is why Step~3 must precede Skolem--Noether.}
 
 \column{0.50\textwidth}
 {\small\textbf{\textcolor{leangreen}{The Lean proof:}}}
@@ -1251,7 +1200,7 @@ If $\mathrm{tr}(MN) = 0$ for all $N\in M_D(\mathbb{C})$, then $M = 0$.}
   \item {\scriptsize TracePairing: $\Phi_A$ injective}
   \item {\scriptsize $\to$ LinearExtension: $T$ unique}
   \item {\scriptsize $\to$ Multiplicativity of $T$}
-  \item {\scriptsize $\to$ \textbf{Everything downstream!}}
+  \item {\scriptsize $\to$ Everything downstream}
 \end{itemize}
 
 \column{0.54\textwidth}

@@ -154,7 +154,7 @@
 \maketitle
 \vspace{-2em}
 \begin{center}
-{\footnotesize Lean~4 + Mathlib v4.27.0\quad$\cdot$\quad arXiv:2011.12127\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}}
+{\footnotesize Lean~4 + Mathlib v4.27.0\quad$\cdot$\quad\cite{Cirac2021Matrix}\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}}
 \end{center}
 \end{frame}
 }
@@ -284,21 +284,22 @@ E_k(X) =  \sum_{\sigma=1}^{d} A_k^\sigma \,X\, (A_k^\sigma)^\dagger
 \end{column}
 \begin{column}{0.48\textwidth}
 \begin{tikzpicture}[scale=0.75]
-  % Transfer operator diagram
-  \draw[gray!50, thick, rounded corners=5pt] (-0.3,-0.3) rectangle (4.0,3.3);
-  \node[text=dimwhite, font=\scriptsize] at (1.85, 3.55) {$E_k : M_{D_k}(\mathbb{C}) \to M_{D_k}(\mathbb{C})$};
+  % Transfer operator schematic (Kraus sum)
+  \draw[gray!50, thick, rounded corners=5pt] (-0.3,-0.3) rectangle (4.2,3.3);
+  \node[text=dimwhite, font=\scriptsize] at (1.95, 3.55) {$E_k : M_{D_k}(\mathbb{C}) \to M_{D_k}(\mathbb{C})$};
 
   % Input
   \node[rectangle, draw=leanblue, fill=leanblue!20!cardbg, minimum width=0.8cm, minimum height=0.8cm, text=white, font=\scriptsize] (X) at (0.4, 1.5) {$X$};
 
-  % Kraus operators
-  \foreach \i/\y in {1/2.5, 2/1.5, 3/0.5} {
-    \node[font=\tiny, text=amber] at (2, \y) {$A_k^{\i} X (A_k^{\i})^\dagger$};
-  }
+  % Kraus terms
+  \node[font=\tiny, text=amber] at (2.2, 2.7) {$A_k^{1}\, X\, (A_k^{1})^\dagger$};
+  \node[font=\tiny, text=amber] at (2.2, 1.9) {$A_k^{2}\, X\, (A_k^{2})^\dagger$};
+  \node[font=\tiny, text=dimwhite] at (2.2, 1.25) {$\vdots$};
+  \node[font=\tiny, text=amber] at (2.2, 0.5) {$A_k^{d}\, X\, (A_k^{d})^\dagger$};
 
   % Sum arrow
-  \node[font=\scriptsize, text=leangreen] at (3.3, 1.5) {$\sum$};
-  \draw[-{Stealth[length=3pt]}, leangreen, thick] (3.55, 1.5) -- (3.85, 1.5);
+  \node[font=\scriptsize, text=leangreen] at (3.5, 1.5) {$\displaystyle\sum$};
+  \draw[-{Stealth[length=3pt]}, leangreen, thick] (3.75, 1.5) -- (4.05, 1.5);
 \end{tikzpicture}
 
 \vspace{0.3em}
@@ -317,7 +318,7 @@ $E_k$ has Kraus form $\{A_k^\sigma\}_\sigma$, so it is automatically \alert{comp
 \[
 E_k \otimes \mathrm{id}_n : M_{D_k \cdot n}(\mathbb{C}) \to M_{D_k \cdot n}(\mathbb{C}) \quad\text{preserves}\quad X \geq 0.
 \]
-This is stronger than just ``positive'': it means $E_k$ preserves entanglement structure.
+Stronger than positivity: $E_k$ preserves entanglement structure.
 
 \vspace{0.6em}
 \textbf{Step 3: Irreducibility.}\quad
@@ -330,7 +331,7 @@ Equivalently: the only $E_k$-invariant faces of the PSD cone are $\{0\}$ and the
 \end{block}
 
 \vspace{0.3em}
-\textcolor{dimwhite}{\footnotesize This connects our algebraic condition (\texttt{IsInjective}) to the spectral-theoretic framework. Mathlib has the \emph{definition} of \texttt{Matrix.IsIrreducible} but not the eigenvalue consequences.}
+\textcolor{dimwhite}{\footnotesize Mathlib has \texttt{Matrix.IsIrreducible} (definition only), not the eigenvalue consequences.}
 \end{frame}
 
 %======================================================================
@@ -353,13 +354,12 @@ Let $E : M_D(\mathbb{C}) \to M_D(\mathbb{C})$ be an \alert{irreducible completel
 \begin{itemize}\itemsep0pt
   \item In canonical form, $E_k(I) = I$ (trace-preserving), so $\rho(E_k) = 1$
   \item The unique fixed point $\Lambda_k > 0$ with $E_k(\Lambda_k) = \Lambda_k$
-  \item \alert{All other eigenvalues satisfy $|\lambda| < 1$} (spectral gap!)
+  \item \alert{All other eigenvalues satisfy $|\lambda| < 1$} (spectral gap)
 \end{itemize}
 
 \vspace{0.2em}
 \begin{center}
-\textcolor{softred}{\textbf{This theorem has never been formally verified in any proof assistant.}}\\[2pt]
-{\footnotesize \textcolor{dimwhite}{Not in Lean, not in Isabelle, not in Coq. It's the key missing piece.}}
+\textcolor{softred}{Not formally verified in any proof assistant (Lean, Isabelle, or Coq).}
 \end{center}
 \end{frame}
 
@@ -387,7 +387,7 @@ The convergence rate is $|\lambda_2|^N$ where $|\lambda_2| < 1$ is the second-la
 \end{enumerate}
 
 \vspace{0.3em}
-{\footnotesize \textcolor{dimwhite}{The spectral gap ensures the $E_k^N$ terms converge, giving us ``fixed coefficients'' for the Vandermonde argument that was otherwise blocked by the $N$--$\sigma$ coupling.}}
+{\footnotesize \textcolor{dimwhite}{The spectral gap ensures convergence of $E_k^N$, providing fixed coefficients for Vandermonde despite the $N$--$\sigma$ coupling.}}
 \end{frame}
 
 %======================================================================
@@ -438,7 +438,7 @@ Applying to the transfer operator:
 \end{columns}
 
 \vspace{0.2em}
-{\footnotesize This \alert{reduction to classical PF} is the most practical formalization path.}
+{\footnotesize Reduces the problem to classical PF on $T_A$.}
 \end{frame}
 
 %======================================================================
@@ -457,7 +457,7 @@ Applying to the transfer operator:
      \checkmark\ Perron root existence\\
      \checkmark\ Unique positive eigvec\\
      \checkmark\ Spectral dominance\\
-     \checkmark\ \textbf{Same Lean + Mathlib!}
+     \checkmark\ Same Lean + Mathlib versions
   };
 
   \node[cardblue, right=0.2cm of hf] (lqi) {%
@@ -491,7 +491,7 @@ Applying to the transfer operator:
 %======================================================================
 \begin{frame}[fragile]{HopfieldNet: Full Classical PF in Lean 4}
 
-\textbf{The big surprise:} the paper said ``stochastic matrices,'' but the code proves PF for \alert{general irreducible nonneg real matrices}.
+The paper targets stochastic matrices, but the code proves PF for \alert{general irreducible nonneg real matrices}.
 
 \vspace{0.3em}
 \begin{columns}[T]
@@ -518,7 +518,7 @@ Applying to the transfer operator:
 \end{tabular}
 
 \vspace{0.5em}
-\textcolor{leangreen}{\textbf{Identical Mathlib revision!}}
+\textcolor{leangreen}{Identical Mathlib revision.}
 
 \vspace{0.3em}
 Import with one line:
@@ -666,7 +666,7 @@ Spectral theory & \textcolor{leangreen}{\checkmark} & --- & \textcolor{leangreen
 
 \vspace{0.1em}
 \begin{center}
-\textcolor{amber}{\textbf{The two halves of the bridge exist separately. Nobody has connected them.}}
+\textcolor{amber}{The two halves exist separately; no one has connected them.}
 \end{center}
 \end{frame}
 
@@ -752,7 +752,7 @@ Spectral theory & \textcolor{leangreen}{\checkmark} & --- & \textcolor{leangreen
   \item Prove quantum PF directly using:
     \begin{itemize}\scriptsize\itemsep0pt
       \item Compactness of state space
-      \item Brouwer FPT (in Mathlib!)
+      \item Brouwer FPT (in Mathlib)
       \item Irreducibility $\implies$ interior fixed pt
     \end{itemize}
   \item \textcolor{leangreen}{Avoids classical PF bridge entirely}
@@ -880,13 +880,11 @@ Skip the classical $\to$ quantum bridge entirely. Prove quantum PF from first pr
 \end{center}
 
 \vspace{0.3em}
-\textbf{Key insight:} Community resources cut the ``from scratch'' estimate by \alert{50--70\%}.
-
-\vspace{0.2em}
+Community resources cut the ``from scratch'' estimate by $\sim$50--70\%:
 \begin{itemize}\small\itemsep1pt
-  \item \textbf{HopfieldNet} saves 2--3 months of classical PF formalization (8,302 lines free)
-  \item \textbf{Lean-QuantumInfo} saves 2--3 weeks of CP map foundations (as blueprint)
-  \item \textbf{Mathlib} provides spectral theory, Brouwer, Kronecker (months of infrastructure)
+  \item HopfieldNet: 8,302 lines of classical PF (saves 2--3 months)
+  \item Lean-QuantumInfo: CP map foundations as blueprint (saves 2--3 weeks)
+  \item Mathlib: spectral theory, Brouwer, Kronecker
 \end{itemize}
 \end{frame}
 
@@ -927,7 +925,7 @@ Skip the classical $\to$ quantum bridge entirely. Prove quantum PF from first pr
 \end{tikzpicture}
 
 \vspace{0.5em}
-\textbf{Decision point:}  After Tier 2, the gap is \textcolor{leangreen}{fully closed}. Tier 3 is for community impact.
+After Tier 2 the gap is closed. Tier 3 is community contribution.
 \end{frame}
 
 %======================================================================
@@ -980,7 +978,7 @@ Brouwer not strong enough & Low & \textcolor{amber}{Medium} & Schauder FPT also 
 \end{tabular}
 
 \vspace{0.4em}
-\textbf{Overall risk:} \textcolor{amber}{Medium}. Multiple fallback paths exist at every stage.
+Overall risk: \textcolor{amber}{Medium}. Fallback paths exist at each stage.
 \end{frame}
 
 %======================================================================
@@ -988,7 +986,7 @@ Brouwer not strong enough & Low & \textcolor{amber}{Medium} & Schauder FPT also 
 %======================================================================
 \begin{frame}{Impact: Beyond MPSLean}
 
-Closing this gap produces \textbf{the first formally verified quantum Perron--Frobenius theorem} in any proof assistant.
+Closing this gap would yield a formally verified quantum Perron--Frobenius theorem.
 
 \vspace{0.3em}
 \begin{columns}[T]
@@ -996,30 +994,17 @@ Closing this gap produces \textbf{the first formally verified quantum Perron--Fr
 \textbf{For MPSLean:}
 \begin{itemize}\small\itemsep0pt
   \item Full FT of MPS: 0 sorries, 0 axioms
-  \item First formalization of a non-trivial quantum many-body theorem
   \item Opens path to DMRG, SPT phases
 \end{itemize}
 \end{column}
 \begin{column}{0.48\textwidth}
 \textbf{For the community:}
 \begin{itemize}\small\itemsep0pt
-  \item \textbf{Mathlib}: Classical PF on ``100 theorems'' list (\#6091)
-  \item \textbf{Quantum info}: First formal quantum channel spectral theory
-  \item \textbf{Lean ecosystem}: Bridge HopfieldNet + Lean-QuantumInfo
+  \item Classical PF on Mathlib's ``100 theorems'' list (\#6091)
+  \item Formal quantum channel spectral theory
 \end{itemize}
 \end{column}
 \end{columns}
-
-\vspace{0.4em}
-\begin{center}
-\begin{tikzpicture}
-\node[rectangle, rounded corners=5pt, draw=leangreen!50, fill=leangreen!10!cardbg,
-      text=white, font=\small, minimum width=10cm, align=center, inner sep=6pt,
-      text width=9.5cm] {%
-  \textcolor{leangreen}{\textbf{The Lean 4 ecosystem is 5--6 weeks away from the first formally verified quantum PF theorem.}}
-};
-\end{tikzpicture}
-\end{center}
 \end{frame}
 
 %======================================================================
@@ -1038,13 +1023,10 @@ Closing this gap produces \textbf{the first formally verified quantum Perron--Fr
       text=white, font=\small, minimum width=11cm, align=left,
       inner sep=10pt, text width=10.5cm] {%
   \proved{14 modules, 2,396 lines, 0 sorries, 0 axioms}\\[1pt]
-  \proved{Single-block Fundamental Theorem fully closed}\\[1pt]
-  \proved{Multi-block pipeline complete (conditional on separation)}\\[3pt]
-  \community{HopfieldNet: 8,302 lines of classical PF, \textbf{same versions}}\\[1pt]
-  \community{Lean-QuantumInfo: Choi's theorem + Kraus decomposition}\\[1pt]
-  \community{Combined: \textbf{50--70\% reduction} in formalization effort}\\[3pt]
-  \inprog{Recommended: Direct quantum PF, 5--6 weeks, 600--1000 LoC}\\[1pt]
-  \inprog{Would produce \textbf{first} formally verified quantum PF}
+  \proved{Single-block FT closed; multi-block conditional on separation}\\[3pt]
+  \community{HopfieldNet: classical PF (8,302 lines, same Mathlib revision)}\\[1pt]
+  \community{Lean-QuantumInfo: Choi's theorem + Kraus decomposition}\\[3pt]
+  \inprog{Recommended: direct quantum PF, 5--6 weeks, 600--1000 LoC}
 };
 \end{tikzpicture}
 
