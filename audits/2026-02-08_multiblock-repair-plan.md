@@ -1,3 +1,13 @@
+---
+title: "MultiBlock.lean audit / repair plan"
+date: 2026-02-08
+author: AI research assistant (search agent)
+purpose: >
+  Code-level audit of the existing MultiBlock.lean file.  Diagnoses
+  compilation issues, proposes targeted fixes, and outlines the repair
+  sequence for block-diagonal MPV decomposition infrastructure.
+---
+
 # MultiBlock.lean audit / repair plan
 
 _Date_: 2026-02-08

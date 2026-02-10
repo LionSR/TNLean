@@ -1,3 +1,14 @@
+---
+title: "Multi-block implementation plan: toward the full Fundamental Theorem"
+date: 2026-02-08
+author: AI research assistant (search agent)
+purpose: >
+  Research and implementation plan for extending MPSLean from the
+  single-block injective Fundamental Theorem to the multi-block
+  canonical-form version (arXiv:2011.12127, Thm 4.1).  Covers phased
+  execution plan, Vandermonde separation strategy, and effort estimates.
+---
+
 # Toward the *full* Fundamental Theorem (multi-block / canonical form) as stated in `2011.12127`
 
 _Date_: 2026-02-08

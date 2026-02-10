@@ -1,3 +1,15 @@
+---
+title: "Community Lean 4 resources for the spectral gap"
+date: 2026-02-09
+author: AI research assistant (search agent)
+purpose: >
+  Survey of reusable Lean 4 libraries (HopfieldNet, Lean-QuantumInfo,
+  Mathlib, Isabelle AFP) for closing the quantum Perron–Frobenius gap.
+  Assesses version compatibility, importability, and gap coverage for
+  each resource.  Includes the HopfieldNet addendum after the repo was
+  found to use identical Lean+Mathlib versions.
+---
+
 # Community Lean 4 Resources for MPSLean's Spectral Gap
 ## Investigation of Available Formalizations for Quantum Perron-Frobenius Theory
 

@@ -1,3 +1,15 @@
+---
+title: "Spectral gap analysis: quantum Perron–Frobenius & transfer operators"
+date: 2026-02-09
+author: AI research assistant (search agent)
+purpose: >
+  Feasibility study for closing the multi-block (r≥2) gap.  Maps the
+  6-step physics proof (transfer operator → CP → irreducibility →
+  quantum PF → spectral gap → block separation) against Mathlib v4.27.0
+  and external Lean 4 projects.  Provides effort estimates for five
+  alternative approaches.
+---
+
 # Spectral Gap Analysis Report
 ## Quantum Perron-Frobenius & Transfer Operator Theory for MPSLean
 

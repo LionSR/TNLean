@@ -1,3 +1,14 @@
+---
+title: "Multi-block MPS audit: Mathlib support & gaps"
+date: 2026-02-08
+author: AI research assistant (search agent)
+purpose: >
+  Assess Mathlib readiness for formalizing multi-block / canonical-form
+  versions of the Fundamental Theorem of MPS.  Inventories block-diagonal,
+  Kronecker, Vandermonde, CP map, and spectral theory APIs; identifies
+  critical gaps (Perron–Frobenius, Choi, Kraus).
+---
+
 # Multi-block MPS audit: Mathlib support & gaps
 
 _Date_: 2026-02-08

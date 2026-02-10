@@ -1,3 +1,14 @@
+---
+title: Initial Mathlib Audit for MPS Formalization
+date: 2026-02-07
+author: AI research assistant (search agent)
+purpose: >
+  Systematic audit of Mathlib v4.27.0 for the building blocks needed to
+  formalize the Fundamental Theorem of Matrix Product States.  Covers
+  matrix algebras, simple rings, Skolem–Noether, trace, block diagonals,
+  and proposes the initial MPSLean architecture.
+---
+
 I set up the Lean/Mathlib workspace as requested:
 
 - Created a Lean package `MPSLean` (Mathlib template) with `mathlib` pinned to `v4.27.0` in `lakefile.toml`.

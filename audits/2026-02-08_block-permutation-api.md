@@ -1,3 +1,14 @@
+---
+title: "Block permutation API audit (Mathlib v4.27.0)"
+date: 2026-02-08
+author: AI research assistant (search agent)
+purpose: >
+  Audit of Mathlib's semisimple block decomposition and block permutation
+  API.  Evaluates TwoSidedIdeal, simple ring infrastructure, and
+  Equiv.Perm tooling needed to prove that automorphisms of ∏ M_{D_k}(ℂ)
+  decompose as block permutations + per-block inner automorphisms.
+---
+
 # Audit: semisimple block decomposition / block permutation API (Mathlib v4.27.0)
 
 _Date_: 2026-02-08  

@@ -1,3 +1,15 @@
+---
+title: "HopfieldNet classical PF: effort analysis for MPSLean integration"
+date: 2026-02-09
+author: AI research assistant (search agent)
+purpose: >
+  Deep dive into mkaratarakis/HopfieldNet — the Cipollina, Karatarakis,
+  Wiedijk (arXiv:2512.07766) Perron–Frobenius formalization.  File-by-file
+  inventory of 8,302 lines / 416 theorems.  Version compatibility
+  assessment (identical Lean+Mathlib), import instructions, and the
+  classical-to-quantum bridge strategy with effort estimates.
+---
+
 # HopfieldNet Perron-Frobenius: Effort Analysis for MPSLean Integration
 
 **Date:** 2026-02-09

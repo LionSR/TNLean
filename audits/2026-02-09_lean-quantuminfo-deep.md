@@ -1,3 +1,15 @@
+---
+title: "Lean-QuantumInfo deep analysis: CP map infrastructure inventory"
+date: 2026-02-09
+author: AI research assistant (search agent)
+purpose: >
+  Exhaustive file-by-file examination of Timeroot/Lean-QuantumInfo
+  (20,434 lines, 1,059 theorems).  Catalogs every definition and theorem
+  in the CPTPMap module, HermitianMat infrastructure, and ForMathlib
+  extensions.  Assesses version gap (v4.24→v4.27), sorry status on the
+  critical path, and cherry-pick / guided-rewrite strategies.
+---
+
 # Deep Analysis: Lean-QuantumInfo for MPSLean's Spectral Gap
 ## Exhaustive File-by-File Examination Report
 
