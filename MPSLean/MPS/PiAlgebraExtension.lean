@@ -542,4 +542,58 @@ with `N`. We cannot produce a Vandermonde system with fixed coefficients at diff
 None of these are currently available in Mathlib v4.27.0.
 -/
 
+section BlockSeparation
+
+variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+
+/-! ### The block separation conjecture
+
+The following theorem is the precise statement that would close the remaining
+gap in the multi-block Fundamental Theorem. Its proof requires either:
+- The quantum Perron–Frobenius spectral gap (`spectralRadius_mixedTransfer_lt_one`
+  from `TransferSpectral.lean`) composed with a bridge connecting spectral decay
+  to per-block MPV equality, or
+- A purely algebraic argument using Newton's identities on repeated-word
+  characteristic polynomials with a genericity/Zariski density argument.
+
+Both approaches are beyond current Mathlib capabilities. We state it here as a
+clean, self-contained hypothesis that plugs directly into
+`fundamentalTheorem_multiBlock_fromSameMPV₂`. -/
+
+/-- **Block separation from SameMPV₂**: If two families of injective block tensors
+with distinct unit-circle phases produce the same MPV when assembled into
+block-diagonal tensors, then each block produces the same MPV individually.
+
+This is the multi-block analogue of the single-block result
+`sameMPV₂_single_block` (which holds trivially for `r = 1`).
+For `r ≥ 2`, the proof requires spectral theory (quantum Perron–Frobenius)
+or a purely algebraic argument based on Newton's identities. -/
+theorem sameMPV₂_implies_perBlock_sameMPV
+    (μ : Fin r → ℂ) (hμ_inj : Function.Injective μ)
+    (hμ_ne : ∀ k, μ k ≠ 0)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hA : ∀ k, IsInjective (A k))
+    (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+    ∀ k, SameMPV (A k) (B k) := by
+  sorry
+
+/-- **Full multi-block Fundamental Theorem (no separation hypothesis).**
+
+Combining `sameMPV₂_implies_perBlock_sameMPV` with the assembly machinery
+gives the complete result: `SameMPV₂` on block-diagonal tensors with distinct
+nonzero phases implies global gauge equivalence.
+
+Note: This theorem depends on `sameMPV₂_implies_perBlock_sameMPV` (sorry). -/
+theorem fundamentalTheorem_multiBlock_complete
+    (μ : Fin r → ℂ) (hμ_inj : Function.Injective μ)
+    (hμ_ne : ∀ k, μ k ≠ 0)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hA : ∀ k, IsInjective (A k))
+    (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+    GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
+  (fundamentalTheorem_multiBlock_fromSameMPV₂ μ A B hA hSame₂
+    (sameMPV₂_implies_perBlock_sameMPV μ hμ_inj hμ_ne A B hA hSame₂)).2.1
+
+end BlockSeparation
+
 end MPSTensor
