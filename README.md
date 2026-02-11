@@ -71,12 +71,11 @@ theorem algEquiv_pi_matrix_decomposition (φ : (∀ k, Matrix (Fin (D k)) (Fin (
 
 | Metric | Value |
 |--------|-------|
-| Lean modules | 14 |
-| Total lines of Lean | 2,396 |
-| Build jobs | 2,095 |
-| `sorry` | 0 |
+| Lean modules | 16 |
+| Total lines of Lean | 3,386 |
+| Build jobs | 2,775 |
+| `sorry` | 4 (spectral theory; see below) |
 | `axiom` | 0 |
-| Linter warnings | 0 |
 | Mathlib version | v4.27.0 |
 
 ## File Structure
@@ -96,7 +95,9 @@ MPSLean/MPS/
 ├── FundamentalTheoremMulti.lean — Multi-block gauge assembly + global theorem (237 l)
 ├── BlockPermutation.lean        — Automorphisms of ∏ simple rings permute factors (223 l)
 ├── BlockPermutationMPS.lean     — Per-block decomposition via Skolem–Noether (336 l)
-└── PiAlgebraExtension.lean      — Linear extension on ∏ M_{D_k}(ℂ), single-block closure, gap analysis (545 l)
+├── PiAlgebraExtension.lean      — Linear extension on ∏ M_{D_k}(ℂ), single-block closure, gap analysis (545 l)
+├── CPPrimitive.lean             — CP map theory: IsCP, IsIrreducibleCP, injectivity→irreducibility (422 l)
+└── TransferSpectral.lean        — Mixed transfer operator, spectral convergence, block separation (567 l)
 ```
 
 ## Key Design Decisions
@@ -130,10 +131,14 @@ The gap has **narrowed significantly**. We now have:
 - ✅ Block permutation decomposition (any algebra automorphism of `∏ M_{D_k}(ℂ)` = permutation + per-block inner automorphisms)
 - ✅ Pi-algebra automorphism from per-block SameMPV, with full decomposition
 - ✅ **Single-block case closed**: `sameMPV₂_single_block` proves that for `r = 1`, `SameMPV₂` directly gives per-block `SameMPV` (no PF theory needed)
+- ✅ **Transfer operator spectral theory**: Mixed transfer operator, Gelfand spectral radius convergence, cross-correlation decay, block separation
+- ✅ **CP map theory**: Injectivity implies irreducibility of the transfer operator (complete proof via PSD cone argument)
 
-**What remains for `r ≥ 2`:** The step from `SameMPV₂` (global MPV equality of block-diagonal tensors) to per-block `SameMPV` (MPV equality within each block independently). This *block separation* step requires spectral analysis of the transfer operator (quantum Perron–Frobenius theory), which is not yet available in Mathlib. Our formalization isolates this as an explicit hypothesis.
+**What remains for `r ≥ 2` (4 `sorry`):** The *spectral gap* for the mixed transfer operator of non-gauge-equivalent blocks. The key sorry is `spectralRadius_mixedTransfer_lt_one`: for injective MPS tensors A, B that are not gauge-phase equivalent, the mixed transfer operator F_{AB} has spectral radius < 1. This is the quantum Perron–Frobenius theorem applied to cross-block channels. Everything downstream (convergence, block separation, per-block SameMPV) follows from this single result.
 
-The difficulty is that `SameMPV₂` gives equations `∑_k μ_k^N · Δ_k(σ) = 0` where the exponent `N` is coupled to the configuration type `σ : Fin N → Fin d`, preventing direct application of Vandermonde-type linear independence arguments. See the detailed analysis in `PiAlgebraExtension.lean`.
+The remaining 3 sorry are: (1-2) `irreducibleCP_implies_primitiveCP` and `primitive_has_unique_fixed_point` documenting the quantum PF proof chain (not in the critical path), and (3) `mixedTransferSpectralRadius_eq_transferMatrix` connecting the linear map spectral radius to the Kronecker-product matrix form (isolated).
+
+See the detailed analysis in `PiAlgebraExtension.lean` and `TransferSpectral.lean`.
 
 ## Building
 
