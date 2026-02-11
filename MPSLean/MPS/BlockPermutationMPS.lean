@@ -256,9 +256,7 @@ theorem componentMap_surjective
     · rw [h_symm_support j hj, Pi.single_eq_of_ne hj]
   refine ⟨T.symm (Pi.single (σ i) N) i, ?_⟩
   show T (Pi.single i (T.symm (Pi.single (σ i) N) i)) (σ i) = N
-  rw [show T (Pi.single i (T.symm (Pi.single (σ i) N) i)) (σ i) =
-      (T (T.symm (Pi.single (σ i) N))) (σ i) from by rw [← h_eq],
-    T.apply_symm_apply, Pi.single_eq_same]
+  rw [← h_eq, T.apply_symm_apply, Pi.single_eq_same]
 
 theorem componentMap_bijective
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}

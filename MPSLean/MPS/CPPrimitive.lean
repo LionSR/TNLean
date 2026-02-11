@@ -153,22 +153,21 @@ private lemma one_sub_mul_self_of_idem (P : Matrix (Fin D) (Fin D) ℂ) (hP : P 
     (1 - P) * P = 0 := by
   rw [sub_mul, one_mul, hP, sub_self]
 
-/-- If `M * Mᴴ = 0` then `M = 0`. This uses the fact that the diagonal entries
-of `M * Mᴴ` are sums of squared norms. -/
+/-- `(M * Mᴴ) c c = ∑ x, ‖M c x‖²` for any matrix `M`. -/
+private lemma diagonal_mul_conjTranspose_eq_normSq_sum
+    (M : Matrix (Fin D) (Fin D) ℂ) (c : Fin D) :
+    (M * Mᴴ) c c = ↑(∑ x, Complex.normSq (M c x)) := by
+  rw [Matrix.mul_apply, Complex.ofReal_sum]
+  congr 1; ext x
+  simp [Matrix.conjTranspose_apply, Complex.normSq_eq_conj_mul_self]; ring
+
+/-- If `M * Mᴴ = 0` then `M = 0`, since the diagonal entries are sums of squared norms. -/
 private lemma eq_zero_of_mul_conjTranspose_eq_zero
     (M : Matrix (Fin D) (Fin D) ℂ) (h : M * Mᴴ = 0) : M = 0 := by
   ext i j
   have hii : (M * Mᴴ) i i = 0 := by rw [h]; simp
-  rw [Matrix.mul_apply] at hii
-  simp only [Matrix.conjTranspose_apply] at hii
-  have h_nonneg : ∀ x, M i x * star (M i x) = ↑(Complex.normSq (M i x)) := by
-    intro x; simp [Complex.normSq_eq_conj_mul_self]; ring
-  rw [show ∑ x, M i x * star (M i x) = ∑ x, ↑(Complex.normSq (M i x)) from
-    Finset.sum_congr rfl (fun x _ => h_nonneg x)] at hii
-  have h_sum_real : ∑ x : Fin D, Complex.normSq (M i x) = 0 := by
-    have h1 : (↑(∑ x : Fin D, Complex.normSq (M i x)) : ℂ) = 0 := by
-      rw [Complex.ofReal_sum]; exact hii
-    exact_mod_cast h1
+  rw [diagonal_mul_conjTranspose_eq_normSq_sum] at hii
+  have h_sum_real : ∑ x : Fin D, Complex.normSq (M i x) = 0 := by exact_mod_cast hii
   exact Complex.normSq_eq_zero.mp
     ((Finset.sum_eq_zero_iff_of_nonneg (fun x _ => Complex.normSq_nonneg _)).mp
       h_sum_real j (Finset.mem_univ _))
@@ -178,70 +177,24 @@ private lemma eq_zero_of_sum_mul_conjTranspose_eq_zero {ι : Type*} [Fintype ι]
     (B : ι → Matrix (Fin D) (Fin D) ℂ)
     (h : ∑ i : ι, B i * (B i)ᴴ = 0) :
     ∀ i, B i = 0 := by
-  intro i
-  apply eq_zero_of_mul_conjTranspose_eq_zero
-  suffices hBi : B i = 0 by rw [hBi]; simp
-  ext a b
-  have h_diag : ∀ k, ∀ c, (B k * (B k)ᴴ) c c ≥ 0 := by
-    intro k c
-    rw [Matrix.mul_apply]
-    simp only [Matrix.conjTranspose_apply, ge_iff_le]
-    rw [show ∑ x, B k c x * star (B k c x) =
-          ↑(∑ x, Complex.normSq (B k c x)) from by
-      rw [Complex.ofReal_sum]
-      congr 1; ext x; simp [Complex.normSq_eq_conj_mul_self]; ring]
-    rw [Complex.zero_le_real]
-    exact Finset.sum_nonneg (fun x _ => Complex.normSq_nonneg _)
-  have h_sum_diag_zero : ∀ c, ∑ k : ι, (B k * (B k)ᴴ) c c = 0 := by
-    intro c
-    have h1 := congr_fun (congr_fun h c) c
-    simp only [Matrix.zero_apply] at h1
-    rw [Finset.sum_apply, Finset.sum_apply] at h1
-    exact h1
+  -- Key fact: the diagonal entries of each `Bₖ * Bₖᴴ` are nonneg reals that sum to 0.
+  have h_diag_eq : ∀ c, ∑ k : ι, (B k * (B k)ᴴ) c c = 0 := by
+    intro c; have := congr_fun (congr_fun h c) c
+    rwa [Finset.sum_apply, Finset.sum_apply, Matrix.zero_apply] at this
   have h_each_diag : ∀ k c, (B k * (B k)ᴴ) c c = 0 := by
     intro k c
-    have h_entry : (B k * (B k)ᴴ) c c = ↑(∑ x, Complex.normSq (B k c x)) := by
-      rw [Matrix.mul_apply, Complex.ofReal_sum]
-      congr 1; ext x
-      simp only [Matrix.conjTranspose_apply, Complex.normSq_eq_conj_mul_self,
-                  Complex.star_def]
-      ring
-    rw [h_entry]
-    have h_each_real : ∀ k', (B k' * (B k')ᴴ) c c =
-        ↑(∑ x, Complex.normSq (B k' c x)) := by
-      intro k'
-      rw [Matrix.mul_apply, Complex.ofReal_sum]
-      congr 1; ext x
-      simp only [Matrix.conjTranspose_apply, Complex.normSq_eq_conj_mul_self,
-                  Complex.star_def]
-      ring
-    have h_sum_eq : ∑ k' : ι, (↑(∑ x, Complex.normSq (B k' c x)) : ℂ) = 0 := by
-      rw [show ∑ k' : ι, (↑(∑ x, Complex.normSq (B k' c x)) : ℂ) =
-            ∑ k' : ι, (B k' * (B k')ᴴ) c c from by
-        congr 1; ext k'; exact (h_each_real k').symm]
-      exact h_sum_diag_zero c
-    have h_sum_real : ∑ k' : ι, ∑ x, Complex.normSq (B k' c x) = 0 := by
-      have : (↑(∑ k' : ι, ∑ x, Complex.normSq (B k' c x)) : ℂ) = 0 := by
-        rw [Complex.ofReal_sum]
-        convert h_sum_eq using 1
-      exact_mod_cast this
-    have h_inner_nn : ∀ k', 0 ≤ ∑ x, Complex.normSq (B k' c x) :=
+    simp_rw [diagonal_mul_conjTranspose_eq_normSq_sum] at h_diag_eq ⊢
+    have h_nonneg : ∀ k', (0 : ℝ) ≤ ∑ x, Complex.normSq (B k' c x) :=
       fun k' => Finset.sum_nonneg (fun x _ => Complex.normSq_nonneg _)
-    have h_inner_zero : ∑ x, Complex.normSq (B k c x) = 0 :=
-      (Finset.sum_eq_zero_iff_of_nonneg (fun k' _ => h_inner_nn k')).mp
-        h_sum_real k (Finset.mem_univ _)
-    simp [h_inner_zero]
+    have h_sum_real : ∑ k' : ι, ∑ x, Complex.normSq (B k' c x) = 0 := by
+      exact_mod_cast h_diag_eq c
+    simp [(Finset.sum_eq_zero_iff_of_nonneg (fun k' _ => h_nonneg k')).mp
+      h_sum_real k (Finset.mem_univ _)]
+  -- Extract: each Bᵢ a b = 0 from the vanishing diagonal of Bᵢ * Bᵢᴴ.
+  intro i; ext a b
   have h_ii := h_each_diag i a
-  rw [Matrix.mul_apply] at h_ii
-  simp only [Matrix.conjTranspose_apply] at h_ii
-  have h_nonneg : ∀ x, B i a x * star (B i a x) = ↑(Complex.normSq (B i a x)) := by
-    intro x; simp [Complex.normSq_eq_conj_mul_self]; ring
-  rw [show ∑ x, B i a x * star (B i a x) = ∑ x, ↑(Complex.normSq (B i a x)) from
-    Finset.sum_congr rfl (fun x _ => h_nonneg x)] at h_ii
-  have h_sum_real : ∑ x, Complex.normSq (B i a x) = 0 := by
-    have h1 : (↑(∑ x, Complex.normSq (B i a x)) : ℂ) = 0 := by
-      rw [Complex.ofReal_sum]; exact h_ii
-    exact_mod_cast h1
+  rw [diagonal_mul_conjTranspose_eq_normSq_sum] at h_ii
+  have h_sum_real : ∑ x, Complex.normSq (B i a x) = 0 := by exact_mod_cast h_ii
   exact Complex.normSq_eq_zero.mp
     ((Finset.sum_eq_zero_iff_of_nonneg (fun x _ => Complex.normSq_nonneg _)).mp
       h_sum_real b (Finset.mem_univ _))
@@ -281,11 +234,7 @@ private lemma invariance_implies_complement_zero (A : MPSTensor d D)
           = (1 - P) * A i * (P * P) * (A i)ᴴ * (1 - P) := by noncomm_ring
         _ = (1 - P) * A i * P * (A i)ᴴ * (1 - P) := by rw [hPP]
         _ = (1 - P) * (A i * P * (A i)ᴴ) * (1 - P) := by noncomm_ring
-    simp_rw [key]
-    have factor : ∀ i : Fin d,
-        (1 - P) * (A i * P * (A i)ᴴ) * (1 - P) =
-        (1 - P) * (A i * P * (A i)ᴴ) * (1 - P) := fun _ => rfl
-    simp_rw [← Finset.sum_mul, ← Finset.mul_sum]
+    simp_rw [key, ← Finset.sum_mul, ← Finset.mul_sum]
     rw [show ∑ i : Fin d, A i * P * (A i)ᴴ = transferMap (d := d) (D := D) A P from by
       rw [transferMap_apply]]
     rw [h_EP_zero, zero_mul]

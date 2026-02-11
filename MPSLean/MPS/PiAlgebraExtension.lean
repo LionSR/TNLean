@@ -69,14 +69,6 @@ theorem sameMPV₂_summed_blocks
   rw [← hA, ← hB]
   exact hSame N σ
 
-/-- SameMPV₂ implies the summed mpv equality at every system size. -/
-theorem sameMPV₂_mpv_sum_eq
-    (μ : Fin r → ℂ) (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B))
-    (N : ℕ) (σ : Fin N → Fin d) :
-    ∑ k, (μ k) ^ N • mpv (A k) σ = ∑ k, (μ k) ^ N • mpv (B k) σ :=
-  sameMPV₂_summed_blocks μ A B hSame N σ
-
 end SummedTraces
 
 /-! ### Per-block linear extension and Pi-algebra automorphism -/
@@ -149,13 +141,12 @@ theorem perBlockLinearExtension_one
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r) :
     perBlockLinearExtension A B hA hSame k 1 = 1 := by
+  set T := perBlockLinearExtension A B hA hSame k
   have hMul := perBlockLinearExtension_mul A B hA hSame k
   obtain ⟨x, hx⟩ := (perBlockLinearExtension_bijective A B hA hSame k).2 1
-  calc perBlockLinearExtension A B hA hSame k 1
-      = 1 * perBlockLinearExtension A B hA hSame k 1 := (one_mul _).symm
-    _ = perBlockLinearExtension A B hA hSame k x *
-          perBlockLinearExtension A B hA hSame k 1 := by rw [hx]
-    _ = perBlockLinearExtension A B hA hSame k x := by rw [← hMul, mul_one]
+  -- T(1) = 1 · T(1) = T(x) · T(1) = T(x · 1) = T(x) = 1
+  calc T 1 = T x * T 1 := by rw [hx, one_mul]
+    _ = T x := by rw [← hMul, mul_one]
     _ = 1 := hx
 
 /-- Per-block T commutes with scalars. -/
@@ -421,21 +412,11 @@ end SingleBlockSeparation
 
 /-! ### End-to-end theorems from `SameMPV₂` with explicit separation hypothesis
 
-The following theorems provide the complete pipeline from `SameMPV₂` on block-diagonal tensors
-to the final multi-block result.  They factor the argument cleanly into:
+These theorems provide the complete pipeline: `SameMPV₂` → per-block `SameMPV` (via `hSep`)
+→ per-block `GaugeEquiv` → global `GaugeEquiv` → block-permutation decomposition.
 
-1. **Separation**: `SameMPV₂` on the block-diagonal tensor → per-block `SameMPV`
-2. **Per-block FT**: per-block `SameMPV` → per-block `GaugeEquiv` (single-block theorem)
-3. **Assembly**: per-block `GaugeEquiv` → global `GaugeEquiv` of block-diagonal tensors
-4. **Decomposition**: Pi-algebra automorphism → block permutation + inner automorphisms
-
-Step (1) requires quantum PF theory (spectral analysis of the transfer operator), which is not
-yet available in Mathlib.  We therefore isolate it as an explicit hypothesis
-`hSep : ∀ k, SameMPV (A k) (B k)`, making the overall structure transparent.
-
-In the single-block case (`r = 1`), step (1) is proved by `sameMPV₂_single_block` and the full
-pipeline closes without additional hypotheses.
--/
+The separation hypothesis `hSep` is needed for `r ≥ 2` (quantum PF theory); for `r = 1` it
+is proved by `sameMPV₂_single_block`. -/
 section EndToEnd
 
 variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -509,65 +490,26 @@ theorem global_sameMPV_of_perBlock
 
 end Equivalence
 
-/-! ### Structural analysis of the gap
+/-! ### Block separation gap
 
-We record here what would be needed to close the gap from `SameMPV₂` to per-block `SameMPV`
-for the general multi-block case (`r ≥ 2`), and why the standard Vandermonde technique falls
-short.
+The step from `SameMPV₂` to per-block `SameMPV` for `r ≥ 2` requires separating the
+weighted sum `∑_k μ_k^N · mpv(A_k, σ) = ∑_k μ_k^N · mpv(B_k, σ)` into per-block
+equalities. The standard Vandermonde approach fails because the "coefficients"
+`mpv(A_k, σ) - mpv(B_k, σ)` depend on `σ : Fin N → Fin d` whose type varies with `N`.
 
-**What SameMPV₂ gives:**
-For every system size `N` and configuration `σ : Fin N → Fin d`:
-  `∑ k, μ_k^N · mpv(A_k, σ) = ∑ k, μ_k^N · mpv(B_k, σ)`
-
-**What we need:**
-For every block `k`, system size `N`, and configuration `σ : Fin N → Fin d`:
-  `mpv(A_k, σ) = mpv(B_k, σ)`
-
-**Why Vandermonde alone is insufficient:**
-The Vandermonde technique requires equations of the form `∑ k c_k · μ_k^N = 0` for
-`N = 0, 1, …, r-1` with *fixed* coefficients `c_k`. In our setting, the "coefficient"
-`Δ_k(σ) := mpv(A_k, σ) - mpv(B_k, σ)` depends on `σ : Fin N → Fin d`, whose type varies
-with `N`. We cannot produce a Vandermonde system with fixed coefficients at different powers.
-
-**What would suffice (any one of these):**
-1. *Quantum Perron–Frobenius theory*: Spectral analysis of the transfer operator
-   `E(X) = ∑_i A_i X A_i†` showing that block contributions can be spectrally separated.
-   (This is the approach in arXiv:2011.12127, §IV.)
-2. *Transfer operator fixed-point analysis*: Showing that the dominant eigenvector of the
-   mixed transfer operator `∑_i A_k^i ⊗ conj(B_k^i)` is the identity (up to scaling) for
-   each block `k`.
-3. *An algebraic identity* relating word evaluations at different lengths in a way that
-   decouples the `N`-dependence from the block contributions.
-
-None of these are currently available in Mathlib v4.27.0.
--/
+Closing this gap requires quantum Perron–Frobenius theory or an equivalent spectral
+argument, which is not yet available in Mathlib. -/
 
 section BlockSeparation
 
 variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 
-/-! ### The block separation conjecture
-
-The following theorem is the precise statement that would close the remaining
-gap in the multi-block Fundamental Theorem. Its proof requires either:
-- The quantum Perron–Frobenius spectral gap (`spectralRadius_mixedTransfer_lt_one`
-  from `TransferSpectral.lean`) composed with a bridge connecting spectral decay
-  to per-block MPV equality, or
-- A purely algebraic argument using Newton's identities on repeated-word
-  characteristic polynomials with a genericity/Zariski density argument.
-
-Both approaches are beyond current Mathlib capabilities. We state it here as a
-clean, self-contained hypothesis that plugs directly into
-`fundamentalTheorem_multiBlock_fromSameMPV₂`. -/
-
 /-- **Block separation from SameMPV₂**: If two families of injective block tensors
-with distinct unit-circle phases produce the same MPV when assembled into
+with distinct nonzero phases produce the same MPV when assembled into
 block-diagonal tensors, then each block produces the same MPV individually.
 
-This is the multi-block analogue of the single-block result
-`sameMPV₂_single_block` (which holds trivially for `r = 1`).
-For `r ≥ 2`, the proof requires spectral theory (quantum Perron–Frobenius)
-or a purely algebraic argument based on Newton's identities. -/
+For `r = 1` this is proved by `sameMPV₂_single_block`. For `r ≥ 2`, the proof
+requires quantum Perron–Frobenius theory (see `TransferSpectral.lean`). -/
 theorem sameMPV₂_implies_perBlock_sameMPV
     (μ : Fin r → ℂ) (hμ_inj : Function.Injective μ)
     (hμ_ne : ∀ k, μ k ≠ 0)

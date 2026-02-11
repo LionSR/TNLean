@@ -38,28 +38,22 @@ section BlockDiagonalGL
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 
-private theorem blockDiagonal'_mul_inv (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
-    Matrix.blockDiagonal' (fun k => (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) *
-      Matrix.blockDiagonal' (fun k => ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) = 1 := by
+private theorem blockDiagonal'_mul_one
+    (f g : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+    (hfg : ∀ k, f k * g k = 1) :
+    Matrix.blockDiagonal' f * Matrix.blockDiagonal' g = 1 := by
   classical
-  rw [← Matrix.blockDiagonal'_mul, show (fun k =>
-    (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) *
-    ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) =
-    (1 : ∀ k : Fin r, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) from by funext k; simp,
+  rw [← Matrix.blockDiagonal'_mul, show (fun k => f k * g k) = 1 from funext hfg,
     Matrix.blockDiagonal'_one]
 
 /-- Assemble blockwise invertible matrices into a block-diagonal element of `GL`. -/
 noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
     GL ((k : Fin r) × Fin (dim k)) ℂ := by
   classical
-  exact ⟨Matrix.blockDiagonal' (fun k => (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)),
-    Matrix.blockDiagonal' (fun k => ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)),
-    blockDiagonal'_mul_inv X,
-    by rw [← Matrix.blockDiagonal'_mul, show (fun k =>
-      ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) *
-        (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) =
-      (1 : ∀ k : Fin r, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) from by funext k; simp,
-      Matrix.blockDiagonal'_one]⟩
+  exact ⟨Matrix.blockDiagonal' (fun k => (X k : Matrix _ _ ℂ)),
+    Matrix.blockDiagonal' (fun k => ((X k)⁻¹ : Matrix _ _ ℂ)),
+    blockDiagonal'_mul_one _ _ (fun k => by simp),
+    blockDiagonal'_mul_one _ _ (fun k => by simp)⟩
 
 end BlockDiagonalGL
 
@@ -129,6 +123,7 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
     simp [Xfin, Xσ, XBDinv, blockDiagonalGL]
   rw [htoB, htoA, hBD]
   simp [map_mul, hXfin, hXfin_inv, Matrix.mul_assoc]
+
 /-- Block-diagonal gauge assembly from blockwise `GaugeEquiv`. -/
 theorem gaugeEquiv_toTensorFromBlocks_of_blockGauge
     (hGauge : ∀ k : Fin r, GaugeEquiv (A k) (B k)) :

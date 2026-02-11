@@ -143,21 +143,12 @@ theorem transferMap_pow_apply' (A : MPSTensor d D) (N : ℕ) :
 
 /-- **Trace of iterated mixed transfer encodes MPV cross-correlations.**
 
-For `X = 1` (the identity matrix):
-$$\mathrm{tr}(F_{AB}^N(1)) = \sum_\sigma \mathrm{tr}(\mathrm{evalWord}(A,\sigma))
-  \cdot \overline{\mathrm{tr}(\mathrm{evalWord}(B,\sigma))}
-  = \sum_\sigma \mathrm{mpv}(A,\sigma) \cdot \overline{\mathrm{mpv}(B,\sigma)}$$
+For `X = 1`:
+$$\mathrm{tr}(F_{AB}^N(1)) = \sum_\sigma \mathrm{tr}(\mathrm{evalWord}(A,\sigma)
+  \cdot \mathrm{evalWord}(B,\sigma)^\dagger)$$
 
-This is the inner product of the MPV vectors for system size `N`, which
-is the key quantity for detecting whether two MPS tensors produce the
-same (or different) physical states.
-
-**Proof sketch:** Apply `mixedTransferMap_pow_apply` with `X = 1`, then use
-`trace(M * N†) = ∑_{i,j} M_{ij} * conj(N_{ij})` and the fact that
-`trace(M) * conj(trace(N)) = trace(M * 1 * N†)` when combined with the
-trace-product formula. The difficulty is that the general case
-`trace(M * N†) ≠ trace(M) * conj(trace(N))`. We state the correct
-relationship as the sum of `trace(word_A * word_B†)` terms. -/
+This is the key quantity for detecting whether two MPS tensors produce the
+same (or different) physical states. -/
 theorem trace_mixedTransferMap_pow_identity (A B : MPSTensor d D) (N : ℕ) :
     Matrix.trace (((mixedTransferMap A B) ^ N) (1 : Matrix (Fin D) (Fin D) ℂ)) =
       ∑ σ : Fin N → Fin d,
@@ -438,33 +429,20 @@ theorem cross_correlation_tendsto_zero
     Filter.Tendsto
       (fun N => Matrix.trace (((mixedTransferMap A B) ^ N) X))
       Filter.atTop (nhds 0) := by
-  -- Step 1: F^N(X) → 0 by mixedTransfer_pow_tendsto_zero
+  -- Compose: F^N(X) → 0 (by spectral gap) and trace is continuous.
   have h := mixedTransfer_pow_tendsto_zero A B hA hB hAB X
-  -- Step 2: trace is continuous (linear map on finite-dimensional space)
-  have h_cont :
-      Continuous (Matrix.traceLinearMap (Fin D) ℂ ℂ) :=
+  have h_cont : Continuous (Matrix.traceLinearMap (Fin D) ℂ ℂ) :=
     LinearMap.continuous_of_finiteDimensional _
-  have h_zero :
-      (Matrix.traceLinearMap (Fin D) ℂ ℂ) 0 = 0 := map_zero _
-  -- Step 3: Compose to get trace(F^N(X)) → trace(0) = 0
   have h2 : Filter.Tendsto
-      (fun N => (Matrix.traceLinearMap (Fin D) ℂ ℂ)
-        (((mixedTransferMap A B) ^ N) X))
+      (fun N => (Matrix.traceLinearMap (Fin D) ℂ ℂ) (((mixedTransferMap A B) ^ N) X))
       Filter.atTop (nhds 0) := by
-    rw [← h_zero]
+    rw [← map_zero (Matrix.traceLinearMap (Fin D) ℂ ℂ)]
     exact h_cont.continuousAt.tendsto.comp h
-  -- traceLinearMap agrees with Matrix.trace
-  simp only [Matrix.traceLinearMap_apply] at h2
-  exact h2
+  simpa [Matrix.traceLinearMap_apply] using h2
 
-/-- **Self-correlation growth**: For an injective MPS tensor `A` with
-transfer map having eigenvalue 1 (i.e., normalized so that
-`E_A(ρ) = ρ` for some positive definite `ρ`), the self-correlation
-$$\mathrm{tr}(E_A^N(\rho))$$
-remains bounded away from zero.
-
-This is the diagonal counterpart to the off-diagonal decay: the
-self-terms persist while the cross-terms vanish, enabling separation. -/
+/-- **Self-correlation persists**: If `ρ` is a fixed point of `E_A`, then
+`tr(E_A^N(ρ)) = tr(ρ)` for all `N`. This is the diagonal counterpart to
+the off-diagonal decay: self-terms persist while cross-terms vanish. -/
 theorem self_correlation_persists
     (A : MPSTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
@@ -472,51 +450,23 @@ theorem self_correlation_persists
     ∀ N : ℕ,
       Matrix.trace (((transferMap (d := d) (D := D) A) ^ N) ρ) = Matrix.trace ρ := by
   intro N
-  -- Since E_A(ρ) = ρ, we have E_A^N(ρ) = ρ for all N.
-  have hfix : ∀ n : ℕ, ((transferMap (d := d) (D := D) A) ^ n) ρ = ρ := by
-    intro n
-    induction n with
-    | zero => simp
-    | succ n ih => simp [pow_succ, ih, hfp.fixed]
-  rw [hfix N]
+  suffices hfix : ((transferMap (d := d) (D := D) A) ^ N) ρ = ρ by rw [hfix]
+  induction N with
+  | zero => simp
+  | succ n ih => simp [pow_succ, ih, hfp.fixed]
 
-/-! ### Block separation theorem (high-level statement)
+/-! ### Block separation
 
-This is the culmination of the transfer operator approach: given a
-block-diagonal MPS tensor (from the multi-block decomposition), the
-cross-terms between distinct blocks vanish in the large-N limit,
-allowing us to separate the per-block MPV contributions.
+Combining the iterated transfer formula with spectral convergence:
+the MPV cross-correlations between distinct blocks decay, while
+self-correlations persist. -/
 
-The full proof requires:
-1. The block structure from `BlockPermutationMPS.lean`
-2. The spectral gap from `spectralRadius_mixedTransfer_lt_one`
-3. The convergence from `mixedTransfer_pow_tendsto_zero`
-4. A finite-N quantitative bound (not just asymptotic)
+/-- **Block separation principle**: If the cross-correlation
+`tr(F_{AB}^N(1))` vanishes for all `N`, then `F_{AB}(1) = 0`.
 
-Step 4 is the most technical: we need that the cross-terms are
-*exactly* zero for N ≥ some threshold (from the algebraic structure),
-not just asymptotically zero. In fact, for the MPS fundamental theorem,
-the stronger algebraic fact is that SameMPV for all N implies per-block
-SameMPV — the spectral approach gives the *mechanism* but the actual
-proof may use a finite-N algebraic argument.
--/
-
-/-- **Block separation principle**: If two MPS tensors produce the same
-MPV at all system sizes, and each is a direct sum of injective blocks,
-then the cross-correlations between non-matching blocks must vanish
-at *every* system size (not just asymptotically).
-
-This is because if `SameMPV₂ (A ⊕ B) (A' ⊕ B')`, expanding the MPV
-gives self-terms plus cross-terms. The self-terms match by the
-single-block theorem, so the cross-terms must cancel. But the cross-
-terms decay at rate `ρ(F_{cross})^N < 1`, so their sum can only be
-identically zero for all N if each cross-term is individually zero.
-
-This is the KEY use of the spectral theory: it provides the "linear
-independence" of the exponential decay rates that forces exact vanishing.
-
-The formal statement and proof require the full multi-block setup from
-`FundamentalTheoremMulti.lean` and are left for future work. -/
+In fact the hypothesis at `N = 0` gives `tr(1) = D = 0`, so for `D ≥ 1`
+this is vacuously true. The real content is in the *spectral gap* that
+forces the cross-terms to vanish. -/
 theorem block_separation_principle
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
@@ -538,35 +488,5 @@ theorem block_separation_principle
     exact hD h0
 
 end BlockSeparation
-
-/-! ## Vectorization and the transfer matrix
-
-An alternative (and sometimes more convenient) perspective: instead of
-viewing `F_{AB}` as a linear map on `M_D(ℂ)`, we can **vectorize** it
-as a `D² × D²` matrix acting on `vec(X)`.
-
-Under the standard vec operation `vec(X)_{(i,j)} = X_{i,j}`, we have:
-$$\mathrm{vec}(F_{AB}(X)) = T_{AB} \cdot \mathrm{vec}(X)$$
-where
-$$T_{AB} = \sum_k A^k \otimes \overline{B^k}$$
-is the **transfer matrix** (a.k.a. vectorized transfer operator).
-
-This connects to the Kronecker product structure in Mathlib. -/
-
-section Vectorization
-
-/-- The mixed transfer map `F_{AB}` converges to zero (as n → ∞) if and only if
-the transfer matrix `T_{AB}` converges to zero entrywise. This is because
-vectorization is an algebra isomorphism.
-
-We state the direction we need: if `T_{AB}^n → 0` entrywise, then
-`F_{AB}^n(X) → 0` for all `X`. -/
-theorem transferMatrix_pow_tendsto_zero_iff
-    (A B : MPSTensor d D) :
-    (∀ X, Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X) Filter.atTop (nhds 0)) ↔
-    (∀ X, Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X) Filter.atTop (nhds 0)) := by
-  exact Iff.rfl
-
-end Vectorization
 
 end MPSTensor
