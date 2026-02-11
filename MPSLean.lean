@@ -12,3 +12,5 @@ import MPSLean.MPS.FundamentalTheoremMulti
 import MPSLean.MPS.BlockPermutation
 import MPSLean.MPS.BlockPermutationMPS
 import MPSLean.MPS.PiAlgebraExtension
+import MPSLean.MPS.CPPrimitive
+import MPSLean.MPS.TransferSpectral
