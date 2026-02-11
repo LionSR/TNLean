@@ -533,7 +533,8 @@ theorem block_separation_principle
   · -- D ≥ 1: derive contradiction from h_cross 0
     exfalso
     have h0 := h_cross 0
-    simp at h0
+    simp only [pow_zero, Module.End.one_apply, Matrix.trace_one,
+      Fintype.card_fin, Nat.cast_eq_zero] at h0
     exact hD h0
 
 end BlockSeparation
