@@ -7,8 +7,12 @@
 \usepackage{array}
 \usepackage{listings}
 \usepackage{appendixnumberbeamer}
-\usepackage[style=numeric-comp,backend=biber,sorting=none,maxbibnames=4]{biblatex}
-\addbibresource{references.bib}
+% Manual bibliography (avoid biber/biblatex version mismatch)
+\newcommand{\citenum}[1]{[#1]}
+\newcommand{\bibCirac}{\citenum{1}}
+\newcommand{\bibEvans}{\citenum{2}}
+\newcommand{\bibHopfield}{\citenum{3}}
+\newcommand{\bibQuantumInfo}{\citenum{4}}
 
 % ── Color scheme (matches presentation20260208.tex) ──
 \definecolor{leangreen}{RGB}{34,180,34}
@@ -97,7 +101,7 @@
 \maketitle
 \vspace{-2em}
 \begin{center}
-{\footnotesize \cite{Cirac2021Matrix}\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}\quad$\cdot$\quad Feb 8--11 push: \textbf{+1,223 lines}}
+{\footnotesize \bibCirac{}\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}\quad$\cdot$\quad Feb 8--11 push: \textbf{+1,223 lines}}
 \end{center}
 \end{frame}
 }
@@ -655,7 +659,7 @@ theorem fundamentalTheorem_multiBlock_complete      -- (*@\textcolor{leangreen}{
 \textbf{What would be needed:}
 \begin{enumerate}\itemsep0.1em
   \item {\small CP maps on $C^*$-algebras\\{\scriptsize (Choi isomorphism, Kraus form)}}
-  \item {\small Quantum Perron--Frobenius\\{\scriptsize (Evans--H{\o}egh-Krohn \cite{Evans1978Spectral})}}
+  \item {\small Quantum Perron--Frobenius\\{\scriptsize (Evans--H{\o}egh-Krohn \bibEvans{})}}
   \item {\small Spectral gap for primitive CP maps\\{\scriptsize (unique fixed point $\Rightarrow$ gap)}}
   \item {\small Block separation bridge\\{\scriptsize (spectral decay $\Rightarrow$ per-block identity)}}
 \end{enumerate}
@@ -667,7 +671,7 @@ theorem fundamentalTheorem_multiBlock_complete      -- (*@\textcolor{leangreen}{
 \node[rectangle,rounded corners,draw=amber,fill=cardbg,text=white,
   font=\small,align=center,minimum width=11cm,minimum height=0.7cm] {
   \textbf{The architecture is complete --- all that remains is the analytic core.}\\
-  Community resources: HopfieldNet \cite{Cipollina2025Formalized} (classical PF), Lean-QuantumInfo \cite{Meiburg2025Formalization} (CP maps).
+  Community resources: HopfieldNet \bibHopfield{} (classical PF), Lean-QuantumInfo \bibQuantumInfo{} (CP maps).
 };
 \end{tikzpicture}
 \end{center}
@@ -888,7 +892,7 @@ the asymptotic separation argument.
   \item {\small Often implicitly assumed}
   \item {\small Canonical form normalizes $|\mu_k| = 1$}
   \item {\small Distinct phases on the unit circle}
-  \item {\small The paper \cite{Cirac2021Matrix} handles this via ``blocking'' --- replacing $A$ by $A^{\otimes q}$}
+  \item {\small The paper \bibCirac{} handles this via ``blocking'' --- replacing $A$ by $A^{\otimes q}$}
 \end{itemize}
 
 \column{0.48\textwidth}
@@ -927,9 +931,9 @@ the asymptotic separation argument.
 
   \node[tierA, below=0.2cm of t1] (t2) {%
     \textcolor{amber}{\textbf{Next (weeks--months):}} Close sorry \#4 (spectral gap).\\
-    {\small Import HopfieldNet \cite{Cipollina2025Formalized} (classical PF, same Mathlib version).
-    Build Choi bridge (guided by Lean-QuantumInfo \cite{Meiburg2025Formalization}).
-    Estimated: 1,100--1,800 new LoC.}
+    {\small Formalize quantum Perron--Frobenius directly (Evans--H{\o}egh-Krohn \bibEvans{}).
+    Classical PF (HopfieldNet) does not apply---the transfer matrix is complex and non-Hermitian.
+    Estimated: 2,000--3,000 new LoC.}
   };
 
   \node[tierB, below=0.2cm of t2] (t3) {%
@@ -1008,7 +1012,7 @@ the asymptotic separation argument.
 \normalsize Built on Lean 4 + Mathlib v4.27.0
 
 \vspace{0.3em}
-{\small Reference: Cirac, P{\'e}rez-Garc{\'i}a, Schuch \& Verstraete \cite{Cirac2021Matrix}}
+{\small Reference: Cirac, P{\'e}rez-Garc{\'i}a, Schuch \& Verstraete \bibCirac{}}
 
 \vspace{0.6em}
 \textcolor{leangreen}{\textbf{3,444 lines\quad$\cdot$\quad 16 modules\quad$\cdot$\quad 5 sorries\quad$\cdot$\quad 142 theorems}}
@@ -1028,531 +1032,28 @@ the asymptotic separation argument.
 % REFERENCES
 %======================================================================
 \begin{frame}[allowframebreaks]{References}
-\printbibliography[heading=none]
-\end{frame}
+\begin{thebibliography}{9}
+\bibitem{1}
+``Matrix Product States and Projected Entangled Pair States: Concepts, Symmetries, Theorems''.
+In: \emph{Reviews of Modern Physics} 93.4 (2021), p.~045003.
+\textsc{doi}: \texttt{10.1103/RevModPhys.93.045003}.
+arXiv: \texttt{2011.12127 [quant-ph]}.
 
-\appendix
+\bibitem{2}
+``Spectral Properties of Positive Maps on $C^*$-Algebras''.
+In: \emph{Journal of the London Mathematical Society} s2-17.2 (1978), pp.~345--355.
+\textsc{doi}: \texttt{10.1112/jlms/s2-17.2.345}.
 
-%======================================================================
-% BACKUP 1 - Full injective_implies_irreducibleCP
-%======================================================================
-\begin{frame}[fragile]{Backup: Full Proof of \texttt{injective\_implies\_irreducibleCP}}
-\vspace{-0.7em}
-\begin{lstlisting}[basicstyle=\ttfamily\fontsize{4.5}{5.5}\selectfont\color{white}]
-theorem injective_implies_irreducibleCP (A : MPSTensor d D) (hA : IsInjective A) :
-    IsIrreducibleCP (transferMap A) := by
-  intro P hProj hInv
-  -- Step 1: derive (1-P)*A(*@$_i$@*)*P = 0 for each i
-  have h_on_A := invariance_implies_complement_zero A P hProj hInv
-  -- Step 2: extend to all matrices via span
-  have h_all : (*@$\forall$@*) M : Matrix (Fin D) (Fin D) (*@$\mathbb{C}$@*), (1 - P) * M * P = 0 := by
-    intro M
-    have hM : M (*@$\in$@*) Submodule.span (*@$\mathbb{C}$@*) (Set.range A) := hA (*@$\blacktriangleright$@*) Submodule.mem_top
-    induction hM using Submodule.span_induction with
-    | mem x hx => obtain (*@$\langle$@*)i, rfl(*@$\rangle$@*) := hx; exact h_on_A i
-    | zero => simp
-    | add x y _ _ hx hy =>
-      calc (1 - P) * (x + y) * P
-          = (1 - P) * x * P + (1 - P) * y * P := by noncomm_ring
-        _ = 0 + 0 := by rw [hx, hy]
-        _ = 0 := add_zero 0
-    | smul c x _ hx =>
-      calc (1 - P) * (c (*@$\bullet$@*) x) * P
-          = c (*@$\bullet$@*) ((1 - P) * x * P) := by rw [mul_smul_comm, smul_mul_assoc]
-        _ = c (*@$\bullet$@*) 0 := by rw [hx]
-        _ = 0 := smul_zero c
-  -- Step 3: conclude P = 0 or P = 1
-  exact proj_zero_or_one_of_sandwich P h_all
-\end{lstlisting}
-\end{frame}
+\bibitem{3}
+``Formalized Hopfield Networks and Boltzmann Machines''. In: (2025).
+Includes a full Lean~4 formalization of the Perron--Frobenius theorem.
+arXiv: \texttt{2512.07766 [cs.LG]}.
 
-%======================================================================
-% BACKUP 2 - Full pow_tendsto_zero proof
-%======================================================================
-\begin{frame}[fragile]{Backup: Full Proof of \texttt{pow\_tendsto\_zero\_of\_spectralRadius\_lt\_one}}
-\vspace{-0.7em}
-\begin{lstlisting}[basicstyle=\ttfamily\fontsize{4.5}{5.5}\selectfont\color{white}]
-theorem pow_tendsto_zero_of_spectralRadius_lt_one
-    {A : Type*} [NormedRing A] [CompleteSpace A] [NormedAlgebra (*@$\mathbb{C}$@*) A]
-    (a : A) (h : spectralRadius (*@$\mathbb{C}$@*) a < 1) :
-    Filter.Tendsto (fun n => a ^ n) Filter.atTop (nhds 0) := by
-  -- Step 1: Find r : NNReal with spectralRadius (*@$\mathbb{C}$@*) a < r < 1
-  rw [ENNReal.lt_iff_exists_nnreal_btwn] at h
-  obtain (*@$\langle$@*)r, hr_above, hr_below(*@$\rangle$@*) := h
-  have hr_lt_one : r < 1 := ENNReal.coe_lt_coe.mp (by rwa [ENNReal.coe_one])
-  -- Step 2: Gelfand formula: eventually (*@$\|a^n\|_+^{1/n}$@*) < r
-  have gelfand := spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius a
-  have hev := gelfand.eventually (eventually_lt_nhds hr_above)
-  -- Step 3: Eventually (*@$\|a^n\|_+$@*) < r^n
-  have hev2 : (*@$\forall^\infty$@*) n in Filter.atTop, (*@$\|a ^ n\|_+$@*) < r ^ n := by
-    filter_upwards [hev, Filter.eventually_gt_atTop 0] with n hn hn_pos
-    have hn_pos_real : (0 : (*@$\mathbb{R}$@*)) < (n : (*@$\mathbb{R}$@*)) := Nat.cast_pos.mpr hn_pos
-    rw [one_div, ENNReal.rpow_inv_lt_iff hn_pos_real] at hn
-    rw [ENNReal.rpow_natCast] at hn; exact_mod_cast hn
-  -- Step 4: Squeeze: (*@$\|a^n\|$@*) (*@$\le$@*) r^n (*@$\to$@*) 0
-  apply squeeze_zero_norm' (a := fun n => (r : (*@$\mathbb{R}$@*)) ^ n)
-  (*@$\cdot$@*) filter_upwards [hev2] with n hn
-    rw [(*@$\leftarrow$@*) coe_nnnorm, (*@$\leftarrow$@*) NNReal.coe_pow]; exact_mod_cast hn.le
-  (*@$\cdot$@*) exact tendsto_pow_atTop_nhds_zero_of_lt_one r.coe_nonneg (by exact_mod_cast hr_lt_one)
-\end{lstlisting}
-\end{frame}
-
-%======================================================================
-% BACKUP 3 - mixedTransferMap_pow_apply
-%======================================================================
-\begin{frame}[fragile]{Backup: \texttt{mixedTransferMap\_pow\_apply} (Iterated Transfer)}
-\vspace{-0.7em}
-\begin{lstlisting}[basicstyle=\ttfamily\fontsize{4.5}{5.5}\selectfont\color{white}]
-theorem mixedTransferMap_pow_apply (A B : MPSTensor d D) (N : (*@$\mathbb{N}$@*)) :
-    (*@$\forall$@*) X, ((mixedTransferMap A B) ^ N) X =
-      (*@$\sum$@*) (*@$\sigma$@*) : Fin N (*@$\to$@*) Fin d,
-        evalWord A (List.ofFn (*@$\sigma$@*)) * X * (evalWord B (List.ofFn (*@$\sigma$@*)))(*@$^\dagger$@*) := by
-  induction N with
-  | zero => intro X; simp [evalWord, Finset.univ_unique]
-  | succ n ih =>
-    intro X
-    rw [pow_succ']
-    change mixedTransferMap A B (((mixedTransferMap A B) ^ n) X) = _
-    rw [ih]
-    simp only [mixedTransferMap_apply, map_sum]
-    rw [Finset.sum_comm]
-    rw [sum_fin_succ_eq]    -- Fin.cons decomposition
-    congr 1; funext i
-    apply Finset.sum_congr rfl; intro (*@$\tau$@*) _
-    simp only [List.ofFn_cons, evalWord,
-               Matrix.conjTranspose_mul, Matrix.mul_assoc]
-\end{lstlisting}
-\vspace{0.1em}
-{\small\textbf{Pattern:} Same Fin.cons induction used for both \texttt{transferMap\_pow\_eq\_blocked} and \texttt{mixedTransferMap\_pow\_apply}. The decomposition
-$\mathrm{Fin}(n+1) \to \mathrm{Fin}\,d \simeq  \mathrm{Fin}\,d \times (\mathrm{Fin}\,n \to \mathrm{Fin}\,d)$
-splits each sum into head $i$ + tail $\tau$.}
-\end{frame}
-
-%======================================================================
-% BACKUP 4 - The PSD Sandwich Argument
-%======================================================================
-\begin{frame}[fragile]{Backup: The PSD Sandwich Argument}
-\vspace{-0.5em}
-{\small The key helper lemma for \texttt{injective\_implies\_irreducibleCP}:}
-
-\vspace{0.1em}
-\begin{lstlisting}[basicstyle=\ttfamily\fontsize{4.5}{5.5}\selectfont\color{white}]
-private lemma invariance_implies_complement_zero (A : MPSTensor d D)
-    (P : Matrix (Fin D) (Fin D) (*@$\mathbb{C}$@*))
-    (hProj : IsOrthogonalProjection P)
-    (hInv : (*@$\forall$@*) X, P * transferMap A (P * X * P) * P = transferMap A (P * X * P)) :
-    (*@$\forall$@*) i : Fin d, (1 - P) * A i * P = 0 := by
-  -- Step 1: (1-P)*E(PXP) = 0 for all X (from P*E(PXP)*P = E(PXP))
-  -- Step 2: specialise X = 1, use P*P = P to get (1-P)*E(P) = 0
-  -- Step 3: Expand E(P) = (*@$\sum_i$@*) A(*@$_i$@*)P(*@$A_i^\dagger$@*), define B(*@$_i$@*) = (1-P)*A(*@$_i$@*)*P
-  --         Show (*@$\sum_i$@*) B(*@$_i$@*) * B(*@$_i^\dagger$@*) = (1-P) * E(P) * (1-P) = 0
-  -- Step 4: (*@$\sum_i$@*) B(*@$_i$@*)*B(*@$_i^\dagger$@*) = 0 implies each B(*@$_i$@*) = 0
-  --         (diagonal entries are (*@$\sum_j$@*) |B(*@$_{ij}$@*)|(*@$^2$@*), all nonneg, summing to 0)
-\end{lstlisting}
-
-\vspace{0.2em}
-{\small\textbf{The PSD key:} $\sum_i B_i B_i^\dagger = 0$ and each $B_i B_i^\dagger$ is PSD, so each $B_i B_i^\dagger = 0$, hence each $B_i = 0$.
-This is the \textbf{quantum} argument --- it uses the Hermitian structure
-of the transfer operator, not just linearity.}
-
-\vspace{0.1em}
-{\small $\sim$90 lines for the PSD chain (\texttt{eq\_zero\_of\_mul\_conjTranspose\_eq\_zero} and friends).}
-\end{frame}
-
-%======================================================================
-% BACKUP 5 - sameMPV₂_implies_perBlock_sameMPV context
-%======================================================================
-\begin{frame}[fragile]{Backup: The Critical Sorry in Context}
-\vspace{-0.7em}
-\begin{lstlisting}[basicstyle=\ttfamily\fontsize{5}{6.5}\selectfont\color{white}]
-/-- Block separation from SameMPV(*@$_2$@*): If two families of injective block
-tensors with distinct nonzero phases produce the same MPV when assembled
-into block-diagonal tensors, then each block produces the same MPV
-individually.
-
-Both proof approaches are beyond current Mathlib capabilities:
-- Quantum Perron-Frobenius spectral gap + bridge to per-block MPV equality
-- Purely algebraic via Newton's identities + Zariski density -/
-theorem sameMPV(*@$_2$@*)_implies_perBlock_sameMPV
-    ((*@$\mu$@*) : Fin r (*@$\to$@*) (*@$\mathbb{C}$@*)) (h(*@$\mu$@*)_inj : Function.Injective (*@$\mu$@*))
-    (h(*@$\mu$@*)_ne : (*@$\forall$@*) k, (*@$\mu$@*) k (*@$\ne$@*) 0)
-    (A B : (k : Fin r) (*@$\to$@*) MPSTensor d (dim k))
-    (hA : (*@$\forall$@*) k, IsInjective (A k))
-    (hSame(*@$_2$@*) : SameMPV2 (toTensorFromBlocks (*@$\mu$@*) A) (toTensorFromBlocks (*@$\mu$@*) B)) :
-    (*@$\forall$@*) k, SameMPV (A k) (B k) := by
-  sorry
-\end{lstlisting}
-
-\vspace{0.1em}
-{\small This is the \textbf{one} sorry that the full multi-block theorem depends on.
-Everything above it (the spectral machinery) and everything below it
-(the assembly into global gauge equivalence) is fully proved.}
-\end{frame}
-
-%======================================================================
-% SLIDE 13 - The Full Multi-Block Theorem
-%======================================================================
-\begin{frame}[fragile]{The Full Multi-Block Theorem (Modulo Sorry \#5)}
-\vspace{-0.5em}
-\begin{lstlisting}[basicstyle=\ttfamily\fontsize{5.5}{7}\selectfont\color{white}]
-theorem sameMPV(*@$_2$@*)_implies_perBlock_sameMPV          -- (*@\textcolor{softred}{sorry \#5}@*)
-    ((*@$\mu$@*) : Fin r (*@$\to$@*) (*@$\mathbb{C}$@*)) (h(*@$\mu$@*)_inj : Function.Injective (*@$\mu$@*))
-    (h(*@$\mu$@*)_ne : (*@$\forall$@*) k, (*@$\mu$@*) k (*@$\ne$@*) 0)
-    (A B : (k : Fin r) (*@$\to$@*) MPSTensor d (dim k))
-    (hA : (*@$\forall$@*) k, IsInjective (A k))
-    (hSame(*@$_2$@*) : SameMPV2 (toTensorFromBlocks (*@$\mu$@*) A) (toTensorFromBlocks (*@$\mu$@*) B)) :
-    (*@$\forall$@*) k, SameMPV (A k) (B k) := by sorry
-
-theorem fundamentalTheorem_multiBlock_complete      -- (*@\textcolor{leangreen}{compiles!}@*)
-    ((*@$\mu$@*) : Fin r (*@$\to$@*) (*@$\mathbb{C}$@*)) (h(*@$\mu$@*)_inj : Function.Injective (*@$\mu$@*))
-    (h(*@$\mu$@*)_ne : (*@$\forall$@*) k, (*@$\mu$@*) k (*@$\ne$@*) 0)
-    (A B : (k : Fin r) (*@$\to$@*) MPSTensor d (dim k))
-    (hA : (*@$\forall$@*) k, IsInjective (A k))
-    (hSame(*@$_2$@*) : SameMPV2 (toTensorFromBlocks (*@$\mu$@*) A) (toTensorFromBlocks (*@$\mu$@*) B)) :
-    GaugeEquiv (toTensorFromBlocks (*@$\mu$@*) A) (toTensorFromBlocks (*@$\mu$@*) B) :=
-  (fundamentalTheorem_multiBlock_fromSameMPV(*@$_2$@*) (*@$\mu$@*) A B hA hSame(*@$_2$@*)
-    (sameMPV(*@$_2$@*)_implies_perBlock_sameMPV (*@$\mu$@*) h(*@$\mu$@*)_inj h(*@$\mu$@*)_ne A B hA hSame(*@$_2$@*))).2.1
-\end{lstlisting}
-
-\vspace{0.1em}
-\begin{center}
-{\small The full theorem \textbf{type-checks} and \textbf{compiles}. It depends on exactly \textbf{one} sorry.}
-\end{center}
-\end{frame}
-
-%======================================================================
-% SLIDE 14 - What We Learned: The Gap is Genuine
-%======================================================================
-\begin{frame}{What We Learned: The Gap is Genuine}
-\vspace{-0.3em}
-\begin{columns}[T]
-\column{0.48\textwidth}
-\textbf{Research findings:}
-\begin{itemize}\itemsep0.15em
-  \item {\small Closing sorry \#5 requires the \textbf{full quantum Perron--Frobenius theorem}}
-  \item {\small Estimated: \textbf{3,000--5,000 additional lines}}
-  \item {\small Multi-month effort, essentially a \textbf{Mathlib contribution project}}
-  \item {\small Missing hypothesis identified: \textbf{phase non-degeneracy}\\
-  {\scriptsize ($\mu_k/\mu_\ell$ not a root of unity)}}
-\end{itemize}
-
-\column{0.48\textwidth}
-\textbf{What would be needed:}
-\begin{enumerate}\itemsep0.1em
-  \item {\small CP maps on $C^*$-algebras\\{\scriptsize (Choi isomorphism, Kraus form)}}
-  \item {\small Quantum Perron--Frobenius\\{\scriptsize (Evans--H{\o}egh-Krohn \cite{Evans1978Spectral})}}
-  \item {\small Spectral gap for primitive CP maps\\{\scriptsize (unique fixed point $\Rightarrow$ gap)}}
-  \item {\small Block separation bridge\\{\scriptsize (spectral decay $\Rightarrow$ per-block identity)}}
-\end{enumerate}
-\end{columns}
-
-\vspace{0.3em}
-\begin{center}
-\begin{tikzpicture}
-\node[rectangle,rounded corners,draw=amber,fill=cardbg,text=white,
-  font=\small,align=center,minimum width=11cm,minimum height=0.6cm] {
-  \textbf{Conclusion:} The gap is real, well-understood, and precisely \emph{one} sorry away from a full proof.
-};
-\end{tikzpicture}
-\end{center}
-\end{frame}
-
-%======================================================================
-% SLIDE 15 - Statistics Comparison
-%======================================================================
-\begin{frame}{Statistics: Feb 8 vs.\ Feb 11}
-\vspace{-0.3em}
-\begin{columns}[T]
-\column{0.48\textwidth}
-\begin{center}
-\renewcommand{\arraystretch}{1.25}
-{\small
-\begin{tabular}{lcc}
-\hline
-\textbf{Metric} & \textbf{Feb 8} & \textbf{Feb 11} \\
-\hline
-Lines of Lean 4 & 2,221 & \textbf{3,444} \\
-Modules & 14 & \textbf{16} \\
-Sorries & \textcolor{leangreen}{0} & \textcolor{amber}{5} \\
-Theorems/defs & $\sim$100 & \textbf{142} \\
-Build jobs & 2,510 & 2,775 \\
-\hline
-\textcolor{leangreen}{$\Delta$} & \multicolumn{2}{c}{\textbf{+1,223 lines, +2 modules}} \\
-\hline
-\end{tabular}}
-\end{center}
-
-\vspace{0.3em}
-{\small\textbf{New modules:}}
-\begin{itemize}
-  \item \texttt{CPPrimitive.lean} --- 422 lines
-  \item \texttt{TransferSpectral.lean} --- 572 lines
-\end{itemize}
-
-\column{0.48\textwidth}
-\begin{center}
-\begin{tikzpicture}[scale=0.7]
-% Sorry reduction bar
-\fill[softred!40!black] (0,0) rectangle (4,0.4);
-\fill[leangreen!60!black] (0,0) rectangle (2.33,0.4);
-\node[font=\tiny\bfseries,text=white] at (1.15,0.2) {7 closed};
-\node[font=\tiny\bfseries,text=white] at (3.15,0.2) {5 remain};
-\node[above,font=\tiny\bfseries,text=white] at (2,0.5) {Sorry reduction: 12 $\to$ 5};
-\end{tikzpicture}
-\end{center}
-
-\vspace{0.5em}
-\begin{center}
-\begin{tikzpicture}
-\node[rectangle,rounded corners,draw=leangreen,fill=cardbg,text=white,
-  font=\scriptsize,align=center,minimum width=4cm] {
-  \textbf{+55\% more code}\\[0.1em]
-  \textbf{$-$58\% fewer sorries}
-};
-\end{tikzpicture}
-\end{center}
-\end{columns}
-\end{frame}
-
-%======================================================================
-% SLIDE 16 - Module Architecture Updated
-%======================================================================
-\begin{frame}{Updated Module Architecture (16 modules)}
-\vspace{-0.5em}
-\begin{center}
-\begin{tikzpicture}[scale=0.62,
-  mod/.style={rectangle,rounded corners,draw=white,fill=cardbg,text=white,
-              font=\tiny\bfseries,minimum width=1.5cm,minimum height=0.38cm,align=center},
-  newmod/.style={rectangle,rounded corners,draw=leangreen,fill=leangreen!30!black,text=white,
-              font=\tiny\bfseries,minimum width=1.5cm,minimum height=0.38cm,align=center},
-  arr/.style={-{Stealth[scale=0.6]},gray,thin}
-]
-% Row 0: Foundation
-\node[mod] (defs) at (0,0) {Defs (128)};
-\node[mod] (trans) at (3,0) {Transfer (45)};
-% Row 1
-\node[mod] (tnd) at (5.5,1.3) {TraceNdeg (22)};
-\node[mod] (tp) at (1.5,1.3) {TracePair (98)};
-% Row 2
-\node[mod] (cf) at (4.5,2.6) {CanForm (51)};
-\node[mod] (le) at (0,2.6) {LinExt (159)};
-\node[mod] (sn) at (3,2.6) {SkolNoeth (149)};
-% Row 3
-\node[mod] (mb) at (6,3.9) {MultiBlk (163)};
-\node[mod] (ft) at (1.5,3.9) {FundThm (78)};
-% Row 4
-\node[mod] (bn) at (5,5.2) {BasisNorm (162)};
-\node[mod] (bp) at (7.5,5.2) {BlkPerm (223)};
-\node[mod] (bpm) at (7.5,3.9) {BlkPermMPS (336)};
-\node[mod] (ftm) at (3.5,6.5) {FundThmMulti (237)};
-\node[mod] (piae) at (5,6.5) {PiAlgExt (370)};
-% NEW modules
-\node[newmod] (cpp) at (9.5,1.3) {\textbf{CPPrim (422)}};
-\node[newmod] (tsp) at (9.5,2.6) {\textbf{TransSpec (572)}};
-% Arrows (selection)
-\draw[arr] (defs) -- (trans);
-\draw[arr] (defs) -- (tp);
-\draw[arr] (trans) -- (cpp);
-\draw[arr] (cpp) -- (tsp);
-\draw[arr] (tsp) -- (piae);
-\draw[arr] (tp) -- (le);
-\draw[arr] (le) -- (ft);
-\draw[arr] (sn) -- (ft);
-\draw[arr] (ft) -- (ftm);
-\draw[arr] (ftm) -- (piae);
-\end{tikzpicture}
-\end{center}
-\end{frame}
-
-%======================================================================
-% SLIDE 17 - The Sorry Dependency Graph
-%======================================================================
-\begin{frame}{Sorry Dependency Graph}
-\vspace{-0.3em}
-{\small How the 5 sorries relate to each other and to the final theorem:}
-
-\vspace{0.2em}
-\begin{center}
-\begin{tikzpicture}[xscale=1.1,yscale=0.85,
-  sbox/.style={rectangle,rounded corners,draw=amber,fill=amber!25!black,
-    text=white,font=\scriptsize\bfseries,minimum width=2.4cm,minimum height=0.45cm,align=center},
-  pbox/.style={rectangle,rounded corners,draw=leangreen,fill=leangreen!25!black,
-    text=white,font=\scriptsize\bfseries,minimum width=2.4cm,minimum height=0.45cm,align=center},
-  arr/.style={-{Stealth[scale=0.7]},white,thick},
-  darr/.style={-{Stealth[scale=0.7]},amber,thick,dashed}
-]
-\node[sbox] (s1) at (-3,2) {\#1 irredCP $\Rightarrow$ primCP};
-\node[sbox] (s2) at (-3,1) {\#2 prim unique fp};
-\node[sbox] (s3) at (5,2) {\#3 vec bridge};
-\node[sbox] (s4) at (1,1) {\#4 spectral gap};
-\node[sbox,draw=softred,fill=softred!25!black] (s5) at (1,0) {\#5 block separation};
-\node[pbox,minimum width=3cm] (thm) at (1,-1.2) {\textbf{Full theorem}};
-% Arrows
-\draw[darr] (s1) -- (s2);
-\draw[darr] (s2) -- (s4);
-\draw[darr] (s4) -- (s5);
-\draw[arr] (s5) -- (thm);
-% Labels
-\node[font=\tiny,text=dimwhite,right] at (5,1.3) {(isolated)};
-\node[font=\tiny,text=dimwhite,left] at (-3,0.3) {(documentation)};
-\end{tikzpicture}
-\end{center}
-
-\vspace{0.2em}
-{\small\textbf{Critical path:} Only \textcolor{softred}{\#4 $\to$ \#5 $\to$ theorem}. Sorries \#1--3 are off the critical path.}
-
-\vspace{0.1em}
-{\small \textbf{To close the gap:} Prove quantum PF (\#4), then the spectral argument gives \#5.}
-\end{frame}
-
-%======================================================================
-% SLIDE 18 - Missing Hypothesis: Phase Non-Degeneracy
-%======================================================================
-\begin{frame}{Discovery: Missing Hypothesis (Phase Non-Degeneracy)}
-\vspace{-0.3em}
-{\small During the sprint, we identified a \textbf{missing hypothesis} in the standard physics proof:}
-
-\vspace{0.3em}
-\begin{block}{Phase non-degeneracy condition}
-The ratios $\mu_k / \mu_\ell$ for $k \neq \ell$ must \textbf{not be roots of unity}.
-
-Without this, blocks with $\mu_k / \mu_\ell = e^{2\pi i p/q}$ can interfere
-constructively at system sizes that are multiples of $q$, potentially obstructing
-the asymptotic separation argument.
-\end{block}
-
-\vspace{0.3em}
-\begin{columns}[T]
-\column{0.48\textwidth}
-{\small\textbf{In the physics literature:}}
-\begin{itemize}\itemsep0.1em
-  \item {\small Often implicitly assumed}
-  \item {\small Canonical form normalizes $|\mu_k| = 1$}
-  \item {\small Distinct phases on the unit circle}
-  \item {\small The paper \cite{Cirac2021Matrix} handles this via ``blocking'' --- replacing $A$ by $A^{\otimes q}$}
-\end{itemize}
-
-\column{0.48\textwidth}
-{\small\textbf{In the formalization:}}
-\begin{itemize}\itemsep0.1em
-  \item {\small Our sorry \#5 takes $\mu$ injective and $\mu_k \neq 0$}
-  \item {\small May need to strengthen to:\\
-  $\forall k \neq \ell,\ \mu_k/\mu_\ell$ not a root of unity}
-  \item {\small Or: work with blocked tensors}
-  \item {\small \textcolor{amber}{Open design question}}
-\end{itemize}
-\end{columns}
-\end{frame}
-
-%======================================================================
-% SLIDE 19 - Timeline / What's Next
-%======================================================================
-\begin{frame}{What's Next: Three Tiers}
-\vspace{-0.3em}
-\begin{center}
-\begin{tikzpicture}[
-  tier/.style={rectangle,rounded corners,draw=#1,fill=#1!20!black,text=white,
-    font=\small,align=left,minimum width=12cm,minimum height=1cm,inner sep=0.3cm}
-]
-\node[tier=leangreen] (t1) at (0,2.5) {
-  \textbf{Tier 1 --- Immediate (days):}
-  Documentation, cleanup, sorry \#3 (vectorization bridge)
-};
-\node[tier=amber] (t2) at (0,0.8) {
-  \textbf{Tier 2 --- Medium-term (weeks):}
-  Mathlib PR for quantum PF prerequisites (CP maps, primitivity)
-};
-\node[tier=softred] (t3) at (0,-0.9) {
-  \textbf{Tier 3 --- Research (months):}
-  Full quantum PF spectral gap $\to$ sorry \#4 $\to$ sorry \#5 $\to$ done
-};
-\end{tikzpicture}
-\end{center}
-\end{frame}
-
-%======================================================================
-% SLIDE 20 - Lessons from the Sprint
-%======================================================================
-\begin{frame}{Lessons from the Three-Day Sprint}
-\begin{columns}[T]
-\column{0.48\textwidth}
-\textbf{\textcolor{leangreen}{What worked:}}
-\begin{enumerate}\itemsep0.15em
-  \item {\small \textbf{Architecture first:} Build the complete proof chain with classified sorries, then close them}
-  \item {\small \textbf{Spectral radius refactoring:} Working directly with \texttt{ContinuousLinearMap} eliminated the vectorization bridge}
-  \item {\small \textbf{Mathlib's Gelfand formula:} Surprisingly powerful --- the convergence proof was shorter than expected}
-  \item {\small \textbf{Lean's type system} caught the block separation vacuity immediately}
-\end{enumerate}
-
-\column{0.48\textwidth}
-\textbf{\textcolor{amber}{What was hard:}}
-\begin{enumerate}\itemsep0.15em
-  \item {\small \textbf{ENNReal arithmetic:} The spectral radius lives in $\mathbb{R}_{\geq 0}^\infty$; comparing with $1$ requires careful coercion}
-  \item {\small \textbf{PSD arguments:} $M M^\dagger = 0 \Rightarrow M = 0$ via norm-squared sums took $\sim$90 lines}
-  \item {\small \textbf{Fin.cons induction:} Same pattern needed twice (CPPrimitive + TransferSpectral)}
-  \item {\small \textbf{The gap is real:} No purely algebraic shortcut exists for block separation}
-\end{enumerate}
-\end{columns}
-\end{frame}
-
-%======================================================================
-% SLIDE 21 - Summary
-%======================================================================
-\begin{frame}{Summary}
-\vspace{-0.3em}
-\begin{center}
-\begin{tikzpicture}[
-  item/.style={rectangle,rounded corners,draw=#1,fill=#1!20!black,text=white,
-    font=\small,align=center,minimum width=3.5cm,minimum height=0.7cm}
-]
-\node[item=leangreen] (a) at (-4.5,1.5) {\textbf{+1,223 lines}\\{\scriptsize 2 new modules}};
-\node[item=leangreen] (b) at (0,1.5) {\textbf{7 sorries closed}\\{\scriptsize 12 $\to$ 5}};
-\node[item=amber] (c) at (4.5,1.5) {\textbf{1 critical sorry}\\{\scriptsize block separation}};
-\node[item=leangreen] (d) at (-2.25,0) {\textbf{Full theorem compiles}\\{\scriptsize modulo sorry \#5}};
-\node[item=leanblue] (e) at (2.25,0) {\textbf{Gap is genuine}\\{\scriptsize quantum PF needed}};
-% Box around all
-\begin{scope}[on background layer]
-\node[fit=(a)(b)(c)(d)(e),draw=dimwhite,rounded corners,inner sep=0.3cm,fill=cardbg] {};
-\end{scope}
-\end{tikzpicture}
-\end{center}
-\end{frame}
-
-%======================================================================
-% SLIDE 22 - Thank You
-%======================================================================
-\begin{frame}
-\begin{center}
-\vspace{0.5em}
-\Huge\textbf{\textcolor{leangreen}{Thank You!}}
-
-\vspace{0.8em}
-\LARGE Questions?
-
-\vspace{1em}
-\large\texttt{github.com/LionSR/MPSLean}
-
-\vspace{0.4em}
-\normalsize Built on Lean 4 + Mathlib v4.27.0
-
-\vspace{0.3em}
-{\small Reference: Cirac, P{\'e}rez-Garc{\'i}a, Schuch \& Verstraete \cite{Cirac2021Matrix}}
-
-\vspace{0.6em}
-\textcolor{leangreen}{\textbf{3,444 lines\quad$\cdot$\quad 16 modules\quad$\cdot$\quad 5 sorries\quad$\cdot$\quad 142 theorems}}
-
-\vspace{0.5em}
-\begin{tikzpicture}
-\fill[leangreen!40!black] (0,0) rectangle (8,0.15);
-\end{tikzpicture}
-\end{center}
-\end{frame}
-
-%======================================================================
-% REFERENCES
-%======================================================================
-\begin{frame}[allowframebreaks]{References}
-\printbibliography[heading=none]
+\bibitem{4}
+``A Formalization of the Generalized Quantum Stein's Lemma in Lean''. In: (2025).
+Lean-QuantumInfo library: \texttt{https://github.com/Timeroot/Lean-QuantumInfo}.
+arXiv: \texttt{2510.08672 [quant-ph]}.
+\end{thebibliography}
 \end{frame}
 
 \appendix

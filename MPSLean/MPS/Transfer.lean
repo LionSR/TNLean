@@ -9,7 +9,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The transfer operator / channel associated to an MPS tensor `A`:
+/-- The transfer operator associated to an MPS tensor `A`:
 $$E_A(X) = \sum_i A_i X A_i^{\dagger}.$$ -/
 noncomputable def transferMap (A : MPSTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=

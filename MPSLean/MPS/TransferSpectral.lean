@@ -267,7 +267,7 @@ individually normalized so their self-transfer maps have spectral
 radius 1).
 
 This is the content of the quantum Perron–Frobenius theorem applied
-to the cross-channel. -/
+to the mixed transfer operator. -/
 
 /-- **Spectral gap for distinct blocks**: If `A` and `B` are injective
 MPS tensors that are *not* gauge-phase equivalent, then the mixed
@@ -278,8 +278,8 @@ off-diagonal blocks in the transfer matrix have spectral radius < 1.
 
 **Mathematical proof sketch:** The transfer map `E_A` has a unique
 fixed point `ρ_A` (by quantum PF). The adjoint `E_A†` has a unique
-fixed point `σ_A`. The full channel decomposes as
-`E_A^n(X) → tr(σ_A X) ρ_A` exponentially. For the mixed channel
+fixed point `σ_A`. The full transfer map decomposes as
+`E_A^n(X) → tr(σ_A X) ρ_A` exponentially. For the mixed transfer operator
 `F_{AB}`, if A and B are not gauge-phase equivalent, there is no
 rank-1 fixed point, so all eigenvalues have modulus < 1. -/
 theorem spectralRadius_mixedTransfer_lt_one

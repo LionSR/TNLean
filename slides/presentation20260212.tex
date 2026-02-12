@@ -1,0 +1,1065 @@
+
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\usepackage{amsmath,amssymb,braket}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc,decorations.pathreplacing,fit,backgrounds}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{appendixnumberbeamer}
+\usepackage{booktabs}
+
+% ── Manual bibliography (avoid biber issues) ──
+\newcommand{\citenum}[1]{[#1]}
+\newcommand{\bibCirac}{\citenum{1}}       % Cirac et al. 2021
+\newcommand{\bibPerez}{\citenum{2}}        % P\'erez-Garc\'ia et al. 2007
+\newcommand{\bibEvans}{\citenum{3}}        % Evans-Høegh-Krohn 1978
+\newcommand{\bibHopfield}{\citenum{4}}     % Cipollina et al. 2025
+\newcommand{\bibQuantumInfo}{\citenum{5}}  % Meiburg et al. 2025
+\newcommand{\bibWolf}{\citenum{6}}         % Wolf 2012
+\newcommand{\bibCiracAnn}{\citenum{7}}    % Cirac et al. 2017 Annals (normal FT)
+\newcommand{\bibCiracIrr}{\citenum{8}}    % Cirac et al. 2017 (irreducible FT)
+\newcommand{\bibFernandez}{\citenum{9}}   % Fern\'andez-Gonz\'alez et al. 2015
+
+% ── Color scheme (dark theme) ──
+\definecolor{leangreen}{RGB}{34,180,34}
+\definecolor{leanblue}{RGB}{70,130,180}
+\definecolor{amber}{RGB}{255,191,0}
+\definecolor{softred}{RGB}{220,80,80}
+\definecolor{darkbg}{RGB}{21,21,21}
+\definecolor{cardbg}{RGB}{30,30,30}
+\definecolor{dimwhite}{RGB}{180,180,180}
+
+\setbeamercolor{background canvas}{bg=darkbg}
+\setbeamercolor{normal text}{fg=white}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{frametitle}{fg=white,bg=darkbg}
+\setbeamercolor{block title}{fg=white,bg=gray!30!black}
+\setbeamercolor{block body}{fg=white,bg=cardbg}
+\setbeamercolor{alerted text}{fg=amber}
+\setbeamercolor{example text}{fg=leangreen}
+\setbeamercolor{itemize item}{fg=leangreen}
+\setbeamercolor{itemize subitem}{fg=dimwhite}
+\setbeamercolor{itemize subsubitem}{fg=dimwhite}
+\setbeamercolor{enumerate item}{fg=leangreen}
+\setbeamercolor{progress bar}{fg=leangreen}
+\setbeamercolor{title separator}{fg=leangreen}
+\setbeamercolor{footline}{fg=dimwhite,bg=darkbg}
+
+% ── Footer ──
+\setbeamertemplate{footline}{%
+  \hfill%
+  \usebeamercolor[fg]{footline}%
+  \usebeamerfont{footline}%
+  \insertframenumber\,/\,\inserttotalframenumber%
+  \hspace*{6pt}\par%
+}
+
+% ── Lean listing style ──
+\lstdefinelanguage{Lean}{
+  keywords={theorem, lemma, def, abbrev, variable, namespace, end, open, import,
+            noncomputable, private, section, structure, where, let, have, exact,
+            intro, apply, simp, rw, rcases, refine, classical, cases, with,
+            fun, forall, exists, Prop, Type, sorry, by, instance},
+  keywordstyle=\color{leanblue}\bfseries,
+  keywords=[2]{IsInjective, SameMPV, SameMPV2, GaugeEquiv, GaugePhaseEquiv,
+               MPSTensor, Matrix, Fin, GL, CanonicalForm, AlgEquiv,
+               TwoSidedIdeal, transferMap, mixedTransferMap,
+               IsIrreducibleCP, IsCP, IsPrimitiveCP, IsOrthogonalProjection,
+               HasUniqueFixedPoint, spectralRadius, mixedTransferSpectralRadius,
+               PosSemidef, PosDef, toTensorFromBlocks, evalWord, mpv,
+               Submodule, Set, AlgHom, AlgEquiv, LinearMap},
+  keywordstyle=[2]\color{leangreen},
+  comment=[l]{--},
+  commentstyle=\color{gray}\itshape,
+  string=[b]",
+  stringstyle=\color{orange},
+  basicstyle=\ttfamily\scriptsize\color{white},
+  backgroundcolor=\color{cardbg},
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{gray!50!black},
+  showstringspaces=false,
+  escapeinside={(*@}{@*)},
+  literate=
+    {ℕ}{{$\mathbb{N}$}}1
+    {ℂ}{{$\mathbb{C}$}}1
+    {ℝ}{{$\mathbb{R}$}}1
+    {→}{{$\to$}}1
+    {←}{{$\leftarrow$}}1
+    {⟨}{{$\langle$}}1
+    {⟩}{{$\rangle$}}1
+    {∀}{{$\forall$}}1
+    {∃}{{$\exists$}}1
+    {⊤}{{$\top$}}1
+    {⁻¹}{{${}^{-1}$}}2
+    {≠}{{$\neq$}}1
+    {≤}{{$\leq$}}1
+    {≥}{{$\geq$}}1
+    {∈}{{$\in$}}1
+    {∘}{{$\circ$}}1
+    {σ}{{$\sigma$}}1,
+}
+\lstset{language=Lean}
+
+% ── Macros ──
+\newcommand{\proved}[1]{\textcolor{leangreen}{\checkmark\ #1}}
+\newcommand{\sorrymark}[1]{\textcolor{softred}{\texttt{sorry}\ #1}}
+\newcommand{\notavail}[1]{\textcolor{softred}{$\boldsymbol{\times}$\ #1}}
+\newcommand{\avail}[1]{\textcolor{leangreen}{$\checkmark$\ #1}}
+\newcommand{\MD}{M_D(\mathbb{C})}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\spn}{\mathrm{span}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\CP}{\mathrm{CP}}
+\newcommand{\rank}{\mathrm{rank}}
+\newcommand{\diag}{\mathrm{diag}}
+
+\title{\textbf{MPSLean: Formalizing the Fundamental Theorem\\of MPS in Lean 4}}
+\subtitle{{\small Lean 4 + Mathlib v4.27.0}}
+\date{}
+\author{}
+
+\begin{document}
+
+%======================================================================
+% SLIDE 1 - Title
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{-1em}
+    \maketitle
+    \vspace{-2em}
+    \begin{center}
+        {\footnotesize
+            \textcolor{dimwhite}{Single-block: \textcolor{leangreen}{fully proved} $\cdot$ Multi-block: 5 open gaps $\cdot$ $\sim$3,300 lines}}
+    \end{center}
+\end{frame}
+}
+
+%======================================================================
+% SLIDE 2 - The Fundamental Theorem of MPS
+%======================================================================
+\begin{frame}{The Fundamental Theorem of MPS}
+    \vspace{-0.5em}
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \textbf{Setup.} Physical index $i\in\{1,\dots,d\}$, bond dimension~$D$.
+        Assign a $D\times D$ matrix $A^i$ to each physical index.
+        \vspace{0.3em}
+
+        \textbf{The state} (periodic boundary conditions):
+        \[
+            \ket{V^{(N)}} = \sum_{i_1,\dots,i_N} \tr\!(A^{i_1}\!\cdots A^{i_N}) \ket{i_1\cdots i_N}
+        \]
+
+        \textbf{Injectivity}: $\spn\{A^i\}_{i=1}^d = \MD$.
+
+        \vspace{0.3em}
+        \textbf{Gauge freedom:}
+        $B^i = X A^i X^{-1}$ with $X\in\GL(D,\mathbb{C})$
+        leaves every coefficient invariant (trace cyclicity).
+
+        \column{0.43\textwidth}
+        \begin{center}
+            \begin{tikzpicture}[scale=0.82]
+                \foreach \x in {1,2,3,4,5} {
+                        \node[rectangle,draw=white,fill=leangreen,minimum size=0.6cm,
+                            font=\small\bfseries] (A\x) at (\x*1.1,0) {$A$};
+                        \draw[-,white,thick] (A\x.north) -- ++(0,0.55);
+                        \node[above=0.58cm of A\x,font=\small] {$i_{\x}$};
+                    }
+                \foreach \x in {1,2,3,4} {
+                        \pgfmathtruncatemacro{\next}{\x+1}
+                        \draw[-,white,thick] (A\x.east) -- (A\next.west);
+                    }
+                \draw[-,white,thick,densely dashed] (A1.west) -- ++(-0.5,0)
+                node[left,font=\tiny] {tr};
+                \draw[-,white,thick,densely dashed] (A5.east) -- ++(0.5,0);
+                \draw[-,white,thick,densely dashed,rounded corners]
+                ([xshift=-0.5cm]A1.west) -- ++(0,-0.7) -- ++(6.5,0) -- ++(0,0.7);
+                \node[font=\footnotesize\bfseries,white] at (3.3,-1.2) {bond dimension $D$};
+            \end{tikzpicture}
+
+            \vspace{1.2em}
+            \begin{tikzpicture}[scale=0.82]
+                \node[rectangle,draw=white,fill=leangreen,minimum size=0.6cm,
+                    font=\small\bfseries] (Ai) at (0,0) {$A$};
+                \draw[-,white,thick] (Ai.north) -- ++(0,0.5);
+                \node[above=0.55cm of Ai,font=\small] {$i$};
+                \draw[-,white,thick] (Ai.west) -- ++(-0.5,0);
+                \draw[-,white,thick] (Ai.east) -- ++(0.5,0);
+                \node[font=\Large,white] at (2,0) {$=$};
+                \node[circle,draw=white,fill=amber!80!black,minimum size=0.55cm,
+                    font=\scriptsize\bfseries,text=black] (X) at (3,0) {$X$};
+                \node[rectangle,draw=white,fill=leangreen,minimum size=0.6cm,
+                    font=\small\bfseries] (A2) at (4.2,0) {$A$};
+                \node[circle,draw=white,fill=amber!80!black,minimum size=0.55cm,
+                    font=\scriptsize\bfseries,text=black] (Xi) at (5.4,0) {$X^{\!-\!1}$};
+                \draw[-,white,thick] (A2.north) -- ++(0,0.5);
+                \node[above=0.55cm of A2,font=\small] {$i$};
+                \draw[-,white,thick] (X.west) -- ++(-0.5,0);
+                \draw[-,white,thick] (X.east) -- (A2.west);
+                \draw[-,white,thick] (A2.east) -- (Xi.west);
+                \draw[-,white,thick] (Xi.east) -- ++(0.5,0);
+            \end{tikzpicture}
+        \end{center}
+    \end{columns}
+
+    \vspace{0.3em}
+    \begin{block}{Fundamental Theorem \bibPerez{} \bibCirac}
+        If $A$ is injective and $A,B$ generate the \emph{same state family} for all $N$,
+        then $B^i = X\, A^i\, X^{-1}$ for some $X\in\GL(D,\mathbb{C})$.
+    \end{block}
+\end{frame}
+
+%======================================================================
+% SLIDE 3 - AI + Lean: The Approach
+%======================================================================
+\begin{frame}{The Approach: AI Writes, Lean Checks}
+    \vspace{-0.3em}
+
+    \begin{columns}[T]
+        \column{0.42\textwidth}
+        \small
+        \textbf{Lean} is a proof assistant: a compiler for mathematics.
+        If the code compiles, the proof is correct.
+
+        \vspace{0.4em}
+        \textbf{LLMs} can now generate Lean proof code ---
+        tactics, lemma chains, definitions.
+        They make mistakes, but Lean catches every one.
+
+        \vspace{0.4em}
+        \textbf{Our setup:} a multi-agent system where
+        an orchestrator delegates tasks to specialized AI agents.
+        Runs autonomously overnight; we review in the morning.
+
+        \vspace{0.4em}
+        \textbf{3 days} $\to$ 3,300 lines of machine-checked mathematics.
+
+        \column{0.55\textwidth}
+        \begin{center}
+            \begin{tikzpicture}[
+                box/.style={rectangle,rounded corners=4pt,draw=white,text=white,
+                        minimum width=2.4cm,minimum height=0.9cm,align=center,font=\small\bfseries},
+                arr/.style={-{Stealth[scale=1.0]},white,thick},
+                arrgr/.style={-{Stealth[scale=1.0]},leangreen,thick},
+                arrred/.style={-{Stealth[scale=1.0]},softred,thick},
+                ]
+                % Left column: AI generates code
+                \node[box,fill=leanblue!60!black] (ai) at (0,2.4) {AI Agents};
+                % Right column: Lean checks
+                \node[box,fill=leangreen!40!black] (kernel) at (4.0,2.4) {Lean 4\\{\footnotesize (type checker)}};
+                % Output below
+                \node[box,fill=leangreen!60!black,minimum width=2.0cm] (yes) at (4.0,0.4) {\textcolor{leangreen}{\Large\checkmark} Verified};
+
+                % Forward: AI → Lean
+                \draw[arr] (ai) -- node[above,font=\scriptsize]{proof code} (kernel);
+                % Accept: Lean → Verified
+                \draw[arrgr] (kernel) -- node[right,font=\scriptsize,text=leangreen]{pass} (yes);
+                % Reject: Lean → AI (below)
+                \draw[arrred] (kernel.south west) -- (ai.south east)
+                node[midway,below,font=\scriptsize,text=softred,yshift=-2pt]{reject + error};
+            \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 4 - The Multi-Agent System
+%======================================================================
+\begin{frame}{The Multi-Agent System}
+    \vspace{-0.3em}
+
+    \begin{columns}[T]
+        \column{0.44\textwidth}
+        \small
+        An \textbf{orchestrator} breaks the problem into tasks
+        and delegates to \textbf{specialized agents}:
+
+        \vspace{0.3em}
+        \textbf{\textcolor{leangreen}{Lean agent}} --- the workhorse:
+        \begin{itemize}\itemsep0.05em\scriptsize
+            \item Edits \texttt{.lean} files, runs \texttt{lake build}
+            \item Reads compiler diagnostics (errors, goals)
+            \item Searches Mathlib via \textbf{Loogle} (type-driven lemma search)
+            \item Inspects definitions, tracks \texttt{sorry} count
+            \item Persistent memory across sessions
+        \end{itemize}
+
+        \vspace{0.2em}
+        \textbf{\textcolor{leanblue}{Other agents:}}
+        \begin{itemize}\itemsep0.05em\scriptsize
+            \item \textbf{Search}: arXiv, Mathlib docs, cross-references
+            \item \textbf{Research}: derivations, Wolfram Language
+            \item \textbf{Simplifier}: refactors code preserving correctness
+        \end{itemize}
+
+        \vspace{0.2em}
+        {\small Each agent has \textbf{tools}, not just a chat prompt.
+        The Lean agent \emph{compiles}, reads the error, and iterates.}
+
+        \column{0.53\textwidth}
+        \begin{center}
+            \begin{tikzpicture}[
+                box/.style={rectangle,rounded corners=4pt,draw=white,text=white,
+                        minimum width=2.1cm,minimum height=0.7cm,align=center,font=\scriptsize\bfseries},
+                arr/.style={-{Stealth[scale=0.8]},white,thick},
+                arrgr/.style={-{Stealth[scale=0.8]},leangreen,thick},
+                arrred/.style={-{Stealth[scale=0.8]},softred,thick},
+                tool/.style={font=\tiny,text=dimwhite,align=left},
+                ]
+                % Orchestrator at top
+                \node[box,fill=amber!40!black,minimum width=2.8cm] (orch) at (2,3.6) {Orchestrator};
+
+                % Lean agent (center, prominent)
+                \node[box,fill=leangreen!40!black,minimum width=2.4cm,minimum height=0.8cm] (lean) at (0.5,2.0) {Lean Agent};
+
+                % Other agents (right)
+                \node[box,fill=leanblue!40!black,minimum width=1.6cm] (search) at (4.0,2.6) {Search};
+                \node[box,fill=leanblue!40!black,minimum width=1.6cm] (research) at (4.0,1.7) {Research};
+                \node[box,fill=leanblue!30!black,minimum width=1.6cm] (simpl) at (4.0,0.8) {Simplifier};
+
+                % Lean 4 compiler (below lean agent)
+                \node[box,fill=leangreen!60!black,minimum width=2.2cm] (compiler) at (0.5,0.1) {Lean 4 Kernel};
+
+                % Delegation arrows
+                \draw[arr] (orch) -- (lean);
+                \draw[arr] (orch) -- (search);
+                \draw[arr] (orch) -- (research);
+                \draw[arr] (orch) -- (simpl);
+
+                % Lean agent ↔ compiler loop
+                \draw[arrgr] ([xshift=-4pt]lean.south) -- ([xshift=-4pt]compiler.north)
+                    node[midway,left,font=\tiny,text=leangreen]{code};
+                \draw[arrred] ([xshift=4pt]compiler.north) -- ([xshift=4pt]lean.south)
+                    node[midway,right,font=\tiny,text=softred]{errors};
+
+                % Tools annotation (next to Lean agent)
+                \node[tool,right] at (1.9,2.2) {%
+                    \texttt{lake build}\\[-1pt]
+                    \texttt{lean\_diagnostics}\\[-1pt]
+                    \texttt{lean\_loogle}\\[-1pt]
+                    \texttt{lean\_inspect}\\[-1pt]
+                    \texttt{edit\_file}};
+
+                % Verified output
+                \node[font=\tiny\bfseries,text=leangreen] at (0.5,-0.6) {\checkmark\ compiles $=$ correct};
+            \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 5 - What is Lean 4?
+%======================================================================
+\begin{frame}{What is Lean 4?}
+    \vspace{-0.3em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \small
+        \textbf{Lean 4} (Microsoft Research + open-source, 2021--)
+        \begin{itemize}\itemsep0.15em
+            \item Proof assistant + programming language
+            \item \textcolor{amber}{Not} a computer algebra system --- does not compute proofs, only \emph{checks} them
+            \item \texttt{\textcolor{softred}{sorry}}: marks an unproved step;
+                  the compiler tracks all of them
+        \end{itemize}
+
+        \column{0.48\textwidth}
+        \small
+        \textbf{Mathlib}: $>$1.5\,M lines of formalized math
+        \begin{itemize}\itemsep0.15em
+            \item Matrix algebras, traces, $\GL(n,\mathbb{C})$
+            \item Two-sided ideals, simplicity
+            \item Skolem--Noether theorem
+            \item Spectral radius, Gelfand formula
+        \end{itemize}
+
+        \vspace{0.3em}
+        These are the building blocks we use.
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 6 - What Formalizing Looks Like
+%======================================================================
+\begin{frame}[fragile]{What Formalizing Looks Like}
+    \vspace{-0.3em}
+    \begin{columns}[T]
+        \column{0.38\textwidth}
+        {\small\textbf{Mathematics}}
+        \vspace{0.3em}
+
+        $A = \{A^{(i)}\}_{i=1}^d$, \ $A^{(i)} \in \MD$
+
+        \vspace{1.0em}
+        $\spn\{A^{(i)}\} = \MD$
+
+        \vspace{1.0em}
+        $\forall\, N,\sigma:$ \\
+        $\tr(A^{(\sigma_1)}\!\cdots\! A^{(\sigma_N)}) = \tr(B^{(\sigma_1)}\!\cdots\! B^{(\sigma_N)})$
+
+        \vspace{0.8em}
+        $\exists\, X \in \GL_D(\mathbb{C}):$ \\
+        $B^{(i)} = X A^{(i)} X^{-1}\ \forall\, i$
+
+        \column{0.59\textwidth}
+        {\small\textbf{Lean 4 code}}
+        \vspace{0.2em}
+        \begin{lstlisting}
+abbrev MPSTensor (d D : ℕ) :=
+  Fin d → Matrix (Fin D) (Fin D) ℂ
+\end{lstlisting}
+        \vspace{-0.3em}
+        \begin{lstlisting}
+def IsInjective (A : MPSTensor d D) :=
+  Submodule.span ℂ (Set.range A) = ⊤
+\end{lstlisting}
+        \vspace{-0.3em}
+        \begin{lstlisting}
+def SameMPV (A B : MPSTensor d D) :=
+  ∀ N σ, mpv A σ = mpv B σ
+\end{lstlisting}
+        \vspace{-0.3em}
+        \begin{lstlisting}
+def GaugeEquiv (A B : MPSTensor d D) :=
+  ∃ X : GL (Fin D) ℂ,
+    ∀ i, B i = X * A i * X⁻¹
+\end{lstlisting}
+    \end{columns}
+
+    \vspace{0.3em}
+    {\small Definitions are direct transcriptions. The hard part is the \emph{proofs}.}
+\end{frame}
+
+%======================================================================
+% SLIDE 7 - Single-Block Proof: FULLY PROVED
+%======================================================================
+\begin{frame}{Single-Block Proof\quad\textcolor{leangreen}{FULLY PROVED \checkmark}}
+    \vspace{-0.4em}
+
+    \textbf{The key object: $T\colon \MD \to \MD$.}\quad
+    {\small Injectivity means $\{A^i\}$ span all of~$\MD$.
+        Define $T$ by $T(A^i):= B^i$ and extend linearly.
+        This is well-defined and unique \emph{because} $\{A^i\}$ span.}
+
+    \vspace{0.2em}
+    \begin{center}
+        \begin{tikzpicture}[xscale=0.88,
+            sbox/.style={rectangle,rounded corners,draw=white,text=white,
+                    font=\scriptsize\bfseries,minimum width=1.8cm,minimum height=0.95cm,align=center},
+            sarr/.style={-{Stealth[scale=0.8]},white,thick},
+            slab/.style={font=\tiny,text=amber,align=center,above,yshift=-1pt}
+            ]
+            \node[sbox,fill=gray!50!black] (s0) at (0,0) {Same state\\$\forall\,N,\sigma$};
+            \node[sbox,fill=leanblue!40!black] (s1) at (2.7,0) {Unique\\linear $T$};
+            \node[sbox,fill=leanblue!60!black] (s2) at (5.4,0) {$T$ is\\multiplicative};
+            \node[sbox,fill=leangreen!40!black] (s3) at (8.1,0) {$T$ is an\\automorphism};
+            \node[sbox,fill=leangreen!60!black] (s4) at (10.8,0) {$B^i\!=\!XA^iX^{\!-\!1}$};
+            \draw[sarr] (s0) -- node[slab]{spanning} (s1);
+            \draw[sarr] (s1) -- node[slab]{trace ids} (s2);
+            \draw[sarr] (s2) -- node[slab]{simplicity} (s3);
+            \draw[sarr] (s3) -- node[slab]{Skolem--N.} (s4);
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.1em}
+    \begin{enumerate}\itemsep0.1em
+        \item {\small \textbf{Spanning $\boldsymbol{\Rightarrow}$ linear map.}
+              $T(A^i):=B^i$, extended to all of~$\MD$ by linearity.
+              SameMPV ensures consistency (via the trace pairing).}
+        \item {\small \textbf{Trace identities $\boldsymbol{\Rightarrow}$ multiplicativity.}
+              $\tr(A^i A^j A^k) = \tr(B^i B^j B^k)$ forces
+              $T(MN)=T(M)\,T(N)$.}
+        \item {\small \textbf{Simplicity $\boldsymbol{\Rightarrow}$ bijectivity.}
+              $\ker T$ is a two-sided ideal of $\MD$, which is simple, so $\ker T = 0$.}
+        \item {\small \textbf{Skolem--Noether $\boldsymbol{\Rightarrow}$ conjugation.}
+              Every automorphism of $\MD$ is inner: $T(M) = XMX^{-1}$.}
+    \end{enumerate}
+
+    \vspace{0.1em}
+    \begin{center}
+        {\small \textcolor{leangreen}{\textbf{Zero sorry.}} Pure algebra --- our own proof strategy, chosen because
+            Mathlib already has simplicity and Skolem--Noether.}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 8 - Multi-Block: Canonical Form
+%======================================================================
+\begin{frame}{Multi-Block: Canonical Form}
+    \vspace{-0.5em}
+    \begin{columns}[T]
+        \column{0.45\textwidth}
+        \begin{center}
+            \begin{tikzpicture}[scale=0.85]
+                \draw[white,thick] (0,0) rectangle (4,4);
+                \fill[leangreen!30!black] (0.1,2.9) rectangle (1.4,3.9);
+                \fill[leanblue!30!black] (1.5,1.6) rectangle (2.5,2.8);
+                \fill[amber!30!black] (2.6,0.1) rectangle (3.9,1.5);
+                \node[white,font=\small\bfseries] at (0.75,3.4) {$\mu_1 A_1^i$};
+                \node[white,font=\small\bfseries] at (2.0,2.2) {$\mu_2 A_2^i$};
+                \node[white,font=\small\bfseries] at (3.25,0.8) {$\mu_3 A_3^i$};
+                \node[gray,font=\scriptsize] at (2.5,3.4) {$0$};
+                \node[gray,font=\scriptsize] at (0.75,0.8) {$0$};
+                \node[white,font=\bfseries] at (2,-0.5) {Block-diagonal};
+            \end{tikzpicture}
+        \end{center}
+
+        \column{0.52\textwidth}
+        \textbf{Canonical form} \bibCirac:
+        $T^{(i)} = \bigoplus_k \mu_k\, A_k^{(i)}$
+
+        \vspace{0.2em}
+        Each block $A_k$ is injective, $\mu_k\in\mathbb{C}$ distinct.
+
+        \vspace{0.3em}
+        Block MPVs contribute independently:
+        \begin{equation*}
+            V^{(N)} = \textstyle\sum_k \mu_k^N \cdot V_k^{(N)}
+        \end{equation*}
+
+        \vspace{0.3em}
+        \textbf{Multi-block theorem} \bibCiracAnn{} \bibCiracIrr:
+        Same state $\Rightarrow$ blocks match pairwise up to gauge and phase.
+    \end{columns}
+
+    \vspace{0.4em}
+    {\small\textbf{Informal proof outline:}}
+    \begin{enumerate}\itemsep0.1em
+        \item {\small \textbf{Decompose}: MPV is a sum over blocks, weighted by $\mu_k^N$.}
+        \item {\small \textbf{Separate}: distinct $\mu_k$ $\Rightarrow$ blocks decouple (the hard step --- see later slides).}
+        \item {\small \textbf{Match}: per-block SameMPV; apply single-block theorem to each.}
+        \item {\small \textbf{Assemble}: per-block gauge transforms $\Rightarrow$ global block-diagonal conjugation.}
+    \end{enumerate}
+\end{frame}
+
+%======================================================================
+% SLIDE 9 - Multi-Block: What's Proved
+%======================================================================
+\begin{frame}{Multi-Block --- What's Proved}
+    \vspace{-0.3em}
+    \proved{MPV decomposition}:
+    {\small $\mathrm{mpv}(\bigoplus_k \mu_k A_k, \sigma) = \sum_k \mu_k^N \cdot \mathrm{mpv}(A_k, \sigma)$.}
+
+    \vspace{0.3em}
+    \proved{Block permutation theory}:
+    {\small automorphisms of $\prod_k M_{n_k}(\mathbb{C})$ permute simple factors.}
+
+    \vspace{0.3em}
+    \proved{Single-block FT applied per block}:
+    {\small per-block SameMPV $\Rightarrow$ per-block GaugeEquiv.}
+
+    \vspace{0.3em}
+    \proved{Block-diagonal gauge assembly}:
+    {\small per-block $B_k = X_k A_k X_k^{-1}$ $\Rightarrow$ global
+    $G\cdot(\bigoplus_k \mu_k A_k)\cdot G^{-1}$ with $G = \diag(X_1,\ldots,X_r)$.}
+
+    \vspace{0.5em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=amber,thick,rounded corners=4pt,fill=cardbg,text=amber,
+                text width=0.85\textwidth,align=center,inner sep=6pt,font=\small] {
+                The complete theorem holds \textbf{if} we can show:\\
+                \textbf{Block separation:}\quad
+                $\text{SameMPV}(\bigoplus_k \mu_k A_k, \bigoplus_k \mu_k B_k)
+                    \Longrightarrow   \forall\, k: \text{SameMPV}(A_k,\, B_k)$
+            };
+        \end{tikzpicture}
+    \end{center}
+
+\end{frame}
+
+%======================================================================
+% SLIDE 10 - The Physics Proof of Block Separation
+%======================================================================
+\begin{frame}{The Physics Proof of Block Separation \bibCiracAnn{} \bibCirac}
+    \vspace{-0.3em}
+    \textbf{Step 1.}  Define transfer operators:
+    $ \mathcal{E}_A(X) = \sum_i A^{(i)} X A^{(i)\dagger}$,\quad
+    $\mathcal{F}_{AB}(X) = \sum_i A^{(i)} X B^{(i)\dagger}$.
+
+    \vspace{0.2em}
+    \textbf{Step 2.}  Injectivity of $A$ $\Rightarrow$ $\mathcal{E}_A$ is \emph{irreducible} CP:
+    no nontrivial projection $P$ satisfies $P\,\mathcal{E}_A(PXP)\,P = \mathcal{E}_A(PXP)$.
+
+    \vspace{0.2em}
+    \textbf{Step 3.}  \textcolor{amber}{Quantum Perron--Frobenius} \bibEvans:
+    irreducible CP $\Rightarrow$ primitive: unique positive definite fixed point, exponential convergence.
+
+    \vspace{0.2em}
+    \textbf{Step 4.}  For the \emph{mixed transfer operator} $\mathcal{F}_{AB}(X)=\sum_i A^i X {B^i}^\dagger$ across different blocks:
+    no rank-1 fixed point $\Rightarrow$ spectral radius $< 1$.
+
+    \vspace{0.2em}
+    \textbf{Step 5.}  $\rho < 1$ $\Rightarrow$ $\mathcal{F}_{AB}^n \to 0$ $\Rightarrow$ cross-correlations vanish.
+
+    \vspace{0.2em}
+    \textbf{Step 6.}  MPV identity $+$ diagonal terms persist $+$ off-diagonal decay
+    $\Rightarrow$ blocks separate.
+
+    \vspace{0.4em}
+    \begin{center}
+        {\small Steps 1--2: fully proved \textcolor{leangreen}{\checkmark}\quad
+            Steps 3--4: \textcolor{softred}{the core gap}\quad
+            Steps 5--6: fully proved \textcolor{leangreen}{\checkmark}}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 11 - The Remaining Gap: Quantum Perron-Frobenius
+%======================================================================
+\begin{frame}{The Remaining Gap --- Quantum Perron--Frobenius}
+    \vspace{-0.3em}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \small
+        \textbf{Quantum PF} \bibEvans: for an irreducible CP map $\mathcal{E}$,
+        \begin{itemize}\itemsep0.12em
+            \item unique positive definite fixed point $\Lambda$
+            \item spectral gap: all other eigenvalues $|\lambda|<1$
+        \end{itemize}
+
+        \vspace{0.3em}
+        This gives Steps 3--4: spectral gap for self-transfer operators
+        and $\rho(\mathcal{F}_{AB})<1$ for mixed transfer operators \bibFernandez.
+
+        \vspace{0.4em}
+        \textbf{\textcolor{softred}{Not formalized in any proof assistant.}}
+
+        \vspace{0.2em}
+        Classical PF (real nonneg matrices) exists in Lean \bibHopfield,
+        but does not apply: the transfer matrix is complex and not Hermitian.
+
+        \column{0.48\textwidth}
+        \small
+        \textbf{What we have built toward it:}
+        \begin{itemize}\itemsep0.1em
+            \item[\textcolor{leangreen}{\checkmark}] CP map definitions, irreducibility
+            \item[\textcolor{leangreen}{\checkmark}] Injectivity $\Rightarrow$ irreducible CP
+            \item[\textcolor{leangreen}{\checkmark}] $\rho<1 \Rightarrow \mathcal{F}^n \to 0$
+            \item[\textcolor{leangreen}{\checkmark}] Full chain from spectral gap to block separation
+            \item[\textcolor{softred}{$\times$}] Quantum PF itself (Steps 3--4)
+        \end{itemize}
+
+        \vspace{0.4em}
+        Everything above and below the gap is proved.
+        Estimated $\sim$2,000--3,000 additional lines to close it.
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 12 - Community Formalizations
+%======================================================================
+\begin{frame}{Community Formalizations of Related Math}
+    \vspace{-0.3em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{\textcolor{leanblue}{HopfieldNet} \bibHopfield}
+        \begin{itemize}\itemsep0.12em\small
+            \item Full Perron--Frobenius for \emph{real} nonneg.\ matrices
+            \item 4,055 lines Lean 4
+            \item \textcolor{softred}{Not applicable}: transfer matrix $\sum_i \bar{A}^i\otimes A^i$ is complex, not real nonneg, not Hermitian
+        \end{itemize}
+
+        \vspace{0.4em}
+        \textbf{\textcolor{leanblue}{Lean-QuantumInfo} \bibQuantumInfo}
+        \begin{itemize}\itemsep0.12em\small
+            \item CP maps, CPTP maps, Choi matrix, Kraus operators
+            \item Has infrastructure we need, but not the spectral theory
+        \end{itemize}
+
+        \column{0.48\textwidth}
+        \textbf{\textcolor{leanblue}{Isabelle/AFP}}
+        \begin{itemize}\itemsep0.12em\small
+            \item PF for real matrices in Isabelle
+            \item Different proof assistant --- not usable from Lean
+        \end{itemize}
+
+        \vspace{0.4em}
+        \begin{center}
+            \begin{tikzpicture}
+                \node[draw=amber,thick,rounded corners=4pt,fill=cardbg,text=amber,
+                    text width=0.42\textwidth,align=center,font=\small\bfseries,inner sep=6pt] {
+                    Classical PF exists in Lean.\\
+                    Quantum PF does not exist\\in any proof assistant.
+                };
+            \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 13 - Key Result: Injectivity ⟹ Irreducible CP
+%======================================================================
+\begin{frame}{Key Result: Injectivity $\Rightarrow$ Irreducible CP\quad\textcolor{leangreen}{\checkmark}}
+    \vspace{-0.3em}
+    {\small Step 2 of the physics proof, fully proved ($\sim$80 lines, no sorry).}
+
+    \vspace{0.3em}
+    \textbf{Theorem.}  If $\spn\{A^{(i)}\} = \MD$, then $\mathcal{E}_A$ is irreducible.
+
+    \vspace{0.3em}
+    \textbf{Proof.}  Suppose projection $P$ is invariant: $P\,\mathcal{E}_A(PXP)\,P = \mathcal{E}_A(PXP)\ \forall\, X$.
+    \begin{enumerate}\itemsep0.15em
+        \item {\small Expand: $\sum_i (PA^{(i)}P - A^{(i)}P)\,X\,(PA^{(i)}P - A^{(i)}P)^\dagger = 0$ for all $X$.}
+        \item {\small Each summand is PSD $\Rightarrow$ each is zero $\Rightarrow$ $A^{(i)}P = PA^{(i)}P$.}
+        \item {\small Adjoints: $PA^{(i)} = A^{(i)}P$ $\Rightarrow$ $P$ commutes with $\spn\{A^{(i)}\} = \MD$.}
+        \item {\small $P \in Z(\MD) = \mathbb{C}\cdot I$ and $P^2 = P = P^\dagger$ $\Rightarrow$ $P = 0$ or $I$. \qed}
+    \end{enumerate}
+\end{frame}
+
+%======================================================================
+% SLIDE 14 - What's Next
+%======================================================================
+\begin{frame}{What's Next}
+    \vspace{-0.3em}
+
+    \textbf{Immediate target:} Quantum Perron--Frobenius in Lean 4.
+    \begin{itemize}\itemsep0.1em\small
+        \item Would close all 5 remaining gaps simultaneously
+        \item Estimated $\sim$2,000--3,000 additional lines
+        \item No formalization exists in any proof assistant yet
+        \item Background: Meiburg, Lessa \& Soldati \bibQuantumInfo{} formalized the generalized quantum Stein's lemma in Lean 4 (14K lines) --- the ecosystem we build on
+    \end{itemize}
+
+    \vspace{0.3em}
+    \textbf{Natural extensions:}
+    \begin{itemize}\itemsep0.1em\small
+        \item Parent Hamiltonians and spectral gap (uses same transfer operator machinery)
+        \item Contribute quantum PF and CP map infrastructure to Mathlib
+    \end{itemize}
+
+    \vspace{0.3em}
+    \textbf{Methodology:}
+    \begin{itemize}\itemsep0.1em\small
+        \item AI-assisted formalization continues to accelerate
+        \item Each proved theorem becomes a building block for the next
+    \end{itemize}
+\end{frame}
+
+%======================================================================
+% SLIDE 15 - Summary
+%======================================================================
+\begin{frame}{Summary}
+    \vspace{-0.3em}
+    \textbf{\textcolor{leangreen}{Done:}}
+    \begin{itemize}\itemsep0.1em\small
+        \item Single-block Fundamental Theorem: \textcolor{leangreen}{\textbf{fully proved}} (0 sorry, 0 axioms)
+        \item Multi-block: complete proof architecture, 5 classified gaps
+        \item Injectivity $\Rightarrow$ irreducible CP: fully proved
+        \item 3,300 lines across 16 modules, produced in $\sim$3 days with AI assistance
+    \end{itemize}
+
+    \vspace{0.3em}
+    \textbf{\textcolor{softred}{Remaining:}}
+    \begin{itemize}\itemsep0.1em\small
+        \item Quantum Perron--Frobenius (Evans--H{\o}egh-Krohn \bibEvans) for CP maps
+        \item $\sim$2,000--3,000 additional lines; would close all 5 gaps
+        \item Not formalized in any proof assistant yet
+    \end{itemize}
+
+    \vspace{0.3em}
+    \textbf{The picture:}
+    \begin{center}
+        \small
+        \begin{tabular}{@{}lcl@{}}
+            Single-block             & \textcolor{leangreen}{\checkmark} & complete                    \\
+            Multi-block architecture & \textcolor{leangreen}{\checkmark} & all steps except quantum PF \\
+            Quantum PF               & \textcolor{softred}{$\times$}     & the one open problem        \\
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% THANK YOU
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \begin{center}
+        \vspace{2em}
+        \Huge\textbf{\textcolor{leangreen}{Thank You}}
+
+        \vspace{1.2em}
+        \LARGE Questions?
+
+        \vspace{1.5em}
+        \large\texttt{github.com/LionSR/MPSLean}
+    \end{center}
+\end{frame}
+}
+
+%======================================================================
+% References (manual)
+%======================================================================
+\begin{frame}[allowframebreaks]{References}
+    \vspace{-0.5em}
+    {\scriptsize
+        \begin{description}
+            \item[\citenum{1}] J.~I.~Cirac, D.~P\'{e}rez-Garc\'{i}a, N.~Schuch, F.~Verstraete. \textit{Matrix product states and projected entangled pair states: Concepts, symmetries, theorems}. Rev.\ Mod.\ Phys.\ \textbf{93}, 045003 (2021). arXiv:2011.12127
+            \item[\citenum{2}] D.~P\'{e}rez-Garc\'{i}a, F.~Verstraete, M.~M.~Wolf, J.~I.~Cirac. \textit{Matrix product state representations}. Quantum Inf.\ Comput.\ \textbf{7}, 401 (2007). arXiv:quant-ph/0608197
+            \item[\citenum{3}] D.~E.~Evans, R.~H\o egh-Krohn. \textit{Spectral properties of positive maps on $C^*$-algebras}. J.~London Math.\ Soc.\ \textbf{17}, 345--355 (1978).
+            \item[\citenum{4}] G.~L.~Cipollina, C.~Karatarakis, F.~Wiedijk. \textit{Formalizing the Perron--Frobenius Theorem and the Hopfield Network Cycle}. arXiv:2512.07766 (2025).
+            \item[\citenum{5}] A.~Meiburg, L.~Lessa, I.~Soldati. \textit{Lean-QuantumInfo: Quantum information theory in Lean 4}. arXiv:2510.08672 (2025).
+            \item[\citenum{6}] M.~M.~Wolf. \textit{Quantum Channels \& Operations: Guided Tour}. Lecture notes (2012).
+            \item[\citenum{7}] J.~I.~Cirac, D.~P\'{e}rez-Garc\'{i}a, N.~Schuch, F.~Verstraete. \textit{Matrix Product States: Symmetries and Two-Body Hamiltonians}. Ann.\ Phys.\ \textbf{378}, 100--149 (2017).
+            \item[\citenum{8}] J.~I.~Cirac, G.~de~las~Cuevas, A.~Moln\'{a}r, N.~Schuch, F.~Verstraete. \textit{Irreducible forms of matrix product states: Theory and applications}. arXiv:1708.00029 (2017).
+            \item[\citenum{9}] C.~Fern\'{a}ndez-Gonz\'{a}lez, N.~Schuch, M.~M.~Wolf, J.~I.~Cirac, D.~P\'{e}rez-Garc\'{i}a. \textit{Frustration free gapless Hamiltonians for MPS}. Commun.\ Math.\ Phys.\ \textbf{333}, 299--333 (2015).
+        \end{description}
+    }
+\end{frame}
+
+%======================================================================
+%  BACKUP / APPENDIX SLIDES
+%======================================================================
+\appendix
+
+%======================================================================
+% BACKUP 1 - Module Dependency Graph
+%======================================================================
+\begin{frame}{Backup: Module Dependency Graph}
+    \vspace{-0.5em}
+    \begin{center}
+        \begin{tikzpicture}[
+            node distance=0.4cm and 0.8cm,
+            every node/.style={font=\tiny},
+            mod/.style={draw=leanblue!60,thick,rounded corners=2pt,fill=cardbg,
+                    text=white,minimum height=0.4cm,align=center,inner sep=3pt},
+            arr/.style={-{Stealth[length=3pt]},leanblue!40,thin},
+            ]
+            % Row 1: Defs
+            \node[mod] (defs) {\textbf{Defs} (128)};
+
+            % Row 2
+            \node[mod, below left=0.5cm and 0.5cm of defs] (basis) {BasisNormal (162)};
+            \node[mod, below=0.5cm of defs] (transfer) {Transfer (45)};
+            \node[mod, below right=0.5cm and 0.5cm of defs] (canon) {CanonicalForm (51)};
+            \node[mod, right=0.5cm of canon] (linext) {LinearExtension (159)};
+
+            \draw[arr] (defs) -- (basis);
+            \draw[arr] (defs) -- (transfer);
+            \draw[arr] (defs) -- (canon);
+            \draw[arr] (defs) -- (linext);
+
+            % Row 3
+            \node[mod, below=0.4cm of basis] (trace) {TracePairing (98)};
+            \node[mod, below=0.4cm of transfer] (cpp) {CPPrimitive (371)};
+            \node[mod, below=0.4cm of canon] (multi) {MultiBlock (163)};
+            \node[mod, below=0.4cm of linext] (skolem) {SkolemNoether (149)};
+
+            \draw[arr] (basis) -- (trace);
+            \draw[arr] (transfer) -- (cpp);
+            \draw[arr] (canon) -- (multi);
+            \draw[arr] (linext) -- (skolem);
+
+            % Row 4
+            \node[mod, below=0.4cm of trace] (tracend) {TraceNondeg (22)};
+            \node[mod, below=0.4cm of cpp] (tspec) {\textcolor{amber}{TransferSpectral (492)}};
+            \node[mod, below=0.4cm of multi] (bperm) {BlockPerm (223)};
+            \node[mod, below=0.4cm of skolem] (ft) {\textcolor{leangreen}{FundThm (78)}};
+
+            \draw[arr] (trace) -- (tracend);
+            \draw[arr] (cpp) -- (tspec);
+            \draw[arr] (multi) -- (bperm);
+            \draw[arr] (skolem) -- (ft);
+
+            % Row 5
+            \node[mod, below=0.4cm of bperm] (bpmps) {BlockPermMPS (334)};
+            \node[mod, left=0.3cm of bpmps] (pialg) {PiAlgExt (541)};
+            \draw[arr] (bperm) -- (bpmps);
+            \draw[arr] (multi) -- (pialg);
+
+            % Row 6
+            \node[mod, below=0.5cm of bpmps] (ftm) {\textcolor{amber}{FundThmMulti (232)}};
+            \draw[arr] (bpmps) -- (ftm);
+            \draw[arr] (pialg) -- (ftm);
+            \draw[arr] (ft) -- (ftm);
+
+            % Stats box
+            \node[draw=dimwhite,rounded corners=3pt,fill=cardbg,text=dimwhite,
+                font=\scriptsize,align=left,inner sep=4pt]
+            at (5.5,-3.5) {
+                \textbf{Total}: 3,264 lines\\
+                147 theorems/lemmas\\
+                44 definitions\\
+                \textcolor{leangreen}{0 sorry}: single-block\\
+                \textcolor{softred}{5 sorry}: multi-block
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% BACKUP 2 - Lean Code: Single-Block Proof
+%======================================================================
+\begin{frame}[fragile]{Backup: Lean Code --- Single-Block FT}
+    \vspace{-0.6em}
+    \begin{lstlisting}
+theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
+    (hA : IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B := by
+  classical
+  cases D with
+  | zero => exact ⟨1, fun i => by simpa using Subsingleton.elim (B i) (A i)⟩
+  | succ D' =>
+      -- Step 1: linear map T with T(A_i) = B_i
+      rcases linearExtension_exists_unique hA hAB with ⟨T, hT, -⟩
+      -- Step 2: T is multiplicative
+      have hMul := linearExtension_mul hA hAB hT
+      -- Steps 3-4: T is bijective (simplicity of M_D)
+      have hBij := linear_mul_endomorphism_bijective T hMul
+                     (linearExtension_nonzero hA hAB hT)
+      -- Step 5: T as algebra equivalence
+      let fHom := linearMapToAlgHom T hMul hBij.surjective
+      let f := AlgEquiv.ofBijective fHom hBij
+      -- Step 6: Skolem-Noether gives conjugation matrix
+      rcases skolemNoether_matrix f with ⟨X, hX⟩
+      refine ⟨X, fun i => ?_⟩
+      have hfi : f (A i) = B i := by simpa [f, fHom] using hT i
+      simpa [hfi] using hX (A i)
+\end{lstlisting}
+
+    \vspace{-0.2em}
+    {\scriptsize The proof mirrors the mathematical argument 1:1.
+        Each \texttt{have}/\texttt{rcases} corresponds to one step in the chain from Slide~6.}
+\end{frame}
+
+%======================================================================
+% BACKUP 3 - Mathlib Has vs. Needs
+%======================================================================
+\begin{frame}{Backup: Mathlib Has vs.\ Needs}
+    \vspace{-0.7em}
+    \begin{center}
+        {\scriptsize
+            \begin{tabular}{@{}lcc@{}}
+                \toprule
+                \textbf{Component}                & \textbf{Status}                                    & \textbf{Notes}                                              \\
+                \midrule
+                Matrix algebra, trace, det        & \textcolor{leangreen}{\checkmark} Mathlib          & Used throughout                                             \\
+                GL group, Units                   & \textcolor{leangreen}{\checkmark} Mathlib          & For GaugeEquiv                                              \\
+                Submodule.span                    & \textcolor{leangreen}{\checkmark} Mathlib          & For IsInjective                                             \\
+                Two-sided ideals, simplicity      & \textcolor{leangreen}{\checkmark} Mathlib          & For Skolem--Noether                                         \\
+                Spectral radius                   & \textcolor{leangreen}{\checkmark} Mathlib          & Banach algebra setting                                      \\
+                Gelfand formula                   & \textcolor{leangreen}{\checkmark} Mathlib          & Used for convergence                                        \\
+                Characteristic polynomial         & \textcolor{leangreen}{\checkmark} Mathlib          & Available                                                   \\
+                Newton's identities               & \textcolor{amber}{$\sim$} Mathlib                  & For symmetric \texttt{MvPolynomial}; not matrix eigenvalues \\
+                \midrule
+                $\rho(T)<1 \Rightarrow T^n \to 0$ & \textcolor{leangreen}{\checkmark} Our code         & 30 lines, from Gelfand                                      \\
+                Irreducible CP proof              & \textcolor{leangreen}{\checkmark} Our code         & $\sim$80 lines                                              \\
+                CP map definitions                & \textcolor{leangreen}{\checkmark} Our code         & CPPrimitive.lean                                            \\
+                Transfer operator chain           & \textcolor{leangreen}{\checkmark} Our code         & TransferSpectral.lean                                       \\
+                \midrule
+                Jordan normal form                & \textcolor{softred}{$\boldsymbol{\times}$} Missing & Would simplify QPF                                          \\
+                Quantum Perron--Frobenius         & \textcolor{softred}{$\boldsymbol{\times}$} Missing & The core gap                                                \\
+                CP spectral theory                & \textcolor{softred}{$\boldsymbol{\times}$} Missing & Needed for Steps 3--4                                       \\
+                Vectorization isomorphism         & \textcolor{softred}{$\boldsymbol{\times}$} Missing & Isolated sorry                                              \\
+                \bottomrule
+            \end{tabular}
+        }
+    \end{center}
+\end{frame}
+
+%======================================================================
+% BACKUP 4 - The 5 Sorries: Dependency Map
+%======================================================================
+\begin{frame}{Backup: The 5 Sorries --- Dependency Map}
+    \vspace{-0.5em}
+    \begin{center}
+        \begin{tikzpicture}[
+            node distance=0.4cm and 1.0cm,
+            every node/.style={font=\scriptsize},
+            proved box/.style={draw=leangreen!70,thick,rounded corners=2pt,fill=cardbg,
+                    text=white,minimum width=3.2cm,minimum height=0.4cm,align=center},
+            sorry box/.style={draw=softred!70,thick,rounded corners=2pt,fill=cardbg,
+                    text=softred,minimum width=3.2cm,minimum height=0.4cm,align=center},
+            arr/.style={-{Stealth[length=3pt]},thick},
+            garr/.style={arr,leangreen!60},
+            rarr/.style={arr,softred!60},
+            ]
+            % Top row
+            \node[proved box] (inj) {Injectivity};
+            \node[proved box, right=1.8cm of inj] (irr) {IsIrreducibleCP};
+            \draw[garr] (inj) -- node[above,font=\tiny,text=leangreen]{proved} (irr);
+
+            % Sorry chain (center column)
+            \node[sorry box, below=of irr] (prim) {\texttt{sorry \#1}: IsPrimitiveCP};
+            \draw[rarr] (irr) -- (prim);
+
+            \node[sorry box, below=of prim] (ufp) {\texttt{sorry \#2}: UniqueFixedPoint};
+            \draw[rarr] (prim) -- (ufp);
+
+            \node[sorry box, below=of ufp] (spec) {\texttt{sorry \#4}: $\rho < 1$};
+            \draw[rarr] (ufp) -- (spec);
+
+            % Proved chain below
+            \node[proved box, below=of spec] (conv) {$\mathcal{F}^n \!\to\! 0$, cross-corr $\!\to\! 0$};
+            \draw[garr] (spec) -- node[right,font=\tiny,text=leangreen]{proved} (conv);
+
+            \node[proved box, below=of conv] (sep) {Block separation};
+            \draw[garr] (conv) -- (sep);
+
+            \node[proved box, below=of sep] (result) {Per-block $\to$ Global GaugeEquiv};
+            \draw[garr] (sep) -- (result);
+
+            % Sorry #3 isolated (left)
+            \node[sorry box, left=1.2cm of spec] (vec) {\texttt{sorry \#3}: vectorization};
+            \node[font=\tiny,text=dimwhite,below=0.05cm of vec] {(isolated bridge)};
+
+            % Sorry #5 (left)
+            \node[sorry box, left=1.2cm of conv] (s5) {\texttt{sorry \#5}: block sep.};
+            \draw[rarr,dashed] (spec) -- (s5);
+            \draw[rarr,dashed] (s5) -- (sep);
+            \node[font=\tiny,text=dimwhite,below=0.05cm of s5] {(alternative route)};
+
+            % Brace
+            \draw[decorate,decoration={brace,amplitude=5pt,mirror},softred!70,thick]
+            ([xshift=4.2cm]prim.north east) -- ([xshift=4.2cm]spec.south east)
+            node[midway,right=6pt,font=\tiny,text=softred,align=left]
+            {Quantum PF\\theorem};
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.2em}
+    {\small\textbf{Summary}: everything \textcolor{leangreen}{above} and \textcolor{leangreen}{below} the sorry chain is proved.
+        The 4 critical sorries (\#1$\to$\#2$\to$\#4$\to$\#5) are all consequences of quantum PF.}
+\end{frame}
+
+%======================================================================
+% BACKUP 5 - Effort Estimates (AI-assisted)
+%======================================================================
+\begin{frame}{Backup: Effort Estimates (AI-Assisted)}
+    \vspace{-0.5em}
+    {\small Development uses \textbf{multi-agent AI systems} for proof exploration, tactic generation,
+        and boilerplate --- so calendar time is compressed vs.\ traditional Lean development.
+        Lines of code are the primary complexity metric.}
+
+    \vspace{0.3em}
+    \begin{center}
+        {\scriptsize
+            \begin{tabular}{@{}lcc@{}}
+                \toprule
+                \textbf{Component}                         & \textbf{Est.\ Lines}        & \textbf{Dependencies} \\
+                \midrule
+                \multicolumn{3}{@{}l}{\textcolor{leanblue}{\textbf{Quantum Perron--Frobenius formalization}}}    \\
+                \quad QPF core (closes sorry \#1 + \#2)    & 2,000--3,000                & From scratch          \\
+                \quad Spectral gap (closes sorry \#4)      & 500--1,000                  & Needs QPF             \\
+                \quad Block separation via QPF (sorry \#5) & 200--400                    & Needs spectral gap    \\
+                \quad Vectorization bridge (sorry \#3)     & 200--400                    & Linear algebra        \\
+                \midrule
+                \textbf{Total estimated}                   & \textbf{$\sim$3,000--4,800} &                       \\
+                \bottomrule
+            \end{tabular}
+        }
+    \end{center}
+
+    \vspace{0.2em}
+    {\small\textbf{Context}: current codebase ($\sim$3,300 lines) was developed in $\sim$3 days with AI assistance.
+        No formalization of quantum Perron--Frobenius exists in any proof assistant yet.}
+\end{frame}
+
+\end{document}

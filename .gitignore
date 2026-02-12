@@ -29,3 +29,15 @@ PRESENTATION_README.md
 TIKZ_VALIDATION_REPORT.md
 tikz_analysis.md
 improved_mps_tikz.tex
+
+1210.6613/
+1606.00608/
+1708.00029/
+quant-ph_0608197/
+# Slides build artifacts
+slides/.texpadtmp/
+slides/History/
+slides/build/
+*.bcf
+*.run.xml
+*.pdf

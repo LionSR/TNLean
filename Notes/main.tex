@@ -1,0 +1,135 @@
+%\documentclass[prd,reprint,onecolumn,superscriptaddress,floatfix,nofootinbib]{revtex4-2}
+\documentclass[11pt,letter,usenames,dvipsnames]{article}
+
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{bm}
+\usepackage{rotating}
+\usepackage{hyperref}
+\usepackage{pbox}
+\usepackage{array}
+\usepackage{mathtools}
+\usepackage{leftidx}
+\usepackage{lmodern}
+\usepackage[normalem]{ulem}
+\usepackage{braket}
+\usepackage{tensor}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{float}
+\usepackage{footnote}
+\usepackage{setspace}
+\usepackage{CJKutf8}
+\usepackage{dsfont}
+\usepackage{mathrsfs}
+\setlength{\parskip}{0.2cm}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[many]{tcolorbox}
+\usepackage{palatino}
+
+% ERICKSON COMMAND
+\newcommand{\eri}[1]{\leavevmode{\color{Blue}{[\textbf{ET:} #1]}}}
+\newcommand{\tcb}[1]{\leavevmode{\textcolor{Blue}{#1}}}
+\newcommand{\tcr}[1]{\leavevmode{\textcolor{BrickRed}{#1}}}
+\newcommand{\tco}[1]{\leavevmode{\textcolor{Orange}{#1}}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\W}{\mathcal{W}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\rr}[1]{\left(#1\right)}
+\newcommand{\bx}{{\bm{x}}}
+\newcommand{\bk}{{\bm{k}}}
+\newcommand{\sx}{\mathsf{x}}
+\newcommand{\sy}{\mathsf{y}}
+\newcommand{\sz}{\mathsf{z}}
+\newcommand{\vp}{\hat{\phi}}
+\newcommand{\ii}{\text{i}}
+\DeclareMathOperator{\supp}{\text{supp}}
+\DeclareMathOperator{\Tr}{\text{Tr}}
+\renewcommand{\tilde}{\widetilde}
+\renewcommand{\bar}{\overline}
+\renewcommand{\Re}{\mathrm{Re}}
+\renewcommand{\Im}{\mathrm{Im}}
+\newcommand{\openone}{\mathds{1}}
+\DeclareMathOperator{\Id}{Id}
+\DeclareMathOperator{\Span}{span}
+
+\newcommand{\ketbra}[2]{{|{#1}\rangle \!\langle {#2}|}}
+
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{faketheorem}{``Theorem''}
+
+
+\newcommand{\gbox}[1]{\begin{tcolorbox}[breakable,colback=red!25!green!15!]#1\end{tcolorbox}}
+\newcommand{\bbox}[1]{\begin{tcolorbox}[breakable,colback=blue!5]#1\end{tcolorbox}}
+\newcommand{\obox}[1]{\begin{tcolorbox}[breakable,colback=Goldenrod!25]#1\end{tcolorbox}}
+
+
+
+\numberwithin{equation}{section}
+
+
+\begin{document}
+
+ 
+\title{Notes on Lean formalization of QMB}
+
+
+%\author{Erickson Tjoa}
+
+
+%\date{\today}
+
+
+\maketitle
+%\tableofcontents
+
+
+\section{Remarks}
+
+
+\paragraph{Feb 2026.} Some comments:
+\begin{enumerate}[label=(\arabic*)]
+    \item 
+    $E = \sum_j \bar{A}^j\otimes A^j$ is the "standard representation" of quantum channel $\mathcal{E}$ (in the terminology of Watrous \cite[Chapter 2]{watrous2018theory}). We call them transfer operator. It is standard representation because it converts the action of quantum channels on density operators into matrix multiplication on vectors:
+    \begin{align}
+        \ket{\mathcal{E}(X)} = E\ket{X}\,.
+    \end{align}
+    
+    \item Crucially, $E$ is not the Choi matrix: the Choi matrix of a CP map $\mathcal{E}(X) = \sum_jA^jXA^{j\dagger}$ is
+    \begin{align}
+        J(\mathcal{E})\coloneqq (\mathcal{E}\otimes \Id)(\ketbra{\Phi^+}{\Phi^+}) \equiv \sum_{i,j=1}^d\mathcal{E}(\ketbra{i}{j})\otimes\ketbra{i}{j}\,,
+    \end{align}
+    where $\ket{\Phi^+}=\sum_{j=1}^d\ket{jj}$ is \textbf{unnormalized} Bell state. For CP maps, the Choi matrix is positive semi-definite \cite{watrous2018theory}. However, the transfer matrix $E$ is not even Hermitian, so it may not even have real eigenvalues. The dimension is also wrong: $E\in M_{D^2}(\C)$ but $J(\mathcal{E})\in M_{d^2}(\C)$. 
+
+    \item Let $\mathcal{E}$ be a CP map, i.e., it has the form $\mathcal{E}(X) = \sum_jA^jXA^{j\dagger}$ and assume it has spectral radius 1 (otherwise rescale the $A^j$). Then \cite{molnar2019thesis}:
+    \begin{itemize}
+        \item $\mathcal{E}$ is primitive if it has a \textbf{unique} eigenvalue with magnitude $|\lambda|=1$. In fact, it means that eigenvalue is $\lambda=1$. This corresponds to \textbf{normal tensors}. 
+
+        
+
+        \item A tensor $A$ is \textbf{normal} if it is injective after blocking some finite number of times: that is, there exists $L_0\geq 1$ such that
+        \begin{align}
+            \Tr(XA^{i_1}...A^{i_L}) = 0 \Longrightarrow X = 0\qquad \forall L\geq L_0\,.
+        \end{align}
+        If $L_0=1$ then $A$ is injective.
+
+        \item $\mathcal{E}$ is reducible if there exists some non-trivial projector $P\geq 0$ such that $\mathcal{E}(P)\leq P$. It is \textbf{periodic} if it is \textit{irreducible but not primitive}. In particular, periodic CP maps have multiple eigenvalues with $|\lambda|=1$ and all eigenvalues are roots of unity $e^{2\pi i p/q}$ for some $q$. 
+
+        \item A tensor $A$ has invariant subspaces if its corresponding CP map $\mathcal{E}$ or transfer operator $E$ is reducible. If $\mathcal{E}$ is irreducible, it can still be periodic. If it is irreducible and not periodic, then it is primitive, which corresponds to normal tensors.
+    \end{itemize}
+    
+    See also Theorem 1 of \cite{fernandez2015uncle} for the statement of canonical form. 
+\end{enumerate}
+
+
+
+
+\clearpage
+\bibliography{brainstorm}
+\bibliographystyle{unsrt}
+
+\end{document}
