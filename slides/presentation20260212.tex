@@ -1,120 +1,7 @@
 
 \documentclass[aspectratio=169,10pt]{beamer}
 \usetheme{metropolis}
-\usepackage{amsmath,amssymb,braket}
-\usepackage{tikz}
-\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc,decorations.pathreplacing,fit,backgrounds}
-\usepackage{xcolor}
-\usepackage{array}
-\usepackage{listings}
-\usepackage{appendixnumberbeamer}
-\usepackage{booktabs}
-
-% ── Manual bibliography (avoid biber issues) ──
-\newcommand{\citenum}[1]{[#1]}
-\newcommand{\bibCirac}{\citenum{1}}       % Cirac et al. 2021
-\newcommand{\bibPerez}{\citenum{2}}        % P\'erez-Garc\'ia et al. 2007
-\newcommand{\bibEvans}{\citenum{3}}        % Evans-Høegh-Krohn 1978
-\newcommand{\bibHopfield}{\citenum{4}}     % Cipollina et al. 2025
-\newcommand{\bibQuantumInfo}{\citenum{5}}  % Meiburg et al. 2025
-\newcommand{\bibWolf}{\citenum{6}}         % Wolf 2012
-\newcommand{\bibCiracAnn}{\citenum{7}}    % Cirac et al. 2017 Annals (normal FT)
-\newcommand{\bibCiracIrr}{\citenum{8}}    % Cirac et al. 2017 (irreducible FT)
-\newcommand{\bibFernandez}{\citenum{9}}   % Fern\'andez-Gonz\'alez et al. 2015
-
-% ── Color scheme (dark theme) ──
-\definecolor{leangreen}{RGB}{34,180,34}
-\definecolor{leanblue}{RGB}{70,130,180}
-\definecolor{amber}{RGB}{255,191,0}
-\definecolor{softred}{RGB}{220,80,80}
-\definecolor{darkbg}{RGB}{21,21,21}
-\definecolor{cardbg}{RGB}{30,30,30}
-\definecolor{dimwhite}{RGB}{180,180,180}
-
-\setbeamercolor{background canvas}{bg=darkbg}
-\setbeamercolor{normal text}{fg=white}
-\setbeamercolor{title}{fg=white}
-\setbeamercolor{frametitle}{fg=white,bg=darkbg}
-\setbeamercolor{block title}{fg=white,bg=gray!30!black}
-\setbeamercolor{block body}{fg=white,bg=cardbg}
-\setbeamercolor{alerted text}{fg=amber}
-\setbeamercolor{example text}{fg=leangreen}
-\setbeamercolor{itemize item}{fg=leangreen}
-\setbeamercolor{itemize subitem}{fg=dimwhite}
-\setbeamercolor{itemize subsubitem}{fg=dimwhite}
-\setbeamercolor{enumerate item}{fg=leangreen}
-\setbeamercolor{progress bar}{fg=leangreen}
-\setbeamercolor{title separator}{fg=leangreen}
-\setbeamercolor{footline}{fg=dimwhite,bg=darkbg}
-
-% ── Footer ──
-\setbeamertemplate{footline}{%
-  \hfill%
-  \usebeamercolor[fg]{footline}%
-  \usebeamerfont{footline}%
-  \insertframenumber\,/\,\inserttotalframenumber%
-  \hspace*{6pt}\par%
-}
-
-% ── Lean listing style ──
-\lstdefinelanguage{Lean}{
-  keywords={theorem, lemma, def, abbrev, variable, namespace, end, open, import,
-            noncomputable, private, section, structure, where, let, have, exact,
-            intro, apply, simp, rw, rcases, refine, classical, cases, with,
-            fun, forall, exists, Prop, Type, sorry, by, instance},
-  keywordstyle=\color{leanblue}\bfseries,
-  keywords=[2]{IsInjective, SameMPV, SameMPV2, GaugeEquiv, GaugePhaseEquiv,
-               MPSTensor, Matrix, Fin, GL, CanonicalForm, AlgEquiv,
-               TwoSidedIdeal, transferMap, mixedTransferMap,
-               IsIrreducibleCP, IsCP, IsPrimitiveCP, IsOrthogonalProjection,
-               HasUniqueFixedPoint, spectralRadius, mixedTransferSpectralRadius,
-               PosSemidef, PosDef, toTensorFromBlocks, evalWord, mpv,
-               Submodule, Set, AlgHom, AlgEquiv, LinearMap},
-  keywordstyle=[2]\color{leangreen},
-  comment=[l]{--},
-  commentstyle=\color{gray}\itshape,
-  string=[b]",
-  stringstyle=\color{orange},
-  basicstyle=\ttfamily\scriptsize\color{white},
-  backgroundcolor=\color{cardbg},
-  breaklines=true,
-  frame=single,
-  rulecolor=\color{gray!50!black},
-  showstringspaces=false,
-  escapeinside={(*@}{@*)},
-  literate=
-    {ℕ}{{$\mathbb{N}$}}1
-    {ℂ}{{$\mathbb{C}$}}1
-    {ℝ}{{$\mathbb{R}$}}1
-    {→}{{$\to$}}1
-    {←}{{$\leftarrow$}}1
-    {⟨}{{$\langle$}}1
-    {⟩}{{$\rangle$}}1
-    {∀}{{$\forall$}}1
-    {∃}{{$\exists$}}1
-    {⊤}{{$\top$}}1
-    {⁻¹}{{${}^{-1}$}}2
-    {≠}{{$\neq$}}1
-    {≤}{{$\leq$}}1
-    {≥}{{$\geq$}}1
-    {∈}{{$\in$}}1
-    {∘}{{$\circ$}}1
-    {σ}{{$\sigma$}}1,
-}
-\lstset{language=Lean}
-
-% ── Macros ──
-\newcommand{\proved}[1]{\textcolor{leangreen}{\checkmark\ #1}}
-\newcommand{\sorrymark}[1]{\textcolor{softred}{\texttt{sorry}\ #1}}
-\newcommand{\notavail}[1]{\textcolor{softred}{$\boldsymbol{\times}$\ #1}}
-\newcommand{\avail}[1]{\textcolor{leangreen}{$\checkmark$\ #1}}
-\newcommand{\MD}{M_D(\mathbb{C})}
-\newcommand{\tr}{\mathrm{tr}}
-\newcommand{\spn}{\mathrm{span}}
-\newcommand{\GL}{\mathrm{GL}}
-\newcommand{\CP}{\mathrm{CP}}
-\newcommand{\rank}{\mathrm{rank}}
-\newcommand{\diag}{\mathrm{diag}}
+\input{preamble}
 
 \title{\textbf{MPSLean: Formalizing the Fundamental Theorem\\of MPS in Lean 4}}
 \subtitle{{\small Lean 4 + Mathlib v4.27.0}}
@@ -209,7 +96,7 @@
     \end{columns}
 
     \vspace{0.3em}
-    \begin{block}{Fundamental Theorem \bibPerez{} \bibCirac}
+    \begin{block}{Fundamental Theorem \cite{Perez-Garcia2007Matrix} \cite{Cirac2021Matrix}}
         If $A$ is injective and $A,B$ generate the \emph{same state family} for all $N$,
         then $B^i = X\, A^i\, X^{-1}$ for some $X\in\GL(D,\mathbb{C})$.
     \end{block}
@@ -511,7 +398,7 @@ def GaugeEquiv (A B : MPSTensor d D) :=
         \end{center}
 
         \column{0.52\textwidth}
-        \textbf{Canonical form} \bibCirac:
+        \textbf{Canonical form} \cite{Cirac2021Matrix}:
         $T^{(i)} = \bigoplus_k \mu_k\, A_k^{(i)}$
 
         \vspace{0.2em}
@@ -524,7 +411,7 @@ def GaugeEquiv (A B : MPSTensor d D) :=
         \end{equation*}
 
         \vspace{0.3em}
-        \textbf{Multi-block theorem} \bibCiracAnn{} \bibCiracIrr:
+        \textbf{Multi-block theorem} \cite{Cirac2017Annals} \cite{Cirac2017Irreducible}:
         Same state $\Rightarrow$ blocks match pairwise up to gauge and phase.
     \end{columns}
 
@@ -577,7 +464,7 @@ def GaugeEquiv (A B : MPSTensor d D) :=
 %======================================================================
 % SLIDE 10 - The Physics Proof of Block Separation
 %======================================================================
-\begin{frame}{The Physics Proof of Block Separation \bibCiracAnn{} \bibCirac}
+\begin{frame}{The Physics Proof of Block Separation \cite{Cirac2017Annals} \cite{Cirac2021Matrix}}
     \vspace{-0.3em}
     \textbf{Step 1.}  Define transfer operators:
     $ \mathcal{E}_A(X) = \sum_i A^{(i)} X A^{(i)\dagger}$,\quad
@@ -588,7 +475,7 @@ def GaugeEquiv (A B : MPSTensor d D) :=
     no nontrivial projection $P$ satisfies $P\,\mathcal{E}_A(PXP)\,P = \mathcal{E}_A(PXP)$.
 
     \vspace{0.2em}
-    \textbf{Step 3.}  \textcolor{amber}{Quantum Perron--Frobenius} \bibEvans:
+    \textbf{Step 3.}  \textcolor{amber}{Quantum Perron--Frobenius} \cite{Evans1978Spectral}:
     irreducible CP $\Rightarrow$ primitive: unique positive definite fixed point, exponential convergence.
 
     \vspace{0.2em}
@@ -619,7 +506,7 @@ def GaugeEquiv (A B : MPSTensor d D) :=
     \begin{columns}[T]
         \column{0.48\textwidth}
         \small
-        \textbf{Quantum PF} \bibEvans: for an irreducible CP map $\mathcal{E}$,
+        \textbf{Quantum PF} \cite{Evans1978Spectral}: for an irreducible CP map $\mathcal{E}$,
         \begin{itemize}\itemsep0.12em
             \item unique positive definite fixed point $\Lambda$
             \item spectral gap: all other eigenvalues $|\lambda|<1$
@@ -627,13 +514,13 @@ def GaugeEquiv (A B : MPSTensor d D) :=
 
         \vspace{0.3em}
         This gives Steps 3--4: spectral gap for self-transfer operators
-        and $\rho(\mathcal{F}_{AB})<1$ for mixed transfer operators \bibFernandez.
+        and $\rho(\mathcal{F}_{AB})<1$ for mixed transfer operators \cite{Fernandez2015Frustration}.
 
         \vspace{0.4em}
         \textbf{\textcolor{softred}{Not formalized in any proof assistant.}}
 
         \vspace{0.2em}
-        Classical PF (real nonneg matrices) exists in Lean \bibHopfield,
+        Classical PF (real nonneg matrices) exists in Lean \cite{Cipollina2025Formalized},
         but does not apply: the transfer matrix is complex and not Hermitian.
 
         \column{0.48\textwidth}
@@ -660,7 +547,7 @@ def GaugeEquiv (A B : MPSTensor d D) :=
     \vspace{-0.3em}
     \begin{columns}[T]
         \column{0.48\textwidth}
-        \textbf{\textcolor{leanblue}{HopfieldNet} \bibHopfield}
+        \textbf{\textcolor{leanblue}{HopfieldNet} \cite{Cipollina2025Formalized}}
         \begin{itemize}\itemsep0.12em\small
             \item Full Perron--Frobenius for \emph{real} nonneg.\ matrices
             \item 4,055 lines Lean 4
@@ -668,7 +555,7 @@ def GaugeEquiv (A B : MPSTensor d D) :=
         \end{itemize}
 
         \vspace{0.4em}
-        \textbf{\textcolor{leanblue}{Lean-QuantumInfo} \bibQuantumInfo}
+        \textbf{\textcolor{leanblue}{Lean-QuantumInfo} \cite{Meiburg2025Formalization}}
         \begin{itemize}\itemsep0.12em\small
             \item CP maps, CPTP maps, Choi matrix, Kraus operators
             \item Has infrastructure we need, but not the spectral theory
@@ -725,7 +612,7 @@ def GaugeEquiv (A B : MPSTensor d D) :=
         \item Would close all 5 remaining gaps simultaneously
         \item Estimated $\sim$2,000--3,000 additional lines
         \item No formalization exists in any proof assistant yet
-        \item Background: Meiburg, Lessa \& Soldati \bibQuantumInfo{} formalized the generalized quantum Stein's lemma in Lean 4 (14K lines) --- the ecosystem we build on
+        \item Background: Meiburg, Lessa \& Soldati \cite{Meiburg2025Formalization} formalized the generalized quantum Stein's lemma in Lean 4 (14K lines) --- the ecosystem we build on
     \end{itemize}
 
     \vspace{0.3em}
@@ -759,7 +646,7 @@ def GaugeEquiv (A B : MPSTensor d D) :=
     \vspace{0.3em}
     \textbf{\textcolor{softred}{Remaining:}}
     \begin{itemize}\itemsep0.1em\small
-        \item Quantum Perron--Frobenius (Evans--H{\o}egh-Krohn \bibEvans) for CP maps
+        \item Quantum Perron--Frobenius (Evans--H{\o}egh-Krohn \cite{Evans1978Spectral}) for CP maps
         \item $\sim$2,000--3,000 additional lines; would close all 5 gaps
         \item Not formalized in any proof assistant yet
     \end{itemize}
@@ -796,23 +683,10 @@ def GaugeEquiv (A B : MPSTensor d D) :=
 }
 
 %======================================================================
-% References (manual)
+% References
 %======================================================================
 \begin{frame}[allowframebreaks]{References}
-    \vspace{-0.5em}
-    {\scriptsize
-        \begin{description}
-            \item[\citenum{1}] J.~I.~Cirac, D.~P\'{e}rez-Garc\'{i}a, N.~Schuch, F.~Verstraete. \textit{Matrix product states and projected entangled pair states: Concepts, symmetries, theorems}. Rev.\ Mod.\ Phys.\ \textbf{93}, 045003 (2021). arXiv:2011.12127
-            \item[\citenum{2}] D.~P\'{e}rez-Garc\'{i}a, F.~Verstraete, M.~M.~Wolf, J.~I.~Cirac. \textit{Matrix product state representations}. Quantum Inf.\ Comput.\ \textbf{7}, 401 (2007). arXiv:quant-ph/0608197
-            \item[\citenum{3}] D.~E.~Evans, R.~H\o egh-Krohn. \textit{Spectral properties of positive maps on $C^*$-algebras}. J.~London Math.\ Soc.\ \textbf{17}, 345--355 (1978).
-            \item[\citenum{4}] G.~L.~Cipollina, C.~Karatarakis, F.~Wiedijk. \textit{Formalizing the Perron--Frobenius Theorem and the Hopfield Network Cycle}. arXiv:2512.07766 (2025).
-            \item[\citenum{5}] A.~Meiburg, L.~Lessa, I.~Soldati. \textit{Lean-QuantumInfo: Quantum information theory in Lean 4}. arXiv:2510.08672 (2025).
-            \item[\citenum{6}] M.~M.~Wolf. \textit{Quantum Channels \& Operations: Guided Tour}. Lecture notes (2012).
-            \item[\citenum{7}] J.~I.~Cirac, D.~P\'{e}rez-Garc\'{i}a, N.~Schuch, F.~Verstraete. \textit{Matrix Product States: Symmetries and Two-Body Hamiltonians}. Ann.\ Phys.\ \textbf{378}, 100--149 (2017).
-            \item[\citenum{8}] J.~I.~Cirac, G.~de~las~Cuevas, A.~Moln\'{a}r, N.~Schuch, F.~Verstraete. \textit{Irreducible forms of matrix product states: Theory and applications}. arXiv:1708.00029 (2017).
-            \item[\citenum{9}] C.~Fern\'{a}ndez-Gonz\'{a}lez, N.~Schuch, M.~M.~Wolf, J.~I.~Cirac, D.~P\'{e}rez-Garc\'{i}a. \textit{Frustration free gapless Hamiltonians for MPS}. Commun.\ Math.\ Phys.\ \textbf{333}, 299--333 (2015).
-        \end{description}
-    }
+\bibliography{references}
 \end{frame}
 
 %======================================================================

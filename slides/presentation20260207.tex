@@ -1,39 +1,17 @@
 \documentclass[aspectratio=169,10pt]{beamer}
 \usetheme{metropolis}
-\usepackage{amsmath,amssymb}
-\usepackage{tikz}
-\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc}
-\usepackage{xcolor}
-\usepackage{listings}
-\usepackage[style=numeric-comp,backend=biber,sorting=none,maxbibnames=4]{biblatex}
-\addbibresource{references.bib}
+\input{preamble}
 
-\definecolor{leangreen}{RGB}{34,139,34}
-\definecolor{leanblue}{RGB}{70,130,180}
-\definecolor{amber}{RGB}{255,191,0}
-
-\lstdefinelanguage{Lean}{
-  keywords={theorem, lemma, def, abbrev, variable, namespace, end, axiom, noncomputable},
-  keywordstyle=\color{leanblue}\bfseries,
-  comment=[l]{--},
-  commentstyle=\color{gray}\itshape,
-  string=[b]",
-  stringstyle=\color{orange},
-  basicstyle=\ttfamily\small,
-  breaklines=true,
-}
+% ── Presentation-specific settings ──
+% Override background to pure black
+\setbeamercolor{background canvas}{bg=black}
+\setbeamercolor{frametitle}{fg=white,bg=black}
+\setbeamercolor{block body}{fg=white,bg=gray!10!black}
 
 \title{\textbf{MPSLean}}
 \subtitle{Formalizing the Fundamental Theorem of Matrix Product States in Lean 4}
 \date{February 7, 2026}
 \author{}
-
-\setbeamercolor{background canvas}{bg=black}
-\setbeamercolor{normal text}{fg=white}
-\setbeamercolor{title}{fg=white}
-\setbeamercolor{frametitle}{fg=white,bg=black}
-\setbeamercolor{block title}{fg=white,bg=gray!30!black}
-\setbeamercolor{block body}{fg=white,bg=gray!10!black}
 
 \begin{document}
 
@@ -213,7 +191,7 @@ abbrev MPSTensor (d D : $\mathbb{N}$) :=\\
 \end{frame}
 
 \begin{frame}[allowframebreaks]{References}
-\printbibliography[heading=none]
+\bibliography{references}
 \end{frame}
 
 \end{document}

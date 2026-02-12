@@ -1,88 +1,11 @@
 \documentclass[aspectratio=169,10pt]{beamer}
 \usetheme{metropolis}
-\usepackage{amsmath,amssymb,braket}
-\usepackage{tikz}
-\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc,decorations.pathreplacing,fit,backgrounds}
-\usepackage{xcolor}
-\usepackage{array}
-\usepackage{listings}
-\usepackage{appendixnumberbeamer}
-% Manual bibliography (avoid biber/biblatex version mismatch)
-\newcommand{\citenum}[1]{[#1]}
-\newcommand{\bibCirac}{\citenum{1}}
-\newcommand{\bibEvans}{\citenum{2}}
-\newcommand{\bibHopfield}{\citenum{3}}
-\newcommand{\bibQuantumInfo}{\citenum{4}}
+\input{preamble}
 
-% ── Color scheme (matches presentation20260208.tex) ──
-\definecolor{leangreen}{RGB}{34,180,34}
-\definecolor{leanblue}{RGB}{70,130,180}
-\definecolor{amber}{RGB}{255,191,0}
-\definecolor{softred}{RGB}{220,80,80}
-\definecolor{darkbg}{RGB}{15,15,15}
-\definecolor{cardbg}{RGB}{30,30,30}
-\definecolor{dimwhite}{RGB}{180,180,180}
-
+% ── Presentation-specific settings ──
+\definecolor{darkbg}{RGB}{15,15,15}  % Slightly lighter than preamble default
 \setbeamercolor{background canvas}{bg=darkbg}
-\setbeamercolor{normal text}{fg=white}
-\setbeamercolor{title}{fg=white}
 \setbeamercolor{frametitle}{fg=white,bg=darkbg}
-\setbeamercolor{block title}{fg=white,bg=gray!30!black}
-\setbeamercolor{block body}{fg=white,bg=cardbg}
-\setbeamercolor{alerted text}{fg=amber}
-\setbeamercolor{example text}{fg=leangreen}
-\setbeamercolor{itemize item}{fg=leangreen}
-\setbeamercolor{itemize subitem}{fg=dimwhite}
-\setbeamercolor{enumerate item}{fg=leangreen}
-\setbeamercolor{progress bar}{fg=leangreen}
-\setbeamercolor{title separator}{fg=leangreen}
-\setbeamercolor{footline}{fg=dimwhite,bg=darkbg}
-
-% ── Footer with page number / total ──
-\setbeamertemplate{footline}{%
-  \hfill%
-  \usebeamercolor[fg]{footline}%
-  \usebeamerfont{footline}%
-  \insertframenumber\,/\,\inserttotalframenumber%
-  \hspace*{6pt}\par%
-}
-
-% ── Lean listing ──
-\lstdefinelanguage{Lean}{
-  keywords={theorem, lemma, def, abbrev, variable, namespace, end, open, import,
-            noncomputable, private, section, structure, where, let, have, exact,
-            intro, apply, simp, rw, rcases, refine, classical, cases, with,
-            fun, forall, exists, Prop, Type, sorry, by},
-  keywordstyle=\color{leanblue}\bfseries,
-  keywords=[2]{IsInjective, SameMPV, SameMPV2, GaugeEquiv, GaugePhaseEquiv,
-               MPSTensor, Matrix, Fin, GL, CanonicalForm, AlgEquiv,
-               TwoSidedIdeal, transferMap, mixedTransferMap,
-               IsIrreducibleCP, IsCP, IsPrimitiveCP, IsOrthogonalProjection,
-               HasUniqueFixedPoint, spectralRadius, mixedTransferSpectralRadius,
-               PosSemidef, PosDef, toTensorFromBlocks, evalWord},
-  keywordstyle=[2]\color{leangreen},
-  comment=[l]{--},
-  commentstyle=\color{gray}\itshape,
-  string=[b]",
-  stringstyle=\color{orange},
-  basicstyle=\ttfamily\scriptsize\color{white},
-  backgroundcolor=\color{cardbg},
-  breaklines=true,
-  frame=single,
-  rulecolor=\color{gray!50!black},
-  showstringspaces=false,
-  escapeinside={(*@}{@*)},
-}
-\lstset{language=Lean}
-
-% ── Macros ──
-\newcommand{\proved}[1]{\textcolor{leangreen}{\checkmark\  #1}}
-\newcommand{\inprog}[1]{\textcolor{amber}{$\circ$\  #1}}
-\newcommand{\future}[1]{\textcolor{gray}{$\diamond$\  #1}}
-\newcommand{\notproved}[1]{\textcolor{softred}{$\boldsymbol{\times}$\  #1}}
-\newcommand{\MD}{M_D(\mathbb{C})}
-\newcommand{\GLC}{\mathrm{GL}}
-\newcommand{\tr}{\mathrm{tr}}
 
 \title{\textbf{MPSLean: Three-Day Sprint Report\\Building the Full Multi-Block Architecture}}
 \subtitle{{\small 3,444 lines $\cdot$ 16 modules $\cdot$ 5 sorries $\cdot$ 142 theorems  $\cdot$  Lean 4 + Mathlib v4.27.0}}
@@ -101,7 +24,7 @@
 \maketitle
 \vspace{-2em}
 \begin{center}
-{\footnotesize \bibCirac{}\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}\quad$\cdot$\quad Feb 8--11 push: \textbf{+1,223 lines}}
+{\footnotesize \cite{Cirac2021Matrix}\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}\quad$\cdot$\quad Feb 8--11 push: \textbf{+1,223 lines}}
 \end{center}
 \end{frame}
 }
@@ -659,7 +582,7 @@ theorem fundamentalTheorem_multiBlock_complete      -- (*@\textcolor{leangreen}{
 \textbf{What would be needed:}
 \begin{enumerate}\itemsep0.1em
   \item {\small CP maps on $C^*$-algebras\\{\scriptsize (Choi isomorphism, Kraus form)}}
-  \item {\small Quantum Perron--Frobenius\\{\scriptsize (Evans--H{\o}egh-Krohn \bibEvans{})}}
+  \item {\small Quantum Perron--Frobenius\\{\scriptsize (Evans--H{\o}egh-Krohn \cite{Evans1978Spectral})}}
   \item {\small Spectral gap for primitive CP maps\\{\scriptsize (unique fixed point $\Rightarrow$ gap)}}
   \item {\small Block separation bridge\\{\scriptsize (spectral decay $\Rightarrow$ per-block identity)}}
 \end{enumerate}
@@ -671,7 +594,7 @@ theorem fundamentalTheorem_multiBlock_complete      -- (*@\textcolor{leangreen}{
 \node[rectangle,rounded corners,draw=amber,fill=cardbg,text=white,
   font=\small,align=center,minimum width=11cm,minimum height=0.7cm] {
   \textbf{The architecture is complete --- all that remains is the analytic core.}\\
-  Community resources: HopfieldNet \bibHopfield{} (classical PF), Lean-QuantumInfo \bibQuantumInfo{} (CP maps).
+  Community resources: HopfieldNet \cite{Cipollina2025Formalized} (classical PF), Lean-QuantumInfo \cite{Meiburg2025Formalization} (CP maps).
 };
 \end{tikzpicture}
 \end{center}
@@ -892,7 +815,7 @@ the asymptotic separation argument.
   \item {\small Often implicitly assumed}
   \item {\small Canonical form normalizes $|\mu_k| = 1$}
   \item {\small Distinct phases on the unit circle}
-  \item {\small The paper \bibCirac{} handles this via ``blocking'' --- replacing $A$ by $A^{\otimes q}$}
+  \item {\small The paper \cite{Cirac2021Matrix} handles this via ``blocking'' --- replacing $A$ by $A^{\otimes q}$}
 \end{itemize}
 
 \column{0.48\textwidth}
@@ -931,7 +854,7 @@ the asymptotic separation argument.
 
   \node[tierA, below=0.2cm of t1] (t2) {%
     \textcolor{amber}{\textbf{Next (weeks--months):}} Close sorry \#4 (spectral gap).\\
-    {\small Formalize quantum Perron--Frobenius directly (Evans--H{\o}egh-Krohn \bibEvans{}).
+    {\small Formalize quantum Perron--Frobenius directly (Evans--H{\o}egh-Krohn \cite{Evans1978Spectral}).
     Classical PF (HopfieldNet) does not apply---the transfer matrix is complex and non-Hermitian.
     Estimated: 2,000--3,000 new LoC.}
   };
@@ -1012,7 +935,7 @@ the asymptotic separation argument.
 \normalsize Built on Lean 4 + Mathlib v4.27.0
 
 \vspace{0.3em}
-{\small Reference: Cirac, P{\'e}rez-Garc{\'i}a, Schuch \& Verstraete \bibCirac{}}
+{\small Reference: Cirac, P{\'e}rez-Garc{\'i}a, Schuch \& Verstraete \cite{Cirac2021Matrix}}
 
 \vspace{0.6em}
 \textcolor{leangreen}{\textbf{3,444 lines\quad$\cdot$\quad 16 modules\quad$\cdot$\quad 5 sorries\quad$\cdot$\quad 142 theorems}}
@@ -1032,28 +955,7 @@ the asymptotic separation argument.
 % REFERENCES
 %======================================================================
 \begin{frame}[allowframebreaks]{References}
-\begin{thebibliography}{9}
-\bibitem{1}
-``Matrix Product States and Projected Entangled Pair States: Concepts, Symmetries, Theorems''.
-In: \emph{Reviews of Modern Physics} 93.4 (2021), p.~045003.
-\textsc{doi}: \texttt{10.1103/RevModPhys.93.045003}.
-arXiv: \texttt{2011.12127 [quant-ph]}.
-
-\bibitem{2}
-``Spectral Properties of Positive Maps on $C^*$-Algebras''.
-In: \emph{Journal of the London Mathematical Society} s2-17.2 (1978), pp.~345--355.
-\textsc{doi}: \texttt{10.1112/jlms/s2-17.2.345}.
-
-\bibitem{3}
-``Formalized Hopfield Networks and Boltzmann Machines''. In: (2025).
-Includes a full Lean~4 formalization of the Perron--Frobenius theorem.
-arXiv: \texttt{2512.07766 [cs.LG]}.
-
-\bibitem{4}
-``A Formalization of the Generalized Quantum Stein's Lemma in Lean''. In: (2025).
-Lean-QuantumInfo library: \texttt{https://github.com/Timeroot/Lean-QuantumInfo}.
-arXiv: \texttt{2510.08672 [quant-ph]}.
-\end{thebibliography}
+\bibliography{references}
 \end{frame}
 
 \appendix

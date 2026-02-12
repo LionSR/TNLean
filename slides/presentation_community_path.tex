@@ -1,78 +1,13 @@
 \documentclass[aspectratio=169,10pt]{beamer}
 \usetheme{metropolis}
-\usepackage{amsmath,amssymb,braket}
-\usepackage{tikz}
-\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc,decorations.pathreplacing,fit,backgrounds,matrix}
-\usepackage{xcolor}
-\usepackage{array}
-\usepackage{booktabs}
-\usepackage{listings}
-\usepackage{appendixnumberbeamer}
-\usepackage[style=numeric-comp,backend=biber,sorting=none,maxbibnames=4]{biblatex}
-\addbibresource{references.bib}
+\input{preamble}
 
-% ── Color scheme (matches presentation20260208.tex) ──
-\definecolor{leangreen}{RGB}{34,180,34}
-\definecolor{leanblue}{RGB}{70,130,180}
-\definecolor{amber}{RGB}{255,191,0}
-\definecolor{softred}{RGB}{220,80,80}
+% ── Presentation-specific settings ──
 \definecolor{darkbg}{RGB}{15,15,15}
-\definecolor{cardbg}{RGB}{30,30,30}
-\definecolor{dimwhite}{RGB}{180,180,180}
-\definecolor{deepblue}{RGB}{50,100,170}
-\definecolor{mintgreen}{RGB}{100,210,130}
-
 \setbeamercolor{background canvas}{bg=darkbg}
-\setbeamercolor{normal text}{fg=white}
-\setbeamercolor{title}{fg=white}
 \setbeamercolor{frametitle}{fg=white,bg=darkbg}
-\setbeamercolor{block title}{fg=white,bg=gray!30!black}
-\setbeamercolor{block body}{fg=white,bg=cardbg}
-\setbeamercolor{alerted text}{fg=amber}
-\setbeamercolor{example text}{fg=leangreen}
-\setbeamercolor{itemize item}{fg=leangreen}
-\setbeamercolor{itemize subitem}{fg=dimwhite}
-\setbeamercolor{enumerate item}{fg=leangreen}
-\setbeamercolor{progress bar}{fg=leangreen}
-\setbeamercolor{title separator}{fg=leangreen}
-\setbeamercolor{footline}{fg=dimwhite,bg=darkbg}
 
-% ── Footer with page number / total ──
-\setbeamertemplate{footline}{%
-  \hfill%
-  \usebeamercolor[fg]{footline}%
-  \usebeamerfont{footline}%
-  \insertframenumber\,/\,\inserttotalframenumber%
-  \hspace*{6pt}\vspace{4pt}\par%
-}
-
-% ── Lean listing ──
-\lstdefinelanguage{Lean}{
-  keywords={theorem, lemma, def, abbrev, variable, namespace, end, open, import,
-            noncomputable, private, section, structure, where, let, have, exact,
-            intro, apply, simp, rw, rcases, refine, classical, cases, with,
-            fun, forall, exists, Prop, Type, require},
-  keywordstyle=\color{leanblue}\bfseries,
-  keywords=[2]{IsInjective, SameMPV, SameMPV2, GaugeEquiv, MPSTensor, Matrix, Fin, GL,
-               CanonicalForm, transferMap, HopfieldNet, CPTPMap, IsCompletelyPositive,
-               choi_PSD_iff_CP_map, pft_irreducible, spectral_dominance_of_primitive,
-               IsIrreducible, IsPrimitive, PosSemidef},
-  keywordstyle=[2]\color{leangreen},
-  comment=[l]{--},
-  commentstyle=\color{gray}\itshape,
-  string=[b]",
-  stringstyle=\color{orange},
-  basicstyle=\ttfamily\scriptsize\color{white},
-  backgroundcolor=\color{cardbg},
-  breaklines=true,
-  frame=single,
-  rulecolor=\color{gray!50!black},
-  showstringspaces=false,
-  escapeinside={(*@}{@*)},
-}
-\lstset{language=Lean}
-
-% ── Global TikZ styles (must be outside frames to avoid beamer # issues) ──
+% ── TikZ styles (presentation-specific) ──
 \tikzset{
   stdbox/.style={rectangle, rounded corners=3pt, draw=gray!50, fill=cardbg,
               text=white, font=\scriptsize, minimum width=3.3cm,
@@ -126,16 +61,6 @@
   qibox/.style={rectangle, rounded corners=2pt, draw=leanblue!50, fill=leanblue!10!cardbg,
               text=white, font=\tiny, minimum width=2cm, align=center},
 }
-
-% ── Macros ──
-\newcommand{\proved}[1]{\textcolor{leangreen}{\checkmark\  #1}}
-\newcommand{\inprog}[1]{\textcolor{amber}{$\circ$\  #1}}
-\newcommand{\future}[1]{\textcolor{gray}{$\diamond$\  #1}}
-\newcommand{\notproved}[1]{\textcolor{softred}{$\boldsymbol{\times}$\  #1}}
-\newcommand{\community}[1]{\textcolor{deepblue}{$\blacklozenge$\  #1}}
-\newcommand{\MD}{M_D(\mathbb{C})}
-\newcommand{\GLC}{\mathrm{GL}}
-\newcommand{\tr}{\mathrm{tr}}
 
 \title{\textbf{Closing the Gap:\\The Physics Proof \& Community Resources}}
 \subtitle{{\small From transfer operators to Perron--Frobenius  $\cdot$  What we can reuse  $\cdot$  A roadmap}}
@@ -1040,7 +965,7 @@ Closing this gap would yield a formally verified quantum Perron--Frobenius theor
 % REFERENCES
 %======================================================================
 \begin{frame}[allowframebreaks]{References}
-\printbibliography[heading=none]
+\bibliography{references}
 \end{frame}
 
 \end{document}
