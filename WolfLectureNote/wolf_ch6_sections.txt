@@ -1,0 +1,1140 @@
+6.2. IRREDUCIBLE MAPS AND PERRON-FROBENIUS THEORY
+
+99
+
+come in complex conjugate pairs so that their product is positive. The same
+argumentation holds, of course, for the A ⊗ Ā term. The proof is completed by
+using that the set of maps with det A 6= 0 is dense and that det T is continuous.
+Thm. 6.1 shows that if for a quantum channel det T = 1, then it has to
+be a unitary or, expressed in terms of the purity of the Jamiolkowsky state,
+tr τ 2 = 1. By continuity a channel close to a unitary, described by a τ with
+purity close to one, will still have determinant close to one. The following is a
+quantitative version of the converse: if the determinant is large, then the purity
+has to be large, too. We will see later that and how this implies closeness to a
+unitary for quantum channels.
+Proposition 6.5 (Determinant and Choi-Jamiolkowski operator) Let T :
+Md → Md be a linear map and τ the corresponding Choi-Jamiolkowski operator. Then
+
+d2 /2
+|det T | ≤ tr τ † τ
+.
+(6.27)
+Proof To relate the ’purity’ to the determinant we exploit that by Eq.(2.22)
+T̂ = dτ Γ is a matrix representation of the map T , so that
+d2
+ † 
+1 X 2
+1 h † i
+s ,
+tr τ τ = 2 tr T̂ T̂ = 2
+d
+d i=1 i
+
+(6.28)
+
+where the si are the singular values of T̂ (and thus T ). From this Eq.(6.27) is
+obtained via the
+Q geometric–arithmetic mean inequality together with the fact
+that | det T | = i si .
+
+6.2
+
+Irreducible maps and Perron-Frobenius theory
+
+Perron-Frobenius theory, roughly speaking, deals with the dominant eigenvalues
+and eigenvectors of (element-wise) non-negative matrices (see Exp. ...), i.e., in
+particular with those of classical channels. In order to make the theory work the
+considered maps have to fulfill a generic condition like irreducibility, primitivity
+or strict positivity (in order of increasing restriction).
+In this section we will discuss the generalization of Perron-Frobenius theory
+to the context of positive maps on Md (C). The following theorem defines
+irreducible positive maps and shows that this can be done in various equivalent
+ways:
+Theorem 6.2 (Irreducible positive maps) Let T : Md (C) → Md (C) be a
+positive linear map. The following properties are equivalent:
+1. Irreducibility: If P ∈ Md (C) is a Hermitian projector such that T (P Md P ) ⊆
+P Md P , then P ∈ {0, 1}.
+
+100
+
+CHAPTER 6. SPECTRAL PROPERTIES
+
+2. For every non-zero A ≥ 0 we have (id + T )d−1 (A) > 0.
+3. For every non-zero A ≥ 0 and every strictly positive t ∈ R we have
+exp[tT ](A) > 0.
+4. For every orthogonal pair of non-zero, positive semi-definite A, B ∈ Md (C)
+there is an integer t ∈ {1, . . . , d − 1} such that tr [BT t (A)] > 0.
+Proof 1. → 2.: From T (A) ≥ 0 we get an inclusion for the kernels ker(id +
+T )(A) ⊆ kerA. Suppose equality holds in this inclusion, then suppT (A) ⊆
+suppA. Therefore T (P Md P ) ⊆ P Md P if we take P the Hermitian projector
+onto the support space of A. By 1. (irreducibility) this can only be if A > 0.
+Application of (id + T ) thus has to increase the rank until there is no kernel left,
+which happens after d − 1 steps at the latest.
+2. → 3.: Looking at the series expansion of both (id + T )d−1 (A) and
+exp[tT ](A) in terms of powers of T we realize that (i) all terms are positive,
+and (ii) all terms appearing in the first expansion are also present in the second
+one. Therefore we can bound exp[tT ](A) ≥ c(id + T )d−1 (A) with some non-zero
+positive constant c.
+3. → 1.: Suppose T is reducible, i.e., there is a proper projection P 6= 0, 1
+for which T (P ) ≤ cP for some scalar c > 0. Then exp[tT ](P ) ≤ exp[tc]P , so T
+does not fulfill 3..
+4. → 1.: If T is reducible by a proper projection P , then tr [(1 − P )T t (P )] =
+0 for all t ∈ N.
+
+
+2. → 4.: Expanding tr B(id + T )d−1 (A) > 0 and using tr [BA] = 0 together
+with positivity of all terms in the expansion, we get that tr [BT t (A)] > 0 for at
+least one t ≤ d − 1.
+Note that T is irreducible iff the dual map T ∗ is irreducible. If a proper
+projection P ’reduces’ T in the sense that tr [(1 − P )T (P )] = 0, then 1 − P
+reduces T ∗ .
+In order to relate irreducibility to spectral properties of a positive map T
+it is useful to consider the following functionals defined on the cone of positive
+semi-definite operators:
+r(X)
+
+:=
+
+sup{λ ∈ R (T − λid)(X) ≥ 0},
+
+(6.29)
+
+r̃(X)
+
+:=
+
+inf{λ ∈ R (T − λid)(X) ≤ 0}.
+
+(6.30)
+
+We are especially interested in the maxima r := supX≥0 r(X) and r̃ := supX≥0 r̃(X)
+which obviously satisfy r ≥ r̃ and actually coincide for irreducible maps:
+Theorem 6.3 (Spectral radius of irreducible maps) Let T : Md (C) →
+Md (C) be an irreducible positive map. Then
+1. For the quantities introduced below Eqs.(6.29,6.30) r = r̃.
+2. r is a non-degenerate eigenvalue of T and the corresponding eigenvector
+is strictly positive, i.e., T (X) = rX > 0.
+
+6.2. IRREDUCIBLE MAPS AND PERRON-FROBENIUS THEORY
+
+101
+
+3. If there is any λ > 0 which is an eigenvalue of T with positive egenvector,
+i.e., T (Y ) = λY ≥ 0, then λ = r.
+4. r is the spectral radius of T .
+Proof First note that all suprema/infima in Eqs.(6.29,6.30) and for defining
+r, r̃ are attained since the respective sets are compact or can be made so, e.g.,
+by imposing tr [X] = 1.
+We begin with showing that r is attained for a strictly positive X and that
+T (X) = rX. To this end consider any non-zero X ≥ 0 for which λ := r(X) > 0.
+The identity
+(T + id)d−1 (T − λid)(X) = (T − λid)(T + id)d−1 (X),
+
+(6.31)
+
+shows two things. First, the supremum supX≥0 r(X) is attained for a strictly
+positive X, since by Thm.6.2 (T + id)d−1 (X) > 0. Second, the X achieving
+r(X) = r must satisfy (T − rid)(X) = 0, since otherwise the expression in
+Eq.(6.31) would be positive definite so that a larger multiple of the identity map
+could be subtracted—contradicting the supposed maximality. As r(X) = r̃(X)
+for every eigenvector X ≥ 0, the just mentioned observation together with the
+inequality r ≥ r̃ proves item 1. of the theorem.
+To prove 2. we still need to show non-degeneracy. Suppose there would be
+an eigenvector X 0 corresponding to r which is not a multiple of X. By taking
+the Hermitian (or i times the anti-Hermitian) part we can assume X 0 = X 0† .
+As X > 0 there is a non-zero c ∈ R such that 0 ≤ X + cX 0 has a kernel. This
+is, however, in conflict with
+0 < (T + id)d−1 (X + cX 0 ) = (r + 1)d−1 (X + cX 0 ),
+
+(6.32)
+
+so that X 0 must be a multiple of X. Hence, r is indeed non-degenerate.
+For the proof of 3. assume that Y ≥ 0 is an eigenvector of T corresponding
+to an eigenvalue λ > 0. Using that r is an eigenvalue of the dual map T ∗ with
+a strictly positive eigenvector X 0 > 0 we get
+rtr [X 0 Y ] = tr [T ∗ (X 0 )Y ] = tr [X 0 T (Y )] = λtr [X 0 Y ] .
+
+(6.33)
+
+Since tr [X 0 Y ] > 0 this implies r = λ.
+Finally, in order to prove 4. we define a positive map T 0 (·) := X −1/2 T (X 1/2 ·
+1/2
+X )X −1/2 /r with X > 0 being the positive eigenvector corresponding to the
+eigenvalue r of T . Note that up to the factor 1/r the maps T and T 0 differ only
+by a similarity transformation, i.e., their spectra coincide up to that factor. In
+particular the spectral radii satisfy %(T 0 ) = %(T )/r. Since T 0 is a unital positive
+map we have %(T 0 ) = 1 by Prop.6.1 and thus %(T ) = r.
+The proof of the last item of Thm.6.3 leads to the following simple observation:
+Proposition 6.6 (Similarity transformations preserving irreducibility)
+Let T : Md (C) → Md (C) be an irreducible positive map. Then for arbitrary
+
+102
+
+CHAPTER 6. SPECTRAL PROPERTIES
+
+constants c > 0 and invertible matrices C ∈ Md (C) the maps
+T 0 (·) := c C −1 T (C · C † )C −† ,
+
+(6.34)
+
+are irreducible as well.
+Proof Assume that a projection Q would ’reduce’ T 0 . Then the projection P
+onto the support of CQC † would reduce T . By invertibility of C we have that
+P and Q have the same rank and thus T 0 can only be reducible if T is.
+The invariance of irreducibility under similarity transformation of the form
+in Eq.6.34 shows that irreducibility does not only imply spectral properties of
+a positive map, but that it is determined by such properties:
+Theorem 6.4 (Irreducibility from spectral properties) Let T : Md (C) →
+Md (C) be a positive map with spectral radius %. The following are equivalent:
+1. T is irreducible.
+2. The spectral radius % is a non-degenerate eigenvalue and the corresponding
+right and left eigenvectors are positive definite (i.e., T (X) = %X > 0 and
+T ∗ (Y ) = %Y > 0).
+Proof 1. → 2. is given by Thm.6.3 when applied to T and T ∗ .
+For the converse 2. → 1. we apply Eq.(6.34) with c = 1/% and C√= Y −1/2
+√ .
+In this way T 0 becomes trace preserving with T (X 0 ) = X 0 > 0, X 0 := Y X Y .
+Moreover, the non-degeneracy translates to that of the eigenvalue 1 of T 0 . Now
+assume that T 0 (and thus T ) would be reducible, i.e., there is a Hermitian
+projection P 6∈ {0, 1} such that T 0 : A → A with A := P Md (C)P . In this case
+T 0 would have a fixed point density operator ρ ∈ A for which T 0 (ρ) = ρ ≥ 0
+(see Sec.6.4). Hence, the eigenvalue 1 of T would have to be degenerate since ρ
+is not a multiple of X 0 because of X 0 6∈ A (as X 0 > 0).
+If we consider the time evolution of a density operator of the form ρ(t) :=
+T t (ρ) where T is a positive and trace-preserving map and t ∈ N, then the
+previous theorem allows us to relate irreducibility to a unique time-average
+corresponding to a full rank stationary state:
+Corollary 6.3 (Time-average and ergodicity) Let T : Md (C) → Md (C)
+be a positive, trace-preserving linear map. Then the following are equivalent:
+1. T is irreducible,
+2. There is a unique state with density matrix σ > 0 such that for every
+density matrix ρ ∈ Md (C) we have
+N
+
+1 X t
+T (ρ) = σ.
+N →∞ N
+t=1
+lim
+
+(6.35)
+
+6.2. IRREDUCIBLE MAPS AND PERRON-FROBENIUS THEORY
+
+103
+
+Proof Note that Eq.(6.35) is nothing but T∞ (ρ) = σ, where T∞ is the projection onto the eigenspace of T with eigenvalue one as given in Eq.(6.14). The
+equivalence 1. ↔ 2. thus follows from the equivalence in Thm.6.4.
+Irreducible positive maps are generic, i.e., in particular dense within the set
+of all positive maps. For instance X 7→ T (X) + 1tr [X] is irreducible for every
+ > 0 and positive T since it maps every positive input to a positive definite
+output. By continuity of eigenvalues and eigenvectors we can therefore extend
+the above observation about the spectral radius to arbitrary positive maps:
+Theorem 6.5 (Spectral radius and positive eigenvectors) Let T : Md (C) →
+Md (C) be a positive map with spectral radius %. Then % is an eigenvalue and
+there is a positive semi-definite X ∈ Md (C) such that T (X) = %X.
+Of course, in general the spectral radius might be a degenerate eigenvalue and
+the corresponding positive eigenvector may have a kernel. Even for irreducible
+maps there can be several eigenvalues with modulus equal to the spectral radius:
+The peripheral spectrum is the set of eigenvalues whose magnitude is equal
+to the spectral radius, i.e., equal to one if we are considering unital positive
+maps (Prop.6.1). As we saw in Prop.6.2 the properties positivity and unitality together imply that all eigenvalues in the peripheral spectrum have trivial
+(i.e., one-dimensional) Jordan blocks. If we add irreducibility and the assumed
+validity of the Schwarz inequality in Eq.(5.2) we can say much more:
+Theorem 6.6 (Peripheral spectrum of irreducible Schwarz maps) Let T :
+Md (C) → Md (C) be an irreducible positive unital map which fulfills the Schwarz
+inequality in Eq.(5.2). Denote by S := spec(T ) ∩ exp (iR) the peripheral spectrum of T . Then
+1. There is an integer m ∈ {1, . . . , d2 } such that S = {exp (2πik/m)}k∈Zm .
+2. All eigenvalues in S are non-degenerate.
+3. There is a unitary U such that for all k ∈ N: T (U k ) = γ k U k where
+γ := exp (2πi/m).
+P
+4. U has spectral decomposition U = k∈Zm γ k Pk where the spectral projections Pk satisfy T (Pk+1 ) = Pk .
+Proof Take any eigenvalue λ ∈ S with corresponding eigenvector U ∈ Md (C),
+i.e., T (U ) = λU . Then the Schwarz inequality reads U † U ≤ T (U † U ). Since T
+is irreducible by assumption we can apply the tools in the proof of Thm.6.3,
+in particular that r(U † U ) = 1, which implies that equality has to hold in the
+Schwarz inequality and that U can be rescaled to be a unitary. Moreover, by
+Thm.5.3 we have
+λ̄U † T (X) = T (U † X),
+
+∀X ∈ Md (C).
+
+(6.36)
+
+104
+
+CHAPTER 6. SPECTRAL PROPERTIES
+
+Applying this to the case where X is another eigenvector of T w.r.t. an eigenvalue in S shows that S is closed under multiplication and thus a group. Since
+there are at most d2 elements in S we must have S = exp(2πiZm /m) for some
+integer m ≤ d2 .
+Now assume that U and V are both eigenvectors w.r.t. the same eigenvalue
+in S. Then T (U † V ) = U † V and, since the eigenvalue one of an irreducible unital
+positive map is non-degenerate (Prop.6.1 and Thm.6.3), we must have U ∝ V .
+Hence, all eigenvalues in S are simple.
+If U is the unitary eigenvector corresponding to the eigenvalue γ := exp (2πi/m),
+then the group property gives T (U k ) = γ k U k for all k ∈ N. In particular
+T (U m ) = U m which has to be equal
+P to 1 by non-degeneracy of the eigenvalue
+one. Therefore we can write U = k∈Zm γ k Pk with orthogonal spectral projections Pk . This gives
+X
+
+γ k+1 Pk = γU = T (U ) =
+
+k∈Zm
+
+X
+
+γ k T (Pk ).
+
+(6.37)
+
+k∈Zm
+
+Due to T (U k ) = γ k U k , T acts as an automorphism on the ∗ -algebra generated
+by U . Projections are thus mapped onto projections and by comparing the left
+and right hand side in Eq.(6.37) we get T (Pk+1 ) = Pk from the uniqueness of
+the spectral decomposition.
+The last item implies that T m (Pk ) = Pk , i.e., if m > 1, then T m is reducible.
+Similarly, if l, m > 1, then T l is reducible if l and m have a non-trivial integer
+factor in common.
+In the proof of the above theorem Eq.(6.36) is remarkable and has consequences beyond the peripheral spectrum: if the peripheral spectrum is nontrivial (m > 1), then every eigenvalue of T is an element of a group of eigenvalues
+of the same magnitude but rotated in the complex plane:
+Proposition 6.7 (Covariance and eigensystem of irreducible maps) Let
+T : Md (C) → Md (C) be an irreducible positive and unital linear map which
+fulfills the Schwarz inequality. Following Thm.6.6 denote by {γ k }k=1,...,m the
+peripheral spectrum of T and by U = γ̄T (U ) the respective unitary eigenvector.
+1. For every X ∈ Md (C) we have T (U † XU ) = U † T (X)U .
+2. If X is an eigenvector with T (X) = µX, then
+T (U † X) = γ̄µ U † X,
+
+T (XU ) = γµ XU.
+
+(6.38)
+
+Proof Both statements follow directly from Eq.(6.36) and its adjoint.
+Note that the statements 1. and 2. taken together imply that if µ is nondegenerate, then U † XU = eiϕ X. So either [X, U ] = 0 or eiϕ is a root of unity
+and spec(X) = eiϕ spec(X).
+
+6.3. PRIMITIVE MAPS
+
+6.3
+
+105
+
+Primitive maps
+
+We will continue the discussion on Perron-Frobenius theory and direct the focus
+to primitive maps. A primitive map is an irreducible positive map with trivial
+peripheral spectrum. Similar to the irreducible case primitive maps can, however, be characterized by a number of equivalent properties each of which may
+be used as a definition:
+Theorem 6.7 (Primitive maps) Let T : Md (C) → Md (C) be a positive and
+trace-preserving linear map. Then the following statements are equivalent:
+1. There exists an n ∈ N such that for every density matrix ρ ∈ Md (C) we
+have T n (ρ) > 0.
+2. T k is irreducible for every k ∈ N and the limit Tφ (see Prop.6.3) is irreducible as well.
+3. For all density matrices ρ the limit limk→∞ T k (ρ) exists, is independent
+of ρ and given by a positive definite density matrix ρ∞ .
+4. T has trivial peripheral spectrum (i.e., counting algebraic multiplicities,
+there is only one eigenvalue of magnitude one) and the corresponding
+eigenvector is positive definite.
+Proof 1. → 2. can be proven by contradiction: assume for instance Tφ =
+limi→∞ T ni is reducible. Then there is a density matrix
+ρ0 which has a ker
+nel and for which ρ0 = Tφ (ρ0 ) = limi T n T ni −n (ρ) which would imply that
+T n (ρ) 6> 0 for some ρ. Similarly, if T k and therefore also T km is reducible for
+all m ∈ N, then there cannot be any n for which 1. holds.
+2. → 4.: If Tφ has a non-degenerate eigenvalue one, then, by definition of Tφ ,
+the map T has trivial peripheral spectrum. Moreover, since the fixed point set
+of T is included in the one of Tφ which in turn contains only a single positive
+definite element, this fixed point has to be the one of T as well.
+4. → 3.: Since T has only one eigenvalue of magnitude one with corresponding positive definite eigenvector ρ∞ = T (ρ∞ ) we have limk→∞ T k = Tφ and
+Tφ (ρ) = ρ∞ tr [ρ] is a projection.
+3. → 1.: First note that 3. implies that the eigenvalue of T which is second
+largest in magnitude, denote it by λ2 , satisfies |λ2 | < 1. Assume that T n (ρ)
+would have a kernel with eigenvector ψ. Then
+λmin (ρ∞ ) ≤
+=
+
+hψ|T n (ρ) − ρ∞ |ψi ≤ ||T n (ρ) − ρ∞ ||
+n
+
+n
+
+||(T − T∞ )(ρ − ρ∞ )|| ≤ µ c ||ρ − ρ∞ ||,
+
+(6.39)
+(6.40)
+
+where λmin denotes the smallest eigenvalue, µ is such that 1 > µ > |λ2 | and || · ||
+is the operator norm. The constant c > 0 depends on T but is independent of n
+(see the discussion around Thm.8.23 for more details). Thus if n is sufficiently
+large, then Eqs.(6.39,6.40) would lead to a contradiction for every ρ. Hence,
+there is a finite n such that T n (ρ) > 0 for all ρ.
+
+106
+
+CHAPTER 6. SPECTRAL PROPERTIES
+
+If we interpret T t (ρ) for t ∈ N as discrete time-evolution, then primitive
+maps are exactly those for which the evolution eventually converges to a stationary state which is strictly positive (i.e., it may in some contexts be interpreted
+as a finite temperature Gibbs state) and independent of the initial state.
+Note that if T in addition satisfies the Schwarz inequality as required by
+Thm.6.6, then we can replace point 2. in Thm.6.7 by the statement that T k is
+irreducible for all k < d2 .
+Moreover, if a map is completely positive, we can give three more equivalent
+characterizations of primitivity:
+Theorem 6.8 (Completely positive primitive maps) Let T : Md (C) →
+Md (C) be a completely positive and trace-preserving linear map with Kraus
+ Qm
+P
+†
+decomposition T (·) =
+the
+i Ki · Ki . Denote by Km := span
+k=1 Kik
+complex linear span of all degree-m monomials of Kraus operators. Then the
+following are equivalent:
+1. T is primitive.
+2. There exists an n ∈ N such that for every non-zero ψ ∈ Cd and all m ≥ n:
+Km |ψi = Cd .
+3. There exists a q ∈ N such that for all m ≥ q: Km = Md (C).
+4. There exists a q ∈ N such that for all m ≥ q: (T m ⊗ idd )(|ΩihΩ|) > 0,
+where Ω ∈ Cd ⊗ Cd denotes a maximally entangled state.
+The numbers q appearing in 3., 4. can be chosen equal and if q and n are chosen
+minimal, then n ≤ q.
+Proof First consider item 2. and observe that it obviously holds for all m ≥ n
+if it holds for some n since we can always incorporate m − n Kraus operators in
+ψ. Similar holds for item 4. In order to see this, define τq := (T q ⊗ idd )(|ΩihΩ|)
+and assume τq > 0. Then there is in particular a constant c > 0 such that
+τq ≥ cτq−1 and therefore
+τq+1 = (T ⊗ id)(τq ) ≥ c(T ⊗ id)(τq−1 ) = cτq > 0.
+
+(6.41)
+
+By induction the same holds then true
+Qn for all integers larger than q.
+1. ↔ 2.: Let us introduce KI := k=1 Kik with multi-index I = (i1 , . . . , in ).
+P
+If T is primitive, then by Thm.6.7 there exists an n such that I KI |ψihψ|KI†
+has full rank for every ψ. Thus, for every φ there is an I so that hφ|KI |ψi 6= 0
+and therefore span{KI |ψi} = Cd . Conversely,P
+if the latter is true, then for
+every φ there will be a unitary U so that |φi ∝ I UJI KI |ψi =: KJ0 |ψi. Since
+{KI } and {KJ0 } both provide a Kraus representation of T n (see Thm.2.1) the
+full rank property is guaranteed. Following Thm.6.7 T then has to be primitive.
+3. ↔ 4.: Following the above lines and denoting by KI the Kraus operators
+of T q it is clear that (T q ⊗idd )(|ΩihΩ|) > 0 is equivalent to span{(KI ⊗ 1d )|Ωi} =
+
+6.3. PRIMITIVE MAPS
+
+107
+
+Cd ⊗ Cd . From here the equivalence between item 3. and 4. follows due to the
+fact that the relation K ↔ (K ⊗ 1)|Ωi is a linear one-to-one mapping between
+Md (C) and Cd ⊗ Cd .
+4. → 1.: If the Choi-Jamiolkowski matrix τ := (T q ⊗ idd )(|ΩihΩ|) has full
+rank, then so does
+
+T q |ψihψ| = d(1d ⊗ hψ̄|) τ (1d ⊗ |ψ̄i)
+
+for all ψ ∈ Cd .
+
+(6.42)
+
+This also shows that n = q is sufficient. So if we choose both n and q minimal,
+then n ≤ q in general.
+1. → 4.: The proof for this implication is entirely parallel with Eqs.(6.39,6.40)
+where q now plays the role of n: just replace ρ by Ω, ρ∞ by ρ∞ ⊗ 1/d and T
+by T ⊗ id. Also the constant c now depends on T ⊗ id, but the argumentation
+remains the same.
+Note that all the above relations for both positive and completely positive
+maps hold as well for maps which are not trace-preserving3 so that the notion
+of primitivity is well-defined for arbitrary positive maps.
+Finally, we will show that the number q (and therefore also n) appearing in
+Thm.6.8 can be bounded by the dimension d of the system. These bounds can
+be seen as a quantum counterpart to Wielandt’s inequality, which does the same
+for the classical case of primitive stochastic matrices. We need two preparatory
+Lemmas before the main result. As before Kn denotes the complex linear span
+of the Kraus operators of T n . We will frequently use that every K ∈ Kn is,
+up to a scalar multiple, a possible Kraus operator of T n . This follows from the
+freedom in the Kraus decomposition (Thm.2.1, point 4.).
+Lemma 6.2 Let T be a primitive quantum channel on Md (C) with Kraus rank
+k. Then, there is an natural number n ≤ d2 − k + 1 and a K ∈ Kn such that
+tr [K] 6= 0.
+Proof Let us denote by Rn the complex linear span of all Km with m ≤ n.
+We have to show that: (*) for any n ∈ N, if dim[Rn ] < d2 , then dim[Rn+1 ] >
+dim[Rn ]. Since dim[R1 ] = k, by iteration we obtain that Rd2 −k+1 = Md (C).
+This implies that a linear combination of the elements of Kn with various n ≤
+d2 − k + 1 must be equal to the identity, and thus at least one of the elements
+must have non-zero trace. To prove (*) we note that, by definition, Rn ⊆ Rn+1 .
+If they would be equal, then Rm = Rn for all m > n. Thus, equality can only
+occur when dim[Rn ] = d2 since otherwise the map T would not be primitive.
+Lemma 6.3 Let T : Md (C) → Md (C) be a primitive completely positive map
+such that at least one of its Kraus operators, say K1 , has a non-zero eigenvalue,
+i.e., K1 |ϕi = µ|ϕi with µ 6= 0. Then: (a) Kd−1 |ϕi = Cd . (b) If K1 is not
+invertible, then for all |ψi ∈ Cd , |ϕihψ| ∈ Kd2 −d+1 .
+3 The limit lim
+k
+k→∞ T has then to be normalized by the k’th power of the spectral radius
+of T .
+
+108
+
+CHAPTER 6. SPECTRAL PROPERTIES
+
+Proof (a) We define Sn as the span of all Km |ϕi with m ≤ n together with |ϕi.
+If dim[Sn ] < d, then dim[Sn+1 ] > dim[Sn ], since otherwise the map would not
+be primitive. Thus, Sd−1 = Cd . That is, for all |φi ∈ Cd , there exist matrices
+K (n) ∈ Kkn , kn ≤ d − 1 such that (with K (0) ∝ 1)
+|φi =
+
+d−1
+X
+
+K (n) |ϕi =
+
+n=0
+
+d−1
+X
+n=0
+
+K (n)
+
+K1d−kn
+|ϕi,
+µd−kn
+
+(6.43)
+
+and thus, |φi ∈ Kd−1 |ϕi. (b) We write K1 in the Jordan standard form and
+˜ consists of all Jordan
+divide it into two blocks. The first one, of size d˜ × d,
+blocks corresponding to non-zero eigenvalues, whereas the second one contains
+all those corresponding to zero eigenvalues. We denote by P the (not necessarily
+Hermitian) projector onto the subspace where the first block is supported and by
+r ≤ d − d˜ the size of the largest Jordan block corresponding to a zero eigenvalue.
+We have
+K1 P = P K1 , K1r = K1r P.
+(6.44)
+We define Rn := P Kn and show that Rdd˜ = P Md (C). For all n ∈ N,
+dim[Rn+1 ] ≥ dim[Rn ]. The reason is that for any set of linearly independent
+(n)
+(n)
+matrices Kk ∈ Rn , K1 Kk ∈ Rn+1 are also linearly independent, given that
+K1 is invertible on its range. By following the reasoning of [?, Appendix A] we
+get that, if dim[Rn+1 ] = dim[Rn ] =: d0 , then dim[Rm ] = d0 for all m > n, which
+˜ Thus, for any |ψi ∈ Cd ,
+is incompatible with T being primitive unless d0 = dd.
+r
+r
+r
+r
+there exists a K ∈ Kdd
+.
+˜ with |ϕihψ| = P K = K1 P K/µ = K1 K/µ ∈ Kdd+r
+˜
+˜
+By using that d ≤ d−r and that r ≥ 1 (since K1 is supposed to be not invertible)
+˜ + r ≤ d2 − d + 1, which concludes the proof.
+we get dd
+We have now the necessary tools to prove our main result.
+Theorem 6.9 (Quantum Wielandt inequality) Let T be a primitive quantum channel on Md (C) with Kraus rank k. Then for the minimal q as it appears
+in Thm.6.8 we have that
+1. in general q ≤ (d2 − k + 1)d2 ,
+2. if the span of Kraus operators K1 contains an invertible element, then
+q ≤ d2 − k + 1,
+3. if the span of Kraus operators K1 contains an element with at least one
+non-zero eigenvalue, then q ≤ d2 .
+Proof
+2. If there is an invertible element, then it follows from [?, Appendix A,
+Proposition 2]that dim Kn+1 > dim Kn until the full matrix space Md (C) is
+spanned and thus q ≤ d2 − k + 1.
+(n)
+1. Let us denote by {Kk } the Kraus operators corresponding to T n . Ac(n)
+cording to Lemma 6.2, one of them, say K1 , has non-zero trace for some
+(n)
+n ≤ d2 − k + 1 and therefore there exists |ϕi such that K1 |ϕi = µ|ϕi with
+
+6.3. PRIMITIVE MAPS
+
+109
+
+(n)
+
+µ 6= 0. If K1 is invertible, then 1. is implied by 2., so we can assume that
+it is not invertible. According to Lemma 6.3.(b), for all |ψi, |χi ∈ Cd we have
+|ϕihψ| ∈ K(d2 −d+1)n ; and according to Lemma 6.3.(a) |χihψ| ∈ Knd2 . This
+implies that Knd2 = Md (C) and hence the general bound 1. follows.
+The argument which proves 3. is completely analogous just with n = 1 as
+we do, by assumption, not have to block in order to get a Kraus operator with
+non-zero eigenvalue.
+In the previous proof we use, for the general case, blocks of T n for some
+n ≤ d2 −k+1 just in order to get any Kraus operator with a non-zero eigenvalue.
+This rather clumsy step is not necessary if the dimension is small:
+Corollary 6.4 Let T be a primitive quantum channel on Md (C) with d = 2, 3.
+Then there is always a Kraus operator with non-zero eigenvalue in K1 and thus
+q ≤ d2 .
+Proof The fact that K1 has this property for d = 2, 3 stems from the classification of nilpotent subspaces[?]: assume that K1 would be a nilpotent subspace
+within the space of d × d matrices. Then for d = 2 its dimension would have to
+be one, so it could not arise from the Kraus operators of a quantum channel.
+Similarly, for d = 3 there are (up to similarity transformations) two types of
+nilpotent subspaces [?] of dimension k > 1: one of dimension k = 3, the space of
+upper-triangular matrices, whose structure does not allow the trace-preserving
+property, and one of dimension k = 2 which only leads to quantum channels
+having a (in modulus) degenerate largest eigenvalue. Hence, if K1 is generated by the Kraus operators of a primitive quantum channel, then it cannot be
+nilpotent if d = 2, 3.
+For d ≥ 4 the set of Kraus operators can form a nilpotent subspace even
+for primitive quantum channels. However, exploiting the structure of such
+subspaces[?] the general bound in Thm.6.9 can still be improved.
+Problem 12 (Optimal Wielandt bound) Find the smallest integers n and
+q (as a function of the dimension d) for Thm.6.8.
+
+110
+
+6.4
+
+CHAPTER 6. SPECTRAL PROPERTIES
+
+Fixed points
+
+Theorem 6.10 (Brouwer’s fixed point theorem) Let T be a continuous map
+from a non-empty, compact, convex set S ⊂ Rn into itself, then there is an x ∈ S
+such that T (x) = x.
+As the set of Hermitian matrices in Md (C) is a real vector space and the
+density matrices therein form a compact, convex set, Brouwer’s fixed point
+theorem immediately implies:
+Theorem 6.11 (Stationary states) Every continuous, trace-preserving, positive (not necessarily linear) map T : Md (C) → Md (C) has at least one stationary state. That is, there is a density matrix ρ ∈ Md (C) such that T (ρ) = ρ.
+In the following we are interested in linear maps, which are automatically continuous.
+Proposition 6.8 (Positive fixed-points) Let T : Md (C) → Md (C) be a
+trace-preserving, positive, linear map and X = T (X) a fixed point. If X =
+P4
+j=1 cj Pj is the decomposition of X into four positive operators Pj ≥ 0 which
+arises from decomposing X first into Hermitian and anti-Hermitian parts and
+these further into orthogonal positive and negative parts, then
+T (Pj ) = Pj
+
+j = 1, . . . , 4, are fixed points as well.
+
+(6.45)
+
+Proof For every Hermiticity preserving linear map we obviously have that the
+two Hermitian operators X + X † and i(X − X † ) are fixed points if X is one. So
+let us assume that X is Hermitian and that P± ≥ 0 are its orthogonal positive
+an negative parts, i.e., X = P+ − P− and tr [P+ P− ] = 0. The fixed point
+equation then reads T (P+ ) − T (P− ) = P+ − P− and we want to identify T (P± )
+with P± . To this end, denote by Q the projection onto the support of P+ and
+note that the fixed point equation together with the trace-preserving property
+of T implies that
+
+
+tr [P+ ] = tr [Q(P+ − P− )] = tr Q T (P+ − P− )
+(6.46)
+≤
+
+tr [T (P+ )] = tr [P+ ] .
+
+(6.47)
+
+Since equality has to hold for the inequality in Eq.(6.47), we have to have that
+T (P+ ) is supported on Q while T (P− ) is orthogonal to it. Consequently, T
+preserves the orthogonality of P± and we have T (P± ) = P± .
+For a map T on Md (C) let us define the set of fixed points
+
+FT := X ∈ Md (C) | X = T (X) .
+(6.48)
+Note that if T is linear, then FT is closed under linear combination, i.e., it is a
+vector space, and if T is Hermiticity preserving (in particular, if it is positive),
+then F is closed under Hermitian conjugation. The previous Prop.6.8 immediately implies that for trace-preserving quantum channels the set of fixed points
+is spanned by stationary density operators:
+
+6.4. FIXED POINTS
+
+111
+
+Corollary 6.5 (Linearly independent stationary states) Let T : Md (C) →
+Md (C) be a trace-preserving, positive, linear map. If the space FT has dimension D, then there are D linearly independent density operators {ρα ∈
+Md (C)}α=1,...,D such that T (ρα ) = ρα and
+
+FT = span ρ1 , . . . , ρD .
+(6.49)
+Proposition 6.9 (Maximal support of fixed points) Let T : Md (C) →
+Md (C) be a trace-preserving, positive, linear map and T∞ the projection onto
+its fixed point space as given in Eq.(6.14). Then every fixed point X = T (X) ∈
+Md (C) has support and range within the support space of the fixed point T∞ (1).
+Proof For positive X the claim follows from positivity of T∞ : since 0 ≤
+T∞ (X) = X ≤ ||X||∞ T∞ (1) the range (which equals the support) of X has
+to be contained in the one of T∞ (1) (See Douglas’ theorem 5.1).
+If X is not positive we can by Prop.6.8 decompose it into a linear combination
+of four
+S positive fixed points P1 , . . . , P4 . Using that supp(X) is in the linear span
+of j supp(Pj ) together with the result for positive fixed points then shows
+
+supp(X) ⊆ supp T∞ (1) . The same argument applies for the range of X.
+Alternatively, we may use that X is a fixed point iff X † is, and that the range
+of X equals the support of X † .
+The following shows that the ranges of all stationary states play an exceptional role: every state which is supported within such a space will remain so
+after the action of the channel:
+Proposition 6.10 (Stationary subspaces) Let T : Md (C) → Md (C) be a
+trace-preserving, positive, linear map, and let Q ∈ Md (C) be the Hermitian
+projection onto the support of any stationary density operator σ = T (σ) ∈
+Md (C). Then tr [(1 − Q)T (Q)] = 0 and for every density operator ρ ∈ Md (C)
+ρ≤Q
+
+⇒
+
+T (ρ) ≤ Q.
+
+(6.50)
+
+Proof By definition of Q we have that Q ≤ cσ ≤ c0 Q for some strictly positive numbers c and c0 . Therefore T (Q) ≤ cT (σ) = cσ ≤ c0 Q which implies
+tr [(1 − Q)T (Q)] = 0. Similarly, if ρ ≤ Q, then T (ρ) ≤ c0 Q, i.e., T (ρ) has support in the range of Q. Since T (ρ) has eigenvalues at most one, this means that
+T (ρ) ≤ Q.
+Projections onto stationary subspaces (in the sense of Eq.(6.50)) can be
+easily characterized in the Heisenberg picture, as well:
+Proposition 6.11 (Stationary subspaces II) Let T : Md (C) → Md (C) be
+a trace-preserving, positive, linear map, and let Q ∈ Md (C) be any Hermitian
+projection. Then the following statements are equivalent:
+1. For every density matrix ρ ∈ Md (C) with ρ ≤ Q, we have that T (ρ) ≤ Q
+as well,
+2. T ∗ (Q) ≥ Q.
+
+112
+
+CHAPTER 6. SPECTRAL PROPERTIES
+
+Proof 1. → 2.: define the orthogonal projection P := (1 −Q). The assumption
+implies that QT ∗ (P )Q = 0 which in turn means that P T ∗ (P )P = T ∗ (P ). Using
+that T ∗ (1) = 1, the latter can be rewritten as T ∗ (Q) − P T ∗ (Q)P = Q from
+which T ∗ (Q) ≥ Q follows. 2. → 1. follows from the chain of inequalities
+0 ≤ tr [T (ρ)P ] = 1 − tr [ρT ∗ (Q)] ≤ 1 − tr [ρQ] = 0.
+
+A projection onto a stationary subspace is often called sub-harmonic and
+item 2. of the previous proposition is used as the defining property of this
+notion. Note that while the support projection of every stationary state is
+sub-harmonic (due to Props.6.10,6.11), the converse is not necessarily true: for
+instance T ∗ (1) ≥ 1 holds trivially for every trace-preserving T even if there is
+no stationary state of full rank.
+P
+If T is completely positive with Kraus decomposition T (·) = i Ki · Ki† , one
+can relate support spaces of fixed points to properties of the Kraus operators:
+suppose there is a stationary state with support H ∈ Cd . Then all Kraus operators have to preserve this subspace in the sense that Ki H ⊆ H. In particular,
+if ρ = |ψihψ| is a pure state, then ψ has to be a simultaneous eigenvector of all
+Kraus operators.
+We will now investigate the structure of the set of fixed points F of quantum channels. As a first step we exploit Props.6.9,6.10 in order to restrict the
+discussion to trace-preserving maps which have a full rank fixed point:
+Lemma 6.4 (Restriction to full rank fixed points) Let T : Md (C) → Md (C)
+be a trace-preserving, (completely) positive, linear map, and H ⊆ Cd the support space of T∞ (1). Then the linear map T̃ : B(H) → B(H) defined via
+T̃ (X) := T (X ⊕0) H is trace-preserving and (completely) positive as well. Moreover, T̃ has a fixed point of full rank and4
+FT = FT̃ ⊕ 0.
+
+(6.51)
+
+Proof Denote by V : H → Cd the isometry which embeds H into Cd so that
+V † V = 1 and Q := V V † is the projection onto the range of T∞ (1). Then
+by definition T̃ (X) = V † T (V XV † )V so that T̃ inherits the property of being
+(completely) positive from T . In order to see that T̃ is trace-preserving note
+that V XV † = X ⊕ 0 has support and range within the range of Q. Thus we
+can decompose it into four positive operators with the same property and apply
+Prop.6.10 which leads to
+T (X ⊕ 0) = T̃ (X) ⊕ 0,
+
+(6.52)
+
+so that the trace-preserving property is inherited from T as well. Finally,
+Eq.(6.52) also implies Eq.(6.51) since by Prop.6.9 all fixed points of T are of the
+form X ⊕ 0. In particular, by definition of H, there is one fixed point which has
+full rank on H.
+4 Here the ‘0’ is supposed to act on the orthogonal complement of H in
+
+Cd .
+
+6.4. FIXED POINTS
+
+113
+
+Before returning to trace-preserving maps we will discuss their duals–unital
+maps. This will provide an important prerequisite for the discussion of the
+trace-preserving case. We will also see that the structure of the fixed point set
+of a map simplifies a lot when the dual map has at least one fixed point of full
+rank. This is already visible in the dual analogue of Lem.6.4:
+Lemma 6.5 Let T : Md (C) → Md (C) be a trace-preserving, positive, linear
+map, and T̃ and V defined as in Lem.6.4. Let us further denote by S the set of
+linear unital maps which satisfy the Schwarz inequality in Eq.(5.2). Then
+A ∈ FT ∗
+X ∈ FT̃ ∗
+∗
+
+T ∈S
+
+⇒ V † AV ∈ FT̃ ∗
+†
+
+∗
+
+and
+
+(6.53)
+
+†
+
+⇔ V T (V XV )V = X.
+
+(6.54)
+
+∗
+
+⇒ T̃ ∈ S.
+
+(6.55)
+
+Proof Eq.(6.54) follows from inserting the definitions. For Eq.(6.53) note that
+T̃ ∗ (V † AV ) = V † T ∗ (QAQ)V (using the notation of Lem.6.4 again). Taking the
+trace with an arbitrary C ∈ B(H) we obtain
+h
+i
+
+
+tr C T̃ ∗ (V † AV ) = tr T (V CV † )QAQ
+(6.56)
+
+
+
+
+= tr T (V CV † )A = tr CV † AV ,
+(6.57)
+where the second equality follows from Prop.6.10 and the last step uses the
+assumption that A is a fixed point of T ∗ . Finally, the Schwarz inequality for T̃ ∗
+follows from
+V † T ∗ (V A† AV † )V
+
+≥
+≥
+
+V † T ∗ (V A† V † )T ∗ (V AV † )V
+†
+
+∗
+
+†
+
+†
+
+†
+
+∗
+
+(6.58)
+†
+
+V T (V A V )V V T (V AV )V.
+
+(6.59)
+
+Here the first inequality comes from first inserting V † V = 1 between A† and A
+and then using the Schwarz inequality for T ∗ and the second inequality is due
+to V V † ≤ 1. Written in terms of T̃ ∗ the above equations lead to the claimed
+T̃ ∗ (A† A) ≥ T̃ ∗ (A† )T̃ ∗ (A).
+Due to the aforementioned issue we will first characterize the fixed point set
+of unital maps which have a dual with fixed point of full rank:
+Theorem 6.12 (Structure of fixed points for unital Schwarz maps) Let
+T ∗ : Md (C) → Md (C) be a unital map which (i) satisfies the Schwarz inequality Eq.(5.2) (e.g., a completely positive map) and (ii) is such that T has a full
+rank fixed point. Then the set of fixed points FT ∗ is a ∗ -algebra and has thus
+the form specified in Eq.(1.39) (without the zero-block).
+Proof Let ρ ∈ Md (C) be a full rank fixed point of T . Note that by Prop.6.9
+we can w.l.o.g. chose a positive definite ρ > 0. Denote by A = T ∗ (A) ∈ Md (C)
+a fixed point of T ∗ . Then, using the fixed point properties and the fact that A†
+is a fixed point of T ∗ as well we obtain
+
+ 
+tr T ∗ (A† A) − T ∗ (A† )T ∗ (A) ρ = 0.
+(6.60)
+
+114
+
+CHAPTER 6. SPECTRAL PROPERTIES
+
+Note that the expression in parentheses is positive semi-definite by the Schwarz
+inequality Eq.(5.2) and therefore, in fact, identical zero since ρ is assumed to be
+positive definite. Hence, we have equality in the Schwarz inequality so that we
+can apply Thm.5.4 which implies that if A, X ∈ FT ∗ , then AX ∈ FT ∗ is a fixed
+point as well. Since FT ∗ is also closed under linear combinations and Hermitian
+conjugation, it is a ∗ -algebra. Evidently, it is unital since T ∗ (1) = 1 holds by
+assumption.
+If T does not have a full rank fixed point, then FT ∗ need not be an algebra.
+Together with Lem.6.5 we obtain a weaker structure in this case:
+Corollary 6.6 Let T ∗ : Md (C) → Md (C) be a unital linear map which satisfies the Schwarz inequality Eq.(5.2). Let Q = Q† ∈ Md (C) be the projection
+onto the maximum rank fixed point of T , then the following set is a ∗ -algebra:
+
+(6.61)
+Y ∈ QMd (C)Q QT ∗ (Y )Q = Y .
+Proof The stated set is exactly the one appearing in Eq.(6.54), i.e., the fixed
+point set of T̃ ∗ . Since T̃ has, however, a fixed point of full rank by construction
+(see Lem.6.4) we can apply Thm.6.12 which proves the claim.
+The relation between fixed point sets of unital maps and ∗ -algebras becomes
+more transparent for completely positive maps:
+Theorem 6.13 (Fixed points and commutants) Let T ∗ : Md (C) → Md (C)
+P
+be a completely positive unital map with Kraus decomposition T ∗ (·) = i Ki† ·Ki .
+If both X, X † X ∈ FT ∗ , then [X, Ki ] = 0 for all i. Consequently, the largest ∗ subalgebra contained within FT ∗ is given by the set
+
+(6.62)
+X ∈ Md (C) ∀i : [X, Ki ] = [X, Ki† ] = 0 .
+Proof The assertion follows from the equation
+X
+[X, Ki ]† [X, Ki ] = T ∗ (X † X) − X † T ∗ (X) − T ∗ (X)† X + X † X = 0
+i
+
+by exploiting the fixed point properties of X and X † X together with the fact
+that the l.h.s. is a sum over positive terms which is zero iff all terms vanish
+individually. Hence every ∗ -subalgebra of FT ∗ is a subset of Eq.(6.62). Conversely, the set in Eq.(6.62) is a ∗ -subalgebra within FT ∗ on its own and thus
+the largest one.
+Finally, we discuss the structure of the fixed point set of trace-preserving
+maps:
+Theorem 6.14 (Fixed points of trace-preserving maps) Let T : Md (C) →
+Md (C) be a trace-preserving, positive, linear map for which T ∗ satisfies the
+Schwarz inequality in Eq.(5.2). Then there is a unitary U ∈ Md (C) and a set
+of positive definite density matrices ρk ∈ Mmk (C) such that the fixed point set
+of T is given by
+!
+K
+M
+FT = U 0 ⊕
+Mdk ⊗ ρk U † ,
+(6.63)
+k=1
+
+6.4. FIXED POINTS
+
+115
+
+for an appropriate decomposition of the Hilbert space Cd = Cd0 ⊕
+Mdk stands for the full algebra of complex matrices on Cdk .
+
+L
+
+k
+
+Cdk ⊗Cmk .
+
+Proof We exploit that by Lem.6.4 FT = 0 ⊕ FT̃ after an appropriate basis
+transformation which we can assign to a unitary U . Now T̃ has, by construction,
+a full rank fixed point and following Lem.6.4 it is trace-preserving and its dual
+satisfies the Schwarz inequality due to Lem.6.5. This implies by Thm.6.12 that
+∗
+T̃∞
+projects onto a ∗ -algebra. The general form of a positive map projecting onto
+∗
+a −algebra (i.e., a conditional expectation) is given in Eq.(1.40). Taking the
+dual of this map we arrive at T̃∞ projecting onto a set of the form in Eq.(6.63)
+(without the zero-block). Putting things together and using that we can always
+move the kernel of each ρk into the zero-block completes the proof.
+Note that Thm.6.14
+Limplies that the fixed point T∞ (1) is (up to normalization) given by U (0 ⊕ k 1mk ⊗ ρk )U † . Moreover, it shows that again the set
+of fixed points is closely related to a ∗ -algebra (actually is a ∗ -algebra w.r.t. a
+modified product):
+Corollary 6.7 Let T : Md (C) → Md (C) be a trace-preserving, positive, linear
+map for which T ∗ satisfies the Schwarz inequality in Eq.(5.2). Then for any
+density matrix ρ ∈ Md (C) which is a maximum rank fixed point of T we have
+that the set ρ−1/2 FT ρ−1/2 is a ∗ -algebra (with the inverse taken on the support
+of ρ).
+Another interesting consequence of Thm.6.14 is its implication according to
+Prop.6.10: the decomposition of the fixed point space into a direct sum in
+Eq.(6.63) implies the same decomposition into stationary subspaces. What is
+more, the Mdk ’s give rise to subsystem which are invariant, i.e., on which T
+acts as the identity (up to the reversible rotation given by U ).
+Theorem 6.15 (Unique fixed points of full rank) Let T : Md (C) →
+P Md (C)
+be a trace-preserving quantum channel with Kraus decomposition T (·) = i Ki ·
+Ki† . If for some n ∈ N we have that
+span
+
+n
+nY
+
+Kik
+
+o
+
+= Md (C),
+
+(6.64)
+
+k=1
+
+i.e., homogeneous polynomials of the Kraus operators span the entire matrix
+algebra, then there exist a unique positive definite density matrix ρ ∈ Md (C)
+such that FT ∝ ρ.
+n
+Proof Consider the
+Qnmap T , i.e., the n-fold concatenation of T . This has Kraus
+operators RI := k=1 Kik with multi-index I = (i1 , . . . , in ) and it satisfies
+FT ⊆ FT n . Now for every ψ ∈ Cd we have that T n (|ψihψ|) has full rank
+since by assumption span{RI |ψi} = Cd . This implies that there cannot be any
+stationary density operator which has a kernel. Since we can always construct
+a rank deficient positive fixed point if the dimension of FT is larger than one
+(see Cor.6.5), the assertion follows.
+
+116
+
+CHAPTER 6. SPECTRAL PROPERTIES
+
+Problem 13 (Fixed points of general positive maps) Characterize the set
+of fixed points of unital, positive, linear maps which do not satisfy the Schwarz inequality.
+
+6.5
+
+Cycles and recurrences
+
+We will now have a closer look at the space corresponding to the peripheral spectrum (i.e., eigenvalues which are phases) of a positive linear map
+T : Md (C) → Md (C) which is assumed to be either trace-preserving or unital.
+Denote the complex linear span of all the respective eigenspaces by
+
+(6.65)
+XT := span X ∈ Md (C) ∃ϕ ∈ R : T (X) = eiϕ X ,
+for which we will simply write X if the dependence on T is clear from the
+context. The questions which we address first are: what’s the structure of X ?
+what’s the structure of T restricted to X ? and what does this imply on the
+peripheral spectrum?
+Note that evidently XT = XTϕ if Tϕ is constructed from T as defined in
+Eq.(6.13) by discarding all but those terms in the spectral decomposition which
+correspond to the peripheral spectrum. Recall that by Prop.6.3 if T is tracepreserving or unital, then Tϕ will be (completely) positive if T is and that by
+Prop.6.2 there cannot any non-trivial Jordan-block associated to an eigenvalue
+of modulus one.
+Proposition 6.12 (Asymptotic image) Let T : Md (C) → Md (C) be a positive and trace-preserving linear map. Then XT is the image of the projection
+Tφ , it is spanned by positive operators, and it is closed under the action of T .
+That is,
+
+1. Tφ Md (C) = XT ,
+2. ∃{ρi ≥ 0} : XT = span{ρi },
+
+3. T XT = XT .
+Proof Note that by the proof of Prop.6.3 every X ∈ XT is a fixed point of
+Tφ since there is an ascending sequence ni ∈ N such that limi∞ Tϕni = Tφ .
+Conversely, if X = Tφ (X) is such a fixed point, then it has to be a linear
+combination of eigenvectors of T which correspond to eigenvalues of modulus
+one. XT thus coincides
+with the space of fixed points of Tφ which is in turn
+
+given by Tφ Md (C) , proving 1.
+2. follows from 1. together with Corr.6.5 and in order to arrive at 3. we
+just have to use the definition of XT and express an element X ∈ XT as a linear
+combination of peripheral eigenvectors of T .
+The following refines this Proposition by adding the assumption that the
+map under consideration satisfies the Schwarz inequality. Exploiting this fact
+one observes that X is a ∗ -algebra (w.r.t. a modified product) and that T acts
+on it either by permuting blocks or by unitary conjugation on subsystems:
+
+6.5. CYCLES AND RECURRENCES
+
+117
+
+Theorem 6.16 (Structure of cycles) Let T : Md (C) → Md (C) be a tracepreserving and positive linear map which fulfills the Schwarz inequality in Eq.(5.2).
+LK
+1. There exists a decomposition of the Hilbert space Cd = H0 ⊕ k=1 Hk into
+5
+a direct sum of tensor products Hk = Hk,1 ⊗ Hk,2 and positive definite
+density matrices ρk acting on Hk,2 such that
+XT = 0 ⊕
+
+K
+M
+
+Mdk ⊗ ρk ,
+
+(6.66)
+
+k=1
+
+where Mdk is a full complex matrix algebra on Hk,1 of dimension dk :=
+dim(Hk,1 ). That is, for every X ∈ XT there are xk ∈ B(Hk,1 ) such that
+X =0⊕
+
+M
+
+xk ⊗ ρk .
+
+(6.67)
+
+k
+
+2. There exist unitaries Uk ∈ B(Hk,1 ) and a permutation π, which permutes
+within subsets of {1, . . . , K} for which the corresponding Hk ’s have equal
+dimension, so that for every X ∈ XT represented as in Eq.(6.67)
+T (X) = 0 ⊕
+
+K
+M
+
+Uk xπ(k) Uk† ⊗ ρk .
+
+(6.68)
+
+k=1
+
+Proof The basic ingredients of the proof are those which already appeared
+in the proof of Thm.6.1 where we characterized maps with unit determinant.
+Exploiting Dirichlet’s lemma on Diophantine approximations (Lem.6.1) we can
+find an ascending subsequence ni ∈ N so that limi→∞ T ni converges to a map
+I with eigenvalues which are either one or zero. Clearly, I is again a tracepreserving, positive linear map which satisfies the Schwarz inequality since all
+these properties are preserved under concatenation. Moreover, XT = XI is
+the fixed-point space of I. So, statement 1. of the theorem follows from the
+structure of the space of fixed points provided in Thm.6.14.
+2. The map T −1 := limi→∞ T ni −1 is the inverse of T on X since by construction T −1 T = I. Hence, both T and T −1 map X → X in a bijective way.
+The crucial point here is that T −1 is a again a positive, trace-preserving map
+since it is constructed as a limit of such maps. To understand the consequences,
+consider any pure state in X , i.e., a density operator σ ∈ X which has no nontrivial convex decomposition within X . Then the image of σ under
+P T has to
+be a pure state as well: assume this is not the case, i.e., T (σ) = i λi σi is a
+−1
+non-trivial convex decomposition into states σP
+to this
+i ∈ X . Then applying T
+−1
+equation leads to a contradiction since σ = i λi T (σi ) is not pure. Consequently, both T and T −1 map pure states in X onto pure states. Note that a
+5 Note that we may have dimH = 0 as well as dimH
+0
+k,i = 1. Moreover, the direct sum
+in the decomposition does not necessarily correspond to a block structure in computational
+basis – just in some basis.
+
+118
+
+CHAPTER 6. SPECTRAL PROPERTIES
+
+pure state can only have support in one of the K blocks, for instance σ = x ⊗ ρk
+where x ∈ B(Hk,1 ) is a rank one projection. Now we know that T (σ) = x0 ⊗ ρk0
+for some k 0 and some rank one projection x0 ∈ B(Hk0 ,1 ). By continuity and the
+fact that T is a bijective linear map on X , we have that within X : (i) every
+element of block k is mapped to an element of the block k 0 (i.e., k 0 does not
+depend on x), and (ii) the blocks k and k 0 must have equal dimension dk = dk0 .
+Therefore, there is a permutation π which permutes blocks of equal size so that
+X ∈ X is mapped to
+M
+T (X) = 0 ⊕
+Tk (xπ(k) ) ⊕ ρk ,
+k
+
+with some linear maps Tk : Mdk → Mdk . Since the latter have, together with
+their inverses, to be positive and trace-preserving they must be either matrix
+transpositions or unitary conjugations by Cor.6.2. Matrix transpositions are,
+however, ruled out by the requirement that T and thus each Tk is a Schwarzmap.
+
+6.6
+
+Inverse eigenvalue problems
+
+6.7
+
+Literature
+
+There are various extensions of Brouwer’s fixed point theorem. Schauder’s theorem, for instance, extends it to topological vector spaces, which may be of infinite dimension. That is, S becomes a convex, compact subset of a topological
+vector space. Kakutani’s theorem is a generalization to upper semi-continuous
+set-valued functions (correspondences) T from a non-empty, compact, convex
+set S ∈ Rn into itself such that for all x ∈ S the set T (x) is non-empty and
+convex, too. Dealing with these and more refined fixed point theorems is part
+of algebraic topology.
+
+

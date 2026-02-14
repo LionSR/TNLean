@@ -3,6 +3,7 @@ Copyright (c) 2025 MPSLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import MPSLean.MPS.CPPrimitive
+import MPSLean.MPS.PositiveMapSpectral
 
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Hermitian
@@ -822,16 +823,18 @@ point of the rescaled transfer map.
 **Status**: This requires either Brouwer's fixed point theorem or the
 finite-dimensional Krein-Rutman theorem, neither of which is currently in Mathlib.
 
-**Note**: As stated, the theorem implicitly assumes that the spectral radius of
-`E_A` equals 1 (equivalently, that `A` has been normalized). For a general
-injective tensor, the conclusion should be `∃ ρ c, ρ.PosSemidef ∧ ρ ≠ 0 ∧ 0 < c ∧
-E(ρ) = c • ρ`. The fixed-point version follows after rescaling. -/
+**Note**: Requires normalization `∑ Aᵢ† Aᵢ = 1`, which ensures the transfer map
+is trace-preserving. For a general injective tensor, the conclusion should be
+`∃ ρ c, ρ.PosSemidef ∧ ρ ≠ 0 ∧ 0 < c ∧ E(ρ) = c • ρ`. The fixed-point version
+follows after rescaling so that the spectral radius equals 1. -/
 theorem exists_posSemidef_fixedPoint
     (A : MPSTensor d D) (hA : IsInjective A)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hD : 0 < D) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef ∧ ρ ≠ 0 ∧
       transferMap (d := d) (D := D) A ρ = ρ := by
-  sorry
+  have hCh := MPSTensor.transferMap_isChannel A hNorm
+  exact hCh.exists_posSemidef_fixedPoint (E := transferMap A) hD
 
 end Existence
 
@@ -845,10 +848,11 @@ The transfer map of an injective MPS tensor has a unique PSD fixed point
 (up to scalar), and it is positive definite. -/
 theorem quantum_perron_frobenius [DecidableEq (Fin D)]
     (A : MPSTensor d D) (hA : IsInjective A)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hD : 0 < D) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       HasUniqueFixedPoint (transferMap (d := d) (D := D) A) ρ := by
-  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := exists_posSemidef_fixedPoint A hA hD
+  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := exists_posSemidef_fixedPoint A hA (by convert hNorm) hD
   have hρ_pd := posSemidef_fixedPoint_isPosDef A hA ρ hρ_psd hρ_ne hρ_fix
   exact ⟨ρ, {
     fixed := hρ_fix
@@ -871,11 +875,12 @@ private lemma posDef_zero_fin0 : (0 : Matrix (Fin 0) (Fin 0) ℂ).PosDef :=
 /-- **Injectivity implies unique fixed point** (without the `0 < D` hypothesis).
 Wraps `quantum_perron_frobenius` with a vacuous case for `D = 0`. -/
 theorem injective_transfer_unique_fixed_point' [DecidableEq (Fin D)]
-    (A : MPSTensor d D) (hA : IsInjective A) :
+    (A : MPSTensor d D) (hA : IsInjective A)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       HasUniqueFixedPoint (transferMap (d := d) (D := D) A) ρ := by
   by_cases hD : 0 < D
-  · exact quantum_perron_frobenius A hA hD
+  · exact quantum_perron_frobenius A hA hNorm hD
   · push_neg at hD
     interval_cases D
     exact ⟨0, {

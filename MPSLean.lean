@@ -15,3 +15,4 @@ import MPSLean.MPS.PiAlgebraExtension
 import MPSLean.MPS.CPPrimitive
 import MPSLean.MPS.TransferSpectral
 import MPSLean.MPS.QuantumPerronFrobenius
+import MPSLean.MPS.PositiveMapSpectral
