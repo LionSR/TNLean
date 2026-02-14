@@ -26,9 +26,6 @@ on `M_D(ℂ)`, following Chapter 6 of Wolf's lecture notes
 
 import MPSLean.MPS.CPPrimitive
 
-import Mathlib.LinearAlgebra.Matrix.PosDef
-import Mathlib.LinearAlgebra.Matrix.Hermitian
-import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.Spectrum
@@ -117,9 +114,8 @@ private lemma continuous_quadraticForm (v : Fin D → ℂ) :
 /-- For a nonneg complex number `z` (in `ComplexOrder`), `‖z‖ = z.re`. -/
 private lemma norm_of_complex_nonneg {z : ℂ} (hz : 0 ≤ z) : ‖z‖ = z.re := by
   have ⟨h_re, h_im⟩ := Complex.nonneg_iff.mp hz
-  rw [Complex.norm_eq_sqrt_sq_add_sq]
-  simp [h_im.symm]
-  exact Real.sqrt_sq h_re
+  rw [Complex.norm_eq_sqrt_sq_add_sq, h_im.symm, zero_pow (by norm_num : 2 ≠ 0),
+    add_zero, Real.sqrt_sq h_re]
 
 /-- For PSD `X`, each diagonal entry norm is bounded by the trace norm. -/
 private lemma posSemidef_diag_norm_le_trace_norm {X : Matrix (Fin D) (Fin D) ℂ}
@@ -140,7 +136,8 @@ private lemma conjTranspose_mul_self_entry_eq_inner (B : Matrix (Fin D) (Fin D) 
     Matrix.mul_apply, Matrix.conjTranspose_apply]
   congr 1; ext k; ring
 
-/-- The squared norm of a column vector of `B` equals the real part of a diagonal entry of `Bᴴ * B`. -/
+/-- The squared norm of a column vector of `B` equals the real part of
+a diagonal entry of `Bᴴ * B`. -/
 private lemma col_norm_sq_eq_diag (B : Matrix (Fin D) (Fin D) ℂ) (i : Fin D) :
     ‖WithLp.toLp (p := 2) (fun k : Fin D => B k i)‖ ^ 2 = ((Bᴴ * B) i i).re := by
   rw [EuclideanSpace.norm_sq_eq]
@@ -165,9 +162,11 @@ The off-diagonal bound uses the Cauchy-Schwarz inequality for the
 PSD inner product: `|X i j|² ≤ (X i i) * (X j j) ≤ (trace X)²`. -/
 private lemma posSemidef_entry_norm_le_trace_norm {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X.PosSemidef) (i j : Fin D) : ‖X i j‖ ≤ ‖trace X‖ := by
-  obtain ⟨B, rfl⟩ := Matrix.posSemidef_iff_eq_conjTranspose_mul_self.mp hX
+  obtain ⟨B, rfl⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hX.nonneg
+  rw [Matrix.star_eq_conjTranspose] at *
   have hX' : (Bᴴ * B).PosSemidef :=
-    Matrix.posSemidef_iff_eq_conjTranspose_mul_self.mpr ⟨B, rfl⟩
+    (CStarAlgebra.nonneg_iff_eq_star_mul_self.mpr
+      ⟨B, by rw [Matrix.star_eq_conjTranspose]⟩).posSemidef
   rw [conjTranspose_mul_self_entry_eq_inner]
   set u := WithLp.toLp (p := 2) (fun k : Fin D => B k i)
   set v := WithLp.toLp (p := 2) (fun k : Fin D => B k j)
@@ -323,7 +322,7 @@ noncomputable def cesaroMean (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix 
   (1 / (N : ℂ)) • ∑ n ∈ Finset.range N, (E ^ n) X
 
 /-- Key lemma: telescoping. `E(σ_N) - σ_N = (E^N(X) - X) / N`. -/
-theorem cesaroMean_telescope (X : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) (hN : 0 < N) :
+theorem cesaroMean_telescope (X : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) (_hN : 0 < N) :
     E (cesaroMean E X N) - cesaroMean E X N =
       (1 / (N : ℂ)) • ((E ^ N) X - X) := by
   simp only [cesaroMean]
@@ -366,7 +365,7 @@ theorem IsChannel.exists_posSemidef_fixedPoint
     | succ n ih =>
       intro ρ hρ
       have h1 := ih ρ hρ
-      show (E ^ (n + 1)) ρ ∈ densityMatrices D
+      change (E ^ (n + 1)) ρ ∈ densityMatrices D
       rw [pow_succ']
       change E ((E ^ n) ρ) ∈ densityMatrices D
       exact IsChannel.map_densityMatrices E hE ((E ^ n) ρ) h1
@@ -379,12 +378,12 @@ theorem IsChannel.exists_posSemidef_fixedPoint
     intro N
     refine ⟨?_, ?_⟩
     · -- PSD: (1/(N+1)) • Σ E^n(ρ₀) is PSD
-      show cesaroMean E ρ₀ (N + 1) |>.PosSemidef
+      change cesaroMean E ρ₀ (N + 1) |>.PosSemidef
       unfold cesaroMean
       exact (Matrix.posSemidef_sum _ fun n _ => (h_iter n ρ₀ hρ₀).1).smul
         (by rw [one_div]; exact_mod_cast inv_nonneg_of_nonneg (Nat.cast_nonneg' (N + 1)))
     · -- Trace = 1
-      show (cesaroMean E ρ₀ (N + 1)).trace = 1
+      change (cesaroMean E ρ₀ (N + 1)).trace = 1
       unfold cesaroMean
       rw [trace_smul, trace_sum,
         Finset.sum_congr rfl (fun n _ => (h_iter n ρ₀ hρ₀).2),

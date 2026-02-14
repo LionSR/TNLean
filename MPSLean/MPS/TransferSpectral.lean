@@ -4,11 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import MPSLean.MPS.QuantumPerronFrobenius
 
-import Mathlib.Analysis.Normed.Algebra.Spectrum
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula
-import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.SpecificLimits.Normed
-import Mathlib.Topology.Algebra.Module.FiniteDimension
 
 open scoped Matrix ComplexOrder BigOperators
 

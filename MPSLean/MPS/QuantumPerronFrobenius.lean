@@ -2,17 +2,8 @@
 Copyright (c) 2025 MPSLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import MPSLean.MPS.CPPrimitive
 import MPSLean.MPS.PositiveMapSpectral
 
-import Mathlib.LinearAlgebra.Matrix.PosDef
-import Mathlib.LinearAlgebra.Matrix.Hermitian
-import Mathlib.Analysis.Matrix.PosDef
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.Analysis.Matrix.Spectrum
-import Mathlib.Topology.Algebra.Module.FiniteDimension
-import Mathlib.Analysis.Normed.Algebra.Spectrum
-import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Tactic.NoncommRing
 
 /-!
@@ -828,7 +819,7 @@ is trace-preserving. For a general injective tensor, the conclusion should be
 `∃ ρ c, ρ.PosSemidef ∧ ρ ≠ 0 ∧ 0 < c ∧ E(ρ) = c • ρ`. The fixed-point version
 follows after rescaling so that the spectral radius equals 1. -/
 theorem exists_posSemidef_fixedPoint
-    (A : MPSTensor d D) (hA : IsInjective A)
+    (A : MPSTensor d D) (_hA : IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hD : 0 < D) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef ∧ ρ ≠ 0 ∧

@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import MPSLean.MPS.Transfer
 
-import Mathlib.LinearAlgebra.Matrix.PosDef
-import Mathlib.LinearAlgebra.Matrix.Hermitian
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Tactic.NoncommRing
 
@@ -23,34 +21,15 @@ positive and irreducible, in the context of MPS transfer operators.
 Key results:
 - `injective_implies_irreducibleCP`: injectivity of an MPS tensor implies
   irreducibility of its transfer map.
-- `transferMap_pow_eq_blocked`: iterating the transfer map equals the transfer
-  map of the blocked tensor.
 - `HasUniqueFixedPoint`: the unique-fixed-point property used by
   `QuantumPerronFrobenius.lean`.
 -/
 
-/-! ### Complete positivity -/
+/-! ### Irreducibility of CP maps
 
-/-- A linear map on matrices is *completely positive* (CP) if it maps positive semidefinite
-matrices to positive semidefinite matrices.
-
-Note: This is the Schwarz/positivity condition. Full complete positivity (positivity of
-`E ⊗ id_n` for all `n`) is automatic for maps of the Kraus form `E(X) = ∑ᵢ Aᵢ X Aᵢ†`,
-which is the only case we use. -/
-def IsCP (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  ∀ X : Matrix (Fin D) (Fin D) ℂ, X.PosSemidef → (E X).PosSemidef
-
-/-- A linear map is *trace-preserving* if `trace (E X) = trace X` for all `X`. -/
-def IsTracePreserving (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  ∀ X : Matrix (Fin D) (Fin D) ℂ, Matrix.trace (E X) = Matrix.trace X
-
-/-- The transfer map of any MPS tensor is completely positive.
-This is a direct consequence of `transferMap_pos`. -/
-theorem transferMap_isCP (A : MPSTensor d D) :
-    IsCP (transferMap (d := d) (D := D) A) :=
-  fun _ hX => transferMap_pos A hX
-
-/-! ### Irreducibility of CP maps -/
+For the definitions of positive maps, trace-preserving maps, and channels,
+see `IsPositiveMap`, `IsTracePreservingMap`, and `IsChannel` in
+`PositiveMapSpectral.lean`. -/
 
 /-- An orthogonal projection in `M_D(ℂ)`: a matrix that is both Hermitian and idempotent.
 These correspond to projections onto subspaces of `ℂ^D`. -/
@@ -269,45 +248,10 @@ theorem injective_implies_irreducibleCP (A : MPSTensor d D) (hA : IsInjective A)
   -- Step 3: conclude P = 0 or P = 1
   exact proj_zero_or_one_of_sandwich P h_all
 
-/-! ### Iterated transfer map -/
+/-! ### Iterated transfer map
 
-/-- The `n`-fold composition of the transfer map equals the transfer map of the
-`n`-blocked tensor. This connects blocking (used in the `IsNormal` definition)
-to iterating the transfer operator. -/
-theorem transferMap_pow_eq_blocked (A : MPSTensor d D) (n : ℕ) :
-    ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      ((transferMap (d := d) (D := D) A) ^ n) X =
-        ∑ σ : Fin n → Fin d,
-          evalWord A (List.ofFn σ) * X * (evalWord A (List.ofFn σ))ᴴ := by
-  classical
-  -- Helper: decompose a sum over `Fin (n+1) → Fin d` into head + tail via `Fin.cons`.
-  have sum_fin_succ_eq {n : ℕ}
-      (f : (Fin (n + 1) → Fin d) → Matrix (Fin D) (Fin D) ℂ) :
-      ∑ σ : Fin (n + 1) → Fin d, f σ =
-        ∑ i : Fin d, ∑ τ : Fin n → Fin d, f (Fin.cons i τ) := by
-    rw [← Fintype.sum_prod_type']
-    exact Fintype.sum_equiv (Fin.consEquiv (fun _ => Fin d)).symm _ _
-      (fun σ => by simp [Fin.consEquiv, Fin.cons_self_tail])
-  induction n with
-  | zero =>
-      intro X
-      -- `transferMap^0 = id`, and the only word of length 0 is the empty word.
-      simp [evalWord, Finset.univ_unique]
-  | succ n ih =>
-      intro X
-      rw [pow_succ']
-      change transferMap (d := d) (D := D) A (((transferMap (d := d) (D := D) A) ^ n) X) = _
-      rw [ih]
-      -- Use linearity to move `transferMap` inside the sum, then unfold it.
-      simp only [transferMap_apply, map_sum]
-      -- Swap the order of the two finite sums.
-      rw [Finset.sum_comm]
-      -- Reindex the RHS sum over `Fin (n+1) → Fin d` by splitting into head + tail.
-      rw [sum_fin_succ_eq]
-      congr 1
-      funext i
-      apply Finset.sum_congr rfl
-      intro τ _
-      simp only [List.ofFn_cons, evalWord, Matrix.conjTranspose_mul, Matrix.mul_assoc]
+The iterated transfer map identity (iterating the transfer map `n` times gives
+the sum over word evaluations) is proved in `TransferSpectral.lean` as
+`transferMap_pow_apply'`, using the more general mixed transfer map framework. -/
 
 end MPSTensor
