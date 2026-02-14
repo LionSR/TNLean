@@ -14,3 +14,4 @@ import MPSLean.MPS.BlockPermutationMPS
 import MPSLean.MPS.PiAlgebraExtension
 import MPSLean.MPS.CPPrimitive
 import MPSLean.MPS.TransferSpectral
+import MPSLean.MPS.QuantumPerronFrobenius

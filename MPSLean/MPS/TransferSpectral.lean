@@ -2,7 +2,7 @@
 Copyright (c) 2025 MPSLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import MPSLean.MPS.CPPrimitive
+import MPSLean.MPS.QuantumPerronFrobenius
 
 import Mathlib.Analysis.Normed.Algebra.Spectrum
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula

@@ -18,10 +18,15 @@ variable {d D : ℕ}
 /-! ## Completely positive maps on matrices
 
 We define what it means for a linear map `E : M_D(ℂ) →ₗ[ℂ] M_D(ℂ)` to be completely
-positive, irreducible, and primitive, in the context of MPS transfer operators.
+positive and irreducible, in the context of MPS transfer operators.
 
-These notions are central to the quantum Perron–Frobenius theory that underpins
-the uniqueness of fixed points for MPS transfer maps.
+Key results:
+- `injective_implies_irreducibleCP`: injectivity of an MPS tensor implies
+  irreducibility of its transfer map.
+- `transferMap_pow_eq_blocked`: iterating the transfer map equals the transfer
+  map of the blocked tensor.
+- `HasUniqueFixedPoint`: the unique-fixed-point property used by
+  `QuantumPerronFrobenius.lean`.
 -/
 
 /-! ### Complete positivity -/
@@ -75,25 +80,10 @@ def IsIrreducibleCP (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (
     (∀ X : Matrix (Fin D) (Fin D) ℂ, P * E (P * X * P) * P = E (P * X * P)) →
     P = 0 ∨ P = 1
 
-/-! ### Primitivity of CP maps -/
-
-/-- A CP map `E` is *primitive* if iterating it sufficiently many times sends
-every nonzero PSD matrix to a strictly positive definite matrix.
-
-This is the quantum analogue of a primitive (aperiodic + irreducible) non-negative matrix.
-By the quantum Perron–Frobenius theorem, primitivity implies the existence of a unique
-(up to scaling) PSD fixed point, which is in fact positive definite. -/
-def IsPrimitiveCP [DecidableEq (Fin D)]
-    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  IsIrreducibleCP E ∧
-  ∃ n : ℕ, ∀ X : Matrix (Fin D) (Fin D) ℂ,
-    X.PosSemidef → X ≠ 0 → ((E ^ n) X).PosDef
-
 /-! ### Unique fixed point property -/
 
 /-- `E` has `ρ` as its unique PSD fixed point (up to scalar multiples), and `ρ` is
-positive definite. This is the conclusion of the quantum Perron–Frobenius theorem
-for primitive CP maps. -/
+positive definite. This is the conclusion of the quantum Perron–Frobenius theorem. -/
 structure HasUniqueFixedPoint [DecidableEq (Fin D)]
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) : Prop where
@@ -154,7 +144,7 @@ private lemma one_sub_mul_self_of_idem (P : Matrix (Fin D) (Fin D) ℂ) (hP : P 
   rw [sub_mul, one_mul, hP, sub_self]
 
 /-- `(M * Mᴴ) c c = ∑ x, ‖M c x‖²` for any matrix `M`. -/
-private lemma diagonal_mul_conjTranspose_eq_normSq_sum
+lemma diagonal_mul_conjTranspose_eq_normSq_sum
     (M : Matrix (Fin D) (Fin D) ℂ) (c : Fin D) :
     (M * Mᴴ) c c = ↑(∑ x, Complex.normSq (M c x)) := by
   rw [Matrix.mul_apply, Complex.ofReal_sum]
@@ -173,7 +163,7 @@ private lemma eq_zero_of_mul_conjTranspose_eq_zero
       h_sum_real j (Finset.mem_univ _))
 
 /-- If `∑ᵢ Bᵢ * Bᵢᴴ = 0` then each `Bᵢ = 0`, since each term is PSD. -/
-private lemma eq_zero_of_sum_mul_conjTranspose_eq_zero {ι : Type*} [Fintype ι]
+lemma eq_zero_of_sum_mul_conjTranspose_eq_zero {ι : Type*} [Fintype ι]
     (B : ι → Matrix (Fin D) (Fin D) ℂ)
     (h : ∑ i : ι, B i * (B i)ᴴ = 0) :
     ∀ i, B i = 0 := by
@@ -279,38 +269,6 @@ theorem injective_implies_irreducibleCP (A : MPSTensor d D) (hA : IsInjective A)
   -- Step 3: conclude P = 0 or P = 1
   exact proj_zero_or_one_of_sandwich P h_all
 
-/-- Irreducibility of a CP map implies primitivity (possibly after blocking).
-
-For a finite-dimensional irreducible CP map, there exists a period `p` such that
-`E^p` is primitive. In particular, if `E` is both irreducible and aperiodic,
-then `E` is primitive. This follows from the quantum Perron–Frobenius theorem.
-
-The full proof requires spectral theory for CP maps, which is not yet
-available in Mathlib. -/
-theorem irreducibleCP_implies_primitiveCP [DecidableEq (Fin D)]
-    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hCP : IsCP E) (hIrr : IsIrreducibleCP E)
-    -- Additional hypothesis: aperiodicity (the spectral radius eigenvalue is the
-    -- only eigenvalue of maximum modulus)
-    (hAperiodic : True) :
-    IsPrimitiveCP E := by
-  -- Requires spectral theory for CP maps (quantum Perron–Frobenius).
-  sorry
-
-/-- The quantum Perron–Frobenius theorem: a primitive CP map has a unique
-PSD fixed point (up to scaling), and that fixed point is positive definite.
-
-This is the key theorem connecting MPS injectivity to the existence of
-canonical forms via unique fixed points of the transfer operator. -/
-theorem primitive_has_unique_fixed_point [DecidableEq (Fin D)]
-    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hPrim : IsPrimitiveCP E) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, HasUniqueFixedPoint E ρ := by
-  -- This is the quantum Perron–Frobenius theorem.
-  -- The proof requires spectral analysis of CP maps, which is beyond
-  -- current Mathlib capabilities.
-  sorry
-
 /-! ### Iterated transfer map -/
 
 /-- The `n`-fold composition of the transfer map equals the transfer map of the
@@ -351,21 +309,5 @@ theorem transferMap_pow_eq_blocked (A : MPSTensor d D) (n : ℕ) :
       apply Finset.sum_congr rfl
       intro τ _
       simp only [List.ofFn_cons, evalWord, Matrix.conjTranspose_mul, Matrix.mul_assoc]
-
-/-! ### Main bridge theorem -/
-
-/-- **Injectivity implies unique fixed point**: If `A` is an injective MPS tensor,
-then its transfer map `E_A` has a unique PSD fixed point `ρ` which is positive definite.
-
-This is the main result connecting the algebraic MPS framework (injectivity, gauge
-equivalence) to the analytic framework (CP maps, Perron–Frobenius theory). -/
-theorem injective_transfer_unique_fixed_point [DecidableEq (Fin D)]
-    (A : MPSTensor d D) (hA : IsInjective A) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, HasUniqueFixedPoint (transferMap (d := d) (D := D) A) ρ := by
-  -- Chain: IsInjective → IsIrreducibleCP → IsPrimitiveCP → HasUniqueFixedPoint
-  have hCP := transferMap_isCP A
-  have hIrr := injective_implies_irreducibleCP A hA
-  have hPrim := irreducibleCP_implies_primitiveCP _ hCP hIrr trivial
-  exact primitive_has_unique_fixed_point _ hPrim
 
 end MPSTensor

@@ -1,0 +1,652 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\input{preamble}
+
+\title{\textbf{MPSLean Status Update:\\Quantum Perron--Frobenius in Lean 4}}
+\subtitle{{\small Feb 16 --- Lean 4 + Mathlib v4.27.0}}
+\date{}
+\author{}
+
+\begin{document}
+
+%======================================================================
+% SLIDE 1 - Title
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{-1.5em}
+    \maketitle
+    \vspace{-3em}
+    \begin{center}
+        {\footnotesize
+            \textcolor{dimwhite}{Single-block: \textcolor{leangreen}{fully proved} $\cdot$
+            Multi-block: \textcolor{amber}{4 open gaps} (was 5) $\cdot$
+            $\sim$4{,}100 lines (+900 new)}}
+    \end{center}
+\end{frame}
+}
+
+%======================================================================
+% CATCH-UP SLIDE 2 - Where we were
+%======================================================================
+\begin{frame}{Catch-Up: Where We Were (Feb 12)}
+    \vspace{-0.3em}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{\textcolor{leangreen}{Done:}}
+        \begin{itemize}\itemsep0.1em\small
+            \item Single-block Fundamental Theorem: \textcolor{leangreen}{\textbf{0 sorry}}
+            \item Multi-block architecture: all steps in place
+            \item Injectivity $\Rightarrow$ irreducible CP: proved
+            \item $\rho < 1 \Rightarrow \mathcal{F}^n \to 0$: proved
+            \item $\sim$3{,}200 lines across 16 modules
+        \end{itemize}
+
+        \column{0.48\textwidth}
+        \textbf{\textcolor{softred}{Open (5 sorries):}}
+        \begin{itemize}\itemsep0.1em\small
+            \item[\textcolor{softred}{1.}] Irreducible $\Rightarrow$ primitive CP
+            \item[\textcolor{softred}{2.}] Primitive $\Rightarrow$ unique fixed point
+            \item[\textcolor{softred}{3.}] Vectorization bridge (isolated)
+            \item[\textcolor{softred}{4.}] Spectral radius $< 1$ for mixed transfer
+            \item[\textcolor{softred}{5.}] Block separation
+        \end{itemize}
+    \end{columns}
+
+    \vspace{0.5em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=amber,thick,rounded corners=4pt,fill=cardbg,text=amber,
+                text width=0.8\textwidth,align=center,inner sep=6pt,font=\small] {
+                All 5 sorries traced back to one missing ingredient:\\
+                \textbf{Quantum Perron--Frobenius} for CP maps\\
+                {\scriptsize (not formalized in any proof assistant)}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% CATCH-UP SLIDE 3 - The dependency chain
+%======================================================================
+\begin{frame}{Catch-Up: The Dependency Chain}
+    \vspace{-0.3em}
+
+    \textbf{Quantum Perron--Frobenius} \cite{Evans1978Spectral}: for an irreducible CP map $\mathcal{E}$,
+    \begin{itemize}\itemsep0.15em\small
+        \item $\exists$ unique positive definite fixed point $\rho$ (up to scalar)
+        \item spectral gap: all other eigenvalues have $|\lambda| < r(\mathcal{E})$
+    \end{itemize}
+
+    \vspace{0.3em}
+    \textbf{The chain from QPF to multi-block theorem:}
+    \vspace{-0.2em}
+    \begin{center}
+        \begin{tikzpicture}[xscale=0.9,
+            sbox/.style={rectangle,rounded corners,draw=white,text=white,
+                    font=\scriptsize\bfseries,minimum width=2.0cm,minimum height=0.75cm,align=center},
+            sarr/.style={-{Stealth[scale=0.8]},white,thick},
+            slab/.style={font=\tiny,text=amber,align=center,above,yshift=-1pt}
+            ]
+            \node[sbox,fill=softred!40!black] (qpf) at (0,0) {Quantum PF\\{\tiny (existence + PD + unique)}};
+            \node[sbox,fill=softred!40!black] (gap) at (3.2,0) {Spectral gap\\{\tiny $\rho(\mathcal{F}_{AB})<1$}};
+            \node[sbox,fill=leangreen!40!black] (conv) at (6.4,0) {$\mathcal{F}^n \to 0$};
+            \node[sbox,fill=leangreen!40!black] (sep) at (9.1,0) {Block\\separation};
+            \node[sbox,fill=leangreen!40!black] (ft) at (11.6,0) {Multi-block\\FT};
+            \draw[sarr] (qpf) -- (gap);
+            \draw[sarr] (gap) -- (conv);
+            \draw[sarr] (conv) -- (sep);
+            \draw[sarr] (sep) -- (ft);
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.3em}
+    \textbf{Strategy}: instead of formalizing full abstract QPF, prove the \emph{concrete}
+    results we need directly from injectivity.
+    \begin{itemize}\itemsep0.1em\small
+        \item Injectivity is \emph{stronger} than irreducibility --- shorter proofs
+        \item Avoid the intermediate ``primitive CP'' notion entirely
+    \end{itemize}
+\end{frame}
+
+%======================================================================
+% SLIDE 4 - What We Did: Overview
+%======================================================================
+\begin{frame}{What We Did: New File \texttt{QuantumPerronFrobenius.lean}}
+    \vspace{-0.3em}
+
+    \textbf{Created from scratch}: 889 lines, 31 theorems/lemmas, \textbf{1 sorry}
+    (was 0 theorems in this area).
+
+    \vspace{0.2em}
+    \begin{center}
+        \begin{tikzpicture}[xscale=0.95,
+            sbox/.style={rectangle,rounded corners,draw=white,text=white,
+                    font=\scriptsize\bfseries,minimum width=2.6cm,minimum height=1.1cm,align=center},
+            sarr/.style={-{Stealth[scale=0.8]},white,thick},
+            ]
+            \node[sbox,fill=leangreen!40!black] (pd) at (0,0) {
+                \textcolor{leangreen}{\checkmark}\ Positive\\definiteness\\{\tiny (injectivity-based)}};
+            \node[sbox,fill=leangreen!40!black] (pdi) at (3.4,0) {
+                \textcolor{leangreen}{\checkmark}\ Positive\\definiteness\\{\tiny (irreducibility-based)}};
+            \node[sbox,fill=leangreen!40!black] (uniq) at (6.8,0) {
+                \textcolor{leangreen}{\checkmark}\ Uniqueness\\{\tiny (up to scalar)}};
+            \node[sbox,fill=softred!30!black] (exist) at (10.2,0) {
+                \textcolor{softred}{\texttt{sorry}}\ Existence\\{\tiny (needs Brouwer FPT)}};
+
+            \draw[sarr] (pd) -- (pdi);
+            \draw[sarr] (uniq) -- ++(1.6,0);
+            \draw[sarr] (exist) -- ++(0,-1.0) node[below,font=\scriptsize,text=white] {
+                Assembly: \texttt{quantum\_perron\_frobenius}};
+
+            % Arrow from all three down to assembly
+            \draw[sarr,leangreen] (pd) -- ++(0,-1.0);
+            \draw[sarr,leangreen] (uniq) -- ++(0,-1.0);
+            \draw[sarr,softred] (exist) -- ++(0,-1.0);
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.1em}
+    Three of four components of QPF are \textcolor{leangreen}{fully proved}.
+    The missing piece (existence) requires topology
+    not yet in Mathlib (Brouwer/Krein--Rutman on the PSD cone).
+
+    \vspace{0.3em}
+    \textbf{Net effect on sorry count}: $5 \to 4$ effective (the 2 dead-code
+    sorries in \texttt{CPPrimitive.lean} have been \textbf{deleted}).
+\end{frame}
+
+%======================================================================
+% SLIDE 5 - Key Proof 1: PD from injectivity
+%======================================================================
+\begin{frame}{Proved: PSD Fixed Point $\Rightarrow$ Positive Definite (Injectivity)}
+    \vspace{-0.3em}
+
+    \textbf{Theorem} (\texttt{posSemidef\_fixedPoint\_isPosDef}):
+    If $\{A^i\}$ spans $\MD$ and $\rho \geq 0$, $\rho \neq 0$,
+    $\mathcal{E}(\rho) = \rho$, then $\rho > 0$.
+
+    \vspace{0.3em}
+    \textbf{Proof idea} (contradiction, $\sim$170 lines):
+    \begin{enumerate}\itemsep0.2em
+        \item {\small Suppose $\exists\, x \neq 0$ with $\rho x = 0$.}
+        \item {\small From the fixed-point equation $\rho = \sum_i A_i \rho A_i^\dagger$:
+            \[
+                0 = \langle x | \rho | x\rangle = \sum_i \underbrace{\langle A_i^\dagger x | \rho | A_i^\dagger x\rangle}_{\geq 0}
+                    \quad\Longrightarrow\quad \rho\, (A_i^\dagger x) = 0\ \ \forall\, i
+            \]}
+        \item {\small By injectivity, $\{A_i\}$ spans $\MD$, so $\{A_i^\dagger\}$ spans $\MD$.
+            Hence $\rho\, (M x) = 0$ for \emph{all} $M$.}
+        \item {\small Since $x \neq 0$, the map $M \mapsto Mx$ is surjective,
+            so $\rho = 0$. Contradiction.}
+    \end{enumerate}
+
+    \vspace{0.2em}
+    {\small \textbf{Key insight}: use injectivity directly at the vector level.
+    No spectral projections, no functional calculus. The proof is short and elementary.}
+\end{frame}
+
+%======================================================================
+% SLIDE 6 - Key Proof 2: PD from irreducibility
+%======================================================================
+\begin{frame}{Proved: PSD Fixed Point $\Rightarrow$ Positive Definite (Irreducibility)}
+    \vspace{-0.3em}
+
+    \textbf{Theorem} (\texttt{posSemidef\_fixedPoint\_isPosDef\_of\_irreducible}):
+    If $\mathcal{E}$ is irreducible CP and $\rho \geq 0$, $\rho \neq 0$,
+    $\mathcal{E}(\rho) = \rho$, then $\rho > 0$.
+
+    \vspace{0.2em}
+    \textbf{Proof idea} (contradiction via support projection, $\sim$220 lines):
+    \begin{enumerate}\itemsep0.15em
+        \item {\small Assume $\rho$ PSD but not PD $\Rightarrow$ some eigenvalue is 0.}
+        \item {\small Construct the \textbf{spectral support projection}
+            $Q = U \cdot \diag(\mathbf{1}_{\lambda > 0}) \cdot U^\dagger$
+            where $\rho = U \cdot \diag(\lambda) \cdot U^\dagger$.}
+        \item {\small Show $Q$ is an orthogonal projection with $\ker(Q) = \ker(\rho)$.}
+        \item {\small From ``$\ker(\rho)$ invariant under $A_i^\dagger$'' (reusing lemma from Part 1):
+            \[
+                (1 - Q) \cdot A_i \cdot Q = 0 \quad\Longrightarrow\quad
+                Q \cdot \mathcal{E}(Q X Q) \cdot Q = \mathcal{E}(Q X Q) \quad \forall\, X
+            \]
+            (verified using \texttt{noncomm\_ring} tactic for the matrix algebra).}
+        \item {\small By irreducibility: $Q = 0$ or $Q = 1$.
+            But $Q \neq 0$ (since $\rho \neq 0$) and $Q \neq 1$ (since $\rho$ not PD). \qed}
+    \end{enumerate}
+
+    \vspace{0.2em}
+    {\small \textbf{Key tools}: Mathlib's \texttt{IsHermitian.spectral\_theorem},
+    \texttt{diagonal\_conjTranspose}, and \texttt{noncomm\_ring} for non-commutative identities.}
+\end{frame}
+
+%======================================================================
+% SLIDE 7 - Key Proof 3: Uniqueness
+%======================================================================
+\begin{frame}{Proved: Uniqueness of PSD Fixed Point}
+    \vspace{-0.3em}
+
+    \textbf{Theorem} (\texttt{posSemidef\_fixedPoint\_unique}):
+    If $\rho, \sigma$ are both nonzero PSD fixed points of $\mathcal{E}_A$
+    (with $A$ injective), then $\sigma = c\rho$ for some $c > 0$.
+
+    \vspace{0.3em}
+    \textbf{Proof idea} ($\sim$330 lines, using \texttt{exists\_critical\_scalar}):
+    \begin{enumerate}\itemsep0.15em
+        \item {\small Both $\rho, \sigma$ are PD (by the theorem above).}
+        \item {\small Diagonalize $\rho^{-1/2}\sigma\,\rho^{-1/2}$ and find the minimum eigenvalue $c_0 > 0$.}
+        \item {\small Then $\sigma - c_0 \rho$ is PSD, a fixed point, and \textbf{has a zero eigenvalue}.}
+        \item {\small If $\sigma - c_0 \rho \neq 0$, it's a nonzero PSD fixed point that's not PD.
+            Contradiction with the PD theorem!}
+        \item {\small Hence $\sigma = c_0 \rho$.}
+    \end{enumerate}
+
+    \vspace{0.3em}
+    {\small \textbf{Key Mathlib tools}:
+    \texttt{PosDef.isUnit} (PD matrices are invertible),
+    spectral theorem for the conjugated matrix,
+    and the PD theorem from Part 1 for the contradiction.}
+\end{frame}
+
+%======================================================================
+% SLIDE 8 - Dead code cleanup
+%======================================================================
+\begin{frame}{Architecture: Bypassing the Primitivity Route}
+    \vspace{-0.3em}
+
+    \textbf{Old route} (in \texttt{CPPrimitive.lean}):
+    \vspace{-0.3em}
+    \begin{center}
+        \begin{tikzpicture}[xscale=0.88,
+            sbox/.style={rectangle,rounded corners,draw=white,text=white,
+                    font=\scriptsize\bfseries,minimum width=2.1cm,minimum height=0.7cm,align=center},
+            sarr/.style={-{Stealth[scale=0.8]},thick},
+            ]
+            \node[sbox,fill=leangreen!40!black] (inj) at (0,0) {Injective};
+            \node[sbox,fill=leangreen!40!black] (irr) at (2.5,0) {Irreducible};
+            \node[sbox,fill=softred!40!black] (prim) at (5.5,0) {Primitive\\{\tiny \textcolor{softred}{\texttt{sorry}}}};
+            \node[sbox,fill=softred!40!black] (ufp) at (8.5,0) {Unique FP\\{\tiny \textcolor{softred}{\texttt{sorry}}}};
+            \draw[sarr,leangreen] (inj) -- (irr);
+            \draw[sarr,softred] (irr) -- (prim);
+            \draw[sarr,softred] (prim) -- (ufp);
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.3em}
+    \textbf{New route} (in \texttt{QuantumPerronFrobenius.lean}):
+    \vspace{-0.3em}
+    \begin{center}
+        \begin{tikzpicture}[xscale=0.88,
+            sbox/.style={rectangle,rounded corners,draw=white,text=white,
+                    font=\scriptsize\bfseries,minimum width=2.1cm,minimum height=0.7cm,align=center},
+            sarr/.style={-{Stealth[scale=0.8]},thick},
+            ]
+            \node[sbox,fill=leangreen!40!black] (inj) at (0,0) {Injective};
+            \node[sbox,fill=leangreen!40!black] (pd) at (3.0,0) {PSD $\Rightarrow$ PD};
+            \node[sbox,fill=leangreen!40!black] (uniq) at (6.0,0) {Unique};
+            \node[sbox,fill=softred!30!black] (exist) at (9.0,0) {$\exists$ FP\\{\tiny \textcolor{softred}{\texttt{sorry}}}};
+            \node[sbox,fill=leangreen!40!black] (ufp) at (12.0,0) {QPF asm.};
+            \draw[sarr,leangreen] (inj) -- (pd);
+            \draw[sarr,leangreen] (pd) -- (uniq);
+            \draw[sarr,softred] (exist) -- (ufp);
+            \draw[sarr,leangreen] (uniq) -- ++(1.2,0);
+            \draw[sarr,leangreen] (pd.south) to[out=-30,in=-150] (ufp.south);
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.3em}
+    \begin{itemize}\itemsep0.1em\small
+        \item \textbf{Skips ``primitive''} entirely --- that notion is unnecessary for the concrete result
+        \item Dead code in \texttt{CPPrimitive.lean} (3 theorems, 2 sorries) \textbf{deleted} ($-$70 lines)
+        \item The one remaining sorry (existence) needs only topology (Brouwer FPT), not spectral theory
+    \end{itemize}
+\end{frame}
+
+%======================================================================
+% SLIDE 9 - Updated sorry map
+%======================================================================
+\begin{frame}{Updated Sorry Map (4 remaining)}
+    \vspace{-0.5em}
+    \begin{center}
+        {\scriptsize
+            \begin{tabular}{@{}lp{6.2cm}p{3.0cm}@{}}
+                \toprule
+                \textbf{File} & \textbf{Sorry} & \textbf{What's needed} \\
+                \midrule
+                QPF & \texttt{exists\_posSemidef\_fixedPoint} &
+                    Brouwer FPT on PSD cone \\[2pt]
+                TransferSpectral & \texttt{mixedTransferSpectralRadius\_eq\_transferMatrix} &
+                    Vectorization isomorphism \\[2pt]
+                TransferSpectral & \texttt{spectralRadius\_mixedTransfer\_lt\_one} &
+                    QPF spectral gap theory \\[2pt]
+                PiAlgExtension & \texttt{sameMPV\textsubscript{2}\_implies\_perBlock\_sameMPV} &
+                    Depends on spectral gap \\
+                \bottomrule
+            \end{tabular}
+        }
+    \end{center}
+
+    \vspace{0.3em}
+    \textbf{Key observation}: the 4 effective sorries split into two groups:
+    \begin{itemize}\itemsep0.1em\small
+        \item \textcolor{amber}{Group A} (existence): needs Brouwer FPT on PSD cone --- \textbf{pure topology}, not hard math
+        \item \textcolor{softred}{Group B} (spectral gap chain): needs deep spectral theory --- \textbf{the real blocker}
+    \end{itemize}
+\end{frame}
+
+%======================================================================
+% SLIDE 10 - The real blocker
+%======================================================================
+\begin{frame}{The Real Blocker: Spectral Gap}
+    \vspace{-0.3em}
+
+    The multi-block theorem needs:
+    \[
+        A_k \neq B_\ell \text{ (not gauge-equivalent)} \quad\Longrightarrow\quad
+        \rho\!\left(\mathcal{F}_{A_k B_\ell}\right) < 1
+    \]
+
+    \vspace{0.2em}
+    \textbf{What this requires} (not yet formalized):
+    \begin{enumerate}\itemsep0.15em\small
+        \item Existence of PSD eigenvector for spectral radius \hfill\textcolor{softred}{[Krein--Rutman]}
+        \item This eigenvector is PD (our new theorem gives this \textcolor{leangreen}{\checkmark})
+        \item Spectral radius of $\mathcal{E}_A$ is simple and dominant \hfill\textcolor{softred}{[QPF spectral theory]}
+        \item For the \emph{mixed} operator $\mathcal{F}_{AB}$: no PD fixed point when $A \not\sim B$
+            \hfill\textcolor{softred}{[cross analysis]}
+        \item Hence spectral radius $< 1$ \hfill\textcolor{softred}{[primitivity]}
+    \end{enumerate}
+
+    \vspace{0.3em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=softred,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.85\textwidth,align=center,inner sep=6pt,font=\small] {
+                Step 2 is now proved.
+                Steps 1, 3--5 require formalizing the spectral theory of\\
+                completely positive maps --- estimated $\sim$2{,}000--3{,}000 lines.\\
+                {\scriptsize This is the \textbf{same gap} as before,
+                but now we know exactly what's needed.}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 11 - Cleanup opportunities
+%======================================================================
+\begin{frame}{Cleanup Completed}
+    \vspace{-0.3em}
+
+    \textbf{1. Removed dead code from \texttt{CPPrimitive.lean}}~~\textcolor{leangreen}{\checkmark}
+    \begin{itemize}\itemsep0.05em\small
+        \item Deleted \texttt{IsPrimitiveCP}, \texttt{irreducibleCP\_implies\_primitiveCP},
+            \texttt{primitive\_has\_unique\_fixed\_point}, and unprimed bridge theorem
+        \item $-$70 lines, 2 fewer sorry statements
+    \end{itemize}
+
+    \vspace{0.3em}
+    \textbf{2. Consolidated duplicate spectral lemmas}~~\textcolor{leangreen}{\checkmark}
+    \begin{itemize}\itemsep0.05em\small
+        \item 6 duplicated lemmas (3 pairs) merged into 3 shared lemmas:
+            \texttt{eig\_conj\_mul}, \texttt{eig\_mul\_conj}, \texttt{spectral\_decomp\_eq}
+        \item All 12 call sites updated; saved $\sim$21 lines
+    \end{itemize}
+
+    \vspace{0.3em}
+    \textbf{3. Fixed all linter warnings}~~\textcolor{leangreen}{\checkmark}
+    \begin{itemize}\itemsep0.05em\small
+        \item Removed unused \texttt{DecidableEq} hypotheses from 8 theorems (added \texttt{classical} in proofs)
+        \item Fixed unused \texttt{simp} arguments (2 lines)
+        \item Replaced 7 \texttt{show} $\to$ \texttt{change} to eliminate tactic warnings
+    \end{itemize}
+
+    \vspace{0.2em}
+    {\footnotesize \textbf{Result}: project builds clean (2849 jobs),
+    zero warnings except the 4 expected \texttt{sorry} declarations.}
+\end{frame}
+
+%======================================================================
+% SLIDE 12 - Updated module map
+%======================================================================
+\begin{frame}{Updated Module Map ($\sim$4{,}100 lines)}
+    \vspace{-0.5em}
+    \begin{center}
+        \begin{tikzpicture}[
+            node distance=0.4cm and 0.8cm,
+            every node/.style={font=\tiny},
+            mod/.style={draw=leanblue!60,thick,rounded corners=2pt,fill=cardbg,
+                    text=white,minimum height=0.4cm,align=center,inner sep=3pt},
+            newmod/.style={draw=leangreen!80,thick,rounded corners=2pt,fill=leangreen!10!black,
+                    text=white,minimum height=0.4cm,align=center,inner sep=3pt},
+            deadmod/.style={draw=gray!40,thick,rounded corners=2pt,fill=cardbg,
+                    text=gray,minimum height=0.4cm,align=center,inner sep=3pt},
+            arr/.style={-{Stealth[length=3pt]},leanblue!40,thin},
+            newarr/.style={-{Stealth[length=3pt]},leangreen!60,thin},
+            ]
+            % Row 1: Defs
+            \node[mod] (defs) {\textbf{Defs} (128)};
+
+            % Row 2
+            \node[mod, below left=0.5cm and 0.5cm of defs] (basis) {BasisNormal (162)};
+            \node[mod, below=0.5cm of defs] (transfer) {Transfer (45)};
+            \node[mod, below right=0.5cm and 0.5cm of defs] (canon) {CanonicalForm (51)};
+            \node[mod, right=0.5cm of canon] (linext) {LinearExtension (159)};
+
+            \draw[arr] (defs) -- (basis);
+            \draw[arr] (defs) -- (transfer);
+            \draw[arr] (defs) -- (canon);
+            \draw[arr] (defs) -- (linext);
+
+            % Row 3
+            \node[mod, below=0.4cm of basis] (trace) {TracePairing (98)};
+            \node[mod, below=0.4cm of transfer] (cpp) {CPPrimitive (313)};
+            \node[mod, below=0.4cm of canon] (multi) {MultiBlock (163)};
+            \node[mod, below=0.4cm of linext] (skolem) {SkolemNoether (149)};
+
+            \draw[arr] (basis) -- (trace);
+            \draw[arr] (transfer) -- (cpp);
+            \draw[arr] (canon) -- (multi);
+            \draw[arr] (linext) -- (skolem);
+
+            % Row 4
+            \node[mod, below=0.4cm of trace] (tracend) {TraceNondeg (22)};
+            \node[newmod, below left=0.4cm and -0.3cm of cpp] (qpf)
+                {\textbf{\textcolor{leangreen}{QPF (889) \textnormal{NEW}}}};
+            \node[mod, below right=0.4cm and -0.3cm of cpp] (tspec)
+                {\textcolor{amber}{TransferSpectral (492)}};
+            \node[mod, below=0.4cm of multi] (bperm) {BlockPerm (223)};
+            \node[mod, below=0.4cm of skolem] (ft) {\textcolor{leangreen}{FundThm (78)}};
+
+            \draw[arr] (trace) -- (tracend);
+            \draw[newarr] (cpp) -- (qpf);
+            \draw[arr] (cpp) -- (tspec);
+            \draw[arr] (multi) -- (bperm);
+            \draw[arr] (skolem) -- (ft);
+
+            % Row 5
+            \node[mod, below=0.4cm of bperm] (bpmps) {BlockPermMPS (334)};
+            \node[mod, left=0.3cm of bpmps] (pialg) {PiAlgExt (541)};
+            \draw[arr] (bperm) -- (bpmps);
+            \draw[arr] (multi) -- (pialg);
+
+            % Row 6
+            \node[mod, below=0.5cm of bpmps] (ftm) {\textcolor{amber}{FundThmMulti (232)}};
+            \draw[arr] (bpmps) -- (ftm);
+            \draw[arr] (pialg) -- (ftm);
+            \draw[arr] (ft) -- (ftm);
+
+            % Stats box
+            \node[draw=dimwhite,rounded corners=3pt,fill=cardbg,text=dimwhite,
+                font=\scriptsize,align=left,inner sep=4pt]
+            at (5.8,-3.5) {
+                \textbf{Total}: 4,079 lines {\small(+831)}\\
+                $\sim$150 theorems/lemmas\\
+                \textcolor{leangreen}{0 sorry}: single-block\\
+                \textcolor{softred}{4 sorry}: multi-block
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 13 - Mathematical content of QPF file
+%======================================================================
+\begin{frame}[fragile]{Inside \texttt{QuantumPerronFrobenius.lean}: 889 Lines}
+    \vspace{-0.3em}
+
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textbf{Part 1: Positive definiteness}
+        \begin{itemize}\itemsep0.05em\scriptsize
+            \item \texttt{ker\_invariant\_under\_adjoint} --- \\
+                $\rho x = 0 \Rightarrow \rho(A_i^\dagger x) = 0$
+            \item \texttt{ker\_contains\_all\_of\_span} --- \\
+                spanning + kernel inv.\ $\Rightarrow$ $\ker(\rho) = \mathbb{C}^D$
+            \item \texttt{posSemidef\_fixedPoint\_isPosDef} --- \\
+                from injectivity (vector-level)
+            \item \texttt{posSemidef\_fixedPoint\_isPosDef\_of\_irreducible} --- \\
+                from irreducibility (spectral projection)
+        \end{itemize}
+
+        \vspace{0.3em}
+        \textbf{Part 2: Uniqueness}
+        \begin{itemize}\itemsep0.05em\scriptsize
+            \item \texttt{exists\_critical\_scalar} --- \\
+                min eigenvalue of $\rho^{-1/2}\sigma\,\rho^{-1/2}$
+            \item \texttt{posSemidef\_fixedPoint\_unique} --- \\
+                $\sigma = c \rho$ for some $c > 0$
+        \end{itemize}
+
+        \column{0.47\textwidth}
+        \textbf{Part 3: Existence}
+        \begin{itemize}\itemsep0.05em\scriptsize
+            \item \texttt{exists\_posSemidef\_fixedPoint} --- \textcolor{softred}{\texttt{sorry}} \\
+                Needs Brouwer FPT on PSD cone
+        \end{itemize}
+
+        \vspace{0.3em}
+        \textbf{Part 4: Assembly}
+        \begin{itemize}\itemsep0.05em\scriptsize
+            \item \texttt{quantum\_perron\_frobenius} --- \\
+                combines Parts 1--3
+            \item \texttt{injective\_transfer\_unique\_fixed\_point'} --- \\
+                bridge replacing CPPrimitive chain
+        \end{itemize}
+
+        \vspace{0.5em}
+        \vspace{0.2em}
+        {\ttfamily\tiny\color{white}
+        \colorbox{cardbg}{\parbox{0.42\textwidth}{%
+        \texttt{-{}- The assembly is clean:}\\
+        \texttt{obtain $\langle\rho$, hpsd, hne, hfix$\rangle$ :=}\\
+        \texttt{~~exists\_posSemidef\_fixedPoint A hA hD}\\
+        \texttt{have hpd :=}\\
+        \texttt{~~posSemidef\_fixedPoint\_isPosDef}\\
+        \texttt{~~~~A hA $\rho$ hpsd hne hfix}\\
+        \texttt{exact $\langle\rho$, hfix, hpd,}\\
+        \texttt{~~fun $\sigma$ h$\sigma$ h$\sigma$fix => ...$\rangle$}
+        }}}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 14 - What's next
+%======================================================================
+\begin{frame}{What's Next}
+    \vspace{-0.3em}
+
+    \textbf{Cleanup (done):}
+    \begin{itemize}\itemsep0.1em\small
+        \item[\textcolor{leangreen}{\checkmark}] Dead code in \texttt{CPPrimitive.lean} deleted ($-$70 lines, $-$2 sorries)
+        \item[\textcolor{leangreen}{\checkmark}] 6 duplicate spectral lemmas consolidated into 3
+        \item[\textcolor{leangreen}{\checkmark}] All linter warnings fixed (DecidableEq, simp, show $\to$ change)
+    \end{itemize}
+
+    \vspace{0.3em}
+    \textbf{Medium-term (existence sorry):}
+    \begin{itemize}\itemsep0.1em\small
+        \item Brouwer FPT for the PSD cone: $\mathcal{E}$ maps PSD cone to itself,
+            restrict to trace-1 slice (compact convex), apply fixed point theorem
+        \item Alternatively: finite-dimensional Krein--Rutman is equivalent and more direct
+        \item Estimated $\sim$500 lines if Brouwer FPT were in Mathlib (it's not yet)
+    \end{itemize}
+
+    \vspace{0.3em}
+    \textbf{Hard target (spectral gap):}
+    \begin{itemize}\itemsep0.1em\small
+        \item The key blocker for the multi-block theorem
+        \item Requires: spectral radius is a simple dominant eigenvalue for primitive CP maps
+        \item Estimated $\sim$2{,}000--3{,}000 lines
+        \item Would close all remaining effective sorries
+    \end{itemize}
+\end{frame}
+
+%======================================================================
+% SLIDE 15 - Summary
+%======================================================================
+\begin{frame}{Summary}
+    \vspace{-0.3em}
+
+    \textbf{This session:} created \texttt{QuantumPerronFrobenius.lean} (889 lines, 31 theorems).
+
+    \vspace{0.3em}
+    \begin{center}
+        \small
+        \begin{tabular}{@{}lcc@{}}
+            \toprule
+            \textbf{QPF component} & \textbf{Status} & \textbf{Approach} \\
+            \midrule
+            PSD fixed point $\Rightarrow$ PD (injectivity) & \textcolor{leangreen}{\checkmark} & Vector-level kernel argument \\
+            PSD fixed point $\Rightarrow$ PD (irreducibility) & \textcolor{leangreen}{\checkmark} & Spectral support projection \\
+            Uniqueness up to scalar & \textcolor{leangreen}{\checkmark} & Critical scalar via eigenvalues \\
+            Existence of PSD fixed point & \textcolor{softred}{\texttt{sorry}} & Needs Brouwer FPT \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+
+    \vspace{0.3em}
+    \textbf{Overall project:}
+    \begin{center}
+        \small
+        \begin{tabular}{@{}lcl@{}}
+            Single-block FT              & \textcolor{leangreen}{\checkmark} & 0 sorry, complete \\
+            QPF: PD + uniqueness         & \textcolor{leangreen}{\checkmark} & 3/4 components proved \\
+            QPF: existence               & \textcolor{amber}{$\circ$}        & needs topology (Brouwer) \\
+            Spectral gap                 & \textcolor{softred}{$\times$}     & the hard remaining problem \\
+            Multi-block FT               & \textcolor{amber}{$\circ$}        & complete modulo spectral gap \\
+        \end{tabular}
+    \end{center}
+
+    \vspace{0.2em}
+    {\small \textbf{4,079 lines} across 17 modules. Sorry count: \textbf{5 $\to$ 4} (dead code deleted).}
+\end{frame}
+
+%======================================================================
+% THANK YOU
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \begin{center}
+        \vspace{2em}
+        \Huge\textbf{\textcolor{leangreen}{Thank You}}
+
+        \vspace{1.2em}
+        \LARGE Questions?
+
+        \vspace{1.5em}
+        \large\texttt{github.com/LionSR/MPSLean}
+    \end{center}
+\end{frame}
+}
+
+%======================================================================
+% References
+%======================================================================
+\begin{frame}[allowframebreaks]{References}
+\bibliography{references}
+\end{frame}
+
+\end{document}
