@@ -512,7 +512,62 @@ theorem kadison_schwarz (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_unital : IsUnitalKraus K)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (krausMap K (Xᴴ * X) - (krausMap K X)ᴴ * krausMap K X).PosSemidef := by
-  sorry
+  classical
+  -- The Gram 2×2 block matrix `[[X†X, X†], [X, I]]` is PSD.
+  let P : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ :=
+    Matrix.fromBlocks (Xᴴ * X) Xᴴ X 1
+  have hP : P.PosSemidef := by
+    -- Write `P = A * A†` with `A = [[X†],[I]]`.
+    let A : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin 0) ℂ :=
+      Matrix.fromBlocks Xᴴ 0 1 0
+    have hPA : A * Aᴴ = P := by
+      simp [A, P, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
+    simpa [hPA] using Matrix.posSemidef_self_mul_conjTranspose A
+  -- Block-diagonal Kraus operators acting on the direct sum space.
+  let K₂ : Fin d → Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ :=
+    fun i => Matrix.fromBlocks (K i) 0 0 (K i)
+  have h_term (i : Fin d) :
+      K₂ i * P * (K₂ i)ᴴ =
+        Matrix.fromBlocks (K i * (Xᴴ * X) * (K i)ᴴ) (K i * Xᴴ * (K i)ᴴ)
+          (K i * X * (K i)ᴴ) (K i * (K i)ᴴ) := by
+    simp [K₂, P, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, Matrix.mul_assoc]
+  -- The block matrix `[[E(X†X), E(X)†], [E(X), I]]` is a sum of conjugations of `P`, hence PSD.
+  have h_sum_psd : (∑ i : Fin d, K₂ i * P * (K₂ i)ᴴ).PosSemidef :=
+    Matrix.posSemidef_sum (s := Finset.univ)
+      (x := fun i : Fin d => K₂ i * P * (K₂ i)ᴴ)
+      (fun i _ => hP.mul_mul_conjTranspose_same (B := K₂ i))
+  have h_block_eq :
+      (∑ i : Fin d, K₂ i * P * (K₂ i)ᴴ) =
+        Matrix.fromBlocks (krausMap K (Xᴴ * X)) ((krausMap K X)ᴴ)
+          (krausMap K X) (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    simp_rw [h_term]
+    -- Sum of fromBlocks = fromBlocks of sums
+    have h_sfb : ∀ (A' B' C' D' : Fin d → Matrix (Fin D) (Fin D) ℂ),
+        ∑ i, Matrix.fromBlocks (A' i) (B' i) (C' i) (D' i) =
+          Matrix.fromBlocks (∑ i, A' i) (∑ i, B' i) (∑ i, C' i) (∑ i, D' i) := by
+      intro A' B' C' D'
+      induction Finset.univ (α := Fin d) using Finset.cons_induction with
+      | empty => simp [Matrix.fromBlocks_zero]
+      | cons a s ha ih =>
+        simp only [Finset.sum_cons]; rw [ih, Matrix.fromBlocks_add]
+    rw [h_sfb]
+    simp only [krausMap, Matrix.conjTranspose_sum, Matrix.conjTranspose_mul,
+      conjTranspose_conjTranspose, Matrix.mul_assoc]
+    rw [h_unital]
+  -- The resulting block matrix is PSD.
+  have h_block_psd :
+      (Matrix.fromBlocks (krausMap K (Xᴴ * X)) ((krausMap K X)ᴴ)
+        ((krausMap K X)ᴴᴴ) (1 : Matrix (Fin D) (Fin D) ℂ)).PosSemidef := by
+    rw [conjTranspose_conjTranspose, ← h_block_eq]; exact h_sum_psd
+  -- Schur complement: since the (2,2)-block is `I` (positive definite),
+  -- the Schur complement `E(X†X) - E(X)†E(X)` is PSD.
+  haveI : Invertible (1 : Matrix (Fin D) (Fin D) ℂ) := invertibleOne
+  have h_schur :
+      (krausMap K (Xᴴ * X) - (krausMap K X)ᴴ * (1 : Matrix (Fin D) (Fin D) ℂ)⁻¹ *
+        ((krausMap K X)ᴴ)ᴴ).PosSemidef :=
+    (Matrix.PosDef.fromBlocks₂₂ (A := krausMap K (Xᴴ * X)) (B := (krausMap K X)ᴴ)
+      (D := (1 : Matrix (Fin D) (Fin D) ℂ)) Matrix.PosDef.one).1 h_block_psd
+  simpa [inv_one, Matrix.mul_assoc, conjTranspose_conjTranspose] using h_schur
 
 /-- **Kadison-Schwarz for the adjoint channel** (MPS version).
 
