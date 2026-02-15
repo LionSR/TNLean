@@ -230,9 +230,8 @@ The proof embeds `M_D(ℂ)` into `EuclideanSpace ℂ (Fin D × Fin D)` so that
 `‖toES M‖² = frobSq M`. The triangle inequality and submultiplicativity of
 the Frobenius norm, together with Cauchy–Schwarz on the word sum, yield:
 
-$$\|F^n(X)\|_F^2 \le \bigl(\sum_\sigma \|w_A(\sigma)\|_F \cdot \|X\,w_B(\sigma)^\dagger\|_F\bigr)^2
-  \le \bigl(\sum_\sigma \|w_A(\sigma)\|_F^2\bigr)\bigl(\sum_\sigma \|X\,w_B(\sigma)^\dagger\|_F^2\bigr)
-  = D \cdot \|X\|_F^2.$$
+$$‖F^n(X)‖² ≤ (∑_σ ‖w_A(σ)‖ ‖X w_B(σ)†‖)²
+  ≤ (∑ ‖w_A‖²)(∑ ‖X w_B†‖²) = D · ‖X‖².$$
 -/
 
 /-- Embed a `D×D` matrix into `EuclideanSpace` to access the Frobenius norm. -/
@@ -271,6 +270,7 @@ private lemma norm_sq_sum_mul_le (a b : Fin D → ℂ) :
     _ ≤ _ := Finset.sum_mul_sq_le_sq_mul_sq _ _ _
 
 set_option maxHeartbeats 800000 in
+-- Frobenius submultiplicativity needs extra heartbeats for simp_rw over double sums
 /-- Frobenius-norm submultiplicativity: `frobSq(A B) ≤ frobSq A · frobSq B`. -/
 private lemma frobSq_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
     frobSq (A * B) ≤ frobSq A * frobSq B := by
@@ -320,6 +320,7 @@ private lemma sum_frobSq_words (K : MPSTensor d D) (hK : ∑ i : Fin d, (K i)ᴴ
   simp [Matrix.trace_one, Fintype.card_fin]
 
 set_option maxHeartbeats 1600000 in
+-- The uniform bound proof chains triangle + CS + Frobenius submult over word sums
 /-- **Uniform Frobenius-norm bound** on the mixed transfer operator.
 
 For normalized MPS tensors (`∑ Aᵢ† Aᵢ = 1` and `∑ Bᵢ† Bᵢ = 1`):

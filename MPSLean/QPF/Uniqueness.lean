@@ -26,31 +26,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Spectral decomposition helpers (re-proved locally as private) -/
-
-private lemma eig_conj_mul' [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Matrix.UnitaryGroup.star_mul_self hM.eigenvectorUnitary
-
-private lemma eig_mul_conj' [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ = 1 := by
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop
-
-private lemma spectral_decomp_eq' [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-      Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-  have h := hM.spectral_theorem
-  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-  convert h using 2
-
 section Uniqueness
 
 private lemma eigenvectorUnitary_isUnit' [DecidableEq (Fin D)]
@@ -120,7 +95,7 @@ private lemma sqrtFactor_mul_conjTranspose' [DecidableEq (Fin D)]
       = U * (Matrix.diagonal (sqrtΛ' hρ) * Matrix.diagonal (sqrtΛ' hρ)) * Uᴴ := by noncomm_ring
     _ = U * Matrix.diagonal (fun j => (↑(hρ.eigenvalues j) : ℂ)) * Uᴴ := by
         rw [sqrtΛ_mul_sqrtΛ' hρ hρ_pd.posSemidef]
-    _ = ρ := (spectral_decomp_eq' hρ).symm
+    _ = ρ := (spectral_decomp_eq hρ).symm
 
 private lemma sqrtFactor_mul_invFactor_conj' [DecidableEq (Fin D)]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.IsHermitian) (hρ_pd : ρ.PosDef) :
@@ -135,7 +110,7 @@ private lemma sqrtFactor_mul_invFactor_conj' [DecidableEq (Fin D)]
       = U * (Matrix.diagonal (sqrtΛ' hρ) * Matrix.diagonal (sqrtInvΛ' hρ hρ_pd)) * Uᴴ := by
         noncomm_ring
     _ = U * 1 * Uᴴ := by rw [sqrtΛ_mul_sqrtInvΛ' hρ hρ_pd]
-    _ = 1 := by rw [Matrix.mul_one]; exact eig_mul_conj' hρ
+    _ = 1 := by rw [Matrix.mul_one]; exact eig_mul_conj hρ
 
 private lemma invFactor_mul_sqrtFactor_conj' [DecidableEq (Fin D)]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.IsHermitian) (hρ_pd : ρ.PosDef) :
@@ -150,7 +125,7 @@ private lemma invFactor_mul_sqrtFactor_conj' [DecidableEq (Fin D)]
       = U * (Matrix.diagonal (sqrtInvΛ' hρ hρ_pd) * Matrix.diagonal (sqrtΛ' hρ)) * Uᴴ := by
         noncomm_ring
     _ = U * 1 * Uᴴ := by rw [sqrtInvΛ_mul_sqrtΛ' hρ hρ_pd]
-    _ = 1 := by rw [Matrix.mul_one]; exact eig_mul_conj' hρ
+    _ = 1 := by rw [Matrix.mul_one]; exact eig_mul_conj hρ
 
 private lemma sqrtFactor_isUnit' [DecidableEq (Fin D)]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.IsHermitian) (hρ_pd : ρ.PosDef) :
@@ -184,8 +159,8 @@ private lemma hermitian_sub_scalar_spectral [DecidableEq (Fin D)]
       Matrix.diagonal (fun j => (↑(hA.eigenvalues j - c) : ℂ)) *
       (↑hA.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hA.eigenvectorUnitary
-  have hUUt : U * Uᴴ = 1 := eig_mul_conj' hA
-  have hA_spec := spectral_decomp_eq' hA
+  have hUUt : U * Uᴴ = 1 := eig_mul_conj hA
+  have hA_spec := spectral_decomp_eq hA
   have h_cI : (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
       U * ((↑c : ℂ) • 1) * Uᴴ := by
     calc (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ)

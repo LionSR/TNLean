@@ -29,23 +29,25 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Shared spectral decomposition helpers -/
+/-! ### Shared spectral decomposition helpers
 
-private lemma eig_conj_mul [DecidableEq (Fin D)]
+These are non-private so that `QPF.Uniqueness` can reuse them. -/
+
+lemma eig_conj_mul [DecidableEq (Fin D)]
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
     (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ *
       (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) = 1 := by
   rw [← Matrix.star_eq_conjTranspose]
   exact Matrix.UnitaryGroup.star_mul_self hM.eigenvectorUnitary
 
-private lemma eig_mul_conj [DecidableEq (Fin D)]
+lemma eig_mul_conj [DecidableEq (Fin D)]
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
     (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
       (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ = 1 := by
   rw [← Matrix.star_eq_conjTranspose]
   exact Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop
 
-private lemma spectral_decomp_eq [DecidableEq (Fin D)]
+lemma spectral_decomp_eq [DecidableEq (Fin D)]
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
     M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
       Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) *

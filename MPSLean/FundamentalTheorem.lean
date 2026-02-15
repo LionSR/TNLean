@@ -23,31 +23,16 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- If `T = 0` and `T(A i) = B i` with `SameMPV A B`, then `trace 1 = 0`, contradicting `D > 0`.
+/-- If `T = 0` and `T(A i) = B i` with `SameMPV A B`, then we get a contradiction.
 
-This is the `T ≠ 0` argument used in the single-block theorem: `T = 0` forces `B = 0`, hence
-`trace (A i) = 0` for all `i`; since the `A i` span, this means `trace` vanishes on everything,
-but `trace 1 = D ≠ 0`. -/
+Uses `trace_ne_zero_of_injective` from `TracePairing`. -/
 private theorem linearExtension_nonzero {A B : MPSTensor d (Nat.succ D')}
     (hA : IsInjective A) (hAB : SameMPV A B)
     {T : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ →ₗ[ℂ]
          Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ}
     (hT : ∀ i : Fin d, T (A i) = B i) : T ≠ 0 := by
   intro h0
-  -- `T = 0` implies `B i = 0`, hence `trace (A i) = 0` for all `i`.
-  have hBzero : ∀ i, B i = 0 := fun i => by simpa [h0] using (hT i).symm
-  have hTraceA : ∀ i, Matrix.trace (A i) = 0 := fun i => by
-    simpa [evalWord, hBzero i] using hAB.trace_evalWord [i]
-  -- The trace functional vanishes on a spanning set, hence on everything.
-  have htr_zero : Matrix.traceLinearMap (Fin (Nat.succ D')) ℂ ℂ = 0 := by
-    apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
-    intro i; simpa [Matrix.traceLinearMap_apply] using hTraceA i
-  -- But `trace 1 = D' + 1 ≠ 0`.
-  have : Matrix.trace (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 0 := by
-    simpa [Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
-  exact absurd this (by
-    simpa [Matrix.trace_one, Fintype.card_fin] using
-      (Nat.cast_ne_zero (R := ℂ)).2 (Nat.succ_ne_zero D'))
+  exact trace_ne_zero_of_injective hA hAB (fun i => by simpa [h0] using (hT i).symm)
 
 /-- Single-block (injective) Fundamental Theorem of MPS:
 

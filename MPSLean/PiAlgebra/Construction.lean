@@ -93,7 +93,7 @@ theorem perBlockLinearExtension_mul
         perBlockLinearExtension A B hA hSame k N :=
   linearExtension_mul (hA k) (hSame k) (perBlockLinearExtension_spec A B hA hSame k)
 
-/-- Per-block T ≠ 0. -/
+/-- Per-block T ≠ 0. Uses `trace_ne_zero_of_injective` from `TracePairing`. -/
 private theorem perBlockLinearExtension_nonzero
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))
@@ -101,16 +101,8 @@ private theorem perBlockLinearExtension_nonzero
     (k : Fin r) : perBlockLinearExtension A B hA hSame k ≠ 0 := by
   intro h0
   have hT := perBlockLinearExtension_spec A B hA hSame k
-  have hBzero : ∀ i, B k i = 0 := fun i => by simpa [h0] using (hT i).symm
-  have hTraceA : ∀ i, Matrix.trace (A k i) = 0 := fun i => by
-    simpa [MPSTensor.evalWord, hBzero i] using (hSame k).trace_evalWord [i]
-  have htr_zero : Matrix.traceLinearMap (Fin (dim k)) ℂ ℂ = 0 := by
-    apply LinearMap.ext_on_range (v := A k) (hv := (hA k).span_eq_top)
-    intro i; simpa [Matrix.traceLinearMap_apply] using hTraceA i
-  have htr1 : Matrix.trace (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) = 0 := by
-    simpa [Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
-  rw [Matrix.trace_one, Fintype.card_fin] at htr1
-  exact absurd htr1 ((Nat.cast_ne_zero (R := ℂ)).2 (NeZero.ne (dim k)))
+  exact MPSTensor.trace_ne_zero_of_injective (hA k) (hSame k)
+    (fun i => by simpa [h0] using (hT i).symm)
 
 /-- Per-block bijectivity. -/
 theorem perBlockLinearExtension_bijective
