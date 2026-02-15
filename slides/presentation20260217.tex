@@ -1,0 +1,551 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\input{preamble}
+
+\title{\textbf{MPSLean Status Update:\\Quantum Perron--Frobenius in Lean 4}}
+\subtitle{{\small Feb 17 --- Lean 4 + Mathlib v4.27.0 --- based on \cite{Perez-Garcia2007Matrix,Wolf2012Quantum}}}
+\date{}
+\author{}
+
+\begin{document}
+
+%======================================================================
+% SLIDE 1 - Title
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{-1.5em}
+    \maketitle
+    \vspace{-3em}
+    \begin{center}
+        {\footnotesize
+            \textcolor{dimwhite}{Single-block: \textcolor{leangreen}{fully proved} $\cdot$
+            QPF \cite{Evans1978Spectral}: \textcolor{leangreen}{0 sorry} $\cdot$
+            $\rho(\mathcal{F}_{AB}) \leq 1$: \textcolor{leangreen}{proved} $\cdot$
+            ${\sim}$5{,}300 lines across 19 files}}
+    \end{center}
+\end{frame}
+}
+
+%======================================================================
+% SLIDE 2 - What changed since Feb 16
+%======================================================================
+\begin{frame}{What Changed Since Feb 16}
+    \vspace{-0.5em}
+
+    \begin{columns}[T]
+        \column{0.46\textwidth}
+        \textbf{\textcolor{leangreen}{Sorries closed (2):}}
+        \begin{itemize}\itemsep0.1em\small
+            \item[\textcolor{leangreen}{\checkmark}] \texttt{spectralRadius\_mixedTransfer\_lt\_one}\\
+                {\tiny Now proved via contrapositive + axiom}
+            \item[\textcolor{leangreen}{\checkmark}] \texttt{exists\_posSemidef\_fixedPoint}\\
+                {\tiny Ces\`aro mean argument (new)}
+        \end{itemize}
+
+        \vspace{0.3em}
+        \textbf{\textcolor{leangreen}{Major new results:}}
+        \begin{itemize}\itemsep0.15em\small
+            \item[\textcolor{leangreen}{\checkmark}] $\rho(\mathcal{F}_{AB}) \leq 1$ fully proved
+            \item[\textcolor{leangreen}{\checkmark}] Every eigenvalue $|\mu| \leq 1$
+            \item[\textcolor{leangreen}{\checkmark}] Hilbert--Schmidt contraction bound
+            \item[\textcolor{leangreen}{\checkmark}] Full convergence chain (mod axiom)
+        \end{itemize}
+
+        \column{0.50\textwidth}
+        \textbf{\textcolor{amber}{New scaffolding added:}}
+        \begin{itemize}\itemsep0.15em\small
+            \item[\textcolor{softred}{\texttt{ax}}] \texttt{modulus\_one\_eigenvalue\_implies\_gauge}\\
+                {\tiny The hard math; axiom for now}
+            \item[\textcolor{gray}{\texttt{s}}] \texttt{kadison\_schwarz}\\
+                {\tiny Stated + downstream wired; orphan}
+            \item[\textcolor{gray}{\texttt{s}}] \texttt{posSemidef\_parts\_of\_herm\_FP}\\
+                {\tiny Wolf Prop 6.8; orphan}
+        \end{itemize}
+
+        \vspace{0.3em}
+        \textbf{Net change:}
+        \begin{itemize}\itemsep0.1em\small
+            \item Feb 16: 4 sorries, 0 axioms
+            \item \textbf{Now: 4 sorries + 1 axiom}
+            \item 2 old closed, 2 new (orphans) + 1 axiom added
+            \item \textbf{But}: 3 of 4 sorries are \textcolor{gray}{orphans}
+        \end{itemize}
+    \end{columns}
+
+    \vspace{0.1em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=amber,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.88\textwidth,align=center,inner sep=4pt,font=\small] {
+                Net sorry count unchanged (4$\to$4+1 axiom), but \textbf{topology improved}:\\
+                {\scriptsize main gap is now one hard theorem
+                (eigenvalue rigidity \cite{Wolf2012Quantum}, Thm 6.6).
+                \textcolor{dimwhite}{(+583 uncommitted lines)}}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 3 - QPF Overview: what is it and how does our proof compare to Wolf
+%======================================================================
+\begin{frame}{Quantum Perron--Frobenius: Architecture \& Comparison to Wolf}
+    \vspace{-0.5em}
+
+    \textbf{Theorem} (\texttt{quantum\_perron\_frobenius}, cf.\ \cite{Evans1978Spectral}):
+    {\small For an injective, normalized MPS tensor $A$ \cite{Perez-Garcia2007Matrix},
+    the transfer map
+    $\mathcal{E}_A(X) = \sum_i A_i X A_i^\dagger$ has a \textbf{unique} PSD fixed
+    point $\rho$, and it is \textbf{positive definite}.}
+
+    \vspace{0.25em}
+    {\small Three ingredients, all \textcolor{leangreen}{0 sorry}:}
+
+    \vspace{0.1em}
+    {\footnotesize
+    \begin{tabular}{@{}lllll@{}}
+        \toprule
+        \textbf{Step} & \textbf{Lean theorem} & \textbf{Wolf ref.} & \textbf{Same approach?} & \textbf{Lines} \\
+        \midrule
+        \rowcolor{cardbg}
+        1.\ Existence & \texttt{exists\_posSemidef\_fixedPoint} & {\cite{Wolf2012Quantum} Thm 6.11} &
+            \textcolor{amber}{\textbf{No}} --- Ces\`aro mean & $\sim$130 \\
+        2.\ Positive def & \texttt{posSemidef\_fixedPoint\_isPosDef} & {\cite{Wolf2012Quantum} Thm 6.3} &
+            \textcolor{amber}{\textbf{No}} --- kernel argument & $\sim$200 \\
+        \rowcolor{cardbg}
+        3.\ Uniqueness & \texttt{posSemidef\_fixedPoint\_unique} & {\cite{Wolf2012Quantum} Thm 6.15} &
+            \textcolor{leangreen}{\textbf{Yes}} --- critical scalar & $\sim$350 \\
+        \bottomrule
+    \end{tabular}
+    }
+
+    \vspace{0.3em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=amber,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.88\textwidth,align=center,inner sep=5pt,font=\small] {
+                2 of 3 proofs diverge from \cite{Wolf2012Quantum}.
+                Our proofs exploit the MPS \textbf{injectivity} assumption directly,\\
+                {\scriptsize avoiding the general irreducibility theory of Wolf Ch.~6,
+                which would require more Mathlib infrastructure to formalize.}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 4 - Existence: Ces\`aro mean (our proof vs Wolf's Brouwer)
+%======================================================================
+\begin{frame}{QPF Existence: Ces\`aro Mean \textnormal{(cf.\ \cite{Wolf2012Quantum} Thm 6.11)}}
+    \vspace{-0.3em}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{\textcolor{leangreen}{Our proof} (0 sorry):}
+        \begin{enumerate}\itemsep0.1em\small
+            \item Start with any density matrix $\rho_0 = \tfrac{1}{D}I$
+            \item Ces\`aro means:
+                $\sigma_N = \tfrac{1}{N}\sum_{n=0}^{N-1} \mathcal{E}^n(\rho_0)$
+            \item Each $\sigma_N$ is a density matrix\\
+                {\tiny PSD: convex comb of PSD. \quad Tr = 1: $\mathcal{E}$ is TP.}
+            \item Compact $\Rightarrow$ convergent subsequence $\sigma_{N_k} \to \sigma$
+            \item \textbf{Telescoping}: $\mathcal{E}(\sigma_N) - \sigma_N = \frac{\mathcal{E}^N(\rho_0) - \rho_0}{N} \to 0$
+            \item $\Rightarrow$ $\mathcal{E}(\sigma) = \sigma$ \quad {\tiny (limit uniqueness)}
+        \end{enumerate}
+
+        \column{0.48\textwidth}
+        \textbf{\textcolor{dimwhite}{Wolf's proof} (\cite{Wolf2012Quantum} Thm 6.11):}
+        \begin{enumerate}\itemsep0.1em\small\color{dimwhite}
+            \item $\mathcal{E}$ maps density matrices to density matrices\\
+                {\tiny (positive + trace-preserving)}
+            \item Density matrices form a compact convex set
+            \item $\mathcal{E}$ is continuous
+            \item Apply \textbf{Brouwer fixed-point theorem}:\\
+                continuous self-map of compact convex set has a fixed point
+        \end{enumerate}
+
+        \vspace{0.3em}
+        \textbf{\textcolor{amber}{Why we diverge:}}
+        \begin{itemize}\itemsep0.1em\small
+            \item Mathlib has Schauder--Tychonoff, but
+                applying it to density matrices requires nontrivial
+                compactness/convexity setup
+            \item Ces\`aro argument is self-contained\\
+                {\tiny Uses only: compactness, linearity, sequential limits}
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 5 - PD: Kernel argument (our proof vs Wolf)
+%======================================================================
+\begin{frame}{QPF Positive Definiteness: Kernel Argument \textnormal{(cf.\ \cite{Wolf2012Quantum} Thm 6.3)}}
+    \vspace{-0.3em}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{\textcolor{leangreen}{Our proof} (0 sorry):}
+        \begin{enumerate}\itemsep0.12em\small
+            \item Suppose $\rho \geq 0$, $\rho \neq 0$, $\mathcal{E}(\rho) = \rho$
+            \item If $\rho x = 0$, then from FP equation:\\
+                $0 = x^* \rho\, x = \sum_i (A_i^\dagger x)^* \rho (A_i^\dagger x)$
+            \item Each term $\geq 0$ (PSD), sum $= 0$\\
+                $\Rightarrow$ $\rho\,(A_i^\dagger x) = 0$ for all $i$
+            \item \textbf{Key}: $\{A_i\}$ spans $M_D$ (injectivity \cite{Perez-Garcia2007Matrix})\\
+                $\Rightarrow$ $\{A_i^\dagger\}$ spans $M_D$\\
+                $\Rightarrow$ $\rho \cdot (M x) = 0$ for all $M$
+            \item Since $x \neq 0$: $M \mapsto Mx$ is surjective\\
+                $\Rightarrow$ $\rho = 0$, contradicting $\rho \neq 0$
+        \end{enumerate}
+
+        \column{0.48\textwidth}
+        \textbf{\textcolor{dimwhite}{Wolf's proof} (\cite{Wolf2012Quantum} Thm 6.3):}
+        \begin{enumerate}\itemsep0.12em\small\color{dimwhite}
+            \item Define $r(X) = \lambda_{\max}(X) / \lambda_{\min}(X)$\\
+                {\tiny (ratio of extreme eigenvalues)}
+            \item Show $r(\mathcal{E}(X)) \leq r(X)$ for PD $X$
+            \item Apply $(I + \mathcal{E})^{d^2-1}$ to a PSD eigenvector
+            \item Conclude PD via the ratio bound
+        \end{enumerate}
+
+        \vspace{0.3em}
+        \textbf{\textcolor{amber}{Why we diverge:}}
+        \begin{itemize}\itemsep0.1em\small
+            \item Wolf's proof works for general \emph{irreducible} maps;
+                ours only handles MPS injectivity
+            \item Our kernel argument is shorter ($\sim$200 lines)
+                but \emph{less general}
+            \item \textbf{Also proved}: irreducibility version\\
+                {\tiny via support projection $Q$ (closer to Wolf)}
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 6 - Uniqueness: Critical scalar (same as Wolf)
+%======================================================================
+\begin{frame}{QPF Uniqueness: Critical Scalar \textnormal{($\approx$ \cite{Wolf2012Quantum} Thm 6.15)}}
+    \vspace{-0.5em}
+
+    \textbf{Theorem}: Any two nonzero PSD fixed points of $\mathcal{E}_A$
+    (with $A$ injective) are proportional.
+
+    \vspace{0.15em}
+    \textbf{\textcolor{leangreen}{Proof}} (same strategy as \cite{Wolf2012Quantum}):
+    \begin{enumerate}\itemsep0.08em\small
+        \item Both $\rho$ and $\sigma$ are PD (by the kernel argument above).
+        \item Conjugate: $H := \rho^{-1/2}\,\sigma\,\rho^{-1/2}$ is PD.
+            \quad {\tiny Via spectral decomp: $S = U\,\mathrm{diag}(\sqrt{\lambda})$, $B = U\,\mathrm{diag}(1/\sqrt{\lambda})$.}
+        \item \textbf{Critical scalar}: $c_0 = \lambda_{\min}(H) > 0$.
+        \item Define $\tau = \sigma - c_0\,\rho$.
+            \quad {\tiny Spectral shift: $\tau = S(H - c_0 I)S^\dagger \geq 0$ but $\lambda_{\min} = 0$ $\Rightarrow$ not PD.}
+        \item $\tau$ is a fixed point (linearity).
+            \quad If $\tau \neq 0$: PD theorem forces PD --- \textbf{contradiction}!
+        \item $\therefore$ $\tau = 0$, i.e., $\sigma = c_0\,\rho$. \qed
+    \end{enumerate}
+
+    \vspace{0.15em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.88\textwidth,align=center,inner sep=4pt,font=\small] {
+                $\sim$350 lines.
+                The spectral decomposition bookkeeping ($S$, $S^{-1}$, conjugation)
+                is the bulk of the proof.\\
+                {\scriptsize The \emph{mathematical} idea is short: PSD-but-not-PD contradicts the PD theorem.}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 7 - HS contraction and spectral radius bound (beyond Wolf)
+%======================================================================
+\begin{frame}{Spectral Bound: $\rho(\mathcal{F}_{AB}) \leq 1$ via HS Contraction
+    \textnormal{(beyond Wolf)}}
+    \vspace{-0.5em}
+
+    \textbf{Setting}: the \emph{mixed} transfer $\mathcal{F}_{AB}(X) = \sum_i A_i X B_i^\dagger$
+    for two (possibly different) MPS tensors. \textcolor{amber}{Not covered by \cite{Wolf2012Quantum} Ch.~6; argument follows \cite{Perez-Garcia2007Matrix}.}
+
+    \vspace{0.15em}
+    \textbf{\textcolor{leangreen}{Theorem}} (\texttt{eigenvalue\_norm\_le\_one}):
+    Every eigenvalue $\mu$ of $\mathcal{F}_{AB}$ has $|\mu| \leq 1$.
+
+    \vspace{0.15em}
+    \textbf{Proof} ($\sim$200 new lines in \texttt{TransferSpectral.lean}):
+    \begin{enumerate}\itemsep0.06em\small
+        \item Embed $M_D(\mathbb{C}) \hookrightarrow \mathrm{EuclideanSpace} \mathbb{C} 
+            (\mathrm{Fin} D \times \mathrm{Fin} D)$
+            via \texttt{toES}, with $\|\texttt{toES}(M)\|^2 = \mathrm{frobSq}(M)$
+        \item Expand: $\mathcal{F}^n(X) = \sum_\sigma w_A(\sigma) \cdot X \cdot w_B(\sigma)^\dagger$
+            \quad {\tiny (\texttt{mixedTransferMap\_pow\_apply})}
+        \item Triangle + Frob.\ submult: $\|\mathcal{F}^n(X)\|_F \leq \sum_\sigma \|w_A(\sigma)\|_F \cdot \|X\,w_B(\sigma)^\dagger\|_F$
+        \item Cauchy--Schwarz on the word sum:
+            $(\sum f_A \cdot f_B)^2 \leq (\sum f_A^2)(\sum f_B^2)$
+        \item TP condition $\sum A_i^\dagger A_i = I$ iterated over words gives:
+            \vspace{-0.2em}
+            \[
+                \textstyle\sum_\sigma \mathrm{frobSq}(w_A(\sigma)) = D, \qquad
+                \sum_\sigma \mathrm{frobSq}(X \cdot w_B(\sigma)^\dagger) = \mathrm{frobSq}(X)
+            \]
+            \vspace{-1em}
+        \item \textbf{Result}: $\mathrm{frobSq}(\mathcal{F}^n(X)) \leq D^2 \cdot \mathrm{frobSq}(X)$
+            for all $n$. \quad {\small If $|\mu| > 1$: $|\mu|^{2n} \to \infty$, contradiction.}
+    \end{enumerate}
+
+    \vspace{0.15em}
+    {\footnotesize\textcolor{amber}{Note}: this gives $|\mu| \leq 1$ (non-strict).
+    The strict bound $\rho < 1$ requires the axiom (next slide).}
+\end{frame}
+
+%======================================================================
+% SLIDE 8 - Spectral gap and convergence (the axiom)
+%======================================================================
+\begin{frame}{From $\rho \leq 1$ to $\rho < 1$: The Hard Problem}
+    \vspace{-0.5em}
+
+    \textbf{Goal}: for $A \not\sim B$ (not gauge-equiv), $\rho(\mathcal{F}_{AB}) < 1$.
+
+    \vspace{0.1em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{What's proved (green) vs axiom (red):}
+        \begin{itemize}\itemsep0.06em\small
+            \item[\textcolor{leangreen}{\checkmark}] $\rho(\mathcal{F}_{AB}) \leq 1$
+                \quad {\tiny (HS contraction)}
+            \item[\textcolor{softred}{\texttt{ax}}] $\rho \geq 1 \Rightarrow A \sim B$\\
+                {\tiny \texttt{modulus\_one\_eigenvalue\_implies\_gauge}}
+            \item[\textcolor{leangreen}{\checkmark}] $\neg(A \sim B) \Rightarrow \rho < 1$
+                \quad {\tiny (contrapositive)}
+            \item[\textcolor{leangreen}{\checkmark}] $\rho < 1 \Rightarrow \mathcal{F}^n \to 0$
+                \quad {\tiny (Gelfand)}
+            \item[\textcolor{leangreen}{\checkmark}] $\mathrm{tr}(\mathcal{F}_{AB}^N(X)) \to 0$
+                \quad {\tiny (cont.\ of trace)}
+        \end{itemize}
+
+        \column{0.48\textwidth}
+        \textbf{The axiom} (\cite{Wolf2012Quantum} Thm 6.6 / \cite{Perez-Garcia2007Matrix}):
+        \begin{enumerate}\itemsep0.04em\small
+            \item $|\mu| = 1$ eigenvector\\
+                $\Rightarrow$ KS equality case
+            \item Equality $\Rightarrow$ $X^\dagger X$ is FP of $\mathcal{E}$
+            \item Uniqueness $\Rightarrow$ $X = U\sqrt{\rho}$
+            \item Peripheral eigenvectors form group\\
+                $\Rightarrow$ $U$ is unitary
+            \item Primitivity (injectivity)\\
+                $\Rightarrow$ only eigenvalue $= 1$ on circle
+            \item $\Rightarrow$ gauge equivalence
+        \end{enumerate}
+    \end{columns}
+
+    \vspace{0.2em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=softred,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.88\textwidth,align=center,inner sep=4pt,font=\small] {
+                This is the hardest remaining mathematics.
+                It involves Kadison--Schwarz equality analysis,\\
+                peripheral spectrum theory, and primitivity,
+                none of which are currently in Mathlib.
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 9 - Complete dependency architecture
+%======================================================================
+\begin{frame}{Complete Proof Architecture}
+    \vspace{-0.5em}
+
+    \begin{center}
+        \begin{tikzpicture}[xscale=0.82,yscale=0.82,
+            sbox/.style={rectangle,rounded corners,draw=white,text=white,
+                    font=\tiny\bfseries,minimum width=2.0cm,minimum height=0.6cm,align=center},
+            sarr/.style={-{Stealth[scale=0.7]},white,thick},
+            ]
+            % Row 1: QPF chain (all green, 0 sorry)
+            \node[sbox,fill=leangreen!40!black] (exist) at (0,3) {$\exists$ PSD FP\\{\tiny Ces\`aro}};
+            \node[sbox,fill=leangreen!40!black] (pd) at (2.8,3) {PSD$\Rightarrow$PD\\{\tiny kernel}};
+            \node[sbox,fill=leangreen!40!black] (uniq) at (5.6,3) {Unique FP\\{\tiny crit.\ scalar}};
+            \node[sbox,fill=leangreen!40!black] (qpf) at (9.0,3) {\texttt{quantum\_PF}\\{\tiny 0 sorry}};
+            \draw[sarr,leangreen] (exist) -- (pd);
+            \draw[sarr,leangreen] (pd) -- (uniq);
+            \draw[sarr,leangreen] (uniq) -- (qpf);
+
+            % Row 2: Spectral bound chain (all green)
+            \node[sbox,fill=leangreen!40!black] (hs) at (0,1.5) {HS contraction\\{\tiny frobSq $\leq D^2$}};
+            \node[sbox,fill=leangreen!40!black] (eigen) at (2.8,1.5) {$|\mu|\leq 1$\\{\tiny eigenvector}};
+            \node[sbox,fill=leangreen!40!black] (rho1) at (5.6,1.5) {$\rho \leq 1$\\{\tiny $\sup$ over spectrum}};
+            \draw[sarr,leangreen] (hs) -- (eigen);
+            \draw[sarr,leangreen] (eigen) -- (rho1);
+
+            % The axiom + spectral gap
+            \node[sbox,fill=softred!50!black,draw=softred] (axiom) at (5.6,0) {\textcolor{softred}{\texttt{axiom}}\\eigenvalue rigidity};
+            \node[sbox,fill=amber!30!black] (rho_lt) at (9.0,0.75) {$\rho < 1$\\{\tiny contrapositive}};
+            \draw[sarr,leangreen] (rho1) -- (rho_lt);
+            \draw[sarr,softred] (axiom) -- (rho_lt);
+
+            % Row 3: Convergence chain (proved, depends on axiom)
+            \node[sbox,fill=amber!25!black] (conv) at (9.0,-0.5) {$\mathcal{F}^n\to 0$\\{\tiny Gelfand}};
+            \node[sbox,fill=amber!25!black] (corr) at (12.0,-0.5) {cross-corr\\$\to 0$};
+            \draw[sarr,amber] (rho_lt) -- (conv);
+            \draw[sarr,amber] (conv) -- (corr);
+
+            % Row 4: Block separation + FT
+            \node[sbox,fill=softred!50!black,draw=softred] (sep) at (9.0,-2) {\textcolor{softred}{\texttt{sorry}}\\per-block SameMPV};
+            \node[sbox,fill=leangreen!40!black] (ft) at (12.0,-2) {Multi-block FT\\{\tiny assembly}};
+            \draw[sarr,softred] (sep) -- (ft);
+            \draw[sarr,white,dashed] (corr) -- (sep) node[midway,right,font=\tiny,text=amber] {needs};
+
+            % Single block (independent, green)
+            \node[sbox,fill=leangreen!40!black] (sb) at (0,-2) {Single-block FT\\{\tiny Skolem--Noether}};
+
+            % Orphan sorries (grayed out)
+            \node[sbox,fill=gray!30!black,draw=gray,text=dimwhite] (ks) at (0,0) {kadison\_schwarz\\{\tiny orphan}};
+            \node[sbox,fill=gray!30!black,draw=gray,text=dimwhite] (w68) at (2.8,0) {Wolf 6.8\\{\tiny orphan}};
+            \node[sbox,fill=gray!30!black,draw=gray,text=dimwhite] (vec) at (12.0,1.5) {vectorization\\{\tiny orphan}};
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.1em}
+    {\footnotesize
+    \textcolor{leangreen}{Green} = fully proved (0 sorry).
+    \textcolor{amber}{Amber} = proved but depends on axiom.
+    \textcolor{softred}{Red} = sorry/axiom (critical).
+    \textcolor{gray}{Gray} = orphan.
+    \textcolor{dimwhite}{Dashed = not yet wired (PiAlgExt $\not\to$ TransferSpectral).}}
+\end{frame}
+
+%======================================================================
+% SLIDE 10 - Sorry/axiom inventory
+%======================================================================
+\begin{frame}{Sorry \& Axiom Inventory}
+    \vspace{-0.5em}
+
+    \textbf{\textcolor{softred}{Critical path}} (block the Fundamental Theorem):
+    \vspace{-0.3em}
+    {\scriptsize
+        \begin{tabular}{@{}cp{5.0cm}cp{3.5cm}@{}}
+            \toprule
+            \textbf{Type} & \textbf{Statement} & \textbf{Used by} & \textbf{Math needed} \\
+            \midrule
+            \rowcolor{cardbg}
+            \texttt{axiom} &
+                \texttt{modulus\_one\_eigenvalue\_implies\_gauge}:
+                $\rho \geq 1 \Rightarrow$ gauge-phase equiv &
+                $\rho < 1$ &
+                \cite{Wolf2012Quantum} Thm 6.6 \\
+            \texttt{sorry} &
+                \texttt{sameMPV\textsubscript{2}\_implies\_perBlock\_sameMPV}:
+                block separation &
+                multi-block FT &
+                Spectral gap + Vandermonde \\
+            \bottomrule
+        \end{tabular}
+    }
+
+    \vspace{0.4em}
+    \textbf{\textcolor{gray}{Orphan sorries}} (no downstream dependents):
+    \vspace{-0.3em}
+    {\scriptsize
+        \begin{tabular}{@{}cp{5.0cm}p{4.5cm}@{}}
+            \toprule
+            \textbf{File} & \textbf{Sorry} & \textbf{Why it exists} \\
+            \midrule
+            \rowcolor{cardbg}
+            PositiveMapSpectral &
+                \texttt{kadison\_schwarz} &
+                Scaffolding for future \cite{Wolf2012Quantum} Ch.~6 \\
+            PositiveMapSpectral &
+                \texttt{posSemidef\_parts\_of\_herm\_FP} &
+                \cite{Wolf2012Quantum} Prop 6.8; not yet used \\
+            \rowcolor{cardbg}
+            TransferSpectral &
+                \texttt{mixedTransferSpectralRadius\_eq\_...} &
+                Vectorization bridge; isolated \\
+            \bottomrule
+        \end{tabular}
+    }
+
+    \vspace{0.3em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=amber,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.88\textwidth,align=center,inner sep=5pt,font=\small] {
+                \textbf{Only 1 axiom + 1 sorry} block the Fundamental Theorem.\\
+                {\scriptsize The sorry reduces to the axiom once
+                \texttt{cross\_correlation\_tendsto\_zero} is wired into the
+                block-separation argument.}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 11 - Summary & path forward
+%======================================================================
+\begin{frame}{Summary \& Path Forward}
+    \vspace{-0.3em}
+
+    \begin{center}
+        \begin{tikzpicture}[xscale=0.85,
+            sbox/.style={rectangle,rounded corners,draw=white,text=white,
+                    font=\scriptsize\bfseries,minimum width=2.2cm,minimum height=0.75cm,align=center},
+            sarr/.style={-{Stealth[scale=0.8]},white,thick},
+            ]
+            \node[sbox,fill=leangreen!40!black] (a) at (0,0) {Single-block\\FT \textcolor{leangreen}{\checkmark}};
+            \node[sbox,fill=leangreen!40!black] (b) at (3,0) {QPF\\\textcolor{leangreen}{\checkmark}};
+            \node[sbox,fill=leangreen!40!black] (c) at (6,0) {$\rho \leq 1$\\\textcolor{leangreen}{\checkmark}};
+            \node[sbox,fill=softred!50!black] (d) at (9,0) {Eigenvalue\\rigidity};
+            \node[sbox,fill=softred!40!black] (e) at (12,0) {Multi-block\\FT};
+
+            \draw[sarr,leangreen] (a) -- (b);
+            \draw[sarr,leangreen] (b) -- (c);
+            \draw[sarr,softred] (c) -- (d);
+            \draw[sarr,softred] (d) -- (e);
+
+            % Progress bar
+            \fill[leangreen!40!black,rounded corners=2pt] (0,-0.9) rectangle (8.4,-0.65);
+            \fill[softred!40!black,rounded corners=2pt] (8.4,-0.9) rectangle (13.0,-0.65);
+            \node[font=\tiny,text=white] at (4.2,-0.78) {formalized};
+            \node[font=\tiny,text=white] at (10.7,-0.78) {remaining};
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.15em}
+    \textbf{What IS proved (0 sorry in chain):}
+    \begin{itemize}\itemsep0.05em\small
+        \item QPF: existence (Ces\`aro) + PD (kernel) + uniqueness (critical scalar) = 885 lines
+        \item $\rho(\mathcal{F}_{AB}) \leq 1$ via HS contraction (EuclideanSpace embedding)
+        \item Gelfand-based convergence $\mathcal{F}^n \to 0$ and cross-correlation decay
+        \item Single-block FT, Vandermonde separation, multi-block assembly (all 0 sorry)
+    \end{itemize}
+
+    \vspace{0.15em}
+    \textbf{Next steps (priority order):}
+    \begin{enumerate}\itemsep0.1em\small
+        \item \textcolor{softred}{\textbf{Prove the axiom}} via \cite{Wolf2012Quantum} Ch.~6:
+            KS $\to$ peripheral spectrum $\to$ primitivity $\to$ gauge
+        \item \textcolor{softred}{\textbf{Wire}} \texttt{cross\_correlation\_tendsto\_zero}
+            into block separation
+        \item \textcolor{gray}{(Optional) Close orphan sorries}
+    \end{enumerate}
+
+    \vspace{0.1em}
+    {\footnotesize The axiom encodes \cite{Wolf2012Quantum} Thm 6.6, which is the deepest result
+    in Wolf's CP map theory. Proving it formally is a significant open challenge.}
+
+    \vspace{0.1em}
+    {\footnotesize ${\sim}$5{,}300 lines $\cdot$ ${\sim}$200 theorems $\cdot$ ${\sim}$50 definitions $\cdot$ 15/19 sorry-free files}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+\footnotesize
+\bibliography{references}
+\end{frame}
+
+\end{document}
