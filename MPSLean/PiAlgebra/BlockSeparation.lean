@@ -71,18 +71,15 @@ variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 lemma evalWord_replicate (A : MPSTensor d D) (i : Fin d) (L : ℕ) :
     evalWord A (List.replicate L i) = (A i) ^ L := by
   induction L with
-  | zero => simp [evalWord, List.replicate_zero]
-  | succ n ih =>
-    rw [List.replicate_succ, evalWord, ih, pow_succ']
+  | zero => simp [evalWord]
+  | succ n ih => rw [List.replicate_succ, evalWord, ih, pow_succ']
 
 /-- `evalWord A` on a flattened replicated word gives a matrix power. -/
 lemma evalWord_flatten_replicate (A : MPSTensor d D) (w : List (Fin d)) (L : ℕ) :
     evalWord A ((List.replicate L w).flatten) = (evalWord A w) ^ L := by
   induction L with
   | zero => simp [evalWord, List.replicate]
-  | succ n ih =>
-    simp only [List.replicate_succ, List.flatten_cons]
-    rw [evalWord_append, ih, pow_succ']
+  | succ n ih => simp only [List.replicate_succ, List.flatten_cons]; rw [evalWord_append, ih, pow_succ']
 
 /-- The mpv of a constant configuration equals a trace of a matrix power. -/
 lemma mpv_const_eq_trace_pow (A : MPSTensor d D) (i : Fin d) (L : ℕ) :
@@ -142,24 +139,11 @@ theorem sameMPV₂_implies_perBlock_sameMPV
     (hA : ∀ k, IsInjective (A k))
     (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     ∀ k, SameMPV (A k) (B k) := by
-  -- Step 0: From SameMPV₂, derive the summed equation
-  have hsum : ∀ N (σ : Fin N → Fin d),
-      ∑ k, (μ k) ^ N • mpv (A k) σ = ∑ k, (μ k) ^ N • mpv (B k) σ :=
-    sameMPV₂_summed_blocks μ A B hSame₂
-  -- Step 1: Rewrite as ∑_k μ_k^N • δ_k(σ) = 0 where δ_k(σ) = mpv(A_k,σ) - mpv(B_k,σ)
-  have hδ : ∀ N (σ : Fin N → Fin d),
-      ∑ k, (μ k) ^ N • (mpv (A k) σ - mpv (B k) σ) = 0 := by
-    intro N σ
-    simp only [smul_sub]
-    rw [Finset.sum_sub_distrib]
-    exact sub_eq_zero.mpr (hsum N σ)
-  -- Step 2: Separate per block using the Vandermonde structure + Newton/algebraic separation
-  -- The key insight: for repeated words, we get power-sum equations whose structure
-  -- (via evalWord_flatten_replicate) constrains eigenvalue multisets.
-  -- Combined with the distinctness of μ_k, this forces per-block equality.
-  -- This algebraic separation step requires Newton's identities for eigenvalues of
-  -- matrices over ℂ plus a genericity/Zariski-density argument, beyond current Mathlib.
-  exact block_powsum_separation μ hμ_inj hμ_ne A B hA hδ
+  apply block_powsum_separation μ hμ_inj hμ_ne A B hA
+  intro N σ
+  have := sameMPV₂_summed_blocks μ A B hSame₂ N σ
+  simp only [smul_sub, Finset.sum_sub_distrib]
+  exact sub_eq_zero.mpr this
 
 /-- **Full multi-block Fundamental Theorem (no separation hypothesis).**
 

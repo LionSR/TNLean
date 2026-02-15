@@ -96,25 +96,11 @@ private lemma ker_invariant_under_adjoint
   have h_each_zero : ∀ i : Fin d,
       star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) = 0 := by
     intro i
-    have h_nonneg : ∀ j : Fin d,
-        0 ≤ star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x)) :=
-      fun j => hρ_psd.dotProduct_mulVec_nonneg _
-    have h_sum_zero : ∑ j : Fin d,
-        star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x)) = 0 := by
-      rw [← hsum, hqf]
-    have hg_nonneg : ∀ j, (0 : ℝ) ≤ RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) :=
-      fun j => hρ_psd.re_dotProduct_nonneg _
-    have hg_sum : ∑ j : Fin d, RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) = 0 := by
-      rw [← map_sum]
-      rw [h_sum_zero]; simp
-    have hg_zero : RCLike.re (star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x))) = 0 :=
-      (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hg_nonneg j)).mp
-        hg_sum i (Finset.mem_univ _)
-    have him_zero : RCLike.im (star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x))) = 0 :=
-      hρ_psd.isHermitian.im_star_dotProduct_mulVec_self _
-    have hre : (star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x))).re = 0 := hg_zero
-    have him : (star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x))).im = 0 := him_zero
-    exact Complex.ext hre him
+    have h_sum_zero : ∑ j, RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) = 0 := by
+      rw [← map_sum, ← hsum, hqf]; simp
+    have hre := (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hρ_psd.re_dotProduct_nonneg _)).mp
+      h_sum_zero i (Finset.mem_univ _)
+    exact Complex.ext hre (hρ_psd.isHermitian.im_star_dotProduct_mulVec_self _)
   intro i
   exact mulVec_eq_zero_of_quadForm_eq_zero ρ hρ_psd _ (h_each_zero i)
 
@@ -125,7 +111,6 @@ private lemma ker_contains_all_of_span
     (h : ∀ i : Fin d, ρ *ᵥ ((A i)ᴴ *ᵥ x) = 0) :
     ∀ M : Matrix (Fin D) (Fin D) ℂ, ρ *ᵥ (M *ᵥ x) = 0 := by
   intro M
-  have hMH : Mᴴ ∈ Submodule.span ℂ (Set.range A) := hA ▸ Submodule.mem_top
   suffices ∀ N : Matrix (Fin D) (Fin D) ℂ, ρ *ᵥ (Nᴴ *ᵥ x) = 0 by
     specialize this Mᴴ; rwa [Matrix.conjTranspose_conjTranspose] at this
   intro N
@@ -190,9 +175,8 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
   classical
   by_contra hρ_not_pd
   have hH := hρ_psd.isHermitian
-  have h_not_all_pos : ¬∀ i, 0 < hH.eigenvalues i := by
-    intro h_all_pos
-    exact hρ_not_pd (hH.posDef_iff_eigenvalues_pos.mpr h_all_pos)
+  have h_not_all_pos : ¬∀ i, 0 < hH.eigenvalues i :=
+    fun h => hρ_not_pd (hH.posDef_iff_eigenvalues_pos.mpr h)
   push_neg at h_not_all_pos
   obtain ⟨j₀, hj₀⟩ := h_not_all_pos
   have hj₀_eq : hH.eigenvalues j₀ = 0 :=
@@ -215,8 +199,8 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
   have hQ_herm : Q.IsHermitian := by
     change (U * Matrix.diagonal sgnEig * Uᴴ)ᴴ = U * Matrix.diagonal sgnEig * Uᴴ
     rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-        Matrix.conjTranspose_conjTranspose, Matrix.diagonal_conjTranspose, hsgnEig_star]
-    rw [Matrix.mul_assoc]
+        Matrix.conjTranspose_conjTranspose, Matrix.diagonal_conjTranspose, hsgnEig_star,
+        Matrix.mul_assoc]
   have hQ_idem : Q * Q = Q := by
     change U * Matrix.diagonal sgnEig * Uᴴ * (U * Matrix.diagonal sgnEig * Uᴴ) =
          U * Matrix.diagonal sgnEig * Uᴴ
@@ -224,19 +208,16 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
         ← Matrix.mul_assoc (Matrix.diagonal sgnEig), Matrix.diagonal_mul_diagonal,
         show (fun i => sgnEig i * sgnEig i) = sgnEig from funext hsgnEig_sq]
-  have hQ1Q : Q * (1 - Q) = 0 := by
-    rw [mul_sub, mul_one, hQ_idem, sub_self]
-  have h1QQ : (1 - Q) * Q = 0 := by
-    rw [sub_mul, one_mul, hQ_idem, sub_self]
+  have hQ1Q : Q * (1 - Q) = 0 := by rw [mul_sub, mul_one, hQ_idem, sub_self]
+  have h1QQ : (1 - Q) * Q = 0 := by rw [sub_mul, one_mul, hQ_idem, sub_self]
   have hQ_proj : IsOrthogonalProjection Q := ⟨hQ_herm, hQ_idem⟩
   have hQρ : Q * ρ = ρ := by
-    have hρ_spectral : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ :=
-      spectral_decomp_eq hH
-    rw [hρ_spectral, hQ_def]
-    rw [Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
+    have hρ_spectral := spectral_decomp_eq hH
+    rw [hρ_spectral, hQ_def,
+        Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
-        ← Matrix.mul_assoc (Matrix.diagonal sgnEig), Matrix.diagonal_mul_diagonal]
-    rw [show (fun i => sgnEig i * ↑(hH.eigenvalues i)) =
+        ← Matrix.mul_assoc (Matrix.diagonal sgnEig), Matrix.diagonal_mul_diagonal,
+        show (fun i => sgnEig i * ↑(hH.eigenvalues i)) =
             (fun j => (↑(hH.eigenvalues j) : ℂ)) from hsign_mul_eig]
   have hρQ : ρ * Q = ρ := by
     have : (Q * ρ)ᴴ = ρᴴ := congr_arg Matrix.conjTranspose hQρ
@@ -251,32 +232,22 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
     intro v hv
     set w := Uᴴ *ᵥ v
     have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
-      have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 := by
-        rwa [spectral_decomp_eq hH] at hv
-      set Λ := Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) with hΛ_def
+      have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
+        spectral_decomp_eq hH ▸ hv
+      set Λ := Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ))
       have hUΛw : U *ᵥ (Λ *ᵥ w) = 0 := by
-        rw [Matrix.mulVec_mulVec]
-        rw [show w = Uᴴ *ᵥ v from rfl, Matrix.mulVec_mulVec]
-        exact hρv
+        rw [Matrix.mulVec_mulVec, show w = Uᴴ *ᵥ v from rfl, Matrix.mulVec_mulVec]; exact hρv
       have : Uᴴ *ᵥ (U *ᵥ (Λ *ᵥ w)) = 0 := by rw [hUΛw]; simp
       rwa [Matrix.mulVec_mulVec, hUU, Matrix.one_mulVec] at this
-    have h_comp : ∀ j, (↑(hH.eigenvalues j) : ℂ) * w j = 0 := by
-      intro j
+    have h_comp : ∀ j, (↑(hH.eigenvalues j) : ℂ) * w j = 0 := fun j => by
       have := congr_fun hΛw j
-      simp only [Matrix.mulVec, dotProduct, Matrix.diagonal_apply, Pi.zero_apply] at this
-      simp only [ite_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, ite_true] at this
+      simp only [Matrix.mulVec, dotProduct, Matrix.diagonal_apply, Pi.zero_apply,
+        ite_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, ite_true] at this
       exact this
     have hSw : Matrix.diagonal sgnEig *ᵥ w = 0 := by
-      ext j
-      simp only [Matrix.mulVec, dotProduct, Matrix.diagonal_apply, Pi.zero_apply]
-      simp only [sgnEig]
+      ext j; simp only [Matrix.mulVec, dotProduct, Matrix.diagonal_apply, Pi.zero_apply, sgnEig]
       split
-      · rename_i hpos
-        have hwj : w j = 0 := by
-          have := h_comp j
-          have hne : (↑(hH.eigenvalues j) : ℂ) ≠ 0 := by exact_mod_cast ne_of_gt hpos
-          exact (mul_eq_zero.mp this).resolve_left hne
-        simp [hwj]
+      · simp [(mul_eq_zero.mp (h_comp j)).resolve_left (by exact_mod_cast ne_of_gt ‹_›)]
       · simp
     change (U * Matrix.diagonal sgnEig * Uᴴ) *ᵥ v = 0
     have : (U * Matrix.diagonal sgnEig * Uᴴ) *ᵥ v =
@@ -286,64 +257,53 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
   have h_complement_zero : ∀ i : Fin d, (1 - Q) * A i * Q = 0 := by
     intro i
     suffices h : Q * (A i)ᴴ * (1 - Q) = 0 by
-      have h1 : ((Q * (A i)ᴴ * (1 - Q))ᴴ) = 0ᴴ := congr_arg _ h
+      have := congr_arg Matrix.conjTranspose h
       simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_sub,
         Matrix.conjTranspose_one, Matrix.conjTranspose_conjTranspose,
-        hQ_herm.eq, Matrix.conjTranspose_zero] at h1
-      rwa [← Matrix.mul_assoc] at h1
+        hQ_herm.eq, Matrix.conjTranspose_zero] at this
+      rwa [← Matrix.mul_assoc] at this
     suffices h_vec : ∀ v, (Q * (A i)ᴴ * (1 - Q)) *ᵥ v = 0 by
       ext a b; simpa [Matrix.mulVec, dotProduct, Pi.single_apply, Finset.sum_ite_eq'] using
         congr_fun (h_vec (Pi.single b 1)) a
     intro v
-    have key : (Q * (A i)ᴴ * (1 - Q)) *ᵥ v = Q *ᵥ ((A i)ᴴ *ᵥ ((1 - Q) *ᵥ v)) := by
-      simp only [Matrix.mul_assoc, Matrix.mulVec_mulVec]
-    rw [key]
+    rw [show (Q * (A i)ᴴ * (1 - Q)) *ᵥ v = Q *ᵥ ((A i)ᴴ *ᵥ ((1 - Q) *ᵥ v)) from by
+      simp only [Matrix.mul_assoc, Matrix.mulVec_mulVec]]
     apply ker_ρ_sub_ker_Q
     apply ker_invariant_under_adjoint A ρ hρ_psd hρ_fix
     apply ker_Q_sub_ker_ρ
     rw [Matrix.mulVec_mulVec, hQ1Q]; simp
   have h_AQ : ∀ i : Fin d, A i * Q = Q * A i * Q := by
     intro i
-    have h := h_complement_zero i
-    have : A i * Q - Q * A i * Q = 0 := by
-      calc A i * Q - Q * A i * Q
-          = (1 - Q) * A i * Q := by noncomm_ring
-        _ = 0 := h
-    exact sub_eq_zero.mp this
+    exact sub_eq_zero.mp (show A i * Q - Q * A i * Q = 0 by
+      calc _ = (1 - Q) * A i * Q := by noncomm_ring
+           _ = 0 := h_complement_zero i)
   have h_QA : ∀ i : Fin d, Q * (A i)ᴴ = Q * (A i)ᴴ * Q := by
     intro i
-    have h := h_AQ i
-    have h1 : (A i * Q)ᴴ = (Q * A i * Q)ᴴ := congr_arg _ h
-    simp only [Matrix.conjTranspose_mul, hQ_herm.eq] at h1
-    rwa [← Matrix.mul_assoc] at h1
+    have := congr_arg Matrix.conjTranspose (h_AQ i)
+    simp only [Matrix.conjTranspose_mul, hQ_herm.eq] at this
+    rwa [← Matrix.mul_assoc] at this
   have hQ_inv : ∀ X, Q * transferMap (d := d) (D := D) A (Q * X * Q) * Q =
       transferMap (d := d) (D := D) A (Q * X * Q) := by
-    intro X
-    simp only [transferMap_apply]
-    have h_term : ∀ i : Fin d,
-        Q * (A i * (Q * X * Q) * (A i)ᴴ) * Q = A i * (Q * X * Q) * (A i)ᴴ := by
-      intro i
+    intro X; simp only [transferMap_apply, Finset.mul_sum, Finset.sum_mul]
+    exact Finset.sum_congr rfl fun i _ => by
       calc Q * (A i * (Q * X * Q) * (A i)ᴴ) * Q
-          = (Q * A i) * (Q * X * Q) * ((A i)ᴴ * Q) := by noncomm_ring
-        _ = (Q * A i * Q) * X * (Q * (A i)ᴴ * Q) := by noncomm_ring
+          = (Q * A i * Q) * X * (Q * (A i)ᴴ * Q) := by noncomm_ring
         _ = (A i * Q) * X * (Q * (A i)ᴴ) := by rw [← h_AQ i, ← h_QA i]
         _ = A i * (Q * X * Q) * (A i)ᴴ := by noncomm_ring
-    rw [Finset.mul_sum, Finset.sum_mul]
-    exact Finset.sum_congr rfl (fun i _ => h_term i)
   have hQ_zero_or_one := hIrr Q hQ_proj hQ_inv
   have hQ_ne_zero : Q ≠ 0 := by
     intro hQ_zero; apply hρ_ne; rw [← hQρ, hQ_zero]; simp
   have hQ_ne_one : Q ≠ 1 := by
     intro hQ_one
-    have hdiag_one : Matrix.diagonal sgnEig = 1 := by
+    have hdiag_one : Matrix.diagonal sgnEig = 1 :=
       calc Matrix.diagonal sgnEig
           = (Uᴴ * U) * Matrix.diagonal sgnEig * (Uᴴ * U) := by rw [hUU]; simp
         _ = Uᴴ * (U * Matrix.diagonal sgnEig * Uᴴ) * U := by noncomm_ring
         _ = Uᴴ * 1 * U := by rw [show U * Matrix.diagonal sgnEig * Uᴴ = Q from rfl, hQ_one]
         _ = 1 := by rw [Matrix.mul_one, hUU]
     have : sgnEig j₀ = 1 := by
-      have := congr_fun (Matrix.diagonal_injective (hdiag_one.trans Matrix.diagonal_one.symm)) j₀
-      simpa using this
+      simpa using congr_fun (Matrix.diagonal_injective
+        (hdiag_one.trans Matrix.diagonal_one.symm)) j₀
     simp [sgnEig, hj₀_eq] at this
   rcases hQ_zero_or_one with h | h
   · exact hQ_ne_zero h

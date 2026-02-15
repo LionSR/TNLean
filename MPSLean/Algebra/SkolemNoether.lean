@@ -38,24 +38,20 @@ theorem linear_mul_endomorphism_bijective
     (hNonzero : T ≠ 0) : Function.Bijective T := by
   classical
   cases D with
-  | zero =>
-      -- The `0×0` matrix algebra is a subsingleton, so any endomorphism is bijective.
-      exact Function.bijective_of_subsingleton T
+  | zero => exact Function.bijective_of_subsingleton T
   | succ D' =>
-      -- Package `T` as a non-unital ring hom.
-      let f : Matrix (Fin (D' + 1)) (Fin (D' + 1)) ℂ →ₙ+*
-            Matrix (Fin (D' + 1)) (Fin (D' + 1)) ℂ :=
-        { toFun := T, map_zero' := by simp, map_add' := T.map_add, map_mul' := hMul }
-      -- The kernel is either `⊥` or `⊤`; `⊤` would force `T = 0`.
-      have hker : TwoSidedIdeal.ker f = ⊥ := by
-        rcases eq_bot_or_eq_top (TwoSidedIdeal.ker f) with h | h
-        · exact h
-        · exact absurd (LinearMap.ext fun A => by
-            simpa [f] using (TwoSidedIdeal.mem_ker (f := f)).1
-              (h ▸ (show A ∈ (⊤ : TwoSidedIdeal _) by simp))) hNonzero
-      have hinj : Function.Injective T := by
-        simpa [f] using (TwoSidedIdeal.ker_eq_bot (f := f)).1 hker
-      exact ⟨hinj, LinearMap.surjective_of_injective hinj⟩
+    let f : Matrix (Fin (D' + 1)) (Fin (D' + 1)) ℂ →ₙ+*
+          Matrix (Fin (D' + 1)) (Fin (D' + 1)) ℂ :=
+      { toFun := T, map_zero' := by simp, map_add' := T.map_add, map_mul' := hMul }
+    have hker : TwoSidedIdeal.ker f = ⊥ := by
+      rcases eq_bot_or_eq_top (TwoSidedIdeal.ker f) with h | h
+      · exact h
+      · exact absurd (LinearMap.ext fun A => by
+          simpa [f] using (TwoSidedIdeal.mem_ker (f := f)).1
+            (h ▸ (show A ∈ (⊤ : TwoSidedIdeal _) by simp))) hNonzero
+    have hinj : Function.Injective T := by
+      simpa [f] using (TwoSidedIdeal.ker_eq_bot (f := f)).1 hker
+    exact ⟨hinj, LinearMap.surjective_of_injective hinj⟩
 
 /-- Lemma 6 (Skolem–Noether for matrices, *proved*): any `ℂ`-algebra automorphism of
 `Matrix n n ℂ` is inner.
@@ -67,59 +63,39 @@ theorem skolemNoether_matrix {n : Type*} [Fintype n] [DecidableEq n]
     ∃ X : GL n ℂ, ∀ M : Matrix n n ℂ,
       f M = (X : Matrix n n ℂ) * M * ((X⁻¹ : GL n ℂ) : Matrix n n ℂ) := by
   classical
-  -- Transport `f` to an automorphism of endomorphisms of `n → ℂ`.
   let e : Matrix n n ℂ ≃ₐ[ℂ] Module.End ℂ (n → ℂ) := Matrix.toLinAlgEquiv'
   let fEnd : Module.End ℂ (n → ℂ) ≃ₐ[ℂ] Module.End ℂ (n → ℂ) := e.symm.trans (f.trans e)
   obtain ⟨T, hT⟩ := AlgEquiv.eq_linearEquivConjAlgEquiv (f := fEnd)
-  -- Turn the linear equivalence `T` into an invertible matrix `X`.
   let X : GL n ℂ :=
     (Matrix.GeneralLinearGroup.toLin (n := n) (R := ℂ)).symm
       (LinearMap.GeneralLinearGroup.ofLinearEquiv T)
-  refine ⟨X, ?_⟩
-  intro M
-  -- We show equality after applying the algebra equivalence `e : Matrix ≃ₐ End`, and then use
-  -- injectivity.
+  refine ⟨X, fun M => ?_⟩
   apply e.injective
-  -- Identify `e X` and `e X⁻¹` with the underlying linear maps of `T` and `T.symm`.
-  have hX_toLin :
-      Matrix.GeneralLinearGroup.toLin X =
-        LinearMap.GeneralLinearGroup.ofLinearEquiv T := by simp [X]
+  -- Identify `e X` and `e X⁻¹` with the linear maps of `T` and `T.symm`.
+  have hX_toLin : Matrix.GeneralLinearGroup.toLin X =
+      LinearMap.GeneralLinearGroup.ofLinearEquiv T := by simp [X]
   have hX_lin : e (X : Matrix n n ℂ) = (T : (n → ℂ) →ₗ[ℂ] n → ℂ) := by
-    -- `toLin` is `Units.mapEquiv` of `e.toMulEquiv`.
-    -- The key simp lemma is `Units.coe_mapEquiv`.
     have := congrArg (fun u : LinearMap.GeneralLinearGroup ℂ (n → ℂ) =>
       (↑u : (n → ℂ) →ₗ[ℂ] n → ℂ)) hX_toLin
     simpa [Matrix.GeneralLinearGroup.toLin, Units.coe_mapEquiv, e] using this
   have hX_lin_inv :
       e ((X⁻¹ : GL n ℂ) : Matrix n n ℂ) = (T.symm : (n → ℂ) →ₗ[ℂ] n → ℂ) := by
-    have hX_toLin_inv :
-        Matrix.GeneralLinearGroup.toLin (X⁻¹) =
-          LinearMap.GeneralLinearGroup.ofLinearEquiv T.symm := by
-      calc Matrix.GeneralLinearGroup.toLin (X⁻¹)
-            = (Matrix.GeneralLinearGroup.toLin X)⁻¹ := by simp [MulEquiv.map_inv]
-        _ = (LinearMap.GeneralLinearGroup.ofLinearEquiv T)⁻¹ := by simp [hX_toLin]
-        _ = LinearMap.GeneralLinearGroup.ofLinearEquiv T.symm :=
-              (LinearMap.GeneralLinearGroup.ofLinearEquiv_inv (f := T)).symm
+    have hX_toLin_inv : Matrix.GeneralLinearGroup.toLin (X⁻¹) =
+        LinearMap.GeneralLinearGroup.ofLinearEquiv T.symm := by
+      simp only [MulEquiv.map_inv, hX_toLin]
+      exact (LinearMap.GeneralLinearGroup.ofLinearEquiv_inv (f := T)).symm
     have := congrArg (fun u : LinearMap.GeneralLinearGroup ℂ (n → ℂ) =>
       (↑u : (n → ℂ) →ₗ[ℂ] n → ℂ)) hX_toLin_inv
-    -- `toLin` unfolds to `Units.mapEquiv e.toMulEquiv`; coercing a unit gives `e` applied to the
-    -- matrix coercion; the `Units.val_inv_eq_inv_val` / `map_inv` dance is handled by `simp`.
     simp only [Matrix.GeneralLinearGroup.toLin, Units.coe_mapEquiv, e] at this ⊢
     convert this using 1
-  -- Now compute both sides under `e`.
+  -- Compute both sides under `e`.
   calc e (f M)
-        = fEnd (e M) := by simp [fEnd]
-    _ = (T.conjAlgEquiv ℂ) (e M) := congrArg (· (e M)) hT
+      = fEnd (e M) := by simp [fEnd]
     _ = (T : (n → ℂ) →ₗ[ℂ] n → ℂ) ∘ₗ e M ∘ₗ (T.symm : (n → ℂ) →ₗ[ℂ] n → ℂ) := by
-          -- `conjAlgEquiv` is `x ↦ T ∘ x ∘ T⁻¹`.
-          simp [LinearEquiv.conjAlgEquiv_apply]
+        rw [congrArg (· (e M)) hT]; simp [LinearEquiv.conjAlgEquiv_apply]
     _ = e (X : Matrix n n ℂ) * e M * e ((X⁻¹ : GL n ℂ) : Matrix n n ℂ) := by
-          -- Turn compositions into multiplication in `Module.End` and rewrite using `hX_lin`.
-          rw [← hX_lin, ← hX_lin_inv]
-          simp [Module.End.mul_eq_comp, LinearMap.comp_assoc]
-    _ = e ((X : Matrix n n ℂ) * M * ((X⁻¹ : GL n ℂ) : Matrix n n ℂ)) := by
-          -- Use multiplicativity of `e`.
-          simp [mul_assoc]
+        rw [← hX_lin, ← hX_lin_inv]; simp [Module.End.mul_eq_comp, LinearMap.comp_assoc]
+    _ = e ((X : Matrix n n ℂ) * M * ((X⁻¹ : GL n ℂ) : Matrix n n ℂ)) := by simp [mul_assoc]
 
 /-- Build an `ℂ`-algebra homomorphism from a multiplicative `ℂ`-linear map.
 
@@ -133,17 +109,14 @@ noncomputable def linearMapToAlgHom
   classical
   have hOne : T 1 = 1 := by
     obtain ⟨x, hx⟩ := hSurj 1
-    calc T 1 = 1 * T 1 := (one_mul _).symm
-      _ = T x * T 1 := by rw [hx]
-      _ = T x := by rw [← hMul, mul_one]
-      _ = 1 := hx
+    have : T x = 1 := hx
+    calc T 1 = T x * T 1 := by rw [this, one_mul]
+      _ = T (x * 1) := (hMul x 1).symm
+      _ = 1 := by rw [mul_one, this]
   exact
     { toRingHom :=
-        { toFun := T
-          map_one' := hOne
-          map_mul' := hMul
-          map_zero' := by simp
-          map_add' := T.map_add }
+        { toFun := T, map_one' := hOne, map_mul' := hMul,
+          map_zero' := by simp, map_add' := T.map_add }
       commutes' := fun c => by simp [Algebra.algebraMap_eq_smul_one, hOne] }
 
 end MPSTensor

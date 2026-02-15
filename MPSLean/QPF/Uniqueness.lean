@@ -133,24 +133,16 @@ private lemma sqrtFactor_isUnit' [DecidableEq (Fin D)]
     let S := U * Matrix.diagonal (sqrtΛ' hρ)
     IsUnit S := by
   intro U S
-  rw [Matrix.isUnit_iff_isUnit_det]
-  have h1 := sqrtFactor_mul_invFactor_conj' hρ hρ_pd
-  have h2 := invFactor_mul_sqrtFactor_conj' hρ hρ_pd
-  set B := U * Matrix.diagonal (sqrtInvΛ' hρ hρ_pd)
-  have : S * Bᴴ = 1 := h1
-  rw [isUnit_iff_exists_inv]
-  exact ⟨(Bᴴ).det, by rw [← Matrix.det_mul, this, Matrix.det_one]⟩
+  rw [Matrix.isUnit_iff_isUnit_det, isUnit_iff_exists_inv]
+  exact ⟨(U * Matrix.diagonal (sqrtInvΛ' hρ hρ_pd))ᴴ.det,
+    by rw [← Matrix.det_mul, sqrtFactor_mul_invFactor_conj' hρ hρ_pd, Matrix.det_one]⟩
 
 /-! ### Diagonal subtraction and spectral shift -/
 
 private lemma diagonal_sub_smul_one' [DecidableEq (Fin D)] (v : Fin D → ℝ) (c : ℝ) :
     Matrix.diagonal (fun j => (↑(v j) : ℂ)) - (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
       Matrix.diagonal (fun j => (↑(v j - c) : ℂ)) := by
-  ext i j
-  simp [Matrix.diagonal_apply, Matrix.smul_apply, Matrix.one_apply]
-  split
-  · simp
-  · simp
+  ext i j; simp [Matrix.diagonal_apply, Matrix.smul_apply, Matrix.one_apply]; split <;> simp
 
 private lemma hermitian_sub_scalar_spectral [DecidableEq (Fin D)]
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.IsHermitian) (c : ℝ) :
@@ -160,7 +152,6 @@ private lemma hermitian_sub_scalar_spectral [DecidableEq (Fin D)]
       (↑hA.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hA.eigenvectorUnitary
   have hUUt : U * Uᴴ = 1 := eig_mul_conj hA
-  have hA_spec := spectral_decomp_eq hA
   have h_cI : (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
       U * ((↑c : ℂ) • 1) * Uᴴ := by
     calc (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ)
@@ -170,7 +161,7 @@ private lemma hermitian_sub_scalar_spectral [DecidableEq (Fin D)]
   calc A - (↑c : ℂ) • 1
       = U * Matrix.diagonal (fun j => ↑(hA.eigenvalues j)) * Uᴴ -
         U * ((↑c : ℂ) • 1) * Uᴴ := by
-        conv_lhs => rw [hA_spec]; rw [h_cI]
+        conv_lhs => rw [spectral_decomp_eq hA]; rw [h_cI]
     _ = U * (Matrix.diagonal (fun j => ↑(hA.eigenvalues j)) - (↑c : ℂ) • 1) * Uᴴ := by
         noncomm_ring
     _ = U * Matrix.diagonal (fun j => ↑(hA.eigenvalues j - c)) * Uᴴ := by
@@ -184,26 +175,21 @@ private noncomputable def minEigenvalue' [DecidableEq (Fin D)] [Nonempty (Fin D)
 
 private lemma minEigenvalue_le' [DecidableEq (Fin D)] [Nonempty (Fin D)]
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.IsHermitian) (i : Fin D) :
-    minEigenvalue' hA ≤ hA.eigenvalues i := by
-  exact Finset.min'_le _ _ (Finset.mem_image.mpr ⟨i, Finset.mem_univ _, rfl⟩)
+    minEigenvalue' hA ≤ hA.eigenvalues i :=
+  Finset.min'_le _ _ (Finset.mem_image.mpr ⟨i, Finset.mem_univ _, rfl⟩)
 
 private lemma minEigenvalue_achieved' [DecidableEq (Fin D)] [Nonempty (Fin D)]
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.IsHermitian) :
     ∃ i : Fin D, hA.eigenvalues i = minEigenvalue' hA := by
   have hne := Finset.Nonempty.image Finset.univ_nonempty hA.eigenvalues
-  have h := Finset.min'_mem _ hne
-  rw [Finset.mem_image] at h
-  obtain ⟨i, _, hi⟩ := h
+  obtain ⟨i, _, hi⟩ := Finset.mem_image.mp (Finset.min'_mem _ hne)
   exact ⟨i, hi⟩
 
 private lemma minEigenvalue_pos' [DecidableEq (Fin D)] [Nonempty (Fin D)]
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.IsHermitian) (hPD : A.PosDef) :
     0 < minEigenvalue' hA := by
-  unfold minEigenvalue'
-  rw [Finset.lt_min'_iff]
-  intro x hx
-  rw [Finset.mem_image] at hx
-  obtain ⟨i, _, rfl⟩ := hx
+  simp only [minEigenvalue', Finset.lt_min'_iff, Finset.mem_image, Finset.mem_univ, true_and]
+  rintro _ ⟨i, rfl⟩
   exact hA.posDef_iff_eigenvalues_pos.mp hPD i
 
 /-! ### The key identity and critical scalar lemma -/
@@ -217,11 +203,6 @@ private lemma key_identity' [DecidableEq (Fin D)]
     let H := Bᴴ * σ * B
     σ - (↑c₀ : ℂ) • ρ = S * (H - (↑c₀ : ℂ) • 1) * Sᴴ := by
   intro U S B H
-  have h_expand : S * (H - (↑c₀ : ℂ) • 1) * Sᴴ = S * H * Sᴴ - (↑c₀ : ℂ) • (S * Sᴴ) := by
-    simp only [Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_smul, Matrix.smul_mul,
-               Matrix.mul_one]
-  rw [h_expand]
-  have hSS := sqrtFactor_mul_conjTranspose' hρ hρ_pd
   have hSBt := sqrtFactor_mul_invFactor_conj' hρ hρ_pd
   have hBSt := invFactor_mul_sqrtFactor_conj' hρ hρ_pd
   have hSHS : S * H * Sᴴ = σ := by
@@ -229,7 +210,9 @@ private lemma key_identity' [DecidableEq (Fin D)]
         = (S * Bᴴ) * σ * (B * Sᴴ) := by noncomm_ring
       _ = 1 * σ * 1 := by rw [hSBt, hBSt]
       _ = σ := by rw [Matrix.one_mul, Matrix.mul_one]
-  rw [hSHS, hSS]
+  have : S * (H - (↑c₀ : ℂ) • 1) * Sᴴ = S * H * Sᴴ - (↑c₀ : ℂ) • (S * Sᴴ) := by
+    simp only [Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_one]
+  rw [this, hSHS, sqrtFactor_mul_conjTranspose' hρ hρ_pd]
 
 private lemma exists_critical_scalar [Nonempty (Fin D)]
     {ρ σ : Matrix (Fin D) (Fin D) ℂ}
@@ -238,36 +221,31 @@ private lemma exists_critical_scalar [Nonempty (Fin D)]
       ¬(σ - (↑c₀ : ℂ) • ρ).PosDef := by
   classical
   set hρ := hρ_pd.isHermitian
-  set hσ := hσ_pd.isHermitian
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hρ.eigenvectorUnitary
-  set S := U * Matrix.diagonal (sqrtΛ' hρ) with hS_def
-  set B := U * Matrix.diagonal (sqrtInvΛ' hρ hρ_pd) with hB_def
+  set S := U * Matrix.diagonal (sqrtΛ' hρ)
+  set B := U * Matrix.diagonal (sqrtInvΛ' hρ hρ_pd)
   set H := Bᴴ * σ * B with hH_def
   have hH_herm : H.IsHermitian := by
     change Hᴴ = H
-    simp only [hH_def, Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-      Matrix.conjTranspose_conjTranspose, hσ.eq]
+    simp only [hH_def, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
+      hσ_pd.isHermitian.eq]
     noncomm_ring
   have hB_unit : IsUnit B := by
     rw [Matrix.isUnit_iff_isUnit_det]
-    have h := invFactor_mul_sqrtFactor_conj' hρ hρ_pd
-    have h_det := congr_arg Matrix.det h
-    rw [Matrix.det_mul, Matrix.det_one] at h_det
-    rw [Matrix.det_conjTranspose] at h_det
+    have h_det := congr_arg Matrix.det (invFactor_mul_sqrtFactor_conj' hρ hρ_pd)
+    rw [Matrix.det_mul, Matrix.det_one, Matrix.det_conjTranspose] at h_det
     exact IsUnit.of_mul_eq_one _ h_det
   have hH_pd : H.PosDef := by
     rw [show H = star B * σ * B from by simp [hH_def, Matrix.star_eq_conjTranspose]]
     exact (Matrix.IsUnit.posDef_star_left_conjugate_iff hB_unit).mpr hσ_pd
-  set c₀ := minEigenvalue' hH_herm with hc₀_def
-  have hc₀_pos : 0 < c₀ := minEigenvalue_pos' hH_herm hH_pd
-  set V : Matrix (Fin D) (Fin D) ℂ := ↑hH_herm.eigenvectorUnitary with hV_def
-  have hV_unit : IsUnit V := eigenvectorUnitary_isUnit' hH_herm
+  set c₀ := minEigenvalue' hH_herm
+  set V : Matrix (Fin D) (Fin D) ℂ := ↑hH_herm.eigenvectorUnitary
+  have hV_unit := eigenvectorUnitary_isUnit' hH_herm
   have h_shift := hermitian_sub_scalar_spectral hH_herm c₀
+  have hct : ∀ f, V * Matrix.diagonal f * Vᴴ = V * Matrix.diagonal f * star V :=
+    fun _ => by simp [Matrix.star_eq_conjTranspose]
   have hHc_psd : (H - (↑c₀ : ℂ) • 1).PosSemidef := by
-    rw [h_shift]
-    rw [show V * Matrix.diagonal (fun j => ↑(hH_herm.eigenvalues j - c₀)) * Vᴴ =
-          V * Matrix.diagonal (fun j => ↑(hH_herm.eigenvalues j - c₀)) * star V from by
-        simp [Matrix.star_eq_conjTranspose]]
+    rw [h_shift, hct]
     exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hV_unit).mpr
       (Matrix.posSemidef_diagonal_iff.mpr (fun i => by
         simp only [Complex.nonneg_iff]
@@ -275,28 +253,22 @@ private lemma exists_critical_scalar [Nonempty (Fin D)]
         · exact_mod_cast sub_nonneg.mpr (minEigenvalue_le' hH_herm i)
         · simp [Complex.ofReal_im]))
   have hHc_not_pd : ¬(H - (↑c₀ : ℂ) • 1).PosDef := by
-    rw [h_shift]
-    rw [show V * Matrix.diagonal (fun j => ↑(hH_herm.eigenvalues j - c₀)) * Vᴴ =
-          V * Matrix.diagonal (fun j => ↑(hH_herm.eigenvalues j - c₀)) * star V from by
-        simp [Matrix.star_eq_conjTranspose]]
-    intro h_pd
+    rw [h_shift, hct]; intro h_pd
     have h_pd' := (Matrix.IsUnit.posDef_star_right_conjugate_iff hV_unit).mp h_pd
     rw [Matrix.posDef_diagonal_iff] at h_pd'
     obtain ⟨i₀, hi₀⟩ := minEigenvalue_achieved' hH_herm
     have := h_pd' i₀
-    simp only at this
     rw [show (↑(hH_herm.eigenvalues i₀ - c₀) : ℂ) = ↑(hH_herm.eigenvalues i₀ - c₀) from rfl,
         hi₀, sub_self] at this
     simp at this
   have h_key := key_identity' (σ := σ) hρ hρ_pd c₀
   have hS_unit := sqrtFactor_isUnit' hρ hρ_pd
-  refine ⟨c₀, hc₀_pos, ?_, ?_⟩
-  · rw [h_key, show S * (H - (↑c₀ : ℂ) • 1) * Sᴴ =
-      S * (H - (↑c₀ : ℂ) • 1) * star S from by simp [Matrix.star_eq_conjTranspose]]
+  have hst : ∀ M, S * M * Sᴴ = S * M * star S :=
+    fun _ => by simp [Matrix.star_eq_conjTranspose]
+  refine ⟨c₀, minEigenvalue_pos' hH_herm hH_pd, ?_, ?_⟩
+  · rw [h_key, hst]
     exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hS_unit).mpr hHc_psd
-  · rw [h_key, show S * (H - (↑c₀ : ℂ) • 1) * Sᴴ =
-      S * (H - (↑c₀ : ℂ) • 1) * star S from by simp [Matrix.star_eq_conjTranspose]]
-    intro h_pd
+  · rw [h_key, hst]; intro h_pd
     exact hHc_not_pd ((Matrix.IsUnit.posDef_star_right_conjugate_iff hS_unit).mp h_pd)
 
 /-- **Uniqueness**: any two nonzero PSD fixed points of an injective
@@ -316,13 +288,12 @@ theorem posSemidef_fixedPoint_unique
   · exact ⟨1, by ext i; exact (Fin.elim0 (hD ▸ i))⟩
   · haveI : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
     obtain ⟨c₀, _, hτ_psd, hτ_not_pd⟩ := exists_critical_scalar hρ_pd hσ_pd
-    set τ := σ - (↑c₀ : ℂ) • ρ with hτ_def
+    set τ := σ - (↑c₀ : ℂ) • ρ
     have hτ_fix : transferMap (d := d) (D := D) A τ = τ := by
-      simp only [hτ_def, map_sub, LinearMap.map_smul, hρ_fix, hσ_fix]
+      simp only [τ, map_sub, LinearMap.map_smul, hρ_fix, hσ_fix]
     by_cases hτ_ne : τ = 0
     · exact ⟨↑c₀, sub_eq_zero.mp hτ_ne⟩
-    · exfalso
-      exact hτ_not_pd (posSemidef_fixedPoint_isPosDef A hA τ hτ_psd hτ_ne hτ_fix)
+    · exact absurd (posSemidef_fixedPoint_isPosDef A hA τ hτ_psd hτ_ne hτ_fix) hτ_not_pd
 
 end Uniqueness
 

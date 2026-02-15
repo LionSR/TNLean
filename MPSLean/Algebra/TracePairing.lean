@@ -86,16 +86,12 @@ This is the shared core of `linearExtension_nonzero` and
 `perBlockLinearExtension_nonzero`. -/
 theorem trace_ne_zero_of_injective [NeZero D] {A : MPSTensor d D}
     (hA : IsInjective A) (hAB : SameMPV A B) (hBzero : ∀ i, B i = 0) : False := by
-  have hTraceA : ∀ i, Matrix.trace (A i) = 0 := fun i => by
-    simpa [evalWord, hBzero i] using hAB.trace_evalWord [i]
   have htr_zero : Matrix.traceLinearMap (Fin D) ℂ ℂ = 0 := by
     apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
-    intro i; simpa [Matrix.traceLinearMap_apply] using hTraceA i
+    intro i; simpa [Matrix.traceLinearMap_apply, evalWord, hBzero i] using hAB.trace_evalWord [i]
   have : Matrix.trace (1 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
     simpa [Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
-  exact absurd this (by
-    rw [Matrix.trace_one, Fintype.card_fin]
-    exact (Nat.cast_ne_zero (R := ℂ)).2 (NeZero.ne D))
+  simp [Matrix.trace_one, Fintype.card_fin, (Nat.cast_ne_zero (R := ℂ)).2 (NeZero.ne D)] at this
 
 /-- If `ΦA` is injective and `range ΦA ≤ range ΦB`, then `ΦB` has trivial kernel.
 
@@ -105,14 +101,12 @@ theorem ker_bot_of_range_le {V W : Type*} [AddCommGroup V] [Module ℂ V] [Modul
     [AddCommGroup W] [Module ℂ W]
     (ΦA ΦB : V →ₗ[ℂ] W) (hKerA : ΦA.ker = ⊥) (hRange : ΦA.range ≤ ΦB.range) :
     ΦB.ker = ⊥ := by
-  -- From ker ΦA = ⊥, get finrank(range ΦA) = finrank V.
-  have hRN_A := LinearMap.finrank_range_add_finrank_ker (f := ΦA)
-  rw [hKerA, finrank_bot] at hRN_A
-  -- Range inclusion gives finrank(range ΦB) ≥ finrank V.
-  have hRN_B := LinearMap.finrank_range_add_finrank_ker (f := ΦB)
-  have hle : Module.finrank ℂ ↥ΦB.range ≤ Module.finrank ℂ V := LinearMap.finrank_range_le ΦB
-  have hmono : Module.finrank ℂ ↥ΦA.range ≤ Module.finrank ℂ ↥ΦB.range :=
-    Submodule.finrank_mono hRange
-  exact (Submodule.finrank_eq_zero (S := ΦB.ker)).1 (by omega)
+  have hA := LinearMap.finrank_range_add_finrank_ker (f := ΦA)
+  rw [hKerA, finrank_bot] at hA
+  have hB := LinearMap.finrank_range_add_finrank_ker (f := ΦB)
+  exact (Submodule.finrank_eq_zero (S := ΦB.ker)).1 (by
+    have := Submodule.finrank_mono hRange
+    have := LinearMap.finrank_range_le ΦB
+    omega)
 
 end MPSTensor

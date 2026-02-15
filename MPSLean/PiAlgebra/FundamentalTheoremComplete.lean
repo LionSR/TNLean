@@ -68,9 +68,9 @@ theorem fundamentalTheorem_multiBlock_explicit
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
     ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
-      (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
-  choose X hX using fun k => fundamentalTheorem_singleBlock (hA k) (hSame k)
-  exact ⟨X, hX⟩
+      (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) :=
+  ⟨fun k => (fundamentalTheorem_singleBlock (hA k) (hSame k)).choose,
+   fun k => (fundamentalTheorem_singleBlock (hA k) (hSame k)).choose_spec⟩
 
 /-- **Multi-block FT with decomposition.** -/
 theorem fundamentalTheorem_multiBlock_decomposition
@@ -112,9 +112,9 @@ theorem sameMPV₂_single_block
       (toTensorFromBlocks (fun _ : Fin 1 => μ₀) (fun _ : Fin 1 => B₀))) :
     SameMPV A₀ B₀ := by
   intro N σ
-  have hsum := sameMPV₂_summed_blocks (fun _ : Fin 1 => μ₀) (fun _ => A₀) (fun _ => B₀) hSame₂ N σ
-  simp only [Fin.sum_univ_one] at hsum
-  exact mul_left_cancel₀ (pow_ne_zero N hμ) hsum
+  have := sameMPV₂_summed_blocks (fun _ : Fin 1 => μ₀) (fun _ => A₀) (fun _ => B₀) hSame₂ N σ
+  simp only [Fin.sum_univ_one] at this
+  exact mul_left_cancel₀ (pow_ne_zero N hμ) this
 
 /-- **Single-block Fundamental Theorem from `SameMPV₂`.**
 

@@ -65,15 +65,10 @@ and `E(X) = E(X⁺) - E(X⁻)` is a difference of Hermitian matrices. -/
 theorem IsPositiveMap.map_isHermitian (hE : IsPositiveMap E)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :
     (E X).IsHermitian := by
-  -- Decompose X = X⁺ - X⁻ using CFC
-  have h_decomp : X⁺ - X⁻ = X := CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)
-  -- X⁺ and X⁻ are PSD (via nonneg_iff_posSemidef)
+  have h_decomp := CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)
   have h_pos_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X)
   have h_neg_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg X)
-  -- E(X) = E(X⁺) - E(X⁻) by linearity
-  have h_EX : E X = E (X⁺) - E (X⁻) := by
-    conv_lhs => rw [← h_decomp]; simp [map_sub]
-  rw [h_EX]
+  rw [show E X = E (X⁺) - E (X⁻) by conv_lhs => rw [← h_decomp]; simp [map_sub]]
   exact (hE _ h_pos_psd).isHermitian.sub (hE _ h_neg_psd).isHermitian
 
 end PositiveMap
@@ -93,12 +88,9 @@ def densityMatrices (D : ℕ) : Set (Matrix (Fin D) (Fin D) ℂ) :=
 /-- The set of nonneg complex numbers (those with `0 ≤ z` in `ComplexOrder`) is closed. -/
 private lemma isClosed_complex_nonneg : IsClosed {z : ℂ | 0 ≤ z} := by
   have : {z : ℂ | 0 ≤ z} = {z | 0 ≤ z.re ∧ z.im = 0} := by
-    ext z; constructor
-    · intro h; exact ⟨(Complex.nonneg_iff.mp h).1, (Complex.nonneg_iff.mp h).2.symm⟩
-    · intro ⟨h1, h2⟩; exact Complex.nonneg_iff.mpr ⟨h1, h2.symm⟩
+    ext z; simp [Complex.nonneg_iff, eq_comm]
   rw [this]
-  exact IsClosed.inter
-    (isClosed_le continuous_const Complex.continuous_re)
+  exact (isClosed_le continuous_const Complex.continuous_re).inter
     (isClosed_eq Complex.continuous_im continuous_const)
 
 /-- The quadratic form `X ↦ star v ⬝ᵥ X.mulVec v` is continuous. -/
@@ -110,20 +102,17 @@ private lemma continuous_quadraticForm (v : Fin D → ℂ) :
 
 /-- For a nonneg complex number `z` (in `ComplexOrder`), `‖z‖ = z.re`. -/
 private lemma norm_of_complex_nonneg {z : ℂ} (hz : 0 ≤ z) : ‖z‖ = z.re := by
-  have ⟨h_re, h_im⟩ := Complex.nonneg_iff.mp hz
+  obtain ⟨h_re, h_im⟩ := Complex.nonneg_iff.mp hz
   rw [Complex.norm_eq_sqrt_sq_add_sq, h_im.symm, zero_pow (by norm_num : 2 ≠ 0),
     add_zero, Real.sqrt_sq h_re]
 
 /-- For PSD `X`, each diagonal entry norm is bounded by the trace norm. -/
 private lemma posSemidef_diag_norm_le_trace_norm {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X.PosSemidef) (i : Fin D) : ‖X i i‖ ≤ ‖trace X‖ := by
-  rw [norm_of_complex_nonneg hX.diag_nonneg, norm_of_complex_nonneg hX.trace_nonneg]
-  have h_trace_re : (trace X).re = ∑ j : Fin D, (X j j).re := by
-    simp [Matrix.trace, Matrix.diag]
-  rw [h_trace_re]
-  exact Finset.single_le_sum
-    (fun j _ => (Complex.nonneg_iff.mp (hX.diag_nonneg (i := j))).1)
-    (Finset.mem_univ i)
+  rw [norm_of_complex_nonneg hX.diag_nonneg, norm_of_complex_nonneg hX.trace_nonneg,
+    show (trace X).re = ∑ j : Fin D, (X j j).re from by simp [Matrix.trace, Matrix.diag]]
+  exact single_le_sum (fun j _ => (Complex.nonneg_iff.mp (hX.diag_nonneg (i := j))).1)
+    (mem_univ i)
 
 /-- For PSD `X = Bᴴ * B`, the entry `(Bᴴ * B) i j` equals an inner product of column vectors. -/
 private lemma conjTranspose_mul_self_entry_eq_inner (B : Matrix (Fin D) (Fin D) ℂ) (i j : Fin D) :
@@ -146,11 +135,9 @@ private lemma col_norm_sq_eq_diag (B : Matrix (Fin D) (Fin D) ℂ) (i : Fin D) :
 
 /-- If `a² ≤ c` and `b² ≤ c` with `c ≥ 0`, then `a * b ≤ c` (for nonneg `a, b`). -/
 private lemma mul_le_of_sq_le {a b c : ℝ} (_ha : 0 ≤ a) (hb : 0 ≤ b) (hc : 0 ≤ c)
-    (ha2 : a ^ 2 ≤ c) (hb2 : b ^ 2 ≤ c) : a * b ≤ c := by
-  have h1 : a ≤ Real.sqrt c := Real.le_sqrt_of_sq_le ha2
-  have h2 : b ≤ Real.sqrt c := Real.le_sqrt_of_sq_le hb2
-  calc a * b ≤ Real.sqrt c * Real.sqrt c := mul_le_mul h1 h2 hb (Real.sqrt_nonneg _)
-    _ = c := Real.mul_self_sqrt hc
+    (ha2 : a ^ 2 ≤ c) (hb2 : b ^ 2 ≤ c) : a * b ≤ c :=
+  (mul_le_mul (Real.le_sqrt_of_sq_le ha2) (Real.le_sqrt_of_sq_le hb2)
+    hb (Real.sqrt_nonneg _)).trans (Real.mul_self_sqrt hc).le
 
 /-- For PSD `X`, each entry norm is bounded by the trace norm.
 
@@ -167,16 +154,15 @@ private lemma posSemidef_entry_norm_le_trace_norm {X : Matrix (Fin D) (Fin D) �
   rw [conjTranspose_mul_self_entry_eq_inner]
   set u := WithLp.toLp (p := 2) (fun k : Fin D => B k i)
   set v := WithLp.toLp (p := 2) (fun k : Fin D => B k j)
+  have sq_le_trace : ∀ k, ‖WithLp.toLp (p := 2) (fun l : Fin D => B l k)‖ ^ 2
+      ≤ ‖trace (Bᴴ * B)‖ := fun k => by
+    rw [col_norm_sq_eq_diag, ← norm_of_complex_nonneg hX'.diag_nonneg]
+    exact posSemidef_diag_norm_le_trace_norm hX' k
   calc ‖inner (𝕜 := ℂ) u v‖
-      ≤ ‖u‖ * ‖v‖ := @norm_inner_le_norm ℂ _ _ _ _ u v
-    _ ≤ ‖trace (Bᴴ * B)‖ := by
-        apply mul_le_of_sq_le (norm_nonneg u) (norm_nonneg v) (norm_nonneg _)
-        · rw [col_norm_sq_eq_diag]
-          rw [← norm_of_complex_nonneg hX'.diag_nonneg]
-          exact posSemidef_diag_norm_le_trace_norm hX' i
-        · rw [col_norm_sq_eq_diag]
-          rw [← norm_of_complex_nonneg hX'.diag_nonneg]
-          exact posSemidef_diag_norm_le_trace_norm hX' j
+      ≤ ‖u‖ * ‖v‖ := norm_inner_le_norm ..
+    _ ≤ ‖trace (Bᴴ * B)‖ :=
+        mul_le_of_sq_le (norm_nonneg _) (norm_nonneg _) (norm_nonneg _)
+          (sq_le_trace i) (sq_le_trace j)
 
 /-! ### Main results -/
 
@@ -190,20 +176,17 @@ theorem posSemidef_trace_bounded_isBounded (c : ℝ) :
       {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef ∧ ‖trace X‖ ≤ c} := by
   rw [isBounded_iff_forall_norm_le]
   refine ⟨D * c, fun X ⟨hX_psd, hX_tr⟩ => ?_⟩
-  have hc_nonneg : 0 ≤ c := le_trans (norm_nonneg _) hX_tr
+  have hc : 0 ≤ c := (norm_nonneg _).trans hX_tr
   have hentry : ∀ i j, ‖X i j‖ ≤ c :=
-    fun i j => le_trans (posSemidef_entry_norm_le_trace_norm hX_psd i j) hX_tr
-  rw [Matrix.frobenius_norm_def, ← Real.sqrt_eq_rpow]
-  rw [← Real.sqrt_sq (by positivity : 0 ≤ (D : ℝ) * c)]
+    fun i j => (posSemidef_entry_norm_le_trace_norm hX_psd i j).trans hX_tr
+  rw [Matrix.frobenius_norm_def, ← Real.sqrt_eq_rpow,
+    ← Real.sqrt_sq (by positivity : 0 ≤ (D : ℝ) * c)]
   apply Real.sqrt_le_sqrt
   simp_rw [show (2 : ℝ) = ((2 : ℕ) : ℝ) from by norm_num, Real.rpow_natCast]
   calc ∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2
-      ≤ ∑ _i : Fin D, ∑ _j : Fin D, c ^ 2 := by
-        apply Finset.sum_le_sum; intro i _
-        apply Finset.sum_le_sum; intro j _
-        exact pow_le_pow_left₀ (norm_nonneg _) (hentry i j) 2
-    _ = ↑D * ↑D * c ^ 2 := by simp [Finset.sum_const]; ring
-    _ = (↑D * c) ^ 2 := by ring
+      ≤ ∑ _i : Fin D, ∑ _j : Fin D, c ^ 2 :=
+        sum_le_sum fun i _ => sum_le_sum fun j _ => pow_le_pow_left₀ (norm_nonneg _) (hentry i j) 2
+    _ = (↑D * c) ^ 2 := by simp [sum_const]; ring
 
 /-- The PSD cone is closed.
 
@@ -213,14 +196,12 @@ Proof: `PosSemidef X ↔ X.IsHermitian ∧ ∀ v, 0 ≤ star v ⬝ᵥ X.mulVec v
   nonneg cone under continuous quadratic form). -/
 theorem isClosed_posSemidef :
     IsClosed {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef} := by
-  have h_eq : {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef}
+  have : {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef}
     = {X | X.IsHermitian} ∩ ⋂ (v : Fin D → ℂ), {X | 0 ≤ star v ⬝ᵥ X.mulVec v} := by
-    ext X
-    simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter,
+    ext X; simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter,
       Matrix.posSemidef_iff_dotProduct_mulVec]
-  rw [h_eq]
-  exact IsClosed.inter
-    (isClosed_eq continuous_star continuous_id)
+  rw [this]
+  exact (isClosed_eq continuous_star continuous_id).inter
     (isClosed_iInter fun v => isClosed_complex_nonneg.preimage (continuous_quadraticForm v))
 
 /-- The set of density matrices is compact (Heine-Borel).
@@ -229,16 +210,10 @@ Closed: intersection of the closed PSD cone and the closed set `{trace = 1}`.
 Bounded: PSD matrices with unit trace have bounded entries. -/
 theorem densityMatrices_isCompact :
     IsCompact (densityMatrices D) := by
-  haveI : ProperSpace (Matrix (Fin D) (Fin D) ℂ) :=
-    FiniteDimensional.proper_rclike ℂ _
-  apply Metric.isCompact_of_isClosed_isBounded
-  · -- Closed: PSD ∩ {trace = 1}
-    apply IsClosed.inter isClosed_posSemidef
-    exact isClosed_eq (continuous_id.matrix_trace) continuous_const
-  · -- Bounded: subset of PSD ∩ {‖trace‖ ≤ 1}
-    apply Bornology.IsBounded.subset (posSemidef_trace_bounded_isBounded 1)
-    intro X ⟨hX_psd, hX_tr⟩
-    exact ⟨hX_psd, by rw [hX_tr]; simp⟩
+  haveI : ProperSpace (Matrix (Fin D) (Fin D) ℂ) := FiniteDimensional.proper_rclike ℂ _
+  exact Metric.isCompact_of_isClosed_isBounded
+    (isClosed_posSemidef.inter (isClosed_eq continuous_id.matrix_trace continuous_const))
+    ((posSemidef_trace_bounded_isBounded 1).subset fun _ ⟨h1, h2⟩ => ⟨h1, by rw [h2]; simp⟩)
 
 /-- The set of density matrices is convex.
 
@@ -247,20 +222,17 @@ Trace is linear: `trace(a • ρ + b • σ) = a * 1 + b * 1 = 1` when `a + b = 
 theorem densityMatrices_isConvex :
     Convex ℝ (densityMatrices D) := by
   intro ρ ⟨hρ_psd, hρ_tr⟩ σ ⟨hσ_psd, hσ_tr⟩ a b ha hb hab
-  refine ⟨?_, ?_⟩
-  · exact (hρ_psd.smul ha).add (hσ_psd.smul hb)
-  · simp only [trace_add, trace_smul, hρ_tr, hσ_tr]
-    rw [← add_smul, hab, one_smul]
+  exact ⟨(hρ_psd.smul ha).add (hσ_psd.smul hb),
+    by simp only [trace_add, trace_smul, hρ_tr, hσ_tr, ← add_smul, hab, one_smul]⟩
 
 /-- The set of density matrices is nonempty when D > 0.
 
 The matrix `(1/D) • I` is a density matrix. -/
 theorem densityMatrices_nonempty (hD : 0 < D) :
-    (densityMatrices D).Nonempty := by
-  refine ⟨(D : ℂ)⁻¹ • (1 : Matrix (Fin D) (Fin D) ℂ), ?_, ?_⟩
-  · exact Matrix.PosSemidef.one.smul (by positivity : (0 : ℝ) ≤ (D : ℂ)⁻¹)
-  · simp only [trace_smul, trace_one, Fintype.card_fin]
-    exact inv_mul_cancel₀ (Nat.cast_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hD))
+    (densityMatrices D).Nonempty :=
+  ⟨(D : ℂ)⁻¹ • 1, PosSemidef.one.smul (by positivity), by
+    simp only [trace_smul, trace_one, Fintype.card_fin]
+    exact inv_mul_cancel₀ (Nat.cast_ne_zero.mpr hD.ne')⟩
 
 end DensityMatrices
 
@@ -272,8 +244,7 @@ variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
 /-- A channel (positive + trace-preserving) maps density matrices to density matrices. -/
 theorem IsChannel.map_densityMatrices (hE : IsChannel E) :
-    ∀ ρ ∈ densityMatrices D, E ρ ∈ densityMatrices D := by
-  intro ρ ⟨hρ_psd, hρ_tr⟩
-  exact ⟨hE.pos ρ hρ_psd, by rw [hE.tp, hρ_tr]⟩
+    ∀ ρ ∈ densityMatrices D, E ρ ∈ densityMatrices D :=
+  fun _ ⟨hρ_psd, hρ_tr⟩ => ⟨hE.pos _ hρ_psd, by rw [hE.tp, hρ_tr]⟩
 
 end ChannelPreserves

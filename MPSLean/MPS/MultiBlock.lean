@@ -21,10 +21,8 @@ lemma trace_reindex {m n : Type*} [Fintype m] [Fintype n]
     (e : m ≃ n) (M : Matrix m m ℂ) :
     Matrix.trace ((Matrix.reindex e e) M) = Matrix.trace M := by
   classical
-  -- Expand `trace` as a sum over diagonal entries and change variables along `e.symm`.
-  simpa [Matrix.trace, Matrix.reindex_apply] using
-    (Fintype.sum_equiv e.symm (fun j : n => M (e.symm j) (e.symm j)) (fun i : m => M i i)
-      (by intro j; simp))
+  simpa [trace, reindex_apply] using
+    Fintype.sum_equiv e.symm _ _ (by intro; simp)
 
 end Matrix
 
@@ -41,16 +39,12 @@ lemma evalWord_blockDiagonal'
       evalWord (fun i => Matrix.blockDiagonal' (fun k => blocks k i)) w =
         Matrix.blockDiagonal' (fun k => evalWord (blocks k) w) := by
   classical
-  intro w
-  induction w with
+  intro w; induction w with
   | nil =>
-      -- `evalWord` is `1` and `blockDiagonal'` of identity blocks is again `1`.
       simp only [evalWord]
-      change (1 : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) =
-        Matrix.blockDiagonal' (1 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+      change (1 : Matrix ((k : Fin r) × Fin (dim k)) _ ℂ) = Matrix.blockDiagonal' 1
       simp
-  | cons i w ih =>
-      simp [evalWord, ih]
+  | cons _ _ ih => simp [evalWord, ih]
 
 /-- Variant of `evalWord_blockDiagonal'` with a per-block scalar factor `μ k`.
 
@@ -61,32 +55,20 @@ lemma evalWord_blockDiagonal'_smul
       evalWord (fun i => Matrix.blockDiagonal' (fun k => μ k • A k i)) w =
         Matrix.blockDiagonal' (fun k => (μ k) ^ w.length • evalWord (A k) w) := by
   classical
-  intro w
-  induction w with
+  intro w; induction w with
   | nil =>
-      -- `evalWord` is `1` and `blockDiagonal'` of identity blocks is again `1`.
       simp only [List.length_nil, pow_zero, one_smul]
-      change (1 : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) =
-        Matrix.blockDiagonal' (1 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+      change (1 : Matrix ((k : Fin r) × Fin (dim k)) _ ℂ) = Matrix.blockDiagonal' 1
       simp
   | cons i w ih =>
-      -- Expand one step of the recursion and insert the induction hypothesis.
-      simp only [List.length_cons, pow_succ']
-      -- Use `blockDiagonal'_mul` to multiply blockwise.
-      have hmul :
-          Matrix.blockDiagonal' (fun k => μ k • A k i) *
+      simp only [List.length_cons, pow_succ', evalWord, ih]
+      rw [show Matrix.blockDiagonal' (fun k => μ k • A k i) *
               Matrix.blockDiagonal' (fun k => (μ k) ^ w.length • evalWord (A k) w) =
             Matrix.blockDiagonal'
-              (fun k => (μ k • A k i) * ((μ k) ^ w.length • evalWord (A k) w)) := by
-        simpa using
-          (Matrix.blockDiagonal'_mul (M := fun k => μ k • A k i)
-            (N := fun k => (μ k) ^ w.length • evalWord (A k) w)).symm
-      -- Rewrite the blockwise product into a single scalar power.
-      -- Key identity: `(μ • M₁) * (μ^n • M₂) = μ^(n+1) • (M₁ * M₂)`.
-      -- Then fold back the recursive definition of `evalWord`.
-      simp only [evalWord, ih, hmul, Algebra.mul_smul_comm, Algebra.smul_mul_assoc,
-        smul_smul, Matrix.blockDiagonal'_inj]
-      funext k; simp only [mul_comm]
+              (fun k => (μ k • A k i) * ((μ k) ^ w.length • evalWord (A k) w)) from by
+        simpa using (Matrix.blockDiagonal'_mul (M := fun k => μ k • A k i)
+          (N := fun k => (μ k) ^ w.length • evalWord (A k) w)).symm]
+      simp [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, smul_smul, mul_comm]
 
 end BlockDiagonal
 
@@ -111,9 +93,8 @@ lemma evalWord_reindex {d D : ℕ} {m : Type*} [Fintype m] [DecidableEq m]
   classical
   intro w; induction w with
   | nil => simp [MPSTensor.evalWord, _root_.evalWord]
-  | cons i w ih =>
+  | cons _ _ ih =>
       simp only [MPSTensor.evalWord, _root_.evalWord, ih]
-      -- reindex preserves multiplication (via reindexAlgEquiv)
-      simp
+      simp [Matrix.submatrix_mul_equiv]
 
 end MPSTensor

@@ -52,9 +52,7 @@ theorem sameMPV₂_summed_blocks
     (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B))
     (N : ℕ) (σ : Fin N → Fin d) :
     ∑ k, (μ k) ^ N • mpv (A k) σ = ∑ k, (μ k) ^ N • mpv (B k) σ := by
-  have hA := mpv_toTensorFromBlocks_eq_sum μ A σ
-  have hB := mpv_toTensorFromBlocks_eq_sum μ B σ
-  rw [← hA, ← hB]
+  rw [← mpv_toTensorFromBlocks_eq_sum μ A σ, ← mpv_toTensorFromBlocks_eq_sum μ B σ]
   exact hSame N σ
 
 end SummedTraces
@@ -100,9 +98,8 @@ private theorem perBlockLinearExtension_nonzero
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r) : perBlockLinearExtension A B hA hSame k ≠ 0 := by
   intro h0
-  have hT := perBlockLinearExtension_spec A B hA hSame k
   exact MPSTensor.trace_ne_zero_of_injective (hA k) (hSame k)
-    (fun i => by simpa [h0] using (hT i).symm)
+    (fun i => by simpa [h0] using (perBlockLinearExtension_spec A B hA hSame k i).symm)
 
 /-- Per-block bijectivity. -/
 theorem perBlockLinearExtension_bijective
@@ -124,10 +121,8 @@ theorem perBlockLinearExtension_one
   set T := perBlockLinearExtension A B hA hSame k
   have hMul := perBlockLinearExtension_mul A B hA hSame k
   obtain ⟨x, hx⟩ := (perBlockLinearExtension_bijective A B hA hSame k).2 1
-  -- T(1) = 1 · T(1) = T(x) · T(1) = T(x · 1) = T(x) = 1
-  calc T 1 = T x * T 1 := by rw [hx, one_mul]
-    _ = T x := by rw [← hMul, mul_one]
-    _ = 1 := hx
+  have h1 : T 1 = T x * T 1 := by rw [hx, one_mul]
+  rw [h1, ← hMul, mul_one, hx]
 
 /-- Per-block T commutes with scalars. -/
 theorem perBlockLinearExtension_commutes
@@ -136,8 +131,7 @@ theorem perBlockLinearExtension_commutes
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r) (c : ℂ) :
     perBlockLinearExtension A B hA hSame k (algebraMap ℂ _ c) = algebraMap ℂ _ c := by
-  simp only [Algebra.algebraMap_eq_smul_one]
-  rw [map_smul, perBlockLinearExtension_one A B hA hSame k]
+  simp only [Algebra.algebraMap_eq_smul_one, map_smul, perBlockLinearExtension_one A B hA hSame k]
 
 /-- The assembled Pi-algebra map: apply `T_k` on each block independently. -/
 noncomputable def piLinearExtension
@@ -167,8 +161,7 @@ theorem piLinearExtension_bijective
     Function.Bijective (piLinearExtension A B hA hSame) := by
   constructor
   · intro M₁ M₂ h; funext k
-    have hk := congrFun h k; simp only [piLinearExtension_apply] at hk
-    exact (perBlockLinearExtension_bijective A B hA hSame k).1 hk
+    exact (perBlockLinearExtension_bijective A B hA hSame k).1 (by simpa using congrFun h k)
   · intro M
     choose N hN using fun k => (perBlockLinearExtension_bijective A B hA hSame k).2 (M k)
     exact ⟨N, funext fun k => by simp [hN k]⟩
@@ -208,8 +201,7 @@ theorem piAlgEquiv_apply
     (M : ∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (k : Fin r) :
     piAlgEquiv A B hA hSame M k =
       perBlockLinearExtension A B hA hSame k (M k) := by
-  change piAlgHom A B hA hSame M k = _
-  simp [piAlgHom, piLinearExtension_apply]
+  simp [piAlgEquiv, AlgEquiv.ofBijective, piAlgHom, piLinearExtension_apply]
 
 /-- The Pi-algebra map sends `A_k i` to `B_k i` in each block. -/
 theorem piAlgEquiv_on_single
@@ -256,13 +248,11 @@ theorem piTrace_mul_right_eq_zero
       ∑ k, Matrix.trace (M k * N k) = 0) :
     M = 0 := by
   classical
-  funext k
-  apply trace_mul_right_eq_zero
-  intro N_k
-  have hspec := h (Function.update 0 k N_k)
+  funext k; apply trace_mul_right_eq_zero; intro N_k
+  have := h (Function.update 0 k N_k)
   rwa [Finset.sum_eq_single k
     (fun j _ hj => by rw [Function.update_of_ne hj, Pi.zero_apply, mul_zero, Matrix.trace_zero])
-    (fun hk => absurd (Finset.mem_univ k) hk), Function.update_self] at hspec
+    (fun hk => absurd (Finset.mem_univ k) hk), Function.update_self] at this
 
 end PiTraceNondeg
 

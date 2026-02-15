@@ -112,16 +112,13 @@ lemma trace_conj_eq (X : GL (Fin D) ℂ) (M : Matrix (Fin D) (Fin D) ℂ) :
         ((X : Matrix (Fin D) (Fin D) ℂ) * M *
           ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) =
       Matrix.trace M := by
-  simpa [Matrix.mul_assoc] using
-    (Matrix.trace_mul_cycle (X : Matrix (Fin D) (Fin D) ℂ) M
-      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+  simpa [Matrix.mul_assoc] using Matrix.trace_mul_cycle
+      (X : Matrix (Fin D) (Fin D) ℂ) M ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
 
 /-- Gauge equivalent tensors generate the same MPV family. -/
 theorem GaugeEquiv.sameMPV {A B : MPSTensor d D} : GaugeEquiv A B → SameMPV A B := by
   rintro ⟨X, hX⟩ N σ
-  simp only [mpv, coeff]
-  rw [evalWord_gauge (A := A) (B := B) X hX (List.ofFn σ)]
-  simpa using (trace_conj_eq X (evalWord A (List.ofFn σ))).symm
+  simp only [mpv, coeff, evalWord_gauge X hX, trace_conj_eq]
 
 end GaugeInvariance
 

@@ -109,12 +109,11 @@ lemma proj_zero_or_one_of_sandwich [DecidableEq (Fin D)]
     (h : ∀ M : Matrix (Fin D) (Fin D) ℂ, (1 - P) * M * P = 0) :
     P = 0 ∨ P = 1 := by
   by_cases hP : P = 0
-  · left; exact hP
+  · exact .inl hP
   · right; symm; rw [← sub_eq_zero]
-    have hP' : ∃ l₀ j₀, P l₀ j₀ ≠ 0 := by
+    obtain ⟨l₀, j₀, hlj⟩ : ∃ l₀ j₀, P l₀ j₀ ≠ 0 := by
       by_contra h_all; push_neg at h_all
-      exact hP (Matrix.ext (fun i j => h_all i j))
-    obtain ⟨l₀, j₀, hlj⟩ := hP'
+      exact hP (Matrix.ext fun i j => h_all i j)
     ext i k
     have h_eq := mul_single_mul_eq (1 - P) P k l₀
     rw [h (Matrix.single k l₀ 1)] at h_eq
@@ -122,11 +121,6 @@ lemma proj_zero_or_one_of_sandwich [DecidableEq (Fin D)]
     simp [Matrix.of_apply] at h_entry
     simp only [Matrix.sub_apply, Matrix.one_apply, Matrix.zero_apply]
     exact h_entry.resolve_right hlj
-
-private lemma one_sub_mul_self_of_idem [DecidableEq (Fin D)]
-    (P : Matrix (Fin D) (Fin D) ℂ) (hP : P * P = P) :
-    (1 - P) * P = 0 := by
-  rw [sub_mul, one_mul, hP, sub_self]
 
 /-- `(M * Mᴴ) c c = ∑ x, ‖M c x‖²` for any matrix `M`. -/
 lemma diagonal_mul_conjTranspose_eq_normSq_sum
@@ -136,36 +130,23 @@ lemma diagonal_mul_conjTranspose_eq_normSq_sum
   congr 1; ext x
   simp [Matrix.conjTranspose_apply, Complex.normSq_eq_conj_mul_self]; ring
 
-/-- If `M * Mᴴ = 0` then `M = 0`, since the diagonal entries are sums of squared norms. -/
-private lemma eq_zero_of_mul_conjTranspose_eq_zero
-    (M : Matrix (Fin D) (Fin D) ℂ) (h : M * Mᴴ = 0) : M = 0 := by
-  ext i j
-  have hii : (M * Mᴴ) i i = 0 := by rw [h]; simp
-  rw [diagonal_mul_conjTranspose_eq_normSq_sum] at hii
-  have h_sum_real : ∑ x : Fin D, Complex.normSq (M i x) = 0 := by exact_mod_cast hii
-  exact Complex.normSq_eq_zero.mp
-    ((Finset.sum_eq_zero_iff_of_nonneg (fun x _ => Complex.normSq_nonneg _)).mp
-      h_sum_real j (Finset.mem_univ _))
-
 /-- If `∑ᵢ Bᵢ * Bᵢᴴ = 0` then each `Bᵢ = 0`, since each term is PSD. -/
 lemma eq_zero_of_sum_mul_conjTranspose_eq_zero {ι : Type*} [Fintype ι]
     (B : ι → Matrix (Fin D) (Fin D) ℂ)
     (h : ∑ i : ι, B i * (B i)ᴴ = 0) :
     ∀ i, B i = 0 := by
-  -- Key fact: the diagonal entries of each `Bₖ * Bₖᴴ` are nonneg reals that sum to 0.
-  have h_diag_eq : ∀ c, ∑ k : ι, (B k * (B k)ᴴ) c c = 0 := by
-    intro c; have := congr_fun (congr_fun h c) c
-    rwa [Finset.sum_apply, Finset.sum_apply, Matrix.zero_apply] at this
   have h_each_diag : ∀ k c, (B k * (B k)ᴴ) c c = 0 := by
     intro k c
+    have h_diag_eq : ∑ k' : ι, (B k' * (B k')ᴴ) c c = 0 := by
+      have := congr_fun (congr_fun h c) c
+      rwa [Finset.sum_apply, Finset.sum_apply, Matrix.zero_apply] at this
     simp_rw [diagonal_mul_conjTranspose_eq_normSq_sum] at h_diag_eq ⊢
     have h_nonneg : ∀ k', (0 : ℝ) ≤ ∑ x, Complex.normSq (B k' c x) :=
       fun k' => Finset.sum_nonneg (fun x _ => Complex.normSq_nonneg _)
     have h_sum_real : ∑ k' : ι, ∑ x, Complex.normSq (B k' c x) = 0 := by
-      exact_mod_cast h_diag_eq c
+      exact_mod_cast h_diag_eq
     simp [(Finset.sum_eq_zero_iff_of_nonneg (fun k' _ => h_nonneg k')).mp
       h_sum_real k (Finset.mem_univ _)]
-  -- Extract: each Bᵢ a b = 0 from the vanishing diagonal of Bᵢ * Bᵢᴴ.
   intro i; ext a b
   have h_ii := h_each_diag i a
   rw [diagonal_mul_conjTranspose_eq_normSq_sum] at h_ii

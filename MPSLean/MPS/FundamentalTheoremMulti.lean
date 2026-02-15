@@ -42,18 +42,16 @@ private theorem blockDiagonal'_mul_one
     (f g : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
     (hfg : ∀ k, f k * g k = 1) :
     Matrix.blockDiagonal' f * Matrix.blockDiagonal' g = 1 := by
-  classical
   rw [← Matrix.blockDiagonal'_mul, show (fun k => f k * g k) = 1 from funext hfg,
     Matrix.blockDiagonal'_one]
 
 /-- Assemble blockwise invertible matrices into a block-diagonal element of `GL`. -/
 noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
-    GL ((k : Fin r) × Fin (dim k)) ℂ := by
-  classical
-  exact ⟨Matrix.blockDiagonal' (fun k => (X k : Matrix _ _ ℂ)),
-    Matrix.blockDiagonal' (fun k => ((X k)⁻¹ : Matrix _ _ ℂ)),
-    blockDiagonal'_mul_one _ _ (fun k => by simp),
-    blockDiagonal'_mul_one _ _ (fun k => by simp)⟩
+    GL ((k : Fin r) × Fin (dim k)) ℂ :=
+  ⟨Matrix.blockDiagonal' (fun k => (X k : Matrix _ _ ℂ)),
+   Matrix.blockDiagonal' (fun k => ((X k)⁻¹ : Matrix _ _ ℂ)),
+   blockDiagonal'_mul_one _ _ (fun k => by simp),
+   blockDiagonal'_mul_one _ _ (fun k => by simp)⟩
 
 end BlockDiagonalGL
 
@@ -87,32 +85,27 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
   let e : α ≃ Fin (∑ k : Fin r, dim k) := finSigmaFinEquiv
   let f : Matrix α α ℂ →* Matrix (Fin _) (Fin _) ℂ :=
     (Matrix.reindexAlgEquiv ℂ ℂ e).toRingEquiv.toMonoidHom
-  let Xσ : GL α ℂ := blockDiagonalGL X
-  let Xfin : GL (Fin _) ℂ := (Units.map f) Xσ
+  let Xfin : GL (Fin _) ℂ := (Units.map f) (blockDiagonalGL X)
   refine ⟨Xfin, fun i => ?_⟩
-  let BD_A : Matrix α α ℂ := Matrix.blockDiagonal' fun k => (μ k) • A k i
-  let BD_B : Matrix α α ℂ := Matrix.blockDiagonal' fun k => (μ k) • B k i
+  let BD := fun (T : (k : Fin r) → MPSTensor d (dim k)) =>
+    Matrix.blockDiagonal' fun k => (μ k) • T k i
   let XBD : Matrix α α ℂ :=
     Matrix.blockDiagonal' fun k => (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
   let XBDinv : Matrix α α ℂ :=
     Matrix.blockDiagonal' fun k => ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
-  have htoA : toTensorFromBlocks (d := d) (μ := μ) A i = f BD_A := by
-    simp [toTensorFromBlocks, BD_A, f, e]; rfl
-  have htoB : toTensorFromBlocks (d := d) (μ := μ) B i = f BD_B := by
-    simp [toTensorFromBlocks, BD_B, f, e]; rfl
-  have hblock :
-      (fun k : Fin r => (μ k) • B k i) =
-        fun k : Fin r =>
-          (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * ((μ k) • A k i) *
-            ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) := by
-    funext k; simp [hX k i, Algebra.mul_smul_comm, Algebra.smul_mul_assoc, Matrix.mul_assoc]
-  have hBD : BD_B = XBD * BD_A * XBDinv := by
-    simp only [BD_B, BD_A, XBD, XBDinv, hblock]
-    rw [← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul]
-  have hXfin : (Xfin : Matrix _ _ ℂ) = f XBD := by
-    simp [Xfin, Xσ, XBD, blockDiagonalGL]
+  have htoA : toTensorFromBlocks (d := d) (μ := μ) A i = f (BD A) := by
+    simp [toTensorFromBlocks, BD, f, e]; rfl
+  have htoB : toTensorFromBlocks (d := d) (μ := μ) B i = f (BD B) := by
+    simp [toTensorFromBlocks, BD, f, e]; rfl
+  have hBD : BD B = XBD * BD A * XBDinv := by
+    simp only [BD, XBD, XBDinv]
+    have : (fun k : Fin r => (μ k) • B k i) =
+        fun k => (X k : Matrix _ _ ℂ) * ((μ k) • A k i) * ((X k)⁻¹ : Matrix _ _ ℂ) := by
+      funext k; simp [hX k i, Algebra.mul_smul_comm, Algebra.smul_mul_assoc, Matrix.mul_assoc]
+    rw [this, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul]
+  have hXfin : (Xfin : Matrix _ _ ℂ) = f XBD := by simp [Xfin, XBD, blockDiagonalGL]
   have hXfin_inv : ((Xfin⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) = f XBDinv := by
-    simp [Xfin, Xσ, XBDinv, blockDiagonalGL]
+    simp [Xfin, XBDinv, blockDiagonalGL]
   rw [htoB, htoA, hBD]
   simp [map_mul, hXfin, hXfin_inv, Matrix.mul_assoc]
 
@@ -192,7 +185,7 @@ theorem mpv_toTensorFromBlocks_eq_sum
     mpv (toTensorFromBlocks (d := d) (μ := μ) A) σ =
       ∑ k : Fin r, (μ k) ^ N • mpv (A k) σ := by
   classical
-  set w : List (Fin d) := List.ofFn σ with hw
+  set w := List.ofFn σ with hw
   have hwlen : w.length = N := by simp [w]
   simp only [MPSTensor.mpv, MPSTensor.coeff, hw.symm, smul_eq_mul]
   let α := (k : Fin r) × Fin (dim k)
@@ -200,15 +193,14 @@ theorem mpv_toTensorFromBlocks_eq_sum
   let BD : Fin d → Matrix α α ℂ := fun i => Matrix.blockDiagonal' (fun k => μ k • A k i)
   have hEval : MPSTensor.evalWord (toTensorFromBlocks (d := d) (μ := μ) A) w =
       (Matrix.reindex e e) (_root_.evalWord BD w) := by
-    have hTensor : (fun i : Fin d => toTensorFromBlocks (d := d) (μ := μ) A i) =
-        fun i => (Matrix.reindex e e) (BD i) := by
-      funext i; simp [toTensorFromBlocks, BD, e]; rfl
-    simpa [hTensor] using (evalWord_reindex (d := d) (e := e) (A := BD) w)
+    simpa [toTensorFromBlocks, BD, e, show (fun i : Fin d => toTensorFromBlocks (d := d) (μ := μ)
+      A i) = fun i => (Matrix.reindex e e) (BD i) from by funext i; rfl]
+      using evalWord_reindex (d := d) (e := e) (A := BD) w
   rw [hEval, Matrix.trace_reindex]
-  have hBD : _root_.evalWord BD w = Matrix.blockDiagonal'
-      (fun k => (μ k) ^ w.length • _root_.evalWord (A k) w) := by
-    simpa [BD] using (evalWord_blockDiagonal'_smul (μ := μ) (A := A) w)
-  rw [hBD, Matrix.trace_blockDiagonal']
+  rw [show _root_.evalWord BD w = Matrix.blockDiagonal'
+      (fun k => (μ k) ^ w.length • _root_.evalWord (A k) w) from by
+    simpa [BD] using evalWord_blockDiagonal'_smul (μ := μ) (A := A) w]
+  rw [Matrix.trace_blockDiagonal']
   exact Finset.sum_congr rfl fun k _ => by simp [Matrix.trace_smul, hwlen]
 
 theorem sameMPV_toTensorFromBlocks_of_blockSameMPV

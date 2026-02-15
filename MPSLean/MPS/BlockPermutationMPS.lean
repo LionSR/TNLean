@@ -102,13 +102,11 @@ theorem ringEquiv_single_one_eq
     have h_T_sum : ∑ j : ι, T (Pi.single j (1 : R j)) = 1 := by
       rw [← map_sum, show ∑ j : ι, Pi.single j (1 : R j) = 1 from by
         simpa using Finset.univ_sum_single (1 : ∀ i, R i), map_one]
-    have h_at : (∑ j : ι, T (Pi.single j (1 : R j))) (σ i) =
-        T (Pi.single i (1 : R i)) (σ i) := by
-      simp only [Finset.sum_apply]
-      rw [Finset.sum_eq_single i (fun j _ hj =>
-        ringEquiv_maps_single_support T σ hσ 1 (σ i) (fun h => hj (σ.injective h.symm)))
-        (fun hi => absurd (Finset.mem_univ i) hi)]
-    rw [h_T_sum] at h_at; simpa using h_at.symm
+    have h_at := congr_fun h_T_sum (σ i)
+    simp only [Finset.sum_apply, Pi.one_apply] at h_at
+    rwa [Finset.sum_eq_single i (fun j _ hj =>
+      ringEquiv_maps_single_support T σ hσ 1 (σ i) (fun h => hj (σ.injective h.symm)))
+      (fun hi => absurd (Finset.mem_univ i) hi)] at h_at
   rw [h_eq_single, h_eval]
 
 end PiSingleOne
@@ -148,9 +146,7 @@ theorem componentMap_map_mul
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
     (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T σ i (M * N) = componentMap T σ i M * componentMap T σ i N := by
-  show T (Pi.single i (M * N)) (σ i) =
-    T (Pi.single i M) (σ i) * T (Pi.single i N) (σ i)
-  rw [Pi.single_mul, map_mul, Pi.mul_apply]
+  simp only [componentMap, Pi.single_mul, map_mul, Pi.mul_apply]
 
 theorem componentMap_map_one
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
@@ -159,22 +155,7 @@ theorem componentMap_map_one
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
     (i : ι) :
     componentMap T σ i 1 = 1 := by
-  show T (Pi.single i 1) (σ i) = 1
-  rw [ringEquiv_single_one_eq T σ hσ i, Pi.single_eq_same]
-
-private theorem componentMap_map_sub
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
-    (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
-    componentMap T σ i (M - N) = componentMap T σ i M - componentMap T σ i N := by
-  show T (Pi.single i (M - N)) (σ i) =
-    T (Pi.single i M) (σ i) - T (Pi.single i N) (σ i)
-  have : (Pi.single i (M - N) : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) =
-      Pi.single i M - Pi.single i N := by
-    funext j; simp only [Pi.sub_apply]
-    by_cases hj : j = i
-    · subst hj; simp
-    · simp [Pi.single_eq_of_ne hj]
-  rw [this, map_sub, Pi.sub_apply]
+  simp only [componentMap, ringEquiv_single_one_eq T σ hσ i, Pi.single_eq_same]
 
 /-- The component map commutes with ℂ-scalar multiplication when T is a ℂ-algebra map. -/
 theorem componentMap_map_smul_of_algEquiv
@@ -182,14 +163,7 @@ theorem componentMap_map_smul_of_algEquiv
     (c : ℂ) (M : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T.toRingEquiv σ i (c • M) = c • componentMap T.toRingEquiv σ i M := by
   show T (Pi.single i (c • M)) (σ i) = c • T (Pi.single i M) (σ i)
-  have h : Pi.single i (c • M) =
-      (algebraMap ℂ (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) c) * Pi.single i M := by
-    funext j; simp only [Pi.mul_apply, Algebra.algebraMap_eq_smul_one, Pi.smul_apply, Pi.one_apply]
-    by_cases hj : j = i
-    · subst hj; simp
-    · simp [Pi.single_eq_of_ne hj, mul_zero]
-  rw [h, map_mul, T.commutes, Pi.mul_apply, Algebra.algebraMap_eq_smul_one,
-      Pi.smul_apply, Pi.one_apply, smul_mul_assoc, one_mul]
+  rw [Pi.single_smul, map_smul, Pi.smul_apply]
 
 private noncomputable def componentMapRingHom
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
@@ -208,21 +182,8 @@ theorem componentMap_injective
     (hσ : ∀ i, T.mapTwoSidedIdeal
         (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
-    (i : ι) : Function.Injective (componentMap T σ i) := by
-  let f := componentMapRingHom hσ i
-  have hker : TwoSidedIdeal.ker (f : Matrix _ _ ℂ →+* Matrix _ _ ℂ) = ⊥ := by
-    rcases eq_bot_or_eq_top (TwoSidedIdeal.ker (f : Matrix _ _ ℂ →+* Matrix _ _ ℂ)) with h | h
-    · exact h
-    · exfalso
-      have h1 : (1 : Matrix (Fin (D i)) (Fin (D i)) ℂ) ∈ (⊤ : TwoSidedIdeal _) := trivial
-      rw [← h] at h1; rw [TwoSidedIdeal.mem_ker] at h1
-      change componentMap T σ i 1 = 0 at h1
-      rw [componentMap_map_one hσ i] at h1; exact one_ne_zero h1
-  intro x y hxy
-  have hsub : x - y ∈ TwoSidedIdeal.ker (f : Matrix _ _ ℂ →+* Matrix _ _ ℂ) := by
-    rw [TwoSidedIdeal.mem_ker]; change componentMap T σ i (x - y) = 0
-    rw [componentMap_map_sub, sub_eq_zero]; exact hxy
-  rw [hker, TwoSidedIdeal.mem_bot] at hsub; exact sub_eq_zero.mp hsub
+    (i : ι) : Function.Injective (componentMap T σ i) :=
+  (componentMapRingHom hσ i).injective
 
 theorem componentMap_surjective
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
@@ -231,23 +192,18 @@ theorem componentMap_surjective
       blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
     (i : ι) : Function.Surjective (componentMap T σ i) := by
   intro N
-  haveI : Finite ι := Finite.of_fintype ι
-  have h_symm_support : ∀ j, j ≠ i → T.symm (Pi.single (σ i) N) j = 0 := by
-    intro j hj
-    exact (mem_blockIdeal_iff.mp (by
-      rw [← ringEquiv_symm_maps_blockIdeal T σ hσ i,
-          RingEquiv.mapTwoSidedIdeal_apply, TwoSidedIdeal.mem_comap]
-      simp only [RingEquiv.symm_symm, RingEquiv.apply_symm_apply]
-      exact @pi_single_mem_blockIdeal ι _ _
-        (fun k => Matrix (Fin (D k)) (Fin (D k)) ℂ) _ _ (σ i) N)) j hj
+  have h_mem : T.symm (Pi.single (σ i) N) ∈
+      blockIdeal (fun k => Matrix (Fin (D k)) (Fin (D k)) ℂ) i := by
+    rw [← ringEquiv_symm_maps_blockIdeal T σ hσ i,
+        RingEquiv.mapTwoSidedIdeal_apply, TwoSidedIdeal.mem_comap]
+    simp [pi_single_mem_blockIdeal]
   have h_eq : T.symm (Pi.single (σ i) N) =
       Pi.single i (T.symm (Pi.single (σ i) N) i) := by
     ext j; by_cases hj : j = i
     · subst hj; simp
-    · rw [h_symm_support j hj, Pi.single_eq_of_ne hj]
-  refine ⟨T.symm (Pi.single (σ i) N) i, ?_⟩
-  show T (Pi.single i (T.symm (Pi.single (σ i) N) i)) (σ i) = N
-  rw [← h_eq, T.apply_symm_apply, Pi.single_eq_same]
+    · rw [mem_blockIdeal_iff.mp h_mem j hj, Pi.single_eq_of_ne hj]
+  exact ⟨T.symm (Pi.single (σ i) N) i, by
+    simp only [componentMap, ← h_eq, T.apply_symm_apply, Pi.single_eq_same]⟩
 
 theorem componentMap_bijective
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}

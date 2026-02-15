@@ -34,24 +34,112 @@ section FixedPointDecomposition
 
 variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
+/-- For PSD matrices `A`, `B` with `A * B = 0` and `B * A = 0`, and `Y` such that
+`A + Y` is PSD, `B + Y` is PSD, and `trace Y = 0`, we have `Y = 0`.
+
+This is the key linear algebra lemma needed for Wolf Proposition 6.8.
+The proof uses that Y ≥ 0 on ker(A) (from A+Y ≥ 0), Y ≥ 0 on ker(B)
+(from B+Y ≥ 0), and range(A) ⊆ ker(B), range(B) ⊆ ker(A) (from AB = BA = 0).
+Combined with the orthogonal decomposition for Hermitian PSD matrices,
+this gives Y ≥ 0, and trace(Y) = 0 then gives Y = 0. -/
+private theorem psd_orthogonal_difference_eq_zero
+    {A B Y : Matrix (Fin D) (Fin D) ℂ}
+    (hA : A.PosSemidef) (hB : B.PosSemidef)
+    (hAB : A * B = 0) (_hBA : B * A = 0)
+    (hAY : (A + Y).PosSemidef) (hBY : (B + Y).PosSemidef)
+    (hY_tr : trace Y = 0) : Y = 0 := by
+  -- Strategy: show Y is PSD, then use trace = 0 to conclude Y = 0.
+  suffices hY_psd : Y.PosSemidef from hY_psd.trace_eq_zero_iff.mp hY_tr
+  -- Y is Hermitian (Y = (A + Y) - A, difference of Hermitian matrices)
+  have hY_herm : Y.IsHermitian := by
+    have h := hAY.isHermitian.sub hA.isHermitian
+    rwa [show A + Y - A = Y from by abel] at h
+  -- To show Y ≥ 0: show ⟨v, Yv⟩ ≥ 0 for all v.
+  apply Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hY_herm
+  intro v
+  -- For any w with A.mulVec w = 0: ⟨w, Yw⟩ ≥ 0 (from A + Y ≥ 0)
+  have hY_ker_A : ∀ w, A.mulVec w = 0 → 0 ≤ star w ⬝ᵥ Y.mulVec w := by
+    intro w hw
+    have := hAY.dotProduct_mulVec_nonneg w
+    rwa [Matrix.add_mulVec, hw, zero_add] at this
+  -- For any w with B.mulVec w = 0: ⟨w, Yw⟩ ≥ 0 (from B + Y ≥ 0)
+  have hY_ker_B : ∀ w, B.mulVec w = 0 → 0 ≤ star w ⬝ᵥ Y.mulVec w := by
+    intro w hw
+    have := hBY.dotProduct_mulVec_nonneg w
+    rwa [Matrix.add_mulVec, hw, zero_add] at this
+  -- From A * B = 0: for all v, A.mulVec (B.mulVec v) = 0
+  have hAB_mulVec : ∀ w, A.mulVec (B.mulVec w) = 0 := by
+    intro w
+    rw [Matrix.mulVec_mulVec]; simp [hAB]
+  -- The full proof requires showing Y ≥ 0 using the orthogonal decomposition
+  -- ker(A) ⊕⊥ range(A) = ℂ^D for Hermitian A, with range(A) ⊆ ker(B).
+  -- Y ≥ 0 on ker(A) (from hY_ker_A) and on range(A) ⊆ ker(B) (from hY_ker_B).
+  -- The Schur complement argument shows the cross terms also work out.
+  sorry
+
 /-- **Wolf Proposition 6.8** (Hermitian part):
 If `E` is trace-preserving and positive, and `X` is a Hermitian fixed point,
 then the positive and negative parts of `X` are also fixed points.
 
-More precisely: if `X = X₊ - X₋` where `X₊, X₋ ≥ 0` and `X₊ ⊥ X₋`
-(orthogonal supports), then `E(X₊) = X₊` and `E(X₋) = X₋`. -/
+More precisely: there exist PSD `Q₁`, `Q₂` (the CFC positive and negative parts)
+with `X = Q₁ - Q₂` and `E(Q₁) = Q₁` and `E(Q₂) = Q₂`. -/
 theorem IsChannel.posSemidef_parts_of_hermitian_fixedPoint
     (hE : IsChannel E)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX_herm : X.IsHermitian)
     (hX_fix : E X = X) :
-    -- If P₊ is the positive part of X (projection onto positive eigenspace)
-    -- and P₋ is the negative part, then both are fixed by E.
-    -- For now, we state the consequence: there exist PSD Q₁, Q₂ with
-    -- X = Q₁ - Q₂ and E(Q₁) = Q₁ and E(Q₂) = Q₂.
     ∃ Q₁ Q₂ : Matrix (Fin D) (Fin D) ℂ,
       Q₁.PosSemidef ∧ Q₂.PosSemidef ∧
       X = Q₁ - Q₂ ∧ E Q₁ = Q₁ ∧ E Q₂ = Q₂ := by
-  sorry
+  -- Use CFC positive and negative parts
+  set Q₁ := X⁺ with hQ₁_def
+  set Q₂ := X⁻ with hQ₂_def
+  have hX_sa : IsSelfAdjoint X := isSelfAdjoint_iff.mpr hX_herm
+  -- Q₁ and Q₂ are PSD
+  have hQ₁_psd : Q₁.PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X)
+  have hQ₂_psd : Q₂.PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg X)
+  -- X = Q₁ - Q₂
+  have hX_decomp : X = Q₁ - Q₂ := (CFC.posPart_sub_negPart X hX_sa).symm
+  -- Orthogonality: Q₁ * Q₂ = 0 and Q₂ * Q₁ = 0
+  have hQ₁Q₂ : Q₁ * Q₂ = 0 := CFC.posPart_mul_negPart X
+  have hQ₂Q₁ : Q₂ * Q₁ = 0 := CFC.negPart_mul_posPart X
+  -- E preserves PSD (positivity)
+  have hEQ₁_psd : (E Q₁).PosSemidef := hE.pos Q₁ hQ₁_psd
+  have hEQ₂_psd : (E Q₂).PosSemidef := hE.pos Q₂ hQ₂_psd
+  -- E is trace-preserving
+  have hEQ₁_tr : trace (E Q₁) = trace Q₁ := hE.tp Q₁
+  -- From E(X) = X and X = Q₁ - Q₂: E(Q₁) - E(Q₂) = Q₁ - Q₂
+  have hE_diff : E Q₁ - E Q₂ = Q₁ - Q₂ := by
+    rw [← map_sub]; rw [← hX_decomp]; exact hX_fix
+  -- Let Y = E(Q₁) - Q₁ = E(Q₂) - Q₂
+  set Y := E Q₁ - Q₁ with hY_def
+  -- E Q₂ - Q₂ = Y (from the difference equation)
+  have hY_eq : E Q₂ - Q₂ = Y := by
+    rw [hY_def]
+    -- goal: E Q₂ - Q₂ = E Q₁ - Q₁
+    -- from hE_diff: E Q₁ - E Q₂ = Q₁ - Q₂
+    have h := hE_diff
+    rw [sub_eq_iff_eq_add] at h -- h: E Q₁ = Q₁ - Q₂ + E Q₂
+    rw [h]; abel
+  -- trace(Y) = 0
+  have hY_tr : trace Y = 0 := by
+    rw [hY_def, trace_sub, hEQ₁_tr, sub_self]
+  -- E(Q₁) = Q₁ + Y and E(Q₂) = Q₂ + Y
+  have hEQ₁_eq : E Q₁ = Q₁ + Y := by rw [hY_def]; abel
+  have hEQ₂_eq : E Q₂ = Q₂ + Y := by
+    rw [sub_eq_iff_eq_add] at hY_eq; rw [hY_eq, add_comm]
+  -- Q₁ + Y ≥ 0 (since E(Q₁) ≥ 0)
+  have hQ₁Y_psd : (Q₁ + Y).PosSemidef := hEQ₁_eq ▸ hEQ₁_psd
+  -- Q₂ + Y ≥ 0 (since E(Q₂) ≥ 0)
+  have hQ₂Y_psd : (Q₂ + Y).PosSemidef := hEQ₂_eq ▸ hEQ₂_psd
+  -- Apply the key lemma: Y = 0
+  have hY_zero : Y = 0 :=
+    psd_orthogonal_difference_eq_zero hQ₁_psd hQ₂_psd hQ₁Q₂ hQ₂Q₁ hQ₁Y_psd hQ₂Y_psd hY_tr
+  -- Therefore E(Q₁) = Q₁ and E(Q₂) = Q₂
+  have hEQ₁ : E Q₁ = Q₁ := by rw [hEQ₁_eq, hY_zero, add_zero]
+  have hEQ₂ : E Q₂ = Q₂ := by rw [hEQ₂_eq, hY_zero, add_zero]
+  exact ⟨Q₁, Q₂, hQ₁_psd, hQ₂_psd, hX_decomp, hEQ₁, hEQ₂⟩
 
 end FixedPointDecomposition
 
