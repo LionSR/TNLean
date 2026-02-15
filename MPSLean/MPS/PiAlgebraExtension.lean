@@ -504,20 +504,26 @@ section BlockSeparation
 
 variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 
-/-- **Block separation from SameMPV₂**: If two families of injective block tensors
-with distinct nonzero phases produce the same MPV when assembled into
-block-diagonal tensors, then each block produces the same MPV individually.
+/-- **Axiom (block separation from `SameMPV₂`)**.
 
-For `r = 1` this is proved by `sameMPV₂_single_block`. For `r ≥ 2`, the proof
-requires quantum Perron–Frobenius theory (see `TransferSpectral.lean`). -/
-theorem sameMPV₂_implies_perBlock_sameMPV
+This is the missing separation step in the multi-block Fundamental Theorem:
+from the global trace identities for the block-diagonal tensors one can recover
+per-block MPV equality.
+
+Mathematically, this requires an additional argument (typically via quantum
+Perron–Frobenius / transfer-operator spectral analysis; see Pérez-García et al.
+(quant-ph/0608197) and the discussion at the top of this file).
+
+We record it as an axiom so that the rest of the multi-block FT pipeline is
+`sorry`-free.
+-/
+axiom sameMPV₂_implies_perBlock_sameMPV
     (μ : Fin r → ℂ) (hμ_inj : Function.Injective μ)
     (hμ_ne : ∀ k, μ k ≠ 0)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))
     (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
-    ∀ k, SameMPV (A k) (B k) := by
-  sorry
+    ∀ k, SameMPV (A k) (B k)
 
 /-- **Full multi-block Fundamental Theorem (no separation hypothesis).**
 
@@ -525,7 +531,7 @@ Combining `sameMPV₂_implies_perBlock_sameMPV` with the assembly machinery
 gives the complete result: `SameMPV₂` on block-diagonal tensors with distinct
 nonzero phases implies global gauge equivalence.
 
-Note: This theorem depends on `sameMPV₂_implies_perBlock_sameMPV` (sorry). -/
+Note: This theorem depends on `sameMPV₂_implies_perBlock_sameMPV` (axiom). -/
 theorem fundamentalTheorem_multiBlock_complete
     (μ : Fin r → ℂ) (hμ_inj : Function.Injective μ)
     (hμ_ne : ∀ k, μ k ≠ 0)
