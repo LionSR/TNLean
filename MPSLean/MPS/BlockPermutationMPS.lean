@@ -144,22 +144,13 @@ private theorem componentMap_map_add
     componentMap T σ i (M + N) = componentMap T σ i M + componentMap T σ i N := by
   simp [componentMap, Pi.single_add, map_add, Pi.add_apply]
 
--- Helper: Pi.single distributes over multiplication
-private theorem pi_single_mul {i : ι} (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
-    (Pi.single i (M * N) : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) =
-      Pi.single i M * Pi.single i N := by
-  funext j; simp only [Pi.mul_apply]
-  by_cases hj : j = i
-  · subst hj; simp
-  · simp [Pi.single_eq_of_ne hj]
-
 theorem componentMap_map_mul
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
     (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T σ i (M * N) = componentMap T σ i M * componentMap T σ i N := by
   show T (Pi.single i (M * N)) (σ i) =
     T (Pi.single i M) (σ i) * T (Pi.single i N) (σ i)
-  rw [pi_single_mul, map_mul, Pi.mul_apply]
+  rw [Pi.single_mul, map_mul, Pi.mul_apply]
 
 theorem componentMap_map_one
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
