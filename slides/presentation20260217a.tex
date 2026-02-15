@@ -572,7 +572,7 @@
         Non-full-rank FP $\to$ projectors $\to$ block structure.
         Moment matching (B\'ezout + linear indep.).} &
         \textcolor{amber}{Moderate} &
-        \textcolor{softred}{Not started} \\
+        \shortstack{\textcolor{amber}{Partial}\\{\tiny block perm.\ \textcolor{leangreen}{\checkmark}}} \\
         \rowcolor{cardbg}
         \textcolor{mintgreen}{L4: Periodic extras} &
         \textcolor{dimwhite}{Unblocking argument (inverse tensors).
@@ -741,6 +741,8 @@
             \item[\textcolor{softred}{$\boldsymbol\times$}] Irreducible CP map decomposition
             \item[\textcolor{softred}{$\boldsymbol\times$}] Blocking / tensor product of Kraus operators\\
                   {\tiny Partially in our code}
+            \item[\textcolor{amber}{$\circ$}] Banach algebra power decay lemma\\
+                  {\tiny \texttt{pow\_tendsto\_zero\_of\_spectralRadius\_lt\_one}: not in Mathlib; proved in our code}
         \end{itemize}
 
         \column{0.50\textwidth}
@@ -765,6 +767,39 @@
 \end{frame}
 
 %======================================================================
+% NEW SLIDE — Algebraic infrastructure already proved
+%======================================================================
+\begin{frame}{Algebraic Infrastructure Already Proved}
+    \vspace{-0.7em}
+
+    \begin{columns}[T]
+        \column{0.54\textwidth}
+        \textbf{\textcolor{leangreen}{Done (0 \texttt{sorry}):}}
+        \begin{itemize}\itemsep0.12em\scriptsize
+            \item[\textcolor{leangreen}{\checkmark}] Wedderburn block permutation for $\bigoplus_j M_{D_j}$\\
+                {\tiny Phase 4 block decomposition backbone:\\
+                \texttt{ringEquiv\_pi\_simple\_permutes\_blockIdeals},\\
+                \texttt{algEquiv\_pi\_matrix\_decomposition}, \texttt{dim\_preserved}.}
+            \item[\textcolor{leangreen}{\checkmark}] \texttt{mpv\_inner\_product\_via\_trace}\\
+                {\tiny Bridge identity used in equal-or-orthogonal: $\langle V_N(A)|V_N(B)\rangle = \tr(\mathcal{F}_{AB}^N(I))$.}
+            \item[\textcolor{leangreen}{\checkmark}] Trace pairing nondegeneracy\\
+                {\tiny \texttt{trace\_mul\_right\_eq\_zero\_iff}, \texttt{traceMulRightPi\_ker\_eq\_bot}.}
+        \end{itemize}
+
+        \column{0.44\textwidth}
+        \textbf{\textcolor{amber}{Proved modulo the axiom:}}
+        \begin{itemize}\itemsep0.12em\scriptsize
+            \item[\textcolor{amber}{$\circ$}] \texttt{block\_separation\_principle} + \texttt{self\_correlation\_persists}\\
+                {\tiny Master separation lemma (assumes spectral-gap axiom).}
+            \item[\textcolor{leangreen}{\checkmark}] \texttt{fundamentalTheorem\_singleBlock\_fromMPV\textsubscript{2}}\\
+                {\tiny Cross-dimension single-block FT.}
+            \item[\textcolor{leangreen}{\checkmark}] \texttt{pow\_tendsto\_zero\_of\_spectralRadius\_lt\_one}\\
+                {\tiny General Banach algebra: $\rho(T)<1 \Rightarrow T^n\to 0$.\; \textcolor{amber}{Not in Mathlib}.}
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+%======================================================================
 % SLIDE 15 — Summary
 %======================================================================
 \begin{frame}{Summary}
@@ -775,6 +810,8 @@
               all general cases \textbf{reduce} to it
         \item Our formalization handles injective \textbf{completely}
               (modulo 1 axiom + 1 sorry)
+        \item Some Phase 4 algebra is already proved\\
+              {\tiny Wedderburn block permutation, \texttt{mpv\_inner\_product\_via\_trace}, trace pairing nondegeneracy}
         \item The \textcolor{softred}{axiom} (Wolf Thm 6.6) is the single
               hardest piece and \textbf{unlocks everything}
         \item Once the axiom is proved, extending to

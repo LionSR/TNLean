@@ -725,6 +725,45 @@
 \end{frame}
 
 %======================================================================
+% NEW SLIDE — Additional proved results (unmentioned)
+%======================================================================
+\begin{frame}{Additional Proved Results}
+    \vspace{-0.8em}
+
+    \begin{columns}[T]
+        \column{0.54\textwidth}
+        \textbf{\textcolor{amber}{Tier 1 (highlight):}}
+        \begin{itemize}\itemsep0.12em\scriptsize
+            \item[\textcolor{leangreen}{\checkmark}] \texttt{pow\_tendsto\_zero\_of\_spectralRadius\_lt\_one}\\
+                {\tiny General Banach algebra: $\rho(T)<1 \Rightarrow T^n \to 0$.\; \textcolor{amber}{Not in Mathlib}.\; Original contribution (${\sim}$150 lines).}
+            \item[\textcolor{leangreen}{\checkmark}] Wedderburn block permutation theory\\
+                {\tiny \texttt{BlockPermutation.lean} + \texttt{BlockPermutationMPS.lean} (${\sim}$500 lines):\\
+                automorphisms of $\bigoplus_j M_{D_j}$ permute block ideals, decompose into per-block conjugations, and preserve $D_j$\\
+                (original formalization of classical algebra).\\
+                \texttt{ringEquiv\_pi\_simple\_permutes\_blockIdeals},\\
+                \texttt{algEquiv\_pi\_matrix\_decomposition}, \texttt{dim\_preserved}.}
+            \item[\textcolor{leangreen}{\checkmark}] \texttt{posSemidef\_fixedPoint\_isPosDef\_of\_irreducible}\\
+                {\tiny Positive definiteness for \emph{irreducible} CP maps (beyond injective).}
+            \item[\textcolor{leangreen}{\checkmark}] \texttt{mpv\_inner\_product\_via\_trace}\\
+                {\tiny $\langle V_N(A)\,|\,V_N(B)\rangle = \tr\!\bigl(\mathcal{F}_{AB}^N(I)\bigr)$ (bridge identity).}
+        \end{itemize}
+
+        \column{0.44\textwidth}
+        \textbf{\textcolor{dimwhite}{Tier 2 (brief):}}
+        \begin{itemize}\itemsep0.12em\scriptsize\color{dimwhite}
+            \item Trace pairing nondegeneracy:\\
+                \texttt{trace\_mul\_right\_eq\_zero\_iff}, \texttt{traceMulRightPi\_ker\_eq\_bot}
+            \item Density matrix topology:\\
+                \texttt{densityMatrices\_isCompact}, \texttt{densityMatrices\_isConvex}, \texttt{isClosed\_posSemidef}
+            \item Block separation tools:\\
+                \texttt{block\_separation\_principle}, \texttt{self\_correlation\_persists}
+            \item Cross-dimension FT:\\
+                \texttt{fundamentalTheorem\_singleBlock\_fromMPV\textsubscript{2}}
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+%======================================================================
 % SLIDE 16 — Summary & path forward
 %======================================================================
 \begin{frame}{Summary \& Path Forward}
@@ -757,15 +796,16 @@
 
     \vspace{-0.1em}
     {\small\textbf{What IS proved (0 sorry in chain):}}
-    \begin{itemize}\itemsep0em\small
+    \begin{itemize}\itemsep0em\footnotesize
         \item QPF: existence (Ces\`aro) + PD (kernel) + uniqueness (critical scalar) = 885 lines
         \item $\rho(\mathcal{F}_{AB}) \leq 1$ via HS contraction; Gelfand convergence $\mathcal{F}^n \to 0$
         \item Single-block FT, Vandermonde separation, multi-block assembly (all 0 sorry)
+        \item \textcolor{amber}{Original contributions not in Mathlib}: Banach-algebra power decay ($\rho(T)<1 \Rightarrow T^n\to 0$); Wedderburn block permutation
     \end{itemize}
 
-    \vspace{0.05em}
+    \vspace{0.0em}
     {\small\textbf{Next steps (priority order):}}
-    \begin{enumerate}\itemsep0em\small
+    \begin{enumerate}\itemsep0em\footnotesize
         \item \textcolor{softred}{\textbf{Prove the axiom}} via \cite{Wolf2012Quantum} Ch.~6:
             KS $\to$ peripheral spectrum $\to$ primitivity $\to$ gauge
         \item \textcolor{softred}{\textbf{Wire}} \texttt{cross\_correlation\_tendsto\_zero}
@@ -773,8 +813,8 @@
         \item \textcolor{gray}{(Optional) Close orphan sorries}
     \end{enumerate}
 
-    \vspace{0.1em}
-    {\scriptsize The axiom encodes \cite{Wolf2012Quantum} Thm 6.6, the deepest result
+    \vspace{-0.1em}
+    {\tiny The axiom encodes \cite{Wolf2012Quantum} Thm 6.6, the deepest result
     in Wolf's CP map theory. Proving it formally is a significant open challenge.
     \quad ${\sim}$5{,}300 lines $\cdot$ ${\sim}$200 theorems $\cdot$ ${\sim}$50 definitions $\cdot$ 15/19 sorry-free files}
 \end{frame}
