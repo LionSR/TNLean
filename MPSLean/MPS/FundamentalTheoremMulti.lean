@@ -63,14 +63,6 @@ section ReindexGL
 
 variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
 
-/-- Transport a `GL` element across a reindexing equivalence. -/
-noncomputable def reindexGL (e : m ≃ n) : GL m ℂ ≃* GL n ℂ :=
-  Units.mapEquiv (Matrix.reindexAlgEquiv ℂ ℂ e).toRingEquiv.toMulEquiv
-
-@[simp] lemma reindexGL_coe (e : m ≃ n) (X : GL m ℂ) :
-    ((reindexGL (m := m) (n := n) e X : GL n ℂ) : Matrix n n ℂ) =
-      Matrix.reindex e e (X : Matrix m m ℂ) := rfl
-
 end ReindexGL
 
 /-! ## Block-diagonal gauge assembly -/

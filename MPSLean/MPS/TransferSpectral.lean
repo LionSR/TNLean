@@ -264,43 +264,6 @@ norm bounded by a fixed constant `C`, then the spectral radius of `a`
 is at most 1.  The proof uses `ρ(a)^n ≤ ρ(a^n) ≤ ‖a^n‖₊ ≤ C`, so
 `ρ(a)^n` is bounded, which forces `ρ(a) ≤ 1`. -/
 
-/-- If all powers of `a` have uniformly bounded nonnegative norm, then the
-spectral radius of `a` is at most 1.
-
-This follows from the Gelfand formula: `ρ(a) = lim ‖a^n‖^{1/n}`, so
-`ρ(a)^n ≤ ‖a^n‖₊ ≤ C` for all `n`, which forces `ρ(a) ≤ 1`.
-
-The proof proceeds by contradiction: if `ρ(a) > 1`, then `ρ(a)^n → ⊤`
-in `ℝ≥0∞`, contradicting the uniform bound `ρ(a)^n ≤ C`. -/
-lemma spectralRadius_le_one_of_pow_nnnorm_bounded
-    {A : Type*} [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A] [NormOneClass A]
-    (a : A) (C : ℝ≥0) (hC : ∀ n : ℕ, ‖a ^ n‖₊ ≤ C) :
-    spectralRadius ℂ a ≤ 1 := by
-  -- By contradiction: suppose ρ(a) > 1
-  by_contra h_gt
-  push_neg at h_gt
-  -- h_gt : 1 < spectralRadius ℂ a
-  -- ρ(a) > 1 means ρ(a)^n → ⊤ (in ℝ≥0∞)
-  have h_tendsto := ENNReal.tendsto_pow_atTop_nhds_top_iff.mpr h_gt
-  -- ρ(a)^n ≤ ρ(a^n) ≤ ‖a^n‖₊ ≤ C for all n
-  have h_bounded : ∀ n : ℕ, (spectralRadius ℂ a) ^ n ≤ (C : ℝ≥0∞) := by
-    intro n
-    rcases eq_or_ne n 0 with rfl | hn
-    · -- n = 0: ρ(a)^0 = 1 ≤ C (from NormOneClass: hC 0 gives ‖1‖₊ = 1 ≤ C)
-      simp only [pow_zero]
-      have h0 := hC 0
-      simp only [pow_zero, nnnorm_one] at h0
-      exact_mod_cast h0
-    · calc (spectralRadius ℂ a) ^ n
-          ≤ spectralRadius ℂ (a ^ n) := spectrum.spectralRadius_pow_le a n hn
-        _ ≤ ↑‖a ^ n‖₊ := spectrum.spectralRadius_le_nnnorm (a ^ n)
-        _ ≤ ↑C := ENNReal.coe_le_coe.mpr (hC n)
-  -- Tendsto ⊤ means: for any x : NNReal, eventually x < ρ(a)^n.
-  -- Apply with x = C to get a contradiction with h_bounded.
-  rw [ENNReal.tendsto_nhds_top_iff_nnreal] at h_tendsto
-  obtain ⟨n, hn⟩ := (h_tendsto C).exists
-  exact not_lt.mpr (h_bounded n) hn
-
 /-! ### Key spectral gap property
 
 The crucial fact for block separation: when `A` and `B` come from

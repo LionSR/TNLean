@@ -30,40 +30,6 @@ def mpvFun (A : MPSTensor d D) (N : ℕ) : (Fin N → Fin d) → ℂ :=
 @[simp] lemma mpvFun_apply (A : MPSTensor d D) (N : ℕ) (σ : Fin N → Fin d) :
     mpvFun A N σ = mpv A σ := rfl
 
-/-- If `A` is injective and `D > 0`, then the one-site MPV is not identically zero.
-
-The proof follows the same "trace on a spanning set" argument as `linearExtension_nonzero` in the
-single-block Fundamental Theorem.
-
-For words of length `1`, `mpv A σ = trace (A (σ 0))`.  If this were zero for all `σ`, then
-`trace (A i) = 0` for all `i`; since the `A i` span the full matrix algebra, trace would vanish on
-all matrices, contradicting `trace 1 = D`.
--/
-theorem mpvFun_nonzero {d D' : ℕ} {A : MPSTensor d (Nat.succ D')}
-    (hA : IsInjective A) : mpvFun A 1 ≠ 0 := by
-  classical
-  intro h0
-  -- From `mpvFun A 1 = 0`, deduce `trace (A i) = 0` for each physical index `i`.
-  have hTraceA : ∀ i : Fin d, Matrix.trace (A i) = 0 := by
-    intro i
-    have hmpv : mpv A (fun _ : Fin 1 => i) = 0 := by
-      -- Apply the function equality to the constant configuration `σ := fun _ => i`.
-      have := congrArg (fun f : (Fin 1 → Fin d) → ℂ => f (fun _ : Fin 1 => i)) h0
-      simpa [mpvFun] using this
-    -- Unfold `mpv` on a one-letter word.
-    simpa [MPSTensor.mpv, MPSTensor.coeff, MPSTensor.evalWord] using hmpv
-  -- The trace functional vanishes on a spanning set, hence is the zero map.
-  have htr_zero : Matrix.traceLinearMap (Fin (Nat.succ D')) ℂ ℂ = 0 := by
-    apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
-    intro i
-    simpa [Matrix.traceLinearMap_apply] using hTraceA i
-  -- But then `trace 1 = 0`, contradiction.
-  have : Matrix.trace (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 0 := by
-    simpa [Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
-  exact absurd this (by
-    simpa [Matrix.trace_one, Fintype.card_fin] using
-      (Nat.cast_ne_zero (R := ℂ)).2 (Nat.succ_ne_zero D'))
-
 /-- The Vandermonde separation lemma: if the scaling factors `μ k` are distinct,
 then any linear relation `∑ k, c k * (μ k) ^ N = 0` holding for `N = 0, …, r-1`
 forces all coefficients `c k` to vanish.
