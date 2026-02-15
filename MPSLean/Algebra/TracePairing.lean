@@ -1,5 +1,5 @@
-import MPSLean.Defs
-import MPSLean.TraceNondeg
+import MPSLean.MPS.Defs
+import MPSLean.Algebra.TraceNondeg
 
 import Mathlib.LinearAlgebra.Dimension.Finite
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic

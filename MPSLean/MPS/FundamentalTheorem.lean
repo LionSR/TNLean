@@ -1,5 +1,5 @@
-import MPSLean.LinearExtension
-import MPSLean.SkolemNoether
+import MPSLean.MPS.LinearExtension
+import MPSLean.Algebra.SkolemNoether
 
 /-!
 # The single-block Fundamental Theorem of Matrix Product States

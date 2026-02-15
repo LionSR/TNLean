@@ -1,4 +1,4 @@
-import MPSLean.Defs
+import MPSLean.MPS.Defs
 
 import Mathlib.LinearAlgebra.GeneralLinearGroup.AlgEquiv
 import Mathlib.RingTheory.SimpleRing.Matrix

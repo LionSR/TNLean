@@ -1,14 +1,19 @@
 -- Layer 0: General algebra
-import MPSLean.TraceNondeg
-import MPSLean.TracePairing
-import MPSLean.BlockPermutation
-import MPSLean.SkolemNoether
+import MPSLean.Algebra.TraceNondeg
+import MPSLean.Algebra.TracePairing
+import MPSLean.Algebra.BlockPermutation
+import MPSLean.Algebra.SkolemNoether
 
--- Layer 1: Quantum channels
+-- Layer 1: Quantum channels (general theory)
 import MPSLean.Channel.PositiveMap
 import MPSLean.Channel.KadisonSchwarz
 import MPSLean.Channel.CesaroFixedPoint
-import MPSLean.CPPrimitive
+import MPSLean.Channel.Irreducible
+import MPSLean.Channel.Schwarz
+import MPSLean.Channel.PeripheralSpectrum
+import MPSLean.Channel.Primitive
+import MPSLean.Channel.FixedPoints
+import MPSLean.Channel.Ergodic
 
 -- Layer 2: Spectral theory (QPF + spectral gap)
 import MPSLean.QPF.PosDef
@@ -19,19 +24,25 @@ import MPSLean.Spectral.SpectralGap
 import MPSLean.Spectral.CrossCorrelation
 
 -- Layer 3: MPS core
-import MPSLean.Defs
-import MPSLean.Transfer
-import MPSLean.CanonicalForm
+import MPSLean.MPS.Defs
+import MPSLean.MPS.Transfer
+import MPSLean.MPS.CanonicalForm
+import MPSLean.MPS.CPPrimitive
 
 -- Layer 4: Fundamental theorem (single block)
-import MPSLean.LinearExtension
-import MPSLean.FundamentalTheorem
+import MPSLean.MPS.LinearExtension
+import MPSLean.MPS.FundamentalTheorem
 
 -- Layer 5: Multi-block
-import MPSLean.MultiBlock
-import MPSLean.BasisNormal
-import MPSLean.FundamentalTheoremMulti
-import MPSLean.BlockPermutationMPS
+import MPSLean.MPS.MultiBlock
+import MPSLean.MPS.BasisNormal
+import MPSLean.MPS.FundamentalTheoremMulti
+import MPSLean.MPS.BlockPermutationMPS
 import MPSLean.PiAlgebra.Construction
 import MPSLean.PiAlgebra.FundamentalTheoremComplete
 import MPSLean.PiAlgebra.BlockSeparation
+
+-- Re-export hubs
+import MPSLean.PositiveMapSpectral
+import MPSLean.TransferSpectral
+import MPSLean.PiAlgebraExtension

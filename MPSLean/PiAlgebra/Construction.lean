@@ -2,10 +2,10 @@
 Copyright (c) 2025 MPSLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import MPSLean.BlockPermutationMPS
-import MPSLean.LinearExtension
-import MPSLean.MultiBlock
-import MPSLean.FundamentalTheoremMulti
+import MPSLean.MPS.BlockPermutationMPS
+import MPSLean.MPS.LinearExtension
+import MPSLean.MPS.MultiBlock
+import MPSLean.MPS.FundamentalTheoremMulti
 
 import Mathlib.LinearAlgebra.Pi
 import Mathlib.LinearAlgebra.Matrix.Trace

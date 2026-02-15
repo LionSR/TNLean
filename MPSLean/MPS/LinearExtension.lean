@@ -1,4 +1,4 @@
-import MPSLean.TracePairing
+import MPSLean.Algebra.TracePairing
 
 import Mathlib.Algebra.Module.Submodule.Range
 import Mathlib.LinearAlgebra.Basis.VectorSpace

@@ -1,0 +1,167 @@
+% Transcribed from: Wolf, "Quantum Channels & Operations: Guided Tour", Chapter 6
+% Source PDF: WolfLectureNote/ch06_spectral_properties.pdf
+% Status: PLACEHOLDER - awaiting OCR transcription
+%
+% Scope: Sections 6.2-6.5 (the core spectral theory)
+%   6.2 Irreducible maps and Perron-Frobenius theory
+%   6.3 Primitive maps
+%   6.4 Fixed points
+%   6.5 Cycles and recurrences
+%
+% Notation conventions (same as ch05):
+%   T          - channel/map (Schr{\"o}dinger picture)
+%   T^*        - dual map (Heisenberg picture)
+%   \mcM_d     - \mathcal{M}_d(\mathbb{C})
+%   \dagger    - adjoint
+%   \rho(T)    - spectral radius
+%   S          - peripheral spectrum
+
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+
+\newcommand{\mcM}{\mathcal{M}}
+\newcommand{\one}{\mathbb{1}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\spec}{\operatorname{spec}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\range}{\operatorname{range}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\FT}{\mathcal{F}_T}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{problem}[theorem]{Problem}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Chapter 6: Spectral Properties of Quantum Channels \\ {\small (Wolf Lecture Notes - Transcription)}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+% ============================================================
+\section{Irreducible maps and Perron-Frobenius theory} \label{sec:irreducible}
+% ============================================================
+
+% TODO: OCR from ch06_spectral_properties.pdf, pages 99-104
+%
+% Thm 6.2 (Irreducible positive maps) - 4 equivalent characterizations
+%   1. No invariant projection P with T(P M_d P) \subseteq P M_d P
+%   2. (id + T)^{d-1}(A) > 0 for all nonzero A >= 0
+%   3. exp[tT](A) > 0 for all nonzero A >= 0, t > 0
+%   4. Orthogonal pair trace condition
+%
+% Thm 6.3 (Spectral radius of irreducible maps) - 4 properties
+%   1. r = \tilde{r}
+%   2. r is non-degenerate eigenvalue with strictly positive eigenvector
+%   3. Unique positive eigenvalue
+%   4. r is the spectral radius
+%
+% Prop 6.6 (Similarity transformations preserving irreducibility)
+%
+% Thm 6.4 (Irreducibility from spectral properties) - equivalence
+%   1. T irreducible <=> 2. spectral radius non-degenerate with PD eigenvectors
+%
+% Cor 6.3 (Time-average and ergodicity)
+%
+% Thm 6.5 (Spectral radius and positive eigenvectors) - general positive maps
+%
+% Thm 6.6 (Peripheral spectrum of irreducible Schwarz maps)  *** KEY ***
+%   1. S = {exp(2πik/m)} cyclic group
+%   2. All eigenvalues in S non-degenerate
+%   3. Unitary eigenvectors: T(U^k) = γ^k U^k
+%   4. Spectral projections: T(P_{k+1}) = P_k
+%
+% Prop 6.7 (Covariance and eigensystem)
+
+\textbf{[Placeholder - content will be filled by OCR workflow]}
+
+% ============================================================
+\section{Primitive maps} \label{sec:primitive}
+% ============================================================
+
+% TODO: OCR from ch06_spectral_properties.pdf, pages 105-109
+%
+% Thm 6.7 (Primitive maps) - 4 equivalent characterizations
+%   1. T^n(ρ) > 0 for some n
+%   2. T^k irreducible for all k, T_φ irreducible
+%   3. lim T^k(ρ) = ρ_∞ > 0 independent of ρ
+%   4. Trivial peripheral spectrum + PD eigenvector
+%
+% Thm 6.8 (CP primitive maps) - Kraus monomial characterization
+%   1. Primitive <=> 2. K_m|ψ> = C^d for m >= n
+%              <=> 3. K_m = M_d for m >= q
+%              <=> 4. (T^m ⊗ id)(|Ω><Ω|) > 0
+%
+% Lemma 6.2, 6.3 - preparatory lemmas for Wielandt
+%
+% Thm 6.9 (Quantum Wielandt inequality)
+%   q ≤ (d²-k+1)d² in general; q ≤ d²-k+1 if invertible Kraus; q ≤ d² otherwise
+%
+% Cor 6.4 - d=2,3 always has Kraus with nonzero eigenvalue
+
+\textbf{[Placeholder - content will be filled by OCR workflow]}
+
+% ============================================================
+\section{Fixed points} \label{sec:fixedpoints}
+% ============================================================
+
+% TODO: OCR from ch06_spectral_properties.pdf, pages 110-115
+%
+% Thm 6.10 (Brouwer's fixed point theorem)
+% Thm 6.11 (Stationary states) - every TP positive map has a fixed density matrix
+%
+% Prop 6.8 (Positive fixed-points)  *** KEY - our sorry #1 ***
+%   If X = T(X) then decompose X = P₁ - P₂ + i(P₃ - P₄), each T(Pⱼ) = Pⱼ
+%   Proof: trace-preserving + support argument
+%
+% Cor 6.5 (Linearly independent stationary states)
+% Prop 6.9 (Maximal support of fixed points)
+% Prop 6.10 (Stationary subspaces) - Ki H ⊆ H
+% Prop 6.11 (Stationary subspaces II) - T^*(Q) ≥ Q characterization
+%
+% Lem 6.4 (Restriction to full rank fixed points)
+% Lem 6.5 (Schwarz property inheritance)
+%
+% Thm 6.12 (Fixed points for unital Schwarz maps) - FT* is a *-algebra
+% Cor 6.6 (Weaker structure without full rank)
+% Thm 6.13 (Fixed points and commutants) - [X, Ki] = 0
+%
+% Thm 6.14 (Fixed points of TP maps) - FT = U(0 ⊕ ⊕_k M_{dk} ⊗ ρk)U†
+% Cor 6.7 (ρ^{-1/2} FT ρ^{-1/2} is a *-algebra)
+% Thm 6.15 (Unique fixed points of full rank) - Kraus span = Md => unique ρ
+
+\textbf{[Placeholder - content will be filled by OCR workflow]}
+
+% ============================================================
+\section{Cycles and recurrences} \label{sec:cycles}
+% ============================================================
+
+% TODO: OCR from ch06_spectral_properties.pdf, pages 116-118
+%
+% Prop 6.12 (Asymptotic image) - X_T is image of T_φ, spanned by positive ops
+%
+% Thm 6.16 (Structure of cycles)  *** KEY ***
+%   1. X_T = 0 ⊕ ⊕_k M_{dk} ⊗ ρk  (same form as fixed points but for full peripheral spectrum)
+%   2. T acts by: permuting blocks + unitary conjugation on subsystems
+
+\textbf{[Placeholder - content will be filled by OCR workflow]}
+
+\end{document}

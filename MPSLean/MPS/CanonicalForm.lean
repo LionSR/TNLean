@@ -1,4 +1,4 @@
-import MPSLean.Defs
+import MPSLean.MPS.Defs
 
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Matrix.Block

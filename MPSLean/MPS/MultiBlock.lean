@@ -1,4 +1,4 @@
-import MPSLean.CanonicalForm
+import MPSLean.MPS.CanonicalForm
 
 import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.Reindex

@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import MPSLean.Channel.PositiveMap
 import MPSLean.Channel.KadisonSchwarz
 import MPSLean.Channel.CesaroFixedPoint
+import MPSLean.Channel.Irreducible
 
 /-!
 # Spectral theory of positive maps — re-export hub

@@ -1,0 +1,124 @@
+
+\documentclass{article}
+\input{preamble}
+
+\numberwithin{equation}{section}
+
+\title{Chapter 4: Convex Structure \\ {\small (Wolf Lecture Notes - Transcription)}}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+% Make this ``Chapter 4'' in an article-class transcription:
+\setcounter{section}{3}
+
+\section{Convex Structure}
+
+\subsection{Convex optimization and Lagrange duality}
+
+Admittedly, a section about optimization techniques is a bit off topic. However,
+convex optimization and, in particular, \emph{semidefinite programming}\footnote{Depending on what community one comes from it needs some time to get used to the terminology: conic, semidefinite or linear programs are just optimization problems of a certain type.}
+turned out to be an extremely useful tool in the context of quantum information
+theory, so we will at least sketch the basic framework here.
+
+The utility of these methods is threefold: (i) they provide powerful algorithms
+to solve problems numerically. In contrast to many other numerical techniques
+these algorithms are certifiable. That is, they return a result together with a
+(usually negligeable) error bound which is essentially enabled by duality theory.
+(ii) Duality theory allows to convert numerical results into analytic proofs and
+often enough gives some analytic insight (if not a solution) without exploiting
+any silicon brain. (iii) Having expressed a problem in terms of e.g.\ a
+semidefinite program may be considered as a solution of the problem in very
+much the same way as we consider a reduction to an eigenvalue problem to be a
+solution. Moreover, it enables a classification of the problems complexity in
+the sense of complexity theory since interior point methods provide a general
+polynomial-time solution.
+
+\noindent\textbf{Conic programs}
+Consider finite-dimensional real Hilbert spaces $V$ and $V^\prime$. These may
+be bare $\RR^d$'s but could also be spaces of Hermitian matrices or spaces of
+polynomials of a certain degree. Suppose $K\subset V$ is a closed convex cone
+which is pointed $(K\cap (-K)=\{0\})$ and has a non-empty interior. For any
+linear map $T:V\to V^\prime$ and $c\in V$, $b\in V^\prime$ the optimization
+problem
+\begin{equation}\label{eq:conic-primal}
+    \inf_{x\in K}\left\{\langle c|x\rangle \Bigm| T(x)=b\right\} \eqqcolon C_p
+\end{equation}
+is called a \emph{convex conic program}. Assigned to this is a \emph{dual
+    problem}\footnote{The relation between the \emph{primal} problem in
+    \eqref{eq:conic-primal} and the dual problem \eqref{eq:conic-dual} is more
+    symmetric than it appears at first sight. In particular, the dual problem is a
+    convex conic program in its own right. To see the symmetric structure note that
+    $T(x)=b$ defines an affine set which can be parametrized by
+    $\tilde{y}\in \RR^n$ via $x=e_0+\sum_{i=1}^n \tilde{y}_i e_i$ with suitable
+    $e_i\in V$. Defining further $\tilde{b}_i \coloneqq \langle c|e_i\rangle$ we can
+    rewrite the primal problem without equality constraints in a form similar to
+    that of Eq.~\eqref{eq:conic-dual} up to a constant offset (since
+    $\langle \tilde{b}|\tilde{y}\rangle=\langle c|x\rangle-\langle c|e_0\rangle$)
+    and a sign which has to be spent to turn the inf into a sup.}
+which reads
+\begin{equation}\label{eq:conic-dual}
+    \sup_{y\in V^\prime}\left\{\langle b|y\rangle \Bigm| c-T^{*}(y)\in K^{*}\right\}
+    \eqqcolon C_d,
+\end{equation}
+where $T^{*}$ is the dual map (i.e., $\langle T^{*}(y)|x\rangle=\langle y|T(x)\rangle$)
+and $K^{*}$ is the dual cone defined by
+\[
+    K^{*} \coloneqq \{x\in V \mid \forall z\in K:\ \langle z|x\rangle \ge 0\}.
+\]
+It holds in general that $C_p\ge C_d$ -- this is called \emph{weak duality}.
+Strong duality, meaning $C_p=C_d$, holds if $T(x)=b$ is fulfilled for some $x$
+which is in the interior of $K$. In this case the problem in
+Eq.~\eqref{eq:conic-primal} is called strictly feasible and the supremum $C_d$
+is attained in the dual. Similarly, strong duality holds if the dual problem in
+Eq.~\eqref{eq:conic-dual} is strictly feasible (i.e., $c-T^{*}(y)$ is in the
+interior of $K^{*}$ for some $y$). In this case the infimum $C_p$ is attained
+in Eq.~\eqref{eq:conic-primal}.
+
+For many conic programs there exist polynomial-time algorithms. Roughly
+speaking, the requirements for that are that membership in the cone can be
+decided efficiently (like for the cone of positive semidefinite matrices) and
+that bounds on the norm of candidate solutions can be given.
+
+\noindent\textbf{Semidefinite programs}
+are special instances of convex conic programs. Here $T$ is a linear map
+between spaces of Hermitian matrices and $K=K^{*}$ is the cone of positive
+semidefinite matrices. Traditionally, semidefinite programs are phrased in a
+slightly different way than in Eqs.~\eqref{eq:conic-primal} and
+\eqref{eq:conic-dual}. The weak duality inequality is usually stated as
+\begin{equation}\label{eq:sdp-weak-duality}
+    \begin{aligned}
+        \inf_{X\ge 0}\left\{\tr[F_0X] \Bigm| \tr[F_iX]=b_i \ (i=1,\dots,n)\right\}
+        \ge
+        \sup_{y\in \RR^{n}}\left\{\langle b|y\rangle \Bigm| F_0 \ge \sum_{i=1}^{n} y_i F_i\right\},
+    \end{aligned}
+\end{equation}
+where $b\in \RR^{n}$, $F_0,F_1,\ldots,F_n$ as well as $X$ are Hermitian matrices
+and ``$\ge$'' for matrices denotes the standard matrix ordering induced by the
+cone of positive semidefinite matrices. Strong duality, meaning equality in
+Eq.~\eqref{eq:sdp-weak-duality}, holds if at least one of the two optimization
+problems is strictly feasible. That is, if there is either an $X>0$ with
+$\tr[F_iX]=b_i$ $(i=1,\dots,n)$ or a $y$ such that $F_0>\sum_i y_iF_i$. As
+mentioned in the previous paragraph, if one of the problems is strictly
+feasible, then the extremum in the dual problem is attained.
+
+If the extrema in Eq.~\eqref{eq:sdp-weak-duality} are both attained and equal
+(i.e., in particular strong duality holds) then a simple condition called
+complementary slackness relates optimal solutions $X^0$ and $y^0$:
+\begin{equation}\label{eq:complementary-slackness}
+    \left(F_0 - \sum_i y_i^{0} F_i\right) X^{0} = 0.
+\end{equation}
+That is, $X^0$ and $(F_0-\sum_i y_i^{0}F_i)$ have to have orthogonal
+supports. Moreover, any $y^0$ is then optimal iff there exists an $X^0\ge 0$
+such that Eq.~\eqref{eq:complementary-slackness} holds and the constraints
+$\tr[F_iX^0]=b_i$ and $F_0\ge \sum_i y_i^{0}F_i$ are satisfied.
+
+\subsection{Literature}
+
+Convex optimization is described in detail in the textbook [?]. [?] is a good
+source for more on semidefinite programs and more on conic programs, in
+particular about complexity related questions, can be found in [?].
+
+\end{document}

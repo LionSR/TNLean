@@ -1,5 +1,5 @@
-import MPSLean.MultiBlock
-import MPSLean.FundamentalTheorem
+import MPSLean.MPS.MultiBlock
+import MPSLean.MPS.FundamentalTheorem
 
 import Mathlib.Algebra.BigOperators.Fin
 

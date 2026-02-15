@@ -3,7 +3,6 @@ Copyright (c) 2025 MPSLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import MPSLean.Channel.PositiveMap
-import MPSLean.Transfer
 
 /-!
 # Kadison–Schwarz inequality for completely positive maps
@@ -12,15 +11,13 @@ The **Kadison–Schwarz inequality** (Wolf, Proposition 6.4) states that for any
 **unital** completely positive map `E`, we have
 `E(X† X) ≥ E(X)† E(X)` in the Loewner order.
 
-This file also proves the Hilbert–Schmidt contraction property and
-that the MPS transfer map is a quantum channel.
+This file also proves the Hilbert–Schmidt contraction property.
 
 ## Main results
 
 * `kadison_schwarz`: the KS inequality for unital Kraus maps
 * `kadison_schwarz_adjoint`: KS for the adjoint channel (MPS version)
 * `hilbertSchmidt_contraction`: HS norm contraction for unital TP maps
-* `MPSTensor.transferMap_isChannel`: the MPS transfer map is a channel
 
 ## References
 
@@ -238,26 +235,3 @@ theorem hilbertSchmidt_contraction_adjoint (K : Fin d → Matrix (Fin D) (Fin D)
   exact hilbertSchmidt_contraction _ h_adj_unital h_adj_tp X
 
 end KadisonSchwarz
-
-/-! ## Connection to MPS transfer maps -/
-
-section TransferMap
-
-/-- The transfer map of a normalized MPS tensor (with `∑ Aᵢ† Aᵢ = 1`)
-is a channel: positive and trace-preserving. -/
-theorem MPSTensor.transferMap_isChannel {d D : ℕ}
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    IsChannel (MPSTensor.transferMap (d := d) (D := D) A) := by
-  constructor
-  · -- Positivity: already proved as transferMap_isCP / transferMap_pos
-    intro X hX
-    exact MPSTensor.transferMap_pos A hX
-  · -- Trace-preserving: Tr(Σ Aᵢ X Aᵢ†) = Σ Tr(Aᵢ† Aᵢ X) = Tr(X)
-    intro X
-    simp only [MPSTensor.transferMap_apply]
-    rw [trace_sum]
-    conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
-    rw [← trace_sum, ← Finset.sum_mul, hNorm, one_mul]
-
-end TransferMap

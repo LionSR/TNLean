@@ -1,0 +1,43 @@
+% Shared preamble for Wolf lecture note transcriptions
+% Usage: \input{preamble} in each chapter file
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{mathtools}
+
+% ── Notation (consistent across all chapters) ──
+\newcommand{\mcM}{\mathcal{M}}       % matrix algebra M_d(C)
+\newcommand{\mcB}{\mathcal{B}}       % bounded operators B(H)
+\newcommand{\mcA}{\mathcal{A}}       % multiplicative domain
+\newcommand{\one}{\mathbb{1}}        % identity operator
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\spec}{\operatorname{spec}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\range}{\operatorname{range}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\FT}{\mathcal{F}_T}      % fixed point set
+\newcommand{\XT}{\mathcal{X}_T}      % peripheral eigenspace
+\newcommand{\id}{\mathrm{id}}        % identity map
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\bra}[1]{\langle#1|}
+\newcommand{\braket}[2]{\langle#1|#2\rangle}
+\newcommand{\ketbra}[2]{|#1\rangle\!\langle#2|}
+
+% ── Theorem environments ──
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{problem}[theorem]{Problem}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}

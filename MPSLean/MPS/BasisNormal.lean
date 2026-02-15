@@ -1,4 +1,4 @@
-import MPSLean.MultiBlock
+import MPSLean.MPS.MultiBlock
 
 import Mathlib.Algebra.Module.Submodule.Range
 import Mathlib.LinearAlgebra.Vandermonde

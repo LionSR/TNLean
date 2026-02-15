@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import MPSLean.QPF.PosDef
 import MPSLean.QPF.Uniqueness
+import MPSLean.MPS.CPPrimitive
 
 /-!
 # Quantum Perron–Frobenius Theory for MPS Transfer Operators

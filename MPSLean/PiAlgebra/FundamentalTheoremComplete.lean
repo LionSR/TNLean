@@ -3,8 +3,8 @@ Copyright (c) 2025 MPSLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import MPSLean.PiAlgebra.Construction
-import MPSLean.BasisNormal
-import MPSLean.FundamentalTheoremMulti
+import MPSLean.MPS.BasisNormal
+import MPSLean.MPS.FundamentalTheoremMulti
 
 /-!
 # End-to-end multi-block Fundamental Theorem from per-block SameMPV

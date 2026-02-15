@@ -1,5 +1,5 @@
-import MPSLean.BlockPermutation
-import MPSLean.SkolemNoether
+import MPSLean.Algebra.BlockPermutation
+import MPSLean.Algebra.SkolemNoether
 
 import Mathlib.RingTheory.SimpleRing.Matrix
 import Mathlib.Data.Complex.Basic

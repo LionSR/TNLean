@@ -1,4 +1,4 @@
-import MPSLean.Defs
+import MPSLean.MPS.Defs
 
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.PosDef
