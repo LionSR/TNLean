@@ -931,20 +931,20 @@ on the TI canonical form:
     A_{i_N}|\alpha\>|i_1\cdots i_N\rangle=\vspace*{-20pt}$$
     $$=\sum_{\alpha,\beta=1}^D |\Phi_{\alpha,\beta}\>
     |\Psi_{\alpha,\beta}\>,\quad\text{where}\vspace*{-10pt}$$
-    \begin{eqnarray}\nonumber
-        |\Phi_{\alpha,\beta}\>&=&\sum_{i_1,\ldots,i_R}
-        \<\alpha|A_{i_1}\cdots A_{i_R}|\beta\>|i_1\cdots i_R\rangle,\\
-        |\Psi_{\alpha,\beta}\>&=&\sum_{i_1,\ldots,i_R}
-        \<\beta|A_{i_R}\cdots A_{i_N}|\alpha\>|i_{R+1}1\cdots
-        i_N\rangle.\nonumber
-    \end{eqnarray}
-    It is then sufficient to prove that both
-    $\{|\Phi_{\alpha,\beta}\>\}$ and $\{|\Psi_{\alpha,\beta}\>\}$ are
-    sets of linearly independent vectors. But this is a consequence of
-    C1: Let us take complex numbers $c_{\alpha,\beta}$ such that
-    $\sum_{\alpha,\beta} c_{\alpha,\beta} |\Phi_{\alpha,\beta}\>=0$
-    (the same reasoning for the $|\Psi_{\alpha,\beta}\>$). This is
-    exactly
+        \begin{eqnarray}\nonumber
+            |\Phi_{\alpha,\beta}\>&=&\sum_{i_1,\ldots,i_R}
+            \<\alpha|A_{i_1}\cdots A_{i_R}|\beta\>|i_1\cdots i_R\rangle,\\
+            |\Psi_{\alpha,\beta}\>&=&\sum_{i_1,\ldots,i_R}
+            \<\beta|A_{i_R}\cdots A_{i_N}|\alpha\>|i_{R+1}1\cdots
+            i_N\rangle.\nonumber
+        \end{eqnarray}
+        It is then sufficient to prove that both
+        $\{|\Phi_{\alpha,\beta}\>\}$ and $\{|\Psi_{\alpha,\beta}\>\}$ are
+        sets of linearly independent vectors. But this is a consequence of
+        C1: Let us take complex numbers $c_{\alpha,\beta}$ such that
+        $\sum_{\alpha,\beta} c_{\alpha,\beta} |\Phi_{\alpha,\beta}\>=0$
+        (the same reasoning for the $|\Psi_{\alpha,\beta}\>$). This is
+        exactly
     $$\Gamma_R\left[\sum_{\alpha,\beta}c_{\alpha,\beta}|\beta\>\<\alpha|\right]=0.$$  By C1 we have
     that $\sum_{\alpha,\beta}c_{\alpha,\beta}|\beta\>\<\alpha|=0$ and
     hence $c_{\alpha,\beta}=0$ for every $\alpha,\beta$. }
@@ -2196,28 +2196,28 @@ diagonal):
     $$|\Psi_{\alpha,\beta}\>=\sum_{i_1,\ldots,i_R}
     \<\beta|A_{i_R}\cdots A_{i_N}|\alpha\>|i_{R+1}\cdots i_N\rangle.$$
 
-    If we call $S_j$ to the set of positions of the $j$-th block in
-    the canonical form of $|W_N\>$ and $S=\cup S_j$, we claim that the
-    sets $\{|\Phi_{\alpha,\beta}\>\}_{(\alpha,\beta)\in S}$ and
-    $\{|\Phi_{\alpha,\beta}\>\}_{(\alpha,\beta)\in S}$ are both
-    linearly independent. This implies that the rank of the reduced
-    density operator after tracing out the particles $1,\ldots, R$ is
-    $\ge \sum_{i=1}^bD_i^2$, being $D_i\times D_i$ the size of the
-    $i$-th block.
+        If we call $S_j$ to the set of positions of the $j$-th block in
+        the canonical form of $|W_N\>$ and $S=\cup S_j$, we claim that the
+        sets $\{|\Phi_{\alpha,\beta}\>\}_{(\alpha,\beta)\in S}$ and
+        $\{|\Phi_{\alpha,\beta}\>\}_{(\alpha,\beta)\in S}$ are both
+        linearly independent. This implies that the rank of the reduced
+        density operator after tracing out the particles $1,\ldots, R$ is
+        $\ge \sum_{i=1}^bD_i^2$, being $D_i\times D_i$ the size of the
+        $i$-th block.
 
-    We know that in the case of $|W_N\>$, this rank is $2$, so we get
-    exactly two blocks of size $1\times 1$. It is trivial now to see
-    that this is impossible. Therefore, $\frac{N}{2}\le 3(b-1)(L_0+1)$
-    and hence the result.
+        We know that in the case of $|W_N\>$, this rank is $2$, so we get
+        exactly two blocks of size $1\times 1$. It is trivial now to see
+        that this is impossible. Therefore, $\frac{N}{2}\le 3(b-1)(L_0+1)$
+        and hence the result.
 
-    \
+        \
 
-    So it only remains to prove the claim. For $(\alpha,\beta)\in S_j$
-    let us take complex numbers $c_{\alpha,\beta}$ such that
-    $\sum_{\alpha,\beta} c_{\alpha,\beta} |\Phi_{\alpha,\beta}\>=0$ ;
-    which is exactly
+        So it only remains to prove the claim. For $(\alpha,\beta)\in S_j$
+        let us take complex numbers $c_{\alpha,\beta}$ such that
+        $\sum_{\alpha,\beta} c_{\alpha,\beta} |\Phi_{\alpha,\beta}\>=0$ ;
+        which is exactly
     $$\sum_{j=1}^b\trace(\left[\sum_{(\alpha,\beta)\in S_j}c_{\alpha,\beta}|\beta\>\<\alpha|\right]A^j_{i_1}\cdots
-        A^j_{i_R})|i_1\cdots i_R\>=0.$$ By Lemma \ref{lem:direct-sum} the
+    A^j_{i_R})|i_1\cdots i_R\>=0.$$ By Lemma \ref{lem:direct-sum} the
     sum in $j$ is direct, so each summand is $0$. Finally, by
     condition C1 by blocks  $\sum_{(\alpha,\beta)\in
             S_j}c_{\alpha,\beta}|\beta\>\<\alpha|=0$ for every $j$ and hence
