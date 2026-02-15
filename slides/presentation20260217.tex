@@ -32,7 +32,7 @@
 % SLIDE 2 - What changed since Feb 16
 %======================================================================
 \begin{frame}{What Changed Since Feb 16}
-    \vspace{-0.5em}
+    \vspace{-0.7em}
 
     \begin{columns}[T]
         \column{0.46\textwidth}
@@ -64,9 +64,9 @@
                 {\tiny Wolf Prop 6.8; orphan}
         \end{itemize}
 
-        \vspace{0.3em}
+        \vspace{0.2em}
         \textbf{Net change:}
-        \begin{itemize}\itemsep0.1em\small
+        \begin{itemize}\itemsep0.05em\small
             \item Feb 16: 4 sorries, 0 axioms
             \item \textbf{Now: 4 sorries + 1 axiom}
             \item 2 old closed, 2 new (orphans) + 1 axiom added
@@ -74,7 +74,7 @@
         \end{itemize}
     \end{columns}
 
-    \vspace{0.1em}
+    \vspace{0.05em}
     \begin{center}
         \begin{tikzpicture}
             \node[draw=amber,thick,rounded corners=4pt,fill=cardbg,text=white,
@@ -356,7 +356,246 @@
 \end{frame}
 
 %======================================================================
-% SLIDE 9 - Complete dependency architecture
+% SLIDE 9 — Informal Proof Walk-Through: QPF Existence
+%======================================================================
+\begin{frame}{Proof Walk-Through: Why $\mathcal{E}$ Has a Fixed Point}
+    \vspace{-0.5em}
+
+    {\small\textcolor{dimwhite}{Goal: find $\rho \geq 0$, $\rho \neq 0$, with
+    $\mathcal{E}(\rho) = \rho$.
+    \quad(\texttt{exists\_posSemidef\_fixedPoint}, 130 lines, 0 sorry)}}
+
+    \vspace{0.4em}
+    \textbf{Idea}: average the orbits and extract a limit.
+
+    \begin{enumerate}\itemsep0.2em\small
+        \item \textbf{Seed}: pick $\rho_0 = \frac{1}{D}I$
+            \quad (any density matrix works).
+
+        \item \textbf{Cesàro means}: $\displaystyle\sigma_N
+            = \frac{1}{N}\sum_{n=0}^{N-1}\mathcal{E}^n(\rho_0)$.\\
+            Each $\sigma_N$ is a density matrix:
+            {\footnotesize PSD (convex combo of PSD), trace 1 ($\mathcal{E}$ is TP).}
+
+        \item \textbf{Compactness}: density matrices live in a compact set
+            (finite-dim, bounded trace).\\
+            $\Rightarrow$ some subsequence $\sigma_{N_k}\to\sigma$.
+
+        \item \textbf{Telescoping trick}: $\mathcal{E}(\sigma_N) - \sigma_N
+            = \dfrac{\mathcal{E}^N(\rho_0) - \rho_0}{N}$.\\[3pt]
+            Both terms in the numerator have bounded norm, so the
+            difference $\to 0$.
+
+        \item \textbf{Conclusion}: passing to the limit,
+            $\mathcal{E}(\sigma) - \sigma = 0$, i.e.\ $\mathcal{E}(\sigma) = \sigma$.
+    \end{enumerate}
+
+    \vspace{0.3em}
+    \begin{center}
+    \begin{tikzpicture}
+        \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+            text width=0.88\textwidth,align=center,inner sep=4pt,font=\small] {
+            Self-contained argument: only uses compactness + linearity.\\
+            {\scriptsize No Brouwer/Schauder FPT invoked (avoids nontrivial Mathlib plumbing).}
+        };
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 10 — Informal Proof Walk-Through: PSD ⟹ PD
+%======================================================================
+\begin{frame}{Proof Walk-Through: Why the Fixed Point Is Positive Definite}
+    \vspace{-0.7em}
+
+    {\small\textcolor{dimwhite}{Goal: $\rho \geq 0$, $\mathcal{E}(\rho) = \rho$,
+    $\rho \neq 0$ $\Longrightarrow$ $\rho > 0$ (all eigenvalues $> 0$).
+    \quad(\texttt{posSemidef\_fixedPoint\_isPosDef}, 200 lines)}}
+
+    \vspace{0.3em}
+    \textbf{Idea}: if $\rho$ has a kernel, injectivity forces $\rho = 0$ --- contradiction.
+
+    \begin{enumerate}\itemsep0.05em\small
+        \item Suppose $\rho x = 0$ for some $x \neq 0$.
+
+        \item From the fixed-point equation $\rho = \sum_i A_i\,\rho\, A_i^\dagger$:
+            \vspace{-0.3em}
+            \[
+                0 = x^*\rho\, x = \sum_i \underbrace{(A_i^\dagger x)^*\;\rho\; (A_i^\dagger x)}_{\geq\, 0\;\text{(PSD)}}
+            \]
+            \vspace{-0.6em}
+            Each term $\geq 0$ and sum $= 0$
+            $\;\Rightarrow\;$ $\rho\,(A_i^\dagger x) = 0$ for \emph{every} $i$.
+
+        \item \textbf{Injectivity} \cite{Perez-Garcia2007Matrix}: $\{A_i\}$ spans $\MD$
+            $\;\Rightarrow\;$ $\{A_i^\dagger\}$ spans $\MD$.
+            So $\rho\,(M x) = 0$ for \emph{every} matrix $M$.
+
+        \item Since $x \neq 0$: $M \mapsto Mx$ is surjective on $\mathbb{C}^D$
+            $\;\Rightarrow\;$ $\rho\, v = 0$ for all $v$
+            $\;\Rightarrow\;$ $\rho = 0$.  \textbf{Contradiction.}
+    \end{enumerate}
+
+    \vspace{0.1em}
+    \begin{center}
+    \begin{tikzpicture}
+        \node[draw=amber,thick,rounded corners=4pt,fill=cardbg,text=white,
+            text width=0.88\textwidth,align=center,inner sep=3pt,font=\small] {
+            This is where the \textbf{MPS injectivity} assumption pays
+            off: it ``closes'' the kernel propagation in one step.
+        };
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 11 — Informal Proof Walk-Through: Uniqueness (Critical Scalar)
+%======================================================================
+\begin{frame}{Proof Walk-Through: Why the Fixed Point Is Unique}
+    \vspace{-0.7em}
+
+    {\small\textcolor{dimwhite}{Goal: any two nonzero PSD fixed points are proportional.
+    \quad(\texttt{posSemidef\_fixedPoint\_unique}, 350 lines)}}
+
+    \vspace{0.2em}
+    \textbf{Idea}: construct a PSD-but-not-PD fixed point, contradicting the
+    previous theorem.
+
+    \begin{enumerate}\itemsep0em\small
+        \item Let $\rho, \sigma$ both be nonzero PSD fixed points of $\mathcal{E}$.
+            By the PD theorem, both are actually \textbf{positive definite}.
+
+        \item Conjugate:
+            $H = \rho^{-1/2}\,\sigma\,\rho^{-1/2}$.
+            $H$ is PD.
+            \textbf{Critical scalar}: $c_0 = \lambda_{\min}(H) > 0$.
+
+        \item Define $\tau = \sigma - c_0\,\rho$.
+            Since $\tau = \rho^{1/2}(H - c_0 I)\rho^{1/2}$:
+            $\tau$ is \textbf{PSD} ($H - c_0 I \geq 0$) but \textbf{not PD}
+            ($\lambda_{\min} = 0$).
+
+        \item $\tau$ is a fixed point by linearity:
+            $\mathcal{E}(\tau) = \mathcal{E}(\sigma) - c_0\,\mathcal{E}(\rho) = \sigma - c_0\,\rho = \tau$.
+
+        \item If $\tau \neq 0$: the PD theorem says any nonzero PSD FP is PD.
+            But $\tau$ is not PD --- \textbf{contradiction!}
+            Therefore $\tau = 0$, i.e.\ $\sigma = c_0\,\rho$.\qed
+    \end{enumerate}
+
+    \vspace{0.1em}
+    {\scriptsize\textcolor{dimwhite}{Bulk of 350 lines: bookkeeping around
+    $\rho^{1/2}$, $\rho^{-1/2}$, and spectral decomposition
+    ($S\,\mathrm{diag}(\lambda)\,S^\dagger$ round-trips).}}
+\end{frame}
+
+%======================================================================
+% SLIDE 12 — Informal Proof Walk-Through: ρ(F) ≤ 1
+%======================================================================
+\begin{frame}{Proof Walk-Through: Every Eigenvalue of $\mathcal{F}_{AB}$ Has $|\mu| \leq 1$}
+    \vspace{-0.5em}
+
+    {\small\textcolor{dimwhite}{Goal: $\rho(\mathcal{F}_{AB}) \leq 1$.
+    \quad(\texttt{eigenvalue\_norm\_le\_one}, 200 lines, 0 sorry)}}
+
+    \vspace{0.3em}
+    \textbf{Strategy}: show $\|\mathcal{F}^n(X)\|_F$ is uniformly bounded, then
+    Gelfand says $\rho \leq 1$.
+
+    \begin{enumerate}\itemsep0.12em\small
+        \item Expand: $\mathcal{F}^n_{AB}(X) = \sum_{\sigma \in [d]^n}
+            w_A(\sigma)\, X\, w_B(\sigma)^\dagger$
+            \quad{\tiny where $w_A(\sigma) = A_{\sigma_1}\cdots A_{\sigma_n}$}
+
+        \item \textbf{HS Cauchy--Schwarz}:
+            \vspace{-0.3em}
+            \[
+                \|\mathcal{F}^n(X)\|_F^2
+                \;\leq\;
+                \underbrace{\biggl(\sum_\sigma \|w_A(\sigma)\|_F^2\biggr)}_{%
+                    = \;\tr(\mathcal{E}_A^n(I))\;=\;D}
+                \;\cdot\;
+                \underbrace{\biggl(\sum_\sigma \|X\, w_B(\sigma)^\dagger\|_F^2\biggr)}_{%
+                    \leq\; D \cdot \|X\|_F^2}
+            \]
+            \vspace{-0.6em}
+            \begin{itemize}\footnotesize
+                \item Left factor: iterated TP gives $\tr(\mathcal{E}^n(I)) = D$.
+                \item Right factor: unital property
+                    $\sum B_i^\dagger B_i = I$ iterated over words.
+            \end{itemize}
+
+        \item \textbf{Result}: $\|\mathcal{F}^n(X)\|_F \leq D \cdot \|X\|_F$
+            for \emph{all} $n$.
+
+        \item If $\mu$ is an eigenvalue with $|\mu| > 1$: pick eigenvector $X$,
+            then $\|\mathcal{F}^n(X)\|_F = |\mu|^n\|X\|_F \to \infty$.
+            Contradicts uniform bound.
+    \end{enumerate}
+
+    \vspace{0.2em}
+    {\footnotesize\textcolor{dimwhite}{Technical: Lean uses \texttt{EuclideanSpace}
+    embedding to access Frobenius norm, then norm-equivalence back to
+    operator norm for Gelfand formula.
+    Original idea: \cite{Perez-Garcia2007Matrix} Lemma 5.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 13 — Informal Proof Walk-Through: The Single-Block FT
+%======================================================================
+\begin{frame}{Proof Walk-Through: Single-Block Fundamental Theorem}
+    \vspace{-0.5em}
+
+    {\small\textcolor{dimwhite}{Goal: $|V_N(A)\rangle = |V_N(B)\rangle$ for all $N$
+    $\Longrightarrow$ $B_i = U A_i U^\dagger$.
+    \quad(\texttt{gauge\_equiv\_of\_sameMPV}, 0 sorry)}}
+
+    \vspace{0.3em}
+    \textbf{Idea}: extract intertwining matrices from boundary freedom,
+    then use unique fixed point.
+
+    \begin{enumerate}\itemsep0.12em\small
+        \item \textbf{Same state $\Rightarrow$ intertwiner}:
+            from $\sum_\sigma \tr(A_{\sigma_1}\cdots A_{\sigma_N}\,\alpha)
+            = \sum_\sigma \tr(B_{\sigma_1}\cdots B_{\sigma_N}\,\beta)$
+            for all $N$,\\
+            extract an invertible $R$ with
+            $R\,A_i = \frac{1}{x}\,B_i\,R$ for all $i$.
+
+        \item \textbf{Trace-preserving $\Rightarrow$ $|x|^2 = 1$}:
+            apply $\sum_i (\cdot)^\dagger (\cdot) = I$ to both sides.
+
+        \item \textbf{Fixed point uniqueness $\Rightarrow$ unitarity}:
+            $R R^\dagger$ is a PSD fixed point of $\mathcal{E}_B$.\\
+            By QPF uniqueness: $R R^\dagger = c \cdot \rho_B$.
+            With proper normalization, $R R^\dagger = I$.\\
+            Set $U = R$. Then $B_i = x\, U A_i U^\dagger$
+            with $|x| = 1$.
+
+        \item \textbf{Algebra backbone}: the intertwiner extraction
+            (step 1) uses
+            \emph{Skolem--Noether}:\\
+            {\footnotesize any algebra isomorphism $M_D \xrightarrow{\sim} M_D$ is inner,
+            i.e.\ conjugation by an invertible.}\\
+            {\footnotesize Formalized via Lean's \texttt{piAlgEquiv} machinery.}
+    \end{enumerate}
+
+    \vspace{0.2em}
+    \begin{center}
+    \begin{tikzpicture}
+        \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+            text width=0.88\textwidth,align=center,inner sep=4pt,font=\small] {
+            This is a \textbf{purely algebraic} proof --- no analysis, no limits,
+            no spectral theory.\\
+            {\scriptsize QPF is used only for the uniqueness step (``$RR^\dagger$
+            is the unique fixed point'').}
+        };
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 14 — Complete dependency architecture
 %======================================================================
 \begin{frame}{Complete Proof Architecture}
     \vspace{-0.5em}
@@ -421,7 +660,7 @@
 \end{frame}
 
 %======================================================================
-% SLIDE 10 - Sorry/axiom inventory
+% SLIDE 15 — Sorry/axiom inventory
 %======================================================================
 \begin{frame}{Sorry \& Axiom Inventory}
     \vspace{-0.5em}
@@ -486,15 +725,15 @@
 \end{frame}
 
 %======================================================================
-% SLIDE 11 - Summary & path forward
+% SLIDE 16 — Summary & path forward
 %======================================================================
 \begin{frame}{Summary \& Path Forward}
-    \vspace{-0.3em}
+    \vspace{-0.5em}
 
     \begin{center}
         \begin{tikzpicture}[xscale=0.85,
             sbox/.style={rectangle,rounded corners,draw=white,text=white,
-                    font=\scriptsize\bfseries,minimum width=2.2cm,minimum height=0.75cm,align=center},
+                    font=\scriptsize\bfseries,minimum width=2.2cm,minimum height=0.7cm,align=center},
             sarr/.style={-{Stealth[scale=0.8]},white,thick},
             ]
             \node[sbox,fill=leangreen!40!black] (a) at (0,0) {Single-block\\FT \textcolor{leangreen}{\checkmark}};
@@ -509,25 +748,24 @@
             \draw[sarr,softred] (d) -- (e);
 
             % Progress bar
-            \fill[leangreen!40!black,rounded corners=2pt] (0,-0.9) rectangle (8.4,-0.65);
-            \fill[softred!40!black,rounded corners=2pt] (8.4,-0.9) rectangle (13.0,-0.65);
-            \node[font=\tiny,text=white] at (4.2,-0.78) {formalized};
-            \node[font=\tiny,text=white] at (10.7,-0.78) {remaining};
+            \fill[leangreen!40!black,rounded corners=2pt] (0,-0.85) rectangle (8.4,-0.6);
+            \fill[softred!40!black,rounded corners=2pt] (8.4,-0.85) rectangle (13.0,-0.6);
+            \node[font=\tiny,text=white] at (4.2,-0.73) {formalized};
+            \node[font=\tiny,text=white] at (10.7,-0.73) {remaining};
         \end{tikzpicture}
     \end{center}
 
-    \vspace{0.15em}
-    \textbf{What IS proved (0 sorry in chain):}
-    \begin{itemize}\itemsep0.05em\small
+    \vspace{-0.1em}
+    {\small\textbf{What IS proved (0 sorry in chain):}}
+    \begin{itemize}\itemsep0em\small
         \item QPF: existence (Ces\`aro) + PD (kernel) + uniqueness (critical scalar) = 885 lines
-        \item $\rho(\mathcal{F}_{AB}) \leq 1$ via HS contraction (EuclideanSpace embedding)
-        \item Gelfand-based convergence $\mathcal{F}^n \to 0$ and cross-correlation decay
+        \item $\rho(\mathcal{F}_{AB}) \leq 1$ via HS contraction; Gelfand convergence $\mathcal{F}^n \to 0$
         \item Single-block FT, Vandermonde separation, multi-block assembly (all 0 sorry)
     \end{itemize}
 
-    \vspace{0.15em}
-    \textbf{Next steps (priority order):}
-    \begin{enumerate}\itemsep0.1em\small
+    \vspace{0.05em}
+    {\small\textbf{Next steps (priority order):}}
+    \begin{enumerate}\itemsep0em\small
         \item \textcolor{softred}{\textbf{Prove the axiom}} via \cite{Wolf2012Quantum} Ch.~6:
             KS $\to$ peripheral spectrum $\to$ primitivity $\to$ gauge
         \item \textcolor{softred}{\textbf{Wire}} \texttt{cross\_correlation\_tendsto\_zero}
@@ -536,11 +774,9 @@
     \end{enumerate}
 
     \vspace{0.1em}
-    {\footnotesize The axiom encodes \cite{Wolf2012Quantum} Thm 6.6, which is the deepest result
-    in Wolf's CP map theory. Proving it formally is a significant open challenge.}
-
-    \vspace{0.1em}
-    {\footnotesize ${\sim}$5{,}300 lines $\cdot$ ${\sim}$200 theorems $\cdot$ ${\sim}$50 definitions $\cdot$ 15/19 sorry-free files}
+    {\scriptsize The axiom encodes \cite{Wolf2012Quantum} Thm 6.6, the deepest result
+    in Wolf's CP map theory. Proving it formally is a significant open challenge.
+    \quad ${\sim}$5{,}300 lines $\cdot$ ${\sim}$200 theorems $\cdot$ ${\sim}$50 definitions $\cdot$ 15/19 sorry-free files}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{References}

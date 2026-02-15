@@ -1,0 +1,828 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\input{preamble}
+
+\title{\textbf{From Injective to General:\\Roadmap for the Full MPS Fundamental Theorem}}
+\subtitle{{\small Feb 17 --- What's proved, what's missing, and the path forward}}
+\date{}
+\author{}
+
+\begin{document}
+
+%======================================================================
+% SLIDE 1 - Title
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{-1.5em}
+    \maketitle
+    \vspace{-3.5em}
+    \begin{center}
+        {\footnotesize
+            \textcolor{dimwhite}{Current formalization assumes
+            \textcolor{amber}{\texttt{IsInjective}} throughout.
+            The full FT handles
+            \textcolor{leangreen}{normal},
+            \textcolor{leanblue}{periodic}, and
+            \textcolor{softred}{reducible} tensors.}}
+    \end{center}
+\end{frame}
+}
+
+%======================================================================
+% SLIDE 2 - The Tensor Hierarchy
+%======================================================================
+\begin{frame}{The Tensor Hierarchy}
+    \vspace{-0.5em}
+
+    \begin{center}
+    \begin{tikzpicture}[
+        every node/.style={font=\small},
+        box/.style={rectangle, rounded corners=6pt, minimum width=2.6cm,
+                     minimum height=1.0cm, align=center, text=white,
+                     font=\small\bfseries, draw=white!30, thick},
+        arr/.style={-{Stealth[scale=0.8]}, white, very thick},
+    ]
+        % Nested boxes (largest first for layering)
+        \node[box, minimum width=13.5cm, minimum height=5.0cm,
+              fill=softred!15!black, draw=softred!50] (gen) at (0,0) {};
+        \node[box, minimum width=10.0cm, minimum height=3.8cm,
+              fill=leanblue!15!black, draw=leanblue!50] (irr) at (-0.8,0) {};
+        \node[box, minimum width=6.5cm, minimum height=2.6cm,
+              fill=leangreen!15!black, draw=leangreen!50] (nor) at (-1.6,0) {};
+        \node[box, minimum width=3.0cm, minimum height=1.4cm,
+              fill=amber!25!black, draw=amber!70] (inj) at (-2.2,0) {};
+
+        % Labels
+        \node[font=\footnotesize\bfseries, text=amber] at (-2.2, 0.25) {Injective};
+        \node[font=\tiny, text=dimwhite, align=center] at (-2.2,-0.25) {$L_0=1$\\$\{A^i\}$ spans $\MD$};
+
+        \node[font=\footnotesize\bfseries, text=leangreen] at (0.3, 0.9) {Normal (Primitive)};
+        \node[font=\tiny, text=dimwhite, align=center] at (0.3, 0.25) {Unique eigenvalue on $|z|=1$\\Injective after $\leq L_0$ blocking};
+        \node[font=\tiny, text=dimwhite] at (0.3, -0.3) {$L_0 \leq D^2(D^2-d+1)$~\cite{Sanz2010Quantum}};
+
+        \node[font=\footnotesize\bfseries, text=leanblue] at (3.3, 1.55) {Irreducible (Periodic)};
+        \node[font=\tiny, text=dimwhite, align=center] at (3.5, 0.9) {$m$ eigenvalues on $|z|=1$\\$(m$-th roots of unity)};
+        \node[font=\tiny, text=dimwhite, align=center] at (3.5, 0.2) {$A^i\colon P_{u+1}\to P_u$ cyclically};
+
+        \node[font=\footnotesize\bfseries, text=softred] at (5.5, 2.15) {General (Reducible)};
+        \node[font=\tiny, text=dimwhite, align=center] at (5.5, 1.5)
+            {$A^i = \bigoplus_j \mu_j\, A_j^i$\\blocks irreducible};
+
+        % Subset arrows
+        \draw[arr, amber!70, densely dashed] (-0.65, 0) -- (-0.0, 0);
+
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.3em}
+    {\footnotesize
+    \textcolor{amber}{Injective} $\subset$
+    \textcolor{leangreen}{Normal} $\subset$
+    \textcolor{leanblue}{Irreducible} $\subset$
+    \textcolor{softred}{General}
+    \hfill
+    Refs:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix}}
+\end{frame}
+
+%======================================================================
+% SLIDE 3 - What We've Proved (Injective Case)
+%======================================================================
+\begin{frame}{What We've Proved (Injective Case)}
+    \vspace{-0.5em}
+
+    {\small All results assume \texttt{\textcolor{amber}{IsInjective}}.}
+
+    \vspace{0.3em}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \textbf{\textcolor{leangreen}{Fully proved (\checkmark):}}
+        \begin{itemize}\itemsep0.15em\small
+            \item[\textcolor{leangreen}{\checkmark}] \textbf{Quantum Perron--Frobenius}\\
+                {\tiny $\exists$ + PSD $\Rightarrow$ PD + unique fixed point (0 sorry, 885 lines)}
+            \item[\textcolor{leangreen}{\checkmark}] $\rho(\mathcal{F}_{AB}) \leq 1$ via Hilbert--Schmidt contraction
+            \item[\textcolor{leangreen}{\checkmark}] $\rho < 1 \Rightarrow \mathcal{F}^n \to 0$ (Gelfand formula, mod axiom)
+            \item[\textcolor{leangreen}{\checkmark}] \textbf{Single-block FT}: same state $\Rightarrow$ gauge equivalence
+            \item[\textcolor{leangreen}{\checkmark}] Multi-block assembly (mod spectral gap)
+        \end{itemize}
+
+        \column{0.48\textwidth}
+        \textbf{\textcolor{softred}{Remaining gaps:}}
+        \begin{itemize}\itemsep0.15em\small
+            \item[\textcolor{softred}{$\boldsymbol\times$}] \textcolor{softred}{\texttt{axiom}}: \texttt{modulus\_one\_eigenvalue\_implies\_gauge}\\
+                {\tiny Wolf Thm 6.6~\cite{Wolf2012Quantum} - the hard part}
+            \item[\textcolor{softred}{$\boldsymbol\times$}] \textcolor{softred}{\texttt{sorry}}: \texttt{sameMPV\textsubscript{2}\_implies\_perBlock\_sameMPV}\\
+                {\tiny Block separation lemma}
+        \end{itemize}
+
+        \vspace{0.5em}
+        \textbf{\textcolor{gray}{Orphan sorries (unused):}}\\
+        {\tiny \textcolor{gray}{\texttt{kadison\_schwarz}, \texttt{wolf\_6.8}, \texttt{vectorization}}}
+    \end{columns}
+
+    \vspace{0.6em}
+    \begin{center}
+    \colorbox{cardbg}{\parbox{0.92\textwidth}{\centering\small
+    \textcolor{dimwhite}{The injective FT is \textbf{not} a toy version --- it is the
+    \textcolor{leangreen}{core case}. Every normal tensor becomes injective after blocking,
+    and every general tensor decomposes into irreducible blocks.
+    But extending the formalization requires substantial new infrastructure.}}}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 4 - The Fundamental Theorem: Three Versions
+%======================================================================
+\begin{frame}{The Fundamental Theorem --- Three Versions}
+    \vspace{-0.3em}
+
+    \renewcommand{\arraystretch}{1.3}
+    {\small
+    \begin{center}
+    \begin{tabular}{>{\bfseries\color{white}}l
+                    >{\color{dimwhite}\small}p{3.2cm}
+                    >{\color{dimwhite}\small}p{4.2cm}
+                    >{\color{dimwhite}\footnotesize}l}
+        \toprule
+        \rowcolor{cardbg}
+        \textcolor{white}{Version} & \textcolor{white}{Tensor class} & \textcolor{white}{Result} & \textcolor{white}{Reference} \\
+        \midrule
+        \rowcolor{cardbg}
+        \textcolor{amber}{V1: Injective} &
+            $\{A^i\}$ spans $\MD$ &
+            $B^i = U\, C^i\, U^\dagger$ &
+            \cite{Perez-Garcia2007Matrix} Thm~10 \\
+        \rowcolor{cardbg}
+        \textcolor{leangreen}{V2: Normal} &
+            Primitive CP map &
+            Same, after blocking $L_0$ sites &
+            \cite{Cirac2017Annals} \\
+        \rowcolor{cardbg}
+        \textcolor{leanblue}{V3: General} &
+            Block-diagonal &
+            $\bigoplus$ gauge + phases + $Z$ matrix &
+            \cite{Cirac2017Irreducible} \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+    }
+
+    \vspace{0.5em}
+    \begin{center}
+    \begin{tikzpicture}[xscale=0.9,
+        rbox/.style={rectangle, rounded corners=4pt, draw=white!40, thick,
+                     fill=cardbg, text=white, font=\small, minimum width=2.9cm,
+                     minimum height=0.7cm, align=center},
+        arr/.style={-{Stealth[scale=0.7]}, white, thick},
+    ]
+        \node[rbox, fill=softred!20!black] (gen) at (0,0) {General};
+        \node[rbox, fill=leanblue!20!black] (irr) at (3.8,0) {Irreducible blocks};
+        \node[rbox, fill=leangreen!20!black] (pri) at (7.6,0) {Primitive blocks};
+        \node[rbox, fill=amber!20!black] (inj) at (11.4,0) {\textcolor{amber}{Injective (DONE)}};
+        \draw[arr] (gen) -- node[above,font=\tiny,text=dimwhite]{block decomp.} (irr);
+        \draw[arr] (irr) -- node[above,font=\tiny,text=dimwhite]{blocking $m$ sites} (pri);
+        \draw[arr] (pri) -- node[above,font=\tiny,text=dimwhite]{blocking $L_0$ sites} (inj);
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.3em}
+    {\footnotesize \textcolor{dimwhite}{Key insight: V2 and V3 both
+    \textbf{reduce} to V1 after block decomposition, blocking, and the
+    equal-or-orthogonal lemma.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 5 - The Equal-or-Orthogonal Lemma
+%======================================================================
+\begin{frame}{The Equal-or-Orthogonal Lemma (Key to Multi-Block)}
+    \vspace{-0.5em}
+
+    {\small For two normal tensors $A_1, A_2$ generating states $|V_N(A_1)\rangle,  |V_N(A_2)\rangle$:}
+
+    \vspace{0.2em}
+    \begin{center}
+    \colorbox{cardbg}{\parbox{0.85\textwidth}{\centering
+    $
+    \langle V_N(A_1)\,|\,V_N(A_2)\rangle = 
+    \tr\!(\mathcal{F}_{12}^N(\mathbf{I}))
+    \qquad\text{where}\quad
+    \mathcal{F}_{12}(X) = \sum_i A_1^i\, X\, (A_2^i)^\dagger
+    $}}
+    \end{center}
+
+    \vspace{0.3em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Case 1:} $\rho(\mathcal{F}_{12}) < 1$
+        \begin{itemize}\small
+            \item $\tr(\mathcal{F}_{12}^N) \to 0$
+            \item States become \textbf{\textcolor{leanblue}{orthogonal}}
+            \item $\Rightarrow$ different blocks
+        \end{itemize}
+
+        \column{0.48\textwidth}
+        \textbf{Case 2:} $\rho(\mathcal{F}_{12}) = 1$
+        \begin{itemize}\small
+            \item Overlap persists
+            \item Tensors are \textbf{\textcolor{leangreen}{gauge equivalent}}
+            \item $\Rightarrow$ same block
+        \end{itemize}
+    \end{columns}
+
+    \vspace{0.3em}
+    {\small \textbf{Our status:}}
+    \begin{itemize}\itemsep0.05em\small
+        \item[\textcolor{leangreen}{\checkmark}] $\rho(\mathcal{F}_{12}) \leq 1$ \hfill{\tiny Hilbert--Schmidt contraction, fully proved}
+        \item[\textcolor{leangreen}{\checkmark}] $\rho < 1 \Rightarrow \mathcal{F}^n\to 0$ \hfill{\tiny Gelfand formula, fully proved}
+        \item[\textcolor{softred}{$\boldsymbol\times$}] $\rho = 1 \Rightarrow$ gauge equiv \hfill{\tiny \textcolor{softred}{\texttt{axiom}} --- the hard part (Wolf Thm 6.6)}
+    \end{itemize}
+
+    \vspace{0.15em}
+    {\footnotesize \textcolor{dimwhite}{Refs:~\cite{Perez-Garcia2007Matrix,Wolf2012Quantum}}}
+\end{frame}
+
+%======================================================================
+% SLIDE 6 — Normal Tensors: Blocking and the Wielandt Bound
+%======================================================================
+\begin{frame}{Normal Tensors: Blocking and the Wielandt Bound}
+    \vspace{-0.5em}
+
+    \textbf{Key idea}: a normal tensor is ``almost injective'' ---
+    just block enough sites.
+
+    \vspace{0.3em}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \textbf{Blocking $L$ sites}:\\[3pt]
+        {\small Given MPS tensor $A$ with physical dim $d$, bond dim $D$,
+        define the \emph{$L$-blocked tensor}:}
+        \[
+            A^{[L]}_{i_1\ldots i_L} = A_{i_1}\, A_{i_2}\cdots A_{i_L}
+        \]
+        {\small New physical dim $= d^L$, same bond dim $D$.
+        Transfer operator: $\mathcal{E}_{A^{[L]}} = \mathcal{E}_A^L$.}
+
+        \vspace{0.4em}
+        \textbf{Normal $\Leftrightarrow$ primitive CP}:\\[2pt]
+        {\small $\mathcal{E}_A$ has 1 as the \emph{only} eigenvalue on $|z|=1$.\\
+        Implies: $\mathcal{E}_A^n \to P$ (rank-1 projection).}
+
+        \column{0.48\textwidth}
+        \textbf{\textcolor{amber}{Quantum Wielandt bound}} \cite{Sanz2010Quantum}:
+        \vspace{0.2em}
+
+        \colorbox{cardbg}{\parbox{0.92\columnwidth}{\centering\small
+        $L_0 \leq D^2(D^2 - d + 1)$
+        }}
+
+        \vspace{0.3em}
+        {\small After $L_0$ sites of blocking, $\{A^{[L_0]}_\sigma\}_\sigma$
+        spans $\MD$.\\[3pt]
+        i.e.\ the blocked tensor is \textbf{injective}.}
+
+        \vspace{0.4em}
+        \textbf{Proof ingredients}:
+        \begin{itemize}\itemsep0.08em\footnotesize
+            \item Classical Wielandt inequality for nonneg.\ matrices
+            \item Choi--Jamio{\l}kowski isomorphism
+            \item Rank arguments on iterated Kraus operators
+        \end{itemize}
+
+        {\footnotesize\textcolor{dimwhite}{Tight example:
+        $d=2$, $D=3$ gives $L_0 \leq 63$.}}
+    \end{columns}
+
+    \vspace{0.4em}
+    {\footnotesize\textcolor{dimwhite}{%
+    \textbf{For formalization}: we need either the Wielandt bound (hard but gives explicit $L_0$)
+    or just the \emph{existence} of $L_0$ from primitivity
+    (``$\mathcal{E}^n$ converges $\Rightarrow$ eventually full Kraus rank'').}}
+\end{frame}
+
+%======================================================================
+% SLIDE 7 — Periodic Tensors: Off-Diagonal Decomposition
+%======================================================================
+\begin{frame}{Periodic Tensors: The Off-Diagonal Decomposition}
+    \vspace{-0.7em}
+
+    {\small An irreducible tensor with period $m > 1$: $\mathcal{E}$ has
+    eigenvalues $\{e^{2\pi i k/m}\}_{k=0}^{m-1}$ on the unit circle.}
+
+    \vspace{0.2em}
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \textbf{Cyclic structure} \cite{Wolf2012Quantum,Cirac2021Matrix}:\\[2pt]
+        {\small There exist orthogonal projectors $P_0, P_1, \ldots, P_{m-1}$
+        with $\sum_u P_u = I$ such that:}
+        \vspace{-0.3em}
+        \[
+            A^i = \sum_{u=0}^{m-1} P_u\, A^i\, P_{u+1\!\!\mod m}
+        \]
+        \vspace{-0.5em}
+        {\small Each $A^i$ maps the $P_{u+1}$-subspace into the $P_u$-subspace.}
+
+        \vspace{0.2em}
+        \textbf{Consequence}: blocking $m$ sites gives
+        \vspace{-0.3em}
+        \[
+            A^{[m]}_\sigma = P_0\, A^{[m]}_\sigma\, P_0 \;\oplus\; \cdots
+        \]
+        \vspace{-0.5em}
+        {\small Each $P_u$-block of $\mathcal{E}^m$ is \textbf{primitive}
+        $\Rightarrow$ reduce to normal case.}
+
+        \column{0.42\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[
+            pnode/.style={circle, draw=leanblue, thick, fill=leanblue!15!black,
+                          text=white, font=\scriptsize\bfseries, minimum size=0.7cm},
+            parr/.style={-{Stealth[scale=0.6]}, leanblue, thick},
+        ]
+            \node[pnode] (p0) at (90:1.2) {$P_0$};
+            \node[pnode] (p1) at (210:1.2) {$P_1$};
+            \node[pnode] (p2) at (330:1.2) {$P_2$};
+
+            \draw[parr] (p1) -- node[left,font=\tiny,text=dimwhite]{$A^i$} (p0);
+            \draw[parr] (p2) -- node[below,font=\tiny,text=dimwhite]{$A^i$} (p1);
+            \draw[parr] (p0) -- node[right,font=\tiny,text=dimwhite]{$A^i$} (p2);
+
+            \node[font=\tiny,text=dimwhite] at (0,-1.8) {Period $m=3$ example};
+        \end{tikzpicture}
+        \end{center}
+
+        \vspace{0.1em}
+        {\footnotesize The projectors $P_u$ are the
+        \textbf{spectral projections}
+        of the unitary eigenoperator
+        $U$ with $\mathcal{E}(U) = e^{2\pi i/m}\,U$.}
+    \end{columns}
+
+    \vspace{0.15em}
+    {\scriptsize\textcolor{dimwhite}{Finding the projectors $P_u$ requires
+    the peripheral spectrum theory (Wolf Thm 6.6~\cite{Wolf2012Quantum}):
+    $|\mu|=1$ eigenoperators are \emph{unitary}.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 8 — Reducible Tensors: Block Decomposition
+%======================================================================
+\begin{frame}{Reducible Tensors: Block Decomposition}
+    \vspace{-0.7em}
+
+    {\small When $\mathcal{E}$ has a nontrivial invariant subspace: the
+    tensor is reducible.}
+
+    \vspace{0.2em}
+    \textbf{Decomposition} \cite{Cirac2017Irreducible}:
+    after a change of basis, every MPS tensor can be written as
+    \vspace{-0.3em}
+    \[
+        A^i = \begin{pmatrix}
+            \mu_1 A_1^i & * & * \\
+            0 & \mu_2 A_2^i & * \\
+            0 & 0 & \ddots
+        \end{pmatrix}
+        \qquad |\mu_j| \leq 1, \quad \text{each } \mathcal{E}_{A_j} \text{ irreducible}
+    \]
+
+    \vspace{-0.1em}
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textbf{The irreducible form}:\\[2pt]
+        {\small Discard off-diagonal (upper-triangular) parts ---
+        they contribute to the state only at sub-leading order in $N$.}
+        \vspace{-0.3em}
+        \[
+            |V_N(A)\rangle \;=\; \sum_{j:\,|\mu_j|=1}
+            \mu_j^N |V_N(A_j)\rangle + O(c^N)
+        \]
+        \vspace{-0.5em}
+        {\small for some $c < 1$.
+        Only blocks with $|\mu_j| = 1$ survive.}
+
+        \column{0.50\textwidth}
+        \textbf{What the FT must handle}:
+        \begin{itemize}\itemsep0.05em\small
+            \item Multiple blocks $\to$ \textbf{block matching}:\\
+                  {\scriptsize which blocks of $A$ correspond to which of $B$?}
+            \item Phase freedom: $\mu_j$ can differ by a root of unity
+            \item Permutation matrix $Z$: reorders blocks
+            \item \textbf{Equal-or-orthogonal} decides matching:\\
+                  $\rho(\mathcal{F}_{j,k}) < 1$ $\Rightarrow$ different,
+                  $= 1$ $\Rightarrow$ same
+        \end{itemize}
+    \end{columns}
+
+    \vspace{0.15em}
+    {\scriptsize\textcolor{dimwhite}{Full canonical form:
+    $B^i = Z\bigl(\bigoplus_j e^{i\theta_j} U_j A^i_{\pi(j)} U_j^\dagger\bigr)Z^\dagger$
+    --- $Z$ permutation, $\pi$ block relabeling, $U_j$ unitaries,
+    $\theta_j$ phases~\cite{Cirac2017Irreducible,Cirac2021Matrix}.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 9 — Wolf Thm 6.6: The Peripheral Spectrum (Deep Dive)
+%======================================================================
+\begin{frame}{Wolf Thm 6.6: The Peripheral Spectrum (the Axiom)}
+    \vspace{-0.7em}
+
+    {\small This single theorem is the \textcolor{softred}{key missing piece}.
+    It characterizes what happens when $|\mu| = 1$ for a CP map.}
+
+    \vspace{0.2em}
+    \colorbox{cardbg}{\parbox{0.93\textwidth}{%
+    \textbf{Theorem} (Wolf 6.6 \cite{Wolf2012Quantum}):
+    {\small Let $\mathcal{E}$ be a unital CP map with
+    $\mathcal{E}(X) = \mu X$, $|\mu| = 1$, $X \neq 0$. Then:}
+    \begin{enumerate}\itemsep0.02em\small
+        \item $X^\dagger X$ and $X X^\dagger$ are fixed points of $\mathcal{E}$
+        \item If the fixed point is unique (up to scalar), then
+            $X = c\, U$ for a \textbf{unitary} $U$
+        \item The peripheral eigenvalues $\{\mu : |\mu|=1\}$
+            form a \textbf{group} (closed under multiplication)
+        \item For a primitive map: $\{1\}$ is the only peripheral eigenvalue
+    \end{enumerate}}}
+
+    \vspace{0.3em}
+    \textbf{Proof chain} (each step nontrivial):
+
+    \vspace{0.1em}
+    \begin{center}
+    \begin{tikzpicture}[xscale=0.92,
+        sbox/.style={rectangle, rounded corners=3pt, draw=white!30, thick,
+                     fill=cardbg, text=white, font=\scriptsize,
+                     minimum width=2.1cm, minimum height=0.5cm, align=center},
+        sarr/.style={-{Stealth[scale=0.5]}, white, thick},
+    ]
+        \node[sbox] (ks) at (0,0) {Kadison--Schwarz\\inequality};
+        \node[sbox] (eq) at (3.1,0) {$|\mu|{=}1$ forces\\KS \emph{equality}};
+        \node[sbox] (fp) at (6.2,0) {$X^\dagger X$ is\\fixed point};
+        \node[sbox] (uni) at (9.3,0) {Uniqueness\\$\Rightarrow$ $X$ unitary};
+        \node[sbox] (grp) at (12.4,0) {Peripheral\\$=$ group};
+        \draw[sarr] (ks) -- (eq);
+        \draw[sarr] (eq) -- (fp);
+        \draw[sarr] (fp) -- (uni);
+        \draw[sarr] (uni) -- (grp);
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.1em}
+    {\scriptsize\textcolor{dimwhite}{%
+    \textbf{Kadison--Schwarz}: $\mathcal{E}(X)^\dagger \mathcal{E}(X) \leq \mathcal{E}(X^\dagger X)$ for CP unital $\mathcal{E}$.
+    Equality when $|\mu|{=}1$: $\|X\|^2 = |\mu|^2 \|X\|^2 \leq \|\mathcal{E}(X^\dagger X)\| = \|X^\dagger X\| = \|X\|^2$.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 10 — Moment Matching: How Multi-Block Separation Works
+%======================================================================
+\begin{frame}{Moment Matching: How Multi-Block Separation Works}
+    \vspace{-0.8em}
+
+    {\small When both $A$ and $B$ are reducible with multiple blocks,
+    we need to match them up.}
+
+    \vspace{0.1em}
+    \textbf{Setup}: $A^i = \bigoplus_{j=1}^r \mu_j A_j^i$, \;
+    $B^i = \bigoplus_{k=1}^s \nu_k B_k^i$, \;
+    $|V_N(A)\rangle = |V_N(B)\rangle$ for all $N$.
+
+    \vspace{0.1em}
+    \textbf{The overlap expansion}:
+    \vspace{-0.5em}
+    \[
+        \langle V_N(A)\,|\,V_N(B)\rangle
+        = \sum_{j,k} (\bar\mu_j \nu_k)^N \cdot
+        \underbrace{\tr\bigl(\mathcal{F}_{j,k}^N(I)\bigr)}_{\text{mixed transfer}}
+    \]
+
+    \vspace{-0.4em}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \textbf{Three cases for each $(j,k)$ pair}:
+        \begin{itemize}\itemsep0em\small
+            \item[\textcolor{leangreen}{$\checkmark$}] $\rho(\mathcal{F}_{j,k}) < 1$:
+                overlap $\to 0$ exponentially\\
+                {\tiny Block $j$ of $A$ and block $k$ of $B$ are unrelated}
+            \item[\textcolor{leanblue}{$\circ$}] $\rho(\mathcal{F}_{j,k}) = 1$:
+                overlap persists\\
+                {\tiny Blocks are gauge-equivalent: $A_j \sim B_k$}
+            \item[\textcolor{softred}{$\times$}] No other case possible
+                ($\rho \leq 1$ always)
+        \end{itemize}
+
+        \column{0.48\textwidth}
+        \textbf{Matching argument}:
+        \begin{enumerate}\itemsep0em\small
+            \item Phases $(\bar\mu_j\nu_k)^N$
+                oscillate as $N$ varies
+            \item \textbf{B\'ezout / Vandermonde}: distinct phases are
+                linearly independent over $\mathbb{Z}$
+            \item Surviving terms match individually
+                $\Rightarrow$ bijection $\pi: j \mapsto k$
+            \item Within each matched pair: apply the
+                \textcolor{leangreen}{injective FT}
+        \end{enumerate}
+    \end{columns}
+
+    \vspace{0.05em}
+    {\scriptsize\textcolor{dimwhite}{%
+    This is \texttt{sameMPV\textsubscript{2}\_implies\_perBlock\_sameMPV}:
+    global state equality $\to$ per-block gauge equivalences.
+    Needs spectral gap (axiom) + Vandermonde (algebraic).}}
+\end{frame}
+
+%======================================================================
+% SLIDE 11 — What's Missing: Layer by Layer
+%======================================================================
+\begin{frame}{What's Missing --- Layer by Layer}
+    \vspace{-0.8em}
+    {\small Four layers of generalization, each building on the previous:}
+
+    \vspace{0.05em}
+    \renewcommand{\arraystretch}{0.9}
+    {\scriptsize
+    \begin{tabular}{@{}>{\ \bfseries\color{white}}p{2.7cm}
+                    p{5.8cm}
+                    >{\centering\arraybackslash}p{1.4cm}
+                    >{\centering\arraybackslash}p{1.4cm}@{}}
+        \toprule
+        \rowcolor{cardbg}
+        \textcolor{white}{Layer} &
+        \textcolor{white}{What's needed} &
+        \textcolor{white}{Difficulty} &
+        \textcolor{white}{Status} \\
+        \midrule
+        \rowcolor{cardbg}
+        \textcolor{amber}{L1: Inj $\to$ Normal} &
+        \textcolor{dimwhite}{Blocking theory: $\mathcal{E}^{L_0}$ has full Kraus rank.
+        Wielandt bound~\cite{Sanz2010Quantum}: $L_0 \leq D^2(D^2-d+1)$.} &
+        \textcolor{amber}{Moderate} &
+        \textcolor{softred}{Not started} \\
+        \rowcolor{cardbg}
+        \textcolor{leanblue}{L2: Normal $\to$ Periodic} &
+        \textcolor{dimwhite}{Peripheral spectrum (Wolf 6.6~\cite{Wolf2012Quantum}):
+        $|z|{=}1$ eigenvalues are $m$-th roots of unity.
+        Off-diagonal decomp $\to$ block $m$ sites $\to$ primitive.} &
+        \textcolor{softred}{Hard} &
+        \textcolor{softred}{Axiom territory} \\
+        \rowcolor{cardbg}
+        \textcolor{leangreen}{L3: Irred $\to$ General} &
+        \textcolor{dimwhite}{Block decomp.\ via invariant subspaces of $\mathcal{E}$.
+        Non-full-rank FP $\to$ projectors $\to$ block structure.
+        Moment matching (B\'ezout + linear indep.).} &
+        \textcolor{amber}{Moderate} &
+        \textcolor{softred}{Not started} \\
+        \rowcolor{cardbg}
+        \textcolor{mintgreen}{L4: Periodic extras} &
+        \textcolor{dimwhite}{Unblocking argument (inverse tensors).
+        Extra $Z$ matrix ($m$-th root of unity gauge freedom).} &
+        \textcolor{amber}{Moderate} &
+        \textcolor{softred}{Not started} \\
+        \bottomrule
+    \end{tabular}
+    }
+
+    \vspace{0.1em}
+    {\scriptsize\textcolor{dimwhite}{%
+    \textcolor{softred}{Layer 2 is the bottleneck} --- same peripheral spectrum
+    theory as the axiom. Once done, the rest is mostly algebraic.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 12 — The Critical Path: What Unlocks What
+%======================================================================
+\begin{frame}{The Critical Path --- What Unlocks What}
+    \vspace{-0.5em}
+
+    \begin{center}
+    \begin{tikzpicture}[
+        sbox/.style={rectangle, rounded corners=4pt, draw=white!30, thick,
+                     text=white, font=\tiny\bfseries, minimum width=2.3cm,
+                     minimum height=0.6cm, align=center},
+        sarr/.style={-{Stealth[scale=0.6]}, thick},
+        xscale=0.88, yscale=0.9,
+    ]
+        % === Row 1: Spectral gap axiom path ===
+        \node[sbox, fill=softred!50!black, draw=softred]
+            (axiom) at (0,3) {\textcolor{softred}{Spectral gap axiom}\\Wolf Thm 6.6};
+        \node[sbox, fill=amber!25!black, draw=amber]
+            (eqorth) at (3.8,3) {Equal-or-orthogonal\\lemma};
+        \node[sbox, fill=amber!25!black, draw=amber]
+            (blockmatch) at (7.6,3) {Block matching\\(multi-block FT)};
+        \draw[sarr, softred] (axiom) -- (eqorth);
+        \draw[sarr, amber] (eqorth) -- (blockmatch);
+
+        % === Row 2: Peripheral spectrum path ===
+        \node[sbox, fill=softred!50!black, draw=softred]
+            (periph) at (0,1.5) {\textcolor{softred}{Peripheral spectrum}\\theory};
+        \node[sbox, fill=gray!40!black, draw=gray, text=dimwhite]
+            (period) at (3.8,1.5) {Period detection\\($m$ from spectrum)};
+        \node[sbox, fill=gray!40!black, draw=gray, text=dimwhite]
+            (blockprim) at (7.6,1.5) {Blocking $m$ sites\\$\to$ primitive};
+        \draw[sarr, softred] (axiom.south) -- ++(0,-0.25) -| (periph.north);
+        \draw[sarr, gray] (periph) -- (period);
+        \draw[sarr, gray] (period) -- (blockprim);
+
+        % === Row 3: Wielandt + injective FT ===
+        \node[sbox, fill=gray!40!black, draw=gray, text=dimwhite]
+            (wielandt) at (0,0) {Wielandt bound\\$L_0 \leq D^2(D^2{-}d{+}1)$};
+        \node[sbox, fill=gray!40!black, draw=gray, text=dimwhite]
+            (primtoinj) at (3.8,0) {Primitive $\to$ injective\\after blocking $L_0$};
+        \node[sbox, fill=leangreen!40!black, draw=leangreen]
+            (injft) at (7.6,0) {\textcolor{leangreen}{Injective FT}\\(DONE)};
+        \node[sbox, fill=amber!25!black, draw=amber]
+            (fullft) at (11.2,1.5) {\textbf{Full FT}};
+        \draw[sarr, gray] (wielandt) -- (primtoinj);
+        \draw[sarr, gray] (primtoinj) -- (injft);
+        \draw[sarr, gray] (blockprim) -- (primtoinj);
+        \draw[sarr, leangreen] (injft) -- (fullft);
+        \draw[sarr, amber] (blockmatch) -- (fullft);
+
+        % Legend
+        \node[font=\tiny, text=dimwhite, anchor=west] at (-1.5,-1.2)
+            {\textcolor{leangreen}{$\blacksquare$} Done\quad
+             \textcolor{softred}{$\blacksquare$} Axiom/hard\quad
+             \textcolor{amber}{$\blacksquare$} Proved mod axiom\quad
+             \textcolor{gray}{$\blacksquare$} Not started};
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{0.3em}
+    \begin{center}
+    \colorbox{cardbg}{\parbox{0.88\textwidth}{\centering\small
+    \textcolor{dimwhite}{\textbf{Everything flows through the spectral gap axiom.}
+    Once Wolf Thm 6.6 is formalized, the rest is mostly algebraic bookkeeping.}}}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 13 — Concrete Plan (Priority Order)
+%======================================================================
+\begin{frame}{Concrete Plan --- Priority Order}
+    \vspace{-0.5em}
+
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textbf{\textcolor{softred}{Phase 1} --- Complete injective case}\\[-0.3em]
+        {\tiny\textcolor{dimwhite}{Current sprint. Hardest mathematics.}}
+        \begin{enumerate}\itemsep0.05em\scriptsize
+            \item Prove axiom (Wolf 6.6~\cite{Wolf2012Quantum}):\\
+                  {\tiny KS equality $\to$ peripheral spectrum $\to$ primitivity $\to$ gauge}
+            \item Wire \texttt{cross\_correlation\_tendsto\_zero} into block separation
+            \item Close orphan sorries
+        \end{enumerate}
+        {\tiny\textcolor{softred}{Challenge: Kadison--Schwarz equality not in Mathlib.}}
+
+        \vspace{0.4em}
+        \textbf{\textcolor{amber}{Phase 2} --- Extend to normal tensors}\\[-0.3em]
+        {\tiny\textcolor{dimwhite}{Moderate, mostly definitional.}}
+        \begin{enumerate}\setcounter{enumi}{3}\itemsep0.05em\scriptsize
+            \item Formalize blocking (tensor product of Kraus operators)
+            \item Show blocked normal tensor is injective\\
+                  {\tiny (Wielandt bound~\cite{Sanz2010Quantum} or direct existence of $L_0$)}
+            \item Adapt FT to use blocked tensors
+        \end{enumerate}
+
+        \column{0.50\textwidth}
+        \textbf{\textcolor{leanblue}{Phase 3} --- Handle periodicity}\\[-0.3em]
+        {\tiny\textcolor{dimwhite}{Needs peripheral spectrum from Phase 1.}}
+        \begin{enumerate}\setcounter{enumi}{6}\itemsep0.05em\scriptsize
+            \item Detect period from peripheral spectrum of $\mathcal{E}$
+            \item Off-diagonal decomposition (find projectors $P_u$)
+            \item Unblocking argument
+        \end{enumerate}
+
+        \vspace{0.4em}
+        \textbf{\textcolor{leangreen}{Phase 4} --- General case}\\[-0.3em]
+        {\tiny\textcolor{dimwhite}{Mostly algebraic once Phases 1--3 done.}}
+        \begin{enumerate}\setcounter{enumi}{9}\itemsep0.05em\scriptsize
+            \item Block decomposition (invariant subspaces of $\mathcal{E}$)
+            \item Moment matching for multi-block
+            \item Assemble full canonical form theorem
+        \end{enumerate}
+
+        \vspace{0.3em}
+        \begin{tikzpicture}[
+            pbox/.style={rectangle, rounded corners=3pt, minimum width=1.4cm,
+                         minimum height=0.35cm, font=\tiny\bfseries, text=white,
+                         align=center, thick},
+            parr/.style={-{Stealth[scale=0.45]}, white, thick},
+        ]
+            \node[pbox, fill=softred!50!black, draw=softred] (p1) at (0,0) {Phase 1};
+            \node[pbox, fill=amber!30!black, draw=amber] (p2) at (1.6,0) {Phase 2};
+            \node[pbox, fill=leanblue!30!black, draw=leanblue] (p3) at (3.2,0) {Phase 3};
+            \node[pbox, fill=leangreen!30!black, draw=leangreen] (p4) at (4.8,0) {Phase 4};
+            \draw[parr] (p1) -- (p2);
+            \draw[parr] (p2) -- (p3);
+            \draw[parr] (p3) -- (p4);
+        \end{tikzpicture}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 14 — Mathlib Infrastructure Gaps
+%======================================================================
+\begin{frame}{Mathlib Infrastructure Gaps}
+    \vspace{-0.5em}
+
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textbf{\textcolor{softred}{NOT in Mathlib} (we need):}
+        \begin{itemize}\itemsep0.15em\small
+            \item[\textcolor{softred}{$\boldsymbol\times$}] Kadison--Schwarz inequality\\
+                  {\tiny Stated + sorry'd in our code}
+            \item[\textcolor{softred}{$\boldsymbol\times$}] Peripheral spectrum theory for CP maps\\
+                  {\tiny Wolf Ch.~6~\cite{Wolf2012Quantum}}
+            \item[\textcolor{softred}{$\boldsymbol\times$}] Primitivity $\Leftrightarrow$ unique eigenvalue on $|z|{=}1$\\
+                  {\tiny For non-negative matrices: in Mathlib; for CP maps: no}
+            \item[\textcolor{softred}{$\boldsymbol\times$}] Quantum Wielandt inequality\\
+                  {\tiny \cite{Sanz2010Quantum}}
+            \item[\textcolor{softred}{$\boldsymbol\times$}] Irreducible CP map decomposition
+            \item[\textcolor{softred}{$\boldsymbol\times$}] Blocking / tensor product of Kraus operators\\
+                  {\tiny Partially in our code}
+        \end{itemize}
+
+        \column{0.50\textwidth}
+        \textbf{\textcolor{leangreen}{Available in Mathlib} (\checkmark):}
+        \begin{itemize}\itemsep0.15em\small
+            \item[\textcolor{leangreen}{\checkmark}] Spectral radius, Gelfand formula
+            \item[\textcolor{leangreen}{\checkmark}] Schauder--Tychonoff FPT\\
+                  {\tiny (available but unused)}
+            \item[\textcolor{leangreen}{\checkmark}] Finite-dimensional spectral theory
+            \item[\textcolor{leangreen}{\checkmark}] Positive semidefinite matrices
+            \item[\textcolor{leangreen}{\checkmark}] General Banach algebra theory
+            \item[\textcolor{leangreen}{\checkmark}] Perron--Frobenius for nonneg.\ matrices\\
+                  {\tiny (via \texttt{NNRatFunc}; partial)}
+        \end{itemize}
+
+        \vspace{0.4em}
+        \colorbox{cardbg}{\parbox{0.93\columnwidth}{\centering\scriptsize
+        \textcolor{dimwhite}{The main gap is \textbf{CP map spectral theory}:\\
+        Kadison--Schwarz + peripheral spectrum.\\
+        Everything else builds on these.}}}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 15 — Summary
+%======================================================================
+\begin{frame}{Summary}
+    \vspace{-0.3em}
+
+    \begin{enumerate}\itemsep0.3em\small
+        \item The \textcolor{amber}{injective case} is the mathematical core ---
+              all general cases \textbf{reduce} to it
+        \item Our formalization handles injective \textbf{completely}
+              (modulo 1 axiom + 1 sorry)
+        \item The \textcolor{softred}{axiom} (Wolf Thm 6.6) is the single
+              hardest piece and \textbf{unlocks everything}
+        \item Once the axiom is proved, extending to
+              \textcolor{leangreen}{normal} is moderate work
+        \item Full generality (\textcolor{leanblue}{periodic} +
+              \textcolor{softred}{reducible}) is additional but mostly
+              \textbf{algebraic}
+        \item Main Mathlib gaps: CP map spectral theory
+              (Kadison--Schwarz, peripheral spectrum)
+    \end{enumerate}
+
+    \vspace{0.5em}
+    \begin{center}
+    \begin{tikzpicture}[
+        pbox/.style={rectangle, rounded corners=4pt, minimum width=2.5cm,
+                     minimum height=0.7cm, font=\scriptsize\bfseries, text=white,
+                     align=center, thick},
+        parr/.style={-{Stealth[scale=0.6]}, white, very thick},
+    ]
+        % Phase boxes
+        \node[pbox, fill=softred!50!black, draw=softred]
+            (p1) at (0,0) {Phase 1\\{\tiny Injective (axiom)}};
+        \node[pbox, fill=amber!30!black, draw=amber]
+            (p2) at (3.5,0) {Phase 2\\{\tiny Normal (blocking)}};
+        \node[pbox, fill=leanblue!30!black, draw=leanblue]
+            (p3) at (7.0,0) {Phase 3\\{\tiny Periodic}};
+        \node[pbox, fill=leangreen!30!black, draw=leangreen]
+            (p4) at (10.5,0) {Phase 4\\{\tiny General (full FT)}};
+
+        % Progress indicator
+        \fill[softred!70] (-1.25,-0.65) rectangle (-0.15,-0.55);
+        \fill[gray!40] (-0.15,-0.65) rectangle (11.75,-0.55);
+        \node[font=\tiny, text=dimwhite] at (5.25,-0.85) {current progress};
+        \draw[white, thick, -{Stealth[scale=0.4]}] (-0.75,-0.6) -- (-0.75,-0.4);
+
+        \draw[parr] (p1) -- (p2);
+        \draw[parr] (p2) -- (p3);
+        \draw[parr] (p3) -- (p4);
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% References
+%======================================================================
+\begin{frame}[allowframebreaks]{References}
+    \small
+    \bibliography{references}
+\end{frame}
+
+\end{document}
