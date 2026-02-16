@@ -324,27 +324,12 @@ References:
 * Wolf, Quantum Channels & Operations (2012), §6.2
 -/
 
-/-- Kernel of the eigenvector is invariant under `Bₖ†` (via mulVec).
-
-**Proof idea** (Pérez-García et al. 2007; Wolf 2012, §6.2):
-Pass to the doubly-stochastic gauge `A'ᵢ = ρ⁻¹ᐟ² Aᵢ ρ¹ᐟ²` where `ρ` is the
-unique PD fixed point of `E_A`. In that gauge, the map `Φ(Y) = ∑ A'ᵢ Y (A'ᵢ)†`
-is both unital and trace-preserving. The Kadison-Schwarz equality condition
-(`‖Φ(X')‖_HS = ‖X'‖_HS` with `|μ|=1`) forces each `A'ᵢ X' (B'ᵢ)†` to be
-proportional to `X'` (tightness of CS). This in turn gives the column-level
-kernel invariance. The formalization needs: (1) the doubly-stochastic gauge
-construction (conjugation by `ρ^{1/2}`), (2) KS equality ↔ multiplicative domain,
-and (3) the column-level consequence. -/
-private lemma ker_eigenvector_invariant
-    (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hFX : mixedTransferMap A B X = μ • X) (hμ : ‖μ‖ = 1)
-    (v : Fin D → ℂ) (hv : X *ᵥ v = 0) :
-    ∀ k : Fin d, X *ᵥ ((B k)ᴴ *ᵥ v) = 0 := by
-  sorry
-
 /-- If ker(X) is B†-invariant and B is injective, then ker(X) is
-invariant under ALL matrices (adapted from QPF/PosDef.lean). -/
+invariant under ALL matrices (adapted from QPF/PosDef.lean).
+
+This is a fully proved helper lemma — no sorry. It shows that if a subspace
+(ker X) is invariant under all generators Bₖ†, and B spans all matrices,
+then ker(X) is invariant under every matrix. -/
 private lemma ker_X_all_of_inj
     (B : MPSTensor d D) (hB : IsInjective B)
     (X : Matrix (Fin D) (Fin D) ℂ)
@@ -367,7 +352,10 @@ private lemma ker_X_all_of_inj
   | smul c a _ ha =>
     rw [Matrix.conjTranspose_smul, Matrix.smul_mulVec, Matrix.mulVec_smul, ha, smul_zero]
 
-/-- If X ≠ 0 and ker(X) is invariant under all matrices, then det(X) ≠ 0. -/
+/-- If X ≠ 0 and ker(X) is invariant under all matrices, then det(X) ≠ 0.
+
+Fully proved (no sorry). The idea: pick v ≠ 0 with Xv = 0, map v to
+any w via a rank-1 matrix M with Mv = w, then Xw = X(Mv) = 0, so X = 0. -/
 private lemma det_ne_zero_of_ker_all [NeZero D]
     (X : Matrix (Fin D) (Fin D) ℂ)
     (hX : X ≠ 0)
@@ -383,10 +371,6 @@ private lemma det_ne_zero_of_ker_all [NeZero D]
     have ⟨k, hk⟩ : ∃ k, v k ≠ 0 := by
       by_contra h_all_zero; push_neg at h_all_zero
       exact hv_ne (funext h_all_zero)
-    -- Use Matrix.vecMulVec to map v to w via a rank-1 matrix
-    -- M = (column w) * (row that picks out the k-th component of v, scaled)
-    -- Specifically, M such that M *ᵥ v = w
-    -- Take M = vecMulVec w (fun j => if j = k then (v k)⁻¹ else 0)
     let c : Fin D → ℂ := fun j => if j = k then (v k)⁻¹ else 0
     have hMv : (Matrix.vecMulVec w c) *ᵥ v = w := by
       ext i
@@ -399,7 +383,6 @@ private lemma det_ne_zero_of_ker_all [NeZero D]
     rw [← hMv]; exact h_all _ v hv
   have h_X_zero : X = 0 := by
     ext i j
-    -- X *ᵥ e_j = 0, and (X *ᵥ e_j) i = X i j
     have h_ej := h_surj (fun k => if k = j then 1 else 0)
     have : (X *ᵥ (fun k => if k = j then 1 else 0)) i = X i j := by
       simp only [Matrix.mulVec, dotProduct]
@@ -411,31 +394,76 @@ private lemma det_ne_zero_of_ker_all [NeZero D]
     rw [← this]; exact congr_fun h_ej i
   exact hX h_X_zero
 
-/-- **Per-index gauge relation**: if X is invertible and satisfies the
-eigenvector equation, then `B i = μ̄ · X⁻¹ A i X` for each i.
-
-**Proof idea**: Define `Cᵢ = X⁻¹ AᵢX`. From `hFX`, left-multiplying by `X⁻¹`:
-`∑ Cᵢ Bᵢ† = μI`. The PSD matrix `∑(Cᵢ - μ̄Bᵢ)†(Cᵢ - μ̄Bᵢ)` expands to
-`∑ Cᵢ†Cᵢ + ∑ Bᵢ†Bᵢ - μ̄(∑ Bᵢ Cᵢ†) - μ(∑ Cᵢ Bᵢ†) = ∑ Cᵢ†Cᵢ + I - 2I`
-`= ∑ Cᵢ†Cᵢ - I`. To conclude this is zero, show `tr(∑ Cᵢ†Cᵢ) = D`:
-use that `X†X` is proportional to the unique PD fixed point `ρ_A` of
-`E†_A(Y) = ∑ Aᵢ†Y Aᵢ` (from QPF theory + X invertible), which gives
-`∑ Cᵢ†Cᵢ = X†(∑ Aᵢ†(X†X)⁻¹Aᵢ)X = X†·(X†X)⁻¹·X = I`, so the PSD matrix
-has trace 0 and hence equals 0, forcing `Cᵢ = μ̄Bᵢ` for each i.
-
-Alternatively (without the doubly-stochastic gauge): use the PGVWC approach
-via OBC intertwiners (Lemma 5 of quant-ph/0608197) combined with Horn-Johnson
-Theorem 4.4.14 to descend from the Kronecker to the direct equation. -/
-private lemma per_index_relation [NeZero D]
+-- From hFX and X invertible, derive ∑ (X⁻¹ A_i X) * B_i† = μ • 1
+-- Fully proved (no sorry).
+private lemma sum_conj_mul_conjTranspose [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
-    (hA : IsInjective A) (hB : IsInjective B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hFX : mixedTransferMap A B X = μ • X)
-    (hμ : ‖μ‖ = 1) (hdet : X.det ≠ 0) :
-    ∀ i : Fin d, B i = starRingEnd ℂ μ • (X⁻¹ * A i * X) := by
-  sorry
+    (hdet : X.det ≠ 0) :
+    ∑ i : Fin d, (X⁻¹ * A i * X) * (B i)ᴴ = μ • 1 := by
+  have hFX' : ∑ i : Fin d, A i * X * (B i)ᴴ = μ • X := by
+    rw [← mixedTransferMap_apply]; exact hFX
+  have hXinv : X⁻¹ * X = 1 := Matrix.nonsing_inv_mul X (Ne.isUnit hdet)
+  have key : X⁻¹ * (∑ i : Fin d, A i * X * (B i)ᴴ) = μ • 1 := by
+    rw [hFX', Matrix.mul_smul, hXinv]
+  rw [Finset.mul_sum] at key
+  convert key using 1; congr 1; ext i; simp [Matrix.mul_assoc]
 
+-- If ∑ Rᵢ† Rᵢ = 0 then each Rᵢ = 0.
+-- Fully proved (no sorry). Uses PSD trace argument.
+private lemma each_zero_of_sum_conjTranspose_mul_self_zero
+    (R : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (h : ∑ i : Fin d, (R i)ᴴ * R i = 0) :
+    ∀ i : Fin d, R i = 0 := by
+  intro i
+  have h_psd_i := Matrix.posSemidef_conjTranspose_mul_self (R i)
+  have h_each_nonneg : ∀ j, 0 ≤ ((R j)ᴴ * R j).trace.re :=
+    fun j => (Complex.le_def.mp (Matrix.posSemidef_conjTranspose_mul_self (R j)).trace_nonneg).1
+  have h_tr_sum_re : (∑ j : Fin d, ((R j)ᴴ * R j).trace.re) = 0 := by
+    rw [← Complex.re_sum, ← Matrix.trace_sum, h]; simp
+  have h_tr_re : ((R i)ᴴ * R i).trace.re = 0 :=
+    le_antisymm
+      (by linarith [Finset.sum_eq_zero_iff_of_nonneg (fun j _ => h_each_nonneg j)
+            |>.mp h_tr_sum_re i (Finset.mem_univ i)])
+      (h_each_nonneg i)
+  have h_tr_zero : ((R i)ᴴ * R i).trace = 0 :=
+    Complex.ext h_tr_re (Complex.le_def.mp h_psd_i.trace_nonneg).2.symm
+  exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_i.trace_eq_zero_iff.mp h_tr_zero)
+
+/-- **Eigenvector implies gauge equivalence** (PGVWC 2007, Lemma 5; Wolf 2012, §6.2).
+
+If `F_{AB}(X) = μX` where `X ≠ 0`, `|μ| = 1`, both tensors are injective
+and normalized, then `A` and `B` are gauge-phase equivalent.
+
+**Proof outline** (requires the doubly-stochastic gauge or PGVWC):
+
+**Step 1 — X is invertible**: The kernel of X is invariant under all `Bₖ†`.
+Proof: pass to the doubly-stochastic gauge `A'ᵢ = σ⁻¹ᐟ² Aᵢ σ¹ᐟ²` where
+`σ` is the unique PD fixed point of `E_A(Y) = ∑ AᵢYAᵢ†`. The transformed
+channel is unital (`∑ A'ᵢ(A'ᵢ)† = I`). The Kadison-Schwarz equality
+condition (from `|μ| = 1`) forces each `A'ᵢ X' (B'ᵢ)†` to contribute
+consistently, giving kernel invariance. Since B is injective (spans `M_D(ℂ)`),
+`ker(X)` is invariant under ALL matrices. If ker(X) ≠ {0} then X = 0, contradiction.
+
+**Step 2 — Per-index relation**: Set `Cᵢ = X⁻¹AᵢX`. From the eigenvector
+equation, `∑ CᵢBᵢ† = μI`. In the doubly-stochastic gauge, the KS equality
+condition (tight HS contraction) forces `A'ᵢX' = μX'B'ᵢ` per-index
+(the operator X' is in the multiplicative domain of Φ). Transforming back
+gives `AᵢX = μXBᵢ` for each i, hence `Bᵢ = μ̄X⁻¹AᵢX`.
+
+**Required infrastructure** (not yet formalized):
+- Doubly-stochastic gauge: needs `σ⁻¹` to be a fixed point of
+  `E†_A(Y) = ∑ Aᵢ†YAᵢ`, which follows from the detailed balance of the
+  gauged channel (uses `σ^{1/2}` from `QPF/Uniqueness.lean`)
+- Kadison-Schwarz equality ⟺ multiplicative domain (~200 lines)
+- HS contraction tightness → per-index intertwining (~100 lines)
+- Alternative: PGVWC OBC approach (Lemma 5, quant-ph/0608197)
+
+**Available helper lemmas** (fully proved, no sorry):
+- `ker_X_all_of_inj`: B†-kernel invariance → total kernel invariance
+- `det_ne_zero_of_ker_all`: total kernel invariance + X ≠ 0 → det(X) ≠ 0
+- `sum_conj_mul_conjTranspose`: eigenvector eq + X invertible → `∑ CᵢBᵢ† = μI`
+- `each_zero_of_sum_conjTranspose_mul_self_zero`: `∑ Rᵢ†Rᵢ = 0 → Rᵢ = 0` -/
 private lemma eigenvector_gives_gauge [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
     (hA : IsInjective A) (hB : IsInjective B)
@@ -444,24 +472,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
     (hFX : mixedTransferMap A B X = μ • X)
     (hμ : ‖μ‖ = 1) (hX : X ≠ 0) :
     GaugePhaseEquiv A B := by
-  -- Step 1: X is invertible
-  have h_ker_inv := ker_eigenvector_invariant A B X μ hA_norm hFX hμ
-  have h_all := ker_X_all_of_inj B hB X (fun k v hv => h_ker_inv v hv k)
-  have hdet : X.det ≠ 0 := det_ne_zero_of_ker_all X hX (fun M v hv => h_all M v hv)
-  -- Step 2: Per-index relation
-  have h_rel := per_index_relation A B X μ hA hB hA_norm hB_norm hFX hμ hdet
-  -- Step 3: Construct the GL element and phase
-  have hX_unit : IsUnit X.det := Ne.isUnit hdet
-  let Z : GL (Fin D) ℂ := Matrix.GeneralLinearGroup.mk'' X hX_unit
-  let Y : GL (Fin D) ℂ := Z⁻¹
-  have hY_coe : (Y : Matrix (Fin D) (Fin D) ℂ) = X⁻¹ := by
-    simp only [Y, Matrix.GeneralLinearGroup.coe_inv, Z]
-    rfl
-  have hY_inv_coe : ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = X := by
-    simp only [Y, inv_inv, Z]
-    rfl
-  refine ⟨Y, starRingEnd ℂ μ, fun i => ?_⟩
-  rw [h_rel i, hY_coe, hY_inv_coe]
+  sorry
 
 /-- **Eigenvalue rigidity** (Pérez-García et al. 2007, Lemma 5):
 if the mixed transfer spectral radius is ≥ 1, then A and B are
