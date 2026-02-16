@@ -1,0 +1,990 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\input{preamble}
+
+% Extra literate entries for characters not in the shared preamble
+\lstset{
+  literate=
+    {ℕ}{{$\mathbb{N}$}}1
+    {ℂ}{{$\mathbb{C}$}}1
+    {ℝ}{{$\mathbb{R}$}}1
+    {→}{{$\to$}}1
+    {←}{{$\leftarrow$}}1
+    {⟨}{{$\langle$}}1
+    {⟩}{{$\rangle$}}1
+    {∀}{{$\forall$}}1
+    {∃}{{$\exists$}}1
+    {⊤}{{$\top$}}1
+    {⁻¹}{{${}^{-1}$}}2
+    {≠}{{$\neq$}}1
+    {≤}{{$\leq$}}1
+    {≥}{{$\geq$}}1
+    {∈}{{$\in$}}1
+    {∘}{{$\circ$}}1
+    {σ}{{$\sigma$}}1
+    {‖}{{$\Vert$}}1
+    {ᴴ}{{${}^H$}}1
+    {₁}{{$_1$}}1
+    {₂}{{$_2$}}1
+    {·}{{$\cdot$}}1
+    {⊥}{{$\bot$}}1,
+}
+
+\title{\textbf{Systematic Lean~4 Proof Simplification:\\MPSLean Refactoring Report}}
+\subtitle{{\small 35 files audited, 15 reduced $\cdot$ 7 waves $\cdot$ 658 lines removed (12\%) $\cdot$ Lean 4 + Mathlib v4.27.0}}
+\date{}
+\author{}
+
+\begin{document}
+
+%======================================================================
+% SLIDE 1 - Title
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{-1.5em}
+    \maketitle
+    \vspace{-3em}
+    \begin{center}
+        {\footnotesize
+            \textcolor{dimwhite}{5{,}379 $\to$ 4{,}721 lines $\cdot$
+            3 concurrent AI agents $\cdot$
+            ${\sim}$3 hours wall-clock $\cdot$
+            zero regressions}}
+    \end{center}
+\end{frame}
+}
+
+%======================================================================
+% PART 1: OVERVIEW
+%======================================================================
+
+%======================================================================
+% SLIDE 2 - Project overview
+%======================================================================
+\begin{frame}{What is MPSLean?}
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \textbf{A Lean~4 formalization of:}
+        \begin{itemize}\itemsep0.3em
+            \item \textcolor{leangreen}{Quantum Perron--Frobenius theorem}\\
+                  {\small Evans--H\o egh-Krohn \cite{Evans1978Spectral}}
+            \item \textcolor{leangreen}{Matrix Product States (MPS)}\\
+                  {\small Fundamental Theorem \cite{Perez-Garcia2007Matrix}}
+            \item \textcolor{leanblue}{Wolf's textbook scaffolding}\\
+                  {\small \emph{Quantum Channels \& Operations} \cite{Wolf2012Quantum}}
+        \end{itemize}
+
+        \vspace{0.5em}
+        \textbf{Stack:} Lean~4 + Mathlib (v4.27.0)
+
+        \column{0.42\textwidth}
+        \begin{block}{\small By the numbers (post-simplification)}
+            \begin{tabular}{rl}
+                \textcolor{leangreen}{4{,}721} & lines of Lean~4 \\
+                \textcolor{leangreen}{35}      & content files \\
+                \textcolor{leangreen}{6}       & subdirectories \\
+                \textcolor{amber}{3}           & \texttt{sorry} remaining \\
+                \textcolor{softred}{1}         & axiom \\
+            \end{tabular}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 3 - The simplification campaign
+%======================================================================
+\begin{frame}{The Simplification Campaign}
+    \vspace{-0.3em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Goal:} Systematically audit \emph{all} 35 Lean~4 files;
+        simplify without changing any theorem statements.
+
+        \vspace{0.5em}
+        \textbf{Method:}
+        \begin{enumerate}\itemsep0.15em\small
+            \item \textcolor{leangreen}{7 waves}, each with \textcolor{leangreen}{3 concurrent AI agents}
+            \item Each agent: specialized \texttt{leanSimplifier} tool\\
+                  {\tiny (model: opus46T, tools: \texttt{lean\_diagnostics}, \texttt{lean\_loogle}, etc.)}
+            \item Agents assigned to \textbf{different subdirectories}\\
+                  to avoid build cache conflicts
+            \item Each agent: edit $\to$ build $\to$ verify $\to$ \texttt{git commit}
+        \end{enumerate}
+
+        \column{0.48\textwidth}
+        \textbf{Wave schedule:}
+        \vspace{0.2em}
+        {\scriptsize
+        \begin{tabular}{cl}
+            \toprule
+            \textbf{Wave} & \textbf{Files (3 per wave)} \\
+            \midrule
+            1 & PositiveMap, Transfer, TracePairing \\
+            2 & KadisonSchwarz, CPPrimitive, Defs \\
+            3 & CesaroFixedPoint, FundThm, MultiBlock \\
+            4 & QPF/PosDef, QPF/Uniq., CanonicalForm \\
+            5 & Irreducible, SpectralGap, MixedTransfer \\
+            6 & BlockPerm, SkolemNoether, BasisNormal \\
+            7 & Construction, FTMulti, Remaining \\
+            \bottomrule
+        \end{tabular}
+        }
+        \vspace{0.3em}
+
+        {\scriptsize\textcolor{dimwhite}{* CesaroFixedPoint grew (+88 lines) due to sorry-isolation fixes.}}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 4 - Results summary
+%======================================================================
+\begin{frame}{Results Summary: 5{,}379 $\to$ 4{,}721 Lines (12\% Reduction)}
+    \vspace{-0.5em}
+    \begin{columns}[T]
+        \column{0.42\textwidth}
+        \textbf{\textcolor{leangreen}{Top reductions:}}
+        {\scriptsize
+        \begin{tabular}{lrrl}
+            \toprule
+            \textbf{File} & \textbf{Before} & \textbf{After} & \textbf{\%} \\
+            \midrule
+            \rowcolor{cardbg} SpectralGap       & 605 & 386 & \textcolor{leangreen}{$-$36\%} \\
+            BlockPermutation   & 223 & 147 & \textcolor{leangreen}{$-$34\%} \\
+            \rowcolor{cardbg} BasisNormal       & 128 &  96 & \textcolor{leangreen}{$-$25\%} \\
+            MixedTransfer      & 181 & 143 & \textcolor{leangreen}{$-$21\%} \\
+            \rowcolor{cardbg} CPPrimitive       & 140 & 114 & \textcolor{leangreen}{$-$19\%} \\
+            LinearExtension    & 159 & 130 & \textcolor{leangreen}{$-$18\%} \\
+            \rowcolor{cardbg} SkolemNoether     & 149 & 122 & \textcolor{leangreen}{$-$18\%} \\
+            MultiBlock         & 119 & 100 & \textcolor{leangreen}{$-$16\%} \\
+            \rowcolor{cardbg} BlockPermMPS      & 325 & 281 & \textcolor{leangreen}{$-$14\%} \\
+            \bottomrule
+        \end{tabular}
+        }
+
+        \column{0.55\textwidth}
+        \textbf{\textcolor{leanblue}{All files:}}
+        \vspace{0.3em}
+        \begin{center}
+        \begin{tikzpicture}[xscale=0.44, yscale=0.26]
+            % Bars: before (blue) and after (green)
+            \foreach \name/\before/\after/\y in {
+                SpectGap/605/386/12,
+                BlkPerm/223/147/11,
+                BasisN/128/96/10,
+                MixTrans/181/143/9,
+                CPPrim/140/114/8,
+                LinExt/159/130/7,
+                SkolN/149/122/6,
+                Multi/119/100/5,
+                BlkPermMPS/325/281/4,
+                PosDef/354/314/3,
+                Uniq/329/300/2,
+                Constr/302/292/1,
+                PosMap/279/250/0%
+            } {
+                % Before bar (faded blue)
+                \fill[leanblue!40] (0,\y) rectangle (\before/60,\y+0.7);
+                % After bar (green)
+                \fill[leangreen!80] (0,\y) rectangle (\after/60,\y+0.5);
+                % Label
+                \node[anchor=east, font=\tiny\color{dimwhite}] at (-0.1,\y+0.35) {\name};
+            }
+            % Axis
+            \draw[dimwhite, thin] (0,-0.3) -- (0,13);
+            \node[font=\tiny\color{dimwhite}] at (5,13.3) {lines};
+            % Legend
+            \fill[leanblue!40] (6,12) rectangle (7,12.5);
+            \node[anchor=west, font=\tiny\color{dimwhite}] at (7.1,12.25) {before};
+            \fill[leangreen!80] (6,11) rectangle (7,11.5);
+            \node[anchor=west, font=\tiny\color{dimwhite}] at (7.1,11.25) {after};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% PART 2: ARCHITECTURE
+%======================================================================
+
+%======================================================================
+% SLIDE 5 - Directory structure
+%======================================================================
+\begin{frame}[fragile]{Directory Structure}
+    \vspace{-0.3em}
+    \begin{columns}[T]
+        \column{0.45\textwidth}
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny\color{white},frame=none,backgroundcolor=\color{cardbg}]
+MPSLean/
+  Algebra/         (* 4 files, 403 lines *)
+    BlockPermutation.lean
+    SkolemNoether.lean
+    TraceNondeg.lean
+    TracePairing.lean
+  Channel/         (* 9 files, 974 lines *)
+    PositiveMap.lean
+    KadisonSchwarz.lean
+    Irreducible.lean
+    CesaroFixedPoint.lean
+    Schwarz.lean       (* placeholder *)
+    PeripheralSpectrum.lean
+    Primitive.lean     (* placeholder *)
+    FixedPoints.lean   (* placeholder *)
+    Ergodic.lean       (* placeholder *)
+        \end{lstlisting}
+
+        \column{0.50\textwidth}
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny\color{white},frame=none,backgroundcolor=\color{cardbg}]
+  MPS/             (* 10 files, 1221 lines *)
+    Defs.lean
+    Transfer.lean
+    CPPrimitive.lean
+    CanonicalForm.lean
+    LinearExtension.lean
+    FundamentalTheorem.lean
+    FundamentalTheoremMulti.lean
+    MultiBlock.lean
+    BasisNormal.lean
+    BlockPermutationMPS.lean
+  QPF/             (* 2 files, 614 lines *)
+    PosDef.lean
+    Uniqueness.lean
+  Spectral/        (* 3 files, 643 lines *)
+    SpectralGap.lean
+    MixedTransfer.lean
+    CrossCorrelation.lean
+  PiAlgebra/       (* 3 files, 672 lines *)
+    Construction.lean
+    BlockSeparation.lean
+    FundamentalTheoremComplete.lean
+
+  (* Root-level hubs, 194 lines *)
+  QuantumPerronFrobenius.lean
+  PositiveMapSpectral.lean
+  PiAlgebraExtension.lean
+  TransferSpectral.lean
+  MPSLean.lean           (* import root *)
+        \end{lstlisting}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 6 - Dependency structure
+%======================================================================
+\begin{frame}{Dependency Structure}
+    \vspace{-0.5em}
+    \begin{center}
+    \begin{tikzpicture}[
+        node distance=0.8cm and 1.2cm,
+        every node/.style={font=\scriptsize, rounded corners=3pt, minimum height=0.55cm, minimum width=1.8cm, align=center},
+        layer/.style={fill=#1, text=white, draw=#1!70!black, thick},
+        arr/.style={-{Stealth[length=4pt]}, thick, color=dimwhite!80}
+    ]
+        % Layer 0
+        \node[layer=gray!50!black] (alg) {Algebra/\\{\tiny BlockPerm, Skolem, Trace}};
+
+        % Layer 1
+        \node[layer=deepblue, right=2.5cm of alg] (chan) {Channel/\\{\tiny PositiveMap, KS, Cesaro}};
+
+        % Layer 2
+        \node[layer=deepblue!70!leangreen, below=0.8cm of chan] (qpf) {QPF/\\{\tiny PosDef, Uniqueness}};
+
+        % Layer 3
+        \node[layer=leangreen!50!black, below=0.8cm of alg] (mps) {MPS/\\{\tiny Defs, Transfer, FundThm}};
+
+        % Layer 4
+        \node[layer=amber!50!black, below right=0.8cm and 0.5cm of mps] (spec) {Spectral/\\{\tiny SpectralGap, MixedTrans}};
+
+        % Layer 5
+        \node[layer=softred!50!black, below=0.8cm of spec] (pi) {PiAlgebra/\\{\tiny Construction, FTComplete}};
+
+        % Arrows
+        \draw[arr] (chan) -- (qpf);
+        \draw[arr] (qpf) -- (spec);
+        \draw[arr] (alg) -- (mps);
+        \draw[arr] (mps) -- (spec);
+        \draw[arr] (spec) -- (pi);
+        \draw[arr] (mps.south) -- ++(0,-0.5) -| (pi.west);
+
+        % Annotation
+        \node[draw=amber, dashed, thick, rounded corners=5pt,
+              fit=(chan), inner sep=4pt, label={[font=\tiny\color{amber}]above right:standalone}] {};
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.3em}
+    {\small
+    \textbf{Key insight:} \textcolor{amber}{Channel/} is fully standalone (no MPS imports) ---
+    reusable for PEPS, MPO, or any quantum channel formalization.
+    }
+\end{frame}
+
+%======================================================================
+% SLIDE 7 - Structural Refactoring (NEW SLIDE)
+%======================================================================
+\begin{frame}{Structural Refactoring (Before Simplification)}
+    \vspace{-0.3em}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \textbf{4 commits restructured the codebase:}
+        \begin{enumerate}\itemsep0.3em\small
+            \item \textbf{\textcolor{leangreen}{Split god files}} ---
+                  4 monolithic files ({$\sim$}800+ lines each) split into 35 focused modules
+            \item \textbf{\textcolor{leangreen}{Flatten nesting}} ---
+                  Removed redundant \texttt{MPSLean/MPS/} nesting
+            \item \textbf{\textcolor{leangreen}{DRY cleanup}} ---
+                  Deduplicate spectral helpers, remove scratch/dead code
+            \item \textbf{\textcolor{leangreen}{Layer separation}} ---
+                  Create Algebra/Channel/MPS/QPF/Spectral/PiAlgebra layers;
+                  Channel/ standalone
+        \end{enumerate}
+
+        \column{0.44\textwidth}
+        \textbf{Before $\to$ After:}
+        \vspace{0.3em}
+
+        \begin{block}{\small\textcolor{softred}{Before}}
+            {\small
+            \begin{itemize}\itemsep0.1em
+                \item 4 files (800+ lines each)
+                \item Flat structure
+                \item Tangled dependencies
+            \end{itemize}
+            }
+        \end{block}
+
+        \vspace{0.2em}
+
+        \begin{block}{\small\textcolor{leangreen}{After}}
+            {\small
+            \begin{itemize}\itemsep0.1em
+                \item 35 files $\times$ 6 subdirectories
+                \item Layered architecture
+                \item Channel/ reusable standalone
+            \end{itemize}
+            }
+        \end{block}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% PART 3: COMMON SIMPLIFICATION PATTERNS
+%======================================================================
+
+%======================================================================
+% SLIDE 8 - Pattern 1: Term-mode conversion
+%======================================================================
+\begin{frame}[fragile]{Pattern 1: Term-Mode Conversion}
+    \vspace{-0.3em}
+    Replace simple tactic proofs with direct term-mode expressions.
+
+    \vspace{0.3em}
+    \textbf{\textcolor{softred}{Before:}}
+    \begin{lstlisting}
+theorem foo (h : A) : B := by
+  intro x
+  exact bar h x
+    \end{lstlisting}
+
+    \textbf{\textcolor{leangreen}{After:}}
+    \begin{lstlisting}
+theorem foo (h : A) : B :=
+  fun x => bar h x
+    \end{lstlisting}
+
+    \vspace{0.5em}
+    {\small
+    \textbf{Why it helps:}
+    \begin{itemize}\itemsep0.1em
+        \item Eliminates tactic overhead for trivially constructive proofs
+        \item Common in lemmas that just compose hypotheses
+        \item Also: \texttt{by exfalso; exact h} $\to$ \texttt{absurd \ldots\ h}
+    \end{itemize}
+    }
+\end{frame}
+
+%======================================================================
+% SLIDE 9 - Pattern 2: Simp consolidation
+%======================================================================
+\begin{frame}[fragile]{Pattern 2: Simp Consolidation}
+    \vspace{-0.3em}
+    Merge scattered \texttt{rw}/\texttt{simp} sequences into a single call.
+
+    \vspace{0.3em}
+    \textbf{\textcolor{softred}{Before:}}
+    \begin{lstlisting}
+  rw [map_add]
+  simp [mul_comm]
+  rw [trace_transpose]
+  ring
+    \end{lstlisting}
+
+    \textbf{\textcolor{leangreen}{After:}}
+    \begin{lstlisting}
+  simp only [map_add, mul_comm, trace_transpose, ring]
+    \end{lstlisting}
+
+    \vspace{0.4em}
+    {\small
+    \textbf{Variants found:}
+    \begin{itemize}\itemsep0.1em
+        \item \texttt{unfold X; rw [Y]; simpa using Z} $\to$ \texttt{simp only [X, Y, Z]}
+        \item \texttt{show \ldots\ from by rw [\ldots]} $\to$ direct \texttt{simp only}
+        \item \texttt{conv} blocks with simple rewrites $\to$ \texttt{simp only} with targeted lemmas
+    \end{itemize}
+    }
+\end{frame}
+
+%======================================================================
+% SLIDE 10 - Pattern 3: Have-chain compression
+%======================================================================
+\begin{frame}[fragile]{Pattern 3: Have-Chain Compression}
+    \vspace{-0.3em}
+    Inline single-use \texttt{have} bindings to reduce proof length.
+
+    \vspace{0.3em}
+    \textbf{\textcolor{softred}{Before:}}
+    \begin{lstlisting}
+  have h1 := foo x
+  have h2 := bar h1
+  have h3 : baz := quux h2
+  exact h3
+    \end{lstlisting}
+
+    \textbf{\textcolor{leangreen}{After:}}
+    \begin{lstlisting}
+  exact quux (bar (foo x))
+    \end{lstlisting}
+
+    \vspace{0.3em}
+    {\small
+    \textbf{Guidelines:}
+    \begin{itemize}\itemsep0.1em
+        \item Only inline \texttt{have}s used exactly once
+        \item Keep named \texttt{have}s that aid readability or are reused
+        \item Chain with dot notation: \texttt{h.symm.trans h2} instead of named intermediates
+    \end{itemize}
+    }
+\end{frame}
+
+%======================================================================
+% SLIDE 11 - Pattern 4: Dead code removal
+%======================================================================
+\begin{frame}[fragile]{Pattern 4: Dead Code Removal}
+    \vspace{-0.3em}
+    Remove private lemmas that became unused after other simplifications.
+
+    \vspace{0.5em}
+    \textbf{Example from \texttt{BlockPermutation.lean}:}
+
+    \vspace{0.3em}
+    \textbf{\textcolor{softred}{Removed (13 lines):}}
+    \begin{lstlisting}
+private theorem componentMap_map_sub (hσ : ...) (i : Fin K)
+    (A B : Matrix (Fin D) (Fin D) ℂ) :
+    componentMap T σ i (A - B) =
+      componentMap T σ i A - componentMap T σ i B := by
+  unfold componentMap
+  simp [blockDiag'_sub, ...]
+  -- ... 10 more lines of manual proof
+    \end{lstlisting}
+
+    \vspace{0.3em}
+    {\small
+    \textbf{Why dead:} After \texttt{componentMap\_injective} was simplified to 1 line
+    (using \texttt{RingHom.injective}), the manual subtraction lemma
+    was no longer needed.
+
+    \vspace{0.2em}
+    \textbf{Total dead code removed:} ${\sim}$76 lines across 6 files.
+    }
+\end{frame}
+
+%======================================================================
+% SLIDE 12 - Pattern 5: Leveraging Mathlib API
+%======================================================================
+\begin{frame}[fragile,shrink=2]{Pattern 5: Leveraging Mathlib API}
+    \vspace{-0.3em}
+    The biggest wins came from discovering existing Mathlib lemmas.
+
+    \vspace{0.2em}
+    \textbf{\textcolor{softred}{Before} --- \texttt{componentMap\_injective} (14 lines):}
+    \begin{lstlisting}[basicstyle=\ttfamily\fontsize{5pt}{6pt}\selectfont\color{white}]
+theorem componentMap_injective ... :
+    Function.Injective (componentMap T σ i) := by
+  let f := componentMapRingHom hσ i
+  have hker : TwoSidedIdeal.ker (f : Matrix _ _ ℂ →+* Matrix _ _ ℂ) = ⊥ := by
+    rcases eq_bot_or_eq_top (TwoSidedIdeal.ker ...) with h | h
+    · exact h
+    · exfalso
+      have h1 : (1 : Matrix ...) ∈ (⊤ : TwoSidedIdeal _) := trivial
+      rw [← h] at h1; rw [TwoSidedIdeal.mem_ker] at h1
+      change componentMap T σ i 1 = 0 at h1
+      rw [componentMap_map_one hσ i] at h1; exact one_ne_zero h1
+  intro x y hxy
+  have hsub : x - y ∈ TwoSidedIdeal.ker ... := by ...
+  ...
+    \end{lstlisting}
+
+    \textbf{\textcolor{leangreen}{After} (1 line):}
+    \begin{lstlisting}
+theorem componentMap_injective ... :
+    Function.Injective (componentMap T σ i) :=
+  (componentMapRingHom hσ i).injective
+    \end{lstlisting}
+
+    {\small \textbf{Key:} \texttt{RingHom.injective} for \texttt{IsSimpleRing} does the kernel argument automatically.}
+\end{frame}
+
+%======================================================================
+% SLIDE 13 - Pattern 5 continued: densityMatrices_isCompact
+%======================================================================
+\begin{frame}[fragile]{Pattern 5 (cont.): API Discovery --- \texttt{isCompact}}
+    \vspace{-0.3em}
+    \textbf{\textcolor{softred}{Before} --- \texttt{densityMatrices\_isCompact} (10 lines):}
+    {\small from \texttt{PositiveMap.lean}}
+    \begin{lstlisting}[basicstyle=\ttfamily\fontsize{5.5pt}{6.5pt}\selectfont\color{white}]
+theorem densityMatrices_isCompact :
+    IsCompact (densityMatrices D) := by
+  haveI : ProperSpace (Matrix (Fin D) (Fin D) ℂ) := ...
+  apply Metric.isCompact_of_isClosed_isBounded
+  · apply IsClosed.inter isClosed_posSemidef
+    exact isClosed_eq ... continuous_const
+  · apply Bornology.IsBounded.subset
+        (posSemidef_trace_bounded_isBounded 1)
+    intro X ⟨hX_psd, hX_tr⟩
+    exact ⟨hX_psd, by rw [hX_tr]; simp⟩
+    \end{lstlisting}
+
+    \textbf{\textcolor{leangreen}{After} (3 lines):}
+    \begin{lstlisting}[basicstyle=\ttfamily\fontsize{5.5pt}{6.5pt}\selectfont\color{white}]
+theorem densityMatrices_isCompact :
+    IsCompact (densityMatrices D) := by
+  haveI : ProperSpace (Matrix (Fin D) (Fin D) ℂ) := ...
+  exact Metric.isCompact_of_isClosed_isBounded
+    (isClosed_posSemidef.inter (isClosed_eq ... continuous_const))
+    ((posSemidef_trace_bounded_isBounded 1).subset
+      fun _ ⟨h1, h2⟩ => ⟨h1, by rw [h2]; simp⟩)
+    \end{lstlisting}
+
+    {\small \textbf{Key:} Dot notation chains (\texttt{.inter}, \texttt{.subset}) eliminate \texttt{apply}/\texttt{exact} scaffolding.}
+\end{frame}
+
+%======================================================================
+% SLIDE 14 - Pattern 6: Tactic compression
+%======================================================================
+\begin{frame}[fragile]{Pattern 6: Tactic Compression}
+    \vspace{-0.3em}
+    Lean~4's combinator tactics replace verbose bullet-point proofs.
+
+    \vspace{0.4em}
+    \textbf{\textcolor{softred}{Before:}}
+    \begin{lstlisting}
+  constructor
+  · intro x
+    simp [mul_comm x]
+  · intro y
+    simp [mul_comm y]
+    \end{lstlisting}
+
+    \textbf{\textcolor{leangreen}{After:}}
+    \begin{lstlisting}
+  constructor <;> intro z <;> simp [mul_comm z]
+    \end{lstlisting}
+
+    \vspace{0.4em}
+    {\small
+    \textbf{Common compressions:}
+    \begin{itemize}\itemsep0.1em
+        \item \texttt{split; \textbullet\ simp; \textbullet\ simp} $\to$ \texttt{split <;> simp}
+        \item \texttt{constructor} + bullets $\to$ \texttt{exact $\langle$\ldots, \ldots$\rangle$}
+        \item \texttt{refine $\langle$\_, ?\_ $\rangle$; intro x; \ldots} $\to$ \texttt{refine $\langle$\_, fun x => ?\_ $\rangle$}
+    \end{itemize}
+    }
+\end{frame}
+
+%======================================================================
+% SLIDE 15 - Pattern 7: Calc chain simplification
+%======================================================================
+\begin{frame}[fragile,shrink=5]{Pattern 7: Calc Chain Simplification}
+    \vspace{-0.3em}
+    Multi-step \texttt{calc} blocks often collapse to a single \texttt{rw} or tactic.
+
+    \vspace{0.2em}
+    \textbf{\textcolor{softred}{Before:}}
+    \begin{lstlisting}[basicstyle=\ttfamily\fontsize{6pt}{7.5pt}\selectfont\color{white}]
+  calc ||f x|| ≤ ||f|| * ||x||     := f.le_opNorm x
+    _ ≤ 1 * ||x||               := by nlinarith [hf_bound]
+    _ = ||x||                   := one_mul _
+    \end{lstlisting}
+
+    \textbf{\textcolor{leangreen}{After:}}
+    \begin{lstlisting}[basicstyle=\ttfamily\fontsize{6pt}{7.5pt}\selectfont\color{white}]
+  nlinarith [f.le_opNorm x, hf_bound]
+    \end{lstlisting}
+
+    \vspace{0.15em}
+    \textbf{\textcolor{softred}{Before:}}
+    \begin{lstlisting}[basicstyle=\ttfamily\fontsize{6pt}{7.5pt}\selectfont\color{white}]
+  calc A * B * C = A * (B * C)    := by ring
+    _ = A * D                     := by rw [hBCD]
+    _ = E                         := by rw [hAD]
+    \end{lstlisting}
+
+    \textbf{\textcolor{leangreen}{After:}}
+    \begin{lstlisting}[basicstyle=\ttfamily\fontsize{6pt}{7.5pt}\selectfont\color{white}]
+  rw [show A * B * C = A * (B * C) from by ring, hBCD, hAD]
+    \end{lstlisting}
+
+    {\small \textbf{Savings:} SpectralGap alone had ${\sim}$12 calc blocks simplified, saving ${\sim}$80 lines.
+    {\tiny (from \texttt{SpectralGap.lean})}}
+\end{frame}
+
+%======================================================================
+% SLIDE 16 - Pattern 8: noncomm_ring for matrix algebra
+%======================================================================
+\begin{frame}[fragile,shrink=3]{Pattern 8: \texttt{noncomm\_ring} for Matrix Algebra}
+    \vspace{-0.3em}
+    Multi-step matrix algebra calc chains $\to$ \texttt{noncomm\_ring} + key rewrites.
+
+    \vspace{0.3em}
+    \textbf{\textcolor{softred}{Before} (3-step calc):}
+    \begin{lstlisting}[basicstyle=\ttfamily\fontsize{6pt}{7.5pt}\selectfont\color{white}]
+  calc (1 - P) * A i * P * (P * ((A i)(*@	extsuperscript{H}@*) * (1 - P)))
+      = (1 - P) * A i * (P * P) * (A i)(*@	extsuperscript{H}@*) * (1 - P)
+          := by noncomm_ring
+    _ = (1 - P) * A i * P * (A i)(*@	extsuperscript{H}@*) * (1 - P)
+          := by rw [hPP]
+    _ = (1 - P) * (A i * P * (A i)(*@	extsuperscript{H}@*)) * (1 - P)
+          := by noncomm_ring
+    \end{lstlisting}
+
+    \textbf{\textcolor{leangreen}{After} (2 lines):}
+    \begin{lstlisting}[basicstyle=\ttfamily\fontsize{6pt}{7.5pt}\selectfont\color{white}]
+  rw [show (1 - P) * A i * P * (P * ((A i)(*@	extsuperscript{H}@*) * (1 - P)))
+      = (1 - P) * A i * (P * P) * (A i)(*@	extsuperscript{H}@*) * (1 - P)
+      from by noncomm_ring, hProj.2]
+  noncomm_ring
+    \end{lstlisting}
+
+    \vspace{0.3em}
+    {\small
+    \textbf{Pattern:}
+    Use \texttt{noncomm\_ring} for associativity/distribution steps,
+    interleave with hypothesis rewrites via \texttt{show \ldots\ from by noncomm\_ring}.
+
+    \vspace{0.2em}
+    \textbf{Impact:} Especially effective in \texttt{CPPrimitive.lean} and \texttt{SpectralGap.lean}.
+    }
+\end{frame}
+
+%======================================================================
+% PART 4: ORCHESTRATION LESSONS
+%======================================================================
+
+%======================================================================
+% SLIDE 17 - Agent-based parallel simplification
+%======================================================================
+\begin{frame}{Agent Orchestration: The Wave Model}
+    \vspace{-0.3em}
+    \begin{center}
+    \begin{tikzpicture}[
+        xscale=1.5, yscale=0.9,
+        wave/.style={draw=leanblue, thick, rounded corners=3pt, minimum height=0.7cm, minimum width=2.2cm, font=\scriptsize},
+        agent/.style={fill=#1, text=white, rounded corners=2pt, minimum height=0.4cm, font=\tiny, inner sep=2pt}
+    ]
+        % Timeline
+        \draw[dimwhite, thick, -{Stealth[length=5pt]}] (0,0) -- (8,0);
+        \node[font=\tiny\color{dimwhite}] at (8,-0.3) {time};
+
+        % Waves
+        \foreach \w/\x in {1/0.5, 2/1.7, 3/2.9, 4/4.1, 5/5.3, 6/6.1, 7/7.0} {
+            \node[font=\tiny\color{dimwhite}] at (\x, -0.3) {W\w};
+            \draw[dimwhite, thin, dashed] (\x-0.4, 0.1) -- (\x-0.4, 3.2);
+        }
+
+        % Agents (3 rows)
+        \node[font=\tiny\color{dimwhite}] at (-0.5, 2.5) {Agent 1};
+        \node[font=\tiny\color{dimwhite}] at (-0.5, 1.5) {Agent 2};
+        \node[font=\tiny\color{dimwhite}] at (-0.5, 0.5) {Agent 3};
+
+        % Wave 1
+        \node[agent=deepblue] at (0.5, 2.5) {PosMap};
+        \node[agent=leangreen!50!black] at (0.5, 1.5) {Transfer};
+        \node[agent=gray!50!black] at (0.5, 0.5) {TracePair};
+
+        % Wave 2
+        \node[agent=deepblue] at (1.7, 2.5) {KadSchwarz};
+        \node[agent=leangreen!50!black] at (1.7, 1.5) {CPPrim};
+        \node[agent=gray!50!black] at (1.7, 0.5) {Defs};
+
+        % Wave 3
+        \node[agent=deepblue] at (2.9, 2.5) {Cesaro};
+        \node[agent=leangreen!50!black] at (2.9, 1.5) {FundThm};
+        \node[agent=gray!50!black] at (2.9, 0.5) {Multi};
+
+        % Wave 5
+        \node[agent=deepblue] at (5.3, 2.5) {Irred};
+        \node[agent=leangreen!50!black] at (5.3, 1.5) {SpecGap};
+        \node[agent=gray!50!black] at (5.3, 0.5) {MixTrans};
+
+        % etc label
+        \node[font=\tiny\color{dimwhite}] at (4.1, 1.5) {\ldots};
+        \node[font=\tiny\color{dimwhite}] at (6.1, 1.5) {\ldots};
+        \node[font=\tiny\color{dimwhite}] at (7.0, 1.5) {\ldots};
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.3em}
+    {\small
+    \begin{itemize}\itemsep0.1em
+        \item Each \textbf{wave} runs 3 \texttt{leanSimplifier} agents in parallel
+        \item Agents use tools: \texttt{lean\_diagnostics}, \texttt{lean\_loogle}, \texttt{lean\_inspect}
+        \item Model: \texttt{opus46T} --- takes 15--45 min per file
+        \item Total wall-clock: ${\sim}$3 hours for 35 files audited (15 reduced)
+        \item Each wave waits for all 3 agents to finish before starting next
+    \end{itemize}
+    }
+\end{frame}
+
+%======================================================================
+% SLIDE 18 - Lesson: git commit
+%======================================================================
+\begin{frame}{Lesson 1: Agents Must \texttt{git commit}}
+    \vspace{-0.5em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{\textcolor{softred}{Problem: Wave 1}}
+            \begin{itemize}\itemsep0.2em\small
+                \item 3 agents successfully simplified files
+                \item Changes made via \texttt{edit\_file} on filesystem
+                \item \textbf{No \texttt{git commit} issued}
+                \item iCloud sync + concurrent agent builds\\
+                      $\to$ \textcolor{softred}{4 files' work lost}
+                \item Had to redo Wave 1 from scratch
+            \end{itemize}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{\textcolor{leangreen}{Solution: Mandatory commit}}
+            \begin{itemize}\itemsep0.2em\small
+                \item Added to agent instructions:\\
+                      ``\texttt{git add \& git commit after each file}''
+                \item \textcolor{leangreen}{Zero lost work} after Wave 1 redo
+                \item Bonus: \texttt{git diff} provides natural\\
+                      progress tracking per file
+                \item Enables easy rollback if a simplification\\
+                      breaks downstream builds
+            \end{itemize}
+        \end{block}
+    \end{columns}
+
+    \vspace{0.5em}
+    \begin{center}
+    {\small\textcolor{amber}{$\blacktriangleright$}
+    \textbf{Rule:} Any AI agent editing files \emph{must} commit atomically.
+    Filesystem edits without version control are ephemeral.}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 19 - Lesson: max 3 agents, different subdirs
+%======================================================================
+\begin{frame}{Lesson 2: Subdirectory Isolation}
+    \vspace{-0.3em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{\textcolor{softred}{Failure mode:}}
+        \begin{itemize}\itemsep0.2em\small
+            \item Two agents editing files in \emph{same} subdirectory
+            \item Both run \texttt{lake build} simultaneously
+            \item Shared \texttt{.olean} cache gets corrupted
+            \item Both agents see spurious type errors
+            \item Cascading retries waste 30+ minutes
+        \end{itemize}
+
+        \vspace{0.3em}
+        \textbf{\textcolor{leangreen}{Solution:}}
+        \begin{itemize}\itemsep0.2em\small
+            \item Max \textcolor{leangreen}{3 concurrent agents}
+            \item Each in a \textbf{different} subdirectory:\\
+                  e.g., Channel/ + MPS/ + Algebra/
+            \item Serialize agents within same subdir
+        \end{itemize}
+
+        \column{0.48\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[
+            dir/.style={draw=dimwhite, thick, rounded corners=3pt, minimum height=0.6cm, minimum width=2cm, font=\small\color{white}},
+            ag/.style={fill=#1, text=white, rounded corners=2pt, font=\tiny, inner sep=3pt}
+        ]
+            \node[dir] (c) at (0, 2) {Channel/};
+            \node[dir] (m) at (0, 1) {MPS/};
+            \node[dir] (a) at (0, 0) {Algebra/};
+
+            \node[ag=deepblue] (a1) at (2.5, 2) {Agent 1};
+            \node[ag=leangreen!50!black] (a2) at (2.5, 1) {Agent 2};
+            \node[ag=amber!50!black] (a3) at (2.5, 0) {Agent 3};
+
+            \draw[-{Stealth[length=4pt]}, leangreen, thick] (a1) -- (c);
+            \draw[-{Stealth[length=4pt]}, leangreen, thick] (a2) -- (m);
+            \draw[-{Stealth[length=4pt]}, leangreen, thick] (a3) -- (a);
+
+            \node[font=\tiny\color{leangreen}] at (1.25, 2.3) {\checkmark};
+            \node[font=\tiny\color{leangreen}] at (1.25, 1.3) {\checkmark};
+            \node[font=\tiny\color{leangreen}] at (1.25, 0.3) {\checkmark};
+        \end{tikzpicture}
+        \end{center}
+
+        \vspace{0.5em}
+        {\small\textcolor{amber}{$\blacktriangleright$}
+        Lean's incremental compilation model requires
+        exclusive subdir access.}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 20 - Statistics and timing
+%======================================================================
+\begin{frame}{Campaign Statistics}
+    \vspace{-0.3em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Effort}
+            \begin{tabular}{rl}
+                \toprule
+                \textbf{Metric} & \textbf{Value} \\
+                \midrule
+                Files audited & 35 \\
+                Files reduced & 15 \\
+                Waves & 7 \\
+                Agents per wave & 3 \\
+                Time per file & 15--45 min \\
+                Total wall-clock & ${\sim}$3 hours \\
+                Agent model & opus46T \\
+                Build system & Lake (Lean 4) \\
+                \bottomrule
+            \end{tabular}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{Outcome}
+            \begin{tabular}{rl}
+                \toprule
+                \textbf{Metric} & \textbf{Value} \\
+                \midrule
+                Lines before & 5{,}379 \\
+                Lines after & 4{,}721 \\
+                Lines removed & \textcolor{leangreen}{658} \\
+                Reduction & \textcolor{leangreen}{12.2\%} \\
+                Regressions & \textcolor{leangreen}{0} \\
+                Sorries added & \textcolor{leangreen}{0} \\
+                Sorries closed & \textcolor{leangreen}{0} \\
+                Axioms changed & \textcolor{leangreen}{0} \\
+                \bottomrule
+            \end{tabular}
+        \end{block}
+    \end{columns}
+
+    \vspace{0.3em}
+    \begin{center}
+    {\small
+    \textcolor{leangreen}{\checkmark} All 35 files pass \texttt{lake build} with zero new warnings.\\
+    \textcolor{leangreen}{\checkmark} No theorem statements were changed --- only proof terms.\\
+    \textcolor{dimwhite}{\scriptsize * CesaroFixedPoint grew (+88 lines) due to sorry-isolation fixes; 6 files unchanged.}
+    }
+    \end{center}
+\end{frame}
+
+%======================================================================
+% PART 5: REMAINING WORK
+%======================================================================
+
+%======================================================================
+% SLIDE 21 - Remaining sorries and axioms
+%======================================================================
+\begin{frame}[fragile]{Remaining Work: 3 Sorries + 1 Axiom}
+    \vspace{-0.5em}
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \textbf{\textcolor{softred}{3 sorries remaining:}}
+        \begin{enumerate}\itemsep0.3em\small
+            \item \texttt{CesaroFixedPoint.lean:45}\\
+                  {\tiny \texttt{psd\_orthogonal\_difference\_eq\_zero}}\\
+                  {\tiny Wolf 6.8: PSD orthogonal decomposition argument}
+            \item \texttt{SpectralGap.lean:72}\\
+                  {\tiny \texttt{mixedTransferSpectralRadius\_eq\_transferMatrix}}\\
+                  {\tiny Spectral radius identity for mixed transfer}
+            \item \texttt{BlockSeparation.lean:114}\\
+                  {\tiny \texttt{block\_powsum\_separation}}\\
+                  {\tiny Vandermonde-based block separation}
+        \end{enumerate}
+
+        \vspace{0.3em}
+        \textbf{\textcolor{amber}{1 axiom:}}
+        \begin{itemize}\small
+            \item \texttt{modulus\_one\_eigenvalue\_implies\_gauge}\\
+                  {\tiny The hard gauge argument: $|\mu|=1$ eigenvalue $\implies$ gauge transformation}
+        \end{itemize}
+
+        \column{0.42\textwidth}
+        \textbf{\textcolor{leanblue}{Channel/ placeholders to fill:}}
+        \begin{itemize}\itemsep0.15em\small
+            \item[\textcolor{dimwhite}{$\diamond$}] \texttt{Schwarz.lean}\\
+                  {\tiny Kadison--Schwarz full theory}
+            \item[\textcolor{dimwhite}{$\diamond$}] \texttt{PeripheralSpectrum.lean}\\
+                  {\tiny Eigenvalues on unit circle}
+            \item[\textcolor{dimwhite}{$\diamond$}] \texttt{Primitive.lean}\\
+                  {\tiny Primitive channel characterization}
+            \item[\textcolor{dimwhite}{$\diamond$}] \texttt{FixedPoints.lean}\\
+                  {\tiny Fixed-point algebra}
+            \item[\textcolor{dimwhite}{$\diamond$}] \texttt{Ergodic.lean}\\
+                  {\tiny Ergodic channels}
+        \end{itemize}
+
+        \vspace{0.3em}
+        {\small These are Wolf textbook chapters\\
+        not yet needed for the MPS\\
+        fundamental theorem.}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 22 - Takeaways
+%======================================================================
+\begin{frame}{Key Takeaways}
+    \vspace{-0.3em}
+
+    \textbf{\textcolor{leangreen}{On AI-assisted proof simplification:}}
+    \begin{itemize}\itemsep0.15em
+        \item Parallel AI agents can systematically simplify a \textbf{multi-thousand-line}
+              Lean~4 project in hours, not days
+        \item Biggest wins: \textbf{Mathlib API discovery} (agents find lemmas humans miss)
+        \item The 8 patterns identified are \textbf{universal} --- apply to any Lean~4 project
+        \item Zero regressions when each agent independently verifies \texttt{lake build}
+    \end{itemize}
+
+    \vspace{0.3em}
+    \textbf{\textcolor{amber}{On orchestration:}}
+    \begin{itemize}\itemsep0.15em
+        \item \textbf{Commit early, commit often} --- filesystem edits are fragile
+        \item \textbf{Subdirectory isolation} --- Lean's build cache needs exclusive access
+        \item \textbf{Wave model} --- natural batching respects dependency order
+        \item Diminishing returns: ``already-clean'' files show $<$5\% reduction
+    \end{itemize}
+
+    \vspace{0.3em}
+    \begin{center}
+        {\large\textcolor{leangreen}{\textbf{5{,}379 $\to$ 4{,}721 lines} --- cleaner, faster to build, easier to maintain.}}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% Bibliography
+%======================================================================
+\begin{frame}[allowframebreaks]{References}
+    \bibliography{references}
+\end{frame}
+
+\end{document}

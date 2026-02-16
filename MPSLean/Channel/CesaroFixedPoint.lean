@@ -38,44 +38,91 @@ variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 `A + Y` is PSD, `B + Y` is PSD, and `trace Y = 0`, we have `Y = 0`.
 
 This is the key linear algebra lemma needed for Wolf Proposition 6.8.
-The proof uses that Y ≥ 0 on ker(A) (from A+Y ≥ 0), Y ≥ 0 on ker(B)
-(from B+Y ≥ 0), and range(A) ⊆ ker(B), range(B) ⊆ ker(A) (from AB = BA = 0).
-Combined with the orthogonal decomposition for Hermitian PSD matrices,
-this gives Y ≥ 0, and trace(Y) = 0 then gives Y = 0. -/
+The proof works in the eigenbasis of `A`: each eigenvector lies in `ker(A)` or `ker(B)`
+(from `BA = 0`), giving `⟨eⱼ, Y eⱼ⟩ ≥ 0`. Since `trace(Y) = 0` is the sum of these
+nonneg terms, each must be zero. Then `dotProduct_mulVec_zero_iff` gives
+`Y.mulVec eⱼ = 0` for all basis vectors, so `Y = 0`. -/
 private theorem psd_orthogonal_difference_eq_zero
     {A B Y : Matrix (Fin D) (Fin D) ℂ}
-    (hA : A.PosSemidef) (hB : B.PosSemidef)
-    (hAB : A * B = 0) (_hBA : B * A = 0)
+    (hA : A.PosSemidef) (_hB : B.PosSemidef)
+    (_hAB : A * B = 0) (hBA : B * A = 0)
     (hAY : (A + Y).PosSemidef) (hBY : (B + Y).PosSemidef)
     (hY_tr : trace Y = 0) : Y = 0 := by
-  -- Strategy: show Y is PSD, then use trace = 0 to conclude Y = 0.
-  suffices hY_psd : Y.PosSemidef from hY_psd.trace_eq_zero_iff.mp hY_tr
-  -- Y is Hermitian (Y = (A + Y) - A, difference of Hermitian matrices)
-  have hY_herm : Y.IsHermitian := by
-    have h := hAY.isHermitian.sub hA.isHermitian
-    rwa [show A + Y - A = Y from by abel] at h
-  -- To show Y ≥ 0: show ⟨v, Yv⟩ ≥ 0 for all v.
-  apply Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hY_herm
-  intro v
-  -- For any w with A.mulVec w = 0: ⟨w, Yw⟩ ≥ 0 (from A + Y ≥ 0)
+  -- Set up eigenbasis of A
+  set hA_herm := hA.isHermitian
+  set U := hA_herm.eigenvectorUnitary
+  set V : Matrix (Fin D) (Fin D) ℂ := (U : Matrix (Fin D) (Fin D) ℂ) with hV_def
+  set e := fun j => (hA_herm.eigenvectorBasis j).ofLp with he_def
+  -- e_j = V.col j (columns of the eigenvector unitary)
+  have he_col : ∀ j, e j = V.col j := by
+    intro j; rw [he_def, hV_def]; exact (hA_herm.eigenvectorUnitary_col_eq j).symm
+  -- Eigenvector equation: A.mulVec(e_j) = λ_j • e_j
+  have hA_eigen : ∀ j, A.mulVec (e j) = (hA_herm.eigenvalues j : ℂ) • e j :=
+    fun j => hA_herm.mulVec_eigenvectorBasis j
+  -- Y ≥ 0 on ker(A) and ker(B)
   have hY_ker_A : ∀ w, A.mulVec w = 0 → 0 ≤ star w ⬝ᵥ Y.mulVec w := by
-    intro w hw
-    have := hAY.dotProduct_mulVec_nonneg w
-    rwa [Matrix.add_mulVec, hw, zero_add] at this
-  -- For any w with B.mulVec w = 0: ⟨w, Yw⟩ ≥ 0 (from B + Y ≥ 0)
+    intro w hw; have := hAY.dotProduct_mulVec_nonneg w
+    rwa [add_mulVec, hw, zero_add] at this
   have hY_ker_B : ∀ w, B.mulVec w = 0 → 0 ≤ star w ⬝ᵥ Y.mulVec w := by
-    intro w hw
-    have := hBY.dotProduct_mulVec_nonneg w
-    rwa [Matrix.add_mulVec, hw, zero_add] at this
-  -- From A * B = 0: for all v, A.mulVec (B.mulVec v) = 0
-  have hAB_mulVec : ∀ w, A.mulVec (B.mulVec w) = 0 := by
-    intro w
-    rw [Matrix.mulVec_mulVec]; simp [hAB]
-  -- The full proof requires showing Y ≥ 0 using the orthogonal decomposition
-  -- ker(A) ⊕⊥ range(A) = ℂ^D for Hermitian A, with range(A) ⊆ ker(B).
-  -- Y ≥ 0 on ker(A) (from hY_ker_A) and on range(A) ⊆ ker(B) (from hY_ker_B).
-  -- The Schur complement argument shows the cross terms also work out.
-  sorry
+    intro w hw; have := hBY.dotProduct_mulVec_nonneg w
+    rwa [add_mulVec, hw, zero_add] at this
+  -- Each eigenvector is in ker(A) or ker(B) (from BA = 0)
+  have he_ker : ∀ j, A.mulVec (e j) = 0 ∨ B.mulVec (e j) = 0 := by
+    intro j
+    by_cases h : hA_herm.eigenvalues j = 0
+    · left; rw [hA_eigen, h]; simp
+    · right -- eigenvalue ≠ 0: BA = 0 gives B(λ_j e_j) = 0, so B(e_j) = 0
+      have hBe : B.mulVec (A.mulVec (e j)) = 0 := by rw [mulVec_mulVec]; simp [hBA]
+      rw [hA_eigen, mulVec_smul] at hBe
+      exact (smul_eq_zero.mp hBe).resolve_left (by exact_mod_cast h)
+  -- ⟨e_j, Y e_j⟩ ≥ 0 for each eigenvector
+  have hY_nonneg : ∀ j, 0 ≤ star (e j) ⬝ᵥ Y.mulVec (e j) := by
+    intro j; rcases he_ker j with h | h
+    · exact hY_ker_A _ h
+    · exact hY_ker_B _ h
+  -- Unitarity of V
+  have hV_mul_star : V * star V = 1 := Matrix.mem_unitaryGroup_iff.mp U.prop
+  -- trace(Y) = Σ_j ⟨e_j, Y e_j⟩ via unitary conjugation
+  have hdiag : ∀ j, (star V * Y * V) j j = star (e j) ⬝ᵥ Y.mulVec (e j) := by
+    intro j
+    simp only [Matrix.mul_apply, Matrix.star_apply, dotProduct, mulVec]
+    rw [he_col]; simp only [Matrix.col_apply, RCLike.star_def]
+    simp_rw [Finset.sum_mul, Finset.mul_sum]
+    rw [Finset.sum_comm]; congr 1; ext i; congr 1; ext k
+    change (starRingEnd ℂ) (V i j) * Y i k * V k j = star (V.col j) i * (Y i k * V k j)
+    rw [Pi.star_apply, col_apply, Complex.star_def]; ring
+  have hY_tr_sum : trace Y = ∑ j, star (e j) ⬝ᵥ Y.mulVec (e j) := by
+    rw [show trace Y = (star V * Y * V).trace from by rw [trace_mul_cycle, hV_mul_star, one_mul]]
+    exact Finset.sum_congr rfl (fun j _ => hdiag j)
+  -- Sum of nonneg reals = 0 ⟹ each = 0
+  have hY_diag_zero : ∀ j, star (e j) ⬝ᵥ Y.mulVec (e j) = 0 := by
+    have him : ∀ j, (star (e j) ⬝ᵥ Y.mulVec (e j)).im = 0 :=
+      fun j => (Complex.nonneg_iff.mp (hY_nonneg j)).2.symm
+    have hre_nonneg : ∀ j, 0 ≤ (star (e j) ⬝ᵥ Y.mulVec (e j)).re :=
+      fun j => (Complex.nonneg_iff.mp (hY_nonneg j)).1
+    have hre_sum : ∑ j, (star (e j) ⬝ᵥ Y.mulVec (e j)).re = 0 := by
+      have h1 := map_sum Complex.reAddGroupHom (fun j => star (e j) ⬝ᵥ Y.mulVec (e j)) Finset.univ
+      rw [← hY_tr_sum, hY_tr] at h1; exact h1.symm
+    have hre_zero := (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hre_nonneg j)).mp hre_sum
+    intro j; exact Complex.ext (hre_zero j (Finset.mem_univ _)) (him j)
+  -- Y.mulVec(e_j) = 0 via dotProduct_mulVec_zero_iff for (A+Y) or (B+Y)
+  have hY_mulVec_zero : ∀ j, Y.mulVec (e j) = 0 := by
+    intro j; rcases he_ker j with hA_ker | hB_ker
+    · have h1 : star (e j) ⬝ᵥ (A + Y).mulVec (e j) = 0 := by
+        rw [add_mulVec, hA_ker, zero_add]; exact hY_diag_zero j
+      have h2 := hAY.dotProduct_mulVec_zero_iff (e j) |>.mp h1
+      rw [add_mulVec, hA_ker, zero_add] at h2; exact h2
+    · have h1 : star (e j) ⬝ᵥ (B + Y).mulVec (e j) = 0 := by
+        rw [add_mulVec, hB_ker, zero_add]; exact hY_diag_zero j
+      have h2 := hBY.dotProduct_mulVec_zero_iff (e j) |>.mp h1
+      rw [add_mulVec, hB_ker, zero_add] at h2; exact h2
+  -- Y * V = 0 (column by column) and V invertible ⟹ Y = 0
+  have hYV_zero : Y * V = 0 := by
+    ext i j; simp only [Matrix.mul_apply, Matrix.zero_apply]
+    exact congr_fun (show Y.mulVec (V.col j) = 0 from he_col j ▸ hY_mulVec_zero j) i
+  calc Y = Y * (V * star V) := by rw [hV_mul_star, mul_one]
+    _ = Y * V * star V := (mul_assoc Y V (star V)).symm
+    _ = 0 := by rw [hYV_zero, zero_mul]
 
 /-- **Wolf Proposition 6.8** (Hermitian part):
 If `E` is trace-preserving and positive, and `X` is a Hermitian fixed point,
