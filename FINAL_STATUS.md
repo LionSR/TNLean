@@ -2,19 +2,20 @@
 
 ## Summary
 
-**~5,000 lines · 36 files · 0 axioms · 1 sorry**
+**~5,000 lines · 36 files · 0 axioms · 2 sorry (isolated helpers, assembly proved)**
 
 The **Fundamental Theorem of Matrix Product States** is formalized:
 - **Single-block case**: fully proved (0 sorry)
 - **Multi-block case**: proved modulo per-block separation (taken as hypothesis)
-- **Spectral gap theorem**: proved with 1 isolated sorry
-  (requires doubly-stochastic gauge + multiplicative domain infrastructure)
+- **Spectral gap theorem**: proved with 2 isolated helper sorry
+  (assembly proved; helpers require multiplicative domain theory)
 
 ## Build
 
 ```bash
 lake build   # Lean 4 v4.27.0, Mathlib v4.27.0
-# 0 axioms, 1 sorry warning (eigenvector_gives_gauge in SpectralGap.lean), 0 errors
+# 0 axioms, 2 sorry warnings (eigenvector_det_ne_zero, per_index_from_eigenvector), 0 errors
+# Assembly (eigenvector_gives_gauge) is fully proved — no sorry
 ```
 
 ## Completed Results
@@ -51,49 +52,47 @@ lake build   # Lean 4 v4.27.0, Mathlib v4.27.0
 - `gauged_unital`: DS gauge unitality — `∑ (S⁻¹AᵢS)(S⁻¹AᵢS)† = I`
   when `S*S† = ρ` and `E_A(ρ) = ρ` (0 sorry)
 
-## Remaining Sorry (1)
+## Remaining Sorry (2)
 
-A single **private lemma** in `MPSLean/Spectral/SpectralGap.lean`:
+Two **private helper lemmas** in `MPSLean/Spectral/SpectralGap.lean`.
+Their assembly (`eigenvector_gives_gauge`) is **fully proved** (no sorry).
 
-| Line | Lemma | Mathematical Content |
-|------|-------|---------------------|
-| ~480 | `eigenvector_gives_gauge` | F_{AB}(X) = μX, X ≠ 0, \|μ\| = 1, A,B injective normalized → GaugePhaseEquiv A B |
+| # | Line | Lemma | Mathematical Content |
+|---|------|-------|---------------------|
+| 1 | ~441 | `eigenvector_det_ne_zero` | F_{AB}(X) = μX, X ≠ 0, \|μ\| = 1 → X invertible |
+| 2 | ~461 | `per_index_from_eigenvector` | F_{AB}(X) = μX, X invertible, \|μ\| = 1 → Bᵢ = μ̄ X⁻¹AᵢX |
 
-### Proof Decomposition (documented in docstring)
+### Proof Structure
 
-The proof has two major steps, each with fully proved helper lemmas that
-reduce the problem to specific sub-goals:
+```
+eigenvector_gives_gauge [PROVED — assembly, no sorry]
+├── eigenvector_det_ne_zero [sorry — needs multiplicative domain for kernel invariance]
+│   └── ker_X_all_of_inj [PROVED] → det_ne_zero_of_ker_all [PROVED]
+│       (reduces to: show ker(X) is B†-invariant)
+├── per_index_from_eigenvector [sorry — needs ∑‖Cᵢ‖²=D from multiplicative domain]
+│   └── sum_conj_mul_conjTranspose [PROVED] → each_zero_of_sum_conjTranspose_mul_self_zero [PROVED]
+│       (reduces to: show ∑‖Cᵢ‖²_F = D)
+└── GL construction via Matrix.nonsingInvUnit [PROVED — by rfl]
+```
 
-**Step 1 — X is invertible**: Needs ker(X) to be B†-invariant.
-- `ker_X_all_of_inj` [PROVED]: B†-kernel invariance → total kernel invariance
-- `det_ne_zero_of_ker_all` [PROVED]: total kernel invariance + X ≠ 0 → det(X) ≠ 0
-- **Gap**: showing ker(X) is B†-invariant (requires multiplicative domain theory)
+### Required Infrastructure (not yet formalized, ~200–500 lines)
 
-**Step 2 — Per-index relation** (Bᵢ = μ̄ X⁻¹AᵢX):
-- `sum_conj_mul_conjTranspose` [PROVED]: eigenvector eq + X invertible → ∑ CᵢBᵢ† = μI
-- `each_zero_of_sum_conjTranspose_mul_self_zero` [PROVED]: ∑ Rᵢ†Rᵢ = 0 → Rᵢ = 0
-- **Gap**: showing tr(∑ Cᵢ†Cᵢ) = D (requires doubly-stochastic gauge with TP condition)
+Both sorry require the **multiplicative domain theory** for CP maps:
 
-**Assembly** (GL construction via `Matrix.nonsingInvUnit`): trivial once Steps 1+2 hold.
+1. **Kadison–Schwarz equality**: `E(X†X) = E(X)†E(X)` iff X is in the
+   multiplicative domain. For peripheral eigenvectors with `|μ| = 1`,
+   the KS inequality becomes tight, placing X in the multiplicative domain.
 
-### Required Infrastructure (not yet formalized)
+2. **Multiplicative domain → kernel invariance** (Step 1): In the DS gauge
+   (unitality proved in `gauged_unital`), the KS equality forces kernel invariance.
 
-Both steps require infrastructure from the theory of **quantum channels with
-peripheral eigenvalues** (~200–500 lines of new formalization):
+3. **Multiplicative domain → HS norm tightness** (Step 2): The equality
+   `∑‖Cᵢ‖² = D` follows from multiplicative domain membership.
 
-1. **Multiplicative domain theory**: Kadison–Schwarz equality characterizes when
-   `E(X†X) = E(X)†E(X)` holds. Peripheral eigenvectors lie in the multiplicative
-   domain, which is a *-subalgebra. This gives kernel invariance (Step 1) and
-   the HS norm tightness (Step 2).
+4. **Note**: The "TP direction" of the DS gauge (`∑(A'ᵢ)†A'ᵢ = I`) is NOT needed
+   and does NOT hold in general. The proof uses multiplicative domain theory directly.
 
-2. **Doubly-stochastic gauge TP direction**: showing `∑ (A'ᵢ)†A'ᵢ = I` requires
-   `E†_A(σ⁻¹) = σ⁻¹`, which does NOT hold for general primitive CPTP maps
-   (counterexample: diagonal Kraus operators with unequal fixed point eigenvalues).
-   The correct approach uses multiplicative domain theory directly, bypassing
-   the need for the full DS gauge.
-
-3. **Alternative**: The PGVWC OBC intertwiner approach (quant-ph/0608197, Lemma 5)
-   uses parent Hamiltonian theory instead of channel analysis.
+**Alternative**: PGVWC OBC intertwiner approach (quant-ph/0608197, Lemma 5).
 
 **References**:
 - Wolf 2012, §6.2 (multiplicative domain + peripheral eigenvalues)

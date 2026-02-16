@@ -430,45 +430,72 @@ private lemma each_zero_of_sum_conjTranspose_mul_self_zero
     Complex.ext h_tr_re (Complex.le_def.mp h_psd_i.trace_nonneg).2.symm
   exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_i.trace_eq_zero_iff.mp h_tr_zero)
 
+/-- **Step 1 — Eigenvector invertibility** (sorry).
+
+If `F_{AB}(X) = μX` where `X ≠ 0`, `|μ| = 1`, both tensors are injective
+and normalized, then `X` is invertible.
+
+**Proof requires**: Multiplicative domain theory — showing ker(X) is B†-invariant
+from the eigenvector equation using Kadison-Schwarz equality in the DS gauge.
+See docstring of `eigenvector_gives_gauge` for details. -/
+private lemma eigenvector_det_ne_zero [NeZero D]
+    (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
+    (hA : IsInjective A) (hB : IsInjective B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hFX : mixedTransferMap A B X = μ • X)
+    (hμ : ‖μ‖ = 1) (hX : X ≠ 0) :
+    X.det ≠ 0 := by
+  sorry
+
+/-- **Step 2 — Per-index relation** (sorry).
+
+If `F_{AB}(X) = μX` where `X` is invertible, `|μ| = 1`, and both tensors
+are injective and normalized, then `Bᵢ = μ̄ · X⁻¹AᵢX` for each `i`.
+
+**Proof requires**: showing `tr(∑ Cᵢ†Cᵢ) = D` where `Cᵢ = X⁻¹AᵢX`.
+The PSD matrix `∑(μ̄Cᵢ - Bᵢ)†(μ̄Cᵢ - Bᵢ)` has trace = `∑‖Cᵢ‖² - D`.
+The bound `∑‖Cᵢ‖² ≥ D` is automatic (PSD trace ≥ 0).
+The reverse bound requires the multiplicative domain theory.
+See docstring of `eigenvector_gives_gauge` for details. -/
+private lemma per_index_from_eigenvector [NeZero D]
+    (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
+    (hA : IsInjective A) (hB : IsInjective B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hFX : mixedTransferMap A B X = μ • X)
+    (hμ : ‖μ‖ = 1) (hdet : X.det ≠ 0) :
+    ∀ i : Fin d, B i = starRingEnd ℂ μ • (X⁻¹ * A i * X) := by
+  sorry
+
 /-- **Eigenvector implies gauge equivalence** (PGVWC 2007, Lemma 5; Wolf 2012, §6.2).
 
 If `F_{AB}(X) = μX` where `X ≠ 0`, `|μ| = 1`, both tensors are injective
 and normalized, then `A` and `B` are gauge-phase equivalent.
 
-**Proof outline** (requires the doubly-stochastic gauge or PGVWC):
+**Assembly** (PROVED, no sorry): chains `eigenvector_det_ne_zero` (Step 1)
+and `per_index_from_eigenvector` (Step 2) to construct the GL(D,ℂ) element.
+The GL element is `Y = X⁻¹` with phase `ζ = μ̄ = conj(μ)`.
+
+**Proof outline** (for the sorry helper lemmas):
 
 **Step 1 — X is invertible**: The kernel of X is invariant under all `Bₖ†`.
-Proof: pass to the doubly-stochastic gauge `A'ᵢ = σ⁻¹ᐟ² Aᵢ σ¹ᐟ²` where
-`σ` is the unique PD fixed point of `E_A(Y) = ∑ AᵢYAᵢ†`. The transformed
-channel is unital (`∑ A'ᵢ(A'ᵢ)† = I`). The Kadison-Schwarz equality
-condition (from `|μ| = 1`) forces each `A'ᵢ X' (B'ᵢ)†` to contribute
-consistently, giving kernel invariance. Since B is injective (spans `M_D(ℂ)`),
-`ker(X)` is invariant under ALL matrices. If ker(X) ≠ {0} then X = 0, contradiction.
+Pass to the DS gauge `A'ᵢ = σ⁻¹ᐟ² Aᵢ σ¹ᐟ²` where `σ` is the QPF fixed point.
+The KS equality condition (from `|μ| = 1`) forces kernel invariance.
+Since B is injective, `ker(X)` is invariant under ALL matrices, forcing X = 0.
 
-Once X is invertible, the proof structure is as follows. Set `Cᵢ = X⁻¹AᵢX`.
-From the eigenvector equation `∑ AᵢXBᵢ† = μX`, we derive `∑ CᵢBᵢ† = μI`
-(this step is fully proved in `sum_conj_mul_conjTranspose`).
+**Step 2 — Per-index relation**: Set `Cᵢ = X⁻¹AᵢX`, `Dᵢ = μ̄Cᵢ`.
+From `∑ CᵢBᵢ† = μI` (proved in `sum_conj_mul_conjTranspose`), the PSD matrix
+`∑(Dᵢ - Bᵢ)†(Dᵢ - Bᵢ)` has trace = `∑‖Cᵢ‖² - D`. Need `∑‖Cᵢ‖² = D`
+(from multiplicative domain theory). Then `Dᵢ = Bᵢ` for each i.
 
-**Step 2 — Per-index relation**: Set `Dᵢ = μ̄Cᵢ`. Then `∑ DᵢBᵢ† = I`.
-The PSD matrix `∑(Dᵢ - Bᵢ)†(Dᵢ - Bᵢ)` has trace = `tr(∑Cᵢ†Cᵢ) - D`.
-Expanding: `tr(∑Cᵢ†Cᵢ) = tr(E_A(XX†) · (X†X)⁻¹)`, which equals D in the
-doubly-stochastic gauge. With trace 0 for a PSD matrix, `Dᵢ = Bᵢ` for each i,
-giving `Bᵢ = μ̄ X⁻¹AᵢX`. The GL element is `Y = X⁻¹` with phase `ζ = μ̄`.
-(This uses `each_zero_of_sum_conjTranspose_mul_self_zero`.)
+**Available helpers** (all proved, no sorry):
+`ker_X_all_of_inj`, `det_ne_zero_of_ker_all`, `sum_conj_mul_conjTranspose`,
+`each_zero_of_sum_conjTranspose_mul_self_zero`, `gauged_unital` (Channel/DSGauge).
 
-**Required infrastructure** (not yet formalized):
-- Doubly-stochastic gauge: needs `σ⁻¹` to be a fixed point of
-  `E†_A(Y) = ∑ Aᵢ†YAᵢ`, which follows from the detailed balance of the
-  gauged channel (uses `σ^{1/2}` from `QPF/Uniqueness.lean`)
-- Kadison-Schwarz equality ⟺ multiplicative domain (~200 lines)
-- HS contraction tightness → per-index intertwining (~100 lines)
-- Alternative: PGVWC OBC approach (Lemma 5, quant-ph/0608197)
-
-**Available helper lemmas** (fully proved, no sorry):
-- `ker_X_all_of_inj`: B†-kernel invariance → total kernel invariance
-- `det_ne_zero_of_ker_all`: total kernel invariance + X ≠ 0 → det(X) ≠ 0
-- `sum_conj_mul_conjTranspose`: eigenvector eq + X invertible → `∑ CᵢBᵢ† = μI`
-- `each_zero_of_sum_conjTranspose_mul_self_zero`: `∑ Rᵢ†Rᵢ = 0 → Rᵢ = 0` -/
+**Required infrastructure** (~200-500 lines, not yet formalized):
+multiplicative domain theory for peripheral eigenvectors of CP maps.
+Alternative: PGVWC OBC intertwiner approach (quant-ph/0608197, Lemma 5). -/
 private lemma eigenvector_gives_gauge [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
     (hA : IsInjective A) (hB : IsInjective B)
@@ -477,7 +504,9 @@ private lemma eigenvector_gives_gauge [NeZero D]
     (hFX : mixedTransferMap A B X = μ • X)
     (hμ : ‖μ‖ = 1) (hX : X ≠ 0) :
     GaugePhaseEquiv A B := by
-  sorry
+  have hdet := eigenvector_det_ne_zero A B X μ hA hB hA_norm hB_norm hFX hμ hX
+  have hpi := per_index_from_eigenvector A B X μ hA hB hA_norm hB_norm hFX hμ hdet
+  exact ⟨(Matrix.nonsingInvUnit X (Ne.isUnit hdet))⁻¹, starRingEnd ℂ μ, fun i => (hpi i)⟩
 
 /-- **Eigenvalue rigidity** (Pérez-García et al. 2007, Lemma 5):
 if the mixed transfer spectral radius is ≥ 1, then A and B are
