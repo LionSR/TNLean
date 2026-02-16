@@ -16,6 +16,7 @@ section DSGauge
 
 variable [DecidableEq (Fin D)] [NeZero D]
 
+omit [NeZero D] in
 /-- If `S` is invertible and `S * S† = ρ`, then the gauged operators
 `A'_i = S⁻¹ A_i S` satisfy `∑ A'_i A'_i† = I` whenever `E_A(ρ) = ρ`. -/
 theorem gauged_unital
