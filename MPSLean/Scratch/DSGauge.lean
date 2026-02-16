@@ -30,22 +30,25 @@ theorem gauged_unital
     rw [Matrix.det_conjTranspose]; exact star_ne_zero.mpr hS_inv
   have hStinv_mul : (Sᴴ)⁻¹ * Sᴴ = 1 := Matrix.nonsing_inv_mul Sᴴ (Ne.isUnit hSt_inv)
   have hStmul_inv : Sᴴ * (Sᴴ)⁻¹ = 1 := Matrix.mul_nonsing_inv Sᴴ (Ne.isUnit hSt_inv)
-  -- Each summand: (S⁻¹ A_i S)(S⁻¹ A_i S)† = S⁻¹ A_i (SS†) A_i† (S†)⁻¹
+  -- Each summand: (S⁻¹ A_i S)(S⁻¹ A_i S)† = S⁻¹ (A_i ρ A_i†) (S†)⁻¹
   have h_term : ∀ i, (S⁻¹ * A i * S) * (S⁻¹ * A i * S)ᴴ =
       S⁻¹ * (A i * ρ * (A i)ᴴ) * (Sᴴ)⁻¹ := by
     intro i
-    -- (M₁ * M₂ * M₃)ᴴ = M₃ᴴ * M₂ᴴ * M₁ᴴ
     rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-        Matrix.conjTranspose_nonsing_inv]
-    -- Goal: S⁻¹ * A i * S * (Sᴴ * ((A i)ᴴ * Sᴴ⁻¹)) = S⁻¹ * (A i * ρ * (A i)ᴴ) * Sᴴ⁻¹
-    -- Rewrite ρ = S * Sᴴ
-    rw [← hSS]
-    ring
+        Matrix.conjTranspose_nonsing_inv, ← hSS]
+    simp only [Matrix.mul_assoc]
   -- Sum over i
   simp_rw [h_term]
-  rw [← Finset.mul_sum, ← Finset.sum_mul]
-  -- Now: S⁻¹ * (∑ A_i * (S * Sᴴ) * (A_i)ᴴ) * (Sᴴ)⁻¹ = 1
-  -- = S⁻¹ * E_A(ρ) * (Sᴴ)⁻¹ = S⁻¹ * ρ * (Sᴴ)⁻¹
-  sorry
+  -- Factor S⁻¹ from left and (Sᴴ)⁻¹ from right
+  -- Goal: ∑ i, S⁻¹ * (A i * ρ * (A i)ᴴ) * Sᴴ⁻¹ = 1
+  -- Each term is S⁻¹ * (A i * ρ * (A i)ᴴ) * Sᴴ⁻¹ = (S⁻¹ * (A i * ρ * (A i)ᴴ)) * Sᴴ⁻¹
+  -- Use Finset.sum_mul (reversed) and Finset.mul_sum (reversed)
+  have h_sum_eq : ∑ i : Fin d, A i * ρ * (A i)ᴴ = ρ := by
+    rw [← transferMap_apply]; exact hfix
+  -- Rewrite: ∑ i, S⁻¹ * (A i * ρ * (A i)ᴴ) * Sᴴ⁻¹
+  --        = (∑ i, S⁻¹ * (A i * ρ * (A i)ᴴ)) * Sᴴ⁻¹
+  --        = (S⁻¹ * ∑ i, (A i * ρ * (A i)ᴴ)) * Sᴴ⁻¹
+  rw [← Finset.sum_mul, ← Finset.mul_sum, h_sum_eq, ← hSS,
+      Matrix.mul_assoc, Matrix.mul_assoc, hStmul_inv, Matrix.mul_one, hSinv_mul]
 
 end DSGauge
