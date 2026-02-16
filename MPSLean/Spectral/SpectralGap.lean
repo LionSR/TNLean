@@ -430,62 +430,39 @@ private lemma each_zero_of_sum_conjTranspose_mul_self_zero
     Complex.ext h_tr_re (Complex.le_def.mp h_psd_i.trace_nonneg).2.symm
   exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_i.trace_eq_zero_iff.mp h_tr_zero)
 
-/-- **Step 1 — Eigenvector invertibility** (PGVWC 2007; Wolf 2012, §6.2).
-
-If `F_{AB}(X) = μX` where `X ≠ 0`, `|μ| = 1`, both tensors are injective
-and normalized, then `X` is invertible (`det(X) ≠ 0`).
-
-**Proof sketch**: The kernel of `X` is invariant under all `Bₖ†`.
-Pass to the doubly-stochastic gauge `A'ᵢ = σ⁻¹ᐟ² Aᵢ σ¹ᐟ²` where
-`σ` is the unique PD fixed point of `E_A(Y) = ∑ AᵢYAᵢ†`. The transformed
-channel is unital (`∑ A'ᵢ(A'ᵢ)† = I`). The Kadison-Schwarz equality
-condition (from `|μ| = 1`) forces kernel invariance. Since B is injective,
-`ker(X)` is invariant under ALL matrices. If ker(X) ≠ {0} then X = 0, contradiction.
-
-**Required infrastructure** (not yet formalized):
-- Doubly-stochastic gauge (uses `σ^{1/2}` from `QPF/Uniqueness.lean`)
-- Kadison-Schwarz equality ⟺ multiplicative domain (~200 lines) -/
-private lemma eigenvector_det_ne_zero [NeZero D]
-    (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
-    (hA : IsInjective A) (hB : IsInjective B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (hFX : mixedTransferMap A B X = μ • X)
-    (hμ : ‖μ‖ = 1) (hX : X ≠ 0) :
-    X.det ≠ 0 := by
-  sorry
-
-/-- **Step 2 — Per-index relation** (PGVWC 2007, Lemma 5; Wolf 2012, §6.2).
-
-If `F_{AB}(X) = μX` where `X` is invertible, `|μ| = 1`, and both tensors
-are injective and normalized, then `Bᵢ = μ̄ · X⁻¹AᵢX` for each `i`.
-
-**Proof sketch**: Set `Cᵢ = X⁻¹AᵢX` and `Dᵢ = μ̄Cᵢ`. From the eigenvector
-equation, `∑ DᵢBᵢ† = I`. The PSD matrix `∑(Dᵢ - Bᵢ)†(Dᵢ - Bᵢ)` has
-`trace = ∑‖Cᵢ‖²_F - D`. In the doubly-stochastic gauge (using the QPF
-fixed point `σ`), the KS equality condition forces `∑‖Cᵢ‖² = D`, so the
-PSD trace is 0, giving `Dᵢ = Bᵢ` for each `i`.
-
-**Required infrastructure** (not yet formalized):
-- Doubly-stochastic gauge + Kadison-Schwarz equality → ∑‖Cᵢ‖² = D (~200 lines)
-- Alternative: PGVWC OBC approach (quant-ph/0608197, Lemma 5) -/
-private lemma per_index_from_eigenvector [NeZero D]
-    (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
-    (hA : IsInjective A) (hB : IsInjective B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (hFX : mixedTransferMap A B X = μ • X)
-    (hμ : ‖μ‖ = 1) (hdet : X.det ≠ 0) :
-    ∀ i : Fin d, B i = starRingEnd ℂ μ • (X⁻¹ * A i * X) := by
-  sorry
-
 /-- **Eigenvector implies gauge equivalence** (PGVWC 2007, Lemma 5; Wolf 2012, §6.2).
 
 If `F_{AB}(X) = μX` where `X ≠ 0`, `|μ| = 1`, both tensors are injective
 and normalized, then `A` and `B` are gauge-phase equivalent.
 
-Assembled from `eigenvector_det_ne_zero` (Step 1) and
-`per_index_from_eigenvector` (Step 2). The assembly is fully proved.
+**Proof outline** (requires the doubly-stochastic gauge or PGVWC):
+
+**Step 1 — X is invertible**: The kernel of X is invariant under all `Bₖ†`.
+Proof: pass to the doubly-stochastic gauge `A'ᵢ = σ⁻¹ᐟ² Aᵢ σ¹ᐟ²` where
+`σ` is the unique PD fixed point of `E_A(Y) = ∑ AᵢYAᵢ†`. The transformed
+channel is unital (`∑ A'ᵢ(A'ᵢ)† = I`). The Kadison-Schwarz equality
+condition (from `|μ| = 1`) forces each `A'ᵢ X' (B'ᵢ)†` to contribute
+consistently, giving kernel invariance. Since B is injective (spans `M_D(ℂ)`),
+`ker(X)` is invariant under ALL matrices. If ker(X) ≠ {0} then X = 0, contradiction.
+
+Once X is invertible, the proof structure is as follows. Set `Cᵢ = X⁻¹AᵢX`.
+From the eigenvector equation `∑ AᵢXBᵢ† = μX`, we derive `∑ CᵢBᵢ† = μI`
+(this step is fully proved in `sum_conj_mul_conjTranspose`).
+
+**Step 2 — Per-index relation**: Set `Dᵢ = μ̄Cᵢ`. Then `∑ DᵢBᵢ† = I`.
+The PSD matrix `∑(Dᵢ - Bᵢ)†(Dᵢ - Bᵢ)` has trace = `tr(∑Cᵢ†Cᵢ) - D`.
+Expanding: `tr(∑Cᵢ†Cᵢ) = tr(E_A(XX†) · (X†X)⁻¹)`, which equals D in the
+doubly-stochastic gauge. With trace 0 for a PSD matrix, `Dᵢ = Bᵢ` for each i,
+giving `Bᵢ = μ̄ X⁻¹AᵢX`. The GL element is `Y = X⁻¹` with phase `ζ = μ̄`.
+(This uses `each_zero_of_sum_conjTranspose_mul_self_zero`.)
+
+**Required infrastructure** (not yet formalized):
+- Doubly-stochastic gauge: needs `σ⁻¹` to be a fixed point of
+  `E†_A(Y) = ∑ Aᵢ†YAᵢ`, which follows from the detailed balance of the
+  gauged channel (uses `σ^{1/2}` from `QPF/Uniqueness.lean`)
+- Kadison-Schwarz equality ⟺ multiplicative domain (~200 lines)
+- HS contraction tightness → per-index intertwining (~100 lines)
+- Alternative: PGVWC OBC approach (Lemma 5, quant-ph/0608197)
 
 **Available helper lemmas** (fully proved, no sorry):
 - `ker_X_all_of_inj`: B†-kernel invariance → total kernel invariance
@@ -500,9 +477,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
     (hFX : mixedTransferMap A B X = μ • X)
     (hμ : ‖μ‖ = 1) (hX : X ≠ 0) :
     GaugePhaseEquiv A B := by
-  have hdet := eigenvector_det_ne_zero A B X μ hA hB hA_norm hB_norm hFX hμ hX
-  have hpi := per_index_from_eigenvector A B X μ hA hB hA_norm hB_norm hFX hμ hdet
-  exact ⟨(Matrix.nonsingInvUnit X (Ne.isUnit hdet))⁻¹, starRingEnd ℂ μ, fun i => (hpi i)⟩
+  sorry
 
 /-- **Eigenvalue rigidity** (Pérez-García et al. 2007, Lemma 5):
 if the mixed transfer spectral radius is ≥ 1, then A and B are
