@@ -48,32 +48,12 @@ noncomputable scoped instance : NormedRing (Matrix (Fin D) (Fin D) ℂ) :=
 noncomputable scoped instance : NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.linftyOpNormedAlgebra
 
-/-! ### Transfer matrix (vectorized transfer operator) -/
-
-/-- The **transfer matrix**: `T_AB = ∑_k A^k ⊗ conj(B^k)`. -/
-noncomputable def transferMatrix (A B : MPSTensor d D) :
-    Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
-  ∑ k : Fin d, Matrix.kroneckerMap (· * ·) (A k) (star (B k))
-
-/-- The transfer matrix for `A = B` is the standard self-transfer matrix. -/
-theorem transferMatrix_self (A : MPSTensor d D) :
-    transferMatrix A A = ∑ k : Fin d, Matrix.kroneckerMap (· * ·) (A k) (star (A k)) :=
-  rfl
-
 /-! ### Spectral radius of the mixed transfer operator -/
 
 /-- The **spectral radius** of the mixed transfer operator. -/
 noncomputable def mixedTransferSpectralRadius (A B : MPSTensor d D) : ENNReal :=
   spectralRadius ℂ
     ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (mixedTransferMap A B))
-
-/-- The spectral radius of the mixed transfer operator equals
-the spectral radius of the vectorized transfer matrix. -/
-theorem mixedTransferSpectralRadius_eq_transferMatrix
-    (A B : MPSTensor d D) :
-    mixedTransferSpectralRadius A B =
-      (⨆ k ∈ spectrum ℂ (transferMatrix A B), (‖k‖₊ : ENNReal)) := by
-  sorry
 
 /-! ### Frobenius norm squared -/
 
@@ -314,14 +294,215 @@ theorem spectralRadius_mixedTransfer_le_one
     exact_mod_cast eigenvalue_norm_le_one A B hA_norm hB_norm k
       (Module.End.hasEigenvalue_iff_mem_spectrum.mpr (h_spec ▸ hk))
 
-/-- **Eigenvalue rigidity** (Pérez-García et al. 2007, Lemma 5). -/
-axiom modulus_one_eigenvalue_implies_gauge
+/-! ### Helper lemmas for the eigenvalue rigidity theorem -/
+
+/-
+**Eigenvector implies gauge** (the algebraic core of eigenvalue rigidity).
+
+If `∑ A_i X B_i† = μX` where `X ≠ 0`, `|μ| = 1`, both tensors are injective
+and normalized, then `A` and `B` are gauge-phase equivalent.
+
+Proof strategy:
+
+1. **X is invertible**: The kernel of X is invariant under all B_i†
+   (from `∑ A_i X B_i† = μX` and `∑ A_i† A_i = I`). By injectivity of B,
+   the B_i† span all matrices, so ker(X) is invariant under everything.
+   If ker(X) ≠ {0}, then X = 0, contradiction.
+
+2. **Per-index relation**: Set `C_i = X⁻¹ A_i X`. From the eigenvector equation,
+   `∑ C_i B_i† = μI`. By Cauchy-Schwarz on the Hilbert-Schmidt inner product:
+   `D² = |tr(∑ C_i B_i†)|² = |∑⟨B_i, C_i⟩|² ≤ (∑‖C_i‖²)(∑‖B_i‖²) = tr(∑C_i†C_i)·D`.
+   So `tr(∑ C_i†C_i) ≥ D`. Also `∑(C_i - μB_i)†(C_i - μB_i) = ∑C_i†C_i - I ≥ 0`
+   (the trace computation uses `∑B_i†B_i = I` and `∑C_iB_i† = μI`).
+   Together with `E_A(XX†) = XX†` (which follows from QPF theory applied to
+   the unique PD fixed point of the transfer map), one obtains
+   `tr(∑C_i†C_i) = D`, so the PSD matrix `∑(C_i - μB_i)†(C_i - μB_i)` has
+   trace 0, forcing `C_i = μB_i` for each i, i.e., `B_i = μ⁻¹X⁻¹A_iX`.
+
+References:
+* Pérez-García et al., Matrix Product State Representations (2007), Lemma 5
+* Wolf, Quantum Channels & Operations (2012), §6.2
+-/
+
+/-- Kernel of the eigenvector is invariant under `Bₖ†` (via mulVec).
+
+**Proof idea** (Pérez-García et al. 2007; Wolf 2012, §6.2):
+Pass to the doubly-stochastic gauge `A'ᵢ = ρ⁻¹ᐟ² Aᵢ ρ¹ᐟ²` where `ρ` is the
+unique PD fixed point of `E_A`. In that gauge, the map `Φ(Y) = ∑ A'ᵢ Y (A'ᵢ)†`
+is both unital and trace-preserving. The Kadison-Schwarz equality condition
+(`‖Φ(X')‖_HS = ‖X'‖_HS` with `|μ|=1`) forces each `A'ᵢ X' (B'ᵢ)†` to be
+proportional to `X'` (tightness of CS). This in turn gives the column-level
+kernel invariance. The formalization needs: (1) the doubly-stochastic gauge
+construction (conjugation by `ρ^{1/2}`), (2) KS equality ↔ multiplicative domain,
+and (3) the column-level consequence. -/
+private lemma ker_eigenvector_invariant
+    (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hFX : mixedTransferMap A B X = μ • X) (hμ : ‖μ‖ = 1)
+    (v : Fin D → ℂ) (hv : X *ᵥ v = 0) :
+    ∀ k : Fin d, X *ᵥ ((B k)ᴴ *ᵥ v) = 0 := by
+  sorry
+
+/-- If ker(X) is B†-invariant and B is injective, then ker(X) is
+invariant under ALL matrices (adapted from QPF/PosDef.lean). -/
+private lemma ker_X_all_of_inj
+    (B : MPSTensor d D) (hB : IsInjective B)
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (h : ∀ k : Fin d, ∀ v, X *ᵥ v = 0 → X *ᵥ ((B k)ᴴ *ᵥ v) = 0) :
+    ∀ (M : Matrix (Fin D) (Fin D) ℂ) (v : Fin D → ℂ),
+      X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0 := by
+  intro M v hv
+  -- M† is in span of {B k}, so M†† = M is in span of {(B k)†}
+  suffices ∀ N : Matrix (Fin D) (Fin D) ℂ, X *ᵥ (Nᴴ *ᵥ v) = 0 by
+    specialize this Mᴴ; rwa [Matrix.conjTranspose_conjTranspose] at this
+  intro N
+  have hN : N ∈ Submodule.span ℂ (Set.range B) := hB ▸ Submodule.mem_top
+  induction hN using Submodule.span_induction with
+  | mem y hy =>
+    obtain ⟨k, rfl⟩ := hy
+    exact h k v hv
+  | zero => simp
+  | add a b _ _ ha hb =>
+    rw [Matrix.conjTranspose_add, Matrix.add_mulVec, Matrix.mulVec_add, ha, hb, add_zero]
+  | smul c a _ ha =>
+    rw [Matrix.conjTranspose_smul, Matrix.smul_mulVec, Matrix.mulVec_smul, ha, smul_zero]
+
+/-- If X ≠ 0 and ker(X) is invariant under all matrices, then det(X) ≠ 0. -/
+private lemma det_ne_zero_of_ker_all [NeZero D]
+    (X : Matrix (Fin D) (Fin D) ℂ)
+    (hX : X ≠ 0)
+    (h_all : ∀ M : Matrix (Fin D) (Fin D) ℂ, ∀ v, X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0) :
+    X.det ≠ 0 := by
+  by_contra h_det
+  rw [Matrix.exists_mulVec_eq_zero_iff.symm] at h_det
+  obtain ⟨v, hv_ne, hv⟩ := h_det
+  -- v ≠ 0 and Xv = 0; we'll show Xw = 0 for all w, hence X = 0
+  have h_surj : ∀ w : Fin D → ℂ, X *ᵥ w = 0 := by
+    intro w
+    -- find some k with v k ≠ 0
+    have ⟨k, hk⟩ : ∃ k, v k ≠ 0 := by
+      by_contra h_all_zero; push_neg at h_all_zero
+      exact hv_ne (funext h_all_zero)
+    -- Use Matrix.vecMulVec to map v to w via a rank-1 matrix
+    -- M = (column w) * (row that picks out the k-th component of v, scaled)
+    -- Specifically, M such that M *ᵥ v = w
+    -- Take M = vecMulVec w (fun j => if j = k then (v k)⁻¹ else 0)
+    let c : Fin D → ℂ := fun j => if j = k then (v k)⁻¹ else 0
+    have hMv : (Matrix.vecMulVec w c) *ᵥ v = w := by
+      ext i
+      simp only [Matrix.mulVec, Matrix.vecMulVec, Matrix.of_apply, dotProduct]
+      conv_lhs => arg 2; ext j; rw [mul_assoc]
+      rw [Finset.sum_eq_single k]
+      · simp [c, hk]
+      · intro j _ hjk; simp [c, hjk]
+      · intro hk_abs; exact absurd (Finset.mem_univ k) hk_abs
+    rw [← hMv]; exact h_all _ v hv
+  have h_X_zero : X = 0 := by
+    ext i j
+    -- X *ᵥ e_j = 0, and (X *ᵥ e_j) i = X i j
+    have h_ej := h_surj (fun k => if k = j then 1 else 0)
+    have : (X *ᵥ (fun k => if k = j then 1 else 0)) i = X i j := by
+      simp only [Matrix.mulVec, dotProduct]
+      rw [Finset.sum_eq_single j]
+      · simp
+      · intro b _ hbj; simp [hbj]
+      · intro hj; exact absurd (Finset.mem_univ j) hj
+    rw [show (0 : Matrix (Fin D) (Fin D) ℂ) i j = 0 from rfl]
+    rw [← this]; exact congr_fun h_ej i
+  exact hX h_X_zero
+
+/-- **Per-index gauge relation**: if X is invertible and satisfies the
+eigenvector equation, then `B i = μ̄ · X⁻¹ A i X` for each i.
+
+**Proof idea**: Define `Cᵢ = X⁻¹ AᵢX`. From `hFX`, left-multiplying by `X⁻¹`:
+`∑ Cᵢ Bᵢ† = μI`. The PSD matrix `∑(Cᵢ - μ̄Bᵢ)†(Cᵢ - μ̄Bᵢ)` expands to
+`∑ Cᵢ†Cᵢ + ∑ Bᵢ†Bᵢ - μ̄(∑ Bᵢ Cᵢ†) - μ(∑ Cᵢ Bᵢ†) = ∑ Cᵢ†Cᵢ + I - 2I`
+`= ∑ Cᵢ†Cᵢ - I`. To conclude this is zero, show `tr(∑ Cᵢ†Cᵢ) = D`:
+use that `X†X` is proportional to the unique PD fixed point `ρ_A` of
+`E†_A(Y) = ∑ Aᵢ†Y Aᵢ` (from QPF theory + X invertible), which gives
+`∑ Cᵢ†Cᵢ = X†(∑ Aᵢ†(X†X)⁻¹Aᵢ)X = X†·(X†X)⁻¹·X = I`, so the PSD matrix
+has trace 0 and hence equals 0, forcing `Cᵢ = μ̄Bᵢ` for each i.
+
+Alternatively (without the doubly-stochastic gauge): use the PGVWC approach
+via OBC intertwiners (Lemma 5 of quant-ph/0608197) combined with Horn-Johnson
+Theorem 4.4.14 to descend from the Kronecker to the direct equation. -/
+private lemma per_index_relation [NeZero D]
+    (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
+    (hA : IsInjective A) (hB : IsInjective B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hFX : mixedTransferMap A B X = μ • X)
+    (hμ : ‖μ‖ = 1) (hdet : X.det ≠ 0) :
+    ∀ i : Fin d, B i = starRingEnd ℂ μ • (X⁻¹ * A i * X) := by
+  sorry
+
+private lemma eigenvector_gives_gauge [NeZero D]
+    (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
+    (hA : IsInjective A) (hB : IsInjective B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hFX : mixedTransferMap A B X = μ • X)
+    (hμ : ‖μ‖ = 1) (hX : X ≠ 0) :
+    GaugePhaseEquiv A B := by
+  -- Step 1: X is invertible
+  have h_ker_inv := ker_eigenvector_invariant A B X μ hA_norm hFX hμ
+  have h_all := ker_X_all_of_inj B hB X (fun k v hv => h_ker_inv v hv k)
+  have hdet : X.det ≠ 0 := det_ne_zero_of_ker_all X hX (fun M v hv => h_all M v hv)
+  -- Step 2: Per-index relation
+  have h_rel := per_index_relation A B X μ hA hB hA_norm hB_norm hFX hμ hdet
+  -- Step 3: Construct the GL element and phase
+  have hX_unit : IsUnit X.det := Ne.isUnit hdet
+  let Z : GL (Fin D) ℂ := Matrix.GeneralLinearGroup.mk'' X hX_unit
+  let Y : GL (Fin D) ℂ := Z⁻¹
+  have hY_coe : (Y : Matrix (Fin D) (Fin D) ℂ) = X⁻¹ := by
+    simp only [Y, Matrix.GeneralLinearGroup.coe_inv, Z]
+    rfl
+  have hY_inv_coe : ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = X := by
+    simp only [Y, inv_inv, Z]
+    rfl
+  refine ⟨Y, starRingEnd ℂ μ, fun i => ?_⟩
+  rw [h_rel i, hY_coe, hY_inv_coe]
+
+/-- **Eigenvalue rigidity** (Pérez-García et al. 2007, Lemma 5):
+if the mixed transfer spectral radius is ≥ 1, then A and B are
+gauge-phase equivalent. -/
+theorem modulus_one_eigenvalue_implies_gauge
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hsr : mixedTransferSpectralRadius A B ≥ 1) :
-    GaugePhaseEquiv A B
+    GaugePhaseEquiv A B := by
+  -- Edge case: D = 0
+  rcases eq_or_ne D 0 with rfl | hD
+  · -- For D = 0, all matrices are trivially equal; any GL element works
+    exact ⟨1, 1, fun i => by ext a; exact a.elim0⟩
+  haveI : NeZero D := ⟨hD⟩
+  -- Step 1: Extract eigenvalue with |μ| = 1 and eigenvector X ≠ 0
+  -- The spectral radius equals 1 (≥ 1 from hypothesis, ≤ 1 already proved)
+  set V := Matrix (Fin D) (Fin D) ℂ
+  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
+  let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
+  haveI : Nontrivial V := by
+    haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+    exact Matrix.nonempty
+  haveI : Nontrivial (V →L[ℂ] V) := ContinuousLinearMap.instNontrivialId
+  -- Spectral radius is achieved
+  obtain ⟨μ, hμ_spec, hμ_norm⟩ := spectrum.exists_nnnorm_eq_spectralRadius F'
+  -- Transfer to eigenvalue of the linear map
+  have h_spec_eq := AlgEquiv.spectrum_eq Φ (mixedTransferMap A B)
+  have hμ_spec_end : μ ∈ spectrum ℂ (mixedTransferMap A B) := h_spec_eq ▸ hμ_spec
+  have hμ_ev : Module.End.HasEigenvalue (mixedTransferMap A B) μ :=
+    Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμ_spec_end
+  obtain ⟨X, hX_mem, hX_ne⟩ := hμ_ev.exists_hasEigenvector
+  have hFX : mixedTransferMap A B X = μ • X := Module.End.mem_eigenspace_iff.mp hX_mem
+  -- Step 2: Show |μ| = 1
+  have hμ_le : ‖μ‖ ≤ 1 := eigenvalue_norm_le_one A B hA_norm hB_norm μ hμ_ev
+  have hμ_ge : (1 : ℝ≥0∞) ≤ ‖μ‖₊ := by rw [hμ_norm]; exact hsr
+  have hμ_eq : ‖μ‖ = 1 := le_antisymm hμ_le (by
+    rw [ENNReal.one_le_coe_iff] at hμ_ge; exact_mod_cast hμ_ge)
+  -- Step 3: Apply the core algebraic lemma
+  exact eigenvector_gives_gauge A B X μ hA hB hA_norm hB_norm hFX hμ_eq hX_ne
 
 /-- **Spectral gap for distinct blocks**: `ρ(F_{AB}) < 1` when `A ≇ B`. -/
 theorem spectralRadius_mixedTransfer_lt_one

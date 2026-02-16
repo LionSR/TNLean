@@ -42,8 +42,7 @@ that is not yet available in Mathlib.
 
 * `evalWord_replicate` — evalWord on replicated single letters gives matrix powers
 * `evalWord_flatten_replicate` — evalWord on flattened replicated words gives matrix powers
-* `sameMPV₂_implies_perBlock_sameMPV` — block separation from SameMPV₂ (contains sorry)
-* `fundamentalTheorem_multiBlock_complete` — the final multi-block FT (no separation hyp)
+* `mpv_const_eq_trace_pow` — mpv of constant configurations as traces of powers
 
 ## References
 
@@ -107,58 +106,23 @@ locus) requires algebraic geometry tools not currently in Mathlib.
 See also `evalWord_flatten_replicate` for the key combinatorial identity.
 -/
 
-/-- Algebraic block separation: from `∑_k μ_k^N · δ_k(σ) = 0` for all `N, σ`
-(with `δ_k(σ) = mpv(A_k,σ) - mpv(B_k,σ)`), conclude per-block `SameMPV`.
+/-!
+### Status
 
-See the section docstring above for the mathematical proof strategy. -/
-private theorem block_powsum_separation
-    (μ : Fin r → ℂ) (hμ_inj : Function.Injective μ) (hμ_ne : ∀ k, μ k ≠ 0)
-    (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
-    (hδ : ∀ N (σ : Fin N → Fin d),
-      ∑ k, (μ k) ^ N • (mpv (A k) σ - mpv (B k) σ) = 0) :
-    ∀ k, SameMPV (A k) (B k) := by
-  intro k N σ
-  -- For each fixed N and σ, we need to extract δ_k(σ) = 0 from the summed equation.
-  -- The hypothesis gives us: ∀ N σ, ∑_j μ_j^N · δ_j(σ) = 0
-  -- The multiplicative structure of evalWord (via repeated words) combined with
-  -- Newton's identities and the distinctness of μ_k forces per-block vanishing.
-  -- See the section docstring for the full mathematical argument.
-  sorry
+The per-block separation statement one might hope for,
 
-/-- **Block separation from `SameMPV₂`.**
+`(∀ N σ, ∑ k, (μ k) ^ N • (mpv (A k) σ - mpv (B k) σ) = 0) → ∀ k, SameMPV (A k) (B k)`,
 
-From the global trace identities for block-diagonal tensors, recover per-block MPV equality.
-This is the key separation step in the multi-block Fundamental Theorem.
+is **false** without additional hypotheses (e.g. canonical-form normalization preventing
+rescalings between the block tensors and the phases `μ k`).
 
-The proof reduces to `block_powsum_separation` via `sameMPV₂_summed_blocks`. -/
-theorem sameMPV₂_implies_perBlock_sameMPV
-    (μ : Fin r → ℂ) (hμ_inj : Function.Injective μ)
-    (hμ_ne : ∀ k, μ k ≠ 0)
-    (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
-    (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
-    ∀ k, SameMPV (A k) (B k) := by
-  apply block_powsum_separation μ hμ_inj hμ_ne A B hA
-  intro N σ
-  have := sameMPV₂_summed_blocks μ A B hSame₂ N σ
-  simp only [smul_sub, Finset.sum_sub_distrib]
-  exact sub_eq_zero.mpr this
+Accordingly, this file currently only provides the combinatorial helper lemmas
+`evalWord_replicate`, `evalWord_flatten_replicate`, and `mpv_const_eq_trace_pow`.
 
-/-- **Full multi-block Fundamental Theorem (no separation hypothesis).**
-
-Combining `sameMPV₂_implies_perBlock_sameMPV` with the assembly machinery
-gives the complete result: `SameMPV₂` on block-diagonal tensors with distinct
-nonzero phases implies global gauge equivalence. -/
-theorem fundamentalTheorem_multiBlock_complete
-    (μ : Fin r → ℂ) (hμ_inj : Function.Injective μ)
-    (hμ_ne : ∀ k, μ k ≠ 0)
-    (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
-    (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
-    GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
-  (fundamentalTheorem_multiBlock_fromSameMPV₂ μ A B hA hSame₂
-    (sameMPV₂_implies_perBlock_sameMPV μ hμ_inj hμ_ne A B hA hSame₂)).2.1
+For end-to-end results from `SameMPV₂`, use
+`fundamentalTheorem_multiBlock_fromSameMPV₂` (in `PiAlgebra/FundamentalTheoremComplete.lean`),
+which takes per-block separation as an explicit hypothesis.
+-/
 
 end BlockSeparation
 
