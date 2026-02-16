@@ -2,18 +2,18 @@
 
 ## Summary
 
-**~4,900 lines · 35 files · 0 axioms · 2 sorries**
+**~4,900 lines · 35 files · 0 axioms · 1 sorry**
 
 The **Fundamental Theorem of Matrix Product States** is formalized:
 - **Single-block case**: fully proved (0 sorry)
 - **Multi-block case**: proved modulo per-block separation (taken as hypothesis)
-- **Spectral gap theorem**: proved with 2 private helper sorry (algebraic core of eigenvalue rigidity)
+- **Spectral gap theorem**: proved with 1 private helper sorry (algebraic core of eigenvalue rigidity)
 
 ## Build
 
 ```bash
 lake build   # Lean 4 v4.27.0, Mathlib v4.27.0
-# 0 axioms, 2 sorry warnings (both private helpers in SpectralGap.lean), 0 errors
+# 0 axioms, 1 sorry warning (private helper in SpectralGap.lean), 0 errors
 ```
 
 ## Completed Results
@@ -37,7 +37,7 @@ lake build   # Lean 4 v4.27.0, Mathlib v4.27.0
 - `quantum_perron_frobenius`: unique PSD fixed point for injective tensors
 - `kadison_schwarz` / `kadison_schwarz_adjoint`: Kadison–Schwarz inequality for CP maps
 
-### Layer 5: Spectral Gap + Eigenvalue Rigidity ✅ (modulo 2 private helpers)
+### Layer 5: Spectral Gap + Eigenvalue Rigidity ✅ (modulo 1 private helper)
 - `eigenvalue_norm_le_one`: every eigenvalue of F_{AB} has modulus ≤ 1
 - `spectralRadius_mixedTransfer_le_one`: ρ(F_{AB}) ≤ 1 for normalized tensors
 - `modulus_one_eigenvalue_implies_gauge`: ρ(F_{AB}) ≥ 1 → gauge-phase equivalence (**was axiom, now theorem**)
@@ -45,21 +45,29 @@ lake build   # Lean 4 v4.27.0, Mathlib v4.27.0
 - `pow_tendsto_zero_of_spectralRadius_lt_one`: Gelfand formula convergence
 - `cross_correlation_tendsto_zero`: mixed transfer iterates vanish
 
-## Remaining Sorries (2)
+## Remaining Sorry (1)
 
-Both are **private helper lemmas** in `MPSLean/Spectral/SpectralGap.lean`:
+One **private helper lemma** in `MPSLean/Spectral/SpectralGap.lean`:
 
 | # | Line | Lemma | Mathematical Content |
 |---|------|-------|---------------------|
-| 1 | 338 | `ker_eigenvector_invariant` | Kernel of eigenvector X is B†-invariant |
-| 2 | 429 | `per_index_relation` | X invertible + eigenvector equation → B_i = μ̄ X⁻¹ A_i X |
+| 1 | ~467 | `eigenvector_gives_gauge` | F_{AB}(X) = μX, X ≠ 0, \|μ\| = 1, A,B injective normalized → GaugePhaseEquiv A B |
 
-These are the algebraic core of the eigenvalue rigidity theorem. Their proofs require:
-- **Sorry 1**: Kadison–Schwarz equality condition / multiplicative domain theory (doubly-stochastic gauge)
-- **Sorry 2**: Trace argument via QPF fixed points and Cauchy–Schwarz tightness on Frobenius norm
+This is the algebraic core of the eigenvalue rigidity theorem. The proof requires:
+- **Doubly-stochastic gauge**: conjugation by σ^{1/2} where σ is the QPF fixed point
+- **Kadison-Schwarz equality ⟺ multiplicative domain**: tight HS contraction forces per-index intertwining
+- Alternative: **PGVWC OBC approach** (Lemma 5, quant-ph/0608197)
 
-Both follow from standard functional analysis (Wolf 2012, §6.2; Pérez-García et al. 2007, Lemma 5).
-The mathematical content is well-understood; the formalization gap is purely technical.
+Four fully proved helper lemmas (`ker_X_all_of_inj`, `det_ne_zero_of_ker_all`,
+`sum_conj_mul_conjTranspose`, `each_zero_of_sum_conjTranspose_mul_self_zero`)
+provide infrastructure that reduces the problem to:
+- (a) showing ker(X) is B†-invariant (→ X invertible), and
+- (b) deriving the per-index relation B_i = μ̄ X⁻¹ A_i X.
+
+The mathematical content follows from standard functional analysis
+(Wolf 2012, §6.2; Pérez-García et al. 2007, Lemma 5).
+The formalization gap requires ~200-500 lines of new infrastructure
+(doubly-stochastic gauge + multiplicative domain characterization).
 
 ## Architecture
 
