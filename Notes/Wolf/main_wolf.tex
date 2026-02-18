@@ -1,0 +1,71 @@
+% Master document combining all Wolf lecture note OCR transcriptions
+% Compile with: pdflatex main_wolf.tex (twice for TOC/refs)
+%
+% Each chapter file is standalone-compilable on its own.
+% This master file assembles them into a single book.
+
+\documentclass[11pt,a4paper]{book}
+\input{preamble}
+
+% standalone with subpreambles: processes each file's preamble overrides
+% (UndefEnv calls, numberwithin, etc.) while skipping duplicate \input{preamble}
+\usepackage[subpreambles=true]{standalone}
+
+\title{\textbf{Quantum Channels \& Operations: Guided Tour}\\[1em]
+       {\Large Michael M.\ Wolf}\\[0.5em]
+       {\large Lecture Notes -- OCR Transcription}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+% --- Suppress per-chapter \maketitle and \tableofcontents ---
+\def\maketitle{}
+\def\tableofcontents{}
+
+% ======================================================================
+%  Select r0 or r1 for each chapter below.
+%  r0 = first OCR pass;  r1 = revised OCR pass.
+% ======================================================================
+
+% --- Chapter 1 ---
+\input{ch01_deconstructing_quantum}
+
+% --- Chapter 2 ---
+\input{ch02_representations}
+
+% --- Chapter 3 ---
+\input{ch03_positive_not_completely}
+
+% --- Chapter 4 ---
+\input{ch04_convex_structure}
+
+% --- Chapter 5 ---
+\input{ch05_schwarz_inequalities}
+
+% --- Chapter 6 ---
+\input{ch06_spectral_properties}
+
+% --- Chapter 7 ---
+\input{ch07_semigroup_structure}
+
+% --- Chapter 8 ---
+\input{ch08_distance_measures}
+
+% ======================================================================
+%  Chapters 9--11: not yet transcribed (placeholders)
+% ======================================================================
+
+\setcounter{chapter}{8}
+\chapter{Symmetries}
+\emph{[Not yet transcribed -- 2 pages in original.]}
+
+\chapter{Special channels}
+\emph{[Not yet transcribed -- 2 pages in original.]}
+
+\chapter{Quantum spin chains and finitely correlated states}
+\emph{[Not yet transcribed -- 8 pages in original.]}
+
+\end{document}

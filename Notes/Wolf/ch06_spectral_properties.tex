@@ -1,167 +1,1684 @@
-% Transcribed from: Wolf, "Quantum Channels & Operations: Guided Tour", Chapter 6
-% Source PDF: WolfLectureNote/ch06_spectral_properties.pdf
-% Status: PLACEHOLDER - awaiting OCR transcription
-%
-% Scope: Sections 6.2-6.5 (the core spectral theory)
-%   6.2 Irreducible maps and Perron-Frobenius theory
-%   6.3 Primitive maps
-%   6.4 Fixed points
-%   6.5 Cycles and recurrences
-%
-% Notation conventions (same as ch05):
-%   T          - channel/map (Schr{\"o}dinger picture)
-%   T^*        - dual map (Heisenberg picture)
-%   \mcM_d     - \mathcal{M}_d(\mathbb{C})
-%   \dagger    - adjoint
-%   \rho(T)    - spectral radius
-%   S          - peripheral spectrum
 
-\documentclass{article}
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage[margin=1in]{geometry}
-\usepackage{hyperref}
+\documentclass[11pt,a4paper]{article}
+\input{preamble}
 
-\newcommand{\mcM}{\mathcal{M}}
-\newcommand{\one}{\mathbb{1}}
-\newcommand{\CC}{\mathbb{C}}
-\newcommand{\RR}{\mathbb{R}}
-\newcommand{\NN}{\mathbb{N}}
-\newcommand{\ZZ}{\mathbb{Z}}
-\newcommand{\tr}{\operatorname{tr}}
-\newcommand{\spec}{\operatorname{spec}}
-\newcommand{\rank}{\operatorname{rank}}
-\newcommand{\supp}{\operatorname{supp}}
-\newcommand{\range}{\operatorname{range}}
-\newcommand{\spn}{\operatorname{span}}
-\newcommand{\FT}{\mathcal{F}_T}
+% --- Wolf-style numbering: each environment has its own counter (within Chapter/Section 6) ---
+% The shared preamble defines proposition/lemma/etc. sharing the theorem counter;
+% Wolf numbers them independently (Prop 6.1 and Thm 6.1 both occur), so we override locally.
+\UndefEnv{proposition}
+\UndefEnv{corollary}
+\UndefEnv{lemma}
+\UndefEnv{definition}
+\UndefEnv{example}
+\UndefEnv{problem}
+\UndefEnv{remark}
 
 \theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{lemma}{Lemma}[section]
 \theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{problem}[theorem]{Problem}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{problem}{Problem} % global numbering (Problem 12, 13, ...)
 \theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
+\newtheorem{remark}{Remark}[section]
 
-\title{Chapter 6: Spectral Properties of Quantum Channels \\ {\small (Wolf Lecture Notes - Transcription)}}
-\author{}
-\date{}
+% \mcH, \diag now in preamble
 
 \begin{document}
-\maketitle
 
-\tableofcontents
+% Standalone compilation note:
+% We set the section counter so that the following \section is numbered "6".
+% Remove/adjust this if you integrate into a master document.
+\setcounter{section}{5}
 
-% ============================================================
-\section{Irreducible maps and Perron-Frobenius theory} \label{sec:irreducible}
-% ============================================================
+\section{Spectral properties}
 
-% TODO: OCR from ch06_spectral_properties.pdf, pages 99-104
-%
-% Thm 6.2 (Irreducible positive maps) - 4 equivalent characterizations
-%   1. No invariant projection P with T(P M_d P) \subseteq P M_d P
-%   2. (id + T)^{d-1}(A) > 0 for all nonzero A >= 0
-%   3. exp[tT](A) > 0 for all nonzero A >= 0, t > 0
-%   4. Orthogonal pair trace condition
-%
-% Thm 6.3 (Spectral radius of irreducible maps) - 4 properties
-%   1. r = \tilde{r}
-%   2. r is non-degenerate eigenvalue with strictly positive eigenvector
-%   3. Unique positive eigenvalue
-%   4. r is the spectral radius
-%
-% Prop 6.6 (Similarity transformations preserving irreducibility)
-%
-% Thm 6.4 (Irreducibility from spectral properties) - equivalence
-%   1. T irreducible <=> 2. spectral radius non-degenerate with PD eigenvectors
-%
-% Cor 6.3 (Time-average and ergodicity)
-%
-% Thm 6.5 (Spectral radius and positive eigenvectors) - general positive maps
-%
-% Thm 6.6 (Peripheral spectrum of irreducible Schwarz maps)  *** KEY ***
-%   1. S = {exp(2πik/m)} cyclic group
-%   2. All eigenvalues in S non-degenerate
-%   3. Unitary eigenvectors: T(U^k) = γ^k U^k
-%   4. Spectral projections: T(P_{k+1}) = P_k
-%
-% Prop 6.7 (Covariance and eigensystem)
+If a linear map has equal input and output space, like
+\[
+    T : \mcM_d(\CC)\to \mcM_d(\CC),
+\]
+we can assign a spectrum to it. As outlined in Sec.~1.6 the spectrum can be
+defined in purely algebraic terms as the set of complex numbers $\lambda$ for
+which $(\lambda \id-T)$ is not invertible. Since we restrict ourselves to finite
+dimensions this is equivalent to the set of $\lambda$'s for which there is an
+$X\in \mcM_d(\CC)$ such that
+\begin{equation}\tag{6.1}\label{eq:6.1}
+    T(X)=\lambda X.
+\end{equation}
+Although $X$ is an operator, we will refer to it as an eigenvector of $T$ as
+$\mcM_d(\CC)$ is considered as a vector space in this context. Hence, the
+spectrum of $T$ is the collection of eigenvalues of the $d^2\times d^2$ matrix
+representation $\widehat{T}$ introduced in Sec.~2.3. Using this representation
+we see that the eigenvalues of $T$ and $T^*$ coincide due to
+$\widehat{T^*}=\widehat{T}^{\mathsf T}$ when using a Hermitian basis of operators
+in Eq.~(2.20).
 
-\textbf{[Placeholder - content will be filled by OCR workflow]}
+\paragraph{Location of eigenvalues.}
+For Hermiticity preserving maps (i.e., in particular for positive maps) the
+adjoint of Eq.~\eqref{eq:6.1} implies that eigenvalues are either real or they
+come in complex conjugate pairs.\footnote{More precisely, if we decompose $X$
+    into Hermitian and anti-Hermitian parts and use the Hermiticity preservation
+    together with linearity we obtain $T(X^\dagger)=\overline{\lambda}\,X^\dagger$.}
+Moreover, for every real $\lambda$ there is at least one corresponding Hermitian
+eigenvector $X$.
 
-% ============================================================
-\section{Primitive maps} \label{sec:primitive}
-% ============================================================
+Recall that the spectral radius is defined as
+\[
+    \varrho(T):=\sup\{|\lambda| \mid \lambda\in\spec(T)\},
+\]
+i.e., as the eigenvalue which is largest in magnitude.
 
-% TODO: OCR from ch06_spectral_properties.pdf, pages 105-109
-%
-% Thm 6.7 (Primitive maps) - 4 equivalent characterizations
-%   1. T^n(ρ) > 0 for some n
-%   2. T^k irreducible for all k, T_φ irreducible
-%   3. lim T^k(ρ) = ρ_∞ > 0 independent of ρ
-%   4. Trivial peripheral spectrum + PD eigenvector
-%
-% Thm 6.8 (CP primitive maps) - Kraus monomial characterization
-%   1. Primitive <=> 2. K_m|ψ> = C^d for m >= n
-%              <=> 3. K_m = M_d for m >= q
-%              <=> 4. (T^m ⊗ id)(|Ω><Ω|) > 0
-%
-% Lemma 6.2, 6.3 - preparatory lemmas for Wielandt
-%
-% Thm 6.9 (Quantum Wielandt inequality)
-%   q ≤ (d²-k+1)d² in general; q ≤ d²-k+1 if invertible Kraus; q ≤ d² otherwise
-%
-% Cor 6.4 - d=2,3 always has Kraus with nonzero eigenvalue
+\begin{proposition}[Spectral radius of positive maps]
+    If $T$ is a positive map on $\mcM_d(\CC)$, then its spectral radius satisfies
+    \begin{equation}\tag{6.2}\label{eq:6.2}
+        \varrho(T)\le \|T(\one)\|_\infty.
+    \end{equation}
+    If in addition $T$ is unital or trace-preserving, then there is an eigenvalue
+    $\lambda=1$. That is, in this case $\varrho(T)=1$ so that all eigenvalues of $T$
+    lie in the unit disc of the complex plane.
+\end{proposition}
 
-\textbf{[Placeholder - content will be filled by OCR workflow]}
+\begin{proof}
+    By the theorem of Russo and Dye we have $\|T(X)\|_\infty \le \|T(\one)\|_\infty\|X\|_\infty$.
+    Therefore if $T(X)=\lambda X$, then
+    \begin{equation}\tag{6.3}\label{eq:6.3}
+        |\lambda|\|X\|_\infty = \|T(X)\|_\infty \le \|T(\one)\|_\infty\|X\|_\infty,
+    \end{equation}
+    which implies Eq.~\eqref{eq:6.2}. If $T$ is unital then $T(\one)=\one$ provides
+    an eigenvalue $\lambda=1$. Similar holds if $T$ is trace-preserving, since then
+    $T^*$ (which has the same spectrum) is unital.
+\end{proof}
 
-% ============================================================
-\section{Fixed points} \label{sec:fixedpoints}
-% ============================================================
+Another way to see that the spectral radius of every quantum channel (or
+trace-preserving positive map) is one would be to use that
+$\varrho(\widehat{T})=\lim_{n\to\infty}\|\widehat{T}^n\|^{1/n}$ (see Eq.~(1.35))
+together with the fact that $T^n$ remains a quantum channel for every $n$ and
+that quantum channels in finite dimensions have bounded norm (see \dots).
 
-% TODO: OCR from ch06_spectral_properties.pdf, pages 110-115
-%
-% Thm 6.10 (Brouwer's fixed point theorem)
-% Thm 6.11 (Stationary states) - every TP positive map has a fixed density matrix
-%
-% Prop 6.8 (Positive fixed-points)  *** KEY - our sorry #1 ***
-%   If X = T(X) then decompose X = P₁ - P₂ + i(P₃ - P₄), each T(Pⱼ) = Pⱼ
-%   Proof: trace-preserving + support argument
-%
-% Cor 6.5 (Linearly independent stationary states)
-% Prop 6.9 (Maximal support of fixed points)
-% Prop 6.10 (Stationary subspaces) - Ki H ⊆ H
-% Prop 6.11 (Stationary subspaces II) - T^*(Q) ≥ Q characterization
-%
-% Lem 6.4 (Restriction to full rank fixed points)
-% Lem 6.5 (Schwarz property inheritance)
-%
-% Thm 6.12 (Fixed points for unital Schwarz maps) - FT* is a *-algebra
-% Cor 6.6 (Weaker structure without full rank)
-% Thm 6.13 (Fixed points and commutants) - [X, Ki] = 0
-%
-% Thm 6.14 (Fixed points of TP maps) - FT = U(0 ⊕ ⊕_k M_{dk} ⊗ ρk)U†
-% Cor 6.7 (ρ^{-1/2} FT ρ^{-1/2} is a *-algebra)
-% Thm 6.15 (Unique fixed points of full rank) - Kraus span = Md => unique ρ
+To summarize, the eigenvalues of every quantum channel are restricted to lie on
+the unit disc, there is one eigenvalue one and the others are real or come in
+complex conjugate pairs. In fact, there is no further restriction (as in the
+case of `classical' stochastic matrices): for every $d>1$, every $\lambda$ with
+$|\lambda|\le 1$ can appear as an eigenvalue of a quantum channel on $\mcM_d$.
+Only the set of eigenvalues as a whole underlies further non-trivial constraints
+(see Sec.~6.1).
 
-\textbf{[Placeholder - content will be filled by OCR workflow]}
+\paragraph{Spectral decomposition.}
+Recall some basic linear algebra. Like every other square matrix,
+$\widehat{T}\in \mcM_{d^2}(\CC)$ admits a Jordan decomposition of the form
+\begin{equation}\tag{6.4}\label{eq:6.4}
+    \widehat{T}
+    = X\left(\bigoplus_{k=1}^K J_k(\lambda_k)\right)X^{-1},
+    \qquad
+    J_k(\lambda):=
+    \begin{pmatrix}
+        \lambda &1\\
+                &\ddots &1\\
+                &       &\lambda
+    \end{pmatrix}
+    \in \mcM_{d_k}(\CC),
+\end{equation}
+where the $J_k$'s are Jordan blocks of size $d_k$ (with $\sum_k d_k=d^2$) and the
+number $K$ of Jordan blocks equals the number of different non-zero eigenvectors.
+It is sometimes useful to subdivide each Jordan block into a projection%
+\footnote{This implies that in Eq.~\eqref{eq:6.5} $P_k^2=P_k$ but not necessarily
+    $P_k=P_k^\dagger$, i.e., $P_k$ need not be an orthogonal projection.}
+and a nilpotent part so that we get
+\begin{equation}\tag{6.5}\label{eq:6.5}
+    \begin{aligned}
+        \widehat{T}
+               & = \sum_{k=1}^K (\lambda_k P_k + N_k),
+               & N_k^{d_k}                             & =0,
+               & N_kP_k                                & = P_kN_k = N_k, \\
+        P_kP_l & = \delta_{kl}P_k,
+               & \tr[P_k]                              & = d_k,
+               & \sum_k P_k                            & = \one.
+    \end{aligned}
+\end{equation}
+The number of Jordan blocks with eigenvalue $\lambda$ is the geometric
+multiplicity of $\lambda$, while their joint dimension $\sum_{k:\lambda_k=\lambda} d_k$
+is its algebraic multiplicity. If these two multiplicities are equal for every
+eigenvalue, then $\widehat{T}$ is called non-defective. Non-defective matrices
+are dense (which is easily seen by perturbing the eigenvalues) and exactly those
+for which complete bases of eigenvectors exist. We can then write
+\begin{equation}\tag{6.6}\label{eq:6.6}
+    \widehat{T}=\sum_k \lambda_k \ket{R_k}\!\bra{L_k},
+    \qquad
+    \langle L_k, R_l\rangle=\delta_{kl},
+\end{equation}
+so that the right eigenvectors $\{R_k\}$ and the left eigenvectors $\{L_k\}$ are
+biorthogonal.
 
-% ============================================================
-\section{Cycles and recurrences} \label{sec:cycles}
-% ============================================================
+Returning to the fact that $T$ is a linear map on $\mcM_d(\CC)$ this means that
+in the non-defective case there are biorthogonal operator bases
+$\{R_k\in\mcM_d(\CC)\}$ and $\{L_k\in\mcM_d(\CC)\}$ such that
+\begin{equation}\tag{6.7}\label{eq:6.7}
+    T(A)=\sum_k \lambda_k\,\tr[L_k^\dagger A]\,R_k,
+    \qquad
+    \tr[L_k^\dagger R_l]=\delta_{kl},
+\end{equation}
+so that
+\begin{equation}\tag{6.8}\label{eq:6.8}
+    \forall k:\quad T(R_k)=\lambda_k R_k.
+\end{equation}
+The Choi--Jamiolkowski operator $\tau=(T\otimes \id)(\ket{\Omega}\!\bra{\Omega})$
+then takes the form
+\begin{equation}\tag{6.9}\label{eq:6.9}
+    \tau=\frac{1}{d}\sum_k \lambda_k\,\overline{L_k}\otimes R_k.
+\end{equation}
+If $T$ is a trace-preserving map, then all right eigenvectors $R_k$ corresponding
+to eigenvalues $\lambda_k\neq 1$ have to be traceless, $\tr[R_k]=0$ since $\one$
+is a left eigenvector.
 
-% TODO: OCR from ch06_spectral_properties.pdf, pages 116-118
-%
-% Prop 6.12 (Asymptotic image) - X_T is image of T_φ, spanned by positive ops
-%
-% Thm 6.16 (Structure of cycles)  *** KEY ***
-%   1. X_T = 0 ⊕ ⊕_k M_{dk} ⊗ ρk  (same form as fixed points but for full peripheral spectrum)
-%   2. T acts by: permuting blocks + unitary conjugation on subsystems
+Note that if $T$ is a quantum channel, then $\widehat{T}$ is generally neither
+Hermitian (unless $T=T^*$, see Prop.~2.6) nor is it necessarily non-defective.
+However, the uniformly bounded norm of trace-preserving positive maps prevents
+eigenvalues of magnitude one (the so-called peripheral spectrum) from having
+non-trivial Jordan blocks (meaning $d_k>1$):
 
-\textbf{[Placeholder - content will be filled by OCR workflow]}
+\begin{proposition}[Trivial Jordan blocks for peripheral spectrum]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving (or unital) positive linear
+    map. If $\lambda$ is an eigenvalue of $T$ with $|\lambda|=1$, then its geometric
+    multiplicity equals its algebraic multiplicity, i.e., all Jordan blocks for
+    $\lambda$ are one-dimensional.
+\end{proposition}
+
+\begin{proof}
+    First note that for every trace-preserving (or unital) positive map $\tr[A\,T(B)]$
+    can be upper bounded in terms of the dimension $d$ and the norms of $A$ and $B$
+    only. While we will discuss such bounds in greater detail later it suffices for
+    now to note that we may write $A$ and $B$ as a linear combination of positive
+    matrices and that for positive $A,B$ we have
+    \[
+        \tr[A\,T(B)] \le \|A\|_\infty\|B\|_\infty\tr[\one\,T(\one)]
+        = d\|A\|_\infty\|B\|_\infty.
+    \]
+    The same bound has to hold for every power $T^n$, $n\in\NN$. However, if we take
+    the $n$th power of a Jordan block $J(\lambda)$, it is a Toeplitz matrix whose
+    first row reads
+    \begin{equation}\tag{6.10}\label{eq:6.10}
+        [J(\lambda)^n]_{1j}
+        = \lambda^{n-j+1}\binom{n}{j-1},
+        \qquad
+        j=1,\dots,\dim(J(\lambda)).
+    \end{equation}
+    Hence, if $\dim(J(\lambda))>1$ and $|\lambda|=1$ this would contain entries which
+    grow unboundedly with $n$ contradicting the uniform boundedness of $T^n$.
+\end{proof}
+
+We can now use the obtained results in order to show that some of the spectral
+projections appearing in Eq.~\eqref{eq:6.5} are (completely) positive in their
+own right. Define
+\begin{equation}\tag{6.11}\label{eq:6.11}
+    \widehat{T}_\infty := \sum_{k:\lambda_k=1} P_k,
+\end{equation}
+\begin{equation}\tag{6.12}\label{eq:6.12}
+    \widehat{T}_\phi := \sum_{k:|\lambda_k|=1} P_k,
+\end{equation}
+\begin{equation}\tag{6.13}\label{eq:6.13}
+    \widehat{T}_\varphi := \sum_{k:|\lambda_k|=1} \lambda_k P_k,
+\end{equation}
+from the spectral decomposition in Eq.~\eqref{eq:6.5} and the corresponding maps
+$T_\infty,T_\phi,T_\varphi$ via Eq.~(2.20).
+
+\begin{proposition}[Cesaro means]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a linear map which is trace-preserving and
+    (completely) positive. Then $T_\infty,T_\phi,T_\varphi$ are trace-preserving and
+    (completely) positive as well. More precisely, we have that
+    \begin{enumerate}
+        \item[(i)] there exists an increasing sequence $n_i\in\NN$ such that
+              $\lim_{i\to\infty} T^{n_i}=T_\phi$,
+        \item[(ii)] $T_\varphi = T\,T_\phi$ and
+        \item[(iii)]
+              \begin{equation}\tag{6.14}\label{eq:6.14}
+                  T_\infty=\lim_{N\to\infty}\frac{1}{N}\sum_{n=1}^N T^n.
+              \end{equation}
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    Showing (i)--(iii) essentially proves the claim that the three maps are
+    trace-preserving and (completely) positive. Throughout we will use that the
+    spectral radius of $T$ is one, that there is an eigenvalue one and that the
+    peripheral spectrum of $T$ only has one-dimensional Jordan blocks. For (i) we
+    exploit the subsequent Lemma on simultaneous Diophantine approximations. For
+    our purpose Lemma~6.1 implies that for every $\varepsilon>0$ there is an $n\in\NN$
+    such that $|\lambda_k^n-1|\le \varepsilon$ for all eigenvalues $\lambda_k$ of
+    magnitude one. This means that there is an increasing sequence $n_i\in\NN$ such
+    that $T^{n_i}$ is a better and better approximation to $T_\phi$. Since the set
+    of (completely) positive, trace-preserving maps on $\mcM_d$ is compact, the
+    limit point $T_\phi$ belongs to this set. (ii) is obvious from the spectral
+    decomposition in Eq.~\eqref{eq:6.5} and (iii) is an immediate consequence of the
+    geometric series $\sum_{n=1}^N \lambda^n = (\lambda-\lambda^{N+1})/(1-\lambda)$ for
+    $\lambda\neq 1$.
+\end{proof}
+
+In a similar vein as $T_\infty$ is expressed as a Cesaro mean in Eq.~\eqref{eq:6.14}
+we can write
+\begin{equation}\tag{6.15}\label{eq:6.15}
+    T_\phi
+    = \lim_{N\to\infty}\frac{1}{N}\sum_{n=1}^N
+    \sum_{k:|\lambda_k|=1} (\overline{\lambda_k}T)^n.
+\end{equation}
+
+The maps $T_\infty$ and $T_\phi$ are projections onto the set of fixed points
+(see Chap.~6.4) and the space spanned by the eigenvectors of the peripheral
+spectrum respectively. That is, $X\in\mcM_d$ is in the range of $T_\infty$ iff
+$T(X)=X$ and it is in the range of $T_\phi$ iff for every $\varepsilon>0$ there
+is an $n\in\NN$ such that $\|T^n(X)-X\|\le \varepsilon$. In other words the image
+of $T_\phi$ is the set of operators for which recurrences arise.
+
+For completeness (and later use) Dirichlet's theorem on simultaneous Diophantine
+approximations which was used in the above proof:
+
+\begin{lemma}[Dirichlet's theorem]
+    Let $x_1,\dots,x_m$ be $m$ real numbers and $q>1$ any integer. Then there exist
+    integers $n,p_1,\dots,p_m$ such that
+    \begin{equation}\tag{6.16}\label{eq:6.16}
+        1\le n\le q^m
+        \qquad\text{and}\qquad
+        |x_k n - p_k|\le \frac{1}{q},
+        \ \forall k.
+    \end{equation}
+\end{lemma}
+
+\paragraph{Resolvents.}
+The resolvent $R$ of a linear operator $T$ is an operator-valued function on
+$\CC$ defined as
+\begin{equation}\tag{6.17}\label{eq:6.17}
+    R(z):=(z\id - T)^{-1}.
+\end{equation}
+The singularities of $R$ are exactly the eigenvalues of $T$. Hence, $R$ is
+meromorphic and defined on the set which is the complement of the spectrum of
+$T$, called resolvent set. For $|z|>\varrho(T)$, i.e., outside the spectral radius
+of $T$, we can express the resolvent as
+\begin{equation}\tag{6.18}\label{eq:6.18}
+    R(z)=\frac{1}{z}\sum_{t=0}^\infty \frac{T^t}{z^t}.
+\end{equation}
+
+If $T^t$ describes the discrete time evolution of a quantum (or classical) system
+this series implies that the spectrum of $T$ is reflected in a peculiar way in
+the time evolution of expectation values: consider any $\rho,A\in\mcM_d(\CC)$ and
+the sequence $\langle A(t)\rangle := \tr[\rho\,T^t(A)]$ for $t=0,1,2,\dots$. If $A$
+represents an observable and $\rho$ is a density matrix evolving according to $T$,
+then $\langle A(t)\rangle$ is the expectation value at time $t$. The $z$-transform
+(or discrete Laplace transform) of the `signal' $\langle A(t)\rangle$ is given by
+\begin{equation}\tag{6.19}\label{eq:6.19}
+    \mathcal{L}(z)
+    := \frac{1}{z}\sum_{t\in\NN_0}\frac{\langle A(t)\rangle}{z^t},
+\end{equation}
+which converges for $|z|>\varrho(T)$ and can be defined in the interior of that
+disc by analytic continuation. Obviously, the poles of $\mathcal{L}$ are located
+at eigenvalues of $T$. Note, however, that depending on $A$ and $\rho$ not every
+eigenvalue of $T$ will give rise to a pole of $\mathcal{L}$.
+
+Using the resolvent, many of the results of analytic function theory carry over
+to the world of operators. For instance if $\Delta\subseteq\CC$ is simply
+connected and enclosed by a smooth curve $\partial\Delta$, then
+\begin{equation}\tag{6.20}\label{eq:6.20}
+    \sum_{k:\lambda_k\in\Delta} P_k
+    = \frac{1}{2\pi i}\int_{\partial\Delta} R(z)\,dz,
+\end{equation}
+and
+\begin{equation}\tag{6.21}\label{eq:6.21}
+    f(T)
+    = \frac{1}{2\pi i}\int_{\partial\Delta} f(z)R(z)\,dz,
+    \qquad
+    \text{if } \lambda_k\in\Delta\ \forall k,
+\end{equation}
+where $f:\CC\to\CC$ is any function holomorphic in $\Delta$ and the $P_k$'s are the
+projections appearing in the spectral decomposition in Eq.~\eqref{eq:6.5}.
+
+% ------------------------------------------------------------
+\subsection{Determinants}
+% ------------------------------------------------------------
+
+The determinant (=product of all eigenvalues) is a useful tool in particular when
+it comes to the composition of maps since
+\begin{equation}\tag{6.22}\label{eq:6.22}
+    \det(T_1T_2)=\det(T_1)\det(T_2).
+\end{equation}
+In fact, the property of being multiplicative essentially characterizes the
+determinant: if a functional $F:\mcM_D(\CC)\to\CC$ satisfies
+$F(T_1T_2)=F(T_1)F(T_2)$ for all $T_i\in\mcM_D(\CC)$, then
+$F(T)=f(\det(T))$ for some multiplicative function $f:\CC\to\CC$~[?].
+
+Also note that Eq.~\eqref{eq:6.22} implies the simple relation $\prod_i s_i=|\det(T)|$
+between the determinant and the singular values $\{s_i\}$ of a map.
+
+\begin{theorem}[Determinants]
+    Let $T:\mcM_d\to\mcM_d$ be a positive and trace preserving linear map.
+    \begin{enumerate}
+        \item $\det T$ is real and contained in the interval $[-1,1]$,
+        \item $|\det T|=1$ iff $T$ is either a unitary conjugation (i.e., $T(A)=UAU^\dagger$
+              for some unitary $U\in\mcM_d$) or unitarily equivalent to a matrix transposition
+              (i.e., $T(A)=UA^{\mathsf T}U^\dagger$ for some unitary $U\in\mcM_d$),
+        \item if $T$ is a unitary conjugation then $\det T=1$ and if $\det T=-1$ then $T$
+              is a matrix transposition up to unitary equivalence. In both cases the converse
+              holds iff $\lfloor d/2\rfloor$ is odd.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Since eigenvalues of positive maps either come in complex conjugate pairs or are
+    real, their product $\det T$ is real, too. Due to the additional trace-preserving
+    property the spectral radius is one (Prop.~6.1) so that $\det T\in[-1,1]$.
+
+    Now consider the case $\det T=\pm 1$ where all eigenvalues are phases. Following
+    Dirichlet's Theorem (Lem.~6.1) as in the first part of Prop.~6.3, there is always
+    a subsequence $n_i$ such that the limit of powers $\lim_{i\to\infty} T^{n_i}=:T_\phi$
+    has eigenvalues which all converge to one which implies that $T_\phi=\id$. Hence,
+    the inverse $T^{-1} = T_\phi T^{-1} = \lim_{i\to\infty} T^{n_i-1}$ is a trace-preserving
+    positive map as well.
+
+    Assume that the image of any pure state density matrix $\Psi$ under $T$ is mixed,
+    i.e., $T(\Psi)=\lambda\rho_1+(1-\lambda)\rho_2$ with $\rho_1\neq\rho_2$,
+    $\lambda\in(0,1)$. Then by applying $T^{-1}$ to this decomposition we would get a
+    nontrivial convex decomposition for $\Psi$ (due to positivity of $T^{-1}$) leading
+    to a contradiction. Hence, $T$ and its inverse map pure states onto pure states.
+    Furthermore, they are unital, which can again be seen by contradiction. So assume
+    $T(\one)\neq \one$. Then the smallest eigenvalue of $T(\one)$ satisfies
+    $\lambda_{\min}<1$ due to the trace preserving property. If we denote by $\ket{\lambda}$
+    a corresponding eigenvector, then $\one - \frac{\lambda_{\min}+1}{2}\,T^{-1}(\ket{\lambda}\!\bra{\lambda})$
+    is a positive operator, but its image under $T$ would no longer be positive.
+    Therefore we must have $T(\one)=\one$.
+
+    Every unital positive trace preserving map is contractive with respect to the
+    Hilbert--Schmidt norm. As this holds for both $T$ and $T^{-1}$ we have that
+    $\forall A\in\mcM_d:\ \|T(A)\|_2=\|A\|_2$, i.e., $T$ acts unitarily on the
+    Hilbert--Schmidt Hilbert space. In particular, it preserves the Hilbert--Schmidt
+    scalar product $\tr[T(A)T(B)^\dagger]=\tr[AB^\dagger]$. Applying this to pure states
+    $A=\ket{\phi}\!\bra{\phi}$ and $B=\ket{\psi}\!\bra{\psi}$ shows that $T$ gives rise
+    to a mapping of the Hilbert space onto itself which preserves the value of
+    $|\braket{\phi}{\psi}|$. By Wigner's theorem (Thm.~1.1) this has to be either
+    unitary or anti-unitary. If $T$ is a unitary conjugation then
+    $\det T=\det(U\otimes \overline{U})=1$ due to Eq.~(2.21). Since every anti-unitary
+    is unitarily equivalent to complex conjugation, we get that $T$ is in this case a
+    matrix transposition $T(A)=A^{\mathsf T}$ (up to unitary equivalence). The determinant
+    of the matrix transposition is easily seen in the Gell--Mann basis of $\mcM_d$
+    (see Hermitian operator bases in Sec.~2.3). That is, we take basis elements $F_\alpha$
+    of the form $\sigma_x/\sqrt{2}$, $\sigma_y/\sqrt{2}$ for $\alpha=1,\dots,d^2-d$ and
+    diagonal for $\alpha=d^2-d+1,\dots,d^2$. In this basis matrix transposition is
+    diagonal and has eigenvalues $1$ and $-1$ where the latter appears with multiplicity
+    $d(d-1)/2$. This means that matrix transposition has determinant minus one iff
+    $d(d-1)/2$ is odd, which is equivalent to $\lfloor d/2\rfloor$ being odd.
+\end{proof}
+
+\begin{corollary}[Monotonicity of the determinant]
+    Let $T,T'$ be two positive and trace-preserving linear maps on $\mcM_d$. Then the
+    determinant is decreasing in magnitude under composition, i.e.,
+    $|\det T|\ge |\det(TT')|$ where equality holds iff $T'$ is a unitary conjugation,
+    a matrix transposition or $\det T=0$.
+\end{corollary}
+
+\begin{corollary}[Positive invertible maps]
+    Let $T:\mcM_d\to\mcM_d$ be a trace-preserving and positive linear map. Then the
+    inverse $T^{-1}$ is positive, too iff $T$ is a unitary conjugation or matrix
+    transposition.
+\end{corollary}
+
+Note that the inverse (if it exists) of a trace-preserving linear map is
+automatically trace-preserving. Hence, the above statement implies that the
+inverse of a quantum channel is again a quantum channel iff it describes a
+unitary time evolution.
+
+One might wonder whether completely positive maps can have negative determinants.
+The following simple example answers this question yes. It is built
+up on the map $\rho\mapsto \rho^{T_c}$ which transposes the corners of $\rho\in\mcM_d$,
+i.e., $(\rho^{T_c})_{k,l}$ is $\rho_{l,k}$ for the entries $(k,l)=(1,d),(d,1)$ and
+remains $\rho_{k,l}$ otherwise. Note that for $d=2$ this is the ordinary matrix
+transposition.
+
+\begin{example}[Negative determinant]
+    The map $T:\mcM_d\to\mcM_d$ defined by
+    \begin{equation}\tag{6.23}\label{eq:6.23}
+        T(\rho)=\frac{\rho^{T_c} + \one\,\tr[\rho]}{1+d}
+    \end{equation}
+    is trace preserving, completely positive with Kraus rank $d^2-1$ and has determinant
+    \[
+        \det T = -(d+1)^{1-d^2}.
+    \]
+    For $d=2$ the channel is entanglement breaking and can be written as
+    \begin{equation}\tag{6.24}\label{eq:6.24}
+        T(\rho)=\frac{1}{3}\sum_{j=1}^6
+        \ket{\overline{\xi_j}}\!\bra{\xi_j} \rho\,\ket{\xi_j}\!\bra{\overline{\xi_j}},
+    \end{equation}
+    where the six $\xi_j$ are the normalized eigenvectors of the three Pauli matrices.
+    Moreover, the example given in Eq.~\eqref{eq:6.24} minimizes the determinant within
+    the set of all quantum channels on $\mcM_2$.
+\end{example}
+
+\begin{proof}
+    A convenient matrix representation of the channel is given in the generalized
+    Gell--Mann basis. Choose $F_1$ as the $\sigma_y/\sqrt{2}$ element corresponding to
+    the corners and $F_2=\one/\sqrt{d}$ the only non-traceless element. Then
+    $\widehat{T}=\diag[-1,1+d,1,\dots,1]/(d+1)$ leading to $\det T=-(d+1)^{1-d^2}$.
+
+    For complete positivity we have to check positivity of the Jamiolkowski state $\tau$.
+    The corner transposition applied to a maximally entangled state leads to one negative
+    eigenvalue $-1/d$. This is, however, exactly compensated by the second part of the map
+    such that $\tau\ge 0$ with rank $d^2-1$.
+
+    The representation for $d=2$ is obtained from $\tr[A\,T(B)] = \tr[(A\otimes B^{\mathsf T})\tau]/d$
+    by noting that in this case $\tau$ is proportional to the projector onto the symmetric
+    subspace which in turn can be written as
+    $\frac{1}{2}\sum_j \ket{\xi_j}\!\bra{\xi_j}^{\otimes 2}$ in agreement with the given Kraus
+    representation of the channel.
+
+    In order to see that the determinant is minimized for $d=2$, recall from Sec.~2.4
+    that any trace-preserving $T$ can be conveniently represented in terms of the real
+    $4\times 4$ matrix $\widehat{T}_{ij}:=\tr[\sigma_i T(\sigma_j)]/2$ where the $\sigma_i$
+    are identity and Pauli matrices:
+    \begin{equation}\tag{6.25}\label{eq:6.25}
+        \widehat{T}=
+        \begin{pmatrix}
+            1 &0\\
+            v &\Lambda
+        \end{pmatrix},
+    \end{equation}
+    where $v\in\RR^3$, $\Lambda$ is a $3\times 3$ matrix and $\det\Lambda=\det T$. To simplify
+    matters we can diagonalize $\Lambda$ by special orthogonal matrices
+    $O_1\Lambda O_2=\diag\{\lambda_1,\lambda_2,\lambda_3\}$ corresponding to unitary operations
+    before and after the channel (see Exp.~1.1 for the relation between $\mathrm{SO}(3)$ and
+    $\mathrm{SU}(2)$). Obviously, this does neither change the determinant, nor complete
+    positivity. For the latter it is necessary that $\vec\lambda$ is contained in a tetrahedron
+    spanned by the four corners of the unit cube with $\lambda_1\lambda_2\lambda_3=1$.
+    Fortunately, all these points can indeed be reached by unital channels ($v=0$) for which
+    this criterion becomes also sufficient for complete positivity. By symmetry we can restrict
+    our attention to one octant and reduce the problem to maximizing $p_1p_2p_3$ over all
+    probability vectors $\vec p$ yielding $\vec p=(\tfrac13,\tfrac13,\tfrac13)=(\lambda_1,-\lambda_2,\lambda_3)$.
+    Hence, the minimal determinant is $-(\tfrac13)^3$ and the corresponding channel can easily
+    be constructed from $\widehat{T}$ as $T:\rho\mapsto \frac13(\rho^{\mathsf T}+\one)$.
+\end{proof}
+
+\begin{proposition}[Positive determinant for small Kraus rank]
+    If $T:\mcM_d\to \mcM_d$ is a completely positive linear map with Kraus rank at most
+    two, then $\det T\ge 0$.
+\end{proposition}
+
+\begin{proof}
+    If $A,B\in\mcM_d$ are Kraus operators then
+    $\widehat{T}=A\otimes \overline{A}+B\otimes \overline{B}$ is a matrix representation
+    of $T$ (see Eq.~(2.21)). Assume for the moment that $\det A\neq 0$. Then due to
+    multiplicativity of the determinant
+    \begin{equation}\tag{6.26}\label{eq:6.26}
+        \det T
+        = \det(A\otimes \overline{A})
+        \det\!(\one + A^{-1}B\otimes \overline{A^{-1}B})
+        \ge 0.
+    \end{equation}
+    In order to understand the inequality note that if $\{\lambda_j\}$ are the eigenvalues
+    of $A^{-1}B$, then $\{1+\lambda_i\overline{\lambda_j}\}$ are those of
+    $\one + A^{-1}B\otimes \overline{A^{-1}B}$. That is, they all come in complex conjugate
+    pairs so that their product is positive. The same argumentation holds, of course, for the
+    $A\otimes \overline{A}$ term. The proof is completed by using that the set of maps with
+    $\det A\neq 0$ is dense and that $\det T$ is continuous.
+\end{proof}
+
+\begin{proposition}[Determinant and Choi--Jamiolkowski operator]
+    Let $T:\mcM_d\to \mcM_d$ be a linear map and $\tau$ the corresponding Choi--Jamiolkowski
+    operator. Then
+    \begin{equation}\tag{6.27}\label{eq:6.27}
+        |\det T| \le \tr[\tau^\dagger \tau]^{d^2/2}.
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    To relate the `purity' to the determinant we exploit that by Eq.~(2.22)
+    $\widehat{T}=d\,\tau^\Gamma$ is a matrix representation of the map $T$, so that
+    \begin{equation}\tag{6.28}\label{eq:6.28}
+        \tr[\tau^\dagger \tau]
+        = \frac{1}{d^2}\tr[\widehat{T}^\dagger \widehat{T}]
+        = \frac{1}{d^2}\sum_{i=1}^{d^2} s_i^2,
+    \end{equation}
+    where the $s_i$ are the singular values of $\widehat{T}$ (and thus $T$). From this
+    Eq.~\eqref{eq:6.27} is obtained via the geometric--arithmetic mean inequality together
+    with the fact that $|\det T|=\prod_i s_i$.
+\end{proof}
+
+% ------------------------------------------------------------
+\subsection{Irreducible maps and Perron--Frobenius theory}
+% ------------------------------------------------------------
+
+Perron--Frobenius theory, roughly speaking, deals with the dominant eigenvalues
+and eigenvectors of (element-wise) non-negative matrices (see Exp.\ \dots), i.e.,
+in particular with those of classical channels. In order to make the theory work
+the considered maps have to fulfill a generic condition like irreducibility,
+primitivity or strict positivity (in order of increasing restriction).
+
+In this section we will discuss the generalization of Perron--Frobenius theory to
+the context of positive maps on $\mcM_d(\CC)$. The following theorem defines
+irreducible positive maps and shows that this can be done in various equivalent
+ways:
+
+\begin{theorem}[Irreducible positive maps]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a positive linear map. The following properties
+    are equivalent:
+    \begin{enumerate}
+        \item \textbf{Irreducibility:} If $P\in\mcM_d(\CC)$ is a Hermitian projector such
+              that $T(P\mcM_dP)\subseteq P\mcM_dP$, then $P\in\{0,\one\}$.
+        \item For every non-zero $A\ge 0$ we have $(\id + T)^{d-1}(A)>0$.
+        \item For every non-zero $A\ge 0$ and every strictly positive $t\in\RR$ we have
+              $\exp[tT](A)>0$.
+        \item For every orthogonal pair of non-zero, positive semi-definite $A,B\in\mcM_d(\CC)$
+              there is an integer $t\in\{1,\dots,d-1\}$ such that $\tr[B\,T^t(A)]>0$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \begin{itemize}
+        \item[1.\ $\Rightarrow$ 2.]
+              From $T(A)\ge 0$ we get an inclusion for the kernels
+              $\ker(\id+T)(A)\subseteq \ker A$. Suppose equality holds in this inclusion, then
+              $\supp(\id+T)(A)\subseteq \supp A$. Therefore $T(P\mcM_dP)\subseteq P\mcM_dP$ if
+              we take $P$ the Hermitian projector onto the support space of $A$. By 1.
+              (irreducibility) this can only be if $A>0$. Application of $(\id+T)$ thus has to
+              increase the rank until there is no kernel left, which happens after $d-1$ steps
+              at the latest.
+
+        \item[2.\ $\Rightarrow$ 3.]
+              Looking at the series expansion of both $(\id+T)^{d-1}(A)$ and $\exp[tT](A)$ in
+              terms of powers of $T$ we realize that (i) all terms are positive, and (ii) all
+              terms appearing in the first expansion are also present in the second one.
+              Therefore we can bound $\exp[tT](A)\ge c(\id+T)^{d-1}(A)$ with some non-zero
+              positive constant $c$.
+
+        \item[3.\ $\Rightarrow$ 1.]
+              Suppose $T$ is reducible, i.e., there is a proper projection $P\neq 0,\one$ for
+              which $T(P)\le cP$ for some scalar $c>0$. Then $\exp[tT](P)\le \exp[tc]P$, so $T$
+              does not fulfill 3.
+
+        \item[4.\ $\Rightarrow$ 1.]
+              If $T$ is reducible by a proper projection $P$, then $\tr[(\one-P)T^t(P)]=0$ for
+              all $t\in\NN$.
+
+        \item[2.\ $\Rightarrow$ 4.]
+              Expanding $\tr[B(\id+T)^{d-1}(A)]>0$ and using $\tr[BA]=0$ together with positivity
+              of all terms in the expansion, we get that $\tr[B\,T^t(A)]>0$ for at least one
+              $t\le d-1$.
+    \end{itemize}
+\end{proof}
+
+Note that $T$ is irreducible iff the dual map $T^*$ is irreducible. If a proper
+projection $P$ `reduces' $T$ in the sense that $\tr[(\one-P)T(P)]=0$, then $\one-P$
+reduces $T^*$.
+
+In order to relate irreducibility to spectral properties of a positive map $T$ it
+is useful to consider the following functionals defined on the cone of positive
+semi-definite operators:
+\begin{equation}\tag{6.29}\label{eq:6.29}
+    r(X) := \sup\{\lambda\in\RR \mid (T-\lambda\id)(X)\ge 0\},
+\end{equation}
+\begin{equation}\tag{6.30}\label{eq:6.30}
+    \tilde r(X) := \inf\{\lambda\in\RR \mid (T-\lambda\id)(X)\le 0\}.
+\end{equation}
+We are especially interested in the maxima
+$r := \sup_{X\ge 0} r(X)$ and $\tilde r := \sup_{X\ge 0}\tilde r(X)$ which
+obviously satisfy $r\ge \tilde r$ and actually coincide for irreducible maps:
+
+\begin{theorem}[Spectral radius of irreducible maps]
+    Let $T:\mcM_d(\CC)\to \mcM_d(\CC)$ be an irreducible positive map. Then
+    \begin{enumerate}
+        \item For the quantities introduced below Eqs.~\eqref{eq:6.29},\eqref{eq:6.30}
+              we have $r=\tilde r$.
+        \item $r$ is a non-degenerate eigenvalue of $T$ and the corresponding eigenvector
+              is strictly positive, i.e., $T(X)=rX>0$.
+        \item If there is any $\lambda>0$ which is an eigenvalue of $T$ with positive
+              eigenvector, i.e., $T(Y)=\lambda Y\ge 0$, then $\lambda=r$.
+        \item $r$ is the spectral radius of $T$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    First note that all suprema/infima in Eqs.~\eqref{eq:6.29},\eqref{eq:6.30} and for
+    defining $r,\tilde r$ are attained since the respective sets are compact or can be
+    made so, e.g., by imposing $\tr[X]=1$.
+
+    We begin with showing that $r$ is attained for a strictly positive $X$ and that
+    $T(X)=rX$. To this end consider any non-zero $X\ge 0$ for which $\lambda:=r(X)>0$.
+    The identity
+    \begin{equation}\tag{6.31}\label{eq:6.31}
+        (T+\id)^{d-1}(T-\lambda\id)(X) = (T-\lambda\id)(T+\id)^{d-1}(X),
+    \end{equation}
+    shows two things. First, the supremum $\sup_{X\ge 0} r(X)$ is attained for a strictly
+    positive $X$, since by Thm.~6.2 $(T+\id)^{d-1}(X)>0$. Second, the $X$ achieving
+    $r(X)=r$ must satisfy $(T-r\id)(X)=0$, since otherwise the expression in
+    Eq.~\eqref{eq:6.31} would be positive definite so that a larger multiple of the identity
+    map could be subtracted---contradicting the supposed maximality. As $r(X)=\tilde r(X)$
+    for every eigenvector $X\ge 0$, the just mentioned observation together with the
+    inequality $r\ge \tilde r$ proves item~1.
+
+    To prove 2.\ we still need to show non-degeneracy. Suppose there would be an
+    eigenvector $X'$ corresponding to $r$ which is not a multiple of $X$. By taking the
+    Hermitian (or $i$ times the anti-Hermitian) part we can assume $X'=X'^\dagger$.
+    As $X>0$ there is a non-zero $c\in\RR$ such that $0\le X+cX'$ has a kernel. This is,
+    however, in conflict with
+    \begin{equation}\tag{6.32}\label{eq:6.32}
+        0 < (T+\id)^{d-1}(X+cX') = (r+1)^{d-1}(X+cX'),
+    \end{equation}
+    so that $X'$ must be a multiple of $X$. Hence, $r$ is indeed non-degenerate.
+
+    For the proof of 3.\ assume that $Y\ge 0$ is an eigenvector of $T$ corresponding to
+    an eigenvalue $\lambda>0$. Using that $r$ is an eigenvalue of the dual map $T^*$ with a
+    strictly positive eigenvector $X_0>0$ we get
+    \begin{equation}\tag{6.33}\label{eq:6.33}
+        r\,\tr[X_0Y] = \tr[T^*(X_0)Y] = \tr[X_0T(Y)] = \lambda\,\tr[X_0Y].
+    \end{equation}
+    Since $\tr[X_0Y]>0$ this implies $r=\lambda$.
+
+    Finally, in order to prove 4.\ we define a positive map
+    \[
+        T'(\,\cdot\,)
+        := \frac{1}{r}\,X^{-1/2}\,T\!(X^{1/2}(\,\cdot\,)X^{1/2})\,X^{-1/2}
+    \]
+    with $X>0$ being the positive eigenvector corresponding to the eigenvalue $r$ of $T$.
+    Note that up to the factor $1/r$ the maps $T$ and $T'$ differ only by a similarity
+    transformation, i.e., their spectra coincide up to that factor. In particular the
+    spectral radii satisfy $\varrho(T')=\varrho(T)/r$. Since $T'$ is a unital positive map
+    we have $\varrho(T')=1$ by Prop.~6.1 and thus $\varrho(T)=r$.
+\end{proof}
+
+\begin{proposition}[Similarity transformations preserving irreducibility]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be an irreducible positive map. Then for arbitrary
+    constants $c>0$ and invertible matrices $C\in\mcM_d(\CC)$ the maps
+    \begin{equation}\tag{6.34}\label{eq:6.34}
+        T'(\,\cdot\,) := c\,C^{-1}T(C\,\cdot\, C^\dagger)C^{-\dagger},
+    \end{equation}
+    are irreducible as well.
+\end{proposition}
+
+\begin{proof}
+    Assume that a projection $Q$ would `reduce' $T'$. Then the projection $P$ onto the
+    support of $CQC^\dagger$ would reduce $T$. By invertibility of $C$ we have that $P$
+    and $Q$ have the same rank and thus $T'$ can only be reducible if $T$ is.
+\end{proof}
+
+\begin{theorem}[Irreducibility from spectral properties]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a positive map with spectral radius $\varrho$.
+    The following are equivalent:
+    \begin{enumerate}
+        \item $T$ is irreducible.
+        \item The spectral radius $\varrho$ is a non-degenerate eigenvalue and the corresponding
+              right and left eigenvectors are positive definite (i.e., $T(X)=\varrho X>0$ and
+              $T^*(Y)=\varrho Y>0$).
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    $1.\Rightarrow 2$.\ is given by Thm.~6.3 when applied to $T$ and $T^*$.
+
+    For the converse $2.\Rightarrow 1$.\ we apply Eq.~\eqref{eq:6.34} with $c=1/\varrho$
+    and $C=Y^{-1/2}$. In this way $T'$ becomes trace preserving with $T'(X')=X'>0$,
+    $X':=\sqrt{Y}\,X\sqrt{Y}$. Moreover, the non-degeneracy translates to that of the
+    eigenvalue $1$ of $T'$. Now assume that $T'$ (and thus $T$) would be reducible, i.e.,
+    there is a Hermitian projection $P\notin\{0,\one\}$ such that $T':A\to A$ with
+    $A:=P\mcM_d(\CC)P$. In this case $T'$ would have a fixed point density operator
+    $\rho\in A$ for which $T'(\rho)=\rho\ge 0$ (see Sec.~6.4). Hence, the eigenvalue $1$
+    of $T'$ would have to be degenerate since $\rho$ is not a multiple of $X'$ because
+    $X'\notin A$ (as $X'>0$).
+\end{proof}
+
+\begin{corollary}[Time-average and ergodicity]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a positive, trace-preserving linear map. Then
+    the following are equivalent:
+    \begin{enumerate}
+        \item $T$ is irreducible,
+        \item There is a unique state with density matrix $\sigma>0$ such that for every
+              density matrix $\rho\in\mcM_d(\CC)$ we have
+              \begin{equation}\tag{6.35}\label{eq:6.35}
+                  \lim_{N\to\infty}\frac{1}{N}\sum_{t=1}^N T^t(\rho) = \sigma.
+              \end{equation}
+    \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+    Note that Eq.~\eqref{eq:6.35} is nothing but $T_\infty(\rho)=\sigma$, where $T_\infty$ is
+    the projection onto the eigenspace of $T$ with eigenvalue one as given in
+    Eq.~\eqref{eq:6.14}. The equivalence $1.\Leftrightarrow 2$.\ thus follows from the
+    equivalence in Thm.~6.4.
+\end{proof}
+
+\begin{theorem}[Spectral radius and positive eigenvectors]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a positive map with spectral radius $\varrho$.
+    Then $\varrho$ is an eigenvalue and there is a positive semi-definite $X\in\mcM_d(\CC)$
+    such that $T(X)=\varrho X$.
+\end{theorem}
+
+The peripheral spectrum is the set of eigenvalues whose magnitude is equal to the
+spectral radius, i.e., equal to one if we are considering unital positive maps
+(Prop.~6.1). As we saw in Prop.~6.2 the properties positivity and unitality together
+imply that all eigenvalues in the peripheral spectrum have trivial (i.e.,
+one-dimensional) Jordan blocks. If we add irreducibility and the assumed validity
+of the Schwarz inequality in Eq.~(5.2) we can say much more:
+
+\begin{theorem}[Peripheral spectrum of irreducible Schwarz maps]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be an irreducible positive unital map which fulfills
+    the Schwarz inequality in Eq.~(5.2). Denote by $S:=\spec(T)\cap \exp(i\RR)$ the
+    peripheral spectrum of $T$. Then
+    \begin{enumerate}
+        \item There is an integer $m\in\{1,\dots,d^2\}$ such that
+              $S=\{\exp(2\pi i k/m)\}_{k\in\ZZ_m}$.
+        \item All eigenvalues in $S$ are non-degenerate.
+        \item There is a unitary $U$ such that for all $k\in\NN$: $T(U^k)=\gamma^k U^k$
+              where $\gamma:=\exp(2\pi i/m)$.
+        \item $U$ has spectral decomposition $U=\sum_{k\in\ZZ_m}\gamma^k P_k$ where the
+              spectral projections $P_k$ satisfy $T(P_{k+1})=P_k$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Take any eigenvalue $\lambda\in S$ with corresponding eigenvector $U\in\mcM_d(\CC)$,
+    i.e., $T(U)=\lambda U$. Then the Schwarz inequality reads $U^\dagger U\le T(U^\dagger U)$.
+    Since $T$ is irreducible by assumption we can apply the tools in the proof of Thm.~6.3,
+    in particular that $r(U^\dagger U)=1$, which implies that equality has to hold in the
+    Schwarz inequality and that $U$ can be rescaled to be a unitary. Moreover, by Thm.~5.3 we have
+    \begin{equation}\tag{6.36}\label{eq:6.36}
+        \overline{\lambda}\,U^\dagger T(X)=T(U^\dagger X),
+        \qquad \forall X\in\mcM_d(\CC).
+    \end{equation}
+    Applying this to the case where $X$ is another eigenvector of $T$ w.r.t.\ an eigenvalue
+    in $S$ shows that $S$ is closed under multiplication and thus a group. Since there are at
+    most $d^2$ elements in $S$ we must have $S=\exp(2\pi i \ZZ_m/m)$ for some integer $m\le d^2$.
+
+    Now assume that $U$ and $V$ are both eigenvectors w.r.t.\ the same eigenvalue in $S$.
+    Then $T(U^\dagger V)=U^\dagger V$ and, since the eigenvalue one of an irreducible unital
+    positive map is non-degenerate (Prop.~6.1 and Thm.~6.3), we must have $U\propto V$.
+    Hence, all eigenvalues in $S$ are simple.
+
+    If $U$ is the unitary eigenvector corresponding to the eigenvalue $\gamma:=\exp(2\pi i/m)$,
+    then the group property gives $T(U^k)=\gamma^k U^k$ for all $k\in\NN$. In particular
+    $T(U^m)=U^m$ which has to be equal to $\one$ by non-degeneracy of the eigenvalue one.
+    Therefore we can write $U=\sum_{k\in\ZZ_m}\gamma^k P_k$ with orthogonal spectral projections
+    $P_k$. This gives
+    \begin{equation}\tag{6.37}\label{eq:6.37}
+        \sum_{k\in\ZZ_m}\gamma^{k+1}P_k = \gamma U = T(U) = \sum_{k\in\ZZ_m}\gamma^k T(P_k).
+    \end{equation}
+    Due to $T(U^k)=\gamma^kU^k$, $T$ acts as an automorphism on the $*$-algebra generated by
+    $U$. Projections are thus mapped onto projections and by comparing the left and right hand
+    side in Eq.~\eqref{eq:6.37} we get $T(P_{k+1})=P_k$ from the uniqueness of the spectral decomposition.
+\end{proof}
+
+\begin{proposition}[Covariance and eigensystem of irreducible maps]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be an irreducible positive and unital linear map which
+    fulfills the Schwarz inequality. Following Thm.~6.6 denote by $\{\gamma^k\}_{k=1,\dots,m}$
+    the peripheral spectrum of $T$ and by $U=\overline{\gamma}\,T(U)$ the respective unitary
+    eigenvector.
+    \begin{enumerate}
+        \item For every $X\in\mcM_d(\CC)$ we have $T(U^\dagger XU)=U^\dagger T(X)U$.
+        \item If $X$ is an eigenvector with $T(X)=\mu X$, then
+              \begin{equation}\tag{6.38}\label{eq:6.38}
+                  T(U^\dagger X)=\overline{\gamma}\mu\,U^\dagger X,
+                  \qquad
+                  T(XU)=\gamma\mu\,XU.
+              \end{equation}
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    Both statements follow directly from Eq.~\eqref{eq:6.36} and its adjoint.
+\end{proof}
+
+
+% === Content below merged from r0 (r1 was missing proofs in later sections) ===
+% ------------------------------------------------------------
+\subsection{Primitive maps}
+% ------------------------------------------------------------
+
+We will continue the discussion on Perron--Frobenius theory and direct the focus
+to primitive maps. A primitive map is an irreducible positive map with trivial
+peripheral spectrum. Similar to the irreducible case primitive maps can,
+however, be characterized by a number of equivalent properties each of which
+may be used as a definition:
+
+\begin{theorem}[Primitive maps]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a positive and trace-preserving linear map.
+    Then the following statements are equivalent:
+    \begin{enumerate}
+        \item There exists an $n\in\NN$ such that for every density matrix
+              $\rho\in\mcM_d(\CC)$ we have $T^n(\rho)>0$.
+        \item $T^k$ is irreducible for every $k\in\NN$ and the limit $T_\phi$
+              (see Prop.~6.3) is irreducible as well.
+        \item For all density matrices $\rho$ the limit $\lim_{k\to\infty} T^k(\rho)$
+              exists, is independent of $\rho$ and given by a positive definite density
+              matrix $\rho_\infty$.
+        \item $T$ has trivial peripheral spectrum (i.e., counting algebraic
+              multiplicities, there is only one eigenvalue of magnitude one) and the
+              corresponding eigenvector is positive definite.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    $1.\Rightarrow 2$. can be proven by contradiction: assume for instance
+    $T_\phi=\lim_{i\to\infty}T^{n_i}$ is reducible. Then there is a density matrix
+    $\rho_0$ which has a kernel and for which
+    $\rho_0=T_\phi(\rho_0)=\lim_i T^n\!(T^{n_i-n}(\rho))$ which would imply
+    that $T^n(\rho)\not>0$ for some $\rho$. Similarly, if $T^k$ and therefore also
+    $T^{km}$ is reducible for all $m\in\NN$, then there cannot be any $n$ for which
+    1.\ holds.
+
+    $2.\Rightarrow 4$.: If $T_\phi$ has a non-degenerate eigenvalue one, then, by
+    definition of $T_\phi$, the map $T$ has trivial peripheral spectrum. Moreover,
+    since the fixed point set of $T$ is included in the one of $T_\phi$ which in
+    turn contains only a single positive definite element, this fixed point has to
+    be the one of $T$ as well.
+
+    $4.\Rightarrow 3$.: Since $T$ has only one eigenvalue of magnitude one with
+    corresponding positive definite eigenvector $\rho_\infty=T(\rho_\infty)$ we have
+    $\lim_{k\to\infty}T^k=T_\phi$ and $T_\phi(\rho)=\rho_\infty \tr[\rho]$ is a
+    projection.
+
+    $3.\Rightarrow 1$.: First note that 3.\ implies that the eigenvalue of $T$ which
+    is second largest in magnitude, denote it by $\lambda_2$, satisfies
+    $|\lambda_2|<1$. Assume that $T^n(\rho)$ would have a kernel with eigenvector
+    $\psi$. Then
+    \begin{align}
+        \lambda_{\min}(\rho_\infty)
+         &\le \bigl|\langle\psi|T^n(\rho)-\rho_\infty|\psi\rangle\bigr|
+        \le \lVert T^n(\rho)-\rho_\infty\rVert, \tag{6.39}\\
+         &= \lVert (T^n-T_\infty)(\rho-\rho_\infty)\rVert
+        \le \mu^n c\,\lVert\rho-\rho_\infty\rVert, \tag{6.40}
+    \end{align}
+    where $\lambda_{\min}$ denotes the smallest eigenvalue, $\mu$ is such that
+    $1>\mu>|\lambda_2|$ and $\lVert\cdot\rVert$ is the operator norm. The constant
+    $c>0$ depends on $T$ but is independent of $n$ (see the discussion around
+    Thm.~8.23 for more details). Thus if $n$ is sufficiently large, then
+    Eqs.~\eqref{6.39},\eqref{6.40} would lead to a contradiction for every $\rho$.
+    Hence, there is a finite $n$ such that $T^n(\rho)>0$ for all $\rho$.
+\end{proof}
+
+If we interpret $T^t(\rho)$ for $t\in\NN$ as discrete time-evolution, then
+primitive maps are exactly those for which the evolution eventually converges to
+a stationary state which is strictly positive (i.e., it may in some contexts be
+interpreted as a finite temperature Gibbs state) and independent of the initial
+state.
+
+Note that if $T$ in addition satisfies the Schwarz inequality as required by
+Thm.~6.6, then we can replace point~2.\ in Thm.~6.7 by the statement that $T^k$
+is irreducible for all $k<d^2$.
+
+Moreover, if a map is completely positive, we can give three more equivalent
+characterizations of primitivity:
+
+\begin{theorem}[Completely positive primitive maps]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a completely positive and trace-preserving
+    linear map with Kraus decomposition $T(\cdot)=\sum_i K_i\,\cdot\,K_i^\dagger$.
+    Denote by
+    \[
+        K_m := \spn\left\{\prod_{k=1}^m K_{i_k}\right\}
+    \]
+    the complex linear span of all degree-$m$ monomials of Kraus operators. Then the
+    following are equivalent:
+    \begin{enumerate}
+        \item $T$ is primitive.
+        \item There exists an $n\in\NN$ such that for every non-zero $\psi\in\CC^d$ and
+              all $m\ge n$: $K_m\ket{\psi}=\CC^d$.
+        \item There exists a $q\in\NN$ such that for all $m\ge q$: $K_m=\mcM_d(\CC)$.
+        \item There exists a $q\in\NN$ such that for all $m\ge q$:
+              $(T^m\otimes \id_d)(\ket{\Omega}\!\bra{\Omega})>0$, where
+              $\Omega\in\CC^d\otimes \CC^d$ denotes a maximally entangled state.
+    \end{enumerate}
+    The numbers $q$ appearing in 3., 4.\ can be chosen equal and if $q$ and $n$ are
+    chosen minimal, then $n\le q$.
+\end{theorem}
+
+\begin{proof}
+    First consider item~2.\ and observe that it obviously holds for all $m\ge n$ if
+    it holds for some $n$ since we can always incorporate $m-n$ Kraus operators in
+    $\psi$. Similar holds for item~4. In order to see this, define
+    $\tau_q:=(T^q\otimes \id_d)(\ket{\Omega}\!\bra{\Omega})$ and assume $\tau_q>0$.
+    Then there is in particular a constant $c>0$ such that $\tau_q\ge c\tau_{q-1}$
+    and therefore
+    \begin{equation}\tag{6.41}
+        \tau_{q+1}
+        = (T\otimes \id)(\tau_q)
+        \ge c(T\otimes \id)(\tau_{q-1})
+        = c\tau_q>0.
+    \end{equation}
+    By induction the same holds then true for all integers larger than $q$.
+
+    \noindent
+    $1.\Leftrightarrow 2$.:
+    Let us introduce $K_I:=\prod_{k=1}^n K_{i_k}$ with multi-index
+    $I=(i_1,\dots,i_n)$. If $T$ is primitive, then by Thm.~6.7 there exists an $n$
+    such that $\sum_I K_I\ket{\psi}\!\bra{\psi}K_I^\dagger$ has full rank for every
+    $\psi$. Thus, for every $\phi$ there is an $I$ so that
+    $\langle\phi|K_I|\psi\rangle\neq 0$ and therefore
+    $\spn\{K_I\ket{\psi}\}=\CC^d$. Conversely, if the latter is true, then for every
+    $\phi$ there will be a unitary $U$ so that
+    $\ket{\phi}\propto \sum_I U_{JI}K_I\ket{\psi}=:K'_J\ket{\psi}$. Since $\{K_I\}$
+    and $\{K'_J\}$ both provide a Kraus representation of $T^n$ (see Thm.~2.1) the
+    full rank property is guaranteed. Following Thm.~6.7 $T$ then has to be
+    primitive.
+
+    \noindent
+    $3.\Leftrightarrow 4$.:
+    Following the above lines and denoting by $K_I$ the Kraus operators of $T^q$ it
+    is clear that $(T^q\otimes \id_d)(\ket{\Omega}\!\bra{\Omega})>0$ is equivalent to
+    $\spn\{(K_I\otimes \one_d)\ket{\Omega}\}=\CC^d\otimes \CC^d$. From here the
+    equivalence between item~3.\ and 4.\ follows due to the fact that the relation
+    $K\leftrightarrow (K\otimes \one)\ket{\Omega}$ is a linear one-to-one mapping
+    between $\mcM_d(\CC)$ and $\CC^d\otimes \CC^d$.
+
+    \noindent
+    $4.\Rightarrow 1$.:
+    If the Choi--Jamiolkowski matrix
+    $\tau:=(T^q\otimes \id_d)(\ket{\Omega}\!\bra{\Omega})$ has full rank, then so
+    does
+    \begin{equation}\tag{6.42}
+        T^q(\ket{\psi}\!\bra{\psi})
+        = d(\one_d\otimes \bra{\overline{\psi}}) \tau\,(\one_d\otimes \ket{\overline{\psi}})
+        \qquad \forall \psi\in\CC^d.
+    \end{equation}
+    This also shows that $n=q$ is sufficient. So if we choose both $n$ and $q$
+    minimal, then $n\le q$ in general.
+
+    \noindent
+    $1.\Rightarrow 4$.:
+    The proof for this implication is entirely parallel with
+    Eqs.~\eqref{6.39},\eqref{6.40} where $q$ now plays the role of $n$: just replace
+    $\rho$ by $\Omega$, $\rho_\infty$ by $\rho_\infty\otimes \one/d$ and $T$ by
+    $T\otimes \id$. Also the constant $c$ now depends on $T\otimes \id$, but the
+    argumentation remains the same.
+\end{proof}
+
+Note that all the above relations for both positive and completely positive maps
+hold as well for maps which are not trace-preserving\footnote{The limit
+    $\lim_{k\to\infty}T^k$ has then to be normalized by the $k$th power of the
+    spectral radius of $T$.} so that the notion of primitivity is well-defined for
+arbitrary positive maps.
+
+Finally, we will show that the number $q$ (and therefore also $n$) appearing in
+Thm.~6.8 can be bounded by the dimension $d$ of the system. These bounds can be
+seen as a quantum counterpart to Wielandt's inequality, which does the same for
+the classical case of primitive stochastic matrices. We need two preparatory
+Lemmas before the main result. As before $K_n$ denotes the complex linear span
+of the Kraus operators of $T^n$. We will frequently use that every $K\in K_n$ is,
+up to a scalar multiple, a possible Kraus operator of $T^n$. This follows from
+the freedom in the Kraus decomposition (Thm.~2.1, point~4.).
+
+\begin{lemma}
+    Let $T$ be a primitive quantum channel on $\mcM_d(\CC)$ with Kraus rank $k$. Then,
+    there is a natural number $n\le d^2-k+1$ and a $K\in K_n$ such that $\tr[K]\neq 0$.
+\end{lemma}
+
+\begin{proof}
+    Let us denote by $R_n$ the complex linear span of all $K_m$ with $m\le n$. We have
+    to show that: (*) for any $n\in\NN$, if $\dim(R_n)<d^2$, then
+    $\dim(R_{n+1})>\dim(R_n)$. Since $\dim(R_1)=k$, by iteration we obtain that
+    $R_{d^2-k+1}=\mcM_d(\CC)$. This implies that a linear combination of the elements
+    of $K_n$ with various $n\le d^2-k+1$ must be equal to the identity, and thus at
+    least one of the elements must have non-zero trace. To prove (*) we note that,
+    by definition, $R_n\subseteq R_{n+1}$. If they would be equal, then $R_m=R_n$ for
+    all $m>n$. Thus, equality can only occur when $\dim(R_n)=d^2$ since otherwise
+    the map $T$ would not be primitive.
+\end{proof}
+
+\begin{lemma}
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a primitive completely positive map such that
+    at least one of its Kraus operators, say $K_1$, has a non-zero eigenvalue, i.e.,
+    $K_1\ket{\varphi}=\mu\ket{\varphi}$ with $\mu\neq 0$. Then:
+    \begin{enumerate}
+        \item[(a)] $K_{d-1}\ket{\varphi}=\CC^d$.
+        \item[(b)] If $K_1$ is not invertible, then for all $\ket{\psi}\in\CC^d$,
+              $\ket{\varphi}\!\bra{\psi}\in K_{d^2-d+1}$.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    (a) We define $S_n$ as the span of all $K_m\ket{\varphi}$ with $m\le n$ together
+    with $\ket{\varphi}$. If $\dim(S_n)<d$, then $\dim(S_{n+1})>\dim(S_n)$, since
+    otherwise the map would not be primitive. Thus, $S_{d-1}=\CC^d$. That is, for all
+    $\ket{\phi}\in\CC^d$, there exist matrices $K^{(n)}\in K_{k_n}$, $k_n\le d-1$ such
+    that (with $K^{(0)}\propto \one$)
+    \begin{equation}\tag{6.43}
+        \ket{\phi}
+        = \sum_{n=0}^{d-1} K^{(n)}\ket{\varphi}
+        = \sum_{n=0}^{d-1} K^{(n)} \frac{K_1^{d-k_n}}{\mu^{d-k_n}}\ket{\varphi},
+    \end{equation}
+    and thus $\ket{\phi}\in K_{d-1}\ket{\varphi}$.
+
+    (b) We write $K_1$ in the Jordan standard form and divide it into two blocks. The
+    first one, of size $\tilde d\times \tilde d$, consists of all Jordan blocks
+    corresponding to non-zero eigenvalues, whereas the second one contains all those
+    corresponding to zero eigenvalues. We denote by $P$ the (not necessarily
+    Hermitian) projector onto the subspace where the first block is supported and by
+    $r\le d-\tilde d$ the size of the largest Jordan block corresponding to a zero
+    eigenvalue. We have
+    \begin{equation}\tag{6.44}
+        K_1P=PK_1,
+        \qquad
+        K_1^r = K_1^r P.
+    \end{equation}
+    We define $R_n:=PK_n$ and show that $R_{d\tilde d}=P\mcM_d(\CC)$. For all $n\in\NN$,
+    $\dim(R_{n+1})\ge \dim(R_n)$. The reason is that for any set of linearly
+    independent matrices $K^{(n)}_k\in R_n$, $K_1K^{(n)}_k\in R_{n+1}$ are also linearly
+    independent, given that $K_1$ is invertible on its range. By following the
+    reasoning of [?, Appendix A] we get that, if $\dim(R_{n+1})=\dim(R_n)=:d'$, then
+    $\dim(R_m)=d'$ for all $m>n$, which is incompatible with $T$ being primitive unless
+    $d'=\tilde d d$. Thus, for any $\ket{\psi}\in\CC^d$, there exists a $K\in K_{d\tilde d}$
+    with
+    \[
+        \ket{\varphi}\!\bra{\psi}
+        = PK
+        = \frac{K_1^r PK}{\mu^r}
+        = \frac{K_1^r K}{\mu^r}
+        \in K_{d\tilde d + r}.
+    \]
+    By using that $\tilde d\le d-r$ and that $r\ge 1$ (since $K_1$ is supposed to be
+    not invertible) we get $\tilde d d + r \le d^2-d+1$, which concludes the proof.
+\end{proof}
+
+We have now the necessary tools to prove our main result.
+
+\begin{theorem}[Quantum Wielandt inequality]
+    Let $T$ be a primitive quantum channel on $\mcM_d(\CC)$ with Kraus rank $k$. Then
+    for the minimal $q$ as it appears in Thm.~6.8 we have that
+    \begin{enumerate}
+        \item in general $q\le (d^2-k+1)d^2$,
+        \item if the span of Kraus operators $K_1$ contains an invertible element, then
+              $q\le d^2-k+1$,
+        \item if the span of Kraus operators $K_1$ contains an element with at least one
+              non-zero eigenvalue, then $q\le d^2$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \textbf{2.} If there is an invertible element, then it follows from [?, Appendix A,
+            Proposition 2] that $\dim K_{n+1}>\dim K_n$ until the full matrix space $\mcM_d(\CC)$ is
+    spanned and thus $q\le d^2-k+1$.
+
+    \textbf{1.} Let us denote by $\{K^{(n)}_k\}$ the Kraus operators corresponding to
+    $T^n$. According to Lemma~6.2, one of them, say $K^{(n)}_1$, has non-zero trace for
+    some $n\le d^2-k+1$ and therefore there exists $\ket{\varphi}$ such that
+    $K^{(n)}_1\ket{\varphi}=\mu\ket{\varphi}$ with $\mu\neq 0$. If $K^{(n)}_1$ is
+    invertible, then 1.\ is implied by 2., so we can assume that it is not invertible.
+    According to Lemma~6.3(b), for all $\ket{\psi}$, $\ket{\varphi}\!\bra{\psi}\in
+        K_{(d^2-d+1)n}$; and according to Lemma~6.3(a) $\ket{\chi}\!\bra{\psi}\in K_{nd^2}$.
+    This implies that $K_{nd^2}=\mcM_d(\CC)$ and hence the general bound 1.\ follows.
+
+    The argument which proves 3.\ is completely analogous just with $n=1$ as we do,
+    by assumption, not have to block in order to get a Kraus operator with non-zero
+    eigenvalue.
+\end{proof}
+
+In the previous proof we use, for the general case, blocks of $T^n$ for some
+$n\le d^2-k+1$ just in order to get any Kraus operator with a non-zero
+eigenvalue. This rather clumsy step is not necessary if the dimension is small:
+
+\begin{corollary}
+    Let $T$ be a primitive quantum channel on $\mcM_d(\CC)$ with $d=2,3$. Then there
+    is always a Kraus operator with non-zero eigenvalue in $K_1$ and thus $q\le d^2$.
+\end{corollary}
+
+\begin{proof}
+    The fact that $K_1$ has this property for $d=2,3$ stems from the classification
+    of nilpotent subspaces~[?]: assume that $K_1$ would be a nilpotent subspace
+    within the space of $d\times d$ matrices. Then for $d=2$ its dimension would have
+    to be one, so it could not arise from the Kraus operators of a quantum channel.
+    Similarly, for $d=3$ there are (up to similarity transformations) two types of
+    nilpotent subspaces~[?] of dimension $k>1$: one of dimension $k=3$, the space of
+    upper-triangular matrices, whose structure does not allow the trace-preserving
+    property, and one of dimension $k=2$ which only leads to quantum channels having
+    a (in modulus) degenerate largest eigenvalue. Hence, if $K_1$ is generated by the
+    Kraus operators of a primitive quantum channel, then it cannot be nilpotent if
+    $d=2,3$.
+\end{proof}
+
+For $d\ge 4$ the set of Kraus operators can form a nilpotent subspace even for
+primitive quantum channels. However, exploiting the structure of such
+subspaces~[?] the general bound in Thm.~6.9 can still be improved.
+
+\setcounter{problem}{11}
+\begin{problem}[Optimal Wielandt bound]
+Find the smallest integers $n$ and $q$ (as a function of the dimension $d$) for
+Thm.~6.8.
+\end{problem}
+
+% ------------------------------------------------------------
+\subsection{Fixed points}
+% ------------------------------------------------------------
+
+\begin{theorem}[Brouwer's fixed point theorem]
+    Let $T$ be a continuous map from a non-empty, compact, convex set
+    $S\subset \RR^n$ into itself, then there is an $x\in S$ such that $T(x)=x$.
+\end{theorem}
+
+As the set of Hermitian matrices in $\mcM_d(\CC)$ is a real vector space and the
+density matrices therein form a compact, convex set, Brouwer's fixed point
+theorem immediately implies:
+
+\begin{theorem}[Stationary states]
+    Every continuous, trace-preserving, positive (not necessarily linear) map
+    $T:\mcM_d(\CC)\to\mcM_d(\CC)$ has at least one stationary state. That is, there
+    is a density matrix $\rho\in\mcM_d(\CC)$ such that $T(\rho)=\rho$.
+\end{theorem}
+
+In the following we are interested in linear maps, which are automatically
+continuous.
+
+\begin{proposition}[Positive fixed-points]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving, positive, linear map and
+    $X=T(X)$ a fixed point. If $X=\sum_{j=1}^4 c_j P_j$ is the decomposition of $X$
+    into four positive operators $P_j\ge 0$ which arises from decomposing $X$ first
+    into Hermitian and anti-Hermitian parts and these further into orthogonal
+    positive and negative parts, then
+    \begin{equation}\tag{6.45}
+        T(P_j)=P_j,\qquad j=1,\dots,4,
+    \end{equation}
+    are fixed points as well.
+\end{proposition}
+
+\begin{proof}
+    For every Hermiticity preserving linear map we obviously have that the two
+    Hermitian operators $X+X^\dagger$ and $i(X-X^\dagger)$ are fixed points if $X$ is
+    one. So let us assume that $X$ is Hermitian and that $P_\pm\ge 0$ are its
+    orthogonal positive and negative parts, i.e., $X=P_+-P_-$ and $\tr[P_+P_-]=0$.
+    The fixed point equation then reads $T(P_+)-T(P_-)=P_+-P_-$ and we want to
+    identify $T(P_\pm)$ with $P_\pm$. To this end, denote by $Q$ the projection onto
+    the support of $P_+$ and note that the fixed point equation together with the
+    trace-preserving property of $T$ implies that
+    \begin{align}
+        \tr[P_+]
+         &= \tr[Q(P_+-P_-)]
+        = \tr\!\left[Q\,T(P_+-P_-)\right], \tag{6.46}\\
+         &\le \tr[T(P_+)] = \tr[P_+]. \tag{6.47}
+    \end{align}
+    Since equality has to hold for the inequality in Eq.~\eqref{6.47}, we have to
+    have that $T(P_+)$ is supported on $Q$ while $T(P_-)$ is orthogonal to it.
+    Consequently, $T$ preserves the orthogonality of $P_\pm$ and we have
+    $T(P_\pm)=P_\pm$.
+\end{proof}
+
+For a map $T$ on $\mcM_d(\CC)$ let us define the set of fixed points
+\begin{equation}\tag{6.48}
+    \FT := \{X\in\mcM_d(\CC)\mid X=T(X)\}.
+\end{equation}
+Note that if $T$ is linear, then $\FT$ is closed under linear combination, i.e.,
+it is a vector space, and if $T$ is Hermiticity preserving (in particular, if it
+is positive), then $\FT$ is closed under Hermitian conjugation. The previous
+Prop.~6.8 immediately implies that for trace-preserving quantum channels the set
+of fixed points is spanned by stationary density operators:
+
+\begin{corollary}[Linearly independent stationary states]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving, positive, linear map. If
+    the space $\FT$ has dimension $D$, then there are $D$ linearly independent
+    density operators $\{\rho_\alpha\in\mcM_d(\CC)\}_{\alpha=1,\dots,D}$ such that
+    $T(\rho_\alpha)=\rho_\alpha$ and
+    \begin{equation}\tag{6.49}
+        \FT = \spn\{\rho_1,\dots,\rho_D\}.
+    \end{equation}
+\end{corollary}
+
+\begin{proposition}[Maximal support of fixed points]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving, positive, linear map and
+    $T_\infty$ the projection onto its fixed point space as given in Eq.~\eqref{6.14}.
+    Then every fixed point $X=T(X)\in\mcM_d(\CC)$ has support and range within the
+    support space of the fixed point $T_\infty(\one)$.
+\end{proposition}
+
+\begin{proof}
+    For positive $X$ the claim follows from positivity of $T_\infty$: since
+    $0\le T_\infty(X)=X\le \lVert X\rVert_\infty T_\infty(\one)$ the range (which
+    equals the support) of $X$ has to be contained in the one of $T_\infty(\one)$
+    (see Douglas' theorem~5.1).
+
+    If $X$ is not positive we can by Prop.~6.8 decompose it into a linear combination
+    of four positive fixed points $P_1,\dots,P_4$. Using that $\supp(X)$ is in the
+    linear span of $\bigcup_j \supp(P_j)$ together with the result for positive fixed
+    points then shows $\supp(X)\subseteq \supp(T_\infty(\one))$. The same argument
+    applies for the range of $X$.
+
+    Alternatively, we may use that $X$ is a fixed point iff $X^\dagger$ is, and that
+    the range of $X$ equals the support of $X^\dagger$.
+\end{proof}
+
+The following shows that the ranges of all stationary states play an exceptional
+role: every state which is supported within such a space will remain so after
+the action of the channel:
+
+\begin{proposition}[Stationary subspaces]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving, positive, linear map, and
+    let $Q\in\mcM_d(\CC)$ be the Hermitian projection onto the support of any
+    stationary density operator $\sigma=T(\sigma)\in\mcM_d(\CC)$. Then
+    $\tr[(\one-Q)T(Q)]=0$ and for every density operator $\rho\in\mcM_d(\CC)$
+    \begin{equation}\tag{6.50}
+        \rho\le Q \ \Rightarrow\ T(\rho)\le Q.
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    By definition of $Q$ we have that $Q\le c\sigma\le c'Q$ for some strictly positive
+    numbers $c$ and $c'$. Therefore $T(Q)\le cT(\sigma)=c\sigma\le c'Q$ which implies
+    $\tr[(\one-Q)T(Q)]=0$. Similarly, if $\rho\le Q$, then $T(\rho)\le c'Q$, i.e.,
+    $T(\rho)$ has support in the range of $Q$. Since $T(\rho)$ has eigenvalues at most
+    one, this means that $T(\rho)\le Q$.
+\end{proof}
+
+Projections onto stationary subspaces (in the sense of Eq.~\eqref{6.50}) can be
+easily characterized in the Heisenberg picture, as well:
+
+\begin{proposition}[Stationary subspaces II]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving, positive, linear map, and
+    let $Q\in\mcM_d(\CC)$ be any Hermitian projection. Then the following statements
+    are equivalent:
+    \begin{enumerate}
+        \item For every density matrix $\rho\in\mcM_d(\CC)$ with $\rho\le Q$, we have that
+              $T(\rho)\le Q$ as well,
+        \item $T^*(Q)\ge Q$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    $1.\Rightarrow 2$.: define the orthogonal projection $P:=(\one-Q)$. The assumption
+    implies that $Q\,T^*(P)\,Q=0$ which in turn means that $P\,T^*(P)\,P=T^*(P)$. Using
+    that $T^*(\one)=\one$, the latter can be rewritten as $T^*(Q)-P\,T^*(Q)\,P=Q$ from
+    which $T^*(Q)\ge Q$ follows.
+    $2.\Rightarrow 1$. follows from the chain of inequalities
+    \[
+        0 \le \tr[T(\rho)P]
+        = 1-\tr[\rho\,T^*(Q)]
+        \le 1-\tr[\rho Q]
+        = 0.
+    \]
+\end{proof}
+
+A projection onto a stationary subspace is often called \emph{sub-harmonic} and
+item~2.\ of the previous proposition is used as the defining property of this
+notion. Note that while the support projection of every stationary state is
+sub-harmonic (due to Props.~6.10,6.11), the converse is not necessarily true:
+for instance $T^*(\one)\ge \one$ holds trivially for every trace-preserving $T$
+even if there is no stationary state of full rank.
+
+If $T$ is completely positive with Kraus decomposition
+$T(\cdot)=\sum_i K_i\,\cdot\,K_i^\dagger$, one can relate support spaces of fixed
+points to properties of the Kraus operators: suppose there is a stationary state
+with support $\mcH\subset \CC^d$. Then all Kraus operators have to preserve this
+subspace in the sense that $K_i\mcH\subseteq \mcH$. In particular, if
+$\rho=\ket{\psi}\!\bra{\psi}$ is a pure state, then $\psi$ has to be a
+simultaneous eigenvector of all Kraus operators.
+
+We will now investigate the structure of the set of fixed points $\FT$ of
+quantum channels. As a first step we exploit Props.~6.9,6.10 in order to restrict
+the discussion to trace-preserving maps which have a full rank fixed point:
+
+\begin{lemma}[Restriction to full rank fixed points]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving, (completely) positive,
+    linear map, and $\mcH\subseteq \CC^d$ the support space of $T_\infty(\one)$. Then
+    the linear map $\widetilde{T}:\mcB(\mcH)\to\mcB(\mcH)$ defined via
+    \[
+        \widetilde{T}(X) := \left.T(X\oplus 0)\right|_{\mcH}
+    \]
+    is trace-preserving and (completely) positive as well. Moreover, $\widetilde{T}$
+    has a fixed point of full rank and\footnote{Here the `0' is supposed to act on
+        the orthogonal complement of $\mcH$ in $\CC^d$.}
+    \begin{equation}\tag{6.51}
+        \FT = \mathcal{F}_{\widetilde{T}} \oplus 0.
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    Denote by $V:\mcH\to\CC^d$ the isometry which embeds $\mcH$ into $\CC^d$ so that
+    $V^\dagger V=\one$ and $Q:=VV^\dagger$ is the projection onto the range of
+    $T_\infty(\one)$. Then by definition $\widetilde{T}(X)=V^\dagger T(VXV^\dagger)V$
+    so that $\widetilde{T}$ inherits the property of being (completely) positive from
+    $T$. In order to see that $\widetilde{T}$ is trace-preserving note that
+    $VXV^\dagger=X\oplus 0$ has support and range within the range of $Q$. Thus we
+    can decompose it into four positive operators with the same property and apply
+    Prop.~6.10 which leads to
+    \begin{equation}\tag{6.52}
+        T(X\oplus 0) = \widetilde{T}(X)\oplus 0,
+    \end{equation}
+    so that the trace-preserving property is inherited from $T$ as well. Finally,
+    Eq.~\eqref{6.52} also implies Eq.~\eqref{6.51} since by Prop.~6.9 all fixed points
+    of $T$ are of the form $X\oplus 0$. In particular, by definition of $\mcH$, there
+    is one fixed point which has full rank on $\mcH$.
+\end{proof}
+
+Before returning to trace-preserving maps we will discuss their duals---unital
+maps. This will provide an important prerequisite for the discussion of the
+trace-preserving case. We will also see that the structure of the fixed point set
+of a map simplifies a lot when the dual map has at least one fixed point of full
+rank. This is already visible in the dual analog of Lem.~6.4:
+
+\begin{lemma}
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving, positive, linear map, and
+    $\widetilde{T}$ and $V$ defined as in Lem.~6.4. Let us further denote by $S$ the
+    set of linear unital maps which satisfy the Schwarz inequality in Eq.~(5.2). Then
+    \begin{equation}\tag{6.53}
+        A\in \mathcal{F}_{T^*}\ \Rightarrow\ V^\dagger A V \in \mathcal{F}_{\widetilde{T}^*},
+    \end{equation}
+    and
+    \begin{equation}\tag{6.54}
+        X\in \mathcal{F}_{\widetilde{T}^*}
+        \ \Leftrightarrow\
+        V^\dagger T^*(VXV^\dagger)V = X.
+    \end{equation}
+    Moreover,
+    \begin{equation}\tag{6.55}
+        T^*\in S\ \Rightarrow\ \widetilde{T}^*\in S.
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    Eq.~\eqref{6.54} follows from inserting the definitions. For Eq.~\eqref{6.53}
+    note that
+    $\widetilde{T}^*(V^\dagger A V)=V^\dagger T^*(QAQ)V$ (using the notation of
+    Lem.~6.4 again). Taking the trace with an arbitrary $C\in\mcB(\mcH)$ we obtain
+    \begin{align}
+        \tr\![C\,\widetilde{T}^*(V^\dagger A V)]
+         &= \tr\![T(VCV^\dagger)\,QAQ], \tag{6.56}\\
+         &= \tr\![T(VCV^\dagger)\,A]
+        = \tr\![CV^\dagger A V], \tag{6.57}
+    \end{align}
+    where the second equality follows from Prop.~6.10 and the last step uses the
+    assumption that $A$ is a fixed point of $T^*$.
+
+    Finally, the Schwarz inequality for $\widetilde{T}^*$ follows from
+    \begin{align}
+        V^\dagger T^*(VA^\dagger AV^\dagger)V
+         &\ge V^\dagger T^*(VA^\dagger V^\dagger)\,T^*(VAV^\dagger)V, \tag{6.58}\\
+         &\ge V^\dagger T^*(VA^\dagger V^\dagger)V
+        V^\dagger T^*(VAV^\dagger)V. \tag{6.59}
+    \end{align}
+    Here the first inequality comes from first inserting $V^\dagger V=\one$ between
+    $A^\dagger$ and $A$ and then using the Schwarz inequality for $T^*$ and the
+    second inequality is due to $VV^\dagger\le \one$. Written in terms of
+    $\widetilde{T}^*$ the above equations lead to the claimed
+    $\widetilde{T}^*(A^\dagger A)\ge \widetilde{T}^*(A^\dagger)\widetilde{T}^*(A)$.
+\end{proof}
+
+Due to the aforementioned issue we will first characterize the fixed point set
+of unital maps which have a dual with fixed point of full rank:
+
+\begin{theorem}[Structure of fixed points for unital Schwarz maps]
+    Let $T^*:\mcM_d(\CC)\to\mcM_d(\CC)$ be a unital map which (i) satisfies the
+    Schwarz inequality Eq.~(5.2) (e.g., a completely positive map) and (ii) is such
+    that $T$ has a full rank fixed point. Then the set of fixed points $\mathcal{F}_{T^*}$ is
+    a $*$-algebra and has thus the form specified in Eq.~(1.39) (without the
+    zero-block).
+\end{theorem}
+
+\begin{proof}
+    Let $\rho\in\mcM_d(\CC)$ be a full rank fixed point of $T$. Note that by
+    Prop.~6.9 we can w.l.o.g.\ chose a positive definite $\rho>0$. Denote by
+    $A=T^*(A)\in\mcM_d(\CC)$ a fixed point of $T^*$. Then, using the fixed point
+    properties and the fact that $A^\dagger$ is a fixed point of $T^*$ as well we obtain
+    \begin{equation}\tag{6.60}
+        \tr\!\left[(T^*(A^\dagger A)-T^*(A^\dagger)T^*(A))\rho\right]=0.
+    \end{equation}
+    Note that the expression in parentheses is positive semi-definite by the Schwarz
+    inequality Eq.~(5.2) and therefore, in fact, identical zero since $\rho$ is assumed
+    to be positive definite. Hence, we have equality in the Schwarz inequality so that
+    we can apply Thm.~5.4 which implies that if $A,X\in \mathcal{F}_{T^*}$, then $AX\in \mathcal{F}_{T^*}$
+    is a fixed point as well. Since $\mathcal{F}_{T^*}$ is also closed under linear combinations
+    and Hermitian conjugation, it is a $*$-algebra. Evidently, it is unital since
+    $T^*(\one)=\one$ holds by assumption.
+\end{proof}
+
+If $T$ does not have a full rank fixed point, then $\mathcal{F}_{T^*}$ need not be an
+algebra. Together with Lem.~6.5 we obtain a weaker structure in this case:
+
+\begin{corollary}
+    Let $T^*:\mcM_d(\CC)\to\mcM_d(\CC)$ be a unital linear map which satisfies the
+    Schwarz inequality Eq.~(5.2). Let $Q=Q^\dagger\in\mcM_d(\CC)$ be the projection
+    onto the maximum rank fixed point of $T$, then the following set is a
+    $*$-algebra:
+    \begin{equation}\tag{6.61}
+        \bigl\{Y\in Q\mcM_d(\CC)Q \big| QT^*(Y)Q=Y\bigr\}.
+    \end{equation}
+\end{corollary}
+
+\begin{proof}
+    The stated set is exactly the one appearing in Eq.~\eqref{6.54}, i.e., the fixed
+    point set of $\widetilde{T}^*$. Since $\widetilde{T}$ has, however, a fixed point
+    of full rank by construction (see Lem.~6.4) we can apply Thm.~6.12 which proves
+    the claim.
+\end{proof}
+
+The relation between fixed point sets of unital maps and $*$-algebras becomes
+more transparent for completely positive maps:
+
+\begin{theorem}[Fixed points and commutants]
+    Let $T^*:\mcM_d(\CC)\to\mcM_d(\CC)$ be a completely positive unital map with Kraus
+    decomposition $T^*(\cdot)=\sum_i K_i^\dagger\,\cdot\,K_i$. If both $X,X^\dagger X\in
+        \mathcal{F}_{T^*}$, then $[X,K_i]=0$ for all $i$. Consequently, the largest $*$-subalgebra
+    contained within $\mathcal{F}_{T^*}$ is given by the set
+    \begin{equation}\tag{6.62}
+        \bigl\{X\in\mcM_d(\CC) \big| \forall i:\ [X,K_i]=[X,K_i^\dagger]=0\bigr\}.
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    The assertion follows from the equation
+    \[
+        \sum_i [X,K_i]^\dagger [X,K_i]
+        = T^*(X^\dagger X) - X^\dagger T^*(X) - T^*(X)^\dagger X + X^\dagger X
+        = 0
+    \]
+    by exploiting the fixed point properties of $X$ and $X^\dagger X$ together with
+    the fact that the l.h.s.\ is a sum over positive terms which is zero iff all
+    terms vanish individually. Hence every $*$-subalgebra of $\mathcal{F}_{T^*}$ is a subset
+    of Eq.~\eqref{6.62}. Conversely, the set in Eq.~\eqref{6.62} is a $*$-subalgebra
+    within $\mathcal{F}_{T^*}$ on its own and thus the largest one.
+\end{proof}
+
+Finally, we discuss the structure of the fixed point set of trace-preserving maps:
+
+\begin{theorem}[Fixed points of trace-preserving maps]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving, positive, linear map for
+    which $T^*$ satisfies the Schwarz inequality in Eq.~(5.2). Then there is a
+    unitary $U\in\mcM_d(\CC)$ and a set of positive definite density matrices
+    $\rho_k\in \mcM_{m_k}(\CC)$ such that the fixed point set of $T$ is given by
+    \begin{equation}\tag{6.63}
+        \FT
+        = U\left(0 \oplus \bigoplus_{k=1}^K \mcM_{d_k}\otimes \rho_k\right)U^\dagger,
+    \end{equation}
+    for an appropriate decomposition of the Hilbert space
+    $\CC^d = \CC^{d_0}\oplus \bigoplus_k \CC^{d_k}\otimes \CC^{m_k}$. $\mcM_{d_k}$
+    stands for the full algebra of complex matrices on $\CC^{d_k}$.
+\end{theorem}
+
+\begin{proof}
+    We exploit that by Lem.~6.4 $\FT = 0\oplus \mathcal{F}_{\widetilde{T}}$ after an
+    appropriate basis transformation which we can assign to a unitary $U$. Now
+    $\widetilde{T}$ has, by construction, a full rank fixed point and following
+    Lem.~6.4 it is trace-preserving and its dual satisfies the Schwarz inequality
+    due to Lem.~6.5. This implies by Thm.~6.12 that $\widetilde{T}_\infty^*$ projects
+    onto a $*$-algebra. The general form of a positive map projecting onto a
+    $*$-algebra (i.e., a conditional expectation) is given in Eq.~(1.40). Taking the
+    dual of this map we arrive at $\widetilde{T}_\infty$ projecting onto a set of the
+    form in Eq.~\eqref{6.63} (without the zero-block). Putting things together and
+    using that we can always move the kernel of each $\rho_k$ into the zero-block
+    completes the proof.
+\end{proof}
+
+Note that Thm.~6.14 implies that the fixed point $T_\infty(\one)$ is (up to
+normalization) given by
+$U(0 \oplus \bigoplus_k \one_{m_k}\otimes \rho_k)U^\dagger$. Moreover,
+it shows that again the set of fixed points is closely related to a $*$-algebra
+(actually is a $*$-algebra w.r.t.\ a modified product):
+
+\begin{corollary}
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving, positive, linear map for
+    which $T^*$ satisfies the Schwarz inequality in Eq.~(5.2). Then for any density
+    matrix $\rho\in\mcM_d(\CC)$ which is a maximum rank fixed point of $T$ we have
+    that the set $\rho^{-1/2}\FT\rho^{-1/2}$ is a $*$-algebra (with the inverse taken
+    on the support of $\rho$).
+\end{corollary}
+
+Another interesting consequence of Thm.~6.14 is its implication according to
+Prop.~6.10: the decomposition of the fixed point space into a direct sum in
+Eq.~\eqref{6.63} implies the same decomposition into stationary subspaces. What
+is more, the $\mcM_{d_k}$'s give rise to subsystem which are invariant, i.e., on
+which $T$ acts as the identity (up to the reversible rotation given by $U$).
+
+\begin{theorem}[Unique fixed points of full rank]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving quantum channel with Kraus
+    decomposition $T(\cdot)=\sum_i K_i\,\cdot\,K_i^\dagger$. If for some $n\in\NN$ we
+    have that
+    \begin{equation}\tag{6.64}
+        \spn\left\{\prod_{k=1}^n K_{i_k}\right\}=\mcM_d(\CC),
+    \end{equation}
+    i.e., homogeneous polynomials of the Kraus operators span the entire matrix
+    algebra, then there exist a unique positive definite density matrix
+    $\rho\in\mcM_d(\CC)$ such that $\FT\propto \rho$.
+\end{theorem}
+
+\begin{proof}
+    Consider the map $T^n$, i.e., the $n$-fold concatenation of $T$. This has Kraus
+    operators $R_I:=\prod_{k=1}^n K_{i_k}$ with multi-index $I=(i_1,\dots,i_n)$ and it
+    satisfies $\FT\subseteq \mathcal{F}_{T^n}$. Now for every $\psi\in\CC^d$ we have that
+    $T^n(\ket{\psi}\!\bra{\psi})$ has full rank since by assumption
+    $\spn\{R_I\ket{\psi}\}=\CC^d$. This implies that there cannot be any stationary
+    density operator which has a kernel. Since we can always construct a rank deficient
+    positive fixed point if the dimension of $\FT$ is larger than one (see Cor.~6.5),
+    the assertion follows.
+\end{proof}
+
+\begin{problem}[Fixed points of general positive maps]
+Characterize the set of fixed points of unital, positive, linear maps which do
+not satisfy the Schwarz inequality.
+\end{problem}
+
+% ------------------------------------------------------------
+\subsection{Cycles and recurrences}
+% ------------------------------------------------------------
+
+We will now have a closer look at the space corresponding to the peripheral
+spectrum (i.e., eigenvalues which are phases) of a positive linear map
+$T:\mcM_d(\CC)\to\mcM_d(\CC)$ which is assumed to be either trace-preserving or
+unital. Denote the complex linear span of all the respective eigenspaces by
+\begin{equation}\tag{6.65}
+    \XT := \spn\left\{X\in\mcM_d(\CC) \Big| \exists \varphi\in\RR:\ T(X)=e^{i\varphi}X\right\},
+\end{equation}
+for which we will simply write $\mcX$ if the dependence on $T$ is clear from the
+context. The questions which we address first are: what's the structure of
+$\mcX$? what's the structure of $T$ restricted to $\mcX$? and what does this
+imply on the peripheral spectrum?
+
+Note that evidently $\XT=\mcX_{T_\varphi}$ if $T_\varphi$ is constructed from $T$
+as defined in Eq.~\eqref{6.13} by discarding all but those terms in the spectral
+decomposition which correspond to the peripheral spectrum. Recall that by
+Prop.~6.3 if $T$ is trace-preserving or unital, then $T_\varphi$ will be
+(completely) positive if $T$ is and that by Prop.~6.2 there cannot any non-trivial
+Jordan-block associated to an eigenvalue of modulus one.
+
+\begin{proposition}[Asymptotic image]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a positive and trace-preserving linear map.
+    Then $\XT$ is the image of the projection $T_\phi$, it is spanned by positive
+    operators, and it is closed under the action of $T$. That is,
+    \begin{enumerate}
+        \item $T_\phi(\mcM_d(\CC))=\XT$,
+        \item $\exists\{\rho_i\ge 0\}$ such that $\XT=\spn\{\rho_i\}$,
+        \item $T(\XT)=\XT$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    Note that by the proof of Prop.~6.3 every $X\in \XT$ is a fixed point of $T_\phi$
+    since there is an ascending sequence $n_i\in\NN$ such that
+    $\lim_{i\to\infty} T^{n_i}=T_\phi$. Conversely, if $X=T_\phi(X)$ is such a fixed
+    point, then it has to be a linear combination of eigenvectors of $T$ which
+    correspond to eigenvalues of modulus one. $\XT$ thus coincides with the space of
+    fixed points of $T_\phi$ which is in turn given by $T_\phi(\mcM_d(\CC))$, proving 1.
+
+    2.\ follows from 1.\ together with Cor.~6.5 and in order to arrive at 3.\ we just
+    have to use the definition of $\XT$ and express an element $X\in\XT$ as a linear
+    combination of peripheral eigenvectors of $T$.
+\end{proof}
+
+The following refines this Proposition by adding the assumption that the map
+under consideration satisfies the Schwarz inequality. Exploiting this fact one
+observes that $\mcX$ is a $*$-algebra (w.r.t.\ a modified product) and that $T$
+acts on it either by permuting blocks or by unitary conjugation on subsystems:
+
+\begin{theorem}[Structure of cycles]
+    Let $T:\mcM_d(\CC)\to\mcM_d(\CC)$ be a trace-preserving and positive linear map
+    which fulfills the Schwarz inequality in Eq.~(5.2).
+    \begin{enumerate}
+        \item There exists a decomposition of the Hilbert space
+              $\CC^d=\mcH_0\oplus \bigoplus_{k=1}^K \mcH_k$ into a direct sum of tensor products
+              $\mcH_k=\mcH_{k,1}\otimes \mcH_{k,2}$ and positive definite density matrices
+              $\rho_k$ acting on $\mcH_{k,2}$ such that
+              \begin{equation}\tag{6.66}
+                  \XT = 0 \oplus \bigoplus_{k=1}^K \mcM_{d_k}\otimes \rho_k,
+              \end{equation}
+              where $\mcM_{d_k}$ is a full complex matrix algebra on $\mcH_{k,1}$ of dimension
+              $d_k:=\dim(\mcH_{k,1})$. That is, for every $X\in\XT$ there are
+              $x_k\in\mcB(\mcH_{k,1})$ such that
+              \begin{equation}\tag{6.67}
+                  X = 0 \oplus \bigoplus_k x_k\otimes \rho_k.
+              \end{equation}
+        \item There exist unitaries $U_k\in\mcB(\mcH_{k,1})$ and a permutation $\pi$,
+              which permutes within subsets of $\{1,\dots,K\}$ for which the corresponding
+              $\mcH_k$'s have equal dimension, so that for every $X\in\XT$ represented as in
+              Eq.~\eqref{6.67}
+              \begin{equation}\tag{6.68}
+                  T(X)
+                  = 0 \oplus \bigoplus_{k=1}^K
+                  U_k\,x_{\pi(k)}\,U_k^\dagger \otimes \rho_k.
+              \end{equation}
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    The basic ingredients of the proof are those which already appeared in the proof
+    of Thm.~6.1 where we characterized maps with unit determinant. Exploiting
+    Dirichlet's lemma on Diophantine approximations (Lem.~6.1) we can find an
+    ascending subsequence $n_i\in\NN$ so that $\lim_{i\to\infty} T^{n_i}$ converges
+    to a map $I$ with eigenvalues which are either one or zero. Clearly, $I$ is again
+    a trace-preserving, positive linear map which satisfies the Schwarz inequality
+    since all these properties are preserved under concatenation. Moreover,
+    $\XT=\mcX_I$ is the fixed-point space of $I$. So, statement~1.\ of the theorem
+    follows from the structure of the space of fixed points provided in Thm.~6.14.
+
+    2.\ The map $T^{-1}:=\lim_{i\to\infty} T^{n_i-1}$ is the inverse of $T$ on $\mcX$
+    since by construction $T^{-1}T=I$. Hence, both $T$ and $T^{-1}$ map $\mcX\to\mcX$
+    in a bijective way. The crucial point here is that $T^{-1}$ is again a positive,
+    trace-preserving map since it is constructed as a limit of such maps. To
+    understand the consequences, consider any pure state in $\mcX$, i.e., a density
+    operator $\sigma\in\mcX$ which has no non-trivial convex decomposition within
+    $\mcX$. Then the image of $\sigma$ under $T$ has to be a pure state as well:
+    assume this is not the case, i.e., $T(\sigma)=\sum_i \lambda_i \sigma_i$ is a
+    non-trivial convex decomposition into states $\sigma_i\in\mcX$. Then applying
+    $T^{-1}$ to this equation leads to a contradiction since
+    $\sigma=\sum_i \lambda_i T^{-1}(\sigma_i)$ is not pure. Consequently, both $T$
+    and $T^{-1}$ map pure states in $\mcX$ onto pure states. Note that a pure state
+    can only have support in one of the $K$ blocks, for instance $\sigma=x\otimes\rho_k$
+    where $x\in\mcB(\mcH_{k,1})$ is a rank one projection. Now we know that
+    $T(\sigma)=x'\otimes \rho_{k'}$ for some $k'$ and some rank one projection
+    $x'\in\mcB(\mcH_{k',1})$. By continuity and the fact that $T$ is a bijective linear
+    map on $\mcX$, we have that within $\mcX$: (i) every element of block $k$ is mapped
+    to an element of the block $k'$ (i.e., $k'$ does not depend on $x$), and (ii) the
+    blocks $k$ and $k'$ must have equal dimension $d_k=d_{k'}$. Therefore, there is a
+    permutation $\pi$ which permutes blocks of equal size so that $X\in\mcX$ is mapped to
+    \[
+        T(X) = 0 \oplus \bigoplus_k T_k(x_{\pi(k)})\otimes \rho_k,
+    \]
+    with some linear maps $T_k:\mcM_{d_k}\to\mcM_{d_k}$. Since the latter have, together
+    with their inverses, to be positive and trace-preserving they must be either matrix
+    transpositions or unitary conjugations by Cor.~6.2. Matrix transpositions are,
+    however, ruled out by the requirement that $T$ and thus each $T_k$ is a Schwarz map.
+\end{proof}
+
+% ------------------------------------------------------------
+\subsection{Inverse eigenvalue problems}
+% ------------------------------------------------------------
+
+% (No additional content in the provided pages.)
+
+% ------------------------------------------------------------
+\subsection{Literature}
+% ------------------------------------------------------------
+
+There are various extensions of Brouwer's fixed point theorem. Schauder's theorem,
+for instance, extends it to topological vector spaces, which may be of infinite
+dimension. That is, $S$ becomes a convex, compact subset of a topological vector
+space. Kakutani's theorem is a generalization to upper semi-continuous set-valued
+functions (correspondences) $T$ from a non-empty, compact, convex set $S\subset\RR^n$
+into itself such that for all $x\in S$ the set $T(x)$ is non-empty and convex, too.
+Dealing with these and more refined fixed point theorems is part of algebraic topology.
 
 \end{document}

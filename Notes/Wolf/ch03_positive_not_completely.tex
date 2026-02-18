@@ -1,21 +1,746 @@
-% Transcribed from: Wolf, "Quantum Channels & Operations: Guided Tour", Chapter 3
-% Source PDF: WolfLectureNote/ch03_positive_not_completely.pdf
-% Status: PLACEHOLDER - awaiting OCR transcription
-%
-% Scope: Full chapter
-%   - Positive but not completely positive maps
-%   - Transpose map, entanglement witnesses
-%   - Decomposable maps
-%   - Structural physical approximation
 
-\documentclass{article}
+\documentclass[11pt,a4paper]{article}
 \input{preamble}
-\title{Chapter 3: Positive but Not Completely \\ {\small (Wolf Lecture Notes - Transcription)}}
+
+\title{Chapter 3: Positive but Not Completely \\ {\small (Wolf Lecture Notes -- Transcription)}}
 \date{}
+
+\numberwithin{equation}{section}
+
 \begin{document}
 \maketitle
 \tableofcontents
 
-\textbf{[Placeholder - content will be filled by OCR workflow]}
+\setcounter{section}{2}
+
+\section{Positive, but not completely}
+
+In this chapter we will discuss linear maps which are positive (i.e., they preserve
+positive semidefiniteness) but not necessarily completely positive. Although
+such operations cannot directly be implemented in a physical device they play
+an important role as mathematical tools, in particular in entanglement theory
+(see Sec.~3.2).
+
+Recall that a linear map $T:\mcM_d(\CC)\to \mcM_{d'}(\CC)$ is positive if for every
+positive semidefinite matrix $A\in \mcM_d(\CC)$ (we write $A\ge 0$) we have $T(A)\ge 0$.
+$T$ is positive iff the adjoint map $T^*$ is so, and every positive map is Hermitian
+in the sense that $T(X^\dagger)=T(X)^\dagger$ for all $X\in \mcM_d(\CC)$.
+By Prop.~2.2 every positive map is a difference of two completely positive maps.
+Since this is, however, true for every Hermitian map it does, unfortunately, not provide a
+simple parametrization of positive maps.
+
+The paradigm of a map, which is positive but not completely positive, is
+the usual matrix transposition $A\mapsto \theta(A):=A^T$ which is defined with respect
+to a given orthogonal basis by $\langle i|A^T|j\rangle=\langle j|A|i\rangle$.
+The transposition is trace preserving and positive: if $UDU^\dagger$ is the spectral
+decomposition of any Hermitian matrix (i.e., $U$ is unitary and $D$ diagonal), then
+$(UDU^\dagger)^T=\overline{U}DU^T$ has the same eigenvalues. The fact that transposition is not
+completely positive can be easily seen by applying it to half of a maximally entangled state
+$\ket{\Omega}=\sum_{i=1}^d \ket{ii}/\sqrt{d}$ (see Example~1.2):
+\begin{equation}\label{eq:ch3:3.1}
+    (\theta\otimes \id)(\ketbra{\Omega}{\Omega})
+    =\frac{1}{d}F,
+    \qquad
+    F=\sum_{i,j=1}^d \ket{ij}\!\bra{ji}.
+\end{equation}
+
+Since the ``flip operator'' $F$ has eigenvalues $\pm 1$ (with multiplicities $d(d\pm 1)/2$
+corresponding to symmetric and antisymmetric eigenvectors respectively) $\theta$ fails to be
+completely positive. For the partial transpose $(\theta\otimes \id)(X)$ we will occasionally
+write $X^{T_A}$ or $X^{T_1}$ referring to a transposition on Alice's/the first tensor factor.
+
+Transposition plays an important role in the discussion of the structure of positive maps and
+isometries. We came across one of its appearances already in Wigner's theorem~1.1 and we will see
+similar relations in Prop.~3.6 and \dots\ . Among all positive maps transposition gets physically
+distinguished by a simple interpretation---as time reversal operation (see Sec.~3.3).
+
+The simplest class of positive maps are those which are build up of a matrix transposition
+together with completely positive maps $T_1$ and $T_2$. A positive map which has such a
+decomposition in the form\footnote{Here $T_2\theta$ is a concatenation of maps, i.e.,
+    $(T_2\theta)(X)=T_2(X^T)$.}
+\begin{equation}\label{eq:ch3:3.2}
+    T = T_1 + T_2\theta
+\end{equation}
+is thus called \emph{decomposable}. Note that the order of maps is irrelevant here, since
+$\theta T_2\theta$ is completely positive iff $T_2$ is. From $\mcM_d$ to $\mcM_d$ with $d=2$ every
+positive map is decomposable, whereas for larger dimensions this is no longer true. Both facts have
+far-ranging consequences in entanglement theory (see Sec.~3.2). The existence of indecomposable
+positive maps can, with some imagination and the willingness to make a little detour, be traced
+back to the history of Hilbert's 17th problem. Since this is a detour of the nicer kind, we will
+follow it in Sec.~3.4. We will start, however, by discussing notions of positivity in between
+bare positivity and complete positivity:
+
+\subsection{$n$-positivity}
+
+A linear map $T:\mcM_d(\CC)\to \mcM_{d'}(\CC)$ is called $n$-positive (with $n\in\NN$) if $T\otimes \id_n$
+is positive. That is, positivity of $T$ is preserved if we add an ``innocent bystander''
+of dimension at most $n$. For given dimensions, the set $\mathcal{T}_n$ of $n$-positive maps
+forms a closed convex cone, i.e., if $T_i\in \mathcal{T}_n$ then $\sum_i p_i T_i\in \mathcal{T}_n$
+for all positive $p_i\in\RR$ and $\mathcal{T}_n$ contains its limit points. Moreover, the dual map
+$T^*$ is $n$-positive if and only if $T$ is. Clearly, $n$-positivity implies $m$-positivity for all
+$m\le n$. Only if $n=d$, then (by Prop.~1.2) $m$-positivity holds for all $m\in\NN$, i.e., the map is
+completely positive. For different $n$ we thus get a chain of inclusions
+\begin{equation}\label{eq:ch3:3.3}
+    \mathcal{T}_{\mathrm{cp}} := \mathcal{T}_d \subseteq \mathcal{T}_{d-1}\subseteq \cdots \subseteq \mathcal{T}_2 \subseteq \mathcal{T}_1,
+\end{equation}
+from completely positive maps ($n=d$) to positive maps ($n=1$). As we will see later all these inclusions
+are strict. To this end the following characterization is useful:
+
+\begin{proposition}[Choi--Jamiolkowski for $n$-positive maps]
+    Let $T:\mcM_d(\CC)\to \mcM_{d'}(\CC)$ be a linear map and
+    $\tau:=(T\otimes \id)(\ketbra{\Omega}{\Omega})\in \mcM_{d'}\otimes \mcM_d$ its corresponding
+    Choi--Jamiolkowski operator. For $n\le d$ the following are equivalent:
+    \begin{enumerate}
+        \item $T$ is $n$-positive.
+        \item $(\one\otimes P)\tau(\one\otimes P)\ge 0$ for all Hermitian projections $P\in \mcM_d(\CC)$ with $\rank(P)=n$.
+        \item $\bra{\psi}\tau\ket{\psi}\ge 0$ for all $\psi\in \CC^{d'}\otimes \CC^d$ with Schmidt-rank $n$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    $T$ is $n$-positive iff $(T\otimes \id_n)(\ketbra{\phi}{\phi})\ge 0$ for all $\phi\in \CC^d\otimes \CC^n$.
+    Embedding $\CC^n$ in $\CC^d$ this becomes equivalent to $(T\otimes \id_d)(\ketbra{\phi}{\phi})\ge 0$ for all
+    $\phi\in \CC^d\otimes \CC^d$ with Schmidt rank $n$. The latter can be parameterized by
+    $\ket{\phi}=(\one\otimes X)\ket{\Omega}$ where $X\in \mcM_d$ has rank $n$. In this way $n$-positivity becomes
+    equivalent to
+    \begin{equation}\label{eq:ch3:3.4}
+        (\one\otimes X)\tau(\one\otimes X)^\dagger \ge 0,
+        \qquad \forall X\in \mcM_d(\CC): \rank(X)=n.
+    \end{equation}
+    From here equivalence with 2.\ follows by expressing $X=\tilde X P$ in terms of the
+    projector $P$ onto its support space and an invertible $\tilde X$.
+    Equivalence between 3.\ and Eq.~\eqref{eq:ch3:3.4} is seen by taking the expectation value of the l.h.s.\ of
+    \eqref{eq:ch3:3.4} with an arbitrary vector $\ket{\tilde \psi}$ and noting that
+    $(\one\otimes X)^\dagger\ket{\tilde \psi}=:\ket{\psi}$ has Schmidt rank $n$.
+\end{proof}
+
+In particular the last item motivates to investigate extremal overlaps with pure states of a given Schmidt rank:
+
+\begin{lemma}[Overlap with fixed Schmidt rank]
+    Let $\phi\in \CC^{d'}\otimes \CC^d$ be a normalized vector with reduced density matrix
+    $\tr_2 \ketbra{\phi}{\phi} =:\rho$. Then the maximal overlap with all normalized vectors $\psi$ of Schmidt rank
+    $n$ is given by
+    \begin{equation}\label{eq:ch3:3.5}
+        \sup_{\psi} |\braket{\phi}{\psi}|^2 = \|\rho\|_{(n)},
+    \end{equation}
+    where $\|\cdot\|_{(n)}$ denotes the Ky-Fan norm, i.e., the sum over the $n$ largest singular values (here,
+    eigenvalues).
+\end{lemma}
+
+\begin{proof}
+    Using the Schmidt decomposition of both vectors we can rewrite the optimization in the form
+    \begin{equation}\label{eq:ch3:3.6}
+        \sup_{\psi} |\braket{\phi}{\psi}|^2
+        = \sup_{U,V,\mu} \left|\tr\!\left[U\sqrt{\mu}\,V\sqrt{\lambda}\right]\right|^2,
+    \end{equation}
+    where $U,V$ are unitaries, $\lambda$ a diagonal matrix containing the eigenvalues of $\rho$ and $\sqrt{\mu}$ a
+    diagonal matrix containing the Schmidt coefficients of $\psi$. The maximum in Eq.~\eqref{eq:ch3:3.6} is
+    attained for $U=V=\one$ (which can for instance be seen by exploiting a standard singular value
+    inequality\footnote{For two matrices $A,B$ the ordered singular values satisfy $\sum_i s_i(AB)\le \sum_i s_i(A)s_i(B)$;
+    see Thm.~IV.2.5 in \dots\ [Bhatia].}). The remaining supremum is then of the
+    form $\sup_{\mu}\bigl|\sum_{i=1}^n \sqrt{\mu_i\lambda_i}\bigr|^2$ with
+    $\{\lambda_1,\dots,\lambda_n\}$ the $n$ largest eigenvalues of $\rho$. This
+    can easily be solved using a Lagrange multiplier for the normalization constraint
+    $\sum_{i=1}^n \mu_i=1$ which gives $\mu_i=c\lambda_i$ with $c$ determined by normalization.
+    Putting things together we arrive at \eqref{eq:ch3:3.5}.
+\end{proof}
+
+Utilizing this Lemma together with item~3.\ in Prop.~3.1 we can now provide
+a simple criterion for $n$-positivity in terms of the spectral decomposition
+$\tau=\sum_i \nu_i \ketbra{\phi_i}{\phi_i}$ (with $\|\phi_i\|=1$). Denoting by
+$\rho_i$ the reduced density operator of $\phi_i$ we obtain:
+
+\begin{proposition}[Criterion for $n$-positivity]
+    Consider a Hermitian operator $\tau\in \mcM_{d'}\otimes \mcM_d$ (e.g., the Choi--Jamiolkowski operator of a Hermitian map)
+    whose smallest positive non-zero eigenvalue is $\nu_0$. Then with the above notation
+    \begin{equation}\label{eq:ch3:3.7}
+        \inf_{\psi}\bra{\psi}\tau\ket{\psi} \ge \nu_0 + \sum_{i:\nu_i\le 0} (\nu_i-\nu_0)\|\rho_i\|_{(n)},
+    \end{equation}
+    if the infimum is taken over all normalized vectors of Schmidt rank $n$. Conversely, if all but one eigenvalue
+    $\nu_-$ of $\tau$ are strictly positive, and $\nu_\infty$ is the largest positive eigenvalue, then:
+    \begin{equation}\label{eq:ch3:3.8}
+        \inf_{\psi}\bra{\psi}\tau\ket{\psi} \le \nu_\infty + (\nu_- - \nu_\infty)\|\rho_-\|_{(n)}.
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    By separating positive and negative parts of $\tau$ we obtain
+    \begin{align}
+        \tau
+         &\ge \nu_0 \sum_{i:\nu_i>0} \ketbra{\phi_i}{\phi_i}
+        + \sum_{j:\nu_j\le 0} \nu_j \ketbra{\phi_j}{\phi_j},
+        \label{eq:ch3:3.9}
+        \\
+         &= \nu_0 \one + \sum_{i:\nu_i\le 0} (\nu_i-\nu_0)\ketbra{\phi_i}{\phi_i},
+        \label{eq:ch3:3.10}
+    \end{align}
+    from which Eq.~\eqref{eq:ch3:3.7} follows by exploiting Lemma~3.1. The inequality \eqref{eq:ch3:3.9} is
+    reversed if we replace $\nu_0$ by $\nu_\infty$, which then leads to Eq.~\eqref{eq:ch3:3.8}.
+\end{proof}
+
+Now, let us apply this to the map $T_\eta:\mcM_d\to \mcM_d$ defined by
+\begin{equation}\label{eq:ch3:3.11}
+    T_\eta(\rho) = \one\,\tr[\rho] - \frac{\rho}{\eta},
+    \qquad \eta\in \RR_+.
+\end{equation}
+For $\eta\ge d$ this map is completely positive. For $\eta<d$ all positive eigenvalues of the corresponding
+Choi--Jamiolkowski operator are equal to $1/d$ and there is a single negative eigenvalue
+$\nu_-=(1/d-1/\eta)$ with $\|\rho_-\|_{(n)}=n/d$. Hence, the upper and lower bound in Prop.~3.2 actually coincide
+and we get that $T_\eta$ is $n$-positive iff $\eta\ge n$.\footnote{For the example $T_\eta$ this can be proven in a
+    simpler way (by averaging a Schmidt rank $n$ vector w.r.t.\ the group $\{U\otimes \overline{U}\}$), without invoking
+    Prop.~3.2. We nevertheless stated the proposition as it can be applied to situations where $\tau$ does not have such
+    a symmetry.} This proves that all the inclusions in the chain \eqref{eq:ch3:3.3} are strict. When $T_\eta$ is
+positive (i.e., for $\eta\ge 1$) it is decomposable as $T_\eta\theta$ is completely positive.
+
+\subsection{Positive maps and entanglement theory}
+
+A map, which is positive but not completely positive, like the transposition, does not correspond to a physically
+implementable operation. Nevertheless, such maps, and in particular the transposition and the map $T_1$ in
+Eq.~\eqref{eq:ch3:3.11}, have become important mathematical tools in the theory of entanglement. Applied as
+$(T\otimes \id)$ to a bipartite density matrix they are powerful tools for ``detecting'' entanglement as well as for
+recognizing ``useful'' (in the sense of distillable) entanglement.
+
+\paragraph{Detecting entanglement.}
+Suppose that $\rho\in \mcM_d\otimes \mcM_{d'}$ is a separable state as defined in Eq.~(1.8), then positivity of $T$
+implies that $(T\otimes \id)(\rho)$ remains positive semi-definite, since tensor products and convex combinations of
+positive operators are again positive. Hence, for any positive map $T$ a negative eigenvalue of $(T\otimes \id)(\rho)$
+proves that $\rho$ is entangled:
+\begin{equation}\label{eq:ch3:3.12}
+    T\ \text{positive, and}\ \bra{\Psi}(T\otimes \id)(\rho)\ket{\Psi}<0 \ \Longrightarrow\ \rho\ \text{is entangled.}
+\end{equation}
+
+We may go one step further and use an $n$-positive $T$. This gives the generalization
+\[
+    T\ \text{$n$-positive, and}\ \bra{\Psi}(T\otimes \id)(\rho)\ket{\Psi}<0
+    \ \Longrightarrow\
+    \begin{array}{l}
+        \text{Every pure state decomposition}         \\
+        \text{of $\rho$ contains at least one vector} \\
+        \text{of Schmidt rank larger than $n$.}
+    \end{array}
+\]
+The smallest $n$ such that $\rho$ has a convex decomposition into pure states of Schmidt rank at most $n$ is called
+the \emph{Schmidt number} of $\rho$. With this terminology separable states are precisely those with Schmidt number
+one.
+
+In order to prove the converse of the above implications it is useful to introduce the concept of witnesses for
+(Schmidt number $n+1$) entanglement.
+
+\begin{proposition}[Entanglement witnesses]
+    A density operator $\rho\in \mcM_d(\CC)\otimes \mcM_{d'}(\CC)$ has Schmidt number at least $n+1$ iff there exists a
+    Hermitian operator $W\in \mcM_d(\CC)\otimes \mcM_{d'}(\CC)$ such that $\tr[W\rho]<0$ but
+    $\bra{\psi}W\ket{\psi}\ge 0$ for all vectors $\psi\in \CC^d\otimes \CC^{d'}$ with Schmidt rank $n$.
+\end{proposition}
+
+\begin{proof}
+    Egg--hyperplane--done. In order to be a bit more precise, let us regard the space of Hermitian operators as a real
+    vector space equipped with the Hilbert--Schmidt inner product. Since the set $S_n$ of density operators with Schmidt
+    number at most $n$ is compact and convex, every $\rho\notin S_n$ can be separated from it by a hyperplane of Hermitian
+    operators $H$ satisfying $\langle H,\widetilde W\rangle=c$ for some constant $c$ and some $\widetilde W=\widetilde
+        W^\dagger$. That is, $\langle \rho,\widetilde W\rangle<c$ whereas $\langle \rho_0,\widetilde W\rangle\ge c$ for all
+    $\rho_0\in S_n$. Setting $W:=\widetilde W-c\one$ then completes the `only if' part of the proof. The `if' part follows
+    from the fact that $S_n$ is the closure of the convex hull of the set of pure states with Schmidt rank $n$.
+\end{proof}
+
+An operator $W$ with the properties mentioned in Prop.~3.3 is called \emph{entanglement witness} (for Schmidt number
+$n+1$ entanglement). We will follow the literature and use `entanglement witness' referring to the case $n=1$ unless
+otherwise specified. Invoking the Choi--Jamiolkowski correspondence (Prop.~2.1) we can assign a positive map to each
+witness. This leads to the following characterization:
+
+\begin{proposition}[Positive maps and entanglement]
+    A density operator $\rho\in \mcM_d(\CC)\otimes \mcM_{d'}(\CC)$ has Schmidt number at most $n$ iff for all $n$-positive
+    maps $T:\mcM_d(\CC)\to \mcM_{d'}(\CC)$ it holds that $(T\otimes \id)(\rho)\ge 0$.
+\end{proposition}
+
+\begin{proof}
+    We only have to prove the `if' part. For that assume that $\rho\notin S_n$. Then by Prop.~3.3 there is an entanglement
+    witness for which $\tr[W\rho]<0$. This defines, by the Choi--Jamiolkowski correspondence, a linear map
+    $T^*:\mcM_{d'}(\CC)\to \mcM_d(\CC)$ via
+    \begin{equation}\label{eq:ch3:3.13}
+        W := (T^*\otimes \id)(\ketbra{\Omega}{\Omega}).
+    \end{equation}
+    By item~3 in Prop.~3.1 $T^*$ and with it its adjoint $T$ is $n$-positive and by construction
+    \begin{equation}\label{eq:ch3:3.14}
+        \tr[W\rho] = \bra{\Omega}(T\otimes \id)(\rho)\ket{\Omega} < 0.
+    \end{equation}
+    Hence, $(T\otimes \id)(\rho)$ cannot be positive.
+\end{proof}
+
+We see from Eq.~\eqref{eq:ch3:3.14} that the positive map constructed from a witness is actually more powerful,
+in the sense that it detects more entangled states, than the witness we started with: after all $(T\otimes \id)(\rho)$
+might have a negative eigenvalue without $\bra{\Omega}(T\otimes \id)(\rho)\ket{\Omega}$ being negative.
+A closer look reveals that a positive map $T$ constructed from a witness $W$ `detects' an entangled state $\rho$
+iff it is detected by one of the witnesses from the orbit $\{(\one\otimes X)W(\one\otimes X)^\dagger\}$
+with $X\in \mcM_{d'}(\CC)$.
+
+Decomposable positive maps correspond to decomposable witnesses which are of the form
+\begin{equation}\label{eq:ch3:3.15}
+    W = P_1 + P_2^{T_1},
+    \qquad P_i\ge 0.
+\end{equation}
+By duality, the existence of indecomposable witnesses for given dimensions is equivalent to the existence of
+entangled states satisfying $\rho^{T_1}\ge 0$:
+
+\begin{proposition}[PPT entangled states]\label{prop:ch3-ppt-entangled}
+    \footnote{Admittedly this proposition has mainly and at most pedagogical value. Once examples of entangled PPT states
+        are constructed it looses a lot of its charm\ldots}
+    There exists an indecomposable positive map $T:\mcM_d(\CC)\to \mcM_{d'}(\CC)$ iff there is an entangled state
+    $\rho\in \mcM_d\otimes \mcM_{d'}$ with positive partial transpose $\rho^{T_1}\ge 0$.
+\end{proposition}
+
+\begin{proof}
+    We exploit the equivalence between indecomposable maps and witnesses. That is, we show that the existence of an
+    indecomposable positive map implies that there is an entangled state with $\rho^{T_1}\ge 0$. The converse follows from
+    Prop.~3.3.
+
+    Denote by $\mathcal W\subseteq \mcM_d\otimes \mcM_{d'}$ the set of all entanglement witnesses, i.e., Hermitian
+    operators with $\bra{\phi\otimes \psi}W\ket{\phi\otimes \psi}\ge 0$ for all $\phi,\psi$, and by
+    $\mathcal W_T\subseteq \mathcal W$ all decomposable witnesses. Both $\mathcal W$ and $\mathcal W_T$ are closed convex
+    sets. If there is (by assumption) a $W\in \mathcal W\setminus \mathcal W_T$ we can separate it by a hyperplane
+    characterized by a Hermitian operator $R$ such that $\tr[WR]<0\le \tr[W_T R]$ for all $W_T\in \mathcal W_T$. Since
+    $\mathcal W_T$ contains all positive operators $R$ must be positive so that $\rho:=R/\tr[R]$ is a density matrix. By
+    construction $\rho^{T_1}\ge 0$ while $\rho$ is entangled due to $\tr[W\rho]<0$.
+\end{proof}
+
+We will see shortly that entangled PPT states exists iff the dimension is larger than $\CC^2\otimes \CC^3$.
+
+\begin{example}[Some positive maps and entanglement witnesses]
+    \par\medskip\noindent\textbf{Transposition.}
+    Transposition is a positive map. It corresponds to the set of witnesses
+    $W=(A\otimes B)F(A\otimes B)^\dagger$ for arbitrary $A,B$.
+    The separability criterion $(\theta\otimes \id)(\rho):=\rho^{T_1}\ge 0$
+    is called PPT (positive partial transpose) criterion. Although the partial transpose
+    depends on the choice of the local basis, the PPT criterion does not: if we take the
+    partial transposition with respect to a different (local) basis, labeled by the superscript
+    $\widetilde T_1$, we get
+    \begin{align}
+        \rho^{\widetilde T_1}
+         &=(U\otimes \one)\left[((U^\dagger\otimes \one)\rho(U\otimes \one))^{T_1}\right](U^\dagger\otimes \one),
+        \label{eq:ch3:3.16}
+        \\
+         &=((UU^T)\otimes \one) \rho^{T_1}\,((UU^T)^\dagger\otimes \one).
+        \label{eq:ch3:3.17}
+    \end{align}
+    Eqs.~\eqref{eq:ch3:3.16}--\eqref{eq:ch3:3.17} show that the eigenvalues of the partial transpose are basis independent,
+    and so is the positivity of $\rho^{T_1}$. Moreover, $\rho^{T_1}\ge 0$ is equivalent to $\rho^{T_2}\ge 0$ since the two
+    operators only differ by a global transposition. We will see in \dots\ that the PPT criterion is necessary and
+    sufficient for separability in $\CC^2\otimes \CC^2$ and $\CC^2\otimes \CC^3$.
+
+    \par\medskip\noindent\textbf{Reduction criterion.}
+    The set of maps $T_n(X):=\tr[X]\one - X/n$, $n\in\NN$ in Eq.~\eqref{eq:ch3:3.11} is $n$-positive (and self-dual, i.e.,
+    $T_n^*=T_n$). As a consequence
+    \begin{equation}\label{eq:ch3:3.18}
+        n\rho_1\otimes \one \ge \rho
+        \qquad\text{and}\qquad
+        n\one\otimes \rho_2 \ge \rho,
+    \end{equation}
+    (with $\rho_k$ the $k$th reduced density matrix of $\rho$) is necessary for a bipartite state $\rho$ to have Schmidt
+    number $n$. For $n=1$ this is called reduction criterion. As $T_n$ is a decomposable positive map, the reduction
+    criterion is generally weaker than the PPT criterion for entanglement detection. For $\CC^2\otimes \CC^2$ the two
+    criteria are equivalent since $T_1(X)=(\sigma_y X\sigma_y)^T$ for any $X\in \mcM_2(\CC)$. An entanglement witness
+    corresponding to $T_n$ is $W_n=\one/d-\ketbra{\Omega}{\Omega}/n$. That is, a state $\rho$ with Schmidt number $n$ has
+    to satisfy $\bra{\Omega}\rho\ket{\Omega}\le n/d$ which is a weak version of Lemma~3.1.
+
+    \par\medskip\noindent\textbf{Breuer--Hall map.}
+    $T_{\mathrm{BH}}:\mcM_d\to \mcM_d$ is positive and defined as
+    \begin{equation}\label{eq:ch3:3.19}
+        T_{\mathrm{BH}}(X)=\tr[X]\one - X - U X^T U^\dagger,
+        \quad\text{for any $U$ with $U^T=-U$ and $U^\dagger U\le \one$.}
+    \end{equation}
+    Positivity is easily seen by applying $T_{\mathrm{BH}}$ to a pure state and noting that due to the anti-symmetry of
+    $U$ we have $\bra{\psi}U\ket{\overline{\psi}}=0$ which implies that the subtracted terms are orthogonal. For $d$ even
+    there are anti-symmetric unitaries $U^\dagger=U^{-1}=-\overline{U}$ (e.g.\ embeddings of the Pauli matrix $\sigma_y$),
+    whereas for $d$ odd these do not exist (which can be seen from the fact that $\det(U)=\det(U^T)=\det(-U)$ would be
+    equal to $-\det(U)$ in this case; see Thms.~3.1,3.2). If $U$ is an anti-symmetric unitary $T_{\mathrm{BH}}$ is not
+    decomposable.
+
+    \par\medskip\noindent\textbf{Choi-type maps.}
+    Let $D\in \mcB(\mcM_d)$ map a matrix $X$ onto a diagonal matrix $D(X)$ with the same diagonal entries, and let $U_{k0}$
+    be a cyclic shift as defined in Eq.~(2.24). Then for all $n\in\NN$ with $1\le n\le d-2$ the map
+    $T_C\in \mcB(\mcM_d)$ defined by
+    \begin{equation}\label{eq:ch3:3.20}
+        T_C(X):=(d-n)D(X)-X+\sum_{k=1}^n D\!\left(U_{k0}XU_{k0}^\dagger\right),
+    \end{equation}
+    is positive and indecomposable. For $n=0$ it is completely positive and for $n=d-1$ it is proportional to the map
+    $T_n$ appearing in the context of the reduction criterion.
+
+    \par\medskip\noindent\textbf{Unextendable product bases (UPBs).}
+    Unextendable product bases (UPBs) are sets $S=\{\ket{\alpha_j}\otimes \ket{\beta_j}\}$ of normalized and mutually
+    orthogonal product vectors in $\CC^d\otimes \CC^{d'}$ ($d'\ge d$) such that there is no product vector, which is
+    orthogonal to every element of $S$, and $|S|<dd'$.\footnote{Note that this is only possible if $\{\ket{\alpha_j}\}$
+        (resp.\ $\{\ket{\beta_j}\}$) is not a set of mutually orthogonal vectors.} That is, the projection
+    $P_S:=\sum_{j=1}^{|S|}\ketbra{\alpha_j}{\alpha_j}\otimes \ketbra{\beta_j}{\beta_j}$ has a kernel which contains no
+    product vector. An example of such a UPB in dimension $3\otimes 3$ can be constructed from five real vectors forming
+    the apex of a regular pentagonal pyramid, where the height $h$ is chosen such that nonadjacent apex vectors are
+    orthogonal. These vectors are
+    \begin{equation}\label{eq:ch3:3.21}
+        v_j = N\left(\cos\frac{2\pi j}{5}, \sin\frac{2\pi j}{5},\,h\right),
+        \qquad j=0,\dots,4,
+    \end{equation}
+    with $N=2/\sqrt{5+\sqrt{5}}$ and $h=\tfrac12\sqrt{1+\sqrt{5}}$. The UPB is then given by
+    $\ket{\alpha_j}\otimes \ket{\beta_j}=\ket{v_j}\otimes \ket{v_{2j \bmod 5}}$. Since any subset of three vectors on
+    either side spans the full space, there cannot be a product vector orthogonal to all these states. Based on this or
+    any other UPB, one can easily construct an entangled PPT state:
+    \begin{equation}\label{eq:ch3:3.22}
+        \rho_S \propto (\one - P_S).
+    \end{equation}
+    Since by construction $\rho_S$ has no product vector in its range it has to be entangled. Moreover, $\rho_S^{T_1}\ge
+        0$, since $\{\ket{\overline{\alpha}_j}\otimes \ket{\beta_j}\}$ is again a set of mutually orthogonal and normalized
+    vectors. From here we can construct an entanglement witness
+    \begin{equation}\label{eq:ch3:3.23}
+        W_S = P_S - \epsilon \ketbra{\psi}{\psi},
+    \end{equation}
+    where $\psi$ is any maximally entangled state of dimension $d$ fulfilling $\bra{\psi}\rho_S\ket{\psi}>0$ and
+    \[
+        \epsilon := d\inf_{\phi_1,\phi_2}
+        \frac{\bra{\phi_1\otimes \phi_2}P_S\ket{\phi_1\otimes \phi_2}}{\|\phi_1\otimes \phi_2\|^2}.
+    \]
+    So by construction $\tr[W_S\rho_S]<0$ whereas $\tr[W_S\rho]\ge 0$ for all separable states. By the
+    Choi--Jamiolkowski correspondence $W_S$ thus defines a positive map which is not decomposable.
+\end{example}
+
+\paragraph{Entanglement distillation} \dots\ \textsc{to be written} \dots
+
+\noindent
+LOCC \& separable superoperators
+
+\noindent
+PPT implies not distillable
+
+\noindent
+reduction criterion, distillability (maybe majorization)
+
+\subsection{Transposition and time reversal}
+
+Due to the lack of complete positivity, the transposition (as well as the partial transposition) does not correspond
+to a physically implementable operation. However, it can physically be interpreted as ``time reversal'' [?] and
+appears as such quite often as a (global) symmetry, in particular in particle physics [?]. Although we will not make
+explicit use of this interpretation or symmetry in the following, we will briefly describe this relation.
+
+One way to see that the transposition or complex conjugation (which is the same on Hermitian operators) admits an
+interpretation as time reversal, is looking at the Wigner function of a continuous variable system in Schr\"odinger
+representation.\footnote{Note that we leave the case $\dim \mathcal H < \infty$ within this section. The underlying
+    Hilbert space is now the space $L^2$ of square integrable functions.} If we choose
+$\rho=\sum_i \lambda_i \ket{\psi_i}\bra{\psi_i}$ with $\lambda_i\ge 0$ and $\sum_i \lambda_i\|\psi_i\|^2=1$
+to be a decomposition of a density operator $\rho$ and define an integral kernel
+$D(x;y)=\sum_i \lambda_i \psi_i(x)\overline{\psi_i(y)}$ in the Schr\"odinger representation, then we can write
+the Wigner function as
+\begin{equation}\label{eq:ch3:3.24}
+    W(q,p)=\pi^{-n}\int D(q-x;\,q+x)\,e^{-i2x\cdot p}\,d^n x,
+\end{equation}
+where $n$ is the number of canonical degrees of freedom, i.e., $x,p,q\in \RR^n$. From Eq.~\eqref{eq:ch3:3.24} we see,
+that the complex conjugation or transposition $D(x;y)\mapsto D(y;x)$ is equivalent to a reversal of momenta
+$p\mapsto -p$. Due to the basis dependency of the transposition this is, however, no longer true if we choose another
+representation. Hence we cannot identify the transposition or complex conjugation with time reversal in general.
+
+Time is a parameter in quantum mechanics. Therefore there cannot be a general transformation in Hilbert space which
+directly affects this parameter and acts as $t\mapsto -t$. In this sense the term ``time reversal'' is misleading.
+It characterizes a reversal of momenta including angular momenta and spins, rather than a reversal of the arrow of time.
+The defining ansatz for time reversal is thus an operator $T$ which acts on Hilbert space in a way that position and
+momentum operators transform as
+\begin{equation}\label{eq:ch3:3.25}
+    TQT^{-1}=Q
+    \qquad\text{and}\qquad
+    TPT^{-1}=-P,
+\end{equation}
+and for consistency also $TLT^{-1}=-L$ and $TST^{-1}=-S$ for angular momenta and spins. Left and right multiplication
+of the canonical commutation relations $[Q,P]=i\one$ leads with Eq.~\eqref{eq:ch3:3.25} to $TiT^{-1}=-i\one$. Thus $T$
+is an ``anti-linear'' operator, and, as it is supposed to be norm preserving, it is ``anti-unitary''.\footnote{An
+    anti-linear operator $A$ satisfies $Az=\overline{z}A$ for any complex number $z$. The product of two anti-linear
+    operators is thus again a linear operator. If the inverse $A^{-1}$ exists and $\forall\Psi\in \mathcal H:\|A\Psi\|=\|\Psi\|$,
+    then we say that $A$ is anti-unitary. We have then $\langle A\Phi|A\Psi\rangle=\langle \Psi|\Phi\rangle$.}
+
+The simplest example of an anti-unitary operator is the complex conjugation $\Gamma$ (which is on Hermitian matrices
+equal to the transposition). In fact, in Schr\"odinger representation we may identify the time reversal operator $T$
+with complex conjugation, since the latter leaves the position operator unchanged and maps
+$-i\frac{d}{dx}\stackrel{\Gamma}{\mapsto} i\frac{d}{dx}$ and therefore changes the sign of momentum and angular
+momentum operators. As the time reversal operator should not depend on the representation (resp.\ basis), $T$ cannot be
+identified with $\Gamma$ in general. However, every anti-unitary operator can be written as the product of a unitary
+operator with complex conjugation.
+
+Let us now turn to spin angular momenta. Consider the standard representation, in which $S_x$ and $S_z$ are real and
+$S_y$ is imaginary. In this basis we have
+\begin{equation}\label{eq:ch3:3.26}
+    \Gamma S_x\Gamma^{-1}=S_x,
+    \qquad
+    \Gamma S_y\Gamma^{-1}=-S_y,
+    \qquad
+    \Gamma S_z\Gamma^{-1}=S_z,
+\end{equation}
+hence we cannot identify $T$ with complex conjugation. However, we may write $T=\Gamma V$, where $V$ has to invert the
+signs of $S_x$ and $S_z$, while leaving $S_y$ unchanged. Moreover, $V$ is, as a product of two anti-unitaries, a linear
+unitary operator, and it is supposed to act only on the spin degrees of freedom. These requirements are satisfied by
+$V=\exp(-i\pi S_y)$, which rotates the spin through the angle $\pi$ about the $y$ axis. Hence, we have with respect to
+the considered representation\footnote{Note that time reversal squared is not the identity. The operator $T^2$ in
+    Eq.~\eqref{eq:ch3:3.27} has eigenvalues $-1$ for states with total spin $n/2$, with $n$ odd.}
+\begin{equation}\label{eq:ch3:3.27}
+    T=\Gamma e^{-i\pi S_y},
+\end{equation}
+and applying the time reversal to a density matrix describing a finite dimensional spin system gives then
+$T^{-1}\rho T=V^\dagger \rho^T V$.
+
+Let us now consider (finite dimensional) composite systems, where $\rho\in \mcB(\mathcal H_1\otimes \mathcal H_2)$.
+The global time reversal operator is then $T\otimes T$, which is a well defined anti-unitary operator again.
+Unfortunately, there exists no operator on Hilbert space, which corresponds to a ``partial time reversal'' of only one
+of the two subsystems. In fact, the action of a tensor product of the form $\id\otimes T$ (linear$\otimes$anti-linear)
+on a vector $\Psi\in \mathcal H_1\otimes \mathcal H_2$ is not well defined. However, since for product vectors
+$(\id\otimes T^{-1})(\ket{\psi}\otimes \ket{\phi})$ gives only rise to a phase ambiguity, the action on the respective
+projectors
+\begin{equation}\label{eq:ch3:3.28}
+    (\id\otimes T^{-1})(\ketbra{\psi}{\psi}\otimes \ketbra{\phi}{\phi})(\id\otimes T)
+\end{equation}
+becomes well defined without any ambiguity, and Eq.~\eqref{eq:ch3:3.28} describes a linear operator again. Since the
+real linear hull of projectors onto product states equals the set of all Hermitian operators, we can in this way define
+the ``partial time reversal'' as a map on density matrices. Due to Eq.~\eqref{eq:ch3:3.27} this is equivalent to the
+partial transposition up to a local unitary transformation. Note that the latter is irrelevant for the detection of
+entanglement since it preserves the eigenvalues.
+
+The time reversal symmetry of a dynamics, i.e., the invariance of a Hamiltonian under time reversal, does not lead to a
+conserved quantity (like parity for space inversion). However, it sometimes leads to a degeneracy of the eigenvalues:
+Suppose $[H,T]=0$ for some anti-unitary $T$ and Hermitian $H$. Writing $T=\Gamma V$ with $V$ unitary this becomes
+equivalent to $HV^\dagger = V^\dagger H^T$. Moreover, $T^2=-1$ is equivalent to $V^T=-V$ being anti-symmetric.
+
+\begin{theorem}[Kramer's theorem]
+    If $[H,T]=0$ and $T^2=-1$ for a Hermitian $H$ and anti-unitary $T$, then each eigenvalue of $H$ is at least two-fold
+    degenerate.
+\end{theorem}
+
+\begin{proof}
+    Let $H\ket{\psi}=\lambda\ket{\psi}$. Then $HV^\dagger\ket{\overline{\psi}}=V^\dagger H^T\ket{\overline{\psi}}
+        =V^\dagger \overline{H}\ket{\overline{\psi}}=\lambda V^\dagger\ket{\overline{\psi}}$, so $V^\dagger\ket{\overline{\psi}}$
+    gives rise to the same eigenvalue. This is degenerate since the two vectors are orthogonal:
+    \begin{align}
+        \bra{\psi}V^\dagger\ket{\overline{\psi}}
+         &= -\bra{\psi}\overline{V}\ket{\overline{\psi}}
+        = -\bra{\overline{\psi}}V\ket{\psi},
+        \label{eq:ch3:3.29}
+        \\
+         &= -\bra{\psi}V^\dagger\ket{\overline{\psi}}.
+        \label{eq:ch3:3.30}
+    \end{align}
+\end{proof}
+
+Note that anti-symmetric unitaries only exist in even dimensions.\footnote{In odd dimensions we get that
+    $\det(V)=\det(V^T)=-\det(V)$ which contradicts the fact that the determinant of a unitary has to be a phase.} In fact,
+the restriction on the required symmetry in the theorem can be relaxed as the same proof shows:
+
+\begin{theorem}[Kramer's theorem II]
+    Let $H$ be Hermitian and $HA=AH^T$ for some anti-symmetric $A\neq 0$. Then each eigenvalue of $H$ is at least two-fold
+    degenerate.
+\end{theorem}
+
+\subsection{From Hilbert's 17th problem to indecomposable maps}
+
+The following pages will somehow be a detour following a historical path. Rather than writing down examples of
+indecomposable positive maps (as we did within Example~3.1) we will see how they arose from a problem Hilbert thought
+about in 1888. For an overview of Hilbert's 17th problem see [?].
+
+\paragraph{Hilbert's problem:}
+A sum of squares (sos) of real polynomials is obviously positive semi-definite. The converse question, whether a real
+homogeneous psd polynomial of even degree has a sos decomposition, was posed and answered by David Hilbert in 1888.
+Let $H_h(\RR^n)$ be the set of homogeneous polynomials of even degree $h$ in $n$ real variables, and
+\begin{align}
+    P_h(\RR^n)      &= \{p\in H_h(\RR^n)\mid \forall x\in \RR^n:\ p(x)\ge 0\},
+    \label{eq:ch3:3.31}
+    \\
+    \Sigma_h(\RR^n) &=
+    \left\{p\in P_h(\RR^n)\ \middle|\ \exists\{h_k\in H_{h/2}(\RR^n)\}:\ p=\sum_k h_k^2\right\},
+    \label{eq:ch3:3.32}
+\end{align}
+the set of psd polynomials in $H$ and the subset of polynomials having an sos decomposition, respectively.\footnote{Note
+    that $P$ and $\Sigma$ are both convex cones. Moreover, they are closed, i.e., if $p_n\to p$ coefficientwise, and each
+    $p_n$ is in $P$ resp.\ $\Sigma$, then so is $p$.} It is not difficult to see that $P=\Sigma$ if $n=2$ or $h=2$. In
+fact, the latter is nothing but the spectral decomposition of psd matrices. In 1888 Hilbert showed at first, that
+every $p\in P_4(\RR^3)$ can be written as the sum of squares of three quadratic forms, i.e., $P_4(\RR^3)=\Sigma_4(\RR^3)$.
+Moreover, he proved, albeit in a non-constructive way, that $(h,n)=(2,n),(h,2),(4,3)$ are in fact the only cases where
+$P=\Sigma$. In 1900 Hilbert posed a generalization of these questions as his ``17th problem'' at the International
+Congress of Mathematics in Paris\footnote{At this congress Hilbert outlined 23 major mathematical problems. Whereas
+    some are broad, such as the axiomatization of physics (6th problem), others were very specific and could be solved
+    quickly afterwards.}: Does every homogeneous psd form admit a decomposition into a sum of squares of rational
+functions? This was answered yes by Artin in 1927 using the Artin--Schreier theory of real closed
+fields [?].\footnote{Artin's proof holds for forms with coefficients from a field with unique order, i.e., in
+    particular for $\RR$.}
+
+\paragraph{Choi's example:}
+Concerning Hilbert's original 1888 work it took nearly 80 years for explicit polynomials $p\in P\setminus \Sigma$ to
+appear in the literature. One of these examples was provided by Choi, while investigating one of the numerous ``sum of
+squares'' variants of Hilbert's problem. Choi showed in 1975 that there are psd biquadratic forms that cannot be
+expressed as the sum of squares of bilinear forms. More precisely, let
+\begin{equation}\label{eq:ch3:3.33}
+    F(x,y)=\sum_{i,j,k,l=1}^n F_{ijkl}x_ix_jy_ky_l,
+    \qquad \forall x,y:\ F(x,y)\ge 0
+\end{equation}
+be a real psd biquadratic form in $x,y\in \RR^n$. For $n=3$ Choi found a counterexample to the (wrongly
+proven\footnote{For the case $x\in \RR^n$, $y\in \RR^m$ with $n=2$ or $m=2$ Calderon [?] proved that there is always a
+    sos decomposition of the form in Eq.~(3.34). In [?] Koga claimed that this is also true for arbitrary $n,m$. Finding
+    the flaw in Koga's proof, was apparently Choi's motivation for [?].}) conjecture that there is always a decomposition
+into a sum of squares of bilinear forms, i.e.
+\begin{equation}\label{eq:ch3:3.34}
+    F(x,y)
+    \stackrel{?}{=}
+    \sum_{\alpha}(f^{(\alpha)}(x,y))^2
+    =
+    \sum_{\alpha}\left(\sum_{i,j=1}^n f_{ij}^{(\alpha)}x_i y_j\right)^2.
+\end{equation}
+Choi's counterexample, for which he gave very elementary proofs, is
+\begin{equation}\label{eq:ch3:3.35}
+    F(x,y)=2\sum_{i=1}^3 x_i^2(y_i^2+y_{i+1}^2) - \left(\sum_{j=1}^3 x_jy_j\right)^2,
+\end{equation}
+with $y_{3+1}\equiv y_1$. Note that $F\in P_4(\RR^6)$ and that every quadratic form appearing in an sos decomposition
+of $F$ has to be bilinear. Hence, Eq.~\eqref{eq:ch3:3.35} is an element of $P\setminus \Sigma$ for $(h,n)=(4,6)$.
+\footnote{By choosing dependent $x$ and $y$, Choi also specified $F(x,y)$, such that it yielded elements of
+    $P\setminus \Sigma$ for $(h,n)=(4,4)$ and $(6,3)$ respectively.}
+
+For the mere beauty of the example let us mention an element of $P\setminus \Sigma$ for $(h,n)=(4,5)$:
+\begin{equation}\label{eq:ch3:3.36}
+    \sum_{i=1}^5 \prod_{j\neq i}(x_i-x_j).
+\end{equation}
+
+\paragraph{Relation to positive maps:}
+In our context the main significance of biquadratic forms lies in their relation to linear maps on symmetric
+matrices. This relation is in fact the real analog of the correspondence between entanglement witnesses and positive
+maps expressed in Eq.~\eqref{eq:ch3:3.13}. Let $S_n$ be the set of all real symmetric $n\times n$ matrices, and let
+$\Phi:S_n\to S_n$ be a positive linear map on $S_n$, i.e.\ $\forall x\in\RR^n:\ \Phi(\ketbra{x}{x})\ge 0$. Then $\Phi$
+corresponds to a psd biquadratic form $F$ and vice versa via\footnote{$F\ge 0$ implies $\Phi\ge 0$ since any symmetric
+    matrix $S\in S_n$ is psd if $\bra{y}S\ket{y}\ge 0$ for every real vector $y\in \RR^n$.}
+\begin{equation}\label{eq:ch3:3.37}
+    F(x,y)=\bra{y}\Phi(\ketbra{x}{x})\ket{y}.
+\end{equation}
+Particular instances of such maps are congruence maps of the form $\Phi(A)=K^T AK$, which in turn correspond to psd
+biquadratic forms $F(x,y)=f(x,y)^2$, where $f(x,y)=\sum_{ij}K_{ij}x_i y_j$ is a bilinear form. The existence of a psd
+biquadratic form, which does not admit an sos decomposition, thus implies that the set of positive maps $\Phi:S_n\to S_n$
+properly contains the convex hull of all congruence maps (for $n\ge 3$). The latter is, however, the real analog of
+the set of (complex) decomposable positive maps. Let us now see, whether the map
+\begin{equation}\label{eq:ch3:3.38}
+    \Phi(S)=2\tr[S]\one - \operatorname{diag}(S_{33},S_{11},S_{22}) - S,
+\end{equation}
+which corresponds to the psd biquadratic form in Eq.~\eqref{eq:ch3:3.35} (see also Example~3.1), represents an
+admissible complex non-decomposable positive map as well.
+
+Let $\Lambda$ be a complex extension of $\Phi$ defined as in Eq.~\eqref{eq:ch3:3.38} but on arbitrary complex
+$3\times 3$ matrices. Obviously, $\Lambda$ maps Hermitian matrices onto Hermitian matrices. Moreover, if $\Lambda$ is a
+decomposable positive map, it acts on symmetric matrices as $\Lambda(S)=\sum_j K_j^*SK_j$ for some complex matrices
+$\{K_j\}$. If we decompose the latter with respect to their real and imaginary parts $K_j=R_j+iI_j$ we get
+\begin{equation}\label{eq:ch3:3.39}
+    \Lambda(S)=\sum_j R_j^T SR_j + I_j^T SI_j \overset{!}{=} \Phi(S),
+\end{equation}
+contradicting the fact that $\Phi$ in Eq.~\eqref{eq:ch3:3.38} has no such decomposition into congruence maps. Hence,
+$\Lambda$ is either not decomposable or not a positive map at all. The latter can, however, be excluded, since we have
+for every vector $z\in \CC^3$ with $z_j=x_j\varphi_j$, $x_j=|z_j|$:
+\begin{equation}\label{eq:ch3:3.40}
+    \Lambda(\ketbra{z}{z})= D^*\,\Phi(\ketbra{x}{x})\,D \ge 0,
+    \qquad D=\operatorname{diag}(\varphi_1,\varphi_2,\varphi_3).
+\end{equation}
+By Prop.~\ref{prop:ch3-ppt-entangled} Choi's map thus proves, albeit in a non-constructive way, the existence of PPT
+entangled states in $3\otimes 3$.
+
+The question whether an entanglement witness $W$ is decomposable or not, is equivalent to asking whether the
+biquadratic Hermitian psd form
+\begin{equation}\label{eq:ch3:3.41}
+    W(\Phi,\Psi)=\bra{\Phi\otimes \Psi}W\ket{\Phi\otimes \Psi}
+    =\sum_{ijkl} W_{ijkl} \overline{\Phi_i} \overline{\Psi_j} \Phi_k\,\Psi_l
+\end{equation}
+has an sos decomposition. It is therefore the complex analog of Eq.~\eqref{eq:ch3:3.34}. Apart from examples there is,
+however, not much known about forms which do not admit such a decomposition.
+
+Every real unextendable product basis (as the one in Eq.~\eqref{eq:ch3:3.21}) can be used to construct a real-valued
+non-decomposable entanglement witness. These witnesses thus correspond to biquadratic psd forms, which do not admit an
+sos decomposition and are therefore elements of $P\setminus \Sigma$.
+
+\subsection{Preservation of cones and balls}
+
+\begin{proposition}[Automorphisms and rank preserving maps]
+    Consider a linear map $T:\mcM_d(\CC)\to \mcM_d(\CC)$. The following are equivalent:
+    \begin{enumerate}
+        \item $T$ maps the cone of positive semidefinite matrices onto itself.
+        \item $T$ is positive and preserves the rank of Hermitian matrices.
+        \item There is an invertible $Y\in \mcM_d(\CC)$ such that $T$ is either of the form
+              $T(X)=YXY^\dagger$ or $T(X)=Y X^T Y^\dagger$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    \textit{1 $\Rightarrow$ 2:} Note first that $T$ is bijective and $T^{-1}$ is again positive, linear and
+    maps the positive semidefinite cone onto itself. Consider an arbitrary positive semidefinite $P\in \mcM_d(\CC)$ and
+    the cone defined by
+    \begin{equation}\label{eq:ch3:3.42}
+        C(P):=\{A\in \mcM_d(\CC)\mid \exists c>0:\ P\ge cA\ge 0\}.
+    \end{equation}
+    Note that the subspace spanned by $C(P)$ has dimension $\rank(P)^2$ and that, by the properties of $T$, we have
+    $T(C(P))=C(T(P))$. Since $T$ (as a bijection) preserves the dimension of subspaces, this implies that
+    $\rank(P)=\rank(T(P))$.
+
+    In order to extend this to Hermitian matrices let us decompose an arbitrary $H=H^\dagger$ into $H=P_+-P_-$ where $P_\pm$
+    are positive semidefinite and orthogonal. Then
+    $\rank(T(H))\le \rank(T(P_+))+\rank(T(P_-))=\rank(H)$. Applying the same to $T^{-1}(H)$ instead of $H$ gives the converse
+    inequality.
+
+    \textit{2 $\Rightarrow$ 3:} Define $\widetilde T(X):=T(\one)^{-1/2}T(X)T(\one)^{-1/2}$. Since $T(\one)$ has full rank,
+    $\widetilde T$ inherits the properties of $T$, i.e., it is positive and rank preserving and in addition unital. Now
+    recall that $\lambda\in \spec(H)$ iff $H-\lambda\one$ has reduced rank. Using that
+    $\widetilde T(H-\lambda\one)=\widetilde T(H)-\lambda\one$ together with the fact that $\widetilde T$ preserves the rank
+    for Hermitian $H$ we get that it actually preserves the spectrum. Then Cor.~1.1 completes this part of the proof by
+    setting $Y=U(T(\one))^{-1/2}$.
+
+    \textit{3 $\Rightarrow$ 1} should be obvious.
+\end{proof}
+
+From the definition of decomposable positive maps in Eq.~\eqref{eq:ch3:3.2} together with the Kraus decomposition in
+Thm.~2.1 it is clear that every extreme point within the convex set of decomposable positive maps is of the form
+$X\mapsto YXY^\dagger$ or $X\mapsto YX^T Y^\dagger$ (with $Y$ not necessarily invertible). That the converse is true as
+well, i.e., that all these maps are extreme point has been proven in \dots.
+
+\begin{proposition}[Confining Lorentz cones]
+    Consider a Hermitian matrix $A\in \mcM_d(\CC)$. Then
+    \begin{enumerate}
+        \item $A\ge 0 \Rightarrow \tr[A]^2 \ge \tr[A^2]$. Conversely,
+        \item $A\ge 0 \Leftarrow \tr[A]^2 \ge (d-1)\tr[A^2]$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    1.\ becomes obvious when writing it out in terms of the eigenvalues $\{a_i\in \RR\}$:
+    $(\sum_i a_i)^2\ge \sum_i a_i^2$ is certainly true for $a_i\ge 0$ as the l.h.s.\ contains all terms of the r.h.s.\ plus
+    some extra positive terms.
+
+    In order to prove the second implication (by contradiction) assume that $A$ has a negative part such that it admits a
+    non-trivial decomposition of the form $A=A_+-A_-$ with $A_\pm\ge 0$ and $\tr[A_+A_-]=0$. Denoting by $d_+<d$ the rank
+    of $A_+$ we can bound
+    \begin{align}
+        \tr[A] &\le \tr[A_+] = \|A_+\|_1 \le \sqrt{d_+} \|A_+\|_2,
+        \label{eq:ch3:3.43}
+        \\
+               &\le \sqrt{d-1} \|A_+\|_2 < \sqrt{d-1} \|A\|_2,
+        \label{eq:ch3:3.44}
+    \end{align}
+    where the first inequality is a simple consequence of H\"older's inequality\footnote{For every unitarily invariant
+        norm we have $\|CB\|\le \|\,|C|^{p}\|_1^{1/p}\|\,|B|^{q}\|_1^{1/q}$ for all $p>1$ and $1/p+1/q=1$.
+        Eq.~\eqref{eq:ch3:3.43} follows from applying this to the trace norm with $p=2$, $C=A_+$ and $B$ the projection onto the
+        range of $A_+$.} and the last one uses $\|A\|_2^2=\|A_+\|_2^2+\|A_-\|_2^2$ and $A_-\neq 0$.
+\end{proof}
+
+\begin{lemma}[Making positive maps trace preserving]
+    Let $T:\mcM_d(\CC)\to \mcM_{d'}(\CC)$ be a positive map for which $T^*(\one)>0$. There exists an invertible
+    $X\in \mcM_d(\CC)$ such that $T'(\rho):=T(X\rho X^\dagger)$ is a trace-preserving positive map.
+\end{lemma}
+
+\begin{proof}
+    Let $\tau:=(T\otimes \id)(\ketbra{\Omega}{\Omega})$ be the Choi--Jamiolkowski operator corresponding to $T$ and $\tau'$
+    the one for $T'$. By Prop.~2.1 the map $T'$ is trace preserving if the partial trace $\tau'_B$ equals $\one/d$. Since
+    (again by Prop.~2.1)
+    \[
+        \tau'_B = X^T \tau_B \overline{X}
+        = \frac{1}{d}\,X^T (T^*(\one))^T \overline{X},
+    \]
+    this can be achieved by choosing $X:=(T^*(\one))^{-1/2}$.
+\end{proof}
+
+Hildebrand: \dots\ maps preserving the Lorentz cone \dots
+
+Gorini, Sudarshan: \dots\ maps preserving the sphere + Kossakowski and Chru\'sci\'nski \dots
+
+\subsection{Complexity issues}
+
+\subsection{Literature}
 
 \end{document}

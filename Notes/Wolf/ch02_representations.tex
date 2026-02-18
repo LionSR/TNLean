@@ -1,22 +1,1090 @@
-% Transcribed from: Wolf, "Quantum Channels & Operations: Guided Tour", Chapter 2
-% Source PDF: WolfLectureNote/ch02_representations.pdf
-% Status: PLACEHOLDER - awaiting OCR transcription
-%
-% Scope: Full chapter
-%   - Stinespring's theorem (Thm 2.2)
-%   - Kraus / operator-sum representation (Thm 2.1)
-%   - Choi-Jamiołkowski operator
-%   - Unitary freedom in Kraus decomposition
-%   - Environmental representations
 
-\documentclass{article}
+\documentclass[11pt,a4paper]{article}
 \input{preamble}
+
+% --- Adjust numbering to match Wolf's Chapter-2 layout ---
+\numberwithin{equation}{section}
+
+% Wolf uses independent numbering for Theorems vs Propositions vs Examples,
+% and Problems are globally numbered across the notes.
+% The shared preamble defines these environments sharing one counter, so we
+% redefine the ones needed here.
+\UndefEnv{proposition}
+\UndefEnv{example}
+\UndefEnv{problem}
+
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}[section]
+\theoremstyle{definition}
+\newtheorem{example}{Example}[section]
+\newtheorem{problem}{Problem} % global numbering (no [section])
+
 \title{Chapter 2: Representations \\ {\small (Wolf Lecture Notes - Transcription)}}
 \date{}
+
 \begin{document}
 \maketitle
 \tableofcontents
 
-\textbf{[Placeholder - content will be filled by OCR workflow]}
+% Start chapter numbering at 2 (Chapter 2 as Section 2).
+\setcounter{section}{1}
+
+\section{Representations}
+
+In this chapter we will discuss the most important ways of parameterizing and
+representing a quantum channel:
+(i) in terms of a bipartite quantum state, leading to the state-channel duality
+introduced by Jamiolkowski and Choi,
+(ii) as the reduced dynamics of a larger (unitarily evolving) system as expressed
+by the representation theorems of Kraus, Stinespring, and Neumark (for POVMs),
+and
+(iii) as a linear map represented in terms of a ``transfer matrix''.
+This will be supplemented with a brief discussion about normal forms.
+
+\subsection{Jamiolkowski and Choi}
+
+We saw in Prop.~1.2 that complete positivity of a linear map $T$ is equivalent to
+positivity of the operator
+\[
+    \tau := (T \otimes \id)(\ketbra{\Omega}{\Omega})
+\]
+which is obtained by letting $T$ act on half of a maximally entangled state $\Omega$.
+In fact, the operator $\tau$ obtained in this way encodes not only complete positivity
+but every property of $T$. This reflects the simple equivalence
+$\mcB(\mcM_d,\mcM_{d'}) \simeq \mcM_{dd'}$ which was certainly observed and
+used at various places, but in the context of quantum channels the credit goes to
+Choi and Jamiolkowski. $d\tau$ is often called \emph{Choi matrix}, and if $T$ is a
+trace-preserving quantum channel, then $\tau$ is called the corresponding
+\emph{Jamiolkowski state}.
+
+\begin{proposition}[Choi--Jamiolkowski representation of maps]
+    The following provides a one-to-one correspondence between linear maps
+    $T \in \mcB(\mcM_d,\mcM_{d'})$ and operators $\tau \in \mcB(\CC^{d'}\otimes \CC^{d})$:
+    \begin{equation}\label{eq:2.1}
+        \begin{aligned}
+            \tau           & = (T \otimes \id_d)(\ketbra{\Omega}{\Omega}), \\
+            \tr\![A\,T(B)] & = d\,\tr\![\tau\,(A \otimes B^{T})],
+        \end{aligned}
+    \end{equation}
+    for all $A \in \mcM_{d'}$, $B \in \mcM_d$ and $\Omega \in \CC^d\otimes \CC^d$
+    being a maximally entangled state as in Eq.~(1.11). The maps $T \mapsto \tau$ and
+    $\tau \mapsto T$ defined by \eqref{eq:2.1} are mutual inverses and lead to the
+    following correspondences:
+    \begin{itemize}
+        \item Hermiticity: $\tau = \tau^\dagger$ iff $T(B^\dagger)=T(B)^\dagger$ for all
+              $B \in \mcM_d$,\footnote{Note that this is in turn equivalent to $T$ being a
+                  Hermiticity preserving map, i.e., $T(X)=T(X)^\dagger$ for all $X=X^\dagger$.}
+        \item Complete positivity: $T$ is completely positive iff $\tau \ge 0$.
+        \item Doubly-stochastic: $T(\one)\propto\one$ and $T^*(\one)\propto\one$ iff
+              $\tr_A[\tau]\propto \one$ and $\tr_B[\tau]\propto \one$.
+        \item Unitality: $T(\one)=\one$ iff $\tr_B[\tau]=\one_{d'}/d$.
+        \item Preservation of the trace: $\tr_A[\tau] = (T^*(\one))^{T}/d$,
+              i.e., $T^*(\one)=\one$ iff $\tr_A[\tau]=\one_d/d$.
+        \item Normalization: $\tr[\tau]=\tr[T^*(\one)]/d$.
+    \end{itemize}
+\end{proposition}
+
+\begin{proof}
+    The complete positivity correspondence was proven in Prop.~1.2 and the other
+    equivalences follow from \eqref{eq:2.1} by direct inspection. So, the only piece to
+    prove is that the two relations in \eqref{eq:2.1} are mutual inverses which then
+    establishes the claimed one-to-one correspondence. To this end let us start with the
+    rightmost expression in \eqref{eq:2.1} and insert $\tau=(T\otimes \id)(\ketbra{\Omega}{\Omega})$:
+    \begin{align}
+        d\,\tr\![\tau\,(A \otimes B^{T})]
+         &= \tr\![F^{T_B}\,T^*(A)\otimes B^{T}], \label{eq:2.2}\\
+         &= \tr\![F\,T^*(A)\otimes B]
+        = \tr\![A\,T(B)], \label{eq:2.3}
+    \end{align}
+    where we have used the basic tools from Example~1.2, in particular that
+    $d\ketbra{\Omega}{\Omega}=F^{T_B}$. Eqs.~\eqref{eq:2.2}--\eqref{eq:2.3} show that
+    indeed $T \to \tau \to T$. So the two maps in \eqref{eq:2.1} are mutual inverses if
+    $T \mapsto \tau$ is surjective. This is, however, easily seen by decomposing $\tau$
+    into a linear combination of rank-one operators $\ket{\psi}\!\bra{\psi'}$ and using
+    $\ket{\psi}=(X\otimes \one)\ket{\Omega}$ from Eq.~(1.13).
+\end{proof}
+
+When writing out the mapping $\tau \to T$ from \eqref{eq:2.1} in terms of a product
+basis we get
+\begin{equation}\label{eq:2.4}
+    T(B) = d \sum_{i j k l} \bra{ij}\tau\ket{kl}  \ketbra{i}{j}\,B\,\ketbra{l}{k}.
+\end{equation}
+
+If $T$ is a quantum channel in the Schr\"odinger picture, then $\tau$ is a density
+operator with reduced density matrix $\tr_{B}[\tau] = \one/d$. This means that the
+set of quantum channels corresponds one-to-one to the set of bipartite quantum
+states which have one reduced density matrix maximally mixed. By replacing $\Omega$
+in the construction of $\tau$ by any other pure state we can easily establish a
+similar state-channel-duality with respect to states with different reduced density
+matrices. Such a correspondence will be one-to-one iff the respective reduced state
+has full rank.
+
+If $d$ is countable infinite then $\Omega$ loses its meaning. However, we can partly
+restore the above correspondence by using either its unnormalized counterpart
+$\sum_{ij}\ketbra{ii}{jj}$ or any non-maximally entangled state which has reduced
+density matrix with full rank instead.
+
+The correspondence between $T$ and $\tau$ enables us to show that every linear map
+admits a decomposition into at most four completely positive maps:
+
+\begin{proposition}[Decomposition into completely positive maps]
+    Every linear map $T \in \mcB(\mcM_d,\mcM_{d'})$ can be written as a complex linear
+    combination of four completely positive maps. If $T$ is Hermitian (i.e.,
+    $T(B^\dagger)=T(B)^\dagger$ for all $B$), it can be written as a real linear
+    combination of two of them.
+\end{proposition}
+
+\begin{proof}
+    We use that the mapping $T \leftrightarrow \tau$ in Prop.~2.1 is one-to-one and
+    linear so that it suffices to decompose $\tau$. On this level the existence of such
+    a decomposition is rather obvious: we can always decompose $\tau$ into a Hermitian
+    and anti-Hermitian part and each of them into a positive and negative part. More
+    explicitly,
+    \[
+        \tau = \frac{\tau+\tau^\dagger}{2} + i\,\frac{i\tau^\dagger - i\tau}{2}
+    \]
+    provides a complex linear combination of two Hermitian parts and each of the latter
+    can, by invoking the spectral decomposition, be written as a real linear combination
+    of two positive semi-definite matrices.
+\end{proof}
+
+As a first simple application of this (extremely useful and later extensively used)
+correspondence we show the following:
+
+\begin{proposition}[No information without disturbance]
+    Consider an instrument represented by a set of completely positive maps
+    $\{T_\alpha:\mcM_d \to \mcM_d\}$. If there is no disturbance on average, i.e.,
+    $T=\sum_\alpha T_\alpha$ satisfies $T=\id$, then $T_\alpha \propto \id$ for every
+    $\alpha$ and the probability for obtaining an outcome $\alpha$ (given by
+    $\tr[T_\alpha(\rho)]$) is independent of the input $\rho$ (hence, no information gain).
+\end{proposition}
+
+\begin{proof}
+    On the level of the Jamiolkowski states the decomposition $\id=\sum_\alpha T_\alpha$
+    reads $\ketbra{\Omega}{\Omega}=\sum_\alpha \tau_\alpha$. Since $\tau_\alpha \ge 0$
+    (due to complete positivity of $T_\alpha$) this corresponds to a convex decomposition
+    of the density operator for the maximally entangled state. Since the latter is pure
+    there is only the trivial decomposition, so that $\tau_\alpha = c_\alpha\ketbra{\Omega}{\Omega}$
+    for some constants $c_\alpha \ge 0$. Consequently, $T_\alpha = c_\alpha\id$ so
+    that $\tr[T_\alpha(\rho)] = c_\alpha$ independent of $\rho$.
+\end{proof}
+
+\paragraph{Implementation via teleportation.}
+If $T$ is a quantum channel then its Jamiolkowski state $\tau$ can operationally be
+obtained by letting the channel act on a maximally entangled state. What about the
+converse? If $\tau$ is given, does this help us to implement $T$ as an action on an
+arbitrary input $\rho$?
+
+The answer to this involves some form of teleportation: assume that the bipartite
+state $\tau$ is shared by two parties, Alice and Bob, so that Bob has the maximally
+mixed reduced state. Suppose that Bob has an additional state $\rho$ and that he
+performs a measurement on his composite system using a POVM which contains the
+maximally entangled state $\omega := \ketbra{\Omega}{\Omega}$ as an effect operator.
+We claim now that Alice's state is given by $T(\rho)$ whenever Bob has obtained a
+measurement outcome corresponding to $\omega$. In order to show this denote Alice's
+reduced density matrix (in case of Bob's success) by $\rho_A$, the success
+probability by $p$ and compute the expectation value with an arbitrary operator $A$:
+\begin{align}
+    p\,\tr[A\rho_A]
+     &= \tr[(\tau \otimes \rho)(A \otimes \omega)], \label{eq:2.5}\\
+     &= \frac{1}{d} \tr[(\tau \otimes \rho^{T})(A \otimes F)], \label{eq:2.6}\\
+     &= \frac{1}{d} \tr[\tau\,(A \otimes \rho^{T})]
+    = \frac{1}{d^2} \tr[A\,T(\rho)], \label{eq:2.7}
+\end{align}
+where we used the basic ingredients from Example~1.2 again and, in the last step,
+the r.h.s.\ of \eqref{eq:2.1}. This shows that the described protocol is indeed
+successful with probability $p=1/d^2$. In some cases Alice and Bob can, however, do
+much better: assume that there is a set of local unitaries
+$\{V_i\otimes U_i\}_{i=1}^N$ w.r.t.\ which
+$\tau=(V_i\otimes U_i)\tau(V_i\otimes U_i)^\dagger$ is invariant and which are
+orthogonal in the sense that $\tr[U_i U_j^\dagger]=d\,\delta_{ij}$. Due to the latter
+condition Bob can use a POVM which contains all
+$(\one \otimes U_i)^\dagger \omega (\one\otimes U_i)$ as effect operators. When Bob
+obtains one of the corresponding outcomes $i$ and he reports this to Alice, she can
+``undo'' the action of the unitary by applying $V_i$ with the consequence that
+$\rho_A = T(\rho)$ with probability $p=N/d^2$. So if the $U_i$'s form a basis (i.e.,
+$N=d^2$) the two protagonists can implement $T$ with unit probability by
+``teleporting'' through $\tau$. If $T=\id$ and therefore $\tau=\ketbra{\Omega}{\Omega}$
+this reduces to the standard protocol for entanglement-assisted teleportation.
+
+Note that by linearity the implemented action of $T$ does not only hold for
+uncorrelated states but it also works properly if $\rho$ is part of a larger system.
+
+\setcounter{problem}{5}
+\begin{problem}[Implementation via teleportation]
+Suppose Alice and Bob are given the Jamiolkowski state $\tau$ corresponding to a
+given quantum channel $T$. Which is the largest probability at which Bob can
+teleport an unknown state $\rho$ to Alice (using $\tau$, local operations and
+classical communication as resource) so that Alice ends up with the state $T(\rho)$?
+\end{problem}
+
+\subsection{Kraus, Stinespring and Neumark}
+
+The Choi-Jamiolkowski state-channel duality allows us to translate between
+properties of bipartite states and quantum channels. One immediate implication is
+a more specific and very useful representation of quantum channels which
+corresponds, on the level of the Jamiolkowski state, to a convex (or spectral)
+decomposition into rank-one operators:
+
+\begin{theorem}[Kraus representation]
+    A linear map $T \in \mcB(\mcM_d,\mcM_{d'})$ is completely positive iff it admits a
+    representation of the form
+    \begin{equation}\label{eq:2.8}
+        T(A) = \sum_{j=1}^r K_j A K_j^\dagger.
+    \end{equation}
+    This decomposition has the following properties:
+    \begin{enumerate}
+        \item Normalization: $T$ is trace preserving iff $\sum_j K_j^\dagger K_j = \one$
+              and unital iff $\sum_j K_j K_j^\dagger = \one$.
+        \item Kraus rank:\footnote{We call $r=\rank(\tau)$ Kraus rank or Choi rank in order
+                  not to confuse it with the rank of $T$ as a linear map. Take for instance $T=\id$
+                  the ideal channel. As this is obviously invertible it has full rank as a linear
+                  map. However, its Kraus rank is $r=1$. $T(B)=\tr[B]$ instead has rank one but
+                  Kraus rank equal to $d$, the dimension of the input space.}
+              The minimal number of Kraus operators
+              $\{K_j \in \mcB(\CC^d,\CC^{d'})\}_{j=1}^r$ is
+              $r=\rank(\tau)\le dd'$.
+        \item Orthogonality: There is always a representation with $r=\rank(\tau)$
+              Hilbert--Schmidt orthogonal Kraus operators (i.e., $\tr[K_i^\dagger K_j]\propto \delta_{ij}$).
+        \item Freedom: Two sets of Kraus operators $\{K_j\}$ and $\{\widetilde{K}_\ell\}$
+              represent the same map $T$ iff there is a unitary $U$ so that
+              $K_j=\sum_\ell U_{j\ell}\widetilde{K}_\ell$ (where the smaller set is padded with zeros).
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Assume $T$ is completely positive. By Prop.~2.1 this is equivalent to saying that
+    $\tau \ge 0$ which allows for a decomposition of the form
+    \begin{equation}\label{eq:2.9}
+        \tau = \sum_{j=1}^r \ketbra{\psi_j}{\psi_j}
+        = \sum_{j=1}^r (K_j \otimes \one) \ketbra{\Omega}{\Omega}\,(K_j \otimes \one)^\dagger,
+    \end{equation}
+    where the first step uses $\tau \ge 0$ and the second Eq.~(1.13). Comparing the
+    r.h.s.\ of \eqref{eq:2.9} with the definition $\tau := (T \otimes \id)(\ketbra{\Omega}{\Omega})$
+    and recalling that $T \leftrightarrow \tau$ is one-to-one leads to the desired
+    decomposition in \eqref{eq:2.8}. It also shows that $r \ge \rank(\tau)$ where
+    equality can be achieved and if the $\psi_j$'s are in addition chosen to be
+    orthogonal, then the Kraus operators are orthogonal (w.r.t.\ the Hilbert--Schmidt
+    inner product) as well.
+
+    Conversely, if a map is of the form \eqref{eq:2.8} then $\tau \ge 0$ which implies
+    complete positivity. The conditions for unitality and preservation of the trace are
+    straight forward. It remains to show that the freedom in the representation is
+    precisely given by unitary linear combinations. This is a direct consequence of
+    \eqref{eq:2.9} and the subsequent proposition.
+\end{proof}
+
+\begin{proposition}[Equivalence of ensembles]
+    Two ensembles of (not necessarily normalized) vectors $\{\psi_j\}$ and
+    $\{\widetilde{\psi}_\ell\}$ satisfy
+    \begin{equation}\label{eq:2.10}
+        \sum_j \ketbra{\psi_j}{\psi_j} = \sum_\ell \ketbra{\widetilde{\psi}_\ell}{\widetilde{\psi}_\ell}
+    \end{equation}
+    iff there is a unitary $U$ such that
+    $\ket{\psi_j} = \sum_\ell U_{j\ell}\ket{\widetilde{\psi}_\ell}$
+    (where the smaller set is padded with zero vectors).
+\end{proposition}
+
+\begin{proof}
+    W.l.o.g.\ we may think of the mixture in \eqref{eq:2.10} as a given density matrix
+    $\rho$. From both ensembles we can construct a purification of
+    $\rho=\tr_B[\ketbra{\Psi}{\Psi}]$, of the form
+    $\ket{\Psi}=\sum_j \ket{\psi_j}\otimes \ket{j}$ where $\{\ket{j}\}$ is an orthonormal
+    basis which we use as well in
+    $\ket{\widetilde{\Psi}}=\sum_\ell \ket{\widetilde{\psi}_\ell}\otimes \ket{\ell}$.
+    It follows from the Schmidt decomposition (Prop.~1.1) that two purifications differ
+    by a unitary (or isometry if the dimensions do not match), i.e.,
+    $\ket{\Psi}=(\one\otimes U)\ket{\widetilde{\Psi}}$. By taking the scalar product
+    with a basis vector $\bra{j}$ on the second tensor factor this leads to
+    $\ket{\psi_j}=\sum_\ell U_{j\ell}\ket{\widetilde{\psi}_\ell}$ which proves necessity
+    of the condition.\footnote{If the $U$ relating the two purifications is an isometry
+        it can always be embedded into a unitary, just by completing the set of orthonormal
+        row or column vectors to an orthonormal basis.} Sufficiency follows by inspection
+    from unitarity of $U$.
+\end{proof}
+
+Note that the number of linearly independent Kraus operators is $r=\rank(\tau)$
+independent of the representation. The Kraus representations of a completely
+positive map $T$ and its dual $T^*$ are related via interchanging
+$K_j \leftrightarrow K_j^\dagger$. Moreover, $T^* = T$ iff there is a
+representation with Hermitian Kraus operators (a simple exercise using the unitary
+freedom).
+
+\paragraph{Stinespring and the open-system point of view.}
+A common perspective is to regard a quantum channel as a description of
+``open system dynamics'' which originates from considering only parts of a unitarily
+evolving system. Using the Kraus representation we will now see that indeed every
+quantum channel can be represented as arising in this way. Before we discuss this
+in the Schr\"odinger picture (which might be the more familiar version for
+physicists), we will state the equivalent theorem in the Heisenberg picture (more
+common to operator algebraists):
+
+\begin{theorem}[Stinespring representation]
+    Let $T:\mcM_d \to \mcM_{d'}$ be a completely positive linear map. Then for every
+    $r \ge \rank(\tau)$ (recall that $\rank(\tau)\le dd'$) there is a
+    $V:\CC^d \to \CC^{d'} \otimes \CC^r$ such that
+    \begin{equation}\label{eq:2.11}
+        T^*(A) = V^\dagger (A \otimes \one_r)V, \qquad \forall A \in \mcM_{d'}.
+    \end{equation}
+    $V$ is an isometry (i.e., $V^\dagger V = \one_d$) iff $T$ is trace preserving.
+\end{theorem}
+
+\begin{proof}
+    This is a simple consequence of the Kraus representation
+    $T^*(A)=\sum_{j=1}^r K_j^\dagger A K_j$: construct
+    $V := \sum_j K_j \otimes \ket{j}$ with $\{\ket{j}\}$ any orthonormal basis in
+    $\CC^r$. Then \eqref{eq:2.11} holds by construction, $r$ is at least the Kraus rank
+    (hence minimally $r=\rank(\tau)$, see Thm.~2.1) and
+    $V^\dagger V=\sum_j K_j^\dagger K_j=\one$ just reflects the trace preserving
+    condition.
+\end{proof}
+
+Note from the proof that a representation of the form \eqref{eq:2.11} exists for $T$
+as well (and not only for $T^*$). However, the trace-preserving condition is easier
+expressed in terms of $T^*$ where it becomes unitality.
+
+The ancillary space $\CC^r$ is usually called \emph{dilation space}. In the same way
+in which we constructed $V$ from the set of Kraus operators, we can obtain the
+latter from $V$ as $K_j = (\one_{d'}\otimes \bra{j})V$. As $r=\rank(\tau)$ is the
+smallest number of Kraus operators, it is also the least possible dimension for a
+representation of the form \eqref{eq:2.11}. Dilations with $r=\rank(\tau)$ are
+called \emph{minimal}. From the unitary freedom in the choice of Kraus operators
+(Thm.~2.1) we obtain that for minimal dilations $V$ is unique up to the obvious
+unitary freedom $V \to (\one_{d'} \otimes U)V$. All other dilations can be obtained
+by an isometry $U$.
+
+An alternative, but equivalent, way of characterizing minimal dilations is the
+identity
+\begin{equation}\label{eq:2.12}
+    \CC^{d'} \otimes \CC^r
+    = \{ (A \otimes \one_r)V\ket{\psi} \mid A\in \mcM_{d'},\ \psi\in\CC^d \},
+\end{equation}
+i.e., the requirement that the set on the r.h.s.\ spans the entire space.
+
+There is a natural partial order in the set of completely positive maps: we write
+$T_2 \ge T_1$ iff $T_2-T_1$ is completely positive. Due to the Choi-Jamiolkowski
+representation (Prop.~2.1) this is equivalent to $\tau_2 \ge \tau_1$. Such an order
+relation is reflected in the Stinespring representation in the following way:
+
+\begin{theorem}[Relation between ordered cp-maps]
+    Let $T_i:\mcM_{d'} \to \mcM_d$, $i=1,2$ be two completely positive linear maps with
+    $T_2 \ge T_1$. If $V_i:\CC^d \to \CC^{d'} \otimes \CC^{r_i}$ provide Stinespring
+    representations $T_i(A)=V_i^\dagger(A\otimes \one_{r_i})V_i$, then there is a
+    contraction $C:\CC^{r_2} \to \CC^{r_1}$ such that $V_1=(\one_{d'}\otimes C)V_2$. If
+    $V_2$ belongs to a minimal dilation, then $C$ is unique (for given $V_1$ and $V_2$).
+\end{theorem}
+
+\begin{proof}
+    We exploit the fact that $T_2 \ge T_1$ is equivalent to $\tau_2 \ge \tau_1$, i.e.,
+    the analogous order relation between the corresponding Choi-Jamiolkowski operators.
+    Define
+    \[
+        W_i := (\one_{r_i} \otimes \bra{\Omega}) (V_i \otimes \one_{d'})
+        \in \mcB(\CC^d\otimes \CC^{d'},\CC^{r_i}).
+    \]
+    Then for all $\psi \in \CC^d \otimes \CC^{d'}$,
+    \begin{equation}\label{eq:2.13}
+        \|W_2\ket{\psi}\|^2 = \bra{\psi}\tau_2\ket{\psi} \ge \bra{\psi}\tau_1\ket{\psi}
+        = \|W_1\ket{\psi}\|^2.
+    \end{equation}
+    Hence, there is a contraction (meaning $C^\dagger C \le \one$)
+    $C:\CC^{r_2}\to \CC^{r_1}$ such that $W_1 = C W_2$. Since the map $V_i\mapsto W_i$
+    is one-to-one\footnote{The inverse is
+        $V_i = d'^2 (W_i\otimes \one_{d'})(\one_d\otimes \ket{\Omega})$.}
+    this implies $V_1=(\one_{d'}\otimes C)V_2$. Moreover, if $r_2=\rank(\tau_2)$ (i.e.,
+    $\CC^{r_2}$ is a minimal dilation space), then $W_2$ must be surjective so that $C$
+    becomes uniquely defined.
+\end{proof}
+
+As a simple corollary of this result one obtains a Radon--Nikodym type theorem for
+instruments:
+
+\begin{theorem}[Radon--Nikodym for quantum instruments]
+    Let $\{T_i\}$ be a set of completely positive linear maps such that
+    $\sum_i T_i = T \in \mcB(\mcM_{d'},\mcM_d)$ with Stinespring representation
+    $T(A)=V^\dagger(A\otimes \one_r)V$. Then there is a set of positive operators
+    $P_i \in \mcM_r$ which sum up to $\one_r$ such that $T_i(A)=V^\dagger(A\otimes P_i)V$.
+\end{theorem}
+
+Now let us turn to the Schr\"odinger picture again and see how to represent a
+quantum channel from a system-plus-environment point of view:
+
+\begin{theorem}[Open-system representation]
+    Let $T:\mcM_d \to \mcM_{d'}$ be a completely positive and trace-preserving linear
+    map. Then there is a unitary $U\in \mcM_{d(d')^2}$ and a normalized vector
+    $\varphi \in \CC^{d'} \otimes \CC^{d'}$ such that
+    \begin{equation}\label{eq:2.14}
+        T(\rho) = \tr_E\!\left[U(\rho \otimes \ketbra{\varphi}{\varphi})U^\dagger\right],
+    \end{equation}
+    where $\tr_E$ denotes the partial trace over the first two tensor factors of the
+    involved Hilbert space $\CC^d \otimes \CC^{d'} \otimes \CC^{d'}$.
+\end{theorem}
+
+\begin{proof}
+    By expressing Stinespring's representation theorem in the Schr\"odinger picture we
+    get $T(\rho)=\tr_{\CC^r}[V\rho V^\dagger]$. Let us choose a dilation space of
+    dimension $r=dd'$. In this way we can embed $V$ into a unitary which acts on a
+    tensor product and write $V = U(\one_d \otimes \ket{\varphi})$ for some
+    $\varphi \in \CC^{d'}\otimes \CC^{d'}$ so that \eqref{eq:2.14} follows.
+\end{proof}
+
+Notice the possible departure from the dimension of the minimal dilation space in
+Thm.~2.5: if $d$ is not a factor of $d'\rank(\tau)$, then the construction fails and
+we have to use a space of larger dimension (e.g., $r=dd'$ which is always possible).
+In this case the type of freedom in the representation is less obvious.
+
+The physical interpretation of Thm.~2.5 is clear: we couple a system to an
+environment, which is initially in a state $\varphi$, let them evolve jointly
+according to a unitary $U$ and finally disregard (i.e., trace out) environmental
+degrees of freedom. This way of representing quantum channels nicely reminds us of
+the fundamental assumption used when we express an evolution in terms of a linear,
+completely positive, and trace preserving map: the initial state of the system has
+to be independent of the ``environment''---in other words $T$ itself must not depend
+on the input $\rho$.
+
+Let us finally revisit Thm.~2.4 from the system-plus-environment point of view:
+
+\begin{proposition}[Environment induced instruments]
+    Let $T:\mcM_d \to \mcM_{d'}$ be a completely positive and trace-preserving linear
+    with a system-plus-environment representation as in \eqref{eq:2.14}. For every
+    decomposition of the form $T=\sum_i T_i$ into completely positive maps $T_i$ there
+    is a POVM $\{P_i \in \mcM_{dd'}\}$ such that
+    \begin{equation}\label{eq:2.15}
+        T_i(\rho) = \tr_E\!\left[(P_i \otimes \one_{d'})\,U(\rho \otimes \ketbra{\varphi}{\varphi})U^\dagger\right].
+    \end{equation}
+    The Kraus rank $k_i$ of $T_i$ satisfies $k_i \le \rank(P_i)$.
+\end{proposition}
+
+\begin{proof}
+    \dots\ wouldn't be necessary, as this can essentially be considered a rewriting of
+    Thm.~2.4. However, we want to provide a simple alternative proof which is not based
+    on Thm.~2.4. Consider the Jamiolkowski state $\tau$ of $T$ and its purification
+    \[
+        \ket{\psi}:=(\one_d\otimes U)(\ket{\Omega}\otimes \ket{\varphi})
+    \]
+    so that $\tau=\tr_E[\ketbra{\psi}{\psi}]$. The decomposition of $T$ corresponds to a
+    decomposition $\tau=\sum_i \tau_i$ on the level of Choi-Jamiolkowski operators. As
+    this is a convex decomposition of the reduced density matrix of $\psi$ we can invoke
+    the quantum steering result in Prop.~1.3 (together with the one-to-one correspondence
+    between $T_i$ and $\tau_i$) in order to arrive at \eqref{eq:2.15}. From this the
+    bound on the Kraus rank follows by utilizing $k_i=\rank(\tau_i)$.
+\end{proof}
+
+\paragraph{Neumark's representation of POVMs.}
+In the same way as Stinespring's theorem enables us to regard a quantum channel as
+part of larger, unitarily evolving system, one can represent a POVM as a von Neumann
+measurement performed in an extended space. To simplify matters let us assume that
+the effect operators all have rank one (which can always be achieved by spectral
+decomposition).
+
+\begin{theorem}[Neumark's theorem]\footnote{As always we restrict ourselves to the
+        case of finite dimensions and finite outcomes. Neumark's theorem holds, however,
+        similarly if the set of measurement outcomes is characterized by any regular,
+        positive, $\mcB(\mathcal{H})$-valued measure on a compact Hausdorff space. The general
+        theorem can be viewed as a corollary of Stinespring's representation theorem.}
+    Consider a POVM with effect operators $\{\ketbra{\psi_i}{\psi_i}\}_{i=1}^n$ acting on
+    $\CC^d$, i.e., $\sum_i \ketbra{\psi_i}{\psi_i} = \one_d$. There exists an orthonormal
+    basis $\{\phi_i\}_{i=1}^n$ in $\CC^n \supseteq \CC^d$ such that each $\psi_i$ is the
+    restriction of $\phi_i$ to $\CC^d$.
+\end{theorem}
+
+\begin{proof}
+    Take an orthonormal basis $\{\ket{j}\in\CC^n\}_{j=1}^n$ so that $\CC^d$ is embedded as
+    a subspace spanned by the vectors $\ket{1},\dots,\ket{d}$. Then the matrix
+    $\Psi \in M_{n,d}$ with components $\Psi_{i,j}:=\braket{j}{\psi_i}$ satisfies
+    $\Psi^\dagger \Psi=\one_d$. That is, $\Psi$ is an isometry and can be extended to a
+    unitary in $M_n$ by completing the set of orthonormal column vectors to an
+    orthonormal basis. The vectors $\phi_j$ are then obtained from the extended
+    $\Psi \in M_n$ by $\braket{j}{\phi_i}:=\Psi_{i,j}$.
+\end{proof}
+
+Note that in order to implement a general POVM with effect operators $\{P_i\}_{i=1}^n$
+as von Neumann measurement the construction leading to Thm.~2.6 requires a space of
+dimension $\sum_i \rank(P_i)$. Sometimes we can, however, do better by using rank-one
+projections which appear in the decomposition of more than one $P_i$.
+
+\begin{problem}[Minimal Neumark dilation]
+Which is the minimal dimension required to implement a given POVM as von Neumann
+measurement in an extended space if post-processing of the measurement outcomes
+(such as introducing randomness) is allowed?
+\end{problem}
+
+Neumark's theorem shows that one can always implement a POVM (at least in
+principle) as a von Neumann/sharp measurement in a larger space. That is, we embed
+the system which is, say, described by a density matrix $\rho$ into a larger space
+where the additional levels are just not populated so that the state becomes a
+direct sum (i.e., block diagonal) $\rho \oplus 0$ and we obtain the identity
+\begin{equation}\label{eq:2.16}
+    \bra{\psi_i}\rho\ket{\psi_i} = \bra{\phi_i}(\rho \oplus 0)\ket{\phi_i}.
+\end{equation}
+For actual practical implementations a tensor product would be more convenient than
+a direct sum structure, since this would allow a realization by coupling the system
+to an ancillary system. Such an ``ancilla representation'' of a POVM can easily be
+obtained from Neumark's theorem by further enlarging the space (if necessary). Let
+us extend the space until the dimension is a multiple of $d$, say $dd' \ge n$. As the
+zero-block now has dimension $(d'-1)d$, this enables us to write
+$\rho\oplus 0 = \rho \otimes \ketbra{1}{1}$ (with $\ket{1}$ an element of the
+computational basis in $\CC^{d'}$). Embedding the vectors $\phi_i$ into this space,
+such that $\ket{\Phi_i}:=\ket{\phi_i}\oplus 0$ becomes part of an orthonormal basis in
+$\CC^d\otimes \CC^{d'}$, we get
+\begin{equation}\label{eq:2.17}
+    \bra{\psi_i}\rho\ket{\psi_i} = \bra{\Phi_i}(\rho\otimes \ketbra{1}{1})\ket{\Phi_i}.
+\end{equation}
+
+\subsection{Linear maps as matrices}
+
+The last representation, which we discuss, is the simplest one---linear maps
+represented as matrices in a way that concatenation of maps corresponds to
+multiplication of the respective matrices.
+
+To this end, we use that the space $M_{d,d'}(\CC)$ of complex valued $d\times d'$
+matrices is a vector space, i.e., it is closed under linear combinations and scalar
+multiplication. As a vector space $M_{d,d'}(\CC)$ is isomorphic to $\CC^{dd'}$. We
+can upgrade it to a Hilbert space by equipping it with a scalar product. A common
+choice is
+\begin{equation}\label{eq:2.18}
+    \langle A,B\rangle := \tr\![P\,A^\dagger B], \qquad A,B \in M_{d,d'},
+\end{equation}
+where $P\in \mcM_{d'}$ is any positive definite operator. Each set of $dd'$
+operators which is orthonormal w.r.t.\ this scalar product
+($\langle A_i,A_j\rangle=\delta_{ij}$, $i,j=1,\dots,dd'$) forms a basis of
+$M_{d,d'}$. Such orthonormal bases lead to simple completely positive maps of the
+form
+\begin{equation}\label{eq:2.19}
+    \sum_{i=1}^{dd'} A_i^\dagger \rho A_i = \tr[\rho]\,P^{-1}, \qquad \forall \rho \in \mcM_d.
+\end{equation}
+If $P=\one$ in \eqref{eq:2.18} the scalar product is called \emph{Hilbert--Schmidt
+    inner product} and the respective space \emph{Hilbert--Schmidt Hilbert space}. Unless
+otherwise stated we will in the following use the Hilbert--Schmidt inner product.
+
+The space of linear maps of the form $T:\mcM_d \to \mcM_{d'}$ is isomorphic to
+$M_{(d')^2,d^2}$. A concrete matrix representation, which we denote by
+$\widehat{T}\in M_{(d')^2,d^2}$ and refer to as \emph{transfer matrix}, is then
+obtained in given orthonormal bases $\{G_\beta \in \mcM_d\}_{\beta=1}^{d^2}$ and
+$\{F_\alpha \in \mcM_{d'}\}_{\alpha=1}^{(d')^2}$ via
+\begin{equation}\label{eq:2.20}
+    \widehat{T}_{\alpha,\beta} := \tr\![F_\alpha^\dagger T(G_\beta)].
+\end{equation}
+By construction a concatenation of maps, e.g.,
+$T''(\rho):=T'(T(\rho))$, then corresponds to a matrix multiplication
+$\widehat{T''}=\widehat{T'} \widehat{T}$. With some abuse of notation we usually
+write the composed map as a formal product $T'' = T' T$ as well.
+
+From \eqref{eq:2.20} we can see that the matrix representation of $T^*$ is given
+by the Hermitian conjugate matrix $\widehat{T}^\dagger$ if $T$ is a Hermitian map
+(i.e., $T(X^\dagger)=T(X)^\dagger$) and by the transpose matrix $\widehat{T}^{T}$
+if the bases are Hermitian.
+
+\begin{proposition}[Self-dual channels]
+    Let $T:\mcM_d \to \mcM_d$ be a completely positive linear map. The following are
+    equivalent:
+    \begin{enumerate}
+        \item $T = T^*$.
+        \item $\widehat{T}=\widehat{T}^\dagger$ if identical bases $F_\alpha=G_\alpha$ are chosen.
+        \item there exists a set of Hermitian Kraus operators for $T$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    $1\leftrightarrow 2$ follows from direct inspection. Also $3\to 1$ is obvious as the
+    Kraus operators of $T$ and $T^*$ differ by Hermitian conjugation. In order to show
+    $1\to 3$ we can thus write
+    \[
+        T(X) = \sum_j K_j X K_j^\dagger
+        = \frac{1}{2}\sum_j(K_j X K_j^\dagger + K_j^\dagger X K_j).
+    \]
+    Every pair $(K_j,K_j^\dagger)/\sqrt{2}$ of Kraus operators in the last representation
+    can, however, be transformed into a pair of Hermitian operators
+    $(K_j+K_j^\dagger,\ i(K_j-K_j^\dagger))/2$ by a unitary linear combination.
+    This provides a different representation of the same map (see Prop.~2.1, item~4.)
+    by Hermitian Kraus operators.
+\end{proof}
+
+Let us in the following have a closer look at different operator bases. The simplest
+basis which is orthonormal w.r.t.\ the Hilbert--Schmidt inner product (i.e.,
+$\tr[G_\beta^\dagger G_{\beta'}]=\delta_{\beta,\beta'}$) is given by matrix units of
+the form $G_\beta=\ketbra{k}{\ell}$ where $\beta$ is identified with the index pair
+$(k,\ell)=:\beta$ and $k,\ell=1,\dots,d$. Making this identification explicit leads
+to the isomorphism $\mcM_d \simeq \CC^{d^2}$ via the correspondence
+$\ketbra{k}{\ell} \leftrightarrow \ket{k,\ell}$. When applied to an arbitrary linear
+map represented as $T(\cdot)=\sum_j L_j\,\cdot\,R_j$ this gives
+\begin{equation}\label{eq:2.21}
+    \widehat{T} = \sum_j L_j \otimes R_j^{T}.
+\end{equation}
+That is, in particular for completely positive maps with Kraus representation
+$T(\cdot)=\sum_j K_j\,\cdot\,K_j^\dagger$ we obtain the simple expression
+$\widehat{T}=\sum_j K_j \otimes \overline{K_j}$, which is independent of the
+particular choice of Kraus operators (as the unitaries relating the different sets
+of Kraus operators cancel). Another advantage of using matrix units as a basis is a
+simple mapping between $\widehat{T}$ and the Choi-Jamiolkowski operator
+$\tau=(T\otimes \id)(\ketbra{\Omega}{\Omega})$ for arbitrary linear maps:
+\begin{equation}\label{eq:2.22}
+    \widehat{T} = d\,\tau^\Gamma,
+\end{equation}
+where $\tau\mapsto \tau^\Gamma$ is an involution defined by
+$\bra{m,n}\tau^\Gamma\ket{k,\ell} := \bra{m,k}\tau\ket{n,\ell}$.
+
+\paragraph{More operator bases.}
+Despite the useful relations in Eqs.~\eqref{eq:2.21}--\eqref{eq:2.22} it is
+sometimes advantageous to use operator bases other than matrix units. The most
+common ones can be regarded as generalization of the $2\times 2$ Pauli matrices
+(incl.\ identity matrix) to higher dimensions. Since the two-dimensional case is
+rather special one has to drop some of the nice properties---for instance
+generalize to Hermitian or unitary bases.
+
+\begin{problem}[Generalizing Pauli matrices]
+Construct Hilbert--Schmidt orthogonal bases of operators in $\mcM_d$ (different from
+tensor products of Pauli matrices) which are unitary and Hermitian.
+\end{problem}
+
+\paragraph{Hermitian operator bases.}
+The set of Hermitian matrices forms a real vector space. Thus, an orthonormal basis
+of Hermitian operators helps to have this property nicely reflected in a concrete
+representation. A simple example for such a basis can be constructed by embedding
+normalized Pauli matrices $\sigma_x/\sqrt{2}$ and $\sigma_y/\sqrt{2}$ as $2\times 2$
+principal submatrices into $\mcM_d$ (so that only two entries are non-zero). This
+leads to $d^2-d$ orthonormal matrices. In order to complete the basis we add $d$
+diagonal matrices which we construct from any orthogonal matrix $M\in M_d(\RR)$ by
+choosing the diagonal entries of the $k$'th diagonal matrix equal to the $k$'th
+column vector of $M$. This yields a complete Hilbert--Schmidt orthonormal basis. If
+in addition one column of $M$ leads to $\one_d$, then the other $d^2-1$ matrices are
+traceless and generate the Lie-algebra $\mathfrak{su}(d)$, i.e., they provide a
+complete set of infinitesimal generators of $\mathrm{SU}(d)$. A popular example of
+this kind are the $8$ Gell--Mann matrices in $\mcM_3$ (and, of course, the $3$ Pauli
+matrices in $\mcM_2$).
+
+\paragraph{Unitary operator bases.}
+Unitary operator bases play an important role in quantum information theory as they
+correspond one-to-one to bases of maximally entangled states (see Example~1.2). In
+$\mcM_2$ all orthogonal bases of unitaries are of the form
+\begin{equation}\label{eq:2.23}
+    U_k = e^{i\phi_k} V_1 \sigma_k V_2, \qquad k=0,\dots,3,
+\end{equation}
+where $V_1$ and $V_2$ are unitaries and $\sigma_k$ denote the Pauli matrices (with
+$\sigma_0=\one$). That is, in $\mcM_2$ all orthogonal bases of unitaries are
+essentially equivalent to the set of Pauli matrices. In higher dimensions a similar
+characterization of all unitary operator bases is not known. A priori, it is quite
+remarkable that such orthogonal bases exist in every dimension. Note that this
+depends crucially on the chosen scalar product: if we choose the $A_i$'s in
+\eqref{eq:2.19} proportional to unitaries (and thus $d=d'$), then $\rho=\one$ shows
+that they can only form an orthogonal basis if $P \propto \one$, corresponding to
+the Hilbert--Schmidt scalar product.
+
+\begin{example}[Discrete Weyl system and GHZ bases]
+    One of the most important unitary operator bases and also a very inspiring example
+    regarding the construction of others comes from a discrete version of the
+    Heisenberg--Weyl group. Consider a set
+    $\{U_{kl}\in \mcM_d\}_{k,\ell=0}^{d-1}$ of $d^2$ unitaries defined by
+    \begin{equation}\label{eq:2.24}
+        U_{kl} := \sum_{r=0}^{d-1} \eta^{r\ell} \ket{k+r}\!\bra{r},\qquad
+        \eta := e^{2\pi i/d},
+    \end{equation}
+    where addition inside the ket is modulo $d$. This set has the following nice
+    properties:
+    \begin{itemize}
+        \item It forms a basis of operators in $\mcM_d$ which is orthogonal w.r.t.\ the
+              Hilbert--Schmidt scalar product, i.e., $\tr[U_{ij}^\dagger U_{k\ell}] = d\,\delta_{ik}\delta_{j\ell}$.
+              Since $U_{00}=\one$ we have in particular $\tr[U_{k\ell}]=0$ for all
+              $(k,\ell)\ne (0,0)$.
+        \item It is a discrete Weyl system since $U_{ij}U_{k\ell}=\eta^{jk}U_{i+k,j+\ell}$
+              (with addition modulo $d$). Thus $U_{k\ell}^{-1}=\eta^{k\ell}U_{-k,-\ell}$.
+        \item The set is generated by $U_{01}$ and $U_{10}$ via $U_{k\ell}=(U_{10})^k(U_{01})^\ell$.
+        \item If $d$ is odd, then $U_{k\ell}\in \mathrm{SU}(d)$. For $d$ even
+              $\det U_{k\ell} = (-1)^{k+\ell}$.
+        \item For $d=2$ the set reduces to the set of Pauli matrices with identity, i.e.,
+              $(\sigma_x,\sigma_y,\sigma_z)=(U_{10},\,iU_{11},\,U_{01})$.
+        \item The group generated by the unitaries $U_{k\ell}$ is isomorphic to the
+              discrete Heisenberg--Weyl group
+              \begin{equation}\label{eq:2.25}
+                  \left\{\begin{pmatrix}
+                      1 &\ell &m\\
+                      0 &1    &k\\
+                      0 &0    &1
+                  \end{pmatrix}
+                  \middle|
+                  k,\ell,m\in \ZZ_d\right\}.
+              \end{equation}
+    \end{itemize}
+
+    Among the many applications of this set we will briefly discuss the construction of
+    bases of entangled states. As indicated in Example~1.2, $(U_{k\ell}\otimes \one)\ket{\Omega}$
+    is an orthonormal basis of maximally entangled states in $\CC^d \otimes \CC^d$. For
+    more than two, say $n$, parties a similar construction can be made by exploiting
+    some group structure. Consider the group of local unitaries
+    \begin{equation}\label{eq:2.26}
+        G =
+        \left\{\bigotimes_{k=1}^n U_{i,j_k}
+        \ \middle|\
+        \sum_{k=1}^n j_k \equiv 0 \ (\mathrm{mod}\ d)\right\},
+    \end{equation}
+    where $i\in \ZZ_d$, $j\in \ZZ_d^n$ and one of the components of $j$, say $j_1$,
+    depends on the others by the additional constraint. Utilizing the above properties
+    of the set $\{U_{k\ell}\}$ it is readily verified that $G$ is an abelian group with
+    $d^n$ elements and that it spans its own commutant $G'$. Since the algebra $G'$ is
+    therefore abelian as well, it forms a simplex, i.e., each element in $G'$ has a
+    unique convex decomposition into minimal projections. The latter turn out to be
+    one-dimensional and can be parametrized by $\omega\in \ZZ_d^n$ such that they
+    correspond to vectors of the form
+    \begin{equation}\label{eq:2.27}
+        \ket{\Psi_\omega} :=
+        \frac{1}{\sqrt{d}}\sum_{l=0}^{d-1} \eta^{l\omega_1}\bigotimes_{k=1}^n \ket{\omega_k + l}.
+    \end{equation}
+    These vectors form an orthonormal basis of the entire Hilbert space
+    $(\CC^d)^{\otimes n}$ and they can all be obtained by local unitaries from the GHZ
+    state $\ket{\Psi_0}=\sum_k \ket{k}^{\otimes n}/\sqrt{d}$. For $n=d=2$ we get
+    $G=\{\one, \sigma_x\otimes \sigma_x,\,-\sigma_y\otimes \sigma_y, \sigma_z\otimes \sigma_z\}$
+    (which is the Klein four group\footnote{ok, \emph{``Vierergruppe''} sounds better})
+    and the states in \eqref{eq:2.27} become the four Bell states.
+\end{example}
+
+Example~2.1 exhibits two properties which suggest possible starting points for the
+construction of other unitary operator bases: (i) the group structure of the set,
+and (ii) the property that every element is generated by two elementary actions:
+shifting the computational basis and multiplying with phases. The latter approach
+leads to a fairly general construction scheme. Bases of unitaries obtained in this
+way are said to be of shift-and-multiply type, and they are of the general form
+\begin{equation}\label{eq:2.28}
+    U_{k\ell} = \sum_{r=0}^{d-1} H^{(\ell)}_{kr} \ket{\Lambda_{\ell r}}\!\bra{r},
+\end{equation}
+where $\{H^{(\ell)}\in \mcM_d\}$ is a set of (not necessarily distinct) complex
+Hadamard matrices and $\Lambda \in M_d(\ZZ_d)$ is a Latin square. That is,
+$|H^{(\ell)}_{kr}|=1$ are phases so that $H^{(\ell)}(H^{(\ell)})^\dagger=d\one$, and
+$\Lambda$ is such that each row and column contains every number from $0$ to $d-1$
+exactly once. Obviously, the set in \eqref{eq:2.24} is just the simplest example of a
+shift-and-multiply basis. Its group property (the fact, that the elements form a group
+of order $d^2$, up to phases) is not shared by all shift-and-multiply bases. For small
+dimensions (at least for $d<6$), every unitary basis with such a group structure
+(sometimes called \emph{nice error basis}) is of shift-and-multiply type. For higher
+dimensions ($d=165$ being the first known counter example) this is no longer valid.
+
+\paragraph{Overcomplete sets, frames and SIC-POVMs.}
+We have seen that operator bases for $\mcM_d$ can be constructed from unitary as well
+as from Hermitian operators. What about positive semidefinite operators or Hermitian
+rank-one projections? This turns out not to be possible if one demands orthogonality
+w.r.t.\ the Hilbert--Schmidt scalar product (see Prop.~2.7). However, relaxing this
+condition leads to bases with remarkable properties---and our discussion to the
+framework of frames. A frame of a vector space, say $\CC^d$, is a set of vectors
+$\{\phi_i\}_{i=1}^n$ for which there are constants $0<a\le b<\infty$ such that for all
+$\psi\in \CC^d$,
+\begin{equation}\label{eq:2.29}
+    a\|\psi\|^2 \le \sum_i |\braket{\psi}{\phi_i}|^2 \le b\|\psi\|^2.
+\end{equation}
+Hence, the $\phi_i$'s have to span the entire vector space. If $a=b$, the frame is
+called tight and if in addition $n=d$ it is nothing but an orthonormal basis (with
+norm equal to $\sqrt{a}$). Since for tight frames $\sum_i \ketbra{\phi_i}{\phi_i} = a\one$,
+they correspond one-to-one to rank-one POVMs.
+
+A POVM is called informationally complete if its measurement outcomes allow for a
+complete reconstruction of an arbitrary state. The existence of such POVMs is fairly
+obvious: just use properly normalized spectral projections of a unitary or Hermitian
+operator basis as effect operators. A simple physical implementation in $\CC^d$
+would be to first draw a random number from $1,\dots,d^2$ and then measure the
+corresponding element of a Hermitian operator basis. Clearly, a POVM acting on
+$\CC^d$ is informationally complete iff it contains $d^2$ linearly independent
+effect operators.
+
+Now let us try to construct a positive semidefinite operator basis for $\mcM_d$ which
+is ``as orthogonal as possible'' and see how this relates to tight frames and
+informationally complete POVMs:
+
+\begin{proposition}[SIC POVMs]
+    Let $\{P_i\}_{i=1}^n$ be a set of positive semidefinite operators in $\mcM_d$,
+    $d\le n$, which are normalized w.r.t.\ the Hilbert--Schmidt scalar product, i.e.,
+    $\langle P_i,P_i\rangle=\tr[P_i^2]=1$. Then
+    \begin{equation}\label{eq:2.30}
+        \sum_{i\ne j} |\langle P_i,P_j\rangle|^2 \ge \frac{(n-d)^2\,n}{(n-1)d^2},
+    \end{equation}
+    with equality iff all $P_i$ are rank-one projections fulfilling
+    $\langle P_i,P_j\rangle=\frac{n-d}{(n-1)d}$ for all $i\ne j$, and $\sum_i P_i = \frac{n}{d}\one$.
+    In case of equality the $P_i$'s are linearly independent.
+\end{proposition}
+
+\begin{proof}
+    Define $Q:=\sum_i P_i$. Invoking Cauchy--Schwarz inequality twice we get
+    \begin{equation}\label{eq:2.31}
+        \sum_{i\ne j} |\langle P_i,P_j\rangle|^2 \ge \frac{1}{n^2-n}\left(\sum_{i\ne j} \langle P_i,P_j\rangle\right)^2
+    \end{equation}
+    \begin{equation}\label{eq:2.32}
+        = \frac{1}{n^2-n}(\tr[Q^2]-n)^2 \ge \frac{(\tr[Q]^2/d - n)^2}{n^2-n},
+    \end{equation}
+    where the first inequality holds iff $\langle P_i,P_j\rangle=\mathrm{const}$ for all
+    $i\ne j$ and the second one iff $Q\propto \one$. Since due to normalization
+    $\tr[P_i]\ge 1$ and thus $\tr[Q]\ge n$ with equality iff $P_i$ is a rank-one
+    projection we can further bound \eqref{eq:2.32} from below leading to the r.h.s.\ of
+    \eqref{eq:2.30}. Collecting the conditions for equality completes the proof of the
+    first part.
+
+    In order to show linear independence assume $\sum_j c_j P_j=0$ and set
+    $c:=\langle P_i,P_j\rangle$ for $i\ne j$. Then for all $i$:
+    \[
+        0=\sum_j c_j \langle P_i,P_j\rangle = c_i(1-c) + c\sum_j c_j,
+    \]
+    so $c_i$ is independent of $i$ and therefore $c_i=0$.
+\end{proof}
+
+As claimed before, Prop.~2.7 shows that positive semidefinite operators cannot form
+a Hilbert--Schmidt orthogonal operator basis (for that the l.h.s.\ of
+\eqref{eq:2.30} would have to be zero, which is in conflict with $n=d^2$). Whether
+the conditions for equality in Prop.~2.7 are vacuous or actually have a solution
+depends on $n$ and $d$. Whenever there exists a solution, it forms a tight frame.
+While for $n=d$ the solutions are exactly all orthonormal bases of $\CC^d$, for
+$n>d^2$ no solution exists (as the $P_i$'s become necessarily linear dependent then).
+
+Remarkably, there exist solutions for some $n=d^2$, i.e., tight frames which are
+informationally complete POVMs with the additional symmetry $\tr[P_iP_j]=(d+1)^{-1}$
+for all $i\ne j$. These are called symmetric informationally complete (SIC) POVMs.
+For $d=2$ all SIC POVMs are obtained by choosing points on the Bloch sphere which
+correspond to vertices of a tetrahedron. For $d=3$ an example can be constructed
+from the shift-and-multiply basis in \eqref{eq:2.24} by taking projections onto the
+vectors $\ket{\xi_{k\ell}} := U_{k\ell}\ket{\xi_{00}}$ with
+$\ket{\xi_{00}} := (\ket{0}+\ket{1})/\sqrt{2}$. In other words, in this example the
+vectors onto which the $P_i$'s project are generalized coherent states w.r.t.\ the
+discrete Heisenberg--Weyl group. Analogous to continuous coherent states, all SIC
+POVMs provide (due to the operator basis property) a representation of arbitrary
+operators $\rho\in \mcM_d$:
+\begin{equation}\label{eq:2.33}
+    \rho = \frac{1}{d}\sum_i\left((d+1)\tr[P_i\rho] - \tr[\rho]\right) P_i.
+\end{equation}
+In the context of coherent states this is called diagonal representation or (in
+quantum optics for the continuous Heisenberg--Weyl group) $P$-function
+representation.
+
+Using the effect operators of a SIC-POVM as Kraus operators we get a quantum channel
+of the form
+\begin{equation}\label{eq:2.34}
+    \frac{1}{d}\sum_{i=1}^{d^2} P_i \rho P_i
+    = \frac{\one\,\tr[\rho] + \rho}{d+1}, \qquad \forall \rho\in \mcM_d.
+\end{equation}
+Both \eqref{eq:2.33} and \eqref{eq:2.34} are readily verified by using the
+properties (in particular the operator basis property) of the $P_i$'s.
+
+\begin{problem}[SIC POVMs]
+Determine the pairs $(n,d)$ for which equality in \eqref{eq:2.30} can be achieved.
+\end{problem}
+
+\subsection{Normal forms}
+
+It is sometimes useful to cut some trees in order to get a better overview of the
+forest. Depending on the situation will later encounter various ``normal forms'' for
+the representations discussed previously---in particular, decompositions based
+on spectral, convex or semi-group properties. This section is devoted to normal
+forms of completely positive maps w.r.t.\ invertible maps with Kraus rank one.
+More specifically, given a completely positive map $T:\mcM_{d_1} \to \mcM_{d_2}$ we
+are interested in simple representatives of the equivalence class
+\begin{equation}\label{eq:2.35}
+    T \sim \Phi_2T\Phi_1,
+\end{equation}
+where $\Phi_i \in \mcB(\mcM_{d_i})$ is of the form $\Phi_i(\cdot):=X_i\,\cdot\,X_i^\dagger$
+with $X_i\in \mathrm{SL}(d_i,\CC)$, i.e., complex valued matrices with unit
+determinant. Such maps often run under the name filtering operations. On the level
+of Choi-Jamiolkowski operators $\tau\in \mcB(\CC^{d_2}\otimes \CC^{d_1})$ the
+transformation in \eqref{eq:2.35} corresponds to
+$\tau\mapsto \tau' := (X_2\otimes X_1)\tau (X_2\otimes X_1)^\dagger$
+(up to an irrelevant transposition for $X_1$). In order to construct a normal form
+w.r.t.\ such transformations we utilize the following optimization problem:
+\begin{equation}\label{eq:2.36}
+    p := \inf_{X_i\in \mathrm{SL}(d_i,\CC)} \tr[\tau'].
+\end{equation}
+Recall that we assume complete positivity which by Prop.~2.1 means $\tau\ge 0$.
+Clearly, $p\le \tr[\tau]$ (as we can choose $X_i=\one$) and
+$p \ge \|X_i\|_\infty^2\,\lambda_{\min}(\tau)$ with $\lambda_{\min}(\tau)$ the
+smallest eigenvalue of $\tau$. Our aim is to choose as a representative of the
+equivalence class one which minimizes \eqref{eq:2.36}:
+
+\begin{proposition}[Normal form for generic $\tau$]
+    Let $\tau \in \mcB(\CC^{d_2}\otimes \CC^{d_1})$ be positive definite. Then there exist
+    $X_i\in \mathrm{SL}(d_i,\CC)$ which attain the infimum in \eqref{eq:2.36} so that the
+    respective optimal $\tau'=(X_2\otimes X_1)\tau (X_2\otimes X_1)^\dagger$ is such that
+    both partial traces are proportional to the identity matrix.
+\end{proposition}
+
+\begin{proof}
+    From the upper and lower bound on $p$ we know that we can w.l.o.g.\ restrict to
+    $\|X_i\|_\infty^2 \le \tr[\tau]/\lambda_{\min}(\tau)$. These $X_i$ form a compact set
+    (since $\tau>0$ by assumption) so that the infimum is indeed attained.
+
+    Eq.~\eqref{eq:2.36} can now be minimized by a simple iteration in $X_1$ and $X_2$:
+    denote by $\tau_1=\tr_2[\tau]$ a partial trace of $\tau$ so that
+    $\tau'_1 := X_1 \tau_1 X_1^\dagger$ is the corresponding one for
+    $\tau':=(\one\otimes X_1)\tau(\one\otimes X_1)^\dagger$. Choosing
+    $X_1 := \det(\tau_1)^{1/(2d_1)} \tau_1^{-1/2}$ will lead to $\tau'_1\propto \one$.
+    Moreover, the arithmetic-geometric mean inequality gives
+    \begin{equation}\label{eq:2.37}
+        \tr[\tau'] = \det(\tau_1)^{1/d_1}\,d_1 \le \tr[\tau_1] = \tr[\tau],
+    \end{equation}
+    with equality iff $\tau_1\propto \one$. Iterating this step w.r.t.\ $X_1$ and $X_2$
+    will thus decrease the trace while both reduced density matrices converge to
+    something proportional to the identity. As this holds true in particular for the
+    optimal $\tau'$, it has to have $\tau'_i \propto \one$.
+\end{proof}
+
+Together with the Choi-Jamiolkowski correspondence in Prop.~2.1 this has an
+immediate corollary on the level of completely positive maps:
+
+\begin{proposition}[Normal form for generic cp maps]
+    Let $T:\mcM_{d_1} \to \mcM_{d_2}$ be a completely positive map with full Kraus rank.
+    There exist invertible completely positive maps $\Phi_i \in \mcB(\mcM_{d_i})$ with
+    Kraus rank one such that $T':=\Phi_2T\Phi_1$ is doubly-stochastic, i.e., both
+    $T(\one)$ and $T^*(\one)$ are proportional to the identity matrix.
+\end{proposition}
+
+The normal form in Prop.~2.8 is unique\footnote{This is an exercise about
+non-negative matrices: assume $\widetilde{\tau}:=(D_2\otimes D_1)\tau'(D_2\otimes D_1)$
+is a second normal form with $D_i$ positive diagonal matrices (we can always use the
+unitary freedom to choose them like this). Then $M_{ij}:=\bra{ij}\tau'\ket{ij}$
+(and analogously $\widetilde{M}$) is a doubly stochastic non-negative matrix, i.e.,
+$M_{ij}\ge 0$ and all rows as well as all columns have the same sum. Moreover,
+$\widetilde{M}=M * H$ is a Hadamard product with $H_{ij}:=[D_2]_{ii}[D_1]_{jj}$. The
+                only $H$ which achieves such a mapping is, however, a multiple of $H_{ij}=1$.} up to
+    local unitaries $\tau' \mapsto (U_2\otimes U_1)\tau'(U_2\otimes U_1)^\dagger$, which
+    corresponds to unitary channels $\Phi_i(\cdot)=U_i\,\cdot\,U_i^\dagger$ in
+    Prop.~2.9. This implies that the algorithmic procedure used in the proof of
+    Prop.~2.8 in order to obtain the normal form by minimizing $\tr[\tau']$ eventually
+    converges to the global optimum.
+
+    In cases where $\tau$ has a kernel the infimum in \eqref{eq:2.36} may either be zero
+    or not be attained for finite $X_i$. An exhaustive investigation of general normal
+    forms w.r.t.\ the equivalence class \eqref{eq:2.35} has been performed for qubit
+    channels.
+
+    \paragraph{Qubit maps.}
+    We continue the discussion about normal forms w.r.t.\ Kraus-rank one operations for
+    completely positive maps $T:\mcM_2 \to \mcM_2$. Choosing normalized Pauli matrices as
+    operator basis (with $\sigma_0=\one$) we can represent $T$ as a $4\times 4$ matrix
+$\widehat{T}_{ij} := \tr[\sigma_iT(\sigma_j)]/2$. If $T$ is Hermitian, then
+$\widehat{T}$ is real, and if $T$ is trace preserving, then
+$(\widehat{T}_{0,j})=(1,0,0,0)$. A quantum channel in the Schr\"odinger picture is
+    thus represented by
+    \begin{equation}\label{eq:2.38}
+        \widehat{T} =
+        \begin{pmatrix}
+            1 &0\\
+            v &\Delta
+        \end{pmatrix},
+    \end{equation}
+    where $\Delta$ is a real $3\times 3$ matrix and $v\in \RR^3$. The corresponding
+    Jamiolkowski state is given by
+    \[
+        \tau = \frac{1}{4}\sum_{ij} \widehat{T}_{ij} \sigma_i\otimes \sigma_j^{T},
+    \]
+    so that $v$ describes its reduced density operator and $\Delta$ its correlations.
+    The conditions for $\widehat{T}$ to correspond to a completely positive map have to
+    be read off from $\tau\ge 0$. The complexity of this condition is the drawback of
+    this representation. One of its advantages is a nice geometric interpretation:
+    parameterizing a density operator via $\rho=(\one+\sum_{k=1}^3 x_k\sigma_k)/2$, i.e.,
+    in terms of a vector $x\in \RR^3$ within the Bloch ball $\|x\|\le 1$ (see
+    Example~1.1), the action of $T$ is a simple affine transformation
+    \begin{equation}\label{eq:2.39}
+        x \mapsto v + \Delta x.
+    \end{equation}
+    From here conditions for $T$ to be positive are readily derived (as the vector has
+    to stay within the Bloch ball), and we will discuss them in greater detail in
+    \dots. The following is a useful proposition in this context:
+
+    \begin{proposition}
+        Let $T:M_2(\CC)\to M_2(\CC)$ be a Hermiticity preserving linear map with
+        $\Delta_{ij}:=\tr[\sigma_iT(\sigma_j)]/2$ the lower-right submatrix (i.e.,
+        $i,j=1,2,3$) of the matrix representation $\widehat{T}$. Then
+        $\widehat{T}' := \widehat{T}_{00} \oplus \Delta$ represents a (completely) positive
+        map iff $\widehat{T}$ does so.
+    \end{proposition}
+
+    \begin{proof}
+        We use that $D:=\mathrm{diag}(1,-1,-1,-1)$ is the matrix representation of
+        time-reversal (see Sec.~3.3), i.e., matrix transposition in some basis. Following
+        the relation in Eq.~(1.24) the map $D\widehat{T}D$ is (completely) positive if
+        $\widehat{T}$ is. The same holds thus for the convex combination
+        $(\widehat{T}+D\widehat{T}D)/2 = \widehat{T}'$.
+    \end{proof}
+
+    Suppose now that we act with a unitary before and another one after applying the
+    channel $T$ so that the overall action is
+$\rho \mapsto U_2T(U_1\rho U_1^\dagger)U_2^\dagger$.
+    The transfer matrix corresponding to this concatenation is then given by the product
+$(\one\oplus O_2)\widehat{T}(\one\oplus O_1)$, where $O_i\in \mathrm{SO}(3)$ are real
+    rotations of the Bloch sphere. This reflects the two-to-one group homomorphism
+$\mathrm{SU}(2)\to \mathrm{SO}(3)$ (see Examples~1.1 and 2.2). We may use this in
+    order to diagonalize $\Delta \to \mathrm{diag}(\lambda_1,\lambda_2,\lambda_3)$ so that
+$\lambda_1\ge \lambda_2\ge |\lambda_3|$ and for positive, trace-preserving maps
+    necessarily $1\ge \lambda_1$. Up to a possibly remaining sign this diagonalization is
+    nothing but a real singular value decomposition. Expressed in terms of the $\lambda_i$'s
+    a necessary condition for complete positivity is that
+    \begin{equation}\label{eq:2.40}
+        \lambda_1 + \lambda_2 \le 1 + \lambda_3.
+    \end{equation}
+    This becomes sufficient if the map is unital, i.e., if $v=0$ (see also Exp.~2.3).
+
+    Extending the freedom in the transformations from $\mathrm{SU}(2)$ to
+$\mathrm{SL}(2)$ enables us to further simplify $\widehat{T}$ and to bring it to a
+normal form (as stated in Prop.~2.9 for the full rank case):
+
+\begin{proposition}[Lorentz normal form]
+    For every qubit channel $T$ there exist invertible completely positive maps
+    $\Phi_1,\Phi_2$, both of Kraus rank one, such that the concatenation
+    $\Phi_2T\Phi_1 =: T'$ (characterized by $v$ and $\Delta$) is a qubit channel of
+    one of the following three forms:
+    \begin{enumerate}
+        \item Diagonal: $T'$ is unital ($v=0$) with $\Delta$ diagonal. This is the generic
+              case (proved in Prop.~2.9).
+        \item Non-diagonal: $T'$ has $\Delta=\mathrm{diag}(x/\sqrt{3},\,x/\sqrt{3},\,1/3)$,
+              $0\le x \le 1$ and $v=(0,0,2/3)$. These channels have Kraus rank $3$ for $x<1$
+              and Kraus rank $2$ for $x=1$.
+        \item Singular: $T'$ has $\Delta=0$ and $v=(0,0,1)$. This channel has Kraus rank
+              $2$ and is singular in the sense that it maps everything onto the same output.
+    \end{enumerate}
+\end{proposition}
+
+\begin{example}[Lorentz group and spinor representation]
+    Our aim is to understand the action of $T \mapsto \Phi_2T\Phi_1$ as an equivalence
+    transformation on $\widehat{T}$ by elements from the Lorentz group. In order to see
+    how this arises, consider the space $M_2^\dagger(\CC)$ of complex Hermitian $2\times 2$
+    matrices. Every such matrix can be expanded as $M=\sum_{i=0}^3 x_i\sigma_i$ with
+    $x\in \RR^4$. Since $\det(M)=x_0^2-x_1^2-x_2^2-x_3^2=\langle x,\eta x\rangle$ with
+    $\eta:=\mathrm{diag}(1,-1,-1,-1)$ we can identify $M_2^\dagger(\CC)$ with Minkowski
+    space such that the determinant provides the Minkowski metric. If $X\in \mathrm{SL}(2,\CC)$,
+    the map
+    \begin{equation}\label{eq:2.41}
+        M \mapsto XMX^\dagger
+    \end{equation}
+    in this way becomes a linear isometry in Minkowski space, i.e., a Lorentz
+    transformation. In fact, the group $\mathrm{SL}(2,\CC)$ is a double cover of the
+    special orthochronous Lorentz group
+    \begin{equation}\label{eq:2.42}
+        \mathrm{SO}^+(1,3)
+        := \{L\in M_4(\RR)\mid \det(L)=1,\ L\eta L^{T}=\eta,\ L_{00}>0\}
+    \end{equation}
+    in very much the same way as $\mathrm{SU}(2)$ is a double cover of $\mathrm{SO}(3)$.
+    The map $\mathrm{SL}(2,\CC)\to \mathrm{SO}^+(1,3)$ constructed above is sometimes
+    called spinor map. It is two-to-one since $\pm X$ have the same effect in
+    \eqref{eq:2.41}. Due to this equivalence the transfer matrix of the channel
+    $\Phi_2T\Phi_1$ becomes
+    \begin{equation}\label{eq:2.43}
+        L_2\,\widehat{T}\,L_1,\qquad L_i\in \mathrm{SO}^+(1,3).
+    \end{equation}
+    The normal form in Prop.~2.11 can thus be regarded as a normal form w.r.t.\ special
+    orthochronous Lorentz transformations.
+
+    Every $L\in \mathrm{SO}^+(1,3)$ can be decomposed into a ``boost'' and a spatial
+    rotation. This decomposition can be obtained from the polar decomposition $X=PU$ in
+    $\mathrm{SL}(2,\CC)$, where $P>0$ and $UU^\dagger=\one$. In order to make this more
+    explicit, define generators of spatial rotations by
+    $R_i := \sum_{j,k=1}^3 \varepsilon_{ijk} \ketbra{k}{j}\in M_4$, and generators of
+    boosts by $B_i := \ketbra{0}{i}+\ketbra{i}{0}\in M_4$ with $i=1,2,3$. Then with
+    $\vec{n},\vec{m}\in \RR^3$ the mapping $\mathrm{SL}(2,\CC)\to \mathrm{SO}^+(1,3)$
+    takes the form
+    \begin{equation}\label{eq:2.44}
+        U = e^{-i\vec{n}\cdot \vec{\sigma}/2} \mapsto e^{-\vec{n}\cdot \vec{R}},\qquad
+        P = e^{\vec{m}\cdot \vec{\sigma}/2} \mapsto e^{\vec{m}\cdot \vec{B}}.
+    \end{equation}
+    Decomposing $P$ further according to the spectral decomposition leads to a diagonal
+    matrix which corresponds to a boost in $z$-direction (i.e., it acts in the
+    $0$--$3$--plane as $\one \cosh m_3 + \sigma_x \sinh m_3$).
+\end{example}
+
+\begin{example}[Bell diagonal states and Pauli channels]
+    \dots
+\end{example}
+
+\subsection{Literature}
 
 \end{document}

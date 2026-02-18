@@ -1,8 +1,12 @@
 % Shared preamble for Wolf lecture note transcriptions
 % Usage: \input{preamble} in each chapter file
+% Include guard: safe to \input multiple times (e.g. from main_wolf.tex)
+\ifdefined\wolfpreambleloaded\endinput\fi
+\def\wolfpreambleloaded{}
 
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage[margin=1in]{geometry}
+% Match Wolf book-class layout: a4paper, ~345pt text width
+\usepackage[a4paper, textwidth=345pt, textheight=550pt]{geometry}
 \usepackage{hyperref}
 \usepackage{mathtools}
 
@@ -10,6 +14,8 @@
 \newcommand{\mcM}{\mathcal{M}}       % matrix algebra M_d(C)
 \newcommand{\mcB}{\mathcal{B}}       % bounded operators B(H)
 \newcommand{\mcA}{\mathcal{A}}       % multiplicative domain
+\newcommand{\mcH}{\mathcal{H}}       % Hilbert space H
+\newcommand{\diag}{\operatorname{diag}}
 \newcommand{\one}{\mathbb{1}}        % identity operator
 \newcommand{\CC}{\mathbb{C}}
 \newcommand{\RR}{\mathbb{R}}
@@ -23,11 +29,24 @@
 \newcommand{\spn}{\operatorname{span}}
 \newcommand{\FT}{\mathcal{F}_T}      % fixed point set
 \newcommand{\XT}{\mathcal{X}_T}      % peripheral eigenspace
+\newcommand{\mcX}{\mathcal{X}}       % peripheral eigenspace (bare)
 \newcommand{\id}{\mathrm{id}}        % identity map
 \newcommand{\ket}[1]{|#1\rangle}
 \newcommand{\bra}[1]{\langle#1|}
 \newcommand{\braket}[2]{\langle#1|#2\rangle}
 \newcommand{\ketbra}[2]{|#1\rangle\!\langle#2|}
+
+% ── Helper: properly undefine a theorem environment for redefinition ──
+% Usage: \UndefEnv{theorem} before \newtheorem{theorem}{...}
+\makeatletter
+\newcommand{\UndefEnv}[1]{%
+  % Remove from section reset list (if registered there)
+  \@removefromreset{#1}{section}%
+  \expandafter\let\csname #1\endcsname\relax
+  \expandafter\let\csname end#1\endcsname\relax
+  \expandafter\let\csname c@#1\endcsname\relax
+}
+\makeatother
 
 % ── Theorem environments ──
 \theoremstyle{plain}
