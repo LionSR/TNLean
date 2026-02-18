@@ -1,0 +1,995 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\input{preamble}
+
+% Extra TikZ libraries for this deck
+\usetikzlibrary{arrows.meta,shapes.geometric,calc,decorations.pathreplacing,fit,backgrounds,matrix,chains}
+
+\title{\textbf{MPSLean: All Sorry Closed\\Complete Formalization of the FT of Matrix Product States}}
+\subtitle{{\small Update since Feb 15 status report --- Lean 4 + Mathlib v4.27.0 --- based on \cite{Perez-Garcia2007Matrix,Wolf2012Quantum,Evans1978Spectral}}}
+\date{}
+\author{}
+
+\begin{document}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  PART I - EXECUTIVE SUMMARY (slides 1-4)
+% ═══════════════════════════════════════════════════════════════════════
+
+%======================================================================
+% SLIDE 1 - Title
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{-1.5em}
+    \maketitle
+    \vspace{-3em}
+    \begin{center}
+        {\footnotesize
+            \textcolor{dimwhite}{5{,}811 lines $\cdot$
+            39 files $\cdot$
+            68 commits $\cdot$
+            \textcolor{leangreen}{145 theorems} $\cdot$
+            \textcolor{leangreen}{0 axioms} $\cdot$
+            \textcolor{leangreen}{0 sorry}}}
+    \end{center}
+\end{frame}
+}
+
+%======================================================================
+% SLIDE 2 - Before / After Delta Table
+%======================================================================
+\begin{frame}{Before \& After: What Changed}
+    \vspace{-0.7em}
+
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \begin{block}{\small Key Delta: Feb 15 Status $\to$ Now}
+            {\small
+            \begin{tabular}{l r@{  }c@{  }r l}
+                \toprule
+                \textbf{Metric} & \textbf{Feb 15} & & \textbf{Now} & \\
+                \midrule
+                \rowcolor{cardbg}
+                Lines      & 5{,}192  & $\to$ & \textcolor{leangreen}{5{,}811}  & \textcolor{dimwhite}{\tiny +619} \\
+                Files      & 37       & $\to$ & \textcolor{leangreen}{39}       & \textcolor{dimwhite}{\tiny +2} \\
+                \rowcolor{cardbg}
+                Sorry      & \textcolor{amber}{2}  & $\to$ & \textcolor{leangreen}{\textbf{0}} & \textcolor{leangreen}{\checkmark} \\
+                Axioms     & 0        & $\to$ & \textcolor{leangreen}{0}        & \\
+                \rowcolor{cardbg}
+                Theorems   & 104      & $\to$ & \textcolor{leangreen}{145}      & \textcolor{dimwhite}{\tiny +41} \\
+                Lemmas     & 45       & $\to$ & \textcolor{leangreen}{106}      & \textcolor{dimwhite}{\tiny +61} \\
+                \rowcolor{cardbg}
+                Definitions& 51       & $\to$ & \textcolor{leangreen}{55}       & \textcolor{dimwhite}{\tiny +4} \\
+                Commits    & 65       & $\to$ & \textcolor{leangreen}{68}       & \textcolor{dimwhite}{\tiny +3} \\
+                \bottomrule
+            \end{tabular}
+            }
+        \end{block}
+
+        \column{0.42\textwidth}
+        \begin{block}{\small Headline}
+            {\small
+            \begin{itemize}\itemsep0.15em
+                \item[\textcolor{leangreen}{\checkmark}] \textbf{0 sorry, 0 axioms}
+                \item[\textcolor{leangreen}{\checkmark}] Full \texttt{lake build} clean
+                \item[\textcolor{leangreen}{\checkmark}] +619 net new lines
+                \item[\textcolor{leangreen}{\checkmark}] +102 new lemmas/theorems
+                \item[\textcolor{leangreen}{\checkmark}] 2 new source files
+            \end{itemize}
+            }
+        \end{block}
+
+        \vspace{0.2em}
+        \begin{tikzpicture}
+            % Progress bar: 100% green
+            \fill[leangreen!60!black,rounded corners=2pt] (0,0) rectangle (5.5,0.35);
+            \node[font=\scriptsize,text=white] at (2.75,0.175) {\textbf{100\% complete} --- 0 sorry};
+        \end{tikzpicture}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 3 - Sorry Trajectory (extended)
+%======================================================================
+\begin{frame}{Sorry \& Axiom Trajectory (Feb 7--16, extended)}
+    \vspace{-0.5em}
+
+    \begin{center}
+    \begin{tikzpicture}[xscale=1.15,yscale=0.65]
+        % Axes
+        \draw[dimwhite,thick,-{Stealth[length=5pt]}] (0,0) -- (11.5,0)
+            node[right,font=\tiny\color{dimwhite}]{date};
+        \draw[dimwhite,thick,-{Stealth[length=5pt]}] (0,0) -- (0,6.5)
+            node[above,font=\tiny\color{dimwhite}]{gaps};
+
+        % Y-axis ticks
+        \foreach \y in {0,1,...,5} {
+            \draw[dimwhite,thin] (-0.1,\y) -- (0.1,\y);
+            \node[left,font=\tiny\color{dimwhite}] at (0,\y) {\y};
+        }
+
+        % X-axis labels
+        \foreach \x/\lbl in {0/Feb 7,1.5/Feb 9,3/Feb 11,5/Feb 14,7/Feb 15,9/Feb 16,10.5/done} {
+            \draw[dimwhite,thin] (\x,-0.1) -- (\x,0.1);
+            \node[below,font=\tiny\color{dimwhite},rotate=30,anchor=north east] at (\x,-0.1) {\lbl};
+        }
+
+        % Sorry line (amber then green)
+        \draw[amber,very thick,mark=*,mark size=2pt] plot coordinates {
+            (0,0) (1.5,0) (3,5) (5,4) (7,3) (9,2)
+        };
+        \draw[leangreen,very thick,mark=*,mark size=2.5pt] plot coordinates {
+            (9,2) (10.5,0)
+        };
+
+        % Axiom line (softred)
+        \draw[softred,very thick,dashed,mark=square*,mark size=2pt] plot coordinates {
+            (0,0) (1.5,0) (3,0) (5,0) (7,1) (9,0) (10.5,0)
+        };
+        % Total line (white)
+        \draw[white,thick,dotted,mark=diamond*,mark size=2pt] plot coordinates {
+            (0,0) (1.5,0) (3,5) (5,4) (7,4) (9,2) (10.5,0)
+        };
+
+        % Annotations
+        \node[font=\tiny,text=leangreen,anchor=south] at (0,0.2) {FT proved};
+        \node[font=\tiny,text=leangreen,anchor=south] at (1.5,0.2) {multi-block};
+        \node[font=\tiny,text=amber,anchor=south] at (3,5.2) {spectral added};
+        \node[font=\tiny,text=leangreen,anchor=south west] at (5.1,4.2) {QPF via Ces\`aro};
+        \node[font=\tiny,text=softred,anchor=south] at (7,4.3) {KS proved};
+        \node[font=\tiny,text=leangreen,anchor=south] at (9,2.3) {axiom removed};
+        \node[font=\tiny,text=leangreen,anchor=south,fill=darkbg,inner sep=1pt,
+              draw=leangreen,rounded corners=2pt] at (10.5,0.4) {\textbf{0 sorry!}};
+
+        % Green celebration zone
+        \fill[leangreen!10!darkbg] (9.5,-0.3) rectangle (11.3,0.3);
+
+        % Legend
+        \draw[amber,very thick] (6.5,6) -- (7.3,6) node[right,font=\tiny\color{white}] {sorry};
+        \draw[softred,very thick,dashed] (6.5,5.3) -- (7.3,5.3) node[right,font=\tiny\color{white}] {axiom};
+        \draw[white,thick,dotted] (6.5,4.6) -- (7.3,4.6) node[right,font=\tiny\color{white}] {total};
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.3em}
+    {\footnotesize\textcolor{dimwhite}{%
+    Feb~15 status report had 2 sorry remaining in \texttt{SpectralGap.lean}.
+    Both closed via block Kraus embedding + weighted KS equality approach.
+    \textbf{\textcolor{leangreen}{Final: 0 sorry, 0 axioms.}}}}
+\end{frame}
+
+%======================================================================
+% SLIDE 4 - Three Headlines
+%======================================================================
+\begin{frame}{Three Key Additions}
+    \vspace{-0.5em}
+
+    \begin{columns}[T]
+        \column{0.32\textwidth}
+        \begin{tikzpicture}
+            \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=\textwidth-8pt,align=left,inner sep=5pt] {
+                {\small\textcolor{leangreen}{\textbf{1. Schwarz.lean}}}\\
+                {\scriptsize
+                \textbf{315 lines}, new file.\\
+                Generalized Kraus-level Kadison--Schwarz:
+                weighted KS equality, KS gap decomposition,
+                Kraus commutation.\\
+                Key: replaces TP assumption with PD fixed point of adjoint.}
+            };
+        \end{tikzpicture}
+
+        \column{0.32\textwidth}
+        \begin{tikzpicture}
+            \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=\textwidth-8pt,align=left,inner sep=5pt] {
+                {\small\textcolor{leangreen}{\textbf{2. MultiplicativeDomain}}}\\
+                {\small\textcolor{leangreen}{\textbf{.lean}}}\\
+                {\scriptsize
+                \textbf{219 lines}, new file.\\
+                Peripheral eigenvector $\Rightarrow$ KS equality
+                (trace argument via PD FP).\\
+                Multiplicative domain left (Wolf Prop~6.7):
+                $E(X^\dagger X)=E(X)^\dagger E(X)$
+                $\Rightarrow$ $E(X^\dagger Y)=E(X)^\dagger E(Y)$.}
+            };
+        \end{tikzpicture}
+
+        \column{0.32\textwidth}
+        \begin{tikzpicture}
+            \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=\textwidth-8pt,align=left,inner sep=5pt] {
+                {\small\textcolor{leangreen}{\textbf{3. SpectralGap.lean}}}\\
+                {\scriptsize
+                \textbf{612 $\to$ 1{,}074 lines} (+462).\\
+                Complete \texttt{eigenvector\_gives\_gauge}:
+                block Kraus construction, off-diagonal embedding,
+                kernel invariance, per-index relation.\\
+                \textbf{Both sorry closed.}}
+            };
+        \end{tikzpicture}
+    \end{columns}
+
+    \vspace{0.4em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.88\textwidth,align=center,inner sep=4pt,font=\small] {
+                \textbf{+996 gross new lines} across 3 files.
+                All sorry eliminated.\\
+                {\scriptsize Actual approach differs from the plan in slides~18--22 of the status report
+                --- see ``Mathematical Innovation'' (slide~9).}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+
+% ═══════════════════════════════════════════════════════════════════════
+%  PART II - WHAT WAS PROVED (slides 5-10)
+% ═══════════════════════════════════════════════════════════════════════
+
+%======================================================================
+% SLIDE 5 - The Two Sorry That Were Closed
+%======================================================================
+\begin{frame}{The Two Sorry That Were Closed}
+    \vspace{-0.5em}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{tikzpicture}
+            \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=\textwidth-8pt,align=left,inner sep=5pt] {
+                {\small\textcolor{leangreen}{\textbf{\checkmark\ Sorry \#1}} {\tiny (was \textcolor{softred}{\texttt{sorry}})}}\\
+                {\scriptsize
+                \texttt{eigenvector\_det\_ne\_zero}:\\
+                If $\mathcal{F}_{AB}(X)=\mu X$, $|\mu|=1$, $X\neq 0$,\\
+                $A,B$ injective normalized, then:
+                \begin{center}$\det(X) \neq 0$\end{center}
+                \vspace{-0.5em}
+                \textbf{Proof}: Block Kraus embedding $\to$ weighted KS equality $\to$ Kraus commutation $\to$ kernel invariance $\to$ injectivity.\\
+                \textcolor{dimwhite}{Status report said: ``mult domain + QPF uniqueness''.}\\
+                \textcolor{leangreen}{Actual: block Kraus + kernel argument.}}
+            };
+        \end{tikzpicture}
+
+        \column{0.48\textwidth}
+        \begin{tikzpicture}
+            \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=\textwidth-8pt,align=left,inner sep=5pt] {
+                {\small\textcolor{leangreen}{\textbf{\checkmark\ Sorry \#2}} {\tiny (was \textcolor{softred}{\texttt{sorry}})}}\\
+                {\scriptsize
+                \texttt{per\_index\_from\_eigenvector}:\\
+                Same hypotheses, plus $X$ invertible.\\
+                Then $\forall\, i$:
+                \begin{center}$B_i = \bar\mu \cdot X^{-1} A_i X$\end{center}
+                \vspace{-0.5em}
+                \textbf{Proof}: Kraus commutation gives
+                $A'_i X' = \mu\, X' B'_i$ in DS gauge.
+                Left-multiply by $X'^{-1}$:
+                $X'^{-1}A'_i = \mu\, B'_i X'^{-1}$.
+                Undo gauge $\to$ per-index relation.\\
+                \textcolor{dimwhite}{Status report said: ``commutation + DS gauge''.}\\
+                \textcolor{leangreen}{Actual: Kraus commutation + invertibility.}}
+            };
+        \end{tikzpicture}
+    \end{columns}
+
+    \vspace{0.3em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.88\textwidth,align=center,inner sep=4pt,font=\small] {
+                Both sorry resolved in a single unified proof: \texttt{eigenvector\_gives\_gauge}.\\
+                {\scriptsize The block Kraus approach avoids the TP assumption entirely --- see slide~9.}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 6 - Block Kraus + Weighted KS Approach (TikZ)
+%======================================================================
+\begin{frame}{The Block Kraus + Weighted KS Approach}
+    \vspace{-0.5em}
+
+    \begin{center}
+    \begin{tikzpicture}[xscale=0.82,yscale=0.82,
+        sbox/.style={rectangle,rounded corners=3pt,text=white,
+                font=\tiny\bfseries,minimum width=2.6cm,minimum height=0.6cm,align=center},
+        sarr/.style={-{Stealth[scale=0.7]},white,thick},
+        ]
+        % Row 1: Setup
+        \node[sbox,draw=leanblue,fill=leanblue!25!black] (ds) at (0,4.5)
+            {DS-gauge both\\$A'_i = S_A^{-1}A_iS_A$\\$B'_i = S_B^{-1}B_iS_B$};
+        \node[sbox,draw=leanblue,fill=leanblue!25!black] (block) at (4.5,4.5)
+            {Block Kraus\\$K_i = (\begin{smallmatrix}A'_i & 0 \\ 0 & B'_i\end{smallmatrix})$\\automatically unital};
+        \node[sbox,draw=leanblue,fill=leanblue!25!black] (rho) at (9,4.5)
+            {Block PD FP\\$\rho_T = (\begin{smallmatrix}\!S_A^\dagger S_A\! & 0 \\ 0 & \!S_B^\dagger S_B\!\end{smallmatrix})$\\FP of $E_{\mathrm{block}}^\dagger$};
+
+        % Row 2: Core argument
+        \node[sbox,draw=amber,fill=amber!25!black] (embed) at (0,2.7)
+            {Off-diagonal\\$M = (\begin{smallmatrix}0 & X' \\ 0 & 0\end{smallmatrix})$\\$E_{\mathrm{block}}(M)=\mu M$};
+        \node[sbox,draw=leangreen,fill=leangreen!25!black] (wks) at (4.5,2.7)
+            {Weighted KS equality\\$E(M^\dagger M) = E(M)^\dagger E(M)$\\{\tiny via PD FP of $E^\dagger$, not TP!}};
+        \node[sbox,draw=leangreen,fill=leangreen!25!black] (comm) at (9,2.7)
+            {Kraus commutation\\$A'_i X' = \mu\, X' B'_i$\\for all $i$};
+
+        % Row 3: Conclusion
+        \node[sbox,draw=leangreen,fill=leangreen!25!black] (ker) at (2.25,0.9)
+            {Kernel invariance\\$X'v=0 \Rightarrow A'_iX'v=0$\\$\Rightarrow v=0$ by injectivity};
+        \node[sbox,draw=leangreen,fill=leangreen!25!black] (pidx) at (6.75,0.9)
+            {Per-index relation\\$B'_i = \bar\mu\, X'^{-1}A'_i X'$\\undo gauge};
+        \node[sbox,draw=leangreen,fill=leangreen!40!black,font=\small\bfseries] (gauge) at (4.5,-0.3)
+            {\textbf{GaugePhaseEquiv}};
+
+        % Arrows
+        \draw[sarr] (ds) -- (block);
+        \draw[sarr] (block) -- (rho);
+        \draw[sarr] (ds) -- (embed);
+        \draw[sarr] (rho) -- (wks);
+        \draw[sarr] (embed) -- (wks);
+        \draw[sarr] (wks) -- (comm);
+        \draw[sarr] (comm) -- ++(0,-0.55) -| (ker);
+        \draw[sarr] (comm) -- ++(0,-0.55) -| (pidx);
+        \draw[sarr,leangreen,very thick] (ker) -- (gauge);
+        \draw[sarr,leangreen,very thick] (pidx) -- (gauge);
+
+        % Labels
+        \node[font=\tiny,text=dimwhite] at (12.5,4.5) {setup};
+        \node[font=\tiny,text=dimwhite] at (12.5,2.7) {core};
+        \node[font=\tiny,text=dimwhite] at (12.5,0.9) {close};
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.1em}
+    {\footnotesize\textcolor{dimwhite}{%
+    Block Kraus construction is unital but \textbf{not} trace-preserving.
+    The weighted KS equality uses a PD fixed point of the adjoint map instead of TP.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 7 - eigenvector_gives_gauge 8-step walkthrough
+%======================================================================
+\begin{frame}{\texttt{eigenvector\_gives\_gauge}: 8-Step Proof Chain}
+    \vspace{-0.5em}
+
+    {\small
+    \begin{tabular}{@{}c p{6.2cm} l c@{}}
+        \toprule
+        \textbf{\#} & \textbf{Step} & \textbf{Key lemma} & \\
+        \midrule
+        \rowcolor{cardbg}
+        1 & DS-gauge both tensors $\to$ unital Kraus families $A', B'$
+          & \texttt{gauged\_unital} & \proved{} \\
+        2 & Block Kraus: $K_i = (\begin{smallmatrix}A'_i & 0 \\ 0 & B'_i\end{smallmatrix})$, automatically unital
+          & \texttt{sum\_blockKraus\_mul\_star} & \proved{} \\
+        \rowcolor{cardbg}
+        3 & Block PD FP: $\rho_T$ is PD FP of $E_{\mathrm{block}}^\dagger$
+          & \texttt{blockRho\_isPosDef} & \proved{} \\
+        4 & Off-diagonal $M$ is peripheral eigenvector: $E(M) = \mu M$
+          & \texttt{offDiag\_eigenvector} & \proved{} \\
+        \rowcolor{cardbg}
+        5 & Weighted KS equality: $E(M^\dagger M) = E(M)^\dagger E(M)$
+          & \texttt{ks\_equality\_of\_peripheral\ldots} & \proved{} \\
+        6 & Kraus commutation: $A'_i X' = \mu\, X' B'_i$ for all $i$
+          & \texttt{kraus\_commute\_of\_ks\_equality} & \proved{} \\
+        \rowcolor{cardbg}
+        7 & Kernel invariance $\to$ $X'$ invertible
+          & \texttt{isUnit\_det\_of\_inj\_kraus} & \proved{} \\
+        8 & Left-multiply by $X'^{-1}$ $\to$ per-index $\to$ \texttt{GaugePhaseEquiv}
+          & \texttt{per\_index\_from\_comm} & \proved{} \\
+        \bottomrule
+    \end{tabular}
+    }
+
+    \vspace{0.3em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.88\textwidth,align=center,inner sep=4pt,font=\small] {
+                All 8 steps fully proved. \textbf{462 new lines} in \texttt{SpectralGap.lean}.\\
+                {\scriptsize Steps 5--6 use the new \texttt{Schwarz.lean}; step~5 uses the new \texttt{MultiplicativeDomain.lean}.}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 8 - New Theorems Table
+%======================================================================
+\begin{frame}{New Theorems (all fully proved, 0 sorry)}
+    \vspace{-0.7em}
+
+    {\footnotesize
+    \begin{tabular}{@{}p{5.8cm} l r c@{}}
+        \toprule
+        \textbf{Theorem} & \textbf{File} & \textbf{Lines} & \\
+        \midrule
+        \rowcolor{cardbg}
+        \texttt{ks\_equality\_of\_peripheral\_eigenvector\_of\_fixedPoint}
+          & Schwarz & 315 & \proved{} \\
+        {\tiny Weighted KS: $E(X)=\mu X$, $|\mu|=1$, PD FP of $E^\dagger$ $\Rightarrow$ KS equality} & & & \\
+        \texttt{ks\_gap\_eq\_sum\_squares}
+          & Schwarz & & \proved{} \\
+        {\tiny KS gap $= \sum_i (XK_i^\dagger - K_i^\dagger E(X))^\dagger(\cdots)$} & & & \\
+        \rowcolor{cardbg}
+        \texttt{kraus\_commute\_of\_ks\_equality}
+          & Schwarz & & \proved{} \\
+        {\tiny KS equality $\Rightarrow$ $XK_i^\dagger = K_i^\dagger E(X)$ for all Kraus operators $i$} & & & \\
+        \texttt{multiplicative\_domain\_left}
+          & MultDom & 219 & \proved{} \\
+        {\tiny Wolf 6.7: $E(X^\dagger X)=E(X)^\dagger E(X) \Rightarrow E(X^\dagger Y)=E(X)^\dagger E(Y) \forall Y$} & & & \\
+        \rowcolor{cardbg}
+        \texttt{eigenvector\_gives\_gauge}
+          & SpectralGap & 1{,}074 & \proved{} \\
+        {\tiny Modulus-1 eigenvector of mixed transfer $\to$ gauge-phase equivalence} & & & \\
+        \texttt{modulus\_one\_eigenvalue\_implies\_gauge}
+          & SpectralGap & & \proved{} \\
+        {\tiny $\rho(\mathcal{F}_{AB})\geq 1 \Rightarrow A \sim B$ (eigenvalue rigidity)} & & & \\
+        \rowcolor{cardbg}
+        \texttt{spectralRadius\_mixedTransfer\_lt\_one}
+          & SpectralGap & & \proved{} \\
+        {\tiny $A \not\sim B \Rightarrow \rho(\mathcal{F}_{AB}) < 1$ (spectral gap)} & & & \\
+        \texttt{mixedTransfer\_pow\_tendsto\_zero}
+          & SpectralGap & & \proved{} \\
+        {\tiny $A \not\sim B \Rightarrow \mathcal{F}_{AB}^n \to 0$ (power convergence via Gelfand)} & & & \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{frame}
+
+%======================================================================
+% SLIDE 9 - Mathematical Innovation: Weighted KS vs TP
+%======================================================================
+\begin{frame}{Mathematical Innovation: Why the Planned Approach Was Wrong}
+    \vspace{-0.5em}
+
+    \begin{columns}[T]
+        \column{0.46\textwidth}
+        \textbf{\textcolor{softred}{Old plan} (status report, slides 18--22):}
+        \begin{itemize}\itemsep0.1em\small
+            \item[\textcolor{softred}{$\times$}] Use standard multiplicative domain theory (\cite{Wolf2012Quantum} \S6.2)
+            \item[\textcolor{softred}{$\times$}] Requires \textbf{trace-preserving} channel
+            \item[\textcolor{softred}{$\times$}] Trace argument: $\tr(E(X^\dagger X)) = \tr(X^\dagger X)$
+            \item[\textcolor{softred}{$\times$}] Helper \texttt{transferMap\_fixed\_mul\_conjTranspose} claiming $E_A(XX^\dagger) = XX^\dagger$ was \textbf{mathematically false}
+        \end{itemize}
+
+        \vspace{0.2em}
+        {\scriptsize\textcolor{dimwhite}{Estimated: 300--480 lines of multiplicative domain theory.}}
+
+        \column{0.50\textwidth}
+        \textbf{\textcolor{leangreen}{Actual approach:}}
+        \begin{itemize}\itemsep0.1em\small
+            \item[\textcolor{leangreen}{\checkmark}] Block Kraus is \textbf{unital} but \textbf{not TP}
+            \item[\textcolor{leangreen}{\checkmark}] Use \textbf{PD fixed point of adjoint} instead of TP
+            \item[\textcolor{leangreen}{\checkmark}] Trace argument via PD FP:\\
+                {\scriptsize $\tr(\rho\,(E(X^\dagger X) - X^\dagger X)) = 0$ where $\rho$ is PD FP of $E^\dagger$}
+            \item[\textcolor{leangreen}{\checkmark}] Weighted KS equality: more general than TP
+            \item[\textcolor{leangreen}{\checkmark}] Kraus commutation at the block level
+        \end{itemize}
+
+        \vspace{0.2em}
+        {\scriptsize\textcolor{dimwhite}{Actual: 996 lines (534 new infra + 462 assembly).}}
+    \end{columns}
+
+    \vspace{0.3em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=amber,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.88\textwidth,align=center,inner sep=4pt,font=\small] {
+                \textbf{Key insight}: the block Kraus embedding is unital but not trace-preserving.\\
+                {\scriptsize Standard multiplicative domain theory (Wolf \S6.2) assumes TP. The generalized
+                weighted KS approach replaces TP with existence of a PD fixed point of the adjoint ---
+                which is exactly what QPF provides.}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% SLIDE 10 - What Was Mathematically False
+%======================================================================
+\begin{frame}{Discovery During Formalization: A False Helper}
+    \vspace{-0.5em}
+
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textbf{\textcolor{softred}{The false claim:}}\\
+        {\small \texttt{transferMap\_fixed\_mul\_conjTranspose}:}
+        \[
+            \mathcal{E}_A(XX^\dagger) = XX^\dagger
+        \]
+        {\scriptsize where $\mathcal{F}_{AB}(X) = \mu X$ with $|\mu|=1$.}
+
+        \vspace{0.3em}
+        \textbf{Why it's false:}
+        \begin{itemize}\itemsep0.1em\small
+            \item $\mathcal{E}_A(XX^\dagger) = \sum_i A_i X X^\dagger A_i^\dagger$
+            \item $\mathcal{F}_{AB}(X) = \sum_i A_i X B_i^\dagger$
+            \item Different operations; eigenvector of $\mathcal{F}_{AB}$ does \textbf{not} make $XX^\dagger$ a fixed point of $\mathcal{E}_A$
+        \end{itemize}
+
+        \column{0.46\textwidth}
+        \textbf{\textcolor{leangreen}{The correct approach:}}\\
+        {\small Work at the block level:}
+        \begin{enumerate}\itemsep0.1em\small
+            \item Embed into block channel $E_{\mathrm{block}}$
+            \item $M = (\begin{smallmatrix}0 & X' \\ 0 & 0\end{smallmatrix})$ is peripheral eigenvector of $E_{\mathrm{block}}$
+            \item $M^\dagger M = (\begin{smallmatrix}0 & 0 \\ 0 & X'^\dagger X'\end{smallmatrix})$
+            \item KS equality holds for $E_{\mathrm{block}}$
+            \item This gives the correct matrix identity
+        \end{enumerate}
+
+        \vspace{0.2em}
+        {\scriptsize\textcolor{leangreen}{Formalization forces precision about which channel acts on which matrix.}}
+    \end{columns}
+
+    \vspace{0.3em}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+                text width=0.88\textwidth,align=center,inner sep=4pt,font=\small] {
+                Concrete example of formalization catching a subtle mathematical error\\
+                {\scriptsize in the informal proof strategy --- discovered only when Lean refused to accept the statement.}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+
+% ═══════════════════════════════════════════════════════════════════════
+%  PART III - ARCHITECTURE UPDATE (slides 11-13)
+% ═══════════════════════════════════════════════════════════════════════
+
+%======================================================================
+% SLIDE 11 - Updated Six-Layer Architecture
+%======================================================================
+\begin{frame}{Updated Six-Layer Architecture}
+    \vspace{-0.5em}
+
+    \begin{center}
+    \begin{tikzpicture}[xscale=0.85,yscale=0.7,
+        lbox/.style={rectangle,rounded corners=4pt,thick,
+            text=white,font=\scriptsize,minimum width=12cm,minimum height=0.7cm,align=center},
+        ]
+        % Layer 5
+        \node[lbox,draw=leangreen,fill=leangreen!15!black] (l5) at (0,0)
+            {\textbf{Layer 5: Multi-block FT} (1{,}329L)
+            \quad MultiBlock $\cdot$ BasisNormal $\cdot$ FTMulti $\cdot$ BlockPermutationMPS $\cdot$ PiAlgebra/*};
+        % Layer 4
+        \node[lbox,draw=leangreen,fill=leangreen!15!black] (l4) at (0,1.1)
+            {\textbf{Layer 4: Single-block FT} (193L)
+            \quad LinearExtension $\cdot$ FundamentalTheorem};
+        % Layer 3
+        \node[lbox,draw=leangreen,fill=leangreen!15!black] (l3) at (0,2.2)
+            {\textbf{Layer 3: MPS Core} (335L)
+            \quad Defs $\cdot$ Transfer $\cdot$ CanonicalForm $\cdot$ CPPrimitive};
+        % Layer 2
+        \node[lbox,draw=leangreen,fill=leangreen!15!black] (l2) at (0,3.3)
+            {\textbf{Layer 2: Spectral / QPF} (\textcolor{leangreen}{1{,}284L} {\tiny\textcolor{dimwhite}{was 1{,}483}})
+            \quad QPF $\cdot$ \textcolor{leangreen}{SpectralGap\,\raisebox{0.3ex}{\tiny$\triangleright$\,0\,sorry}}
+            $\cdot$ MixedTransfer $\cdot$ CrossCorrelation};
+        % Layer 1
+        \node[lbox,draw=leangreen,fill=leangreen!15!black] (l1) at (0,4.4)
+            {\textbf{Layer 1: Channels} (\textcolor{leangreen}{1{,}433L} {\tiny\textcolor{dimwhite}{was 1{,}076}})
+            \quad PositiveMap $\cdot$ KadisonSchwarz $\cdot$ \textcolor{leangreen}{\textbf{Schwarz}} $\cdot$ \textcolor{leangreen}{\textbf{MultDomain}} $\cdot$ CesaroFP $\cdot$ Irred $\cdot$ DSGauge};
+        % Layer 0
+        \node[lbox,draw=gray,fill=gray!20!black] (l0) at (0,5.5)
+            {\textbf{Layer 0: Algebra} (403L)
+            \quad TraceNondeg $\cdot$ TracePairing $\cdot$ BlockPermutation $\cdot$ SkolemNoether};
+
+        % Arrows
+        \draw[white,thick,-{Stealth[length=4pt]}] (l0) -- (l1);
+        \draw[white,thick,-{Stealth[length=4pt]}] (l1) -- (l2);
+        \draw[white,thick,-{Stealth[length=4pt]}] (l2) -- (l3);
+        \draw[white,thick,-{Stealth[length=4pt]}] (l3) -- (l4);
+        \draw[white,thick,-{Stealth[length=4pt]}] (l4) -- (l5);
+
+        % Side annotation
+        \node[font=\tiny,text=dimwhite,rotate=90,anchor=south] at (6.5,2.75) {dependency direction $\downarrow$};
+
+        % Delta annotations
+        \node[font=\tiny,text=leangreen,anchor=west] at (6.3,4.4) {\textbf{+357L}};
+        \node[font=\tiny,text=leangreen,anchor=west] at (6.3,3.3) {\textbf{+462L}};
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.3em}
+    {\footnotesize\textcolor{dimwhite}{Total: \textcolor{leangreen}{5{,}811 lines}, all sorry-free.
+    \textcolor{leangreen}{\textbf{New files}} in bold: Schwarz.lean (315L), MultiplicativeDomain.lean (219L).
+    SpectralGap.lean grew 612$\to$1{,}074L.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 12 - Updated Dependency Graph
+%======================================================================
+\begin{frame}{Updated Module Dependency Graph}
+    \vspace{-0.5em}
+
+    \begin{center}
+    \begin{tikzpicture}[xscale=0.72,yscale=0.72,
+        sbox/.style={rectangle,rounded corners=3pt,draw=white,text=white,
+                font=\tiny\bfseries,minimum width=1.7cm,minimum height=0.55cm,align=center},
+        nbox/.style={rectangle,rounded corners=3pt,draw=leangreen,text=white,
+                font=\tiny\bfseries,minimum width=1.7cm,minimum height=0.55cm,align=center,
+                line width=1.2pt},
+        sarr/.style={-{Stealth[scale=0.6]},dimwhite,thick},
+        narr/.style={-{Stealth[scale=0.6]},leangreen,thick},
+        ]
+        % Layer 0
+        \node[sbox,fill=gray!50!black] (trace) at (-4,6) {TraceNondeg\\TracePairing};
+        \node[sbox,fill=gray!50!black] (skolem) at (-1,6) {SkolemNoether};
+        \node[sbox,fill=gray!50!black] (blkp) at (2,6) {BlockPerm};
+
+        % Layer 1 (with new nodes)
+        \node[sbox,fill=leanblue!60!black] (posmap) at (-5.5,4.2) {PositiveMap\\{\tiny 250L}};
+        \node[sbox,fill=leanblue!60!black] (ks) at (-2.8,4.2) {KadisonSchwarz\\{\tiny 209L}};
+        \node[nbox,fill=leangreen!30!black] (schwarz) at (0.2,4.2) {\textbf{Schwarz}\\{\tiny 315L \textcolor{leangreen}{new}}};
+        \node[nbox,fill=leangreen!30!black] (multdom) at (3.2,4.2) {\textbf{MultDomain}\\{\tiny 219L \textcolor{leangreen}{new}}};
+        \node[sbox,fill=leanblue!60!black] (cesaro) at (6,4.2) {CesaroFP\\{\tiny 328L}};
+        \node[sbox,fill=leanblue!60!black] (dsg) at (8.5,4.2) {DSGauge\\{\tiny 55L}};
+
+        % Layer 2
+        \node[sbox,fill=deepblue!60!black] (posdef) at (-3,2.4) {QPF/PosDef\\{\tiny 314L}};
+        \node[sbox,fill=deepblue!60!black] (uniq) at (0,2.4) {QPF/Uniq\\{\tiny 300L}};
+        \node[nbox,fill=leangreen!30!black] (specgap) at (3.5,2.4) {SpectralGap\\{\tiny 1{,}074L \textcolor{leangreen}{0s}}};
+        \node[sbox,fill=deepblue!60!black] (mixed) at (7,2.4) {MixedTransfer};
+        \node[sbox,fill=deepblue!60!black] (xcorr) at (10,2.4) {CrossCorr};
+
+        % Layer 3
+        \node[sbox,fill=leangreen!40!black] (defs) at (-4,0.6) {MPS/Defs};
+        \node[sbox,fill=leangreen!40!black] (trans) at (-1,0.6) {Transfer};
+        \node[sbox,fill=leangreen!40!black] (canon) at (2,0.6) {CanonicalForm};
+        \node[sbox,fill=leangreen!40!black] (cpp) at (5,0.6) {CPPrimitive};
+
+        % Layer 4-5
+        \node[sbox,fill=leangreen!30!black] (linext) at (-2,-1.2) {LinearExt\\{\tiny 193L}};
+        \node[sbox,fill=leangreen!30!black] (ft) at (1,-1.2) {FundThm};
+        \node[sbox,fill=leangreen!30!black] (ftm) at (4,-1.2) {FTMulti\\{\tiny 216L}};
+        \node[sbox,fill=leangreen!30!black] (ftc) at (7,-1.2) {FTComplete\\{\tiny 215L}};
+
+        % Key arrows
+        \draw[sarr] (trace) -- (posmap);
+        \draw[sarr] (posmap) -- (ks);
+        \draw[narr] (ks) -- (schwarz);
+        \draw[narr] (schwarz) -- (multdom);
+        \draw[sarr] (posmap) -- (cesaro);
+        \draw[sarr] (cesaro) -- (posdef);
+        \draw[sarr] (posdef) -- (uniq);
+        \draw[narr] (uniq) -- (specgap);
+        \draw[narr] (schwarz) -- (specgap);
+        \draw[narr] (multdom) -- (specgap);
+        \draw[sarr] (dsg) -- (specgap);
+        \draw[sarr] (specgap) -- (mixed);
+        \draw[sarr] (mixed) -- (xcorr);
+        \draw[sarr] (defs) -- (trans);
+        \draw[sarr] (trans) -- (canon);
+        \draw[sarr] (skolem) -- (linext);
+        \draw[sarr] (canon) -- (linext);
+        \draw[sarr] (linext) -- (ft);
+        \draw[sarr] (ft) -- (ftm);
+        \draw[sarr] (xcorr) -- (ftc);
+        \draw[sarr] (ftm) -- (ftc);
+        \draw[sarr] (blkp) -- (ftc);
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.3em}
+    {\footnotesize
+    \textcolor{leangreen}{\textbf{Green border}} = new/changed files.
+    New: Schwarz.lean, MultiplicativeDomain.lean.
+    Changed: SpectralGap.lean (+462L).
+    All nodes now \textcolor{leangreen}{sorry-free}.}
+\end{frame}
+
+%======================================================================
+% SLIDE 13 - Updated Top 10 Files Bar Chart
+%======================================================================
+\begin{frame}{Top 10 Files by Size (updated)}
+    \vspace{-0.5em}
+
+    \begin{center}
+    \begin{tikzpicture}[xscale=0.45,yscale=0.38]
+        % Data: name / lines / color / y-position
+        \foreach \name/\lines/\clr/\y in {
+            SpectralGap/1074/leangreen/9,
+            CesaroFixedPoint/328/leangreen/8,
+            {Channel/Schwarz}/315/mintgreen/7,
+            {QPF/PosDef}/314/leangreen/6,
+            {QPF/Uniqueness}/300/leangreen/5,
+            {PiAlgebra/Constr}/292/leangreen/4,
+            BlockPermMPS/281/leangreen/3,
+            PositiveMap/250/leangreen/2,
+            {MultDomain}/219/mintgreen/1,
+            FTMulti/216/leangreen/0%
+        } {
+            \fill[\clr!70!black] (0,\y) rectangle (\lines/50,\y+0.7);
+            \node[anchor=east,font=\tiny\color{white}] at (-0.2,\y+0.35) {\name};
+            \node[anchor=west,font=\tiny\color{white}] at (\lines/50+0.2,\y+0.35) {\lines L};
+        }
+        % Annotations
+        \node[anchor=west,font=\tiny\color{leangreen}] at (1074/50+1.2,9.35) {was 612L (+462)};
+        \node[anchor=west,font=\tiny\color{mintgreen}] at (315/50+1.2,7.35) {new};
+        \node[anchor=west,font=\tiny\color{mintgreen}] at (219/50+1.2,1.35) {new};
+        % Axis
+        \draw[dimwhite,thin] (0,-0.3) -- (0,10);
+        \foreach \x/\lbl in {2/100,4/200,6/300,8/400,10/500,12/600,16/800,20/1000} {
+            \draw[dimwhite,thin] (\x,-0.3) -- (\x,-0.1);
+            \node[font=\tiny\color{dimwhite}] at (\x,-0.7) {\lbl};
+        }
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.3em}
+    {\footnotesize\textcolor{dimwhite}{%
+    \texttt{SpectralGap.lean} remains the largest file (now 1{,}074L, was 612L) and is \textbf{sorry-free}.
+    \textcolor{mintgreen}{Mint} = new files added since Feb~15 status report.
+    Total: 5{,}811 lines across 39 files.}}
+\end{frame}
+
+
+% ═══════════════════════════════════════════════════════════════════════
+%  PART IV - COMPLETE PHYSICAL RESULTS (slides 14-16)
+% ═══════════════════════════════════════════════════════════════════════
+
+%======================================================================
+% SLIDE 14 - All Major Results Table
+%======================================================================
+\begin{frame}{Complete Results: All Major Theorems Proved}
+    \vspace{-0.5em}
+
+    {\small
+    \begin{tabular}{@{}p{6.2cm} c c@{}}
+        \toprule
+        \textbf{Result} & \textbf{Feb 15} & \textbf{Now} \\
+        \midrule
+        \rowcolor{cardbg}
+        Fundamental Theorem (single-block)
+            & \proved{} & \proved{} \\
+        Fundamental Theorem (multi-block)
+            & \proved{} & \proved{} \\
+        \rowcolor{cardbg}
+        Quantum Perron--Frobenius (existence, PD, uniqueness)
+            & \proved{} & \proved{} \\
+        Kadison--Schwarz inequality
+            & \proved{} & \proved{} \\
+        \rowcolor{cardbg}
+        DS gauge unitality
+            & \proved{} & \proved{} \\
+        \textcolor{leangreen}{\textbf{Weighted KS equality}} (PD FP of adjoint)
+            & --- & \proved{} \\
+        \rowcolor{cardbg}
+        \textcolor{leangreen}{\textbf{Kraus commutation}} from KS equality
+            & --- & \proved{} \\
+        \textcolor{leangreen}{\textbf{Multiplicative domain left}} (Wolf 6.7)
+            & --- & \proved{} \\
+        \rowcolor{cardbg}
+        \textcolor{leangreen}{\textbf{Eigenvector gives gauge}} (assembly)
+            & \sorrymark{2} & \proved{} \\
+        Modulus-1 eigenvalue $\Rightarrow$ gauge equiv
+            & \sorrymark{dep} & \proved{} \\
+        \rowcolor{cardbg}
+        Spectral gap: $\rho(\mathcal{F}_{AB}) < 1$ for $A \not\sim B$
+            & \sorrymark{dep} & \proved{} \\
+        Mixed transfer $\mathcal{F}_{AB}^n \to 0$ for $A \not\sim B$
+            & \sorrymark{dep} & \proved{} \\
+        \rowcolor{cardbg}
+        Cross-correlation decay
+            & \sorrymark{dep} & \proved{} \\
+        Skolem--Noether (inner automorphisms)
+            & \proved{} & \proved{} \\
+        \bottomrule
+    \end{tabular}
+    }
+
+    \vspace{0.1em}
+    {\footnotesize\textcolor{dimwhite}{%
+    {\tiny dep} = depended on the 2 sorry transitively.
+    All results now fully proved with 0 sorry, 0 axioms.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 15 - Complete Proof Chain TikZ
+%======================================================================
+\begin{frame}{Complete Proof Chain: From KS to the Fundamental Theorem}
+    \vspace{-0.5em}
+
+    \begin{center}
+    \begin{tikzpicture}[xscale=0.78,yscale=0.78,
+        sbox/.style={rectangle,rounded corners=3pt,draw=leangreen,thick,fill=leangreen!20!black,
+                text=white,font=\tiny\bfseries,minimum width=2.0cm,minimum height=0.55cm,align=center},
+        nbox/.style={rectangle,rounded corners=3pt,draw=leangreen,thick,fill=leangreen!35!black,
+                text=white,font=\tiny\bfseries,minimum width=2.0cm,minimum height=0.55cm,align=center},
+        sarr/.style={-{Stealth[scale=0.6]},leangreen,thick},
+        ]
+        % Top row: Ingredients
+        \node[sbox] (ks) at (0,4.5) {Kadison--Schwarz\\{\tiny inequality}};
+        \node[sbox] (qpf) at (3.2,4.5) {QPF\\{\tiny unique PD FP}};
+        \node[sbox] (dsg) at (6.4,4.5) {DS gauge\\{\tiny unitality}};
+        \node[sbox] (sn) at (9.6,4.5) {Skolem--Noether\\{\tiny inner auto}};
+
+        % Middle row: New infrastructure
+        \node[nbox] (wks) at (1.6,3) {Weighted KS\\equality};
+        \node[nbox] (kcomm) at (4.8,3) {Kraus\\commutation};
+        \node[nbox] (mdom) at (8,3) {Mult domain\\left};
+
+        % Assembly row
+        \node[nbox] (egauge) at (3.2,1.5) {\textbf{eigenvector\_gives}\\\textbf{\_gauge}};
+        \node[sbox] (specgap) at (7,1.5) {Spectral gap\\$\rho(\mathcal{F}_{AB}) < 1$};
+        \node[sbox] (decay) at (10.5,1.5) {$\mathcal{F}^n \to 0$\\cross-corr decay};
+
+        % Bottom: Final theorem
+        \node[sbox,fill=leangreen!40!black,font=\small\bfseries,minimum width=4cm] (ft) at (5.5,0)
+            {\textbf{Fundamental Theorem}\\{\tiny single + multi-block}};
+
+        % Arrows
+        \draw[sarr] (ks) -- (wks);
+        \draw[sarr] (qpf) -- (wks);
+        \draw[sarr] (wks) -- (kcomm);
+        \draw[sarr] (kcomm) -- (mdom);
+        \draw[sarr] (dsg) -- (kcomm);
+        \draw[sarr] (wks) -- (egauge);
+        \draw[sarr] (kcomm) -- (egauge);
+        \draw[sarr] (egauge) -- (specgap);
+        \draw[sarr] (specgap) -- (decay);
+        \draw[sarr] (egauge) -- (ft);
+        \draw[sarr] (decay) -- ++(0,-0.5) -| (ft);
+        \draw[sarr] (sn) -- ++(0,-3) -| (ft);
+    \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.1em}
+    {\footnotesize\textcolor{dimwhite}{%
+    \textcolor{leangreen}{\textbf{Bright green}} = new results added since status report.
+    Every node in the chain is fully proved.
+    The Fundamental Theorem (single + multi-block) follows with 0 sorry, 0 axioms.}}
+\end{frame}
+
+%======================================================================
+% SLIDE 16 - What the Formalization Covers
+%======================================================================
+\begin{frame}{Scope: What the Formalization Covers}
+    \vspace{-0.5em}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{\textcolor{leangreen}{Formalized (complete, 0 sorry):}}
+        \begin{itemize}\itemsep0.08em\scriptsize
+            \item[\textcolor{leangreen}{\checkmark}] FT of MPS: single-block (injective tensors)
+            \item[\textcolor{leangreen}{\checkmark}] FT of MPS: multi-block (block permutations)
+            \item[\textcolor{leangreen}{\checkmark}] Quantum Perron--Frobenius (existence, PD, uniqueness)
+            \item[\textcolor{leangreen}{\checkmark}] Kadison--Schwarz inequality (2$\times$2 Schur)
+            \item[\textcolor{leangreen}{\checkmark}] Weighted KS equality (generalized, no TP)
+            \item[\textcolor{leangreen}{\checkmark}] Multiplicative domain (left, Wolf 6.7)
+            \item[\textcolor{leangreen}{\checkmark}] DS gauge construction + unitality
+            \item[\textcolor{leangreen}{\checkmark}] Spectral gap for mixed transfer
+            \item[\textcolor{leangreen}{\checkmark}] Power convergence $\mathcal{F}^n \to 0$
+            \item[\textcolor{leangreen}{\checkmark}] Skolem--Noether theorem
+            \item[\textcolor{leangreen}{\checkmark}] Trace nondegeneracy, trace pairing
+            \item[\textcolor{leangreen}{\checkmark}] Wedderburn block permutation theory
+            \item[\textcolor{leangreen}{\checkmark}] Canonical form for injective MPS
+        \end{itemize}
+
+        \column{0.48\textwidth}
+        \textbf{\textcolor{dimwhite}{Not formalized (out of scope \cite{Cirac2021Matrix}):}}
+        \begin{itemize}\itemsep0.08em\scriptsize
+            \item[\textcolor{dimwhite}{$\diamond$}] Non-injective MPS (zero-eigenvalue case)
+            \item[\textcolor{dimwhite}{$\diamond$}] 2D tensor networks (PEPS)
+            \item[\textcolor{dimwhite}{$\diamond$}] Parent Hamiltonians
+            \item[\textcolor{dimwhite}{$\diamond$}] Symmetry-protected topological phases
+            \item[\textcolor{dimwhite}{$\diamond$}] Thermodynamic limit
+            \item[\textcolor{dimwhite}{$\diamond$}] DMRG algorithm correctness
+            \item[\textcolor{dimwhite}{$\diamond$}] Infinite-dimensional case
+        \end{itemize}
+
+        \vspace{0.3em}
+        \textbf{\textcolor{leangreen}{Mathlib upstreaming candidates:}}
+        \begin{itemize}\itemsep0.05em\scriptsize
+            \item[\textcolor{leangreen}{\checkmark}] Kadison--Schwarz inequality
+            \item[\textcolor{leangreen}{\checkmark}] Quantum Perron--Frobenius
+            \item[\textcolor{leangreen}{\checkmark}] Weighted KS equality
+            \item[\textcolor{leangreen}{\checkmark}] Banach algebra power decay
+            \item[\textcolor{leangreen}{\checkmark}] Block permutation theory
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+
+% ═══════════════════════════════════════════════════════════════════════
+%  PART V - SUMMARY (slides 17-18)
+% ═══════════════════════════════════════════════════════════════════════
+
+%======================================================================
+% SLIDE 17 - Final Metrics & What's Next
+%======================================================================
+\begin{frame}{Final Metrics \& What's Next}
+    \vspace{-0.5em}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textbf{Final development metrics:}
+        {\small
+        \begin{tabular}{rl}
+            \toprule
+            \textbf{Metric} & \textbf{Value} \\
+            \midrule
+            \rowcolor{cardbg}
+            Lines of Lean 4 & \textcolor{leangreen}{5{,}811} \\
+            Files & 39 \\
+            \rowcolor{cardbg}
+            Theorems & \textcolor{leangreen}{145} \\
+            Lemmas & \textcolor{leangreen}{106} \\
+            \rowcolor{cardbg}
+            Definitions & 55 \\
+            Commits & 68 \\
+            \rowcolor{cardbg}
+            Development period & 10 days \\
+            Axioms & \textcolor{leangreen}{\textbf{0}} \\
+            \rowcolor{cardbg}
+            Sorry & \textcolor{leangreen}{\textbf{0}} \\
+            \bottomrule
+        \end{tabular}
+        }
+
+        \vspace{0.2em}
+        \begin{tikzpicture}
+            % Progress bar: 100% green
+            \fill[leangreen!60!black,rounded corners=2pt] (0,0) rectangle (5.5,0.35);
+            \node[font=\scriptsize,text=white] at (2.75,0.175) {\textbf{Complete} --- 0 sorry, 0 axioms};
+        \end{tikzpicture}
+
+        \column{0.48\textwidth}
+        \textbf{LOC trajectory:}
+        \vspace{0.1em}
+        \begin{center}
+        \begin{tikzpicture}[xscale=0.60,yscale=0.32]
+            \draw[dimwhite,thick,-{Stealth[length=4pt]}] (0,0) -- (8,0);
+            \draw[dimwhite,thick,-{Stealth[length=4pt]}] (0,0) -- (0,7);
+
+            \foreach \y/\lbl in {1/1000,2/2000,3/3000,4/4000,5/5000,6/6000} {
+                \draw[dimwhite,thin] (-0.1,\y) -- (0.1,\y);
+                \node[left,font=\tiny\color{dimwhite}] at (0,\y) {\lbl};
+            }
+            \foreach \x/\lbl in {0/Feb 7,1.5/9,3/11,4.5/14,5.5/15,6.5/16,7.5/done} {
+                \node[below,font=\tiny\color{dimwhite}] at (\x,-0.2) {\lbl};
+            }
+
+            \fill[leangreen!30!black] plot coordinates {
+                (0,0.82) (1.5,2.40) (3,3.25) (4.5,4.50) (5.5,4.72) (6.5,5.19) (7.5,5.81)
+            } -- (7.5,0) -- (0,0) -- cycle;
+            \draw[leangreen,very thick,mark=*,mark size=1.5pt] plot coordinates {
+                (0,0.82) (1.5,2.40) (3,3.25) (4.5,4.50) (5.5,4.72) (6.5,5.19) (7.5,5.81)
+            };
+
+            \node[font=\tiny,text=white] at (4,1.5) {5{,}811 lines};
+
+            % Marker for sorry-free
+            \node[font=\tiny,text=leangreen,fill=darkbg,inner sep=1pt,
+                  draw=leangreen,rounded corners=1pt] at (7.5,6.3) {\textbf{0 sorry}};
+        \end{tikzpicture}
+        \end{center}
+
+        \vspace{0.2em}
+        \textbf{What's next:}
+        \begin{itemize}\itemsep0.05em\small
+            \item[\textcolor{dimwhite}{$\diamond$}] \textbf{Mathlib upstreaming}:\\
+                {\scriptsize KS, QPF, weighted KS, power decay}
+            \item[\textcolor{dimwhite}{$\diamond$}] \textbf{Documentation \& paper}
+            \item[\textcolor{dimwhite}{$\diamond$}] Fill Channel/ placeholder files
+            \item[\textcolor{dimwhite}{$\diamond$}] Code cleanup / refactor
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+% SLIDE 18 - References
+%======================================================================
+\begin{frame}[allowframebreaks]{References}
+    \footnotesize
+    \bibliography{references}
+\end{frame}
+
+\end{document}

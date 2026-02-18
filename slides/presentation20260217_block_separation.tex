@@ -1,0 +1,712 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\input{preamble}
+
+% Extra TikZ libraries
+\usetikzlibrary{arrows.meta,shapes.geometric,calc,decorations.pathreplacing,fit,backgrounds,matrix,chains}
+
+\title{\textbf{Block Separation in the Fundamental Theorem of MPS:\\A Counterexample and the Role of Spectral Normalization}}
+\subtitle{{\small MPSLean --- Lean 4 + Mathlib v4.27.0 --- based on \cite{Perez-Garcia2007Matrix,Cirac2021Matrix}}}
+\date{}
+\author{}
+
+\begin{document}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 1 - Title
+% ═══════════════════════════════════════════════════════════════════════
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{-1.5em}
+    \maketitle
+    \vspace{-3em}
+    \begin{center}
+        {\footnotesize
+            \textcolor{dimwhite}{%
+            The ``block separation'' step is \textcolor{softred}{false}
+            without spectral radius normalization.\\
+            We present a concrete counterexample and analyse the consequences.}}
+    \end{center}
+\end{frame}
+}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 2 - The Fundamental Theorem of MPS
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{The Fundamental Theorem of Matrix Product States}
+\vspace{-0.5em}
+
+\begin{block}{Physical setup}
+A \emph{matrix product state} (MPS) on a spin chain of length $N$ with
+local dimension $d$ and bond dimension $D$ is a state whose coefficients are
+\[
+  c_{\sigma_1 \dots \sigma_N}
+  = 
+  \tr\!(A^{[\sigma_1]} A^{[\sigma_2]} \cdots A^{[\sigma_N]}),
+  \qquad
+  A^{[\sigma]} \in M_D(\mathbb{C}).
+\]
+\end{block}
+
+\begin{block}{Fundamental Theorem \cite{Perez-Garcia2007Matrix}}
+If two \textbf{injective} MPS tensors $A, B$ generate the same state family
+for all system sizes $N$, then they are related by a \textbf{gauge transform}:
+\[
+  \boxed{ 
+  \forall\,\sigma: 
+  B^{[\sigma]} = X\, A^{[\sigma]} X^{-1},
+  \qquad X \in \GL_D(\mathbb{C}).
+  }
+\]
+\end{block}
+
+\vspace{0.3em}
+\textcolor{dimwhite}{\footnotesize%
+This is the \emph{single-block} (injective) case.
+The \emph{multi-block} case requires a canonical form decomposition.}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 3 - Canonical Form
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{Canonical Form and Block-Diagonal Structure}
+\vspace{-0.5em}
+
+Every MPS tensor can be brought into \textbf{canonical form}
+\cite{Perez-Garcia2007Matrix,Cirac2021Matrix}:
+
+\[
+  A^{[\sigma]}
+  = 
+  \begin{pmatrix}
+    \mu_1 A_1^{[\sigma]} & & \\
+    & \mu_2 A_2^{[\sigma]} & \\
+    & & \ddots \\
+    & & & \mu_r A_r^{[\sigma]}
+  \end{pmatrix}
+\]
+
+\vspace{-0.3em}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{itemize}
+  \item $r$ blocks, bond dimensions $D_1, \dots, D_r$
+  \item Each $A_k$ is \textbf{injective} (normal)
+  \item $\mu_k \in \mathbb{C}^{\times}$ are \textbf{distinct} scalars
+\end{itemize}
+
+\column{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+  \fill[leanblue!30] (0,3) rectangle (1.5,4.5);
+  \fill[leangreen!30] (1.5,1.5) rectangle (3.5,3);
+  \fill[amber!30] (3.5,0) rectangle (5,1.5);
+  \draw[white,thick] (0,0) rectangle (5,4.5);
+  \draw[dimwhite,dashed] (1.5,0) -- (1.5,4.5);
+  \draw[dimwhite,dashed] (3.5,0) -- (3.5,4.5);
+  \draw[dimwhite,dashed] (0,3) -- (5,3);
+  \draw[dimwhite,dashed] (0,1.5) -- (5,1.5);
+  \node[white,font=\footnotesize] at (0.75,3.75) {$\mu_1 A_1$};
+  \node[white,font=\footnotesize] at (2.5,2.25) {$\mu_2 A_2$};
+  \node[white,font=\footnotesize] at (4.25,0.75) {$\mu_3 A_3$};
+\end{tikzpicture}
+\end{center}
+\end{columns}
+
+\vspace{0.5em}
+\textcolor{dimwhite}{\footnotesize%
+In PGVWC, additionally: $\rho(\mathcal{E}_{A_k}) = 1$ (spectral radius normalization)
+and $|\mu_1| > |\mu_2| > \cdots > |\mu_r|$ (strict ordering).}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 4 - The Block Separation Question
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{The Block Separation Question}
+\vspace{-0.5em}
+
+\begin{block}{Setup}
+Two block-diagonal MPS tensors with the \emph{same} scaling factors $\mu_k$:
+\begin{align*}
+  A^{[\sigma]} &= \diag(\mu_1 A_1^{[\sigma]}, \dots, \mu_r A_r^{[\sigma]}), \\
+  B^{[\sigma]} &= \diag(\mu_1 B_1^{[\sigma]}, \dots, \mu_r B_r^{[\sigma]}).
+\end{align*}
+\end{block}
+
+\begin{block}{Question (\texttt{hSep} hypothesis)}
+Does
+\[
+  \underbrace{%
+    \forall\,N, \sigma: 
+    \sum_{k=1}^r \mu_k^N \tr\!\left(\prod_j A_k^{[\sigma_j]}\right)
+    = 
+    \sum_{k=1}^r \mu_k^N \tr\!\left(\prod_j B_k^{[\sigma_j]}\right)
+  }_{\text{SameMPV}_2 \text{ (global equality)}}
+\]
+imply \quad
+$
+  \underbrace{%
+    \forall\,k,\,N, \sigma: 
+    \tr\!\left(\prod_j A_k^{[\sigma_j]}\right) = \tr\!\left(\prod_j B_k^{[\sigma_j]}\right)
+  }_{\text{per-block SameMPV}}
+$ \textbf{?}
+\end{block}
+
+\vspace{0.3em}
+\begin{center}
+\textcolor{softred}{\large\textbf{No.}} \quad
+\textcolor{dimwhite}{Not without additional hypotheses.}
+\end{center}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 5 - Transfer Matrices and Correlation Functions
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{Transfer Matrices and the Physical Meaning of $\mu_k$}
+\vspace{-0.5em}
+
+The \textbf{transfer map} (completely positive map) of block $k$:
+\[
+  \mathcal{E}_{A_k}(X)
+  = 
+  \sum_{\sigma=1}^{d} A_k^{[\sigma]}\, X\, (A_k^{[\sigma]})^{\!\dagger}
+\]
+
+\vspace{-0.3em}
+\begin{columns}[T]
+\column{0.55\textwidth}
+\begin{itemize}
+  \item $\mathcal{E}_{A_k}$ is a \textbf{quantum channel} (after normalization)
+  \item Spectral radius $\rho(\mathcal{E}_{A_k})$ controls correlation decay
+  \item The $\mu_k$ are eigenvalues of the \emph{full} transfer map
+  \item $|\mu_k|^2 = \rho(\mathcal{E}_{A_k})$ in canonical form \cite{Cirac2021Matrix}
+\end{itemize}
+
+\column{0.45\textwidth}
+\begin{block}{\small Correlation functions}
+{\small
+For large $N$, two-point correlations decay as
+\[
+  \langle O_i O_j \rangle - \langle O_i\rangle\langle O_j\rangle
+  \sim 
+  \sum_{k\ge 2} c_k \left|\frac{\mu_k}{\mu_1}\right|^{2|i-j|}
+\]
+Each $|\mu_k/\mu_1|^2 < 1$ gives a \textbf{correlation length} $\xi_k$.
+}
+\end{block}
+\end{columns}
+
+\vspace{0.5em}
+\textcolor{amber}{\textbf{Key point:}} The $\mu_k$ encode the \emph{physical correlation structure}.
+Block separation asks whether observing identical correlations at \emph{all} scales forces
+per-block equality.
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 6 - What We Proved: Repeated-Word Identity
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}[fragile]{What We Proved: The Repeated-Word Trace Identity}
+\vspace{-0.5em}
+
+\begin{block}{Theorem (\texttt{sameMPV\textsubscript{2}\_repeated\_word}, sorry-free)}
+For any word $w$ of length $M$ and repetition count $L$:
+\[
+  \boxed{ 
+  \sum_{k=1}^r (\mu_k)^{ML} \cdot
+  \left[\tr(T_k^L) - \tr(U_k^L)\right] = 0
+  }
+\]
+where $T_k = A_k^{[w_1]} \cdots A_k^{[w_M]}$ and
+$U_k = B_k^{[w_1]} \cdots B_k^{[w_M]}$.
+\end{block}
+
+\vspace{-0.3em}
+\begin{lstlisting}
+theorem sameMPV2_repeated_word
+    (*@$\mu$@*) : Fin r (*@$\to$@*) (*@$\mathbb{C}$@*))
+    (A B : (k : Fin r) (*@$\to$@*) MPSTensor d (dim k))
+    (hSame : SameMPV2 (toTensorFromBlocks (*@$\mu$@*) A)
+                       (toTensorFromBlocks (*@$\mu$@*) B))
+    (w : List (Fin d)) (L : (*@$\mathbb{N}$@*)) :
+    (*@$\sum$@*) k, ((*@$\mu$@*) k) ^ (w.length * L) *
+      (Matrix.trace ((evalWord (A k) w) ^ L) -
+       Matrix.trace ((evalWord (B k) w) ^ L)) = 0
+\end{lstlisting}
+
+\vspace{0.2em}
+\textcolor{dimwhite}{\footnotesize%
+Proof: apply SameMPV\textsubscript{2} to the concatenated word $w^L = \underbrace{w \cdot w \cdots w}_{L}$,
+then use \texttt{evalWord\_flatten\_replicate} to factor the product.}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 7 - Why Vandermonde Fails
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{Why Na\"ive Vandermonde Separation Fails}
+\vspace{-0.5em}
+
+The repeated-word identity gives, for each fixed $w$ and varying $L$:
+\[
+  \sum_{k=1}^r \underbrace{(\mu_k^{|w|})^L}_{\text{Vandermonde node}^L}
+  \cdot
+  \underbrace{[\tr(T_k^L) - \tr(U_k^L)]}_{\Delta_k(L)}
+  = 0
+  \qquad \forall\, L \ge 0
+\]
+
+\vspace{0.3em}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{block}{\small If $\Delta_k$ were constant in $L$\ldots}
+{\small
+$\sum_k \lambda_k^L \cdot c_k = 0$ for all $L$
+with distinct $\lambda_k = \mu_k^{|w|}$
+
+$\Longrightarrow$ Vandermonde invertibility gives $c_k = 0$ for all $k$.
+
+\textcolor{leangreen}{This is \texttt{Matrix.eq\_zero\_of\_forall\_pow\_sum\_mul\_pow\_eq\_zero} in Mathlib.}
+}
+\end{block}
+
+\column{0.5\textwidth}
+\begin{block}{\small But $\Delta_k$ depends on $L$!}
+{\small
+$\Delta_k(L) = \tr(T_k^L) - \tr(U_k^L)$
+
+is a \textbf{polynomial in the eigenvalues} of $T_k$ and $U_k$, varying with $L$.
+
+The ``coefficients'' are \emph{entangled} with the Vandermonde exponent.
+
+\textcolor{softred}{Cannot separate.}
+}
+\end{block}
+\end{columns}
+
+\vspace{0.5em}
+\textcolor{amber}{\textbf{The deeper issue:}} We have $r$ unknowns (blocks), but
+$\tr(T_k^L)$ gives us power sums of eigenvalues of $T_k$ --- these are coupled
+to $L$ through Newton's identities, not independent of it.
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 8 - The Counterexample: Construction
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{The Counterexample: Construction}
+\vspace{-0.5em}
+
+\textbf{Parameters:} $r = 2$ blocks, $d = 2$ physical sites, $D_1 = D_2 = 1$ (scalars).
+
+\vspace{0.3em}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\begin{block}{\small Tensor $A$}
+\[
+  A_1(\sigma_1) = 4, \quad A_1(\sigma_2) = 2
+\]
+\[
+  A_2(\sigma_1) = 1, \quad A_2(\sigma_2) = 3
+\]
+\end{block}
+
+\begin{block}{\small Block-diagonal for $A$ ($\mu_1\!=\!1, \mu_2\!=\!2$)}
+\[
+  A^{[\sigma_1]} = \begin{pmatrix} 4 & 0 \\ 0 & 2 \end{pmatrix}, \quad
+  A^{[\sigma_2]} = \begin{pmatrix} 2 & 0 \\ 0 & 6 \end{pmatrix}
+\]
+\end{block}
+
+\column{0.52\textwidth}
+\begin{block}{\small Tensor $B$ via ``block swap''}
+\[
+  B_1(\sigma_i) = \frac{\mu_2}{\mu_1} A_2(\sigma_i), \quad
+  B_2(\sigma_i) = \frac{\mu_1}{\mu_2} A_1(\sigma_i)
+\]
+\vspace{-0.5em}
+\[
+  B_1(\sigma_1) = 2, B_1(\sigma_2) = 6, 
+  B_2(\sigma_1) = 2, B_2(\sigma_2) = 1
+\]
+\end{block}
+
+\begin{block}{\small Block-diagonal for $B$}
+\[
+  B^{[\sigma_1]} = \begin{pmatrix} 2 & 0 \\ 0 & 4 \end{pmatrix}, \quad
+  B^{[\sigma_2]} = \begin{pmatrix} 6 & 0 \\ 0 & 2 \end{pmatrix}
+\]
+\end{block}
+\end{columns}
+
+\vspace{0.5em}
+\begin{center}
+\begin{tikzpicture}[scale=0.7,
+    block/.style={minimum width=1cm, minimum height=1cm, draw=white, thick, font=\footnotesize}]
+  % A
+  \node[font=\small,white] at (-0.8, 0.5) {$A^{[\sigma_1]}$:};
+  \node[block, fill=leanblue!40] at (0.5, 1) {$4$};
+  \node[block, fill=leangreen!40] at (1.5, 0) {$2$};
+  \draw[white,thick] (0,-.5) rectangle (2,1.5);
+
+  \node[font=\small,white] at (3.7, 0.5) {$\xrightarrow{\text{swap}}$};
+
+  % B
+  \node[font=\small,white] at (5.2, 0.5) {$B^{[\sigma_1]}$:};
+  \node[block, fill=leangreen!40] at (6.5, 1) {$2$};
+  \node[block, fill=leanblue!40] at (7.5, 0) {$4$};
+  \draw[white,thick] (6,-.5) rectangle (8,1.5);
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 9 - The Counterexample: Verification
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{The Counterexample: Verification}
+\vspace{-0.5em}
+
+\textbf{Claim 1: SameMPV$_2$ holds.}\quad
+For any word $w = (\sigma_{j_1}, \dots, \sigma_{j_N})$:
+\begin{align*}
+  &\text{For } A: \quad
+  \mu_1^N \prod_\ell A_1(\sigma_{j_\ell}) + \mu_2^N \prod_\ell A_2(\sigma_{j_\ell})
+  = 1^N \cdot \prod_\ell A_1(\sigma_{j_\ell}) + 2^N \cdot \prod_\ell A_2(\sigma_{j_\ell}) \\
+  &\text{For } B: \quad
+  \mu_1^N \prod_\ell B_1(\sigma_{j_\ell}) + \mu_2^N \prod_\ell B_2(\sigma_{j_\ell})
+\end{align*}
+
+\vspace{-0.8em}
+Since $\mu_1 B_1(\sigma_i) = \mu_2 A_2(\sigma_i)$ and
+$\mu_2 B_2(\sigma_i) = \mu_1 A_1(\sigma_i)$:
+\[
+  \mu_1^N \prod_\ell B_1(\sigma_{j_\ell})
+  = \prod_\ell [\mu_1 B_1(\sigma_{j_\ell})]
+  = \prod_\ell [\mu_2 A_2(\sigma_{j_\ell})]
+  = \mu_2^N \prod_\ell A_2(\sigma_{j_\ell})
+\]
+
+\vspace{-0.2em}
+Similarly for the other term. So the $B$-sum equals
+$\mu_2^N \prod A_2 + \mu_1^N \prod A_1$ --- same as $A$. \textcolor{leangreen}{\checkmark}
+
+\vspace{0.5em}
+\textbf{Claim 2: Per-block SameMPV fails.}\quad
+\[
+  \tr(A_1(\sigma_1)) = 4 \neq  2 = \tr(B_1(\sigma_1))
+  \qquad \textcolor{softred}{\boldsymbol{\times}}
+\]
+
+\vspace{0.3em}
+\begin{center}
+\fcolorbox{softred}{cardbg}{\parbox{0.8\textwidth}{\centering
+\textcolor{softred}{\textbf{Conclusion:}} \texttt{SameMPV\textsubscript{2}} with injective nonzero $\mu$
+does \textbf{not} imply per-block \texttt{SameMPV}.}}
+\end{center}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 10 - The Block Swap Symmetry
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{The Block Swap Symmetry}
+\vspace{-0.5em}
+
+\begin{block}{General construction}
+Given any permutation $\pi \in S_r$ and block tensors $\{A_k\}$, define:
+\[
+  B_k^{[\sigma]}
+  := 
+  \frac{\mu_{\pi(k)}}{\mu_k}  A_{\pi(k)}^{[\sigma]}
+  \qquad \forall\, k,\, \sigma.
+\]
+Then $\mu_k \cdot B_k^{[\sigma]} = \mu_{\pi(k)} \cdot A_{\pi(k)}^{[\sigma]}$, and
+the block-diagonal matrices for $B$ are a \textbf{permutation} of those for $A$.
+\end{block}
+
+\vspace{0.3em}
+
+\textbf{Why doesn't injectivity of $\mu$ help?}
+
+\begin{itemize}
+  \item Injectivity means $\mu_j \neq \mu_k$ for $j \neq k$
+        --- prevents $\mu_k = \mu_{\pi(k)}$ for non-trivial $\pi$.
+  \item But the \emph{scaled} products $\mu_k \cdot B_k(\sigma) = \mu_{\pi(k)} \cdot A_{\pi(k)}(\sigma)$
+        can still match, because $B_k$ absorbs the ratio $\mu_{\pi(k)}/\mu_k$.
+  \item The SameMPV$_2$ condition only sees $\sum_k \mu_k^N \cdot \text{(block trace)}_k$
+        --- a \textbf{symmetric function} of the scaled blocks.
+\end{itemize}
+
+\vspace{0.3em}
+\textcolor{amber}{\textbf{Analogy:}} Given $\{a + b = 5,  2a + 3b = 13\}$, we can solve
+for $a, b$ uniquely. But $\{a + b,  a \cdot b\}$ only determines $\{a, b\}$
+\emph{as a set} --- the assignment to names is lost.
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 11 - Connection to the Literature
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{What PGVWC Actually Assumes}
+\vspace{-0.5em}
+
+In the original paper \cite{Perez-Garcia2007Matrix} and the review \cite{Cirac2021Matrix},
+the canonical form has \textbf{two additional structural properties}:
+
+\vspace{0.3em}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{block}{\small 1.\ Spectral radius normalization}
+Each block tensor $A_k$ satisfies
+\[
+  \rho(\mathcal{E}_{A_k}) = 1
+\]
+i.e., the transfer map is normalized to have spectral radius 1.
+
+\vspace{0.3em}
+\textcolor{dimwhite}{\footnotesize%
+This is the ``DS-gauge'' normalization:
+$\sum_\sigma A_k^{[\sigma]} \Lambda_k (A_k^{[\sigma]})^\dagger = \Lambda_k$
+for some positive definite $\Lambda_k$.
+}
+\end{block}
+
+\column{0.5\textwidth}
+\begin{block}{\small 2.\ Strict modulus ordering}
+The scalars satisfy
+\[
+  |\mu_1| > |\mu_2| > \cdots > |\mu_r|
+\]
+In particular, $|\mu_j| \neq |\mu_k|$ for $j \neq k$.
+
+\vspace{0.3em}
+\textcolor{dimwhite}{\footnotesize%
+This is stronger than injectivity of $\mu$:
+it requires distinct \emph{moduli}, not just distinct values.
+The $\mu_k$ are eigenvalues of the full transfer map,
+ordered by magnitude.
+}
+\end{block}
+\end{columns}
+
+\vspace{0.5em}
+\begin{center}
+\fcolorbox{amber}{cardbg}{\parbox{0.85\textwidth}{\centering
+\textcolor{amber}{\textbf{Our counterexample shows these are not mere conveniences ---}}\\
+\textcolor{amber}{\textbf{they are necessary for block separation to hold.}}
+}}
+\end{center}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 12 - How Normalization Prevents Block Swaps
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{How Spectral Normalization Prevents Block Swaps}
+\vspace{-0.5em}
+
+Suppose $B_k(\sigma) = (\mu_{\pi(k)}/\mu_k)\cdot A_{\pi(k)}(\sigma)$ for some non-trivial $\pi$.
+
+\vspace{0.3em}
+\textbf{Transfer map of $B_k$:}
+\[
+  \mathcal{E}_{B_k}(X)
+  = \sum_\sigma B_k^{[\sigma]} X (B_k^{[\sigma]})^\dagger
+  = \left|\frac{\mu_{\pi(k)}}{\mu_k}\right|^2
+    \sum_\sigma A_{\pi(k)}^{[\sigma]} X (A_{\pi(k)}^{[\sigma]})^\dagger
+  = \left|\frac{\mu_{\pi(k)}}{\mu_k}\right|^2 \mathcal{E}_{A_{\pi(k)}}(X)
+\]
+
+\vspace{0.3em}
+\textbf{Spectral radius:}
+\[
+  \rho(\mathcal{E}_{B_k})
+  = \left|\frac{\mu_{\pi(k)}}{\mu_k}\right|^2 \cdot
+    \underbrace{\rho(\mathcal{E}_{A_{\pi(k)}})}_{= 1}
+  = \left|\frac{\mu_{\pi(k)}}{\mu_k}\right|^2
+\]
+
+\vspace{0.3em}
+For $B$ to also be in canonical form ($\rho(\mathcal{E}_{B_k}) = 1$), we need
+$|\mu_{\pi(k)}| = |\mu_k|$ for all $k$.
+
+\vspace{0.5em}
+\begin{center}
+\begin{tikzpicture}
+  \node[draw=leangreen, thick, rounded corners, fill=cardbg, text=white,
+        minimum width=12cm, minimum height=1.2cm, align=center] {
+    With $|\mu_1| > |\mu_2| > \cdots > |\mu_r|$ (strict ordering),\\
+    $|\mu_{\pi(k)}| = |\mu_k|$ forces $\pi = \mathrm{id}$. \quad
+    \textcolor{leangreen}{\textbf{Block swap is impossible.}}
+  };
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 13 - Proof Strategies Analyzed
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{Proof Strategies Analyzed}
+\vspace{-0.5em}
+
+{\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{>{\raggedright}p{3.5cm} p{5.5cm} c}
+\toprule
+\textbf{Strategy} & \textbf{Key idea} & \textbf{Status} \\
+\midrule
+\rowcolor{cardbg}
+Vandermonde on\\power sums &
+$\sum_k \lambda_k^L \Delta_k(L) = 0$; 
+$\Delta_k$ depends on $L$ &
+\textcolor{softred}{Fails} \\
+
+Newton's identities $\to$ charpoly &
+$\sum_k \tr(T_k^L)\lambda_k^L \to \prod_k \det(I - z\,\lambda_k T_k)$; 
+gives product equality only &
+\textcolor{amber}{Partial} \\
+
+\rowcolor{cardbg}
+Jacobi's formula &
+$\frac{d}{dz}\det(I-zM) = -\tr(\mathrm{adj}(I-zM)\cdot M)$; 
+linear coeff.\ $= -\tr(M)$ only &
+\textcolor{amber}{Partial} \\
+
+Exponential decay +\newline normalization &
+$|\mu_k^M|^{2L} \cdot \|\Delta_k\| \to 0$ as $L\to\infty$; 
+separated annuli $\Rightarrow$ per-block $\Delta_k = 0$ &
+\textcolor{leangreen}{Works} \\
+
+\rowcolor{cardbg}
+Cayley--Hamilton based\newline Newton's identities &
+$\tr(M^n) = $ polynomial in $\tr(M), \dots, \tr(M^{n-1})$; 
+$\sim$200--400 lines in Lean &
+\textcolor{leangreen}{Viable} \\
+\bottomrule
+\end{tabular}
+}
+
+\vspace{0.5em}
+\textcolor{dimwhite}{\footnotesize%
+The ``exponential decay'' strategy is the most natural in the physics setting:
+different blocks contribute to separated annuli in the complex plane,
+so a contour integral (or dominated convergence) isolates each block.}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 14 - Paths Forward
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{Paths Forward}
+\vspace{-0.5em}
+
+\begin{columns}[T]
+\column{0.5\textwidth}
+
+\begin{block}{\small Option 1: Add normalization hypotheses}
+Add $\rho(\mathcal{E}_{A_k}) = 1$ and $|\mu_j| \neq |\mu_k|$.
+\begin{itemize}
+  \item[\textcolor{leangreen}{+}] Mathematically correct
+  \item[\textcolor{leangreen}{+}] Matches the physics
+  \item[\textcolor{softred}{--}] $\sim$150--200 lines new Lean
+  \item[\textcolor{softred}{--}] Requires spectral radius API
+\end{itemize}
+\end{block}
+
+\begin{block}{\small Option 2: Weaken the conclusion}
+Conclude $\exists\,\pi\!:\, \forall\,k, 
+\text{SameMPV}(A_k, B_{\pi(k)})$.
+\begin{itemize}
+  \item[\textcolor{leangreen}{+}] True under just injective $\mu$
+  \item[\textcolor{softred}{--}] Downstream theorems need $\pi = \mathrm{id}$
+  \item[\textcolor{softred}{--}] Propagates permutation ambiguity
+\end{itemize}
+\end{block}
+
+\column{0.5\textwidth}
+
+\begin{block}{\small Option 3: Keep \texttt{hSep} explicit}
+Document that \texttt{hSep} is genuinely needed in the abstract setting.
+\begin{itemize}
+  \item[\textcolor{leangreen}{+}] Project already has \textbf{0 sorry}
+  \item[\textcolor{leangreen}{+}] Clean, honest architecture
+  \item[\textcolor{leangreen}{+}] Zero new proof burden
+  \item[\textcolor{softred}{--}] \texttt{hSep} feels ``unfinished''
+\end{itemize}
+\end{block}
+
+\begin{block}{\small Option 4: Derive \texttt{hSep} from canonical form}
+Use \texttt{SpectralGap.lean} eigenvector argument.
+\begin{itemize}
+  \item[\textcolor{leangreen}{+}] Closes the gap in the physical setting
+  \item[\textcolor{leangreen}{+}] Uses existing infrastructure
+  \item[\textcolor{softred}{--}] Ties separation to spectral gap
+  \item[\textcolor{softred}{--}] Moderately complex proof ($\sim$100 lines)
+\end{itemize}
+\end{block}
+\end{columns}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  SLIDE 15 - Recommendation and Status
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}{Recommendation and Current Status}
+\vspace{-0.5em}
+
+\begin{center}
+\begin{tikzpicture}[
+    box/.style={draw=white, thick, rounded corners=4pt, fill=cardbg,
+                text=white, minimum width=4.8cm, minimum height=1.2cm,
+                align=center, font=\small},
+    arr/.style={-{Stealth[length=6pt]}, white, thick}
+  ]
+  \node[box, fill=leangreen!20!cardbg] (now) at (0,0)
+    {\textbf{Now:} Option 3\\Keep \texttt{hSep}, document necessity};
+  \node[box, fill=amber!20!cardbg] (next) at (6.5,0)
+    {\textbf{Next:} Option 4\\Derive from canonical form};
+  \node[box, fill=leanblue!20!cardbg] (future) at (3.25,-2.2)
+    {\textbf{Long-term:} Option 1\\Abstract algebraic version};
+  \draw[arr] (now) -- (next);
+  \draw[arr, dashed] (next) -- (future);
+  \draw[arr, dashed] (now) -- (future);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3em}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\begin{block}{\small Current project status}
+{\small
+\begin{tabular}{l l}
+  Build & \textcolor{leangreen}{\checkmark  clean (0 sorry)} \\
+  FT single-block & \textcolor{leangreen}{\checkmark  fully proved} \\
+  FT multi-block & \textcolor{leangreen}{\checkmark  with \texttt{hSep}} \\
+  Spectral gap & \textcolor{leangreen}{\checkmark  fully proved} \\
+  Block separation & \textcolor{amber}{\texttt{hSep} = hypothesis} \\
+\end{tabular}
+}
+\end{block}
+
+\column{0.5\textwidth}
+\begin{block}{\small What we learned}
+{\small
+\begin{itemize}
+  \item Block separation is \textbf{not} purely algebraic
+  \item Spectral normalization is \textbf{necessary}, not cosmetic
+  \item The counterexample is \textbf{minimal} ($r\!=\!2$, $D\!=\!1$)
+  \item Formalization forced us to find a gap the literature glosses over
+\end{itemize}
+}
+\end{block}
+\end{columns}
+
+\vspace{0.5em}
+\begin{center}
+\textcolor{dimwhite}{\footnotesize%
+The \texttt{sameMPV\textsubscript{2}\_repeated\_word} infrastructure remains valuable
+for any future proof strategy.}
+\end{center}
+\end{frame}
+
+% ═══════════════════════════════════════════════════════════════════════
+%  Bibliography
+% ═══════════════════════════════════════════════════════════════════════
+\begin{frame}[allowframebreaks]{References}
+\bibliography{references}
+\end{frame}
+
+\end{document}
