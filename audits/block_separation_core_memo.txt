@@ -1,0 +1,423 @@
+Technical memo: investigation of `MPSTensor.block_separation_core`
+Date: 2026-02-18
+Target file: `MPSLean/PiAlgebra/CanonicalFormSep.lean`
+
+================================================================================
+0. Executive summary
+================================================================================
+
+`MPSTensor.block_separation_core` (in `PiAlgebra/CanonicalFormSep.lean`) is the remaining open
+lemma needed to derive *per-block* MPV equality from global `SameMPV₂` for block-diagonal tensors
+in (a version of) canonical form.
+
+* What it tries to show (informally):
+
+    If
+      • the block weights μ₀,…,μ_{r-1} have strictly decreasing moduli,
+      • each block A_k is injective and DS-gauge normalized (∑ᵢ Aᵢ†Aᵢ = I),
+      • each block B_k is DS-gauge normalized,
+      • and we have the “summed” identity
+
+          ∑_k μ_k^N · (mpv(A_k,σ) − mpv(B_k,σ)) = 0
+
+        for all system sizes N and configurations σ,
+
+    then each block matches:  ∀k, SameMPV(A_k,B_k).
+
+* The lemma is proved in-file for r = 0 and r = 1; the r ≥ 2 case is `sorry`.
+
+* The file already contains major *local* infrastructure that is clearly intended for the proof:
+  - DS gauge ⇒ uniform trace bound on any word-evaluation power.
+  - A “peeling” lemma extracting exponential decay of the *leading* block’s repeated-word trace
+    difference.
+  - A lemma turning the global h_summed hypothesis into the repeated-word identity
+    ∑_k (μ_k^M)^L · (tr(T_k^L) − tr(U_k^L)) = 0.
+
+* There is also substantial *global* infrastructure elsewhere in the repo:
+  - `MPSLean/PiAlgebra/NewtonGirard.lean` (0 sorry): Newton–Girard recursion and the theorem
+    “all traces of powers equal ⇒ charpoly equal”.
+  - `MPSLean/Spectral/SpectralGap.lean` + `Spectral/CrossCorrelation.lean`: spectral-radius bounds
+    and `mixedTransferMap` decay when ρ < 1.
+
+* Key obstacle: the existing “peeling + boundedness” tools only yield *exponential smallness* of
+  certain trace differences for repeated words; exponential decay does **not** by itself force
+  exact equality.
+
+* Important API caveat: `block_separation_core` assumes `∀k, IsInjective (A k)` but **does not**
+  assume `∀k, IsInjective (B k)`. Many strict spectral-gap lemmas for the mixed transfer operator
+  require injectivity on *both* sides. Any proof plan that uses those lemmas must either:
+  (1) derive injectivity of `B k` from the hypotheses, or
+  (2) strengthen the statement (or the canonical-form predicate) to include `B`-injectivity.
+
+================================================================================
+1. Statement and plain-math restatement
+================================================================================
+
+Location: `MPSLean/PiAlgebra/CanonicalFormSep.lean`, lemma starts at line ~110.
+
+Lean statement (abridged):
+
+  lemma block_separation_core
+      {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+      (μ : Fin r → ℂ)
+      (A B : (k : Fin r) → MPSTensor d (dim k))
+      (hμ_strict : StrictAnti (fun k : Fin r => ‖μ k‖))
+      (hμ_ne_zero : ∀ k, μ k ≠ 0)
+      (hA_inj : ∀ k, IsInjective (A k))
+      (hA_ds : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+      (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+      (h_summed : ∀ N σ,
+        ∑ k : Fin r, (μ k) ^ N * (mpv (A k) σ - mpv (B k) σ) = 0) :
+      ∀ k, SameMPV (A k) (B k)
+
+Plain math:
+
+Let r ≥ 0 and D_k ≥ 1. For each block k, let A_k = (A_k^i)_{i∈Fin d} and B_k similarly, with
+A_k^i,B_k^i ∈ M_{D_k}(ℂ). Assume:
+
+(1) Strict modulus ordering: ‖μ₀‖ > ‖μ₁‖ > … > ‖μ_{r-1}‖ and μ_k ≠ 0.
+(2) Injectivity (algebraic spanning): span{A_k^i : i} = M_{D_k}(ℂ).
+(3) DS gauge (TP Kraus normalization): ∑_i (A_k^i)†A_k^i = I and ∑_i (B_k^i)†B_k^i = I.
+(4) For every word σ of length N, the weighted trace coefficients match:
+
+      ∑_k μ_k^N · tr(A_k^{σ₀} A_k^{σ₁} … A_k^{σ_{N-1}})
+    = ∑_k μ_k^N · tr(B_k^{σ₀} B_k^{σ₁} … B_k^{σ_{N-1}}).
+
+Then conclude per-block equality of all MPV coefficients:
+
+    ∀k, ∀N, ∀σ, tr(A_k^{σ₀} … A_k^{σ_{N-1}}) = tr(B_k^{σ₀} … B_k^{σ_{N-1}}).
+
+================================================================================
+2. What is already proved in `CanonicalFormSep.lean`
+================================================================================
+
+2.1 Canonical-form predicate (local)
+-----------------------------------
+
+`structure MPSTensor.IsCanonicalForm μ A : Prop` (lines ~25–31) bundles:
+
+* `block_injective : ∀ k, IsInjective (A k)`
+* `ds_gauge : ∀ k, ∑ i, (A k i)ᴴ * (A k i) = 1`
+* `mu_strict_anti : StrictAnti (k ↦ ‖μ k‖)`
+* `mu_ne_zero : ∀ k, μ k ≠ 0`
+
+and proves `μ` injective:
+
+* `IsCanonicalForm.mu_injective`
+* `IsCanonicalForm.mu_norm_injective`
+
+2.2 Algebraic lemmas: charpoly scaling / trace extraction
+--------------------------------------------------------
+
+Section `AlgebraicLemmas` (lines ~52–86):
+
+* `eval_charpoly_smul_mul` and `charpoly_eq_of_smul_charpoly_eq`:
+  if c ≠ 0 and (c • T).charpoly = (c • U).charpoly then T.charpoly = U.charpoly.
+
+* `trace_eq_of_charpoly_eq`:
+  T.charpoly = U.charpoly ⇒ trace T = trace U.
+
+2.3 DS gauge ⇒ uniform trace bound for word powers
+--------------------------------------------------
+
+Section “DS gauge implies trace bound” (lines ~161–242):
+
+* `ds_gauge_evalWord_trace_bound`:
+
+    ‖trace((evalWord A w)^L)‖ ≤ D
+
+under DS gauge `∑ᵢ Aᵢ†Aᵢ = I`.
+
+Key helper used: `word_conjTranspose_mul_sum` (defined in `Spectral/SpectralGap.lean`):
+
+    ∑σ (evalWord A σ)† (evalWord A σ) = I.
+
+2.4 “Peeling lemma” (analytic dominance)
+----------------------------------------
+
+Section `PeelingLemma` (lines ~245–312):
+
+* `peeling_exponential_bound`:
+  for ∑_k α_k^L δ_k(L) = 0 with |α₀| dominating and δ_k uniformly bounded,
+  conclude exponential decay of δ₀(L).
+
+2.5 Repeated-word / fixed-word summed identity
+----------------------------------------------
+
+Section `BlockSeparation` (lines ~323–354):
+
+* `summed_identity_for_word`:
+  from h_summed, for any fixed word w (length M) and any L,
+
+    ∑_k ((μ_k)^M)^L · (tr(T_k^L) − tr(U_k^L)) = 0
+
+  where T_k = evalWord(A_k,w), U_k = evalWord(B_k,w).
+
+2.6 SameMPV from charpoly equality (all words)
+----------------------------------------------
+
+* `sameMPV_of_charpoly_eq_all_words`:
+  (∀w, charpoly(evalWord A w)=charpoly(evalWord B w)) ⇒ SameMPV A B.
+
+2.7 Downstream dependency graph
+-------------------------------
+
+    block_separation_core
+        ↓
+    block_separation_all_words
+        ↓
+    per_block_sameMPV_of_canonical_form
+        ↓
+    fundamentalTheorem_canonicalForm (+ explicit variant)
+
+2.8 Practical note (Lean compilation order)
+------------------------------------------
+
+`block_separation_core` appears *before* `ds_gauge_evalWord_trace_bound`,
+`peeling_exponential_bound`, and `summed_identity_for_word` in the file. Therefore the intended
+proof cannot directly call them unless the file is reorganized or those lemmas are moved to an
+earlier import.
+
+================================================================================
+3. Repo-level lemmas that look relevant to the r ≥ 2 case
+================================================================================
+
+3.1 Newton–Girard “trace powers ⇒ charpoly”
+------------------------------------------
+
+File: `MPSLean/PiAlgebra/NewtonGirard.lean` (namespace `Matrix`). Key theorems:
+
+* `Matrix.charpolyRev_eq_of_forall_trace_pow_eq`
+* `Matrix.charpoly_eq_of_forall_trace_pow_eq`
+
+These provide the bridge:
+
+    (∀k>0, trace(A^k)=trace(B^k)) ⇒ A.charpoly = B.charpoly.
+
+3.2 Mixed transfer operator and spectral decay
+----------------------------------------------
+
+Files:
+
+* `MPSLean/Spectral/MixedTransfer.lean`:
+  - `mixedTransferMap` and `mixedTransferMap_pow_apply`.
+  - scalar-linearity lemmas:
+      `mixedTransferMap_smul_left`  : mixedTransferMap (c • A) B = c • mixedTransferMap A B
+      `mixedTransferMap_smul_right` : mixedTransferMap A (c • B) = conj(c) • mixedTransferMap A B
+
+* `MPSLean/Spectral/SpectralGap.lean`:
+  - `spectralRadius_mixedTransfer_le_one` requires only DS gauge.
+  - `spectralRadius_mixedTransfer_lt_one` and `mixedTransfer_pow_tendsto_zero` require
+    injectivity on both tensors and a non-(GaugePhaseEquiv) hypothesis.
+
+* `MPSLean/Spectral/CrossCorrelation.lean`:
+  - `cross_correlation_tendsto_zero` is trace-decay for iterated mixed transfer.
+
+3.3 Trace-pairing / spanning tools
+----------------------------------
+
+File: `MPSLean/Algebra/TracePairing.lean`:
+
+* `trace_mul_right_eq_zero` (nondegeneracy of trace pairing).
+* `traceMulRightPi_ker_eq_bot` (injectivity of the “Gram map” when A is injective).
+
+These are plausible ingredients for the “injectivity gives spanning ⇒ enough equations” step
+mentioned in the docstring of `block_separation_core`.
+
+================================================================================
+4. Mathlib lemmas found (useful for proof planning)
+================================================================================
+
+4.1 Block-diagonal / block-triangular charpoly and det
+------------------------------------------------------
+
+Mathlib has a very helpful charpoly factorization lemma for block-triangular matrices:
+
+* `Matrix.blockTriangular_blockDiagonal'`:
+
+    (Matrix.blockDiagonal' d).BlockTriangular Sigma.fst
+
+  (`Mathlib/LinearAlgebra/Matrix/Block.lean`)
+
+* `Matrix.BlockTriangular.charpoly`:
+
+    M.BlockTriangular b →
+      M.charpoly = ∏ a ∈ image b univ, (M.toSquareBlock b a).charpoly
+
+  (`Mathlib/LinearAlgebra/Matrix/Charpoly/Basic.lean`)
+
+So a `charpoly_blockDiagonal'` lemma can be obtained with essentially no new theory.
+
+Related:
+
+* `Matrix.BlockTriangular.det_fintype` / `.det` (det factorization)
+* `Matrix.trace_blockDiagonal'` (trace factorization)
+
+4.2 Vandermonde separation
+--------------------------
+
+`Mathlib/LinearAlgebra/Vandermonde.lean` provides:
+
+* `Matrix.eq_zero_of_forall_pow_sum_mul_pow_eq_zero`
+* `Matrix.eq_zero_of_forall_index_sum_pow_mul_eq_zero`
+
+These are the canonical tools for extracting coefficients from power sums *when the unknowns do not
+vary with the equation index*.
+
+4.3 Kronecker trace identity
+----------------------------
+
+`Mathlib/LinearAlgebra/Matrix/Kronecker.lean` provides:
+
+* `Matrix.trace_kronecker`:
+
+    trace(kronecker(A,B)) = trace(A) * trace(B)
+
+This is relevant if one pursues an “MPV overlap = trace(power of a double transfer)” route.
+
+================================================================================
+5. Known-false related statement and why canonical-form hypotheses matter
+================================================================================
+
+`MPSLean/PiAlgebra/BlockSeparationProof.lean` contains the (documented) counterexample showing that
+
+  (μ injective + μ≠0 + SameMPV₂ on global block-diagonal tensors)
+
+does NOT imply per-block trace equality for r ≥ 2.
+
+The failure mode is “block swap + rescaling”: swapping blocks while compensating by scaling each
+block tensor preserves the global block-diagonal MPV traces.
+
+The DS gauge assumptions in `block_separation_core` are designed to forbid this rescaling (because
+scaling by c changes ∑ Aᵢ†Aᵢ by ‖c‖² unless ‖c‖=1), and strict anti ordering on ‖μ‖ rules out
+cross-block phase compensation when moduli differ.
+
+================================================================================
+6. Why the remaining r ≥ 2 proof is hard
+================================================================================
+
+From `summed_identity_for_word` + DS trace bound + `peeling_exponential_bound`, one can show (for
+any fixed word w) an exponential decay bound of the form
+
+  ‖tr(T₀(w)^L) − tr(U₀(w)^L)‖ ≤ C · ρ^L
+
+for some ρ<1, where T₀(w)=evalWord(A₀,w) and U₀(w)=evalWord(B₀,w).
+
+But exponential decay does not imply exact equality (e.g. f(L)=(1/2)^L). So to get exact SameMPV,
+one needs an additional rigidity mechanism using either:
+
+* extra equations obtained by varying w and exploiting injectivity/spanning, and/or
+* spectral theory on an operator whose peripheral spectrum is rigid (mixed transfer / channel
+  theory), and/or
+* a factor-identification theorem for characteristic polynomials in the block-diagonal setting.
+
+================================================================================
+7. Proof-plan options (Lean-level; not full code)
+================================================================================
+
+I. Plan A (algebraic / charpoly product)
+---------------------------------------
+
+High-level goal: reduce SameMPV to per-block charpoly equality, via Newton–Girard and charpoly
+factorization.
+
+A1) For each word w, define global block-diagonal matrices
+
+  GA(w) := blockDiagonal' (k ↦ (μ k)^(|w|) • evalWord(A k,w))
+  GB(w) := blockDiagonal' (k ↦ (μ k)^(|w|) • evalWord(B k,w))
+
+so that GA(w)^L is blockDiagonal' of the Lth powers.
+
+A2) Use `summed_identity_for_word` to show:
+
+  ∀L>0, trace(GA(w)^L) = trace(GB(w)^L).
+
+A3) Import `MPSLean.PiAlgebra.NewtonGirard` and apply
+
+  `Matrix.charpoly_eq_of_forall_trace_pow_eq`
+
+to deduce GA(w).charpoly = GB(w).charpoly.
+
+A4) Use Mathlib block-triangular factorization:
+
+  - `Matrix.blockTriangular_blockDiagonal'`
+  - `Matrix.BlockTriangular.charpoly`
+
+to rewrite GA(w).charpoly and GB(w).charpoly as products over k of per-block charpolys.
+
+A5) (Hard step) From
+
+    ∏_k charpoly((μ k)^M • T_k) = ∏_k charpoly((μ k)^M • U_k)
+
+deduce factor-by-factor equality, ultimately giving T_k.charpoly = U_k.charpoly (use
+`charpoly_eq_of_smul_charpoly_eq`).
+
+This factor-identification step is the main missing mathematical argument. The strict ordering of
+‖μ‖ and DS gauge give some modulus control, but it is not obvious that it suffices without further
+hypotheses (e.g. a non-collision / separation assumption on spectra).
+
+A6) Once ∀w, (evalWord(A k,w)).charpoly = (evalWord(B k,w)).charpoly, use
+`sameMPV_of_charpoly_eq_all_words`.
+
+II. Plan B (analytic / spectral; closer to PGVWC/Cirac)
+------------------------------------------------------
+
+Idea: project onto blocks using asymptotic orthogonality (mixed transfer decay) of different
+injective DS-gauge blocks, plus strict anti ordering of ‖μ‖.
+
+This likely requires introducing a notion of overlap of periodic MPV vectors, and proving a lemma
+linking that overlap to the trace of iterates of an operator built from `mixedTransferMap`
+(via `vec` / Kronecker machinery; `Matrix.trace_kronecker` is already in Mathlib).
+
+Gaps for Plan B in the current repo:
+
+* A “double transfer / overlap” layer is not currently present.
+* Existing strict spectral-gap lemmas require injectivity of both tensors. Either prove B blocks are
+  injective first, or strengthen the statement to assume it.
+
+III. Plan C (pragmatic API adjustment)
+--------------------------------------
+
+If the project’s priority is to remove the sorry with minimal new theory, the most plausible route
+is to strengthen the statement/canonical-form predicate so that existing spectral tools apply.
+
+Candidates:
+
+* Add `hB_inj : ∀ k, IsInjective (B k)` to `block_separation_core`.
+* Or require `IsCanonicalForm μ B` (so B is canonical too).
+
+This matches the typical uniqueness theorem statement (“two canonical forms representing the same
+state are blockwise gauge equivalent”).
+
+================================================================================
+8. Effort estimate (very rough)
+================================================================================
+
+* Plan A:
+  - Building the GA/GB wrapper and wiring Newton–Girard: ~100–200 LoC.
+  - BlockDiagonal' charpoly factorization: largely solved by Mathlib lemmas (small glue).
+  - Factor identification across blocks: likely 200–800+ LoC, and may require new hypotheses.
+
+* Plan B:
+  - Define overlaps + prove overlap/transfer identity: ~150–400 LoC.
+  - Connect overlap spectral radius to existing mixedTransfer spectral theorems: ~150–400 LoC.
+  - Asymptotic extraction + induction on r: ~150–300 LoC.
+
+Given uncertainty, budget 400–1000 lines for a serious attempt.
+
+================================================================================
+9. Recommendation
+================================================================================
+
+1) Decide which mathematical path is intended for this project:
+   - If you want a purely algebraic proof, Plan A is local but the factor-identification step is
+     genuinely difficult.
+   - If you want the physics proof, Plan B is conceptually correct and leverages the repo’s
+     strongest existing analytic development, but needs additional overlap infrastructure and likely
+     stronger hypotheses.
+
+2) If the short-term goal is “remove the sorry”, seriously consider Plan C:
+   strengthen the hypotheses to include injectivity of B (or that B is canonical).
+
+3) Regardless of direction, note that helper lemmas currently appear *after* the sorry in
+   `CanonicalFormSep.lean`; expect a refactor to make those lemmas available in the proof.

@@ -1,0 +1,519 @@
+Fundamental Theorem of Matrix Product States (MPS) in MPSLean
+Scientist-facing proof narrative (with Lean coverage notes)
+Date: 2026-02-18
+
+Primary physics references consulted (local copies):
+  • Pérez-García–Verstraete–Wolf–Cirac (2007), quant-ph/0608197, “Matrix Product State Representations”
+    (see in particular TI canonical form Thm. \ref{Th:TIcanonical} and the uniqueness discussion).
+  • Cirac et al. (2021), arXiv:2011.12127 (RMP TN review), §4.1 “Fundamental Theorem of MPVs”
+    (canonical form (Eq. (1801)/(1834)) and FT (Thm. 1891 + Cor. 1896)).
+  • M. M. Wolf lecture notes (channel spectral theory), ch06_spectral_properties.pdf.
+
+Lean sources consulted (local files):
+  • MPSLean/MPS/Defs.lean, Transfer.lean
+  • MPSLean/MPS/LinearExtension.lean, FundamentalTheorem.lean
+  • MPSLean/MPS/FundamentalTheoremMulti.lean, MPSLean/PiAlgebra/Construction.lean,
+    MPSLean/PiAlgebra/FundamentalTheoremComplete.lean
+  • MPSLean/PiAlgebra/BlockSeparation.lean, BlockSeparationProof.lean,
+    MPSLean/PiAlgebra/CanonicalFormSep.lean
+
+
+============================================================
+1. Basic objects and definitions
+============================================================
+
+Throughout, fix a physical dimension d and (finite) bond dimensions D.
+
+1.1 MPS tensors and words
+
+An (uniform, periodic, translation-invariant) MPS tensor is a family of matrices
+  A = (A^i)_{i=1..d},   A^i ∈ M_D(ℂ).
+
+Given a “word” w = (i₁,…,i_N) with i_k ∈ {1,…,d}, define its evaluation
+  A(w) := A^{i₁} A^{i₂} ⋯ A^{i_N}.
+
+In Lean:
+  • MPSTensor d D := Fin d → Matrix (Fin D) (Fin D) ℂ
+  • evalWord A w is the recursion computing A(w).
+
+
+1.2 Matrix Product Vectors (MPVs) and equality
+
+For each system size N, the associated matrix product vector (MPV)
+  |V^{(N)}(A)⟩ ∈ (ℂ^d)^{⊗N}
+has coefficients in the computational basis given by
+  ⟨i₁…i_N|V^{(N)}(A)⟩ = tr(A^{i₁}⋯A^{i_N}).
+
+In Lean, we focus on these coefficients as a function:
+  mpv(A,σ) := tr(evalWord A (List.ofFn σ)),
+where σ : Fin N → Fin d encodes the word.
+
+Two tensors generate the same MPV family if all coefficients match:
+  SameMPV(A,B) :⇔  ∀N ∀σ, mpv(A,σ) = mpv(B,σ).
+There is also SameMPV₂ allowing different bond dimensions.
+
+
+1.3 Gauge equivalence
+
+A gauge transform is a simultaneous similarity transform of all local matrices:
+  B^i = X A^i X^{-1}   for some invertible X ∈ GL(D,ℂ).
+
+This always preserves MPVs because tr is cyclic:
+  tr(X A(w) X^{-1}) = tr(A(w)).
+
+In Lean:
+  GaugeEquiv(A,B) :⇔ ∃X : GL(Fin D) ℂ, ∀i, B i = X * A i * X⁻¹.
+  GaugeEquiv.sameMPV : GaugeEquiv A B → SameMPV A B is proved in Defs.lean.
+
+
+1.4 Injectivity / normality
+
+Physics definition (PGVWC; Cirac review): an MPS is (eventually) injective if there exists
+some blocking length L such that the products {A^{i₁}⋯A^{i_L}} span M_D(ℂ), equivalently the map
+  Γ_L : M_D → (ℂ^d)^{⊗L},   Γ_L(X) = Σ_{i₁,…,i_L} tr(X A^{i₁}⋯A^{i_L}) |i₁…i_L⟩
+is injective.
+
+Lean formalization uses a strong “already blocked” version:
+  IsInjective(A) :⇔ span_ℂ{A^i : i∈Fin d} = M_D(ℂ).
+It also defines the blocked variant IsNBlkInjective(A,L) and “normality”
+  IsNormal(A) :⇔ ∃L, IsNBlkInjective(A,L),
+but the main Fundamental Theorem is stated for IsInjective.
+
+Interpretation: the Lean theorem corresponds to the physics theorem after a (not formalized)
+finite blocking step which turns a normal/injective MPS into one satisfying IsInjective.
+
+
+1.5 Transfer operators
+
+The transfer operator of A is the completely positive (CP) map
+  E_A : M_D(ℂ) → M_D(ℂ),    E_A(X) = Σ_i A^i X (A^i)†.
+
+The mixed (cross) transfer operator of A,B is
+  F_{AB}(X) = Σ_i A^i X (B^i)†.
+
+These encode correlations and appear in canonical-form arguments (Cirac review, Eq. (1806) and
+surrounding discussion).
+
+In Lean:
+  • transferMap A (Transfer.lean)
+  • mixedTransferMap A B (Spectral/MixedTransfer.lean)
+  together with the iterated-word formula for (mixedTransferMap)^N.
+
+
+============================================================
+2. Single-block Fundamental Theorem (injective case)
+============================================================
+
+2.1 Mathematical statement
+
+Single-block Fundamental Theorem (injective periodic MPS):
+
+Assume A,B have the same bond dimension D and
+  (i)  A is injective (in the spanning sense), and
+  (ii) SameMPV(A,B).
+Then A and B are gauge equivalent:
+  ∃X ∈ GL(D,ℂ),  ∀i,  B^i = X A^i X^{-1}.
+
+This is the periodic, translation-invariant form of the “Fundamental Theorem for equal MPVs”
+(Cirac review Cor. 1896), specialized to the injective/single-block case.
+
+Lean theorem:
+  MPSTensor.fundamentalTheorem_singleBlock
+  (MPSLean/MPS/FundamentalTheorem.lean)
+
+Status in Lean: COMPLETE (no sorry).
+
+
+2.2 Proof idea (linear extension + Skolem–Noether)
+
+Step A: Build the linear extension T.
+
+Because IsInjective(A) says the matrices {A^i} span all of M_D, any assignment A^i ↦ B^i can
+extend to a linear map T : M_D → M_D at most uniquely. The nontrivial part is existence:
+we need to know that every linear relation among the A^i is also satisfied by the B^i.
+
+The key observation (used in Lean) is that SameMPV gives enough trace identities to control the
+trace pairing
+  ⟨M,N⟩ := tr(MN)
+and to show that “Gram matrices” built from A and B match; with nondegeneracy of the trace
+pairing (injectivity hypothesis), this yields a well-defined linear T with T(A^i)=B^i.
+
+Lean: linearExtension_exists_unique (LinearExtension.lean).
+
+
+Step B: Show T is multiplicative.
+
+Using SameMPV for words of length 3 gives trace equalities
+  tr(A^i A^j A^k) = tr(B^i B^j B^k)
+for all i,j,k. From this and the injectivity/nondegeneracy of the trace pairing, one forces
+  T(A^i A^j) = B^i B^j
+and then extends bilinearly (using spanning) to
+  T(MN) = T(M)T(N)   for all M,N.
+
+Lean: linearExtension_mul (LinearExtension.lean).
+
+
+Step C: Multiplicative + nonzero ⇒ automorphism.
+
+A nonzero multiplicative linear endomorphism of a matrix algebra has kernel a two-sided ideal.
+Matrix algebras are simple rings, so the kernel is either 0 or everything; nonzero excludes the
+second. Hence T is injective, and finite-dimensionality upgrades injective ⇒ bijective.
+
+Lean: linear_mul_endomorphism_bijective (Algebra/SkolemNoether.lean).
+
+
+Step D: Skolem–Noether ⇒ inner automorphism.
+
+Promote T to an algebra automorphism of M_D(ℂ), then apply Skolem–Noether:
+any ℂ-algebra automorphism of a full matrix algebra is conjugation by an invertible matrix.
+So there exists X with T(M)=XMX^{-1}; in particular B^i=T(A^i)=X A^i X^{-1}.
+
+Lean: skolemNoether_matrix + final assembly in fundamentalTheorem_singleBlock.
+
+
+============================================================
+3. Multi-block results proved in Lean (given per-block equality)
+============================================================
+
+Physics canonical forms (PGVWC Thm. TI canonical form; Cirac review Eq. (1801)/(1834)) write
+an MPS tensor as a block diagonal direct sum of “normal/injective” blocks times scalars.
+Lean isolates the block-diagonal bookkeeping separately from the (open) block-separation step.
+
+
+3.1 Block-diagonal tensors and MPV decomposition
+
+Given block tensors A_k with possibly different bond dimensions D_k and scalars μ_k, define a
+block-diagonal tensor
+  A^i = ⊕_k μ_k A_k^i.
+
+Then word evaluation stays block-diagonal and picks up a factor μ_k^N per block, so
+  mpv(A,σ) = Σ_k μ_k^N · mpv(A_k,σ).
+
+Lean:
+  • toTensorFromBlocks μ A  (FundamentalTheoremMulti.lean)
+  • mpv_toTensorFromBlocks_eq_sum (FundamentalTheoremMulti.lean)
+
+Status in Lean: COMPLETE.
+
+
+3.2 Multi-block Fundamental Theorem (assembly, assuming blockwise SameMPV)
+
+Assume:
+  • each block A_k is injective,
+  • for each k, SameMPV(A_k,B_k).
+
+Then by applying the single-block theorem per block, we get per-block gauges X_k with
+  B_k^i = X_k A_k^i X_k^{-1}.
+
+Assemble these X_k into a block-diagonal gauge X = ⊕_k X_k; then
+  (⊕_k μ_k B_k^i) = X (⊕_k μ_k A_k^i) X^{-1},
+so the full block-diagonal tensors are gauge equivalent.
+
+Lean theorems:
+  • fundamentalTheorem_multiBlock_blocks
+  • fundamentalTheorem_multiBlock_global
+  (MPSLean/MPS/FundamentalTheoremMulti.lean)
+  and packaged as fundamentalTheorem_multiBlock_full
+  (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean).
+
+Status in Lean: COMPLETE.
+
+
+3.3 Pi-algebra viewpoint and “permutation + inner” decomposition
+
+Let the block algebra be the direct product
+  𝒜 := Π_k M_{D_k}(ℂ).
+
+The per-block linear extensions define an algebra automorphism Φ : 𝒜 → 𝒜.
+A general structure theorem says: any algebra automorphism of a finite product of simple matrix
+algebras decomposes as
+  (i) a permutation of the blocks (possibly requiring dimension-equalities), plus
+  (ii) inner automorphisms on each block.
+
+This is the mathematically clean way of expressing “blocks are only defined up to permutation
+and gauge”.
+
+Lean:
+  • piAlgEquiv  and  piAlgEquiv_decomposition
+    (MPSLean/PiAlgebra/Construction.lean)
+  used by fundamentalTheorem_multiBlock_decomposition
+    (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean).
+
+Status in Lean: COMPLETE.
+
+
+============================================================
+4. Canonical form and block separation: what is correct, what is open
+============================================================
+
+4.1 What physics needs
+
+The physically used multi-block fundamental theorem starts from a *global* equality of MPV
+families for two canonical-form tensors and concludes a blockwise identification.
+
+In the Cirac review language (Thm. 1891, Cor. 1896), for tensors in canonical form
+  A^i = ⊕_{k=1}^r μ_k A_k^i,
+  B^i = ⊕_{k=1}^r ν_k B_k^i,
+“same MPV family” forces matching of the basis normal tensors up to a block permutation and
+blockwise gauges.
+
+To bridge from global equality to blockwise equality, one needs a *block separation* argument.
+
+
+4.2 The naive separation statement is false (block-swap counterexample)
+
+A tempting (but wrong) claim is:
+
+  If μ_k are pairwise distinct and nonzero, and
+    SameMPV₂(toTensorFromBlocks μ A, toTensorFromBlocks μ B),
+  then ∀k, SameMPV(A_k,B_k).
+
+Why one might believe it: from mpv_toTensorFromBlocks_eq_sum we get, for all N and σ,
+  Σ_k μ_k^N mpv(A_k,σ) = Σ_k μ_k^N mpv(B_k,σ),
+and “distinct μ_k” suggests a Vandermonde argument.
+
+Why it fails: the coefficients mpv(A_k,σ)-mpv(B_k,σ) depend on σ : Fin N → Fin d, hence on N,
+so the usual finite Vandermonde inversion does not apply directly. Worse: even as a purely
+algebraic statement it is false.
+
+Concrete counterexample (“block swap”; documented in
+MPSLean/PiAlgebra/BlockSeparationProof.lean, lines ~125–155):
+  • r=2, dim=[1,1] (so blocks are scalars), μ=(1,2)
+  • choose scalar blocks A₀(i),A₁(i)
+  • define B by swapping blocks with compensating rescaling:
+        B₀(i) = (μ₁/μ₀)·A₁(i),   B₁(i) = (μ₀/μ₁)·A₀(i).
+Then the scaled diagonal blocks satisfy
+  μ₀·B₀(i) = μ₁·A₁(i),   μ₁·B₁(i) = μ₀·A₀(i),
+so the full block-diagonal tensors agree up to permutation of diagonal entries and therefore have
+identical traces of all products, hence SameMPV₂ holds. But per-block traces differ, e.g.
+  tr(A₀(0)) ≠ tr(B₀(0)),
+so per-block SameMPV fails.
+
+Lean status:
+  • The corresponding lemma attempt per_block_trace_eq_of_summed_blocks is left as sorry,
+    and the file explicitly warns the statement is false.
+
+
+4.3 What extra hypotheses fix the issue (canonical-form normalization)
+
+The counterexample exploits a “gauge” where weight can be traded between μ_k and the block tensor.
+Canonical form fixes this by normalizing each block.
+
+Lean’s proposed canonical-form predicate (PiAlgebra/CanonicalFormSep.lean):
+
+  IsCanonicalForm(μ,A) includes
+    (i)  each block A_k is injective,
+    (ii) each block is in a fixed normalization (“DS/TP gauge”)
+          Σ_i (A_k^i)† A_k^i = I,
+    (iii) strict ordering of block weights by magnitude
+          ‖μ_0‖ > ‖μ_1‖ > …,
+    (iv) μ_k ≠ 0.
+
+Why this rules out the block swap: if one rescales a block A_k^i ↦ c·A_k^i, then condition (ii)
+forces |c|=1. But swapping between blocks would require a rescaling by μ_j/μ_k whose modulus is
+≠1 when ‖μ_j‖≠‖μ_k‖. Thus strict magnitude ordering + normalization fixes the assignment.
+
+This matches the physics canonical form idea: the μ_k capture the spectral radii (or dominant
+weights) of blocks, while each block tensor is normalized so its associated transfer operator has
+spectral radius 1.
+
+
+4.4 Proof strategy for block separation (PGVWC / Cirac) and what Lean has
+
+Canonical-form block separation is the missing bridge:
+
+  From SameMPV₂(toTensorFromBlocks μ A, toTensorFromBlocks μ B)
+  and canonical normalization,
+  prove ∀k, SameMPV(A_k,B_k).
+
+Lean’s intended proof skeleton (CanonicalFormSep.lean, docstring around block_separation_core):
+
+  1) Repeated-word reduction:
+     Fix a word w of length M, and consider w^L (L repetitions). Then
+       evalWord(A_k,w^L) = (evalWord(A_k,w))^L,
+     and the global SameMPV₂ identity yields a weighted identity in L:
+       Σ_k (μ_k^M)^L · [ tr(T_k^L) - tr(U_k^L) ] = 0,
+     where T_k=evalWord(A_k,w), U_k=evalWord(B_k,w).
+
+  2) Uniform bounds from normalization:
+     Under Σ_i A_i†A_i=I, Lean proves a uniform trace bound
+       ‖tr( (evalWord(A,w))^L )‖ ≤ D
+     (ds_gauge_evalWord_trace_bound).
+
+  3) Peeling / asymptotic dominance:
+     If ‖μ_0‖ is strictly larger than the others, the term k=0 dominates as L→∞; a purely
+     analytic “peeling lemma” then forces the k=0 contribution to decay exponentially, and hence to
+     vanish. Repeat inductively over blocks.
+     Lean has a proved abstract peeling lemma peeling_exponential_bound.
+
+  4) Injectivity + transfer-operator spectral gap:
+     To upgrade decay/trace information to full SameMPV for all words, one uses that injective blocks
+     have transfer operators with a spectral gap (quantum Perron–Frobenius / mixed transfer theory).
+     Lean has substantial fully proved spectral infrastructure for the mixed transfer operator
+     (Spectral/SpectralGap.lean), including the strict contraction when blocks are not gauge-equivalent.
+
+Lean status:
+  • The *statement* of block separation under canonical hypotheses is present as
+      block_separation_core
+    in MPSLean/PiAlgebra/CanonicalFormSep.lean.
+  • block_separation_core is fully proved for r≤1, but for r≥2 the main argument is currently
+    a sorry (this is the only remaining sorry in that file).
+
+
+============================================================
+5. What is proved in Lean vs what remains open (precise status)
+============================================================
+
+(Verified by building the library: two remaining sorry-warnings originate exactly from
+PiAlgebra/BlockSeparationProof.lean and PiAlgebra/CanonicalFormSep.lean.)
+
+Fully proved in Lean (core FT pipeline once blockwise SameMPV is given):
+  • Single-block FT: fundamentalTheorem_singleBlock (MPS/FundamentalTheorem.lean).
+  • Multi-block assembly (given ∀k SameMPV(A_k,B_k)):
+      fundamentalTheorem_multiBlock_global / fundamentalTheorem_multiBlock_full
+      (MPS/FundamentalTheoremMulti.lean; PiAlgebra/FundamentalTheoremComplete.lean).
+  • Pi-algebra automorphism construction + decomposition (permutation + inner):
+      piAlgEquiv, piAlgEquiv_decomposition (PiAlgebra/Construction.lean).
+  • Special case r=1: SameMPV₂ ⇒ SameMPV and thus FT from SameMPV₂:
+      sameMPV₂_single_block, fundamentalTheorem_singleBlock_fromMPV₂
+      (PiAlgebra/FundamentalTheoremComplete.lean).
+
+Still open / incomplete in Lean (current bottlenecks):
+  • Canonical-form block separation for r≥2:
+      block_separation_core (PiAlgebra/CanonicalFormSep.lean) has a sorry in the r≥2 branch,
+      hence downstream canonical-form theorems are not yet fully justified.
+  • The “distinct μ alone separates blocks” approach is not just unproved but false:
+      per_block_trace_eq_of_summed_blocks (PiAlgebra/BlockSeparationProof.lean) is a sorry and the
+      file contains an explicit counterexample; therefore theorems built on it (e.g.
+      sameMPV_of_sameMPV₂_injective, fundamentalTheorem_multiBlock_noSep) should be treated as
+      placeholder / invalid until corrected hypotheses are adopted.
+  • Reduction to canonical form (blocking + decomposition into injective/normal blocks + normalization)
+    for a general (not already injective) periodic tensor is not formalized; the current Lean FT is
+    for already-injective blocks.
+
+
+============================================================
+6. Suggested 40-slide “Terence Tao style” technical talk outline
+============================================================
+
+(Each slide: title + one-sentence content.)
+
+1.  Why a “Fundamental Theorem” for MPS?
+    Non-uniqueness of tensor parametrizations forces us to understand exactly when two tensors define the same family of many-body states.
+
+2.  Uniform periodic MPS tensor
+    Fix d,D and define A=(A^i)_{i=1..d} with A^i∈M_D(ℂ).
+
+3.  Words and coefficients
+    For a word w=(i₁,…,i_N), define A(w)=A^{i₁}⋯A^{i_N} and coefficient c_w(A)=tr(A(w)).
+
+4.  Matrix Product Vectors (MPVs)
+    The N-site MPV is the vector whose computational-basis amplitudes are c_w(A).
+
+5.  Equality notion: SameMPV / SameMPV₂
+    We say A and B generate the same MPV family if c_w(A)=c_w(B) for all N and all words w.
+
+6.  Trivial redundancy: gauge transforms
+    If B^i=X A^i X^{-1}, then tr(B(w))=tr(A(w)) by cyclicity.
+
+7.  The central question
+    Is gauge equivalence the only way to have SameMPV, and under what hypotheses?
+
+8.  Injectivity (spanning version)
+    Assume span{A^i}=M_D(ℂ), i.e. the local matrices generate the full matrix algebra.
+
+9.  Single-block Fundamental Theorem (statement)
+    If A is injective and SameMPV(A,B), then ∃X invertible with B^i=X A^i X^{-1}.
+
+10. Proof roadmap
+    Build a linear map T with T(A^i)=B^i, prove it is an algebra automorphism, then apply Skolem–Noether.
+
+11. Step 1: uniqueness of the linear extension
+    Injectivity means {A^i} spans M_D, so T is determined by its values on the generators.
+
+12. Step 1 (existence): trace pairing compatibility
+    SameMPV supplies enough trace identities to ensure any linear relation among the A^i is mirrored among the B^i.
+
+13. Step 2: multiplicativity on generators
+    Length-3 word trace equalities force T(A^iA^j)=B^iB^j.
+
+14. Step 2: bilinear extension
+    Spanning lets us upgrade multiplicativity from generators to all M,N: T(MN)=T(M)T(N).
+
+15. Step 3: the kernel is an ideal
+    Multiplicativity implies ker(T) is a two-sided ideal in M_D(ℂ).
+
+16. Step 3: simplicity forces injectivity
+    Since M_D(ℂ) is simple, a nonzero T has ker(T)=0.
+
+17. Step 3: finite-dimensionality forces bijectivity
+    Injective linear maps on finite-dimensional spaces are surjective.
+
+18. Step 4: promote to an algebra automorphism
+    A bijective multiplicative linear map becomes an ℂ-algebra automorphism.
+
+19. Step 4: Skolem–Noether
+    Any ℂ-algebra automorphism of M_D(ℂ) is inner: T(M)=XMX^{-1}.
+
+20. Single-block FT (conclusion)
+    Apply the inner form to M=A^i to obtain B^i=X A^i X^{-1}.
+
+21. Why multi-block canonical forms appear
+    Non-injective tensors have invariant subspaces and can be block-diagonalized, and traces ignore off-diagonal blocks.
+
+22. Block-diagonal tensor ansatz
+    Write A^i=⊕_k μ_k A_k^i with blocks of possibly different bond dimensions.
+
+23. MPV decomposition over blocks
+    Coefficients split as tr(A(w))=Σ_k μ_k^N tr(A_k(w)).
+
+24. Multi-block FT: what we can prove assuming blockwise equality
+    If SameMPV(A_k,B_k) for each k and all blocks are injective, we can gauge-match blocks independently.
+
+25. Blockwise application of single-block FT
+    For each k obtain X_k with B_k^i=X_k A_k^i X_k^{-1}.
+
+26. Assembly of the global gauge
+    Let X=⊕_k X_k; then the full block-diagonal tensors satisfy B^i=X A^i X^{-1}.
+
+27. Pi-algebra reformulation
+    View the block algebra as 𝒜=Π_k M_{D_k}(ℂ) and interpret the blockwise map as an automorphism Φ:𝒜→𝒜.
+
+28. General structure theorem for Φ
+    Any algebra automorphism of a product of matrix algebras is a block permutation composed with inner automorphisms.
+
+29. Physical meaning of the decomposition
+    The only freedom is: reorder blocks + conjugate within each block.
+
+30. What’s still missing for the full physics theorem
+    We must derive the per-block equalities SameMPV(A_k,B_k) from a single global SameMPV₂ statement.
+
+31. The block separation problem
+    From Σ_k μ_k^N mpv(A_k,σ)=Σ_k μ_k^N mpv(B_k,σ) for all N,σ, deduce each summand agrees.
+
+32. Naive Vandermonde intuition
+    “Distinct μ_k should allow separation by looking at finitely many N” — but the coefficients depend on N.
+
+33. The fatal obstruction
+    Even worse: without canonical normalization one can swap blocks and rescale, preserving the total trace sum.
+
+34. Block-swap counterexample
+    With r=2 and μ=(1,2), one can construct scalar blocks where SameMPV₂ holds but per-block traces disagree.
+
+35. What canonical form normalization buys you
+    Fix a gauge where each block obeys Σ_i A_i†A_i=I, so weights cannot be shifted between μ_k and A_k.
+
+36. Strict ordering of |μ_k|
+    If ‖μ_0‖>‖μ_1‖>…, the leading block dominates asymptotically and cannot be cancelled by others.
+
+37. Peeling lemma idea
+    From Σ_k α_k^L δ_k(L)=0 with |α_0|≫|α_k| and bounded δ_k, conclude δ_0(L) decays (hence vanishes) and peel off the leading block.
+
+38. Transfer operator spectral gap
+    Injectivity + normalization give a spectral gap for mixed transfer maps, controlling decay and enabling the inductive block separation.
+
+39. What Lean already has
+    The single-block FT, multi-block assembly, and large pieces of transfer-operator spectral theory are fully formalized.
+
+40. What remains open (and why it matters)
+    The final canonical-form block separation for r≥2 is still a sorry (and the naive injective-μ variant is false), so completing this step is the main remaining task for a fully end-to-end Lean Fundamental Theorem.

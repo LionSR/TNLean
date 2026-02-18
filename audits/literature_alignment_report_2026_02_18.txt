@@ -1,0 +1,502 @@
+Literature-alignment audit — MPSLean (Lean 4)
+Date: 2026-02-18
+Repo: MPSLean
+
+================================================================================
+0. Executive summary
+================================================================================
+
+Goal of this audit.
+  Assess how closely the current Lean development matches the *standard literature proof routes*
+  for canonical forms and the Fundamental Theorem (FT) of Matrix Product States/Vectors (MPS/MPV),
+  focusing on the local TeX sources listed in the task.
+
+Headline status (Lean).
+  • Single-block (injective) FT: PROVED.
+    - Lean theorem: MPSTensor.fundamentalTheorem_singleBlock
+      (MPSLean/MPS/FundamentalTheorem.lean)
+    - Lean proof route: linear extension + simplicity + Skolem–Noether (inner automorphisms).
+
+  • Multi-block FT *given* per-block SameMPV (“hSep”): PROVED.
+    - Lean theorems: MPSTensor.fundamentalTheorem_multiBlock_full / _decomposition
+      (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean)
+    - Key extra: Pi-algebra automorphism decomposition (permutation + inner conjugations).
+
+  • Literature-critical missing bridge: canonical-form “block separation”
+      SameMPV₂(toTensorFromBlocks μ A, toTensorFromBlocks μ B)
+        ⟹  ∀k, SameMPV(A_k,B_k).
+    - Lean lemma: MPSTensor.block_separation_core
+      (MPSLean/PiAlgebra/CanonicalFormSep.lean)
+      Status: PARTIALLY PROVED (r=0,1), MISSING (r≥2 is `sorry`).
+
+  • Known-false lemma currently present (guarded by `sorry` and a counterexample).
+    - Lean lemma: private lemma per_block_trace_eq_of_summed_blocks
+      (MPSLean/PiAlgebra/BlockSeparationProof.lean)
+      Status: STATEMENT FALSE UNDER CURRENT HYPOTHESES.
+
+Key literature alignment diagnosis.
+  1) Lean’s single-block FT is mathematically correct but does *not* follow the standard “channel/
+     mixed transfer” proof path used in e.g. the MPDO and review papers. This is acceptable for a
+     formalization, but for an academic talk the narrative should explicitly relate the Lean route
+     to the standard one (“same content, different proof skeleton”).
+
+  2) Lean already *does* contain the main spectral-theory lemma that powers the literature’s
+     “equal-or-orthogonal” / “off-diagonal damping” step:
+       - mixedTransfer spectral radius ≤ 1 (normalized Kraus)
+       - spectral radius = 1 forces gauge-phase equivalence
+       - otherwise spectral radius < 1 and powers → 0
+     (MPSLean/Spectral/SpectralGap.lean).
+     This is highly aligned with Wolf’s channel framing (Schwarz maps, peripheral eigenvectors).
+
+  3) The open block-separation lemma should be closed using the spectral/mixed-transfer route
+     (as in the literature), not by the current “peeling + boundedness” approach alone.
+     Memo-level issue: peeling yields exponential *decay* but not *exact equality*.
+
+Concrete recommendation (proof strategy).
+  Replace the “Newton–Girard/Vandermonde separation on repeated words” as the primary strategy for
+  block separation by a literature-aligned pipeline:
+
+    (a) canonical form hypotheses (primitive/DS gauge) ⇒ equal-or-orthogonal for blocks
+        via mixed transfer spectral radius
+
+    (b) equal-or-orthogonal ⇒ eventual linear independence of block MPVs (Lemma “Lem1” in MPDO
+        appendix / 1708 paper)
+
+    (c) linear independence + global MPV equality ⇒ block matching (permutation fixed by strict
+        |μ| ordering) ⇒ per-block SameMPV (and then per-block gauge by single-block FT).
+
+Concrete recommendation (slides).
+  Current slide deck (presentation20260218_tao_technical.tex) is Lean-architecture driven.
+  For “literature alignment”, reorganize around the literature spine:
+
+    Canonical form → equal-or-orthogonal (mixed transfer) → BNT / linear independence → FT.
+
+  Move Skolem–Noether and Pi-algebra decomposition to backup slides.
+
+================================================================================
+1. Common literature proof spine (across the listed papers)
+================================================================================
+
+The following “spine” appears (with variants) in 1210.6613, 1606.00608, 1708.00029, and
+2011.12127, and is also the conceptual background for Wielandt-type blocking bounds.
+
+S1. Canonical / standard / irreducible form (after blocking)
+  - Put tensor in block diagonal form, with blocks corresponding to irreducible/primitive transfer
+    maps (normal tensors).
+  - Normalize each block (trace-preserving / unital “DS gauge” in many expositions).
+
+S2. Equal-or-orthogonal / off-diagonal damping lemma
+  - For two normal blocks A,B, the mixed transfer F_{AB}(X)=∑_i A_i X B_i† satisfies:
+      either ρ(F_{AB}) < 1  (cross terms decay)
+      or     ρ(F_{AB}) = 1  (then A,B are gauge-phase equivalent).
+
+S3. Basis of normal tensors (BNT) + eventual linear independence
+  - Choose a subset of blocks which are pairwise “orthogonal” (cross correlations → 0).
+  - Show that for N large enough, the corresponding MPVs are linearly independent.
+
+S4. Fundamental Theorem (proportional and equal cases)
+  - Proportional case: blocks match up to permutation + phase + gauge.
+  - Equal case: stronger constraints; in the periodic/irreducible generalization, an extra root-of-
+    unity diagonal degree of freedom appears.
+
+S5. Optional quantitative ingredients
+  - Quantum Wielandt inequalities: bounds on blocking length needed for injectivity/primitivity.
+  - Correlation length estimates: spectral gap of transfer operator ⇒ exponential decay.
+
+Lean coverage note.
+  Lean currently fully covers S2 (mixed transfer spectral gap) and the algebraic consequences of S4
+  *assuming per-block separation*; it does not yet cover S1 (canonical-form existence) or the S3→S4
+  separation step in the form used in the literature.
+
+================================================================================
+2. Per-paper theorem extraction + mapping tables
+================================================================================
+
+Legend for status column:
+  • proved
+  • partially proved
+  • missing
+  • statement false under current hypotheses
+
+--------------------------------------------------------------------------------
+2.1 Paper: 0909.5347/main.tex — “A quantum version of Wielandt’s inequality”
+--------------------------------------------------------------------------------
+
+Key items (as used in the MPS/canonical-form pipeline).
+  • Sec. 3, Lemma 1 (label lemma1): existence of short product with nonzero trace.
+  • Sec. 3, Lemma 2 (label lemma2): cyclic-subspace / spanning statements.
+  • Sec. 3, Theorem (label thm:mainthm): Quantum Wielandt inequality bounds on i(A).
+      - general i(A) ≤ (D^2-d+1)D^2
+      - sharper bounds if span contains invertible / non-invertible w/ nonzero eigenvalue.
+  • Sec. 5 (Frustration-free Hamiltonians and MPS):
+      injectivity of the Γ_L map ⇔ primitivity of transfer channel; injectivity holds for all
+      L ≥ i(A).
+
+Mapping table.
+| Paper ref | Content (abridged) | Lean analogue | Status | Notes |
+|---|---|---|---|---|
+| Sec. 3, Thm. thm:mainthm | quantum Wielandt bound on i(A) | (none) | missing | No quantitative blocking-length bounds in Lean. |
+| Sec. 5, Eq. (gamma) discussion | Γ_L injective iff E_A primitive; injective for L≥i(A) | MPSTensor.IsNBlkInjective / IsNormal (MPSLean/MPS/Defs.lean) | partially proved | Definitions exist; no theorem connecting IsNormal to primitivity nor explicit L bound. |
+| spectral characterization of primitivity | primitive ⇔ unique peripheral eigenvalue etc | (partial) QPF + spectral lemmas (MPSLean/QuantumPerronFrobenius.lean; Spectral/SpectralGap.lean) | partially proved | Lean has QPF for injective + TP gauge; does not formalize full “quantum Wielandt index”. |
+
+Alignment notes.
+  This paper is mostly about the *quantitative blocking bound* ensuring “after finite blocking,
+  normal ⇒ injective”. Lean currently assumes injectivity (already blocked) and does not implement
+  any Wielandt-style bound.
+
+--------------------------------------------------------------------------------
+2.2 Paper: 1210.6613/UncleHMPS.tex — “Uncle Hamiltonians…”
+--------------------------------------------------------------------------------
+
+Key items (FT/canonical-form route).
+  • Sec. “Normal form”, Theorem thm:std-form-inj:
+      After blocking, MPS admits standard form
+        A_i = ⊕_{j=1}^𝒟 A_i^j ⊗ Γ_j
+      with: block diagonal structure, span property, and transfer-map spectral property
+      (unique eigenvalue 1 on unit circle for each block).
+  • Lemma lemma:exptransferoperator:
+      (E_A^A)^k converges exponentially to fixed point.
+  • Lemma lemma:offdiagonal-damping:
+      for blocks i≠j, ρ(E_{A^i}^{A^j}) < 1.
+      Proof uses strict Cauchy–Schwarz, and “disjoint spans” due to block injectivity.
+
+Mapping table.
+| Paper ref | Content (abridged) | Lean analogue | Status | Notes |
+|---|---|---|---|---|
+| Thm. thm:std-form-inj | existence of standard/canonical form after blocking | MPSTensor.CanonicalForm (MPSLean/MPS/CanonicalForm.lean) | partially proved | Canonical form is a data structure only; no theorem “any tensor → standard form”. |
+| Lemma lemma:offdiagonal-damping | mixed transfer spectral radius < 1 for distinct blocks | MPSTensor.spectralRadius_mixedTransfer_lt_one (MPSLean/Spectral/SpectralGap.lean) | proved | Lean version assumes IsInjective on both tensors + TP normalization + ¬GaugePhaseEquiv. |
+| Lemma lemma:exptransferoperator | exponential convergence of E_A^k to fixed point | (no direct analogue) | missing | Lean has QPF fixed point existence/uniqueness, but not an explicit convergence-rate theorem for E_A^n on the traceless subspace. |
+
+Alignment notes.
+  Lean is strongly aligned with the “offdiagonal damping” part, but not with the “standard form
+  existence after blocking” part.
+
+--------------------------------------------------------------------------------
+2.3 Paper: 1606.00608/MPDO-22-12-17-2.tex — “MPDO: RG fixed points & boundary theories”
+--------------------------------------------------------------------------------
+
+Key items (FT/canonical-form route).
+  • Sec. MPV/Canonical forms:
+      - Def. NT (normal tensor): no nontrivial invariant subspace; unique eigenvalue on unit circle.
+      - Def. CF: A^i = ⊕_{k=1}^r μ_k A_k^i with each A_k NT.
+      - Def. BNT + Prop. prop:char-BNT; decomposition Eq. (II_ABasicTensors).
+      - Def. injective NT; Def. block-injective canonical form (biCF).
+      - Quantum Wielandt: after ≤D^4 blocking, NT becomes injective.
+      - Prop. propblockinj: after ≤3D^5 blocking, CF ⇒ biCF.
+  • Fundamental theorem of MPVs:
+      - Thm. thm1: proportional case (blocks match up to permutation + phase + gauge).
+      - Cor. II_cor2: equal case ⇒ global gauge.
+  • Appendix MPV, Lemma equalMPS:
+      equal-or-orthogonal for normal tensors: overlap limit is 0 or 1; if 1 then gauge-phase.
+
+Mapping table.
+| Paper ref | Content (abridged) | Lean analogue | Status | Notes |
+|---|---|---|---|---|
+| Sec. MPV, Def. CF/NT | canonical form into normal blocks | MPSTensor.CanonicalForm (MPSLean/MPS/CanonicalForm.lean) | partially proved | No formal canonical-form construction nor proof of correctness/uniqueness. |
+| Def. injective NT / biCF | injectivity and block-injectivity conditions | MPSTensor.IsInjective / IsNBlkInjective / IsNormal (MPSLean/MPS/Defs.lean) | partially proved | “block injective canonical form” as in physics not yet formalized. |
+| Quantum Wielandt (≤D^4) | normal ⇒ injective after bounded blocking | (none) | missing | No quantitative blocking bounds. |
+| Prop. propblockinj (≤3D^5) | CF ⇒ biCF after blocking | (none) | missing | Not present. |
+| Lemma equalMPS | equal-or-orthogonal lemma via mixed transfer | spectralRadius_mixedTransfer_lt_one + modulus_one_eigenvalue_implies_gauge (MPSLean/Spectral/SpectralGap.lean) | proved | Lean proves “ρ<1 unless gauge-phase”, matching the channel core of equalMPS. |
+| Thm. thm1 (proportional MPVs) | blocks match up to permutation+phase+gauge | (none) | missing | Lean currently formalizes only the *equal* SameMPV case, not proportional ProportionalMPV₂. |
+| Cor. II_cor2 (equal MPVs) | equal MPVs ⇒ gauge | fundamentalTheorem_singleBlock (MPSLean/MPS/FundamentalTheorem.lean) | proved (single-block) | Proof route differs (Skolem–Noether rather than transfer-operator argument). |
+| multi-block equal-case FT (needs separation) | full FT for canonical-form tensors | fundamentalTheorem_canonicalForm (PiAlgebra/CanonicalFormSep.lean) | partially proved | Depends on open block_separation_core (r≥2). |
+
+Alignment notes.
+  Lean matches the “single-block equal case” content, and has the modern channel-theoretic
+  infrastructure for equal-or-orthogonal. The missing pieces are: proportional-case FT, canonical
+  form construction, and the block-separation bridge.
+
+--------------------------------------------------------------------------------
+2.4 Paper: 1708.00029/main.tex — “Irreducible forms of MPS; FT without blocking”
+--------------------------------------------------------------------------------
+
+Key items (FT/canonical-form route).
+  • Irreducible form and periodic blocks:
+      - Eq. (irreducible-form): block decomposition into irreducible CP maps (possibly periodic).
+      - Peripheral spectrum / periodicity m_j; irreducible form II (TP + diagonal fixed point).
+      - Lemmas on blocking periodic tensors (Lemma “Blocking a single periodic block”; lem:blocking-arbitrary).
+  • Fundamental theorem for MPS in irreducible form:
+      - Thm. thm:cf and Cor. cor:cfequal: canonical-form FT (from Ci15).
+      - Prop. equal-or-orthogonal (Lemma A.2 of Ci15): normal blocks are equal or orthogonal.
+      - Prop. equal-or-orthogonal-generalized: periodic generalization.
+      - Thm. thm:bd (proportional case, irreducible form).
+      - Thm. thm:bdequal (equal case, irreducible form): root-of-unity diagonal Z_j freedom.
+      - Lemmas lem:moments / lem:momentsN0: moment matching of scalar weights.
+
+Mapping table.
+| Paper ref | Content (abridged) | Lean analogue | Status | Notes |
+|---|---|---|---|---|
+| Def/eq:irreducible-form + periodic blocks | irreducible/periodic canonical form | (none) | missing | Lean currently formalizes only the primitive/normal (injective) setting. |
+| Prop. equal-or-orthogonal | equal-or-orthogonal for normal blocks | spectralRadius_mixedTransfer_lt_one etc (Spectral/SpectralGap.lean) | proved (normal only) | Lean covers the normal/primitive case; periodic generalization missing. |
+| Prop. equal-or-orthogonal-generalized | periodic generalization | (none) | missing | No peripheral-spectrum / periodic tensor formalization. |
+| Thm. thm:bd / thm:bdequal | FT in irreducible form (with Z freedom) | (none) | missing | Not present. |
+| Lemma lem:moments / momentsN0 | moment/trace power matching | Matrix.charpoly_eq_of_forall_trace_pow_eq (PiAlgebra/NewtonGirard.lean) | partially proved | Lean has strong “traces of all powers ⇒ charpoly equality”; does not implement the root-of-unity/permutation moment arguments as in the paper. |
+
+Alignment notes.
+  Lean’s current scope corresponds to the “blocked, primitive/normal” regime. The irreducible/periodic
+  (no-blocking) generalization is not yet aligned.
+
+--------------------------------------------------------------------------------
+2.5 Paper: 1906.11682/Correlations_random_MPS_and_PEPS_-_Revised_2.tex — “Correlation length in random MPS/PEPS”
+--------------------------------------------------------------------------------
+
+Key items (relevant to transfer/spectral framing).
+  • Transfer operator definition; correlation function expressed via transfer operator powers.
+  • Uses PF theory for irreducible positive maps (Theorem th:PF).
+  • Proves *probabilistic* lower bounds on spectral gaps of random transfer operators and parent
+    Hamiltonians, and deduces typical exponential decay of correlations.
+
+Mapping table.
+| Paper ref | Content (abridged) | Lean analogue | Status | Notes |
+|---|---|---|---|---|
+| PF theorem for irreducible positive maps | existence/uniqueness of positive eigenvectors | quantum_perron_frobenius / injective_transfer_unique_fixed_point' (MPSLean/QuantumPerronFrobenius.lean) | partially proved | Lean proves QPF under IsInjective + TP normalization; does not yet cover general irreducible positive maps. |
+| correlation decay from transfer spectral gap | exponential decay of cross terms | mixedTransfer_pow_tendsto_zero + cross_correlation_tendsto_zero (Spectral/*.lean) | proved (deterministic) | Lean has deterministic spectral-gap ⇒ decay; no random/probabilistic results. |
+| typical gap for random MPS/PEPS | probabilistic bounds | (none) | missing | Random matrix theory not in scope. |
+
+Alignment notes.
+  Lean aligns with the deterministic “spectral gap ⇒ decay” mechanism, but not with the random/
+  probabilistic regime studied in this paper.
+
+--------------------------------------------------------------------------------
+2.6 Paper: 2011.12127/TN-Review-main.tex — “Tensor Networks review; Sec. IV.1 FT of MPVs”
+--------------------------------------------------------------------------------
+
+Key items (FT/canonical-form route).
+  • Sec. 4.1 overview: canonical form + FT narrative.
+  • Canonical form and normal tensors:
+      - block-diagonalization removing invariant subspaces
+      - irreducible vs primitive CP maps; blocking to remove periodicity
+      - Def. normal tensor (primitive channel), canonical form Eq. (eq:II_CF1).
+  • Basis of normal tensors (BNT): Def. + Prop. prop:char-BNT.
+      Review explicitly proposes algorithm via mixed transfer largest eigenvalue.
+  • Fundamental theorem:
+      - Thm. thm1: proportional case
+      - Cor. II_cor2: equal case
+      - Note: in unital gauge, X and X_k become unitary.
+  • Generalization without blocking (periodic/irreducible blocks): Thm. thm:fundamental-general
+    with diagonal Z commuting with blocks.
+  • Quantum Wielandt remarks (MPS and PEPS): bounded blocking length for injectivity/normality.
+
+Mapping table.
+| Review ref | Content (abridged) | Lean analogue | Status | Notes |
+|---|---|---|---|---|
+| Sec. 4.1 canonical form algorithm | “any tensor → canonical form” | MPSTensor.CanonicalForm (MPS/CanonicalForm.lean) | partially proved | Data only; no constructive theorem or blocking machinery. |
+| BNT construction via mixed transfer eigenvalues | pick maximal subset with |λ_{jk}|<1 | (none) | missing | Lean has the spectral criterion (ρ<1 unless gauge), but no BNT selection / maximality formalization. |
+| FT proportional (Thm. thm1) | proportional MPVs ⇒ block permutation + gauge-phase | (none) | missing | Lean has ProportionalMPV₂ definition only; no theorems. |
+| FT equal (Cor. II_cor2) | equal MPVs ⇒ global gauge | fundamentalTheorem_singleBlock (MPS/FundamentalTheorem.lean) | proved (single-block) | Uses Skolem–Noether route. |
+| “equal-or-orthogonal” ingredient | peripheral eigenvectors / mixed transfer gap | Spectral/SpectralGap.lean (ρ≤1, ρ=1⇒GaugePhaseEquiv, else ρ<1) | proved | Strong alignment with Wolf ch06 peripheral-spectrum story. |
+| periodic generalization (Thm. thm:fundamental-general) | diagonal Z root-of-unity freedom | (none) | missing | Not formalized. |
+| quantum Wielandt bounds | bounded blocking for injectivity | (none) | missing | Not formalized. |
+
+Alignment notes.
+  Lean already has the spectral “workhorse” which the review cites as the computational method
+  for BNT selection. The missing part is the *canonical-form-to-FT bridge* (block separation / BNT
+  uniqueness), which is precisely the open lemma block_separation_core.
+
+================================================================================
+3. Lean development vs. literature: where the proof route differs
+================================================================================
+
+3.1 Single-block FT: Skolem–Noether route vs. mixed-transfer route
+  Literature (esp. 1606.00608 appendix; 2011 review) often proves the injective/normal FT via:
+    - DS gauge (TP + fixed point),
+    - Cauchy–Schwarz / Kadison–Schwarz,
+    - peripheral eigenvector rigidity ⇒ gauge-phase.
+
+  Lean proves the same mathematical statement via:
+    - linear extension T : M_D→M_D extending A_i ↦ B_i,
+    - show T multiplicative,
+    - matrix algebra simplicity ⇒ bijective,
+    - Skolem–Noether ⇒ inner automorphism.
+
+  Assessment: acceptable as formal route. For a talk, explicitly say:
+    “We formalize the same gauge-equivalence content, but use a ring-theoretic proof that is
+     well-supported by Mathlib (Skolem–Noether), while we separately formalize the channel-based
+     equal-or-orthogonal lemmas needed for the multi-block narrative.”
+
+3.2 Multi-block FT: Pi-algebra decomposition vs. BNT narrative
+  Literature expresses the multi-block uniqueness as “block permutation + gauge per block” inside
+  the canonical-form/BNT framework.
+
+  Lean expresses the same structure theorem as:
+    - build an algebra automorphism of Π_k Mat_{D_k}(ℂ)
+    - apply a general decomposition theorem: automorphism = block permutation + inner maps.
+
+  Assessment: mathematically identical; just a more abstract packaging. In slides, present the
+  physics statement (permutation + per-block conjugation) first, and then note that Lean uses a
+  general algebra theorem to obtain it.
+
+3.3 Canonical form assumptions in Lean are currently stronger than in the literature
+  Lean predicate IsCanonicalForm μ A includes StrictAnti (k ↦ ‖μ_k‖) and a single-sided TP gauge
+  ∑ A_i†A_i = I. The literature canonical form allows:
+    - repeated blocks up to phases (handled by BNT),
+    - periodic/irreducible blocks (handled by irreducible form),
+    - equal moduli among μs (phases on the unit circle).
+
+  This is fine for a “first formal target” but should be clearly stated as a restriction.
+
+================================================================================
+4. Literature-aligned strategy to close the main gap: canonical-form block separation
+================================================================================
+
+Target gap.
+  Close MPSTensor.block_separation_core (PiAlgebra/CanonicalFormSep.lean) for r ≥ 2.
+
+Why the current local tools are insufficient.
+  CanonicalFormSep already contains:
+    - DS gauge ⇒ uniform trace bounds
+    - a “peeling” lemma ⇒ exponential decay of the leading-block repeated-word trace difference
+
+  But decay does not imply equality: |δ(L)| ≤ C ρ^L allows δ(L) ≠ 0.
+  The literature resolves this by *orthogonality/linear-independence* arguments driven by the
+  mixed transfer operator spectral theory.
+
+Recommended (literature-aligned) closure plan.
+
+(4.1) Strengthen or derive hypotheses so spectral lemmas apply.
+  • Many strict spectral-gap results for mixedTransferMap require injectivity on both tensors.
+  • CanonicalFormSep.block_separation_core currently assumes injectivity only for A blocks.
+
+  Recommendation:
+    - Either (preferred) strengthen IsCanonicalForm to include block_injective for B as well, or
+    - Prove “B_k injective” as a lemma from the canonical-form hypotheses + global SameMPV₂
+      (this is plausible but nontrivial).
+
+(4.2) Use the already formalized equal-or-orthogonal lemma.
+  Lean already proves the core statement:
+
+    spectralRadius_mixedTransfer_lt_one:
+      IsInjective A ∧ IsInjective B ∧ TP(A) ∧ TP(B) ∧ ¬GaugePhaseEquiv(A,B)
+        ⟹  ρ(F_AB) < 1
+
+    mixedTransfer_pow_tendsto_zero:
+      ρ(F_AB) < 1 ⟹ F_AB^n(X) → 0
+
+  This matches:
+    - UncleHMPS lemma:offdiagonal-damping
+    - MPDO appendix Lemma equalMPS (channel-based part)
+    - Wolf ch06: peripheral spectrum of irreducible Schwarz maps.
+
+(4.3) Prove eventual linear independence (Lemma “Lem1” / “Lem1t”).
+  Literature uses: if pairwise overlaps → 0 and norms → 1, then vectors are independent for N
+  sufficiently large.
+
+  Implementation idea in Lean:
+    - Define MPV vectors explicitly as functions mpvFun A N : (Fin N → Fin d) → ℂ (already exists)
+      and equip that finite function space with the standard ℓ² inner product.
+    - Express overlaps via mixed transfer traces (CrossCorrelation already gives “trace → 0”).
+    - Show Gram matrix → diagonal PD, hence det ≠ 0 for N large, hence linear independence.
+
+  This step is the clean, literature-aligned replacement for the “peeling-only” approach.
+
+(4.4) Use uniqueness of decomposition for large N to separate blocks.
+  Once {V_N(A_k)} are linearly independent and likewise for B, global equality of the canonical-
+  form states forces a blockwise identification. With strict ordering of ‖μ_k‖, the block permutation
+  is fixed (sorted by magnitude).
+
+  Then apply the already proved single-block FT to convert SameMPV into per-block GaugeEquiv.
+
+(4.5) De-emphasize Newton–Girard as a primary route.
+  Lean’s Newton–Girard development is correct and useful, but the BlockSeparationProof.lean plan
+  demonstrates that a purely “trace powers ⇒ charpoly ⇒ Vandermonde” strategy is fragile and can
+  state false lemmas unless canonical-form normalization is carefully built in.
+  The spectral/mixed-transfer route is closer to the literature and already matches the existing
+  Lean Spectral/ modules.
+
+================================================================================
+5. Concrete slide-deck overhaul instructions (to match literature narrative)
+================================================================================
+
+Reference slide source (current): slides/presentation20260218_tao_technical.tex
+Current section order:
+  1) project goal + headline theorems
+  2) Lean defs
+  3) single-block FT (Skolem–Noether route)
+  4) multi-block assembly + Pi-algebra decomposition
+  5) block separation (counterexample + canonical-form fix)
+  6) status
+
+For a literature-aligned academic talk, reorganize to follow the standard proof spine.
+
+(5.1) New top-level section order (recommended)
+  A. “Canonical form in the literature”
+     - Show canonical form equation A^i = ⊕ μ_k A_k^i (cite 2011 review Eq. (eq:II_CF1) and
+       1606 MPDO Eq. (II_CF1)).
+     - State what “normal/primitive block” means (transfer operator primitive).
+     - Explicitly mention blocking/quantum Wielandt as the reason we can assume injective blocks.
+
+  B. “Equal-or-orthogonal lemma (mixed transfer)”
+     - Present the mixed transfer operator F_AB and the dichotomy:
+         ρ(F_AB) = 1 ⇔ gauge-phase equivalence;
+         otherwise ρ(F_AB) < 1 and F_AB^n → 0.
+     - Cite: UncleHMPS lemma:offdiagonal-damping; MPDO Lemma equalMPS; Wolf ch06 Thm 6.6.
+     - Map directly to Lean:
+         Spectral/SpectralGap.lean: spectralRadius_mixedTransfer_lt_one, mixedTransfer_pow_tendsto_zero.
+
+  C. “Basis of normal tensors and block separation”
+     - Explain BNT selection criterion (review after Prop. prop:char-BNT) using mixed transfer.
+     - Explain eventual linear independence and uniqueness of decomposition (1708 Lemma Lem1t).
+     - State the separation goal (the exact open lemma block_separation_core).
+
+  D. “Fundamental Theorem statement (equal case)”
+     - Give the equal-case statement (review Cor. II_cor2; MPDO Cor. II_cor2).
+     - Then “Lean formalization status” slide: which parts done, which open.
+
+  E. “Lean-specific proof architecture (optional / appendix)”
+     - Put Skolem–Noether single-block proof and Pi-algebra decomposition into backup slides.
+     - In the main talk, only show the *result* and how it matches the literature.
+
+(5.2) Slides to move to appendix
+  - All detailed Skolem–Noether chain slides (currently Section “Single-block FT: Lean proof
+    architecture”). Keep 1 slide summarizing “Lean proves the same gauge statement; proof uses
+    Skolem–Noether”.
+  - All Pi-algebra decomposition technicalities (keep 1 slide: “permutation + inner”).
+
+(5.3) Slides to add (or strengthen)
+  - A “Quantum Wielandt / blocking” slide (0909.5347 thm:mainthm; review mention of bounded
+    blocking). State clearly: not formalized in Lean.
+  - A “Proportional case vs equal case” slide: literature thm1 vs cor II_cor2; Lean currently covers
+    equal case.
+  - A “Periodic/irreducible subtleties” slide (1708): root-of-unity Z freedom; not in Lean.
+
+(5.4) Keep but compress
+  - The block-swap counterexample is very valuable: keep it as one slide as motivation for why
+    canonical-form normalization is needed; then transition immediately to the literature’s fix
+    (DS gauge + mixed transfer).
+
+================================================================================
+6. Appendix: Lean theorem index (quick reference)
+================================================================================
+
+Core FT results.
+  • MPSTensor.fundamentalTheorem_singleBlock
+    - file: MPSLean/MPS/FundamentalTheorem.lean
+
+  • MPSTensor.fundamentalTheorem_multiBlock_full / _decomposition
+    - file: MPSLean/PiAlgebra/FundamentalTheoremComplete.lean
+
+  • MPSTensor.fundamentalTheorem_multiBlock_fromSameMPV₂
+    - file: MPSLean/PiAlgebra/FundamentalTheoremComplete.lean
+    - NOTE: requires explicit hSep : ∀k, SameMPV(A_k,B_k).
+
+Spectral / channel-aligned lemmas.
+  • MPSTensor.spectralRadius_mixedTransfer_lt_one
+  • MPSTensor.mixedTransfer_pow_tendsto_zero
+    - file: MPSLean/Spectral/SpectralGap.lean
+
+  • MPSTensor.cross_correlation_tendsto_zero
+    - file: MPSLean/Spectral/CrossCorrelation.lean
+
+Block separation (open / false).
+  • MPSTensor.block_separation_core
+    - file: MPSLean/PiAlgebra/CanonicalFormSep.lean
+    - status: partially proved, sorry for r≥2
+
+  • private lemma per_block_trace_eq_of_summed_blocks
+    - file: MPSLean/PiAlgebra/BlockSeparationProof.lean
+    - status: statement false under current hypotheses (docstring counterexample) + sorry
+
+Canonical-form end-to-end (conditional on open lemma).
+  • MPSTensor.fundamentalTheorem_canonicalForm
+    - file: MPSLean/PiAlgebra/CanonicalFormSep.lean
+    - depends on block_separation_core
