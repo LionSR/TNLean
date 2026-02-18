@@ -26,6 +26,7 @@ import MPSLean.Spectral.CrossCorrelation
 
 -- Layer 3: MPS core
 import MPSLean.MPS.Defs
+import MPSLean.MPS.MPVOverlap
 import MPSLean.MPS.Transfer
 import MPSLean.MPS.CanonicalForm
 import MPSLean.MPS.CPPrimitive
