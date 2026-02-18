@@ -3,6 +3,7 @@ import MPSLean.Algebra.TraceNondeg
 import MPSLean.Algebra.TracePairing
 import MPSLean.Algebra.BlockPermutation
 import MPSLean.Algebra.SkolemNoether
+import MPSLean.Algebra.GramMatrixLI
 
 -- Layer 1: Quantum channels (general theory)
 import MPSLean.Channel.PositiveMap
