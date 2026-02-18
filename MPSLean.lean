@@ -41,8 +41,6 @@ import MPSLean.MPS.BlockPermutationMPS
 import MPSLean.PiAlgebra.Construction
 import MPSLean.PiAlgebra.FundamentalTheoremComplete
 import MPSLean.PiAlgebra.BlockSeparation
-import MPSLean.PiAlgebra.BlockSeparationProof
-import MPSLean.PiAlgebra.CanonicalFormSep
 
 -- Re-export hubs
 import MPSLean.PositiveMapSpectral
