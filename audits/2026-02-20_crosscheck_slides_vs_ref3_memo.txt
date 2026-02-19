@@ -1,0 +1,476 @@
+================================================================================
+CROSS-CHECK REPORT: Slide Deck vs Reference [3]
+================================================================================
+
+Slide deck:  slides/presentation20260218_tao_technical.tex
+Reference:   [3] = Cirac/Pérez-García/Schuch/Verstraete, arXiv:1606.00608
+             (1606.00608/MPDO-22-12-17-2.tex)
+Scope:       Section 2 (\section{Matrix Product Vectors}\label{Sec:MPV})
+             Appendix A (\section{Proofs of Section \ref{Sec:MPV}}\label{AppendixMPV})
+Date:        2026-02-20
+
+================================================================================
+PART A: SLIDE-TO-PAPER MAPPING TABLE
+================================================================================
+
+Slide/Frame Title                           | [3] Item(s)
+--------------------------------------------|--------------------------------------------
+"Matrix Product Vectors: traces of          | Def (MPV), Eq (MPV) [Sec 2, line 132-139]
+ tensor products"                           |   MPV definition matches exactly.
+                                            |   Cites [Cirac2021Matrix] but equally in [3].
+--------------------------------------------|--------------------------------------------
+"Fundamental Theorem: gauge is the only     | Cor (II_cor2), Eq (eq:II_auxcor) [Sec 2,
+ ambiguity"                                 |   line 354-361] (equal-MPV case).
+                                            |   Also Thm (thm1) [line 349-352] (proportional).
+                                            |   Injectivity def: Def (defnbi) [line 317-322].
+--------------------------------------------|--------------------------------------------
+"The multi-block target: canonical form"    | CF definition, Eq (eq:II_CF1) [line 237-244].
+                                            |   NT definition [line 233-235].
+                                            |   Eq (eq:II_Psi_k) [line 261-262] for MPV
+                                            |   decomposition. Strict |μ| ordering is a
+                                            |   SLIDE ADDITION; [3] only requires |μ_k|≤1,
+                                            |   at least one =1 (line 246).
+--------------------------------------------|--------------------------------------------
+"Proof architecture: all steps now          | Overall: Thm (thm1) + Cor (II_cor2).
+ verified"                                  |   Architecture (CF→block sep→per-block FT)
+                                            |   is consistent with [3]'s Appendix A proof.
+--------------------------------------------|--------------------------------------------
+"Precise Lean theorem statement"            | Corresponds to Cor (II_cor2) restricted to
+ (fundamentalTheorem_canonicalForm_explicit)|   the equal-MPV case with strict |μ| ordering.
+                                            |   Differences from [3]: see PART B items 1-3.
+--------------------------------------------|--------------------------------------------
+"The standard two-step derivation"          | Consistent with [3] Sec 2 structure:
+                                            |   Step 1 = CF reduction (Sec 2.3).
+                                            |   Step 2 = FT for CF tensors (Thm thm1).
+                                            |   Cites "RMP Section IV.1" = [Cirac2021Matrix],
+                                            |   but the proof is equally in [3] App A.
+--------------------------------------------|--------------------------------------------
+"Step (i): canonical form reduction"        | [3] Sec 2.3, lines 184-251.
+                                            |   Invariant subspace decomp: lines 200-213.
+                                            |   Eq (eq:II_Aiplusk1) [line 216-218].
+                                            |   CPM normalization: lines 219-225, Eq (Ek).
+--------------------------------------------|--------------------------------------------
+"Quantum Wielandt: injectivity after        | [3] line 332 (quantum Wielandt ref),
+ blocking"                                  |   Prop (propblockinj) [line 342-345]: ≤3D^5.
+                                            |   Cites [Sanz2010Quantum, Cirac2017Annals].
+                                            |   [3] cites [Wieland] for D^4 bound (line 332).
+--------------------------------------------|--------------------------------------------
+"Equal-or-orthogonal: the mixed transfer    | Lem (equalMPS) [App A, line 1080-1117]:
+ dichotomy"                                 |   ⟨V_b|V_a⟩ → 0 or 1. If 1, gauge-phase equiv.
+                                            |   Cor (eqV) [line 1121-1128].
+                                            |   NOTE: [3] does NOT define a "mixed transfer
+                                            |   operator" F_{A,B}(X) explicitly as an object
+                                            |   in Sec 2/App A. The slide's formulation via
+                                            |   F_{jk} is from [Perez-Garcia2007] / [Cirac2021].
+--------------------------------------------|--------------------------------------------
+"Step (ii): FT in canonical form"           | Thm (thm1) [line 349-352] (proportional).
+                                            |   Cor (II_cor2) [line 354-361] (equal).
+--------------------------------------------|--------------------------------------------
+"Why canonical form is essential"           | [3] Sec 2.3, line 246: normalization convention.
+                                            |   The slides' "strict |μ_k| ordering" is an
+                                            |   addition not in [3] (see PART B item 1).
+--------------------------------------------|--------------------------------------------
+"Definitions: Lean meets the literature"    | MPV: Def (MPV) [line 132-139].
+                                            |   Transfer map: Eq (Ek) [line 221] (cited as
+                                            |   Wolf, but equally in [3]).
+                                            |   Mixed transfer: NOT in [3] Sec 2/App A
+                                            |   as a named object.
+                                            |   Canonical form data: CF def [line 237-244].
+--------------------------------------------|--------------------------------------------
+"Theorems: literature results in Lean"      | Single-block FT: special case of Thm (thm1).
+                                            |   Π-algebra automorphisms: NOT in [3].
+                                            |   Block separation: proved in [3] App A as
+                                            |   part of Thm (thm1) proof, lines 1181-1182.
+                                            |   Newton-Girard: NOT in [3] (independent).
+--------------------------------------------|--------------------------------------------
+"Lean definitions: tensor, word evaluation" | Def (MPV) [line 132-139].
+                                            |   Direct correspondence.
+--------------------------------------------|--------------------------------------------
+"Injectivity: spanning vs inverse tensor"   | Def (defnbi) [line 317-322].
+                                            |   Inverse tensor: line 324-328, Eq (injectivity).
+--------------------------------------------|--------------------------------------------
+"Step 1: intertwiner from equal MPVs"       | Part of Lem (equalMPS) proof [App A].
+                                            |   In [3], the intertwiner arises from the
+                                            |   Cauchy-Schwarz equality case.
+                                            |   The slide's "linear extension" route
+                                            |   (Skolem-Noether) differs; see PART B item 5.
+--------------------------------------------|--------------------------------------------
+"Step 2: trace pairing forces uniqueness"   | NOT directly in [3]. The slide's proof
+                                            |   route via trace pairing + linear extension
+                                            |   is the Pérez-García 2007 route, not [3]'s.
+--------------------------------------------|--------------------------------------------
+"Step 3: multiplicativity from length-3"    | NOT in [3]. This is the algebraic (Pérez-García
+                                            |   2007 / Skolem-Noether) route to single-block FT.
+--------------------------------------------|--------------------------------------------
+"Step 4: simplicity + Skolem-Noether"       | NOT in [3]. [3] uses Lem (equalMPS) via
+                                            |   Cauchy-Schwarz, not Skolem-Noether.
+--------------------------------------------|--------------------------------------------
+"Transfer and mixed transfer operators"     | Transfer: Eq (Ek) [line 221].
+                                            |   Mixed transfer: [3] uses the mixed object
+                                            |   E_{ab} = Σ A^i_a ⊗ \bar{A}^i_b (line 1099-1100)
+                                            |   implicitly but does not name/define F_{A,B}(X)
+                                            |   as a CP map in Sec 2/App A.
+--------------------------------------------|--------------------------------------------
+"Irreducible and primitive channels"        | NT definition [line 233-235]: unique eigenvalue
+                                            |   of magnitude 1. Blocking to remove periodicity:
+                                            |   lines 226-231.
+                                            |   Cites [Evans1978, Wolf2012] — not from [3].
+--------------------------------------------|--------------------------------------------
+"DS gauge: the normalization"               | CFII definition [App A, line 1058-1060].
+                                            |   Eq (TP) [line 1066-1067]: Σ A^{i†} A^i = I.
+                                            |   Eq (Lambda) [line 1068-1069]: E(Λ) = Λ > 0.
+                                            |   NOTE: slide says only "Σ (A^i)† A^i = I";
+                                            |   [3] CFII requires BOTH (TP) and (Lambda).
+--------------------------------------------|--------------------------------------------
+"The spectral gap proof at a glance"        | NOT in [3]. This is the Wolf/channel-theoretic
+                                            |   proof route. [3] uses direct Cauchy-Schwarz
+                                            |   in Lem (equalMPS).
+--------------------------------------------|--------------------------------------------
+"Kadison-Schwarz inequality"                | NOT in [3]. [3] never mentions Kadison-Schwarz.
+                                            |   Cites "Wolf, Proposition 6.4" — outside [3].
+--------------------------------------------|--------------------------------------------
+"KS equality: peripheral eigenvectors       | NOT in [3]. This is the Wolf multiplicative
+ are multiplicative"                        |   domain argument.
+--------------------------------------------|--------------------------------------------
+"HS contraction and eigenvalue bound"       | PARTIAL MATCH. [3] App A, Lem (equalMPS) proof
+                                            |   (lines 1105-1110) proves |λ|≤1 via C-S on
+                                            |   traces, using (TP) and (Lambda). The slide's
+                                            |   "HS contraction" is a different formulation
+                                            |   of a similar bound.
+--------------------------------------------|--------------------------------------------
+"Eigenvector rigidity: |μ|=1 implies gauge" | Lem (equalMPS) [App A, lines 1111-1116].
+                                            |   SAME CONCLUSION but DIFFERENT PROOF ROUTE.
+                                            |   [3]: C-S equality → A^i_b X = α X A^i_a →
+                                            |   isometry → unitary (in CFII).
+                                            |   Slides: block-embed → KS equality →
+                                            |   multiplicative domain → intertwining → kernel.
+--------------------------------------------|--------------------------------------------
+"The block-embedding construction"          | NOT in [3]. This is the Wolf construction
+                                            |   (embed A,B into a single channel K).
+--------------------------------------------|--------------------------------------------
+"From intertwining to invertibility"        | Lem (equalMPS) proof [lines 1115-1116].
+                                            |   [3] gets unitarity differently: X is an
+                                            |   isometry from D_b to D_a; D_a=D_b by NT.
+                                            |   Slide gets ker(X')=0 via injectivity.
+                                            |   Same conclusion, different argument.
+--------------------------------------------|--------------------------------------------
+"Equal-or-orthogonal: the complete          | Lem (equalMPS) + Cor (eqV) [App A].
+ dichotomy"                                 |   Same logical content, different proof route.
+--------------------------------------------|--------------------------------------------
+"The overlap-trace identity"                | [3] uses tr(E_{ab}^N) = ⟨V_b|V_a⟩ (line 1099)
+                                            |   implicitly. Not stated as a named identity.
+--------------------------------------------|--------------------------------------------
+"Proof of the overlap-trace identity"       | NOT in [3] as a separate proof; it's standard.
+--------------------------------------------|--------------------------------------------
+"Overlap decay: spectral gap implies        | Cor (eqV) [line 1121-1128].
+ orthogonality"                             |   ⟨V_a|V_b⟩ → 0 if not gauge-phase equiv.
+--------------------------------------------|--------------------------------------------
+"The block separation problem"              | Eq (eq:II_Psi_k) [line 261-262] for the
+                                            |   decomposition mpv(A,σ)=Σ μ_k^N mpv(A_k,σ).
+--------------------------------------------|--------------------------------------------
+"Why naive Vandermonde fails"               | NOT in [3]. Slide-specific observation.
+--------------------------------------------|--------------------------------------------
+"How canonical form defeats the             | Implicit in [3] Sec 2.3 normalization (line 246).
+ counterexample"                            |
+--------------------------------------------|--------------------------------------------
+"Step 1: asymptotic dominance via peeling"  | NOT in [3] as a named step. [3]'s proof of
+                                            |   Thm (thm1) [lines 1181-1182] uses a
+                                            |   different architecture: directly tests each
+                                            |   B_k against all A_j using Lem1/eqV/equalMPS,
+                                            |   rather than "peeling" by |μ| dominance.
+--------------------------------------------|--------------------------------------------
+"Step 2: the overlap test"                  | SIMILAR to [3] Thm proof (line 1181-1182):
+                                            |   "not possible that ⟨V(B_k)|V(A_j)⟩→0 for
+                                            |   all j". But [3] uses Lem1 (eventual LI)
+                                            |   rather than an explicit "overlap test" with
+                                            |   μ-weighted sums.
+--------------------------------------------|--------------------------------------------
+"Step 3: equal-or-orthogonal forces gauge"  | Lem (equalMPS) + Cor (eqV) application in
+                                            |   Thm proof [line 1182].
+--------------------------------------------|--------------------------------------------
+"Step 4: phase cancellation (ζ=1)"         | In [3] Cor (II_cor2) proof [lines 1184-1192]:
+                                            |   phases are handled via Lem (Lem:app_simple)
+                                            |   (equal power sums → equal coefficients).
+                                            |   The slide's "ζ^N → 1 ⟹ ζ=1" is a simpler
+                                            |   direct argument that suffices for equal-MPV.
+--------------------------------------------|--------------------------------------------
+"Step 5: peel the leading block and induct" | NOT in [3]'s architecture. [3] does not use
+                                            |   induction on blocks with peeling; instead
+                                            |   it tests each B_k independently against A_j.
+--------------------------------------------|--------------------------------------------
+"Block separation: the complete proof tree" | Synthesis slide. Architecture differs from [3].
+--------------------------------------------|--------------------------------------------
+"Five hypotheses drive the entire proof"    | PARTIAL MATCH to CFII [App A, line 1058-1060].
+                                            |   See PART B items 1-4 for differences.
+--------------------------------------------|--------------------------------------------
+"Per-block SameMPV → per-block gauge equiv" | Consequence of Thm (thm1).
+--------------------------------------------|--------------------------------------------
+"Π-algebra automorphisms"                   | NOT in [3]. The Π-algebra decomposition
+                                            |   (product of matrix algebras) is not in [3].
+--------------------------------------------|--------------------------------------------
+"Multi-block FT: the complete theorem"      | Cor (II_cor2) + Thm (thm1).
+--------------------------------------------|--------------------------------------------
+"Hierarchy of FT-MPS results"              | Thm (thm1) = proportional case.
+                                            |   Cor (II_cor2) = equal case.
+                                            |   Cor (thm:Fundamental-CFII) = CFII unitary.
+--------------------------------------------|--------------------------------------------
+"Gram matrix linear independence"           | Cor (Lem1) [App A, line 1130-1133].
+                                            |   Slide correctly attributes to [3] "Lemma 1".
+--------------------------------------------|--------------------------------------------
+
+================================================================================
+PART B: CONCRETE CORRECTIONS
+================================================================================
+
+CORRECTION 1: Strict |μ_k| ordering vs [3]'s convention
+------------------------------------------------------------------------
+Slide: "The multi-block target: canonical form" + "Precise Lean theorem 
+       statement" + "DS gauge" + throughout
+Current text: "|μ_0| > |μ_1| > ... > |μ_{r-1}|" presented as part of CF.
+[3] says:    CF (Eq II_CF1) requires μ_k with ρ(E_k)=1 and |μ_k|≤1 with
+             at least one =1 (line 246). Strict ordering is NOT required.
+             [3] allows repeated |μ| values; the BNT theory (Prop char-BNT)
+             handles the case where multiple blocks share the same NT.
+Proposed:    Add a footnote or qualifier: "The strict ordering
+             ‖μ_0‖ > ‖μ_1‖ > ... is an additional assumption in our
+             formalization (sufficient for the equal-MPV case); [3] allows
+             repeated magnitudes and handles them via the BNT framework
+             (Prop.~\ref{prop:char-BNT})."
+Justification: [3] Sec 2, line 246 and Prop (prop:char-BNT).
+
+CORRECTION 2: DS gauge slide under-specifies CFII
+------------------------------------------------------------------------
+Slide: "DS gauge: the normalization that makes everything work" (line 708-725)
+Current text: "A convenient gauge choice: Σ_i (A^i_k)† A^i_k = I, ‖μ_0‖>...>‖μ_{r-1}‖."
+[3] says:    CFII (App A, line 1058-1060) requires BOTH:
+             (TP)  Σ_i A^{i†}_k A^i_k = I_D_k    [trace-preserving]
+             (Λ)   E_k(Λ_k) = Λ_k > 0             [full-rank diagonal fixed point]
+             The slides only state (TP) and omit (Λ).
+Proposed replacement text:
+  "A convenient gauge choice used in the formalization:
+   \[
+     \sum_i (A_k^i)^\dagger A_k^i = I \quad\text{(trace-preserving)},
+     \qquad \mathcal{E}_k(\Lambda_k) = \Lambda_k,\;\Lambda_k > 0
+     \quad\text{(full-rank fixed point)}.
+   \]
+   This is CFII in [3, Appendix A]. The second condition is used in the
+   Cauchy-Schwarz eigenvalue bound but is automatic for injective+primitive blocks."
+Justification: [3] App A, Eqs (TP)+(Lambda), lines 1066-1069.
+
+CORRECTION 3: Kadison-Schwarz slide cites "Wolf, Proposition 6.4" — not in [3]
+------------------------------------------------------------------------
+Slide: "Kadison-Schwarz inequality" (line 769-790)
+Current text: "\begin{block}{Theorem (Wolf, Proposition~6.4)}
+              For a unital completely positive map E:
+              E(X†X) ≥ E(X)†E(X)  (Löwner order)."
+[3] says:    [3] Sec 2 and App A never mention Kadison-Schwarz by name.
+             [3]'s proof of Lem (equalMPS) uses a DIRECT Cauchy-Schwarz
+             inequality on traces (lines 1105-1110), not the operator
+             Kadison-Schwarz inequality.
+Options:     (a) Keep the Wolf citation but mark it as a deviation:
+                 "This step uses Wolf [4, Prop 6.4] rather than [3]'s
+                  direct Cauchy-Schwarz approach (Appendix A, Lem equalMPS)."
+             (b) Replace with a self-contained statement:
+                 "Theorem (Kadison-Schwarz, standard). For a unital CP map..."
+                 and note that [3] uses a different but equivalent argument.
+Proposed replacement:
+  "\begin{block}{Theorem (Kadison--Schwarz inequality; standard, 
+   cf.\ Wolf~\cite{Wolf2012Quantum}, Prop.~6.4)}
+   For a unital completely positive map $\cE$:
+   \[
+       \cE(X^\dagger X) \ge \cE(X)^\dagger\,\cE(X).
+   \]
+   \end{block}
+   \textcolor{dimwhite}{\footnotesize Note: [3] does not use KS explicitly; 
+   its Appendix A proof (Lem~equalMPS) instead applies Cauchy--Schwarz 
+   directly to traces weighted by the CFII fixed point $\Lambda$.
+   The channel-theoretic KS route is our formalization's proof strategy.}"
+Justification: [3] App A, Lem (equalMPS) proof, lines 1093-1117.
+
+CORRECTION 4: "unital AND trace-preserving" (doubly stochastic) over-assumption
+------------------------------------------------------------------------
+Slide: "KS equality: peripheral eigenvectors are multiplicative" (line 792-812)
+Current text (line 804): "If E(M)=μM with |μ|=1 and E is unital + 
+  trace-preserving:
+  1. KS gives E(M†M) ≥ |μ|² M†M = M†M.
+  2. Trace-preserving: tr(E(M†M)) = tr(M†M).
+  3. So E(M†M) - M†M ≥ 0 with trace zero ⟹ equals zero."
+
+Also: "The block-embedding construction in detail" (line 857-880)
+Current text (line 867): "Then K is a unital, trace-preserving CP map."
+
+Also: "HS contraction and eigenvalue bound" (line 814-834)
+Current text (line 818-819): "If E is both unital (E(I)=I) and trace-preserving..."
+
+[3] says:    CFII is one-sided: the CPM E_k is trace-preserving (Eq TP)
+             and has a full-rank diagonal fixed point Λ_k (Eq Lambda).
+             It is NOT generally unital (E_k(I)≠I in general; rather
+             E_k(Λ_k)=Λ_k). The "unital" property is that the ADJOINT
+             map E_k^*(X) = Σ A^{i†}_k X A^i_k satisfies E_k^*(I) = I
+             (which IS the TP condition on E_k). [3]'s E_k itself is
+             unital only if Λ_k = c·I.
+
+             The slides' block-embedding trick creates a DOUBLY STOCHASTIC
+             channel K(Y) = Σ K_i Y K_i† with K_i = diag(A'_i, B'_i),
+             which IS both unital and trace-preserving IF the A'_i, B'_i
+             are already in DS gauge (Σ A'^{i†} A'_i = I AND E(I) = I).
+             
+             This works when A'_i are obtained by the similarity
+             A'_i = Λ^{-1/2} A_i Λ^{1/2} (so that both TP and Λ=I hold),
+             making E' genuinely doubly stochastic.
+             
+             KEY ISSUE: The slides present the block channel as "unital +
+             trace-preserving" without explaining that this requires the
+             extra gauge step Λ^{-1/2} · Λ^{1/2} to make E' doubly
+             stochastic (not just CFII). In [3], the proof works with
+             the one-sided CFII and Λ≠I.
+
+Proposed corrections:
+
+(a) For "KS equality" slide (line 804), add:
+    "Here $\cE$ denotes the block-embedded channel after passing to the
+    \emph{doubly stochastic gauge} $A'_i = \Lambda^{-1/2} A_i \Lambda^{1/2}$,
+    which makes $\cE'$ both unital and trace-preserving. Note: [3, App.~A]
+    does not require this; its proof uses Cauchy--Schwarz directly with the
+    CFII fixed point $\Lambda$."
+
+(b) For "The block-embedding construction" slide (line 867), change:
+    CURRENT: "Then K is a unital, trace-preserving CP map on Mat_{2D}(C)."
+    PROPOSED: "After passing to the doubly stochastic gauge
+    $A'_i = \Lambda_A^{-1/2}\tilde A_i\Lambda_A^{1/2}$ (and similarly for $B$),
+    $\mathcal{K}$ is a unital, trace-preserving CP map on $\Mat_{2D}(\mathbb{C})$.
+    This additional gauge step goes beyond CFII; [3] avoids it by using
+    Cauchy--Schwarz directly."
+
+(c) For "HS contraction" slide (line 818), add footnote:
+    "The doubly stochastic assumption ($\cE$ unital + TP) is stronger than
+    [3]'s CFII (TP + full-rank fixed point $\Lambda>0$). In [3], the
+    analogous bound uses $\Lambda$ explicitly; see Lem~equalMPS proof."
+
+Justification: [3] App A, CFII def (lines 1058-1060), Eqs (TP)+(Lambda),
+  and Lem (equalMPS) proof lines 1104-1110.
+
+CORRECTION 5: Single-block FT proof route differs from [3]
+------------------------------------------------------------------------
+Slides: "Step 1: intertwiner from equal MPVs" through "Step 4: simplicity +
+        Skolem-Noether closes the proof" (lines 543-611)
+Current text: Presents Pérez-García 2007 algebraic route:
+  linear extension → trace pairing → multiplicativity from length-3 words →
+  simplicity → Skolem-Noether.
+[3] says:    [3]'s single-block proof goes through Lem (equalMPS):
+  CFII → mixed overlap tr(E_{ab}^N) → Cauchy-Schwarz eigenvalue bound →
+  C-S equality → intertwining A^i_b X = α X A^i_a → isometry → unitary.
+  No Skolem-Noether, no trace pairing, no multiplicativity argument.
+Proposed:    The slides cite [Perez-Garcia2007] for this route, which is
+             correct. Add a note distinguishing from [3]:
+             "This algebraic route follows [1, Pérez-García et al. 2007].
+             Reference [3] uses an alternative analytic route via 
+             Cauchy-Schwarz on the mixed transfer eigenvalues (Lem equalMPS,
+             Appendix A)."
+Justification: [3] App A, Lem (equalMPS), lines 1080-1117.
+
+CORRECTION 6: Block separation architecture differs from [3]
+------------------------------------------------------------------------
+Slides: "Step 1: asymptotic dominance via peeling" through "Step 5: peel and
+        induct" (lines 1071-1213)
+Current text: Peeling-based proof:
+  |μ_0| > |μ_1| > ... → leading block dominates → show Δ_0=0 by overlap
+  test + equal-or-orthogonal → phase cancellation ζ=1 → induction on r.
+[3] says:    [3]'s Thm (thm1) proof [lines 1181-1182] uses a DIFFERENT
+  architecture:
+  - For each B_k, test against ALL A_j via Lem1 (eventual LI).
+  - Cannot have ⟨V(B_k)|V(A_j)⟩→0 for ALL j (would contradict proportionality
+    by Lem1).
+  - So ∃ j_k with ⟨V(B_k)|V(A_{j_k})⟩ ↛ 0 → by Cor (eqV), V(B_k) = e^{iφN}V(A_{j_k}).
+  - Then Lem (equalMPS) gives gauge-phase equivalence.
+  - Symmetry argument gives g_a = g_b.
+  This does NOT use peeling, strict |μ| ordering, or induction on block count.
+Proposed:    Add a note: "Our formalization's proof architecture (peeling +
+             overlap test + induction on block count) differs from [3]'s
+             approach, which uses eventual linear independence (Cor~Lem1)
+             to directly match each block of $B$ to a block of $A$.
+             The peeling route requires strict $|\mu|$ ordering but avoids
+             the BNT machinery."
+Justification: [3] App A, Thm proof, lines 1181-1193.
+
+CORRECTION 7: "Lemma 1" attribution for Gram matrix LI
+------------------------------------------------------------------------
+Slide: "Gram matrix linear independence" (line 1413-1433)
+Current text (line 1432): "Corresponds to Lemma~1 in [Cirac2017Annals]
+  (BNT eventual linear independence)."
+[3] says:    Cor (Lem1) [App A, line 1130-1133] states exactly this.
+             The label "Lem1" is a label in the source, and is stated as
+             a Corollary (not Lemma) in the paper. The content matches.
+Proposed:    Minor: "Corresponds to Corollary~\ref{Lem1} in [3, Appendix A]
+             (BNT eventual linear independence)."
+Justification: [3] App A, Cor (Lem1), line 1130-1133.
+
+CORRECTION 8: Transfer map cited to Wolf, also in [3]
+------------------------------------------------------------------------
+Slide: "Definitions: Lean meets the literature" (line 433-464)
+Current text (line 445): "Transfer map E_A [Wolf2012Quantum]"
+[3] says:    Eq (Ek) [Sec 2, line 221] defines the transfer CPM explicitly.
+Proposed:    Change to: "Transfer map E_A~\cite{Cirac2017Annals,Wolf2012Quantum}"
+             (or just cite [3] since it defines it in scope).
+Justification: [3] Sec 2, Eq (Ek), line 221.
+
+
+================================================================================
+PART C: WHAT TRULY REQUIRES REFERENCES OUTSIDE [3]
+================================================================================
+
+1. KADISON-SCHWARZ INEQUALITY AND MULTIPLICATIVE DOMAIN
+   The entire spectral gap section (slides "The spectral gap proof at a glance"
+   through "Equal-or-orthogonal: the complete dichotomy") uses the
+   channel-theoretic proof route via Kadison-Schwarz inequality and
+   multiplicative domain. [3] does NOT use this route at all. [3]'s proof
+   of the same result (Lem equalMPS) uses direct Cauchy-Schwarz on
+   Hilbert-Schmidt inner products weighted by the CFII fixed point Λ.
+   
+   The KS route requires Wolf [Wolf2012Quantum] or equivalent (e.g.,
+   Paulsen's book, Choi 1974). This is the PRIMARY deviation from [3]
+   and is inherent to the Lean formalization's proof strategy.
+
+2. SINGLE-BLOCK FT VIA SKOLEM-NOETHER
+   The algebraic route (trace pairing → multiplicativity → simplicity →
+   Skolem-Noether) is from Pérez-García et al. 2007 [Perez-Garcia2007Matrix],
+   not from [3]. [3]'s single-block result comes as a consequence of
+   Lem (equalMPS). The Skolem-Noether theorem itself is a standard algebra
+   result (Mathlib).
+
+3. Π-ALGEBRA DECOMPOSITION
+   The decomposition of automorphisms of Π = ∏ Mat_{D_k}(C) into block
+   permutations + inner automorphisms is not in [3]. This is standard
+   Wedderburn/Artin-Wedderburn theory. [3] achieves the same effect via
+   the BNT framework (Prop char-BNT) without naming the Π-algebra.
+
+4. NEWTON-GIRARD IDENTITIES
+   Not in [3]. The slide correctly notes this is "not used in the main proof
+   but provides an independent algebraic route." [3]'s equivalent is
+   Lem (Lem:app_simple) which directly asserts equal power sums ⟹ equal
+   coefficients (citing [Gemma] for the proof).
+
+5. EVANS-HØEGH-KROHN (Evans1978Spectral)
+   Cited for "spectral properties of positive maps." [3] cites [Fan92]
+   (= Fannes-Nachtergaele-Werner 1992) and [David2006] for CP map spectral
+   properties. Evans 1978 is an alternative source for the same material.
+
+6. QUANTUM WIELANDT (Sanz2010Quantum)
+   [3] cites the quantum Wielandt theorem as [Wieland] (line 332) — same
+   content, the slide's citation [Sanz2010Quantum] is the actual paper.
+
+7. BLOCKING INFRASTRUCTURE + COUNTEREXAMPLE
+   The "naive Vandermonde fails" counterexample and the detailed blocking
+   infrastructure are formalization-specific contributions not in [3].
+
+SUMMARY: The spectral gap proof section (KS → HS contraction → eigenvalue
+rigidity → gauge equivalence) is the largest portion of the slides that
+CANNOT be sourced to [3]. This is a deliberate choice of proof route in
+the Lean formalization. The rest of the proof architecture (CF definition,
+block separation, BNT/FT conclusion) has clear [3] counterparts, though
+with structural differences (peeling vs. eventual-LI; strict ordering vs.
+BNT framework; Π-algebra vs. BNT).
+
+================================================================================
+END OF REPORT
+================================================================================

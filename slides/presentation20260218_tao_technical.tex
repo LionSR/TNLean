@@ -185,7 +185,7 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
             \end{tikzpicture}
 
             {\scriptsize\textcolor{dimwhite}{Block-diagonal structure.\\
-                    $|\mu_0|>|\mu_1|>\cdots>|\mu_{r-1}|$.}}
+                    (In general CF only assumes $|\mu_k|\le 1$ with at least one $=1$; strict ordering is a simplifying hypothesis.)}}
         \end{center}
     \end{columns}
 \end{frame}
@@ -233,7 +233,8 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         \textbf{Given:}
         \begin{itemize}\itemsep0.05em
             \item Weights $\mu_0,\ldots,\mu_{r-1}\in\mathbb{C}^\times$ with
-                  \alert{$\|\mu_0\|>\|\mu_1\|>\cdots>\|\mu_{r-1}\|$}.
+                  \alert{$\|\mu_0\|>\|\mu_1\|>\cdots>\|\mu_{r-1}\|$}
+                  \textcolor{dimwhite}{\footnotesize(simplifying; \cite{Cirac2017Annals} allows repeated magnitudes via BNT).}.
             \item Block tensors $A_k, B_k$ ($k=0,\ldots,r{-}1$), each $A_k^i\in\Mat_{D_k}(\mathbb{C})$.
             \item \alert{Injectivity}: $\Span\{A_k^i\}=\Mat_{D_k}$ and $\Span\{B_k^i\}=\Mat_{D_k}$ for all $k$.
             \item \alert{DS gauge}: $\sum_i (A_k^i)^\dagger A_k^i = I$ and $\sum_i (B_k^i)^\dagger B_k^i = I$.
@@ -442,7 +443,7 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         MPV tensors, word evaluation~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix}
                                     & \texttt{MPS/Defs}                & \proved{}       \\
         \rowcolor{cardbg}
-        Transfer map $\cE_A$~\cite{Wolf2012Quantum}
+        Transfer map $\cE_A$~\cite{Cirac2017Annals,Wolf2012Quantum}
                                     & \texttt{MPS/Transfer}            & \proved{}       \\
         \rowcolor{cardbg}
         Mixed transfer $\cF_{AB}$~\cite{Perez-Garcia2007Matrix}
@@ -607,7 +608,8 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
 
     \textcolor{dimwhite}{\footnotesize Lean: \texttt{Algebra/SkolemNoether.lean} (wraps Mathlib's Skolem--Noether).
         The only nontrivial external input is Skolem--Noether (already in Mathlib).
-        No analytic or spectral assumptions needed for the single-block case.}
+        No analytic or spectral assumptions needed for the single-block case.\\
+        \textbf{Deviation from~\cite{Cirac2017Annals}:} Appendix~A derives the same conclusion via a CFII + Cauchy--Schwarz argument (Lemma~equalMPS), without Skolem--Noether.}
 \end{frame}
 
 %======================================================================
@@ -705,23 +707,25 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
     \end{block}
 \end{frame}
 
-\begin{frame}{DS gauge: the normalization that makes everything work}
+\begin{frame}{DS gauge / CFII: one-sided normalization}
     \vspace{-0.6em}
 
-    \begin{block}{Literature convention~\cite{Cirac2017Annals,Cirac2021Matrix}}
-        Blocks are normalized so that $\rho(\cE_{A_k})=1$
-        with full-rank fixed points.
-        This pins the magnitude of each~$\mu_k$.
+    \begin{block}{Canonical form II (CFII) gauge in~\cite{Cirac2017Annals}}
+        Besides CF, one fixes a one-sided canonical normalization:
+        \[
+            \sum_i (A_k^i)^\dagger A_k^i = I
+            \quad\text{and}\quad
+            \cE_{A_k}(\Lambda_k)=\Lambda_k,\;\Lambda_k>0\ \text{(diagonal)}.
+        \]
     \end{block}
 
-    \begin{block}{Lean predicate}
-        A convenient gauge choice used in the formalization:
-        \[
-            \sum_i (A_k^i)^\dagger A_k^i = I,\qquad \|\mu_0\|>\|\mu_1\|>\cdots>\|\mu_{r-1}\|.
-        \]
-        Packaged as \texttt{IsCanonicalForm} in
+    \begin{block}{Lean predicate (\texttt{IsCanonicalForm})}
+        We package DS/TP gauge (the first condition) together with auxiliary hypotheses
+        (injectivity, overlap $\Ov\to 1$, and a simplifying strict $\|\mu\|$ ordering) in
         \texttt{PiAlgebra/CanonicalFormSep.lean}.
     \end{block}
+
+    \textcolor{dimwhite}{\footnotesize In general one cannot impose both left- and right-canonical conditions simultaneously.}
 \end{frame}
 
 %======================================================================
@@ -769,7 +773,7 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
 \begin{frame}{Kadison--Schwarz inequality~\cite{Wolf2012Quantum}}
     \vspace{-0.6em}
 
-    \begin{block}{Theorem (Wolf, Proposition~6.4)}
+    \begin{block}{Theorem (Operator Schwarz / Kadison--Schwarz inequality; Wolf Ch.~5, Thm.~5.3)}
         For a unital completely positive map $\cE$:
         \[
             \cE(X^\dagger X) \ge  \cE(X)^\dagger\,\cE(X)
@@ -786,7 +790,8 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
         gives $\cE(X^\dagger X) - \cE(X)^\dagger \cE(X) \ge 0$.
     \end{block}
 
-    \textcolor{dimwhite}{\footnotesize Lean: \texttt{kadison\_schwarz} in \texttt{Channel/KadisonSchwarz.lean} (sorry-free).}
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{kadison\_schwarz} in \texttt{Channel/KadisonSchwarz.lean} (sorry-free).\\
+        \textbf{Deviation from~\cite{Cirac2017Annals}:} Appendix~A proves the same rigidity step by a direct Cauchy--Schwarz argument weighted by the CFII fixed point $\Lambda$ (no explicit KS).}
 \end{frame}
 
 \begin{frame}{KS equality: peripheral eigenvectors are multiplicative}
@@ -801,13 +806,14 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
     \end{block}
 
     \begin{block}{Key fact: peripheral eigenvectors satisfy equality}
-        If $\cE(M)=\mu M$ with $|\mu|=1$ and $\cE$ is unital + trace-preserving:
+        If $\cE(M)=\mu M$ with $|\mu|=1$ and $\cE$ is \alert{doubly stochastic} (unital + trace-preserving):
         \begin{enumerate}\itemsep0.1em
             \item KS gives $\cE(M^\dagger M) \ge |\mu|^2 M^\dagger M = M^\dagger M$.
             \item Trace-preserving: $\tr(\cE(M^\dagger M)) = \tr(M^\dagger M)$.
             \item So $\cE(M^\dagger M) - M^\dagger M \ge 0$ with trace zero $\Rightarrow$ equals zero.
         \end{enumerate}
-        \textcolor{leangreen}{Peripheral eigenvalues force intertwining with Kraus operators.}
+        \textcolor{leangreen}{Peripheral eigenvalues force intertwining with Kraus operators.}\\
+        \textcolor{dimwhite}{\footnotesize (This doubly-stochastic hypothesis comes from an extra gauge choice; \cite{Cirac2017Annals} instead uses CFII with a $\Lambda$-weighted Cauchy--Schwarz argument.)}
     \end{block}
 \end{frame}
 
@@ -815,11 +821,12 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
     \vspace{-0.6em}
 
     \begin{block}{Corollary: HS contraction}
-        If $\cE$ is both unital ($\cE(I)=I$) and trace-preserving:
+        If $\cE$ is \alert{doubly stochastic} (unital + trace-preserving):
         \[
             \tr(\cE(X)^\dagger\,\cE(X)) \le  \tr(X^\dagger X)
             \qquad (\text{i.e.\ } \|\cE(X)\|_{\HS} \le \|X\|_{\HS}).
         \]
+        \textcolor{dimwhite}{\footnotesize (Stronger than CFII in~\cite{Cirac2017Annals}; there the analogous estimate is proved using the fixed point $\Lambda$.)}
     \end{block}
 
     \begin{block}{Eigenvalue bound for the mixed transfer}
@@ -864,7 +871,8 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
             \mathcal{K}(Y) := \sum_{i} K_i\, Y\, K_i^\dagger, \qquad
             K_i := \begin{pmatrix} A'_i & 0 \\ 0 & B'_i \end{pmatrix}.
         \]
-        Then $\mathcal{K}$ is a \alert{unital, trace-preserving} CP map on $\Mat_{2D}(\mathbb{C})$.
+        Then $\mathcal{K}$ is a \alert{unital} CP map on $\Mat_{2D}(\mathbb{C})$.\
+        \textcolor{dimwhite}{\footnotesize (Trace-preservation would require an extra gauge choice; \cite{Cirac2017Annals} instead uses CFII + a $\Lambda$-weighted Cauchy--Schwarz argument.)}
     \end{block}
 
     \begin{block}{Embedding the eigenvector}
@@ -1062,9 +1070,9 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
         which \alert{strict ordering forbids}.
     \end{block}
 
-    \begin{block}{Lean encoding}
-        \texttt{IsCanonicalForm} enforces DS-gauge normalization and
-        strict ordering of~$\|\mu_k\|$.
+    \begin{block}{Lean encoding (simplifying hypotheses)}
+        \texttt{IsCanonicalForm} enforces DS-gauge normalization and a strict $\|\mu\|$ ordering
+        \textcolor{dimwhite}{\footnotesize(sufficient for our peeling proof; \cite{Cirac2017Annals} uses BNT for the general case).}
     \end{block}
 \end{frame}
 
@@ -1087,6 +1095,8 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
     \begin{block}{Exponential decay}
         Set $\rho := \max_{k\ge 1}|\mu_k/\mu_0|<1$. Then $|\Delta_0(N,\sigma)| \le C\,\rho^N \to 0$.
     \end{block}
+
+    \textcolor{dimwhite}{\footnotesize \textbf{Deviation from~\cite{Cirac2017Annals}:} Appendix~A matches blocks via BNT + eventual linear independence (Cor.~Lem1), without strict $\|\mu\|$ ordering or peeling.}
 \end{frame}
 
 \begin{frame}{Step 2: the overlap test}
@@ -1429,7 +1439,7 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
 
     \textcolor{dimwhite}{\footnotesize Lean: \texttt{eventually\_linearIndependent\_of\_gram\_tendsto\_id}
         in \texttt{Algebra/GramMatrixLI.lean}.
-        Corresponds to Lemma~1 in~\cite{Cirac2017Annals} (BNT eventual linear independence).}
+        Corresponds to Corollary~(Lem1) in Appendix~A of~\cite{Cirac2017Annals} (BNT eventual linear independence).}
 \end{frame}
 
 %======================================================================
