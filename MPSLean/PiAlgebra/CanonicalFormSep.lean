@@ -126,7 +126,7 @@ private lemma norm_sq_sum_mul_le {ι : Type*} [Fintype ι] (a b : ι → ℂ) :
     -- `Fintype.sum` is definitionally a `Finset.univ` sum.
     simpa [norm_mul] using
       (norm_sum_le (s := (Finset.univ : Finset ι)) (f := fun i => a i * b i)).trans
-        (Finset.sum_le_sum (fun i _ => by simpa [norm_mul]))
+        (Finset.sum_le_sum (fun i _ => by simp [norm_mul]))
   have hsq :
       ‖(∑ i : ι, a i * b i)‖ ^ 2 ≤ (∑ i : ι, ‖a i‖ * ‖b i‖) ^ 2 :=
     pow_le_pow_left₀ (norm_nonneg _) h 2
@@ -453,6 +453,142 @@ theorem peeling_exponential_bound
 
 end PeelingLemma
 
+section BlockSeparationCoreHelpers
+
+private lemma eq_one_of_tendsto_pow_atTop_nhds_one (z : ℂ)
+    (hz : Filter.Tendsto (fun N : ℕ => z ^ N) Filter.atTop (nhds (1 : ℂ))) :
+    z = 1 := by
+  have hz_shift :
+      Filter.Tendsto (fun N : ℕ => z ^ (N + 1)) Filter.atTop (nhds (1 : ℂ)) :=
+    (Filter.tendsto_add_atTop_iff_nat 1).2 hz
+  have hz_mul : Filter.Tendsto (fun N : ℕ => z ^ (N + 1)) Filter.atTop (nhds z) := by
+    have h := (Filter.Tendsto.mul_const (b := z) hz)
+    simpa [pow_succ, mul_assoc] using h
+  have huniq := tendsto_nhds_unique hz_shift hz_mul
+  simpa [eq_comm] using huniq
+
+private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
+    {D : ℕ} [NeZero D] (A B : MPSTensor d D)
+    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
+    (hA_ds : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hB_ds : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
+    (h : Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds (1 : ℂ))) :
+    GaugePhaseEquiv A B := by
+  by_contra hnot
+  have hto0 :=
+    mpvOverlap_tendsto_zero (A := A) (B := B) hA_inj hB_inj hA_ds hB_ds hnot
+  have : (0 : ℂ) = 1 := tendsto_nhds_unique hto0 h
+  exact zero_ne_one this
+
+private lemma mpv_eq_pow_mul_of_gaugePhase
+    {D : ℕ} (A B : MPSTensor d D)
+    (X : GL (Fin D) ℂ) (ζ : ℂ)
+    (hX :
+      ∀ i : Fin d,
+        B i =
+          ζ •
+            ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
+              ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :
+    ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ := by
+  intro N σ
+  set w : List (Fin d) := List.ofFn σ
+  have hwlen : w.length = N := by simp [w]
+  let C : MPSTensor d D := fun i =>
+    (X : Matrix (Fin D) (Fin D) ℂ) * A i *
+      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  have hB : B = fun i => ζ • C i := by
+    funext i
+    simpa [C] using hX i
+  have hGauge :
+      evalWord C w =
+        (X : Matrix (Fin D) (Fin D) ℂ) * evalWord A w *
+          ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+    simpa [C] using (evalWord_gauge (A := A) (B := C) X (by intro i; rfl) w)
+  have htrace : Matrix.trace (evalWord C w) = Matrix.trace (evalWord A w) := by
+    simpa [hGauge, Matrix.mul_assoc] using (trace_conj_eq (X := X) (M := evalWord A w))
+  calc
+    mpv B σ = Matrix.trace (evalWord B w) := by simp [mpv, coeff, w]
+    _ = Matrix.trace (evalWord (fun i => ζ • C i) w) := by simp [hB]
+    _ = Matrix.trace ((ζ ^ w.length) • evalWord C w) := by
+          simpa using congrArg Matrix.trace (evalWord_smul (ζ := ζ) (A := C) w)
+    _ = (ζ ^ w.length) * Matrix.trace (evalWord C w) := by
+          simp [Matrix.trace_smul, smul_eq_mul, mul_assoc]
+    _ = (ζ ^ w.length) * Matrix.trace (evalWord A w) := by simp [htrace]
+    _ = ζ ^ N * mpv A σ := by simp [mpv, coeff, w, hwlen, mul_assoc]
+
+private lemma mpvOverlap_eq_pow_mul_self_of_mpv_eq_pow_mul
+    {D : ℕ} (A B : MPSTensor d D) (ζ : ℂ)
+    (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) :
+    ∀ N : ℕ,
+      mpvOverlap (d := d) A B N = (star ζ) ^ N * mpvOverlap (d := d) A A N := by
+  intro N
+  classical
+  calc
+    mpvOverlap (d := d) A B N = ∑ σ : Fin N → Fin d, mpv A σ * star (mpv B σ) := by
+      simp [mpvOverlap]
+    _ = ∑ σ : Fin N → Fin d, mpv A σ * star (ζ ^ N * mpv A σ) := by
+      refine Finset.sum_congr rfl ?_
+      intro σ _
+      simp [hmpv]
+    _ = ∑ σ : Fin N → Fin d, mpv A σ * (star (mpv A σ) * (star ζ) ^ N) := by
+      refine Finset.sum_congr rfl ?_
+      intro σ _
+      simp [star_mul, star_pow, mul_assoc, mul_left_comm, mul_comm]
+    _ = (star ζ) ^ N * ∑ σ : Fin N → Fin d, mpv A σ * star (mpv A σ) := by
+      -- factor out the constant `(star ζ) ^ N`
+      simp [Finset.mul_sum, mul_assoc, mul_left_comm, mul_comm]
+    _ = (star ζ) ^ N * mpvOverlap (d := d) A A N := by
+      simp [mpvOverlap]
+
+private lemma sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one
+    {D : ℕ} (A B : MPSTensor d D)
+    (hSelf : Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)))
+    (hCross : Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds (1 : ℂ)))
+    (hGaugePhase : GaugePhaseEquiv A B) :
+    SameMPV A B := by
+  classical
+  rcases hGaugePhase with ⟨X, ζ, hX⟩
+  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ :=
+    mpv_eq_pow_mul_of_gaugePhase (A := A) (B := B) X ζ hX
+  have hoverlap :
+      ∀ N : ℕ,
+        mpvOverlap (d := d) A B N = (star ζ) ^ N * mpvOverlap (d := d) A A N :=
+    mpvOverlap_eq_pow_mul_self_of_mpv_eq_pow_mul (A := A) (B := B) (ζ := ζ) hmpv
+  have hSelf_ne :
+      (∀ᶠ N in Filter.atTop, mpvOverlap (d := d) A A N ≠ 0) :=
+    hSelf.eventually_ne (by simp)
+  have hratio_tendsto :
+      Filter.Tendsto
+        (fun N => mpvOverlap (d := d) A B N / mpvOverlap (d := d) A A N)
+        Filter.atTop (nhds (1 : ℂ)) := by
+    simpa using (Filter.Tendsto.div hCross hSelf (by simp))
+  have hratio_eq :
+      ∀ᶠ N in Filter.atTop,
+        mpvOverlap (d := d) A B N / mpvOverlap (d := d) A A N = (star ζ) ^ N := by
+    filter_upwards [hSelf_ne] with N hN
+    have hEq := hoverlap N
+    calc
+      mpvOverlap (d := d) A B N / mpvOverlap (d := d) A A N
+          = ((star ζ) ^ N * mpvOverlap (d := d) A A N) / mpvOverlap (d := d) A A N := by
+              simp [hEq]
+      _ = (star ζ) ^ N := by
+            simpa using (mul_div_cancel_right₀ ((star ζ) ^ N) hN)
+  have hpow_tendsto :
+      Filter.Tendsto (fun N : ℕ => (star ζ) ^ N) Filter.atTop (nhds (1 : ℂ)) :=
+    Filter.Tendsto.congr' hratio_eq hratio_tendsto
+  have hstarζ : star ζ = (1 : ℂ) :=
+    eq_one_of_tendsto_pow_atTop_nhds_one (z := star ζ) hpow_tendsto
+  have hζ : ζ = 1 := by
+    have := congrArg star hstarζ
+    simpa using this
+  have hGauge : GaugeEquiv A B := by
+    refine ⟨X, ?_⟩
+    intro i
+    simp [hζ, hX i]
+  exact GaugeEquiv.sameMPV hGauge
+
+end BlockSeparationCoreHelpers
+
 /-! ### Block separation core lemma (mixed-transfer / overlap route)
 
 This is the literature-aligned block-separation step in canonical form.
@@ -491,8 +627,8 @@ lemma block_separation_core
   revert μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_ds hB_ds hA_overlap h_summed
   induction r with
   | zero =>
-      intro μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_ds hB_ds hA_overlap h_summed
-      intro k; exact k.elim0
+      intro μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_ds hB_ds hA_overlap h_summed k
+      exact k.elim0
   | succ r ih =>
       intro μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_ds hB_ds hA_overlap h_summed
       cases r with
@@ -642,8 +778,8 @@ lemma block_separation_core
             have hρ_lt : ρ < 1 := by
               have hμ0 : 0 < ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ :=
                 norm_pos_iff.mpr (hμ_ne_zero 0)
-              have h01 : (0 : Fin (Nat.succ (Nat.succ r))) < 1 := by
-                simpa using (Fin.zero_lt_one : (0 : Fin (Nat.succ (Nat.succ r))) < 1)
+              have h01 : (0 : Fin (Nat.succ (Nat.succ r))) < 1 :=
+                (Fin.zero_lt_one : (0 : Fin (Nat.succ (Nat.succ r))) < 1)
               have hstrict : ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ < ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ :=
                 hμ_strict h01
               exact (div_lt_one hμ0).2 hstrict
@@ -725,11 +861,9 @@ lemma block_separation_core
                 refine tendsto_of_tendsto_of_tendsto_of_le_of_le
                   (f := fun N => ‖δ (0 : Fin (Nat.succ (Nat.succ r))) N‖)
                   (g := fun _ => (0 : ℝ)) (h := fun N => C * ρ ^ N)
-                  (hg := by simpa using (tendsto_const_nhds :
-                    Filter.Tendsto (fun _ : ℕ => (0 : ℝ)) Filter.atTop (nhds 0)))
+                  (hg := tendsto_const_nhds)
                   (hh := hmul)
-                  (hgf := fun N => by
-                    simpa using (norm_nonneg (δ (0 : Fin (Nat.succ (Nat.succ r))) N)))
+                  (hgf := fun N => norm_nonneg (δ (0 : Fin (Nat.succ (Nat.succ r))) N))
                   (hfh := fun N => hδ0_le N)
               exact (tendsto_zero_iff_norm_tendsto_zero).2 hnorm
             have hCross_tendsto :
@@ -745,187 +879,27 @@ lemma block_separation_core
                 simpa using (hSelf.sub hδ0_tendsto)
               refine Filter.Tendsto.congr (fun N => ?_) h
               simp [δ, sub_sub]
-            -- Step 4: use overlap decay to get gauge-phase equivalence, then fix the phase.
-            have hGaugePhase : GaugePhaseEquiv (A 0) (B 0) := by
-              by_contra hnot
-              have hto0 :=
-                mpvOverlap_tendsto_zero (A := A 0) (B := B 0)
-                  (hA_inj 0) (hB_inj 0) (hA_ds 0) (hB_ds 0) hnot
-              have : (0 : ℂ) = 1 := tendsto_nhds_unique hto0 hCross_tendsto
-              exact zero_ne_one this
-            rcases hGaugePhase with ⟨X, ζ, hX⟩
-            -- Gauge-phase relation implies exact proportionality of MPVs, hence of overlaps.
-            have evalWord_smul_const {D : ℕ} (ζ : ℂ) (T : MPSTensor d D) :
-                ∀ w : List (Fin d),
-                  evalWord (fun i => ζ • T i) w = (ζ ^ w.length) • evalWord T w := by
-              intro w; induction w with
-              | nil => simp [evalWord]
-              | cons i w ih =>
-                  simp [evalWord, ih, pow_succ, Matrix.mul_smul, Matrix.smul_mul, smul_smul, mul_assoc]
-            have hmpv_phase :
-                ∀ (N : ℕ) (σ : Fin N → Fin d),
-                  mpv (B 0) σ = ζ ^ N * mpv (A 0) σ := by
-              intro N σ
-              set w : List (Fin d) := List.ofFn σ
-              have hwlen : w.length = N := by simp [w]
-              let C : MPSTensor d (dim 0) := fun i =>
-                (X : Matrix (Fin (dim 0)) (Fin (dim 0)) ℂ) * (A 0 i) *
-                  (((X⁻¹ : GL (Fin (dim 0)) ℂ)) : Matrix (Fin (dim 0)) (Fin (dim 0)) ℂ)
-              have hB0 : (fun i => ζ • C i) = B 0 := by
-                funext i
-                simpa [C, hX i] using (hX i).symm
-              have hEval :
-                  evalWord (B 0) w = (ζ ^ w.length) • evalWord C w := by
-                -- rewrite `B 0` as `ζ • C` and apply `evalWord_smul_const`
-                have := evalWord_smul_const (D := dim 0) ζ C w
-                -- rewrite LHS using `hB0` (in the correct direction)
-                simpa [hB0] using this
-              have hGauge :
-                  evalWord C w =
-                    (X : Matrix (Fin (dim 0)) (Fin (dim 0)) ℂ) *
-                      evalWord (A 0) w *
-                        (((X⁻¹ : GL (Fin (dim 0)) ℂ)) :
-                          Matrix (Fin (dim 0)) (Fin (dim 0)) ℂ) := by
-                simpa [C] using (evalWord_gauge (A := A 0) (B := C) X (by intro i; rfl) w)
-              -- Now take the trace.
-              -- We avoid `simp` here because it can rewrite the matrix inverse in a way that makes
-              -- the cyclic-trace lemma harder to match.
-              --
-              -- Start from the definition of `mpv` as a trace.
-              have : mpv (B 0) σ = (ζ ^ w.length) * Matrix.trace (evalWord C w) := by
-                -- `mpv` is the trace of word evaluation; `hEval` gives the scalar factor.
-                -- Note: `Matrix.trace_smul` produces a scalar action; for `ℂ` this is multiplication.
-                simp [mpv, coeff, w, hEval, Matrix.trace_smul, smul_eq_mul, mul_assoc]
-              -- Substitute the gauge form for `evalWord C w` and use trace cyclicity.
-              have htrace : Matrix.trace (evalWord C w) = Matrix.trace (evalWord (A 0) w) := by
-                -- `hGauge` expresses `evalWord C w` as a conjugation by `X`.
-                -- Use the already-proved cyclicity lemma `trace_conj_eq`.
-                -- (We may need to reassociate once.)
-                simpa [hGauge, Matrix.mul_assoc] using
-                  (trace_conj_eq (X := X) (M := evalWord (A 0) w))
-              -- Finish.
-              calc
-                mpv (B 0) σ
-                    = (ζ ^ w.length) * Matrix.trace (evalWord C w) := this
-                _ = (ζ ^ w.length) * Matrix.trace (evalWord (A 0) w) := by simp [htrace]
-                _ = (ζ ^ N) * Matrix.trace (evalWord (A 0) w) := by
-                      -- rewrite `w.length = N`
-                      simpa [hwlen]
-                _ = ζ ^ N * mpv (A 0) σ := by
-                      simp [mpv, coeff, w, mul_assoc]
-            have hoverlap_phase :
-                ∀ N : ℕ,
-                  mpvOverlap (d := d) (A 0) (B 0) N =
-                    (star ζ) ^ N * mpvOverlap (d := d) (A 0) (A 0) N := by
-              intro N
-              classical
-              calc
-                mpvOverlap (d := d) (A 0) (B 0) N
-                    = ∑ σ : Fin N → Fin d, mpv (A 0) σ * star (mpv (B 0) σ) := by
-                        simp [mpvOverlap]
-                _ = ∑ σ : Fin N → Fin d, mpv (A 0) σ * star (ζ ^ N * mpv (A 0) σ) := by
-                        refine Finset.sum_congr rfl ?_
-                        intro σ _
-                        simp [hmpv_phase N σ]
-                _ = ∑ σ : Fin N → Fin d,
-                        mpv (A 0) σ * (star (mpv (A 0) σ) * (star ζ) ^ N) := by
-                        refine Finset.sum_congr rfl ?_
-                        intro σ _
-                        simp [star_mul, star_pow, mul_assoc, mul_left_comm, mul_comm]
-                _ = (star ζ) ^ N * ∑ σ : Fin N → Fin d,
-                        mpv (A 0) σ * star (mpv (A 0) σ) := by
-                        -- factor out the constant `(star ζ)^N`
-                        -- (all sums are over `Finset.univ`).
-                        calc
-                          ∑ σ : Fin N → Fin d,
-                              mpv (A 0) σ * (star (mpv (A 0) σ) * (star ζ) ^ N)
-                              =
-                              ∑ σ : Fin N → Fin d,
-                                (star ζ) ^ N * (mpv (A 0) σ * star (mpv (A 0) σ)) := by
-                                  refine Finset.sum_congr rfl ?_
-                                  intro σ hσ
-                                  simp [mul_assoc, mul_left_comm, mul_comm]
-                          _ = (star ζ) ^ N * ∑ σ : Fin N → Fin d,
-                                mpv (A 0) σ * star (mpv (A 0) σ) := by
-                                  -- `Finset.mul_sum` read backwards.
-                                  simpa using
-                                    (Finset.mul_sum
-                                      (s := (Finset.univ : Finset (Fin N → Fin d)))
-                                      (f := fun σ : Fin N → Fin d =>
-                                        mpv (A 0) σ * star (mpv (A 0) σ))
-                                      (a := (star ζ) ^ N)).symm
-                _ = (star ζ) ^ N * mpvOverlap (d := d) (A 0) (A 0) N := by
-                        simp [mpvOverlap]
-            -- The overlap limit forces the phase `ζ = 1`.
-            have hSelf_ne :
-                (∀ᶠ N in Filter.atTop, mpvOverlap (d := d) (A 0) (A 0) N ≠ 0) :=
-              (hA_overlap (0 : Fin (Nat.succ (Nat.succ r)))).eventually_ne (by simp)
-            have hratio_tendsto :
-                Filter.Tendsto
-                  (fun N =>
-                    mpvOverlap (d := d) (A 0) (B 0) N /
-                      mpvOverlap (d := d) (A 0) (A 0) N)
-                  Filter.atTop (nhds (1 : ℂ)) := by
-              -- `Filter.Tendsto.div` produces the limit `1 / 1`; simplify to `1`.
-              simpa using (Filter.Tendsto.div hCross_tendsto (hA_overlap 0) (by simp))
-            have hratio_eq :
-                ∀ᶠ N in Filter.atTop,
-                  mpvOverlap (d := d) (A 0) (B 0) N /
-                      mpvOverlap (d := d) (A 0) (A 0) N
-                    = (star ζ) ^ N := by
-              filter_upwards [hSelf_ne] with N hN
-              have hEq := hoverlap_phase N
-              calc
-                mpvOverlap (d := d) (A 0) (B 0) N /
-                    mpvOverlap (d := d) (A 0) (A 0) N
-                    = ((star ζ) ^ N * mpvOverlap (d := d) (A 0) (A 0) N) /
-                        mpvOverlap (d := d) (A 0) (A 0) N := by
-                          simpa [hEq]
-                _ = (star ζ) ^ N := by
-                          simpa using (mul_div_cancel_right₀ ((star ζ) ^ N) hN)
-            have hpow_tendsto :
-                Filter.Tendsto (fun N => (star ζ) ^ N) Filter.atTop (nhds (1 : ℂ)) :=
-              Filter.Tendsto.congr' hratio_eq hratio_tendsto
-            have hpow_shift :
-                Filter.Tendsto (fun N => (star ζ) ^ (N + 1)) Filter.atTop (nhds (1 : ℂ)) := by
-              -- shifting does not change the limit at `atTop`
-              exact (Filter.tendsto_add_atTop_iff_nat 1).2 hpow_tendsto
-            have hpow_mul :
-                Filter.Tendsto (fun N => (star ζ) ^ (N + 1)) Filter.atTop (nhds (star ζ)) := by
-              -- `(star ζ)^(N+1) = (star ζ)^N * (star ζ)`
-              have h := (Filter.Tendsto.mul_const (b := star ζ) hpow_tendsto)
-              simpa [pow_succ, mul_assoc] using h
-            have hstarζ : star ζ = (1 : ℂ) := by
-              -- uniqueness of limits in a Hausdorff space
-              have := tendsto_nhds_unique hpow_shift hpow_mul
-              simpa [eq_comm] using this
-            have hζ : ζ = 1 := by
-              have := congrArg star hstarζ
-              simpa using this
-            have hGauge : GaugeEquiv (A 0) (B 0) := by
-              refine ⟨X, ?_⟩
-              intro i
-              simpa [hζ, hX i]
-            exact GaugeEquiv.sameMPV hGauge
+            -- Step 4: overlap limit forces gauge equivalence, hence `SameMPV`.
+            have hGaugePhase : GaugePhaseEquiv (A 0) (B 0) :=
+              gaugePhaseEquiv_of_mpvOverlap_tendsto_one (A := A 0) (B := B 0)
+                (hA_inj 0) (hB_inj 0) (hA_ds 0) (hB_ds 0) hCross_tendsto
+            exact
+              sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one (A := A 0) (B := B 0)
+                (hSelf := hA_overlap 0) (hCross := hCross_tendsto) hGaugePhase
           -- Derive the summed identity for the tail blocks and apply the induction hypothesis.
           have h_summed_tail :
               ∀ (N : ℕ) (σ : Fin N → Fin d),
                 ∑ k : Fin (Nat.succ r),
                   (μ k.succ) ^ N * (mpv (A k.succ) σ - mpv (B k.succ) σ) = 0 := by
             intro N σ
-            let f : Fin (Nat.succ (Nat.succ r)) → ℂ :=
-              fun k => (μ k) ^ N * (mpv (A k) σ - mpv (B k) σ)
-            have hf0 : f 0 = 0 := by
-              have h0 := hHead N σ
-              simp [f, h0]
-            have hsum : (∑ k : Fin (Nat.succ (Nat.succ r)), f k) = 0 := by
-              simpa [f] using h_summed N σ
-            have hsplit : f 0 + (∑ k : Fin (Nat.succ r), f k.succ) = 0 := by
-              simpa [Fin.sum_univ_succ] using hsum
-            have htail : (∑ k : Fin (Nat.succ r), f k.succ) = 0 := by
-              have := eq_neg_of_add_eq_zero_right hsplit
-              simpa [hf0] using this
-            simpa [f] using htail
+            have hsum :
+                (μ 0) ^ N * (mpv (A 0) σ - mpv (B 0) σ) +
+                  ∑ k : Fin (Nat.succ r),
+                    (μ k.succ) ^ N * (mpv (A k.succ) σ - mpv (B k.succ) σ) = 0 := by
+              simpa [Fin.sum_univ_succ] using h_summed N σ
+            have hhead : (μ 0) ^ N * (mpv (A 0) σ - mpv (B 0) σ) = 0 := by
+              simp [hHead N σ]
+            simpa [hhead] using hsum
           have hTail :
               ∀ k : Fin (Nat.succ r), SameMPV (A k.succ) (B k.succ) := by
             -- apply IH to the shifted data
