@@ -2,7 +2,14 @@
 Copyright (c) 2025 MPSLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import MPSLean.PositiveMapSpectral
+-- Direct imports replacing the former MPSLean.PositiveMapSpectral hub:
+-- • Channel.PositiveMap  – Mathlib PosDef API (re_dotProduct_nonneg, etc.)
+-- • Channel.Irreducible  – IsIrreducibleCP, IsOrthogonalProjection
+-- Both are already transitively available through MPSLean.MPS.CPPrimitive
+-- (CPPrimitive → KadisonSchwarz → PositiveMap; CPPrimitive → Irreducible),
+-- but are listed explicitly here so the dependency is self-documenting.
+import MPSLean.Channel.PositiveMap
+import MPSLean.Channel.Irreducible
 import MPSLean.MPS.CPPrimitive
 
 import Mathlib.Tactic.NoncommRing

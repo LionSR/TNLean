@@ -5,6 +5,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import MPSLean.QPF.PosDef
 import MPSLean.QPF.Uniqueness
 import MPSLean.MPS.CPPrimitive
+-- Needed for IsChannel.exists_posSemidef_fixedPoint (previously reached
+-- transitively via QPF.PosDef → PositiveMapSpectral → CesaroFixedPoint;
+-- now that PosDef no longer imports the re-export hub, add it directly here).
+import MPSLean.Channel.CesaroFixedPoint
 
 /-!
 # Quantum Perron–Frobenius Theory for MPS Transfer Operators

@@ -45,7 +45,7 @@ import MPSLean.PiAlgebra.Construction
 import MPSLean.PiAlgebra.FundamentalTheoremComplete
 import MPSLean.PiAlgebra.BlockSeparation
 
--- Re-export hubs
-import MPSLean.PositiveMapSpectral
-import MPSLean.TransferSpectral
-import MPSLean.PiAlgebraExtension
+-- NOTE: MPSLean.PositiveMapSpectral, MPSLean.TransferSpectral, and
+-- MPSLean.PiAlgebraExtension are backwards-compatible re-export hubs kept for
+-- external downstream consumers. They are NOT imported here because every
+-- module they re-export is already covered by the direct imports above.
