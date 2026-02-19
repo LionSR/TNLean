@@ -15,6 +15,9 @@
 *.bbl
 *.blg
 
+Notes/Wolff/cho06_spectral_properties.pdf
+
+
 # Compiled PDFs (regenerable)
 presentation*.pdf
 
