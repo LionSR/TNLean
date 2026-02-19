@@ -1,0 +1,356 @@
+MPV overlap / Gram infrastructure plan (Lean memo)
+Date: 2026-02-18
+Repo: MPSLean
+Target gap: close `sorry` in `MPSTensor.block_separation_core` (MPSLean/PiAlgebra/CanonicalFormSep.lean)
+Immediate subtask: overlap/Gram layer needed for the literature route
+  “equal-or-orthogonal / mixed transfer → overlap decay → Gram-matrix LI → block separation”.
+
+This memo is intentionally Lean-facing: exact definition suggestions, Mathlib lemma names + import paths,
+then a concrete proof sketch for the key trace/overlap identity using the already-proved
+`mixedTransferMap_pow_apply`.
+
+================================================================================
+1) MPV state vector as an element of a finite-dimensional Hilbert space
+================================================================================
+
+Goal: treat the MPV coefficients σ ↦ mpv A σ as a vector in the physical Hilbert space
+  H_N := EuclideanSpace ℂ (Fin N → Fin d).
+
+There is already a purely function-level view in:
+  `MPSLean/MPS/BasisNormal.lean`:
+    def mpvFun (A : MPSTensor d D) (N : ℕ) : (Fin N → Fin d) → ℂ := fun σ => mpv A σ
+
+For overlaps / Gram matrices, it is cleaner to package this into an `EuclideanSpace` vector.
+Suggested new file (minimal deps):
+  `MPSLean/MPS/MPVOverlap.lean` (or `MPSLean/MPS/Overlap.lean`)
+Imports:
+  - `import MPSLean.MPS.Defs`              -- mpv
+  - `import Mathlib.Analysis.InnerProductSpace.PiL2`  -- EuclideanSpace
+  - `import Mathlib.Analysis.InnerProductSpace.Basic` -- RCLike.inner_apply, inner_conj_symm
+  - `import Mathlib.Algebra.BigOperators.Basic`        -- finite sums
+
+Recommended core defs:
+
+  namespace MPSTensor
+
+  abbrev Cfg (d N : ℕ) := Fin N → Fin d
+  abbrev MPVSpace (d N : ℕ) := EuclideanSpace ℂ (Cfg d N)
+
+  /-- The MPV state vector at size `N` as a vector in `EuclideanSpace`. -/
+  noncomputable def mpvState {d D : ℕ} (A : MPSTensor d D) (N : ℕ) : MPVSpace d N :=
+    (EuclideanSpace.equiv (Cfg d N) ℂ).symm (fun σ => mpv A σ)
+
+  @[simp] lemma mpvState_apply {d D : ℕ} (A : MPSTensor d D) (N : ℕ) (σ : Cfg d N) :
+      mpvState (d := d) A N σ = mpv A σ := by
+    simp [mpvState, EuclideanSpace.equiv]
+
+  /-- Lean’s Hilbert-space overlap (conjugate-linear in the first argument). -/
+  noncomputable def mpvInner {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) : ℂ :=
+    ⟪mpvState (d := d) A N, mpvState (d := d) B N⟫_ℂ
+
+  /-- The “literature orientation” overlap (conjugating the B-term).
+      This matches `LinearMap.trace ((mixedTransferMap A B)^N)` below. -/
+  noncomputable def mpvOverlap {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) : ℂ :=
+    ∑ σ : Cfg d N, mpv A σ * star (mpv B σ)
+
+Basic bookkeeping lemmas to add immediately:
+
+  /-- Expand `mpvInner` as a finite sum of coordinates. -/
+  lemma mpvInner_eq_sum {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
+      mpvInner (d := d) A B N = ∑ σ : Cfg d N, mpv B σ * star (mpv A σ) := by
+    -- `PiLp.inner_apply` + `RCLike.inner_apply` + simp [mpvInner, mpvState]
+    -- NOTE: `RCLike.inner_apply x y : ⟪x,y⟫ = y * star x`.
+    admit
+
+  /-- Relate the two overlap conventions via conjugate symmetry of inner products. -/
+  lemma mpvOverlap_eq_conj_mpvInner {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
+      mpvOverlap (d := d) A B N = star (mpvInner (d := d) B A N) := by
+    -- immediate from `mpvInner_eq_sum` and commutativity in ℂ.
+    admit
+
+Notes:
+* `mpvOverlap` is defined for different bond dims D₁,D₂, since it lives purely in H_N.
+* The transfer-operator formula we prove in §3 is for the equal-bond-dimension case (current `mixedTransferMap`).
+  Rectangular generalization is a later extension.
+
+================================================================================
+2) Best Mathlib lemmas for `LinearMap.trace` (basis / orthonormal basis)
+================================================================================
+
+You suspected the right ones; confirmed by environment search.
+
+(2.a) Trace via orthonormal basis (inner-product-friendly)
+  Name:   `LinearMap.trace_eq_sum_inner`
+  Module: `Mathlib.Analysis.InnerProductSpace.Trace`
+  Type:
+    LinearMap.trace_eq_sum_inner
+      (T : E →ₗ[𝕜] E) (b : OrthonormalBasis ι 𝕜 E) :
+      (LinearMap.trace 𝕜 E) T = ∑ i, ⟪b i, T (b i)⟫_𝕜
+
+(2.b) Trace via any module basis (matrix-friendly)
+  Name:   `LinearMap.trace_eq_matrix_trace`
+  Module: `Mathlib.LinearAlgebra.Trace`
+  Type:
+    LinearMap.trace_eq_matrix_trace
+      (b : Module.Basis ι R M) (f : M →ₗ[R] M) :
+      (LinearMap.trace R M) f = ((LinearMap.toMatrix b b) f).trace
+
+(2.c) Trace invariance under change of space / “conjugation by a linear equivalence”
+  Name:   `LinearMap.trace_conj'`
+  Module: `Mathlib.LinearAlgebra.Trace`
+  Type:
+    LinearMap.trace_conj'
+      (f : M →ₗ[R] M) (e : M ≃ₗ[R] N) :
+      (LinearMap.trace R N) (e.conj f) = (LinearMap.trace R M) f
+
+This is useful if we decide to compute traces after transporting an endomorphism to a more convenient
+representation (e.g. EuclideanSpace).
+
+================================================================================
+3) Key identity: trace of mixed transfer power = MPV overlap sum
+================================================================================
+
+Target identity (Lean-corrected arity):
+
+  Let V := Matrix (Fin D) (Fin D) ℂ.
+
+  theorem trace_mixedTransfer_pow_eq_sum_mpv_mul_star
+      (A B : MPSTensor d D) (N : ℕ) :
+      (LinearMap.trace ℂ V) ((mixedTransferMap A B) ^ N)
+        = ∑ σ : (Fin N → Fin d), mpv A σ * star (mpv B σ)
+
+This is exactly the formula needed to identify the physical overlap with a transfer-operator trace.
+
+Recommended proof route (does NOT require Kronecker/vec machinery; it uses the existing
+`mixedTransferMap_pow_apply` lemma and basic matrix-basis manipulations).
+
+--- Step 0: imports needed for this lemma
+In the file containing the lemma (suggest: `MPSLean/Spectral/MPVOverlapTrace.lean`):
+  - `import MPSLean.Spectral.MixedTransfer`  -- mixedTransferMap + mixedTransferMap_pow_apply
+  - `import Mathlib.LinearAlgebra.Trace`     -- LinearMap.trace_eq_matrix_trace
+  - `import Mathlib.Data.Matrix.Basis`       -- Matrix.mul_single_apply_same/of_ne, etc
+  - `import Mathlib.LinearAlgebra.Matrix.Trace` -- Matrix.trace_conjTranspose, trace_single lemmas
+  - (optional) `import Mathlib.Analysis.InnerProductSpace.Trace` if you also want the `trace_eq_sum_inner` viewpoint.
+
+--- Step 1: a concrete “matrix-unit” trace expansion lemma
+Prove once and reuse everywhere:
+
+  lemma linearMap_trace_eq_sum_apply_single
+      {D : ℕ} [Fintype (Fin D)] [DecidableEq (Fin D)]
+      (T : (Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+      (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)) T
+        = ∑ p : Fin D, ∑ q : Fin D, (T (Matrix.single p q (1 : ℂ))) p q
+
+How to prove it cleanly:
+  • Use `LinearMap.trace_eq_matrix_trace` with the *Pi-basis* on matrices:
+      b := Pi.basis (fun _ : Fin D => Pi.basisFun ℂ (Fin D))
+    This is a basis of the curried function type `(Fin D → Fin D → ℂ)` (defeq to matrices).
+
+  • Key existing simp lemmas you can chain to show `b (p,q) = Matrix.single p q 1`:
+      - `Pi.basis_apply` (Mathlib.LinearAlgebra.StdBasis)
+      - `Pi.basisFun_apply` (Mathlib.LinearAlgebra.StdBasis)
+      - `Matrix.single_eq_of_single_single` (Mathlib.Data.Matrix.Basis)
+
+  • Key existing repr lemma to avoid hand-proving coordinate extraction:
+      - `Pi.basis_repr` (Mathlib.LinearAlgebra.StdBasis)
+      - `Pi.basisFun_repr` (Mathlib.LinearAlgebra.StdBasis)
+    Together these give:
+      (b.repr M) (p,q) = M p q.
+
+  • Then expand:
+      trace T = trace (toMatrix b b T)
+              = ∑ (p,q), (toMatrix b b T) (p,q) (p,q)
+              = ∑ (p,q), (b.repr (T (b (p,q)))) (p,q)
+              = ∑ p q, (T (Matrix.single p q 1)) p q.
+
+This lemma is the exact substitute for the Lean3-era “stdBasisMatrix diagonal trace trick”.
+
+--- Step 2: plug in `T = (mixedTransferMap A B)^N`
+Start from the lemma above:
+
+  (LinearMap.trace ℂ V) ((mixedTransferMap A B) ^ N)
+    = ∑ p q, (((mixedTransferMap A B) ^ N) (Matrix.single p q 1)) p q.
+
+Now expand the application using the existing lemma:
+
+  `mixedTransferMap_pow_apply` (MPSLean/Spectral/MixedTransfer.lean)
+
+specialized to `X := Matrix.single p q 1`:
+
+  ((mixedTransferMap A B) ^ N) (Matrix.single p q 1)
+    = ∑ σ : Fin N → Fin d,
+        evalWord A (List.ofFn σ) * (Matrix.single p q 1) * (evalWord B (List.ofFn σ))ᴴ.
+
+Interchange the finite sums:
+  ∑ p q ∑ σ (...)  =  ∑ σ ∑ p q (...)
+
+--- Step 3: compute the key matrix-unit entry
+Need a helper lemma (prove in the same file):
+
+  lemma entry_mul_single_mul_conjTranspose
+      (M N : Matrix (Fin D) (Fin D) ℂ) (p q : Fin D) :
+      (M * Matrix.single p q (1 : ℂ) * N) p q = M p p * N q q
+
+This is a one-liner with existing simp lemmas from `Mathlib.Data.Matrix.Basis`:
+  - `Matrix.mul_single_apply_same` and `Matrix.mul_single_apply_of_ne`
+  - `Matrix.mul_apply`
+Plus `Finset.sum_eq_single` to kill all but the `k=q` term.
+
+--- Step 4: collapse the double sum over p,q
+After Step 3:
+
+  ∑ p q, (evalWord A w * single p q 1 * (evalWord B w)ᴴ) p q
+    = ∑ p q, (evalWord A w p p) * ((evalWord B w)ᴴ q q)
+    = (∑ p, evalWord A w p p) * (∑ q, (evalWord B w)ᴴ q q)
+    = Matrix.trace (evalWord A w) * Matrix.trace ((evalWord B w)ᴴ)
+
+Then use Mathlib lemma:
+  `Matrix.trace_conjTranspose` (Mathlib.LinearAlgebra.Matrix.Trace)
+    trace (Xᴴ) = star (trace X)
+
+So the word contribution becomes:
+  mpv A σ * star (mpv B σ).
+
+That yields the target identity.
+
+--- Existing helper lemmas (already in Mathlib)
+Instead of `Matrix.stdBasisMatrix` (Lean3 name), in Lean4/Mathlib use:
+  - matrix units are `Matrix.single p q (1 : ℂ)` (file: Mathlib.Data.Matrix.Basis)
+  - multiplication with single:
+      `Matrix.mul_single_apply_same`, `Matrix.mul_single_apply_of_ne`
+      `Matrix.single_mul_apply_same`, `Matrix.single_mul_apply_of_ne`
+    (file: Mathlib.Data.Matrix.Basis)
+  - trace of conjTranspose:
+      `Matrix.trace_conjTranspose` (file: Mathlib.LinearAlgebra.Matrix.Trace)
+
+================================================================================
+4) From spectral gap to overlap decay (¬ GaugePhaseEquiv ⇒ overlap → 0)
+================================================================================
+
+Repo fact already available:
+  `MPSTensor.mixedTransfer_pow_tendsto_zero` in
+    `MPSLean/Spectral/SpectralGap.lean`
+  Statement (abridged):
+    if A,B injective + DS gauge and ¬GaugePhaseEquiv A B,
+    then for any matrix X,
+      Tendsto (fun n => ((mixedTransferMap A B)^n) X) atTop (nhds 0).
+
+Easiest “no operator-topology” route to overlap decay:
+
+1. Use the matrix-unit trace expansion lemma from §3 (Step 1):
+     trace((mixedTransferMap A B)^n)
+       = ∑ p q, (((mixedTransferMap A B)^n) (single p q 1)) p q.
+
+2. For each fixed (p,q), apply `mixedTransfer_pow_tendsto_zero` with
+     X := Matrix.single p q (1:ℂ)
+   to get the matrix tends to 0.
+
+3. Turn matrix convergence → entry convergence:
+   • Use the continuous linear map `Matrix.entryLinearMap ℂ ℂ p q` and
+     `LinearMap.continuous_of_finiteDimensional` (same pattern as in
+     `Spectral/CrossCorrelation.lean` for `Matrix.traceLinearMap`).
+
+4. Since the sum over p,q is finite, apply `tendsto_finset_sum`
+   (Mathlib.Topology.Algebra.Monoid) twice to conclude:
+
+     Tendsto (fun n => (LinearMap.trace ℂ V) ((mixedTransferMap A B)^n)) atTop (nhds 0).
+
+5. Finally, combine with the key identity from §3:
+     trace((mixedTransferMap A B)^n) = mpvOverlap A B n
+   to get overlap decay.
+
+This gives the “equal-or-orthogonal” half: for injective DS-gauge blocks,
+  ¬GaugePhaseEquiv A B  ⇒  mpvOverlap A B n → 0.
+
+================================================================================
+5) Using GramMatrixLI (already proved) and what assumptions are still needed
+================================================================================
+
+Already in repo:
+  `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`
+  in `MPSLean/Algebra/GramMatrixLI.lean`.
+
+To apply it in the MPS context, we need a family of vectors v_k(N) in H_N with
+  ⟪v_j(N), v_k(N)⟫ → δ_{jk}.
+
+Natural choice:
+  v_k(N) := normalized MPV state vectors for canonical blocks.
+
+Concrete Lean data:
+  • Index type ι: typically `Fin r` (blocks), or a maximal “basis of normal tensors” subset.
+  • Space V(N): `MPVSpace d N := EuclideanSpace ℂ (Fin N → Fin d)`.
+  • Vectors:
+      u_k(N) := mpvState (A k) N
+      v_k(N) := (1 / ‖u_k(N)‖) • u_k(N)    (or a Real-sqrt-based normalization)
+
+What we need to prove to feed `eventually_linearIndependent_of_gram_tendsto_id`:
+
+(A) Off-diagonal Gram entries → 0
+    For j ≠ k, show
+      Tendsto (fun N => ⟪v_j(N), v_k(N)⟫) atTop (nhds 0).
+
+    Sufficient conditions:
+      • show unnormalized overlaps decay:
+          mpvInner (A j) (A k) N → 0
+        using §4 (via mixed transfer + trace identity), plus conjugate symmetry
+        `inner_conj_symm` if the orientation doesn’t match.
+      • control denominators: need `‖u_k(N)‖` does not go to 0 (at least eventually).
+        A clean way is to prove `‖u_k(N)‖² → c_k` with c_k > 0.
+
+(B) Diagonal Gram entries → 1
+    If we normalize per N so that ‖v_k(N)‖ = 1, then diagonal entries are 1 *by definition*;
+    hence they trivially tend to 1. This avoids proving the exact “self-overlap → 1” statement
+    at this stage.
+
+(C) “Eventually nonzero” / definability of normalization
+    To define v_k(N) for all N, we need ‖u_k(N)‖ ≠ 0.
+
+    A sufficient approach:
+      • Prove a lemma: injectivity ⇒ ∃ σ of some fixed length N₀ with mpv (A k) σ ≠ 0.
+        Then u_k(N₀) ≠ 0, and for normalization-based proofs we only need linear independence
+        for N≥N₀ anyway.
+      • Alternatively, prove a genuine limit for the self-overlap:
+          mpvOverlap (A k) (A k) N → 1
+        which implies eventual nonzero. (This is the “primitive/peripheral-spectrum” part
+        of the literature; may require more theory than we want right now.)
+
+Net effect for `block_separation_core`:
+  Once we can show a Gram matrix for a suitable block family tends to I, we can invoke
+  `eventually_linearIndependent_of_gram_tendsto_id` to obtain eventual linear independence,
+  then use the global MPV equality (summed identity) + strict |μ| ordering to match blocks.
+
+================================================================================
+Dependency graph + next implementation steps
+================================================================================
+
+Existing:
+  mpv (MPSLean/MPS/Defs.lean)
+  mixedTransferMap_pow_apply (MPSLean/Spectral/MixedTransfer.lean)
+  mixedTransfer_pow_tendsto_zero (MPSLean/Spectral/SpectralGap.lean)
+  eventually_linearIndependent_of_gram_tendsto_id (MPSLean/Algebra/GramMatrixLI.lean)
+
+NEW (minimal, square-dimension overlap layer):
+  [1] MPSLean/MPS/MPVOverlap.lean
+      - Cfg, MPVSpace, mpvState, mpvInner, mpvOverlap
+      - simp lemmas: mpvState_apply
+      - lemma: mpvOverlap_eq_conj_mpvInner
+
+  [2] MPSLean/Spectral/MPVOverlapTrace.lean
+      - lemma: linearMap_trace_eq_sum_apply_single
+      - lemma: trace_mixedTransfer_pow_eq_sum_mpv_mul_star
+      - corollary: mpvOverlap_eq_trace_mixedTransfer_pow (and/or mpvInner variant)
+
+  [3] MPSLean/Spectral/MPVOverlapDecay.lean
+      - lemma: Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)
+        under injective+DS gauge + ¬GaugePhaseEquiv (using §4 finite-sum argument)
+
+  [4] Glue to GramMatrixLI (later file; might live near CanonicalFormSep)
+      - define normalized vectors v_k(N)
+      - prove Gram entry convergence assumptions
+      - apply eventually_linearIndependent_of_gram_tendsto_id
+
+Open risk / likely extra work:
+  • controlling self-overlaps (needed for denominator bounds if we normalize per N)
+    may require a “primitive transfer operator” lemma not yet present.
+  • Rectangular overlaps (dim_j ≠ dim_k) will need rectangular mixed transfer; postpone until
+    the square case is stable.

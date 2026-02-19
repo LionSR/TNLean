@@ -1,0 +1,135 @@
+Memo: MPV overlap via operator-trace (MPSLean/Spectral/MPVOverlapTrace.lean)
+
+Date: 2026-02-19
+
+Goal
+----
+Show
+  LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) ((mixedTransferMap A B) ^ N)
+    = mpvOverlap (d := d) A B N
+by expanding the operator trace in the matrix-unit basis and using the word-sum formula for
+mixedTransferMap powers.
+
+Key Mathlib lemmas / files
+--------------------------
+Trace + matrices:
+* LinearMap.trace_eq_matrix_trace
+  (import Mathlib.LinearAlgebra.Trace)
+* LinearMap.toMatrix_apply
+  (pulled in by the trace import; used when rewriting Matrix.trace (toMatrix ...))
+* Matrix.trace_conjTranspose
+  (import Mathlib.LinearAlgebra.Matrix.Trace)
+
+Standard basis / matrix units:
+* Matrix.stdBasis
+* Matrix.stdBasis_eq_single
+  (import Mathlib.LinearAlgebra.Matrix.StdBasis)
+  Proof uses simp [Matrix.stdBasis, Matrix.single_eq_of_single_single]
+
+Pi basis simp lemmas (for unraveling stdBasis repr/apply):
+* Pi.basis_apply, Pi.basis_repr
+* Pi.basisFun_apply, Pi.basisFun_repr
+  (import Mathlib.LinearAlgebra.StdBasis)
+
+Matrix.single lemmas:
+* Matrix.single_eq_of_single_single
+* Matrix.mul_single_apply_same, Matrix.mul_single_apply_of_ne
+  (import Mathlib.Data.Matrix.Basis)
+
+Big-operator reordering/factorization:
+* Finset.sum_comm_cycle
+  (import Mathlib.Algebra.BigOperators.Group.Finset.Sigma)
+* Fintype.sum_mul_sum
+  (import Mathlib.Algebra.BigOperators.Ring.Finset)
+* Fintype.sum_apply
+  (import Mathlib.Algebra.BigOperators.Pi)
+
+Project lemmas:
+* mixedTransferMap_pow_apply
+  (import MPSLean.Spectral.MixedTransfer)
+
+
+(1) Trace expansion lemma
+------------------------
+Lemma name in file:
+  linearMap_trace_eq_sum_apply_single
+
+Statement:
+  (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)) T
+    = ∑ p, ∑ q, (T (Matrix.single p q 1)) p q
+
+Robust proof pattern:
+1. Take b := Matrix.stdBasis ℂ (Fin D) (Fin D).
+2. Show coordinates are entries:
+     (b.repr X) (p,q) = X p q
+   via simp using Pi.basis_repr / Pi.basisFun_repr and Basis.map_repr.
+3. Use LinearMap.trace_eq_matrix_trace and unfold Matrix.trace of the toMatrix.
+4. Reindex the sum over (Fin D × Fin D) into a double sum.
+5. Replace b (p,q) with Matrix.single p q 1 using Matrix.stdBasis_eq_single.
+
+Crucial line that avoids the old failing goal
+  (Pi.basis (fun _ => Pi.basisFun ...) ⟨p,q⟩) p q = 1
+is to *not* hand-expand Pi.basis; instead rely on:
+  Matrix.stdBasis_eq_single
+whose proof is already:
+  by simp [Matrix.stdBasis, Matrix.single_eq_of_single_single]
+(using Pi.basis_apply / Pi.basisFun_apply under simp).
+
+
+(2) Entry lemma for M * single * N
+---------------------------------
+Lemma name in file:
+  entry_mul_single_mul
+
+Wanted:
+  (M * Matrix.single p q 1 * N) p q = M p p * N q q
+
+Mathlib lemmas used (Mathlib.Data.Matrix.Basis):
+* Matrix.mul_single_apply_same
+* Matrix.mul_single_apply_of_ne
+
+Proof idea:
+Expand ((M * single) * N) p q as a Fintype sum over the middle index r.
+Only r = q contributes, because (M * single p q 1) p r = 0 for r ≠ q and equals M p p for r = q.
+The two facts are exactly mul_single_apply_of_ne / mul_single_apply_same.
+
+
+(3) Main theorem skeleton
+------------------------
+Theorem name in file:
+  trace_mixedTransferMap_pow_eq_mpvOverlap
+
+High-level steps:
+1. Expand operator trace in matrix units:
+     rw [linearMap_trace_eq_sum_apply_single]
+2. Expand mixed transfer power on each matrix unit:
+     simp only [mixedTransferMap_pow_apply]
+3. Push (p,q)-entry through the σ-sum using Fintype.sum_apply twice, then
+   simplify each summand using entry_mul_single_mul.
+4. Swap the triple sum order (p,q,σ) using:
+     Finset.sum_comm_cycle (s := univ) (t := univ) (u := univ)
+5. Unfold mpvOverlap/mpv/coeff, so RHS becomes
+     ∑ σ, Matrix.trace (evalWord A ...) * star (Matrix.trace (evalWord B ...)).
+6. For each σ, factor the p,q sum using:
+     (Fintype.sum_mul_sum f g).symm
+   and rewrite diagonal sums as traces; simp [Matrix.trace] then uses
+   Matrix.trace_conjTranspose to turn the B-term into a star.
+
+Lean-ready core lines (as implemented):
+* after swapping sums:
+    simp [mpvOverlap, MPSTensor.mpv, MPSTensor.coeff]
+    refine Fintype.sum_congr _ _ (fun σ => ?_)
+    calc
+      (∑ p, ∑ q, Aσ p p * (Bσ)ᴴ q q)
+          = (∑ p, Aσ p p) * (∑ q, (Bσ)ᴴ q q) := by
+              simpa using (Fintype.sum_mul_sum (f := ...) (g := ...)).symm
+      _ = Matrix.trace Aσ * star (Matrix.trace Bσ) := by
+              simp [Matrix.trace]
+
+Notes:
+* When using Fintype.sum_apply, avoid simpa/simp: simp can reduce the proof term to True.
+  Use `exact Fintype.sum_apply ...` and then congrArg to evaluate the second index.
+
+Status
+------
+MPSLean/Spectral/MPVOverlapTrace.lean now compiles without `sorry`.

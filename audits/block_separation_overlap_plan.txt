@@ -1,0 +1,354 @@
+Technical plan: canonical-form block separation via overlaps / Gram matrices
+Date: 2026-02-18
+Repo: MPSLean
+Target gap: `MPSTensor.block_separation_core` (MPSLean/PiAlgebra/CanonicalFormSep.lean), r≥2 case
+Focus: Step S3→S4 in the MPDO / TN-review / 1708 literature route (“equal-or-orthogonal → Gram → linear independence → block separation”).
+
+================================================================================
+0. Literature spine (what we want to mirror)
+================================================================================
+
+Key references (in-repo):
+  • 1606.00608/MPDO-22-12-17-2.tex, Appendix “Proofs of Section MPV”:
+      - Lemma `equalMPS` (label {equalMPS}): overlap limits 0/1 and gauge-phase rigidity.
+      - Corollary `Lem1` (label {Lem1}): Gram → identity ⇒ eventual linear independence.
+  • 1708.00029/main.tex:
+      - Proposition `equal-or-orthogonal` and Lemma `Lem1t` (approx-orthogonality ⇒ LI).
+  • 2011.12127/TN-Review-main.tex, §“Basis of normal tensors”:
+      - BNT selection criterion via mixed transfer operator eigenvalue |λ_{jk}| < 1.
+
+Standard proof sketch (primitive/normal setting; no periodicity):
+  S1: Put tensors into canonical form (block diagonal, each block “normal/primitive”; scale so ρ=1).
+  S2: Equal-or-orthogonal:
+        For blocks A,B: either ρ(F_AB) < 1 ⇒ overlaps decay, or ρ(F_AB)=1 ⇒ gauge-phase.
+  S3: Pick a BNT = maximal subset of inequivalent normal blocks; then cross-overlaps → 0.
+  S3→S4: Gram matrix → I ⇒ eventual linear independence of the MPV vectors.
+  S4: Use LI + global MPV equality to match blocks (permutation/phase/gauge); for equal case, phases cancel.
+
+Lean already has: S2 for square (equal-bond) tensors via `mixedTransferMap` and `SpectralGap.lean`.
+Lean already has: Corollary Lem1 (Gram→I ⇒ LI) as `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`
+  (MPSLean/Algebra/GramMatrixLI.lean).
+Lean is missing: the “overlap layer” (MPV overlap + its transfer-matrix formula) and the glue from
+spectral gap → overlap decay → Gram convergence → block separation.
+
+================================================================================
+1) Overlap definition in Lean (Q1)
+================================================================================
+
+Goal: formalize the Hilbert-space overlap used in MPDO/1708.
+
+Literature overlap (periodic boundary MPVs):
+  ⟨V^{(N)}(A), V^{(N)}(B)⟩ = ∑_{σ : (Fin N → Fin d)} conj(tr(evalWord B σ)) * tr(evalWord A σ).
+
+Important convention note:
+  Lean’s `⟪x,y⟫_ℂ` is conjugate-linear in the *first* argument.
+  Therefore the literature expression (conjugating the B-term) corresponds to `⟪V(B), V(A)⟫_ℂ`.
+
+Proposed “physical Hilbert space” type:
+  For fixed N, the configuration type is `Cfg d N := (Fin N → Fin d)`.
+  The physical Hilbert space is the standard finite-dimensional ℓ² space:
+    `MPVSpace d N := EuclideanSpace ℂ (Cfg d N)`
+  (`EuclideanSpace` is in `Mathlib.Analysis.InnerProductSpace.PiL2`).
+
+Proposed Lean definitions (new file suggestion: `MPSLean/MPS/Overlap.lean`):
+
+  namespace MPSTensor
+
+  abbrev Cfg (d N : ℕ) := (Fin N → Fin d)
+  abbrev MPVSpace (d N : ℕ) := EuclideanSpace ℂ (Cfg d N)
+
+  /-- MPV as a vector in the physical Hilbert space. -/
+  noncomputable def mpvVec (A : MPSTensor d D) (N : ℕ) : MPVSpace d N :=
+    (EuclideanSpace.equiv (Cfg d N) ℂ).symm (fun σ => mpv A σ)
+
+  @[simp] lemma mpvVec_ofLp (A : MPSTensor d D) (N : ℕ) (σ : Cfg d N) :
+      (mpvVec (d := d) (D := D) A N).ofLp σ = mpv A σ := by
+    -- simp [mpvVec, EuclideanSpace.equiv]
+
+  /-- The overlap used in the literature (conjugate on the B side). -/
+  noncomputable def mpvOverlap (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) : ℂ :=
+    ∑ σ : Cfg d N, (star (mpv B σ)) * (mpv A σ)
+
+  /-- Connection to Lean inner product: `mpvOverlap A B N = ⟪mpvVec B N, mpvVec A N⟫`. -/
+  lemma mpvOverlap_eq_inner (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
+      mpvOverlap (d := d) A B N = ⟪mpvVec (d := d) B N, mpvVec (d := d) A N⟫_ℂ := by
+    -- use `PiLp.inner_apply` + simp
+
+Comments:
+  • We keep `mpvOverlap` as a scalar defined by a finite sum, and separately prove it equals an inner product.
+    This avoids fighting `EuclideanSpace` coercions early.
+
+================================================================================
+2) Transfer-matrix formula for overlaps (Q2)
+================================================================================
+
+Target statement (what the literature uses):
+  ⟨V_N(A), V_N(B)⟩ = tr( (∑_i A_i ⊗ \bar{B_i})^N ).
+
+In Lean, we implement bar as entrywise `star` on ℂ:
+  `conjMatrix (M : Matrix _ _ ℂ) := M.map star`.
+
+Proposed definitions (same file `MPSLean/MPS/Overlap.lean`):
+
+  /-- Entrywise complex conjugation. -/
+  abbrev conjMatrix {m n} (M : Matrix m n ℂ) : Matrix m n ℂ := M.map star
+
+  /-- The “overlap transfer matrix” E_{A,B} := ∑_i A_i ⊗ₖ \bar{B_i}. -/
+  noncomputable def overlapTransferMatrix (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+      Matrix (Fin D₁ × Fin D₂) (Fin D₁ × Fin D₂) ℂ :=
+    ∑ i : Fin d, (A i) ⊗ₖ (conjMatrix (B i))
+
+  /-- Main formula: MPV overlap equals trace of the overlap transfer matrix power. -/
+  theorem mpvOverlap_eq_trace_overlapTransfer_pow
+      (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
+      mpvOverlap (d := d) A B N = Matrix.trace ((overlapTransferMatrix (d := d) A B) ^ N) := by
+    -- proof by expanding powers as sums over words and using `Matrix.trace_kronecker`.
+
+Key Mathlib lemmas likely needed:
+  • Kronecker product basics:
+      - `Matrix.trace_kronecker` (Mathlib.LinearAlgebra.Matrix.Kronecker)
+      - `Matrix.mul_kronecker_mul` (name search: "kronecker_mul")
+      - distributivity: `Matrix.add_kronecker`, `Matrix.kronecker_add`
+      - scalar: `Matrix.kronecker_smul`, `Matrix.smul_kronecker`
+      - (optional) `Matrix.conjTranspose_kronecker` if we later want adjoints.
+  • Map / conjugation compatibility:
+      - `Matrix.map_mul`, `Matrix.map_pow` (Mathlib.Data.Matrix.Mul / Basic)
+      - `Matrix.vec_map`, `Matrix.star_vec` if vectorization is used.
+  • Trace properties:
+      - `Matrix.trace_sum`, `Matrix.trace_mul_comm` (Matrix.Trace)
+
+Suggested proof structure for `mpvOverlap_eq_trace_overlapTransfer_pow`:
+  1. Expand `((∑ i, A_i ⊗ₖ conj(B_i))^N)` as a sum over words σ using induction on N.
+     Use `pow_succ`, distributivity of multiplication over sums, and `Matrix.mul_kronecker_mul`.
+  2. Show each word term equals `evalWord A w ⊗ₖ conjMatrix (evalWord B w)`.
+     Use a lemma `evalWord_kronecker`:
+        `evalWord (fun i => A i ⊗ₖ conj(B i)) w = evalWord A w ⊗ₖ conj(evalWord B w)`.
+  3. Take trace and use `Matrix.trace_kronecker`:
+        `trace(X ⊗ₖ Y) = trace X * trace Y`.
+     Then use that `trace(conjMatrix M) = star(trace M)` (prove a small simp lemma by unfolding trace).
+  4. Rearrange to match `mpvOverlap` definition.
+
+Implementation note:
+  Use the notation `⊗ₖ` (Kronecker product) which is available from Mathlib.
+
+================================================================================
+3) Connecting overlap decay to existing spectral-gap results (Q3)
+================================================================================
+
+We need a Lean bridge from:
+  overlap(A,B,N) = tr(E_{A,B}^N)
+  and “ρ(mixed transfer) < 1”
+  to
+  overlap(A,B,N) → 0.
+
+There are two engineering choices:
+
+(A) Generalize mixedTransferMap to rectangular intertwiners (recommended for literature alignment).
+(B) Keep current square `mixedTransferMap` and only relate overlaps in the equal-bond-dimension case.
+
+Why (A) is recommended:
+  • Canonical forms have blocks with potentially different bond dimensions (`dim : Fin r → ℕ`).
+  • Overlaps between blocks `A_j` and `A_k` (needed for Gram matrices / BNT) must be defined even when
+    `dim j ≠ dim k`.
+  • The literature mixed transfer operator is intrinsically rectangular:
+        F_{AB} : Mat_{D_A×D_B} → Mat_{D_A×D_B},  X ↦ ∑_i A_i X (B_i)†.
+
+Minimal rectangular generalization (new file suggestion: `MPSLean/Spectral/MixedTransferRect.lean`):
+
+  noncomputable def mixedTransferMap₂ (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+      Matrix (Fin D₁) (Fin D₂) ℂ →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
+    ∑ i : Fin d,
+      (mulLeftLinearMap (Fin D₂) ℂ (A i)).comp
+        (mulRightLinearMap (Fin D₁) ℂ ((B i)ᴴ))
+
+where `mulLeftLinearMap` / `mulRightLinearMap` are from `Mathlib.Data.Matrix.Bilinear`.
+
+Then re-prove (straight generalizations of existing `Spectral/MixedTransfer.lean`):
+  • `mixedTransferMap₂_apply`
+  • `mixedTransferMap₂_pow_apply` (sum over configurations; same proof skeleton)
+
+Vectorization equivalence (to connect to the Kronecker transfer matrix):
+  Using `Mathlib.LinearAlgebra.Matrix.Vec`:
+
+    `Matrix.kronecker_mulVec_vec`:
+      (B ⊗ₖ A).mulVec (X.vec) = (A * X * B.transpose).vec
+
+  For complex conjugation:
+      (conjMatrix B).transpose = Bᴴ
+  so choosing `B := conjMatrix (B i)` makes `B.transpose = (B i)ᴴ`.
+
+  This gives a clean conjugacy:
+    vec( mixedTransferMap₂ A B X ) = (E'_{A,B}).mulVec (vec X)
+  where `E'_{A,B} := ∑ i, (conjMatrix (B i)) ⊗ₖ (A i)`.
+
+  Finally, relate `E'_{A,B}` to the “literature orientation”
+      E_{A,B} = ∑ i, A_i ⊗ₖ conj(B_i)
+  via `Matrix.reindex` with `Equiv.prodComm` (swap factors). Trace and spectral radius are invariant
+  under reindexing.
+
+Spectral-gap reuse strategy:
+  • If we implement rectangular spectral theory, we can mimic `Spectral/SpectralGap.lean`:
+      - Frobenius/HS contraction bound extends to rectangular matrices.
+      - Define `mixedTransferSpectralRadius₂` as spectral radius of the associated continuous linear map.
+      - Prove: `spectralRadius_mixedTransfer₂_le_one` under TP normalization.
+      - Prove: `spectralRadius_mixedTransfer₂_lt_one` if A,B injective and not gauge-phase equivalent.
+        (If D₁ ≠ D₂, “gauge-phase equivalence” is impossible, so the strict case is automatic.)
+      - Prove: `mixedTransfer₂_pow_tendsto_zero`.
+
+  • Then overlap decay follows in two equivalent ways:
+      (i) show `overlapTransferMatrix` is conjugate to the matrix of `mixedTransferMap₂` under vec,
+          so ρ(E_{A,B}) = ρ(F_{A,B}) < 1 ⇒ E_{A,B}^N → 0 ⇒ trace(E_{A,B}^N) → 0.
+      (ii) or define overlap directly as `LinearMap.trace` of the endomorphism and use continuity.
+
+Which existing proofs can be adapted:
+  • From `MPSLean/Spectral/SpectralGap.lean`:
+      - the HS contraction lemma (currently for square matrices) should port almost line-by-line,
+        replacing sums over `(Fin D × Fin D)` by `(Fin D₁ × Fin D₂)`.
+      - the “|μ|=1 eigenvalue ⇒ gauge-phase equivalence” proof needs care: invertibility of the
+        eigenvector X must be replaced by “X has trivial kernel and cokernel”, forcing D₁=D₂.
+  • From `MPSLean/Spectral/CrossCorrelation.lean`:
+      - the decay statement is already proved once we have `mixedTransfer_pow_tendsto_zero`.
+        A rectangular analogue can be proved similarly.
+
+Pragmatic alternative if we want to avoid rectangular spectral theory:
+  • Restrict the overlap-decay lemma to equal-bond dimensions using existing `mixedTransferMap`.
+  • This is insufficient to build the Gram matrix for blocks of different bond dimensions, so it
+    won’t fully support BNT selection as in the review.
+
+================================================================================
+4) Corollary Lem1 (Gram → identity ⇒ eventual LI) in Lean (Q4)
+================================================================================
+
+Already implemented:
+  File: `MPSLean/Algebra/GramMatrixLI.lean`
+  Theorem:
+
+    `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`
+
+  Statement (abridged):
+    For finite index type ι and inner product space V over ℂ, if
+      Tendsto (fun N => ⟪v i N, v j N⟫) atTop (nhds (if i=j then 1 else 0))
+    then eventually `LinearIndependent ℂ (fun i => v i N)`.
+
+This is the exact formal analogue of MPDO Corollary `Lem1` (and stronger than 1708 Lem1t).
+
+Usage plan:
+  • Define vectors `v k N := normalized block MPV vector` in `MPVSpace d N`.
+  • Prove pairwise Gram convergence `⟪v j N, v k N⟫ → δ_{jk}`.
+  • Apply `eventually_linearIndependent_of_gram_tendsto_id`.
+
+Potential additional lemma (optional improvement):
+  • A version where Gram tends to any invertible limit matrix (not necessarily identity), which would
+    avoid proving the self-overlap limit is exactly 1. But the current lemma is likely sufficient
+    once “normal/primitive” is properly encoded.
+
+================================================================================
+5) Dependency graph + minimal implementation sequence (Q5)
+================================================================================
+
+High-level dependency graph (new items marked NEW):
+
+  MPSTensor.mpv (exists)
+      ↓
+  NEW: mpvVec + mpvOverlap (physical Hilbert space)
+      ↓
+  NEW: overlapTransferMatrix + mpvOverlap_eq_trace_overlapTransfer_pow
+      ↓
+  NEW: overlap decay lemmas (via spectral gap)
+      ↓
+  Gram convergence for BNT blocks
+      ↓
+  MPSTensor.eventually_linearIndependent_of_gram_tendsto_id (exists)
+      ↓
+  NEW: block separation via LI + strict |μ| ordering
+      ↓
+  Fill `MPSTensor.block_separation_core` (CanonicalFormSep.lean)
+
+Concrete file plan (minimal; do not implement now):
+
+(1) NEW file: `MPSLean/MPS/Overlap.lean`
+    Imports:
+      - `MPSLean.MPS.Defs`
+      - `Mathlib.Analysis.InnerProductSpace.PiL2`
+      - `Mathlib.LinearAlgebra.Matrix.Kronecker`
+      - `Mathlib.Data.Matrix.Bilinear` (if we include vec bridge)
+      - `Mathlib.LinearAlgebra.Matrix.Vec` (if we include vec bridge)
+      - `Mathlib.LinearAlgebra.Matrix.Trace`
+    Contents:
+      - `Cfg`, `MPVSpace`, `mpvVec`, simp lemma `mpvVec_ofLp`.
+      - `mpvOverlap` + lemma `mpvOverlap_eq_inner`.
+      - `conjMatrix`.
+      - `overlapTransferMatrix`.
+      - Theorem `mpvOverlap_eq_trace_overlapTransfer_pow`.
+
+(2) NEW file: `MPSLean/Spectral/MixedTransferRect.lean` (if rectangular generalization is pursued)
+    Imports:
+      - `MPSLean.MPS.Defs`
+      - `Mathlib.Data.Matrix.Bilinear`
+    Contents:
+      - Definition `mixedTransferMap₂` on rectangular matrices.
+      - `mixedTransferMap₂_pow_apply` analogue.
+
+(3) NEW file: `MPSLean/Spectral/OverlapDecay.lean`
+    Imports:
+      - `MPSLean/MPS/Overlap`
+      - `MPSLean/Spectral/SpectralGap` (and/or new rectangular version)
+    Contents:
+      - Lemma: if `mixedTransferSpectralRadius₂ A B < 1` then `Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)`.
+      - Lemma: `mpvOverlap A A N → 1` for “normal/primitive” blocks.
+        (This is the part that may require peripheral spectrum / primitivity theory; see caveat below.)
+
+(4) NEW file: `MPSLean/MPS/BNT.lean` (optional but literature-aligned)
+    Contents:
+      - Formalize “basis of normal tensors” selection as in TN-review.
+      - Show the chosen family satisfies Gram→I.
+
+(5) Implement block separation proof (edit existing file later):
+    Target: replace the `sorry` in `MPSLean/PiAlgebra/CanonicalFormSep.lean`.
+
+    Proposed proof outline for `block_separation_core` (overlap route):
+      a. Strengthen hypotheses to match literature:
+           - Either assume `hB_inj : ∀k, IsInjective (B k)`
+             (or `IsCanonicalForm μ B`).
+           - Rationale: strict spectral-gap lemmas for mixed transfer currently need injective on both sides.
+      b. For the family of blocks in canonical form, prove:
+           - off-diagonal overlaps decay: for j≠k, `mpvOverlap (A j) (A k) N → 0`.
+           - diagonal overlaps converge to 1: `mpvOverlap (A k) (A k) N → 1`.
+         (Same for B blocks.)
+      c. Define normalized vectors `vA k N` and `vB k N` in `MPVSpace d N` and show Gram→I.
+      d. Apply `eventually_linearIndependent_of_gram_tendsto_id` to get LI for large N.
+      e. Use global SameMPV₂ (or `h_summed`) + LI + strict `StrictAnti (‖μ k‖)` to identify matching blocks
+         (permutation fixed by modulus ordering), yielding `SameMPV (A k) (B k)`.
+
+Caveat / known missing theory:
+  • To fully match MPDO Lemma `equalMPS`, we need a Lean notion of “normal tensor” = “primitive channel”
+    (TN-review def 4) and at least the peripheral-spectrum triviality needed to prove self-overlap → 1.
+    Files `MPSLean/Channel/Primitive.lean` and `PeripheralSpectrum.lean` are placeholders.
+  • If we want a quick path to unblock `block_separation_core` without developing primitivity theory,
+    we can:
+      - prove a weaker “approx-orthogonality ⇒ LI” lemma (like 1708 Lem1t) and derive explicit ε-bounds
+        from existing decay lemmas; OR
+      - normalize vectors by their exact norm at each N (requires showing norms are eventually nonzero).
+
+================================================================================
+6. Effort estimate (rough)
+================================================================================
+
+Assuming we implement the full overlap layer + rectangular mixed transfer + overlap decay, but NOT the
+full primitive/peripheral-spectrum library:
+  • Overlap definitions + transfer-matrix formula: 150–300 LoC.
+  • Rectangular mixed transfer (`mixedTransferMap₂`) + power formula: 80–200 LoC.
+  • Vec/Kronecker conjugacy lemmas: 100–250 LoC.
+  • Overlap decay lemma from spectral radius < 1: 50–150 LoC.
+  • Integrating GramMatrixLI + finishing `block_separation_core`: 150–400 LoC.
+  Total: ~500–1300 LoC.
+
+If we ALSO implement primitivity/peripheral-spectrum theory enough to prove self-overlap → 1 in full
+literature generality:
+  • Add ~500–2000+ LoC (this is essentially Wolf Thm 6.6/6.7 territory).
+
+Recommended incremental milestone:
+  1) Get overlapTransferMatrix + formula working and use it to prove cross-overlap decay (ρ<1 ⇒ 0).
+  2) Use the existing GramMatrixLI lemma with per-N normalization (diagonal exactly 1) to get LI.
+  3) Close `block_separation_core` under slightly strengthened hypotheses (injective B blocks), then
+     relax if desired.
