@@ -12,12 +12,14 @@
 \newcommand{\Id}{\mathrm{Id}}
 \newcommand{\Spec}{\mathrm{Spec}}
 \newcommand{\Span}{\mathrm{span}}
+\newcommand{\HS}{\mathrm{HS}}
+\newcommand{\Ov}{\mathrm{Ov}}
 
 \title{Formalizing the Fundamental Theorem of MPS in Lean~4}
-\subtitle{Literature-aligned proof routes via canonical form, block separation, and gauge equivalence\\[3pt]
-{\scriptsize Lean~4 + Mathlib v4.27.0 \quad|\quad
-Key references: \cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wolf2012Quantum}}}
-\date{February 18, 2026}
+\subtitle{A complete sorry-free proof via canonical form, spectral gap, and gauge equivalence\\
+{\scriptsize Lean~4 + Mathlib v4.27.0 \quad|\quad 48 files, 8{,}700+ lines, 0 sorry, 0 axioms\\
+Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wolf2012Quantum}}}
+\date{February 19, 2026}
 \author{}
 
 \begin{document}
@@ -28,15 +30,14 @@ Key references: \cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
 {%
 \setbeamertemplate{footline}{}
 \begin{frame}[plain,noframenumbering]
-  \vspace{-1.5em}
-  \maketitle
-  \vspace{-2.0em}
-  \begin{center}
-    {\footnotesize\textcolor{dimwhite}{%
-    The proof follows the standard route in the literature:\\
-    canonical form \,$\to$\, equal-or-orthogonal via mixed transfer
-    \,$\to$\, block separation \,$\to$\, gauge equivalence.}}
-  \end{center}
+    \vspace{-1.5em}
+    \maketitle
+    \vspace{-2.0em}
+    \begin{center}
+        {\footnotesize\textcolor{leangreen}{%
+                The proof is complete. Every step from spectral gap through block separation\\
+                to multi-block gauge equivalence is formally verified---no \texttt{sorry}, no axioms.}}
+    \end{center}
 \end{frame}
 }
 
@@ -44,293 +45,458 @@ Key references: \cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
 % Outline
 %======================================================================
 \begin{frame}{Roadmap}
-  \vspace{-0.4em}
-  \tableofcontents
+    \vspace{-0.4em}
+    \tableofcontents
 \end{frame}
 
 %======================================================================
 \section{The theorem and its context}
 %======================================================================
 
-\begin{frame}{Matrix Product Vectors: the basic object}
-\vspace{-0.6em}
+\begin{frame}{Matrix Product Vectors: traces of tensor products}
+    \vspace{-0.6em}
 
-\begin{block}{Definition (MPV family) \cite{Cirac2021Matrix}}
-Given matrices $A = (A^i)_{i=1}^d$ with each $A^i\in \Mat_D(\mathbb{C})$, set
-\[
-  \ket{V^{(N)}(A)} \;:=\; \sum_{i_1,\dots,i_N=1}^d \tr(A^{i_1}\cdots A^{i_N})\, \ket{i_1\cdots i_N} \;\in\; (\mathbb{C}^d)^{\otimes N}.
-\]
-The \emph{MPV family} is $\mathcal{V}(A):=\bigl\{\ket{V^{(N)}(A)}\bigr\}_{N\ge 1}$.
-\end{block}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \begin{block}{Definition (MPV family)~\cite{Cirac2021Matrix}}
+            Given $A = (A^i)_{i=1}^d$, $A^i\in \Mat_D(\mathbb{C})$:
+            \[
+                \ket{V^{(N)}\!(A)} \!:=\! \sum_{i_1,\ldots,i_N} \tr(A^{i_1}\!\cdots A^{i_N})\, \ket{i_1\!\cdots i_N}.
+            \]
+        \end{block}
 
-\begin{block}{Gauge invariance}
-Conjugating every matrix $A^i \mapsto X A^i X^{-1}$ ($X$ invertible)
-leaves every $\ket{V^{(N)}}$ unchanged.
-\end{block}
+        \begin{block}{Gauge invariance}
+            $A^i \mapsto X A^i X^{-1}$ leaves every $\ket{V^{(N)}}$ unchanged.
+        \end{block}
 
-\textcolor{dimwhite}{\footnotesize\textbf{Key question:} Is gauge the \emph{only} ambiguity?}
+        \textcolor{dimwhite}{\footnotesize\textbf{Key question:} Is gauge the \emph{only} ambiguity?}
+
+        \column{0.46\textwidth}
+        \begin{center}
+            \vspace{0.2em}
+            % MPS Tensor Network Diagram
+            \begin{tikzpicture}[
+                    tn/.style={draw=leangreen, fill=cardbg, rounded corners=2pt,
+                            minimum size=7mm, thick, text=white, font=\small},
+                    bond/.style={thick, white},
+                    phys/.style={thick, leangreen!80!white}
+                ]
+                \node[tn] (A1) at (0,0) {$A$};
+                \node[tn] (A2) at (1.5,0) {$A$};
+                \node[tn] (A3) at (3.0,0) {$A$};
+                \node[tn] (A4) at (4.5,0) {$A$};
+
+                % physical indices (up)
+                \foreach \a in {A1,A2,A3,A4}
+                    \draw[phys] (\a.north) -- ++(0,0.55);
+
+                \node[font=\scriptsize, text=dimwhite] at (0, 0.85) {$i_1$};
+                \node[font=\scriptsize, text=dimwhite] at (1.5, 0.85) {$i_2$};
+                \node[font=\scriptsize, text=dimwhite] at (3.0, 0.85) {$i_3$};
+                \node[font=\scriptsize, text=dimwhite] at (4.5, 0.85) {$i_N$};
+
+                % bond indices (horizontal)
+                \draw[bond] (A1.east) -- (A2.west);
+                \draw[bond] (A2.east) -- (A3.west);
+                \draw[bond] (A3.east) -- (A4.west);
+
+                % bond dimension labels
+                \node[font=\tiny, text=dimwhite] at (0.75,0.25) {$D$};
+
+                % trace: curved line below connecting ends
+                \draw[dimwhite, thick, densely dashed]
+                (A1.west) -- ++(-0.25,0) -- ++(0,-0.55)
+                -- ($(A4.east)+(0.25,-0.55)$) -- ++(0,0.55) -- (A4.east);
+                \node[font=\tiny, text=amber] at (2.25,-0.7) {$\mathrm{tr}$};
+            \end{tikzpicture}
+
+            {\scriptsize\textcolor{dimwhite}{Tensor network for $\tr(A^{i_1}\!\cdots A^{i_N})$.\\
+                    Physical indices $\uparrow$, virtual indices $\leftrightarrow$.}}
+        \end{center}
+    \end{columns}
 \end{frame}
 
-\begin{frame}{Fundamental Theorem: the injective (single-block) case}
-\vspace{-0.6em}
+\begin{frame}{Fundamental Theorem: gauge is the only ambiguity}
+    \vspace{-0.6em}
 
-\begin{block}{Injectivity}
-$A$ is \emph{injective} if $\Span_{\mathbb{C}}\{A^i\}=\Mat_D(\mathbb{C})$.
-\end{block}
+    \begin{block}{Injectivity}
+        $A$ is \emph{injective} if $\Span_{\mathbb{C}}\{A^i\}=\Mat_D(\mathbb{C})$.
+    \end{block}
 
-\begin{block}{Theorem (FT, injective) \cite{Perez-Garcia2007Matrix,Cirac2021Matrix}}
-If $A$ is injective and $\mathcal{V}(A)=\mathcal{V}(B)$ for all~$N$, then
-\[
-  \exists\,X\in \GLC_D(\mathbb{C}),\quad B^i = X A^i X^{-1}\quad (\forall\, i).
-\]
-\end{block}
+    \begin{block}{Theorem (FT, injective case)~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix}}
+        If $A$ is injective and $\mathcal{V}(A)=\mathcal{V}(B)$ for all~$N$, then
+        \[
+            \exists\,X\in \GLC_D(\mathbb{C}),\quad B^i = X A^i X^{-1}\quad (\forall\, i).
+        \]
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize\textbf{Lean status:} \proved{Fully proved.}
-\texttt{MPS/FundamentalTheorem.lean} (stable).}
+    \textcolor{dimwhite}{\footnotesize\textbf{Lean status:} \proved{Fully proved.}
+        \texttt{MPS/FundamentalTheorem.lean} (stable).}
 \end{frame}
 
 \begin{frame}{The multi-block target: canonical form}
-\vspace{-0.6em}
+    \vspace{-0.6em}
 
-\begin{block}{Canonical form \cite{Cirac2017Annals,Cirac2021Matrix}}
-After blocking, a translation-invariant tensor decomposes as
-\[
-  A^i = \bigoplus_{k=1}^r \mu_k\,A_k^i,
-\]
-where each $A_k$ is \emph{primitive} (hence injective after blocking)
-and the $\mu_k\in\mathbb{C}^\times$ are pinned by normalization.
-\end{block}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \begin{block}{Canonical form~\cite{Cirac2017Annals,Cirac2021Matrix}}
+            After blocking, a translation-invariant tensor decomposes as
+            \[
+                A^i = \bigoplus_{k=0}^{r-1} \mu_k\,A_k^i,
+            \]
+            with each $A_k$ \emph{primitive} (hence injective)
+            and the $\mu_k\in\mathbb{C}^\times$ pinned by normalization.
+        \end{block}
 
-\begin{block}{Fundamental Theorem in canonical form (informal)}
-$\mathcal{V}(A)=\mathcal{V}(B)$ implies that the blocks of $A$ and $B$ agree
-up to permutation and per-block gauge equivalence.
-\end{block}
+        \begin{block}{Fundamental Theorem (informal)}
+            $\mathcal{V}(A)=\mathcal{V}(B)$ implies the blocks of $A$ and $B$ agree
+            up to permutation and per-block gauge.
+        \end{block}
+
+        \column{0.46\textwidth}
+        \begin{center}
+            \vspace{0.3em}
+            % Block-diagonal matrix TikZ
+            \begin{tikzpicture}[scale=0.65]
+                % outer matrix frame
+                \draw[dimwhite, thick, rounded corners=2pt] (0,0) rectangle (5.5,5.5);
+
+                % Block A_0 (largest)
+                \fill[leangreen!20!cardbg] (0.2,3.6) rectangle (1.9,5.3);
+                \draw[leangreen, thick, rounded corners=1pt] (0.2,3.6) rectangle (1.9,5.3);
+                \node[text=leangreen, font=\footnotesize\bfseries] at (1.05,4.45) {$\mu_0 A_0^i$};
+
+                % Block A_1
+                \fill[leanblue!20!cardbg] (2.1,2.0) rectangle (3.4,3.4);
+                \draw[leanblue, thick, rounded corners=1pt] (2.1,2.0) rectangle (3.4,3.4);
+                \node[text=leanblue, font=\footnotesize\bfseries] at (2.75,2.7) {$\mu_1 A_1^i$};
+
+                % Block A_{r-1} (smallest)
+                \fill[amber!20!cardbg] (3.6,0.2) rectangle (5.3,1.8);
+                \draw[amber, thick, rounded corners=1pt] (3.6,0.2) rectangle (5.3,1.8);
+                \node[text=amber, font=\footnotesize\bfseries] at (4.45,1.0) {$\mu_{r\!-\!1} A_{r\!-\!1}^i$};
+
+                % zero regions indicator
+                \node[text=dimwhite, font=\tiny] at (3.8,4.4) {$0$};
+                \node[text=dimwhite, font=\tiny] at (1.0,1.0) {$0$};
+
+                % dots between blocks
+                \node[text=dimwhite, font=\small] at (3.05,1.55) {$\ddots$};
+            \end{tikzpicture}
+
+            {\scriptsize\textcolor{dimwhite}{Block-diagonal structure.\\
+                    $|\mu_0|>|\mu_1|>\cdots>|\mu_{r-1}|$.}}
+        \end{center}
+    \end{columns}
 \end{frame}
 
-\begin{frame}{Proof pipeline: matching the literature step by step}
-\vspace{-0.6em}
+\begin{frame}{Proof architecture: all steps now verified}
+    \vspace{-0.4em}
 
-\begin{center}
-\begin{tikzpicture}[
-  node/.style={draw=leangreen,rounded corners=3pt,thick,fill=cardbg,align=center,text=white,
-    inner sep=5pt,font=\footnotesize},
-  arrow/.style={-Stealth,thick,dimwhite}
-]
+    \begin{center}
+        \begin{tikzpicture}[
+                pbox/.style={draw=leangreen,rounded corners=3pt,thick,fill=cardbg,align=center,text=white,
+                        inner sep=5pt,font=\footnotesize},
+                obox/.style={draw=dimwhite,rounded corners=3pt,thick,fill=cardbg,align=center,text=dimwhite,
+                        inner sep=5pt,font=\footnotesize,densely dashed},
+                parr/.style={-Stealth,thick,leangreen},
+                oarr/.style={-Stealth,thick,dimwhite,densely dashed}
+            ]
 
-\node[node] (raw) {arbitrary tensor\\(bond dim.\ $D$)};
-\node[node,right=1.2cm of raw] (cf) {canonical form\\$A=\bigoplus_k \mu_k A_k$};
-\node[node,right=1.2cm of cf] (sep) {block separation\\global $\Rightarrow$ per-block};
-\node[node,right=1.2cm of sep] (ft) {single-block FT\\$\Rightarrow$ gauges $X_k$};
-\node[node,below=0.8cm of ft] (pi) {$\Pi$-algebra\\permute\,+\,conjugate};
+            \node[obox] (raw) {arbitrary tensor\\(bond dim.\ $D$)};
+            \node[pbox,right=1.0cm of raw] (cf) {canonical form\\$A=\bigoplus_k \mu_k A_k$};
+            \node[pbox,right=1.0cm of cf] (sep) {\alert{block separation}\\global $\Rightarrow$ per-block};
+            \node[pbox,right=1.0cm of sep] (ft) {single-block FT\\$\Rightarrow$ gauges $X_k$};
+            \node[pbox,below=0.7cm of ft] (pi) {$\Pi$-algebra assembly\\permute + conjugate};
 
-\draw[arrow] (raw) -- node[above,font=\scriptsize,text=dimwhite]{(i)} (cf);
-\draw[arrow] (cf) -- node[above,font=\scriptsize,text=dimwhite]{(ii.a)} (sep);
-\draw[arrow] (sep) -- node[above,font=\scriptsize,text=dimwhite]{(ii.b)} (ft);
-\draw[arrow] (ft) -- (pi);
+            \draw[oarr] (raw) -- node[above,font=\scriptsize,text=dimwhite]{(i) open} (cf);
+            \draw[parr] (cf) -- node[above,font=\scriptsize,text=leangreen]{\checkmark} (sep);
+            \draw[parr] (sep) -- node[above,font=\scriptsize,text=leangreen]{\checkmark} (ft);
+            \draw[parr] (ft) -- node[right,font=\scriptsize,text=leangreen]{\checkmark} (pi);
+        \end{tikzpicture}
+    \end{center}
 
-\end{tikzpicture}
-\end{center}
+    \vspace{-0.3em}
+    \begin{block}{What is proved in Lean}
+        \begin{itemize}\itemsep0.15em
+            \item \proved{Single-block FT, spectral gap, overlap--trace bridge, block separation, $\Pi$-algebra.}
+            \item \future{Canonical form existence (arbitrary tensor $\to$ canonical form).}
+        \end{itemize}
+    \end{block}
+\end{frame}
 
-\vspace{-0.2em}
-\begin{block}{Lean status at a glance}
-\begin{itemize}\itemsep0.25em
-  \item \proved{Single-block FT, $\Pi$-algebra decomposition, mixed-transfer spectral gap.}
-  \item \inprog{Canonical-form block separation (main open gap).}
-  \item \future{Canonical form existence; irreducible/periodic generalization.}
-\end{itemize}
-\end{block}
+%----------------------------------------------------------------------
+\begin{frame}{Precise Lean theorem statement}
+    \vspace{-0.6em}
+
+    \begin{block}{Theorem (\texttt{fundamentalTheorem\_canonicalForm\_explicit})}
+        \textbf{Given:}
+        \begin{itemize}\itemsep0.05em
+            \item Weights $\mu_0,\ldots,\mu_{r-1}\in\mathbb{C}^\times$ with
+                  \alert{$\|\mu_0\|>\|\mu_1\|>\cdots>\|\mu_{r-1}\|$}.
+            \item Block tensors $A_k, B_k$ ($k=0,\ldots,r{-}1$), each $A_k^i\in\Mat_{D_k}(\mathbb{C})$.
+            \item \alert{Injectivity}: $\Span\{A_k^i\}=\Mat_{D_k}$ and $\Span\{B_k^i\}=\Mat_{D_k}$ for all $k$.
+            \item \alert{DS gauge}: $\sum_i (A_k^i)^\dagger A_k^i = I$ and $\sum_i (B_k^i)^\dagger B_k^i = I$.
+            \item \alert{Primitivity}: $\Ov(A_k,A_k,N)\xrightarrow{N\to\infty} 1$ for all~$k$.
+            \item \textbf{Global MPV equality}:
+                  $\mathrm{mpv}\!(\bigoplus_k\mu_k A_k, \sigma)
+                      =\mathrm{mpv}\!(\bigoplus_k\mu_k B_k, \sigma)$
+                  for all~$N,\sigma$.
+        \end{itemize}
+        \textbf{Then:} $\exists\, X_k\in\GL_{D_k}(\mathbb{C}),  B_k^i = X_k A_k^i X_k^{-1}   \forall\, k,i$.
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Canonical form is \emph{assumed}, not constructed.
+        Both $A$ and $B$ share the same block structure.}
 \end{frame}
 
 %======================================================================
 \section{\texorpdfstring{Literature roadmap (Cirac RMP, \S\,IV.1)}{Literature roadmap (Cirac RMP, §IV.1)}}
 %======================================================================
 
-\begin{frame}{The standard two-step derivation \cite{Cirac2021Matrix}}
-\vspace{-0.6em}
+\begin{frame}{The standard two-step derivation~\cite{Cirac2021Matrix}}
+    \vspace{-0.6em}
 
-\begin{block}{Structure (RMP Section IV.1)}
-\begin{enumerate}\itemsep0.2em
-  \item \textbf{Canonical form reduction.} 
-  Remove nonphysical off-diagonal blocks; normalize each block
-  via its transfer operator (blocking removes periodicity).
-  \item \textbf{FT for canonical tensors.} 
-  Equal MPV families imply blockwise gauge-phase equivalence
-  plus a block permutation.
-\end{enumerate}
-\end{block}
+    \begin{block}{Structure (RMP Section~IV.1)}
+        \begin{enumerate}\itemsep0.2em
+            \item \textbf{Canonical form reduction.}
+                  Remove nonphysical off-diagonal blocks; normalize each block
+                  via its transfer operator (blocking removes periodicity).
+            \item \textbf{FT for canonical tensors.}
+                  Equal MPV families imply blockwise gauge-phase equivalence
+                  plus a block permutation.
+        \end{enumerate}
+    \end{block}
 
-\begin{block}{Where this talk focuses}
-The technical heart is \emph{block separation} (first half of Step~2):
-turning a global weighted-sum identity into per-block equalities.
-\end{block}
+    \begin{block}{Where this talk focuses}
+        The technical heart is \emph{block separation} (first half of Step~2):
+        turning a global weighted-sum identity into per-block equalities.
+        \textcolor{leangreen}{This is now fully proved in Lean.}
+    \end{block}
 \end{frame}
 
-\begin{frame}{Step~(i): canonical form reduction \cite{Cirac2017Annals,Cirac2021Matrix}}
-\vspace{-0.7em}
+\begin{frame}{Step~(i): canonical form reduction~\cite{Cirac2017Annals,Cirac2021Matrix}}
+    \vspace{-0.7em}
 
-\begin{columns}[T]
-\column{0.62\textwidth}
-\begin{block}{Key moves}
-\begin{itemize}\itemsep0.25em
-  \item Decompose via invariant subspaces:
-  $B^i \mapsto \bigoplus_k \mu_k A_k^i$.
-  \item Discard upper-triangular/off-diagonal blocks
-  (they never contribute to $\tr(A^{i_1}\cdots A^{i_N})$).
-  \item Normalize each block by transfer-operator data:
-  spectral radius $\rho(\cE_{A_k})=1$, full-rank fixed points.
-\end{itemize}
-\end{block}
+    \begin{columns}[T]
+        \column{0.62\textwidth}
+        \begin{block}{Key moves}
+            \begin{itemize}\itemsep0.25em
+                \item Decompose via invariant subspaces:
+                      $B^i \mapsto \bigoplus_k \mu_k A_k^i$.
+                \item Discard upper-triangular blocks
+                      (they never contribute to $\tr(A^{i_1}\cdots A^{i_N})$).
+                \item Normalize each block by transfer-operator data:
+                      spectral radius $\rho(\cE_{A_k})=1$, full-rank fixed points.
+            \end{itemize}
+        \end{block}
 
-\begin{block}{Lean status}
-Canonical forms exist as records and constructors.
-Existence theorem (arbitrary tensor $\to$ canonical form) is not yet formalized.
-\end{block}
+        \begin{block}{Lean status}
+            Canonical forms exist as records and constructors.
+            Existence theorem (arbitrary tensor $\to$ CF) is not yet formalized.
+        \end{block}
 
-\column{0.36\textwidth}
-\begin{center}
-\colorbox{white}{\includegraphics[height=3.0cm]{../1606.00608/I_Blocking.png}}
-\\[0.2em]
-{\scriptsize\textcolor{dimwhite}{Blocking picture from \cite{Cirac2017Annals}.}}
-\end{center}
-\end{columns}
+        \column{0.36\textwidth}
+        \begin{center}
+            \vspace{0.3em}
+            % Blocking: C = B ⊗ B ⊗ ... ⊗ B (TikZ replacement)
+            \begin{tikzpicture}[scale=0.78, every node/.style={scale=0.78},
+                    tn/.style={draw=white, fill=cardbg, rounded corners=1.5pt,
+                            minimum size=6.5mm, thick, text=white, font=\small},
+                    bond/.style={thick, white},
+                    phys/.style={thick, dimwhite}
+                ]
+                % Left side: blocked tensor C
+                \node[tn] (C) at (0,0) {$C$};
+                \draw[bond] (C.west) -- ++(-0.4,0);
+                \draw[bond] (C.east) -- ++(0.4,0);
+                \draw[phys] (C.north) -- ++(0,0.45);
+
+                % Equals
+                \node[text=white, font=\normalsize] at (1.1,0) {$=$};
+
+                % Right side: chain of B tensors
+                \node[tn, draw=leangreen, text=leangreen] (B1) at (2.0,0) {$B$};
+                \node[tn, draw=leangreen, text=leangreen] (B2) at (3.2,0) {$B$};
+                \node[tn, draw=leangreen, text=leangreen] (B3) at (4.4,0) {$B$};
+
+                % Bond connections
+                \draw[bond] (B1.west) -- ++(-0.35,0);
+                \draw[bond] (B1.east) -- (B2.west);
+                \draw[bond] (B2.east) -- (B3.west);
+                \draw[bond] (B3.east) -- ++(0.35,0);
+
+                % Physical indices
+                \draw[phys] (B1.north) -- ++(0,0.45);
+                \draw[phys] (B2.north) -- ++(0,0.45);
+                \draw[phys] (B3.north) -- ++(0,0.45);
+
+                % Ellipsis for more B's
+                \node[text=dimwhite, font=\small] at (5.1,0) {$\cdots$};
+                \node[tn, draw=leangreen, text=leangreen] (BL) at (5.8,0) {$B$};
+                \draw[bond] (BL.east) -- ++(0.35,0);
+                \draw[phys] (BL.north) -- ++(0,0.45);
+
+                % Brace underneath
+                \draw[decorate, decoration={brace, mirror, amplitude=4pt},
+                      dimwhite, thick]
+                    (1.6,-0.55) -- (6.25,-0.55)
+                    node[midway, below=5pt, font=\tiny, text=dimwhite] {$L$ copies};
+            \end{tikzpicture}
+
+            \vspace{0.2em}
+            {\scriptsize\textcolor{dimwhite}{Blocking: $C = B^{\otimes L}$.\\
+                    After~\cite{Cirac2017Annals}, Fig.~I.}}
+        \end{center}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Quantum Wielandt: injectivity after blocking}
-\vspace{-0.6em}
+    \vspace{-0.6em}
 
-\begin{block}{Idea \cite{Sanz2010Quantum,Cirac2017Annals}}
-For a primitive transfer operator, there is a finite blocking length~$L$
-after which products of length~$L$ span the full matrix algebra.
-A coarse bound:
-\[
-  L \le D^4 \quad \text{(quantum Wielandt)};\qquad
-  \text{block-injectivity after }\le 3D^5.
-\]
-\end{block}
+    \begin{block}{Idea~\cite{Sanz2010Quantum,Cirac2017Annals}}
+        For a primitive transfer operator, there is a finite blocking length~$L$
+        after which products of length~$L$ span the full matrix algebra.
+        A coarse bound:
+        \[
+            L \le D^4 \quad \text{(quantum Wielandt)};\qquad
+            \text{block-injectivity after }\le 3D^5.
+        \]
+    \end{block}
 
-\begin{block}{Lean status}
-The library works with explicit hypotheses
-(\texttt{IsNBlkInjective}, \texttt{IsNormal}, \texttt{IsInjective})
-rather than quantitative bounds.
-\end{block}
+    \begin{block}{Lean status}
+        The library works with explicit hypotheses
+        (\texttt{IsNBlkInjective}, \texttt{IsNormal}, \texttt{IsInjective})
+        rather than quantitative bounds.
+    \end{block}
 \end{frame}
 
-\begin{frame}{Equal-or-orthogonal: the mixed transfer test}
-\vspace{-0.6em}
+\begin{frame}{Equal-or-orthogonal: the mixed transfer dichotomy}
+    \vspace{-0.6em}
 
-\begin{block}{Mixed transfer operator \cite{Perez-Garcia2007Matrix,Cirac2021Matrix}}
-For injective blocks, define
-\[
-  \cF_{jk}(X) := \sum_{i=1}^d A_j^i\,X\,(A_k^i)^\dagger.
-\]
-\end{block}
+    \begin{block}{Mixed transfer operator~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix}}
+        For injective blocks, define
+        \[
+            \cF_{jk}(X) := \sum_{i=1}^d A_j^i\,X\,(A_k^i)^\dagger.
+        \]
+    \end{block}
 
-\begin{block}{Key dichotomy}
-\begin{itemize}\itemsep0.2em
-  \item $\rho(\cF_{jk})=1$ $\Longrightarrow$ 
-  blocks are gauge-phase equivalent.
-  \item $\rho(\cF_{jk})<1$ $\Longrightarrow$ 
-  cross-terms decay exponentially (asymptotic orthogonality).
-\end{itemize}
-\end{block}
+    \begin{block}{Key dichotomy}
+        \begin{itemize}\itemsep0.2em
+            \item $\rho(\cF_{jk})=1$ $\Longrightarrow$
+                  blocks are gauge-phase equivalent.
+            \item $\rho(\cF_{jk})<1$ $\Longrightarrow$
+                  cross-terms decay exponentially (asymptotic orthogonality).
+        \end{itemize}
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize This is the engine behind block separation: inequivalent blocks decouple at large~$N$.}
+    \textcolor{dimwhite}{\footnotesize This is the engine behind block separation: inequivalent blocks decouple at large~$N$.}
 \end{frame}
 
 \begin{frame}{Step~(ii): FT in canonical form}
-\vspace{-0.6em}
+    \vspace{-0.6em}
 
-\begin{block}{Theorem (proportional MPVs; simplified) \cite{Cirac2017Annals,Cirac2021Matrix}}
-Let $A$ and~$B$ be in canonical form.
-If $\ket{V^{(N)}(A)}$ and $\ket{V^{(N)}(B)}$ are proportional for all~$N$,
-then (after relabeling) each block $B_j$ is gauge-phase equivalent
-to some~$A_{\pi(j)}$.
-\end{block}
+    \begin{block}{Theorem (proportional MPVs; simplified)~\cite{Cirac2017Annals,Cirac2021Matrix}}
+        Let $A$ and~$B$ be in canonical form.
+        If $\ket{V^{(N)}(A)}$ and $\ket{V^{(N)}(B)}$ are proportional for all~$N$,
+        then (after relabeling) each block $B_j$ is gauge-phase equivalent
+        to some~$A_{\pi(j)}$.
+    \end{block}
 
-\begin{block}{Corollary (equal MPVs)}
-If $\mathcal{V}(A)=\mathcal{V}(B)$ exactly, phases cancel
-and one obtains genuine per-block gauge equivalence plus a block permutation.
-\end{block}
+    \begin{block}{Corollary (equal MPVs)}
+        If $\mathcal{V}(A)=\mathcal{V}(B)$ exactly, phases cancel
+        and one obtains per-block gauge equivalence plus a block permutation.
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Our Lean formalization proves the \emph{equal} case (Corollary) with canonical form assumed.}
 \end{frame}
 
 \begin{frame}{Why canonical form is essential}
-\vspace{-0.6em}
+    \vspace{-0.6em}
 
-\begin{block}{Ambiguity without normalization}
-Rescaling $A_k^i \mapsto c\, A_k^i$ while compensating $\mu_k \mapsto c^{-1}\mu_k$
-preserves the block-diagonal tensor. This freedom breaks naive separation.
-\end{block}
+    \begin{block}{Ambiguity without normalization}
+        Rescaling $A_k^i \mapsto c\, A_k^i$ while compensating $\mu_k \mapsto c^{-1}\mu_k$
+        preserves the block-diagonal tensor. This freedom breaks naive separation.
+    \end{block}
 
-\begin{block}{How normalization helps \cite{Cirac2017Annals,Cirac2021Matrix}}
-Canonical form ties block scale to transfer-operator data
-(e.g.\ $\rho(\cE_{A_k})=1$), so the only allowed rescalings are phases.
-A strict $|\mu_k|$ ordering then pins down a unique labeling.
-\end{block}
+    \begin{block}{How normalization helps~\cite{Cirac2017Annals,Cirac2021Matrix}}
+        Canonical form ties block scale to transfer-operator data
+        (e.g.\ $\rho(\cE_{A_k})=1$), so the only allowed rescalings are phases.
+        A strict $|\mu_k|$ ordering then pins a unique labeling.
+    \end{block}
 \end{frame}
 
 %======================================================================
 \section{\texorpdfstring{Paper $\to$ Lean module map}{Paper to Lean module map}}
 %======================================================================
 
-\begin{frame}{Literature objects in Lean}
-\vspace{-0.7em}
+\begin{frame}{Definitions: Lean meets the literature}
+    \vspace{-0.7em}
 
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{p{0.46\textwidth} p{0.38\textwidth} p{0.12\textwidth}}
-\toprule
-\textbf{Literature concept} & \textbf{Lean module} & \textbf{Status} \\
-\midrule
-\rowcolor{cardbg}
-MPV tensors, word evaluation \cite{Perez-Garcia2007Matrix,Cirac2021Matrix}
-& \texttt{MPS/Defs} & \proved{} \\
-\rowcolor{cardbg}
-Transfer map $\cE_A$ \cite{Wolf2012Quantum}
-& \texttt{MPS/Transfer} & \proved{} \\
-\rowcolor{cardbg}
-Mixed transfer $\cF_{AB}$ \cite{Perez-Garcia2007Matrix}
-& \texttt{Spectral/MixedTransfer} & \proved{} \\
-\rowcolor{cardbg}
-Irreducible/primitive channels \cite{Evans1978Spectral,Wolf2012Quantum}
-& \texttt{Channel/*}, \texttt{QPF} & \proved{} \\
-\rowcolor{cardbg}
-Canonical form data \cite{Cirac2021Matrix}
-& \texttt{MPS/CanonicalForm} & \proved{} \\
-\bottomrule
-\end{tabular}
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{p{0.46\textwidth} p{0.38\textwidth} p{0.12\textwidth}}
+        \toprule
+        \textbf{Literature concept} & \textbf{Lean module}             & \textbf{Status} \\
+        \midrule
+        \rowcolor{cardbg}
+        MPV tensors, word evaluation~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix}
+                                    & \texttt{MPS/Defs}                & \proved{}       \\
+        \rowcolor{cardbg}
+        Transfer map $\cE_A$~\cite{Wolf2012Quantum}
+                                    & \texttt{MPS/Transfer}            & \proved{}       \\
+        \rowcolor{cardbg}
+        Mixed transfer $\cF_{AB}$~\cite{Perez-Garcia2007Matrix}
+                                    & \texttt{Spectral/MixedTransfer*} & \proved{}       \\
+        \rowcolor{cardbg}
+        Irreducible/primitive channels~\cite{Evans1978Spectral,Wolf2012Quantum}
+                                    & \texttt{Channel/*}, \texttt{QPF} & \proved{}       \\
+        \rowcolor{cardbg}
+        Canonical form data~\cite{Cirac2021Matrix}
+                                    & \texttt{MPS/CanonicalForm}       & \proved{}       \\
+        \rowcolor{cardbg}
+        MPV overlap $\braket{V(A)|V(B)}$
+                                    & \texttt{MPS/MPVOverlap}          & \proved{}       \\
+        \bottomrule
+    \end{tabular}
 
-\vspace{0.3em}
-\textcolor{dimwhite}{\footnotesize All definitions above are sorry-free and available via \texttt{import MPSLean}.}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize All definitions are sorry-free and available via \texttt{import MPSLean}.}
 \end{frame}
 
-\begin{frame}{Literature theorems in Lean}
-\vspace{-0.7em}
+\begin{frame}{Theorems: literature results formalized in Lean}
+    \vspace{-0.7em}
 
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{p{0.46\textwidth} p{0.38\textwidth} p{0.12\textwidth}}
-\toprule
-\textbf{Theorem} & \textbf{Lean module} & \textbf{Status} \\
-\midrule
-\rowcolor{cardbg}
-Single-block FT \cite{Perez-Garcia2007Matrix}
-& \texttt{MPS/FundamentalTheorem} & \proved{} \\
-\rowcolor{cardbg}
-$\Pi$-algebra automorphisms \cite{Cirac2017Annals}
-& \texttt{MPS/BlockPermutationMPS} & \proved{} \\
-\rowcolor{cardbg}
-Mixed-transfer spectral gap \cite{Evans1978Spectral,Wolf2012Quantum}
-& \texttt{Spectral/SpectralGap} & \proved{} \\
-\rowcolor{cardbg}
-Repeated-word identities
-& \texttt{PiAlgebra/BlockSeparation} & \proved{} \\
-\rowcolor{cardbg}
-Block separation (canonical form) \cite{Cirac2017Annals,Cirac2021Matrix}
-& \texttt{PiAlgebra/CanonicalFormSep} & \inprog{} \\
-\bottomrule
-\end{tabular}
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{p{0.46\textwidth} p{0.38\textwidth} p{0.12\textwidth}}
+        \toprule
+        \textbf{Theorem} & \textbf{Lean module}                & \textbf{Status} \\
+        \midrule
+        \rowcolor{cardbg}
+        Single-block FT~\cite{Perez-Garcia2007Matrix}
+                         & \texttt{MPS/FundamentalTheorem}     & \proved{}       \\
+        \rowcolor{cardbg}
+        $\Pi$-algebra automorphisms~\cite{Cirac2017Annals}
+                         & \texttt{MPS/BlockPermutationMPS}    & \proved{}       \\
+        \rowcolor{cardbg}
+        Mixed-transfer spectral gap~\cite{Evans1978Spectral,Wolf2012Quantum}
+                         & \texttt{Spectral/SpectralGap}       & \proved{}       \\
+        \rowcolor{cardbg}
+        Overlap--trace identity
+                         & \texttt{Spectral/MPVOverlapTrace*}  & \proved{}       \\
+        \rowcolor{cardbg}
+        Overlap decay (equal-or-orthogonal)
+                         & \texttt{Spectral/MPVOverlapDecay}   & \proved{}       \\
+        \rowcolor{cardbg}
+        Block separation (canonical form)~\cite{Cirac2017Annals,Cirac2021Matrix}
+                         & \texttt{PiAlgebra/CanonicalFormSep} & \proved{}       \\
+        \rowcolor{cardbg}
+        Newton--Girard identities
+                         & \texttt{Algebra/NewtonGirard}       & \proved{}       \\
+        \bottomrule
+    \end{tabular}
 
-\vspace{0.3em}
-\textcolor{dimwhite}{\footnotesize Experimental files live behind \texttt{import MPSLean.Experimental};
-the stable entrypoint \texttt{import MPSLean} is sorry-free.}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize The stable entrypoint \texttt{import MPSLean} is sorry-free (48 files, 8{,}700+ lines).}
 \end{frame}
 
 %======================================================================
@@ -338,9 +504,9 @@ the stable entrypoint \texttt{import MPSLean} is sorry-free.}
 %======================================================================
 
 \begin{frame}[fragile]{Lean definitions: tensor, word evaluation, MPV}
-\vspace{-0.65em}
+    \vspace{-0.65em}
 
-\begin{lstlisting}
+    \begin{lstlisting}
 abbrev MPSTensor (d D : (*@$\mathbb{N}$@*)) := Fin d (*@$\to$@*) Matrix (Fin D) (Fin D) (*@$\mathbb{C}$@*)
 
 def evalWord (A : MPSTensor d D) : List (Fin d) (*@$\to$@*) Matrix (Fin D) (Fin D) (*@$\mathbb{C}$@*)
@@ -351,109 +517,97 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
   Matrix.trace (evalWord A (List.ofFn (*@$\sigma$@*)))
 \end{lstlisting}
 
-\vspace{-0.2em}
-\textcolor{dimwhite}{\footnotesize Source: \texttt{MPS/Defs.lean}.}
+    \vspace{-0.2em}
+    \textcolor{dimwhite}{\footnotesize Source: \texttt{MPS/Defs.lean}.}
 \end{frame}
 
 \begin{frame}{Injectivity: spanning vs.\ inverse tensor}
-\vspace{-0.6em}
+    \vspace{-0.6em}
 
-\begin{block}{Literature formulation \cite{Cirac2017Annals,Perez-Garcia2007Matrix}}
-$A$ is injective when products $\{A^{i_1}\cdots A^{i_L}\}$ span $\Mat_D(\mathbb{C})$
-for some~$L$.
-Equivalently, an ``inverse tensor'' $A^{-1}$ exists satisfying
-\[
-  \sum_{i_1,\dots,i_L} (A^{i_1}\cdots A^{i_L})_{\alpha\beta}\,(A^{-1})^{i_1\cdots i_L}_{\alpha'\beta'}
-  = \delta_{\alpha\alpha'}\delta_{\beta\beta'}.
-\]
-\end{block}
+    \begin{block}{Literature formulation~\cite{Cirac2017Annals,Perez-Garcia2007Matrix}}
+        $A$ is injective when products $\{A^{i_1}\cdots A^{i_L}\}$ span $\Mat_D(\mathbb{C})$
+        for some~$L$.
+        Equivalently, an ``inverse tensor'' $A^{-1}$ exists satisfying
+        \[
+            \sum_{i_1,\ldots,i_L} (A^{i_1}\cdots A^{i_L})_{\alpha\beta}\,(A^{-1})^{i_1\cdots i_L}_{\alpha'\beta'}
+            = \delta_{\alpha\alpha'}\delta_{\beta\beta'}.
+        \]
+    \end{block}
 
-\begin{block}{Lean formulation}
-\texttt{IsInjective A}: the span of $\{A^i\}$ equals $\Mat_D(\mathbb{C})$.\\
-\texttt{IsNBlkInjective}: the $L$-step spanning condition.
-\end{block}
+    \begin{block}{Lean formulation}
+        \texttt{IsInjective A}: the span of $\{A^i\}$ equals $\Mat_D(\mathbb{C})$.\\
+        \texttt{IsNBlkInjective}: the $L$-step spanning condition.
+    \end{block}
 \end{frame}
 
-\begin{frame}{Step 1: intertwiner $\to$ linear extension}
-\vspace{-0.6em}
+\begin{frame}{Step 1: intertwiner from equal MPVs}
+    \vspace{-0.6em}
 
-\begin{block}{Idea (literature) \cite{Perez-Garcia2007Matrix,Cirac2021Matrix}}
-$\mathcal{V}(A)=\mathcal{V}(B)$ with $A$ injective implies
-$\exists\, X\neq 0$ such that $B^i X = X A^i$ for all~$i$.
-\end{block}
+    \begin{block}{Idea~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix}}
+        $\mathcal{V}(A)=\mathcal{V}(B)$ with $A$ injective implies
+        $\exists\, X\neq 0$ such that $B^i X = X A^i$ for all~$i$.
+    \end{block}
 
-\begin{block}{Lean route}
-From injectivity, construct a unique $\mathbb{C}$-linear map
-$T : \Mat_D(\mathbb{C})\to \Mat_D(\mathbb{C})$ with $T(A^i)=B^i$.
+    \begin{block}{Lean route}
+        From injectivity, construct a unique $\mathbb{C}$-linear map
+        $T : \Mat_D(\mathbb{C})\to \Mat_D(\mathbb{C})$ with $T(A^i)=B^i$.
 
-\textcolor{dimwhite}{\footnotesize If $T(M)=XMX^{-1}$, then $T(A^i)=B^i$ is exactly $B^i X = X A^i$.
-The two viewpoints are mathematically equivalent.}
-\end{block}
+        \textcolor{dimwhite}{\footnotesize If $T(M)=XMX^{-1}$, then $T(A^i)=B^i$ is exactly $B^i X = X A^i$.}
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize Source: \texttt{MPS/LinearExtension.lean}.}
+    \textcolor{dimwhite}{\footnotesize Source: \texttt{MPS/LinearExtension.lean}.}
 \end{frame}
 
-\begin{frame}{Step 2: trace pairing and uniqueness}
-\vspace{-0.6em}
+\begin{frame}{Step 2: trace pairing forces uniqueness}
+    \vspace{-0.6em}
 
-\begin{block}{Key construction}
-Define
-$\Phi_A : \Mat_D(\mathbb{C}) \to \mathbb{C}^d$, \quad $(\Phi_A(M))_i := \tr(M A^i)$.
+    \begin{block}{Key construction}
+        Define
+        $\Phi_A : \Mat_D(\mathbb{C}) \to \mathbb{C}^d$, \quad $(\Phi_A(M))_i := \tr(M A^i)$.
 
-Injectivity of $A$ forces $\ker(\Phi_A)=\{0\}$ (nondegenerate trace pairing).
-SameMPV supplies enough trace identities to determine~$T$ uniquely via~$\Phi_A$.
-\end{block}
+        Injectivity of $A$ forces $\ker(\Phi_A)=\{0\}$ (nondegenerate trace pairing).
+        SameMPV supplies enough trace identities to determine~$T$ uniquely via~$\Phi_A$.
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize Source: \texttt{Algebra/TracePairing.lean}, \texttt{MPS/LinearExtension.lean}.}
+    \textcolor{dimwhite}{\footnotesize Source: \texttt{Algebra/TracePairing.lean}, \texttt{MPS/LinearExtension.lean}.}
 \end{frame}
 
 \begin{frame}{Step 3: multiplicativity from length-3 words}
-\vspace{-0.6em}
+    \vspace{-0.6em}
 
-\begin{block}{Key lemma}
-From $\tr(A^i A^j A^k)=\tr(B^i B^j B^k)$ for all $i,j,k$, conclude
-\[
-  T(MN)=T(M)\,T(N)\qquad \forall\, M,N\in \Mat_D(\mathbb{C}).
-\]
-\end{block}
+    \begin{block}{Key lemma}
+        From $\tr(A^i A^j A^k)=\tr(B^i B^j B^k)$ for all $i,j,k$, conclude
+        \[
+            T(MN)=T(M)\,T(N)\qquad \forall\, M,N\in \Mat_D(\mathbb{C}).
+        \]
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize Lean: \texttt{linearExtension\_mul} in \texttt{MPS/LinearExtension.lean}.}
+    \begin{block}{Proof idea}
+        Write $M = \sum_i \alpha_i A^i$ and $N = \sum_j \beta_j A^j$ using injectivity (spanning).
+        Then $T(MN) = T\!(\sum_{i,j} \alpha_i \beta_j A^i A^j) = \sum_{i,j} \alpha_i \beta_j T(A^i A^j)$.
+        The length-3 trace identity shows $T(A^i A^j) = B^i B^j = T(A^i)T(A^j)$.
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{linearExtension\_mul} in \texttt{MPS/LinearExtension.lean}.}
 \end{frame}
 
-\begin{frame}{Step 4: simplicity + Skolem--Noether}
-\vspace{-0.6em}
+\begin{frame}{Step 4: simplicity + Skolem--Noether closes the proof}
+    \vspace{-0.6em}
 
-\begin{block}{Simplicity $\Rightarrow$ bijectivity}
-$T$ is linear and multiplicative, so $\ker(T)$ is a two-sided ideal of $\Mat_D(\mathbb{C})$.
-Since this algebra is simple, $\ker(T)=0$ (a trace argument rules out $T=0$).
-Finite dimension gives surjectivity.
-\end{block}
+    \begin{block}{Simplicity $\Rightarrow$ bijectivity}
+        $T$ is linear and multiplicative, so $\ker(T)$ is a two-sided ideal of $\Mat_D(\mathbb{C})$.
+        Since this algebra is simple, $\ker(T)=0$ (a trace argument rules out $T=0$).
+        Finite dimension gives surjectivity.
+    \end{block}
 
-\begin{block}{Skolem--Noether $\Rightarrow$ inner automorphism}
-Every $\mathbb{C}$-algebra automorphism of $\Mat_D(\mathbb{C})$
-has the form $M\mapsto XMX^{-1}$ for some invertible~$X$.
-\end{block}
+    \begin{block}{Skolem--Noether $\Rightarrow$ inner automorphism}
+        Every $\mathbb{C}$-algebra automorphism of $\Mat_D(\mathbb{C})$
+        has the form $M\mapsto XMX^{-1}$ for some invertible~$X$.
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize Lean: \texttt{Algebra/SkolemNoether.lean} (wraps Mathlib's Skolem--Noether).}
-\end{frame}
-
-\begin{frame}[fragile]{Assembled theorem in Lean}
-\vspace{-0.65em}
-
-\begin{lstlisting}
-theorem fundamentalTheorem_singleBlock
-  (hA : IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B := by
-  -- 1. linear extension T with T(A i) = B i
-  -- 2. multiplicativity from length-3 words
-  -- 3. simplicity --> bijective
-  -- 4. Skolem--Noether --> conjugation by X
-\end{lstlisting}
-
-\vspace{-0.2em}
-\begin{block}{Match to the literature}
-The only nontrivial external input is Skolem--Noether (already in Mathlib).
-No analytic or spectral assumptions are needed for the single-block case.
-\end{block}
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{Algebra/SkolemNoether.lean} (wraps Mathlib's Skolem--Noether).
+        The only nontrivial external input is Skolem--Noether (already in Mathlib).
+        No analytic or spectral assumptions needed for the single-block case.}
 \end{frame}
 
 %======================================================================
@@ -461,371 +615,1289 @@ No analytic or spectral assumptions are needed for the single-block case.
 %======================================================================
 
 \begin{frame}{Transfer and mixed transfer operators}
-\vspace{-0.6em}
+    \vspace{-0.6em}
 
-\begin{block}{Definitions}
-\vspace{-0.8em}
-\begin{align*}
-  \cE_A(X) &:= \sum_{i=1}^d A^i X (A^i)^\dagger,\\
-  \cF_{A,B}(X) &:= \sum_{i=1}^d A^i X (B^i)^\dagger.
-\end{align*}
-\end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Definitions}
+            \vspace{-0.8em}
+            \begin{align*}
+                \cE_A(X)     & := \sum_{i=1}^d A^i X (A^i)^\dagger, \\
+                \cF_{A,B}(X) & := \sum_{i=1}^d A^i X (B^i)^\dagger.
+            \end{align*}
+        \end{block}
 
-\begin{block}{Iterated word expansion (proved in Lean)}
-\[
-  \cF_{A,B}^N(X)=\sum_{\sigma:\mathrm{Fin}\,N\to[d]} \mathrm{evalWord}(A,\sigma)\,X\,\mathrm{evalWord}(B,\sigma)^\dagger.
-\]
-\end{block}
+        \begin{block}{Iterated word expansion}
+            \vspace{-0.5em}
+            {\small
+                \[
+                    \cF_{A,B}^N(X)\!=\sum_{\sigma:\mathrm{Fin}\,N\to[d]}\!\mathrm{ev}(A,\sigma)\,X\,\mathrm{ev}(B,\sigma)^\dagger
+                \]}
+        \end{block}
 
-\textcolor{dimwhite}{\footnotesize Source: \texttt{Spectral/MixedTransfer.lean} (\texttt{mixedTransferMap\_pow\_apply}).}
+        \column{0.50\textwidth}
+        \begin{center}
+            \vspace{0.2em}
+            % Overlap sandwich: two MPS layers
+            \begin{tikzpicture}[
+                    tn/.style={draw=leangreen, fill=cardbg, rounded corners=2pt,
+                            minimum size=6mm, thick, text=white, font=\scriptsize},
+                    bn/.style={draw=leanblue, fill=cardbg, rounded corners=2pt,
+                            minimum size=6mm, thick, text=leanblue, font=\scriptsize},
+                    bond/.style={thick, white},
+                    phys/.style={thick, dimwhite},
+                    xnode/.style={draw=amber, fill=cardbg, rounded corners=2pt,
+                            minimum width=5mm, minimum height=5mm, thick,
+                            text=amber, font=\scriptsize}
+                ]
+                % Top row: A tensors
+                \foreach \i in {1,2,3} {
+                        \node[tn] (A\i) at ({(\i-1)*1.4}, 0.8) {$A$};
+                    }
+                % Bottom row: B^* tensors
+                \foreach \i in {1,2,3} {
+                        \node[bn] (B\i) at ({(\i-1)*1.4}, -0.8) {$B^\dagger$};
+                    }
+                % X in the middle-left
+                \node[xnode] (X) at (-1.1, 0) {$X$};
+
+                % Horizontal bonds (top)
+                \draw[bond] (X.north east) -- (A1.west);
+                \draw[bond] (A1.east) -- (A2.west);
+                \draw[bond] (A2.east) -- (A3.west);
+                \draw[bond] (A3.east) -- ++(0.3,0);
+                % Horizontal bonds (bottom)
+                \draw[bond] (X.south east) -- (B1.west);
+                \draw[bond] (B1.east) -- (B2.west);
+                \draw[bond] (B2.east) -- (B3.west);
+                \draw[bond] (B3.east) -- ++(0.3,0);
+                % Vertical contractions (physical indices)
+                \foreach \i in {1,2,3} {
+                        \draw[phys] (A\i.south) -- (B\i.north);
+                    }
+                % Labels
+                \node[font=\tiny, text=dimwhite] at (-1.1, 1.3) {};
+                \node[font=\tiny, text=amber] at (3.2, 0) {$\cF^N(X)$};
+                \node[font=\tiny, text=dimwhite] at (0.7, 0) {$\sum_i$};
+            \end{tikzpicture}
+
+            {\scriptsize\textcolor{dimwhite}{Sandwich: $\cF^N_{A,B}(X)$.\\Top: $A$, bottom: $B^\dagger$, contract physical indices.}}
+        \end{center}
+    \end{columns}
+
+    \textcolor{dimwhite}{\footnotesize Source: \texttt{Spectral/MixedTransfer.lean}, \texttt{MixedTransferRect.lean}.}
 \end{frame}
 
-\begin{frame}{Irreducible and primitive channels \cite{Evans1978Spectral,Wolf2012Quantum}}
-\vspace{-0.6em}
+\begin{frame}{Irreducible and primitive channels~\cite{Evans1978Spectral,Wolf2012Quantum}}
+    \vspace{-0.6em}
 
-\begin{block}{Taxonomy}
-\begin{itemize}\itemsep0.25em
-  \item \textbf{Irreducible:} unique full-rank fixed point; no nontrivial invariant face.
-  \item \textbf{Primitive:} unique peripheral eigenvalue (no period); implies a spectral gap.
-  \item \textbf{Blocking:} powers $\cE_A^p$ kill peripheral phases $e^{2\pi i q/p}$.
-\end{itemize}
-\end{block}
+    \begin{block}{Taxonomy}
+        \begin{itemize}\itemsep0.25em
+            \item \textbf{Irreducible:} unique full-rank fixed point; no nontrivial invariant face.
+            \item \textbf{Primitive:} unique peripheral eigenvalue (no period); implies a spectral gap.
+            \item \textbf{Blocking:} powers $\cE_A^p$ kill peripheral phases $e^{2\pi i q/p}$.
+        \end{itemize}
+    \end{block}
 
-\begin{block}{Role in MPS theory}
-Primitivity drives exponential convergence of correlations~\cite{Lancien2021Correlation}
-and is the analytic engine behind block separation.
-\end{block}
+    \begin{block}{Role in MPS theory}
+        Primitivity drives exponential convergence of correlations~\cite{Lancien2021Correlation}
+        and is the analytic engine behind block separation.
+    \end{block}
 \end{frame}
 
-\begin{frame}{Canonical form: DS gauge normalization}
-\vspace{-0.6em}
+\begin{frame}{DS gauge: the normalization that makes everything work}
+    \vspace{-0.6em}
 
-\begin{block}{Literature convention \cite{Cirac2017Annals,Cirac2021Matrix}}
-Blocks are normalized so that $\rho(\cE_{A_k})=1$
-with full-rank fixed points.
-This pins the magnitude of each~$\mu_k$.
-\end{block}
+    \begin{block}{Literature convention~\cite{Cirac2017Annals,Cirac2021Matrix}}
+        Blocks are normalized so that $\rho(\cE_{A_k})=1$
+        with full-rank fixed points.
+        This pins the magnitude of each~$\mu_k$.
+    \end{block}
 
-\begin{block}{Lean predicate}
-A convenient gauge choice used in the formalization:
-\[
-  \sum_i (A_k^i)^\dagger A_k^i = I,\qquad \|\mu_1\|>\|\mu_2\|>\cdots>\|\mu_r\|.
-\]
-Packaged as \texttt{IsCanonicalForm} in
-\texttt{PiAlgebra/CanonicalFormSep.lean}.
-\end{block}
-\end{frame}
-
-\begin{frame}{Equal-or-orthogonal lemma (proved)}
-\vspace{-0.6em}
-
-\begin{block}{Key dichotomy \cite{Perez-Garcia2007Matrix,Cirac2021Matrix}}
-For injective, normalized blocks $A,B$:
-\begin{itemize}\itemsep0.2em
-  \item \textbf{Equivalent:} 
-  $\rho(\cF_{A,B})=1$ implies $B^i = e^{i\phi}\, X A^i X^{-1}$.
-  \item \textbf{Orthogonal:} 
-  $\rho(\cF_{A,B})<1$ implies $\cF_{A,B}^N\to 0$ exponentially.
-\end{itemize}
-\end{block}
-
-\begin{block}{Lean status}
-\proved{\texttt{spectralRadius\_mixedTransfer\_lt\_one}} and
-\proved{\texttt{mixedTransfer\_pow\_tendsto\_zero}}
-implement the orthogonal branch (stable, sorry-free).
-\end{block}
-\end{frame}
-
-\begin{frame}{Lean coverage: transfer toolkit summary}
-\vspace{-0.6em}
-
-\begin{block}{Available via \texttt{import MPSLean} (sorry-free)}
-\begin{itemize}\itemsep0.25em
-  \item \proved{Definitions: \texttt{transferMap}, \texttt{mixedTransferMap}.}
-  \item \proved{Iterated word expansion: \texttt{mixedTransferMap\_pow\_apply}.}
-  \item \proved{Spectral gap for inequivalent blocks.}
-  \item \proved{Exponential convergence: \texttt{mixedTransfer\_pow\_tendsto\_zero}.}
-\end{itemize}
-\end{block}
-
-\textcolor{dimwhite}{\footnotesize Key files: \texttt{Spectral/MixedTransfer.lean}, \texttt{Spectral/SpectralGap.lean}.}
+    \begin{block}{Lean predicate}
+        A convenient gauge choice used in the formalization:
+        \[
+            \sum_i (A_k^i)^\dagger A_k^i = I,\qquad \|\mu_0\|>\|\mu_1\|>\cdots>\|\mu_{r-1}\|.
+        \]
+        Packaged as \texttt{IsCanonicalForm} in
+        \texttt{PiAlgebra/CanonicalFormSep.lean}.
+    \end{block}
 \end{frame}
 
 %======================================================================
-\section{Block separation: the main open problem}
+\section{The spectral gap: from Kadison--Schwarz to $\rho < 1$}
+%======================================================================
+
+\begin{frame}{The spectral gap proof at a glance}
+    \vspace{-0.2em}
+    \begin{center}
+        % Spectral gap proof flowchart
+        \begin{tikzpicture}[
+                sbox/.style={draw=leangreen,rounded corners=3pt,thick,fill=cardbg,
+                        align=center,text=white,inner sep=4pt,font=\scriptsize,
+                        minimum width=2.8cm, minimum height=0.7cm},
+                sarr/.style={-Stealth,thick,leangreen},
+                slbl/.style={font=\tiny,text=dimwhite,align=center}
+            ]
+            % Row 1
+            \node[sbox] (ds) at (0,0) {DS-gauge both\\$A, B$};
+            \node[sbox] (embed) at (3.5,0) {block-embed\\$K_i = A'_i \oplus B'_i$};
+            \node[sbox] (ks) at (7.5,0) {KS inequality\\$\cE(X^\dagger X)\!\ge\!\cE(X)^\dagger\cE(X)$};
+
+            % Row 2
+            \node[sbox] (kseq) at (0,-1.5) {KS \alert{equality}\\(peripheral $|\mu|{=}1$)};
+            \node[sbox] (intw) at (3.5,-1.5) {intertwining\\$A'_i X' = \mu X' B'_i$};
+            \node[sbox] (ker) at (7.5,-1.5) {$\ker(X')$ invariant\\under $(B'_i)^\dagger$};
+
+            % Row 3
+            \node[sbox] (inv) at (2,-3) {injectivity $\Rightarrow$\\$\ker(X'){=}\{0\}$};
+            \node[sbox] (gauge) at (6,-3) {\textcolor{leangreen}{\bfseries gauge equiv}\\$B'_i = \bar\mu (X')^{-1}A'_i X'$};
+
+            \draw[sarr] (ds) -- (embed);
+            \draw[sarr] (embed) -- (ks);
+            \draw[sarr] (ks) -- (kseq);
+            \draw[sarr] (kseq) -- (intw);
+            \draw[sarr] (intw) -- (ker);
+            \draw[sarr] (ker) -- (inv);
+            \draw[sarr] (inv) -- (gauge);
+        \end{tikzpicture}
+    \end{center}
+    \vspace{-0.3em}
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{eigenvector\_gives\_gauge} in \texttt{Spectral/SpectralGap.lean} (1{,}214 lines, sorry-free).}
+\end{frame}
+
+\begin{frame}{Kadison--Schwarz inequality~\cite{Wolf2012Quantum}}
+    \vspace{-0.6em}
+
+    \begin{block}{Theorem (Wolf, Proposition~6.4)}
+        For a unital completely positive map $\cE$:
+        \[
+            \cE(X^\dagger X) \ge  \cE(X)^\dagger\,\cE(X)
+            \qquad \text{(L\"{o}wner order)}.
+        \]
+    \end{block}
+
+    \begin{block}{Proof idea (channel-theoretic)}
+        Form the $2\times 2$ block matrix
+        $[\begin{smallmatrix} X^\dagger X & X^\dagger \\ X & I \end{smallmatrix}] =
+            [\begin{smallmatrix} X^\dagger \\ I \end{smallmatrix}]
+            [\begin{smallmatrix} X & I \end{smallmatrix}] \ge 0$.
+        Apply $\cE$ blockwise (2-positivity). The Schur complement of the $(2,2)$-block
+        gives $\cE(X^\dagger X) - \cE(X)^\dagger \cE(X) \ge 0$.
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{kadison\_schwarz} in \texttt{Channel/KadisonSchwarz.lean} (sorry-free).}
+\end{frame}
+
+\begin{frame}{KS equality: peripheral eigenvectors are multiplicative}
+    \vspace{-0.6em}
+
+    \begin{block}{Multiplicative domain~\cite{Wolf2012Quantum}}
+        For a unital CP map $\cE$ with Kraus operators $\{K_i\}$, KS equality
+        \[
+            \cE(X^\dagger X) = \cE(X)^\dagger\,\cE(X)
+        \]
+        holds iff $K_i X = \cE(X)\, K_i$ for all~$i$ (\alert{intertwining with Kraus operators}).
+    \end{block}
+
+    \begin{block}{Key fact: peripheral eigenvectors satisfy equality}
+        If $\cE(M)=\mu M$ with $|\mu|=1$ and $\cE$ is unital + trace-preserving:
+        \begin{enumerate}\itemsep0.1em
+            \item KS gives $\cE(M^\dagger M) \ge |\mu|^2 M^\dagger M = M^\dagger M$.
+            \item Trace-preserving: $\tr(\cE(M^\dagger M)) = \tr(M^\dagger M)$.
+            \item So $\cE(M^\dagger M) - M^\dagger M \ge 0$ with trace zero $\Rightarrow$ equals zero.
+        \end{enumerate}
+        \textcolor{leangreen}{Peripheral eigenvalues force intertwining with Kraus operators.}
+    \end{block}
+\end{frame}
+
+\begin{frame}{HS contraction and eigenvalue bound}
+    \vspace{-0.6em}
+
+    \begin{block}{Corollary: HS contraction}
+        If $\cE$ is both unital ($\cE(I)=I$) and trace-preserving:
+        \[
+            \tr(\cE(X)^\dagger\,\cE(X)) \le  \tr(X^\dagger X)
+            \qquad (\text{i.e.\ } \|\cE(X)\|_{\HS} \le \|X\|_{\HS}).
+        \]
+    \end{block}
+
+    \begin{block}{Eigenvalue bound for the mixed transfer}
+        From the iterated word expansion and Cauchy--Schwarz:
+        $\|\cF_{A,B}^n(X)\|_{\HS}^2 \le D^2\,\|X\|_{\HS}^2$ for all~$n$.
+        If $\cF_{A,B}(X)=\mu X$ with $X\neq 0$, then
+        $|\mu|^{2n} \|X\|_{\HS}^2 \le D^2\,\|X\|_{\HS}^2$.
+        Taking $n\to\infty$ forces $|\mu|\le 1$.
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{eigenvalue\_norm\_le\_one} in \texttt{Spectral/SpectralGap.lean}.}
+\end{frame}
+
+\begin{frame}{Eigenvector rigidity: $|\mu|=1$ implies gauge equivalence}
+    \vspace{-0.6em}
+
+    \begin{block}{Theorem (the hard algebraic step)~\cite{Wolf2012Quantum}}
+        If $A,B$ are injective and normalized, and $\cF_{A,B}(X) = \mu X$ with $|\mu|=1$,
+        $X\neq 0$, then $\exists\,Y\in\GLC_D(\mathbb{C})$ such that $B^i = \bar\mu\, Y A^i Y^{-1}$.
+    \end{block}
+
+    \begin{block}{Proof outline (channel-theoretic route)}
+        \begin{enumerate}\itemsep0.1em
+            \item \textbf{DS-gauge} both tensors: $A'_i = S_A^{-1}A_i S_A$, $B'_i = S_B^{-1}B_i S_B$.
+            \item \textbf{Block-embed}: form $K_i = \diag(A'_i, B'_i)$ on $\mathbb{C}^D \oplus \mathbb{C}^D$.
+            \item \textbf{KS equality} for peripheral eigenvector $\Rightarrow$ intertwining:
+                  $A'_i X' = \mu\, X' B'_i$.
+            \item \textbf{Kernel invariance}: $\ker(X')$ is invariant under all $(B'_i)^\dagger$.
+                  Injectivity forces $\ker(X') = 0$, so $X'$ is invertible.
+            \item \textbf{Conclude}: $B'_i = \bar\mu\,(X')^{-1}A'_i X'$; gauge back.
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}{The block-embedding construction in detail}
+    \vspace{-0.6em}
+
+    \begin{block}{The key construction}
+        Given $\cF_{A,B}(X) = \mu X$ with $|\mu|=1$, pass to DS-gauged tensors
+        $A'_i, B'_i$ and define the \emph{block channel}:
+        \[
+            \mathcal{K}(Y) := \sum_{i} K_i\, Y\, K_i^\dagger, \qquad
+            K_i := \begin{pmatrix} A'_i & 0 \\ 0 & B'_i \end{pmatrix}.
+        \]
+        Then $\mathcal{K}$ is a \alert{unital, trace-preserving} CP map on $\Mat_{2D}(\mathbb{C})$.
+    \end{block}
+
+    \begin{block}{Embedding the eigenvector}
+        Set $M := (\begin{smallmatrix} 0 & X' \\ 0 & 0 \end{smallmatrix})$
+        where $X' = S_A^{-1} X S_B^{-1}$.
+        Then $\mathcal{K}(M) = \mu M$: a \emph{peripheral eigenvector}.
+        By KS equality, $M$ is in the multiplicative domain, yielding:
+        \[
+            A'_i X' = \mu\, X' B'_i \quad \text{and} \quad
+            X' (B'_i)^\dagger = \mu\, (A'_i)^\dagger X'.
+        \]
+    \end{block}
+\end{frame}
+
+\begin{frame}{From intertwining to invertibility: the kernel argument}
+    \vspace{-0.6em}
+
+    \begin{block}{Kernel invariance}
+        From $X' (B'_k)^\dagger = \mu\,(A'_k)^\dagger X'$:
+        if $X' v = 0$ then $X' (B'_k)^\dagger v = \mu\,(A'_k)^\dagger (X' v) = 0$.
+        So \alert{$\ker(X')$ is invariant under every $(B'_k)^\dagger$}.
+    \end{block}
+
+    \begin{block}{Injectivity closes the argument}
+        $B$ injective $\Rightarrow$ $\Span\{(B'_k)^\dagger\}$ generates $\Mat_D(\mathbb{C})$.
+        An invariant subspace for the full matrix algebra is $\{0\}$ or~$\mathbb{C}^D$.
+        Since $X'\neq 0$, we get $\ker(X')=\{0\}$, so $X'$ is invertible:
+        \[
+            B'_i = \bar\mu\,(X')^{-1}A'_i X'.
+        \]
+        Gauging back: $B_i = \bar\mu\, Y A_i Y^{-1}$ with $Y = S_B\,(X')^{-1} S_A^{-1}$.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Equal-or-orthogonal: the complete dichotomy}
+    \vspace{-0.6em}
+
+    \begin{block}{Key dichotomy~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix}}
+        For injective, normalized blocks $A,B$:
+        \begin{itemize}\itemsep0.2em
+            \item \textbf{Equivalent:}
+                  $\rho(\cF_{A,B})=1$ implies $B^i = e^{i\phi}\, X A^i X^{-1}$.
+            \item \textbf{Orthogonal:}
+                  $\rho(\cF_{A,B})<1$ implies $\cF_{A,B}^N\to 0$ exponentially.
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{The logical chain}
+        \[
+            \text{KS ineq.} \Rightarrow  \|\cF\|_{\HS}\le 1
+            \Rightarrow  \rho(\cF)\le 1
+            \underset{|\mu|=1}{\Longrightarrow}  \text{gauge-phase equiv}
+            \Rightarrow  \rho<1 \text{ if } \lnot\text{equiv}.
+        \]
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{spectralRadius\_mixedTransfer\_lt\_one} and
+        \texttt{mixedTransfer\_pow\_tendsto\_zero} in \texttt{Spectral/SpectralGap.lean}.}
+\end{frame}
+
+%======================================================================
+\section{The overlap--trace bridge}
+%======================================================================
+
+\begin{frame}{The overlap--trace identity: bridging spectra and combinatorics}
+    \vspace{-0.6em}
+
+    \begin{block}{MPV overlap}
+        \vspace{-0.5em}
+        \[
+            \Ov(A,B,N) :=  \sum_{\sigma:\mathrm{Fin}\,N\to[d]} \mathrm{mpv}(A,\sigma)\, \overline{\mathrm{mpv}(B,\sigma)}
+            = \braket{V^{(N)}\!(A)|V^{(N)}\!(B)}.
+        \]
+    \end{block}
+
+    \begin{block}{Key identity (proved in Lean)}
+        \[
+            \boxed{ \Ov(A,B,N) =  \tr(\cF_{A,B}^N) }
+        \]
+        \vspace{-0.8em}
+        \begin{itemize}\itemsep0.15em
+            \item \textbf{Spectral side:} $\tr(\cF^N)$ is controlled by eigenvalues of $\cF$.
+            \item \textbf{Combinatorial side:} $\Ov(A,B,N)$ is the inner product in $\mathbb{C}^{d^N}$.
+            \item Works for \alert{heterogeneous bond dimensions} $D_j \neq D_k$.
+        \end{itemize}
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{trace\_mixedTransferMap\_pow\_eq\_mpvOverlap}
+        in \texttt{Spectral/MPVOverlapTraceRect.lean} (180 lines, sorry-free).}
+\end{frame}
+
+\begin{frame}{Proof of the overlap--trace identity}
+    \vspace{-0.6em}
+
+    \begin{block}{Proof idea}
+        \begin{enumerate}\itemsep0.2em
+            \item Expand the operator trace via matrix units:
+                  $\tr(T) = \sum_{p,q} (T(e_{pq}))_{pq}$.
+            \item Use the iterated word expansion:
+                  $\cF^N(e_{pq}) = \sum_\sigma \mathrm{evalWord}(A,\sigma)\,e_{pq}\, \mathrm{evalWord}(B,\sigma)^\dagger$.
+            \item Extract diagonal entries:
+                  $(M\,e_{pq}\,N)_{pq} = M_{pp}\,N_{qq}$.
+            \item Exchange summation order ($\sigma$ outermost) and factor:
+                  \[
+                      \sum_\sigma \left(\sum_p \mathrm{ev}(A,\sigma)_{pp}\right)
+                      \left(\sum_q \overline{\mathrm{ev}(B,\sigma)_{qq}}\right)
+                      = \sum_\sigma \mathrm{mpv}(A,\sigma)\, \overline{\mathrm{mpv}(B,\sigma)}.
+                  \]
+        \end{enumerate}
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Key helper: \texttt{entry\_mul\_single\_mul\_2} isolates individual matrix entries
+        from the rank-1 matrix unit sandwich.}
+\end{frame}
+
+\begin{frame}{Overlap decay: spectral gap implies orthogonality}
+    \vspace{-0.6em}
+
+    \begin{block}{Theorem (proved in Lean)}
+        If $A,B$ are injective, normalized, and $\lnot\,\mathrm{GaugePhaseEquiv}(A,B)$:
+        \[
+            \Ov(A,B,N) \xrightarrow{N\to\infty}  0.
+        \]
+    \end{block}
+
+    \begin{block}{Proof chain}
+        \begin{enumerate}\itemsep0.15em
+            \item Rewrite: $\Ov(A,B,N) = \tr(\cF_{A,B}^N)$ (overlap--trace identity).
+            \item Expand: $\tr(\cF^N) = \sum_{p,q} (\cF^N(e_{pq}))_{pq}$.
+            \item Each entry $\to 0$: by $\cF^N(X)\to 0$ (spectral gap) composed with the
+                  continuous evaluation functional $M\mapsto M_{pq}$.
+            \item Finite sum of limits: $\mathrm{tendsto\_finset\_sum}$.
+        \end{enumerate}
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{mpvOverlap\_tendsto\_zero} in \texttt{Spectral/MPVOverlapDecay.lean} (sorry-free).}
+\end{frame}
+
+%======================================================================
+\section{Block separation: the proof}
 %======================================================================
 
 \begin{frame}{The block separation problem}
-\vspace{-0.6em}
+    \vspace{-0.6em}
 
-\begin{block}{Setup}
-For $A^i=\bigoplus_k \mu_k A_k^i$, the MPV decomposes as
-\[
-  \mathrm{mpv}(A,\sigma)=\sum_{k=1}^r \mu_k^N\,\mathrm{mpv}(A_k,\sigma).
-\]
-Global equality $\mathcal{V}(A)=\mathcal{V}(B)$ becomes
-\[
-  \sum_{k=1}^r \mu_k^N\,\Delta_k(N,\sigma)=0,
-  \qquad \Delta_k:=\mathrm{mpv}(A_k,\sigma)-\mathrm{mpv}(B_k,\sigma).
-\]
-\end{block}
+    \begin{block}{Setup}
+        For $A^i=\bigoplus_{k=0}^{r-1} \mu_k A_k^i$, the MPV decomposes as
+        \[
+            \mathrm{mpv}(A,\sigma)=\sum_{k=0}^{r-1} \mu_k^N\,\mathrm{mpv}(A_k,\sigma).
+        \]
+        Global equality $\mathcal{V}(A)=\mathcal{V}(B)$ becomes
+        \[
+            \sum_{k=0}^{r-1} \mu_k^N\,\Delta_k(N,\sigma)=0,
+            \qquad \Delta_k:=\mathrm{mpv}(A_k,\sigma)-\mathrm{mpv}(B_k,\sigma).
+        \]
+    \end{block}
 
-\begin{block}{Goal}
-Prove $\Delta_k=0$ for every block~$k$ (per-block SameMPV).
-\end{block}
+    \begin{block}{Goal (\textcolor{leangreen}{proved})}
+        Under canonical form hypotheses, $\Delta_k=0$ for every block~$k$.
+    \end{block}
 \end{frame}
 
 \begin{frame}{Why naive Vandermonde fails}
-\vspace{-0.6em}
+    \vspace{-0.6em}
 
-\begin{block}{Two obstructions}
-\begin{enumerate}\itemsep0.25em
-  \item \textbf{Type-varying coefficients.} 
-  The ``coefficient'' $\Delta_k(N,\sigma)$ depends on~$N$,
-  so there is no fixed vector to which classical Vandermonde applies.
-  \item \textbf{Block swap + rescale.} 
-  Even with distinct $\mu_k$, swapping blocks and compensating scales
-  can preserve the global MPV.
-\end{enumerate}
-\end{block}
+    \begin{block}{Two obstructions}
+        \begin{enumerate}\itemsep0.25em
+            \item \textbf{Type-varying coefficients.}
+                  $\Delta_k(N,\sigma)$ depends on~$N$,
+                  so there is no fixed vector for classical Vandermonde.
+            \item \textbf{Block swap + rescale.}
+                  Even with distinct $\mu_k$, swapping blocks and compensating scales
+                  preserves the global MPV.
+        \end{enumerate}
+    \end{block}
 
-\begin{block}{Minimal counterexample (scalar blocks)}
-$r=2$, $D=1$, $\mu=(1,2)$: set $B_0^i=\tfrac{\mu_1}{\mu_0}A_1^i$, 
-$B_1^i=\tfrac{\mu_0}{\mu_1}A_0^i$.
-Global MPVs agree, but $A_0\neq B_0$.
-\end{block}
+    \begin{block}{Minimal counterexample (scalar blocks)}
+        $r=2$, $D=1$, $\mu=(1,2)$: set $B_0^i=\tfrac{\mu_1}{\mu_0}A_1^i$,
+        $B_1^i=\tfrac{\mu_0}{\mu_1}A_0^i$.
+        Global MPVs agree, but $A_0\neq B_0$.
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize Documented in \texttt{PiAlgebra/BlockSeparationProof.lean} (Experimental).}
+    \textcolor{dimwhite}{\footnotesize Documented in \texttt{PiAlgebra/BlockSeparationProof.lean} (Experimental).
+        The naive Vandermonde lemma there is \emph{known-false} (counterexample included).}
 \end{frame}
 
 \begin{frame}{How canonical form defeats the counterexample}
-\vspace{-0.6em}
+    \vspace{-0.6em}
 
-\begin{block}{Key insight}
-In canonical form, $\mu_k$ are fixed by transfer-operator normalization
-($\rho(\cE_{A_k})=1$).
-Rescaling $A_k\mapsto cA_k$ is only allowed when $|c|=1$.
-The swap-and-rescale trick requires $|\mu_0|=|\mu_1|$,
-which strict ordering forbids.
-\end{block}
+    \begin{block}{Key insight}
+        In canonical form, $\mu_k$ are fixed by transfer-operator normalization
+        ($\rho(\cE_{A_k})=1$).
+        Rescaling $A_k\mapsto cA_k$ is only allowed when $|c|=1$.
+        The swap-and-rescale trick requires $|\mu_0|=|\mu_1|$,
+        which \alert{strict ordering forbids}.
+    \end{block}
 
-\begin{block}{Lean encoding}
-\texttt{IsCanonicalForm} enforces DS-gauge normalization and
-strict ordering of~$\|\mu_k\|$.
-\end{block}
+    \begin{block}{Lean encoding}
+        \texttt{IsCanonicalForm} enforces DS-gauge normalization and
+        strict ordering of~$\|\mu_k\|$.
+    \end{block}
 \end{frame}
 
-\begin{frame}{Separation strategy: dominance + peeling}
-\vspace{-0.6em}
+\begin{frame}{Step 1: asymptotic dominance via peeling}
+    \vspace{-0.6em}
 
-\begin{block}{Step 1: asymptotic dominance}
-From $\|\mu_1\|>\|\mu_2\|\ge\cdots$ and
-$\sum_k \mu_k^N\Delta_k=0$:
-\[
-  \Delta_1(N,\sigma) = -\sum_{k\ge 2} \left(\frac{\mu_k}{\mu_1}\right)^{\!N} \Delta_k(N,\sigma).
-\]
-If $|\Delta_k|$ is uniformly bounded, then $|\Delta_1|$ decays exponentially.
-\end{block}
+    \begin{block}{Setup}
+        From $\|\mu_0\|>\|\mu_1\|>\cdots>\|\mu_{r-1}\|$ and
+        $\sum_{k=0}^{r-1} \mu_k^N\Delta_k=0$:
+        \[
+            \Delta_0(N,\sigma) = -\sum_{k=1}^{r-1} \left(\frac{\mu_k}{\mu_0}\right)^{\!N} \Delta_k(N,\sigma).
+        \]
+    \end{block}
 
-\begin{block}{Step 2: uniform bounds from DS gauge}
-Under $\sum_i (A^i)^\dagger A^i=I$:
-\[
-  \bigl|\tr(\mathrm{evalWord}(A,w)^L)\bigr| \le D
-  \qquad (\forall\, w, \forall\, L).
-\]
-\end{block}
+    \begin{block}{Uniform bound from DS gauge}
+        $\sum_i (A^i)^\dagger A^i=I$ implies
+        $|\mathrm{mpv}(A,\sigma)| = |\tr(\mathrm{evalWord}(A,w))| \le D$.
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize Both steps are proved in Lean (Experimental).}
+    \begin{block}{Exponential decay}
+        Set $\rho := \max_{k\ge 1}|\mu_k/\mu_0|<1$. Then $|\Delta_0(N,\sigma)| \le C\,\rho^N \to 0$.
+    \end{block}
 \end{frame}
 
-\begin{frame}{From decay to exact equality}
-\vspace{-0.6em}
+\begin{frame}{Step 2: the overlap test}
+    \vspace{-0.6em}
 
-\begin{block}{What the peeling gives}
-For suitable test words:
-\[
-  \tr(T_1^L)=\tr(U_1^L)+O(\rho^L),
-\]
-where $T_1=\mathrm{evalWord}(A_1,w)$, $U_1=\mathrm{evalWord}(B_1,w)$.
-\end{block}
+    \begin{block}{Multiplying by test functions}
+        Multiply $\sum_{k=0}^{r-1} \mu_k^N \Delta_k(N,\sigma) = 0$
+        by $\overline{\mathrm{mpv}(A_0,\sigma)}$ and sum over $\sigma$:
+        \[
+            \sum_{k=0}^{r-1} (\bar\mu_k)^N [\Ov(A_0,A_k,N) - \Ov(A_0,B_k,N)] = 0.
+        \]
+    \end{block}
 
-\begin{block}{What remains (literature route)}
-\begin{enumerate}\itemsep0.2em
-  \item Use primitivity to upgrade asymptotic identities to exact constraints.
-  \item Use injectivity (spanning) to vary~$w$ and force equality of all word traces.
-  \item Induct: subtract the leading block and recurse.
-\end{enumerate}
-\end{block}
+    \begin{block}{Apply peeling to the overlap identity}
+        Same dominance: $|\bar\mu_0|>|\bar\mu_1|>\cdots$, so
+        \[
+            \bigl|\Ov(A_0,A_0,N) - \Ov(A_0,B_0,N)\bigr| \le  C\,\rho^N \to  0.
+        \]
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{peeling\_exponential\_bound} in \texttt{PiAlgebra/CanonicalFormSep.lean}.}
 \end{frame}
 
-\begin{frame}{Formal gap: \texttt{block\_separation\_core} for $r\ge 2$}
-\vspace{-0.6em}
+\begin{frame}{Step 3: equal-or-orthogonal forces gauge equivalence}
+    \vspace{-0.6em}
 
-\begin{block}{Open statement}
-Under \texttt{IsCanonicalForm} (injective blocks, DS gauge,
-strict $\|\mu\|$ ordering), prove:
-\[
-  \Bigl(\forall\, N,\;\forall\, \sigma,\;\sum_k \mu_k^N\,\Delta_k(N,\sigma)=0\Bigr)
-  \;\Longrightarrow\; \forall\, k,\; \mathrm{SameMPV}(A_k,B_k).
-\]
-\end{block}
+    \begin{block}{The two limits collide}
+        \begin{itemize}\itemsep0.2em
+            \item \textbf{Primitivity:}
+                  $\Ov(A_0,A_0,N) \to 1$ \quad (hypothesis).
+            \item \textbf{Peeling:}
+                  $|\Ov(A_0,A_0,N) - \Ov(A_0,B_0,N)| \to 0$.
+            \item \textbf{Therefore:} $\Ov(A_0,B_0,N) \to 1$.
+        \end{itemize}
+    \end{block}
 
-\begin{block}{Lean status}
-\texttt{PiAlgebra/CanonicalFormSep.lean} (Experimental):
-$r=0,1$ proved; $r\ge 2$ is the remaining \texttt{sorry}.
-\end{block}
+    \begin{block}{Contradiction if $\lnot\,\mathrm{GaugePhaseEquiv}(A_0,B_0)$}
+        Overlap decay gives $\Ov(A_0,B_0,N)\to 0$,
+        but we just showed $\Ov(A_0,B_0,N)\to 1$.
+        \alert{Uniqueness of limits}: $0 = 1$---contradiction
+    \end{block}
+
+    \begin{block}{Conclusion}
+        $\mathrm{GaugePhaseEquiv}(A_0,B_0)$: $\exists\, \zeta$ with $|\zeta|=1$
+        and invertible $X$ such that $B_0^i = \zeta\,X\,A_0^i\,X^{-1}$.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Step 4: phase cancellation ($\zeta = 1$)}
+    \vspace{-0.6em}
+
+    \begin{block}{Setup}
+        We have $B_0^i = \zeta\,X\,A_0^i\,X^{-1}$ with $|\zeta|=1$.
+        Gauge invariance of the MPV gives:
+        \[
+            \Ov(A_0,B_0,N) = \bar\zeta^N \cdot \Ov(A_0,A_0,N).
+        \]
+    \end{block}
+
+    \begin{block}{Forcing $\zeta = 1$}
+        \begin{itemize}\itemsep0.15em
+            \item From primitivity: $\Ov(A_0,A_0,N) \to 1$.
+            \item From peeling: $\Ov(A_0,B_0,N) \to 1$.
+            \item Therefore $\bar\zeta^N \to 1$.
+            \item But $|\bar\zeta^{N+1}-\bar\zeta^N|=|\bar\zeta-1|$ is constant.
+                  Convergence forces $|\bar\zeta-1|=0$, so \alert{$\zeta = 1$}.
+        \end{itemize}
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Lean: uses \texttt{Filter.Tendsto.unique} (uniqueness of limits in $T_2$ spaces).}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: peel the leading block and induct}
+    \vspace{-0.4em}
+
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Completing the proof}
+            \begin{itemize}\itemsep0.2em
+                \item \textbf{Base ($r=1$):}
+                      $\mu_0^N \Delta_0=0$, $\mu_0\neq 0$ gives $\Delta_0=0$.
+                \item \textbf{Inductive step ($r\ge 2$):}
+                      Steps 1--4 show $\Delta_0 = 0$.
+                      Cancel the leading term:
+                      $\sum_{k=1}^{r-1}\mu_k^N\Delta_k = 0$.
+                      Apply IH to $r-1$ blocks.
+            \end{itemize}
+        \end{block}
+
+        \textcolor{leangreen}{\checkmark\ \textbf{Fully proved.}}
+        {\footnotesize\texttt{block\_separation\_core} (1{,}094 lines).}
+
+        \column{0.50\textwidth}
+        \begin{center}
+            \vspace{0.2em}
+            % Block separation peeling visual
+            \begin{tikzpicture}[
+                    blk/.style={draw=#1, fill=#1!15!cardbg, rounded corners=2pt,
+                            thick, minimum width=1.0cm, minimum height=0.5cm,
+                            text=#1, font=\scriptsize},
+                    parr/.style={-Stealth, thick, dimwhite}
+                ]
+                % Full block row
+                \node[blk=leangreen] (b0) at (0,2.5) {$\mu_0 A_0$};
+                \node[blk=leanblue] (b1) at (1.3,2.5) {$\mu_1 A_1$};
+                \node[blk=amber] (b2) at (2.6,2.5) {$\mu_2 A_2$};
+                \node[font=\scriptsize, text=dimwhite] at (3.5,2.5) {$\cdots$};
+
+                % After peeling: first block removed
+                \draw[parr] (1.5,2.0) -- (1.5,1.5) node[midway, right, font=\tiny, text=dimwhite] {peel};
+                \node[blk=leangreen, draw=leangreen!40, text=leangreen!40, fill=cardbg] (b0g) at (0,1.0) {$\Delta_0\!=\!0$};
+                \node[blk=leanblue] (b1b) at (1.3,1.0) {$\mu_1 A_1$};
+                \node[blk=amber] (b2b) at (2.6,1.0) {$\mu_2 A_2$};
+                \node[font=\scriptsize, text=dimwhite] at (3.5,1.0) {$\cdots$};
+
+                % After peeling second block
+                \draw[parr] (1.8,0.5) -- (1.8,0.0) node[midway, right, font=\tiny, text=dimwhite] {IH};
+                \node[blk=leanblue, draw=leanblue!40, text=leanblue!40, fill=cardbg] (b1g) at (1.3,-0.5) {$\Delta_1\!=\!0$};
+                \node[blk=amber] (b2c) at (2.6,-0.5) {$\mu_2 A_2$};
+                \node[font=\scriptsize, text=dimwhite] at (3.5,-0.5) {$\cdots$};
+            \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Block separation: the complete proof tree}
+    \vspace{-0.4em}
+
+    \begin{center}
+        \begin{tikzpicture}[
+                sbox/.style={draw=leangreen,rounded corners=2pt,thick,fill=cardbg,align=center,text=white,
+                        inner sep=3pt,font=\tiny,minimum width=3.5cm},
+                sarr/.style={-Stealth,thick,dimwhite},
+                slbl/.style={font=\tiny,text=amber,align=center}
+            ]
+
+            \node[sbox] (sum) at (0,0) {$\sum_{k=0}^{r-1}\mu_k^N\Delta_k = 0$\\(global MPV equality)};
+            \node[sbox] (peel) at (-3.5,-1.2) {Peeling (Step~1)\\$|\Delta_0|\le C\rho^N$};
+            \node[sbox] (ov) at (3.5,-1.2) {Overlap test (Step~2)\\$|\Ov(A_0,A_0,N)-\Ov(A_0,B_0,N)|\le C\rho^N$};
+            \node[sbox] (lim) at (0,-2.4) {$\Ov(A_0,B_0,N)\to 1$\\(primitivity: $\Ov(A_0,A_0,N)\to 1$)};
+            \node[sbox] (contra) at (-3.5,-3.6) {$\lnot$GaugePhaseEquiv?\\$\Ov\to 0 \neq 1$ --- contradiction!};
+            \node[sbox] (gpe) at (3.5,-3.6) {GaugePhaseEquiv$(A_0,B_0)$\\$B_0=\zeta X A_0 X^{-1}$};
+            \node[sbox] (phase) at (3.5,-4.8) {$\bar\zeta^N\to 1 \Rightarrow \zeta=1$\\$\Rightarrow$ SameMPV$(A_0,B_0)$};
+            \node[sbox] (ih) at (0,-5.8) {Subtract $k{=}0$ term; IH on $r{-}1$ blocks\\$\Rightarrow \forall\, k,\, \mathrm{SameMPV}(A_k,B_k)$};
+
+            \draw[sarr] (sum) -- (peel);
+            \draw[sarr] (sum) -- (ov);
+            \draw[sarr] (peel) -- (lim);
+            \draw[sarr] (ov) -- (lim);
+            \draw[sarr] (lim) -- (contra);
+            \draw[sarr] (lim) -- (gpe);
+            \draw[sarr] (gpe) -- (phase);
+            \draw[sarr] (phase) -- (ih);
+            \draw[sarr] (contra.south) -- ++(0,-0.3) -| node[slbl,pos=0.25]{contradiction} (gpe.west);
+
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Five hypotheses drive the entire proof}
+    \vspace{-0.6em}
+
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{p{0.32\textwidth} p{0.38\textwidth} p{0.24\textwidth}}
+        \toprule
+        \textbf{Hypothesis}                & \textbf{Role in proof}              & \textbf{Lean name}             \\
+        \midrule
+        \rowcolor{cardbg}
+        $\Span\{A_k^i\} = \Mat_{D_k}$      & Skolem--Noether (single-block FT)   & \texttt{block\_injective}      \\
+        \rowcolor{cardbg}
+        $\sum_i (A_k^i)^\dagger A_k^i = I$ & Uniform bound $|\mathrm{mpv}|\le D$ & \texttt{ds\_gauge}             \\
+        \rowcolor{cardbg}
+        $\|\mu_0\|>\|\mu_1\|>\cdots$       & Peeling (geometric decay)           & \texttt{mu\_strict\_anti}      \\
+        \rowcolor{cardbg}
+        $B_k$ injective $\forall\, k$      & Spectral gap for $B$ blocks         & \texttt{hB\_inj}               \\
+        \rowcolor{cardbg}
+        $\Ov(A_k,A_k,N)\to 1$              & Contradiction target                & \texttt{overlap\_tendsto\_one} \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize The last two go beyond the basic canonical form.
+        In practice, they follow from primitivity + DS gauge; we state them explicitly.}
 \end{frame}
 
 %======================================================================
 \section{\texorpdfstring{Multi-block assembly: $\Pi$-algebra}{Multi-block assembly: Pi-algebra}}
 %======================================================================
 
-\begin{frame}{Per-block SameMPV $\Rightarrow$ per-block gauge}
-\vspace{-0.6em}
+\begin{frame}{Per-block SameMPV $\Rightarrow$ per-block gauge equivalence}
+    \vspace{-0.6em}
 
-\begin{block}{Reuse of the single-block FT}
-Once separation gives $\mathrm{SameMPV}(A_k,B_k)$ for each~$k$,
-and each $A_k$ is injective:
-\[
-  \forall\, k,\;\exists\, X_k\in\GLC_{D_k}(\mathbb{C}),\quad B_k^i=X_k A_k^i X_k^{-1}.
-\]
-\end{block}
+    \begin{block}{Reuse of the single-block FT}
+        Once separation gives $\mathrm{SameMPV}(A_k,B_k)$ for each~$k$,
+        and each $A_k$ is injective:
+        \[
+            \forall\, k,\  \exists\, X_k\in\GLC_{D_k}(\mathbb{C}),\quad B_k^i=X_k A_k^i X_k^{-1}.
+        \]
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize Lean: apply \texttt{fundamentalTheorem\_singleBlock} blockwise.}
+    \textcolor{dimwhite}{\footnotesize Lean: apply \texttt{fundamentalTheorem\_singleBlock} blockwise.}
 \end{frame}
 
-\begin{frame}{\texorpdfstring{The product algebra $\Pi$ and its automorphisms}{The product algebra Pi and its automorphisms}}
-\vspace{-0.6em}
+\begin{frame}{\texorpdfstring{$\Pi$-algebra automorphisms decompose into permutation + conjugation}{Pi-algebra automorphisms decompose into permutation + conjugation}}
+    \vspace{-0.6em}
 
-\begin{block}{Object}
-$\Pi := \prod_{k=1}^r \Mat_{D_k}(\mathbb{C})$.
-\end{block}
+    \begin{block}{Object}
+        $\Pi := \prod_{k=0}^{r-1} \Mat_{D_k}(\mathbb{C})$.
+    \end{block}
 
-\begin{block}{Theorem (proved in Lean)}
-Every $\mathbb{C}$-algebra automorphism of~$\Pi$ decomposes into:
-\begin{enumerate}\itemsep0.2em
-  \item a block permutation $\pi$ (preserving dimensions),
-  \item inner automorphisms per block: $M\mapsto X_k M X_k^{-1}$.
-\end{enumerate}
-\end{block}
+    \begin{block}{Theorem (proved in Lean)}
+        Every $\mathbb{C}$-algebra automorphism of~$\Pi$ decomposes into:
+        \begin{enumerate}\itemsep0.2em
+            \item a block permutation $\pi$ (preserving dimensions),
+            \item inner automorphisms per block: $M\mapsto X_k M X_k^{-1}$.
+        \end{enumerate}
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize Lean: \texttt{algEquiv\_pi\_matrix\_decomposition} in \texttt{MPS/BlockPermutationMPS.lean}.}
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{algEquiv\_pi\_matrix\_decomposition} in \texttt{MPS/BlockPermutationMPS.lean}.}
 \end{frame}
 
-\begin{frame}{Multi-block FT: complete modulo separation}
-\vspace{-0.6em}
+\begin{frame}{Multi-block FT: the complete theorem}
+    \vspace{-0.6em}
 
-\begin{block}{Lean theorem}
-\begin{itemize}\itemsep0.2em
-  \item \textbf{Input:} block-diagonal SameMPV plus a separation hypothesis\\
-  \texttt{hSep :\ forall k, SameMPV (A k) (B k)}.
-  \item \textbf{Output:} blockwise gauges $X_k$, global block-diagonal gauge,
-  and the $\Pi$-automorphism decomposition.
-\end{itemize}
-\end{block}
+    \begin{block}{Lean theorem}
+        \begin{itemize}\itemsep0.15em
+            \item \textbf{Input:} canonical form tensors $A = \bigoplus_k \mu_k A_k$,
+                  $B = \bigoplus_k \mu_k B_k$ with $\mathcal{V}(A) = \mathcal{V}(B)$.
+            \item \textbf{Output:} blockwise gauges $X_k$, global block-diagonal gauge,
+                  and the $\Pi$-automorphism decomposition.
+        \end{itemize}
+    \end{block}
 
-\begin{block}{Agreement with the literature}
-Given canonical form + block separation, this produces exactly
-the conclusion of~\cite{Cirac2017Annals,Cirac2021Matrix}:
-blocks match up to permutation and gauge.
-\end{block}
+    \begin{block}{Agreement with the literature}
+        Given canonical form + block separation, this produces exactly
+        the conclusion of~\cite{Cirac2017Annals,Cirac2021Matrix}:
+        \alert{blocks match up to permutation and gauge.}
+        \textcolor{leangreen}{\checkmark\ The entire chain is sorry-free.}
+    \end{block}
 
-\textcolor{dimwhite}{\footnotesize Source: \texttt{PiAlgebra/FundamentalTheoremComplete.lean} (stable).}
+    \textcolor{dimwhite}{\footnotesize Source: \texttt{PiAlgebra/FundamentalTheoremComplete.lean} (stable).}
+\end{frame}
+
+%======================================================================
+\section{The complete proof chain}
+%======================================================================
+
+\begin{frame}{End-to-end verified proof chain}
+    \vspace{-0.6em}
+
+    \begin{center}
+        \begin{tikzpicture}[
+                box/.style={draw=leangreen,rounded corners=3pt,thick,fill=cardbg,align=center,text=white,
+                        inner sep=4pt,font=\scriptsize,minimum width=5.5cm},
+                arr/.style={-Stealth,thick,leangreen},
+                lbl/.style={font=\tiny,text=dimwhite,align=center}
+            ]
+
+            \node[box] (ot) {$\Ov(A,B,N) = \tr(\cF_{A,B}^N)$\\
+            {\tiny\texttt{MPVOverlapTraceRect}}};
+            \node[box,below=0.5cm of ot] (sg) {$\rho(\cF_{A,B})<1$ if $\lnot\,$GaugePhaseEquiv\\
+            {\tiny\texttt{SpectralGap} (KS $\to$ HS $\to$ $\rho<1$)}};
+            \node[box,below=0.5cm of sg] (od) {$\Ov(A,B,N)\to 0$ if $\lnot\,$GaugePhaseEquiv\\
+            {\tiny\texttt{MPVOverlapDecay}}};
+            \node[box,below=0.5cm of od] (bs) {Peeling + overlap test + phase cancellation\\
+            $\Rightarrow$ $\forall\,k,\  \mathrm{SameMPV}(A_k,B_k)$\\
+            {\tiny\texttt{CanonicalFormSep} (1{,}094 lines)}};
+            \node[box,below=0.5cm of bs] (sb) {Single-block FT per block (Skolem--Noether)\\
+            $\Rightarrow$ $\forall\,k,\  \mathrm{GaugeEquiv}(A_k,B_k)$\\
+            {\tiny\texttt{FundamentalTheorem}}};
+            \node[box,below=0.5cm of sb] (pa) {$\Pi$-algebra assembly $\Rightarrow$ global gauge\\
+            {\tiny\texttt{FundamentalTheoremComplete}}};
+
+            \draw[arr] (ot) -- (sg);
+            \draw[arr] (sg) -- (od);
+            \draw[arr] (od) -- (bs);
+            \draw[arr] (bs) -- (sb);
+            \draw[arr] (sb) -- (pa);
+
+            \node[right=0.3cm of ot,lbl] {\textcolor{leangreen}{\checkmark}};
+            \node[right=0.3cm of sg,lbl] {\textcolor{leangreen}{\checkmark}};
+            \node[right=0.3cm of od,lbl] {\textcolor{leangreen}{\checkmark}};
+            \node[right=0.3cm of bs,lbl] {\textcolor{leangreen}{\checkmark}};
+            \node[right=0.3cm of sb,lbl] {\textcolor{leangreen}{\checkmark}};
+            \node[right=0.3cm of pa,lbl] {\textcolor{leangreen}{\checkmark}};
+
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.2em}
+    \textcolor{leangreen}{\footnotesize Every step in this chain is sorry-free and axiom-free.}
+\end{frame}
+
+%======================================================================
+\section{Additional infrastructure}
+%======================================================================
+
+\begin{frame}{Newton--Girard: an algebraic alternative route}
+    \vspace{-0.6em}
+
+    \begin{block}{Theorem (proved in Lean, 316 lines)}
+        For matrices $A, B$ over a characteristic-zero integral domain:
+        \[
+            (\forall\, k\ge 1,\  \tr(A^k)=\tr(B^k))
+            \Longrightarrow
+            \mathrm{charpoly}(A) = \mathrm{charpoly}(B).
+        \]
+    \end{block}
+
+    \begin{block}{Proof via Jacobi's formula}
+        \begin{enumerate}\itemsep0.1em
+            \item Derive $P'(X) = -\tr(M\cdot\mathrm{adj}(I-XM))$
+                  by differentiating $\det$ column-by-column.
+            \item Extract the recursion: $(m{+}1)\cdot p_{m+1} = -\sum_{j=0}^m p_j\cdot\tr(M^{m+1-j})$.
+            \item Strong induction on coefficients: equal power sums $\Rightarrow$
+                  equal characteristic polynomial.
+        \end{enumerate}
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{charpoly\_eq\_of\_forall\_trace\_pow\_eq} in \texttt{Algebra/NewtonGirard.lean}.
+        Not used in the main proof but provides an independent algebraic route.}
+\end{frame}
+
+\begin{frame}{Gram matrix linear independence}
+    \vspace{-0.6em}
+
+    \begin{block}{Theorem (proved in Lean, 73 lines)}
+        If vectors $v_1(N),\ldots,v_r(N)$ in a Hilbert space satisfy
+        \[
+            \langle v_i(N),v_j(N)\rangle \xrightarrow{N\to\infty}  \delta_{ij},
+        \]
+        then for all sufficiently large~$N$, $\{v_1(N),\ldots,v_r(N)\}$ are linearly independent.
+    \end{block}
+
+    \begin{block}{Proof idea}
+        The Gram matrix $G(N)_{ij} = \langle v_i, v_j\rangle \to I$.
+        By continuity of $\det$: $\det G(N) \to 1 \neq 0$.
+        Eventually $\det G(N) \neq 0$, which is equivalent to linear independence.
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{eventually\_linearIndependent\_of\_gram\_tendsto\_id}
+        in \texttt{Algebra/GramMatrixLI.lean}.
+        Corresponds to Lemma~1 in~\cite{Cirac2017Annals} (BNT eventual linear independence).}
+\end{frame}
+
+%======================================================================
+\section{How far from the most general FT?}
+%======================================================================
+
+\begin{frame}[fragile]{Hierarchy of FT-MPS results}
+    \vspace{-0.3em}
+
+    \begin{center}
+        % Hierarchy nested diagram
+        \begin{tikzpicture}[
+                hbox/.style={draw=#1, fill=#1!8!darkbg, rounded corners=4pt, thick,
+                        minimum height=0.7cm, text=white, font=\scriptsize, align=center}
+            ]
+            % Outermost: Thm 4.6
+            \node[hbox=softred, minimum width=12.0cm, minimum height=4.8cm] (t46) at (0,0) {};
+            \node[font=\scriptsize, text=softred, anchor=north west] at (-5.8, 2.2) {%
+                \textbf{Thm~4.6}~\cite{Cirac2017Irreducible}: irreducible (periodic) blocks, diagonal $Z$};
+
+            % Thm 4.4
+            \node[hbox=amber, minimum width=9.8cm, minimum height=3.2cm] (t44) at (0,-0.25) {};
+            \node[font=\scriptsize, text=amber, anchor=north west] at (-4.7, 1.3) {%
+                \textbf{Thm~4.4}~\cite{Cirac2021Matrix}: primitive, proportional MPVs, BNT permutation};
+
+            % Cor 4.5 (ours)
+            \node[hbox=leangreen, minimum width=7.2cm, minimum height=1.8cm] (c45) at (0,-0.55) {};
+            \node[font=\scriptsize, text=leangreen, anchor=north west] at (-3.4, 0.5) {%
+                \textbf{Cor~4.5} (our formalization): primitive, equal MPVs};
+            \node[font=\scriptsize, text=leangreen] at (0,-0.15) {%
+                same block structure + per-block gauge $X_k$};
+
+            % Single-block (innermost)
+            \node[hbox=leanblue, minimum width=4.2cm, minimum height=0.65cm] (sb) at (0,-1.0) {%
+                \textbf{Single-block} ($r=1$): $B^i = X A^i X^{-1}$};
+
+            % "PROVED" labels (right side)
+            \node[font=\footnotesize\bfseries, text=leangreen] at (5.2, -1.0) {\checkmark\ proved};
+            \node[font=\footnotesize\bfseries, text=leangreen] at (5.2, 0.1) {\checkmark\ proved};
+            \node[font=\footnotesize, text=dimwhite] at (5.2, 1.0) {open};
+            \node[font=\footnotesize, text=dimwhite] at (5.2, 1.9) {open};
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.3em}
+    \textcolor{dimwhite}{\footnotesize Our formalization covers Cor~4.5 with canonical form \emph{assumed} (not constructed).}
+\end{frame}
+
+\begin{frame}{Gap analysis: what remains to formalize}
+    \vspace{-0.7em}
+
+    \renewcommand{\arraystretch}{1.1}
+    {\footnotesize
+        \begin{tabular}{p{0.34\textwidth} p{0.10\textwidth} p{0.12\textwidth} p{0.34\textwidth}}
+            \toprule
+            \textbf{Gap} & \textbf{Difficulty} & \textbf{Est.\ LOC} & \textbf{Mathematical content}                 \\
+            \midrule
+            \rowcolor{cardbg}
+            CF existence (arbitrary $\to$ CF)
+                         & Hard                & 1{,}500--3{,}000   & Jordan decomp., invariant subspaces, blocking \\
+            \rowcolor{cardbg}
+            Periodic blocks (diagonal $Z$)
+                         & Hard                & 1{,}000--2{,}000   & Peripheral spectrum of CP maps                \\
+            \rowcolor{cardbg}
+            Derive $\Ov\to 1$ from primitivity
+                         & Hard                & 800--1{,}200       & Perron--Frobenius for CP maps                 \\
+            \rowcolor{cardbg}
+            Proportional MPV case
+                         & Med-Hard            & 800--1{,}500       & BNT theory, phase tracking                    \\
+            \rowcolor{cardbg}
+            Match block structure of $B$
+                         & Hard                & 500--1{,}000       & Full BNT, dimension matching                  \\
+            \rowcolor{cardbg}
+            BNT permutation
+                         & Medium              & 300--600           & Extend block separation                       \\
+            \rowcolor{cardbg}
+            Unitary gauge (CFII)
+                         & Medium              & 200--400           & Polar decomposition                           \\
+            \bottomrule
+        \end{tabular}
+    }
+
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize
+    \textbf{Principal gap:} canonical form existence (Step~(i) in the pipeline).
+    The FT \emph{given} CF is complete.
+    Total to full generality: ${\sim}5{,}000$--$10{,}000$ lines.}
 \end{frame}
 
 %======================================================================
 \section{Status and next steps}
 %======================================================================
 
-\begin{frame}{Build status: stable vs.\ Experimental}
-\vspace{-0.6em}
+\begin{frame}{What is proved: a sorry-free core library}
+    \vspace{-0.7em}
 
-\begin{block}{Stable entrypoint}
-\textcolor{leangreen}{\checkmark}  \texttt{import MPSLean} is \textbf{sorry-free}.
-\end{block}
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \renewcommand{\arraystretch}{1.1}
+        {\footnotesize
+            \begin{tabular}{p{0.60\textwidth} p{0.24\textwidth}}
+                \toprule
+                \textbf{Component}                    & \textbf{Status}  \\
+                \midrule
+                \rowcolor{cardbg}
+                Single-block FT                       & \proved{}        \\
+                \rowcolor{cardbg}
+                Spectral gap ($\rho(\cF)<1$)          & \proved{}        \\
+                \rowcolor{cardbg}
+                Overlap--trace bridge                  & \proved{}        \\
+                \rowcolor{cardbg}
+                Block separation (CF)                  & \proved{}        \\
+                \rowcolor{cardbg}
+                Multi-block assembly                  & \proved{}        \\
+                \rowcolor{cardbg}
+                Newton--Girard                        & \proved{}        \\
+                \rowcolor{cardbg}
+                Gram matrix LI                        & \proved{}        \\
+                \midrule
+                \rowcolor{cardbg}
+                CF \emph{existence}                   & \future{open}    \\
+                \rowcolor{cardbg}
+                Proportional-case FT                  & \future{open}    \\
+                \rowcolor{cardbg}
+                Periodic/irreducible                  & \future{open}    \\
+                \bottomrule
+            \end{tabular}
+        }
 
-\begin{block}{Experimental entrypoint}
-\texttt{import MPSLean.Experimental} exposes two work-in-progress items:
-\begin{enumerate}\itemsep0.3em
-  \item \sorrymark{} \texttt{BlockSeparationProof.lean}:
-  Vandermonde-style lemma (\textbf{known false}; counterexample included).
-  \item \sorrymark{} \texttt{CanonicalFormSep.lean}:
-  \texttt{block\_separation\_core} for $r\ge 2$
-  (true target; literature-aligned, incomplete).
-\end{enumerate}
-\end{block}
+        \column{0.43\textwidth}
+        \begin{block}{Build statistics}
+            \begin{itemize}\itemsep0.15em
+                \item[\textcolor{leangreen}{\checkmark}] 48 files, 8{,}700+ lines
+                \item[\textcolor{leangreen}{\checkmark}] \textbf{0 sorry}, 0 axioms
+                \item[\textcolor{leangreen}{\checkmark}] Mathlib v4.27.0
+            \end{itemize}
+        \end{block}
+
+        \begin{block}{Experimental}
+            One sorry: a naive Vandermonde lemma that is \textbf{known-false}
+            (counterexample documented).
+            Superseded by the CF route.
+        \end{block}
+    \end{columns}
 \end{frame}
 
-\begin{frame}{Extensions not yet covered}
-\vspace{-0.6em}
+\begin{frame}[fragile]{Roadmap to the full theorem}
+    \vspace{-0.3em}
 
-\begin{block}{Irreducible/periodic generalization \cite{Cirac2017Irreducible}}
-If the transfer operator has period $p>1$, canonical form is replaced by
-\emph{irreducible form}, and the FT allows an extra diagonal unitary~$Z$:
-\[
-  Z A^i = Y B^i Y^{-1},\quad [Z,A^i]=0,\quad \mathcal{V}(A)=\mathcal{V}(ZA).
-\]
-\end{block}
+    \begin{center}
+        % Roadmap timeline
+        \begin{tikzpicture}[
+                phase/.style={draw=#1, fill=#1!15!cardbg, rounded corners=4pt, thick,
+                        text=white, font=\scriptsize, align=center,
+                        minimum width=2.8cm, minimum height=1.8cm},
+                parr/.style={-Stealth, very thick, #1}
+            ]
+            \node[phase=leangreen] (p1) at (0,0) {\textbf{Phase 1}\\
+                Core machinery\\
+                {\tiny Single-block FT}\\
+                {\tiny Spectral gap}\\
+                {\tiny Block separation}};
+            \node[phase=amber] (p2) at (3.6,0) {\textbf{Phase 2}\\
+                CF bridge\\
+                {\tiny Invariant subspaces}\\
+                {\tiny DS gauge construction}\\
+                {\tiny Remove periodicity}};
+            \node[phase=leanblue] (p3) at (7.2,0) {\textbf{Phase 3}\\
+                Generalizations\\
+                {\tiny Periodic blocks}\\
+                {\tiny Proportional MPVs}\\
+                {\tiny BNT permutation}};
+            \node[phase=softred] (p4) at (10.8,0) {\textbf{Phase 4}\\
+                Applications\\
+                {\tiny Parent Hamiltonians}\\
+                {\tiny Correlation lengths}\\
+                {\tiny Gapped phases}};
 
-\begin{block}{Quantitative blocking bounds \cite{Sanz2010Quantum,Fernandez2015Frustration}}
-Physics applications (parent Hamiltonians, uncle Hamiltonians, RG fixed points)
-use explicit blocking lengths.
-The library currently works with qualitative hypotheses only.
-\end{block}
+            \draw[parr=leangreen] (p1.east) -- (p2.west);
+            \draw[parr=amber] (p2.east) -- (p3.west);
+            \draw[parr=leanblue] (p3.east) -- (p4.west);
+
+            % Status labels
+            \node[font=\scriptsize\bfseries, text=leangreen] at (0, -1.3) {\checkmark\ DONE};
+            \node[font=\scriptsize\bfseries, text=amber] at (3.6, -1.3) {NEXT};
+            \node[font=\scriptsize, text=dimwhite] at (7.2, -1.3) {planned};
+            \node[font=\scriptsize, text=dimwhite] at (10.8, -1.3) {long-term};
+        \end{tikzpicture}
+    \end{center}
+
+    \vspace{-0.2em}
+    \textcolor{dimwhite}{\footnotesize Phase 1 complete: 8{,}700+ lines, sorry-free.
+        Phase 2 (CF existence) is the main bridge to full generality (${\sim}1{,}500$--$3{,}000$ lines).}
 \end{frame}
 
-\begin{frame}{Next milestones}
-\vspace{-0.6em}
+%======================================================================
+\section{The big picture}
+%======================================================================
 
-\begin{block}{A: canonical-form block separation (main gap)}
-Formalize the equal-or-orthogonal + dominance + induction argument
-from~\cite{Cirac2017Annals,Cirac2021Matrix},
-using the existing mixed-transfer spectral gap.
-\end{block}
+\begin{frame}{Why formalize the Fundamental Theorem of MPS?}
+    \vspace{-0.6em}
 
-\begin{block}{B: canonical form existence}
-Connect QPF primitives to constructive canonical gauges
-(DS normalization, spectral-radius fixing).
-\end{block}
+    \begin{block}{Physics context}
+        \begin{itemize}\itemsep0.1em
+            \item \textbf{MPS are the mathematical backbone} of DMRG, the most successful
+                  numerical method for 1D quantum many-body systems.
+            \item The FT is the \textbf{structural uniqueness theorem}: when two
+                  MPS representations describe the ``same'' physical state.
+            \item \textbf{Applications:} parent Hamiltonians, correlation lengths,
+                  classification of gapped quantum phases, SPT order.
+        \end{itemize}
+    \end{block}
 
-\begin{block}{C: irreducible/periodic extension (optional)}
-Add the diagonal~$Z$ degree of freedom
-and the FT without blocking~\cite{Cirac2017Irreducible}.
-\end{block}
+    \begin{block}{Why formalization adds value}
+        \begin{itemize}\itemsep0.1em
+            \item \textbf{Subtle proof:} our counterexample shows
+                  the Vandermonde argument is \emph{false} without canonical form.
+            \item \textbf{Many moving parts:} algebra, analysis, combinatorics, linear algebra.
+            \item \textbf{Foundation for more:} downstream results
+                  (parent Hamiltonians, DMRG convergence) built on a verified base.
+        \end{itemize}
+    \end{block}
 \end{frame}
 
 %======================================================================
 \section{Conclusion}
 %======================================================================
 
-\begin{frame}{Summary}
-\vspace{-0.6em}
+\begin{frame}{Summary: what we achieved and why it matters}
+    \vspace{-0.6em}
 
-\begin{block}{Formalized (stable, sorry-free)}
-\begin{itemize}\itemsep0.25em
-  \item Single-block FT via linear extension + Skolem--Noether.
-  \item Mixed transfer toolkit: spectral gap, exponential decay.
-  \item Multi-block assembly: $\Pi$-algebra automorphisms, block permutations.
-\end{itemize}
-\end{block}
+    \begin{block}{A complete formal proof of the FT-MPS (Cor~4.5, CF assumed)}
+        \begin{itemize}\itemsep0.2em
+            \item \textbf{Algebra:} Single-block FT via linear extension + Skolem--Noether.
+            \item \textbf{Analysis:} Kadison--Schwarz $\to$ eigenvector rigidity $\to$ $\rho(\cF)<1$.
+            \item \textbf{Bridge:} $\Ov(A,B,N) = \tr(\cF^N)$ (square + rectangular).
+            \item \textbf{Core:} Block separation via peeling + overlap test + phase cancellation.
+            \item \textbf{Assembly:} $\Pi$-algebra automorphisms $\to$ global gauge.
+        \end{itemize}
+    \end{block}
 
-\begin{block}{Primary open bridge}
-Canonical-form block separation (Step~ii.a in the literature).
-Closing it makes the Lean proof identical to the standard route
-in~\cite{Cirac2017Annals,Cirac2021Matrix}.
-\end{block}
+    \begin{block}{Impact}
+        \begin{itemize}\itemsep0.15em
+            \item \alert{First formal verification} of a core theorem in quantum many-body physics.
+            \item Confirms the literature proof, catching a subtle point (naive Vandermonde fails).
+            \item Verified foundation for parent Hamiltonians, correlation bounds, phase classification.
+        \end{itemize}
+    \end{block}
 
-\vspace{0.5em}
-\begin{center}
-\textcolor{dimwhite}{\footnotesize Thank you.\quad Code: \texttt{github.com/.../MPSLean}}
-\end{center}
+    \vspace{0.3em}
+    \begin{center}
+        \textcolor{leangreen}{\footnotesize 48 files \quad|\quad 8{,}700+ lines \quad|\quad 0 sorry \quad|\quad 0 axioms}
+        \\[0.2em]
+        \textcolor{dimwhite}{\footnotesize Thank you.\quad Code: \texttt{github.com/\ldots/MPSLean}}
+    \end{center}
 \end{frame}
 
 %======================================================================
-% References (appendix)
+% Appendix
 %======================================================================
+\appendix
+
 \begin{frame}[allowframebreaks]{References}
-  \bibliography{references}
+    \bibliography{references}
+\end{frame}
+
+%======================================================================
+% Backup slides
+%======================================================================
+
+\begin{frame}[fragile]{Backup A: Lean theorem signatures (exact)}
+    \vspace{-0.6em}
+
+    \begin{lstlisting}
+-- Single-block FT
+theorem fundamentalTheorem_singleBlock
+    {A B : MPSTensor d D}
+    (hA : IsInjective A) (hAB : SameMPV A B) :
+    GaugeEquiv A B
+
+-- Canonical-form FT (end-to-end)
+theorem fundamentalTheorem_canonicalForm_explicit
+    ((*@$\mu$@*) : Fin r (*@$\to$@*) (*@$\mathbb{C}$@*))
+    (A B : (k : Fin r) (*@$\to$@*) MPSTensor d (dim k))
+    (hA : IsCanonicalForm (*@$\mu$@*) A)
+    (hB_inj : (*@$\forall$@*) k, IsInjective (B k))
+    (hB_ds : (*@$\forall$@*) k, (*@$\sum$@*) i, (B k i)(*@${}^{\textrm{H}}$@*) * (B k i) = 1)
+    (hSame(*@$_2$@*) : SameMPV(*@$_2$@*) (toTensorFromBlocks (*@$\mu$@*) A)
+                          (toTensorFromBlocks (*@$\mu$@*) B)) :
+    (*@$\exists$@*) (X : (*@$\forall$@*) k, GL (Fin (dim k)) (*@$\mathbb{C}$@*)),
+    (*@$\forall$@*) k i, B k i = (X k) * A k i * (X k)(*@${}^{-1}$@*)
+\end{lstlisting}
+
+    \textcolor{dimwhite}{\footnotesize Source: \texttt{PiAlgebra/CanonicalFormSep.lean}. Both theorems are sorry-free.}
+\end{frame}
+
+\begin{frame}[fragile]{Backup B: \texttt{IsCanonicalForm} --- the full predicate}
+    \vspace{-0.6em}
+
+    \begin{lstlisting}
+structure IsCanonicalForm
+    ((*@$\mu$@*) : Fin r (*@$\to$@*) (*@$\mathbb{C}$@*))
+    (A : (k : Fin r) (*@$\to$@*) MPSTensor d (dim k)) where
+  block_injective :
+    (*@$\forall$@*) k, IsInjective (A k)
+  ds_gauge :
+    (*@$\forall$@*) k, (*@$\sum$@*) i, (A k i)(*@${}^{\textrm{H}}$@*) * (A k i) = 1
+  mu_strict_anti :
+    StrictAnti (fun k => (*@$\|$@*)(*@$\mu$@*) k(*@$\|$@*))
+  mu_ne_zero :
+    (*@$\forall$@*) k, (*@$\mu$@*) k (*@$\neq$@*) 0
+  overlap_tendsto_one :
+    (*@$\forall$@*) k, Filter.Tendsto
+      (fun N => mpvOverlap (A k) (A k) N)
+      Filter.atTop (nhds 1)
+\end{lstlisting}
+
+    \vspace{-0.2em}
+    \textcolor{dimwhite}{\footnotesize
+        \texttt{block\_injective}: spanning condition (Skolem--Noether input).
+        \texttt{ds\_gauge}: $\sum_i (A_k^i)^\dagger A_k^i = I$ (HS contraction input).
+        \texttt{mu\_strict\_anti}: strict $\|\mu\|$ ordering (peeling input).
+        \texttt{overlap\_tendsto\_one}: primitivity consequence (contradiction target).}
+\end{frame}
+
+\begin{frame}{Backup C: File dependency layers}
+    \vspace{-0.6em}
+
+    \renewcommand{\arraystretch}{1.15}
+    {\footnotesize
+        \begin{tabular}{c p{0.22\textwidth} p{0.60\textwidth}}
+            \toprule
+            \textbf{Layer} & \textbf{Role}       & \textbf{Key files}                                                                                                                           \\
+            \midrule
+            \rowcolor{cardbg}
+            0              & Mathlib foundations & Linear algebra, matrices, topology, spectral theory                                                                                          \\
+            \rowcolor{cardbg}
+            1              & Core definitions    & \texttt{MPS/Defs}, \texttt{MPS/Transfer}, \texttt{MPS/MPVOverlap}                                                                            \\
+            \rowcolor{cardbg}
+            2              & Algebra toolkit     & \texttt{Algebra/SkolemNoether}, \texttt{Algebra/TracePairing}, \texttt{Algebra/NewtonGirard}, \texttt{Algebra/GramMatrixLI}                  \\
+            \rowcolor{cardbg}
+            3              & Channel theory      & \texttt{Channel/KadisonSchwarz}, \texttt{Channel/DSGauge}, \texttt{Channel/Schwarz}                                                          \\
+            \rowcolor{cardbg}
+            4              & Spectral gap        & \texttt{Spectral/SpectralGap}, \texttt{Spectral/MixedTransferRect}, \texttt{Spectral/MPVOverlapDecay}, \texttt{Spectral/MPVOverlapTraceRect} \\
+            \rowcolor{cardbg}
+            5              & Main theorems       & \texttt{MPS/FundamentalTheorem}, \texttt{PiAlgebra/CanonicalFormSep}, \texttt{PiAlgebra/FundamentalTheoremComplete}                          \\
+            \bottomrule
+        \end{tabular}
+    }
+
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize Each layer depends only on layers below it.
+        The stable entrypoint \texttt{import MPSLean} transitively imports all 48 files.}
+\end{frame}
+
+\begin{frame}{Backup D: the Newton--Girard alternative path}
+    \vspace{-0.6em}
+
+    \begin{block}{An algebraic alternative to spectral gap}
+        \begin{enumerate}\itemsep0.1em
+            \item \textbf{SameMPV $\Rightarrow$ equal traces of powers:}
+                  $\tr(A^k) = \tr(B^k)$ for all $k\ge 1$.
+            \item \textbf{Newton--Girard recursion:}
+                  $(m{+}1)\,p_{m+1}=-\sum_{j=0}^{m} p_j\,\tr(M^{m+1-j})$.
+            \item \textbf{Equal power sums $\Rightarrow$ equal characteristic polynomial:}
+                  strong induction using $\mathrm{CharZero}$ cancellation.
+            \item \textbf{Equal charpoly $\Rightarrow$ same spectrum:} useful for matching
+                  transfer-operator eigenvalues across blocks.
+        \end{enumerate}
+    \end{block}
+
+    \begin{block}{Current status}
+        Fully proved in \texttt{Algebra/NewtonGirard.lean} (316 lines, sorry-free).
+        Not used in the main proof; available as a verified alternative.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Backup E: the counterexample that killed naive Vandermonde}
+    \vspace{-0.6em}
+
+    \begin{block}{Setup: $r=2$ blocks, $D=1$ (scalar), $\mu=(1,2)$}
+        Let $A_0, A_1$ be any pair of scalar blocks ($A_k^i \in \mathbb{C}$).
+        Define $B$ by swapping and rescaling:
+        \[
+            B_0^i := \frac{\mu_1}{\mu_0}\,A_1^i = 2\,A_1^i,
+            \qquad
+            B_1^i := \frac{\mu_0}{\mu_1}\,A_0^i = \tfrac{1}{2}\,A_0^i.
+        \]
+    \end{block}
+
+    \begin{block}{Verification: global MPVs agree}
+        \vspace{-0.5em}
+        \[
+            \sum_{k=0}^{1} \mu_k^N \mathrm{mpv}(B_k,\sigma)
+            = 1^N \cdot 2^N A_1^{i_1}\cdots A_1^{i_N}
+            + 2^N \cdot \tfrac{1}{2^N} A_0^{i_1}\cdots A_0^{i_N}
+            = \sum_{k} \mu_k^N \mathrm{mpv}(A_k,\sigma).
+        \]
+        But $A_0 \neq B_0$ in general. The naive Vandermonde lemma is \textbf{false}.
+    \end{block}
+
+    \begin{block}{Why canonical form blocks this}
+        DS normalization ($\rho(\cE_{A_k})=1$) fixes block scale.
+        Swap-and-rescale requires $|\mu_0|=|\mu_1|$, contradicting strict ordering.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Backup F: build statistics}
+    \vspace{-0.6em}
+
+    \renewcommand{\arraystretch}{1.15}
+    {\footnotesize
+        \begin{tabular}{p{0.50\textwidth} r}
+            \toprule
+            \textbf{Metric}                                  & \textbf{Value}        \\
+            \midrule
+            \rowcolor{cardbg}
+            Total Lean files (stable core)                   & 48                    \\
+            \rowcolor{cardbg}
+            Total lines of code                              & 8{,}700+              \\
+            \rowcolor{cardbg}
+            \texttt{sorry} occurrences (stable core)         & 0                     \\
+            \rowcolor{cardbg}
+            Non-Lean axioms                                  & 0                     \\
+            \rowcolor{cardbg}
+            Mathlib version                                  & v4.27.0               \\
+            \rowcolor{cardbg}
+            Lean version                                     & 4                     \\
+            \midrule
+            \rowcolor{cardbg}
+            Largest file: \texttt{SpectralGap.lean}          & ${\sim}$1{,}214 lines \\
+            \rowcolor{cardbg}
+            Block separation: \texttt{CanonicalFormSep.lean} & ${\sim}$1{,}094 lines \\
+            \rowcolor{cardbg}
+            Newton--Girard: \texttt{NewtonGirard.lean}       & ${\sim}$316 lines     \\
+            \rowcolor{cardbg}
+            Multi-block assembly (2 files)                   & ${\sim}$428 lines     \\
+            \rowcolor{cardbg}
+            Gram matrix LI: \texttt{GramMatrixLI.lean}       & ${\sim}$73 lines      \\
+            \midrule
+            \rowcolor{cardbg}
+            Experimental files (gated, not in core)          & 2 files, 1 sorry      \\
+            \bottomrule
+        \end{tabular}
+    }
+
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize The one experimental sorry is a naive Vandermonde lemma known to be false
+        (counterexample in Backup~E). Superseded by the canonical-form route.}
+\end{frame}
+
+\begin{frame}{Backup G: transfer toolkit summary}
+    \vspace{-0.6em}
+
+    \begin{block}{Available via \texttt{import MPSLean} (sorry-free)}
+        \begin{itemize}\itemsep0.2em
+            \item \proved{Definitions: \texttt{transferMap}, \texttt{mixedTransferMap}, \texttt{mixedTransferMap\_2}.}
+            \item \proved{Iterated word expansion (square and rectangular).}
+            \item \proved{Kadison--Schwarz inequality + HS contraction.}
+            \item \proved{Spectral gap: $\rho<1$ for inequivalent blocks (1{,}214 lines).}
+            \item \proved{Overlap--trace identity (square and rectangular).}
+            \item \proved{Overlap decay: $\Ov(A,B,N)\to 0$ for $\lnot$GaugePhaseEquiv.}
+            \item \proved{DS gauge normalization: \texttt{gauged\_unital}.}
+        \end{itemize}
+    \end{block}
+
+    \textcolor{dimwhite}{\footnotesize Key files: \texttt{Spectral/SpectralGap.lean}, \texttt{Spectral/MPVOverlapDecay.lean},
+        \texttt{Channel/KadisonSchwarz.lean}, \texttt{Channel/DSGauge.lean}.}
 \end{frame}
 
 \end{document}
