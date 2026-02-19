@@ -1,0 +1,353 @@
+Block separation (canonical form) via RECTANGULAR mixed transfer — audit & Lean plan
+Date: 2026-02-19
+Repo: MPSLean
+Target: Milestone A = close `MPSTensor.block_separation_core` in `MPSLean/PiAlgebra/CanonicalFormSep.lean`
+Style goal: mirror the literature spine
+  equal-or-orthogonal (mixed transfer) → dominance/peeling → induction on #blocks.
+
+================================================================================
+A. Current Lean statement we must prove
+================================================================================
+
+File: `MPSLean/PiAlgebra/CanonicalFormSep.lean`
+Lemma (lines ~109–149):
+
+  lemma MPSTensor.block_separation_core
+      {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+      (μ : Fin r → ℂ)
+      (A B : (k : Fin r) → MPSTensor d (dim k))
+      (hμ_strict : StrictAnti (fun k : Fin r => ‖μ k‖))
+      (hμ_ne_zero : ∀ k, μ k ≠ 0)
+      (hA_inj : ∀ k, IsInjective (A k))
+      (hA_ds : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+      (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+      (h_summed : ∀ (N : ℕ) (σ : Fin N → Fin d),
+        ∑ k : Fin r, (μ k) ^ N * (mpv (A k) σ - mpv (B k) σ) = 0) :
+      ∀ k, SameMPV (A k) (B k)
+
+Key observation: block dimensions vary (`dim : Fin r → ℕ`). Any “cross-block” object inevitably
+lives on rectangular matrices `Matrix (Fin (dim j)) (Fin (dim k)) ℂ`.
+
+Important API caveat (already noted in older memo `audits/block_separation_core_memo.txt`):
+* `block_separation_core` assumes `IsInjective (A k)` but NOT `IsInjective (B k)`.
+* The existing strict spectral-gap lemma `spectralRadius_mixedTransfer_lt_one` in
+  `MPSLean/Spectral/SpectralGap.lean` requires injectivity on BOTH sides.
+  Any literature-aligned proof using equal-or-orthogonal must either
+  (i) derive injectivity of `B k` from the hypotheses, or
+  (ii) strengthen the lemma/predicate so B-blocks are injective (e.g. assume `IsCanonicalForm μ B`).
+
+================================================================================
+B. Literature-aligned proof skeleton (what *cross-block* overlap/decay facts are needed)
+================================================================================
+
+Goal: replace the current (Newton/charpoly) placeholder with the standard route:
+
+  (1) Equal-or-orthogonal:
+      For injective DS-gauge blocks A,B:
+        either `GaugePhaseEquiv A B` (spectral radius = 1),
+        or the MPV overlap decays: `mpvOverlap A B N → 0`.
+
+  (2) Dominance / peeling:
+      Use strict ordering `‖μ 0‖ > ‖μ 1‖ > …` to isolate the leading block by applying a peeling
+      lemma to a weighted overlap identity.
+
+  (3) Induction:
+      After proving the leading block matches, remove it from the summed identity and recurse.
+
+To execute (1)→(2) in Lean we need the following cross-block “overlap layer” facts:
+
+Needed overlap statements (minimal list):
+
+  O1. Overlap is definable for different bond dims (already DONE):
+      `MPSTensor.mpvOverlap` in `MPSLean/MPS/MPVOverlap.lean` is
+        mpvOverlap (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) : ℂ.
+
+  O2. Transfer-trace formula for overlaps, rectangular version (MISSING):
+      For any D₁,D₂ (NeZero), we want
+
+        (LinearMap.trace ℂ (Matrix (Fin D₁) (Fin D₂) ℂ)) ((mixedTransferMap₂ A B) ^ N)
+          = mpvOverlap A B N.
+
+      (Square case already DONE as `trace_mixedTransferMap_pow_eq_mpvOverlap` in
+       `MPSLean/Spectral/MPVOverlapTrace.lean`.)
+
+  O3. Uniform boundedness of cross overlaps (needed for peeling):
+      For DS-gauge A,B, show a uniform bound
+
+        ‖mpvOverlap A B N‖ ≤ C(D₁,D₂)
+
+      (independent of N). The clean route is:
+        mpvOverlap = operator-trace of (mixedTransferMap₂)^N,
+        spectralRadius ≤ 1 ⇒ eigenvalues ≤ 1 ⇒ trace of powers bounded by dim(V) = D₁*D₂.
+
+  O4. Decay for “inequivalent” blocks (equal-or-orthogonal):
+      If blocks are inequivalent, overlaps tend to 0:
+
+        Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0).
+
+      For D₁=D₂, this should be reducible to existing `SpectralGap.lean`.
+      For D₁≠D₂, we need a rectangular spectral-gap statement (see §D).
+
+  O5. Self-overlap persistence / nonzero limit (needed to force equality rather than just decay):
+      We need that for injective DS-gauge A,
+
+        mpvOverlap A A N → c, with c ≠ 0.
+
+      (Concretely: exclude peripheral eigenvalues μ with |μ|=1, μ≠1, for `transferMap A`.
+       This should be provable from injectivity + the existing modulus-one-eigenvalue rigidity proof,
+       but is currently not packaged as a lemma.)
+
+Why rectangular overlaps are needed even if the main “diagonal” matching is square:
+* In the peeling step we form overlaps between the leading block and *every other* block.
+  Those other blocks can have different bond dimension, hence rectangular mixed transfer is
+  the natural object.
+
+================================================================================
+C. Does the current mixed-transfer / spectral-gap API suffice?
+================================================================================
+
+Current state:
+* `MPSLean/Spectral/MixedTransfer.lean` defines only
+    mixedTransferMap (A B : MPSTensor d D) : Mat(D,D) →ₗ Mat(D,D)
+  (square only).
+
+* `MPSLean/Spectral/SpectralGap.lean` proves spectral-radius bounds and decay only for the square
+  case. In particular:
+    `spectralRadius_mixedTransfer_lt_one` and `mixedTransfer_pow_tendsto_zero`
+  require equal D and injectivity on both A and B.
+
+Conclusion:
+* For a literature-aligned block-separation proof with varying block dimensions, the current API is
+  NOT sufficient.
+* We need a minimal rectangular generalization of the mixed transfer map and its overlap-trace
+  identity. For full equal-or-orthogonal we also need a rectangular spectral-gap wrapper.
+
+================================================================================
+D. Minimal rectangular generalization (design)
+================================================================================
+
+This section answers the “minimal rectangular generalization” request precisely.
+
+----------------------------------------
+D1. Rectangular mixed transfer map
+----------------------------------------
+
+New definition (suggested name: `mixedTransferMap₂` to match `SameMPV₂`):
+
+  mixedTransferMap₂ (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+      Matrix (Fin D₁) (Fin D₂) ℂ →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ
+
+  mixedTransferMap₂ A B X = ∑ i : Fin d, A i * X * (B i)ᴴ.
+
+Implementation trick (Mathlib helper):
+* Use `mulLeftLinearMap` / `mulRightLinearMap` from `Mathlib.Data.Matrix.Bilinear`:
+    mulLeftLinearMap  (Fin D₂) ℂ (A i)  : Mat(D₁,D₂) →ₗ Mat(D₁,D₂)
+    mulRightLinearMap (Fin D₁) ℂ ((B i)ᴴ) : Mat(D₁,D₂) →ₗ Mat(D₁,D₂)
+
+  mixedTransferMap₂ A B := ∑ i, (mulLeftLinearMap (Fin D₂) ℂ (A i)).comp
+                              (mulRightLinearMap (Fin D₁) ℂ ((B i)ᴴ))
+
+Required simp lemma:
+* `mixedTransferMap₂_apply` analogous to `mixedTransferMap_apply`.
+
+----------------------------------------
+D2. Word-sum lemma (pow_apply)
+----------------------------------------
+
+New theorem (analogue of `mixedTransferMap_pow_apply`):
+
+  theorem mixedTransferMap₂_pow_apply (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
+    ∀ X : Matrix (Fin D₁) (Fin D₂) ℂ,
+      ((mixedTransferMap₂ A B) ^ N) X
+        = ∑ σ : Fin N → Fin d,
+            evalWord A (List.ofFn σ) * X * (evalWord B (List.ofFn σ))ᴴ.
+
+Proof skeleton: identical induction to the square proof; only requires matrix associativity and the
+reindexing lemma `sum_fin_succ_eq` (already in `Spectral/MixedTransfer.lean`, can be copied/reused).
+
+----------------------------------------
+D3. Operator-trace identity = mpvOverlap (rectangular)
+----------------------------------------
+
+New theorem (rectangular analogue of `trace_mixedTransferMap_pow_eq_mpvOverlap`):
+
+  theorem trace_mixedTransferMap₂_pow_eq_mpvOverlap
+      {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+      (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
+    (LinearMap.trace ℂ (Matrix (Fin D₁) (Fin D₂) ℂ)) ((mixedTransferMap₂ A B) ^ N)
+      = mpvOverlap (d := d) A B N.
+
+Key supporting lemmas to generalize (from `MPSLean/Spectral/MPVOverlapTrace.lean`):
+
+* Rectangular trace expansion via matrix units:
+
+    lemma linearMap_trace_eq_sum_apply_single₂
+        (T : Mat(D₁,D₂) →ₗ[ℂ] Mat(D₁,D₂)) :
+      LinearMap.trace ℂ Mat(D₁,D₂) T
+        = ∑ p : Fin D₁, ∑ q : Fin D₂, (T (Matrix.single p q (1:ℂ))) p q.
+
+  Proof: use `Matrix.stdBasis ℂ (Fin D₁) (Fin D₂)` and `LinearMap.trace_eq_matrix_trace`.
+
+* Entry simplification for `M * single * N` with different dims:
+
+    lemma entry_mul_single_mul₂
+      (M : Mat(D₁,D₁)) (N : Mat(D₂,D₂)) (p : Fin D₁) (q : Fin D₂) :
+      (M * Matrix.single p q (1:ℂ) * N) p q = M p p * N q q.
+
+Then the main trace identity follows by the same rearrangement proof as the square case.
+
+----------------------------------------
+D4. Decay lemma (inequivalent ⇒ overlap → 0)
+----------------------------------------
+
+Define inequivalence for different bond dims:
+
+  def Inequivalent {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
+    (D₁ ≠ D₂) ∨ (∃ h : D₁ = D₂, ¬ GaugePhaseEquiv (A) (by simpa [h] using B))
+
+Lean ergonomics note: it may be better to define two lemmas rather than a single disjunction:
+  • one lemma for `D₁ = D₂` with the existing `¬GaugePhaseEquiv` hypothesis;
+  • one lemma for `D₁ ≠ D₂`.
+
+Target decay lemma:
+
+  theorem mpvOverlap_tendsto_zero_of_inequivalent
+      (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+      (hA : IsInjective A) (hB : IsInjective B)
+      (hA_ds : ∑ i, (A i)ᴴ * A i = 1)
+      (hB_ds : ∑ i, (B i)ᴴ * B i = 1)
+      (hIneq : Inequivalent A B) :
+    Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0)
+
+Proof strategy:
+* Use D3 to rewrite mpvOverlap as operator-trace of `(mixedTransferMap₂ A B)^N`.
+* Prove spectralRadius < 1 for `(mixedTransferMap₂ A B)` under `Inequivalent`.
+  - If `D₁ = D₂`, reuse existing `SpectralGap.spectralRadius_mixedTransfer_lt_one`.
+  - If `D₁ ≠ D₂`, prove the rectangular analogue:
+      “if spectral radius = 1 then there exists a unit-modulus eigenvalue and nonzero eigenvector,
+       which forces an isomorphism between virtual spaces, hence D₁ = D₂”, contradiction.
+* Once spectralRadius < 1, use `pow_tendsto_zero_of_spectralRadius_lt_one` (already in
+  `SpectralGap.lean`) on the associated continuous linear map to get:
+
+      Tendsto (fun N => ((mixedTransferMap₂ A B) ^ N) X) atTop (nhds 0)
+
+  for each basis matrix unit X.
+* Apply `linearMap_trace_eq_sum_apply_single₂` and `tendsto_finset_sum` to conclude the operator
+  trace tends to 0.
+
+================================================================================
+E. Mathlib lemma inventory (rectangular linear maps + trace)
+================================================================================
+
+Rectangular multiplication linear maps (key to defining mixedTransferMap₂):
+* `mulLeftLinearMap` / `mulRightLinearMap` in `Mathlib.Data.Matrix.Bilinear`.
+  (Also: `mulLeftLinearMap_apply`, `mulRightLinearMap_apply`.)
+
+Trace computation:
+* `LinearMap.trace_eq_matrix_trace` (Mathlib.LinearAlgebra.Trace)
+* `LinearMap.toMatrix_apply` (Mathlib.LinearAlgebra.Matrix.ToLin)
+* `Matrix.stdBasis` and `Matrix.stdBasis_eq_single` (Mathlib.LinearAlgebra.Matrix.StdBasis)
+
+Matrix-unit multiplication simp lemmas:
+* `Matrix.mul_single_apply_same`, `Matrix.mul_single_apply_of_ne` (Mathlib.Data.Matrix.Basis)
+
+Big-operator reshuffling:
+* `Finset.sum_comm_cycle`
+* `Fintype.sum_mul_sum`
+* `Fintype.sum_apply`
+
+================================================================================
+F. Concrete file layout + theorem naming + dependency order
+================================================================================
+
+(Prefer new modules under `MPSLean/Spectral/`; keep `MPSLean.lean` unchanged until sorry-free.)
+
+1) NEW `MPSLean/Spectral/MixedTransferRect.lean`
+   Imports:
+     * `MPSLean.MPS.Transfer` (or `MPSLean.Spectral.MixedTransfer` for shared lemmas)
+     * `Mathlib.Data.Matrix.Bilinear`
+   Contents:
+     * def `mixedTransferMap₂`
+     * simp lemma `mixedTransferMap₂_apply`
+     * `mixedTransferMap₂_smul_left`, `mixedTransferMap₂_smul_right`
+     * theorem `mixedTransferMap₂_pow_apply`
+     * optional: lemma relating to square `mixedTransferMap` when D₁=D₂.
+
+2) NEW `MPSLean/Spectral/MPVOverlapTraceRect.lean`
+   Imports:
+     * `MPSLean.MPS.MPVOverlap`
+     * `MPSLean.Spectral.MixedTransferRect`
+     * `Mathlib.LinearAlgebra.Trace`
+     * `Mathlib.LinearAlgebra.Matrix.StdBasis`
+     * `Mathlib.Data.Matrix.Basis`
+     * `Mathlib.LinearAlgebra.Matrix.Trace`
+   Contents:
+     * `linearMap_trace_eq_sum_apply_single₂`
+     * `entry_mul_single_mul₂`
+     * theorem `trace_mixedTransferMap₂_pow_eq_mpvOverlap`
+
+3) NEW `MPSLean/Spectral/SpectralGapRect.lean` (minimal wrapper; avoid touching existing file)
+   Imports:
+     * `MPSLean.Spectral.MixedTransferRect`
+     * `MPSLean.Spectral.SpectralGap` (reuse pow_tendsto_zero lemma + square strict gap)
+     * `Mathlib.Analysis.Normed.Algebra.GelfandFormula` (if reusing the same spectral machinery)
+   Contents (minimal):
+     * define `mixedTransferSpectralRadius₂`
+     * prove `spectralRadius_mixedTransfer₂_le_one` (HS contraction generalized to D₁×D₂)
+     * prove `spectralRadius_mixedTransfer₂_lt_one` under `Inequivalent`
+     * prove `mixedTransfer₂_pow_tendsto_zero`
+     * prove `mpvOverlap_tendsto_zero_of_inequivalent` using operator-trace expansion
+
+4) Update proof of `MPSTensor.block_separation_core` in
+     `MPSLean/PiAlgebra/CanonicalFormSep.lean`
+   (likely in Experimental until fully stable)
+
+   Suggested lemma structure (names are placeholders):
+     * `block_separation_core_step0`:
+         isolate the leading block using overlap + peeling.
+     * `block_separation_core_induction`:
+         peel block 0 and recurse on remaining blocks (needs Fin/erase bookkeeping).
+
+   Proof skeleton:
+     i) Use `h_summed` to show global SameMPV:
+         SameMPV (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)
+     ii) Fix leading index k0 := ⟨0,hr⟩.
+     iii) Form the overlap identity with test tensor `A k0`:
+
+         0 = mpvOverlap (A k0) (toTensorFromBlocks μ A) N
+             - mpvOverlap (A k0) (toTensorFromBlocks μ B) N
+
+         Expand each using `mpv_toTensorFromBlocks_eq_sum` under the overlap sum to obtain:
+
+           ∑ k, conj(μ k)^N * ( mpvOverlap (A k0) (A k) N - mpvOverlap (A k0) (B k) N ) = 0.
+
+     iv) Apply `peeling_exponential_bound` (dominance from strict anti `‖μ‖`) using the uniform
+         overlap bound from the rectangular mixed-transfer theory.
+         Conclude exponential decay of δ0(N) := mpvOverlap(A0,A0,N) - mpvOverlap(A0,B0,N).
+
+     v) Use equal-or-orthogonal (overlap decay) to force `GaugePhaseEquiv (A 0) (B 0)`.
+        NOTE: this step currently requires injectivity of `B 0` unless we strengthen the spectral
+        lemma. Decide early:
+          * either add `hB_inj : ∀k, IsInjective (B k)` to the core lemma,
+          * or add a preliminary lemma deriving it from the canonical-form context.
+
+     vi) Use “self overlap persists” (limit ≠ 0) + δ0(N) → 0 to show the gauge phase is 1, hence
+         `GaugeEquiv` and therefore `SameMPV` for block 0.
+
+     vii) Remove block 0 from `h_summed` and apply induction on r.
+
+================================================================================
+G. Next-step checklist (concrete)
+================================================================================
+
+1) Implement `mixedTransferMap₂` + `mixedTransferMap₂_pow_apply` (new Spectral module).
+2) Port `MPVOverlapTrace.lean` to rectangular dims:
+     `linearMap_trace_eq_sum_apply_single₂` + `trace_mixedTransferMap₂_pow_eq_mpvOverlap`.
+3) Prove at least `spectralRadius_mixedTransfer₂_le_one` (uniform overlap boundedness for peeling).
+4) Decide injectivity of B-blocks strategy for block separation:
+     (a) strengthen `block_separation_core` hypotheses, or
+     (b) derive `∀k, IsInjective (B k)` from the canonical-form assumptions + h_summed.
+5) Implement overlap decay lemma `mpvOverlap_tendsto_zero_of_inequivalent` (equal-or-orthogonal).
+6) Implement self-overlap persistence lemma for injective DS-gauge blocks (needed to kill phases).
+7) Finish `block_separation_core` by the peeling+induction proof; keep changes behind
+   `import MPSLean.Experimental` until sorry-free.
