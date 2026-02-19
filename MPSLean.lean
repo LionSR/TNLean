@@ -27,6 +27,7 @@ import MPSLean.Spectral.CrossCorrelation
 
 -- Layer 3: MPS core
 import MPSLean.MPS.Defs
+import MPSLean.MPS.Blocking
 import MPSLean.MPS.MPVOverlap
 import MPSLean.MPS.Transfer
 import MPSLean.MPS.CanonicalForm
@@ -38,6 +39,7 @@ import MPSLean.MPS.FundamentalTheorem
 
 -- Layer 5: Multi-block
 import MPSLean.MPS.MultiBlock
+import MPSLean.Algebra.BlockTriangularTrace
 import MPSLean.MPS.BasisNormal
 import MPSLean.MPS.FundamentalTheoremMulti
 import MPSLean.MPS.BlockPermutationMPS
