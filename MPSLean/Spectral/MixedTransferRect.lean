@@ -51,7 +51,6 @@ lemma mixedTransferMap₂_apply {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (X : Matrix (Fin D₁) (Fin D₂) ℂ) :
     mixedTransferMap₂ A B X = ∑ i : Fin d, A i * X * (B i)ᴴ := by
-  classical
   simp [mixedTransferMap₂, Matrix.mul_assoc]
 
 end MixedTransferRect
