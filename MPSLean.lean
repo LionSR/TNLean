@@ -40,6 +40,7 @@ import MPSLean.MPS.FundamentalTheorem
 -- Layer 5: Multi-block
 import MPSLean.MPS.MultiBlock
 import MPSLean.Algebra.BlockTriangularTrace
+import MPSLean.Algebra.ProjectionTriangularTrace
 import MPSLean.MPS.BasisNormal
 import MPSLean.MPS.FundamentalTheoremMulti
 import MPSLean.MPS.BlockPermutationMPS
