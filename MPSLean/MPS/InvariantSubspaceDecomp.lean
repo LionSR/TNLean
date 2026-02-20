@@ -612,4 +612,307 @@ theorem exists_twoBlock_decomp_of_lowerZero
     _ = mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ := by
           simpa [hmpv_twoBlockTensor] using hmpv_twoBlockTensor.symm
 
+
+/-! ## Strict dimension decrease variant
+
+The following theorem strengthens `exists_twoBlock_decomp_of_lowerZero` by showing that
+both returned block dimensions are *strictly smaller* than `D`. This is the key
+ingredient for proving termination of the canonical-form recursion.
+
+References:
+* Perez-Garcia et al., quant-ph/0608197, Thm. 3 (lines 769–803): recursion on bond dimension.
+* Cirac et al., arXiv:1606.00608, §2.3: the same step in the "canonical forms" reduction.
+-/
+
+section StrictDimDecrease
+
+variable {d D : ℕ}
+
+/-- Spectral decomposition helper for a Hermitian matrix (matrix form). -/
+private lemma orthProj_spectral_eq'
+    (P : Matrix (Fin D) (Fin D) ℂ) (hHerm : P.IsHermitian) :
+    P = (↑hHerm.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
+      Matrix.diagonal (fun j => (↑(hHerm.eigenvalues j) : ℂ)) *
+      (↑hHerm.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
+  have h := hHerm.spectral_theorem
+  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
+  simpa using h
+
+/-- **Strict dimension decrease** for the invariant-projection splitting step.
+
+If `A` admits an invariant orthogonal projection `P` with `P ≠ 0` and `P ≠ 1`, then
+`A` is MPV-equivalent to a two-block tensor whose block dimensions `n` and `m` are both
+*strictly smaller* than `D`.
+
+This is the strict version of `exists_twoBlock_decomp_of_lowerZero`. The additional
+bounds `n < D` and `m < D` come from the `1`- and `0`-eigenspaces of `P` both being
+nonempty (which follows from `P ≠ 0` and `P ≠ 1`).
+-/
+theorem exists_twoBlock_decomp_of_lowerZero_strict
+    (A : MPSTensor d D)
+    (P : Matrix (Fin D) (Fin D) ℂ)
+    (hP : IsOrthogonalProjection P)
+    (hLower : ∀ i : Fin d, (1 - P) * A i * P = 0)
+    (hP0 : P ≠ 0) (hP1 : P ≠ 1) :
+    ∃ n m : ℕ, ∃ hnm : n + m = D, n < D ∧ m < D ∧
+      ∃ (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
+        SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
+  classical
+  -- ═══ Spectral setup (same as `exists_twoBlock_decomp_of_lowerZero`) ═══
+  let hHerm : P.IsHermitian := hP.1
+  let U : ↥(Matrix.unitaryGroup (Fin D) ℂ) := hHerm.eigenvectorUnitary
+  let Umat : Matrix (Fin D) (Fin D) ℂ := (U : Matrix (Fin D) (Fin D) ℂ)
+  let Pdiag : Matrix (Fin D) (Fin D) ℂ := star Umat * P * Umat
+  let f : Fin D → ℂ := fun j => (↑(hHerm.eigenvalues j) : ℂ)
+  have hPdiag_eq : Pdiag = Matrix.diagonal f := by
+    have h := hHerm.conjStarAlgAut_star_eigenvectorUnitary
+    simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply] using h
+  have hU_mul_star : Umat * star Umat = 1 :=
+    Unitary.mul_star_self_of_mem U.2
+  have hPdiag_idem : Pdiag * Pdiag = Pdiag := by
+    calc Pdiag * Pdiag
+        = star Umat * P * (Umat * star Umat) * P * Umat := by
+            simp [Pdiag, Matrix.mul_assoc]
+      _ = star Umat * P * P * Umat := by simp [hU_mul_star, Matrix.mul_assoc]
+      _ = star Umat * P * Umat := by simp [hP.2, Matrix.mul_assoc]
+      _ = Pdiag := by simp [Pdiag, Matrix.mul_assoc]
+  have hDiag_idem : Matrix.diagonal f * Matrix.diagonal f = Matrix.diagonal f := by
+    simpa [hPdiag_eq] using hPdiag_idem
+  have hf01 : ∀ j : Fin D, f j = 0 ∨ f j = 1 := by
+    intro j
+    have hfun : (fun k => f k * f k) = f := by
+      apply Matrix.diagonal_injective
+      simpa [Matrix.diagonal_mul_diagonal] using hDiag_idem
+    exact mul_self_eq_self_or_eq_one (f j) (congrFun hfun j)
+
+  -- ═══ Index splitting ═══
+  let p : Fin D → Prop := fun j => f j = 1
+  haveI : DecidablePred p := fun _ => inferInstance
+  let S : Type := { j : Fin D // p j }
+  let T : Type := { j : Fin D // ¬ p j }
+  let n : ℕ := Fintype.card S
+  let m : ℕ := Fintype.card T
+  have hnm : n + m = D := by
+    have hST : Fintype.card (S ⊕ T) = D :=
+      (Fintype.card_congr (Equiv.sumCompl p)).trans (by simp [Fintype.card_fin])
+    have hsum : Fintype.card (S ⊕ T) = Fintype.card S + Fintype.card T :=
+      Fintype.card_sum (α := S) (β := T)
+    simpa [n, m] using hsum.symm.trans hST
+
+  -- ═══ Strict bounds ═══
+  -- `S` is nonempty from `P ≠ 0`.
+  have hn_pos : 0 < n := by
+    rw [show n = Fintype.card S from rfl, Fintype.card_pos_iff]
+    by_contra hempty; rw [not_nonempty_iff] at hempty
+    apply hP0
+    have hf_zero : ∀ j, f j = 0 := fun j =>
+      (hf01 j).resolve_right (fun h1 => (IsEmpty.false (α := S) ⟨j, h1⟩).elim)
+    rw [orthProj_spectral_eq' P hHerm]
+    have hdiag0 : Matrix.diagonal f = 0 := by ext i k; simp [Matrix.diagonal_apply, hf_zero]
+    rw [hdiag0, Matrix.mul_zero, Matrix.zero_mul]
+  -- `T` is nonempty from `P ≠ 1`.
+  have hm_pos : 0 < m := by
+    rw [show m = Fintype.card T from rfl, Fintype.card_pos_iff]
+    by_contra hempty; rw [not_nonempty_iff] at hempty
+    apply hP1
+    have hf_one : ∀ j, f j = 1 := fun j =>
+      (hf01 j).resolve_left
+        (fun h0 =>
+          -- `f j = 0` implies `j ∈ T` (the 0-eigenspace), contradicting `IsEmpty T`.
+          (IsEmpty.false (α := T)
+            ⟨j, fun (h1 : f j = 1) => absurd (h0.symm.trans h1) zero_ne_one⟩).elim)
+    rw [orthProj_spectral_eq' P hHerm]
+    have hdiag1 : Matrix.diagonal f = 1 := by
+      ext i k
+      simp only [Matrix.diagonal_apply, Matrix.one_apply]
+      split_ifs with heq
+      · subst heq; exact hf_one i
+      · rfl
+    rw [hdiag1, Matrix.mul_one, ← Matrix.star_eq_conjTranspose]
+    simpa [Umat] using Unitary.mul_star_self_of_mem U.prop
+  have hn_lt : n < D := by omega
+  have hm_lt : m < D := by omega
+
+  -- ═══ Block decomposition ═══
+  have hfT : ∀ t : T, f t.1 = 0 := fun t => (hf01 t.1).resolve_right t.2
+  let eST : Fin D ≃ (S ⊕ T) := (Equiv.sumCompl p).symm
+  let Aconj : MPSTensor d D := fun i => star Umat * A i * Umat
+  have hSame_conj : SameMPV A Aconj := sameMPV_conj_unitary A U
+
+  have hPdiag_proj : IsOrthogonalProjection Pdiag := by
+    refine ⟨?_, hPdiag_idem⟩
+    have : ∀ j : Fin D, IsSelfAdjoint (f j) := fun j =>
+      (hf01 j).elim (fun h => by simp [IsSelfAdjoint, h]) (fun h => by simp [IsSelfAdjoint, h])
+    simpa [hPdiag_eq] using (Matrix.isHermitian_diagonal_iff (d := f)).2 this
+
+  have hLower_conj : ∀ i : Fin d, (1 - Pdiag) * Aconj i * Pdiag = 0 := by
+    intro i
+    have hStar_mul : star Umat * Umat = 1 := by
+      simpa [Umat] using (Matrix.UnitaryGroup.star_mul_self U)
+    have hOneSub : (1 - Pdiag) = star Umat * (1 - P) * Umat := by
+      have : star Umat * (1 - P) * Umat = (1 - Pdiag) := by
+        simp [Pdiag, mul_sub, sub_mul, Matrix.mul_assoc, hStar_mul]
+      exact this.symm
+    calc (1 - Pdiag) * Aconj i * Pdiag
+        = (star Umat * (1 - P) * Umat) * (star Umat * A i * Umat) *
+            (star Umat * P * Umat) := by simp [hOneSub, Aconj, Pdiag]
+      _ = star Umat * ((1 - P) * A i * P) * Umat := by
+            calc (star Umat * (1 - P) * Umat) * (star Umat * A i * Umat) *
+                    (star Umat * P * Umat)
+                = star Umat * (1 - P) * (Umat * star Umat) * A i *
+                    (Umat * star Umat) * P * Umat := by noncomm_ring
+              _ = star Umat * (1 - P) * A i * P * Umat := by
+                    simp [hU_mul_star, Matrix.mul_assoc]
+              _ = star Umat * ((1 - P) * A i * P) * Umat := by noncomm_ring
+      _ = 0 := by simp [hLower i]
+
+  have hSame_diagPart : SameMPV Aconj (diagPart Aconj Pdiag) :=
+    sameMPV_diagPart_of_lowerZero Aconj Pdiag hPdiag_proj hLower_conj
+
+  -- Extract block tensors.
+  let X : Fin d → Matrix (S ⊕ T) (S ⊕ T) ℂ := fun i => Matrix.reindex eST eST (Aconj i)
+  let A11raw : Fin d → Matrix S S ℂ := fun i => (X i).toBlocks₁₁
+  let A22raw : Fin d → Matrix T T ℂ := fun i => (X i).toBlocks₂₂
+  let eS : S ≃ Fin n := Fintype.equivFin S
+  let eT : T ≃ Fin m := Fintype.equivFin T
+  let A₁ : MPSTensor d n := fun i => Matrix.reindex eS eS (A11raw i)
+  let A₂ : MPSTensor d m := fun i => Matrix.reindex eT eT (A22raw i)
+
+  refine ⟨n, m, hnm, hn_lt, hm_lt, A₁, A₂, ?_⟩
+
+  -- ═══ MPV equivalence ═══
+  intro N σ
+  set w : List (Fin d) := List.ofFn σ
+  have hA_Aconj : mpv A σ = mpv Aconj σ := hSame_conj N σ
+  have hAconj_diag : mpv Aconj σ = mpv (diagPart Aconj Pdiag) σ := hSame_diagPart N σ
+
+  have hTrace_reindex :
+      Matrix.trace (MPSTensor.evalWord (diagPart Aconj Pdiag) w) =
+        Matrix.trace (_root_.evalWord (fun i => Matrix.reindex eST eST
+          ((diagPart Aconj Pdiag) i)) w) := by
+    calc Matrix.trace (MPSTensor.evalWord (diagPart Aconj Pdiag) w)
+        = Matrix.trace (Matrix.reindex eST eST
+            (MPSTensor.evalWord (diagPart Aconj Pdiag) w)) := by
+              simpa using (Matrix.trace_reindex eST
+                (MPSTensor.evalWord (diagPart Aconj Pdiag) w)).symm
+      _ = _ := by
+              have := evalWord_reindex_fin (e := eST) (A := diagPart Aconj Pdiag) w
+              simpa using congrArg Matrix.trace this.symm
+
+  have hPdiag_std :
+      Matrix.reindex eST eST Pdiag =
+        Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ) := by
+    rw [hPdiag_eq]
+    have : Matrix.reindex eST eST (Matrix.diagonal f) =
+        Matrix.diagonal (f ∘ eST.symm) := by
+      simpa [Matrix.reindex_apply] using
+        (Matrix.submatrix_diagonal_equiv (d := f) (e := eST.symm))
+    rw [this]
+    ext x y
+    cases x with
+    | inl s =>
+        cases y with
+        | inl s' =>
+            by_cases h : s = s'
+            · subst h; simpa [p] using s.2
+            · simp [Matrix.fromBlocks_apply₁₁, Matrix.diagonal_apply, Function.comp, h]
+        | inr t =>
+            simp [Matrix.fromBlocks_apply₁₂, Matrix.diagonal_apply, Function.comp]
+    | inr t =>
+        cases y with
+        | inl s =>
+            simp [Matrix.fromBlocks_apply₂₁, Matrix.diagonal_apply, Function.comp]
+        | inr t' =>
+            by_cases h : t = t'
+            · subst h; simpa [p] using (hfT t)
+            · simp [Matrix.fromBlocks_apply₂₂, Matrix.diagonal_apply, Function.comp, h]
+
+  have hLetter_block : ∀ i : Fin d,
+      Matrix.reindex eST eST ((diagPart Aconj Pdiag) i) =
+        Matrix.fromBlocks (A11raw i) 0 0 (A22raw i) := by
+    intro i
+    let φ : Matrix (Fin D) (Fin D) ℂ ≃ₐ[ℂ] Matrix (S ⊕ T) (S ⊕ T) ℂ :=
+      Matrix.reindexAlgEquiv ℂ ℂ eST
+    let P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
+      Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ)
+    let Q0 : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
+      Matrix.fromBlocks (0 : Matrix S S ℂ) 0 0 (1 : Matrix T T ℂ)
+    have hφP : φ Pdiag = P0 := by simpa [φ, P0] using hPdiag_std
+    have hφA : φ (Aconj i) = X i := by simp [φ, X]
+    have hXfull : X i = Matrix.fromBlocks (A11raw i) (X i).toBlocks₁₂
+        (X i).toBlocks₂₁ (A22raw i) := by
+      simpa [A11raw, A22raw] using (Matrix.fromBlocks_toBlocks (X i)).symm
+    have hQ : (1 - P0) = Q0 := by
+      ext x y <;> cases x <;> cases y <;>
+        simp [P0, Q0, Matrix.fromBlocks_apply₁₁, Matrix.fromBlocks_apply₁₂,
+          Matrix.fromBlocks_apply₂₁, Matrix.fromBlocks_apply₂₂, Matrix.one_apply]
+    have hφ_diag : φ ((diagPart Aconj Pdiag) i) =
+        Matrix.fromBlocks (A11raw i) 0 0 (A22raw i) := by
+      simp only [MPSTensor.diagPart, map_add, map_mul, map_sub, map_one, hφP, hφA]
+      rw [hQ, hXfull]
+      simp [P0, Q0, Matrix.fromBlocks_multiply, Matrix.fromBlocks_add, Matrix.mul_assoc]
+    simpa [φ] using hφ_diag
+
+  have hEval_block :
+      _root_.evalWord (fun i => Matrix.reindex eST eST
+        ((diagPart Aconj Pdiag) i)) w =
+        Matrix.fromBlocks (_root_.evalWord A11raw w) 0 0 (_root_.evalWord A22raw w) := by
+    rw [show (fun i => Matrix.reindex eST eST ((diagPart Aconj Pdiag) i)) =
+        fun i => Matrix.fromBlocks (A11raw i) 0 0 (A22raw i) from funext hLetter_block]
+    simpa using evalWord_fromBlocks_diag A11raw A22raw w
+
+  have hTrace_diagPart :
+      mpv (diagPart Aconj Pdiag) σ = mpv A₁ σ + mpv A₂ σ := by
+    simp only [MPSTensor.mpv, MPSTensor.coeff]
+    have htr_blocks :
+        Matrix.trace (_root_.evalWord (fun i => Matrix.reindex eST eST
+            ((diagPart Aconj Pdiag) i)) w)
+          = Matrix.trace (_root_.evalWord A11raw w) +
+              Matrix.trace (_root_.evalWord A22raw w) := by
+      rw [hEval_block]
+      simpa using trace_fromBlocks_diag (_root_.evalWord A11raw w) (_root_.evalWord A22raw w)
+    have hmpv₁ : mpv A₁ σ = Matrix.trace (_root_.evalWord A11raw w) := by
+      have : MPSTensor.evalWord A₁ w = Matrix.reindex eS eS (_root_.evalWord A11raw w) := by
+        simpa [A₁] using MPSTensor.evalWord_reindex (e := eS) (A := A11raw) w
+      calc mpv A₁ σ = Matrix.trace (MPSTensor.evalWord A₁ w) := rfl
+        _ = Matrix.trace (Matrix.reindex eS eS (_root_.evalWord A11raw w)) := by rw [this]
+        _ = _ := by simpa using Matrix.trace_reindex eS (_root_.evalWord A11raw w)
+    have hmpv₂ : mpv A₂ σ = Matrix.trace (_root_.evalWord A22raw w) := by
+      have : MPSTensor.evalWord A₂ w = Matrix.reindex eT eT (_root_.evalWord A22raw w) := by
+        simpa [A₂] using MPSTensor.evalWord_reindex (e := eT) (A := A22raw) w
+      calc mpv A₂ σ = Matrix.trace (MPSTensor.evalWord A₂ w) := rfl
+        _ = Matrix.trace (Matrix.reindex eT eT (_root_.evalWord A22raw w)) := by rw [this]
+        _ = _ := by simpa using Matrix.trace_reindex eT (_root_.evalWord A22raw w)
+    calc Matrix.trace (MPSTensor.evalWord (diagPart Aconj Pdiag) w)
+        = Matrix.trace (_root_.evalWord (fun i => Matrix.reindex eST eST
+            ((diagPart Aconj Pdiag) i)) w) := hTrace_reindex
+      _ = Matrix.trace (_root_.evalWord A11raw w) +
+            Matrix.trace (_root_.evalWord A22raw w) := htr_blocks
+      _ = mpv A₁ σ + mpv A₂ σ := by simp [hmpv₁, hmpv₂]
+
+  have hmpv_twoBlockTensor :
+      mpv (twoBlockTensor A₁ A₂) σ = mpv A₁ σ + mpv A₂ σ := by
+    have h := mpv_toTensorFromBlocks_eq_sum (r := 2) (dim := ![n, m])
+        (μ := fun _ => (1 : ℂ)) (A := twoBlockBlocks A₁ A₂) (σ := σ)
+    have h' : mpv (twoBlockTensor A₁ A₂) σ =
+        ∑ k : Fin 2, (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ k) σ := by
+      simpa [twoBlockTensor] using h
+    calc mpv (twoBlockTensor A₁ A₂) σ
+        = ∑ k : Fin 2, (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ k) σ := h'
+      _ = ((1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ 0) σ) +
+            ((1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ (Fin.succ 0)) σ) := by
+          simpa [Fin.sum_univ_succ, Fin.sum_univ_one] using
+            Fin.sum_univ_succ (n := 1)
+              (f := fun k : Fin 2 => (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ k) σ)
+      _ = mpv A₁ σ + mpv A₂ σ := by
+          simp only [one_pow, one_smul, twoBlockBlocks, Fin.cases_zero, Fin.cases_succ]
+
+  -- Chain all steps.
+  calc mpv A σ = mpv Aconj σ := hA_Aconj
+    _ = mpv (diagPart Aconj Pdiag) σ := hAconj_diag
+    _ = mpv A₁ σ + mpv A₂ σ := hTrace_diagPart
+    _ = mpv (twoBlockTensor A₁ A₂) σ := hmpv_twoBlockTensor.symm
+
+end StrictDimDecrease
+
 end MPSTensor
