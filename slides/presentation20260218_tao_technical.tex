@@ -276,25 +276,52 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
     \end{block}
 \end{frame}
 
+% SOURCE: audits/2026-02-20_invariant_subspace_step_literature_map.txt
 \begin{frame}{Step~(i): canonical form reduction~\cite{Cirac2017Annals,Cirac2021Matrix}}
     \vspace{-0.7em}
 
     \begin{columns}[T]
         \column{0.62\textwidth}
-        \begin{block}{Key moves}
-            \begin{itemize}\itemsep0.25em
-                \item Decompose via invariant subspaces:
-                      $B^i \mapsto \bigoplus_k \mu_k A_k^i$.
-                \item Discard upper-triangular blocks
-                      (they never contribute to $\tr(A^{i_1}\cdots A^{i_N})$).
-                \item Normalize each block by transfer-operator data:
-                      spectral radius $\rho(\cE_{A_k})=1$, full-rank fixed points.
+        \begin{block}{Key moves~(\cite{Cirac2017Annals} \S2.3)}
+            % SOURCE: 1606.00608 §2.3 (TeX lines 184-219) + eq:II_Aiplusk1
+            \begin{itemize}\itemsep0.18em
+                \item[(1)] \textbf{Block upper-triangular form} (1606.00608, line 196):
+                      $B^i = \bigl(\begin{smallmatrix}B_1^i & B_o^i\\0&B_2^i\end{smallmatrix}\bigr)$
+                      $\Rightarrow$ \textit{"MPV does not depend on $B^i_o$"};
+                      off-diagonal block irrelevant.
+                \item[(2)] \textbf{Projector identities} (1606.00608, lines 201--204):
+                      $B^i P_1 = P_1 B^i P_1$,\;
+                      $Q_1 B^i = Q_1 B^i Q_1$\;
+                      (from $(1{-}P)A^i P = 0$;
+                      cf.\ \cite{Perez-Garcia2007Matrix} Thm.~3).
+                \item[(3)] \textbf{Direct-sum form} (\texttt{eq:II\_Aiplusk1}, line 215):
+                      $A^i = \bigoplus_k \mu_k A_k^i$;
+                      iterate until all blocks are irreducible.
+                \item[(4)] Normalize each block via transfer-operator
+                      (QPF) fixed points.
             \end{itemize}
         \end{block}
 
-        \begin{block}{Lean status}
-            Canonical forms exist as records and constructors.
-            Existence theorem (arbitrary tensor $\to$ CF) is not yet formalized.
+        \begin{block}{Lean status \textnormal{\scriptsize(source: memo 2026-02-20 in \texttt{audits/})}}
+            \begin{itemize}\itemsep0.10em
+                \item[\textcolor{leangreen}{\checkmark}]
+                      Blocking infrastructure
+                      (\texttt{Blocking.lean}).
+                \item[\textcolor{leangreen}{\checkmark}]
+                      Off-diagonal drop:
+                      \texttt{sameMPV\_diagPart\_of\_lowerZero}\\
+                      {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/Algebra/ProjectionTriangularTrace.lean}}}
+                \item[\textcolor{leangreen}{\checkmark}]
+                      Inv.-proj.\ $\Rightarrow$ 2-block:
+                      \texttt{exists\_twoBlock\_decomp\_of\_lowerZero}\\
+                      {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/MPS/InvariantSubspaceDecomp.lean}}}
+                \item[\textcolor{leangreen}{\checkmark}]
+                      Fixed point $\to$ invariant projection:
+                      \texttt{lowerZero\_of\_posSemidef\_fixedPoint}\\
+                      {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/MPS/FixedPointInvariantProjection.lean}}}
+                \item[\textcolor{amber}{\textbullet}]
+                      \textbf{Open:} iterate to full CF; PF normalization; Wielandt.
+            \end{itemize}
         \end{block}
 
         \column{0.36\textwidth}
@@ -349,6 +376,156 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
             {\scriptsize\textcolor{dimwhite}{Blocking: $C = B^{\otimes L}$.\\
                     After~\cite{Cirac2017Annals}, Fig.~I.}}
         \end{center}
+    \end{columns}
+\end{frame}
+
+%----------------------------------------------------------------------
+% SOURCE: audits/2026-02-20_invariant_subspace_step_literature_map.txt
+% The literature mapping below is derived from that memo.
+%----------------------------------------------------------------------
+\begin{frame}{Invariant subspace $\Rightarrow$ direct sum (literature + Lean)}
+    \vspace{-0.45em}
+
+    % Main lemma statement (Lean theorem in mathematical language)
+    \begin{block}{Lemma (projection condition $\Rightarrow$ MPV trace splitting)%
+        ~\cite{Cirac2017Annals,Perez-Garcia2007Matrix}}
+        Let $P\in\Mat_D(\mathbb{C})$ be an orthogonal projection with
+        $(1{-}P)\,A^i\,P = 0\ \forall\,i$.
+        Then $\exists$ sub-tensors $A_1$ ($n{\times}n$), $A_2$ ($m{\times}m$), $n+m=D$:
+        \vspace{-0.3em}
+        \[
+            \tr(A^{i_1}\!\cdots A^{i_N})
+            \;=\;
+            \tr(A_1^{i_1}\!\cdots A_1^{i_N})
+            +
+            \tr(A_2^{i_1}\!\cdots A_2^{i_N}).
+        \]
+    \end{block}
+
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        % SOURCE: audits/2026-02-20_invariant_subspace_step_literature_map.txt §(B)
+        \begin{block}{Key equations from~\cite{Cirac2017Annals} \S2.3~(arXiv:1606.00608)}
+            \textbf{Block upper-triangular form} (TeX line 196--198):
+            \vspace{-0.2em}
+            \[
+                B^i = \begin{pmatrix}B_1^i & B_o^i \\ 0 & B_2^i\end{pmatrix},
+                \quad \text{"$B^i_o$ irrelevant for MPV."}
+            \]
+            \vspace{-0.6em}
+
+            \textbf{Projector identities} (TeX lines 201--204):
+            \vspace{-0.2em}
+            \begin{align*}
+                B^i P_1 &= P_1 B^i P_1, \\[-0.1em]
+                Q_1 B^i &= Q_1 B^i Q_1,\quad Q_1 := I{-}P_1.
+            \end{align*}
+            \vspace{-0.8em}
+
+            \textbf{Direct-sum form} (\texttt{eq:II\_Aiplusk1}, TeX line 215):
+            \vspace{-0.2em}
+            \[
+                A^i = \sum_k P_k B^i P_k = \bigoplus_{k} \mu_k A_k^i.
+            \]
+        \end{block}
+
+        \column{0.46\textwidth}
+        \begin{block}{Full literature mapping}
+            \begin{itemize}\itemsep0.15em
+                \item[(a)] \textbf{\cite{Cirac2017Annals} \S2.3}: primary ref;\
+                      explicit $P_1$/$Q_1$ projection, block-triangular display,
+                      and \texttt{eq:II\_Aiplusk1} direct-sum conclusion.
+                \item[(b)] \textbf{\cite{Perez-Garcia2007Matrix} Thm.~3} (quant-ph/0608197):
+                      invariant projection $P_R = \mathrm{supp}(\rho)$ from
+                      non-invertible PF fixed point;
+                      traces split $\mathrm{Tr}_R + \mathrm{Tr}_{R^\perp}$
+                      (TeX lines 771--814).
+                \item[(c)] \textbf{\cite{Cirac2017Irreducible} \S2.1, Prop.~1}
+                      (arXiv:1708.00029): cites~\cite{Cirac2017Annals}~\S2.3
+                      explicitly for this step.
+                \item[$\times$] \textcolor{dimwhite}{\footnotesize
+                      \cite{Wolf2012Quantum}: covers irreducibility/PF theory,
+                      \emph{not} the MPV off-diagonal-drop step.}
+            \end{itemize}
+        \end{block}
+
+        \begin{block}{Lean: both verified $\checkmark$}
+            {\scriptsize
+            \texttt{MPSTensor.exists\_twoBlock\_decomp\_of\_lowerZero}\\
+            \textcolor{dimwhite}{\texttt{MPSLean/MPS/InvariantSubspaceDecomp.lean}}\\[0.3em]
+            \texttt{MPSTensor.sameMPV\_diagPart\_of\_lowerZero}\\
+            \textcolor{dimwhite}{\texttt{MPSLean/Algebra/ProjectionTriangularTrace.lean}}
+            }
+        \end{block}
+    \end{columns}
+\end{frame}
+
+%----------------------------------------------------------------------
+% NEW FRAME: fixed-point ⇒ invariant projection (next Lean target)
+% SOURCE: audits/2026-02-20_invariant_subspace_step_literature_map.txt
+% Attribution: quant-ph/0608197 Thm.3 proof (lines 765-783) and
+%              1606.00608 §2.3 (TeX lines 201-204).
+%----------------------------------------------------------------------
+\begin{frame}{Fixed point $\Rightarrow$ invariant projection (Lean: verified)}
+    \vspace{-0.5em}
+
+    \begin{block}{Missing link: how to \emph{find} the invariant projection}
+        The two Lean lemmas above require an \emph{input} projection $P$
+        satisfying $(1{-}P)A^i P = 0$.
+        The canonical-form iteration must \alert{construct} such $P$ automatically.
+    \end{block}
+
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \begin{block}{Key lemma (Lean: verified)}
+            \textbf{Statement:}
+            Let $\mathcal{E}_A(\rho) = \sum_i A^i\,\rho\,(A^i)^\dagger$ be the transfer map.
+            Suppose $\rho \ge 0$, $\mathcal{E}_A(\rho) = \rho$, and $\rho$ is
+            \emph{not} full-rank. Then the support projection
+            $P := \mathrm{supp}(\rho)$ satisfies
+            \[
+                (1 - P)\,A^i\,P = 0 \quad \forall\,i,
+            \]
+            i.e.\ $P\mathcal{H}$ is a nontrivial $A$-invariant subspace.
+        \end{block}
+
+        \begin{block}{Proof sketch}
+            The positivity $\rho \ge 0$ and channel equation give
+            $P\rho P = \rho$.
+            Each summand $A^i\rho(A^i)^\dagger \ge 0$ has support $\subseteq P\mathcal{H}$,
+            forcing $(1{-}P)A^i P = 0$ for every~$i$
+            (a Kraus-rank argument; see~\cite{Perez-Garcia2007Matrix} Thm.~3,
+            TeX lines 765--770).
+        \end{block}
+
+        \column{0.46\textwidth}
+        \begin{block}{Literature attribution}
+            \begin{itemize}\itemsep0.18em
+                \item \textbf{\cite{Perez-Garcia2007Matrix} Thm.~3}
+                      (quant-ph/0608197, TeX lines 765--770):
+                      first explicit proof; fixed point $\rho_R$ (non-invertible)
+                      $\Rightarrow$ $P_R = \mathrm{supp}(\rho_R)$ satisfies
+                      $A^i P_R = P_R A^i P_R$.
+                \item \textbf{\cite{Cirac2017Annals} \S2.3}
+                      (arXiv:1606.00608):
+                      same construction; the existence of such $\rho$ follows
+                      from quantum Perron--Frobenius when the transfer map
+                      is reducible.
+            \end{itemize}
+        \end{block}
+
+        \begin{block}{Lean status}
+            {\scriptsize
+            \textcolor{leangreen}{\checkmark}~\texttt{sameMPV\_diagPart\_of\_lowerZero}
+              (\texttt{ProjectionTriangularTrace.lean})\\
+            \textcolor{leangreen}{\checkmark}~\texttt{exists\_twoBlock\_decomp\_of\_lowerZero}
+              (\texttt{InvariantSubspaceDecomp.lean})\\
+            \textcolor{leangreen}{\checkmark}~\texttt{lowerZero\_of\_posSemidef\_fixedPoint}
+              (\texttt{FixedPointInvariantProjection.lean})\\[0.35em]
+            \textcolor{amber}{\textbullet}~\textbf{Next:} combine into an iterative CF-splitting
+              procedure (recurse until full-rank fixed points).
+            }
+        \end{block}
     \end{columns}
 \end{frame}
 
@@ -744,7 +921,7 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
                 slbl/.style={font=\tiny,text=dimwhite,align=center}
             ]
             % Row 1
-            \node[sbox] (ds) at (0,0) {DS-gauge both\\$A, B$};
+            \node[sbox] (ds) at (0,0) {PF/unital gauge\\$A,B$};
             \node[sbox] (embed) at (3.5,0) {block-embed\\$K_i = A'_i \oplus B'_i$};
             \node[sbox] (ks) at (7.5,0) {KS inequality\\$\cE(X^\dagger X)\!\ge\!\cE(X)^\dagger\cE(X)$};
 
@@ -767,7 +944,8 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
         \end{tikzpicture}
     \end{center}
     \vspace{-0.3em}
-    \textcolor{dimwhite}{\footnotesize Lean: \texttt{eigenvector\_gives\_gauge} in \texttt{Spectral/SpectralGap.lean} (1{,}214 lines, sorry-free).}
+    \textcolor{dimwhite}{\footnotesize Lean: \texttt{eigenvector\_gives\_gauge} in \texttt{Spectral/SpectralGap.lean} (sorry-free).\\
+        Gauge step: \texttt{gauged\_unital} (\texttt{Channel/DSGauge.lean}); weighted KS: \texttt{Channel/Schwarz.lean}.}
 \end{frame}
 
 \begin{frame}{Kadison--Schwarz inequality~\cite{Wolf2012Quantum}}
@@ -805,28 +983,34 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
         holds iff $K_i X = \cE(X)\, K_i$ for all~$i$ (\alert{intertwining with Kraus operators}).
     \end{block}
 
-    \begin{block}{Key fact: peripheral eigenvectors satisfy equality}
-        If $\cE(M)=\mu M$ with $|\mu|=1$ and $\cE$ is \alert{doubly stochastic} (unital + trace-preserving):
+    \begin{block}{Weighted KS equality: peripheral eigenvectors~\cite{Cirac2017Annals}}
+        Assume $\cE = \sum_i K_i(\cdot)K_i^\dagger$ is \alert{unital} and
+        $\exists\,\rho\succ 0$ with $\cE^\dagger(\rho)=\rho$ (adjoint PF fixed point).
+        If $\cE(M)=\mu M$, $|\mu|=1$:
         \begin{enumerate}\itemsep0.1em
-            \item KS gives $\cE(M^\dagger M) \ge |\mu|^2 M^\dagger M = M^\dagger M$.
-            \item Trace-preserving: $\tr(\cE(M^\dagger M)) = \tr(M^\dagger M)$.
-            \item So $\cE(M^\dagger M) - M^\dagger M \ge 0$ with trace zero $\Rightarrow$ equals zero.
+            \item KS gives $\cE(M^\dagger M) - \cE(M)^\dagger\cE(M) \ge 0$ (PSD gap).
+            \item Weighted trace: $\tr\!\bigl(\rho\,[\cE(M^\dagger M){-}\cE(M)^\dagger\cE(M)]\bigr)=0$
+                  \;(uses $\cE^\dagger(\rho){=}\rho$, $\bar\mu\mu{=}1$).
+            \item Faithfulness: PSD gap $+$ zero $\rho$-trace $\Rightarrow$ gap $= 0$.
         \end{enumerate}
         \textcolor{leangreen}{Peripheral eigenvalues force intertwining with Kraus operators.}\\
-        \textcolor{dimwhite}{\footnotesize (This doubly-stochastic hypothesis comes from an extra gauge choice; \cite{Cirac2017Annals} instead uses CFII with a $\Lambda$-weighted Cauchy--Schwarz argument.)}
+        \textcolor{dimwhite}{\footnotesize DS special case: $\rho=I$ (TP gauge). Generic injective MPS: $\rho={}$PF right fixed pt ($\neq I$ in general).%
+        % SOURCE: Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint in Channel/Schwarz.lean
+        \\Lean: \texttt{ks\_equality\_of\_peripheral\_eigenvector\_of\_fixedPoint} (\texttt{Channel/Schwarz.lean}).}
     \end{block}
 \end{frame}
 
 \begin{frame}{HS contraction and eigenvalue bound}
     \vspace{-0.6em}
 
-    \begin{block}{Corollary: HS contraction}
-        If $\cE$ is \alert{doubly stochastic} (unital + trace-preserving):
+    \begin{block}{$\rho$-weighted HS contraction (from weighted KS equality)}
+        If $\cE$ is unital and $\cE^\dagger(\rho)=\rho$ with $\rho\succ 0$:
         \[
-            \tr(\cE(X)^\dagger\,\cE(X)) \le  \tr(X^\dagger X)
-            \qquad (\text{i.e.\ } \|\cE(X)\|_{\HS} \le \|X\|_{\HS}).
+            \tr\!\bigl(\rho\,\cE(X)^\dagger\cE(X)\bigr) \le  \tr\!\bigl(\rho\, X^\dagger X\bigr)
+            \quad (\rho\text{-weighted HS contraction}).
         \]
-        \textcolor{dimwhite}{\footnotesize (Stronger than CFII in~\cite{Cirac2017Annals}; there the analogous estimate is proved using the fixed point $\Lambda$.)}
+        \textcolor{dimwhite}{\footnotesize DS special case: $\rho=I$ (TP gauge) gives $\|\cE(X)\|_{\HS}\le\|X\|_{\HS}$.
+        \cite{Cirac2017Annals} App.~A uses the PF fixed point $\Lambda$ in exactly this role.}
     \end{block}
 
     \begin{block}{Eigenvalue bound for the mixed transfer}
@@ -850,29 +1034,35 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
 
     \begin{block}{Proof outline (channel-theoretic route)}
         \begin{enumerate}\itemsep0.1em
-            \item \textbf{DS-gauge} both tensors: $A'_i = S_A^{-1}A_i S_A$, $B'_i = S_B^{-1}B_i S_B$.
+            \item \textbf{PF/unital gauge}: $A'_i = S_A^{-1}A_i S_A$ with $S_A S_A^\dagger = \rho_A$
+                  (PF right fixed pt), making $\cE_{A'}$ unital and $\cE_{A'}^\dagger$ having PD fixed pt
+                  $\rho_A$; likewise $B'_i$. (Not generally TP; DS iff $\rho=I$.)
             \item \textbf{Block-embed}: form $K_i = \diag(A'_i, B'_i)$ on $\mathbb{C}^D \oplus \mathbb{C}^D$.
-            \item \textbf{KS equality} for peripheral eigenvector $\Rightarrow$ intertwining:
+            \item \textbf{Weighted KS equality} for peripheral eigenvector $\Rightarrow$ intertwining:
                   $A'_i X' = \mu\, X' B'_i$.
             \item \textbf{Kernel invariance}: $\ker(X')$ is invariant under all $(B'_i)^\dagger$.
                   Injectivity forces $\ker(X') = 0$, so $X'$ is invertible.
             \item \textbf{Conclude}: $B'_i = \bar\mu\,(X')^{-1}A'_i X'$; gauge back.
         \end{enumerate}
     \end{block}
+    \textcolor{dimwhite}{\footnotesize Lean gauge: \texttt{gauged\_unital} (\texttt{Channel/DSGauge.lean});
+        weighted KS $+$ Kraus commutation: \texttt{Channel/Schwarz.lean}.}
 \end{frame}
 
 \begin{frame}{The block-embedding construction in detail}
     \vspace{-0.6em}
 
     \begin{block}{The key construction}
-        Given $\cF_{A,B}(X) = \mu X$ with $|\mu|=1$, pass to DS-gauged tensors
-        $A'_i, B'_i$ and define the \emph{block channel}:
+        Given $\cF_{A,B}(X) = \mu X$ with $|\mu|=1$, pass to PF/unital-gauged tensors
+        $A'_i, B'_i$ ($\cE_{A'},\cE_{B'}$ unital via PF similarity; \texttt{Channel/DSGauge.lean})
+        and define the \emph{block channel}:
         \[
             \mathcal{K}(Y) := \sum_{i} K_i\, Y\, K_i^\dagger, \qquad
             K_i := \begin{pmatrix} A'_i & 0 \\ 0 & B'_i \end{pmatrix}.
         \]
-        Then $\mathcal{K}$ is a \alert{unital} CP map on $\Mat_{2D}(\mathbb{C})$.\
-        \textcolor{dimwhite}{\footnotesize (Trace-preservation would require an extra gauge choice; \cite{Cirac2017Annals} instead uses CFII + a $\Lambda$-weighted Cauchy--Schwarz argument.)}
+        Then $\mathcal{K}$ is a \alert{unital} CP map; the adjoint fixed point $\rho_A\oplus\rho_B\succ 0$
+        enables the weighted KS argument.\\
+        \textcolor{dimwhite}{\footnotesize (\cite{Cirac2017Annals} App.~A uses the PF fixed point $\Lambda$ analogously; not TP in general.)}
     \end{block}
 
     \begin{block}{Embedding the eigenvector}
@@ -1499,7 +1689,9 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
             \midrule
             \rowcolor{cardbg}
             CF existence (arbitrary $\to$ CF)
-                         & Hard                & 1{,}500--3{,}000   & Jordan decomp., invariant subspaces, blocking \\
+                         & Hard                & 1{,}000--2{,}500
+                         & Inv.-subspace $\Rightarrow$ 2-block: \textcolor{leangreen}{\textbf{done}}$^*$;
+                           remaining: iteration, PF normalization, and Wielandt \\
             \rowcolor{cardbg}
             Periodic blocks (diagonal $Z$)
                          & Hard                & 1{,}000--2{,}000   & Peripheral spectrum of CP maps                \\
@@ -1522,7 +1714,21 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
         \end{tabular}
     }
 
-    \vspace{0.3em}
+    % SOURCE: audits/2026-02-20_invariant_subspace_step_literature_map.txt
+    \vspace{0.15em}
+    {\footnotesize\textcolor{leangreen}{%
+        $^*$\,Inv.-subspace substeps formalized~\cite{Cirac2017Annals,Perez-Garcia2007Matrix}:\\
+        \textcolor{leangreen}{\checkmark}~\texttt{MPSTensor.sameMPV\_diagPart\_of\_lowerZero}
+          (\texttt{MPSLean/Algebra/ProjectionTriangularTrace.lean})\\
+        \textcolor{leangreen}{\checkmark}~\texttt{MPSTensor.exists\_twoBlock\_decomp\_of\_lowerZero}
+          (\texttt{MPSLean/MPS/InvariantSubspaceDecomp.lean})\\[0.15em]
+        \textcolor{leangreen}{\checkmark}~\texttt{MPSTensor.lowerZero\_of\_posSemidef\_fixedPoint}
+          (\texttt{MPSLean/MPS/FixedPointInvariantProjection.lean})\\[0.15em]
+        \textcolor{amber}{\textbullet}~\textbf{Next:} iterate the decomposition and PF-normalize
+          each block to obtain full CF.
+    }}
+
+    \vspace{0.05em}
     \textcolor{dimwhite}{\footnotesize
     \textbf{Principal gap:} canonical form existence (Step~(i) in the pipeline).
     The FT \emph{given} CF is complete.
@@ -1701,6 +1907,11 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
 % Appendix
 %======================================================================
 \appendix
+
+% Workaround: appendixnumberbeamer resets \inserttotalframenumber to 0 in the appendix,
+% while Metropolis' default section progress bar divides by \inserttotalframenumber.
+% Disable section pages in the appendix to avoid arithmetic overflow in calc.sty.
+\metroset{sectionpage=none}
 
 \begin{frame}[allowframebreaks]{References}
     \bibliography{references}

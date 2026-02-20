@@ -1,0 +1,444 @@
+================================================================================
+MEMORANDUM
+Date   : 2026-02-20
+Subject: Literature mapping — Lean canonical-form existence lemma
+         `MPSTensor.exists_twoBlock_decomp_of_lowerZero`
+         (invariant subspace ⇒ 2-block direct sum)
+File   : MPSLean/MPS/InvariantSubspaceDecomp.lean
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(A)  RESTATING THE LEAN THEOREM IN MATHEMATICAL LANGUAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MAIN LEMMA
+  `MPSTensor.exists_twoBlock_decomp_of_lowerZero`
+
+Hypothesis (abstract invariant-subspace / lower-zero condition):
+  • A : MPSTensor d D       (a family A₀,…,A_{d-1} of D×D complex matrices)
+  • P : Matrix (Fin D) (Fin D) ℂ   (an orthogonal projection on ℂ^D)
+  • hP : IsOrthogonalProjection P  (i.e. P is Hermitian and P² = P)
+  • hLower : ∀ i, (1 − P) · A i · P = 0   (the "lower block" is zero for every letter)
+
+Conclusion (explicit 2-block MPV-equivalence):
+  ∃ n m : ℕ  with  n + m = D,
+    A₁ : MPSTensor d n,
+    A₂ : MPSTensor d m,
+  such that
+    SameMPV₂  A  (twoBlockTensor A₁ A₂)
+  where twoBlockTensor A₁ A₂ is the block-diagonal tensor
+    (twoBlockTensor A₁ A₂) i  =  blockDiag(A₁ i, A₂ i)   (as a (n+m)×(n+m) matrix).
+
+MATHEMATICAL RESTATEMENT:
+  Let {Aᵢ}ᵢ be a finite family of D×D complex matrices (an MPS tensor) and let
+  P be an orthogonal projection on ℂ^D such that (I−P) Aᵢ P = 0 for all i.
+  Then there exist n, m with n+m=D and families of n×n (resp. m×m) complex
+  matrices {A¹ᵢ} and {A²ᵢ} such that for every system size N and every
+  configuration σ : {0,…,N−1}→{0,…,d−1}:
+
+    Tr(Aσ₀ ··· Aσ_{N−1}) = Tr(A¹σ₀ ··· A¹σ_{N−1}) + Tr(A²σ₀ ··· A²σ_{N−1}).
+
+  In other words, the MPS partition-function amplitudes of A coincide with those
+  of the block-diagonal tensor blockDiag(A¹ᵢ, A²ᵢ).
+
+  The two sub-families {A¹ᵢ} and {A²ᵢ} are the compressions of the unitarily
+  conjugated tensor to the eigenspaces of P corresponding to eigenvalue 1 and 0,
+  respectively.
+
+PROOF ROUTE IN LEAN (file InvariantSubspaceDecomp.lean):
+  Step 1. Diagonalise the Hermitian projection P:
+          let U = P.eigenvectorUnitary (from Mathlib.Analysis.Matrix.Spectrum).
+          Define Pdiag = U† P U = diag(f), where f(j) ∈ {0,1} for all j.
+  Step 2. Conjugate A by U to get Aconj i = U† Aᵢ U.
+          Prove SameMPV A Aconj via `sameMPV_conj_unitary`
+          (trace cyclicity cancels U U† = I at each boundary).
+  Step 3. Show (1−Pdiag) · Aconj i · Pdiag = 0
+          (conjugation transforms the lower-zero hypothesis from P to Pdiag).
+  Step 4. Apply `sameMPV_diagPart_of_lowerZero`
+          (from ProjectionTriangularTrace.lean): this drops the off-diagonal
+          block, giving SameMPV Aconj (diagPart Aconj Pdiag).
+  Step 5. Split the basis index set Fin D into S = {j | f(j)=1} ⊕ T = {j | f(j)=0}
+          using the canonical equivalence eST : Fin D ≃ S ⊕ T.
+  Step 6. Extract block tensors A₁ (the 1-eigenspace block) and A₂ (0-eigenspace).
+  Step 7. Prove MPV(diagPart Aconj Pdiag)(σ) = MPV(A₁)(σ) + MPV(A₂)(σ)
+          via `evalWord_fromBlocks_diag` + `trace_fromBlocks_diag`.
+  Step 8. Prove MPV(twoBlockTensor A₁ A₂)(σ) = MPV(A₁)(σ) + MPV(A₂)(σ)
+          via `mpv_toTensorFromBlocks_eq_sum` (μ ≡ 1, r = 2).
+  Chain: A ~MPV Aconj ~MPV diagPart(Aconj,Pdiag) ~MPV twoBlockTensor(A₁,A₂).
+
+HELPER LEMMAS (same literature step):
+  • `sameMPV_conj_unitary`           (InvariantSubspaceDecomp.lean, line 167):
+      Conjugating all letters by a unitary does not change any MPV amplitude.
+      [Uses trace cyclicity: Tr(U†M U) = Tr(M U U†) = Tr(M)]
+  • `sameMPV_diagPart_of_lowerZero`  (ProjectionTriangularTrace.lean):
+      (1−P) Aᵢ P = 0 ⇒ SameMPV A (P Aᵢ P ⊕ (I−P) Aᵢ (I−P)).
+      [The key off-diagonal-drop step; see discussion in §(B) below]
+  • `mpv_toTensorFromBlocks_eq_sum`  (FundamentalTheoremMulti.lean):
+      MPV of a block-diagonal tensor = weighted sum of per-block MPVs.
+      [Algebraic identity, no literature citation needed]
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(B)  PER-PAPER MAPPING TABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+────────────────────────────────────────────────────────────────────────────────
+PAPER 1 — Perez-Garcia, Verstraete, Wolf, Cirac (2007)
+          "Matrix Product State Representations"
+          Quantum Inf. Comput. 7(5–6):401–430 (2007) / arXiv:quant-ph/0608197
+          Source file: quant-ph_0608197/MPSarchive.tex
+────────────────────────────────────────────────────────────────────────────────
+
+MAPPING TABLE:
+
+  Lean lemma / helper              → Paper location
+  ─────────────────────────────────────────────────
+  exists_twoBlock_decomp_of_lowerZero
+    (full two-block splitting)     → Section 3 "The canonical form",
+                                     Subsection 3.2 (PBC/TI),
+                                     Subsubsection "The canonical representation"
+                                     (TeX lines 733–833), specifically the proof
+                                     of Theorem 3 [TI canonical form]
+                                     (label \Th:TIcanonical, TeX line 742).
+                                     The two-block step occupies lines 771–814.
+
+  sameMPV_conj_unitary             → Proof of Thm 3, lines 828–832:
+    (unitary conjugation           "by choosing an adequate unitary U and
+     preserves MPV)                changing Bᵢ to UBᵢU†, we can diagonalise
+                                   this fixed point..." (implicit use of
+                                   trace cyclicity Tr(U†MU) = Tr(M)).
+
+  sameMPV_diagPart_of_lowerZero   → Proof of Thm 3, lines 785–814:
+    (off-diagonal drop)            Explicit trace-split argument:
+                                   Tr(P_R Aσ₁···Aσ_N P_R) + Tr(P_{R⊥} ··· P_{R⊥})
+                                   The paper proves that the cross-term
+                                   (lower-left block passing through all factors)
+                                   cancels by cycling P_R past P_{R⊥} = 0.
+                                   Result: the original state equals the sum of
+                                   the two block MPS (Bᵢ = P_R Aᵢ P_R) and
+                                   (Cᵢ = P_{R⊥} Aᵢ P_{R⊥}).
+
+
+DEVIATION ANALYSIS (Perez-Garcia et al. vs. Lean):
+
+  1. How the invariant projection is obtained.  The Perez-Garcia proof does NOT
+     take P as a hypothesis; instead it constructs P from a rank-deficient
+     positive fixed point X of the transfer map E(·) = Σᵢ Aᵢ (·) Aᵢ†, taking
+     P_R to be the orthogonal projection onto supp(X).  It then argues that
+     the invariance condition Aᵢ P_R = P_R Aᵢ P_R follows from the positivity
+     of X and the channel equation X = Σᵢ Aᵢ X Aᵢ†.  The Lean lemma assumes
+     (I−P) Aᵢ P = 0 as an abstract hypothesis (the invariant-subspace condition
+     is given, not derived), making it strictly more general.
+
+  2. Unitary conjugation route.  Perez-Garcia's proof uses a unitary U only at
+     the very end (to diagonalise the right fixed point Λ).  The block-splitting
+     step itself is done without explicit diagonalisation of P, using instead a
+     direct trace-split algebraic argument.  The Lean proof uses unitary
+     conjugation via the spectral theorem of Hermitian matrices (P = U diag(f) U†)
+     as a first step, converting the abstract projection into an explicit
+     diagonal one.  Both routes are mathematically equivalent but structurally
+     different.
+
+  3. Single step vs. full induction.  The paper's proof is a full inductive
+     argument that iterates the two-block step until no further non-trivial
+     invariant subspace exists.  The Lean lemma formalises exactly one step
+     (one projector → two blocks), leaving the iteration to the caller.
+
+
+────────────────────────────────────────────────────────────────────────────────
+PAPER 2 — Cirac, Perez-Garcia, Schuch, Verstraete (2017)
+          "Matrix Product Density Operators: Renormalization Fixed Points
+          and Boundary Theories"
+          Annals of Physics 378 (2017) 100 / arXiv:1606.00608
+          Source file: 1606.00608/MPDO-22-12-17-2.tex
+          [Scope: Section 2 and Appendix A only, per task requirements]
+────────────────────────────────────────────────────────────────────────────────
+
+MAPPING TABLE:
+
+  Lean lemma / helper              → Paper location
+  ─────────────────────────────────────────────────
+  exists_twoBlock_decomp_of_lowerZero
+    (full two-block splitting)     → Section 2 "Matrix Product Vectors",
+                                     Subsection 2.3 "Canonical forms",
+                                     the construction paragraph beginning:
+                                     "First of all, let us assume that there
+                                     exist one or more subspaces that are
+                                     invariant under the action of all Bⁱ.
+                                     Let us denote by S₁ one such subspace,
+                                     of dimension D₁, which does not contain
+                                     any other invariant subspace, and let us
+                                     denote by P₁ (Q₁=Id−P₁) the orthogonal
+                                     projector onto S₁ (S₁⊥). We have
+                                       Bⁱ P₁ = P₁ Bⁱ P₁,  Q₁ Bⁱ = Q₁ Bⁱ Q₁."
+                                     (TeX lines 201–213)
+                                     and culminating in equation
+                                     (\label{eq:II_Aiplusk1}, TeX line 215–218):
+                                       Aⁱ = Σₖ Pₖ Bⁱ Pₖ = ⊕ₖ μₖ Aⁱₖ
+                                     which shows that the diagonal-block
+                                     restriction generates the same family of
+                                     MPVs. (No separately labeled lemma/
+                                     proposition number; it is a construction
+                                     in the text of §2.3.)
+
+  sameMPV_diagPart_of_lowerZero   → Section 2.3, TeX lines 195–199, caption:
+    (off-diagonal block irrelevant  "The MPV generated by B does not depend on
+     for MPV)                       Bⁱₒ, so that for any such matrix we will
+                                    have the same vector."
+                                    This is the prose statement of the
+                                    off-diagonal-drop fact used by the Lean
+                                    helper; it is not given a proposition number
+                                    in the paper but appears immediately after
+                                    the 2×2 block upper-triangular display (the
+                                    matrix (Bⁱ₁  Bⁱₒ; 0  Bⁱ₂), TeX line 197).
+
+  sameMPV_conj_unitary             → Implicit: Appendix A (Section labeled
+    (unitary conjugation)           \AppendixMPV, TeX line 1054), in the proof
+                                    of Lemma A.1 (\label{equalMPS}, line 1081),
+                                    where the matrices are conjugated by Y_α to
+                                    put them in CFII (normalised gauge) while
+                                    preserving the MPV scalar product.  The fact
+                                    that Tr(U†MU) = Tr(M) is used implicitly
+                                    throughout (e.g. §2.3, eq. (eq:II_XAX),
+                                    TeX line 1074–1076: gauge conjugation
+                                    X A X⁻¹ preserves MPV).
+
+  Closest labeled results (Propositions 2.4–2.5):
+    "After blocking, for any tensor B, it is always possible to obtain another
+    one, A, in CF and generating the same V."  (Prop. after \label{eq:II_CF1},
+    TeX lines 249–250)   ← this is the consequence of the full inductive
+    iteration of the two-block step, not the single step itself.
+
+
+DEVIATION ANALYSIS (Cirac et al. 1606.00608 vs. Lean):
+
+  1. Single step vs. multi-step.  Section 2.3 describes an iterative procedure:
+     given A, find an invariant subspace S₁ not containing any further invariant
+     subspace, split, then recurse on Q₁ B Q₁ to find S₂ ⊆ S₁⊥, and so on,
+     until after r steps there is no non-trivial invariant subspace left.  The
+     Lean lemma does exactly one step: given one invariant projection P, output
+     two blocks. The iterative structure is left to the caller.
+
+  2. Irreducibility of resulting blocks.  The paper's iteration terminates at
+     "normal tensors" (no non-trivial invariant subspace, unique peripheral
+     eigenvalue 1).  The Lean lemma makes no irreducibility claim about A₁ or A₂.
+
+  3. Orthogonality of P vs. existence of P.  The Lean proof takes P as an
+     abstract orthogonal projector and starts immediately with the spectral
+     theorem (U diagonalises P).  Cirac et al. construct P₁ as the orthogonal
+     projector onto the smallest invariant subspace; the paper does not note
+     that this P₁ is automatically orthogonal in the sense (I−P₁) B P₁ = 0
+     (it is, because S₁⊥ has no B-invariant component within S₁, but this is
+     asserted informally).  The Lean condition `(1-P) * A i * P = 0` is exactly
+     `Q B P = 0`, which is the form used on TeX line 203: `Q₁ Bⁱ = Q₁ Bⁱ Q₁`.
+
+
+────────────────────────────────────────────────────────────────────────────────
+PAPER 3 — De las Cuevas, Cirac, Schuch, Perez-Garcia (2017)
+          "Irreducible forms of Matrix Product States: Theory and Applications"
+          Physical Review A 95, 063612 (2017) / arXiv:1708.00029
+          Source file: 1708.00029/main.tex
+────────────────────────────────────────────────────────────────────────────────
+
+MAPPING TABLE:
+
+  Lean lemma / helper              → Paper location
+  ─────────────────────────────────────────────────
+  exists_twoBlock_decomp_of_lowerZero
+    (full two-block splitting)     → Section 2, Subsection 2.1
+                                     "The irreducible form"
+                                     (label \ssec:irr, TeX line 237).
+                                     
+                                     The block-splitting step is described
+                                     at TeX lines 240–248, immediately after
+                                     the subsection heading, with explicit
+                                     cross-reference to [Ci15] = 1606.00608:
+                                     
+                                     "The procedure that transforms A to its
+                                     irreducible form is the same as the one
+                                     that transforms it to its canonical form
+                                     [Ci15], with the only difference that we
+                                     do not block sites together.  That is, we
+                                     project A onto its invariant subspaces
+                                     (as explained, e.g., at the beginning of
+                                     Sec. 2.3 of Ref. [Ci15]), which allows
+                                     to express A in a block diagonal form
+                                       Aⁱ = ⊕_{j∈J̃} Ã^i_j"
+
+                                     The full iteration is then summarised as:
+                                     Proposition 1 (\label{thm:irr}, TeX line 266):
+                                     "Given any tensor A, one can always find
+                                     another tensor B in irreducible form such
+                                     that V(A) = V(B)."
+                                     This is the closest labeled result;
+                                     it subsumes the two-block step.
+
+  sameMPV_diagPart_of_lowerZero   → Implicit: cited as the same block-diagonal
+    (off-diagonal drop)             step from [Ci15], Sec. 2.3, beginning of
+                                    §2.3 (TeX lines 240–242 of 1708.00029).
+                                    No new statement in 1708.00029 itself.
+
+
+DEVIATION ANALYSIS (De las Cuevas et al. 1708.00029 vs. Lean):
+
+  1. Periodic vs. normal blocks.  The novel contribution of 1708.00029 is the
+     "irreducible form" where each block A_j may be *periodic* (the transfer map
+     E_{A_j} may have other eigenvalues of modulus 1 besides 1, so long as they
+     are exactly the m_j-th roots of unity for some period m_j).  The Lean lemma
+     does not require normality or aperiodicity of the resulting blocks, so Lean's
+     version is compatible with both normal (Cirac 2017) and irreducible (De las
+     Cuevas 2017) notions.
+
+  2. The paper's main theorem.  The fundamental theorem of 1708.00029 (Theorem 1,
+     giving a gauge relation ZA = YBY⁻¹ between tensors in irreducible form) is
+     a more general version of the fundamental theorem for canonical forms.  The
+     Lean project currently formalises the canonical-form version; 1708.00029 is
+     the reference for extending to the periodic/irreducible case.
+
+  3. Attribution.  The paper explicitly credits the invariant-subspace step to
+     [Ci15] (1606.00608), making it clear that the block-splitting procedure is
+     not a new contribution of 1708.00029 but a known construction adapted from
+     the canonical-form literature.
+
+
+────────────────────────────────────────────────────────────────────────────────
+PAPER 4 — Wolf (2012) Quantum Channels and Operations (Lecture Notes)
+           PDFs under WolfLectureNote/ (especially ch06_spectral_properties.pdf
+           and the full notes 1701036.pdf)
+────────────────────────────────────────────────────────────────────────────────
+
+STATUS: NOT DIRECTLY APPLICABLE to the invariant-subspace ⇒ 2-block MPS step.
+
+CLOSEST CONTENT IN THE WOLF NOTES:
+
+  (a) Chapter 6, Section 6.2 "Irreducible maps and Perron-Frobenius theory"
+      (ch06_spectral_properties.pdf, p. 99–104; 1701036.pdf lines ~6270–6400).
+      Theorem 6.2 (Irreducible positive maps): states that a positive map T is
+      irreducible iff "If P is a Hermitian projector such that T(P Md P) ⊆ P Md P,
+      then P ∈ {0,1}."
+      This defines what it means for the transfer map to have NO non-trivial
+      invariant subspace, which is the NEGATION of the hypothesis of the Lean
+      lemma. The Wolf notes define irreducibility but do not prove the block-
+      diagonal decomposition for reducible maps in the MPS/MPV context.
+
+  (b) Section 7.1 "Continuous one-parameter semigroups" (1701036.pdf, lines ~7365–7440),
+      Proposition 7.6 (Reducible quantum dynamical semigroups):
+      "There is a Hermitian projector P s.t. for all t≥0: Tₜ(P Md P) ⊆ P Md P
+       ⟺ There is a basis in which all Kraus operators Lⱼ and κ are block-upper-
+       triangular, i.e., (1−P)Lⱼ P = (1−P)κP = 0 for some Hermitian projector P."
+      This is formally analogous to the Lean hypothesis `(1-P) * A i * P = 0`
+      but is in the SEMIGROUP / LINDBLAD GENERATOR context (continuous-time),
+      not the MPS trace / MPV context.  The conclusion is about block-upper-
+      triangular Kraus operators, not about MPV equivalence after dropping the
+      off-diagonal block.  The trace-based MPV identity (SameMPV A diagPart(A,P))
+      does not appear in the Wolf notes.
+
+  CONCLUSION: The Wolf lecture notes are a standard reference for the definition
+  of irreducibility of positive maps (Theorem 6.2, which underlies the concept
+  of "normal tensor" = irreducible + primitive transfer map), but they do NOT
+  contain the MPV-equivalence (invariant subspace → drop off-diagonal → same
+  MPV amplitudes) that the Lean lemma formalises.  Do not cite Wolf for this step.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+(C)  RECOMMENDATION FOR SLIDES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRIMARY CITATION FOR THIS STEP:
+
+  Cirac, Perez-Garcia, Schuch, Verstraete,
+  "Matrix Product Density Operators: Renormalization Fixed Points and Boundary
+  Theories," Annals of Physics 378 (2017) 100.
+  arXiv:1606.00608.
+  → Section 2.3 "Canonical forms", paragraph beginning "First of all, let us
+    assume that there exist one or more subspaces that are invariant under the
+    action of all Bⁱ…", ending with equation (eq:II_Aiplusk1):
+    Aⁱ = Σₖ Pₖ Bⁱ Pₖ = ⊕ₖ μₖ Aⁱₖ   (the direct-sum form generating the same MPV).
+
+  REASONS:
+    • This is a published journal paper (not a preprint) that gives the cleanest
+      and most explicit exposition of the invariant-subspace → block-diagonal
+      construction.  Section 2.3 presents the procedure step-by-step with clear
+      notation (P₁, Q₁=I−P₁, and the projection equations Bⁱ P₁ = P₁ Bⁱ P₁,
+      Q₁ Bⁱ = Q₁ Bⁱ Q₁), which maps directly onto the Lean hypothesis
+      `(1-P) * A i * P = 0`.
+    • The paper explicitly states (TeX line 199): "The MPV generated by B does
+      not depend on Bⁱₒ" — this is precisely the content of Lean's helper
+      `sameMPV_diagPart_of_lowerZero`.
+    • The paper's construction (equation eq:II_Aiplusk1) is the exact source for
+      the Lean conclusion: the diagonal-block restriction ⊕ₖ Pₖ Bⁱ Pₖ generates
+      the same MPV family.  The Lean lemma formalises the r=2 single-step case.
+    • Both 1708.00029 and the broader MPS community cite 1606.00608 (Section 2.3)
+      as the canonical reference for this reduction step.
+
+SECONDARY / SUPPORTING CITATION:
+
+  Perez-Garcia, Verstraete, Wolf, Cirac,
+  "Matrix Product State Representations,"
+  Quantum Inf. Comput. 7(5–6):401–430 (2007). arXiv:quant-ph/0608197.
+  → Proof of Theorem 3 [TI canonical form, label \Th:TIcanonical], specifically
+    the block-splitting part of the proof (TeX lines 771–814): invariant
+    projection P_R from rank-deficient fixed point → trace_R + trace_{R⊥}
+    decomposition → block-diagonal form (Bᵢ  0; 0  Cᵢ).
+
+  This paper was the first to prove the TI canonical-form theorem and explicitly
+  carried out the trace-splitting argument, but the exposition is embedded in a
+  proof and the block-splitting step is less cleanly isolated than in 1606.00608.
+  Cite as "original proof" if historical attribution is desired.
+
+DO NOT CITE Wolf notes for this step.
+  The Wolf lecture notes (2012, arXiv:1701036) are the right reference for the
+  spectral theory of irreducible/primitive quantum channels (Theorem 6.2, relevant
+  to the subsequent step of per-block normalization via QPF fixed points), but they
+  do not contain the invariant-subspace → MPV-equivalence reduction.
+
+SLIDE TEMPLATE (suggested phrasing):
+  "Key reduction step (Cirac–Perez-Garcia–Schuch–Verstraete, Ann. Phys. 2017, §2.3):
+   If the transfer matrices {Aᵢ} leave a subspace invariant — that is, if there is
+   an orthogonal projection P with (I−P) Aᵢ P = 0 for all i — then removing the
+   off-diagonal blocks does not change any MPV amplitude:
+     Tr(Aσ₁···AσN) = Tr(A¹σ₁···A¹σN) + Tr(A²σ₁···A²σN).
+   Lean formalization: `MPSTensor.exists_twoBlock_decomp_of_lowerZero`
+     (MPSLean/MPS/InvariantSubspaceDecomp.lean)."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+APPENDIX: EXACT TEX-SOURCE LOCATIONS USED IN THIS AUDIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+quant-ph_0608197/MPSarchive.tex
+  • Theorem 3 (TI canonical form):       line 742     (\Th:TIcanonical)
+  • Proof of Thm 3, fixed-point step:    lines 765–770
+  • Proof of Thm 3, invariant-subspace:  lines 771–783  (A_i P_R = P_R A_i P_R)
+  • Proof of Thm 3, trace-split:         lines 785–814  (Tr_R + Tr_{R⊥})
+  • Proof of Thm 3, block-diag display:  lines 809–814  (Bᵢ 0; 0 Cᵢ)
+  • Proof of Thm 3, unitary diag:        lines 828–832  (U diagonalises Λ)
+
+1606.00608/MPDO-22-12-17-2.tex
+  • Section 2 header:                    line 126  (\section{Matrix Product Vectors})
+  • Section 2.1 (Definition):            line 128
+  • Section 2.2 (Graphical):             line 157
+  • Section 2.3 (Canonical forms):       line 184
+  • Block upper-triangular display:      lines 196–198
+  • "MPV does not depend on B^i_o":      line 199
+  • Invariant subspace intro & P₁:       lines 201–204  (B^i P₁ = P₁ B^i P₁ etc.)
+  • Iteration to Q₁ B Q₁:               lines 205–213
+  • Key equation (direct-sum form):      lines 215–219  (\label{eq:II_Aiplusk1})
+    A^i = Σ_k P_k B^i P_k = ⊕_k μ_k A^i_k
+  • Appendix A start:                    line 1054  (\AppendixMPV)
+  • Lemma A.1 (equalMPS):               lines 1080–1091  (\label{equalMPS})
+  • CFII definition:                     lines 1058–1059  (\defn CFII)
+
+1708.00029/main.tex
+  • Section 2 header:                    line 219  (\sec:irr)
+  • Subsection 2.1 header:              line 237  (\ssec:irr)
+  • Block-diagonal construction:         lines 240–248  (cite [Ci15], §2.3)
+  • Proposition 1:                       line 266  (\thm:irr)
+
+WolfLectureNote/ch06_spectral_properties.pdf
+  • Theorem 6.2 (Irreducible positive maps):  p. 99–100  (ch06 PDF)
+  • Proposition 7.6 (Reducible semigroups):   p. 127–128 (in full notes 1701036.pdf)
+  → NEITHER directly covers the MPV/MPS block-splitting step.
+
+================================================================================
+End of memo.  Prepared 2026-02-20.
+================================================================================

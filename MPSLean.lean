@@ -30,6 +30,7 @@ import MPSLean.MPS.Defs
 import MPSLean.MPS.Blocking
 import MPSLean.MPS.MPVOverlap
 import MPSLean.MPS.Transfer
+import MPSLean.MPS.FixedPointInvariantProjection
 import MPSLean.MPS.CanonicalForm
 import MPSLean.MPS.CPPrimitive
 
@@ -43,6 +44,8 @@ import MPSLean.Algebra.BlockTriangularTrace
 import MPSLean.Algebra.ProjectionTriangularTrace
 import MPSLean.MPS.BasisNormal
 import MPSLean.MPS.FundamentalTheoremMulti
+import MPSLean.MPS.InvariantSubspaceDecomp
+import MPSLean.MPS.FixedPointSplit
 import MPSLean.MPS.BlockPermutationMPS
 import MPSLean.PiAlgebra.Construction
 import MPSLean.PiAlgebra.FundamentalTheoremComplete
