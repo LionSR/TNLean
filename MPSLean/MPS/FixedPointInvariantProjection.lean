@@ -394,4 +394,95 @@ theorem lowerZero_of_posSemidef_fixedPoint
 
 end FixedPointInvariant
 
+
+/-! ## Nontriviality lemmas for the support projection
+
+These lemmas connect the support projection to the nondegeneracy of the original
+matrix, and are essential for the "strict dimension decrease" argument used when
+iterating the canonical-form splitting step.
+
+References:
+* Perez-Garcia et al., quant-ph/0608197, Thm. 3 (lines 769–803): the recursion terminates
+  because each irreducible block has strictly smaller bond dimension.
+* Cirac et al., arXiv:1606.00608, §2.3: the same argument in a slightly different presentation.
+-/
+
+section SupportProjNontriviality
+
+variable {d D : ℕ}
+
+/-- The support projection of a nonzero PSD matrix is nonzero.
+
+If `supportProj ρ hρ` were zero, then `supportProj_mul` would give `0 * ρ = ρ`, i.e., `ρ = 0`.
+-/
+theorem supportProj_ne_zero_of_ne_zero
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) (hne : ρ ≠ 0) :
+    supportProj (D := D) ρ hρ ≠ 0 := by
+  intro habs
+  apply hne
+  have h := supportProj_mul (D := D) (ρ := ρ) hρ
+  rw [habs, Matrix.zero_mul] at h
+  exact h.symm
+
+/-- The support projection of a PSD-but-not-PosDef matrix is not the identity.
+
+If `supportProj ρ hρ = 1`, then every eigenvalue of `ρ` is strictly positive,
+hence `ρ` is positive definite — contradicting `¬ ρ.PosDef`.
+-/
+theorem supportProj_ne_one_of_not_posDef
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) (hnotPD : ¬ ρ.PosDef) :
+    supportProj (D := D) ρ hρ ≠ 1 := by
+  classical
+  intro habs
+  apply hnotPD
+  -- Use the spectral characterization: PSD + all eigenvalues positive ⟹ PosDef.
+  let hH : ρ.IsHermitian := hρ.isHermitian
+  rw [hH.posDef_iff_eigenvalues_pos]
+  -- It suffices to show all eigenvalues are positive.
+  intro i
+  -- Expand the support projection definition and use `habs`.
+  set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
+  set sgn : Fin D → ℂ := fun j => if 0 < hH.eigenvalues j then 1 else 0
+  have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal sgn * Uᴴ := by
+    simp [supportProj, U, sgn]
+  -- From `P = 1`, deduce `diag(sgn) = 1`.
+  have hUU : Uᴴ * U = 1 := by
+    rw [← Matrix.star_eq_conjTranspose]
+    simpa [U] using (Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary)
+  have hSgn1 : Matrix.diagonal sgn = 1 := by
+    have h : U * Matrix.diagonal sgn * Uᴴ = 1 := hP_def ▸ habs
+    -- Multiply on the left by `Uᴴ` and on the right by `U`.
+    have step1 : Uᴴ * (U * Matrix.diagonal sgn * Uᴴ) * U = Uᴴ * 1 * U := by
+      -- Apply the congruence `M ↦ Uᴴ * M * U` to the equality `h`.
+      simpa using congrArg (fun M => Uᴴ * M * U) h
+    -- Simplify using unitarity: `Uᴴ * U = 1` and `U * Uᴴ = 1`.
+    have hUU' : U * Uᴴ = 1 := by
+      -- `U` is unitary, so `U * Uᴴ = 1`.
+      simpa [U, Matrix.star_eq_conjTranspose] using
+        (Unitary.mul_star_self_of_mem (hH.eigenvectorUnitary).prop)
+
+    -- Reassociate to expose the unitary cancellations.
+    have step2 : (Uᴴ * U) * Matrix.diagonal sgn * (Uᴴ * U) = Uᴴ * U := by
+      -- LHS: rewrite `Uᴴ * (U * diag(sgn) * Uᴴ) * U`.
+      -- RHS: rewrite `Uᴴ * 1 * U`.
+      simpa [Matrix.mul_assoc] using step1
+
+    -- Now cancel `Uᴴ * U = 1`.
+    -- (Note: `hUU'` is not needed, but keeping it local avoids universe inference issues.)
+    simpa [hUU] using step2
+
+  -- Extract `sgn i = 1` from the diagonal-entry equality.
+  have hSgn_i : sgn i = 1 := by
+    have hentry := congrArg (fun M => M i i) hSgn1
+    simpa [Matrix.diagonal_apply] using hentry
+
+  -- `sgn i = 1` means `0 < eigenvalues i`.
+  by_cases hi : 0 < hH.eigenvalues i
+  · exact hi
+  · -- Otherwise `sgn i = 0`, contradicting `sgn i = 1`.
+    have : (if 0 < hH.eigenvalues i then (1 : ℂ) else 0) = 1 := by simpa [sgn] using hSgn_i
+    simp [hi] at this
+
+end SupportProjNontriviality
+
 end MPSTensor
