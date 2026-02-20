@@ -1,0 +1,740 @@
+================================================================================
+MEMO: Canonical Form Existence — Proof Spine Mapping to Lean
+Date: 2026-02-20
+Author: MPSLean audit (automated)
+Relates to: slides/presentation20260218_tao_technical.tex (Step (i) gap),
+            MPSLean codebase (core library, 0 sorry, 0 axioms)
+References:
+  [PG07] Pérez-García, Verstraete, Wolf, Cirac — quant-ph/0608197 (MPSarchive.tex)
+  [Ci17] Cirac, Pérez-García, Schuch, Verstraete — 1606.00608 (MPDO-22-12-17-2.tex)
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+A.  TARGET THEOREMS FOR "CF EXISTS" IN LEAN
+────────────────────────────────────────────────────────────────────────────────
+
+A.1  Full-generality target (what the literature proves)
+─────────────────────────────────────────────────────────
+
+  Given: any MPSTensor A : MPSTensor d D (no a-priori assumptions).
+
+  Conclusion:
+    ∃ (L : ℕ)                     -- blocking length
+      (r : ℕ)                     -- number of blocks
+      (D_k : Fin r → ℕ)          -- block bond dimensions, ∑ D_k ≤ D^L
+      (μ_k : Fin r → ℂˣ)        -- scaling weights, |μ_k| = 1 after norm.
+      (A_k : ∀ k, MPSTensor (d^L) (D_k k)),   -- blocked normal-tensor blocks
+    (∀ k, IsNormalTensor (A_k k)) ∧
+    SameMPV (blockTensor A L) (toTensor (CanonicalForm {μ_k, A_k}))
+
+  Here IsNormalTensor (= NT in 1606.00608) means:
+    (NT1)  no non-trivial invariant orthogonal projection P with (1-P)*A_k^i*P = 0
+    (NT2)  the CPM E_k = transferMap A_k has spectral radius 1 AND the only
+           eigenvalue of magnitude 1 is λ = 1 (i.e., no periodicity after blocking).
+
+  Lean identifier (proposed):
+    MPSTensor.exists_canonicalForm : ∀ A : MPSTensor d D, ∃ ... , ...
+
+A.2  Variants by scope and assumption
+
+  VARIANT 1 (current Lean theorems assume CF, not constructing it)
+  ──────────────────────────────────────────────────────────────────
+  The existing `fundamentalTheorem_canonicalForm_explicit` ASSUMES A,B are in CF
+  (both conditions NT1+NT2 + TP normalization) and PROVES gauge equivalence.
+  It does NOT construct the CF from an arbitrary tensor.
+
+  VARIANT 2 (aperiodic/primitive blocks only — easier, current target)
+  ─────────────────────────────────────────────────────────────────────
+  If we additionally assume that after one blocking step each CPM E_k is
+  primitive (= irreducible + aperiodic, i.e., NT2 holds without further
+  blocking), then:
+    • No periodicity / Z-matrix handling needed.
+    • Blocking.lean already covers the physical-space coarse-graining.
+    • The proof reduces to: (L1)–(L6) below without the periodicity step (L7).
+  This is the RECOMMENDED IMMEDIATE TARGET for Lean.
+
+  VARIANT 3 (full periodicity, canonical form I vs II)
+  ─────────────────────────────────────────────────────
+  Canonical Form I  [PG07 Thm. TIcanonical, 1606.00608 Defn after eq:II_CF1]:
+      A^i = ⊕_k μ_k A_k^i,  each A_k normal (NT1+NT2).
+      The μ_k encode the spectral radius of each block's CPM.
+
+  Canonical Form II [1606.00608 Appendix A, Defn CFII]:
+      CF I PLUS each A_k is trace-preserving (∑_i A_k^{i†} A_k^i = I)
+      AND has a full-rank diagonal right fixed point Λ_k > 0
+      (E_k(Λ_k) = ∑_i A_k^i Λ_k A_k^{i†} = Λ_k).
+      Equivalently: ∃ gauge G_k s.t. G_k A_k^i G_k^{-1} is in CFII.
+
+  The slides currently assume CFII and block injectivity.
+  For the existence proof, constructing CF I is the main work;
+  CF II follows by an additional normalization gauge (Step L6 below).
+
+  HOW BLOCKING AFFECTS PHYSICAL DIMENSION
+  ─────────────────────────────────────────
+  Blocking by length L replaces:
+      d  →  d^L  (or blockPhysDim d L = d^L in Lean)
+      D  →  D    (bond dimension unchanged)
+  The physical dimension grows exponentially. This is acceptable for existence
+  (we do not need efficiency), but the CFII normalization gauge must be applied
+  AFTER choosing L so that periodicity is eliminated.
+  In Lean: MPSTensor.blockTensor : MPSTensor d D → ℕ → MPSTensor (blockPhysDim d L) D.
+
+
+────────────────────────────────────────────────────────────────────────────────
+B.  PROOF SPINE FROM LITERATURE (LINE-BY-LINE)
+────────────────────────────────────────────────────────────────────────────────
+
+We extract the proof from TWO primary sources and cross-reference them.
+
+═══════════════════════════════════════════════════════════════════════════════
+SOURCE 1:  quant-ph/0608197 (MPSarchive.tex)
+           Theorem TIcanonical (label: Th:TIcanonical)
+           Theorem statement: lines 742–763
+           Proof: lines 765–832
+═══════════════════════════════════════════════════════════════════════════════
+
+[PG07-L1]  lines 765–767
+  CONTENT: "Assume w.l.o.g. that the spectral radius of E is 1; this implies
+  (by Evans-Høegh-Krohn 1978, Thm 2.5) that E has a positive fixed point X."
+  MATHEMATICAL CONTENT: The transfer map E(X) = ∑_i A_i X A_i† is CP; normalizing
+  its spectral radius to 1, a positive (PSD) fixed point X ≥ 0 exists.
+  LEAN STATUS: ✅ DONE
+    `IsChannel.exists_posSemidef_fixedPoint`
+    (MPSLean/Channel/CesaroFixedPoint.lean)
+    — uses Cesàro means (Wolf Prop 6.8) instead of Evans-Høegh-Krohn;
+      requires IsChannel (= TP), so one must first normalize spectral radius.
+    Also: `exists_posSemidef_fixedPoint` (QuantumPerronFrobenius.lean)
+      which wraps the above for the MPS transfer map.
+  DEVIATION NOTE: We use Cesàro / Wolf Prop 6.8 instead of Evans-HK.
+    Justification: the Cesàro argument is self-contained and avoids Brouwer.
+    It requires TP, which is obtained by scaling: if E has spectral radius c,
+    then (1/c)·E is a contraction; one can use a normalized version.
+    See also: the "spectral radius normalization" step below.
+
+[PG07-L2]  lines 767–769
+  CONTENT: "If X is invertible, set B_i = X^{-1/2} A_i X^{1/2}. Then
+  ∑_i B_i B_i† = 1."
+  MATHEMATICAL CONTENT: Gauge to make the CPM trace-preserving (left-canonical).
+  LEAN STATUS: ❌ MISSING
+    This is the CF I → CF II normalization step.
+    Needed: `MPSTensor.gauge_to_TP_of_pd_fixed_point` or similar.
+    — Input: A, PD fixed point ρ of E_A.
+    — Output: B_i = ρ^{-1/2} A_i ρ^{1/2}, proof that ∑_i B_i† B_i = I.
+    — This is ~20 lines of matrix algebra once ρ^{1/2} is available.
+    — ρ^{1/2} requires: Mathlib's `Matrix.PosDef.sqrt` or `CFC.sqrt`.
+      Mathlib has `CFC.sqrt` for C*-algebras; for matrices it's available
+      via `Matrix.IsHermitian.sqrt` (though it may need importing).
+    PROPOSED FILE: MPSLean/MPS/CFNormalization.lean
+
+[PG07-L3]  lines 769–803 (the main support-projection argument)
+  CONTENT: "If X is not invertible, let P_R = projection onto support(X).
+  Then A_i P_R = P_R A_i P_R for every i."
+  MATHEMATICAL CONTENT: The support of any PSD fixed point is an invariant
+  subspace under each Kraus operator.
+  PROOF SKETCH: If ⟨α|A_j|β⟩ ≠ 0 for some |β⟩ ∈ supp(X) and |α⟩ ∉ supp(X),
+  then X - λ_β A_j |β⟩⟨β| A_j† ≱ 0, contradicting X = ∑_i A_i X A_i†.
+  LEAN STATUS: ✅ DONE
+    `MPSTensor.lowerZero_of_posSemidef_fixedPoint`
+    (MPSLean/MPS/FixedPointInvariantProjection.lean)
+    — Proves: if ρ.PosSemidef ∧ transferMap A ρ = ρ, then
+              (let P = supportProj ρ hρ),
+              IsOrthogonalProjection P ∧ ∀ i, (1-P)*A i*P = 0.
+    — Proof route: ker(ρ) is invariant under A_i† (via sum-of-PSD-terms = 0),
+      then supp(ρ) = ker(ρ)⊥ is invariant under A_i.
+
+[PG07-L4]  lines 773–803
+  CONTENT: "We can decompose our state using trace_R and trace_{R⊥}:
+  the original matrices become block-diagonal with B_i = P_R A_i P_R and
+  C_i = P_{R⊥} A_i P_{R⊥}."
+  MATHEMATICAL CONTENT: Given invariant projection P_R, the tensor A is
+  MPV-equivalent to the direct sum of two smaller block tensors.
+  LEAN STATUS: ✅ DONE
+    `MPSTensor.exists_twoBlock_decomp_of_lowerZero`
+    (MPSLean/MPS/InvariantSubspaceDecomp.lean)
+    — Returns: n, m, hnm : n+m=D, A₁ : MPSTensor d n, A₂ : MPSTensor d m,
+               with SameMPV₂ A (twoBlockTensor A₁ A₂).
+    Also: `MPSTensor.sameMPV_diagPart_of_lowerZero`
+    (MPSLean/Algebra/ProjectionTriangularTrace.lean)
+    — Off-diagonal blocks do not affect MPV (prerequisite step).
+  COMPOSITION: `MPSTensor.exists_twoBlock_decomp_of_posSemidef_fixedPoint`
+    (MPSLean/MPS/FixedPointSplit.lean)
+    — Combines [PG07-L3] + [PG07-L4] in one call.
+
+[PG07-L5]  lines 803–826 (recursion / iteration)
+  CONTENT: "For each block, reason similarly. Repeat until every block satisfies
+  condition 1 (∑_i B_i B_i† = 1). If a block has a non-identity fixed point X ≠ 1,
+  then 1 - (1/λ_1) X is a PSD fixed point that is NOT full rank, allowing further
+  decomposition. Iterate until each block has only the identity as its unique
+  fixed point."
+  MATHEMATICAL CONTENT: Well-founded induction on bond dimension.
+  LEAN STATUS: ❌ MISSING (core gap)
+    Need: `MPSTensor.iteratedDecomp_to_normalBlocks`
+    Proof structure:
+      — Strong induction on D (bond dimension).
+      — Base case D=0 or D=1: trivially normal.
+      — Inductive step: if E has a rank-deficient PSD fixed point ρ,
+        apply `exists_twoBlock_decomp_of_posSemidef_fixedPoint` to get
+        A₁ (dim n < D) and A₂ (dim m < D with n+m=D), then recurse on each.
+      — Termination: n < D and m < D (because ρ is rank-deficient, so
+        supp(ρ) is a strict subspace, hence n := rank(ρ) < D).
+    KEY LEMMA NEEDED: "rank(supportProj ρ) < D whenever ρ is rank-deficient"
+      i.e., ρ.PosSemidef ∧ ¬ρ.PosDef → rank(supportProj ρ hρ) < D.
+      This is immediate from the definition of supportProj and rank.
+    PROPOSED FILE: MPSLean/MPS/CanonicalFormExistence.lean
+
+[PG07-L6]  lines 826–832 (unique fixed point ↔ normal / CFII normalization)
+  CONTENT: "For each block, the dual map X ↦ ∑_i B_i† X B_i also has a positive
+  full-rank fixed point Λ. Choosing an adequate unitary U and changing B_i to
+  U B_i U†, we can diagonalize Λ to a diagonal positive full-rank matrix."
+  MATHEMATICAL CONTENT: Given a block with unique PSD fixed point (up to scalar),
+  there is a gauge (unitary conjugation) making the right fixed point diagonal.
+  This gives CF I; combining with [PG07-L2] gives CF II.
+  LEAN STATUS: ❌ MISSING
+    Needs:
+    (a) `MPSTensor.unique_psd_fp_iff_normal` or "QPF ↔ NT":
+        — If E has a unique PD fixed point (= quantum PF conclusion), then
+          there is no non-trivial invariant projection.
+        — Proof: if P were non-trivial invariant, then P*ρ*P would be a
+          rank-deficient fixed point ≠ c*ρ, contradicting uniqueness.
+        — This is the CONVERSE of the support-projection argument.
+        — Key: quantum_perron_frobenius already gives the unique PD fixed
+          point when A is injective + TP. The converse (unique PD FP →
+          no non-trivial proj) needs an additional lemma.
+    (b) `MPSTensor.diag_gauge_of_pd_dual_fixed_point` (CFII diagonal gauge):
+        — Input: A with unique PD fixed point Λ of the dual CPM E†.
+        — Output: U unitary, B_i = U† A_i U, such that U† Λ U is diagonal.
+        — This is just the spectral theorem for PD matrices.
+    PROPOSED FILE: MPSLean/MPS/CFNormalization.lean
+
+═══════════════════════════════════════════════════════════════════════════════
+SOURCE 2:  1606.00608 (MPDO-22-12-17-2.tex)
+           §2.3 "Canonical forms" (lines 184–255) + AppendixMPV (lines 1054–1085)
+═══════════════════════════════════════════════════════════════════════════════
+
+[Ci17-L1]  lines 184–196 (§2.3 opening: block upper-triangular form)
+  CONTENT: "It can also happen that all B^i have a block upper triangular form;
+  the MPV generated by B does not depend on B^i_o [the off-diagonal block]."
+  MATHEMATICAL CONTENT: If there is an invariant subspace, the off-diagonal
+  block of the tensor is irrelevant for MPV.
+  LEAN STATUS: ✅ DONE
+    `MPSTensor.sameMPV_diagPart_of_lowerZero`
+    (MPSLean/Algebra/ProjectionTriangularTrace.lean, ~313 lines, sorry-free)
+
+[Ci17-L2]  lines 196–204 (projector identities)
+  CONTENT: "Let S_1 be an invariant subspace with projector P_1. We have
+  B^i P_1 = P_1 B^i P_1, Q_1 B^i = Q_1 B^i Q_1."
+  MATHEMATICAL CONTENT: Two-sided version: P is invariant iff lower-left
+  block is zero AND upper-right block is zero (from the adjoint).
+  LEAN STATUS: ✅ PARTIAL
+    The condition (1-P)*A^i*P = 0 (lower-left zero = P invariant for A)
+    is exactly `hLower` in `exists_twoBlock_decomp_of_lowerZero`.
+    The upper-right condition Q*A^i*P = Q*A^i*Q follows from idempotence
+    and is used implicitly in `lowerZero_evalWord`.
+    Missing explicitly: a separate lemma stating the equivalence
+    "(1-P)*A^i*P = 0 ↔ A^i * ran(P) ⊆ ran(P)" (subspace invariance).
+    This is straightforward but not a standalone Lean lemma yet.
+
+[Ci17-L3]  lines 204–215 (iterative direct sum, eq:II_Aiplusk1)
+  CONTENT: "Consider Q_1 B^i Q_1 and proceed similarly: identify S_2 ⊆ S_1⊥,
+  projector P_2, etc. After r steps, A^i = ⊕_k P_k B^i P_k = ⊕_k μ_k A^i_k
+  [equation label eq:II_Aiplusk1, line 215]."
+  MATHEMATICAL CONTENT: The full iterated block decomposition. This is the
+  abstract existence of the canonical form, combining [PG07-L3] to [PG07-L5].
+  LEAN STATUS: ❌ MISSING (same gap as [PG07-L5])
+    This is the iteration lemma. Note that 1606.00608 states it as a
+    consequence of the procedure (not a formal theorem), but relies on the
+    same well-founded induction on D.
+
+[Ci17-L4]  lines 215–225 (spectral radius normalization, weights μ_k)
+  CONTENT: "The values μ_k are chosen such that all these maps E_k have
+  spectral radius equal to 1."
+  MATHEMATICAL CONTENT: Scale each block so its transfer CPM has spectral
+  radius 1. This is the "λ_j" in [PG07].
+  LEAN STATUS: ❌ MISSING
+    Needed: a lemma saying that for any A with transfer map E_A of spectral
+    radius c > 0, the rescaled tensor (1/c^{1/2}) * A has transfer map of
+    spectral radius 1.
+    — This is trivial algebra: E_{cA}(X) = c^2 · E_A(X), so spectral radius
+      of E_{cA} is c^2 · spectralRadius(E_A).
+    — The hard part is computing spectralRadius in Lean (currently no spectral
+      radius lemma for matrices in Mathlib except in specific cases).
+    PROPOSED: Add to MPSLean/MPS/Transfer.lean or a new CFNormalization.lean.
+    NOTE: For the Cesàro route, we don't need the spectral radius literally;
+    we just need the CPM to be TP, which is arranged by [PG07-L2] above.
+
+[Ci17-L5]  lines 227–231 (blocking to remove periodicity)
+  CONTENT: "There may be eigenvalues of magnitude 1 of the form e^{i2πq/p}
+  (p-periodic). By blocking lcm(p_1,...,p_t) systems, one obtains a vector
+  without p-periodic ones."
+  MATHEMATICAL CONTENT: Choosing L = lcm of all periods, the blocked CPM E_k^L
+  has a unique eigenvalue of magnitude 1 (equal to 1).
+  LEAN STATUS: ❌ MISSING (explicitly deferred)
+    — `Channel/PeripheralSpectrum.lean` is a placeholder with no content.
+    — `Channel/Primitive.lean` is a placeholder with no content.
+    — For the aperiodic case (RECOMMENDED IMMEDIATE SCOPE), this step is
+      vacuous (L=1 suffices, and blocking.lean handles it).
+    — For full generality, needs:
+        * Peripheral spectrum of CP maps forms a cyclic group (Wolf Thm 6.6).
+        * Blocking by p collapses eigenvalue e^{i2π/p} to 1 (trivial algebra).
+      This is labelled "Hard, 1,000–2,000 LOC" in the gap analysis slide.
+
+[Ci17-L6]  lines 233–244 (definition of NT and CF)
+  CONTENT: Definition of Normal Tensor (NT) and Canonical Form (CF).
+    NT: (i) no non-trivial invariant projector P with A^i P = P A^i P;
+        (ii) CPM E_k has unique eigenvalue of magnitude (and value) = 1.
+    CF: A^i = ⊕_k μ_k A^i_k, each A_k a NT.
+  LEAN STATUS: ❌ MISSING (definitions not formalized)
+    `MPSTensor.CanonicalForm` (MPSLean/MPS/CanonicalForm.lean) exists as a
+    structure but only requires block_injective (condition on the span), NOT
+    the two NT conditions above. It conflates NT with injectivity.
+    NEEDED: Lean definitions of `IsNormalTensor` and `IsCanonicalFormI` that
+    match the literature (NT1 = no invariant proj, NT2 = unique eigenvalue 1).
+    PROPOSED FILE: MPSLean/MPS/NormalTensor.lean
+
+[Ci17-L7]  lines 249–251 (existence proposition)
+  CONTENT: "After blocking, for any tensor B, it is always possible to obtain
+  another one A in CF and generating the same V."
+  MATHEMATICAL CONTENT: This is THE existence theorem, stated as a Proposition
+  (without proof in the main text; proof is built from [Ci17-L1]–[Ci17-L5]).
+  LEAN STATUS: ❌ MISSING (the ultimate target, Variant 2 scope)
+
+[Ci17-App1] AppendixMPV lines 1054–1082 (CFII definition + gauge)
+  CONTENT: CFII definition: CF + TP (∑_i A^{i†}_k A^i_k = I) + PD diagonal
+  fixed point Λ_k > 0 (E_k(Λ_k) = Λ_k). "For any A in CF, it is always
+  possible to find a gauge X s.t. X A X^{-1} is in CFII."
+  LEAN STATUS: ❌ MISSING (same as [PG07-L2] + [PG07-L6])
+
+
+────────────────────────────────────────────────────────────────────────────────
+C.  MINIMUM MISSING LEMMAS FOR CF EXISTENCE
+────────────────────────────────────────────────────────────────────────────────
+
+The following is an ordered list of the minimum set of lemmas needed to prove
+the CF existence theorem (Variant 2, aperiodic case). Items are grouped by
+dependency order.
+
+═══════════════════════════════════════════════════════════════════════════════
+STRATUM 0 — Already in Lean (no action needed)
+═══════════════════════════════════════════════════════════════════════════════
+
+  [S0-1] IsChannel.exists_posSemidef_fixedPoint
+         (MPSLean/Channel/CesaroFixedPoint.lean)
+         — PSD fixed point via Cesàro means.
+
+  [S0-2] lowerZero_of_posSemidef_fixedPoint
+         (MPSLean/MPS/FixedPointInvariantProjection.lean)
+         — PSD fixed point → invariant support projection.
+
+  [S0-3] exists_twoBlock_decomp_of_lowerZero
+         (MPSLean/MPS/InvariantSubspaceDecomp.lean)
+         — Invariant projection → 2-block MPV-equivalent decomposition.
+
+  [S0-4] sameMPV_diagPart_of_lowerZero
+         (MPSLean/Algebra/ProjectionTriangularTrace.lean)
+         — Off-diagonal drop: triangular ⟹ SameMPV.
+
+  [S0-5] SameMPV.blockTensor
+         (MPSLean/MPS/Blocking.lean)
+         — Physical blocking preserves SameMPV.
+
+  [S0-6] quantum_perron_frobenius
+         (MPSLean/QuantumPerronFrobenius.lean)
+         — Injective + TP ⟹ unique PD fixed point (QPF theorem).
+
+  [S0-7] MPSTensor.CanonicalForm / toTensor
+         (MPSLean/MPS/CanonicalForm.lean)
+         — Structure for block-diagonal CF tensor (incomplete definition,
+           see [M1] below).
+
+═══════════════════════════════════════════════════════════════════════════════
+STRATUM 1 — Definitional/foundational (easiest, ~50–150 LOC each)
+═══════════════════════════════════════════════════════════════════════════════
+
+  [M1] IsNormalTensor : MPSTensor d D → Prop
+       Definition matching [Ci17-L6]:
+         (NT1) ¬∃ P : Matrix (Fin D) (Fin D) ℂ, IsOrthogonalProjection P ∧
+                   P ≠ 0 ∧ P ≠ 1 ∧ ∀ i, (1-P)*A i*P = 0
+         (NT2) (for aperiodic case only) the only eigenvalue of
+                   transferMap A of magnitude 1 is λ = 1.
+       PROPOSED FILE: MPSLean/MPS/NormalTensor.lean (~50 LOC)
+       NOTE: NT1 is just the negation of `exists_twoBlock_decomp_of_lowerZero`'s
+       hypothesis. NT2 corresponds to `IsChannel.IsIrreducibleCP` already in
+       MPSLean/Channel/Irreducible.lean PLUS uniqueness (no periodicity).
+       For aperiodic case, NT2 = IsIrreducibleCP (the unique fixed point is
+       the identity, up to the left/right normalization).
+
+  [M2] rank_supportProj_lt_of_not_posDef :
+         ρ.PosSemidef → ¬ρ.PosDef → rank (supportProj ρ hρ) < D
+       MATHEMATICAL CONTENT: A rank-deficient PSD matrix has support
+       strictly smaller than the full space.
+       PROOF: Rank of supportProj = number of positive eigenvalues of ρ.
+         ¬PosDef means ∃ eigenvalue ≤ 0; since ρ.PosSemidef all eigenvalues ≥ 0,
+         ∃ zero eigenvalue, so rank < D.
+       PROPOSED FILE: MPSLean/MPS/FixedPointInvariantProjection.lean (extend)
+       ESTIMATED LOC: ~40 lines
+
+  [M3] posDef_of_unique_psd_fixedPoint_of_inj :
+         (∀ Y : Matrix (Fin D) (Fin D) ℂ, Y.PosSemidef → transferMap A Y = Y
+              → ∃ c : ℂ, Y = c • ρ) →   -- uniqueness
+         ρ.PosDef                          -- conclusion
+       MATHEMATICAL CONTENT: The unique PSD fixed point (up to scalar) must be
+       PD. If it were rank-deficient, its support would give a non-trivial
+       invariant projection, and P*ρ*P would be a distinct PSD fixed point.
+       PROOF: Contrapositive: ¬PosDef → ∃ rank-deficient fixed point via
+       the support-projection argument applied to ρ, giving P*ρ*P ≠ c*ρ for
+       any scalar c (since P*ρ*P has smaller rank than ρ).
+       NOTE: This is the CONVERSE of the QPF direction. The QPF theorem
+       (`quantum_perron_frobenius`) already proves injectivity+TP → unique PD FP.
+       What [M3] proves is uniqueness → PD without assuming injectivity, which
+       is needed for the CFII characterization of NT blocks.
+       PROPOSED FILE: MPSLean/MPS/NormalTensor.lean (~60 lines)
+
+═══════════════════════════════════════════════════════════════════════════════
+STRATUM 2 — Core existence machinery (~150–400 LOC total)
+═══════════════════════════════════════════════════════════════════════════════
+
+  [M4] iteratedDecomp_termination :
+       Well-founded induction on D showing the 2-block decomposition terminates.
+       Concretely: the recursive application of [S0-3] always produces
+       sub-tensors of strictly smaller bond dimension.
+       PROOF SKETCH:
+         If ρ is rank-deficient (¬PosDef), supportProj ρ has rank n < D.
+         The first block A₁ has bond dimension n, the second A₂ has D-n.
+         Both n < D and D-n < D.
+       KEY INGREDIENT: [M2] (rank < D when not PD).
+       PROPOSED FILE: MPSLean/MPS/CanonicalFormExistence.lean (~100 lines)
+
+  [M5] iteratedDecomp_to_normalBlocks (main iteration lemma) :
+         ∀ A : MPSTensor d D, ∃ (r : ℕ) (D_k : Fin r → ℕ)
+           (μ_k : Fin r → ℂˣ) (A_k : ∀ k, MPSTensor d (D_k k)),
+           (∀ k, IsNormalTensor (A_k k)) ∧
+           SameMPV A (toTensor (CanonicalForm {μ_k, A_k}))
+       PROOF STRUCTURE (strong induction on D):
+         • D = 0: vacuous (empty direct sum, SameMPV trivial).
+         • D = 1: A is automatically NT (rank 1 has no non-trivial subspace).
+         • D ≥ 2: By Cesàro ([S0-1]), get PSD fixed point ρ.
+           Case (a): ρ is PD → A is injective (by QPF converse), hence
+             has no non-trivial invariant projection ([M1]-NT1 by [M3]).
+             Still must check NT2 (aperiodic), but defer to blocking step.
+             So A itself might already be "normal" (assuming aperiodic).
+           Case (b): ρ is NOT PD → apply [S0-2]+[S0-3] to get
+             A₁ (dim n) and A₂ (dim D-n) with n < D, D-n < D.
+             Recurse on A₁ and A₂ by induction hypothesis.
+             Combine the resulting block decompositions.
+       KEY SUBTLETY: The Cesàro argument requires the CPM to be TP (IsChannel).
+         If A is not TP, we must first scale it: replace A^i by (1/c^{1/2})·A^i
+         where c = spectral radius of E_A. This requires knowing c > 0.
+         For D ≥ 1, the transfer map is always strictly positive (sends PSD ↦ PSD)
+         and has spectral radius ≥ 1/D (by Perron-Frobenius for positive maps),
+         so c > 0 is guaranteed.
+       PROPOSED FILE: MPSLean/MPS/CanonicalFormExistence.lean (~200 lines)
+       ESTIMATED DIFFICULTY: Hard (well-founded induction on ℕ with multiple cases)
+
+  [M6] spectralRadius_transferMap_pos (supporting lemma) :
+         0 < D → 0 < spectralRadius (transferMap A)
+       NOTE: This is needed to scale A in [M5] so the CPM is TP.
+       ALTERNATIVE: Instead of scaling, use the raw Cesàro argument for
+       general positive maps (not just channels). The Cesàro fixed-point
+       argument works for any linear map on a compact convex set; for positive
+       maps on PSD matrices, the PSD cone is compact when restricted to the
+       trace-1 slice, so a Brouwer/Schauder argument works.
+       HOWEVER: The current Lean code uses `IsChannel` (TP) for `exists_posSemidef_fixedPoint`.
+       RECOMMENDATION: Either (a) extend CesaroFixedPoint.lean to work for
+       positive maps (not just channels), using the normalized cone argument,
+       OR (b) add a scaling lemma as [M6] and use the existing channel route.
+       Option (a) aligns better with [PG07] (Evans-HK works for positive maps).
+       PROPOSED FILE: MPSLean/Channel/CesaroFixedPoint.lean (extend, ~100 lines)
+
+═══════════════════════════════════════════════════════════════════════════════
+STRATUM 3 — Normalization to CFII (~100–200 LOC)
+═══════════════════════════════════════════════════════════════════════════════
+
+  [M7] gauge_to_TP_of_pd_fixed_point :
+         ρ.PosDef → transferMap A ρ = ρ →
+         ∃ B : MPSTensor d D,
+           SameMPV A B ∧
+           ∑ i, (B i)ᴴ * B i = (1 : Matrix (Fin D) (Fin D) ℂ)
+       PROOF: Set B^i = ρ^{-1/2} A^i ρ^{1/2}.
+         Then ∑_i (B^i)† B^i = ρ^{-1/2} (∑_i A^{i†} ρ A^i) ρ^{-1/2}
+                              = ρ^{-1/2} (E†(ρ)) ρ^{-1/2}.
+         Since ρ is a fixed point of E_A, E†(ρ) = ρ (dual fixed point
+         condition), so the sum = ρ^{-1/2} ρ ρ^{-1/2} = I.
+         SameMPV follows because the gauge B^i = X A^i X^{-1} with
+         X = ρ^{1/2} does not change MPV (the trace is gauge-invariant).
+       PREREQUISITE: matrix square root ρ^{1/2} for PD ρ.
+         Mathlib: `Matrix.PosDef.sqrt` or `CFC.sqrt` on matrices.
+       PROPOSED FILE: MPSLean/MPS/CFNormalization.lean (~100 lines)
+
+  [M8] diag_gauge_of_dual_fixed_point :
+         Λ.PosDef → dualTransferMap A Λ = Λ →
+         ∃ (U : unitaryGroup (Fin D) ℂ) B : MPSTensor d D,
+           SameMPV A B ∧
+           (∀ i, B i = star (U : Matrix _ _ ℂ) * A i * U) ∧
+           (star (U : _) * Λ * U).IsDiag
+       PROOF: Just the spectral theorem for PD Hermitian matrix Λ.
+         U := eigenvectorUnitary of Λ (already in Mathlib via
+         `Matrix.IsHermitian.eigenvectorUnitary`).
+       PREREQUISITE: `dualTransferMap` definition (E†(X) = ∑_i A^{i†} X A^i).
+         Currently MPS/Transfer.lean has `transferMap` but not the dual.
+       PROPOSED FILE: MPSLean/MPS/CFNormalization.lean (~80 lines)
+
+═══════════════════════════════════════════════════════════════════════════════
+STRATUM 4 — Periodicity / Wielandt (deferred, "later")
+═══════════════════════════════════════════════════════════════════════════════
+
+  [M9]  peripheral_spectrum_is_cyclic_group :
+          The eigenvalues of E_A of modulus 1 form a cyclic group Z/pZ.
+          (Wolf Theorem 6.6; placeholder in PeripheralSpectrum.lean.)
+          ESTIMATED LOC: 400–800.
+
+  [M10] blocking_removes_periodicity :
+          After blocking by p (= period), the blocked CPM has unique
+          eigenvalue of modulus 1 equal to 1.
+          (Wolf / Fannes argument; requires [M9].)
+          ESTIMATED LOC: 100–200.
+
+  [M11] quantum_Wielandt_inequality :
+          After ≤ D^4 blockings, any injective NT becomes primitive
+          (= NT1 + NT2 both hold, no periodicity).
+          (Referenced in 1606.00608 Prop after Defn biCF, line 332.)
+          ESTIMATED LOC: 800–1200.
+
+ON PERRON-FROBENIUS / KREIN-RUTMAN vs CESÀRO:
+
+  The literature ([PG07] line 692) cites Evans-Høegh-Krohn (Thm 2.5, 1978)
+  for the existence of a positive fixed point of any positive map with
+  spectral radius 1. This is the finite-dimensional analogue of Krein-Rutman.
+
+  In Lean, `IsChannel.exists_posSemidef_fixedPoint` uses Cesàro means
+  (Wolf Prop 6.8 route) which:
+    — avoids Brouwer's fixed point theorem,
+    — works for channels (TP maps), not arbitrary positive maps,
+    — gives PSD fixed point directly (not just existence of a positive eigenvector).
+
+  FOR THE CF EXISTENCE PROOF, we need fixed points of the NORMALIZED transfer
+  map, which may not be TP. There are two resolution strategies:
+
+  OPTION A (RECOMMENDED): Extend CesaroFixedPoint.lean to handle positive maps
+    (not just channels). The Cesàro mean argument for positive maps works by:
+    1. Take σ = identity / D (normalized trace-1 PSD matrix).
+    2. Form Cesàro means Σ_N = (1/N) ∑_{k=0}^{N-1} E^k(σ).
+    3. Any accumulation point of {Σ_N} is a PSD fixed point.
+    4. Accumulation points exist by compactness of the trace-1 PSD cone.
+    The key step is compactness, which follows from finite-dimensionality.
+    Lean/Mathlib has `IsCompact` for finite-dimensional unit balls
+    (`Metric.isCompact_of_isClosed_bounded` for finite-dim spaces).
+    This avoids TP assumption entirely.
+    ESTIMATED LOC: ~120 lines.
+
+  OPTION B: Add a scaling lemma ([M6]) to convert any positive map with
+    spectral radius c > 0 to a channel, then use the existing Cesàro code.
+    Requires knowing c > 0 (non-trivial for general matrices).
+
+  OPTION C: Use the existing quantum_perron_frobenius for INJECTIVE tensors
+    directly, and only use the Cesàro route for the non-injective sub-blocks.
+    This requires a separate argument for non-injective blocks.
+
+
+────────────────────────────────────────────────────────────────────────────────
+D.  NEXT FORMALIZATION MILESTONES
+────────────────────────────────────────────────────────────────────────────────
+
+Listed in dependency order (each item depends on the previous ones).
+Difficulty: E=Easy (~50 LOC, 1 session), M=Medium (~150 LOC, 2–3 sessions),
+            H=Hard (~300+ LOC, multiple sessions).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MILESTONE 1 (M): IsNormalTensor definition + termination lemma
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Target lemmas: [M1], [M2], [M3]
+  New file: MPSLean/MPS/NormalTensor.lean (~150 LOC)
+
+  Specifically:
+  (a) Define `IsNormalTensor` (NT1 = no invariant proj; for aperiodic,
+      NT2 can be stated as: the unique fixed-point hypothesis holds, i.e.,
+      IsIrreducibleCP (transferMap A)).
+  (b) Prove `rank_supportProj_lt_of_not_posDef` ([M2]).
+  (c) Prove `posDef_of_unique_psd_fp_no_inv_proj` ([M3]).
+
+  WHY FIRST: All subsequent milestones depend on having a clear definition
+  of NT. Also [M2] is needed for termination ([M4]).
+
+  ESTIMATED LOC: 150–200.
+  ESTIMATED SESSIONS: 2.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MILESTONE 2 (M): Cesàro fixed point for general positive maps
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Target lemma: [M6] / Option A (extend CesaroFixedPoint.lean)
+  File to extend: MPSLean/Channel/CesaroFixedPoint.lean
+
+  Add:
+    `IsPositiveMap.exists_posSemidef_fixedPoint` :
+      E is a positive linear map, E maps PSD ↦ PSD,
+      spectral radius of E ≤ 1 (or normalize via scaling) →
+      ∃ ρ.PosSemidef ∧ ρ ≠ 0 ∧ E ρ = ρ.
+
+  WHY NOW: The iteration in [M5] needs a PSD fixed point for each block,
+  which may not be TP. This is the key stepping stone.
+  Also: this lemma is more faithful to [PG07] (Evans-HK for positive maps).
+
+  MATHLIB HOOKS:
+  - `Metric.isCompact_of_isClosed_bounded` (compactness of bounded closed sets)
+  - Or alternatively: `Set.IsCompact` for the unit simplex in the PSD cone.
+  - `Filter.Tendsto` + `Filter.HasBoundedSubnets` or sequential compactness.
+  ESTIMATED LOC: 120 lines.
+  ESTIMATED SESSIONS: 2.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MILESTONE 3 (H): Iterated decomposition theorem (CF existence, aperiodic)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Target lemmas: [M4], [M5]
+  New file: MPSLean/MPS/CanonicalFormExistence.lean
+
+  Main theorem:
+    `MPSTensor.exists_normalBlock_decomp` :
+      ∀ A : MPSTensor d D,
+        ∃ (r : ℕ) (Dk : Fin r → ℕ) (μk : Fin r → ℂˣ)
+          (Ak : ∀ k, MPSTensor d (Dk k)),
+          (∀ k, IsNormalTensor (Ak k)) ∧
+          SameMPV A (toTensor (CanonicalForm {μk, Ak}))
+
+  PROOF STRATEGY: Strong induction on D : ℕ.
+    `Nat.strongRecOn D (fun D ih A => ...)`
+
+  KEY CASE D ≥ 2 (ρ rank-deficient):
+    1. Obtain ρ from [M6] (or scale A to make it TP, then use [S0-1]).
+    2. If ρ.PosDef: A is already NT (no non-trivial inv proj by [M3]+[M1]).
+       Return r=1, D_1=D, μ_1=1, A_1=A. [Edge case: still need to check NT2.]
+    3. If ¬ρ.PosDef: Apply [S0-2]+[S0-3] to get A₁ (dim n) and A₂ (dim D-n).
+       Use [M2] to show n < D and D-n < D.
+       Recurse: ih(n)(A₁) gives decomp of A₁; ih(D-n)(A₂) gives decomp of A₂.
+       Combine: concatenate the block lists, prove SameMPV by transitivity.
+    4. Combine with SameMPV transitivity (the decomposition from [S0-3] →
+       recursion → assembly).
+
+  LEAN CHALLENGES:
+  - The return type is existential with dependent types (Dk : Fin r → ℕ).
+  - Assembly step: if A₁ has r₁ blocks and A₂ has r₂ blocks,
+    the combined tensor has r₁+r₂ blocks; the MPV sum formula must be
+    verified via `toTensorFromBlocks` and `mpv_toTensorFromBlocks_eq_sum`.
+  - SameMPV transitivity: `SameMPV.trans`.
+  - The `SameMPV₂` type-cast must be handled carefully for the combined
+    tensor (bond dimensions change across recursion levels).
+
+  ESTIMATED LOC: 300–400.
+  ESTIMATED SESSIONS: 4–6.
+  ESTIMATED DIFFICULTY: Hard.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MILESTONE 4 (M): CFII normalization gauge
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Target lemmas: [M7], [M8]
+  New file: MPSLean/MPS/CFNormalization.lean
+
+  Main theorems:
+    `MPSTensor.normalize_to_CFII` :
+      given A with NT blocks (from Milestone 3), produce A' in CFII
+      (TP + diagonal fixed point on each block).
+
+  PREREQUISITE: Matrix square root (ρ^{1/2} for PD ρ).
+    Mathlib status: `CFC.sqrt` exists for C*-algebras; for matrices,
+    `Matrix.PosDef.sqrt` may not be directly available but can be
+    constructed via the spectral theorem + eigenvalue square roots.
+
+  ESTIMATED LOC: 150–200.
+  ESTIMATED SESSIONS: 2–3.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MILESTONE 5 (H, DEFERRED): Periodicity and Wielandt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Target lemmas: [M9], [M10], [M11]
+  Files: MPSLean/Channel/PeripheralSpectrum.lean,
+         MPSLean/Channel/Primitive.lean
+
+  This milestone is explicitly deferred in the slide deck ("later").
+  For Variant 2 (aperiodic), Milestones 1–4 suffice.
+  For full Variant 3 (general), Milestone 5 is needed.
+  ESTIMATED LOC: 1,500–3,000.
+  ESTIMATED SESSIONS: 10–20.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SUMMARY TABLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  # | Milestone                          | Dep. | Diff. | LOC Est. | Lit. Ref.
+  --+------------------------------------+------+-------+----------+----------
+  1 | IsNormalTensor + termination       |  —   |  M    | 150–200  | [Ci17-L6]
+  2 | Cesàro for positive maps           |  —   |  M    | 100–150  | [PG07-L1]
+  3 | Iterated decomposition (CF exist.) | 1,2  |  H    | 300–400  | [PG07-L5]
+  4 | CFII normalization gauge           | 1,3  |  M    | 150–200  | [PG07-L2],[PG07-L6]
+  5 | Periodicity + Wielandt (deferred)  | 1–4  |  H    | 1500–3000| [Ci17-L5]
+  --+------------------------------------+------+-------+----------+----------
+  TOTAL (Milestones 1–4, aperiodic CF):                   700–950 LOC
+  TOTAL (all, including periodicity):                    2200–3950 LOC
+
+  These are in addition to the ~8,700 LOC already in the sorry-free core.
+
+
+────────────────────────────────────────────────────────────────────────────────
+DEVIATIONS FROM LITERATURE AND JUSTIFICATIONS
+────────────────────────────────────────────────────────────────────────────────
+
+DEVIATION 1: Cesàro (Wolf Prop 6.8) instead of Evans-Høegh-Krohn (1978)
+  [PG07] line 692 cites Evans-HK for positive fixed point existence.
+  WE USE: Cesàro means (already proved in MPSLean/Channel/CesaroFixedPoint.lean).
+  JUSTIFICATION: Cesàro is self-contained, avoids Brouwer/Krein-Rutman,
+  and is formalized in the codebase. For channels (TP maps), it is equivalent.
+  For general positive maps (needed in [M5]), Milestone 2 extends it appropriately.
+
+DEVIATION 2: TP assumption for Cesàro
+  [PG07] works with non-TP maps (spectral radius normalization).
+  WE HANDLE: either by scaling (Option B) or extending Cesàro to positive maps
+  (Option A, recommended). We flag this as the main deviation from the literature.
+
+DEVIATION 3: Aperiodic case first (no Z-matrix / periodic blocks)
+  [Ci17] and [PG07] treat periodic blocks (diagonal Z-matrix structure).
+  WE DEFER: the periodic/Wielandt case to Milestone 5. The aperiodic case
+  (NT2 assumed or proved via blocking) is the immediate target.
+  JUSTIFICATION: The slides explicitly mark periodic blocks as "open/later".
+  The aperiodic case gives the most important structural result and unlocks
+  the full Fundamental Theorem pipeline.
+
+DEVIATION 4: SameMPV₂ for cross-bond-dimension comparisons
+  The literature uses equality of states (tensor-network notation).
+  WE USE: SameMPV₂ which allows comparing MPV families across different
+  bond dimensions, handling type-cast bookkeeping via `finSumFinEquiv`.
+  This is not a mathematical deviation but a Lean formalization design choice.
+
+
+────────────────────────────────────────────────────────────────────────────────
+CURRENT LEAN STATUS SUMMARY (snapshot 2026-02-20)
+────────────────────────────────────────────────────────────────────────────────
+
+  Files implementing CF existence infrastructure:
+
+  MPSLean/MPS/Blocking.lean                     ✅ DONE (143 lines, 0 sorry)
+  MPSLean/Algebra/ProjectionTriangularTrace.lean ✅ DONE (313 lines, 0 sorry)
+  MPSLean/MPS/InvariantSubspaceDecomp.lean       ✅ DONE (615 lines, 0 sorry)
+  MPSLean/MPS/FixedPointInvariantProjection.lean ✅ DONE (397 lines, 0 sorry)
+  MPSLean/MPS/FixedPointSplit.lean               ✅ DONE (~51 lines, 0 sorry)
+  MPSLean/Channel/CesaroFixedPoint.lean          ✅ DONE (channel case only)
+  MPSLean/QuantumPerronFrobenius.lean            ✅ DONE (inj+TP case)
+  MPSLean/MPS/CanonicalForm.lean                 ⚠️  PARTIAL (struct only, no MPV proof)
+  MPSLean/MPS/NormalTensor.lean                  ❌ MISSING (Milestone 1)
+  MPSLean/MPS/CanonicalFormExistence.lean        ❌ MISSING (Milestone 3)
+  MPSLean/MPS/CFNormalization.lean               ❌ MISSING (Milestone 4)
+  MPSLean/Channel/PeripheralSpectrum.lean        ❌ PLACEHOLDER
+  MPSLean/Channel/Primitive.lean                 ❌ PLACEHOLDER
+
+  The core pipeline (Milestones 1–4) requires approximately 700–950 new
+  lines of Lean to complete CF existence in the aperiodic case.
+
+================================================================================
+END OF MEMO
+================================================================================
