@@ -48,6 +48,7 @@ import MPSLean.MPS.MultiBlock
 import MPSLean.Algebra.BlockTriangularTrace
 import MPSLean.Algebra.ProjectionTriangularTrace
 import MPSLean.MPS.BasisNormal
+import MPSLean.MPS.BNTMatching
 import MPSLean.MPS.FundamentalTheoremMulti
 import MPSLean.MPS.InvariantSubspaceDecomp
 import MPSLean.MPS.FixedPointSplit
