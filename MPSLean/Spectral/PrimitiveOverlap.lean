@@ -28,7 +28,7 @@ For MPS tensors, the identity
 then yields `mpvOverlap A A N → 1`.
 
 This matches the **primitive branch** of the Fundamental Theorem proofs
-(Cirac--P\'erez-Garc\'ia--Schuch--Verstraete, Rev. Mod. Phys. 93 (2021)).
+(Cirac--Pérez-García--Schuch--Verstraete, Rev. Mod. Phys. 93 (2021)).
 
 We intentionally phrase primitivity as a **spectral-gap hypothesis**. Connecting this to Wolf's
 characterizations (irreducible + aperiodic, peripheral spectrum roots of unity, etc.) is a
@@ -51,12 +51,8 @@ local notation "V" => Matrix (Fin D) (Fin D) ℂ
 On finite-dimensional spaces this is automatically continuous. -/
 noncomputable def traceCLM : (V →L[ℂ] V) →ₗ[ℂ] ℂ where
   toFun F := LinearMap.trace ℂ V F
-  map_add' F G := by
-    classical
-    simp
-  map_smul' c F := by
-    classical
-    simp
+  map_add' F G := by simp
+  map_smul' c F := by simp
 
 /-- If `F^n → 0` in operator norm, then `trace(F^n) → 0`. -/
 lemma tendsto_trace_pow_of_tendsto_zero
@@ -100,30 +96,21 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
         (fun n => LinearMap.trace ℂ V ((Φ N) ^ n : V →L[ℂ] V))
         Filter.atTop (nhds (0 : ℂ)) :=
     tendsto_trace_pow_of_tendsto_zero (D := D) (F := Φ N) hNpow_clm
+  -- Convert `trace((Φ N)^n)` to `trace(N^n)` via `map_pow` and the definitional coercion.
   have hNtrace0 :
       Filter.Tendsto (fun n => LinearMap.trace ℂ V (N ^ n)) Filter.atTop (nhds (0 : ℂ)) := by
-    -- Convert `trace((Φ N)^n)` to `trace(N^n)` using `map_pow` and definitional equality.
     refine Filter.Tendsto.congr (fun n => ?_) hNtrace0'
-    have hpow : Φ (N ^ n) = (Φ N) ^ n := by
-      exact map_pow Φ N n
-    -- First, coerce `Φ (N^n)` back to a linear map and simplify.
-    have hcoe : ((Φ (N ^ n) : V →L[ℂ] V) : V →ₗ[ℂ] V) = N ^ n := by
-      -- By definition, `Module.End.toContinuousLinearMap` has underlying linear map `N^n`.
-      rfl
-    -- Convert `Φ (N^n) = (Φ N)^n` to an identity of the underlying *linear* maps.
-    have hpow_coe : ((Φ (N ^ n) : V →L[ℂ] V) : V →ₗ[ℂ] V) = ((Φ N) ^ n : V →L[ℂ] V) := by
-      exact congrArg (fun F : V →L[ℂ] V => (F : V →ₗ[ℂ] V)) hpow
+    -- `Φ (N^n) = (Φ N)^n` and `((Φ M : V →L[ℂ] V) : V →ₗ[ℂ] V) = M` by definition.
     have hlin : N ^ n = ((Φ N) ^ n : V →L[ℂ] V) :=
-      hcoe.symm.trans hpow_coe
-    -- Apply trace to `hlin`.
-    simpa using (congrArg (fun F : V →ₗ[ℂ] V => LinearMap.trace ℂ V F) hlin).symm
+      (show ((Φ (N ^ n) : V →L[ℂ] V) : V →ₗ[ℂ] V) = N ^ n from rfl).symm.trans
+        (congrArg (fun F : V →L[ℂ] V => (F : V →ₗ[ℂ] V)) (map_pow Φ N n))
+    exact (congrArg (LinearMap.trace ℂ V) hlin).symm
   -- Step 2: identify `E^n = P + N^n` for all sufficiently large `n`.
   have h_decomp : ∀ᶠ n in Filter.atTop, E ^ n = P + N ^ n := by
     filter_upwards [Filter.eventually_ge_atTop (1 : ℕ)] with n hn
     exact pow_eq_fixedPointProj_add_compl_pow (E := E) (ρ := ρ) (htr := htr) hTP hρ hn
   -- Step 3: take traces and pass to the limit.
   have hP_tr : (LinearMap.trace ℂ V) P = (1 : ℂ) := by
-    -- `trace(P) = 1` for the fixed-point projection.
     simpa [P] using fixedPointProj_trace (D := D) ρ htr
   -- Reduce to the eventually-equal sequence `trace(P) + trace(N^n)`.
   have h_main' :
@@ -135,7 +122,6 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
     simpa [hP_tr] using h
   refine (Filter.Tendsto.congr' ?_ h_main')
   filter_upwards [h_decomp] with n hn
-  -- rewrite with the decomposition and linearity of trace
   simp [hn, hP_tr]
 
 end General
@@ -173,8 +159,7 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
     rw [← Matrix.trace_sum, ← Finset.sum_mul, hNorm, one_mul]
   have htrρ : Matrix.trace ρ ≠ 0 := by
     intro htr0
-    have : ρ = 0 := (Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0
-    exact hρ_ne this
+    exact hρ_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0)
   have hTrace :
       Filter.Tendsto
         (fun N => (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ))

@@ -34,10 +34,8 @@ cancel denominators. -/
 noncomputable def fixedPointProj (ρ : Matrix (Fin D) (Fin D) ℂ) (_htr : trace ρ ≠ 0) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
   toFun X := (trace X / trace ρ) • ρ
-  map_add' X Y := by
-    simp [add_div, add_smul]
-  map_smul' c X := by
-    simp [mul_div_assoc, smul_smul]
+  map_add' X Y := by simp [add_div, add_smul]
+  map_smul' c X := by simp [mul_div_assoc, smul_smul]
 
 theorem fixedPointProj_idempotent (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : trace ρ ≠ 0)
     (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -92,45 +90,28 @@ local notation "P" => fixedPointProj (D := D) ρ htr
 local notation "N" => E - P
 
 lemma fixedPointProj_mul_self : P * P = P := by
-  ext X i j
-  simpa [Module.End.mul_apply] using
-    congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => M i j)
-      (fixedPointProj_idempotent (ρ := ρ) (htr := htr) X)
+  ext X
+  simp [Module.End.mul_apply, fixedPointProj_idempotent]
 
 /-- `P ∘ N = 0` for `P := fixedPointProj ρ` and `N := E - P`. -/
 lemma fixedPointProj_mul_compl (hTP : IsTracePreservingMap E) : P * N = 0 := by
   ext X
-  have hPE : P (E X) = P X := by
-    -- evaluate `P.comp E = P` at `X`
-    simpa [LinearMap.comp_apply] using
-      congrArg (fun f => f X)
-        (fixedPointProj_comp_E (E := E) (ρ := ρ) (htr := htr) hTP)
-  -- compute `P (E X - P X) = P (E X) - P (P X)`
+  have hPE : P (E X) = P X :=
+    LinearMap.congr_fun (fixedPointProj_comp_E (E := E) (ρ := ρ) (htr := htr) hTP) X
   simp [Module.End.mul_apply, hPE, fixedPointProj_idempotent]
 
 /-- `N ∘ P = 0` for `P := fixedPointProj ρ` and `N := E - P`. -/
 lemma compl_mul_fixedPointProj (hρ : E ρ = ρ) : N * P = 0 := by
   ext X
-  have hEP : E (P X) = P X := by
-    -- evaluate `E.comp P = P` at `X`
-    simpa [LinearMap.comp_apply] using
-      congrArg (fun f => f X)
-        (E_comp_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ)
+  have hEP : E (P X) = P X :=
+    LinearMap.congr_fun (E_comp_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ) X
   simp [Module.End.mul_apply, hEP, fixedPointProj_idempotent]
 
 /-- `N^n ∘ P = 0` for all `n ≥ 1`. -/
 lemma compl_pow_succ_mul_fixedPointProj (hρ : E ρ = ρ) (n : ℕ) : N ^ (n + 1) * P = 0 := by
-  induction n with
-  | zero =>
-      simpa [pow_one] using compl_mul_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ
-  | succ n ih =>
-      calc
-        N ^ (n + 2) * P = (N ^ (n + 1) * N) * P := by
-          simp [pow_succ, mul_assoc]
-        _ = N ^ (n + 1) * (N * P) := by
-          simp [mul_assoc]
-        _ = 0 := by
-          simp [compl_mul_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ]
+  -- N^(n+1) * P = (N^n * N) * P = N^n * (N * P) = N^n * 0 = 0
+  have hNP : N * P = 0 := compl_mul_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ
+  simp only [pow_succ, mul_assoc, hNP, mul_zero]
 
 /-- For `P := fixedPointProj ρ` and `N := E - P`, we have `E^(n+1) = P + N^(n+1)`.
 
@@ -148,26 +129,22 @@ theorem pow_succ_eq_fixedPointProj_add_compl_pow
       have hPN : P * N = 0 := fixedPointProj_mul_compl (E := E) (ρ := ρ) (htr := htr) hTP
       have hNpowP : N ^ (n + 1) * P = 0 :=
         compl_pow_succ_mul_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ n
-      have hE : E = P + N := (add_sub_cancel (P) E).symm
+      have hE : E = P + N := (add_sub_cancel P E).symm
       calc
-        E ^ (n + 2) = E ^ (n + 1) * E := by
-          simp [pow_succ]
-        _ = (P + N ^ (n + 1)) * E := by
-          simp [ih]
+        E ^ (n + 2) = E ^ (n + 1) * E := by simp [pow_succ]
+        _ = (P + N ^ (n + 1)) * E := by simp [ih]
         _ = (P + N ^ (n + 1)) * (P + N) := by
-          -- Rewrite only the *right* `E` (do not rewrite the `E` hidden inside `N = E - P`).
-          conv_lhs =>
-            congr
-            · skip
-            · rw [hE]
+              -- Rewrite only the *right* `E` (do not rewrite the `E` hidden inside `N = E - P`).
+              conv_lhs =>
+                congr
+                · skip
+                · rw [hE]
         _ = P + N ^ (n + 2) := by
-          -- Expand without simplifying `P + N` back to `E`.
-          rw [mul_add]
-          -- Expand both left sums.
-          rw [add_mul, add_mul]
-          -- Now use `P*P = P`, `P*N = 0`, and `N^(n+1)*P = 0`.
-          simp [hPP, hPN, hNpowP]
-          simp [pow_succ, mul_assoc]
+              -- Expand without simplifying `P + N` back to `E`.
+              rw [mul_add, add_mul, add_mul]
+              -- Now use `P*P = P`, `P*N = 0`, and `N^(n+1)*P = 0`.
+              simp [hPP, hPN, hNpowP]
+              simp [pow_succ, mul_assoc]
 
 /-- For `P := fixedPointProj ρ` and `N := E - P`, we have `E^n = P + N^n` for all `n ≥ 1`. -/
 theorem pow_eq_fixedPointProj_add_compl_pow

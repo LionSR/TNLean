@@ -95,13 +95,9 @@ theorem proportionalMPV₂_of_gaugePhaseEquiv
       simp [hX i, hζ0]
     have hsum0 : (∑ i : Fin d, (B i)ᴴ * B i) = (0 : Matrix (Fin D) (Fin D) ℂ) := by
       simp [hBzero]
-    have h01 : (0 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-      have h01' := hB_norm
-      rw [hsum0] at h01'
-      exact h01'
     haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
     haveI : Nontrivial (Matrix (Fin D) (Fin D) ℂ) := Matrix.nonempty
-    exact zero_ne_one h01
+    exact zero_ne_one (hsum0 ▸ hB_norm)
   intro N
   refine ⟨(ζ ^ N)⁻¹, ?_⟩
   intro σ
@@ -110,7 +106,7 @@ theorem proportionalMPV₂_of_gaugePhaseEquiv
   have h1 : (ζ ^ N)⁻¹ * mpv B σ = mpv A σ := by
     -- Rewrite `mpv B σ` using the gauge-phase relation and cancel `ζ ^ N`.
     simpa [hmpv] using (inv_mul_cancel_left₀ hζN (mpv A σ))
-  simpa using h1.symm
+  exact h1.symm
 
 end EasyDirection
 
@@ -163,10 +159,10 @@ theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
       Filter.Tendsto
         (fun N => ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖)
         Filter.atTop (nhds (1 : ℝ)) := by
-    simpa using (Filter.Tendsto.div hA_self_norm hB_self_norm (by simp))
+    simpa using hA_self_norm.div hB_self_norm one_ne_zero
   have hB_self_norm_ne :
       (∀ᶠ N in Filter.atTop, ‖mpvOverlap (d := d) B B N‖ ≠ (0 : ℝ)) :=
-    hB_self_norm.eventually_ne (by simp)
+    hB_self_norm.eventually_ne one_ne_zero
   have hRatio_eq :
       (fun N => ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖)
         =ᶠ[Filter.atTop] fun N => ‖c N‖ ^ 2 := by
@@ -190,26 +186,19 @@ theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
     Filter.Tendsto.congr' hRatio_eq hRatio
   have hc_norm :
       Filter.Tendsto (fun N => ‖c N‖) Filter.atTop (nhds (1 : ℝ)) := by
-    have h := Filter.Tendsto.sqrt hc_normsq
-    refine Filter.Tendsto.congr (fun N => ?_) (by simpa using h)
-    simp
+    simpa [Real.sqrt_sq (norm_nonneg _)] using hc_normsq.sqrt
   have hCrossNorm :
       Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop (nhds (1 : ℝ)) := by
-    have hmul :
-        Filter.Tendsto (fun N => ‖c N‖ * ‖mpvOverlap (d := d) B B N‖) Filter.atTop
-          (nhds (1 : ℝ)) := by
-      simpa using (Filter.Tendsto.mul hc_norm hB_self_norm)
-    refine Filter.Tendsto.congr (fun N => ?_) hmul
-    simp [hOverlapAB N]
+    have hmul : Filter.Tendsto (fun N => ‖c N‖ * ‖mpvOverlap (d := d) B B N‖)
+        Filter.atTop (nhds (1 : ℝ)) := by simpa using hc_norm.mul hB_self_norm
+    exact hmul.congr fun N => by simp [hOverlapAB N]
   by_contra hNot
   have hto0 :
       Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0) :=
     mpvOverlap_tendsto_zero (A := A) (B := B) hA hB hA_norm hB_norm hNot
-  have hto0_norm :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop (nhds (0 : ℝ)) := by
-    simpa using hto0.norm
-  have : (0 : ℝ) = 1 := tendsto_nhds_unique hto0_norm hCrossNorm
-  exact zero_ne_one this
+  exact absurd
+    (tendsto_nhds_unique (by simpa using hto0.norm) hCrossNorm)
+    zero_ne_one
 
 end Main
 

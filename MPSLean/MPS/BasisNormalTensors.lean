@@ -73,42 +73,24 @@ theorem eventually_linearIndependent_of_overlap_tendsto_orthonormal
     intro i j
     by_cases h : i = j
     · subst h
-      have hstar : Tendsto (fun N => star (mpvOverlap (d := d) (A i) (A i) N))
-          atTop (nhds (star (1 : ℂ))) := (h_self i).star
-      have hinner : Tendsto (fun N => mpvInner (d := d) (A i) (A i) N)
-          atTop (nhds (1 : ℂ)) := by
-        simpa [mpvOverlap_eq_star_mpvInner] using hstar
-      simpa [mpvInner] using hinner
-    · have hstar : Tendsto (fun N => star (mpvOverlap (d := d) (A i) (A j) N))
-          atTop (nhds (star (0 : ℂ))) := (h_cross i j h).star
-      have hinner : Tendsto (fun N => mpvInner (d := d) (A i) (A j) N)
-          atTop (nhds (0 : ℂ)) := by
-        simpa [mpvOverlap_eq_star_mpvInner] using hstar
-      simpa [mpvInner, if_neg h] using hinner
+      -- `mpvOverlap = star mpvInner`, so `.star` converts the limit.
+      have h1 : Tendsto (fun N => star (mpvInner (d := d) (A i) (A i) N)) atTop (nhds 1) :=
+        (h_self i).congr fun N =>
+          mpvOverlap_eq_star_mpvInner (A := A i) (B := A i) N
+      simpa [mpvInner] using h1.star
+    · have h1 : Tendsto (fun N => star (mpvInner (d := d) (A i) (A j) N)) atTop (nhds 0) :=
+        (h_cross i j h).congr fun N =>
+          mpvOverlap_eq_star_mpvInner (A := A i) (B := A j) N
+      simpa [mpvInner, if_neg h] using h1.star
   -- Translate the Gram convergence to the embedded vectors `v` in the fixed space `V`.
   have hGram : ∀ i j : Fin g,
       Tendsto (fun N => ⟪v i N, v j N⟫_ℂ)
-        atTop (nhds (if i = j then (1 : ℂ) else 0)) := by
-    intro i j
-    -- Use `Tendsto.congr` with the pointwise identity between the two inner products.
-    refine (Filter.Tendsto.congr (f₁ := fun N =>
-        ⟪mpvState (d := d) (A i) N, mpvState (d := d) (A j) N⟫_ℂ)
-      (f₂ := fun N => ⟪v i N, v j N⟫_ℂ)
-      (fun N => ?_) (hInnerState i j))
-    -- Compute the inner product of the embedded `lp.single` vectors.
-    --
-    -- We use `lp.inner_single_left` and then evaluate the `lp.single` at its own index.
-    have h :=
-        (lp.inner_single_left (ι := ℕ) (𝕜 := ℂ) (G := fun n : ℕ => MPVSpace d n) N
-          (mpvState (d := d) (A i) N)
-          (lp.single 2 N (mpvState (d := d) (A j) N)))
-    have h' :
-        ⟪lp.single 2 N (mpvState (d := d) (A i) N),
-          lp.single 2 N (mpvState (d := d) (A j) N)⟫_ℂ =
-          ⟪mpvState (d := d) (A i) N,
-            (lp.single 2 N (mpvState (d := d) (A j) N)) N⟫_ℂ := h
-    -- Now evaluate the `lp.single` at `N`.
-    simpa [v, lp.single_apply_self] using h'.symm
+        atTop (nhds (if i = j then (1 : ℂ) else 0)) := fun i j =>
+    -- `⟪v i N, v j N⟫ = ⟪lp.single 2 N (mpvState A i N), ...⟫ = ⟪mpvState A i N, ...⟫`
+    -- by `lp.inner_single_left` and `lp.single_apply_self`.
+    (hInnerState i j).congr fun N => by
+      simp only [v]
+      rw [lp.inner_single_left, lp.single_apply_self]
   -- Apply the Gram-matrix criterion in the fixed inner product space `V`.
   have hLI_emb : ∀ᶠ N in atTop, LinearIndependent ℂ (fun j : Fin g => v j N) :=
     MPSTensor.eventually_linearIndependent_of_gram_tendsto_id (v := v) hGram
