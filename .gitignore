@@ -15,7 +15,10 @@
 *.bbl
 *.blg
 
-Notes/Wolff/cho06_spectral_properties.pdf
+# Notes/Wolf build artifacts
+Notes/Wolf/.texpadtmp/
+Notes/Wolf/History/
+Notes/Wolf/build/
 
 
 # Compiled PDFs (regenerable)
