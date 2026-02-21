@@ -327,8 +327,17 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
                       \texttt{exists\_irreducible\_blockDecomp}\\
                       {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/MPS/CanonicalFormReduction.lean}}}%
                       ~\cite{Cirac2017Annals,Cirac2017Irreducible}
+                % SOURCE: MPSLean/MPS/IrreducibleFormII.lean
+                %         theorem MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
+                %         TP + irreducible tensor => exists unitary U, diagonal PD Lambda fixed point
+                %         Ref: Cirac2017Annals §2.3 (CFII) + Cirac2017Irreducible Prop. 2
+                \item[\textcolor{leangreen}{\checkmark}]
+                      CFII diagonal fixed-point gauge (TP irreducible blocks):
+                      \texttt{exists\_unitary\_diag\_posDef\_fixedPoint\_of\_TP\_of\_isIrreducibleTensor}\\
+                      {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/MPS/IrreducibleFormII.lean}}}%
+                      ~\cite{Cirac2017Annals,Cirac2017Irreducible}
                 \item[\textcolor{amber}{\textbullet}]
-                      \textbf{Open:} PF/$\mu$ normalization; CFII gauge;
+                      \textbf{Open:} PF/$\mu$ normalization;
                       Wielandt/periodicity (later).
             \end{itemize}
         \end{block}
@@ -534,9 +543,15 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
             % SOURCE: MPSLean/MPS/CanonicalFormReduction.lean
             %         theorem MPSTensor.exists_irreducible_blockDecomp
             %         The iterative CF-splitting procedure is now formalized.
-            \textcolor{amber}{\textbullet}~\textbf{Next:} normalize each irreducible block to
-              irreducible form~II\,/\,CFII; incorporate $\mu$ scaling;
-              periodicity removal later~\cite{Cirac2017Annals,Cirac2017Irreducible}.
+            \textcolor{leangreen}{\checkmark}~\texttt{exists\_irreducible\_blockDecomp}
+              (\texttt{CanonicalFormReduction.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.2em]
+            % SOURCE: MPSLean/MPS/IrreducibleFormII.lean
+            %         theorem MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
+            %         CFII diagonal fixed-point gauge for TP irreducible blocks.
+            \textcolor{leangreen}{\checkmark}~\texttt{exists\_unitary\_diag\_posDef\_fixedPoint\_of\_TP\_of\_isIrreducibleTensor}
+              (\texttt{IrreducibleFormII.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.2em]
+            \textcolor{amber}{\textbullet}~\textbf{Next:} PF/$\mu$ normalization per block;
+              Wielandt/periodicity later.
             }
         \end{block}
     \end{columns}
@@ -907,12 +922,25 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
             \quad\text{and}\quad
             \cE_{A_k}(\Lambda_k)=\Lambda_k,\;\Lambda_k>0\ \text{(diagonal)}.
         \]
+        CFII chooses \emph{one-sided} normalization: TP (trace-preserving, i.e.\ the identity is a fixed point of the dual) together with a \emph{diagonal} positive-definite right fixed point~$\Lambda$; unitality ($\sum_i A^i(A^i)^\dagger = I$) is a separate, independent gauge choice.
     \end{block}
 
     \begin{block}{Lean predicate (\texttt{IsCanonicalForm})}
         We package DS/TP gauge (the first condition) together with auxiliary hypotheses
         (injectivity, overlap $\Ov\to 1$, and a simplifying strict $\|\mu\|$ ordering) in
         \texttt{PiAlgebra/CanonicalFormSep.lean}.
+    \end{block}
+
+    \begin{block}{Lean status \textnormal{\scriptsize(new)}}
+        % SOURCE: MPSLean/MPS/IrreducibleFormII.lean
+        %         theorem MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
+        %         TP + irreducible => exists unitary U, diagonal PD Lambda fixed point for conjugated tensor
+        {\scriptsize
+        \textcolor{leangreen}{\checkmark}~%
+        \texttt{exists\_unitary\_diag\_posDef\_fixedPoint\_of\_TP\_of\_isIrreducibleTensor}:\\
+        \quad TP + irreducible tensor $\Rightarrow$ $\exists$ unitary $U$, diagonal PD $\Lambda$
+        fixed point for the $U$-conjugated tensor.\\
+        {\textcolor{dimwhite}{\texttt{MPSLean/MPS/IrreducibleFormII.lean}}}~\cite{Cirac2017Annals,Cirac2017Irreducible}}
     \end{block}
 
     \textcolor{dimwhite}{\footnotesize In general one cannot impose both left- and right-canonical conditions simultaneously.}
@@ -1705,7 +1733,8 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
                          & Hard                & 800--2{,}000
                          & Inv.-subspace $\Rightarrow$ 2-block: \textcolor{leangreen}{\textbf{done}}$^*$;
                            iteration to irred.\ blocks: \textcolor{leangreen}{\textbf{done}}$^*$;
-                           remaining: PF/$\mu$ norm., CFII gauge, Wielandt/periodicity \\
+                           CFII diag.\ fixed-pt gauge: \textcolor{leangreen}{\textbf{done}}$^{\dagger}$;
+                           remaining: PF/$\mu$ norm., Wielandt/periodicity \\
             \rowcolor{cardbg}
             Periodic blocks (diagonal $Z$)
                          & Hard                & 1{,}000--2{,}000   & Peripheral spectrum of CP maps                \\
@@ -1722,8 +1751,11 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
             BNT permutation
                          & Medium              & 300--600           & Extend block separation                       \\
             \rowcolor{cardbg}
-            Unitary gauge (CFII)
-                         & Medium              & 200--400           & Polar decomposition                           \\
+            CFII diagonal fixed-point gauge
+                         & Medium              & \textcolor{leangreen}{done}
+                         & TP + irred.\ block $\Rightarrow$ diag.\ PD fixed pt:
+                           \textcolor{leangreen}{\textbf{done}}$^{\dagger}$
+                           (unitality/PF norm.\ separate)                          \\
             \bottomrule
         \end{tabular}
     }
@@ -1743,8 +1775,15 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
         %         Ref: Cirac2017Annals §2.3 + Cirac2017Irreducible Prop. thm:irr
         \textcolor{leangreen}{\checkmark}~\texttt{MPSTensor.exists\_irreducible\_blockDecomp}
           (\texttt{MPSLean/MPS/CanonicalFormReduction.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.15em]
+        % SOURCE: MPSLean/MPS/IrreducibleFormII.lean
+        %         theorem MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
+        %         CFII: TP + irreducible tensor => exists unitary U, diagonal PD Lambda fixed point
+        %         Ref: Cirac2017Annals §2.3 (CFII) + Cirac2017Irreducible Prop. 2
+        \textcolor{leangreen}{\checkmark}~%
+          $^{\dagger}$\,\texttt{MPSTensor.exists\_unitary\_diag\_posDef\_fixedPoint\_of\_TP\_of\_isIrreducibleTensor}\\
+          \quad(\texttt{MPSLean/MPS/IrreducibleFormII.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.15em]
         \textcolor{amber}{\textbullet}~\textbf{Next:} PF/$\mu$ normalization per block;
-          CFII gauge; Wielandt/periodicity later.
+          Wielandt/periodicity later.
     }}
 
     \vspace{0.05em}
