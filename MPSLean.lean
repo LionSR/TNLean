@@ -23,6 +23,7 @@ import MPSLean.QuantumPerronFrobenius
 import MPSLean.Spectral.MixedTransfer
 import MPSLean.Spectral.MPVOverlapTrace
 import MPSLean.Spectral.SpectralGap
+import MPSLean.Spectral.PrimitiveOverlap
 import MPSLean.Spectral.CrossCorrelation
 
 -- Layer 3: MPS core
