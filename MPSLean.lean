@@ -37,6 +37,7 @@ import MPSLean.MPS.CPPrimitive
 -- Layer 4: Fundamental theorem (single block)
 import MPSLean.MPS.LinearExtension
 import MPSLean.MPS.FundamentalTheorem
+import MPSLean.MPS.FundamentalTheoremProportional
 
 -- Layer 5: Multi-block
 import MPSLean.MPS.MultiBlock
