@@ -614,7 +614,19 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         and one obtains per-block gauge equivalence plus a block permutation.
     \end{block}
 
-    \textcolor{dimwhite}{\footnotesize Our Lean formalization proves the \emph{equal} case (Corollary) with canonical form assumed.}
+    % SOURCE: MPSLean/MPS/FundamentalTheoremProportional.lean
+    %         theorem MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
+    %         single-block primitive/proportional lemma (overlap assumed, not derived)
+    \begin{block}{Lean status (new\,$^{\ddagger}$)}
+        {\scriptsize
+        \textcolor{leangreen}{\checkmark}~\textbf{Single-block primitive/proportional lemma} now proved in Lean:\\[0.05em]
+        \quad\texttt{MPSTensor.gaugePhaseEquiv\_of\_proportionalMPV2\_of\_overlap\_tendsto\_one}\\
+        \quad\textcolor{dimwhite}{\texttt{MPSLean/MPS/FundamentalTheoremProportional.lean}}\\[0.05em]
+        \textcolor{dimwhite}{\emph{Scope: \textbf{single-block} only.
+            Assumes \texttt{mpvOverlap A A N}$\to1$ (self-overlap limit)
+            rather than deriving it from primitivity.}}}
+    \end{block}
+    \textcolor{dimwhite}{\footnotesize The equal-MPV Corollary with canonical form assumed is also fully verified.}
 \end{frame}
 
 \begin{frame}{Why canonical form is essential}
@@ -680,6 +692,9 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         \rowcolor{cardbg}
         Single-block FT~\cite{Perez-Garcia2007Matrix}
                          & \texttt{MPS/FundamentalTheorem}     & \proved{}       \\
+        \rowcolor{cardbg}
+        Single-block FT (proportional / primitive branch)~\cite{Cirac2021Matrix}
+                         & \texttt{MPS/FundamentalTheoremProportional} & \proved{}  \\
         \rowcolor{cardbg}
         $\Pi$-algebra automorphisms~\cite{Cirac2017Annals}
                          & \texttt{MPS/BlockPermutationMPS}    & \proved{}       \\
@@ -1743,7 +1758,10 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
                          & Hard                & 800--1{,}200       & Perron--Frobenius for CP maps                 \\
             \rowcolor{cardbg}
             Proportional MPV case
-                         & Med-Hard            & 800--1{,}500       & BNT theory, phase tracking                    \\
+                         & Med-Hard            & 800--1{,}500
+                         & Single-block primitive/proportional lemma:
+                           \textcolor{leangreen}{\textbf{done}}$^{\ddagger}$;
+                           remaining: BNT construction + permutation matching (Thm~4.4) \\
             \rowcolor{cardbg}
             Match block structure of $B$
                          & Hard                & 500--1{,}000       & Full BNT, dimension matching                  \\
@@ -1782,6 +1800,12 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
         \textcolor{leangreen}{\checkmark}~%
           $^{\dagger}$\,\texttt{MPSTensor.exists\_unitary\_diag\_posDef\_fixedPoint\_of\_TP\_of\_isIrreducibleTensor}\\
           \quad(\texttt{MPSLean/MPS/IrreducibleFormII.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.15em]
+        % SOURCE: MPSLean/MPS/FundamentalTheoremProportional.lean
+        %         theorem MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
+        %         single-block primitive/proportional branch; overlap_tendsto_one assumed
+        \textcolor{leangreen}{\checkmark}~%
+          $^{\ddagger}$\,\texttt{MPSTensor.gaugePhaseEquiv\_of\_proportionalMPV2\_of\_overlap\_tendsto\_one}\\
+          \quad(\texttt{MPSLean/MPS/FundamentalTheoremProportional.lean})~\cite{Cirac2021Matrix}\\[0.15em]
         \textcolor{amber}{\textbullet}~\textbf{Next:} PF/$\mu$ normalization per block;
           Wielandt/periodicity later.
     }}
