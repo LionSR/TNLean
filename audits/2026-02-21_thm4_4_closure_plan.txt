@@ -1,0 +1,662 @@
+================================================================================
+MEMO: Formalization Roadmap — Closing Theorem 4.4 of Cirac et al. (RevModPhys 2021)
+Date: 2026-02-21
+Author: MPSLean audit (automated)
+Target theorem: Theorem 4.4 [2] = labels \thm1 + \II_cor2 in 2011.12127/TN-Review-main.tex
+Repo commit context: IrreducibleFormII.lean complete; CanonicalFormReduction.lean complete;
+                     block_separation_core sorry-free (overlap-decay route, 2026-02-19)
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+PART A — PRECISE RESTATEMENT OF THEOREM 4.4 IN LEAN NOTATION
+────────────────────────────────────────────────────────────────────────────────
+
+A.1  Theorem numbering in [2]
+──────────────────────────────
+
+The RevModPhys paper (arXiv:2011.12127) uses the \newtheorem counter shared
+across thm/prop/cor/defn/example, numbered per section.  Section IV starts at
+label "sec_4" (TeX line 1710).  The block of numbered items in §IV.A is:
+
+  Defn  4.1  (\label{def:4:normal-tensor-mps})  — "normal tensor" / canonical form
+  Defn  4.2  (\label{def:4:BNT})               — basis of normal tensors (BNT)
+  Prop  4.3  (\label{prop:char-BNT})            — characterization of BNTs
+  Thm   4.4  (\label{thm1})                     — FT for PROPORTIONAL MPVs
+  Cor   4.5  (\label{II_cor2})                  — FT for EQUAL MPVs
+  Thm   4.6  (\label{thm:fundamental-general})  — generalized FT (no blocking, diagonal Z)
+
+"Theorem 4.4" thus refers specifically to \label{thm1} (proportional case).
+The task instruction bundles both thm1 and II_cor2 under "Theorem 4.4",
+treating the corollary as "the equal part".
+
+A.2  Paper statement (verbatim from TeX lines 1891–1901)
+─────────────────────────────────────────────────────────
+
+  [Thm 4.4 = \thm1, PROPORTIONAL PART]
+  Let A and B be two tensors in canonical form, with bases of normal tensors
+  A^i_{k_a} and B^i_{k_b} (k_{a,b} = 1,...,g_{a,b}), respectively.
+  If for all N, A and B generate MPVs that are proportional to each other,
+  then: (i) g_a = g_b =: g; (ii) for all k, there exists a j_k, phases φ_k,
+  and non-singular matrices X_k such that B^i_k = e^{i φ_k} X_k A^i_{j_k} X_k^{-1}.
+
+  [Cor 4.5 = \II_cor2, EQUAL PART]
+  If two tensors A and B in canonical form generate the same MPV for all N then:
+  (i) the dimensions of A^i and B^i coincide;
+  (ii) there exists an invertible matrix X such that A^i = X B^i X^{-1}.
+
+  [Remark after Cor 4.5]
+  When A and B are in a gauge where E_k is unital (ρ^{-1/2} A_k ρ^{1/2}
+  with ρ the fixed point), the intertwiner X (and each X_k) is unitary.
+
+A.3  Target Lean statements
+────────────────────────────
+
+Using the repo's notation, the two parts of Theorem 4.4 [2] read as follows.
+
+  ---------- Equal MPVs (Corollary 4.5 = "equal part") ----------
+
+  theorem fundamentalTheorem_equalMPV
+      {d : ℕ}
+      {r_A r_B : ℕ} {dim_A : Fin r_A → ℕ} {dim_B : Fin r_B → ℕ}
+      [∀ k, NeZero (dim_A k)] [∀ k, NeZero (dim_B k)]
+      (μ_A : Fin r_A → ℂ) (μ_B : Fin r_B → ℂ)
+      (A : ∀ k, MPSTensor d (dim_A k))
+      (B : ∀ k, MPSTensor d (dim_B k))
+      (hA : IsCanonicalForm μ_A A)    -- A in canonical form
+      (hB : IsCanonicalForm μ_B B)    -- B in canonical form
+      (hSame : SameMPV₂
+                 (toTensorFromBlocks μ_A A)
+                 (toTensorFromBlocks μ_B B)) :
+      -- (i) same total bond dimension:
+      (∑ k, dim_A k) = (∑ k, dim_B k) ∧
+      -- (ii) ∃ invertible X, global gauge equivalence:
+      GaugeEquiv (toTensorFromBlocks μ_A A)
+                 (toTensorFromBlocks μ_B B)
+
+  NOTE: The paper's "same dimension of A^i and B^i" refers to the total bond
+  dimension (sum of block dims), not just matching the number of blocks.
+  The Lean conclusion (ii) says ∃ X : GL(D_A, ℂ) with D_A = ∑ dim_A k.
+
+  ---------- Proportional MPVs (Theorem 4.4 = "proportional part") ----------
+
+  theorem fundamentalTheorem_proportionalMPV
+      {d : ℕ}
+      {r_A r_B : ℕ} {dim_A : Fin r_A → ℕ} {dim_B : Fin r_B → ℕ}
+      [∀ k, NeZero (dim_A k)] [∀ k, NeZero (dim_B k)]
+      (μ_A : Fin r_A → ℂ) (μ_B : Fin r_B → ℂ)
+      (A_bnt : ∀ k, MPSTensor d (dim_A k))   -- BNT elements of A
+      (B_bnt : ∀ k, MPSTensor d (dim_B k))   -- BNT elements of B
+      (hA_normal : ∀ k, IsNormal (A_bnt k))
+      (hB_normal : ∀ k, IsNormal (B_bnt k))
+      -- A and B in canonical form via their BNTs
+      (hProp : ProportionalMPV₂
+                 (toTensorFromBlocks μ_A A_bnt)
+                 (toTensorFromBlocks μ_B B_bnt)) :
+      -- (i) same number of BNT elements:
+      (g : r_A = r_B) ∧
+      -- (ii) bijection + gauge+phase for each BNT element:
+      ∃ (perm : Fin r_A ≃ Fin r_B),
+        ∀ k, GaugePhaseEquiv (A_bnt k) (B_bnt (perm k))
+
+  NOTE on GaugePhaseEquiv: this is already in the repo (MPSLean/MPS/Defs.lean):
+    def GaugePhaseEquiv (A B : MPSTensor d D) : Prop :=
+      ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ∀ i, B i = ζ • (X * A i * X⁻¹)
+  The paper's e^{iφ_k} X_k A^i_{j_k} X_k^{-1} is exactly GaugePhaseEquiv(A_{j_k}, B_k).
+  However, the paper uses the BNT elements of BOTH A and B, allowing A and B to
+  have DIFFERENT total bond dimensions (A_bnt's dim_A ≠ B_bnt's dim_B in general).
+
+  ---------- Block-diagonal constructor notation ----------
+
+  toTensorFromBlocks (defined in MPSLean/MPS/MultiBlock.lean):
+    toTensorFromBlocks μ A : MPSTensor d (∑ k, dim k)
+    where A : (k : Fin r) → MPSTensor d (dim k), μ : Fin r → ℂ
+    is the block-diagonal tensor ⊕_k μ_k A_k^i.
+
+  GaugeEquiv, SameMPV, SameMPV₂, ProportionalMPV₂ from MPSLean/MPS/Defs.lean.
+  IsCanonicalForm from MPSLean/PiAlgebra/CanonicalFormSep.lean (see §B).
+  IsNormal from MPSLean/MPS/Defs.lean (= eventual injectivity).
+
+
+────────────────────────────────────────────────────────────────────────────────
+PART B — EXISTING LEAN INGREDIENTS AND THEIR MATCH TO [2]
+────────────────────────────────────────────────────────────────────────────────
+
+B.1  IsCanonicalForm (CanonicalFormSep.lean) vs paper's canonical form (Defn 4.1)
+───────────────────────────────────────────────────────────────────────────────────
+
+  LEAN:
+    structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
+        (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
+      block_injective    : ∀ k, IsInjective (A k)
+      ds_gauge           : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
+      mu_strict_anti     : StrictAnti (fun k : Fin r => ‖μ k‖)
+      mu_ne_zero         : ∀ k, μ k ≠ 0
+      overlap_tendsto_one: ∀ k, Filter.Tendsto (fun N => mpvOverlap (A k) (A k) N) atTop (nhds 1)
+
+  PAPER (Defn 4.1):
+    A^i = ⊕_k μ_k A_k^i, each A_k is a "normal tensor"
+    where "normal" = transfer map E_k is a PRIMITIVE channel
+    (Wolf §6.2: primitive = irreducible + aperiodic, unique eigenvalue 1 of magnitude 1).
+    The μ_k normalize spectral_radius(E_k) = 1.
+
+  *** DEVIATION 1 — mu_strict_anti ***
+  The Lean `mu_strict_anti : StrictAnti (‖μ k‖)` imposes a STRICT total ordering
+  |μ_0| > |μ_1| > ··· on the scaling weights.  The paper does NOT require this.
+  In the paper, multiple blocks can have the same |μ_k| (they're handled by the
+  BNT construction — blocks with equal |μ_k| may generate proportional or linearly
+  independent MPVs).  The BNT separates them via the mixed-transfer spectral radius.
+  The strict ordering is used in `block_separation_core` (peeling lemma) to
+  extract per-block MPV equalities.
+
+  IMPLICATION: The Lean `IsCanonicalForm` effectively encodes "canonical form
+  with a fixed BNT and all BNT elements having distinct |μ_k| weights."  This
+  is a SPECIAL CASE of the paper's canonical form (the generic case allows
+  multiple blocks with the same |μ_k|; the paper's Thm 4.4 works at the BNT level).
+  To recover full generality, one would need to allow equal |μ_k| values and
+  handle the BNT matching as a separate combinatorial step.
+
+  *** DEVIATION 2 — block_injective vs IsNormal ***
+  The Lean uses `IsInjective (A k)` = the matrices {A_k^i} span M_D(ℂ).
+  The paper's "normal" = primitive transfer map ⟺ (eventually injective), which
+  in Lean is `IsNormal (A k)` from Defs.lean:
+    def IsNormal (A : MPSTensor d D) : Prop := ∃ N : ℕ, IsNBlkInjective A N
+  For a primitive channel, IsInjective implies IsNormal (with N=1), and IsNormal
+  implies IsInjective after sufficient blocking.  So `IsInjective` is STRONGER
+  than `IsNormal` (= injectivity without blocking), which is what the paper calls
+  "normal after blocking" in a single step.  For primitive channels (paper's
+  assumption), eventual injectivity ↔ injectivity after one fixed blocking step.
+  The current Lean `block_injective` (= IsInjective) implicitly assumes a
+  post-blocking canonical form.
+
+  *** DEVIATION 3 — overlap_tendsto_one ***
+  The Lean `overlap_tendsto_one: mpvOverlap (A k) (A k) N → 1` is a hypothesis
+  encoding the primitivity of E_k (aperiodicity).  It should be a THEOREM derived
+  from IsNormal or IsPrimitiveChannel, not assumed.
+  This is flagged as "TODO: derive from primitivity" in the source file.
+
+  *** DEVIATION 4 — ds_gauge ***
+  The Lean `ds_gauge` (= ∑ (A k i)ᴴ * (A k i) = 1) is the trace-preserving
+  condition in the left-canonical (right-unital) gauge.  This matches the paper's
+  CFII normalization after the gauge G_k (= ρ_k^{-1/2}).  The paper allows any
+  gauge for the fundamental theorem statement, with the unitary X conclusion valid
+  only in the unital gauge.  The Lean version works in this unital gauge throughout.
+
+B.2  fundamentalTheorem_canonicalForm (CanonicalFormSep.lean)
+──────────────────────────────────────────────────────────────
+
+  LEAN:
+    theorem fundamentalTheorem_canonicalForm
+        (μ : Fin r → ℂ)
+        (A B : (k : Fin r) → MPSTensor d (dim k))
+        (hA : IsCanonicalForm μ A)
+        (hB_inj : ∀ k, IsInjective (B k))
+        (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+        (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+        (∀ k, GaugeEquiv (A k) (B k)) ∧
+        GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)
+
+  MATCHES PAPER: This is essentially Cor 4.5 (equal MPVs) under the SAME BLOCK
+  STRUCTURE (both tensors use the same μ and same dim k).  It does NOT handle:
+  - Different numbers of blocks (r_A ≠ r_B)
+  - Different scaling weights (μ_A ≠ μ_B) for A and B
+  - Proportional MPVs (only equal MPVs, via SameMPV₂)
+  - The BNT matching step (permutation σ : Fin r_A ≃ Fin r_B)
+
+B.3  block_separation_core (CanonicalFormSep.lean) — sorry-free since 2026-02-19
+──────────────────────────────────────────────────────────────────────────────────
+
+  LEAN:
+    theorem block_separation_core
+        (μ : Fin r → ℂ)
+        (A B : (k : Fin r) → MPSTensor d (dim k))
+        [hμ_strict, hμ_ne_zero, hA_inj, hB_inj, hA_ds, hB_ds, hA_overlap, h_summed]
+        : ∀ k, SameMPV (A k) (B k)
+
+  MATCHES PAPER: This is the "peeling lemma" / spectral-dominance step
+  (Pérez-García et al. 2007, Appendix E; Cirac et al. 2021 §IV.A proof idea).
+  It produces per-block SameMPV from a global summed identity.
+
+  PROOF CHAIN (implemented):
+    1. mpvOverlap_tendsto_zero (MPVOverlapDecay.lean) — equal-or-orthogonal decay
+    2. peeling_exponential_bound (CanonicalFormSep.lean) — exponential isolation
+    3. gaugePhaseEquiv_of_mpvOverlap_tendsto_one — overlap limit → GaugePhaseEquiv
+    4. sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one — GaugePhaseEquiv + overlap → SameMPV
+    5. induction on r — tail blocks reduce to IH
+
+B.4  fundamentalTheorem_singleBlock (FundamentalTheorem.lean)
+──────────────────────────────────────────────────────────────
+
+  LEAN:
+    theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
+        (hA : IsInjective A) (hSame : SameMPV A B) : GaugeEquiv A B
+
+  STATUS: PROVED (Skolem–Noether / span-equals-top → algebra automorphism → inner automorphism)
+  MATCHES PAPER: This is the single-block case of Cor 4.5 (injective A, same MPV → gauge equiv).
+
+B.5  mpvOverlap_tendsto_zero (MPVOverlapDecay.lean)
+────────────────────────────────────────────────────
+
+  LEAN:
+    theorem mpvOverlap_tendsto_zero (A B : MPSTensor d D)
+        [NeZero D]
+        (hA : IsInjective A) (hB : IsInjective B)
+        (hA_norm, hB_norm : ∑ i, (· i)ᴴ * · i = 1)
+        (hAB : ¬ GaugePhaseEquiv A B) :
+        Filter.Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)
+
+  STATUS: PROVED via spectral gap + trace-overlap identity
+  MATCHES PAPER: "equal-or-orthogonal" lemma (Pérez-García 2007, Lem A.1 / Cirac 2021 proof of thm1)
+  LIMITATION: Square bond dimension only (D_A = D_B = D).
+
+B.6  eventually_linearIndependent_of_gram_tendsto_id (GramMatrixLI.lean)
+─────────────────────────────────────────────────────────────────────────
+
+  LEAN:
+    theorem eventually_linearIndependent_of_gram_tendsto_id {ι : Type} [Finite ι] ...
+        (h : ∀ i j, Tendsto (fun N => ⟪v i N, v j N⟫_ℂ) atTop (nhds (if i=j then 1 else 0))) :
+        ∀ᶠ N in atTop, LinearIndependent ℂ (fun i => v i N)
+
+  STATUS: PROVED
+  MATCHES PAPER: "Lem 1" from arXiv:1606.00608 (Cirac et al. 2017, Annals of Physics)
+  ROLE IN THM 4.4: used in the BNT step to show BNT elements generate linearly
+  independent MPVs for large N (part of condition (ii) in Defn 4.2).
+
+B.7  exists_irreducible_blockDecomp (CanonicalFormReduction.lean)
+──────────────────────────────────────────────────────────────────
+
+  LEAN:
+    theorem MPSTensor.exists_irreducible_blockDecomp (A : MPSTensor d D) :
+        ∃ r dim (blocks : (k : Fin r) → MPSTensor d (dim k)),
+          (∀ k, IsIrreducibleTensor (blocks k)) ∧
+          SameMPV₂ A (toTensorFromBlocks (μ := fun _ => 1) blocks)
+
+  STATUS: PROVED (strong induction on D, uses exists_twoBlock_decomp_of_lowerZero_strict)
+  ROLE IN THM 4.4: This is Step 1 toward canonical form existence: block-decompose into
+  irreducible blocks.  The μ_k are all 1 here; normalization (spectral radius → 1)
+  is NOT done.  Primitivity/blocking for period removal is NOT done.
+
+B.8  exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor (IrreducibleFormII.lean)
+──────────────────────────────────────────────────────────────────────────────────────────────────
+
+  LEAN:
+    theorem MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
+        (A : MPSTensor d D) (hTP) (hIrr : IsIrreducibleTensor A) (hD : 0 < D) :
+        ∃ U : unitaryGroup, ∃ Λ : Matrix,
+          Λ.PosDef ∧ Λ.IsDiag ∧ TP(U†AU) ∧ transferMap(U†AU)(Λ) = Λ
+
+  STATUS: PROVED
+  ROLE IN THM 4.4: The CFII normalization gauge — after conjugation by U, we get
+  a TP block with PD diagonal fixed point.  Completing the canonical form requires:
+  (a) normalizing μ_k := spectral_radius(E_k)^{1/2} (not done)
+  (b) further rescaling so E_k(Λ_k^{-1/2} A_k^i Λ_k^{1/2}) is unital (not done)
+
+B.9  ProportionalMPV₂ (Defs.lean)
+───────────────────────────────────
+
+  LEAN:
+    def ProportionalMPV₂ {d D₁ D₂} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
+        ∀ N : ℕ, ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
+
+  STATUS: Defined but NOT used in any proved theorem.
+  ROLE IN THM 4.4: Main hypothesis of the proportional part (Theorem 4.4/thm1).
+  The proportional case is not yet proved in Lean.
+
+
+────────────────────────────────────────────────────────────────────────────────
+PART C — MISSING INGREDIENTS: MINIMAL LEAN API
+────────────────────────────────────────────────────────────────────────────────
+
+C.1  Primitive / Normal Tensor Notion
+──────────────────────────────────────
+
+C.1.1  Current state:
+  - `IsNormal` (Defs.lean): ∃ N, IsNBlkInjective A N   ← correct algebraic notion
+  - `IsIrreducibleTensor` (CanonicalFormReduction.lean): ¬HasInvariantProj  ← step toward primitive
+  - `IsPrimitiveChannel` (Channel/Primitive.lean): PLACEHOLDER ONLY (no content)
+  - `IsIrreducibleCP` (Channel/Irreducible.lean): PROVED (no nontrivial invariant projection)
+  - `isIrreducibleCP_transferMap_of_isIrreducibleTensor` (IrreducibleFormII.lean): BRIDGE EXISTS
+
+C.1.2  Recommended choice:
+  Use `IsNormal` (eventual injectivity) as the Lean analogue of paper's "normal tensor."
+  Add a separate `IsPrimitiveChannel` in `MPSLean/Channel/Primitive.lean`:
+
+  -- File: MPSLean/Channel/Primitive.lean
+  /-- A quantum channel E is primitive if it is irreducible (no nontrivial invariant
+      projection) and the peripheral spectrum is {1} (= E has spectral radius 1 and
+      1 is the unique eigenvalue of magnitude 1). -/
+  def IsPrimitiveChannel (E : LinearMap ℂ (Matrix n n ℂ) (Matrix n n ℂ)) : Prop :=
+      IsIrreducibleCP E ∧
+      ∀ ρ : Matrix n n ℂ, ρ ≠ 0 → ρ.PosSemidef → E ρ = ρ →
+        ∃ c : ℝ, 0 < c ∧ ρ = c • (hE.unique_fixed_point)
+      -- equivalently: peripheral_eigenvalues = {1}
+
+  Then add:
+  /-- The MPV self-overlap converges to 1 iff the transfer map is primitive. -/
+  theorem overlap_tendsto_one_iff_primitive (A : MPSTensor d D) [NeZero D]
+      (hA : IsInjective A) (hA_norm : ∑ i, (A i)ᴴ * (A i) = 1) :
+      (Filter.Tendsto (fun N => mpvOverlap A A N) atTop (nhds 1)) ↔
+      IsPrimitiveChannel (transferMap A)
+
+  File: MPSLean/Channel/Primitive.lean  (new content, ~150–200 LOC)
+  Dependencies: Channel/Irreducible.lean, Channel/PeripheralSpectrum.lean
+
+C.1.3  Alternatively (lower effort, less complete):
+  Add `IsPrimitiveTransferMap (A : MPSTensor d D) : Prop` directly in
+  `MPSLean/MPS/CPPrimitive.lean` without introducing a general channel notion:
+
+  def IsPrimitiveTransferMap (A : MPSTensor d D) : Prop :=
+      IsIrreducibleTensor A ∧
+      Filter.Tendsto (fun N => mpvOverlap A A N) atTop (nhds 1)
+
+  And derive `overlap_tendsto_one` from `IsPrimitiveTransferMap`.
+  File: MPSLean/MPS/CPPrimitive.lean (add ~80 LOC)
+
+C.2  "Equal-or-Orthogonal" Dichotomy for Normal Tensors
+────────────────────────────────────────────────────────
+
+C.2.1  Current state:
+  - `mpvOverlap_tendsto_zero` (MPVOverlapDecay.lean): PROVED for EQUAL bond dim D_A = D_B
+  - For cross-block overlaps with D_A ≠ D_B: infrastructure exists (MixedTransferRect.lean,
+    MPVOverlapTraceRect.lean) but no analogous spectral-gap theorem for rectangular case
+  - `mpvOverlap_tendsto_zero_rect` (not yet created): would state decay for D_A ≠ D_B case
+
+C.2.2  Missing lemma:
+  -- File: MPSLean/Spectral/MPVOverlapDecayRect.lean (new, ~120 LOC)
+  theorem MPSTensor.mpvOverlap_tendsto_zero_rect
+      {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+      (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+      (hA : IsInjective A) (hB : IsInjective B)
+      (hA_norm : ∑ i, (A i)ᴴ * (A i) = 1)
+      (hB_norm : ∑ i, (B i)ᴴ * (B i) = 1) :
+      Filter.Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)
+
+  NOTE: For DIFFERENT bond dimensions D₁ ≠ D₂, the mixed transfer map
+  `mixedTransferMap₂ A B : Matrix D₁ D₂ → Matrix D₁ D₂` is ALWAYS contractive
+  (by Kadison–Schwarz + HS-norm bound), so the spectral radius is < 1
+  WITHOUT any non-gauge-phase condition.  The non-gauge-phase condition only
+  matters for D₁ = D₂.
+  Required: extend SpectralGap.lean with a rectangular spectral radius bound
+  (≤ 1) → decay to 0 without the gauge-phase hypothesis.
+
+C.3  BNT Construction and Permutation/Matching Lemma
+──────────────────────────────────────────────────────
+
+C.3.1  Current state:
+  - `Defn 4.2` (BNT) is NOT formalized in Lean (Lean has BasisNormal.lean with
+    Vandermonde lemmas, but no `IsBNT` predicate or BNT existence theorem).
+  - `Prop 4.3` (characterization of BNTs) is NOT formalized.
+
+C.3.2  Required API:
+  -- File: MPSLean/MPS/BasisNormal.lean (extend existing file, ~300–400 LOC)
+
+  /-- A family of normal tensors A_j (j = 1,...,g) is a basis of normal tensors for A if:
+      (i) for each N, mpv A N ∈ span{ mpv (A_j) N : j = 1,...,g }
+      (ii) ∃ N₀, ∀ N > N₀, mpvFun (A_j) N are linearly independent -/
+  structure IsBNT {d : ℕ} (A_total : MPSTensor d D_total)
+      (g : ℕ) (dim : Fin g → ℕ) (A_bnt : ∀ j, MPSTensor d (dim j)) : Prop where
+    normal      : ∀ j, IsNormal (A_bnt j)
+    spans_mpv   : ∀ N (σ : Fin N → Fin d),
+                    ∃ c : Fin g → ℂ, mpv A_total σ = ∑ j, c j * mpv (A_bnt j) σ
+    eventually_li : ∃ N₀ : ℕ, ∀ N > N₀,
+                    LinearIndependent ℂ (fun j => mpvFun (A_bnt j) N)
+    minimal     : ∀ j : Fin g, ∀ perm : Fin g → Fin g, perm j ≠ j →
+                    ¬ GaugePhaseEquiv (A_bnt j) (A_bnt (perm j))
+
+  /-- A BNT always exists for any tensor in canonical form. -/
+  theorem MPSTensor.exists_bnt (A : MPSTensor d D)
+      (hBlock : ∃ r dim μ blocks, IsCanonicalForm μ blocks ∧ SameMPV₂ A ...) :
+      ∃ g dim_bnt (A_bnt : ∀ j, MPSTensor d (dim_bnt j)), IsBNT A g dim_bnt A_bnt
+
+  /-- The permutation/matching lemma: BNTs are unique up to reordering + gauge-phase. -/
+  theorem MPSTensor.bnt_uniqueness
+      (hA : IsBNT A_total g_A dim_A A_bnt)
+      (hB : IsBNT A_total g_B dim_B B_bnt) :
+      ∃ (perm : Fin g_A ≃ Fin g_B),
+        ∀ j : Fin g_A, GaugePhaseEquiv (A_bnt j) (B_bnt (perm j))
+
+  /-- The matching lemma for two different tensors with proportional MPVs:
+      g_A = g_B and bijection of BNTs. -/
+  theorem MPSTensor.bnt_matching_of_proportional
+      (hProp : ProportionalMPV₂ A_total B_total)
+      (hA : IsBNT A_total g_A dim_A A_bnt)
+      (hB : IsBNT B_total g_B dim_B B_bnt) :
+      (hg : g_A = g_B) ∧
+      ∃ perm : Fin g_A ≃ Fin g_B, ∀ j, GaugePhaseEquiv (A_bnt j) (B_bnt (perm j))
+
+  PROOF STRATEGY for `bnt_matching_of_proportional`:
+  1. The self-overlaps ⟨mpvState A_j N, mpvState A_j N⟩ → 1 (primitivity).
+  2. The cross-overlaps ⟨mpvState A_j N, mpvState B_k N⟩ → 0 or → c (|c|=1).
+     Uses `mpvOverlap_tendsto_zero` (equal-or-orthogonal).
+  3. `eventually_linearIndependent_of_gram_tendsto_id` (GramMatrixLI.lean): for large N,
+     the MPV states form a Gram matrix → identity → Lin. Indep.
+  4. Vandermonde/peeling: the proportionality c_N must be a finite linear combination
+     of (μ_j)^N weighted MPV overlaps; by linear independence, this forces g_A = g_B
+     and a bijection.
+  5. Conclude GaugePhaseEquiv using `gaugePhaseEquiv_of_mpvOverlap_tendsto_one`.
+
+C.4  Removing the `overlap_tendsto_one` Assumption: Path via Existing Pieces
+───────────────────────────────────────────────────────────────────────────────
+
+C.4.1  What exists:
+  - `exists_irreducible_blockDecomp` → blocks are `IsIrreducibleTensor`
+  - `isIrreducibleCP_transferMap_of_isIrreducibleTensor` → IsIrreducibleCP(E_k)
+  - `exists_posSemidef_fixedPoint` (Channel/FixedPoints.lean) → PSD fixed point ρ
+  - `posSemidef_fixedPoint_isPosDef_of_irreducible` (QPF/PosDef.lean) → PD fixed point
+  - `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor` → PD diag fixed point
+  - `MPSTensor.Blocking.lean`: `blockTensor`, `mpv_blockTensor_eq_mpv`, `SameMPV.blockTensor`
+
+C.4.2  What's missing to derive overlap_tendsto_one:
+
+  [STEP M1] Spectral radius normalization:
+  -- File: MPSLean/MPS/SpectralRadiusNorm.lean (new, ~100 LOC)
+  Given `IsIrreducibleTensor A`, define μ_k := ‖eigenvalue of max magnitude of E_A‖.
+  Rescale: A_normalized := (1/μ_k) • A.
+  Show: transferMap(A_normalized) has spectral radius 1.
+  Key tool: `quantum_perron_frobenius` (QuantumPerronFrobenius.lean — EXISTS).
+
+  [STEP M2] Peripheral spectrum characterization:
+  -- File: MPSLean/Channel/PeripheralSpectrum.lean (currently placeholder, ~200–300 LOC)
+  For an irreducible channel E with spectral radius 1:
+  - All peripheral eigenvalues (‖λ‖ = 1) are roots of unity — Wolf Theorem 6.6
+  - The peripheral spectrum forms a cyclic group Z/pZ
+  - After blocking by period p, the channel becomes primitive (single peripheral eigenvalue 1)
+
+  [STEP M3] Blocking to remove periodicity:
+  -- File: MPSLean/MPS/PrimitivePeriodRemoval.lean (new, ~150–200 LOC)
+  Using `blockTensor A p` (Blocking.lean), show:
+  If E_A has period p (peripheral spectrum = {e^{2πi q/p}}), then
+  E_{blockTensor A p} is primitive (IsIrreducibleCP ∧ peripheral spectrum = {1}).
+  Conclude: `IsPrimitiveTransferMap (blockTensor A p)`.
+
+  [STEP M4] Overlap convergence from primitivity:
+  -- File: MPSLean/Channel/Primitive.lean (extend placeholder, ~200 LOC)
+  theorem overlap_tendsto_one_of_primitive (A : MPSTensor d D) [NeZero D]
+      (hTP : ∑ i, (A i)ᴴ * (A i) = 1)
+      (hPrim : IsPrimitiveChannel (transferMap A)) :
+      Filter.Tendsto (fun N => mpvOverlap A A N) atTop (nhds 1)
+  Proof: E^N(ρ) → ρ_∞ (unique fixed state) by Cesaro/Evans-HK + primitivity.
+  Key tool: `transferMap_pow_tendsto_fixedPoint` (not yet proved, needs ~100 LOC).
+
+C.5  Canonical Form Existence: How Existing Pieces + Missing Pieces Fit
+────────────────────────────────────────────────────────────────────────
+
+  Exists in Lean (done):
+    ✓ L1: PSD fixed point (Channel/CesaroFixedPoint.lean, QuantumPerronFrobenius.lean)
+    ✓ L2: Support proj invariant (MPS/FixedPointInvariantProjection.lean)
+    ✓ L3: Two-block decomp with strict dim decrease (MPS/InvariantSubspaceDecomp.lean +
+           MPS/FixedPointSplit.lean)
+    ✓ L4: Strong-induction recursion → irreducible blocks (MPS/CanonicalFormReduction.lean)
+    ✓ L5: PD fixed point for irreducible block (IrreducibleFormII.lean part 2)
+    ✓ L5': Diagonal gauge for PD fixed point (IrreducibleFormII.lean)
+    ✓ L6: TP gauge (already in hypothesis via ds_gauge; DSGauge.lean covers gauged_unital)
+    ✓ Blocking infrastructure (MPS/Blocking.lean)
+
+  Missing from Lean:
+    ✗ L5'': Spectral radius normalization (μ_k = spectral_radius^{1/2}) — STEP M1 above
+    ✗ L7: Period removal via blocking p sites — STEPS M2+M3 above
+    ✗ L8: derive overlap_tendsto_one from IsPrimitiveChannel — STEP M4 above
+    ✗ Assembly theorem: `MPSTensor.exists_canonicalForm` (combining L1–L8 into a single
+       ∃ statement with IsCanonicalForm conclusion) — ~100 LOC glue code
+
+
+────────────────────────────────────────────────────────────────────────────────
+PART D — WHAT CAN BE POSTPONED vs NEEDED IMMEDIATELY
+────────────────────────────────────────────────────────────────────────────────
+
+D.1  IMMEDIATELY NEEDED to close Thm 4.4 (equal-MPV part, Cor 4.5)
+─────────────────────────────────────────────────────────────────────
+
+  The MINIMAL path to close Corollary 4.5 (equal MPVs, same total bond dim):
+
+  [I1] BNT predicate `IsBNT` and uniqueness theorem `bnt_uniqueness` (C.3)
+       → needed to show BOTH A and B can be decomposed with EQUAL g_A = g_B
+  [I2] Rectangular overlap decay `mpvOverlap_tendsto_zero_rect` (C.2)
+       → needed for cross-block overlaps in the BNT matching lemma (D₁ ≠ D₂ case)
+  [I3] Remove `overlap_tendsto_one` as a hypothesis by deriving it from IsNormal:
+       Minimal: add `overlap_tendsto_one_of_isNormal` (using IsNblkInjective + QPF)
+       without full peripheral-spectrum theory (assume 1 = only peripheral eigenvalue
+       as an additional "aperiodic" hypothesis).  This avoids STEP M2+M3.
+  [I4] Prove `fundamentalTheorem_equalMPV` (A.3):
+       Given hA : IsCanonicalForm μ_A A, hB : IsCanonicalForm μ_B B (with possibly
+       DIFFERENT μ_A, μ_B and r_A, r_B), and hSame : SameMPV₂ (total A) (total B),
+       conclude: ∃ X, GaugeEquiv (total A) (total B).
+       Current gap: the existing `fundamentalTheorem_canonicalForm` assumes SAME
+       block structure; the general case needs [I1]+[I2] to first match blocks.
+
+D.2  CAN BE POSTPONED (not needed for Cor 4.5)
+────────────────────────────────────────────────
+
+  [P1] Proportional case (Thm 4.4/thm1): requires additional BNT-matching logic for
+       the case ProportionalMPV₂ (vs SameMPV₂).  Can be done after [I1]–[I4].
+  [P2] Periodic / no-blocking version (Thm 4.6/thm:fundamental-general):
+       the "diagonal Z" theorem for irreducible (not primitive) blocks.
+       Requires peripheral spectrum theory (STEPS M2–M3) which is in placeholders.
+       This is the hardest missing piece and should wait for [P1].
+  [P3] Unitary gauge conclusion: showing X is unitary when both A and B are in
+       CFII (unital gauge).  This requires completing the gauge normalization
+       (STEP M1 + M2 + L8 above).  Moderately hard (~200 LOC).
+  [P4] Quantum Wielandt: explicit upper bound on the blocking length needed for
+       IsNormal → IsNBlkInjective with explicit N.  Not needed for existence.
+  [P5] Full `exists_canonicalForm` theorem: wrapping all pieces into one theorem
+       with full IsCanonicalForm conclusion including overlap_tendsto_one derived.
+       Low priority once the FT is proved with the right hypotheses.
+
+D.3  DEVIATION HANDLING
+────────────────────────
+
+  The existing Lean `IsCanonicalForm` has `mu_strict_anti` which DEVIATES from [2].
+  To match [2] precisely, two options:
+  (a) KEEP `mu_strict_anti` but acknowledge this as a special case of [2]
+      (BNT elements ordered by |μ|, only works when all |μ_k| are distinct).
+      → Simplest; works for Cor 4.5 in the strict case.
+  (b) WEAKEN `mu_strict_anti` to `Function.Injective (fun k => ‖μ k‖)` (distinct
+      norms but not necessarily ordered) and replace the peeling lemma with a
+      Vandermonde-based argument.
+      → More faithful to [2]; requires refactoring block_separation_core.
+  RECOMMENDATION: Keep (a) for the immediate closure; add a comment noting the
+  deviation.  The `vandermonde_separation` results in BasisNormal.lean already
+  support a future upgrade to (b).
+
+
+────────────────────────────────────────────────────────────────────────────────
+PART E — ESTIMATED LOC AND IMPLEMENTATION ORDER
+────────────────────────────────────────────────────────────────────────────────
+
+E.1  Immediately needed modules (in dependency order)
+───────────────────────────────────────────────────────
+
+  PRIORITY 1 — Rectangular spectral gap / overlap decay (for cross-block analysis):
+  File: MPSLean/Spectral/SpectralGapRect.lean  (NEW)
+    spectral_radius_mixedTransfer_rect_le_one     ~  80 LOC
+    mixedTransfer_rect_pow_tendsto_zero            ~  60 LOC
+  File: MPSLean/Spectral/MPVOverlapDecayRect.lean  (NEW)
+    mpvOverlap_tendsto_zero_rect                   ~  80 LOC
+  TOTAL: ~220 LOC
+  DEPENDENCIES: SpectralGap.lean (square), MixedTransferRect.lean, MPVOverlapTraceRect.lean,
+                KadisonSchwarz.lean (HS-norm contraction)
+
+  PRIORITY 2 — Primitive channel / aperiodicity (minimal version):
+  File: MPSLean/Channel/Primitive.lean  (EXTEND placeholder)
+    def IsPrimitiveChannel                          ~  20 LOC
+    transferMap_pow_tendsto_fixedPoint               ~ 120 LOC
+    overlap_tendsto_one_of_primitive                 ~  60 LOC
+  TOTAL: ~200 LOC
+  DEPENDENCIES: Channel/CesaroFixedPoint.lean, Channel/Irreducible.lean,
+                QuantumPerronFrobenius.lean
+
+  PRIORITY 3 — BNT predicate and matching lemma:
+  File: MPSLean/MPS/BasisNormal.lean  (EXTEND existing, ~400 new LOC)
+    structure IsBNT                                 ~  40 LOC
+    exists_bnt (from CF blocks)                     ~  80 LOC
+    bnt_uniqueness                                  ~ 120 LOC
+    bnt_matching_of_proportional                    ~ 160 LOC
+  TOTAL: ~400 LOC
+  DEPENDENCIES: [PRIORITY 1+2] + GramMatrixLI.lean, MPVOverlapDecay.lean,
+                PiAlgebra/CanonicalFormSep.lean
+
+  PRIORITY 4 — Equal-MPV FT in full generality (general r_A, r_B):
+  File: MPSLean/PiAlgebra/FundamentalTheoremFull.lean  (NEW, ~300 LOC)
+    fundamentalTheorem_equalMPV                     ~ 180 LOC
+    (uses BNT matching + block_separation + singleBlock FT)
+  TOTAL: ~300 LOC
+  DEPENDENCIES: [PRIORITY 1–3] + CanonicalFormSep.lean + FundamentalTheoremComplete.lean
+
+E.2  Deferred modules (proportional part + generalized FT)
+────────────────────────────────────────────────────────────
+
+  File: MPSLean/Channel/PeripheralSpectrum.lean  (extend placeholder, ~300 LOC)
+    peripheral_eigenvalues_are_roots_of_unity
+    peripheral_spectrum_is_cyclic_group
+  File: MPSLean/MPS/PrimitivePeriodRemoval.lean  (NEW, ~200 LOC)
+    IsPrimitiveTransferMap_of_blocked
+  File: MPSLean/PiAlgebra/FundamentalTheoremGeneralized.lean  (NEW, ~400 LOC)
+    fundamentalTheorem_proportionalMPV   (Thm 4.4 proportional part)
+    fundamentalTheorem_generalMPV        (Thm 4.6, diagonal Z)
+
+E.3  Summary table
+────────────────────
+
+  Module                           | Status       | New LOC | Priority
+  ---------------------------------|--------------|---------|----------
+  SpectralGapRect.lean             | NEW          |  ~220   | IMMEDIATE
+  MPVOverlapDecayRect.lean         | NEW          |  ~80    | IMMEDIATE
+  Channel/Primitive.lean (extend)  | EXTEND       |  ~200   | IMMEDIATE
+  MPS/BasisNormal.lean (extend)    | EXTEND       |  ~400   | IMMEDIATE
+  FundamentalTheoremFull.lean      | NEW          |  ~300   | IMMEDIATE
+  ---------------------------------|--------------|---------|----------
+  SUBTOTAL (close Cor 4.5)         |              | ~1200   |
+  ---------------------------------|--------------|---------|----------
+  Channel/PeripheralSpectrum.lean  | EXTEND       |  ~300   | DEFERRED
+  MPS/PrimitivePeriodRemoval.lean  | NEW          |  ~200   | DEFERRED
+  MPS/SpectralRadiusNorm.lean      | NEW          |  ~100   | DEFERRED
+  FundamentalTheoremGeneralized.lean| NEW         |  ~400   | DEFERRED
+  ---------------------------------|--------------|---------|----------
+  SUBTOTAL (close Thm 4.4 + 4.6)  |              | ~1000   |
+  ---------------------------------|--------------|---------|----------
+  GRAND TOTAL                      |              | ~2200   |
+
+
+────────────────────────────────────────────────────────────────────────────────
+PART F — KNOWN DEVIATIONS SUMMARY
+────────────────────────────────────────────────────────────────────────────────
+
+  # | Location                   | Lean assumption           | Paper (Defn 4.1/Thm 4.4) | Action
+  --|----------------------------|---------------------------|---------------------------|-------
+  1 | IsCanonicalForm.mu_strict_ | StrictAnti (‖μ k‖)        | distinct μ_k (not ordered)| Keep for now (special case)
+    | anti                       |                           |                           |
+  2 | IsCanonicalForm.block_     | IsInjective (= 1-block    | IsNormal (= eventual inj) | OK: IsInjective ⊂ IsNormal;
+    | injective                  | injectivity)              | = primitive after blocking| assume post-blocking context
+  3 | IsCanonicalForm.overlap_   | Assumed as hypothesis     | Theorem from primitivity  | MUST DERIVE via Primitive.lean
+    | tendsto_one                |                           | of transfer map           |
+  4 | fundamentalTheorem_canon   | Same block structure      | Different structure allowed| EXTEND with BNT matching
+    | icalForm signature         | (same r, dim, μ for A,B)  | (r_A, r_B can differ)     | (Priority 3+4 above)
+  5 | ProportionalMPV₂           | Defined, UNUSED           | Main hypothesis of Thm4.4 | IMPLEMENT Thm4.4 proportional
+  6 | GaugePhaseEquiv            | ∃ X, ζ, B i = ζ•(X A_i X⁻¹) | Same (e^{iφ} X_k A_{jk} X_k⁻¹)| MATCHES
+  7 | GaugeEquiv                 | ∃ X : GL, B i = X A i X⁻¹| Same                      | MATCHES
+  8 | SameMPV                    | ∀ N σ, mpv A σ = mpv B σ  | Same (equal MPVs)         | MATCHES
+  9 | mu_strict_anti→ordering    | Ordered Fin r index       | BNT elements unordered    | Minor; permutation added via
+    |                            |                           |                           | block_permutation machinery
+
+================================================================================
+END OF MEMO
+================================================================================
