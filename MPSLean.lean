@@ -46,6 +46,7 @@ import MPSLean.MPS.BasisNormal
 import MPSLean.MPS.FundamentalTheoremMulti
 import MPSLean.MPS.InvariantSubspaceDecomp
 import MPSLean.MPS.FixedPointSplit
+import MPSLean.MPS.CanonicalFormReduction
 import MPSLean.MPS.BlockPermutationMPS
 import MPSLean.PiAlgebra.Construction
 import MPSLean.PiAlgebra.FundamentalTheoremComplete
