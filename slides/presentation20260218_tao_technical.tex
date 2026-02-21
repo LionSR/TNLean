@@ -319,8 +319,17 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
                       Fixed point $\to$ invariant projection:
                       \texttt{lowerZero\_of\_posSemidef\_fixedPoint}\\
                       {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/MPS/FixedPointInvariantProjection.lean}}}
+                % SOURCE: MPSLean/MPS/CanonicalFormReduction.lean
+                %         theorem MPSTensor.exists_irreducible_blockDecomp
+                %         matches 1606.00608 §2.3 iteration step + 1708.00029 Prop. thm:irr
+                \item[\textcolor{leangreen}{\checkmark}]
+                      Iteration to irreducible blocks:
+                      \texttt{exists\_irreducible\_blockDecomp}\\
+                      {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/MPS/CanonicalFormReduction.lean}}}%
+                      ~\cite{Cirac2017Annals,Cirac2017Irreducible}
                 \item[\textcolor{amber}{\textbullet}]
-                      \textbf{Open:} iterate to full CF; PF normalization; Wielandt.
+                      \textbf{Open:} PF/$\mu$ normalization; CFII gauge;
+                      Wielandt/periodicity (later).
             \end{itemize}
         \end{block}
 
@@ -522,8 +531,12 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
               (\texttt{InvariantSubspaceDecomp.lean})\\
             \textcolor{leangreen}{\checkmark}~\texttt{lowerZero\_of\_posSemidef\_fixedPoint}
               (\texttt{FixedPointInvariantProjection.lean})\\[0.35em]
-            \textcolor{amber}{\textbullet}~\textbf{Next:} combine into an iterative CF-splitting
-              procedure (recurse until full-rank fixed points).
+            % SOURCE: MPSLean/MPS/CanonicalFormReduction.lean
+            %         theorem MPSTensor.exists_irreducible_blockDecomp
+            %         The iterative CF-splitting procedure is now formalized.
+            \textcolor{amber}{\textbullet}~\textbf{Next:} normalize each irreducible block to
+              irreducible form~II\,/\,CFII; incorporate $\mu$ scaling;
+              periodicity removal later~\cite{Cirac2017Annals,Cirac2017Irreducible}.
             }
         \end{block}
     \end{columns}
@@ -1689,9 +1702,10 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
             \midrule
             \rowcolor{cardbg}
             CF existence (arbitrary $\to$ CF)
-                         & Hard                & 1{,}000--2{,}500
+                         & Hard                & 800--2{,}000
                          & Inv.-subspace $\Rightarrow$ 2-block: \textcolor{leangreen}{\textbf{done}}$^*$;
-                           remaining: iteration, PF normalization, and Wielandt \\
+                           iteration to irred.\ blocks: \textcolor{leangreen}{\textbf{done}}$^*$;
+                           remaining: PF/$\mu$ norm., CFII gauge, Wielandt/periodicity \\
             \rowcolor{cardbg}
             Periodic blocks (diagonal $Z$)
                          & Hard                & 1{,}000--2{,}000   & Peripheral spectrum of CP maps                \\
@@ -1724,8 +1738,13 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
           (\texttt{MPSLean/MPS/InvariantSubspaceDecomp.lean})\\[0.15em]
         \textcolor{leangreen}{\checkmark}~\texttt{MPSTensor.lowerZero\_of\_posSemidef\_fixedPoint}
           (\texttt{MPSLean/MPS/FixedPointInvariantProjection.lean})\\[0.15em]
-        \textcolor{amber}{\textbullet}~\textbf{Next:} iterate the decomposition and PF-normalize
-          each block to obtain full CF.
+        % SOURCE: MPSLean/MPS/CanonicalFormReduction.lean
+        %         theorem MPSTensor.exists_irreducible_blockDecomp
+        %         Ref: Cirac2017Annals §2.3 + Cirac2017Irreducible Prop. thm:irr
+        \textcolor{leangreen}{\checkmark}~\texttt{MPSTensor.exists\_irreducible\_blockDecomp}
+          (\texttt{MPSLean/MPS/CanonicalFormReduction.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.15em]
+        \textcolor{amber}{\textbullet}~\textbf{Next:} PF/$\mu$ normalization per block;
+          CFII gauge; Wielandt/periodicity later.
     }}
 
     \vspace{0.05em}
