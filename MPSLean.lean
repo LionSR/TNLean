@@ -26,6 +26,7 @@ import MPSLean.Spectral.MPVOverlapTrace
 import MPSLean.Spectral.MPVOverlapTraceRect
 import MPSLean.Spectral.SpectralGap
 import MPSLean.Spectral.MPVOverlapDecayRect
+import MPSLean.Spectral.SpectralGapRect
 import MPSLean.Spectral.PrimitiveOverlap
 import MPSLean.Spectral.CrossCorrelation
 
