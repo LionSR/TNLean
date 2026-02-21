@@ -21,8 +21,11 @@ import MPSLean.QPF.PosDef
 import MPSLean.QPF.Uniqueness
 import MPSLean.QuantumPerronFrobenius
 import MPSLean.Spectral.MixedTransfer
+import MPSLean.Spectral.MixedTransferRect
 import MPSLean.Spectral.MPVOverlapTrace
+import MPSLean.Spectral.MPVOverlapTraceRect
 import MPSLean.Spectral.SpectralGap
+import MPSLean.Spectral.MPVOverlapDecayRect
 import MPSLean.Spectral.PrimitiveOverlap
 import MPSLean.Spectral.CrossCorrelation
 
