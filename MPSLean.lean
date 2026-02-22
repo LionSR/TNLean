@@ -4,6 +4,7 @@ import MPSLean.Algebra.TracePairing
 import MPSLean.Algebra.BlockPermutation
 import MPSLean.Algebra.SkolemNoether
 import MPSLean.Algebra.GramMatrixLI
+import MPSLean.Algebra.ScalarPowerSumIdentity
 
 -- Layer 1: Quantum channels (general theory)
 import MPSLean.Channel.PositiveMap
@@ -51,7 +52,9 @@ import MPSLean.Algebra.ProjectionTriangularTrace
 import MPSLean.MPS.BasisNormal
 import MPSLean.MPS.BNTMatching
 import MPSLean.MPS.BNTPermutationSimple
+import MPSLean.MPS.BNTPermutationThm44
 import MPSLean.MPS.FundamentalTheoremThm44
+import MPSLean.MPS.BNTConstruction
 import MPSLean.MPS.FundamentalTheoremMulti
 import MPSLean.MPS.InvariantSubspaceDecomp
 import MPSLean.MPS.FixedPointSplit
