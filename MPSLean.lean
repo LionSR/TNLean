@@ -55,6 +55,7 @@ import MPSLean.MPS.BNTPermutationSimple
 import MPSLean.MPS.BNTPermutationThm44
 import MPSLean.MPS.FundamentalTheoremThm44
 import MPSLean.MPS.BNTConstruction
+import MPSLean.MPS.FundamentalTheoremFull
 import MPSLean.MPS.FundamentalTheoremMulti
 import MPSLean.MPS.InvariantSubspaceDecomp
 import MPSLean.MPS.FixedPointSplit
