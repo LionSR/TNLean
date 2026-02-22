@@ -51,6 +51,7 @@ import MPSLean.Algebra.ProjectionTriangularTrace
 import MPSLean.MPS.BasisNormal
 import MPSLean.MPS.BNTMatching
 import MPSLean.MPS.BNTPermutationSimple
+import MPSLean.MPS.FundamentalTheoremThm44
 import MPSLean.MPS.FundamentalTheoremMulti
 import MPSLean.MPS.InvariantSubspaceDecomp
 import MPSLean.MPS.FixedPointSplit
