@@ -51,10 +51,9 @@ import MPSLean.MPS.MultiBlock
 import MPSLean.Algebra.BlockTriangularTrace
 import MPSLean.Algebra.ProjectionTriangularTrace
 import MPSLean.MPS.BasisNormal
-import MPSLean.MPS.BNTMatching
+import MPSLean.MPS.BNT
 import MPSLean.MPS.BNTPermutationSimple
 import MPSLean.MPS.BNTPermutationThm44
-import MPSLean.MPS.FundamentalTheoremThm44
 import MPSLean.MPS.BNTConstruction
 import MPSLean.MPS.FundamentalTheoremFull
 import MPSLean.MPS.FundamentalTheoremMulti

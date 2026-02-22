@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import MPSLean.PiAlgebra.CanonicalFormSep
 import MPSLean.Spectral.SpectralGapRect
 import MPSLean.MPS.BNTPermutationThm44
-import MPSLean.MPS.FundamentalTheoremThm44
+import MPSLean.MPS.BNTPermutationSimple
 import MPSLean.MPS.CastLemmas
 
 set_option linter.unusedSectionVars false
