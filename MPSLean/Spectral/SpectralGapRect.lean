@@ -2,9 +2,9 @@
 Copyright (c) 2026 MPSLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import MPSLean.Spectral.MixedTransferRect
+import MPSLean.Spectral.MixedTransfer
 import MPSLean.Spectral.SpectralGap
-import MPSLean.Spectral.MPVOverlapDecayRect
+import MPSLean.Spectral.MPVOverlapDecay
 import MPSLean.QuantumPerronFrobenius
 import MPSLean.Channel.DSGauge
 import MPSLean.Channel.Schwarz
