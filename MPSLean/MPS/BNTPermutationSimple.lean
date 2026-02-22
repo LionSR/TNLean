@@ -2,6 +2,7 @@ import MPSLean.MPS.BNTMatching
 import MPSLean.MPS.FundamentalTheoremProportional
 import MPSLean.Spectral.SpectralGapRect
 import MPSLean.MPS.MPVOverlap
+import MPSLean.MPS.CastLemmas
 
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Data.Fintype.Card
@@ -36,40 +37,6 @@ open scoped BigOperators Matrix InnerProductSpace
 open Filter Finset
 
 namespace MPSTensor
-
-/-! ## Cast helper lemmas -/
-
-private lemma mpv_cast_eq {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv (cast (congr_arg (MPSTensor d) h) A) σ = mpv A σ := by
-  subst h; simp
-
-private lemma mpvOverlap_cast_left {d D₁ D₂ D₃ : ℕ} (h : D₁ = D₂)
-    (A : MPSTensor d D₁) (B : MPSTensor d D₃) :
-    ∀ N, mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) h) A) B N =
-      mpvOverlap (d := d) A B N := by
-  subst h; simp
-
-private lemma isInjective_cast {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    IsInjective (cast (congr_arg (MPSTensor d) h) A) ↔ IsInjective A := by
-  subst h; simp
-
-private lemma norm_cast_eq {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    (∑ i : Fin d, (cast (congr_arg (MPSTensor d) h) A i)ᴴ *
-      (cast (congr_arg (MPSTensor d) h) A i)) = 1 ↔
-    (∑ i : Fin d, (A i)ᴴ * (A i)) = 1 := by
-  subst h; simp
-
-/-- Shift the tensor index in a gauge-phase equivalence along an index equality. -/
-private lemma gaugePhaseEquiv_cast_idx {d g : ℕ} {dim₁ dim₂ : Fin g → ℕ}
-    (T₁ : (j : Fin g) → MPSTensor d (dim₁ j))
-    (T₂ : (j : Fin g) → MPSTensor d (dim₂ j))
-    {i₁ i₂ : Fin g} (hi : i₁ = i₂) {j : Fin g}
-    (hdim : dim₁ i₁ = dim₂ j)
-    (hg : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) (T₁ i₁)) (T₂ j)) :
-    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) (show dim₁ i₂ = dim₂ j from hi ▸ hdim))
-      (T₁ i₂)) (T₂ j) := by
-  subst hi; exact hg
 
 /-! ## Overlap ↔ inner product conversion -/
 
@@ -326,15 +293,15 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     by_contra hNot
     have hdim := hf_dim j
     have hAcst_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A (f j))) :=
-      (isInjective_cast hdim (A (f j))).mpr (hA_inj (f j))
+      (isInjective_cast_dim hdim (A (f j))).mpr (hA_inj (f j))
     have hAcst_norm : ∑ i : Fin d,
         (cast (congr_arg (MPSTensor d) hdim) (A (f j)) i)ᴴ *
         (cast (congr_arg (MPSTensor d) hdim) (A (f j)) i) = 1 :=
-      (norm_cast_eq hdim (A (f j))).mpr (hA_norm (f j))
+      (dsGauge_cast_dim hdim (A (f j))).mpr (hA_norm (f j))
     have hto0 := mpvOverlap_tendsto_zero
       (cast (congr_arg (MPSTensor d) hdim) (A (f j))) (B j)
       hAcst_inj (hB_inj j) hAcst_norm (hB_norm j) hNot
-    exact hf_spec j (hto0.congr fun N => mpvOverlap_cast_left hdim (A (f j)) (B j) N)
+    exact hf_spec j (hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A (f j)) (B j) N)
   --
   -- ═══════════════════════════════════════════════════════════════════════════
   -- Step 4: Show f is injective (hence a bijection on Fin g).
@@ -352,11 +319,11 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     have hmpv1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
         mpv (B j1) σ = ζ1 ^ N * mpv (A (f j1)) σ := by
       intro N σ
-      rw [mpv_eq_pow_mul_of_gaugePhase _ _ X1 ζ1 hX1 N σ, mpv_cast_eq (hf_dim j1)]
+      rw [mpv_eq_pow_mul_of_gaugePhase _ _ X1 ζ1 hX1 N σ, mpv_cast_dim (hf_dim j1)]
     have hmpv2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
         mpv (B j2) σ = ζ2 ^ N * mpv (A (f j1)) σ := by
       intro N σ
-      rw [mpv_eq_pow_mul_of_gaugePhase _ _ X2 ζ2 hX2 N σ, mpv_cast_eq (hf_dim j2), hfj]
+      rw [mpv_eq_pow_mul_of_gaugePhase _ _ X2 ζ2 hX2 N σ, mpv_cast_dim (hf_dim j2), hfj]
     --
     -- Overlap scaling helper.
     have overlap_self_scale : ∀ (Dk : ℕ) (Bk : MPSTensor d Dk) (ζ : ℂ)

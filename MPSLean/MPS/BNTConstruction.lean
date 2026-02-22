@@ -6,6 +6,7 @@ import MPSLean.PiAlgebra.CanonicalFormSep
 import MPSLean.Spectral.SpectralGapRect
 import MPSLean.MPS.BNTPermutationThm44
 import MPSLean.MPS.FundamentalTheoremThm44
+import MPSLean.MPS.CastLemmas
 
 set_option linter.unusedSectionVars false
 set_option linter.unusedVariables false
@@ -56,28 +57,6 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### Cast lemmas (reproduced since upstream versions are `private`) -/
-
-section CastLemmas
-
-private lemma mpvOverlap_cast_left' {d D₁ D₂ D₃ : ℕ} (h : D₁ = D₂)
-    (A : MPSTensor d D₁) (B : MPSTensor d D₃) :
-    ∀ N, mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) h) A) B N =
-      mpvOverlap (d := d) A B N := by
-  subst h; simp
-
-private lemma isInjective_cast' {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    IsInjective (cast (congr_arg (MPSTensor d) h) A) ↔ IsInjective A := by
-  subst h; simp
-
-private lemma norm_cast_eq' {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    (∑ i : Fin d, (cast (congr_arg (MPSTensor d) h) A i)ᴴ *
-      (cast (congr_arg (MPSTensor d) h) A i)) = 1 ↔
-    (∑ i : Fin d, (A i)ᴴ * (A i)) = 1 := by
-  subst h; simp
-
-end CastLemmas
-
 /-! ### `IsCanonicalFormBNT` predicate -/
 
 /-- **Canonical form with BNT separation**: extends `IsCanonicalForm` with the requirement
@@ -117,17 +96,17 @@ theorem cross_overlap_tendsto_zero
     have hNotEquiv : ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k) :=
       hCF.blocks_not_equiv j k hjk hdim
     have hAj_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) :=
-      (isInjective_cast' hdim (A j)).mpr (hCF.toIsCanonicalForm.block_injective j)
+      (isInjective_cast_dim hdim (A j)).mpr (hCF.toIsCanonicalForm.block_injective j)
     have hAj_norm : ∑ i : Fin d,
         (cast (congr_arg (MPSTensor d) hdim) (A j) i)ᴴ *
         (cast (congr_arg (MPSTensor d) hdim) (A j) i) = 1 :=
-      (norm_cast_eq' hdim (A j)).mpr (hCF.toIsCanonicalForm.ds_gauge j)
+      (dsGauge_cast_dim hdim (A j)).mpr (hCF.toIsCanonicalForm.ds_gauge j)
     have hto0 := mpvOverlap_tendsto_zero
       (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k)
       hAj_inj (hCF.toIsCanonicalForm.block_injective k)
       hAj_norm (hCF.toIsCanonicalForm.ds_gauge k)
       hNotEquiv
-    exact hto0.congr fun N => mpvOverlap_cast_left' hdim (A j) (A k) N
+    exact hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A j) (A k) N
   · -- Different bond dimensions: use the rectangular spectral gap
     exact mpvOverlap_tendsto_zero_of_dim_ne (A j) (A k)
       (hCF.toIsCanonicalForm.block_injective j)

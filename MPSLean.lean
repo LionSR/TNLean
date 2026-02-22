@@ -33,6 +33,7 @@ import MPSLean.Spectral.CrossCorrelation
 
 -- Layer 3: MPS core
 import MPSLean.MPS.Defs
+import MPSLean.MPS.CastLemmas
 import MPSLean.MPS.Blocking
 import MPSLean.MPS.MPVOverlap
 import MPSLean.MPS.Transfer

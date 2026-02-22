@@ -1,6 +1,7 @@
 import MPSLean.MPS.FundamentalTheoremProportional
 import MPSLean.Spectral.SpectralGapRect
 import MPSLean.MPS.MPVOverlap
+import MPSLean.MPS.CastLemmas
 
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Data.Fintype.Card
@@ -30,59 +31,6 @@ open scoped BigOperators Matrix
 open Filter Finset
 
 namespace MPSTensor
-
-/-! ## Cast helper lemmas
-
-These are copied from `BNTPermutationSimple.lean` (where they were private).
--/
-
-private lemma mpv_cast_eq {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv (cast (congr_arg (MPSTensor d) h) A) σ = mpv A σ := by
-  subst h; simp
-
-private lemma mpvOverlap_cast_left {d D₁ D₂ D₃ : ℕ} (h : D₁ = D₂)
-    (A : MPSTensor d D₁) (B : MPSTensor d D₃) :
-    ∀ N, mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) h) A) B N =
-      mpvOverlap (d := d) A B N := by
-  subst h; simp
-
-private lemma isInjective_cast {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    IsInjective (cast (congr_arg (MPSTensor d) h) A) ↔ IsInjective A := by
-  subst h; simp
-
-private lemma norm_cast_eq {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    (∑ i : Fin d, (cast (congr_arg (MPSTensor d) h) A i)ᴴ *
-      (cast (congr_arg (MPSTensor d) h) A i)) = 1 ↔
-    (∑ i : Fin d, (A i)ᴴ * (A i)) = 1 := by
-  subst h; simp
-
-/-- Shift the tensor index in a gauge-phase equivalence along an index equality. -/
-private lemma gaugePhaseEquiv_cast_idx {d g : ℕ} {dim₁ dim₂ : Fin g → ℕ}
-    (T₁ : (j : Fin g) → MPSTensor d (dim₁ j))
-    (T₂ : (j : Fin g) → MPSTensor d (dim₂ j))
-    {i₁ i₂ : Fin g} (hi : i₁ = i₂) {j : Fin g}
-    (hdim : dim₁ i₁ = dim₂ j)
-    (hg : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) (T₁ i₁)) (T₂ j)) :
-    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) (show dim₁ i₂ = dim₂ j from hi ▸ hdim))
-      (T₁ i₂)) (T₂ j) := by
-  subst hi; exact hg
-
-/-- Shift the tensor index on the left family in a gauge-phase equivalence along an index equality.
-
-This is a version of `gaugePhaseEquiv_cast_idx` that allows different index types for the two
-families.
--/
-private lemma gaugePhaseEquiv_cast_idx_left {d gA gB : ℕ}
-    {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
-    (A : (j : Fin gA) → MPSTensor d (dimA j))
-    (B : (k : Fin gB) → MPSTensor d (dimB k))
-    {i₁ i₂ : Fin gA} (hi : i₁ = i₂) {k : Fin gB}
-    (hdim : dimA i₁ = dimB k)
-    (hg : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) (A i₁)) (B k)) :
-    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) (show dimA i₂ = dimB k from hi ▸ hdim))
-      (A i₂)) (B k) := by
-  subst hi; exact hg
 
 /-! ## Overlap algebra for decompositions -/
 
@@ -524,15 +472,15 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     by_contra hNot
     have hdim := hf_dim k
     have hAcst_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A (f k))) :=
-      (isInjective_cast hdim (A (f k))).mpr (hA_inj (f k))
+      (isInjective_cast_dim hdim (A (f k))).mpr (hA_inj (f k))
     have hAcst_norm : ∑ i : Fin d,
         (cast (congr_arg (MPSTensor d) hdim) (A (f k)) i)ᴴ *
         (cast (congr_arg (MPSTensor d) hdim) (A (f k)) i) = 1 :=
-      (norm_cast_eq hdim (A (f k))).mpr (hA_norm (f k))
+      (dsGauge_cast_dim hdim (A (f k))).mpr (hA_norm (f k))
     have hto0 := mpvOverlap_tendsto_zero
       (cast (congr_arg (MPSTensor d) hdim) (A (f k))) (B k)
       hAcst_inj (hB_inj k) hAcst_norm (hB_norm k) hNot
-    exact hf_spec k (hto0.congr fun N => mpvOverlap_cast_left hdim (A (f k)) (B k) N)
+    exact hf_spec k (hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A (f k)) (B k) N)
   have hf_inj : Function.Injective f := by
     intro k1 k2 hk
     by_contra hne
@@ -549,14 +497,14 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
       rw [mpv_eq_pow_mul_of_gaugePhase
         (A := cast (congr_arg (MPSTensor d) (hf_dim k1)) (A (f k1)))
         (B := B k1) X1 ζ1 hX1 N σ,
-        mpv_cast_eq (hf_dim k1) (A (f k1)) N σ]
+        mpv_cast_dim (hf_dim k1) (A (f k1)) N σ]
     have hmpv2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
         mpv (B k2) σ = ζ2 ^ N * mpv (A (f k1)) σ := by
       intro N σ
       rw [mpv_eq_pow_mul_of_gaugePhase
         (A := cast (congr_arg (MPSTensor d) (hf_dim k2)) (A (f k2)))
         (B := B k2) X2 ζ2 hX2 N σ,
-        mpv_cast_eq (hf_dim k2) (A (f k2)) N σ,
+        mpv_cast_dim (hf_dim k2) (A (f k2)) N σ,
         hk.symm]
     have overlap_self_scale : ∀ (Dk : ℕ) (Bk : MPSTensor d Dk) (ζ : ℂ)
         (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv Bk σ = ζ ^ N * mpv (A (f k1)) σ),
@@ -664,15 +612,15 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     by_contra hNot
     have hdim := hg_dim j
     have hAcst_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) :=
-      (isInjective_cast hdim (A j)).mpr (hA_inj j)
+      (isInjective_cast_dim hdim (A j)).mpr (hA_inj j)
     have hAcst_norm : ∑ i : Fin d,
         (cast (congr_arg (MPSTensor d) hdim) (A j) i)ᴴ *
         (cast (congr_arg (MPSTensor d) hdim) (A j) i) = 1 :=
-      (norm_cast_eq hdim (A j)).mpr (hA_norm j)
+      (dsGauge_cast_dim hdim (A j)).mpr (hA_norm j)
     have hto0 := mpvOverlap_tendsto_zero
       (cast (congr_arg (MPSTensor d) hdim) (A j)) (B (g j))
       hAcst_inj (hB_inj (g j)) hAcst_norm (hB_norm (g j)) hNot
-    exact hg_spec j (hto0.congr fun N => mpvOverlap_cast_left hdim (A j) (B (g j)) N)
+    exact hg_spec j (hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A j) (B (g j)) N)
   have hg_inj : Function.Injective g := by
     intro j1 j2 hj
     by_contra hne
@@ -689,7 +637,7 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
       rw [mpv_eq_pow_mul_of_gaugePhase
         (A := cast (congr_arg (MPSTensor d) (hg_dim j1)) (A j1))
         (B := B (g j1)) X1 ζ1 hX1 N σ,
-        mpv_cast_eq (hg_dim j1) (A j1) N σ]
+        mpv_cast_dim (hg_dim j1) (A j1) N σ]
     have hmpvB2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
         mpv (B (g j1)) σ = ζ2 ^ N * mpv (A j2) σ := by
       intro N σ
@@ -697,7 +645,7 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
         rw [mpv_eq_pow_mul_of_gaugePhase
           (A := cast (congr_arg (MPSTensor d) (hg_dim j2)) (A j2))
           (B := B (g j2)) X2 ζ2 hX2 N σ,
-          mpv_cast_eq (hg_dim j2) (A j2) N σ]
+          mpv_cast_dim (hg_dim j2) (A j2) N σ]
       exact Eq.ndrec
         (motive := fun k : Fin gB => mpv (B k) σ = ζ2 ^ N * mpv (A j2) σ)
         htmp hj.symm
