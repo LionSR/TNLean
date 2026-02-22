@@ -1,0 +1,655 @@
+================================================================================
+  LEAN FORMALIZATION PLAN — Theorem 4.4 (thm1) & Corollary (II_cor2)
+  Reference: arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete)
+  Date: 2026-02-22
+================================================================================
+
+TABLE OF CONTENTS
+  (A) Proposed Lean theorem statements
+  (B) Step-by-step dependency chain & mapping to existing Lean lemmas
+  (C) Analysis: span-equality formulation vs. paper proof
+  (D) Concrete next Lean modules to implement
+
+================================================================================
+(A) PROPOSED LEAN THEOREM STATEMENTS
+================================================================================
+
+We target two main statements, matching the paper's Theorem 4.4 (label `thm1`)
+for proportional MPVs and Corollary (label `II_cor2`) for equal MPVs.
+
+The paper proves these for tensors "in CF" (canonical form), i.e., block-diagonal
+tensors `A = ⊕ μ_{j,q} X_{j,q} A_j X_{j,q}^{-1}` where `A_j` are the BNT.
+
+---------------------------------------------------------------------------
+(A1) Theorem 4.4 — Proportional MPV case (multi-block, BNT-level statement)
+---------------------------------------------------------------------------
+
+  /--
+  **Fundamental Theorem of MPV — proportional case (Thm 4.4 of 1606.00608).**
+
+  If two tensors in canonical form generate proportional MPV families for every
+  system size N, then:
+    (i)  their BNTs have the same number of blocks: `gA = gB`;
+    (ii) there is a permutation `σ : Fin g ≃ Fin g` such that for each BNT block
+         `B_k` there exist a phase `φ_k` and an invertible matrix `X_k` with
+         `B_k^i = e^{iφ_k} X_k A_{σ(k)}^i X_k^{-1}`.
+  -/
+  theorem fundamentalTheorem_proportionalMPV_BNT
+      {d : ℕ}
+      {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+      [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+      {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+      (A_bnt : (j : Fin rA) → MPSTensor d (dimA j))   -- actually gA blocks
+      (B_bnt : (j : Fin rB) → MPSTensor d (dimB j))   -- actually gB blocks
+      -- A_total and B_total are the full CF tensors
+      (A_total : MPSTensor d (∑ k : Fin rA, dimA k))   -- or a suitable Dtot
+      (B_total : MPSTensor d (∑ k : Fin rB, dimB k))
+      -- Canonical-form hypotheses
+      (hA_cf : IsCanonicalForm μA A_bnt)   -- or a suitable CF predicate
+      (hB_cf : IsCanonicalForm μB B_bnt)
+      -- BNT hypotheses
+      (hA_bnt : IsBNT A_total gA dimA_bnt A_bnt)
+      (hB_bnt : IsBNT B_total gB dimB_bnt B_bnt)
+      -- Proportionality
+      (hProp : ProportionalMPV₂ A_total B_total) :
+      ∃ hg : gA = gB,
+        ∃ perm : Fin gA ≃ Fin gB,
+          ∀ k : Fin gB,
+            ∃ hdim : dimB_bnt k = dimA_bnt (perm.symm k),
+              GaugePhaseEquiv (d := d)
+                (cast (congr_arg (MPSTensor d) hdim) (B_bnt k))
+                (A_bnt (perm.symm k))
+
+NOTE: The above is the "ideal" paper-matching statement. In practice, we
+recommend a simpler intermediate statement that factors the proof into two
+stages (see (A3) below).
+
+---------------------------------------------------------------------------
+(A2) Corollary II_cor2 — Equal MPV case (global gauge equivalence)
+---------------------------------------------------------------------------
+
+  /--
+  **Fundamental Theorem of MPV — equal case (Cor II_cor2 of 1606.00608).**
+
+  If two tensors in CF generate the same MPV for all N, then:
+    (i)  the bond dimensions coincide (D_A = D_B);
+    (ii) there exists an invertible matrix X such that A^i = X B^i X^{-1}.
+  -/
+  theorem fundamentalTheorem_sameMPV_CF
+      {d : ℕ}
+      {r : ℕ} {dimA dimB : Fin r → ℕ}
+      [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+      (μ : Fin r → ℂ)
+      (A : (k : Fin r) → MPSTensor d (dimA k))
+      (B : (k : Fin r) → MPSTensor d (dimB k))
+      (hA_cf : IsCanonicalForm μ A)
+      (hB_cf : IsCanonicalForm μ B)   -- same μ (after normalization)
+      (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+      ∃ hdim : (∑ k, dimA k) = (∑ k, dimB k),
+        GaugeEquiv
+          (cast (congr_arg (MPSTensor d) hdim) (toTensorFromBlocks μ A))
+          (toTensorFromBlocks μ B)
+
+NOTE: Existing `fundamentalTheorem_canonicalForm` in `CanonicalFormSep.lean`
+already proves the equal-MPV case with SAME bond dimensions (`dimA = dimB`).
+The new corollary extends this to the case where dimA ≠ dimB a priori but
+must agree by the theorem.
+
+---------------------------------------------------------------------------
+(A3) Recommended intermediate decomposition
+---------------------------------------------------------------------------
+
+Rather than one monolithic theorem, we recommend three modular steps:
+
+  Step 1 (Block Separation — DONE):
+    `per_block_sameMPV_of_canonical_form` in CanonicalFormSep.lean
+    — Given SameMPV₂ of full CF tensors, deduce per-block SameMPV.
+
+  Step 2 (BNT Permutation Rigidity — MOSTLY DONE):
+    `exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho`
+    in FundamentalTheoremThm44.lean
+    — Given two BNT-like families with orthonormal overlaps and equal spans,
+      deduce gA = gB, permutation, dimension match, gauge-phase equiv.
+
+  Step 3 (BNT Construction + Bridge — MISSING):
+    Given a CF tensor, construct its BNT (as in Prop. char-BNT proof).
+    Then prove that proportional MPVs imply the BNT families satisfy the
+    hypotheses of Step 2.
+
+  Step 4 (Corollary Assembly — MISSING):
+    Combine Step 1–3 with the Newton-Girard/Lemma Lem:app_simple argument
+    to get II_cor2 (equal MPV ⟹ global gauge equivalence + dimension match).
+
+
+================================================================================
+(B) STEP-BY-STEP DEPENDENCY CHAIN
+================================================================================
+
+We trace the paper proof (Appendix A, lines 1080–1195 of MPDO-22-12-17-2.tex)
+and map each step to existing Lean lemmas or mark as MISSING.
+
+---------------------------------------------------------------------------
+Paper Lemma `equalMPS` (Lemma, lines 1080–1117):
+---------------------------------------------------------------------------
+  Statement: For two NMPV generated by NT with D_a × D_a and D_b × D_b matrices,
+    lim |⟨V_b|V_a⟩| = 0 or 1.
+    If → 1, then D_a = D_b and B = e^{iφ} X A X^{-1}.
+
+  Lean mapping:
+    • The "→ 0" branch:
+        `mpvOverlap_tendsto_zero` (MPVOverlapDecay.lean, line 45)
+          — for D_a = D_b (square case), ¬GaugePhaseEquiv ⟹ overlap → 0.
+        `mpvOverlap_tendsto_zero_of_dim_ne` (SpectralGapRect.lean)
+          — for D_a ≠ D_b, overlap → 0.
+      Combined, these give the 0/1 dichotomy: either GaugePhaseEquiv (and D_a=D_b)
+      or overlap → 0.
+
+    • The "→ 1 ⟹ gauge-phase equiv" direction:
+        `gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one`
+          (FundamentalTheoremProportional.lean, line 127)
+          — for the single-block case: proportional + self-overlap→1 ⟹ GaugePhaseEquiv.
+      However, this theorem assumes D_a = D_b. The paper derives D_a = D_b
+      from the overlap analysis itself (using the isometry argument).
+      The Lean approach handles this differently:
+        `mpvOverlap_tendsto_zero_of_dim_ne` rules out D_a ≠ D_b when overlap ↛ 0,
+        so D_a = D_b follows.
+
+    STATUS: ✅ COVERED (by combination of existing lemmas)
+
+---------------------------------------------------------------------------
+Paper Corollary `eqV` (lines 1121–1128):
+---------------------------------------------------------------------------
+  Statement: For two NT generating NMPV, either ⟨V_a|V_b⟩ → 0, or
+    |V_b⟩ = e^{iφN} |V_a⟩ for all N.
+
+  Lean mapping:
+    • The "→ 0" branch: `mpvOverlap_tendsto_zero` / `mpvOverlap_tendsto_zero_of_dim_ne`
+    • The "equal up to phase" branch:
+        `mpv_eq_pow_mul_of_gaugePhase` (FundamentalTheoremProportional.lean, line 38)
+          — if B = ζ • X A X^{-1}, then mpv B σ = ζ^N * mpv A σ.
+      So GaugePhaseEquiv ⟹ mpvState(B,N) = ζ^N · mpvState(A,N).
+
+    STATUS: ✅ COVERED (by combination of existing lemmas)
+
+---------------------------------------------------------------------------
+Paper Corollary `Lem1` (lines 1131–1133):
+---------------------------------------------------------------------------
+  Statement: Any set of NMPV {V_j} with ⟨V_j|V_{j'}⟩ → δ_{j,j'} is linearly
+    independent for N sufficiently large.
+
+  Lean mapping:
+    `eventually_linearIndependent_of_overlap_tendsto_orthonormal`
+      (BasisNormalTensors.lean, line 54)
+
+    STATUS: ✅ EXISTS (exact match)
+
+---------------------------------------------------------------------------
+**KEY PAPER STEP in Thm thm1 proof (lines 1181–1182):**
+---------------------------------------------------------------------------
+
+  "Let us first consider B_k for some given k. It is not possible that
+   ⟨V^{(N)}(B_k)|V^{(N)}(A_j)⟩ → 0 as N→∞ for all j, since otherwise the
+   MPV generated by A and B could not be proportional for all N (Lemma Lem1)."
+
+  This step has two parts:
+
+  Part (a): If ⟨V(B_k), V(A_j)⟩ → 0 for all j, then mpvState(B_k, N) is
+    eventually orthogonal to the span of {mpvState(A_j, N)}_j.
+
+  Part (b): But proportionality of MPV(A_total) and MPV(B_total) forces
+    mpvState(B_k, N) to lie in the span of {mpvState(A_j, N)}_j (via the
+    BNT decomposition eq (decBSV)).
+
+  Part (c): Combined with Lem1 (the A_j are eventually LI), B_k eventually
+    has norm → 0, contradicting self-overlap → 1.
+
+  Lean mapping:
+    The EXISTING proof in `BNTPermutationSimple.lean` (lines 225–304) handles
+    this step directly via a **span-equality hypothesis**:
+
+      `exists_nonzero_overlap` (BNTPermutationSimple.lean, line 225):
+        For each j : Fin g, ∃ i such that mpvOverlap(A_i, B_j) ↛ 0.
+
+    The proof uses the span-equality hypothesis `hspan` to express
+    mpvState(B_j, N) = Σ_i U_N(i,j) · mpvState(A_i, N) (via the invertible
+    change-of-basis matrix from `BNTMatching.lean`), then shows:
+      - if all overlaps → 0, then all coefficients u_i → 0 (via Gram matrix
+        inversion)
+      - hence ⟨B_j, B_j⟩ → 0, contradicting self-overlap → 1.
+
+    STATUS: ✅ EXISTS — `exists_nonzero_overlap` in BNTPermutationSimple.lean
+
+  **WHAT IS STILL NEEDED: the bridge from "proportional MPV of full CF tensors"
+    to "equal spans of BNT families".**
+
+  Proposed Lean lemma for this bridge:
+
+    /--
+    If A_total and B_total have proportional MPV families, and A_bnt/B_bnt are
+    their respective BNTs, then the BNT-level mpvState spans agree at each N.
+    -/
+    theorem bnt_spans_eq_of_proportionalMPV
+        {d gA gB : ℕ}
+        {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+        {DtotA DtotB : ℕ}
+        (A_total : MPSTensor d DtotA) (B_total : MPSTensor d DtotB)
+        (A_bnt : (j : Fin gA) → MPSTensor d (dimA j))
+        (B_bnt : (j : Fin gB) → MPSTensor d (dimB j))
+        (hA_bnt : IsBNT A_total gA dimA A_bnt)
+        (hB_bnt : IsBNT B_total gB dimB B_bnt)
+        (hProp : ProportionalMPV₂ A_total B_total) :
+        ∀ N,
+          Submodule.span ℂ (Set.range (fun j => mpvState (A_bnt j) N))
+          =
+          Submodule.span ℂ (Set.range (fun j => mpvState (B_bnt j) N))
+
+    STATUS: ❌ MISSING — This is the key bridge lemma.
+
+    Proof sketch: By IsBNT, mpvState(A_total, N) = Σ_j c_j(N) · mpvState(A_bnt_j, N).
+    By proportionality, mpvState(A_total, N) = λ_N · mpvState(B_total, N).
+    By IsBNT for B, mpvState(B_total, N) = Σ_k d_k(N) · mpvState(B_bnt_k, N).
+    So Σ_j c_j · mpvState(A_bnt_j) = λ_N · Σ_k d_k · mpvState(B_bnt_k).
+    This shows each B_bnt state is a linear combination of A_bnt states and vice
+    versa (using linear independence for large N and then an algebraic argument for
+    all N). Actually, the span equality follows from the fact that both BNT families
+    span the same 1-dimensional space (the line through mpvState(A_total, N), scaled
+    by proportionality constants).
+
+    **Alternative approach (avoiding full span equality; see Section C):**
+    Instead of proving span equality directly, one can prove the
+    `exists_nonzero_overlap` step directly from proportionality + BNT decomposition,
+    bypassing the span-equality formulation entirely.
+
+---------------------------------------------------------------------------
+Paper: "There must exist j_k such that |V(B_k)⟩ = e^{iφ_k N} |V(A_{j_k})⟩"
+(line 1182)
+---------------------------------------------------------------------------
+  This follows from Cor. eqV: since mpvOverlap(A_{j_k}, B_k) ↛ 0, and the
+  0/1 dichotomy holds, the overlap → 1 case gives gauge-phase equivalence.
+
+  Lean mapping:
+    `hf_gauge` in BNTPermutationSimple.lean (line 321):
+      GaugePhaseEquiv (cast ... (A (f j))) (B j)
+
+    Which follows from combining:
+      - `hf_spec` (overlap ↛ 0)
+      - `hf_dim` (dimension match via `mpvOverlap_tendsto_zero_of_dim_ne`)
+      - contrapositive of `mpvOverlap_tendsto_zero`
+
+    STATUS: ✅ EXISTS
+
+---------------------------------------------------------------------------
+Paper: "g_a ≥ g_b" (line 1182) and "g_b ≥ g_a" (symmetric argument)
+---------------------------------------------------------------------------
+  The argument: for each B_k, there exists A_{j_k}, so the map k ↦ j_k is
+  well-defined. Injectivity (from off-diagonal orthogonality of B) gives
+  g_b ≤ g_a. Symmetry gives g_a ≤ g_b.
+
+  Lean mapping:
+    `exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho`
+      (FundamentalTheoremThm44.lean, line 46)
+    Uses `finrank_span_eq_card` to show gA = gB from equal spans + eventual LI.
+
+    The injectivity of the matching function f: `hf_inj` in
+    BNTPermutationSimple.lean (line 342).
+
+    STATUS: ✅ EXISTS
+
+---------------------------------------------------------------------------
+Paper Lemma `Lem:app_simple` (lines 1155–1163):
+---------------------------------------------------------------------------
+  Statement: If Σ_{k=1}^{x_a} λ_{a,k}^N = Σ_{k=1}^{x_b} λ_{b,k}^N for all
+    N ≤ max{x_a, x_b}, then x_a = x_b and λ_{a,k} = λ_{b,k}.
+
+  This is the "Newton's identities" / power-sum determines roots lemma, used
+  in the proof of Corollary II_cor2.
+
+  Lean mapping:
+    `Matrix.charpoly_eq_of_forall_trace_pow_eq` (NewtonGirard.lean, line 295)
+      — proves that equal power traces ⟹ equal characteristic polynomials.
+    However, the paper's Lemma `Lem:app_simple` is about SCALARS (complex
+    numbers), not matrices. We need a scalar version:
+
+    /--
+    If two finite multisets of complex numbers have the same power sums
+    Σ_k λ_k^N for all N = 1, ..., max(#A, #B), then they are equal.
+    -/
+    theorem multiset_eq_of_sum_pow_eq
+        (A B : Multiset ℂ)
+        (h : ∀ N : ℕ, 0 < N → N ≤ max A.card B.card →
+          (A.map (· ^ N)).sum = (B.map (· ^ N)).sum) :
+        A = B
+
+    STATUS: ❌ MISSING (scalar power-sum identity)
+    Can be derived from `charpoly_eq_of_forall_trace_pow_eq` applied to
+    diagonal matrices, or proved directly via Newton-Girard for polynomials.
+
+---------------------------------------------------------------------------
+Paper Corollary II_cor2 proof (lines 1184–1193):
+---------------------------------------------------------------------------
+  Uses Thm thm1 to get the BNT permutation + gauge-phase, then applies
+  Lemma `Lem:app_simple` to show the μ-coefficients in the BNT decomposition
+  must match (up to the phase rotation), hence the total bond dimensions agree,
+  and finally assembles the global gauge transform.
+
+  Lean mapping:
+    The existing `fundamentalTheorem_canonicalForm` in CanonicalFormSep.lean
+    proves the equal-MPV, SAME-dimension case. The new corollary needs:
+
+    1. BNT permutation (from Thm 4.4): ✅ EXISTS
+    2. μ-coefficient matching (Lem:app_simple): ❌ MISSING
+    3. Total dimension equality from r_{a,j} = r_{b,j}: ❌ MISSING (arithmetic)
+    4. Global gauge assembly: Partially covered by
+         `fundamentalTheorem_multiBlock_global` in FundamentalTheoremMulti.lean
+
+    STATUS: ❌ PARTIALLY MISSING
+
+
+================================================================================
+(C) SPAN-EQUALITY FORMULATION vs. PAPER PROOF
+================================================================================
+
+QUESTION: Can we avoid the "span-equality formulation" used in
+BNTPermutationSimple.lean / FundamentalTheoremThm44.lean and instead follow
+the paper proof directly?
+
+---------------------------------------------------------------------------
+Analysis:
+---------------------------------------------------------------------------
+
+The current Lean proof chain uses a hypothesis:
+
+    (hspan : ∀ N,
+      Submodule.span ℂ (Set.range (fun j => mpvState (A j) N))
+      =
+      Submodule.span ℂ (Set.range (fun j => mpvState (B j) N)))
+
+This is NOT what the paper assumes. The paper assumes:
+  - A_total and B_total are in CF with BNTs A_bnt and B_bnt
+  - MPV(A_total) ∝ MPV(B_total) for all N
+
+The span-equality hypothesis is an INTERMEDIATE CONSEQUENCE of proportionality
++ BNT decomposition. Specifically:
+
+  mpvState(A_total, N) = Σ_j (Σ_q μ_{j,q}^N) · mpvState(A_bnt_j, N)
+
+and similarly for B. If MPV(A_total) = c_N · MPV(B_total), then:
+
+  Σ_j α_j(N) · mpvState(A_bnt_j, N) = c_N · Σ_k β_k(N) · mpvState(B_bnt_k, N)
+
+This immediately shows that each mpvState(B_bnt_k, N) (multiplied by c_N β_k(N))
+lies in the span of {mpvState(A_bnt_j, N)} ∪ {mpvState(B_bnt_k', N) : k' ≠ k},
+but NOT directly that the spans are equal. To get span equality, we need:
+
+  1. For large N, both families are LI (from Lem1 / orthonormal overlaps).
+  2. The proportionality constant c_N ≠ 0 for large N (follows from
+     ‖mpvState(A_total, N)‖ ≠ 0, which follows from self-overlap → 1).
+  3. Then span equality follows from the linear algebra: two sets of LI vectors
+     that are linear combinations of each other (with nonzero coefficients)
+     span the same space.
+
+However, this is somewhat circular — we need LI before we can establish span
+equality, but LI is what we use span equality for in the permutation step.
+
+---------------------------------------------------------------------------
+RECOMMENDATION: Follow the paper proof more directly by BYPASSING span equality.
+---------------------------------------------------------------------------
+
+The paper proof's key step is simpler than span equality: it only needs:
+
+  "For each k, ∃ j such that ⟨V(B_k), V(A_j)⟩ ↛ 0."
+
+This can be proved MORE DIRECTLY from proportionality:
+
+  1. Suppose ⟨V(B_k), V(A_j)⟩ → 0 for ALL j.
+  2. By the BNT decomposition (decBSV):
+       ⟨V(B_k), V(A_total)⟩ = Σ_j (Σ_q μ_{j,q}^N)* · ⟨V(B_k), V(A_bnt_j)⟩ → 0
+     (finite sum of products of bounded × convergent-to-0 sequences).
+  3. By proportionality: V(A_total) = c_N · V(B_total), so:
+       ⟨V(B_k), V(A_total)⟩ = c_N · ⟨V(B_k), V(B_total)⟩
+  4. By the BNT decomposition for B:
+       ⟨V(B_k), V(B_total)⟩ = Σ_j' (Σ_q' ν_{j',q'}^N)* · ⟨V(B_k), V(B_bnt_{j'})⟩
+     The k-th term has ⟨V(B_k), V(B_k)⟩ → 1, and off-diagonal terms → 0.
+     So ⟨V(B_k), V(B_total)⟩ → (Σ_q' ν*_{k,q'}^N)* ≠ 0 eventually.
+  5. Combined with c_N's behavior, we get ⟨V(B_k), V(A_total)⟩ ↛ 0, contradiction.
+
+This avoids span equality entirely but requires the BNT decomposition identity
+(decBSV) and more careful analysis of the proportionality constants.
+
+---------------------------------------------------------------------------
+VERDICT:
+---------------------------------------------------------------------------
+
+  YES, we CAN and SHOULD avoid span-equality for the full paper-matching proof.
+
+  However, the existing code in BNTPermutationSimple.lean is still useful because:
+  - It provides the permutation/gauge-phase matching step (Step 2 of Section A3)
+    under a clean abstract hypothesis.
+  - The "missing bridge" is just connecting proportional MPV + BNT decomposition
+    to the abstract hypothesis.
+
+  Two viable paths:
+
+  PATH A (Recommended — span-equality bridge):
+    Prove `bnt_spans_eq_of_proportionalMPV` (as stated in Section B above).
+    This uses the BNT decomposition and proportionality to establish span equality.
+    Then feed this into the existing `exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho`.
+    PRO: reuses all existing code. CON: span-equality proof is nontrivial.
+
+  PATH B (Alternative — direct paper proof):
+    Rewrite the `exists_nonzero_overlap` step to take BNT decomposition +
+    proportionality as hypotheses instead of span equality.
+    PRO: follows paper more closely. CON: duplicates some code from
+    BNTPermutationSimple.lean.
+
+  We recommend PATH A because it reuses more existing infrastructure.
+
+  **Key point where span-equality is truly needed (or not):**
+  The span-equality hypothesis in BNTPermutationSimple is used in exactly ONE
+  place: to obtain the change-of-basis matrix U_N via
+  `eventually_exists_invertible_changeBasis`. This U_N is then used to prove
+  `exists_nonzero_overlap`. If we follow the paper directly (PATH B), we
+  replace U_N with the explicit BNT decomposition coefficients, avoiding
+  the span-equality hypothesis but requiring the BNT coefficient structure.
+
+
+================================================================================
+(D) CONCRETE NEXT LEAN MODULES TO IMPLEMENT
+================================================================================
+
+---------------------------------------------------------------------------
+Module 1: MPSLean/MPS/BNTConstruction.lean
+  "BNT construction from canonical form"
+---------------------------------------------------------------------------
+
+  Main theorems:
+    • `IsBNT_of_isCanonicalForm`:
+        Given `IsCanonicalForm μ A`, construct a BNT for the full CF tensor.
+        Proof: iteratively select the NT blocks that generate mutually orthogonal
+        MPV families (as in the proof of Prop. char-BNT in the paper).
+
+    • `isBNT_mpvState_decomposition`:
+        `∀ N, mpvState A_total N = Σ_j c_j(N) · mpvState (A_bnt j) N`
+        with explicit coefficients `c_j(N) = Σ_q μ_{j,q}^N`.
+
+    • `isBNT_overlap_orthonormal`:
+        The BNT satisfies the orthonormal overlap hypotheses required by
+        BNTPermutationSimple.lean.
+
+  Rough LOC estimate: ~200-300 lines
+  Hardest points:
+    - Dealing with the grouping of CF blocks into BNT equivalence classes
+      (blocks that are gauge-phase equivalent get merged).
+    - The coefficients c_j(N) = Σ_q μ_{j,q}^N involve the CF structure.
+    - Need to show each BNT block is injective and normalized (follows from
+      the CF blocks being so).
+
+  Dependencies: CanonicalFormSep.lean, BasisNormalTensors.lean,
+    FundamentalTheoremProportional.lean
+
+---------------------------------------------------------------------------
+Module 2: MPSLean/MPS/BNTSpanBridge.lean
+  "Bridge from proportional MPV to BNT span equality"
+---------------------------------------------------------------------------
+
+  Main theorems:
+    • `bnt_spans_eq_of_proportionalMPV`:
+        (Statement as in Section B above.)
+        Proportional MPV of CF tensors ⟹ their BNT families span the same
+        mpvState subspace at each N.
+
+    • `bnt_spans_eq_of_sameMPV`:
+        (Simpler version for the equal-MPV case, where c_N = 1.)
+
+  Rough LOC estimate: ~150-250 lines
+  Hardest points:
+    - Showing span inclusion in BOTH directions.
+    - For large N (where BNTs are LI), this is straightforward algebra.
+    - For ALL N (including small N), need an indirect argument:
+      the span inclusion for large N implies span equality for all N because
+      the mpvState functions are polynomial-exponential (BNT decomposition).
+      Alternatively, just prove it eventually and strengthen the hypothesis in
+      BNTPermutationSimple to only require eventual span equality (which it
+      currently does NOT — it requires span equality for ALL N).
+
+    IMPORTANT SUBTLETY: The current `hspan` hypothesis in
+    `exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho` requires span equality
+    for ALL N. But it is only used (via `eventually_exists_invertible_changeBasis`)
+    for large N. So we can weaken the hypothesis to "eventually equal spans"
+    without changing the proof. This would make the bridge much easier.
+
+    Proposed weakening:
+      Change `hspan : ∀ N, ...` to `hspan : ∀ᶠ N in atTop, ...`
+      in `exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho`.
+      This is a BACKWARD-COMPATIBLE change (the old hypothesis implies the new one).
+
+  Dependencies: BNTConstruction.lean, BNTPermutationSimple.lean
+
+---------------------------------------------------------------------------
+Module 3: MPSLean/MPS/ScalarPowerSumIdentity.lean
+  "Lemma Lem:app_simple (scalar power-sum identity)"
+---------------------------------------------------------------------------
+
+  Main theorem:
+    • `eq_of_sum_pow_eq`:
+        If Σ_k λ_{a,k}^N = Σ_k λ_{b,k}^N for all N = 1, ..., max(x_a, x_b),
+        then x_a = x_b and the multisets {λ_{a,k}} = {λ_{b,k}}.
+
+  Rough LOC estimate: ~80-120 lines
+  Hardest points:
+    - Reducing to Newton-Girard / characteristic polynomial equality for
+      diagonal matrices, then using that equal char. polys for diagonal
+      matrices implies equal multisets of eigenvalues.
+    - Alternatively, directly applying `charpoly_eq_of_forall_trace_pow_eq`
+      to diagonal matrices and then using `Multiset.map_id` + root extraction.
+
+  Dependencies: NewtonGirard.lean, Mathlib polynomial/multiset theory
+
+---------------------------------------------------------------------------
+Module 4: MPSLean/MPS/FundamentalTheoremFull.lean
+  "Full Thm 4.4 + Cor II_cor2 assembly"
+---------------------------------------------------------------------------
+
+  Main theorems:
+    • `fundamentalTheorem_proportionalMPV_BNT`:
+        The full Theorem 4.4 as stated in (A1).
+
+    • `fundamentalTheorem_sameMPV_CF`:
+        Corollary II_cor2 as stated in (A2).
+
+  Rough LOC estimate: ~150-200 lines
+  Proof structure:
+    1. Construct BNTs for both A and B (Module 1).
+    2. Establish span equality (Module 2).
+    3. Apply BNT permutation rigidity
+       (`exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho`).
+    4. For II_cor2: additionally apply the scalar power-sum identity (Module 3)
+       to match the μ-coefficients, then assemble the global gauge transform.
+
+  Dependencies: All of Modules 1–3, FundamentalTheoremThm44.lean
+
+  Hardest points:
+    - The μ-coefficient matching: after Thm 4.4 gives the BNT permutation, we
+      have for each j:
+        Σ_{q=1}^{r_{a,j}} μ_{j,q}^N = Σ_{q=1}^{r_{b,j}} (ν_{j,q} e^{iφ_j})^N
+      Applying Lem:app_simple gives r_{a,j} = r_{b,j} and μ_{j,q} = ν_{j,q} e^{iφ_j}.
+    - Assembling the block-diagonal gauge transform
+      Y = ⊕_{j=1}^g (I_{r_j} ⊗ Y_j) requires working with the Kronecker
+      product / tensor product structure, which may be cumbersome in Lean.
+
+---------------------------------------------------------------------------
+SUMMARY TABLE
+---------------------------------------------------------------------------
+
+  Module                         | Est. LOC | Status    | Hardest Point
+  -------------------------------|----------|-----------|-----------------------------
+  1. BNTConstruction             | 200-300  | MISSING   | BNT equivalence classes
+  2. BNTSpanBridge               | 150-250  | MISSING   | "For all N" vs "eventually"
+  3. ScalarPowerSumIdentity      | 80-120   | MISSING   | Diagonal matrix reduction
+  4. FundamentalTheoremFull      | 150-200  | MISSING   | μ-coeff matching + assembly
+  -------------------------------|----------|-----------|-----------------------------
+  TOTAL                          | 580-870  |           |
+
+---------------------------------------------------------------------------
+EXISTING MODULES THAT ARE COMPLETE (no changes needed):
+---------------------------------------------------------------------------
+
+  • MPSLean/MPS/FundamentalTheoremProportional.lean    ✅ (205 lines)
+  • MPSLean/Spectral/MPVOverlapDecay.lean              ✅ (115 lines)
+  • MPSLean/Spectral/MPVOverlapDecayRect.lean          ✅ (99 lines)
+  • MPSLean/Spectral/SpectralGap.lean                  ✅ (1214 lines)
+  • MPSLean/Spectral/SpectralGapRect.lean              ✅ (736 lines)
+  • MPSLean/Spectral/PrimitiveOverlap.lean             ✅ (185 lines)
+  • MPSLean/MPS/BasisNormalTensors.lean                ✅ (107 lines)
+  • MPSLean/MPS/BNTMatching.lean                       ✅ (201 lines)
+  • MPSLean/MPS/BNTPermutationSimple.lean              ✅ (450 lines)
+  • MPSLean/MPS/FundamentalTheoremThm44.lean           ✅ (115 lines)
+  • MPSLean/PiAlgebra/CanonicalFormSep.lean            ✅ (1068 lines)
+
+---------------------------------------------------------------------------
+KEY EXISTING LEAN IDENTIFIERS (quick reference):
+---------------------------------------------------------------------------
+
+  Predicates:
+    MPSTensor.IsInjective            — Defs.lean:78
+    MPSTensor.IsNormal               — Defs.lean:95
+    MPSTensor.GaugeEquiv             — Defs.lean:52
+    MPSTensor.GaugePhaseEquiv        — Defs.lean:69
+    MPSTensor.SameMPV₂               — Defs.lean:61
+    MPSTensor.ProportionalMPV₂       — Defs.lean:65
+    MPSTensor.IsCanonicalForm        — CanonicalFormSep.lean:25
+    MPSTensor.IsBNT                  — BasisNormalTensors.lean:36
+
+  Key lemmas (overlap/spectral):
+    mpvOverlap_tendsto_zero          — MPVOverlapDecay.lean:45
+    mpvOverlap_tendsto_zero_of_dim_ne — SpectralGapRect.lean (end of file)
+    mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
+                                     — PrimitiveOverlap.lean:138
+
+  Key lemmas (BNT/permutation):
+    eventually_linearIndependent_of_overlap_tendsto_orthonormal
+                                     — BasisNormalTensors.lean:54
+    exists_invertible_changeBasis    — BNTMatching.lean:74
+    exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
+                                     — BNTPermutationSimple.lean:140
+    exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
+                                     — FundamentalTheoremThm44.lean:46
+
+  Key lemmas (fundamental theorem, existing route):
+    gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
+                                     — FundamentalTheoremProportional.lean:127
+    proportionalMPV₂_of_gaugePhaseEquiv
+                                     — FundamentalTheoremProportional.lean:85
+    mpv_eq_pow_mul_of_gaugePhase     — FundamentalTheoremProportional.lean:38
+    fundamentalTheorem_canonicalForm — CanonicalFormSep.lean:1040
+    per_block_sameMPV_of_canonical_form — CanonicalFormSep.lean:1011
+    block_separation_core            — CanonicalFormSep.lean:608
+
+  Key lemmas (algebraic):
+    charpoly_eq_of_forall_trace_pow_eq — NewtonGirard.lean:295
+    vandermonde_separation           — BasisNormal.lean:36
+    toTensorFromBlocks               — FundamentalTheoremMulti.lean:29
+
+================================================================================
+END OF MEMO
+================================================================================
