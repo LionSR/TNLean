@@ -617,14 +617,24 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
     % SOURCE: MPSLean/MPS/FundamentalTheoremProportional.lean
     %         theorem MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
     %         single-block primitive/proportional lemma (overlap assumed, not derived)
-    \begin{block}{Lean status (new\,$^{\ddagger}$)}
+    \begin{block}{Lean status (new\,$^{\ddagger}$; BNT permutation\,$^{\S}$)}
         {\scriptsize
-        \textcolor{leangreen}{\checkmark}~\textbf{Single-block primitive/proportional lemma} now proved in Lean:\\[0.05em]
+        \textcolor{leangreen}{\checkmark}~\textbf{Single-block primitive/proportional lemma}
+          now proved in Lean:\\[0.05em]
         \quad\texttt{MPSTensor.gaugePhaseEquiv\_of\_proportionalMPV2\_of\_overlap\_tendsto\_one}\\
-        \quad\textcolor{dimwhite}{\texttt{MPSLean/MPS/FundamentalTheoremProportional.lean}}\\[0.05em]
-        \textcolor{dimwhite}{\emph{Scope: \textbf{single-block} only.
-            Assumes \texttt{mpvOverlap A A N}$\to1$ (self-overlap limit)
-            rather than deriving it from primitivity.}}}
+        \quad\textcolor{dimwhite}{\texttt{MPSLean/MPS/FundamentalTheoremProportional.lean}}\\[0.2em]
+        % SOURCE: MPSLean/MPS/BNTPermutationSimple.lean
+        %         theorem MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
+        \textcolor{leangreen}{\checkmark}~\textbf{BNT permutation rigidity}
+          (span-equality formulation; Thm~4.4 bridge):\\[0.05em]
+        \quad\texttt{exists\_perm\_dimEq\_gaugePhaseEquiv\_of\_overlapOrtho}
+          \textcolor{dimwhite}{(\texttt{BNTPermutationSimple.lean})}\\
+        % SOURCE: MPSLean/MPS/FundamentalTheoremThm44.lean
+        %         theorem MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
+        \quad\texttt{exists\_eq\_numBlocks\_and\_equiv\_gaugePhase\_of\_overlapOrtho}
+          \textcolor{dimwhite}{(\texttt{FundamentalTheoremThm44.lean})}\\[0.2em]
+        \textcolor{dimwhite}{\emph{Scope: overlap-ortho $+$ span-equality assumed;
+            not yet end-to-end Thm~4.4 from canonical form.}}}
     \end{block}
     \textcolor{dimwhite}{\footnotesize The equal-MPV Corollary with canonical form assumed is also fully verified.}
 \end{frame}
@@ -710,6 +720,12 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         \rowcolor{cardbg}
         Block separation (canonical form)~\cite{Cirac2017Annals,Cirac2021Matrix}
                          & \texttt{PiAlgebra/CanonicalFormSep} & \proved{}       \\
+        \rowcolor{cardbg}
+        % SOURCE: MPSLean/MPS/BNTPermutationSimple.lean + MPSLean/MPS/FundamentalTheoremThm44.lean
+        BNT permutation rigidity (span-equality; Thm~4.4 bridge)~\cite{Cirac2021Matrix}
+                         & \texttt{MPS/BNTPermutationSimple},
+                           \texttt{MPS/FundamentalTheoremThm44}
+                         & \proved{}                           \\
         \rowcolor{cardbg}
         Newton--Girard identities
                          & \texttt{Algebra/NewtonGirard}       & \proved{}       \\
@@ -1761,13 +1777,22 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
                          & Med-Hard            & 800--1{,}500
                          & Single-block primitive/proportional lemma:
                            \textcolor{leangreen}{\textbf{done}}$^{\ddagger}$;
-                           remaining: BNT construction + permutation matching (Thm~4.4) \\
+                           permutation/phase matching:
+                           \textcolor{leangreen}{\textbf{done}}$^{\S}$;
+                           remaining: BNT construction from canonical form
+                           (Prop.~4.3/Def.~4.2), bridge from proportional MPVs of
+                           canonical forms to span-equality hypotheses;
+                           PF/$\mu$ normalization and periodicity later \\
             \rowcolor{cardbg}
             Match block structure of $B$
                          & Hard                & 500--1{,}000       & Full BNT, dimension matching                  \\
             \rowcolor{cardbg}
-            BNT permutation
-                         & Medium              & 300--600           & Extend block separation                       \\
+            BNT permutation (span-equality formulation)
+                         & \textcolor{leangreen}{done}
+                         & \textcolor{leangreen}{done}
+                         & Permutation $+$ per-block dim.\ equality $+$ GaugePhaseEquiv
+                           (overlap-ortho $+$ span-equality assumed):
+                           \textcolor{leangreen}{\textbf{done}}$^{\S}$ \\
             \rowcolor{cardbg}
             CFII diagonal fixed-point gauge
                          & Medium              & \textcolor{leangreen}{done}
@@ -1806,6 +1831,20 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
         \textcolor{leangreen}{\checkmark}~%
           $^{\ddagger}$\,\texttt{MPSTensor.gaugePhaseEquiv\_of\_proportionalMPV2\_of\_overlap\_tendsto\_one}\\
           \quad(\texttt{MPSLean/MPS/FundamentalTheoremProportional.lean})~\cite{Cirac2021Matrix}\\[0.15em]
+        % SOURCE: MPSLean/MPS/BNTPermutationSimple.lean
+        %         theorem MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
+        %         BNT permutation rigidity: span-equality formulation
+        %         (overlap-ortho + span-equality hypotheses assumed)
+        \textcolor{leangreen}{\checkmark}~%
+          $^{\S}$\,\texttt{MPSTensor.exists\_perm\_dimEq\_gaugePhaseEquiv\_of\_overlapOrtho}\\
+          \quad(\texttt{MPSLean/MPS/BNTPermutationSimple.lean})~\cite{Cirac2021Matrix}\\[0.15em]
+        % SOURCE: MPSLean/MPS/FundamentalTheoremThm44.lean
+        %         theorem MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
+        %         Generalizes BNT permutation to allow gA ≠ gB: proves gA = gB via
+        %         finrank_span_eq_card + eventual LI + equal span, then delegates.
+        \textcolor{leangreen}{\checkmark}~%
+          \texttt{MPSTensor.exists\_eq\_numBlocks\_and\_equiv\_gaugePhase\_of\_overlapOrtho}\\
+          \quad(\texttt{MPSLean/MPS/FundamentalTheoremThm44.lean})~\cite{Cirac2021Matrix}\\[0.15em]
         \textcolor{amber}{\textbullet}~\textbf{Next:} PF/$\mu$ normalization per block;
           Wielandt/periodicity later.
     }}
