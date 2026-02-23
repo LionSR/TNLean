@@ -251,12 +251,12 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \]
 \end{definition}
 
-\begin{lemma}[Ces\`aro telescope]\label{lem:cesaro_telescope}
+\begin{theorem}[Ces\`aro telescope]\label{thm:cesaro_telescope}
     \lean{cesaroMean_telescope}
     \leanok
     \uses{def:cesaro_mean}
     $E(\sigma_N) - \sigma_N = \frac{1}{N}(E^N(\rho_0) - \rho_0)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok\uses{def:cesaro_mean}
     Telescoping sum.
@@ -291,7 +291,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \uses{def:channel, def:density_matrices, def:cesaro_mean,
           thm:density_compact, thm:density_convex,
           thm:density_nonempty, thm:channel_preserves_density,
-          lem:cesaro_telescope}
+          thm:cesaro_telescope}
     Every quantum channel $E : \MN{D} \to \MN{D}$ (with $D \ge 1$)
     has a nonzero positive semidefinite fixed point:
     there exists $\rho \ge 0$, $\rho \neq 0$, with $E(\rho) = \rho$.
@@ -301,7 +301,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     \uses{def:channel, def:density_matrices, def:cesaro_mean,
           thm:density_compact, thm:channel_preserves_density,
-          lem:cesaro_telescope}
+          thm:cesaro_telescope}
     Start with any $\rho_0 \in \mc{D}_D$.
     Each Ces\`aro mean $\sigma_N$ lies in $\mc{D}_D$
     (by convexity and channel preservation).

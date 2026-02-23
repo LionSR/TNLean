@@ -6,13 +6,13 @@ then $A$ and $B$ are gauge equivalent.
 
 \section{Trace pairing}
 
-\begin{lemma}[Nondegeneracy of the trace pairing]\label{lem:trace_nondeg}
+\begin{theorem}[Nondegeneracy of the trace pairing]\label{thm:trace_nondeg}
     \lean{Matrix.trace_mul_right_eq_zero_iff}
     \leanok
     For $M \in \MN{D}$,
     $\tr(M N) = 0$ for all $N \in \MN{D}$
     if and only if $M = 0$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -46,16 +46,16 @@ then $A$ and $B$ are gauge equivalent.
     \]
 \end{definition}
 
-\begin{lemma}[Injectivity of the trace pairing map]\label{lem:trace_pairing_injective}
+\begin{theorem}[Injectivity of the trace pairing map]\label{thm:trace_pairing_injective}
     \lean{MPSTensor.traceMulRightPi_ker_eq_bot}
     \leanok
-    \uses{def:trace_pairing_map, def:injective, lem:trace_nondeg}
+    \uses{def:trace_pairing_map, def:injective, thm:trace_nondeg}
     If $A$ is injective, then $\ker \Phi_A = \{0\}$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:injective, lem:trace_nondeg, def:trace_pairing_map}
+    \uses{def:injective, thm:trace_nondeg, def:trace_pairing_map}
     If $\Phi_A(M) = 0$, then $\tr(M \cdot A^i) = 0$ for all~$i$.
     Since the $\{A^i\}$ span $\MN{D}$, this gives $\tr(M N) = 0$
     for all~$N$, so $M = 0$ by nondegeneracy of the trace pairing.
@@ -66,7 +66,7 @@ then $A$ and $B$ are gauge equivalent.
 \begin{theorem}[Existence and uniqueness of the linear extension]\label{thm:linear_ext}
     \lean{MPSTensor.linearExtension_exists_unique}
     \leanok
-    \uses{def:injective, def:same_mpv, lem:trace_pairing_injective}
+    \uses{def:injective, def:same_mpv, thm:trace_pairing_injective}
     If $A$ is injective and $A$, $B$ generate the same MPV family,
     then there exists a unique linear map
     $T : \MN{D} \to \MN{D}$ satisfying $T(A^i) = B^i$ for all~$i$.
@@ -74,7 +74,7 @@ then $A$ and $B$ are gauge equivalent.
 
 \begin{proof}
     \leanok
-    \uses{lem:trace_pairing_injective, lem:same_mpv_trace}
+    \uses{thm:trace_pairing_injective, lem:same_mpv_trace}
     The trace pairing maps satisfy
     $\Phi_A \circ \mathrm{lc}_A = \Phi_B \circ \mathrm{lc}_B$
     (where $\mathrm{lc}_A$ denotes linear combination
@@ -99,7 +99,7 @@ then $A$ and $B$ are gauge equivalent.
 
 \begin{proof}
     \leanok
-    \uses{thm:linear_ext, lem:trace_pairing_injective, lem:same_mpv_trace}
+    \uses{thm:linear_ext, thm:trace_pairing_injective, lem:same_mpv_trace}
     First, $\Phi_B \circ T = \Phi_A$
     (verified on the spanning set $\{A^i\}$ using the length-2 trace identity).
     Using the length-3 trace identity and injectivity of $\Phi_B$,
