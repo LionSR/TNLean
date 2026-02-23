@@ -1,0 +1,261 @@
+\chapter{Wielandt Bound}\label{ch:wielandt}
+
+This chapter proves a quantum analog of Wielandt's inequality:
+for a normal MPS tensor with bond dimension~$D$,
+the cumulative span of matrix products stabilises
+after at most $D^2$ steps.
+The results follow~\cite{Sanz2010Quantum}.
+
+\section{Cumulative span}
+
+\begin{definition}[Word span]\label{def:word_span}
+    \lean{MPSTensor.wordSpan}
+    \leanok
+    \uses{def:mps_tensor}
+    The \emph{word span} at length~$n$ is the subspace
+    \[
+        S_n(A) =  \spn_{\C}\{A^{i_1} \cdots A^{i_n}
+          : (i_1,\ldots,i_n) \in \{0,\ldots,d{-}1\}^n\}
+        \subseteq  \MN{D}.
+    \]
+    This is \cite[Eq.~(1)]{Sanz2010Quantum}.
+\end{definition}
+
+\begin{definition}[Cumulative span]\label{def:cumulative_span}
+    \lean{MPSTensor.cumulativeSpan}
+    \leanok
+    \uses{def:word_span}
+    The \emph{cumulative span} at level~$n$ is
+    \[
+        T_n(A) =  \spn_{\C}\{A^{i_1} \cdots A^{i_m}
+          : m \le n\}
+        =  S_0(A) + S_1(A) + \cdots + S_n(A).
+    \]
+\end{definition}
+
+\begin{theorem}[Cumulative span stabilisation]\label{thm:cumulative_stable}
+    \lean{MPSTensor.cumulativeSpan_stable}
+    \leanok
+    \uses{def:cumulative_span}
+    If $T_n(A) = T_{n+1}(A)$, then $T_m(A) = T_n(A)$
+    for all $m \ge n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cumulative_span, def:word_span}
+    If $T_n = T_{n+1}$, then $S_{n+1} \subseteq T_n$,
+    so left-multiplying by any $A^i$ gives
+    $S_{n+2} \subseteq T_{n+1} = T_n$.
+    By induction, $S_m \subseteq T_n$ for all $m \ge n+1$,
+    hence $T_m = T_n$.
+\end{proof}
+
+\begin{theorem}[Dimension growth]\label{thm:cumulative_strict_mono}
+    \lean{MPSTensor.cumulativeSpan_finrank_strict_mono}
+    \leanok
+    \uses{def:cumulative_span, thm:cumulative_stable}
+    If $T_n(A) \neq T_{n+1}(A)$, then
+    $\dim T_{n+1}(A) > \dim T_n(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cumulative_span}
+    $T_n \subseteq T_{n+1}$ and $T_n \neq T_{n+1}$
+    imply strict rank increase.
+\end{proof}
+
+\section{Fitting decomposition}
+
+\begin{definition}[Fitting decomposition]\label{def:fitting_decomp}
+    \lean{FittingDecomposition}
+    \leanok
+    A \emph{Fitting decomposition} of a linear endomorphism
+    $f : V \to V$ on a finite-dimensional vector space over an
+    algebraically closed field consists of:
+    \begin{enumerate}
+        \item $f$ is nilpotent on the generalized $0$-eigenspace,
+        \item $f$ is invertible on each generalized $\mu$-eigenspace
+              for $\mu \neq 0$,
+        \item the generalized eigenspaces span~$V$,
+        \item the generalized eigenspaces are linearly independent.
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}[Fitting decomposition exists]\label{thm:fitting_decomp}
+    \lean{fittingDecomposition}
+    \leanok
+    \uses{def:fitting_decomp}
+    Every linear endomorphism on a finite-dimensional vector space
+    over an algebraically closed field admits a Fitting decomposition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fitting_decomp}
+    Nilpotency on the zero generalized eigenspace follows from
+    the definition of generalized eigenspaces.
+    Invertibility on nonzero generalized eigenspaces follows
+    because $f - \mu$ is nilpotent there, so $f = \mu(1 - (1-f/\mu))$
+    is invertible.
+    Spanning and independence are standard spectral theory
+    (available in Mathlib).
+\end{proof}
+
+\section{Nonzero trace product}
+
+\begin{theorem}[Cumulative span reaches $\MN{D}$]\label{thm:cumulative_eq_top}
+    \lean{MPSTensor.cumulativeSpan_eq_top}
+    \leanok
+    \uses{def:cumulative_span, def:normal}
+    If $A$ is normal, then $T_{D^2}(A) = \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cumulative_span, def:normal, thm:cumulative_stable,
+          thm:cumulative_strict_mono}
+    By Theorem~\ref{thm:cumulative_strict_mono},
+    if $T_n \neq T_{n+1}$ then the dimension increases by $\ge 1$.
+    Since $\dim \MN{D} = D^2$,
+    after at most $D^2$ steps either $T_n = \MN{D}$ or
+    $T_n$ has stabilised.
+    Stabilisation before reaching $\MN{D}$ contradicts normality
+    (which requires $S_{L_0} = \MN{D}$ for some $L_0$,
+    hence $T_{L_0} = \MN{D}$).
+    This is the proof of \cite[Lemma~1]{Sanz2010Quantum}.
+\end{proof}
+
+\begin{theorem}[Nonzero trace product]\label{thm:nonzero_trace_word}
+    \lean{MPSTensor.exists_nonzero_trace_word}
+    \leanok
+    \uses{thm:cumulative_eq_top, def:mps_tensor}
+    If $A$ is normal, then there exists a word $w$ of length
+    $\le D^2$ such that $\tr(A^{i_1} \cdots A^{i_{|w|}}) \neq 0$.
+    This is \cite[Lemma~1]{Sanz2010Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cumulative_eq_top}
+    By Theorem~\ref{thm:cumulative_eq_top},
+    the identity $\Id \in T_{D^2}(A)$,
+    so $\Id$ is a linear combination of word products
+    of length $\le D^2$.
+    At least one of these word products must have nonzero trace
+    (since $\tr(\Id) = D \neq 0$).
+\end{proof}
+
+\section{Eigenvector spreading}
+
+\begin{definition}[Cumulative vector span]\label{def:cumulative_vector_span}
+    \lean{MPSTensor.cumulativeVectorSpan}
+    \leanok
+    \uses{def:mps_tensor}
+    Given an MPS tensor~$A$ and a vector
+    $\varphi \in \C^D$, the \emph{cumulative vector span} is
+    \[
+        K_n(A, \varphi) = 
+        \spn_{\C}\{A^{i_1} \cdots A^{i_m} \varphi : m \le n\}
+        \subseteq  \C^D.
+    \]
+    This is \cite[proof of Lemma~2(a)]{Sanz2010Quantum}.
+\end{definition}
+
+\begin{theorem}[Eigenvector spreading]\label{thm:eigenvector_spreading}
+    \lean{MPSTensor.eigenvector_spreading}
+    \leanok
+    \uses{def:cumulative_vector_span, def:normal}
+    Let $A$ be a normal MPS tensor and let
+    $A^{i_0} \varphi = \mu \varphi$ with $\mu \neq 0$
+    and $\varphi \neq 0$.
+    Then $K_{D-1}(A, \varphi) = \C^D$.
+    This is \cite[Lemma~2(a)]{Sanz2010Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cumulative_vector_span, def:normal,
+          thm:cumulative_eq_top}
+    The vector span $K_n$ is monotone and
+    $\dim K_n \le D$.
+    If $K_n = K_{n+1}$ for some $n < D-1$, the span stabilises.
+    But $T_N(A) = \MN{D}$ by Theorem~\ref{thm:cumulative_eq_top},
+    so every standard basis matrix is in the cumulative span;
+    applying these to $\varphi \neq 0$ gives all of $\C^D$,
+    contradicting early stabilisation.
+    Hence $\dim K_n$ grows by $\ge 1$ at each step,
+    reaching $D$ by step $D - 1$.
+\end{proof}
+
+\section{Rank-one products and eigenvalue extraction}
+
+\begin{theorem}[Eigenvalue extraction]\label{thm:eigenvalue_extraction}
+    \lean{MPSTensor.exists_word_eigenvector}
+    \leanok
+    \uses{thm:nonzero_trace_word, def:fitting_decomp}
+    If $A$ is normal, then there exist a word $w$,
+    a nonzero scalar $\mu$, and a nonzero vector $\varphi$ such that
+    $(\text{evalWord}\ A\ w) \varphi = \mu \varphi$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:nonzero_trace_word, thm:fitting_decomp}
+    By Theorem~\ref{thm:nonzero_trace_word}, there is a word $w$
+    with $\tr(\text{evalWord}\ A\ w) \neq 0$.
+    A matrix with nonzero trace has a nonzero eigenvalue
+    (since trace = sum of eigenvalues).
+    The Fitting decomposition
+    (Theorem~\ref{thm:fitting_decomp})
+    shows that the nonzero generalized eigenspace is nontrivial,
+    yielding the eigenvector.
+\end{proof}
+
+\section{Assembly}
+
+\begin{definition}[Wielandt analysis]\label{def:wielandt_analysis}
+    \lean{WielandtAnalysis}
+    \leanok
+    \uses{def:mps_tensor, def:normal}
+    A \emph{Wielandt analysis} for a normal MPS tensor~$A$
+    packages:
+    a word $w_0$ of length $\le D^2$,
+    a nonzero eigenvalue $\mu$,
+    and a nonzero eigenvector $\varphi$
+    of the matrix $A^{w_0}$, such that
+    $A^{w_0} \varphi = \mu \varphi$.
+\end{definition}
+
+\begin{theorem}[Wielandt analysis exists]\label{thm:wielandt_analysis}
+    \lean{MPSTensor.wielandtAnalysis}
+    \leanok
+    \uses{def:wielandt_analysis, thm:eigenvalue_extraction}
+    Every normal MPS tensor admits a Wielandt analysis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:eigenvalue_extraction}
+    Immediate from Theorem~\ref{thm:eigenvalue_extraction}.
+\end{proof}
+
+\begin{theorem}[Wielandt bound]\label{thm:wielandt_bound}
+    \lean{MPSTensor.isNormal_implies_cumulativeSpan}
+    \leanok
+    \uses{def:cumulative_span, def:normal}
+    If $A$ is a normal MPS tensor with bond dimension~$D$,
+    then $T_{D^2}(A) = \MN{D}$.
+    In particular, the cumulative span stabilises at index
+    at most $D^2$.
+    This is \cite[Theorem~1]{Sanz2010Quantum}
+    (which gives the sharper bound $D^2 - d + 1$ in certain
+    cases; our formalization proves the $D^2$ bound).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cumulative_eq_top}
+    Immediate from Theorem~\ref{thm:cumulative_eq_top}.
+\end{proof}
