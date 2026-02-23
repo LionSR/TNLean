@@ -1,0 +1,1139 @@
+
+\documentclass[11pt,a4paper]{article}
+\input{preamble}
+
+% --- Override theorem environments from the shared preamble ---
+% Wolf numbers Theorems/Propositions/Examples/Corollaries independently.
+\UndefEnv{theorem}
+\UndefEnv{proposition}
+\UndefEnv{corollary}
+\UndefEnv{lemma}
+\UndefEnv{definition}
+\UndefEnv{example}
+\UndefEnv{problem}
+\UndefEnv{remark}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{lemma}{Lemma}[section]
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{problem}{Problem} % global numbering (as in the notes)
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+\numberwithin{equation}{section}
+
+\title{Wolf Lecture Notes: Chapter 5 -- Operator Inequalities}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+% Make this chapter be "5" in an article document:
+\setcounter{section}{4}
+\section{Operator Inequalities}
+
+% Problems in the notes are globally numbered; in this chapter we have Problem 10 and 11.
+\setcounter{problem}{9}
+
+\subsection{Operator ordering}
+
+The set of Hermitian operators is equipped with a natural partial order, i.e., a
+consistent way of saying that one operator is larger than another one or that two
+operators are actually incomparable. In fact, we will come across various partial
+orders, but spend most time on what is sometimes called L\"owner's partial order
+which is based on positive (semi-)definite differences.
+
+First recall the basics about positive matrices. A matrix $A \in \mcM_d(\CC)$ is
+called positive semi-definite if $\bra{\psi}A\ket{\psi} \ge 0$ for all $\psi \in \CC^d$
+and positive definite or strictly positive if the inequality is strict (i.e., `$>0$'
+holds). Being lazy we will occasionally just write `positive' when meaning
+`positive semi-definite'. This is equivalent to saying that $A$ is Hermitian and has
+(strictly) positive eigenvalues and we will write $A \ge 0$ ($A>0$). Recall that
+$A\ge 0$ is in turn equivalent to $A=B^\dagger B$ for some $B$ and that
+$A\ge 0 \Rightarrow X^\dagger A X \ge 0$.
+An order relation for Hermitian matrices $A,B$ is given by
+\begin{equation}\label{eq:5.1}
+    A \ge B \iff A-B \ge 0.
+\end{equation}
+This defines a partial order in the sense that two Hermitian matrices may be
+incomparable. If, for instance a Hermitian $A$ has positive and negative eigenvalues,
+then neither $A\ge 0$ nor $A\le 0$ holds. This is reminiscent to the ordering of
+events in Minkowski space, and for $\mcM_2(\CC)$ it is actually equivalent (see
+Example~5.1).
+
+Note that by the defining equation~\eqref{eq:5.1} a linear map
+$T:\mcM_d \to \mcM_{d'}$ is order preserving iff it is positive.
+
+The above operator ordering leads to a peculiar structure: it makes the set of
+Hermitian matrices an anti-lattice. A partially ordered set is called a lattice if for
+every two elements, say $A$ and $B$, there is an infimum (a largest lower bound,
+typically denoted $A\wedge B$) and a supremum (least upper bound, $A\vee B$).
+The set of Hermitian matrices in $\mcM_d$ ($d>1$) is not a lattice (unlike the set
+of Hermitian projections; see Example~5.2). It has the property that if two elements
+happen to have a supremum or infimum, than this coincides with one of the
+elements---this structure is called an `anti-lattice'.
+
+Before we come to the main operator inequalities involving quantum channels (or
+more generally positive maps) we collect some very useful basic results:
+
+\begin{theorem}[Douglas' Theorem]\leavevmode\footnote{This is typically referred to as ``Douglas' Lemma''.}
+    Let $A,B\in \mcM_d(\CC)$. Then the following are equivalent:
+    \begin{enumerate}
+        \item $\range(A)\subseteq \range(B)$,
+        \item $AA^\dagger \le \mu BB^\dagger$ for some $\mu\ge 0$,
+        \item $A = BC$ for some $C\in \mcM_d(\CC)$.
+    \end{enumerate}
+    Moreover, if this is valid, then there is a unique $C$ for which
+    \begin{enumerate}
+        \item[(i)] $\ker(A)\subseteq \ker(C)$,
+        \item[(ii)] $\range(C)\subseteq \range(B^\dagger)$ and
+        \item[(iii)] $\|C\|_\infty^2=\min\{\mu \mid AA^\dagger \le \mu BB^\dagger\}$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Block matrices and Schur complements]
+    Let $A\in \mcM_d(\CC)$ and $B\in \mcM_{d'}(\CC)$ be two positive semi-definite
+    matrices and $C\in \mcM_{d,d'}(\CC)$. Then the following are equivalent:
+    \begin{enumerate}
+        \item
+              \[
+                  \begin{pmatrix}
+                      A         &C\\
+                      C^\dagger &B
+                  \end{pmatrix} \ge 0,
+              \]
+        \item $\ker(B)\subseteq \ker(C)$ and $A \ge C B^{-1}C^\dagger$, where $B^{-1}$ is
+              the pseudo-inverse (i.e., inverse on the support) when necessary,
+        \item $\ker(B)\subseteq \ker(C)$ and $\|A^{-1/2} C B^{-1/2}\|_\infty \le 1$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{example}[Ordering in Minkowski space]
+    Every Hermitian $2\times 2$ matrix can be expanded as
+    $M=\sum_{i=0}^3 x_i\sigma_i$ with $x\in \RR^4$.
+    Since
+    \[
+        \det(M) = x_0^2-x_1^2-x_2^2-x_3^2 = \langle x, \eta x\rangle
+        \qquad\text{with}\qquad \eta := \operatorname{diag}(1,-1,-1,-1)
+    \]
+    we can identify $x$ with the coordinates of an event in Minkowski space, so that the
+    determinant provides the Minkowski metric. As discussed in Example~2.2 Lorentz
+    transformations then take on the form $M \mapsto XMX^\dagger$ with
+    $X\in \mathrm{SL}(2,\CC)$.
+
+    The ordering of events in Minkowski space, i.e., the causal structure imposed by the
+    forward and backward light cones, then becomes the operator ordering on the level of
+    the matrix representation. Recall that in Minkowski space two elements $x$ and $x'$
+    are time-like (i.e., potentially causally related) if
+    $\langle x-x', \eta(x-x')\rangle$ is positive, and space-like (i.e., incomparable) if it
+    is negative. The ordering between two time-like related events is then given by
+    $(x-x')_0$, i.e., the sign of the time-component and $x$ is in the forward/backward
+    light cone of $x'$ if this component is positive/negative.
+
+    On the level of the matrix representation $\det(M-M')$ tells us whether the matrices
+    are comparable in matrix order and $M-M' \ge 0$ if and only if $\det(M-M')\ge 0$
+    and $\tr[M-M']\ge 0$. In other words a Hermitian $2\times 2$ matrix is positive iff
+    its determinant and trace are.
+
+    In Minkowski space the absence of the lattice property means that for two space-like
+    separated events there is no `latest' event in the intersection of their backward light
+    cones.
+\end{example}
+
+\begin{example}[Lattice of projections]
+    \dots
+\end{example}
+
+\subsection{Schwarz inequalities}
+
+Let $T:\mcM_d \to \mcM_{d'}$ be a completely positive, trace preserving map and
+$T^*$ its dual (description in the Heisenberg picture). Then
+\begin{equation}\label{eq:5.2}
+    \forall A\in \mcM_{d'}:\qquad T^*(A^\dagger)\,T^*(A) \le T^*(A^\dagger A),
+\end{equation}
+is an operator version of the Schwarz inequality. Inequality~\eqref{eq:5.2} can easily
+be proven by employing Stinespring's representation
+\[
+    T^*(A)=V^\dagger(A\otimes \one)V
+\]
+(with $V$ an isometry, see Thm.~2.2) so that it can be written
+\begin{equation}\label{eq:5.3}
+    V^\dagger(A^\dagger \otimes \one)
+    \underbrace{VV^\dagger}_{\le \one}
+    (A\otimes \one)V
+    \le
+    V^\dagger(A^\dagger A \otimes \one)V.
+\end{equation}
+
+The following relaxes the assumptions on the map $T$ and characterizes the cases of
+equality:
+
+\begin{theorem}[Operator Schwarz inequality]
+    Let $T^*:\mcM_{d'} \to \mcM_d$ be a positive linear map. If $T$ is $2$-positive, then
+    for all $A,B \in \mcM_{d'}$:
+    \begin{equation}\label{eq:5.4}
+        T^*(A^\dagger B)\,T^*(B^\dagger B)^{-1}\,T^*(B^\dagger A) \le T^*(A^\dagger A),
+    \end{equation}
+    where the inverse is taken on the range.
+\end{theorem}
+
+\begin{proof}
+    Define a rectangular matrix $C := (A,B)$ so that $C^\dagger C \in \mcM_{2d'}$ is
+    positive semidefinite. Then, due to $2$-positivity,
+    \[
+        (\id_2\otimes T^*)(C^\dagger C) \ge 0
+    \]
+    which by Thm.~5.2 implies Eq.~\eqref{eq:5.4}.
+\end{proof}
+
+\begin{theorem}[Equality in the operator Schwarz inequality]
+    Let $T^*:\mcM_{d'} \to \mcM_d$ be a positive linear map such that for a given
+    $B\in \mcM_{d'}$ the Schwarz inequality in Eq.~\eqref{eq:5.4} holds for all
+    $A\in \mcM_{d'}$. Denote by $\mcA_B\subseteq \mcM_{d'}$ the set of $A$'s for which
+    equality is attained in Eq.~\eqref{eq:5.4} for the given $B$. Then for all
+    $A\in \mcA_B$ we have
+    \begin{equation}\label{eq:5.5}
+        T^*(A^\dagger B)\,T^*(B^\dagger B)^{-1}\,T^*(B^\dagger X) = T^*(A^\dagger X),
+        \qquad \forall X\in \mcM_{d'}.
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Assume that $A\in \mcA_B$. Applying Eq.~\eqref{eq:5.4} (where we put everything to
+    the r.h.s.) to $B$ and $\widetilde A = tA+X$ with $t\in \RR$, we obtain
+    \begin{equation}\label{eq:5.6}
+        \begin{aligned}
+            0 \le & \, t\Big[
+            T^*(A^\dagger X) + T^*(X^\dagger A)
+            - T^*(A^\dagger B)\,T^*(B^\dagger B)^{-1}\,T^*(B^\dagger X) \\
+                  & \hphantom{\, t\Big[}
+                - T^*(X^\dagger B)\,T^*(B^\dagger B)^{-1}\,T^*(B^\dagger A)
+            \Big]                                                       \\
+                  & \quad + T^*(X^\dagger X)
+            - T^*(X^\dagger B)\,T^*(B^\dagger B)^{-1}\,T^*(B^\dagger X),
+        \end{aligned}
+    \end{equation}
+    as the quadratic order in $t$ vanishes due to $A\in \mcA_B$. In order for this
+    inequality to hold for all $t\in \RR$ the term linear in $t$ has to vanish. By applying
+    this argument to both $X$ and $iX$ and taking the sum we obtain Eq.~\eqref{eq:5.5}.
+\end{proof}
+
+Generalizations of the above inequalities to the case of block matrices can be easily
+obtained by setting
+\[
+    A=\sum_{i=1}^n A_i\otimes \bra{i} \in \mcM_{d',nd'}
+\]
+and $T=\widetilde T\otimes \id_n$ where $\widetilde T$ has then to be
+$(n+1)$-positive.
+
+Positivity alone is not sufficient for a linear map to satisfy the Schwarz inequality
+\eqref{eq:5.2}; the simplest counterexample being matrix transposition with
+\[
+    A=\begin{pmatrix}0 & 1 \\ 0 & 0\end{pmatrix}.
+\]
+However, there are notable exceptions:
+
+\begin{proposition}[Schwarz inequality for commutative domains]
+    Let $T:\mcM_d \to \mcM_{d'}$ be a positive linear map which is trace non-increasing
+    (i.e., $T^*(\one)\le \one$). Then the Schwarz inequality~\eqref{eq:5.2} holds for all
+    normal operators $A\in \mcM_{d'}$.\footnote{An operator $A$ is normal if it commutes
+        with its adjoint. So in particular Hermitian and unitary operators are normal.}
+\end{proposition}
+
+\begin{proof}
+    Take an arbitrary normal $A$. Then $[A,A^\dagger]=[A,A^\dagger A]=0$ so that by
+    Prop.~1.6 $T^*$ is completely positive when restricted to the domain
+    $D:=\spn\{A,A^\dagger,A^\dagger A,\one\}$. Following Prop.~1.7 we can extend this to
+    a completely positive map on $\mcM_{d'}$ since $D$ is an operator space. The
+    assertion then follows from the fact that (i) the extension coincides with $T^*$ on $D$
+    and (ii) the Schwarz inequality holds for completely positive maps.
+\end{proof}
+
+Prop.~5.1 is the basis of the following generalizations. For the first one recall that
+an operator $A\in \mcB(\mathcal{H})$ is called \emph{subnormal} if there is a Hilbert
+space $\mathcal{H}'=\mathcal{H}\oplus \mathcal{H}^\perp$ and some $B,C$ so that
+\[
+    \begin{pmatrix}
+        A &B\\
+        0 &C
+    \end{pmatrix} \in \mcB(\mathcal{H}')
+\]
+is a normal operator. An alternative characterization of subnormal operators is that
+for all $n\in \NN$ it holds that
+\[
+    \sum_{k,l=0}^n \ketbra{l}{k}\otimes A^{\dagger k}A^l \ge 0
+    \qquad\text{with}\qquad A^0:=\one.
+\]
+An operator is called \emph{quasinormal} iff $[A^\dagger A,A]=0$ and the following
+relation between the mentioned sets holds:
+\[
+    \text{normal} \subset \text{quasinormal} \subset \text{subnormal}.
+\]
+
+\begin{theorem}[Schwarz inequality for subnormal operators]
+    Let $T:\mcM_d \to \mcM_{d'}$ be a positive linear map which is trace non-increasing
+    (i.e., $T^*(\one)\le \one$) and $A\in \mcM_{d'}$ a subnormal operator. Then
+    \begin{equation}\label{eq:5.7}
+        T^*(A^\dagger)\,T^*(A) \le T^*(A^\dagger A)
+        \qquad\text{and}\qquad
+        T^*(A)\,T^*(A^\dagger) \le T^*(A^\dagger A).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Denote by $N\in \mcB(\mathcal{H}')$ the normal extension of $A$ and by
+    $\theta:\mcB(\mathcal{H}')\to \mcB(\mathcal{H})$ the unital and completely positive
+    linear map which maps $\theta(N)=A$. That is, $\theta$ returns the North-West block
+    of its argument. Then, by Prop.~5.1,
+    \[
+        \widetilde T(N^\dagger N) \ge \widetilde T(N)\widetilde T(N^\dagger),
+        \qquad
+        \widetilde T(N^\dagger)\widetilde T(N),
+    \]
+    holds for the concatenated map $\widetilde T := T^*\circ \theta$ (and the second
+    inequality follows from the first by $N\mapsto N^\dagger$ and $NN^\dagger=N^\dagger N$).
+    Writing things out in terms of $T$ and $A$ yields the claimed inequalities.
+\end{proof}
+
+Another possibility of generalizing the Schwarz inequality to beyond $2$-positive maps
+is replacing the $A^\dagger A$ term by something which is larger and commutes with
+$A$:
+
+\begin{theorem}[Schwarz inequality for commuting dominant operators]
+    Let $T:\mcM_d \to \mcM_{d'}$ be a positive linear map which is trace non-increasing
+    (i.e., $T^*(\one)\le \one$) and $A\in \mcM_{d'}$. Then for every positive
+    $D\in \mcM_{d'}$ which satisfies $[D,A]=0$ and $D\ge A^\dagger A$ it holds that
+    \begin{equation}\label{eq:5.8}
+        T^*(A^\dagger)\,T^*(A) \le T^*(D)
+        \qquad\text{and}\qquad
+        T^*(A)\,T^*(A^\dagger) \le T^*(D).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    First note that $D\ge AA^\dagger$. In order to see this, assume for the moment that
+    $D$ is invertible. Then $D\ge A^\dagger A$ implies that $\one \ge X^\dagger X$ with
+    $X:=AD^{-1/2}$. This in turn implies $\one \ge XX^\dagger$ from which
+    $D\ge AA^\dagger$ follows by using $[D,A]=0$. This generalizes to non-invertible $D$'s
+    if we first replace $D\mapsto D+\varepsilon \one$ in the argument and then let
+    $\varepsilon \to 0$.
+
+    Now construct the block matrix
+    \[
+        N :=
+        \begin{pmatrix}
+            A                    &\sqrt{D-AA^\dagger}\\
+            \sqrt{D-A^\dagger A} &-A^\dagger
+        \end{pmatrix}.
+    \]
+    Direct calculation (and using that $A\sqrt{D-A^\dagger A}=\sqrt{D-AA^\dagger}A$)
+    shows that $N$ is a normal operator. Analogous to the proof of Thm.~5.5 we can now
+    introduce a unital and completely positive linear map $\theta:N\mapsto A$ and show
+    the desired inequalities by using Prop.~5.1 in order to get
+    $\widetilde T(N^\dagger N)\ge \widetilde T(N^\dagger)\widetilde T(N)$ and
+    $\widetilde T(N)\widetilde T(N^\dagger)$ for the map $\widetilde T:=T^*\circ \theta$.
+    Using that $\theta(N^\dagger N)=D$ and $\theta(N)=A$ concludes the proof.
+\end{proof}
+
+One might wonder whether a unital positive map $T^*$ which satisfies the Schwarz
+inequality in Eq.~\eqref{eq:5.2} is automatically $2$-positive. The following example
+shows that this is not the case. Since the set of unital maps which satisfy
+Eq.~\eqref{eq:5.2} is therefore larger than the subset of $2$-positive maps but
+smaller than the set of positive maps it may deserve an own name: \emph{Schwarz maps}
+is the most commonly used; $\tfrac32$-positive maps a not too serious alternative.
+
+\begin{example}[Schwarz maps which are not $2$-positive]
+    Consider the map $T:\mcM_2 \to \mcM_2$ defined via
+    \begin{equation}\label{eq:5.9}
+        T^*(A) := \frac12\left(A^{T} + \frac12 \tr[A]\one\right).
+    \end{equation}
+    As a convex combination of two positive maps it is positive. However, it fails to be
+    $2$-positive (which in this case means completely positive) since the
+    Choi--Jamio\l kowski operator of $T^*$ is $(F+\one/2)/4$ which has one eigenvalue
+    $-1/8$. Nevertheless, the map satisfies the Schwarz inequality in Eq.~\eqref{eq:5.2}.
+    In order to see this define
+    \[
+        F(A) := T^*(A^\dagger A)-T^*(A^\dagger)T^*(A)
+    \]
+    and note that $F(A)=F(A+\lambda \one)$ for all $\lambda\in \CC$ and $A\in \mcM_2$.
+    So for proving that $F(A)\ge 0$ for all $A$ we can w.l.o.g.\ assume that $\tr[A]=0$.
+    In this case
+    \begin{equation}\label{eq:5.10}
+        \begin{aligned}
+            F(A)
+             & = \frac14\left(2(A^\dagger A)^{T} + \tr[A^\dagger A]\one - A\overline{A}^{\,T}\right) \\
+             & \ge \frac12 (A^\dagger A)^{T} \ge 0,
+        \end{aligned}
+    \end{equation}
+    since $\tr[A^\dagger A]\one = \tr[A\overline{A}^{\,T}]\one \ge A\overline{A}^{\,T}$.
+\end{example}
+
+By Thm.~5.3 every $2$-positive linear map $T$ which is trace non-increasing (i.e.,
+$T^*(\one)\le \one$) satisfies the Schwarz inequality~\eqref{eq:5.2}. The cases of
+equality in this inequality lead us to the sets
+\begin{align}
+    \mcA_R
+     &:= \{A\in \mcM_{d'} \mid T^*(XA)=T^*(X)T^*(A),\ \forall X\in \mcM_{d'}\},
+    \label{eq:5.11}\\
+    \mcA_L
+     &:= \{A\in \mcM_{d'} \mid T^*(AX)=T^*(A)T^*(X),\ \forall X\in \mcM_{d'}\},
+    \label{eq:5.12}
+\end{align}
+called the right/left multiplicative domain of $T^*$, and $\mcA:=\mcA_R\cap \mcA_L$
+its multiplicative domain.
+
+Note that these three sets form each an algebra (i.e., they are in particular closed
+under multiplication) and that $T^*$ acts as a homomorphism on these algebras. Since
+the multiplicative domain $\mcA$ is in addition closed under taking the adjoint, it
+is a $*$-algebra and $T^*$ a $*$-homomorphism when restricted to $\mcA$.
+
+\begin{theorem}[Multiplicative domains]
+    Let $T$ be a linear map which fulfills the Schwarz inequality~\eqref{eq:5.2}. Then
+    \begin{align}
+        \{A\in \mcM_{d'} \mid T^*(A^\dagger A)=T^*(A^\dagger)T^*(A)\} &= \mcA_R,
+        \label{eq:5.13}\\
+        \{A\in \mcM_{d'} \mid T^*(AA^\dagger)=T^*(A)T^*(A^\dagger)\}  &= \mcA_L.
+        \label{eq:5.14}
+    \end{align}
+\end{theorem}
+
+The proof of this statement is analogous to that of Thm.~5.4. The fact that the set
+of operators achieving equality in the Schwarz inequality forms an algebra has
+remarkable consequences when it comes to the discussion of fixed points of quantum
+channels.
+
+\subsection{Operator convexity and monotonicity}
+
+Functional calculus gives a meaning to scalar functions evaluated on operators.
+Suppose a matrix $A\in \mcM_d(\CC)$ can be diagonalized as $A=UDU^{-1}$ and a given
+function $f$ is defined on a domain including the eigenvalues of $A$ (i.e., the
+entries of the diagonal matrix $D$). Then a consistent way of defining $f$ applied to
+$A$ is
+\begin{equation}\label{eq:5.15}
+    f(A) = U f(D) U^{-1}
+    \qquad\text{where}\qquad
+    [f(D)]_{ii} = f(D_{ii}).
+\end{equation}
+As diagonalizable matrices are dense, there is at most one continuous way of
+extending the definition of $f(A)$ to all $A\in \mcM_d(\CC)$. The core of this is the
+observation that for diagonalizable matrices Eq.~\eqref{eq:5.15} implies that $f(A)=g(A)$
+for every polynomial $g$ which coincides with $f$ on the spectrum of $A$. In general
+one can show that replacing $f$ by such a polynomial $g$ gives a well-defined meaning
+to $f(A)$ if the derivatives of $f$ and $g$ coincide up to order $j-1$ at every
+eigenvalue of $A$ with Jordan-block of size $j$.
+
+As we are only considering Hermitian matrices in this chapter we can, however, use
+Eq.~\eqref{eq:5.15} and take $U^{-1}=U^\dagger$ unitary. The above definition implies
+that $f(VAV^\dagger)=Vf(A)V^\dagger$ for every unitary $V$. Moreover,
+$f(A\oplus B)=f(A)\oplus f(B)$ and in particular $f(A\otimes \one)=f(A)\otimes \one$.
+Be aware, that in general $f(A\otimes B)\ne f(A)\otimes f(B)$ and
+$f(VAV^\dagger)\ne Vf(A)V^\dagger$ if $V$ is merely an isometry.
+
+Having defined functions on operators and L\"owner's operator ordering in mind we
+may now ask how properties of functions like monotonicity or convexity translate to
+the world of matrices and operators.
+
+\paragraph{Operator monotonicity and operator convexity.}
+Recall that a real-valued function $f$ is called convex on an interval $I\subseteq \RR$
+if for all $\lambda \in [0,1]$ and all $a,b\in I$ we have
+\begin{equation}\label{eq:5.16}
+    f(\lambda a + (1-\lambda)b) \le \lambda f(a) + (1-\lambda)f(b),
+\end{equation}
+i.e., the second derivative (if it exists) should be positive on $I$. For continuous
+functions this is equivalent to mid-point convexity, which is the same statement with
+$\lambda=1/2$. $f$ is called concave if $-f$ is convex, and it is called monotone on
+$I$ if for all $a,b\in I$
+\begin{equation}\label{eq:5.17}
+    a\ge b \implies f(a)\ge f(b).
+\end{equation}
+If Eqs.~\eqref{eq:5.16} and \eqref{eq:5.17} hold for all Hermitian matrices
+$A,B\in \mcM_d(\CC)$ whose spectrum is contained in $I$, then we say that $f$ is
+\emph{matrix convex} or \emph{matrix monotone} of order $d$ on $I$. Functions which
+are convex/monotone on scalars need not be so on matrices (see Example~5.4). In fact,
+the set of matrix convex/monotone functions becomes smaller and smaller when we
+increase $d$. Functions which remain matrix convex/monotone for all $d\in \NN$ are
+called \emph{operator convex} or \emph{operator monotone}, respectively.
+
+Note that the sets of operator monotone functions and operator convex functions (on a
+given interval) are both convex cones which are closed under pointwise limits. So,
+characterizing all such functions essentially boils down to identifying the extreme
+rays of these sets and then allowing for positive linear combinations. The two
+following theorems do this for the positive half-line (for other intervals analogous
+results hold).
+
+\begin{theorem}[Operator convexity]
+    A function $f:[0,\infty)\to \RR$ is operator convex iff it can be written as
+    \begin{equation}\label{eq:5.18}
+        f(x) = a + bx + cx^2 + \int_0^\infty \frac{y x^2}{y+x}\, d\mu(y),
+    \end{equation}
+    where $a,b\in \RR$, $c\ge 0$ and $\mu$ is a positive finite measure.
+\end{theorem}
+
+\begin{theorem}[L\"owner's theorem---operator monotonicity]
+    For a continuous function $f:(0,\infty)\to \RR$ the following statements are
+    equivalent:
+    \begin{enumerate}
+        \item $f$ is operator monotone,
+        \item $f$ has an analytic continuation to the entire domain $\operatorname{Im}z\ne 0$
+              such that it maps the upper half-plane $\{z\in \CC\mid \operatorname{Im}z>0\}$
+              into itself,
+        \item $f$ has an integral representation of the form
+              \begin{equation}\label{eq:5.19}
+                  f(x) = a + bx + \int_{-\infty}^0 \frac{1+xy}{y-x}\, d\mu(y),
+              \end{equation}
+              where $a\in \RR$, $b\ge 0$ and $\mu$ is a finite positive measure.
+    \end{enumerate}
+\end{theorem}
+
+In particular the relation between operator monotone functions and so-called Pick
+functions (holomorphic functions with positive imaginary part) is a very powerful
+result. It enables us to `see' right away that certain functions (like the exponential
+function) are not operator monotone. The integral representations of operator convex
+and operator monotone functions seem somehow related and, in fact, there are close
+relations between these two classes. For instance, a continuous function
+$f:[0,\infty)\to [0,\infty)$ is operator monotone iff it is operator concave.
+
+\begin{example}[Operator monotone/convex functions]
+    The following lists some functions (in the variable $x\in \RR$) and their properties
+    regarding operator convexity/monotonicity on specified intervals $I\subseteq \RR$:
+    \begin{center}
+        \renewcommand{\arraystretch}{1.2}
+        \begin{tabular}{|p{0.48\linewidth}|p{0.48\linewidth}|}
+            \hline
+            \textbf{operator monotone}                           & \textbf{operator convex}     \\
+            \hline
+            $\circ\ a+bx$ on $\RR$ for $a\in \RR$, $b\ge 0$      &
+            $\circ\ a+bx+cx^2$ on $\RR$ for $a,b\in \RR$, $c\ge 0$                              \\
+            $\circ\ x^p$ on $[0,\infty)$ for $p\in[0,1]$         &
+            $\circ\ x^p$ on $(0,\infty)$ for $p\in[1,2]$                                        \\
+            $\circ\ -x^p$ on $(0,\infty)$ for $p\in[-1,0]$       &
+            $\circ\ x^p$ on $(0,\infty)$ for $p\in[-1,0]$                                       \\
+            $\circ\ \log x$ on $(0,\infty)$                      &
+            $\circ\ -\log x$ on $(0,\infty)$                                                    \\
+            $\circ\ \dfrac{x\log x}{x-1}$ on $(0,\infty)$        &
+            $\circ\ x\log x$ on $(0,\infty)$                                                    \\
+            $\circ\ \dfrac{x}{y+x}$ on $(0,\infty)$ for $y\ge 0$ &
+            $\circ\ \dfrac{x^2}{y+x}$ on $[0,\infty)$ for $y\ge 0$                              \\
+            $\circ\ \tan x$ on $(-\pi/2,\pi/2)$                  &
+            $\circ\ f:(0,\infty)\to(0,\infty)$ if $x\mapsto 1/f(x)$ is op.\ monotone            \\
+            \hline
+            \textbf{not operator monotone}                       & \textbf{not operator convex} \\
+            \hline
+            $\circ\ x^p$ on $(0,\infty)$ for $p\notin[0,1]$      &
+            $\circ\ x^p$ on $(0,\infty)$ for $p\notin[-1,0]\cup[1,2]$                           \\
+            $\circ\ e^x$ on any non-trivial $I$                  &
+            $\circ\ e^x$ on any non-trivial $I$                                                 \\
+            $\circ\ \max(0,x)$ on any $I\supset\{0\}$            &
+            $\circ\ |x|$ on any $I\supset\{0\}$                                                 \\
+            \hline
+        \end{tabular}
+    \end{center}
+
+    For `simple' functions which are not operator monotone/convex there are similarly
+    `simple' counterexamples. Take for instance
+    \begin{equation}\label{eq:5.20}
+        A=
+        \begin{pmatrix}
+            2 &1\\
+            1 &1
+        \end{pmatrix},
+        \qquad
+        B=
+        \begin{pmatrix}
+            1 &1\\
+            1 &1
+        \end{pmatrix}.
+    \end{equation}
+    When applied to them we see that $f(x)=x^2$ is not operator monotone on $[0,\infty)$
+    and that $f(x)=x^3$ fails to be operator convex on $[0,\infty)$.
+\end{example}
+
+% === Content below merged from r0 (r1 was truncated at Example 5.4) ===
+We will now connect first operator convexity and then operator monotonicity to
+positive maps. Recall that positive maps are exactly the ones which preserve the
+order, i.e., if $A\ge B$, then $T(A)\ge T(B)$ for positive $T$. Conversely, if this
+holds for all $A,B$, then $T$ has to be positive.
+
+A typical requirement in the context addressed below is that the positive map
+satisfies $T(\one)\le \one$. This implies that $T$ is contractive in the following
+sense: consider a Hermitian $A$ with $\spec(A)\subseteq [a,b]$, where $[a,b]$ is an
+interval containing zero. Then $T(\one)\le \one$ implies that also
+$\spec(T(A))\subseteq [a,b]$ since
+\begin{equation}\label{eq:5.21}
+    a\one \le T(a\one) \le T(A) \le T(b\one) \le b\one.
+\end{equation}
+
+\begin{theorem}[Operator convexity from projection inequality]
+    Consider a real-valued function $f$ defined on some interval $I\subseteq \RR$ with
+    $0\in I$. If for all $d\in \NN$, all Hermitian projections $P\in \mcM_d(\CC)$ and all
+    Hermitian $A\in \mcM_d(\CC)$ with $\spec(A)\subseteq I$
+    \begin{equation}\label{eq:5.22}
+        f(PAP) \le P f(A)P,
+    \end{equation}
+    then
+    \begin{enumerate}
+        \item $f(0)\le 0$,
+        \item $f$ is operator convex on $I$,
+        \item for all positive linear maps $T:\mcM_d(\CC)\to \mcM_{d'}(\CC)$ with
+              $T(\one)\le \one$ and all Hermitian $A$ with spectrum in $I$:
+              \begin{equation}\label{eq:5.23}
+                  f(T(A)) \le T(f(A)).
+              \end{equation}
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    1.\ follows from Eq.~\eqref{eq:5.22} already by setting $A=P^\perp := \one-P$.
+
+    In order to show 3.\ consider first a completely positive and unital map $T$. Using
+    Stinespring's theorem (Thm.~2.2) and expressing the isometry as a unitary times a
+    projection we can write
+    \begin{equation}\label{eq:5.24}
+        T(A) \oplus 0_{dr-d'} = P\,U^\dagger (A\otimes \one_r)\,U\,P.
+    \end{equation}
+    When applying $f$ to both sides of this equality we can use
+    $f(U^\dagger (\cdot)\,U)=U^\dagger f(\cdot)\,U$, and $f(A\otimes \one)=f(A)\otimes \one$
+    so that Eq.~\eqref{eq:5.23} indeed follows from Eq.~\eqref{eq:5.22} for unital and
+    completely positive $T$.
+
+    Now let us successively get rid of the additional constraints. Assume $T$ is not
+    unital. Then we can define a unital map
+    $T':\mcM_d(\CC)\oplus \CC \to \mcM_{d'}(\CC)$ by
+    $T':A\oplus b \mapsto T(A)+b(\one-T(\one))$ (and off-diagonals are mapped to zero).
+    $T'$ is completely positive iff $T$ is completely positive and $T(\one)\le \one$.
+    Applying Eq.~\eqref{eq:5.23} to $T'$ then yields the same inequality for $T$, so
+    unitality can be replaced by $T(\one)\le \one$.
+
+    If $T$ is merely positive we can use that $A$ and $f(A)$ are elements of an abelian
+    $C^*$-algebra (the one generated by $A$ and $\one$) on which $T$ is completely
+    positive (Prop.~1.6) with a completely positive extension on $\mcM_d$ (Prop.~1.7).
+    This completes the proof of 3.
+
+    Finally, 2.\ follows by applying Eq.~\eqref{eq:5.23} to the map
+    $T:A\oplus B \mapsto \lambda A+(1-\lambda)B$, $\lambda\in [0,1]$.
+\end{proof}
+
+This theorem becomes yet more interesting as the converse also holds:
+
+\begin{theorem}[Projection inequality from operator convexity]
+    Let $f:I\subseteq \RR \to \RR$ be an operator convex function on an interval $I\ni 0$.
+    Then for all Hermitian projections $P\in \mcM_d(\CC)$ (with $P^\perp:=\one-P$) and all
+    Hermitian $A\in \mcM_d(\CC)$ with $\spec(A)\subseteq I$:
+    \begin{equation}\label{eq:5.25}
+        f(PAP) \le P f(A)P + P^\perp f(0) P^\perp.
+    \end{equation}
+    Consequently, if $f(0)\le 0$, then for all positive maps $T$ with $T(\one)\le \one$:
+    \begin{equation}\label{eq:5.26}
+        f(T(A)) \le T(f(A)).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Define a unitary $U:=P-P^\perp$. Then
+    \begin{align}
+        P f(PAP)P
+         &= P f(PAP + P^\perp A P^\perp)P \label{eq:5.27}\\
+         &= P f(A/2 + UAU^\dagger/2)P \label{eq:5.28}\\
+         &\le P\left(f(A)/2 + U f(A)U^\dagger/2\right)P = P f(A)P,
+        \label{eq:5.29}
+    \end{align}
+    where the inequality is the assumed operator convexity. Eq.~\eqref{eq:5.25} then
+    follows from $f(PAP)=Pf(PAP)P + P^\perp f(0)P^\perp$ and Eq.~\eqref{eq:5.26} is just
+    Eq.~\eqref{eq:5.23} since Thm.~5.10 applies if $f(0)\le 0$.
+\end{proof}
+
+The following shows that we can drop the restriction $f(0)\le 0$ if $T$ is normalized,
+i.e., unital:
+
+\begin{theorem}[Operator convexity and unital positive maps]
+    Let $f:\RR\to \RR$ be operator convex on $[0,\infty)$ and $T:\mcM_d\to \mcM_{d'}$ any
+    positive unital map. Then for all $A\ge 0$:
+    \begin{equation}\label{eq:5.30}
+        f(T(A)) \le T(f(A)).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    By the integral representation in Thm.~5.8 it suffices to prove Eq.~\eqref{eq:5.30}
+    for $f(x)=x^2$ and $f(x)=x^2/(y+x)$, $y>0$. The first case is nothing but the Schwarz
+    inequality in Eq.~\eqref{eq:5.2}. The second case can be simplified by rewriting it
+    as $f(x)=x-y+y^2/(x+y)$. Inserting this into Eq.~\eqref{eq:5.30} and exploiting
+    linearity and unitality of $T$ we see that proving Eq.~\eqref{eq:5.30} boils down to
+    showing that
+    \begin{equation}\label{eq:5.31}
+        T(B)^{-1} \le T(B^{-1}),
+    \end{equation}
+    for all $B>0$. In order to show Eq.~\eqref{eq:5.31} note that by introducing the
+    spectral decomposition $B=\sum_i b_i P_i$ (with spectral projections $P_i$) and using
+    that $\one=T(\one)=\sum_i T(P_i)$ we get
+    \begin{equation}\label{eq:5.32}
+        \begin{pmatrix}
+            T(B^{-1}) &\one\\
+            \one      &T(B)
+        \end{pmatrix}
+        =
+        \sum_i
+        \begin{pmatrix}
+            b_i^{-1} &1\\
+            1        &b_i
+        \end{pmatrix}
+        \otimes T(P_i)
+        \ge 0.
+    \end{equation}
+    From here Eq.~\eqref{eq:5.31} follows by invoking the condition for the positivity of
+    block matrices in Thm.~5.2.
+\end{proof}
+
+By applying this to $f(x)=x\log x$, which is operator convex on the positive half-line,
+we obtain:
+
+\begin{corollary}[Entropic operator inequality]
+    Let $T:\mcM_d\to \mcM_{d'}$ be a positive unital map. Then for all $\rho\ge 0$:
+    \begin{equation}\label{eq:5.33}
+        T(\rho)\log T(\rho) \le T(\rho\log \rho).
+    \end{equation}
+\end{corollary}
+
+\begin{problem}
+Provide a generalization of the inequality for positive maps with $T(\one)\le \one$ in
+the form of Eq.~\eqref{eq:5.30} for arbitrary operator convex $f$ (not necessarily
+satisfying $f(0)\le 0$).
+\end{problem}
+
+Let us now turn from convexity to monotonicity:
+
+\begin{theorem}[Operator monotonicity and positive maps]
+    Let $f$ be an operator monotone function on an interval $I=[0,a]$ with $f(0)\ge 0$
+    and $T:\mcM_d \to \mcM_{d'}$ any positive map for which $T(\one)\le \one$. Then for
+    all $A=A^\dagger$ with $\spec(A)\subseteq I$:
+    \begin{equation}\label{eq:5.34}
+        T(f(A)) \le f(T(A)).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Let us first prove the statement for $T(A)=X^\dagger A X$ with $\|X\|_\infty \le 1$.
+    To this end define a unitary block matrix
+    \begin{equation}\label{eq:5.35}
+        U :=
+        \begin{pmatrix}
+            X                       &\sqrt{\one-XX^\dagger}\\
+            \sqrt{\one-X^\dagger X} &-X^\dagger
+        \end{pmatrix},
+    \end{equation}
+    and note that the upper left block of $U^\dagger(A\oplus 0)U$ is $X^\dagger A X$.
+    Hence by Thm.~5.2 we can find for every $\varepsilon>0$ a $\delta>0$ such that
+    \[
+        U^\dagger(A\oplus 0)U \le (X^\dagger A X + \varepsilon \one)\oplus (\delta \one).
+    \]
+    Applying $f$ to this inequality, using its monotonicity and that
+    $f(U^\dagger \cdot U)=U^\dagger f(\cdot) U$ we get
+    \begin{equation}\label{eq:5.36}
+        X^\dagger f(A)X
+        + \sqrt{\one-XX^\dagger}\, f(0)\, \sqrt{\one-XX^\dagger}
+        \le f(X^\dagger A X + \varepsilon \one)
+    \end{equation}
+    by comparing the upper left blocks on both sides. The asserted inequality
+    Eq.~\eqref{eq:5.34} follows then from continuity of operator monotone functions by
+    taking $\varepsilon \to 0$ together with $f(0)\ge 0$.
+
+    This can be extended to all completely positive maps with $T(\one)\le \one$ by
+    Stinespring's theorem. Following Thms.~2.2,2.3 we can represent every such map in the
+    form $T(A)=X^\dagger(A\otimes \one)X$, where $X^\dagger X=T(\one)\le \one$. By
+    invoking $f(A\otimes \one)=f(A)\otimes \one$ we can thus generalize the inequality to
+    contractive completely positive maps. Finally, if $T$ is merely positive with
+    $T(\one)\le \one$, then it is completely positive on the abelian algebra generated by
+    $\one$ and $A$ (Prop.~1.6) and admits a completely positive extension on $\mcM_d$
+    (Prop.~1.7).
+\end{proof}
+
+Applying this to some of the examples in Example~5.4 leads to:
+
+\begin{corollary}
+    Let $T:\mcM_d\to \mcM_{d'}$ be a positive map with $T(\one)\le \one$. Then
+    \begin{enumerate}
+        \item $T(A) \le T(A^p)^{1/p}$ for all $p\ge 1$ and $A\ge 0$,
+        \item $T(A) \ge T(A^p)^{1/p}$ for all $A>0$ and $p\in[1/2,1]$,\footnote{This follows
+                  from Thm.~5.11 and operator convexity of $x\mapsto x^{1/p}$ for $p\in[1/2,1]$.}
+        \item $T(\log(A)) \le \log(T(A))$ for all $A>0$.
+    \end{enumerate}
+\end{corollary}
+
+\begin{problem}
+Prove a counterpart of Thm.~5.12 for matrix convex functions of finite order. In other
+words, find a proof which does not use the integral representation (or any other
+representation implying operator convexity).
+\end{problem}
+
+Let us finally prove a useful implication of the above theorems:
+
+\begin{corollary}
+    Let $\{T_i:\mcM_d\to \mcM_{d'}\}_{i=1,\dots,n}$ be a collection of positive linear maps
+    such that $\sum_i T_i(\one)\le \one$.
+    \begin{enumerate}
+        \item If $f$ is operator monotone on an interval $I\ni 0$ with $f(0)\ge 0$, then for
+              all Hermitian operators $A_i$ with spectrum in $I$:
+              \begin{equation}\label{eq:5.37}
+                  \sum_{i=1}^n T_i(f(A_i))
+                  \le
+                  f\!\left(\sum_{i=1}^n T_i(A_i)\right).
+              \end{equation}
+        \item If $f$ is operator convex on an interval $I\ni 0$ and $f(0)\le 0$, then for all
+              Hermitian operators $A_i$ with spectrum in $I$:
+              \begin{equation}\label{eq:5.38}
+                  \sum_{i=1}^n T_i(f(A_i))
+                  \ge
+                  f\!\left(\sum_{i=1}^n T_i(A_i)\right).
+              \end{equation}
+    \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+    Let us construct a new map $T:\mcM_d\otimes \mcM_n \to \mcM_{d'}$ via
+    $T(A):=\sum_{i=1}^n T_i(V_i A V_i^\dagger)$ with isometries
+    $V_i:=\one_d \otimes \ket{i}$. Similarly, define
+    $A:=\sum_i A_i\otimes \ketbra{i}{i}$. Then $T(A)=\sum_i T_i(A_i)$ and
+    $f(A)=\sum_i f(A_i)\otimes \ketbra{i}{i}$. Since $T$ is by construction such that
+    $T(\one)\le \one$ we can now apply Thm.~5.11 and Thm.~5.13 leading to assertions 2.\
+    and 1., respectively.
+\end{proof}
+
+\subsection{Joint convexity}
+
+Joint convexity is a property of certain functions of several variables. A function
+$f:D\subseteq \RR\times \RR\to \RR$ with domain $D$ is called jointly convex in its
+arguments iff
+\begin{equation}\label{eq:5.39}
+    f(a,b) \le \lambda f(a_1,b_1) + (1-\lambda) f(a_2,b_2)
+\end{equation}
+holds for all $a_i,b_i$ with $a=\lambda a_1+(1-\lambda)a_2$, $b=\lambda b_1+(1-\lambda)b_2$
+and all $\lambda\in[0,1]$. It is defined analogously for more than two arguments and
+$f$ is called jointly concave iff $-f$ is jointly convex. Clearly, a jointly convex
+function is convex in each of its arguments separately (i.e., $f(a,b)\le \lambda f(a_1,b)+(1-\lambda)f(a_2,b)$);
+the converse is, however, not true in general.
+
+In the following we will apply the concept of joint convexity to operators, i.e., we
+will essentially replace $\RR$ with the space of Hermitian operators. Two related
+types of joint convexity results will be of interest: (i) joint operator convexity,
+where the ordering ``$\le$'' in Eq.~\eqref{eq:5.39} refers to the partial order in the
+space of Hermitian operators (see Eq.~\eqref{eq:5.1}) and $f$ is a mapping between
+operators, and (ii) joint convexity of functionals which map operators into $\RR$ (in
+most cases the `functional' will essentially be the trace).
+
+\paragraph{Joint operator convexity.}
+We consider mappings of the form $F:D\subseteq \mcM_{d_1}\times \cdots \times \mcM_{d_n} \to \mcM_d$
+and say that they are jointly operator convex in the domain $D$ iff
+\begin{equation}\label{eq:5.40}
+    F(A) \le \sum_i \lambda_i F(A^{(i)}),
+\end{equation}
+for all $A,A^{(i)}\in D$ which are related via $A=\sum_i \lambda_i A^{(i)}$ with
+$\lambda$ being a vector of probabilities. The ordering `$\le$' used in this context
+is the one between Hermitian operators which means in particular that $F$ should have
+Hermitian image.
+
+The following theorem encompasses most of the results about joint operator convexity.
+It provides a tool for constructing maps in several variables from maps in fewer
+variables while retaining the convexity properties. In particular, it allows us to
+construct mappings which are jointly operator concave/convex from simple operator
+concave/convex functions:
+
+\begin{theorem}[Joint operator convexity]
+    Let $g:D\subseteq \mcM_{d_1}\times \cdots \times \mcM_{d_n}\to \mcM_d$ be a map on the
+    direct product $D$ of $n$ positive operators, and similarly
+    $h:D'\subseteq \mcM_{d'_1}\times \cdots \times \mcM_{d'_m}\to \mcM_d$.
+    Assume that $g$ is jointly operator concave and positive and $h$ is semi-definite.
+    Let $I\ni 0$ be the positive/negative real half line depending on whether $h$ is
+    positive or negative semi-definite. For any function $f:I\to \RR$ with $f(0)\le 0$
+    define $F:D'\times D \to \mcM_d$ as
+    \begin{equation}\label{eq:5.41}
+        F(L,R) := \sqrt{g(R)}
+        f\!\left(g(R)^{-1/2} h(L) g(R)^{-1/2}\right)
+        \sqrt{g(R)}.
+    \end{equation}
+    We consider joint operator convexity of $F$ in its $n+m$ arguments. $F$ is jointly
+    operator convex on positive operators for which $g$ is invertible if at least one of
+    the following holds:
+    \begin{enumerate}
+        \item $h$ is jointly operator concave and $f$ is operator anti-monotone,
+        \item $h$ is affine and $f$ is operator convex.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Consider the convex decompositions $R=\sum_i \lambda_i R_i$ and $L=\sum_i \lambda_i L_i$
+    and define
+    \[
+        K_i := \sqrt{\lambda_i g(R_i)}\, g(R)^{-1/2}.
+    \]
+    This satisfies
+    \begin{equation}\label{eq:5.42}
+        \sum_i K_i^\dagger K_i
+        = g(R)^{-1/2}\left(\sum_i \lambda_i g(R_i)\right) g(R)^{-1/2}
+        \le \one,
+    \end{equation}
+    where the inequality comes from joint concavity of $g$. Assume that the requirements
+    of the first assertion are fulfilled. Then if we insert the definitions:
+    \begin{align}
+        F(L,R)
+         &\le \sqrt{g(R)}
+        f\!\left(\sum_i \lambda_i g(R)^{-1/2} h(L_i) g(R)^{-1/2}\right)
+        \sqrt{g(R)}, \label{eq:5.43}\\
+         &= \sqrt{g(R)}
+        f\!\left(\sum_i K_i^\dagger g(R_i)^{-1/2} h(L_i) g(R_i)^{-1/2} K_i\right)
+        \sqrt{g(R)}, \label{eq:5.44}\\
+         &\le \sqrt{g(R)}
+        \sum_i K_i^\dagger
+        f\!\left(g(R_i)^{-1/2} h(L_i) g(R_i)^{-1/2}\right)
+        K_i
+        \sqrt{g(R)}, \label{eq:5.45}\\
+         &= \sum_i \lambda_i F(L_i,R_i), \label{eq:5.46}
+    \end{align}
+    where the first inequality comes from concavity of $h$ together with
+    anti-monotonicity of $f$ and the second inequality follows from the first part of
+    Cor.~5.3 by setting $T_i(\cdot):=K_i^\dagger (\cdot)\,K_i$ and noticing that
+    Eq.~\eqref{eq:5.42} means $\sum_i T_i(\one)\le \one$.
+
+    For the second assertion of the theorem note that if $h$ is affine we have equality in
+    Eq.~\eqref{eq:5.43}. The inequality in Eq.~\eqref{eq:5.45} follows then from the
+    second part of Cor.~5.3.
+\end{proof}
+
+Note that in the preceding theorem we may extend $D'$ to all Hermitian operators and
+allow $h$ to have Hermitian image if we set $I=\RR$. Similarly, we can enlarge $D$ as
+long as $g$ has positive image. Applying Thm.~5.14 to various functions now provides
+us with a zoo of jointly operator convex/concave mappings:
+
+\begin{corollary}
+    \begin{enumerate}
+        \item $\mcM_d\times \mcM_d \ni (L,R)\mapsto L R^{-\alpha} L$ is jointly operator
+              convex for $\alpha\in[0,1]$ on positive $L$ and positive $R$,
+        \item $\mcM_d\times \mcM_d \ni (L,R)\mapsto
+                  R^{\beta/2}(R^{-\beta/2} L^\gamma R^{-\beta/2})^\alpha R^{\beta/2}$
+              is jointly operator concave on positive operators for $\alpha,\beta,\gamma\in[0,1]$,
+        \item $\mcM_d^m \times \mcM_d \ni (L_1,\dots,L_m,R)\mapsto
+                  R^{\beta/2}\, f\!\left(\sum_{i=1}^m R^{-\beta/2}L_i R^{-\beta/2}\right)\,R^{\beta/2}$,
+              $\beta\in[0,1]$ is jointly operator convex on positive operators if $f$ is operator
+              convex with $f(0)\le 0$, e.g.\ $f(x)=-x^\alpha$, $f(x)=x^{1+\alpha}$ with
+              $\alpha\in[0,1]$ or $f(x)=x\log x$.
+    \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+    Use Thm.~5.14 and for 1.\ set $f(x)=x^2$, $h(x)=x$ and $g(x)=x^\alpha$. For 2.\ set
+    $f(x)=-x^\alpha$, $g(x)=x^\beta$, $h(x)=x^\gamma$. For 3.\ set $h(L)=\sum_i L_i$ and
+    $g(x)=x^\beta$.
+\end{proof}
+
+By replacing $L,R$ in the above discussion by $L\mapsto L\otimes \one$ and
+$R\mapsto \one\otimes R$ and thereby making things commutative, we obtain similar
+statements for tensor product mappings:
+
+\begin{corollary}
+    \begin{enumerate}
+        \item $\mcM_d\times \mcM_d \ni (L,R)\mapsto L^x\otimes R^y$ is jointly operator
+              concave on positive operators for $x,y\ge 0$ with $x+y\le 1$,
+        \item $\mcM_d^m \ni (A_1,\dots,A_m)\mapsto \bigotimes_{i=1}^m A_i^{x_i}$ is jointly
+              operator concave on positive operators for $x_i\ge 0$ with $\sum_i x_i\le 1$,
+        \item $\mcM_d\times \mcM_d \ni (L,R)\mapsto L^{1+\alpha}\otimes R^{-\beta\alpha}$ is
+              jointly operator convex on positive operators for $\alpha,\beta\in[0,1]$.
+    \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+    Statement 1.\ follows by inserting into the second assertion of Cor.~5.4. Statement 2.\
+    follows by induction from the previous argument. That is, for $m=3$ we continue with
+    $h(A_1,A_2)=A_1^{x_1}\otimes A_2^{x_2}\otimes \one$, exploit that it is concave by the
+    first statement and apply Thm.~5.14 with $R=\one\otimes \one\otimes A_3$ and
+    $f(x)=-x^\alpha$ and $g(x)=x^\beta$, $\alpha,\beta\in[0,1]$, etc. Assertion 3.\ follows
+    from point 3.\ of Cor.~5.4 when applied to $f(x)=x^{1+\alpha}$.
+\end{proof}
+
+\paragraph{Jointly convex functionals.}
+In the following we will discuss joint convexity/concavity properties of functionals,
+i.e., maps from a set of operators into $\RR$. In most cases the results follow from
+the previous ones on joint operator convexity by taking the trace or the expectation
+value w.r.t.\ some positive operator. One of the central results in this context is
+the following:
+
+\begin{theorem}[Ando--Lieb]
+    For every $K\in \mcM_d(\CC)$ the map
+    \begin{equation}\label{eq:5.47}
+        \mcM_d(\CC)\times \mcM_d(\CC)\ni (A,B) \mapsto \tr\!\left[K^\dagger A^x K B^y\right]
+    \end{equation}
+    \begin{itemize}
+        \item is jointly concave on positive operators for $x,y\ge 0$ if $x+y\le 1$, and
+        \item jointly convex on positive operators for $x\in[1,2]$ if $y\in[1-x,0]$.
+    \end{itemize}
+\end{theorem}
+
+\begin{proof}
+    The result is an immediate consequence of items 1.\ and 3.\ of Cor.~5.5. In order to
+    see this consider the expectation value of $L^x\otimes R^y$ w.r.t.\
+    $\ket{\psi} = (K\otimes \one)\sum_{i=1}^d \ket{i}\otimes \ket{i}$. Using Eq.~(1.12)
+    this gives
+    \begin{equation}\label{eq:5.48}
+        \bra{\psi}(L^x\otimes R^y)\ket{\psi}
+        = \tr\!\left[K^\dagger L^x K (R^{T})^y\right],
+    \end{equation}
+    so that the result follows by setting $A=L$ and $B=R^{T}$.
+\end{proof}
+
+In fact, the parameter ranges for $x$ and $y$ in Thm.~5.15 are the only ones (apart
+from interchanging $x\leftrightarrow y$) for which joint convexity/concavity holds.
+
+\begin{theorem}[Monotonicity under cp-maps]
+    Consider a functional $F:D\subseteq \mcM_d\times \cdots \times \mcM_d\to \RR$ which is
+    defined for all dimensions $d\in \NN$. Assume that $F$ satisfies
+    \begin{enumerate}
+        \item joint convexity in $D$,
+        \item unitary invariance, i.e., for all $A\in D$ and all unitaries $U\in \mcM_d(\CC)$
+              it holds that
+              \[
+                  F(UA_1U^\dagger,\dots,UA_nU^\dagger)=F(A_1,\dots,A_n),
+              \]
+        \item invariance under tensor products, meaning that for all $A\in D$ and all density
+              operators $\tau\in \mcM_{d''}(\CC)$ we have
+              \[
+                  F(A_1\otimes \tau,\dots,A_n\otimes \tau)=F(A_1,\dots,A_n).
+              \]
+    \end{enumerate}
+    Then $F$ is monotone w.r.t.\ all completely positive trace-preserving maps
+    $T:\mcM_d(\CC)\to \mcM_{d'''}(\CC)$ in the sense that for all $A\in D$
+    \begin{equation}\label{eq:5.49}
+        F(T(A_1),\dots,T(A_n)) \le F(A_1,\dots,A_n).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Let us follow Thm.~2.5 and represent $T$ as
+    $T(\rho)=\tr_E\![U(\rho\otimes \tau)U^\dagger]$ where $\tau$ is a density
+    matrix, $U$ a unitary and $\tr_E$ the partial trace over an `environmental' system of
+    dimension $m$, say. If we take a unitary operator basis $\{V_i\}_{i=1,\dots,m^2}$ in
+    $\mcM_m$ (orthonormal w.r.t.\ the Hilbert--Schmidt inner product---see Exp.~2.1), we
+    can write
+    \begin{equation}\label{eq:5.50}
+        T(\rho)\otimes \one_m/m
+        =
+        \frac{1}{m^2}\sum_{i=1}^{m^2}
+        (\one \otimes V_i)\,U(\rho\otimes \tau)U^\dagger\,(\one\otimes V_i^\dagger).
+    \end{equation}
+    Observing that $\one_m/m$ is again a density matrix and that the r.h.s.\ of
+    Eq.~\eqref{eq:5.50} represents a convex combination of unitarily equivalent terms we
+    can straightforwardly arrive at the desired Eq.~\eqref{eq:5.49} by applying joint
+    convexity together with the invariance properties of $F$.
+\end{proof}
+
+\subsection{Convexity and monotonicity under the trace}
+
+\subsubsection*{Trace inequalities}
+
+\begin{theorem}[Convex functions and positive maps under the trace]
+    Let $\{T_i:\mcM_d(\CC)\to \mcM_{d'}(\CC)\}$ be a collection of positive linear maps,
+    $f:I\subseteq \RR \to \RR$ a function which is convex on $I$ and
+    $\{X_i\in \mcM_d(\CC)\}$ a collection of Hermitian operators with spectrum in $I$.
+    Then
+    \begin{equation}\label{eq:5.51}
+        \tr\!\left[C\, f\!\left(\sum_i T_i(X_i)\right)\right]
+        \le
+        \sum_i \tr\!\left[C\, T_i(f(X_i))\right]
+    \end{equation}
+    holds for all positive semi-definite $C\in \mcM_{d'}(\CC)$ which commute with
+    $f\!\left(\sum_i T_i(X_i)\right)$ if either
+    \begin{enumerate}
+        \item $\sum_i T_i(\one)=\one$, or
+        \item $\sum_i T_i(\one)\le \one$ and $f(0)\le 0$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    By linearity it is sufficient to consider $C=\ketbra{\psi}{\psi}$, where $\psi$ is a
+    normalized eigenvector of $f\!\left(\sum_i T_i(X_i)\right)$. Denote by
+    $X_i=\sum_x \mu_{x,i}\ketbra{x_i}{x_i}$ the spectral decomposition of $X_i$. Then
+    \begin{align}
+        \bra{\psi} f\!\left(\sum_i T_i(X_i)\right)\ket{\psi}
+         &= f\!\left(\bra{\psi}\sum_i T_i(X_i)\ket{\psi}\right) \label{eq:5.52}\\
+         &= f\!\left(\sum_{x,i} p_{x,i}\mu_{x,i}\right),
+        \qquad p_{x,i}:=\bra{\psi}T_i(\ketbra{x_i}{x_i})\ket{\psi} \nonumber\\
+         &\le \sum_{x,i} p_{x,i} f(\mu_{x,i})
+        = \sum_i \bra{\psi} T_i(f(X_i))\ket{\psi}.
+        \label{eq:5.53}
+    \end{align}
+    Here the first equality follows from $\psi$ being an eigenvector. To see this recall
+    that applying a function to a Hermitian matrix means applying it to the eigenvalues
+    (see Eq.~\eqref{eq:5.15} and the discussion of functional calculus). For the
+    inequality in Eq.~\eqref{eq:5.53} we use convexity of $f$ together with the fact that
+    the $p_{x,i}$'s are positive (due to positivity of the $T_i$'s) and sum up to one if
+    $\sum_i T_i(\one)=\one$ holds with equality. If equality does not hold we can add
+    another term which completes the probability distribution and for which the
+    corresponding $\mu=0$. In this case the inequality then follows from convexity
+    together with $f(0)\le 0$.
+\end{proof}
+
+The following is a simple but important consequence of the above Thm.~5.17. It
+follows by setting $C=\one$ and $T_i=\lambda_i \id$ with $\lambda$ being a probability
+vector:
+
+\begin{corollary}[Convex trace functions]
+    Let $f:I\subseteq \RR\to \RR$ be a function which is convex on $I$. Then the map
+    $X\mapsto \tr[f(X)]$ is convex on the set of Hermitian operators with spectrum in $I$.
+\end{corollary}
+
+In order to get a similar result for function which are monotone, but not necessarily
+operator monotone, it is convenient to recall how functions are differentiated under
+the trace. If $f:I\subseteq \RR\to \RR$ is a continuously differentiable function with
+derivative $f'$, then
+\begin{equation}\label{eq:5.54}
+    \left.\frac{\partial}{\partial x}\tr[f(A+xB)]\right|_{x=x_0}
+    = \tr[B\, f'(A+x_0 B)],
+\end{equation}
+for all Hermitian operators $A,B\in \mcM_d(\CC)$ for which the spectrum of $A+xB$ in a
+neighborhood of $x_0$ is contained in $I$.\footnote{This is easily verified by looking
+    at a polynomial approximation of $f$.}
+With this at hand we obtain:
+
+\begin{proposition}[Monotone trace functions]
+    Let $f:I\to \RR$ be a continuously differentiable and non-decreasing function on an
+    open interval $I\subseteq \RR$. Then for all Hermitian operators $A,B\in \mcM_d(\CC)$
+    with spectrum in $I$ and $A\le B$ we have that
+    \begin{equation}\label{eq:5.55}
+        \tr[f(A)] \le \tr[f(B)].
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    Consider the function $g(x):=\tr[f(A+x\Delta)]$ with $\Delta:=(B-A)\ge 0$. Following
+    Eq.~\eqref{eq:5.54} we have $g'(x_0)=\tr[\Delta f'(A+x_0\Delta)]$ which is non-negative
+    for $x_0\ge 0$ since it is the trace of the product of two positive semi-definite
+    operators. Thus $g(0)\le g(1)$.
+\end{proof}
+
+A slightly stronger result can be obtained from Weyl's monotonicity theorem which
+states that for any pair of Hermitian $d\times d$ matrices for which $A\le B$, it
+holds that
+\begin{equation}\label{eq:5.56}
+    \forall j:\quad \lambda^\downarrow_j(B) \ge \lambda^\downarrow_j(A) + \lambda^\downarrow_d(B-A),
+\end{equation}
+where the $\lambda^\downarrow_j$'s are the decreasingly ordered eigenvalues. Since
+$\lambda^\downarrow_d(B-A)\ge 0$, one obtains immediately:
+
+\begin{proposition}
+    For any pair of Hermitian operators $A,B\in \mcM_d(\CC)$ there exists a unitary
+    $U\in \mcM_d(\CC)$ so that for any $f:I\to \RR$ which is non-decreasing on an interval
+    $I$ which includes the spectra of both $A$ and $B$, we have
+    \begin{equation}\label{eq:5.57}
+        f(A) \le U f(B) U^\dagger.
+    \end{equation}
+\end{proposition}
+
+\subsection{Operator means}
+
+\end{document}

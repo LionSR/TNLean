@@ -1,0 +1,1370 @@
+
+% Transcribed from: Wolf, "Quantum Channels \& Operations: Guided Tour", Chapter 8
+% Source PDF: WolfLectureNote/ch08_distance_measures.pdf
+% Status: Partial (provided pages cover up to the heading of Sec. 8.8)
+
+\documentclass[11pt,a4paper]{article}
+\input{preamble}
+
+% --- Override theorem numbering to match Wolf PDF (independent counters per environment) ---
+\UndefEnv{proposition}
+\UndefEnv{corollary}
+\UndefEnv{lemma}
+\UndefEnv{definition}
+\UndefEnv{example}
+\UndefEnv{problem}
+\UndefEnv{remark}
+
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{lemma}{Lemma}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{problem}{Problem}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{excursion}{Excursion}[section]
+
+\title{Chapter 8: Measures for distances and mixedness\\{\small (Wolf Lecture Notes -- Transcription)}}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\setcounter{section}{7}
+\section{Measures for distances and mixedness}
+
+\begin{theorem}[Russo--Dye]
+    \ldots
+\end{theorem}
+
+\subsection{Norms}
+
+A matrix norm is a vector norm on the space of matrices $M_{n,m}(\CC)$. That is, it
+is a positive functional which is convex (i.e., it satisfies the triangle inequality
+$\|A+B\|\le \|A\|+\|B\|$ for all $A,B$) and such that $\|aA\|=|a| \|A\|$ for all $a\in\CC$
+and $(\|A\|=0 \Rightarrow A=0)$. For square matrices some norms have the additional
+property of being sub-multiplicative, meaning that $\|AB\|\le \|A\| \|B\|$ holds.
+Sometimes this property is included in the definition of matrix norms. Equipped
+with a sub-multiplicative norm, $M_d(\CC)$ becomes a Banach algebra (see Sec.~1.6).
+
+An important class of sub-multiplicative matrix norms on $M_d(\CC)$ are those
+which are unitarily invariant in the sense that $\|UAV\|=\|A\|$ for all unitaries $U$
+and $V$. Since every element $A\in M_d(\CC)$ has a singular value decomposition
+$A = U\operatorname{diag}(s_1,\dots,s_d)V$, a unitarily invariant norm depends solely on the singular
+values $\{s_i(A)\}$.\footnote{In fact, unitarily invariant norms on $M_d$ are in one-to-one correspondence with norms
+    $f:\RR^d\to\RR_+$ which are (i) permutational invariant and (ii) depend only on absolute values.
+    Such a vector norm $f$ is called \emph{symmetric gauge function} and it gives rise to a unitarily invariant
+    norm on $M_d$ via $\|A\| = f(s_1(A),\dots,s_d(A))$.}
+
+The two mostly used classes of unitarily invariant norms are:
+\begin{itemize}
+    \item \emph{Schatten $p$-norms}:
+          \[
+              \|A\|_p := \left(\sum_{i=1}^d s_i(A)^p\right)^{1/p}
+              \qquad\text{for any } p\ge 1,
+          \]
+    \item \emph{Ky Fan $k$-norms}:
+          \[
+              \|A\|_{(k)} := \sum_{i=1}^k s_i(A)
+              \qquad\text{where } k=1,\dots,d \text{ and the singular values are decreasingly ordered.}
+          \]
+\end{itemize}
+
+Both classes have a monotonicity property in their parameter. Evidently, $\|A\|_{(k)}\ge \|A\|_{(k')}$ for
+$k\ge k'$, but also
+\begin{equation}\tag{8.1}
+    \|A\|_1 \ge \|A\|_p \ge \|A\|_{p'} \ge \|A\|_\infty,
+\end{equation}
+for all $1\le p\le p'$. Moreover, $p<p'$ leads to a strict inequality iff $A$ has rank at
+least two.\footnote{In infinite dimensions the analog of Eq.~(8.1), in particular $\|A\|_1 \ge \|A\|_2 \ge \|A\|_\infty$
+    gives rise to the inclusion trace class operators $\subset$ Hilbert--Schmidt class operators $\subset$ bounded
+    operators.}
+The norm $\|A\|_\infty=\|A\|_{(1)}$ is called the operator norm and it can be
+defined alternatively as
+\[
+    \|A\|_\infty = \sup_{\|\psi\|=\|\phi\|=1} \bigl|\bra{\psi}A\ket{\phi}\bigr|
+\]
+with supremum over all unit vectors $\phi,\psi\in\CC^d$. With the operator norm $M_d(\CC)$ becomes a $C^\ast$-algebra as the
+$C^\ast$-equality $\|A^\dagger A\|=\|A\|^2$ is satisfied (see Sec.~1.6). This property uniquely identifies the operator norm.
+The norm $\|A\|_1=\|A\|_{(d)}=\tr[|A|]$ is called the trace norm. Trace norm and operator norm are the largest/smallest norms
+among all unitarily invariant norms in the sense that $\|A\|_\infty \le \|A\|/\|\rho\| \le \|A\|_1$, where $\rho=\ketbra{1}{1}$
+takes care of normalization. The norm $\|A\|_2$ is called Hilbert--Schmidt norm or Frobenius norm. It can be regarded as arising from the Hilbert--Schmidt scalar product
+(see Sec.~2.3) and it coincides with the $\ell_2$-norm. The latter is defined within the class of $\ell_p$ norms
+\[
+    \|A\|_{\ell_p} := \left(\sum_{k,l} |A_{kl}|^p\right)^{1/p}\qquad\text{for } p\ge 1.\footnote{Note that in the definition of the $\ell_p$-norms as well as for the Schatten $p$-norms $p\ge 1$ is
+        crucial for convexity.}
+\]
+They are bounded by the Schatten $p$-norms (which one may call $L_p$-norms in this context) via $\|A\|_{\ell_p}\ge \|A\|_p$ for $p\in[1,2]$
+and with inequality in the opposite direction for $p\ge 2$. Apart from $\ell_2$ the $\ell_p$-norms are not unitarily invariant.
+
+Besides being sub-multiplicative unitarily invariant norms exhibit some very useful properties which are collected in the following:
+
+\begin{theorem}[Unitarily invariant norms]
+    Let $\|\cdot\|$ be any unitarily invariant norm on $M_d(\CC)$. Then the following holds for $A,B\in M_d(\CC)$:
+    \begin{enumerate}
+        \item H\"older's inequality for $p\ge 1$ and $p^{-1}+q^{-1}=1$:
+              \begin{equation}\tag{8.2}
+                  \|AB\| \le \bigl\||A|^p\bigr\|^{1/p} \bigl\||B|^q\bigr\|^{1/q}.
+              \end{equation}
+
+        \item Lidskii's inequalities: If $A$ and $B$ are Hermitian and $E^{\downarrow}(A)$, $E^{\uparrow}(A)$ denote
+              the diagonal matrices with decreasingly/increasingly ordered eigenvalues of $A$ respectively, then\footnote{If one drops the restriction on $A$ and $B$ to be Hermitian and replaces eigenvalues by
+                  singular values in the diagonal matrices, then still the lower bound holds true.}
+              \begin{equation}\tag{8.3}
+                  \|A-B\|
+                  \begin{cases}
+                      \le \bigl\|E^{\downarrow}(A)-E^{\uparrow}(B)\bigr\|, \\[0.3em]
+                      \ge \bigl\|E^{\downarrow}(A)-E^{\downarrow}(B)\bigr\|.
+                  \end{cases}
+              \end{equation}
+
+        \item If $AB$ is normal, then $\|AB\|\le \|BA\|$.
+
+        \item For every non-negative concave function $f$ on $[0,\infty)$ and all $A,B\ge 0$:
+              \begin{equation}\tag{8.4}
+                  \|f(A)+f(B)\| \ge \|f(A+B)\|.
+              \end{equation}
+              The inequality is reversed if $f$ is non-negative and convex on $[0,\infty)$ with $f(0)=0$.
+
+        \item Ky Fan dominance: if we have $\|A\|_{(k)}\ge \|B\|_{(k)}$ for all Ky--Fan norms
+              $(k=1,\dots,d)$, then $\|A\|\ge \|B\|$ for every unitarily invariant norm.
+
+        \item Araki--Lieb--Thirring inequalities: If $A,B\ge 0$ and $p\ge 1$, then
+              \begin{equation}\tag{8.5}
+                  \bigl\|(BAB)^p\bigr\| \le \|B^pA^pB^p\|,\qquad \bigl\||BA|^p\bigr\| \le \|B^pA^p\|,
+              \end{equation}
+              and the reversed inequalities hold for $p\in(0,1]$.
+    \end{enumerate}
+\end{theorem}
+
+Applying H\"older's inequality to the trace norm and using that $|\tr[A^\dagger B]|\le \tr[|A^\dagger B|]$
+leads to a useful Cauchy--Schwarz type version of the inequality, namely:
+\begin{equation}\tag{8.6}
+    \bigl|\tr[A^\dagger B]\bigr| \le \|A\|_p\,\|B\|_q.
+\end{equation}
+For $p=2$ this is indeed the Cauchy--Schwarz inequality for the Hilbert--Schmidt inner product. Another simple application of H\"older's inequality is a relation
+between different $p$-norms opposite to the direction of Eq.~(8.1): setting $B=\one$ in Eq.~(8.2) and applying it to the $p$-norm we arrive at
+\begin{equation}\tag{8.7}
+    \|A\|_p \le d^{\frac{1}{p}-\frac{1}{p'}} \|A\|_{p'},\qquad p'\ge p\ge 1.
+\end{equation}
+
+In a similar vein we can derive the following moment inequality which generalizes the well known variance inequality $\langle X^2\rangle \ge \langle X\rangle^2$
+known for Hermitian operators:
+
+\begin{proposition}[Moment inequalities]
+    Consider $1\le p\le p'$ and $\rho,X\in M_d(\CC)$ where $\rho$ is a density operator and $X\ge 0$. Then
+    \begin{equation}\tag{8.8}
+        (\tr[\rho X^p])^{p'} \le (\tr[\rho X^{p'}])^p.
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    This follows from H\"older's inequality $\|AB\|_1 \le \|A\|_{\tilde p}\|B\|_{\tilde q}$ by setting
+    $\tilde q = p'/p$, $A=\rho^{1/\tilde p}$ and $B=\rho^{\frac{p}{2p'}}X^p\rho^{\frac{p}{2p'}}$.
+\end{proof}
+
+\paragraph{Variational characterization of norms.}
+In the same spirit as the extremal eigenvalue of a Hermitian matrix can be obtained variationally, we can characterize
+the Schatten $p$-norms and the Ky--Fan norms as the solution of optimization problems. For the latter it holds for instance that
+\begin{equation}\tag{8.9}
+    \|A\|_{(k)}=\sup\left\{\bigl|\tr[A^\dagger B]\bigr|\ \Big|\ B^\dagger B\le \one,\ \rank(B)\le k\right\}.
+\end{equation}
+Inequality (8.6) is the basis for an analogous variational characterization of the Schatten $p$-norms:
+
+\begin{theorem}[Variational ways to $p$-norms]
+    Let $A,P\in M_d(\CC)$ with $P\ge 0$ and $p^{-1}+q^{-1}=1$ with $p\ge 1$. Then
+    \begin{align}
+        \|A\|_p      &= \sup\left\{\bigl|\tr[A^\dagger B]\bigr|\ \big|\ \|B\|_q=1\right\}, \tag{8.10}\\
+        \|A\|_1      &= \sup\left\{\bigl|\tr[A^\dagger U]\bigr|\ \big|\ UU^\dagger=\one\right\}, \tag{8.11}\\
+        \|A\|_\infty &= \sup\left\{\bigl|\langle\psi|A|\phi\rangle\bigr|\ \big|\ \|\psi\|=\|\phi\|=1\right\}, \tag{8.12}\\
+        \|P\|_p^{p}  &= \frac{1}{p}\sup_{X\ge 0}\left[\tr[PX]-\frac{1}{q}\|X\|_q^q\right]. \tag{8.13}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    In order to arrive at Eq.~(8.10) first note that the supremum is an upper bound by Eq.~(8.6).
+    The supremum is attained if we set $B = UP^{p-1}\tr[P^p]^{-1/q}$ constructed from the polar decomposition
+    $A=UP$. Eqs.~(8.11,8.12) are special cases which arise from (8.10) due to the fact that the set of operators
+    with $\|B\|_q\le 1$ is convex and, since we maximize a convex functional, the maximum is attained at an extreme point.
+    The extreme points are the set of unitaries for $q=1$ and normalized rank-one operators for $q=\infty$, respectively.
+    \ldots
+\end{proof}
+
+Eq.~(8.10) is the reason why $p$-norms and $q$-norms are called dual to each other if $p^{-1}+q^{-1}=1$.
+In fact, for every norm $\|\cdot\|$ on $M_{n,m}$ we can define a dual norm $\|\cdot\|_D$ w.r.t.\ the Hilbert--Schmidt inner product via
+\begin{equation}\tag{8.14}
+    \|A\|_D := \sup\left\{\bigl|\tr[A^\dagger B]\bigr|\ \Big|\ B\in M_{n,m}(\CC),\ \|B\|=1\right\}.
+\end{equation}
+The dual norm is unitarily invariant iff $\|\cdot\|$ is.
+
+\subsection{Entropies}
+
+\subsubsection{Information theoretic origin}
+
+\subsubsection{Mathematical origin}
+
+axiomatization \ldots
+\begin{equation}\tag{8.15}
+    S(\rho) = -\left.\frac{\partial}{\partial p}\tr[\rho^p]\right|_{p=1}.
+\end{equation}
+
+\subsubsection{Physical origin}
+
+Boltzmann, time asymmetry \& co., relation to the above, statistical interpretation
+
+\subsection{Majorization}
+
+Majorization is a stronger means of saying that a probability distribution/density operator is more mixed than another one. While entropies and the respective norms
+provide an ordering in the space of probability distributions/density operators, majorization leaves us with a partial order. We will, in fact, see that one distribution
+is more mixed than another in the majorization sense iff this applies to all entropy-type functionals.
+
+Consider two vectors $x,y\in\RR^d$. We say that $x$ is majorized by $y$, and write $x\prec y$, iff for the sum of decreasingly ordered components we have
+\begin{equation}\tag{8.16}
+    \sum_{i=1}^k x_i^{\downarrow} \le \sum_{i=1}^k y_i^{\downarrow},
+    \qquad \forall k=1,\dots,d
+    \quad\text{with equality for } k=d.
+\end{equation}
+Note that if $x$ describes any discrete probability distribution, then
+\begin{equation}\tag{8.17}
+    \left(\frac{1}{d},\dots,\frac{1}{d}\right)\prec x \prec (1,0,\dots,0),
+\end{equation}
+consistent with our intuition about what is the `maximally mixed' distribution and which is a most `pure' distribution. If only the $d$ inequalities in Eq.~(8.16) are satisfied
+but equality for $k=d$ is not required, then we say that $x$ is weakly submajorized by $y$ and we write $x\prec_w y$.
+
+The basic results in the context of majorization are:
+
+\begin{theorem}[Majorization]
+    Let $x,y\in\RR^d$. The following statements are equivalent:
+    \begin{enumerate}
+        \item $x$ is majorized by $y$,
+        \item $x=My$ for some doubly stochastic\footnote{Doubly stochastic means that $M$ is non-negative ($M_{kl}\ge 0$) and
+                  $\sum_k M_{kl}=\sum_j M_{ij}=1$ for all $l,i$.} matrix $M\in M_d(\RR)$,
+        \item $x=My$ where $M_{kl}=O_{kl}^2$ for some real orthogonal matrix\footnote{If $U\in M_d(\CC)$ is any unitary, then the matrix with components $M_{kl}=|U_{kl}|^2$
+                  is doubly stochastic and called a unistochastic matrix. If $U$ real orthogonal, then $M$ is called orthostochastic.} $O\in M_d(\RR)$,
+        \item $\sum_i f(x_i)\le \sum_i f(y_i)$ for all convex functions $f:\RR\to\RR$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Submajorization]
+    Let $x,y\in\RR^d$. The following statements are equivalent:
+    \begin{enumerate}
+        \item $x\prec_w y$,
+        \item $x=My$ for some doubly substochastic\footnote{Doubly substochastic means that $M$ is non-negative and all columns and rows have a sum which is at most $1$.}
+              matrix $M\in M_d(\RR)$,
+        \item There exists a vector $z\in\RR^d$ such that $z\prec y$ and $x_i\le z_i$ for all $i$,
+        \item $\sum_i f(x_i)\le \sum_i f(y_i)$ for all monotonically increasing convex functions $f:\RR\to\RR$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Birkhoff]
+    The set of doubly stochastic matrices in $M_d(\RR)$ is a convex polytope. Its extreme points are the permutation matrices. Similarly, the set of doubly substochastic matrices is a convex polytope.
+    Its extreme points are all matrices which have at most one entry $1$ in each column and each row and all other entries zero.
+\end{theorem}
+
+\begin{excursion}[Diagonals, eigenvalues, singular values]
+    Consider a Hermitian matrix $H\in M_d(\CC)$ with eigenvalues $\{\lambda_i\}$ and diagonal elements $D_i:=H_{ii}$. Using that we can diagonalize $H$ via a unitary $U$, we get the relation
+    $D_i=\sum_j |U_{ij}|^2\lambda_j$ and since $[|U_{ij}|^2]$ is doubly stochastic we have
+    \begin{equation}\tag{8.18}
+        \lambda \succ D.
+    \end{equation}
+\end{excursion}
+
+% === Content below merged from r0 (r1 was truncated at Excursion 8.18) ===
+
+Given vectors $D,\lambda\in\RR^d$ Eq.~(8.18) is thus a necessary condition for the existence of a Hermitian matrix with eigenvalues
+$\lambda$ and diagonal entries $D$. As shown by Horn it is also a sufficient one. If $\lambda,D\in\CC^d$ are complex, then Mirsky showed
+that there exists a complex matrix in $M_d$ with eigenvalues $\lambda_i$ and diagonal entries $D_i$ iff $\sum_i \lambda_i=\sum_i D_i$,
+i.e., the trace remains the only relevant condition. In a similar vein we can ask for the relation between eigenvalues and singular values
+and obtain again a majorization like condition: let $s\in\RR_+^d$ and $\lambda\in\CC^d$, then there exists a matrix with singular values
+$s_i$ and eigenvalues $\lambda_i$ iff
+\begin{equation}\tag{8.19}
+    \prod_{i=1}^k s_i \ge \left|\prod_{i=1}^k \lambda_i\right|
+    \qquad \forall k=1,\dots,d\ \text{with equality for }k=d,
+\end{equation}
+where both $s$ and $|\lambda|$ are arranged in decreasing order. That is, if there is no zero element we can express this as
+$\log s \succ \log|\lambda|$ which, in particular implies $|\lambda|\prec_w s$.
+
+The concept of majorization can be applied to pairs of matrices in $M_d(\CC)$ by applying it to the vectors containing either the singular
+values or (in particular, for Hermitian matrices) the eigenvalues in decreasing order. Let for instance $s(A),s(B)\in\RR^d$ be the vectors
+containing the singular values of two arbitrary complex matrices $A,B\in M_d(\CC)$. By Ky Fan dominance (Thm.~8.2) we get that
+\begin{equation}\tag{8.20}
+    s(A)\succ s(B)\iff \|A\|_1=\|B\|_1\ \text{ and }\ \|A\|\ge \|B\|\ \text{ for all u.i.\ norms.}
+\end{equation}
+In the following we will apply majorization to Hermitian matrices and write $A\succ B$ iff the corresponding majorization relation holds
+for the eigenvalues of $A$ and $B$.
+
+\begin{theorem}[Majorization between density matrices]
+    Let $\rho,\sigma$ be two density matrices in $M_d(\CC)$. Then the following are equivalent:
+    \begin{enumerate}
+        \item $\rho \succ \sigma$,
+        \item $\tr[f(\rho)]\ge \tr[f(\sigma)]$ for all convex functions $f:\RR\to\RR$,
+        \item there exists a set of unitaries $\{U_i\in M_d(\CC)\}$ and probabilities $p_i$ such that
+              \begin{equation}\tag{8.21}
+                  \sigma = \sum_i p_i U_i \rho U_i^\dagger.
+              \end{equation}
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    The equivalence $1.\Leftrightarrow 2$. is an immediate application of Thm.~8.4. For $3.\Rightarrow 1$. we can w.l.o.g.\ assume that $\rho$
+    and $\sigma$ are both diagonal since the diagonalizing unitaries can be incorporated in the $U_i$'s. Then
+    $\sigma_{kk}=\sum_l M_{kl}\rho_{ll}$ where $M_{kl}=\sum_i p_i|\langle k|U_i|l\rangle|^2$ is doubly stochastic and thus $\rho\succ\sigma$
+    by Thm.~8.4. For the converse $1.\Rightarrow 3$. we again use the freedom of assuming $\rho,\sigma$ are both diagonal. Then by Thm.~8.4 and
+    Birkhoff's Thm.~8.6 we can write $\sigma_{kk}=\sum_i p_i (P_i\rho P_i^T)_{kk}$ where the $P_i$'s are permutations and the $p_i$'s probabilities.
+    Written in terms of the matrices this is $\sigma=\sum_i p_i P_i\rho P_i^T$ which completes the proof.
+\end{proof}
+
+A similar result holds if we go from a fixed pair of density operators to all pairs which are related by a positive map:
+
+\begin{theorem}[Majorization and doubly stochastic positive maps]
+    Let $T:M_d(\CC)\to M_{d'}(\CC)$ be a positive linear map. Then the following are equivalent:
+    \begin{enumerate}
+        \item $T$ is trace preserving and unital,
+        \item For all density operators $\rho$ it holds that $\rho \succ T(\rho)$,
+        \item For all density operators $\rho$ and convex functions $f:\RR\to\RR$ it holds that $\tr[f(\rho)]\ge \tr[f(T(\rho))]$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    The equivalence $2.\Leftrightarrow 3$. follows from Thm.~8.4 in the same way as it was used for the previous Thm.~8.7. For $2.\Rightarrow 1$.
+    note that the trace preserving property is implied by the equality condition in the definition of majorization (see Eq.~(8.16)). Unitaliy follows
+    from assuming that $\one \succ T(\one)$ together with the fact that the maximally mixed distribution only majorizes itself (see Eq.~(8.17)).
+
+    Finally, in order to show $1.\Rightarrow 2$. let us consider an arbitrary density operator $\rho$ with eigenvalue decomposition
+    $\rho = V^\dagger \lambda(\rho) V$ and similarly $T(\rho)=U^\dagger \lambda(T(\rho))U$, where $U,V\in M_d(\CC)$ are unitaries and the
+    $\lambda$'s denote the diagonal matrices containing the respective eigenvalues. Define a map $T':M_d\to M_d$ via
+    $T'(X)=U\,T(VXV^\dagger)\,U^\dagger$. By construction we have now $\lambda(T(\rho))=T'(\lambda(\rho))$ which becomes
+    $\lambda(T(\rho))_{ii}=\sum_j M_{ij}\lambda(\rho)_{jj}$ if we introduce $M_{ij}:=\langle i|T'(\ketbra{j}{j})|i\rangle$.
+    The assertion now follows from the fact that $M$ is a doubly stochastic matrix, which is in turn implied by $T'$ being a trace-preserving,
+    unital and positive map.
+\end{proof}
+
+As a consequence we get that doubly stochastic quantum channels are exactly those for which the entropy is non-decreasing:
+
+\begin{corollary}[Entropy increasing maps]
+    Let $T:M_d(\CC)\to M_d(\CC)$ be a positive and trace-preserving linear map and $h:\RR\to\RR$ any strictly concave function.\footnote{`Strictly concave' means that for all $x_1\neq x_2$ and $\lambda\in(0,1)$ it holds that
+        $h(\lambda x_1+(1-\lambda)x_2) > \lambda h(x_1) + (1-\lambda)h(x_2)$.}
+    Then $T$ is unital iff for all density operators $\rho\in M_d(\CC)$ we have that
+    \begin{equation}\tag{8.22}
+        \tr[h(T(\rho))]\ge \tr[h(\rho)].
+    \end{equation}
+\end{corollary}
+
+\begin{proof}
+    If $T$ is unital, then the assertion follows from Thm.~8.8 for every (not necessarily strictly) concave function $h$.
+    Conversely, if $h$ is strictly concave, then $\tr[h(\rho)]$ has $\rho=\one/d$ as a unique maximizer within the set of density operators.
+    So if we assume Eq.~(8.22), then necessarily $T(\one)=\one$.
+\end{proof}
+
+We will now use the developed tools in order to formalize the statement
+that any classical probability distribution obtained from measuring a quantum
+state is always at least as mixed as the density operator from which it has been
+obtained:
+
+\begin{theorem}[Measurements and convex functions]
+    Let $\{P_i\in M_d(\CC)\}_{i=1,\dots,m}$ with $m\ge d$ be a POVM (i.e., $P_i\ge 0$ and $\sum_i P_i=\one$)
+    and $\rho\in M_d(\CC)$ a density operator. Assume that the POVM is symmetric
+    in the sense that $\tr[P_i]=d/m$ and denote the probabilities obtained from a
+    measurement on $\rho$ by $p_i:=\tr[P_i\rho]$. For every convex function $f:\RR\to\RR$
+    which satisfies $f(0)\le 0$ we have
+    \begin{equation}\tag{8.23}
+        \tr[f(\rho)] \ge \sum_{i=1}^m f(p_i).
+    \end{equation}
+    For $m=d$ the same holds true without $f(0)\le 0$ being required.
+\end{theorem}
+
+\begin{proof}
+    We want to make use of the implication $1.\Rightarrow 3$. in Thm.~8.8. To this
+    end we first embed everything in an $m$-dimensional space and set for instance
+    $\rho' := \rho\oplus 0\in M_m$. Moreover, we define a linear map $T:M_m\to M_m$ via
+    \begin{equation}\tag{8.24}
+        T(X) := \frac{\mathbb{1}_m}{m}\tr[X(0\oplus \mathbb{1}_{m-d})]
+        +\sum_{i=1}^m \ketbra{i}{i} \tr[X(P_i\oplus 0)].
+    \end{equation}
+    Note that $T$ is positive, unital and trace-preserving as required by Thm.~8.8. Then
+    \begin{equation}\tag{8.25}
+        \tr[f(\rho)] \ge \tr[f(\rho')] \ge \tr[f(T(\rho'))] = \sum_{i=1}^m f(p_i),
+    \end{equation}
+    where the first inequality comes from $f(0)\le 0$ which is only required if $m>d$
+    since $\rho'=\rho$ for $m=d$.
+\end{proof}
+
+Note that for von Neumann measurements, i.e., when the $P_i$'s are one-dimensional orthogonal projections, the above theorem essentially reduces to
+saying that the eigenvalues of $\rho$ majorize the diagonal entries (see Eq.~(8.18)).
+We also remark that Thm.~8.9 is no longer true in general if we drop any of the
+three assumptions: $f(0)\le 0$, $m\ge d$ or $\tr[P_i]=d/m$.
+
+\subsection{Divergences and quasi-relative entropies}
+
+In classical probability theory, one way of quantifying how two probability distributions $p$ and $q$ differ from each other (other than using norms and metrics)
+is to use Csisz\'ar's $f$-divergence measures
+\begin{equation}\tag{8.26}
+    C_f(p|q) := \sum_{x\in X} q_x f\!\left(\frac{p_x}{q_x}\right),
+\end{equation}
+where $f:\RR_+\to\RR$ is any continuous convex function. Every such $C_f$ is jointly convex in its arguments and monotone in the sense that
+$C_f(p|q)\ge C_f(t(p)|t(q))$ for any map $t:p\mapsto p'$ characterized by a partitioning of the set of events $X$ into disjoint $X_i$'s so that
+$p'_i=\sum_{x\in X_i} p_x$. If $f(1)=0$ then $C_f(p|p)=0$ and if $f(x)$ is strictly convex at $x=1$ then $C_f(p|q)=0$ implies $p=q$.
+Prominent examples of $f$-divergences are:
+\begin{enumerate}
+    \item Kullback--Leibler divergence or relative entropy for $f(x)=x\log x$:
+          \begin{equation}\tag{8.27}
+              Q_{KL}(p|q) = \sum_x p_x \log\frac{p_x}{q_x},
+          \end{equation}
+
+    \item Relative $\alpha$-entropy\footnote{In fact, there are many variants of relative $\alpha$-entropies in the literature---most of them
+              are slight modifications of others. The relative R\'enyi entropy for instance is usually defined as
+              $S_\alpha(p|q)=(\alpha-1)^{-1}\log\sum_x p_x^\alpha q_x^{1-\alpha}$ with $\alpha\ge 0$. In the limit $\alpha\to 1$ this becomes $Q_{KL}(p|q)$ again.}
+          for $f(x)=(1-x^\alpha)/(\alpha(1-\alpha))$ with $\alpha\in(0,1)$:
+          \begin{equation}\tag{8.28}
+              Q_\alpha(p|q) = \left(1-\sum_x p_x^\alpha q_x^{1-\alpha}\right)\big/(\alpha(1-\alpha)).
+          \end{equation}
+          This converges to the Kullback--Leibler divergence as $\lim_{\alpha\to 0}Q_\alpha(p|q)=Q_{KL}(q|p)$ and
+          $\lim_{\alpha\to 1}Q_\alpha(p|q)=Q_{KL}(p|q)$.
+
+    \item $\chi^2$-divergence for $f(x)=x^2-1$:
+          \begin{equation}\tag{8.29}
+              Q_{\chi^2}(p|q) = \sum_x \frac{(p_x-q_x)^2}{q_x} = \left(\sum_x \frac{p_x^2}{q_x}\right)-1.
+          \end{equation}
+          Note that by Taylor expansion the $\chi^2$-divergence locally approximates every $f$-divergence which is twice differentiable at $x=1$.
+          More precisely $C_f(p|q)/C_{\chi^2}(p|q)\to \frac{1}{2}f''(1)$ as $p\to q$.
+
+    \item Hellinger divergence for $f(x)=(\sqrt{x}-1)^2/2$:
+          \begin{equation}\tag{8.30}
+              Q_{h^2}(p|q) = \left(1-\sum_x \sqrt{p_x q_x}\right) = \frac{1}{2}\sum_x (\sqrt{p_x}-\sqrt{q_x})^2.
+          \end{equation}
+          The square root of $Q_{h^2}$ is a metric since it is proportional to the norm difference in $\ell_2$.
+
+    \item $\ell_1$-norm is the only bare metric among the $f$-divergences and is obtained for $f(x)=|x-1|$:
+          \begin{equation}\tag{8.31}
+              Q_{\ell_1}(p|q) = \sum_x |p_x-q_x|.
+          \end{equation}
+\end{enumerate}
+In the following we will discuss generalizations of these `distance' measures to density operators.
+
+\subsubsection{$\chi^2$ divergence}
+
+A simple generalization of the $\chi^2$ divergence in Eq.~(8.29) to the non-commutative context of density operators $\rho$ and $\sigma$ is
+\begin{align}
+    \chi^2_\alpha(\rho|\sigma)
+     &:= \tr\!\left[(\rho-\sigma)\sigma^{-\alpha}(\rho-\sigma)\sigma^{\alpha-1}\right],
+    \qquad \alpha\in\RR \tag{8.32}\\
+     &= \tr\!\left[\rho\sigma^{-\alpha}\rho\sigma^{\alpha-1}\right] - 1. \notag
+\end{align}
+
+\subsubsection{Quasi-relative entropies}
+
+The relative entropy has generalizing relatives in very much the same way as the
+von Neumann entropy has R\'enyi and Tsallis type cousins. The most prominent
+ones are functions depending on the one-parameter family $\tr[\rho^\alpha\sigma^{1-\alpha}]$ where
+$\alpha\in\RR$. These quantities appear naturally in the context of hypothesis testing
+(see Sec.~8.5). The Tsallis relative entropy $S^{(\alpha)}$ and the R\'enyi relative entropy
+$S_\alpha$ are defined as
+\begin{align}
+    S^{(\alpha)}(\rho|\sigma)
+     &:= \frac{1}{1-\alpha}\left(1-\tr[\rho^\alpha\sigma^{1-\alpha}]\right), \tag{8.33}\\
+    S_\alpha(\rho|\sigma)
+     &:= \frac{1}{\alpha-1}\log \tr[\rho^\alpha\sigma^{1-\alpha}]. \tag{8.34}
+\end{align}
+Both are non-negative for $\alpha\ge 0$ and coincide with the relative entropy
+$S(\rho|\sigma)=\tr[\rho(\log\rho-\log\sigma)]$ in the limit $\alpha\to 1$.\footnote{Outside the interval $\alpha\in[0,1]$ inverses are take on the support and the relative entropies
+    are set to $\infty$ if the kernel of the operator to be inverted is not contained in the kernel of the
+    other operator.}
+One of the main properties of these generalized relative entropies follows from Thm.~5.15 which implies that the map
+$(\rho,\sigma)\mapsto \tr[\rho^\alpha\sigma^{1-\alpha}]$ is jointly concave for $\alpha\in[0,1]$ and jointly convex for $\alpha\in[-1,0]$.
+Exploiting that joint convexity implies monotonicity under completely positive trace-preserving maps (see Thm.~5.16) we arrive at:
+
+\begin{theorem}[Monotonicity of quasi-relative entropies]
+    Let $\rho,\sigma\in M_d(\CC)$ be two density matrices. Then for all completely positive trace-preserving linear maps
+    $T:M_d(\CC)\to M_{d'}(\CC)$ and $\alpha\in[0,1]$
+    \begin{equation}\tag{8.35}
+        \tr[\rho^\alpha\sigma^{1-\alpha}] \le \tr[T(\rho)^\alpha T(\sigma)^{1-\alpha}],
+    \end{equation}
+    and the reverse inequality holds for $\alpha\in[-1,0]$.
+\end{theorem}
+
+This means that for $\alpha\in[0,1]$ both R\'enyi and Tsallis relative entropy are non-increasing under the action of a quantum channel.
+
+A useful tool for deriving properties of the quasi-relative entropies in Eqs.~(8.33,8.34) is a simple method which relates them to their
+classical counterparts: consider the spectral decompositions $\rho=\sum_i \lambda_i\ketbra{x_i}{x_i}$ and
+$\sigma=\sum_j \mu_j \ketbra{y_j}{y_j}$ and define $p_{ij}:=\lambda_i|\langle x_i|y_j\rangle|^2$ and
+$q_{ij}:=\mu_j|\langle x_i|y_j\rangle|^2$. Then $p,q\in\RR^{2d}$ are classical probability distributions and straight forward calculation shows that
+\begin{align}
+    \tr[\rho^\alpha\sigma^{1-\alpha}] &= \sum_x q_x\left(\frac{p_x}{q_x}\right)^\alpha, \tag{8.36}\\
+    S(\rho|\sigma)                    &= \sum_x p_x \log\frac{p_x}{q_x}. \tag{8.37}
+\end{align}
+That is, under the mapping $(\rho,\sigma)\to(p,q)$ the quantum relative entropies coincide with their classical analogs. This allows us to easily prove some
+of their properties---or simply to import them from the world of classical probability distributions:
+
+\begin{theorem}[Relation among relative entropies]
+    Let $\rho,\sigma\in M_d(\CC)$ be a pair of positive semi-definite operators and
+    $S^{(\alpha)}(\rho|\sigma):=\tr[\rho-\rho^\alpha\sigma^{1-\alpha}]/(1-\alpha)$. Then for all $\alpha\le 1$ and $\beta\ge 1$ we have
+    \begin{equation}\tag{8.38}
+        S^{(\alpha)}(\rho|\sigma)\le S(\rho|\sigma)\le S^{(\beta)}(\rho|\sigma).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    The result follows from the fact that for all positive numbers $t$ and $s$ it holds that $(1-t^{-s})/s \le \log t \le (t^s-1)/s$.
+    This gives
+    \begin{equation}\tag{8.39}
+        \frac{p_x}{s}\left(1-p_x^{-s}q_x^{s}\right)
+        \le p_x\log\frac{p_x}{q_x}
+        \le \frac{p_x}{s}\left(p_x^{s}q_x^{-s}-1\right).
+    \end{equation}
+    Using the relations in Eqs.~(8.36,8.37) the desired result follows by setting $s=1-\alpha$ on the l.h.s.\ and $s=\beta-1$ on the right.
+\end{proof}
+
+Note that other properties and uses of the functional $\tr[\rho^\alpha\sigma^{1-\alpha}]$ will be discussed in Sec.~8.5 in the context of hypothesis testing.
+
+\subsubsection{Fidelity}
+
+\subsection{Hypothesis testing}
+
+Hypothesis testing is the simplest task in the context of statistical inference:
+given two possibilities, find out which one is actually realized by performing
+a statistical test. General examples are questions of the form ``was there a
+Higgs particle generated?'' or ``can we identify a tumor in our tomographic
+data?''. In our context the two hypotheses correspond to two density operators
+and we will see that several of the previously discussed distance measures for
+density operators will get an operational meaning as a means of quantifying how
+distinguishable the two states are.
+
+Suppose we are given one out of two possible sources which produce states
+characterized by density operators $\rho$ and $\sigma$ respectively. Assume further that
+the a priori probability for $\rho$ is $p$ so that $(1-p)$ is the prior for $\sigma$. Imagine
+we want to decide whether the actual source produces $\rho$ or $\sigma$ by performing
+a single two-outcome measurement with effect operators $\{P,\one-P\}$. We then
+assign one of the measurement outcomes, say the one corresponding to $P$, to
+the hypothesis $\rho$ while the other outcome leads us to guess $\sigma$. In this way, the
+average probability for a false conclusion will be
+\begin{equation}\tag{8.40}
+    e(P) := p\,\tr[\rho(\one-P)] + (1-p)\tr[\sigma P].
+\end{equation}
+The following tells us how to minimize this average error probability and provides the optimal measurement:
+
+\begin{theorem}[Quantum Neyman--Pearson]
+    Within the above context the error probability satisfies the bound
+    \begin{equation}\tag{8.41}
+        e(P) \ge \frac{1}{2}\left(1-\bigl\|p\rho-(1-p)\sigma\bigr\|_1\right),
+    \end{equation}
+    where equality is achieved iff $P$ is a projection onto the positive part of $[p\rho-(1-p)\sigma]$.
+\end{theorem}
+
+\begin{proof}
+    We have to minimize $e(P)$ w.r.t.\ all $0\le P\le\one$, i.e.,
+    \begin{equation}\tag{8.42}
+        \min_P e(P) = p - \max_P \tr[(p\rho-(1-p)\sigma)P].
+    \end{equation}
+    Decomposing $(p\rho-(1-p)\sigma)=:A$ into orthogonal positive and negative parts as $A=A_+-A_-$ it becomes clear that the maximum is attained iff
+    $PA_+=A_+$ and $PA_-=0$. Eq.~(8.41) then follows by using that for Hermitian operators $\tr[A_+] = (\|A\|_1+\tr[A])/2$.
+\end{proof}
+
+This gives a simple operational meaning to the trace norm distance between density operators: it quantifies how good the states can be distinguished by a single measurement.
+
+Let us now go one step further and assume that we can measure not only on a single state but on $n\in\NN$ copies of the system. That is, we let the
+source produce $n$ identical state (either $\rho$ or $\sigma$) before we perform a global measurement. According to the above Thm.~8.12 an optimal measurement leads
+to an error probability
+\begin{equation}\tag{8.43}
+    e_n := \frac{1}{2}\left(1-\bigl\|p\rho^{\otimes n}-(1-p)\sigma^{\otimes n}\bigr\|_1\right).
+\end{equation}
+This turns out to decrease exponentially as $\exp(-\xi n)$ at a rate which is asymptotically independent of $p$ (unless $p=0,1$) and given in the following theorem:
+
+\begin{theorem}[Quantum Chernoff bound]
+    For every non-trivial a priori probability $p\neq 0,1$ an optimal sequence of measurements yields
+    \begin{equation}\tag{8.44}
+        \xi := \lim_{n\to\infty}\left(-\frac{1}{n}\log e_n\right)
+        = -\log\left(\inf_{s\in[0,1]}\tr[\rho^{1-s}\sigma^{s}]\right).
+    \end{equation}
+\end{theorem}
+
+In some contexts it is natural to treat the two errors (1.\ we guess $\rho$ while it was $\sigma$ and 2.\ we guess $\sigma$ while it was $\rho$) in an asymmetric way.\footnote{In classical statistical analysis this is natural for instance in many medical contexts:
+    there we want to be sure not to overlook a certain decease, i.e., the probability for a false negative test should be small while one may accept a larger fraction of false positive tests.}
+Assume we again perform a two-outcome measurement described by effect operators $P_n\in M_{d^n}(\CC)$ and $(\one-P_n)$ on $n$ copies of the system.
+Consider the task of minimizing the error probability
+\begin{equation}\tag{8.45}
+    \beta_n(P_n) := \tr[\sigma^{\otimes n}P_n]
+    \quad\text{under the constraint}\quad
+    \tr[\rho^{\otimes n}(\one-P_n)] \le \varepsilon.
+\end{equation}
+For a sequence of optimal measurements the error $\beta_n$ will again decrease exponentially with $n$ and the rate will turn out to be the relative entropy $S(\rho|\sigma)$.
+The analogous classical result is sometimes called Stein's Lemma where the Kullback--Leibler divergence appears as the optimal rate function. Before we
+come to the quantum version of this result we state a crucial ingredient for its proof which eventually enables us again to reduce the quantum to the classical case:
+
+\begin{theorem}[Hiai--Petz]
+    Let $\rho,\sigma\in M_d(\CC)$ be two density operators and $n\in\NN$. Define a map $T:M_{d^n}(\CC)\to M_{d^n}(\CC)$ via
+    $T(X):=\sum_{i=1}^k P_i X P_i$ from the spectral decomposition $\sigma^{\otimes n}=\sum_{i=1}^k \lambda_i P_i$ where the sum runs over $k$ distinct eigenvalues and the $P_i$'s project onto the corresponding eigenspaces. Then
+    \begin{equation}\tag{8.46}
+        S\!\left(T(\rho^{\otimes n})\middle\|\sigma^{\otimes n}\right)
+        \le nS(\rho|\sigma)
+        \le S\!\left(T(\rho^{\otimes n})\middle\|\sigma^{\otimes n}\right) + d\log(n+1),
+    \end{equation}
+    where $S(\rho|\sigma)=\tr[\rho(\log\rho-\log\sigma)]$ is the relative entropy.
+\end{theorem}
+
+\begin{proof}
+    The left inequality follows from monotonicity of the relative entropy under trace-preserving completely positive maps together with additivity
+    $S(\rho^{\otimes n}\|\sigma^{\otimes n})=nS(\rho|\sigma)$ and the invariance $T(\sigma^{\otimes n})=\sigma^{\otimes n}$.
+
+    For the right inequality we use again additivity and proceed as follows:
+    \begin{align}
+        nS(\rho|\sigma)
+         &\le \tr\!\left[\rho^{\otimes n}(\log T(\rho^{\otimes n})-\log\sigma^{\otimes n})\right] + \log k \tag{8.47}\\
+         &\le S\!\left(T(\rho^{\otimes n})\middle\|\sigma^{\otimes n}\right) + d\log(n+1). \tag{8.48}
+    \end{align}
+    Here the first inequality uses $\log\rho^{\otimes n} \le \log T(\rho^{\otimes n}) + \log k$ which follows from Lemma~8.2 together with the operator monotonicity
+    of the logarithm. The second inequality exploits that (i) $T$ is a conditional expectation (see Eq.~(1.43)), so that in particular
+    $\tr[AT(B)]=\tr[T(A)T(B)]$ for any $A,B$ and (ii) the simple combinatorial bound $k\le (n+1)^d$.
+\end{proof}
+
+Note that Eq.~(8.46) implies in particular that
+\begin{equation}\tag{8.49}
+    S(\rho|\sigma)=\lim_{n\to\infty}\frac{1}{n}S\!\left(T(\rho^{\otimes n})\middle\|\sigma^{\otimes n}\right).
+\end{equation}
+Moreover since $\sigma^{\otimes n}$ commutes with $T(\rho^{\otimes n})$ the relative entropy on the r.h.s.\ equals the one of the classical probability distributions
+which are obtained from measuring the two states in the basis in which they are simultaneously diagonal. Since the relative entropy (or Kullback--Leibler divergence)
+is the optimal rate function appearing in the classical Stein's lemma, the above Thm.~8.14 implies that $S(\rho|\sigma)$ is an achievable rate in the quantum context as well.
+The following shows that it is indeed the optimal rate:
+
+\begin{theorem}[Quantum Stein Lemma]
+    Consider the task of distinguishing two quantum states $\rho,\sigma\in M_d(\CC)$.
+    Let $\beta_n$ be the error probability as defined in Eq.~(8.45), minimized over all measurements.
+    For every $\varepsilon\in(0,1)$ we have that
+    \begin{equation}\tag{8.50}
+        \lim_{n\to\infty} -\frac{1}{n}\log \beta_n = S(\rho|\sigma).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    As discussed above achievability of the rate $S(\rho|\sigma)$ follows from Thm.~8.14 together with the classical Stein's lemma.
+    What remains to prove is thus an upper bound on the optimal rate, i.e., a lower bound on the error probability $\beta_n$.
+    To this end we apply Lemma~8.1 to $A=\rho^{\otimes n}$ and $B=e^{\lambda n}\sigma^{\otimes n}$ for some $\lambda\in\RR$ to be chosen later.
+    For $s\in[0,1]$ this gives
+    \begin{align}
+        e^{-s\lambda n}\tr[\rho^{1+s}\sigma^{-s}]^{n}
+         &\ge \tr[(\rho^{\otimes n}-e^{\lambda n}\sigma^{\otimes n})P_n] \tag{8.51}\\
+         &\ge (1-\varepsilon) - e^{n\lambda}\beta_n(P_n), \tag{8.52}
+    \end{align}
+    where the second inequality follows from Eq.~(8.45). Rewriting these inequalities we obtain
+    \begin{equation}\tag{8.53}
+        \beta_n \ge e^{-n\lambda}\left[(1-\varepsilon) - e^{-n(\lambda s - f(s))}\right],
+    \end{equation}
+    where we set $f(s):=\log\tr[\rho^{1+s}\sigma^{-s}]$. Since $f(0)=0$ and $f'(0)=S(\rho|\sigma)$ the choice $\lambda=S(\rho|\sigma)+\delta$
+    will for any $\delta>0$ guarantee that there is an $s\in(0,1]$ such that $\lambda s>f(s)$.
+    Thus, $\lim_{n\to\infty}-\frac{1}{n}\log\beta_n \le S(\rho|\sigma)+\delta$ and since this holds for arbitrary $\delta>0$ the relative entropy is indeed the optimal asymptotic rate.
+\end{proof}
+
+\begin{lemma}
+    Let $A,B\in M_d(\CC)$ be two positive semi-definite operators and denote by $(A-B)_+$ the positive part of the Hermitian matrix $(A-B)$.
+    Then for all $s\in[0,1]$:
+    \begin{equation}\tag{8.54}
+        \|A-B\|_1 \ge \tr[A+B] - 2\tr[A^sB^{1-s}],
+    \end{equation}
+    and
+    \begin{equation}\tag{8.55}
+        \tr[(A-B)_+] \le \tr[A^{1+s}B^{-s}].
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    In order to prove Eq.~(8.55) we show first that it is sufficient to consider diagonal $A$ and $B$.
+    To this end we exploit that $\tr[A^{1+s}B^{-s}]$ is non-increasing under completely positive, trace-preserving maps
+    (see e.g.\ Thm.~8.10). We apply this to the map $T(\cdot):=\sum_i P_i\,\cdot\, P_i$ which is constructed from the spectral decomposition
+    $(A-B)=:\sum_i \lambda_i P_i$ where the $P_i$'s are one-dimensional projections. Then since
+    $\tr[(A-B)_+]=\tr[(T(A)-T(B))_+]$ and now $[T(A),T(B)]=0$ it is indeed sufficient to consider diagonal $A$ and $B$.
+    For those the assertion follows from the simple inequality $a-b\le a(a/b)^s$ which holds for numbers $a\ge b\ge 0$.
+\end{proof}
+
+\begin{lemma}
+    Let $\rho\in M_d(\CC)$ be a density operator and $\{P_i\in M_d(\CC)\}_{i=1,\dots,k}$ a POVM where each $P_i$ is a projection.
+    If $T(X):=\sum_{i=1}^k P_i X P_i$, then
+    \begin{equation}\tag{8.56}
+        \rho \le kT(\rho).
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    Due to linearity it is sufficient to consider pure states $\rho=\ketbra{\psi}{\psi}$. Then for every $\ket{\phi}\in\CC^d$
+    \begin{equation}\tag{8.57}
+        \langle\phi|kT(\rho)-\rho|\phi\rangle
+        =
+        \left(k\sum_{i=1}^k |\langle\phi|P_i|\psi\rangle|^2\right)
+        -\left|\langle\phi|\sum_{i=1}^k P_i|\psi\rangle\right|^2
+        \ge 0,
+    \end{equation}
+    where the inequality follows from Chauchy--Schwarz when applied to a vector
+    with components $\langle\phi|P_i|\psi\rangle$ and the other with components $k$-times $1$.
+\end{proof}
+
+\subsection{Hilbert's projective metric}
+
+Let $V$ be a real, finite-dimensional vector space (e.g., the space of Hermitian matrices in $M_d(\CC)$).
+A convex cone $C\subset V$ is a subset for which $\alpha C+\beta C\subseteq C$ for all $\alpha,\beta\ge 0$.
+We will call a convex cone in $V$ a \emph{proper cone} if it is closed, has a non-empty interior and satisfies $C\cap(-C)=\{0\}$.
+Examples of proper cones are sets of non-negative polynomials, vectors or matrices with non-negative entries,
+positive semi-definite matrices, and the cones of un-normalized density matrices which are separable,
+have a positive partial transpose, are undistillable, etc.
+
+Recall that the dual cone is defined as $C^\ast := \{c\in V\mid \forall v\in C:\langle v|c\rangle\ge 0\}$ and
+that by the bipolar theorem $C^{\ast\ast}=C$ for closed convex cones. This implies that
+\begin{equation}\tag{8.58}
+    v\in C \iff \langle v|c\rangle\ge 0\ \text{ for all }c\in C^\ast.
+\end{equation}
+
+Every proper cone induces a (partial) order relation in $V$ and we will write $a\ge_C b$ meaning $a-b\in C$.
+We will omit the subscript $C$ if the cone $C$ under consideration is the set of positive semi-definite matrices.
+Also note that in this case we have $C=C^\ast$.
+
+For every pair of non-zero elements $a,b\in C$ define
+\begin{equation}\tag{8.59}
+    \sup(a/b) := \sup_{c\in C^\ast}\frac{\langle a|c\rangle}{\langle b|c\rangle},
+    \qquad
+    \inf(a/b) := \inf_{c\in C^\ast}\frac{\langle a|c\rangle}{\langle b|c\rangle}.
+\end{equation}
+By construction $\sup(a/b)\ge \inf(a/b)\ge 0$ and $\sup(a/b)=1/\inf(b/a)$.
+If $C$ (and consequently also $C^\ast$) is a proper cone we can use Eq.~(8.58) and rewrite
+\begin{equation}\tag{8.60}
+    \sup(a/b)=\inf\{\lambda\in\RR\mid a\le_C \lambda b\},
+\end{equation}
+\begin{equation}\tag{8.61}
+    \inf(a/b)=\sup\{\lambda\in\RR\mid \lambda b\le_C a\}.
+\end{equation}
+This implies that $\inf(a/b)b \le_C a \le_C \sup(a/b)b$, where the latter makes sense only if $\sup(a/b)$ is finite.
+In other words, Eq.~(8.59) provides the factors by which $b$ has to be rescaled at least in order to become larger or smaller than $a$.
+
+Hilbert's projective metric is then defined for non-zero $a,b\in C$ as
+\begin{equation}\tag{8.62}
+    D(a,b) := \ln(\sup(a/b)\sup(b/a)).
+\end{equation}
+Obviously, $D$ is symmetric, non-negative and satisfies $D(a,\beta b)=D(a,b)$ for all $\beta>0$.
+That is, $D$ depends only on the `direction' of its arguments. Since it turns out to fulfill the triangle inequality and $D(a,b)=0$
+implies that $a=\beta b$ for some $\beta>0$, $D$ is a projective metric. Hence, if we restrict the arguments $a,b$ further to a subset which
+excludes multiples of elements (such as the unit sphere of a norm), then $D$ becomes a metric on that space.
+With $C$ the cone of positive semi-definite matrices $D$, for instance, is a metric on the set of density matrices.
+The following relates Hilbert's projective metric to metrics induced by norms.
+
+\begin{proposition}[Norm bound]
+    Consider a proper cone $C$ in a real linear space. Let $A,B\in C$ be non-zero elements and define
+    $\nu := \inf(B/A)$ and $\mu := \inf(A/B)$. Then
+    \begin{equation}\tag{8.63}
+        \|A-B\| \le |1-\nu| \|A\| + |1-\mu| \|B\| + \min\{|1-\nu| \|A\|,\ |1-\mu| \|B\|\},
+    \end{equation}
+    for every norm for which $X\ge_C Y\ge_C 0$ implies $\|X\|\ge \|Y\|$.
+\end{proposition}
+
+\begin{proof}
+    By definition $B\ge_C \nu A$ which implies $A-B\le_C (1-\nu)A$ and similar holds for $\mu$ if only $A$ and $B$ are interchanged.
+    This guarantees the existence of positive elements $P_\nu,P_\mu\ge_C 0$ such that
+    \begin{equation}\tag{8.64}
+        A-B+P_\nu = (1-\nu)A
+        \qquad\text{and}\qquad
+        B-A+P_\mu = (1-\mu)B.
+    \end{equation}
+    Using the triangular inequality for the norm $\|A-B\|\le \|A-B+P_\nu\|+\|P_\nu\|$ and exploiting its assumed monotonicity by bounding
+    $\|P_\nu\|\le \|P_\nu+P_\mu\|$, Eq.~(8.64) then leads to
+    \begin{equation}\tag{8.65}
+        \|A-B\| \le \|A-B+P_\nu\| + \|P_\nu+P_\mu\|
+    \end{equation}
+    \begin{equation}\tag{8.66}
+        \le 2|1-\nu| \|A\| + |1-\mu| \|B\|.
+    \end{equation}
+    Since the same reasoning and thus the same inequality applies with $\mu\leftrightarrow\nu$ and $A$ and $B$ interchanged, Eq.~(8.63) then follows
+    from taking the smaller bound.
+\end{proof}
+
+\begin{corollary}[Norms vs.\ Hilbert's projective metric]
+    With the assumptions of Prop.~8.2 and the additional requirement that $\mu,\nu\le 1$ we have
+    \begin{equation}\tag{8.67}
+        \|A-B\| \le 3\left(\frac{\|A\|+\|B\|}{2} - \sqrt{\|A\| \|B\|}\,e^{-D(A,B)/2}\right).
+    \end{equation}
+\end{corollary}
+
+\begin{proof}
+    Instead of taking the minimum in Eq.~(8.63) we take the average and then use that for positive numbers $(a+b)/2\ge \sqrt{ab}$.
+    In this way we obtain
+    \begin{equation}\tag{8.68}
+        \|A-B\| \le \frac{3}{2}\left(\|A\|+\|B\|-(\nu\|A\|+\mu\|B\|)\right)
+    \end{equation}
+    \begin{equation}\tag{8.69}
+        \le 3\left(\frac{\|A\|+\|B\|}{2}-\sqrt{\nu\|A\| \mu\|B\|}\right),
+    \end{equation}
+    which leads the sought result by using $\inf(A/B)=1/\sup(B/A)$ together with the definition Eq.~(8.62).
+\end{proof}
+
+Better bounds can be obtained by exploiting some additional structure. So let us now explicitly assume that $C$ is the cone of positive semi-definite
+operators on a finite-dimensional Hilbert space and consider the trace norm:
+
+\begin{proposition}[Trace norm vs.\ Hilbert's projective metric]
+    Let $\rho_1,\rho_2\in M_d(\CC)$ be two density matrices. Then
+    \begin{equation}\tag{8.70}
+        \frac{1}{2}\|\rho_1-\rho_2\|_1
+        \le (1+\inf(\rho_2/\rho_1))^{-1} - (1+\sup(\rho_2/\rho_1))^{-1}
+    \end{equation}
+    \begin{equation}\tag{8.71}
+        \le \tanh\!\left(\frac{D(\rho_1,\rho_2)}{4}\right).
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    Recall that $\|\rho_1-\rho_2\|_1/2 = \tr[P(\rho_1-\rho_2)]$ for some Hermitian projection $P$.
+    Exploiting that $x(2-x)\le 1$ for all $x\in[0,2]$ and applying it to $x=\tr[P(\rho_1+\rho_2)]$ we obtain
+    \begin{equation}\tag{8.72}
+        \frac{1}{2}\|\rho_1-\rho_2\|_1 \le
+        \frac{\tr[P(\rho_1-\rho_2)]}{\tr[P(\rho_1+\rho_2)](2-\tr[P(\rho_1+\rho_2)])}.
+    \end{equation}
+    Elementary algebra yields
+    \begin{equation}\tag{8.73}
+        =
+        (1+\tr[P\rho_2]/\tr[P\rho_1])^{-1}
+        -
+        (1+\tr[P'\rho_2]/\tr[P'\rho_1])^{-1},
+    \end{equation}
+    where $P'=\one-P$. Eq.~(8.70) now follows from Eq.~(8.73) by taking the supremum over all $P,P'\ge 0$ and inserting the definitions from Eq.~(8.59).
+
+    In order to arrive at Eq.~(8.71) we use that $\inf(\rho_2/\rho_1)=1/\sup(\rho_1/\rho_2)$ and abbreviate $x:=\sup(\rho_1/\rho_2)$, $y:=\sup(\rho_2/\rho_1)$.
+    In this way we can rewrite and bound the r.h.s.\ of Eq.~(8.70) as
+    \begin{equation}\tag{8.74}
+        \frac{xy-1}{(x+1)(y+1)} \le \frac{\sqrt{xy}-1}{\sqrt{xy}+1},
+    \end{equation}
+    where the inequality follows from applying the inequality $(x+1)(y+1)\ge (\sqrt{xy}+1)^2$, which holds for all $x,y\ge 0$.
+    Using that according to definition (8.62) we have $xy=\exp[D(\rho_1,\rho_2)]$ then completes the proof.
+\end{proof}
+
+Exploiting that $2\tanh(x/2)\le x$ for $x\ge 0$ we obtain in particular
+\begin{equation}\tag{8.75}
+    \|\rho_1-\rho_2\|_1 \le D(\rho_1,\rho_2)/2.
+\end{equation}
+Note that a non-trivial lower bound on norms cannot exist: suppose that for some vector $\psi$ we have $\langle\psi|\rho_1|\psi\rangle>0$
+but $\langle\psi|\rho_2|\psi\rangle=0$. Then $\sup(\rho_1/\rho_2)=\infty$ according to Eq.~(8.60) so that $D(\rho_1,\rho_2)=\infty$
+although the two states could be arbitrarily close in norm. However, if the supports of $\rho_1$ and $\rho_2$ are the same, Hilbert's metric is finite and can be explicitly expressed in terms of operator norms:
+
+\begin{proposition}
+    Let $\rho_1,\rho_2\in M_d(\CC)$ be density matrices and consider the positive semi-definite cone $C$.
+    Then with $^{-1}$ denoting the pseudo inverse (inverse on the support) we have
+    \begin{equation}\tag{8.76}
+        \sup(\rho_1/\rho_2)=
+        \begin{cases}
+            \bigl\|\rho_2^{-1/2}\rho_1\rho_2^{-1/2}\bigr\|_\infty, & \text{if }\supp[\rho_1]\subseteq \supp[\rho_2], \\
+            \infty,                                                & \text{otherwise},
+        \end{cases}
+    \end{equation}
+    \begin{equation}\tag{8.77}
+        \inf(\rho_1/\rho_2)=
+        \begin{cases}
+            \bigl\|\rho_1^{-1/2}\rho_2\rho_1^{-1/2}\bigr\|_\infty^{-1}, & \text{if }\supp[\rho_2]\subseteq \supp[\rho_1], \\
+            0,                                                          & \text{otherwise}.
+        \end{cases}
+    \end{equation}
+    Moreover,
+    \[
+        D(\rho_1,\rho_2)=
+        \begin{cases}
+            \ln\!\left(\bigl\|\rho_1^{-1/2}\rho_2\rho_1^{-1/2}\bigr\|_\infty\,\bigl\|\rho_2^{-1/2}\rho_1\rho_2^{-1/2}\bigr\|_\infty\right),
+                    & \text{if }\supp[\rho_2]=\supp[\rho_1], \\
+            \infty, & \text{otherwise.}
+        \end{cases}
+    \]
+\end{proposition}
+
+\begin{proof}
+    We only have to prove the relation for $\sup(\rho_1/\rho_2)$ since this implies the other two by $\inf(\rho_1/\rho_2)=1/\sup(\rho_2/\rho_1)$ and definition (8.62) respectively.
+    Assume that $\supp[\rho_1]\not\subseteq \supp[\rho_2]$. Then there is a vector $\psi$ for which $\langle\psi|\rho_2|\psi\rangle=0$ while $\langle\psi|\rho_1|\psi\rangle>0$ so that the infimum in Eq.~(8.60) is over an empty set and thus by the usual convention $\infty$.
+    If, however, $\supp[\rho_1]\subseteq\supp[\rho_2]$, then $\rho_1\le \lambda \rho_2$ is equivalent to $\rho_2^{-1/2}\rho_1\rho_2^{-1/2}\le \lambda\one$ and the smallest $\lambda$ for which this holds is the operator norm.
+\end{proof}
+
+An immediate consequence of this is a simple bound on the quantum $\chi^2$-divergence:
+
+\begin{corollary}
+    Let $\rho_1,\rho_2\in M_d(\CC)$ be density matrices. Then
+    \begin{equation}\tag{8.78}
+        \chi^2_{1/2}(\rho_1|\rho_2) \le \sup(\rho_1/\rho_2) - 1.
+    \end{equation}
+\end{corollary}
+
+\begin{proof}
+    Recall the definition of the quantum $\chi^2$-divergence from Eq.~(8.32):
+    $\chi^2(\rho_1|\rho_2)=\tr[\rho_1\rho_2^{-1/2}\rho_1\rho_2^{-1/2}]-1$.
+    From here the assertion follows via Eq.~(8.76) by using that
+    $\tr[\rho_1\rho_2^{-1/2}\rho_1\rho_2^{-1/2}] \le \|\rho_2^{-1/2}\rho_1\rho_2^{-1/2}\|_\infty$.
+\end{proof}
+
+\subsection{Contractivity and the increase of entropy}
+
+\paragraph{Trace norm.}
+
+\begin{theorem}[Trace norm contractivity]
+    Let $T:M_d(\CC)\to M_{d'}(\CC)$ be a trace preserving positive linear map. Then for all Hermitian $H\in M_d(\CC)$:
+    \begin{equation}\tag{8.79}
+        \|T(H)\|_1 \le \|H\|_1.
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Let $T(H)=Q_+-Q_-$ and $H=P_+-P_-$ be decompositions into orthogonal parts $Q_\pm\ge 0$ and $P_\pm\ge 0$.
+    Projecting the equation $Q_+-Q_-=T(P_+)-T(P_-)$ onto the support space of $Q_+$ (or $Q_-$) and exploiting positivity of the involved expressions
+    leads to $\tr[Q_+]\le \tr[T(P_+)]$ (or $\tr[Q_-]\le \tr[T(P_-)]$). Using the trace-preserving property of $T$ then leads to
+    $\tr[Q_+ + Q_-]\le \tr[P_+ + P_-]$ which is a reformulation of Eq.~(8.79).
+\end{proof}
+
+Note that this means in particular that for all pairs of density operators $\rho_1$ and $\rho_2$ we have
+\begin{equation}\tag{8.80}
+    \|T(\rho_1)-T(\rho_2)\|_1 \le \|\rho_1-\rho_2\|_1.
+\end{equation}
+
+For a generic map $T$ this inequality can in principle be sharpened in the sense that the r.h.s.\ is multiplied by a factor smaller than one.
+The best possible such factor which is independent of the $\rho_i$'s is called contraction coefficient. For the trace norm its computation is simplified due to the following:
+
+\begin{lemma}[Trace norm contraction coefficient]
+    Let $T:M_d(\CC)\to M_{d'}(\CC)$ be a linear map. Then
+    \begin{equation}\tag{8.81}
+        \sup_{\rho_1,\rho_2}\frac{\|T(\rho_1)-T(\rho_2)\|_1}{\|\rho_1-\rho_2\|_1}
+        =
+        \frac{1}{2}\sup_{\psi\perp\phi}\left\|T\!\left(\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\right)\right\|_1,
+    \end{equation}
+    where the supremum on the l.h.s.\ is taken over all density matrices in $M_d(\CC)$ and the one on the r.h.s.\ over all pairs of orthogonal state vectors in $\CC^d$.
+\end{lemma}
+
+\begin{proof}
+    The r.h.s.\ in Eq.~(8.81) is certainly a lower bound since the set over which the supremum is taken is reduced. So we have to show that it is also an upper bound.
+    To this end, consider any difference of density operators with $\rho_1-\rho_2=P_+-P_-$ being a decomposition into orthogonal positive and negative parts
+    (i.e., $P_\pm\ge 0$ and $P_+P_-=0$). By rescaling both numerator and denominator of $\|T(P_+-P_-)\|_1/\|P_+-P_-\|_1$ we can achieve that $\tr[P_\pm]=1$
+    so that on the l.h.s.\ of Eq.~(8.81) we can w.l.o.g.\ assume that the two density matrices have orthogonal supports. In this case $\|P_+-P_-\|_1=2$.
+    A convex decomposition then leads to $P_+-P_-=\sum_i \lambda_i(\ketbra{\psi_i}{\psi_i}-\ketbra{\phi_i}{\phi_i})$ with $\psi_i\perp\phi_i$ for all $i$.
+    Exploiting convexity of the norm then finally leads to the equality in Eq.~(8.81).
+\end{proof}
+
+We will see below that non-trivial upper bounds for the trace-norm contraction coefficient, and thus improvements on inequality (8.80), can for instance be obtained from the projective diameter and the fidelity contraction coefficient.
+Another possibility to improve on Eq.~(8.80) is to formalize the intuition that if $T$ is strictly inside the cone of positive maps, then it should be a strict contraction.
+In the case of classical channels (i.e., stochastic matrices) this is the content of Doeblin's theorem of which a quantum counterpart looks as follows:
+
+\begin{theorem}[Quantum version of Doeblin's theorem]
+    Let $T,T':M_d(\CC)\to M_{d'}(\CC)$ be two trace-preserving and Hermiticity-preserving linear maps of which $T'$ is such that $T'(X)=\tr[X]\,Y$ for some $Y\in M_{d'}(\CC)$.
+    If $T-\varepsilon T'$ is positive for some $\varepsilon\ge 0$, then for all density matrices $\rho_1,\rho_2\in M_d(\CC)$:
+    \begin{equation}\tag{8.82}
+        \|T(\rho_1)-T(\rho_2)\|_1 \le (1-\varepsilon) \|\rho_1-\rho_2\|_1.
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    We will use a variant of Eq.~(8.10), namely that for any traceless Hermitian matrix $X$ one can express the trace-norm as
+    \begin{equation}\tag{8.83}
+        \|X\|_1 = \sup_{0\le P\le \one} 2\tr[P X].
+    \end{equation}
+    Applying this to $X=T(\rho_1-\rho_2)$ and using that $T'(\rho_1-\rho_2)=0$ we obtain
+    \begin{equation}\tag{8.84}
+        \|T(\rho_1)-T(\rho_2)\|_1
+        =
+        \sup_{0\le P\le \one} 2\tr[(\rho_1-\rho_2)(T-\varepsilon T')^\ast(P)].
+    \end{equation}
+    Note that $P':=(T-\varepsilon T')^\ast(P)$ is positive if, as assumed, $T-\varepsilon T'$ is a positive map.
+    Moreover, the fact that $P\le \one$ together with the trace-preserving property of $T$ and $T'$ implies that
+    $P'\le (T-\varepsilon T')^\ast(\one)=(1-\varepsilon)\one$ so that finally
+    \begin{equation}\tag{8.85}
+        \|T(\rho_1)-T(\rho_2)\|_1 \le (1-\varepsilon)\sup_{0\le P\le \one} 2\tr[(\rho_1-\rho_2)P],
+    \end{equation}
+    from which the claimed inequality follows by exploiting Eq.~(8.83) once again.
+\end{proof}
+
+While positivity is difficult to decide, complete positivity is easily seen from the Choi--Jamio\l{}kowski operator (see Prop.~2.1). So if
+$\tau=(T\otimes \id_d)(\ketbra{\Omega}{\Omega})$ is the Choi--Jamio\l{}kowski operator of $T$, then Eq.~(8.82) holds for every $\varepsilon\ge 0$ for which there is a Hermitian $Y$ with $\tr[Y]=1$ so that
+\begin{equation}\tag{8.86}
+    \tau \ge \frac{\varepsilon}{d}\,(Y\otimes \one).
+\end{equation}
+If $T$ is highly contractive in the sense that it maps everything close to a highly mixed density operator $\rho_\infty$, then $Y=\rho_\infty$ can be a reasonable choice.
+Also note that for a given $Y$ the largest $\varepsilon$ satisfying Eq.~(8.86) can be computed explicitly following the approach of Prop.~8.4.
+Choosing $Y=\one/d$ enables us to relate the spectra of a channel and it Jamiolkowski state:\footnote{For another relation of that kind see Prop.~6.5.}
+
+\begin{corollary}[Channel spectrum vs.\ Jamiolkowski spectrum]
+    Let $T:M_d(\CC)\to M_d(\CC)$ be a completely positive and trace-preserving linear map with corresponding Jamiolkowski state $\tau$.
+    If we denote by $\mu$ the largest modulus of eigenvalues of $T$ which are strictly inside the unit disc and write $\lambda_{\min}(\tau)$ for the smallest eigenvalue of $\tau$, then
+    \begin{equation}\tag{8.87}
+        \mu \le 1-d^2\lambda_{\min}(\tau).
+    \end{equation}
+\end{corollary}
+
+\begin{proof}
+    Applying Thm.~8.17 with $Y=\one/d$ to $T^n$ for $n\in\NN$ leads to
+    $\|T^n(\rho_1-\rho_2)\|_1 \le (1-d^2\lambda_{\min}(\tau))^n\|\rho_1-\rho_2\|_1$.
+    As we will see in Prop.~8.6 and Thm.~8.23 below, $\sup_{\rho_1,\rho_2}\|T^n(\rho_1-\rho_2)\|_1$ is, up to a constant, asymptotically lower bounded by $\mu^n$ so that Eq.~(8.87) follows when considering $n\to\infty$.
+\end{proof}
+
+\paragraph{Hilbert's projective metric.}
+While investigating Perron--Frobenius theory of positive maps [true?], Birkhoff [?] observed that all strictly positive maps are contractive w.r.t.\ Hilbert's projective metric.
+This allowed him in essence to view convergence under subsequent application of a positive map as a special case of the Banach contraction mapping theorem.
+We will use the notation and terminology of Sec.~8.6 and assume throughout that all cones are embedded in finite-dimensional real vector spaces.
+In order to state Birkhoff's observation we need to define the projective diameter $\Delta(T)$ of a positive, i.e., cone-preserving, map $T:C\to C$ on a proper cone $C$ (e.g., the cone of positive semi-definite matrices in $M_d(\CC)$):
+\begin{equation}\tag{8.88}
+    \Delta(T) := \sup_{a,b\in C^\circ} D(T(a),T(b)),
+\end{equation}
+where the supremum runs over all elements $a,b$ in the interior of $C$, denoted by $C^\circ$.
+
+\begin{theorem}[Birkhoff's contraction theorem]
+    Let $C$ be a proper cone and $T:C\to C$ a positive (i.e., cone-preserving) linear map. Then
+    \begin{equation}\tag{8.89}
+        \sup_{a,b\in C^\circ}\frac{D(T(a),T(b))}{D(a,b)} \le \tanh\!\left(\frac{\Delta(T)}{4}\right).
+    \end{equation}
+\end{theorem}
+
+In fact, Hilbert's metric is the essentially unique projective metric which allows to identify positive maps with contractive maps [?].
+In order to formalize this, recall that a symmetric functional $D':C\times C\to \RR_+\cup\{\infty\}$ is called projective metric if it satisfies
+$D'(a,b)\le D'(a,c)+D'(c,b)$ for all $a,b,c\in C$ and $D'(a,b)=0$ iff $a=\lambda b$ for some $\lambda>0$.
+
+\begin{theorem}[Uniqueness of Hilbert's projective metric]
+    Let $C$ be a proper cone and $D'$ a projective metric such that every strictly positive linear map $T:C\to C^\circ$ is a strict contraction w.r.t.\ $D'$.
+    Then there exists a continuous and strictly increasing function $f:\RR_+\to\RR_+$ such that $D' = f(D)$ where $D$ is Hilbert's projective metric.
+    Moreover, for any linear $T:C\to C^\circ$ we have
+    \begin{equation}\tag{8.90}
+        \sup_{a,b\in C^\circ}\frac{D(T(a),T(b))}{D(a,b)}
+        \le
+        \sup_{a,b\in C^\circ}\frac{D'(T(a),T(b))}{D'(a,b)}.
+    \end{equation}
+\end{theorem}
+
+The projective diameter which appears in Birkhoff's theorem can in turn be lower bounded by the ``second largest eigenvalue'' [?]:
+
+\begin{theorem}[Spectral bound on projective diameter]
+    Let $C$ be a proper cone and $T:C\to C$ a positive linear map for which $T(c)=c$ for some non-zero $c\in C$.
+    If $T(a)=\lambda a$ for some $\lambda\in\CC$ and $a$ not proportional to $c$, then
+    \begin{equation}\tag{8.91}
+        |\lambda| \le \tanh\!\left(\frac{\Delta(T)}{4}\right).
+    \end{equation}
+\end{theorem}
+
+\emph{[I dropped the $\Delta<\infty$ and the $c\in C^\circ$ requirement. Both seem superfluous \ldots\ proof? idea: perturb $T$ in order to make it primitive and
+            use that the spectrum changes continuously and that $\Delta(T)<\infty$ iff $T$ is primitive (which should mean something like $T:C\setminus\{0\}\to C^\circ$)]}
+
+For the particular case of $C$ being the cone of positive semi-definite matrices in $M_d(\CC)$ we can show that the projective diameter also bounds the contraction w.r.t.\ the trace norm:
+
+\begin{theorem}[Trace norm contraction incl.\ projective diameter]
+    Let $T:M_d(\CC)\to M_{d'}(\CC)$ be a positive, trace-preserving linear map. Then for all pairs of density matrices $\rho_1,\rho_2\in M_d(\CC)$
+    \begin{equation}\tag{8.92}
+        \|T(\rho_1)-T(\rho_2)\|_1 \le \|\rho_1-\rho_2\|_1\,\tanh\!\left(\frac{\Delta(T)}{4}\right).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Replacing $\rho_i\mapsto T(\rho_i)$ in Prop.~8.3 and taking the supremum over all full-rank density operators $\rho_1,\rho_2$ we obtain
+    $\sup \|T(\rho_1-\rho_2)\|_1/2 \le \tanh(\Delta(T)/4)$. On the l.h.s.\ of this inequality we may as well take the supremum over all density matrices and then obtain a lower bound by restricting to orthogonal pure states.
+    Following Lem.~8.3 this lower bound equals the trace-norm contraction coefficient which then implies Eq.~(8.92).
+\end{proof}
+
+Birkhoff's theorem implies that if for two pairs of positive operators $\rho_1,\rho_2$ and $\rho'_1,\rho'_2$ there is a positive map $T:\rho_i\mapsto\rho'_i$, then $D(\rho_1,\rho_2)\ge D(\rho'_1,\rho'_2)$.
+In the following we will see that the converse is true as well: if $D$ decreases, then there exists a completely positive map which does the mapping up to normalization.
+The main ingredient will be the following relation with the condition number which is defined for symmetric matrices as $\kappa(X):=\|X\|_\infty\|X^{-1}\|_\infty$.
+
+\begin{lemma}
+    Let $P\in M_d(\CC)$ and $P'\in M_{d'}(\CC)$ be positive definite operators. Then there exists a completely positive and unital linear map
+    $T:M_d(\CC)\to M_{d'}(\CC)$ such that $T(P)=\lambda P'$ for some $\lambda>0$ iff
+    \begin{equation}\tag{8.93}
+        \kappa(P) \ge \kappa(P').
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    Let us first prove the ``if part'' and let all norms be operator norms. Note that $\kappa(P)=1$ is equivalent to $P\propto\one$ for which the statement is trivially true
+    (since $P'\propto\one$ as well). So let us assume that $P$ is not proportional to the identity. Define two functions on spaces of symmetric matrices as
+    $E_1(X):=\one - X/\|P\|$ and $E_2(X):=X-\one/\|P^{-1}\|$. By construction $E_i(P)\ge 0$ and $\spn\{E_1(P),E_2(P)\}=\spn\{P,\one\}$.
+    Moreover, Eq.~(8.93) implies that there is a $\lambda>0$ such that
+    \begin{equation}\tag{8.94}
+        \frac{\|P\|}{\|P'\|} \ge \lambda \ge \frac{\|{P'}^{-1}\|}{\|P^{-1}\|},
+    \end{equation}
+    from which $E_i(\lambda P')\ge 0$ follows. Let $\psi_1$ ($\psi_2$) be an eigenvector corresponding to the smallest (largest) eigenvalue of $P$ and define a map
+    $T:M_d(\CC)\to M_{d'}(\CC)$ via
+    \begin{equation}\tag{8.95}
+        T(X) = \sum_i \langle\psi_i|X|\psi_i\rangle\,\frac{E_i(\lambda P')}{\langle\psi_i|E_i(P)|\psi_i\rangle}.
+    \end{equation}
+    Since $E_i(P)\ket{\psi_j}=0$ for $i\neq j$ we have that $T:E_i(P)\mapsto E_i(\lambda P')$ and therefore $T(\one)=\one$ and $T(P)=\lambda P'$.
+    Moreover, due to positivity of the involved expressions $T$ is a completely positive map, as desired.
+
+    For the ``only if part'' assume that there is a positive unital map $T$ which acts as $T(P)=\lambda P'$. Then, since $E_i(P)\ge 0$, we have to have that
+    $T(E_i(P)) = E_i(\lambda P')\ge 0$. These two inequalities (for $i=1,2$) are, however, equivalent to Eq.~(8.94) from which Eq.~(8.93) follows.
+\end{proof}
+
+As a consequence we obtain the claimed converse to Birkhoff's theorem:
+
+\begin{theorem}
+    Let $\rho_1,\rho_2\in M_d(\CC)$ and $\rho'_1,\rho'_2\in M_{d'}(\CC)$ be two pairs of density matrices so that $\supp(\rho_1)=\supp(\rho_2)$.
+    There exists a completely positive map $T:M_d(\CC)\to M_{d'}(\CC)$ which acts as $T(\rho_i)=\lambda_i\rho'_i$ for some $\lambda_i>0$ iff
+    \begin{equation}\tag{8.96}
+        D(\rho_1,\rho_2)\ge D(\rho'_1,\rho'_2).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    The `only if' part follows from Birkhoff's theorem. For the converse assume that Eq.~(8.96) holds. The assumed equal support of $\rho_1$ and $\rho_2$ together
+    with Eq.~(8.96) implies that $\rho'_1$ and $\rho'_2$ have equal support as well. We can therefore restrict the input and output spaces to the respective support spaces
+    and assume w.l.o.g.\ that all involved states have full rank. For any map $T$ we can then define a map $\tilde{T}$ as
+    \[
+        \tilde{T}(X) := \rho_1'^{-1/2}\,T\!(\rho_1^{1/2}X\rho_1^{1/2}) \rho_1'^{-1/2}/\lambda_1.
+    \]
+    Note that $T$ is completely positive iff $\tilde{T}$ is. Moreover, if we define $P:=\rho_1^{-1/2}\rho_2\rho_1^{-1/2}$,
+    $P':=\rho_1'^{-1/2}\rho_2'\rho_1'^{-1/2}$ and $\lambda:=\lambda_2/\lambda_1$ then $T(\rho_i)=\lambda_i\rho'_i$ becomes equivalent to
+    $\tilde{T}(P)=\lambda P'$ and $\tilde{T}(\one)=\one$. Hence, we can apply Lem.~8.4 and by using Prop.~8.4 we see that Eq.~(8.96) is a reformulation of Eq.~(8.93).
+\end{proof}
+
+To conclude this discussion we will give an operational interpretation of this result: assume that for a finite set of pairs of density matrices $\{(\rho_i,\rho'_i)\}$
+there is a completely positive map $T:M_d(\CC)\to M_{d'}(\CC)$ such that $T(\rho_i)=\lambda_i\rho'_i$ for some $\lambda_i>0$.
+Then we can construct a new map $\tilde{T}:M_d(\CC)\to M_{d'}(\CC)\otimes \ZZ_2$ which is completely positive and trace-preserving and such that
+(i) $\rho_i\mapsto \rho'_i$ conditioned on outcome `1' on the ancillary two-level system, and (ii) this outcome is obtained with non-zero probability.
+More explicitly, this is obtained by
+\begin{equation}\tag{8.97}
+    \tilde{T}(\rho) := cT(\rho)\otimes \ketbra{1}{1} + B\rho B^\dagger\otimes \ketbra{0}{0},
+\end{equation}
+with $c:=\|T^\ast(\one)\|_\infty^{-1}$ and $B:=\sqrt{\one-cT^\ast(\one)}$.
+
+In other words, Thm.~8.22 shows that Hilbert's metric provides a necessary and sufficient condition for the existence of a probabilistic quantum operation which maps
+$\rho_i\mapsto \rho'_i$ upon success.
+
+\paragraph{Asymptotic convergence and ergodic theory.}
+In this paragraph we consider quantum channels which can be applied repeatedly, i.e., $T:M_d(\CC)\to M_d(\CC)$, and analyze the behavior of $T^n$ as $n\in\NN$ goes to infinity.
+Naturally, some of the spectral properties investigated in Chapter~6 will enter the discussion. For instance, depending on whether or not $T$ has eigenvalues of modulus
+one which are different from one, $T^n$ will or will not converge. In any case the image of $T^n$ will converge to $\XT$, the space spanned by all eigenvectors corresponding
+to eigenvalues of modulus one as defined in Eq.~(6.65). Similarly, according to Prop.~6.3 there will be an ascending subsequence $n_i\in\NN$ such that $T^{n_i}\to T_\phi$ will converge
+to $T_\phi$ which is a projection onto $\XT$. In other words
+\begin{equation}\tag{8.98}
+    \|T^n - T_\varphi^n\|\to 0,
+\end{equation}
+where $T_\varphi := T_\phi T$ describes the ``asymptotic dynamics'' which is studied in greater detail in Thm.~6.16. Recall from Chapter~6 that $T_\varphi$ is defined in terms of
+the spectral decomposition of $T$ where all eigenvalues of modulus smaller than one are set to zero while the peripheral eigensystem is kept unchanged. Similarly, $T_\phi$ is nothing but
+the projection corresponding to the peripheral eigenvectors. The question which is addressed in the following is: how fast is the convergence in Eq.~(8.98)?
+
+Clearly, some of the previous results on contractivity may be applied. For instance Thm.~8.17 implies that
+\[
+    \|T^n(\rho_1)-T^n(\rho_2)\|_1 \le (1-\varepsilon)^n\|\rho_1-\rho_2\|_1,
+\]
+but it leaves us with having to determine $(1-\varepsilon)$.
+
+A clearer picture about the asymptotic behavior\footnote{which might, however, lead to quite ridiculous bounds for finite $n$} can be obtained by having a closer look at spectral properties:
+recall that the spectral radius of a positive and trace-preserving map is one, so that $(T-T_\varphi)$ has spectral radius equal to $\mu$ where $\mu:=\sup_{\lambda\in\spec(T)}\{|\lambda|<1\}$
+is the largest modulus of the eigenvalues of $T$ which are in the interior of the unit disc. Note further that
+\begin{equation}\tag{8.99}
+    T^n - T_\varphi^n = (T-T_\varphi)^n,
+\end{equation}
+since $T_\varphi T=TT_\varphi=T_\varphi^2$. Taken together these facts suggest that $\mu$ governs the asymptotic behavior and we will see indeed that
+\begin{equation}\tag{8.100}
+    \|\hat{T}^n - \hat{T}_\varphi^n\| = O(\nu^n),\qquad \text{for all }\nu>\mu.
+\end{equation}
+Before we proceed, some remarks are in order:
+(i) note that the choice of the norm is only relevant when it comes to decorating Eq.~(8.100) with actual constants; most of the time we will consider
+$\|\hat{T}^n-\hat{T}_\varphi^n\|_\infty$,
+(ii) if $T$ has only one eigenvalue of modulus one with corresponding fixed point density matrix $\rho_\infty$, then $T_\varphi(\cdot)=\tr[\cdot]\rho_\infty$ and
+$T_\varphi=T_\phi=T^\infty$,
+(iii) it is not a typo that we do not have $\nu\ge\mu$ in Eq.~(8.100). In order to understand the latter, consider the following example:
+
+\begin{example}[Slow convergence of non-diagonalizable channels]
+    A simple example of a channel whose convergence is slower than $O(\mu^n)$ is a classical channel with $0<\mu<1$, characterized by a stochastic matrix $S\in M_3(\RR_+)$ of the form
+    \begin{equation}\tag{8.101}
+        S=
+        \begin{pmatrix}
+            \mu   &0     &0\\
+            1-\mu &\mu   &0\\
+            0     &1-\mu &1
+        \end{pmatrix},
+        \qquad\text{leading to}\qquad
+        S^\infty =
+        \begin{pmatrix}
+            0 &0 &0\\
+            0 &0 &0\\
+            1 &1 &1
+        \end{pmatrix}.
+    \end{equation}
+    In this case we can compute $S^n-S^\infty$ explicitly and verify that $\|S^n-S^\infty\|$ is asymptotically bounded by $\mu^n n$ both, from below and from above.
+    A general proof of such an asymptotic behavior is given Thm.~8.23 where it is traced back to the appearance of non-trivial Jordan blocks.
+
+    Note that this example can be translated to the context of quantum channels by defining a quantum channel on $M_3(\CC)$ as
+    $T(\cdot):=\sum_{i,j} S_{i,j}\langle j|\cdot|j\rangle \ketbra{i}{i}$ which then displays the same type of asymptotic behavior since $\hat{T}=S\oplus 0$.
+    The main purpose of this example is to show that quantum channels with large Jordan blocks exist and can be easily constructed: extending the example to $M_d(\CC)$ leads to a Jordan block of size $d-1$.
+\end{example}
+
+The above example suggests that the asymptotic behavior is governed by $\mu$ and the size (denote it by $d_\mu$) of the largest Jordan block corresponding to $\mu$.
+In the following we will see that there are indeed $n$-independent constants $C_1,C_2$ such that
+\begin{equation}\tag{8.102}
+    C_1\mu^n n^{d_\mu-1} \le \|\hat{T}^n-\hat{T}_\varphi^n\| \le C_2\mu^n n^{d_\mu-1}.
+\end{equation}
+Proving this requires a lemma:
+
+\begin{lemma}
+    Consider an upper-triangular matrix $X\in M_D(\CC)$ with decomposition $X=\Lambda+N$ into a diagonal part $\Lambda$ and a strictly upper-diagonal part $N$
+    (i.e., $N_{i,j}=0$ if $i\ge j$). If $\|\cdot\|$ is a sub-multiplicative norm, $\|\Lambda\|\le 1$ and $n\in\NN$, then
+    \begin{equation}\tag{8.103}
+        \|X^n\| \le \|\Lambda^n\| + C_{D,n}\|\Lambda\|^{n-D+1}\max\{\|N\|,\|N\|^{D-1}\},
+    \end{equation}
+    with $C_{D,n}=(D-1)n^{D-1}$. If in addition $2(D-1)\le n$ then Eq.~(8.103) holds with $C_{D,n}=(D-1)\binom{n}{D-1}$.
+
+    Similarly, if $X$ is a Jordan block with diagonal part $\Lambda=\lambda\one$, then for all $n\in\NN$ and natural numbers $k_0\le \min\{n,D-1\}$
+    \begin{equation}\tag{8.104}
+        |\lambda|^{n-k_0}\binom{n}{k_0} \le \|X^n\|_\infty \le \sum_{k=0}^{\min\{n,D-1\}} |\lambda|^{n-k}\binom{n}{k}.
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    Looking at the binomial expansion of $(\Lambda+N)^n$ we first observe that all monomials in which $N$ appears more than $D-1$ times will vanish since they
+    are products of more than $D-1$ strictly upper-triangular matrices. Hence, by using the basic properties of the norm we obtain
+    \begin{equation}\tag{8.105}
+        \|X^n\| \le \|\Lambda^n\| + \sum_{k=1}^{\min\{n,D-1\}} \binom{n}{k}\|N\|^k\|\Lambda\|^{n-k},
+    \end{equation}
+    which leads to Eq.~(8.103) when bounding either $\binom{n}{k}\le n^{D-1}$ or $\binom{n}{k}\le \binom{n}{D-1}$ if $n\ge 2(D-1)$ and then choosing $k$ extremal in each of the three factors.
+
+    Now assume that $X$ is a Jordan block. Since then $[\Lambda,N]=0$ we have
+    $X^n = \sum_k \lambda^{n-k}N^k\binom{n}{k}$, where $k$ again runs from $0$ to $D-1$. $X^n$ is thus a Toeplitz matrix whose first row has entries of the form
+    $\lambda^{n-k}\binom{n}{k}$. Since the largest singular value, i.e.\ the operator norm, is bounded from below by the largest modulus of all entries, we obtain the l.h.s.\ of Eq.~(8.104).
+    The r.h.s.\ is obtained by using the triangle inequality for the norm together with $\|N\|_\infty=1$.
+\end{proof}
+
+Using this Lemma we will now derive two related results about the asymptotic behavior of $T^n$---based on either Jordan decomposition or Schur decomposition of $T$.
+While the first one allows us to pinpoint the exact asymptotic scaling, the second one enables us to provide explicit (albeit generally pessimistic) constants
+which depend only on $n$, $\mu$ and the underlying Hilbert space dimension.
+
+For the following consider the Jordan decomposition $\hat{T}=A(\bigoplus_{k=1}^K J_k(\lambda_k))A^{-1}$ where $k$ labels the different eigenvalues $\lambda_k$ of $T$
+according to their geometric multiplicity. That is, $K$ is the number of eigenvectors. We define the Jordan condition number as
+$\kappa_T := \inf_A \|A\|_\infty\|A^{-1}\|_\infty$ where the infimum is taken over all similarity transformation $A$ which bring $\hat{T}$ to Jordan normal form.
+
+\begin{theorem}[Asymptotic convergence I]
+    Let $T:M_d(\CC)\to M_d(\CC)$ be a positive and trace preserving linear map. Denote by
+    $\mu:=\sup_{\lambda\in\spec(T)}\{|\lambda|<1\}$ the largest modulus of all eigenvalues which are in the interior of the unit disc, and by $d_\mu$
+    the dimension of the largest Jordan block corresponding to an eigenvalue of modulus $\mu$. Then there exists a constant $C_1>0$ such that for all $n\in\NN$
+    \begin{equation}\tag{8.106}
+        C_1\mu^n n^{d_\mu-1} \le \|\hat{T}^n-\hat{T}_\varphi^n\|_\infty.
+    \end{equation}
+    Moreover, this inequality holds for
+    \[
+        C_1=
+        \begin{cases}
+            \kappa_T^{-1},                         & \text{if } d_\mu=1,      \\
+            \kappa_T^{-1}(\mu(d_\mu-1))^{1-d_\mu}, & \text{if } d_\mu\le n+1.
+        \end{cases}
+    \]
+    Similarly, there exists a $C_2\in\RR$ such that for all $n\in\NN$ we have
+    \begin{equation}\tag{8.107}
+        \|\hat{T}^n-\hat{T}_\varphi^n\|_\infty \le C_2\mu^n n^{d_\mu-1}.
+    \end{equation}
+    If $\hat{T}$ is diagonalizable (i.e., all Jordan blocks are one-dimensional), we can choose $C_2=\kappa_T$.
+\end{theorem}
+
+\begin{proof}
+    By definition of $T_\varphi$ we have that $\hat{T}-\hat{T}_\varphi=A(\bigoplus_{k:|\lambda_k|<1} J_k(\lambda_k))A^{-1}$
+    (assuming, with some abuse of notation, that missing Jordan blocks are properly replaced by blocks of zero matrices).
+    Exploiting Eq.~(8.99) together with sub-multiplicativity of the norm we obtain
+    \begin{equation}\tag{8.108}
+        \kappa_T^{-1}\|J^n\|_\infty \le \|\hat{T}^n-\hat{T}_\varphi^n\|_\infty \le \kappa_T\|J^n\|_\infty,
+    \end{equation}
+    with $J:=\bigoplus_{k:|\lambda_k|<1} J_k(\lambda_k)$.
+
+    It follows from Eq.~(8.104) that for every pair of eigenvalues with $|\lambda_i|<|\lambda_j|$ there is an $n_0\in\NN$ such that
+    $\|J_i(\lambda_i)^n\|_\infty < \|J_j(\lambda_j)^n\|_\infty$ holds for the norms of the corresponding Jordan blocks for all $n\ge n_0$.
+    Moreover, if two eigenvalues have equal magnitude, then the Jordan block with the larger dimension has the larger norm.\footnote{This can be seen by first noting that for Jordan blocks of equal size
+        $\|J(\lambda)^n\|_\infty=\|J(|\lambda|)^n\|_\infty$ and then using that $J(|\lambda|)^n$ contains any smaller Jordan block with eigenvalue $|\lambda|$ as principal submatrix
+        whose operator norm thus forms a lower bound.}
+    Hence, there exists an $n_0\in\NN$ such that for all $n\ge n_0$ we have $\|J^n\|_\infty \le \|X^n\|_\infty$ where $X$ is chosen to be the largest Jordan block
+    corresponding to an eigenvalue of modulus $\mu$. At this point the r.h.s.\ of Eq.~(8.104) becomes applicable with $D=d_\mu$ and we arrive at the desired result in Eq.~(8.107)
+    by using that $\binom{n}{k}\le n^{d_\mu-1}$ is implied by $k\le d_\mu-1$. Note that we can drop the requirement that $n\ge n_0$ by appropriately rescaling $C_2$.
+
+    The lower bound stated in Eq.~(8.106) is similarly obtained by using $\|J^n\|_\infty\ge \|X^n\|_\infty$ and inserting the l.h.s.\ of Eq.~(8.108) together with Eq.~(8.104)
+    after setting $k_0=d_\mu-1$ and bounding $\binom{n}{k_0}\ge (n/k_0)^{k_0}$.
+\end{proof}
+
+Note that if $\hat{T}$ is diagonalizable (as it holds for almost all channels), then the Jordan decomposition used in Thm.~8.23 yields
+\begin{equation}\tag{8.109}
+    \kappa_T^{-1}\mu^n \le \|\hat{T}^n-\hat{T}_\varphi^n\|_\infty \le \kappa_T\mu^n.
+\end{equation}
+
+In some cases the Jordan condition number $\kappa_T$ can be bounded in terms of the condition number $\kappa(\sigma):=\|\sigma\|_\infty\|\sigma^{-1}\|_\infty$
+of a fixed point density matrix $\sigma=T(\sigma)$:
+
+\begin{proposition}[Jordan condition number and detailed balance]
+    Let $T:M_d(\CC)\to M_d(\CC)$ be a Hermiticity preserving linear map and $\Sigma:M_d(\CC)\to M_d(\CC)$ a linear map such that $\hat{\Sigma}>0$ is a positive definite matrix.
+    If
+    \begin{equation}\tag{8.110}
+        \Sigma T^\ast = T\Sigma,
+    \end{equation}
+    then the Jordan condition number satisfies $\kappa_T \le \sqrt{\kappa(\hat{\Sigma})}$.
+    In particular, if $\Sigma(X)=\sqrt{\sigma}X\sqrt{\sigma}$ for some positive definite $\sigma\in M_d(\CC)$ (which is a fixed point of $T$ if $T^\ast(\one)=\one$),
+    then $\kappa_T\le \sqrt{\kappa(\sigma)}$.
+\end{proposition}
+
+\begin{proof}
+    Expressed in terms of the matrix representation $\hat{T}$ the ``detailed balance'' type condition of Eq.~(8.110) reads $\hat{\Sigma}\hat{T}^\dagger=\hat{T}\hat{\Sigma}$.
+    Since $\hat{\Sigma}>0$ this is equivalent to $\hat{\Sigma}^{1/2}\hat{T}^\dagger\hat{\Sigma}^{-1/2} = \hat{\Sigma}^{-1/2}\hat{T}\hat{\Sigma}^{1/2}$ which is thus a Hermitian matrix so that
+    $\hat{T}$ can be diagonalized by a similarity transformation $\hat{\Sigma}^{1/2}U$ for some unitary $U$. Since multiplying with the latter doesn't change the operator norm,
+    we obtain $\kappa_T \le \kappa(\hat{\Sigma}^{1/2})=\sqrt{\kappa(\hat{\Sigma})}$ which equals $\sqrt{\kappa(\sigma)}$ if $\hat{\Sigma}=\sigma^{1/2}\otimes \bar{\sigma}^{1/2}$.
+\end{proof}
+
+For the general non-diagonalizable case, the constant $C_2$ (constant w.r.t.\ $n$) in Thm.~8.23 is somewhat elusive so that Eq.~(8.107) becomes a rather weak statement.
+A look at the proof reveals that we can obtain an explicit $C_2$ by either making it dependent on the separation of the moduli of eigenvalues, or by replacing $d_\mu$ in Eq.~(8.107)
+by the dimension of the largest Jordan block corresponding to any eigenvalue in the interior of the unit disk. In the latter case $C_2$ would still involve the Jordan condition number
+$\kappa_T$ which in turn may be bounded in terms of the separation of eigenvalues (see [?]). The subsequent theorem will follow an alternative route which, to some extent, allows to circumvent such issues.
+It is based on the Schur decomposition $(\hat{T}-\hat{T}_\varphi)=U(\Lambda+N)U^\dagger$ where $U$ is unitary, $\Lambda$ is diagonal and $N$ is strictly upper triangular.
+
+\begin{theorem}[Asymptotic convergence II]
+    Let $T:M_d(\CC)\to M_d(\CC)$ be a positive and trace preserving linear map. Denote by
+    $\mu:=\sup_{\lambda\in\spec(T)}\{|\lambda|<1\}$ the largest modulus of all eigenvalues which are in the interior of the unit disc.
+    Then for any $n\in\NN$
+    \begin{equation}\tag{8.111}
+        \|\hat{T}^n-\hat{T}_\varphi^n\|_\infty
+        \le \mu^n + C_{d,n}\mu^{n-d^2+1}\max\{\|N\|_\infty,\ \|N\|_\infty^{d^2-1}\},
+    \end{equation}
+    with $C_{d,n}=(d^2-1)n^{d^2-1}$. If in addition $2(d^2-1)\le n$ then Eq.~(8.111) holds with $C_{d,n}=(d^2-1)\binom{n}{d^2-1}$.
+    Moreover, we can bound $\|N\|_\infty \le (\mu+2\sqrt{d})$.
+\end{theorem}
+
+\begin{proof}
+    Eq.~(8.111) is an immediate consequence of Eq.~(8.103) together with the spectral properties of $T$.
+    The operator norm bound for $N$ follows from $\|N\|_\infty\le \|\Lambda\|_\infty+\|\hat{T}\|_\infty+\|\hat{T}_\varphi\|_\infty$ since $\|\Lambda\|_\infty=\mu$
+    and the singular values of positive, trace-preserving linear maps on $M_d(\CC)$ are bounded by $\sqrt{d}$.
+\end{proof}
+
+We will now relate the operator norm convergence of maps, which we have discussed in the last paragraphs, to the trace norm convergence of states.
+Recall that $\XT:=\spn\{X\in M_d(\CC)\mid \exists \varphi\in\RR: T(X)=e^{i\varphi}X\}$ is the complex linear span of all eigenvectors of $T$ with corresponding eigenvalue of modulus one.
+According to Prop.~6.12 $\XT$ admits a basis consisting of density operators and satisfies $\XT=T(\XT)=T_\phi(M_d(\CC))$.
+
+\begin{proposition}[Convergence towards asymptotic states]
+    Let $T:M_d(\CC)\to M_d(\CC)$ be a positive and trace preserving linear map and denote by
+    $\Delta_T(\rho):=\|\rho-T_\phi(\rho)\|_1$ the trace-norm distance between $\rho\in M_d(\CC)$ and its projection onto $\XT$.
+    Then for any density operator $\rho\in M_d(\CC)$ and $n\in\NN$
+    \begin{equation}\tag{8.112}
+        \Delta_T(T^n(\rho)) \le \sqrt{\frac{d}{2}}\ \|\hat{T}^n-\hat{T}_\varphi^n\|_\infty\ \Delta_T(\rho).
+    \end{equation}
+    Conversely, if the supremum is taken over all density operators $\rho\in M_d(\CC)$, then
+    \begin{equation}\tag{8.113}
+        \sup_\rho \Delta_T(T^n(\rho)) \ge \frac{1}{4\sqrt{d}}\ \|\hat{T}^n-\hat{T}_\varphi^n\|_\infty.
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    First note that since $T_\phi T = TT_\phi = T_\varphi = T_\varphi T_\phi$ we have
+    $\Delta_T(T^n(\rho)) = \|T^n(\rho-T_\phi(\rho))\|_1 = \|(T^n-T_\varphi^n)(\rho-T_\phi(\rho))\|_1$.
+    So for any density operator $\rho$ we obtain
+    \begin{equation}\tag{8.114}
+        \frac{\Delta_T(T^n(\rho))}{\Delta_T(\rho)}
+        =
+        \frac{\|(T^n-T_\varphi^n)(\rho-T_\phi(\rho))\|_1}{\|\rho-T_\phi(\rho)\|_1}
+    \end{equation}
+    \begin{equation}\tag{8.115}
+        \le \frac{\sqrt{d}}{2}\sup_{\psi\perp\phi}\left\|(T^n-T_\varphi^n)\!\left(\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\right)\right\|_2
+    \end{equation}
+    \begin{equation}\tag{8.116}
+        \le \sqrt{\frac{d}{2}}\sup_{X\in M_d(\CC)} \frac{\|(T^n-T_\varphi^n)(X)\|_2}{\|X\|_2}
+        = \sqrt{\frac{d}{2}}\ \|(T^n-T_\varphi^n)\|_{2\to 2}.
+    \end{equation}
+    Here the first inequality uses Lemma~8.3 together with $\|\cdot\|_1\le \sqrt{d}\|\cdot\|_2$ from Eq.~(8.7). The second inequality uses that
+    $\|\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\|_2=\sqrt{2}$. Since $\|(T^n-T_\varphi^n)\|_{2\to2}=\|\hat{T}^n-\hat{T}_\varphi^n\|_\infty$ we finally arrive at
+    Eq.~(8.112).
+
+    For the converse statement recall that $\|(T^n-T_\varphi^n)\|_{2\to2} = \sup_{X:\|X\|_2\le 1}\|(T^n-T_\varphi^n)(X)\|_2$.
+    Any such $X$ can be decomposed into four positive parts so that $X=\sum_{i=1}^4 c_i P_i$ with $|c_i|=1$ and $P_i\ge 0$, $\|P_i\|_2\le 1$.
+    Together with $\|\cdot\|_2\le \|\cdot\|_1$ this implies
+    \begin{equation}\tag{8.117}
+        \frac{1}{4}\|(T^n-T_\varphi^n)\|_{2\to2}
+        \le \sup_{P\ge 0}\left\{\|(T^n-T_\varphi^n)(P)\|_1\ \big|\ \|P\|_2\le 1\right\}.
+    \end{equation}
+    Eq.~(8.113) then follows by observing that $\|P\|_2\le 1$ implies $\tr[P]\le \sqrt{d}$.
+\end{proof}
+
+\subsection{Continuity bounds}
+
+% (The provided images end at the beginning of Sec. 8.8.)
+
+\end{document}

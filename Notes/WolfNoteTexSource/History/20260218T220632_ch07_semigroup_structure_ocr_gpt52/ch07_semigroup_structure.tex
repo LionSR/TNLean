@@ -1,0 +1,365 @@
+
+\documentclass[11pt,a4paper]{article}
+\input{preamble}
+
+% --- Chapter 7 numbering (Wolf Lecture Notes) ---
+\renewcommand{\thesection}{7.\arabic{section}}
+\renewcommand{\theequation}{7.\arabic{equation}}
+
+% --- Replace theorem environments from preamble (Wolf uses separate counters) ---
+\UndefEnv{theorem}
+\UndefEnv{proposition}
+\UndefEnv{corollary}
+\UndefEnv{lemma}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\renewcommand{\thetheorem}{7.\arabic{theorem}}
+\renewcommand{\theproposition}{7.\arabic{proposition}}
+\renewcommand{\thecorollary}{7.\arabic{corollary}}
+\renewcommand{\thelemma}{7.\arabic{lemma}}
+
+\title{Chapter 7: Semigroup Structure \\ {\small (Wolf Lecture Notes -- Transcription)}}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Continuous one-parameter semigroups}
+
+In this section we discuss continuous time-evolution which is described by continuous one-parameter semigroups. We begin with a brief discussion of general properties of such semigroups and later, in Subsection~7.1.2, consider those semigroups which are quantum channels.
+
+\subsection{Dynamical semigroups}
+
+For a set $\Sigma$ of ``observables'' or ``states'', a family of maps $T_t:\Sigma\to\Sigma$, parameterized by $t\in\RR_{+}$, is called \emph{dynamical semigroup} if for all $t,s\in\RR_{+}$,
+\begin{equation}\label{eq:7.1}
+    T_tT_s = T_{t+s}
+    \qquad\text{and}\qquad
+    T_0 = \id.
+\end{equation}
+Here ``dynamical'' should remind us that we may think of $T_t$ as time evolution for a time-interval $[0,t]$. The semigroup property $T_tT_s=T_{t+s}$ in turn means that the time evolution is both \emph{Markovian} and \emph{homogeneous}. That is, the time evolution operation neither depends on the history nor on the actual time.\footnote{Note that, from a nerdy mathematical point of view, the semigroup throughout this section is actually always the same, namely $(\RR_{+},+)$, i.e., the positive numbers. What changes is its representation.}
+
+\paragraph{Continuity and differentiability.}
+In order to arrive at a reasonable theory we have to add some form of continuity to the algebraic definition in Eq.~\eqref{eq:7.1}, meaning that $T_t$ should depend continuously on $t$. At this point there are different choices -- usually chosen by the nature of the problem rather than by us. Assuming that $\Sigma$ is equipped with a norm, we say that $T_t\to T_{t_0}$ converges \emph{strongly} when $t\to t_0$ if $\lVert T_t(x)-T_{t_0}(x)\rVert\to 0$ for all $x\in\Sigma$ and we speak about \emph{uniform convergence} or \emph{convergence in norm} if $\lVert T_{t_0}-T_t\rVert\to 0$ where the norm of maps is defined as
+\[
+    \lVert T\rVert := \sup_{x\in\Sigma}\frac{\lVert T(x)\rVert}{\lVert x\rVert}.
+\]\footnote{There is also the notion of \emph{weak} convergence but this coincides with strong convergence for dynamical semigroups. Needless to say, but nonetheless mentioned, uniform implies strong implies weak convergence in general.}
+Following the spirit of this exposition we will not make much use of this difference since our main focus lies on linear spaces $\Sigma$ which are of finite dimension, so that these notions actually coincide. We will, however, occasionally comment on infinite dimensional analogs of the derived results and those will crucially depend on the form of continuity. As a rule of thumb the results derived for matrices tend to hold when we ask for uniform convergence and replace matrices by bounded operators.
+
+From now on let us assume that $\Sigma$ is a finite-dimensional vector space, say $\CC^{D}$ for simplicity. For later purpose keep in mind that there might be additional structure, e.g.\ $\Sigma = M_d(\CC)$ isomorphic to $\CC^{d^2}$.
+
+Not surprisingly,
+\[
+    T_t = e^{tL}=\sum_{k=0}^{\infty}\frac{(tL)^k}{k!}
+\]
+forms a dynamical semigroup for any $L\in M_D(\CC)$ and it fulfills the differential equation
+\begin{equation}\label{eq:7.2}
+    \frac{d}{dt}T_t = LT_t.
+\end{equation}
+$L$ is called the \emph{generator} or \emph{infinitesimal generator} of the semigroup.
+
+Conversely, whenever Eq.~\eqref{eq:7.2} is fulfilled for a differentiable map $t\mapsto T_t\in M_D(\CC)$ and $T_0=\one$, then $T_t=e^{tL}$ with $L=\left.\frac{d}{dt}T_t\right|_{t=0}$. Surprisingly, differentiability for a finite-dimensional dynamical semigroup is implied by continuity:
+
+\begin{proposition}[From continuous semigroups to differentiable groups]
+    Let $\{T_t\in M_D(\CC)\}$ be a dynamical semigroup which is continuous in $t\in\RR_{+}$. Then $T_t$ is differentiable for $t\in\RR_{+}$ and of the form $T_t=e^{tL}$ for some $L\in M_D(\CC)$. Consequently, $T_t$ can be embedded into a group by extending the range of $t$ to $\RR$ or $\CC$.
+\end{proposition}
+
+\begin{proof}
+    Since $T_0=\one$ and $T_t$ is, by assumption, continuous in $t$,
+    \begin{equation}\label{eq:7.3}
+        M_\varepsilon := \int_0^\varepsilon T_s\,ds
+    \end{equation}
+    will be invertible for sufficiently small $\varepsilon>0$. The idea is now to express $T_t$ in terms of this integral expression and thereby showing that it is differentiable. To this end note that
+    \begin{align}
+        T_t
+         &= M_\varepsilon^{-1}M_\varepsilon T_t
+        = M_\varepsilon^{-1}\int_0^\varepsilon T_{s+t}\,ds, \label{eq:7.4}\\
+         &= M_\varepsilon^{-1}\int_t^{t+\varepsilon} T_s\,ds
+        = M_\varepsilon^{-1}(M_{t+\varepsilon}-M_t). \label{eq:7.5}
+    \end{align}
+    Hence, $T_t$ is differentiable and there exists a generator $L$ so that $T_t=e^{tL}$ which evidently becomes a group if we extend the range of $t$ to $\RR$ or $\CC$.
+\end{proof}
+
+This assertion remains true in infinite dimensions if we ask for uniform continuity. The generators are then bounded operators.
+
+\paragraph{Resolvents.}
+Recall from Eq.~(6.17) that the resolvent of a matrix $L\in M_D(\CC)$ is a matrix-valued function on the complex plane defined by
+\begin{equation}\label{eq:7.6}
+    R(z) := (z\one - L)^{-1}.
+\end{equation}
+The resolvent of a generator of a dynamical semigroup can be obtained via
+\begin{equation}\label{eq:7.7}
+    R(z) = \int_0^\infty e^{-zs}T_s\,ds,
+\end{equation}
+if $\operatorname{Re}(z)>\sup\{\operatorname{Re}(\lambda)\mid \lambda\in\spec(L)\}$. Conversely, if the resolvent of $L$ is given we can obtain the dynamical semigroup via the two expressions
+\begin{align}
+    T_t
+     &= \frac{1}{2\pi i}\int_{\partial\Delta} e^{zt}R(z)\,dz, \label{eq:7.8}\\
+     &= \lim_{n\to\infty}\left(\frac{n}{t}R\!\left(\frac{n}{t}\right)\right)^{\!n}. \label{eq:7.9}
+\end{align}
+Note that in the Cauchy integral formula in Eq.~\eqref{eq:7.8} we have to choose $\Delta\supset \spec(L)$. Eq.~\eqref{eq:7.9} on the other hand is nothing but Euler's approximation $e^{tL}=\lim_{n\to\infty}(\one-(tL)/n)^{-n}$.
+
+Some remarks on the above equations: it follows from Eq.~\eqref{eq:7.7} that if $z\in\RR$ is sufficiently large, then $R(z)$ is an element of a convex cone (e.g., of positive or completely positive maps) if $T_t$ is for all $t\in\RR_{+}$. Conversely, if $R(t)$ is an element of a closed convex cone for large $t\in\RR_{+}$ and this cone is closed under taking powers, then Eq.~\eqref{eq:7.9} implies that $T_t$ is contained in this cone as well. Hence, positivity properties in which we will be interested further down are simultaneously reflected by the dynamical semigroup and the resolvent of its generator.
+
+Another point worth mentioning is that if we leave the area of matrices for a moment and allow $L$ to be unbounded, then the resolvent, where defined, remains bounded so that the above expressions enable us to construct dynamical semigroups from unbounded generators via bounded expressions. They are therefore a central tool in proving the \emph{Hille--Yoshida theorem} which characterizes the generators of strongly continuous contraction semigroups. These generators are in general unbounded and merely defined on a dense subspace.
+
+\paragraph{Perturbations and series expansions.}
+Consider two dynamical semigroups of matrices $T_t=e^{tL}$ and $T'_t=e^{tL'}$ with $\Delta:=L'-L$ the difference of their generators. Here is a useful relation between the two:
+
+\begin{lemma}
+    Let $\{T_t\in M_D(\CC)\}$ and $\{T'_t\in M_D(\CC)\}$ be two dynamical semigroups and define $\Delta := \left.\frac{d}{dt}(T'_t-T_t)\right|_{t=0}$ the difference of their generators. Then
+    \begin{equation}\label{eq:7.10}
+        T'_t = T_t + \int_0^t T_{t-s}\Delta T'_s\,ds.
+    \end{equation}
+\end{lemma}
+
+\begin{proof}
+    Defining a function $f(s):=T_{t-s}T'_s$ and evaluating its derivative as
+    \[
+        \frac{d}{ds}f(s)=T_{t-s}(L'-L)T'_s
+    \]
+    we can express the difference of the two dynamical semigroups as
+    \begin{equation}\label{eq:7.11}
+        T'_t-T_t = f(t)-f(0)
+        = \int_0^t f'(s)\,ds
+        = \int_0^t T_{t-s}\Delta T'_s\,ds.
+    \end{equation}
+\end{proof}
+
+This simple relation has some remarkable consequences. One of them which is hard to overlook is an upper bound on the distance between the semigroups in terms of the distance of their generators:
+
+\begin{corollary}[Perturbation of generators]
+    Let $\{T_t\in M_D(\CC)\}$ and $\{T'_t\in M_D(\CC)\}$ be two dynamical semigroups and let $\Delta$ be the difference of their generators. Then for any norm and $t\in\RR_{+}$,
+    \begin{equation}\label{eq:7.12}
+        \lVert T'_t-T_t\rVert
+        \le t\lVert\Delta\rVert \sup_{s,s'\in[0,t]}\lVert T_s\rVert\,\lVert T'_{s'}\rVert.
+    \end{equation}
+\end{corollary}
+
+Note that for various applications which we may have in mind, this simplifies further as for instance the relevant norms of the dynamical semigroups on the right hand side in Eq.~\eqref{eq:7.12} are one (e.g., the cb-norm of quantum channels).
+
+A second implication of the above Lemma is the Dyson--Philips series (which is just called Dyson series if both semigroups are unitary): by recursively inserting Eq.~\eqref{eq:7.10} into itself, we obtain
+\begin{equation}\label{eq:7.13}
+    T'_t = \sum_{n=0}^{\infty}\tilde{T}^{(n)}_t,
+    \qquad
+    \tilde{T}^{(n+1)}_t = \int_0^t T_{t-s}\Delta \tilde{T}^{(n)}_s\,ds
+    \ \text{ with }\
+    \tilde{T}^{(0)}_t=T_t.
+\end{equation}
+
+\subsection{Quantum dynamical semigroups}
+
+After having analyzed general properties of `unstructured' dynamical semigroups, we will now turn to dynamical semigroups of quantum channels, i.e., for any $t\in\RR_{+}$ the map $T_t:M_d(\CC)\to M_d(\CC)$ of interest will be completely positive. A central question in this discussion is that about the structure of generators. It turns out that complete positivity of $T_t=e^{tL}$ is equivalent to a very similar property of the associated generator $L$, called conditional complete positivity:
+
+\begin{proposition}[Conditional complete positivity]
+    Let $L:M_d(\CC)\to M_d(\CC)$ be a linear map. Then the following properties are equivalent:
+    \begin{enumerate}
+        \item There is a completely positive map $\phi:M_d(\CC)\to M_d(\CC)$ and a matrix $\kappa\in M_d(\CC)$ so that for every $\rho\in M_d(\CC)$:
+              \begin{equation}\label{eq:7.14}
+                  L(\rho)=\phi(\rho)-\kappa\rho-\rho\kappa^{\dagger}.
+              \end{equation}
+        \item $L$ is Hermiticity preserving and denoting by $\ket{\Omega}\in\CC^d\otimes\CC^d$ an arbitrary maximally entangled state and by $P=\one-\ketbra{\Omega}{\Omega}$ the projection onto its orthogonal complement, we have
+              \begin{equation}\label{eq:7.15}
+                  P((L\otimes\id)(\ketbra{\Omega}{\Omega}))P \ge 0.
+              \end{equation}
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    Before proving the equivalence, let us make sure that the second property is well-defined in the sense that it doesn't depend on the choice of the maximally entangled state. To this end, recall that any two maximally entangled states $\Omega$ and $\Omega'$ are related via a local unitary $\ket{\Omega'}=(\one\otimes U)\ket{\Omega}$. Choosing a different maximally entangled state thus changes Eq.~\eqref{eq:7.15} by a unitary conjugation with $(\one\otimes U)$ which clearly doesn't change positivity.
+    \begin{enumerate}
+        \item[1.\ $\Rightarrow$ 2.:] Inserting Eq.~\eqref{eq:7.14} into Eq.~\eqref{eq:7.15} and using that $P$ annihilates $\ket{\Omega}$ gives
+              \[
+                  P((L\otimes\id)(\ketbra{\Omega}{\Omega}))P
+                  = P((\phi\otimes\id)(\ketbra{\Omega}{\Omega}))P,
+              \]
+              which is positive by complete positivity of $\phi$. Moreover, $L$ is Hermiticity preserving since $L(\rho)^{\dagger}=L(\rho^{\dagger})$.
+        \item[2.\ $\Rightarrow$ 1.:] Since $L$ is Hermiticity preserving, $\tau := (L\otimes\id)(\ketbra{\Omega}{\Omega})$ is Hermitian. Moreover, since $P\tau P\ge 0$ we can write
+              \[
+                  \tau = Q - \ket{\psi}\bra{\Omega} - \ket{\Omega}\bra{\psi},
+              \]
+              where $Q\ge 0$, when written in a basis containing $\Omega$, has non-zero entries only in columns and rows orthogonal to $\Omega$ and $\psi$ contains all the entries of $\tau$ in the column/row corresponding to $\Omega$. By Prop.~2.1 we can now define a completely positive map via
+              \[
+                  (\phi\otimes\id)(\ketbra{\Omega}{\Omega}) := Q
+              \]
+              so that setting $(\kappa\otimes\one)\ket{\Omega}:=\ket{\psi}$ completes the proof.
+    \end{enumerate}
+\end{proof}
+
+Using this equivalence together with the fact that by Prop.~7.1 there exists always a generator, we can now derive the structure of the latter in cases where $T_t$ is a semigroup of completely positive maps on $M_d(\CC)$:
+
+\begin{proposition}[Completely positive dynamical semigroups]
+    Consider a family of linear maps $T_t:M_d(\CC)\to M_d(\CC)$ for $t\in\RR_{+}$. The following are equivalent:
+    \begin{enumerate}
+        \item $T_t$ is a dynamical semigroup of completely positive maps which is continuous in $t$,
+        \item $T_t=e^{tL}$ for some conditional completely positive linear map $L:M_d(\CC)\to M_d(\CC)$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    \begin{enumerate}
+        \item[1.\ $\Rightarrow$ 2.:] By Prop.~7.1 there exists a generator $L:M_d(\CC)\to M_d(\CC)$. Since $T_t$ is, by assumption, completely positive for all $t\ge 0$ we may look at infinitesimal $t$ for which this implies
+              \begin{equation}\label{eq:7.16}
+                  0 \le (e^{tL}\otimes\id)(\ketbra{\Omega}{\Omega})
+                  = \ketbra{\Omega}{\Omega} + t\,(L\otimes\id)(\ketbra{\Omega}{\Omega}) + o(t).
+              \end{equation}
+              Exploiting that $o(t)/t\to 0$ as $t\to 0$ and projecting onto the orthogonal complement of $\Omega$ we obtain that $L$ is Hermiticity preserving and fulfills Eq.~\eqref{eq:7.15}.
+        \item[2.\ $\Rightarrow$ 1.:] Clearly, $e^{tL}$ is a continuous dynamical semigroup. In order to see complete positivity we use Eq.~\eqref{eq:7.14} and decompose the generator into two parts $L=\phi+\phi_\kappa$ with $\phi_\kappa(\rho):=-\kappa\rho-\rho\kappa^{\dagger}$. From the Lie--Trotter formula we get
+              \begin{equation}\label{eq:7.17}
+                  e^{tL} = \lim_{n\to\infty}\left(e^{t\phi/n}e^{t\phi_\kappa/n}\right)^{n}.
+              \end{equation}
+              Since concatenations of completely positive maps are again completely positive, it is sufficient to show that $e^{t\phi/n}$ and $e^{t\phi_\kappa/n}$ are both completely positive. For $e^{t\phi/n}$ this follows from complete positivity of $\phi$ by Taylor expansion. For $e^{t\phi_\kappa/n}$ we invoke the matrix representation (see Eq.~(2.21))
+              \[
+                  \widehat{\phi_\kappa} = -\kappa\otimes\one - \one\otimes\overline{\kappa}
+              \]
+              from which we get $e^{t\widehat{\phi_\kappa}/n} = K\otimes\overline{K}$ with $K:=e^{-t\kappa/n}$. Therefore $e^{t\phi_\kappa/n}(\rho)=K\rho K^{\dagger}$ is completely positive as well.
+    \end{enumerate}
+\end{proof}
+
+\begin{proposition}[Freedom in representation of generators]
+    Let $\phi:M_d(\CC)\to M_d(\CC)$ be a completely positive map with Kraus representation $\phi(\rho)=\sum_i L_i\rho L_i^{\dagger}$ and let $\kappa\in M_d(\CC)$. Consider the generator of a continuous dynamical semigroup of completely positive maps which is represented by the pair $(\phi,\kappa)$ as in Eq.~\eqref{eq:7.14}.
+    \begin{enumerate}
+        \item A matrix $\kappa'$ and a completely positive map $\phi'$ with Kraus operators $\{L'_i\}$ represent the same generator if there are constants $c_i\in\CC$ and $\lambda\in\RR$ such that
+              \begin{equation}\label{eq:7.18}
+                  L'_i = L_i + c_i\one,
+              \end{equation}
+              \begin{equation}\label{eq:7.19}
+                  \kappa' = \kappa + \sum_i \overline{c_i}\,L_i + i\lambda\one + \frac12\sum_i |c_i|^2\one.
+              \end{equation}
+              In particular, there is always a choice in which all Kraus operators are trace-less.
+        \item If $(\phi,\kappa)$ and $(\phi',\kappa')$ represent the same generator and the Kraus operators of $\phi$ as well as those of $\phi'$ are trace-less, then $\phi=\phi'$, $\kappa=\kappa'+i\lambda\one$ for some $\lambda\in\RR$ and any two Kraus representations of $\phi$ and $\phi'$ are related via a unitary so that $L'_i=\sum_j U_{ij}L_j$ (where the smaller set of operators is padded by zeros).
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    \begin{enumerate}
+        \item That $(\phi,\kappa)$ and $(\phi',\kappa')$ lead to the same generator can be seen by direct inspection.
+        \item If we impose that $\phi$ has trace-less Kraus operators, then its Choi matrix has support and range on the orthogonal complement of the corresponding maximally entangled state $\Omega$. The map $\rho\mapsto \kappa\rho+\rho\kappa^{\dagger}$, however, has a Choi matrix which (in an orthogonal basis containing $\Omega$) has entries only in the row or column corresponding to $\Omega$. Hence, the Choi matrix corresponding to the generator $L$ has a unique decomposition into a part leading to $\phi$ and a part leading to $\kappa$. The statement that $\phi=\phi'$ and $\kappa=\kappa'+i\lambda\one$ then follows from the one-to-one correspondence between maps and their Choi matrices (see Prop.~2.1) and the fact that the map $\rho\mapsto \kappa\rho+\rho\kappa^{\dagger}$ is invariant under adding imaginary multiples of the identity matrix to $\kappa$. Finally, the remaining unitary freedom in the Kraus decomposition follows from Thm.~2.1.
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}[Generators for semigroups of quantum channels]
+    A linear map $L:M_d(\CC)\to M_d(\CC)$ is the generator of a continuous dynamical semigroup of trace-preserving, completely positive linear maps, iff it can be written in one (and thus any) of the following equivalent forms:
+    \begin{align}
+        L(\rho)
+         &= \phi(\rho) - \kappa\rho - \rho\kappa^{\dagger},
+        \qquad\text{with }\ \phi^{*}(\one)=\kappa+\kappa^{\dagger}, \label{eq:7.20}\\
+         &= i[\rho,H] + \sum_j L_j\rho L_j^{\dagger} - \frac12\{L_j^{\dagger}L_j,\rho\}_{+}, \label{eq:7.21}\\
+         &= i[\rho,H] + \frac12\sum_j ([L_j,\rho L_j^{\dagger}] + [L_j\rho,L_j^{\dagger}]), \label{eq:7.22}\\
+         &= i[\rho,H] + \frac12\sum_{k,l=1}^{d^2-1} C_{l,k}([F_k,\rho F_l^{\dagger}] + [F_k\rho,F_l^{\dagger}]), \label{eq:7.23}
+    \end{align}
+    where $\phi$ is a completely positive linear map, $H=H^{\dagger}$ Hermitian, $\{L_j\subset M_d(\CC)\}$ a set of matrices, $C\in M_{d^2-1}(\CC)$ positive semi-definite and $F_1,\ldots,F_{d^2-1}$ a basis of the space of trace-less matrices in $M_d(\CC)$.
+\end{theorem}
+
+\begin{proof}
+    The first equation follows from Props.~7.3 and~7.2 by imposing $\tr[L(\rho)]=\tr[\rho]$ for all $\rho$'s. Eq.~\eqref{eq:7.21} is derived by identifying the $L_j$'s with the Kraus operators of $\phi$ and
+    \begin{equation}\label{eq:7.24}
+        \kappa = iH + \frac12\,\phi^{*}(\one).
+    \end{equation}
+    Eq.~\eqref{eq:7.22} is merely an occasionally convenient rewriting of Eq.~\eqref{eq:7.21}. Eq.~\eqref{eq:7.23} follows from Eq.~\eqref{eq:7.22} by using first that the $L_j$'s can be chosen trace-less by Prop.~7.4 and then expanding them in terms of a basis as $L_j=\sum_{k=1}^{d^2-1} M_{j,k}F_k$. This leads to $C=M^{\dagger}M$ which is thus positive semi-definite. Conversely, if $C\ge 0$, then there is always an $M$ such that $C=M^{\dagger}M$, which brings us back from Eq.~\eqref{eq:7.23} to Eq.~\eqref{eq:7.22}.
+\end{proof}
+
+Some jargon and remarks are in order: $H$, i.e., the imaginary/anti-Hermitian part of $\kappa$, is the Hamiltonian which governs the coherent part of the evolution. The freedom $\kappa\to\kappa+i\lambda\one$, $\lambda\in\RR$ is thus nothing but the irrelevance of a global energy shift. The map $\phi$ together with the real/Hermitian part of $\kappa$ (which is determined by $\phi$ due to trace preservation) is the incoherent or dissipative part. As Prop.~7.4 shows, the decomposition into a Hamiltonian and dissipative part is not unique but becomes so if we impose trace-less Kraus operators. In the context of quantum dynamical semigroups the Kraus operators of $\phi$ are often called \emph{Lindblad operators} and the matrix $C$ is often named \emph{Kossakowski matrix}, in particular when the $F$'s are chosen Hermitian and orthonormal ($\tr[F_k^{\dagger}F_l]=\delta_{kl}$) which is always possible.
+
+\begin{proposition}[Irreducibility implies primitivity]
+    Let $T_t=e^{tL}:M_d(\CC)\to M_d(\CC)$ with $t\in\RR_{+}$ be a dynamical semigroup of trace-preserving, completely positive linear maps. Then the following statements are equivalent:
+    \begin{enumerate}
+        \item There is a $t_0>0$ such that $T_{t_0}$ is irreducible.
+        \item $T_t$ is irreducible for all $t>0$.
+        \item $T_t$ is primitive for all $t>0$.
+        \item There is a $\rho_\infty>0$ such that for all density matrices $\rho\in M_d(\CC)$ we have $\lim_{t\to\infty}T_t(\rho)=\rho_\infty$.
+        \item $L$ has a one-dimensional kernel which consists of multiples of a positive definite density operator $\rho_\infty>0$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    Recall from Thm.~6.4 that irreducibility is equivalent to having a non-degenerate eigenvalue one whose corresponding ``eigenvector'', call it $\rho_\infty$, is positive definite. Moreover, by Thm.~6.6 all eigenvalues of an irreducible map which have magnitude one, denote them by $\{\lambda_1,\ldots,\lambda_m\}$, are roots of unity. Thus if $T_{t_0}$ is irreducible, then $T_{\pi t_0}$ will be irreducible, too, since $e^{\pi t_0 L}$ has still a non-degenerate eigenvalue one with corresponding eigenvector $\rho_\infty$. However, $\{\lambda_1^{\pi},\ldots,\lambda_m^{\pi}\}$ can only remain roots of unity if $m=1$, i.e., if there is a trivial peripheral spectrum in the first place. So $T_t$ is irreducible for all $t>0$ and thus primitive. This and the equivalence with point~4.\ follows from Thm.~6.7 which shows that primitive channels can either be characterized as irreducible channels with trivial peripheral spectrum, or as channels for which the evolution eventually converges to a unique stationary state of full rank.
+
+    In order to see that 5.\ $\Rightarrow$ 1.\ assume there would be imaginary eigenvalues of $L$. We could then choose a $t_0$ such that $e^{t_0L}$ still has a unique fixed point and since this has to be $\rho_\infty>0$, $e^{t_0L}$ is irreducible. Conversely, in order to see 1.\ $\Rightarrow$ 5.\ note that the kernel of $L$ is contained in the fixed point space of any $e^{tL}$. So if the kernel of $L$ would be of higher dimension or contain a density matrix which is not full rank, then no $e^{tL}$ could be irreducible for any $t$.
+\end{proof}
+
+\begin{proposition}[Reducible quantum dynamical semigroups]
+    Let $T_t=e^{tL}:M_d(\CC)\to M_d(\CC)$ with $t\in\RR_{+}$ be a dynamical semigroup of trace-preserving, completely positive linear maps with generator $L$ represented as in Thm.~7.1. Then the following are equivalent:
+    \begin{enumerate}
+        \item There is a density matrix $\rho_0$ with non-trivial kernel and such that for all $t\ge 0$: $\rho_0=T_t(\rho_0)$.
+        \item There is a density matrix $\rho_0$ with non-trivial kernel and such that $L(\rho_0)=0$.
+        \item There is a Hermitian projector $P\notin\{0,\one\}$ such that for all $t\ge 0$:
+              \[
+                  T_t(PM_d(\CC)P)\subseteq PM_d(\CC)P.
+              \]
+        \item There is a basis in which all Kraus operators $L_j$ and $\kappa$ are block-upper triangular, i.e., they satisfy $(\one-P)L_jP=(\one-P)\kappa P=0$ for some Hermitian projector $P\notin\{0,\one\}$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    The equivalence 1.\ $\Leftrightarrow$ 2.\ can be verified by differentiation and Taylor expansion of the exponential respectively. 1.\ $\Rightarrow$ 3.\ can be shown by taking $P$ the projector onto the support of $\rho_0$. Using that $0\le Q\le \rho_0$ implies $0\le T_t(Q)\le \rho_0$ and therefore $T_t(Q)\in PM_d(\CC)P$ we can obtain 3.\ by exploiting that any element of $PM_d(\CC)P$ is a linear combination of such $Q$'s, i.e., positive semi-definite operators whose support space is contained in the one of $\rho_0$.
+
+    For 3.\ $\Rightarrow$ 4.\ we use that $T_t(P)(\one-P)=0$ which, by differentiation, implies
+    \begin{equation}\label{eq:7.25}
+        L(P)(\one-P)=0.
+    \end{equation}
+    We first multiply this equation from the left with $(\one-P)$ and represent $L$ as in Thm.~7.1. Using $P=P^2$ and abbreviating $X_j:=(\one-P)L_jP$ this leads to $\sum_j X_jX_j^{\dagger}=0$ and thus $X_j=0$ for every $j$. Inserting this back into Eq.~\eqref{eq:7.25} then yields $(\one-P)\kappa P=0$. This condition is equivalent to $\kappa$ being block upper-triangular in a basis in which $P=(\one\oplus 0)$.
+
+    Conversely, 4.\ $\Rightarrow$ 3.\ follows by noticing that the block upper-triangular structure of the $L_j$'s and $\kappa$ implies that
+    $L(PM_d(\CC)P)\subseteq PM_d(\CC)P$. By Taylor expansion of the exponential $e^{tL}$ then preserves this subspace as well. Finally, 3.\ $\Rightarrow$ 2.\ is verified as follows: choose a $t_0$ such that the fixed point space of $e^{t_0L}$ equals the kernel of $L$. This is the case whenever no purely imaginary eigenvalue of $L$ is an integer multiple of $2\pi/t_0$. Since $T_{t_0}$ by assumption is reducible, there is a rank deficient fixed point density matrix $\rho_0=T_{t_0}(\rho_0)$ and therefore $L(\rho_0)=0$.
+\end{proof}
+
+In principle, Prop.~7.6 gives necessary and sufficient conditions for reducibility and thus, by negation, for irreducibility. However, the validity of the conditions may not be easily decidable, so that the following necessary (but not sufficient) conditions may be useful:
+
+\begin{corollary}[Necessary conditions for relaxation]
+    Let $T_t=e^{tL}:M_d(\CC)\to M_d(\CC)$ with $t\in\RR_{+}$ be a dynamical semigroup of trace-preserving, completely positive linear maps with generator $L$ represented as in Thm.~7.1. There is a positive definite density matrix $\rho_\infty$ such that for every density matrix $\rho$ we have $\lim_{t\to\infty}T_t(\rho)=\rho_\infty$ if one of the following statements is true:
+    \begin{enumerate}
+        \item The algebra generated by the set of Lindblad operators $\{L_j\}$ and $\kappa$ (i.e., the space of all polynomials thereof) is the entire matrix algebra $M_d(\CC)$.
+        \item The linear space spanned by the set of Lindblad operators is Hermitian\footnote{This means that for every $X=\sum_j x_jL_j$ there are $y_j\in\CC$ such that $X^{\dagger}=\sum_j y_jL_j$.} and its commutant contains only multiples of the identity.
+        \item The Kossakowski matrix has rank $\rank(C)>d^2-d$.
+    \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+    Following Prop.~7.5 we have to show that neither of three conditions is compatible with reducibility as discussed in Prop.~7.6. So assume that $T_t$ is reducible for one and thus any $t>0$. Then by Prop.~7.6, there is a basis in which the Lindblad operators $\{L_j\}$ and $\kappa$ are block upper-triangular. Since this property is preserved under multiplication and addition, this proves 1.
+
+    Regarding 2., if the linear space spanned by the $L_j$'s is Hermitian, then reducibility would imply a block-diagonal structure (i.e., $L_j = PL_jP + (\one-P)L_j(\one-P)$) which is incompatible with the assumed trivial commutant. Finally, for 3.\ first note that the rank of $C\in M_{d^2-1}(\CC)$ is independent of the basis we choose for the space of trace-less operators. If the evolution is reducible, then the block upper-triangular structure implies that the linear space $\mathcal{L}$ spanned by Lindblad operators has dimension at most $(d^2-d)$. Hence, using a basis $\{F_k\}$ of the space of trace-less operators such that $F_1,\ldots,F_{d^2-d}$ is a basis for $\mathcal{L}$ then shows that $\rank(C)\le d^2-d$.
+\end{proof}
+
+Note that the inequality in 3.\ in Cor.~7.2 is optimal in the sense that there are reducible cases with $\rank(C)=d^2-d$.
+
+The kernel of the Liouvillian $L$ leads to a space of fixed points of the map $e^{tL}$. Hence, the analysis of the space of fixed points of quantum channels can be used to learn something about the structure of $\ker(L)$:
+
+\begin{theorem}[Kernel of the Liouvillian]
+    Let $L:M_d(\CC)\to M_d(\CC)$ be a generator of a dynamical semigroup of trace-preserving, completely positive linear maps as presented in Thm.~7.1 with Lindblad operators $\{L_i\}$ and Hamiltonian $H$. Then
+    \begin{equation}\label{eq:7.26}
+        \{H,L_i,L_i^{\dagger}\}' \subseteq \{X\in M_d(\CC)\mid L^{*}(X)=0\}.
+    \end{equation}
+    If there is a positive definite element in the kernel of $L$, i.e., $\rho>0$, $L(\rho)=0$, then the converse inclusion is also true, i.e., the commutant equals the kernel.
+\end{theorem}
+
+\begin{proof}
+    The inclusion in Eq.~\eqref{eq:7.26} follows directly from the characterization of generators in Thm.~7.1. In order to arrive at the converse inclusion note that for some $t\in\RR_{+}$ we have $L^{*}(X)=0 \Leftrightarrow e^{tL^{*}}(X)=X$. Thm.~6.12 then implies that the set $\{X\mid L^{*}(X)=0\}$ forms a $\ast$-algebra, in particular $L^{*}(A)=0\Rightarrow L^{*}(A^{\dagger}A)=0$ and therefore
+    \begin{equation}\label{eq:7.27}
+        \sum_i [A,L_i]^{\dagger}[A,L_i]
+        = \phi^{*}(A^{\dagger}A) + A^{\dagger}\phi^{*}(\one)A - \phi^{*}(A^{\dagger})A - A^{\dagger}\phi^{*}(A)
+        = 0.
+    \end{equation}
+    Here the last equality used that $L^{*}(A)=0\Rightarrow \phi^{*}(A)=A\kappa+\kappa^{\dagger}A$ (and the same for $A^{\dagger}A$ in place of $A$) together with $\phi^{*}(\one)=\kappa+\kappa^{\dagger}$.
+
+    Since the l.h.s.\ in Eq.~\eqref{eq:7.27} is a sum of positive terms, each of them has to be zero. So $[A,L_i]=0$ and since we deal with a $\ast$-algebra, also $[A^{\dagger},L_i]=[L_i^{\dagger},A]^{\dagger}=0$. Finally, we can exploit this in order to obtain
+    \[
+        \kappa A = \phi^{*}(\one)A - \kappa^{\dagger}A = \phi^{*}(A) - \kappa^{\dagger}A = A\kappa,
+    \]
+    which implies $[H,A]=0$.
+\end{proof}
+
+\section{Literature}
+
+Suzuki~[?] gives a detailed investigation of the speed of convergence of the Lie--Trotter formula and proves in particular that for all bounded operators $A,B$ on any Banach space:
+\begin{equation}\label{eq:7.28}
+    \Bigl\lVert e^{A+B} - (e^{A/n}e^{B/n})^n \Bigr\rVert
+    \le \frac{2}{n}(\lVert A\rVert+\lVert B\rVert)^2
+    e^{\frac{n+2}{n}(\lVert A\rVert+\lVert B\rVert)}.
+\end{equation}
+
+\end{document}

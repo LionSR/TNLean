@@ -1,0 +1,632 @@
+
+\documentclass[11pt,a4paper]{article}
+\input{preamble}
+
+% ------------------------------------------------------------------------------
+% Wolf PDF numbering in Chapter 1:
+%   - Theorem/Proposition/Corollary/Example/etc. each have their own counters:
+%       Proposition 1.1, 1.2, ...
+%       Example 1.1, 1.2, ...
+%       Theorem 1.1, Corollary 1.1, ...
+%   - Problems are numbered: Problem 1,2,3,... (no "1." prefix).
+%
+% The shared preamble uses a shared counter for theorem-like environments, so we
+% override them locally (and do so in a compile-safe way).
+% ------------------------------------------------------------------------------
+\UndefEnv{theorem}
+\UndefEnv{proposition}
+\UndefEnv{corollary}
+\UndefEnv{lemma}
+\UndefEnv{definition}
+\UndefEnv{example}
+\UndefEnv{problem}
+\UndefEnv{remark}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{lemma}{Lemma}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{problem}{Problem}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+\numberwithin{equation}{section}
+
+\title{Chapter 1: (De)constructing Quantum Mechanics\\ {\small (Wolf Lecture Notes -- Transcription)}}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+% Display ``Chapter 1.'' like in the PDF, but keep section counter = 1 for
+% numbering of subsections, theorems, and equations.
+\setcounter{section}{1}
+\section*{Chapter \thesection.\ (De)constructing quantum mechanics}
+\addcontentsline{toc}{section}{Chapter 1.\ (De)constructing quantum mechanics}
+
+Quantum mechanics can be regarded as a general theoretical framework for
+physical theories. It consist out of a mathematical core which becomes a phys\-ical theory when adding a set of correspondence rules telling us which mathe\-matical objects we have to use in different physical situations. In contrast to
+classical physical theories, these correspondence rules are not very intuitive as
+linear operators on Hilbert spaces are quite far from everyday life. It is truly
+remarkable that Heisenberg, Schr\"odinger, Dirac, Bohr, von Neumann together
+with all the other famous minds of this golden age come up with such a theory.
+
+In this chapter we will briefly review the mathematical formalism of quan\-tum
+mechanics---abstracting from concrete physical realizations. All quantities
+will be dimensionless and $\hbar$ is set to one (although one should keep in mind
+that it is actually $10^{-34} \mathrm{J\,s}$, in other words: really, really small).
+Moreover, we will with few exceptions restrict ourselves to finite dimensional systems. This
+suffices to clarify the basic concepts and allows us to achieve this with little
+more requirements than linear matrix algebra.
+
+\subsection{States and Observables}
+
+\paragraph{Preparation and Measurement}
+It is often useful to divide physical experi\-ments into two parts: preparation
+and measurement. This innocent looking step already covers one of the basic
+differences between the quantum and the classi\-cal world, as in classical physics
+there is no need to talk about measurements in the first place. Note also that the division of a physical process into preparation and measurement is ambiguous (see the discussion of time evolution in Sec.~1.3) but, fortunately, in the case of quantum mechanics predictions do not depend on this choice.
+
+A genuine request is that a physical theory should predict the outcome of any measurement given all the information about the preparation, i.e., the initial conditions, of the system. Quantum mechanics teaches us that this is in general not possible and that all we can do is to predict the probabilities of outcomes in statistical experiments, i.e., long series of experiments where all relevant parameters in the procedure are kept unchanged. Thus, quantum mechanics does not predict individual events, unless the corresponding probability distribution happens to be tight. We will see later that there are good reasons to believe that this `fuzziness' is not due to incompleteness of the theory and lacking knowledge about some hidden variables but rather part of natures character. In fact, entanglement will be the leading actor in that story.
+
+The fact that the appearance of probabilities is not only due to the ignorance of the observer, but at the very heart of the description, means that the measurement process can be regarded as a transition from possibilities to facts. This leads to two related conceptual puzzles: (i) we have to specify where this cut takes place, i.e., where facts appear. This choice is ambiguous but fortunately irrelevant (as long as we make this cut at some point). (ii) the transition is intrinsically irreversible and thus in apparent conflict with the usual reversible way of setting up the theory. Variations of these two themes run under the name measurement problem.
+
+The preparation of a quantum system is the set of actions which determines all probability distributions of any possible measurement. It has to be a procedure which, when applied to a statistical ensemble, leads to converging relative frequencies and thus allows us to talk about probabilities. Since many different preparations can have the same effect in the sense that all the resulting probability distributions coincide it is reasonable to introduce the concept of a state, which specifies the effect of a preparation regardless of how it has actually been performed. Note that, in contrast to classical mechanics, a quantum mechanical `state' does not refer to the attributes of an individual system but rather describes a statistical ensemble---the effect of a preparation in a statistical experiment. Although it is quite common, one should neither assign states to single events nor interpret them as elements of reality.
+
+\paragraph{States as density matrices}
+The division of physical experiments into preparation of a state and measurement of an observable quantity (an observable) is reflected in the mathematical structure of quantum mechanics. The mathematical representation of the set of observables is given by Hermitian elements $A$ taken from an algebra $\mathcal{A}$ (called observable algebra). Just to recall: an algebra is a set which is closed under multiplication and addition as well as under multiplication with scalars. Moreover, we will assume that each element has an adjoint, i.e., that there is a Hermitian conjugation operation. The algebras are usually represented in terms of bounded\footnote{At this point you might disagree when having position or momentum operators or certain unbounded Hamiltonians in mind. However, in order to compute observable statistics, only the spectral projectors of these operators are needed and these are bounded again.}
+linear operators $\mcB(\mathcal{H})$ acting on a Hilbert space $\mathcal{H}$. When necessary we will write $\mcB(\mathcal{H}_1,\mathcal{H}_2)$ for the bounded linear operators from a Hilbert space $\mathcal{H}_1$ to $\mathcal{H}_2$, i.e., $\mcB(\mathcal{H})=\mcB(\mathcal{H},\mathcal{H})$. The algebras used will always admit such a representation.
+
+A state in turn corresponds to a linear functional mapping observables onto real numbers---their expectation values $\langle A\rangle$. That is, a state is an element of the dual $\mathcal{A}^\ast$ of $\mathcal{A}$, i.e., the space of continuous, linear functionals over $\mathcal{A}$. In order to get a nice interpretation in terms of probabilities, states are required to be
+\begin{itemize}
+    \item normalized: $\langle \one\rangle = 1$ (i.e., $\mathcal{A}$ should contain a unit element $\one$) and
+    \item positive: $\forall A\in \mathcal{A}:\ \langle A^\dagger A\rangle \ge 0$, where $\dagger$ is the adjoint operation\footnote{OK, we will use a compromise in notation: $A^\dagger$ for the adjoint, and $\bar{c}$ for complex conjugation. Though, I don't have the heart of writing $C^\dagger$-algebra.}.
+\end{itemize}
+Commonly, the words `state' and `observable' are used to refer to both the physical concept and the mathematical operator.
+
+We will in the following mainly consider systems of finite dimension $d$ where $A\in M_d \cong \mcB(\CC^d)$ is a $d\times d$ matrix with a concrete representation on $\mathcal{H}=\CC^d$. In general, $\mathcal{A}$ is a $C^\ast$-algebra (see Sec.~1.6). As inequivalent representations are usually no issue in finite dimensions, we will largely disregard the distinction between $\mathcal{A}$ and its representations.
+
+The set of complex valued matrices $M_d$ can be upgraded to a Hilbert space equipped with the Hilbert--Schmidt scalar product $\langle B,A\rangle_{\mathrm{HS}} := \tr[B^\dagger A]$.%
+\footnote{The resulting Hilbert space is sometimes called Hilbert Schmidt Hilbert space. Hilbert Schmidt class operators are those for which the Hilbert Schmidt norm $\sqrt{\langle A,A\rangle_{\mathrm{HS}}}$ is finite.}
+Hence, any linear functional can be identified with a matrix itself, so that every state can be described by a density matrix $\rho\in M_d$ for which normalization and positivity read $\tr[\rho]=1$ and $\rho\ge 0$ respectively.\footnote{In infinite dimensions this is no longer true in general. There are states (i.e., linear positive and normalized functionals on an observable algebra) which cannot be represented by density matrices. These are called singular states as opposed to normal states for which a density matrix representation exists.}
+The expectation value of an observable is then given by
+\begin{equation}
+    \langle A\rangle = \tr[\rho A].
+\end{equation}
+
+An important property of the set of density matrices is that it is convex, i.e., if $\rho_i$ are density operators and $\lambda_i$ probabilities, then the mixture
+\begin{equation}
+    \rho = \sum_i \lambda_i \rho_i
+\end{equation}
+is again an admissible density operator. It describes a state which can be prepared by generating the states $\rho_i$ with probability $\lambda_i$. If a state $\rho$ has no non-trivial convex decomposition of the form in Eq.(1.2) it is called pure, and mixed otherwise. Pure state density operators are one-dimensional projectors $\rho=\ketbra{\psi}{\psi}$, so that pure states can equivalently be represented by (normalized) vectors $\ket{\psi}\in \mathcal{H}$ traditionally called state vectors or wave functions. We will see that various measures can be used in order to quantify how pure/mixed a given state is. The simplest one, often called purity, is $\tr[\rho^2]$ and ranges from $1/d$ for the maximally mixed state $\rho=\one/d$ to $1$ which is attained iff the state is pure.
+
+Note that every mixed state can be convexly decomposed into pure states. A straight forward way to achieve this is given by the spectral decomposition $\rho=\sum_i \lambda_i \ketbra{\psi_i}{\psi_i}$, where the weights $\lambda_i$ are eigenvalues and the $\ket{\psi_i}$ the corresponding orthogonal eigenvectors. However, every mixed state has infinitely many different decompositions into pure states reflecting infinitely many possibilities of preparing it by mixing pure states. This is a crucial difference to classical probability theory where the convex set of probability distributions forms a simplex, meaning that there is a unique decomposition into `pure' elements. Remember that by definition of a quantum mechanical state there is no way to distinguish between preparations corresponding to different decompositions. A hypothetical device which is defined by its capability of achieving this task is sometimes call mixed state analyzer and often appears together with an individual state interpretation (for which we already learned to keep our hand off it). In fact, we will see later that such an innocent looking mixed state analyzer would immediately lead to a breakdown of Einstein locality when applied to entangled states. A closely related pitfall is to think of the occurrence of mixed states in quantum mechanics as a result of ignorance or incomplete knowledge. While this can be correct in specific cases it not true in general and we will soon see that it fails in particular if the mixed state is part of a pure entangled state.
+
+\begin{example}[Bloch sphere]
+    Two-level quantum systems, qubits ($d=2$), are simpler than higher dimensional ones not just because two is smaller than three, but very often they turn out to be special and allow for a qualitative different treatment. One reason for this are the special properties of the three Pauli matrices
+    \begin{equation}
+        \sigma_1=
+        \begin{pmatrix}
+            0 &1\\
+            1 &0
+        \end{pmatrix},
+        \qquad
+        \sigma_2=
+        \begin{pmatrix}
+            0 &-i\\
+            i &0
+        \end{pmatrix},
+        \qquad
+        \sigma_3=
+        \begin{pmatrix}
+            1 &0\\
+            0 &-1
+        \end{pmatrix}
+    \end{equation}
+    which, together with the identity $\one$, form a basis for all $2\times 2$ matrices. For any $M\in M_2(\CC)$ we can write $M=\frac12(x_0\one+\vec{x}\cdot \vec{\sigma})$, where $x_0=\tr[M]$ and $\vec{x}\cdot \vec{\sigma}=\sum_{i=1}^3 x_i\sigma_i$, $\vec{x}\in \CC^3$. $M$ is Hermitian iff $x_0$ and $\vec{x}$ are real and it is positive iff in addition $\|\vec{x}\|_2\le x_0$. Hence, the set of density matrices
+    \begin{equation}
+        \rho = \frac12(\one + \vec{x}\cdot \vec{\sigma})
+    \end{equation}
+    can be represented by a ball $\|\vec{x}\|_2\le 1$, the Bloch ball. In this visualization a state is pure iff $\|\vec{x}\|_2=1$, i.e., it is part of the Bloch sphere. Closer to the center states become more and more mixed (the purity is given by $\tr[\rho^2]=\frac12(1+\|\vec{x}\|_2^2)$) and for $\vec{x}=0$ we have the maximally mixed state. An orthogonal rotation of the Bloch ball corresponds to a unitary on the level of the density matrix. More precisely,
+    \begin{equation}
+        \rho \mapsto U_{\vec{n},\theta}\rho U_{\vec{n},\theta}^\dagger,
+        \qquad \text{with}\qquad
+        U_{\vec{n},\theta}
+        = e^{-i\theta \vec{n}\cdot \vec{\sigma}/2}
+        = \one \cos\frac{\theta}{2} - i\,\vec{n}\cdot \vec{\sigma} \sin\frac{\theta}{2}
+    \end{equation}
+    corresponds to a rotation of the Bloch ball by an angle $\theta$ about the $\vec{n}$ axis. Conversely, every $2\times 2$ unitary is, up to a phase factor, of the form in Eq.(1.5). This reflects the isomorphism $\mathrm{SO}(3)\cong \mathrm{SU}(2)/\{-\one,\one\}$, i.e., every pair $\pm U\in \mathrm{SU}(2)$ is in one-to-one correspondence with an element $O\in \mathrm{SO}(3)$.
+\end{example}
+
+A close relative (if not alter ego) of the Bloch sphere is the Poincar\'e sphere describing polarization of light. In this context the north pole, `front pole' and `east pole' correspond to perfect horizontal, $45^\circ$ linear and circular polarization. The components of the respective vector are then called Stokes parameters.
+
+\paragraph{Measurements}
+An observable in quantum mechanics should be understood as a measurement procedure in a statistical experiment. Again we consider equivalence classes of measurement procedures yielding equal probability distributions when applied to equal preparations. Similar to the individual state representation we run into trouble if we insist on assigning real entities to observables. They rather describe how we measure than what we measure.
+
+Let us label distinct measurement outcomes corresponding to an observable $A$ by an index $\alpha$ and denote their values and probabilities by $a_\alpha$ and $p_\alpha$ respectively.\footnote{To avoid subtleties in measure theory we assume that the set of measurement outcomes is finite. From a practical point of view this is justified by finite resolutions of any apparatus.} With this the expectation value reads $\langle A\rangle=\sum_\alpha a_\alpha p_\alpha$. In quantum mechanics the probabilities $p_\alpha$ are calculated by assigning a positive operator $0\le P_\alpha\le \one$ (called effect operator) to each outcome so that
+\begin{equation}
+    p_\alpha = \tr[\rho P_\alpha].
+\end{equation}
+As probabilities sum up to one we have to require $\sum_\alpha P_\alpha=\one$. A set of positive operators fulfilling this normalization condition (being a resolution of the identity) is called positive operator-valued measure (POVM). POVMs are the most general concept in quantum mechanics for describing measurements if we are only interested in probabilities and not in the state after the measurement.
+
+The connection between POVMs and the standard text book notion of observables as self-adjoint operators in Eq.(1.1) is given by the spectral decomposition $A=\sum_\alpha a_\alpha P_\alpha$. Here the $P_\alpha$ are now orthogonal projectors onto the eigenspaces of $A$ with corresponding eigenvalues $a_\alpha$. Clearly, the spectral projectors form a POVM and the formulas for the expectation value become consistent if one interprets the eigenvalues as measurement outcomes. However, POVMs need not consist out of orthogonal projectors, which is why they are sometimes called generalized measurements as opposed to von Neumann measurements in the case of spectral projectors.
+
+Two observables given by POVMs $\{P_\alpha\}$, $\{Q_\beta\}$ are jointly measurable iff there is a `finer' POVM $\{R_{\alpha\beta}\}$ which recovers them as `marginals', i.e., $\sum_\alpha R_{\alpha\beta}=Q_\beta$ and $\sum_\beta R_{\alpha\beta}=P_\alpha$. A set of von Neumann measurements is jointly measurable iff the corresponding Hermitian operators commute pairwise (and can thus be all diagonalized simultaneously).
+
+\begin{problem}[What's physical?]
+Is, in every given physical context, every observable (i.e., every POVM) principally measurable?\footnote{Is there more to say than `it's a matter of energy'?} Or similarly, does every state correspond to a physically possible preparation procedure? Are there well-defined systems where an observable when measured would provide the answer to an undecidable problem? If in some physical context some observable cannot be measured, can we always get rid of the `redundant part' in the theoretical description? Is there a way of making sense out of these questions?
+\end{problem}
+
+\begin{problem}[Joint measurability vs.\ coexistence of effects]
+A POVM can be viewed as a mapping from subsets of possible measurement outcomes to the set of positive semidefinite (psd) operators. More precisely, if $X$ is a (not necessarily discrete) measurable set characterizing all possible measurement outcomes, then $X\supseteq x\mapsto P(x)$ is a POVM if it is a consistent assignment of psd operators with $P(x)\ge 0$ and $P(X)=\one$. For the above discrete case this means $P(x)=\sum_{\alpha\in x} P_\alpha$.
+
+Two POVMs $P$ and $Q$ are said to be coexistent if there is a POVM $R$ whose range (as a mapping into psd operators) includes the ranges of both $P$ and $Q$. For von Neumann measurements as well as for the case of $P$ and $Q$ being two-valued, coexistence and joint measurability are known to be equivalent. Which is the general relation?
+\end{problem}
+
+\begin{problem}[Uniqueness of joint measurements]
+Given two jointly measurable POVMs $\{P_\alpha\}$ and $\{Q_\beta\}$. Find necessary and/or sufficient conditions for the joint observable $\{R_{\alpha\beta}\}$ to be unique.
+\end{problem}
+
+\subsection{Composite systems \& entanglement}
+
+Quantum theory replaces the Cartesian product, which classical theories use in order to describe composite systems, by the tensor product. The algebra of observables for a composite system is for instance given by the tensor product $\mathcal{A}\otimes \mathcal{B}$ of their observable algebras $\mathcal{A}$ and $\mathcal{B}$. The Hilbert space $\mathcal{H}=\mathcal{H}_A\otimes \mathcal{H}_B$ then becomes a tensor product as well and the number of discrete degrees of freedom increases to $\dim \mathcal{H}=\dim\mathcal{H}_A\dim\mathcal{H}_B$. $\mathcal{H}_A$ is said to correspond to a subsystem of $\mathcal{H}$, but we may later loosen this notion to the extent that $\mathcal{H}_a$ is a subsystem of $\mathcal{H}$ if
+\begin{equation}
+    \mathcal{H}=\mathcal{H}_a\otimes \mathcal{H}_b \oplus \mathcal{H}_c.
+\end{equation}
+A composite system or bipartite system always refers to a tensor product.
+
+The simplest states of a composite system are product states, i.e., tensor products of individual states. States which do not factorize are said to exhibit correlations, as for some observables $\langle A\otimes B\rangle\ne \langle A\otimes \one\rangle\langle \one\otimes B\rangle$. This is usually written in a shorter form by introducing the reduced density operator $\rho_A$ defined via $\tr[\rho_A A]=\tr[\rho(A\otimes \one)]$ for all $A\in \mathcal{A}$. The mapping $\tr_B:\rho\mapsto \sum_b \bra{b}\rho\ket{b}=\rho_A$ with $\{\ket{b}\}$ an orthonormal basis in $\mathcal{H}_B$ is called partial trace and the resulting $\rho_A$ is sometimes called a marginal of $\rho$.
+
+A special type of correlations are those which can be of classical origin: assume a state is given by a convex combination of product states\footnote{Here we could choose pure product states as well, since it follows from Carath\'eodory's theorem that a density matrix of the form (1.8) can always be decomposed into at most $\rank(\rho)^2$ pure product states. Note also that positivity of the $p_x$'s is crucial: if we allow for $p_x\in \RR$ then every state admits a representation like (1.8).}
+\begin{equation}
+    \rho = \sum_x p_x\, \rho_x^{(A)} \otimes \rho_x^{(B)} ,
+\end{equation}
+then one way of preparing $\rho$ is to draw a classical random variable $x$ from the probability distribution $p$ and to prepare a product state $\rho_x^{(A)}\otimes\rho_x^{(B)}$ conditioned on $x$. With this motivation a state of the form (1.8) is called classically correlated or synonymously separable or unentangled. Entanglement is defined as its negation. An equivalent operational definition of classical correlations (to which we will get back later) is as those which can be generated by means of arbitrary local operations and classical communications.
+
+Talking about `local operations' and `communication' already indicates that here and in the following we usually assume that the systems corresponding to different tensor factors are situated at distant locations. Such a distant location paradigm is not really necessary. However, it prevents us from misconceptions appearing when the apparently entangled systems are not spatially separated. This also avoids an extra discussion of systems of indistinguishable particles for which otherwise a proper definition of entanglement becomes a more subtle issue.
+
+Obviously, pure states are separable if and only if they are product states. That is, any kind of correlation is then due to entanglement and in this sense non-classical. Since entanglement properties are independent of the choice of local bases, we may bring a pure state into a simple normal form:
+
+\begin{proposition}[Schmidt decomposition]
+    For every vector $\ket{\psi}\in \mathcal{H}_A\otimes \mathcal{H}_B$ with $d=\min\{\dim(\mathcal{H}_A),\dim(\mathcal{H}_B)\}$ there exist orthonormal bases $\{e_j\in \mathcal{H}_A\}$ and $\{f_j\in \mathcal{H}_B\}$ such that
+    \begin{equation}
+        \ket{\psi}=\sum_{j=1}^{d} \sqrt{\lambda_j} \ket{e_j}\otimes \ket{f_j},
+        \qquad
+        \lambda_j\ge 0,
+        \qquad
+        \sum_i \lambda_i = \|\psi\|^2.
+    \end{equation}
+    The coefficients $\{\sqrt{\lambda_j}\}$ are called Schmidt coefficients and the number of non-zero $\lambda_j$ is the Schmidt rank of $\psi$.
+\end{proposition}
+
+Prop.~1.1 is easily proven by noting that a change of local bases in a general decomposition $\ket{\psi}=\sum_{a,b} C_{a,b}\ket{a}\otimes \ket{b}$ corresponds to left and right multiplication of the coefficient matrix $C$ with two different unitaries. Hence, we can choose unitaries diagonalizing $C$ such that the Schmidt coefficients are the singular values of $C$.\footnote{This makes clear that the bases $\{e_j\}$ and $\{f_j\}$ depend on $\psi$.} We will briefly summarize some implications of the Schmidt decomposition:
+\begin{itemize}
+    \item Reductions and purifications. The reduced density operators of $\psi$ are diagonal in the bases $\{e_j\}$ and $\{f_j\}$ and the $\lambda_j$'s are their non-zero eigenvalues. Conversely, given any density matrix $\rho_A$ with spectral decomposition $\rho_A=\sum_j \lambda_j \ketbra{e_j}{e_j}$ Eq.(1.9) provides a purification such that $\rho_A=\tr_B[\ketbra{\psi}{\psi}]$. The minimal dilation space $\mathcal{H}_B^{\min}$ has $\dim(\mathcal{H}_B^{\min})=\rank(\rho_A)$. If $\psi\in \mathcal{H}_A\otimes \mathcal{H}_B^{\min}$ is a purification then all other purifications of $\rho_A$ are of the form $\ket{\psi'}=(\one\otimes V)\ket{\psi}$ with $V\in \mcB(\mathcal{H}_B^{\min},\mathcal{H}_B)$ an isometry.
+    \item Monogamy. The Schmidt decomposition tells us that pure states cannot be correlated with any other system: a pure state as a reduced density operator means that any possibly larger, composite system is in a product state. Hence, correlations contained in pure states are monogamous and cannot be shared with any other system. This in sharp contrast to classical correlations (1.8). In fact, an equivalent way of characterizing classical correlations is (by the quantum de Finetti theorem) as those which can be symmetrically shared with an arbitrary number of other parties.
+    \item Mixed states. As a density operator $\rho\in \mcB(\mathcal{H}_A\otimes \mathcal{H}_B)$ is itself a `vector' (although not normalized) in the Hilbert--Schmidt Hilbert space, we can find a decomposition analogous to (1.9) of the form
+          \begin{equation}
+              \rho = \sum_j \sqrt{\mu_j}\,E_j\otimes F_j,\qquad \mu_j\ge 0,
+          \end{equation}
+          where $\{E_j\}$ and $\{F_j\}$ are sets of orthonormal operators w.r.t.\ the Hilbert--Schmidt scalar product. Then $\tr[\rho^2]=\sum_j \mu_j$ and $\rho$ being classically correlated can be shown to imply $\sum_j \sqrt{\mu_j}\le 1$.
+\end{itemize}
+
+\begin{example}[Tricks with maximal entanglement]
+    If all Schmidt coefficients of a pure state $\phi$ are $\lambda_j=1/d$, then $\phi$ is called maximally entangled\footnote{The name `maximally entangled' is justified for instance by the fact that every other state (of the same dimension) can be obtained with unit probability from a maximally entangled one by means of local operations and classical communication.} of dimension $d$. Every maximally entangled state is of the form $\phi=(\one\otimes U)\ket{\Omega}$ where $U$ is any unitary and
+    \begin{equation}
+        \ket{\Omega}=\frac{1}{\sqrt{d}}\sum_{j=1}^{d} \ket{jj}.
+    \end{equation}
+    Note that by using a basis of Hilbert--Schmidt orthogonal unitaries $\{U_j\}_{j=1,\dots,d^2}$ we can construct an orthonormal basis of maximally entangled states $\{(U_j\otimes \one)\ket{\Omega}\}$ for $\CC^d\otimes \CC^d$. $\Omega$ has a series of useful properties, like $\forall A,B\in \mcB(\CC^d)$:
+    \begin{equation}
+        \bra{\Omega}A\otimes B\ket{\Omega}=\frac{1}{d}\tr[A^T B],
+        \qquad
+        (A\otimes \one)\ket{\Omega} = (\one\otimes A^T)\ket{\Omega},
+    \end{equation}
+    where the transposition has to be taken in the Schmidt basis of $\Omega$. This implies that (i) $(U\otimes \bar{U})\ket{\Omega}=\ket{\Omega}$ for all unitaries $U$ and (ii) every pure state $\psi$ with reduced density operator $(\rho_B)$ can be written as\footnote{Clearly, $\rho_A$ has to be supported by the Schmidt basis of $\Omega$.}
+    \begin{equation}
+        \ket{\psi} = (\one\otimes R)\ket{\Omega},
+    \end{equation}
+    where $R=\sqrt{d\rho_B}\,V$ and the isometry $V$ takes care of adjusting the different Schmidt bases.\footnote{Eq.(1.13) is essentially the observation of Schr\"odinger who at that time was rather puzzled about this consequence of quantum mechanics. In his own words: ``It is rather discomforting that the theory should allow a system to be steered or piloted into one or the other type of state at the experimenter's mercy in spite of his having no access to it''. The analog of Eq.(1.13) in quantum field theory is the Reeh--Schlieder theorem where the subsystem is any open, bounded region in Minkowski-space and the vacuum plays the role of $\Omega$.}
+
+    Identifying basis vectors in $\mathcal{H}_A$ and $\mathcal{H}_B$ (assuming they are of the same dimension) leads to a good friend of $\Omega$: the flip (or swap) operator, defined as $F\ket{ij}=\ket{ji}$. They can be interconverted by partial transposition\footnote{The partial transpose of an operator $C\in \mcB(\mathcal{H}_A\otimes \mathcal{H}_B)$ is defined w.r.t.\ a given product basis as $\bra{ij}C^{T_A}\ket{kl}:=\bra{kj}C\ket{il}$.} as $d\,\ketbra{\Omega}{\Omega}^{T_A}=F$ and the equivalent of (1.12) is
+    \begin{equation}
+        \tr[(A\otimes B)F]=\tr[AB],
+        \qquad
+        (A\otimes \one)F = F(\one\otimes A).
+    \end{equation}
+    A useful representation of $F$ is in terms of any orthonormal\footnote{meaning $\tr[G_i^\dagger G_j]=\delta_{ij}$.} basis of operators $\{G_i\}_{i=1,\dots,d^2}$ as
+    \begin{equation}
+        F=\sum_{i=1}^{d^2} G_i\otimes G_i^\dagger.
+    \end{equation}
+\end{example}
+
+\begin{problem}[Separability problem]
+Consider small bipartite systems associated to $\mathcal{H}=\CC^3\otimes \CC^3$ or $\mathcal{H}=\CC^2\otimes \CC^4$ (but feel free to be more ambitious). Find an efficient and certifiable algorithmic way of deciding whether any density operator $\rho\in \mcB(\mathcal{H})$ is separable or not. Here, efficiency refers to a run-time which scales polynomially with the length of the specified input and also with the inverse of a reasonably chosen `error'.
+\end{problem}
+
+\subsection{Evolutions}
+
+Time plays a special role in quantum mechanics. Unlike most other quantities it is in a sense treated classically---described by a parameter rather than an operator\footnote{Pauli gave the following simple argument against the existence of a self-adjoint operator $T$ satisfying $[T,H]=i\one$ with $H$ a Hamiltonian: take $T$ as the generator of a unitary group $e^{ihT}$ and let this act on an eigenstate of $H$ with eigenvalue $E$, then we get another eigenstate with energy $E+h$. The spectrum of $H$ is thus continuous and in particular it cannot be semi-bounded. This argumentation, however, gets some loopholes when considering issues of the domains of the operators.}. When dealing with time evolution one typically distinguishes a special case: the evolution of closed systems. Closed systems (as opposed to open systems) are those for which the evolution is physically reversible. One might argue that this concept is at the root of the measurement problem and is therefore disputable, but this is a different story.
+
+As quantum mechanics divides every physical process into preparation and measurement there are different (but in the end equivalent) `pictures' depicting time evolution: we may treat the evolution as part of the preparation process, as part of the measurement process or split it up between the two. This leads to the Schr\"odinger picture, the Heisenberg picture or an interaction picture.
+
+\paragraph{Closed systems and reversible evolutions}
+Depending on the chosen picture we will describe the evolution for a given time as a linear transformation on observables $A\mapsto u(A)$ (Heisenberg picture) or on states $\rho\mapsto u^\ast(\rho)$ (Schr\"odinger picture) where consistency imposes the relation
+\begin{equation}
+    \tr[\rho\,u(A)] = \tr[u^\ast(\rho)\,A] ,
+\end{equation}
+i.e., $u$ and $u^\ast$ are mutually dual or adjoint maps. Physically reversible evolutions should be described by mathematically reversible transformations (the converse is not true). Moreover, the concatenation of evolutions is naturally considered to be associative (i.e., $(uv)w=u(vw)$) and should again lead to an admissible evolution. Consequently, the set of reversible evolutions is described by a group of linear transformations. This is in addition supposed to preserve the structure of the algebra $\mathcal{A}$ in the sense that for all $A,B\in \mathcal{A}$: $u(AB)=u(A)u(B)$, $u(A^\dagger)=u(A)^\dagger$ and $\|u(A)\|=\|A\|$. In other words the set of reversible evolutions is identified with the group $\mathrm{aut}(\mathcal{A})$ of linear automorphisms of $\mathcal{A}$.
+
+A subgroup of such automorphisms, which are then called inner, is formed by the unitary elements $U\in \mathcal{A}$ via $u(A)=U^\dagger A U$ or equivalently
+\begin{equation}
+    \rho \mapsto U\rho U^\dagger.
+\end{equation}
+Clearly, if two unitary elements in $\mathcal{A}$ differ only by a phase they give rise to the same automorphism. More generally, this is true iff they differ by a unitary $V\in \mathcal{A}$ which commutes with all $A\in \mathcal{A}$ (i.e., $V$ is in the center of $\mathcal{A}$).
+
+For $\mathcal{A}=M_d$ (the case we are interested in the following) all automorphisms are inner. However, if we either restrict $\mathcal{A}$ or consider an infinite dimensional case this is no longer true in general. Take for instance the algebra of diagonal matrices. Then the only inner automorphism is the identity map $\id(A)=A$. Yet there is obviously a representation for which other automorphisms (like permutations) have the form $u(A)=U^\dagger A U$ with $U$ a unitary, albeit none corresponding to an element in $\mathcal{A}$. Such automorphisms are called spatial (w.r.t.\ a given representation) or unitarily implementable.
+
+We say that a reversible evolution is homogeneous in discrete time if after $n$ time steps it is described by the $n$'th power of a unitary $U$ which describes the evolution for a single time step. The pendant in continuous time is a one-parameter group of unitaries $U_t$ satisfying $U_tU_r=U_{t+r}$ for all $t,r\in \RR$. Imposing continuity in the form $(U_t-U_0)\ket{\psi}\to 0$ for $t\to 0$ and all $\psi\in \mathcal{H}$, Stone's theorem asserts that there is a unique self-adjoint operator $H$ (the Hamiltonian or infinitesimal generator) such that
+\begin{equation}
+    U_t = \exp(iHt).
+\end{equation}
+
+Let us finally have a look at a different approach towards the statement that reversible evolutions are associated to unitaries acting on Hilbert space. Imagine a reversible mapping from the set of normalized pure states $S:=\{\psi:=\ketbra{\psi}{\psi}\}\subset \mcB(\mathcal{H})$ onto itself. Two obvious types of such mappings are $\psi\mapsto U\psi U^\dagger$ with $U$ being a unitary and $\psi\mapsto \psi^T$ a transposition in some basis. The following theorem asserts that these are in fact the only possibilities which preserve the norms of scalar products:
+
+\begin{theorem}[Wigner's theorem]
+    Let $S:S\to S$ be a bijective mapping such that $\tr[S(\psi)S(\phi)]=\tr[\psi\phi]$ for all $\psi,\phi\in S$. Then $S$ falls in one of the two following classes:
+    \begin{itemize}
+        \item Unitary. There exists a unitary $U$ such that $S(\psi)=U\psi U^\dagger$ for all $\psi\in S$.
+        \item Antiunitary\footnote{This name stems from the fact that if we imagine the action of $S$ on $\mathcal{H}$ then it involves complex conjugation, i.e., it is anti-linear rather than linear on $\mathcal{H}$.}. There exists a unitary $U$ such that $S(\psi)=U\psi^T U^\dagger$ for all $\psi\in S$.
+    \end{itemize}
+\end{theorem}
+
+Wigner's theorem has various nice consequences. A simple one is the following:
+
+\begin{corollary}[Spectrum preserving maps]
+    Let $T:M_d(\CC)\to M_d(\CC)$ be a linear map which is Hermitian (i.e., $T(X)^\dagger=T(X^\dagger)$ for all $X$) and spectrum preserving on Hermitian matrices. Then there is a unitary $U$ such that $T$ is either of the form $T(X)=UXU^\dagger$ or $T(X)=UX^T U^\dagger$.
+\end{corollary}
+
+\begin{proof}
+    Note first that preservation of the spectrum as a set implies its preservation counting multiplicities. This follows from continuity of linear maps: suppose the multiplicities are not preserved. Then there is at least one eigenvalue whose multiplicity is larger for the input operator than for its image. By perturbing the input we see that this would contradict continuity---so multiplicities have to be preserved as well.
+
+    Consider two Hermitian rank-one projections $\phi,\psi\in M_d(\CC)$. The spectrum of the matrix $M:=\phi+\psi$ is given by $1\pm \sqrt{\tr[\phi\psi]}$. Since $T$ is linear, Hermitian and spectrum preserving we obtain from applying $T$ to $M$ that $\tr[T(\phi)T(\psi)]=\tr[\phi\psi]$ so that application of Wigner's theorem completes the proof.
+\end{proof}
+
+\paragraph{Open systems and irreversible dynamics}
+Irreversible dynamics is usually regarded as a consequence of considering only part of a larger system which (together with the unobserved part) undergoes reversible evolution. We will for the moment, however, not make use of this viewpoint and rather discuss briefly the general requirements of descriptions of physical evolution---reversible or not. Later we will find that all these evolutions have indeed a mathematical representation in terms of the mentioned reversible system-plus-environment dynamics.
+
+Consider an evolution which, in the Schr\"odinger picture, is described by a map $T:\mcB(\mathcal{H})\to \mcB(\mathcal{H}')$. When describing a physically meaningful evolution $T$ should fulfill the following three conditions:
+\begin{itemize}
+    \item Linearity. This is an inherent quantum mechanical requirement. We will see in Sec.~1.4 that it is related to locality, i.e., the fact that a spatially localized action does not instantaneously affect distant regions. Linearity means that
+          \begin{equation}
+              \forall A,B\in \mcB(\mathcal{H}),\ c\in \CC:\quad T(cA+B)=cT(A)+T(B).
+          \end{equation}
+    \item Preservation of the trace. $T$ has to map density operators onto density operators. Since every element in $\mcB(\mathcal{H})$ is a linear combination of density operators we obtain by virtue of linearity
+          \begin{equation}
+              \forall A\in \mcB(\mathcal{H}):\quad \tr[T(A)]=\tr[A].
+          \end{equation}
+    \item Complete positivity. Another consequence of linearity together with asking $T$ to map density operators onto density operators is that it has to be a positive map, i.e., $T(A^\dagger A)\ge 0$ for all $A\in \mcB(\mathcal{H})$. Positivity alone is, however, not sufficient: consider $\mathcal{H}$ as part of a bipartite system so that the evolution of the larger system is described by $T\otimes \id$. That is, the additional system merely plays the role of a spectator as the evolution on this part is the trivial one. Yet $T\otimes \id$ should again be a positive map---a requirement which is stronger than positivity. So the relevant condition is complete positivity of $T$ which means positivity of the map $T\otimes \id_n$ for all $n\in \NN$ where $\id_n$ is the identity map on $M_n$.
+\end{itemize}
+
+For the map $T^\ast:\mcB(\mathcal{H}')\to \mcB(\mathcal{H})$ describing the same evolution in the Heisenberg picture via $\tr[T(\rho)A]=\tr[\rho T^\ast(A)]$ the conditions linearity and complete positivity remain the same, only the trace preserving condition translates to unitality
+\begin{equation}
+    T^\ast(\one)=\one.
+\end{equation}
+A mapping which fulfills the above three conditions (either in Heisenberg or Schr\"odinger picture) is called a quantum channel. Quantum channels are the most general framework in which general input-output relations (i.e., black box devices) are described within quantum mechanics. It is crucial, however, that the mapping itself does neither depend on the input nor on its history. If such correlations appear, then the above black box description becomes inappropriate and either a larger system (including `the environments memory') has to be taken into account or a consistent effective description has to be found. When talking about quantum channels in the following we will always mean the Markovian or synonymously memory-less case in which such correlations or dependencies do not occur.
+
+Unlike positivity, complete positivity of a linear map is rather simple to check in finite dimensions:
+
+\begin{proposition}[Checking complete positivity]
+    A linear map $T:\mcB(\mathcal{H})\to \mcB(\mathcal{H}')$ is completely positive iff $(T\otimes \id_d)(\ketbra{\Omega}{\Omega})\ge 0$, where $\Omega$ is a maximally entangled state of dimension $d=\dim\mathcal{H}$.
+\end{proposition}
+
+\begin{proof}
+    Necessity of the condition follows from the definition of complete positivity. In order to prove sufficiency let us begin with an arbitrary $n$ and density operator $\rho\in \mcB(\mathcal{H}\otimes \CC^n)$. Then $(T\otimes \id_n)(\rho)\ge 0$ if the same applies to all pure states appearing in the spectral decomposition of $\rho$. By Eq.(1.13) we can write every such pure state in the form $(\one_d\otimes R)\ket{\Omega}$ with some $R\in \mcB(\mathcal{H},\CC^n)$. Together with the fact that positive semidefiniteness of an operator $B$ implies that of $ABA^\dagger$, this concludes the proof.
+\end{proof}
+
+We will later on see that the operator $(T\otimes \id_d)(\ketbra{\Omega}{\Omega})$ called Jamiolkowski state (or Choi matrix when multiplied by $d$) contains in fact all information about $T$.
+
+\paragraph{Probabilistic operations and Instruments}
+The trace preserving condition (or unitality in the Heisenberg picture) reflects the normalization of probabilities. That is, quantum channels (trace preserving, completely positive linear maps) describe quantum operation which succeed with unit probability. When measurements are involved we may, however, relax this condition and consider as well linear completely positive maps $T$ which are trace non-increasing in the sense that $\tr[T(A)]\le \tr[A]$ for all $A\in \mcB(\mathcal{H})$ (or equivalently $T^\ast(\one)\le \one$). The interpretation of such a map is that it only succeeds upon an input state $\rho$ with probability $p=\tr[T(\rho)]$ and in this case yields the output density matrix $T(\rho)/p$. Such maps are sometimes called probabilistic or stochastic (although this notion is more than doubly occupied) or filtering operations. This leads directly to the concept of an instrument:
+
+In the Schr\"odinger picture an instrument is a set of completely positive linear maps $\{T_i\}$ whose sum $\sum_i T_i$ is trace preserving (i.e., $\sum_i T_i^\ast(\one)=\one$). The label $i$ (which might as well be a measurable continuous set) can be interpreted as the outcome of a measurement which occurs with probability $p_i=\tr[T_i(\rho)]$ and conditioned on which the density matrix transforms as $\rho\mapsto T_i(\rho)/p_i$.
+
+Instruments encompass both, the concept of a quantum channel (when ignoring $i$ and considering only $T=\sum_i T_i$) and the concept of a POVM (when ignoring the state at the output and only dealing with the set of effect operators $\{T_i^\ast(\one)\}$).
+
+Note that every POVM corresponds to an entire equivalence class of instruments rather than to a single one. This reflects the fact that a POVM alone does not determine the state after the measurement. A simple type of instruments realizing any POVM with effect operators $\{P_i\}$ is the L\"uders instrument for which
+\begin{equation}
+    T_i(\rho) = \sqrt{P_i} \rho\,\sqrt{P_i}.
+\end{equation}
+But obviously the instruments $T_i(\rho)=U\sqrt{P_i}\rho\sqrt{P_i}U^\dagger$ (with $U$ any unitary) or $T_i(\rho)=\tr[\rho P_i]$ and many others correspond to the same POVM. The last example may describe situations in which the quantum system `disappears' after the measurement.
+
+Let us finally see how we can use the concept of an instrument to get a strengthened and operational version of Eq.(1.13):
+
+\begin{proposition}[Quantum steering]
+    Let $\rho\in \mcB(\mathcal{H}_A)$ be a density operator with purification $\ket{\psi}\in \mathcal{H}_A\otimes \mathcal{H}_B$. For every convex decomposition $\rho=\sum_i \lambda_i\rho_i$ there is an instrument $\{T_i:\mcB(\mathcal{H}_B)\to \mcB(\mathcal{H}_B)\}$ acting on Bob's system such that
+    \begin{equation}
+        \lambda_i\rho_i = \tr_B[(\id\otimes T_i)(\ketbra{\psi}{\psi})].
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    W.l.o.g.\ we can assume that $\psi$ is a minimal purification ($\dim\mathcal{H}_B=\rank[\rho]=:d$) and write $\ket{\psi}=(\sqrt{d\rho}\otimes \one)\ket{\Omega}$ where $\Omega$ is a maximally entangled state of dimension $d$ with the same Schmidt bases as $\psi$. Moreover, we exploit that for every linear map $T_i$:
+    \begin{equation}
+        (\id\otimes T_i)(\ketbra{\Omega}{\Omega})
+        = (\theta T_i^\ast \theta \otimes \id)(\ketbra{\Omega}{\Omega}),
+    \end{equation}
+    where $\theta:\mcB(\mathcal{H}_B)\to \mcB(\mathcal{H}_B)$ is the matrix transposition w.r.t.\ the Schmidt basis of $\Omega$.\footnote{Eq.(1.24) is a simple exercise which can be solved using the tools presented in Example~1.2. Of course, it can also be directly seen from a Kraus decomposition of $T_i$.} Putting these two things together we obtain for any linear map $T_i$ that
+    \begin{equation}
+        \tr_B[(\id\otimes T_i)(\ketbra{\psi}{\psi})]
+        = \sqrt{\rho} (T_i^\ast(\one))^T\sqrt{\rho}.
+    \end{equation}
+    Therefore, an instrument will satisfy Eq.(1.23) if it corresponds to a POVM $\{T_i^\ast(\one)\}$ which fulfills $T_i^\ast(\one)=\lambda_i\rho^{-1/2}\rho_i^T\rho^{-1/2}$ on the range of $\rho$. One possible choice is thus $T_i^\ast(A)=K_iAK_i^\dagger$ with $K_i:=\rho^{-1/2}\sqrt{\lambda_i\rho_i^T}\oplus (\delta_{1,i}\one)$ where the second term in the direct sum acts on the kernel of $\rho$.
+\end{proof}
+
+The interpretation of this is the following: assume Alice and Bob share the state $\psi$, then Bob can generate not only any single state on Alice side (which is in the support of her local density operator) but he can engineer every ensemble $\{\lambda_i\rho_i\}$ consistent with her reduced density matrix. In order to `steer' the state $\rho_i$ on Alice's side, Bob can apply the described instrument. For every single event he has to report to Alice whether or not his operation was successful (i.e., he received an outcome $i$) which happens with probability $\lambda_i$. If Alice then performs any statistical experiment using only events for which Bob reported success, her state will be $\rho_i$. The following provides the maximum probability of success:
+
+\begin{proposition}[Maximal weight in convex decomposition]
+    Let $\rho$ and $\rho_1$ be two density operators acting on the same space. There exists a convex decomposition of the form $\rho=\sum_i \lambda_i\rho_i$ with $\lambda_1>0$ iff $\supp(\rho_1)\subseteq \supp(\rho)$ and
+    \begin{equation}
+        \lambda_1 \le \bigl\|\rho^{-1/2}\rho_1\rho^{-1/2}\bigr\|_\infty^{-1} ,
+    \end{equation}
+    where the inverse is taken on the range of $\rho$.
+\end{proposition}
+
+\begin{proof}
+    The necessity of the condition for the supports is evident since adding positive operators can never decrease the support. The existence of a decomposition is equivalent to $\rho-\lambda_1\rho_1\ge 0$ which can be rewritten as $\one \ge \lambda_1 \rho^{-1/2}\rho_1\rho^{-1/2}$ from which the statement follows.
+\end{proof}
+
+\subsection{Linearity and locality}
+
+Locality is one of the most basic concepts in physics. It runs under various names like Einstein locality, no-signaling condition or the non-existence of a Bell telephone\footnote{Did anybody tell this the Bell telephone company?}. Its meaning is essentially that a spatially localized action does not (instantaneously) influence distant parts. Evidently, this is a crucial ingredient when we want to talk about small systems without always having to take the entire rest of the universe into account.
+
+Quantum mechanics is by construction a local theory.\footnote{There is a very unfortunate use of the notion `non-locality' as an attribute of quantum mechanics. This is used in order to express that certain correlations predicted by quantum mechanics do not admit a description within a local hidden variable theory.} In order to see this, consider a bipartite system prepared in any initial state $\rho\in \mcB(\mathcal{H}_A\otimes \mathcal{H}_B)$ and act with a quantum channel $T$ on Bob's system only. The reduced density operator on Alice's side is then given by
+\begin{equation}
+    \tr_B[(\id\otimes T)(\rho)] = \tr_B[\rho],
+\end{equation}
+where we used that $T^\ast(\one)=\one$ which together with the tensor product structure implies that Alice is not affected by Bob's action, i.e., $\rho_A$ is independent of $T$.
+
+In fact, quantum mechanics exhibits a stronger form of locality/independence, sometimes called Schlieder property: not only is Bob unable to communicate to Alice by local operations, but Alice is unable to gain any information about Bob's system (when she is constrained to local operations and does not know the overall state). This follows from the simple fact that every reduced density matrix $\rho_A$ is compatible with every other reduced density matrix $\rho_B$ since there is always a joint state (like $\rho_A\otimes \rho_B$) which returns both as marginals.\footnote{Usually, this is invoked in the context of algebraic quantum field theory where the statement is that $AB=0$ implies that either $A=0$ or $B=0$ if $A$ and $B$ are elements of observable algebras corresponding to spacelike separated regions.}
+
+In the following we will see that locality (in the sense of no-signaling) is strongly connected to linearity of quantum mechanics. The argument for this comes in two flavors: (i) making explicit use of the formalism of quantum mechanics one can show that any sort of non-linearity would imply a breakdown of locality (unless we modify some of the framework, e.g., by imposing additional restrictions). (ii) The existence of certain observable correlations predicted by quantum mechanics allows to rule out specific non-linear devices. So, while the second argument is weaker in the sense that it relates only a particular observable form of non-linearity to non-locality, it is stronger in that it applies to every theory which predicts the required correlations.
+
+\paragraph{Non-linear evolutions and mixed state analyzers}
+Suppose there is a physical device which is characterized by a non-linear map $N$ on density operators, i.e., one for which there exists a convex decomposition of a density operator $\rho=\sum_i \lambda_i\rho_i$ such that
+\begin{equation}
+    \sum_i \lambda_i N(\rho_i) \ne N\!\left(\sum_i \lambda_i \rho_i\right).
+\end{equation}
+Such a device can be used to break the no-signaling condition. In order to see this recall the steering result of Prop.~1.3 and assume that $\rho$ is Alice's reduced state of a bipartite pure state $\psi$. If Bob leaves his part untouched (or equivalently, discards it) and Alice applies her non-linear device, then $N(\rho)$ describes her state. If, however, Bob applies an instrument $\{T_i\}$ tailored to prepare $\rho_i$ on Alice's side with probability $\lambda_i$, then Alice's state will be $\sum_i \lambda_i N(\rho_i)$. As this is, by the non-linear character of Alice's mysterious machine, different from $N(\rho)$, she is able to distinguish the two cases with a probability of success which is strictly bigger than one half. That is, by only looking at her local system she can gain information about whether or not Bob applied the instrument---something in conflict with the no-signaling condition.
+
+The same type of argument holds for mixed state analyzers, i.e., hypothetical devices which are capable of telling us whether the `true' decomposition of a state is $\rho=\sum_i \lambda_i\rho_i$ or $\rho=\sum_i \tilde{\lambda}_i\tilde{\rho}_i$. If such a machine existed (and Alice possesses it) then we could again think about Bob transmitting information to Alice by choosing one out of two instruments to apply on his subsystem.
+
+The above arguments may not be on firm enough grounds to force us to conclude that quantum mechanics does not allow non-linear processes. However, they show at least that a naive incorporation of such processes comes in conflict with locality unless we impose additional restrictions and/or modify the framework.
+
+\paragraph{A sequence of impossible machines}
+Some non-linear devices can be specified by their observable action and thus without going too much into the details of the theory. An example of this kind is the cloning device for which it is usually argued that its impossibility within quantum mechanics follows from the linearity of quantum mechanical evolutions. While this is certainly true, this reasoning misses an important point. After all, the Liouville equation of motion for classical mechanics is linear as well but we would hardly argue that this implies impossibility of making a copy of a classical system. Evidently, the difference is the absence of a theory of measurements in classical mechanics, i.e., the tacit assumption that we can in principle observe any detail of a system in classical mechanics without causing disturbance. A more careful derivation of the quantum no-cloning theorem should thus take measurements and re-preparations into account. It turns out, however, that the validity of the no-cloning theorem goes far beyond the particular framework of quantum mechanics and is implied by the no-signaling condition when supplemented by the existence of certain observable correlations. This argument can be nicely embedded in a remarkable chain: a series of hypothetical devices where the existence of each would imply the possibility of all subsequent ones, and where the last in the row is the Bell telephone---a device capable of breaking the no-signaling condition. So if we want to retain locality we are forced to accept no-go statements for all the devices of the hierarchy and within all theories which are consistent with the required correlations. The hierarchy is build up of the following devices:
+\begin{itemize}
+    \item Classical teleportation is the process of converting an unknown system into classical information (a bit string or punchcard) and then re-preparing it again such that no statistical test could distinguish between the original and the re-prepared system.\footnote{The difference between classical teleportation and entanglement-assisted teleportation (often just called teleportation) is that in the latter case the re-preparation requires more than just the classical information, namely the remaining part of an entangled state.} A classical teleportation device thus consists out of two parts: a measurement device and a repreparation machine.
+    \item Cloning, i.e., generating statistically indistinguishable duplicates for arbitrary systems, is clearly possible if we are able to do classical teleportation---we just make a copy of the classical bit string and feed it into two repreparation machines. Cloning in turn enables:
+    \item Measuring without disturbance, meaning that every type of measurement can be performed without changing the statistics of any other subsequent measurement. A slightly weaker version of this is the possibility of
+    \item Joint measurements of any pair of observables. This requires that the statistics of the joint measurement is the same as the one for individual measurements. The assumed existence of a joint measurement device implies the possibility of a
+    \item Bell telephone, a hypothetical device which enables two distant parties to break the no-signaling condition.
+\end{itemize}
+
+Whereas all previous implications are fairly obvious, the last one requires an additional ingredient---specific correlations between the two parties---and some background knowledge: suppose Alice is given a joint measurement device which she uses to measure two observables $A_1$ and $A_2$ yielding outcomes $a_1,a_2$ with probability $p(a_1,a_2)$. If Bob, at a distance, measures an observable $B_1$ with outcome $b_1$, then they observe in a statistical experiment a joint probability distribution $p(a_1,a_2,b_1\mid B_1)$ so that\footnote{As common in classical probability theory we use the notation $p(\cdot\mid\cdot)$ where right of the dash is the condition which the probability is subject to. In our case this is the observable which is measured.}
+\begin{equation}
+    p(a_1,a_2)=\sum_{b_1} p(a_1,a_2,b_1\mid B_1).
+\end{equation}
+However, in a no-signaling theory this has to be independent of Bob's chosen observable, i.e., a possibly measured $p(a_1,a_2,b_2\mid B_2)$ has to have the same marginal $p(a_1,a_2)$. Assume that Bob chooses $B_1$ or $B_2$ at random so that they measure both triple distributions albeit not simultaneously as they come from disjoint statistical ensembles. Nevertheless we can write down a joint distribution
+\begin{equation}
+    p(a_1,a_2,b_1,b_2)
+    := \frac{p(a_1,a_2,b_1\mid B_1)\,p(a_1,a_2,b_2\mid B_2)}{p(a_1,a_2)} ,
+\end{equation}
+which by construction correctly returns all measured distributions as marginals. As a result, the existence of a joint measurement device implies a joint probability distribution (1.30) if the no-signaling condition is invoked. The point is now that not all pair distributions $p(a_i,b_j\mid A_i,B_j)$ allow such a joint distribution. The conditions under which a joint distribution exists are called Bell inequalities. These are, however, known to be violated by certain measurements performed on particular entangled quantum states. Accepting this as a fact, the conclusion must be: either the no-signaling condition is violated or a universal joint measurement device, and with it the entire above hierarchy, is impossible. Even on Sundays such strong implications come rarely so cheap.
+
+\paragraph{The quantum Boltzmann map}
+The quantum Boltzmann map is a special case of a non-linear map---an analog of a map Boltzmann introduced in classical statistical mechanics in connection to the `Stosszahlansatz'. It is defined as $T:\mcB(\mathcal{H}_A\otimes \mathcal{H}_B)\to \mcB(\mathcal{H}_A\otimes \mathcal{H}_B)$ via
+\begin{equation}
+    T_{\mathrm{QB}}(C)=\tr_B[C]\otimes \tr_A[C],
+\end{equation}
+and sometimes also called Zwanzig projection. For a density operator $\rho$ we get $T_{\mathrm{QB}}(\rho)=\rho_A\otimes \rho_B$, i.e., $T_{\mathrm{QB}}$ `breaks' all correlations between the two subsystems while retaining the local states. Its appearance in statistical mechanics stems from the fact that it maximizes the global entropy under given local constraints.
+
+\subsection{Do we need complex numbers?}
+
+No, but there are good reasons to use them.
+
+The algebras and Hilbert spaces used in the formulation of quantum mechanics are almost exclusively over the field of complex numbers. Of course, we may express everything in terms of real and imaginary parts, and thus by real numbers, but can we do so without ever writing `$i$'? This is, actually, simple (although in the end not recommended): consider the mapping $M_d(\CC)\ni A\mapsto \tilde{A}\in M_{2d}(\RR)$ given by
+\begin{equation}
+    \tilde{A} := R(A\oplus \bar{A})R^\dagger
+    =\frac12
+    \begin{pmatrix}
+        \Re A &-\Im A\\
+        \Im A &\Re A
+    \end{pmatrix}
+    \qquad\text{with}\qquad
+    R:=\frac{1}{\sqrt{2}}
+    \begin{pmatrix}
+        \one   &\one\\
+        -i\one &i\one
+    \end{pmatrix}.
+\end{equation}
+Since $R$ is a unitary we obtain for the trace of a product of matrices:
+\begin{equation}
+    \tr\!\left[\prod_i \tilde{A}_i\right]
+    = 2\Re\, \tr\!\left[\prod_i A_i\right],
+\end{equation}
+and if $A$ is Hermitian, positive or unitary\footnote{An element of $U(n)$ will be mapped onto a special orthogonal matrix which is symplectic as well. Eq.(1.32) is then nothing but the group isomorphism $U(n)\simeq \mathrm{Sp}(2n,\RR)\cap \mathrm{SO}(2n,\RR)$.}, $\tilde{A}$ will be so as well. Furthermore, a complex POVM will be mapped onto a real one and by introducing a real density operator $\rho_r:=\tilde{\rho}/2$ a unitary time-evolution of the expectation value of a Hermitian operator $A$ can by Eq.(1.33) be written in a purely real form:
+\begin{equation}
+    \tr[\rho\,UAU^\dagger] = \tr\![\rho_r\,\tilde{U}\tilde{A}\tilde{U}^{T}].
+\end{equation}
+If $\rho$ corresponds to a pure state, then $\rho_r$ will have rank two. However, we can safely replace it by any (real) rank-one projection $\ketbra{\psi}{\psi}$ which is in the support of $\rho_r$ so that the expectation value in (1.34) wont change. In this way we may even replace the Schr\"odinger equation by a real counterpart $\partial_t\ket{\psi}=H\ket{\psi}$, where $H$ is real and anti-symmetric. The ambiguity in choosing $\psi$ in the support of $\rho_r$ may be compared to the irrelevance of a global phase in the complex framework.
+
+The main drawback of the discussed real representation is the description of composite systems. Clearly, $\widetilde{A\otimes B}\ne \tilde{A}\otimes \tilde{B}$ so that composite systems are no longer associated to a tensor product---we have to make use of the tensor product in the complex framework. Alternatively we could try to double the dimension for each tensor factor separately (and actually use $\tilde{A}\otimes \tilde{B}$). In this case, however, the total dimension would not only depend on the number of degrees of freedom but, quite inconveniently, also on the way we group them into subsystems (something which might change during a calculation or which we might not want to fix beforehand).
+
+Of course, one can think about other ways of representing the expectation values of complex quantum mechanics by using real Hilbert spaces. In the end we are, however, always faced with the problem that dimensions of tensor products do not mach unless we invoke some unpleasant book-keeping.
+
+\begin{problem}[Quaternionic quantum mechanics]
+Real and complex quantum mechanics are equivalent in the sense that they allow the same observable correlations (incl.\ violations of Bell inequalities). Are complex and quaternionic quantum mechanics equivalent?\footnote{Using a representation of quaternions in terms of complex valued $2\times 2$ matrices, a simple translation between the quaternionic and complex world can be found for single systems. However, non-cummutativity complicates the description of composite systems.} What about no-go theorems such as the impossibility of (complex) quantum bit commitment?
+\end{problem}
+
+\subsection{The algebraic framework}
+
+\begin{quote}
+    ``I would like to make a confession which may seem immoral: I do not believe in Hilbert space anymore'' [J.\ von Neumann in a letter to Birkhoff, 1935]\footnote{quoted from Fred Kronz: \emph{von Neumann vs.\ Dirac} in \emph{The Stanford Encyclopedia of Philosophy}---actually a nice article.}
+\end{quote}
+
+\paragraph{A glimpse beyond `Hilbert-space-centrism'}
+Most literature/work on quantum mechanics is based on Hilbert space formalism. This has, in the early days of quantum mechanics, been brought forward by Dirac and (independently and with a rather different flavor) by von Neumann. There is, however, a branch of quantum physics which departs from using a (separable) Hilbert space as starting point and which focuses more on properties of algebras assigned to local observables. This point of view, which actually builds up on von Neumann's work on operator algebras, mainly arose in the third quarter of the 20th century and is called algebraic quantum (field) theory. But why change the view point? What's wrong with Hilbert spaces?
+
+First of all, there is hardly any difference between the two points of view when dealing with finite dimensional quantum systems. So everything we need for our (finite-dimensional) purposes is a little bit of useful terminology and some representation theory for finite dimensional $\ast$-algebras.
+
+The `algebraic framework' becomes beneficial in the context of a mathematically rigorous treatment of infinite systems. The `infinity' may either arise from thermodynamical limits (infinite lattice systems) and/or from the investigation of quantum fields in continuous space(-time). In both cases there is an assignment of an algebra of observables to each region in space(-time). This assignment should be (i) consistent in the sense that algebras of subregions correspond to subalgebras and (ii) local in the sense that algebras assigned to space-like separated regions commute. For a finite lattice system we may still think about operators acting on a tensor-product of Hilbert spaces (with one tensor factor per site). However, the need to go beyond this framework becomes apparent in continuous space-time where the possibility of considering finer-and-finer subdivisions comes in conflict with representations on separable Hilbert spaces.
+
+Some appealing properties of the algebraic framework are that (i) it treats quantum and classical systems on the same ground (ii) it allows to some extent to circumvent the problem of unitarily inequivalent representations, and (iii) it describes the occurence of super-selection rules as a consequence of reducible representations. Having said this, one has to admit, however, that algebraic quantum (field) theory is, so far, more a principal framework for physical theories than the origin (or even host) of a full-fledged physical theory. It provides solid grounds for discussing axiomatic and foundational questions, but cross-sections and line-widths are a different story.
+
+The following intends to provide a pedestrian introduction to the basic notions around $C^\ast$-algebras. The general discussion in the next paragraph is disconnected from the other chapters (so, feel free to skip), but it might be useful for connecting the discussed topics to literature which goes beyond the finite-dimensional case. The focus in the second part will be on the finite-dimensional world again.
+
+\paragraph{Algebras in a nutshell}
+As a guideline it is helpful to think about algebras as `generalizations of matrices', with the set of matrices as a special case (and our main focus---at least outside the present paragraph). An algebra $\mathcal{A}$ over the field of complex numbers $\CC$ is a set which is closed under scalar multiplication, addition and multiplication. That is, if $A,B\in \mathcal{A}$ and $c\in \CC$, then $cA$, $A+B$ and $AB$ are elements of $\mathcal{A}$ as well. We will include associativity and the existence of a unit element ($\one A=A$) in our definition of an algebra. $\mathcal{A}$ is said to be abelian or commutative if $AB=BA$ for all $A,B\in \mathcal{A}$ and it is said to be a $\ast$-algebra if there is an involution $\dagger:\mathcal{A}\to \mathcal{A}$ which fulfills all basic requirements known from the Hermitian adjoint of matrices: $(AB)^\dagger=B^\dagger A^\dagger$, $(cA)^\dagger=\bar{c}A^\dagger$ and $(A+B)^\dagger=A^\dagger+B^\dagger$. An element $A\in \mathcal{A}$ is called normal if $AA^\dagger=A^\dagger A$ and selfadjoint if $A=A^\dagger$.
+
+A normed algebra is equipped with a norm $\|\cdot\|$ which satisfies, apart from the usual requirements for vector space norms, the product inequality $\|AB\|\le \|A\| \|B\|$. If $\mathcal{A}$ is complete w.r.t.\ this norm (i.e., it contains all limits of Cauchy sequences) then it is called a Banach algebra. For a Banach $\ast$-algebra we require in addition $\|A^\dagger\|=\|A\|$.
+
+The spectrum $\spec(A)$ can be defined in purely algebraic terms as the set of all $\lambda\in \CC$ for which $(\lambda\one-A)$ is not invertible. It satisfies $\spec(AB)\setminus\{0\}=\spec(BA)\setminus\{0\}$ and selfadjoint elements for which $\spec(A)\subseteq \RR_+$ are called positive. The spectral radius is defined by $\varrho(A):=\sup\{|\lambda|:\lambda\in \spec(A)\}$. In every Banach algebra the spectral radius fulfills $\varrho(A)\le \|A\|$ and
+\begin{equation}
+    \varrho(A)=\lim_{n\to\infty} \|A^n\|^{1/n}.
+\end{equation}
+Conversely, we can define a norm from the spectral radius by $\|A\|_\infty:=\sqrt{\varrho(A^\dagger A)}$. This satisfies
+\begin{equation}
+    \|A^\dagger A\|_\infty = \|A\|_\infty^2,
+\end{equation}
+which means for selfadjoint elements $\|A\|_\infty=\varrho(A)$ and thus $\|A\|_\infty\le \|A\|$. Note that due to Eq.(1.35) every norm wich fulfills the so-called $C^\ast$-norm property in Eq.(1.36) has to coincide with $\|\cdot\|_\infty$. Hence, a Banach $\ast$-algebra norm which fulfills condition (1.36) is unique (and called $C^\ast$-norm).
+
+A Banach $\ast$-algebra whose norm satisfies condition (1.36) is called $C^\ast$-algebra. $C^\ast$-algebras exhibit a number of useful properties, for example:
+\begin{itemize}
+    \item The spectrum of an element $A$ is the same in every $C^\ast$-subalgebra containing $A$.\footnote{In general, if $\mathcal{B}$ is a subalgebra of $\mathcal{A}$ and $A\in \mathcal{B}$, then the spectrum of $A$ depends on whether we regard $A$ as an element of $\mathcal{A}$ or $\mathcal{B}$, though $\spec_{\mathcal{A}}(A)\subseteq \spec_{\mathcal{B}}(A)$ holds.}
+    \item Positive elements are precisely those which can be written as $A=B^\dagger B$ for some $B\in \mathcal{A}$. They form a convex cone whose elements have a unique positive square root which can in turn be characterized in a purely algebraic way.
+    \item Homomorphisms are order preserving (i.e., they map positive elements onto positive elements) and norm decreasing (hence, continuous). Isomorphisms are norm preserving and the range of every homomorphism is again a $C^\ast$-algebra.
+    \item Every derivation is bounded.
+\end{itemize}
+
+A linear functional $\rho:\mathcal{A}\to \CC$ on a $C^\ast$-algebra is called positive if $\rho(A^\dagger A)\ge 0$ for all $A\in \mathcal{A}$ and normalized if $\rho(\one)=1$. A state is a positive, normalized linear functional. It is called faithful if $\rho(A^\dagger A)>0$ unless $A=0$ and pure if it does not admit a non-trivial convex decomposition into other states.
+
+So far, our discussion remained abstract---before any concrete representation. Two paradigmatic examples of concrete $C^\ast$-algebras are (i) the space of complex-valued continuous functions on a compact space, and (ii) the space of bounded operators acting on a Hilbert space. A result by Gelfand shows that every commutative $C^\ast$-algebra is isomorphic to one of type (i). (ii) instead sets the stage for general representations. In fact, every $C^\ast$-algebra has a faithful (i.e., one-to-one) representation within bounded operators on some (not necessarily separable) Hilbert space. The $C^\ast$-norm then becomes the operator norm on the level of the representation. That is, if we denote the representation by $\pi:\mathcal{A}\to \mcB(\mathcal{H})$, then
+\begin{equation}
+    \|A\|_\infty = \sup_{\psi\in \mathcal{H}} \frac{\|\pi(A)\psi\|}{\|\psi\|},
+    \qquad
+    \text{with}\qquad
+    \|\psi\|=\sqrt{\braket{\psi}{\psi}}.
+\end{equation}
+
+The Gelfand--Neumark--Segal (GNS) theorem constructs a $\mcB(\mathcal{H})$-representation of a $C^\ast$-algebra starting from a state $\rho:\mathcal{A}\to \CC$. The main idea is to define a scalar product via $\langle A,B\rangle:=\rho(A^\dagger B)$. If $\rho$ is not faithful, one has to define the elements of the sought Hilbert space in terms of equivalence classes and consider the set $\mathcal{A}/J$ with $J=\{A\in \mathcal{A}\mid \rho(A^\dagger A)=0\}$. By completing $\mathcal{A}/J$ we get a Hilbert space $\mathcal{H}_\rho$. The action of any $A\in \mathcal{A}$ on vectors in $\mathcal{H}_\rho$ is then represented by $\pi_\rho(A)\ket{B}:=\ket{AB}$. In this way we can write
+\begin{equation}
+    \rho(A) = \bra{1}\pi_\rho(A)\ket{1},
+\end{equation}
+and interpret $\ket{1}$ as the vector state which represents $\rho$ in $\mathcal{H}_\rho$. The so constructed GNS-representation is irreducible iff $\rho$ is pure. Physically, the GNS construction is closely related to constructing a Hilbert space from a `vacuum state' by acting on it with creation operators (and thereby adding particles).
+
+From now on let us assume that a faithful representation has been chosen, i.e., that $\mathcal{A}$ is a concrete algebra of bounded operators acting on some Hilbert space $\mathcal{H}$. The commutant $\mathcal{A}':=\{C\in \mcB(\mathcal{H})\mid \forall A\in \mathcal{A}: AC=CA\}$ is then the set of operators which commute with every element of $\mathcal{A}$. The center of $\mathcal{A}$ is the intersection $C:=\mathcal{A}\cap \mathcal{A}'$.
+
+Sometimes $C^\ast$-algebras are too general and more structure is either required or provided. In fact, $C^\ast$-algebras can exhibit some `unpleasant' properties: they may not contain projections other then $0$ and $\one$, the bicommutant $\mathcal{A}'':=(\mathcal{A}')'$ may be larger than $\mathcal{A}$, and a tensor product of $C^\ast$-algebras can be ambiguous since several norms may have the $C^\ast$-property.\footnote{No, there isn't a contradiction with the uniqueness of the $C^\ast$-norm since that requires that the algebra is complete w.r.t.\ the considered norm---this is not fulfilled by the algebraic tensor product of two $C^\ast$-algebras unless one of them is finite dimensional.} All these things a `cured' by restricting to a subset of $C^\ast$-algebras called von Neumann algebras. Von Neumann algebras can be defined as bicommutant of a $\ast$-algebra $\tilde{\mathcal{A}}\subseteq \mcB(\mathcal{H})$ or, equivalently, as the weak or strong closure of $\tilde{\mathcal{A}}$. A von Neumann algebra is generated (and classified) by its projections.
+
+A state on a von Neumann algebra $\mathcal{A}$ is called normal if it admits a density operator representation, i.e., with some abuse of notation $\rho(A)=\tr[\rho A]$ for all $A\in \mathcal{A}$. $\mathcal{A}$ is called a factor if its center contains only multiples of the identity. These can be regarded as basic building blocks as every von Neumann algebra admits a decomposition into factors.
+
+\paragraph{Finite dimensional $\ast$-algebras and conditional expectations}
+Since the topologies which make the difference between $C^\ast$ and von Neumann algebras coincide in finite dimensions, these types of algebras coincide there, too. Similarly, every normed space becomes a Banach space as finite dimensional vector spaces are automatically complete. In this way every finite dimensional normed $\ast$-algebra is automatically a von Neumann/$C^\ast$ algebra w.r.t.\ the norm induced by the spectral radius.
+
+Every finite dimensional von Neumann algebra is isomorphic to a direct sum of full matrix algebras. More precisely, if a von Neumann algebra $\mathcal{B}\subseteq \mathcal{A}\simeq M_d(\CC)$ is a subalgebra of a finite dimensional matrix algebra, then there is a unitary $U$ such that
+\begin{equation}
+    \mathcal{B} = U\left(0 \oplus \bigoplus_{k=1}^{K} M_{d_k}\otimes \one_{m_k}\right)U^\dagger.
+\end{equation}
+The $K$-fold direct sum corresponds to a decomposition into $K$ factors. Each factor is isomorphic to a full matrix algebra of dimension $d_k^2$ which appears with multiplicity $m_k$. Hence, the commutant of the $k$'th factor is a full matrix algebra of dimension $m_k^2$ and multiplicity $d_k$. We will denote the decomposition of the Hilbert space to which Eq.(1.39) leads to as $\CC^d=\mathcal{H}_0\oplus \bigoplus_{k=1}^{K} \mathcal{H}_k$ with $\mathcal{H}_k=\mathcal{H}_{k,1}\otimes \mathcal{H}_{k,2}\simeq \CC^{d_k}\otimes \CC^{m_k}$. Furthermore, we will denote by $V_k:\CC^d\to \mathcal{H}_k$ the corresponding isometries which are mutually orthogonal in the sense that $V_kV_l^\dagger=\delta_{kl}\one_{\mathcal{H}_k}$. Note that $\mathcal{B}$ is unital iff $\sum_k V_kV_k^\dagger=\one$, i.e., iff there is no $\mathcal{H}_0$.
+
+The representation in Eq.(1.39) shows us how a subalgebra $\mathcal{B}$ can be embedded in a larger matrix algebra $\mathcal{A}\supseteq \mathcal{B}$ and it provides a simple form for projective (in the sense of idempotent and surjective) mappings $E:\mathcal{A}\to \mathcal{B}$ which allow us to `restrict' every element of $\mathcal{A}$ to $\mathcal{B}$ and act as the identity on $\mathcal{B}$. If we require $E$ to be positive, then the structure in Eq.(1.39) dictates the form of $E$:
+
+\begin{proposition}[Conditional expectations]
+    Consider a unital $\ast$-subalgebra $\mathcal{B}\subseteq \mathcal{A}\simeq M_d(\CC)$. If a positive linear map $E:\mathcal{A}\to \mathcal{B}$ satisfies $E(b)=b$ for all $b\in \mathcal{B}$, then (using the above notation) there exist density operators $\{\rho_k\in \mcB(\mathcal{H}_{k,2})\}$ such that $E$ has the form
+    \begin{equation}
+        E(A) = \sum_{k=1}^{K}
+        V_k^\dagger\Bigl[
+            \tr_{k,2}\!((V_kAV_k^\dagger)(\one_{d_k}\otimes \rho_k))\otimes \one_{m_k}
+            \Bigr]V_k.
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    Define projections $P_k:=V_kV_k^\dagger\in \mathcal{B}$ and a `pinching' map $E_0:\mathcal{A}\to \mathcal{A}$ via $E_0(A):=\sum_{k=1}^{K} P_kAP_k$. Since $E_0$ acts as the identity on $\mathcal{B}$ and the image of $E$ is in $\mathcal{B}$ we have $E_0E=E$. In order to see that $EE_0=E$ holds as well, consider an operator of the form $A=\lambda P_k+\lambda^{-1}P_l+Q+Q^\dagger$ with $k\ne l$, $\lambda>0$ and $Q$ such that $P_kQP_l=Q$. If $\|Q\|_\infty\le 1$, then $A\ge 0$ and therefore $E(A)\ge 0$. However, $E(A)=\lambda P_k+\lambda^{-1}P_l+E(Q+Q^\dagger)$ can only be positive for all $\lambda>0$ and properly normalized $Q$ if $E(Q+Q^\dagger)=0$. That is, the image of $E$ is independent of `off-diagonal blocks' in the pre-image so that indeed $E=EE_0$ and therefore
+    \begin{equation}
+        E(A)=\sum_{k,l=1}^{K} P_l\,E\!(P_kAP_k)\,P_l.
+    \end{equation}
+
+    Next, we want to argue that all summands in Eq.(1.41) with $k\ne l$ vanish. For that recall that every matrix can be written as a complex linear combination of Hermitian rank-one projections so that a linear map is determined by its action on the latter. Consider $\psi\otimes \varphi_\alpha\in \mathcal{H}_{k,1}\otimes \mathcal{H}_{k,2}$ with $\{\varphi_\alpha\}$ any orthonormal basis in $\mathcal{H}_{k,2}$ and note that (i) $E(V_k^\dagger(\ketbra{\psi}{\psi}\otimes \ketbra{\varphi_\alpha}{\varphi_\alpha})V_k)\ge 0$ and (ii) $\sum_\alpha E(V_k^\dagger(\ketbra{\psi}{\psi}\otimes \ketbra{\varphi_\alpha}{\varphi_\alpha})V_k)=V_k^\dagger(\ketbra{\psi}{\psi}\otimes \sum_\alpha \ketbra{\varphi_\alpha}{\varphi_\alpha})V_k$ since $E(b)=b$ for all $b\in \mathcal{B}$. Hence, the image of every summand must be supported within the support space of $P_k$---in other words $k\ne l$ gives no contribution in Eq.(1.41). So we can finally focus on the action of $E$ restricted to the factors of $\mathcal{B}$ where we refer to it as $E_k:\mcB(\mathcal{H}_k)\to \mcB(\mathcal{H}_k)$, i.e.,
+    \begin{equation}
+        E(A)=\sum_{k=1}^{K} V_k^\dagger\,E_k\!(V_kAV_k^\dagger)\,V_k.
+    \end{equation}
+    Each $E_k$ has to be a positive linear map satisfying $E_k(X\otimes Y)=X'\otimes \one$ for some $X'(X,Y)$ and $E_k(\ketbra{\psi}{\psi}\otimes \one)=\ketbra{\psi}{\psi}\otimes \one$ for all $\psi$. Since $E_k$ is positive, and thus order-preserving (see Sec.5.1), this implies that for $Y\le \one$ we have $E_k(\ketbra{\psi}{\psi}\otimes Y)\le \ketbra{\psi}{\psi}\otimes \one$ and therefore $X'(X,Y)\propto X$. The proportionality factor has to be a linear, normalized functional of $Y$ such that this together with positivity requires that $E_k(X\otimes Y)=X\otimes \one\,\tr[\rho_kY]$ for some density operator $\rho_k$. Inserting into Eq.(1.42) yields Eq.(1.40).
+\end{proof}
+
+A map $E$ with the properties stated in Prop.1.5 is called a conditional expectation. In other words a conditional expectation is a positive map projecting onto a unital $\ast$-subalgebra. Note that for conditional expectations positivity implies complete positivity and that they are self-dual, i.e., $E=E^\ast$, if $\rho_k\propto \one$ for all $k$ (see below for a more detailed discussion of duality). Moreover, they satisfy
+\begin{equation}
+    \forall b_1,b_2\in \mathcal{B},\ \forall a\in \mathcal{A}:\quad
+    E(b_1ab_2)=b_1E(a)b_2.
+\end{equation}
+This is often used as the defining property, since every positive linear map $E:\mathcal{A}\to \mathcal{B}$ fulfilling Eq.(1.43) satisfies the requirements of Prop.1.5.
+
+Note that there are two basic building blocks for conditional expectations: (i) partial traces and (ii) pinchings (i.e., restrictions to block diagonal matrices).
+
+\paragraph{Duality and (complete) positivity}
+Let us now switch the focus to duality and positivity. In finite dimensions every linear functional $f:\mathcal{A}\to \CC$ can be written as
+\begin{equation}
+    f(A)=\tr[FA]\qquad\text{for some }F\in \mathcal{A},
+\end{equation}
+so that we can identify $\mathcal{A}$ with its dual $\mathcal{A}^\ast$. If $T:\mathcal{A}\to \mathcal{B}$ is any linear map between two finite dimensional $C^\ast$-algebras, then its dual map $T^\ast:\mathcal{B}\to \mathcal{A}$ is defined via $\tr[AT^\ast(B)]=\tr[T(A)B]$ for all $A,B$. A map $T$ is positive if it maps positive elements of $\mathcal{A}$ to positive elements of $\mathcal{B}$. Recall that positivity (meaning positive semidefiniteness) of $A\in \mathcal{A}$ can be expressed in different equivalent ways: (i) there is an $a\in \mathcal{A}$ such that $A=a^\dagger a$, (ii) for all positive elements $f\in \mathcal{A}^\ast$: $f(A)\ge 0$, or (iii) $A^\dagger=A$ and $A+\lambda\one$ is invertible for all $\lambda>0$ (i.e., $A$ has no negative eigenvalues). A frequently used implication is that $BAB^\dagger\ge 0$ for all $B\in \mathcal{A}$ whenever $A\ge 0$.
+
+Every matrix $X\in M_d(\CC)$ can be expressed as a linear combination of two Hermitian matrices via $2X=(X+X^\dagger)-i(iX-iX^\dagger)$ and (by further decomposing each Hermitian term into positive and negative spectral part) as a linear combination of four positive matrices. In fact, the polarization identity
+\begin{equation}
+    B^\dagger A =
+    \frac{1}{4}\sum_{k=0}^{3} i^k\,(A+i^kB)^\dagger(A+i^kB)
+\end{equation}
+holds for all bounded operators $A$ and $B$.
+
+To every linear map $T:\mathcal{A}\to \mathcal{B}$ we can assign a sequence of maps $T_n:M_n(\mathcal{A})\to M_n(\mathcal{B})$ defined as $T_n([A_{ij}])=[T(A_{ij})]$.\footnote{With $[A_{ij}]$ we mean the block matrix whose blocks are labeled by $i$ and $j$.} By identifying $M_n(\mathcal{A})$ with $\mathcal{A}\otimes M_n$ this can be written more conveniently as $T_n=(T\otimes \id_n)$. Attributes of $T$ (like positivity, contractivity, boundedness) are then said to be complete if they hold for all $T_n$, $n\in \NN$. Putting things together we get that $T$ is completely positive iff
+\begin{equation}
+    \tr\![b^\dagger b\,(T\otimes \id_n)(a^\dagger a)]
+    = \tr\![(T^\ast\otimes \id_n)(b^\dagger b)\,a^\dagger a]\ge 0,
+\end{equation}
+for all $a\in \mathcal{A}\otimes M_n$ and $b\in \mathcal{B}\otimes M_n$. In other words $T$ is completely positive if $T^\ast$ is. While complete positivity is in general a stronger requirement than positivity, they become the same if either $\mathcal{A}$ or $\mathcal{B}$ is abelian:
+
+\begin{proposition}[Complete positivity from positivity]
+    Let $T:\mathcal{A}\to \mathcal{B}$ be positive linear map between unital $C^\ast$-algebras. If either $\mathcal{A}$ or $\mathcal{B}$ is commutative then $T$ is completely positive.
+\end{proposition}
+
+\begin{proof}
+    We will prove the finite-dimensional version although the proposition holds in general. W.l.o.g.\ we can restrict to the case where $\mathcal{B}$ is commutative. The case where the domain is commutative then follows by invoking that $T$ is completely positive iff $T^\ast$ is. We have to show that $\sum_{i,j=1}^{n}\bra{\psi_i}T(a_{ij})\ket{\psi_j}\ge 0$ for all $\{\ket{\psi_i}\}$ is implied by $[a_{ij}]\ge 0$. As the $T(a_{ij})$ mutually commute we can choose a basis where they are diagonal and denote the components of $\ket{\psi_j}$ in this basis by $\psi_{j,\beta}$. Then
+    \begin{equation}
+        \sum_{i,j=1}^{n}\bra{\psi_i}T(a_{ij})\ket{\psi_j}
+        =
+        \sum_{\beta}\bra{\beta}T\!\left(\sum_{i,j}\bar{\psi}_{i,\beta}a_{ij}\psi_{j,\beta}\right)\ket{\beta}\ge 0,
+    \end{equation}
+    due to positivity of $T$ and $[a_{ij}]$.
+\end{proof}
+
+Sometimes a linear map might only be specified on a subspace $S\subseteq \mathcal{A}$ of a $C^\ast$-algebra. If this space is closed under the adjoint and contains the unit element, then it is called an operator system. Note for instance that in the proof of Prop.1.6 the algebra structure of $\mathcal{A}$ was never used, so that complete positivity also holds for positive maps which map an operator system to any commutative $C^\ast$-algebra. Every such map can then be extended to one with a larger domain (extending at the same time the utility of Prop.1.6):
+
+\begin{proposition}[Extending cp maps from operator systems]
+    Let $\mathcal{A},\mathcal{B}$ be two finite dimensional $C^\ast$-algebras and $T:S\to \mathcal{B}$ a completely positive linear map from an operator system $S\subseteq \mathcal{A}$. Then there is a completely positive map $\tilde{T}:\mathcal{A}\to \mathcal{B}$ which coincides with $T$ on $S$.
+\end{proposition}
+
+\begin{proof}
+    We want to use the Hahn--Banach theorem, so we need a functional: define $\tau(A):=\bra{\Omega}(T\otimes \id_n)(A)\ket{\Omega}$ with $\Omega$ a maximally entangled state of dimension $n$ which is in turn chosen such that $\mathcal{B}$ is a subalgebra of $M_n(\CC)$. So $\tau$ is a positive linear functional on $S\otimes M_n$. Note that complete positivity can be expressed as $\tau(\one-A/\|A\|_\infty)\ge 0$ for all $A=A^\dagger$ or equivalently
+    \begin{equation}
+        \tau(A)\le f(A):=\|A\|_\infty\,\tau(\one).
+    \end{equation}
+    Since $f$ is sublinear we can now invoke the Hahn--Banach theorem in order to extend $\tau$ from the Hermitian subspace of $S$ to that of $\mathcal{A}$ and (by linearity) further to the entire algebra $\mathcal{A}$. The extension fulfills Eq.(1.48) which, by the Choi--Jamiolkowski correspondence (Prop.2.1), implies complete positivity of the extension $\tilde{T}$. By Prop.2.1 $\tilde{T}$ is in one-to-one correspondence with $\tau$.
+\end{proof}
+
+\subsection{Literature}
+
+For a general introduction to quantum mechanics we refer to the excellent text books of Ballentine [?], Galindo and Pascal [?] and Peres [?]. A closer look on quantum mechanics from the point of view of mathematical physics can be found in the books of Thirring [?] and Holevo [?]. A superb introduction to quantum computing and quantum information theory can be found in Nielsen and Chuang [?] the lecture notes by Preskill [?] and the review article of Keyl [?].
+
+\end{document}
