@@ -1,48 +1,8 @@
-\chapter{Introduction}
-
-This is the blueprint for the formalization of the Fundamental Theorem of Matrix Product States in Lean~4.
-
-\section{Basic Definitions}
-
-\begin{definition}[MPS Tensor]\label{def:mps_tensor}
-  \lean{MPSTensor}
-  \leanok
-  An MPS tensor of physical dimension $d$ and bond dimension $D$ is a map
-  $A : \{1,\ldots,d\} \to M_D(\mathbb{C})$.
-\end{definition}
-
-\begin{definition}[Injectivity]\label{def:injective}
-  \lean{IsInjective}
-  \leanok
-  \uses{def:mps_tensor}
-  An MPS tensor $A$ is \emph{injective} if its matrices $\{A^i\}_{i=1}^d$ span the full matrix algebra $M_D(\mathbb{C})$.
-\end{definition}
-
-\begin{definition}[Gauge Equivalence]\label{def:gauge_equiv}
-  \lean{GaugeEquiv}
-  \leanok
-  \uses{def:mps_tensor}
-  Two MPS tensors $A, B$ are \emph{gauge equivalent} if there exists an invertible matrix $X$ such that $B^i = X A^i X^{-1}$ for all $i$.
-\end{definition}
-
-\begin{definition}[Same MPV]\label{def:same_mpv}
-  \lean{SameMPV}
-  \leanok
-  \uses{def:mps_tensor}
-  Two MPS tensors $A, B$ have the \emph{same matrix product vectors} if for every $N$ and every sequence $\sigma = (i_1,\ldots,i_N)$, $\mathrm{tr}(A^{i_1}\cdots A^{i_N}) = \mathrm{tr}(B^{i_1}\cdots B^{i_N})$.
-\end{definition}
-
-\section{Single-Block Fundamental Theorem}
-
-\begin{theorem}[Fundamental Theorem - Single Block]\label{thm:ft_single}
-  \lean{fundamentalTheorem_singleBlock}
-  \leanok
-  \uses{def:injective, def:gauge_equiv, def:same_mpv}
-  If $A$ is injective and $\mathrm{SameMPV}(A, B)$, then $\mathrm{GaugeEquiv}(A, B)$.
-\end{theorem}
-
-\begin{proof}
-  \leanok
-  \uses{def:injective, def:same_mpv, def:gauge_equiv}
-  Follows from trace nondegeneracy, linear extension, and Skolem--Noether.
-\end{proof}
+\input{chapter/ch01_intro}
+\input{chapter/ch02_mps}
+% \input{chapter/ch03_single}
+% \input{chapter/ch04_channels}
+% \input{chapter/ch05_qpf}
+% \input{chapter/ch06_spectral}
+% \input{chapter/ch07_multiblock}
+% \input{chapter/ch08_wielandt}

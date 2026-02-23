@@ -1,18 +1,47 @@
-% In this file you should put all LaTeX macros and settings to be used both by
-% the pdf version and the web version.
-% This should be most of your macros.
+% ==========================================================================
+%  Common macros for both PDF and web versions of the blueprint.
+%  All macros here must be plasTeX-compatible.
+% ==========================================================================
 
-% The theorem-like environments defined below are those that appear by default
-% in the dependency graph. See the README of leanblueprint if you need help to
-% customize this. 
-% The configuration below use the theorem counter for all those environments
-% (this is what the [theorem] arguments mean) and never resets it.
-% If you want for instance to number them within chapters then you can add
-% [chapter] at the end of the next line.
-\newtheorem{theorem}{Theorem}
+% -- Theorem-like environments (collected by the dependency graph) ---------
+% Numbered continuously; add [chapter] to reset per chapter if desired.
+\newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+% -- Number fields ---------------------------------------------------------
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+
+% -- Dirac notation (manual; braket package not available in plasTeX) ------
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\braket}[2]{\langle #1 | #2 \rangle}
+\newcommand{\ketbra}[2]{|#1\rangle\!\langle #2|}
+
+% -- Operators -------------------------------------------------------------
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\spec}{spec}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\id}{id}
+
+% -- Common shorthands -----------------------------------------------------
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\E}{\mathcal{E}}              % quantum channel
+\newcommand{\Id}{\mathbb{1}}              % identity operator
+\newcommand{\MD}{M_D(\C)}                 % D×D complex matrices
+\newcommand{\MN}[1]{M_{#1}(\C)}           % n×n complex matrices
+\newcommand{\GL}{\mathrm{GL}}             % general linear group

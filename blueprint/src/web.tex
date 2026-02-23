@@ -1,15 +1,8 @@
-% This file makes a web version of the blueprint
-% It should include all the \usepackage needed for this version.
-% The template includes standard AMS packages.
-% It is otherwise a very minimal preamble (you should probably at least
-% add cleveref and tikz-cd).
-
 \documentclass{report}
 
 \usepackage{amssymb, amsthm, amsmath}
 \usepackage{hyperref}
 \usepackage[showmore, dep_graph]{blueprint}
-
 
 \input{macros/common}
 \input{macros/web}
@@ -19,9 +12,11 @@
 \dochome{https://LionSR.github.io/TNLean/docs}
 
 \title{Fundamental Theorem of Matrix Product States}
-\author{Authors}
+\author{Sirui Lu}
 
 \begin{document}
 \maketitle
 \input{content}
+\bibliographystyle{alpha}
+\bibliography{references}
 \end{document}
