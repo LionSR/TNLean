@@ -88,15 +88,9 @@ theorem isNilpotent_restrict_maxGenEigenspace_zero
   -- Get nilpotency of (f - 0·1) on the zero eigenspace
   have h := End.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap f 0
   simp only [map_zero, sub_zero] at h
-  -- Convert between different MapsTo proofs (they give equal restrictions)
+  -- Extract the power and prove equality by ext
   obtain ⟨k, hk⟩ := h
-  refine ⟨k, ?_⟩
-  have : f.restrict (mapsTo_maxGenEigenspace_self f 0) =
-    f.restrict (End.mapsTo_maxGenEigenspace_of_comm
-      (Algebra.mul_sub_algebraMap_commutes f 0) 0) := by
-    ext ⟨v, _⟩; rfl
-  simp only [map_zero, sub_zero] at this
-  rw [this]; exact hk
+  exact ⟨k, by ext ⟨v, hv⟩; exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, hv⟩)⟩
 
 /-! ### Part 2: f is invertible on nonzero generalized eigenspaces -/
 
@@ -119,45 +113,51 @@ theorem isUnit_restrict_maxGenEigenspace_of_ne_zero
     IsUnit (f.restrict (mapsTo_maxGenEigenspace_self f μ)) := by
   set W := f.maxGenEigenspace μ
   set hf_maps : Set.MapsTo f ↑W ↑W := mapsTo_maxGenEigenspace_self f μ
-  -- MapsTo for μ • 1
-  have hμ_maps : Set.MapsTo (μ • (1 : End K V)) ↑W ↑W := fun x hx => by
-    simp only [LinearMap.smul_apply, End.one_apply]
+  -- Abbreviation for the scalar endomorphism
+  set a := algebraMap K (End K V) μ
+  set N := f - a
+  -- MapsTo proofs
+  have ha_maps : Set.MapsTo a ↑W ↑W := fun x hx => by
+    change (algebraMap K (End K V) μ) x ∈ W
+    rw [Module.algebraMap_end_eq_smul_id, LinearMap.smul_apply, LinearMap.id_apply]
     exact W.smul_mem μ hx
-  -- MapsTo for f - μ • 1
-  have hN_maps : Set.MapsTo (f - μ • (1 : End K V)) ↑W ↑W := fun x hx => by
-    rw [LinearMap.sub_apply, LinearMap.smul_apply, End.one_apply]
-    exact W.sub_mem (hf_maps hx) (W.smul_mem μ hx)
-  -- Step 1: (f - μ·1) restricted to W is nilpotent
-  have hnil : IsNilpotent ((f - μ • (1 : End K V)).restrict hN_maps) := by
-    have h := End.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap f μ
-    rw [Algebra.algebraMap_eq_smul_one] at h
-    obtain ⟨k, hk⟩ := h
-    exact ⟨k, by ext ⟨v, _⟩; exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, _⟩)⟩
-  -- Step 2: (μ • 1) restricted to W is a unit
-  have hμ_unit : IsUnit ((μ • (1 : End K V)).restrict hμ_maps) := by
-    have : (μ • (1 : End K V)).restrict hμ_maps = μ • (1 : End K ↥W) :=
-      LinearMap.restrict_smul_one μ
-    rw [this, ← Algebra.algebraMap_eq_smul_one]
-    exact (Ne.isUnit hμ).map (algebraMap K (End K ↥W))
-  -- Step 3: They commute (μ·1 commutes with everything)
-  have hcomm : Commute
-    ((f - μ • (1 : End K V)).restrict hN_maps)
-    ((μ • (1 : End K V)).restrict hμ_maps) := by
-    have : (μ • (1 : End K V)).restrict hμ_maps = μ • (1 : End K ↥W) :=
-      LinearMap.restrict_smul_one μ
-    rw [this]
-    exact Commute.smul_right (Commute.one_right _) μ
-  -- Step 4: f.restrict = (μ·1).restrict + (f - μ·1).restrict
-  have hsum : f.restrict hf_maps =
-    (μ • (1 : End K V)).restrict hμ_maps +
-    (f - μ • (1 : End K V)).restrict hN_maps := by
+  -- Use the default MapsTo from Mathlib for N
+  have hN_maps_default :=
+    End.mapsTo_maxGenEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ) μ
+  -- Our own MapsTo for N (same proof essentially, but might be syntactically different)
+  have hN_maps : Set.MapsTo N ↑W ↑W := fun x hx => by
+    change (f - a) x ∈ W
+    rw [LinearMap.sub_apply]
+    exact W.sub_mem (hf_maps hx) (ha_maps hx)
+  -- Step 1: N restricted to W is nilpotent (from Mathlib)
+  have hnil : IsNilpotent (N.restrict hN_maps) := by
+    obtain ⟨k, hk⟩ := End.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap f μ
+    exact ⟨k, by ext ⟨v, hv⟩; exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, hv⟩)⟩
+  -- Step 2: a restricted to W is a unit
+  have ha_apply : ∀ (v : V), a v = μ • v := fun v => by
+    change (algebraMap K (End K V) μ) v = μ • v
+    rw [Module.algebraMap_end_eq_smul_id, LinearMap.smul_apply, LinearMap.id_apply]
+  have ha_restrict_eq : a.restrict ha_maps = algebraMap K (End K ↥W) μ := by
     ext ⟨v, hv⟩
-    simp only [LinearMap.restrict_apply, LinearMap.add_apply, LinearMap.sub_apply,
-      LinearMap.smul_apply, End.one_apply]
-    abel
-  -- Step 5: Conclude
+    simp only [ha_apply, LinearMap.restrict_coe_apply,
+      Module.algebraMap_end_eq_smul_id, LinearMap.smul_apply, LinearMap.id_apply,
+      SetLike.val_smul]
+  have ha_unit : IsUnit (a.restrict ha_maps) := by
+    rw [ha_restrict_eq]
+    exact (Ne.isUnit hμ).map (algebraMap K (End K ↥W))
+  -- Step 3: They commute (a = algebraMap μ commutes with everything)
+  have hcomm : Commute (N.restrict hN_maps) (a.restrict ha_maps) := by
+    rw [ha_restrict_eq, Algebra.algebraMap_eq_smul_one]
+    exact Commute.smul_right (Commute.one_right _) μ
+  -- Step 4: f.restrict = a.restrict + N.restrict
+  have hsum : f.restrict hf_maps = a.restrict ha_maps + N.restrict hN_maps := by
+    ext ⟨v, hv⟩
+    simp only [LinearMap.restrict_apply, LinearMap.add_apply]
+    change f v = a v + (f - a) v
+    simp [LinearMap.sub_apply]
+  -- Step 5: Conclude: unit + nilpotent = unit
   rw [hsum]
-  exact hnil.isUnit_add_left_of_commute hμ_unit hcomm
+  exact hnil.isUnit_add_left_of_commute ha_unit hcomm
 
 /-! ### Part 3: Nilpotency index bound -/
 

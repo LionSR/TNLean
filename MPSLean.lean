@@ -61,6 +61,13 @@ import MPSLean.PiAlgebra.Construction
 import MPSLean.PiAlgebra.FundamentalTheoremComplete
 import MPSLean.PiAlgebra.BlockSeparation
 
+-- Layer 6: Wielandt bound infrastructure
+import MPSLean.Wielandt.FittingDecomposition
+
+-- Layer 6: Quantum Wielandt bound (arXiv:0909.5347)
+import MPSLean.Wielandt.CumulativeSpan
+import MPSLean.Wielandt.NonzeroTraceProduct
+
 -- NOTE: MPSLean.PositiveMapSpectral, MPSLean.TransferSpectral, and
 -- MPSLean.PiAlgebraExtension are backwards-compatible re-export hubs kept for
 -- external downstream consumers. They are NOT imported here because every

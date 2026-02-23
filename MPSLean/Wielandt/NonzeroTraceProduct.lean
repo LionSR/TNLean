@@ -50,9 +50,11 @@ by stabilization, either T_n = ⊤ or the span never reaches ⊤
 
 /-- Auxiliary: either `cumulativeSpan` stabilizes by step `k`, or
 its dimension has grown by at least `k` compared to step 0. -/
-private theorem cumulativeSpan_dim_growth (A : MPSTensor d D) :
+private theorem cumulativeSpan_dim_growth
+    (A : MPSTensor d D) :
     ∀ k : ℕ,
-      (∃ j, j < k ∧ cumulativeSpan A j = cumulativeSpan A (j + 1)) ∨
+      (∃ j, j < k ∧
+        cumulativeSpan A j = cumulativeSpan A (j + 1)) ∨
       Module.finrank ℂ (cumulativeSpan A k) ≥
         Module.finrank ℂ (cumulativeSpan A 0) + k := by
   intro k
@@ -60,14 +62,13 @@ private theorem cumulativeSpan_dim_growth (A : MPSTensor d D) :
   | zero => right; simp
   | succ k ih =>
     rcases ih with ⟨j, hj, hstab⟩ | hgrow
-    · -- Already stabilized at step j < k
-      left; exact ⟨j, by omega, hstab⟩
-    · -- Not yet stabilized; check if k stabilizes
-      by_cases hstab : cumulativeSpan A k = cumulativeSpan A (k + 1)
+    · left; exact ⟨j, by omega, hstab⟩
+    · by_cases hstab :
+          cumulativeSpan A k = cumulativeSpan A (k + 1)
       · left; exact ⟨k, by omega, hstab⟩
-      · -- Strict growth at step k
-        right
-        have hlt : cumulativeSpan A k < cumulativeSpan A (k + 1) :=
+      · right
+        have hlt : cumulativeSpan A k <
+            cumulativeSpan A (k + 1) :=
           lt_of_le_of_ne (cumulativeSpan_mono A k) hstab
         have := cumulativeSpan_finrank_strict_mono A hlt
         omega
@@ -81,85 +82,72 @@ natural number subtraction.
 theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     cumulativeSpan A (D ^ 2) = ⊤ := by
-  -- Proof by contradiction
   by_contra hne
-  -- Use the dimension growth argument
   rcases cumulativeSpan_dim_growth A (D ^ 2 + 1) with
     ⟨j, hj, hstab⟩ | hgrow
-  · -- T_j = T_{j+1} for some j ≤ D²
+  · -- T_j = T_{j+1} for some j < D² + 1 (so j ≤ D²)
     -- By stabilization, T_m = T_j for all m ≥ j
     have hstable := cumulativeSpan_stable A hstab
-    -- Since j ≤ D², cumulativeSpan A (D²) = cumulativeSpan A j
-    have : cumulativeSpan A (D ^ 2) = cumulativeSpan A j := by
-      exact hstable (D ^ 2) (by omega)
-    -- But then cumulativeSpan never reaches ⊤
-    -- This contradicts IsNormal: ∃ N, wordSpan A N = ⊤
+    -- Use IsNormal: ∃ N, wordSpan A N = ⊤
     obtain ⟨N, hNblk⟩ := hN
-    have : wordSpan A N ≤ cumulativeSpan A j := by
+    -- wordSpan A N ≤ cumulativeSpan A (max N j) = T_j
+    have hN_le : wordSpan A N ≤ cumulativeSpan A j := by
       calc wordSpan A N
-          ≤ cumulativeSpan A N :=
-            wordSpan_le_cumulativeSpan A (le_refl N)
-        _ = cumulativeSpan A (max N (D ^ 2)) := by
-            rw [cumulativeSpan_stable A hstab _ (by omega)]
-        _ = cumulativeSpan A j := by
-            rw [hstable _ (by omega)]
-      -- max N (D²) ≥ j since D² ≥ j
-    have := le_trans
-      (eq_top_iff.mp
-        ((wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk))
-      this
-    have : cumulativeSpan A j = ⊤ := eq_top_iff.mpr this
-    -- But cumulativeSpan A (D²) = cumulativeSpan A j = ⊤, contradiction
+          ≤ cumulativeSpan A (N ⊔ j) :=
+            wordSpan_le_cumulativeSpan A le_sup_left
+        _ = cumulativeSpan A j :=
+            hstable _ le_sup_right
+    -- So T_j = ⊤
+    have : cumulativeSpan A j = ⊤ := eq_top_iff.mpr
+      (le_trans
+        (eq_top_iff.mp
+          ((wordSpan_eq_top_iff_isNBlkInjective A N).mpr
+            hNblk))
+        hN_le)
+    -- But T_{D²} = T_j = ⊤, contradiction
     rw [← hstable (D ^ 2) (by omega)] at this
     exact hne this
-  · -- dim(T_{D²+1}) ≥ dim(T_0) + D² + 1
-    -- But dim(T_{D²+1}) ≤ D²
+  · -- dim(T_{D²+1}) ≥ dim(T_0) + D² + 1 > D²
     have h1 := cumulativeSpan_finrank_le A (D ^ 2 + 1)
-    -- We need: dim(T_0) ≥ 0, which gives dim(T_{D²+1}) ≥ D² + 1 > D²
     omega
 
 /-! ### Nonzero trace product exists -/
 
 /-- If `cumulativeSpan A n = ⊤` and all word products of length
 ≤ `n` have zero trace, then `tr(1) = 0`.
-This is the contrapositive of "some word product has nonzero trace". -/
+This is the contrapositive of "some word product has nonzero
+trace". -/
 private theorem trace_one_eq_zero_of_all_traces_zero
     (A : MPSTensor d D) {n : ℕ}
     (htop : cumulativeSpan A n = ⊤)
     (hall : ∀ w : List (Fin d), w.length ≤ n →
       Matrix.trace (evalWord A w) = 0) :
     Matrix.trace (1 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
-  -- The trace is a linear map that vanishes on all generators of
-  -- cumulativeSpan A n
-  have hvanish : ∀ M ∈
-      ({M | ∃ w : List (Fin d), w.length ≤ n ∧
-        M = evalWord A w} : Set (Matrix (Fin D) (Fin D) ℂ)),
-      (Matrix.traceLinearMap (Fin D) ℂ ℂ) M = (0 : ℂ) := by
+  -- The trace linear map vanishes on all generators
+  have hvanish : Set.EqOn
+      (Matrix.traceLinearMap (Fin D) ℂ ℂ)
+      (0 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ)
+      {M | ∃ w : List (Fin d), w.length ≤ n ∧
+        M = evalWord A w} := by
     rintro M ⟨w, hw, rfl⟩
-    simp [Matrix.traceLinearMap_apply]
+    simp only [Matrix.traceLinearMap_apply, LinearMap.zero_apply]
     exact hall w hw
-  -- By LinearMap.eqOn_span, the trace vanishes on the entire
-  -- cumulativeSpan A n
-  have : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ cumulativeSpan A n := by
+  -- By LinearMap.eqOn_span, trace vanishes on all of cumulativeSpan
+  have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
+      cumulativeSpan A n := by
     rw [htop]; exact Submodule.mem_top
-  have htr := LinearMap.eqOn_span
-    (s := {M | ∃ w : List (Fin d), w.length ≤ n ∧
-      M = evalWord A w})
-    (f := Matrix.traceLinearMap (Fin D) ℂ ℂ) (g := 0)
-    (fun x hx => by
-      simp
-      exact hvanish x hx)
-    this
-  simp [Matrix.traceLinearMap_apply] at htr
-  exact htr
+  have := LinearMap.eqOn_span hvanish h1
+  simp only [Matrix.traceLinearMap_apply,
+    LinearMap.zero_apply] at this
+  exact this
 
 /-- `tr(1 : Matrix (Fin D) (Fin D) ℂ) = D`, and `D ≠ 0` when
 `NeZero D`. -/
 private theorem trace_one_ne_zero [NeZero D] :
     Matrix.trace (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
   rw [Matrix.trace_one]
-  simp [Fintype.card_fin]
-  exact Nat.cast_ne_zero.mpr (NeZero.ne D)
+  simp only [Fintype.card_fin, ne_eq, Nat.cast_eq_zero]
+  exact NeZero.ne D
 
 /-- **Lemma 1** (arXiv:0909.5347), part (a):
 Under `IsNormal` (eventually full word span), the cumulative span
@@ -173,8 +161,8 @@ theorem cumulativeSpan_eq_top [NeZero D]
   cumulativeSpan_eq_top_of_isNormal_bound A hN
 
 /-- **Lemma 1** (arXiv:0909.5347), main statement:
-Under `IsNormal`, there exists a word `w` of length ≤ D² such that
-`tr(evalWord A w) ≠ 0`.
+Under `IsNormal`, there exists a word `w` of length ≤ D² such
+that `tr(evalWord A w) ≠ 0`.
 
 Paper: "If E_A is primitive, then there exists A^(n) ∈ S_n(A)
 with n ≤ D²−d+1 such that tr(A^(n)) ≠ 0."
@@ -187,16 +175,12 @@ will come in a later file.
 theorem exists_nonzero_trace_word [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     ∃ (w : List (Fin d)),
-      w.length ≤ D ^ 2 ∧ Matrix.trace (evalWord A w) ≠ 0 := by
-  -- Proof by contradiction: assume all traces are zero
+      w.length ≤ D ^ 2 ∧
+        Matrix.trace (evalWord A w) ≠ 0 := by
   by_contra hall
   push_neg at hall
-  -- All word products of length ≤ D² have zero trace
-  -- But cumulativeSpan A (D²) = ⊤ by the dimension argument
   have htop := cumulativeSpan_eq_top A hN
-  -- So tr(1) = 0
   have := trace_one_eq_zero_of_all_traces_zero A htop hall
-  -- But tr(1) = D ≠ 0
   exact trace_one_ne_zero this
 
 end MPSTensor
