@@ -5,7 +5,7 @@
 \pgfplotsset{compat=1.18}
 \lstset{literate=%
   {∧}{{$\land$}}1
-  {•}{{$\cdot$}}1
+  {*}{{$\cdot$}}1
   {ℕ}{{$\mathbb{N}$}}1
   {ℂ}{{$\mathbb{C}$}}1
   {ℝ}{{$\mathbb{R}$}}1
@@ -37,8 +37,8 @@
 \newcommand{\trace}{\mathrm{tr}}
 
 \title{Formalizing the Fundamental Theorem of MPS}
-\subtitle{A complete mechanical proof in Lean 4\\
-{\scriptsize \quad|\quad 58 files, $\sim$14,700 lines, 0 sorry}}
+\subtitle{\small A Lean~4 formalization (with caveats)\\[-2pt]
+{\tiny 58 files\enspace$\cdot$\enspace${\sim}$14{,}700 lines\enspace$\cdot$\enspace 0 sorry}}
 \date{February 22, 2026}
 \author{Technical Overview}
 
@@ -50,6 +50,7 @@
 {%
 \setbeamertemplate{footline}{}
 \begin{frame}[plain,noframenumbering]
+    \vspace*{-0.5cm}
     \maketitle
 \end{frame}
 }
@@ -145,7 +146,7 @@
 
     \vspace{1em}
     \begin{center}
-        \fcolorbox{leangreen}{darkbg}{\textcolor{leangreen}{\textbf{Goal: Formalize this fully in Lean 4.}}}
+        \fcolorbox{leangreen}{darkbg}{\textcolor{leangreen}{\textbf{Goal: Formalize this in Lean 4.}}}
     \end{center}
 \end{frame}
 
@@ -242,8 +243,8 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
 \begin{frame}{High-Level Strategy}
     \begin{center}
         \begin{tikzpicture}[
-            node distance=1.2cm,
-            process/.style={rectangle, draw=leangreen, fill=cardbg, text=white, text width=3cm, align=center, minimum height=1cm},
+            node distance=0.8cm,
+            process/.style={rectangle, draw=leangreen, fill=cardbg, text=white, text width=2.4cm, align=center, minimum height=0.9cm, font=\small},
             arrow/.style={->, >=Stealth, thick, white}
         ]
             \node[process] (inputs) {Arbitrary MPS $A, B$};
@@ -257,10 +258,10 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
         \end{tikzpicture}
     \end{center}
 
-    \vspace{1em}
+    \vspace{0.5em}
     \textbf{Three Logic Layers:}
     \begin{enumerate}
-        \item \textbf{Single Block:} If $A, B$ are primitive and $\braket{V_N(A)|V_N(B)} \approx 1$, then $A \cong B$.
+        \item \textbf{Single Block:} Primitive + overlap $\approx 1$ $\implies$ gauge equiv.
         \item \textbf{Block Separation:} Distinct eigenvalues $\implies$ orthogonal MPVs.
         \item \textbf{Combinatorics:} Matching blocks between $A$ and $B$.
     \end{enumerate}
@@ -281,7 +282,6 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
     \begin{itemize}
         \item Uses orthogonal projection theory.
         \item Iteratively splits via invariant projections (strong induction on bond dimension).
-        \item \textbf{Result:} We only need to prove the theorem for Block Diagonal MPS where each block is Irreducible.
     \end{itemize}
 \end{frame}
 
@@ -297,10 +297,10 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
         to the fixed-point projector $\mathcal{P}$ (spectral radius of the remainder $< 1$).
     \end{block}
 
-    \textbf{Lean:} `MPSLean.Spectral.SpectralGap`
+    \textbf{Lean:} \texttt{MPSLean.Spectral.SpectralGap}
     \begin{itemize}
-        \item formalized via \texttt{Complex.abs} bounds on eigenvalues.
-        \item used to prove $\braket{V_N|V_N}$ grows as $\rho^N$.
+        \item Formalized via \texttt{Complex.abs} bounds on eigenvalues.
+        \item Used to prove $\braket{V_N|V_N}$ grows as $\rho^N$.
     \end{itemize}
 \end{frame}
 
@@ -314,7 +314,7 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
     If $A$ and $B$ are \textbf{not} gauge equivalent (up to phase), then
     \[ O_N(A,B) \to 0 \quad \text{exponentially}. \]
     
-    \textbf{Lean:} `MPSLean.Spectral.MPVOverlapDecay`
+    \textbf{Lean:} \texttt{MPSLean.Spectral.MPVOverlapDecay}
     \begin{itemize}
         \item Proves that if spectral radii differ, overlap decays.
         \item If radii match but no gauge equiv, the ``mixed'' transfer operator has spectral radius strictly less than $\sqrt{\rho_A \rho_B}$.
@@ -335,32 +335,27 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
         \item This implies the existence of an invertible intertwiner $X$ (Sanz et al., 2010).
     \end{enumerate}
     
-    File: `MPSLean.MPS.FundamentalTheoremProportional`
+    File: \texttt{MPSLean.MPS.FundamentalTheoremProportional}
 \end{frame}
 
 \begin{frame}{Step 5: Multi-Block Matching (BNT)}
+    \small
     Now consider $A = \bigoplus_k A_k$ and $B = \bigoplus_j B_j$.
     
     \begin{block}{Basis Normal Form (BNT)}
-        We organize blocks such that:
-        \begin{itemize}
-            \item All $A_k$ are primitive.
-            \item Spectral radii are sorted/grouped.
-            \item No two blocks are gauge equivalent to each other (redundancy removal).
-        \end{itemize}
+        We organize blocks such that all $A_k$ are primitive,
+        spectral radii are sorted/grouped, and no two blocks are gauge equivalent
+        (redundancy removal).
     \end{block}
 
     \textbf{The Matching Logic:}
-    If $\sum \ket{V_N(A_k)} = \sum \ket{V_N(B_j)}$, then by linear independence of MPVs from inequivalent primitive blocks (proved via overlap decay), there must be a permutation $\sigma$ such that:
-    \[ \ket{V_N(A_k)} \approx \ket{V_N(B_{\sigma(k)})} \]
-    
-    This reduces the multi-block problem to $N$ single-block problems.
+    If $\sum \ket{V_N(A_k)} = \sum \ket{V_N(B_j)}$, then by linear independence of MPVs from inequivalent primitive blocks (proved via overlap decay), there must be a permutation $\sigma$ such that $\ket{V_N(A_k)} \approx \ket{V_N(B_{\sigma(k)})}$.
 \end{frame}
 
 \begin{frame}{Linear Independence of MPVs}
     A crucial intermediate result:
     
-    \textbf{Theorem (`BlockSeparation`):}
+    \textbf{Theorem (\texttt{BlockSeparation}):}
     If $\{A_1, \dots, A_m\}$ are mutually inequivalent primitive MPS, then for large $N$, the vectors $\{\ket{V_N(A_k)}\}_k$ are \emph{linearly independent}.
 
     \vspace{0.5em}
@@ -369,22 +364,22 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
 \end{frame}
 
 \begin{frame}{Grand Unified Argument}
+    \small
     Combining it all:
     
     \begin{enumerate}
         \item \textbf{Input:} $A, B$ such that $\ket{V_N(A)} = \ket{V_N(B)}$.
         \item \textbf{Reduce:} $A \to \bigoplus A_i$, $B \to \bigoplus B_j$ (Canonical Form).
-        \item \textbf{Cluster:} Group by spectral radius and gauge equivalence class.
         \item \textbf{Separate:} Use linear independence to show the sets of blocks must be identical (up to permutation).
         \item \textbf{Equate:} Apply Single-Block FT to each matched pair.
         \item \textbf{Conclude:} $A \cong B$.
     \end{enumerate}
     
-    File: `MPSLean.MPS.FundamentalTheoremFull`
+    File: \texttt{MPSLean.MPS.FundamentalTheoremFull}
 \end{frame}
 
 %======================================================================
-\section{Gauge Choices \& Deviations}
+\section{Gauge Choices \& Deviations from the Paper}
 %======================================================================
 
 \begin{frame}{TP vs DS Gauge}
@@ -404,9 +399,10 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
     \texttt{MPSLean.QPF.PosDef} handles the positive-definiteness of these fixed points.
 \end{frame}
 
-\begin{frame}[fragile]{The \texttt{mu\_strict\_anti} Lemma}
-    \begin{alertblock}{The Problem}
-        Proving uniqueness of the spectral radius often requires monotonicity.
+\begin{frame}[fragile]{The \texttt{mu\_strict\_anti} Hypothesis}
+    \begin{alertblock}{Stronger than the paper}
+        The paper \cite{Cirac2021Matrix} allows degenerate $|\mu_k|$ values (blocks with equal spectral radii).
+        Our formalization requires \emph{strict} ordering.
     \end{alertblock}
 
     We require strict ordering of the block weights by modulus.
@@ -418,29 +414,39 @@ mu_strict_anti :
   StrictAnti (fun k : Fin r => (*@$\|\mu(k)\|$@*))
     \end{lstlisting}
 
-    This was critical for handling the ``overlap=1'' condition and ensuring distinct blocks produce orthogonal contributions.
+    This simplifies block separation but excludes cases where distinct
+    blocks share the same spectral radius.
 \end{frame}
 
 \begin{frame}{The ``Overlap $\to$ 1'' Assumption}
     Standard literature often states:
     "If overlap is 1, they are equivalent."
     
-    In Lean, ``Overlap'' is a ratio of traces.
-    We had to rigorously prove:
-    \[ \lim_{N \to \infty} \frac{|\trace(E_{AB}^N)|^2}{\trace(E_A^N)\trace(E_B^N)} = 1 \iff \rho(E_{AB})^2 = \rho(E_A)\rho(E_B) \]
-    
-    This required detailed spectral analysis of the "Mixed Transfer Operator" $E_{AB} = \sum A^i \otimes \bar{B}^i$.
+    \begin{alertblock}{Assumed, not derived}
+        In the Lean code, \texttt{overlap\_tendsto\_one} is taken as an \emph{explicit hypothesis}
+        in \texttt{IsCanonicalForm}, not derived from primitivity of the transfer map.
+        Deriving it requires assembling spectral-gap convergence with
+        Perron-Frobenius normalization.
+    \end{alertblock}
+
+    The mathematical content we \emph{do} prove:
+    \[ \frac{|\trace(E_{AB}^N)|^2}{\trace(E_A^N)\trace(E_B^N)} = 1 \iff \rho(E_{AB})^2 = \rho(E_A)\rho(E_B) \]
 \end{frame}
 
-\begin{frame}{Basis Normal Form (BNT)}
-    The paper \cite{Cirac2021Matrix} discusses a ``Normal Form''. We formalized a strict version called \textbf{BNT} (Basis Normal Tensor).
+\begin{frame}{The \texttt{IsCanonicalFormBNT} Predicate}
+    The paper \cite{Cirac2021Matrix} discusses a ``Normal Form''.
+    We formalized a strict version called \textbf{BNT} (Basis Normal Tensor).
     
     \begin{itemize}
-        \item A `BNT` structure in Lean enforces that blocks are sorted and minimal.
-        \item We defined a type `BNT` which bundles the list of blocks with proofs of their properties.
-        \item This makes the final theorem statement cleaner:
-        "Every MPS has a unique BNT representation."
+        \item A \texttt{BNT} structure in Lean enforces that blocks are sorted and minimal.
+        \item We defined a type \texttt{BNT} which bundles the list of blocks with proofs of their properties.
     \end{itemize}
+
+    \begin{alertblock}{Extra hypothesis: \texttt{blocks\_not\_equiv}}
+        Our \texttt{IsCanonicalFormBNT} adds an explicit
+        \texttt{blocks\_not\_equiv} field (no two blocks are gauge equivalent)
+        that is implicit/derived in the paper's presentation.
+    \end{alertblock}
 \end{frame}
 
 %======================================================================
@@ -475,7 +481,7 @@ mu_strict_anti :
         \vspace{1em}
         \textbf{Volume:}
         $\sim$14,700 lines of Lean code.
-        0 \texttt{sorry} (axioms: none).
+        0 \texttt{sorry}.
     \end{columns}
 \end{frame}
 
@@ -502,7 +508,7 @@ mu_strict_anti :
         \end{tikzpicture}
     \end{center}
     
-    \emph{Note: `MPS` contains the heavy lifting of the final theorem assembly.}
+    \emph{Note: \texttt{MPS} contains the heavy lifting of the final theorem assembly.}
 \end{frame}
 
 \begin{frame}{Dependency Graph (Simplified)}
@@ -526,11 +532,10 @@ mu_strict_anti :
     \end{tikzpicture}
     \end{center}
     
-    \emph{Note: graph is simplified.}
+    {\small Graph is simplified.
     Actual cross-layer dependencies exist: \texttt{QPF} $\leftrightarrow$ \texttt{MPS},
-    \texttt{Spectral} $\leftrightarrow$ \texttt{MPS}, and \texttt{PiAlgebra} is used
-    throughout multiple layers.
-    \texttt{PiAlgebra} handles the ``direct sum'' logic generic to any algebra, reused for MPS blocks.
+    \texttt{Spectral} $\leftrightarrow$ \texttt{MPS}. \texttt{PiAlgebra} handles
+    ``direct sum'' logic and is used across multiple layers.}
 \end{frame}
 
 \begin{frame}{Verification Status}
@@ -572,7 +577,8 @@ theorem gaugePhaseEquiv_of_proportionalMPV(*@$_2$@*)_of_overlap_tendsto_one
 \end{frame}
 
 \begin{frame}[fragile]{The Main Result (Multi-Block)}
-    \begin{lstlisting}[language=Lean]
+    \footnotesize
+    \begin{lstlisting}[language=Lean,basicstyle=\ttfamily\tiny\color{white}]
 theorem fundamentalTheorem_equalMPV_CFBNT
     {r : ℕ} {dim : Fin r → ℕ} {(*@$\mu$@*) : Fin r → ℂ}
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -590,10 +596,9 @@ theorem fundamentalTheorem_equalMPV_CFBNT
     the conclusion is per-block and global \texttt{GaugeEquiv}.
 \end{frame}
 
-\begin{frame}[fragile]{The Complete Theorem}
-    Finally, handling \emph{any} tensor (not just canonical):
-
-    \begin{lstlisting}[language=Lean]
+\begin{frame}[fragile]{The Full Theorem (with Explicit Hypotheses)}
+    \footnotesize
+    \begin{lstlisting}[language=Lean,basicstyle=\ttfamily\tiny\color{white}]
 theorem fundamentalTheorem_multiBlock_fromSameMPV(*@$_2$@*)
     ((*@$\mu$@*) : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -608,71 +613,174 @@ theorem fundamentalTheorem_multiBlock_fromSameMPV(*@$_2$@*)
     ∃ (σ : Fin r (*@$\simeq$@*) Fin r), ...
     \end{lstlisting}
 
-    Gives per-block and global \texttt{GaugeEquiv} plus an explicit block-permutation
+    Per-block and global \texttt{GaugeEquiv} plus an explicit block-permutation
     decomposition of the Pi-algebra automorphism.
-    
-    This matches the physical intuition:
-    \emph{"If two MPS generate the same state, their physical (minimal) degrees of freedom are identical."}
 \end{frame}
 
-\begin{frame}{Comparison with Cirac et al. 2021}
+\begin{frame}{Comparison with Cirac et al.\ 2021}
     \textbf{Paper Statement (Thm 4.4):}
     "Let $A, B$ be two MPS in canonical form... if they generate the same state... they are related by a gauge transformation, permutation, and phases."
 
-    \textbf{Lean Statement:}
-    Exactly matches, but with explicit type-theoretic handling of:
+    \vspace{0.5em}
+    \textbf{Lean Statement:} Covers the core content, with these \textbf{deviations}:
     \begin{itemize}
-        \item The permutation (as an \texttt{Equiv}).
-        \item The block structure (via \texttt{PiAlgebra}).
-        \item The ``for all $N$'' quantifier (via asymptotic analysis).
+        \item \texttt{mu\_strict\_anti}: We require $|\mu_0| > |\mu_1| > \cdots$; the paper allows $|\mu_j| = |\mu_k|$ for $j \neq k$.
+        \item \texttt{overlap\_tendsto\_one}: Taken as hypothesis; the paper derives it from primitivity.
+        \item \texttt{blocks\_not\_equiv}: Extra hypothesis in \texttt{IsCanonicalFormBNT}.
+        \item Coefficient convergence (\texttt{haCoeff}): Taken as explicit hypothesis, not derived from $|\mu_k| < |\mu_0|$.
+        \item No periodic case (Thm 4.6): We handle only primitive (aperiodic) blocks.
+        \item No quantitative Wielandt bound: Injectivity is an assumption, not derived from primitivity.
     \end{itemize}
 \end{frame}
 
 %======================================================================
-\section{Next Steps}
+\section{Limitations \& Honest Assessment}
 %======================================================================
 
-\begin{frame}{1. Periodicity and Wielandt}
-    Currently, we focus on \emph{aperiodic} (primitive) blocks.
+\begin{frame}{What We Actually Proved}
+    \textbf{Proved (sorry-free):}
     \begin{itemize}
-        \item \textbf{Periodic MPS:} The transfer matrix has eigenvalues $e^{2\pi i k / p} \rho$.
-        \item \textbf{Wielandt's Inequality:} We have bounds for primitivity indices, but explicitly handling the periodic case ($p > 1$) is the next generalization.
-        \item Ref: de las Cuevas et al.\ (arXiv:1708.00029).
+        \item Single-block FT: primitive + injective $\implies$ gauge equiv (modulo phase).
+        \item Multi-block FT: matching blocks under \texttt{IsCanonicalFormBNT}.
+        \item Block separation via overlap decay.
+        \item Spectral gap for primitive CP maps.
+        \item Full library of CP-map, trace, and Kronecker infrastructure.
+    \end{itemize}
+
+    \vspace{0.5em}
+    \textbf{Not proved / assumed:}
+    \begin{itemize}
+        \item \texttt{overlap\_tendsto\_one} is \emph{assumed} in \texttt{IsCanonicalForm}, not derived from primitivity.
+        \item \texttt{mu\_strict\_anti} is \emph{stronger} than the paper (paper allows degenerate $|\mu|$).
+        \item Coefficient convergence $\mu_k^N \to 0$ is taken as explicit hypothesis \texttt{haCoeff}.
+        \item No periodicity handling (Thm 4.6 of \cite{Cirac2021Matrix}).
+        \item No quantitative Wielandt bound.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{2. Convergence Rates}
-    We proved $O_N \to 0$ exponentially.
-    \begin{itemize}
-        \item Can we extract explicit constants? $C, \gamma$?
-        \item Useful for numerical tensor network algorithms (DMRG errors).
-        \item Requires making the spectral gap bounds computable/explicit in Mathlib.
-    \end{itemize}
+%======================================================================
+\section{Next Steps: Detailed Roadmap}
+%======================================================================
+
+\begin{frame}{Target 1: Coefficient Convergence (\texorpdfstring{$\sim$50--100}{~50-100} LOC)}
+    \textbf{Mathematical statement:}
+    For \texttt{IsCanonicalForm} with \texttt{mu\_strict\_anti}, the coefficients
+    $c_j(N) = \sum_q \mu_{j,q}^N$ converge. In particular, $\mu_k^N \to 0$ for $k > 0$
+    after normalizing $\mu_0 = 1$, since $|\mu_k| < |\mu_0|$.
+
+    \vspace{0.5em}
+    \textbf{Paper ref:} Implicit in \cite{Cirac2017Annals} (arXiv:1606.00608), Appendix~A proof of Thm~4.4.
+    The coefficients are used without explicit convergence proof because the paper works with finite power sums.
+
+    \vspace{0.5em}
+    \textbf{Lean context:}
+    \texttt{fundamentalTheorem\_proportionalMPV\_CFBNT} in \texttt{FundamentalTheoremFull.lean} currently takes
+    \texttt{haCoeff : $\forall$ j, Tendsto (fun N $\Rightarrow$ aCoeff N j) atTop (nhds (aLim j))} as an explicit hypothesis.
+
+    \vspace{0.5em}
+    \textbf{What's needed:} Apply Mathlib's \texttt{tendsto\_pow\_atTop\_nhds\_zero\_of\_norm\_lt\_one} plus assembly. \textcolor{leangreen}{Easiest target.}
 \end{frame}
 
-\begin{frame}{3. 2D Tensor Networks (PEPS)}
-    The Fundamental Theorem for PEPS (2D) is much harder.
-    \begin{itemize}
-        \item No ``canonical form'' in general.
-        \item Undecidable problems lurk.
-        \item However, for \emph{injective} PEPS, a similar theorem holds.
-        \item Our `PosMap` and `SpectralGap` libraries are reusable here.
-    \end{itemize}
+\begin{frame}{Target 2: PF/$\mu$ Normalization (\texorpdfstring{$\sim$100--200}{~100-200} LOC)}
+    \textbf{Mathematical statement:}
+    For each irreducible block with transfer map $E_k$, the spectral radius $\rho(E_k)$
+    is the Perron-Frobenius eigenvalue. Dividing the block tensor by $\rho(E_k)^{1/2}$
+    normalizes the transfer map to spectral radius~1.
+
+    \vspace{0.5em}
+    \textbf{Paper ref:} \cite{Cirac2021Matrix} (arXiv:2011.12127) \S IV.A before Def~4.1;
+    \cite{Cirac2017Annals} (arXiv:1606.00608) \S 2.3.
+
+    \vspace{0.5em}
+    \textbf{Lean context:}
+    \texttt{IrreducibleFormII.lean} handles the unitary gauge (TP + diagonal PD fixed point).
+    Missing: the spectral-radius normalization \emph{before} applying CF~II.
+
+    \vspace{0.5em}
+    \textbf{What's needed:} Show $\text{transferMap}(c \cdot A) = |c|^2 \cdot \text{transferMap}(A)$,
+    then choose $c = \rho(E)^{-1/2}$ to normalize. \textcolor{amber}{Moderate difficulty.}
 \end{frame}
+
+\begin{frame}{Target 3: Periodic Cases / Thm 4.6 (\texorpdfstring{$\sim$300--600}{~300-600} LOC)}
+    \small
+    \textbf{Mathematical statement:}
+    Without blocking to remove periodicity, two tensors $A, B$ with equal MPVs may differ by
+    a diagonal matrix $Z$ with $[Z, A^i] = 0$ for all $i$ and $ZA^i = YB^i Y^{-1}$.
+    The $Z$ arises from $p$-periodic blocks with eigenvalues $e^{2\pi iq/p}$.
+
+    \vspace{0.3em}
+    \textbf{Paper ref:} \cite{Cirac2021Matrix} Thm~4.6; \cite{Cirac2017Irreducible} for the full periodic version.
+
+    \vspace{0.3em}
+    \textbf{Lean context:}
+    \texttt{MPS/Blocking.lean} has physical blocking (\texttt{blockTensor}, \texttt{mpv\_blockTensor\_eq\_mpv}).
+    \texttt{Channel/Primitive.lean} has the P+N decomposition.
+    Missing: peripheral spectrum theory, period detection, $Z$-matrix construction.
+
+    \vspace{0.3em}
+    \textbf{What's needed:}
+    \begin{enumerate}
+        \item Peripheral eigenvalues of irreducible CPTP maps are $p$-th roots of unity (Wolf Thm~6.6 \cite{Wolf2012Quantum}).
+        \item Blocking by $p$ removes periodicity (makes transfer primitive).
+        \item Define $Z$-matrix as block-diagonal with $p$-th roots.
+        \item Compose with existing primitive FT.
+    \end{enumerate}
+    \textcolor{softred}{Substantial effort.}
+\end{frame}
+
+\begin{frame}{Target 4: Quantum Wielandt Bound (\texorpdfstring{$\sim$500--1000}{~500-1000} LOC)}
+    \small
+    \textbf{Mathematical statement:}
+    For a primitive channel with Kraus rank $d$ and dimension $D$, the quantum Wielandt number
+    $W$ (smallest $L$ such that length-$L$ products span $M_D(\mathbb{C})$) satisfies
+    $W \leq (D^2 - d + 1)(D^2 - 1) + 1$; coarsely $W \leq D^4$.
+
+    \vspace{0.3em}
+    \textbf{Paper ref:} \cite{Sanz2010Quantum} (arXiv:0909.5347), Theorem~1 and Corollary~2.
+    Also \cite{Wolf2012Quantum} Theorem~7.3.
+
+    \vspace{0.3em}
+    \textbf{Lean context:}
+    The library uses \texttt{IsNormal A} ($\exists\, N$, \texttt{IsNBlkInjective A N}) and
+    \texttt{IsInjective A} as explicit hypotheses.
+    Wielandt would give: \texttt{IsPrimitive (transferMap A) $\to$ IsNormal A} with a quantitative bound.
+
+    \vspace{0.3em}
+    \textbf{What's needed:}
+    \begin{enumerate}
+        \item Define \texttt{IsPrimitive} for CPTP maps (trivial peripheral spectrum).
+        \item Products of Kraus operators generate a $*$-subalgebra of $M_D(\mathbb{C})$.
+        \item Burnside's theorem: irreducibly-acting $*$-subalgebra $= M_D(\mathbb{C})$.
+        \item Dimension-counting argument for the $D^4$ bound.
+    \end{enumerate}
+    \textcolor{softred}{Hardest target; likely a separate project.}
+\end{frame}
+
+%======================================================================
+\section{Summary}
+%======================================================================
 
 \begin{frame}{Summary}
     \begin{center}
-        \Large \textbf{The Fundamental Theorem of MPS is formalised.}
+        \Large \textbf{A Lean 4 formalization of the Fundamental Theorem of MPS.}
     \end{center}
     
-    \vspace{1em}
+    \vspace{0.5em}
+    \textbf{What we built:}
     \begin{itemize}
-        \item \textbf{Complete:} From matrix definitions to multi-block gauge equivalence.
-        \item \textbf{Foundational:} Built a reusable library for Quantum Information in Lean (CP maps, traces, spectral gaps).
-        \item \textbf{Rigorous:} Clarified subtleties about gauge choices and overlaps often glossed over in physics literature.
+        \item A sorry-free proof of the FT for \emph{primitive, aperiodic} blocks in canonical form, under explicit spectral hypotheses.
+        \item A reusable library for quantum information in Lean (CP maps, traces, spectral gaps).
     \end{itemize}
 
-    \vspace{1em}
+    \vspace{0.5em}
+    \textbf{Gaps remaining:}
+    \begin{itemize}
+        \item Coefficient convergence, overlap convergence (currently hypotheses).
+        \item Periodic blocks (Thm~4.6), Wielandt bound.
+        \item \texttt{mu\_strict\_anti} is stronger than the paper.
+    \end{itemize}
+
+    \vspace{0.5em}
     \hfill \textit{Thank you.}
 \end{frame}
 
