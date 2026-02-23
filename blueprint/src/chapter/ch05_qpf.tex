@@ -34,6 +34,13 @@ The results follow
     Since $\{A^i\}$ spans $\MN{D}$, this gives
     $\rho M v = 0$ for all $M$, hence $\rho = 0$,
     contradicting $\rho \neq 0$.
+    In~\cite[Thm.~6.8]{Wolf2012Quantum}, positive definiteness
+    is proved using the growth condition
+    $(\Id + \E)^{D-1}(X) > 0$ for irreducible maps
+    (\cite[Thm.~6.6, condition~(2)]{Wolf2012Quantum}).
+    Our proof instead exploits injectivity of the MPS tensor
+    directly, which avoids the irreducibility growth chain
+    and gives a shorter argument.
 \end{proof}
 
 \section{Uniqueness}
@@ -61,6 +68,12 @@ The results follow
     (it has a zero eigenvalue by construction).
     By Theorem~\ref{thm:psd_fp_pd}, $\tau$ must be zero,
     giving $\sigma = c_0 \rho$.
+    In~\cite[Thm.~6.8]{Wolf2012Quantum}, uniqueness follows from
+    non-degeneracy of the spectral radius eigenvalue, proved via
+    the $(\Id + \E)^{D-1}$ growth condition.
+    Our proof reduces uniqueness to the positive definiteness
+    theorem (Theorem~\ref{thm:psd_fp_pd}) via a spectral shift
+    argument, which is more elementary.
 \end{proof}
 
 \section{Existence and assembly}

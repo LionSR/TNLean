@@ -134,6 +134,9 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     is PSD ($= v v^\dagger$ with $v = [X^\dagger,\, \Id]^T$).
     Applying the unital CP map blockwise preserves PSD-ness.
     The Schur complement of the $(2,2)$-block gives the result.
+    In~\cite[Eq.~(5.3)]{Wolf2012Quantum}, the proof instead uses the
+    Stinespring representation $E^*(A) = V^\dagger(A \otimes \Id)V$
+    with $VV^\dagger \le \Id$.
 \end{proof}
 
 \begin{theorem}[Hilbert--Schmidt contraction]\label{thm:hs_contraction}
@@ -310,6 +313,10 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     The telescope identity gives
     $\|E(\sigma_N) - \sigma_N\| = \frac{1}{N}\|E^N(\rho_0) - \rho_0\| \to 0$,
     so $E(\rho) = \rho$ by continuity.
+    In~\cite[Thm.~6.13]{Wolf2012Quantum}, existence is proved
+    via Brouwer's fixed-point theorem; we use the Ces\`aro
+    argument instead, as Brouwer's theorem is not available
+    in Mathlib.
 \end{proof}
 
 \section{Peripheral spectrum and primitivity}
