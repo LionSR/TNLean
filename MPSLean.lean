@@ -31,6 +31,7 @@ import MPSLean.MPS.CastLemmas
 import MPSLean.MPS.Blocking
 import MPSLean.MPS.MPVOverlap
 import MPSLean.MPS.Transfer
+import MPSLean.MPS.TransferNormalization
 import MPSLean.MPS.FixedPointInvariantProjection
 import MPSLean.MPS.CPPrimitive
 
@@ -49,6 +50,7 @@ import MPSLean.MPS.BNTPermutationSimple
 import MPSLean.MPS.BNTPermutationThm44
 import MPSLean.MPS.BNTConstruction
 import MPSLean.MPS.FundamentalTheoremFull
+import MPSLean.MPS.CoefficientConvergence
 import MPSLean.MPS.FundamentalTheoremMulti
 import MPSLean.MPS.InvariantSubspaceDecomp
 import MPSLean.MPS.CanonicalFormReduction
