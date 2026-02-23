@@ -1,0 +1,151 @@
+\chapter{Quantum Perron--Frobenius Theory}\label{ch:qpf}
+
+This chapter establishes that the transfer map of an injective MPS
+tensor has a unique positive semidefinite fixed point (up to scaling),
+and that this fixed point is positive definite.
+The results follow
+\cite{Evans1978Spectral} and \cite[Ch.~6]{Wolf2012Quantum}.
+
+\section{Positive definiteness}
+
+\begin{theorem}[PSD fixed point is positive definite]\label{thm:psd_fp_pd}
+    \lean{MPSTensor.posSemidef_fixedPoint_isPosDef}
+    \leanok
+    \uses{def:injective, def:transfer_map}
+    Let $A$ be an injective MPS tensor and let $\rho \ge 0$,
+    $\rho \neq 0$, be a fixed point of the transfer map
+    $\E_A(\rho) = \rho$.
+    Then $\rho$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:injective, def:transfer_map}
+    Suppose $\rho v = 0$ for some $v \neq 0$.
+    The fixed-point equation $\E_A(\rho) = \rho$ and the
+    expansion $\E_A(\rho) = \sum_i A^i \rho (A^i)^\dagger$ give
+    \[
+        v^\dagger \rho v
+        =  \sum_{i} ((A^i)^\dagger v)^\dagger
+              \rho ((A^i)^\dagger v).
+    \]
+    Each term is nonneg; if the sum is zero, then
+    $\rho (A^i)^\dagger v = 0$ for all~$i$.
+    Since $\{A^i\}$ spans $\MN{D}$, this gives
+    $\rho M v = 0$ for all $M$, hence $\rho = 0$,
+    contradicting $\rho \neq 0$.
+\end{proof}
+
+\section{Uniqueness}
+
+\begin{theorem}[Uniqueness of PSD fixed point]\label{thm:psd_fp_unique}
+    \lean{MPSTensor.posSemidef_fixedPoint_unique}
+    \leanok
+    \uses{thm:psd_fp_pd, def:injective, def:transfer_map}
+    Let $A$ be an injective MPS tensor.
+    If $\rho, \sigma \ge 0$ are both nonzero fixed points of
+    $\E_A$, then $\sigma = c \rho$ for some $c \in \C$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_fp_pd}
+    Both $\rho$ and $\sigma$ are positive definite by
+    Theorem~\ref{thm:psd_fp_pd}.
+    Write $\rho = S S^\dagger$ via a spectral square root and set
+    $H = (S^\dagger)^{-1} \sigma S^{-1}$, which is Hermitian
+    and positive definite.
+    Let $c_0$ be the minimal eigenvalue of $H$.
+    Then $\tau = \sigma - c_0 \rho$ is a PSD fixed point of $\E_A$
+    which is \emph{not} positive definite
+    (it has a zero eigenvalue by construction).
+    By Theorem~\ref{thm:psd_fp_pd}, $\tau$ must be zero,
+    giving $\sigma = c_0 \rho$.
+\end{proof}
+
+\section{Existence and assembly}
+
+\begin{theorem}[Existence of PSD fixed point]\label{thm:psd_fp_exists}
+    \lean{MPSTensor.exists_posSemidef_fixedPoint}
+    \leanok
+    \uses{def:injective, def:transfer_map,
+          thm:transfer_channel, thm:cesaro_fixedpoint}
+    Let $A$ be an injective MPS tensor with
+    $\sum_i (A^i)^\dagger A^i = \Id$ (so that $\E_A$ is
+    trace-preserving).
+    Then there exists $\rho \ge 0$, $\rho \neq 0$,
+    with $\E_A(\rho) = \rho$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:transfer_channel, thm:cesaro_fixedpoint}
+    Under the normalization $\sum_i (A^i)^\dagger A^i = \Id$,
+    the transfer map is a quantum channel
+    (Theorem~\ref{thm:transfer_channel}).
+    The Ces\`aro fixed-point theorem
+    (Theorem~\ref{thm:cesaro_fixedpoint}) then provides the
+    fixed point.
+\end{proof}
+
+\begin{theorem}[Quantum Perron--Frobenius]\label{thm:qpf}
+    \lean{MPSTensor.quantum_perron_frobenius}
+    \leanok
+    \uses{thm:psd_fp_exists, thm:psd_fp_pd, thm:psd_fp_unique,
+          def:injective}
+    Let $A$ be an injective MPS tensor (with normalized Kraus
+    operators).
+    Then the transfer map $\E_A$ has a unique PSD fixed point
+    $\rho$ (up to scaling), and $\rho$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:psd_fp_exists, thm:psd_fp_pd, thm:psd_fp_unique}
+    Combine existence (Theorem~\ref{thm:psd_fp_exists}),
+    positive definiteness (Theorem~\ref{thm:psd_fp_pd}),
+    and uniqueness (Theorem~\ref{thm:psd_fp_unique}).
+\end{proof}
+
+\section{Doubly stochastic gauge}
+
+\begin{theorem}[Unital gauge]\label{thm:ds_gauge_unital}
+    \lean{gauged_unital}
+    \leanok
+    \uses{def:transfer_map}
+    Let $\E_A(\rho) = \rho$ and let $S$ be an invertible matrix with
+    $S S^\dagger = \rho$.
+    Define gauged operators $A'^i = S^{-1} A^i S$.
+    Then $\sum_i A'^i (A'^i)^\dagger = \Id$, i.e.\ the gauged
+    Kraus map is unital.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:transfer_map}
+    $\sum_i (S^{-1} A^i S)(S^{-1} A^i S)^\dagger
+    = S^{-1} (\sum_i A^i \rho (A^i)^\dagger) (S^\dagger)^{-1}
+    = S^{-1} \rho (S^\dagger)^{-1}
+    = S^{-1} S S^\dagger (S^\dagger)^{-1} = \Id$.
+\end{proof}
+
+\begin{theorem}[Trace-preserving gauge]\label{thm:ds_gauge_tp}
+    \lean{gauged_tracePreserving}
+    \leanok
+    \uses{def:transfer_map}
+    Let $\sigma$ be a fixed point of the adjoint transfer map
+    $\E_A^\dagger(\sigma) = \sigma$, and let $S$ be invertible with
+    $S^\dagger S = \sigma$.
+    Define $A'^i = S A^i S^{-1}$.
+    Then $\sum_i (A'^i)^\dagger A'^i = \Id$, i.e.\ the gauged
+    Kraus map is trace-preserving.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:transfer_map}
+    $\sum_i (S A^i S^{-1})^\dagger (S A^i S^{-1})
+    = (S^\dagger)^{-1} (\sum_i (A^i)^\dagger \sigma A^i) S^{-1}
+    = (S^\dagger)^{-1} \sigma S^{-1}
+    = (S^\dagger)^{-1} S^\dagger S S^{-1} = \Id$.
+\end{proof}
