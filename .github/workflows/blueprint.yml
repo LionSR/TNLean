@@ -1,0 +1,49 @@
+name: Compile blueprint
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Cancel previous runs if a new commit is pushed
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build_project:
+    runs-on: ubuntu-latest
+    name: Build project
+    steps:
+      - name: Cleanup to free disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
+      - name: Checkout project
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Build project
+        uses: leanprover/lean-action@v1
+        with:
+          build: true
+
+      - name: Compile blueprint and documentation
+        uses: leanprover-community/docgen-action@main
+        with:
+          blueprint: true
+          homepage: home_page
