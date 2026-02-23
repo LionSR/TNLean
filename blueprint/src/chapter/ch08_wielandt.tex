@@ -101,6 +101,11 @@ The results follow~\cite{Sanz2010Quantum}.
     is invertible.
     Spanning and independence are standard spectral theory
     (available in Mathlib).
+    In~\cite{Sanz2010Quantum} and \cite[Lemma~6.3(b)]{Wolf2012Quantum},
+    the Jordan normal form is used directly.
+    Our formalization uses the Fitting decomposition
+    (generalized eigenspaces) as a substitute,
+    since the full Jordan normal form is not available in Mathlib.
 \end{proof}
 
 \section{Nonzero trace product}
@@ -124,7 +129,11 @@ The results follow~\cite{Sanz2010Quantum}.
     Stabilisation before reaching $\MN{D}$ contradicts normality
     (which requires $S_{L_0} = \MN{D}$ for some $L_0$,
     hence $T_{L_0} = \MN{D}$).
-    This is the proof of \cite[Lemma~1]{Sanz2010Quantum}.
+    The proof follows \cite[Lemma~1]{Sanz2010Quantum}
+    and \cite[Lemma~6.2]{Wolf2012Quantum}.
+    Those references obtain the sharper bound $D^2 - d + 1$
+    by starting the dimension count at $\dim S_1 = d$;
+    our formalization uses the coarser bound $D^2$.
 \end{proof}
 
 \begin{theorem}[Nonzero trace product]\label{thm:nonzero_trace_word}
@@ -211,6 +220,12 @@ The results follow~\cite{Sanz2010Quantum}.
     (Theorem~\ref{thm:fitting_decomp})
     shows that the nonzero generalized eigenspace is nontrivial,
     yielding the eigenvector.
+    In \cite{Sanz2010Quantum} and \cite{Wolf2012Quantum},
+    this step uses the Jordan normal form directly;
+    our formalization uses the Fitting decomposition instead,
+    as the full Jordan normal form is not available in Mathlib.
+    This suffices because we only need the existence of an
+    eigenvector, not the full Jordan block structure.
 \end{proof}
 
 \section{Assembly}
