@@ -1,0 +1,176 @@
+\chapter{The Single-Block Fundamental Theorem}\label{ch:single}
+
+This chapter proves that if an injective MPS tensor~$A$ generates
+the same MPV family as another tensor~$B$ (of the same bond dimension),
+then $A$ and $B$ are gauge equivalent.
+
+\section{Trace pairing}
+
+\begin{lemma}[Nondegeneracy of the trace pairing]\label{lem:trace_nondeg}
+    \lean{Matrix.trace_mul_right_eq_zero_iff}
+    \leanok
+    For $M \in \MN{D}$,
+    $\tr(M N) = 0$ for all $N \in \MN{D}$
+    if and only if $M = 0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Testing against the matrix units $E_{ji}$ gives
+    $\tr(E_{ji} M) = M_{ij}$.
+\end{proof}
+
+\begin{lemma}[SameMPV implies trace agreement]\label{lem:same_mpv_trace}
+    \lean{MPSTensor.SameMPV.trace_evalWord}
+    \leanok
+    \uses{def:same_mpv, def:mps_tensor}
+    If $A$ and $B$ generate the same MPV family, then
+    $\tr(A^{i_1} \cdots A^{i_L}) = \tr(B^{i_1} \cdots B^{i_L})$
+    for every word $(i_1, \ldots, i_L)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:same_mpv, def:mpv}
+    Immediate from the definition of same MPV at system size~$L$.
+\end{proof}
+
+\begin{definition}[Trace pairing map]\label{def:trace_pairing_map}
+    \lean{MPSTensor.traceMulRightPi}
+    \leanok
+    \uses{def:mps_tensor}
+    For an MPS tensor~$A$, define the linear map
+    $\Phi_A : \MN{D} \to \C^d$ by
+    \[
+        \Phi_A(M)_i =  \tr(M \cdot A^i).
+    \]
+\end{definition}
+
+\begin{lemma}[Injectivity of the trace pairing map]\label{lem:trace_pairing_injective}
+    \lean{MPSTensor.traceMulRightPi_ker_eq_bot}
+    \leanok
+    \uses{def:trace_pairing_map, def:injective, lem:trace_nondeg}
+    If $A$ is injective, then $\ker \Phi_A = \{0\}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:injective, lem:trace_nondeg, def:trace_pairing_map}
+    If $\Phi_A(M) = 0$, then $\tr(M \cdot A^i) = 0$ for all~$i$.
+    Since the $\{A^i\}$ span $\MN{D}$, this gives $\tr(M N) = 0$
+    for all~$N$, so $M = 0$ by nondegeneracy of the trace pairing.
+\end{proof}
+
+\section{Linear extension}
+
+\begin{theorem}[Existence and uniqueness of the linear extension]\label{thm:linear_ext}
+    \lean{MPSTensor.linearExtension_exists_unique}
+    \leanok
+    \uses{def:injective, def:same_mpv, lem:trace_pairing_injective}
+    If $A$ is injective and $A$, $B$ generate the same MPV family,
+    then there exists a unique linear map
+    $T : \MN{D} \to \MN{D}$ satisfying $T(A^i) = B^i$ for all~$i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:trace_pairing_injective, lem:same_mpv_trace}
+    The trace pairing maps satisfy
+    $\Phi_A \circ \mathrm{lc}_A = \Phi_B \circ \mathrm{lc}_B$
+    (where $\mathrm{lc}_A$ denotes linear combination
+    with the $A^i$), which follows from the length-2
+    trace identity.
+    Since $\mathrm{lc}_A$ is surjective (by injectivity of~$A$),
+    we get $\mathrm{range}(\Phi_A) \subseteq \mathrm{range}(\Phi_B)$.
+    Injectivity of $\Phi_A$ forces $\Phi_B$ to also be
+    injective (by a rank argument).
+    A left inverse of $\Phi_B$ composed with $\Phi_A$ gives the
+    desired~$T$.
+    Uniqueness follows because the $\{A^i\}$ span $\MN{D}$.
+\end{proof}
+
+\begin{theorem}[Multiplicativity of the linear extension]\label{thm:linear_ext_mul}
+    \lean{MPSTensor.linearExtension_mul}
+    \leanok
+    \uses{thm:linear_ext, def:injective, def:same_mpv}
+    The linear extension $T$ from Theorem~\ref{thm:linear_ext}
+    is multiplicative: $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:linear_ext, lem:trace_pairing_injective, lem:same_mpv_trace}
+    First, $\Phi_B \circ T = \Phi_A$
+    (verified on the spanning set $\{A^i\}$ using the length-2 trace identity).
+    Using the length-3 trace identity and injectivity of $\Phi_B$,
+    one shows $T(A^i A^j) = B^i B^j$ for all $i, j$.
+    The full multiplicativity follows by extending bilinearly
+    using the spanning property of $\{A^i\}$.
+\end{proof}
+
+\section{Simplicity and Skolem--Noether}
+
+\begin{theorem}[Simplicity of $\MN{D}$]\label{thm:simplicity}
+    \lean{MPSTensor.linear_mul_endomorphism_bijective}
+    \leanok
+    A nonzero multiplicative $\C$-linear endomorphism of $\MN{D}$
+    is bijective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The kernel of a multiplicative linear map is a two-sided ideal.
+    Since $\MN{D}$ is a simple ring, the kernel is either $\{0\}$
+    or $\MN{D}$.
+    The latter would force the map to be zero, contradicting
+    the hypothesis.
+    Hence the map is injective, and surjectivity follows from
+    finite-dimensionality.
+\end{proof}
+
+\begin{theorem}[Skolem--Noether]\label{thm:skolem_noether}
+    \lean{MPSTensor.skolemNoether_matrix}
+    \leanok
+    Every $\C$-algebra automorphism of $\MN{D}$ is inner:
+    for any $f \in \mathrm{Aut}_{\C\text{-alg}}(\MN{D})$,
+    there exists $X \in \GL_D(\C)$ such that
+    $f(M) = X M X^{-1}$ for all $M$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Via the canonical identification
+    $\MN{D} \cong \mathrm{End}_{\C}(\C^D)$,
+    the automorphism induces an automorphism of
+    $\mathrm{End}_{\C}(\C^D)$, which by the Mathlib theorem
+    on endomorphism algebras is conjugation by an
+    invertible linear map.
+\end{proof}
+
+\section{Assembly}
+
+\begin{theorem}[Single-block Fundamental Theorem]\label{thm:ft_single}
+    \lean{MPSTensor.fundamentalTheorem_singleBlock}
+    \leanok
+    \uses{def:injective, def:same_mpv, def:gauge_equiv}
+    Let $A$ be an injective MPS tensor and let $B$ be an MPS tensor
+    of the same bond dimension.
+    If $A$ and $B$ generate the same MPV family, then they are gauge
+    equivalent: there exists $X \in \GL_D(\C)$ such that
+    $B^i = X A^i X^{-1}$ for all~$i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity, thm:skolem_noether}
+    By Theorem~\ref{thm:linear_ext}, there is a unique linear
+    $T$ with $T(A^i) = B^i$.
+    By Theorem~\ref{thm:linear_ext_mul}, $T$ is multiplicative.
+    By Theorem~\ref{thm:simplicity}, $T$ is bijective
+    (it is nonzero since trace does not vanish on an
+    injective tensor).
+    Promoting $T$ to an algebra automorphism,
+    Theorem~\ref{thm:skolem_noether} gives an invertible $X$
+    with $T(M) = X M X^{-1}$,
+    and evaluating at $M = A^i$ yields $B^i = X A^i X^{-1}$.
+\end{proof}
