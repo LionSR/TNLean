@@ -161,7 +161,7 @@ boundary conditions (PBC).
     \begin{enumerate}
         \item a number of blocks $r \ge 1$,
         \item bond dimensions $D_1, \ldots, D_r$,
-        \item injective (normal) tensors
+        \item injective tensors
               $\{A_k^i\}_{i=0}^{d-1}$ with $A_k^i \in \MN{D_k}$
               for each block $k \in \{1,\ldots,r\}$,
         \item scaling factors $\mu_1, \ldots, \mu_r \in \C$.
@@ -173,6 +173,15 @@ boundary conditions (PBC).
     This decomposition is defined in \cite{PerezGarcia2007Matrix}
     and reviewed in~\cite{Cirac2021Matrix}.
 \end{definition}
+
+\begin{remark}\label{rem:cf_injective_vs_normal}
+    The formalization requires each block tensor to be injective
+    (Definition~\ref{def:injective}).
+    More generally, canonical forms in the literature
+    \cite{Cirac2021Matrix} allow normal tensors
+    (Definition~\ref{def:normal}), which become injective after
+    sufficient blocking (Definition~\ref{def:blocked_tensor}).
+\end{remark}
 
 \begin{definition}[Block-diagonal MPS tensor]\label{def:block_diagonal_tensor}
     \lean{MPSTensor.toTensorFromBlocks}
