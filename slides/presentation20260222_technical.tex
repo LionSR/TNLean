@@ -199,13 +199,12 @@
     \begin{columns}
         \column{0.6\textwidth}
         \begin{lstlisting}[language=Lean]
-structure MPSTensor (d D : ℕ) where
-  data : Fin d → Matrix (Fin D) (Fin D) ℂ
+abbrev MPSTensor (d D : ℕ) :=
+  Fin d → Matrix (Fin D) (Fin D) ℂ
 
-def MPSTensor.mpv {d D : ℕ} (A : MPSTensor d D) (n : ℕ) :
-  TensorPower ℂ d n := 
-  -- Definition via trace of products
-  -- ...
+def mpv (A : MPSTensor d D) {N : ℕ}
+    (σ : Fin N → Fin d) : ℂ :=
+  coeff A (List.ofFn σ)
         \end{lstlisting}
         
         \vspace{0.5em}
@@ -224,15 +223,14 @@ def MPSTensor.mpv {d D : ℕ} (A : MPSTensor d D) (n : ℕ) :
 \begin{frame}[fragile]{Definitions in Lean: Gauge Equivalence}
     \begin{lstlisting}[language=Lean]
 def GaugeEquiv (A B : MPSTensor d D) : Prop :=
-  ∃ (X : Matrix (Fin D) (Fin D) ℂ), 
-    X ∈ GL (Fin D) ℂ /\
-    ∀ i, B[i] = X * A[i] * X⁻¹
+  ∃ X : GL (Fin D) ℂ,
+    ∀ i : Fin d, B i = X * A i * X⁻¹
     \end{lstlisting}
 
     \vspace{1em}
     This is strict gauge equivalence. The theorem allows for:
     \begin{itemize}
-        \item Block permutations (handled via \texttt{AlgEquiv})
+        \item Block permutations (handled via \texttt{Fin rA}~$\simeq$~\texttt{Fin rB})
         \item Phasing ($e^{i\theta} A$)
     \end{itemize}
 \end{frame}
@@ -281,8 +279,8 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
     \texttt{MPSLean.MPS.CanonicalFormReduction}
     
     \begin{itemize}
-        \item Uses \texttt{Mathlib.RingTheory.SimpleModule}
-        \item Decomposes module into composition series.
+        \item Uses orthogonal projection theory.
+        \item Iteratively splits via invariant projections (strong induction on bond dimension).
         \item \textbf{Result:} We only need to prove the theorem for Block Diagonal MPS where each block is Irreducible.
     \end{itemize}
 \end{frame}
@@ -295,8 +293,8 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
     \end{itemize}
 
     \begin{block}{Theorem: Spectral Gap}
-        If $\mathcal{E}$ is primitive, $\exists C, \gamma < 1$ such that:
-        \[ \|\rho^{-N}\mathcal{E}^N - \mathcal{P}\| \le C \gamma^N \]
+        If $\mathcal{E}$ is primitive, the normalised power $\rho^{-N}\mathcal{E}^N$ converges
+        to the fixed-point projector $\mathcal{P}$ (spectral radius of the remainder $< 1$).
     \end{block}
 
     \textbf{Lean:} `MPSLean.Spectral.SpectralGap`
@@ -411,14 +409,16 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
         Proving uniqueness of the spectral radius often requires monotonicity.
     \end{alertblock}
 
-    We proved a strict anti-monotonicity property for the spectral radius of perturbed CP maps.
-    
+    We require strict ordering of the block weights by modulus.
+    This is captured as a field of the \texttt{IsCanonicalForm} structure:
+
     \begin{lstlisting}[language=Lean]
-lemma mu_strict_anti (f : PosMap) (h : IsPrimitive f) :
-  StrictAnti (fun t => spectralRadius (f + t * perturbation))
+-- Field of `IsCanonicalForm`:
+mu_strict_anti :
+  StrictAnti (fun k : Fin r => (*@$\|\mu(k)\|$@*))
     \end{lstlisting}
 
-    This was critical for handling the ``overlap=1'' condition without assuming the blocks were already normalized.
+    This was critical for handling the ``overlap=1'' condition and ensuring distinct blocks produce orthogonal contributions.
 \end{frame}
 
 \begin{frame}{The ``Overlap $\to$ 1'' Assumption}
@@ -453,11 +453,11 @@ lemma mu_strict_anti (f : PosMap) (h : IsPrimitive f) :
         \begin{itemize}
             \item[$\bullet$] MPSLean
             \begin{itemize}
-                \item[$\circ$] Algebra (12 files)
+                \item[$\circ$] Algebra (8 files)
                 \item[$\circ$] Channel (8 files)
-                \item[$\circ$] QPF (5 files)
-                \item[$\circ$] Spectral (10 files)
-                \item[$\circ$] MPS (15 files)
+                \item[$\circ$] QPF (3 files)
+                \item[$\circ$] Spectral (8 files)
+                \item[$\circ$] MPS (22 files)
                 \item[$\circ$] PiAlgebra (5 files)
                 \item[$\textit{Total}$] \textit{58 files}
             \end{itemize}
@@ -495,12 +495,8 @@ lemma mu_strict_anti (f : PosMap) (h : IsPrimitive f) :
                 ymin=0
             ]
                 \addplot[fill=leanblue] coordinates {
-                    (Algebra,2500)
-                    (Channel,1800)
-                    (QPF,1200)
-                    (Spectral,3100)
-                    (MPS,4500)
-                    (PiAlgebra,1600)
+                    (Algebra,1391) (Channel,1812) (QPF,745)
+                    (Spectral,2938) (MPS,5758) (PiAlgebra,1951)
                 };
             \end{axis}
         \end{tikzpicture}
@@ -530,7 +526,10 @@ lemma mu_strict_anti (f : PosMap) (h : IsPrimitive f) :
     \end{tikzpicture}
     \end{center}
     
-    Each layer abstracts away the complexity of the previous one.
+    \emph{Note: graph is simplified.}
+    Actual cross-layer dependencies exist: \texttt{QPF} $\leftrightarrow$ \texttt{MPS},
+    \texttt{Spectral} $\leftrightarrow$ \texttt{MPS}, and \texttt{PiAlgebra} is used
+    throughout multiple layers.
     \texttt{PiAlgebra} handles the ``direct sum'' logic generic to any algebra, reused for MPS blocks.
 \end{frame}
 
@@ -559,17 +558,14 @@ lemma mu_strict_anti (f : PosMap) (h : IsPrimitive f) :
 
 \begin{frame}[fragile]{Single Block FT (Lean)}
     \begin{lstlisting}[language=Lean]
-theorem fundamental_theorem_primitive_proportional
+theorem gaugePhaseEquiv_of_proportionalMPV(*@$_2$@*)_of_overlap_tendsto_one
     (A B : MPSTensor d D)
-    [IsPrimitive A] [IsPrimitive B]
-    (h_ratio : ∃ (c : ℕ → ℂ), ∀ n, A.mpv n = c n * B.mpv n) :
-    GaugeEquivPhase A B :=
-by
-  -- Proof: 
-  -- 1. Construct mixed transfer E_AB
-  -- 2. Show rho(E_AB)^2 = rho(A)rho(B) using h_ratio
-  -- 3. Extract similarity matrix X
-  -- ...
+    (hA : IsInjective A) (hB : IsInjective B)
+    (hA_norm : (*@$\sum$@*) i, (A i)(*@${}^\dagger$@*) * A i = 1) -- DS gauge
+    (hA_self : Tendsto (fun N => mpvOverlap A A N) atTop (nhds 1))
+    (hB_self : Tendsto (fun N => mpvOverlap B B N) atTop (nhds 1))
+    (hProp : ProportionalMPV(*@$_2$@*) A B) :
+    GaugePhaseEquiv A B
     \end{lstlisting}
     
     This is the ``atomic'' unit of the proof.
@@ -577,34 +573,43 @@ by
 
 \begin{frame}[fragile]{The Main Result (Multi-Block)}
     \begin{lstlisting}[language=Lean]
-theorem fundamental_theorem_of_mps (A B : MPSTensor d D) 
-  (h_canon_A : InCanonicalForm A)
-  (h_canon_B : InCanonicalForm B)
-  (h_eq : ∀ n, A.mpv n = B.mpv n) :
-  GaugeEquivPermutationPhase A B :=
-by
-  -- 1. Decompose A, B into BNT (Basis Normal Tensor)
-  -- 2. Use linear independence to match blocks
-  -- 3. Apply single block theorem to pairs
+theorem fundamentalTheorem_equalMPV_CFBNT
+    {r : ℕ} {dim : Fin r → ℕ} {(*@$\mu$@*) : Fin r → ℂ}
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hA : IsCanonicalFormBNT (*@$\mu$@*) A)
+    (hB : IsCanonicalFormBNT (*@$\mu$@*) B)
+    (hSame : SameMPV(*@$_2$@*)
+        (toTensorFromBlocks (*@$\mu$@*) A)
+        (toTensorFromBlocks (*@$\mu$@*) B)) :
+    (∀ k, GaugeEquiv (A k) (B k)) (*@$\land$@*)
+    GaugeEquiv (toTensorFromBlocks (*@$\mu$@*) A)
+               (toTensorFromBlocks (*@$\mu$@*) B)
     \end{lstlisting}
     
-    Here `GaugeEquivPermutationPhase` allows:
-    1. Permuting the blocks of the direct sum.
-    2. Applying a global phase to each block.
-    3. Applying a GL similarity transform to each block.
+    Both tensors must be in \texttt{IsCanonicalFormBNT} (BNT-separated canonical form);
+    the conclusion is per-block and global \texttt{GaugeEquiv}.
 \end{frame}
 
 \begin{frame}[fragile]{The Complete Theorem}
     Finally, handling \emph{any} tensor (not just canonical):
 
     \begin{lstlisting}[language=Lean]
-theorem fundamental_theorem_complete (A B : MPSTensor d D)
-  (h_eq : ∀ n, A.mpv n = B.mpv n) :
-  EquivalentUnderReduction A B :=
+theorem fundamentalTheorem_multiBlock_fromSameMPV(*@$_2$@*)
+    ((*@$\mu$@*) : Fin r → ℂ)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hA : ∀ k, IsInjective (A k))
+    (hSame : SameMPV(*@$_2$@*)
+        (toTensorFromBlocks (*@$\mu$@*) A)
+        (toTensorFromBlocks (*@$\mu$@*) B))
+    (hSep : ∀ k, SameMPV (A k) (B k)) :
+    (∀ k, GaugeEquiv (A k) (B k)) (*@$\land$@*)
+    GaugeEquiv (toTensorFromBlocks (*@$\mu$@*) A)
+               (toTensorFromBlocks (*@$\mu$@*) B) (*@$\land$@*)
+    ∃ (σ : Fin r (*@$\simeq$@*) Fin r), ...
     \end{lstlisting}
 
-    "EquivalentUnderReduction" means:
-    If you reduce $A$ to its canonical form $A'$, and $B$ to $B'$, then $A'$ and $B'$ are gauge equivalent.
+    Gives per-block and global \texttt{GaugeEquiv} plus an explicit block-permutation
+    decomposition of the Pi-algebra automorphism.
     
     This matches the physical intuition:
     \emph{"If two MPS generate the same state, their physical (minimal) degrees of freedom are identical."}
