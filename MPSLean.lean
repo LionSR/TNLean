@@ -12,6 +12,7 @@ import MPSLean.Channel.CesaroFixedPoint
 import MPSLean.Channel.Irreducible
 import MPSLean.Channel.Schwarz
 import MPSLean.Channel.Primitive
+import MPSLean.Channel.PeripheralSpectrum
 
 -- Layer 2: Spectral theory (QPF + spectral gap)
 import MPSLean.QPF.PosDef
@@ -68,6 +69,7 @@ import MPSLean.Wielandt.FittingDecomposition
 import MPSLean.Wielandt.EigenvectorSpreading
 import MPSLean.Wielandt.RankOneProducts
 import MPSLean.Wielandt.WielandtBound
+import MPSLean.Wielandt.PrimitivityNormal
 
 -- NOTE: MPSLean.PositiveMapSpectral, MPSLean.TransferSpectral, and
 -- MPSLean.PiAlgebraExtension are backwards-compatible re-export hubs kept for
