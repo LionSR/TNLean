@@ -49,6 +49,7 @@ import MPSLean.MPS.BNT
 import MPSLean.MPS.BNTPermutationSimple
 import MPSLean.MPS.BNTPermutationThm44
 import MPSLean.MPS.BNTConstruction
+import MPSLean.MPS.PrimitivityBridge
 import MPSLean.MPS.FundamentalTheoremFull
 import MPSLean.MPS.CoefficientConvergence
 import MPSLean.MPS.FundamentalTheoremMulti
