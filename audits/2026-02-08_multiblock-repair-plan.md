@@ -14,9 +14,9 @@ _Date_: 2026-02-08
 
 ## 0. What I actually found in this repository
 
-In the current snapshot, there is **no** file `MPSLean/MPS/MultiBlock.lean`.
+In the current snapshot, there is **no** file `TNLean/MPS/MultiBlock.lean`.
 
-What *is* present is `MPSLean/MPS/CanonicalForm.lean`, which already contains the core multi-block bookkeeping:
+What *is* present is `TNLean/MPS/CanonicalForm.lean`, which already contains the core multi-block bookkeeping:
 
 - `MPSTensor.CanonicalForm` (block count, block dimensions, block tensors, scalars `μ`, injectivity hypotheses)
 - `CanonicalForm.totalDim`

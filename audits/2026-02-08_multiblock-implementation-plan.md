@@ -3,7 +3,7 @@ title: "Multi-block implementation plan: toward the full Fundamental Theorem"
 date: 2026-02-08
 author: AI research assistant (search agent)
 purpose: >
-  Research and implementation plan for extending MPSLean from the
+  Research and implementation plan for extending TNLean from the
   single-block injective Fundamental Theorem to the multi-block
   canonical-form version (arXiv:2011.12127, Thm 4.1).  Covers phased
   execution plan, Vandermonde separation strategy, and effort estimates.
@@ -13,7 +13,7 @@ purpose: >
 
 _Date_: 2026-02-08
 
-This note is a “research + implementation plan” for extending **MPSLean** from the current
+This note is a “research + implementation plan” for extending **TNLean** from the current
 **single-block (injective) Fundamental Theorem** to the **multi-block / canonical-form**
 version presented in the tensor-network review contained in this repo:
 
@@ -58,21 +58,21 @@ All references below are to **`2011.12127/TN-Review-main.tex`**.
 
 ---
 
-## 2. Where MPSLean currently is
+## 2. Where TNLean currently is
 
 ### 2.1 Already done (single-block)
-- `MPSLean/MPS/FundamentalTheorem.lean` proves the **injective/single-block** statement:
+- `TNLean/MPS/FundamentalTheorem.lean` proves the **injective/single-block** statement:
   `IsInjective A ∧ SameMPV A B → GaugeEquiv A B`.
 
 ### 2.2 Already scaffolded (multi-block data)
-- `MPSLean/MPS/CanonicalForm.lean` defines
+- `TNLean/MPS/CanonicalForm.lean` defines
   - `CanonicalForm` with blocks `blockTensor k`, scalars `μ k`, injectivity per block, etc.
   - `CanonicalForm.toTensor` builds the block-diagonal tensor using `Matrix.blockDiagonal'`
     and a `Matrix.reindex` along `finSigmaFinEquiv`.
 
 ### 2.3 Important mismatch with the paper
 The review’s “normal tensor” is defined via **primitive CP maps** (transfer operators).  
-MPSLean currently defines “normal” algebraically as “injective after blocking”:
+TNLean currently defines “normal” algebraically as “injective after blocking”:
 
 - `IsNormal A := ∃ N, IsNBlkInjective A N` (in `Injective.lean`).
 
@@ -262,12 +262,12 @@ A practical compromise is:
 
 ---
 
-## 10. Concrete file plan for MPSLean
+## 10. Concrete file plan for TNLean
 
-1. **Defs upgrade** (`MPSLean/MPS/Defs.lean`):
+1. **Defs upgrade** (`TNLean/MPS/Defs.lean`):
    - add `SameMPV₂`, `ProportionalMPV₂`, and `GaugeEquiv₂`.
 
-2. **Canonical form computations** (`MPSLean/MPS/CanonicalForm.lean` + new `MultiBlock.lean`):
+2. **Canonical form computations** (`TNLean/MPS/CanonicalForm.lean` + new `MultiBlock.lean`):
    - prove `mpv_toTensor_eq_sum`.
    - prove permutation invariance lemmas up to reindex/gauge.
 

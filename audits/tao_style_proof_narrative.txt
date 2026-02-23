@@ -1,4 +1,4 @@
-Fundamental Theorem of Matrix Product States (MPS) in MPSLean
+Fundamental Theorem of Matrix Product States (MPS) in TNLean
 Scientist-facing proof narrative (with Lean coverage notes)
 Date: 2026-02-18
 
@@ -10,12 +10,12 @@ Primary physics references consulted (local copies):
   • M. M. Wolf lecture notes (channel spectral theory), ch06_spectral_properties.pdf.
 
 Lean sources consulted (local files):
-  • MPSLean/MPS/Defs.lean, Transfer.lean
-  • MPSLean/MPS/LinearExtension.lean, FundamentalTheorem.lean
-  • MPSLean/MPS/FundamentalTheoremMulti.lean, MPSLean/PiAlgebra/Construction.lean,
-    MPSLean/PiAlgebra/FundamentalTheoremComplete.lean
-  • MPSLean/PiAlgebra/BlockSeparation.lean, BlockSeparationProof.lean,
-    MPSLean/PiAlgebra/CanonicalFormSep.lean
+  • TNLean/MPS/Defs.lean, Transfer.lean
+  • TNLean/MPS/LinearExtension.lean, FundamentalTheorem.lean
+  • TNLean/MPS/FundamentalTheoremMulti.lean, TNLean/PiAlgebra/Construction.lean,
+    TNLean/PiAlgebra/FundamentalTheoremComplete.lean
+  • TNLean/PiAlgebra/BlockSeparation.lean, BlockSeparationProof.lean,
+    TNLean/PiAlgebra/CanonicalFormSep.lean
 
 
 ============================================================
@@ -119,7 +119,7 @@ This is the periodic, translation-invariant form of the “Fundamental Theorem f
 
 Lean theorem:
   MPSTensor.fundamentalTheorem_singleBlock
-  (MPSLean/MPS/FundamentalTheorem.lean)
+  (TNLean/MPS/FundamentalTheorem.lean)
 
 Status in Lean: COMPLETE (no sorry).
 
@@ -212,9 +212,9 @@ so the full block-diagonal tensors are gauge equivalent.
 Lean theorems:
   • fundamentalTheorem_multiBlock_blocks
   • fundamentalTheorem_multiBlock_global
-  (MPSLean/MPS/FundamentalTheoremMulti.lean)
+  (TNLean/MPS/FundamentalTheoremMulti.lean)
   and packaged as fundamentalTheorem_multiBlock_full
-  (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean).
+  (TNLean/PiAlgebra/FundamentalTheoremComplete.lean).
 
 Status in Lean: COMPLETE.
 
@@ -235,9 +235,9 @@ and gauge”.
 
 Lean:
   • piAlgEquiv  and  piAlgEquiv_decomposition
-    (MPSLean/PiAlgebra/Construction.lean)
+    (TNLean/PiAlgebra/Construction.lean)
   used by fundamentalTheorem_multiBlock_decomposition
-    (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean).
+    (TNLean/PiAlgebra/FundamentalTheoremComplete.lean).
 
 Status in Lean: COMPLETE.
 
@@ -277,7 +277,7 @@ so the usual finite Vandermonde inversion does not apply directly. Worse: even a
 algebraic statement it is false.
 
 Concrete counterexample (“block swap”; documented in
-MPSLean/PiAlgebra/BlockSeparationProof.lean, lines ~125–155):
+TNLean/PiAlgebra/BlockSeparationProof.lean, lines ~125–155):
   • r=2, dim=[1,1] (so blocks are scalars), μ=(1,2)
   • choose scalar blocks A₀(i),A₁(i)
   • define B by swapping blocks with compensating rescaling:
@@ -355,7 +355,7 @@ Lean’s intended proof skeleton (CanonicalFormSep.lean, docstring around block_
 Lean status:
   • The *statement* of block separation under canonical hypotheses is present as
       block_separation_core
-    in MPSLean/PiAlgebra/CanonicalFormSep.lean.
+    in TNLean/PiAlgebra/CanonicalFormSep.lean.
   • block_separation_core is fully proved for r≤1, but for r≥2 the main argument is currently
     a sorry (this is the only remaining sorry in that file).
 

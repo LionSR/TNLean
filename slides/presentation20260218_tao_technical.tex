@@ -310,31 +310,31 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
                 \item[\textcolor{leangreen}{\checkmark}]
                       Off-diagonal drop:
                       \texttt{sameMPV\_diagPart\_of\_lowerZero}\\
-                      {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/Algebra/ProjectionTriangularTrace.lean}}}
+                      {\scriptsize\textcolor{dimwhite}{\texttt{TNLean/Algebra/ProjectionTriangularTrace.lean}}}
                 \item[\textcolor{leangreen}{\checkmark}]
                       Inv.-proj.\ $\Rightarrow$ 2-block:
                       \texttt{exists\_twoBlock\_decomp\_of\_lowerZero}\\
-                      {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/MPS/InvariantSubspaceDecomp.lean}}}
+                      {\scriptsize\textcolor{dimwhite}{\texttt{TNLean/MPS/InvariantSubspaceDecomp.lean}}}
                 \item[\textcolor{leangreen}{\checkmark}]
                       Fixed point $\to$ invariant projection:
                       \texttt{lowerZero\_of\_posSemidef\_fixedPoint}\\
-                      {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/MPS/FixedPointInvariantProjection.lean}}}
-                % SOURCE: MPSLean/MPS/CanonicalFormReduction.lean
+                      {\scriptsize\textcolor{dimwhite}{\texttt{TNLean/MPS/FixedPointInvariantProjection.lean}}}
+                % SOURCE: TNLean/MPS/CanonicalFormReduction.lean
                 %         theorem MPSTensor.exists_irreducible_blockDecomp
                 %         matches 1606.00608 §2.3 iteration step + 1708.00029 Prop. thm:irr
                 \item[\textcolor{leangreen}{\checkmark}]
                       Iteration to irreducible blocks:
                       \texttt{exists\_irreducible\_blockDecomp}\\
-                      {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/MPS/CanonicalFormReduction.lean}}}%
+                      {\scriptsize\textcolor{dimwhite}{\texttt{TNLean/MPS/CanonicalFormReduction.lean}}}%
                       ~\cite{Cirac2017Annals,Cirac2017Irreducible}
-                % SOURCE: MPSLean/MPS/IrreducibleFormII.lean
+                % SOURCE: TNLean/MPS/IrreducibleFormII.lean
                 %         theorem MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
                 %         TP + irreducible tensor => exists unitary U, diagonal PD Lambda fixed point
                 %         Ref: Cirac2017Annals §2.3 (CFII) + Cirac2017Irreducible Prop. 2
                 \item[\textcolor{leangreen}{\checkmark}]
                       CFII diagonal fixed-point gauge (TP irreducible blocks):
                       \texttt{exists\_unitary\_diag\_posDef\_fixedPoint\_of\_TP\_of\_isIrreducibleTensor}\\
-                      {\scriptsize\textcolor{dimwhite}{\texttt{MPSLean/MPS/IrreducibleFormII.lean}}}%
+                      {\scriptsize\textcolor{dimwhite}{\texttt{TNLean/MPS/IrreducibleFormII.lean}}}%
                       ~\cite{Cirac2017Annals,Cirac2017Irreducible}
                 \item[\textcolor{amber}{\textbullet}]
                       \textbf{Open:} PF/$\mu$ normalization;
@@ -470,9 +470,9 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         \begin{block}{Lean: both verified $\checkmark$}
             {\scriptsize
             \texttt{MPSTensor.exists\_twoBlock\_decomp\_of\_lowerZero}\\
-            \textcolor{dimwhite}{\texttt{MPSLean/MPS/InvariantSubspaceDecomp.lean}}\\[0.3em]
+            \textcolor{dimwhite}{\texttt{TNLean/MPS/InvariantSubspaceDecomp.lean}}\\[0.3em]
             \texttt{MPSTensor.sameMPV\_diagPart\_of\_lowerZero}\\
-            \textcolor{dimwhite}{\texttt{MPSLean/Algebra/ProjectionTriangularTrace.lean}}
+            \textcolor{dimwhite}{\texttt{TNLean/Algebra/ProjectionTriangularTrace.lean}}
             }
         \end{block}
     \end{columns}
@@ -540,12 +540,12 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
               (\texttt{InvariantSubspaceDecomp.lean})\\
             \textcolor{leangreen}{\checkmark}~\texttt{lowerZero\_of\_posSemidef\_fixedPoint}
               (\texttt{FixedPointInvariantProjection.lean})\\[0.35em]
-            % SOURCE: MPSLean/MPS/CanonicalFormReduction.lean
+            % SOURCE: TNLean/MPS/CanonicalFormReduction.lean
             %         theorem MPSTensor.exists_irreducible_blockDecomp
             %         The iterative CF-splitting procedure is now formalized.
             \textcolor{leangreen}{\checkmark}~\texttt{exists\_irreducible\_blockDecomp}
               (\texttt{CanonicalFormReduction.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.2em]
-            % SOURCE: MPSLean/MPS/IrreducibleFormII.lean
+            % SOURCE: TNLean/MPS/IrreducibleFormII.lean
             %         theorem MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
             %         CFII diagonal fixed-point gauge for TP irreducible blocks.
             \textcolor{leangreen}{\checkmark}~\texttt{exists\_unitary\_diag\_posDef\_fixedPoint\_of\_TP\_of\_isIrreducibleTensor}
@@ -614,7 +614,7 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         and one obtains per-block gauge equivalence plus a block permutation.
     \end{block}
 
-    % SOURCE: MPSLean/MPS/FundamentalTheoremProportional.lean
+    % SOURCE: TNLean/MPS/FundamentalTheoremProportional.lean
     %         theorem MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
     %         single-block primitive/proportional lemma (overlap assumed, not derived)
     \begin{block}{Lean status (new\,$^{\ddagger}$; BNT permutation\,$^{\S}$)}
@@ -622,14 +622,14 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         \textcolor{leangreen}{\checkmark}~\textbf{Single-block primitive/proportional lemma}
           now proved in Lean:\\[0.05em]
         \quad\texttt{MPSTensor.gaugePhaseEquiv\_of\_proportionalMPV2\_of\_overlap\_tendsto\_one}\\
-        \quad\textcolor{dimwhite}{\texttt{MPSLean/MPS/FundamentalTheoremProportional.lean}}\\[0.2em]
-        % SOURCE: MPSLean/MPS/BNTPermutationSimple.lean
+        \quad\textcolor{dimwhite}{\texttt{TNLean/MPS/FundamentalTheoremProportional.lean}}\\[0.2em]
+        % SOURCE: TNLean/MPS/BNTPermutationSimple.lean
         %         theorem MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
         \textcolor{leangreen}{\checkmark}~\textbf{BNT permutation rigidity}
           (span-equality formulation; Thm~4.4 bridge):\\[0.05em]
         \quad\texttt{exists\_perm\_dimEq\_gaugePhaseEquiv\_of\_overlapOrtho}
           \textcolor{dimwhite}{(\texttt{BNTPermutationSimple.lean})}\\
-        % SOURCE: MPSLean/MPS/FundamentalTheoremThm44.lean
+        % SOURCE: TNLean/MPS/FundamentalTheoremThm44.lean
         %         theorem MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
         \quad\texttt{exists\_eq\_numBlocks\_and\_equiv\_gaugePhase\_of\_overlapOrtho}
           \textcolor{dimwhite}{(\texttt{FundamentalTheoremThm44.lean})}\\[0.2em]
@@ -688,7 +688,7 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
     \end{tabular}
 
     \vspace{0.3em}
-    \textcolor{dimwhite}{\footnotesize All definitions are sorry-free and available via \texttt{import MPSLean}.}
+    \textcolor{dimwhite}{\footnotesize All definitions are sorry-free and available via \texttt{import TNLean}.}
 \end{frame}
 
 \begin{frame}{Theorems: literature results formalized in Lean}
@@ -721,7 +721,7 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
         Block separation (canonical form)~\cite{Cirac2017Annals,Cirac2021Matrix}
                          & \texttt{PiAlgebra/CanonicalFormSep} & \proved{}       \\
         \rowcolor{cardbg}
-        % SOURCE: MPSLean/MPS/BNTPermutationSimple.lean + MPSLean/MPS/FundamentalTheoremThm44.lean
+        % SOURCE: TNLean/MPS/BNTPermutationSimple.lean + TNLean/MPS/FundamentalTheoremThm44.lean
         BNT permutation rigidity (span-equality; Thm~4.4 bridge)~\cite{Cirac2021Matrix}
                          & \texttt{MPS/BNTPermutationSimple},
                            \texttt{MPS/FundamentalTheoremThm44}
@@ -733,7 +733,7 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
     \end{tabular}
 
     \vspace{0.3em}
-    \textcolor{dimwhite}{\footnotesize The stable entrypoint \texttt{import MPSLean} is sorry-free (48 files, 8{,}700+ lines).}
+    \textcolor{dimwhite}{\footnotesize The stable entrypoint \texttt{import TNLean} is sorry-free (48 files, 8{,}700+ lines).}
 \end{frame}
 
 %======================================================================
@@ -963,7 +963,7 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
     \end{block}
 
     \begin{block}{Lean status \textnormal{\scriptsize(new)}}
-        % SOURCE: MPSLean/MPS/IrreducibleFormII.lean
+        % SOURCE: TNLean/MPS/IrreducibleFormII.lean
         %         theorem MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
         %         TP + irreducible => exists unitary U, diagonal PD Lambda fixed point for conjugated tensor
         {\scriptsize
@@ -971,7 +971,7 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
         \texttt{exists\_unitary\_diag\_posDef\_fixedPoint\_of\_TP\_of\_isIrreducibleTensor}:\\
         \quad TP + irreducible tensor $\Rightarrow$ $\exists$ unitary $U$, diagonal PD $\Lambda$
         fixed point for the $U$-conjugated tensor.\\
-        {\textcolor{dimwhite}{\texttt{MPSLean/MPS/IrreducibleFormII.lean}}}~\cite{Cirac2017Annals,Cirac2017Irreducible}}
+        {\textcolor{dimwhite}{\texttt{TNLean/MPS/IrreducibleFormII.lean}}}~\cite{Cirac2017Annals,Cirac2017Irreducible}}
     \end{block}
 
     \textcolor{dimwhite}{\footnotesize In general one cannot impose both left- and right-canonical conditions simultaneously.}
@@ -1808,43 +1808,43 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
     {\footnotesize\textcolor{leangreen}{%
         $^*$\,Inv.-subspace substeps formalized~\cite{Cirac2017Annals,Perez-Garcia2007Matrix}:\\
         \textcolor{leangreen}{\checkmark}~\texttt{MPSTensor.sameMPV\_diagPart\_of\_lowerZero}
-          (\texttt{MPSLean/Algebra/ProjectionTriangularTrace.lean})\\
+          (\texttt{TNLean/Algebra/ProjectionTriangularTrace.lean})\\
         \textcolor{leangreen}{\checkmark}~\texttt{MPSTensor.exists\_twoBlock\_decomp\_of\_lowerZero}
-          (\texttt{MPSLean/MPS/InvariantSubspaceDecomp.lean})\\[0.15em]
+          (\texttt{TNLean/MPS/InvariantSubspaceDecomp.lean})\\[0.15em]
         \textcolor{leangreen}{\checkmark}~\texttt{MPSTensor.lowerZero\_of\_posSemidef\_fixedPoint}
-          (\texttt{MPSLean/MPS/FixedPointInvariantProjection.lean})\\[0.15em]
-        % SOURCE: MPSLean/MPS/CanonicalFormReduction.lean
+          (\texttt{TNLean/MPS/FixedPointInvariantProjection.lean})\\[0.15em]
+        % SOURCE: TNLean/MPS/CanonicalFormReduction.lean
         %         theorem MPSTensor.exists_irreducible_blockDecomp
         %         Ref: Cirac2017Annals §2.3 + Cirac2017Irreducible Prop. thm:irr
         \textcolor{leangreen}{\checkmark}~\texttt{MPSTensor.exists\_irreducible\_blockDecomp}
-          (\texttt{MPSLean/MPS/CanonicalFormReduction.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.15em]
-        % SOURCE: MPSLean/MPS/IrreducibleFormII.lean
+          (\texttt{TNLean/MPS/CanonicalFormReduction.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.15em]
+        % SOURCE: TNLean/MPS/IrreducibleFormII.lean
         %         theorem MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
         %         CFII: TP + irreducible tensor => exists unitary U, diagonal PD Lambda fixed point
         %         Ref: Cirac2017Annals §2.3 (CFII) + Cirac2017Irreducible Prop. 2
         \textcolor{leangreen}{\checkmark}~%
           $^{\dagger}$\,\texttt{MPSTensor.exists\_unitary\_diag\_posDef\_fixedPoint\_of\_TP\_of\_isIrreducibleTensor}\\
-          \quad(\texttt{MPSLean/MPS/IrreducibleFormII.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.15em]
-        % SOURCE: MPSLean/MPS/FundamentalTheoremProportional.lean
+          \quad(\texttt{TNLean/MPS/IrreducibleFormII.lean})~\cite{Cirac2017Annals,Cirac2017Irreducible}\\[0.15em]
+        % SOURCE: TNLean/MPS/FundamentalTheoremProportional.lean
         %         theorem MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
         %         single-block primitive/proportional branch; overlap_tendsto_one assumed
         \textcolor{leangreen}{\checkmark}~%
           $^{\ddagger}$\,\texttt{MPSTensor.gaugePhaseEquiv\_of\_proportionalMPV2\_of\_overlap\_tendsto\_one}\\
-          \quad(\texttt{MPSLean/MPS/FundamentalTheoremProportional.lean})~\cite{Cirac2021Matrix}\\[0.15em]
-        % SOURCE: MPSLean/MPS/BNTPermutationSimple.lean
+          \quad(\texttt{TNLean/MPS/FundamentalTheoremProportional.lean})~\cite{Cirac2021Matrix}\\[0.15em]
+        % SOURCE: TNLean/MPS/BNTPermutationSimple.lean
         %         theorem MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
         %         BNT permutation rigidity: span-equality formulation
         %         (overlap-ortho + span-equality hypotheses assumed)
         \textcolor{leangreen}{\checkmark}~%
           $^{\S}$\,\texttt{MPSTensor.exists\_perm\_dimEq\_gaugePhaseEquiv\_of\_overlapOrtho}\\
-          \quad(\texttt{MPSLean/MPS/BNTPermutationSimple.lean})~\cite{Cirac2021Matrix}\\[0.15em]
-        % SOURCE: MPSLean/MPS/FundamentalTheoremThm44.lean
+          \quad(\texttt{TNLean/MPS/BNTPermutationSimple.lean})~\cite{Cirac2021Matrix}\\[0.15em]
+        % SOURCE: TNLean/MPS/FundamentalTheoremThm44.lean
         %         theorem MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
         %         Generalizes BNT permutation to allow gA ≠ gB: proves gA = gB via
         %         finrank_span_eq_card + eventual LI + equal span, then delegates.
         \textcolor{leangreen}{\checkmark}~%
           \texttt{MPSTensor.exists\_eq\_numBlocks\_and\_equiv\_gaugePhase\_of\_overlapOrtho}\\
-          \quad(\texttt{MPSLean/MPS/FundamentalTheoremThm44.lean})~\cite{Cirac2021Matrix}\\[0.15em]
+          \quad(\texttt{TNLean/MPS/FundamentalTheoremThm44.lean})~\cite{Cirac2021Matrix}\\[0.15em]
         \textcolor{amber}{\textbullet}~\textbf{Next:} PF/$\mu$ normalization per block;
           Wielandt/periodicity later.
     }}
@@ -2020,7 +2020,7 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
     \begin{center}
         \textcolor{leangreen}{\footnotesize 48 files \quad|\quad 8{,}700+ lines \quad|\quad 0 sorry \quad|\quad 0 axioms}
         \\[0.2em]
-        \textcolor{dimwhite}{\footnotesize Thank you.\quad Code: \texttt{github.com/\ldots/MPSLean}}
+        \textcolor{dimwhite}{\footnotesize Thank you.\quad Code: \texttt{github.com/\ldots/TNLean}}
     \end{center}
 \end{frame}
 
@@ -2124,7 +2124,7 @@ structure IsCanonicalForm
 
     \vspace{0.3em}
     \textcolor{dimwhite}{\footnotesize Each layer depends only on layers below it.
-        The stable entrypoint \texttt{import MPSLean} transitively imports all 48 files.}
+        The stable entrypoint \texttt{import TNLean} transitively imports all 48 files.}
 \end{frame}
 
 \begin{frame}{Backup D: the Newton--Girard alternative path}
@@ -2226,7 +2226,7 @@ structure IsCanonicalForm
 \begin{frame}{Backup G: transfer toolkit summary}
     \vspace{-0.6em}
 
-    \begin{block}{Available via \texttt{import MPSLean} (sorry-free)}
+    \begin{block}{Available via \texttt{import TNLean} (sorry-free)}
         \begin{itemize}\itemsep0.2em
             \item \proved{Definitions: \texttt{transferMap}, \texttt{mixedTransferMap}, \texttt{mixedTransferMap\_2}.}
             \item \proved{Iterated word expansion (square and rectangular).}

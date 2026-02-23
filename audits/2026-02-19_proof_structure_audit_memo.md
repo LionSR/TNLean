@@ -18,15 +18,15 @@ classifying MPS under local unitary equivalence.
 **Sorry status**: 9 of the 10 audited files are **completely sorry-free**. The 10th
 (`SpectralGap.lean`) contains 7 occurrences of the word "sorry" — but every single one is in a
 *comment* describing the proof strategy. There is no `sorry` tactic anywhere in the 10 audited
-files. Only `MPSLean/PiAlgebra/BlockSeparationProof.lean` (not in the 10 audited files) and
-`MPSLean/Scratch/KerInvariance.lean` contain actual sorry tactics, both intentionally gated behind
-`MPSLean/Experimental.lean`.
+files. Only `TNLean/PiAlgebra/BlockSeparationProof.lean` (not in the 10 audited files) and
+`TNLean/Scratch/KerInvariance.lean` contain actual sorry tactics, both intentionally gated behind
+`TNLean/Experimental.lean`.
 
 ---
 
 ## II. Per-File Technical Summary
 
-### 1. `MPSLean/MPS/FundamentalTheorem.lean` — Single-block FT
+### 1. `TNLean/MPS/FundamentalTheorem.lean` — Single-block FT
 
 **Lines**: ~63
 
@@ -53,7 +53,7 @@ then ∃ X ∈ GL(D,ℂ) such that B_i = X A_i X⁻¹ for all i.
 
 ---
 
-### 2. `MPSLean/PiAlgebra/CanonicalFormSep.lean` — Block separation core
+### 2. `TNLean/PiAlgebra/CanonicalFormSep.lean` — Block separation core
 
 **Lines**: ~1094
 
@@ -113,7 +113,7 @@ Cirac, Pérez-García et al. 2021 (arXiv:2011.12127, Thm. IV.3).
 
 ---
 
-### 3. `MPSLean/Spectral/SpectralGap.lean` — Spectral gap
+### 3. `TNLean/Spectral/SpectralGap.lean` — Spectral gap
 
 **Lines**: ~1214
 
@@ -185,7 +185,7 @@ Wolf 2012 §6.2 (multiplicative domain characterization).
 
 ---
 
-### 4. `MPSLean/Spectral/MixedTransferRect.lean` — Rectangular mixed transfer
+### 4. `TNLean/Spectral/MixedTransferRect.lean` — Rectangular mixed transfer
 
 **Lines**: ~92
 
@@ -218,7 +218,7 @@ infrastructure for `MPVOverlapTraceRect`.
 
 ---
 
-### 5. `MPSLean/Spectral/MPVOverlapDecay.lean` — Overlap decay
+### 5. `TNLean/Spectral/MPVOverlapDecay.lean` — Overlap decay
 
 **Lines**: ~145
 
@@ -252,7 +252,7 @@ inductive step.
 
 ---
 
-### 6. `MPSLean/Spectral/MPVOverlapTraceRect.lean` — Overlap trace identity (rectangular)
+### 6. `TNLean/Spectral/MPVOverlapTraceRect.lean` — Overlap trace identity (rectangular)
 
 **Lines**: ~180
 
@@ -287,7 +287,7 @@ gap (spectral radius of F_{AB}) with the combinatorial MPV overlap sum; fundamen
 
 ---
 
-### 7. `MPSLean/PiAlgebra/NewtonGirard.lean` — Newton-Girard identities
+### 7. `TNLean/PiAlgebra/NewtonGirard.lean` — Newton-Girard identities
 
 **Lines**: ~316
 
@@ -331,7 +331,7 @@ as an alternative algebraic path.
 
 ---
 
-### 8. `MPSLean/Algebra/GramMatrixLI.lean` — Gram matrix linear independence
+### 8. `TNLean/Algebra/GramMatrixLI.lean` — Gram matrix linear independence
 
 **Lines**: ~73
 
@@ -359,7 +359,7 @@ distinct blocks, needed to establish the isomorphism underlying the block struct
 
 ---
 
-### 9. `MPSLean/PiAlgebra/FundamentalTheoremComplete.lean` — Multi-block assembly
+### 9. `TNLean/PiAlgebra/FundamentalTheoremComplete.lean` — Multi-block assembly
 
 **Lines**: ~214
 
@@ -406,7 +406,7 @@ multi-block (non-injective) MPS; corresponds to Theorem IV.2 of Cirac et al. 202
 
 ---
 
-### 10. `MPSLean/MPS/FundamentalTheoremMulti.lean` — Multi-block theorem
+### 10. `TNLean/MPS/FundamentalTheoremMulti.lean` — Multi-block theorem
 
 **Lines**: ~214
 

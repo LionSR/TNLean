@@ -1,7 +1,7 @@
 Technical plan: canonical-form block separation via overlaps / Gram matrices
 Date: 2026-02-18
-Repo: MPSLean
-Target gap: `MPSTensor.block_separation_core` (MPSLean/PiAlgebra/CanonicalFormSep.lean), r≥2 case
+Repo: TNLean
+Target gap: `MPSTensor.block_separation_core` (TNLean/PiAlgebra/CanonicalFormSep.lean), r≥2 case
 Focus: Step S3→S4 in the MPDO / TN-review / 1708 literature route (“equal-or-orthogonal → Gram → linear independence → block separation”).
 
 ================================================================================
@@ -27,7 +27,7 @@ Standard proof sketch (primitive/normal setting; no periodicity):
 
 Lean already has: S2 for square (equal-bond) tensors via `mixedTransferMap` and `SpectralGap.lean`.
 Lean already has: Corollary Lem1 (Gram→I ⇒ LI) as `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`
-  (MPSLean/Algebra/GramMatrixLI.lean).
+  (TNLean/Algebra/GramMatrixLI.lean).
 Lean is missing: the “overlap layer” (MPV overlap + its transfer-matrix formula) and the glue from
 spectral gap → overlap decay → Gram convergence → block separation.
 
@@ -50,7 +50,7 @@ Proposed “physical Hilbert space” type:
     `MPVSpace d N := EuclideanSpace ℂ (Cfg d N)`
   (`EuclideanSpace` is in `Mathlib.Analysis.InnerProductSpace.PiL2`).
 
-Proposed Lean definitions (new file suggestion: `MPSLean/MPS/Overlap.lean`):
+Proposed Lean definitions (new file suggestion: `TNLean/MPS/Overlap.lean`):
 
   namespace MPSTensor
 
@@ -88,7 +88,7 @@ Target statement (what the literature uses):
 In Lean, we implement bar as entrywise `star` on ℂ:
   `conjMatrix (M : Matrix _ _ ℂ) := M.map star`.
 
-Proposed definitions (same file `MPSLean/MPS/Overlap.lean`):
+Proposed definitions (same file `TNLean/MPS/Overlap.lean`):
 
   /-- Entrywise complex conjugation. -/
   abbrev conjMatrix {m n} (M : Matrix m n ℂ) : Matrix m n ℂ := M.map star
@@ -153,7 +153,7 @@ Why (A) is recommended:
   • The literature mixed transfer operator is intrinsically rectangular:
         F_{AB} : Mat_{D_A×D_B} → Mat_{D_A×D_B},  X ↦ ∑_i A_i X (B_i)†.
 
-Minimal rectangular generalization (new file suggestion: `MPSLean/Spectral/MixedTransferRect.lean`):
+Minimal rectangular generalization (new file suggestion: `TNLean/Spectral/MixedTransferRect.lean`):
 
   noncomputable def mixedTransferMap₂ (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
       Matrix (Fin D₁) (Fin D₂) ℂ →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
@@ -201,12 +201,12 @@ Spectral-gap reuse strategy:
       (ii) or define overlap directly as `LinearMap.trace` of the endomorphism and use continuity.
 
 Which existing proofs can be adapted:
-  • From `MPSLean/Spectral/SpectralGap.lean`:
+  • From `TNLean/Spectral/SpectralGap.lean`:
       - the HS contraction lemma (currently for square matrices) should port almost line-by-line,
         replacing sums over `(Fin D × Fin D)` by `(Fin D₁ × Fin D₂)`.
       - the “|μ|=1 eigenvalue ⇒ gauge-phase equivalence” proof needs care: invertibility of the
         eigenvector X must be replaced by “X has trivial kernel and cokernel”, forcing D₁=D₂.
-  • From `MPSLean/Spectral/CrossCorrelation.lean`:
+  • From `TNLean/Spectral/CrossCorrelation.lean`:
       - the decay statement is already proved once we have `mixedTransfer_pow_tendsto_zero`.
         A rectangular analogue can be proved similarly.
 
@@ -220,7 +220,7 @@ Pragmatic alternative if we want to avoid rectangular spectral theory:
 ================================================================================
 
 Already implemented:
-  File: `MPSLean/Algebra/GramMatrixLI.lean`
+  File: `TNLean/Algebra/GramMatrixLI.lean`
   Theorem:
 
     `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`
@@ -266,9 +266,9 @@ High-level dependency graph (new items marked NEW):
 
 Concrete file plan (minimal; do not implement now):
 
-(1) NEW file: `MPSLean/MPS/Overlap.lean`
+(1) NEW file: `TNLean/MPS/Overlap.lean`
     Imports:
-      - `MPSLean.MPS.Defs`
+      - `TNLean.MPS.Defs`
       - `Mathlib.Analysis.InnerProductSpace.PiL2`
       - `Mathlib.LinearAlgebra.Matrix.Kronecker`
       - `Mathlib.Data.Matrix.Bilinear` (if we include vec bridge)
@@ -281,30 +281,30 @@ Concrete file plan (minimal; do not implement now):
       - `overlapTransferMatrix`.
       - Theorem `mpvOverlap_eq_trace_overlapTransfer_pow`.
 
-(2) NEW file: `MPSLean/Spectral/MixedTransferRect.lean` (if rectangular generalization is pursued)
+(2) NEW file: `TNLean/Spectral/MixedTransferRect.lean` (if rectangular generalization is pursued)
     Imports:
-      - `MPSLean.MPS.Defs`
+      - `TNLean.MPS.Defs`
       - `Mathlib.Data.Matrix.Bilinear`
     Contents:
       - Definition `mixedTransferMap₂` on rectangular matrices.
       - `mixedTransferMap₂_pow_apply` analogue.
 
-(3) NEW file: `MPSLean/Spectral/OverlapDecay.lean`
+(3) NEW file: `TNLean/Spectral/OverlapDecay.lean`
     Imports:
-      - `MPSLean/MPS/Overlap`
-      - `MPSLean/Spectral/SpectralGap` (and/or new rectangular version)
+      - `TNLean/MPS/Overlap`
+      - `TNLean/Spectral/SpectralGap` (and/or new rectangular version)
     Contents:
       - Lemma: if `mixedTransferSpectralRadius₂ A B < 1` then `Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)`.
       - Lemma: `mpvOverlap A A N → 1` for “normal/primitive” blocks.
         (This is the part that may require peripheral spectrum / primitivity theory; see caveat below.)
 
-(4) NEW file: `MPSLean/MPS/BNT.lean` (optional but literature-aligned)
+(4) NEW file: `TNLean/MPS/BNT.lean` (optional but literature-aligned)
     Contents:
       - Formalize “basis of normal tensors” selection as in TN-review.
       - Show the chosen family satisfies Gram→I.
 
 (5) Implement block separation proof (edit existing file later):
-    Target: replace the `sorry` in `MPSLean/PiAlgebra/CanonicalFormSep.lean`.
+    Target: replace the `sorry` in `TNLean/PiAlgebra/CanonicalFormSep.lean`.
 
     Proposed proof outline for `block_separation_core` (overlap route):
       a. Strengthen hypotheses to match literature:
@@ -323,7 +323,7 @@ Concrete file plan (minimal; do not implement now):
 Caveat / known missing theory:
   • To fully match MPDO Lemma `equalMPS`, we need a Lean notion of “normal tensor” = “primitive channel”
     (TN-review def 4) and at least the peripheral-spectrum triviality needed to prove self-overlap → 1.
-    Files `MPSLean/Channel/Primitive.lean` and `PeripheralSpectrum.lean` are placeholders.
+    Files `TNLean/Channel/Primitive.lean` and `PeripheralSpectrum.lean` are placeholders.
   • If we want a quick path to unblock `block_separation_core` without developing primitivity theory,
     we can:
       - prove a weaker “approx-orthogonality ⇒ LI” lemma (like 1708 Lem1t) and derive explicit ε-bounds

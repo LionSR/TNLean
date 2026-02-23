@@ -1,6 +1,6 @@
 Technical memo: investigation of `MPSTensor.block_separation_core`
 Date: 2026-02-18
-Target file: `MPSLean/PiAlgebra/CanonicalFormSep.lean`
+Target file: `TNLean/PiAlgebra/CanonicalFormSep.lean`
 
 ================================================================================
 0. Executive summary
@@ -34,9 +34,9 @@ in (a version of) canonical form.
     ∑_k (μ_k^M)^L · (tr(T_k^L) − tr(U_k^L)) = 0.
 
 * There is also substantial *global* infrastructure elsewhere in the repo:
-  - `MPSLean/PiAlgebra/NewtonGirard.lean` (0 sorry): Newton–Girard recursion and the theorem
+  - `TNLean/PiAlgebra/NewtonGirard.lean` (0 sorry): Newton–Girard recursion and the theorem
     “all traces of powers equal ⇒ charpoly equal”.
-  - `MPSLean/Spectral/SpectralGap.lean` + `Spectral/CrossCorrelation.lean`: spectral-radius bounds
+  - `TNLean/Spectral/SpectralGap.lean` + `Spectral/CrossCorrelation.lean`: spectral-radius bounds
     and `mixedTransferMap` decay when ρ < 1.
 
 * Key obstacle: the existing “peeling + boundedness” tools only yield *exponential smallness* of
@@ -53,7 +53,7 @@ in (a version of) canonical form.
 1. Statement and plain-math restatement
 ================================================================================
 
-Location: `MPSLean/PiAlgebra/CanonicalFormSep.lean`, lemma starts at line ~110.
+Location: `TNLean/PiAlgebra/CanonicalFormSep.lean`, lemma starts at line ~110.
 
 Lean statement (abridged):
 
@@ -185,7 +185,7 @@ earlier import.
 3.1 Newton–Girard “trace powers ⇒ charpoly”
 ------------------------------------------
 
-File: `MPSLean/PiAlgebra/NewtonGirard.lean` (namespace `Matrix`). Key theorems:
+File: `TNLean/PiAlgebra/NewtonGirard.lean` (namespace `Matrix`). Key theorems:
 
 * `Matrix.charpolyRev_eq_of_forall_trace_pow_eq`
 * `Matrix.charpoly_eq_of_forall_trace_pow_eq`
@@ -199,24 +199,24 @@ These provide the bridge:
 
 Files:
 
-* `MPSLean/Spectral/MixedTransfer.lean`:
+* `TNLean/Spectral/MixedTransfer.lean`:
   - `mixedTransferMap` and `mixedTransferMap_pow_apply`.
   - scalar-linearity lemmas:
       `mixedTransferMap_smul_left`  : mixedTransferMap (c • A) B = c • mixedTransferMap A B
       `mixedTransferMap_smul_right` : mixedTransferMap A (c • B) = conj(c) • mixedTransferMap A B
 
-* `MPSLean/Spectral/SpectralGap.lean`:
+* `TNLean/Spectral/SpectralGap.lean`:
   - `spectralRadius_mixedTransfer_le_one` requires only DS gauge.
   - `spectralRadius_mixedTransfer_lt_one` and `mixedTransfer_pow_tendsto_zero` require
     injectivity on both tensors and a non-(GaugePhaseEquiv) hypothesis.
 
-* `MPSLean/Spectral/CrossCorrelation.lean`:
+* `TNLean/Spectral/CrossCorrelation.lean`:
   - `cross_correlation_tendsto_zero` is trace-decay for iterated mixed transfer.
 
 3.3 Trace-pairing / spanning tools
 ----------------------------------
 
-File: `MPSLean/Algebra/TracePairing.lean`:
+File: `TNLean/Algebra/TracePairing.lean`:
 
 * `trace_mul_right_eq_zero` (nondegeneracy of trace pairing).
 * `traceMulRightPi_ker_eq_bot` (injectivity of the “Gram map” when A is injective).
@@ -279,7 +279,7 @@ This is relevant if one pursues an “MPV overlap = trace(power of a double tran
 5. Known-false related statement and why canonical-form hypotheses matter
 ================================================================================
 
-`MPSLean/PiAlgebra/BlockSeparationProof.lean` contains the (documented) counterexample showing that
+`TNLean/PiAlgebra/BlockSeparationProof.lean` contains the (documented) counterexample showing that
 
   (μ injective + μ≠0 + SameMPV₂ on global block-diagonal tensors)
 
@@ -332,7 +332,7 @@ A2) Use `summed_identity_for_word` to show:
 
   ∀L>0, trace(GA(w)^L) = trace(GB(w)^L).
 
-A3) Import `MPSLean.PiAlgebra.NewtonGirard` and apply
+A3) Import `TNLean.PiAlgebra.NewtonGirard` and apply
 
   `Matrix.charpoly_eq_of_forall_trace_pow_eq`
 

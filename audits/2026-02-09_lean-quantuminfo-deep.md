@@ -10,19 +10,19 @@ purpose: >
   critical path, and cherry-pick / guided-rewrite strategies.
 ---
 
-# Deep Analysis: Lean-QuantumInfo for MPSLean's Spectral Gap
+# Deep Analysis: Lean-QuantumInfo for TNLean's Spectral Gap
 ## Exhaustive File-by-File Examination Report
 
 **Date**: February 9, 2026  
 **Analyst**: AI Research Assistant  
 **Subject**: https://github.com/Timeroot/Lean-QuantumInfo  
-**Purpose**: Determine what can be leveraged for closing MPSLean's spectral gap
+**Purpose**: Determine what can be leveraged for closing TNLean's spectral gap
 
 ---
 
 ## Executive Summary
 
-**Lean-QuantumInfo** is the most substantial Lean 4 formalization of quantum information theory available today: 20,434 lines, 1,059 theorems, 248 definitions, MIT license. Its completely positive trace-preserving (CPTP) map infrastructure — including **sorry-free** proofs of **Choi's theorem** and the **Kraus decomposition** — directly matches MPSLean's transfer operator framework. However, the repository is **3 minor Lean versions behind** MPSLean (v4.24.0 vs v4.27.0) and critically **lacks all spectral theory for CP maps** (no quantum Perron-Frobenius, no fixed point theory, no convergence results).
+**Lean-QuantumInfo** is the most substantial Lean 4 formalization of quantum information theory available today: 20,434 lines, 1,059 theorems, 248 definitions, MIT license. Its completely positive trace-preserving (CPTP) map infrastructure — including **sorry-free** proofs of **Choi's theorem** and the **Kraus decomposition** — directly matches TNLean's transfer operator framework. However, the repository is **3 minor Lean versions behind** TNLean (v4.24.0 vs v4.27.0) and critically **lacks all spectral theory for CP maps** (no quantum Perron-Frobenius, no fixed point theory, no convergence results).
 
 **Bottom line**: Saves ~2-3 weeks on CP map foundations via guided rewriting; the hard part (spectral gap, ~6-8 weeks) must be built from scratch. Combined with HopfieldNet's classical PF (same Lean version, direct import), total effort drops from ~15 weeks to ~10 weeks.
 
@@ -80,7 +80,7 @@ This is **exactly** our transfer map type:
 -- Lean-QuantumInfo:
 MatrixMap dIn dOut ℂ = Matrix dIn dIn ℂ →ₗ[ℂ] Matrix dOut dOut ℂ
 
--- MPSLean:
+-- TNLean:
 transferMap : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ
 ```
 
@@ -356,7 +356,7 @@ Mixed quantum states (PSD + trace 1):
 -- Lean-QuantumInfo
 def MatrixMap (A B : Type*) (R : Type*) := Matrix A A R →ₗ[R] Matrix B B R
 
--- MPSLean (endomorphism case, A = B)
+-- TNLean (endomorphism case, A = B)
 noncomputable def transferMap (A : Fin d → Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ
 ```
@@ -365,7 +365,7 @@ Both are `ℂ`-linear maps on square complex matrices. The `MatrixMap (Fin D) (F
 
 ### Immediate Application: Our Transfer Map IS Kraus-form
 
-MPSLean defines:
+TNLean defines:
 ```
 E_A(X) = ∑ᵢ Aᵢ * X * Aᵢ†
 ```
@@ -435,7 +435,7 @@ Showing E_A is CPTP is a key step because:
 
 ### The Version Gap Problem
 
-| Component | Lean-QuantumInfo | MPSLean |
+| Component | Lean-QuantumInfo | TNLean |
 |-----------|-----------------|---------|
 | Lean | v4.24.0 | v4.27.0 |
 | Mathlib | `f897ebcf72cd` | `910dac3f6e7f` |
@@ -479,7 +479,7 @@ Unlike HopfieldNet (which shares our exact versions), Lean-QuantumInfo **cannot 
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│                    MPSLean (v4.27.0, Mathlib 910dac3f)   │
+│                    TNLean (v4.27.0, Mathlib 910dac3f)   │
 │                                                          │
 │  ┌─────────────────┐  ┌─────────────────────────────┐   │
 │  │ HopfieldNet      │  │ New Code (v4.27.0 native)   │   │

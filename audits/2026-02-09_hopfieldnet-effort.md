@@ -1,5 +1,5 @@
 ---
-title: "HopfieldNet classical PF: effort analysis for MPSLean integration"
+title: "HopfieldNet classical PF: effort analysis for TNLean integration"
 date: 2026-02-09
 author: AI research assistant (search agent)
 purpose: >
@@ -10,7 +10,7 @@ purpose: >
   classical-to-quantum bridge strategy with effort estimates.
 ---
 
-# HopfieldNet Perron-Frobenius: Effort Analysis for MPSLean Integration
+# HopfieldNet Perron-Frobenius: Effort Analysis for TNLean Integration
 
 **Date:** 2026-02-09
 **Repository:** https://github.com/mkaratarakis/HopfieldNet
@@ -21,7 +21,7 @@ purpose: >
 
 ## 1. Executive Summary
 
-The HopfieldNet repository contains a **complete, essentially sorry-free formalization of the classical Perron-Frobenius theorem** for general irreducible and primitive nonneg real matrices — far more comprehensive than what the paper abstract suggested (which emphasized stochastic matrices). Critically, the repo uses **the exact same Lean and Mathlib versions as MPSLean**, making integration frictionless.
+The HopfieldNet repository contains a **complete, essentially sorry-free formalization of the classical Perron-Frobenius theorem** for general irreducible and primitive nonneg real matrices — far more comprehensive than what the paper abstract suggested (which emphasized stochastic matrices). Critically, the repo uses **the exact same Lean and Mathlib versions as TNLean**, making integration frictionless.
 
 ### Key Numbers
 
@@ -31,8 +31,8 @@ The HopfieldNet repository contains a **complete, essentially sorry-free formali
 | Theorems/lemmas | 416 |
 | Definitions | 40 |
 | Sorries | 1 (minor path lemma in quiver infrastructure) |
-| Lean version | v4.27.0-rc1 (MPSLean: v4.27.0) |
-| Mathlib revision | `910dac3f` (identical to MPSLean) |
+| Lean version | v4.27.0-rc1 (TNLean: v4.27.0) |
+| Mathlib revision | `910dac3f` (identical to TNLean) |
 | License | MIT |
 
 ### Bottom Line
@@ -107,7 +107,7 @@ Spectrum.lean (696 lines)
 ### Version Compatibility: PERFECT ✅
 
 ```
-                    HopfieldNet         MPSLean
+                    HopfieldNet         TNLean
 Lean version:       v4.27.0-rc1        v4.27.0
 Mathlib revision:   910dac3f6e...      910dac3f6e...  (IDENTICAL)
 Build system:       lakefile.lean       lakefile.toml
@@ -134,7 +134,7 @@ rev = "master"
 Then: `import MCMC.PF.LinearAlgebra.Matrix.PerronFrobenius.Dominance`
 
 **Option B: Copy the PF Module**
-Copy `MCMC/PF/` (16 files, 8,302 lines) directly into MPSLean. Rename the module prefix. MIT license allows this.
+Copy `MCMC/PF/` (16 files, 8,302 lines) directly into TNLean. Rename the module prefix. MIT license allows this.
 
 **Recommendation**: Option A for development, Option B for a self-contained release.
 
@@ -261,7 +261,7 @@ Specifically:
 
 ### Immediate Actions (This Week)
 
-1. **Add HopfieldNet as a Lake dependency** to MPSLean. Cost: 1 day. Even if we don't use PF immediately, this makes the classical PF available for future work and validates the integration.
+1. **Add HopfieldNet as a Lake dependency** to TNLean. Cost: 1 day. Even if we don't use PF immediately, this makes the classical PF available for future work and validates the integration.
 
 2. **Update `COMMUNITY_RESOURCES_REPORT.md`** with the finding that the repo is now public and uses identical versions.
 

@@ -1,33 +1,33 @@
-MPSLean status report — 2026-02-18
+TNLean status report — 2026-02-18
 
 Repository snapshot
-- Path: /Users/siruilu/Library/Mobile Documents/com~apple~CloudDocs/Research/Agent-Physics/MPSLean
+- Path: /Users/siruilu/Library/Mobile Documents/com~apple~CloudDocs/Research/Agent-Physics/TNLean
 - Branch: fix/schwarz-kraus-api
 - HEAD: cd95649e552e255b401ae7285f52219cb3d5ff26 (cd95649 Add presentation slides for block separation and project completion)
 - Working tree (uncommitted):
   * D  slides/refactoring_summary.pdf
-  * ?? MPSLean/MPS/BlockPermutationMPS 2.lean
-  * ?? MPSLean/QPF/Uniqueness 2.lean
-  * ?? MPSLean/Scratch/PerIndexAlgebra.lean.bak
+  * ?? TNLean/MPS/BlockPermutationMPS 2.lean
+  * ?? TNLean/QPF/Uniqueness 2.lean
+  * ?? TNLean/Scratch/PerIndexAlgebra.lean.bak
 
 1) Build / trustworthiness audit
 
 1.1 lake build
 - Command: lake build
 - Result: SUCCESS (exit code 0), 2870 jobs, ~5s
-- Style warnings (non-fatal): long line linter in MPSLean/Spectral/SpectralGap.lean at lines 920, 921, 963, 973.
+- Style warnings (non-fatal): long line linter in TNLean/Spectral/SpectralGap.lean at lines 920, 921, 963, 973.
 
 1.2 Sorries reported by the build (these are the only sorry-warnings from lake build)
-- MPSLean/PiAlgebra/BlockSeparationProof.lean:170:14
+- TNLean/PiAlgebra/BlockSeparationProof.lean:170:14
   * declaration: private lemma per_block_trace_eq_of_summed_blocks
   * status: contains `sorry` (at line 178); moreover the docstring contains a concrete counterexample showing the statement is FALSE for r ≥ 2 as stated.
-- MPSLean/PiAlgebra/CanonicalFormSep.lean:110:6
+- TNLean/PiAlgebra/CanonicalFormSep.lean:110:6
   * declaration: lemma block_separation_core
   * status: contains `sorry` (in the r ≥ 2 branch, at line 149); intended to be TRUE under canonical-form hypotheses but not formalized yet.
 
 1.3 Additional sorries present in the repo but NOT in the default build
 (Found by searching for lines starting with `sorry` in *.lean.)
-- MPSLean/Scratch/KerInvariance.lean:
+- TNLean/Scratch/KerInvariance.lean:
   * lemma block_ks_gap_psd (sorry at line 151)
   * lemma ks_gap_zero_of_peripheral_eigenvector (sorry at line 214)
   * theorem ker_invariant (sorry at line 238)
@@ -40,40 +40,40 @@ Repository snapshot
 
 2.1 Single-block Fundamental Theorem (injective case)
 - MPSTensor.fundamentalTheorem_singleBlock
-  * file: MPSLean/MPS/FundamentalTheorem.lean
+  * file: TNLean/MPS/FundamentalTheorem.lean
 
 2.2 Multi-block Fundamental Theorem under per-block SameMPV ("hSep")
 (Core assembly lives in MPS/, packaged for end users in PiAlgebra/.)
 - MPSTensor.fundamentalTheorem_multiBlock_global
-  * file: MPSLean/MPS/FundamentalTheoremMulti.lean
+  * file: TNLean/MPS/FundamentalTheoremMulti.lean
 - MPSTensor.fundamentalTheorem_multiBlock_full
-  * file: MPSLean/PiAlgebra/FundamentalTheoremComplete.lean
+  * file: TNLean/PiAlgebra/FundamentalTheoremComplete.lean
   * variants: fundamentalTheorem_multiBlock_explicit, fundamentalTheorem_multiBlock_decomposition
 
 2.3 Block separation attempts (SameMPV₂(global) → per-block SameMPV)
 - Proven (r = 1 only):
   * MPSTensor.sameMPV₂_single_block
-    - file: MPSLean/PiAlgebra/FundamentalTheoremComplete.lean
+    - file: TNLean/PiAlgebra/FundamentalTheoremComplete.lean
 - Attempted “injective μ” separation (KNOWN FALSE as stated; relies on a sorry):
   * MPSTensor.sameMPV_of_sameMPV₂_injective
-    - file: MPSLean/PiAlgebra/BlockSeparationProof.lean
+    - file: TNLean/PiAlgebra/BlockSeparationProof.lean
   * MPSTensor.fundamentalTheorem_multiBlock_noSep
-    - file: MPSLean/PiAlgebra/BlockSeparationProof.lean
+    - file: TNLean/PiAlgebra/BlockSeparationProof.lean
 
 2.4 Canonical-form separation pipeline
 - Canonical-form predicate:
   * MPSTensor.IsCanonicalForm
-    - file: MPSLean/PiAlgebra/CanonicalFormSep.lean
+    - file: TNLean/PiAlgebra/CanonicalFormSep.lean
 - Separation + fundamental theorem in canonical form (relies on sorry in block_separation_core when r ≥ 2):
   * MPSTensor.per_block_sameMPV_of_canonical_form
   * MPSTensor.fundamentalTheorem_canonicalForm
   * MPSTensor.fundamentalTheorem_canonicalForm_explicit
-    - file: MPSLean/PiAlgebra/CanonicalFormSep.lean
+    - file: TNLean/PiAlgebra/CanonicalFormSep.lean
 
 
 3) Scientist-facing summaries (hypotheses / conclusion / proof idea)
 
-3.1 MPSTensor.fundamentalTheorem_singleBlock  (MPSLean/MPS/FundamentalTheorem.lean)
+3.1 MPSTensor.fundamentalTheorem_singleBlock  (TNLean/MPS/FundamentalTheorem.lean)
 - Hypotheses:
   * A is injective: the matrices {A(i)} span the full matrix algebra.
   * SameMPV A B: for every length N and spin configuration σ, tr(evalWord A σ) = tr(evalWord B σ).
@@ -85,7 +85,7 @@ Repository snapshot
   * A nonzero multiplicative endomorphism of a full matrix algebra is bijective.
   * Apply Skolem–Noether: every matrix-algebra automorphism is inner, hence conjugation by some X.
 
-3.2 MPSTensor.fundamentalTheorem_multiBlock_full  (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean)
+3.2 MPSTensor.fundamentalTheorem_multiBlock_full  (TNLean/PiAlgebra/FundamentalTheoremComplete.lean)
 - Hypotheses:
   * A and B are families of blocks A_k, B_k with (possibly different) block dimensions.
   * Each A_k is injective.
@@ -98,7 +98,7 @@ Repository snapshot
   * Assemble the X_k into one block-diagonal gauge matrix (a block-diagonal element of GL).
   * Reindex the Σ-type block matrix into a Fin(∑ dim_k)-indexed matrix; obtain global conjugation.
 
-3.3 MPSTensor.fundamentalTheorem_multiBlock_fromSameMPV₂  (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean)
+3.3 MPSTensor.fundamentalTheorem_multiBlock_fromSameMPV₂  (TNLean/PiAlgebra/FundamentalTheoremComplete.lean)
 - Hypotheses:
   * SameMPV₂ holds globally on the two block-diagonal tensors toTensorFromBlocks μ A and toTensorFromBlocks μ B.
   * Each A_k is injective.
@@ -111,7 +111,7 @@ Repository snapshot
   * Treat hSep as the only physics-heavy input.
   * Then the result is purely algebraic: single-block FT + block-diagonal assembly + Pi-algebra decomposition.
 
-3.4 MPSTensor.sameMPV₂_single_block  (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean)
+3.4 MPSTensor.sameMPV₂_single_block  (TNLean/PiAlgebra/FundamentalTheoremComplete.lean)
 - Hypotheses:
   * One block (r = 1) with scaling μ₀ ≠ 0.
   * SameMPV₂ holds for the corresponding 1-block “block-diagonal” tensors.
@@ -121,7 +121,7 @@ Repository snapshot
   * The global summed identity collapses to μ₀^N · mpv(A₀,σ) = μ₀^N · mpv(B₀,σ).
   * Divide by μ₀^N (nonzero) to get equality of MPVs.
 
-3.5 MPSTensor.sameMPV_of_sameMPV₂_injective / fundamentalTheorem_multiBlock_noSep  (MPSLean/PiAlgebra/BlockSeparationProof.lean)
+3.5 MPSTensor.sameMPV_of_sameMPV₂_injective / fundamentalTheorem_multiBlock_noSep  (TNLean/PiAlgebra/BlockSeparationProof.lean)
 - Hypotheses (claimed sufficient in the file):
   * μ : Fin r → ℂ is injective and nonzero.
   * SameMPV₂ holds globally for the block-diagonal tensors.
@@ -134,7 +134,7 @@ Repository snapshot
   * Additional canonical-form normalization (e.g. DS gauge / fixed spectral radius per block) to forbid rescaling-and-swap.
   * Or a weakened conclusion that allows identifying blocks only up to an allowed permutation/rescaling mechanism.
 
-3.6 MPSTensor.block_separation_core / fundamentalTheorem_canonicalForm  (MPSLean/PiAlgebra/CanonicalFormSep.lean)
+3.6 MPSTensor.block_separation_core / fundamentalTheorem_canonicalForm  (TNLean/PiAlgebra/CanonicalFormSep.lean)
 - Hypotheses (canonical form):
   * Each block is injective.
   * DS gauge normalization: ∑_i A_{k,i}† A_{k,i} = I (and similarly for B).
@@ -154,24 +154,24 @@ Repository snapshot
 
 (A) Fully proved + trustworthy (no sorries, and does not rely on the open “block separation” step)
 - Single-block FT:
-  * MPSTensor.fundamentalTheorem_singleBlock (MPSLean/MPS/FundamentalTheorem.lean)
+  * MPSTensor.fundamentalTheorem_singleBlock (TNLean/MPS/FundamentalTheorem.lean)
 - Block-diagonal mechanics / identities (used throughout the multi-block development):
-  * toTensorFromBlocks, mpv_toTensorFromBlocks_eq_sum (MPSLean/MPS/FundamentalTheoremMulti.lean)
-  * evalWord_replicate, evalWord_flatten_replicate, mpv_const_eq_trace_pow (MPSLean/PiAlgebra/BlockSeparation.lean)
+  * toTensorFromBlocks, mpv_toTensorFromBlocks_eq_sum (TNLean/MPS/FundamentalTheoremMulti.lean)
+  * evalWord_replicate, evalWord_flatten_replicate, mpv_const_eq_trace_pow (TNLean/PiAlgebra/BlockSeparation.lean)
 - Channel / QPF / spectral infrastructure (all sorry-free; selected highlights):
-  * Kadison–Schwarz and related channel lemmas (MPSLean/Channel/*)
-  * Quantum Perron–Frobenius fixed-point theory (MPSLean/QPF/*, MPSLean/QuantumPerronFrobenius.lean)
+  * Kadison–Schwarz and related channel lemmas (TNLean/Channel/*)
+  * Quantum Perron–Frobenius fixed-point theory (TNLean/QPF/*, TNLean/QuantumPerronFrobenius.lean)
   * spectralRadius_mixedTransfer_le_one, spectralRadius_mixedTransfer_lt_one, mixedTransfer_pow_tendsto_zero,
-    modulus_one_eigenvalue_implies_gauge (MPSLean/Spectral/SpectralGap.lean)
-  * cross_correlation_tendsto_zero (MPSLean/Spectral/CrossCorrelation.lean)
+    modulus_one_eigenvalue_implies_gauge (TNLean/Spectral/SpectralGap.lean)
+  * cross_correlation_tendsto_zero (TNLean/Spectral/CrossCorrelation.lean)
 
 (B) Fully proved but with strong / “placeholder” hypotheses
 (Correct Lean theorems, but they assume per-block SameMPV (hSep) instead of deriving it from global SameMPV₂.)
 - Multi-block FT GIVEN per-block SameMPV (“hSep”):
-  * fundamentalTheorem_multiBlock_global (MPSLean/MPS/FundamentalTheoremMulti.lean)
-  * fundamentalTheorem_multiBlock_full / _explicit / _decomposition (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean)
+  * fundamentalTheorem_multiBlock_global (TNLean/MPS/FundamentalTheoremMulti.lean)
+  * fundamentalTheorem_multiBlock_full / _explicit / _decomposition (TNLean/PiAlgebra/FundamentalTheoremComplete.lean)
 - End-to-end from global SameMPV₂ GIVEN hSep explicitly:
-  * fundamentalTheorem_multiBlock_fromSameMPV₂ and _explicit_fromSameMPV₂ (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean)
+  * fundamentalTheorem_multiBlock_fromSameMPV₂ and _explicit_fromSameMPV₂ (TNLean/PiAlgebra/FundamentalTheoremComplete.lean)
 
 (C) Open gaps / known-false statements
 - Known-false-as-stated lemma (left as sorry):
@@ -193,18 +193,18 @@ Repository snapshot
 5) Recommendations (repo hygiene + keeping core sorry-free)
 
 5.1 Remove known-false or unfinished results from the default import surface
-- MPSLean.lean currently imports:
-  * MPSLean.PiAlgebra.BlockSeparationProof   (contains a known-false sorry)
-  * MPSLean.PiAlgebra.CanonicalFormSep      (contains an open-gap sorry)
+- TNLean.lean currently imports:
+  * TNLean.PiAlgebra.BlockSeparationProof   (contains a known-false sorry)
+  * TNLean.PiAlgebra.CanonicalFormSep      (contains an open-gap sorry)
 - Recommendation:
-  * Move these two files to an “Experimental/” (or keep them in PiAlgebra/ but DO NOT import them from MPSLean.lean).
-  * Keep the core library (everything imported by MPSLean.lean) sorry-free.
+  * Move these two files to an “Experimental/” (or keep them in PiAlgebra/ but DO NOT import them from TNLean.lean).
+  * Keep the core library (everything imported by TNLean.lean) sorry-free.
 
 5.2 Split stable vs experimental targets
-- Add a separate top-level module (e.g. MPSLeanExperimental.lean) that imports the experimental files.
+- Add a separate top-level module (e.g. TNLeanExperimental.lean) that imports the experimental files.
 - Optionally split into two Lake libraries:
-  * MPSLeanCore (no sorries; used by downstream users)
-  * MPSLeanExperimental (may contain sorries / sketches)
+  * TNLeanCore (no sorries; used by downstream users)
+  * TNLeanExperimental (may contain sorries / sketches)
 
 5.3 Automate “no sorry” checks
 - Add a CI or local script that fails the build on sorry-warnings for the core target.

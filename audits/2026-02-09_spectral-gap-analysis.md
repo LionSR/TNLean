@@ -11,10 +11,10 @@ purpose: >
 ---
 
 # Spectral Gap Analysis Report
-## Quantum Perron-Frobenius & Transfer Operator Theory for MPSLean
+## Quantum Perron-Frobenius & Transfer Operator Theory for TNLean
 
 **Date:** 2026-02-09  
-**Scope:** Mathlib v4.27.0 + MPSLean current codebase  
+**Scope:** Mathlib v4.27.0 + TNLean current codebase  
 **Author:** Gap analysis for closing the multi-block (r≥2) Fundamental Theorem of MPS
 
 ---
@@ -22,10 +22,10 @@ purpose: >
 ## 1. Executive Summary
 
 ### The problem
-The MPSLean formalization of the Fundamental Theorem of Matrix Product States is **complete and sorry-free for single-block (r=1) canonical forms**. For multi-block (r≥2) canonical forms, one gap remains: proving that a global weighted-sum equality (`SameMPV₂` on block-diagonal tensors) implies per-block equality (`SameMPV` on each block). This is the **block separation lemma**.
+The TNLean formalization of the Fundamental Theorem of Matrix Product States is **complete and sorry-free for single-block (r=1) canonical forms**. For multi-block (r≥2) canonical forms, one gap remains: proving that a global weighted-sum equality (`SameMPV₂` on block-diagonal tensors) implies per-block equality (`SameMPV` on each block). This is the **block separation lemma**.
 
 ### What exists
-- **MPSLean** already defines the transfer operator `E_A(X) = Σ_i A_i X A_i†` in `Transfer.lean`, with a proof that it preserves positive semidefiniteness.
+- **TNLean** already defines the transfer operator `E_A(X) = Σ_i A_i X A_i†` in `Transfer.lean`, with a proof that it preserves positive semidefiniteness.
 - **Mathlib v4.27.0** has definitions of matrix irreducibility/primitivity, a mature spectral theory (spectrum, eigenvalues, characteristic polynomials, spectral radius, Gelfand formula), completely positive map definitions, positive semidefinite matrix ordering, and Kronecker/vectorization identities.
 - **External Lean 4 projects** include a classical Perron-Frobenius theorem formalization (Cipollina et al., arXiv:2512.07766, Dec 2025, for Hopfield/Boltzmann machines), and the Lean-QuantumInfo library (Meiburg, ~1059 theorems on quantum states/channels/entropy).
 - **Isabelle/AFP** has a complete classical Perron-Frobenius formalization (Divasón, Kunčar, Thiemann, Yamada, 2016).
@@ -202,7 +202,7 @@ The μ_k weights in canonical form have distinct absolute values (or, after grou
 
 ```
 Level 0 (already done):
-  transferMap, transferMap_pos (MPSLean/Transfer.lean)
+  transferMap, transferMap_pos (TNLean/Transfer.lean)
   spectrum, eigenvalue, spectralRadius (Mathlib)
   PosSemidef, matrix ordering (Mathlib)
   Matrix.IsIrreducible (Mathlib)
@@ -315,7 +315,7 @@ This circles back to needing some spectral theory of the transfer operator.
 
 ### 5.5 Approach E: Axiomatize and move on
 
-**Status quo:** The current MPSLean code takes `hSep : ∀ k, SameMPV (A k) (B k)` as an explicit hypothesis. Everything else is proved. This is already a valid mathematical statement:
+**Status quo:** The current TNLean code takes `hSep : ∀ k, SameMPV (A k) (B k)` as an explicit hypothesis. Everything else is proved. This is already a valid mathematical statement:
 
 > "If two canonical-form MPS have the same MPV family, and the block-separation property holds, then they are related by per-block gauge transforms."
 
@@ -354,20 +354,20 @@ The argument would be:
 - Build the Choi-Jamiołkowski isomorphism.
 - Derive quantum PF as a consequence.
 
-This would be a significant Mathlib contribution (PF is on the "100 theorems" wish list) and would close the MPSLean gap in full generality.
+This would be a significant Mathlib contribution (PF is on the "100 theorems" wish list) and would close the TNLean gap in full generality.
 
 ### 6.4 Decision matrix
 
 | Scenario | Recommendation |
 |----------|---------------|
-| Need to publish/share MPSLean now | Use current axiomatic approach (Approach E) |
+| Need to publish/share TNLean now | Use current axiomatic approach (Approach E) |
 | Want to close gap for distinct μ_k | Pursue Approach C (1–2 months) |
 | Want full generality + Mathlib contribution | Pursue Approach B (3–6 months) |
 | Want to maximize impact | Combine: close distinct-μ case now + contribute PF to Mathlib later |
 
 ---
 
-## Appendix A: Key Definitions in MPSLean
+## Appendix A: Key Definitions in TNLean
 
 ### Transfer operator (from `Transfer.lean`)
 ```lean

@@ -12,7 +12,7 @@ purpose: >
 # Audit: semisimple block decomposition / block permutation API (Mathlib v4.27.0)
 
 _Date_: 2026-02-08  
-_Project_: **MPSLean** (Fundamental Theorem of Matrix Product States, multi-block version)
+_Project_: **TNLean** (Fundamental Theorem of Matrix Product States, multi-block version)
 
 ## Goal
 

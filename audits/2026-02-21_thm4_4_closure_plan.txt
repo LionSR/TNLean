@@ -1,7 +1,7 @@
 ================================================================================
 MEMO: Formalization Roadmap — Closing Theorem 4.4 of Cirac et al. (RevModPhys 2021)
 Date: 2026-02-21
-Author: MPSLean audit (automated)
+Author: TNLean audit (automated)
 Target theorem: Theorem 4.4 [2] = labels \thm1 + \II_cor2 in 2011.12127/TN-Review-main.tex
 Repo commit context: IrreducibleFormII.lean complete; CanonicalFormReduction.lean complete;
                      block_separation_core sorry-free (overlap-decay route, 2026-02-19)
@@ -98,7 +98,7 @@ Using the repo's notation, the two parts of Theorem 4.4 [2] read as follows.
       ∃ (perm : Fin r_A ≃ Fin r_B),
         ∀ k, GaugePhaseEquiv (A_bnt k) (B_bnt (perm k))
 
-  NOTE on GaugePhaseEquiv: this is already in the repo (MPSLean/MPS/Defs.lean):
+  NOTE on GaugePhaseEquiv: this is already in the repo (TNLean/MPS/Defs.lean):
     def GaugePhaseEquiv (A B : MPSTensor d D) : Prop :=
       ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ∀ i, B i = ζ • (X * A i * X⁻¹)
   The paper's e^{iφ_k} X_k A^i_{j_k} X_k^{-1} is exactly GaugePhaseEquiv(A_{j_k}, B_k).
@@ -107,14 +107,14 @@ Using the repo's notation, the two parts of Theorem 4.4 [2] read as follows.
 
   ---------- Block-diagonal constructor notation ----------
 
-  toTensorFromBlocks (defined in MPSLean/MPS/MultiBlock.lean):
+  toTensorFromBlocks (defined in TNLean/MPS/MultiBlock.lean):
     toTensorFromBlocks μ A : MPSTensor d (∑ k, dim k)
     where A : (k : Fin r) → MPSTensor d (dim k), μ : Fin r → ℂ
     is the block-diagonal tensor ⊕_k μ_k A_k^i.
 
-  GaugeEquiv, SameMPV, SameMPV₂, ProportionalMPV₂ from MPSLean/MPS/Defs.lean.
-  IsCanonicalForm from MPSLean/PiAlgebra/CanonicalFormSep.lean (see §B).
-  IsNormal from MPSLean/MPS/Defs.lean (= eventual injectivity).
+  GaugeEquiv, SameMPV, SameMPV₂, ProportionalMPV₂ from TNLean/MPS/Defs.lean.
+  IsCanonicalForm from TNLean/PiAlgebra/CanonicalFormSep.lean (see §B).
+  IsNormal from TNLean/MPS/Defs.lean (= eventual injectivity).
 
 
 ────────────────────────────────────────────────────────────────────────────────
@@ -318,9 +318,9 @@ C.1.1  Current state:
 
 C.1.2  Recommended choice:
   Use `IsNormal` (eventual injectivity) as the Lean analogue of paper's "normal tensor."
-  Add a separate `IsPrimitiveChannel` in `MPSLean/Channel/Primitive.lean`:
+  Add a separate `IsPrimitiveChannel` in `TNLean/Channel/Primitive.lean`:
 
-  -- File: MPSLean/Channel/Primitive.lean
+  -- File: TNLean/Channel/Primitive.lean
   /-- A quantum channel E is primitive if it is irreducible (no nontrivial invariant
       projection) and the peripheral spectrum is {1} (= E has spectral radius 1 and
       1 is the unique eigenvalue of magnitude 1). -/
@@ -337,19 +337,19 @@ C.1.2  Recommended choice:
       (Filter.Tendsto (fun N => mpvOverlap A A N) atTop (nhds 1)) ↔
       IsPrimitiveChannel (transferMap A)
 
-  File: MPSLean/Channel/Primitive.lean  (new content, ~150–200 LOC)
+  File: TNLean/Channel/Primitive.lean  (new content, ~150–200 LOC)
   Dependencies: Channel/Irreducible.lean, Channel/PeripheralSpectrum.lean
 
 C.1.3  Alternatively (lower effort, less complete):
   Add `IsPrimitiveTransferMap (A : MPSTensor d D) : Prop` directly in
-  `MPSLean/MPS/CPPrimitive.lean` without introducing a general channel notion:
+  `TNLean/MPS/CPPrimitive.lean` without introducing a general channel notion:
 
   def IsPrimitiveTransferMap (A : MPSTensor d D) : Prop :=
       IsIrreducibleTensor A ∧
       Filter.Tendsto (fun N => mpvOverlap A A N) atTop (nhds 1)
 
   And derive `overlap_tendsto_one` from `IsPrimitiveTransferMap`.
-  File: MPSLean/MPS/CPPrimitive.lean (add ~80 LOC)
+  File: TNLean/MPS/CPPrimitive.lean (add ~80 LOC)
 
 C.2  "Equal-or-Orthogonal" Dichotomy for Normal Tensors
 ────────────────────────────────────────────────────────
@@ -361,7 +361,7 @@ C.2.1  Current state:
   - `mpvOverlap_tendsto_zero_rect` (not yet created): would state decay for D_A ≠ D_B case
 
 C.2.2  Missing lemma:
-  -- File: MPSLean/Spectral/MPVOverlapDecayRect.lean (new, ~120 LOC)
+  -- File: TNLean/Spectral/MPVOverlapDecayRect.lean (new, ~120 LOC)
   theorem MPSTensor.mpvOverlap_tendsto_zero_rect
       {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
       (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -387,7 +387,7 @@ C.3.1  Current state:
   - `Prop 4.3` (characterization of BNTs) is NOT formalized.
 
 C.3.2  Required API:
-  -- File: MPSLean/MPS/BasisNormal.lean (extend existing file, ~300–400 LOC)
+  -- File: TNLean/MPS/BasisNormal.lean (extend existing file, ~300–400 LOC)
 
   /-- A family of normal tensors A_j (j = 1,...,g) is a basis of normal tensors for A if:
       (i) for each N, mpv A N ∈ span{ mpv (A_j) N : j = 1,...,g }
@@ -448,28 +448,28 @@ C.4.1  What exists:
 C.4.2  What's missing to derive overlap_tendsto_one:
 
   [STEP M1] Spectral radius normalization:
-  -- File: MPSLean/MPS/SpectralRadiusNorm.lean (new, ~100 LOC)
+  -- File: TNLean/MPS/SpectralRadiusNorm.lean (new, ~100 LOC)
   Given `IsIrreducibleTensor A`, define μ_k := ‖eigenvalue of max magnitude of E_A‖.
   Rescale: A_normalized := (1/μ_k) • A.
   Show: transferMap(A_normalized) has spectral radius 1.
   Key tool: `quantum_perron_frobenius` (QuantumPerronFrobenius.lean — EXISTS).
 
   [STEP M2] Peripheral spectrum characterization:
-  -- File: MPSLean/Channel/PeripheralSpectrum.lean (currently placeholder, ~200–300 LOC)
+  -- File: TNLean/Channel/PeripheralSpectrum.lean (currently placeholder, ~200–300 LOC)
   For an irreducible channel E with spectral radius 1:
   - All peripheral eigenvalues (‖λ‖ = 1) are roots of unity — Wolf Theorem 6.6
   - The peripheral spectrum forms a cyclic group Z/pZ
   - After blocking by period p, the channel becomes primitive (single peripheral eigenvalue 1)
 
   [STEP M3] Blocking to remove periodicity:
-  -- File: MPSLean/MPS/PrimitivePeriodRemoval.lean (new, ~150–200 LOC)
+  -- File: TNLean/MPS/PrimitivePeriodRemoval.lean (new, ~150–200 LOC)
   Using `blockTensor A p` (Blocking.lean), show:
   If E_A has period p (peripheral spectrum = {e^{2πi q/p}}), then
   E_{blockTensor A p} is primitive (IsIrreducibleCP ∧ peripheral spectrum = {1}).
   Conclude: `IsPrimitiveTransferMap (blockTensor A p)`.
 
   [STEP M4] Overlap convergence from primitivity:
-  -- File: MPSLean/Channel/Primitive.lean (extend placeholder, ~200 LOC)
+  -- File: TNLean/Channel/Primitive.lean (extend placeholder, ~200 LOC)
   theorem overlap_tendsto_one_of_primitive (A : MPSTensor d D) [NeZero D]
       (hTP : ∑ i, (A i)ᴴ * (A i) = 1)
       (hPrim : IsPrimitiveChannel (transferMap A)) :
@@ -566,17 +566,17 @@ E.1  Immediately needed modules (in dependency order)
 ───────────────────────────────────────────────────────
 
   PRIORITY 1 — Rectangular spectral gap / overlap decay (for cross-block analysis):
-  File: MPSLean/Spectral/SpectralGapRect.lean  (NEW)
+  File: TNLean/Spectral/SpectralGapRect.lean  (NEW)
     spectral_radius_mixedTransfer_rect_le_one     ~  80 LOC
     mixedTransfer_rect_pow_tendsto_zero            ~  60 LOC
-  File: MPSLean/Spectral/MPVOverlapDecayRect.lean  (NEW)
+  File: TNLean/Spectral/MPVOverlapDecayRect.lean  (NEW)
     mpvOverlap_tendsto_zero_rect                   ~  80 LOC
   TOTAL: ~220 LOC
   DEPENDENCIES: SpectralGap.lean (square), MixedTransferRect.lean, MPVOverlapTraceRect.lean,
                 KadisonSchwarz.lean (HS-norm contraction)
 
   PRIORITY 2 — Primitive channel / aperiodicity (minimal version):
-  File: MPSLean/Channel/Primitive.lean  (EXTEND placeholder)
+  File: TNLean/Channel/Primitive.lean  (EXTEND placeholder)
     def IsPrimitiveChannel                          ~  20 LOC
     transferMap_pow_tendsto_fixedPoint               ~ 120 LOC
     overlap_tendsto_one_of_primitive                 ~  60 LOC
@@ -585,7 +585,7 @@ E.1  Immediately needed modules (in dependency order)
                 QuantumPerronFrobenius.lean
 
   PRIORITY 3 — BNT predicate and matching lemma:
-  File: MPSLean/MPS/BasisNormal.lean  (EXTEND existing, ~400 new LOC)
+  File: TNLean/MPS/BasisNormal.lean  (EXTEND existing, ~400 new LOC)
     structure IsBNT                                 ~  40 LOC
     exists_bnt (from CF blocks)                     ~  80 LOC
     bnt_uniqueness                                  ~ 120 LOC
@@ -595,7 +595,7 @@ E.1  Immediately needed modules (in dependency order)
                 PiAlgebra/CanonicalFormSep.lean
 
   PRIORITY 4 — Equal-MPV FT in full generality (general r_A, r_B):
-  File: MPSLean/PiAlgebra/FundamentalTheoremFull.lean  (NEW, ~300 LOC)
+  File: TNLean/PiAlgebra/FundamentalTheoremFull.lean  (NEW, ~300 LOC)
     fundamentalTheorem_equalMPV                     ~ 180 LOC
     (uses BNT matching + block_separation + singleBlock FT)
   TOTAL: ~300 LOC
@@ -604,12 +604,12 @@ E.1  Immediately needed modules (in dependency order)
 E.2  Deferred modules (proportional part + generalized FT)
 ────────────────────────────────────────────────────────────
 
-  File: MPSLean/Channel/PeripheralSpectrum.lean  (extend placeholder, ~300 LOC)
+  File: TNLean/Channel/PeripheralSpectrum.lean  (extend placeholder, ~300 LOC)
     peripheral_eigenvalues_are_roots_of_unity
     peripheral_spectrum_is_cyclic_group
-  File: MPSLean/MPS/PrimitivePeriodRemoval.lean  (NEW, ~200 LOC)
+  File: TNLean/MPS/PrimitivePeriodRemoval.lean  (NEW, ~200 LOC)
     IsPrimitiveTransferMap_of_blocked
-  File: MPSLean/PiAlgebra/FundamentalTheoremGeneralized.lean  (NEW, ~400 LOC)
+  File: TNLean/PiAlgebra/FundamentalTheoremGeneralized.lean  (NEW, ~400 LOC)
     fundamentalTheorem_proportionalMPV   (Thm 4.4 proportional part)
     fundamentalTheorem_generalMPV        (Thm 4.6, diagonal Z)
 

@@ -458,7 +458,7 @@ VERDICT:
 ================================================================================
 
 ---------------------------------------------------------------------------
-Module 1: MPSLean/MPS/BNTConstruction.lean
+Module 1: TNLean/MPS/BNTConstruction.lean
   "BNT construction from canonical form"
 ---------------------------------------------------------------------------
 
@@ -488,7 +488,7 @@ Module 1: MPSLean/MPS/BNTConstruction.lean
     FundamentalTheoremProportional.lean
 
 ---------------------------------------------------------------------------
-Module 2: MPSLean/MPS/BNTSpanBridge.lean
+Module 2: TNLean/MPS/BNTSpanBridge.lean
   "Bridge from proportional MPV to BNT span equality"
 ---------------------------------------------------------------------------
 
@@ -526,7 +526,7 @@ Module 2: MPSLean/MPS/BNTSpanBridge.lean
   Dependencies: BNTConstruction.lean, BNTPermutationSimple.lean
 
 ---------------------------------------------------------------------------
-Module 3: MPSLean/MPS/ScalarPowerSumIdentity.lean
+Module 3: TNLean/MPS/ScalarPowerSumIdentity.lean
   "Lemma Lem:app_simple (scalar power-sum identity)"
 ---------------------------------------------------------------------------
 
@@ -546,7 +546,7 @@ Module 3: MPSLean/MPS/ScalarPowerSumIdentity.lean
   Dependencies: NewtonGirard.lean, Mathlib polynomial/multiset theory
 
 ---------------------------------------------------------------------------
-Module 4: MPSLean/MPS/FundamentalTheoremFull.lean
+Module 4: TNLean/MPS/FundamentalTheoremFull.lean
   "Full Thm 4.4 + Cor II_cor2 assembly"
 ---------------------------------------------------------------------------
 
@@ -594,17 +594,17 @@ SUMMARY TABLE
 EXISTING MODULES THAT ARE COMPLETE (no changes needed):
 ---------------------------------------------------------------------------
 
-  • MPSLean/MPS/FundamentalTheoremProportional.lean    ✅ (205 lines)
-  • MPSLean/Spectral/MPVOverlapDecay.lean              ✅ (115 lines)
-  • MPSLean/Spectral/MPVOverlapDecayRect.lean          ✅ (99 lines)
-  • MPSLean/Spectral/SpectralGap.lean                  ✅ (1214 lines)
-  • MPSLean/Spectral/SpectralGapRect.lean              ✅ (736 lines)
-  • MPSLean/Spectral/PrimitiveOverlap.lean             ✅ (185 lines)
-  • MPSLean/MPS/BasisNormalTensors.lean                ✅ (107 lines)
-  • MPSLean/MPS/BNTMatching.lean                       ✅ (201 lines)
-  • MPSLean/MPS/BNTPermutationSimple.lean              ✅ (450 lines)
-  • MPSLean/MPS/FundamentalTheoremThm44.lean           ✅ (115 lines)
-  • MPSLean/PiAlgebra/CanonicalFormSep.lean            ✅ (1068 lines)
+  • TNLean/MPS/FundamentalTheoremProportional.lean    ✅ (205 lines)
+  • TNLean/Spectral/MPVOverlapDecay.lean              ✅ (115 lines)
+  • TNLean/Spectral/MPVOverlapDecayRect.lean          ✅ (99 lines)
+  • TNLean/Spectral/SpectralGap.lean                  ✅ (1214 lines)
+  • TNLean/Spectral/SpectralGapRect.lean              ✅ (736 lines)
+  • TNLean/Spectral/PrimitiveOverlap.lean             ✅ (185 lines)
+  • TNLean/MPS/BasisNormalTensors.lean                ✅ (107 lines)
+  • TNLean/MPS/BNTMatching.lean                       ✅ (201 lines)
+  • TNLean/MPS/BNTPermutationSimple.lean              ✅ (450 lines)
+  • TNLean/MPS/FundamentalTheoremThm44.lean           ✅ (115 lines)
+  • TNLean/PiAlgebra/CanonicalFormSep.lean            ✅ (1068 lines)
 
 ---------------------------------------------------------------------------
 KEY EXISTING LEAN IDENTIFIERS (quick reference):

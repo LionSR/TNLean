@@ -10,18 +10,18 @@ purpose: >
   found to use identical Lean+Mathlib versions.
 ---
 
-# Community Lean 4 Resources for MPSLean's Spectral Gap
+# Community Lean 4 Resources for TNLean's Spectral Gap
 ## Investigation of Available Formalizations for Quantum Perron-Frobenius Theory
 
 **Date:** 2026-02-09  
 **Scope:** Lean 4 community libraries, Mathlib v4.27.0, external proof assistant projects  
-**Purpose:** Assess what existing community resources can help close MPSLean's remaining gap — the spectral theory of completely positive maps (quantum Perron-Frobenius) needed for block separation in the multi-block (r≥2) Fundamental Theorem of Matrix Product States.
+**Purpose:** Assess what existing community resources can help close TNLean's remaining gap — the spectral theory of completely positive maps (quantum Perron-Frobenius) needed for block separation in the multi-block (r≥2) Fundamental Theorem of Matrix Product States.
 
 ---
 
 ## 1. Executive Summary
 
-MPSLean's sole remaining gap is the **block separation lemma**: proving that a weighted-sum equality across blocks implies per-block equality, which requires spectral analysis of the transfer operator $E_A(X) = \sum_i A_i X A_i^\dagger$ as a completely positive map. We investigated four categories of community resources:
+TNLean's sole remaining gap is the **block separation lemma**: proving that a weighted-sum equality across blocks implies per-block equality, which requires spectral analysis of the transfer operator $E_A(X) = \sum_i A_i X A_i^\dagger$ as a completely positive map. We investigated four categories of community resources:
 
 | Resource | Status | Gap Coverage | Importable? |
 |----------|--------|-------------|-------------|
@@ -61,7 +61,7 @@ These results are proved for **stochastic matrices** (nonneg entries, rows summi
 - **PhysLean:** The neural network formalization was submitted as a PR to HEPLean/PhysLean. The PF infrastructure may be included in that PR, but the specific PR has not been located.
 - **Mathlib issue #6091:** The Perron-Frobenius theorem is listed among the "100 theorems" challenge and remains unproved in Mathlib proper.
 
-#### Relevance to MPSLean
+#### Relevance to TNLean
 
 **Partial.** The classical PF theorem for stochastic matrices could serve as a foundation, but our transfer operator is a completely positive map on the space of matrices (not a stochastic matrix on a vector space). Bridging the gap would require:
 
@@ -87,7 +87,7 @@ These results are proved for **stochastic matrices** (nonneg entries, rows summi
 
 This is the most comprehensive quantum information theory library in Lean 4. Its primary goal is a formalization of the Generalized Quantum Stein's Lemma (described as "quite close" to the first milestone as of October 2025). The library includes:
 
-**Directly relevant to MPSLean:**
+**Directly relevant to TNLean:**
 - **`CPTPMap dIn dOut`** — Completely positive trace-preserving maps as a structure over `Matrix (Fin dIn) (Fin dIn) ℂ →ₗ[ℂ] Matrix (Fin dOut) (Fin dOut) ℂ`, with bundled proofs of complete positivity and trace preservation.
 - **`IsCompletelyPositive`** — Definition of complete positivity via Kronecker products with the identity: a map is CP if for all $n$, $(\phi \otimes \mathrm{id}_n)$ preserves positive semidefiniteness.
 - **`MState d`** — Mixed quantum states (positive semidefinite matrices with trace 1).
@@ -117,7 +117,7 @@ This is the most comprehensive quantum information theory library in Lean 4. Its
 | **Version gap** | v4.24.0 → v4.27.0 needed. Lean 4 breaking changes between minor versions are common; expect 1–2 days of porting work. |
 | **Build system** | Uses `lakefile.lean` (we use `lakefile.toml`). Minor compatibility issue, easily resolved. |
 | **Mathlib dependency** | Both depend on Mathlib, reducing conflict risk. |
-| **Matrix types** | Uses `Matrix (Fin d) (Fin d) ℂ` — compatible with MPSLean's concrete matrix types. |
+| **Matrix types** | Uses `Matrix (Fin d) (Fin d) ℂ` — compatible with TNLean's concrete matrix types. |
 | **License** | MIT — fully compatible with any use. |
 
 **What we could import:**
@@ -131,7 +131,7 @@ This is the most comprehensive quantum information theory library in Lean 4. Its
 
 ### 2.3 Mathlib v4.27.0 — Current State
 
-Mathlib is already a dependency of MPSLean. Here is the current state of relevant components:
+Mathlib is already a dependency of TNLean. Here is the current state of relevant components:
 
 #### Completely positive maps (`Mathlib.Analysis.CStarAlgebra.CompletelyPositiveMap`)
 
@@ -167,7 +167,7 @@ Mathlib has mature general spectral theory:
 - `Matrix.PosDef` — strict positivity
 - `innerProductSpace` on matrices via Hilbert-Schmidt inner product
 
-These are directly used by MPSLean already (the transfer operator `transferMap` is proved to preserve `PosSemidef` in `Transfer.lean`).
+These are directly used by TNLean already (the transfer operator `transferMap` is proved to preserve `PosSemidef` in `Transfer.lean`).
 
 ---
 
@@ -233,7 +233,7 @@ The **quantum Perron-Frobenius theorem** — that an irreducible completely posi
 
 **Risk:** Version gap may cause build issues. Their library may have transitive dependencies that conflict.
 
-**Alternative:** Cherry-pick the key definitions and theorems (MIT license allows this) into MPSLean directly, avoiding dependency management issues. This is the recommended approach — copy and adapt ~200 lines rather than adding a full library dependency.
+**Alternative:** Cherry-pick the key definitions and theorems (MIT license allows this) into TNLean directly, avoiding dependency management issues. This is the recommended approach — copy and adapt ~200 lines rather than adding a full library dependency.
 
 ### 4.2 Cipollina PF: Potentially Useful When Available
 
@@ -261,7 +261,7 @@ Given the landscape, we recommend a tiered approach:
 
 ### Tier 1: Axiomatic Interface (Current — 0 additional effort)
 
-MPSLean already has a clean axiomatic interface via `blockSeparation_from_spectralTheory` that assumes the block separation result. The single-block case (r=1) is fully proved, and the multi-block case has an explicit, well-documented hypothesis. This is the **production interface** and should remain the default.
+TNLean already has a clean axiomatic interface via `blockSeparation_from_spectralTheory` that assumes the block separation result. The single-block case (r=1) is fully proved, and the multi-block case has an explicit, well-documented hypothesis. This is the **production interface** and should remain the default.
 
 ### Tier 2: Direct Finite-Dimensional Argument (1–2 months)
 
@@ -269,7 +269,7 @@ As recommended in the Spectral Gap Analysis report, pursue a direct algebraic pr
 
 1. **Vandermonde separation** of eigenvalue weights $\mu_k^N$ to isolate individual blocks (already established to work when eigenvalues are distinct).
 2. **Transfer operator spectral analysis** for a single block: show that the identity component dominates as $N \to \infty$.
-3. **Key insight:** For the specific transfer operator $E_A(X) = \sum_i A_i X A_i^\dagger$ arising from a canonical-form MPS, irreducibility of $E_A$ follows from the canonical form conditions (already in MPSLean).
+3. **Key insight:** For the specific transfer operator $E_A(X) = \sum_i A_i X A_i^\dagger$ arising from a canonical-form MPS, irreducibility of $E_A$ follows from the canonical form conditions (already in TNLean).
 
 **Community resource usage:**
 - Cherry-pick Choi matrix definitions from Lean-QuantumInfo (~200 lines)
@@ -285,7 +285,7 @@ If/when the Cipollina PF code becomes public:
 3. Prove the quantum PF theorem by reduction to the classical case via the Choi matrix
 4. Apply to the transfer operator
 
-This would be a significant contribution to the Lean 4 ecosystem beyond MPSLean.
+This would be a significant contribution to the Lean 4 ecosystem beyond TNLean.
 
 ### Tier 4: Contribute to Mathlib (6–12 months, aspirational)
 
@@ -330,7 +330,7 @@ To stay current with community developments:
 
 The Lean 4 ecosystem is approaching but has not yet reached the point where quantum Perron-Frobenius theory can be assembled from existing components. The two most relevant resources — Cipollina's classical PF and Meiburg's quantum information library — together cover the two halves of the bridge (classical eigenvalue theory + quantum channel structure) but neither has been connected to the other, and one is not yet publicly available.
 
-For MPSLean's practical needs, the recommended path is:
+For TNLean's practical needs, the recommended path is:
 1. **Keep the current axiomatic interface** as the production version.
 2. **Pursue the direct finite-dimensional algebraic argument** (Tier 2) as the next proof effort, cherry-picking Choi definitions from Lean-QuantumInfo.
 3. **Monitor** the Cipollina PF availability for a potential faster path to a full proof.

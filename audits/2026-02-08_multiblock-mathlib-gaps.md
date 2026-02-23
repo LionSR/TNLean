@@ -73,7 +73,7 @@ Still in `Mathlib/Data/Matrix/Block.lean`:
 
 ### Relevance to multi-block MPS
 
-This repo already uses `blockDiagonal'` exactly as intended. See `MPSLean/MPS/CanonicalForm.lean`:
+This repo already uses `blockDiagonal'` exactly as intended. See `TNLean/MPS/CanonicalForm.lean`:
 
 * `CanonicalForm.toTensor` builds a block-diagonal tensor using `Matrix.blockDiagonal'` and then `Matrix.reindex` along `finSigmaFinEquiv`.
 
@@ -296,11 +296,11 @@ These results become relevant in multi-block settings where one studies asymptot
 
 ### Present in this repo
 
-* **Single-block Fundamental Theorem**: `MPSLean/MPS/FundamentalTheorem.lean`
-  * uses linear extension + simplicity + a Skolem–Noether result (`MPSLean/MPS/SkolemNoether.lean`).
-* **Canonical-form scaffolding**: `MPSLean/MPS/CanonicalForm.lean`
+* **Single-block Fundamental Theorem**: `TNLean/MPS/FundamentalTheorem.lean`
+  * uses linear extension + simplicity + a Skolem–Noether result (`TNLean/MPS/SkolemNoether.lean`).
+* **Canonical-form scaffolding**: `TNLean/MPS/CanonicalForm.lean`
   * already models a multi-block tensor as dependent block diagonal (`Matrix.blockDiagonal'`) with reindexing via `finSigmaFinEquiv`.
-* **Transfer operator**: `MPSLean/MPS/Transfer.lean`
+* **Transfer operator**: `TNLean/MPS/Transfer.lean`
   * defines `transferMap` as a `LinearMap` on matrices and proves positivity with `Matrix.PosSemidef`.
 
 ### Likely upcoming requirements for multi-block FT

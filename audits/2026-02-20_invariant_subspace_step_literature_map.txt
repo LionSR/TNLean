@@ -4,7 +4,7 @@ Date   : 2026-02-20
 Subject: Literature mapping — Lean canonical-form existence lemma
          `MPSTensor.exists_twoBlock_decomp_of_lowerZero`
          (invariant subspace ⇒ 2-block direct sum)
-File   : MPSLean/MPS/InvariantSubspaceDecomp.lean
+File   : TNLean/MPS/InvariantSubspaceDecomp.lean
 ================================================================================
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -399,7 +399,7 @@ SLIDE TEMPLATE (suggested phrasing):
    off-diagonal blocks does not change any MPV amplitude:
      Tr(Aσ₁···AσN) = Tr(A¹σ₁···A¹σN) + Tr(A²σ₁···A²σN).
    Lean formalization: `MPSTensor.exists_twoBlock_decomp_of_lowerZero`
-     (MPSLean/MPS/InvariantSubspaceDecomp.lean)."
+     (TNLean/MPS/InvariantSubspaceDecomp.lean)."
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 APPENDIX: EXACT TEX-SOURCE LOCATIONS USED IN THIS AUDIT

@@ -79,7 +79,7 @@
 \maketitle
 \vspace{-2em}
 \begin{center}
-{\footnotesize Lean~4 + Mathlib v4.27.0\quad$\cdot$\quad\cite{Cirac2021Matrix}\quad$\cdot$\quad\texttt{github.com/LionSR/MPSLean}}
+{\footnotesize Lean~4 + Mathlib v4.27.0\quad$\cdot$\quad\cite{Cirac2021Matrix}\quad$\cdot$\quad\texttt{github.com/LionSR/TNLean}}
 \end{center}
 \end{frame}
 }
@@ -162,7 +162,7 @@ The standard proof \cite{Perez-Garcia2007Matrix,Cirac2021Matrix} uses \alert{tra
 \vspace{0.5em}
 \begin{columns}[T]
 \begin{column}{0.48\textwidth}
-\textcolor{leangreen}{\textbf{Already in MPSLean:}}
+\textcolor{leangreen}{\textbf{Already in TNLean:}}
 \begin{itemize}\small
   \item Transfer map: $E_A(X) = \sum_i A_i X A_i^\dagger$
   \item Positivity: $X \geq 0 \Rightarrow E_A(X) \geq 0$
@@ -435,7 +435,7 @@ The paper targets stochastic matrices, but the code proves PF for \alert{general
 
 \vspace{0.3em}
 \begin{tabular}{lcc}
-  & \textbf{HopfieldNet} & \textbf{MPSLean} \\
+  & \textbf{HopfieldNet} & \textbf{TNLean} \\
   \hline\\
   Lean & v4.27.0-rc1 & v4.27.0 \\
   Mathlib & \texttt{910dac3f} & \texttt{910dac3f} \\
@@ -610,8 +610,8 @@ Spectral theory & \textcolor{leangreen}{\checkmark} & --- & \textcolor{leangreen
   archboxR/.style={rectangle, rounded corners=3pt, draw=softred!60, fill=softred!12!cardbg,
               text=white, font=\tiny, minimum width=2.5cm, minimum height=0.5cm, align=center},
 ]
-  % Left column: MPSLean
-  \node[archboxG] (tf) {Transfer operator $E_A$\\{\tiny MPSLean/Transfer.lean}};
+  % Left column: TNLean
+  \node[archboxG] (tf) {Transfer operator $E_A$\\{\tiny TNLean/Transfer.lean}};
   \node[archboxG, below=of tf] (pos) {$E_A$ is positive\\{\tiny transferMap\_pos}};
 
   % Middle column: New code (bridge)
@@ -636,7 +636,7 @@ Spectral theory & \textcolor{leangreen}{\checkmark} & --- & \textcolor{leangreen
   \draw[stdarr] (gap) -- (sep);
 
   % Source labels
-  \node[left=0.3cm of tf, font=\tiny, text=leangreen, rotate=90, anchor=south] {\textbf{MPSLean}};
+  \node[left=0.3cm of tf, font=\tiny, text=leangreen, rotate=90, anchor=south] {\textbf{TNLean}};
   \node[left=0.3cm of choi, font=\tiny, text=amber, rotate=90, anchor=south] {\textbf{New code}};
   \node[right=0.3cm of gap, font=\tiny, text=leangreen, rotate=90, anchor=north] {\textbf{HopfieldNet}};
 \end{tikzpicture}
@@ -909,14 +909,14 @@ Overall risk: \textcolor{amber}{Medium}. Fallback paths exist at each stage.
 %======================================================================
 % SLIDE 22 - Impact
 %======================================================================
-\begin{frame}{Impact: Beyond MPSLean}
+\begin{frame}{Impact: Beyond TNLean}
 
 Closing this gap would yield a formally verified quantum Perron--Frobenius theorem.
 
 \vspace{0.3em}
 \begin{columns}[T]
 \begin{column}{0.48\textwidth}
-\textbf{For MPSLean:}
+\textbf{For TNLean:}
 \begin{itemize}\small\itemsep0pt
   \item Full FT of MPS: 0 sorries, 0 axioms
   \item Opens path to DMRG, SPT phases
@@ -956,7 +956,7 @@ Closing this gap would yield a formally verified quantum Perron--Frobenius theor
 \end{tikzpicture}
 
 \vspace{0.7em}
-{\scriptsize \texttt{github.com/LionSR/MPSLean} $\cdot$ \texttt{github.com/mkaratarakis/HopfieldNet} $\cdot$ \texttt{github.com/Timeroot/Lean-QuantumInfo}}
+{\scriptsize \texttt{github.com/LionSR/TNLean} $\cdot$ \texttt{github.com/mkaratarakis/HopfieldNet} $\cdot$ \texttt{github.com/Timeroot/Lean-QuantumInfo}}
 \end{center}
 \vfill
 \end{frame}

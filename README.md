@@ -1,4 +1,4 @@
-# MPSLean
+# TNLean
 
 A formal verification of the **Fundamental Theorem of Matrix Product States** in Lean 4, using [Mathlib](https://github.com/leanprover-community/mathlib4) v4.27.0.
 
@@ -103,7 +103,7 @@ theorem IsChannel.exists_posSemidef_fixedPoint
 ## File Structure
 
 ```
-MPSLean/MPS/
+TNLean/MPS/
 ├── Defs.lean                    — MPSTensor, IsInjective, GaugeEquiv, SameMPV, gauge invariance (128 l)
 ├── Transfer.lean                — Transfer map, gauge covariance, positivity (45 l)
 ├── TraceNondeg.lean             — Trace nondegeneracy: tr(MN)=0 ∀N ⟹ M=0 (22 l)

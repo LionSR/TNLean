@@ -6,12 +6,12 @@ purpose: >
   Systematic audit of Mathlib v4.27.0 for the building blocks needed to
   formalize the Fundamental Theorem of Matrix Product States.  Covers
   matrix algebras, simple rings, Skolem–Noether, trace, block diagonals,
-  and proposes the initial MPSLean architecture.
+  and proposes the initial TNLean architecture.
 ---
 
 I set up the Lean/Mathlib workspace as requested:
 
-- Created a Lean package `MPSLean` (Mathlib template) with `mathlib` pinned to `v4.27.0` in `lakefile.toml`.
+- Created a Lean package `TNLean` (Mathlib template) with `mathlib` pinned to `v4.27.0` in `lakefile.toml`.
 - Fetched the precompiled cache and verified `lake build` succeeds.
 
 Below is a systematic audit of Mathlib w.r.t. the building blocks you listed, followed by an architecture proposal aimed at being maintainable and extensible (e.g. toward PEPS).
@@ -279,13 +279,13 @@ No project code yet; just rely on Mathlib.
 
 ### Layer 1: Core MPS algebra (`Matrix`-first)
 **Goal**: define MPVs as coefficient functions, gauge actions, and basic lemmas.
-- `MPSLean/MPS/Tensor.lean`
+- `TNLean/MPS/Tensor.lean`
   - `MPSTensor d D := Fin d → Matrix (Fin D) (Fin D) ℂ`
   - gauge action by `GL (Fin D) ℂ`
-- `MPSLean/MPS/Words.lean`
+- `TNLean/MPS/Words.lean`
   - represent index strings as `List (Fin d)` or as `Fin N → Fin d`
   - define product evaluation `evalWord : List (Fin d) → Matrix …`
-- `MPSLean/MPS/MPV.lean`
+- `TNLean/MPS/MPV.lean`
   - define coefficients \(c_A(w) := \mathrm{tr}(\prod A^{i})\)
   - define “same MPVs for all \(N\)” as `∀ N, ∀ i : Fin N → Fin d, coeffA i = coeffB i`
   - (optionally) prove equivalence with equality of coefficients on all words
@@ -293,7 +293,7 @@ No project code yet; just rely on Mathlib.
 This avoids Hilbert-space tensor products until you actually need them.
 
 ### Layer 2: Transfer operator as a linear map (and optionally as CP map)
-- `MPSLean/MPS/Transfer.lean`
+- `TNLean/MPS/Transfer.lean`
   - `E_A : Matrix D D ℂ →ₗ[ℂ] Matrix D D ℂ` via `X ↦ ∑ i, A i * X * (A i)ᴴ`
   - show linearity, basic identities, gauge covariance `E_{XAX⁻¹} = conj … (E_A)` etc.
 

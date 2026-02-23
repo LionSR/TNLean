@@ -1,4 +1,4 @@
-Memo: MPV overlap via operator-trace (MPSLean/Spectral/MPVOverlapTrace.lean)
+Memo: MPV overlap via operator-trace (TNLean/Spectral/MPVOverlapTrace.lean)
 
 Date: 2026-02-19
 
@@ -46,7 +46,7 @@ Big-operator reordering/factorization:
 
 Project lemmas:
 * mixedTransferMap_pow_apply
-  (import MPSLean.Spectral.MixedTransfer)
+  (import TNLean.Spectral.MixedTransfer)
 
 
 (1) Trace expansion lemma
@@ -132,4 +132,4 @@ Notes:
 
 Status
 ------
-MPSLean/Spectral/MPVOverlapTrace.lean now compiles without `sorry`.
+TNLean/Spectral/MPVOverlapTrace.lean now compiles without `sorry`.

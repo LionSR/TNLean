@@ -30,7 +30,7 @@
     {⊥}{{$\bot$}}1,
 }
 
-\title{\textbf{Systematic Lean~4 Proof Simplification:\\MPSLean Refactoring Report}}
+\title{\textbf{Systematic Lean~4 Proof Simplification:\\TNLean Refactoring Report}}
 \subtitle{{\small 35 files audited, 15 reduced $\cdot$ 7 waves $\cdot$ 658 lines removed (12\%) $\cdot$ Lean 4 + Mathlib v4.27.0}}
 \date{}
 \author{}
@@ -63,7 +63,7 @@
 %======================================================================
 % SLIDE 2 - Project overview
 %======================================================================
-\begin{frame}{What is MPSLean?}
+\begin{frame}{What is TNLean?}
     \begin{columns}[T]
         \column{0.55\textwidth}
         \textbf{A Lean~4 formalization of:}
@@ -216,7 +216,7 @@
     \begin{columns}[T]
         \column{0.45\textwidth}
         \begin{lstlisting}[basicstyle=\ttfamily\tiny\color{white},frame=none,backgroundcolor=\color{cardbg}]
-MPSLean/
+TNLean/
   Algebra/         (* 4 files, 403 lines *)
     BlockPermutation.lean
     SkolemNoether.lean
@@ -264,7 +264,7 @@ MPSLean/
   PositiveMapSpectral.lean
   PiAlgebraExtension.lean
   TransferSpectral.lean
-  MPSLean.lean           (* import root *)
+  TNLean.lean           (* import root *)
         \end{lstlisting}
     \end{columns}
 \end{frame}
@@ -332,7 +332,7 @@ MPSLean/
             \item \textbf{\textcolor{leangreen}{Split god files}} ---
                   4 monolithic files ({$\sim$}800+ lines each) split into 35 focused modules
             \item \textbf{\textcolor{leangreen}{Flatten nesting}} ---
-                  Removed redundant \texttt{MPSLean/MPS/} nesting
+                  Removed redundant \texttt{TNLean/MPS/} nesting
             \item \textbf{\textcolor{leangreen}{DRY cleanup}} ---
                   Deduplicate spectral helpers, remove scratch/dead code
             \item \textbf{\textcolor{leangreen}{Layer separation}} ---

@@ -1,7 +1,7 @@
-name = "MPSLean"
+name = "TNLean"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["MPSLean"]
+defaultTargets = ["TNLean"]
 
 [leanOptions]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
@@ -14,5 +14,9 @@ name = "mathlib"
 scope = "leanprover-community"
 rev = "v4.27.0"
 
+[[require]]
+name = "checkdecls"
+git = "https://github.com/PatrickMassot/checkdecls.git"
+
 [[lean_lib]]
-name = "MPSLean"
+name = "TNLean"

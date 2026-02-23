@@ -1,6 +1,6 @@
-Literature-alignment audit — MPSLean (Lean 4)
+Literature-alignment audit — TNLean (Lean 4)
 Date: 2026-02-18
-Repo: MPSLean
+Repo: TNLean
 
 ================================================================================
 0. Executive summary
@@ -14,24 +14,24 @@ Goal of this audit.
 Headline status (Lean).
   • Single-block (injective) FT: PROVED.
     - Lean theorem: MPSTensor.fundamentalTheorem_singleBlock
-      (MPSLean/MPS/FundamentalTheorem.lean)
+      (TNLean/MPS/FundamentalTheorem.lean)
     - Lean proof route: linear extension + simplicity + Skolem–Noether (inner automorphisms).
 
   • Multi-block FT *given* per-block SameMPV (“hSep”): PROVED.
     - Lean theorems: MPSTensor.fundamentalTheorem_multiBlock_full / _decomposition
-      (MPSLean/PiAlgebra/FundamentalTheoremComplete.lean)
+      (TNLean/PiAlgebra/FundamentalTheoremComplete.lean)
     - Key extra: Pi-algebra automorphism decomposition (permutation + inner conjugations).
 
   • Literature-critical missing bridge: canonical-form “block separation”
       SameMPV₂(toTensorFromBlocks μ A, toTensorFromBlocks μ B)
         ⟹  ∀k, SameMPV(A_k,B_k).
     - Lean lemma: MPSTensor.block_separation_core
-      (MPSLean/PiAlgebra/CanonicalFormSep.lean)
+      (TNLean/PiAlgebra/CanonicalFormSep.lean)
       Status: PARTIALLY PROVED (r=0,1), MISSING (r≥2 is `sorry`).
 
   • Known-false lemma currently present (guarded by `sorry` and a counterexample).
     - Lean lemma: private lemma per_block_trace_eq_of_summed_blocks
-      (MPSLean/PiAlgebra/BlockSeparationProof.lean)
+      (TNLean/PiAlgebra/BlockSeparationProof.lean)
       Status: STATEMENT FALSE UNDER CURRENT HYPOTHESES.
 
 Key literature alignment diagnosis.
@@ -45,7 +45,7 @@ Key literature alignment diagnosis.
        - mixedTransfer spectral radius ≤ 1 (normalized Kraus)
        - spectral radius = 1 forces gauge-phase equivalence
        - otherwise spectral radius < 1 and powers → 0
-     (MPSLean/Spectral/SpectralGap.lean).
+     (TNLean/Spectral/SpectralGap.lean).
      This is highly aligned with Wolf’s channel framing (Schwarz maps, peripheral eigenvectors).
 
   3) The open block-separation lemma should be closed using the spectral/mixed-transfer route
@@ -136,8 +136,8 @@ Mapping table.
 | Paper ref | Content (abridged) | Lean analogue | Status | Notes |
 |---|---|---|---|---|
 | Sec. 3, Thm. thm:mainthm | quantum Wielandt bound on i(A) | (none) | missing | No quantitative blocking-length bounds in Lean. |
-| Sec. 5, Eq. (gamma) discussion | Γ_L injective iff E_A primitive; injective for L≥i(A) | MPSTensor.IsNBlkInjective / IsNormal (MPSLean/MPS/Defs.lean) | partially proved | Definitions exist; no theorem connecting IsNormal to primitivity nor explicit L bound. |
-| spectral characterization of primitivity | primitive ⇔ unique peripheral eigenvalue etc | (partial) QPF + spectral lemmas (MPSLean/QuantumPerronFrobenius.lean; Spectral/SpectralGap.lean) | partially proved | Lean has QPF for injective + TP gauge; does not formalize full “quantum Wielandt index”. |
+| Sec. 5, Eq. (gamma) discussion | Γ_L injective iff E_A primitive; injective for L≥i(A) | MPSTensor.IsNBlkInjective / IsNormal (TNLean/MPS/Defs.lean) | partially proved | Definitions exist; no theorem connecting IsNormal to primitivity nor explicit L bound. |
+| spectral characterization of primitivity | primitive ⇔ unique peripheral eigenvalue etc | (partial) QPF + spectral lemmas (TNLean/QuantumPerronFrobenius.lean; Spectral/SpectralGap.lean) | partially proved | Lean has QPF for injective + TP gauge; does not formalize full “quantum Wielandt index”. |
 
 Alignment notes.
   This paper is mostly about the *quantitative blocking bound* ensuring “after finite blocking,
@@ -163,8 +163,8 @@ Key items (FT/canonical-form route).
 Mapping table.
 | Paper ref | Content (abridged) | Lean analogue | Status | Notes |
 |---|---|---|---|---|
-| Thm. thm:std-form-inj | existence of standard/canonical form after blocking | MPSTensor.CanonicalForm (MPSLean/MPS/CanonicalForm.lean) | partially proved | Canonical form is a data structure only; no theorem “any tensor → standard form”. |
-| Lemma lemma:offdiagonal-damping | mixed transfer spectral radius < 1 for distinct blocks | MPSTensor.spectralRadius_mixedTransfer_lt_one (MPSLean/Spectral/SpectralGap.lean) | proved | Lean version assumes IsInjective on both tensors + TP normalization + ¬GaugePhaseEquiv. |
+| Thm. thm:std-form-inj | existence of standard/canonical form after blocking | MPSTensor.CanonicalForm (TNLean/MPS/CanonicalForm.lean) | partially proved | Canonical form is a data structure only; no theorem “any tensor → standard form”. |
+| Lemma lemma:offdiagonal-damping | mixed transfer spectral radius < 1 for distinct blocks | MPSTensor.spectralRadius_mixedTransfer_lt_one (TNLean/Spectral/SpectralGap.lean) | proved | Lean version assumes IsInjective on both tensors + TP normalization + ¬GaugePhaseEquiv. |
 | Lemma lemma:exptransferoperator | exponential convergence of E_A^k to fixed point | (no direct analogue) | missing | Lean has QPF fixed point existence/uniqueness, but not an explicit convergence-rate theorem for E_A^n on the traceless subspace. |
 
 Alignment notes.
@@ -192,13 +192,13 @@ Key items (FT/canonical-form route).
 Mapping table.
 | Paper ref | Content (abridged) | Lean analogue | Status | Notes |
 |---|---|---|---|---|
-| Sec. MPV, Def. CF/NT | canonical form into normal blocks | MPSTensor.CanonicalForm (MPSLean/MPS/CanonicalForm.lean) | partially proved | No formal canonical-form construction nor proof of correctness/uniqueness. |
-| Def. injective NT / biCF | injectivity and block-injectivity conditions | MPSTensor.IsInjective / IsNBlkInjective / IsNormal (MPSLean/MPS/Defs.lean) | partially proved | “block injective canonical form” as in physics not yet formalized. |
+| Sec. MPV, Def. CF/NT | canonical form into normal blocks | MPSTensor.CanonicalForm (TNLean/MPS/CanonicalForm.lean) | partially proved | No formal canonical-form construction nor proof of correctness/uniqueness. |
+| Def. injective NT / biCF | injectivity and block-injectivity conditions | MPSTensor.IsInjective / IsNBlkInjective / IsNormal (TNLean/MPS/Defs.lean) | partially proved | “block injective canonical form” as in physics not yet formalized. |
 | Quantum Wielandt (≤D^4) | normal ⇒ injective after bounded blocking | (none) | missing | No quantitative blocking bounds. |
 | Prop. propblockinj (≤3D^5) | CF ⇒ biCF after blocking | (none) | missing | Not present. |
-| Lemma equalMPS | equal-or-orthogonal lemma via mixed transfer | spectralRadius_mixedTransfer_lt_one + modulus_one_eigenvalue_implies_gauge (MPSLean/Spectral/SpectralGap.lean) | proved | Lean proves “ρ<1 unless gauge-phase”, matching the channel core of equalMPS. |
+| Lemma equalMPS | equal-or-orthogonal lemma via mixed transfer | spectralRadius_mixedTransfer_lt_one + modulus_one_eigenvalue_implies_gauge (TNLean/Spectral/SpectralGap.lean) | proved | Lean proves “ρ<1 unless gauge-phase”, matching the channel core of equalMPS. |
 | Thm. thm1 (proportional MPVs) | blocks match up to permutation+phase+gauge | (none) | missing | Lean currently formalizes only the *equal* SameMPV case, not proportional ProportionalMPV₂. |
-| Cor. II_cor2 (equal MPVs) | equal MPVs ⇒ gauge | fundamentalTheorem_singleBlock (MPSLean/MPS/FundamentalTheorem.lean) | proved (single-block) | Proof route differs (Skolem–Noether rather than transfer-operator argument). |
+| Cor. II_cor2 (equal MPVs) | equal MPVs ⇒ gauge | fundamentalTheorem_singleBlock (TNLean/MPS/FundamentalTheorem.lean) | proved (single-block) | Proof route differs (Skolem–Noether rather than transfer-operator argument). |
 | multi-block equal-case FT (needs separation) | full FT for canonical-form tensors | fundamentalTheorem_canonicalForm (PiAlgebra/CanonicalFormSep.lean) | partially proved | Depends on open block_separation_core (r≥2). |
 
 Alignment notes.
@@ -249,7 +249,7 @@ Key items (relevant to transfer/spectral framing).
 Mapping table.
 | Paper ref | Content (abridged) | Lean analogue | Status | Notes |
 |---|---|---|---|---|
-| PF theorem for irreducible positive maps | existence/uniqueness of positive eigenvectors | quantum_perron_frobenius / injective_transfer_unique_fixed_point' (MPSLean/QuantumPerronFrobenius.lean) | partially proved | Lean proves QPF under IsInjective + TP normalization; does not yet cover general irreducible positive maps. |
+| PF theorem for irreducible positive maps | existence/uniqueness of positive eigenvectors | quantum_perron_frobenius / injective_transfer_unique_fixed_point' (TNLean/QuantumPerronFrobenius.lean) | partially proved | Lean proves QPF under IsInjective + TP normalization; does not yet cover general irreducible positive maps. |
 | correlation decay from transfer spectral gap | exponential decay of cross terms | mixedTransfer_pow_tendsto_zero + cross_correlation_tendsto_zero (Spectral/*.lean) | proved (deterministic) | Lean has deterministic spectral-gap ⇒ decay; no random/probabilistic results. |
 | typical gap for random MPS/PEPS | probabilistic bounds | (none) | missing | Random matrix theory not in scope. |
 
@@ -470,33 +470,33 @@ For a literature-aligned academic talk, reorganize to follow the standard proof 
 
 Core FT results.
   • MPSTensor.fundamentalTheorem_singleBlock
-    - file: MPSLean/MPS/FundamentalTheorem.lean
+    - file: TNLean/MPS/FundamentalTheorem.lean
 
   • MPSTensor.fundamentalTheorem_multiBlock_full / _decomposition
-    - file: MPSLean/PiAlgebra/FundamentalTheoremComplete.lean
+    - file: TNLean/PiAlgebra/FundamentalTheoremComplete.lean
 
   • MPSTensor.fundamentalTheorem_multiBlock_fromSameMPV₂
-    - file: MPSLean/PiAlgebra/FundamentalTheoremComplete.lean
+    - file: TNLean/PiAlgebra/FundamentalTheoremComplete.lean
     - NOTE: requires explicit hSep : ∀k, SameMPV(A_k,B_k).
 
 Spectral / channel-aligned lemmas.
   • MPSTensor.spectralRadius_mixedTransfer_lt_one
   • MPSTensor.mixedTransfer_pow_tendsto_zero
-    - file: MPSLean/Spectral/SpectralGap.lean
+    - file: TNLean/Spectral/SpectralGap.lean
 
   • MPSTensor.cross_correlation_tendsto_zero
-    - file: MPSLean/Spectral/CrossCorrelation.lean
+    - file: TNLean/Spectral/CrossCorrelation.lean
 
 Block separation (open / false).
   • MPSTensor.block_separation_core
-    - file: MPSLean/PiAlgebra/CanonicalFormSep.lean
+    - file: TNLean/PiAlgebra/CanonicalFormSep.lean
     - status: partially proved, sorry for r≥2
 
   • private lemma per_block_trace_eq_of_summed_blocks
-    - file: MPSLean/PiAlgebra/BlockSeparationProof.lean
+    - file: TNLean/PiAlgebra/BlockSeparationProof.lean
     - status: statement false under current hypotheses (docstring counterexample) + sorry
 
 Canonical-form end-to-end (conditional on open lemma).
   • MPSTensor.fundamentalTheorem_canonicalForm
-    - file: MPSLean/PiAlgebra/CanonicalFormSep.lean
+    - file: TNLean/PiAlgebra/CanonicalFormSep.lean
     - depends on block_separation_core

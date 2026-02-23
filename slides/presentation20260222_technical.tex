@@ -277,7 +277,7 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
 
     \vspace{0.5em}
     \textbf{Lean Implementation:}
-    \texttt{MPSLean.MPS.CanonicalFormReduction}
+    \texttt{TNLean.MPS.CanonicalFormReduction}
     
     \begin{itemize}
         \item Uses orthogonal projection theory.
@@ -297,7 +297,7 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
         to the fixed-point projector $\mathcal{P}$ (spectral radius of the remainder $< 1$).
     \end{block}
 
-    \textbf{Lean:} \texttt{MPSLean.Spectral.SpectralGap}
+    \textbf{Lean:} \texttt{TNLean.Spectral.SpectralGap}
     \begin{itemize}
         \item Formalized via \texttt{Complex.abs} bounds on eigenvalues.
         \item Used to prove $\braket{V_N|V_N}$ grows as $\rho^N$.
@@ -314,7 +314,7 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
     If $A$ and $B$ are \textbf{not} gauge equivalent (up to phase), then
     \[ O_N(A,B) \to 0 \quad \text{exponentially}. \]
     
-    \textbf{Lean:} \texttt{MPSLean.Spectral.MPVOverlapDecay}
+    \textbf{Lean:} \texttt{TNLean.Spectral.MPVOverlapDecay}
     \begin{itemize}
         \item Proves that if spectral radii differ, overlap decays.
         \item If radii match but no gauge equiv, the ``mixed'' transfer operator has spectral radius strictly less than $\sqrt{\rho_A \rho_B}$.
@@ -335,7 +335,7 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
         \item This implies the existence of an invertible intertwiner $X$ (Sanz et al., 2010).
     \end{enumerate}
     
-    File: \texttt{MPSLean.MPS.FundamentalTheoremProportional}
+    File: \texttt{TNLean.MPS.FundamentalTheoremProportional}
 \end{frame}
 
 \begin{frame}{Step 5: Multi-Block Matching (BNT)}
@@ -375,7 +375,7 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
         \item \textbf{Conclude:} $A \cong B$.
     \end{enumerate}
     
-    File: \texttt{MPSLean.MPS.FundamentalTheoremFull}
+    File: \texttt{TNLean.MPS.FundamentalTheoremFull}
 \end{frame}
 
 %======================================================================
@@ -396,7 +396,7 @@ def GaugeEquiv (A B : MPSTensor d D) : Prop :=
     
     \textbf{Our Approach:}
     We work with "General Primitive" tensors and carry around the fixed-point matrices ($\Lambda_L, \Lambda_R$) explicitly.
-    \texttt{MPSLean.QPF.PosDef} handles the positive-definiteness of these fixed points.
+    \texttt{TNLean.QPF.PosDef} handles the positive-definiteness of these fixed points.
 \end{frame}
 
 \begin{frame}[fragile]{The \texttt{mu\_strict\_anti} Hypothesis}
@@ -457,7 +457,7 @@ mu_strict_anti :
     \begin{columns}[T]
         \column{0.4\textwidth}
         \begin{itemize}
-            \item[$\bullet$] MPSLean
+            \item[$\bullet$] TNLean
             \begin{itemize}
                 \item[$\circ$] Algebra (8 files)
                 \item[$\circ$] Channel (8 files)

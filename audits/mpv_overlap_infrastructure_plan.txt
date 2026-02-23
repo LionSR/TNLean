@@ -1,7 +1,7 @@
 MPV overlap / Gram infrastructure plan (Lean memo)
 Date: 2026-02-18
-Repo: MPSLean
-Target gap: close `sorry` in `MPSTensor.block_separation_core` (MPSLean/PiAlgebra/CanonicalFormSep.lean)
+Repo: TNLean
+Target gap: close `sorry` in `MPSTensor.block_separation_core` (TNLean/PiAlgebra/CanonicalFormSep.lean)
 Immediate subtask: overlap/Gram layer needed for the literature route
   “equal-or-orthogonal / mixed transfer → overlap decay → Gram-matrix LI → block separation”.
 
@@ -17,14 +17,14 @@ Goal: treat the MPV coefficients σ ↦ mpv A σ as a vector in the physical Hil
   H_N := EuclideanSpace ℂ (Fin N → Fin d).
 
 There is already a purely function-level view in:
-  `MPSLean/MPS/BasisNormal.lean`:
+  `TNLean/MPS/BasisNormal.lean`:
     def mpvFun (A : MPSTensor d D) (N : ℕ) : (Fin N → Fin d) → ℂ := fun σ => mpv A σ
 
 For overlaps / Gram matrices, it is cleaner to package this into an `EuclideanSpace` vector.
 Suggested new file (minimal deps):
-  `MPSLean/MPS/MPVOverlap.lean` (or `MPSLean/MPS/Overlap.lean`)
+  `TNLean/MPS/MPVOverlap.lean` (or `TNLean/MPS/Overlap.lean`)
 Imports:
-  - `import MPSLean.MPS.Defs`              -- mpv
+  - `import TNLean.MPS.Defs`              -- mpv
   - `import Mathlib.Analysis.InnerProductSpace.PiL2`  -- EuclideanSpace
   - `import Mathlib.Analysis.InnerProductSpace.Basic` -- RCLike.inner_apply, inner_conj_symm
   - `import Mathlib.Algebra.BigOperators.Basic`        -- finite sums
@@ -125,8 +125,8 @@ Recommended proof route (does NOT require Kronecker/vec machinery; it uses the e
 `mixedTransferMap_pow_apply` lemma and basic matrix-basis manipulations).
 
 --- Step 0: imports needed for this lemma
-In the file containing the lemma (suggest: `MPSLean/Spectral/MPVOverlapTrace.lean`):
-  - `import MPSLean.Spectral.MixedTransfer`  -- mixedTransferMap + mixedTransferMap_pow_apply
+In the file containing the lemma (suggest: `TNLean/Spectral/MPVOverlapTrace.lean`):
+  - `import TNLean.Spectral.MixedTransfer`  -- mixedTransferMap + mixedTransferMap_pow_apply
   - `import Mathlib.LinearAlgebra.Trace`     -- LinearMap.trace_eq_matrix_trace
   - `import Mathlib.Data.Matrix.Basis`       -- Matrix.mul_single_apply_same/of_ne, etc
   - `import Mathlib.LinearAlgebra.Matrix.Trace` -- Matrix.trace_conjTranspose, trace_single lemmas
@@ -173,7 +173,7 @@ Start from the lemma above:
 
 Now expand the application using the existing lemma:
 
-  `mixedTransferMap_pow_apply` (MPSLean/Spectral/MixedTransfer.lean)
+  `mixedTransferMap_pow_apply` (TNLean/Spectral/MixedTransfer.lean)
 
 specialized to `X := Matrix.single p q 1`:
 
@@ -229,7 +229,7 @@ Instead of `Matrix.stdBasisMatrix` (Lean3 name), in Lean4/Mathlib use:
 
 Repo fact already available:
   `MPSTensor.mixedTransfer_pow_tendsto_zero` in
-    `MPSLean/Spectral/SpectralGap.lean`
+    `TNLean/Spectral/SpectralGap.lean`
   Statement (abridged):
     if A,B injective + DS gauge and ¬GaugePhaseEquiv A B,
     then for any matrix X,
@@ -268,7 +268,7 @@ This gives the “equal-or-orthogonal” half: for injective DS-gauge blocks,
 
 Already in repo:
   `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`
-  in `MPSLean/Algebra/GramMatrixLI.lean`.
+  in `TNLean/Algebra/GramMatrixLI.lean`.
 
 To apply it in the MPS context, we need a family of vectors v_k(N) in H_N with
   ⟪v_j(N), v_k(N)⟫ → δ_{jk}.
@@ -324,23 +324,23 @@ Dependency graph + next implementation steps
 ================================================================================
 
 Existing:
-  mpv (MPSLean/MPS/Defs.lean)
-  mixedTransferMap_pow_apply (MPSLean/Spectral/MixedTransfer.lean)
-  mixedTransfer_pow_tendsto_zero (MPSLean/Spectral/SpectralGap.lean)
-  eventually_linearIndependent_of_gram_tendsto_id (MPSLean/Algebra/GramMatrixLI.lean)
+  mpv (TNLean/MPS/Defs.lean)
+  mixedTransferMap_pow_apply (TNLean/Spectral/MixedTransfer.lean)
+  mixedTransfer_pow_tendsto_zero (TNLean/Spectral/SpectralGap.lean)
+  eventually_linearIndependent_of_gram_tendsto_id (TNLean/Algebra/GramMatrixLI.lean)
 
 NEW (minimal, square-dimension overlap layer):
-  [1] MPSLean/MPS/MPVOverlap.lean
+  [1] TNLean/MPS/MPVOverlap.lean
       - Cfg, MPVSpace, mpvState, mpvInner, mpvOverlap
       - simp lemmas: mpvState_apply
       - lemma: mpvOverlap_eq_conj_mpvInner
 
-  [2] MPSLean/Spectral/MPVOverlapTrace.lean
+  [2] TNLean/Spectral/MPVOverlapTrace.lean
       - lemma: linearMap_trace_eq_sum_apply_single
       - lemma: trace_mixedTransfer_pow_eq_sum_mpv_mul_star
       - corollary: mpvOverlap_eq_trace_mixedTransfer_pow (and/or mpvInner variant)
 
-  [3] MPSLean/Spectral/MPVOverlapDecay.lean
+  [3] TNLean/Spectral/MPVOverlapDecay.lean
       - lemma: Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)
         under injective+DS gauge + ¬GaugePhaseEquiv (using §4 finite-sum argument)
 
