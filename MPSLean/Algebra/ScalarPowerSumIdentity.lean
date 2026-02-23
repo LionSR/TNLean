@@ -2,7 +2,7 @@
 Copyright (c) 2025 MPSLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import MPSLean.PiAlgebra.NewtonGirard
+import MPSLean.Algebra.NewtonGirard
 import Mathlib.Analysis.SpecialFunctions.Complex.Analytic
 import Mathlib.Data.Matrix.Basic
 

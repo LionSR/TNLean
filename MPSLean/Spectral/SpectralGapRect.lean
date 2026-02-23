@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import MPSLean.Spectral.MixedTransfer
 import MPSLean.Spectral.SpectralGap
 import MPSLean.Spectral.MPVOverlapDecay
-import MPSLean.QuantumPerronFrobenius
+import MPSLean.QPF.Assembly
 import MPSLean.Channel.DSGauge
 import MPSLean.Channel.Schwarz
 import Mathlib.Data.Matrix.Block

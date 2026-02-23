@@ -1,5 +1,4 @@
 -- Layer 0: General algebra
-import MPSLean.Algebra.TraceNondeg
 import MPSLean.Algebra.TracePairing
 import MPSLean.Algebra.BlockPermutation
 import MPSLean.Algebra.SkolemNoether
@@ -12,15 +11,12 @@ import MPSLean.Channel.KadisonSchwarz
 import MPSLean.Channel.CesaroFixedPoint
 import MPSLean.Channel.Irreducible
 import MPSLean.Channel.Schwarz
-import MPSLean.Channel.PeripheralSpectrum
 import MPSLean.Channel.Primitive
-import MPSLean.Channel.FixedPoints
-import MPSLean.Channel.Ergodic
 
 -- Layer 2: Spectral theory (QPF + spectral gap)
 import MPSLean.QPF.PosDef
 import MPSLean.QPF.Uniqueness
-import MPSLean.QuantumPerronFrobenius
+import MPSLean.QPF.Assembly
 import MPSLean.Spectral.MixedTransfer
 import MPSLean.Spectral.MPVOverlapTrace
 import MPSLean.Spectral.SpectralGap
@@ -36,7 +32,6 @@ import MPSLean.MPS.Blocking
 import MPSLean.MPS.MPVOverlap
 import MPSLean.MPS.Transfer
 import MPSLean.MPS.FixedPointInvariantProjection
-import MPSLean.MPS.CanonicalForm
 import MPSLean.MPS.CPPrimitive
 
 -- Layer 4: Fundamental theorem (single block)
@@ -56,7 +51,6 @@ import MPSLean.MPS.BNTConstruction
 import MPSLean.MPS.FundamentalTheoremFull
 import MPSLean.MPS.FundamentalTheoremMulti
 import MPSLean.MPS.InvariantSubspaceDecomp
-import MPSLean.MPS.FixedPointSplit
 import MPSLean.MPS.CanonicalFormReduction
 import MPSLean.MPS.IrreducibleFormII
 import MPSLean.MPS.BlockPermutationMPS

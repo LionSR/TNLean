@@ -3,7 +3,7 @@ Copyright (c) 2026 MPSLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import MPSLean.MPS.CanonicalFormReduction
-import MPSLean.QuantumPerronFrobenius
+import MPSLean.QPF.Assembly
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 
 open scoped Matrix BigOperators ComplexOrder

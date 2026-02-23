@@ -4,7 +4,7 @@
 The gauged operators A'_i = S⁻¹ A_i S satisfy ∑ A'_i A'_i† = I
 whenever S * S† = ρ and E_A(ρ) = ρ.
 -/
-import MPSLean.QuantumPerronFrobenius
+import MPSLean.QPF.Assembly
 import MPSLean.Spectral.MixedTransfer
 
 open scoped Matrix ComplexOrder BigOperators
