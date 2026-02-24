@@ -31,7 +31,7 @@ variable {d D : ℕ}
 
 /-! ## Kadison-Schwarz inequality for completely positive maps -/
 
-section KadisonSchwarz
+namespace KadisonSchwarz
 
 /-- Apply a Kraus map: `krausMap K X = ∑ᵢ Kᵢ X Kᵢ†`. -/
 noncomputable def krausMap (K : Fin d → Matrix (Fin D) (Fin D) ℂ)

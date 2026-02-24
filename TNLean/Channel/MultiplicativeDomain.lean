@@ -36,9 +36,11 @@ then directly implies `E(X†Y) = E(X)†E(Y)` for all `Y`.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
-open Matrix Finset Complex
+open Matrix Finset Complex KadisonSchwarz
 
 variable {d D : ℕ}
+
+namespace KadisonSchwarz
 
 /-! ## Helper lemmas -/
 
@@ -255,3 +257,5 @@ theorem multiplicative_domain_left (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     _ = (krausMap K X)ᴴ * krausMap K Y := rfl
 
 end MultiplicativeDomain
+
+end KadisonSchwarz

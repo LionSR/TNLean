@@ -8,6 +8,7 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 -- Layer 1: Quantum channels (general theory)
 import TNLean.Channel.PositiveMap
 import TNLean.Channel.KadisonSchwarz
+import TNLean.Channel.MultiplicativeDomain
 import TNLean.Channel.CesaroFixedPoint
 import TNLean.Channel.Irreducible
 import TNLean.Channel.Schwarz
