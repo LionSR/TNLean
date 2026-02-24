@@ -47,12 +47,12 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{def:density_matrices}
-    Heine--Borel: the PSD cone is closed (preimage of the closed
-    nonneg cone under continuous quadratic forms),
-    and PSD matrices with $\tr(\rho) = 1$ have entry norms bounded
-    by~$1$ (diagonal entries by trace; off-diagonal by
-    Cauchy--Schwarz).
+    The PSD cone is closed
+    (preimage of the closed nonneg cone under continuous
+    quadratic forms), and PSD matrices with $\tr(\rho) = 1$
+    have entry norms bounded by~$1$
+    (diagonal entries by trace; off-diagonal by Cauchy--Schwarz).
+    Heine--Borel gives compactness.
 \end{proof}
 
 \begin{theorem}[Density matrices are convex]\label{thm:density_convex}
@@ -62,7 +62,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $\mc{D}_D$ is convex.
 \end{theorem}
 
-\begin{proof}\leanok\uses{def:density_matrices}
+\begin{proof}\leanok
     Convex combination of PSD matrices is PSD, and trace is linear.
 \end{proof}
 
@@ -73,7 +73,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     For $D \ge 1$, $\mc{D}_D \neq \varnothing$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{def:density_matrices}
+\begin{proof}\leanok
     $\frac{1}{D} \Id_D$ is a density matrix.
 \end{proof}
 
@@ -84,7 +84,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     If $E$ is a quantum channel, then $E(\mc{D}_D) \subseteq \mc{D}_D$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{def:channel, def:density_matrices}
+\begin{proof}\leanok
     Positivity preserves $\rho \ge 0$, and trace preservation gives
     $\tr(E(\rho)) = \tr(\rho) = 1$.
 \end{proof}
@@ -97,6 +97,18 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     Given operators $\{K_i\}_{i=0}^{d-1}$ with $K_i \in \MN{D}$,
     the \emph{Kraus map} is
     $E(X) = \sum_{i=0}^{d-1} K_i X K_i^\dagger$.
+\end{definition}
+
+\begin{definition}[Adjoint Kraus map]\label{def:kraus_adjoint_map}
+    \lean{KadisonSchwarz.krausAdjointMap}
+    \leanok
+    \uses{def:kraus_map}
+    The \emph{adjoint Kraus map} is
+    $E^*(X) = \sum_{i=0}^{d-1} K_i^\dagger X K_i$.
+    When the $\{K_i\}$ are the matrices of an MPS tensor~$A$,
+    the adjoint Kraus map corresponds to the
+    transfer map $\E_A$ with the roles of $A^i$ and $(A^i)^\dagger$
+    exchanged.
 \end{definition}
 
 \begin{definition}[Unital Kraus map]\label{def:unital_kraus}
@@ -113,6 +125,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \uses{def:kraus_map}
     A Kraus map is \emph{trace-preserving} if
     $\sum_{i=0}^{d-1} K_i^\dagger K_i = \Id$.
+    This is the standard MPS normalization condition.
 \end{definition}
 
 \begin{theorem}[Kadison--Schwarz inequality]\label{thm:kadison_schwarz}
@@ -123,22 +136,38 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     Kraus map (i.e.\ $\sum_i K_i K_i^\dagger = \Id$).
     Then for all $X \in \MN{D}$,
     \[
-        E(X^\dagger X) \ge  E(X)^\dagger E(X).
+        E(X^\dagger X) \ge   E(X)^\dagger E(X).
     \]
     This is \cite[Eq.~(5.2)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:unital_kraus}
     The $2 \times 2$ block matrix
     $[\begin{smallmatrix} X^\dagger X & X^\dagger \\ X & \Id \end{smallmatrix}]$
     is PSD ($= v v^\dagger$ with $v = [X^\dagger,\, \Id]^T$).
-    Applying the unital CP map blockwise preserves PSD-ness.
-    The Schur complement of the $(2,2)$-block gives the result.
-    In~\cite[Eq.~(5.3)]{Wolf2012Quantum}, the proof instead uses the
-    Stinespring representation $E^*(A) = V^\dagger(A \otimes \Id)V$
-    with $VV^\dagger \le \Id$.
+    Applying the unital CP map blockwise preserves PSD-ness
+    (each block $K_i (\cdot) K_i^\dagger$ preserves PSD, and unitality
+    ensures the $(2,2)$-block maps to~$\Id$).
+    The Schur complement of the $(2,2)$-block $\Id$ gives the result.
+\end{proof}
+
+\begin{theorem}[Kadison--Schwarz for the adjoint channel]\label{thm:kadison_schwarz_adjoint}
+    \lean{KadisonSchwarz.kadison_schwarz_adjoint}
+    \leanok
+    \uses{def:tp_kraus, def:kraus_adjoint_map}
+    If $\sum_i K_i^\dagger K_i = \Id$ (trace-preserving), then
+    the adjoint Kraus map satisfies
+    $E^*(X^\dagger X) \ge E^*(X)^\dagger E^*(X)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kadison_schwarz}
+    The adjoint operators $\{K_i^\dagger\}$ satisfy
+    $\sum_i K_i^\dagger (K_i^\dagger)^\dagger = \sum_i K_i^\dagger K_i = \Id$,
+    so they form a unital family.
+    Apply Theorem~\ref{thm:kadison_schwarz} to $\{K_i^\dagger\}$.
 \end{proof}
 
 \begin{theorem}[Hilbert--Schmidt contraction]\label{thm:hs_contraction}
@@ -150,8 +179,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     for all $X \in \MN{D}$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:kadison_schwarz, def:tp_kraus}
-    By the Kadison--Schwarz inequality,
+\begin{proof}\leanok\uses{thm:kadison_schwarz}
+    By Theorem~\ref{thm:kadison_schwarz},
     $E(X^\dagger X) - E(X)^\dagger E(X) \ge 0$,
     so $\tr(E(X^\dagger X)) \ge \tr(E(X)^\dagger E(X))$.
     Trace preservation gives $\tr(E(X^\dagger X)) = \tr(X^\dagger X)$.
@@ -159,24 +188,72 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \section{Multiplicative domain}
 
+\begin{theorem}[KS gap decomposition]\label{thm:ks_gap_decomp}
+    \lean{KadisonSchwarz.ks_gap_eq_sum_squares}
+    \leanok
+    \uses{def:unital_kraus, def:kraus_map}
+    For a unital Kraus map $E$,
+    the Kadison--Schwarz gap decomposes as
+    \[
+        E(X^\dagger X) - E(X)^\dagger E(X)
+        = 
+        \sum_{i=0}^{d-1} R_i^\dagger R_i,
+    \]
+    where $R_i := X K_i^\dagger - K_i^\dagger E(X)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:unital_kraus}
+    Expand the right-hand side
+    $\sum_i (X K_i^\dagger - K_i^\dagger E(X))^\dagger
+           (X K_i^\dagger - K_i^\dagger E(X))$,
+    distribute, and use unitality $\sum_i K_i K_i^\dagger = \Id$
+    to identify the result with the KS gap.
+\end{proof}
+
 \begin{theorem}[KS equality implies Kraus commutation]\label{thm:kraus_commute}
     \lean{KadisonSchwarz.kraus_commute_of_ks_equality}
     \leanok
-    \uses{thm:kadison_schwarz, def:unital_kraus}
+    \uses{def:unital_kraus}
     Let $E$ be a unital Kraus map.
     If $E(X^\dagger X) = E(X)^\dagger E(X)$ for some $X$,
     then $X K_i^\dagger = K_i^\dagger E(X)$ for all~$i$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:kadison_schwarz}
-    The KS gap $E(X^\dagger X) - E(X)^\dagger E(X)$ is a sum
-    of terms $(X K_i^\dagger - K_i^\dagger E(X))^\dagger
-    (X K_i^\dagger - K_i^\dagger E(X))$.
-    If it vanishes, each term vanishes.
+\begin{proof}\leanok\uses{thm:ks_gap_decomp}
+    By Theorem~\ref{thm:ks_gap_decomp},
+    the KS gap is $\sum_i R_i^\dagger R_i$ with
+    $R_i = X K_i^\dagger - K_i^\dagger E(X)$.
+    If the gap vanishes, $\sum_i R_i^\dagger R_i = 0$.
+    Each summand $R_i^\dagger R_i$ is PSD, so each must be zero,
+    giving $R_i = 0$.
+\end{proof}
+
+\begin{theorem}[KS equality for peripheral eigenvectors]\label{thm:ks_peripheral}
+    \lean{KadisonSchwarz.ks_equality_of_peripheral_eigenvector}
+    \leanok
+    \uses{thm:kadison_schwarz, def:unital_kraus, def:tp_kraus}
+    Let $E$ be a Kraus map that is both unital and trace-preserving.
+    If $E(X) = \mu X$ with $|\mu| = 1$, then the KS gap vanishes:
+    $E(X^\dagger X) = E(X)^\dagger E(X)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kadison_schwarz}
+    The gap $G := E(X^\dagger X) - E(X)^\dagger E(X)$ is PSD
+    by Theorem~\ref{thm:kadison_schwarz}.
+    Its trace satisfies
+    $\tr(G) = \tr(E(X^\dagger X)) - \tr(E(X)^\dagger E(X))$.
+    Trace preservation gives $\tr(E(X^\dagger X)) = \tr(X^\dagger X)$.
+    Using $E(X) = \mu X$ and $|\mu| = 1$,
+    $\tr(E(X)^\dagger E(X)) = |\mu|^2 \tr(X^\dagger X) = \tr(X^\dagger X)$.
+    So $\tr(G) = 0$, and a PSD matrix with zero trace must be zero.
 \end{proof}
 
 \begin{theorem}[Multiplicative domain]\label{thm:multiplicative_domain}
-    \lean{MultiplicativeDomain.multiplicative_domain_left}
+    \lean{KadisonSchwarz.multiplicative_domain_left}
     \leanok
     \uses{thm:kraus_commute, def:unital_kraus}
     Let $E$ be a unital Kraus map.
@@ -188,11 +265,16 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     \uses{thm:kraus_commute}
     From Theorem~\ref{thm:kraus_commute},
-    $K_i X^\dagger = E(X)^\dagger K_i$ for all~$i$.
+    $X K_i^\dagger = K_i^\dagger E(X)$ for all~$i$.
+    Taking conjugate transposes:
+    $K_i X^\dagger = E(X)^\dagger K_i$.
     Then
-    $E(X^\dagger Y) = \sum_i K_i X^\dagger Y K_i^\dagger
-    = \sum_i E(X)^\dagger K_i Y K_i^\dagger
-    = E(X)^\dagger E(Y)$.
+    \begin{align*}
+        E(X^\dagger Y)
+        &= \sum_i K_i X^\dagger Y K_i^\dagger \\
+        &= \sum_i E(X)^\dagger K_i Y K_i^\dagger \\
+        &= E(X)^\dagger E(Y). \qedhere
+    \end{align*}
 \end{proof}
 
 \section{Irreducibility}
@@ -209,7 +291,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{definition}
 
 \begin{theorem}[Injectivity implies irreducibility]\label{thm:injective_irreducible}
-    \lean{injective_implies_irreducibleCP}
+    \lean{MPSTensor.injective_implies_irreducibleCP}
     \leanok
     \uses{def:injective, def:transfer_map, def:irreducible_cp}
     If $A$ is an injective MPS tensor, then its transfer map
@@ -218,13 +300,10 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{def:injective, def:transfer_map, def:irreducible_cp}
     If $P$ is an invariant projection for $\E_A$,
-    then expanding $\E_A(P X P) = \sum_i A^i P X P (A^i)^\dagger$
-    and the invariance condition forces
-    $(\Id - P) A^i P = 0$ for all~$i$.
+    then $(\Id - P) A^i P = 0$ for all~$i$.
     Since the $\{A^i\}$ span $\MN{D}$,
-    the map $M \mapsto (\Id - P) M P$ vanishes on all matrices,
+    $(\Id - P) M P = 0$ for all $M$,
     so $P = 0$ or $P = \Id$.
 \end{proof}
 
@@ -232,16 +311,18 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \lean{MPSTensor.transferMap_isChannel}
     \leanok
     \uses{def:transfer_map, def:channel}
-    The transfer map $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
+    If $\sum_i (A^i)^\dagger A^i = \Id$, then the transfer map
+    $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
     is a quantum channel.
 \end{theorem}
 
-\begin{proof}\leanok\uses{def:transfer_map, def:channel}
-    Positivity: each $A^i X (A^i)^\dagger \ge 0$ when $X \ge 0$.
+\begin{proof}\leanok
+    Positivity: each summand $A^i X (A^i)^\dagger \ge 0$
+    when $X \ge 0$.
     Trace preservation:
     $\tr(\E_A(X)) = \sum_i \tr(A^i X (A^i)^\dagger)
     = \tr((\sum_i (A^i)^\dagger A^i) X) = \tr(X)$
-    by cyclicity.
+    by cyclicity and the normalization hypothesis.
 \end{proof}
 
 \section{Ces\`aro fixed-point theorem}
@@ -252,7 +333,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     The \emph{Ces\`aro mean} of a linear map $E$ at order $N$,
     applied to a starting matrix $\rho_0$, is
     \[
-        \sigma_N =  \frac{1}{N} \sum_{n=0}^{N-1} E^n(\rho_0).
+        \sigma_N =   \frac{1}{N} \sum_{n=0}^{N-1} E^n(\rho_0).
     \]
 \end{definition}
 
@@ -264,7 +345,8 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:cesaro_mean}
-    Telescoping sum.
+    Telescoping: $E(\sigma_N) = \frac{1}{N}\sum_{n=1}^{N} E^n(\rho_0)$
+    and subtracting $\sigma_N$ cancels all but the first and last terms.
 \end{proof}
 
 \begin{theorem}[Hermitian fixed-point decomposition]\label{thm:hermitian_fixedpoint_parts}
@@ -280,14 +362,13 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{def:channel}
     Let $Q$ be the support projection of $P_+$.
     Trace preservation and positivity give
     $\tr(Q E(P_-)) = 0$
     and $E(P_-) \ge 0$, so $Q E(P_-) = 0$.
-    Then the fixed-point equation
-    $E(P_+) - E(P_-) = P_+ - P_-$ identifies
-    $E(P_\pm)$ with $P_\pm$.
+    The fixed-point equation
+    $E(P_+) - E(P_-) = P_+ - P_-$ then identifies
+    $E(P_\pm) = P_\pm$.
 \end{proof}
 
 \begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}
@@ -304,15 +385,17 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{def:channel, def:density_matrices, def:cesaro_mean,
-          thm:density_compact, thm:channel_preserves_density,
+    \uses{thm:density_compact, thm:channel_preserves_density,
           thm:cesaro_telescope}
-    Start with any $\rho_0 \in \mc{D}_D$.
+    Start with any $\rho_0 \in \mc{D}_D$
+    (Theorem~\ref{thm:density_nonempty}).
     Each Ces\`aro mean $\sigma_N$ lies in $\mc{D}_D$
     (by convexity and channel preservation).
-    By compactness, extract a convergent subsequence
+    By compactness (Theorem~\ref{thm:density_compact}),
+    extract a convergent subsequence
     $\sigma_{N_k} \to \rho$.
-    The telescope identity gives
+    The telescope identity (Theorem~\ref{thm:cesaro_telescope})
+    gives
     $\|E(\sigma_N) - \sigma_N\| = \frac{1}{N}\|E^N(\rho_0) - \rho_0\| \to 0$,
     so $E(\rho) = \rho$ by continuity.
     In~\cite[Thm.~6.13]{Wolf2012Quantum}, existence is proved
@@ -321,18 +404,102 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     in Mathlib.
 \end{proof}
 
+\section{Fixed-point projection}
+
+\begin{definition}[Fixed-point projection]\label{def:fixed_point_proj}
+    \lean{fixedPointProj}
+    \leanok
+    Given a linear map $E : \MN{D} \to \MN{D}$ and a fixed point
+    $\rho$ with $E(\rho) = \rho$ and $\tr(\rho) \neq 0$,
+    the \emph{fixed-point projection} is the rank-one map
+    \[
+        P(X) =  \frac{\tr(X)}{\tr(\rho)} \rho.
+    \]
+    This projects onto the span of $\rho$ along the kernel of the
+    trace functional.
+\end{definition}
+
+\begin{theorem}[Power decomposition]\label{thm:pow_decomp}
+    \lean{pow_eq_fixedPointProj_add_compl_pow}
+    \leanok
+    \uses{def:fixed_point_proj, def:trace_preserving}
+    If $E$ is trace-preserving and $E(\rho) = \rho$, then
+    for $n \ge 1$,
+    \[
+        E^n =  P + (E - P)^n,
+    \]
+    where $P$ is the fixed-point projection.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fixed_point_proj}
+    $P$ is idempotent ($P^2 = P$), and
+    trace preservation gives $E \circ P = P$ and
+    $P \circ E = P$.
+    These imply $(E-P) \circ P = 0$ and $P \circ (E-P) = 0$,
+    so in the binomial expansion of $(P + (E-P))^n$
+    all cross terms vanish, leaving $E^n = P^n + (E-P)^n = P + (E-P)^n$.
+\end{proof}
+
 \section{Peripheral spectrum and primitivity}
+
+\begin{definition}[Peripheral spectrum]\label{def:peripheral_spectrum}
+    \lean{peripheralSpectrum}
+    \leanok
+    The \emph{peripheral spectrum} of a bounded linear operator $T$
+    is the set of spectral values $\mu$ with
+    $\|\mu\|$ equal to the spectral radius of $T$.
+\end{definition}
 
 \begin{definition}[Peripheral eigenvalues]\label{def:peripheral_eigenvalues}
     \lean{peripheralEigenvalues}
     \leanok
-    The \emph{peripheral eigenvalues} of a linear map $E$ on $\MN{D}$
+    The \emph{peripheral eigenvalues} of a linear map $E$ on
+    a finite-dimensional space
     are those eigenvalues $\lambda$ with $|\lambda|$ equal to the
     spectral radius of $E$.
     For a channel, the spectral radius is~$1$
     \cite[Prop.~6.1]{Wolf2012Quantum}, so these are the eigenvalues
     on the unit circle.
 \end{definition}
+
+\begin{theorem}[$1$ is a peripheral eigenvalue]\label{thm:one_peripheral}
+    \lean{one_mem_peripheralEigenvalues}
+    \leanok
+    \uses{def:peripheral_eigenvalues}
+    If $E$ has a nonzero fixed point $\rho \neq 0$ with $E(\rho) = \rho$,
+    then $1 \in \mathrm{peripheral}(E)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    $\rho$ is an eigenvector with eigenvalue~$1$,
+    and $|1| = 1$ equals the spectral radius.
+\end{proof}
+
+\begin{theorem}[Peripheral eigenvalues lie on the unit circle]\label{thm:peripheral_unit_circle}
+    \lean{peripheralEigenvalues_subset_unit_circle}
+    \leanok
+    \uses{def:peripheral_eigenvalues}
+    Every peripheral eigenvalue $\lambda$ satisfies $|\lambda| = 1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By definition of peripheral eigenvalues (spectral radius = 1 for channels).
+\end{proof}
+
+\begin{theorem}[Finiteness of peripheral eigenvalues]\label{thm:peripheral_finite}
+    \lean{peripheralEigenvalues_finite}
+    \leanok
+    \uses{def:peripheral_eigenvalues}
+    On a finite-dimensional space, the set of peripheral eigenvalues
+    is finite.
+\end{theorem}
+
+\begin{proof}\leanok
+    Peripheral eigenvalues are a subset of all eigenvalues,
+    which is a finite set in finite dimensions.
+\end{proof}
 
 \begin{theorem}[Peripheral eigenvalues are roots of unity]\label{thm:peripheral_roots_of_unity}
     \lean{peripheral_isRootOfUnity_of_pow_eigenvalue}
@@ -346,19 +513,45 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{def:peripheral_eigenvalues}
     A complex number of modulus~$1$ whose powers take only
     finitely many values must be a root of unity.
 \end{proof}
+
+\begin{definition}[Channel period]\label{def:channel_period}
+    \lean{channelPeriod}
+    \leanok
+    \uses{def:peripheral_eigenvalues, thm:peripheral_finite}
+    The \emph{period} of a channel $E$ is the number of
+    peripheral eigenvalues (counted without multiplicity):
+    $p(E) := |\mathrm{peripheral}(E)|$.
+\end{definition}
 
 \begin{definition}[Primitive channel]\label{def:primitive_channel}
     \lean{IsPrimitiveChannel}
     \leanok
     \uses{def:peripheral_eigenvalues}
     A channel is \emph{primitive} if its only peripheral eigenvalue
-    is $\lambda = 1$.
+    is $\lambda = 1$, i.e.\
+    $\mathrm{peripheral}(E) = \{1\}$.
     This corresponds to \cite[Thm.~6.11]{Wolf2012Quantum}.
 \end{definition}
+
+\begin{theorem}[Primitivity equals period one]\label{thm:primitive_iff_period_one}
+    \lean{isPrimitiveChannel_iff_period_one}
+    \leanok
+    \uses{def:primitive_channel, def:channel_period}
+    A channel with a nonzero fixed point is primitive if and only if
+    its period is~$1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:one_peripheral}
+    If $\mathrm{peripheral}(E) = \{1\}$, then
+    $|\mathrm{peripheral}(E)| = 1$.
+    Conversely, if $|\mathrm{peripheral}(E)| = 1$,
+    then since $1 \in \mathrm{peripheral}(E)$
+    (Theorem~\ref{thm:one_peripheral}), the
+    only element is $1$.
+\end{proof}
 
 \begin{theorem}[Non-peripheral eigenvalues of primitive channels]\label{thm:primitive_compl_lt_one}
     \lean{compl_eigenvalue_norm_lt_one_of_primitive}
@@ -368,7 +561,7 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     satisfies $|\lambda| < 1$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{def:primitive_channel}
+\begin{proof}\leanok
     By primitivity, no eigenvalue other than~$1$ has modulus~$1$.
     Since the spectral radius is~$1$, all other eigenvalues have
     strictly smaller modulus.
