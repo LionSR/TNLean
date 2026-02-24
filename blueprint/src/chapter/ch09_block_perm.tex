@@ -22,9 +22,12 @@ and~\cite{Cirac2021Matrix}.
 \begin{proof}
     \leanok
     Each block ideal $I_k = \{x : x_j = 0 \text{ for } j \neq k\}$
-    is an atom in the lattice of two-sided ideals.
+    is an atom in the lattice of two-sided ideals
+    (since $R_k$ is simple).
     A ring isomorphism preserves the ideal lattice and hence
     permutes the atoms.
+    Injectivity of the induced map on atoms gives the
+    permutation~$\sigma$.
 \end{proof}
 
 \begin{theorem}[Dimension preservation]\label{thm:dim_preserved}
@@ -37,14 +40,15 @@ and~\cite{Cirac2021Matrix}.
     $D_{\sigma(k)} = D_k$ for all~$k$.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}\leanok\uses{thm:ring_perm}
     The restriction of $T$ to the $k$-th block ideal
-    induces an algebra isomorphism
+    induces a $\C$-algebra isomorphism
     $\MN{D_k} \cong \MN{D_{\sigma(k)}}$,
-    which forces $D_k = D_{\sigma(k)}$.
+    which forces $D_k = D_{\sigma(k)}$
+    (by comparing dimensions as $\C$-vector spaces).
 \end{proof}
 
-\begin{theorem}[Automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
+\begin{theorem}[Decomposition of automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
     \lean{MPSTensor.algEquiv_pi_matrix_decomposition}
     \leanok
     \uses{thm:ring_perm, thm:dim_preserved, thm:skolem_noether}
@@ -61,51 +65,62 @@ and~\cite{Cirac2021Matrix}.
     \uses{thm:ring_perm, thm:dim_preserved, thm:skolem_noether}
     Theorem~\ref{thm:ring_perm} gives the permutation $\sigma$.
     Theorem~\ref{thm:dim_preserved} gives $D_{\sigma(k)} = D_k$.
-    The restriction to each block is an automorphism of $\MN{D_k}$,
-    which is inner by Skolem--Noether
-    (Theorem~\ref{thm:skolem_noether}).
+    The restriction of $T$ to each block is a $\C$-algebra
+    automorphism of $\MN{D_k}$, which is inner by
+    Skolem--Noether (Theorem~\ref{thm:skolem_noether}).
+
+    This is a standard result in the theory of
+    semisimple algebras;
+    see \cite[§II.B]{Cirac2021Matrix} for the MPS context.
 \end{proof}
 
 \section{Pi-algebra linear extension}
 
-\begin{theorem}[Pi-algebra linear extension]\label{thm:pi_linear_ext}
+\begin{theorem}[Per-block linear extensions assemble]\label{thm:pi_linear_ext}
     \lean{MPSTensor.piAlgEquiv_decomposition}
     \leanok
-    \uses{thm:linear_ext, def:injective}
+    \uses{def:injective}
     Let $A_k$ and $B_k$ be injective tensors of bond dimension
     $D_k$ for $k = 1, \ldots, r$, and suppose the per-block
     same-MPV condition holds.
     Then the per-block linear extensions $T_k : A_k^i \mapsto B_k^i$
-    assemble into an algebra automorphism of $\prod_k \MN{D_k}$.
+    assemble into an algebra automorphism of $\prod_k \MN{D_k}$,
+    which decomposes as a permutation $\sigma$ with
+    $D_{\sigma(k)} = D_k$ and per-block conjugation matrices $X_k$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:linear_ext, thm:linear_ext_mul, lem:linear_map_to_alg}
-    Each $T_k$ exists and is multiplicative by
+    \uses{thm:linear_ext, thm:linear_ext_mul, lem:linear_map_to_alg,
+          thm:pi_auto_decomp}
+    Each $T_k$ exists uniquely and is multiplicative by
     Theorems~\ref{thm:linear_ext} and~\ref{thm:linear_ext_mul}.
     Promotion to algebra homomorphisms
     (Lemma~\ref{lem:linear_map_to_alg}) and assembly into
-    the product gives the automorphism.
+    the product gives an algebra automorphism.
+    Theorem~\ref{thm:pi_auto_decomp} decomposes it into
+    permutation + per-block inner automorphisms.
 \end{proof}
 
-\begin{theorem}[Per-block SameMPV gives global gauge]\label{thm:per_block_gauge}
+\begin{theorem}[Per-block SameMPV gives global gauge equivalence]\label{thm:per_block_gauge}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
-    \uses{thm:pi_linear_ext, thm:pi_auto_decomp}
-    If all block tensors are injective and per-block same-MPV
-    holds, then there exist a permutation $\sigma$ with
-    $D_{\sigma(k)} = D_k$ and invertible matrices $X_k$ such that
-    $B_k^i = X_k A_{\sigma(k)}^i X_k^{-1}$ for all $i, k$.
+    \uses{def:injective, def:gauge_equiv, def:tensor_from_blocks}
+    If all block tensors $A_k$ are injective and per-block
+    same-MPV holds, then each pair $(A_k, B_k)$ is gauge
+    equivalent, and the block-diagonal tensors
+    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
+    are globally gauge equivalent.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:pi_linear_ext, thm:pi_auto_decomp}
-    The pi-algebra automorphism from
-    Theorem~\ref{thm:pi_linear_ext}
-    decomposes as permutation + per-block conjugation by
-    Theorem~\ref{thm:pi_auto_decomp}.
+    \uses{thm:ft_single, thm:multi_block_global}
+    Per-block gauge equivalence follows from the single-block
+    FT (Theorem~\ref{thm:ft_single}) applied to each block.
+    Global gauge equivalence follows by assembling the
+    per-block gauge matrices into a block-diagonal matrix
+    (Theorem~\ref{thm:multi_block_global}).
 \end{proof}
 
 \section{Block separation}
@@ -114,58 +129,80 @@ and~\cite{Cirac2021Matrix}.
     \lean{MPSTensor.IsCanonicalForm}
     \leanok
     \uses{def:injective}
-    An \emph{IsCanonicalForm} for scaling factors $(\mu_k)$ and
-    block tensors $(A_k)$ requires:
+    A collection of scaling factors $(\mu_k)_{k=1}^r$ and
+    block tensors $(A_k)_{k=1}^r$ satisfies the
+    \emph{canonical form predicate} if:
     \begin{enumerate}
         \item each $A_k$ is injective,
         \item each $A_k$ is in DS gauge
               ($\sum_i (A_k^i)^\dagger A_k^i = \Id$),
-        \item the moduli $|\mu_k|$ are strictly decreasing,
+        \item the moduli are strictly decreasing:
+              $|\mu_1| > |\mu_2| > \cdots > |\mu_r|$,
         \item all $\mu_k \neq 0$,
         \item the self-overlap converges: $O_{A_k A_k}(N) \to 1$
               for each~$k$.
     \end{enumerate}
+    Condition~(5) is a primitivity hypothesis;
+    see \cite[Thm.~6.11]{Wolf2012Quantum}
+    and the discussion in Chapter~\ref{ch:spectral}.
 \end{definition}
+
+\begin{remark}\label{rem:overlap_hypothesis}
+    In the literature~\cite{Cirac2021Matrix},
+    condition~(5) is derived from primitivity of the
+    transfer map (peripheral spectrum $= \{1\}$).
+    In the formalization, it is assumed directly as a
+    hypothesis in the canonical form predicate.
+    This avoids the need to formalize the full classification
+    of peripheral spectra of irreducible channels.
+\end{remark}
 
 \begin{theorem}[Block separation from canonical form]\label{thm:block_sep}
     \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
     \leanok
-    \uses{def:is_canonical_form, thm:overlap_decay,
-          thm:overlap_decay_rect, thm:spectral_gap}
-    Let $((\mu_k), (A_k))$ and $((\mu_k), (B_k))$ be two
-    canonical forms with the same scaling factors,
-    each satisfying the canonical form predicate.
-    If the block-diagonal tensors generate the same MPV family,
-    then each pair $(A_k, B_k)$ generates the same MPV family.
+    \uses{def:is_canonical_form}
+    Let $((\mu_k), (A_k))$ satisfy the canonical form predicate,
+    and let $(B_k)$ be injective tensors in DS gauge.
+    If the block-diagonal tensors
+    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
+    generate the same MPV family, then each pair
+    $(A_k, B_k)$ generates the same MPV family.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The proof combines two main ingredients:
+    \uses{thm:overlap_decay, thm:overlap_decay_rect,
+          thm:proportional_ft}
+    By induction on the number of blocks $r$.
 
-    \textbf{Overlap orthogonality.}
-    The cross-block overlaps $O_{A_j B_k}(N)$ vanish for $j \neq k$:
-    when $D_j \neq D_k$, this follows from the rectangular spectral
-    gap (Theorem~\ref{thm:overlap_decay_rect});
-    when $D_j = D_k$ but the blocks are not gauge-phase equivalent,
-    it follows from the square spectral gap
-    (Theorem~\ref{thm:overlap_decay}).
+    \textbf{Base case} ($r = 1$):
+    the summed identity
+    $\mu_1^N (V^{(N)}(A_1)_\sigma - V^{(N)}(B_1)_\sigma) = 0$
+    and $\mu_1 \neq 0$ give $A_1$ and $B_1$ same MPV.
 
-    \textbf{Vandermonde separation.}
-    The same-MPV hypothesis gives
-    $\sum_k \mu_k^N \tr(A_k^w) = \sum_k \mu_k^N \tr(B_k^w)$
-    for all words $w$ and system sizes~$N$.
-    Since the $\mu_k$ are pairwise distinct,
-    the Vandermonde matrix $(\mu_k^N)_{N,k}$ has full rank
-    (for sufficiently many values of $N$),
-    so $\tr(A_k^w) = \tr(B_k^w)$ for each~$k$ and all~$w$.
-    The trace agreement gives per-block same-MPV.
+    \textbf{Inductive step} ($r \ge 2$):
+    the leading block~$0$ has the largest $|\mu_0|$.
+    Taking overlaps with a test tensor $A_0$ and using
+    the spectral gap (Theorems~\ref{thm:overlap_decay}
+    and~\ref{thm:overlap_decay_rect}), the cross-overlap
+    contributions from non-leading blocks decay to zero.
+    This shows $O_{A_0 A_0}(N) - O_{A_0 B_0}(N) \to 0$,
+    and since $O_{A_0 A_0}(N) \to 1$ (by the primitivity
+    hypothesis), the proportional FT
+    (Theorem~\ref{thm:proportional_ft}) gives
+    $A_0$ and $B_0$ gauge-phase equivalent,
+    hence same MPV.
 
-    In~\cite{PerezGarcia2007Matrix}, the Vandermonde separation
-    argument is described informally.
-    The formalization makes it precise using the characteristic
-    polynomial identity from Newton--Girard
-    (Chapter~\ref{ch:assembly}).
+    Peeling off the leading block and dividing by $\mu_0^N$,
+    the induction hypothesis applies to the remaining $r-1$
+    blocks.
+
+    In~\cite{PerezGarcia2007Matrix}, the separation argument
+    is sketched informally using the ``Vandermonde structure''
+    of the powers $\mu_k^N$.
+    The formalization makes this precise by induction on $r$,
+    with each step using the spectral gap to peel off the
+    dominant block.
 \end{proof}
 
 \begin{theorem}[Canonical form fundamental theorem]\label{thm:ft_canonical}
@@ -174,7 +211,8 @@ and~\cite{Cirac2021Matrix}.
     \uses{thm:block_sep, thm:per_block_gauge}
     Under the hypotheses of Theorem~\ref{thm:block_sep},
     there exist a permutation $\sigma$ and per-block gauge
-    matrices such that $B_k^i = X_k A_{\sigma(k)}^i X_k^{-1}$.
+    matrices $X_k$ such that
+    $B_k^i = X_k A_{\sigma(k)}^i X_k^{-1}$.
 \end{theorem}
 
 \begin{proof}
@@ -182,5 +220,5 @@ and~\cite{Cirac2021Matrix}.
     \uses{thm:block_sep, thm:per_block_gauge}
     Theorem~\ref{thm:block_sep} gives per-block same-MPV.
     Theorem~\ref{thm:per_block_gauge} converts this to
-    permutation + per-block gauge.
+    per-block gauge equivalence with permutation.
 \end{proof}
