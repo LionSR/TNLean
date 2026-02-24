@@ -1,0 +1,186 @@
+\chapter{Block Permutation and Separation}\label{ch:block_perm}
+
+This chapter establishes the algebraic structure of
+automorphisms of products of matrix algebras and uses it
+to prove that the same-MPV condition on block-diagonal
+tensors descends to per-block gauge equivalence.
+The approach follows~\cite{PerezGarcia2007Matrix}
+and~\cite{Cirac2021Matrix}.
+
+\section{Block permutation algebra}
+
+\begin{theorem}[Ring isomorphisms permute block ideals]\label{thm:ring_perm}
+    \lean{MPSTensor.ringEquiv_pi_simple_permutes_blockIdeals}
+    \leanok
+    Let $\{R_k\}_{k=1}^r$ be simple rings.
+    Every ring isomorphism $T : \prod_k R_k \xrightarrow{\sim} \prod_k R_k$
+    permutes the block ideals:
+    there exists a permutation $\sigma$ such that
+    $T$ maps the $k$-th block ideal to the $\sigma(k)$-th block ideal.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each block ideal $I_k = \{x : x_j = 0 \text{ for } j \neq k\}$
+    is an atom in the lattice of two-sided ideals.
+    A ring isomorphism preserves the ideal lattice and hence
+    permutes the atoms.
+\end{proof}
+
+\begin{theorem}[Dimension preservation]\label{thm:dim_preserved}
+    \lean{MPSTensor.dim_preserved}
+    \leanok
+    \uses{thm:ring_perm}
+    If $T$ is an algebra automorphism of
+    $\prod_{k=1}^r \MN{D_k}$,
+    and $\sigma$ is the induced permutation, then
+    $D_{\sigma(k)} = D_k$ for all~$k$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The restriction of $T$ to the $k$-th block ideal
+    induces an algebra isomorphism
+    $\MN{D_k} \cong \MN{D_{\sigma(k)}}$,
+    which forces $D_k = D_{\sigma(k)}$.
+\end{proof}
+
+\begin{theorem}[Automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
+    \lean{MPSTensor.algEquiv_pi_matrix_decomposition}
+    \leanok
+    \uses{thm:ring_perm, thm:dim_preserved, thm:skolem_noether}
+    Every $\C$-algebra automorphism of $\prod_{k=1}^r \MN{D_k}$
+    decomposes as a block permutation~$\sigma$ followed by
+    per-block inner automorphisms:
+    there exist $\sigma \in S_r$ with $D_{\sigma(k)} = D_k$
+    and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that
+    $T(M)_k = X_k M_{\sigma(k)} X_k^{-1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ring_perm, thm:dim_preserved, thm:skolem_noether}
+    Theorem~\ref{thm:ring_perm} gives the permutation $\sigma$.
+    Theorem~\ref{thm:dim_preserved} gives $D_{\sigma(k)} = D_k$.
+    The restriction to each block is an automorphism of $\MN{D_k}$,
+    which is inner by Skolem--Noether
+    (Theorem~\ref{thm:skolem_noether}).
+\end{proof}
+
+\section{Pi-algebra linear extension}
+
+\begin{theorem}[Pi-algebra linear extension]\label{thm:pi_linear_ext}
+    \lean{MPSTensor.piAlgEquiv_decomposition}
+    \leanok
+    \uses{thm:linear_ext, def:injective}
+    Let $A_k$ and $B_k$ be injective tensors of bond dimension
+    $D_k$ for $k = 1, \ldots, r$, and suppose the per-block
+    same-MPV condition holds.
+    Then the per-block linear extensions $T_k : A_k^i \mapsto B_k^i$
+    assemble into an algebra automorphism of $\prod_k \MN{D_k}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:linear_ext, thm:linear_ext_mul, lem:linear_map_to_alg}
+    Each $T_k$ exists and is multiplicative by
+    Theorems~\ref{thm:linear_ext} and~\ref{thm:linear_ext_mul}.
+    Promotion to algebra homomorphisms
+    (Lemma~\ref{lem:linear_map_to_alg}) and assembly into
+    the product gives the automorphism.
+\end{proof}
+
+\begin{theorem}[Per-block SameMPV gives global gauge]\label{thm:per_block_gauge}
+    \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
+    \leanok
+    \uses{thm:pi_linear_ext, thm:pi_auto_decomp}
+    If all block tensors are injective and per-block same-MPV
+    holds, then there exist a permutation $\sigma$ with
+    $D_{\sigma(k)} = D_k$ and invertible matrices $X_k$ such that
+    $B_k^i = X_k A_{\sigma(k)}^i X_k^{-1}$ for all $i, k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pi_linear_ext, thm:pi_auto_decomp}
+    The pi-algebra automorphism from
+    Theorem~\ref{thm:pi_linear_ext}
+    decomposes as permutation + per-block conjugation by
+    Theorem~\ref{thm:pi_auto_decomp}.
+\end{proof}
+
+\section{Block separation}
+
+\begin{definition}[Canonical form predicate]\label{def:is_canonical_form}
+    \lean{MPSTensor.IsCanonicalForm}
+    \leanok
+    \uses{def:injective}
+    An \emph{IsCanonicalForm} for scaling factors $(\mu_k)$ and
+    block tensors $(A_k)$ requires:
+    \begin{enumerate}
+        \item each $A_k$ is injective,
+        \item each $A_k$ is in DS gauge
+              ($\sum_i (A_k^i)^\dagger A_k^i = \Id$),
+        \item the moduli $|\mu_k|$ are strictly decreasing,
+        \item all $\mu_k \neq 0$,
+        \item the self-overlap converges: $O_{A_k A_k}(N) \to 1$
+              for each~$k$.
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}[Block separation from canonical form]\label{thm:block_sep}
+    \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
+    \leanok
+    \uses{def:is_canonical_form, thm:overlap_decay,
+          thm:overlap_decay_rect, thm:spectral_gap}
+    Let $((\mu_k), (A_k))$ and $((\mu_k), (B_k))$ be two
+    canonical forms with the same scaling factors,
+    each satisfying the canonical form predicate.
+    If the block-diagonal tensors generate the same MPV family,
+    then each pair $(A_k, B_k)$ generates the same MPV family.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The proof combines two main ingredients:
+
+    \textbf{Overlap orthogonality.}
+    The cross-block overlaps $O_{A_j B_k}(N)$ vanish for $j \neq k$:
+    when $D_j \neq D_k$, this follows from the rectangular spectral
+    gap (Theorem~\ref{thm:overlap_decay_rect});
+    when $D_j = D_k$ but the blocks are not gauge-phase equivalent,
+    it follows from the square spectral gap
+    (Theorem~\ref{thm:overlap_decay}).
+
+    \textbf{Vandermonde separation.}
+    The same-MPV hypothesis gives
+    $\sum_k \mu_k^N \tr(A_k^w) = \sum_k \mu_k^N \tr(B_k^w)$
+    for all words $w$ and system sizes~$N$.
+    Since the $\mu_k$ are pairwise distinct,
+    the Vandermonde matrix $(\mu_k^N)_{N,k}$ has full rank
+    (for sufficiently many values of $N$),
+    so $\tr(A_k^w) = \tr(B_k^w)$ for each~$k$ and all~$w$.
+    The trace agreement gives per-block same-MPV.
+
+    In~\cite{PerezGarcia2007Matrix}, the Vandermonde separation
+    argument is described informally.
+    The formalization makes it precise using the characteristic
+    polynomial identity from Newton--Girard
+    (Chapter~\ref{ch:assembly}).
+\end{proof}
+
+\begin{theorem}[Canonical form fundamental theorem]\label{thm:ft_canonical}
+    \lean{MPSTensor.fundamentalTheorem_canonicalForm}
+    \leanok
+    \uses{thm:block_sep, thm:per_block_gauge}
+    Under the hypotheses of Theorem~\ref{thm:block_sep},
+    there exist a permutation $\sigma$ and per-block gauge
+    matrices such that $B_k^i = X_k A_{\sigma(k)}^i X_k^{-1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:block_sep, thm:per_block_gauge}
+    Theorem~\ref{thm:block_sep} gives per-block same-MPV.
+    Theorem~\ref{thm:per_block_gauge} converts this to
+    permutation + per-block gauge.
+\end{proof}
