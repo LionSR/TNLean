@@ -197,11 +197,17 @@ and the doubly stochastic gauge
     (Theorem~\ref{thm:ds_gauge_unital}),
     the Hilbert--Schmidt contraction
     (Theorem~\ref{thm:hs_contraction}) gives
-    $|\mu|^{2n} \|X\|_{\mathrm{HS}}^2
-    \le D^2$
-    for all $n \ge 0$.
+    $\|F_{AB}^n(X)\|_{\mathrm{HS}}^2 \le \|X\|_{\mathrm{HS}}^2$
+    for all~$n$.
+    Since $F_{AB}^n(X) = \mu^n X$, this gives
+    $|\mu|^{2n} \le D^2 / \|X\|_{\mathrm{HS}}^2$
+    (using $\|X\|_{\mathrm{HS}}^2 \le D^2$ for matrices in
+    $\MN{D}$).
     If $|\mu| > 1$, the left-hand side diverges,
     contradicting the bound.
+
+    This proof avoids the Perron--Frobenius theorem entirely;
+    the bound follows from the Kadison--Schwarz inequality alone.
 \end{proof}
 
 \begin{theorem}[Spectral radius bound]\label{thm:spectral_radius_le_one}
@@ -251,13 +257,17 @@ and the doubly stochastic gauge
     simplicity of $\MN{D}$, Theorem~\ref{thm:simplicity}).
     Skolem--Noether
     (Theorem~\ref{thm:skolem_noether}) then yields
-    $B^i = \bar{\mu} X^{-1} A^i X$ for all~$i$.
+    $B^i = \bar{\mu} \, X \, A^i \, X^{-1}$ for all~$i$,
+    establishing gauge-phase equivalence
+    (Definition~\ref{def:gauge_phase_equiv}).
 
-    In~\cite{PerezGarcia2007Matrix}, this result is stated as
+    In~\cite{PerezGarcia2007Matrix}, this argument appears as
     part of the proof of the single-block fundamental theorem.
-    The argument above follows the same strategy
-    (KS inequality $\to$ multiplicative domain $\to$ Skolem--Noether)
-    adapted to the mixed transfer setting.
+    Our formalization factors it out as a self-contained
+    spectral-gap theorem for the mixed transfer operator,
+    following the same chain
+    (KS inequality $\to$ multiplicative domain $\to$
+    Skolem--Noether).
 \end{proof}
 
 \begin{theorem}[Strict spectral gap]\label{thm:spectral_gap}
@@ -299,6 +309,12 @@ and the doubly stochastic gauge
     yields an invertible intertwiner
     $X : \C^{D_2} \to \C^{D_1}$, which is impossible when
     $D_1 \neq D_2$.
+
+    The rectangular case does not appear in
+    \cite{PerezGarcia2007Matrix};
+    the formalization extends the square-case argument by
+    observing that the dimension mismatch obstructs the
+    final Skolem--Noether step.
 \end{proof}
 
 \begin{theorem}[Rectangular overlap decay]\label{thm:overlap_decay_rect}
@@ -382,9 +398,10 @@ and the doubly stochastic gauge
 \begin{theorem}[Self-correlation persists]\label{thm:self_persist}
     \lean{MPSTensor.self_correlation_persists}
     \leanok
-    \uses{def:transfer_map}
-    If $\rho$ is the unique PSD fixed point of $\E_A$, then
-    $\tr(\E_A^N(\rho)) = \tr(\rho)$ for all $N \ge 0$.
+    \uses{def:transfer_map, thm:qpf}
+    Let $\rho$ be the unique PSD fixed point of $\E_A$
+    (Theorem~\ref{thm:qpf}).
+    Then $\tr(\E_A^N(\rho)) = \tr(\rho)$ for all $N \ge 0$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -429,11 +446,11 @@ and the doubly stochastic gauge
     By the power decomposition
     (Theorem~\ref{thm:pow_decomp}),
     $E^n = P + (E - P)^n$ for $n \ge 1$.
-    Since $\rho(E - P) < 1$, $(E - P)^n \to 0$,
-    so $\tr(E^n) \to \tr(P)$.
-    Trace preservation gives $\tr(P(X)) = \tr(X) \cdot
-    \frac{\tr(\rho)}{\tr(\rho)} = \tr(X)$ for the
-    trace functional, so $\tr(P) = 1$.
+    Since $\rho(E - P) < 1$, the Gelfand formula gives
+    $(E - P)^n \to 0$, so $\tr(E^n) \to \tr(P)$.
+    The operator trace of $P$ equals~$1$: since
+    $P(X) = \frac{\tr(X)}{\tr(\rho)} \rho$,
+    we have $\tr(P) = \frac{\tr(\rho)}{\tr(\rho)} = 1$.
 \end{proof}
 
 \begin{theorem}[Primitive overlap convergence]\label{thm:primitive_overlap}
