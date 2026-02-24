@@ -1,0 +1,457 @@
+\chapter{Spectral Gap and Block Separation}\label{ch:spectral}
+
+This chapter proves that the MPV overlaps between distinct
+(non-gauge-phase-equivalent) MPS blocks decay to zero as system
+size grows, while self-overlaps of primitive blocks converge to~$1$.
+The argument is based on a spectral analysis of the \emph{mixed
+transfer operator}, following~\cite{PerezGarcia2007Matrix}.
+
+Throughout this chapter, all MPS tensors are assumed to satisfy the
+trace-preserving normalization
+$\sum_i (A^i)^\dagger A^i = \Id$.
+
+\section{Mixed transfer operator}
+
+\begin{definition}[Mixed transfer operator]\label{def:mixed_transfer}
+    \lean{MPSTensor.mixedTransferMap}
+    \leanok
+    \uses{def:mps_tensor}
+    The \emph{mixed transfer operator} (or \emph{cross transfer
+    operator}) for two MPS tensors $A$ and $B$ of the same bond
+    dimension~$D$ is the linear map
+    $F_{AB} : \MN{D} \to \MN{D}$ defined by
+    \[
+        F_{AB}(X) =  \sum_{i=0}^{d-1} A^i X (B^i)^\dagger.
+    \]
+\end{definition}
+
+\begin{definition}[Rectangular mixed transfer operator]\label{def:mixed_transfer_rect}
+    \lean{MPSTensor.mixedTransferMap₂}
+    \leanok
+    \uses{def:mps_tensor}
+    For MPS tensors $A$ of bond dimension $D_1$ and $B$ of bond
+    dimension $D_2$ (possibly $D_1 \neq D_2$), the
+    \emph{rectangular mixed transfer operator} is
+    $F_{AB}^{\mathrm{rect}} :
+    M_{D_1 \times D_2}(\C) \to M_{D_1 \times D_2}(\C)$
+    defined by
+    \[
+        F_{AB}^{\mathrm{rect}}(X)
+        =  \sum_{i=0}^{d-1} A^i X (B^i)^\dagger.
+    \]
+\end{definition}
+
+\begin{theorem}[Self-transfer]\label{thm:mixed_self}
+    \lean{MPSTensor.mixedTransferMap_self}
+    \leanok
+    \uses{def:mixed_transfer, def:transfer_map}
+    $F_{AA} = \E_A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Immediate from the definitions.
+\end{proof}
+
+\begin{theorem}[Iterated mixed transfer]\label{thm:mixed_pow}
+    \lean{MPSTensor.mixedTransferMap_pow_apply}
+    \leanok
+    \uses{def:mixed_transfer, def:eval_word}
+    For all $X \in \MN{D}$ and $N \ge 0$,
+    \[
+        F_{AB}^N(X)
+        =  \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
+        A^\sigma X (B^\sigma)^\dagger,
+    \]
+    where $A^\sigma = A^{\sigma_1} \cdots A^{\sigma_N}$ denotes the
+    word evaluation (Definition~\ref{def:eval_word}).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induction on $N$: the base case is $F^0(X) = X$;
+    the inductive step applies $F_{AB}$ to each summand
+    and re-indexes via
+    $\{0,\ldots,d{-}1\}^{N+1} \cong
+    \{0,\ldots,d{-}1\} \times \{0,\ldots,d{-}1\}^N$.
+\end{proof}
+
+\begin{theorem}[Trace of iterated mixed transfer]\label{thm:mixed_trace_identity}
+    \lean{MPSTensor.trace_mixedTransferMap_pow_identity}
+    \leanok
+    \uses{thm:mixed_pow, def:coeff}
+    For all $X \in \MN{D}$ and $N \ge 0$,
+    \[
+        \tr(F_{AB}^N(X))
+        = 
+        \sum_{\sigma}
+        \tr(A^\sigma X)
+        \overline{\tr(B^\sigma)}.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:mixed_pow}
+    Apply the trace to each summand in
+    Theorem~\ref{thm:mixed_pow} and use
+    $\tr(M N^\dagger) = \sum_{p,q} M_{pq} \overline{N_{pq}}$.
+\end{proof}
+
+\section{MPV overlap as transfer trace}
+
+\begin{lemma}[Trace expansion over matrix units]\label{lem:trace_expansion}
+    \lean{MPSTensor.linearMap_trace_eq_sum_apply_single}
+    \leanok
+    For any linear endomorphism $T$ on $\MN{D}$,
+    the operator trace can be expanded as
+    \[
+        (\tr \circ T)
+        = 
+        \sum_{p,q = 0}^{D-1}
+        (T(E_{pq}))_{pq},
+    \]
+    where $E_{pq}$ is the matrix with $1$ in position $(p,q)$
+    and $0$ elsewhere.
+\end{lemma}
+
+\begin{proof}\leanok
+    The operator trace of $T$ equals the sum of
+    $\tr(T(E_{pq}) \cdot E_{qp})$ over all $(p,q)$,
+    and $\tr(M \cdot E_{qp}) = M_{pq}$.
+\end{proof}
+
+\begin{theorem}[Overlap equals transfer trace]\label{thm:overlap_trace}
+    \lean{MPSTensor.trace_mixedTransferMap_pow_eq_mpvOverlap}
+    \leanok
+    \uses{def:mixed_transfer, def:mpv_overlap,
+          thm:mixed_pow, lem:trace_expansion}
+    For normalized tensors $A, B$ of bond dimension~$D \ge 1$,
+    \[
+        O_{AB}(N)
+        = 
+        \tr(F_{AB}^N),
+    \]
+    where the right-hand side is the operator trace
+    (trace of $F_{AB}^N$ as a linear map on $\MN{D}$).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mixed_pow, lem:trace_expansion}
+    Expand the operator trace using
+    Lemma~\ref{lem:trace_expansion} as a sum over matrix units
+    $E_{pq}$.
+    Apply Theorem~\ref{thm:mixed_pow} to evaluate
+    $F_{AB}^N(E_{pq})$, extract the $(p,q)$-entry, and
+    reassemble. The resulting double sum over $(p,q)$ and $\sigma$
+    equals $\sum_\sigma V^{(N)}(A)_\sigma 
+    \overline{V^{(N)}(B)_\sigma} = O_{AB}(N)$.
+\end{proof}
+
+\begin{theorem}[Rectangular overlap as transfer trace]\label{thm:overlap_trace_rect}
+    \lean{MPSTensor.trace_mixedTransferMap₂_pow_eq_mpvOverlap}
+    \leanok
+    \uses{def:mixed_transfer_rect, def:mpv_overlap}
+    For tensors $A$ of bond dimension $D_1 \ge 1$ and $B$ of bond
+    dimension $D_2 \ge 1$,
+    $O_{AB}(N) = \tr((F_{AB}^{\mathrm{rect}})^N)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Same argument as Theorem~\ref{thm:overlap_trace},
+    using rectangular matrix units.
+\end{proof}
+
+\begin{theorem}[Inner product via transfer trace]\label{thm:inner_via_trace}
+    \lean{MPSTensor.mpv_inner_product_via_trace}
+    \leanok
+    \uses{def:mixed_transfer, def:mpv_inner}
+    $\braket{V^{(N)}(A)}{V^{(N)}(B)}
+    = \tr(F_{AB}^N(\Id))$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:mixed_pow}
+    Apply Theorem~\ref{thm:mixed_pow} with $X = \Id$
+    and take the trace.
+\end{proof}
+
+\section{Eigenvalue bound and spectral gap}
+
+The proofs in this section use the Hilbert--Schmidt (Frobenius) norm
+contraction from the Kadison--Schwarz inequality
+(Theorem~\ref{thm:hs_contraction})
+and the doubly stochastic gauge
+(Theorem~\ref{thm:ds_gauge_unital}).
+
+\begin{theorem}[Eigenvalue bound]\label{thm:eigenvalue_bound}
+    \lean{MPSTensor.eigenvalue_norm_le_one}
+    \leanok
+    \uses{def:mixed_transfer}
+    Let $A, B$ be normalized MPS tensors.
+    Every eigenvalue $\mu$ of $F_{AB}$ satisfies $|\mu| \le 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hs_contraction, thm:ds_gauge_unital}
+    Let $F_{AB}(X) = \mu X$ with $X \neq 0$.
+    After passing to the doubly stochastic gauge
+    (Theorem~\ref{thm:ds_gauge_unital}),
+    the Hilbert--Schmidt contraction
+    (Theorem~\ref{thm:hs_contraction}) gives
+    $|\mu|^{2n} \|X\|_{\mathrm{HS}}^2
+    \le D^2$
+    for all $n \ge 0$.
+    If $|\mu| > 1$, the left-hand side diverges,
+    contradicting the bound.
+\end{proof}
+
+\begin{theorem}[Spectral radius bound]\label{thm:spectral_radius_le_one}
+    \lean{MPSTensor.spectralRadius_mixedTransfer_le_one}
+    \leanok
+    \uses{thm:eigenvalue_bound}
+    $\rho(F_{AB}) \le 1$ for normalized tensors.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:eigenvalue_bound}
+    The spectral radius is the supremum of $|\mu|$ over all
+    eigenvalues, and each satisfies $|\mu| \le 1$ by
+    Theorem~\ref{thm:eigenvalue_bound}.
+\end{proof}
+
+\begin{theorem}[Modulus-one eigenvalue implies gauge-phase equivalence]%
+    \label{thm:modulus_one_gauge}
+    \lean{MPSTensor.modulus_one_eigenvalue_implies_gauge}
+    \leanok
+    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
+    Let $A, B$ be injective normalized MPS tensors.
+    If $\rho(F_{AB}) \ge 1$, then $A$ and $B$ are
+    gauge-phase equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:eigenvalue_bound, thm:ks_peripheral,
+          thm:kraus_commute, thm:multiplicative_domain,
+          thm:simplicity, thm:skolem_noether}
+    Since $\rho(F_{AB}) \le 1$ (Theorem~\ref{thm:spectral_radius_le_one})
+    and $\rho(F_{AB}) \ge 1$ by hypothesis, there exists an
+    eigenvalue~$\mu$ with $|\mu| = 1$ and eigenvector $X \neq 0$:
+    $F_{AB}(X) = \mu X$.
+
+    After passing to the doubly stochastic gauge, $F_{AB}$
+    becomes both unital and trace-preserving.
+    By the KS equality for peripheral eigenvectors
+    (Theorem~\ref{thm:ks_peripheral}),
+    the Kadison--Schwarz gap vanishes.
+    The Kraus commutation identity
+    (Theorem~\ref{thm:kraus_commute}) then gives
+    $X (B^i)^\dagger = (B^i)^\dagger \mu X$ for all~$i$.
+    Using the multiplicative domain
+    (Theorem~\ref{thm:multiplicative_domain}), one shows
+    that $X$ is invertible (using injectivity of $B$ and
+    simplicity of $\MN{D}$, Theorem~\ref{thm:simplicity}).
+    Skolem--Noether
+    (Theorem~\ref{thm:skolem_noether}) then yields
+    $B^i = \bar{\mu} X^{-1} A^i X$ for all~$i$.
+
+    In~\cite{PerezGarcia2007Matrix}, this result is stated as
+    part of the proof of the single-block fundamental theorem.
+    The argument above follows the same strategy
+    (KS inequality $\to$ multiplicative domain $\to$ Skolem--Noether)
+    adapted to the mixed transfer setting.
+\end{proof}
+
+\begin{theorem}[Strict spectral gap]\label{thm:spectral_gap}
+    \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one}
+    \leanok
+    \uses{thm:modulus_one_gauge, def:gauge_phase_equiv}
+    Let $A, B$ be injective normalized MPS tensors that
+    are \emph{not} gauge-phase equivalent.
+    Then $\rho(F_{AB}) < 1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:spectral_radius_le_one, thm:modulus_one_gauge}
+    $\rho(F_{AB}) \le 1$ by
+    Theorem~\ref{thm:spectral_radius_le_one}.
+    If $\rho(F_{AB}) = 1$,
+    Theorem~\ref{thm:modulus_one_gauge} gives gauge-phase
+    equivalence, contradicting the hypothesis.
+\end{proof}
+
+\section{Spectral gap --- rectangular case}
+
+\begin{theorem}[Rectangular spectral gap]\label{thm:spectral_gap_rect}
+    \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne}
+    \leanok
+    \uses{def:mixed_transfer_rect, def:injective}
+    Let $A$ be an injective normalized tensor of bond dimension
+    $D_1$ and $B$ an injective normalized tensor of bond
+    dimension $D_2$, with $D_1 \neq D_2$.
+    Then $\rho(F_{AB}^{\mathrm{rect}}) < 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The eigenvalue bound $|\mu| \le 1$ holds by the same
+    Frobenius-norm contraction argument as
+    Theorem~\ref{thm:eigenvalue_bound}, adapted to rectangular
+    matrices.
+    If $\rho = 1$, the modulus-one eigenvector argument
+    yields an invertible intertwiner
+    $X : \C^{D_2} \to \C^{D_1}$, which is impossible when
+    $D_1 \neq D_2$.
+\end{proof}
+
+\begin{theorem}[Rectangular overlap decay]\label{thm:overlap_decay_rect}
+    \lean{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne}
+    \leanok
+    \uses{thm:spectral_gap_rect, thm:overlap_trace_rect}
+    If $D_1 \neq D_2$ and both tensors are injective and
+    normalized, then $O_{AB}(N) \to 0$ as $N \to \infty$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:spectral_gap_rect}
+    The spectral gap $\rho(F_{AB}^{\mathrm{rect}}) < 1$
+    (Theorem~\ref{thm:spectral_gap_rect}) implies
+    $(F_{AB}^{\mathrm{rect}})^N \to 0$, so the operator
+    trace converges to~$0$.
+    By Theorem~\ref{thm:overlap_trace_rect},
+    $O_{AB}(N) = \tr((F_{AB}^{\mathrm{rect}})^N) \to 0$.
+\end{proof}
+
+\section{MPV overlap decay}
+
+\begin{theorem}[Transfer powers converge to zero]\label{thm:transfer_pow_zero}
+    \lean{MPSTensor.mixedTransfer_pow_tendsto_zero}
+    \leanok
+    \uses{thm:spectral_gap}
+    Let $A, B$ be injective normalized tensors that are not
+    gauge-phase equivalent.
+    Then $F_{AB}^n(X) \to 0$ for every $X \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:spectral_gap}
+    The spectral gap $\rho(F_{AB}) < 1$
+    (Theorem~\ref{thm:spectral_gap})
+    implies $\|F_{AB}^n\|_{\mathrm{op}} \to 0$
+    by the Gelfand formula,
+    so $F_{AB}^n(X) \to 0$ for every~$X$.
+\end{proof}
+
+\begin{theorem}[Overlap decay]\label{thm:overlap_decay}
+    \lean{MPSTensor.mpvOverlap_tendsto_zero}
+    \leanok
+    \uses{thm:transfer_pow_zero, thm:overlap_trace}
+    Let $A, B$ be injective normalized tensors of the same bond
+    dimension that are not gauge-phase equivalent.
+    Then $O_{AB}(N) \to 0$ as $N \to \infty$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:transfer_pow_zero, lem:trace_expansion}
+    By Theorem~\ref{thm:overlap_trace},
+    $O_{AB}(N) = \tr(F_{AB}^N)$.
+    Expand the operator trace over matrix units
+    (Lemma~\ref{lem:trace_expansion}):
+    $\tr(F_{AB}^N) = \sum_{p,q} (F_{AB}^N(E_{pq}))_{pq}$.
+    By Theorem~\ref{thm:transfer_pow_zero},
+    each $F_{AB}^N(E_{pq}) \to 0$ entry-wise.
+    Since the sum is finite, $O_{AB}(N) \to 0$.
+\end{proof}
+
+\section{Block separation}
+
+\begin{theorem}[Cross-correlation decay]\label{thm:cross_decay}
+    \lean{MPSTensor.cross_correlation_tendsto_zero}
+    \leanok
+    \uses{thm:transfer_pow_zero}
+    Let $A, B$ be injective normalized tensors that are not
+    gauge-phase equivalent.
+    For every $X \in \MN{D}$,
+    $\tr(F_{AB}^N(X)) \to 0$ as $N \to \infty$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:transfer_pow_zero}
+    By Theorem~\ref{thm:transfer_pow_zero},
+    $F_{AB}^N(X) \to 0$; the trace is continuous in
+    finite dimensions.
+\end{proof}
+
+\begin{theorem}[Self-correlation persists]\label{thm:self_persist}
+    \lean{MPSTensor.self_correlation_persists}
+    \leanok
+    \uses{def:transfer_map}
+    If $\rho$ is the unique PSD fixed point of $\E_A$, then
+    $\tr(\E_A^N(\rho)) = \tr(\rho)$ for all $N \ge 0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $\E_A(\rho) = \rho$, by induction $\E_A^N(\rho) = \rho$,
+    so $\tr(\E_A^N(\rho)) = \tr(\rho)$.
+\end{proof}
+
+\begin{theorem}[Block separation principle]\label{thm:block_separation}
+    \lean{MPSTensor.block_separation_principle}
+    \leanok
+    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
+    Let $A, B$ be injective tensors that are not gauge-phase
+    equivalent. If $\tr(F_{AB}^N(\Id)) = 0$ for all $N \ge 0$,
+    then $F_{AB}(\Id) = 0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Taking $N = 0$ gives $\tr(F_{AB}^0(\Id)) = \tr(\Id) = D$.
+    For $D \ge 1$, this is nonzero, so the hypothesis is
+    vacuously false.
+    For $D = 0$, all $0 \times 0$ matrices are equal.
+\end{proof}
+
+\section{Primitive overlap convergence}
+
+\begin{theorem}[Trace of powers converges to $1$]\label{thm:trace_pow_one}
+    \lean{MPSTensor.linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one}
+    \leanok
+    \uses{def:fixed_point_proj, thm:pow_decomp,
+          def:trace_preserving}
+    Let $E$ be trace-preserving with fixed point $\rho$
+    ($\tr(\rho) \neq 0$) and
+    let $P$ be the fixed-point projection
+    (Definition~\ref{def:fixed_point_proj}).
+    If $\rho(E - P) < 1$, then
+    $\tr(E^n) \to 1$ as $n \to \infty$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pow_decomp}
+    By the power decomposition
+    (Theorem~\ref{thm:pow_decomp}),
+    $E^n = P + (E - P)^n$ for $n \ge 1$.
+    Since $\rho(E - P) < 1$, $(E - P)^n \to 0$,
+    so $\tr(E^n) \to \tr(P)$.
+    Trace preservation gives $\tr(P(X)) = \tr(X) \cdot
+    \frac{\tr(\rho)}{\tr(\rho)} = \tr(X)$ for the
+    trace functional, so $\tr(P) = 1$.
+\end{proof}
+
+\begin{theorem}[Primitive overlap convergence]\label{thm:primitive_overlap}
+    \lean{MPSTensor.mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one}
+    \leanok
+    \uses{thm:trace_pow_one, thm:overlap_trace,
+          def:transfer_map}
+    Let $A$ be a normalized MPS tensor with a nonzero PSD fixed
+    point $\rho$ of the transfer map.
+    If $\rho(\E_A - P) < 1$ (where $P$ is the fixed-point
+    projection), then $O_{AA}(N) \to 1$ as $N \to \infty$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:trace_pow_one, thm:overlap_trace}
+    By Theorem~\ref{thm:overlap_trace} (with $A = B$),
+    $O_{AA}(N) = \tr(\E_A^N)$.
+    By Theorem~\ref{thm:trace_pow_one},
+    $\tr(\E_A^N) \to 1$.
+\end{proof}
