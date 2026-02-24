@@ -18,10 +18,43 @@ boundary conditions (PBC).
     indexed by a physical index $i \in \{0, \ldots, d{-}1\}$.
 \end{definition}
 
+\begin{definition}[Word evaluation]\label{def:eval_word}
+    \lean{MPSTensor.evalWord}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a word $w = (i_1, \ldots, i_L) \in \{0,\ldots,d{-}1\}^L$,
+    the \emph{word evaluation} is the matrix product
+    \[
+        A^w \;:=\; A^{i_1} A^{i_2} \cdots A^{i_L} \;\in\; \MN{D},
+    \]
+    with the convention that the empty word evaluates to the identity:
+    $A^\varnothing = \Id_D$.
+\end{definition}
+
+\begin{lemma}[Word evaluation respects concatenation]\label{lem:eval_word_append}
+    \lean{MPSTensor.evalWord_append}
+    \leanok
+    \uses{def:eval_word}
+    For any words $w_1, w_2$,
+    $A^{w_1 \cdot w_2} = A^{w_1} \, A^{w_2}$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:eval_word}
+    Induction on $w_1$.
+\end{proof}
+
+\begin{definition}[Trace coefficient]\label{def:coeff}
+    \lean{MPSTensor.coeff}
+    \leanok
+    \uses{def:eval_word}
+    The \emph{trace coefficient} of a word $w$ is
+    $c_w(A) := \tr(A^w)$.
+\end{definition}
+
 \begin{definition}[Matrix product vector]\label{def:mpv}
     \lean{MPSTensor.mpv}
     \leanok
-    \uses{def:mps_tensor}
+    \uses{def:coeff}
     The \emph{matrix product vector} (MPV) of an MPS tensor~$A$
     at system size~$N$ is the vector
     \[
@@ -45,6 +78,17 @@ boundary conditions (PBC).
         \E_A(X) \;=\; \sum_{i=0}^{d-1} A^i \, X \, (A^i)^\dagger.
     \]
 \end{definition}
+
+\begin{lemma}[Transfer map is positive]\label{lem:transfer_pos}
+    \lean{MPSTensor.transferMap_pos}
+    \leanok
+    \uses{def:transfer_map}
+    If $X \ge 0$, then $\E_A(X) \ge 0$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:transfer_map}
+    Each summand $A^i X (A^i)^\dagger$ is PSD when $X$ is PSD.
+\end{proof}
 
 \section{Gauge equivalence and same MPV}
 
@@ -90,6 +134,24 @@ boundary conditions (PBC).
     $\ket{V^{(N)}(A)} = c_N \, \ket{V^{(N)}(B)}$.
 \end{definition}
 
+\begin{lemma}[Word evaluation under scaling]\label{lem:eval_word_smul}
+    \lean{MPSTensor.evalWord_smul}
+    \leanok
+    \uses{def:eval_word}
+    Let $\zeta A$ denote the tensor with matrices
+    $\{\zeta \, A^i\}_{i=0}^{d-1}$.
+    Then for any word $w$,
+    \[
+        (\zeta A)^w \;=\; \zeta^{|w|} \, A^w,
+    \]
+    where $|w|$ is the length of~$w$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:eval_word}
+    Induction on $w$: the base case gives $\zeta^0 = 1$,
+    and each step picks up one factor of $\zeta$.
+\end{proof}
+
 \begin{definition}[Gauge-phase equivalence]\label{def:gauge_phase_equiv}
     \lean{MPSTensor.GaugePhaseEquiv}
     \leanok
@@ -102,6 +164,20 @@ boundary conditions (PBC).
     \]
 \end{definition}
 
+\begin{lemma}[Word evaluation under conjugation]\label{lem:eval_word_gauge}
+    \lean{MPSTensor.evalWord_gauge}
+    \leanok
+    \uses{def:eval_word}
+    If $B^i = X \, A^i \, X^{-1}$ for all~$i$, then for every word~$w$,
+    \[
+        B^w \;=\; X \, A^w \, X^{-1}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:eval_word}
+    Induction on the word length, using $X X^{-1} = \Id$.
+\end{proof}
+
 \begin{theorem}[Gauge invariance of MPVs]\label{thm:gauge_invariance}
     \lean{MPSTensor.GaugeEquiv.sameMPV}
     \leanok
@@ -112,11 +188,11 @@ boundary conditions (PBC).
 
 \begin{proof}
     \leanok
-    \uses{def:gauge_equiv, def:mpv}
+    \uses{lem:eval_word_gauge}
     Let $B^i = X A^i X^{-1}$.
-    By induction on word length,
-    $B^{i_1} \cdots B^{i_N} = X \, A^{i_1} \cdots A^{i_N} \, X^{-1}$.
-    Then $\tr(B^{i_1} \cdots B^{i_N}) = \tr(A^{i_1} \cdots A^{i_N})$
+    By Lemma~\ref{lem:eval_word_gauge}, $B^w = X \, A^w \, X^{-1}$
+    for every word~$w$.
+    Then $\tr(B^w) = \tr(X \, A^w \, X^{-1}) = \tr(A^w)$
     by cyclicity of the trace.
 \end{proof}
 
@@ -210,11 +286,16 @@ boundary conditions (PBC).
 
 \begin{proof}
     \leanok
-    \uses{def:block_diagonal_tensor, def:mpv}
-    The trace of a block-diagonal matrix is the sum of the
-    block traces, and the word evaluation of a block-diagonal
-    tensor is block-diagonal with per-block scaling
-    $\mu_k^N$.
+    \uses{def:block_diagonal_tensor, def:coeff, lem:eval_word_smul}
+    For each physical index~$i$, the block-diagonal tensor
+    $A^i = \bigoplus_k \mu_k A_k^i$ is a block-diagonal matrix.
+    By Lemma~\ref{lem:eval_word_smul},
+    the word evaluation of each block picks up a factor
+    $\mu_k^{|w|}$, and the full word evaluation is block-diagonal
+    with blocks $\mu_k^N A_k^w$.
+    Taking the trace of a block-diagonal matrix gives the sum
+    of the block traces:
+    $\tr(A^w) = \sum_k \mu_k^N \tr(A_k^w)$.
 \end{proof}
 
 \section{Blocking}
@@ -233,6 +314,44 @@ boundary conditions (PBC).
     \]
 \end{definition}
 
+\begin{lemma}[Blocked word evaluation]\label{lem:eval_word_block}
+    \lean{MPSTensor.evalWord_blockTensor}
+    \leanok
+    \uses{def:blocked_tensor, def:eval_word}
+    Let $w = (J_1, \ldots, J_m)$ be a word in the blocked alphabet
+    (each $J_k \in \{0, \ldots, d^L{-}1\}$).
+    Decoding each blocked index $J_k$ back to an $L$-tuple of
+    physical indices and concatenating gives a word
+    $\widetilde{w}$ of length $mL$ in the original alphabet.
+    Then $(A^{[L]})^w = A^{\widetilde{w}}$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:blocked_tensor, def:eval_word}
+    Induction on $w$, using the concatenation lemma
+    (Lemma~\ref{lem:eval_word_append}).
+\end{proof}
+
+\begin{lemma}[Blocking preserves MPV coefficients]\label{lem:mpv_block}
+    \lean{MPSTensor.mpv_blockTensor_eq_mpv}
+    \leanok
+    \uses{def:blocked_tensor, def:mpv}
+    For each basis state $\sigma = (\sigma_1, \ldots, \sigma_N)$ of
+    the blocked system (with $\sigma_k \in \{0, \ldots, d^L{-}1\}$),
+    there exists a basis state
+    $\widetilde{\sigma} = (\widetilde{\sigma}_1, \ldots, \widetilde{\sigma}_{NL})$
+    of the original system such that
+    \[
+        V^{(N)}(A^{[L]})_\sigma
+        \;=\;
+        V^{(NL)}(A)_{\widetilde{\sigma}}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:blocked_tensor, def:mpv, lem:eval_word_block}
+    Flatten the blocked basis state and apply the blocked word
+    evaluation lemma (Lemma~\ref{lem:eval_word_block}).
+\end{proof}
+
 \begin{theorem}[Blocking preserves same MPV]\label{thm:blocking_same_mpv}
     \lean{MPSTensor.SameMPV.blockTensor}
     \leanok
@@ -244,13 +363,46 @@ boundary conditions (PBC).
 
 \begin{proof}
     \leanok
-    \uses{def:same_mpv, def:blocked_tensor}
-    Every word in the blocked indices flattens to an ordinary
-    word in the original indices, and the hypothesis gives
-    equality of traces for all ordinary words.
+    \uses{lem:mpv_block}
+    By Lemma~\ref{lem:mpv_block},
+    each MPV coefficient of the blocked tensor $A^{[L]}$ equals
+    a coefficient of $A$ at the flattened configuration.
+    The same holds for $B^{[L]}$ (with the same flattened
+    configuration).
+    Since $A$ and $B$ agree on all configurations, so do
+    $A^{[L]}$ and $B^{[L]}$.
 \end{proof}
 
 \section{MPV overlap}
+
+\begin{definition}[MPV as Hilbert-space vector]\label{def:mpv_state}
+    \lean{MPSTensor.mpvState}
+    \leanok
+    \uses{def:mpv}
+    We regard $\ket{V^{(N)}(A)}$ as an element of $\C^{d^N}$
+    indexed by configurations
+    $\sigma \in \{0,\ldots,d{-}1\}^N$,
+    with $\sigma$-component $V^{(N)}(A)_\sigma$ as in
+    Definition~\ref{def:mpv}.
+    This allows us to use the standard Euclidean inner product
+    on $\C^{d^N}$.
+\end{definition}
+
+\begin{definition}[MPV inner product]\label{def:mpv_inner}
+    \lean{MPSTensor.mpvInner}
+    \leanok
+    \uses{def:mpv_state}
+    The \emph{MPV inner product} between two MPS tensors $A$ and $B$
+    at system size~$N$ is
+    \[
+        \braket{V^{(N)}(A)}{V^{(N)}(B)}
+        \;:=\;
+        \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
+        \overline{V^{(N)}(A)_\sigma} \; V^{(N)}(B)_\sigma,
+    \]
+    i.e.\ the Euclidean inner product on $\C^{d^N}$
+    (conjugate-linear in the first argument).
+\end{definition}
 
 \begin{definition}[MPV overlap]\label{def:mpv_overlap}
     \lean{MPSTensor.mpvOverlap}
@@ -260,11 +412,22 @@ boundary conditions (PBC).
     dimension $D_1$) and $B$ (of bond dimension $D_2$)
     at system size~$N$ is
     \[
-        \langle A | B \rangle_N
-        \;=\;
+        O_{AB}(N)
+        \;:=\;
         \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
-        V^{(N)}(A)_\sigma \; \overline{V^{(N)}(B)_\sigma}
-        \;=\;
-        \braket{V^{(N)}(A)}{V^{(N)}(B)}.
+        V^{(N)}(A)_\sigma \; \overline{V^{(N)}(B)_\sigma}.
     \]
 \end{definition}
+
+\begin{lemma}[Overlap equals conjugate inner product]\label{lem:overlap_eq_inner}
+    \lean{MPSTensor.mpvOverlap_eq_star_mpvInner}
+    \leanok
+    \uses{def:mpv_overlap, def:mpv_inner}
+    $O_{AB}(N) = \overline{\braket{V^{(N)}(A)}{V^{(N)}(B)}}$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:mpv_overlap, def:mpv_inner}
+    The overlap sums $V_\sigma \, \overline{W_\sigma}$
+    while the inner product sums $\overline{V_\sigma} \, W_\sigma$.
+    Complex conjugation swaps these.
+\end{proof}
