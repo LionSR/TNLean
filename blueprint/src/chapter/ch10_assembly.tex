@@ -1,0 +1,253 @@
+\chapter{BNT and Full Assembly}\label{ch:assembly}
+
+This chapter introduces \emph{Basis Normal Tensors} (BNT),
+establishes their permutation rigidity, and assembles the
+full Fundamental Theorem of Matrix Product States.
+The results combine the canonical form reduction
+(Chapter~\ref{ch:canonical}),
+block separation (Chapter~\ref{ch:block_perm}),
+spectral gap (Chapter~\ref{ch:spectral}),
+and Newton--Girard identities into the final statement.
+The main references are
+\cite{PerezGarcia2007Matrix} and~\cite{Cirac2021Matrix}.
+
+\section{Basis normal tensors}
+
+\begin{definition}[Basis Normal Tensor (BNT)]\label{def:bnt}
+    \lean{MPSTensor.IsBNT}
+    \leanok
+    \uses{def:normal, def:mpv}
+    A \emph{basis normal tensor} (BNT) decomposition for a
+    total tensor $A_{\mathrm{tot}}$ consists of $g$ block tensors
+    $(A_1, \ldots, A_g)$ with bond dimensions $(D_1, \ldots, D_g)$
+    such that:
+    \begin{enumerate}
+        \item each $A_j$ is normal
+              (Definition~\ref{def:normal}),
+        \item at each system size~$N$, the MPV of $A_{\mathrm{tot}}$
+              is a linear combination of the block MPVs:
+              $\ket{V^{(N)}(A_{\mathrm{tot}})}
+              = \sum_j c_j \ket{V^{(N)}(A_j)}$,
+        \item for sufficiently large~$N$, the block MPV
+              vectors $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are
+              linearly independent.
+    \end{enumerate}
+    This is \cite[Definition~4.2]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{definition}[Canonical form with BNT separation]\label{def:cf_bnt}
+    \lean{MPSTensor.IsCanonicalFormBNT}
+    \leanok
+    \uses{def:is_canonical_form, def:gauge_phase_equiv}
+    An \emph{IsCanonicalFormBNT} extends the canonical form
+    predicate (Definition~\ref{def:is_canonical_form})
+    with the additional requirement that distinct blocks are
+    \emph{not} gauge-phase equivalent:
+    for $j \neq k$ with $D_j = D_k$,
+    $A_j$ and $A_k$ are not gauge-phase equivalent.
+\end{definition}
+
+\begin{theorem}[CF-BNT yields BNT]\label{thm:cf_bnt_is_bnt}
+    \lean{MPSTensor.IsCanonicalFormBNT.isBNT}
+    \leanok
+    \uses{def:cf_bnt, def:bnt}
+    If $((\mu_k), (A_k))$ satisfies the CF-BNT predicate, then
+    the block tensors form a BNT decomposition for the
+    block-diagonal tensor $\bigoplus_k \mu_k A_k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpv_decomposition}
+    \textbf{Normality}: each block is injective
+    (hence $1$-block injective, hence normal).
+    \textbf{Spanning}: the MPV decomposition
+    (Theorem~\ref{thm:mpv_decomposition}) gives
+    $V^{(N)}(A_{\mathrm{tot}})_\sigma = \sum_k \mu_k^N V^{(N)}(A_k)_\sigma$.
+    \textbf{Linear independence}: the overlap matrix
+    $G_{jk}(N) = O_{A_j A_k}(N)$ converges to the identity
+    (diagonal entries $\to 1$ by the self-overlap hypothesis;
+    off-diagonal entries $\to 0$ by the spectral gap,
+    since distinct CF-BNT blocks are not gauge-phase equivalent).
+    A Gram matrix converging to the identity is eventually
+    invertible, giving linear independence.
+\end{proof}
+
+\section{BNT permutation rigidity}
+
+\begin{theorem}[BNT permutation --- proportional MPV case]\label{thm:bnt_perm_prop}
+    \lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp}
+    \leanok
+    \uses{def:bnt, def:gauge_phase_equiv}
+    Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be two
+    BNT decompositions such that the block-diagonal tensors
+    generate proportional MPV families with convergent nonzero
+    coefficients.
+    Then $g_A = g_B$, and there is a permutation
+    $\sigma \in S_g$ with $D_{\sigma(k)} = D_k$ and
+    $A_{\sigma(k)}$ gauge-phase equivalent to $B_k$ for each~$k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    From the proportional MPV hypothesis and convergent
+    coefficients, one extracts (for each pair $(j,k)$) the
+    limit $\lim_{N \to \infty} O_{A_j B_k}(N)$.
+    By the spectral gap (Chapter~\ref{ch:spectral}),
+    cross-block overlaps between non-equivalent blocks
+    decay to~$0$.
+    The resulting overlap matrix has at most one nonzero entry
+    per row and per column, which defines a permutation.
+    Nonzero overlap forces gauge-phase equivalence.
+
+    This is \cite[Theorem~4.4]{Cirac2021Matrix},
+    proved there using the uniqueness of BNT decompositions.
+\end{proof}
+
+\section{Coefficient convergence}
+
+\begin{theorem}[Coefficient ratio decay]\label{thm:coeff_ratio_decay}
+    \lean{MPSTensor.IsCanonicalForm.coeff_ratio_tendsto}
+    \leanok
+    \uses{def:is_canonical_form}
+    Under the canonical form predicate, for $k \ge 1$,
+    $(\mu_k / \mu_0)^N \to 0$
+    as $N \to \infty$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $|\mu_k| < |\mu_0|$ (strict ordering of moduli),
+    $|\mu_k / \mu_0| < 1$, so the geometric sequence
+    converges to~$0$.
+\end{proof}
+
+\section{Newton--Girard identities}
+
+\begin{theorem}[Newton--Girard trace recursion]\label{thm:newton_girard}
+    \lean{Matrix.charpoly_eq_of_forall_trace_pow_eq}
+    \leanok
+    If $A, B \in \MN{n}$ satisfy
+    $\tr(A^k) = \tr(B^k)$ for all $k \ge 1$,
+    then $A$ and $B$ have the same characteristic polynomial.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Newton--Girard identities express the coefficients
+    of the characteristic polynomial recursively in terms
+    of the power-sum traces $\tr(A^k)$.
+    Equal power sums give equal coefficients, hence equal
+    characteristic polynomials.
+\end{proof}
+
+\begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
+    \lean{Matrix.sum_pow_eq_implies_multiset_eq}
+    \leanok
+    \uses{thm:newton_girard}
+    Let $\alpha, \beta : \{1, \ldots, n\} \to \C$.
+    If $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for all $k \ge 1$,
+    then the multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:newton_girard}
+    Construct diagonal matrices $\diag(\alpha)$ and
+    $\diag(\beta)$.
+    The power-sum hypothesis gives
+    $\tr(\diag(\alpha)^k) = \tr(\diag(\beta)^k)$.
+    By Theorem~\ref{thm:newton_girard}, the characteristic
+    polynomials agree: $\prod_i (X - \alpha_i) = \prod_i (X - \beta_i)$.
+    Extracting roots gives multiset equality.
+\end{proof}
+
+\section{Primitivity bridge}
+
+\begin{definition}[Primitive MPS tensor]\label{def:primitive_mps}
+    \lean{MPSTensor.IsPrimitiveMPS}
+    \leanok
+    \uses{def:mps_tensor}
+    A \emph{primitive MPS tensor} is one equipped with a nonzero
+    PSD fixed point $\rho$ of the transfer map such that the
+    complementary spectral radius
+    $\rho(\E_A - P) < 1$
+    (where $P$ is the fixed-point projection).
+\end{definition}
+
+\begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
+    \lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
+    \leanok
+    \uses{def:primitive_mps, thm:primitive_overlap}
+    If $A$ is a primitive MPS tensor, then
+    $O_{AA}(N) \to 1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:primitive_overlap}
+    Immediate from the primitive overlap convergence
+    (Theorem~\ref{thm:primitive_overlap}).
+\end{proof}
+
+\section{Full assembly}
+
+\begin{theorem}[Fundamental Theorem --- proportional MPV case]\label{thm:ft_proportional}
+    \lean{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT}
+    \leanok
+    \uses{def:cf_bnt, def:gauge_phase_equiv}
+    Let $((\mu_k^A), (A_k))$ and $((\mu_k^B), (B_k))$ be two
+    CF-BNT decompositions.
+    If the block-diagonal tensors generate proportional MPV
+    families, then:
+    \begin{enumerate}
+        \item $r_A = r_B$ (same number of blocks),
+        \item there exists a permutation $\sigma$ with
+              $D_{\sigma(k)}^A = D_k^B$,
+        \item each pair $(A_{\sigma(k)}, B_k)$ is gauge-phase
+              equivalent.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cf_bnt_is_bnt, thm:bnt_perm_prop,
+          thm:coeff_ratio_decay, thm:ft_canonical}
+    The CF-BNT predicate produces a BNT decomposition
+    (Theorem~\ref{thm:cf_bnt_is_bnt}).
+    Coefficient convergence (Theorem~\ref{thm:coeff_ratio_decay})
+    provides the convergent nonzero coefficients.
+    The BNT permutation theorem
+    (Theorem~\ref{thm:bnt_perm_prop}) gives the block count,
+    permutation, and per-block gauge-phase equivalence.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem --- equal MPV case]\label{thm:ft_equal}
+    \lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
+    \leanok
+    \uses{def:cf_bnt, def:gauge_equiv}
+    Under the same hypotheses as Theorem~\ref{thm:ft_proportional},
+    if the MPV families are \emph{equal} (not just proportional),
+    then the block-diagonal tensors are gauge equivalent (not just
+    gauge-phase equivalent).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ft_proportional, thm:power_sum_multiset,
+          thm:ft_canonical}
+    Theorem~\ref{thm:ft_proportional} gives the permutation
+    and per-block gauge-phase equivalence.
+    From equal MPVs, the power-sum identity
+    $\sum_k (\mu_k^A)^N = \sum_k (\mu_k^B)^N$ holds for all~$N$.
+    By Theorem~\ref{thm:power_sum_multiset},
+    the multisets $\{\mu_k^A\}$ and $\{\mu_k^B\}$ agree.
+    Combining with the permutation and per-block gauge-phase
+    equivalence gives global gauge equivalence.
+
+    This is the full Fundamental Theorem of MPS as stated in
+    \cite[Theorem~4.1]{Cirac2021Matrix}
+    and originally proved in~\cite{PerezGarcia2007Matrix}.
+    The key deviation from the literature is the explicit
+    use of Newton--Girard identities
+    (Theorem~\ref{thm:newton_girard}) to pass from
+    equal power sums of scaling factors to
+    multiset equality.
+\end{proof}
