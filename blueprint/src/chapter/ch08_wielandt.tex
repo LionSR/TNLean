@@ -11,11 +11,10 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{definition}[Word span]\label{def:word_span}
     \lean{MPSTensor.wordSpan}
     \leanok
-    \uses{def:mps_tensor}
+    \uses{def:mps_tensor, def:eval_word}
     The \emph{word span} at length~$n$ is the subspace
     \[
-        S_n(A) =  \spn_{\C}\{A^{i_1} \cdots A^{i_n}
-          : (i_1,\ldots,i_n) \in \{0,\ldots,d{-}1\}^n\}
+        S_n(A) =  \spn_{\C}\{A^w : |w| = n\}
         \subseteq  \MN{D}.
     \]
     This is \cite[Eq.~(1)]{Sanz2010Quantum}.
@@ -27,11 +26,32 @@ The results follow~\cite{Sanz2010Quantum}.
     \uses{def:word_span}
     The \emph{cumulative span} at level~$n$ is
     \[
-        T_n(A) =  \spn_{\C}\{A^{i_1} \cdots A^{i_m}
-          : m \le n\}
-        =  S_0(A) + S_1(A) + \cdots + S_n(A).
+        T_n(A) =  S_0(A) + S_1(A) + \cdots + S_n(A).
     \]
 \end{definition}
+
+\begin{lemma}[Monotonicity of cumulative span]\label{lem:cumulative_mono}
+    \lean{MPSTensor.cumulativeSpan_mono}
+    \leanok
+    \uses{def:cumulative_span}
+    $T_n(A) \le T_{n+1}(A)$ for all~$n$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:cumulative_span}
+    $T_{n+1}$ includes all words of length $\le n+1$,
+    which contains all words of length $\le n$.
+\end{proof}
+
+\begin{lemma}[Dimension bound]\label{lem:cumulative_finrank_le}
+    \lean{MPSTensor.cumulativeSpan_finrank_le}
+    \leanok
+    \uses{def:cumulative_span}
+    $\dim T_n(A) \le D^2$ for all~$n$.
+\end{lemma}
+
+\begin{proof}\leanok
+    $T_n(A) \subseteq \MN{D}$ and $\dim \MN{D} = D^2$.
+\end{proof}
 
 \begin{theorem}[Cumulative span stabilisation]\label{thm:cumulative_stable}
     \lean{MPSTensor.cumulativeSpan_stable}
@@ -43,27 +63,39 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{def:cumulative_span, def:word_span}
-    If $T_n = T_{n+1}$, then $S_{n+1} \subseteq T_n$,
-    so left-multiplying by any $A^i$ gives
-    $S_{n+2} \subseteq T_{n+1} = T_n$.
-    By induction, $S_m \subseteq T_n$ for all $m \ge n+1$,
+    If $T_n = T_{n+1}$, then $S_{n+1} \subseteq T_n$.
+    Left-multiplying any element of $S_{n+1}$ by $A^i$ gives
+    an element of $S_{n+2}$, so $S_{n+2} \subseteq T_{n+1} = T_n$.
+    By induction, $S_m \subseteq T_n$ for all $m > n$,
     hence $T_m = T_n$.
 \end{proof}
 
 \begin{theorem}[Dimension growth]\label{thm:cumulative_strict_mono}
     \lean{MPSTensor.cumulativeSpan_finrank_strict_mono}
     \leanok
-    \uses{def:cumulative_span, thm:cumulative_stable}
+    \uses{def:cumulative_span}
     If $T_n(A) \neq T_{n+1}(A)$, then
     $\dim T_{n+1}(A) > \dim T_n(A)$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:cumulative_span}
-    $T_n \subseteq T_{n+1}$ and $T_n \neq T_{n+1}$
-    imply strict rank increase.
+    \uses{lem:cumulative_mono}
+    $T_n \le T_{n+1}$ (Lemma~\ref{lem:cumulative_mono})
+    and $T_n \neq T_{n+1}$
+    imply strict submodule inclusion, hence strict rank increase.
+\end{proof}
+
+\begin{lemma}[Word span characterises block injectivity]\label{lem:wordspan_blk_inj}
+    \lean{MPSTensor.wordSpan_eq_top_iff_isNBlkInjective}
+    \leanok
+    \uses{def:word_span, def:l_blk_injective}
+    $S_L(A) = \MN{D}$ if and only if $A$ is $L$-block injective.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:word_span, def:l_blk_injective}
+    Both conditions assert that the span of all products of
+    length~$L$ equals $\MN{D}$.
 \end{proof}
 
 \section{Fitting decomposition}
@@ -93,55 +125,73 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{def:fitting_decomp}
     Nilpotency on the zero generalized eigenspace follows from
     the definition of generalized eigenspaces.
     Invertibility on nonzero generalized eigenspaces follows
     because $f - \mu$ is nilpotent there, so $f = \mu(1 - (1-f/\mu))$
     is invertible.
-    Spanning and independence are standard spectral theory
-    (available in Mathlib).
+    Spanning and independence are standard results for
+    generalized eigenspaces over algebraically closed fields.
     In~\cite{Sanz2010Quantum} and \cite[Lemma~6.3(b)]{Wolf2012Quantum},
     the Jordan normal form is used directly.
-    Our formalization uses the Fitting decomposition
-    (generalized eigenspaces) as a substitute,
+    Our formalization uses generalized eigenspaces as a substitute,
     since the full Jordan normal form is not available in Mathlib.
+\end{proof}
+
+\begin{theorem}[Nilpotent power bound]\label{thm:nilpotent_pow_bound}
+    \lean{Wielandt.nilpotent_pow_eq_zero_of_finrank}
+    \leanok
+    If $f$ is nilpotent on a space of dimension~$n$,
+    then $f^n = 0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    A nilpotent endomorphism on an $n$-dimensional space has
+    nilpotency index $\le n$.
 \end{proof}
 
 \section{Nonzero trace product}
 
-\begin{theorem}[Cumulative span reaches $\MN{D}$]\label{thm:cumulative_eq_top}
-    \lean{MPSTensor.cumulativeSpan_eq_top}
+\begin{theorem}[Cumulative span reaches $\MN{D}$ --- explicit bound]\label{thm:cumulative_eq_top_bound}
+    \lean{MPSTensor.cumulativeSpan_eq_top_of_isNormal_bound}
     \leanok
-    \uses{def:cumulative_span, def:normal}
-    If $A$ is normal, then $T_{D^2}(A) = \MN{D}$.
+    \uses{def:cumulative_span, def:normal,
+          thm:cumulative_stable, thm:cumulative_strict_mono,
+          lem:cumulative_finrank_le}
+    If $A$ is normal, then there exists $n \le D^2$ with
+    $T_n(A) = \MN{D}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:cumulative_span, def:normal, thm:cumulative_stable,
-          thm:cumulative_strict_mono}
     By Theorem~\ref{thm:cumulative_strict_mono},
-    if $T_n \neq T_{n+1}$ then the dimension increases by $\ge 1$.
-    Since $\dim \MN{D} = D^2$,
+    if $T_n \neq T_{n+1}$ then $\dim T_{n+1} > \dim T_n$.
+    Since $\dim T_n \le D^2$ (Lemma~\ref{lem:cumulative_finrank_le}),
     after at most $D^2$ steps either $T_n = \MN{D}$ or
     $T_n$ has stabilised.
     Stabilisation before reaching $\MN{D}$ contradicts normality
     (which requires $S_{L_0} = \MN{D}$ for some $L_0$,
     hence $T_{L_0} = \MN{D}$).
-    The proof follows \cite[Lemma~1]{Sanz2010Quantum}
-    and \cite[Lemma~6.2]{Wolf2012Quantum}.
-    Those references obtain the sharper bound $D^2 - d + 1$
-    by starting the dimension count at $\dim S_1 = d$;
-    our formalization uses the coarser bound $D^2$.
+\end{proof}
+
+\begin{theorem}[Cumulative span reaches $\MN{D}$]\label{thm:cumulative_eq_top}
+    \lean{MPSTensor.cumulativeSpan_eq_top}
+    \leanok
+    \uses{thm:cumulative_eq_top_bound}
+    If $A$ is normal, then $T_{D^2}(A) = \MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:cumulative_eq_top_bound}
+    Take $n$ from Theorem~\ref{thm:cumulative_eq_top_bound};
+    since $n \le D^2$ and $T$ is monotone, $T_{D^2} = \MN{D}$.
 \end{proof}
 
 \begin{theorem}[Nonzero trace product]\label{thm:nonzero_trace_word}
     \lean{MPSTensor.exists_nonzero_trace_word}
     \leanok
-    \uses{thm:cumulative_eq_top, def:mps_tensor}
+    \uses{thm:cumulative_eq_top}
     If $A$ is normal, then there exists a word $w$ of length
-    $\le D^2$ such that $\tr(A^{i_1} \cdots A^{i_{|w|}}) \neq 0$.
+    $\le D^2$ such that $\tr(A^w) \neq 0$.
     This is \cite[Lemma~1]{Sanz2010Quantum}.
 \end{theorem}
 
@@ -149,11 +199,52 @@ The results follow~\cite{Sanz2010Quantum}.
     \leanok
     \uses{thm:cumulative_eq_top}
     By Theorem~\ref{thm:cumulative_eq_top},
-    the identity $\Id \in T_{D^2}(A)$,
+    $\Id \in T_{D^2}(A)$,
     so $\Id$ is a linear combination of word products
     of length $\le D^2$.
-    At least one of these word products must have nonzero trace
+    At least one has nonzero trace
     (since $\tr(\Id) = D \neq 0$).
+\end{proof}
+
+\section{Eigenvector extraction}
+
+\begin{theorem}[Nonzero trace implies eigenvector]\label{thm:eigenvector_from_trace}
+    \lean{exists_eigenvector_of_trace_ne_zero}
+    \leanok
+    \uses{def:fitting_decomp}
+    If $M \in \MN{D}$ has $\tr(M) \neq 0$, then $M$ has a
+    nonzero eigenvalue $\mu \neq 0$ and a corresponding eigenvector
+    $\varphi \neq 0$ with $M \varphi = \mu \varphi$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fitting_decomp}
+    A matrix with nonzero trace has a nonzero eigenvalue
+    (since trace = sum of eigenvalues counted with multiplicity).
+    The Fitting decomposition
+    (Theorem~\ref{thm:fitting_decomp})
+    ensures the corresponding generalized eigenspace is nontrivial,
+    yielding an eigenvector.
+\end{proof}
+
+\begin{theorem}[Eigenvalue extraction]\label{thm:eigenvalue_extraction}
+    \lean{MPSTensor.exists_word_eigenvector}
+    \leanok
+    \uses{thm:nonzero_trace_word, thm:eigenvector_from_trace}
+    If $A$ is normal, then there exist a word $w_0$ with
+    $|w_0| \le D^2$,
+    a nonzero scalar $\mu \neq 0$, and a nonzero vector
+    $\varphi \neq 0$ such that $A^{w_0} \varphi = \mu \varphi$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:nonzero_trace_word, thm:eigenvector_from_trace}
+    By Theorem~\ref{thm:nonzero_trace_word}, there is a word $w_0$
+    with $\tr(A^{w_0}) \neq 0$ and $|w_0| \le D^2$.
+    By Theorem~\ref{thm:eigenvector_from_trace},
+    $A^{w_0}$ has a nonzero eigenvector.
 \end{proof}
 
 \section{Eigenvector spreading}
@@ -166,11 +257,40 @@ The results follow~\cite{Sanz2010Quantum}.
     $\varphi \in \C^D$, the \emph{cumulative vector span} is
     \[
         K_n(A, \varphi) = 
-        \spn_{\C}\{A^{i_1} \cdots A^{i_m} \varphi : m \le n\}
+        \spn_{\C}\{A^w \varphi : |w| \le n\}
         \subseteq  \C^D.
     \]
     This is \cite[proof of Lemma~2(a)]{Sanz2010Quantum}.
 \end{definition}
+
+\begin{theorem}[Vector span stabilisation]\label{thm:vector_span_stable}
+    \lean{MPSTensor.cumulativeVectorSpan_stable}
+    \leanok
+    \uses{def:cumulative_vector_span}
+    If $K_n(A, \varphi) = K_{n+1}(A, \varphi)$, then
+    $K_m(A, \varphi) = K_n(A, \varphi)$ for all $m \ge n$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Same argument as Theorem~\ref{thm:cumulative_stable}:
+    left-multiplication by $A^i$ cannot escape the stabilised span.
+\end{proof}
+
+\begin{lemma}[Vector span from matrix span]\label{lem:vector_span_from_matrix}
+    \lean{MPSTensor.cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top}
+    \leanok
+    \uses{def:cumulative_vector_span, def:cumulative_span}
+    If $T_N(A) = \MN{D}$ and $\varphi \neq 0$, then
+    $K_N(A, \varphi) = \C^D$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Every matrix $M \in \MN{D}$ is in $T_N(A)$, so in particular
+    every rank-one matrix sending $\varphi$ to any target vector~$v$
+    is in $T_N$.
+    Applying such matrices to $\varphi$ recovers all of $\C^D$.
+\end{proof}
 
 \begin{theorem}[Eigenvector spreading]\label{thm:eigenvector_spreading}
     \lean{MPSTensor.eigenvector_spreading}
@@ -185,47 +305,16 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{def:cumulative_vector_span, def:normal,
-          thm:cumulative_eq_top}
-    The vector span $K_n$ is monotone and
-    $\dim K_n \le D$.
-    If $K_n = K_{n+1}$ for some $n < D-1$, the span stabilises.
-    But $T_N(A) = \MN{D}$ by Theorem~\ref{thm:cumulative_eq_top},
-    so every standard basis matrix is in the cumulative span;
-    applying these to $\varphi \neq 0$ gives all of $\C^D$,
-    contradicting early stabilisation.
+    \uses{thm:cumulative_eq_top, lem:vector_span_from_matrix,
+          thm:vector_span_stable}
+    The vector span $K_n$ is monotone and $\dim K_n \le D$.
+    If $K_n = K_{n+1}$ for some $n < D-1$, the span stabilises
+    (Theorem~\ref{thm:vector_span_stable}).
+    But $T_{D^2}(A) = \MN{D}$ by Theorem~\ref{thm:cumulative_eq_top},
+    so Lemma~\ref{lem:vector_span_from_matrix} gives
+    $K_{D^2}(A, \varphi) = \C^D$, contradicting early stabilisation.
     Hence $\dim K_n$ grows by $\ge 1$ at each step,
     reaching $D$ by step $D - 1$.
-\end{proof}
-
-\section{Rank-one products and eigenvalue extraction}
-
-\begin{theorem}[Eigenvalue extraction]\label{thm:eigenvalue_extraction}
-    \lean{MPSTensor.exists_word_eigenvector}
-    \leanok
-    \uses{thm:nonzero_trace_word, def:fitting_decomp}
-    If $A$ is normal, then there exist a word $w$,
-    a nonzero scalar $\mu$, and a nonzero vector $\varphi$ such that
-    $(\text{evalWord}\ A\ w) \varphi = \mu \varphi$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:nonzero_trace_word, thm:fitting_decomp}
-    By Theorem~\ref{thm:nonzero_trace_word}, there is a word $w$
-    with $\tr(\text{evalWord}\ A\ w) \neq 0$.
-    A matrix with nonzero trace has a nonzero eigenvalue
-    (since trace = sum of eigenvalues).
-    The Fitting decomposition
-    (Theorem~\ref{thm:fitting_decomp})
-    shows that the nonzero generalized eigenspace is nontrivial,
-    yielding the eigenvector.
-    In \cite{Sanz2010Quantum} and \cite{Wolf2012Quantum},
-    this step uses the Jordan normal form directly;
-    our formalization uses the Fitting decomposition instead,
-    as the full Jordan normal form is not available in Mathlib.
-    This suffices because we only need the existence of an
-    eigenvector, not the full Jordan block structure.
 \end{proof}
 
 \section{Assembly}
@@ -256,6 +345,23 @@ The results follow~\cite{Sanz2010Quantum}.
     Immediate from Theorem~\ref{thm:eigenvalue_extraction}.
 \end{proof}
 
+\begin{theorem}[Wielandt chain]\label{thm:wielandt_chain}
+    \lean{MPSTensor.wielandt_chain}
+    \leanok
+    \uses{thm:wielandt_analysis, thm:eigenvector_spreading}
+    Every normal MPS tensor admits a Wielandt analysis
+    (Theorem~\ref{thm:wielandt_analysis}), and the eigenvector
+    from that analysis spreads to all of $\C^D$ in $D-1$ steps
+    (Theorem~\ref{thm:eigenvector_spreading}).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:wielandt_analysis, thm:eigenvector_spreading}
+    Combine Theorems~\ref{thm:wielandt_analysis}
+    and~\ref{thm:eigenvector_spreading}.
+\end{proof}
+
 \begin{theorem}[Wielandt bound]\label{thm:wielandt_bound}
     \lean{MPSTensor.isNormal_implies_cumulativeSpan}
     \leanok
@@ -273,4 +379,37 @@ The results follow~\cite{Sanz2010Quantum}.
     \leanok
     \uses{thm:cumulative_eq_top}
     Immediate from Theorem~\ref{thm:cumulative_eq_top}.
+\end{proof}
+
+\section{Primitivity and normality}
+
+\begin{theorem}[Primitive MPS tensors have nonzero word products]\label{thm:prim_nonzero_word}
+    \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitive}
+    \leanok
+    \uses{def:eval_word, def:normal}
+    If $A$ is a primitive normal MPS tensor, then for every
+    $n \ge 1$ there exists a word $w$ of length $\le n$
+    with $A^w \neq 0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Primitivity of the transfer map ensures that iterated
+    powers of $\E_A$ do not vanish. Since
+    $\E_A^n(\Id) = \sum_{|w|=n} A^w (A^w)^\dagger$,
+    this sum is nonzero, so at least one $A^w$ is nonzero.
+\end{proof}
+
+\begin{theorem}[Iterated transfer does not vanish]\label{thm:transfer_pow_ne_zero}
+    \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitive}
+    \leanok
+    \uses{def:transfer_map}
+    If $A$ is a primitive normal MPS tensor, then
+    $\E_A^n \neq 0$ for all $n \ge 0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $n = 0$, $\E_A^0 = \Id \neq 0$.
+    For $n \ge 1$, use Theorem~\ref{thm:prim_nonzero_word}:
+    there exists a word~$w$ with $A^w \neq 0$, so
+    $\E_A^n(\Id)$ has a nonzero summand.
 \end{proof}
