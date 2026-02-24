@@ -70,16 +70,14 @@ private lemma supportU_star_mul_self : (supportU (D := D) ρ hρ)ᴴ * supportU 
   classical
   -- rewrite `ᴴ` as `star` to use the `UnitaryGroup` lemma.
   rw [← Matrix.star_eq_conjTranspose]
-  simpa [supportU] using
-    (Matrix.UnitaryGroup.star_mul_self (hρ.isHermitian.eigenvectorUnitary))
+  simp [supportU]
 
 private lemma supportU_mul_star_self : supportU (D := D) ρ hρ * (supportU (D := D) ρ hρ)ᴴ = 1 := by
   classical
   -- The unitary group lemma is phrased with `star`.
   have : (supportU (D := D) ρ hρ) * star (supportU (D := D) ρ hρ) = 1 := by
     -- `U * star U = 1` for a unitary.
-    simpa [supportU] using
-      (Unitary.mul_star_self_of_mem (hρ.isHermitian.eigenvectorUnitary).prop)
+    simp [supportU]
   simpa [Matrix.star_eq_conjTranspose] using this
 
 private lemma sgnEig_star : star (sgnEig (D := D) ρ hρ) = sgnEig (D := D) ρ hρ := by
@@ -87,7 +85,8 @@ private lemma sgnEig_star : star (sgnEig (D := D) ρ hρ) = sgnEig (D := D) ρ h
   ext i
   simp [sgnEig]
 
-private lemma sgnEig_sq : ∀ i, sgnEig (D := D) ρ hρ i * sgnEig (D := D) ρ hρ i = sgnEig (D := D) ρ hρ i := by
+private lemma sgnEig_sq :
+    ∀ i, sgnEig (D := D) ρ hρ i * sgnEig (D := D) ρ hρ i = sgnEig (D := D) ρ hρ i := by
   classical
   intro i
   simp [sgnEig]
@@ -116,10 +115,13 @@ lemma supportProj_idem :
     supportU_star_mul_self (D := D) (ρ := ρ) (hρ := hρ)
   rw [supportProj_eq (D := D) (ρ := ρ) (hρ := hρ)]
   -- Expand `P * P` using `Uᴴ * U = 1` and `diag(s) * diag(s) = diag(s)`.
-  change supportU (D := D) ρ hρ * Matrix.diagonal (sgnEig (D := D) ρ hρ) * (supportU (D := D) ρ hρ)ᴴ *
-        (supportU (D := D) ρ hρ * Matrix.diagonal (sgnEig (D := D) ρ hρ) * (supportU (D := D) ρ hρ)ᴴ)
+  change supportU (D := D) ρ hρ * Matrix.diagonal (sgnEig (D := D) ρ hρ) *
+        (supportU (D := D) ρ hρ)ᴴ *
+        (supportU (D := D) ρ hρ * Matrix.diagonal (sgnEig (D := D) ρ hρ) *
+          (supportU (D := D) ρ hρ)ᴴ)
       =
-      supportU (D := D) ρ hρ * Matrix.diagonal (sgnEig (D := D) ρ hρ) * (supportU (D := D) ρ hρ)ᴴ
+      supportU (D := D) ρ hρ * Matrix.diagonal (sgnEig (D := D) ρ hρ) *
+        (supportU (D := D) ρ hρ)ᴴ
   rw [Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
     ← Matrix.mul_assoc ((supportU (D := D) ρ hρ)ᴴ) (supportU (D := D) ρ hρ), hUU, Matrix.one_mul,
     ← Matrix.mul_assoc (Matrix.diagonal (sgnEig (D := D) ρ hρ)), Matrix.diagonal_mul_diagonal,
@@ -159,8 +161,7 @@ lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :
   set sgn : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
   have hUU : Uᴴ * U = 1 := by
     rw [← Matrix.star_eq_conjTranspose]
-    simpa [U] using (Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary)
-
+    simp [U]
   have hsign_mul_eig : sgn * (fun j => (↑(hH.eigenvalues j) : ℂ)) =
       (fun j => (↑(hH.eigenvalues j) : ℂ)) := by
     ext i
@@ -173,13 +174,10 @@ lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :
       have hnonneg : 0 ≤ hH.eigenvalues i :=
         (hH.posSemidef_iff_eigenvalues_nonneg.mp hρ_psd) i
       simp [le_antisymm hi hnonneg]
-
   have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
     simpa [U] using (spectral_decomp_eq (D := D) ρ hH)
-
   have hP_def : supportProj (D := D) ρ hρ_psd = U * Matrix.diagonal sgn * Uᴴ := by
-    simp [supportProj, hρ_psd, hH, U, sgn]
-
+    simp [supportProj, U, sgn]
   -- Compute `P * ρ`.
   rw [hP_def, hρ_spec, Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
     ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
@@ -282,12 +280,10 @@ theorem lowerZero_of_posSemidef_fixedPoint
   have hP_idem : P * P = P := hP_proj.2
   have hP1P : P * (1 - P) = 0 := by rw [mul_sub, mul_one, hP_idem, sub_self]
   have h1PP : (1 - P) * P = 0 := by rw [sub_mul, one_mul, hP_idem, sub_self]
-
   -- Multiplication identities `P*ρ=ρ` and `ρ*P=ρ`.
   have hPρ : P * ρ = ρ := supportProj_mul (D := D) (ρ := ρ) hρ_psd
   have hρP : ρ * P = ρ := mul_supportProj (D := D) (ρ := ρ) hρ_psd
-  have hPρP : P * ρ * P = ρ := by simpa [Matrix.mul_assoc, hPρ, hρP]
-
+  have hPρP : P * ρ * P = ρ := by simp [hPρ, hρP]
   -- Kernel inclusion: `ker P ⊆ ker ρ`.
   have ker_P_sub_ker_ρ : ∀ v, P *ᵥ v = 0 → ρ *ᵥ v = 0 := by
     intro v hv
@@ -298,7 +294,6 @@ theorem lowerZero_of_posSemidef_fixedPoint
       _ = 0 := by
             rw [hv]
             simp
-
   -- Kernel inclusion: `ker ρ ⊆ ker P` (spectral argument).
   have ker_ρ_sub_ker_P : ∀ v, ρ *ᵥ v = 0 → P *ᵥ v = 0 := by
     intro v hv
@@ -308,11 +303,9 @@ theorem lowerZero_of_posSemidef_fixedPoint
     set s : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
     have hUU : Uᴴ * U = 1 := by
       rw [← Matrix.star_eq_conjTranspose]
-      simpa [U] using (Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary)
-
+      simp [U]
     -- Work in the eigenbasis: `w := Uᴴ *ᵥ v`.
     set w : Fin D → ℂ := Uᴴ *ᵥ v
-
     have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
       have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
         spectral_decomp_eq (D := D) ρ hH ▸ hv
@@ -324,13 +317,11 @@ theorem lowerZero_of_posSemidef_fixedPoint
         rw [hUΛw]
         simp
       rwa [Matrix.mulVec_mulVec, hUU, Matrix.one_mulVec] at this
-
     have h_comp : ∀ j, (↑(hH.eigenvalues j) : ℂ) * w j = 0 := fun j => by
       have := congrFun hΛw j
       simp only [Matrix.mulVec, dotProduct, Matrix.diagonal_apply, Pi.zero_apply,
         ite_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, ite_true] at this
       exact this
-
     have hSw : Matrix.diagonal s *ᵥ w = 0 := by
       ext j
       -- Entrywise, multiplying by a diagonal matrix scales each coordinate.
@@ -342,16 +333,14 @@ theorem lowerZero_of_posSemidef_fixedPoint
           exact (mul_eq_zero.mp (h_comp j)).resolve_left hEig_ne
         simp [s, hjpos, this]
       · simp [s, hjpos]
-
     -- Finish: compute `P *ᵥ v` in the `U` eigenbasis.
     have hP_def : P = U * Matrix.diagonal s * Uᴴ := by
-      simp [P, supportProj, hρ_psd, hH, U, s]
+      simp [P, supportProj, U, s]
     change (U * Matrix.diagonal s * Uᴴ) *ᵥ v = 0
     have : (U * Matrix.diagonal s * Uᴴ) *ᵥ v = U *ᵥ (Matrix.diagonal s *ᵥ w) := by
       rw [Matrix.mulVec_mulVec, Matrix.mulVec_mulVec]
     rw [this, hSw]
     simp
-
   -- Complement-zero (invariance) statement.
   have h_complement_zero : ∀ i : Fin d, (1 - P) * A i * P = 0 := by
     intro i
@@ -363,14 +352,12 @@ theorem lowerZero_of_posSemidef_fixedPoint
         Matrix.conjTranspose_conjTranspose, hP_herm.eq] at this
       -- reassociate
       simpa [Matrix.mul_assoc] using this
-
     -- Show the matrix is zero by testing on all vectors.
     suffices h_vec : ∀ v, (P * (A i)ᴴ * (1 - P)) *ᵥ v = 0 by
       ext a b
       -- evaluate on the standard basis vector `e_b`.
       simpa [Matrix.mulVec, dotProduct, Pi.single_apply, Finset.sum_ite_eq'] using
         congrFun (h_vec (Pi.single b 1)) a
-
     intro v
     -- Rewrite as `P *ᵥ ((A i)ᴴ *ᵥ ((1-P) *ᵥ v))`.
     have : (P * (A i)ᴴ * (1 - P)) *ᵥ v = P *ᵥ ((A i)ᴴ *ᵥ ((1 - P) *ᵥ v)) := by
@@ -384,12 +371,11 @@ theorem lowerZero_of_posSemidef_fixedPoint
       -- First show `(1-P)*ᵥ v` is in `ker P`.
       have : P *ᵥ ((1 - P) *ᵥ v) = 0 := by
         -- because `P*(1-P)=0`
-        simp [Matrix.mulVec_mulVec, Matrix.mul_assoc, hP1P]
+        simp [Matrix.mulVec_mulVec, hP1P]
       exact ker_P_sub_ker_ρ _ this
     -- Now apply the invariance lemma.
     simpa using (ker_invariant_under_adjoint (d := d) (D := D) A ρ hρ_psd hρ_fix
       ((1 - P) *ᵥ v) hker i)
-
   -- Package the result.
   refine ?_
   -- unfold `let P := ...`
@@ -451,7 +437,7 @@ theorem supportProj_ne_one_of_not_posDef
   -- From `P = 1`, deduce `diag(sgn) = 1`.
   have hUU : Uᴴ * U = 1 := by
     rw [← Matrix.star_eq_conjTranspose]
-    simpa [U] using (Matrix.UnitaryGroup.star_mul_self hH.eigenvectorUnitary)
+    simp [U]
   have hSgn1 : Matrix.diagonal sgn = 1 := by
     have h : U * Matrix.diagonal sgn * Uᴴ = 1 := hP_def ▸ habs
     -- Multiply on the left by `Uᴴ` and on the right by `U`.
@@ -463,22 +449,18 @@ theorem supportProj_ne_one_of_not_posDef
       -- `U` is unitary, so `U * Uᴴ = 1`.
       simpa [U, Matrix.star_eq_conjTranspose] using
         (Unitary.mul_star_self_of_mem (hH.eigenvectorUnitary).prop)
-
     -- Reassociate to expose the unitary cancellations.
     have step2 : (Uᴴ * U) * Matrix.diagonal sgn * (Uᴴ * U) = Uᴴ * U := by
       -- LHS: rewrite `Uᴴ * (U * diag(sgn) * Uᴴ) * U`.
       -- RHS: rewrite `Uᴴ * 1 * U`.
       simpa [Matrix.mul_assoc] using step1
-
     -- Now cancel `Uᴴ * U = 1`.
     -- (Note: `hUU'` is not needed, but keeping it local avoids universe inference issues.)
     simpa [hUU] using step2
-
   -- Extract `sgn i = 1` from the diagonal-entry equality.
   have hSgn_i : sgn i = 1 := by
     have hentry := congrArg (fun M => M i i) hSgn1
     simpa [Matrix.diagonal_apply] using hentry
-
   -- `sgn i = 1` means `0 < eigenvalues i`.
   by_cases hi : 0 < hH.eigenvalues i
   · exact hi
@@ -516,7 +498,7 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ_psd : ρ.PosSemidef)
     (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
-    ∃ (n m : ℕ) (hnm : n + m = D)
+    ∃ (n m : ℕ) (_ : n + m = D)
       (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
       SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
   classical
@@ -551,7 +533,7 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
     (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
     (hρ_ne : ρ ≠ 0)
     (hρ_not_pd : ¬ ρ.PosDef) :
-    ∃ n m : ℕ, ∃ hnm : n + m = D, n < D ∧ m < D ∧
+    ∃ n m : ℕ, ∃ _ : n + m = D, n < D ∧ m < D ∧
       ∃ (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
         SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
   -- Step 1: obtain the invariant support projection

@@ -26,7 +26,7 @@ namespace Kraus
 open Matrix Finset Complex
 
 variable {ι n : Type*}
-variable [Fintype ι] [DecidableEq ι]
+variable [Fintype ι]
 variable [Fintype n] [DecidableEq n]
 
 /-- Apply a Kraus map: `map K X = ∑ᵢ Kᵢ X Kᵢ†`. -/
@@ -51,15 +51,18 @@ theorem map_one_of_isUnital (K : ι → Matrix n n ℂ) (h : IsUnital K) :
   -- Reduce directly to unitality.
   simpa [map, IsUnital, Matrix.mul_one] using h
 
+omit [DecidableEq n] in
 /-- Conjugate-transpose commutes with a Kraus map. -/
 theorem map_conjTranspose (K : ι → Matrix n n ℂ) (X : Matrix n n ℂ) : (map K X)ᴴ = map K Xᴴ := by
   classical
   simp [map, Matrix.conjTranspose_sum, Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
+omit [DecidableEq n] in
 /-- Scalar-linearity of a Kraus map. -/
-theorem map_smul (K : ι → Matrix n n ℂ) (c : ℂ) (X : Matrix n n ℂ) : map K (c • X) = c • map K X := by
+theorem map_smul (K : ι → Matrix n n ℂ) (c : ℂ) (X : Matrix n n ℂ) :
+    map K (c • X) = c • map K X := by
   classical
-  simp [map, Matrix.mul_smul, smul_mul_assoc, Finset.smul_sum]
+  simp [map, Finset.smul_sum]
 
 /-- **Kadison–Schwarz inequality** for unital Kraus maps.
 
@@ -78,22 +81,18 @@ theorem kadison_schwarz (K : ι → Matrix n n ℂ)
       Matrix.fromBlocks Xᴴ 0 1 0
     simpa [A, P, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose] using
       Matrix.posSemidef_self_mul_conjTranspose A
-
   -- Block-diagonal Kraus operators on `n ⊕ n`.
   let K₂ : ι → Matrix (n ⊕ n) (n ⊕ n) ℂ :=
     fun i => Matrix.fromBlocks (K i) 0 0 (K i)
-
   have h_term (i : ι) :
       K₂ i * P * (K₂ i)ᴴ =
         Matrix.fromBlocks (K i * (Xᴴ * X) * (K i)ᴴ) (K i * Xᴴ * (K i)ᴴ)
           (K i * X * (K i)ᴴ) (K i * (K i)ᴴ) := by
     simp [K₂, P, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, Matrix.mul_assoc]
-
   -- Sum of conjugations preserves PSD.
   have h_sum_psd : (∑ i : ι, K₂ i * P * (K₂ i)ᴴ).PosSemidef :=
     Matrix.posSemidef_sum (s := Finset.univ) (x := fun i => K₂ i * P * (K₂ i)ᴴ)
       (fun i _ => hP.mul_mul_conjTranspose_same (B := K₂ i))
-
   -- Identify the resulting block matrix.
   have h_block_eq :
       (∑ i : ι, K₂ i * P * (K₂ i)ᴴ) =
@@ -114,7 +113,6 @@ theorem kadison_schwarz (K : ι → Matrix n n ℂ)
           simp only [Finset.sum_cons]
           rw [ih, Matrix.fromBlocks_add]
     rw [h_sfb]
-
     -- Prove equality blockwise (avoid relying on `simp` to guess the off-diagonal blocks).
     refine (Matrix.fromBlocks_inj).2 ?_
     constructor
@@ -131,18 +129,17 @@ theorem kadison_schwarz (K : ι → Matrix n n ℂ)
       simp [map, conjTranspose_conjTranspose]
     · -- (2,2)-block
       simpa [IsUnital] using h_unital
-
   -- Schur complement: the (2,2) block is `I`, so the KS gap is PSD.
   have h_block_psd :
       (Matrix.fromBlocks (map K (Xᴴ * X)) ((map K X)ᴴ)
         ((map K X)ᴴᴴ) (1 : Matrix n n ℂ)).PosSemidef := by
     simpa [h_block_eq] using h_sum_psd
-
   haveI : Invertible (1 : Matrix n n ℂ) := invertibleOne
   simpa [inv_one, Matrix.mul_assoc, conjTranspose_conjTranspose] using
     (Matrix.PosDef.fromBlocks₂₂ (A := map K (Xᴴ * X)) (B := (map K X)ᴴ)
       (D := (1 : Matrix n n ℂ)) Matrix.PosDef.one).1 h_block_psd
 
+omit [DecidableEq n] in
 /-- **Weighted trace / adjointness identity** for Kraus maps:
 
 `tr(ρ · E(X)) = tr(E†(ρ) · X)`. -/
@@ -150,9 +147,8 @@ theorem trace_mul_map_eq_trace_adjointMap_mul
     (K : ι → Matrix n n ℂ) (ρ X : Matrix n n ℂ) :
     Matrix.trace (ρ * map K X) = Matrix.trace (adjointMap K ρ * X) := by
   classical
-
   -- Expand both sides to a sum over the Kraus index and use cyclicity termwise.
-  simp [map, adjointMap, Matrix.mul_sum, Matrix.sum_mul, Matrix.trace_sum, Matrix.mul_assoc]
+  simp only [map, adjointMap, Matrix.mul_sum, Matrix.sum_mul, Matrix.trace_sum, Matrix.mul_assoc]
   refine Finset.sum_congr rfl ?_
   intro i _
   calc
@@ -164,6 +160,7 @@ theorem trace_mul_map_eq_trace_adjointMap_mul
     _ = Matrix.trace ((K i)ᴴ * (ρ * (K i * X))) := by
             simp [Matrix.mul_assoc]
 
+omit [DecidableEq n] in
 /-- If `M` is PSD, `ρ` is PD, and `tr(ρ·M)=0`, then `M=0`.
 
 This is the standard “faithfulness of the weighted trace”. -/
@@ -172,7 +169,8 @@ theorem posSemidef_eq_zero_of_posDef_trace_mul_eq_zero
     (htr : Matrix.trace (ρ * M) = 0) : M = 0 := by
   classical
   -- Factor `ρ = S†S` with `S` a unit.
-  rcases (Matrix.posDef_iff_eq_conjTranspose_mul_self.mp hρ) with ⟨S, hS_unit, hρ_eq⟩
+  rcases CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.mp
+      (Matrix.isStrictlyPositive_iff_posDef.mpr hρ) with ⟨S, hS_unit, hρ_eq⟩
   -- Consider `S M S†`, which is PSD.
   have hSMS_psd : (S * M * Sᴴ).PosSemidef :=
     hM.mul_mul_conjTranspose_same (B := S)
@@ -215,7 +213,6 @@ theorem ks_equality_of_peripheral_eigenvector_of_fixedPoint
   -- KS gap is PSD.
   have h_psd : (map K (Xᴴ * X) - (map K X)ᴴ * map K X).PosSemidef :=
     kadison_schwarz K h_unital X
-
   -- Show the weighted trace of the KS gap is zero.
   have h_trace_gap : Matrix.trace (ρ * (map K (Xᴴ * X) - (map K X)ᴴ * map K X)) = 0 := by
     -- Reduce to showing both terms have the same weighted trace.
@@ -227,42 +224,34 @@ theorem ks_equality_of_peripheral_eigenvector_of_fixedPoint
         Matrix.trace (ρ * map K (Xᴴ * X))
             = Matrix.trace (adjointMap K ρ * (Xᴴ * X)) :=
               trace_mul_map_eq_trace_adjointMap_mul K ρ (Xᴴ * X)
-        _ = Matrix.trace (ρ * (Xᴴ * X)) := by simpa [hfix]
+        _ = Matrix.trace (ρ * (Xᴴ * X)) := by simp [hfix]
     -- Second term: use the eigenvector equation `E(X)=μX` and `‖μ‖=1`.
     have h2 : Matrix.trace (ρ * ((map K X)ᴴ * map K X)) = Matrix.trace (ρ * (Xᴴ * X)) := by
       -- Rewrite `‖μ‖ = 1` as `conj μ * μ = 1`.
       have hnormSq : Complex.normSq μ = 1 := by
         calc
           Complex.normSq μ = ‖μ‖ ^ 2 := Complex.normSq_eq_norm_sq μ
-          _ = 1 := by simpa [hμ]
+          _ = 1 := by simp [hμ]
       have hconjmul : (starRingEnd ℂ) μ * μ = (1 : ℂ) := by
         calc
           (starRingEnd ℂ) μ * μ = (↑(Complex.normSq μ) : ℂ) := by
             simpa using (Complex.normSq_eq_conj_mul_self (z := μ)).symm
-          _ = 1 := by simpa [hnormSq]
+          _ = 1 := by simp [hnormSq]
       have hmulconj : μ * (starRingEnd ℂ) μ = (1 : ℂ) := by
         simpa [mul_comm] using hconjmul
-
-      -- Simplify the trace expression using the eigenvector equation.
-      -- (After `simp`, the goal is a scalar identity.)
-      simp [hEig, Matrix.mul_assoc]
-      calc
-        μ * ((starRingEnd ℂ) μ * (ρ * (Xᴴ * X)).trace)
-            = (μ * (starRingEnd ℂ) μ) * (ρ * (Xᴴ * X)).trace := by
-              simpa using
-                (mul_assoc μ ((starRingEnd ℂ) μ) (ρ * (Xᴴ * X)).trace).symm
-        _ = (1 : ℂ) * (ρ * (Xᴴ * X)).trace := by simp [hmulconj]
-        _ = (ρ * (Xᴴ * X)).trace := by simp
-    simpa [h1, h2]
-
+      have hkey : (μ • X)ᴴ * (μ • X) = Xᴴ * X := by
+        simp only [Matrix.conjTranspose_smul, smul_mul_assoc, mul_smul_comm,
+          smul_smul, Complex.star_def, hmulconj, one_smul]
+      simp only [hEig, hkey]
+    simp [h1, h2]
   -- Faithfulness: PSD + weighted trace 0 ⇒ the KS gap is 0.
   have h_gap_zero : map K (Xᴴ * X) - (map K X)ᴴ * map K X = 0 := by
     exact posSemidef_eq_zero_of_posDef_trace_mul_eq_zero (hM := h_psd) (hρ := hρ) h_trace_gap
-
   exact sub_eq_zero.mp h_gap_zero
 
 /-! ## KS gap decomposition and Kraus-level commutation -/
 
+omit [DecidableEq n] in
 /-- If `∑ᵢ Rᵢ†Rᵢ = 0`, then each `Rᵢ = 0`. -/
 private lemma each_zero_of_sum_conjTranspose_mul_self_zero
     (R : ι → Matrix n n ℂ)
@@ -304,7 +293,6 @@ theorem ks_gap_eq_sum_squares (K : ι → Matrix n n ℂ)
     intro i
     simp only [conjTranspose_sub, conjTranspose_mul, conjTranspose_conjTranspose]
     noncomm_ring
-
   simp_rw [expand]
   -- Reassociate to enable factoring.
   have h_reassoc_2 : ∀ i : ι, K i * Xᴴ * ((K i)ᴴ * E X) = K i * Xᴴ * (K i)ᴴ * E X := by
@@ -313,24 +301,20 @@ theorem ks_gap_eq_sum_squares (K : ι → Matrix n n ℂ)
     intro i; noncomm_ring
   simp_rw [h_reassoc_2, h_reassoc_4]
   simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
-
   -- Factor the two cross terms.
   rw [← Finset.sum_mul (f := fun i => K i * Xᴴ * (K i)ᴴ)]
   rw [← Finset.mul_sum (a := (E X)ᴴ) (f := fun i => K i * X * (K i)ᴴ)]
   rw [← Finset.sum_mul (f := fun i => (E X)ᴴ * K i * (K i)ᴴ)]
-
   -- Use `E(X†) = E(X)†`.
   have hEXconj : (∑ i : ι, K i * Xᴴ * (K i)ᴴ) = (E X)ᴴ := by
     -- `E Xᴴ = (E X)ᴴ`.
     have := (map_conjTranspose (K := K) X)
     -- Rewrite `E`.
     simpa [E, map] using this.symm
-
   -- Use unitality to simplify the last term.
   have hunit : (∑ i : ι, (E X)ᴴ * K i * (K i)ᴴ) = (E X)ᴴ := by
     simp_rw [Matrix.mul_assoc]
     rw [← Finset.mul_sum, h_unital, Matrix.mul_one]
-
   rw [hEXconj, hunit]
   -- Unfold `E` in the remaining `E(...)` occurrences.
   -- After cancellation, this is just the definition of `E`.
@@ -353,12 +337,10 @@ theorem kraus_commute_of_ks_equality (K : ι → Matrix n n ℂ)
     have : map K (Xᴴ * X) - (map K X)ᴴ * map K X = 0 := sub_eq_zero.mpr h_eq
     -- Rewrite the KS gap using the decomposition.
     simpa [h_gap] using this
-
   -- Each square term must vanish.
   have h_each :=
     each_zero_of_sum_conjTranspose_mul_self_zero
       (R := fun i => X * (K i)ᴴ - (K i)ᴴ * map K X) h_sum_zero
-
   intro i
   exact sub_eq_zero.mp (h_each i)
 

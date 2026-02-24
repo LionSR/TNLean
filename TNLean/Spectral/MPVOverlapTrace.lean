@@ -84,7 +84,7 @@ theorem trace_mixedTransferMap_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
   -- Apply the helper equalities.
   rw [h1, hswap]
   -- Unfold `mpvOverlap`/`mpv`/`coeff` so both sides are sums over σ.
-  simp [mpvOverlap, MPSTensor.mpv, MPSTensor.coeff]
+  simp only [mpvOverlap, MPSTensor.mpv, MPSTensor.coeff]
   -- Now compute the inner double sum termwise in σ.
   refine Fintype.sum_congr _ _ (fun σ => ?_)
   calc

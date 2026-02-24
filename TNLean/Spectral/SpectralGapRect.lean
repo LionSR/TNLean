@@ -174,7 +174,7 @@ private lemma norm_toES₂_mul_le
       _ = (∑ i, ∑ k, ‖A i k‖ ^ 2) * (∑ j, ∑ k, ‖B k j‖ ^ 2) := by
           simp_rw [← Finset.mul_sum, ← Finset.sum_mul]
       _ = (∑ i, ∑ j, ‖A i j‖ ^ 2) * (∑ i, ∑ j, ‖B i j‖ ^ 2) := by
-          congr 1 <;> exact Finset.sum_comm
+          (congr 1; exact Finset.sum_comm)
   nlinarith [Real.sqrt_le_sqrt h, Real.sqrt_sq (norm_nonneg (toES₂ (A * B))),
     Real.sqrt_sq (mul_nonneg (norm_nonneg (toESSq₁ A)) (norm_nonneg (toES₂ B)))]
 
@@ -393,7 +393,7 @@ private lemma dim_le_of_injective_matrix [NeZero D₂]
     exact eq_of_sub_eq_zero h4
   have h1 : Module.finrank ℂ (Fin D₂ → ℂ) ≤ Module.finrank ℂ (Fin D₁ → ℂ) :=
     LinearMap.finrank_le_finrank_of_injective hf_inj
-  simp at h1
+  simp only [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] at h1
   exact h1
 
 /-- Conjugation by an invertible matrix preserves injectivity (spanning). -/
@@ -443,7 +443,9 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   obtain ⟨ρA, hρA⟩ := injective_transfer_unique_fixed_point' A hA hA_norm
   obtain ⟨ρB, hρB⟩ := injective_transfer_unique_fixed_point' B hB hB_norm
   -- === 2. Cholesky factorization ===
+  set_option linter.deprecated false in
   rcases Matrix.posDef_iff_eq_conjTranspose_mul_self.mp hρA.pos_def with ⟨S0A, hS0A_unit, hρA_eq⟩
+  set_option linter.deprecated false in
   rcases Matrix.posDef_iff_eq_conjTranspose_mul_self.mp hρB.pos_def with ⟨S0B, hS0B_unit, hρB_eq⟩
   let SA : Matrix (Fin D₁) (Fin D₁) ℂ := S0Aᴴ
   let SB : Matrix (Fin D₂) (Fin D₂) ℂ := S0Bᴴ
@@ -517,10 +519,10 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
     rw [hFXsum]
     -- Move the scalar `μ` out of the two matrix multiplications.
     have h1 : SA⁻¹ * (μ • X) = μ • (SA⁻¹ * X) := by
-      simpa using (Matrix.mul_smul (M := SA⁻¹) (a := μ) (N := X))
+      simp [Matrix.mul_smul]
     rw [h1]
     have h2 : (μ • (SA⁻¹ * X)) * (SBᴴ)⁻¹ = μ • ((SA⁻¹ * X) * (SBᴴ)⁻¹) := by
-      simpa using (Matrix.smul_mul (a := μ) (M := SA⁻¹ * X) (N := (SBᴴ)⁻¹))
+      simp [Matrix.smul_mul]
     rw [h2]
   -- === 5. Block embedding ===
   let K : Fin d → Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
@@ -533,14 +535,14 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
         Matrix.fromBlocks (∑ i, (A' i) * (A' i)ᴴ) 0 0 (∑ i, (B' i) * (B' i)ᴴ) := by
       ext a b; rcases a with (a | a) <;> rcases b with (b | b) <;>
         simp [K, Matrix.sum_apply, Matrix.fromBlocks_multiply,
-              Matrix.fromBlocks_conjTranspose, Matrix.mul_assoc]
+              Matrix.fromBlocks_conjTranspose]
     simp [hsum, hA'unital, hB'unital]
   have hEigM : Kraus.map K M = μ • M := by
     have hmap : Kraus.map K M =
         Matrix.fromBlocks 0 (∑ i : Fin d, A' i * X' * (B' i)ᴴ) 0 0 := by
       ext a b; rcases a with (a | a) <;> rcases b with (b | b) <;>
         simp [Kraus.map, K, M, Matrix.sum_apply, Matrix.fromBlocks_multiply,
-              Matrix.fromBlocks_conjTranspose, Matrix.mul_assoc]
+              Matrix.fromBlocks_conjTranspose]
     simp [hmap, hFX', M, Matrix.fromBlocks_smul]
   -- PD fixed point for adjoint Kraus map
   let rhoT : Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
@@ -548,13 +550,13 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   have hrhoT_pd : rhoT.PosDef := by
     let Sblock : Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
       Matrix.fromBlocks SA 0 0 SB
+    set_option linter.deprecated false in
     refine (Matrix.posDef_iff_eq_conjTranspose_mul_self).2 ⟨Sblock, ?_, ?_⟩
     · exact (isUnit_iff_exists_inv).2
         ⟨Matrix.fromBlocks SA⁻¹ 0 0 SB⁻¹, by
           simp [Sblock, Matrix.fromBlocks_multiply,
                 Matrix.mul_nonsing_inv _ hSA_u, Matrix.mul_nonsing_inv _ hSB_u]⟩
-    · simp [rhoT, Sblock, Matrix.fromBlocks_conjTranspose, Matrix.fromBlocks_multiply,
-            Matrix.mul_assoc]
+    · simp [rhoT, Sblock, Matrix.fromBlocks_conjTranspose, Matrix.fromBlocks_multiply]
   have hrhoT_fix : Kraus.adjointMap K rhoT = rhoT := by
     -- Each diagonal block: ∑ (A'_i)† (SA† SA) A'_i = SA† SA (similarly for B)
     have hAblock : ∑ i : Fin d, (A' i)ᴴ * (SAᴴ * SA) * (A' i) = SAᴴ * SA := by
@@ -590,8 +592,8 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
           (∑ i, (B' i)ᴴ * (SBᴴ * SB) * (B' i)) := by
       ext a b; rcases a with (a | a) <;> rcases b with (b | b) <;>
         simp [Kraus.adjointMap, K, rhoT, Matrix.sum_apply, Matrix.fromBlocks_multiply,
-              Matrix.fromBlocks_conjTranspose, Matrix.mul_assoc]
-    simpa [hAdj, rhoT, hAblock, hBblock]
+              Matrix.fromBlocks_conjTranspose]
+    simp [hAdj, rhoT, hAblock, hBblock]
   -- === 6. KS equality + commutation ===
   have hKS_M : Kraus.map K (Mᴴ * M) = (Kraus.map K M)ᴴ * Kraus.map K M :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
@@ -601,12 +603,12 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   -- === 7. Intertwining: X' * (B' k)† = μ • (A' k)† * X' ===
   have hInter1 : ∀ k : Fin d, X' * (B' k)ᴴ = μ • ((A' k)ᴴ * X') := by
     intro k
-    have h' : M * (K k)ᴴ = (K k)ᴴ * (μ • M) := by simpa [hEigM] using hComm_M k
+    have h' : M * (K k)ᴴ = (K k)ᴴ * (μ • M) := by simp [hEigM, hComm_M k]
     have hL : M * (K k)ᴴ = Matrix.fromBlocks 0 (X' * (B' k)ᴴ) 0 0 := by
-      simp [M, K, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, Matrix.mul_assoc]
+      simp [M, K, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
     have hR : (K k)ᴴ * (μ • M) = Matrix.fromBlocks 0 (μ • ((A' k)ᴴ * X')) 0 0 := by
       simp [M, K, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose,
-            Matrix.mul_assoc, Matrix.fromBlocks_smul]
+            Matrix.fromBlocks_smul]
     have h_eq := hL ▸ hR ▸ h'
     exact (Matrix.fromBlocks_inj.1 h_eq).2.1
   -- === 8. Dual intertwining: X'† * (A' k)† = conj μ • (B' k)† * X'† ===
@@ -623,14 +625,14 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   have hInter2 : ∀ k : Fin d, X'ᴴ * (A' k)ᴴ = (starRingEnd ℂ μ) • ((B' k)ᴴ * X'ᴴ) := by
     intro k
     have h' : Mᴴ * (K k)ᴴ = (K k)ᴴ * ((starRingEnd ℂ μ) • Mᴴ) := by
-      simpa [hEigMstar] using hComm_Ms k
+      simp [hEigMstar, hComm_Ms k]
     have hL : Mᴴ * (K k)ᴴ =
         Matrix.fromBlocks 0 0 (X'ᴴ * (A' k)ᴴ) 0 := by
-      simp [M, K, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, Matrix.mul_assoc]
+      simp [M, K, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
     have hR : (K k)ᴴ * ((starRingEnd ℂ μ) • Mᴴ) =
         Matrix.fromBlocks 0 0 ((starRingEnd ℂ μ) • ((B' k)ᴴ * X'ᴴ)) 0 := by
       simp [M, K, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose,
-            Matrix.mul_assoc, Matrix.fromBlocks_smul]
+            Matrix.fromBlocks_smul]
     have h_eq := hL ▸ hR ▸ h'
     exact (Matrix.fromBlocks_inj.1 h_eq).2.2.1
   -- === 9. ker(X') invariant under (B' k)† ===
