@@ -389,7 +389,41 @@ removing it as an independent assumption.
     In the paper~\cite{Cirac2021Matrix},
     primitivity is obtained from irreducibility plus
     periodicity removal (blocking to period one).
-    The formalization now supports both routes:
-    assuming overlap convergence directly,
-    or deriving it from per-block primitivity.
+    Theorem~\ref{thm:blocking_primitivity} formalizes this
+    periodicity-removal step: under irreducibility and
+    doubly-stochastic normalization, one can block until the
+    transfer map becomes primitive.
+    This corresponds to arXiv:1606.00608, Appendix~A.
+\end{remark}
+
+\begin{theorem}[Blocking yields a primitive transfer map]\label{thm:blocking_primitivity}
+    \lean{MPSTensor.exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic}
+    \leanok
+    \uses{def:blocked_tensor, def:transfer_map, def:primitive_channel,
+          def:unital_kraus, def:tp_kraus, def:irreducible_cp,
+          thm:peripheral_finite, thm:peripheral_roots_of_unity_irred_ds,
+          lem:common_power_eq_one, lem:peripheral_pow_singleton}
+    Let $A$ be an MPS tensor whose transfer map $\E_A$ is irreducible.
+    Assume that $A$ is doubly stochastic:
+    $\sum_i A^i (A^i)^\dagger = \Id$ and $\sum_i (A^i)^\dagger A^i = \Id$.
+    Then there exists a blocking length $p > 0$ such that the transfer map
+    $\E_{A^{[p]}}$ of the blocked tensor $A^{[p]}$ is primitive.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:peripheral_roots_of_unity_irred_ds},
+    every peripheral eigenvalue of $\E_A$ is a root of unity.
+    Since $\mathrm{peripheral}(\E_A)$ is finite
+    (Theorem~\ref{thm:peripheral_finite}),
+    Lemma~\ref{lem:common_power_eq_one} gives a common exponent $p$
+    such that $\mu^p = 1$ for all $\mu \in \mathrm{peripheral}(\E_A)$.
+    Lemma~\ref{lem:peripheral_pow_singleton} then implies
+    $\mathrm{peripheral}(\E_A^p) = \{1\}$.
+    Finally, the transfer map of the blocked tensor is the $p$-th power
+    of the original transfer map, so $\E_{A^{[p]}}$ is primitive.
+\end{proof}
+
+\begin{remark}\label{rem:blocking_primitivity_appendixA}
+    Theorem~\ref{thm:blocking_primitivity} is the ``periodicity removal by blocking''
+    step in arXiv:1606.00608, Appendix~A.
 \end{remark}

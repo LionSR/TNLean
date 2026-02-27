@@ -604,6 +604,89 @@ then applied to transfer maps, which are Kraus maps by construction
     $\mu^p = 1$ for some $p > 0$.
 \end{proof}
 
+\subsection{Periodicity removal by powering}\label{subsec:periodicity_removal_power}
+
+\begin{remark}\label{rem:periodicity_removal_spectral}
+    The results in this subsection are purely spectral: they use only
+    finiteness of a set of complex numbers and the spectral mapping theorem
+    for powers. In particular, they do not rely on complete positivity.
+\end{remark}
+
+\begin{lemma}[Common exponent for a finite set of roots of unity]\label{lem:common_power_eq_one}
+    \lean{exists_common_power_eq_one_of_finite}
+    \leanok
+    Let $s \subseteq \C$ be a finite set.
+    Assume that for every $\mu \in s$ there exists an exponent $p_\mu > 0$
+    with $\mu^{p_\mu} = 1$.
+    Then there exists $p > 0$ such that $\mu^p = 1$ for all $\mu \in s$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Take $p$ to be the least common multiple of the exponents $p_\mu$.
+\end{proof}
+
+\begin{lemma}[Powering collapses peripheral eigenvalues]\label{lem:peripheral_pow_singleton}
+    \lean{peripheralEigenvalues_pow_eq_singleton}
+    \leanok
+    \uses{def:peripheral_eigenvalues, thm:one_peripheral}
+    Let $E : \MN{D} \to \MN{D}$ be a linear map, and assume that $E$ has a
+    nonzero fixed point $\rho \neq 0$.
+    Let $p > 0$.
+    If every peripheral eigenvalue $\mu$ of $E$ satisfies $\mu^p = 1$,
+    then $\mathrm{peripheral}(E^p) = \{1\}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:one_peripheral}
+    The fixed point $\rho$ gives $1 \in \mathrm{peripheral}(E^p)$.
+    For the reverse inclusion, let $\nu \in \mathrm{peripheral}(E^p)$.
+    Spectral mapping gives $\nu = \mu^p$ for some $\mu \in \sigma(E)$.
+    From $|\nu| = 1$ and $p > 0$ we obtain $|\mu| = 1$, hence
+    $\mu \in \mathrm{peripheral}(E)$.
+    The hypothesis $\mu^p = 1$ then forces $\nu = 1$.
+\end{proof}
+
+\begin{lemma}[Peripheral eigenvalues closed under powers]\label{lem:peripheral_closed_powers_irred_ds}
+    \lean{peripheralEigenvalues_pow_mem_of_irreducible_doubly_stochastic}
+    \leanok
+    \uses{def:unital_kraus, def:tp_kraus, def:irreducible_cp, thm:ks_peripheral,
+          thm:psd_fp_pd_irred}
+    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is both
+    unital and trace-preserving, and assume that $E$ is irreducible.
+    Then $\mathrm{peripheral}(E)$ is closed under powers:
+    if $\mu \in \mathrm{peripheral}(E)$ then $\mu^n \in \mathrm{peripheral}(E)$
+    for every $n \in \N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:ks_peripheral, thm:psd_fp_pd_irred}
+    Let $E(X) = \mu X$ with $|\mu| = 1$.
+    The Kadison--Schwarz equality for peripheral eigenvectors
+    (Theorem~\ref{thm:ks_peripheral})
+    shows that $X^\dagger X$ is a positive semidefinite fixed point.
+    By irreducibility, this fixed point is positive definite
+    (Theorem~\ref{thm:psd_fp_pd_irred}), hence $X$ is invertible.
+    Multiplicative-domain powers then give $E(X^n) = \mu^n X^n$,
+    so $\mu^n$ is again peripheral.
+\end{proof}
+
+\begin{theorem}[Roots of unity for irreducible doubly stochastic maps]%
+    \label{thm:peripheral_roots_of_unity_irred_ds}
+    \lean{peripheral_isRootOfUnity_of_irreducible_doubly_stochastic}
+    \leanok
+    \uses{lem:peripheral_closed_powers_irred_ds, thm:peripheral_powers}
+    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is both
+    unital and trace-preserving, and assume that $E$ is irreducible.
+    Then every peripheral eigenvalue $\mu$ of $E$ is a root of unity:
+    there exists $p > 0$ with $\mu^p = 1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Combine the closure-under-powers result
+    (Lemma~\ref{lem:peripheral_closed_powers_irred_ds})
+    with Theorem~\ref{thm:peripheral_powers}.
+\end{proof}
+
 \begin{definition}[Channel period]\label{def:channel_period}
     \lean{channelPeriod}
     \leanok
