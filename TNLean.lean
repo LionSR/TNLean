@@ -37,6 +37,7 @@ import TNLean.MPS.Blocking
 import TNLean.MPS.MPVOverlap
 import TNLean.MPS.Transfer
 import TNLean.MPS.BlockingTransfer
+import TNLean.MPS.BlockingPeriodicity
 import TNLean.MPS.TransferNormalization
 import TNLean.MPS.FixedPointInvariantProjection
 import TNLean.MPS.CPPrimitive
