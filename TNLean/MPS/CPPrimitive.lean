@@ -14,7 +14,7 @@ variable {d D : ℕ}
 
 /-! ## MPS injectivity implies irreducibility of the transfer map
 
-The general definitions (`IsOrthogonalProjection`, `IsIrreducibleCP`,
+The general definitions (`IsOrthogonalProjection`, `IsIrreducibleMap`,
 `HasUniqueFixedPoint`) and the supporting matrix-algebra lemmas
 (`diagonal_mul_conjTranspose_eq_normSq_sum`,
 `eq_zero_of_sum_mul_conjTranspose_eq_zero`) live in
@@ -77,7 +77,7 @@ then its transfer map `E_A` is irreducible.
 Since the `{Aᵢ}` span all of `M_D(ℂ)`, the linear map `M ↦ (1-P)MP` vanishes
 on all matrices. Testing with single-entry matrices forces either `P = 0` or `P = 1`. -/
 theorem injective_implies_irreducibleCP (A : MPSTensor d D) (hA : IsInjective A) :
-    IsIrreducibleCP (transferMap (d := d) (D := D) A) := by
+    IsIrreducibleMap (transferMap (d := d) (D := D) A) := by
   intro P hProj hInv
   have h_on_A := invariance_implies_complement_zero A P hProj hInv
   have h_all : ∀ M : Matrix (Fin D) (Fin D) ℂ, (1 - P) * M * P = 0 := by
@@ -94,13 +94,20 @@ theorem injective_implies_irreducibleCP (A : MPSTensor d D) (hA : IsInjective A)
 
 /-! ### The transfer map is a quantum channel -/
 
+/-- The transfer map of any MPS tensor is completely positive:
+it is defined as the Kraus map `E_A(X) = ∑ᵢ Aᵢ X Aᵢ†`. -/
+theorem transferMap_isCPMap
+    (A : MPSTensor d D) :
+    IsCPMap (MPSTensor.transferMap (d := d) (D := D) A) :=
+  ⟨d, A, fun X => by simp [transferMap_apply]⟩
+
 /-- The transfer map of a normalized MPS tensor (with `∑ Aᵢ† Aᵢ = 1`)
-is a channel: positive and trace-preserving. -/
+is a quantum channel: completely positive and trace-preserving. -/
 theorem transferMap_isChannel
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     IsChannel (MPSTensor.transferMap (d := d) (D := D) A) := by
-  refine ⟨fun X hX => transferMap_pos A hX, fun X => ?_⟩
+  refine ⟨transferMap_isCPMap A, fun X => ?_⟩
   simp only [transferMap_apply, Matrix.trace_sum]
   conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
   rw [← Matrix.trace_sum, ← Finset.sum_mul, hNorm, one_mul]

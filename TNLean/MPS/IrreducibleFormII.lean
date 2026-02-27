@@ -21,7 +21,7 @@ to channel / QPF normalization, following:
 
 ## Main results
 
-### Part 1: Bridge `IsIrreducibleTensor` → `IsIrreducibleCP (transferMap A)`
+### Part 1: Bridge `IsIrreducibleTensor` → `IsIrreducibleMap (transferMap A)`
 
 * `MPSTensor.invariance_implies_lowerZero`: the invariance condition for a projection
   under a transfer map implies `(1 - P) * A i * P = 0` for all `i`.
@@ -46,7 +46,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Part 1: Bridge IsIrreducibleTensor → IsIrreducibleCP -/
+/-! ## Part 1: Bridge IsIrreducibleTensor → IsIrreducibleMap -/
 
 /-- The invariance condition for a projection `P` under the transfer map
 implies `(1 - P) * A i * P = 0` for every Kraus operator.
@@ -98,7 +98,7 @@ If `P ≠ 0` and `P ≠ 1`, this would witness `HasInvariantProj A`, contradicti
 the irreducibility hypothesis. -/
 theorem isIrreducibleCP_transferMap_of_isIrreducibleTensor
     (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleCP (transferMap (d := d) (D := D) A) := by
+    IsIrreducibleMap (transferMap (d := d) (D := D) A) := by
   intro P hProj hInv
   -- Use the invariance to get the lower-zero condition
   have hLower := invariance_implies_lowerZero A P hProj hInv
@@ -198,7 +198,7 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint (E := transferMap (d := d) (D := D) A) hD
   -- Step 3: Convert irreducibility: tensor → CP map.
-  have hIrrCP : IsIrreducibleCP (transferMap (d := d) (D := D) A) :=
+  have hIrrCP : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
   -- Step 4: Upgrade PSD to PD via quantum Perron–Frobenius.
   have hρ_pd : ρ.PosDef :=

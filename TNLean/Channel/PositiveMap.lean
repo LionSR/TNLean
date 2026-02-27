@@ -14,16 +14,19 @@ import Mathlib.Topology.MetricSpace.Bounded
 import Mathlib.Topology.Instances.Matrix
 
 /-!
-# Positive maps, density matrices, and quantum channels
+# Positive maps, completely positive maps, density matrices, and quantum channels
 
-This file defines positive maps, trace-preserving maps, and quantum channels
-on `M_D(ℂ)`, together with the basic theory of density matrices (compactness,
-convexity), following Chapter 6 of Wolf's lecture notes.
+This file defines positive maps, completely positive (CP) maps,
+trace-preserving maps, and quantum channels on `M_D(ℂ)`, together with the
+basic theory of density matrices (compactness, convexity), following
+Chapter 6 of Wolf's lecture notes.
 
 ## Main results
 
 * `IsPositiveMap`: a linear map that preserves the PSD cone
-* `IsChannel`: positive + trace-preserving
+* `IsCPMap`: a linear map that admits a Kraus representation
+* `IsCPMap.isPositiveMap`: completely positive maps are positive
+* `IsChannel`: completely positive + trace-preserving (CPTP)
 * `IsPositiveMap.map_isHermitian`: positive maps preserve Hermiticity
 * `densityMatrices_isCompact`: the set of density matrices is compact
 * `densityMatrices_isConvex`: the set of density matrices is convex
@@ -52,10 +55,39 @@ def IsPositiveMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fi
 def IsTracePreservingMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ X : Matrix (Fin D) (Fin D) ℂ, trace (E X) = trace X
 
-/-- A positive trace-preserving map is a **quantum channel** (in the broad sense). -/
+/-- A linear map is **completely positive** if it admits a Kraus representation:
+`E(X) = ∑ᵢ Kᵢ X Kᵢ†` for some family of operators `{Kᵢ}`.
+
+Equivalently (by Choi's theorem), `E` is completely positive iff `E ⊗ idₙ`
+is positive for all `n`.  We use the Kraus characterisation since it matches
+the formulation used in the Kadison–Schwarz and multiplicative-domain proofs. -/
+def IsCPMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
+  ∃ (r : ℕ) (K : Fin r → Matrix (Fin D) (Fin D) ℂ),
+    ∀ X, E X = ∑ i : Fin r, K i * X * (K i)ᴴ
+
+/-- A completely positive map is positive. -/
+theorem IsCPMap.isPositiveMap {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (h : IsCPMap E) : IsPositiveMap E := by
+  obtain ⟨r, K, hK⟩ := h
+  intro X hX
+  rw [hK]
+  exact Matrix.posSemidef_sum (s := Finset.univ) (x := fun i => K i * X * (K i)ᴴ)
+    (fun i _ => by simpa [Matrix.mul_assoc] using hX.mul_mul_conjTranspose_same (B := K i))
+
+/-- A **quantum channel** is a completely positive trace-preserving (CPTP) map.
+
+This matches the standard definition in quantum information theory
+(see \cite[Definition 4.1]{Wolf2012Quantum}).  Earlier versions of this
+formalisation required only positivity; the upgrade to complete positivity
+is important because the Kadison–Schwarz inequality and the multiplicative
+domain characterisation require CP, not merely positivity. -/
 structure IsChannel (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop where
-  pos : IsPositiveMap E
+  cp : IsCPMap E
   tp : IsTracePreservingMap E
+
+/-- A channel is a positive map (derived from complete positivity). -/
+theorem IsChannel.pos {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hE : IsChannel E) : IsPositiveMap E := hE.cp.isPositiveMap
 
 /-- Positive maps preserve Hermiticity.
 
@@ -242,7 +274,7 @@ section ChannelPreserves
 
 variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
-/-- A channel (positive + trace-preserving) maps density matrices to density matrices. -/
+/-- A channel (CPTP map) maps density matrices to density matrices. -/
 theorem IsChannel.map_densityMatrices (hE : IsChannel E) :
     ∀ ρ ∈ densityMatrices D, E ρ ∈ densityMatrices D :=
   fun _ ⟨hρ_psd, hρ_tr⟩ => ⟨hE.pos _ hρ_psd, by rw [hE.tp, hρ_tr]⟩

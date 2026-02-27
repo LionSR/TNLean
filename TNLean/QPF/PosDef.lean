@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 -- Direct imports replacing the former TNLean.PositiveMapSpectral hub:
 -- • Channel.PositiveMap  – Mathlib PosDef API (re_dotProduct_nonneg, etc.)
--- • Channel.Irreducible  – IsIrreducibleCP, IsOrthogonalProjection
+-- • Channel.Irreducible  – IsIrreducibleMap, IsOrthogonalProjection
 -- Both are already transitively available through TNLean.MPS.CPPrimitive
 -- (CPPrimitive → KadisonSchwarz → PositiveMap; CPPrimitive → Irreducible),
 -- but are listed explicitly here so the dependency is self-documenting.
@@ -174,7 +174,7 @@ theorem posSemidef_fixedPoint_isPosDef
 -- Corollary for the irreducibility-based formulation
 theorem posSemidef_fixedPoint_isPosDef_of_irreducible
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleCP (transferMap (d := d) (D := D) A))
+    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0)
     (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :

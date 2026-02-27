@@ -21,7 +21,7 @@ the eigenvalues on the unit circle.
 * `peripheralSpectrum` — eigenvalues whose norm equals the spectral radius
 * `peripheralEigenvalues` — eigenvalues on the unit circle
 * `channelPeriod` — cardinality of the peripheral eigenvalue set
-* `IsPrimitiveChannel` — 1 is the only peripheral eigenvalue
+* `IsPrimitive` — 1 is the only peripheral eigenvalue
 
 ## Main results
 
@@ -30,8 +30,8 @@ the eigenvalues on the unit circle.
 * `peripheralEigenvalues_finite` — peripheral eigenvalues are finite
 * `isRootOfUnity_of_finite_powers` — pigeonhole for roots of unity
 * `peripheral_isRootOfUnity_of_pow_eigenvalue` — powers-are-eigenvalues ⟹ root of unity
-* `isPrimitiveChannel_iff_period_one` — primitive ↔ period = 1
-* `isPrimitiveChannel_of_compl_eigenvalues_lt_one` — spectral gap → primitive
+* `isPrimitive_iff_period_one` — primitive ↔ period = 1
+* `isPrimitive_of_compl_eigenvalues_lt_one` — spectral gap → primitive
 * `compl_eigenvalue_norm_lt_one_of_primitive` — primitive → spectral gap
 
 ## References
@@ -173,35 +173,35 @@ noncomputable def channelPeriod {V : Type*} [AddCommGroup V] [Module ℂ V]
   hfin.toFinset.card
 
 /-- A channel is **primitive** if 1 is the only peripheral eigenvalue. -/
-def IsPrimitiveChannel {V : Type*} [AddCommGroup V] [Module ℂ V]
+def IsPrimitive {V : Type*} [AddCommGroup V] [Module ℂ V]
     (E : V →ₗ[ℂ] V) : Prop :=
   peripheralEigenvalues E = {1}
 
 /-- Primitive channels have unique peripheral eigenvalue. -/
-theorem IsPrimitiveChannel.unique_peripheral
+theorem IsPrimitive.unique_peripheral
     {V : Type*} [AddCommGroup V] [Module ℂ V]
-    {E : V →ₗ[ℂ] V} (h : IsPrimitiveChannel E) (μ : ℂ)
+    {E : V →ₗ[ℂ] V} (h : IsPrimitive E) (μ : ℂ)
     (hμ_eig : Module.End.HasEigenvalue E μ) (hμ_norm : ‖μ‖ = 1) :
     μ = 1 := by
   have : μ ∈ peripheralEigenvalues E := ⟨hμ_eig, hμ_norm⟩
   rw [h] at this; exact this
 
-/-- Construct IsPrimitiveChannel from uniqueness of norm-1 eigenvalue. -/
-theorem isPrimitiveChannel_of_unique_norm_one
+/-- Construct IsPrimitive from uniqueness of norm-1 eigenvalue. -/
+theorem isPrimitive_of_unique_norm_one
     {V : Type*} [AddCommGroup V] [Module ℂ V]
     (E : V →ₗ[ℂ] V) (ρ : V) (hfix : E ρ = ρ) (hne : ρ ≠ 0)
     (huniq : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ = 1 → μ = 1) :
-    IsPrimitiveChannel E := by
+    IsPrimitive E := by
   ext μ; constructor
   · intro ⟨hev, hnorm⟩; exact huniq μ hev hnorm
   · intro h; subst h; exact ⟨hasEigenvalue_one_of_fixedPoint E ρ hfix hne, by simp⟩
 
 /-- **Primitive ↔ period = 1.** -/
-theorem isPrimitiveChannel_iff_period_one
+theorem isPrimitive_iff_period_one
     {V : Type*} [AddCommGroup V] [Module ℂ V]
     (E : V →ₗ[ℂ] V) (ρ : V) (hfix : E ρ = ρ) (hne : ρ ≠ 0)
     (hfin : (peripheralEigenvalues E).Finite) :
-    IsPrimitiveChannel E ↔ channelPeriod E hfin = 1 := by
+    IsPrimitive E ↔ channelPeriod E hfin = 1 := by
   constructor
   · intro hprim
     simp only [channelPeriod]
@@ -237,16 +237,16 @@ then 1 is the only peripheral eigenvalue of E.
 
 Key idea: for `μ ≠ 1`, trace preservation forces eigenvectors to have trace 0,
 so they lie in ker(P), making μ an eigenvalue of `E - P`. -/
-theorem isPrimitiveChannel_of_compl_eigenvalues_lt_one
+theorem isPrimitive_of_compl_eigenvalues_lt_one
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hfix : E ρ = ρ) (hne : ρ ≠ 0)
     (htr : trace ρ ≠ 0)
     (hTP : IsTracePreservingMap E)
     (hcompl : ∀ ν : ℂ, Module.End.HasEigenvalue
         (E - fixedPointProj ρ htr) ν → ‖ν‖ < 1) :
-    IsPrimitiveChannel E := by
+    IsPrimitive E := by
   classical
-  apply isPrimitiveChannel_of_unique_norm_one E ρ hfix hne
+  apply isPrimitive_of_unique_norm_one E ρ hfix hne
   intro μ hμ_eig hμ_norm
   by_contra hμ_ne
   obtain ⟨X, hX_ev⟩ := hμ_eig.exists_hasEigenvector
@@ -280,7 +280,7 @@ theorem compl_eigenvalue_norm_lt_one_of_primitive
     (ρ : Matrix (Fin D) (Fin D) ℂ) (_hfix : E ρ = ρ) (_hne : ρ ≠ 0)
     (htr : trace ρ ≠ 0)
     (hTP : IsTracePreservingMap E)
-    (hprim : IsPrimitiveChannel E)
+    (hprim : IsPrimitive E)
     (hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1)
     (huniq_fp : ∀ X : Matrix (Fin D) (Fin D) ℂ, E X = X → trace X = 0 → X = 0)
     (ν : ℂ) (hν : Module.End.HasEigenvalue (E - fixedPointProj ρ htr) ν) :
@@ -335,7 +335,7 @@ The peripheral spectrum framework connects to MPS theory via:
 1. Transfer map `E_A(X) = ∑ᵢ Aᵢ X Aᵢ†` is trace-preserving when `∑ᵢ Aᵢ† Aᵢ = I`.
 2. By `Spectral/SpectralGap.lean`, eigenvalues satisfy `‖μ‖ ≤ 1`.
 3. `IsPrimitiveMPS` requires `spectralRadius(E - P) < 1`, which by
-   `compl_eigenvalue_norm_lt_one_of_primitive` is equivalent to `IsPrimitiveChannel E`.
+   `compl_eigenvalue_norm_lt_one_of_primitive` is equivalent to `IsPrimitive E`.
 4. For irreducible CPTP maps, multiplicative domain theory
    (`Channel/MultiplicativeDomain.lean`) shows peripheral eigenvectors are in the
    multiplicative domain ⟹ powers of eigenvalues remain eigenvalues ⟹

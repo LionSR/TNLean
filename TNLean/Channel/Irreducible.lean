@@ -16,7 +16,7 @@ on matrix algebras `M_D(ℂ)`.
 ## Main definitions
 
 * `IsOrthogonalProjection`: a matrix that is Hermitian and idempotent
-* `IsIrreducibleCP`: a CP map with no non-trivial invariant projection
+* `IsIrreducibleMap`: a CP map with no non-trivial invariant projection
 * `HasUniqueFixedPoint`: unique PSD fixed point (up to scalar), which is positive definite
 
 ## Main lemmas
@@ -60,7 +60,7 @@ there is no proper non-zero subspace `S ⊆ ℂ^D` such that `E` maps the
 
 This is the quantum analogue of a positive matrix being irreducible
 (having no non-trivial invariant face in the PSD cone). -/
-def IsIrreducibleCP (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
+def IsIrreducibleMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ P : Matrix (Fin D) (Fin D) ℂ,
     IsOrthogonalProjection P →
     (∀ X : Matrix (Fin D) (Fin D) ℂ, P * E (P * X * P) * P = E (P * X * P)) →

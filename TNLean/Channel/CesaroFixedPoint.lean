@@ -7,9 +7,12 @@ import TNLean.Channel.PositiveMap
 /-!
 # Fixed point existence via Cesàro means
 
-This file proves that every quantum channel (positive + trace-preserving map)
-on `M_D(ℂ)` has a nonzero PSD fixed point, using the Cesàro mean / Markov-Kakutani
-argument. It also states the decomposition of Hermitian fixed points (Wolf Prop 6.8).
+This file proves that every quantum channel (CPTP map) on `M_D(ℂ)` has a nonzero
+PSD fixed point, using the Cesàro mean / Markov-Kakutani argument. It also states
+the decomposition of Hermitian fixed points (Wolf Prop 6.8).
+
+Note: the proofs only use positivity + trace-preservation (not full CP), but the
+statements are for channels (`IsChannel`) which carry a CP hypothesis.
 
 ## Main results
 

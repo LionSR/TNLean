@@ -1040,7 +1040,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
       _ = SA * SA⁻¹ := by rw [h2]
       _ = 1 := h3
   let Ygl : GL (Fin D) ℂ := ⟨Ymat, Yinv, hYmul, hYinv_mul⟩
-  refine ⟨Ygl, μ⁻¹, ?_⟩
+  refine ⟨Ygl, μ⁻¹, inv_ne_zero (norm_ne_zero_iff.mp (by rw [hμ]; norm_num)), ?_⟩
   intro i
   -- Expand definitions and use the per-index relation for `B'`.
   have : B i = μ⁻¹ • (Ymat * A i * Yinv) := by
@@ -1073,7 +1073,7 @@ theorem modulus_one_eigenvalue_implies_gauge
   -- Edge case: D = 0
   rcases eq_or_ne D 0 with rfl | hD
   · -- For D = 0, all matrices are trivially equal; any GL element works
-    exact ⟨1, 1, fun i => by ext a; exact a.elim0⟩
+    exact ⟨1, 1, one_ne_zero, fun i => by ext a; exact a.elim0⟩
   haveI : NeZero D := ⟨hD⟩
   -- Step 1: Extract eigenvalue with |μ| = 1 and eigenvector X ≠ 0
   -- The spectral radius equals 1 (≥ 1 from hypothesis, ≤ 1 already proved)

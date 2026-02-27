@@ -75,24 +75,30 @@ $\sum_i (A^i)^\dagger A^i = \Id$.
     \{0,\ldots,d{-}1\} \times \{0,\ldots,d{-}1\}^N$.
 \end{proof}
 
-\begin{theorem}[Trace of iterated mixed transfer]\label{thm:mixed_trace_identity}
+\begin{theorem}[Matrix trace of iterated mixed transfer at the identity]\label{thm:mixed_trace_identity}
     \lean{MPSTensor.trace_mixedTransferMap_pow_identity}
     \leanok
-    \uses{thm:mixed_pow, def:coeff}
-    For all $X \in \MN{D}$ and $N \ge 0$,
+    \uses{thm:mixed_pow}
+    For $N \ge 0$,
     \[
-        \tr(F_{AB}^N(X))
+        \tr\bigl(F_{AB}^N(\Id)\bigr)
         = 
         \sum_{\sigma}
-        \tr(A^\sigma X)
-        \overline{\tr(B^\sigma)}.
+        \tr\bigl(A^\sigma (B^\sigma)^\dagger\bigr).
     \]
+    This is the matrix trace of $F_{AB}^N$ evaluated at the
+    identity matrix.
+    It should \emph{not} be confused with the operator trace
+    $\Tr(F_{AB}^N)$, which equals the MPV overlap
+    (Theorem~\ref{thm:overlap_trace}).
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:mixed_pow}
-    Apply the trace to each summand in
-    Theorem~\ref{thm:mixed_pow} and use
-    $\tr(M N^\dagger) = \sum_{p,q} M_{pq} \overline{N_{pq}}$.
+    Apply the matrix trace to each summand in
+    Theorem~\ref{thm:mixed_pow} with $X = \Id$:
+    $\tr(F_{AB}^N(\Id))
+    = \sum_\sigma \tr(A^\sigma \cdot \Id \cdot (B^\sigma)^\dagger)
+    = \sum_\sigma \tr(A^\sigma (B^\sigma)^\dagger)$.
 \end{proof}
 
 \section{MPV overlap as transfer trace}

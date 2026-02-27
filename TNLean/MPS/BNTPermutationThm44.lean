@@ -489,8 +489,8 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     have h_cross_norm_zero : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖)
         atTop (nhds 0) := by
       simpa using h_cross.norm
-    obtain ⟨X1, ζ1, hX1⟩ := hf_gauge k1
-    obtain ⟨X2, ζ2, hX2⟩ := hf_gauge k2
+    obtain ⟨X1, ζ1, _, hX1⟩ := hf_gauge k1
+    obtain ⟨X2, ζ2, _, hX2⟩ := hf_gauge k2
     have hmpv1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
         mpv (B k1) σ = ζ1 ^ N * mpv (A (f k1)) σ := by
       intro N σ
@@ -629,8 +629,8 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     have h_cross_norm_zero : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖)
         atTop (nhds 0) := by
       simpa using h_cross.norm
-    obtain ⟨X1, ζ1, hX1⟩ := hg_gauge j1
-    obtain ⟨X2, ζ2, hX2⟩ := hg_gauge j2
+    obtain ⟨X1, ζ1, _, hX1⟩ := hg_gauge j1
+    obtain ⟨X2, ζ2, _, hX2⟩ := hg_gauge j2
     have hmpvB1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
         mpv (B (g j1)) σ = ζ1 ^ N * mpv (A j1) σ := by
       intro N σ

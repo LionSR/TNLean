@@ -19,14 +19,40 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     if $\tr(E(X)) = \tr(X)$ for all $X$.
 \end{definition}
 
+\begin{definition}[Completely positive map]\label{def:cp_map}
+    \lean{IsCPMap}
+    \leanok
+    A linear map $E : \MN{D} \to \MN{D}$ is \emph{completely positive} (CP)
+    if it admits a \emph{Kraus representation}: there exist operators
+    $\{K_i\}_{i=0}^{r-1}$ with $K_i \in \MN{D}$ such that
+    \[
+        E(X) = \sum_{i=0}^{r-1} K_i X K_i^\dagger
+        \quad \text{for all } X \in \MN{D}.
+    \]
+    By Choi's theorem, this is equivalent to $E \otimes \id_n$ being
+    positive for all~$n$.
+\end{definition}
+
+\begin{theorem}[CP maps are positive]\label{thm:cp_is_positive}
+    \lean{IsCPMap.isPositiveMap}
+    \leanok
+    \uses{def:cp_map, def:positive_map}
+    Every completely positive map is positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $X \ge 0$, then each summand $K_i X K_i^\dagger \ge 0$
+    (conjugation preserves positive semidefiniteness),
+    so the sum is PSD.
+\end{proof}
+
 \begin{definition}[Quantum channel]\label{def:channel}
     \lean{IsChannel}
     \leanok
-    \uses{def:positive_map, def:trace_preserving}
+    \uses{def:cp_map, def:trace_preserving}
     A linear map $E : \MN{D} \to \MN{D}$ is a \emph{quantum channel}
-    if it is both positive and trace-preserving.
-    In~\cite{Wolf2012Quantum}, ``channel'' refers to completely
-    positive trace-preserving maps; here we only require positivity.
+    if it is both completely positive and trace-preserving (CPTP),
+    following~\cite{Wolf2012Quantum}.
 \end{definition}
 
 \begin{definition}[Density matrices]\label{def:density_matrices}
@@ -84,19 +110,31 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     If $E$ is a quantum channel, then $E(\mc{D}_D) \subseteq \mc{D}_D$.
 \end{theorem}
 
-\begin{proof}\leanok
-    Positivity preserves $\rho \ge 0$, and trace preservation gives
+\begin{proof}\leanok\uses{thm:cp_is_positive}
+    Complete positivity implies positivity
+    (Theorem~\ref{thm:cp_is_positive}),
+    so $E(\rho) \ge 0$; trace preservation gives
     $\tr(E(\rho)) = \tr(\rho) = 1$.
 \end{proof}
 
 \section{Kadison--Schwarz inequality}
 
+A Kraus map is the concrete realisation of a completely positive map
+(Definition~\ref{def:cp_map}).  The Kadison--Schwarz inequality and the
+multiplicative domain characterisation are proved for Kraus maps,
+then applied to transfer maps, which are Kraus maps by construction
+(Theorem~\ref{thm:transfer_cp}).
+
 \begin{definition}[Kraus map]\label{def:kraus_map}
     \lean{KadisonSchwarz.krausMap}
     \leanok
+    \uses{def:cp_map}
     Given operators $\{K_i\}_{i=0}^{d-1}$ with $K_i \in \MN{D}$,
     the \emph{Kraus map} is
     $E(X) = \sum_{i=0}^{d-1} K_i X K_i^\dagger$.
+    A linear map is completely positive
+    (Definition~\ref{def:cp_map}) if and only if it can be written
+    in this form.
 \end{definition}
 
 \begin{definition}[Adjoint Kraus map]\label{def:kraus_adjoint_map}
@@ -279,23 +317,25 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 
 \section{Irreducibility}
 
-\begin{definition}[Irreducible CP map]\label{def:irreducible_cp}
-    \lean{IsIrreducibleCP}
+\begin{definition}[Irreducible map]\label{def:irreducible_cp}
+    \lean{IsIrreducibleMap}
     \leanok
-    A completely positive linear map
+    A linear map
     $E : \MN{D} \to \MN{D}$ is \emph{irreducible}
     if whenever $P$ is an orthogonal projection satisfying
     $E(P \MN{D} P) \subseteq P \MN{D} P$,
     then $P = 0$ or $P = \Id$.
     This is \cite[Thm.~6.6, condition~(1)]{Wolf2012Quantum}.
+    The definition applies to any linear map; complete positivity
+    is not required.
 \end{definition}
 
 \begin{theorem}[Injectivity implies irreducibility]\label{thm:injective_irreducible}
     \lean{MPSTensor.injective_implies_irreducibleCP}
     \leanok
-    \uses{def:injective, def:transfer_map, def:irreducible_cp}
+    \uses{def:injective, def:transfer_map, def:irreducible_cp, thm:transfer_cp}
     If $A$ is an injective MPS tensor, then its transfer map
-    $\E_A$ is irreducible.
+    $\E_A$ (which is CP by Theorem~\ref{thm:transfer_cp}) is irreducible.
 \end{theorem}
 
 \begin{proof}
@@ -307,18 +347,31 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     so $P = 0$ or $P = \Id$.
 \end{proof}
 
-\begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
-    \lean{MPSTensor.transferMap_isChannel}
+\begin{theorem}[Transfer map is CP]\label{thm:transfer_cp}
+    \lean{MPSTensor.transferMap_isCPMap}
     \leanok
-    \uses{def:transfer_map, def:channel}
-    If $\sum_i (A^i)^\dagger A^i = \Id$, then the transfer map
-    $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
-    is a quantum channel.
+    \uses{def:transfer_map, def:cp_map}
+    The transfer map $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
+    is completely positive (its Kraus operators are the matrices
+    $\{A^i\}$).
 \end{theorem}
 
 \begin{proof}\leanok
-    Positivity: each summand $A^i X (A^i)^\dagger \ge 0$
-    when $X \ge 0$.
+    Immediate from the definition: the transfer map is defined
+    as a Kraus map with operators $K_i = A^i$.
+\end{proof}
+
+\begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
+    \lean{MPSTensor.transferMap_isChannel}
+    \leanok
+    \uses{def:transfer_map, def:channel, thm:transfer_cp}
+    If $\sum_i (A^i)^\dagger A^i = \Id$, then the transfer map
+    $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
+    is a quantum channel (CPTP).
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:transfer_cp}
+    Complete positivity is Theorem~\ref{thm:transfer_cp}.
     Trace preservation:
     $\tr(\E_A(X)) = \sum_i \tr(A^i X (A^i)^\dagger)
     = \tr((\sum_i (A^i)^\dagger A^i) X) = \tr(X)$
@@ -457,11 +510,17 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     The \emph{peripheral eigenvalues} of a linear map $E$ on
     a finite-dimensional space
-    are those eigenvalues $\lambda$ with $|\lambda|$ equal to the
-    spectral radius of $E$.
+    are the eigenvalues $\lambda$ on the unit circle:
+    $|\lambda| = 1$.
     For a channel, the spectral radius is~$1$
-    \cite[Prop.~6.1]{Wolf2012Quantum}, so these are the eigenvalues
-    on the unit circle.
+    \cite[Prop.~6.1]{Wolf2012Quantum}, so these coincide with
+    the eigenvalues of maximal modulus.
+
+    \textbf{Note:} The Lean definition hardcodes $|\lambda| = 1$
+    rather than $|\lambda| = \rho(E)$
+    (the spectral radius).  This is correct for channels
+    but would need generalisation for maps with spectral
+    radius $\neq 1$.
 \end{definition}
 
 \begin{theorem}[$1$ is a peripheral eigenvalue]\label{thm:one_peripheral}
@@ -506,15 +565,20 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \leanok
     \uses{def:peripheral_eigenvalues}
     Every peripheral eigenvalue of a channel is a root of unity.
-    This follows from \cite[Prop.~6.2]{Wolf2012Quantum}:
-    peripheral eigenvalues have trivial Jordan blocks,
-    so their powers form a finite set.
+    By the multiplicative domain theory
+    (\cite[Prop.~6.2]{Wolf2012Quantum}),
+    if $\mu$ is a peripheral eigenvalue then $\mu^n$ is an
+    eigenvalue for every $n \ge 1$.
+    In finite dimensions the eigenvalue set is finite,
+    so $\{\mu^n\}$ is finite, forcing $\mu$ to be a root of unity.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    A complex number of modulus~$1$ whose powers take only
-    finitely many values must be a root of unity.
+    The hypothesis of the Lean theorem is that $\mu^n$ is an
+    eigenvalue for every~$n$.
+    By the pigeonhole principle on the finite eigenvalue set,
+    $\mu^a = \mu^b$ for some $a \neq b$, giving $\mu^{|a-b|} = 1$.
 \end{proof}
 
 \begin{definition}[Channel period]\label{def:channel_period}
@@ -526,21 +590,23 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     $p(E) := |\mathrm{peripheral}(E)|$.
 \end{definition}
 
-\begin{definition}[Primitive channel]\label{def:primitive_channel}
-    \lean{IsPrimitiveChannel}
+\begin{definition}[Primitive map]\label{def:primitive_channel}
+    \lean{IsPrimitive}
     \leanok
     \uses{def:peripheral_eigenvalues}
-    A channel is \emph{primitive} if its only peripheral eigenvalue
+    A linear map is \emph{primitive} if its only peripheral eigenvalue
     is $\lambda = 1$, i.e.\
     $\mathrm{peripheral}(E) = \{1\}$.
-    This corresponds to \cite[Thm.~6.11]{Wolf2012Quantum}.
+    For channels this corresponds to \cite[Thm.~6.11]{Wolf2012Quantum}.
+    The Lean definition applies to any linear endomorphism, not only
+    channels.
 \end{definition}
 
 \begin{theorem}[Primitivity equals period one]\label{thm:primitive_iff_period_one}
-    \lean{isPrimitiveChannel_iff_period_one}
+    \lean{isPrimitive_iff_period_one}
     \leanok
     \uses{def:primitive_channel, def:channel_period}
-    A channel with a nonzero fixed point is primitive if and only if
+    A linear map with a nonzero fixed point is primitive if and only if
     its period is~$1$.
 \end{theorem}
 
@@ -553,11 +619,11 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     only element is $1$.
 \end{proof}
 
-\begin{theorem}[Non-peripheral eigenvalues of primitive channels]\label{thm:primitive_compl_lt_one}
+\begin{theorem}[Non-peripheral eigenvalues of primitive maps]\label{thm:primitive_compl_lt_one}
     \lean{compl_eigenvalue_norm_lt_one_of_primitive}
     \leanok
     \uses{def:primitive_channel}
-    If a channel is primitive, then every eigenvalue $\lambda \neq 1$
+    If a linear map is primitive, then every eigenvalue $\lambda \neq 1$
     satisfies $|\lambda| < 1$.
 \end{theorem}
 

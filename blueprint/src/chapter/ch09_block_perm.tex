@@ -71,10 +71,34 @@ and~\cite{Cirac2021Matrix}.
 
     This is a standard result in the theory of
     semisimple algebras;
-    see \cite[§II.B]{Cirac2021Matrix} for the MPS context.
+    see \cite[§IV.A]{Cirac2021Matrix} for the MPS context.
 \end{proof}
 
 \section{Pi-algebra linear extension}
+
+\begin{definition}[Per-block linear extension]\label{def:per_block_linear_ext}
+    \lean{MPSTensor.perBlockLinearExtension}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    Given injective tensors $A_k, B_k$ of bond dimension~$D_k$
+    with the same MPV for each block~$k$,
+    the \emph{per-block linear extension} $T_k$ is the unique
+    linear map $\MN{D_k}\to\MN{D_k}$ satisfying
+    $T_k(A_k^i)=B_k^i$ for all~$i$.
+    It exists (and is unique) because $\{A_k^i\}$ spans
+    $\MN{D_k}$ by injectivity.
+\end{definition}
+
+\begin{definition}[Product algebra automorphism]\label{def:pi_alg_equiv}
+    \lean{MPSTensor.piAlgEquiv}
+    \leanok
+    \uses{def:per_block_linear_ext, lem:linear_map_to_alg}
+    The per-block linear extensions $T_k$ are promoted to
+    $\C$-algebra homomorphisms
+    (Lemma~\ref{lem:linear_map_to_alg}) and assembled into
+    a single $\C$-algebra automorphism
+    $T:\prod_k\MN{D_k}\xrightarrow{\sim}\prod_k\MN{D_k}$.
+\end{definition}
 
 \begin{theorem}[Per-block linear extensions assemble]\label{thm:pi_linear_ext}
     \lean{MPSTensor.piAlgEquiv_decomposition}
@@ -142,9 +166,15 @@ and~\cite{Cirac2021Matrix}.
         \item the self-overlap converges: $O_{A_k A_k}(N) \to 1$
               for each~$k$.
     \end{enumerate}
-    Condition~(5) is a primitivity hypothesis;
-    see \cite[Thm.~6.11]{Wolf2012Quantum}
-    and the discussion in Chapter~\ref{ch:spectral}.
+    Condition~(5) is a primitivity hypothesis:
+    for a primitive channel
+    (\cite[Thm.~6.7, item~3]{Wolf2012Quantum}),
+    $T^n(\rho)\to\rho_\infty$ for every initial state,
+    which forces the self-overlap to converge to~$1$.
+    See also \cite[Thm.~6.8]{Wolf2012Quantum}
+    for the completely-positive characterisation
+    and Chapter~\ref{ch:spectral} for the spectral-gap
+    proof used in this formalization.
 \end{definition}
 
 \begin{remark}\label{rem:overlap_hypothesis}
@@ -156,6 +186,47 @@ and~\cite{Cirac2021Matrix}.
     This avoids the need to formalize the full classification
     of peripheral spectra of irreducible channels.
 \end{remark}
+
+\begin{theorem}[Vandermonde separation]\label{thm:vandermonde_sep}
+    \lean{MPSTensor.vandermonde_separation}
+    \leanok
+    If $\mu_1,\ldots,\mu_r$ are pairwise distinct complex numbers
+    and $\sum_{k=1}^r c_k \mu_k^N = 0$ for
+    $N = 0,1,\ldots,r-1$,
+    then $c_k = 0$ for all~$k$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The coefficient vector $c$ satisfies $V c = 0$
+    where $V$ is the Vandermonde matrix of the $\mu_k$.
+    Injectivity of $\mu$ makes $V$ invertible.
+\end{proof}
+
+\begin{lemma}[Block separation core]\label{lem:block_sep_core}
+    \lean{MPSTensor.block_separation_core}
+    \leanok
+    \uses{def:is_canonical_form, thm:overlap_decay, thm:overlap_decay_rect}
+    Under the hypotheses of the canonical form predicate
+    (strict ordering, DS gauge, self-overlap convergence),
+    if $\sum_k \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
+    for all $N,\sigma$,
+    then $A_k$ and $B_k$ generate the same MPV for each~$k$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:overlap_decay, thm:overlap_decay_rect,
+          thm:proportional_ft}
+    By induction on the number of blocks~$r$.
+    In the inductive step, take overlaps with the
+    leading block $A_0$; cross-block contributions
+    from $k \ge 1$ decay exponentially (by the
+    spectral gap), leaving
+    $O_{A_0 A_0}(N) - O_{A_0 B_0}(N) \to 0$.
+    The proportional FT (Theorem~\ref{thm:proportional_ft})
+    gives $A_0 \simeq B_0$.
+    Peeling off the leading block and dividing by
+    $\mu_0^N$, the induction hypothesis applies.
+\end{proof}
 
 \begin{theorem}[Block separation from canonical form]\label{thm:block_sep}
     \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
@@ -197,12 +268,17 @@ and~\cite{Cirac2021Matrix}.
     the induction hypothesis applies to the remaining $r-1$
     blocks.
 
-    In~\cite{PerezGarcia2007Matrix}, the separation argument
-    is sketched informally using the ``Vandermonde structure''
-    of the powers $\mu_k^N$.
-    The formalization makes this precise by induction on $r$,
-    with each step using the spectral gap to peel off the
-    dominant block.
+    In~\cite{PerezGarcia2007Matrix}, the uniqueness of the
+    canonical form is proved differently: the argument uses
+    OBC (open boundary condition) canonical forms together
+    with a Horn--Johnson matrix-equation lemma
+    (\cite[Thm.~4.4.14]{HornJohnson91}).
+    In~\cite{Cirac2021Matrix}, the block separation is
+    deduced from the BNT uniqueness
+    (Theorem~\ref{thm:bnt_perm_prop}).
+    Our formalization makes the separation explicit by
+    induction on the number of blocks~$r$, with each step
+    using the spectral gap to peel off the dominant block.
 \end{proof}
 
 \begin{theorem}[Canonical form fundamental theorem]\label{thm:ft_canonical}

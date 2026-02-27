@@ -147,6 +147,32 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
     = \tr(A^{i_1} \cdots A^{i_N})$.
 \end{proof}
 
+\begin{definition}[Support projection]\label{def:support_proj}
+    \lean{MPSTensor.supportProj}
+    \leanok
+    For a positive semi-definite matrix $\rho \ge 0$,
+    the \emph{support projection} $P$ is the orthogonal
+    projection onto the range of $\rho$.
+    It is constructed via the spectral decomposition:
+    if $\rho = U \diag(\lambda_1,\ldots,\lambda_D) U^\dagger$,
+    then $P = U \diag(\mathbf{1}_{\lambda_1>0},\ldots,\mathbf{1}_{\lambda_D>0}) U^\dagger$,
+    where $\mathbf{1}_{\lambda_j>0}$ is $1$ if $\lambda_j > 0$
+    and $0$ otherwise.
+\end{definition}
+
+\begin{definition}[Invariant projection predicate]\label{def:has_inv_proj}
+    \lean{MPSTensor.HasInvariantProj}
+    \leanok
+    \uses{def:mps_tensor}
+    An MPS tensor $A$ \emph{has an invariant projection}
+    if there exists an orthogonal projection $P$ with
+    $P \neq 0$, $P \neq \Id$, and
+    $(\Id - P) A^i P = 0$ for all~$i$.
+    The negation of this predicate is
+    $\mathrm{IsIrreducibleTensor}$
+    (Definition~\ref{def:irreducible_tensor}).
+\end{definition}
+
 \begin{theorem}[PSD fixed point gives invariant projection]\label{thm:fp_inv_proj}
     \lean{MPSTensor.lowerZero_of_posSemidef_fixedPoint}
     \leanok
@@ -167,9 +193,15 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
     this forces $(\Id - P) A^i P = 0$.
 
     This is the finite-dimensional version of
-    \cite[Thm.~6.6]{Wolf2012Quantum},
-    which characterises irreducibility via absence of
-    nontrivial invariant projections.
+    \cite[Prop.~6.10]{Wolf2012Quantum}
+    (``Stationary subspaces'': the support projection
+    of any stationary state is sub-harmonic, i.e.\
+    invariant under the channel).
+    The equivalence between irreducibility and
+    absence of nontrivial invariant projections is
+    \cite[Thm.~6.2]{Wolf2012Quantum};
+    see also
+    \cite[§IV.A.1]{Cirac2021Matrix}.
 \end{proof}
 
 \begin{theorem}[Two-block decomposition]\label{thm:two_block_decomp}
@@ -208,7 +240,7 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
     An MPS tensor~$A$ is \emph{irreducible}
     (in the sense of~\cite{Cirac2021Matrix})
     if the transfer map $\E_A$ has no nontrivial invariant
-    projection, i.e.\ $\E_A$ is irreducible as a CP map
+    projection, i.e.\ $\E_A$ is irreducible
     (Definition~\ref{def:irreducible_cp}).
 \end{definition}
 
@@ -235,11 +267,20 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
     Apply the induction hypothesis to each block and
     concatenate.
 
-    In~\cite{PerezGarcia2007Matrix}, this is the standard
-    canonical-form reduction.
-    Our formalization iterates the invariant-projection splitting
-    via strong induction on $D$, rather than appealing to a general
-    structure theorem for C*-algebras.
+    Both~\cite{PerezGarcia2007Matrix} (Theorem~4, ``TI
+    canonical form'') and~\cite{Cirac2021Matrix} (§IV.A.1)
+    obtain the block decomposition by the same
+    invariant-projection splitting used here.
+    An alternative route, developed
+    in~\cite[Thm.~6.14]{Wolf2012Quantum},
+    characterises the fixed-point set of a quantum channel
+    as a $*$-algebra and then applies the
+    Wedderburn--Artin decomposition
+    (\cite[Eq.~(1.39)]{Wolf2012Quantum})
+    to read off the block structure directly.
+    Our formalization avoids this algebraic detour:
+    we iterate the invariant-projection splitting with
+    a termination proof by strong induction on~$D$.
 \end{proof}
 
 \begin{theorem}[Diagonal PD fixed point]\label{thm:form_II}

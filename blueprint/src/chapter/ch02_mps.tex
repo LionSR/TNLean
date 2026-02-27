@@ -157,11 +157,14 @@ boundary conditions (PBC).
     \leanok
     \uses{def:mps_tensor}
     Two MPS tensors $A$ and $B$ are \emph{gauge-phase equivalent}
-    if there exist $X \in \GL_D(\C)$ and $\zeta \in \C$ such that
+    if there exist $X \in \GL_D(\C)$ and $\zeta \in \C \setminus \{0\}$
+    such that
     \[
         B^i \;=\; \zeta \, X \, A^i \, X^{-1}
         \qquad \text{for all } i.
     \]
+    The requirement $\zeta \neq 0$ ensures that gauge-phase equivalence
+    preserves injectivity.
 \end{definition}
 
 \begin{lemma}[Word evaluation under conjugation]\label{lem:eval_word_gauge}

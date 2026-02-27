@@ -79,25 +79,12 @@ variable [NeZero D]
 
 /-- Gauge-phase equivalence implies proportionality of MPVs.
 
-`GaugePhaseEquiv` allows the degenerate case `ζ = 0`, in which `B` is the zero tensor; to obtain
-proportionality in the direction `A = c_N • B` we assume the standard trace-preserving/DS-gauge
-normalization on `B`, which forces `ζ ≠ 0` when `D ≠ 0`. -/
+`GaugePhaseEquiv` requires `ζ ≠ 0`, so `B` is a nondegenerate gauge-phase transform of `A`. -/
 theorem proportionalMPV₂_of_gaugePhaseEquiv
-    (A B : MPSTensor d D)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1) :
+    (A B : MPSTensor d D) :
     GaugePhaseEquiv A B → ProportionalMPV₂ (d := d) A B := by
   classical
-  rintro ⟨X, ζ, hX⟩
-  have hζ : ζ ≠ 0 := by
-    intro hζ0
-    have hBzero : ∀ i : Fin d, B i = 0 := by
-      intro i
-      simp [hX i, hζ0]
-    have hsum0 : (∑ i : Fin d, (B i)ᴴ * B i) = (0 : Matrix (Fin D) (Fin D) ℂ) := by
-      simp [hBzero]
-    haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
-    haveI : Nontrivial (Matrix (Fin D) (Fin D) ℂ) := Matrix.nonempty
-    exact zero_ne_one (hsum0 ▸ hB_norm)
+  rintro ⟨X, ζ, hζ, hX⟩
   intro N
   refine ⟨(ζ ^ N)⁻¹, ?_⟩
   intro σ

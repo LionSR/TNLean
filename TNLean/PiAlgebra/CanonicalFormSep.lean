@@ -547,7 +547,7 @@ private lemma sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one
     (hGaugePhase : GaugePhaseEquiv A B) :
     SameMPV A B := by
   classical
-  rcases hGaugePhase with ⟨X, ζ, hX⟩
+  rcases hGaugePhase with ⟨X, ζ, hζ, hX⟩
   have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ :=
     mpv_eq_pow_mul_of_gaugePhase (A := A) (B := B) X ζ hX
   have hoverlap :

@@ -313,8 +313,8 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     have h_cross : Tendsto (fun N => mpvOverlap (d := d) (B j1) (B j2) N) atTop (nhds 0) :=
       hB_off j1 j2 hne
     --
-    obtain ⟨X1, ζ1, hX1⟩ := hf_gauge j1
-    obtain ⟨X2, ζ2, hX2⟩ := hf_gauge j2
+    obtain ⟨X1, ζ1, _, hX1⟩ := hf_gauge j1
+    obtain ⟨X2, ζ2, _, hX2⟩ := hf_gauge j2
     --
     -- MPV scaling formulas.
     have hmpv1 : ∀ (N : ℕ) (σ : Fin N → Fin d),

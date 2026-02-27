@@ -67,7 +67,7 @@ def ProportionalMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor
 
 /-- Gauge equivalence up to a global phase. -/
 def GaugePhaseEquiv {d D : ℕ} (A B : MPSTensor d D) : Prop :=
-  ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ∀ i : Fin d,
+  ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ζ ≠ 0 ∧ ∀ i : Fin d,
     B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
 
