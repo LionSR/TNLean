@@ -386,30 +386,31 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{theorem}[Primitive MPS tensors have nonzero word products]\label{thm:prim_nonzero_word}
     \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitive}
     \leanok
-    \uses{def:eval_word, def:normal}
-    If $A$ is a primitive normal MPS tensor, then for every
-    $n \ge 1$ there exists a word $w$ of length $\le n$
-    with $A^w \neq 0$.
+    \uses{def:eval_word}
+    If $A$ is a primitive MPS tensor (with DS gauge),
+    then for every $n \ge 0$ there exists a word $w$ of length
+    \emph{exactly}~$n$ with $A^w \neq 0$.
+    (The Lean definition \texttt{IsPrimitive} bundles
+    DS-gauge normalization; \texttt{IsNormal} is not required.)
 \end{theorem}
 
 \begin{proof}\leanok
-    Primitivity of the transfer map ensures that iterated
-    powers of $\E_A$ do not vanish. Since
-    $\E_A^n(\Id) = \sum_{|w|=n} A^w (A^w)^\dagger$,
-    this sum is nonzero, so at least one $A^w$ is nonzero.
+    The PSD fixed point $\rho$ of $\E_A$ satisfies
+    $\E_A^n(\rho) = \rho \neq 0$.
+    Since $\E_A^n(\rho) = \sum_{|w|=n} A^w \rho (A^w)^\dagger$,
+    at least one summand is nonzero, hence some $A^w \neq 0$.
 \end{proof}
 
 \begin{theorem}[Iterated transfer does not vanish]\label{thm:transfer_pow_ne_zero}
     \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitive}
     \leanok
-    \uses{def:transfer_map}
-    If $A$ is a primitive normal MPS tensor, then
+    \uses{def:transfer_map, thm:prim_nonzero_word}
+    If $A$ is a primitive MPS tensor (with DS gauge), then
     $\E_A^n \neq 0$ for all $n \ge 0$.
 \end{theorem}
 
-\begin{proof}\leanok
-    For $n = 0$, $\E_A^0 = \Id \neq 0$.
-    For $n \ge 1$, use Theorem~\ref{thm:prim_nonzero_word}:
-    there exists a word~$w$ with $A^w \neq 0$, so
-    $\E_A^n(\Id)$ has a nonzero summand.
+\begin{proof}\leanok\uses{thm:prim_nonzero_word}
+    By Theorem~\ref{thm:prim_nonzero_word},
+    there exists a word~$w$ of length~$n$ with $A^w \neq 0$,
+    so $\E_A^n(\rho)$ has a nonzero summand.
 \end{proof}

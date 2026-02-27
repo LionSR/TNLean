@@ -329,9 +329,11 @@ with nonzero eigenvalue, then K_{D-1}(A, φ) = ℂ^D.
 
 Paper: "H_{D-1}(A, φ) = ℂ^D" (arXiv:0909.5347, Lemma 2(a))
 
-Deviation: We use K_{D-1} (cumulative) instead of H_{D-1} (single level). Since
-H_{D-1} ⊆ K_{D-1} and K_{D-1} = ℂ^D, this is equivalent. The paper's proof
-actually uses the cumulative version.
+Deviation: We prove K_{D-1} = ℂ^D (cumulative span) instead of the paper's
+H_{D-1} = ℂ^D (single-level span). This is strictly weaker than the paper's
+result (K_{D-1} = ⊤ follows from H_{D-1} = ⊤ since H_{D-1} ⊆ K_{D-1}, but
+not vice versa). However, K_{D-1} = ⊤ suffices for all downstream applications
+in this formalization.
 
 The proof uses dimension counting:
 1. K_0 has dim ≥ 1 (contains φ ≠ 0)
