@@ -76,6 +76,92 @@ theorem evalWord_transpose (A : MPSTensor d D) :
       -- `transpose` reverses products and `reverse (i :: w) = reverse w ++ [i]`.
       simp [evalWord, transposeTensor, Matrix.transpose_mul, ih, evalWord_append, List.reverse_cons]
 
+/-! ## Transpose preserves normality -/
+
+/-- `N`-block injectivity is preserved by pointwise transposition. -/
+theorem IsNBlkInjective_transposeTensor
+    {d D : ℕ} {A : MPSTensor d D} {N : ℕ}
+    (h : IsNBlkInjective (d := d) (D := D) A N) :
+    IsNBlkInjective (d := d) (D := D) (transposeTensor A) N := by
+  classical
+  -- Unfold the definition: both sides are spans of ranges.
+  unfold IsNBlkInjective at h ⊢
+  -- First, identify the generating set for `transposeTensor A` as the transpose of the
+  -- generating set for `A` (up to reindexing by `Fin.rev`).
+  have hrange :
+      Set.range (fun σ : Fin N → Fin d => evalWord (transposeTensor A) (List.ofFn σ)) =
+        Set.range (fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ) := by
+    ext M
+    constructor
+    · rintro ⟨σ, rfl⟩
+      refine ⟨σ ∘ Fin.rev, ?_⟩
+      -- Use `evalWord_transpose` with the reversed word.
+      have hrev : ((σ ∘ Fin.rev) ∘ Fin.rev) = σ := by
+        funext i
+        simp [Function.comp]
+      -- `(evalWord A (ofFn (σ ∘ rev)))ᵀ = evalWord (transposeTensor A) (ofFn σ)`
+      -- by word reversal.
+      have htrans :=
+        (evalWord_transpose (A := A) (w := List.ofFn (σ ∘ Fin.rev)))
+      -- Simplify the reversed word.
+      simpa [ofFn_reverse, hrev] using htrans
+    · rintro ⟨σ, rfl⟩
+      refine ⟨σ ∘ Fin.rev, ?_⟩
+      -- Here we use `evalWord_transpose` on `List.ofFn σ` directly.
+      have htrans := (evalWord_transpose (A := A) (w := List.ofFn σ))
+      -- Rewrite the reversed word via `Fin.rev`, then flip the equality.
+      simpa [ofFn_reverse] using htrans.symm
+  -- Reduce to the span of transposes.
+  rw [hrange]
+  -- Use that transpose is a linear equivalence on matrices, hence maps spanning sets to
+  -- spanning sets and preserves `⊤`.
+  let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    Matrix.transposeLinearEquiv (Fin D) (Fin D) ℂ ℂ
+  have hmap :
+      Submodule.map (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+          (Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))) =
+        Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ) := by
+    -- `Submodule.map` distributes over `Submodule.span`.
+    rw [Submodule.map_span]
+    -- Rewrite the image of a range as a range of a composition.
+    have hrange' :
+        (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ) ''
+            Set.range (fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) =
+          Set.range (fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ) := by
+      -- `Set.range (g ∘ f) = g '' Set.range f`.
+      simpa [Function.comp] using
+        (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ)
+          (fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))).symm
+    -- Now simplify the map (it is just transpose) and apply `hrange'`.
+    simp [e, hrange']
+  -- Now transport `h : span(range evalWord A) = ⊤` along the transpose equivalence.
+  -- Conclude by rewriting using `hmap`.
+  --
+  -- `Submodule.map (↑e) ⊤ = ⊤` since `e` is an equivalence.
+  have :
+      Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ) = ⊤ := by
+    -- Rewrite the span as a mapped submodule.
+    -- Then use `h` and `Submodule.map_top`.
+    calc
+      Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ)
+          = Submodule.map (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+              (Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))) := by
+              simp [hmap]
+      _ = Submodule.map (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ⊤ := by
+            simp [h]
+      _ = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+            -- `map ⊤ = range`, and the range of a linear equivalence is `⊤`.
+            simp [Submodule.map_top, LinearEquiv.range (e := e)]
+  simpa using this
+
+/-- Normality is preserved by pointwise transposition. -/
+theorem IsNormal_transposeTensor
+    {d D : ℕ} {A : MPSTensor d D}
+    (h : IsNormal (d := d) (D := D) A) :
+    IsNormal (d := d) (D := D) (transposeTensor A) := by
+  rcases h with ⟨N, hN⟩
+  exact ⟨N, IsNBlkInjective_transposeTensor (A := A) (N := N) hN⟩
+
 /-! ## Row spreading: right action on row vectors -/
 
 /-- The linear map `M ↦ ψ ᵥ* M` for a fixed row vector `ψ`. -/
@@ -190,6 +276,43 @@ theorem exists_wordSpan_vecMul_eq_pi_single
   refine ⟨M, hM, ?_⟩
   -- Unfold the linear map.
   simpa [vecMulLinearMap] using hM_apply
+
+/-! ## Row spreading from normality (via transpose) -/
+
+/-- If `A` is normal, then a left-eigenvector for `(A i₀)ᵀ` spreads all rows at level `D-1`.
+
+This is the row-analogue of `eigenvector_spreading`, obtained by applying that theorem to
+`transposeTensor A` and then translating `vectorSpreadSpan` back to `rowSpreadSpan`. -/
+theorem rowSpreadSpan_eq_top_of_isNormal_of_eigenvector_transpose
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D) (ψ : Fin D → ℂ) (hψ : ψ ≠ 0)
+    (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
+    (heig : (A i₀)ᵀ *ᵥ ψ = μ • ψ)
+    (hNormal : IsNormal (d := d) (D := D) A) :
+    rowSpreadSpan A ψ (D - 1) = ⊤ := by
+  classical
+  -- Translate row spreading into vector spreading for the transposed tensor.
+  have hrow :
+      rowSpreadSpan A ψ (D - 1) = vectorSpreadSpan (transposeTensor A) ψ (D - 1) := by
+    -- `transposeTensor A` is definitionaly `fun i => (A i)ᵀ`.
+    simpa [transposeTensor] using
+      (rowSpreadSpan_eq_vectorSpreadSpan_transpose (A := A) (ψ := ψ) (n := D - 1))
+  -- Apply eigenvector spreading to `transposeTensor A`.
+  have hNormalT : IsNormal (d := d) (D := D) (transposeTensor A) :=
+    IsNormal_transposeTensor (A := A) hNormal
+  have hcum : cumulativeVectorSpan (transposeTensor A) ψ (D - 1) = ⊤ := by
+    -- Use the eigenvector spreading theorem.
+    -- The eigenvector hypothesis is exactly `heig` since `(transposeTensor A) i₀ = (A i₀)ᵀ`.
+    simpa [transposeTensor] using
+      (eigenvector_spreading (A := transposeTensor A) (φ := ψ) hψ i₀ μ hμ heig hNormalT)
+  -- Convert cumulative span to fixed-length span using the padding lemma.
+  have hvec : vectorSpreadSpan (transposeTensor A) ψ (D - 1) = ⊤ := by
+    simpa [transposeTensor] using
+      (vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
+        (A := transposeTensor A) (φ := ψ) (n := D - 1)
+        i₀ μ hμ heig hcum)
+  -- Conclude by rewriting back to `rowSpreadSpan`.
+  simpa [hrow] using hvec
 
 /-! ## Reduction: one rank-one element + row spreading ⇒ full rank-one basis -/
 
