@@ -181,10 +181,13 @@ and~\cite{Cirac2021Matrix}.
     In the literature~\cite{Cirac2021Matrix},
     condition~(5) is derived from primitivity of the
     transfer map (peripheral spectrum $= \{1\}$).
-    In the formalization, it is assumed directly as a
-    hypothesis in the canonical form predicate.
-    This avoids the need to formalize the full classification
-    of peripheral spectra of irreducible channels.
+    Theorem~\ref{thm:canonical_from_primitive}
+    now formalizes this derivation:
+    per-block primitivity implies overlap convergence,
+    so condition~(5) is redundant when primitivity holds.
+    The canonical form predicate retains the explicit
+    hypothesis for flexibility (it can be satisfied
+    without proving primitivity of each block).
 \end{remark}
 
 \begin{theorem}[Vandermonde separation]\label{thm:vandermonde_sep}

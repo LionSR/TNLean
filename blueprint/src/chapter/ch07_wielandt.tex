@@ -381,6 +381,146 @@ The results follow~\cite{Sanz2010Quantum}.
     Immediate from Theorem~\ref{thm:cumulative_eq_top}.
 \end{proof}
 
+\section{Lemma~2(b): fixed-length matrix spanning}\label{sec:lemma2b}
+
+The preceding sections establish Lemma~2(a) of~\cite{Sanz2010Quantum}:
+eigenvector spreading gives a cumulative vector span $K_{D-1}(A,\varphi) = \C^D$.
+The next step, Lemma~2(b), strengthens this to \emph{fixed-length}
+matrix spanning:
+there exists an $n_0$ such that $S_{n_0}(A) = \MN{D}$
+(i.e.\ word products of \emph{exactly} one length span all matrices).
+The formalization in \texttt{Wielandt/Lemma2b.lean} covers the
+algebraic assembly part of this argument.
+
+\begin{definition}[Fixed-length vector span]\label{def:vector_spread_span}
+    \lean{MPSTensor.vectorSpreadSpan}
+    \leanok
+    \uses{def:mps_tensor, def:eval_word}
+    The \emph{fixed-length vector span} at length~$n$ is
+    \[
+        H_n(A, \varphi) = \spn_{\C}\{A^w \varphi : |w| = n\}
+        \subseteq \C^D.
+    \]
+    This is $S_n(A)\ket{\varphi}$ in the notation
+    of~\cite{Sanz2010Quantum}.
+\end{definition}
+
+\begin{lemma}[Word span products]\label{lem:word_span_mul}
+    \lean{MPSTensor.wordSpan_mul_le}
+    \leanok
+    \uses{def:word_span}
+    $S_m(A) \cdot S_n(A) \subseteq S_{m+n}(A)$:
+    the product of word spans at lengths $m$ and $n$
+    is contained in the word span at length $m + n$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every product $A^{w_1} A^{w_2}$ with $|w_1| = m$
+    and $|w_2| = n$ equals $A^{w_1 w_2}$ with $|w_1 w_2| = m + n$.
+\end{proof}
+
+\begin{lemma}[Eigenvector padding]\label{lem:eigenvector_padding}
+    \lean{MPSTensor.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector}
+    \leanok
+    \uses{def:cumulative_vector_span, def:vector_spread_span}
+    Suppose $A^{i_0} \varphi = \mu \varphi$ with $\mu \neq 0$.
+    Then for all~$n$,
+    \[
+        K_n(A, \varphi) = H_n(A, \varphi).
+    \]
+    In particular, if $K_n(A,\varphi) = \C^D$ then
+    already $H_n(A,\varphi) = \C^D$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Any word $w$ with $|w| \le n$ can be padded to exact
+    length~$n$ by appending $n - |w|$ copies of the index~$i_0$.
+    The eigenvector relation gives
+    $A^{w \cdot i_0^k} \varphi = \mu^k \cdot A^w \varphi$,
+    so the padded vector is a nonzero scalar multiple
+    of the original.
+    Hence every generator of $K_n$ lies in $H_n$.
+    The reverse inclusion $H_n \le K_n$ is immediate.
+\end{proof}
+
+\begin{theorem}[Vector spanning to matrix spanning (assembly step)]%
+    \label{thm:lemma2b_assembly}
+    \lean{MPSTensor.wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis}
+    \leanok
+    \uses{def:word_span, def:vector_spread_span, lem:word_span_mul}
+    Assume:
+    \begin{enumerate}
+        \item $H_n(A, \varphi) = \C^D$
+              (length-$n$ word products applied to $\varphi$
+              span all of~$\C^D$), and
+        \item for each standard basis vector $e_j$,
+              the rank-one operator
+              $\ketbra{\varphi}{e_j}$
+              lies in $S_m(A)$.
+    \end{enumerate}
+    Then $S_{n+m}(A) = \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:word_span_mul}
+    Fix a matrix unit $E_{ij}$.
+    By hypothesis~(1), there exists $M_i \in S_n(A)$
+    with $M_i \varphi = e_i$.
+    By hypothesis~(2), $\ketbra{\varphi}{e_j} \in S_m(A)$.
+    Their product satisfies
+    \[
+        M_i \cdot \ketbra{\varphi}{e_j}
+        = \ketbra{M_i \varphi}{e_j}
+        = \ketbra{e_i}{e_j}
+        = E_{ij},
+    \]
+    and $E_{ij} \in S_{n+m}(A)$ by
+    Lemma~\ref{lem:word_span_mul}.
+    Since the matrix units span $\MN{D}$,
+    $S_{n+m}(A) = \MN{D}$.
+\end{proof}
+
+\begin{lemma}[Blocking transfer]\label{lem:blocking_transfer}
+    \lean{MPSTensor.wordSpan_eq_top_of_blockTensor_wordSpan_eq_top}
+    \leanok
+    \uses{def:word_span, def:blocked_tensor}
+    If the blocked tensor $A^{[L]}$ satisfies
+    $S_n(A^{[L]}) = M_{D}(\C)$,
+    then $S_{nL}(A) = M_{D}(\C)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Each length-$n$ word in the blocked alphabet
+    $\{0,\ldots,d^L-1\}$ decodes to a length-$nL$ word
+    in the original alphabet $\{0,\ldots,d-1\}$,
+    so $S_n(A^{[L]}) \subseteq S_{nL}(A)$.
+\end{proof}
+
+\begin{remark}[Status of Lemma~2(b)]\label{rem:lemma2b_status}
+    \notready
+    Theorem~\ref{thm:lemma2b_assembly} establishes the
+    \emph{assembly} part of Lemma~2(b)
+    of~\cite{Sanz2010Quantum}:
+    rank-one operators plus fixed-length vector spanning
+    imply fixed-length matrix spanning.
+    What remains is the \emph{rank-one construction step}:
+    showing that the Fitting/Jordan analysis of the eigenvalue
+    word $A^{w_0}$
+    (from Theorem~\ref{thm:eigenvalue_extraction})
+    produces the required rank-one operators
+    $\ketbra{\varphi}{e_j} \in S_m(A)$.
+    Once this is done, combining with the eigenvector
+    spreading (Theorem~\ref{thm:eigenvector_spreading})
+    and eigenvector padding
+    (Lemma~\ref{lem:eigenvector_padding})
+    will yield the full Lemma~2(b) and hence the sharp
+    Wielandt bound
+    $S_{(D-1)^2 + 1}(A) = \MN{D}$.
+\end{remark}
+
 \section{Primitivity and normality}
 
 \begin{theorem}[Primitive MPS tensors have nonzero word products]\label{thm:prim_nonzero_word}

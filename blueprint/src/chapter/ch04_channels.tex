@@ -581,6 +581,29 @@ then applied to transfer maps, which are Kraus maps by construction
     $\mu^a = \mu^b$ for some $a \neq b$, giving $\mu^{|a-b|} = 1$.
 \end{proof}
 
+\begin{theorem}[Peripheral powers imply root of unity]\label{thm:peripheral_powers}
+    \lean{peripheral_isRootOfUnity_of_closed_powers}
+    \leanok
+    \uses{def:peripheral_eigenvalues, thm:peripheral_roots_of_unity}
+    If the set of peripheral eigenvalues of a linear
+    endomorphism~$E$ on a finite-dimensional space is
+    \emph{closed under powers}
+    ($\mu \in \mathrm{peripheral}(E)$
+    and $n \ge 1$ imply
+    $\mu^n \in \mathrm{peripheral}(E)$),
+    then every peripheral eigenvalue is a root of unity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peripheral_roots_of_unity}
+    The closure hypothesis provides
+    $\mu^n \in \mathrm{peripheral}(E)$ for all $n$,
+    which in particular means $\mu^n$ is an eigenvalue.
+    Theorem~\ref{thm:peripheral_roots_of_unity} then gives
+    $\mu^p = 1$ for some $p > 0$.
+\end{proof}
+
 \begin{definition}[Channel period]\label{def:channel_period}
     \lean{channelPeriod}
     \leanok

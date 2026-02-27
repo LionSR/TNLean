@@ -335,3 +335,61 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
     Our proof isolates it as a self-contained consequence
     of the spectral gap (Chapter~\ref{ch:spectral}).
 \end{proof}
+
+\section{Canonical form from primitivity}
+
+The canonical form predicate
+(Definition~\ref{def:is_canonical_form})
+includes an explicit hypothesis
+that the self-overlap $O_{A_k A_k}(N) \to 1$
+for each block.
+The following theorem derives this from
+per-block primitivity,
+removing it as an independent assumption.
+
+\begin{theorem}[Canonical form from primitivity]%
+    \label{thm:canonical_from_primitive}
+    \lean{MPSTensor.isCanonicalForm_of_primitive}
+    \leanok
+    \uses{def:is_canonical_form, def:primitive_channel}
+    Let $(\mu_k, A_k)_{k=1}^r$ be a collection of block
+    tensors and scaling factors satisfying:
+    \begin{enumerate}
+        \item each $A_k$ is injective,
+        \item each $A_k$ is in DS gauge,
+        \item $|\mu_1| > \cdots > |\mu_r|$ (strictly decreasing),
+        \item all $\mu_k \neq 0$,
+        \item each $A_k$ is primitive
+              (the transfer map $\E_{A_k}$ has
+              peripheral spectrum $\{1\}$).
+    \end{enumerate}
+    Then $(\mu_k, A_k)$ satisfies the canonical form
+    predicate (Definition~\ref{def:is_canonical_form}).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Conditions (1)--(4) are passed through directly.
+    For condition~(5) of the canonical form predicate
+    ($O_{A_k A_k}(N) \to 1$),
+    primitivity of $\E_{A_k}$ implies
+    $\E_{A_k}^N(\rho) \to \rho_\infty$
+    for the unique fixed-point state $\rho_\infty$,
+    and hence the self-overlap converges to~$1$.
+    The Lean proof invokes
+    \texttt{IsPrimitive.overlap\_tendsto\_one}
+    for each block.
+\end{proof}
+
+\begin{remark}\label{rem:primitivity_reduces_assumptions}
+    Theorem~\ref{thm:canonical_from_primitive} means that
+    the overlap convergence hypothesis in the canonical form
+    predicate is \emph{redundant} when primitivity is
+    available.
+    In the paper~\cite{Cirac2021Matrix},
+    primitivity is obtained from irreducibility plus
+    periodicity removal (blocking to period one).
+    The formalization now supports both routes:
+    assuming overlap convergence directly,
+    or deriving it from per-block primitivity.
+\end{remark}
