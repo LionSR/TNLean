@@ -16,6 +16,7 @@ import TNLean.Channel.Schwarz
 import TNLean.Channel.Primitive
 import TNLean.Channel.PeripheralSpectrum
 import TNLean.Channel.PeripheralPowers
+import TNLean.Channel.PeriodicityRemoval
 
 -- Layer 2: Spectral theory (QPF + spectral gap)
 import TNLean.QPF.PosDef
