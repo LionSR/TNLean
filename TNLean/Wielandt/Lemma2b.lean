@@ -10,6 +10,11 @@ import TNLean.MPS.Blocking
 import Mathlib.Algebra.Algebra.Operations
 import Mathlib.Data.Matrix.Mul
 
+set_option linter.unusedSectionVars false
+set_option linter.unusedVariables false
+set_option linter.style.longLine false
+set_option linter.style.emptyLine false
+
 /-!
 # Lemma 2(b) (start): from vector spanning to fixed-length matrix spanning
 
@@ -64,7 +69,7 @@ theorem map_wordSpan_eq_vectorSpreadSpan
       (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => M *ᵥ φ)
         (fun σ : Fin n → Fin d => A.evalWord (List.ofFn σ)))
   -- Finish by rewriting.
-  simpa [hrange]
+  simp [hrange]
 
 /-! ## Word spans and multiplication -/
 
@@ -76,7 +81,7 @@ theorem wordSpan_mul_le (A : MPSTensor d D) (m n : ℕ) :
   --
   -- `wordSpan A k = span (range (σ ↦ evalWord A (List.ofFn σ)))`.
   -- Therefore the product is the span of products of generators.
-  simp [wordSpan, Submodule.span_mul_span]
+  simp only [wordSpan, Submodule.span_mul_span]
   -- Now show each generator product is a length-`m+n` word product.
   apply Submodule.span_le.mpr
   intro x hx
@@ -159,7 +164,7 @@ theorem cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector
   have hw' : w'.length = n := by
     -- `w.length + (n - w.length) = n` since `w.length ≤ n`.
     have : w.length + (n - w.length) = n := Nat.add_sub_of_le hw
-    simpa [w', k, List.length_append, this]
+    simp [w', k, List.length_append, this]
   -- Compute the padded action on `φ`.
   have hrep : evalWord A (List.replicate k i₀) *ᵥ φ = μ ^ k • φ := by
     induction k with
@@ -172,17 +177,15 @@ theorem cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector
             = (A i₀ * evalWord A (List.replicate k i₀)) *ᵥ φ := by
                 simp [List.replicate_succ, MPSTensor.evalWord]
         _ = A i₀ *ᵥ (evalWord A (List.replicate k i₀) *ᵥ φ) := by
-              simpa using
-                (Matrix.mulVec_mulVec φ (A i₀) (evalWord A (List.replicate k i₀))).symm
+              exact (Matrix.mulVec_mulVec φ (A i₀) (evalWord A (List.replicate k i₀))).symm
         _ = A i₀ *ᵥ (μ ^ k • φ) := by
-              simpa [ih]
+              simp [ih]
         _ = μ ^ k • (A i₀ *ᵥ φ) := by
               simp [Matrix.mulVec_smul]
         _ = μ ^ k • (μ • φ) := by
               simp [heig]
         _ = μ ^ (k + 1) • φ := by
-              simp [pow_succ, smul_smul, mul_assoc]
-
+              simp [pow_succ, smul_smul]
   have hpad : evalWord A w' *ᵥ φ = μ ^ k • (evalWord A w *ᵥ φ) := by
     -- Use `evalWord_append` and then apply the eigenvector scaling lemma.
     -- `evalWord A w' = evalWord A w * evalWord A (replicate k i₀)`.
@@ -191,8 +194,7 @@ theorem cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector
           = (evalWord A w * evalWord A (List.replicate k i₀)) *ᵥ φ := by
               simp [w', evalWord_append]
       _ = evalWord A w *ᵥ (evalWord A (List.replicate k i₀) *ᵥ φ) := by
-            simpa using
-              (Matrix.mulVec_mulVec φ (evalWord A w) (evalWord A (List.replicate k i₀))).symm
+            exact (Matrix.mulVec_mulVec φ (evalWord A w) (evalWord A (List.replicate k i₀))).symm
       _ = evalWord A w *ᵥ (μ ^ k • φ) := by
             simp [hrep]
       _ = μ ^ k • (evalWord A w *ᵥ φ) := by
@@ -211,7 +213,7 @@ theorem cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector
     calc
       (μ ^ k)⁻¹ • (evalWord A w' *ᵥ φ)
           = (μ ^ k)⁻¹ • (μ ^ k • (evalWord A w *ᵥ φ)) := by
-              simpa [hpad]
+              simp [hpad]
       _ = ((μ ^ k)⁻¹ * μ ^ k) • (evalWord A w *ᵥ φ) := by
             simp [smul_smul]
       _ = evalWord A w *ᵥ φ := by
@@ -244,8 +246,6 @@ theorem vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
     (htop : cumulativeVectorSpan A φ n = ⊤) :
     vectorSpreadSpan A φ n = ⊤ := by
   -- Use `cumulativeVectorSpan = vectorSpreadSpan` under eigenvector padding.
-  have := congrArg (fun (S : Submodule ℂ (Fin D → ℂ)) => S) htop
-  -- Rewrite LHS.
   simpa [cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector (A := A) (φ := φ) (n := n)
     i₀ μ hμ heig] using htop
 
@@ -293,7 +293,7 @@ theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis
     -- Since `Submodule.map f (wordSpan A n) = ⊤`, there is some `Mi ∈ wordSpan A n`
     -- with `Mi *ᵥ φ = e_i`.
     have hi_mem : (Pi.single i (1 : ℂ)) ∈ Submodule.map f (wordSpan A n) := by
-      simpa [hmap] using (show (Pi.single i (1 : ℂ)) ∈ (⊤ : Submodule ℂ (Fin D → ℂ)) from by simp)
+      simp [hmap]
     rcases hi_mem with ⟨Mi, hMi, hMi_apply⟩
     have hMi_vec : Mi *ᵥ φ = Pi.single i (1 : ℂ) := by
       simpa [f, mulVecLinearMap] using hMi_apply
@@ -324,24 +324,20 @@ theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis
         · subst i'
           by_cases hjEq : j' = j
           · subst j'
-            simp [Matrix.vecMulVec_apply, Matrix.single_apply, Pi.single_apply]
-          · have hj : j ≠ j' := by
-              intro h; exact hjEq h.symm
-            have hnot : ¬ (i = i ∧ j = j') := by
-              intro h; exact hj h.2
-            simp [Matrix.vecMulVec_apply, Matrix.single_apply, Pi.single_apply, hjEq, hj, hnot]
-        · have hi : i ≠ i' := by
-            intro h; exact hiEq h.symm
-          have hnot : ¬ (i = i' ∧ j = j') := by
-            intro h; exact hi h.1
-          simp [Matrix.vecMulVec_apply, Matrix.single_apply, Pi.single_apply, hiEq, hnot]
+            simp [Matrix.vecMulVec_apply]
+          · have hj : j ≠ j' := fun h => hjEq h.symm
+            have hnot : ¬ (i = i ∧ j = j') := fun h => hj h.2
+            simp [Matrix.vecMulVec_apply, hjEq, hj]
+        · have hi : i ≠ i' := fun h => hiEq h.symm
+          have hnot : ¬ (i = i' ∧ j = j') := fun h => hi h.1
+          simp [Matrix.vecMulVec_apply, Pi.single_apply, hiEq, hnot]
 
       calc
         Mi * Matrix.vecMulVec φ (Pi.single j (1 : ℂ))
             = Matrix.vecMulVec (Mi *ᵥ φ) (Pi.single j (1 : ℂ)) := by
                 simpa using (Matrix.mul_vecMulVec Mi φ (Pi.single j (1 : ℂ)))
         _ = Matrix.vecMulVec (Pi.single i (1 : ℂ)) (Pi.single j (1 : ℂ)) := by
-              simpa [hMi_vec]
+              simp [hMi_vec]
         _ = Matrix.single i j (1 : ℂ) := houter
 
     -- Replace the product by the matrix unit.

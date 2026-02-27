@@ -9,11 +9,13 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Channel.PositiveMap
 import TNLean.Channel.KadisonSchwarz
 import TNLean.Channel.MultiplicativeDomain
+import TNLean.Channel.MultiplicativeDomainPowers
 import TNLean.Channel.CesaroFixedPoint
 import TNLean.Channel.Irreducible
 import TNLean.Channel.Schwarz
 import TNLean.Channel.Primitive
 import TNLean.Channel.PeripheralSpectrum
+import TNLean.Channel.PeripheralPowers
 
 -- Layer 2: Spectral theory (QPF + spectral gap)
 import TNLean.QPF.PosDef
@@ -52,6 +54,7 @@ import TNLean.MPS.BNTPermutationSimple
 import TNLean.MPS.BNTPermutationThm44
 import TNLean.MPS.BNTConstruction
 import TNLean.MPS.PrimitivityBridge
+import TNLean.MPS.CanonicalFormFromPrimitive
 import TNLean.MPS.FundamentalTheoremFull
 import TNLean.MPS.CoefficientConvergence
 import TNLean.MPS.FundamentalTheoremMulti
@@ -68,6 +71,8 @@ import TNLean.Wielandt.CumulativeSpan
 import TNLean.Wielandt.NonzeroTraceProduct
 import TNLean.Wielandt.FittingDecomposition
 import TNLean.Wielandt.EigenvectorSpreading
+import TNLean.Wielandt.Lemma2b
+import TNLean.Wielandt.RankOneConstruction
 import TNLean.Wielandt.RankOneProducts
 import TNLean.Wielandt.WielandtBound
 import TNLean.Wielandt.PrimitivityNormal
