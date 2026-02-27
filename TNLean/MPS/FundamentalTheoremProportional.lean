@@ -75,8 +75,6 @@ theorem mpv_eq_pow_mul_of_gaugePhase
 
 section EasyDirection
 
-variable [NeZero D]
-
 /-- Gauge-phase equivalence implies proportionality of MPVs.
 
 `GaugePhaseEquiv` requires `ζ ≠ 0`, so `B` is a nondegenerate gauge-phase transform of `A`. -/
