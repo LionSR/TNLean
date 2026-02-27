@@ -57,6 +57,7 @@ import TNLean.MPS.BNTPermutationSimple
 import TNLean.MPS.BNTPermutationThm44
 import TNLean.MPS.BNTConstruction
 import TNLean.MPS.PrimitivityBridge
+import TNLean.MPS.PeripheralToSpectralGap
 import TNLean.MPS.CanonicalFormFromPrimitive
 import TNLean.MPS.FundamentalTheoremFull
 import TNLean.MPS.CoefficientConvergence
