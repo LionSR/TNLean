@@ -7,6 +7,7 @@ Authors: TNLean contributors
 import TNLean.Wielandt.Lemma2b
 
 import Mathlib.Data.Matrix.Mul
+import Mathlib.Data.List.FinRange
 
 /-!
 # Rank-one construction (reductions)
@@ -40,6 +41,41 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-! ## Transpose tensor and word reversal -/
+
+/-- The pointwise transpose of an MPS tensor. -/
+noncomputable def transposeTensor (A : MPSTensor d D) : MPSTensor d D := fun i => (A i)ᵀ
+
+/-- Reversing a word given as `List.ofFn σ` corresponds to precomposing `σ` with `Fin.rev`. -/
+private lemma ofFn_reverse {n : ℕ} (σ : Fin n → Fin d) :
+    (List.ofFn σ).reverse = List.ofFn (σ ∘ Fin.rev) := by
+  -- Rewrite `ofFn` via `finRange`, then use `finRange_reverse`.
+  calc
+    (List.ofFn σ).reverse = (List.map σ (List.finRange n)).reverse := by
+      simp [List.ofFn_eq_map]
+    _ = List.map σ (List.finRange n).reverse := by
+      simp [List.map_reverse]
+    _ = List.map σ (List.map Fin.rev (List.finRange n)) := by
+      simp [List.finRange_reverse]
+    _ = List.map (σ ∘ Fin.rev) (List.finRange n) := by
+      simp [List.map_map]
+    _ = List.ofFn (σ ∘ Fin.rev) := by
+      simp [List.ofFn_eq_map]
+
+/-- Transposing a word product reverses the word.
+
+More precisely, `(evalWord A w)ᵀ` is the evaluation of the pointwise-transposed tensor
+`transposeTensor A` on the reversed word `w.reverse`. -/
+theorem evalWord_transpose (A : MPSTensor d D) :
+    ∀ w : List (Fin d), (evalWord A w)ᵀ = evalWord (transposeTensor A) w.reverse := by
+  intro w
+  induction w with
+  | nil =>
+      simp [evalWord]
+  | cons i w ih =>
+      -- `transpose` reverses products and `reverse (i :: w) = reverse w ++ [i]`.
+      simp [evalWord, transposeTensor, Matrix.transpose_mul, ih, evalWord_append, List.reverse_cons]
+
 /-! ## Row spreading: right action on row vectors -/
 
 /-- The linear map `M ↦ ψ ᵥ* M` for a fixed row vector `ψ`. -/
@@ -62,6 +98,56 @@ def rowSpreadSpan (A : MPSTensor d D) (ψ : Fin D → ℂ) (n : ℕ) :
     Submodule ℂ (Fin D → ℂ) :=
   Submodule.span ℂ (Set.range fun σ : Fin n → Fin d =>
     Matrix.vecMul ψ (evalWord A (List.ofFn σ)))
+
+/-- A single generator of `rowSpreadSpan` can be rewritten as a generator of
+`vectorSpreadSpan` for the transposed tensor, after reindexing by `Fin.rev`. -/
+private lemma vecMul_evalWord_ofFn_eq_evalWord_transposeTensor_mulVec
+    (A : MPSTensor d D) (ψ : Fin D → ℂ) {n : ℕ} (σ : Fin n → Fin d) :
+    Matrix.vecMul ψ (evalWord A (List.ofFn σ)) =
+      evalWord (transposeTensor A) (List.ofFn (σ ∘ Fin.rev)) *ᵥ ψ := by
+  calc
+    Matrix.vecMul ψ (evalWord A (List.ofFn σ))
+        = (evalWord A (List.ofFn σ))ᵀ *ᵥ ψ := by
+            simpa using
+              (Matrix.vecMul_transpose (A := (evalWord A (List.ofFn σ))ᵀ) (x := ψ))
+    _ = evalWord (transposeTensor A) (List.ofFn σ).reverse *ᵥ ψ := by
+        simp [evalWord_transpose]
+    _ = evalWord (transposeTensor A) (List.ofFn (σ ∘ Fin.rev)) *ᵥ ψ := by
+        simp [ofFn_reverse]
+
+/-- `rowSpreadSpan` is a `vectorSpreadSpan` for the pointwise-transposed tensor.
+
+The word-reversal coming from transposition is removed by reindexing via the involution
+`σ ↦ σ ∘ Fin.rev` on `Fin n → Fin d`. -/
+theorem rowSpreadSpan_eq_vectorSpreadSpan_transpose
+    (A : MPSTensor d D) (ψ : Fin D → ℂ) (n : ℕ) :
+    rowSpreadSpan A ψ n = vectorSpreadSpan (fun i => (A i)ᵀ) ψ n := by
+  classical
+  -- Work with `transposeTensor A = fun i => (A i)ᵀ`.
+  have htrans : transposeTensor A = (fun i => (A i)ᵀ) := rfl
+  -- Unfold both spans.
+  unfold rowSpreadSpan vectorSpreadSpan
+  refine le_antisymm ?_ ?_
+  · -- `rowSpreadSpan ≤ vectorSpreadSpan`
+    refine Submodule.span_le.mpr ?_
+    rintro v ⟨σ, rfl⟩
+    apply Submodule.subset_span
+    refine ⟨σ ∘ Fin.rev, ?_⟩
+    -- Generator equality (note the orientation expected by `Set.range`).
+    simpa [htrans] using
+      (vecMul_evalWord_ofFn_eq_evalWord_transposeTensor_mulVec (A := A) (ψ := ψ) (σ := σ)).symm
+  · -- `vectorSpreadSpan ≤ rowSpreadSpan`
+    refine Submodule.span_le.mpr ?_
+    rintro v ⟨σ, rfl⟩
+    apply Submodule.subset_span
+    refine ⟨σ ∘ Fin.rev, ?_⟩
+    -- Apply the same generator identity with `σ ∘ Fin.rev` and simplify `rev_rev`.
+    have h := vecMul_evalWord_ofFn_eq_evalWord_transposeTensor_mulVec
+      (A := A) (ψ := ψ) (σ := (σ ∘ Fin.rev))
+    have hrev : ((σ ∘ Fin.rev) ∘ Fin.rev) = σ := by
+      funext i
+      simp [Function.comp]
+    simpa [htrans, hrev] using h
 
 /-- Mapping `wordSpan` along `M ↦ ψ ᵥ* M` yields `rowSpreadSpan`. -/
 theorem map_wordSpan_eq_rowSpreadSpan
