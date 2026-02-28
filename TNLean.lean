@@ -5,6 +5,7 @@ import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.BurnsideMatrix
+import TNLean.Algebra.IrreducibleTensorAction
 
 -- Layer 1: Quantum channels (general theory)
 import TNLean.Channel.PositiveMap
