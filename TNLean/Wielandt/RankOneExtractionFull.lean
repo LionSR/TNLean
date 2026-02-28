@@ -326,4 +326,120 @@ theorem wielandt_lemma2b [NeZero D]
 
 end WielandtLemma2b
 
+/-! ## Rank-one extraction with external eigenvectors -/
+
+section ExternalEigenvectors
+
+/-- **Rank-one element in the word span of the blocked tensor, given external eigenvectors.**
+
+Given:
+- A blocking length `L > 0` and eigenvector data (word functions `σ₀`, `τ₀`, eigenvectors
+  `φ`, `ψ`, nonzero eigenvalues `μ`, `ν`),
+- `IsNormal A`,
+
+we place `vecMulVec φ ψ` in a bounded word span of the blocked tensor.
+
+### Strategy:
+1. `B := blockTensor A L` is `IsNormal` (from `isNormal_blockTensor`).
+2. `P := (B (encodeBlock σ₀))^D` and `Q := (B (encodeBlock τ₀))^D` lie in `wordSpan B D`.
+3. The eigenvector conditions give `φ ∈ range(toLin' P)` and `ψ ∈ range(Q.vecMulLinear)`.
+4. By `vecMulVec_mem_range_mulLeft_mulRight`, `vecMulVec φ ψ ∈ range(mulLeft P ∘ mulRight Q)`.
+5. Since `B` is normal, `wordSpan B N₁ = ⊤` for some `N₁`, so
+   `range(mulLeft P ∘ mulRight Q) ≤ wordSpan B (D + N₁ + D)`.
+
+The bound `m_blocked = 2D + N₁` depends on the normality witness `N₁` of the blocked tensor. -/
+theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
+    [NeZero D]
+    (A : MPSTensor d D)
+    (L : ℕ) (hL : 0 < L)
+    (σ₀ τ₀ : Fin L → Fin d)
+    (φ ψ : Fin D → ℂ) (μ ν : ℂ)
+    (hμ : μ ≠ 0) (hν : ν ≠ 0)
+    (heigφ : evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ)
+    (heigψ : (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ)
+    (hNormal : IsNormal A) :
+    ∃ m_blocked : ℕ,
+      Matrix.vecMulVec φ ψ ∈
+        wordSpan (blockTensor (d := d) (D := D) A L) m_blocked := by
+  classical
+  set B := blockTensor (d := d) (D := D) A L with hB_def
+  set i₀ := encodeBlock d L σ₀
+  set i₁ := encodeBlock d L τ₀
+  -- Step 1: B is normal
+  have hNormalB : IsNormal B := isNormal_blockTensor A L hL hNormal
+  -- Step 2: P = (B i₀)^D and Q = (B i₁)^D lie in wordSpan B D
+  set P := (B i₀) ^ D
+  set Q := (B i₁) ^ D
+  have hP : P ∈ wordSpan B D := pow_single_mem_wordSpan B i₀
+  have hQ : Q ∈ wordSpan B D := pow_single_mem_wordSpan B i₁
+  -- Step 3a: Eigenvector conditions at the blocked level
+  have hBi₀ : B i₀ = evalWord A (List.ofFn σ₀) :=
+    blockTensor_apply_encodeBlock A L σ₀
+  have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) :=
+    blockTensor_apply_encodeBlock A L τ₀
+  -- Step 3b: P *ᵥ φ = μ^D • φ
+  have hP_eig : P *ᵥ φ = (μ ^ D) • φ := by
+    simp only [P]; rw [hBi₀]
+    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
+      (evalWord A (List.ofFn σ₀)) φ μ heigφ D
+  -- Step 3c: φ ∈ range(toLin' P)
+  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) :=
+    mem_range_toLin'_of_eigenvector P φ (μ ^ D) (pow_ne_zero D hμ) hP_eig
+  -- Step 3d: Qᵀ *ᵥ ψ = ν^D • ψ
+  have hQ_eig : Qᵀ *ᵥ ψ = (ν ^ D) • ψ := by
+    simp only [Q]
+    rw [Matrix.transpose_pow_eq_pow_transpose, hBi₁]
+    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
+      ((evalWord A (List.ofFn τ₀))ᵀ) ψ ν heigψ D
+  -- Step 3e: ψ ∈ range(Q.vecMulLinear)
+  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) :=
+    mem_range_vecMulLinear_of_transpose_eigenvector
+      Q ψ (ν ^ D) (pow_ne_zero D hν) hQ_eig
+  -- Step 4: vecMulVec φ ψ ∈ range(mulLeft P ∘ mulRight Q)
+  have hrank1_range : Matrix.vecMulVec φ ψ ∈
+      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) :=
+    vecMulVec_mem_range_mulLeft_mulRight P Q φ ψ hφ_range hψ_range
+  -- Step 5: Get wordSpan B N₁ = ⊤ from normality of B
+  obtain ⟨N₁, hN₁⟩ := hNormalB
+  have hBtop : wordSpan B N₁ = ⊤ :=
+    (wordSpan_eq_top_iff_isNBlkInjective B N₁).mpr hN₁
+  -- Step 6: range(mulLeft P ∘ mulRight Q) ≤ wordSpan B (D + N₁ + D)
+  have hrange_le :
+      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) ≤
+        wordSpan B (D + N₁ + D) :=
+    range_comp_le_wordSpan B P Q hP hQ hBtop
+  exact ⟨D + N₁ + D, hrange_le hrank1_range⟩
+
+set_option maxHeartbeats 800000 in
+-- The blocked assembly involves multiple typeclass unifications across blocked tensor types.
+/-- **Wielandt Lemma 2(b) blocked assembly — unconditional version with external eigenvectors.**
+
+Given word eigenvectors of length `L` with nonzero eigenvalues and `IsNormal A`,
+produces `wordSpan A N = ⊤` for an explicit `N`.
+
+This eliminates the `hRankOne` hypothesis from `wielandt_blocked_assembly` by
+using `exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors` to internally
+produce the rank-one element. -/
+theorem wielandt_blocked_assembly_complete [NeZero D]
+    (A : MPSTensor d D)
+    (L : ℕ) (hL : 0 < L)
+    (σ₀ τ₀ : Fin L → Fin d)
+    (φ ψ : Fin D → ℂ)
+    (hφ : φ ≠ 0) (hψ : ψ ≠ 0)
+    (μ ν : ℂ) (hμ : μ ≠ 0) (hν : ν ≠ 0)
+    (heigφ : evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ)
+    (heigψ : (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ)
+    (hNormal : IsNormal A) :
+    ∃ N : ℕ, wordSpan A N = ⊤ := by
+  -- Step 1: Get the rank-one element in the blocked word span
+  obtain ⟨m_blocked, hRankOne⟩ :=
+    exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
+      A L hL σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ hNormal
+  -- Step 2: Apply the conditional assembly
+  exact ⟨(D - 1 + (m_blocked + (D - 1))) * L,
+    wielandt_blocked_assembly A hNormal L hL σ₀ φ hφ μ hμ heigφ
+      τ₀ ψ hψ ν hν heigψ hRankOne⟩
+
+end ExternalEigenvectors
+
 end MPSTensor

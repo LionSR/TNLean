@@ -385,32 +385,17 @@ theorem wielandt_blocked_assembly [NeZero D]
   exact wordSpan_eq_top_of_blockTensor_wordSpan_eq_top A L
     ((D - 1) + (m_blocked + (D - 1))) hBtop
 
-/-! ## Section 8: Summary and remaining gap documentation -/
+/-! ## Section 8: Summary -/
 
-/-- **Summary of Lemma 2(b) status.**
-
-### Proven (sorry-free):
-1. `wordSpan_top_of_mul` — word span at multiples of N
-2. `wordSpan_le_wordSpan_blockTensor` — chunking lemma (reverse of flattening)
-3. `isNormal_blockTensor` — blocking preserves normality
-4. `blockTensor_single_eigenvector` — word eigenvector → single-index eigenvector
-5. `rectSpan` + `cumulativeRectSpan` API — monotonicity, dimension bounds
-6. `wielandt_lemma2b_conditional` — full assembly from eigenvectors + rank-one
-7. `wielandt_blocked_assembly` — full assembly at the blocked level
-
-### Gap closed (2026-03-01):
-The rank-one extraction is provided by `exists_rankOne_mem_wordSpan_blockTensor`
-in `RankOneExtractionFull.lean`, which proves:
-- Under `IsNormal A` with normality witness `N₀ ≥ 1`, there exist eigenvectors
-  `φ`, `ψ` and a word-span level `m_blocked = D + N₀ + D` such that
-  `vecMulVec φ ψ ∈ wordSpan (blockTensor A N₀) m_blocked`.
-- The key insight: since `wordSpan A N₀ = ⊤` and `tr(I) ≠ 0`, there exist
-  length-`N₀` words with nonzero trace (hence nonzero eigenvalues), providing
-  eigenvectors on both the column and row (transpose) sides.
-
-The unconditional assembly is `wielandt_lemma2b` in `RankOneExtractionFull.lean`,
-which combines the rank-one extraction with `wielandt_blocked_assembly`.
+/-- The rank-one extraction and unconditional assembly are provided in
+`RankOneExtractionFull.lean`:
+- `exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors`: given external
+  word eigenvectors and `IsNormal A`, places `vecMulVec φ ψ` in a word span of
+  the blocked tensor.
+- `wielandt_blocked_assembly_complete`: combines the rank-one extraction with the
+  conditional assembly to produce `∃ N, wordSpan A N = ⊤` unconditionally.
+- `wielandt_lemma2b`: the fully unconditional Lemma 2(b).
 -/
-theorem wielandt_lemma2b_status_documentation : True := trivial
+theorem wielandt_summary_documentation : True := trivial
 
 end MPSTensor
