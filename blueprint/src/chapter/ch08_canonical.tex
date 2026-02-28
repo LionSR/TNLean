@@ -393,7 +393,7 @@ removing it as an independent assumption.
     periodicity-removal step: under irreducibility and
     doubly-stochastic normalization, one can block until the
     transfer map becomes primitive.
-    This corresponds to arXiv:1606.00608, Appendix~A.
+    This corresponds to \cite[Appendix~A]{Cirac2016Density}.
 \end{remark}
 
 \begin{theorem}[Blocking yields a primitive transfer map]\label{thm:blocking_primitivity}
@@ -425,5 +425,105 @@ removing it as an independent assumption.
 
 \begin{remark}\label{rem:blocking_primitivity_appendixA}
     Theorem~\ref{thm:blocking_primitivity} is the ``periodicity removal by blocking''
-    step in arXiv:1606.00608, Appendix~A.
+    step in \cite[Appendix~A]{Cirac2016Density}.
+\end{remark}
+
+\section{Canonical form existence pipeline (\cite{Cirac2016Density})}%
+\label{sec:canonical_pipeline_1606}
+
+The module \texttt{MPS/CanonicalFormExistence1606.lean} assembles
+the sorry-free components of the canonical-form construction
+following \cite[\S2.3 and Appendix~A]{Cirac2016Density}.
+
+\begin{theorem}[Irreducible block decomposition (pipeline)]%
+    \label{thm:irred_decomp_pipeline}
+    \lean{MPSTensor.exists_irreducible_blockDecomp_pipeline1606}
+    \leanok
+    \uses{thm:irred_decomp}
+    Every MPS tensor $A$ is $\mathrm{SameMPV}_2$-equivalent
+    to a block-diagonal tensor $\bigoplus_{k=1}^r A_k$
+    with each block irreducible.
+    This re-exports Theorem~\ref{thm:irred_decomp}.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:irred_decomp}
+    Direct application of Theorem~\ref{thm:irred_decomp}.
+\end{proof}
+
+\begin{theorem}[CFII data for irreducible TP blocks]%
+    \label{thm:CFII_data}
+    \lean{MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleTensor}
+    \leanok
+    \uses{def:irreducible_tensor, thm:form_II, thm:samempv_unitary}
+    Let $A$ be an irreducible MPS tensor in the TP gauge
+    ($\sum_i (A^i)^\dagger A^i = \Id$) with $D > 0$.
+    Then there exist a unitary~$U$ and a diagonal positive
+    definite matrix~$\Lambda$ such that:
+    \begin{enumerate}
+        \item $B^i := U^\dagger A^i U$ is TP,
+        \item $\E_B(\Lambda) = \Lambda$,
+        \item $\Lambda$ is diagonal and positive definite,
+        \item $A$ and $B$ generate the same MPV family.
+    \end{enumerate}
+    This is the ``Canonical Form~II'' (CFII) step
+    of \cite[Appendix~A]{Cirac2016Density}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:form_II, thm:samempv_unitary}
+    Apply Theorem~\ref{thm:form_II} to obtain the unitary and
+    the diagonal PD fixed point.
+    Unitary conjugation preserves trace-preservation and the MPV
+    family (Theorem~\ref{thm:samempv_unitary}).
+\end{proof}
+
+\begin{theorem}[Pipeline handoff: block decomposition with conditional CFII]%
+    \label{thm:pipeline_handoff}
+    \lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII_handoff}
+    \leanok
+    \uses{thm:irred_decomp_pipeline, thm:CFII_data}
+    For any MPS tensor~$A$, there exist irreducible blocks
+    $(A_k)_{k=1}^r$ that are $\mathrm{SameMPV}_2$-equivalent to~$A$.
+    Moreover, for each block~$k$,
+    \emph{assuming} TP gauge and $D_k > 0$,
+    one obtains CFII data (unitary, diagonal PD fixed point,
+    MPV preservation).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:irred_decomp_pipeline, thm:CFII_data}
+    Combine Theorems~\ref{thm:irred_decomp_pipeline}
+    and~\ref{thm:CFII_data}.
+\end{proof}
+
+\begin{remark}[Missing steps for full canonical form existence]%
+    \label{rem:canonical_pipeline_gaps}
+    \notready
+    The pipeline in this section stops at the ``handoff'' point:
+    irreducible blocks with \emph{conditional} CFII data.
+    The remaining steps for a complete canonical form existence
+    theorem are:
+    \begin{enumerate}
+        \item \emph{TP-gauge existence:}
+              put each irreducible block into the TP gauge
+              (Perron--Frobenius / spectral rescaling).
+              This is not yet formalized.
+        \item \emph{CFII $\to$ doubly-stochastic glue:}
+              the CFII diagonal PD fixed point provides
+              a weight for the adjoint fixed-point peripheral
+              closure
+              (Lemma~\ref{lem:peripheral_closed_powers_irred_fp}),
+              but the current blocking-primitivity theorem
+              (Theorem~\ref{thm:blocking_primitivity})
+              assumes the stronger doubly-stochastic condition.
+              A generalization using the adjoint-fixed-point
+              version would close this gap.
+        \item \emph{Primitivity $\to$ normality/injectivity:}
+              primitive blocks must be shown to be normal
+              (and hence block-injective after further blocking).
+              This requires either Burnside's theorem or
+              the Choi-representation spanning argument
+              (see Remark~\ref{rem:prim_definition_mismatch}
+              in Chapter~\ref{ch:wielandt}).
+    \end{enumerate}
 \end{remark}

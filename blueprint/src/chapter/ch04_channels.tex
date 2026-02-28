@@ -687,6 +687,82 @@ then applied to transfer maps, which are Kraus maps by construction
     with Theorem~\ref{thm:peripheral_powers}.
 \end{proof}
 
+\subsection{Peripheral closure via adjoint fixed point}%
+\label{subsec:peripheral_closure_fixedpoint}
+
+The doubly-stochastic hypothesis in
+Lemma~\ref{lem:peripheral_closed_powers_irred_ds}
+(unital \emph{and} trace-preserving)
+can be weakened: trace preservation is only used to derive
+the Kadison--Schwarz equality at peripheral eigenvectors.
+The following result replaces the TP condition by the existence
+of a positive definite fixed point for the \emph{adjoint} Kraus map,
+matching the weighted-trace argument in
+\cite[Appendix~A]{Cirac2016Density}.
+
+\begin{lemma}[Peripheral closure via adjoint fixed point]%
+    \label{lem:peripheral_closed_powers_irred_fp}
+    \lean{MPSTensor.peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint}
+    \leanok
+    \uses{def:unital_kraus, def:kraus_adjoint_map, def:irreducible_cp,
+          thm:ks_peripheral, thm:psd_fp_pd_irred}
+    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is
+    unital ($\sum_i K_i K_i^\dagger = \Id$), and assume:
+    \begin{enumerate}
+        \item the adjoint Kraus map $E^*(X) = \sum_i K_i^\dagger X K_i$
+              has a positive definite fixed point $\rho > 0$, and
+        \item $E$ is irreducible.
+    \end{enumerate}
+    Then $\mathrm{peripheral}(E)$ is closed under powers:
+    if $\mu \in \mathrm{peripheral}(E)$ then $\mu^n \in \mathrm{peripheral}(E)$
+    for every $n \in \N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:psd_fp_pd_irred}
+    Let $E(X) = \mu X$ with $|\mu| = 1$.
+    The weighted Kadison--Schwarz equality (using the adjoint
+    fixed point $\rho$ in place of trace preservation)
+    shows $E(X^\dagger X) = E(X)^\dagger E(X)$.
+    Hence $X^\dagger X$ is a PSD fixed point, which is
+    positive definite by irreducibility
+    (Theorem~\ref{thm:psd_fp_pd_irred}).
+    So $X$ is invertible, and multiplicative-domain powers
+    give $E(X^n) = \mu^n X^n$, so $\mu^n$ is peripheral.
+\end{proof}
+
+\begin{theorem}[Roots of unity via adjoint fixed point]%
+    \label{thm:peripheral_roots_irred_fp}
+    \lean{MPSTensor.peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint}
+    \leanok
+    \uses{lem:peripheral_closed_powers_irred_fp, thm:peripheral_powers}
+    Under the same hypotheses as
+    Lemma~\ref{lem:peripheral_closed_powers_irred_fp},
+    every peripheral eigenvalue of $E$ is a root of unity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peripheral_closed_powers_irred_fp, thm:peripheral_powers}
+    Combine the closure-under-powers result
+    (Lemma~\ref{lem:peripheral_closed_powers_irred_fp})
+    with Theorem~\ref{thm:peripheral_powers}.
+\end{proof}
+
+\begin{remark}\label{rem:adjoint_fp_more_general}
+    Lemma~\ref{lem:peripheral_closed_powers_irred_fp}
+    and Theorem~\ref{thm:peripheral_roots_irred_fp}
+    strictly generalise
+    Lemma~\ref{lem:peripheral_closed_powers_irred_ds}
+    and Theorem~\ref{thm:peripheral_roots_of_unity_irred_ds}:
+    the doubly-stochastic (unital + TP) condition implies
+    $E^*(\Id) = \Id$, which is a positive definite fixed
+    point of the adjoint.
+    The adjoint-fixed-point formulation matches the
+    argument in \cite[Appendix~A]{Cirac2016Density},
+    which uses a faithful invariant state rather than
+    double stochasticity.
+\end{remark}
+
 \begin{definition}[Channel period]\label{def:channel_period}
     \lean{channelPeriod}
     \leanok

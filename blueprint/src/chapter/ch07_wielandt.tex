@@ -521,6 +521,117 @@ algebraic assembly part of this argument.
     $S_{(D-1)^2 + 1}(A) = \MN{D}$.
 \end{remark}
 
+\section{Blocked tensor and rectangular span}\label{sec:rectangular_span}
+
+The module \texttt{Wielandt/RectangularSpan.lean} extends the
+Lemma~2(b) infrastructure to the \emph{blocked tensor}~$A^{[L]}$
+and develops the ``rectangular span'' used to produce
+rank-one elements.
+
+\begin{theorem}[Blocking preserves normality]\label{thm:isNormal_blockTensor}
+    \lean{MPSTensor.isNormal_blockTensor}
+    \leanok
+    \uses{def:normal, def:blocked_tensor, def:word_span}
+    If $A$ is normal and $L > 0$, then the blocked tensor
+    $A^{[L]}$ is also normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:word_span_le_blockTensor}
+    If $S_N(A) = \MN{D}$ then
+    $S_{NL}(A) = \MN{D}$
+    (padding by repeated single-letter words).
+    By Lemma~\ref{lem:word_span_le_blockTensor},
+    $S_{NL}(A) \subseteq S_N(A^{[L]})$,
+    so $S_N(A^{[L]}) = \MN{D}$.
+\end{proof}
+
+\begin{lemma}[Chunking: word span embeds into blocked word span]%
+    \label{lem:word_span_le_blockTensor}
+    \lean{MPSTensor.wordSpan_le_wordSpan_blockTensor}
+    \leanok
+    \uses{def:word_span, def:blocked_tensor}
+    $S_{nL}(A) \subseteq S_n(A^{[L]})$ for all $n, L$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:word_span_mul}
+    Every length-$nL$ word in the original alphabet
+    can be split into $n$ consecutive chunks of length~$L$,
+    each of which is a single blocked Kraus operator.
+    By induction on~$n$, using the word span product lemma
+    (Lemma~\ref{lem:word_span_mul}).
+\end{proof}
+
+\begin{theorem}[Word eigenvector gives blocked eigenvector]%
+    \label{thm:blockTensor_single_eigenvector}
+    \lean{MPSTensor.blockTensor_single_eigenvector}
+    \leanok
+    \uses{def:blocked_tensor}
+    If $A^{w_0} \varphi = \mu \varphi$ for a word $w_0$
+    of length~$L$, then
+    $(A^{[L]})^{j_0} \varphi = \mu \varphi$,
+    where $j_0$ is the encoded blocked index corresponding
+    to $w_0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By definition, $(A^{[L]})^{j_0} = A^{w_0}$.
+\end{proof}
+
+\begin{theorem}[Wielandt blocked assembly]\label{thm:wielandt_blocked_assembly}
+    \lean{MPSTensor.wielandt_blocked_assembly}
+    \leanok
+    \uses{def:word_span, def:normal, def:blocked_tensor,
+          thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector,
+          thm:eigenvector_spreading, lem:blocking_transfer}
+    Suppose $A$ is normal and $L > 0$, and we have:
+    \begin{enumerate}
+        \item a word $w_0$ of length $L$ with eigenvector
+              $A^{w_0} \varphi = \mu \varphi$
+              ($\mu \neq 0$, $\varphi \neq 0$),
+        \item a word $\tau_0$ of length $L$ with transpose
+              eigenvector
+              $(A^{\tau_0})^T \psi = \nu \psi$
+              ($\nu \neq 0$, $\psi \neq 0$),
+        \item a rank-one element
+              $\varphi \psi^T \in S_m(A^{[L]})$
+              for some $m$.
+    \end{enumerate}
+    Then $S_{((D-1) + m + (D-1)) \cdot L}(A) = \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector,
+          thm:eigenvector_spreading, lem:blocking_transfer,
+          thm:lemma2b_assembly}
+    Apply the conditional Lemma~2(b) assembly
+    (Theorem~\ref{thm:lemma2b_assembly}) to the
+    blocked tensor $A^{[L]}$,
+    which is normal by Theorem~\ref{thm:isNormal_blockTensor}.
+    The eigenvector and transpose eigenvector are transferred
+    to single-index eigenvectors of $A^{[L]}$ by
+    Theorem~\ref{thm:blockTensor_single_eigenvector}.
+    Transfer back to the original tensor via
+    Lemma~\ref{lem:blocking_transfer}.
+\end{proof}
+
+\begin{remark}[Remaining gap for Lemma~2(b) via blocking]%
+    \label{rem:blocked_lemma2b_gap}
+    \notready
+    Theorem~\ref{thm:wielandt_blocked_assembly} reduces the full
+    Lemma~2(b) of~\cite{Sanz2010Quantum} to producing a single
+    rank-one element $\varphi \psi^T \in S_m(A^{[L]})$ for bounded~$m$.
+    This is the core linear-algebraic step:
+    the Fitting/Jordan analysis of high powers of the eigenvector
+    word products should produce this rank-one element via the
+    ``rectangular span'' developed in the same module.
+    The rectangular span API (monotonicity, dimension bounds,
+    Wielandt-type stabilisation) is formalized, but the final
+    rank-one extraction is not yet completed.
+\end{remark}
+
 \section{Primitivity and normality}
 
 \begin{theorem}[Primitive MPS tensors have nonzero word products]\label{thm:prim_nonzero_word}
@@ -554,3 +665,71 @@ algebraic assembly part of this argument.
     there exists a word~$w$ of length~$n$ with $A^w \neq 0$,
     so $\E_A^n(\rho)$ has a nonzero summand.
 \end{proof}
+
+\subsection{Primitivity-to-normality bridge}\label{subsec:prim_to_normal}
+
+The module \texttt{Wielandt/PrimitivityToNormal.lean} studies the
+relationship between the spectral-gap notion of primitivity
+(\texttt{IsPrimitiveMPS}: unique PSD fixed point with spectral gap)
+and normality.
+
+\begin{theorem}[Fixed-point uniqueness from spectral gap]%
+    \label{thm:fixedpoint_unique_spectral}
+    \lean{MPSTensor.IsPrimitiveMPS.fixedPoint_unique}
+    \leanok
+    If $A$ is a primitive MPS tensor
+    with PSD fixed point $\rho$,
+    then every fixed point $\sigma$ of $\E_A$ is proportional
+    to $\rho$: $\sigma = \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Set $\sigma' = \sigma - \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
+    Then $\tr(\sigma') = 0$ and $(E - P_\rho)(\sigma') = \sigma'$.
+    If $\sigma' \neq 0$, then $1$ is an eigenvalue of $E - P_\rho$,
+    contradicting the spectral gap
+    $\rho_{\mathrm{spec}}(E - P_\rho) < 1$.
+\end{proof}
+
+\begin{theorem}[Complement powers tend to zero]%
+    \label{thm:complement_pow_zero}
+    \lean{MPSTensor.IsPrimitiveMPS.complement_pow_tendsto_zero}
+    \leanok
+    If $A$ is a primitive MPS tensor with PSD fixed point $\rho$,
+    then $(\E_A - P_\rho)^n \to 0$ in operator norm.
+\end{theorem}
+
+\begin{proof}\leanok
+    The spectral radius of $\E_A - P_\rho$ is strictly less
+    than $1$ by the spectral-gap hypothesis.
+    Apply the general result that powers of an operator
+    with spectral radius $< 1$ tend to zero.
+\end{proof}
+
+\begin{remark}[Definition mismatch]\label{rem:prim_definition_mismatch}
+    \notready
+    The Lean definition \texttt{IsPrimitiveMPS} encodes only
+    the spectral-gap condition: there exists a nonzero PSD
+    fixed point $\rho$ and $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
+    The paper's notion of ``primitive''
+    (\cite[Proposition~3]{Sanz2010Quantum}) additionally requires
+    $\rho$ to be positive definite (full rank).
+    Without this, \texttt{IsPrimitiveMPS} alone does \emph{not}
+    imply irreducibility or normality.
+    A counterexample ($D = 2$, $\rho = \mathrm{diag}(1,0)$)
+    is documented in the Lean source.
+    To recover the paper's full equivalence
+    (primitive $\Leftrightarrow$ eventually full Kraus rank),
+    one should assume $\rho$ is positive definite or,
+    equivalently, work with \texttt{IsIrreducibleTensor}.
+    The remaining gaps are:
+    \begin{enumerate}
+        \item \texttt{IsPrimitiveMPS} $+$ $\rho$ positive definite
+              $\Rightarrow$ \texttt{IsIrreducibleTensor}
+              (requires formalising the restricted subchannel argument).
+        \item \texttt{IsIrreducibleTensor} $\Rightarrow$
+              \texttt{IsNormal}
+              (requires Burnside's theorem for matrix algebras,
+              not yet in Mathlib).
+    \end{enumerate}
+\end{remark}
