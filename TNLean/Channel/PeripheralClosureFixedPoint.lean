@@ -24,8 +24,6 @@ The key new input is the weighted Kadison–Schwarz equality
 `Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint` from `TNLean/Channel/Schwarz.lean`.
 -/
 
-set_option linter.unusedSectionVars false
-
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex
 
@@ -45,7 +43,8 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoin
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
     ∀ μ : ℂ,
       μ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) →
-        ∀ n : ℕ, μ ^ n ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) := by
+        ∀ n : ℕ,
+          μ ^ n ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) := by
   classical
   intro μ hμ n
   rcases hμ with ⟨hμ_eig, hμ_norm⟩

@@ -8,10 +8,6 @@ import TNLean.MPS.BlockingPeriodicity
 import TNLean.MPS.PeripheralToSpectralGap
 import TNLean.MPS.CanonicalFormFromPeripheralPrimitive
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-
 open scoped Matrix BigOperators ComplexOrder
 open Filter
 
@@ -93,7 +89,8 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
       (Λ : Matrix (Fin D) (Fin D) ℂ),
         let B : MPSTensor d D :=
-          fun i => (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ);
+          fun i =>
+            (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ);
         SameMPV₂ A B ∧
         Λ.PosDef ∧ Λ.IsDiag ∧
         (∑ i : Fin d, (B i)ᴴ * (B i) = 1) ∧
@@ -106,14 +103,13 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
   -- MPV is invariant under unitary conjugation.
   have hSame :
       SameMPV₂ A
-        (fun i => (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
+        (fun i =>
+          (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
     -- Existing lemma is stated with `star` rather than `ᴴ`.
-    simpa [Matrix.star_eq_conjTranspose] using
-      (sameMPV_conj_unitary (d := d) (D := D) A U)
+    simpa [Matrix.star_eq_conjTranspose] using sameMPV_conj_unitary (d := d) (D := D) A U
   -- Assemble the packaged data under the `let B := ...` binder.
   -- The goal is definitionally a conjunction about the explicit conjugated tensor.
-  -- We therefore `simpa` using the existing data.
-  simpa using (And.intro hSame (And.intro hΛ_pd (And.intro hΛ_diag (And.intro hTP_conj hΛ_fix))))
+  simpa using And.intro hSame (And.intro hΛ_pd (And.intro hΛ_diag (And.intro hTP_conj hΛ_fix)))
 
 
 /-!
@@ -128,7 +124,7 @@ We simply re-export it with a pipeline name.
 Current library version: assumes the Kraus family is doubly stochastic (unital + TP) and
 irreducible, and concludes that some physical blocking makes the transfer map primitive. -/
 theorem exists_blockTensor_isPrimitive_pipeline1606
-    {d D : ℕ} [NeZero D]
+    [NeZero D]
     (A : MPSTensor d D)
     (h_unital : KadisonSchwarz.IsUnitalKraus A)
     (h_tp : KadisonSchwarz.IsTPKraus A)
@@ -150,7 +146,7 @@ This is a direct re-export of the existing lemma.
 /-- **Pipeline step:** peripheral-spectrum primitivity of `transferMap A` implies the overlap
 `mpvOverlap A A N` tends to `1`. -/
 theorem overlap_tendsto_one_of_peripheralPrimitive_pipeline1606
-    {d D : ℕ} [NeZero D]
+    [NeZero D]
     (A : MPSTensor d D)
     (hInj : IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -169,7 +165,7 @@ Again, this is just a re-export with a pipeline name.
 /-- **Pipeline step:** build `IsCanonicalForm` from peripheral-spectrum primitivity hypotheses
 (on each block), together with injectivity + DS gauge + μ ordering + μ ≠ 0. -/
 theorem isCanonicalForm_of_peripheralPrimitive_pipeline1606
-    {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
     (hInj : ∀ k, IsInjective (A k))
     (hDS : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)

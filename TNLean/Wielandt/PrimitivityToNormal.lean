@@ -14,12 +14,6 @@ import TNLean.MPS.FixedPointInvariantProjection
 import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.CPPrimitive
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-set_option linter.style.setOption false in
-set_option maxHeartbeats 800000
-
 /-!
 # IsPrimitive → IsNormal Bridge
 
@@ -87,6 +81,8 @@ theorem IsPrimitiveMPS.trace_ne_zero
   exact hP.fixedPoint_ne_zero
     ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
 
+set_option maxHeartbeats 800000 in
+-- Spectral-radius argument via `le_iSup₂` and `AlgEquiv.spectrum_eq` needs extra elaboration.
 /-- **Any fixed point of E is proportional to ρ** (from spectral gap).
 
 If `E(σ) = σ`, then `σ = (tr(σ)/tr(ρ)) • ρ`.
@@ -136,7 +132,8 @@ theorem IsPrimitiveMPS.fixedPoint_unique
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) Ê) := by
     have h1 : (1 : ENNReal) = (‖(1 : ℂ)‖₊ : ENNReal) := by simp
     rw [h1]
-    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ _) _ (fun k _ => (‖k‖₊ : ENNReal)) 1 h1_in_spec
+    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ _) _
+      (fun k _ => (‖k‖₊ : ENNReal)) 1 h1_in_spec
   exact absurd (lt_of_le_of_lt h1_le hP.spectral_gap) (lt_irrefl _)
 
 /-- **(E − P_ρ)^n → 0** as continuous linear maps.
@@ -188,6 +185,7 @@ theorem posDef_of_isIrreducibleMap_of_isPrimitiveMPS
   posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr ρ
     hP.fixedPoint_psd hP.fixedPoint_ne_zero hP.fixedPoint_is_fixed
 
+omit [NeZero D] in
 /-- Bridge from irreducible tensor to irreducible map (re-export). -/
 theorem isIrreducibleMap_of_isIrreducibleTensor
     (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :

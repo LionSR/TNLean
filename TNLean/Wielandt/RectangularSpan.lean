@@ -9,11 +9,6 @@ import TNLean.Wielandt.RankOneElement
 import TNLean.Wielandt.RankOneProducts
 import Mathlib.Data.Fin.Tuple.Basic
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-set_option linter.style.emptyLine false
-
 /-!
 # Rectangular Span and Lemma 2(b) Assembly
 
@@ -114,7 +109,8 @@ private theorem evalWord_chunk (A : MPSTensor d D) (L n : ℕ)
   have hword_split : List.ofFn (σ ∘ Fin.cast hlen.symm) = List.ofFn σ₀ ++ List.ofFn σ' := by
     rw [hσ_reindex, List.ofFn_fin_append]
   -- Now evalWord A (List.ofFn σ) = evalWord A (List.ofFn (σ ∘ Fin.cast hlen.symm))
-  have heval_eq : evalWord A (List.ofFn σ) = evalWord A (List.ofFn (σ ∘ Fin.cast hlen.symm)) := by
+  have heval_eq :
+      evalWord A (List.ofFn σ) = evalWord A (List.ofFn (σ ∘ Fin.cast hlen.symm)) := by
     congr 1
     apply List.ext_getElem
     · simp [hlen]
@@ -383,7 +379,8 @@ theorem wielandt_blocked_assembly [NeZero D]
   have hNormalB : IsNormal B := isNormal_blockTensor A L hL hNormal
   -- Apply the conditional assembly to B
   have hBtop : wordSpan B ((D - 1) + (m_blocked + (D - 1))) = ⊤ :=
-    wielandt_lemma2b_conditional B hNormalB i₀ μ hμ φ hφ heigφ_B i₁ ν hν ψ hψ heigψ_B hRankOne
+    wielandt_lemma2b_conditional B hNormalB i₀ μ hμ φ hφ heigφ_B i₁ ν hν ψ hψ
+      heigψ_B hRankOne
   -- Transfer back to A
   exact wordSpan_eq_top_of_blockTensor_wordSpan_eq_top A L
     ((D - 1) + (m_blocked + (D - 1))) hBtop
