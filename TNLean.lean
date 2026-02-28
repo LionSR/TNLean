@@ -82,6 +82,14 @@ import TNLean.Wielandt.RankOneConstruction
 import TNLean.Wielandt.RankOneProducts
 import TNLean.Wielandt.WielandtBound
 import TNLean.Wielandt.PrimitivityNormal
+import TNLean.Wielandt.RankOneElement
+import TNLean.Wielandt.RankOneExtraction
+import TNLean.Wielandt.RankOneSpanGrowth
+import TNLean.Wielandt.RankOneManufacture
+import TNLean.Wielandt.RectangularRanges
+import TNLean.Wielandt.RectangularSpan
+import TNLean.Wielandt.RankOneBoundedWord
+import TNLean.Wielandt.RankOneExtractionFull
 
 -- NOTE: TNLean.PositiveMapSpectral, TNLean.TransferSpectral, and
 -- TNLean.PiAlgebraExtension are backwards-compatible re-export hubs kept for

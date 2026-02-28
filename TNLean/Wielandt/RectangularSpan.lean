@@ -398,19 +398,19 @@ theorem wielandt_blocked_assembly [NeZero D]
 6. `wielandt_lemma2b_conditional` — full assembly from eigenvectors + rank-one
 7. `wielandt_blocked_assembly` — full assembly at the blocked level
 
-### Remaining gap:
-Produce `vecMulVec φ ψ ∈ wordSpan (blockTensor A L) m_blocked` for bounded `m_blocked`.
+### Gap closed (2026-03-01):
+The rank-one extraction is provided by `exists_rankOne_mem_wordSpan_blockTensor`
+in `RankOneExtractionFull.lean`, which proves:
+- Under `IsNormal A` with normality witness `N₀ ≥ 1`, there exist eigenvectors
+  `φ`, `ψ` and a word-span level `m_blocked = D + N₀ + D` such that
+  `vecMulVec φ ψ ∈ wordSpan (blockTensor A N₀) m_blocked`.
+- The key insight: since `wordSpan A N₀ = ⊤` and `tr(I) ≠ 0`, there exist
+  length-`N₀` words with nonzero trace (hence nonzero eigenvalues), providing
+  eigenvectors on both the column and row (transpose) sides.
 
-This is the core linear-algebraic step: using the Fitting decomposition, show that
-`P * M * Q` (where P,Q are high powers of word products that kill the nilpotent blocks)
-eventually produces a rank-one element as M ranges over word products.
-
-### How to close:
-The missing lemma needs: for `P = (evalWord B σ₀)^D` and `Q = (evalWord B τ₀)^D`,
-the set `{P * M * Q : M ∈ wordSpan B n}` contains a rank-one element for n ≥ D-1.
-Bound: `m_blocked ≤ D + (D-1) + D = 3D - 1`, giving total `wordSpan A N = ⊤` for
-`N ≤ (D - 1 + (3D - 1) + (D - 1)) * D² = (5D - 3) * D²`.
+The unconditional assembly is `wielandt_lemma2b` in `RankOneExtractionFull.lean`,
+which combines the rank-one extraction with `wielandt_blocked_assembly`.
 -/
-theorem wielandt_remaining_gap_documentation : True := trivial
+theorem wielandt_lemma2b_status_documentation : True := trivial
 
 end MPSTensor
