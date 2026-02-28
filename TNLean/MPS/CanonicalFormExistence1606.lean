@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalFormReduction
 import TNLean.MPS.IrreducibleFormII
-import TNLean.MPS.BlockingPeriodicity
+import TNLean.MPS.BlockingPeriodicityCFII2
 import TNLean.MPS.PeripheralToSpectralGap
 import TNLean.MPS.CanonicalFormFromPeripheralPrimitive
 
@@ -115,26 +115,23 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
 /-!
 ## (3) Periodicity removal by blocking (1606.00608 Appendix A)
 
-At present the library lemma is formulated for **doubly stochastic** Kraus families.
-We simply re-export it with a pipeline name.
+This is the Appendix-A periodicity-removal step in the **CFII** setting.
 -/
 
-/-- **Pipeline step (1606.00608 Appendix A): periodicity removal by blocking.**
+/-- **Pipeline step (1606.00608 Appendix A): periodicity removal by blocking (CFII).**
 
-Current library version: assumes the Kraus family is doubly stochastic (unital + TP) and
-irreducible, and concludes that some physical blocking makes the transfer map primitive. -/
+If `A` is trace-preserving and irreducible (tensor sense), then some physical blocking makes the
+transfer map primitive. -/
 theorem exists_blockTensor_isPrimitive_pipeline1606
     [NeZero D]
     (A : MPSTensor d D)
-    (h_unital : KadisonSchwarz.IsUnitalKraus A)
-    (h_tp : KadisonSchwarz.IsTPKraus A)
-    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
     ∃ p : ℕ, 0 < p ∧
       _root_.IsPrimitive
         (transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p)) := by
   simpa using
-    (exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic
-      (A := A) h_unital h_tp hIrr)
+    (exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII (A := A) hTP hIrr)
 
 
 /-!
