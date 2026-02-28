@@ -500,25 +500,18 @@ algebraic assembly part of this argument.
 \end{proof}
 
 \begin{remark}[Status of Lemma~2(b)]\label{rem:lemma2b_status}
-    \notready
     Theorem~\ref{thm:lemma2b_assembly} establishes the
     \emph{assembly} part of Lemma~2(b)
     of~\cite{Sanz2010Quantum}:
     rank-one operators plus fixed-length vector spanning
     imply fixed-length matrix spanning.
-    What remains is the \emph{rank-one construction step}:
-    showing that the Fitting/Jordan analysis of the eigenvalue
-    word $A^{w_0}$
-    (from Theorem~\ref{thm:eigenvalue_extraction})
-    produces the required rank-one operators
-    $\ketbra{\varphi}{e_j} \in S_m(A)$.
-    Once this is done, combining with the eigenvector
-    spreading (Theorem~\ref{thm:eigenvector_spreading})
-    and eigenvector padding
-    (Lemma~\ref{lem:eigenvector_padding})
-    will yield the full Lemma~2(b) and hence the sharp
-    Wielandt bound
-    $S_{(D-1)^2 + 1}(A) = \MN{D}$.
+    The remaining \emph{rank-one construction step}
+    is completed in \S\ref{sec:rectangular_span}:
+    Theorem~\ref{thm:rankone_extraction_blockTensor}
+    produces the required rank-one element via the
+    Fitting decomposition, and
+    Theorem~\ref{thm:wielandt_lemma2b} gives the fully
+    unconditional Lemma~2(b).
 \end{remark}
 
 \section{Blocked tensor and rectangular span}\label{sec:rectangular_span}
@@ -617,19 +610,83 @@ rank-one elements.
     Lemma~\ref{lem:blocking_transfer}.
 \end{proof}
 
-\begin{remark}[Remaining gap for Lemma~2(b) via blocking]%
+\begin{theorem}[Rank-one extraction for blocked tensor]%
+    \label{thm:rankone_extraction_blockTensor}
+    \lean{MPSTensor.exists_rankOne_mem_wordSpan_blockTensor}
+    \leanok
+    \uses{def:word_span, def:normal, def:blocked_tensor,
+          thm:isNormal_blockTensor, thm:nonzero_trace_word,
+          thm:eigenvector_from_trace}
+    Suppose $A$ is normal and $N_0 \ge 1$ with
+    $S_{N_0}(A) = \MN{D}$.
+    Then there exist words $\sigma_0, \tau_0$ of length~$N_0$,
+    nonzero vectors $\varphi, \psi$, nonzero scalars $\mu, \nu$,
+    and $m \in \N$ such that:
+    \begin{enumerate}
+        \item $A^{\sigma_0} \varphi = \mu \varphi$,
+        \item $(A^{\tau_0})^T \psi = \nu \psi$,
+        \item $\varphi \psi^T \in S_m(A^{[N_0]})$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:isNormal_blockTensor, thm:nonzero_trace_word,
+          thm:eigenvector_from_trace}
+    Set $B = A^{[N_0]}$.
+    Since $S_{N_0}(A) = \MN{D}$,
+    a nonzero-trace word exists
+    (Theorem~\ref{thm:nonzero_trace_word}),
+    yielding a column eigenvector $\varphi$
+    via Theorem~\ref{thm:eigenvector_from_trace}.
+    A row eigenvector $\psi$ is obtained analogously
+    from the transpose tensor.
+    Set $P = (B^{j_0})^D$ and $Q = (B^{k_0})^D$,
+    where $j_0, k_0$ encode $\sigma_0, \tau_0$
+    in the blocked alphabet.
+    The Fitting decomposition ensures
+    $\varphi \in \operatorname{range}(P)$
+    and $\psi \in \operatorname{range}(Q^T)$,
+    so $\varphi \psi^T \in
+    \operatorname{range}(\mathrm{mulLeft}(P)
+    \circ \mathrm{mulRight}(Q))
+    \subseteq S_{2D}(B)$.
+\end{proof}
+
+\begin{theorem}[Wielandt Lemma~2(b)]\label{thm:wielandt_lemma2b}
+    \lean{MPSTensor.wielandt_lemma2b}
+    \leanok
+    \uses{def:word_span, def:normal,
+          thm:rankone_extraction_blockTensor,
+          thm:wielandt_blocked_assembly}
+    If $A$ is a normal MPS tensor with bond dimension~$D$,
+    then there exists $N$ such that $S_N(A) = \MN{D}$.
+    This is \cite[Lemma~2(b)]{Sanz2010Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:rankone_extraction_blockTensor,
+          thm:wielandt_blocked_assembly}
+    By normality, some $N_0$ has $S_{N_0}(A) = \MN{D}$.
+    If $N_0 = 0$ we are done.
+    Otherwise, Theorem~\ref{thm:rankone_extraction_blockTensor}
+    produces eigenvectors and a rank-one element
+    $\varphi \psi^T \in S_m(A^{[N_0]})$.
+    Theorem~\ref{thm:wielandt_blocked_assembly} then gives
+    $S_{((D-1) + m + (D-1)) \cdot N_0}(A) = \MN{D}$.
+\end{proof}
+
+\begin{remark}[Gap closed for Lemma~2(b) via blocking]%
     \label{rem:blocked_lemma2b_gap}
-    \notready
-    Theorem~\ref{thm:wielandt_blocked_assembly} reduces the full
-    Lemma~2(b) of~\cite{Sanz2010Quantum} to producing a single
-    rank-one element $\varphi \psi^T \in S_m(A^{[L]})$ for bounded~$m$.
-    This is the core linear-algebraic step:
-    the Fitting/Jordan analysis of high powers of the eigenvector
-    word products should produce this rank-one element via the
-    ``rectangular span'' developed in the same module.
-    The rectangular span API (monotonicity, dimension bounds,
-    Wielandt-type stabilisation) is formalized, but the final
-    rank-one extraction is not yet completed.
+    The rank-one extraction gap noted in earlier versions of this
+    blueprint has been closed:
+    Theorem~\ref{thm:rankone_extraction_blockTensor} produces the
+    required rank-one element, and
+    Theorem~\ref{thm:wielandt_lemma2b} gives the fully unconditional
+    Lemma~2(b).
+    The formalization is in
+    \texttt{Wielandt/RankOneExtractionFull.lean}.
 \end{remark}
 
 \section{Primitivity and normality}
