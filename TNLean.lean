@@ -15,6 +15,7 @@ import TNLean.Channel.Irreducible
 import TNLean.Channel.Schwarz
 import TNLean.Channel.Primitive
 import TNLean.Channel.PeripheralSpectrum
+import TNLean.Channel.ConjugationSpectrum
 import TNLean.Channel.PeripheralPowers
 import TNLean.Channel.PeriodicityRemoval
 
