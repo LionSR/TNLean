@@ -4,6 +4,7 @@ import TNLean.Algebra.BlockPermutation
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.ScalarPowerSumIdentity
+import TNLean.Algebra.BurnsideMatrix
 
 -- Layer 1: Quantum channels (general theory)
 import TNLean.Channel.PositiveMap
@@ -68,6 +69,7 @@ import TNLean.MPS.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalFormReduction
 import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.IrreducibleAdjoint
+import TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint
 import TNLean.MPS.BlockPermutationMPS
 import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete
