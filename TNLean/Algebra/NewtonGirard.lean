@@ -43,15 +43,6 @@ the recursion by strong induction on the coefficient index, using the fact that
 `(m+1 : R) ≠ 0` in characteristic zero rings for cancellation.
 -/
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-set_option linter.unusedSimpArgs false
-set_option linter.style.show false
-set_option linter.unusedFintypeInType false
-set_option linter.style.setOption false
-set_option linter.style.maxHeartbeats false
-set_option linter.unusedDecidableInType false
 
 open scoped Matrix BigOperators
 open Polynomial Finset Matrix
@@ -63,7 +54,6 @@ variable {n : Type*} [DecidableEq n] [Fintype n]
 
 /-! ### Auxiliary lemmas for the Newton-Girard proof -/
 
-set_option maxHeartbeats 1600000 in
 private lemma derivative_det_eq_sum (A : Matrix n n R[X]) :
     derivative A.det =
     ∑ j : n, (A.updateCol j (fun k => derivative (A k j))).det := by
@@ -100,14 +90,14 @@ private lemma det_updateCol_eq_adjugate_mulVec (A : Matrix n n R[X]) (j : n) (b 
     (A.updateCol j b).det = ∑ k : n, A.adjugate j k * b k := by
   rw [← cramer_apply, cramer_eq_adjugate_mulVec]; simp [mulVec, dotProduct]
 
+omit [Fintype n] in
 private lemma derivative_entry_F (M : Matrix n n R) (i j : n) :
     derivative ((1 - (X : R[X]) • M.map C) i j) = -C (M i j) := by
-  simp only [sub_apply, one_apply, smul_apply, smul_eq_mul, map_apply]
-  split_ifs with h
-  · subst h; simp [derivative_sub, derivative_one, derivative_mul, derivative_X, derivative_C]
-  · simp [derivative_sub, derivative_mul, derivative_X, derivative_C]
+  by_cases h : i = j
+  · subst h
+    simp [derivative_mul]
+  · simp [h, derivative_mul]
 
-set_option maxHeartbeats 800000 in
 private lemma jacobi_formula_charpolyRev (M : Matrix n n R) :
     derivative (M.charpolyRev) =
     -Matrix.trace (M.map C * (1 - (X : R[X]) • M.map C).adjugate) := by
@@ -131,6 +121,7 @@ private lemma map_C_pow (M : Matrix n n R) (l : ℕ) :
   | zero => simp [Matrix.map_one]
   | succ l ih => simp [pow_succ, ih, Matrix.map_mul]
 
+omit [DecidableEq n] in
 private lemma trace_map_C (M : Matrix n n R) :
     Matrix.trace (M.map (C : R → R[X])) = C (Matrix.trace M) := by
   simp [Matrix.trace, map_apply, map_sum]
@@ -138,7 +129,6 @@ private lemma trace_map_C (M : Matrix n n R) :
 private noncomputable def T_trace (M : Matrix n n R) (l : ℕ) : R[X] :=
   Matrix.trace ((M.map C) ^ l * (1 - (X : R[X]) • M.map C).adjugate)
 
-set_option maxHeartbeats 3200000 in
 private lemma T_trace_recursion (M : Matrix n n R) (l : ℕ) :
     T_trace M l - X * T_trace M (l + 1) =
     M.charpolyRev * C (Matrix.trace (M ^ l)) := by
@@ -147,8 +137,15 @@ private lemma T_trace_recursion (M : Matrix n n R) (l : ℕ) :
   set Adj := F.adjugate
   have hadj : Adj * F = F.det • 1 := adjugate_mul F
   have h_mul : (M.map C) ^ l * Adj * F = F.det • (M.map C) ^ l := by
-    rw [Matrix.mul_assoc, hadj]; ext i j
-    simp [Matrix.smul_apply, Matrix.mul_apply, smul_eq_mul, Matrix.one_apply]; ring
+    calc
+      (M.map C) ^ l * Adj * F = (M.map C) ^ l * (Adj * F) := by
+        simp [Matrix.mul_assoc]
+      _ = (M.map C) ^ l * (F.det • (1 : Matrix n n R[X])) := by
+        simp [hadj]
+      _ = F.det • ((M.map C) ^ l * (1 : Matrix n n R[X])) := by
+        simp
+      _ = F.det • (M.map C) ^ l := by
+        simp
   have h_rhs : Matrix.trace (F.det • (M.map C) ^ l) =
       F.det * C (Matrix.trace (M ^ l)) := by
     rw [Matrix.trace_smul, smul_eq_mul, map_C_pow, trace_map_C]
@@ -170,7 +167,6 @@ private lemma T_trace_recursion (M : Matrix n n R) (l : ℕ) :
   rw [h_lhs, h_rhs] at h4
   exact h4
 
-set_option maxHeartbeats 1600000 in
 private lemma T_trace_coeff (M : Matrix n n R) (l m : ℕ) :
     (T_trace M (l + 1)).coeff m =
     ∑ j ∈ range (m + 1), M.charpolyRev.coeff j * Matrix.trace (M ^ (l + m + 1 - j)) := by
@@ -207,7 +203,6 @@ private lemma T_trace_coeff (M : Matrix n n R) (l m : ℕ) :
 
 /-! ### Newton-Girard Recursion -/
 
-set_option maxHeartbeats 800000 in
 /-- **Newton-Girard trace recursion** for `charpolyRev` coefficients.
 
 For an `n × n` matrix `M`, writing `P(X) = charpolyRev(M) = det(1 - X·M)` and
