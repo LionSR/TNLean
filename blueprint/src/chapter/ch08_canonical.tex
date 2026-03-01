@@ -378,14 +378,14 @@ For Burnside-style arguments it is more natural to work with invariant
     $\operatorname{End}_{\C}(\C^D)$.
 \end{proof}
 
-\begin{corollary}[Irreducible action implies eventual cumulative spanning]%
-    \label{cor:irreducible_action_cumulative_span}
+\begin{theorem}[Irreducible action implies eventual cumulative spanning]%
+    \label{thm:irreducible_action_cumulative_span}
     \lean{MPSTensor.exists_cumulativeSpan_eq_top_of_isIrreducibleAction}\leanok
     \uses{def:cumulative_span, def:irreducible_action}
     Assume $D > 0$.
     If $A$ acts irreducibly on $\C^D$, then there exists $N$ such that
     $T_N(A) = \MN{D}$.
-\end{corollary}
+\end{theorem}
 
 \begin{proof}\leanok\uses{thm:burnside_matrix}
     By Theorem~\ref{thm:burnside_matrix}, $\operatorname{algSpan}(A) = \MN{D}$.
@@ -616,7 +616,7 @@ following \cite[\S2.3 and Appendix~A]{Cirac2016Density}.
               (Theorem~\ref{thm:irreducible_tensor_to_action}),
               and irreducible action implies eventual \emph{cumulative} spanning
               $\exists N,\ T_N(A) = \MN{D}$
-              (Corollary~\ref{cor:irreducible_action_cumulative_span}).
+              (Theorem~\ref{thm:irreducible_action_cumulative_span}).
               What is still missing is an argument upgrading
               $\exists N,\ T_N(A) = \MN{D}$ to normality, i.e.
               $\exists L,\ S_L(A) = \MN{D}$.
