@@ -1,6 +1,6 @@
 # TNLean
 
-A formal verification of the **Fundamental Theorem of Matrix Product States** and the **Quantum Wielandt Bound** in Lean 4, using [Mathlib](https://github.com/leanprover-community/mathlib4) v4.27.0.
+A formal verification of the **Fundamental Theorem of Matrix Product States** and the **Quantum Wielandt Bound** in Lean 4, using [Mathlib](https://github.com/leanprover-community/mathlib4) v4.28.0.
 
 ## Overview
 
@@ -65,7 +65,7 @@ curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf 
 lake build
 ```
 
-Requires Lean 4 v4.27.0 (managed via `lean-toolchain`).
+Requires Lean 4 v4.28.0 (managed via `lean-toolchain`).
 
 ## References
 

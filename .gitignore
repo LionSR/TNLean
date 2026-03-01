@@ -1,6 +1,9 @@
 # Lake build artifacts
 /.lake/
 
+# Local build output (LaTeX artifacts, PDFs, etc.)
+/build/
+
 # LaTeX compilation artifacts
 *.aux
 *.log
