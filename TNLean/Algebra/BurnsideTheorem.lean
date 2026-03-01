@@ -78,12 +78,12 @@ theorem burnside_matrix [NeZero D]
     algSpan (d := d) (D := D) A = ⊤ := by
   classical
   -- `V = ℂ^D`
-  let V : Type := Fin D → ℂ
-  -- matrices as endomorphisms of `V`
+  let V := Fin D → ℂ
+  -- Matrices as endomorphisms of `V`.
   let φ : Matrix (Fin D) (Fin D) ℂ →ₐ[ℂ] Module.End ℂ V :=
     (Matrix.toLinAlgEquiv' :
         Matrix (Fin D) (Fin D) ℂ ≃ₐ[ℂ] (V →ₗ[ℂ] V)).toAlgHom
-  -- image of the generated matrix algebra inside `End(V)`
+  -- Image of the generated matrix algebra inside `End(V)`.
   let R : Subalgebra ℂ (Module.End ℂ V) := (algSpan A).map φ
   -- `End(V)` acts on `V` by evaluation, and we restrict this action to the subalgebra `R`.
   letI : Module (Module.End ℂ V) V := Module.End.applyModule
@@ -105,22 +105,21 @@ theorem burnside_matrix [NeZero D]
     intro r c v
     -- `r` is `ℂ`-linear, hence `r (c • v) = c • r v`.
     simp [Subalgebra.smul_def, Module.End.smul_def]
+  have hφA_mem (i : Fin d) : φ (A i) ∈ R := by
+    refine (Subalgebra.mem_map).2 ?_
+    exact ⟨A i, algSpan_mem A i, rfl⟩
   -- Step 1: irreducibility ⇒ `V` is a simple `R`-module.
-  have hSimple : IsSimpleModule R V := by
+  haveI : IsSimpleModule R V := by
     refine (isSimpleModule_iff R V).2 ?_
-    classical
     refine IsSimpleOrder.mk (α := Submodule R V) ?_
     intro W
     let Wℂ : Submodule ℂ V := Submodule.restrictScalars ℂ W
     have hWInv : IsInvariantSubmodule A Wℂ := by
       intro i v hv
-      have hAi : φ (A i) ∈ R := by
-        refine (Subalgebra.mem_map).2 ?_
-        exact ⟨A i, algSpan_mem A i, rfl⟩
       have hv' : v ∈ W := by
         simpa [Wℂ] using hv
-      have hsmul : (⟨φ (A i), hAi⟩ : R) • v ∈ W :=
-        W.smul_mem ⟨φ (A i), hAi⟩ hv'
+      have hsmul : (⟨φ (A i), hφA_mem i⟩ : R) • v ∈ W :=
+        W.smul_mem ⟨φ (A i), hφA_mem i⟩ hv'
       have : (A i).mulVec v ∈ W := by
         simpa [φ, Subalgebra.smul_def, Module.End.smul_def, Matrix.toLinAlgEquiv'_apply] using hsmul
       simpa [Wℂ] using this
@@ -129,8 +128,6 @@ theorem burnside_matrix [NeZero D]
       exact (Submodule.restrictScalars_eq_bot_iff (S := ℂ) (R := R) (M := V)).1 hbot
     · right
       exact (Submodule.restrictScalars_eq_top_iff (S := ℂ) (R := R) (M := V)).1 htop
-  -- Make simplicity available as an instance.
-  letI : IsSimpleModule R V := hSimple
   -- Step 2: Schur (alg closed) ⇒ commuting endomorphisms are scalars.
   have hSchur : Function.Bijective (algebraMap ℂ (Module.End R V)) := by
     simpa using
@@ -139,7 +136,6 @@ theorem burnside_matrix [NeZero D]
   -- Step 3: Jacobson density ⇒ surjectivity of the action map.
   -- First show `V` is finite over its commutant `Module.End R V`.
   haveI : Module.Finite (Module.End R V) V := by
-    classical
     -- `V` is finite as an `ℂ`-module (finite basis), and Schur gives a surjective ring map
     -- `ℂ → Module.End R V`. Transport finiteness along this surjection.
     haveI : Module.Finite ℂ V := Module.Finite.of_basis (Pi.basisFun ℂ (Fin D))
@@ -160,8 +156,7 @@ theorem burnside_matrix [NeZero D]
     refine ⟨?_⟩
     intro r f v
     -- `f` is `R`-linear, so `f (r • v) = r • f v`.
-    -- Rearranged to match the `SMulCommClass` convention.
-    simp [Module.End.smul_def]
+    simp [Module.End.smul_def, f.map_smul r v]
   have hJD : Function.Surjective (Module.toModuleEnd (Module.End R V) V) :=
     Module.Finite.toModuleEnd_moduleEnd_surjective (R := R) (M := V)
   -- Conclude `R = ⊤` by showing every `ℂ`-linear endomorphism lies in `R`.
@@ -171,7 +166,9 @@ theorem burnside_matrix [NeZero D]
     -- Regard `f` as `Module.End R V`-linear using surjectivity of `algebraMap`.
     let g : Module.End (Module.End R V) V :=
       { toFun := fun v => f v
-        map_add' := by simp
+        map_add' := by
+          intro v w
+          exact f.map_add v w
         map_smul' := by
           intro d v
           rcases hAlgSurj d with ⟨c, rfl⟩
@@ -182,25 +179,19 @@ theorem burnside_matrix [NeZero D]
       -- Use `LinearMap.ext` to avoid `ext` picking a basis lemma for `Fin D → ℂ`.
       apply LinearMap.ext
       intro v
-      ext x
       have hv : (Module.toModuleEnd (Module.End R V) V r) v = g v :=
         congrArg (fun h => h v) hr
-      have hx : ((Module.toModuleEnd (Module.End R V) V r) v) x = (g v) x :=
-        congrArg (fun w => w x) hv
+      -- Unfolding `Module.toModuleEnd` turns the left-hand side into the `R`-action on `V`.
       simpa [g, Module.toModuleEnd_apply, DistribSMul.toLinearMap_apply,
-        Subalgebra.smul_def, Module.End.smul_def] using hx
+        Subalgebra.smul_def, Module.End.smul_def] using hv
     simpa [hrf] using r.2
   -- Transport back along `Matrix.toLinAlgEquiv'`.
   have hcomap : Subalgebra.comap φ R = algSpan A := by
-    dsimp [R]
-    exact Subalgebra.comap_map_eq_self_of_injective (f := φ) φ.injective (algSpan A)
-  have : algSpan A = ⊤ := by
-    calc
-      algSpan A = Subalgebra.comap φ R := hcomap.symm
-      _ = Subalgebra.comap φ ⊤ := by simp [hRtop]
-      _ = ⊤ := by
-        ext x
-        simp [Subalgebra.comap]
-  exact this
+    simpa [R] using
+      (Subalgebra.comap_map_eq_self_of_injective (f := φ) φ.injective (algSpan A))
+  calc
+    algSpan A = Subalgebra.comap φ R := hcomap.symm
+    _ = Subalgebra.comap φ ⊤ := by simp [hRtop]
+    _ = ⊤ := Algebra.comap_top (f := φ)
 
 end MPSTensor

@@ -20,30 +20,6 @@ This produces `HasInvariantProj A`, contradicting `IsIrreducibleTensor A`.
 -/
 
 open scoped Matrix BigOperators
-open Matrix
-
-namespace Matrix
-
-variable {𝕜 n : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n]
-
-/-- `Matrix.toEuclideanLin` respects matrix multiplication (composition of linear maps). -/
-lemma toEuclideanLin_mul (M N : Matrix n n 𝕜) :
-    Matrix.toEuclideanLin (M * N) = (Matrix.toEuclideanLin M).comp (Matrix.toEuclideanLin N) := by
-  classical
-  apply LinearMap.ext
-  intro x
-  simp [Matrix.toEuclideanLin, Matrix.toLin'_mul, LinearMap.comp_apply]
-
-/-- `Matrix.toEuclideanLin` sends the identity matrix to `LinearMap.id`. -/
-lemma toEuclideanLin_one :
-    Matrix.toEuclideanLin (1 : Matrix n n 𝕜) =
-      (LinearMap.id : EuclideanSpace 𝕜 n →ₗ[𝕜] EuclideanSpace 𝕜 n) := by
-  classical
-  apply LinearMap.ext
-  intro x
-  simp [Matrix.toEuclideanLin_apply]
-
-end Matrix
 
 namespace MPSTensor
 
@@ -92,7 +68,7 @@ theorem isIrreducibleAction_of_isIrreducibleTensor
     have huW' : (A i).mulVec u ∈ W := hW i u huW
     have : e.toLinearMap ((A i).mulVec u) ∈ W' :=
       Submodule.mem_map_of_mem (f := e.toLinearMap) huW'
-    simpa [W', Matrix.toEuclideanLin_toLp, e] using this
+    simpa [W', Matrix.toEuclideanLin, e] using this
   -- The matrix `P` is Hermitian.
   have hHerm : P.IsHermitian := by
     have hSymm : (Matrix.toEuclideanLin P).IsSymmetric := by
@@ -103,7 +79,7 @@ theorem isIrreducibleAction_of_isIrreducibleTensor
     apply (Matrix.toEuclideanLin : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] E →ₗ[ℂ] E).injective
     apply LinearMap.ext
     intro x
-    simp [Matrix.toEuclideanLin_mul, P, p', LinearMap.comp_apply]
+    simp [Matrix.toEuclideanLin, P, p']
     have hx : W'.starProjection x ∈ W' := by
       simp
     have : W'.starProjection (W'.starProjection x) = W'.starProjection x :=
@@ -127,7 +103,7 @@ theorem isIrreducibleAction_of_isIrreducibleTensor
     have hp1 : p'.toLinearMap = (LinearMap.id : E →ₗ[ℂ] E) := by
       have : Matrix.toEuclideanLin P = Matrix.toEuclideanLin (1 : Matrix (Fin D) (Fin D) ℂ) := by
         simp [hP1]
-      simpa [P, Matrix.toEuclideanLin_one] using this
+      simpa [Matrix.toEuclideanLin, P] using this
     have : W' = (⊤ : Submodule ℂ E) := by
       have : (p' : E →L[ℂ] E).range = (⊤ : Submodule ℂ E) := by
         -- `p'` is the identity map.
@@ -145,8 +121,8 @@ theorem isIrreducibleAction_of_isIrreducibleTensor
     apply (Matrix.toEuclideanLin : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] E →ₗ[ℂ] E).injective
     apply LinearMap.ext
     intro x
-    -- Expand the triple product using `toEuclideanLin_mul`.
-    simp [Matrix.toEuclideanLin_mul, LinearMap.comp_apply]
+    -- Expand the triple product using the `Matrix.toLpLin` API.
+    simp [Matrix.toEuclideanLin]
     -- Show the intermediate vector lies in `W'`.
     have hP_lin : Matrix.toEuclideanLin P = p'.toLinearMap := by
       simp [P]
@@ -168,7 +144,7 @@ theorem isIrreducibleAction_of_isIrreducibleTensor
           (v := (Matrix.toEuclideanLin (A i)) ((Matrix.toEuclideanLin P) x))).2 hz
       simpa [P, p'] using this
     -- Now `toEuclideanLin (1 - P)` kills vectors in `W'`.
-    simp [Matrix.toEuclideanLin_one, hfix]
+    simp [Matrix.toEuclideanLin, hfix]
   -- Build `HasInvariantProj A`, contradicting `IsIrreducibleTensor A`.
   have : HasInvariantProj (d := d) (D := D) A :=
     ⟨P, horth, hP_ne0, hP_ne1, hPinv⟩
