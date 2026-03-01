@@ -102,7 +102,7 @@ import TNLean.Wielandt.RectangularSpan
 import TNLean.Wielandt.RankOneBoundedWord
 import TNLean.Wielandt.RankOneExtractionFull
 import TNLean.Wielandt.CumulativeToWordSpan
-import TNLean.Wielandt.PrimitiveImpliesIrreducible
+import TNLean.Wielandt.QuantumWielandt
 
 -- NOTE: TNLean.PositiveMapSpectral, TNLean.TransferSpectral, and
 -- TNLean.PiAlgebraExtension are backwards-compatible re-export hubs kept for
