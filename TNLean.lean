@@ -14,6 +14,7 @@ import TNLean.Channel.MultiplicativeDomain
 import TNLean.Channel.MultiplicativeDomainPowers
 import TNLean.Channel.CesaroFixedPoint
 import TNLean.Channel.Irreducible
+import TNLean.Channel.PerronFrobeniusNormalization
 import TNLean.Channel.Schwarz
 import TNLean.Channel.Primitive
 import TNLean.Channel.PeripheralSpectrum
