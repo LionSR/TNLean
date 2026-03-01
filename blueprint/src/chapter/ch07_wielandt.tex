@@ -775,18 +775,37 @@ and normality.
     imply irreducibility or normality.
     A counterexample ($D = 2$, $\rho = \mathrm{diag}(1,0)$)
     is documented in the Lean source.
+
+    The Burnside-style bridge from irreducibility to matrix spanning is now
+    formalized in Chapter~\ref{ch:canonical}, \S\ref{subsec:burnside_bridge}:
+    irreducible tensor implies irreducible action
+    (Theorem~\ref{thm:irreducible_tensor_to_action}),
+    Burnside's theorem gives $\operatorname{algSpan}(A) = \MN{D}$
+    (Theorem~\ref{thm:burnside_matrix}),
+    and hence there exists $N$ with $T_N(A) = \MN{D}$
+    (Corollary~\ref{cor:irreducible_action_cumulative_span}).
+
+    However, $T_N(A) = \MN{D}$ is weaker than normality, which asks for a fixed
+    length $L$ with $S_L(A) = \MN{D}$ (Definition~\ref{def:normal}).
+    The implication
+    $\exists N,\ T_N(A) = \MN{D} \Rightarrow$ \texttt{IsNormal}
+    is false: in $\MN{2}$ the matrices $A_1 = E_{12}$ and $A_2 = E_{21}$
+    (matrix units) generate $\MN{2}$, so $T_2(A) = \MN{2}$,
+    but the word spans alternate between the off-diagonal and diagonal subspaces,
+    and $S_n(A) \neq \MN{2}$ for every~$n$.
+
     To recover the paper's full equivalence
     (primitive $\Leftrightarrow$ eventually full Kraus rank),
-    one should assume $\rho$ is positive definite or,
-    equivalently, work with \texttt{IsIrreducibleTensor}.
+    one should strengthen \texttt{IsPrimitiveMPS} by assuming $\rho$ is positive
+    definite.
     The remaining gaps are:
     \begin{enumerate}
         \item \texttt{IsPrimitiveMPS} $+$ $\rho$ positive definite
               $\Rightarrow$ \texttt{IsIrreducibleTensor}
               (requires formalising the restricted subchannel argument).
-        \item \texttt{IsIrreducibleTensor} $\Rightarrow$
-              \texttt{IsNormal}
-              (requires Burnside's theorem for matrix algebras,
-              not yet in Mathlib).
+        \item Using an aperiodicity/peripheral-spectrum input (typically obtained
+              by blocking to a primitive transfer map), upgrade
+              $\exists N,\ T_N(A) = \MN{D}$ to fixed-length spanning
+              $\exists L,\ S_L(A) = \MN{D}$, and hence \texttt{IsNormal}.
     \end{enumerate}
 \end{remark}

@@ -69,6 +69,7 @@ import TNLean.MPS.CoefficientConvergence
 import TNLean.MPS.FundamentalTheoremMulti
 import TNLean.MPS.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalFormReduction
+import TNLean.MPS.CanonicalFormExistence1606
 import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.IrreducibleAdjoint
 import TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint
@@ -87,6 +88,7 @@ import TNLean.Wielandt.RankOneConstruction
 import TNLean.Wielandt.RankOneProducts
 import TNLean.Wielandt.WielandtBound
 import TNLean.Wielandt.PrimitivityNormal
+import TNLean.Wielandt.PrimitivityToNormal
 import TNLean.Wielandt.RankOneElement
 import TNLean.Wielandt.RankOneExtraction
 import TNLean.Wielandt.RankOneSpanGrowth
