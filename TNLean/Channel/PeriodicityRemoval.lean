@@ -6,10 +6,6 @@ import TNLean.Channel.PeripheralSpectrum
 import Mathlib.FieldTheory.IsAlgClosed.Spectrum
 import Mathlib.Algebra.GCDMonoid.Finset
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-
 /-!
 # Periodicity removal
 
@@ -22,10 +18,6 @@ collapse to `{1}`.
 
 These lemmas align with arXiv:1606.00608 Appendix A (peripheral spectrum / period).
 -/
-
-open scoped BigOperators
-
-open Finset
 
 /-! ## Part 1: a common exponent for a finite set of roots of unity -/
 
@@ -74,8 +66,6 @@ end CommonExponent
 
 section Peripheral
 
-open scoped Matrix
-
 /-- If every peripheral eigenvalue of `E` satisfies `μ ^ p = 1` for a fixed `p > 0`, and `E` has a
 nonzero fixed point, then the peripheral eigenvalues of `E ^ p` are exactly `{1}`.
 
@@ -87,20 +77,14 @@ theorem peripheralEigenvalues_pow_eq_singleton
     (hper : ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → μ ^ p = 1)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hfix : E ρ = ρ) (hne : ρ ≠ 0) :
     peripheralEigenvalues (E ^ p) = {1} := by
-  classical
   -- First show `1 ∈ peripheralEigenvalues (E ^ p)` using the fixed point `ρ`.
   have hfixPow : ∀ n : ℕ, (E ^ n) ρ = ρ := by
     intro n
-    induction n with
-    | zero =>
-        simp
-    | succ n ih =>
-        -- `(E^(n+1)) ρ = (E^n) (E ρ)`
-        simp [pow_succ, Module.End.mul_apply, hfix, ih]
-  have hone_mem : (1 : ℂ) ∈ peripheralEigenvalues (E ^ p) := by
-    refine ⟨?_, by simp⟩
-    -- `ρ` is a nonzero eigenvector for eigenvalue `1`.
-    exact hasEigenvalue_one_of_fixedPoint (E ^ p) ρ (hfixPow p) hne
+    have hfixPt : Function.IsFixedPt (E : _ → _) ρ := by
+      simpa [Function.IsFixedPt] using hfix
+    simpa [Module.End.pow_apply] using (hfixPt.iterate n).eq
+  have hone_mem : (1 : ℂ) ∈ peripheralEigenvalues (E ^ p) :=
+    one_mem_peripheralEigenvalues (E ^ p) ρ (hfixPow p) hne
   refine Set.Subset.antisymm ?_ ?_
   · -- `peripheralEigenvalues (E ^ p) ⊆ {1}`
     intro ν hν

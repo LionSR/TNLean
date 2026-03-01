@@ -10,11 +10,6 @@ import TNLean.Wielandt.FittingDecomposition
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.LinearAlgebra.Matrix.ToLin
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-set_option linter.style.emptyLine false
-
 /-!
 # Rank-one element construction step (partial)
 
@@ -55,11 +50,9 @@ theorem evalWord_pow_mem_wordSpan (A : MPSTensor d D) (w : List (Fin d)) (k : �
   | succ k ih =>
       -- Multiply the inductive hypothesis by the length-`w.length` word matrix.
       have hw : evalWord A w ∈ wordSpan A w.length :=
-        (evalWord_mem_wordSpan (A := A) w)
-      have hprod : (evalWord A w) ^ k * evalWord A w ∈ wordSpan A (k * w.length + w.length) := by
-        have : (evalWord A w) ^ k * evalWord A w ∈ (wordSpan A (k * w.length)) * (wordSpan A w.length) :=
-          Submodule.mul_mem_mul ih hw
-        exact (wordSpan_mul_le A (k * w.length) w.length) this
+        evalWord_mem_wordSpan (A := A) w
+      have hprod : (evalWord A w) ^ k * evalWord A w ∈ wordSpan A (k * w.length + w.length) :=
+        (wordSpan_mul_le A (k * w.length) w.length) (Submodule.mul_mem_mul ih hw)
       -- Rewrite the product as a power.
       simpa [pow_succ, Nat.succ_mul] using hprod
 
@@ -144,16 +137,13 @@ theorem range_pow_le_iSup_maxGenEigenspace_ne_zero
   -- Let `W` be the nonzero generalized-eigenspace sum.
   set W : Submodule ℂ (Fin D → ℂ) :=
     ⨆ (μ : ℂ) (_ : μ ≠ 0), f.maxGenEigenspace μ
-
   -- Take an element of the range.
   rintro y ⟨x, rfl⟩
-
   -- Use `⨆ μ, maxGenEigenspace f μ = ⊤` to write `x` as a sum of generalized-eigen pieces.
   have hx : x ∈ ⨆ μ : ℂ, f.maxGenEigenspace μ := by
     have htop : (⨆ μ : ℂ, f.maxGenEigenspace μ) = ⊤ :=
       Wielandt.iSup_maxGenEigenspace_eq_top f
     simp [htop]
-
   -- Prove the desired membership by induction on `x ∈ ⨆ μ, maxGenEigenspace μ`.
   refine Submodule.iSup_induction (p := fun μ : ℂ => f.maxGenEigenspace μ)
     (x := x) hx
@@ -221,16 +211,13 @@ theorem exists_nonzero_pow_evalWord_mem_wordSpan_range_le
   · -- nonzero: apply to the eigenvector `φ`
     have hpow : ((evalWord A w₀) ^ D) *ᵥ φ = μ ^ D • φ :=
       pow_mulVec_eq_smul_of_mulVec_eq_smul (M := evalWord A w₀) (φ := φ) (μ := μ) heig D
-
     have hμpow : μ ^ D ≠ 0 := pow_ne_zero _ hμ
-
     -- If the matrix were zero, its action on `φ` would be zero.
     intro hP0
     have hzero : ((evalWord A w₀) ^ D) *ᵥ φ = 0 := by
       simp [hP0]
-
     -- Contradiction with `μ^D • φ ≠ 0`.
-    have : (μ ^ D • φ) = 0 := by simpa [hpow] using hzero
+    have : μ ^ D • φ = 0 := by simpa [hpow] using hzero
     exact hφ (smul_eq_zero.mp this |>.resolve_left hμpow)
   · -- range inclusion: translate to a statement about `f := Matrix.toLin' (evalWord A w₀)`
     let f : End ℂ (Fin D → ℂ) := Matrix.toLin' (evalWord A w₀)
