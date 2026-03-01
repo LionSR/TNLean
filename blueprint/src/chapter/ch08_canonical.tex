@@ -278,9 +278,9 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
     Wedderburn--Artin decomposition
     (\cite[Eq.~(1.39)]{Wolf2012Quantum})
     to read off the block structure directly.
-    Our formalization avoids this algebraic detour:
+    Our proof avoids this algebraic detour:
     we iterate the invariant-projection splitting with
-    a termination proof by strong induction on~$D$.
+    termination by strong induction on~$D$.
 \end{proof}
 
 \begin{theorem}[Diagonal PD fixed point]\label{thm:form_II}
@@ -468,9 +468,8 @@ removing it as an independent assumption.
     $\E_{A_k}^N(\rho) \to \rho_\infty$
     for the unique fixed-point state $\rho_\infty$,
     and hence the self-overlap converges to~$1$.
-    The Lean proof invokes
-    \texttt{IsPrimitive.overlap\_tendsto\_one}
-    for each block.
+    The proof applies primitive overlap convergence
+    to each block.
 \end{proof}
 
 \begin{remark}\label{rem:primitivity_reduces_assumptions}
@@ -481,7 +480,7 @@ removing it as an independent assumption.
     In the paper~\cite{Cirac2021Matrix},
     primitivity is obtained from irreducibility plus
     periodicity removal (blocking to period one).
-    Theorem~\ref{thm:blocking_primitivity} formalizes this
+    Theorem~\ref{thm:blocking_primitivity} establishes this
     periodicity-removal step: under irreducibility and
     doubly-stochastic normalization, one can block until the
     transfer map becomes primitive.
@@ -523,9 +522,8 @@ removing it as an independent assumption.
 \section{Canonical form existence pipeline (\cite{Cirac2016Density})}%
 \label{sec:canonical_pipeline_1606}
 
-The module \texttt{MPS/CanonicalFormExistence1606.lean} assembles
-the sorry-free components of the canonical-form construction
-following \cite[\S2.3 and Appendix~A]{Cirac2016Density}.
+This section assembles the components of the canonical-form
+construction following \cite[\S2.3 and Appendix~A]{Cirac2016Density}.
 
 \begin{theorem}[Irreducible block decomposition (pipeline)]%
     \label{thm:irred_decomp_pipeline}
@@ -588,41 +586,180 @@ following \cite[\S2.3 and Appendix~A]{Cirac2016Density}.
     and~\ref{thm:CFII_data}.
 \end{proof}
 
-\begin{remark}[Missing steps for full canonical form existence]%
+\section{Perron--Frobenius eigenvector existence}%
+\label{sec:pf_eigenvector}
+
+This section establishes the existence of a positive definite
+eigenvector for the adjoint transfer map of an irreducible MPS
+tensor, and uses it to construct a TP-gauge normalization.
+The results correspond to \cite{Evans1978Spectral},
+\cite[Ch.~6]{Wolf2012Quantum}, and
+\cite[Appendix~A]{Cirac2016Density}.
+
+\begin{theorem}[PSD eigenvector for positive maps (axiom)]%
+    \label{thm:pf_eigenvector_existence}
+    \lean{exists_posSemidef_eigenvector}
+    \notready
+    \uses{def:positive_map}
+    Let $E : \MN{D} \to \MN{D}$ be a nonzero positive linear map
+    with $D > 0$.
+    Then there exist a nonzero PSD matrix $\rho$ and a positive
+    real $r > 0$ such that $E(\rho) = r \rho$.
+
+    This is the finite-dimensional Perron--Frobenius theorem for
+    positive maps on matrix algebras
+    (\cite{Evans1978Spectral},
+    \cite[Proposition~6.1]{Wolf2012Quantum}).
+    The standard proof uses the Brouwer fixed-point theorem
+    applied to the normalization map
+    $\rho \mapsto E(\rho) / \tr(E(\rho))$
+    on the compact convex set of density matrices.
+    Since no proof of Brouwer's FPT is available in the
+    underlying library, this result is stated as an axiom.
+\end{theorem}
+
+\begin{theorem}[Scaling preserves irreducibility]%
+    \label{thm:irred_map_smul}
+    \lean{isIrreducibleMap_smul}
+    \leanok
+    \uses{def:irreducible_cp}
+    If $E$ is an irreducible map and $c \neq 0$, then $c E$
+    is also irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+    An invariant projection for $cE$ is an invariant projection
+    for $E$ (scale out the nonzero constant from the commutation
+    relation).
+\end{proof}
+
+\begin{theorem}[Adjoint transfer map is nonzero]%
+    \label{thm:adjoint_transfer_ne_zero}
+    \lean{MPSTensor.adjointTransferMap_ne_zero_of_nonzero}
+    \leanok
+    \uses{def:transfer_map}
+    If some Kraus operator $A^i \neq 0$, then the adjoint transfer
+    map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is nonzero.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $\E_A^\dagger = 0$ then $\E_A^\dagger(\Id) = 0$,
+    so $\sum_i (A^i)^\dagger A^i = 0$.
+    Since each summand $(A^i)^\dagger A^i$ is PSD,
+    each $(A^i)^\dagger = 0$ and hence each $A^i = 0$.
+\end{proof}
+
+\begin{theorem}[PosDef adjoint eigenvector for irreducible tensors]%
+    \label{thm:posDef_adjoint_eigenvector}
+    \lean{MPSTensor.exists_posDef_adjoint_eigenvector}
+    \leanok
+    \uses{def:irreducible_tensor, def:transfer_map,
+          thm:pf_eigenvector_existence, thm:irred_map_smul,
+          thm:adjoint_transfer_ne_zero}
+    Let $A$ be an irreducible MPS tensor with $D > 0$
+    and some $A^i \neq 0$.
+    Then there exist a positive definite matrix~$\sigma$
+    and a positive real $r > 0$ such that
+    $\E_A^\dagger(\sigma) = r \sigma$.
+
+    Uses Theorem~\ref{thm:pf_eigenvector_existence} (axiom).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pf_eigenvector_existence, thm:irred_map_smul,
+          thm:adjoint_transfer_ne_zero, thm:psd_fp_pd_irred}
+    By Theorem~\ref{thm:adjoint_transfer_ne_zero},
+    $\E_A^\dagger \neq 0$.
+    By Theorem~\ref{thm:pf_eigenvector_existence},
+    there exist $\sigma_0 \ge 0$ (PSD, nonzero)
+    and $r > 0$ with $\E_A^\dagger(\sigma_0) = r \sigma_0$.
+    Rescale: set $T^i = r^{-1/2} (A^i)^\dagger$.
+    Then $\E_T(\sigma_0) = \sigma_0$,
+    and $\E_T$ is irreducible
+    (by Theorem~\ref{thm:irred_map_smul},
+    since irreducibility of $\E_A$ transfers to the
+    adjoint and is preserved under scaling).
+    Since $\E_T$ is irreducible with a PSD fixed point,
+    the PSD-to-PosDef upgrade
+    (Theorem~\ref{thm:psd_fp_pd_irred})
+    gives $\sigma_0$ positive definite.
+\end{proof}
+
+\begin{theorem}[TP-gauge existence for irreducible tensors]%
+    \label{thm:tp_data_irreducible}
+    \lean{MPSTensor.exists_tp_data_of_irreducible}
+    \leanok
+    \uses{def:irreducible_tensor, thm:posDef_adjoint_eigenvector}
+    Let $A$ be an irreducible MPS tensor with $D > 0$
+    and some $A^i \neq 0$.
+    Then there exist a positive real~$r$, a positive definite
+    matrix~$\sigma$, and a gauge-equivalent tensor~$B$ such that
+    \[
+        B^i = \sigma^{1/2} \cdot (r^{-1/2} A^i) \cdot \sigma^{-1/2}
+    \]
+    is trace-preserving:
+    $\sum_i (B^i)^\dagger B^i = \Id$.
+
+    Uses Theorem~\ref{thm:pf_eigenvector_existence} (axiom).
+    This is the ``spectral rescaling $+$ TP gauge'' step of
+    \cite[Appendix~A]{Cirac2016Density}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:posDef_adjoint_eigenvector, thm:ds_gauge_tp}
+    By Theorem~\ref{thm:posDef_adjoint_eigenvector},
+    obtain $\sigma$ positive definite and $r > 0$ with
+    $\E_A^\dagger(\sigma) = r \sigma$.
+    Set $c = r^{-1/2}$ and $A'^i = c A^i$.
+    Then $\E_{A'}^\dagger(\sigma) = \sigma$.
+    By the TP gauge construction
+    (Theorem~\ref{thm:ds_gauge_tp}),
+    $B^i = \sigma^{1/2} A'^i \sigma^{-1/2}$
+    satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
+\end{proof}
+
+\section{End-to-end pipeline status}\label{sec:pipeline_status}
+
+\begin{remark}[Canonical form pipeline]%
     \label{rem:canonical_pipeline_gaps}
     \notready
-    The pipeline in this section stops at the ``handoff'' point:
-    irreducible blocks with \emph{conditional} CFII data.
-    The remaining steps for a complete canonical form existence
-    theorem are:
+    The end-to-end pipeline from an arbitrary MPS tensor to
+    canonical form proceeds as follows.
+    Every step is proved except for step~2,
+    which requires a fixed-point theorem not available in
+    the library (marked $\star$ below).
     \begin{enumerate}
-        \item \emph{TP-gauge existence:}
-              put each irreducible block into the TP gauge
-              (Perron--Frobenius / spectral rescaling).
-              This is not yet formalized.
-        \item \emph{CFII $\to$ doubly-stochastic glue:}
-              the CFII diagonal PD fixed point provides
-              a weight for the adjoint fixed-point peripheral
-              closure
-              (Lemma~\ref{lem:peripheral_closed_powers_irred_fp}),
-              but the current blocking-primitivity theorem
-              (Theorem~\ref{thm:blocking_primitivity})
-              assumes the stronger doubly-stochastic condition.
-              A generalization using the adjoint-fixed-point
-              version would close this gap.
-        \item \emph{Aperiodicity $\to$ fixed-length spanning:}
-              the Burnside bridge is now available.
-              Irreducible tensor blocks act irreducibly on $\C^D$
-              (Theorem~\ref{thm:irreducible_tensor_to_action}),
-              and irreducible action implies eventual \emph{cumulative} spanning
-              $\exists N,\ T_N(A) = \MN{D}$
-              (Theorem~\ref{thm:irreducible_action_cumulative_span}).
-              What is still missing is an argument upgrading
-              $\exists N,\ T_N(A) = \MN{D}$ to normality, i.e.
-              $\exists L,\ S_L(A) = \MN{D}$.
-              This requires an aperiodicity/peripheral-spectrum input
-              (typically obtained by blocking to a primitive transfer map);
-              see Remark~\ref{rem:prim_definition_mismatch}
-              in Chapter~\ref{ch:wielandt}.
+        \item Irreducible block decomposition
+              (Theorem~\ref{thm:irred_decomp}):
+              $A \sim \bigoplus_k A_k$ with each $A_k$
+              irreducible.
+        \item[$\star$2.] PF eigenvector
+              (Theorem~\ref{thm:pf_eigenvector_existence}):
+              the adjoint transfer map has a PSD eigenvector.
+              Requires Brouwer's fixed-point theorem.
+        \item TP gauge
+              (Theorem~\ref{thm:tp_data_irreducible}):
+              rescale and gauge to TP normalization
+              (uses step~2).
+        \item CFII data
+              (Theorem~\ref{thm:CFII_data}):
+              diagonal PD fixed point after unitary conjugation.
+        \item Periodicity removal
+              (Theorem~\ref{thm:blocking_primitivity}):
+              block until the transfer map is primitive.
+        \item Primitive $\Rightarrow$ irreducible tensor
+              (Theorem~\ref{thm:primitive_implies_irreducible}):
+              spectral-gap convergence argument.
+        \item Burnside
+              (Theorem~\ref{thm:burnside_matrix}):
+              irreducible action implies $\operatorname{algSpan}(A) = \MN{D}$.
+        \item Cumulative $\Rightarrow$ normality
+              (Theorem~\ref{thm:algspan_to_normal}):
+              aperiodicity upgrades cumulative spanning to
+              fixed-length spanning.
+        \item Canonical form assembly
+              (Theorem~\ref{thm:canonical_from_primitive}).
+        \item Fundamental theorem for CF-BNT families
+              (Theorem~\ref{thm:ft_proportional}).
     \end{enumerate}
 \end{remark}

@@ -134,8 +134,8 @@ The results follow~\cite{Sanz2010Quantum}.
     generalized eigenspaces over algebraically closed fields.
     In~\cite{Sanz2010Quantum} and \cite[Lemma~6.3(b)]{Wolf2012Quantum},
     the Jordan normal form is used directly.
-    Our formalization uses generalized eigenspaces as a substitute,
-    since the full Jordan normal form is not available in Mathlib.
+    Our proof uses generalized eigenspaces as a substitute
+    for the full Jordan normal form.
 \end{proof}
 
 \begin{theorem}[Nilpotent power bound]\label{thm:nilpotent_pow_bound}
@@ -372,7 +372,7 @@ The results follow~\cite{Sanz2010Quantum}.
     at most $D^2$.
     This is \cite[Theorem~1]{Sanz2010Quantum}
     (which gives the sharper bound $D^2 - d + 1$ in certain
-    cases; our formalization proves the $D^2$ bound).
+    cases; here we prove the $D^2$ bound).
 \end{theorem}
 
 \begin{proof}
@@ -389,7 +389,7 @@ The next step, Lemma~2(b), strengthens this to \emph{fixed-length}
 matrix spanning:
 there exists an $n_0$ such that $S_{n_0}(A) = \MN{D}$
 (i.e.\ word products of \emph{exactly} one length span all matrices).
-The formalization in \texttt{Wielandt/Lemma2b.lean} covers the
+The following results cover the
 algebraic assembly part of this argument.
 
 \begin{definition}[Fixed-length vector span]\label{def:vector_spread_span}
@@ -516,10 +516,9 @@ algebraic assembly part of this argument.
 
 \section{Blocked tensor and rectangular span}\label{sec:rectangular_span}
 
-The module \texttt{Wielandt/RectangularSpan.lean} extends the
-Lemma~2(b) infrastructure to the \emph{blocked tensor}~$A^{[L]}$
-and develops the ``rectangular span'' used to produce
-rank-one elements.
+This section extends the Lemma~2(b) infrastructure to the
+\emph{blocked tensor}~$A^{[L]}$ and develops the ``rectangular span''
+used to produce rank-one elements.
 
 \begin{theorem}[Blocking preserves normality]\label{thm:isNormal_blockTensor}
     \lean{MPSTensor.isNormal_blockTensor}
@@ -685,8 +684,8 @@ rank-one elements.
     required rank-one element, and
     Theorem~\ref{thm:wielandt_lemma2b} gives the fully unconditional
     Lemma~2(b).
-    The formalization is in
-    \texttt{Wielandt/RankOneExtractionFull.lean}.
+    See Theorem~\ref{thm:rankone_extraction_blockTensor} and
+    Theorem~\ref{thm:wielandt_lemma2b} above.
 \end{remark}
 
 \section{Primitivity and normality}
@@ -695,11 +694,9 @@ rank-one elements.
     \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitive}
     \leanok
     \uses{def:eval_word}
-    If $A$ is a primitive MPS tensor (with DS gauge),
+    If $A$ is a primitive MPS tensor in DS gauge,
     then for every $n \ge 0$ there exists a word $w$ of length
     \emph{exactly}~$n$ with $A^w \neq 0$.
-    (The Lean definition \texttt{IsPrimitive} bundles
-    DS-gauge normalization; \texttt{IsNormal} is not required.)
 \end{theorem}
 
 \begin{proof}\leanok
@@ -725,10 +722,9 @@ rank-one elements.
 
 \subsection{Primitivity-to-normality bridge}\label{subsec:prim_to_normal}
 
-The module \texttt{Wielandt/PrimitivityToNormal.lean} studies the
-relationship between the spectral-gap notion of primitivity
-(\texttt{IsPrimitiveMPS}: unique PSD fixed point with spectral gap)
-and normality.
+The spectral-gap notion of primitivity
+(unique PSD fixed point $\rho$ with $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$)
+is connected to normality through the following results.
 
 \begin{theorem}[Fixed-point uniqueness from spectral gap]%
     \label{thm:fixedpoint_unique_spectral}
@@ -763,49 +759,216 @@ and normality.
     with spectral radius $< 1$ tend to zero.
 \end{proof}
 
-\begin{remark}[Definition mismatch]\label{rem:prim_definition_mismatch}
-    \notready
-    The Lean definition \texttt{IsPrimitiveMPS} encodes only
-    the spectral-gap condition: there exists a nonzero PSD
+\begin{remark}[Primitivity: spectral gap vs.\ positive definiteness]%
+    \label{rem:prim_definition_mismatch}
+    The definition of primitivity used in \S\ref{subsec:prim_to_normal}
+    encodes only the spectral-gap condition: there exists a nonzero PSD
     fixed point $\rho$ and $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
-    The paper's notion of ``primitive''
-    (\cite[Proposition~3]{Sanz2010Quantum}) additionally requires
+    The notion of ``primitive'' in
+    \cite[Proposition~3]{Sanz2010Quantum} additionally requires
     $\rho$ to be positive definite (full rank).
-    Without this, \texttt{IsPrimitiveMPS} alone does \emph{not}
-    imply irreducibility or normality.
-    A counterexample ($D = 2$, $\rho = \mathrm{diag}(1,0)$)
-    is documented in the Lean source.
+    Without positive definiteness, the spectral-gap condition alone
+    does \emph{not} imply irreducibility or normality.
+    A counterexample is $D = 2$, $\rho = \diag(1,0)$.
 
-    The Burnside-style bridge from irreducibility to matrix spanning is now
-    formalized in Chapter~\ref{ch:canonical}, \S\ref{subsec:burnside_bridge}:
-    irreducible tensor implies irreducible action
-    (Theorem~\ref{thm:irreducible_tensor_to_action}),
-    Burnside's theorem gives $\operatorname{algSpan}(A) = \MN{D}$
-    (Theorem~\ref{thm:burnside_matrix}),
-    and hence there exists $N$ with $T_N(A) = \MN{D}$
-    (Theorem~\ref{thm:irreducible_action_cumulative_span}).
-
-    However, $T_N(A) = \MN{D}$ is weaker than normality, which asks for a fixed
-    length $L$ with $S_L(A) = \MN{D}$ (Definition~\ref{def:normal}).
-    The implication
-    $\exists N,\ T_N(A) = \MN{D} \Rightarrow$ \texttt{IsNormal}
-    is false: in $\MN{2}$ the matrices $A_1 = E_{12}$ and $A_2 = E_{21}$
-    (matrix units) generate $\MN{2}$, so $T_2(A) = \MN{2}$,
-    but the word spans alternate between the off-diagonal and diagonal subspaces,
-    and $S_n(A) \neq \MN{2}$ for every~$n$.
-
-    To recover the paper's full equivalence
-    (primitive $\Leftrightarrow$ eventually full Kraus rank),
-    one should strengthen \texttt{IsPrimitiveMPS} by assuming $\rho$ is positive
-    definite.
-    The remaining gaps are:
+    Both gaps identified in earlier versions of this remark
+    are now closed:
     \begin{enumerate}
-        \item \texttt{IsPrimitiveMPS} $+$ $\rho$ positive definite
-              $\Rightarrow$ \texttt{IsIrreducibleTensor}
-              (requires formalising the restricted subchannel argument).
-        \item Using an aperiodicity/peripheral-spectrum input (typically obtained
-              by blocking to a primitive transfer map), upgrade
-              $\exists N,\ T_N(A) = \MN{D}$ to fixed-length spanning
-              $\exists L,\ S_L(A) = \MN{D}$, and hence \texttt{IsNormal}.
+        \item Primitive $+$ $\rho$ positive definite
+              $\Rightarrow$ irreducible tensor: 
+              Theorem~\ref{thm:primitive_implies_irreducible}
+              (\S\ref{subsec:prim_implies_irred}).
+        \item Cumulative spanning $+$ aperiodicity
+              $\Rightarrow$ fixed-length spanning (normality):
+              Theorem~\ref{thm:cumspan_to_normal}
+              (\S\ref{sec:cumspan_to_wordspan}).
     \end{enumerate}
+    Together with the Burnside bridge
+    (Chapter~\ref{ch:canonical}, \S\ref{subsec:burnside_bridge}),
+    the full chain is:
+    \[
+        \text{primitive} + \rho\text{ PosDef}
+        \;\Rightarrow\;
+        \text{irreducible}
+        \;\Rightarrow\;
+        \operatorname{algSpan}(A) = \MN{D}
+        \;\Rightarrow\;
+        \text{normal}.
+    \]
+    The last step uses the aperiodicity condition
+    $\Id \in S_1(A)$ (Remark~\ref{rem:aperiodicity}).
 \end{remark}
+
+\subsection{Primitive implies irreducible}\label{subsec:prim_implies_irred}
+
+\begin{theorem}[Primitive with PosDef fixed point implies irreducible tensor]%
+    \label{thm:primitive_implies_irreducible}
+    \lean{MPSTensor.isIrreducibleTensor_of_isPrimitiveMPS_of_posDef}
+    \leanok
+    \uses{def:irreducible_tensor, def:has_inv_proj,
+          thm:complement_pow_zero}
+    If $A$ is a primitive MPS tensor with PSD fixed point $\rho$
+    and $\rho$ is positive definite, then $A$ is an irreducible tensor.
+    This is part of \cite[Proposition~3]{Sanz2010Quantum}
+    (see also \cite[\S2.3]{Cirac2016Density}).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:complement_pow_zero}
+    By contrapositive.
+    Assume $A$ has an invariant projection~$P$
+    ($P \neq 0$, $P \neq \Id$, $(\Id - P) A^i P = 0$ for all~$i$).
+    Set $\sigma = P \rho P$.
+    \begin{enumerate}
+        \item \emph{Invariance of $\sigma$ under $\E_A^n$:}
+              the projection relation
+              $(\Id - P) A^i P = 0$ implies
+              $(\Id - P) \cdot \E_A^n(\sigma) = 0$ for all~$n$
+              (by induction on~$n$).
+        \item \emph{Convergence:}
+              By Theorem~\ref{thm:complement_pow_zero},
+              $\E_A^n(\sigma) \to \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
+              Hence
+              $(\Id - P) \cdot \frac{\tr(\sigma)}{\tr(\rho)} \rho = 0$.
+        \item \emph{Nonzero scalar:}
+              Since $P \neq 0$ and $\rho$ is positive definite,
+              $\tr(P \rho P) > 0$, so
+              $\frac{\tr(\sigma)}{\tr(\rho)} \neq 0$.
+              Therefore $(\Id - P) \rho = 0$.
+        \item \emph{Contradiction:}
+              Since $\rho$ is positive definite, it is a unit
+              in $\MN{D}$.
+              From $(\Id - P) \rho = 0$ we get $\Id - P = 0$,
+              i.e.\ $P = \Id$, contradicting $P \neq \Id$.
+    \end{enumerate}
+\end{proof}
+
+\section{Cumulative span to word span}\label{sec:cumspan_to_wordspan}
+
+Cumulative spanning ($T_N(A) = \MN{D}$, the union of word spans
+of all lengths~$\le N$) is weaker than normality
+($S_L(A) = \MN{D}$ for a single length~$L$).
+The gap is closed by an aperiodicity hypothesis.
+
+\begin{remark}[Aperiodicity condition]\label{rem:aperiodicity}
+    We say $A$ satisfies the \emph{aperiodicity condition}
+    if $\Id \in S_1(A)$, i.e.\ the identity matrix lies in the
+    span of the Kraus operators $\{A^i\}$.
+    For a doubly-stochastic tensor, $\sum_i A^i (A^i)^\dagger = \Id$
+    and $\sum_i (A^i)^\dagger A^i = \Id$, which gives
+    $\Id \in S_1(A)$.
+    More generally, blocking to a primitive transfer map
+    (Theorem~\ref{thm:blocking_primitivity}) yields a tensor
+    with $\Id \in S_1(A^{[p]})$.
+\end{remark}
+
+\begin{remark}[Counterexample: cumulative spanning does not imply normality]%
+    \label{rem:cumspan_counterexample}
+    In $\MN{2}$, let $A^0 = E_{12}$ and $A^1 = E_{21}$
+    (the off-diagonal matrix units).
+    Then $\operatorname{algSpan}(A) = \MN{2}$ and $T_2(A) = \MN{2}$,
+    but the word spans alternate:
+    $S_n(A)$ contains only off-diagonal matrices for odd~$n$
+    and only diagonal matrices for even~$n$.
+    Hence $S_n(A) \neq \MN{2}$ for every~$n$,
+    and $A$ is not normal.
+    The aperiodicity condition $\Id \in S_1(A)$ fails:
+    $S_1(A) = \spn_{\C}\{E_{12}, E_{21}\}$.
+\end{remark}
+
+\begin{theorem}[Word span monotonicity from aperiodicity]%
+    \label{thm:wordspan_mono_aperiodic}
+    \lean{MPSTensor.wordSpan_mono_succ_of_one_mem_wordSpan_one}
+    \leanok
+    \uses{def:word_span, lem:word_span_mul}
+    If $\Id \in S_1(A)$, then
+    $S_n(A) \le S_{n+1}(A)$ for all~$n$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:word_span_mul}
+    For any $M \in S_n(A)$,
+    $M = M \cdot \Id \in S_n(A) \cdot S_1(A) \subseteq S_{n+1}(A)$
+    by Lemma~\ref{lem:word_span_mul}.
+\end{proof}
+
+\begin{theorem}[Cumulative span equals word span under aperiodicity]%
+    \label{thm:cumspan_eq_wordspan}
+    \lean{MPSTensor.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one}
+    \leanok
+    \uses{def:cumulative_span, def:word_span,
+          thm:wordspan_mono_aperiodic}
+    If $\Id \in S_1(A)$, then
+    $T_n(A) = S_n(A)$ for all~$n$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:wordspan_mono_aperiodic}
+    By Theorem~\ref{thm:wordspan_mono_aperiodic},
+    the word spans are monotone: $S_0 \le S_1 \le \cdots$.
+    The supremum $T_n = S_0 + \cdots + S_n$ therefore equals the
+    largest term~$S_n$.
+\end{proof}
+
+\begin{theorem}[Cumulative spanning plus aperiodicity implies normality]%
+    \label{thm:cumspan_to_normal}
+    \lean{MPSTensor.isNormal_of_cumulativeSpan_eq_top_of_aperiodic}
+    \leanok
+    \uses{def:normal, def:cumulative_span,
+          thm:cumspan_eq_wordspan}
+    If $T_N(A) = \MN{D}$ and $\Id \in S_1(A)$, then $A$ is normal.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:cumspan_eq_wordspan}
+    By Theorem~\ref{thm:cumspan_eq_wordspan},
+    $S_N(A) = T_N(A) = \MN{D}$.
+\end{proof}
+
+\begin{theorem}[Algebra span plus aperiodicity implies normality]%
+    \label{thm:algspan_to_normal}
+    \lean{MPSTensor.isNormal_of_algSpan_eq_top_of_aperiodic}
+    \leanok
+    \uses{def:normal, def:alg_span,
+          thm:cumspan_to_normal}
+    If $\operatorname{algSpan}(A) = \MN{D}$ and $\Id \in S_1(A)$,
+    then $A$ is normal.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:cumspan_to_normal}
+    Since $\operatorname{algSpan}(A) = \MN{D}$,
+    there exists $N$ with $T_N(A) = \MN{D}$
+    (by the ascending chain condition on finite-dimensional subspaces).
+    Apply Theorem~\ref{thm:cumspan_to_normal}.
+\end{proof}
+
+\begin{theorem}[Irreducible tensor plus aperiodicity implies normality]%
+    \label{thm:irred_tensor_aperiodic_normal}
+    \lean{MPSTensor.isNormal_of_isIrreducibleTensor_of_aperiodic}
+    \leanok
+    \uses{def:normal, def:irreducible_tensor,
+          thm:algspan_to_normal, thm:burnside_matrix,
+          thm:irreducible_tensor_to_action}
+    If $A$ is an irreducible tensor, $D > 0$,
+    and $\Id \in S_1(A)$, then $A$ is normal.
+    This assembles the full chain:
+    \[
+        \text{irreducible tensor}
+        \;\xrightarrow{\ref{thm:irreducible_tensor_to_action}}\;
+        \text{irreducible action}
+        \;\xrightarrow{\text{Burnside}}\;
+        \operatorname{algSpan} = \MN{D}
+        \;\xrightarrow{\ref{thm:algspan_to_normal}}\;
+        \text{normal}.
+    \]
+    This corresponds to \cite[Theorem~1 / Proposition~3]{Sanz2010Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:algspan_to_normal, thm:burnside_matrix,
+          thm:irreducible_tensor_to_action}
+    By Theorem~\ref{thm:irreducible_tensor_to_action},
+    $A$ acts irreducibly on $\C^D$.
+    By Theorem~\ref{thm:burnside_matrix},
+    $\operatorname{algSpan}(A) = \MN{D}$.
+    By Theorem~\ref{thm:algspan_to_normal} with the
+    aperiodicity hypothesis, $A$ is normal.
+\end{proof}
