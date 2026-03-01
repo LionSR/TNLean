@@ -14,7 +14,7 @@ import Mathlib.Analysis.Complex.Order
 import Mathlib.Data.Real.Sqrt
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 
-set_option linter.style.emptyLine false
+
 
 /-!
 # Blocking periodicity removal in the CFII setting (diagonal √-gauge)
@@ -360,6 +360,8 @@ lemma supportProj_mulVec_eq_zero_of_mulVec_eq_zero
     simp [w, U, Matrix.mulVec_mulVec, Matrix.mul_assoc]
   simp [hP_def, this, hSw]
 
+-- Blank lines between `have` groups aid readability; tolerated here.
+set_option linter.style.emptyLine false in
 /-- The support projector has the same range as the original PSD matrix. -/
 lemma range_mulVecLin_supportProj_eq
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
@@ -420,6 +422,8 @@ end SupportProj
 
 section Irreducibility
 
+-- Blank lines between `have` groups aid readability; tolerated here.
+set_option linter.style.emptyLine false in
 /-- Unitary conjugation preserves tensor irreducibility. -/
 lemma isIrreducibleTensor_unitaryConj
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
@@ -517,6 +521,8 @@ lemma isIrreducibleTensor_unitaryConj
 
   exact hIrr ⟨P', hP'proj, hP'0, hP'1, hLower'⟩
 
+-- Blank lines between `have` groups aid readability; tolerated here.
+set_option linter.style.emptyLine false in
 /-- If the unitalized tensor has an invariant projection, so does the original tensor.
 
 This is the key irreducibility-preservation step for the CFII unitalization. -/
@@ -735,6 +741,8 @@ end Irreducibility
 
 section PeriodicityRemoval
 
+-- Blank lines between `have` groups aid readability; tolerated here.
+set_option linter.style.emptyLine false in
 /-- Appendix A periodicity removal in the CFII setting.
 
 If `A` is trace-preserving and irreducible (tensor sense), then some physical blocking makes the
