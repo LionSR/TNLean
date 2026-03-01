@@ -8,12 +8,8 @@ import TNLean.Wielandt.EigenvectorSpreading
 import TNLean.MPS.Blocking
 
 import Mathlib.Algebra.Algebra.Operations
-import Mathlib.Data.Matrix.Mul
-
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-set_option linter.style.emptyLine false
+import Mathlib.Data.Matrix.Basis
+import Mathlib.LinearAlgebra.Matrix.StdBasis
 
 /-!
 # Lemma 2(b) (start): from vector spanning to fixed-length matrix spanning
@@ -123,13 +119,8 @@ theorem wordSpan_eq_top_of_blockTensor_wordSpan_eq_top
     (A : MPSTensor d D) (L n : ℕ)
     (h : wordSpan (blockTensor (d := d) (D := D) A L) n = ⊤) :
     wordSpan A (n * L) = ⊤ := by
-  -- Use the inclusion `wordSpan(blockTensor) ≤ wordSpan` and rewrite.
-  have hle :
-      (wordSpan (blockTensor (d := d) (D := D) A L) n) ≤ wordSpan A (n * L) :=
-    wordSpan_blockTensor_le (A := A) (L := L) (n := n)
-  have htop_le : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ wordSpan A (n * L) := by
-    simpa [h] using hle
-  exact eq_top_iff.mpr htop_le
+  refine eq_top_iff.mpr ?_
+  simpa [h] using (wordSpan_blockTensor_le (A := A) (L := L) (n := n))
 
 /-! ## Eigenvector padding: cumulative vector span → fixed-length vector span
 
@@ -274,92 +265,54 @@ theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis
       Matrix.vecMulVec φ (Pi.single j (1 : ℂ)) ∈ wordSpan A m) :
     wordSpan A (n + m) = ⊤ := by
   classical
-  -- Let f(M) = M *ᵥ φ.
-  let f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin D → ℂ) := mulVecLinearMap (D := D) φ
-
-  -- The image of `wordSpan A n` under f is ⊤.
+  -- Let `f(M) = M *ᵥ φ`.
+  let f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin D → ℂ) :=
+    mulVecLinearMap (D := D) φ
+  -- The image of `wordSpan A n` under `f` is `⊤`.
   have hmap : Submodule.map f (wordSpan A n) = ⊤ := by
-    calc
-      Submodule.map f (wordSpan A n)
-          = vectorSpreadSpan A φ n := by
-              simpa [f] using (map_wordSpan_eq_vectorSpreadSpan (A := A) (φ := φ) (n := n))
-      _ = ⊤ := hVec
-
-  -- First show: every matrix unit `single i j 1` lies in `wordSpan A (n+m)`.
+    simpa [f] using
+      (map_wordSpan_eq_vectorSpreadSpan (A := A) (φ := φ) (n := n)).trans hVec
+  -- First show: every matrix unit `single i j 1` lies in `wordSpan A (n + m)`.
   have hsingle :
       ∀ i j : Fin D, Matrix.single i j (1 : ℂ) ∈ wordSpan A (n + m) := by
     intro i j
-
-    -- Since `Submodule.map f (wordSpan A n) = ⊤`, there is some `Mi ∈ wordSpan A n`
-    -- with `Mi *ᵥ φ = e_i`.
     have hi_mem : (Pi.single i (1 : ℂ)) ∈ Submodule.map f (wordSpan A n) := by
       simp [hmap]
     rcases hi_mem with ⟨Mi, hMi, hMi_apply⟩
     have hMi_vec : Mi *ᵥ φ = Pi.single i (1 : ℂ) := by
       simpa [f, mulVecLinearMap] using hMi_apply
-
-    -- The rank-one operator `|φ⟩⟨e_j|` is in `wordSpan A m` by hypothesis.
     have hRj : Matrix.vecMulVec φ (Pi.single j (1 : ℂ)) ∈ wordSpan A m :=
       hRankOne j
-
-    -- Therefore the product lies in `wordSpan A (n+m)`.
-    have hprod :
-        Mi * Matrix.vecMulVec φ (Pi.single j (1 : ℂ)) ∈ wordSpan A (n + m) := by
-      have :
-          Mi * Matrix.vecMulVec φ (Pi.single j (1 : ℂ)) ∈
-            (wordSpan A n) * (wordSpan A m) :=
-        Submodule.mul_mem_mul hMi hRj
-      exact (wordSpan_mul_le A n m) this
-
-    -- Compute the product: `Mi * |φ⟩⟨e_j| = |Miφ⟩⟨e_j| = |e_i⟩⟨e_j|`.
+    have hprod : Mi * Matrix.vecMulVec φ (Pi.single j (1 : ℂ)) ∈ wordSpan A (n + m) := by
+      refine wordSpan_mul_le A n m ?_
+      exact Submodule.mul_mem_mul hMi hRj
     have hcalc :
         Mi * Matrix.vecMulVec φ (Pi.single j (1 : ℂ)) =
           Matrix.single i j (1 : ℂ) := by
-      -- First reduce to an outer product of basis vectors.
       have houter :
           Matrix.vecMulVec (Pi.single i (1 : ℂ)) (Pi.single j (1 : ℂ)) =
             Matrix.single i j (1 : ℂ) := by
-        ext i' j'
-        by_cases hiEq : i' = i
-        · subst i'
-          by_cases hjEq : j' = j
-          · subst j'
-            simp [Matrix.vecMulVec_apply]
-          · have hj : j ≠ j' := fun h => hjEq h.symm
-            have hnot : ¬ (i = i ∧ j = j') := fun h => hj h.2
-            simp [Matrix.vecMulVec_apply, hjEq, hj]
-        · have hi : i ≠ i' := fun h => hiEq h.symm
-          have hnot : ¬ (i = i' ∧ j = j') := fun h => hi h.1
-          simp [Matrix.vecMulVec_apply, Pi.single_apply, hiEq, hnot]
-
+        simpa using (Matrix.single_eq_single_vecMulVec_single (α := ℂ) i j).symm
       calc
-        Mi * Matrix.vecMulVec φ (Pi.single j (1 : ℂ))
-            = Matrix.vecMulVec (Mi *ᵥ φ) (Pi.single j (1 : ℂ)) := by
-                simpa using (Matrix.mul_vecMulVec Mi φ (Pi.single j (1 : ℂ)))
+        Mi * Matrix.vecMulVec φ (Pi.single j (1 : ℂ)) =
+            Matrix.vecMulVec (Mi *ᵥ φ) (Pi.single j (1 : ℂ)) := by
+              simpa using (Matrix.mul_vecMulVec Mi φ (Pi.single j (1 : ℂ)))
         _ = Matrix.vecMulVec (Pi.single i (1 : ℂ)) (Pi.single j (1 : ℂ)) := by
               simp [hMi_vec]
         _ = Matrix.single i j (1 : ℂ) := houter
-
-    -- Replace the product by the matrix unit.
     simpa [hcalc] using hprod
-
   -- Conclude `wordSpan = ⊤` by showing it contains the standard matrix basis.
   apply eq_top_iff.mpr
-
-  -- The standard basis spans ⊤, and each basis element is a matrix unit.
   have hbasis :
       Submodule.span ℂ (Set.range (Matrix.stdBasis ℂ (Fin D) (Fin D))) ≤
         wordSpan A (n + m) := by
-    apply Submodule.span_le.mpr
+    refine Submodule.span_le.2 ?_
     rintro M ⟨ij, rfl⟩
     rcases ij with ⟨i, j⟩
     simpa [Matrix.stdBasis_eq_single] using hsingle i j
-
-  -- Rewrite the LHS as ⊤ using `Basis.span_eq`.
   have htop_le :
       (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ wordSpan A (n + m) := by
     simpa [(Matrix.stdBasis ℂ (Fin D) (Fin D)).span_eq] using hbasis
-
   exact htop_le
 
 end MPSTensor
