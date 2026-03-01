@@ -15,12 +15,14 @@ import TNLean.Channel.MultiplicativeDomainPowers
 import TNLean.Channel.CesaroFixedPoint
 import TNLean.Channel.Irreducible
 import TNLean.Channel.PerronFrobeniusNormalization
+import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.Channel.Schwarz
 import TNLean.Channel.Primitive
 import TNLean.Channel.PeripheralSpectrum
 import TNLean.Channel.ConjugationSpectrum
 import TNLean.Channel.PeripheralPowers
 import TNLean.Channel.PeriodicityRemoval
+import TNLean.Channel.PerronFrobeniusExistence
 
 -- Layer 2: Spectral theory (QPF + spectral gap)
 import TNLean.QPF.PosDef
@@ -72,6 +74,7 @@ import TNLean.MPS.CanonicalFormReduction
 import TNLean.MPS.CanonicalFormExistence1606
 import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.IrreducibleAdjoint
+import TNLean.MPS.TPGaugeFromAdjointFixedPoint
 import TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint
 import TNLean.MPS.BlockPermutationMPS
 import TNLean.PiAlgebra.Construction
@@ -89,6 +92,7 @@ import TNLean.Wielandt.RankOneProducts
 import TNLean.Wielandt.WielandtBound
 import TNLean.Wielandt.PrimitivityNormal
 import TNLean.Wielandt.PrimitivityToNormal
+import TNLean.Wielandt.PrimitiveImpliesIrreducible
 import TNLean.Wielandt.RankOneElement
 import TNLean.Wielandt.RankOneExtraction
 import TNLean.Wielandt.RankOneSpanGrowth
@@ -97,6 +101,8 @@ import TNLean.Wielandt.RectangularRanges
 import TNLean.Wielandt.RectangularSpan
 import TNLean.Wielandt.RankOneBoundedWord
 import TNLean.Wielandt.RankOneExtractionFull
+import TNLean.Wielandt.CumulativeToWordSpan
+import TNLean.Wielandt.PrimitiveImpliesIrreducible
 
 -- NOTE: TNLean.PositiveMapSpectral, TNLean.TransferSpectral, and
 -- TNLean.PiAlgebraExtension are backwards-compatible re-export hubs kept for
