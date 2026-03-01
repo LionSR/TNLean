@@ -439,6 +439,9 @@ private lemma each_zero_of_sum_conjTranspose_mul_self_zero
 -- The new proof establishes invertibility + intertwining directly inside
 -- `eigenvector_gives_gauge` using DS-gauge + weighted KS equality.)
 
+section
+open scoped MatrixOrder
+
 /-- **Eigenvector implies gauge equivalence** (PGVWC 2007, Lemma 5; Wolf 2012, §6.2).
 
 If `F_{AB}(X) = μX` where `X ≠ 0`, `|μ| = 1`, both tensors are injective
@@ -495,8 +498,8 @@ private lemma eigenvector_gives_gauge [NeZero D]
   have hρA_pd : ρA.PosDef := hρA.pos_def
   have hρB_pd : ρB.PosDef := hρB.pos_def
   -- Factor `ρA = S0Aᴴ * S0A` and set `SA := S0Aᴴ` so that `SA * SAᴴ = ρA`.
-  set_option linter.deprecated false in
-  rcases (Matrix.posDef_iff_eq_conjTranspose_mul_self.mp hρA_pd) with ⟨S0A, hS0A_unit, hρA_eq⟩
+  rcases (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).1 hρA_pd.isStrictlyPositive with
+    ⟨S0A, hS0A_unit, hρA_eq⟩
   let SA : Matrix (Fin D) (Fin D) ℂ := S0Aᴴ
   have hSA_unit : IsUnit SA := by
     simpa [SA, Matrix.star_eq_conjTranspose] using (IsUnit.star hS0A_unit)
@@ -508,10 +511,10 @@ private lemma eigenvector_gives_gauge [NeZero D]
     calc
       SA * SAᴴ = S0Aᴴ * (S0Aᴴ)ᴴ := by rfl
       _ = S0Aᴴ * S0A := by simp
-      _ = ρA := by simpa using hρA_eq.symm
+      _ = ρA := by simpa [Matrix.star_eq_conjTranspose] using hρA_eq.symm
   -- Factor `ρB = S0Bᴴ * S0B` and set `SB := S0Bᴴ` so that `SB * SBᴴ = ρB`.
-  set_option linter.deprecated false in
-  rcases (Matrix.posDef_iff_eq_conjTranspose_mul_self.mp hρB_pd) with ⟨S0B, hS0B_unit, hρB_eq⟩
+  rcases (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).1 hρB_pd.isStrictlyPositive with
+    ⟨S0B, hS0B_unit, hρB_eq⟩
   let SB : Matrix (Fin D) (Fin D) ℂ := S0Bᴴ
   have hSB_unit : IsUnit SB := by
     simpa [SB, Matrix.star_eq_conjTranspose] using (IsUnit.star hS0B_unit)
@@ -523,7 +526,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
     calc
       SB * SBᴴ = S0Bᴴ * (S0Bᴴ)ᴴ := by rfl
       _ = S0Bᴴ * S0B := by simp
-      _ = ρB := by simpa using hρB_eq.symm
+      _ = ρB := by simpa [Matrix.star_eq_conjTranspose] using hρB_eq.symm
   have hSBh_det : (SBᴴ).det ≠ 0 := by
     simpa [Matrix.det_conjTranspose] using star_ne_zero.mpr hSB_det
   have hSBh_isUnitdet : IsUnit (SBᴴ).det := Ne.isUnit hSBh_det
@@ -753,10 +756,12 @@ private lemma eigenvector_gives_gauge [NeZero D]
       refine (isUnit_iff_exists_inv).2 ?_
       refine ⟨SblockInv, ?_⟩
       simp [Sblock, SblockInv, Matrix.fromBlocks_multiply, hSA_mul_inv, hSB_mul_inv]
-    set_option linter.deprecated false in
-    refine (Matrix.posDef_iff_eq_conjTranspose_mul_self).2 ?_
-    refine ⟨Sblock, hSblock_unit, ?_⟩
-    simp [rhoT, Sblock, Matrix.fromBlocks_conjTranspose, Matrix.fromBlocks_multiply]
+    have hrhoT_strict : IsStrictlyPositive rhoT := by
+      refine (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).2 ?_
+      refine ⟨Sblock, hSblock_unit, ?_⟩
+      simp [rhoT, Sblock, Matrix.star_eq_conjTranspose, Matrix.fromBlocks_conjTranspose,
+        Matrix.fromBlocks_multiply]
+    exact (Matrix.IsStrictlyPositive.posDef hrhoT_strict)
   have hrhoT_fix : Kraus.adjointMap K rhoT = rhoT := by
     have hAblock : ∑ i : Fin d, (A' i)ᴴ * (SAᴴ * SA) * (A' i) = SAᴴ * SA := by
       have htermA : ∀ i : Fin d,
@@ -1059,6 +1064,8 @@ private lemma eigenvector_gives_gauge [NeZero D]
     -- Both sides are reassociations of SB * X'⁻¹ * SA⁻¹ * A i * SA * X' * SB⁻¹
     simp only [A', Ymat, Yinv, Matrix.mul_assoc]
   simpa [Ygl] using this
+
+end
 
 /-- **Eigenvalue rigidity** (Pérez-García et al. 2007, Lemma 5):
 if the mixed transfer spectral radius is ≥ 1, then A and B are

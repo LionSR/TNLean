@@ -43,7 +43,7 @@ This is the "dimension-mismatch" spectral gap: if the bond dimensions differ, th
   *Matrix Product State Representations*, 2007, Lemma 5.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal ENNReal Matrix.Norms.Elementwise
+open scoped Matrix MatrixOrder ComplexOrder BigOperators NNReal ENNReal Matrix.Norms.Elementwise
 
 namespace MPSTensor
 
@@ -443,10 +443,14 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   obtain ⟨ρA, hρA⟩ := injective_transfer_unique_fixed_point' A hA hA_norm
   obtain ⟨ρB, hρB⟩ := injective_transfer_unique_fixed_point' B hB hB_norm
   -- === 2. Cholesky factorization ===
-  set_option linter.deprecated false in
-  rcases Matrix.posDef_iff_eq_conjTranspose_mul_self.mp hρA.pos_def with ⟨S0A, hS0A_unit, hρA_eq⟩
-  set_option linter.deprecated false in
-  rcases Matrix.posDef_iff_eq_conjTranspose_mul_self.mp hρB.pos_def with ⟨S0B, hS0B_unit, hρB_eq⟩
+  rcases (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).1
+      (hρA.pos_def.isStrictlyPositive) with ⟨S0A, hS0A_unit, hρA_eq'⟩
+  have hρA_eq : ρA = S0Aᴴ * S0A := by
+    simpa [Matrix.star_eq_conjTranspose] using hρA_eq'
+  rcases (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).1
+      (hρB.pos_def.isStrictlyPositive) with ⟨S0B, hS0B_unit, hρB_eq'⟩
+  have hρB_eq : ρB = S0Bᴴ * S0B := by
+    simpa [Matrix.star_eq_conjTranspose] using hρB_eq'
   let SA : Matrix (Fin D₁) (Fin D₁) ℂ := S0Aᴴ
   let SB : Matrix (Fin D₂) (Fin D₂) ℂ := S0Bᴴ
   -- Determinant facts
@@ -550,13 +554,15 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   have hrhoT_pd : rhoT.PosDef := by
     let Sblock : Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
       Matrix.fromBlocks SA 0 0 SB
-    set_option linter.deprecated false in
-    refine (Matrix.posDef_iff_eq_conjTranspose_mul_self).2 ⟨Sblock, ?_, ?_⟩
+    refine (Matrix.isStrictlyPositive_iff_posDef).1 ?_
+    refine (CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self).2 ?_
+    refine ⟨Sblock, ?_, ?_⟩
     · exact (isUnit_iff_exists_inv).2
         ⟨Matrix.fromBlocks SA⁻¹ 0 0 SB⁻¹, by
           simp [Sblock, Matrix.fromBlocks_multiply,
                 Matrix.mul_nonsing_inv _ hSA_u, Matrix.mul_nonsing_inv _ hSB_u]⟩
-    · simp [rhoT, Sblock, Matrix.fromBlocks_conjTranspose, Matrix.fromBlocks_multiply]
+    · simp [rhoT, Sblock, Matrix.star_eq_conjTranspose, Matrix.fromBlocks_conjTranspose,
+        Matrix.fromBlocks_multiply]
   have hrhoT_fix : Kraus.adjointMap K rhoT = rhoT := by
     -- Each diagonal block: ∑ (A'_i)† (SA† SA) A'_i = SA† SA (similarly for B)
     have hAblock : ∑ i : Fin d, (A' i)ᴴ * (SAᴴ * SA) * (A' i) = SAᴴ * SA := by
