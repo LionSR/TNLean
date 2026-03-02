@@ -272,4 +272,44 @@ theorem eq_normMap_iff_eigenvector
     have := congrArg (fun X => (1 / Matrix.trace (E ρ)) • X) h
     simpa [smul_smul, htr] using this
 
+/-- `normMap` is continuous at a point where the denominator `trace (E ρ)` is nonzero. -/
+theorem continuousAt_normMap
+    {D : ℕ}
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace (E ρ) ≠ 0) :
+    ContinuousAt (normMap (D := D) E) ρ := by
+  -- Continuity of the linear map `E` in finite dimension.
+  have hE : Continuous (fun ρ : Matrix (Fin D) (Fin D) ℂ => E ρ) :=
+    E.continuous_of_finiteDimensional
+  have htrace :
+      ContinuousAt (fun ρ : Matrix (Fin D) (Fin D) ℂ => Matrix.trace (E ρ)) ρ :=
+    hE.matrix_trace.continuousAt
+  -- Invert the nonzero denominator.
+  have hinv :
+      ContinuousAt (fun ρ : Matrix (Fin D) (Fin D) ℂ => (Matrix.trace (E ρ))⁻¹) ρ :=
+    (ContinuousAt.inv₀ htrace htr)
+  have hden :
+      ContinuousAt (fun ρ : Matrix (Fin D) (Fin D) ℂ => (1 / Matrix.trace (E ρ))) ρ := by
+    simpa [one_div] using hinv
+  -- Multiply by the numerator.
+  unfold normMap
+  exact ContinuousAt.smul hden hE.continuousAt
+
+/-- `normMap` is continuous on density matrices, assuming the denominator never vanishes there. -/
+theorem continuousOn_normMap_densityMatrices
+    {D : ℕ} [NeZero D]
+    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hEpos : IsPositiveMap (D := D) E)
+    (hNZ : ∀ ρ ∈ densityMatrices D, E ρ ≠ 0) :
+    ContinuousOn (normMap (D := D) E) (densityMatrices D) := by
+  intro ρ hρ_mem
+  rcases hρ_mem with ⟨hρ_psd, hρ_tr⟩
+  have hEρ_psd : (E ρ).PosSemidef := hEpos ρ hρ_psd
+  have hEρ_ne : E ρ ≠ 0 := hNZ ρ ⟨hρ_psd, hρ_tr⟩
+  have htr_ne : Matrix.trace (E ρ) ≠ 0 := by
+    intro htr0
+    apply hEρ_ne
+    exact (hEρ_psd.trace_eq_zero_iff).1 htr0
+  exact (continuousAt_normMap (D := D) E ρ htr_ne).continuousWithinAt
+
 end Normalization

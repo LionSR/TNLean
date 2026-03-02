@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.PerronFrobeniusNormalization
+import TNLean.Channel.BrouwerFixedPointDensityMatrices
 import TNLean.MPS.IrreducibleAdjoint
 import TNLean.MPS.TPGaugeFromAdjointFixedPoint
 import TNLean.MPS.CPPrimitive
@@ -17,20 +18,20 @@ a nonzero positive map on `M_D(ℂ)`, and derives from it:
 * a PosDef fixed point for the adjoint transfer map of a rescaled irreducible tensor,
 * the existence of a TP-normalized tensor from an irreducible one (via `tpGauge`).
 
-## The sorry
+## Brouwer fixed point axiom
 
-The one remaining `sorry` in this file is `exists_posSemidef_eigenvector`, which
-asserts that any nonzero positive map on `M_D(ℂ)` has a PSD eigenvector for a
-positive eigenvalue. The standard proof uses the **Brouwer fixed-point theorem**
-applied to the normalization map `ρ ↦ E(ρ) / tr(E(ρ))` on the compact convex set
-of density matrices. Brouwer's FPT is not yet available in Mathlib.
+The core existence theorem `exists_posSemidef_eigenvector` is proved via Brouwer's
+fixed point theorem applied to the normalization map
+`ρ ↦ E(ρ) / tr(E(ρ))` on the compact convex set of density matrices.
 
-Everything else in this file (and in the downstream pipeline) is sorry-free,
-conditional on this single result.
+Since Brouwer's fixed point theorem is not currently available in Mathlib, we assume
+it as the local axiom `brouwer_fixedPoint_densityMatrices`
+(from `TNLean.Channel.BrouwerFixedPointDensityMatrices`).
 
 ## Main results
 
-* `exists_posSemidef_eigenvector`: PSD eigenvector existence for positive maps (`sorry`)
+* `exists_posSemidef_eigenvector`: PSD eigenvector existence for positive maps
+    (assumes Brouwer axiom)
 * `MPSTensor.adjointTransferMap_ne_zero_of_nonzero`:
     the adjoint transfer map is nonzero when some `A i ≠ 0`
 * `MPSTensor.exists_posDef_adjoint_eigenvector`:
@@ -50,31 +51,80 @@ open Matrix Finset
 
 variable {d D : ℕ}
 
-/-! ## Core existence theorem (sorry) -/
+/-! ## Core existence theorem -/
 
 /-- **Perron–Frobenius eigenvector existence for positive maps.**
 
-For a nonzero positive map `E` on `M_D(ℂ)` with `D > 0`, there exists a nonzero PSD matrix `ρ`
-and a positive real `r` such that `E(ρ) = r • ρ`.
+Let `E` be a positive linear map on `M_D(ℂ)` (with `D > 0`) such that `E ρ ≠ 0` for every
+nonzero PSD matrix `ρ`. Then there exists a nonzero PSD matrix `ρ` and a positive real `r`
+such that `E ρ = r • ρ`.
 
-**Proof sketch** (not yet formalized): The normalization map
-`normMap E : ρ ↦ E(ρ) / tr(E(ρ))` is a continuous self-map of the compact convex set of
-density matrices (see `normMap_mem_densityMatrices`). By Brouwer's fixed-point theorem,
-`normMap E` has a fixed point `ρ*`, which satisfies `E(ρ*) = tr(E(ρ*)) • ρ*` with
-`tr(E(ρ*)) > 0` (see `eq_normMap_iff_eigenvector`).
-
-**Status**: This is the single remaining `sorry` in the canonical form pipeline.
-Closing it requires either:
-1. Brouwer's FPT for finite-dimensional compact convex sets (not in Mathlib), or
-2. Schauder's FPT (not in Mathlib), or
-3. A direct spectral argument for cone-preserving maps (Krein–Rutman). -/
+**Proof idea** (formalized assuming Brouwer's fixed point theorem on density matrices):
+consider the normalization map `normMap E : ρ ↦ E(ρ) / tr(E(ρ))` on density matrices and
+apply Brouwer to obtain a fixed point, then unfold the fixed-point identity using
+`eq_normMap_iff_eigenvector`. -/
 theorem exists_posSemidef_eigenvector
     [NeZero D]
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hpos : IsPositiveMap E) (hE : E ≠ 0) :
+    (hpos : IsPositiveMap E)
+    (hNZ : ∀ {ρ : Matrix (Fin D) (Fin D) ℂ}, ρ.PosSemidef → ρ ≠ 0 → E ρ ≠ 0) :
     ∃ (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
       ρ.PosSemidef ∧ ρ ≠ 0 ∧ 0 < r ∧ E ρ = (r : ℂ) • ρ := by
-  sorry -- Requires Brouwer FPT or Krein–Rutman, not yet in Mathlib
+  classical
+  -- Nonvanishing on density matrices follows from nonvanishing on nonzero PSD matrices.
+  have hNZ_density : ∀ ρ ∈ densityMatrices D, E ρ ≠ 0 := by
+    intro ρ hρ_mem
+    rcases hρ_mem with ⟨hρ_psd, hρ_tr⟩
+    have hρ_ne : ρ ≠ 0 := by
+      intro hρ0
+      have h := hρ_tr
+      simp [hρ0] at h -- closes the goal (since `trace 0 = 1` is impossible)
+    exact hNZ hρ_psd hρ_ne
+  -- `normMap E` is a continuous self-map of the density matrices.
+  have hMapsTo : Set.MapsTo (normMap (D := D) E) (densityMatrices D) (densityMatrices D) := by
+    intro ρ hρ_mem
+    exact normMap_mem_densityMatrices (D := D) (E := E) hpos hNZ_density ρ hρ_mem
+  have hCont : ContinuousOn (normMap (D := D) E) (densityMatrices D) :=
+    continuousOn_normMap_densityMatrices (D := D) (E := E) hpos hNZ_density
+  -- Apply Brouwer fixed point theorem (assumed in `BrouwerFixedPointDensityMatrices.lean`).
+  rcases
+      brouwer_fixedPoint_densityMatrices (D := D) (f := normMap (D := D) E) hCont hMapsTo with
+    ⟨ρ, hρ_mem, hρ_fix⟩
+  have hρ_psd : ρ.PosSemidef := hρ_mem.1
+  have hρ_tr : Matrix.trace ρ = 1 := hρ_mem.2
+  have hρ_ne : ρ ≠ 0 := by
+    intro hρ0
+    have h := hρ_tr
+    simp [hρ0] at h -- closes the goal (since `trace 0 = 1` is impossible)
+  have hEρ_psd : (E ρ).PosSemidef := hpos ρ hρ_psd
+  have hEρ_ne : E ρ ≠ 0 := hNZ_density ρ hρ_mem
+  have htr_ne : Matrix.trace (E ρ) ≠ 0 := by
+    intro htr0
+    apply hEρ_ne
+    exact (hEρ_psd.trace_eq_zero_iff).1 htr0
+  -- Fixed point ⇒ eigenvector identity.
+  have hEig : E ρ = (Matrix.trace (E ρ)) • ρ :=
+    (eq_normMap_iff_eigenvector (D := D) (E := E) ρ htr_ne).1 hρ_fix
+  -- Extract a positive real eigenvalue from the nonnegative (real) trace.
+  set r : ℝ := (Matrix.trace (E ρ)).re
+  have hr_nonneg : 0 ≤ r := by
+    simpa [r] using (Complex.nonneg_iff.mp hEρ_psd.trace_nonneg).1
+  have htr_im : (Matrix.trace (E ρ)).im = 0 := by
+    -- `Complex.nonneg_iff` provides the imaginary-part condition as `0 = z.im`.
+    simpa using (Complex.nonneg_iff.mp hEρ_psd.trace_nonneg).2.symm
+  have htr_eq : Matrix.trace (E ρ) = (r : ℂ) := by
+    apply Complex.ext
+    · simp [r]
+    · simp [htr_im]
+  have hr_ne : r ≠ 0 := by
+    intro hr0
+    apply htr_ne
+    simp [htr_eq, hr0]
+  have hr_pos : 0 < r :=
+    lt_of_le_of_ne hr_nonneg (by simpa [eq_comm] using hr_ne)
+  have hEig' : E ρ = (r : ℂ) • ρ := by
+    simpa [htr_eq] using hEig
+  exact ⟨ρ, r, hρ_psd, hρ_ne, hr_pos, hEig'⟩
 
 /-! ## Scaling preserves irreducibility -/
 
@@ -134,7 +184,7 @@ In other words: `∑ ((1/√r) • A i)ᴴ * σ * ((1/√r) • A i) = σ`.
 
 This is equivalent to saying `∑ (A i)ᴴ * σ * A i = r • σ` (eigenvector equation).
 
-Depends on `exists_posSemidef_eigenvector` (`sorry`). -/
+Depends on `exists_posSemidef_eigenvector` (and hence on Brouwer's fixed point axiom). -/
 theorem exists_posDef_adjoint_eigenvector
     [NeZero D]
     (A : MPSTensor d D)
@@ -149,11 +199,21 @@ theorem exists_posDef_adjoint_eigenvector
   -- Step 2: E† is nonzero.
   have hE_ne : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ≠ 0 :=
     adjointTransferMap_ne_zero_of_nonzero A hA
-  -- Step 3: Get a PSD eigenvector by the core theorem.
+  -- Step 3: The adjoint transfer map is irreducible, hence it does not annihilate
+  -- nonzero PSD matrices.
+  have hIrrAdj : IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) :=
+    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrr
+  have hNZ :
+      ∀ {ρ : Matrix (Fin D) (Fin D) ℂ}, ρ.PosSemidef → ρ ≠ 0 →
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ ≠ 0 :=
+    IsIrreducibleMap.map_posSemidef_ne_zero
+      (E := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) hcp hIrrAdj hE_ne
+  -- Step 4: Get a PSD eigenvector by the core theorem.
   obtain ⟨σ, r, hσ_psd, hσ_ne, hr_pos, hσ_eig⟩ :=
     exists_posSemidef_eigenvector
-      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) hcp.isPositiveMap hE_ne
-  -- Step 4: Upgrade PSD → PosDef.
+      (E := transferMap (d := d) (D := D) (fun i => (A i)ᴴ))
+      hcp.isPositiveMap (hNZ := hNZ)
+  -- Step 5: Upgrade PSD → PosDef.
   -- Define the rescaled tensor T i = (1/√r) • (A i)ᴴ so that
   -- transferMap T σ = σ (fixed point, not just eigenvector).
   set c := (Real.sqrt r)⁻¹ with hc_def
@@ -179,9 +239,6 @@ theorem exists_posDef_adjoint_eigenvector
     rw [h_sum, hσ_eig, smul_smul, inv_mul_cancel₀, one_smul]
     exact_mod_cast hr_pos.ne'
   -- Verify IsIrreducibleMap (transferMap T).
-  -- The adjoint transfer map is irreducible.
-  have hIrrAdj : IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) :=
-    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrr
   -- Show transferMap T = (1/r) • transferMap (fun i => (A i)ᴴ).
   have hT_eq : transferMap (d := d) (D := D) T =
       (r : ℂ)⁻¹ • transferMap (d := d) (D := D) (fun i => (A i)ᴴ) := by
@@ -208,7 +265,7 @@ For an irreducible MPS tensor `A` with `D > 0` and some `A i ≠ 0`, there exist
 The tensor `B` is gauge-equivalent to the rescaled tensor `(1/√r) • A`, hence has
 the same MPV as `A` up to a system-size-dependent factor `(1/√r)^N`.
 
-Depends on `exists_posSemidef_eigenvector` (`sorry`). -/
+Depends on `exists_posSemidef_eigenvector` (and hence on Brouwer's fixed point axiom). -/
 theorem exists_tp_data_of_irreducible
     [NeZero D]
     (A : MPSTensor d D)
