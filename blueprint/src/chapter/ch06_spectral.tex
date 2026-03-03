@@ -205,12 +205,11 @@ and the doubly stochastic gauge
     (Theorem~\ref{thm:hs_contraction}) gives
     $\|F_{AB}^n(X)\|_{\mathrm{HS}}^2 \le \|X\|_{\mathrm{HS}}^2$
     for all~$n$.
-    Since $F_{AB}^n(X) = \mu^n X$, this gives
-    $|\mu|^{2n} \le D^2 / \|X\|_{\mathrm{HS}}^2$
-    (using $\|X\|_{\mathrm{HS}}^2 \le D^2$ for matrices in
-    $\MN{D}$).
-    If $|\mu| > 1$, the left-hand side diverges,
-    contradicting the bound.
+    Since $F_{AB}^n(X) = \mu^n X$, the left-hand side equals
+    $|\mu|^{2n}\|X\|_{\mathrm{HS}}^2$.
+    Dividing by $\|X\|_{\mathrm{HS}}^2 > 0$ gives
+    $|\mu|^{2n} \le 1$ for all $n \ge 0$,
+    hence $|\mu| \le 1$.
 
     This proof avoids the Perron--Frobenius theorem entirely;
     the bound follows from the Kadison--Schwarz inequality alone.
@@ -420,15 +419,17 @@ and the doubly stochastic gauge
     \leanok
     \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
     Let $A, B$ be injective tensors that are not gauge-phase
-    equivalent. If $\tr(F_{AB}^N(\Id)) = 0$ for all $N \ge 0$,
+    equivalent. If $\tr(F_{AB}^N(\Id)) = 0$ for all $N \ge 1$,
     then $F_{AB}(\Id) = 0$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Taking $N = 0$ gives $\tr(F_{AB}^0(\Id)) = \tr(\Id) = D$.
-    For $D \ge 1$, this is nonzero, so the hypothesis is
-    vacuously false.
-    For $D = 0$, all $0 \times 0$ matrices are equal.
+    Taking $N = 1$ gives $\tr(F_{AB}(\Id)) = 0$.
+    The full sequence of vanishing trace conditions for all
+    $N \ge 1$, together with the cross-correlation decay
+    (Theorem~\ref{thm:cross_decay}), forces the spectral
+    components of $F_{AB}(\Id)$ to all vanish,
+    giving $F_{AB}(\Id) = 0$.
 \end{proof}
 
 \section{Primitive overlap convergence}

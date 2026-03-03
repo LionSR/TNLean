@@ -39,8 +39,8 @@ The main references are
     \lean{MPSTensor.IsCanonicalFormBNT}
     \leanok
     \uses{def:is_canonical_form, def:gauge_phase_equiv}
-    An \emph{IsCanonicalFormBNT} extends the canonical form
-    predicate (Definition~\ref{def:is_canonical_form})
+    A \emph{canonical form with BNT separation} extends the canonical form
+    (Definition~\ref{def:is_canonical_form})
     with the additional requirement that distinct blocks are
     \emph{not} gauge-phase equivalent:
     for $j \neq k$ with $D_j = D_k$,
@@ -50,14 +50,15 @@ The main references are
 \begin{theorem}[Cross-overlap decay for distinct CF-BNT blocks]\label{thm:cross_overlap_zero}
     \lean{MPSTensor.IsCanonicalFormBNT.cross_overlap_tendsto_zero}
     \leanok
-    \uses{def:cf_bnt, thm:overlap_decay}
+    \uses{def:cf_bnt, thm:overlap_decay, thm:overlap_decay_rect}
     If $((\mu_k),(A_k))$ satisfies the CF-BNT predicate and
     $j \neq k$, then $O_{A_j A_k}(N) \to 0$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:overlap_decay}
-    If $D_j \neq D_k$ the overlap is zero by dimension
-    mismatch.
+\begin{proof}\leanok\uses{thm:overlap_decay, thm:overlap_decay_rect}
+    If $D_j \neq D_k$, the rectangular spectral gap theorem
+    (Theorem~\ref{thm:overlap_decay_rect}) gives
+    $O_{A_j A_k}(N) \to 0$.
     If $D_j = D_k$, the blocks are not gauge-phase
     equivalent (by the CF-BNT separation condition),
     so the spectral-gap theorem

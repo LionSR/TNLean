@@ -31,10 +31,10 @@ The results follow
     Since the $\{A^i\}$ span $\MN{D}$,
     $\rho M v = 0$ for all $M$,
     which forces $\rho = 0$, contradicting $\rho \neq 0$.
-    In~\cite[Thm.~6.8]{Wolf2012Quantum}, positive definiteness
+    In~\cite[Thm.~6.2]{Wolf2012Quantum}, positive definiteness
     is proved using the growth condition
     $(\Id + \E)^{D-1}(X) > 0$ for irreducible maps
-    (\cite[Thm.~6.6, condition~(2)]{Wolf2012Quantum}).
+    (\cite[Thm.~6.2, condition~(2)]{Wolf2012Quantum}).
     Our proof exploits injectivity directly, giving a
     shorter argument.
 \end{proof}
@@ -49,13 +49,22 @@ The results follow
 
 \begin{proof}
     \leanok
-    \uses{thm:psd_fp_pd, thm:injective_irreducible}
-    Irreducibility of a Kraus map implies
-    the hypotheses of Theorem~\ref{thm:psd_fp_pd},
-    so the result follows.
-    Alternatively, one can use the irreducibility growth chain
-    $(\Id + \E)^{D-1}(X) > 0$ from
-    \cite[Thm.~6.6]{Wolf2012Quantum} directly.
+    \uses{def:irreducible_cp}
+    Suppose $\rho$ is not positive definite.
+    Then $\rho$ has a nontrivial kernel; let $Q$ be the
+    orthogonal projection onto the support of $\rho$
+    (the complement of the kernel).
+    A direct computation using the fixed-point equation
+    $\E_A(\rho) = \rho$ shows that $Q$ is an invariant
+    projection for $\E_A$: it satisfies
+    $Q \, \E_A(Q X Q) \, Q = \E_A(Q X Q)$ for all~$X$.
+    By irreducibility of $\E_A$
+    (Definition~\ref{def:irreducible_cp}),
+    every invariant projection is $0$ or $\Id$.
+    If $Q = 0$ then $\rho = 0$, contradicting $\rho \neq 0$.
+    If $Q = \Id$ then $\rho$ is positive definite,
+    contradicting our assumption.
+    Hence $\rho$ must be positive definite.
 \end{proof}
 
 \section{Uniqueness}
@@ -83,7 +92,7 @@ The results follow
     (it has a zero eigenvalue by construction of~$c_0$).
     By Theorem~\ref{thm:psd_fp_pd}, $\tau$ must be zero,
     giving $\sigma = c_0 \rho$.
-    In~\cite[Thm.~6.8]{Wolf2012Quantum}, uniqueness follows from
+    In~\cite[Thm.~6.2]{Wolf2012Quantum}, uniqueness follows from
     non-degeneracy of the spectral radius eigenvalue via
     the $(\Id + \E)^{D-1}$ growth condition.
     Our proof reduces uniqueness to positive definiteness

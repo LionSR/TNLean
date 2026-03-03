@@ -325,7 +325,7 @@ then applied to transfer maps, which are Kraus maps by construction
     if whenever $P$ is an orthogonal projection satisfying
     $E(P \MN{D} P) \subseteq P \MN{D} P$,
     then $P = 0$ or $P = \Id$.
-    This is \cite[Thm.~6.6, condition~(1)]{Wolf2012Quantum}.
+    This is \cite[Thm.~6.2, condition~(1)]{Wolf2012Quantum}.
     The definition applies to any linear map; complete positivity
     is not required.
 \end{definition}
@@ -451,10 +451,9 @@ then applied to transfer maps, which are Kraus maps by construction
     gives
     $\|E(\sigma_N) - \sigma_N\| = \frac{1}{N}\|E^N(\rho_0) - \rho_0\| \to 0$,
     so $E(\rho) = \rho$ by continuity.
-    In~\cite[Thm.~6.13]{Wolf2012Quantum}, existence is proved
+    In~\cite[Thm.~6.11]{Wolf2012Quantum}, existence is proved
     via Brouwer's fixed-point theorem; we use the Ces\`aro
-    argument instead, as Brouwer's theorem is not available
-    in Mathlib.
+    argument instead.
 \end{proof}
 
 \section{Fixed-point projection}
@@ -516,11 +515,10 @@ then applied to transfer maps, which are Kraus maps by construction
     \cite[Prop.~6.1]{Wolf2012Quantum}, so these coincide with
     the eigenvalues of maximal modulus.
 
-    \textbf{Note:} The Lean definition hardcodes $|\lambda| = 1$
-    rather than $|\lambda| = \rho(E)$
-    (the spectral radius).  This is correct for channels
-    but would need generalisation for maps with spectral
-    radius $\neq 1$.
+    \textbf{Note:} The condition $|\lambda| = 1$ is appropriate
+    for channels, since the spectral radius of a channel is~$1$.
+    For a general linear map with spectral radius $r \neq 1$
+    the condition would generalise to $|\lambda| = r$.
 \end{definition}
 
 \begin{theorem}[$1$ is a peripheral eigenvalue]\label{thm:one_peripheral}
@@ -564,21 +562,18 @@ then applied to transfer maps, which are Kraus maps by construction
     \lean{peripheral_isRootOfUnity_of_pow_eigenvalue}
     \leanok
     \uses{def:peripheral_eigenvalues}
-    Every peripheral eigenvalue of a channel is a root of unity.
-    By the multiplicative domain theory
-    (\cite[Prop.~6.2]{Wolf2012Quantum}),
-    if $\mu$ is a peripheral eigenvalue then $\mu^n$ is an
-    eigenvalue for every $n \ge 1$.
-    In finite dimensions the eigenvalue set is finite,
-    so $\{\mu^n\}$ is finite, forcing $\mu$ to be a root of unity.
+    Let $E$ be a linear endomorphism on a finite-dimensional
+    space.
+    If $\mu$ is a peripheral eigenvalue of $E$
+    and $\mu^n$ is an eigenvalue of $E$ for every $n \ge 1$,
+    then $\mu$ is a root of unity.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The hypothesis of the Lean theorem is that $\mu^n$ is an
-    eigenvalue for every~$n$.
-    By the pigeonhole principle on the finite eigenvalue set,
-    $\mu^a = \mu^b$ for some $a \neq b$, giving $\mu^{|a-b|} = 1$.
+    Since $\mu^n$ is an eigenvalue for every~$n$,
+    the pigeonhole principle on the finite eigenvalue set gives
+    $\mu^a = \mu^b$ for some $a \neq b$, hence $\mu^{|a-b|} = 1$.
 \end{proof}
 
 \begin{theorem}[Peripheral powers imply root of unity]\label{thm:peripheral_powers}
@@ -698,7 +693,7 @@ the Kadison--Schwarz equality at peripheral eigenvectors.
 The following result replaces the TP condition by the existence
 of a positive definite fixed point for the \emph{adjoint} Kraus map,
 matching the weighted-trace argument in
-\cite[Appendix~A]{Cirac2017Matrix}.
+\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 
 \begin{lemma}[Peripheral closure via adjoint fixed point]%
     \label{lem:peripheral_closed_powers_irred_fp}
@@ -758,7 +753,7 @@ matching the weighted-trace argument in
     $E^*(\Id) = \Id$, which is a positive definite fixed
     point of the adjoint.
     The adjoint-fixed-point formulation matches the
-    argument in \cite[Appendix~A]{Cirac2017Matrix},
+    argument in \cite[Appendix~A]{Cirac2017MPDO_AnnPhys},
     which uses a faithful invariant state rather than
     double stochasticity.
 \end{remark}
@@ -779,9 +774,9 @@ matching the weighted-trace argument in
     A linear map is \emph{primitive} if its only peripheral eigenvalue
     is $\lambda = 1$, i.e.\
     $\mathrm{peripheral}(E) = \{1\}$.
-    For channels this corresponds to \cite[Thm.~6.11]{Wolf2012Quantum}.
-    The Lean definition applies to any linear endomorphism, not only
-    channels.
+    For channels this corresponds to \cite[Thm.~6.7]{Wolf2012Quantum}.
+    This definition applies to any linear endomorphism, not only
+    to channels.
 \end{definition}
 
 \begin{theorem}[Primitivity equals period one]\label{thm:primitive_iff_period_one}
