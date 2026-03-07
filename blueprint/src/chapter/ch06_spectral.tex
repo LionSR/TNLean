@@ -78,7 +78,7 @@ $\sum_i (A^i)^\dagger A^i = \Id$.
 \begin{theorem}[Matrix trace of iterated mixed transfer at the identity]\label{thm:mixed_trace_identity}
     \lean{MPSTensor.trace_mixedTransferMap_pow_identity}
     \leanok
-    \uses{thm:mixed_pow}
+    \uses{def:mixed_transfer, def:eval_word}
     For $N \ge 0$,
     \[
         \tr\bigl(F_{AB}^N(\Id)\bigr)
@@ -127,8 +127,7 @@ $\sum_i (A^i)^\dagger A^i = \Id$.
 \begin{theorem}[Overlap equals transfer trace]\label{thm:overlap_trace}
     \lean{MPSTensor.trace_mixedTransferMap_pow_eq_mpvOverlap}
     \leanok
-    \uses{def:mixed_transfer, def:mpv_overlap,
-          thm:mixed_pow, lem:trace_expansion}
+    \uses{def:mixed_transfer, def:mpv_overlap}
     For normalized tensors $A, B$ of bond dimension~$D \ge 1$,
     \[
         O_{AB}(N)
@@ -211,14 +210,14 @@ and the doubly stochastic gauge
     $|\mu|^{2n} \le 1$ for all $n \ge 0$,
     hence $|\mu| \le 1$.
 
-    This proof avoids the Perron--Frobenius theorem entirely;
-    the bound follows from the Kadison--Schwarz inequality alone.
+    The argument uses only the Kadison--Schwarz inequality
+    and does not appeal to Perron--Frobenius theory.
 \end{proof}
 
 \begin{theorem}[Spectral radius bound]\label{thm:spectral_radius_le_one}
     \lean{MPSTensor.spectralRadius_mixedTransfer_le_one}
     \leanok
-    \uses{thm:eigenvalue_bound}
+    \uses{def:mixed_transfer}
     $\rho(F_{AB}) \le 1$ for normalized tensors.
 \end{theorem}
 
@@ -240,9 +239,9 @@ and the doubly stochastic gauge
 
 \begin{proof}
     \leanok
-    \uses{thm:eigenvalue_bound, thm:ks_peripheral,
-          thm:kraus_commute, thm:multiplicative_domain,
-          thm:simplicity, thm:skolem_noether}
+    \uses{thm:spectral_radius_le_one, def:gauge_phase_equiv,
+          thm:ks_peripheral, thm:kraus_commute,
+          thm:multiplicative_domain, thm:simplicity, thm:skolem_noether}
     Since $\rho(F_{AB}) \le 1$ (Theorem~\ref{thm:spectral_radius_le_one})
     and $\rho(F_{AB}) \ge 1$ by hypothesis, there exists an
     eigenvalue~$\mu$ with $|\mu| = 1$ and eigenvector $X \neq 0$:
@@ -266,19 +265,16 @@ and the doubly stochastic gauge
     establishing gauge-phase equivalence
     (Definition~\ref{def:gauge_phase_equiv}).
 
-    In~\cite{PerezGarcia2007Matrix}, this argument appears as
-    part of the proof of the single-block fundamental theorem.
-    Our formalization factors it out as a self-contained
-    spectral-gap theorem for the mixed transfer operator,
-    following the same chain
-    (KS inequality $\to$ multiplicative domain $\to$
-    Skolem--Noether).
+    The same
+    Kadison--Schwarz $\to$ multiplicative domain $\to$
+    Skolem--Noether argument appears in the
+    single-block case in~\cite{PerezGarcia2007Matrix}.
 \end{proof}
 
 \begin{theorem}[Strict spectral gap]\label{thm:spectral_gap}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one}
     \leanok
-    \uses{thm:modulus_one_gauge, def:gauge_phase_equiv}
+    \uses{def:gauge_phase_equiv, def:injective, def:mixed_transfer}
     Let $A, B$ be injective normalized MPS tensors that
     are \emph{not} gauge-phase equivalent.
     Then $\rho(F_{AB}) < 1$.
@@ -315,22 +311,20 @@ and the doubly stochastic gauge
     $X : \C^{D_2} \to \C^{D_1}$, which is impossible when
     $D_1 \neq D_2$.
 
-    The rectangular case does not appear in
-    \cite{PerezGarcia2007Matrix};
-    the formalization extends the square-case argument by
-    observing that the dimension mismatch obstructs the
-    final Skolem--Noether step.
+    The square-case spectral-gap argument applies,
+    with the last step replaced by the observation that
+    no invertible intertwiner exists when $D_1 \neq D_2$.
 \end{proof}
 
 \begin{theorem}[Rectangular overlap decay]\label{thm:overlap_decay_rect}
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne}
     \leanok
-    \uses{thm:spectral_gap_rect, thm:overlap_trace_rect}
+    \uses{def:mpv_overlap, def:injective}
     If $D_1 \neq D_2$ and both tensors are injective and
     normalized, then $O_{AB}(N) \to 0$ as $N \to \infty$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:spectral_gap_rect}
+\begin{proof}\leanok\uses{thm:spectral_gap_rect, thm:overlap_trace_rect}
     The spectral gap $\rho(F_{AB}^{\mathrm{rect}}) < 1$
     (Theorem~\ref{thm:spectral_gap_rect}) implies
     $(F_{AB}^{\mathrm{rect}})^N \to 0$, so the operator
@@ -344,7 +338,7 @@ and the doubly stochastic gauge
 \begin{theorem}[Transfer powers converge to zero]\label{thm:transfer_pow_zero}
     \lean{MPSTensor.mixedTransfer_pow_tendsto_zero}
     \leanok
-    \uses{thm:spectral_gap}
+    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
     Let $A, B$ be injective normalized tensors that are not
     gauge-phase equivalent.
     Then $F_{AB}^n(X) \to 0$ for every $X \in \MN{D}$.
@@ -363,7 +357,7 @@ and the doubly stochastic gauge
 \begin{theorem}[Overlap decay]\label{thm:overlap_decay}
     \lean{MPSTensor.mpvOverlap_tendsto_zero}
     \leanok
-    \uses{thm:transfer_pow_zero, thm:overlap_trace}
+    \uses{def:mpv_overlap, def:gauge_phase_equiv, def:injective}
     Let $A, B$ be injective normalized tensors of the same bond
     dimension that are not gauge-phase equivalent.
     Then $O_{AB}(N) \to 0$ as $N \to \infty$.
@@ -371,7 +365,7 @@ and the doubly stochastic gauge
 
 \begin{proof}
     \leanok
-    \uses{thm:transfer_pow_zero, lem:trace_expansion}
+    \uses{thm:transfer_pow_zero, thm:overlap_trace, lem:trace_expansion}
     By Theorem~\ref{thm:overlap_trace},
     $O_{AB}(N) = \tr(F_{AB}^N)$.
     Expand the operator trace over matrix units
@@ -387,7 +381,7 @@ and the doubly stochastic gauge
 \begin{theorem}[Cross-correlation decay]\label{thm:cross_decay}
     \lean{MPSTensor.cross_correlation_tendsto_zero}
     \leanok
-    \uses{thm:transfer_pow_zero}
+    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
     Let $A, B$ be injective normalized tensors that are not
     gauge-phase equivalent.
     For every $X \in \MN{D}$,
@@ -403,7 +397,7 @@ and the doubly stochastic gauge
 \begin{theorem}[Self-correlation persists]\label{thm:self_persist}
     \lean{MPSTensor.self_correlation_persists}
     \leanok
-    \uses{def:transfer_map, thm:qpf}
+    \uses{def:transfer_map}
     Let $\rho$ be the unique PSD fixed point of $\E_A$
     (Theorem~\ref{thm:qpf}).
     Then $\tr(\E_A^N(\rho)) = \tr(\rho)$ for all $N \ge 0$.
@@ -437,13 +431,12 @@ and the doubly stochastic gauge
 \begin{theorem}[Trace of powers converges to $1$]\label{thm:trace_pow_one}
     \lean{MPSTensor.linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one}
     \leanok
-    \uses{def:fixed_point_proj, thm:pow_decomp,
-          def:trace_preserving}
+    \uses{def:fixed_point_proj, def:trace_preserving}
     Let $E$ be trace-preserving with fixed point $\rho$
     ($\tr(\rho) \neq 0$) and
     let $P$ be the fixed-point projection
     (Definition~\ref{def:fixed_point_proj}).
-    If $\rho(E - P) < 1$, then
+    If $\rho_{\mathrm{spec}}(E - P) < 1$, then
     $\tr(E^n) \to 1$ as $n \to \infty$.
 \end{theorem}
 
@@ -453,7 +446,7 @@ and the doubly stochastic gauge
     By the power decomposition
     (Theorem~\ref{thm:pow_decomp}),
     $E^n = P + (E - P)^n$ for $n \ge 1$.
-    Since $\rho(E - P) < 1$, the Gelfand formula gives
+    Since $\rho_{\mathrm{spec}}(E - P) < 1$, the Gelfand formula gives
     $(E - P)^n \to 0$, so $\tr(E^n) \to \tr(P)$.
     The operator trace of $P$ equals~$1$: since
     $P(X) = \frac{\tr(X)}{\tr(\rho)} \rho$,
@@ -463,11 +456,10 @@ and the doubly stochastic gauge
 \begin{theorem}[Primitive overlap convergence]\label{thm:primitive_overlap}
     \lean{MPSTensor.mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one}
     \leanok
-    \uses{thm:trace_pow_one, thm:overlap_trace,
-          def:transfer_map}
+    \uses{def:transfer_map, def:fixed_point_proj, def:mpv_overlap}
     Let $A$ be a normalized MPS tensor with a nonzero PSD fixed
     point $\rho$ of the transfer map.
-    If $\rho(\E_A - P) < 1$ (where $P$ is the fixed-point
+    If $\rho_{\mathrm{spec}}(\E_A - P) < 1$ (where $P$ is the fixed-point
     projection), then $O_{AA}(N) \to 1$ as $N \to \infty$.
 \end{theorem}
 

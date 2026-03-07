@@ -206,7 +206,7 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
 \begin{theorem}[Two-block decomposition]\label{thm:two_block_decomp}
     \lean{MPSTensor.exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict}
     \leanok
-    \uses{thm:fp_inv_proj, thm:samempv_unitary}
+    \uses{def:transfer_map}
     If the transfer map has a PSD fixed point $\rho$ that is
     \emph{not} positive definite (i.e.\ $\rho$ has a nontrivial
     kernel), then $A$ is unitarily equivalent to a
@@ -246,7 +246,7 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
 \begin{theorem}[Irreducible block decomposition]\label{thm:irred_decomp}
     \lean{MPSTensor.exists_irreducible_blockDecomp}
     \leanok
-    \uses{def:irreducible_tensor, thm:two_block_decomp}
+    \uses{def:irreducible_tensor}
     Every MPS tensor $A$ can be decomposed (up to unitary
     equivalence) into a block-diagonal tensor
     $\bigoplus_{k=1}^r A_k$
@@ -277,9 +277,9 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
     Wedderburn--Artin decomposition
     (\cite[Eq.~(1.39)]{Wolf2012Quantum})
     to read off the block structure directly.
-    Our proof avoids this algebraic detour:
-    we iterate the invariant-projection splitting with
-    termination by strong induction on~$D$.
+    The block decomposition is obtained by iterating
+    the invariant-projection splitting and using strong
+    induction on~$D$ to ensure termination.
 \end{proof}
 
 \begin{theorem}[Diagonal PD fixed point]\label{thm:form_II}
@@ -423,8 +423,8 @@ For Burnside-style arguments it is more natural to work with invariant
 
     In~\cite{PerezGarcia2007Matrix}, the proportional case
     is handled as part of the canonical form argument.
-    Our proof isolates it as a self-contained consequence
-    of the spectral gap (Chapter~\ref{ch:spectral}).
+    Thus the proportional case is obtained directly from the spectral gap in
+    Chapter~\ref{ch:spectral}.
 \end{proof}
 
 \section{Canonical form from primitivity}
@@ -471,11 +471,10 @@ removing it as an independent assumption.
     to each block.
 \end{proof}
 
-\begin{remark}\label{rem:primitivity_reduces_assumptions}
-    Theorem~\ref{thm:canonical_from_primitive} means that
+\begin{remark}\label{rem:primitivity_reduces_assumptions}\leanok
+    Theorem~\ref{thm:canonical_from_primitive} shows that
     the overlap convergence hypothesis in the canonical form
-    predicate is \emph{redundant} when primitivity is
-    available.
+    predicate is redundant once primitivity is known.
     In the paper~\cite{Cirac2021Matrix},
     primitivity is obtained from irreducibility plus
     periodicity removal (blocking to period one).
@@ -490,9 +489,7 @@ removing it as an independent assumption.
     \lean{MPSTensor.exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic}
     \leanok
     \uses{def:blocked_tensor, def:transfer_map, def:primitive_channel,
-          def:unital_kraus, def:tp_kraus, def:irreducible_cp,
-          thm:peripheral_finite, thm:peripheral_roots_of_unity_irred_ds,
-          lem:common_power_eq_one, lem:peripheral_pow_singleton}
+          def:unital_kraus, def:tp_kraus, def:irreducible_cp}
     Let $A$ be an MPS tensor whose transfer map $\E_A$ is irreducible.
     Assume that $A$ is doubly stochastic:
     $\sum_i A^i (A^i)^\dagger = \Id$ and $\sum_i (A^i)^\dagger A^i = \Id$.
@@ -501,6 +498,8 @@ removing it as an independent assumption.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peripheral_roots_of_unity_irred_ds, thm:peripheral_finite,
+          lem:common_power_eq_one, lem:peripheral_pow_singleton}
     By Theorem~\ref{thm:peripheral_roots_of_unity_irred_ds},
     every peripheral eigenvalue of $\E_A$ is a root of unity.
     Since $\mathrm{peripheral}(\E_A)$ is finite
@@ -513,12 +512,12 @@ removing it as an independent assumption.
     of the original transfer map, so $\E_{A^{[p]}}$ is primitive.
 \end{proof}
 
-\begin{remark}\label{rem:blocking_primitivity_appendixA}
+\begin{remark}\label{rem:blocking_primitivity_appendixA}\leanok
     Theorem~\ref{thm:blocking_primitivity} is the ``periodicity removal by blocking''
     step in \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 \end{remark}
 
-\section{Canonical form existence pipeline (\cite{Cirac2017MPDO_AnnPhys})}%
+\section{Canonical form existence pipeline}%
 \label{sec:canonical_pipeline_1606}
 
 This section assembles the components of the canonical-form
@@ -528,22 +527,21 @@ construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
     \label{thm:irred_decomp_pipeline}
     \lean{MPSTensor.exists_irreducible_blockDecomp_pipeline1606}
     \leanok
-    \uses{thm:irred_decomp}
+    \uses{def:irreducible_tensor}
     Every MPS tensor $A$ generates the same MPV family as
     a block-diagonal tensor $\bigoplus_{k=1}^r A_k$
     with each block irreducible.
-    This re-exports Theorem~\ref{thm:irred_decomp}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:irred_decomp}
-    Direct application of Theorem~\ref{thm:irred_decomp}.
+    Apply Theorem~\ref{thm:irred_decomp}.
 \end{proof}
 
 \begin{theorem}[CFII data for irreducible TP blocks]%
     \label{thm:CFII_data}
     \lean{MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleTensor}
     \leanok
-    \uses{def:irreducible_tensor, thm:form_II, thm:samempv_unitary}
+    \uses{def:irreducible_tensor}
     Let $A$ be an irreducible MPS tensor in the TP gauge
     ($\sum_i (A^i)^\dagger A^i = \Id$) with $D > 0$.
     Then there exist a unitary~$U$ and a diagonal positive
@@ -570,7 +568,7 @@ construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
     \label{thm:pipeline_handoff}
     \lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII_handoff}
     \leanok
-    \uses{thm:irred_decomp_pipeline, thm:CFII_data}
+    \uses{def:irreducible_tensor}
     For any MPS tensor~$A$, there exist irreducible blocks
     $(A_k)_{k=1}^r$ that generate the same MPV family as~$A$.
     Moreover, for each block~$k$,
@@ -652,9 +650,7 @@ The results correspond to \cite{Evans1978Spectral},
     \label{thm:posDef_adjoint_eigenvector}
     \lean{MPSTensor.exists_posDef_adjoint_eigenvector}
     \leanok
-    \uses{def:irreducible_tensor, def:transfer_map,
-          thm:pf_eigenvector_existence, thm:irred_map_smul,
-          thm:adjoint_transfer_ne_zero}
+    \uses{def:irreducible_tensor, def:transfer_map}
     Let $A$ be an irreducible MPS tensor with $D > 0$
     and some $A^i \neq 0$.
     Then there exist a positive definite matrix~$\sigma$
@@ -688,7 +684,7 @@ The results correspond to \cite{Evans1978Spectral},
     \label{thm:tp_data_irreducible}
     \lean{MPSTensor.exists_tp_data_of_irreducible}
     \leanok
-    \uses{def:irreducible_tensor, thm:posDef_adjoint_eigenvector}
+    \uses{def:irreducible_tensor}
     Let $A$ be an irreducible MPS tensor with $D > 0$
     and some $A^i \neq 0$.
     Then there exist a positive real~$r$, a positive definite

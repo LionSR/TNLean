@@ -35,8 +35,7 @@ The results follow
     is proved using the growth condition
     $(\Id + \E)^{D-1}(X) > 0$ for irreducible maps
     (\cite[Thm.~6.2, condition~(2)]{Wolf2012Quantum}).
-    Our proof exploits injectivity directly, giving a
-    shorter argument.
+    Here injectivity rules out a nontrivial kernel directly.
 \end{proof}
 
 \begin{theorem}[PSD fixed point is PD --- irreducible version]\label{thm:psd_fp_pd_irred}
@@ -95,8 +94,9 @@ The results follow
     In~\cite[Thm.~6.2]{Wolf2012Quantum}, uniqueness follows from
     non-degeneracy of the spectral radius eigenvalue via
     the $(\Id + \E)^{D-1}$ growth condition.
-    Our proof reduces uniqueness to positive definiteness
-    via a spectral shift argument.
+    Here the conclusion follows by subtracting the
+    minimal-eigenvalue multiple of $\rho$ and applying
+    Theorem~\ref{thm:psd_fp_pd}.
 \end{proof}
 
 \section{Existence and assembly}
@@ -126,7 +126,7 @@ The results follow
 \begin{theorem}[Quantum Perron--Frobenius]\label{thm:qpf}
     \lean{MPSTensor.quantum_perron_frobenius}
     \leanok
-    \uses{thm:psd_fp_exists, thm:psd_fp_pd, thm:psd_fp_unique}
+    \uses{def:injective, def:transfer_map}
     Let $A$ be an injective MPS tensor (with
     $\sum_i (A^i)^\dagger A^i = \Id$).
     Then the transfer map $\E_A$ has a unique PSD fixed point
@@ -200,7 +200,7 @@ The results follow
 \end{proof}
 
 \begin{remark}[Eigenvector existence for general positive maps]%
-    \label{rem:pf_eigenvector_pointer}
+    \label{rem:pf_eigenvector_pointer}\notready
     The preceding results assume that a PSD fixed point is given.
     The \emph{existence} of such an eigenvector for a general
     positive map (Perron--Frobenius for cones) is developed
@@ -208,6 +208,5 @@ The results follow
     Theorem~\ref{thm:pf_eigenvector_existence} states the result,
     and Theorem~\ref{thm:tp_data_irreducible} uses it to
     put an irreducible MPS tensor into TP gauge.
-    This eigenvector existence is the single remaining
-    unproved assumption in the development.
+    This eigenvector existence is currently assumed as an axiom.
 \end{remark}

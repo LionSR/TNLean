@@ -50,7 +50,7 @@ The main references are
 \begin{theorem}[Cross-overlap decay for distinct CF-BNT blocks]\label{thm:cross_overlap_zero}
     \lean{MPSTensor.IsCanonicalFormBNT.cross_overlap_tendsto_zero}
     \leanok
-    \uses{def:cf_bnt, thm:overlap_decay, thm:overlap_decay_rect}
+    \uses{def:cf_bnt, def:mpv_overlap}
     If $((\mu_k),(A_k))$ satisfies the CF-BNT predicate and
     $j \neq k$, then $O_{A_j A_k}(N) \to 0$.
 \end{theorem}
@@ -76,7 +76,7 @@ The main references are
 
 \begin{proof}
     \leanok
-    \uses{thm:mpv_decomposition}
+    \uses{thm:mpv_decomposition, thm:cross_overlap_zero}
     \textbf{Normality}: each block is injective
     (hence $1$-block injective, hence normal).
     \textbf{Spanning}: the MPV decomposition
@@ -85,8 +85,8 @@ The main references are
     \textbf{Linear independence}: the overlap matrix
     $G_{jk}(N) = O_{A_j A_k}(N)$ converges to the identity
     (diagonal entries $\to 1$ by the self-overlap hypothesis;
-    off-diagonal entries $\to 0$ by the spectral gap,
-    since distinct CF-BNT blocks are not gauge-phase equivalent).
+    off-diagonal entries $\to 0$ by
+    Theorem~\ref{thm:cross_overlap_zero}).
     A Gram matrix converging to the identity is eventually
     invertible, giving linear independence.
 \end{proof}
@@ -142,10 +142,9 @@ The main references are
     The overlap matrix $O_{A_j B_k}(N)$ converges to a
     matrix with at most one nonzero entry per row/column
     (by the spectral gap).
-    This is the ``primitive branch'' of the argument,
-    where the overlap orthonormality hypotheses are
-    assumed directly rather than derived from
-    proportional MPVs with convergent coefficients.
+    Thus the overlap orthonormality hypotheses are
+    assumed directly, rather than derived from
+    proportional MPVs together with coefficient convergence.
 \end{proof}
 
 \section{Coefficient convergence}
@@ -164,6 +163,15 @@ The main references are
     $|\mu_k / \mu_0| < 1$, so the geometric sequence
     converges to~$0$.
 \end{proof}
+
+\begin{remark}[Strict-dominance regime]\notready
+    Theorem~\ref{thm:coeff_ratio_decay} applies when one
+    modulus is strictly dominant:
+    $|\mu_0| > |\mu_k|$ for $k \ge 1$.
+    The oscillatory case
+    $\sum_q \mu_{j,q}^N$ with $|\mu_{j,q}| = 1$
+    is treated separately in the full paper and is not formalized here.
+\end{remark}
 
 \section{Newton--Girard identities}
 
@@ -187,7 +195,6 @@ The main references are
 \begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
     \lean{Matrix.sum_pow_eq_implies_multiset_eq}
     \leanok
-    \uses{thm:newton_girard}
     Let $\alpha, \beta : \{1, \ldots, n\} \to \C$.
     If $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for all $k \ge 1$,
     then the multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
@@ -214,14 +221,14 @@ The main references are
     A \emph{primitive MPS tensor} is one equipped with a nonzero
     PSD fixed point $\rho$ of the transfer map such that the
     complementary spectral radius
-    $\rho(\E_A - P) < 1$
+    $\rho_{\mathrm{spec}}(\E_A - P) < 1$
     (where $P$ is the fixed-point projection).
 \end{definition}
 
 \begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
     \lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
     \leanok
-    \uses{def:primitive_mps, thm:primitive_overlap}
+    \uses{def:primitive_mps, def:mpv_overlap}
     If $A$ is a primitive MPS tensor, then
     $O_{AA}(N) \to 1$.
 \end{theorem}
@@ -253,11 +260,11 @@ The main references are
 \begin{proof}
     \leanok
     \uses{thm:cf_bnt_is_bnt, thm:bnt_perm_prop,
-          thm:coeff_ratio_decay, thm:ft_canonical}
+          thm:coeff_ratio_decay}
     The CF-BNT predicate produces a BNT decomposition
     (Theorem~\ref{thm:cf_bnt_is_bnt}).
-    Coefficient convergence (Theorem~\ref{thm:coeff_ratio_decay})
-    provides the convergent nonzero coefficients.
+    Theorem~\ref{thm:coeff_ratio_decay}
+    gives the required convergent nonzero coefficients.
     The BNT permutation theorem
     (Theorem~\ref{thm:bnt_perm_prop}) gives the block count,
     permutation, and per-block gauge-phase equivalence.
@@ -276,7 +283,7 @@ The main references are
 \begin{proof}
     \leanok
     \uses{thm:ft_proportional, thm:power_sum_multiset,
-          thm:ft_canonical}
+          thm:newton_girard}
     Theorem~\ref{thm:ft_proportional} gives the permutation
     and per-block gauge-phase equivalence.
     From equal MPVs, the power-sum identity
@@ -286,12 +293,4 @@ The main references are
     Combining with the permutation and per-block gauge-phase
     equivalence gives global gauge equivalence.
 
-    This is the full Fundamental Theorem of MPS as stated in
-    \cite[Theorem~4.1]{Cirac2021Matrix}
-    and originally proved in~\cite{PerezGarcia2007Matrix}.
-    The key deviation from the literature is the explicit
-    use of Newton--Girard identities
-    (Theorem~\ref{thm:newton_girard}) to pass from
-    equal power sums of scaling factors to
-    multiset equality.
 \end{proof}

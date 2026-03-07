@@ -211,7 +211,7 @@ then applied to transfer maps, which are Kraus maps by construction
 \begin{theorem}[Hilbert--Schmidt contraction]\label{thm:hs_contraction}
     \lean{KadisonSchwarz.hilbertSchmidt_contraction}
     \leanok
-    \uses{thm:kadison_schwarz, def:unital_kraus, def:tp_kraus}
+    \uses{def:unital_kraus, def:tp_kraus}
     If a Kraus map is both unital and trace-preserving, then
     $\tr(E(X)^\dagger E(X)) \le \tr(X^\dagger X)$
     for all $X \in \MN{D}$.
@@ -271,7 +271,7 @@ then applied to transfer maps, which are Kraus maps by construction
 \begin{theorem}[KS equality for peripheral eigenvectors]\label{thm:ks_peripheral}
     \lean{KadisonSchwarz.ks_equality_of_peripheral_eigenvector}
     \leanok
-    \uses{thm:kadison_schwarz, def:unital_kraus, def:tp_kraus}
+    \uses{def:unital_kraus, def:tp_kraus}
     Let $E$ be a Kraus map that is both unital and trace-preserving.
     If $E(X) = \mu X$ with $|\mu| = 1$, then the KS gap vanishes:
     $E(X^\dagger X) = E(X)^\dagger E(X)$.
@@ -293,7 +293,7 @@ then applied to transfer maps, which are Kraus maps by construction
 \begin{theorem}[Multiplicative domain]\label{thm:multiplicative_domain}
     \lean{KadisonSchwarz.multiplicative_domain_left}
     \leanok
-    \uses{thm:kraus_commute, def:unital_kraus}
+    \uses{def:unital_kraus}
     Let $E$ be a unital Kraus map.
     If $E(X^\dagger X) = E(X)^\dagger E(X)$, then
     $E(X^\dagger Y) = E(X)^\dagger E(Y)$ for all $Y \in \MN{D}$.
@@ -311,7 +311,7 @@ then applied to transfer maps, which are Kraus maps by construction
         E(X^\dagger Y)
         &= \sum_i K_i X^\dagger Y K_i^\dagger \\
         &= \sum_i E(X)^\dagger K_i Y K_i^\dagger \\
-        &= E(X)^\dagger E(Y). \qedhere
+        &= E(X)^\dagger E(Y).
     \end{align*}
 \end{proof}
 
@@ -333,9 +333,9 @@ then applied to transfer maps, which are Kraus maps by construction
 \begin{theorem}[Injectivity implies irreducibility]\label{thm:injective_irreducible}
     \lean{MPSTensor.injective_implies_irreducibleCP}
     \leanok
-    \uses{def:injective, def:transfer_map, def:irreducible_cp, thm:transfer_cp}
-    If $A$ is an injective MPS tensor, then its transfer map
-    $\E_A$ (which is CP by Theorem~\ref{thm:transfer_cp}) is irreducible.
+    \uses{def:injective, def:transfer_map, def:irreducible_cp}
+    If $A$ is an injective MPS tensor, then its transfer map $\E_A$
+    is irreducible.
 \end{theorem}
 
 \begin{proof}
@@ -364,7 +364,7 @@ then applied to transfer maps, which are Kraus maps by construction
 \begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
     \lean{MPSTensor.transferMap_isChannel}
     \leanok
-    \uses{def:transfer_map, def:channel, thm:transfer_cp}
+    \uses{def:transfer_map, def:channel}
     If $\sum_i (A^i)^\dagger A^i = \Id$, then the transfer map
     $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
     is a quantum channel (CPTP).
@@ -427,10 +427,7 @@ then applied to transfer maps, which are Kraus maps by construction
 \begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}
     \lean{IsChannel.exists_posSemidef_fixedPoint}
     \leanok
-    \uses{def:channel, def:density_matrices, def:cesaro_mean,
-          thm:density_compact, thm:density_convex,
-          thm:density_nonempty, thm:channel_preserves_density,
-          thm:cesaro_telescope}
+    \uses{def:channel, def:density_matrices, def:cesaro_mean}
     Every quantum channel $E : \MN{D} \to \MN{D}$ (with $D \ge 1$)
     has a nonzero positive semidefinite fixed point:
     there exists $\rho \ge 0$, $\rho \neq 0$, with $E(\rho) = \rho$.
@@ -438,7 +435,8 @@ then applied to transfer maps, which are Kraus maps by construction
 
 \begin{proof}
     \leanok
-    \uses{thm:density_compact, thm:channel_preserves_density,
+    \uses{thm:density_compact, thm:density_convex,
+          thm:density_nonempty, thm:channel_preserves_density,
           thm:cesaro_telescope}
     Start with any $\rho_0 \in \mc{D}_D$
     (Theorem~\ref{thm:density_nonempty}).
@@ -579,7 +577,7 @@ then applied to transfer maps, which are Kraus maps by construction
 \begin{theorem}[Peripheral powers imply root of unity]\label{thm:peripheral_powers}
     \lean{peripheral_isRootOfUnity_of_closed_powers}
     \leanok
-    \uses{def:peripheral_eigenvalues, thm:peripheral_roots_of_unity}
+    \uses{def:peripheral_eigenvalues}
     If the set of peripheral eigenvalues of a linear
     endomorphism~$E$ on a finite-dimensional space is
     \emph{closed under powers}
@@ -601,7 +599,7 @@ then applied to transfer maps, which are Kraus maps by construction
 
 \subsection{Periodicity removal by powering}\label{subsec:periodicity_removal_power}
 
-\begin{remark}\label{rem:periodicity_removal_spectral}
+\begin{remark}\label{rem:periodicity_removal_spectral}\leanok
     The results in this subsection are purely spectral: they use only
     finiteness of a set of complex numbers and the spectral mapping theorem
     for powers. In particular, they do not rely on complete positivity.
@@ -623,7 +621,7 @@ then applied to transfer maps, which are Kraus maps by construction
 \begin{lemma}[Powering collapses peripheral eigenvalues]\label{lem:peripheral_pow_singleton}
     \lean{peripheralEigenvalues_pow_eq_singleton}
     \leanok
-    \uses{def:peripheral_eigenvalues, thm:one_peripheral}
+    \uses{def:peripheral_eigenvalues}
     Let $E : \MN{D} \to \MN{D}$ be a linear map, and assume that $E$ has a
     nonzero fixed point $\rho \neq 0$.
     Let $p > 0$.
@@ -644,8 +642,7 @@ then applied to transfer maps, which are Kraus maps by construction
 \begin{lemma}[Peripheral eigenvalues closed under powers]\label{lem:peripheral_closed_powers_irred_ds}
     \lean{peripheralEigenvalues_pow_mem_of_irreducible_doubly_stochastic}
     \leanok
-    \uses{def:unital_kraus, def:tp_kraus, def:irreducible_cp, thm:ks_peripheral,
-          thm:psd_fp_pd_irred}
+    \uses{def:unital_kraus, def:tp_kraus, def:irreducible_cp}
     Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is both
     unital and trace-preserving, and assume that $E$ is irreducible.
     Then $\mathrm{peripheral}(E)$ is closed under powers:
@@ -669,7 +666,8 @@ then applied to transfer maps, which are Kraus maps by construction
     \label{thm:peripheral_roots_of_unity_irred_ds}
     \lean{peripheral_isRootOfUnity_of_irreducible_doubly_stochastic}
     \leanok
-    \uses{lem:peripheral_closed_powers_irred_ds, thm:peripheral_powers}
+    \uses{def:unital_kraus, def:tp_kraus, def:irreducible_cp,
+          def:peripheral_eigenvalues}
     Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is both
     unital and trace-preserving, and assume that $E$ is irreducible.
     Then every peripheral eigenvalue $\mu$ of $E$ is a root of unity:
@@ -677,6 +675,7 @@ then applied to transfer maps, which are Kraus maps by construction
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:peripheral_closed_powers_irred_ds, thm:peripheral_powers}
     Combine the closure-under-powers result
     (Lemma~\ref{lem:peripheral_closed_powers_irred_ds})
     with Theorem~\ref{thm:peripheral_powers}.
@@ -699,8 +698,7 @@ matching the weighted-trace argument in
     \label{lem:peripheral_closed_powers_irred_fp}
     \lean{MPSTensor.peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
-    \uses{def:unital_kraus, def:kraus_adjoint_map, def:irreducible_cp,
-          thm:ks_peripheral, thm:psd_fp_pd_irred}
+    \uses{def:unital_kraus, def:kraus_adjoint_map, def:irreducible_cp}
     Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is
     unital ($\sum_i K_i K_i^\dagger = \Id$), and assume:
     \begin{enumerate}
@@ -730,10 +728,13 @@ matching the weighted-trace argument in
     \label{thm:peripheral_roots_irred_fp}
     \lean{MPSTensor.peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
-    \uses{lem:peripheral_closed_powers_irred_fp, thm:peripheral_powers}
-    Under the same hypotheses as
-    Lemma~\ref{lem:peripheral_closed_powers_irred_fp},
-    every peripheral eigenvalue of $E$ is a root of unity.
+    \uses{def:unital_kraus, def:kraus_adjoint_map, def:irreducible_cp,
+          def:peripheral_eigenvalues}
+    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is
+    unital, and assume that the adjoint Kraus map
+    $E^*(X) = \sum_i K_i^\dagger X K_i$ has a positive definite fixed
+    point and that $E$ is irreducible.
+    Then every peripheral eigenvalue of $E$ is a root of unity.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -743,7 +744,7 @@ matching the weighted-trace argument in
     with Theorem~\ref{thm:peripheral_powers}.
 \end{proof}
 
-\begin{remark}\label{rem:adjoint_fp_more_general}
+\begin{remark}\label{rem:adjoint_fp_more_general}\leanok
     Lemma~\ref{lem:peripheral_closed_powers_irred_fp}
     and Theorem~\ref{thm:peripheral_roots_irred_fp}
     strictly generalise
@@ -761,7 +762,7 @@ matching the weighted-trace argument in
 \begin{definition}[Channel period]\label{def:channel_period}
     \lean{channelPeriod}
     \leanok
-    \uses{def:peripheral_eigenvalues, thm:peripheral_finite}
+    \uses{def:peripheral_eigenvalues}
     The \emph{period} of a channel $E$ is the number of
     peripheral eigenvalues (counted without multiplicity):
     $p(E) := |\mathrm{peripheral}(E)|$.
@@ -796,16 +797,45 @@ matching the weighted-trace argument in
     only element is $1$.
 \end{proof}
 
-\begin{theorem}[Non-peripheral eigenvalues of primitive maps]\label{thm:primitive_compl_lt_one}
+\begin{theorem}[Primitive maps have a spectral gap on the complement]\label{thm:primitive_compl_lt_one}
     \lean{compl_eigenvalue_norm_lt_one_of_primitive}
     \leanok
-    \uses{def:primitive_channel}
-    If a linear map is primitive, then every eigenvalue $\lambda \neq 1$
-    satisfies $|\lambda| < 1$.
+    \uses{def:primitive_channel, def:fixed_point_proj, def:trace_preserving}
+    Let $E : \MN{D} \to \MN{D}$ be trace-preserving, and let
+    $\rho \neq 0$ satisfy $E(\rho) = \rho$ and $\tr(\rho) \neq 0$.
+    Let
+    \[
+        P(X) = \frac{\tr(X)}{\tr(\rho)} \, \rho
+    \]
+    be the fixed-point projection associated to $\rho$.
+    Assume that:
+    \begin{enumerate}
+        \item $E$ is primitive;
+        \item every eigenvalue $\mu$ of $E$ satisfies $|\mu| \le 1$;
+        \item whenever $E(X) = X$ and $\tr(X) = 0$, one has $X = 0$.
+    \end{enumerate}
+    Then every eigenvalue $\nu$ of $E - P$ satisfies $|\nu| < 1$.
 \end{theorem}
 
-\begin{proof}\leanok
-    By primitivity, no eigenvalue other than~$1$ has modulus~$1$.
-    Since the spectral radius is~$1$, all other eigenvalues have
-    strictly smaller modulus.
+\begin{proof}
+    \leanok
+    Let $(E - P)(X) = \nu X$ with $X \neq 0$.
+    Then
+    \[
+        E(X) = \nu X + P(X).
+    \]
+    If $\tr(X) = 0$, then $P(X) = 0$, so $E(X) = \nu X$ and hence
+    $\nu$ is an eigenvalue of $E$ with $|\nu| \le 1$.
+    If $|\nu| = 1$, primitivity forces $\nu = 1$, so $X$ is a
+    trace-zero fixed point of $E$; by assumption this implies $X = 0$,
+    a contradiction. Thus $|\nu| < 1$.
+
+    If instead $\tr(X) \neq 0$, trace preservation and
+    $\tr(P(X)) = \tr(X)$ give
+    \[
+        \tr(X) = \tr(E(X)) = \nu \, \tr(X) + \tr(P(X))
+        = \nu \, \tr(X) + \tr(X),
+    \]
+    so $\nu \, \tr(X) = 0$ and therefore $\nu = 0$.
+    In either case, $|\nu| < 1$.
 \end{proof}
