@@ -54,3 +54,6 @@ blueprint/src/web.paux
 
 # Local scratch / experiments
 Scratch/
+
+# Nested Lake artifacts in vendored local packages
+External/**/.lake/
