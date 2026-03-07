@@ -11,6 +11,7 @@ import TNLean.Algebra.MatrixFrobenius
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
 import TNLean.Topology.BrouwerProduct
+import TNLean.Topology.CompactRetractFixedPoint
 
 -- Layer 2: Quantum channels (general theory)
 import TNLean.Channel.PositiveMap
