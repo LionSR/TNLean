@@ -10,9 +10,11 @@ import TNLean.Algebra.MatrixFrobenius
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
+import TNLean.Topology.BrouwerProduct
 
 -- Layer 2: Quantum channels (general theory)
 import TNLean.Channel.PositiveMap
+import TNLean.Channel.DensityRetract
 
 -- Layer 2a: Trusted topological input for Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPointDensityMatrices

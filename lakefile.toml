@@ -18,5 +18,9 @@ rev = "v4.28.0"
 name = "checkdecls"
 git = "https://github.com/PatrickMassot/checkdecls.git"
 
+[[require]]
+name = "Gametheory"
+path = "External/Brouwer"
+
 [[lean_lib]]
 name = "TNLean"
