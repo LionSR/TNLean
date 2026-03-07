@@ -593,13 +593,14 @@ The results correspond to \cite{Evans1978Spectral},
 \cite[Ch.~6]{Wolf2012Quantum}, and
 \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 
-\begin{theorem}[PSD eigenvector for positive maps (axiom)]%
+\begin{theorem}[PSD eigenvector for positive maps]%
     \label{thm:pf_eigenvector_existence}
     \lean{exists_posSemidef_eigenvector}
     \notready
     \uses{def:positive_map}
-    Let $E : \MN{D} \to \MN{D}$ be a nonzero positive linear map
-    with $D > 0$.
+    Let $E : \MN{D} \to \MN{D}$ be a positive linear map with
+    $D > 0$, and assume that $E(\sigma) \neq 0$ for every nonzero
+    PSD matrix $\sigma$.
     Then there exist a nonzero PSD matrix $\rho$ and a positive
     real $r > 0$ such that $E(\rho) = r \rho$.
 
@@ -607,12 +608,12 @@ The results correspond to \cite{Evans1978Spectral},
     positive maps on matrix algebras
     (\cite{Evans1978Spectral},
     \cite[Proposition~6.1]{Wolf2012Quantum}).
-    The standard proof applies the Brouwer fixed-point theorem
-    to the normalization map
-    $\rho \mapsto E(\rho) / \tr(E(\rho))$
-    on the compact convex set of density matrices.
-    This fixed-point argument has not yet been formalized;
-    accordingly this result is currently assumed as an axiom.
+    The standard proof applies Brouwer's fixed-point theorem to the
+    normalization map $\rho \mapsto E(\rho) / \tr(E(\rho))$ on the
+    compact convex set of density matrices.
+    In the current development, this proof is reduced to a single
+    trusted Brouwer fixed-point input specialized to density
+    matrices.
 \end{theorem}
 
 \begin{theorem}[Scaling preserves irreducibility]%
@@ -657,7 +658,9 @@ The results correspond to \cite{Evans1978Spectral},
     and a positive real $r > 0$ such that
     $\E_A^\dagger(\sigma) = r \sigma$.
 
-    Uses Theorem~\ref{thm:pf_eigenvector_existence} (axiom).
+    Uses Theorem~\ref{thm:pf_eigenvector_existence}, whose proof is
+    currently reduced to the trusted Brouwer fixed-point input on
+    density matrices.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -665,8 +668,13 @@ The results correspond to \cite{Evans1978Spectral},
           thm:adjoint_transfer_ne_zero, thm:psd_fp_pd_irred}
     By Theorem~\ref{thm:adjoint_transfer_ne_zero},
     $\E_A^\dagger \neq 0$.
-    By Theorem~\ref{thm:pf_eigenvector_existence},
-    there exist $\sigma_0 \ge 0$ (PSD, nonzero)
+    Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
+    Kraus map, it is positive. Irreducibility of $A$ transfers to the
+    adjoint transfer map, and together with $\E_A^\dagger \neq 0$
+    this implies $\E_A^\dagger(\tau) \neq 0$ for every nonzero
+    PSD matrix $\tau$.
+    Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to
+    $\E_A^\dagger$, giving $\sigma_0 \ge 0$ (PSD, nonzero)
     and $r > 0$ with $\E_A^\dagger(\sigma_0) = r \sigma_0$.
     Rescale: set $T^i = r^{-1/2} (A^i)^\dagger$.
     Then $\E_T(\sigma_0) = \sigma_0$,
@@ -695,7 +703,9 @@ The results correspond to \cite{Evans1978Spectral},
     is trace-preserving:
     $\sum_i (B^i)^\dagger B^i = \Id$.
 
-    Uses Theorem~\ref{thm:pf_eigenvector_existence} (axiom).
+    Uses Theorem~\ref{thm:pf_eigenvector_existence}, whose proof is
+    currently reduced to the trusted Brouwer fixed-point input on
+    density matrices.
     This is the ``spectral rescaling $+$ TP gauge'' step of
     \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 \end{theorem}
@@ -720,9 +730,11 @@ The results correspond to \cite{Evans1978Spectral},
     \notready
     The end-to-end pipeline from an arbitrary MPS tensor to
     canonical form proceeds as follows.
-    Every step is proved except for step~2,
-    which requires Brouwer's fixed-point theorem and is
-    currently assumed as an axiom (marked $\star$ below).
+    Every step is proved except for the single topological input
+    behind step~2, marked $\star$ below.
+    Concretely, Theorem~\ref{thm:pf_eigenvector_existence} is
+    currently reduced to a specialized Brouwer fixed-point statement
+    on density matrices, and step~3 depends on that theorem.
     \begin{enumerate}
         \item Irreducible block decomposition
               (Theorem~\ref{thm:irred_decomp}):
@@ -731,7 +743,8 @@ The results correspond to \cite{Evans1978Spectral},
         \item[$\star$2.] PF eigenvector
               (Theorem~\ref{thm:pf_eigenvector_existence}):
               the adjoint transfer map has a PSD eigenvector.
-              Requires Brouwer's fixed-point theorem.
+              This is the only step using the trusted Brouwer
+              fixed-point input on density matrices.
         \item TP gauge
               (Theorem~\ref{thm:tp_data_irreducible}):
               rescale and gauge to TP normalization

@@ -201,12 +201,17 @@ The results follow
 
 \begin{remark}[Eigenvector existence for general positive maps]%
     \label{rem:pf_eigenvector_pointer}\notready
-    The preceding results assume that a PSD fixed point is given.
-    The \emph{existence} of such an eigenvector for a general
-    positive map (Perron--Frobenius for cones) is developed
-    in Chapter~\ref{ch:canonical}, \S\ref{sec:pf_eigenvector}:
-    Theorem~\ref{thm:pf_eigenvector_existence} states the result,
-    and Theorem~\ref{thm:tp_data_irreducible} uses it to
-    put an irreducible MPS tensor into TP gauge.
-    This eigenvector existence is currently assumed as an axiom.
+    The trace-preserving fixed-point statements in this chapter are
+    already unconditional: Theorem~\ref{thm:psd_fp_exists} obtains a
+    PSD fixed point from the Ces\`aro argument of
+    Theorem~\ref{thm:cesaro_fixedpoint}.
+    The remaining gap appears only in the later non-trace-preserving
+    setting of Chapter~\ref{ch:canonical},
+    \S\ref{sec:pf_eigenvector}, where
+    Theorem~\ref{thm:pf_eigenvector_existence} gives a
+    Perron--Frobenius eigenvector for a general positive map and
+    Theorem~\ref{thm:tp_data_irreducible} uses it to rescale an
+    irreducible tensor into TP gauge.
+    At present this later step is reduced to a single trusted Brouwer
+    fixed-point input on density matrices.
 \end{remark}

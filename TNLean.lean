@@ -9,6 +9,11 @@ import TNLean.Algebra.IrreducibleTensorAction
 
 -- Layer 1: Quantum channels (general theory)
 import TNLean.Channel.PositiveMap
+
+-- Layer 1a: Trusted topological input for Perron--Frobenius existence
+import TNLean.Axioms.BrouwerFixedPointDensityMatrices
+
+-- Layer 1b: Quantum channels (general theory)
 import TNLean.Channel.KadisonSchwarz
 import TNLean.Channel.MultiplicativeDomain
 import TNLean.Channel.MultiplicativeDomainPowers
@@ -22,7 +27,6 @@ import TNLean.Channel.PeripheralSpectrum
 import TNLean.Channel.ConjugationSpectrum
 import TNLean.Channel.PeripheralPowers
 import TNLean.Channel.PeriodicityRemoval
-import TNLean.Channel.PerronFrobeniusExistence
 
 -- Layer 2: Spectral theory (QPF + spectral gap)
 import TNLean.QPF.PosDef
