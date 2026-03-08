@@ -17,7 +17,7 @@ import TNLean.Topology.CompactRetractFixedPoint
 import TNLean.Channel.PositiveMap
 import TNLean.Channel.DensityRetract
 
--- Layer 2a: Trusted topological input for Perron--Frobenius existence
+-- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPointDensityMatrices
 
 -- Layer 2b: Quantum channels (general theory)
@@ -55,7 +55,7 @@ import TNLean.MPS.MPVOverlap
 import TNLean.MPS.Transfer
 import TNLean.MPS.BlockingTransfer
 import TNLean.MPS.BlockingPeriodicity
-import TNLean.MPS.BlockingPeriodicityCFII2
+import TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint
 import TNLean.MPS.TransferNormalization
 import TNLean.MPS.FixedPointInvariantProjection
 import TNLean.MPS.CPPrimitive
@@ -86,7 +86,6 @@ import TNLean.MPS.CanonicalFormExistence1606
 import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.IrreducibleAdjoint
 import TNLean.MPS.TPGaugeFromAdjointFixedPoint
-import TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint
 import TNLean.MPS.BlockPermutationMPS
 import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete

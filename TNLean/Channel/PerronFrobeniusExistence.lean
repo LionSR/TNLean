@@ -18,21 +18,19 @@ a nonzero positive map on `M_D(ℂ)`, and derives from it:
 * a PosDef fixed point for the adjoint transfer map of a rescaled irreducible tensor,
 * the existence of a TP-normalized tensor from an irreducible one (via `tpGauge`).
 
-## Brouwer fixed-point input
+## Brouwer fixed-point theorem on density matrices
 
 The core existence theorem `exists_posSemidef_eigenvector` is proved via Brouwer's
 fixed-point theorem applied to the normalization map
 `ρ ↦ E(ρ) / tr(E(ρ))` on the compact convex set of density matrices.
 
-Since Brouwer's fixed-point theorem is not currently available in Mathlib, the
-required specialized statement is isolated as the trusted input
-`brouwer_fixedPoint_densityMatrices`
-(from `TNLean.Axioms.BrouwerFixedPointDensityMatrices`).
+The required density-matrix Brouwer theorem is now proved in
+`TNLean.Axioms.BrouwerFixedPointDensityMatrices` (the legacy path name is kept for
+backwards compatibility even though the file no longer introduces an axiom).
 
 ## Main results
 
 * `exists_posSemidef_eigenvector`: PSD eigenvector existence for positive maps
-    (assumes Brouwer axiom)
 * `MPSTensor.adjointTransferMap_ne_zero_of_nonzero`:
     the adjoint transfer map is nonzero when some `A i ≠ 0`
 * `MPSTensor.exists_posDef_adjoint_eigenvector`:
@@ -60,10 +58,9 @@ Let `E` be a positive linear map on `M_D(ℂ)` (with `D > 0`) such that `E ρ �
 nonzero PSD matrix `ρ`. Then there exists a nonzero PSD matrix `ρ` and a positive real `r`
 such that `E ρ = r • ρ`.
 
-**Proof idea** (formalized assuming Brouwer's fixed point theorem on density matrices):
-consider the normalization map `normMap E : ρ ↦ E(ρ) / tr(E(ρ))` on density matrices and
-apply Brouwer to obtain a fixed point, then unfold the fixed-point identity using
-`eq_normMap_iff_eigenvector`. -/
+**Proof idea**: consider the normalization map `normMap E : ρ ↦ E(ρ) / tr(E(ρ))`
+on density matrices, apply the proved density-matrix Brouwer theorem to obtain a
+fixed point, then unfold the fixed-point identity using `eq_normMap_iff_eigenvector`. -/
 theorem exists_posSemidef_eigenvector
     [NeZero D]
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -87,7 +84,7 @@ theorem exists_posSemidef_eigenvector
     exact normMap_mem_densityMatrices (D := D) (E := E) hpos hNZ_density ρ hρ_mem
   have hCont : ContinuousOn (normMap (D := D) E) (densityMatrices D) :=
     continuousOn_normMap_densityMatrices (D := D) (E := E) hpos hNZ_density
-  -- Apply the isolated Brouwer fixed-point input on density matrices.
+  -- Apply the proved Brouwer fixed-point theorem on density matrices.
   rcases
       brouwer_fixedPoint_densityMatrices (D := D) (f := normMap (D := D) E) hCont hMapsTo with
     ⟨ρ, hρ_mem, hρ_fix⟩
@@ -185,8 +182,9 @@ In other words: `∑ ((1/√r) • A i)ᴴ * σ * ((1/√r) • A i) = σ`.
 
 This is equivalent to saying `∑ (A i)ᴴ * σ * A i = r • σ` (eigenvector equation).
 
-Depends on `exists_posSemidef_eigenvector`
-(and hence on the isolated Brouwer fixed-point input on density matrices). -/
+This theorem is obtained by applying `exists_posSemidef_eigenvector` to the adjoint
+transfer map and then upgrading the resulting PSD fixed point to a PosDef one using
+irreducibility. -/
 theorem exists_posDef_adjoint_eigenvector
     [NeZero D]
     (A : MPSTensor d D)
@@ -267,8 +265,8 @@ For an irreducible MPS tensor `A` with `D > 0` and some `A i ≠ 0`, there exist
 The tensor `B` is gauge-equivalent to the rescaled tensor `(1/√r) • A`, hence has
 the same MPV as `A` up to a system-size-dependent factor `(1/√r)^N`.
 
-Depends on `exists_posSemidef_eigenvector`
-(and hence on the isolated Brouwer fixed-point input on density matrices). -/
+This theorem combines `exists_posDef_adjoint_eigenvector` with the explicit `tpGauge`
+construction. -/
 theorem exists_tp_data_of_irreducible
     [NeZero D]
     (A : MPSTensor d D)
