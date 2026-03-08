@@ -11,296 +11,296 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
 \section{Block-diagonal assembly}
 
 \begin{definition}[Block-diagonal tensor from blocks]\label{def:tensor_from_blocks}
-    \lean{MPSTensor.toTensorFromBlocks}
-    \leanok
-    \uses{def:mps_tensor}
-    Given $r$ blocks with bond dimensions $(D_k)_{k=1}^r$,
-    per-block MPS tensors $\{A_k^i\}$,
-    and scaling factors $(\mu_k)_{k=1}^r$,
-    define the block-diagonal tensor
-    $A^i = \bigoplus_{k=1}^r \mu_k A_k^i$
-    of total bond dimension $D = \sum_k D_k$.
+	\lean{MPSTensor.toTensorFromBlocks}
+	\leanok
+	\uses{def:mps_tensor}
+	Given $r$ blocks with bond dimensions $(D_k)_{k=1}^r$,
+	per-block MPS tensors $\{A_k^i\}$,
+	and scaling factors $(\mu_k)_{k=1}^r$,
+	define the block-diagonal tensor
+	$A^i = \bigoplus_{k=1}^r \mu_k A_k^i$
+	of total bond dimension $D = \sum_k D_k$.
 \end{definition}
 
 \begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
-    \lean{MPSTensor.fundamentalTheorem_multiBlock_blocks}
-    \leanok
-    \uses{def:tensor_from_blocks, def:injective}
-    If all block tensors $A_k$ are injective and the per-block
-    same-MPV condition holds ($A_k$ and $B_k$ generate the same
-    MPV family for each~$k$),
-    then each pair $(A_k, B_k)$ is gauge equivalent.
+	\lean{MPSTensor.fundamentalTheorem_multiBlock_blocks}
+	\leanok
+	\uses{def:tensor_from_blocks, def:injective}
+	If all block tensors $A_k$ are injective and the per-block
+	same-MPV condition holds ($A_k$ and $B_k$ generate the same
+	MPV family for each~$k$),
+	then each pair $(A_k, B_k)$ is gauge equivalent.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    \uses{thm:ft_single}
-    Apply the single-block fundamental theorem
-    (Theorem~\ref{thm:ft_single}) to each block independently.
+	\leanok
+	\uses{thm:ft_single}
+	Apply the single-block fundamental theorem
+	(Theorem~\ref{thm:ft_single}) to each block independently.
 \end{proof}
 
 \begin{theorem}[Per-block SameMPV implies global SameMPV]\label{thm:block_to_global_mpv}
-    \lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
-    \leanok
-    \uses{def:tensor_from_blocks, def:same_mpv}
-    If $A_k$ and $B_k$ generate the same MPV family for each
-    block~$k$, then the block-diagonal tensors
-    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
-    also generate the same MPV family.
+	\lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
+	\leanok
+	\uses{def:tensor_from_blocks, def:same_mpv}
+	If $A_k$ and $B_k$ generate the same MPV family for each
+	block~$k$, then the block-diagonal tensors
+	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
+	also generate the same MPV family.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:mpv_decomposition}
-    By the MPV decomposition (Theorem~\ref{thm:mpv_decomposition}),
-    each MPV is $\sum_k \mu_k^N V^{(N)}(A_k)_\sigma$.
-    Per-block equality of MPV coefficients gives global equality.
+	By the MPV decomposition (Theorem~\ref{thm:mpv_decomposition}),
+	each MPV is $\sum_k \mu_k^N V^{(N)}(A_k)_\sigma$.
+	Per-block equality of MPV coefficients gives global equality.
 \end{proof}
 
 \begin{theorem}[Global gauge from block gauge]\label{thm:multi_block_global}
-    \lean{MPSTensor.fundamentalTheorem_multiBlock_global}
-    \leanok
-    \uses{def:tensor_from_blocks, def:gauge_equiv}
-    If each pair $(A_k, B_k)$ is gauge equivalent
-    ($B_k^i = X_k A_k^i X_k^{-1}$),
-    then the block-diagonal tensors are gauge equivalent
-    via the block-diagonal matrix $X = \bigoplus_k X_k$.
+	\lean{MPSTensor.fundamentalTheorem_multiBlock_global}
+	\leanok
+	\uses{def:tensor_from_blocks, def:gauge_equiv}
+	If each pair $(A_k, B_k)$ is gauge equivalent
+	($B_k^i = X_k A_k^i X_k^{-1}$),
+	then the block-diagonal tensors are gauge equivalent
+	via the block-diagonal matrix $X = \bigoplus_k X_k$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Block-diagonal conjugation: $X (\bigoplus_k \mu_k A_k^i) X^{-1}
-    = \bigoplus_k \mu_k X_k A_k^i X_k^{-1}
-    = \bigoplus_k \mu_k B_k^i$.
+	Block-diagonal conjugation: $X (\bigoplus_k \mu_k A_k^i) X^{-1}
+		= \bigoplus_k \mu_k X_k A_k^i X_k^{-1}
+		= \bigoplus_k \mu_k B_k^i$.
 \end{proof}
 
 \section{Transfer map normalization}
 
 \begin{theorem}[Scaling preserves injectivity]\label{thm:injective_smul}
-    \lean{MPSTensor.isInjective_smul}
-    \leanok
-    \uses{def:injective}
-    If $A$ is injective and $\zeta \neq 0$, then $\zeta A$
-    is injective.
+	\lean{MPSTensor.isInjective_smul}
+	\leanok
+	\uses{def:injective}
+	If $A$ is injective and $\zeta \neq 0$, then $\zeta A$
+	is injective.
 \end{theorem}
 
 \begin{proof}\leanok
-    Scaling by a nonzero scalar preserves linear independence
-    and hence spanning.
+	Scaling by a nonzero scalar preserves linear independence
+	and hence spanning.
 \end{proof}
 
 \begin{theorem}[Transfer map under scaling]\label{thm:transfer_smul}
-    \lean{MPSTensor.transferMap_smul}
-    \leanok
-    \uses{def:transfer_map}
-    $\E_{\zeta A}(X) = |\zeta|^2 \E_A(X)$.
+	\lean{MPSTensor.transferMap_smul}
+	\leanok
+	\uses{def:transfer_map}
+	$\E_{\zeta A}(X) = |\zeta|^2 \E_A(X)$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{lem:eval_word_smul}
-    Each summand: $(\zeta A^i) X (\zeta A^i)^\dagger
-    = |\zeta|^2 A^i X (A^i)^\dagger$.
+	Each summand: $(\zeta A^i) X (\zeta A^i)^\dagger
+		= |\zeta|^2 A^i X (A^i)^\dagger$.
 \end{proof}
 
 \begin{theorem}[Phase-scaling preserves normalization]\label{thm:ds_gauge_blocks}
-    \lean{MPSTensor.dsGauge_smul_of_norm_one}
-    \leanok
-    If $\sum_i (A^i)^\dagger A^i = \Id$ and $|\zeta| = 1$,
-    then $\sum_i (\zeta A^i)^\dagger (\zeta A^i) = \Id$.
+	\lean{MPSTensor.dsGauge_smul_of_norm_one}
+	\leanok
+	If $\sum_i (A^i)^\dagger A^i = \Id$ and $|\zeta| = 1$,
+	then $\sum_i (\zeta A^i)^\dagger (\zeta A^i) = \Id$.
 \end{theorem}
 
 \begin{proof}\leanok
-    $(\zeta A^i)^\dagger (\zeta A^i)
-    = \bar{\zeta} \zeta (A^i)^\dagger A^i
-    = (A^i)^\dagger A^i$,
-    since $\bar{\zeta} \zeta = |\zeta|^2 = 1$.
+	$(\zeta A^i)^\dagger (\zeta A^i)
+		= \bar{\zeta} \zeta (A^i)^\dagger A^i
+		= (A^i)^\dagger A^i$,
+	since $\bar{\zeta} \zeta = |\zeta|^2 = 1$.
 \end{proof}
 
 \begin{theorem}[MPV under block normalization]\label{thm:mpv_normalize}
-    \lean{MPSTensor.mpv_normalize_blocks}
-    \leanok
-    \uses{def:tensor_from_blocks, def:mpv}
-    For any nonzero scaling factors $\mu_k$,
-    write $\mu_k = |\mu_k| \cdot (\mu_k / |\mu_k|)$.
-    The MPVs of $\bigoplus_k \mu_k A_k$ and
-    $\bigoplus_k |\mu_k| \cdot (\mu_k / |\mu_k|) A_k$
-    agree.
+	\lean{MPSTensor.mpv_normalize_blocks}
+	\leanok
+	\uses{def:tensor_from_blocks, def:mpv}
+	For any nonzero scaling factors $\mu_k$,
+	write $\mu_k = |\mu_k| \cdot (\mu_k / |\mu_k|)$.
+	The MPVs of $\bigoplus_k \mu_k A_k$ and
+	$\bigoplus_k |\mu_k| \cdot (\mu_k / |\mu_k|) A_k$
+	agree.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:mpv_decomposition, lem:eval_word_smul}
-    By the MPV decomposition
-    (Theorem~\ref{thm:mpv_decomposition}),
-    the $k$-th term is $\mu_k^N V^{(N)}(A_k)_\sigma$.
-    The scaling identity (Lemma~\ref{lem:eval_word_smul})
-    absorbs the phase into the word evaluation.
+	By the MPV decomposition
+	(Theorem~\ref{thm:mpv_decomposition}),
+	the $k$-th term is $\mu_k^N V^{(N)}(A_k)_\sigma$.
+	The scaling identity (Lemma~\ref{lem:eval_word_smul})
+	absorbs the phase into the word evaluation.
 \end{proof}
 
 \section{Invariant subspace decomposition}
 
 \begin{theorem}[Unitary conjugation preserves SameMPV]\label{thm:samempv_unitary}
-    \lean{MPSTensor.sameMPV_conj_unitary}
-    \leanok
-    \uses{def:same_mpv}
-    If $U$ is a unitary matrix, then $A$ and $U^\dagger A U$
-    generate the same MPV family.
+	\lean{MPSTensor.sameMPV_conj_unitary}
+	\leanok
+	\uses{def:same_mpv}
+	If $U$ is a unitary matrix, then $A$ and $U^\dagger A U$
+	generate the same MPV family.
 \end{theorem}
 
 \begin{proof}\leanok
-    By cyclicity of the trace:
-    $\tr((U^\dagger A^{i_1} U) \cdots (U^\dagger A^{i_N} U))
-    = \tr(A^{i_1} \cdots A^{i_N})$.
+	By cyclicity of the trace:
+	$\tr((U^\dagger A^{i_1} U) \cdots (U^\dagger A^{i_N} U))
+		= \tr(A^{i_1} \cdots A^{i_N})$.
 \end{proof}
 
 \begin{definition}[Support projection]\label{def:support_proj}
-    \lean{MPSTensor.supportProj}
-    \leanok
-    For a positive semi-definite matrix $\rho \ge 0$,
-    the \emph{support projection} $P$ is the orthogonal
-    projection onto the range of $\rho$.
-    It is constructed via the spectral decomposition:
-    if $\rho = U \diag(\lambda_1,\ldots,\lambda_D) U^\dagger$,
-    then $P = U \diag(\mathbf{1}_{\lambda_1>0},\ldots,\mathbf{1}_{\lambda_D>0}) U^\dagger$,
-    where $\mathbf{1}_{\lambda_j>0}$ is $1$ if $\lambda_j > 0$
-    and $0$ otherwise.
+	\lean{MPSTensor.supportProj}
+	\leanok
+	For a positive semi-definite matrix $\rho \ge 0$,
+	the \emph{support projection} $P$ is the orthogonal
+	projection onto the range of $\rho$.
+	It is constructed via the spectral decomposition:
+	if $\rho = U \diag(\lambda_1,\ldots,\lambda_D) U^\dagger$,
+	then $P = U \diag(\mathbf{1}_{\lambda_1>0},\ldots,\mathbf{1}_{\lambda_D>0}) U^\dagger$,
+	where $\mathbf{1}_{\lambda_j>0}$ is $1$ if $\lambda_j > 0$
+	and $0$ otherwise.
 \end{definition}
 
 \begin{definition}[Invariant projection predicate]\label{def:has_inv_proj}
-    \lean{MPSTensor.HasInvariantProj}
-    \leanok
-    \uses{def:mps_tensor}
-    An MPS tensor $A$ \emph{has an invariant projection}
-    if there exists an orthogonal projection $P$ with
-    $P \neq 0$, $P \neq \Id$, and
-    $(\Id - P) A^i P = 0$ for all~$i$.
-    The negation of this predicate defines an \emph{irreducible tensor}
-    (Definition~\ref{def:irreducible_tensor}).
+	\lean{MPSTensor.HasInvariantProj}
+	\leanok
+	\uses{def:mps_tensor}
+	An MPS tensor $A$ \emph{has an invariant projection}
+	if there exists an orthogonal projection $P$ with
+	$P \neq 0$, $P \neq \Id$, and
+	$(\Id - P) A^i P = 0$ for all~$i$.
+	The negation of this predicate defines an \emph{irreducible tensor}
+	(Definition~\ref{def:irreducible_tensor}).
 \end{definition}
 
 \begin{theorem}[PSD fixed point gives invariant projection]\label{thm:fp_inv_proj}
-    \lean{MPSTensor.lowerZero_of_posSemidef_fixedPoint}
-    \leanok
-    \uses{def:transfer_map}
-    Let $\rho \ge 0$ be a fixed point of $\E_A$,
-    and let $P$ be the support projection of $\rho$.
-    Then for all~$i$, $(\Id - P) A^i P = 0$:
-    the range of $P$ is invariant under all $A^i$.
+	\lean{MPSTensor.lowerZero_of_posSemidef_fixedPoint}
+	\leanok
+	\uses{def:transfer_map}
+	Let $\rho \ge 0$ be a fixed point of $\E_A$,
+	and let $P$ be the support projection of $\rho$.
+	Then for all~$i$, $(\Id - P) A^i P = 0$:
+	the range of $P$ is invariant under all $A^i$.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    From $\E_A(\rho) = \rho$ and positivity of each
-    summand $A^i \rho (A^i)^\dagger$,
-    $(\Id - P) A^i \rho (A^i)^\dagger (\Id - P) = 0$
-    for each~$i$.
-    Since $\rho$ is supported on the range of $P$,
-    this forces $(\Id - P) A^i P = 0$.
+	\leanok
+	From $\E_A(\rho) = \rho$ and positivity of each
+	summand $A^i \rho (A^i)^\dagger$,
+	$(\Id - P) A^i \rho (A^i)^\dagger (\Id - P) = 0$
+	for each~$i$.
+	Since $\rho$ is supported on the range of $P$,
+	this forces $(\Id - P) A^i P = 0$.
 
-    This is the finite-dimensional version of
-    \cite[Prop.~6.10]{Wolf2012Quantum}
-    (``Stationary subspaces'': the support projection
-    of any stationary state is sub-harmonic, i.e.\
-    invariant under the channel).
-    The equivalence between irreducibility and
-    absence of nontrivial invariant projections is
-    \cite[Thm.~6.2]{Wolf2012Quantum};
-    see also
-    \cite[§IV.A.1]{Cirac2021Matrix}.
+	This is the finite-dimensional version of
+	\cite[Prop.~6.10]{Wolf2012Quantum}
+	(``Stationary subspaces'': the support projection
+	of any stationary state is sub-harmonic, i.e.\
+	invariant under the channel).
+	The equivalence between irreducibility and
+	absence of nontrivial invariant projections is
+	\cite[Thm.~6.2]{Wolf2012Quantum};
+	see also
+	\cite[§IV.A.1]{Cirac2021Matrix}.
 \end{proof}
 
 \begin{theorem}[Two-block decomposition]\label{thm:two_block_decomp}
-    \lean{MPSTensor.exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict}
-    \leanok
-    \uses{def:transfer_map}
-    If the transfer map has a PSD fixed point $\rho$ that is
-    \emph{not} positive definite (i.e.\ $\rho$ has a nontrivial
-    kernel), then $A$ is unitarily equivalent to a
-    two-block upper-triangular tensor.
-    Moreover, the diagonal blocks generate the same MPV as~$A$.
+	\lean{MPSTensor.exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict}
+	\leanok
+	\uses{def:transfer_map}
+	If the transfer map has a PSD fixed point $\rho$ that is
+	\emph{not} positive definite (i.e.\ $\rho$ has a nontrivial
+	kernel), then $A$ is unitarily equivalent to a
+	two-block upper-triangular tensor.
+	Moreover, the diagonal blocks generate the same MPV as~$A$.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    \uses{thm:fp_inv_proj, thm:samempv_unitary}
-    The support projection $P$ of $\rho$ is neither $0$ nor
-    $\Id$ (since $\rho \neq 0$ and $\rho$ is not PD).
-    Theorem~\ref{thm:fp_inv_proj} gives
-    $(\Id - P) A^i P = 0$ for all~$i$.
-    A unitary change of basis that block-diagonalizes $P$ puts
-    $A^i$ in upper-triangular block form
-    (Theorem~\ref{thm:samempv_unitary} ensures the MPV
-    is preserved by the conjugation).
-    The trace of the upper-triangular product equals the sum
-    of the block-diagonal traces, so the MPV
-    decomposes into block contributions.
+	\leanok
+	\uses{thm:fp_inv_proj, thm:samempv_unitary}
+	The support projection $P$ of $\rho$ is neither $0$ nor
+	$\Id$ (since $\rho \neq 0$ and $\rho$ is not PD).
+	Theorem~\ref{thm:fp_inv_proj} gives
+	$(\Id - P) A^i P = 0$ for all~$i$.
+	A unitary change of basis that block-diagonalizes $P$ puts
+	$A^i$ in upper-triangular block form
+	(Theorem~\ref{thm:samempv_unitary} ensures the MPV
+	is preserved by the conjugation).
+	The trace of the upper-triangular product equals the sum
+	of the block-diagonal traces, so the MPV
+	decomposes into block contributions.
 \end{proof}
 
 \section{Iterated reduction}
 
 \begin{definition}[Irreducible tensor]\label{def:irreducible_tensor}
-    \lean{MPSTensor.IsIrreducibleTensor}
-    \leanok
-    \uses{def:mps_tensor}
-    An MPS tensor~$A$ is \emph{irreducible}
-    (in the sense of~\cite{Cirac2021Matrix})
-    if the transfer map $\E_A$ has no nontrivial invariant
-    projection, i.e.\ $\E_A$ is irreducible
-    (Definition~\ref{def:irreducible_cp}).
+	\lean{MPSTensor.IsIrreducibleTensor}
+	\leanok
+	\uses{def:mps_tensor}
+	An MPS tensor~$A$ is \emph{irreducible}
+	(in the sense of~\cite{Cirac2021Matrix})
+	if the transfer map $\E_A$ has no nontrivial invariant
+	projection, i.e.\ $\E_A$ is irreducible
+	(Definition~\ref{def:irreducible_cp}).
 \end{definition}
 
 \begin{theorem}[Irreducible block decomposition]\label{thm:irred_decomp}
-    \lean{MPSTensor.exists_irreducible_blockDecomp}
-    \leanok
-    \uses{def:irreducible_tensor}
-    Every MPS tensor $A$ can be decomposed (up to unitary
-    equivalence) into a block-diagonal tensor
-    $\bigoplus_{k=1}^r A_k$
-    where each $A_k$ is irreducible.
-    The block-diagonal tensor generates the same MPV as $A$.
+	\lean{MPSTensor.exists_irreducible_blockDecomp}
+	\leanok
+	\uses{def:irreducible_tensor}
+	Every MPS tensor $A$ can be decomposed (up to unitary
+	equivalence) into a block-diagonal tensor
+	$\bigoplus_{k=1}^r A_k$
+	where each $A_k$ is irreducible.
+	The block-diagonal tensor generates the same MPV as $A$.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    \uses{thm:two_block_decomp}
-    By strong induction on the bond dimension~$D$.
-    If $A$ is already irreducible, take $r = 1$.
-    Otherwise, the transfer map has a PSD fixed point that
-    is not PD (by the Ces\`aro argument), and
-    Theorem~\ref{thm:two_block_decomp} splits $A$ into
-    two blocks of strictly smaller bond dimension.
-    Apply the induction hypothesis to each block and
-    concatenate.
+	\leanok
+	\uses{thm:two_block_decomp}
+	By strong induction on the bond dimension~$D$.
+	If $A$ is already irreducible, take $r = 1$.
+	Otherwise, the transfer map has a PSD fixed point that
+	is not PD (by the Ces\`aro argument), and
+	Theorem~\ref{thm:two_block_decomp} splits $A$ into
+	two blocks of strictly smaller bond dimension.
+	Apply the induction hypothesis to each block and
+	concatenate.
 
-    Both~\cite{PerezGarcia2007Matrix} (Theorem~4, ``TI
-    canonical form'') and~\cite{Cirac2021Matrix} (§IV.A.1)
-    obtain the block decomposition by the same
-    invariant-projection splitting used here.
-    An alternative route, developed
-    in~\cite[Thm.~6.14]{Wolf2012Quantum},
-    characterises the fixed-point set of a quantum channel
-    as a $*$-algebra and then applies the
-    Wedderburn--Artin decomposition
-    (\cite[Eq.~(1.39)]{Wolf2012Quantum})
-    to read off the block structure directly.
-    The block decomposition is obtained by iterating
-    the invariant-projection splitting and using strong
-    induction on~$D$ to ensure termination.
+	Both~\cite{PerezGarcia2007Matrix} (Theorem~4, ``TI
+	canonical form'') and~\cite{Cirac2021Matrix} (§IV.A.1)
+	obtain the block decomposition by the same
+	invariant-projection splitting used here.
+	An alternative route, developed
+	in~\cite[Thm.~6.14]{Wolf2012Quantum},
+	characterises the fixed-point set of a quantum channel
+	as a $*$-algebra and then applies the
+	Wedderburn--Artin decomposition
+	(\cite[Eq.~(1.39)]{Wolf2012Quantum})
+	to read off the block structure directly.
+	The block decomposition is obtained by iterating
+	the invariant-projection splitting and using strong
+	induction on~$D$ to ensure termination.
 \end{proof}
 
 \begin{theorem}[Diagonal PD fixed point]\label{thm:form_II}
-    \lean{MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor}
-    \leanok
-    \uses{def:irreducible_tensor}
-    If $A$ is irreducible and trace-preserving, then the
-    (unique) PSD fixed point of $\E_A$ is positive definite.
-    After a unitary gauge transformation, the fixed point
-    becomes a positive diagonal matrix.
+	\lean{MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor}
+	\leanok
+	\uses{def:irreducible_tensor}
+	If $A$ is irreducible and trace-preserving, then the
+	(unique) PSD fixed point of $\E_A$ is positive definite.
+	After a unitary gauge transformation, the fixed point
+	becomes a positive diagonal matrix.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    \uses{thm:psd_fp_pd_irred}
-    The irreducible tensor condition implies that
-    $\E_A$ is irreducible as a CP map.
-    By Theorem~\ref{thm:psd_fp_pd_irred},
-    the PSD fixed point is positive definite.
-    The spectral theorem diagonalizes the PD matrix
-    by a unitary conjugation.
+	\leanok
+	\uses{thm:psd_fp_pd_irred}
+	The irreducible tensor condition implies that
+	$\E_A$ is irreducible as a CP map.
+	By Theorem~\ref{thm:psd_fp_pd_irred},
+	the PSD fixed point is positive definite.
+	The spectral theorem diagonalizes the PD matrix
+	by a unitary conjugation.
 \end{proof}
 
 \subsection{Burnside bridge: irreducibility and spanning}
@@ -312,119 +312,119 @@ For Burnside-style arguments it is more natural to work with invariant
 \emph{subspaces} of $\C^D$ under the Kraus operators.
 
 \begin{definition}[Algebra span]\label{def:alg_span}
-    \lean{MPSTensor.algSpan}\leanok
-    \uses{def:mps_tensor}
-    For an MPS tensor $A$, let $\operatorname{algSpan}(A)$ be the unital
-    $\C$-subalgebra of $\MN{D}$ generated by the matrices $\{A^i\}$:
-    \[
-        \operatorname{algSpan}(A)
-        = \C\langle A^i : i = 0,\ldots,d{-}1\rangle
-        \subseteq \MN{D}.
-    \]
+	\lean{MPSTensor.algSpan}\leanok
+	\uses{def:mps_tensor}
+	For an MPS tensor $A$, let $\operatorname{algSpan}(A)$ be the unital
+	$\C$-subalgebra of $\MN{D}$ generated by the matrices $\{A^i\}$:
+	\[
+		\operatorname{algSpan}(A)
+		= \C\langle A^i : i = 0,\ldots,d{-}1\rangle
+		\subseteq \MN{D}.
+	\]
 \end{definition}
 
 \begin{definition}[Invariant submodule]\label{def:invariant_submodule}
-    \lean{MPSTensor.IsInvariantSubmodule}\leanok
-    \uses{def:mps_tensor}
-    A subspace $W \le \C^D$ is \emph{$A$-invariant} if
-    $A^i W \subseteq W$ for every $i$.
+	\lean{MPSTensor.IsInvariantSubmodule}\leanok
+	\uses{def:mps_tensor}
+	A subspace $W \le \C^D$ is \emph{$A$-invariant} if
+	$A^i W \subseteq W$ for every $i$.
 \end{definition}
 
 \begin{definition}[Irreducible action]\label{def:irreducible_action}
-    \lean{MPSTensor.IsIrreducibleAction}\leanok
-    \uses{def:invariant_submodule}
-    The Kraus operators of $A$ act \emph{irreducibly} on $\C^D$ if every
-    $A$-invariant subspace is trivial, i.e. equal to $0$ or to $\C^D$.
+	\lean{MPSTensor.IsIrreducibleAction}\leanok
+	\uses{def:invariant_submodule}
+	The Kraus operators of $A$ act \emph{irreducibly} on $\C^D$ if every
+	$A$-invariant subspace is trivial, i.e. equal to $0$ or to $\C^D$.
 \end{definition}
 
 \begin{theorem}[Irreducible tensor implies irreducible action]\label{thm:irreducible_tensor_to_action}
-    \lean{MPSTensor.isIrreducibleAction_of_isIrreducibleTensor}\leanok
-    \uses{def:irreducible_tensor, def:irreducible_action}
-    If $A$ is irreducible as a tensor (Definition~\ref{def:irreducible_tensor}),
-    then the Kraus operators act irreducibly on $\C^D$
-    (Definition~\ref{def:irreducible_action}).
+	\lean{MPSTensor.isIrreducibleAction_of_isIrreducibleTensor}\leanok
+	\uses{def:irreducible_tensor, def:irreducible_action}
+	If $A$ is irreducible as a tensor (Definition~\ref{def:irreducible_tensor}),
+	then the Kraus operators act irreducibly on $\C^D$
+	(Definition~\ref{def:irreducible_action}).
 \end{theorem}
 
 \begin{proof}\leanok
-    Let $W \le \C^D$ be an $A$-invariant subspace.
-    In finite dimension the orthogonal projection $P$ onto $W$ exists.
-    Invariance of $W$ implies $(\Id - P) A^i P = 0$ for all~$i$.
-    Thus $P$ is a nontrivial invariant projection unless $W = 0$ or $W = \C^D$,
-    contradicting irreducibility of the tensor.
+	Let $W \le \C^D$ be an $A$-invariant subspace.
+	In finite dimension the orthogonal projection $P$ onto $W$ exists.
+	Invariance of $W$ implies $(\Id - P) A^i P = 0$ for all~$i$.
+	Thus $P$ is a nontrivial invariant projection unless $W = 0$ or $W = \C^D$,
+	contradicting irreducibility of the tensor.
 \end{proof}
 
 \begin{theorem}[Burnside's theorem for Kraus algebras]\label{thm:burnside_matrix}
-    \lean{MPSTensor.burnside_matrix}\leanok
-    \uses{def:alg_span, def:irreducible_action}
-    Assume $D > 0$.
-    If $A$ acts irreducibly on $\C^D$, then the generated unital subalgebra is the
-    full matrix algebra:
-    \[
-        \operatorname{algSpan}(A) = \MN{D}.
-    \]
-    This is the complex finite-dimensional case of Burnside's theorem
-    (equivalently, Jacobson's density theorem); see~\cite{Jacobson2009BasicAlgebraII}.
+	\lean{MPSTensor.burnside_matrix}\leanok
+	\uses{def:alg_span, def:irreducible_action}
+	Assume $D > 0$.
+	If $A$ acts irreducibly on $\C^D$, then the generated unital subalgebra is the
+	full matrix algebra:
+	\[
+		\operatorname{algSpan}(A) = \MN{D}.
+	\]
+	This is the complex finite-dimensional case of Burnside's theorem
+	(equivalently, Jacobson's density theorem); see~\cite{Jacobson2009BasicAlgebraII}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Transport $\operatorname{algSpan}(A)$ along the algebra equivalence
-    $\MN{D} \simeq_{\C} \operatorname{End}_{\C}(\C^D)$.
-    The irreducible-action hypothesis makes $\C^D$ a simple module for this
-    algebra.
-    Over the algebraically closed field $\C$, Schur's lemma identifies the
-    endomorphisms commuting with the action with scalars, and Jacobson density
-    then forces the action map to be surjective onto all of
-    $\operatorname{End}_{\C}(\C^D)$.
+	Transport $\operatorname{algSpan}(A)$ along the algebra equivalence
+	$\MN{D} \simeq_{\C} \operatorname{End}_{\C}(\C^D)$.
+	The irreducible-action hypothesis makes $\C^D$ a simple module for this
+	algebra.
+	Over the algebraically closed field $\C$, Schur's lemma identifies the
+	endomorphisms commuting with the action with scalars, and Jacobson density
+	then forces the action map to be surjective onto all of
+	$\operatorname{End}_{\C}(\C^D)$.
 \end{proof}
 
 \begin{theorem}[Irreducible action implies eventual cumulative spanning]%
-    \label{thm:irreducible_action_cumulative_span}
-    \lean{MPSTensor.exists_cumulativeSpan_eq_top_of_isIrreducibleAction}\leanok
-    \uses{def:cumulative_span, def:irreducible_action}
-    Assume $D > 0$.
-    If $A$ acts irreducibly on $\C^D$, then there exists $N$ such that
-    $T_N(A) = \MN{D}$.
+	\label{thm:irreducible_action_cumulative_span}
+	\lean{MPSTensor.exists_cumulativeSpan_eq_top_of_isIrreducibleAction}\leanok
+	\uses{def:cumulative_span, def:irreducible_action}
+	Assume $D > 0$.
+	If $A$ acts irreducibly on $\C^D$, then there exists $N$ such that
+	$T_N(A) = \MN{D}$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:burnside_matrix}
-    By Theorem~\ref{thm:burnside_matrix}, $\operatorname{algSpan}(A) = \MN{D}$.
-    Every element of the algebra span is a linear combination of word products,
-    hence belongs to $T_n(A)$ for some~$n$.
-    Since $\MN{D}$ is finite-dimensional, the ascending chain
-    $T_0(A) \le T_1(A) \le \cdots$ stabilizes, so one can choose a uniform
-    $N$ with $T_N(A) = \MN{D}$.
+	By Theorem~\ref{thm:burnside_matrix}, $\operatorname{algSpan}(A) = \MN{D}$.
+	Every element of the algebra span is a linear combination of word products,
+	hence belongs to $T_n(A)$ for some~$n$.
+	Since $\MN{D}$ is finite-dimensional, the ascending chain
+	$T_0(A) \le T_1(A) \le \cdots$ stabilizes, so one can choose a uniform
+	$N$ with $T_N(A) = \MN{D}$.
 \end{proof}
 
 \section{Proportional single-block theorem}
 
 \begin{theorem}[Proportional MPV implies gauge-phase equivalence]\label{thm:proportional_ft}
-    \lean{MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one}
-    \leanok
-    \uses{def:gauge_phase_equiv, def:injective}
-    Let $A, B$ be injective normalized MPS tensors.
-    If $A$ and $B$ generate proportional MPV families
-    ($V^{(N)}(A)_\sigma = c_N V^{(N)}(B)_\sigma$
-    for some $c_N \in \C$) and
-    $O_{AA}(N) \to 1$, $O_{BB}(N) \to 1$,
-    then $A$ and $B$ are gauge-phase equivalent.
+	\lean{MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one}
+	\leanok
+	\uses{def:gauge_phase_equiv, def:injective}
+	Let $A, B$ be injective normalized MPS tensors.
+	If $A$ and $B$ generate proportional MPV families
+	($V^{(N)}(A)_\sigma = c_N V^{(N)}(B)_\sigma$
+	for some $c_N \in \C$) and
+	$O_{AA}(N) \to 1$, $O_{BB}(N) \to 1$,
+	then $A$ and $B$ are gauge-phase equivalent.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    \uses{thm:overlap_decay}
-    By contradiction.
-    If $A$ and $B$ are not gauge-phase equivalent, then
-    $O_{AB}(N) \to 0$ (Theorem~\ref{thm:overlap_decay}).
-    From the proportionality hypothesis,
-    $O_{AB}(N) = c_N O_{BB}(N)$.
-    Since $O_{BB}(N) \to 1$, it follows that $c_N \to 0$.
-    But $O_{AA}(N) = |c_N|^2 O_{BB}(N) \to 0$,
-    contradicting $O_{AA}(N) \to 1$.
+	\leanok
+	\uses{thm:overlap_decay}
+	By contradiction.
+	If $A$ and $B$ are not gauge-phase equivalent, then
+	$O_{AB}(N) \to 0$ (Theorem~\ref{thm:overlap_decay}).
+	From the proportionality hypothesis,
+	$O_{AB}(N) = c_N O_{BB}(N)$.
+	Since $O_{BB}(N) \to 1$, it follows that $c_N \to 0$.
+	But $O_{AA}(N) = |c_N|^2 O_{BB}(N) \to 0$,
+	contradicting $O_{AA}(N) \to 1$.
 
-    In~\cite{PerezGarcia2007Matrix}, the proportional case
-    is handled as part of the canonical form argument.
-    Thus the proportional case is obtained directly from the spectral gap in
-    Chapter~\ref{ch:spectral}.
+	In~\cite{PerezGarcia2007Matrix}, the proportional case
+	is handled as part of the canonical form argument.
+	Thus the proportional case is obtained directly from the spectral gap in
+	Chapter~\ref{ch:spectral}.
 \end{proof}
 
 \section{Canonical form from primitivity}
@@ -439,82 +439,82 @@ per-block primitivity,
 removing it as an independent assumption.
 
 \begin{theorem}[Canonical form from primitivity]%
-    \label{thm:canonical_from_primitive}
-    \lean{MPSTensor.isCanonicalForm_of_primitive}
-    \leanok
-    \uses{def:is_canonical_form, def:primitive_channel}
-    Let $(\mu_k, A_k)_{k=1}^r$ be a collection of block
-    tensors and scaling factors satisfying:
-    \begin{enumerate}
-        \item each $A_k$ is injective,
-        \item each $A_k$ is in DS gauge,
-        \item $|\mu_1| > \cdots > |\mu_r|$ (strictly decreasing),
-        \item all $\mu_k \neq 0$,
-        \item each $A_k$ is primitive
-              (the transfer map $\E_{A_k}$ has
-              peripheral spectrum $\{1\}$).
-    \end{enumerate}
-    Then $(\mu_k, A_k)$ satisfies the canonical form
-    predicate (Definition~\ref{def:is_canonical_form}).
+	\label{thm:canonical_from_primitive}
+	\lean{MPSTensor.isCanonicalForm_of_primitive}
+	\leanok
+	\uses{def:is_canonical_form, def:primitive_channel}
+	Let $(\mu_k, A_k)_{k=1}^r$ be a collection of block
+	tensors and scaling factors satisfying:
+	\begin{enumerate}
+		\item each $A_k$ is injective,
+		\item each $A_k$ is in DS gauge,
+		\item $|\mu_1| > \cdots > |\mu_r|$ (strictly decreasing),
+		\item all $\mu_k \neq 0$,
+		\item each $A_k$ is primitive
+		      (the transfer map $\E_{A_k}$ has
+		      peripheral spectrum $\{1\}$).
+	\end{enumerate}
+	Then $(\mu_k, A_k)$ satisfies the canonical form
+	predicate (Definition~\ref{def:is_canonical_form}).
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    Conditions (1)--(4) are passed through directly.
-    For condition~(5) of the canonical form predicate
-    ($O_{A_k A_k}(N) \to 1$),
-    primitivity of $\E_{A_k}$ implies
-    $\E_{A_k}^N(\rho) \to \rho_\infty$
-    for the unique fixed-point state $\rho_\infty$,
-    and hence the self-overlap converges to~$1$.
-    The proof applies primitive overlap convergence
-    to each block.
+	\leanok
+	Conditions (1)--(4) are passed through directly.
+	For condition~(5) of the canonical form predicate
+	($O_{A_k A_k}(N) \to 1$),
+	primitivity of $\E_{A_k}$ implies
+	$\E_{A_k}^N(\rho) \to \rho_\infty$
+	for the unique fixed-point state $\rho_\infty$,
+	and hence the self-overlap converges to~$1$.
+	The proof applies primitive overlap convergence
+	to each block.
 \end{proof}
 
 \begin{remark}\label{rem:primitivity_reduces_assumptions}\leanok
-    Theorem~\ref{thm:canonical_from_primitive} shows that
-    the overlap convergence hypothesis in the canonical form
-    predicate is redundant once primitivity is known.
-    In the paper~\cite{Cirac2021Matrix},
-    primitivity is obtained from irreducibility plus
-    periodicity removal (blocking to period one).
-    Theorem~\ref{thm:blocking_primitivity} establishes this
-    periodicity-removal step: under irreducibility and
-    doubly-stochastic normalization, one can block until the
-    transfer map becomes primitive.
-    This corresponds to \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+	Theorem~\ref{thm:canonical_from_primitive} shows that
+	the overlap convergence hypothesis in the canonical form
+	predicate is redundant once primitivity is known.
+	In the paper~\cite{Cirac2021Matrix},
+	primitivity is obtained from irreducibility plus
+	periodicity removal (blocking to period one).
+	Theorem~\ref{thm:blocking_primitivity} establishes this
+	periodicity-removal step: under irreducibility and
+	doubly-stochastic normalization, one can block until the
+	transfer map becomes primitive.
+	This corresponds to \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 \end{remark}
 
 \begin{theorem}[Blocking yields a primitive transfer map]\label{thm:blocking_primitivity}
-    \lean{MPSTensor.exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic}
-    \leanok
-    \uses{def:blocked_tensor, def:transfer_map, def:primitive_channel,
-          def:unital_kraus, def:tp_kraus, def:irreducible_cp}
-    Let $A$ be an MPS tensor whose transfer map $\E_A$ is irreducible.
-    Assume that $A$ is doubly stochastic:
-    $\sum_i A^i (A^i)^\dagger = \Id$ and $\sum_i (A^i)^\dagger A^i = \Id$.
-    Then there exists a blocking length $p > 0$ such that the transfer map
-    $\E_{A^{[p]}}$ of the blocked tensor $A^{[p]}$ is primitive.
+	\lean{MPSTensor.exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic}
+	\leanok
+	\uses{def:blocked_tensor, def:transfer_map, def:primitive_channel,
+		def:unital_kraus, def:tp_kraus, def:irreducible_cp}
+	Let $A$ be an MPS tensor whose transfer map $\E_A$ is irreducible.
+	Assume that $A$ is doubly stochastic:
+	$\sum_i A^i (A^i)^\dagger = \Id$ and $\sum_i (A^i)^\dagger A^i = \Id$.
+	Then there exists a blocking length $p > 0$ such that the transfer map
+	$\E_{A^{[p]}}$ of the blocked tensor $A^{[p]}$ is primitive.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peripheral_roots_of_unity_irred_ds, thm:peripheral_finite,
-          lem:common_power_eq_one, lem:peripheral_pow_singleton}
-    By Theorem~\ref{thm:peripheral_roots_of_unity_irred_ds},
-    every peripheral eigenvalue of $\E_A$ is a root of unity.
-    Since $\mathrm{peripheral}(\E_A)$ is finite
-    (Theorem~\ref{thm:peripheral_finite}),
-    Lemma~\ref{lem:common_power_eq_one} gives a common exponent $p$
-    such that $\mu^p = 1$ for all $\mu \in \mathrm{peripheral}(\E_A)$.
-    Lemma~\ref{lem:peripheral_pow_singleton} then implies
-    $\mathrm{peripheral}(\E_A^p) = \{1\}$.
-    Finally, the transfer map of the blocked tensor is the $p$-th power
-    of the original transfer map, so $\E_{A^{[p]}}$ is primitive.
+	\uses{thm:peripheral_roots_of_unity_irred_ds, thm:peripheral_finite,
+		lem:common_power_eq_one, lem:peripheral_pow_singleton}
+	By Theorem~\ref{thm:peripheral_roots_of_unity_irred_ds},
+	every peripheral eigenvalue of $\E_A$ is a root of unity.
+	Since $\mathrm{peripheral}(\E_A)$ is finite
+	(Theorem~\ref{thm:peripheral_finite}),
+	Lemma~\ref{lem:common_power_eq_one} gives a common exponent $p$
+	such that $\mu^p = 1$ for all $\mu \in \mathrm{peripheral}(\E_A)$.
+	Lemma~\ref{lem:peripheral_pow_singleton} then implies
+	$\mathrm{peripheral}(\E_A^p) = \{1\}$.
+	Finally, the transfer map of the blocked tensor is the $p$-th power
+	of the original transfer map, so $\E_{A^{[p]}}$ is primitive.
 \end{proof}
 
 \begin{remark}\label{rem:blocking_primitivity_appendixA}\leanok
-    Theorem~\ref{thm:blocking_primitivity} is the ``periodicity removal by blocking''
-    step in \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+	Theorem~\ref{thm:blocking_primitivity} is the ``periodicity removal by blocking''
+	step in \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 \end{remark}
 
 \section{Canonical form existence pipeline}%
@@ -524,63 +524,63 @@ This section assembles the components of the canonical-form
 construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 
 \begin{theorem}[Irreducible block decomposition (pipeline)]%
-    \label{thm:irred_decomp_pipeline}
-    \lean{MPSTensor.exists_irreducible_blockDecomp_pipeline1606}
-    \leanok
-    \uses{def:irreducible_tensor}
-    Every MPS tensor $A$ generates the same MPV family as
-    a block-diagonal tensor $\bigoplus_{k=1}^r A_k$
-    with each block irreducible.
+	\label{thm:irred_decomp_pipeline}
+	\lean{MPSTensor.exists_irreducible_blockDecomp_pipeline1606}
+	\leanok
+	\uses{def:irreducible_tensor}
+	Every MPS tensor $A$ generates the same MPV family as
+	a block-diagonal tensor $\bigoplus_{k=1}^r A_k$
+	with each block irreducible.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:irred_decomp}
-    Apply Theorem~\ref{thm:irred_decomp}.
+	Apply Theorem~\ref{thm:irred_decomp}.
 \end{proof}
 
 \begin{theorem}[CFII data for irreducible TP blocks]%
-    \label{thm:CFII_data}
-    \lean{MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleTensor}
-    \leanok
-    \uses{def:irreducible_tensor}
-    Let $A$ be an irreducible MPS tensor in the TP gauge
-    ($\sum_i (A^i)^\dagger A^i = \Id$) with $D > 0$.
-    Then there exist a unitary~$U$ and a diagonal positive
-    definite matrix~$\Lambda$ such that:
-    \begin{enumerate}
-        \item $B^i := U^\dagger A^i U$ is TP,
-        \item $\E_B(\Lambda) = \Lambda$,
-        \item $\Lambda$ is diagonal and positive definite,
-        \item $A$ and $B$ generate the same MPV family.
-    \end{enumerate}
-    This is the ``Canonical Form~II'' (CFII) step
-    of \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+	\label{thm:CFII_data}
+	\lean{MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleTensor}
+	\leanok
+	\uses{def:irreducible_tensor}
+	Let $A$ be an irreducible MPS tensor in the TP gauge
+	($\sum_i (A^i)^\dagger A^i = \Id$) with $D > 0$.
+	Then there exist a unitary~$U$ and a diagonal positive
+	definite matrix~$\Lambda$ such that:
+	\begin{enumerate}
+		\item $B^i := U^\dagger A^i U$ is TP,
+		\item $\E_B(\Lambda) = \Lambda$,
+		\item $\Lambda$ is diagonal and positive definite,
+		\item $A$ and $B$ generate the same MPV family.
+	\end{enumerate}
+	This is the ``Canonical Form~II'' (CFII) step
+	of \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:form_II, thm:samempv_unitary}
-    Apply Theorem~\ref{thm:form_II} to obtain the unitary and
-    the diagonal PD fixed point.
-    Unitary conjugation preserves trace-preservation and the MPV
-    family (Theorem~\ref{thm:samempv_unitary}).
+	\uses{thm:form_II, thm:samempv_unitary}
+	Apply Theorem~\ref{thm:form_II} to obtain the unitary and
+	the diagonal PD fixed point.
+	Unitary conjugation preserves trace-preservation and the MPV
+	family (Theorem~\ref{thm:samempv_unitary}).
 \end{proof}
 
 \begin{theorem}[Pipeline handoff: block decomposition with conditional CFII]%
-    \label{thm:pipeline_handoff}
-    \lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII_handoff}
-    \leanok
-    \uses{def:irreducible_tensor}
-    For any MPS tensor~$A$, there exist irreducible blocks
-    $(A_k)_{k=1}^r$ that generate the same MPV family as~$A$.
-    Moreover, for each block~$k$,
-    \emph{assuming} TP gauge and $D_k > 0$,
-    one obtains CFII data (unitary, diagonal PD fixed point,
-    MPV preservation).
+	\label{thm:pipeline_handoff}
+	\lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII_handoff}
+	\leanok
+	\uses{def:irreducible_tensor}
+	For any MPS tensor~$A$, there exist irreducible blocks
+	$(A_k)_{k=1}^r$ that generate the same MPV family as~$A$.
+	Moreover, for each block~$k$,
+	\emph{assuming} TP gauge and $D_k > 0$,
+	one obtains CFII data (unitary, diagonal PD fixed point,
+	MPV preservation).
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:irred_decomp_pipeline, thm:CFII_data}
-    Combine Theorems~\ref{thm:irred_decomp_pipeline}
-    and~\ref{thm:CFII_data}.
+	\uses{thm:irred_decomp_pipeline, thm:CFII_data}
+	Combine Theorems~\ref{thm:irred_decomp_pipeline}
+	and~\ref{thm:CFII_data}.
 \end{proof}
 
 \section{Perron--Frobenius eigenvector existence}%
@@ -594,180 +594,184 @@ The results correspond to \cite{Evans1978Spectral},
 \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 
 \begin{theorem}[PSD eigenvector for positive maps]%
-    \label{thm:pf_eigenvector_existence}
-    \lean{exists_posSemidef_eigenvector}
-    \notready
-    \uses{def:positive_map}
-    Let $E : \MN{D} \to \MN{D}$ be a positive linear map with
-    $D > 0$, and assume that $E(\sigma) \neq 0$ for every nonzero
-    PSD matrix $\sigma$.
-    Then there exist a nonzero PSD matrix $\rho$ and a positive
-    real $r > 0$ such that $E(\rho) = r \rho$.
+	\label{thm:pf_eigenvector_existence}
+	\lean{exists_posSemidef_eigenvector}
+	\leanok
+	\uses{def:positive_map}
+	Let $E : \MN{D} \to \MN{D}$ be a positive linear map with
+	$D > 0$, and assume that $E(\sigma) \neq 0$ for every nonzero
+	PSD matrix $\sigma$.
+	Then there exist a nonzero PSD matrix $\rho$ and a positive
+	real $r > 0$ such that $E(\rho) = r \rho$.
 
-    This is the finite-dimensional Perron--Frobenius theorem for
-    positive maps on matrix algebras
-    (\cite{Evans1978Spectral},
-    \cite[Proposition~6.1]{Wolf2012Quantum}).
-    The standard proof applies Brouwer's fixed-point theorem to the
-    normalization map $\rho \mapsto E(\rho) / \tr(E(\rho))$ on the
-    compact convex set of density matrices.
-    In the current development, this proof is reduced to a single
-    trusted Brouwer fixed-point input specialized to density
-    matrices.
+	This is the finite-dimensional Perron--Frobenius theorem for
+	positive maps on matrix algebras
+	(\cite{Evans1978Spectral},
+	\cite[Proposition~6.1]{Wolf2012Quantum}).
+	The Lean proof applies Brouwer's fixed-point theorem to the
+	normalization map $\rho \mapsto E(\rho) / \tr(E(\rho))$ on the
+	compact convex set of density matrices; the required
+	density-matrix Brouwer theorem is now itself formalized.
 \end{theorem}
 
 \begin{theorem}[Scaling preserves irreducibility]%
-    \label{thm:irred_map_smul}
-    \lean{isIrreducibleMap_smul}
-    \leanok
-    \uses{def:irreducible_cp}
-    If $E$ is an irreducible map and $c \neq 0$, then $c E$
-    is also irreducible.
+	\label{thm:irred_map_smul}
+	\lean{isIrreducibleMap_smul}
+	\leanok
+	\uses{def:irreducible_cp}
+	If $E$ is an irreducible map and $c \neq 0$, then $c E$
+	is also irreducible.
 \end{theorem}
 
 \begin{proof}\leanok
-    An invariant projection for $cE$ is an invariant projection
-    for $E$ (scale out the nonzero constant from the commutation
-    relation).
+	An invariant projection for $cE$ is an invariant projection
+	for $E$ (scale out the nonzero constant from the commutation
+	relation).
 \end{proof}
 
 \begin{theorem}[Adjoint transfer map is nonzero]%
-    \label{thm:adjoint_transfer_ne_zero}
-    \lean{MPSTensor.adjointTransferMap_ne_zero_of_nonzero}
-    \leanok
-    \uses{def:transfer_map}
-    If some Kraus operator $A^i \neq 0$, then the adjoint transfer
-    map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is nonzero.
+	\label{thm:adjoint_transfer_ne_zero}
+	\lean{MPSTensor.adjointTransferMap_ne_zero_of_nonzero}
+	\leanok
+	\uses{def:transfer_map}
+	If some Kraus operator $A^i \neq 0$, then the adjoint transfer
+	map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is nonzero.
 \end{theorem}
 
 \begin{proof}\leanok
-    If $\E_A^\dagger = 0$ then $\E_A^\dagger(\Id) = 0$,
-    so $\sum_i (A^i)^\dagger A^i = 0$.
-    Since each summand $(A^i)^\dagger A^i$ is PSD,
-    each $(A^i)^\dagger = 0$ and hence each $A^i = 0$.
+	If $\E_A^\dagger = 0$ then $\E_A^\dagger(\Id) = 0$,
+	so $\sum_i (A^i)^\dagger A^i = 0$.
+	Since each summand $(A^i)^\dagger A^i$ is PSD,
+	each $(A^i)^\dagger = 0$ and hence each $A^i = 0$.
 \end{proof}
 
 \begin{theorem}[PosDef adjoint eigenvector for irreducible tensors]%
-    \label{thm:posDef_adjoint_eigenvector}
-    \lean{MPSTensor.exists_posDef_adjoint_eigenvector}
-    \leanok
-    \uses{def:irreducible_tensor, def:transfer_map}
-    Let $A$ be an irreducible MPS tensor with $D > 0$
-    and some $A^i \neq 0$.
-    Then there exist a positive definite matrix~$\sigma$
-    and a positive real $r > 0$ such that
-    $\E_A^\dagger(\sigma) = r \sigma$.
+	\label{thm:posDef_adjoint_eigenvector}
+	\lean{MPSTensor.exists_posDef_adjoint_eigenvector}
+	\leanok
+	\uses{def:irreducible_tensor, def:transfer_map}
+	Let $A$ be an irreducible MPS tensor with $D > 0$
+	and some $A^i \neq 0$.
+	Then there exist a positive definite matrix~$\sigma$
+	and a positive real $r > 0$ such that
+	$\E_A^\dagger(\sigma) = r \sigma$.
 
-    Uses Theorem~\ref{thm:pf_eigenvector_existence}, whose proof is
-    currently reduced to the trusted Brouwer fixed-point input on
-    density matrices.
+	This is the adjoint-map Perron--Frobenius step of
+	\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}: after applying
+	Theorem~\ref{thm:pf_eigenvector_existence} to the adjoint transfer
+	map, one upgrades the resulting PSD eigenvector to a positive
+	definite one.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:pf_eigenvector_existence, thm:irred_map_smul,
-          thm:adjoint_transfer_ne_zero, thm:psd_fp_pd_irred}
-    By Theorem~\ref{thm:adjoint_transfer_ne_zero},
-    $\E_A^\dagger \neq 0$.
-    Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
-    Kraus map, it is positive. Irreducibility of $A$ transfers to the
-    adjoint transfer map, and together with $\E_A^\dagger \neq 0$
-    this implies $\E_A^\dagger(\tau) \neq 0$ for every nonzero
-    PSD matrix $\tau$.
-    Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to
-    $\E_A^\dagger$, giving $\sigma_0 \ge 0$ (PSD, nonzero)
-    and $r > 0$ with $\E_A^\dagger(\sigma_0) = r \sigma_0$.
-    Rescale: set $T^i = r^{-1/2} (A^i)^\dagger$.
-    Then $\E_T(\sigma_0) = \sigma_0$,
-    and $\E_T$ is irreducible
-    (by Theorem~\ref{thm:irred_map_smul},
-    since irreducibility of $\E_A$ transfers to the
-    adjoint and is preserved under scaling).
-    Since $\E_T$ is irreducible with a PSD fixed point,
-    the PSD-to-PosDef upgrade
-    (Theorem~\ref{thm:psd_fp_pd_irred})
-    gives $\sigma_0$ positive definite.
+	\uses{thm:pf_eigenvector_existence, thm:irred_map_smul,
+		thm:adjoint_transfer_ne_zero, thm:psd_fp_pd_irred}
+	By Theorem~\ref{thm:adjoint_transfer_ne_zero},
+	$\E_A^\dagger \neq 0$.
+	Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
+	Kraus map, it is positive. Irreducibility of $A$ transfers to the
+	adjoint transfer map, and together with $\E_A^\dagger \neq 0$
+	this implies $\E_A^\dagger(\tau) \neq 0$ for every nonzero
+	PSD matrix $\tau$.
+	Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to
+	$\E_A^\dagger$, giving $\sigma_0 \ge 0$ (PSD, nonzero)
+	and $r > 0$ with $\E_A^\dagger(\sigma_0) = r \sigma_0$.
+	Rescale: set $T^i = r^{-1/2} (A^i)^\dagger$.
+	Then $\E_T(\sigma_0) = \sigma_0$,
+	and $\E_T$ is irreducible
+	(by Theorem~\ref{thm:irred_map_smul},
+	since irreducibility of $\E_A$ transfers to the
+	adjoint and is preserved under scaling).
+	Since $\E_T$ is irreducible with a PSD fixed point,
+	the PSD-to-PosDef upgrade
+	(Theorem~\ref{thm:psd_fp_pd_irred})
+	gives $\sigma_0$ positive definite.
 \end{proof}
 
 \begin{theorem}[TP-gauge existence for irreducible tensors]%
-    \label{thm:tp_data_irreducible}
-    \lean{MPSTensor.exists_tp_data_of_irreducible}
-    \leanok
-    \uses{def:irreducible_tensor}
-    Let $A$ be an irreducible MPS tensor with $D > 0$
-    and some $A^i \neq 0$.
-    Then there exist a positive real~$r$, a positive definite
-    matrix~$\sigma$, and a gauge-equivalent tensor~$B$ such that
-    \[
-        B^i = \sigma^{1/2} \cdot (r^{-1/2} A^i) \cdot \sigma^{-1/2}
-    \]
-    is trace-preserving:
-    $\sum_i (B^i)^\dagger B^i = \Id$.
+	\label{thm:tp_data_irreducible}
+	\lean{MPSTensor.exists_tp_data_of_irreducible}
+	\leanok
+	\uses{def:irreducible_tensor}
+	Let $A$ be an irreducible MPS tensor with $D > 0$
+	and some $A^i \neq 0$.
+	Then there exist a positive real~$r$, a positive definite
+	matrix~$\sigma$, and a gauge-equivalent tensor~$B$ such that
+	\[
+		B^i = \sigma^{1/2} \cdot (r^{-1/2} A^i) \cdot \sigma^{-1/2}
+	\]
+	is trace-preserving:
+	$\sum_i (B^i)^\dagger B^i = \Id$.
 
-    Uses Theorem~\ref{thm:pf_eigenvector_existence}, whose proof is
-    currently reduced to the trusted Brouwer fixed-point input on
-    density matrices.
-    This is the ``spectral rescaling $+$ TP gauge'' step of
-    \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+	This is the ``spectral rescaling $+$ TP gauge'' step of
+	\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}, now formalized using
+	Theorem~\ref{thm:posDef_adjoint_eigenvector} and the explicit TP
+	gauge construction.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:posDef_adjoint_eigenvector, thm:ds_gauge_tp}
-    By Theorem~\ref{thm:posDef_adjoint_eigenvector},
-    obtain $\sigma$ positive definite and $r > 0$ with
-    $\E_A^\dagger(\sigma) = r \sigma$.
-    Set $c = r^{-1/2}$ and $A'^i = c A^i$.
-    Then $\E_{A'}^\dagger(\sigma) = \sigma$.
-    By the TP gauge construction
-    (Theorem~\ref{thm:ds_gauge_tp}),
-    $B^i = \sigma^{1/2} A'^i \sigma^{-1/2}$
-    satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
+	\uses{thm:posDef_adjoint_eigenvector, thm:ds_gauge_tp}
+	By Theorem~\ref{thm:posDef_adjoint_eigenvector},
+	obtain $\sigma$ positive definite and $r > 0$ with
+	$\E_A^\dagger(\sigma) = r \sigma$.
+	Set $c = r^{-1/2}$ and $A'^i = c A^i$.
+	Then $\E_{A'}^\dagger(\sigma) = \sigma$.
+	By the TP gauge construction
+	(Theorem~\ref{thm:ds_gauge_tp}),
+	$B^i = \sigma^{1/2} A'^i \sigma^{-1/2}$
+	satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
 \end{proof}
 
 \section{End-to-end pipeline status}\label{sec:pipeline_status}
 
 \begin{remark}[Canonical form pipeline]%
-    \label{rem:canonical_pipeline_gaps}
-    \notready
-    The end-to-end pipeline from an arbitrary MPS tensor to
-    canonical form proceeds as follows.
-    Every step is proved except for the single topological input
-    behind step~2, marked $\star$ below.
-    Concretely, Theorem~\ref{thm:pf_eigenvector_existence} is
-    currently reduced to a specialized Brouwer fixed-point statement
-    on density matrices, and step~3 depends on that theorem.
-    \begin{enumerate}
-        \item Irreducible block decomposition
-              (Theorem~\ref{thm:irred_decomp}):
-              $A \sim \bigoplus_k A_k$ with each $A_k$
-              irreducible.
-        \item[$\star$2.] PF eigenvector
-              (Theorem~\ref{thm:pf_eigenvector_existence}):
-              the adjoint transfer map has a PSD eigenvector.
-              This is the only step using the trusted Brouwer
-              fixed-point input on density matrices.
-        \item TP gauge
-              (Theorem~\ref{thm:tp_data_irreducible}):
-              rescale and gauge to TP normalization
-              (uses step~2).
-        \item CFII data
-              (Theorem~\ref{thm:CFII_data}):
-              diagonal PD fixed point after unitary conjugation.
-        \item Periodicity removal
-              (Theorem~\ref{thm:blocking_primitivity}):
-              block until the transfer map is primitive.
-        \item Primitive $\Rightarrow$ irreducible tensor
-              (Theorem~\ref{thm:primitive_implies_irreducible}):
-              spectral-gap convergence argument.
-        \item Burnside
-              (Theorem~\ref{thm:burnside_matrix}):
-              irreducible action implies $\operatorname{algSpan}(A) = \MN{D}$.
-        \item Cumulative $\Rightarrow$ normality
-              (Theorem~\ref{thm:algspan_to_normal}):
-              aperiodicity upgrades cumulative spanning to
-              fixed-length spanning.
-        \item Canonical form assembly
-              (Theorem~\ref{thm:canonical_from_primitive}).
-        \item Fundamental theorem for CF-BNT families
-              (Theorem~\ref{thm:ft_proportional}).
-    \end{enumerate}
+	\label{rem:canonical_pipeline_gaps}
+	\notready
+	The Appendix-A Perron--Frobenius step is no longer the remaining
+	issue: Theorems~\ref{thm:pf_eigenvector_existence}
+	and~\ref{thm:tp_data_irreducible} are now formalized, as are the
+	CFII and periodicity-removal components
+	(Theorems~\ref{thm:CFII_data}
+	and~\ref{thm:blocking_primitivity}).
+	The missing work is later in the end-to-end assembly from these
+	ingredients to the repository's final canonical-form predicates.
+
+	More precisely, the current pipeline proves the following steps.
+	\begin{enumerate}
+		\item Irreducible block decomposition
+		      (Theorem~\ref{thm:irred_decomp}):
+		      $A \sim \bigoplus_k A_k$ with each $A_k$
+		      irreducible.
+		\item Perron--Frobenius eigenvector
+		      (Theorem~\ref{thm:pf_eigenvector_existence}):
+		      the adjoint transfer map has a PSD eigenvector.
+		\item TP gauge
+		      (Theorem~\ref{thm:tp_data_irreducible}):
+		      rescale and gauge to TP normalization.
+		\item CFII data
+		      (Theorem~\ref{thm:CFII_data}):
+		      diagonal PD fixed point after unitary conjugation.
+		\item Periodicity removal
+		      (Theorem~\ref{thm:blocking_primitivity}):
+		      block until the transfer map is primitive.
+	\end{enumerate}
+
+	What is still not assembled automatically is the passage from this
+	primitive blocked TP/CFII output to the stronger hypotheses used by
+	the repository's canonical-form and FT theorems.
+	In particular, Theorem~\ref{thm:canonical_from_primitive} requires
+	injective DS blocks, while the current pipeline does not yet supply
+	the full primitive $\Rightarrow$ block-injective / normality bridge
+	from Chapter~\ref{ch:wielandt}.
+	The relevant ingredients there
+	(Theorems~\ref{thm:primitive_implies_irreducible}
+	and~\ref{thm:algspan_to_normal}) still need extra hypotheses to
+	turn primitive blocked tensors into the repository's stronger
+	canonical-form notion.
+	As a consequence, there is still no theorem taking an arbitrary
+	tensor all the way to the final repository canonical form / biCF
+	output matching \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
+	Moreover, Chapter~\ref{ch:assembly} still marks an additional
+	strict-dominance / oscillatory coefficient gap in the proportional
+	multi-block assembly.
 \end{remark}
