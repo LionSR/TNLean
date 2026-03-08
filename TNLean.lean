@@ -6,9 +6,21 @@ import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
+import TNLean.Algebra.MatrixFrobenius
 
--- Layer 1: Quantum channels (general theory)
+-- Layer 1: Generic convex/topological infrastructure
+import TNLean.Topology.ConvexProjection
+import TNLean.Topology.BrouwerProduct
+import TNLean.Topology.CompactRetractFixedPoint
+
+-- Layer 2: Quantum channels (general theory)
 import TNLean.Channel.PositiveMap
+import TNLean.Channel.DensityRetract
+
+-- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
+import TNLean.Axioms.BrouwerFixedPointDensityMatrices
+
+-- Layer 2b: Quantum channels (general theory)
 import TNLean.Channel.KadisonSchwarz
 import TNLean.Channel.MultiplicativeDomain
 import TNLean.Channel.MultiplicativeDomainPowers
@@ -22,7 +34,6 @@ import TNLean.Channel.PeripheralSpectrum
 import TNLean.Channel.ConjugationSpectrum
 import TNLean.Channel.PeripheralPowers
 import TNLean.Channel.PeriodicityRemoval
-import TNLean.Channel.PerronFrobeniusExistence
 
 -- Layer 2: Spectral theory (QPF + spectral gap)
 import TNLean.QPF.PosDef
@@ -44,7 +55,7 @@ import TNLean.MPS.MPVOverlap
 import TNLean.MPS.Transfer
 import TNLean.MPS.BlockingTransfer
 import TNLean.MPS.BlockingPeriodicity
-import TNLean.MPS.BlockingPeriodicityCFII2
+import TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint
 import TNLean.MPS.TransferNormalization
 import TNLean.MPS.FixedPointInvariantProjection
 import TNLean.MPS.CPPrimitive
@@ -75,7 +86,6 @@ import TNLean.MPS.CanonicalFormExistence1606
 import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.IrreducibleAdjoint
 import TNLean.MPS.TPGaugeFromAdjointFixedPoint
-import TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint
 import TNLean.MPS.BlockPermutationMPS
 import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete

@@ -167,6 +167,13 @@ boundary conditions (PBC).
     preserves injectivity.
 \end{definition}
 
+\begin{remark}\leanok
+    After spectral-radius normalization one may restrict $\zeta$
+    to a unit-modulus phase $e^{i\phi}$.
+    We keep the more general $\zeta \in \C \setminus \{0\}$
+    because it also absorbs the normalization factors used later.
+\end{remark}
+
 \begin{lemma}[Word evaluation under conjugation]\label{lem:eval_word_gauge}
     \lean{MPSTensor.evalWord_gauge}
     \leanok
@@ -230,6 +237,17 @@ boundary conditions (PBC).
     injective.
 \end{definition}
 
+\begin{remark}\leanok
+    Here ``normal'' means eventual block injectivity.
+    In \cite{Cirac2021Matrix}, the NT terminology is spectral:
+    it is phrased in terms of irreducibility and the peripheral spectrum
+    of the transfer map.
+    The bridge to that viewpoint is supplied later by
+    Theorem~\ref{thm:blocking_primitivity},
+    Theorem~\ref{thm:primitive_implies_irreducible}, and
+    Theorem~\ref{thm:irred_tensor_aperiodic_normal}.
+\end{remark}
+
 \section{Canonical form}
 
 \begin{definition}[Canonical form]\label{def:canonical_form}
@@ -253,13 +271,13 @@ boundary conditions (PBC).
     and reviewed in~\cite{Cirac2021Matrix}.
 \end{definition}
 
-\begin{remark}\label{rem:cf_injective_vs_normal}
-    The formalization requires each block tensor to be injective
-    (Definition~\ref{def:injective}).
-    More generally, canonical forms in the literature
-    \cite{Cirac2021Matrix} allow normal tensors
-    (Definition~\ref{def:normal}), which become injective after
-    sufficient blocking (Definition~\ref{def:blocked_tensor}).
+\begin{remark}\label{rem:cf_injective_vs_normal}\leanok
+    This blueprint uses the block-injective (biCF-style) canonical form:
+    each block is injective in the sense of
+    Definition~\ref{def:injective}.
+    This is stronger than the NT-block canonical form of
+    \cite{Cirac2021Matrix}, where the blocks are only normal in the
+    paper's spectral sense.
 \end{remark}
 
 \begin{definition}[Block-diagonal MPS tensor]\label{def:block_diagonal_tensor}
@@ -329,7 +347,7 @@ boundary conditions (PBC).
     Then $(A^{[L]})^w = A^{\widetilde{w}}$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{def:blocked_tensor, def:eval_word}
+\begin{proof}\leanok\uses{def:blocked_tensor, def:eval_word, lem:eval_word_append}
     Induction on $w$, using the concatenation lemma
     (Lemma~\ref{lem:eval_word_append}).
 \end{proof}
