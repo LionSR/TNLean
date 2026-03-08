@@ -1,5 +1,6 @@
 # Lake build artifacts
 /.lake/
+External/.lake/
 
 # Local build output (LaTeX artifacts, PDFs, etc.)
 /build/
