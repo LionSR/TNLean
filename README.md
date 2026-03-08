@@ -1,10 +1,27 @@
 # TNLean
 
-A formal verification of the **Fundamental Theorem of Matrix Product States** and the **Quantum Wielandt Bound** in Lean 4, using [Mathlib](https://github.com/leanprover-community/mathlib4) v4.28.0.
+A Lean 4 formalization of major components of the **Fundamental Theorem of Matrix Product States** and the repository's **cumulative Quantum Wielandt theory**, using [Mathlib](https://github.com/leanprover-community/mathlib4) v4.28.0.
 
 ## Overview
 
-[Matrix Product States](https://en.wikipedia.org/wiki/Matrix_product_state) (MPS) — equivalently, Tensor Networks with one-dimensional geometry — are a central tool in quantum information theory and condensed matter physics. The **Fundamental Theorem of MPS** states that two MPS tensors generating the same family of quantum states must be related by a gauge transform. The **Quantum Wielandt Bound** gives a constructive upper bound on the length needed for products of matrices to span the full algebra.
+[Matrix Product States](https://en.wikipedia.org/wiki/Matrix_product_state) (MPS) — equivalently, Tensor Networks with one-dimensional geometry — are a central tool in quantum information theory and condensed matter physics. The **Fundamental Theorem of MPS** states that two MPS tensors generating the same family of quantum states must be related by a gauge transform. The **Quantum Wielandt Bound** gives a constructive upper bound on the length needed for products of matrices to span the full algebra. This repository currently formalizes the injective single-block theorem, substantial Perron–Frobenius / canonical-form infrastructure, and strong-hypothesis multi-block and canonical-form assembly theorems, but not yet a full arbitrary-tensor → final canonical-form / biCF pipeline matching Section 2 + Appendix A of [arXiv:1606.00608](https://arxiv.org/abs/1606.00608).
+
+## Current Status
+
+Done in Lean today:
+
+- injective single-block FT
+- arbitrary tensor → irreducible block decomposition
+- density-matrix Brouwer, Perron–Frobenius eigenvector existence, and TP-gauge normalization for irreducible blocks (no project-specific PF / Brouwer axiom remains on the main path)
+- CFII / diagonal fixed-point data and periodicity removal by blocking
+- strong-hypothesis canonical-form / CF-BNT theorems, including the same-structure equal-MPV theorem and the proportional theorem with explicit coefficient-convergence data
+- the cumulative `D²` Wielandt bound for the project's `IsNormal` notion
+
+Still not assembled end-to-end:
+
+- arbitrary tensor → final repository canonical form / biCF theorem matching Section 2 + Appendix A of [arXiv:1606.00608](https://arxiv.org/abs/1606.00608)
+- the bridge from primitive blocked TP / CFII data to the stronger block-injective / `IsNormal` hypotheses used by the final canonical-form predicate
+- the fully automatic multi-block proportional assembly in the oscillatory / coefficient-convergence regime
 
 ## Main Results
 
@@ -17,28 +34,50 @@ theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
 
 If an MPS tensor `A` is *injective* (its matrices span the full matrix algebra) and `B` generates the same MPV family, then `B i = X * A i * X⁻¹` for some invertible `X`.
 
-### Multi-Block Fundamental Theorem
+### Multi-Block Assembly from Per-Block SameMPV
 
 ```lean
 theorem fundamentalTheorem_multiBlock_full
-    (hA : ∀ k, IsInjective (A k)) (hSame : SameMPV₂ μ A μ B) ... :
+    (μ : Fin r → ℂ) (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hA : ∀ k, IsInjective (A k))
+    (hSame : ∀ k, SameMPV (A k) (B k)) :
+    (∀ k, GaugeEquiv (A k) (B k)) ∧
     GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)
 ```
 
-Block-diagonal MPS tensors with the same MPVs are globally gauge equivalent, handling block permutations, proportional eigenvalues, and spectral separation.
+This is a same-structure assembly theorem: once each block pair is known to have the same MPV family, Lean produces both the per-block gauge transforms and the global gauge equivalence of the block-diagonal tensors. It is **not** a raw `SameMPV₂` separation theorem.
 
-### Pi-Algebra Fundamental Theorem
+### Same-Structure CF-BNT Equal-MPV Theorem
 
 ```lean
-theorem fundamentalTheorem_canonicalForm_sameStructure
-    (C₁ C₂ : CanonicalForm d) (hC₁ : C₁.AllBlocksInjective)
-    (hSame : SameMPV C₁.toTensor C₂.toTensor) ... :
-    C₁.numBlocks = C₂.numBlocks ∧ ...
+theorem fundamentalTheorem_equalMPV_CFBNT
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hA : IsCanonicalFormBNT μ A) (hB : IsCanonicalFormBNT μ B)
+    (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+    (∀ k, GaugeEquiv (A k) (B k)) ∧
+    GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)
 ```
 
-Two canonical-form MPS tensors with the same MPVs have the same block structure (number of blocks, dimensions up to permutation) and are related by a block-permuting gauge transform.
+This is the equal-MPV canonical-form theorem currently available in Lean: both sides already share the same block count, the same block dimensions, and the same `μ` data.
 
-### Quantum Wielandt Bound
+### Proportional CF-BNT Theorem with Explicit Coefficient Data
+
+```lean
+theorem fundamentalTheorem_proportionalMPV_CFBNT
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A) (hB : IsCanonicalFormBNT μB B)
+    (A_total : MPSTensor d DtotA) (B_total : MPSTensor d DtotB)
+    (aCoeff bCoeff ... ) (aLim bLim ... ) (c cLim ...)
+    (hA_decomp ...) (hB_decomp ...)
+    (haCoeff ...) (hbCoeff ...) (haLim_ne ...) (hbLim_ne ...)
+    (hProp ...) (hc ...) (hcLim_ne ...) :
+    ∃ h : rA = rB, ∃ perm : Fin rA ≃ Fin rB, ...
+```
+
+This is the current proportional-case top theorem in Lean. The decomposition coefficients and their convergence / nonvanishing data are explicit hypotheses; Lean does not yet derive them automatically from arbitrary raw input tensors.
+
+### Cumulative Quantum Wielandt Bound
 
 ```lean
 theorem cumulative_wielandt_bound [NeZero D]
@@ -46,17 +85,19 @@ theorem cumulative_wielandt_bound [NeZero D]
     cumulativeSpan A (D ^ 2) = ⊤
 ```
 
-For a normal MPS tensor, products of its matrices of length at most `D²` span the full matrix algebra `M_D(ℂ)`.
+For the project's `IsNormal` notion, products of the matrices of `A` of length at most `D²` cumulatively span the full matrix algebra `M_D(ℂ)`.
 
-### Quantum Perron–Frobenius
+### Perron–Frobenius Eigenvector Existence
 
 ```lean
-theorem IsChannel.exists_posSemidef_fixedPoint
-    (hE : IsChannel E) (hD : 0 < D) :
-    ∃ ρ, ρ.PosSemidef ∧ ρ ≠ 0 ∧ E ρ = ρ
+theorem exists_posSemidef_eigenvector [NeZero D]
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hpos : IsPositiveMap E)
+    (hNZ : ∀ {ρ}, ρ.PosSemidef → ρ ≠ 0 → E ρ ≠ 0) :
+    ∃ ρ r, ρ.PosSemidef ∧ ρ ≠ 0 ∧ 0 < r ∧ E ρ = (r : ℂ) • ρ
 ```
 
-Every quantum channel has a nonzero positive semidefinite fixed point (Cesàro mean / Markov–Kakutani argument).
+This is the positive-map Perron–Frobenius step used later to build TP gauges for irreducible tensors. Its proof now goes through a proved Brouwer theorem on density matrices rather than a project-specific axiom.
 
 ## Building
 

@@ -134,8 +134,8 @@ The results follow~\cite{Sanz2010Quantum}.
     generalized eigenspaces over algebraically closed fields.
     In~\cite{Sanz2010Quantum} and \cite[Lemma~6.3(b)]{Wolf2012Quantum},
     the Jordan normal form is used directly.
-    Our proof uses generalized eigenspaces as a substitute
-    for the full Jordan normal form.
+    The argument is phrased in terms of generalized
+    eigenspaces instead.
 \end{proof}
 
 \begin{theorem}[Nilpotent power bound]\label{thm:nilpotent_pow_bound}
@@ -155,15 +155,14 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{theorem}[Cumulative span reaches $\MN{D}$ --- explicit bound]\label{thm:cumulative_eq_top_bound}
     \lean{MPSTensor.cumulativeSpan_eq_top_of_isNormal_bound}
     \leanok
-    \uses{def:cumulative_span, def:normal,
-          thm:cumulative_stable, thm:cumulative_strict_mono,
-          lem:cumulative_finrank_le}
+    \uses{def:cumulative_span, def:normal}
     If $A$ is normal, then there exists $n \le D^2$ with
     $T_n(A) = \MN{D}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{thm:cumulative_strict_mono, lem:cumulative_finrank_le}
     By Theorem~\ref{thm:cumulative_strict_mono},
     if $T_n \neq T_{n+1}$ then $\dim T_{n+1} > \dim T_n$.
     Since $\dim T_n \le D^2$ (Lemma~\ref{lem:cumulative_finrank_le}),
@@ -177,7 +176,7 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{theorem}[Cumulative span reaches $\MN{D}$]\label{thm:cumulative_eq_top}
     \lean{MPSTensor.cumulativeSpan_eq_top}
     \leanok
-    \uses{thm:cumulative_eq_top_bound}
+    \uses{def:cumulative_span, def:normal}
     If $A$ is normal, then $T_{D^2}(A) = \MN{D}$.
 \end{theorem}
 
@@ -189,7 +188,7 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{theorem}[Nonzero trace product]\label{thm:nonzero_trace_word}
     \lean{MPSTensor.exists_nonzero_trace_word}
     \leanok
-    \uses{thm:cumulative_eq_top}
+    \uses{def:normal}
     If $A$ is normal, then there exists a word $w$ of length
     $\le D^2$ such that $\tr(A^w) \neq 0$.
     This is \cite[Lemma~1]{Sanz2010Quantum}.
@@ -211,7 +210,6 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{theorem}[Nonzero trace implies eigenvector]\label{thm:eigenvector_from_trace}
     \lean{exists_eigenvector_of_trace_ne_zero}
     \leanok
-    \uses{def:fitting_decomp}
     If $M \in \MN{D}$ has $\tr(M) \neq 0$, then $M$ has a
     nonzero eigenvalue $\mu \neq 0$ and a corresponding eigenvector
     $\varphi \neq 0$ with $M \varphi = \mu \varphi$.
@@ -231,7 +229,7 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{theorem}[Eigenvalue extraction]\label{thm:eigenvalue_extraction}
     \lean{MPSTensor.exists_word_eigenvector}
     \leanok
-    \uses{thm:nonzero_trace_word, thm:eigenvector_from_trace}
+    \uses{def:normal}
     If $A$ is normal, then there exist a word $w_0$ with
     $|w_0| \le D^2$,
     a nonzero scalar $\mu \neq 0$, and a nonzero vector
@@ -271,7 +269,7 @@ The results follow~\cite{Sanz2010Quantum}.
     $K_m(A, \varphi) = K_n(A, \varphi)$ for all $m \ge n$.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}\leanok\uses{thm:cumulative_stable}
     Same argument as Theorem~\ref{thm:cumulative_stable}:
     left-multiplication by $A^i$ cannot escape the stabilised span.
 \end{proof}
@@ -335,7 +333,7 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{theorem}[Wielandt analysis exists]\label{thm:wielandt_analysis}
     \lean{MPSTensor.wielandtAnalysis}
     \leanok
-    \uses{def:wielandt_analysis, thm:eigenvalue_extraction}
+    \uses{def:wielandt_analysis, def:normal}
     Every normal MPS tensor admits a Wielandt analysis.
 \end{theorem}
 
@@ -348,11 +346,10 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{theorem}[Wielandt chain]\label{thm:wielandt_chain}
     \lean{MPSTensor.wielandt_chain}
     \leanok
-    \uses{thm:wielandt_analysis, thm:eigenvector_spreading}
-    Every normal MPS tensor admits a Wielandt analysis
-    (Theorem~\ref{thm:wielandt_analysis}), and the eigenvector
-    from that analysis spreads to all of $\C^D$ in $D-1$ steps
-    (Theorem~\ref{thm:eigenvector_spreading}).
+    \uses{def:wielandt_analysis, def:cumulative_vector_span, def:normal}
+    Every normal MPS tensor admits a Wielandt analysis consisting of
+    data $(w_0, \mu, \varphi)$ with
+    $K_{D-1}(A, \varphi) = \C^D$.
 \end{theorem}
 
 \begin{proof}
@@ -381,16 +378,24 @@ The results follow~\cite{Sanz2010Quantum}.
     Immediate from Theorem~\ref{thm:cumulative_eq_top}.
 \end{proof}
 
+\begin{remark}[Explicit blocking-length estimates]\notready
+    Theorem~\ref{thm:wielandt_bound} gives the $D^2$
+    cumulative-span bound.
+    The sharper explicit blocking-length estimates from
+    \cite{Sanz2010Quantum} --- at most $D^4$ for injectivity and at
+    most $3D^5$ for the biCF form --- are not currently formalized here.
+\end{remark}
+
 \section{Lemma~2(b): fixed-length matrix spanning}\label{sec:lemma2b}
 
-The preceding sections establish Lemma~2(a) of~\cite{Sanz2010Quantum}:
+The preceding sections establish the cumulative-spanning part of the
+Lemma~2(a) argument from~\cite{Sanz2010Quantum}:
 eigenvector spreading gives a cumulative vector span $K_{D-1}(A,\varphi) = \C^D$.
-The next step, Lemma~2(b), strengthens this to \emph{fixed-length}
-matrix spanning:
-there exists an $n_0$ such that $S_{n_0}(A) = \MN{D}$
+The next stage is to pass to a span at one fixed length,
+namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
 (i.e.\ word products of \emph{exactly} one length span all matrices).
-The following results cover the
-algebraic assembly part of this argument.
+The results below first formalize the assembly step and then derive a
+blocked fixed-length spanning theorem.
 
 \begin{definition}[Fixed-length vector span]\label{def:vector_spread_span}
     \lean{MPSTensor.vectorSpreadSpan}
@@ -448,7 +453,7 @@ algebraic assembly part of this argument.
     \label{thm:lemma2b_assembly}
     \lean{MPSTensor.wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis}
     \leanok
-    \uses{def:word_span, def:vector_spread_span, lem:word_span_mul}
+    \uses{def:word_span, def:vector_spread_span}
     Assume:
     \begin{enumerate}
         \item $H_n(A, \varphi) = \C^D$
@@ -487,8 +492,8 @@ algebraic assembly part of this argument.
     \leanok
     \uses{def:word_span, def:blocked_tensor}
     If the blocked tensor $A^{[L]}$ satisfies
-    $S_n(A^{[L]}) = M_{D}(\C)$,
-    then $S_{nL}(A) = M_{D}(\C)$.
+    $S_n(A^{[L]}) = \MN{D}$,
+    then $S_{nL}(A) = \MN{D}$.
 \end{lemma}
 
 \begin{proof}
@@ -499,19 +504,16 @@ algebraic assembly part of this argument.
     so $S_n(A^{[L]}) \subseteq S_{nL}(A)$.
 \end{proof}
 
-\begin{remark}[Status of Lemma~2(b)]\label{rem:lemma2b_status}
-    Theorem~\ref{thm:lemma2b_assembly} establishes the
-    \emph{assembly} part of Lemma~2(b)
-    of~\cite{Sanz2010Quantum}:
-    rank-one operators plus fixed-length vector spanning
-    imply fixed-length matrix spanning.
-    The remaining \emph{rank-one construction step}
-    is completed in \S\ref{sec:rectangular_span}:
-    Theorem~\ref{thm:rankone_extraction_blockTensor}
-    produces the required rank-one element via the
-    Fitting decomposition, and
-    Theorem~\ref{thm:wielandt_lemma2b} gives the fully
-    unconditional Lemma~2(b).
+\begin{remark}[Relation with Lemma~2(b)]\label{rem:lemma2b_status}\leanok
+    In~\cite{Sanz2010Quantum}, Lemma~2(b) combines a rank-one
+    extraction statement for fixed-length spans with an assembly
+    argument turning fixed-length vector spanning into fixed-length
+    matrix spanning.
+    Theorem~\ref{thm:lemma2b_assembly} formalizes the second step.
+    Theorem~\ref{thm:rankone_extraction_blockTensor} supplies the
+    rank-one input in blocked form, and
+    Theorem~\ref{thm:wielandt_lemma2b} then derives a blocked,
+    fixed-length word-span saturation result from that pipeline.
 \end{remark}
 
 \section{Blocked tensor and rectangular span}\label{sec:rectangular_span}
@@ -523,7 +525,7 @@ used to produce rank-one elements.
 \begin{theorem}[Blocking preserves normality]\label{thm:isNormal_blockTensor}
     \lean{MPSTensor.isNormal_blockTensor}
     \leanok
-    \uses{def:normal, def:blocked_tensor, def:word_span}
+    \uses{def:normal, def:blocked_tensor}
     If $A$ is normal and $L > 0$, then the blocked tensor
     $A^{[L]}$ is also normal.
 \end{theorem}
@@ -574,9 +576,7 @@ used to produce rank-one elements.
 \begin{theorem}[Wielandt blocked assembly]\label{thm:wielandt_blocked_assembly}
     \lean{MPSTensor.wielandt_blocked_assembly}
     \leanok
-    \uses{def:word_span, def:normal, def:blocked_tensor,
-          thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector,
-          thm:eigenvector_spreading, lem:blocking_transfer}
+    \uses{def:word_span, def:normal, def:blocked_tensor}
     Suppose $A$ is normal and $L > 0$, and we have:
     \begin{enumerate}
         \item a word $w_0$ of length $L$ with eigenvector
@@ -613,9 +613,7 @@ used to produce rank-one elements.
     \label{thm:rankone_extraction_blockTensor}
     \lean{MPSTensor.exists_rankOne_mem_wordSpan_blockTensor}
     \leanok
-    \uses{def:word_span, def:normal, def:blocked_tensor,
-          thm:isNormal_blockTensor, thm:nonzero_trace_word,
-          thm:eigenvector_from_trace}
+    \uses{def:word_span, def:normal, def:blocked_tensor}
     Suppose $A$ is normal and $N_0 \ge 1$ with
     $S_{N_0}(A) = \MN{D}$.
     Then there exist words $\sigma_0, \tau_0$ of length~$N_0$,
@@ -652,15 +650,14 @@ used to produce rank-one elements.
     \subseteq S_{2D}(B)$.
 \end{proof}
 
-\begin{theorem}[Wielandt Lemma~2(b)]\label{thm:wielandt_lemma2b}
+\begin{theorem}[Fixed-length word-span saturation via blocking]\label{thm:wielandt_lemma2b}
     \lean{MPSTensor.wielandt_lemma2b}
     \leanok
-    \uses{def:word_span, def:normal,
-          thm:rankone_extraction_blockTensor,
-          thm:wielandt_blocked_assembly}
+    \uses{def:word_span, def:normal}
     If $A$ is a normal MPS tensor with bond dimension~$D$,
     then there exists $N$ such that $S_N(A) = \MN{D}$.
-    This is \cite[Lemma~2(b)]{Sanz2010Quantum}.
+    This gives the fixed-length spanning conclusion corresponding to
+    \cite[Lemma~2(b)]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -676,16 +673,15 @@ used to produce rank-one elements.
     $S_{((D-1) + m + (D-1)) \cdot N_0}(A) = \MN{D}$.
 \end{proof}
 
-\begin{remark}[Gap closed for Lemma~2(b) via blocking]%
-    \label{rem:blocked_lemma2b_gap}
-    The rank-one extraction gap noted in earlier versions of this
-    blueprint has been closed:
-    Theorem~\ref{thm:rankone_extraction_blockTensor} produces the
-    required rank-one element, and
-    Theorem~\ref{thm:wielandt_lemma2b} gives the fully unconditional
-    Lemma~2(b).
-    See Theorem~\ref{thm:rankone_extraction_blockTensor} and
-    Theorem~\ref{thm:wielandt_lemma2b} above.
+\begin{remark}[Blocking route to fixed-length spanning]%
+    \label{rem:blocked_lemma2b_gap}\leanok
+    Theorem~\ref{thm:wielandt_lemma2b} is obtained by first extracting a
+    rank-one operator in a blocked tensor
+    (Theorem~\ref{thm:rankone_extraction_blockTensor}) and then
+    applying the fixed-length assembly step
+    (Theorem~\ref{thm:wielandt_blocked_assembly}).
+    Thus the fixed-length span of $A$ is reached through a blocked
+    auxiliary tensor rather than by a direct unblocked argument.
 \end{remark}
 
 \section{Primitivity and normality}
@@ -693,7 +689,7 @@ used to produce rank-one elements.
 \begin{theorem}[Primitive MPS tensors have nonzero word products]\label{thm:prim_nonzero_word}
     \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitive}
     \leanok
-    \uses{def:eval_word}
+    \uses{def:primitive_mps, def:eval_word}
     If $A$ is a primitive MPS tensor in DS gauge,
     then for every $n \ge 0$ there exists a word $w$ of length
     \emph{exactly}~$n$ with $A^w \neq 0$.
@@ -709,7 +705,7 @@ used to produce rank-one elements.
 \begin{theorem}[Iterated transfer does not vanish]\label{thm:transfer_pow_ne_zero}
     \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitive}
     \leanok
-    \uses{def:transfer_map, thm:prim_nonzero_word}
+    \uses{def:primitive_mps, def:transfer_map}
     If $A$ is a primitive MPS tensor (with DS gauge), then
     $\E_A^n \neq 0$ for all $n \ge 0$.
 \end{theorem}
@@ -730,6 +726,7 @@ is connected to normality through the following results.
     \label{thm:fixedpoint_unique_spectral}
     \lean{MPSTensor.IsPrimitiveMPS.fixedPoint_unique}
     \leanok
+    \uses{def:primitive_mps}
     If $A$ is a primitive MPS tensor
     with PSD fixed point $\rho$,
     then every fixed point $\sigma$ of $\E_A$ is proportional
@@ -748,6 +745,7 @@ is connected to normality through the following results.
     \label{thm:complement_pow_zero}
     \lean{MPSTensor.IsPrimitiveMPS.complement_pow_tendsto_zero}
     \leanok
+    \uses{def:primitive_mps}
     If $A$ is a primitive MPS tensor with PSD fixed point $\rho$,
     then $(\E_A - P_\rho)^n \to 0$ in operator norm.
 \end{theorem}
@@ -760,7 +758,7 @@ is connected to normality through the following results.
 \end{proof}
 
 \begin{remark}[Primitivity: spectral gap vs.\ positive definiteness]%
-    \label{rem:prim_definition_mismatch}
+    \label{rem:prim_definition_mismatch}\leanok
     The definition of primitivity used in \S\ref{subsec:prim_to_normal}
     encodes only the spectral-gap condition: there exists a nonzero PSD
     fixed point $\rho$ and $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
@@ -771,21 +769,12 @@ is connected to normality through the following results.
     does \emph{not} imply irreducibility or normality.
     A counterexample is $D = 2$, $\rho = \diag(1,0)$.
 
-    Both gaps identified in earlier versions of this remark
-    are now closed:
-    \begin{enumerate}
-        \item Primitive $+$ $\rho$ positive definite
-              $\Rightarrow$ irreducible tensor: 
-              Theorem~\ref{thm:primitive_implies_irreducible}
-              (\S\ref{subsec:prim_implies_irred}).
-        \item Cumulative spanning $+$ aperiodicity
-              $\Rightarrow$ fixed-length spanning (normality):
-              Theorem~\ref{thm:cumspan_to_normal}
-              (\S\ref{sec:cumspan_to_wordspan}).
-    \end{enumerate}
+    With the additional hypothesis $\rho > 0$,
+    Theorem~\ref{thm:primitive_implies_irreducible} gives
+    irreducibility.
     Together with the Burnside bridge
-    (Chapter~\ref{ch:canonical}, \S\ref{subsec:burnside_bridge}),
-    the full chain is:
+    (Chapter~\ref{ch:canonical}, \S\ref{subsec:burnside_bridge})
+    and Theorem~\ref{thm:algspan_to_normal}, one obtains
     \[
         \text{primitive} + \rho\text{ PosDef}
         \;\Rightarrow\;
@@ -796,7 +785,7 @@ is connected to normality through the following results.
         \text{normal}.
     \]
     The last step uses the aperiodicity condition
-    $\Id \in S_1(A)$ (Remark~\ref{rem:aperiodicity}).
+    $\Id \in S_1(A)$ from Remark~\ref{rem:aperiodicity}.
 \end{remark}
 
 \subsection{Primitive implies irreducible}\label{subsec:prim_implies_irred}
@@ -805,17 +794,16 @@ is connected to normality through the following results.
     \label{thm:primitive_implies_irreducible}
     \lean{MPSTensor.isIrreducibleTensor_of_isPrimitiveMPS_of_posDef}
     \leanok
-    \uses{def:irreducible_tensor, def:has_inv_proj,
-          thm:complement_pow_zero}
+    \uses{def:primitive_mps, def:irreducible_tensor}
     If $A$ is a primitive MPS tensor with PSD fixed point $\rho$
     and $\rho$ is positive definite, then $A$ is an irreducible tensor.
     This is part of \cite[Proposition~3]{Sanz2010Quantum}
-    (see also \cite[\S2.3]{Cirac2017Matrix}).
+    (see also \cite[\S2.3]{Cirac2017MPDO_AnnPhys}).
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:complement_pow_zero}
+    \uses{def:has_inv_proj, thm:complement_pow_zero}
     By contrapositive.
     Assume $A$ has an invariant projection~$P$
     ($P \neq 0$, $P \neq \Id$, $(\Id - P) A^i P = 0$ for all~$i$).
@@ -851,7 +839,7 @@ of all lengths~$\le N$) is weaker than normality
 ($S_L(A) = \MN{D}$ for a single length~$L$).
 The gap is closed by an aperiodicity hypothesis.
 
-\begin{remark}[Aperiodicity condition]\label{rem:aperiodicity}
+\begin{remark}[Aperiodicity condition]\label{rem:aperiodicity}\leanok
     We say $A$ satisfies the \emph{aperiodicity condition}
     if $\Id \in S_1(A)$, i.e.\ the identity matrix lies in the
     span of the Kraus operators $\{A^i\}$.
@@ -864,7 +852,7 @@ The gap is closed by an aperiodicity hypothesis.
 \end{remark}
 
 \begin{remark}[Counterexample: cumulative spanning does not imply normality]%
-    \label{rem:cumspan_counterexample}
+    \label{rem:cumspan_counterexample}\leanok
     In $\MN{2}$, let $A^0 = E_{12}$ and $A^1 = E_{21}$
     (the off-diagonal matrix units).
     Then $\operatorname{algSpan}(A) = \MN{2}$ and $T_2(A) = \MN{2}$,
@@ -881,7 +869,7 @@ The gap is closed by an aperiodicity hypothesis.
     \label{thm:wordspan_mono_aperiodic}
     \lean{MPSTensor.wordSpan_mono_succ_of_one_mem_wordSpan_one}
     \leanok
-    \uses{def:word_span, lem:word_span_mul}
+    \uses{def:word_span}
     If $\Id \in S_1(A)$, then
     $S_n(A) \le S_{n+1}(A)$ for all~$n$.
 \end{theorem}
@@ -896,8 +884,7 @@ The gap is closed by an aperiodicity hypothesis.
     \label{thm:cumspan_eq_wordspan}
     \lean{MPSTensor.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one}
     \leanok
-    \uses{def:cumulative_span, def:word_span,
-          thm:wordspan_mono_aperiodic}
+    \uses{def:cumulative_span, def:word_span}
     If $\Id \in S_1(A)$, then
     $T_n(A) = S_n(A)$ for all~$n$.
 \end{theorem}
@@ -913,8 +900,7 @@ The gap is closed by an aperiodicity hypothesis.
     \label{thm:cumspan_to_normal}
     \lean{MPSTensor.isNormal_of_cumulativeSpan_eq_top_of_aperiodic}
     \leanok
-    \uses{def:normal, def:cumulative_span,
-          thm:cumspan_eq_wordspan}
+    \uses{def:normal, def:cumulative_span, def:word_span}
     If $T_N(A) = \MN{D}$ and $\Id \in S_1(A)$, then $A$ is normal.
 \end{theorem}
 
@@ -927,8 +913,7 @@ The gap is closed by an aperiodicity hypothesis.
     \label{thm:algspan_to_normal}
     \lean{MPSTensor.isNormal_of_algSpan_eq_top_of_aperiodic}
     \leanok
-    \uses{def:normal, def:alg_span,
-          thm:cumspan_to_normal}
+    \uses{def:normal, def:alg_span, def:word_span}
     If $\operatorname{algSpan}(A) = \MN{D}$ and $\Id \in S_1(A)$,
     then $A$ is normal.
 \end{theorem}
@@ -944,9 +929,7 @@ The gap is closed by an aperiodicity hypothesis.
     \label{thm:irred_tensor_aperiodic_normal}
     \lean{MPSTensor.isNormal_of_isIrreducibleTensor_of_aperiodic}
     \leanok
-    \uses{def:normal, def:irreducible_tensor,
-          thm:algspan_to_normal, thm:burnside_matrix,
-          thm:irreducible_tensor_to_action}
+    \uses{def:normal, def:irreducible_tensor, def:word_span}
     If $A$ is an irreducible tensor, $D > 0$,
     and $\Id \in S_1(A)$, then $A$ is normal.
     This assembles the full chain:

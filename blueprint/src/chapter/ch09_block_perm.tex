@@ -33,7 +33,6 @@ and~\cite{Cirac2021Matrix}.
 \begin{theorem}[Dimension preservation]\label{thm:dim_preserved}
     \lean{MPSTensor.dim_preserved}
     \leanok
-    \uses{thm:ring_perm}
     If $T$ is an algebra automorphism of
     $\prod_{k=1}^r \MN{D_k}$,
     and $\sigma$ is the induced permutation, then
@@ -51,7 +50,6 @@ and~\cite{Cirac2021Matrix}.
 \begin{theorem}[Decomposition of automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
     \lean{MPSTensor.algEquiv_pi_matrix_decomposition}
     \leanok
-    \uses{thm:ring_perm, thm:dim_preserved, thm:skolem_noether}
     Every $\C$-algebra automorphism of $\prod_{k=1}^r \MN{D_k}$
     decomposes as a block permutation~$\sigma$ followed by
     per-block inner automorphisms:
@@ -174,20 +172,19 @@ and~\cite{Cirac2021Matrix}.
     See also \cite[Thm.~6.8]{Wolf2012Quantum}
     for the completely-positive characterisation
     and Chapter~\ref{ch:spectral} for the spectral-gap
-    proof used in this formalization.
+    proof.
 \end{definition}
 
-\begin{remark}\label{rem:overlap_hypothesis}
+\begin{remark}\label{rem:overlap_hypothesis}\leanok
     In the literature~\cite{Cirac2021Matrix},
     condition~(5) is derived from primitivity of the
     transfer map (peripheral spectrum $= \{1\}$).
-    Theorem~\ref{thm:canonical_from_primitive}
-    now formalizes this derivation:
+    Theorem~\ref{thm:canonical_from_primitive} gives this implication:
     per-block primitivity implies overlap convergence,
     so condition~(5) is redundant when primitivity holds.
-    The canonical form predicate retains the explicit
-    hypothesis for flexibility (it can be satisfied
-    without proving primitivity of each block).
+    The canonical form predicate retains condition~(5)
+    explicitly because the overlap limit may also be
+    assumed directly.
 \end{remark}
 
 \begin{theorem}[Vandermonde separation]\label{thm:vandermonde_sep}
@@ -208,7 +205,7 @@ and~\cite{Cirac2021Matrix}.
 \begin{lemma}[Block separation core]\label{lem:block_sep_core}
     \lean{MPSTensor.block_separation_core}
     \leanok
-    \uses{def:is_canonical_form, thm:overlap_decay, thm:overlap_decay_rect}
+    \uses{def:is_canonical_form}
     Under the hypotheses of the canonical form predicate
     (strict ordering, DS gauge, self-overlap convergence),
     if $\sum_k \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
@@ -271,23 +268,12 @@ and~\cite{Cirac2021Matrix}.
     the induction hypothesis applies to the remaining $r-1$
     blocks.
 
-    In~\cite{PerezGarcia2007Matrix}, the uniqueness of the
-    canonical form is proved differently: the argument uses
-    OBC (open boundary condition) canonical forms together
-    with a Horn--Johnson matrix-equation lemma
-    (\cite[Thm.~4.4.14]{HornJohnson91}).
-    In~\cite{Cirac2021Matrix}, the block separation is
-    deduced from the BNT uniqueness
-    (Theorem~\ref{thm:bnt_perm_prop}).
-    Our formalization makes the separation explicit by
-    induction on the number of blocks~$r$, with each step
-    using the spectral gap to peel off the dominant block.
 \end{proof}
 
 \begin{theorem}[Canonical form fundamental theorem]\label{thm:ft_canonical}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm}
     \leanok
-    \uses{thm:block_sep, thm:per_block_gauge}
+    \uses{def:is_canonical_form}
     Under the hypotheses of Theorem~\ref{thm:block_sep},
     there exist a permutation $\sigma$ and per-block gauge
     matrices $X_k$ such that
