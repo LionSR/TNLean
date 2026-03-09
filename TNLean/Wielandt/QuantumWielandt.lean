@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
-import TNLean.Wielandt.PrimitiveImpliesIrreducible
-import TNLean.Wielandt.CumulativeToWordSpan
 import TNLean.Algebra.BurnsideTheorem
 import TNLean.Algebra.IrreducibleTensorAction
+import TNLean.Wielandt.CumulativeToWordSpan
+import TNLean.Wielandt.PrimitiveImpliesIrreducible
 
 /-!
 # Quantum Wielandt theorem: IsPrimitive → IsNormal
@@ -85,10 +85,12 @@ theorem isNormal_of_isPrimitiveMPS_of_posDef
   -- Step 4: algSpan = ⊤ + aperiodicity → IsNormal
   exact isNormal_of_algSpan_eq_top_of_aperiodic A hAlg hAper
 
-/-- **Quantum Wielandt theorem (existential version).**
+/-- Compatibility wrapper returning the witness form of `IsNormal`.
 
-The existential wrapper: if `A` is primitive (∃ ρ with spectral gap), the fixed point
-is positive definite, and the aperiodicity condition holds, then `A` is normal. -/
+Despite the historical name, this theorem still takes the fixed-point witness
+`ρ` explicitly through `IsPrimitiveMPS A ρ`; it simply unwraps
+`isNormal_of_isPrimitiveMPS_of_posDef` into the statement that all sufficiently
+long exact word spans are `⊤`. -/
 theorem isNormal_of_isPrimitive_of_posDef
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hPrim : IsPrimitiveMPS A ρ)
@@ -96,14 +98,16 @@ theorem isNormal_of_isPrimitive_of_posDef
     (hAper : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
     ∃ N : ℕ, ∀ (n : ℕ), N ≤ n → wordSpan A n = ⊤ := by
   obtain ⟨N, hN⟩ := isNormal_of_isPrimitiveMPS_of_posDef hPrim hPD hAper
-  refine ⟨N, fun n hn => ?_⟩
   rw [← wordSpan_eq_top_iff_isNBlkInjective] at hN
-  exact le_antisymm le_top (hN ▸ wordSpan_mono'_of_one_mem_wordSpan_one A hAper hn)
+  refine ⟨N, fun n hn => ?_⟩
+  exact eq_top_iff.mpr <| by
+    simpa [hN] using wordSpan_mono'_of_one_mem_wordSpan_one A hAper hn
 
-/-- **Full pipeline (short form).**
+/-- Compatibility wrapper around
+`isNormal_of_isIrreducibleTensor_of_aperiodic`.
 
-One-line combination: `IsIrreducibleTensor + aperiodicity → IsNormal`.
-This is the composition of Steps 2–4 above, useful when Step 1 has already been applied. -/
+This is the short route from tensor irreducibility plus aperiodicity to
+`IsNormal`. -/
 theorem isNormal_of_isIrreducibleTensor_aperiodic
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleTensor A)

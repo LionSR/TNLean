@@ -3,57 +3,50 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
-import TNLean.MPS.PrimitivityBridge
-import TNLean.Wielandt.WielandtBound
-import TNLean.Wielandt.CumulativeSpan
-import TNLean.Wielandt.NonzeroTraceProduct
-import TNLean.Spectral.MixedTransfer
 import TNLean.Channel.Primitive
-import TNLean.QPF.PosDef
-import TNLean.MPS.FixedPointInvariantProjection
-import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.CPPrimitive
+import TNLean.MPS.IrreducibleFormII
+import TNLean.MPS.PrimitivityBridge
+import TNLean.QPF.PosDef
+import TNLean.Spectral.MixedTransfer
 
 /-!
-# IsPrimitive → IsNormal Bridge
+# Preparatory lemmas for the `IsPrimitive → IsNormal` bridge
 
-This file narrows the gap between `IsPrimitive A` (spectral-gap / fixed-point
-projection definition from `TNLean.MPS.PrimitivityBridge`) and `IsNormal A`
-(existence of a blocking length for which word products span `M_D(ℂ)`, from
-`TNLean.MPS.Defs`).
+This file collects spectral-gap consequences of `IsPrimitiveMPS` together with a
+small transfer-map compatibility API. It stops short of proving any `IsNormal`
+theorem; the current conditional assembly with extra `ρ.PosDef` and
+aperiodicity hypotheses lives in `QuantumWielandt.lean`.
 
-## Main results (all sorry-free)
+## Main results
 
-### Part 1: Spectral-gap consequences
+### Spectral-gap consequences
 
-* `IsPrimitiveMPS.trace_ne_zero`: `tr(ρ) ≠ 0`.
-* `IsPrimitiveMPS.fixedPoint_unique`: any fixed point of `E` is proportional to `ρ`.
-* `IsPrimitiveMPS.complement_pow_tendsto_zero`: `(E − P_ρ)^n → 0` in operator norm.
+* `IsPrimitiveMPS.trace_ne_zero`: `tr(ρ) ≠ 0`
+* `IsPrimitiveMPS.fixedPoint_unique`: any fixed point of `E` is proportional to
+  `ρ`
+* `IsPrimitiveMPS.complement_pow_tendsto_zero`: `(E - P_ρ)^n → 0`
 
-### Part 2: Transfer map structure
+### Transfer-map wrappers
 
-* `IsPrimitiveMPS.transferMap_isChannel`: the transfer map under left-canonical /
-  trace-preserving normalization is a quantum channel.
-* `IsPrimitiveMPS.transferMap_trace_preserving`: trace-preservation.
-* `IsPrimitiveMPS.posDef_iff_isIrreducibleTensor`: relationship between ρ being
-  positive definite and irreducibility of the tensor.
+* `IsPrimitiveMPS.transferMap_isChannel`
+* `IsPrimitiveMPS.transferMap_trace_preserving`
 
-### Part 3: From irreducibility to the Wielandt chain
+### PosDef consequences under irreducibility
 
-* `isNormal_of_isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` (conditional):
-  Documents the pipeline from irreducibility through PosDef to the Wielandt chain,
-  conditional on Burnside's theorem.
+* `posDef_of_isIrreducibleMap_of_isPrimitiveMPS`
+* `isIrreducibleMap_of_isIrreducibleTensor`
+* `posDef_of_isIrreducibleTensor_of_isPrimitiveMPS`
 
 ## Important note on definitions
 
-Our `IsPrimitiveMPS` (spectral gap alone) is **weaker** than the paper's
-"primitive" (arXiv:0909.5347, Proposition 3). The paper's definition
-additionally requires `ρ` to be full-rank (positive definite). We include a
-detailed analysis showing that `IsPrimitiveMPS` alone does NOT imply `ρ.PosDef`.
+Our `IsPrimitiveMPS` hypothesis records a spectral gap around a nonzero PSD
+fixed point. This is weaker than the paper's primitive condition in
+arXiv:0909.5347, Proposition 3, which additionally forces the fixed point to be
+positive definite.
 
-To recover the paper's Proposition 3, one should work with
-`IsPrimitiveMPS A ρ ∧ ρ.PosDef`, which is equivalent to the paper's
-"strongly irreducible" condition.
+Accordingly, this file should be read as preparatory material for the bridge,
+not as the final primitive-to-normal theorem.
 
 ## References
 
@@ -151,29 +144,23 @@ theorem IsPrimitiveMPS.complement_pow_tendsto_zero
 
 /-! ## Part 2: Transfer map structure -/
 
-/-- The transfer map under left-canonical / trace-preserving normalization is a quantum
-channel.
-
-The primed name is kept for compatibility; use `IsPrimitiveMPS.transferMap_isChannel`
-for a cleaner alias. -/
+/-- Compatibility wrapper showing that the transfer map attached to
+`IsPrimitiveMPS A ρ` is a quantum channel. -/
 theorem IsPrimitiveMPS.transferMap_isChannel'
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) :
     IsChannel (transferMap (d := d) (D := D) A) :=
   transferMap_isChannel A hP.norm
 
-/-- Preferred alias for `IsPrimitiveMPS.transferMap_isChannel'`. -/
+/-- Preferred non-primed alias for `IsPrimitiveMPS.transferMap_isChannel'`. -/
 theorem IsPrimitiveMPS.transferMap_isChannel
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) :
     IsChannel (transferMap (d := d) (D := D) A) :=
   hP.transferMap_isChannel'
 
-/-- The transfer map under left-canonical / trace-preserving normalization is
-trace-preserving.
-
-The primed name is kept for compatibility; use
-`IsPrimitiveMPS.transferMap_trace_preserving` for a cleaner alias. -/
+/-- Compatibility wrapper stating that the transfer map attached to
+`IsPrimitiveMPS A ρ` is trace-preserving. -/
 theorem IsPrimitiveMPS.transferMap_trace_preserving'
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
@@ -181,7 +168,8 @@ theorem IsPrimitiveMPS.transferMap_trace_preserving'
     trace (transferMap (d := d) (D := D) A X) = trace X :=
   hP.transferMap_isChannel'.tp X
 
-/-- Preferred alias for `IsPrimitiveMPS.transferMap_trace_preserving'`. -/
+/-- Preferred non-primed alias for
+`IsPrimitiveMPS.transferMap_trace_preserving'`. -/
 theorem IsPrimitiveMPS.transferMap_trace_preserving
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
@@ -189,17 +177,13 @@ theorem IsPrimitiveMPS.transferMap_trace_preserving
     trace (transferMap (d := d) (D := D) A X) = trace X :=
   hP.transferMap_trace_preserving' X
 
-/-- **PosDef fixed point ⟹ irreducible CP map** (via existing infrastructure).
+/-- **Irreducible transfer map implies a positive-definite fixed point.**
 
-This bridges `IsPrimitiveMPS + ρ.PosDef` to `IsIrreducibleMap (transferMap A)`,
-using the existing `posSemidef_fixedPoint_isPosDef_of_irreducible` from
-`TNLean.QPF.PosDef` and the bridge in `TNLean.MPS.IrreducibleFormII`.
+If `ρ` is the PSD fixed point packaged by `IsPrimitiveMPS A ρ` and the transfer
+map is irreducible, then `ρ` is positive definite.
 
-Note: this theorem has the "wrong direction" — it assumes PosDef to conclude
-irreducibility, whereas ideally we'd derive PosDef from irreducibility. The
-existing `posSemidef_fixedPoint_isPosDef_of_irreducible` in `QPF.PosDef` goes
-the other direction (irreducible map ⟹ PosDef). Combined, they show the
-equivalence: for primitive channels, irreducibility ⟺ PosDef fixed point. -/
+This is the Perron–Frobenius `PosDef` result from `TNLean.QPF.PosDef`
+specialized to the fixed point already present in `IsPrimitiveMPS`. -/
 theorem posDef_of_isIrreducibleMap_of_isPrimitiveMPS
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
@@ -229,62 +213,30 @@ theorem posDef_of_isIrreducibleTensor_of_isPrimitiveMPS
 
 /-! ## Part 3: Documented roadmap
 
-### Full proof chain for Proposition 3 of arXiv:0909.5347
+This file intentionally stops before any `IsNormal` theorem.
 
-The paper's Proposition 3 establishes the equivalence of three conditions:
-(a) **Primitive**: `E_A^n` is eventually strictly positive
-    (= spectral gap + ρ PosDef).
-(b) **Eventually full Kraus rank**: `∃ n, S_n(A) = M_D(ℂ)` (= `IsNormal A`).
-(c) **Strongly irreducible**: ρ full-rank + unique PSD fixed point +
-    no other eigenvalue of modulus 1.
+What it does provide is the preparatory material reused by the later bridge:
 
-### What we have proven (sorry-free)
+1. `fixedPoint_unique`: the `1`-eigenspace of the transfer map is spanned by
+   `ρ`
+2. `complement_pow_tendsto_zero`: the complementary part of the transfer map
+   decays to `0`
+3. `posDef_of_isIrreducibleTensor_of_isPrimitiveMPS`: irreducibility upgrades
+   the primitive fixed point to `PosDef`
+4. `isIrreducibleMap_of_isIrreducibleTensor`: tensor irreducibility implies
+   transfer-map irreducibility
 
-1. `fixedPoint_unique`: From spectral gap, the 1-eigenspace of `E` is
-   spanned by `ρ` (any fixed point is proportional to `ρ`).
-2. `complement_pow_tendsto_zero`: `(E − P_ρ)^n → 0` in operator norm.
-3. `posDef_of_isIrreducibleTensor_of_isPrimitiveMPS`:
-   `IsIrreducibleTensor + IsPrimitiveMPS ⟹ ρ.PosDef`.
-4. `isIrreducibleMap_of_isIrreducibleTensor`:
-   `IsIrreducibleTensor ⟹ IsIrreducibleMap (transferMap A)`.
-5. From `PrimitivityNormal.lean`: `IsPrimitive ⟹ ∀ n, ∃ σ, evalWord A σ ≠ 0`.
-6. From `WielandtBound.lean`: `IsNormal ⟹ full Wielandt chain`.
+The key conceptual mismatch remains that our `IsPrimitiveMPS` hypothesis does
+not force `ρ.PosDef`; the standard rank-deficient `2 × 2` example still applies.
+So the paper's primitive condition is stronger than the bare spectral-gap data
+formalized here.
 
-### Definition mismatch
-
-Our `IsPrimitiveMPS` does NOT imply `ρ.PosDef`. Counterexample:
-`D = 2, d = 2, A₁ = diag(1,0), A₂ = [[0,γ],[0,δ]]` with `|γ|²+|δ|²=1, γ≠0`.
-This gives `ρ = diag(1,0)` (not PosDef), `IsPrimitiveMPS` holds (spectral gap
-with `spectralRadius(E−P_ρ) = |δ|² < 1`), but `HasInvariantProj` also holds.
-
-### Remaining gaps
-
-**Gap 1** (definition): Strengthen `IsPrimitiveMPS` to include `ρ.PosDef`,
-matching the paper's "primitive" exactly. Or work with the stronger hypothesis.
-
-**Gap 2** (`PosDef ⟹ IsIrreducibleTensor`): Show that `IsPrimitiveMPS + PosDef ⟹
-IsIrreducibleTensor`. The proof requires formalizing the P-block restricted
-channel (left-canonical / trace-preserving on a subspace) having a Cesàro PSD fixed point,
-then applying `fixedPoint_unique` to derive `ρ = PρP`, contradicting PosDef.
-
-**Gap 3** (Burnside): Show that `IsIrreducibleTensor ⟹ IsNormal`. This is
-Burnside's theorem for matrix algebras: if a unital subalgebra of `M_D(ℂ)`
-(over an algebraically closed field) has no nontrivial invariant subspace,
-it equals `M_D(ℂ)`. Not yet in Mathlib.
-
-### Alternative route (1606.00608 Appendix A)
-
-The paper arXiv:1606.00608 uses:
-1. `IsPrimitive ⟹ IsIrreducibleMap (transferMap A)` (uses P-block channel)
-2. `IsIrreducibleMap ⟹ ρ.PosDef` (from `QPF.PosDef`, **already formalized**)
-3. `ρ.PosDef ⟹` gauge transform to a bi-canonical channel (right-canonical + left-canonical)
-4. Spectral gap + convergence ⟹ word products span `M_D(ℂ)` (uses Choi/tensor)
-
-The bottleneck in both routes is either Burnside's theorem or the
-Choi-representation argument for spanning.
+For the current assembled route with explicit `PosDef` and aperiodicity
+hypotheses, see `QuantumWielandt.lean`.
 -/
 
-/-- Summary of the bridge status (documentation theorem). -/
+/-- Documentation theorem recording that this file only supplies preparatory
+bridge lemmas. -/
 theorem primitivityToNormal_roadmap : True := trivial
 
 end MPSTensor
