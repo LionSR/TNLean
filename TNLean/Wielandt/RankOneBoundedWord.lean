@@ -486,14 +486,6 @@ theorem biRectSpan_finrank_mono (n : ℕ) :
 end BiRectSpanDimGrowth
 
 /-!
-## Additional growth tools: finrank stabilization
-
-We record a pigeonhole-style lemma: since `finrank` is a natural number bounded by
-`D^2`, the monotone sequence `n ↦ finrank (biRectSpan ((B i₀)^D) ((B i₁)^D) B n)` must
-have a consecutive equality within the first `D^2+1` steps.
--/
-
-/-!
 ## Pigeonhole finrank stabilization
 
 The monotone bounded sequence `finrank(biRectSpan P Q B n)` must have a consecutive
