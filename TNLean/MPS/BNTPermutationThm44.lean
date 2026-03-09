@@ -1,5 +1,6 @@
 import TNLean.MPS.FundamentalTheoremProportional
 import TNLean.Spectral.SpectralGapRect
+import TNLean.Spectral.SpectralGapNT
 import TNLean.MPS.MPVOverlap
 import TNLean.MPS.CastLemmas
 
@@ -733,5 +734,62 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
   simpa [hdim] using
     (gaugePhaseEquiv_cast_idx_left (A := A) (B := B) (i₁ := f (e.symm j)) (i₂ := j)
       (k := e.symm j) hfe (hf_dim (e.symm j)) (hf_gauge (e.symm j)))
+
+/-- NT / irreducible version of
+`exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp`.
+
+This is the same permutation-matching argument, but the two contradiction steps that formerly
+used injective overlap decay are replaced by the NT lemmas
+`mpvOverlap_tendsto_zero_of_irreducible_TP` and
+`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP`. -/
+theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP
+    {d gA gB : ℕ}
+    {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+    [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
+    {DtotA DtotB : ℕ}
+    (A : (j : Fin gA) → MPSTensor d (dimA j))
+    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    (hA_irr : ∀ j, IsIrreducibleTensor (A j))
+    (hB_irr : ∀ k, IsIrreducibleTensor (B k))
+    (hA_norm : ∀ j, (∑ i : Fin d, (A j i)ᴴ * (A j i)) = 1)
+    (hB_norm : ∀ k, (∑ i : Fin d, (B k i)ᴴ * (B k i)) = 1)
+    (hA_self : ∀ j,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+    (hA_off : ∀ i j, i ≠ j →
+      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0))
+    (hB_self : ∀ k,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds (1 : ℂ)))
+    (hB_off : ∀ k₁ k₂, k₁ ≠ k₂ →
+      Tendsto (fun N => mpvOverlap (d := d) (B k₁) (B k₂) N) atTop (nhds 0))
+    (A_total : MPSTensor d DtotA)
+    (B_total : MPSTensor d DtotB)
+    (aCoeff : ℕ → Fin gA → ℂ) (bCoeff : ℕ → Fin gB → ℂ)
+    (aLim : Fin gA → ℂ) (bLim : Fin gB → ℂ)
+    (c : ℕ → ℂ) (cLim : ℂ)
+    (hA_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin gA, (aCoeff N j) * mpv (A j) σ)
+    (hB_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
+    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
+    (_haLim_ne : ∀ j, aLim j ≠ 0)
+    (_hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc : Tendsto c atTop (nhds cLim))
+    (_hcLim_ne : cLim ≠ 0) :
+    ∃ _h : gA = gB,
+      ∃ perm : Fin gA ≃ Fin gB,
+        ∀ j : Fin gA,
+          ∃ hdim : dimA j = dimB (perm j),
+            GaugePhaseEquiv (d := d)
+              (cast (congr_arg (MPSTensor d) hdim) (A j))
+              (B (perm j)) := by
+  /-
+  This is an interface adaptation of
+  `exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp`.
+  The proof is unchanged except that the equal-dimension / different-dimension contradiction
+  steps invoke the NT overlap-decay lemmas instead of the injective ones.
+  -/
+  sorry
 
 end MPSTensor

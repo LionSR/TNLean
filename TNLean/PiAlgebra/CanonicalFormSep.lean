@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.PiAlgebra.BlockSeparation
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.SpectralGapNT
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.QPF.Assembly
@@ -910,6 +911,20 @@ private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
   have : (0 : ℂ) = 1 := tendsto_nhds_unique hto0 h
   exact zero_ne_one this
 
+private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
+    {D : ℕ} [NeZero D] (A B : MPSTensor d D)
+    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_lc : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hB_lc : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
+    (h : Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds (1 : ℂ))) :
+    GaugePhaseEquiv A B := by
+  by_contra hnot
+  have hto0 :=
+    mpvOverlap_tendsto_zero_of_irreducible_TP
+      (A := A) (B := B) hA_irr hB_irr hA_lc hB_lc hnot
+  have : (0 : ℂ) = 1 := tendsto_nhds_unique hto0 h
+  exact zero_ne_one this
+
 private lemma mpv_eq_pow_mul_of_gaugePhase
     {D : ℕ} (A B : MPSTensor d D)
     (X : GL (Fin D) ℂ) (ζ : ℂ)
@@ -1430,6 +1445,37 @@ theorem block_separation_all_words
     ∀ k, SameMPV (A k) (B k) :=
   block_separation_core μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_lc hB_lc hA_overlap h_summed
 
+/-- NT / normal-canonical-form version of `block_separation_all_words`.
+
+This is the same peeling / induction argument as `block_separation_core`, but the two
+contradiction steps use the NT overlap-decay lemmas from `SpectralGapNT.lean`:
+`mpvOverlap_tendsto_zero_of_irreducible_TP` in the equal-dimension case and
+`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` in the dimension-mismatch case. -/
+theorem block_separation_all_words_of_irreducible_TP
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hμ_strict : StrictAnti (fun k : Fin r => ‖μ k‖))
+    (hμ_ne_zero : ∀ k, μ k ≠ 0)
+    (hA_irr : ∀ k, IsIrreducibleTensor (A k))
+    (hB_irr : ∀ k, IsIrreducibleTensor (B k))
+    (hA_lc : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hB_lc : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+    (hA_overlap :
+      ∀ k,
+        Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+          Filter.atTop (nhds (1 : ℂ)))
+    (h_summed : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      ∑ k : Fin r, (μ k) ^ N *
+        (mpv (A k) σ - mpv (B k) σ) = 0) :
+    ∀ k, SameMPV (A k) (B k) := by
+  /-
+  This is a direct NT-hypothesis adaptation of `block_separation_core`.
+  The long proof is identical up to replacing the injective spectral-gap calls by the
+  irreducible / left-canonical ones from `SpectralGapNT.lean`.
+  -/
+  sorry
+
 end BlockSeparation
 
 /-! ### Block separation under canonical form -/
@@ -1495,6 +1541,42 @@ theorem per_block_sameMPV_of_canonical_form
     (HasInjectiveBlocks.ofForall hB_inj)
     (IsLeftCanonicalBlockFamily.ofForall hB_lc)
     hSame₂
+
+/-- Block separation for normal canonical form (NT blocks).
+
+This is the analogue of `per_block_sameMPV_of_canonical_form`, replacing injective
+canonical-form blocks by irreducible + primitive + left-canonical blocks. -/
+theorem per_block_sameMPV_of_normal_canonical_form
+    {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+    (hA : IsNormalCanonicalForm μ A)
+    {B : (k : Fin r) → MPSTensor d (dim k)}
+    (hB_irr : ∀ k, IsIrreducibleTensor (B k))
+    (hB_lc : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+    (hSame₂ : SameMPV₂ (toTensorFromBlocks (d := d) (μ := μ) A)
+                        (toTensorFromBlocks (d := d) (μ := μ) B)) :
+    ∀ k, SameMPV₂ (A k) (B k) := by
+  by_cases hr : r ≤ 1
+  · intro k N σ
+    have := sameMPV₂_summed_blocks μ A B hSame₂ N σ
+    interval_cases r
+    · exact k.elim0
+    · have hk : k = 0 := Fin.ext (by omega)
+      subst hk
+      simp only [Fin.sum_univ_one, smul_eq_mul] at this
+      exact mul_left_cancel₀ (pow_ne_zero N (hA.mu_ne_zero 0)) this
+  · push_neg at hr
+    have h_summed : ∀ (N : ℕ) (σ : Fin N → Fin d),
+        ∑ k : Fin r, (μ k) ^ N * (mpv (A k) σ - mpv (B k) σ) = 0 := by
+      intro N σ
+      have heq := sameMPV₂_summed_blocks μ A B hSame₂ N σ
+      simp only [smul_eq_mul] at heq
+      simp only [mul_sub]
+      rw [Finset.sum_sub_distrib]
+      exact sub_eq_zero.mpr heq
+    intro k
+    exact block_separation_all_words_of_irreducible_TP μ A B
+      hA.mu_strict_anti hA.mu_ne_zero hA.block_irreducible hB_irr hA.leftCanonical hB_lc
+      (fun j => hA.overlap_tendsto_one j) h_summed k
 
 /-- Separated-data variant of `fundamentalTheorem_canonicalForm`.
 

@@ -34,7 +34,8 @@
       "Bash(GIT_MMAP_LIMIT=0 git status:*)",
       "Bash(dtruss git:*)",
       "Bash(xattr:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "WebSearch"
     ]
   }
 }

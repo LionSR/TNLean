@@ -237,6 +237,89 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT
   fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB A_total B_total aCoeff bCoeff aLim bLim c
     cLim hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
+/-- Split-data proportional-MPV Fundamental Theorem for normal-CF-BNT-style data. -/
+theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {DtotA DtotB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA_ncf : IsNormalCanonicalForm μA A)
+    (hA_blocks : ∀ j k : Fin rA, j ≠ k →
+      ∀ (h : dimA j = dimA k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k))
+    (hB_ncf : IsNormalCanonicalForm μB B)
+    (hB_blocks : ∀ j k : Fin rB, j ≠ k →
+      ∀ (h : dimB j = dimB k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (B j)) (B k))
+    (A_total : MPSTensor d DtotA)
+    (B_total : MPSTensor d DtotB)
+    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (c : ℕ → ℂ) (cLim : ℂ)
+    (hA_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
+    (hB_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
+    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0)
+    (hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc : Tendsto c atTop (nhds cLim))
+    (hcLim_ne : cLim ≠ 0) :
+    ∃ _h : rA = rB,
+      ∃ perm : Fin rA ≃ Fin rB,
+        ∀ j : Fin rA,
+          ∃ hdim : dimA j = dimB (perm j),
+            GaugePhaseEquiv (d := d)
+              (cast (congr_arg (MPSTensor d) hdim) (A j))
+              (B (perm j)) :=
+  fundamentalTheorem_of_separated_normalCFBNT_data A B
+    hA_ncf hA_blocks hB_ncf hB_blocks
+    A_total B_total aCoeff bCoeff aLim bLim c cLim
+    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+
+/-- Fundamental Theorem (proportional case) for normal canonical form blocks. -/
+theorem fundamentalTheorem_proportionalMPV_normalCFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {DtotA DtotB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsNormalCanonicalFormBNT μA A)
+    (hB : IsNormalCanonicalFormBNT μB B)
+    (A_total : MPSTensor d DtotA)
+    (B_total : MPSTensor d DtotB)
+    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (c : ℕ → ℂ) (cLim : ℂ)
+    (hA_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
+    (hB_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
+    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0)
+    (hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc : Tendsto c atTop (nhds cLim))
+    (hcLim_ne : cLim ≠ 0) :
+    ∃ _h : rA = rB,
+      ∃ perm : Fin rA ≃ Fin rB,
+        ∀ j : Fin rA,
+          ∃ hdim : dimA j = dimB (perm j),
+            GaugePhaseEquiv (d := d)
+              (cast (congr_arg (MPSTensor d) hdim) (A j))
+              (B (perm j)) :=
+  fundamentalTheorem_of_IsNormalCanonicalFormBNT A B hA hB
+    A_total B_total aCoeff bCoeff aLim bLim c cLim
+    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+
 /-! ## Theorem 3: Equal MPVs imply proportional MPVs -/
 
 /-- **Equal MPVs imply proportional MPVs** (trivially, with proportionality constant `1`).
