@@ -348,39 +348,50 @@ theorem cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
       (hLeft.leftCanonical k)
       hdim
 
-/-- Split-data version of `IsNormalCanonicalFormBNT.isBNT`.
-
-The normality field is the only remaining place where the future primitive-to-normal bridge
-needs to be threaded in. All overlap / linear-independence steps already work with NT data. -/
-theorem isBNT_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
+/-- The NT hypotheses already supply the `spans_mpv` and `eventually_li` data used by the
+proportional-FT / permutation arguments. The only missing ingredient for a full `IsBNT`
+package is blockwise `IsNormal`. -/
+theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hNCF : IsNormalCanonicalForm μ A)
     (hBlocks : ∀ j k : Fin r, j ≠ k →
       ∀ (h : dim j = dim k),
         ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
-    IsBNT (toTensorFromBlocks μ A) r dim A where
-  normal := fun j => by
-    /-
-    TODO: thread the primitive → normal bridge for NT blocks here.
-    The intended inputs are `hNCF.block_irreducible j`, `hNCF.block_primitive j`,
-    `hNCF.leftCanonical j`, and `hNCF.dim_pos j`.
-    -/
-    sorry
-  spans_mpv := fun N =>
-    ⟨fun k => μ k ^ N, fun σ => by
-      simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ⟩
-  eventually_li := by
-    have hOrtho := eventually_linearIndependent_of_overlap_tendsto_orthonormal A
-      (fun j => hNCF.overlap_tendsto_one j)
-      (fun i j hij =>
-        cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
-          hNCF.toHasIrreducibleBlocks
-          hNCF.toIsLeftCanonicalBlockFamily
-          hBlocks i j hij)
+    (∀ N : ℕ, ∃ c : Fin r → ℂ, ∀ σ : Fin N → Fin d,
+      mpv (toTensorFromBlocks μ A) σ = ∑ j : Fin r, c j * mpv (A j) σ) ∧
+    (∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N)) := by
+  constructor
+  · intro N
+    refine ⟨fun k => μ k ^ N, ?_⟩
+    intro σ
+    simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ
+  · have hOrtho := eventually_linearIndependent_of_overlap_tendsto_orthonormal A
+        (fun j => hNCF.overlap_tendsto_one j)
+        (fun i j hij =>
+          cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
+            hNCF.toHasIrreducibleBlocks
+            hNCF.toIsLeftCanonicalBlockFamily
+            hBlocks i j hij)
     rw [Filter.Eventually] at hOrtho
     obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hOrtho
     exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩
+
+/-- Split-data version of `IsNormalCanonicalFormBNT.isBNT`, assuming blockwise `IsNormal`
+has already been supplied by an external primitive-to-normal bridge. -/
+theorem isBNT_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNCF : IsNormalCanonicalForm μ A)
+    (hNormal : ∀ j, IsNormal (A j))
+    (hBlocks : ∀ j k : Fin r, j ≠ k →
+      ∀ (h : dim j = dim k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+    IsBNT (toTensorFromBlocks μ A) r dim A := by
+  obtain ⟨hSpans, hLI⟩ :=
+    spans_mpv_and_eventually_li_of_separated_normalCFBNT_data μ A hNCF hBlocks
+  exact ⟨hNormal, hSpans, hLI⟩
 
 end SeparatedNormalCFBNT
 
@@ -400,12 +411,15 @@ theorem cross_overlap_tendsto_zero
     hNCF.blocks_not_equiv
     j k hjk
 
-/-- A normal-canonical-form BNT decomposition yields a valid `IsBNT` structure. -/
+/-- A normal-canonical-form BNT decomposition yields a valid `IsBNT` structure once
+blockwise `IsNormal` is supplied separately. -/
 theorem isBNT [∀ k, NeZero (dim k)]
-    (hNCF : IsNormalCanonicalFormBNT μ A) :
+    (hNCF : IsNormalCanonicalFormBNT μ A)
+    (hNormal : ∀ j, IsNormal (A j)) :
     IsBNT (toTensorFromBlocks μ A) r dim A :=
   isBNT_of_separated_normalCFBNT_data μ A
     hNCF.toIsNormalCanonicalForm
+    hNormal
     hNCF.blocks_not_equiv
 
 end IsNormalCanonicalFormBNT
