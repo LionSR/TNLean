@@ -114,7 +114,12 @@ import TNLean.Wielandt.RankOneExtractionFull
 import TNLean.Wielandt.CumulativeToWordSpan
 import TNLean.Wielandt.QuantumWielandt
 
--- NOTE: TNLean.PositiveMapSpectral, TNLean.TransferSpectral, and
--- TNLean.PiAlgebraExtension are backwards-compatible re-export hubs kept for
--- external downstream consumers. They are NOT imported here because every
+-- NOTE: `TNLean.PositiveMapSpectral`, `TNLean.TransferSpectral`, and
+-- `TNLean.PiAlgebraExtension` are backwards-compatible re-export hubs kept for
+-- external downstream consumers. They are not imported here because every
 -- module they re-export is already covered by the direct imports above.
+--
+-- `TNLean.Experimental`, `TNLean.MPS.BlockingPeriodicityCFII2`, and the
+-- `TNLean.Scratch.*` files are also intentionally excluded from this stable
+-- import surface: they are experimental work-in-progress modules, archived
+-- alternate proofs, or documentary scratch notes.

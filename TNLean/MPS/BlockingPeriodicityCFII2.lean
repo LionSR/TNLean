@@ -32,6 +32,12 @@ starting from a trace-preserving (TP) irreducible tensor `A`, we:
 
 The main theorem is
 `MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII`.
+
+## Status
+
+This file is kept as a fully compiling archival CFII proof. The active library
+route now uses `TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint`, which is the
+module imported by `TNLean.lean` and by the canonical-form pipeline.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators

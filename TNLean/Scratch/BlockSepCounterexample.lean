@@ -1,3 +1,13 @@
+/-!
+# Scratch counterexample for naive block separation
+
+This file records a concrete counterexample to the naive implication from the
+weighted MPV cancellation identity to per-block `SameMPV`. It is not imported
+by `TNLean`; it is kept only as documentary scratch material while
+`TNLean.PiAlgebra.BlockSeparation` explains the corrected status of the
+separation step.
+-/
+
 import TNLean.PiAlgebra.BlockSeparation
 
 open scoped Matrix BigOperators
