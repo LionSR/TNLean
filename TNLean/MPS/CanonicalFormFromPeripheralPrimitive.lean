@@ -29,12 +29,18 @@ theorem isCanonicalForm_of_peripheralPrimitive
     (hPrimPer :
       ∀ k, PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := dim k) (A k))) :
     MPSTensor.IsCanonicalForm (d := d) (μ := μ) A := by
-  have hPrim : ∀ k, MPSTensor.IsPrimitive (A k) := by
+  let hInjData : MPSTensor.HasInjectiveBlocks (d := d) A :=
+    { block_injective := hInj }
+  let hLeftData : MPSTensor.IsLeftCanonicalBlockFamily (d := d) A :=
+    { leftCanonical := hDS }
+  let hμData : MPSTensor.HasStrictOrderedNonzeroWeights μ :=
+    { mu_strict_anti := hμanti, mu_ne_zero := hμne }
+  let hOverlapData : MPSTensor.HasNormalizedSelfOverlap (d := d) A := by
+    refine { overlap_tendsto_one := ?_ }
     intro k
     simpa using
-      (MPSTensor.isPrimitive_of_peripheralPrimitive (A := A k) (hInj := hInj k)
-        (hNorm := hDS k) (hPrim := hPrimPer k))
-  exact
-    MPSTensor.isCanonicalForm_of_primitive (d := d) (μ := μ) (A := A) hInj hDS hμanti hμne hPrim
+      (MPSTensor.overlap_tendsto_one_of_peripheralPrimitive (A := A k) (hInj k) (hDS k)
+        (hPrimPer k))
+  exact MPSTensor.IsCanonicalForm.ofSeparatedData hInjData hLeftData hμData hOverlapData
 
 end MPSTensor

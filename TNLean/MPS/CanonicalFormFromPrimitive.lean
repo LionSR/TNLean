@@ -25,13 +25,16 @@ theorem isCanonicalForm_of_primitive
     (hμne : ∀ k, μ k ≠ 0)
     (hPrim : ∀ k, MPSTensor.IsPrimitive (A k)) :
     MPSTensor.IsCanonicalForm (d := d) (μ := μ) A := by
-  refine
-    { block_injective := hInj
-      ds_gauge := hDS
-      mu_strict_anti := hμanti
-      mu_ne_zero := hμne
-      overlap_tendsto_one := ?_ }
-  intro k
-  simpa using (IsPrimitive.overlap_tendsto_one (d := d) (A := A k) (hPrim k))
+  let hInjData : MPSTensor.HasInjectiveBlocks (d := d) A :=
+    { block_injective := hInj }
+  let hLeftData : MPSTensor.IsLeftCanonicalBlockFamily (d := d) A :=
+    { leftCanonical := hDS }
+  let hμData : MPSTensor.HasStrictOrderedNonzeroWeights μ :=
+    { mu_strict_anti := hμanti, mu_ne_zero := hμne }
+  let hOverlapData : MPSTensor.HasNormalizedSelfOverlap (d := d) A := by
+    refine { overlap_tendsto_one := ?_ }
+    intro k
+    simpa using (IsPrimitive.overlap_tendsto_one (d := d) (A := A k) (hPrim k))
+  exact MPSTensor.IsCanonicalForm.ofSeparatedData hInjData hLeftData hμData hOverlapData
 
 end MPSTensor

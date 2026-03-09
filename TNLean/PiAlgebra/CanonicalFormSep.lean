@@ -29,8 +29,83 @@ Equivalently, the associated transfer map is trace-preserving. We do **not** ass
 unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 -/
 
+/-! ### Additive split API for canonical-form hypotheses
+
+The existing `IsCanonicalForm` bundle is kept unchanged for backwards compatibility.  The
+structures below expose weaker pieces of data so theorem signatures can migrate gradually without
+forcing an immediate project-wide refactor.
+-/
+
+/-- Each block in the family is algebraically injective. -/
+structure HasInjectiveBlocks {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
+  /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
+  block_injective : ∀ k, IsInjective (A k)
+
+/-- Left-canonical block-family normalization: each block satisfies
+`∑ᵢ Aᵢ† Aᵢ = I`. -/
+structure IsLeftCanonicalBlockFamily {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
+  /-- Preferred field name using the project's terminology: left-canonical =
+  `∑ᵢ Aᵢ† Aᵢ = I`. -/
+  leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
+
+namespace IsLeftCanonicalBlockFamily
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Alias emphasizing that left-canonical blocks are trace-preserving. -/
+theorem tp_gauge (hA : IsLeftCanonicalBlockFamily (d := d) A) :
+    ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1 :=
+  hA.leftCanonical
+
+/-- Legacy alias for callers that still use the older `ds_gauge` wording. -/
+theorem ds_gauge (hA : IsLeftCanonicalBlockFamily (d := d) A) :
+    ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1 :=
+  hA.leftCanonical
+
+end IsLeftCanonicalBlockFamily
+
+/-- Strict weight ordering together with nonvanishing coefficients. -/
+structure HasStrictOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
+  /-- Strict ordering of the block weights by modulus. -/
+  mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
+  /-- No block weight vanishes. -/
+  mu_ne_zero : ∀ k, μ k ≠ 0
+
+namespace HasStrictOrderedNonzeroWeights
+
+variable {r : ℕ}
+variable {μ : Fin r → ℂ}
+
+/-- Strictly modulus-ordered nonzero block weights are injective. -/
+theorem mu_injective (hμ : HasStrictOrderedNonzeroWeights μ) : Function.Injective μ := by
+  intro j k hjk
+  have h : ‖μ j‖ = ‖μ k‖ := by rw [hjk]
+  exact hμ.mu_strict_anti.injective h
+
+/-- The modulus profile of strict nonzero weights is injective. -/
+theorem mu_norm_injective (hμ : HasStrictOrderedNonzeroWeights μ) :
+    Function.Injective (fun k : Fin r => ‖μ k‖) :=
+  hμ.mu_strict_anti.injective
+
+end HasStrictOrderedNonzeroWeights
+
+/-- Self-overlap normalization for each block: `mpvOverlap (A k) (A k) N → 1`. -/
+structure HasNormalizedSelfOverlap {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
+  /-- Literature-normalized aperiodicity / overlap normalization. -/
+  overlap_tendsto_one :
+    ∀ k,
+      Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+        Filter.atTop (nhds (1 : ℂ))
+
 /-! ### Canonical form predicate -/
 
+/-- Legacy bundled canonical-form predicate.  This keeps the current API stable while bundling
+injectivity, left-canonical normalization, strict weight data, and overlap normalization in a
+single proposition. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
@@ -58,20 +133,51 @@ namespace IsCanonicalForm
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-theorem mu_injective (hCF : IsCanonicalForm μ A) : Function.Injective μ := by
-  intro j k hjk
-  have h : ‖μ j‖ = ‖μ k‖ := by rw [hjk]
-  exact hCF.mu_strict_anti.injective h
+/-- Project the legacy bundled predicate to blockwise injectivity data. -/
+def toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A where
+  block_injective := hCF.block_injective
+
+/-- Project the legacy bundled predicate to left-canonical block-family normalization. -/
+def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalForm μ A) :
+    IsLeftCanonicalBlockFamily (d := d) A where
+  leftCanonical := hCF.ds_gauge
+
+/-- Project the legacy bundled predicate to the separated weight data. -/
+def toHasStrictOrderedNonzeroWeights (hCF : IsCanonicalForm μ A) :
+    HasStrictOrderedNonzeroWeights μ where
+  mu_strict_anti := hCF.mu_strict_anti
+  mu_ne_zero := hCF.mu_ne_zero
+
+/-- Project the legacy bundled predicate to self-overlap normalization data. -/
+def toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
+    HasNormalizedSelfOverlap (d := d) A where
+  overlap_tendsto_one := hCF.overlap_tendsto_one
+
+/-- Rebuild the legacy `IsCanonicalForm` bundle from the additive split API. -/
+def ofSeparatedData
+    (hInj : HasInjectiveBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hμ : HasStrictOrderedNonzeroWeights μ)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A) :
+    IsCanonicalForm μ A where
+  block_injective := hInj.block_injective
+  ds_gauge := hLeft.leftCanonical
+  mu_strict_anti := hμ.mu_strict_anti
+  mu_ne_zero := hμ.mu_ne_zero
+  overlap_tendsto_one := hOverlap.overlap_tendsto_one
+
+theorem mu_injective (hCF : IsCanonicalForm μ A) : Function.Injective μ :=
+  hCF.toHasStrictOrderedNonzeroWeights.mu_injective
 
 theorem mu_norm_injective (hCF : IsCanonicalForm μ A) :
     Function.Injective (fun k : Fin r => ‖μ k‖) :=
-  hCF.mu_strict_anti.injective
+  hCF.toHasStrictOrderedNonzeroWeights.mu_norm_injective
 
 /-- Alias emphasizing that the field `ds_gauge` is only the one-sided
 trace-preserving normalization `∑ᵢ Aᵢ† Aᵢ = I`. -/
 theorem tp_gauge (hCF : IsCanonicalForm μ A) :
     ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1 :=
-  hCF.ds_gauge
+  hCF.toIsLeftCanonicalBlockFamily.tp_gauge
 
 /-- Preferred alias for `tp_gauge` using the project's left-canonical terminology. -/
 theorem leftCanonical (hCF : IsCanonicalForm μ A) :
@@ -1036,12 +1142,21 @@ section CanonicalFormSeparation
 
 variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 
-theorem per_block_sameMPV_of_canonical_form
+/-- Additive split version of `per_block_sameMPV_of_canonical_form`.
+
+This theorem isolates exactly the pieces of the canonical-form bundle used in the block-separation
+argument: injectivity, left-canonical normalization, strict nonzero weights, and self-overlap
+normalization.  The legacy theorem below is then recovered by projection from `IsCanonicalForm`.
+-/
+theorem per_block_sameMPV_of_separated_canonical_data
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : IsCanonicalForm μ A)
-    (hB_inj : ∀ k, IsInjective (B k))
-    (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+    (hWeights : HasStrictOrderedNonzeroWeights μ)
+    (hA_inj : HasInjectiveBlocks (d := d) A)
+    (hA_left : IsLeftCanonicalBlockFamily (d := d) A)
+    (hA_overlap : HasNormalizedSelfOverlap (d := d) A)
+    (hB_inj : HasInjectiveBlocks (d := d) B)
+    (hB_left : IsLeftCanonicalBlockFamily (d := d) B)
     (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     ∀ k, SameMPV (A k) (B k) := by
   by_cases hr : r ≤ 1
@@ -1052,7 +1167,7 @@ theorem per_block_sameMPV_of_canonical_form
     · have hk : k = 0 := Fin.ext (by omega)
       subst hk
       simp only [Fin.sum_univ_one, smul_eq_mul] at this
-      exact mul_left_cancel₀ (pow_ne_zero N (hA.mu_ne_zero 0)) this
+      exact mul_left_cancel₀ (pow_ne_zero N (hWeights.mu_ne_zero 0)) this
   · push_neg at hr
     have h_summed : ∀ (N : ℕ) (σ : Fin N → Fin d),
         ∑ k : Fin r, (μ k) ^ N * (mpv (A k) σ - mpv (B k) σ) = 0 := by
@@ -1062,8 +1177,26 @@ theorem per_block_sameMPV_of_canonical_form
       simp only [mul_sub]
       rw [Finset.sum_sub_distrib]
       exact sub_eq_zero.mpr heq
-    exact block_separation_all_words μ A B hA.mu_strict_anti hA.mu_ne_zero
-      hA.block_injective hB_inj hA.ds_gauge hB_ds hA.overlap_tendsto_one h_summed
+    exact block_separation_all_words μ A B hWeights.mu_strict_anti hWeights.mu_ne_zero
+      hA_inj.block_injective hB_inj.block_injective hA_left.ds_gauge hB_left.ds_gauge
+      hA_overlap.overlap_tendsto_one h_summed
+
+theorem per_block_sameMPV_of_canonical_form
+    (μ : Fin r → ℂ)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hA : IsCanonicalForm μ A)
+    (hB_inj : ∀ k, IsInjective (B k))
+    (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+    (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+    ∀ k, SameMPV (A k) (B k) :=
+  per_block_sameMPV_of_separated_canonical_data μ A B
+    hA.toHasStrictOrderedNonzeroWeights
+    hA.toHasInjectiveBlocks
+    hA.toIsLeftCanonicalBlockFamily
+    hA.toHasNormalizedSelfOverlap
+    { block_injective := hB_inj }
+    { leftCanonical := hB_ds }
+    hSame₂
 
 theorem fundamentalTheorem_canonicalForm
     (μ : Fin r → ℂ)
