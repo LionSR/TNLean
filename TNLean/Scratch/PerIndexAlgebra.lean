@@ -13,6 +13,12 @@ import Mathlib.Analysis.Matrix.PosDef
 
 This file develops the algebraic core needed for Sorry 2 (`per_index_from_eigenvector`).
 
+## Status
+
+This scratch file is not imported by `TNLean`. The live proof in
+`TNLean.Spectral.SpectralGap` now avoids the old `per_index_from_eigenvector`
+route and records there that the raw per-index formulation was too strong.
+
 ### Key matrix identity (RR† version)
 
   **`∑ R_i R_i† = ∑ C_i C_i† + ∑ B_i B_i† - 2I`**

@@ -1,19 +1,27 @@
 /-
-# Prototype: Kernel invariance for eigenvector_det_ne_zero
+# Scratch prototype: kernel invariance for `eigenvector_det_ne_zero`
 
-Goal: From ∑ A_i * X * (B_i)ᴴ = μ • X and ∑ (A_i)ᴴ * A_i = 1,
-show: if X *ᵥ v = 0 then ∀ k, X *ᵥ ((B k)ᴴ *ᵥ v) = 0.
+This file records an older prototype for the kernel-invariance step in the
+mixed-transfer spectral-gap argument. It is not imported by `TNLean`, and it
+still contains `sorry`s. The live development now routes through
+`TNLean.MPS.FixedPointInvariantProjection` together with the weighted
+Kadison--Schwarz argument in `TNLean.Spectral.SpectralGap`.
 
-## Results proved in this file:
-* `eigvec_applied_to_ker` — easy direction
-* `trace_preserved` — |μ|=1 preserves HS norm
-* `block_psd_zero_corner` — [[0,Z],[Z†,Q]] ≥ 0 → Z = 0
-* `mult_domain_of_ks_equality` — KS equality → multiplicative domain
+Goal: from `∑ A_i * X * (B_i)ᴴ = μ • X` and `∑ (A_i)ᴴ * A_i = 1`, show that if
+`X *ᵥ v = 0` then `∀ k, X *ᵥ ((B k)ᴴ *ᵥ v) = 0`.
 
-## Key sorry items (need ~150-200 lines of infrastructure):
-* `block_ks_gap_psd` — 2×2 block KS gap is PSD (~80 lines, uses 2-positivity)
-* `ks_gap_zero_of_peripheral_eigenvector` — |μ|=1 → ksGap=0 (~100-150 lines)
-* `ker_invariant` — connecting multiplicative domain to kernel invariance (~50 lines)
+## Results proved in this file
+
+* `eigvec_applied_to_ker` — easy direction.
+* `trace_preserved` — `|μ| = 1` preserves the Hilbert--Schmidt norm.
+* `block_psd_zero_corner` — `[[0, Z], [Z†, Q]] ≥ 0 → Z = 0`.
+* `mult_domain_of_ks_equality` — KS equality gives the multiplicative domain.
+
+## Remaining `sorry` items
+
+* `block_ks_gap_psd` — the 2×2 block KS gap is PSD.
+* `ks_gap_zero_of_peripheral_eigenvector` — `|μ| = 1 → ksGap = 0`.
+* `ker_invariant` — connect the multiplicative domain to kernel invariance.
 -/
 import TNLean.Channel.KadisonSchwarz
 import TNLean.Spectral.MixedTransfer
