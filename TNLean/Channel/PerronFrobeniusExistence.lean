@@ -254,13 +254,13 @@ theorem exists_posDef_adjoint_eigenvector
     posSemidef_fixedPoint_isPosDef_of_irreducible T hIrr_T σ hσ_psd hσ_ne hT_fix
   exact ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩
 
-/-- **TP gauge data for an irreducible MPS tensor.**
+/-- **TP / left-canonical gauge data for an irreducible MPS tensor.**
 
 For an irreducible MPS tensor `A` with `D > 0` and some `A i ≠ 0`, there exist:
 * a positive real `r` (the spectral radius of the adjoint transfer map),
 * a positive definite matrix `σ`,
 * such that the rescaled-and-gauged tensor `B i = σ^{1/2} ((1/√r) • A i) σ^{-1/2}`
-  satisfies the TP condition `∑ (B i)ᴴ * B i = 1`.
+  satisfies the TP / left-canonical condition `∑ (B i)ᴴ * B i = 1`.
 
 The tensor `B` is gauge-equivalent to the rescaled tensor `(1/√r) • A`, hence has
 the same MPV as `A` up to a system-size-dependent factor `(1/√r)^N`.
@@ -320,5 +320,22 @@ theorem exists_tp_data_of_irreducible
     simp only [hB_def, tpGauge, hA'_def, hc_def]
   -- GaugeEquiv: A' matches the stated rescaled tensor.
   · convert hB_gauge using 1
+
+/-- Preferred alias for `exists_tp_data_of_irreducible` using the project's
+left-canonical terminology. -/
+theorem exists_leftCanonical_data_of_irreducible
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hA : ∃ i, A i ≠ 0) :
+    ∃ (B : MPSTensor d D) (r : ℝ) (σ : Matrix (Fin D) (Fin D) ℂ),
+      σ.PosDef ∧ 0 < r ∧
+      (∀ i : Fin d,
+        B i = CFC.sqrt σ *
+          ((↑((Real.sqrt r)⁻¹) : ℂ) • A i) * (CFC.sqrt σ)⁻¹) ∧
+      (∑ i : Fin d, (B i)ᴴ * B i = 1) ∧
+      GaugeEquiv (d := d) (D := D)
+        (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
+  simpa using exists_tp_data_of_irreducible (A := A) hIrr hA
 
 end MPSTensor

@@ -57,7 +57,11 @@ definition (irreducible + aperiodic ⟺ peripheral spectrum is `{1}`) is deferre
 peripheral spectrum theory. -/
 structure IsPrimitiveMPS {d D : ℕ} [NeZero D]
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) : Prop where
-  /-- DS gauge normalization: `∑ᵢ Aᵢ† Aᵢ = I`. -/
+  /-- One-sided trace-preserving / canonical normalization:
+  `∑ᵢ Aᵢ† Aᵢ = I`.
+
+  This is the same hypothesis that downstream files often call `ds_gauge`, but it is
+  *not* a two-sided doubly-stochastic assumption. -/
   norm : ∑ i : Fin d, (A i)ᴴ * A i = 1
   /-- The fixed point is nonzero. -/
   fixedPoint_ne_zero : ρ ≠ 0
@@ -77,6 +81,20 @@ def IsPrimitive {d D : ℕ} [NeZero D] (A : MPSTensor d D) : Prop :=
   ∃ ρ : Matrix (Fin D) (Fin D) ℂ, IsPrimitiveMPS A ρ
 
 /-! ## Part 2: Derive overlap → 1 from primitivity -/
+
+/-- Alias emphasizing that `IsPrimitiveMPS.norm` is the one-sided
+trace-preserving normalization `∑ᵢ Aᵢ† Aᵢ = I`. -/
+theorem IsPrimitiveMPS.tp_gauge {d D : ℕ} [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : IsPrimitiveMPS A ρ) :
+    ∑ i : Fin d, (A i)ᴴ * A i = 1 :=
+  hP.norm
+
+/-- Preferred alias for `IsPrimitiveMPS.tp_gauge` using the project's left-canonical
+terminology. -/
+theorem IsPrimitiveMPS.leftCanonical {d D : ℕ} [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : IsPrimitiveMPS A ρ) :
+    ∑ i : Fin d, (A i)ᴴ * A i = 1 :=
+  hP.tp_gauge
 
 /-- A primitive MPS tensor has self-overlap converging to 1.
 

@@ -19,12 +19,14 @@ This file connects the channel-level periodicity-removal lemmas
 (`TNLean.Channel.PeriodicityRemoval`) to the MPS blocking construction
 (`TNLean.MPS.BlockingTransfer`).
 
-For an irreducible doubly-stochastic Kraus family, the peripheral eigenvalues are
-roots of unity, hence a common power kills them. Physically blocking an MPS tensor
-corresponds to taking a power of its transfer map, so for some blocking length the
-blocked transfer map is primitive.
+It records the **legacy stronger bi-canonical route**: if a Kraus family is both
+right-canonical / unital and left-canonical / trace-preserving, then its peripheral
+eigenvalues are roots of unity, hence a common power kills them. Physically blocking
+an MPS tensor corresponds to taking a power of its transfer map, so for some blocking
+length the blocked transfer map is primitive.
 
-This follows the standard argument in arXiv:1606.00608, Appendix A.
+For the Appendix-A pipeline used later in the project, the preferred theorem is the
+left-canonical-only result in `BlockingPeriodicityCFII_viaAdjoint.lean`.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -33,8 +35,9 @@ namespace MPSTensor
 
 open Matrix
 
-/-- For an irreducible, doubly-stochastic MPS tensor `A`, there exists a blocking length `p > 0`
-for which the transfer map of the blocked tensor is primitive.
+/-- Legacy stronger blocking theorem: if `A` is both right-canonical / unital and
+left-canonical / trace-preserving, and the transfer map is irreducible, then some
+blocking length `p > 0` makes the blocked transfer map primitive.
 
 Equivalently, some power of the transfer map has peripheral eigenvalues `{1}`. -/
 theorem exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic
@@ -64,7 +67,7 @@ theorem exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic
     simp [i0] at hentry
   -- The peripheral eigenvalues form a finite set.
   have hfin : (peripheralEigenvalues E).Finite := peripheralEigenvalues_finite (f := E)
-  -- Each peripheral eigenvalue is a root of unity (irreducible + doubly stochastic).
+  -- Each peripheral eigenvalue is a root of unity (irreducible + bi-canonical).
   have hroot : ∀ μ ∈ hfin.toFinset, ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
     intro μ hμ
     have hμ' : μ ∈ peripheralEigenvalues E := hfin.mem_toFinset.mp hμ
@@ -88,5 +91,19 @@ theorem exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic
   -- `transferMap (blockTensor A p) = (transferMap A) ^ p`.
   rw [MPSTensor.transferMap_blockTensor (A := A) (L := p)]
   simpa [E] using hprim_pow
+
+/-- Preferred alias for the legacy doubly-stochastic theorem using the project's
+bi-canonical terminology. -/
+theorem exists_blockTensor_isPrimitive_of_biCanonical_of_isIrreducibleMap
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hRight : KadisonSchwarz.IsUnitalKraus A)
+    (hLeft : KadisonSchwarz.IsTPKraus A)
+    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
+    ∃ p : ℕ, 0 < p ∧
+      IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p)) := by
+  simpa using exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic
+    (A := A) hRight hLeft hIrr
 
 end MPSTensor

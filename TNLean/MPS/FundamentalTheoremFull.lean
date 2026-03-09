@@ -71,9 +71,11 @@ If two sequences of complex numbers have equal power sums for all exponents, the
 ## Design notes
 
 The **coefficient convergence** question: In the full paper, the BNT decomposition uses
-coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N` which converge after normalization.
-The `IsCanonicalFormBNT` predicate sidesteps this by requiring BNT grouping already done.
-The proportional-case theorem takes convergent-coefficient data as explicit hypotheses.
+coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
+These coefficients need not converge in general after normalization, because unit-modulus
+terms can still oscillate. The `IsCanonicalFormBNT` predicate sidesteps this by requiring BNT
+grouping already done, and the proportional-case theorem takes whatever convergent coefficient
+data it needs as explicit hypotheses.
 -/
 
 open scoped Matrix BigOperators
@@ -146,9 +148,10 @@ MPV families (with explicitly convergent nonzero decomposition coefficients), th
      the bond dimensions match and the blocks are gauge-phase equivalent.
 
 **Coefficient convergence**: The caller must supply the decomposition coefficients
-`aCoeff`, `bCoeff` and their limits. In the standard BNT setup, these are
-`aCoeff N j = μA_j^N / μA_0^N` (after normalizing so that `|μA_0| = |μB_0| = 1`),
-which converge because `|μA_j / μA_0| ≤ 1` with the dominant block having ratio 1. -/
+`aCoeff`, `bCoeff` and their limits. In a strict-dominance specialization one may take
+`aCoeff N j = μA_j^N / μA_0^N` after normalizing so that `|μA_0| = |μB_0| = 1`,
+and then the subdominant ratios decay. In the general paper-level BNT setup, however,
+the coefficients are sums `Σ_q μ_{j,q}^N` and need not converge without extra input. -/
 theorem fundamentalTheorem_proportionalMPV_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

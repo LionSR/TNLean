@@ -20,13 +20,23 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
+/-! ### Normalization convention
+
+In this file the legacy field/lemma name `ds_gauge` refers only to the **one-sided**
+normalization
+`∑ᵢ Aᵢ† Aᵢ = I`.
+Equivalently, the associated transfer map is trace-preserving. We do **not** assume the separate
+unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
+-/
+
 /-! ### Canonical form predicate -/
 
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
   block_injective : ∀ k, IsInjective (A k)
-  /-- DS gauge / trace-preserving normalization `∑ᵢ Aᵢ† Aᵢ = I`. -/
+  /-- Legacy name: `ds_gauge` stores only the one-sided trace-preserving / canonical
+  normalization `∑ᵢ Aᵢ† Aᵢ = I`. -/
   ds_gauge : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
   /-- Strict ordering of the block weights by modulus. -/
   mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
@@ -56,6 +66,17 @@ theorem mu_injective (hCF : IsCanonicalForm μ A) : Function.Injective μ := by
 theorem mu_norm_injective (hCF : IsCanonicalForm μ A) :
     Function.Injective (fun k : Fin r => ‖μ k‖) :=
   hCF.mu_strict_anti.injective
+
+/-- Alias emphasizing that the field `ds_gauge` is only the one-sided
+trace-preserving normalization `∑ᵢ Aᵢ† Aᵢ = I`. -/
+theorem tp_gauge (hCF : IsCanonicalForm μ A) :
+    ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1 :=
+  hCF.ds_gauge
+
+/-- Preferred alias for `tp_gauge` using the project's left-canonical terminology. -/
+theorem leftCanonical (hCF : IsCanonicalForm μ A) :
+    ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1 :=
+  hCF.tp_gauge
 
 end IsCanonicalForm
 
@@ -100,11 +121,13 @@ theorem trace_eq_of_charpoly_eq
 
 end AlgebraicLemmas
 
-/-! ### MPV overlap bounds (DS gauge)
+/-! ### MPV overlap bounds from one-sided canonical normalization
 
 For the peeling argument in `block_separation_core` we need uniform (in the chain length) bounds on
-MPV overlaps. The key input is the iterated TP identity `word_conjTranspose_mul_sum` together with
-the elementary trace inequality $|\mathrm{tr}(M)|^2 \le D\,\mathrm{tr}(M^\dagger M)$.
+MPV overlaps. The key input is the one-sided normalization
+`∑ᵢ Aᵢ† Aᵢ = I` (stored under the legacy name `ds_gauge`), together with the iterated TP identity
+`word_conjTranspose_mul_sum` and the elementary trace inequality
+$|\mathrm{tr}(M)|^2 \le D\,\mathrm{tr}(M^\dagger M)$.
 -/
 
 open scoped InnerProductSpace
@@ -176,7 +199,8 @@ private lemma norm_trace_sq_le_dim_mul_trace_conjTranspose_mul
           gcongr
     _ = (D : ℝ) * (Matrix.trace (Mᴴ * M)).re := by simp [hfrob]
 
-/-- Under DS gauge, the MPV self-overlap is uniformly bounded: `‖mpvOverlap A A N‖ ≤ D^2`. -/
+/-- Under the one-sided normalization `∑ᵢ Aᵢ† Aᵢ = I` (legacy name: `ds_gauge`),
+the MPV self-overlap is uniformly bounded: `‖mpvOverlap A A N‖ ≤ D^2`. -/
 lemma ds_gauge_mpvOverlap_self_bound
     {D : ℕ} [NeZero D]
     (A : MPSTensor d D)
@@ -237,7 +261,8 @@ lemma ds_gauge_mpvOverlap_self_bound
       _ = (D : ℝ) ^ 2 := by ring
   exact h1.trans h2
 
-/-- Under DS gauge, the MPV state has uniformly bounded norm: `‖mpvState A N‖ ≤ D`. -/
+/-- Under the one-sided normalization `∑ᵢ Aᵢ† Aᵢ = I` (legacy name: `ds_gauge`),
+the MPV state has uniformly bounded norm: `‖mpvState A N‖ ≤ D`. -/
 lemma ds_gauge_mpvState_norm_bound
     {D : ℕ} [NeZero D]
     (A : MPSTensor d D)
@@ -261,8 +286,8 @@ lemma ds_gauge_mpvState_norm_bound
   simpa [Real.sqrt_sq (norm_nonneg (mpvState (d := d) A N)),
     Real.sqrt_sq (Nat.cast_nonneg D)] using hsqrt
 
-/-- Under DS gauge, MPV overlaps are uniformly bounded:
-`‖mpvOverlap A B N‖ ≤ D₁ · D₂`. -/
+/-- Under the one-sided normalization `∑ᵢ Aᵢ† Aᵢ = I` (legacy name: `ds_gauge`),
+MPV overlaps are uniformly bounded: `‖mpvOverlap A B N‖ ≤ D₁ · D₂`. -/
 lemma ds_gauge_mpvOverlap_bound
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -278,7 +303,7 @@ lemma ds_gauge_mpvOverlap_bound
   -- `mpvOverlap = star (mpvInner)`.
   have hOverlap : ‖mpvOverlap (d := d) A B N‖ = ‖mpvInner (d := d) A B N‖ := by
     simp [mpvOverlap_eq_star_mpvInner]
-  -- Apply the DS gauge bounds on each factor.
+  -- Apply the one-sided normalization bounds on each factor.
   have hA : ‖mpvState (d := d) A N‖ ≤ (D₁ : ℝ) := ds_gauge_mpvState_norm_bound (d := d) A hA_ds N
   have hB : ‖mpvState (d := d) B N‖ ≤ (D₂ : ℝ) := ds_gauge_mpvState_norm_bound (d := d) B hB_ds N
   calc
@@ -289,15 +314,17 @@ lemma ds_gauge_mpvOverlap_bound
 end OverlapBounds
 
 
-/-! ### DS gauge implies trace bound
+/-! ### One-sided canonical normalization implies trace bound
 
-**Mathematical content**: Under the doubly stochastic (DS) gauge normalization
-∑_i A_i† A_i = I, the iterated TP condition `word_conjTranspose_mul_sum` gives
-∑_σ (evalWord A (ofFn σ))† (evalWord A (ofFn σ)) = I for words of any length.
-Each term is PSD, so for any specific word w, (evalWord A w)† (evalWord A w) ≤ I
+**Mathematical content**: Under the one-sided normalization
+`∑_i A_i† A_i = I` (stored under the legacy name `ds_gauge`), the iterated TP condition
+`word_conjTranspose_mul_sum` gives
+`∑_σ (evalWord A (ofFn σ))† (evalWord A (ofFn σ)) = I`
+for words of any length. Each term is PSD, so for any specific word `w`,
+`(evalWord A w)† (evalWord A w) ≤ I`
 (in the Loewner order). This means each diagonal entry satisfies ‖M_ii‖ ≤ 1,
-giving |tr(M)| ≤ ∑ ‖M_ii‖ ≤ D. For M = (evalWord A w)^L, we use the
-identity (evalWord A w)^L = evalWord A (w ++ w ++ ... ++ w). -/
+giving |tr(M)| ≤ ∑ ‖M_ii‖ ≤ D. For `M = (evalWord A w)^L`, we use the
+identity `(evalWord A w)^L = evalWord A (w ++ w ++ ... ++ w)`. -/
 
 open scoped ComplexOrder
 
@@ -348,7 +375,8 @@ private lemma norm_diag_le_one_from_sum_eq_one
       _ ≤ 1 := h_re
   rwa [← abs_of_nonneg (norm_nonneg _), ← sq_le_one_iff_abs_le_one]
 
-/-- Under DS gauge, the trace of any power of any word evaluation is bounded by D.
+/-- Under the one-sided normalization `∑ᵢ Aᵢ† Aᵢ = I` (legacy name: `ds_gauge`),
+the trace of any power of any word evaluation is bounded by `D`.
 Uses the iterated TP condition and PSD diagonal bounds. -/
 lemma ds_gauge_evalWord_trace_bound
     {D : ℕ} [NeZero D]
@@ -733,7 +761,7 @@ lemma block_separation_core
               simpa [Bbound, mul_assoc] using mul_nonneg h2dim0 hDsum
             have hδ_bound : ∀ k N, ‖δ k N‖ ≤ Bbound := by
               intro k N
-              -- triangle inequality + uniform overlap bounds in DS gauge
+              -- triangle inequality + uniform overlap bounds from the one-sided normalization
               have h1 :
                   ‖mpvOverlap (d := d) (A 0) (A k) N‖ ≤ (dim 0 : ℝ) * (dim k : ℝ) :=
                 ds_gauge_mpvOverlap_bound (d := d) (A := A 0) (B := A k)

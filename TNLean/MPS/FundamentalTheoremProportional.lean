@@ -103,8 +103,9 @@ variable [NeZero D]
 
 /-- **Proportional Fundamental Theorem (primitive case).**
 
-If `A` and `B` are injective, trace-preserving/DS-gauged, both self-overlaps tend to `1`, and
-`V_N(A)` is proportional to `V_N(B)` for every `N`, then `A` and `B` are gauge-phase equivalent.
+If `A` and `B` are injective, left-canonical / trace-preserving, both self-overlaps tend to `1`,
+and `V_N(A)` is proportional to `V_N(B)` for every `N`, then `A` and `B` are gauge-phase
+equivalent.
 
 The proof is by contradiction: proportionality forces `‖mpvOverlap A B N‖ → 1`, while
 `¬ GaugePhaseEquiv A B` implies `mpvOverlap A B N → 0` by overlap decay.

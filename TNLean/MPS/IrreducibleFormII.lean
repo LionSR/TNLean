@@ -31,9 +31,9 @@ to channel / QPF normalization, following:
 ### Part 2: CFII-style diagonal fixed point
 
 * `MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor`:
-  for a trace-preserving irreducible MPS tensor, there exists a unitary conjugation
-  such that the conjugated tensor is still TP and has a diagonal positive-definite
-  fixed point.
+  for a trace-preserving / left-canonical irreducible MPS tensor, there exists a
+  unitary conjugation such that the conjugated tensor is still left-canonical and has a
+  diagonal positive-definite fixed point.
 
 ## References
 
@@ -169,11 +169,11 @@ private lemma tp_of_unitaryConj [DecidableEq (Fin D)]
   simp_rw [h_each]
   rw [← Finset.sum_mul, ← Finset.mul_sum, hTP, mul_one, hVV]
 
-/-- **CFII diagonal fixed point for TP irreducible tensors.**
+/-- **CFII diagonal fixed point for left-canonical irreducible tensors.**
 
-Given a trace-preserving irreducible MPS tensor `A`, there exists a unitary `U`
-and a diagonal positive-definite matrix `Λ` such that:
-1. The conjugated tensor `B i := U† A i U` is still trace-preserving.
+Given a trace-preserving / left-canonical irreducible MPS tensor `A`, there exists a
+unitary `U` and a diagonal positive-definite matrix `Λ` such that:
+1. The conjugated tensor `B i := U† A i U` is still trace-preserving / left-canonical.
 2. `Λ` is a fixed point of the transfer map of `B`.
 
 This is the key step in reducing to "Canonical Form II" from
@@ -244,6 +244,24 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
     exact hTP_conj
   · -- Fixed point of conjugated transfer map
     exact hΛ_fix
+
+/-- Preferred alias for `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor`
+using the project's left-canonical terminology. -/
+theorem exists_unitary_diag_posDef_fixedPoint_of_leftCanonical_of_isIrreducibleTensor
+    [DecidableEq (Fin D)]
+    (A : MPSTensor d D)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hD : 0 < D) :
+    ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
+      (Λ : Matrix (Fin D) (Fin D) ℂ),
+        Λ.PosDef ∧ Λ.IsDiag ∧
+        (∑ i : Fin d, ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ))ᴴ
+                      * ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) = 1) ∧
+        transferMap (d := d) (D := D)
+          (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) Λ = Λ := by
+  simpa using exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
+    (d := d) (D := D) A hLeft hIrr hD
 
 end CFII
 

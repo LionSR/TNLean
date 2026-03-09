@@ -45,10 +45,12 @@ in arXiv:2011.12127 and arXiv:1606.00608, lines 1145–1148.
 ## Design note on coefficients
 
 In the full paper (arXiv:1606.00608, eq. decBSV), the BNT decomposition uses summed
-coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`, which converge after normalization.
-The `IsCanonicalFormBNT` predicate sidesteps this by requiring that the grouping has already
-been done (each BNT block corresponds to a single CF block). The coefficient convergence
-question is deferred to a future assembly module.
+coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
+These coefficients do **not** converge in general after normalization: unit-modulus terms can
+still oscillate. The present `IsCanonicalFormBNT` predicate sidesteps that issue by requiring
+that the grouping has already been done (each BNT block corresponds to a single CF block), and
+the proportional-case theorem below takes whatever convergent coefficient data it needs as
+explicit hypotheses.
 -/
 
 open scoped Matrix BigOperators

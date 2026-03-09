@@ -24,10 +24,17 @@ We currently have (sorry-free) components for:
 * §2.3: iterated invariant-projection splitting → irreducible block decomposition.
 * Appendix A (PF / TP gauge): irreducible + nonzero Kraus operator → Perron--Frobenius
   eigenvector → TP-normalized representative.
-* Appendix A (CFII part): TP + irreducible → unitary conjugate with diagonal PD fixed point.
+* Appendix A (CFII part): inside that TP gauge, unitary conjugation → diagonal PD fixed point.
 * Appendix A (periodicity): TP + irreducible → primitive after blocking.
 * peripheral primitive → spectral gap → overlap convergence.
-* peripheral primitive + DS gauge + injective + μ ordering → `IsCanonicalForm`.
+* peripheral primitive + one-sided canonical normalization (`ds_gauge` in downstream files)
+  + injective + μ ordering → `IsCanonicalForm`.
+
+Important normalization note: the downstream name `ds_gauge` is legacy. In the present
+pipeline it records only the one-sided condition `∑ Aᵢ† Aᵢ = I`, not a two-sided
+"doubly-stochastic" gauge. Likewise, the Appendix-A CFII story is genuinely two-step:
+first a generally non-unitary TP similarity from the adjoint Perron--Frobenius eigenvector,
+then a unitary diagonalization **within** that TP gauge.
 
 What is **not** yet assembled end-to-end here:
 
@@ -104,6 +111,10 @@ theorem exists_tp_data_of_irreducible_pipeline1606
 
 We package `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor` together with the
 fact that unitary conjugation preserves MPVs.
+
+Important: this is the **second** half of the Appendix-A normalization story. The preceding
+PF / TP-gauge step is generally a non-unitary similarity; the unitary appearing here acts only
+after one has already moved into the one-sided TP gauge.
 -/
 
 /-- **Pipeline step (1606.00608 Appendix A, CFII).**
@@ -117,7 +128,9 @@ such that the unitary conjugate tensor
 `B i := U† * A i * U` is still TP, has `Λ` as a fixed point of its transfer map, and is
 `SameMPV₂`-equivalent to `A` (unitary gauge equivalence).
 
-This is the formal analogue of bringing a block into **Canonical Form II** (CFII). -/
+This is the formal analogue of bringing a block into **Canonical Form II** (CFII) *after*
+one has already chosen a TP representative; it does not say that the original pre-TP-gauge tensor
+is related to a CFII representative by a unitary similarity alone. -/
 theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -199,7 +212,8 @@ Again, this is just a re-export with a pipeline name.
 -/
 
 /-- **Pipeline step:** build `IsCanonicalForm` from peripheral-spectrum primitivity hypotheses
-(on each block), together with injectivity + DS gauge + μ ordering + μ ≠ 0. -/
+(on each block), together with injectivity + the one-sided normalization
+`∑ Aᵢ† Aᵢ = I` (stored under the legacy field name `ds_gauge`) + μ ordering + μ ≠ 0. -/
 theorem isCanonicalForm_of_peripheralPrimitive_pipeline1606
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
