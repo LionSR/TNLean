@@ -1,5 +1,6 @@
 import TNLean.PiAlgebra.CanonicalFormSep
 import TNLean.Spectral.SpectralGapRect
+import TNLean.Spectral.SpectralGapNT
 import TNLean.MPS.BNT
 import TNLean.MPS.BNTPermutationThm44
 import TNLean.MPS.CastLemmas
@@ -63,6 +64,13 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
+/-- Casting the bond dimension preserves irreducibility. -/
+private lemma isIrreducibleTensor_cast_dim {D₁ D₂ : ℕ} (h : D₁ = D₂)
+    (A : MPSTensor d D₁) :
+    IsIrreducibleTensor (cast (congr_arg (MPSTensor d) h) A) ↔ IsIrreducibleTensor A := by
+  cases h
+  rfl
+
 /-! ### `IsCanonicalFormBNT` predicate -/
 
 /-- **Canonical form with BNT separation**: extends `IsCanonicalForm` with the requirement
@@ -117,6 +125,66 @@ def ofSeparatedData
   blocks_not_equiv := hBlocks
 
 end IsCanonicalFormBNT
+
+/-! ### `IsNormalCanonicalFormBNT` predicate -/
+
+/-- Normal canonical form with BNT separation: extends `IsNormalCanonicalForm` with the
+requirement that distinct blocks are not gauge-phase equivalent. -/
+structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
+    IsNormalCanonicalForm μ A where
+  /-- Distinct blocks are not gauge-phase equivalent (BNT separation). -/
+  blocks_not_equiv : ∀ j k : Fin r, j ≠ k →
+    ∀ (h : dim j = dim k),
+      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)
+
+namespace IsNormalCanonicalFormBNT
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Project normal-CF-BNT data to blockwise irreducibility. -/
+def toHasIrreducibleBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
+    HasIrreducibleBlocks (d := d) A :=
+  hNCF.toIsNormalCanonicalForm.toHasIrreducibleBlocks
+
+/-- Project normal-CF-BNT data to left-canonical block-family normalization. -/
+def toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalFormBNT μ A) :
+    IsLeftCanonicalBlockFamily (d := d) A :=
+  hNCF.toIsNormalCanonicalForm.toIsLeftCanonicalBlockFamily
+
+/-- Project normal-CF-BNT data to blockwise primitive transfer maps. -/
+def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
+    HasPrimitiveBlocks (d := d) A :=
+  hNCF.toIsNormalCanonicalForm.toHasPrimitiveBlocks
+
+/-- Project normal-CF-BNT data to separated weight data. -/
+def toHasStrictOrderedNonzeroWeights (hNCF : IsNormalCanonicalFormBNT μ A) :
+    HasStrictOrderedNonzeroWeights μ :=
+  hNCF.toIsNormalCanonicalForm.toHasStrictOrderedNonzeroWeights
+
+/-- Project normal-CF-BNT data to self-overlap normalization. -/
+def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
+    (hNCF : IsNormalCanonicalFormBNT μ A) :
+    HasNormalizedSelfOverlap (d := d) A :=
+  hNCF.toIsNormalCanonicalForm.toHasNormalizedSelfOverlap
+
+/-- Rebuild `IsNormalCanonicalFormBNT` from the additive split API plus the BNT separation
+axiom. -/
+def ofSeparatedData
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hPrim : HasPrimitiveBlocks (d := d) A)
+    (hμ : HasStrictOrderedNonzeroWeights μ)
+    (hDim : ∀ k, 0 < dim k)
+    (hBlocks : ∀ j k : Fin r, j ≠ k →
+      ∀ (h : dim j = dim k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+    IsNormalCanonicalFormBNT μ A where
+  toIsNormalCanonicalForm := IsNormalCanonicalForm.ofSeparatedData hIrr hLeft hPrim hμ hDim
+  blocks_not_equiv := hBlocks
+
+end IsNormalCanonicalFormBNT
 
 /-! ### Cross-overlap decay from separated CF-BNT data -/
 
@@ -238,6 +306,110 @@ theorem isBNT [∀ k, NeZero (dim k)]
 
 end IsCanonicalFormBNT
 
+/-! ### Cross-overlap decay from separated normal-CF-BNT data -/
+
+section SeparatedNormalCFBNT
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Split-data version of normal-CF-BNT cross-overlap decay.
+
+Only irreducibility, left-canonical normalization, and the BNT non-equivalence axiom are used. -/
+theorem cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
+    [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hBlocks : ∀ j k : Fin r, j ≠ k →
+      ∀ (h : dim j = dim k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k))
+    (j k : Fin r) (hjk : j ≠ k) :
+    Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) := by
+  by_cases hdim : dim j = dim k
+  · have hNotEquiv : ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k) :=
+      hBlocks j k hjk hdim
+    have hAj_irr : IsIrreducibleTensor (cast (congr_arg (MPSTensor d) hdim) (A j)) :=
+      (isIrreducibleTensor_cast_dim hdim (A j)).mpr (hIrr.block_irreducible j)
+    have hAj_norm : ∑ i : Fin d,
+        (cast (congr_arg (MPSTensor d) hdim) (A j) i)ᴴ *
+        (cast (congr_arg (MPSTensor d) hdim) (A j) i) = 1 :=
+      (leftCanonical_cast_dim hdim (A j)).mpr (hLeft.leftCanonical j)
+    have hto0 := mpvOverlap_tendsto_zero_of_irreducible_TP
+      (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k)
+      hAj_irr (hIrr.block_irreducible k)
+      hAj_norm (hLeft.leftCanonical k)
+      hNotEquiv
+    exact hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A j) (A k) N
+  · exact mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP (A j) (A k)
+      (hIrr.block_irreducible j)
+      (hIrr.block_irreducible k)
+      (hLeft.leftCanonical j)
+      (hLeft.leftCanonical k)
+      hdim
+
+/-- Split-data version of `IsNormalCanonicalFormBNT.isBNT`.
+
+The normality field is the only remaining place where the future primitive-to-normal bridge
+needs to be threaded in. All overlap / linear-independence steps already work with NT data. -/
+theorem isBNT_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNCF : IsNormalCanonicalForm μ A)
+    (hBlocks : ∀ j k : Fin r, j ≠ k →
+      ∀ (h : dim j = dim k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+    IsBNT (toTensorFromBlocks μ A) r dim A where
+  normal := fun j => by
+    /-
+    TODO: thread the primitive → normal bridge for NT blocks here.
+    The intended inputs are `hNCF.block_irreducible j`, `hNCF.block_primitive j`,
+    `hNCF.leftCanonical j`, and `hNCF.dim_pos j`.
+    -/
+    sorry
+  spans_mpv := fun N =>
+    ⟨fun k => μ k ^ N, fun σ => by
+      simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ⟩
+  eventually_li := by
+    have hOrtho := eventually_linearIndependent_of_overlap_tendsto_orthonormal A
+      (fun j => hNCF.overlap_tendsto_one j)
+      (fun i j hij =>
+        cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
+          hNCF.toHasIrreducibleBlocks
+          hNCF.toIsLeftCanonicalBlockFamily
+          hBlocks i j hij)
+    rw [Filter.Eventually] at hOrtho
+    obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hOrtho
+    exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩
+
+end SeparatedNormalCFBNT
+
+namespace IsNormalCanonicalFormBNT
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Cross-overlap decay for normal-CF-BNT blocks. -/
+theorem cross_overlap_tendsto_zero
+    [∀ k, NeZero (dim k)]
+    (hNCF : IsNormalCanonicalFormBNT μ A) (j k : Fin r) (hjk : j ≠ k) :
+    Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) :=
+  cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
+    hNCF.toHasIrreducibleBlocks
+    hNCF.toIsLeftCanonicalBlockFamily
+    hNCF.blocks_not_equiv
+    j k hjk
+
+/-- A normal-canonical-form BNT decomposition yields a valid `IsBNT` structure. -/
+theorem isBNT [∀ k, NeZero (dim k)]
+    (hNCF : IsNormalCanonicalFormBNT μ A) :
+    IsBNT (toTensorFromBlocks μ A) r dim A :=
+  isBNT_of_separated_normalCFBNT_data μ A
+    hNCF.toIsNormalCanonicalForm
+    hNCF.blocks_not_equiv
+
+end IsNormalCanonicalFormBNT
+
 /-! ### Bridge to BNTPermutationThm44 -/
 
 /-- Split-data bridge theorem for CF-BNT-style decompositions (Thm 4.4).
@@ -358,6 +530,113 @@ theorem fundamentalTheorem_of_IsCanonicalFormBNT
     hB.toIsLeftCanonicalBlockFamily
     hB.toHasNormalizedSelfOverlap
     hB.blocks_not_equiv
+    A_total B_total aCoeff bCoeff aLim bLim c cLim
+    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+
+/-- Split-data bridge theorem for normal-CF-BNT-style decompositions (NT Thm 4.4). -/
+theorem fundamentalTheorem_of_separated_normalCFBNT_data
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {DtotA DtotB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA_ncf : IsNormalCanonicalForm μA A)
+    (hA_blocks : ∀ j k : Fin rA, j ≠ k →
+      ∀ (h : dimA j = dimA k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k))
+    (hB_ncf : IsNormalCanonicalForm μB B)
+    (hB_blocks : ∀ j k : Fin rB, j ≠ k →
+      ∀ (h : dimB j = dimB k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (B j)) (B k))
+    (A_total : MPSTensor d DtotA)
+    (B_total : MPSTensor d DtotB)
+    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (c : ℕ → ℂ) (cLim : ℂ)
+    (hA_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
+    (hB_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
+    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0)
+    (hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc : Tendsto c atTop (nhds cLim))
+    (hcLim_ne : cLim ≠ 0) :
+    ∃ _h : rA = rB,
+      ∃ perm : Fin rA ≃ Fin rB,
+        ∀ j : Fin rA,
+          ∃ hdim : dimA j = dimB (perm j),
+            GaugePhaseEquiv (d := d)
+              (cast (congr_arg (MPSTensor d) hdim) (A j))
+              (B (perm j)) :=
+  exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP
+    (A := A) (B := B)
+    (hA_irr := hA_ncf.block_irreducible)
+    (hB_irr := hB_ncf.block_irreducible)
+    (hA_norm := hA_ncf.leftCanonical)
+    (hB_norm := hB_ncf.leftCanonical)
+    (hA_self := fun j => hA_ncf.overlap_tendsto_one j)
+    (hA_off := fun i j hij =>
+      cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
+        hA_ncf.toHasIrreducibleBlocks
+        hA_ncf.toIsLeftCanonicalBlockFamily
+        hA_blocks i j hij)
+    (hB_self := fun j => hB_ncf.overlap_tendsto_one j)
+    (hB_off := fun i j hij =>
+      cross_overlap_tendsto_zero_of_separated_normalCFBNT_data B
+        hB_ncf.toHasIrreducibleBlocks
+        hB_ncf.toIsLeftCanonicalBlockFamily
+        hB_blocks i j hij)
+    (A_total := A_total) (B_total := B_total)
+    (aCoeff := aCoeff) (bCoeff := bCoeff)
+    (aLim := aLim) (bLim := bLim)
+    (c := c) (cLim := cLim)
+    (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
+    (haCoeff := haCoeff) (hbCoeff := hbCoeff)
+    (_haLim_ne := haLim_ne) (_hbLim_ne := hbLim_ne)
+    (hProp := hProp) (hc := hc) (_hcLim_ne := hcLim_ne)
+
+/-- Fundamental theorem bridge for normal-CF-BNT decompositions (NT Thm 4.4). -/
+theorem fundamentalTheorem_of_IsNormalCanonicalFormBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {DtotA DtotB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsNormalCanonicalFormBNT μA A)
+    (hB : IsNormalCanonicalFormBNT μB B)
+    (A_total : MPSTensor d DtotA)
+    (B_total : MPSTensor d DtotB)
+    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (c : ℕ → ℂ) (cLim : ℂ)
+    (hA_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
+    (hB_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
+    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0)
+    (hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc : Tendsto c atTop (nhds cLim))
+    (hcLim_ne : cLim ≠ 0) :
+    ∃ _h : rA = rB,
+      ∃ perm : Fin rA ≃ Fin rB,
+        ∀ j : Fin rA,
+          ∃ hdim : dimA j = dimB (perm j),
+            GaugePhaseEquiv (d := d)
+              (cast (congr_arg (MPSTensor d) hdim) (A j))
+              (B (perm j)) :=
+  fundamentalTheorem_of_separated_normalCFBNT_data A B
+    hA.toIsNormalCanonicalForm hA.blocks_not_equiv
+    hB.toIsNormalCanonicalForm hB.blocks_not_equiv
     A_total B_total aCoeff bCoeff aLim bLim c cLim
     hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
