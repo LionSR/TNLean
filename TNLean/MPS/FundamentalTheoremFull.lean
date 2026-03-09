@@ -111,13 +111,7 @@ theorem fundamentalTheorem_equalMPV_CFBNT
     (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     (∀ k, GaugeEquiv (A k) (B k)) ∧
     GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
-  fundamentalTheorem_of_separated_canonical_data μ A B
-    hA.toHasStrictOrderedNonzeroWeights
-    hA.toHasInjectiveBlocks
-    hA.toIsLeftCanonicalBlockFamily
-    hA.toHasNormalizedSelfOverlap
-    hB.toHasInjectiveBlocks
-    hB.toIsLeftCanonicalBlockFamily
+  fundamentalTheorem_canonicalForm μ A B hA.toIsCanonicalForm hB.block_injective hB.leftCanonical
     hSame
 
 /-- **Equal-MPV FT for CF-BNT with explicit gauge matrices.** -/
@@ -131,14 +125,8 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
     ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
     ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
       (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) :=
-  fundamentalTheorem_of_separated_canonical_data_explicit μ A B
-    hA.toHasStrictOrderedNonzeroWeights
-    hA.toHasInjectiveBlocks
-    hA.toIsLeftCanonicalBlockFamily
-    hA.toHasNormalizedSelfOverlap
-    hB.toHasInjectiveBlocks
-    hB.toIsLeftCanonicalBlockFamily
-    hSame
+  fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hB.block_injective
+    hB.leftCanonical hSame
 
 /-! ## Theorem 2: Proportional-MPV Fundamental Theorem (Thm 4.4)
 
@@ -246,17 +234,8 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT
             GaugePhaseEquiv (d := d)
               (cast (congr_arg (MPSTensor d) hdim) (A j))
               (B (perm j)) :=
-  fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data A B
-    hA.toHasInjectiveBlocks
-    hA.toIsLeftCanonicalBlockFamily
-    hA.toHasNormalizedSelfOverlap
-    hA.blocks_not_equiv
-    hB.toHasInjectiveBlocks
-    hB.toIsLeftCanonicalBlockFamily
-    hB.toHasNormalizedSelfOverlap
-    hB.blocks_not_equiv
-    A_total B_total aCoeff bCoeff aLim bLim c cLim
-    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+  fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB A_total B_total aCoeff bCoeff aLim bLim c
+    cLim hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
 /-! ## Theorem 3: Equal MPVs imply proportional MPVs -/
 
@@ -305,14 +284,8 @@ theorem perBlock_sameMPV_of_equalMPV_CFBNT
     (hB : IsCanonicalFormBNT μ B)
     (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     ∀ k, SameMPV (A k) (B k) :=
-  per_block_sameMPV_of_separated_canonical_data μ A B
-    hA.toHasStrictOrderedNonzeroWeights
-    hA.toHasInjectiveBlocks
-    hA.toIsLeftCanonicalBlockFamily
-    hA.toHasNormalizedSelfOverlap
-    hB.toHasInjectiveBlocks
-    hB.toIsLeftCanonicalBlockFamily
-    hSame
+  per_block_sameMPV_of_canonical_form μ A B hA.toIsCanonicalForm hB.block_injective
+    hB.leftCanonical hSame
 
 /-- **Equal-MPV CF-BNT: per-block gauge equivalence implies global gauge equivalence.**
 

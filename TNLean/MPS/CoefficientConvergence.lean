@@ -151,6 +151,8 @@ noncomputable def toTensorFromBlocksNormalized {r : ℕ} {dim : Fin r → ℕ}
     MPSTensor d (∑ k : Fin r, dim k) :=
   toTensorFromBlocks (fun k => μ k / μ ⟨0, hr⟩) A
 
+/-- Expand the normalized block-diagonal MPV as the sum of normalized coefficients times the
+individual block MPVs. -/
 theorem mpv_toTensorFromBlocksNormalized_eq_sum
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (hr : 0 < r) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -235,6 +237,8 @@ stripping them off. Our formalization takes the coefficients as explicit data.
 - The proportionality `mpv(A_total) = c_N * mpv(B_total)`
 - Convergent decomposition coefficients `aCoeff`, `bCoeff` with nonzero limits
 - The convergence of the proportionality constant `c` -/
+/-- Self-contained CF-BNT proportional FT wrapper using the assembled theorem from
+`FundamentalTheoremFull`. -/
 theorem fundamentalTheorem_proportionalMPV_CFBNT_auto
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -271,7 +275,7 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT_auto
             GaugePhaseEquiv (d := d)
               (cast (congr_arg (MPSTensor d) hdim) (A j))
               (B (perm j)) :=
-  fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB
+  fundamentalTheorem_proportionalMPV_CFBNT A B hA hB
     (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)
     aCoeff bCoeff aLim bLim c cLim
     hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne

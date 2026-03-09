@@ -1318,9 +1318,10 @@ variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 
 /-- Additive split version of `per_block_sameMPV_of_canonical_form`.
 
-This theorem isolates exactly the pieces of the canonical-form bundle used in the block-separation
-argument: injectivity, left-canonical normalization, strict nonzero weights, and self-overlap
-normalization.  The backwards-compatible wrapper below is recovered by projection from `IsCanonicalForm`.
+This theorem isolates exactly the pieces of the canonical-form bundle used in the
+block-separation argument: injectivity, left-canonical normalization, strict nonzero weights,
+and self-overlap normalization. The backwards-compatible wrapper below is recovered by
+projection from `IsCanonicalForm`.
 -/
 theorem per_block_sameMPV_of_separated_canonical_data
     (μ : Fin r → ℂ)
@@ -1432,7 +1433,8 @@ theorem fundamentalTheorem_canonicalForm
     (IsLeftCanonicalBlockFamily.ofForall hB_lc)
     hSame₂
 
-/-- Backwards-compatible wrapper around `fundamentalTheorem_of_separated_canonical_data_explicit`. -/
+/-- Backwards-compatible wrapper around
+`fundamentalTheorem_of_separated_canonical_data_explicit`. -/
 theorem fundamentalTheorem_canonicalForm_explicit
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
