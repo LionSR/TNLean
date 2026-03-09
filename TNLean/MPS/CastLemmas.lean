@@ -40,22 +40,15 @@ lemma isInjective_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor 
     IsInjective (cast (congr_arg (MPSTensor d) h) A) ↔ IsInjective A := by
   subst h; simp
 
-/-- Casting the bond dimension preserves the left-canonical / trace-preserving
-condition `∑ Aᵢᴴ * Aᵢ = 1`.
-
-The legacy name `dsGauge_cast_dim` is kept for compatibility. -/
-lemma dsGauge_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
+/-- Casting the bond dimension preserves the left-canonical (trace-preserving)
+condition `∑ Aᵢᴴ * Aᵢ = 1`.  A dimension cast is a propositional equality
+`h : D₁ = D₂`; this lemma confirms that the normalization identity transfers
+through such a cast without change. -/
+lemma leftCanonical_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
     (∑ i : Fin d, (cast (congr_arg (MPSTensor d) h) A i)ᴴ *
       (cast (congr_arg (MPSTensor d) h) A i)) = 1 ↔
     (∑ i : Fin d, (A i)ᴴ * (A i)) = 1 := by
   subst h; simp
-
-/-- Preferred alias for `dsGauge_cast_dim` using the project's left-canonical terminology. -/
-lemma leftCanonical_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    (∑ i : Fin d, (cast (congr_arg (MPSTensor d) h) A i)ᴴ *
-      (cast (congr_arg (MPSTensor d) h) A i)) = 1 ↔
-    (∑ i : Fin d, (A i)ᴴ * (A i)) = 1 :=
-  dsGauge_cast_dim h A
 
 /-- Shift the tensor index in a gauge-phase equivalence along an index equality. -/
 lemma gaugePhaseEquiv_cast_idx {d g : ℕ} {dim₁ dim₂ : Fin g → ℕ}

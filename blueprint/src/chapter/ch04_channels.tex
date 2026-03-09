@@ -651,11 +651,11 @@ then applied to transfer maps, which are Kraus maps by construction
 For a normalized MPS tensor, the transfer map is naturally trace-preserving but need
 not be unital. In general one should not expect a single gauge choice to make it
 both unital and trace-preserving. The next result therefore treats a special
-doubly-stochastic case; the general MPS situation is handled in
+bi-canonical (unital + TP) case; the general MPS situation is handled in
 Subsection~\ref{subsec:peripheral_closure_fixedpoint}.
 
 \begin{lemma}[Peripheral eigenvalues closed under powers]\label{lem:peripheral_closed_powers_irred_ds}
-    \lean{peripheralEigenvalues_pow_mem_of_irreducible_doubly_stochastic}
+    \lean{peripheralEigenvalues_pow_mem_of_irreducible_biCanonical}
     \leanok
     \uses{def:unital_kraus, def:tp_kraus, def:irreducible_cp}
     Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is both
@@ -677,9 +677,9 @@ Subsection~\ref{subsec:peripheral_closure_fixedpoint}.
     so $\mu^n$ is again peripheral.
 \end{proof}
 
-\begin{theorem}[Roots of unity for irreducible doubly stochastic maps]%
+\begin{theorem}[Roots of unity for irreducible bi-canonical (unital + TP) maps]%
     \label{thm:peripheral_roots_of_unity_irred_ds}
-    \lean{peripheral_isRootOfUnity_of_irreducible_doubly_stochastic}
+    \lean{peripheral_isRootOfUnity_of_irreducible_biCanonical}
     \leanok
     \uses{def:unital_kraus, def:tp_kraus, def:irreducible_cp,
           def:peripheral_eigenvalues}
@@ -699,9 +699,8 @@ Subsection~\ref{subsec:peripheral_closure_fixedpoint}.
 \subsection{Peripheral closure via adjoint fixed point}%
 \label{subsec:peripheral_closure_fixedpoint}
 
-The doubly-stochastic hypothesis in
+The bi-canonical (unital + TP) hypothesis in
 Lemma~\ref{lem:peripheral_closed_powers_irred_ds}
-(unital \emph{and} trace-preserving)
 can be weakened: trace preservation is only used to derive
 the Kadison--Schwarz equality at peripheral eigenvectors.
 The following result replaces the TP condition by the existence
@@ -765,13 +764,13 @@ matching the weighted-trace argument in
     strictly generalise
     Lemma~\ref{lem:peripheral_closed_powers_irred_ds}
     and Theorem~\ref{thm:peripheral_roots_of_unity_irred_ds}:
-    the doubly-stochastic (unital + TP) condition implies
+    the bi-canonical (unital + TP) condition implies
     $E^*(\Id) = \Id$, which is a positive definite fixed
     point of the adjoint.
     The adjoint-fixed-point formulation matches the
     argument in \cite[Appendix~A]{Cirac2017MPDO_AnnPhys},
     which uses a faithful invariant state rather than
-    double stochasticity.
+    bi-canonicality.
 \end{remark}
 
 \begin{definition}[Channel period]\label{def:channel_period}

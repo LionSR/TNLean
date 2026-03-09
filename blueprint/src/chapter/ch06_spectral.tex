@@ -254,7 +254,7 @@ a block embedding of a mixed-transfer eigenvector.
 \begin{proof}
     \leanok
     \uses{thm:spectral_radius_le_one, def:gauge_phase_equiv,
-          thm:qpf, thm:ds_gauge_unital,
+          thm:qpf, thm:right_canonical_gauge,
           thm:ks_peripheral, thm:kraus_commute,
           thm:multiplicative_domain, thm:simplicity, thm:skolem_noether}
     Since $\rho(F_{AB}) \le 1$ (Theorem~\ref{thm:spectral_radius_le_one})
@@ -264,7 +264,7 @@ a block embedding of a mixed-transfer eigenvector.
 
     Choose positive fixed points of the transfer maps of $A$ and $B$
     (Theorem~\ref{thm:qpf}) and gauge the two tensors separately to
-    unital Kraus families (Theorem~\ref{thm:ds_gauge_unital}).
+    unital Kraus families (Theorem~\ref{thm:right_canonical_gauge}).
     Gauge $X$ accordingly and embed it as an off-diagonal block matrix
     for the block Kraus family with diagonal blocks $A'^i$ and $B'^i$.
     The KS equality for peripheral eigenvectors

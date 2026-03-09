@@ -298,7 +298,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     have hAcst_norm : ∑ i : Fin d,
         (cast (congr_arg (MPSTensor d) hdim) (A (f j)) i)ᴴ *
         (cast (congr_arg (MPSTensor d) hdim) (A (f j)) i) = 1 :=
-      (dsGauge_cast_dim hdim (A (f j))).mpr (hA_norm (f j))
+      (leftCanonical_cast_dim hdim (A (f j))).mpr (hA_norm (f j))
     have hto0 := mpvOverlap_tendsto_zero
       (cast (congr_arg (MPSTensor d) hdim) (A (f j))) (B j)
       hAcst_inj (hB_inj j) hAcst_norm (hB_norm j) hNot

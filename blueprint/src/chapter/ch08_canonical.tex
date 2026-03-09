@@ -98,8 +98,8 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
 		= |\zeta|^2 A^i X (A^i)^\dagger$.
 \end{proof}
 
-\begin{theorem}[Phase-scaling preserves normalization]\label{thm:ds_gauge_blocks}
-	\lean{MPSTensor.dsGauge_smul_of_norm_one}
+\begin{theorem}[Phase-scaling preserves normalization]\label{thm:leftCanonical_phase_scaling}
+	\lean{MPSTensor.leftCanonical_smul_of_norm_one}
 	\leanok
 	If $\sum_i (A^i)^\dagger A^i = \Id$ and $|\zeta| = 1$,
 	then $\sum_i (\zeta A^i)^\dagger (\zeta A^i) = \Id$.
@@ -731,14 +731,14 @@ The results correspond to \cite{Evans1978Spectral},
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:posDef_adjoint_eigenvector, thm:ds_gauge_tp}
+	\uses{thm:posDef_adjoint_eigenvector, thm:left_canonical_gauge}
 	By Theorem~\ref{thm:posDef_adjoint_eigenvector},
 	obtain $\sigma$ positive definite and $r > 0$ with
 	$\E_A^\dagger(\sigma) = r \sigma$.
 	Set $c = r^{-1/2}$ and $A'^i = c A^i$.
 	Then $\E_{A'}^\dagger(\sigma) = \sigma$.
 	By the TP gauge construction
-	(Theorem~\ref{thm:ds_gauge_tp}),
+	(Theorem~\ref{thm:left_canonical_gauge}),
 	$B^i = \sigma^{1/2} A'^i \sigma^{-1/2}$
 	satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
 \end{proof}

@@ -35,12 +35,12 @@ namespace MPSTensor
 
 open Matrix
 
-/-- Legacy stronger blocking theorem: if `A` is both right-canonical / unital and
-left-canonical / trace-preserving, and the transfer map is irreducible, then some
-blocking length `p > 0` makes the blocked transfer map primitive.
+/-- **Blocking periodicity via bi-canonical gauge**: if `A` is both right-canonical / unital
+and left-canonical / trace-preserving (i.e., bi-canonical), and the transfer map is
+irreducible, then some blocking length `p > 0` makes the blocked transfer map primitive.
 
 Equivalently, some power of the transfer map has peripheral eigenvalues `{1}`. -/
-theorem exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic
+theorem exists_blockTensor_isPrimitive_of_irreducible_biCanonical
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (h_unital : KadisonSchwarz.IsUnitalKraus A)
@@ -73,7 +73,7 @@ theorem exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic
     have hμ' : μ ∈ peripheralEigenvalues E := hfin.mem_toFinset.mp hμ
     -- Use the channel-level root-of-unity lemma.
     simpa [E] using
-      (peripheral_isRootOfUnity_of_irreducible_doubly_stochastic (K := A) h_unital h_tp hIrr μ
+      (peripheral_isRootOfUnity_of_irreducible_biCanonical (K := A) h_unital h_tp hIrr μ
         (by simpa [E] using hμ'))
   -- Choose a common power killing all peripheral eigenvalues.
   obtain ⟨p, hp_pos, hp_all⟩ :=
@@ -92,8 +92,8 @@ theorem exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic
   rw [MPSTensor.transferMap_blockTensor (A := A) (L := p)]
   simpa [E] using hprim_pow
 
-/-- Preferred alias for the legacy doubly-stochastic theorem using the project's
-bi-canonical terminology. -/
+/-- Alias for `exists_blockTensor_isPrimitive_of_irreducible_biCanonical` with
+more explicit parameter names matching the bi-canonical terminology. -/
 theorem exists_blockTensor_isPrimitive_of_biCanonical_of_isIrreducibleMap
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
@@ -103,7 +103,7 @@ theorem exists_blockTensor_isPrimitive_of_biCanonical_of_isIrreducibleMap
     ∃ p : ℕ, 0 < p ∧
       IsPrimitive
         (transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p)) := by
-  simpa using exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic
+  simpa using exists_blockTensor_isPrimitive_of_irreducible_biCanonical
     (A := A) hRight hLeft hIrr
 
 end MPSTensor

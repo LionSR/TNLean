@@ -15,7 +15,7 @@ import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 # Peripheral eigenvalues closed under powers (fixed-point version)
 
 `TNLean/Channel/PeripheralClosure.lean` proves that peripheral eigenvalues are closed under
-powers for **irreducible, doubly-stochastic** Kraus maps.
+powers for **irreducible, bi-canonical** Kraus maps.
 
 In this file we replace the trace-preserving (TP) assumption by the existence of a
 **positive definite fixed point of the adjoint map** (a faithful invariant state).
@@ -33,7 +33,7 @@ namespace MPSTensor
 admitting a positive definite fixed point of the adjoint map.
 
 This is the fixed-point (non-TP) analogue of
-`peripheralEigenvalues_pow_mem_of_irreducible_doubly_stochastic`. -/
+`peripheralEigenvalues_pow_mem_of_irreducible_biCanonical`. -/
 theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)

@@ -192,15 +192,15 @@ theorem mult_domain_of_ks_equality
 /-- **KS gap vanishes for peripheral eigenvectors**.
 
 From F_{AB}(X) = μX with |μ| = 1:
-1. Pass to DS gauge A'_i = S⁻¹A_iS where S·S† = ρ (QPF fixed point)
-2. In DS gauge: E' is doubly stochastic (unital + TP)
+1. Pass to left-canonical gauge A'_i = S⁻¹A_iS where S·S† = ρ (QPF fixed point)
+2. In left-canonical gauge: E' is bi-canonical (unital + TP)
 3. HS contraction: tr(E'*(Y)†E'*(Y)) ≤ tr(Y†Y)
 4. |μ| = 1 forces equality: tr(E'*(X)†E'*(X)) = tr(X†X)
 5. Since ksGap ≥ 0 (PSD) and tr(ksGap) = 0, we get ksGap = 0
 
 Key sub-requirements:
-- DS gauge is also TP (needs E*_A(ρ⁻¹) = ρ⁻¹, ~50 lines)
-- Eigenvector equation transforms correctly in DS gauge (~30 lines)
+- Left-canonical gauge is also TP (needs E*_A(ρ⁻¹) = ρ⁻¹, ~50 lines)
+- Eigenvector equation transforms correctly in left-canonical gauge (~30 lines)
 - The trace argument (steps 3-5, ~40 lines)
 
 Total: ~100-150 lines of new infrastructure. -/
@@ -250,7 +250,7 @@ theorem ker_invariant [NeZero D]
 5. `block_ks_gap_psd` (~80 lines) — 2×2 block KS gap is PSD
    Uses 2-positivity (same technique as existing KS proof).
 6. `ks_gap_zero_of_peripheral_eigenvector` (~100-150 lines) — HARDEST
-   Requires DS gauge TP property + trace/norm argument.
+   Requires left-canonical gauge TP property + trace/norm argument.
 7. `ker_invariant` (~50 lines) — connecting mult domain to kernel invariance.
 
 ### Total: ~230-280 lines more needed to close Sorry 1.

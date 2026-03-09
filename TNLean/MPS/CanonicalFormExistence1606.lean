@@ -27,12 +27,10 @@ We currently have (sorry-free) components for:
 * Appendix A (CFII part): inside that TP gauge, unitary conjugation → diagonal PD fixed point.
 * Appendix A (periodicity): TP + irreducible → primitive after blocking.
 * peripheral primitive → spectral gap → overlap convergence.
-* peripheral primitive + one-sided canonical normalization (`ds_gauge` in downstream files)
+* peripheral primitive + left-canonical normalization (`∑ Aᵢ† Aᵢ = I`)
   + injective + μ ordering → `IsCanonicalForm`.
 
-Important normalization note: the downstream name `ds_gauge` is legacy. In the present
-pipeline it records only the one-sided condition `∑ Aᵢ† Aᵢ = I`, not a two-sided
-"doubly-stochastic" gauge. Likewise, the Appendix-A CFII story is genuinely two-step:
+Note: the Appendix-A CFII story is genuinely two-step:
 first a generally non-unitary TP similarity from the adjoint Perron--Frobenius eigenvector,
 then a unitary diagonalization **within** that TP gauge.
 
@@ -213,7 +211,7 @@ Again, this is just a re-export with a pipeline name.
 
 /-- **Pipeline step:** build `IsCanonicalForm` from peripheral-spectrum primitivity hypotheses
 (on each block), together with injectivity + the one-sided normalization
-`∑ Aᵢ† Aᵢ = I` (stored under the legacy field name `ds_gauge`) + μ ordering + μ ≠ 0. -/
+`∑ Aᵢ† Aᵢ = I` (left-canonical normalization) + μ ordering + μ ≠ 0. -/
 theorem isCanonicalForm_of_peripheralPrimitive_pipeline1606
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}

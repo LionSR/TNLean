@@ -57,11 +57,8 @@ definition (irreducible + aperiodic ⟺ peripheral spectrum is `{1}`) is deferre
 peripheral spectrum theory. -/
 structure IsPrimitiveMPS {d D : ℕ} [NeZero D]
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) : Prop where
-  /-- One-sided trace-preserving / canonical normalization:
-  `∑ᵢ Aᵢ† Aᵢ = I`.
-
-  This is the same hypothesis that downstream files often call `ds_gauge`, but it is
-  *not* a two-sided doubly-stochastic assumption. -/
+  /-- Left-canonical (trace-preserving) normalization:
+  `∑ᵢ Aᵢ† Aᵢ = I`. -/
   norm : ∑ i : Fin d, (A i)ᴴ * A i = 1
   /-- The fixed point is nonzero. -/
   fixedPoint_ne_zero : ρ ≠ 0

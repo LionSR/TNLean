@@ -1,0 +1,40 @@
+{
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(rm:*)",
+      "Bash(lake update:*)",
+      "Bash(MATHLIB_NO_CACHE_ON_UPDATE=1 lake update:*)",
+      "Bash(lake build:*)",
+      "Bash(git:*)",
+      "Bash(lsof:*)",
+      "Bash(lake setup-file:*)",
+      "Bash(find .lake:*)",
+      "Bash(lake print-paths:*)",
+      "Bash(lake env:*)",
+      "Bash(kill %%)",
+      "Bash(xargs kill)",
+      "Bash(mv .lake /tmp/MPSLean_lake_backup)",
+      "Bash(ln -s /tmp/MPSLean_lake_backup .lake)",
+      "Bash(kill 32698:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(lake exe:*)",
+      "Bash(gh repo:*)",
+      "Bash(python3 -c \":*)",
+      "Bash(sed:*)",
+      "Bash(mv /tmp/Brouwer-bump ~/Local/LeanProjects/Brouwer)",
+      "Read(//Users/siruilu/Local/LeanProjects/**)",
+      "Bash(rm .lake:*)",
+      "Bash(kill 46392:*)",
+      "Bash(kill 53315:*)",
+      "Bash(kill:*)",
+      "Bash(du:*)",
+      "Bash(GIT_MMAP_LIMIT=0 git status:*)",
+      "Bash(dtruss git:*)",
+      "Bash(xattr:*)",
+      "Bash(cp:*)"
+    ]
+  }
+}

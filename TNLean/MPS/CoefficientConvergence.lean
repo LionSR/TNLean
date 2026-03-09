@@ -229,7 +229,7 @@ stripping them off. Our formalization takes the coefficients as explicit data.
 **What is derived automatically from `IsCanonicalFormBNT`:**
 - The overlap properties (self → 1, cross → 0)
 - The decomposition identity `mpv(toTensorFromBlocks μ A) σ = Σ_k (μ_k)^N * mpv(A_k) σ`
-- Injectivity and DS-gauge normalization
+- Injectivity and left-canonical normalization
 
 **What the user must supply:**
 - The proportionality `mpv(A_total) = c_N * mpv(B_total)`
