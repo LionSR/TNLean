@@ -1,1 +1,0 @@
-import Gametheory.Brouwer_product
