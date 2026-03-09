@@ -466,24 +466,15 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
     blockTensor_apply_encodeBlock A L σ₀
   have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) :=
     blockTensor_apply_encodeBlock A L τ₀
-  -- Step 3b: P *ᵥ φ = μ^D • φ
-  have hP_eig : P *ᵥ φ = (μ ^ D) • φ := by
-    simp only [P]; rw [hBi₀]
-    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
-      (evalWord A (List.ofFn σ₀)) φ μ heigφ D
-  -- Step 3c: φ ∈ range(toLin' P)
-  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) :=
-    mem_range_toLin'_of_eigenvector P φ (μ ^ D) (pow_ne_zero D hμ) hP_eig
-  -- Step 3d: Qᵀ *ᵥ ψ = ν^D • ψ
-  have hQ_eig : Qᵀ *ᵥ ψ = (ν ^ D) • ψ := by
-    simp only [Q]
-    rw [Matrix.transpose_pow_eq_pow_transpose, hBi₁]
-    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
-      ((evalWord A (List.ofFn τ₀))ᵀ) ψ ν heigψ D
-  -- Step 3e: ψ ∈ range(Q.vecMulLinear)
-  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) :=
-    mem_range_vecMulLinear_of_transpose_eigenvector
-      Q ψ (ν ^ D) (pow_ne_zero D hν) hQ_eig
+  -- Step 3b: pass the eigenvector data through the nilpotent-killing powers.
+  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) := by
+    simpa [P, hBi₀] using
+      (mem_range_toLin'_pow_of_eigenvector
+        (M := evalWord A (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ)
+  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) := by
+    simpa [Q, hBi₁] using
+      (mem_range_vecMulLinear_pow_of_transpose_eigenvector
+        (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
   -- Step 4: vecMulVec φ ψ ∈ range(mulLeft P ∘ mulRight Q)
   have hrank1_range : Matrix.vecMulVec φ ψ ∈
       LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) :=
