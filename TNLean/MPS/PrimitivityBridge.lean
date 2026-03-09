@@ -128,9 +128,12 @@ theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
     (hCF : IsCanonicalForm μ A)
     (hDistinct : Function.Injective dim) :
-    IsCanonicalFormBNT μ A where
-  toIsCanonicalForm := hCF
-  blocks_not_equiv := fun j k hjk h =>
-    absurd (hDistinct h) hjk
+    IsCanonicalFormBNT μ A :=
+  IsCanonicalFormBNT.ofSeparatedData
+    hCF.toHasInjectiveBlocks
+    hCF.toIsLeftCanonicalBlockFamily
+    hCF.toHasStrictOrderedNonzeroWeights
+    hCF.toHasNormalizedSelfOverlap
+    (fun j k hjk h => absurd (hDistinct h) hjk)
 
 end MPSTensor

@@ -81,6 +81,38 @@ namespace IsCanonicalFormBNT
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
+/-- Project CF-BNT data to blockwise injectivity. -/
+def toHasInjectiveBlocks (hCF : IsCanonicalFormBNT μ A) : HasInjectiveBlocks (d := d) A :=
+  hCF.toIsCanonicalForm.toHasInjectiveBlocks
+
+/-- Project CF-BNT data to left-canonical block-family normalization. -/
+def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalFormBNT μ A) :
+    IsLeftCanonicalBlockFamily (d := d) A :=
+  hCF.toIsCanonicalForm.toIsLeftCanonicalBlockFamily
+
+/-- Project CF-BNT data to separated weight data. -/
+def toHasStrictOrderedNonzeroWeights (hCF : IsCanonicalFormBNT μ A) :
+    HasStrictOrderedNonzeroWeights μ :=
+  hCF.toIsCanonicalForm.toHasStrictOrderedNonzeroWeights
+
+/-- Project CF-BNT data to self-overlap normalization. -/
+def toHasNormalizedSelfOverlap (hCF : IsCanonicalFormBNT μ A) :
+    HasNormalizedSelfOverlap (d := d) A :=
+  hCF.toIsCanonicalForm.toHasNormalizedSelfOverlap
+
+/-- Rebuild `IsCanonicalFormBNT` from the additive split API plus the BNT separation axiom. -/
+def ofSeparatedData
+    (hInj : HasInjectiveBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hμ : HasStrictOrderedNonzeroWeights μ)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : ∀ j k : Fin r, j ≠ k →
+      ∀ (h : dim j = dim k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+    IsCanonicalFormBNT μ A where
+  toIsCanonicalForm := IsCanonicalForm.ofSeparatedData hInj hLeft hμ hOverlap
+  blocks_not_equiv := hBlocks
+
 /-! ### Cross-overlap decay -/
 
 /-- **Cross-overlap decay for CF-BNT blocks**: distinct blocks have
@@ -99,23 +131,23 @@ theorem cross_overlap_tendsto_zero
     have hNotEquiv : ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k) :=
       hCF.blocks_not_equiv j k hjk hdim
     have hAj_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) :=
-      (isInjective_cast_dim hdim (A j)).mpr (hCF.toIsCanonicalForm.block_injective j)
+      (isInjective_cast_dim hdim (A j)).mpr (hCF.toHasInjectiveBlocks.block_injective j)
     have hAj_norm : ∑ i : Fin d,
         (cast (congr_arg (MPSTensor d) hdim) (A j) i)ᴴ *
         (cast (congr_arg (MPSTensor d) hdim) (A j) i) = 1 :=
-      (dsGauge_cast_dim hdim (A j)).mpr (hCF.toIsCanonicalForm.ds_gauge j)
+      (dsGauge_cast_dim hdim (A j)).mpr (hCF.toIsLeftCanonicalBlockFamily.ds_gauge j)
     have hto0 := mpvOverlap_tendsto_zero
       (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k)
-      hAj_inj (hCF.toIsCanonicalForm.block_injective k)
-      hAj_norm (hCF.toIsCanonicalForm.ds_gauge k)
+      hAj_inj (hCF.toHasInjectiveBlocks.block_injective k)
+      hAj_norm (hCF.toIsLeftCanonicalBlockFamily.ds_gauge k)
       hNotEquiv
     exact hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A j) (A k) N
   · -- Different bond dimensions: use the rectangular spectral gap
     exact mpvOverlap_tendsto_zero_of_dim_ne (A j) (A k)
-      (hCF.toIsCanonicalForm.block_injective j)
-      (hCF.toIsCanonicalForm.block_injective k)
-      (hCF.toIsCanonicalForm.ds_gauge j)
-      (hCF.toIsCanonicalForm.ds_gauge k)
+      (hCF.toHasInjectiveBlocks.block_injective j)
+      (hCF.toHasInjectiveBlocks.block_injective k)
+      (hCF.toIsLeftCanonicalBlockFamily.ds_gauge j)
+      (hCF.toIsLeftCanonicalBlockFamily.ds_gauge k)
       hdim
 
 /-! ### BNT structure from CF-BNT -/
@@ -136,7 +168,7 @@ theorem isBNT [∀ k, NeZero (dim k)]
   normal := fun j => by
     -- Injective implies normal (with N = 1): `IsInjective = IsNBlkInjective 1`.
     refine ⟨1, ?_⟩
-    have hInj := hCF.toIsCanonicalForm.block_injective j
+    have hInj := hCF.toHasInjectiveBlocks.block_injective j
     -- Show the two ranges coincide.
     -- `IsNBlkInjective A 1` ↔ `IsInjective A` because `evalWord A [i] = A i`.
     have hkey : ∀ σ : Fin 1 → Fin d, evalWord (A j) (List.ofFn σ) = A j (σ 0) := by
@@ -155,7 +187,7 @@ theorem isBNT [∀ k, NeZero (dim k)]
   eventually_li := by
     -- Asymptotic orthonormality gives eventual linear independence
     have hOrtho := eventually_linearIndependent_of_overlap_tendsto_orthonormal A
-      hCF.toIsCanonicalForm.overlap_tendsto_one
+      hCF.toHasNormalizedSelfOverlap.overlap_tendsto_one
       (fun i j hij => hCF.cross_overlap_tendsto_zero i j hij)
     -- Extract an N0 from the `∀ᶠ` filter
     rw [Filter.Eventually] at hOrtho
