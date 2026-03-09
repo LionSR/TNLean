@@ -295,6 +295,37 @@ theorem posSemidef_fixedPoint_unique
     · exact ⟨↑c₀, sub_eq_zero.mp hτ_ne⟩
     · exact absurd (posSemidef_fixedPoint_isPosDef A hA τ hτ_psd hτ_ne hτ_fix) hτ_not_pd
 
+/-- **Uniqueness under irreducibility**: any PSD fixed point of an irreducible
+transfer map is proportional to a fixed nonzero PSD fixed point. -/
+theorem posSemidef_fixedPoint_unique_of_irreducible
+    (A : MPSTensor d D)
+    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))
+    (ρ σ : Matrix (Fin D) (Fin D) ℂ)
+    (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0)
+    (hσ_psd : σ.PosSemidef)
+    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
+    (hσ_fix : transferMap (d := d) (D := D) A σ = σ) :
+    ∃ c : ℂ, σ = c • ρ := by
+  classical
+  by_cases hσ_ne : σ = 0
+  · exact ⟨0, by simp [hσ_ne]⟩
+  have hρ_pd :=
+    posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr ρ hρ_psd hρ_ne hρ_fix
+  have hσ_pd :=
+    posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr σ hσ_psd hσ_ne hσ_fix
+  by_cases hD : D = 0
+  · exact ⟨1, by ext i; exact (Fin.elim0 (hD ▸ i))⟩
+  · haveI : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
+    obtain ⟨c₀, _, hτ_psd, hτ_not_pd⟩ := exists_critical_scalar hρ_pd hσ_pd
+    set τ := σ - (↑c₀ : ℂ) • ρ
+    have hτ_fix : transferMap (d := d) (D := D) A τ = τ := by
+      simp only [τ, map_sub, LinearMap.map_smul, hρ_fix, hσ_fix]
+    by_cases hτ_ne : τ = 0
+    · exact ⟨↑c₀, sub_eq_zero.mp hτ_ne⟩
+    · exact absurd
+        (posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr τ hτ_psd hτ_ne hτ_fix)
+        hτ_not_pd
+
 end Uniqueness
 
 end MPSTensor
