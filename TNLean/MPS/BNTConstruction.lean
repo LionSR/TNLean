@@ -1,5 +1,6 @@
 import TNLean.PiAlgebra.CanonicalFormSep
 import TNLean.Spectral.SpectralGapRect
+import TNLean.MPS.BNT
 import TNLean.MPS.BNTPermutationThm44
 import TNLean.MPS.CastLemmas
 
@@ -186,11 +187,9 @@ theorem isBNT_of_separated_CFBNT_data [∀ k, NeZero (dim k)]
     ext M
     simp only [Set.mem_range, hkey]
     exact ⟨fun ⟨σ, hσ⟩ => ⟨σ 0, hσ⟩, fun ⟨i, hi⟩ => ⟨fun _ => i, hi⟩⟩
-  spans_mpv := fun N => by
-    exact ⟨fun k => μ k ^ N, fun σ => by
-      have h := mpv_toTensorFromBlocks_eq_sum μ A σ
-      simp only [smul_eq_mul] at h
-      exact h⟩
+  spans_mpv := fun N =>
+    ⟨fun k => μ k ^ N, fun σ => by
+      simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ⟩
   eventually_li := by
     have hOrtho := eventually_linearIndependent_of_overlap_tendsto_orthonormal A
       hOverlap.overlap_tendsto_one
