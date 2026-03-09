@@ -1469,12 +1469,310 @@ theorem block_separation_all_words_of_irreducible_TP
       ∑ k : Fin r, (μ k) ^ N *
         (mpv (A k) σ - mpv (B k) σ) = 0) :
     ∀ k, SameMPV (A k) (B k) := by
-  /-
-  This is a direct NT-hypothesis adaptation of `block_separation_core`.
-  The long proof is identical up to replacing the injective spectral-gap calls by the
-  irreducible / left-canonical ones from `SpectralGapNT.lean`.
-  -/
-  sorry
+  classical
+  -- Induction on the number of blocks.
+  revert μ A B hμ_strict hμ_ne_zero hA_irr hB_irr hA_lc hB_lc hA_overlap h_summed
+  induction r with
+  | zero =>
+      intro μ A B hμ_strict hμ_ne_zero hA_irr hB_irr hA_lc hB_lc hA_overlap h_summed k
+      exact k.elim0
+  | succ r ih =>
+      intro μ A B hμ_strict hμ_ne_zero hA_irr hB_irr hA_lc hB_lc hA_overlap h_summed
+      cases r with
+      | zero =>
+          -- Single-block case.
+          intro k
+          have hk : k = 0 := Fin.ext (by omega)
+          subst hk
+          intro N σ
+          have h_eq : (μ 0) ^ N * (mpv (A 0) σ - mpv (B 0) σ) = 0 := by
+            simpa [Fin.sum_univ_one] using h_summed N σ
+          have hμ_pow : (μ 0) ^ N ≠ 0 := pow_ne_zero N (hμ_ne_zero 0)
+          have hsub := (mul_eq_zero.mp h_eq).resolve_left hμ_pow
+          exact sub_eq_zero.mp hsub
+      | succ r =>
+          -- At least two blocks: peel off the leading block `0`, then apply the IH to the tail.
+          have hHead : SameMPV (A 0) (B 0) := by
+            -- Step 1: take overlaps with the test tensor `A 0` and rewrite the summed identity.
+            have h_sum_overlap :
+                ∀ N : ℕ,
+                  ∑ k : Fin (Nat.succ (Nat.succ r)),
+                      (star (μ k)) ^ N *
+                        (mpvOverlap (d := d) (A 0) (A k) N -
+                          mpvOverlap (d := d) (A 0) (B k) N) = 0 := by
+              intro N
+              classical
+              -- Take `star` of the pointwise identity `h_summed`, then sum against `mpv (A 0)`.
+              have hs_star :
+                  ∀ σ : Fin N → Fin d,
+                    ∑ k : Fin (Nat.succ (Nat.succ r)),
+                        (star (μ k)) ^ N *
+                          (star (mpv (A k) σ) - star (mpv (B k) σ)) = 0 := by
+                intro σ
+                have hs := h_summed N σ
+                have hs' : star (∑ k : Fin (Nat.succ (Nat.succ r)),
+                    (μ k) ^ N * (mpv (A k) σ - mpv (B k) σ)) = (0 : ℂ) := by
+                  simpa using congrArg star hs
+                -- Simplify the `star` of the sum.
+                simpa [star_sum, star_mul, star_pow, star_sub,
+                  mul_comm, mul_left_comm, mul_assoc] using hs'
+              -- Expand the overlap sums and use `hs_star`.
+              calc
+                ∑ k : Fin (Nat.succ (Nat.succ r)),
+                    (star (μ k)) ^ N *
+                      (mpvOverlap (d := d) (A 0) (A k) N -
+                        mpvOverlap (d := d) (A 0) (B k) N)
+                    =
+                    ∑ k : Fin (Nat.succ (Nat.succ r)),
+                      (star (μ k)) ^ N *
+                        (∑ σ : Fin N → Fin d,
+                          mpv (A 0) σ * (star (mpv (A k) σ) - star (mpv (B k) σ))) := by
+                      -- Rewrite each overlap difference as a single configuration sum.
+                      simp [mpvOverlap, Finset.sum_sub_distrib, mul_sub]
+                _ =
+                    ∑ k : Fin (Nat.succ (Nat.succ r)),
+                      ∑ σ : Fin N → Fin d,
+                        (star (μ k)) ^ N *
+                          (mpv (A 0) σ * (star (mpv (A k) σ) - star (mpv (B k) σ))) := by
+                      -- Push the scalar coefficient into the inner sum.
+                      simp [Finset.mul_sum, mul_assoc]
+                _ =
+                    ∑ σ : Fin N → Fin d,
+                      ∑ k : Fin (Nat.succ (Nat.succ r)),
+                        (star (μ k)) ^ N *
+                          (mpv (A 0) σ * (star (mpv (A k) σ) - star (mpv (B k) σ))) := by
+                      -- Swap the finite sums.
+                      simpa using
+                        (Finset.sum_comm (s := (Finset.univ : Finset (Fin (Nat.succ (Nat.succ r)))))
+                          (t := (Finset.univ : Finset (Fin N → Fin d)))
+                          (f := fun k σ =>
+                            (star (μ k)) ^ N *
+                              (mpv (A 0) σ * (star (mpv (A k) σ) - star (mpv (B k) σ)))))
+                _ =
+                    ∑ σ : Fin N → Fin d,
+                      mpv (A 0) σ *
+                        ∑ k : Fin (Nat.succ (Nat.succ r)),
+                          (star (μ k)) ^ N *
+                            (star (mpv (A k) σ) - star (mpv (B k) σ)) := by
+                      -- Factor out `mpv (A 0) σ` from the inner sum.
+                      refine Finset.sum_congr rfl ?_
+                      intro σ _
+                      simp [Finset.mul_sum, mul_assoc, mul_left_comm, mul_comm]
+                _ = 0 := by
+                      -- Each inner sum is `0` by `hs_star`.
+                      -- We rewrite termwise and use that a sum of zeros is zero.
+                      refine Finset.sum_eq_zero ?_
+                      intro σ hσ
+                      -- The inner sum vanishes by `hs_star σ`.
+                      exact mul_eq_zero_of_right (mpv (A 0) σ) (hs_star σ)
+            -- Step 2: apply the peeling lemma to show exponential decay of the leading overlap difference.
+            let δ : Fin (Nat.succ (Nat.succ r)) → ℕ → ℂ :=
+              fun k N => mpvOverlap (d := d) (A 0) (A k) N - mpvOverlap (d := d) (A 0) (B k) N
+            let Dsum : ℝ := ∑ k : Fin (Nat.succ (Nat.succ r)), (dim k : ℝ)
+            let Bbound : ℝ := 2 * (dim 0 : ℝ) * Dsum
+            have hBbound_nn : 0 ≤ Bbound := by
+              have h2dim0 : 0 ≤ (2 : ℝ) * (dim 0 : ℝ) := by positivity
+              have hDsum : 0 ≤ Dsum := by
+                refine Finset.sum_nonneg ?_
+                intro k hk
+                positivity
+              -- `Bbound = (2*dim0) * Dsum`
+              simpa [Bbound, mul_assoc] using mul_nonneg h2dim0 hDsum
+            have hδ_bound : ∀ k N, ‖δ k N‖ ≤ Bbound := by
+              intro k N
+              -- triangle inequality + uniform overlap bounds from the one-sided normalization
+              have h1 :
+                  ‖mpvOverlap (d := d) (A 0) (A k) N‖ ≤ (dim 0 : ℝ) * (dim k : ℝ) :=
+                leftCanonical_mpvOverlap_bound (d := d) (A := A 0) (B := A k)
+                  (hA_lc 0) (hA_lc k) N
+              have h2 :
+                  ‖mpvOverlap (d := d) (A 0) (B k) N‖ ≤ (dim 0 : ℝ) * (dim k : ℝ) :=
+                leftCanonical_mpvOverlap_bound (d := d) (A := A 0) (B := B k)
+                  (hA_lc 0) (hB_lc k) N
+              have hdim_le : (dim k : ℝ) ≤ Dsum := by
+                -- `dim k` is one term in the sum
+                have hnonneg : ∀ j : Fin (Nat.succ (Nat.succ r)), 0 ≤ (dim j : ℝ) := fun j => by
+                  positivity
+                simpa [Dsum] using
+                  (Finset.single_le_sum (s := (Finset.univ : Finset (Fin (Nat.succ (Nat.succ r)))))
+                    (f := fun j : Fin (Nat.succ (Nat.succ r)) => (dim j : ℝ))
+                    (hf := fun j _ => hnonneg j) (a := k) (h := Finset.mem_univ k))
+              calc
+                ‖δ k N‖
+                    = ‖mpvOverlap (d := d) (A 0) (A k) N -
+                        mpvOverlap (d := d) (A 0) (B k) N‖ := rfl
+                _ ≤ ‖mpvOverlap (d := d) (A 0) (A k) N‖ +
+                      ‖mpvOverlap (d := d) (A 0) (B k) N‖ := norm_sub_le _ _
+                _ ≤ (dim 0 : ℝ) * (dim k : ℝ) + (dim 0 : ℝ) * (dim k : ℝ) := by
+                      gcongr
+                _ = 2 * (dim 0 : ℝ) * (dim k : ℝ) := by ring
+                _ ≤ 2 * (dim 0 : ℝ) * Dsum := by
+                      have h2dim0 : 0 ≤ (2 : ℝ) * (dim 0 : ℝ) := by positivity
+                      -- multiply `dim k ≤ Dsum` by the nonnegative scalar `2*dim0`
+                      have := mul_le_mul_of_nonneg_left hdim_le h2dim0
+                      simpa [mul_assoc, mul_left_comm, mul_comm] using this
+                _ = Bbound := by
+                      simp [Bbound, mul_assoc, mul_left_comm, mul_comm]
+            -- Choose the dominance ratio `ρ = ‖μ 1‖ / ‖μ 0‖ < 1`.
+            let ρ : ℝ :=
+              ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ / ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖
+            have hρ_pos : 0 < ρ := by
+              have hμ0 : 0 < ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ :=
+                norm_pos_iff.mpr (hμ_ne_zero 0)
+              have hμ1 : 0 < ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ :=
+                norm_pos_iff.mpr (hμ_ne_zero 1)
+              exact div_pos hμ1 hμ0
+            have hρ_lt : ρ < 1 := by
+              have hμ0 : 0 < ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ :=
+                norm_pos_iff.mpr (hμ_ne_zero 0)
+              have h01 : (0 : Fin (Nat.succ (Nat.succ r))) < 1 :=
+                (Fin.zero_lt_one : (0 : Fin (Nat.succ (Nat.succ r))) < 1)
+              have hstrict : ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ < ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ :=
+                hμ_strict h01
+              exact (div_lt_one hμ0).2 hstrict
+            have hρ_bound :
+                ∀ k : Fin (Nat.succ (Nat.succ r)),
+                  k ≠ (0 : Fin (Nat.succ (Nat.succ r))) →
+                    ‖star (μ k)‖ ≤ ‖star (μ (0 : Fin (Nat.succ (Nat.succ r))))‖ * ρ := by
+              intro k hk
+              have hanti : Antitone (fun j : Fin (Nat.succ (Nat.succ r)) => ‖μ j‖) :=
+                (hμ_strict).antitone
+              have hkval : (k : ℕ) ≠ 0 := by
+                simpa using (Fin.val_ne_of_ne hk)
+              have hk1 : (1 : Fin (Nat.succ (Nat.succ r))) ≤ k := by
+                apply (Fin.le_iff_val_le_val).2
+                have : (1 : ℕ) ≤ (k : ℕ) :=
+                  (Nat.one_le_iff_ne_zero).2 hkval
+                simpa using this
+              have hk_le : ‖μ k‖ ≤ ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ := hanti hk1
+              have hμ0ne : ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ ≠ 0 := by
+                exact ne_of_gt (norm_pos_iff.mpr (hμ_ne_zero 0))
+              have hmul : ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ * ρ =
+                  ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ := by
+                dsimp [ρ]
+                calc
+                  ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ *
+                      (‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ /
+                        ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖)
+                      = (‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ *
+                          ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖) /
+                          ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ := by
+                            simpa [mul_assoc] using
+                              (mul_div_assoc
+                                ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖
+                                ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖
+                                ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖).symm
+                  _ = ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ := by
+                            simpa [mul_assoc] using
+                              (mul_div_cancel_left₀
+                                (M₀ := ℝ)
+                                (b := ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖)
+                                (a := ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖)
+                                hμ0ne)
+              have : ‖μ k‖ ≤ ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ * ρ := by
+                simpa [hmul] using hk_le
+              simpa [norm_star] using this
+            have hpeel :
+                ∃ C : ℝ, 0 ≤ C ∧ ∀ N : ℕ, ‖δ (0 : Fin (Nat.succ (Nat.succ r))) N‖ ≤ C * ρ ^ N :=
+              peeling_exponential_bound (r := Nat.succ (Nat.succ r))
+                (hr := Nat.succ_pos _)
+                (α := fun k : Fin (Nat.succ (Nat.succ r)) => star (μ k))
+                (hα₀ := (star_ne_zero).2 (hμ_ne_zero 0))
+                (δ := δ)
+                (B := Bbound) (hB_nn := hBbound_nn)
+                (hδ_bound := hδ_bound)
+                (h_sum := fun N => by simpa [δ] using h_sum_overlap N)
+                (ρ := ρ) (hρ_pos := hρ_pos) (hρ_lt := hρ_lt)
+                (hρ_bound := by
+                  intro k hk
+                  simpa using (hρ_bound k hk))
+            rcases hpeel with ⟨C, hC_nn, hδ0_le⟩
+            -- Step 3: the leading overlap difference tends to `0`, hence the cross-overlap tends to `1`.
+            have hδ0_tendsto :
+                Filter.Tendsto (fun N => δ (0 : Fin (Nat.succ (Nat.succ r))) N)
+                  Filter.atTop (nhds 0) := by
+              -- First show the norms tend to `0` by squeezing with `C * ρ^N`.
+              have habs : |ρ| < 1 := by
+                have hpos : 0 < ρ := hρ_pos
+                have hlt : ρ < 1 := hρ_lt
+                simpa [abs_of_pos hpos] using hlt
+              have hpow :
+                  Filter.Tendsto (fun N => ρ ^ N) Filter.atTop (nhds (0 : ℝ)) := by
+                simpa using (tendsto_pow_atTop_nhds_zero_of_abs_lt_one habs)
+              have hmul :
+                  Filter.Tendsto (fun N => C * ρ ^ N) Filter.atTop (nhds (0 : ℝ)) := by
+                simpa using (Filter.Tendsto.const_mul C hpow)
+              have hnorm :
+                  Filter.Tendsto (fun N => ‖δ (0 : Fin (Nat.succ (Nat.succ r))) N‖)
+                    Filter.atTop (nhds (0 : ℝ)) := by
+                refine tendsto_of_tendsto_of_tendsto_of_le_of_le
+                  (f := fun N => ‖δ (0 : Fin (Nat.succ (Nat.succ r))) N‖)
+                  (g := fun _ => (0 : ℝ)) (h := fun N => C * ρ ^ N)
+                  (hg := tendsto_const_nhds)
+                  (hh := hmul)
+                  (hgf := fun N => norm_nonneg (δ (0 : Fin (Nat.succ (Nat.succ r))) N))
+                  (hfh := fun N => hδ0_le N)
+              exact (tendsto_zero_iff_norm_tendsto_zero).2 hnorm
+            have hCross_tendsto :
+                Filter.Tendsto (fun N => mpvOverlap (d := d) (A 0) (B 0) N)
+                  Filter.atTop (nhds (1 : ℂ)) := by
+              have hSelf := hA_overlap (0 : Fin (Nat.succ (Nat.succ r)))
+              have h :
+                  Filter.Tendsto
+                    (fun N =>
+                      mpvOverlap (d := d) (A 0) (A 0) N -
+                        δ (0 : Fin (Nat.succ (Nat.succ r))) N)
+                    Filter.atTop (nhds (1 : ℂ)) := by
+                simpa using (hSelf.sub hδ0_tendsto)
+              refine Filter.Tendsto.congr (fun N => ?_) h
+              simp [δ, sub_sub]
+            -- Step 4: overlap limit forces gauge equivalence, hence `SameMPV`.
+            have hGaugePhase : GaugePhaseEquiv (A 0) (B 0) :=
+              gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP (A := A 0) (B := B 0)
+                (hA_irr 0) (hB_irr 0) (hA_lc 0) (hB_lc 0) hCross_tendsto
+            exact
+              sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one (A := A 0) (B := B 0)
+                (hSelf := hA_overlap 0) (hCross := hCross_tendsto) hGaugePhase
+          -- Derive the summed identity for the tail blocks and apply the induction hypothesis.
+          have h_summed_tail :
+              ∀ (N : ℕ) (σ : Fin N → Fin d),
+                ∑ k : Fin (Nat.succ r),
+                  (μ k.succ) ^ N * (mpv (A k.succ) σ - mpv (B k.succ) σ) = 0 := by
+            intro N σ
+            have hsum :
+                (μ 0) ^ N * (mpv (A 0) σ - mpv (B 0) σ) +
+                  ∑ k : Fin (Nat.succ r),
+                    (μ k.succ) ^ N * (mpv (A k.succ) σ - mpv (B k.succ) σ) = 0 := by
+              simpa [Fin.sum_univ_succ] using h_summed N σ
+            have hhead : (μ 0) ^ N * (mpv (A 0) σ - mpv (B 0) σ) = 0 := by
+              simp [hHead N σ]
+            simpa [hhead] using hsum
+          have hTail :
+              ∀ k : Fin (Nat.succ r), SameMPV (A k.succ) (B k.succ) := by
+            -- apply IH to the shifted data
+            have hμ_strict_tail :
+                StrictAnti (fun k : Fin (Nat.succ r) => ‖μ k.succ‖) := by
+              intro a b hab
+              have hab' : a.succ < b.succ := (Fin.succ_lt_succ_iff).2 hab
+              exact hμ_strict hab'
+            exact ih
+              (dim := fun k : Fin (Nat.succ r) => dim k.succ)
+              (μ := fun k : Fin (Nat.succ r) => μ k.succ)
+              (A := fun k : Fin (Nat.succ r) => A k.succ)
+              (B := fun k : Fin (Nat.succ r) => B k.succ)
+              (hμ_strict := hμ_strict_tail)
+              (hμ_ne_zero := fun k => hμ_ne_zero k.succ)
+              (hA_irr := fun k => hA_irr k.succ)
+              (hB_irr := fun k => hB_irr k.succ)
+              (hA_lc := fun k => hA_lc k.succ)
+              (hB_lc := fun k => hB_lc k.succ)
+              (hA_overlap := fun k => hA_overlap k.succ)
+              (h_summed := h_summed_tail)
+          -- Assemble head + tail.
+          intro k
+          refine Fin.cases
+            (motive := fun k : Fin (Nat.succ (Nat.succ r)) => SameMPV (A k) (B k))
+            hHead (fun k => hTail k) k
 
 end BlockSeparation
 
