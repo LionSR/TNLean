@@ -8,6 +8,12 @@ The results follow
 
 \section{Positive definiteness}
 
+\begin{remark}\leanok
+	We begin with the injective-tensor proof because it is the shorter,
+	more MPS-specific argument. The irreducible CP-map version follows
+	immediately afterwards.
+\end{remark}
+
 \begin{theorem}[PSD fixed point is positive definite]\label{thm:psd_fp_pd}
 	\lean{MPSTensor.posSemidef_fixedPoint_isPosDef}
 	\leanok
@@ -28,9 +34,10 @@ The results follow
 	Each term is nonneg; if the sum is zero, then
 	$\rho (A^i)^\dagger v = 0$ for all~$i$:
 	the kernel of $\rho$ is invariant under all $(A^i)^\dagger$.
-	Since the $\{A^i\}$ span $\MN{D}$,
-	$\rho M v = 0$ for all $M$,
-	which forces $\rho = 0$, contradicting $\rho \neq 0$.
+	Since the $\{A^i\}$ span $\MN{D}$, we have $\rho M v = 0$
+	for every matrix $M$. Given any vector $w$, choose $M$ with
+	$M v = w$. Then $\rho w = 0$ for every $w$, so $\rho = 0$,
+	contradicting $\rho \neq 0$.
 	In~\cite[Thm.~6.2]{Wolf2012Quantum}, positive definiteness
 	is proved using the growth condition
 	$(\Id + \E)^{D-1}(X) > 0$ for irreducible maps
@@ -99,13 +106,20 @@ The results follow
 	Theorem~\ref{thm:psd_fp_pd}.
 \end{proof}
 
+\begin{remark}\leanok
+	The proof actually produces a positive real scalar $c_0 > 0$:
+	it is the minimal eigenvalue of the positive definite Hermitian
+	matrix $H = (S^\dagger)^{-1} \sigma S^{-1}$. The Lean theorem
+	records the resulting proportionality in the ambient scalar field $\C$.
+\end{remark}
+
 \section{Existence and assembly}
 
 \begin{theorem}[Existence of PSD fixed point]\label{thm:psd_fp_exists}
 	\lean{MPSTensor.exists_posSemidef_fixedPoint}
 	\leanok
-	\uses{def:injective, def:transfer_map}
-	Let $A$ be an injective MPS tensor with
+	\uses{def:transfer_map}
+	Assume $D \ge 1$. Let $A$ be an MPS tensor with
 	$\sum_i (A^i)^\dagger A^i = \Id$ (so that $\E_A$ is
 	trace-preserving).
 	Then there exists $\rho \ge 0$, $\rho \neq 0$,
@@ -119,16 +133,16 @@ The results follow
 	the transfer map is a quantum channel
 	(Theorem~\ref{thm:transfer_channel}).
 	The Ces\`aro fixed-point theorem
-	(Theorem~\ref{thm:cesaro_fixedpoint}) provides the
-	fixed point.
+	(Theorem~\ref{thm:cesaro_fixedpoint}) then provides the
+	fixed point; injectivity is not needed for this step.
 \end{proof}
 
 \begin{theorem}[Quantum Perron--Frobenius]\label{thm:qpf}
 	\lean{MPSTensor.quantum_perron_frobenius}
 	\leanok
 	\uses{def:injective, def:transfer_map}
-	Let $A$ be an injective MPS tensor (with
-	$\sum_i (A^i)^\dagger A^i = \Id$).
+	Assume $D \ge 1$. Let $A$ be an injective MPS tensor with
+	$\sum_i (A^i)^\dagger A^i = \Id$.
 	Then the transfer map $\E_A$ has a unique PSD fixed point
 	$\rho$ (up to scaling), and $\rho$ is positive definite.
 \end{theorem}
@@ -140,23 +154,17 @@ The results follow
 	\ref{thm:psd_fp_pd}, and~\ref{thm:psd_fp_unique}.
 \end{proof}
 
-\begin{theorem}[QPF without dimension hypothesis]\label{thm:qpf_full}
+\begin{remark}[Dimension-zero edge case]\label{rem:qpf_dim_zero}\leanok
+	Lean also packages a wrapper theorem
 	\lean{MPSTensor.injective_transfer_unique_fixed_point'}
-	\leanok
-	\uses{thm:qpf}
-	The conclusion of Theorem~\ref{thm:qpf} holds without the
-	hypothesis $D \ge 1$: when $D = 0$, the zero matrix is
-	vacuously the unique positive definite fixed point.
-\end{theorem}
+	removing the explicit hypothesis $D \ge 1$ by adding the
+	formal edge case $D = 0$. We treat this as an implementation
+	detail rather than part of the mathematical narrative: the
+	tensor-network results of interest all concern positive bond
+	dimension.
+\end{remark}
 
-\begin{proof}
-	\leanok
-	\uses{thm:qpf}
-	For $D \ge 1$, apply Theorem~\ref{thm:qpf}.
-	For $D = 0$, all $0 \times 0$ matrices are equal.
-\end{proof}
-
-\section{Doubly stochastic gauge}
+\section{Unital and trace-preserving gauges}
 
 \begin{theorem}[Unital gauge]\label{thm:ds_gauge_unital}
 	\lean{gauged_unital}
@@ -198,6 +206,15 @@ The results follow
 	gives $(S^\dagger)^{-1} \sigma S^{-1}
 		= (S^\dagger)^{-1} S^\dagger S S^{-1} = \Id$.
 \end{proof}
+
+\begin{remark}\leanok
+	The gauges of Theorems~\ref{thm:ds_gauge_unital}
+	and~\ref{thm:ds_gauge_tp} are generally different similarity
+	transforms: one is built from a fixed point of $\E_A$, the other
+	from a fixed point of the adjoint transfer map. This section does
+	not claim that a single gauge makes the transfer map simultaneously
+	unital and trace-preserving.
+\end{remark}
 
 \begin{remark}[Eigenvector existence for general positive maps]%
 	\label{rem:pf_eigenvector_pointer}

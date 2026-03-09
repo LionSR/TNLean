@@ -3,6 +3,10 @@
 This chapter proves that if an injective MPS tensor~$A$ generates
 the same MPV family as another tensor~$B$ (of the same bond dimension),
 then $A$ and $B$ are gauge equivalent.
+The proof here is purely algebraic. The trace-pairing maps introduced
+below are auxiliary devices attached to the chosen generating families
+$\{A^i\}$ and $\{B^i\}$; they are used only to construct the linear
+map that is later shown to be a gauge transform.
 
 \section{Trace pairing}
 
@@ -36,34 +40,18 @@ then $A$ and $B$ are gauge equivalent.
     \leanok
     \uses{def:mpv}
     Viewing the word $w$ as a configuration of length~$|w|$,
-    the MPV coefficient at this configuration is exactly
-    $\tr(A^w)$.
+    Definition~\ref{def:mpv} gives the corresponding MPV coefficient as
+    the trace coefficient $c_w(A)=\tr(A^w)$.
     The same-MPV hypothesis gives equality at every
     system size.
-\end{proof}
-
-\begin{lemma}[Length-2 trace identity]\label{lem:trace_word2}
-    \lean{MPSTensor.sameMPV_trace_word2}
-    \leanok
-    \uses{def:same_mpv}
-    If $A$ and $B$ generate the same MPV family, then
-    $\tr(A^i A^j) = \tr(B^i B^j)$
-    for all $i, j \in \{0,\ldots,d{-}1\}$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:same_mpv_trace}
-    Apply Lemma~\ref{lem:same_mpv_trace} to the word
-    $w = (i, j)$.
 \end{proof}
 
 \begin{definition}[Trace pairing map]\label{def:trace_pairing_map}
     \lean{MPSTensor.traceMulRightPi}
     \leanok
     \uses{def:mps_tensor}
-    For an MPS tensor~$A$, define the linear map
-    $\Phi_A : \MN{D} \to \C^d$ by
+    For an MPS tensor~$A$, attach to the chosen family $\{A^i\}$ the
+    auxiliary linear map $\Phi_A : \MN{D} \to \C^d$ defined by
     \[
         \Phi_A(M)_i =   \tr(M \cdot A^i).
     \]
@@ -84,31 +72,14 @@ then $A$ and $B$ are gauge equivalent.
     for all~$N$, so $M = 0$ by Theorem~\ref{thm:trace_nondeg}.
 \end{proof}
 
-\begin{lemma}[Injectivity transfer via range inclusion]\label{lem:ker_bot_range}
-    \lean{MPSTensor.ker_bot_of_range_le}
-    \leanok
-    If $\Phi_A, \Phi_B : V \to W$ are linear maps with
-    $\ker \Phi_A = \{0\}$ and $\mathrm{range}(\Phi_A) \subseteq \mathrm{range}(\Phi_B)$,
-    then $\ker \Phi_B = \{0\}$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    By rank--nullity, $\ker \Phi_A = \{0\}$ gives
-    $\dim(\mathrm{range}(\Phi_A)) = \dim V$.
-    The range inclusion forces
-    $\dim(\mathrm{range}(\Phi_B)) \ge \dim V$,
-    so $\dim(\ker \Phi_B) = 0$ by rank--nullity again.
-\end{proof}
-
-\begin{theorem}[Nonvanishing trace on injective tensors]\label{thm:trace_ne_zero}
+\begin{lemma}[Nonvanishing trace on injective tensors]\label{lem:trace_ne_zero}
     \lean{MPSTensor.trace_ne_zero_of_injective}
     \leanok
     \uses{def:injective, def:same_mpv}
     If $D \ge 1$, $A$ is injective, $A$ and $B$ generate the same
     MPV family, and $B^i = 0$ for all~$i$, then we have a
     contradiction.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -133,18 +104,19 @@ then $A$ and $B$ are gauge equivalent.
 
 \begin{proof}
     \leanok
-    \uses{thm:trace_pairing_injective, lem:trace_word2, lem:ker_bot_range}
+    \uses{thm:trace_pairing_injective, lem:same_mpv_trace}
     Write $\ell_A : \C^d \to \MN{D}$ for the map that sends
     a coefficient vector $c$ to $\sum_i c_i A^i$
     (linear combination with the $A^i$).
-    By the length-2 trace identity (Lemma~\ref{lem:trace_word2}),
-    $\Phi_A \circ \ell_A = \Phi_B \circ \ell_B$.
+    Applying Lemma~\ref{lem:same_mpv_trace} to all words of length~$2$
+    shows $\Phi_A \circ \ell_A = \Phi_B \circ \ell_B$.
     Since $A$ is injective, $\ell_A$ is surjective, giving
     $\mathrm{range}(\Phi_A) \subseteq \mathrm{range}(\Phi_B)$.
     By Theorem~\ref{thm:trace_pairing_injective},
-    $\ker \Phi_A = \{0\}$;
-    Lemma~\ref{lem:ker_bot_range} then forces
-    $\ker \Phi_B = \{0\}$.
+    $\ker \Phi_A = \{0\}$, so rank--nullity gives
+    $\dim(\mathrm{range}(\Phi_A)) = \dim(\MN{D})$.
+    Hence $\dim(\mathrm{range}(\Phi_B)) \ge \dim(\MN{D})$,
+    and rank--nullity again gives $\ker \Phi_B = \{0\}$.
     A left inverse $g$ of $\Phi_B$ gives $T := g \circ \Phi_A$,
     and uniqueness follows because the $\{A^i\}$ span $\MN{D}$.
 \end{proof}
@@ -152,25 +124,26 @@ then $A$ and $B$ are gauge equivalent.
 \begin{theorem}[Multiplicativity of the linear extension]\label{thm:linear_ext_mul}
     \lean{MPSTensor.linearExtension_mul}
     \leanok
+    \uses{thm:linear_ext}
     The linear extension $T$ from Theorem~\ref{thm:linear_ext}
     is multiplicative: $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:linear_ext, lem:trace_word2, lem:same_mpv_trace,
-          thm:trace_pairing_injective, lem:ker_bot_range}
+    \uses{thm:linear_ext, lem:same_mpv_trace}
     \textbf{Step 1} ($\Phi_B \circ T = \Phi_A$).
-    By the length-2 trace identity (Lemma~\ref{lem:trace_word2}),
-    $\Phi_B(T(A^i)) = \Phi_B(B^i) = \Phi_A(A^i)$ for all~$i$.
+    Applying Lemma~\ref{lem:same_mpv_trace} to words of length~$2$
+    gives $\Phi_B(T(A^i)) = \Phi_B(B^i) = \Phi_A(A^i)$ for all~$i$.
     Since the $\{A^i\}$ span $\MN{D}$, $\Phi_B \circ T = \Phi_A$.
 
     \textbf{Step 2} ($T(A^i A^j) = B^i B^j$).
     Lemma~\ref{lem:same_mpv_trace} applied to the word $(i,j,k)$ gives
     $\tr(A^i A^j A^k) = \tr(B^i B^j B^k)$ for all $i,j,k$.
     So $\Phi_B(T(A^i A^j))_k = \Phi_A(A^i A^j)_k = \tr(A^i A^j A^k) = \tr(B^i B^j B^k) = \Phi_B(B^i B^j)_k$.
-    Injectivity of $\Phi_B$ (from Lemma~\ref{lem:ker_bot_range})
-    gives $T(A^i A^j) = B^i B^j$.
+    The same rank--nullity argument used in the proof of
+    Theorem~\ref{thm:linear_ext} gives $\ker \Phi_B = \{0\}$.
+    Hence $T(A^i A^j) = B^i B^j$.
 
     \textbf{Step 3} (bilinear extension).
     For fixed~$j$, the maps $M \mapsto T(M \cdot A^j)$ and
@@ -256,12 +229,12 @@ then $A$ and $B$ are gauge equivalent.
 \begin{proof}
     \leanok
     \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity,
-          thm:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
+          lem:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
     By Theorem~\ref{thm:linear_ext}, there is a unique linear
     $T$ with $T(A^i) = B^i$.
     By Theorem~\ref{thm:linear_ext_mul}, $T$ is multiplicative.
     $T$ is nonzero: if $T = 0$ then $B^i = 0$ for all~$i$,
-    contradicting Theorem~\ref{thm:trace_ne_zero}.
+    contradicting Lemma~\ref{lem:trace_ne_zero}.
     By Theorem~\ref{thm:simplicity}, $T$ is bijective.
     By Lemma~\ref{lem:linear_map_to_alg}, $T$ is a
     $\C$-algebra automorphism.

@@ -8,20 +8,20 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-/-- A canonical form for an MPS tensor: block diagonal with normal blocks.
+/-- A block-injective canonical form for an MPS tensor: block diagonal with injective blocks.
 
-This is a lightweight data structure which will be used later to state and prove the multi-block
-version of the Fundamental Theorem. -/
+This is the lightweight data structure used later to state and prove the multi-block version of
+the Fundamental Theorem. -/
 structure CanonicalForm (d : ℕ) where
   /-- Number of blocks -/
   numBlocks : ℕ
   /-- Bond dimension of each block -/
   blockDim : Fin numBlocks → ℕ
-  /-- The normal tensor for each block -/
+  /-- The tensor for each block -/
   blockTensor : (k : Fin numBlocks) → MPSTensor d (blockDim k)
   /-- Scaling factor for each block -/
   μ : Fin numBlocks → ℂ
-  /-- Each block tensor is injective (the algebraic normality condition) -/
+  /-- Each block tensor is injective. -/
   block_injective : ∀ k, MPSTensor.IsInjective (blockTensor k)
 
 namespace CanonicalForm

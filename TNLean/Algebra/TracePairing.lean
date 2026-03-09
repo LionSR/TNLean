@@ -20,9 +20,12 @@ on square matrices that are used throughout the proof of the Fundamental Theorem
 * `Matrix.trace_mul_right_eq_zero_iff` — nondegeneracy of the trace pairing over `ℂ`
 * `MPSTensor.traceMulRightPi` — the linear map `M ↦ (i ↦ trace (M * A i))`
 * `MPSTensor.SameMPV.trace_evalWord` — `SameMPV` implies trace agreement on all words
-* `MPSTensor.sameMPV_trace_word2` — specialisation to length-2 words
-* `MPSTensor.traceMulRightPi_ker_eq_bot` — injectivity of `traceMulRightPi` when `A` is injective
-* `MPSTensor.ker_bot_of_range_le` — finrank transfer: range inclusion + injectivity ⟹ injectivity
+* `MPSTensor.sameMPV_trace_word2` — auxiliary length-2 specialisation
+  used in linear-extension proofs
+* `MPSTensor.traceMulRightPi_ker_eq_bot` — injectivity of `traceMulRightPi`
+  when `A` is injective
+* `MPSTensor.ker_bot_of_range_le` — auxiliary finrank transfer:
+  range inclusion + injectivity ⟹ injectivity
 -/
 
 open scoped Matrix BigOperators
@@ -73,7 +76,9 @@ lemma traceMulRightPi_apply (A : MPSTensor d D)
     traceMulRightPi A M i = Matrix.trace (M * A i) := by
   simp [traceMulRightPi, Matrix.traceLinearMap_apply]
 
-/-- `SameMPV` implies agreement of traces for all length-2 words. -/
+/-- Auxiliary length-2 specialisation of `SameMPV.trace_evalWord`.
+
+This is kept as a small helper for the linear-extension proofs. -/
 lemma sameMPV_trace_word2 {A B : MPSTensor d D} (hAB : SameMPV A B) (i j : Fin d) :
     Matrix.trace (A i * A j) = Matrix.trace (B i * B j) := by
   have h := hAB.trace_evalWord [i, j]
@@ -113,7 +118,8 @@ theorem trace_ne_zero_of_injective [NeZero D] {A : MPSTensor d D}
     simpa [Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
   simp [Matrix.trace_one, Fintype.card_fin, (Nat.cast_ne_zero (R := ℂ)).2 (NeZero.ne D)] at this
 
-/-- If `ΦA` is injective and `range ΦA ≤ range ΦB`, then `ΦB` has trivial kernel.
+/-- Auxiliary finrank-transfer lemma: if `ΦA` is injective and `range ΦA ≤ range ΦB`,
+then `ΦB` has trivial kernel.
 
 This is the "finrank dance": `ker ΦA = ⊥` implies `finrank (range ΦA) = finrank V`,
 and the range inclusion forces `finrank (range ΦB) ≥ finrank V`, so by rank-nullity `ker ΦB = ⊥`. -/
