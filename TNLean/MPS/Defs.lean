@@ -5,8 +5,11 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 
 open scoped Matrix
 
-/-- A (periodic, translation-invariant) MPS tensor: a family of `D×D` matrices indexed by a
-physical index in `Fin d`. -/
+/-- A (periodic, translation-invariant) tensor generating an MPV family:
+a family of `D×D` matrices indexed by a physical index in `Fin d`.
+
+The name `MPSTensor` is kept for compatibility with the literature and the
+existing Lean development. -/
 abbrev MPSTensor (d D : ℕ) := Fin d → Matrix (Fin D) (Fin D) ℂ
 
 namespace MPSTensor
@@ -57,7 +60,10 @@ system size `N` and every basis configuration `σ : Fin N → Fin d`. -/
 def SameMPV (A B : MPSTensor d D) : Prop :=
   ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ
 
-/-- MPV equality for possibly different bond dimensions. -/
+/-- MPV equality for possibly different bond dimensions.
+
+This is the heterogeneous version of `SameMPV`, used later when comparing
+block decompositions whose summands need not live in the same matrix algebra. -/
 def SameMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ
 
@@ -65,7 +71,7 @@ def SameMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
 def ProportionalMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ N : ℕ, ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
 
-/-- Gauge equivalence up to a global phase. -/
+/-- Gauge equivalence up to a nonzero global scalar (a phase after normalization). -/
 def GaugePhaseEquiv {d D : ℕ} (A B : MPSTensor d D) : Prop :=
   ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ζ ≠ 0 ∧ ∀ i : Fin d,
     B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
@@ -90,7 +96,7 @@ def IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop :=
   Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))
     = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
 
-/-- Normality (a.k.a. quantum Wielandt property, in this algebraic formulation):
+/-- Normality in this project means eventual block injectivity:
 there exists some blocking length `N` such that the tensor is `N`-block-injective. -/
 def IsNormal (A : MPSTensor d D) : Prop :=
   ∃ N : ℕ, IsNBlkInjective (d := d) (D := D) A N

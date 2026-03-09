@@ -62,7 +62,7 @@ lemma mixedTransferMap_apply (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) â
   classical
   simp [mixedTransferMap, Matrix.mul_assoc]
 
-/-- The mixed transfer operator with `A = B` is the standard transfer map. -/
+/-- Definitional helper: the mixed transfer operator with `A = B` is the standard transfer map. -/
 theorem mixedTransferMap_self (A : MPSTensor d D) :
     mixedTransferMap A A = transferMap (d := d) (D := D) A := by
   ext X

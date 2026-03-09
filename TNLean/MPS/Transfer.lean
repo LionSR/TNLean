@@ -34,7 +34,10 @@ lemma transferMap_gauge_conj (A : MPSTensor d D) (X : GL (Fin D) ℂ)
   classical
   simp [transferMap_apply, Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
 
-/-- Positivity of the transfer map: it maps PSD matrices to PSD matrices. -/
+/-- Positivity of the transfer map: it maps PSD matrices to PSD matrices.
+
+This is a local tensor-specific helper; later chapters subsume it under the
+abstract completely-positive / positive-map framework. -/
 lemma transferMap_pos (A : MPSTensor d D) {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X.PosSemidef) : (transferMap (d := d) (D := D) A X).PosSemidef := by
   classical

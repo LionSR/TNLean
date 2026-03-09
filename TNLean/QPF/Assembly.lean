@@ -42,23 +42,24 @@ variable {d D : ℕ}
 
 section Existence
 
-/-- Existence of a PSD fixed point for the transfer map of an injective
+/-- Existence of a PSD fixed point for the transfer map of a normalized
 MPS tensor.
 
-**Mathematical content**: By the Krein-Rutman theorem (finite-dimensional version),
-the transfer map `E_A`, which preserves the PSD cone, has a PSD eigenvector for its
-spectral radius `r`. After rescaling `A ↦ A/√r`, this eigenvector becomes a fixed
-point of the rescaled transfer map.
+**Mathematical content**: If `∑ Aᵢ† Aᵢ = 1`, then `transferMap A` is a
+trace-preserving channel. Applying `IsChannel.exists_posSemidef_fixedPoint`
+produces a nonzero PSD matrix `ρ` with `transferMap A ρ = ρ`.
 
-**Status**: This requires either Brouwer's fixed point theorem or the
-finite-dimensional Krein-Rutman theorem, neither of which is currently in Mathlib.
+**Proof method**: The channel fixed-point theorem used here is proved via the
+Cesàro averages of iterates of a density matrix, so in the normalized case this
+existence statement does not rely on Brouwer or Krein-Rutman.
 
-**Note**: Requires normalization `∑ Aᵢ† Aᵢ = 1`, which ensures the transfer map
-is trace-preserving. For a general injective tensor, the conclusion should be
-`∃ ρ c, ρ.PosSemidef ∧ ρ ≠ 0 ∧ 0 < c ∧ E(ρ) = c • ρ`. The fixed-point version
-follows after rescaling so that the spectral radius equals 1. -/
+**Note**: Injectivity is not used in this existence step; it enters later in
+the positive-definiteness and uniqueness statements. For a general non-normalized
+injective tensor, one instead expects the eigenvector statement
+`∃ ρ c, ρ.PosSemidef ∧ ρ ≠ 0 ∧ 0 < c ∧ E(ρ) = c • ρ`, and then rescales to the
+fixed-point setting. -/
 theorem exists_posSemidef_fixedPoint
-    (A : MPSTensor d D) (_hA : IsInjective A)
+    (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hD : 0 < D) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef ∧ ρ ≠ 0 ∧
@@ -82,7 +83,7 @@ theorem quantum_perron_frobenius [DecidableEq (Fin D)]
     (hD : 0 < D) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       HasUniqueFixedPoint (transferMap (d := d) (D := D) A) ρ := by
-  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := exists_posSemidef_fixedPoint A hA (by convert hNorm) hD
+  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := exists_posSemidef_fixedPoint A (by convert hNorm) hD
   have hρ_pd := posSemidef_fixedPoint_isPosDef A hA ρ hρ_psd hρ_ne hρ_fix
   exact ⟨ρ, {
     fixed := hρ_fix

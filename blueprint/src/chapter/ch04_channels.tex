@@ -9,8 +9,14 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
     \lean{IsPositiveMap}
     \leanok
     A linear map $E : \MN{D} \to \MN{D}$ is \emph{positive}
-    if $E(X) \ge 0$ whenever $X \ge 0$.
+    if $E(X) \ge 0$ whenever $X \ge 0$, where $X \ge 0$
+    means that $X$ is positive semidefinite.
 \end{definition}
+
+\begin{remark}\leanok
+    We use the Loewner order on matrices: $X \le Y$ means
+    $Y - X \ge 0$.
+\end{remark}
 
 \begin{definition}[Trace-preserving map]\label{def:trace_preserving}
     \lean{IsTracePreservingMap}
@@ -29,8 +35,9 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
         E(X) = \sum_{i=0}^{r-1} K_i X K_i^\dagger
         \quad \text{for all } X \in \MN{D}.
     \]
-    By Choi's theorem, this is equivalent to $E \otimes \id_n$ being
-    positive for all~$n$.
+    We use the Kraus characterisation because it matches the later
+    Kadison--Schwarz arguments. By Choi's theorem, this is equivalent
+    to $E \otimes \id_n$ being positive for all~$n$.
 \end{definition}
 
 \begin{theorem}[CP maps are positive]\label{thm:cp_is_positive}
@@ -74,11 +81,13 @@ on matrix algebras, following~\cite{Wolf2012Quantum}.
 \begin{proof}
     \leanok
     The PSD cone is closed
-    (preimage of the closed nonneg cone under continuous
-    quadratic forms), and PSD matrices with $\tr(\rho) = 1$
-    have entry norms bounded by~$1$
-    (diagonal entries by trace; off-diagonal by Cauchy--Schwarz).
-    Heine--Borel gives compactness.
+    (preimage of the closed nonnegative cone under continuous
+    quadratic forms), and if $\rho \ge 0$ with $\tr(\rho) = 1$
+    then each entry satisfies $|\rho_{ij}|^2 \le \rho_{ii}\rho_{jj} \le 1$:
+    the diagonal entries are nonnegative and sum to~$1$, and the
+    off-diagonal bound is the PSD Cauchy--Schwarz inequality.
+    Hence the matrix entries are uniformly bounded, and Heine--Borel
+    gives compactness.
 \end{proof}
 
 \begin{theorem}[Density matrices are convex]\label{thm:density_convex}
@@ -123,7 +132,7 @@ A Kraus map is the concrete realisation of a completely positive map
 (Definition~\ref{def:cp_map}).  The Kadison--Schwarz inequality and the
 multiplicative domain characterisation are proved for Kraus maps,
 then applied to transfer maps, which are Kraus maps by construction
-(Theorem~\ref{thm:transfer_cp}).
+(Remark~\ref{thm:transfer_cp}).
 
 \begin{definition}[Kraus map]\label{def:kraus_map}
     \lean{KadisonSchwarz.krausMap}
@@ -155,6 +164,7 @@ then applied to transfer maps, which are Kraus maps by construction
     \uses{def:kraus_map}
     A Kraus map is \emph{unital} if
     $\sum_{i=0}^{d-1} K_i K_i^\dagger = \Id$.
+    Equivalently, $E(\Id) = \Id$.
 \end{definition}
 
 \begin{definition}[Trace-preserving Kraus map]\label{def:tp_kraus}
@@ -163,7 +173,9 @@ then applied to transfer maps, which are Kraus maps by construction
     \uses{def:kraus_map}
     A Kraus map is \emph{trace-preserving} if
     $\sum_{i=0}^{d-1} K_i^\dagger K_i = \Id$.
-    This is the standard MPS normalization condition.
+    Equivalently, the adjoint Kraus map is unital.
+    This is the standard MPS normalization condition, so later
+    Kadison--Schwarz arguments are often applied to the adjoint map.
 \end{definition}
 
 \begin{theorem}[Kadison--Schwarz inequality]\label{thm:kadison_schwarz}
@@ -184,7 +196,7 @@ then applied to transfer maps, which are Kraus maps by construction
     The $2 \times 2$ block matrix
     $[\begin{smallmatrix} X^\dagger X & X^\dagger \\ X & \Id \end{smallmatrix}]$
     is PSD ($= v v^\dagger$ with $v = [X^\dagger,\, \Id]^T$).
-    Applying the unital CP map blockwise preserves PSD-ness
+    Applying the unital CP map blockwise preserves positive semidefiniteness
     (each block $K_i (\cdot) K_i^\dagger$ preserves PSD, and unitality
     ensures the $(2,2)$-block maps to~$\Id$).
     The Schur complement of the $(2,2)$-block $\Id$ gives the result.
@@ -290,7 +302,7 @@ then applied to transfer maps, which are Kraus maps by construction
     So $\tr(G) = 0$, and a PSD matrix with zero trace must be zero.
 \end{proof}
 
-\begin{theorem}[Multiplicative domain]\label{thm:multiplicative_domain}
+\begin{theorem}[One-sided multiplicative-domain identity]\label{thm:multiplicative_domain}
     \lean{KadisonSchwarz.multiplicative_domain_left}
     \leanok
     \uses{def:unital_kraus}
@@ -347,19 +359,14 @@ then applied to transfer maps, which are Kraus maps by construction
     so $P = 0$ or $P = \Id$.
 \end{proof}
 
-\begin{theorem}[Transfer map is CP]\label{thm:transfer_cp}
+\begin{remark}[Transfer map is CP]\label{thm:transfer_cp}
     \lean{MPSTensor.transferMap_isCPMap}
     \leanok
     \uses{def:transfer_map, def:cp_map}
     The transfer map $\E_A(X) = \sum_i A^i X (A^i)^\dagger$
-    is completely positive (its Kraus operators are the matrices
-    $\{A^i\}$).
-\end{theorem}
-
-\begin{proof}\leanok
-    Immediate from the definition: the transfer map is defined
-    as a Kraus map with operators $K_i = A^i$.
-\end{proof}
+    is completely positive: it is already written in Kraus form,
+    with Kraus operators $\{A^i\}$.
+\end{remark}
 
 \begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
     \lean{MPSTensor.transferMap_isChannel}
@@ -371,7 +378,7 @@ then applied to transfer maps, which are Kraus maps by construction
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:transfer_cp}
-    Complete positivity is Theorem~\ref{thm:transfer_cp}.
+    Complete positivity is the observation of Remark~\ref{thm:transfer_cp}.
     Trace preservation:
     $\tr(\E_A(X)) = \sum_i \tr(A^i X (A^i)^\dagger)
     = \tr((\sum_i (A^i)^\dagger A^i) X) = \tr(X)$
@@ -466,7 +473,9 @@ then applied to transfer maps, which are Kraus maps by construction
         P(X) =  \frac{\tr(X)}{\tr(\rho)} \rho.
     \]
     This projects onto the span of $\rho$ along the kernel of the
-    trace functional.
+    trace functional. At this stage it is a projection onto the
+    chosen fixed point, not yet onto the full fixed-point space;
+    the uniqueness statement is proved later.
 \end{definition}
 
 \begin{theorem}[Power decomposition]\label{thm:pow_decomp}
@@ -484,9 +493,9 @@ then applied to transfer maps, which are Kraus maps by construction
 \begin{proof}
     \leanok
     \uses{def:fixed_point_proj}
-    $P$ is idempotent ($P^2 = P$), and
-    trace preservation gives $E \circ P = P$ and
-    $P \circ E = P$.
+    $P$ is idempotent ($P^2 = P$), the fixed-point relation
+    $E(\rho) = \rho$ gives $E \circ P = P$, and
+    trace preservation gives $P \circ E = P$.
     These imply $(E-P) \circ P = 0$ and $P \circ (E-P) = 0$,
     so in the binomial expansion of $(P + (E-P))^n$
     all cross terms vanish, leaving $E^n = P^n + (E-P)^n = P + (E-P)^n$.
@@ -499,7 +508,7 @@ then applied to transfer maps, which are Kraus maps by construction
     \leanok
     The \emph{peripheral spectrum} of a bounded linear operator $T$
     is the set of spectral values $\mu$ with
-    $\|\mu\|$ equal to the spectral radius of $T$.
+    $|\mu|$ equal to the spectral radius of $T$.
 \end{definition}
 
 \begin{definition}[Peripheral eigenvalues]\label{def:peripheral_eigenvalues}
@@ -524,24 +533,21 @@ then applied to transfer maps, which are Kraus maps by construction
     \leanok
     \uses{def:peripheral_eigenvalues}
     If $E$ has a nonzero fixed point $\rho \neq 0$ with $E(\rho) = \rho$,
-    then $1 \in \mathrm{peripheral}(E)$.
+    then $1$ is a peripheral eigenvalue of $E$.
 \end{theorem}
 
 \begin{proof}\leanok
-    $\rho$ is an eigenvector with eigenvalue~$1$,
-    and $|1| = 1$ equals the spectral radius.
+    $\rho$ is an eigenvector with eigenvalue~$1$, and $|1| = 1$.
 \end{proof}
 
-\begin{theorem}[Peripheral eigenvalues lie on the unit circle]\label{thm:peripheral_unit_circle}
+\begin{remark}[Peripheral eigenvalues lie on the unit circle]\label{thm:peripheral_unit_circle}
     \lean{peripheralEigenvalues_subset_unit_circle}
     \leanok
     \uses{def:peripheral_eigenvalues}
     Every peripheral eigenvalue $\lambda$ satisfies $|\lambda| = 1$.
-\end{theorem}
-
-\begin{proof}\leanok
-    By definition of peripheral eigenvalues (spectral radius = 1 for channels).
-\end{proof}
+    This is simply the defining condition in
+    Definition~\ref{def:peripheral_eigenvalues}.
+\end{remark}
 
 \begin{theorem}[Finiteness of peripheral eigenvalues]\label{thm:peripheral_finite}
     \lean{peripheralEigenvalues_finite}
@@ -556,7 +562,7 @@ then applied to transfer maps, which are Kraus maps by construction
     which is a finite set in finite dimensions.
 \end{proof}
 
-\begin{theorem}[Peripheral eigenvalues are roots of unity]\label{thm:peripheral_roots_of_unity}
+\begin{theorem}[Power-stable peripheral eigenvalues are roots of unity]\label{thm:peripheral_roots_of_unity}
     \lean{peripheral_isRootOfUnity_of_pow_eigenvalue}
     \leanok
     \uses{def:peripheral_eigenvalues}
@@ -603,6 +609,9 @@ then applied to transfer maps, which are Kraus maps by construction
     The results in this subsection are purely spectral: they use only
     finiteness of a set of complex numbers and the spectral mapping theorem
     for powers. In particular, they do not rely on complete positivity.
+    For transfer maps, replacing a tensor by its $p$-blocked tensor replaces
+    $\E_A$ by $\E_A^p$, so this powering step is the operator-theoretic
+    form of blocking.
 \end{remark}
 
 \begin{lemma}[Common exponent for a finite set of roots of unity]\label{lem:common_power_eq_one}
@@ -638,6 +647,12 @@ then applied to transfer maps, which are Kraus maps by construction
     $\mu \in \mathrm{peripheral}(E)$.
     The hypothesis $\mu^p = 1$ then forces $\nu = 1$.
 \end{proof}
+
+For a normalized MPS tensor, the transfer map is naturally trace-preserving but need
+not be unital. In general one should not expect a single gauge choice to make it
+both unital and trace-preserving. The next result therefore treats a special
+doubly-stochastic case; the general MPS situation is handled in
+Subsection~\ref{subsec:peripheral_closure_fixedpoint}.
 
 \begin{lemma}[Peripheral eigenvalues closed under powers]\label{lem:peripheral_closed_powers_irred_ds}
     \lean{peripheralEigenvalues_pow_mem_of_irreducible_doubly_stochastic}

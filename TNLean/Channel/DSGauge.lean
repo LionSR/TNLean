@@ -1,8 +1,12 @@
 /-
-# Doubly-Stochastic Gauge Construction
+# Gauge normalizations from fixed points
 
-The gauged operators A'_i = S⁻¹ A_i S satisfy ∑ A'_i A'_i† = I
-whenever S * S† = ρ and E_A(ρ) = ρ.
+This file records two separate similarity-gauge constructions.
+A fixed point `ρ` of `E_A` yields a gauge `A'_i = S⁻¹ A_i S` for which
+`∑ A'_i A'_i† = I`, so the transfer map becomes unital.
+A fixed point `σ` of the adjoint yields a gauge `A'_i = S A_i S⁻¹` for which
+`∑ A'_iᴴ * A'_i = I`, so the transfer map becomes trace-preserving.
+In general these gauges need not coincide.
 -/
 import TNLean.QPF.Assembly
 import TNLean.Spectral.MixedTransfer

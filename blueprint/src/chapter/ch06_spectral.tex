@@ -41,16 +41,12 @@ $\sum_i (A^i)^\dagger A^i = \Id$.
     \]
 \end{definition}
 
-\begin{theorem}[Self-transfer]\label{thm:mixed_self}
+\begin{remark}[Self-transfer]\label{thm:mixed_self}
     \lean{MPSTensor.mixedTransferMap_self}
     \leanok
     \uses{def:mixed_transfer, def:transfer_map}
-    $F_{AA} = \E_A$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Immediate from the definitions.
-\end{proof}
+    Setting $B=A$ recovers the ordinary transfer map: $F_{AA} = \E_A$.
+\end{remark}
 
 \begin{theorem}[Iterated mixed transfer]\label{thm:mixed_pow}
     \lean{MPSTensor.mixedTransferMap_pow_apply}
@@ -103,14 +99,24 @@ $\sum_i (A^i)^\dagger A^i = \Id$.
 
 \section{MPV overlap as transfer trace}
 
+Recall from Definition~\ref{def:mpv_overlap} that
+\[
+    O_{AB}(N)
+    =
+    \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
+    V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma}.
+\]
+This section rewrites that scalar as the operator trace of the
+mixed transfer power.
+
 \begin{lemma}[Trace expansion over matrix units]\label{lem:trace_expansion}
     \lean{MPSTensor.linearMap_trace_eq_sum_apply_single}
     \leanok
     For any linear endomorphism $T$ on $\MN{D}$,
     the operator trace can be expanded as
     \[
-        (\tr \circ T)
-        = 
+        \Tr(T)
+        =
         \sum_{p,q = 0}^{D-1}
         (T(E_{pq}))_{pq},
     \]
@@ -119,7 +125,7 @@ $\sum_i (A^i)^\dagger A^i = \Id$.
 \end{lemma}
 
 \begin{proof}\leanok
-    The operator trace of $T$ equals the sum of
+    The operator trace $\Tr(T)$ equals the sum of
     $\tr(T(E_{pq}) \cdot E_{qp})$ over all $(p,q)$,
     and $\tr(M \cdot E_{qp}) = M_{pq}$.
 \end{proof}
@@ -131,11 +137,9 @@ $\sum_i (A^i)^\dagger A^i = \Id$.
     For normalized tensors $A, B$ of bond dimension~$D \ge 1$,
     \[
         O_{AB}(N)
-        = 
-        \tr(F_{AB}^N),
+        =
+        \Tr(F_{AB}^N).
     \]
-    where the right-hand side is the operator trace
-    (trace of $F_{AB}^N$ as a linear map on $\MN{D}$).
 \end{theorem}
 
 \begin{proof}
@@ -147,7 +151,7 @@ $\sum_i (A^i)^\dagger A^i = \Id$.
     Apply Theorem~\ref{thm:mixed_pow} to evaluate
     $F_{AB}^N(E_{pq})$, extract the $(p,q)$-entry, and
     reassemble. The resulting double sum over $(p,q)$ and $\sigma$
-    equals $\sum_\sigma V^{(N)}(A)_\sigma 
+    equals $\sum_\sigma V^{(N)}(A)_\sigma
     \overline{V^{(N)}(B)_\sigma} = O_{AB}(N)$.
 \end{proof}
 
@@ -157,34 +161,44 @@ $\sum_i (A^i)^\dagger A^i = \Id$.
     \uses{def:mixed_transfer_rect, def:mpv_overlap}
     For tensors $A$ of bond dimension $D_1 \ge 1$ and $B$ of bond
     dimension $D_2 \ge 1$,
-    $O_{AB}(N) = \tr((F_{AB}^{\mathrm{rect}})^N)$.
+    \[
+        O_{AB}(N) = \Tr((F_{AB}^{\mathrm{rect}})^N).
+    \]
 \end{theorem}
 
 \begin{proof}\leanok
-    Same argument as Theorem~\ref{thm:overlap_trace},
-    using rectangular matrix units.
+    Expand the operator trace over the rectangular matrix-unit basis.
+    Then apply the rectangular iterated-transfer formula and sum over
+    the matrix-unit indices exactly as in
+    Theorem~\ref{thm:overlap_trace}.
 \end{proof}
 
-\begin{theorem}[Inner product via transfer trace]\label{thm:inner_via_trace}
+\begin{lemma}[Word trace as entrywise inner product]\label{lem:word_trace_entrywise}
     \lean{MPSTensor.mpv_inner_product_via_trace}
     \leanok
-    \uses{def:mixed_transfer, def:mpv_inner}
-    $\braket{V^{(N)}(A)}{V^{(N)}(B)}
-    = \tr(F_{AB}^N(\Id))$.
-\end{theorem}
+    \uses{def:eval_word}
+    For a word $\sigma \in \{0,\ldots,d{-}1\}^N$,
+    \[
+        \tr\bigl(A^\sigma (B^\sigma)^\dagger\bigr)
+        =
+        \sum_{j,k = 0}^{D-1}
+        (A^\sigma)_{jk}\,\overline{(B^\sigma)_{jk}}.
+    \]
+\end{lemma}
 
-\begin{proof}\leanok\uses{thm:mixed_pow}
-    Apply Theorem~\ref{thm:mixed_pow} with $X = \Id$
-    and take the trace.
+\begin{proof}\leanok
+    Expand the matrix trace and the $(j,j)$-entry of
+    $A^\sigma (B^\sigma)^\dagger$.
 \end{proof}
 
 \section{Eigenvalue bound and spectral gap}
 
-The proofs in this section use the Hilbert--Schmidt (Frobenius) norm
-contraction from the Kadison--Schwarz inequality
-(Theorem~\ref{thm:hs_contraction})
-and the doubly stochastic gauge
-(Theorem~\ref{thm:ds_gauge_unital}).
+The eigenvalue bound comes from a uniform Frobenius-norm estimate
+obtained directly from the trace-preserving normalization.
+For the rigidity theorem, one gauges $A$ and $B$ separately using
+positive fixed points of their transfer maps to obtain unital Kraus
+families, and then applies the Kadison--Schwarz equality argument to
+a block embedding of a mixed-transfer eigenvector.
 
 \begin{theorem}[Eigenvalue bound]\label{thm:eigenvalue_bound}
     \lean{MPSTensor.eigenvalue_norm_le_one}
@@ -196,21 +210,21 @@ and the doubly stochastic gauge
 
 \begin{proof}
     \leanok
-    \uses{thm:hs_contraction, thm:ds_gauge_unital}
-    Let $F_{AB}(X) = \mu X$ with $X \neq 0$.
-    After passing to the doubly stochastic gauge
-    (Theorem~\ref{thm:ds_gauge_unital}),
-    the Hilbert--Schmidt contraction
-    (Theorem~\ref{thm:hs_contraction}) gives
-    $\|F_{AB}^n(X)\|_{\mathrm{HS}}^2 \le \|X\|_{\mathrm{HS}}^2$
-    for all~$n$.
-    Since $F_{AB}^n(X) = \mu^n X$, the left-hand side equals
-    $|\mu|^{2n}\|X\|_{\mathrm{HS}}^2$.
-    Dividing by $\|X\|_{\mathrm{HS}}^2 > 0$ gives
-    $|\mu|^{2n} \le 1$ for all $n \ge 0$,
-    hence $|\mu| \le 1$.
+    \uses{thm:mixed_pow}
+    Expand $F_{AB}^n(X)$ as a sum over words and use Cauchy--Schwarz,
+    together with
+    $\sum_i (A^i)^\dagger A^i = \sum_i (B^i)^\dagger B^i = \Id$,
+    to obtain a uniform Frobenius-norm bound
+    $\|F_{AB}^n(X)\|_{\mathrm{HS}} \le C_D \|X\|_{\mathrm{HS}}$
+    for all $n$, where $C_D$ depends only on $D$.
+    If $F_{AB}(X) = \mu X$ and $X \neq 0$, then
+    $|\mu|^n \|X\|_{\mathrm{HS}}
+    = \|F_{AB}^n(X)\|_{\mathrm{HS}}
+    \le C_D \|X\|_{\mathrm{HS}}$
+    for every $n$.
+    Hence $|\mu| \le 1$.
 
-    The argument uses only the Kadison--Schwarz inequality
+    The argument uses only the trace-preserving normalization
     and does not appeal to Perron--Frobenius theory.
 \end{proof}
 
@@ -240,6 +254,7 @@ and the doubly stochastic gauge
 \begin{proof}
     \leanok
     \uses{thm:spectral_radius_le_one, def:gauge_phase_equiv,
+          thm:qpf, thm:ds_gauge_unital,
           thm:ks_peripheral, thm:kraus_commute,
           thm:multiplicative_domain, thm:simplicity, thm:skolem_noether}
     Since $\rho(F_{AB}) \le 1$ (Theorem~\ref{thm:spectral_radius_le_one})
@@ -247,28 +262,25 @@ and the doubly stochastic gauge
     eigenvalue~$\mu$ with $|\mu| = 1$ and eigenvector $X \neq 0$:
     $F_{AB}(X) = \mu X$.
 
-    After passing to the doubly stochastic gauge, $F_{AB}$
-    becomes both unital and trace-preserving.
-    By the KS equality for peripheral eigenvectors
-    (Theorem~\ref{thm:ks_peripheral}),
-    the Kadison--Schwarz gap vanishes.
-    The Kraus commutation identity
-    (Theorem~\ref{thm:kraus_commute}) then gives
-    $X (B^i)^\dagger = (B^i)^\dagger \mu X$ for all~$i$.
-    Using the multiplicative domain
-    (Theorem~\ref{thm:multiplicative_domain}), one shows
-    that $X$ is invertible (using injectivity of $B$ and
-    simplicity of $\MN{D}$, Theorem~\ref{thm:simplicity}).
-    Skolem--Noether
+    Choose positive fixed points of the transfer maps of $A$ and $B$
+    (Theorem~\ref{thm:qpf}) and gauge the two tensors separately to
+    unital Kraus families (Theorem~\ref{thm:ds_gauge_unital}).
+    Gauge $X$ accordingly and embed it as an off-diagonal block matrix
+    for the block Kraus family with diagonal blocks $A'^i$ and $B'^i$.
+    The KS equality for peripheral eigenvectors
+    (Theorem~\ref{thm:ks_peripheral}) and the resulting Kraus
+    commutation relation (Theorem~\ref{thm:kraus_commute}) yield
+    intertwining identities between $A'^i$, $B'^i$, and the gauged
+    eigenvector. Injectivity and the multiplicative-domain argument
+    force this intertwiner to be invertible; Skolem--Noether
     (Theorem~\ref{thm:skolem_noether}) then yields
     $B^i = \bar{\mu} \, X \, A^i \, X^{-1}$ for all~$i$,
     establishing gauge-phase equivalence
     (Definition~\ref{def:gauge_phase_equiv}).
 
-    The same
-    Kadison--Schwarz $\to$ multiplicative domain $\to$
-    Skolem--Noether argument appears in the
-    single-block case in~\cite{PerezGarcia2007Matrix}.
+    The crucial point is that one gauges the individual transfer maps
+    to unital form; one does not require the mixed transfer map itself
+    to be simultaneously unital and trace-preserving.
 \end{proof}
 
 \begin{theorem}[Strict spectral gap]\label{thm:spectral_gap}
@@ -302,18 +314,18 @@ and the doubly stochastic gauge
 
 \begin{proof}
     \leanok
-    The eigenvalue bound $|\mu| \le 1$ holds by the same
-    Frobenius-norm contraction argument as
-    Theorem~\ref{thm:eigenvalue_bound}, adapted to rectangular
-    matrices.
-    If $\rho = 1$, the modulus-one eigenvector argument
-    yields an invertible intertwiner
-    $X : \C^{D_2} \to \C^{D_1}$, which is impossible when
-    $D_1 \neq D_2$.
+    The same word-expansion argument as in
+    Theorem~\ref{thm:eigenvalue_bound} gives $|\mu| \le 1$
+    for every eigenvalue of $F_{AB}^{\mathrm{rect}}$.
+    If $\rho(F_{AB}^{\mathrm{rect}}) = 1$, choose a
+    modulus-one eigenvector $X$.
 
-    The square-case spectral-gap argument applies,
-    with the last step replaced by the observation that
-    no invertible intertwiner exists when $D_1 \neq D_2$.
+    Gauge $A$ and $B$ separately to unital Kraus families and apply the
+    same block-embedding Kadison--Schwarz argument as in the square case.
+    It shows that $\ker(X)$ is invariant under all matrices on
+    $\C^{D_2}$, so $X$ is injective and therefore $D_2 \le D_1$.
+    Applying the same argument to $X^\dagger$ gives $D_1 \le D_2$.
+    Hence $D_1 = D_2$, contradicting the hypothesis.
 \end{proof}
 
 \begin{theorem}[Rectangular overlap decay]\label{thm:overlap_decay_rect}
@@ -330,7 +342,7 @@ and the doubly stochastic gauge
     $(F_{AB}^{\mathrm{rect}})^N \to 0$, so the operator
     trace converges to~$0$.
     By Theorem~\ref{thm:overlap_trace_rect},
-    $O_{AB}(N) = \tr((F_{AB}^{\mathrm{rect}})^N) \to 0$.
+    $O_{AB}(N) = \Tr((F_{AB}^{\mathrm{rect}})^N) \to 0$.
 \end{proof}
 
 \section{MPV overlap decay}
@@ -367,10 +379,10 @@ and the doubly stochastic gauge
     \leanok
     \uses{thm:transfer_pow_zero, thm:overlap_trace, lem:trace_expansion}
     By Theorem~\ref{thm:overlap_trace},
-    $O_{AB}(N) = \tr(F_{AB}^N)$.
+    $O_{AB}(N) = \Tr(F_{AB}^N)$.
     Expand the operator trace over matrix units
     (Lemma~\ref{lem:trace_expansion}):
-    $\tr(F_{AB}^N) = \sum_{p,q} (F_{AB}^N(E_{pq}))_{pq}$.
+    $\Tr(F_{AB}^N) = \sum_{p,q} (F_{AB}^N(E_{pq}))_{pq}$.
     By Theorem~\ref{thm:transfer_pow_zero},
     each $F_{AB}^N(E_{pq}) \to 0$ entry-wise.
     Since the sum is finite, $O_{AB}(N) \to 0$.
@@ -378,53 +390,29 @@ and the doubly stochastic gauge
 
 \section{Block separation}
 
-\begin{theorem}[Cross-correlation decay]\label{thm:cross_decay}
+These asymptotic facts are the ingredients used later in the
+canonical-form separation arguments.
+
+\begin{remark}[Cross-correlation decay]\label{thm:cross_decay}
     \lean{MPSTensor.cross_correlation_tendsto_zero}
     \leanok
     \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
-    Let $A, B$ be injective normalized tensors that are not
-    gauge-phase equivalent.
-    For every $X \in \MN{D}$,
+    If $A$ and $B$ are injective normalized tensors that are not
+    gauge-phase equivalent, then for every $X \in \MN{D}$ one has
     $\tr(F_{AB}^N(X)) \to 0$ as $N \to \infty$.
-\end{theorem}
+    This is the scalar trace consequence of the operator convergence
+    $F_{AB}^N(X) \to 0$ from Theorem~\ref{thm:transfer_pow_zero}.
+\end{remark}
 
-\begin{proof}\leanok\uses{thm:transfer_pow_zero}
-    By Theorem~\ref{thm:transfer_pow_zero},
-    $F_{AB}^N(X) \to 0$; the trace is continuous in
-    finite dimensions.
-\end{proof}
-
-\begin{theorem}[Self-correlation persists]\label{thm:self_persist}
+\begin{remark}[Self-correlation persists]\label{thm:self_persist}
     \lean{MPSTensor.self_correlation_persists}
     \leanok
-    \uses{def:transfer_map}
-    Let $\rho$ be the unique PSD fixed point of $\E_A$
-    (Theorem~\ref{thm:qpf}).
-    Then $\tr(\E_A^N(\rho)) = \tr(\rho)$ for all $N \ge 0$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Since $\E_A(\rho) = \rho$, by induction $\E_A^N(\rho) = \rho$,
-    so $\tr(\E_A^N(\rho)) = \tr(\rho)$.
-\end{proof}
-
-\begin{theorem}[Block separation principle]\label{thm:block_separation}
-    \lean{MPSTensor.block_separation_principle}
-    \leanok
-    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
-    Let $A, B$ be injective tensors that are not gauge-phase
-    equivalent. If $\tr(F_{AB}^N(\Id)) = 0$ for all $N \ge 1$,
-    then $F_{AB}(\Id) = 0$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Taking $N = 1$ gives $\tr(F_{AB}(\Id)) = 0$.
-    The full sequence of vanishing trace conditions for all
-    $N \ge 1$, together with the cross-correlation decay
-    (Theorem~\ref{thm:cross_decay}), forces the spectral
-    components of $F_{AB}(\Id)$ to all vanish,
-    giving $F_{AB}(\Id) = 0$.
-\end{proof}
+    \uses{def:transfer_map, thm:qpf}
+    If $\rho$ is a fixed point of $\E_A$, then
+    $\tr(\E_A^N(\rho)) = \tr(\rho)$ for all $N \ge 0$.
+    In particular this applies to the distinguished QPF fixed point from
+    Theorem~\ref{thm:qpf}.
+\end{remark}
 
 \section{Primitive overlap convergence}
 
@@ -437,7 +425,7 @@ and the doubly stochastic gauge
     let $P$ be the fixed-point projection
     (Definition~\ref{def:fixed_point_proj}).
     If $\rho_{\mathrm{spec}}(E - P) < 1$, then
-    $\tr(E^n) \to 1$ as $n \to \infty$.
+    $\Tr(E^n) \to 1$ as $n \to \infty$.
 \end{theorem}
 
 \begin{proof}
@@ -447,10 +435,10 @@ and the doubly stochastic gauge
     (Theorem~\ref{thm:pow_decomp}),
     $E^n = P + (E - P)^n$ for $n \ge 1$.
     Since $\rho_{\mathrm{spec}}(E - P) < 1$, the Gelfand formula gives
-    $(E - P)^n \to 0$, so $\tr(E^n) \to \tr(P)$.
+    $(E - P)^n \to 0$, so $\Tr(E^n) \to \Tr(P)$.
     The operator trace of $P$ equals~$1$: since
     $P(X) = \frac{\tr(X)}{\tr(\rho)} \rho$,
-    we have $\tr(P) = \frac{\tr(\rho)}{\tr(\rho)} = 1$.
+    we have $\Tr(P) = \frac{\tr(\rho)}{\tr(\rho)} = 1$.
 \end{proof}
 
 \begin{theorem}[Primitive overlap convergence]\label{thm:primitive_overlap}
@@ -467,7 +455,7 @@ and the doubly stochastic gauge
     \leanok
     \uses{thm:trace_pow_one, thm:overlap_trace}
     By Theorem~\ref{thm:overlap_trace} (with $A = B$),
-    $O_{AA}(N) = \tr(\E_A^N)$.
+    $O_{AA}(N) = \Tr(\E_A^N)$.
     By Theorem~\ref{thm:trace_pow_one},
-    $\tr(\E_A^N) \to 1$.
+    $\Tr(\E_A^N) \to 1$.
 \end{proof}
