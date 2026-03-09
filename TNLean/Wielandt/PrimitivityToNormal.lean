@@ -32,8 +32,8 @@ projection definition from `TNLean.MPS.PrimitivityBridge`) and `IsNormal A`
 
 ### Part 2: Transfer map structure
 
-* `IsPrimitiveMPS.transferMap_isChannel`: the transfer map under DS normalization is
-  a quantum channel.
+* `IsPrimitiveMPS.transferMap_isChannel`: the transfer map under left-canonical /
+  trace-preserving normalization is a quantum channel.
 * `IsPrimitiveMPS.transferMap_trace_preserving`: trace-preservation.
 * `IsPrimitiveMPS.posDef_iff_isIrreducibleTensor`: relationship between ρ being
   positive definite and irreducibility of the tensor.
@@ -151,20 +151,43 @@ theorem IsPrimitiveMPS.complement_pow_tendsto_zero
 
 /-! ## Part 2: Transfer map structure -/
 
-/-- The transfer map under DS normalization is a quantum channel. -/
+/-- The transfer map under left-canonical / trace-preserving normalization is a quantum
+channel.
+
+The primed name is kept for compatibility; use `IsPrimitiveMPS.transferMap_isChannel`
+for a cleaner alias. -/
 theorem IsPrimitiveMPS.transferMap_isChannel'
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) :
     IsChannel (transferMap (d := d) (D := D) A) :=
   transferMap_isChannel A hP.norm
 
-/-- The transfer map under DS normalization is trace-preserving. -/
+/-- Preferred alias for `IsPrimitiveMPS.transferMap_isChannel'`. -/
+theorem IsPrimitiveMPS.transferMap_isChannel
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) :
+    IsChannel (transferMap (d := d) (D := D) A) :=
+  hP.transferMap_isChannel'
+
+/-- The transfer map under left-canonical / trace-preserving normalization is
+trace-preserving.
+
+The primed name is kept for compatibility; use
+`IsPrimitiveMPS.transferMap_trace_preserving` for a cleaner alias. -/
 theorem IsPrimitiveMPS.transferMap_trace_preserving'
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     trace (transferMap (d := d) (D := D) A X) = trace X :=
   hP.transferMap_isChannel'.tp X
+
+/-- Preferred alias for `IsPrimitiveMPS.transferMap_trace_preserving'`. -/
+theorem IsPrimitiveMPS.transferMap_trace_preserving
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    trace (transferMap (d := d) (D := D) A X) = trace X :=
+  hP.transferMap_trace_preserving' X
 
 /-- **PosDef fixed point ⟹ irreducible CP map** (via existing infrastructure).
 
@@ -241,8 +264,8 @@ matching the paper's "primitive" exactly. Or work with the stronger hypothesis.
 
 **Gap 2** (`PosDef ⟹ IsIrreducibleTensor`): Show that `IsPrimitiveMPS + PosDef ⟹
 IsIrreducibleTensor`. The proof requires formalizing the P-block restricted
-channel (DS-normalized on a subspace) having a Cesaro PSD fixed point, then
-applying `fixedPoint_unique` to derive `ρ = PρP`, contradicting PosDef.
+channel (left-canonical / trace-preserving on a subspace) having a Cesàro PSD fixed point,
+then applying `fixedPoint_unique` to derive `ρ = PρP`, contradicting PosDef.
 
 **Gap 3** (Burnside): Show that `IsIrreducibleTensor ⟹ IsNormal`. This is
 Burnside's theorem for matrix algebras: if a unital subalgebra of `M_D(ℂ)`
@@ -254,7 +277,7 @@ it equals `M_D(ℂ)`. Not yet in Mathlib.
 The paper arXiv:1606.00608 uses:
 1. `IsPrimitive ⟹ IsIrreducibleMap (transferMap A)` (uses P-block channel)
 2. `IsIrreducibleMap ⟹ ρ.PosDef` (from `QPF.PosDef`, **already formalized**)
-3. `ρ.PosDef ⟹` gauge transform to unital+TP channel
+3. `ρ.PosDef ⟹` gauge transform to a bi-canonical channel (right-canonical + left-canonical)
 4. Spectral gap + convergence ⟹ word products span `M_D(ℂ)` (uses Choi/tensor)
 
 The bottleneck in both routes is either Burnside's theorem or the

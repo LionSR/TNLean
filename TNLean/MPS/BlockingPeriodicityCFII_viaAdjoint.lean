@@ -265,11 +265,12 @@ end
 end TransferAdjoint
 
 /-!
-## Main theorem: periodicity removal by blocking (TP + irreducible)
+## Main theorem: periodicity removal by blocking (left-canonical + irreducible)
 
-We follow the Appendix-A argument: apply the root-of-unity lemma to the conjugate-transposed
-Kraus family (a unital, irreducible map with a positive definite adjoint fixed point), then take a
-common power and transport primitivity back across the adjoint.
+We follow the Appendix-A argument: start from a left-canonical / trace-preserving tensor,
+pass to the conjugate-transposed Kraus family (which is right-canonical / unital), apply the
+root-of-unity lemma there, then take a common power and transport primitivity back across the
+adjoint.
 -/
 
 theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
@@ -374,5 +375,20 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   -- `transferMap (blockTensor A p) = (transferMap A) ^ p`.
   -- Then use `hprim_pow`.
   simpa [MPSTensor.transferMap_blockTensor (A := A) (L := p)] using hprim_pow
+
+/-- Preferred alias for `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`
+using the project's left-canonical terminology. -/
+theorem exists_blockTensor_isPrimitive_of_leftCanonical_of_isIrreducibleTensor
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrrT : IsIrreducibleTensor (d := d) (D := D) A)
+    (hDpos : 0 < D) :
+    ∃ p : ℕ, 0 < p ∧
+      _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := D)
+          (blockTensor (d := d) (D := D) A p)) := by
+  simpa using exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
+    (A := A) hLeft hIrrT hDpos
 
 end MPSTensor

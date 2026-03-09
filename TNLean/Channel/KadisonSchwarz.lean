@@ -43,25 +43,52 @@ noncomputable def krausAdjointMap (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   ∑ i : Fin d, (K i)ᴴ * X * K i
 
-/-- The Kraus map is **unital** when `∑ᵢ Kᵢ Kᵢ† = I`. -/
+/-- The Kraus map is **unital** when `∑ᵢ Kᵢ Kᵢ† = I`.
+In the project's MPS terminology, this is the **right-canonical** condition. -/
 def IsUnitalKraus (K : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∑ i : Fin d, K i * (K i)ᴴ = 1
 
 /-- The Kraus map is **trace-preserving** (TP) when `∑ᵢ Kᵢ† Kᵢ = I`.
-This is the standard MPS normalization condition. -/
+In the project's MPS terminology, this is the **left-canonical** condition. -/
 def IsTPKraus (K : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∑ i : Fin d, (K i)ᴴ * K i = 1
+
+/-- Alias: unital Kraus families are right-canonical. -/
+abbrev IsRightCanonicalKraus (K : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
+  IsUnitalKraus K
+
+/-- Alias: trace-preserving Kraus families are left-canonical. -/
+abbrev IsLeftCanonicalKraus (K : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
+  IsTPKraus K
+
+@[simp] theorem isRightCanonicalKraus_iff (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
+    IsRightCanonicalKraus K ↔ IsUnitalKraus K :=
+  Iff.rfl
+
+@[simp] theorem isLeftCanonicalKraus_iff (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
+    IsLeftCanonicalKraus K ↔ IsTPKraus K :=
+  Iff.rfl
 
 /-- If the Kraus operators satisfy `∑ Kᵢ Kᵢ† = I`, then `krausMap K 1 = 1`. -/
 theorem krausMap_one_of_unital (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h : IsUnitalKraus K) : krausMap K 1 = 1 := by
   simp only [krausMap, mul_one]; exact h
 
+/-- Right-canonical alias of `krausMap_one_of_unital`. -/
+theorem krausMap_one_of_rightCanonical (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (h : IsRightCanonicalKraus K) : krausMap K 1 = 1 :=
+  krausMap_one_of_unital K h
+
 /-- If the Kraus operators satisfy `∑ Kᵢ† Kᵢ = I`, then the adjoint map is unital:
 `krausAdjointMap K 1 = 1`. -/
 theorem krausAdjointMap_one_of_TP (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h : IsTPKraus K) : krausAdjointMap K 1 = 1 := by
   simp only [krausAdjointMap, mul_one]; exact h
+
+/-- Left-canonical alias of `krausAdjointMap_one_of_TP`. -/
+theorem krausAdjointMap_one_of_leftCanonical (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (h : IsLeftCanonicalKraus K) : krausAdjointMap K 1 = 1 :=
+  krausAdjointMap_one_of_TP K h
 
 /-- The adjoint Kraus map equals the Kraus map with conjugate-transposed operators. -/
 private theorem krausAdjointMap_eq (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (Y) :
@@ -191,8 +218,9 @@ theorem hilbertSchmidt_contraction (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
 
 /-- **HS contraction for the adjoint channel** (MPS version).
 
-If `∑ Kᵢ† Kᵢ = I` (TP) AND `∑ Kᵢ Kᵢ† = I` (unital, doubly stochastic),
-then the adjoint map `E*(X) = ∑ Kᵢ† X Kᵢ` contracts the Hilbert-Schmidt norm:
+If `∑ Kᵢ† Kᵢ = I` (TP / left-canonical) AND `∑ Kᵢ Kᵢ† = I`
+(unital / right-canonical, hence bi-canonical), then the adjoint map
+`E*(X) = ∑ Kᵢ† X Kᵢ` contracts the Hilbert-Schmidt norm:
 `tr(E*(X)† E*(X)) ≤ tr(X† X)`.
 
 Note: both conditions are needed — Kadison-Schwarz uses unitality of E*

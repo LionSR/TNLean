@@ -3,8 +3,9 @@
 
 This file proves that scaling an MPS tensor by a scalar `c` scales the transfer map
 quadratically by `c * star c = ‖c‖²`, and that various structural properties
-(DS gauge, injectivity) are preserved or transform predictably under scaling.
-These are the key ingredients for the "μ-normalization" step in the canonical form.
+(left-canonical / trace-preserving normalization, injectivity) are preserved or transform
+predictably under scaling. These are the key ingredients for the "μ-normalization" step in the
+canonical form.
 -/
 import TNLean.MPS.Transfer
 import TNLean.MPS.FundamentalTheoremMulti
@@ -28,9 +29,12 @@ theorem transferMap_smul (c : ℂ) (A : MPSTensor d D) (X : Matrix (Fin D) (Fin 
   simp_rw [smul_mul_assoc, mul_smul_comm, smul_smul, ← Finset.smul_sum]
   rfl
 
-/-! ## Lemma 2: DS gauge preserved under unit-norm scaling -/
+/-! ## Lemma 2: left-canonical normalization preserved under unit-norm scaling -/
 
-/-- If `∑ i, (A i)ᴴ * (A i) = 1` and `‖c‖ = 1`, then `∑ i, (c • A i)ᴴ * (c • A i) = 1`. -/
+/-- If `∑ i, (A i)ᴴ * (A i) = 1` and `‖c‖ = 1`, then `∑ i, (c • A i)ᴴ * (c • A i) = 1`.
+
+This is the left-canonical / trace-preserving normalization condition.
+The legacy name `dsGauge_smul_of_norm_one` is kept for compatibility. -/
 theorem dsGauge_smul_of_norm_one (c : ℂ) (hc : ‖c‖ = 1)
     (A : MPSTensor d D) (hA : ∑ i : Fin d, (A i)ᴴ * (A i) = 1) :
     ∑ i : Fin d, (c • A i)ᴴ * (c • A i) = 1 := by
@@ -45,6 +49,12 @@ theorem dsGauge_smul_of_norm_one (c : ℂ) (hc : ‖c‖ = 1)
       rw [mul_comm, Complex.mul_conj]
     rw [h1, Complex.normSq_eq_norm_sq, hc, one_pow, Complex.ofReal_one]
   rw [hsc, one_smul]
+
+/-- Preferred alias for `dsGauge_smul_of_norm_one` in the project's left-canonical terminology. -/
+theorem leftCanonical_smul_of_norm_one (c : ℂ) (hc : ‖c‖ = 1)
+    (A : MPSTensor d D) (hA : ∑ i : Fin d, (A i)ᴴ * (A i) = 1) :
+    ∑ i : Fin d, (c • A i)ᴴ * (c • A i) = 1 :=
+  dsGauge_smul_of_norm_one c hc A hA
 
 /-! ## Lemma 3: MPV scales by c^N under tensor scaling -/
 
@@ -91,7 +101,7 @@ theorem transferMap_smul_block (μ : ℂ) {D' : ℕ} (A : MPSTensor d D')
   transferMap_smul μ A X
 
 /-- Rescaling a tensor by `μ / ‖μ‖` (the phase of `μ`) gives a unit-norm scalar
-that preserves the DS gauge condition. -/
+that preserves the left-canonical condition. -/
 theorem phase_norm_one {μ : ℂ} (hμ : μ ≠ 0) :
     ‖μ / ↑‖μ‖‖ = 1 := by
   rw [norm_div, Complex.norm_real, norm_norm]
@@ -157,13 +167,20 @@ theorem transferMap_norm_smul (μ : ℂ) {D' : ℕ} (A : MPSTensor d D')
   congr 1
   rw [Complex.conj_ofReal, ← Complex.ofReal_mul, sq]
 
-/-- The DS gauge condition for the normalized block:
+/-- The left-canonical condition for the normalized block:
 if `∑ (A i)ᴴ * (A i) = 1` and `μ ≠ 0`, then the phase-scaled tensor
-`(μ / ‖μ‖) • A` also satisfies `∑ ((μ/‖μ‖) • A i)ᴴ * ((μ/‖μ‖) • A i) = 1`. -/
+`(μ / ‖μ‖) • A` also satisfies `∑ ((μ/‖μ‖) • A i)ᴴ * ((μ/‖μ‖) • A i) = 1`.
+The legacy name `dsGauge_phase_smul` is kept for compatibility. -/
 theorem dsGauge_phase_smul {D' : ℕ} (μ : ℂ) (hμ : μ ≠ 0)
     (A : MPSTensor d D') (hA : ∑ i : Fin d, (A i)ᴴ * (A i) = 1) :
     ∑ i : Fin d, ((μ / ↑‖μ‖) • A i)ᴴ * ((μ / ↑‖μ‖) • A i) = 1 := by
   have hn := phase_norm_one (μ := μ) hμ
   exact dsGauge_smul_of_norm_one _ hn A hA
+
+/-- Preferred alias for `dsGauge_phase_smul` in the project's left-canonical terminology. -/
+theorem leftCanonical_phase_smul {D' : ℕ} (μ : ℂ) (hμ : μ ≠ 0)
+    (A : MPSTensor d D') (hA : ∑ i : Fin d, (A i)ᴴ * (A i) = 1) :
+    ∑ i : Fin d, ((μ / ↑‖μ‖) • A i)ᴴ * ((μ / ↑‖μ‖) • A i) = 1 :=
+  dsGauge_phase_smul μ hμ A hA
 
 end MPSTensor

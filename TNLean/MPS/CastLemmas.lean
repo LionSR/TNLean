@@ -9,8 +9,8 @@ import TNLean.MPS.MPVOverlap
 
 When two bond dimensions `D₁` and `D₂` are propositionally equal (`h : D₁ = D₂`),
 the cast `cast (congr_arg (MPSTensor d) h) A` preserves all relevant MPS quantities:
-matrix product vectors, overlaps, injectivity, the DS gauge condition, and
-gauge-phase equivalence.
+matrix product vectors, overlaps, injectivity, the left-canonical / trace-preserving
+condition `∑ Aᵢ† Aᵢ = I`, and gauge-phase equivalence.
 
 These lemmas were previously duplicated as private helpers in
 `BNTPermutationSimple`, `BNTPermutationThm44`, and `BNTConstruction`.
@@ -40,12 +40,22 @@ lemma isInjective_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor 
     IsInjective (cast (congr_arg (MPSTensor d) h) A) ↔ IsInjective A := by
   subst h; simp
 
-/-- Casting the bond dimension preserves the DS gauge condition `∑ Aᵢᴴ * Aᵢ = 1`. -/
+/-- Casting the bond dimension preserves the left-canonical / trace-preserving
+condition `∑ Aᵢᴴ * Aᵢ = 1`.
+
+The legacy name `dsGauge_cast_dim` is kept for compatibility. -/
 lemma dsGauge_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
     (∑ i : Fin d, (cast (congr_arg (MPSTensor d) h) A i)ᴴ *
       (cast (congr_arg (MPSTensor d) h) A i)) = 1 ↔
     (∑ i : Fin d, (A i)ᴴ * (A i)) = 1 := by
   subst h; simp
+
+/-- Preferred alias for `dsGauge_cast_dim` using the project's left-canonical terminology. -/
+lemma leftCanonical_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
+    (∑ i : Fin d, (cast (congr_arg (MPSTensor d) h) A i)ᴴ *
+      (cast (congr_arg (MPSTensor d) h) A i)) = 1 ↔
+    (∑ i : Fin d, (A i)ᴴ * (A i)) = 1 :=
+  dsGauge_cast_dim h A
 
 /-- Shift the tensor index in a gauge-phase equivalence along an index equality. -/
 lemma gaugePhaseEquiv_cast_idx {d g : ℕ} {dim₁ dim₂ : Fin g → ℕ}

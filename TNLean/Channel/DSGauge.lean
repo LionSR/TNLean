@@ -3,9 +3,11 @@
 
 This file records two separate similarity-gauge constructions.
 A fixed point `ρ` of `E_A` yields a gauge `A'_i = S⁻¹ A_i S` for which
-`∑ A'_i A'_i† = I`, so the transfer map becomes unital.
+`∑ A'_i A'_i† = I`, so the transfer map becomes unital; in the project's
+terminology, this is the **right-canonical** gauge.
 A fixed point `σ` of the adjoint yields a gauge `A'_i = S A_i S⁻¹` for which
-`∑ A'_iᴴ * A'_i = I`, so the transfer map becomes trace-preserving.
+`∑ A'_iᴴ * A'_i = I`, so the transfer map becomes trace-preserving; this is the
+**left-canonical** gauge.
 In general these gauges need not coincide.
 -/
 import TNLean.QPF.Assembly
@@ -22,7 +24,8 @@ variable [DecidableEq (Fin D)] [NeZero D]
 
 omit [NeZero D] in
 /-- If `S` is invertible and `S * S† = ρ`, then the gauged operators
-`A'_i = S⁻¹ A_i S` satisfy `∑ A'_i A'_i† = I` whenever `E_A(ρ) = ρ`. -/
+`A'_i = S⁻¹ A_i S` satisfy `∑ A'_i A'_i† = I` whenever `E_A(ρ) = ρ`.
+This is the standard **right-canonical** gauge construction. -/
 theorem gauged_unital
     (A : MPSTensor d D) (S : Matrix (Fin D) (Fin D) ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hS_inv : S.det ≠ 0)
@@ -57,6 +60,16 @@ theorem gauged_unital
       Matrix.mul_assoc, Matrix.mul_assoc, hStmul_inv, Matrix.mul_one, hSinv_mul]
 
 omit [NeZero D] in
+/-- Right-canonical alias of `gauged_unital`. -/
+theorem gauged_rightCanonical
+    (A : MPSTensor d D) (S : Matrix (Fin D) (Fin D) ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (hS_inv : S.det ≠ 0)
+    (hSS : S * Sᴴ = ρ)
+    (hfix : transferMap (d := d) (D := D) A ρ = ρ) :
+    ∑ i : Fin d, (S⁻¹ * A i * S) * (S⁻¹ * A i * S)ᴴ = 1 :=
+  gauged_unital A S ρ hS_inv hSS hfix
+
+omit [NeZero D] in
 /-- If `S` is invertible and `Sᴴ * S = σ`, then the gauged operators
 `A'_i = S * A_i * S⁻¹` satisfy `∑ A'_iᴴ * A'_i = I` whenever
 `E_A†(σ) = σ`.
@@ -87,5 +100,15 @@ theorem gauged_tracePreserving
     simpa [transferMap_apply] using hfix
   rw [← Finset.sum_mul, ← Finset.mul_sum, h_sum_eq, ← hStS,
     Matrix.mul_assoc, Matrix.mul_assoc, hSmul_inv, Matrix.mul_one, hStinv_mul]
+
+omit [NeZero D] in
+/-- Left-canonical alias of `gauged_tracePreserving`. -/
+theorem gauged_leftCanonical
+    (A : MPSTensor d D) (S : Matrix (Fin D) (Fin D) ℂ) (σ : Matrix (Fin D) (Fin D) ℂ)
+    (hS_inv : S.det ≠ 0)
+    (hStS : Sᴴ * S = σ)
+    (hfix : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ) :
+    ∑ i : Fin d, (S * A i * S⁻¹)ᴴ * (S * A i * S⁻¹) = 1 :=
+  gauged_tracePreserving A S σ hS_inv hStS hfix
 
 end DSGauge

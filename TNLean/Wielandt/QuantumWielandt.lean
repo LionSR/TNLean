@@ -31,8 +31,8 @@ from across the library:
 
 The assembly requires `1 ∈ wordSpan A 1`, i.e., the identity matrix lies in the
 linear span of the Kraus operators `{A 0, …, A (d-1)}`. This is **not** automatic
-from DS normalization (`∑ᵢ Aᵢᴴ Aᵢ = I`), which only gives `I ∈ wordSpan A 2`.
-
+from left-canonical / trace-preserving normalization (`∑ᵢ Aᵢᴴ Aᵢ = I`), which only gives
+a quadratic identity and at best places `I` in a length-2 span.
 Without aperiodicity, `IsNormal` can fail even when `algSpan = ⊤`. The standard
 counterexample is `A₁ = e₁₂, A₂ = e₂₁` in `M₂(ℂ)`: these generate the full matrix
 algebra but have period 2, so no single word-length spans `M₂(ℂ)`.
