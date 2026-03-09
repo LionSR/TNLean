@@ -156,14 +156,16 @@ and~\cite{Cirac2021Matrix}.
     \emph{canonical form predicate} if:
     \begin{enumerate}
         \item each $A_k$ is injective,
-        \item each $A_k$ is in DS gauge
-              ($\sum_i (A_k^i)^\dagger A_k^i = \Id$),
+        \item each $A_k$ satisfies the TP normalization
+              $\sum_i (A_k^i)^\dagger A_k^i = \Id$,
         \item the moduli are strictly decreasing:
               $|\mu_1| > |\mu_2| > \cdots > |\mu_r|$,
         \item all $\mu_k \neq 0$,
         \item the self-overlap converges: $O_{A_k A_k}(N) \to 1$
               for each~$k$.
     \end{enumerate}
+    Only this one-sided normalization is part of the predicate;
+    no unital condition is assumed here.
     Condition~(5) is a primitivity hypothesis:
     for a primitive channel
     (\cite[Thm.~6.7, item~3]{Wolf2012Quantum}),
@@ -207,7 +209,7 @@ and~\cite{Cirac2021Matrix}.
     \leanok
     \uses{def:is_canonical_form}
     Under the hypotheses of the canonical form predicate
-    (strict ordering, DS gauge, self-overlap convergence),
+    (strict ordering, TP normalization, self-overlap convergence),
     if $\sum_k \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
     for all $N,\sigma$,
     then $A_k$ and $B_k$ generate the same MPV for each~$k$.
@@ -233,7 +235,8 @@ and~\cite{Cirac2021Matrix}.
     \leanok
     \uses{def:is_canonical_form}
     Let $((\mu_k), (A_k))$ satisfy the canonical form predicate,
-    and let $(B_k)$ be injective tensors in DS gauge.
+    and let $(B_k)$ be injective tensors satisfying the same TP
+    normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$.
     If the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     generate the same MPV family, then each pair

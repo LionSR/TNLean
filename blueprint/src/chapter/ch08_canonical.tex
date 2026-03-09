@@ -282,25 +282,32 @@ and \cite[Ch.~6]{Wolf2012Quantum}.
 	induction on~$D$ to ensure termination.
 \end{proof}
 
-\begin{theorem}[Diagonal PD fixed point]\label{thm:form_II}
+\begin{theorem}[Unitary diagonal positive fixed point in TP gauge]\label{thm:form_II}
 	\lean{MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor}
 	\leanok
-	\uses{def:irreducible_tensor}
-	If $A$ is irreducible and trace-preserving, then the
-	(unique) PSD fixed point of $\E_A$ is positive definite.
-	After a unitary gauge transformation, the fixed point
-	becomes a positive diagonal matrix.
+	\uses{def:irreducible_tensor, def:tp_kraus}
+	Let $A$ be an irreducible MPS tensor satisfying
+	$\sum_i (A^i)^\dagger A^i = \Id$, and assume $D > 0$.
+	Then there exist a unitary $U$ and a diagonal positive
+	definite matrix $\Lambda$ such that, for $B^i := U^\dagger A^i U$,
+	\[
+		\sum_i (B^i)^\dagger B^i = \Id
+		\qquad\text{and}\qquad
+		\E_B(\Lambda) = \Lambda.
+	\]
 \end{theorem}
 
 \begin{proof}
 	\leanok
 	\uses{thm:psd_fp_pd_irred}
-	The irreducible tensor condition implies that
-	$\E_A$ is irreducible as a CP map.
-	By Theorem~\ref{thm:psd_fp_pd_irred},
-	the PSD fixed point is positive definite.
-	The spectral theorem diagonalizes the PD matrix
-	by a unitary conjugation.
+	The TP hypothesis makes $\E_A$ a channel, so it has a nonzero
+	PSD fixed point.
+	The irreducible tensor condition implies that $\E_A$ is
+	irreducible as a CP map, and Theorem~\ref{thm:psd_fp_pd_irred}
+	upgrades the fixed point to a positive definite one.
+	The spectral theorem diagonalizes this matrix by a unitary
+	conjugation, and unitary conjugation preserves the TP
+	normalization.
 \end{proof}
 
 \subsection{Burnside bridge: irreducibility and spanning}
@@ -400,8 +407,10 @@ For Burnside-style arguments it is more natural to work with invariant
 \begin{theorem}[Proportional MPV implies gauge-phase equivalence]\label{thm:proportional_ft}
 	\lean{MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one}
 	\leanok
-	\uses{def:gauge_phase_equiv, def:injective}
-	Let $A, B$ be injective normalized MPS tensors.
+	\uses{def:gauge_phase_equiv, def:injective, def:tp_kraus}
+	Let $A$ and $B$ be injective MPS tensors satisfying
+	$\sum_i (A^i)^\dagger A^i = \Id$ and
+	$\sum_i (B^i)^\dagger B^i = \Id$.
 	If $A$ and $B$ generate proportional MPV families
 	($V^{(N)}(A)_\sigma = c_N V^{(N)}(B)_\sigma$
 	for some $c_N \in \C$) and
@@ -447,7 +456,8 @@ removing it as an independent assumption.
 	tensors and scaling factors satisfying:
 	\begin{enumerate}
 		\item each $A_k$ is injective,
-		\item each $A_k$ is in DS gauge,
+		\item each $A_k$ satisfies the TP normalization
+		      $\sum_i (A_k^i)^\dagger A_k^i = \Id$,
 		\item $|\mu_1| > \cdots > |\mu_r|$ (strictly decreasing),
 		\item all $\mu_k \neq 0$,
 		\item each $A_k$ is primitive
@@ -480,41 +490,47 @@ removing it as an independent assumption.
 	periodicity removal (blocking to period one).
 	Theorem~\ref{thm:blocking_primitivity} establishes this
 	periodicity-removal step: under irreducibility and
-	doubly-stochastic normalization, one can block until the
-	transfer map becomes primitive.
+	TP normalization $\sum_i (A^i)^\dagger A^i = \Id$,
+	one can block until the transfer map becomes primitive.
 	This corresponds to \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 \end{remark}
 
 \begin{theorem}[Blocking yields a primitive transfer map]\label{thm:blocking_primitivity}
-	\lean{MPSTensor.exists_blockTensor_isPrimitive_of_irreducible_doubly_stochastic}
+	\lean{MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor}
 	\leanok
 	\uses{def:blocked_tensor, def:transfer_map, def:primitive_channel,
-		def:unital_kraus, def:tp_kraus, def:irreducible_cp}
-	Let $A$ be an MPS tensor whose transfer map $\E_A$ is irreducible.
-	Assume that $A$ is doubly stochastic:
-	$\sum_i A^i (A^i)^\dagger = \Id$ and $\sum_i (A^i)^\dagger A^i = \Id$.
+		def:tp_kraus, def:irreducible_tensor}
+	Let $A$ be an irreducible MPS tensor with $D > 0$.
+	Assume that $A$ satisfies the TP normalization
+	$\sum_i (A^i)^\dagger A^i = \Id$.
 	Then there exists a blocking length $p > 0$ such that the transfer map
 	$\E_{A^{[p]}}$ of the blocked tensor $A^{[p]}$ is primitive.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:peripheral_roots_of_unity_irred_ds, thm:peripheral_finite,
+	\uses{thm:peripheral_roots_irred_fp, thm:peripheral_finite,
 		lem:common_power_eq_one, lem:peripheral_pow_singleton}
-	By Theorem~\ref{thm:peripheral_roots_of_unity_irred_ds},
-	every peripheral eigenvalue of $\E_A$ is a root of unity.
+	Pass to the conjugate-transposed Kraus family $K_i := (A^i)^\dagger$.
+	The TP normalization of $A$ makes $K$ unital, and irreducibility of $A$
+	gives irreducibility of the associated Kraus map.
+	The TP fixed-point theorem for $\E_A$ provides a positive definite fixed
+	point for the adjoint map of $K$, so Theorem~\ref{thm:peripheral_roots_irred_fp}
+	shows that every peripheral eigenvalue is a root of unity.
 	Since $\mathrm{peripheral}(\E_A)$ is finite
 	(Theorem~\ref{thm:peripheral_finite}),
 	Lemma~\ref{lem:common_power_eq_one} gives a common exponent $p$
 	such that $\mu^p = 1$ for all $\mu \in \mathrm{peripheral}(\E_A)$.
 	Lemma~\ref{lem:peripheral_pow_singleton} then implies
 	$\mathrm{peripheral}(\E_A^p) = \{1\}$.
-	Finally, the transfer map of the blocked tensor is the $p$-th power
-	of the original transfer map, so $\E_{A^{[p]}}$ is primitive.
+	Finally, blocking corresponds to taking a power of the transfer map,
+	so $\E_{A^{[p]}}$ is primitive.
 \end{proof}
 
 \begin{remark}\label{rem:blocking_primitivity_appendixA}\leanok
 	Theorem~\ref{thm:blocking_primitivity} is the ``periodicity removal by blocking''
-	step in \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+	step in \cite[Appendix~A]{Cirac2017MPDO_AnnPhys} for an irreducible block
+	already placed in TP gauge. The later pipeline wrapper simply repackages
+	this step.
 \end{remark}
 
 \section{Canonical form existence pipeline}%
@@ -542,8 +558,8 @@ construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	\lean{MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleTensor}
 	\leanok
 	\uses{def:irreducible_tensor}
-	Let $A$ be an irreducible MPS tensor in the TP gauge
-	($\sum_i (A^i)^\dagger A^i = \Id$) with $D > 0$.
+	Let $A$ be an irreducible MPS tensor already in TP
+	gauge ($\sum_i (A^i)^\dagger A^i = \Id$) with $D > 0$.
 	Then there exist a unitary~$U$ and a diagonal positive
 	definite matrix~$\Lambda$ such that:
 	\begin{enumerate}
@@ -553,7 +569,10 @@ construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 		\item $A$ and $B$ generate the same MPV family.
 	\end{enumerate}
 	This is the ``Canonical Form~II'' (CFII) step
-	of \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+	of \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}. The unitary
+	conjugation occurs only after TP normalization has already been
+	achieved; it is a second step inside TP gauge, not a unitary
+	normalization of an arbitrary irreducible block.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -572,7 +591,7 @@ construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	For any MPS tensor~$A$, there exist irreducible blocks
 	$(A_k)_{k=1}^r$ that generate the same MPV family as~$A$.
 	Moreover, for each block~$k$,
-	\emph{assuming} TP gauge and $D_k > 0$,
+	if that block has already been placed in TP gauge and $D_k > 0$,
 	one obtains CFII data (unitary, diagonal PD fixed point,
 	MPV preservation).
 \end{theorem}
@@ -706,7 +725,9 @@ The results correspond to \cite{Evans1978Spectral},
 	This is the ``spectral rescaling $+$ TP gauge'' step of
 	\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}, now formalized using
 	Theorem~\ref{thm:posDef_adjoint_eigenvector} and the explicit TP
-	gauge construction.
+	gauge construction. This similarity is generally non-unitary.
+	The subsequent CFII step applies an additional unitary conjugation
+	to this already TP-normalized representative.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -747,20 +768,23 @@ The results correspond to \cite{Evans1978Spectral},
 		      the adjoint transfer map has a PSD eigenvector.
 		\item TP gauge
 		      (Theorem~\ref{thm:tp_data_irreducible}):
-		      rescale and gauge to TP normalization.
+		      rescale and apply a generally non-unitary similarity to
+		      reach TP normalization.
 		\item CFII data
 		      (Theorem~\ref{thm:CFII_data}):
-		      diagonal PD fixed point after unitary conjugation.
+		      inside this TP gauge, a further unitary conjugation
+		      diagonalizes the positive fixed point.
 		\item Periodicity removal
 		      (Theorem~\ref{thm:blocking_primitivity}):
-		      block until the transfer map is primitive.
+		      block the TP-normalized irreducible representative until
+		      the transfer map is primitive.
 	\end{enumerate}
 
 	What is still not assembled automatically is the passage from this
 	primitive blocked TP/CFII output to the stronger hypotheses used by
 	the repository's canonical-form and FT theorems.
 	In particular, Theorem~\ref{thm:canonical_from_primitive} requires
-	injective DS blocks, while the current pipeline does not yet supply
+	injective TP-normalized blocks, while the current pipeline does not yet supply
 	the full primitive $\Rightarrow$ block-injective / normality bridge
 	from Chapter~\ref{ch:wielandt}.
 	The relevant ingredients there
