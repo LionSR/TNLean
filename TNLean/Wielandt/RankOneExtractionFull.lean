@@ -121,6 +121,58 @@ private lemma ofFn_reverse {n : ℕ} {α : Type*} (σ : Fin n → α) :
     _ = List.ofFn (σ ∘ Fin.rev) := by
       simp [List.ofFn_eq_map]
 
+private structure BlockedTensorRangeData
+    (A : MPSTensor d D) (L : ℕ) (σ₀ τ₀ : Fin L → Fin d)
+    (φ ψ : Fin D → ℂ) where
+  B : MPSTensor (blockPhysDim d L) D
+  P : Matrix (Fin D) (Fin D) ℂ
+  Q : Matrix (Fin D) (Fin D) ℂ
+  hB : B = blockTensor (d := d) (D := D) A L
+  hP : P ∈ wordSpan B D
+  hQ : Q ∈ wordSpan B D
+  hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P)
+  hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear)
+
+private noncomputable def blockedTensorRangeData
+    (A : MPSTensor d D) (L : ℕ) (σ₀ τ₀ : Fin L → Fin d)
+    (φ ψ : Fin D → ℂ) (μ ν : ℂ)
+    (hμ : μ ≠ 0) (hν : ν ≠ 0)
+    (heigφ : evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ)
+    (heigψ : (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ) :
+    BlockedTensorRangeData (d := d) (D := D) A L σ₀ τ₀ φ ψ := by
+  let B : MPSTensor (blockPhysDim d L) D :=
+    blockTensor (d := d) (D := D) A L
+  let i₀ : Fin (blockPhysDim d L) := encodeBlock d L σ₀
+  let i₁ : Fin (blockPhysDim d L) := encodeBlock d L τ₀
+  have hBi₀ : B i₀ = evalWord A (List.ofFn σ₀) := by
+    simpa [B, i₀] using blockTensor_apply_encodeBlock A L σ₀
+  have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) := by
+    simpa [B, i₁] using blockTensor_apply_encodeBlock A L τ₀
+  refine
+    { B := B
+      P := (B i₀) ^ D
+      Q := (B i₁) ^ D
+      hB := rfl
+      hP := pow_single_mem_wordSpan B i₀
+      hQ := pow_single_mem_wordSpan B i₁
+      hφ_range := ?_
+      hψ_range := ?_ }
+  · simpa [hBi₀] using
+      (mem_range_toLin'_pow_of_eigenvector
+        (M := evalWord A (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ)
+  · simpa [hBi₁] using
+      (mem_range_vecMulLinear_pow_of_transpose_eigenvector
+        (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
+
+private theorem BlockedTensorRangeData.rankOne_mem_range
+    {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
+    {φ ψ : Fin D → ℂ}
+    (data : BlockedTensorRangeData (d := d) (D := D) A L σ₀ τ₀ φ ψ) :
+    Matrix.vecMulVec φ ψ ∈
+      LinearMap.range ((LinearMap.mulLeft ℂ data.P).comp (LinearMap.mulRight ℂ data.Q)) := by
+  exact vecMulVec_mem_range_mulLeft_mulRight
+    data.P data.Q φ ψ data.hφ_range data.hψ_range
+
 end Helpers
 
 /-! ## Nonzero-trace word extraction from a full word span -/
@@ -241,47 +293,22 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
     -- By evalWord_transpose: (evalWord A w)ᵀ = evalWord (transposeTensor A) w.reverse
     rw [evalWord_transpose A (List.ofFn τ₀').reverse, List.reverse_reverse]
     exact heigψ'
-  -- Step 3: Set up the blocked tensor
-  set B := blockTensor (d := d) (D := D) A L with hB_def
-  set i₀ := encodeBlock d L σ₀
-  set i₁ := encodeBlock d L τ₀
-  have hBi₀ : B i₀ = evalWord A (List.ofFn σ₀) :=
-    blockTensor_apply_encodeBlock A L σ₀
-  have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) :=
-    blockTensor_apply_encodeBlock A L τ₀
-  -- Step 4: P = (B i₀)^D, Q = (B i₁)^D
-  set P := (B i₀) ^ D
-  set Q := (B i₁) ^ D
-  have hP : P ∈ wordSpan B D := pow_single_mem_wordSpan B i₀
-  have hQ : Q ∈ wordSpan B D := pow_single_mem_wordSpan B i₁
-  -- Step 5: pass the eigenvector data through the nilpotent-killing powers.
-  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) := by
-    simpa [P, hBi₀] using
-      (mem_range_toLin'_pow_of_eigenvector
-        (M := evalWord A (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ)
-  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) := by
-    simpa [Q, hBi₁] using
-      (mem_range_vecMulLinear_pow_of_transpose_eigenvector
-        (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
-  -- Step 7: vecMulVec φ ψ ∈ range(mulLeft P ∘ mulRight Q)
-  have hrank1_range : Matrix.vecMulVec φ ψ ∈
-      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) :=
-    vecMulVec_mem_range_mulLeft_mulRight P Q φ ψ hφ_range hψ_range
-  -- Step 8: wordSpan B N₀ = ⊤ (blocking preserves normality with same witness)
-  have hBtop : wordSpan B N₀ = ⊤ := by
+  let data :=
+    blockedTensorRangeData A L σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ
+  have hBtop : wordSpan data.B N₀ = ⊤ := by
     have htopNL : wordSpan A (N₀ * L) = ⊤ := by
       rw [show N₀ * L = L * N₀ from by ring]
       exact wordSpan_top_of_mul A hN₀_top L hL
-    have hle : wordSpan A (N₀ * L) ≤ wordSpan B N₀ :=
-      wordSpan_le_wordSpan_blockTensor A L N₀
+    have hle : wordSpan A (N₀ * L) ≤ wordSpan data.B N₀ := by
+      simpa [data.hB] using wordSpan_le_wordSpan_blockTensor A L N₀
     exact eq_top_iff.mpr (htopNL ▸ hle)
-  -- Step 9: Embed rank-one into wordSpan B (D + N₀ + D)
   have hrange_le :
-      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) ≤
-        wordSpan B (D + N₀ + D) :=
-    range_comp_le_wordSpan B P Q hP hQ hBtop
+      LinearMap.range ((LinearMap.mulLeft ℂ data.P).comp (LinearMap.mulRight ℂ data.Q)) ≤
+        wordSpan data.B (D + N₀ + D) :=
+    range_comp_le_wordSpan data.B data.P data.Q data.hP data.hQ hBtop
   exact ⟨σ₀, τ₀, φ, ψ, μ, ν, D + N₀ + D,
-    hφ, hψ, hμ, hν, heigφ, heigψ, hrange_le hrank1_range⟩
+    hφ, hψ, hμ, hν, heigφ, heigψ, by
+      simpa [L, data.hB] using hrange_le data.rankOne_mem_range⟩
 
 end RankOneExtraction
 
@@ -344,31 +371,14 @@ theorem exists_rankOne_in_cumulativeSpan_blockTensor_of_wordEigenvectors
     Matrix.vecMulVec φ ψ ∈
       cumulativeSpan (blockTensor (d := d) (D := D) A L) (D + N + D) := by
   classical
-  set B := blockTensor (d := d) (D := D) A L with hB_def
-  set i₀ := encodeBlock d L σ₀
-  set i₁ := encodeBlock d L τ₀
-  have hcsB : cumulativeSpan B N = ⊤ := by
-    simpa [B] using hcs
-  set P := (B i₀) ^ D
-  set Q := (B i₁) ^ D
-  have hP : P ∈ wordSpan B D := pow_single_mem_wordSpan B i₀
-  have hQ : Q ∈ wordSpan B D := pow_single_mem_wordSpan B i₁
-  have hBi₀ : B i₀ = evalWord A (List.ofFn σ₀) :=
-    blockTensor_apply_encodeBlock A L σ₀
-  have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) :=
-    blockTensor_apply_encodeBlock A L τ₀
-  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) := by
-    simpa [P, hBi₀] using
-      (mem_range_toLin'_pow_of_eigenvector
-        (M := evalWord A (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ)
-  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) := by
-    simpa [Q, hBi₁] using
-      (mem_range_vecMulLinear_pow_of_transpose_eigenvector
-        (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
-  simpa [B] using
+  let data :=
+    blockedTensorRangeData A L σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ
+  have hcsB : cumulativeSpan data.B N = ⊤ := by
+    simpa [data.hB] using hcs
+  simpa [data.hB] using
     (vecMulVec_mem_cumulativeSpan_of_cumulativeSpan_eq_top
       (d := blockPhysDim d L) (D := D)
-      B P Q φ ψ hφ_range hψ_range hP hQ hcsB)
+      data.B data.P data.Q φ ψ data.hφ_range data.hψ_range data.hP data.hQ hcsB)
 
 /-- **Exact blocked rank-one extraction from cumulative spanning plus aperiodicity.**
 
@@ -391,33 +401,16 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors_of_cumulative
     Matrix.vecMulVec φ ψ ∈
       wordSpan (blockTensor (d := d) (D := D) A L) (D + N + D) := by
   classical
-  set B := blockTensor (d := d) (D := D) A L with hB_def
-  set i₀ := encodeBlock d L σ₀
-  set i₁ := encodeBlock d L τ₀
-  have hcsB : cumulativeSpan B N = ⊤ := by
-    simpa [B] using hcs
-  have honeB : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan B 1 := by
-    simpa [B] using hone
-  set P := (B i₀) ^ D
-  set Q := (B i₁) ^ D
-  have hP : P ∈ wordSpan B D := pow_single_mem_wordSpan B i₀
-  have hQ : Q ∈ wordSpan B D := pow_single_mem_wordSpan B i₁
-  have hBi₀ : B i₀ = evalWord A (List.ofFn σ₀) :=
-    blockTensor_apply_encodeBlock A L σ₀
-  have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) :=
-    blockTensor_apply_encodeBlock A L τ₀
-  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) := by
-    simpa [P, hBi₀] using
-      (mem_range_toLin'_pow_of_eigenvector
-        (M := evalWord A (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ)
-  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) := by
-    simpa [Q, hBi₁] using
-      (mem_range_vecMulLinear_pow_of_transpose_eigenvector
-        (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
-  simpa [B] using
+  let data :=
+    blockedTensorRangeData A L σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ
+  have hcsB : cumulativeSpan data.B N = ⊤ := by
+    simpa [data.hB] using hcs
+  have honeB : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan data.B 1 := by
+    simpa [data.hB] using hone
+  simpa [data.hB] using
     (vecMulVec_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
       (d := blockPhysDim d L) (D := D)
-      B P Q φ ψ hφ_range hψ_range hP hQ hcsB honeB)
+      data.B data.P data.Q φ ψ data.hφ_range data.hψ_range data.hP data.hQ hcsB honeB)
 
 /-- **Rank-one element in the word span of the blocked tensor, given external eigenvectors.**
 
@@ -451,44 +444,19 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
       Matrix.vecMulVec φ ψ ∈
         wordSpan (blockTensor (d := d) (D := D) A L) m_blocked := by
   classical
-  set B := blockTensor (d := d) (D := D) A L with hB_def
-  set i₀ := encodeBlock d L σ₀
-  set i₁ := encodeBlock d L τ₀
-  -- Step 1: B is normal
-  have hNormalB : IsNormal B := isNormal_blockTensor A L hL hNormal
-  -- Step 2: P = (B i₀)^D and Q = (B i₁)^D lie in wordSpan B D
-  set P := (B i₀) ^ D
-  set Q := (B i₁) ^ D
-  have hP : P ∈ wordSpan B D := pow_single_mem_wordSpan B i₀
-  have hQ : Q ∈ wordSpan B D := pow_single_mem_wordSpan B i₁
-  -- Step 3a: Eigenvector conditions at the blocked level
-  have hBi₀ : B i₀ = evalWord A (List.ofFn σ₀) :=
-    blockTensor_apply_encodeBlock A L σ₀
-  have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) :=
-    blockTensor_apply_encodeBlock A L τ₀
-  -- Step 3b: pass the eigenvector data through the nilpotent-killing powers.
-  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) := by
-    simpa [P, hBi₀] using
-      (mem_range_toLin'_pow_of_eigenvector
-        (M := evalWord A (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ)
-  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) := by
-    simpa [Q, hBi₁] using
-      (mem_range_vecMulLinear_pow_of_transpose_eigenvector
-        (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
-  -- Step 4: vecMulVec φ ψ ∈ range(mulLeft P ∘ mulRight Q)
-  have hrank1_range : Matrix.vecMulVec φ ψ ∈
-      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) :=
-    vecMulVec_mem_range_mulLeft_mulRight P Q φ ψ hφ_range hψ_range
-  -- Step 5: Get wordSpan B N₁ = ⊤ from normality of B
+  let data :=
+    blockedTensorRangeData A L σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ
+  have hNormalB : IsNormal data.B := by
+    simpa [data.hB] using isNormal_blockTensor A L hL hNormal
   obtain ⟨N₁, hN₁⟩ := hNormalB
-  have hBtop : wordSpan B N₁ = ⊤ :=
-    (wordSpan_eq_top_iff_isNBlkInjective B N₁).mpr hN₁
-  -- Step 6: range(mulLeft P ∘ mulRight Q) ≤ wordSpan B (D + N₁ + D)
+  have hBtop : wordSpan data.B N₁ = ⊤ :=
+    (wordSpan_eq_top_iff_isNBlkInjective data.B N₁).mpr hN₁
   have hrange_le :
-      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) ≤
-        wordSpan B (D + N₁ + D) :=
-    range_comp_le_wordSpan B P Q hP hQ hBtop
-  exact ⟨D + N₁ + D, hrange_le hrank1_range⟩
+      LinearMap.range ((LinearMap.mulLeft ℂ data.P).comp (LinearMap.mulRight ℂ data.Q)) ≤
+        wordSpan data.B (D + N₁ + D) :=
+    range_comp_le_wordSpan data.B data.P data.Q data.hP data.hQ hBtop
+  exact ⟨D + N₁ + D, by
+    simpa [data.hB] using hrange_le data.rankOne_mem_range⟩
 
 set_option maxHeartbeats 800000 in
 -- The blocked assembly involves multiple typeclass unifications across blocked tensor types.
