@@ -1,7 +1,6 @@
 import TNLean.PiAlgebra.CanonicalFormSep
 import TNLean.Spectral.SpectralGapRect
 import TNLean.MPS.BNTPermutationThm44
-import TNLean.MPS.BNTPermutationSimple
 import TNLean.MPS.CastLemmas
 
 /-
