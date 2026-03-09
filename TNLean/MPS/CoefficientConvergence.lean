@@ -15,18 +15,20 @@ set_option linter.style.show false
 # Coefficient convergence for canonical-form BNT decompositions
 
 This module proves that the normalized decomposition coefficients `(μ k / μ 0)^N` converge
-automatically from the `IsCanonicalForm.mu_strict_anti` hypothesis, and provides a
-self-contained version of the Fundamental Theorem (Thm 4.4) that derives the decomposition
-data from canonical form structure.
+automatically from the separated weight hypothesis `HasStrictOrderedNonzeroWeights μ`
+(with legacy wrappers through `IsCanonicalForm`), and provides a self-contained version of the
+Fundamental Theorem (Thm 4.4) that derives the decomposition data from canonical form structure.
 
 ## Main results
 
-### `IsCanonicalForm.norm_div_mu_lt_one`
-For `k ≠ 0`, the norm ratio `‖μ k / μ 0‖ < 1` from `mu_strict_anti`.
+### `HasStrictOrderedNonzeroWeights.norm_div_mu_lt_one`
+For `k ≠ 0`, the norm ratio `‖μ k / μ 0‖ < 1` from the separated weight data.
+The legacy wrapper `IsCanonicalForm.norm_div_mu_lt_one` remains available.
 
-### `IsCanonicalForm.coeff_ratio_tendsto`
+### `HasStrictOrderedNonzeroWeights.coeff_ratio_tendsto`
 The normalized coefficient `(μ k / μ ⟨0, hr⟩) ^ N` converges: to `1` for the dominant
-block `k = 0`, and to `0` for all other blocks.
+block `k = 0`, and to `0` for all other blocks. The legacy wrapper
+`IsCanonicalForm.coeff_ratio_tendsto` remains available.
 
 ### `mpv_toTensorFromBlocks_eq_mu0_pow_mul_normalized`
 The original block-diagonal MPV factors as `μ₀^N` times the normalized block-diagonal MPV.
@@ -60,11 +62,6 @@ variable {d : ℕ}
 
 /-! ## Coefficient convergence from strict antitonicity of norms -/
 
-namespace IsCanonicalForm
-
-variable {r : ℕ} {dim : Fin r → ℕ}
-variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
-
 private lemma fin0_lt_of_ne {r : ℕ} (hr : 0 < r) (k : Fin r) (hk : k ≠ ⟨0, hr⟩) :
     ⟨0, hr⟩ < k := by
   simp only [Fin.lt_def, Fin.val_mk]
@@ -73,41 +70,75 @@ private lemma fin0_lt_of_ne {r : ℕ} (hr : 0 < r) (k : Fin r) (hk : k ≠ ⟨0,
     exact hk (Fin.ext heq)
   omega
 
+namespace HasStrictOrderedNonzeroWeights
+
+variable {r : ℕ}
+variable {μ : Fin r → ℂ}
+
 /-- The norm of `μ k / μ 0` is strictly less than 1 for `k ≠ 0`, because
 `mu_strict_anti` gives `‖μ k‖ < ‖μ 0‖` for `0 < k`. -/
-theorem norm_div_mu_lt_one (hCF : IsCanonicalForm μ A) (hr : 0 < r)
+theorem norm_div_mu_lt_one (hμ : HasStrictOrderedNonzeroWeights μ) (hr : 0 < r)
     (k : Fin r) (hk : k ≠ ⟨0, hr⟩) :
     ‖μ k / μ ⟨0, hr⟩‖ < 1 := by
   rw [norm_div]
   have hμ0_pos : (0 : ℝ) < ‖μ ⟨0, hr⟩‖ := by
     rw [norm_pos_iff]
-    exact hCF.mu_ne_zero ⟨0, hr⟩
+    exact hμ.mu_ne_zero ⟨0, hr⟩
   rw [div_lt_one hμ0_pos]
-  exact hCF.mu_strict_anti (fin0_lt_of_ne hr k hk)
+  exact hμ.mu_strict_anti (fin0_lt_of_ne hr k hk)
 
 /-- **Coefficient convergence from strict antitonicity.**
 
-For a canonical form with `StrictAnti (fun k => ‖μ k‖)`, the normalized coefficient
+For separated strict nonzero weight data, the normalized coefficient
 `(μ k / μ ⟨0, hr⟩) ^ N` converges:
 - to `1` when `k = ⟨0, hr⟩` (dominant block), since `μ₀ / μ₀ = 1`;
 - to `0` when `k ≠ ⟨0, hr⟩`, since `‖μ_k / μ₀‖ < 1`. -/
-theorem coeff_ratio_tendsto (hCF : IsCanonicalForm μ A) (hr : 0 < r) :
+theorem coeff_ratio_tendsto (hμ : HasStrictOrderedNonzeroWeights μ) (hr : 0 < r) :
     ∀ k : Fin r,
       Tendsto (fun N => (μ k / μ ⟨0, hr⟩) ^ N) atTop
         (nhds (if k = ⟨0, hr⟩ then 1 else 0)) := by
   intro k
   by_cases hk : k = ⟨0, hr⟩
-  · simp only [hk, if_pos rfl, div_self (hCF.mu_ne_zero ⟨0, hr⟩), one_pow]
+  · simp only [hk, if_pos rfl, div_self (hμ.mu_ne_zero ⟨0, hr⟩), one_pow]
     exact tendsto_const_nhds
   · simp only [if_neg hk]
     exact tendsto_pow_atTop_nhds_zero_of_norm_lt_one
-      (hCF.norm_div_mu_lt_one hr k hk)
+      (hμ.norm_div_mu_lt_one hr k hk)
 
 /-- The norm of `μ k` is strictly less than `‖μ 0‖` for non-dominant blocks. -/
+theorem norm_mu_lt_dominant (hμ : HasStrictOrderedNonzeroWeights μ) (hr : 0 < r)
+    (k : Fin r) (hk : k ≠ ⟨0, hr⟩) :
+    ‖μ k‖ < ‖μ ⟨0, hr⟩‖ :=
+  hμ.mu_strict_anti (fin0_lt_of_ne hr k hk)
+
+end HasStrictOrderedNonzeroWeights
+
+namespace IsCanonicalForm
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Backwards-compatible wrapper for
+`HasStrictOrderedNonzeroWeights.norm_div_mu_lt_one`. -/
+theorem norm_div_mu_lt_one (hCF : IsCanonicalForm μ A) (hr : 0 < r)
+    (k : Fin r) (hk : k ≠ ⟨0, hr⟩) :
+    ‖μ k / μ ⟨0, hr⟩‖ < 1 :=
+  hCF.toHasStrictOrderedNonzeroWeights.norm_div_mu_lt_one hr k hk
+
+/-- Backwards-compatible wrapper for
+`HasStrictOrderedNonzeroWeights.coeff_ratio_tendsto`. -/
+theorem coeff_ratio_tendsto (hCF : IsCanonicalForm μ A) (hr : 0 < r) :
+    ∀ k : Fin r,
+      Tendsto (fun N => (μ k / μ ⟨0, hr⟩) ^ N) atTop
+        (nhds (if k = ⟨0, hr⟩ then 1 else 0)) :=
+  hCF.toHasStrictOrderedNonzeroWeights.coeff_ratio_tendsto hr
+
+/-- Backwards-compatible wrapper for
+`HasStrictOrderedNonzeroWeights.norm_mu_lt_dominant`. -/
 theorem norm_mu_lt_dominant (hCF : IsCanonicalForm μ A) (hr : 0 < r)
     (k : Fin r) (hk : k ≠ ⟨0, hr⟩) :
     ‖μ k‖ < ‖μ ⟨0, hr⟩‖ :=
-  hCF.mu_strict_anti (fin0_lt_of_ne hr k hk)
+  hCF.toHasStrictOrderedNonzeroWeights.norm_mu_lt_dominant hr k hk
 
 end IsCanonicalForm
 

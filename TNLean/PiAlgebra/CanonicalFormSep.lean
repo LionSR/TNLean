@@ -1178,7 +1178,7 @@ theorem per_block_sameMPV_of_separated_canonical_data
       rw [Finset.sum_sub_distrib]
       exact sub_eq_zero.mpr heq
     exact block_separation_all_words μ A B hWeights.mu_strict_anti hWeights.mu_ne_zero
-      hA_inj.block_injective hB_inj.block_injective hA_left.ds_gauge hB_left.ds_gauge
+      hA_inj.block_injective hB_inj.block_injective hA_left.leftCanonical hB_left.leftCanonical
       hA_overlap.overlap_tendsto_one h_summed
 
 theorem per_block_sameMPV_of_canonical_form
@@ -1198,6 +1198,47 @@ theorem per_block_sameMPV_of_canonical_form
     { leftCanonical := hB_ds }
     hSame₂
 
+/-- Separated-data variant of `fundamentalTheorem_canonicalForm`.
+
+This is the Stage B low-risk interface: it only asks for the pieces of canonical-form
+structure actually used by the proof.  The legacy theorem below remains available as a
+wrapper around this one. -/
+theorem fundamentalTheorem_of_separated_canonical_data
+    (μ : Fin r → ℂ)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hWeights : HasStrictOrderedNonzeroWeights μ)
+    (hA_inj : HasInjectiveBlocks (d := d) A)
+    (hA_left : IsLeftCanonicalBlockFamily (d := d) A)
+    (hA_overlap : HasNormalizedSelfOverlap (d := d) A)
+    (hB_inj : HasInjectiveBlocks (d := d) B)
+    (hB_left : IsLeftCanonicalBlockFamily (d := d) B)
+    (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+    (∀ k, GaugeEquiv (A k) (B k)) ∧
+    GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) := by
+  have hSep := per_block_sameMPV_of_separated_canonical_data μ A B
+    hWeights hA_inj hA_left hA_overlap hB_inj hB_left hSame₂
+  exact ⟨fun k => fundamentalTheorem_singleBlock (hA_inj.block_injective k) (hSep k),
+         fundamentalTheorem_multiBlock_global μ A B hA_inj.block_injective hSep⟩
+
+/-- Explicit gauge-matrix version of `fundamentalTheorem_of_separated_canonical_data`. -/
+theorem fundamentalTheorem_of_separated_canonical_data_explicit
+    (μ : Fin r → ℂ)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hWeights : HasStrictOrderedNonzeroWeights μ)
+    (hA_inj : HasInjectiveBlocks (d := d) A)
+    (hA_left : IsLeftCanonicalBlockFamily (d := d) A)
+    (hA_overlap : HasNormalizedSelfOverlap (d := d) A)
+    (hB_inj : HasInjectiveBlocks (d := d) B)
+    (hB_left : IsLeftCanonicalBlockFamily (d := d) B)
+    (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+    ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
+    ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
+      (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
+  have hSep := per_block_sameMPV_of_separated_canonical_data μ A B
+    hWeights hA_inj hA_left hA_overlap hB_inj hB_left hSame₂
+  exact fundamentalTheorem_multiBlock_explicit A B hA_inj.block_injective hSep
+
+/-- Backwards-compatible wrapper around `fundamentalTheorem_of_separated_canonical_data`. -/
 theorem fundamentalTheorem_canonicalForm
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -1206,11 +1247,17 @@ theorem fundamentalTheorem_canonicalForm
     (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
     (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     (∀ k, GaugeEquiv (A k) (B k)) ∧
-    GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) := by
-  have hSep := per_block_sameMPV_of_canonical_form μ A B hA hB_inj hB_ds hSame₂
-  exact ⟨fun k => fundamentalTheorem_singleBlock (hA.block_injective k) (hSep k),
-         fundamentalTheorem_multiBlock_global μ A B hA.block_injective hSep⟩
+    GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
+  fundamentalTheorem_of_separated_canonical_data μ A B
+    hA.toHasStrictOrderedNonzeroWeights
+    hA.toHasInjectiveBlocks
+    hA.toIsLeftCanonicalBlockFamily
+    hA.toHasNormalizedSelfOverlap
+    { block_injective := hB_inj }
+    { leftCanonical := hB_ds }
+    hSame₂
 
+/-- Backwards-compatible wrapper around `fundamentalTheorem_of_separated_canonical_data_explicit`. -/
 theorem fundamentalTheorem_canonicalForm_explicit
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -1220,9 +1267,15 @@ theorem fundamentalTheorem_canonicalForm_explicit
     (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
     ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
-      (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
-  have hSep := per_block_sameMPV_of_canonical_form μ A B hA hB_inj hB_ds hSame₂
-  exact fundamentalTheorem_multiBlock_explicit A B hA.block_injective hSep
+      (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) :=
+  fundamentalTheorem_of_separated_canonical_data_explicit μ A B
+    hA.toHasStrictOrderedNonzeroWeights
+    hA.toHasInjectiveBlocks
+    hA.toIsLeftCanonicalBlockFamily
+    hA.toHasNormalizedSelfOverlap
+    { block_injective := hB_inj }
+    { leftCanonical := hB_ds }
+    hSame₂
 
 end CanonicalFormSeparation
 
