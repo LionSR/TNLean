@@ -7,6 +7,7 @@ Authors: TNLean contributors
 import TNLean.Wielandt.RankOneSpanGrowth
 import TNLean.Wielandt.RankOneManufacture
 import TNLean.Wielandt.RectangularRanges
+import TNLean.Wielandt.CumulativeToWordSpan
 
 /-!
 # Bounded rank-one element in a blocked word span (Wielandt Lemma 2(b))
@@ -87,6 +88,150 @@ theorem biRectSpan_le_wordSpan
   -- Reassociate and simplify arithmetic.
   simpa [biRectSpan, LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc,
     Nat.add_assoc] using hPYQ
+
+/-- Two-sided cumulative bi-rectangular span: image of `cumulativeSpan B n` under
+right-multiplication by `Q` followed by left-multiplication by `P`. -/
+noncomputable def cumulativeBiRectSpan
+    (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
+    Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+  Submodule.map (LinearMap.mulLeft ℂ P)
+    (Submodule.map (LinearMap.mulRight ℂ Q) (cumulativeSpan B n))
+
+@[simp]
+lemma cumulativeBiRectSpan_eq_map_comp
+    (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
+    cumulativeBiRectSpan (d := d) (D := D) P Q B n =
+      Submodule.map ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q))
+        (cumulativeSpan B n) := by
+  simpa [cumulativeBiRectSpan, LinearMap.comp_apply] using
+    (Submodule.map_comp (f := (LinearMap.mulRight ℂ Q)) (g := (LinearMap.mulLeft ℂ P))
+      (p := cumulativeSpan B n)).symm
+
+/-- If the cumulative span is already full, the cumulative bi-rectangular span is the
+full two-sided range. -/
+theorem cumulativeBiRectSpan_eq_range_of_cumulativeSpan_eq_top
+    (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) {n : ℕ}
+    (htop : cumulativeSpan B n = ⊤) :
+    cumulativeBiRectSpan (d := d) (D := D) P Q B n =
+      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) := by
+  rw [cumulativeBiRectSpan_eq_map_comp, htop, Submodule.map_top]
+
+/-- Left multiplication by an exact-length word-span element raises cumulative length
+by the corresponding offset. -/
+theorem mul_mem_cumulativeSpan_of_mem_wordSpan_left
+    (B : MPSTensor d D) {m n : ℕ}
+    {P X : Matrix (Fin D) (Fin D) ℂ}
+    (hP : P ∈ wordSpan B m) (hX : X ∈ cumulativeSpan B n) :
+    P * X ∈ cumulativeSpan B (m + n) := by
+  have hmap :
+      Submodule.map (LinearMap.mulLeft ℂ P) (cumulativeSpan B n) ≤
+        cumulativeSpan B (m + n) := by
+    rw [Submodule.map_le_iff_le_comap]
+    apply Submodule.span_le.mpr
+    rintro M ⟨w, hw, rfl⟩
+    change P * evalWord B w ∈ cumulativeSpan B (m + n)
+    have hw' : evalWord B w ∈ wordSpan B w.length :=
+      evalWord_mem_wordSpan B w
+    have hprod : P * evalWord B w ∈ wordSpan B (m + w.length) := by
+      exact (wordSpan_mul_le B m w.length) (Submodule.mul_mem_mul hP hw')
+    exact (wordSpan_le_cumulativeSpan B (by omega)) hprod
+  exact hmap (Submodule.mem_map.mpr ⟨X, hX, by simp [LinearMap.mulLeft_apply]⟩)
+
+/-- Right multiplication by an exact-length word-span element raises cumulative length
+by the corresponding offset. -/
+theorem mul_mem_cumulativeSpan_of_mem_wordSpan_right
+    (B : MPSTensor d D) {n m : ℕ}
+    {X Q : Matrix (Fin D) (Fin D) ℂ}
+    (hX : X ∈ cumulativeSpan B n) (hQ : Q ∈ wordSpan B m) :
+    X * Q ∈ cumulativeSpan B (n + m) := by
+  have hmap :
+      Submodule.map (LinearMap.mulRight ℂ Q) (cumulativeSpan B n) ≤
+        cumulativeSpan B (n + m) := by
+    rw [Submodule.map_le_iff_le_comap]
+    apply Submodule.span_le.mpr
+    rintro M ⟨w, hw, rfl⟩
+    change evalWord B w * Q ∈ cumulativeSpan B (n + m)
+    have hw' : evalWord B w ∈ wordSpan B w.length :=
+      evalWord_mem_wordSpan B w
+    have hprod : evalWord B w * Q ∈ wordSpan B (w.length + m) := by
+      exact (wordSpan_mul_le B w.length m) (Submodule.mul_mem_mul hw' hQ)
+    exact (wordSpan_le_cumulativeSpan B (by omega)) hprod
+  exact hmap (Submodule.mem_map.mpr ⟨X, hX, by simp [LinearMap.mulRight_apply]⟩)
+
+/-- Converting a cumulative bi-rectangular span element back into a bounded cumulative span,
+assuming `P` and `Q` themselves lie in bounded word spans. -/
+theorem cumulativeBiRectSpan_le_cumulativeSpan
+    (B : MPSTensor d D) {m₁ m₂ n : ℕ}
+    (P Q : Matrix (Fin D) (Fin D) ℂ)
+    (hP : P ∈ wordSpan B m₁) (hQ : Q ∈ wordSpan B m₂) :
+    cumulativeBiRectSpan (d := d) (D := D) P Q B n ≤
+      cumulativeSpan B (m₁ + n + m₂) := by
+  intro M hM
+  rcases Submodule.mem_map.mp hM with ⟨X, hX, rfl⟩
+  rcases Submodule.mem_map.mp hX with ⟨Y, hY, rfl⟩
+  have hPY : P * Y ∈ cumulativeSpan B (m₁ + n) :=
+    mul_mem_cumulativeSpan_of_mem_wordSpan_left B hP hY
+  have hPYQ : (P * Y) * Q ∈ cumulativeSpan B ((m₁ + n) + m₂) :=
+    mul_mem_cumulativeSpan_of_mem_wordSpan_right B hPY hQ
+  simpa [cumulativeBiRectSpan, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
+    Matrix.mul_assoc, Nat.add_assoc] using hPYQ
+
+/-- Membership in the full two-sided range implies membership in a bounded cumulative span,
+assuming the middle factor is available cumulatively. -/
+theorem range_comp_le_cumulativeSpan
+    (B : MPSTensor d D) {m₁ m₂ : ℕ}
+    (P Q : Matrix (Fin D) (Fin D) ℂ)
+    (hP : P ∈ wordSpan B m₁) (hQ : Q ∈ wordSpan B m₂)
+    {n : ℕ} (htop : cumulativeSpan B n = ⊤) :
+    LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) ≤
+      cumulativeSpan B (m₁ + n + m₂) := by
+  rw [← cumulativeBiRectSpan_eq_range_of_cumulativeSpan_eq_top (d := d) (D := D) P Q B htop]
+  exact cumulativeBiRectSpan_le_cumulativeSpan (d := d) (D := D) B P Q hP hQ
+
+/-- Under the aperiodicity hypothesis `1 ∈ wordSpan B 1`, cumulative spanning upgrades the
+full two-sided range to a single exact-length word span. -/
+theorem range_comp_le_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
+    (B : MPSTensor d D) {m₁ m₂ : ℕ}
+    (P Q : Matrix (Fin D) (Fin D) ℂ)
+    (hP : P ∈ wordSpan B m₁) (hQ : Q ∈ wordSpan B m₂)
+    {n : ℕ} (htop : cumulativeSpan B n = ⊤)
+    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan B 1) :
+    LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) ≤
+      wordSpan B (m₁ + n + m₂) := by
+  rw [← cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one B hone (m₁ + n + m₂)]
+  exact range_comp_le_cumulativeSpan (d := d) (D := D) B P Q hP hQ htop
+
+/-- Rank-one manufacture from cumulative spanning: the manufactured rank-one element lies in a
+bounded cumulative span. -/
+theorem vecMulVec_mem_cumulativeSpan_of_cumulativeSpan_eq_top
+    (B : MPSTensor d D) {m₁ m₂ n : ℕ}
+    (P Q : Matrix (Fin D) (Fin D) ℂ) (φ ψ : Fin D → ℂ)
+    (hφ : φ ∈ LinearMap.range (Matrix.toLin' P))
+    (hψ : ψ ∈ LinearMap.range (Q.vecMulLinear))
+    (hP : P ∈ wordSpan B m₁) (hQ : Q ∈ wordSpan B m₂)
+    (htop : cumulativeSpan B n = ⊤) :
+    Matrix.vecMulVec φ ψ ∈ cumulativeSpan B (m₁ + n + m₂) := by
+  have hrange : Matrix.vecMulVec φ ψ ∈
+      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) :=
+    vecMulVec_mem_range_mulLeft_mulRight P Q φ ψ hφ hψ
+  exact (range_comp_le_cumulativeSpan (d := d) (D := D) B P Q hP hQ htop) hrange
+
+/-- Rank-one manufacture from cumulative spanning plus aperiodicity: the manufactured rank-one
+matrix lies in a single exact-length word span. -/
+theorem vecMulVec_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
+    (B : MPSTensor d D) {m₁ m₂ n : ℕ}
+    (P Q : Matrix (Fin D) (Fin D) ℂ) (φ ψ : Fin D → ℂ)
+    (hφ : φ ∈ LinearMap.range (Matrix.toLin' P))
+    (hψ : ψ ∈ LinearMap.range (Q.vecMulLinear))
+    (hP : P ∈ wordSpan B m₁) (hQ : Q ∈ wordSpan B m₂)
+    (htop : cumulativeSpan B n = ⊤)
+    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan B 1) :
+    Matrix.vecMulVec φ ψ ∈ wordSpan B (m₁ + n + m₂) := by
+  have hrange : Matrix.vecMulVec φ ψ ∈
+      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) :=
+    vecMulVec_mem_range_mulLeft_mulRight P Q φ ψ hφ hψ
+  exact (range_comp_le_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
+    (d := d) (D := D) B P Q hP hQ htop hone) hrange
 
 /-- A crude finrank bound: any `biRectSpan` has dimension at most `D^2`. -/
 theorem biRectSpan_finrank_le

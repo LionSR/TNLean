@@ -162,6 +162,48 @@ theorem IsNormal_transposeTensor
   rcases h with ⟨N, hN⟩
   exact ⟨N, IsNBlkInjective_transposeTensor (A := A) (N := N) hN⟩
 
+/-- The cumulative span of the transposed tensor also reaches top. -/
+theorem cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top
+    {d D : ℕ} [NeZero D] (A : MPSTensor d D) {N : ℕ}
+    (h : cumulativeSpan A N = ⊤) :
+    cumulativeSpan (transposeTensor A) N = ⊤ := by
+  let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    Matrix.transposeLinearEquiv (Fin D) (Fin D) ℂ ℂ
+  have hmap :
+      Submodule.map (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+          (cumulativeSpan A N) =
+        cumulativeSpan (transposeTensor A) N := by
+    unfold cumulativeSpan
+    rw [Submodule.map_span]
+    have hset :
+        (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ) ''
+            {M | ∃ w : List (Fin d), w.length ≤ N ∧ M = evalWord A w} =
+          {M | ∃ w : List (Fin d), w.length ≤ N ∧ M = evalWord (transposeTensor A) w} := by
+      ext M
+      constructor
+      · rintro ⟨M', ⟨w, hw, rfl⟩, hM⟩
+        refine ⟨w.reverse, by simpa using hw, ?_⟩
+        rw [← hM]
+        simpa using (evalWord_transpose (A := A) (w := w))
+      · rintro ⟨w, hw, hM⟩
+        refine ⟨evalWord A w.reverse, ⟨w.reverse, by simpa using hw, rfl⟩, ?_⟩
+        rw [hM]
+        simpa [List.reverse_reverse] using
+          (evalWord_transpose (A := A) (w := w.reverse))
+    simp [e, hset]
+  calc
+    cumulativeSpan (transposeTensor A) N
+        = Submodule.map
+            (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+            (cumulativeSpan A N) := by
+              symm
+              exact hmap
+    _ = Submodule.map
+          (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ⊤ := by
+            simp [h]
+    _ = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+          simp [Submodule.map_top, LinearEquiv.range (e := e)]
+
 /-! ## Row spreading: right action on row vectors -/
 
 /-- The linear map `M ↦ ψ ᵥ* M` for a fixed row vector `ψ`. -/
@@ -312,6 +354,32 @@ theorem rowSpreadSpan_eq_top_of_isNormal_of_eigenvector_transpose
         (A := transposeTensor A) (φ := ψ) (n := D - 1)
         i₀ μ hμ heig hcum)
   -- Conclude by rewriting back to `rowSpreadSpan`.
+  simpa [hrow] using hvec
+
+/-- Cumulative-span version: row spread reaches full from cumulative spanning. -/
+theorem rowSpreadSpan_eq_top_of_cumulativeSpan_eq_top_of_eigenvector_transpose
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D) (ψ : Fin D → ℂ) (hψ : ψ ≠ 0)
+    (i₁ : Fin d) (ν : ℂ) (hν : ν ≠ 0)
+    (heigψ : (A i₁)ᵀ *ᵥ ψ = ν • ψ)
+    {N : ℕ} (hCum : cumulativeSpan A N = ⊤) :
+    rowSpreadSpan A ψ (D - 1) = ⊤ := by
+  classical
+  have hrow :
+      rowSpreadSpan A ψ (D - 1) = vectorSpreadSpan (transposeTensor A) ψ (D - 1) := by
+    simpa [transposeTensor] using
+      (rowSpreadSpan_eq_vectorSpreadSpan_transpose (A := A) (ψ := ψ) (n := D - 1))
+  have hCumT : cumulativeSpan (transposeTensor A) N = ⊤ :=
+    cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top (A := A) hCum
+  have hcum : cumulativeVectorSpan (transposeTensor A) ψ (D - 1) = ⊤ := by
+    simpa [transposeTensor] using
+      (eigenvector_spreading_of_cumulativeSpan_eq_top
+        (A := transposeTensor A) (φ := ψ) hψ (N := N) hCumT)
+  have hvec : vectorSpreadSpan (transposeTensor A) ψ (D - 1) = ⊤ := by
+    simpa [transposeTensor] using
+      (vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
+        (A := transposeTensor A) (φ := ψ) (n := D - 1)
+        i₁ ν hν heigψ hcum)
   simpa [hrow] using hvec
 
 /-! ## Reduction: one rank-one element + row spreading ⇒ full rank-one basis -/
