@@ -20,7 +20,8 @@ git = "https://github.com/PatrickMassot/checkdecls.git"
 
 [[require]]
 name = "Gametheory"
-path = "External/Brouwer"
+git = "https://github.com/LionSR/Brouwer.git"
+rev = "main"
 
 [[lean_lib]]
 name = "TNLean"
