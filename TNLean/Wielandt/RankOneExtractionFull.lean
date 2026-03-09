@@ -72,21 +72,30 @@ theorem mem_range_vecMulLinear_of_transpose_eigenvector
   have hvecmul : ψ ᵥ* Q = Qᵀ *ᵥ ψ := by
     ext j
     simp [Matrix.vecMul, Matrix.mulVec, dotProduct, Matrix.transpose_apply, mul_comm]
-  -- (ν⁻¹ • ψ) ᵥ* Q = ν⁻¹ • (ψ ᵥ* Q)
-  calc (ν⁻¹ • ψ) ᵥ* Q
-      = ν⁻¹ • (ψ ᵥ* Q) := by
-        ext j; simp [Matrix.vecMul, dotProduct, Finset.mul_sum, mul_assoc]
+  calc
+    (ν⁻¹ • ψ) ᵥ* Q = ν⁻¹ • (ψ ᵥ* Q) := by
+      ext j
+      simp [Matrix.vecMul, dotProduct, Finset.mul_sum, mul_assoc]
     _ = ν⁻¹ • (ν • ψ) := by rw [hvecmul, heig]
     _ = ψ := by rw [smul_smul, inv_mul_cancel₀ hν, one_smul]
 
-/-- The transpose of a power equals the power of the transpose. -/
-theorem Matrix.transpose_pow_eq_pow_transpose
-    (M : Matrix (Fin D) (Fin D) ℂ) (k : ℕ) :
-    (M ^ k)ᵀ = (Mᵀ) ^ k := by
-  induction k with
-  | zero => simp
-  | succ k ih =>
-    rw [pow_succ, Matrix.transpose_mul, ih, ← pow_succ']
+/-- A nonzero eigenvector of `M` lies in the range of the powered matrix `M ^ D`. -/
+theorem mem_range_toLin'_pow_of_eigenvector
+    (M : Matrix (Fin D) (Fin D) ℂ) (φ : Fin D → ℂ) (μ : ℂ) (hμ : μ ≠ 0)
+    (heig : M *ᵥ φ = μ • φ) :
+    φ ∈ LinearMap.range (Matrix.toLin' (M ^ D)) := by
+  exact mem_range_toLin'_of_eigenvector (M := M ^ D) (φ := φ) (μ := μ ^ D)
+    (pow_ne_zero D hμ) (pow_mulVec_eq_smul_of_mulVec_eq_smul M φ μ heig D)
+
+/-- A nonzero transpose eigenvector of `M` lies in the range of `vecMulLinear` for `M ^ D`. -/
+theorem mem_range_vecMulLinear_pow_of_transpose_eigenvector
+    (M : Matrix (Fin D) (Fin D) ℂ) (ψ : Fin D → ℂ) (ν : ℂ) (hν : ν ≠ 0)
+    (heig : Mᵀ *ᵥ ψ = ν • ψ) :
+    ψ ∈ LinearMap.range ((M ^ D).vecMulLinear) := by
+  refine mem_range_vecMulLinear_of_transpose_eigenvector
+    (Q := M ^ D) (ψ := ψ) (ν := ν ^ D) (pow_ne_zero D hν) ?_
+  rw [Matrix.transpose_pow]
+  exact pow_mulVec_eq_smul_of_mulVec_eq_smul Mᵀ ψ ν heig D
 
 /-- `(B i)^D ∈ wordSpan B D`. -/
 theorem pow_single_mem_wordSpan (B : MPSTensor d D) (i : Fin d) :
@@ -177,16 +186,8 @@ theorem range_comp_le_wordSpan
     {n : ℕ} (htop : wordSpan B n = ⊤) :
     LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) ≤
       wordSpan B (m₁ + n + m₂) := by
-  intro M hM
-  rcases LinearMap.mem_range.mp hM with ⟨X, rfl⟩
-  -- Goal: P * (X * Q) ∈ wordSpan B (m₁ + n + m₂)
-  change P * (X * Q) ∈ wordSpan B (m₁ + n + m₂)
-  have hX : X ∈ wordSpan B n := htop ▸ Submodule.mem_top
-  have hXQ : X * Q ∈ wordSpan B (n + m₂) :=
-    (wordSpan_mul_le B n m₂) (Submodule.mul_mem_mul hX hQ)
-  have hPXQ : P * (X * Q) ∈ wordSpan B (m₁ + (n + m₂)) :=
-    (wordSpan_mul_le B m₁ (n + m₂)) (Submodule.mul_mem_mul hP hXQ)
-  rwa [show m₁ + (n + m₂) = m₁ + n + m₂ from by omega] at hPXQ
+  rw [← biRectSpan_eq_range_of_wordSpan_eq_top (d := d) (D := D) P Q B htop]
+  exact biRectSpan_le_wordSpan (d := d) (D := D) B P Q hP hQ
 
 end TwoSidedRange
 
@@ -253,22 +254,15 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
   set Q := (B i₁) ^ D
   have hP : P ∈ wordSpan B D := pow_single_mem_wordSpan B i₀
   have hQ : Q ∈ wordSpan B D := pow_single_mem_wordSpan B i₁
-  -- Step 5: φ ∈ range(toLin' P) via eigenvector of M₀^D
+  -- Step 5: pass the eigenvector data through the nilpotent-killing powers.
   have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) := by
-    have hP_eig : P *ᵥ φ = (μ ^ D) • φ := by
-      simp only [P]; rw [hBi₀]
-      exact pow_mulVec_eq_smul_of_mulVec_eq_smul
-        (evalWord A (List.ofFn σ₀)) φ μ heigφ D
-    exact mem_range_toLin'_of_eigenvector P φ (μ ^ D) (pow_ne_zero D hμ) hP_eig
-  -- Step 6: ψ ∈ range(Q.vecMulLinear) via transpose eigenvector of M₁^D
+    simpa [P, hBi₀] using
+      (mem_range_toLin'_pow_of_eigenvector
+        (M := evalWord A (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ)
   have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) := by
-    have hQ_eig : Qᵀ *ᵥ ψ = (ν ^ D) • ψ := by
-      simp only [Q]
-      rw [Matrix.transpose_pow_eq_pow_transpose, hBi₁]
-      exact pow_mulVec_eq_smul_of_mulVec_eq_smul
-        ((evalWord A (List.ofFn τ₀))ᵀ) ψ ν heigψ D
-    exact mem_range_vecMulLinear_of_transpose_eigenvector
-      Q ψ (ν ^ D) (pow_ne_zero D hν) hQ_eig
+    simpa [Q, hBi₁] using
+      (mem_range_vecMulLinear_pow_of_transpose_eigenvector
+        (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
   -- Step 7: vecMulVec φ ψ ∈ range(mulLeft P ∘ mulRight Q)
   have hrank1_range : Matrix.vecMulVec φ ψ ∈
       LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) :=
@@ -363,21 +357,14 @@ theorem exists_rankOne_in_cumulativeSpan_blockTensor_of_wordEigenvectors
     blockTensor_apply_encodeBlock A L σ₀
   have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) :=
     blockTensor_apply_encodeBlock A L τ₀
-  have hP_eig : P *ᵥ φ = (μ ^ D) • φ := by
-    simp only [P]
-    rw [hBi₀]
-    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
-      (evalWord A (List.ofFn σ₀)) φ μ heigφ D
-  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) :=
-    mem_range_toLin'_of_eigenvector P φ (μ ^ D) (pow_ne_zero D hμ) hP_eig
-  have hQ_eig : Qᵀ *ᵥ ψ = (ν ^ D) • ψ := by
-    simp only [Q]
-    rw [Matrix.transpose_pow_eq_pow_transpose, hBi₁]
-    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
-      ((evalWord A (List.ofFn τ₀))ᵀ) ψ ν heigψ D
-  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) :=
-    mem_range_vecMulLinear_of_transpose_eigenvector
-      Q ψ (ν ^ D) (pow_ne_zero D hν) hQ_eig
+  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) := by
+    simpa [P, hBi₀] using
+      (mem_range_toLin'_pow_of_eigenvector
+        (M := evalWord A (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ)
+  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) := by
+    simpa [Q, hBi₁] using
+      (mem_range_vecMulLinear_pow_of_transpose_eigenvector
+        (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
   simpa [B] using
     (vecMulVec_mem_cumulativeSpan_of_cumulativeSpan_eq_top
       (d := blockPhysDim d L) (D := D)
@@ -419,21 +406,14 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors_of_cumulative
     blockTensor_apply_encodeBlock A L σ₀
   have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) :=
     blockTensor_apply_encodeBlock A L τ₀
-  have hP_eig : P *ᵥ φ = (μ ^ D) • φ := by
-    simp only [P]
-    rw [hBi₀]
-    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
-      (evalWord A (List.ofFn σ₀)) φ μ heigφ D
-  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) :=
-    mem_range_toLin'_of_eigenvector P φ (μ ^ D) (pow_ne_zero D hμ) hP_eig
-  have hQ_eig : Qᵀ *ᵥ ψ = (ν ^ D) • ψ := by
-    simp only [Q]
-    rw [Matrix.transpose_pow_eq_pow_transpose, hBi₁]
-    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
-      ((evalWord A (List.ofFn τ₀))ᵀ) ψ ν heigψ D
-  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) :=
-    mem_range_vecMulLinear_of_transpose_eigenvector
-      Q ψ (ν ^ D) (pow_ne_zero D hν) hQ_eig
+  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) := by
+    simpa [P, hBi₀] using
+      (mem_range_toLin'_pow_of_eigenvector
+        (M := evalWord A (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ)
+  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) := by
+    simpa [Q, hBi₁] using
+      (mem_range_vecMulLinear_pow_of_transpose_eigenvector
+        (M := evalWord A (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ)
   simpa [B] using
     (vecMulVec_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
       (d := blockPhysDim d L) (D := D)

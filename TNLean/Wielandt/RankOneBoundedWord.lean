@@ -46,11 +46,39 @@ noncomputable def biRectSpan
 lemma biRectSpan_eq_map_comp
     (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
     biRectSpan (d := d) (D := D) P Q B n =
-      Submodule.map ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) (wordSpan B n) := by
+      Submodule.map ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q))
+        (wordSpan B n) := by
   -- `Submodule.map_comp` is stated for semilinear maps; specialize to linear maps.
   simpa [biRectSpan, LinearMap.comp_apply] using
     (Submodule.map_comp (f := (LinearMap.mulRight ℂ Q)) (g := (LinearMap.mulLeft ℂ P))
       (p := wordSpan B n)).symm
+
+/-- If the exact word span is already full, the bi-rectangular span is the full two-sided
+range. -/
+theorem biRectSpan_eq_range_of_wordSpan_eq_top
+    (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) {n : ℕ}
+    (htop : wordSpan B n = ⊤) :
+    biRectSpan (d := d) (D := D) P Q B n =
+      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) := by
+  rw [biRectSpan_eq_map_comp, htop, Submodule.map_top]
+
+private theorem mem_biRectSpan_iff
+    (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) {n : ℕ}
+    {M : Matrix (Fin D) (Fin D) ℂ} :
+    M ∈ biRectSpan (d := d) (D := D) P Q B n ↔
+      ∃ X, X ∈ wordSpan B n ∧ P * X * Q = M := by
+  constructor
+  · intro hM
+    rcases Submodule.mem_map.mp hM with ⟨X, hX, rfl⟩
+    rcases Submodule.mem_map.mp hX with ⟨Y, hY, rfl⟩
+    refine ⟨Y, hY, ?_⟩
+    simp [LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
+  · rintro ⟨X, hX, hM⟩
+    rw [← hM]
+    refine Submodule.mem_map.mpr ?_
+    refine ⟨X * Q, ?_, ?_⟩
+    · exact Submodule.mem_map.mpr ⟨X, hX, by simp [LinearMap.mulRight_apply]⟩
+    · simp [LinearMap.mulLeft_apply, Matrix.mul_assoc]
 
 /-- `biRectSpan` always lives in the range of the two-sided multiplication map. -/
 theorem biRectSpan_le_range
@@ -58,11 +86,10 @@ theorem biRectSpan_le_range
     biRectSpan (d := d) (D := D) P Q B n ≤
       LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) := by
   intro M hM
-  have hM' : M ∈
-      Submodule.map ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) (wordSpan B n) := by
-    simpa [biRectSpan_eq_map_comp (d := d) (D := D) P Q B n] using hM
-  rcases Submodule.mem_map.mp hM' with ⟨X, _hX, rfl⟩
-  exact ⟨X, rfl⟩
+  rcases (mem_biRectSpan_iff (d := d) (D := D) P Q B).mp hM with ⟨X, _, hX⟩
+  exact ⟨X, by
+    simpa [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
+      Matrix.mul_assoc] using hX⟩
 
 /-- Converting a bi-rectangular span element back into a bounded word span,
 assuming `P` and `Q` themselves lie in bounded word spans. -/
@@ -73,21 +100,13 @@ theorem biRectSpan_le_wordSpan
     biRectSpan (d := d) (D := D) P Q B n ≤ wordSpan B (m₁ + n + m₂) := by
   classical
   intro M hM
-  -- Unpack the double `Submodule.map`.
-  rcases Submodule.mem_map.mp hM with ⟨X, hX, rfl⟩
-  rcases Submodule.mem_map.mp hX with ⟨Y, hY, rfl⟩
-  -- Now we need: `P * (Y * Q)` lies in the appropriate word span.
+  rcases (mem_biRectSpan_iff (d := d) (D := D) P Q B).mp hM with ⟨Y, hY, hM⟩
   have hPY : P * Y ∈ wordSpan B (m₁ + n) := by
-    have : P * Y ∈ (wordSpan B m₁) * (wordSpan B n) :=
-      Submodule.mul_mem_mul hP hY
-    exact (wordSpan_mul_le B m₁ n) this
+    exact (wordSpan_mul_le B m₁ n) (Submodule.mul_mem_mul hP hY)
   have hPYQ : (P * Y) * Q ∈ wordSpan B ((m₁ + n) + m₂) := by
-    have : (P * Y) * Q ∈ (wordSpan B (m₁ + n)) * (wordSpan B m₂) :=
-      Submodule.mul_mem_mul hPY hQ
-    exact (wordSpan_mul_le B (m₁ + n) m₂) this
-  -- Reassociate and simplify arithmetic.
-  simpa [biRectSpan, LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc,
-    Nat.add_assoc] using hPYQ
+    exact (wordSpan_mul_le B (m₁ + n) m₂) (Submodule.mul_mem_mul hPY hQ)
+  rw [← hM]
+  simpa [Matrix.mul_assoc, Nat.add_assoc] using hPYQ
 
 /-- Two-sided cumulative bi-rectangular span: image of `cumulativeSpan B n` under
 right-multiplication by `Q` followed by left-multiplication by `P`. -/
@@ -106,6 +125,24 @@ lemma cumulativeBiRectSpan_eq_map_comp
   simpa [cumulativeBiRectSpan, LinearMap.comp_apply] using
     (Submodule.map_comp (f := (LinearMap.mulRight ℂ Q)) (g := (LinearMap.mulLeft ℂ P))
       (p := cumulativeSpan B n)).symm
+
+private theorem mem_cumulativeBiRectSpan_iff
+    (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) {n : ℕ}
+    {M : Matrix (Fin D) (Fin D) ℂ} :
+    M ∈ cumulativeBiRectSpan (d := d) (D := D) P Q B n ↔
+      ∃ X, X ∈ cumulativeSpan B n ∧ P * X * Q = M := by
+  constructor
+  · intro hM
+    rcases Submodule.mem_map.mp hM with ⟨X, hX, rfl⟩
+    rcases Submodule.mem_map.mp hX with ⟨Y, hY, rfl⟩
+    refine ⟨Y, hY, ?_⟩
+    simp [LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
+  · rintro ⟨X, hX, hM⟩
+    rw [← hM]
+    refine Submodule.mem_map.mpr ?_
+    refine ⟨X * Q, ?_, ?_⟩
+    · exact Submodule.mem_map.mpr ⟨X, hX, by simp [LinearMap.mulRight_apply]⟩
+    · simp [LinearMap.mulLeft_apply, Matrix.mul_assoc]
 
 /-- If the cumulative span is already full, the cumulative bi-rectangular span is the
 full two-sided range. -/
@@ -167,14 +204,14 @@ theorem cumulativeBiRectSpan_le_cumulativeSpan
     cumulativeBiRectSpan (d := d) (D := D) P Q B n ≤
       cumulativeSpan B (m₁ + n + m₂) := by
   intro M hM
-  rcases Submodule.mem_map.mp hM with ⟨X, hX, rfl⟩
-  rcases Submodule.mem_map.mp hX with ⟨Y, hY, rfl⟩
+  rcases (mem_cumulativeBiRectSpan_iff (d := d) (D := D) P Q B).mp hM with
+    ⟨Y, hY, hM⟩
   have hPY : P * Y ∈ cumulativeSpan B (m₁ + n) :=
     mul_mem_cumulativeSpan_of_mem_wordSpan_left B hP hY
   have hPYQ : (P * Y) * Q ∈ cumulativeSpan B ((m₁ + n) + m₂) :=
     mul_mem_cumulativeSpan_of_mem_wordSpan_right B hPY hQ
-  simpa [cumulativeBiRectSpan, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
-    Matrix.mul_assoc, Nat.add_assoc] using hPYQ
+  rw [← hM]
+  simpa [Matrix.mul_assoc, Nat.add_assoc] using hPYQ
 
 /-- Membership in the full two-sided range implies membership in a bounded cumulative span,
 assuming the middle factor is available cumulatively. -/
@@ -368,52 +405,29 @@ theorem mulLeft_mem_biRectSpan_pow_succ
     (hX : X ∈ W (d := d) (D := D) (B := B) (i₀ := i₀) (i₁ := i₁) n) :
     (B i₀) * X ∈ W (d := d) (D := D) (B := B) (i₀ := i₀) (i₁ := i₁) (n + 1) := by
   classical
-  -- Unpack the definition of `biRectSpan`.
-  rcases Submodule.mem_map.mp hX with ⟨X₁, hX₁, rfl⟩
-  rcases Submodule.mem_map.mp hX₁ with ⟨Y, hY, rfl⟩
-  -- Commutation of `B i₀` with its own powers.
+  rcases (mem_biRectSpan_iff (d := d) (D := D)
+    (P0 (B := B) (i₀ := i₀)) (Q0 (B := B) (i₁ := i₁)) B).mp hX with ⟨Y, hY, hX⟩
   set M0 : Matrix (Fin D) (Fin D) ℂ := B i₀
   have hcomm : M0 * (M0 ^ D) = (M0 ^ D) * M0 := by
     calc
-      M0 * (M0 ^ D) = M0 ^ (D + 1) := by
-        simp [pow_succ']
-      _ = (M0 ^ D) * M0 := by
-        simp [pow_succ]
+      M0 * (M0 ^ D) = M0 ^ (D + 1) := by simp [pow_succ']
+      _ = (M0 ^ D) * M0 := by simp [pow_succ]
   have hM0 : M0 ∈ wordSpan B 1 := by
-    -- `M0 = evalWord B [i₀]`.
     simpa [M0, evalWord] using (evalWord_mem_wordSpan B ([i₀] : List (Fin d)))
   have hY' : M0 * Y ∈ wordSpan B (n + 1) := by
     have : M0 * Y ∈ (wordSpan B 1) * (wordSpan B n) :=
       Submodule.mul_mem_mul hM0 hY
-    -- `1 + n = n + 1`.
     simpa [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using (wordSpan_mul_le B 1 n) this
-  -- Build the membership proof for the mapped span.
-  apply Submodule.mem_map.mpr
-  refine ⟨(M0 * Y) * (Q0 (B := B) (i₁ := i₁)), ?_, ?_⟩
-  · -- Inner map (right multiplication by `Q0`).
-    apply Submodule.mem_map.mpr
-    refine ⟨M0 * Y, hY', by
-      simp [LinearMap.mulRight_apply, Matrix.mul_assoc]⟩
-  · -- Outer map (left multiplication by `P0`).
-    -- Unfold the linear maps/abbreviations so the goal becomes a plain matrix identity.
-    simp only [P0, Q0, M0, LinearMap.mulLeft_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
-    -- Now solve by associativity plus commutation of `B i₀` with its power.
-    set Z : Matrix (Fin D) (Fin D) ℂ := Y * (B i₁ ^ D)
-    have hcomm' : (B i₀ ^ D) * (B i₀) = (B i₀) * (B i₀ ^ D) := by
-      simpa [M0] using hcomm.symm
-    calc
-      (B i₀ ^ D) * (B i₀ * (Y * B i₁ ^ D))
-          = (B i₀ ^ D) * (B i₀ * Z) := by
-              simp [Z]
-      _ = ((B i₀ ^ D) * B i₀) * Z := by
-              rw [← Matrix.mul_assoc]
-      _ = (B i₀ * (B i₀ ^ D)) * Z := by
-              -- rewrite the commutation in the left factor
-              simp [hcomm']
-      _ = B i₀ * ((B i₀ ^ D) * Z) := by
-              rw [Matrix.mul_assoc]
-      _ = B i₀ * (B i₀ ^ D * (Y * B i₁ ^ D)) := by
-              simp [Z]
+  refine (mem_biRectSpan_iff (d := d) (D := D)
+    (P0 (B := B) (i₀ := i₀)) (Q0 (B := B) (i₁ := i₁)) B).mpr ?_
+  refine ⟨M0 * Y, hY', ?_⟩
+  rw [← hX]
+  calc
+    (B i₀ ^ D) * (M0 * Y) * (B i₁ ^ D)
+        = ((B i₀ ^ D) * M0) * Y * (B i₁ ^ D) := by simp [Matrix.mul_assoc]
+    _ = (M0 * (B i₀ ^ D)) * Y * (B i₁ ^ D) := by
+        simpa [M0] using congrArg (fun Z => Z * Y * (B i₁ ^ D)) hcomm.symm
+    _ = M0 * ((B i₀ ^ D) * Y * (B i₁ ^ D)) := by simp [Matrix.mul_assoc]
 
 /-- Linear map sending level `n` to level `n+1` by left multiplication with `B i₀`. -/
 noncomputable def biRectSpanLeftStep (n : ℕ) :
@@ -441,13 +455,15 @@ theorem biRectSpanLeftStep_injective (n : ℕ) :
     simpa [Matrix.mul_sub, sub_eq_zero] using hmat
   -- The difference lies in the range of left multiplication by `((B i₀)^D)`.
   have hxRange : x.1 ∈ LinearMap.range (LinearMap.mulLeft ℂ ((B i₀) ^ D)) := by
-    rcases (Submodule.mem_map).1 x.2 with ⟨Z, _hZ, hZeq⟩
-    refine (LinearMap.mem_range).2 ⟨Z, ?_⟩
-    simpa [P0] using hZeq
+    rcases (mem_biRectSpan_iff (d := d) (D := D)
+      (P0 (B := B) (i₀ := i₀)) (Q0 (B := B) (i₁ := i₁)) B).mp x.2 with ⟨Z, _, hZ⟩
+    refine (LinearMap.mem_range).2 ⟨Z * Q0 (B := B) (i₁ := i₁), ?_⟩
+    simpa [P0, Q0, LinearMap.mulLeft_apply, Matrix.mul_assoc] using hZ
   have hyRange : y.1 ∈ LinearMap.range (LinearMap.mulLeft ℂ ((B i₀) ^ D)) := by
-    rcases (Submodule.mem_map).1 y.2 with ⟨Z, _hZ, hZeq⟩
-    refine (LinearMap.mem_range).2 ⟨Z, ?_⟩
-    simpa [P0] using hZeq
+    rcases (mem_biRectSpan_iff (d := d) (D := D)
+      (P0 (B := B) (i₀ := i₀)) (Q0 (B := B) (i₁ := i₁)) B).mp y.2 with ⟨Z, _, hZ⟩
+    refine (LinearMap.mem_range).2 ⟨Z * Q0 (B := B) (i₁ := i₁), ?_⟩
+    simpa [P0, Q0, LinearMap.mulLeft_apply, Matrix.mul_assoc] using hZ
   have hzRange : (x.1 - y.1) ∈ LinearMap.range (LinearMap.mulLeft ℂ ((B i₀) ^ D)) :=
     Submodule.sub_mem _ hxRange hyRange
   have hzero : x.1 - y.1 = 0 :=

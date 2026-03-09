@@ -322,6 +322,32 @@ theorem cumulativeVectorSpan_finrank_pos (A : MPSTensor d D)
   intro h0
   exact hne (Submodule.finrank_eq_zero.mp h0)
 
+/-- Shared dimension-growth argument: once some cumulative vector span is all of `ℂ^D`,
+then level `D - 1` is already full. -/
+private theorem cumulativeVectorSpan_eq_top_of_exists_level_eq_top [NeZero D]
+    (A : MPSTensor d D) (φ : Fin D → ℂ) (hφ : φ ≠ 0) {N : ℕ}
+    (hVN : cumulativeVectorSpan A φ N = ⊤) :
+    cumulativeVectorSpan A φ (D - 1) = ⊤ := by
+  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  by_contra hne
+  rcases cumulativeVectorSpan_dim_growth A φ D with ⟨j, hj, hstab⟩ | hgrow
+  · -- Stabilization at some `j < D` forces all later spans to equal `K_j`.
+    have hstable := cumulativeVectorSpan_stable A φ hstab
+    have hKNj : cumulativeVectorSpan A φ (N ⊔ j) = cumulativeVectorSpan A φ j :=
+      hstable _ le_sup_right
+    have hle : cumulativeVectorSpan A φ N ≤ cumulativeVectorSpan A φ j :=
+      le_trans (cumulativeVectorSpan_mono' A φ le_sup_left) hKNj.le
+    have htopj : cumulativeVectorSpan A φ j = ⊤ :=
+      eq_top_iff.mpr (le_trans (eq_top_iff.mp hVN) hle)
+    have : cumulativeVectorSpan A φ j ≤ cumulativeVectorSpan A φ (D - 1) :=
+      cumulativeVectorSpan_mono' A φ (by omega)
+    rw [htopj] at this
+    exact hne (eq_top_iff.mpr this)
+  · -- Otherwise the strictly increasing dimensions exceed `D` at level `D`.
+    have hpos := cumulativeVectorSpan_finrank_pos A φ hφ
+    have hle := cumulativeVectorSpan_finrank_le A φ D
+    omega
+
 /-! ### Main theorem -/
 
 /-- **Lemma 2(a)**: If the channel is normal (IsNormal) and A has an eigenvector
@@ -346,29 +372,9 @@ theorem eigenvector_spreading [NeZero D]
     (_heig : A _i₀ *ᵥ φ = _μ • φ)
     (hNormal : IsNormal A) :
     cumulativeVectorSpan A φ (D - 1) = ⊤ := by
-  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   obtain ⟨N, hN⟩ := cumulativeSpan_eq_top_of_isNormal A hNormal
-  have hVN := cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top A φ hφ hN
-  by_contra hne
-  rcases cumulativeVectorSpan_dim_growth A φ D with ⟨j, hj, hstab⟩ | hgrow
-  · -- Stabilization at some j < D → K_{max N j} = K_j
-    have hstable := cumulativeVectorSpan_stable A φ hstab
-    have hKNj : cumulativeVectorSpan A φ (N ⊔ j) = cumulativeVectorSpan A φ j :=
-      hstable _ le_sup_right
-    have hle : cumulativeVectorSpan A φ N ≤ cumulativeVectorSpan A φ j :=
-      le_trans (cumulativeVectorSpan_mono' A φ le_sup_left) hKNj.le
-    -- K_N = ⊤, so K_j = ⊤
-    have htopj : cumulativeVectorSpan A φ j = ⊤ :=
-      eq_top_iff.mpr (le_trans (eq_top_iff.mp hVN) hle)
-    -- K_{D-1} ≥ K_j since j < D
-    have : cumulativeVectorSpan A φ j ≤ cumulativeVectorSpan A φ (D - 1) :=
-      cumulativeVectorSpan_mono' A φ (by omega)
-    rw [htopj] at this
-    exact hne (eq_top_iff.mpr this)
-  · -- No stabilization: dim(K_D) ≥ dim(K_0) + D > D
-    have hpos := cumulativeVectorSpan_finrank_pos A φ hφ
-    have hle := cumulativeVectorSpan_finrank_le A φ D
-    omega
+  exact cumulativeVectorSpan_eq_top_of_exists_level_eq_top A φ hφ
+    (cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top A φ hφ hN)
 
 /-- Cumulative-span version of eigenvector spreading: if the cumulative span reaches top
 and `φ ≠ 0`, then the cumulative vector span reaches full at step `D - 1`. -/
@@ -376,27 +382,7 @@ theorem eigenvector_spreading_of_cumulativeSpan_eq_top [NeZero D]
     (A : MPSTensor d D) (φ : Fin D → ℂ) (hφ : φ ≠ 0)
     {N : ℕ} (hCum : cumulativeSpan A N = ⊤) :
     cumulativeVectorSpan A φ (D - 1) = ⊤ := by
-  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  have hVN := cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top A φ hφ hCum
-  by_contra hne
-  rcases cumulativeVectorSpan_dim_growth A φ D with ⟨j, hj, hstab⟩ | hgrow
-  · -- Stabilization at some j < D → K_{max N j} = K_j
-    have hstable := cumulativeVectorSpan_stable A φ hstab
-    have hKNj : cumulativeVectorSpan A φ (N ⊔ j) = cumulativeVectorSpan A φ j :=
-      hstable _ le_sup_right
-    have hle : cumulativeVectorSpan A φ N ≤ cumulativeVectorSpan A φ j :=
-      le_trans (cumulativeVectorSpan_mono' A φ le_sup_left) hKNj.le
-    -- K_N = ⊤, so K_j = ⊤
-    have htopj : cumulativeVectorSpan A φ j = ⊤ :=
-      eq_top_iff.mpr (le_trans (eq_top_iff.mp hVN) hle)
-    -- K_{D-1} ≥ K_j since j < D
-    have : cumulativeVectorSpan A φ j ≤ cumulativeVectorSpan A φ (D - 1) :=
-      cumulativeVectorSpan_mono' A φ (by omega)
-    rw [htopj] at this
-    exact hne (eq_top_iff.mpr this)
-  · -- No stabilization: dim(K_D) ≥ dim(K_0) + D > D
-    have hpos := cumulativeVectorSpan_finrank_pos A φ hφ
-    have hle := cumulativeVectorSpan_finrank_le A φ D
-    omega
+  exact cumulativeVectorSpan_eq_top_of_exists_level_eq_top A φ hφ
+    (cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top A φ hφ hCum)
 
 end MPSTensor

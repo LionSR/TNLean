@@ -164,7 +164,7 @@ theorem IsNormal_transposeTensor
 
 /-- The cumulative span of the transposed tensor also reaches top. -/
 theorem cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top
-    {d D : ℕ} [NeZero D] (A : MPSTensor d D) {N : ℕ}
+    {d D : ℕ} (A : MPSTensor d D) {N : ℕ}
     (h : cumulativeSpan A N = ⊤) :
     cumulativeSpan (transposeTensor A) N = ⊤ := by
   let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
@@ -321,41 +321,6 @@ theorem exists_wordSpan_vecMul_eq_pi_single
 
 /-! ## Row spreading from normality (via transpose) -/
 
-/-- If `A` is normal, then a left-eigenvector for `(A i₀)ᵀ` spreads all rows at level `D-1`.
-
-This is the row-analogue of `eigenvector_spreading`, obtained by applying that theorem to
-`transposeTensor A` and then translating `vectorSpreadSpan` back to `rowSpreadSpan`. -/
-theorem rowSpreadSpan_eq_top_of_isNormal_of_eigenvector_transpose
-    {d D : ℕ} [NeZero D]
-    (A : MPSTensor d D) (ψ : Fin D → ℂ) (hψ : ψ ≠ 0)
-    (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
-    (heig : (A i₀)ᵀ *ᵥ ψ = μ • ψ)
-    (hNormal : IsNormal (d := d) (D := D) A) :
-    rowSpreadSpan A ψ (D - 1) = ⊤ := by
-  classical
-  -- Translate row spreading into vector spreading for the transposed tensor.
-  have hrow :
-      rowSpreadSpan A ψ (D - 1) = vectorSpreadSpan (transposeTensor A) ψ (D - 1) := by
-    -- `transposeTensor A` is definitionaly `fun i => (A i)ᵀ`.
-    simpa [transposeTensor] using
-      (rowSpreadSpan_eq_vectorSpreadSpan_transpose (A := A) (ψ := ψ) (n := D - 1))
-  -- Apply eigenvector spreading to `transposeTensor A`.
-  have hNormalT : IsNormal (d := d) (D := D) (transposeTensor A) :=
-    IsNormal_transposeTensor (A := A) hNormal
-  have hcum : cumulativeVectorSpan (transposeTensor A) ψ (D - 1) = ⊤ := by
-    -- Use the eigenvector spreading theorem.
-    -- The eigenvector hypothesis is exactly `heig` since `(transposeTensor A) i₀ = (A i₀)ᵀ`.
-    simpa [transposeTensor] using
-      (eigenvector_spreading (A := transposeTensor A) (φ := ψ) hψ i₀ μ hμ heig hNormalT)
-  -- Convert cumulative span to fixed-length span using the padding lemma.
-  have hvec : vectorSpreadSpan (transposeTensor A) ψ (D - 1) = ⊤ := by
-    simpa [transposeTensor] using
-      (vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
-        (A := transposeTensor A) (φ := ψ) (n := D - 1)
-        i₀ μ hμ heig hcum)
-  -- Conclude by rewriting back to `rowSpreadSpan`.
-  simpa [hrow] using hvec
-
 /-- Cumulative-span version: row spread reaches full from cumulative spanning. -/
 theorem rowSpreadSpan_eq_top_of_cumulativeSpan_eq_top_of_eigenvector_transpose
     {d D : ℕ} [NeZero D]
@@ -381,6 +346,22 @@ theorem rowSpreadSpan_eq_top_of_cumulativeSpan_eq_top_of_eigenvector_transpose
         (A := transposeTensor A) (φ := ψ) (n := D - 1)
         i₁ ν hν heigψ hcum)
   simpa [hrow] using hvec
+
+/-- If `A` is normal, then a left-eigenvector for `(A i₀)ᵀ` spreads all rows at level
+`D - 1`.
+
+This is the row-analogue of `eigenvector_spreading`, obtained by passing from normality to a
+cumulative spanning witness and then applying the cumulative row-spreading theorem. -/
+theorem rowSpreadSpan_eq_top_of_isNormal_of_eigenvector_transpose
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D) (ψ : Fin D → ℂ) (hψ : ψ ≠ 0)
+    (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
+    (heig : (A i₀)ᵀ *ᵥ ψ = μ • ψ)
+    (hNormal : IsNormal (d := d) (D := D) A) :
+    rowSpreadSpan A ψ (D - 1) = ⊤ := by
+  obtain ⟨N, hCum⟩ := cumulativeSpan_eq_top_of_isNormal A hNormal
+  exact rowSpreadSpan_eq_top_of_cumulativeSpan_eq_top_of_eigenvector_transpose
+    (A := A) (ψ := ψ) hψ i₀ μ hμ heig hCum
 
 /-! ## Reduction: one rank-one element + row spreading ⇒ full rank-one basis -/
 

@@ -6,7 +6,17 @@ import TNLean.PiAlgebra.BlockSeparation
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.Spectral.SpectralGap
 import TNLean.Spectral.MPVOverlapDecay
+import TNLean.MPS.CanonicalFormReduction
+import TNLean.Channel.PeripheralSpectrum
 import Mathlib.Analysis.Complex.Basic
+
+/-!
+# Separated canonical-form hypotheses and block separation
+
+This file splits the canonical-form hypotheses used in the MPS fundamental theorem into smaller
+bundles, proves the core block-separation result from those separated hypotheses, and then rebuilds
+legacy canonical-form wrappers on top of the split API.
+-/
 
 set_option linter.unusedSectionVars false
 set_option linter.unusedVariables false
@@ -40,6 +50,54 @@ structure HasInjectiveBlocks {r : ℕ} {dim : Fin r → ℕ}
   /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
   block_injective : ∀ k, IsInjective (A k)
 
+namespace HasInjectiveBlocks
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Build `HasInjectiveBlocks` from pointwise injectivity. -/
+def ofForall (hA : ∀ k, IsInjective (A k)) : HasInjectiveBlocks (d := d) A where
+  block_injective := hA
+
+end HasInjectiveBlocks
+
+/-- Each block in the family is irreducible in the invariant-projection sense. -/
+structure HasIrreducibleBlocks {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
+  /-- Each block has no nontrivial invariant orthogonal projection. -/
+  block_irreducible : ∀ k, IsIrreducibleTensor (A k)
+
+namespace HasIrreducibleBlocks
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Build `HasIrreducibleBlocks` from pointwise irreducibility. -/
+def ofForall (hA : ∀ k, IsIrreducibleTensor (A k)) : HasIrreducibleBlocks (d := d) A where
+  block_irreducible := hA
+
+end HasIrreducibleBlocks
+
+/-- Each block transfer map is primitive in the peripheral-spectrum sense
+(`peripheralEigenvalues = {1}`). -/
+structure HasPrimitiveBlocks {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
+  /-- Each block transfer map has `1` as its unique peripheral eigenvalue. -/
+  block_primitive : ∀ k,
+    _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))
+
+namespace HasPrimitiveBlocks
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Build `HasPrimitiveBlocks` from pointwise peripheral primitivity. -/
+def ofForall (hA : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))) :
+    HasPrimitiveBlocks (d := d) A where
+  block_primitive := hA
+
+end HasPrimitiveBlocks
+
 /-- Left-canonical block-family normalization: each block satisfies
 `∑ᵢ Aᵢ† Aᵢ = I`. -/
 structure IsLeftCanonicalBlockFamily {r : ℕ} {dim : Fin r → ℕ}
@@ -52,6 +110,11 @@ namespace IsLeftCanonicalBlockFamily
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Build `IsLeftCanonicalBlockFamily` from pointwise left-canonical identities. -/
+def ofForall (hA : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
+    IsLeftCanonicalBlockFamily (d := d) A where
+  leftCanonical := hA
 
 /-- Alias emphasizing that left-canonical blocks are trace-preserving. -/
 theorem tp_gauge (hA : IsLeftCanonicalBlockFamily (d := d) A) :
@@ -94,6 +157,21 @@ structure HasNormalizedSelfOverlap {r : ℕ} {dim : Fin r → ℕ}
       Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
         Filter.atTop (nhds (1 : ℂ))
 
+namespace HasNormalizedSelfOverlap
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Build `HasNormalizedSelfOverlap` from pointwise self-overlap convergence. -/
+def ofForall
+    (hA : ∀ k,
+      Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+        Filter.atTop (nhds (1 : ℂ))) :
+    HasNormalizedSelfOverlap (d := d) A where
+  overlap_tendsto_one := hA
+
+end HasNormalizedSelfOverlap
+
 /-! ### Canonical form predicate -/
 
 /-- Bundled canonical-form predicate combining injectivity, left-canonical normalization
@@ -125,13 +203,13 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Project the bundled predicate to blockwise injectivity data. -/
-def toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A where
-  block_injective := hCF.block_injective
+def toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A :=
+  HasInjectiveBlocks.ofForall hCF.block_injective
 
 /-- Project the bundled predicate to left-canonical block-family normalization. -/
 def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalForm μ A) :
-    IsLeftCanonicalBlockFamily (d := d) A where
-  leftCanonical := hCF.leftCanonical
+    IsLeftCanonicalBlockFamily (d := d) A :=
+  IsLeftCanonicalBlockFamily.ofForall hCF.leftCanonical
 
 /-- Project the bundled predicate to the separated weight data. -/
 def toHasStrictOrderedNonzeroWeights (hCF : IsCanonicalForm μ A) :
@@ -141,8 +219,8 @@ def toHasStrictOrderedNonzeroWeights (hCF : IsCanonicalForm μ A) :
 
 /-- Project the bundled predicate to self-overlap normalization data. -/
 def toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
-    HasNormalizedSelfOverlap (d := d) A where
-  overlap_tendsto_one := hCF.overlap_tendsto_one
+    HasNormalizedSelfOverlap (d := d) A :=
+  HasNormalizedSelfOverlap.ofForall hCF.overlap_tendsto_one
 
 /-- Rebuild the `IsCanonicalForm` bundle from the additive split API. -/
 def ofSeparatedData
@@ -163,6 +241,122 @@ theorem mu_injective (hCF : IsCanonicalForm μ A) : Function.Injective μ :=
 theorem mu_norm_injective (hCF : IsCanonicalForm μ A) :
     Function.Injective (fun k : Fin r => ‖μ k‖) :=
   hCF.toHasStrictOrderedNonzeroWeights.mu_norm_injective
+
+end IsCanonicalForm
+
+/-! ### Normal canonical form predicate -/
+
+/-- Bundled normal-canonical-form predicate: each block is irreducible,
+left-canonical, and peripheral-spectrum primitive, with strictly ordered
+nonzero weights and positive bond dimensions.
+
+This is the weaker “normal tensor” block notion from arXiv:1606.00608:
+each block is irreducible and its transfer map has peripheral spectrum `{1}`.
+The self-overlap normalization is intended to be derived from primitivity
+rather than stored as a field. -/
+structure IsNormalCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
+  /-- Each block is irreducible in the invariant-projection sense. -/
+  block_irreducible : ∀ k, IsIrreducibleTensor (A k)
+  /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`. -/
+  leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
+  /-- Each block transfer map is primitive in the peripheral-spectrum sense. -/
+  block_primitive : ∀ k,
+    _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))
+  /-- Strict ordering of the block weights by modulus. -/
+  mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
+  /-- No block weight vanishes. -/
+  mu_ne_zero : ∀ k, μ k ≠ 0
+  /-- All block bond dimensions are positive. -/
+  dim_pos : ∀ k, 0 < dim k
+
+namespace IsNormalCanonicalForm
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Project the bundled predicate to blockwise irreducibility data. -/
+def toHasIrreducibleBlocks (hNCF : IsNormalCanonicalForm μ A) :
+    HasIrreducibleBlocks (d := d) A :=
+  HasIrreducibleBlocks.ofForall hNCF.block_irreducible
+
+/-- Project the bundled predicate to left-canonical block-family normalization. -/
+def toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalForm μ A) :
+    IsLeftCanonicalBlockFamily (d := d) A :=
+  IsLeftCanonicalBlockFamily.ofForall hNCF.leftCanonical
+
+/-- Project the bundled predicate to blockwise peripheral primitivity data. -/
+def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalForm μ A) :
+    HasPrimitiveBlocks (d := d) A :=
+  HasPrimitiveBlocks.ofForall hNCF.block_primitive
+
+/-- Project the bundled predicate to the separated weight data. -/
+def toHasStrictOrderedNonzeroWeights (hNCF : IsNormalCanonicalForm μ A) :
+    HasStrictOrderedNonzeroWeights μ where
+  mu_strict_anti := hNCF.mu_strict_anti
+  mu_ne_zero := hNCF.mu_ne_zero
+
+/-- Rebuild the `IsNormalCanonicalForm` bundle from the additive split API. -/
+def ofSeparatedData
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hPrim : HasPrimitiveBlocks (d := d) A)
+    (hμ : HasStrictOrderedNonzeroWeights μ)
+    (hDim : ∀ k, 0 < dim k) :
+    IsNormalCanonicalForm μ A where
+  block_irreducible := hIrr.block_irreducible
+  leftCanonical := hLeft.leftCanonical
+  block_primitive := hPrim.block_primitive
+  mu_strict_anti := hμ.mu_strict_anti
+  mu_ne_zero := hμ.mu_ne_zero
+  dim_pos := hDim
+
+theorem mu_injective (hNCF : IsNormalCanonicalForm μ A) : Function.Injective μ :=
+  hNCF.toHasStrictOrderedNonzeroWeights.mu_injective
+
+theorem mu_norm_injective (hNCF : IsNormalCanonicalForm μ A) :
+    Function.Injective (fun k : Fin r => ‖μ k‖) :=
+  hNCF.toHasStrictOrderedNonzeroWeights.mu_norm_injective
+
+/-- In a normal canonical form, each block's self-overlap converges to `1`.
+
+This is intended to be derived from left-canonical normalization together with
+peripheral-spectrum primitivity of the transfer map. -/
+theorem overlap_tendsto_one
+    [∀ k, NeZero (dim k)]
+    (hNCF : IsNormalCanonicalForm μ A) (k : Fin r) :
+    Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.atTop (nhds (1 : ℂ)) := by
+  sorry
+
+/-- Project normal-canonical-form data to the overlap-normalization interface used by the
+existing separated FT statements. -/
+def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
+    (hNCF : IsNormalCanonicalForm μ A) :
+    HasNormalizedSelfOverlap (d := d) A :=
+  HasNormalizedSelfOverlap.ofForall hNCF.overlap_tendsto_one
+
+end IsNormalCanonicalForm
+
+namespace IsCanonicalForm
+
+/-- Upgrade an `IsCanonicalForm` witness to the weaker normal-canonical-form interface,
+provided irreducibility, peripheral primitivity, and positive bond dimensions are supplied
+separately. -/
+theorem toIsNormalCanonicalForm
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+    (hCF : IsCanonicalForm μ A)
+    (hIrr : ∀ k, IsIrreducibleTensor (A k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k)))
+    (hDim : ∀ k, 0 < dim k) :
+    IsNormalCanonicalForm μ A where
+  block_irreducible := hIrr
+  leftCanonical := hCF.leftCanonical
+  block_primitive := hPrim
+  mu_strict_anti := hCF.mu_strict_anti
+  mu_ne_zero := hCF.mu_ne_zero
+  dim_pos := hDim
 
 end IsCanonicalForm
 
@@ -1161,6 +1355,7 @@ theorem per_block_sameMPV_of_separated_canonical_data
       hA_inj.block_injective hB_inj.block_injective hA_left.leftCanonical hB_left.leftCanonical
       hA_overlap.overlap_tendsto_one h_summed
 
+/-- Backwards-compatible wrapper extracting per-block `SameMPV` from canonical-form data. -/
 theorem per_block_sameMPV_of_canonical_form
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -1174,8 +1369,8 @@ theorem per_block_sameMPV_of_canonical_form
     hA.toHasInjectiveBlocks
     hA.toIsLeftCanonicalBlockFamily
     hA.toHasNormalizedSelfOverlap
-    { block_injective := hB_inj }
-    { leftCanonical := hB_lc }
+    (HasInjectiveBlocks.ofForall hB_inj)
+    (IsLeftCanonicalBlockFamily.ofForall hB_lc)
     hSame₂
 
 /-- Separated-data variant of `fundamentalTheorem_canonicalForm`.
@@ -1233,8 +1428,8 @@ theorem fundamentalTheorem_canonicalForm
     hA.toHasInjectiveBlocks
     hA.toIsLeftCanonicalBlockFamily
     hA.toHasNormalizedSelfOverlap
-    { block_injective := hB_inj }
-    { leftCanonical := hB_lc }
+    (HasInjectiveBlocks.ofForall hB_inj)
+    (IsLeftCanonicalBlockFamily.ofForall hB_lc)
     hSame₂
 
 /-- Backwards-compatible wrapper around `fundamentalTheorem_of_separated_canonical_data_explicit`. -/
@@ -1253,8 +1448,8 @@ theorem fundamentalTheorem_canonicalForm_explicit
     hA.toHasInjectiveBlocks
     hA.toIsLeftCanonicalBlockFamily
     hA.toHasNormalizedSelfOverlap
-    { block_injective := hB_inj }
-    { leftCanonical := hB_lc }
+    (HasInjectiveBlocks.ofForall hB_inj)
+    (IsLeftCanonicalBlockFamily.ofForall hB_lc)
     hSame₂
 
 end CanonicalFormSeparation
