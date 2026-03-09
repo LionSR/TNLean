@@ -189,6 +189,15 @@ and~\cite{Cirac2021Matrix}.
     assumed directly.
 \end{remark}
 
+\begin{remark}[Normal-canonical companion]\label{rem:normal_cf_companion}
+    Definition~\ref{def:is_canonical_form} is the legacy injective predicate.
+    The D1 route instead uses the normal canonical form predicate from
+    Definition~\ref{def:is_normal_canonical_form}: injectivity and the explicit
+    self-overlap hypothesis are replaced by irreducibility, TP normalization,
+    and primitive transfer maps. Theorem~\ref{thm:ncf_overlap_tendsto_one}
+    then supplies the self-overlap limit automatically.
+\end{remark}
+
 \begin{theorem}[Vandermonde separation]\label{thm:vandermonde_sep}
     \lean{MPSTensor.vandermonde_separation}
     \leanok
@@ -271,6 +280,27 @@ and~\cite{Cirac2021Matrix}.
     the induction hypothesis applies to the remaining $r-1$
     blocks.
 
+\end{proof}
+
+\begin{theorem}[Block separation from normal canonical form]\label{thm:block_sep_normal}
+    \lean{MPSTensor.per_block_sameMPV_of_normal_canonical_form}\leanok
+    \uses{def:is_normal_canonical_form}
+    Let $((\mu_k), (A_k))$ satisfy the normal canonical form predicate,
+    and let $(B_k)$ be irreducible tensors satisfying the same TP
+    normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$.
+    If the block-diagonal tensors
+    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
+    generate the same MPV family, then each pair
+    $(A_k, B_k)$ generates the same MPV family.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge}
+    The proof follows the same peeling argument as
+    Theorem~\ref{thm:block_sep}. The only change is in the spectral step:
+    injectivity is replaced by irreducibility plus TP normalization, and
+    Theorem~\ref{thm:ncf_overlap_tendsto_one} supplies the diagonal overlap
+    limit needed to identify the leading block.
 \end{proof}
 
 \begin{theorem}[Canonical form fundamental theorem]\label{thm:ft_canonical}

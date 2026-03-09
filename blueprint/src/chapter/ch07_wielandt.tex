@@ -956,3 +956,15 @@ The gap is closed by an aperiodicity hypothesis.
     By Theorem~\ref{thm:algspan_to_normal} with the
     aperiodicity hypothesis, $A$ is normal.
 \end{proof}
+
+\begin{remark}[The D1 route bypasses the aperiodicity bridge]\label{rem:d1_bypasses_aperiodicity}
+    The aperiodicity results in \S\ref{sec:cumspan_to_wordspan} are needed only for the
+    legacy route through Definition~\ref{def:normal}, where one upgrades cumulative
+    spanning to eventual block injectivity. The D1 route used later in
+    Chapters~\ref{ch:canonical}--\ref{ch:assembly} does not pass through this bridge:
+    it works directly with irreducible TP-normalized blocks whose blocked transfer maps
+    are primitive, and packages them as normal canonical form in the sense of
+    \cite{Cirac2017MPDO_AnnPhys}. The code also contains companion cumulative-span
+    lemmas for this blocked irreducible setting, including blocked and
+    eigenvector-spreading variants, but we do not spell them out separately here.
+\end{remark}
