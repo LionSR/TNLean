@@ -148,7 +148,8 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_biCanonical
 
 /-! ## Task C: roots of unity wrapper (optional) -/
 
-/-- For irreducible, bi-canonical (unital + trace-preserving) Kraus maps, every peripheral eigenvalue is a root of unity.
+/-- For irreducible, bi-canonical (unital + trace-preserving) Kraus maps,
+every peripheral eigenvalue is a root of unity.
 
 This is a thin wrapper around `peripheral_isRootOfUnity_of_closed_powers`. -/
 theorem peripheral_isRootOfUnity_of_irreducible_biCanonical
