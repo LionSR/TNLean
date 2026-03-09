@@ -35,7 +35,12 @@
       "Bash(dtruss git:*)",
       "Bash(xattr:*)",
       "Bash(cp:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(gh run:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(gh api:*)",
+      "Bash(gh search:*)",
+      "Bash(pip3 show:*)"
     ]
   }
 }

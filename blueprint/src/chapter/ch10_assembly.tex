@@ -5,9 +5,9 @@ establishes their permutation rigidity, and records the
 strongest end-stage Fundamental Theorem statements currently
 assembled in Lean.
 The proportional theorem is formalized with explicit
-coefficient-convergence data, and the equal theorem is the
-same-structure CF-BNT specialization rather than the full
-paper-level equal-MPV theorem.
+coefficient-convergence data in both the legacy CF-BNT route and the
+new normal-CF-BNT route, and the equal theorem is the same-structure
+CF-BNT specialization rather than the full paper-level equal-MPV theorem.
 The results combine the canonical form reduction
 (Chapter~\ref{ch:canonical}),
 block separation (Chapter~\ref{ch:block_perm}),
@@ -54,6 +54,16 @@ The main references are
 	$A_j$ and $A_k$ are not gauge-phase equivalent.
 \end{definition}
 
+\begin{definition}[Normal canonical form with BNT separation]\label{def:normal_cf_bnt}
+		\lean{MPSTensor.IsNormalCanonicalFormBNT}\leanok
+		\uses{def:is_normal_canonical_form, def:gauge_phase_equiv}
+		A \emph{normal canonical form with BNT separation} extends the normal
+		canonical form predicate (Definition~\ref{def:is_normal_canonical_form})
+		with the same non-equivalence condition as Definition~\ref{def:cf_bnt}:
+		for $j \neq k$ with $D_j = D_k$, the blocks $A_j$ and $A_k$ are not
+		gauge-phase equivalent.
+\end{definition}
+
 \begin{theorem}[Cross-overlap decay for distinct CF-BNT blocks]\label{thm:cross_overlap_zero}
 	\lean{MPSTensor.IsCanonicalFormBNT.cross_overlap_tendsto_zero}
 	\leanok
@@ -82,21 +92,35 @@ The main references are
 \end{theorem}
 
 \begin{proof}
-	\leanok
-	\uses{thm:mpv_decomposition, thm:cross_overlap_zero}
-	\textbf{Normality}: each block is injective
-	(hence $1$-block injective, hence normal).
-	\textbf{Spanning}: the MPV decomposition
-	(Theorem~\ref{thm:mpv_decomposition}) gives
-	$V^{(N)}(A_{\mathrm{tot}})_\sigma = \sum_k \mu_k^N V^{(N)}(A_k)_\sigma$.
-	\textbf{Linear independence}: the overlap matrix
-	$G_{jk}(N) = O_{A_j A_k}(N)$ converges to the identity
-	(diagonal entries $\to 1$ by the self-overlap hypothesis;
-	off-diagonal entries $\to 0$ by
-	Theorem~\ref{thm:cross_overlap_zero}).
-	A Gram matrix converging to the identity is eventually
-	invertible, giving linear independence.
+		\leanok
+		\uses{thm:mpv_decomposition, thm:cross_overlap_zero}
+		Each block is injective, hence $1$-block injective and therefore
+		normal in the sense of Definition~\ref{def:normal}.
+		The MPV decomposition (Theorem~\ref{thm:mpv_decomposition}) gives
+		$V^{(N)}(A_{\mathrm{tot}})_\sigma = \sum_k \mu_k^N V^{(N)}(A_k)_\sigma$.
+		The overlap matrix $G_{jk}(N) = O_{A_j A_k}(N)$ converges to the
+		identity: diagonal entries tend to $1$ by the self-overlap
+		hypothesis, and off-diagonal entries tend to $0$ by
+		Theorem~\ref{thm:cross_overlap_zero}.
+		Hence $G(N)$ is eventually invertible, so the block MPV vectors are
+		eventually linearly independent. This is the legacy injective route;
+		Remark~\ref{rem:normalcf_bnt_gap} explains the corresponding gap for
+		the NT companion Definition~\ref{def:normal_cf_bnt}.
 \end{proof}
+
+\begin{remark}[The `IsNormal` gap for normal-CF-BNT]\label{rem:normalcf_bnt_gap}
+		Definition~\ref{def:normal_cf_bnt} uses ``normal'' in the paper's D1
+		sense, not the eventual block-injective predicate of
+		Definition~\ref{def:normal}. The field `IsBNT.normal` still asks for the
+		latter. In Lean, the helper theorem from normal-CF-BNT data to a full BNT
+		structure therefore takes separate blockwise normality as an extra
+		hypothesis. The missing bridge is the aperiodicity step from primitive
+		blocked TP data to eventual block injectivity:
+		$\mathrm{IsPrimitive} \Rightarrow \Id \in S_1(A)$ has not been formalized.
+		This gap does not affect the NT proportional FT chain below, which uses
+		only the MPV spanning and eventual linear-independence consequences of
+		normal-CF-BNT data.
+\end{remark}
 
 \section{BNT permutation rigidity}
 
@@ -148,12 +172,15 @@ The main references are
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:overlap_decay}
-	The overlap matrix $O_{A_j B_k}(N)$ converges to a
-	matrix with at most one nonzero entry per row/column
-	(by the spectral gap).
-	Thus the overlap orthonormality hypotheses are
-	assumed directly, rather than derived from
-	proportional MPVs together with coefficient convergence.
+		The overlap matrix $O_{A_j B_k}(N)$ converges to a
+		matrix with at most one nonzero entry per row/column
+		(by the spectral gap).
+		Thus the overlap orthonormality hypotheses are
+		assumed directly, rather than derived from
+		proportional MPVs together with coefficient convergence.
+		The NT variant uses the same matching argument with the
+		irreducible-TP overlap decay theorems in place of the injective ones,
+		and underlies the normal-CF-BNT proportional theorem below.
 \end{proof}
 
 \section{Coefficient convergence}
@@ -290,6 +317,44 @@ The main references are
 	Theorem~\ref{thm:bnt_perm_prop} yields the equality of block
 	counts, the permutation, and the per-block gauge-phase
 	equivalence.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem --- proportional MPV case, NT route]\label{thm:ft_proportional_nt}
+		\lean{MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT}\leanok
+		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
+		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
+		equipped with normal-CF-BNT families $(\mu_j^A, A_j)_{j=1}^{r_A}$ and
+		$(\mu_k^B, B_k)_{k=1}^{r_B}$.
+		Assume one is given coefficient arrays $a_{N,j}$, $b_{N,k}$ and
+		nonzero limits $a_j^\infty$, $b_k^\infty$, $c^\infty$ such that
+		\[
+			V^{(N)}(A_{\mathrm{tot}})_\sigma
+			= \sum_{j=1}^{r_A} a_{N,j} V^{(N)}(A_j)_\sigma,
+			\qquad
+			V^{(N)}(B_{\mathrm{tot}})_\sigma
+			= \sum_{k=1}^{r_B} b_{N,k} V^{(N)}(B_k)_\sigma,
+		\]
+		with $a_{N,j} \to a_j^\infty \neq 0$ and
+		$b_{N,k} \to b_k^\infty \neq 0$, and suppose also that
+		\[
+			V^{(N)}(A_{\mathrm{tot}})_\sigma
+			= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
+		\]
+		for a sequence $c_N \to c^\infty \neq 0$.
+		Then $r_A = r_B$, and there is a permutation $\pi$ such that
+		$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
+		$B_{\pi(j)}$ for each~$j$.
+\end{theorem}
+
+\begin{proof}\leanok
+		The proof follows the same coefficient-convergence and permutation
+		pattern as Theorem~\ref{thm:ft_proportional}, but uses
+		Definition~\ref{def:normal_cf_bnt} in place of injective CF-BNT data.
+		Irreducibility plus TP normalization supply the necessary overlap
+		asymptotics, so the same matching argument yields the block
+		permutation and gauge-phase equivalence.
+		Remark~\ref{rem:normalcf_bnt_gap} explains why this route does not need
+		the full `IsBNT.normal` field.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case]\label{thm:ft_equal}

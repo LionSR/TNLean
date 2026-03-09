@@ -1,9 +1,12 @@
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
-This chapter reduces a general normal MPS tensor to an
-injective block-diagonal form via iterated invariant-subspace
-decomposition.
-The reduction procedure follows
+This chapter reduces a general MPS tensor to block-diagonal data via iterated
+invariant-subspace decomposition. Two parallel routes coexist in the codebase.
+The legacy route ends in injective TP-normalized blocks and feeds the canonical
+form predicate of Chapter~\ref{ch:block_perm}. The new D1 route ends in
+irreducible TP-normalized blocks with primitive transfer maps and packages them
+as a normal canonical form in the sense of \cite{Cirac2017MPDO_AnnPhys}. The
+reduction procedure follows
 \cite{PerezGarcia2007Matrix},
 \cite{Cirac2021Matrix},
 and \cite[Ch.~6]{Wolf2012Quantum}.
@@ -533,6 +536,65 @@ removing it as an independent assumption.
 	this step.
 \end{remark}
 
+\section{Normal canonical form route}\label{sec:normal_canonical_form}
+
+\begin{definition}[Normal canonical form predicate]\label{def:is_normal_canonical_form}
+		\lean{MPSTensor.IsNormalCanonicalForm}\leanok
+		\uses{def:irreducible_tensor, def:primitive_channel, def:tp_kraus}
+		A collection of scaling factors $(\mu_k)_{k=1}^r$ and block tensors $(A_k)_{k=1}^r$
+		satisfies the \emph{normal canonical form predicate} if:
+		\begin{enumerate}
+			\item each $A_k$ is irreducible,
+			\item each $A_k$ satisfies the TP normalization
+			      $\sum_i (A_k^i)^\dagger A_k^i = \Id$,
+			\item each transfer map $\E_{A_k}$ is primitive
+			      (equivalently, has peripheral spectrum $\{1\}$),
+			\item the moduli are strictly decreasing:
+			      $|\mu_1| > |\mu_2| > \cdots > |\mu_r|$,
+			\item all $\mu_k \neq 0$,
+			\item all bond dimensions are positive.
+		\end{enumerate}
+		Here ``normal'' is used in the sense of
+		\cite{Cirac2017MPDO_AnnPhys}: irreducible blocks with trivial
+		peripheral spectrum after TP normalization. It is not the same as
+		Definition~\ref{def:normal}, which means eventual block injectivity.
+\end{definition}
+
+\begin{theorem}[Self-overlap is derived in normal canonical form]%
+		\label{thm:ncf_overlap_tendsto_one}
+		\lean{MPSTensor.IsNormalCanonicalForm.overlap_tendsto_one}\leanok
+		\uses{def:is_normal_canonical_form, def:mpv_overlap}
+		If $(\mu_k, A_k)$ satisfies the normal canonical form predicate, then
+		$O_{A_k A_k}(N) \to 1$ for every block~$k$.
+\end{theorem}
+
+\begin{proof}\leanok
+		\uses{def:is_normal_canonical_form}
+		This is the main structural advantage of the D1 predicate:
+		primitivity is part of the data, so the self-overlap convergence is
+		derived from irreducibility, TP normalization, and the spectral gap of
+		the transfer map, rather than being stored as an extra field.
+\end{proof}
+
+\begin{theorem}[Modulus-one eigenvalue rigidity for irreducible TP blocks]%
+		\label{thm:nt_modulus_one_gauge}
+		\lean{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP}\leanok
+		\uses{def:irreducible_tensor, def:tp_kraus, def:gauge_phase_equiv}
+		Let $A$ and $B$ be irreducible MPS tensors satisfying
+		$\sum_i (A^i)^\dagger A^i = \Id$ and
+		$\sum_i (B^i)^\dagger B^i = \Id$.
+		If the mixed transfer map has spectral radius at least~$1$
+		(equivalently, it has a peripheral eigenvalue of modulus~$1$),
+		then $A$ and $B$ are gauge-phase equivalent.
+\end{theorem}
+
+\begin{proof}\leanok
+		A modulus-one eigenvector for the mixed transfer map saturates the
+		channel Schwarz inequality. Irreducibility then upgrades this
+		eigenvector to an intertwiner between the two Kraus families, which is
+		exactly gauge-phase equivalence.
+\end{proof}
+
 \section{Canonical form existence pipeline}%
 \label{sec:canonical_pipeline_1606}
 
@@ -743,59 +805,47 @@ The results correspond to \cite{Evans1978Spectral},
 	satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
 \end{proof}
 
+\begin{theorem}[Normal canonical form after common blocking]%
+		\label{thm:exists_normal_canonical_form}
+		\lean{MPSTensor.exists_normalCanonicalForm}
+		\uses{def:is_normal_canonical_form, def:blocked_tensor}
+		For every MPS tensor $A$, there exist a blocking length $p > 0$,
+		a block family $(A_k)$ over the blocked physical space,
+		and nonzero weights $(\mu_k)$ with strictly decreasing moduli such that
+		the blocked tensor $A^{[p]}$ generates the same MPV family as the
+		block-diagonal tensor $\bigoplus_k \mu_k A_k$, and
+		$(\mu_k, A_k)$ satisfies the normal canonical form predicate.
+\end{theorem}
+
+\begin{proof}
+		Decompose $A$ into irreducible blocks, put each block into TP gauge by
+		Theorem~\ref{thm:tp_data_irreducible}, block until each transfer map is
+		primitive by Theorem~\ref{thm:blocking_primitivity}, then take a common
+		blocking length and reorder the surviving blocks by decreasing $|\mu_k|$.
+		The remaining Lean work is the bookkeeping that packages these already
+		formalized components into one theorem.
+\end{proof}
+
 \section{End-to-end pipeline status}\label{sec:pipeline_status}
 
 \begin{remark}[Canonical form pipeline]%
-	\label{rem:canonical_pipeline_gaps}
-	\notready
-	The Appendix-A Perron--Frobenius step is no longer the remaining
-	issue: Theorems~\ref{thm:pf_eigenvector_existence}
-	and~\ref{thm:tp_data_irreducible} are now formalized, as are the
-	CFII and periodicity-removal components
-	(Theorems~\ref{thm:CFII_data}
-	and~\ref{thm:blocking_primitivity}).
-	The missing work is later in the end-to-end assembly from these
-	ingredients to the repository's final canonical-form predicates.
+		\label{rem:canonical_pipeline_gaps}
+		\notready
+		The Perron--Frobenius, TP-gauge, CFII, and periodicity-removal ingredients
+		are now formalized. What remains is to assemble them into the repository's
+		end-stage block predicates.
 
-	More precisely, the current pipeline proves the following steps.
-	\begin{enumerate}
-		\item Irreducible block decomposition
-		      (Theorem~\ref{thm:irred_decomp}):
-		      $A \sim \bigoplus_k A_k$ with each $A_k$
-		      irreducible.
-		\item Perron--Frobenius eigenvector
-		      (Theorem~\ref{thm:pf_eigenvector_existence}):
-		      the adjoint transfer map has a PSD eigenvector.
-		\item TP gauge
-		      (Theorem~\ref{thm:tp_data_irreducible}):
-		      rescale and apply a generally non-unitary similarity to
-		      reach TP normalization.
-		\item CFII data
-		      (Theorem~\ref{thm:CFII_data}):
-		      inside this TP gauge, a further unitary conjugation
-		      diagonalizes the positive fixed point.
-		\item Periodicity removal
-		      (Theorem~\ref{thm:blocking_primitivity}):
-		      block the TP-normalized irreducible representative until
-		      the transfer map is primitive.
-	\end{enumerate}
+		The legacy route still aims at Definition~\ref{def:is_canonical_form}. For
+		this route one still needs to turn blocked primitive TP data into the stronger
+		injective blocks and eventual block-injectivity statements used by the legacy
+		CF-BNT assembly.
 
-	What is still not assembled automatically is the passage from this
-	primitive blocked TP/CFII output to the stronger hypotheses used by
-	the repository's canonical-form and FT theorems.
-	In particular, Theorem~\ref{thm:canonical_from_primitive} requires
-	injective TP-normalized blocks, while the current pipeline does not yet supply
-	the full primitive $\Rightarrow$ block-injective / normality bridge
-	from Chapter~\ref{ch:wielandt}.
-	The relevant ingredients there
-	(Theorems~\ref{thm:primitive_implies_irreducible}
-	and~\ref{thm:algspan_to_normal}) still need extra hypotheses to
-	turn primitive blocked tensors into the repository's stronger
-	canonical-form notion.
-	As a consequence, there is still no theorem taking an arbitrary
-	tensor all the way to the final repository canonical form / biCF
-	output matching \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
-	Moreover, Chapter~\ref{ch:assembly} still marks an additional
-	strict-dominance / oscillatory coefficient gap in the proportional
-	multi-block assembly.
+		The new D1 route packages the same data directly as
+		Definition~\ref{def:is_normal_canonical_form}. Its intended wrapper is
+		Theorem~\ref{thm:exists_normal_canonical_form}, and that theorem is now the
+		remaining sorry in this route. Once such normal-canonical-form data are
+		available, the NT block-separation, BNT, and proportional Fundamental
+		Theorem statements in Chapters~\ref{ch:block_perm} and~\ref{ch:assembly}
+		apply without passing through the aperiodicity bridge of
+		Chapter~\ref{ch:wielandt}.
 \end{remark}

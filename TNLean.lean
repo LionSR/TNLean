@@ -83,6 +83,7 @@ import TNLean.MPS.FundamentalTheoremMulti
 import TNLean.MPS.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalFormReduction
 import TNLean.MPS.CanonicalFormExistence1606
+import TNLean.MPS.NormalCanonicalFormPipeline
 import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.IrreducibleAdjoint
 import TNLean.MPS.TPGaugeFromAdjointFixedPoint
