@@ -22,9 +22,7 @@ variable {d : ℕ}
 
 /-! ### Normalization convention
 
-In this file the legacy field/lemma name `ds_gauge` refers only to the **one-sided**
-normalization
-`∑ᵢ Aᵢ† Aᵢ = I`.
+The **left-canonical** normalization condition in this file is `∑ᵢ Aᵢ† Aᵢ = I`.
 Equivalently, the associated transfer map is trace-preserving. We do **not** assume the separate
 unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 -/
@@ -57,11 +55,6 @@ variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Alias emphasizing that left-canonical blocks are trace-preserving. -/
 theorem tp_gauge (hA : IsLeftCanonicalBlockFamily (d := d) A) :
-    ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1 :=
-  hA.leftCanonical
-
-/-- Legacy alias for callers that still use the older `ds_gauge` wording. -/
-theorem ds_gauge (hA : IsLeftCanonicalBlockFamily (d := d) A) :
     ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1 :=
   hA.leftCanonical
 
@@ -103,16 +96,14 @@ structure HasNormalizedSelfOverlap {r : ℕ} {dim : Fin r → ℕ}
 
 /-! ### Canonical form predicate -/
 
-/-- Legacy bundled canonical-form predicate.  This keeps the current API stable while bundling
-injectivity, left-canonical normalization, strict weight data, and overlap normalization in a
-single proposition. -/
+/-- Bundled canonical-form predicate combining injectivity, left-canonical normalization
+`∑ᵢ Aᵢ† Aᵢ = I`, strict weight data, and overlap normalization in a single proposition. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
   block_injective : ∀ k, IsInjective (A k)
-  /-- Legacy name: `ds_gauge` stores only the one-sided trace-preserving / canonical
-  normalization `∑ᵢ Aᵢ† Aᵢ = I`. -/
-  ds_gauge : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
+  /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`. -/
+  leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
   /-- Strict ordering of the block weights by modulus. -/
   mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
   /-- No block weight vanishes. -/
@@ -133,27 +124,27 @@ namespace IsCanonicalForm
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Project the legacy bundled predicate to blockwise injectivity data. -/
+/-- Project the bundled predicate to blockwise injectivity data. -/
 def toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A where
   block_injective := hCF.block_injective
 
-/-- Project the legacy bundled predicate to left-canonical block-family normalization. -/
+/-- Project the bundled predicate to left-canonical block-family normalization. -/
 def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalForm μ A) :
     IsLeftCanonicalBlockFamily (d := d) A where
-  leftCanonical := hCF.ds_gauge
+  leftCanonical := hCF.leftCanonical
 
-/-- Project the legacy bundled predicate to the separated weight data. -/
+/-- Project the bundled predicate to the separated weight data. -/
 def toHasStrictOrderedNonzeroWeights (hCF : IsCanonicalForm μ A) :
     HasStrictOrderedNonzeroWeights μ where
   mu_strict_anti := hCF.mu_strict_anti
   mu_ne_zero := hCF.mu_ne_zero
 
-/-- Project the legacy bundled predicate to self-overlap normalization data. -/
+/-- Project the bundled predicate to self-overlap normalization data. -/
 def toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
     HasNormalizedSelfOverlap (d := d) A where
   overlap_tendsto_one := hCF.overlap_tendsto_one
 
-/-- Rebuild the legacy `IsCanonicalForm` bundle from the additive split API. -/
+/-- Rebuild the `IsCanonicalForm` bundle from the additive split API. -/
 def ofSeparatedData
     (hInj : HasInjectiveBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
@@ -161,7 +152,7 @@ def ofSeparatedData
     (hOverlap : HasNormalizedSelfOverlap (d := d) A) :
     IsCanonicalForm μ A where
   block_injective := hInj.block_injective
-  ds_gauge := hLeft.leftCanonical
+  leftCanonical := hLeft.leftCanonical
   mu_strict_anti := hμ.mu_strict_anti
   mu_ne_zero := hμ.mu_ne_zero
   overlap_tendsto_one := hOverlap.overlap_tendsto_one
@@ -172,17 +163,6 @@ theorem mu_injective (hCF : IsCanonicalForm μ A) : Function.Injective μ :=
 theorem mu_norm_injective (hCF : IsCanonicalForm μ A) :
     Function.Injective (fun k : Fin r => ‖μ k‖) :=
   hCF.toHasStrictOrderedNonzeroWeights.mu_norm_injective
-
-/-- Alias emphasizing that the field `ds_gauge` is only the one-sided
-trace-preserving normalization `∑ᵢ Aᵢ† Aᵢ = I`. -/
-theorem tp_gauge (hCF : IsCanonicalForm μ A) :
-    ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1 :=
-  hCF.toIsLeftCanonicalBlockFamily.tp_gauge
-
-/-- Preferred alias for `tp_gauge` using the project's left-canonical terminology. -/
-theorem leftCanonical (hCF : IsCanonicalForm μ A) :
-    ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1 :=
-  hCF.tp_gauge
 
 end IsCanonicalForm
 
@@ -227,11 +207,11 @@ theorem trace_eq_of_charpoly_eq
 
 end AlgebraicLemmas
 
-/-! ### MPV overlap bounds from one-sided canonical normalization
+/-! ### MPV overlap bounds from left-canonical normalization
 
 For the peeling argument in `block_separation_core` we need uniform (in the chain length) bounds on
-MPV overlaps. The key input is the one-sided normalization
-`∑ᵢ Aᵢ† Aᵢ = I` (stored under the legacy name `ds_gauge`), together with the iterated TP identity
+MPV overlaps. The key input is the left-canonical normalization
+`∑ᵢ Aᵢ† Aᵢ = I`, together with the iterated TP identity
 `word_conjTranspose_mul_sum` and the elementary trace inequality
 $|\mathrm{tr}(M)|^2 \le D\,\mathrm{tr}(M^\dagger M)$.
 -/
@@ -305,12 +285,12 @@ private lemma norm_trace_sq_le_dim_mul_trace_conjTranspose_mul
           gcongr
     _ = (D : ℝ) * (Matrix.trace (Mᴴ * M)).re := by simp [hfrob]
 
-/-- Under the one-sided normalization `∑ᵢ Aᵢ† Aᵢ = I` (legacy name: `ds_gauge`),
+/-- Under the left-canonical normalization `∑ᵢ Aᵢ† Aᵢ = I`,
 the MPV self-overlap is uniformly bounded: `‖mpvOverlap A A N‖ ≤ D^2`. -/
-lemma ds_gauge_mpvOverlap_self_bound
+lemma leftCanonical_mpvOverlap_self_bound
     {D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hA_ds : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hA_lc : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
     (N : ℕ) :
     ‖mpvOverlap (d := d) A A N‖ ≤ (D : ℝ) ^ 2 := by
   classical
@@ -338,7 +318,7 @@ lemma ds_gauge_mpvOverlap_self_bound
   -- Use the iterated TP condition.
   have hword :
       ∑ σ : Fin N → Fin d, (M σ)ᴴ * M σ = (1 : Matrix (Fin D) (Fin D) ℂ) := by
-    simpa [M] using (word_conjTranspose_mul_sum (K := A) hA_ds N)
+    simpa [M] using (word_conjTranspose_mul_sum (K := A) hA_lc N)
   -- Bound the RHS by `D^2`.
   have h2 : (∑ σ : Fin N → Fin d, ‖Matrix.trace (M σ)‖ ^ 2) ≤ (D : ℝ) ^ 2 := by
     -- Apply the trace inequality termwise, then use `hword`.
@@ -367,17 +347,17 @@ lemma ds_gauge_mpvOverlap_self_bound
       _ = (D : ℝ) ^ 2 := by ring
   exact h1.trans h2
 
-/-- Under the one-sided normalization `∑ᵢ Aᵢ† Aᵢ = I` (legacy name: `ds_gauge`),
+/-- Under the left-canonical normalization `∑ᵢ Aᵢ† Aᵢ = I`,
 the MPV state has uniformly bounded norm: `‖mpvState A N‖ ≤ D`. -/
-lemma ds_gauge_mpvState_norm_bound
+lemma leftCanonical_mpvState_norm_bound
     {D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hA_ds : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hA_lc : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
     (N : ℕ) :
     ‖mpvState (d := d) A N‖ ≤ (D : ℝ) := by
   classical
   have hself : ‖mpvOverlap (d := d) A A N‖ ≤ (D : ℝ) ^ 2 :=
-    ds_gauge_mpvOverlap_self_bound (d := d) (A := A) hA_ds N
+    leftCanonical_mpvOverlap_self_bound (d := d) (A := A) hA_lc N
   have hEq : ‖mpvOverlap (d := d) A A N‖ = ‖mpvState (d := d) A N‖ ^ 2 := by
     -- `mpvOverlap = star (mpvInner)` and `⟪x,x⟫ = ‖x‖²`.
     -- The RHS is a nonnegative real number, so its complex norm is just an absolute value.
@@ -392,13 +372,13 @@ lemma ds_gauge_mpvState_norm_bound
   simpa [Real.sqrt_sq (norm_nonneg (mpvState (d := d) A N)),
     Real.sqrt_sq (Nat.cast_nonneg D)] using hsqrt
 
-/-- Under the one-sided normalization `∑ᵢ Aᵢ† Aᵢ = I` (legacy name: `ds_gauge`),
+/-- Under the left-canonical normalization `∑ᵢ Aᵢ† Aᵢ = I`,
 MPV overlaps are uniformly bounded: `‖mpvOverlap A B N‖ ≤ D₁ · D₂`. -/
-lemma ds_gauge_mpvOverlap_bound
+lemma leftCanonical_mpvOverlap_bound
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA_ds : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
-    (hB_ds : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
+    (hA_lc : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hB_lc : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
     (N : ℕ) :
     ‖mpvOverlap (d := d) A B N‖ ≤ (D₁ : ℝ) * (D₂ : ℝ) := by
   classical
@@ -410,8 +390,8 @@ lemma ds_gauge_mpvOverlap_bound
   have hOverlap : ‖mpvOverlap (d := d) A B N‖ = ‖mpvInner (d := d) A B N‖ := by
     simp [mpvOverlap_eq_star_mpvInner]
   -- Apply the one-sided normalization bounds on each factor.
-  have hA : ‖mpvState (d := d) A N‖ ≤ (D₁ : ℝ) := ds_gauge_mpvState_norm_bound (d := d) A hA_ds N
-  have hB : ‖mpvState (d := d) B N‖ ≤ (D₂ : ℝ) := ds_gauge_mpvState_norm_bound (d := d) B hB_ds N
+  have hA : ‖mpvState (d := d) A N‖ ≤ (D₁ : ℝ) := leftCanonical_mpvState_norm_bound (d := d) A hA_lc N
+  have hB : ‖mpvState (d := d) B N‖ ≤ (D₂ : ℝ) := leftCanonical_mpvState_norm_bound (d := d) B hB_lc N
   calc
     ‖mpvOverlap (d := d) A B N‖ = ‖mpvInner (d := d) A B N‖ := hOverlap
     _ ≤ ‖mpvState (d := d) A N‖ * ‖mpvState (d := d) B N‖ := hCS
@@ -420,10 +400,10 @@ lemma ds_gauge_mpvOverlap_bound
 end OverlapBounds
 
 
-/-! ### One-sided canonical normalization implies trace bound
+/-! ### Left-canonical normalization implies trace bound
 
-**Mathematical content**: Under the one-sided normalization
-`∑_i A_i† A_i = I` (stored under the legacy name `ds_gauge`), the iterated TP condition
+**Mathematical content**: Under the left-canonical normalization
+`∑_i A_i† A_i = I`, the iterated TP condition
 `word_conjTranspose_mul_sum` gives
 `∑_σ (evalWord A (ofFn σ))† (evalWord A (ofFn σ)) = I`
 for words of any length. Each term is PSD, so for any specific word `w`,
@@ -481,13 +461,13 @@ private lemma norm_diag_le_one_from_sum_eq_one
       _ ≤ 1 := h_re
   rwa [← abs_of_nonneg (norm_nonneg _), ← sq_le_one_iff_abs_le_one]
 
-/-- Under the one-sided normalization `∑ᵢ Aᵢ† Aᵢ = I` (legacy name: `ds_gauge`),
+/-- Under the left-canonical normalization `∑ᵢ Aᵢ† Aᵢ = I`,
 the trace of any power of any word evaluation is bounded by `D`.
 Uses the iterated TP condition and PSD diagonal bounds. -/
-lemma ds_gauge_evalWord_trace_bound
+lemma leftCanonical_evalWord_trace_bound
     {D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hA_ds : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hA_lc : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
     (w : List (Fin d)) (L : ℕ) :
     ‖Matrix.trace ((evalWord A w) ^ L)‖ ≤ (D : ℝ) := by
   -- (evalWord A w)^L = evalWord A ((replicate L w).flatten)
@@ -504,7 +484,7 @@ lemma ds_gauge_evalWord_trace_bound
     apply List.ofFn_congr (by omega)
   rw [← hofFn]
   -- word_conjTranspose_mul_sum: ∑_σ (evalWord A (ofFn σ))† (evalWord A (ofFn σ)) = I
-  have h_sum := word_conjTranspose_mul_sum (fun i => A i) hA_ds n
+  have h_sum := word_conjTranspose_mul_sum (fun i => A i) hA_lc n
   -- Each diagonal entry of evalWord A (ofFn σ₀) has norm ≤ 1
   have h_diag : ∀ i : Fin D, ‖evalWord A (List.ofFn σ₀) i i‖ ≤ 1 :=
     norm_diag_le_one_from_sum_eq_one
@@ -604,13 +584,13 @@ private lemma eq_one_of_tendsto_pow_atTop_nhds_one (z : ℂ)
 private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
     {D : ℕ} [NeZero D] (A B : MPSTensor d D)
     (hA_inj : IsInjective A) (hB_inj : IsInjective B)
-    (hA_ds : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
-    (hB_ds : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
+    (hA_lc : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hB_lc : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
     (h : Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds (1 : ℂ))) :
     GaugePhaseEquiv A B := by
   by_contra hnot
   have hto0 :=
-    mpvOverlap_tendsto_zero (A := A) (B := B) hA_inj hB_inj hA_ds hB_ds hnot
+    mpvOverlap_tendsto_zero (A := A) (B := B) hA_inj hB_inj hA_lc hB_lc hnot
   have : (0 : ℂ) = 1 := tendsto_nhds_unique hto0 h
   exact zero_ne_one this
 
@@ -747,8 +727,8 @@ lemma block_separation_core
     (hμ_ne_zero : ∀ k, μ k ≠ 0)
     (hA_inj : ∀ k, IsInjective (A k))
     (hB_inj : ∀ k, IsInjective (B k))
-    (hA_ds : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+    (hA_lc : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hB_lc : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
     (hA_overlap :
       ∀ k,
         Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
@@ -758,13 +738,13 @@ lemma block_separation_core
     ∀ k, SameMPV (A k) (B k) := by
   classical
   -- Induction on the number of blocks.
-  revert μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_ds hB_ds hA_overlap h_summed
+  revert μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_lc hB_lc hA_overlap h_summed
   induction r with
   | zero =>
-      intro μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_ds hB_ds hA_overlap h_summed k
+      intro μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_lc hB_lc hA_overlap h_summed k
       exact k.elim0
   | succ r ih =>
-      intro μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_ds hB_ds hA_overlap h_summed
+      intro μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_lc hB_lc hA_overlap h_summed
       cases r with
       | zero =>
           -- Single-block case.
@@ -870,12 +850,12 @@ lemma block_separation_core
               -- triangle inequality + uniform overlap bounds from the one-sided normalization
               have h1 :
                   ‖mpvOverlap (d := d) (A 0) (A k) N‖ ≤ (dim 0 : ℝ) * (dim k : ℝ) :=
-                ds_gauge_mpvOverlap_bound (d := d) (A := A 0) (B := A k)
-                  (hA_ds 0) (hA_ds k) N
+                leftCanonical_mpvOverlap_bound (d := d) (A := A 0) (B := A k)
+                  (hA_lc 0) (hA_lc k) N
               have h2 :
                   ‖mpvOverlap (d := d) (A 0) (B k) N‖ ≤ (dim 0 : ℝ) * (dim k : ℝ) :=
-                ds_gauge_mpvOverlap_bound (d := d) (A := A 0) (B := B k)
-                  (hA_ds 0) (hB_ds k) N
+                leftCanonical_mpvOverlap_bound (d := d) (A := A 0) (B := B k)
+                  (hA_lc 0) (hB_lc k) N
               have hdim_le : (dim k : ℝ) ≤ Dsum := by
                 -- `dim k` is one term in the sum
                 have hnonneg : ∀ j : Fin (Nat.succ (Nat.succ r)), 0 ≤ (dim j : ℝ) := fun j => by
@@ -1016,7 +996,7 @@ lemma block_separation_core
             -- Step 4: overlap limit forces gauge equivalence, hence `SameMPV`.
             have hGaugePhase : GaugePhaseEquiv (A 0) (B 0) :=
               gaugePhaseEquiv_of_mpvOverlap_tendsto_one (A := A 0) (B := B 0)
-                (hA_inj 0) (hB_inj 0) (hA_ds 0) (hB_ds 0) hCross_tendsto
+                (hA_inj 0) (hB_inj 0) (hA_lc 0) (hB_lc 0) hCross_tendsto
             exact
               sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one (A := A 0) (B := B 0)
                 (hSelf := hA_overlap 0) (hCross := hCross_tendsto) hGaugePhase
@@ -1051,8 +1031,8 @@ lemma block_separation_core
               (hμ_ne_zero := fun k => hμ_ne_zero k.succ)
               (hA_inj := fun k => hA_inj k.succ)
               (hB_inj := fun k => hB_inj k.succ)
-              (hA_ds := fun k => hA_ds k.succ)
-              (hB_ds := fun k => hB_ds k.succ)
+              (hA_lc := fun k => hA_lc k.succ)
+              (hB_lc := fun k => hB_lc k.succ)
               (hA_overlap := fun k => hA_overlap k.succ)
               (h_summed := h_summed_tail)
           -- Assemble head + tail.
@@ -1122,8 +1102,8 @@ theorem block_separation_all_words
     (hμ_ne_zero : ∀ k, μ k ≠ 0)
     (hA_inj : ∀ k, IsInjective (A k))
     (hB_inj : ∀ k, IsInjective (B k))
-    (hA_ds : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+    (hA_lc : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
+    (hB_lc : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
     (hA_overlap :
       ∀ k,
         Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
@@ -1132,7 +1112,7 @@ theorem block_separation_all_words
       ∑ k : Fin r, (μ k) ^ N *
         (mpv (A k) σ - mpv (B k) σ) = 0) :
     ∀ k, SameMPV (A k) (B k) :=
-  block_separation_core μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_ds hB_ds hA_overlap h_summed
+  block_separation_core μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_lc hB_lc hA_overlap h_summed
 
 end BlockSeparation
 
@@ -1146,7 +1126,7 @@ variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 
 This theorem isolates exactly the pieces of the canonical-form bundle used in the block-separation
 argument: injectivity, left-canonical normalization, strict nonzero weights, and self-overlap
-normalization.  The legacy theorem below is then recovered by projection from `IsCanonicalForm`.
+normalization.  The backwards-compatible wrapper below is recovered by projection from `IsCanonicalForm`.
 -/
 theorem per_block_sameMPV_of_separated_canonical_data
     (μ : Fin r → ℂ)
@@ -1186,7 +1166,7 @@ theorem per_block_sameMPV_of_canonical_form
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : IsCanonicalForm μ A)
     (hB_inj : ∀ k, IsInjective (B k))
-    (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+    (hB_lc : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
     (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     ∀ k, SameMPV (A k) (B k) :=
   per_block_sameMPV_of_separated_canonical_data μ A B
@@ -1195,14 +1175,14 @@ theorem per_block_sameMPV_of_canonical_form
     hA.toIsLeftCanonicalBlockFamily
     hA.toHasNormalizedSelfOverlap
     { block_injective := hB_inj }
-    { leftCanonical := hB_ds }
+    { leftCanonical := hB_lc }
     hSame₂
 
 /-- Separated-data variant of `fundamentalTheorem_canonicalForm`.
 
-This is the Stage B low-risk interface: it only asks for the pieces of canonical-form
-structure actually used by the proof.  The legacy theorem below remains available as a
-wrapper around this one. -/
+This is the preferred interface: it only asks for the pieces of canonical-form
+structure actually used by the proof.  The backwards-compatible wrapper below remains available
+around this one. -/
 theorem fundamentalTheorem_of_separated_canonical_data
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -1244,7 +1224,7 @@ theorem fundamentalTheorem_canonicalForm
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : IsCanonicalForm μ A)
     (hB_inj : ∀ k, IsInjective (B k))
-    (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+    (hB_lc : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
     (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     (∀ k, GaugeEquiv (A k) (B k)) ∧
     GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
@@ -1254,7 +1234,7 @@ theorem fundamentalTheorem_canonicalForm
     hA.toIsLeftCanonicalBlockFamily
     hA.toHasNormalizedSelfOverlap
     { block_injective := hB_inj }
-    { leftCanonical := hB_ds }
+    { leftCanonical := hB_lc }
     hSame₂
 
 /-- Backwards-compatible wrapper around `fundamentalTheorem_of_separated_canonical_data_explicit`. -/
@@ -1263,7 +1243,7 @@ theorem fundamentalTheorem_canonicalForm_explicit
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : IsCanonicalForm μ A)
     (hB_inj : ∀ k, IsInjective (B k))
-    (hB_ds : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
+    (hB_lc : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
     (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
     ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
@@ -1274,7 +1254,7 @@ theorem fundamentalTheorem_canonicalForm_explicit
     hA.toIsLeftCanonicalBlockFamily
     hA.toHasNormalizedSelfOverlap
     { block_injective := hB_inj }
-    { leftCanonical := hB_ds }
+    { leftCanonical := hB_lc }
     hSame₂
 
 end CanonicalFormSeparation

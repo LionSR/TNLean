@@ -476,7 +476,7 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     have hAcst_norm : ∑ i : Fin d,
         (cast (congr_arg (MPSTensor d) hdim) (A (f k)) i)ᴴ *
         (cast (congr_arg (MPSTensor d) hdim) (A (f k)) i) = 1 :=
-      (dsGauge_cast_dim hdim (A (f k))).mpr (hA_norm (f k))
+      (leftCanonical_cast_dim hdim (A (f k))).mpr (hA_norm (f k))
     have hto0 := mpvOverlap_tendsto_zero
       (cast (congr_arg (MPSTensor d) hdim) (A (f k))) (B k)
       hAcst_inj (hB_inj k) hAcst_norm (hB_norm k) hNot
@@ -616,7 +616,7 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     have hAcst_norm : ∑ i : Fin d,
         (cast (congr_arg (MPSTensor d) hdim) (A j) i)ᴴ *
         (cast (congr_arg (MPSTensor d) hdim) (A j) i) = 1 :=
-      (dsGauge_cast_dim hdim (A j)).mpr (hA_norm j)
+      (leftCanonical_cast_dim hdim (A j)).mpr (hA_norm j)
     have hto0 := mpvOverlap_tendsto_zero
       (cast (congr_arg (MPSTensor d) hdim) (A j)) (B (g j))
       hAcst_inj (hB_inj (g j)) hAcst_norm (hB_norm (g j)) hNot

@@ -77,7 +77,7 @@ section KSEquality
 
 /-- **KS equality for peripheral eigenvectors**.
 
-If `E` is doubly stochastic (unital + TP) and `E(X) = μ X` with `‖μ‖ = 1`,
+If `E` is bi-canonical (unital + TP) and `E(X) = μ X` with `‖μ‖ = 1`,
 then the Kadison-Schwarz gap vanishes: `E(X† X) = E(X)† E(X)`.
 
 The proof shows the gap has trace zero (using TP and the eigenvalue equation)

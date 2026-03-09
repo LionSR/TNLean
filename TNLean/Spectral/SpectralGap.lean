@@ -437,7 +437,7 @@ private lemma each_zero_of_sum_conjTranspose_mul_self_zero
 -- (The old auxiliary lemmas `eigenvector_det_ne_zero` / `per_index_from_eigenvector`
 -- were based on a too-strong per-index statement for the raw eigenvector.
 -- The new proof establishes invertibility + intertwining directly inside
--- `eigenvector_gives_gauge` using DS-gauge + weighted KS equality.)
+-- `eigenvector_gives_gauge` using left-canonical gauge + weighted KS equality.)
 
 section
 open scoped MatrixOrder
@@ -454,7 +454,7 @@ The GL element is `Y = X⁻¹` with phase `ζ = μ̄ = conj(μ)`.
 **Proof outline** (for the sorry helper lemmas):
 
 **Step 1 — X is invertible**: The kernel of X is invariant under all `Bₖ†`.
-Pass to the DS gauge `A'ᵢ = σ⁻¹ᐟ² Aᵢ σ¹ᐟ²` where `σ` is the QPF fixed point.
+Pass to the left-canonical gauge `A'ᵢ = σ⁻¹ᐟ² Aᵢ σ¹ᐟ²` where `σ` is the QPF fixed point.
 The KS equality condition (from `|μ| = 1`) forces kernel invariance.
 Since B is injective, `ker(X)` is invariant under ALL matrices, forcing X = 0.
 
@@ -482,7 +482,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
   /-
   Outline of the algebraic core:
   1. Obtain QPF positive definite fixed points `ρA, ρB` for the transfer maps of `A, B`.
-  2. DS-gauge both tensors to unital Kraus families `A', B'`.
+  2. Gauge both tensors to left-canonical form (unital Kraus families `A', B'`).
   3. Embed the mixed transfer eigenvector as an off-diagonal block matrix `M` for a unital
      Kraus map on `Fin D ⊕ Fin D`.
   4. Use the weighted KS equality + multiplicative domain lemma from `Channel/Schwarz` to obtain
@@ -550,7 +550,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
     Matrix.nonsing_inv_mul SAᴴ hSAh_isUnitdet
   have hSAh_mul_inv : SAᴴ * (SAᴴ)⁻¹ = (1 : Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.mul_nonsing_inv SAᴴ hSAh_isUnitdet
-  -- DS-gauged tensors.
+  -- Left-canonical-gauged tensors.
   let A' : MPSTensor d D := fun i => SA⁻¹ * A i * SA
   let B' : MPSTensor d D := fun i => SB⁻¹ * B i * SB
   have hA'unital : ∑ i : Fin d, (A' i) * (A' i)ᴴ = 1 := by
@@ -566,7 +566,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
   have hX'ne : X' ≠ 0 := by
     intro h0
     have hXeq : X = SA * X' * SBᴴ := by
-      -- Cancel the DS-gauge factors explicitly (simp does not reassociate in the needed direction).
+      -- Cancel the gauge factors explicitly (simp does not reassociate in the needed direction).
       have hXinv_mul : (SBᴴ)⁻¹ * SBᴴ = (1 : Matrix (Fin D) (Fin D) ℂ) := hSBh_inv_mul
       have hXmul_inv : SA * SA⁻¹ = (1 : Matrix (Fin D) (Fin D) ℂ) := hSA_mul_inv
       have : SA * X' * SBᴴ = X := by

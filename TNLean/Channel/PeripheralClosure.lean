@@ -14,7 +14,7 @@ import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 # Peripheral eigenvalues closed under powers
 
 This file provides the missing “closure under powers” lemma for peripheral
-(eigenvalue-norm $=1$) eigenvalues of **irreducible, doubly-stochastic** Kraus maps.
+(eigenvalue-norm $=1$) eigenvalues of **irreducible, bi-canonical** Kraus maps.
 
 The key ingredients are:
 
@@ -49,12 +49,12 @@ end MPSTensor
 
 /-! ## Task B: peripheral eigenvalues are closed under powers -/
 
-/-- **Peripheral eigenvalues are closed under powers** for irreducible, doubly-stochastic
-Kraus maps.
+/-- **Peripheral eigenvalues are closed under powers** for irreducible, bi-canonical
+(unital + trace-preserving) Kraus maps.
 
 This is the missing step needed for the standard “peripheral eigenvalues are roots of
 unity” argument. -/
-theorem peripheralEigenvalues_pow_mem_of_irreducible_doubly_stochastic
+theorem peripheralEigenvalues_pow_mem_of_irreducible_biCanonical
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_unital : KadisonSchwarz.IsUnitalKraus K)
@@ -148,10 +148,10 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_doubly_stochastic
 
 /-! ## Task C: roots of unity wrapper (optional) -/
 
-/-- For irreducible, doubly-stochastic Kraus maps, every peripheral eigenvalue is a root of unity.
+/-- For irreducible, bi-canonical (unital + trace-preserving) Kraus maps, every peripheral eigenvalue is a root of unity.
 
 This is a thin wrapper around `peripheral_isRootOfUnity_of_closed_powers`. -/
-theorem peripheral_isRootOfUnity_of_irreducible_doubly_stochastic
+theorem peripheral_isRootOfUnity_of_irreducible_biCanonical
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_unital : KadisonSchwarz.IsUnitalKraus K)
@@ -165,6 +165,6 @@ theorem peripheral_isRootOfUnity_of_irreducible_doubly_stochastic
   have hclosed : ∀ ν : ℂ,
       ν ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) →
         ∀ n : ℕ, ν ^ n ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) :=
-    peripheralEigenvalues_pow_mem_of_irreducible_doubly_stochastic (K := K) h_unital h_tp hIrr
+    peripheralEigenvalues_pow_mem_of_irreducible_biCanonical (K := K) h_unital h_tp hIrr
   exact peripheral_isRootOfUnity_of_closed_powers (E := MPSTensor.transferMap (d := d) (D := D) K)
     hclosed μ hμ

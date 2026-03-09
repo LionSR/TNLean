@@ -423,7 +423,7 @@ private lemma isInjective_conjugate {D : ℕ}
   exact this
 
 set_option maxHeartbeats 1600000 in
--- Heartbeat bump: the DS-gauge + block-embedding + KS-equality chain is large.
+-- Heartbeat bump: the left-canonical gauge + block-embedding + KS-equality chain is large.
 /-- Core algebraic lemma: if there is an eigenvector of `mixedTransferMap₂ A B` with eigenvalue
 of modulus 1, then `D₁ = D₂`.
 
@@ -475,7 +475,7 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   have hSB_mul : SB * SBᴴ = ρB := by
     calc SB * SBᴴ = S0Bᴴ * S0B := by simp [SB]
     _ = ρB := by simpa using hρB_eq.symm
-  -- === 3. DS-gauged tensors ===
+  -- === 3. Left-canonical-gauged tensors ===
   let A' : MPSTensor d D₁ := fun i => SA⁻¹ * A i * SA
   let B' : MPSTensor d D₂ := fun i => SB⁻¹ * B i * SB
   have hA'unital : ∑ i : Fin d, (A' i) * (A' i)ᴴ = 1 := by

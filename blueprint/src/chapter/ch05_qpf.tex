@@ -166,7 +166,7 @@ The results follow
 
 \section{Unital and trace-preserving gauges}
 
-\begin{theorem}[Unital gauge]\label{thm:ds_gauge_unital}
+\begin{theorem}[Unital gauge]\label{thm:right_canonical_gauge}
 	\lean{gauged_unital}
 	\leanok
 	Let $\E_A(\rho) = \rho$ and let $S$ be an invertible matrix with
@@ -186,7 +186,7 @@ The results follow
 		= S^{-1} S S^\dagger (S^\dagger)^{-1} = \Id$.
 \end{proof}
 
-\begin{theorem}[Trace-preserving gauge]\label{thm:ds_gauge_tp}
+\begin{theorem}[Trace-preserving gauge]\label{thm:left_canonical_gauge}
 	\lean{gauged_tracePreserving}
 	\leanok
 	Let $\sigma$ be a fixed point of the adjoint transfer map
@@ -208,8 +208,8 @@ The results follow
 \end{proof}
 
 \begin{remark}\leanok
-	The gauges of Theorems~\ref{thm:ds_gauge_unital}
-	and~\ref{thm:ds_gauge_tp} are generally different similarity
+	The gauges of Theorems~\ref{thm:right_canonical_gauge}
+	and~\ref{thm:left_canonical_gauge} are generally different similarity
 	transforms: one is built from a fixed point of $\E_A$, the other
 	from a fixed point of the adjoint transfer map. This section does
 	not claim that a single gauge makes the transfer map simultaneously
