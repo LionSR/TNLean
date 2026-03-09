@@ -16,14 +16,16 @@ set_option linter.style.show false
 
 This module assembles the **Fundamental Theorem of Matrix Product States** by combining:
 
-1. **`BNTConstruction.lean`**: `IsCanonicalFormBNT` structure and the bridge theorem
-   `fundamentalTheorem_of_IsCanonicalFormBNT` (proportional MPVs with convergent coefficients
+1. **`BNTConstruction.lean`**: `IsCanonicalFormBNT` structure, the legacy bridge theorem
+   `fundamentalTheorem_of_IsCanonicalFormBNT`, and the weaker split-data bridge
+   `fundamentalTheorem_of_separated_CFBNT_data` (proportional MPVs with convergent coefficients
    → permutation + gauge-phase matching).
 
 2. **`ScalarPowerSumIdentity.lean`**: `Matrix.sum_pow_eq_implies_multiset_eq`
    (equal power sums → equal multisets of scalars).
 
-3. **`CanonicalFormSep.lean`**: `fundamentalTheorem_canonicalForm` (per-block separation
+3. **`CanonicalFormSep.lean`**: `fundamentalTheorem_canonicalForm` together with the weaker
+   split-data interface `fundamentalTheorem_of_separated_canonical_data` (per-block separation
    for tensors in canonical form with equal MPVs).
 
 4. **`FundamentalTheoremMulti.lean`**: `toTensorFromBlocks`, `mpv_toTensorFromBlocks_eq_sum`,
@@ -109,10 +111,13 @@ theorem fundamentalTheorem_equalMPV_CFBNT
     (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     (∀ k, GaugeEquiv (A k) (B k)) ∧
     GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
-  fundamentalTheorem_canonicalForm μ A B
-    hA.toIsCanonicalForm
-    hB.toIsCanonicalForm.block_injective
-    hB.toIsCanonicalForm.ds_gauge
+  fundamentalTheorem_of_separated_canonical_data μ A B
+    hA.toHasStrictOrderedNonzeroWeights
+    hA.toHasInjectiveBlocks
+    hA.toIsLeftCanonicalBlockFamily
+    hA.toHasNormalizedSelfOverlap
+    hB.toHasInjectiveBlocks
+    hB.toIsLeftCanonicalBlockFamily
     hSame
 
 /-- **Equal-MPV FT for CF-BNT with explicit gauge matrices.** -/
@@ -126,10 +131,13 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
     ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
     ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
       (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) :=
-  fundamentalTheorem_canonicalForm_explicit μ A B
-    hA.toIsCanonicalForm
-    hB.toIsCanonicalForm.block_injective
-    hB.toIsCanonicalForm.ds_gauge
+  fundamentalTheorem_of_separated_canonical_data_explicit μ A B
+    hA.toHasStrictOrderedNonzeroWeights
+    hA.toHasInjectiveBlocks
+    hA.toIsLeftCanonicalBlockFamily
+    hA.toHasNormalizedSelfOverlap
+    hB.toHasInjectiveBlocks
+    hB.toIsLeftCanonicalBlockFamily
     hSame
 
 /-! ## Theorem 2: Proportional-MPV Fundamental Theorem (Thm 4.4)
@@ -137,6 +145,59 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
 This is the content of Theorem 4.4 from arXiv:1606.00608 (primitive branch).
 The theorem takes convergent coefficient data as explicit hypotheses.
 -/
+
+/-- Split-data proportional-MPV Fundamental Theorem for CF-BNT-style data (Thm 4.4).
+
+This is the Stage B low-risk interface: it packages only the hypotheses actually used by the
+proportional-MPV argument, and leaves the legacy `IsCanonicalFormBNT` wrapper theorem below
+unchanged. -/
+theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {DtotA DtotB : ℕ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA_inj : HasInjectiveBlocks (d := d) A)
+    (hA_left : IsLeftCanonicalBlockFamily (d := d) A)
+    (hA_overlap : HasNormalizedSelfOverlap (d := d) A)
+    (hA_blocks : ∀ j k : Fin rA, j ≠ k →
+      ∀ (h : dimA j = dimA k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k))
+    (hB_inj : HasInjectiveBlocks (d := d) B)
+    (hB_left : IsLeftCanonicalBlockFamily (d := d) B)
+    (hB_overlap : HasNormalizedSelfOverlap (d := d) B)
+    (hB_blocks : ∀ j k : Fin rB, j ≠ k →
+      ∀ (h : dimB j = dimB k),
+        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (B j)) (B k))
+    (A_total : MPSTensor d DtotA)
+    (B_total : MPSTensor d DtotB)
+    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (c : ℕ → ℂ) (cLim : ℂ)
+    (hA_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
+    (hB_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
+    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0)
+    (hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc : Tendsto c atTop (nhds cLim))
+    (hcLim_ne : cLim ≠ 0) :
+    ∃ _h : rA = rB,
+      ∃ perm : Fin rA ≃ Fin rB,
+        ∀ j : Fin rA,
+          ∃ hdim : dimA j = dimB (perm j),
+            GaugePhaseEquiv (d := d)
+              (cast (congr_arg (MPSTensor d) hdim) (A j))
+              (B (perm j)) :=
+  fundamentalTheorem_of_separated_CFBNT_data A B
+    hA_inj hA_left hA_overlap hA_blocks
+    hB_inj hB_left hB_overlap hB_blocks
+    A_total B_total aCoeff bCoeff aLim bLim c cLim
+    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
 /-- **Proportional-MPV Fundamental Theorem for CF-BNT (Thm 4.4).**
 
@@ -185,7 +246,15 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT
             GaugePhaseEquiv (d := d)
               (cast (congr_arg (MPSTensor d) hdim) (A j))
               (B (perm j)) :=
-  fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB
+  fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data A B
+    hA.toHasInjectiveBlocks
+    hA.toIsLeftCanonicalBlockFamily
+    hA.toHasNormalizedSelfOverlap
+    hA.blocks_not_equiv
+    hB.toHasInjectiveBlocks
+    hB.toIsLeftCanonicalBlockFamily
+    hB.toHasNormalizedSelfOverlap
+    hB.blocks_not_equiv
     A_total B_total aCoeff bCoeff aLim bLim c cLim
     hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
@@ -236,10 +305,13 @@ theorem perBlock_sameMPV_of_equalMPV_CFBNT
     (hB : IsCanonicalFormBNT μ B)
     (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     ∀ k, SameMPV (A k) (B k) :=
-  per_block_sameMPV_of_canonical_form μ A B
-    hA.toIsCanonicalForm
-    hB.toIsCanonicalForm.block_injective
-    hB.toIsCanonicalForm.ds_gauge
+  per_block_sameMPV_of_separated_canonical_data μ A B
+    hA.toHasStrictOrderedNonzeroWeights
+    hA.toHasInjectiveBlocks
+    hA.toIsLeftCanonicalBlockFamily
+    hA.toHasNormalizedSelfOverlap
+    hB.toHasInjectiveBlocks
+    hB.toIsLeftCanonicalBlockFamily
     hSame
 
 /-- **Equal-MPV CF-BNT: per-block gauge equivalence implies global gauge equivalence.**
