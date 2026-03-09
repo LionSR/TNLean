@@ -7,6 +7,7 @@ Authors: TNLean contributors
 import TNLean.Wielandt.RankOneManufacture
 import TNLean.Wielandt.RankOneExtraction
 import TNLean.Wielandt.RankOneSpanGrowth
+import TNLean.Wielandt.RankOneBoundedWord
 import TNLean.Wielandt.RectangularSpan
 import TNLean.Wielandt.RankOneElement
 
@@ -329,6 +330,114 @@ end WielandtLemma2b
 /-! ## Rank-one extraction with external eigenvectors -/
 
 section ExternalEigenvectors
+
+/-- **Rank-one element in a bounded cumulative span of the blocked tensor, given external
+word eigenvectors and a cumulative spanning witness.**
+
+This is the cumulative analogue of the later exact-word-span result: the manufactured rank-one
+matrix lies in `T_{D + N + D}` of the blocked tensor as soon as `T_N` is already full. -/
+theorem exists_rankOne_in_cumulativeSpan_blockTensor_of_wordEigenvectors
+    [NeZero D]
+    (A : MPSTensor d D)
+    (L : ℕ)
+    (σ₀ τ₀ : Fin L → Fin d)
+    (φ ψ : Fin D → ℂ) (μ ν : ℂ)
+    (hμ : μ ≠ 0) (hν : ν ≠ 0)
+    (heigφ : evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ)
+    (heigψ : (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ)
+    {N : ℕ}
+    (hcs : cumulativeSpan (blockTensor (d := d) (D := D) A L) N = ⊤) :
+    Matrix.vecMulVec φ ψ ∈
+      cumulativeSpan (blockTensor (d := d) (D := D) A L) (D + N + D) := by
+  classical
+  set B := blockTensor (d := d) (D := D) A L with hB_def
+  set i₀ := encodeBlock d L σ₀
+  set i₁ := encodeBlock d L τ₀
+  have hcsB : cumulativeSpan B N = ⊤ := by
+    simpa [B] using hcs
+  set P := (B i₀) ^ D
+  set Q := (B i₁) ^ D
+  have hP : P ∈ wordSpan B D := pow_single_mem_wordSpan B i₀
+  have hQ : Q ∈ wordSpan B D := pow_single_mem_wordSpan B i₁
+  have hBi₀ : B i₀ = evalWord A (List.ofFn σ₀) :=
+    blockTensor_apply_encodeBlock A L σ₀
+  have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) :=
+    blockTensor_apply_encodeBlock A L τ₀
+  have hP_eig : P *ᵥ φ = (μ ^ D) • φ := by
+    simp only [P]
+    rw [hBi₀]
+    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
+      (evalWord A (List.ofFn σ₀)) φ μ heigφ D
+  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) :=
+    mem_range_toLin'_of_eigenvector P φ (μ ^ D) (pow_ne_zero D hμ) hP_eig
+  have hQ_eig : Qᵀ *ᵥ ψ = (ν ^ D) • ψ := by
+    simp only [Q]
+    rw [Matrix.transpose_pow_eq_pow_transpose, hBi₁]
+    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
+      ((evalWord A (List.ofFn τ₀))ᵀ) ψ ν heigψ D
+  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) :=
+    mem_range_vecMulLinear_of_transpose_eigenvector
+      Q ψ (ν ^ D) (pow_ne_zero D hν) hQ_eig
+  simpa [B] using
+    (vecMulVec_mem_cumulativeSpan_of_cumulativeSpan_eq_top
+      (d := blockPhysDim d L) (D := D)
+      B P Q φ ψ hφ_range hψ_range hP hQ hcsB)
+
+/-- **Exact blocked rank-one extraction from cumulative spanning plus aperiodicity.**
+
+If the blocked tensor has full cumulative span at level `N` and also satisfies the padding
+hypothesis `1 ∈ wordSpan B 1`, then the same manufactured rank-one matrix already lies in the
+single exact-length word span `S_{D + N + D}(B)`. -/
+theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors_of_cumulativeSpan_of_aperiodic
+    [NeZero D]
+    (A : MPSTensor d D)
+    (L : ℕ)
+    (σ₀ τ₀ : Fin L → Fin d)
+    (φ ψ : Fin D → ℂ) (μ ν : ℂ)
+    (hμ : μ ≠ 0) (hν : ν ≠ 0)
+    (heigφ : evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ)
+    (heigψ : (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ)
+    {N : ℕ}
+    (hcs : cumulativeSpan (blockTensor (d := d) (D := D) A L) N = ⊤)
+    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
+      wordSpan (blockTensor (d := d) (D := D) A L) 1) :
+    Matrix.vecMulVec φ ψ ∈
+      wordSpan (blockTensor (d := d) (D := D) A L) (D + N + D) := by
+  classical
+  set B := blockTensor (d := d) (D := D) A L with hB_def
+  set i₀ := encodeBlock d L σ₀
+  set i₁ := encodeBlock d L τ₀
+  have hcsB : cumulativeSpan B N = ⊤ := by
+    simpa [B] using hcs
+  have honeB : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan B 1 := by
+    simpa [B] using hone
+  set P := (B i₀) ^ D
+  set Q := (B i₁) ^ D
+  have hP : P ∈ wordSpan B D := pow_single_mem_wordSpan B i₀
+  have hQ : Q ∈ wordSpan B D := pow_single_mem_wordSpan B i₁
+  have hBi₀ : B i₀ = evalWord A (List.ofFn σ₀) :=
+    blockTensor_apply_encodeBlock A L σ₀
+  have hBi₁ : B i₁ = evalWord A (List.ofFn τ₀) :=
+    blockTensor_apply_encodeBlock A L τ₀
+  have hP_eig : P *ᵥ φ = (μ ^ D) • φ := by
+    simp only [P]
+    rw [hBi₀]
+    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
+      (evalWord A (List.ofFn σ₀)) φ μ heigφ D
+  have hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P) :=
+    mem_range_toLin'_of_eigenvector P φ (μ ^ D) (pow_ne_zero D hμ) hP_eig
+  have hQ_eig : Qᵀ *ᵥ ψ = (ν ^ D) • ψ := by
+    simp only [Q]
+    rw [Matrix.transpose_pow_eq_pow_transpose, hBi₁]
+    exact pow_mulVec_eq_smul_of_mulVec_eq_smul
+      ((evalWord A (List.ofFn τ₀))ᵀ) ψ ν heigψ D
+  have hψ_range : ψ ∈ LinearMap.range (Q.vecMulLinear) :=
+    mem_range_vecMulLinear_of_transpose_eigenvector
+      Q ψ (ν ^ D) (pow_ne_zero D hν) hQ_eig
+  simpa [B] using
+    (vecMulVec_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
+      (d := blockPhysDim d L) (D := D)
+      B P Q φ ψ hφ_range hψ_range hP hQ hcsB honeB)
 
 /-- **Rank-one element in the word span of the blocked tensor, given external eigenvectors.**
 
