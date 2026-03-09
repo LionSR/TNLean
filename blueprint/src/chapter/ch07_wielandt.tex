@@ -690,7 +690,7 @@ used to produce rank-one elements.
     \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitive}
     \leanok
     \uses{def:primitive_mps, def:eval_word}
-    If $A$ is a primitive MPS tensor in DS gauge,
+    If $A$ is a primitive MPS tensor,
     then for every $n \ge 0$ there exists a word $w$ of length
     \emph{exactly}~$n$ with $A^w \neq 0$.
 \end{theorem}
@@ -706,7 +706,7 @@ used to produce rank-one elements.
     \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitive}
     \leanok
     \uses{def:primitive_mps, def:transfer_map}
-    If $A$ is a primitive MPS tensor (with DS gauge), then
+    If $A$ is a primitive MPS tensor, then
     $\E_A^n \neq 0$ for all $n \ge 0$.
 \end{theorem}
 
@@ -843,12 +843,13 @@ The gap is closed by an aperiodicity hypothesis.
     We say $A$ satisfies the \emph{aperiodicity condition}
     if $\Id \in S_1(A)$, i.e.\ the identity matrix lies in the
     span of the Kraus operators $\{A^i\}$.
-    For a doubly-stochastic tensor, $\sum_i A^i (A^i)^\dagger = \Id$
-    and $\sum_i (A^i)^\dagger A^i = \Id$, which gives
-    $\Id \in S_1(A)$.
-    More generally, blocking to a primitive transfer map
-    (Theorem~\ref{thm:blocking_primitivity}) yields a tensor
-    with $\Id \in S_1(A^{[p]})$.
+    This is an additional hypothesis. The one-sided TP normalization
+    $\sum_i (A^i)^\dagger A^i = \Id$ does \emph{not} imply
+    $\Id \in S_1(A)$; it only gives a quadratic identity among the
+    Kraus operators.
+    For genuinely primitive tensors one expects aperiodicity to follow
+    from peripheral-spectrum analysis, but that implication is not used
+    in the present Wielandt bridge, so the condition is kept explicit.
 \end{remark}
 
 \begin{remark}[Counterexample: cumulative spanning does not imply normality]%
