@@ -4,12 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 
-import TNLean.Wielandt.RankOneManufacture
-import TNLean.Wielandt.RankOneExtraction
-import TNLean.Wielandt.RankOneSpanGrowth
 import TNLean.Wielandt.RankOneBoundedWord
+import TNLean.Wielandt.RankOneExtraction
 import TNLean.Wielandt.RectangularSpan
-import TNLean.Wielandt.RankOneElement
 
 /-!
 # Full rank-one extraction for Wielandt Lemma 2(b)
@@ -173,6 +170,42 @@ private theorem BlockedTensorRangeData.rankOne_mem_range
   exact vecMulVec_mem_range_mulLeft_mulRight
     data.P data.Q φ ψ data.hφ_range data.hψ_range
 
+private theorem BlockedTensorRangeData.rankOne_mem_cumulativeSpan_of_cumulativeSpan_eq_top
+    {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
+    {φ ψ : Fin D → ℂ}
+    (data : BlockedTensorRangeData (d := d) (D := D) A L σ₀ τ₀ φ ψ)
+    {N : ℕ} (hcs : cumulativeSpan data.B N = ⊤) :
+    Matrix.vecMulVec φ ψ ∈ cumulativeSpan data.B (D + N + D) := by
+  exact vecMulVec_mem_cumulativeSpan_of_cumulativeSpan_eq_top
+    (d := blockPhysDim d L) (D := D)
+    data.B data.P data.Q φ ψ data.hφ_range data.hψ_range data.hP data.hQ hcs
+
+private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_wordSpan_eq_top
+    {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
+    {φ ψ : Fin D → ℂ}
+    (data : BlockedTensorRangeData (d := d) (D := D) A L σ₀ τ₀ φ ψ)
+    {N : ℕ} (htop : wordSpan data.B N = ⊤) :
+    Matrix.vecMulVec φ ψ ∈ wordSpan data.B (D + N + D) := by
+  have hrange_le :
+      LinearMap.range ((LinearMap.mulLeft ℂ data.P).comp (LinearMap.mulRight ℂ data.Q)) ≤
+        wordSpan data.B (D + N + D) := by
+    rw [← biRectSpan_eq_range_of_wordSpan_eq_top
+      (d := blockPhysDim d L) (D := D) data.P data.Q data.B htop]
+    exact biRectSpan_le_wordSpan (d := blockPhysDim d L) (D := D)
+      data.B data.P data.Q data.hP data.hQ
+  exact hrange_le data.rankOne_mem_range
+
+private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
+    {A : MPSTensor d D} {L : ℕ} {σ₀ τ₀ : Fin L → Fin d}
+    {φ ψ : Fin D → ℂ}
+    (data : BlockedTensorRangeData (d := d) (D := D) A L σ₀ τ₀ φ ψ)
+    {N : ℕ} (hcs : cumulativeSpan data.B N = ⊤)
+    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan data.B 1) :
+    Matrix.vecMulVec φ ψ ∈ wordSpan data.B (D + N + D) := by
+  exact (range_comp_le_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
+    (d := blockPhysDim d L) (D := D)
+    data.B data.P data.Q data.hP data.hQ hcs hone) data.rankOne_mem_range
+
 end Helpers
 
 /-! ## Nonzero-trace word extraction from a full word span -/
@@ -302,13 +335,10 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
     have hle : wordSpan A (N₀ * L) ≤ wordSpan data.B N₀ := by
       simpa [data.hB] using wordSpan_le_wordSpan_blockTensor A L N₀
     exact eq_top_iff.mpr (htopNL ▸ hle)
-  have hrange_le :
-      LinearMap.range ((LinearMap.mulLeft ℂ data.P).comp (LinearMap.mulRight ℂ data.Q)) ≤
-        wordSpan data.B (D + N₀ + D) :=
-    range_comp_le_wordSpan data.B data.P data.Q data.hP data.hQ hBtop
   exact ⟨σ₀, τ₀, φ, ψ, μ, ν, D + N₀ + D,
     hφ, hψ, hμ, hν, heigφ, heigψ, by
-      simpa [L, data.hB] using hrange_le data.rankOne_mem_range⟩
+      simpa [L, data.hB] using
+        data.rankOne_mem_wordSpan_of_wordSpan_eq_top hBtop⟩
 
 end RankOneExtraction
 
@@ -343,8 +373,9 @@ theorem wielandt_lemma2b [NeZero D]
       hφ, hψ, hμ, hν, heigφ, heigψ, hRankOne⟩ :=
       exists_rankOne_mem_wordSpan_blockTensor A hN₀ (by omega)
     exact ⟨(D - 1 + (m_blocked + (D - 1))) * N₀,
-      wielandt_blocked_assembly A ⟨N₀, hN₀⟩ N₀ (by omega) σ₀ φ hφ μ hμ heigφ τ₀ ψ hψ ν hν
-        heigψ hRankOne⟩
+      wielandt_blocked_assembly A ⟨N₀, hN₀⟩ N₀ (by omega)
+        σ₀ φ hφ μ hμ heigφ
+        τ₀ ψ hψ ν hν heigψ hRankOne⟩
 
 end WielandtLemma2b
 
@@ -376,9 +407,7 @@ theorem exists_rankOne_in_cumulativeSpan_blockTensor_of_wordEigenvectors
   have hcsB : cumulativeSpan data.B N = ⊤ := by
     simpa [data.hB] using hcs
   simpa [data.hB] using
-    (vecMulVec_mem_cumulativeSpan_of_cumulativeSpan_eq_top
-      (d := blockPhysDim d L) (D := D)
-      data.B data.P data.Q φ ψ data.hφ_range data.hψ_range data.hP data.hQ hcsB)
+    data.rankOne_mem_cumulativeSpan_of_cumulativeSpan_eq_top hcsB
 
 /-- **Exact blocked rank-one extraction from cumulative spanning plus aperiodicity.**
 
@@ -408,9 +437,7 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors_of_cumulative
   have honeB : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan data.B 1 := by
     simpa [data.hB] using hone
   simpa [data.hB] using
-    (vecMulVec_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic
-      (d := blockPhysDim d L) (D := D)
-      data.B data.P data.Q φ ψ data.hφ_range data.hψ_range data.hP data.hQ hcsB honeB)
+    data.rankOne_mem_wordSpan_of_cumulativeSpan_eq_top_of_aperiodic hcsB honeB
 
 /-- **Rank-one element in the word span of the blocked tensor, given external eigenvectors.**
 
@@ -451,12 +478,8 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
   obtain ⟨N₁, hN₁⟩ := hNormalB
   have hBtop : wordSpan data.B N₁ = ⊤ :=
     (wordSpan_eq_top_iff_isNBlkInjective data.B N₁).mpr hN₁
-  have hrange_le :
-      LinearMap.range ((LinearMap.mulLeft ℂ data.P).comp (LinearMap.mulRight ℂ data.Q)) ≤
-        wordSpan data.B (D + N₁ + D) :=
-    range_comp_le_wordSpan data.B data.P data.Q data.hP data.hQ hBtop
   exact ⟨D + N₁ + D, by
-    simpa [data.hB] using hrange_le data.rankOne_mem_range⟩
+    simpa [data.hB] using data.rankOne_mem_wordSpan_of_wordSpan_eq_top hBtop⟩
 
 set_option maxHeartbeats 800000 in
 -- The blocked assembly involves multiple typeclass unifications across blocked tensor types.

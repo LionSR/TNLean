@@ -445,33 +445,29 @@ noncomputable def biRectSpanLeftStep (n : ℕ) :
 /-- The left-step map is injective: multiplication by `B i₀` is injective on the range of
 left multiplication by `((B i₀)^D)`. -/
 theorem biRectSpanLeftStep_injective (n : ℕ) :
-    Function.Injective (biRectSpanLeftStep (d := d) (D := D) (B := B) (i₀ := i₀) (i₁ := i₁) n) := by
+    Function.Injective
+      (biRectSpanLeftStep (d := d) (D := D) (B := B) (i₀ := i₀) (i₁ := i₁) n) := by
   classical
+  have hRange :
+      ∀ {X : Matrix (Fin D) (Fin D) ℂ},
+        X ∈ W (d := d) (D := D) (B := B) (i₀ := i₀) (i₁ := i₁) n →
+          X ∈ LinearMap.range (LinearMap.mulLeft ℂ ((B i₀) ^ D)) := by
+    intro X hX
+    rcases (mem_biRectSpan_iff (d := d) (D := D)
+      (P0 (B := B) (i₀ := i₀)) (Q0 (B := B) (i₁ := i₁)) B).mp hX with ⟨Z, _, hZ⟩
+    refine (LinearMap.mem_range).2 ?_
+    refine ⟨Z * Q0 (B := B) (i₁ := i₁), ?_⟩
+    simpa [P0, Q0, LinearMap.mulLeft_apply, Matrix.mul_assoc] using hZ
   intro x y hxy
-  -- Reduce to an equality in the ambient matrix space.
   have hmat : (B i₀) * x.1 = (B i₀) * y.1 := congrArg Subtype.val hxy
-  -- Consider the difference `z = x - y`.
   have hz : (B i₀) * (x.1 - y.1) = 0 := by
     simpa [Matrix.mul_sub, sub_eq_zero] using hmat
-  -- The difference lies in the range of left multiplication by `((B i₀)^D)`.
-  have hxRange : x.1 ∈ LinearMap.range (LinearMap.mulLeft ℂ ((B i₀) ^ D)) := by
-    rcases (mem_biRectSpan_iff (d := d) (D := D)
-      (P0 (B := B) (i₀ := i₀)) (Q0 (B := B) (i₁ := i₁)) B).mp x.2 with ⟨Z, _, hZ⟩
-    refine (LinearMap.mem_range).2 ⟨Z * Q0 (B := B) (i₁ := i₁), ?_⟩
-    simpa [P0, Q0, LinearMap.mulLeft_apply, Matrix.mul_assoc] using hZ
-  have hyRange : y.1 ∈ LinearMap.range (LinearMap.mulLeft ℂ ((B i₀) ^ D)) := by
-    rcases (mem_biRectSpan_iff (d := d) (D := D)
-      (P0 (B := B) (i₀ := i₀)) (Q0 (B := B) (i₁ := i₁)) B).mp y.2 with ⟨Z, _, hZ⟩
-    refine (LinearMap.mem_range).2 ⟨Z * Q0 (B := B) (i₁ := i₁), ?_⟩
-    simpa [P0, Q0, LinearMap.mulLeft_apply, Matrix.mul_assoc] using hZ
   have hzRange : (x.1 - y.1) ∈ LinearMap.range (LinearMap.mulLeft ℂ ((B i₀) ^ D)) :=
-    Submodule.sub_mem _ hxRange hyRange
+    Submodule.sub_mem _ (hRange x.2) (hRange y.2)
   have hzero : x.1 - y.1 = 0 :=
     WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow (D := D)
       (M := B i₀) (X := x.1 - y.1) hzRange hz
-  have : x.1 = y.1 := by
-    simpa [sub_eq_zero] using hzero
-  exact Subtype.ext this
+  exact Subtype.ext <| by simpa [sub_eq_zero] using hzero
 
 /-- Finrank is nondecreasing along the sequence `n ↦ biRectSpan ((B i₀)^D) ((B i₁)^D) B n`. -/
 theorem biRectSpan_finrank_mono (n : ℕ) :

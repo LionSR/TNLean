@@ -31,10 +31,36 @@ namespace MPSTensor
 
 variable {d D D₁ D₂ : ℕ}
 
-private lemma sum_sandwich (L R : Matrix (Fin D) (Fin D) ℂ)
-    (M : Fin d → Matrix (Fin D) (Fin D) ℂ) :
+private lemma sum_sandwich {l m n r : ℕ}
+    (L : Matrix (Fin l) (Fin m) ℂ) (R : Matrix (Fin n) (Fin r) ℂ)
+    (M : Fin d → Matrix (Fin m) (Fin n) ℂ) :
     ∑ i : Fin d, L * M i * R = L * (∑ i : Fin d, M i) * R := by
-  rw [Finset.mul_sum, Finset.sum_mul]
+  calc
+    ∑ i : Fin d, L * M i * R = (∑ i : Fin d, L * M i) * R := by
+      simpa [Matrix.mul_assoc] using
+        (Matrix.sum_mul (s := (Finset.univ : Finset (Fin d)))
+          (f := fun i : Fin d => L * M i) (M := R)).symm
+    _ = (L * ∑ i : Fin d, M i) * R := by
+      exact congrArg (fun T => T * R) <|
+        (Matrix.mul_sum (s := (Finset.univ : Finset (Fin d)))
+          (f := fun i : Fin d => M i) (M := L)).symm
+
+private lemma norm_starRingEnd_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
+    ‖(starRingEnd ℂ) μ‖ = 1 := by
+  simpa [Complex.norm_conj] using hμ
+
+private lemma smul_mul_conjTranspose_of_norm_eq_one {m n : ℕ}
+    (μ : ℂ) (hμ : ‖μ‖ = 1) (N : Matrix (Fin m) (Fin n) ℂ) :
+    (μ • N) * (μ • N)ᴴ = N * Nᴴ := by
+  have hμ_star_mul : star μ * μ = 1 := by
+    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
+    simp [Complex.normSq_eq_norm_sq, hμ]
+  have hμ_starRing_mul : ((starRingEnd ℂ) μ) * μ = 1 := by
+    simpa [Complex.star_def] using hμ_star_mul
+  calc
+    (μ • N) * (μ • N)ᴴ = (((starRingEnd ℂ) μ) * μ) • (N * Nᴴ) := by
+      simp [Matrix.conjTranspose_smul, smul_smul, mul_comm]
+    _ = N * Nᴴ := by simp [hμ_starRing_mul]
 
 section SameDimension
 
@@ -351,8 +377,8 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
       · simp [Kraus.adjointMap, K, rhoT, Matrix.sum_apply, Matrix.fromBlocks_multiply,
           Matrix.fromBlocks_conjTranspose, mul_assoc]
     simp [hAdj, rhoT, hAblock, hBblock]
-  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := by
-    simpa [Complex.norm_conj] using hμ
+  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 :=
+    norm_starRingEnd_eq_one hμ
   have hEigMstar : Kraus.map K Mᴴ = (starRingEnd ℂ μ) • Mᴴ := by
     have h1 : Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := by
       simp [Kraus.map_conjTranspose (K := K) M]
@@ -397,20 +423,6 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     intro h0
     apply hX'ne
     exact Matrix.self_mul_conjTranspose_eq_zero.mp (by simpa [XXh] using h0)
-  have hμ_star_mul : star μ * μ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp [Complex.normSq_eq_norm_sq, hμ]
-  have hμ_mul_star : μ * star μ = 1 := by
-    simpa [mul_comm] using hμ_star_mul
-  have hμ_starRing_mul : ((starRingEnd ℂ) μ) * μ = 1 := by
-    simpa [Complex.star_def] using hμ_star_mul
-  have hsmul_self_mul_conjTranspose :
-      ∀ N : Matrix (Fin D) (Fin D) ℂ, (μ • N) * (μ • N)ᴴ = N * Nᴴ := by
-    intro N
-    calc
-      (μ • N) * (μ • N)ᴴ = (((starRingEnd ℂ) μ) * μ) • (N * Nᴴ) := by
-        simp [Matrix.conjTranspose_smul, smul_smul, mul_comm]
-      _ = N * Nᴴ := by simp [hμ_starRing_mul]
   have hXXh_fix' : transferMap A' XXh = XXh := by
     have hterm :
         ∀ i : Fin d,
@@ -423,7 +435,8 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
           simp [XXh, Matrix.mul_assoc, Matrix.conjTranspose_mul]
         _ = (μ • (X' * B' i)) * (μ • (X' * B' i))ᴴ := by
           simp [hAX]
-        _ = (X' * B' i) * (X' * B' i)ᴴ := hsmul_self_mul_conjTranspose (X' * B' i)
+        _ = (X' * B' i) * (X' * B' i)ᴴ := by
+          simpa using smul_mul_conjTranspose_of_norm_eq_one μ hμ (X' * B' i)
         _ = X' * (B' i * (B' i)ᴴ) * X'ᴴ := by
           simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
     calc
@@ -566,6 +579,8 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     simp only [A', Ymat, Yinv, Matrix.mul_assoc]
   simpa [Ygl] using this
 
+/-- If the mixed transfer spectral radius of two irreducible left-canonical tensors is at least
+`1`, then the tensors are gauge-phase equivalent. -/
 theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
     (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
@@ -829,18 +844,17 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
             simp only [Matrix.mul_assoc]
             rw [Matrix.mul_nonsing_inv_cancel_left _ _ hSA_u,
                 Matrix.nonsing_inv_mul_cancel_left _ _ hSBh_u]
-    simp_rw [hterm]
-    simp_rw [← Matrix.sum_mul (s := (Finset.univ : Finset (Fin d)))
-      (f := fun i : Fin d => SA⁻¹ * (A i * X * (B i)ᴴ)) (M := (SBᴴ)⁻¹)]
-    simp_rw [← Matrix.mul_sum (s := (Finset.univ : Finset (Fin d)))
-      (f := fun i : Fin d => A i * X * (B i)ᴴ) (M := SA⁻¹)]
-    rw [hFXsum]
-    have h1 : SA⁻¹ * (μ • X) = μ • (SA⁻¹ * X) := by
-      simp [Matrix.mul_smul]
-    rw [h1]
-    have h2 : (μ • (SA⁻¹ * X)) * (SBᴴ)⁻¹ = μ • ((SA⁻¹ * X) * (SBᴴ)⁻¹) := by
-      simp [Matrix.smul_mul]
-    rw [h2]
+    calc
+      ∑ i : Fin d, A' i * X' * (B' i)ᴴ
+          = ∑ i : Fin d, SA⁻¹ * (A i * X * (B i)ᴴ) * (SBᴴ)⁻¹ := by
+              simp [hterm]
+      _ = SA⁻¹ * (∑ i : Fin d, A i * X * (B i)ᴴ) * (SBᴴ)⁻¹ := by
+            simpa using
+              (sum_sandwich (L := SA⁻¹) (R := (SBᴴ)⁻¹)
+                (M := fun i : Fin d => A i * X * (B i)ᴴ))
+      _ = SA⁻¹ * (μ • X) * (SBᴴ)⁻¹ := by rw [hFXsum]
+      _ = μ • X' := by
+            simp [X', Matrix.mul_assoc]
   let K : Fin d → Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
     fun i => Matrix.fromBlocks (A' i) 0 0 (B' i)
   let M : Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
@@ -929,8 +943,8 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
         Matrix.fromBlocks_smul]
     have h_eq := hL ▸ hR ▸ h'
     exact (Matrix.fromBlocks_inj.1 h_eq).2.1
-  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := by
-    rwa [Complex.norm_conj]
+  have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 :=
+    norm_starRingEnd_eq_one hμ
   have hEigMstar : Kraus.map K Mᴴ = (starRingEnd ℂ μ) • Mᴴ := by
     calc Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := by
           simpa using (Kraus.map_conjTranspose (K := K) M).symm
@@ -965,31 +979,6 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
     simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       Matrix.conjTranspose_smul] at h22
     simpa [smul_mul_assoc] using h22
-  have hμ_star_mul : star μ * μ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp [Complex.normSq_eq_norm_sq, hμ]
-  have hμ_mul_star : μ * star μ = 1 := by
-    simpa [mul_comm] using hμ_star_mul
-  have hμ_starRing_mul : ((starRingEnd ℂ) μ) * μ = 1 := by
-    simpa [Complex.star_def] using hμ_star_mul
-  have hμ_mul_starRing : μ * ((starRingEnd ℂ) μ) = 1 := by
-    simpa [Complex.star_def] using hμ_mul_star
-  have hsmul_self_mul_conjTranspose :
-      ∀ N : Matrix (Fin D₁) (Fin D₂) ℂ, (μ • N) * (μ • N)ᴴ = N * Nᴴ := by
-    intro N
-    calc
-      (μ • N) * (μ • N)ᴴ = (((starRingEnd ℂ) μ) * μ) • (N * Nᴴ) := by
-        simp [Matrix.conjTranspose_smul, Matrix.mul_smul, smul_smul, mul_comm]
-      _ = N * Nᴴ := by simp [hμ_starRing_mul]
-  have hsmul_star_self_mul_conjTranspose :
-      ∀ N : Matrix (Fin D₂) (Fin D₁) ℂ,
-        ((starRingEnd ℂ μ) • N) * (((starRingEnd ℂ μ) • N)ᴴ) = N * Nᴴ := by
-    intro N
-    calc
-      ((starRingEnd ℂ μ) • N) * (((starRingEnd ℂ μ) • N)ᴴ)
-          = (μ * (starRingEnd ℂ μ)) • (N * Nᴴ) := by
-              simp [Matrix.conjTranspose_smul, Matrix.mul_smul, smul_smul]
-      _ = N * Nᴴ := by simp [hμ_mul_starRing]
   let σA : Matrix (Fin D₁) (Fin D₁) ℂ := X' * X'ᴴ
   let σB : Matrix (Fin D₂) (Fin D₂) ℂ := X'ᴴ * X'
   have hσA_psd : σA.PosSemidef := by
@@ -1015,7 +1004,8 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
           simp [σA, Matrix.mul_assoc, Matrix.conjTranspose_mul]
         _ = (μ • (X' * B' i)) * (μ • (X' * B' i))ᴴ := by
           simp [hAX i]
-        _ = (X' * B' i) * (X' * B' i)ᴴ := hsmul_self_mul_conjTranspose (X' * B' i)
+        _ = (X' * B' i) * (X' * B' i)ᴴ := by
+          simpa using smul_mul_conjTranspose_of_norm_eq_one μ hμ (X' * B' i)
         _ = X' * (B' i * (B' i)ᴴ) * X'ᴴ := by
           simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
     calc
@@ -1023,15 +1013,10 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
         simp [transferMap_apply]
       _ = ∑ i : Fin d, X' * (B' i * (B' i)ᴴ) * X'ᴴ := by
         simp [hterm]
-      _ = (∑ i : Fin d, X' * (B' i * (B' i)ᴴ)) * X'ᴴ := by
-        simpa using (Matrix.sum_mul (s := (Finset.univ : Finset (Fin d)))
-          (f := fun i : Fin d => X' * (B' i * (B' i)ᴴ)) (M := X'ᴴ)).symm
-      _ = (X' * (∑ i : Fin d, B' i * (B' i)ᴴ)) * X'ᴴ := by
-        exact congrArg (fun T => T * X'ᴴ) <|
-          (Matrix.mul_sum (s := (Finset.univ : Finset (Fin d)))
-            (f := fun i : Fin d => B' i * (B' i)ᴴ) (M := X')).symm
       _ = X' * (∑ i : Fin d, B' i * (B' i)ᴴ) * X'ᴴ := by
-        simp [Matrix.mul_assoc]
+        simpa using
+          (sum_sandwich (L := X') (R := X'ᴴ)
+            (M := fun i : Fin d => B' i * (B' i)ᴴ))
       _ = X' * X'ᴴ := by rw [hB'unital]; simp
       _ = σA := rfl
   have hσB_fix : transferMap (d := d) (D := D₂) B' σB = σB := by
@@ -1045,7 +1030,9 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
           simp [σB, Matrix.mul_assoc, Matrix.conjTranspose_mul]
         _ = ((starRingEnd ℂ μ) • (X'ᴴ * A' i)) * (((starRingEnd ℂ μ) • (X'ᴴ * A' i))ᴴ) := by
           simp [hBX i]
-        _ = (X'ᴴ * A' i) * (X'ᴴ * A' i)ᴴ := hsmul_star_self_mul_conjTranspose (X'ᴴ * A' i)
+        _ = (X'ᴴ * A' i) * (X'ᴴ * A' i)ᴴ := by
+          simpa using
+            smul_mul_conjTranspose_of_norm_eq_one ((starRingEnd ℂ) μ) hμ_conj (X'ᴴ * A' i)
         _ = X'ᴴ * (A' i * (A' i)ᴴ) * X' := by
           simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
     calc
@@ -1053,15 +1040,10 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
         simp [transferMap_apply]
       _ = ∑ i : Fin d, X'ᴴ * (A' i * (A' i)ᴴ) * X' := by
         simp [hterm]
-      _ = (∑ i : Fin d, X'ᴴ * (A' i * (A' i)ᴴ)) * X' := by
-        simpa using (Matrix.sum_mul (s := (Finset.univ : Finset (Fin d)))
-          (f := fun i : Fin d => X'ᴴ * (A' i * (A' i)ᴴ)) (M := X')).symm
-      _ = (X'ᴴ * (∑ i : Fin d, A' i * (A' i)ᴴ)) * X' := by
-        exact congrArg (fun T => T * X') <|
-          (Matrix.mul_sum (s := (Finset.univ : Finset (Fin d)))
-            (f := fun i : Fin d => A' i * (A' i)ᴴ) (M := X'ᴴ)).symm
       _ = X'ᴴ * (∑ i : Fin d, A' i * (A' i)ᴴ) * X' := by
-        simp [Matrix.mul_assoc]
+        simpa using
+          (sum_sandwich (L := X'ᴴ) (R := X')
+            (M := fun i : Fin d => A' i * (A' i)ᴴ))
       _ = X'ᴴ * X' := by rw [hA'unital]; simp
       _ = σB := rfl
   let YA : Matrix (Fin D₁) (Fin D₁) ℂ := SA * σA * SAᴴ

@@ -1,14 +1,14 @@
+import TNLean.PiAlgebra.BlockSeparation
+
 /-!
 # Scratch counterexample for naive block separation
 
 This file records a concrete counterexample to the naive implication from the
-weighted MPV cancellation identity to per-block `SameMPV`. It is not imported
-by `TNLean`; it is kept only as documentary scratch material while
-`TNLean.PiAlgebra.BlockSeparation` explains the corrected status of the
-separation step.
+weighted MPV cancellation identity to per-block `SameMPV`. It is imported by
+neither `TNLean` nor `TNLean.Experimental`; it is retained only as documentary
+scratch material while `TNLean.PiAlgebra.BlockSeparation` explains the
+corrected status of the separation step.
 -/
-
-import TNLean.PiAlgebra.BlockSeparation
 
 open scoped Matrix BigOperators
 
@@ -46,16 +46,16 @@ section
   have hi : i = 0 := Fin.eq_zero i
   have hj : j = 0 := Fin.eq_zero j
   subst hi; subst hj
-  simp [mat1, Matrix.one_apply]
+  simp [mat1]
 
 @[simp] lemma mat1_pow (a : ℂ) : ∀ n : ℕ, (mat1 a) ^ n = mat1 (a ^ n)
   | 0 => by
       simp [pow_zero, mat1_one]
-  | n+1 => by
-      simpa [pow_succ, mat1_mul, mat1_pow a n]
+  | n + 1 => by
+      simp [pow_succ, mat1_pow a n]
 
 @[simp] lemma trace_mat1 (a : ℂ) : Matrix.trace (mat1 a) = a := by
-  simpa [Matrix.trace_fin_one, mat1]
+  simp [Matrix.trace_fin_one, mat1]
 
 @[simp] lemma trace_mat1_pow (a : ℂ) (n : ℕ) : Matrix.trace ((mat1 a) ^ n) = a ^ n := by
   simp [mat1_pow, trace_mat1]
@@ -108,12 +108,14 @@ lemma AEx_isInjective : ∀ k, IsInjective (AEx k) := by
   fin_cases k
   · -- k = 0
     -- Unfold the definition: range is a singleton containing `mat1 1`.
-    simpa [MPSTensor.IsInjective, AEx, Set.range_const] using (span_mat1_eq_top (a := (1 : ℂ)) one_ne_zero)
+    simpa [MPSTensor.IsInjective, AEx, Set.range_const] using
+      (span_mat1_eq_top (a := (1 : ℂ)) one_ne_zero)
   · -- k = 1
     -- Here `3/2 ≠ 0`.
-    have hne : ( (3 : ℂ) / 2) ≠ 0 := by
+    have hne : ((3 : ℂ) / 2) ≠ 0 := by
       norm_num
-    simpa [MPSTensor.IsInjective, AEx, Set.range_const] using (span_mat1_eq_top (a := ((3 : ℂ) / 2)) hne)
+    simpa [MPSTensor.IsInjective, AEx, Set.range_const] using
+      (span_mat1_eq_top (a := ((3 : ℂ) / 2)) hne)
 
 /-- The weighted MPV sum cancels for all system sizes (here `d = 1`, so there is only one σ at each
 size). -/
@@ -126,37 +128,32 @@ lemma hδEx : ∀ N (σ : Fin N → Fin 1),
     funext i
     exact Fin.eq_zero (σ i)
   subst hσ
-  -- Reduce MPVs to traces of powers.
-  -- `mpv` for a constant configuration is `trace ((A i)^N)`.
-  -- Rewrite MPVs as traces of powers.
-  simp [AEx, BEx, μEx, MPSTensor.mpv_const_eq_trace_pow, smul_eq_mul]
-  -- Reduce traces of `mat1` powers to scalar powers.
-  simp [trace_mat1_pow, dimEx]
-  -- Expand the remaining product.
-  simp [mul_sub, sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
-  -- Use `(a*b)^N = a^N*b^N` backwards to simplify the products of powers.
   have h23 : (2 : ℂ) ^ N * ((3 : ℂ) / 2) ^ N = (3 : ℂ) ^ N := by
-    -- First rewrite `a^N*b^N` as `(a*b)^N`.
-    have h : (2 : ℂ) ^ N * ((3 : ℂ) / 2) ^ N = ((2 : ℂ) * ((3 : ℂ) / 2)) ^ N :=
-      (mul_pow (2 : ℂ) ((3 : ℂ) / 2) N).symm
-    -- Then simplify the base.
-    have hbase : (2 : ℂ) * ((3 : ℂ) / 2) = (3 : ℂ) := by
-      norm_num
-    simpa [hbase] using h
-  -- (Not strictly needed, but kept for clarity: the same simplification gives `2^N*(1/2)^N = 1`.)
+    calc
+      (2 : ℂ) ^ N * ((3 : ℂ) / 2) ^ N = ((2 : ℂ) * ((3 : ℂ) / 2)) ^ N := by
+        exact (mul_pow (2 : ℂ) ((3 : ℂ) / 2) N).symm
+      _ = (3 : ℂ) ^ N := by
+        have hbase : (2 : ℂ) * ((3 : ℂ) / 2) = (3 : ℂ) := by
+          norm_num
+        simp [hbase]
   have h21 : (2 : ℂ) ^ N * ((1 : ℂ) / 2) ^ N = (1 : ℂ) ^ N := by
-    have h : (2 : ℂ) ^ N * ((1 : ℂ) / 2) ^ N = ((2 : ℂ) * ((1 : ℂ) / 2)) ^ N :=
-      (mul_pow (2 : ℂ) ((1 : ℂ) / 2) N).symm
-    have hbase : (2 : ℂ) * ((1 : ℂ) / 2) = (1 : ℂ) := by
-      norm_num
-    simpa [hbase] using h
-  -- Finish the scalar identity.
-  have h2ne : (2 : ℂ) ^ N ≠ 0 := by
-    exact pow_ne_zero N (by norm_num)
-  -- Expand the product and use `h23` plus `a * a⁻¹ = 1`.
-  -- (We don't actually need `h21`; it was convenient to compute `2*(1/2)=1`.)
-  simp [mul_add, mul_neg, h23, h2ne, mul_inv_cancel, add_assoc, add_left_comm, add_comm,
-    sub_eq_add_neg, mul_assoc]
+    calc
+      (2 : ℂ) ^ N * ((1 : ℂ) / 2) ^ N = ((2 : ℂ) * ((1 : ℂ) / 2)) ^ N := by
+        exact (mul_pow (2 : ℂ) ((1 : ℂ) / 2) N).symm
+      _ = (1 : ℂ) ^ N := by
+        simp
+  have hgoal :
+      (1 : ℂ) ^ N * ((1 : ℂ) ^ N - (3 : ℂ) ^ N) +
+        (2 : ℂ) ^ N * (((3 : ℂ) / 2) ^ N - ((1 : ℂ) / 2) ^ N) = 0 := by
+    calc
+      (1 : ℂ) ^ N * ((1 : ℂ) ^ N - (3 : ℂ) ^ N) +
+          (2 : ℂ) ^ N * (((3 : ℂ) / 2) ^ N - ((1 : ℂ) / 2) ^ N)
+          = 1 - (3 : ℂ) ^ N + (3 : ℂ) ^ N - 1 := by
+              simp [mul_sub, h23]
+      _ = 0 := by
+        ring
+  simpa [AEx, BEx, μEx, dimEx, MPSTensor.mpv_const_eq_trace_pow, smul_eq_mul,
+    h21, h23] using hgoal
 
 /-- The per-block MPVs are *not* equal: block 0 differs at `N = 1`. -/
 lemma not_perBlock_sameMPV : ¬ (∀ k : Fin 2, SameMPV (AEx k) (BEx k)) := by
@@ -167,7 +164,8 @@ lemma not_perBlock_sameMPV : ¬ (∀ k : Fin 2, SameMPV (AEx k) (BEx k)) := by
   have h13 : (1 : ℂ) = 3 := by
     -- `N = 1` forces `trace(mat1 1) = trace(mat1 3)`, i.e. `1 = 3`.
     -- The left-hand side simplifies to the trace of the identity, i.e. `D = 1`.
-    simpa [AEx, BEx, dimEx, MPSTensor.mpv_const_eq_trace_pow, trace_mat1_pow] using h0
+    have h13' := h0
+    simp [AEx, BEx, dimEx, MPSTensor.mpv_const_eq_trace_pow] at h13'
   -- Contradiction.
   have : False := by
     norm_num at h13

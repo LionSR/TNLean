@@ -1895,8 +1895,10 @@ theorem fundamentalTheorem_of_separated_canonical_data
     GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) := by
   have hSep := per_block_sameMPV_of_separated_canonical_data μ A B
     hWeights hA_inj hA_left hA_overlap hB_inj hB_left hSame₂
-  exact ⟨fun k => fundamentalTheorem_singleBlock (hA_inj.block_injective k) (hSep k),
-         fundamentalTheorem_multiBlock_global μ A B hA_inj.block_injective hSep⟩
+  exact
+    ⟨fundamentalTheorem_multiBlock_blocks
+        (A := A) (B := B) hA_inj.block_injective hSep,
+      fundamentalTheorem_multiBlock_global μ A B hA_inj.block_injective hSep⟩
 
 /-- Explicit gauge-matrix version of `fundamentalTheorem_of_separated_canonical_data`. -/
 theorem fundamentalTheorem_of_separated_canonical_data_explicit
