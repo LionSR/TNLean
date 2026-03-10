@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Channel.CyclicDecomposition
 import TNLean.MPS.Blocking
 import TNLean.MPS.CanonicalFormExistence1606
@@ -58,13 +59,70 @@ private theorem isIrreducibleTensor_smul
       _ = 0 := hLower i
   exact (smul_eq_zero.mp h).resolve_left hc
 
-/-- Placeholder for the missing irreducibility-preservation theorem for the TP gauge.
+private noncomputable def gaugeMulVecLinearEquiv {D : ℕ} (X : GL (Fin D) ℂ) :
+    (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) where
+  toFun v := (X : Matrix (Fin D) (Fin D) ℂ) *ᵥ v
+  invFun v := (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ v)
+  left_inv := by
+    intro v
+    calc
+      (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ
+          ((X : Matrix (Fin D) (Fin D) ℂ) *ᵥ v))
+          = ((((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
+              (X : Matrix (Fin D) (Fin D) ℂ)) *ᵥ v) := by
+              simp [Matrix.mulVec_mulVec]
+      _ = v := by
+            simp
+  right_inv := by
+    intro v
+    calc
+      ((X : Matrix (Fin D) (Fin D) ℂ) *ᵥ
+          ((((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ v)))
+          = (((X : Matrix (Fin D) (Fin D) ℂ) *
+              (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) *ᵥ v) := by
+              simp [Matrix.mulVec_mulVec]
+      _ = v := by
+            simp
+  map_add' := by
+    intro v w
+    simp [Matrix.mulVec_add]
+  map_smul' := by
+    intro c v
+    simp [Matrix.mulVec_smul]
 
-The bookkeeping in `tp_gauge_blockwise` is now formalized, but one still needs a bridge showing
-that the non-unitary similarity `A ↦ tpGauge A σ` preserves `IsIrreducibleTensor`. This should
-follow from the same support-projection argument already used in
-`BlockingPeriodicityCFII2.isIrreducibleTensor_unitalize`, but that general positive-definite
-similarity lemma is not yet factored out in the repository. -/
+private theorem isIrreducibleAction_gaugeEquiv
+    {D : ℕ} {A B : MPSTensor d D}
+    (hGauge : GaugeEquiv (d := d) (D := D) A B)
+    (hIrr : IsIrreducibleAction (d := d) (D := D) A) :
+    IsIrreducibleAction (d := d) (D := D) B := by
+  classical
+  rcases hGauge with ⟨X, hX⟩
+  let T : (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) := gaugeMulVecLinearEquiv X
+  intro W hW
+  let W' : Submodule ℂ (Fin D → ℂ) := W.map T.symm.toLinearMap
+  have hW' : IsInvariantSubmodule (d := d) (D := D) A W' := by
+    intro i v hv
+    rcases (Submodule.mem_map).1 hv with ⟨u, huW, rfl⟩
+    refine (Submodule.mem_map).2 ?_
+    refine ⟨(B i).mulVec u, hW i u huW, ?_⟩
+    change (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ ((B i) *ᵥ u)) =
+      (A i) *ᵥ ((((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ u))
+    calc
+      (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ ((B i) *ᵥ u))
+          = ((((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * B i) *ᵥ u) := by
+              simp [Matrix.mulVec_mulVec]
+      _ = ((A i * (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) ) *ᵥ u) := by
+            rw [hX i]
+            simp [Matrix.mul_assoc]
+      _ = (A i) *ᵥ ((((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ u)) := by
+            simp [Matrix.mulVec_mulVec]
+  rcases hIrr W' hW' with hW'bot | hW'top
+  · left
+    exact (Submodule.map_eq_bot_iff (p := W) (e := T.symm)).1 (by simpa [W'] using hW'bot)
+  · right
+    exact (Submodule.map_eq_top_iff (p := W) (e := T.symm)).1 (by simpa [W'] using hW'top)
+
+/-- Positive-definite TP gauge preserves tensor irreducibility. -/
 private theorem isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
     {D : ℕ} [NeZero D]
     (A : MPSTensor d D)
@@ -72,13 +130,16 @@ private theorem isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
     (hσ : σ.PosDef)
     (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
     IsIrreducibleTensor (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) := by
-  /-
-  Missing API: `tpGauge` is a general positive-definite similarity transform. The existing file
-  `BlockingPeriodicityCFII2.lean` proves the diagonal-specialized analogue
-  `isIrreducibleTensor_unitalize`, and the same support-projection construction should establish the
-  present lemma as well.
-  -/
-  sorry
+  have hAction : IsIrreducibleAction (d := d) (D := D) A :=
+    isIrreducibleAction_of_isIrreducibleTensor (d := d) (D := D) A hIrr
+  have hGauge : GaugeEquiv (d := d) (D := D) A (tpGauge (d := d) (D := D) A σ) :=
+    gaugeEquiv_tpGauge (d := d) (D := D) A σ hσ
+  have hActionGauge :
+      IsIrreducibleAction (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) :=
+    isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hAction
+  exact
+    isIrreducibleTensor_of_isIrreducibleAction
+      (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) hActionGauge
 
 /-- Blockwise Perron--Frobenius / TP gauge step for an irreducible block decomposition.
 
