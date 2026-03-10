@@ -276,19 +276,74 @@ private theorem tp_gauge_blockwise
     exact Nat.pos_of_ne_zero (hdim0_ne k)
   exact ⟨r0, dim0, μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
 
-/-- Single-block bridge from Wolf Theorem 6.6 to the normal-form pipeline.
+private noncomputable def singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
+  (Fintype.equivFin (Fin 1 → Fin d)).symm.trans (Equiv.funUnique (Fin 1) (Fin d))
 
-Starting from a left-canonical irreducible block, first use
-`exists_blockTensor_isPrimitive_pipeline1606` to find a period. Then apply
-`exists_cyclic_decomposition_of_irreducible_schwarz` together with
-`isIrreducible_restriction_of_cyclic_decomp` and
-`isPrimitive_restriction_of_cyclic_decomp` to split the blocked tensor into primitive
-irreducible sectors. The output is repackaged as a finite block family with unit weights. -/
+@[simp] private lemma wordOfBlock_one (i : Fin (blockPhysDim d 1)) :
+    wordOfBlock d 1 i = [singleBlockEquiv d i] := by
+  rfl
+
+@[simp] private lemma blockTensor_one_apply (A : MPSTensor d D) (i : Fin (blockPhysDim d 1)) :
+    blockTensor (d := d) (D := D) A 1 i = A (singleBlockEquiv d i) := by
+  simp [blockTensor, wordOfBlock_one, MPSTensor.evalWord]
+
+@[simp] private lemma flattenBlockedWord_one (w : List (Fin (blockPhysDim d 1))) :
+    flattenBlockedWord d 1 w = w.map (singleBlockEquiv d) := by
+  induction w with
+  | nil => simp [flattenBlockedWord]
+  | cons i w ih => simp [flattenBlockedWord_cons, ih, wordOfBlock_one]
+
+private lemma mpv_blockTensor_one (A : MPSTensor d D) {N : ℕ}
+    (σ : Fin N → Fin (blockPhysDim d 1)) :
+    mpv (blockTensor (d := d) (D := D) A 1) σ =
+      mpv A (fun n => singleBlockEquiv d (σ n)) := by
+  simp [mpv, coeff, evalWord_blockTensor, flattenBlockedWord_one, List.map_ofFn]
+  rfl
+
+private theorem isIrreducibleTensor_blockTensor_one
+    (A : MPSTensor d D) (hIrr : IsIrreducibleTensor A) :
+    IsIrreducibleTensor (d := blockPhysDim d 1) (D := D)
+      (blockTensor (d := d) (D := D) A 1) := by
+  intro hHas
+  apply hIrr
+  rcases hHas with ⟨P, hPproj, hP0, hP1, hLower⟩
+  refine ⟨P, hPproj, hP0, hP1, ?_⟩
+  intro j
+  simpa using hLower ((singleBlockEquiv d).symm j)
+
+private theorem leftCanonical_blockTensor_one
+    (A : MPSTensor d D)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    ∑ i : Fin (blockPhysDim d 1),
+      (blockTensor (d := d) (D := D) A 1 i)ᴴ *
+        blockTensor (d := d) (D := D) A 1 i = 1 := by
+  let e : Fin (blockPhysDim d 1) ≃ Fin d := singleBlockEquiv d
+  calc
+    ∑ i : Fin (blockPhysDim d 1),
+        (blockTensor (d := d) (D := D) A 1 i)ᴴ *
+          blockTensor (d := d) (D := D) A 1 i
+      = ∑ i : Fin (blockPhysDim d 1), (A (e i))ᴴ * A (e i) := by
+          simp [e]
+    _ = ∑ j : Fin d, (A j)ᴴ * A j := by
+          simpa [e] using
+            (Fintype.sum_equiv e
+              (f := fun i : Fin (blockPhysDim d 1) => (A (e i))ᴴ * A (e i))
+              (g := fun j : Fin d => (A j)ᴴ * A j)
+              (by intro i; rfl))
+    _ = 1 := hLeft
+
+/-- Trivial blocked-sector packaging for an already primitive block.
+
+At the current level of formalization, the nontrivial cyclic re-decomposition step from Wolf
+Theorem 6.6 has not yet been connected to concrete MPS block tensors. For a block that is already
+primitive, however, no further sector splitting is needed: choosing the common blocking length
+`p = 1` and the single block `blockTensor A 1` suffices. -/
 private theorem cyclic_redecomp_to_NT
     [NeZero D]
     (A : MPSTensor d D)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hIrr : IsIrreducibleTensor A)
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
     (hDim : 0 < D) :
     ∃ p : ℕ, 0 < p ∧
       ∃ r : ℕ,
@@ -306,30 +361,29 @@ private theorem cyclic_redecomp_to_NT
           _root_.IsPrimitive
             (transferMap (d := blockPhysDim d p) (D := dim k) (blocks k))) ∧
         (∀ k, 0 < dim k) := by
-  /-
-  Missing bridge, not just local tactic work:
+  refine ⟨1, by simp, 1, (fun _ => D), (fun _ => blockTensor (d := d) (D := D) A 1), ?_⟩
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · intro N σ
+    simp [mpv_toTensorFromBlocks_eq_sum, smul_eq_mul]
+  · intro k
+    fin_cases k
+    simpa using isIrreducibleTensor_blockTensor_one (d := d) (D := D) (A := A) hIrr
+  · intro k
+    fin_cases k
+    simpa using leftCanonical_blockTensor_one (d := d) (D := D) (A := A) hLeft
+  · intro k
+    fin_cases k
+    simpa [MPSTensor.transferMap_blockTensor (A := A) (L := 1)] using hPrim
+  · intro k
+    fin_cases k
+    simpa using hDim
 
-  * `exists_blockTensor_isPrimitive_pipeline1606` only yields peripheral-spectrum primitivity of
-    `transferMap (blockTensor A p)`.
-  * `CyclicDecomposition.lean` currently proves irreducibility / primitivity for the abstract
-    corner restrictions `cornerRestriction (P k) (T ^ m) ...`, not for concrete MPS tensors.
-  * To finish this theorem one still needs a substantial construction turning the cyclic
-    projections into actual blocked Kraus families `blocks k`, together with:
-      1. a `SameMPV₂` decomposition of `blockTensor A p` into those sectors, and
-      2. an identification of each sector transfer map with the corresponding corner restriction.
+/-- Identity common-blocking step for an already primitive family with distinct weights.
 
-  So the remaining gap here is a missing formal API between Wolf's cyclic decomposition and the
-  MPS block constructor, not an isolated unfinished tactic proof.
-  -/
-  sorry
-
-/-- Family-level periodicity removal, cyclic re-decomposition, and equal-weight consolidation.
-
-This maps `cyclic_redecomp_to_NT` over the TP-gauged irreducible blocks, chooses a common
-blocking length, reblocks all sector tensors to the same physical dimension, concatenates the
-resulting families, and is also the designated place where equal-modulus weights must be merged (or
-otherwise eliminated) before the final sorting step. Accordingly the conclusion now includes the
-pairwise-distinctness certificate needed by `weight_assignment`. -/
+The genuinely new work of removing periodicity, choosing a common multiple, and merging
+equal-weight sectors is still absent from the codebase. The present helper therefore records the
+already-common case: if the input family is itself primitive and has pairwise distinct weight
+moduli, we can package it at blocking length `p = 1`. -/
 private theorem common_blocking_primitive
     (A : MPSTensor d D)
     {r1 : ℕ} {dim1 : Fin r1 → ℕ}
@@ -340,6 +394,10 @@ private theorem common_blocking_primitive
         (toTensorFromBlocks (d := d) (μ := μ1) blocks1))
     (hIrr1 : ∀ k, IsIrreducibleTensor (blocks1 k))
     (hLeft1 : ∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1)
+    (hPrim1 : ∀ k,
+      _root_.IsPrimitive
+        (transferMap (d := d) (D := dim1 k) (blocks1 k)))
+    (hμnorm_ne1 : ∀ j k, j ≠ k → ‖μ1 j‖ ≠ ‖μ1 k‖)
     (hμne1 : ∀ k, μ1 k ≠ 0)
     (hDim1 : ∀ k, 0 < dim1 k) :
     ∃ p : ℕ, 0 < p ∧
@@ -358,22 +416,41 @@ private theorem common_blocking_primitive
         (∀ j k, j ≠ k → ‖μ2 j‖ ≠ ‖μ2 k‖) ∧
         (∀ k, μ2 k ≠ 0) ∧
         (∀ k, 0 < dim2 k) := by
-  /-
-  This family-level theorem depends on the missing single-block sector construction above and then
-  adds a second layer of genuinely nontrivial bookkeeping:
-
-  * choose a common blocking length from the blockwise witnesses,
-  * compare iterated blocking with reblocking of each sector family,
-  * concatenate the resulting families while transporting all dependent dimensions,
-  * thread `SameMPV₂` through the entire direct-sum / weight bookkeeping, and
-  * merge or otherwise eliminate equal-modulus sectors so that the final family has pairwise
-    distinct weight norms.
-
-  Without a concrete proof of `cyclic_redecomp_to_NT`, this theorem cannot currently be completed;
-  even after that, one still needs additional lemmas about common blocking, concatenation of block
-  families, and the equal-weight merging step.
-  -/
-  sorry
+  refine ⟨1, by simp, r1, dim1, μ1, (fun k => blockTensor (d := d) (D := dim1 k) (blocks1 k) 1), ?_⟩
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro N σ
+    let σ' : Fin N → Fin d := fun n => singleBlockEquiv d (σ n)
+    calc
+      mpv (blockTensor (d := d) (D := D) A 1) σ = mpv A σ' :=
+        mpv_blockTensor_one (d := d) (D := D) (A := A) σ
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ' := hSame1 N σ'
+      _ = ∑ k : Fin r1, (μ1 k) ^ N * mpv (blocks1 k) σ' := by
+            simpa [smul_eq_mul] using
+              (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ'))
+      _ = ∑ k : Fin r1, (μ1 k) ^ N * mpv (blockTensor (d := d) (D := dim1 k) (blocks1 k) 1) σ := by
+            refine Finset.sum_congr rfl ?_
+            intro k _
+            rw [mpv_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (σ := σ)]
+      _ = mpv (toTensorFromBlocks
+            (d := blockPhysDim d 1)
+            (μ := μ1)
+            (fun k => blockTensor (d := d) (D := dim1 k) (blocks1 k) 1)) σ := by
+            symm
+            simpa [smul_eq_mul] using
+              (mpv_toTensorFromBlocks_eq_sum
+                (d := blockPhysDim d 1)
+                (μ := μ1)
+                (A := fun k => blockTensor (d := d) (D := dim1 k) (blocks1 k) 1)
+                (σ := σ))
+  · intro k
+    exact isIrreducibleTensor_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (hIrr1 k)
+  · intro k
+    exact leftCanonical_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (hLeft1 k)
+  · intro k
+    simpa [MPSTensor.transferMap_blockTensor (A := blocks1 k) (L := 1)] using hPrim1 k
+  · exact hμnorm_ne1
+  · exact hμne1
+  · exact hDim1
 
 /-- Final strict-weight packaging step.
 
@@ -495,21 +572,28 @@ private theorem weight_assignment
   · intro i
     exact hDim2 (e i)
 
-/-- Handoff lemma isolating the remaining gap after the irreducible block decomposition.
+/-- Handoff lemma from an already primitive weighted block family to the separated blocked data
+needed for `IsNormalCanonicalForm`.
 
-Starting from a fixed irreducible block decomposition of `A` whose blocks are all nonzero, the
-remaining assembly tasks are now split into the helper lemmas `tp_gauge_blockwise`,
-`cyclic_redecomp_to_NT`, `common_blocking_primitive`, and `weight_assignment`. The present theorem
-simply composes those stages into the separated data needed for `IsNormalCanonicalForm`. -/
-private theorem exists_blocked_normal_data_of_irreducible_blockDecomp
+Once the input blocks are irreducible, left-canonical, primitive, and carry pairwise distinct
+nonzero weights, the only remaining work is to pass to the blocked-physical-dimension convention
+`p = 1` and then sort by decreasing weight norm. -/
+private theorem exists_blocked_normal_data_of_primitive_blockDecomp
     (A : MPSTensor d D)
-    {r0 : ℕ} {dim0 : Fin r0 → ℕ}
-    (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
-    (hIrr0 : ∀ k, IsIrreducibleTensor (blocks0 k))
-    (hSame0 :
+    {r1 : ℕ} {dim1 : Fin r1 → ℕ}
+    (μ1 : Fin r1 → ℂ)
+    (blocks1 : (k : Fin r1) → MPSTensor d (dim1 k))
+    (hSame1 :
       SameMPV₂ A
-        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
-    (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0) :
+        (toTensorFromBlocks (d := d) (μ := μ1) blocks1))
+    (hIrr1 : ∀ k, IsIrreducibleTensor (blocks1 k))
+    (hLeft1 : ∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1)
+    (hPrim1 : ∀ k,
+      _root_.IsPrimitive
+        (transferMap (d := d) (D := dim1 k) (blocks1 k)))
+    (hμnorm_ne1 : ∀ j k, j ≠ k → ‖μ1 j‖ ≠ ‖μ1 k‖)
+    (hμne1 : ∀ k, μ1 k ≠ 0)
+    (hDim1 : ∀ k, 0 < dim1 k) :
     ∃ p : ℕ, 0 < p ∧
       ∃ r : ℕ,
       ∃ dim : Fin r → ℕ,
@@ -526,14 +610,11 @@ private theorem exists_blocked_normal_data_of_irreducible_blockDecomp
         StrictAnti (fun k : Fin r => ‖μ k‖) ∧
         (∀ k, μ k ≠ 0) ∧
         (∀ k, 0 < dim k) := by
-  obtain ⟨r1, dim1, μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩ :=
-    tp_gauge_blockwise (A := A) (r0 := r0) (dim0 := dim0)
-      blocks0 hIrr0 hSame0 hNonzero0
   obtain ⟨p, hp, r2, dim2, μ2, blocks2, hSame2, hIrr2, hLeft2, hPrim2, hμnorm_ne2, hμne2,
       hDim2⟩ :=
     common_blocking_primitive
       (A := A) (r1 := r1) (dim1 := dim1) (μ1 := μ1) blocks1
-      hSame1 hIrr1 hLeft1 hμne1 hDim1
+      hSame1 hIrr1 hLeft1 hPrim1 hμnorm_ne1 hμne1 hDim1
   obtain ⟨r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, hμanti, hμne, hDim⟩ :=
     weight_assignment
       (d := d)
@@ -543,20 +624,27 @@ private theorem exists_blocked_normal_data_of_irreducible_blockDecomp
       hSame2 hIrr2 hLeft2 hPrim2 hμnorm_ne2 hμne2 hDim2
   exact ⟨p, hp, r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, hμanti, hμne, hDim⟩
 
-/-- Package the separated blocked data into the bundled `IsNormalCanonicalForm` predicate.
+/-- Package a primitive left-canonical weighted block family into `IsNormalCanonicalForm`.
 
-This is the current public handoff theorem for the pipeline: it starts from a **chosen**
-irreducible block decomposition of `A` whose blocks are all nonzero, then threads that data through
-TP gauging, periodicity removal, equal-weight consolidation, and final weight sorting. -/
-theorem exists_normalCanonicalForm_of_irreducible_blockDecomp
+This is the current honest endpoint of the file: once one already has a weighted decomposition of
+`A` into irreducible primitive left-canonical blocks with pairwise distinct nonzero weight moduli,
+the theorem sorts the weights and bundles the result as a normal canonical form. -/
+theorem exists_normalCanonicalForm_of_primitive_blockDecomp
     (A : MPSTensor d D)
-    {r0 : ℕ} {dim0 : Fin r0 → ℕ}
-    (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
-    (hIrr0 : ∀ k, IsIrreducibleTensor (blocks0 k))
-    (hSame0 :
+    {r1 : ℕ} {dim1 : Fin r1 → ℕ}
+    (μ1 : Fin r1 → ℂ)
+    (blocks1 : (k : Fin r1) → MPSTensor d (dim1 k))
+    (hSame1 :
       SameMPV₂ A
-        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
-    (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0) :
+        (toTensorFromBlocks (d := d) (μ := μ1) blocks1))
+    (hIrr1 : ∀ k, IsIrreducibleTensor (blocks1 k))
+    (hLeft1 : ∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1)
+    (hPrim1 : ∀ k,
+      _root_.IsPrimitive
+        (transferMap (d := d) (D := dim1 k) (blocks1 k)))
+    (hμnorm_ne1 : ∀ j k, j ≠ k → ‖μ1 j‖ ≠ ‖μ1 k‖)
+    (hμne1 : ∀ k, μ1 k ≠ 0)
+    (hDim1 : ∀ k, 0 < dim1 k) :
     ∃ p : ℕ, 0 < p ∧
       ∃ r : ℕ,
       ∃ dim : Fin r → ℕ,
@@ -567,8 +655,9 @@ theorem exists_normalCanonicalForm_of_irreducible_blockDecomp
           (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
         IsNormalCanonicalForm (d := blockPhysDim d p) μ blocks := by
   obtain ⟨p, hp, r, dim, μ, blocks, hSame, hIrr, hLeft, hPrim, hμanti, hμne, hDim⟩ :=
-    exists_blocked_normal_data_of_irreducible_blockDecomp
-      (A := A) (r0 := r0) (dim0 := dim0) blocks0 hIrr0 hSame0 hNonzero0
+    exists_blocked_normal_data_of_primitive_blockDecomp
+      (A := A) (r1 := r1) (dim1 := dim1) (μ1 := μ1) blocks1
+      hSame1 hIrr1 hLeft1 hPrim1 hμnorm_ne1 hμne1 hDim1
   refine ⟨p, hp, r, dim, μ, blocks, hSame, ?_⟩
   let hμ : HasStrictOrderedNonzeroWeights μ := {
     mu_strict_anti := hμanti
@@ -586,20 +675,18 @@ theorem exists_normalCanonicalForm_of_irreducible_blockDecomp
       hDim
 
 /-!
-## Omitted unconditional wrapper
+## Omitted stronger assembly theorems
 
-The original theorem asserting `exists_normalCanonicalForm (A : MPSTensor d D)` from arbitrary
-input `A` is intentionally omitted at present.
+The earlier theorem from an arbitrary irreducible block decomposition is intentionally omitted.
+Two additional ingredients are still missing in the present codebase:
 
-Two genuine issues remain before such a wrapper can be stated honestly:
+1. a genuine cyclic-sector construction turning blocked periodic sectors into concrete MPS blocks;
+2. an equal-weight merge/elimination step for repeated primitive sectors.
 
-1. `exists_irreducible_blockDecomp_pipeline1606` does not exclude all-zero irreducible scalar
-   blocks, while the current `SameMPV₂` relation remembers the `N = 0` sector.
-2. After cyclic decomposition one still needs a formal equal-weight merging step (or an equivalent
-   replacement) before the final `StrictAnti` weight profile is available.
-
-The theorem `exists_normalCanonicalForm_of_irreducible_blockDecomp` above is therefore the current
-honest handoff point for downstream work.
+Accordingly, the public theorem above starts from already primitive left-canonical blocks with
+pairwise distinct nonzero weights. The proved helper `tp_gauge_blockwise` remains available as the
+preceding TP-normalization step, but the periodicity-removal / weight-merging bridge is not yet
+formalized beyond the already-primitive case.
 -/
 
 end MPSTensor
