@@ -128,7 +128,31 @@ theorem map_powers_of_peripheral_unitary
     ∀ k : ℕ,
       transferMap (d := r) (D := D) K ((U : MatrixAlg D) ^ k) =
         γ ^ k • ((U : MatrixAlg D) ^ k) := by
-  sorry
+  intro k
+  have hγnorm : ‖γ‖ = 1 := hγ.2
+  have hU_map : Kraus.map K (U : MatrixAlg D) = γ • (U : MatrixAlg D) := by
+    simpa [Kraus.map, MPSTensor.transferMap_apply] using hU
+  have hU_kraus : KadisonSchwarz.krausMap (d := r) (D := D) K (U : MatrixAlg D) =
+      γ • (U : MatrixAlg D) := by
+    simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using hU
+  have hUnital' : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using hUnital
+  have hKS_map :
+      Kraus.map K ((U : MatrixAlg D)ᴴ * (U : MatrixAlg D)) =
+        (Kraus.map K (U : MatrixAlg D))ᴴ * Kraus.map K (U : MatrixAlg D) :=
+    Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
+      K hUnital' hρ hρfix (U : MatrixAlg D) γ hU_map hγnorm
+  have hKS_kraus :
+      KadisonSchwarz.krausMap (d := r) (D := D) K ((U : MatrixAlg D)ᴴ * (U : MatrixAlg D)) =
+        (KadisonSchwarz.krausMap (d := r) (D := D) K (U : MatrixAlg D))ᴴ *
+          KadisonSchwarz.krausMap (d := r) (D := D) K (U : MatrixAlg D) := by
+    simpa [Kraus.map, KadisonSchwarz.krausMap] using hKS_map
+  have hpow_kraus :
+      KadisonSchwarz.krausMap (d := r) (D := D) K ((U : MatrixAlg D) ^ k) =
+        γ ^ k • ((U : MatrixAlg D) ^ k) :=
+    KadisonSchwarz.krausMap_pow_of_ks_equality
+      (K := K) hUnital (U : MatrixAlg D) γ hU_kraus hKS_kraus k
+  simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using hpow_kraus
 
 /-- A generator of the peripheral cycle can be normalized to have exact order `m`. -/
 theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
@@ -197,7 +221,27 @@ theorem exists_cyclic_decomposition_of_irreducible_schwarz
         (∑ k : Fin m, P k = 1) ∧
         ((U : MatrixAlg D) = ∑ k : Fin m, γ ^ (k : ℕ) • P k) ∧
         (∀ k : Fin m, transferMap (d := r) (D := D) K (P (k + 1)) = P k) := by
-  sorry
+  have hγ : γ ∈ peripheralEigenvalues (transferMap (d := r) (D := D) K) := by
+    rw [hperiph]
+    by_cases hm1 : m = 1
+    · subst hm1
+      simp [IsPrimitiveRoot.one_right_iff.mp hγprim]
+    · have hm0 : m ≠ 0 := NeZero.ne m
+      have hm_gt : 1 < m := Nat.one_lt_iff_ne_zero_and_ne_one.mpr ⟨hm0, hm1⟩
+      exact ⟨⟨1, hm_gt⟩, by simp⟩
+  obtain ⟨U, hU, hUm⟩ :=
+    exists_normalized_peripheral_unitary_of_irreducible_schwarz
+      (K := K) hUnital ρ hρ hρfix hIrr hγprim hγ
+  have hPow :
+      ∀ k : ℕ,
+        transferMap (d := r) (D := D) K ((U : MatrixAlg D) ^ k) =
+          γ ^ k • ((U : MatrixAlg D) ^ k) :=
+    map_powers_of_peripheral_unitary
+      (K := K) hUnital ρ hρ hρfix hγ U hU
+  obtain ⟨P, hPproj, hPsum, hUspec, hcyclic⟩ :=
+    exists_cyclic_projections_of_peripheral_unitary
+      (T := transferMap (d := r) (D := D) K) hγprim U hUm hPow
+  exact ⟨U, P, hU, hPow, hUm, hPproj, hPsum, hUspec, hcyclic⟩
 
 end MPSTensor
 
