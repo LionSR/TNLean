@@ -5,8 +5,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.PeripheralSpectrum
 import TNLean.Channel.PeripheralClosure
 import TNLean.Channel.PeripheralClosureFixedPoint
+import TNLean.Channel.PeriodicityRemoval
 import TNLean.Channel.Schwarz
 import TNLean.QPF.Uniqueness
+import Mathlib.Analysis.CStarAlgebra.Projection
 import Mathlib.RingTheory.RootsOfUnity.PrimitiveRoots
 
 /-!
@@ -213,15 +215,15 @@ private theorem fixed_eq_scalar_of_irreducible_unital
     calc
       transferMap (d := r) (D := D) K (Complex.I • (X - Xᴴ))
           = Complex.I • transferMap (d := r) (D := D) K (X - Xᴴ) := by
-              simpa using (transferMap (d := r) (D := D) K).map_smul Complex.I (X - Xᴴ)
+              simp using (transferMap (d := r) (D := D) K).map_smul Complex.I (X - Xᴴ)
       _ = Complex.I • (transferMap (d := r) (D := D) K X - transferMap (d := r) (D := D) K Xᴴ) := by
               simpa using congrArg (fun M => Complex.I • M)
                 ((transferMap (d := r) (D := D) K).map_sub X Xᴴ)
       _ = Complex.I • (X - Xᴴ) := by simp [hfix, hfix_star]
   have hHerm_herm : (X + Xᴴ).IsHermitian := by
-    simpa [Matrix.IsHermitian, add_comm]
+    simp [Matrix.IsHermitian, add_comm]
   have hSkew_herm : (Complex.I • (X - Xᴴ)).IsHermitian := by
-    simpa [Matrix.IsHermitian, sub_eq_add_neg, add_comm]
+    simp [Matrix.IsHermitian, sub_eq_add_neg, add_comm]
   rcases hermitian_fixed_eq_scalar_of_irreducible_unital
       (K := K) hUnital hIrr (X + Xᴴ) hHerm_herm hHerm_fix with ⟨a, ha⟩
   rcases hermitian_fixed_eq_scalar_of_irreducible_unital
@@ -233,7 +235,9 @@ private theorem fixed_eq_scalar_of_irreducible_unital
       (X + Xᴴ) - Complex.I • (Complex.I • (X - Xᴴ)) = (X + Xᴴ) + (X - Xᴴ) := by
             simp [sub_eq_add_neg, smul_smul]
             abel
-      _ = (2 : ℂ) • X := by rfl
+      _ = (2 : ℂ) • X := by
+            ext i j
+            simp [two_mul, sub_eq_add_neg, add_assoc, add_left_comm]
   calc
     X = (1 / 2 : ℂ) • ((2 : ℂ) • X) := by simp
     _ = (1 / 2 : ℂ) • ((X + Xᴴ) - Complex.I • (Complex.I • (X - Xᴴ))) := by rw [← hrecon]
@@ -361,7 +365,7 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
               calc
                 (a⁻¹ * a⁻¹) * c = (a⁻¹ * a⁻¹) * (a * a) := by rw [hc_eq_sq]
                 _ = 1 := by field_simp [ha_ne0]
-            simpa [hscalar]⟩, ?_⟩
+            simp [hscalar]⟩, ?_⟩
   calc
     transferMap (d := r) (D := D) K (a⁻¹ • X) = a⁻¹ • transferMap (d := r) (D := D) K X := by
           simp
@@ -582,40 +586,225 @@ section PrimitivityOfSectors
 
 variable {D m : ℕ} [NeZero m]
 
-/-- The `m`-th power of the channel preserves each cyclic corner `P_k · M_D(ℂ) · P_k`. -/
+/-- The `m`-th power of the channel preserves each cyclic corner `P_k · M_D(ℂ) · P_k`.
+
+The cyclic permutation of the projections alone is not enough for this conclusion for a general
+linear map. We therefore assume the left- and right-multiplicative-domain identities on the
+sector projections, which are the abstract consequences needed from the multiplicative-domain
+argument in Wolf Theorem 6.6. -/
 theorem preserves_corner_pow_of_cyclic_decomp
     {T : MatrixEnd D}
     (P : Fin m → MatrixAlg D)
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
-    (hPsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k) :
+    (_hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k)
+    (hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
+    (hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k)) :
     ∀ k : Fin m, PreservesCorner (P k) (T ^ m) := by
-  sorry
+  let idx : Fin m → ℕ → Fin m := fun k n =>
+    ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩
+  have hidx_zero : ∀ k : Fin m, idx k 0 = k := by
+    intro k
+    ext
+    simp [idx, Nat.mod_eq_of_lt k.is_lt]
+  have hidx_succ : ∀ k : Fin m, ∀ n : ℕ, idx k (n + 1) = idx k n + 1 := by
+    intro k n
+    ext
+    change ((k : ℕ) + (n + 1)) % m = ((((k : ℕ) + n) % m) + 1 % m) % m
+    symm
+    simp [Nat.add_assoc] using (Nat.add_mod ((k : ℕ) + n) 1 m)
+  have hidx_full : ∀ k : Fin m, idx k m = k := by
+    intro k
+    ext
+    change ((k : ℕ) + m) % m = k
+    rw [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt]
+  have hstep :
+      ∀ n : ℕ, ∀ k : Fin m, ∀ X : MatrixAlg D,
+        (T ^ n) (P (idx k n) * X * P (idx k n)) = P k * ((T ^ n) X) * P k := by
+    intro n
+    induction n with
+    | zero =>
+        intro k X
+        simp [hidx_zero k]
+    | succ n ih =>
+        intro k X
+        calc
+          (T ^ (n + 1)) (P (idx k (n + 1)) * X * P (idx k (n + 1)))
+              = (T ^ n) (T (P (idx k (n + 1)) * X * P (idx k (n + 1)))) := by
+                  simp [pow_succ]
+          _ = (T ^ n) (T (P (idx k n + 1) * X * P (idx k n + 1))) := by
+                  rw [hidx_succ k n]
+          _ = (T ^ n) (P (idx k n) * T X * P (idx k n)) := by
+                  congr 1
+                  calc
+                    T (P (idx k n + 1) * X * P (idx k n + 1))
+                        = T (P (idx k n + 1) * X) * T (P (idx k n + 1)) := by
+                            exact hMulRight (idx k n + 1) (P (idx k n + 1) * X)
+                    _ = (T (P (idx k n + 1)) * T X) * T (P (idx k n + 1)) := by
+                            rw [hMulLeft (idx k n + 1) X]
+                    _ = P (idx k n) * T X * P (idx k n) := by
+                            rw [hcyclic (idx k n)]
+          _ = P k * ((T ^ n) (T X)) * P k := ih k (T X)
+          _ = P k * ((T ^ (n + 1)) X) * P k := by
+                  simp [pow_succ]
+  intro k X
+  have hmk := hstep m k X
+  rw [hidx_full k] at hmk
+  rw [hmk]
+  calc
+    P k * (P k * ((T ^ m) X) * P k) * P k
+        = (P k * P k) * ((T ^ m) X) * (P k * P k) := by
+            simp [Matrix.mul_assoc]
+    _ = P k * ((T ^ m) X) * P k := by
+            simp [Matrix.mul_assoc, (hPproj k).2]
+/-- Wolf Theorem 6.6 corollary: the `m`-step dynamics on each cyclic sector is irreducible.
 
-/-- Wolf Theorem 6.6 corollary: the `m`-step dynamics on each cyclic sector is irreducible. -/
+The key missing input is an orbit-sum lift from an invariant subprojection of the corner to a
+`T`-invariant ambient projection. This packages the `R = ∑_j T^j(Q)` construction suggested by
+Wolf's proof. -/
 theorem isIrreducible_restriction_of_cyclic_decomp
     {T : MatrixEnd D}
     (hIrr : IsIrreducibleMap T)
     (P : Fin m → MatrixAlg D)
-    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
-    (hPsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k) :
+    (_hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (_hPsum : ∑ k : Fin m, P k = 1)
+    (_hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k)
+    (hLift :
+      ∀ k : Fin m, ∀ Q : MatrixAlg D,
+        IsOrthogonalProjection Q →
+        Q * P k = Q →
+        P k * Q = Q →
+        PreservesCorner Q (T ^ m) →
+        ∃ R : MatrixAlg D,
+          IsOrthogonalProjection R ∧
+          PreservesCorner R T ∧
+          (Q = 0 ↔ R = 0) ∧
+          (Q = P k ↔ R = 1)) :
     ∀ k : Fin m, IsIrreducibleOnCorner (P k) (T ^ m) := by
-  sorry
-
+  intro k Q hQproj hQP hPQ hQinv
+  rcases hLift k Q hQproj hQP hPQ hQinv with ⟨R, hRproj, hRinv, hQzero, hQfull⟩
+  rcases hIrr R hRproj hRinv with hR0 | hR1
+  · left
+    exact hQzero.mpr hR0
+  · right
+    exact hQfull.mpr hR1
 /-- Wolf Theorem 6.6 corollary: the `m`-step dynamics on each cyclic sector is primitive. -/
 theorem isPrimitive_restriction_of_cyclic_decomp
-    {T : MatrixEnd D} {γ : ℂ}
+    {T : MatrixEnd D} [NeZero D] {γ : ℂ}
     (hγprim : IsPrimitiveRoot γ m)
     (hperiph : peripheralEigenvalues T = Set.range (fun j : Fin m => γ ^ (j : ℕ)))
     (P : Fin m → MatrixAlg D)
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k) :
+    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k)
+    (hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
+    (hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k))
+    (hPne : ∀ k : Fin m, P k ≠ 0) :
     ∀ k : Fin m,
       IsPrimitive
         (cornerRestriction (P k) (T ^ m)
-          (preserves_corner_pow_of_cyclic_decomp (T := T) P hPproj hPsum hcyclic k)) := by
-  sorry
-
+          (preserves_corner_pow_of_cyclic_decomp
+            (T := T) P hPproj hPsum hcyclic hMulLeft hMulRight k)) := by
+  let hInv : ∀ k : Fin m, PreservesCorner (P k) (T ^ m) :=
+    preserves_corner_pow_of_cyclic_decomp (T := T) P hPproj hPsum hcyclic hMulLeft hMulRight
+  have hone_mem : (1 : ℂ) ∈ peripheralEigenvalues T := by
+    rw [hperiph]
+    exact ⟨0, by simp⟩
+  rcases hone_mem.1.exists_hasEigenvector with ⟨ρ, hρeig⟩
+  have hρ_fix : T ρ = ρ := by
+    exact (Module.End.HasEigenvector.apply_eq_smul hρeig).trans (by simp)
+  have hρ_ne : ρ ≠ 0 := (Module.End.hasEigenvector_iff.mp hρeig).2
+  have hper_pow : ∀ μ : ℂ, μ ∈ peripheralEigenvalues T → μ ^ m = 1 := by
+    intro μ hμ
+    rw [hperiph] at hμ
+    rcases hμ with ⟨j, rfl⟩
+    calc
+      (γ ^ (j : ℕ)) ^ m = γ ^ ((j : ℕ) * m) := by rw [pow_mul]
+      _ = γ ^ (m * (j : ℕ)) := by rw [Nat.mul_comm]
+      _ = (γ ^ m) ^ (j : ℕ) := by rw [pow_mul]
+      _ = 1 := by simp [hγprim.pow_eq_one]
+  have hperiph_pow : peripheralEigenvalues (T ^ m) = {1} :=
+    peripheralEigenvalues_pow_eq_singleton
+      (E := T) (p := m) (hp := Nat.pos_of_ne_zero (NeZero.ne m))
+      hper_pow ρ hρ_fix hρ_ne
+  let idx : Fin m → ℕ → Fin m := fun k n =>
+    ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩
+  have hidx_zero : ∀ k : Fin m, idx k 0 = k := by
+    intro k
+    ext
+    simp [idx, Nat.mod_eq_of_lt k.is_lt]
+  have hidx_succ : ∀ k : Fin m, ∀ n : ℕ, idx k (n + 1) = idx k n + 1 := by
+    intro k n
+    ext
+    change ((k : ℕ) + (n + 1)) % m = ((((k : ℕ) + n) % m) + 1 % m) % m
+    symm
+    simp [Nat.add_assoc] using (Nat.add_mod ((k : ℕ) + n) 1 m)
+  have hidx_full : ∀ k : Fin m, idx k m = k := by
+    intro k
+    ext
+    change ((k : ℕ) + m) % m = k
+    rw [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt]
+  have hcyclic_pow : ∀ n : ℕ, ∀ k : Fin m, (T ^ n) (P (idx k n)) = P k := by
+    intro n
+    induction n with
+    | zero =>
+        intro k
+        simp [hidx_zero k]
+    | succ n ih =>
+        intro k
+        calc
+          (T ^ (n + 1)) (P (idx k (n + 1))) = (T ^ n) (T (P (idx k (n + 1)))) := by
+            simp [pow_succ]
+          _ = (T ^ n) (T (P (idx k n + 1))) := by rw [hidx_succ k n]
+          _ = (T ^ n) (P (idx k n)) := by rw [hcyclic (idx k n)]
+          _ = P k := ih k
+  have hPk_fix : ∀ k : Fin m, (T ^ m) (P k) = P k := by
+    intro k
+    have hmk := hcyclic_pow m k
+    simpa [hidx_full k] using hmk
+  have hPk_corner : ∀ k : Fin m, P k ∈ cornerSubmodule (P k) := by
+    intro k
+    change P k * P k * P k = P k
+    rw [Matrix.mul_assoc, (hPproj k).2, (hPproj k).2]
+  have hcorner_fix : ∀ k : Fin m,
+      cornerRestriction (P k) (T ^ m) (hInv k) ⟨P k, hPk_corner k⟩ = ⟨P k, hPk_corner k⟩ := by
+    intro k
+    apply Subtype.ext
+    simpa using hPk_fix k
+  have hcorner_ne : ∀ k : Fin m, (⟨P k, hPk_corner k⟩ : cornerSubmodule (P k)) ≠ 0 := by
+    intro k hzero
+    apply hPne k
+    have hval := congrArg Subtype.val hzero
+    simpa using hval
+  have huniq : ∀ k : Fin m, ∀ μ : ℂ,
+      Module.End.HasEigenvalue (cornerRestriction (P k) (T ^ m) (hInv k)) μ →
+      ‖μ‖ = 1 → μ = 1 := by
+    intro k μ hμeig hμnorm
+    rcases hμeig.exists_hasEigenvector with ⟨X, hX⟩
+    have hX_mem : X ∈ Module.End.eigenspace (cornerRestriction (P k) (T ^ m) (hInv k)) μ :=
+      (Module.End.hasEigenvector_iff.mp hX).1
+    have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
+    have hX_eq : cornerRestriction (P k) (T ^ m) (hInv k) X = μ • X :=
+      (Module.End.mem_eigenspace_iff).1 hX_mem
+    have hX_eq_val : (T ^ m) X.1 = μ • X.1 := congrArg Subtype.val hX_eq
+    have hX_mem_ambient : X.1 ∈ Module.End.eigenspace (T ^ m) μ :=
+      (Module.End.mem_eigenspace_iff).2 hX_eq_val
+    have hX_ne_ambient : X.1 ≠ 0 := by
+      intro h0
+      apply hX_ne
+      apply Subtype.ext
+      simpa using h0
+    have hX_eig_ambient : Module.End.HasEigenvector (T ^ m) μ X.1 :=
+      (Module.End.hasEigenvector_iff).2 ⟨hX_mem_ambient, hX_ne_ambient⟩
+    have hμ_ambient : μ ∈ peripheralEigenvalues (T ^ m) :=
+      ⟨Module.End.hasEigenvalue_of_hasEigenvector hX_eig_ambient, hμnorm⟩
+    rw [hperiph_pow] at hμ_ambient
+    exact hμ_ambient
+  intro k
+  exact isPrimitive_of_unique_norm_one
+    (cornerRestriction (P k) (T ^ m) (hInv k))
+    ⟨P k, hPk_corner k⟩
+    (hcorner_fix k)
+    (hcorner_ne k)
+    (huniq k)
 end PrimitivityOfSectors
