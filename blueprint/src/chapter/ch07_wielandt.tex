@@ -686,8 +686,13 @@ used to produce rank-one elements.
 
 \section{Primitivity and normality}
 
+Throughout this section, primitivity means the condition of
+Definition~\ref{def:primitive_mps}: the tensor is in TP gauge,
+it has a nonzero PSD fixed point, and the complementary map has
+spectral radius $< 1$.
+
 \begin{theorem}[Primitive MPS tensors have nonzero word products]\label{thm:prim_nonzero_word}
-    \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitive}
+    \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitiveMPS}
     \leanok
     \uses{def:primitive_mps, def:eval_word}
     If $A$ is a primitive MPS tensor,
@@ -703,7 +708,7 @@ used to produce rank-one elements.
 \end{proof}
 
 \begin{theorem}[Iterated transfer does not vanish]\label{thm:transfer_pow_ne_zero}
-    \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitive}
+    \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitiveMPS}
     \leanok
     \uses{def:primitive_mps, def:transfer_map}
     If $A$ is a primitive MPS tensor, then
@@ -718,9 +723,9 @@ used to produce rank-one elements.
 
 \subsection{Primitivity-to-normality bridge}\label{subsec:prim_to_normal}
 
-The spectral-gap notion of primitivity
-(unique PSD fixed point $\rho$ with $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$)
-is connected to normality through the following results.
+The primitivity condition of Definition~\ref{def:primitive_mps}
+combines TP normalization, a nonzero PSD fixed point, and a complementary
+spectral gap. It is connected to normality through the following results.
 
 \begin{theorem}[Fixed-point uniqueness from spectral gap]%
     \label{thm:fixedpoint_unique_spectral}
@@ -759,9 +764,10 @@ is connected to normality through the following results.
 
 \begin{remark}[Primitivity: spectral gap vs.\ positive definiteness]%
     \label{rem:prim_definition_mismatch}\leanok
-    The definition of primitivity used in \S\ref{subsec:prim_to_normal}
-    encodes only the spectral-gap condition: there exists a nonzero PSD
-    fixed point $\rho$ and $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
+    The primitivity condition used in \S\ref{subsec:prim_to_normal}
+    has three parts: TP normalization $\sum_i (A^i)^\dagger A^i = \Id$,
+    a nonzero PSD fixed point $\rho$, and the spectral gap
+    $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
     The notion of ``primitive'' in
     \cite[Proposition~3]{Sanz2010Quantum} additionally requires
     $\rho$ to be positive definite (full rank).
@@ -847,9 +853,11 @@ The gap is closed by an aperiodicity hypothesis.
     $\sum_i (A^i)^\dagger A^i = \Id$ does \emph{not} imply
     $\Id \in S_1(A)$; it only gives a quadratic identity among the
     Kraus operators.
-    For genuinely primitive tensors one expects aperiodicity to follow
-    from peripheral-spectrum analysis, but that implication is not used
-    in the present Wielandt bridge, so the condition is kept explicit.
+    For the paper-style primitive condition
+    (peripheral-spectrum primitivity together with a positive-definite
+    fixed point), one expects aperiodicity to follow from spectral
+    analysis of the transfer map. That implication is not used in the
+    present Wielandt bridge, so the condition is kept explicit.
 \end{remark}
 
 \begin{remark}[Counterexample: cumulative spanning does not imply normality]%
@@ -957,14 +965,32 @@ The gap is closed by an aperiodicity hypothesis.
     aperiodicity hypothesis, $A$ is normal.
 \end{proof}
 
-\begin{remark}[The D1 route bypasses the aperiodicity bridge]\label{rem:d1_bypasses_aperiodicity}
+\begin{theorem}[Primitive + positive definite fixed point + aperiodicity imply normality]%
+    \label{thm:primitive_posDef_aperiodic_normal}
+    \lean{MPSTensor.isNormal_of_isPrimitiveMPS_of_posDef}
+    \leanok
+    \uses{def:primitive_mps, thm:primitive_implies_irreducible,
+          thm:irred_tensor_aperiodic_normal}
+    If $A$ is a primitive MPS tensor with fixed point $\rho$,
+    $\rho$ is positive definite, and $\Id \in S_1(A)$, then $A$ is normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:primitive_implies_irreducible, thm:irred_tensor_aperiodic_normal}
+    By Theorem~\ref{thm:primitive_implies_irreducible},
+    $A$ is an irreducible tensor.
+    Apply Theorem~\ref{thm:irred_tensor_aperiodic_normal}.
+\end{proof}
+
+\begin{remark}[The normal-canonical route bypasses the aperiodicity bridge]\label{rem:d1_bypasses_aperiodicity}
     The aperiodicity results in \S\ref{sec:cumspan_to_wordspan} are needed only for the
-    legacy route through Definition~\ref{def:normal}, where one upgrades cumulative
-    spanning to eventual block injectivity. The D1 route used later in
-    Chapters~\ref{ch:canonical}--\ref{ch:assembly} does not pass through this bridge:
+    block-injective route through Definition~\ref{def:normal}, where one upgrades cumulative
+    spanning to eventual block injectivity. The normal-canonical route used later in
+    Chapters~\ref{ch:canonical}--\ref{ch:assembly} does not pass through this step:
     it works directly with irreducible TP-normalized blocks whose blocked transfer maps
-    are primitive, and packages them as normal canonical form in the sense of
-    \cite{Cirac2017MPDO_AnnPhys}. The code also contains companion cumulative-span
-    lemmas for this blocked irreducible setting, including blocked and
-    eigenvector-spreading variants, but we do not spell them out separately here.
+    are primitive and, once the corresponding weighted block data are available,
+    packages them as normal canonical form in the sense of
+    \cite{Cirac2017MPDO_AnnPhys}. There are analogous cumulative-span lemmas for
+    blocked irreducible tensors and eigenvector-spreading arguments, but they are
+    auxiliary here and we do not list them separately.
 \end{remark}

@@ -1,15 +1,15 @@
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
 This chapter reduces a general MPS tensor to block-diagonal data via iterated
-invariant-subspace decomposition. Two parallel routes coexist in the codebase.
-The legacy route ends in injective TP-normalized blocks and feeds the canonical
-form predicate of Chapter~\ref{ch:block_perm}. The new D1 route ends in
-irreducible TP-normalized blocks with primitive transfer maps and packages them
-as a normal canonical form in the sense of \cite{Cirac2017MPDO_AnnPhys}. The
-reduction procedure follows
-\cite{PerezGarcia2007Matrix},
-\cite{Cirac2021Matrix},
-and \cite[Ch.~6]{Wolf2012Quantum}.
+invariant-subspace decomposition. Two reduction schemes are relevant.
+The block-injective route aims at injective TP-normalized blocks and the
+canonical form predicate of Chapter~\ref{ch:block_perm}. The normal-canonical
+route packages a weighted family of irreducible TP-normalized blocks with
+primitive transfer maps and pairwise distinct nonzero weight moduli, in the
+sense of \cite{Cirac2017MPDO_AnnPhys}. What remains is the passage from an
+arbitrary tensor to such weighted primitive data. The reduction procedure
+follows \cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix}, and
+\cite[Ch.~6]{Wolf2012Quantum}.
 
 \section{Block-diagonal assembly}
 
@@ -439,7 +439,7 @@ For Burnside-style arguments it is more natural to work with invariant
 	Chapter~\ref{ch:spectral}.
 \end{proof}
 
-\section{Canonical form from primitivity}
+\section{Canonical form from peripheral primitivity}
 
 The canonical form predicate
 (Definition~\ref{def:is_canonical_form})
@@ -447,12 +447,12 @@ includes an explicit hypothesis
 that the self-overlap $O_{A_k A_k}(N) \to 1$
 for each block.
 The following theorem derives this from
-per-block primitivity,
+per-block peripheral-spectrum primitivity,
 removing it as an independent assumption.
 
-\begin{theorem}[Canonical form from primitivity]%
+\begin{theorem}[Canonical form from peripheral primitivity]%
 	\label{thm:canonical_from_primitive}
-	\lean{MPSTensor.isCanonicalForm_of_primitive}
+	\lean{MPSTensor.isCanonicalForm_of_peripheralPrimitive}
 	\leanok
 	\uses{def:is_canonical_form, def:primitive_channel}
 	Let $(\mu_k, A_k)_{k=1}^r$ be a collection of block
@@ -463,9 +463,8 @@ removing it as an independent assumption.
 		      $\sum_i (A_k^i)^\dagger A_k^i = \Id$,
 		\item $|\mu_1| > \cdots > |\mu_r|$ (strictly decreasing),
 		\item all $\mu_k \neq 0$,
-		\item each $A_k$ is primitive
-		      (the transfer map $\E_{A_k}$ has
-		      peripheral spectrum $\{1\}$).
+		\item each transfer map $\E_{A_k}$ is primitive,
+		      i.e. has peripheral spectrum $\{1\}$.
 	\end{enumerate}
 	Then $(\mu_k, A_k)$ satisfies the canonical form
 	predicate (Definition~\ref{def:is_canonical_form}).
@@ -473,32 +472,27 @@ removing it as an independent assumption.
 
 \begin{proof}
 	\leanok
-	Conditions (1)--(4) are passed through directly.
-	For condition~(5) of the canonical form predicate
-	($O_{A_k A_k}(N) \to 1$),
-	primitivity of $\E_{A_k}$ implies
-	$\E_{A_k}^N(\rho) \to \rho_\infty$
-	for the unique fixed-point state $\rho_\infty$,
-	and hence the self-overlap converges to~$1$.
-	The proof applies primitive overlap convergence
-	to each block.
+	Each block is injective and TP-normalized. Peripheral-spectrum primitivity
+	therefore implies the spectral-gap primitive condition used in
+	Chapter~\ref{ch:spectral}, and hence the required self-overlap convergence.
+	This supplies the final field in Definition~\ref{def:is_canonical_form}.
 \end{proof}
 
 \begin{remark}\label{rem:primitivity_reduces_assumptions}\leanok
 	Theorem~\ref{thm:canonical_from_primitive} shows that
 	the overlap convergence hypothesis in the canonical form
-	predicate is redundant once primitivity is known.
-	In the paper~\cite{Cirac2021Matrix},
-	primitivity is obtained from irreducibility plus
-	periodicity removal (blocking to period one).
-	Theorem~\ref{thm:blocking_primitivity} establishes this
-	periodicity-removal step: under irreducibility and
-	TP normalization $\sum_i (A^i)^\dagger A^i = \Id$,
-	one can block until the transfer map becomes primitive.
-	This corresponds to \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+	predicate is redundant once peripheral-spectrum primitivity is known.
+	The argument factors through the spectral-gap formulation of
+	Chapter~\ref{ch:spectral}: peripheral-spectrum primitivity is first
+	converted to that spectral-gap condition, and the overlap limit is then
+	deduced from it.
+	In the paper~\cite{Cirac2021Matrix}, primitivity is obtained from
+	irreducibility plus periodicity removal by blocking to period one.
+	Theorem~\ref{thm:blocking_primitivity} is precisely this
+	periodicity-removal step under irreducibility and TP normalization.
 \end{remark}
 
-\begin{theorem}[Blocking yields a primitive transfer map]\label{thm:blocking_primitivity}
+\begin{theorem}[Blocking yields a peripheral-spectrum primitive transfer map]\label{thm:blocking_primitivity}
 	\lean{MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor}
 	\leanok
 	\uses{def:blocked_tensor, def:transfer_map, def:primitive_channel,
@@ -507,7 +501,8 @@ removing it as an independent assumption.
 	Assume that $A$ satisfies the TP normalization
 	$\sum_i (A^i)^\dagger A^i = \Id$.
 	Then there exists a blocking length $p > 0$ such that the transfer map
-	$\E_{A^{[p]}}$ of the blocked tensor $A^{[p]}$ is primitive.
+	$\E_{A^{[p]}}$ of the blocked tensor $A^{[p]}$ is primitive,
+	i.e. its peripheral spectrum is $\{1\}$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -532,11 +527,11 @@ removing it as an independent assumption.
 \begin{remark}\label{rem:blocking_primitivity_appendixA}\leanok
 	Theorem~\ref{thm:blocking_primitivity} is the ``periodicity removal by blocking''
 	step in \cite[Appendix~A]{Cirac2017MPDO_AnnPhys} for an irreducible block
-	already placed in TP gauge. The later pipeline wrapper simply repackages
+	already placed in TP gauge. The later existence theorems simply reuse
 	this step.
 \end{remark}
 
-\section{Normal canonical form route}\label{sec:normal_canonical_form}
+\section{Normal canonical form}\label{sec:normal_canonical_form}
 
 \begin{definition}[Normal canonical form predicate]\label{def:is_normal_canonical_form}
 		\lean{MPSTensor.IsNormalCanonicalForm}\leanok
@@ -570,10 +565,10 @@ removing it as an independent assumption.
 
 \begin{proof}\leanok
 		\uses{def:is_normal_canonical_form}
-		This is the main structural advantage of the D1 predicate:
-		primitivity is part of the data, so the self-overlap convergence is
-		derived from irreducibility, TP normalization, and the spectral gap of
-		the transfer map, rather than being stored as an extra field.
+		Peripheral-spectrum primitivity is part of the data. Together with
+		irreducibility and TP normalization, it yields the spectral-gap
+		primitive theorem needed for overlap convergence, so the self-overlap
+		condition is derived rather than stored as an extra field.
 \end{proof}
 
 \begin{theorem}[Modulus-one eigenvalue rigidity for irreducible TP blocks]%
@@ -595,13 +590,13 @@ removing it as an independent assumption.
 		exactly gauge-phase equivalence.
 \end{proof}
 
-\section{Canonical form existence pipeline}%
+\section{Steps toward canonical form existence}%
 \label{sec:canonical_pipeline_1606}
 
 This section assembles the components of the canonical-form
 construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 
-\begin{theorem}[Irreducible block decomposition (pipeline)]%
+\begin{theorem}[Irreducible block decomposition]%
 	\label{thm:irred_decomp_pipeline}
 	\lean{MPSTensor.exists_irreducible_blockDecomp_pipeline1606}
 	\leanok
@@ -645,7 +640,7 @@ construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	family (Theorem~\ref{thm:samempv_unitary}).
 \end{proof}
 
-\begin{theorem}[Pipeline handoff: block decomposition with conditional CFII]%
+\begin{theorem}[CFII continuation after irreducible block decomposition]%
 	\label{thm:pipeline_handoff}
 	\lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII_handoff}
 	\leanok
@@ -656,6 +651,8 @@ construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	if that block has already been placed in TP gauge and $D_k > 0$,
 	one obtains CFII data (unitary, diagonal PD fixed point,
 	MPV preservation).
+	This theorem stops at the older CFII stage; it does not yet
+	produce the normal-canonical-form output of the normal-canonical route.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -689,7 +686,7 @@ The results correspond to \cite{Evans1978Spectral},
 	positive maps on matrix algebras
 	(\cite{Evans1978Spectral},
 	\cite[Proposition~6.1]{Wolf2012Quantum}).
-	The Lean proof applies Brouwer's fixed-point theorem to the
+	The proof applies Brouwer's fixed-point theorem to the
 	normalization map $\rho \mapsto E(\rho) / \tr(E(\rho))$ on the
 	compact convex set of density matrices; the required
 	density-matrix Brouwer theorem is now itself formalized.
@@ -805,47 +802,58 @@ The results correspond to \cite{Evans1978Spectral},
 	satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
 \end{proof}
 
-\begin{theorem}[Normal canonical form after common blocking]%
+\begin{theorem}[Normal canonical form from a primitive block decomposition]%
 		\label{thm:exists_normal_canonical_form}
-		\lean{MPSTensor.exists_normalCanonicalForm}
+		\lean{MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp}
+		\leanok
 		\uses{def:is_normal_canonical_form, def:blocked_tensor}
-		For every MPS tensor $A$, there exist a blocking length $p > 0$,
-		a block family $(A_k)$ over the blocked physical space,
-		and nonzero weights $(\mu_k)$ with strictly decreasing moduli such that
-		the blocked tensor $A^{[p]}$ generates the same MPV family as the
-		block-diagonal tensor $\bigoplus_k \mu_k A_k$, and
-		$(\mu_k, A_k)$ satisfies the normal canonical form predicate.
+		Suppose $A$ generates the same MPV family as a weighted block-diagonal
+		tensor $\bigoplus_k \mu_k A_k$, and assume that:
+		\begin{enumerate}
+			\item each $A_k$ is irreducible,
+			\item each $A_k$ satisfies the TP normalization
+			      $\sum_i (A_k^i)^\dagger A_k^i = \Id$,
+			\item each transfer map $\E_{A_k}$ is primitive
+			      (equivalently, has peripheral spectrum $\{1\}$),
+			\item the moduli $|\mu_k|$ are pairwise distinct,
+			\item all $\mu_k \neq 0$,
+			\item all bond dimensions are positive.
+		\end{enumerate}
+		Then there exist a blocking length $p > 0$, weights $(\nu_k)$, and blocked
+		tensors $(B_k)$ such that $A^{[p]}$ generates the same MPV family as
+		$\bigoplus_k \nu_k B_k$, and $(\nu_k, B_k)$ satisfies the normal canonical
+		form predicate.
 \end{theorem}
 
-\begin{proof}
-		Decompose $A$ into irreducible blocks, put each block into TP gauge by
-		Theorem~\ref{thm:tp_data_irreducible}, block until each transfer map is
-		primitive by Theorem~\ref{thm:blocking_primitivity}, then take a common
-		blocking length and reorder the surviving blocks by decreasing $|\mu_k|$.
-		The remaining Lean work is the bookkeeping that packages these already
-		formalized components into one theorem.
+\begin{proof}\leanok
+		\uses{def:is_normal_canonical_form}
+		The theorem first performs a common blocking of the already primitive
+		blocks; in the present statement this blocking is trivial, so one may
+		take $p = 1$. It then reorders the blocks by decreasing weight norm.
+		The resulting irreducibility, TP, primitivity, nonzero-weight, and
+		positive-dimension data are exactly those required by
+		Definition~\ref{def:is_normal_canonical_form}.
 \end{proof}
 
-\section{End-to-end pipeline status}\label{sec:pipeline_status}
+\section{Status of the canonical form reduction}\label{sec:pipeline_status}
 
-\begin{remark}[Canonical form pipeline]%
+\begin{remark}[Status of the canonical form reduction]%
 		\label{rem:canonical_pipeline_gaps}
 		\notready
-		The Perron--Frobenius, TP-gauge, CFII, and periodicity-removal ingredients
-		are now formalized. What remains is to assemble them into the repository's
-		end-stage block predicates.
+		The Perron--Frobenius, TP-gauge, CFII, periodicity-removal, and
+		normal-canonical-form packaging steps are now in place. What remains is
+		the upstream passage from an arbitrary tensor to the primitive weighted
+		block data required by Theorem~\ref{thm:exists_normal_canonical_form}.
 
-		The legacy route still aims at Definition~\ref{def:is_canonical_form}. For
-		this route one still needs to turn blocked primitive TP data into the stronger
-		injective blocks and eventual block-injectivity statements used by the legacy
-		CF-BNT assembly.
+		The block-injective route toward Definition~\ref{def:is_canonical_form}
+		still requires turning blocked primitive TP data into injective blocks and
+		eventual block injectivity.
 
-		The new D1 route packages the same data directly as
-		Definition~\ref{def:is_normal_canonical_form}. Its intended wrapper is
-		Theorem~\ref{thm:exists_normal_canonical_form}, and that theorem is now the
-		remaining sorry in this route. Once such normal-canonical-form data are
-		available, the NT block-separation, BNT, and proportional Fundamental
-		Theorem statements in Chapters~\ref{ch:block_perm} and~\ref{ch:assembly}
-		apply without passing through the aperiodicity bridge of
-		Chapter~\ref{ch:wielandt}.
+		On the normal-canonical side,
+		Theorem~\ref{thm:exists_normal_canonical_form} already provides the
+		downstream packaging once primitive weighted blocks with positive
+		dimensions and pairwise distinct nonzero weight moduli are given. The
+		remaining gap is that Theorem~\ref{thm:pipeline_handoff} stops earlier:
+		it gives only the CFII continuation after irreducible block
+		decomposition, not an end-to-end construction from arbitrary tensors.
 \end{remark}

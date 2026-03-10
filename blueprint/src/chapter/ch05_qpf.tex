@@ -109,7 +109,7 @@ The results follow
 \begin{remark}\leanok
 	The proof actually produces a positive real scalar $c_0 > 0$:
 	it is the minimal eigenvalue of the positive definite Hermitian
-	matrix $H = (S^\dagger)^{-1} \sigma S^{-1}$. The Lean theorem
+	matrix $H = (S^\dagger)^{-1} \sigma S^{-1}$. The formal statement
 	records the resulting proportionality in the ambient scalar field $\C$.
 \end{remark}
 
@@ -154,26 +154,17 @@ The results follow
 	\ref{thm:psd_fp_pd}, and~\ref{thm:psd_fp_unique}.
 \end{proof}
 
-\begin{remark}[Dimension-zero edge case]\label{rem:qpf_dim_zero}\leanok
-	Lean also packages a wrapper theorem
-	\lean{MPSTensor.injective_transfer_unique_fixed_point'}
-	removing the explicit hypothesis $D \ge 1$ by adding the
-	formal edge case $D = 0$. We treat this as an implementation
-	detail rather than part of the mathematical narrative: the
-	tensor-network results of interest all concern positive bond
-	dimension.
-\end{remark}
+\section{Right- and left-canonical gauges}
 
-\section{Unital and trace-preserving gauges}
-
-\begin{theorem}[Unital gauge]\label{thm:right_canonical_gauge}
+\begin{theorem}[Right-canonical (unital) gauge]\label{thm:right_canonical_gauge}
 	\lean{gauged_unital}
 	\leanok
 	Let $\E_A(\rho) = \rho$ and let $S$ be an invertible matrix with
 	$S S^\dagger = \rho$.
 	Define the gauged operators $A'^i = S^{-1} A^i S$.
 	Then $\sum_i A'^i (A'^i)^\dagger = \Id$, i.e.\ the gauged
-	Kraus map is unital.
+	Kraus map is unital. This is the right-canonical normalization
+	used later in the blueprint.
 \end{theorem}
 
 \begin{proof}
@@ -186,7 +177,7 @@ The results follow
 		= S^{-1} S S^\dagger (S^\dagger)^{-1} = \Id$.
 \end{proof}
 
-\begin{theorem}[Trace-preserving gauge]\label{thm:left_canonical_gauge}
+\begin{theorem}[Left-canonical (trace-preserving) gauge]\label{thm:left_canonical_gauge}
 	\lean{gauged_tracePreserving}
 	\leanok
 	Let $\sigma$ be a fixed point of the adjoint transfer map
@@ -194,7 +185,8 @@ The results follow
 	and let $S$ be invertible with $S^\dagger S = \sigma$.
 	Define $A'^i = S A^i S^{-1}$.
 	Then $\sum_i (A'^i)^\dagger A'^i = \Id$, i.e.\ the gauged
-	Kraus map is trace-preserving.
+	Kraus map is trace-preserving. This is the left-canonical
+	normalization used later in the blueprint.
 \end{theorem}
 
 \begin{proof}
@@ -208,12 +200,12 @@ The results follow
 \end{proof}
 
 \begin{remark}\leanok
-	The gauges of Theorems~\ref{thm:right_canonical_gauge}
-	and~\ref{thm:left_canonical_gauge} are generally different similarity
-	transforms: one is built from a fixed point of $\E_A$, the other
-	from a fixed point of the adjoint transfer map. This section does
-	not claim that a single gauge makes the transfer map simultaneously
-	unital and trace-preserving.
+	The right-canonical gauge of Theorem~\ref{thm:right_canonical_gauge}
+	and the left-canonical gauge of Theorem~\ref{thm:left_canonical_gauge}
+	are generally different similarity transforms: one is built from a fixed point
+	of $\E_A$, the other from a fixed point of the adjoint transfer map.
+	This section does not claim that a single gauge makes the transfer map
+	simultaneously unital and trace-preserving.
 \end{remark}
 
 \begin{remark}[Eigenvector existence for general positive maps]%
@@ -229,6 +221,6 @@ The results follow
 	and Theorem~\ref{thm:tp_data_irreducible} uses it to put an
 	irreducible tensor into TP gauge.
 	The remaining gap lies later in the end-to-end
-	canonical-form / block-injectivity assembly, not in the
+	canonical-form / separation assembly, not in the
 	Perron--Frobenius existence step itself.
 \end{remark}
