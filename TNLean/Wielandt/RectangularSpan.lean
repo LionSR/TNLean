@@ -14,8 +14,11 @@ import Mathlib.Data.Fin.Tuple.Basic
 
 This module formalizes the "rectangular span stabilizes to full" portion
 of Lemma 2(b) from arXiv:0909.5347 (Sanz, Pérez-García, Wolf, Cirac),
-and provides the complete assembly chain from `IsNormal` to
-`∃ N, wordSpan A N = ⊤` with explicit bounds.
+together with the blocked and conditional assembly steps reducing the final
+bound to a rank-one element in a blocked word span.
+
+The final unconditional rank-one extraction and complete assembly are carried
+out in `RankOneExtractionFull.lean`.
 
 ## Main results
 
@@ -337,8 +340,6 @@ theorem wielandt_lemma2b_conditional [NeZero D]
 
 /-! ## Section 7: Blocked assembly -/
 
-set_option maxHeartbeats 800000 in
--- The blocked assembly involves multiple typeclass unifications across blocked tensor types.
 /-- **Assembly at the blocked level.**
 
 Reduces the Wielandt bound to producing a rank-one element in the word

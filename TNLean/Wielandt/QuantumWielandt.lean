@@ -36,9 +36,10 @@ Without aperiodicity, `IsNormal` can fail even when `algSpan = ⊤`. The standar
 counterexample is `A₁ = e₁₂, A₂ = e₂₁` in `M₂(ℂ)`: these generate the full matrix
 algebra but have period 2, so no single word-length spans `M₂(ℂ)`.
 
-For truly primitive tensors (peripheral spectrum = {1}), the aperiodicity condition
-follows from spectral analysis of the transfer map; formalizing this derivation is
-left as future work.
+For the paper-style primitive notion — peripheral-spectrum primitivity together
+with a positive-definite fixed point — the aperiodicity condition should follow
+from spectral analysis of the transfer map. Formalizing that bridge from the
+current hypotheses is left as future work.
 
 ## References
 
@@ -59,9 +60,10 @@ variable {d D : ℕ} [NeZero D]
 
 /-- **Quantum Wielandt theorem (conditional on aperiodicity).**
 
-If the transfer map of `A` has a spectral gap with positive-definite fixed point, and the
-identity matrix lies in the span of the Kraus operators (aperiodicity), then `A` is normal:
-word products of some fixed length span the full matrix algebra.
+If `A` satisfies the spectral-gap predicate `IsPrimitiveMPS A ρ`, the fixed
+point `ρ` is positive definite, and the identity matrix lies in the span of the
+Kraus operators (aperiodicity), then `A` is normal: word products of some fixed
+length span the full matrix algebra.
 
 The proof chains four results:
 1. `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef`:
@@ -84,10 +86,11 @@ theorem isNormal_of_isPrimitiveMPS_of_posDef
   -- Step 4: algSpan = ⊤ + aperiodicity → IsNormal
   exact isNormal_of_algSpan_eq_top_of_aperiodic A hAlg hAper
 
-/-- Compatibility wrapper returning the witness form of `IsNormal`.
+/-- Legacy compatibility wrapper returning the witness form of `IsNormal`.
 
-Despite the historical name, this theorem still takes the fixed-point witness
-`ρ` explicitly through `IsPrimitiveMPS A ρ`; it simply unwraps
+The name is historical: this theorem still takes the fixed-point witness `ρ`
+explicitly through `IsPrimitiveMPS A ρ`; it does not use the existential
+predicate `MPSTensor.IsPrimitive`. It simply unwraps
 `isNormal_of_isPrimitiveMPS_of_posDef` into the statement that all sufficiently
 long exact word spans are `⊤`. -/
 theorem isNormal_of_isPrimitive_of_posDef

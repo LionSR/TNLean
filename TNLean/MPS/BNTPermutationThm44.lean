@@ -11,21 +11,18 @@ import Mathlib.Data.Fintype.EquivFin
 /-!
 # BNT permutation rigidity — Thm 4.4 (paper hypotheses, no span-equality)
 
-This module is intended to replace the extra span-equality hypothesis used in
+This module replaces the extra span-equality hypothesis used in
 `BNTPermutationSimple.lean` with the **paper-style** hypotheses from Thm 4.4
 (arXiv:2011.12127 / 1606.00608, primitive branch): proportionality of the *full*
 MPV families together with explicit BNT decompositions.
 
-At the moment we expose a self-contained lemma which proves the key paper step:
-for each BNT block `B k`, it cannot happen that all mixed overlaps
-`mpvOverlap (A j) (B k)` tend to `0`.
+It contains both directions of the key nonvanishing-overlap step and the resulting
+full permutation / gauge-phase matching theorems, in both the injective and
+irreducible trace-preserving settings.
 
-The proof follows the Appendix-A argument: take overlaps of the proportional
-full states with the individual block state `B k` and use the asymptotic
+The overlap arguments follow the Appendix-A strategy: take overlaps of the
+proportional full states with individual block states and use the asymptotic
 orthogonality inside each BNT family.
-
-The rest of the permutation/gauge-phase matching can then follow the same chain
-as in `BNTPermutationSimple.lean`.
 -/
 
 open scoped BigOperators Matrix
@@ -394,9 +391,6 @@ private lemma isIrreducibleTensor_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂)
   cases h
   rfl
 
-set_option maxHeartbeats 800000 in
--- Heartbeat bump: the injectivity/permutation proof below triggers heavy term rewriting and can
--- otherwise exceed the default limit.
 /--
 **BNT permutation rigidity (primitive branch), paper hypothesis set.**
 
@@ -742,9 +736,6 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     (gaugePhaseEquiv_cast_idx_left (A := A) (B := B) (i₁ := f (e.symm j)) (i₂ := j)
       (k := e.symm j) hfe (hf_dim (e.symm j)) (hf_gauge (e.symm j)))
 
-set_option maxHeartbeats 800000 in
--- Heartbeat bump: the NT permutation proof mirrors the injective version and triggers the same
--- heavy term rewriting in the matching/gauge-phase argument.
 /-- NT / irreducible version of
 `exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp`.
 

@@ -3,11 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Spectral.PrimitiveOverlap
-import TNLean.MPS.BNTConstruction
-
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
 
 /-!
 # Primitivity bridge
@@ -25,10 +20,6 @@ canonical-form hypotheses used elsewhere in the library.
 
 * `IsPrimitiveMPS.overlap_tendsto_one`: a primitive MPS tensor has self-overlap converging
   to 1. This directly applies `mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one`.
-
-* `IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims`: when all block bond dimensions are
-  distinct, `IsCanonicalForm` automatically satisfies `IsCanonicalFormBNT` because
-  `blocks_not_equiv` is vacuously true (no valid dimension cast exists).
 
 ## Design notes
 
@@ -67,10 +58,17 @@ structure IsPrimitiveMPS {d D : ℕ} [NeZero D]
   /-- The transfer map fixes this point: `E(ρ) = ρ`. -/
   fixedPoint_is_fixed : transferMap (d := d) (D := D) A ρ = ρ
   /-- Spectral gap: the complement of the fixed-point projection has spectral radius < 1. -/
-  spectral_gap : spectralRadius ℂ
-      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        ((transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ
-          (by intro h; exact fixedPoint_ne_zero ((Matrix.PosSemidef.trace_eq_zero_iff fixedPoint_psd).1 h)))) < 1
+  spectral_gap :
+      spectralRadius ℂ
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          ((transferMap (d := d) (D := D) A) -
+            fixedPointProj (D := D) ρ
+              (by
+                intro h
+                exact
+                  fixedPoint_ne_zero
+                    ((Matrix.PosSemidef.trace_eq_zero_iff fixedPoint_psd).1 h)))) <
+        1
 
 /-- An MPS tensor is **primitive** if there exists a PSD fixed point `ρ` witnessing the
 spectral gap of its transfer map. This is the existential wrapper around `IsPrimitiveMPS`. -/
@@ -110,27 +108,5 @@ theorem IsPrimitive.overlap_tendsto_one {d D : ℕ} [NeZero D]
     Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) :=
   let ⟨_, h⟩ := hP; h.overlap_tendsto_one
 
-/-! ## Part 3: blocks_not_equiv from distinct dimensions -/
-
-variable {d : ℕ}
-
-/-- **`IsCanonicalForm` with distinct bond dimensions automatically satisfies
-`IsCanonicalFormBNT`.**
-
-When all block bond dimensions are distinct (i.e., `dim` is injective), the
-`blocks_not_equiv` condition is vacuously true: for `j ≠ k`, `dim j ≠ dim k`,
-so no valid dimension cast `h : dim j = dim k` can exist. -/
-theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
-    {r : ℕ} {dim : Fin r → ℕ}
-    {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
-    (hCF : IsCanonicalForm μ A)
-    (hDistinct : Function.Injective dim) :
-    IsCanonicalFormBNT μ A :=
-  IsCanonicalFormBNT.ofSeparatedData
-    hCF.toHasInjectiveBlocks
-    hCF.toIsLeftCanonicalBlockFamily
-    hCF.toHasStrictOrderedNonzeroWeights
-    hCF.toHasNormalizedSelfOverlap
-    (fun j k hjk h => absurd (hDistinct h) hjk)
 
 end MPSTensor

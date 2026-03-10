@@ -11,6 +11,7 @@ import TNLean.Spectral.PrimitiveOverlap
 import TNLean.QPF.Assembly
 import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.CanonicalFormReduction
+import TNLean.MPS.PeripheralToSpectralGap
 import TNLean.Channel.PeripheralSpectrum
 import Mathlib.Analysis.Complex.Basic
 
@@ -190,12 +191,12 @@ structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
   mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
   /-- No block weight vanishes. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
-  /-- **Aperiodicity / primitivity hypothesis** (literature-normalized): the MPV self-overlap
-  converges to `1`.  This is used in `block_separation_core` to rule out the “overlap → 0”
-  branch in the equal-or-orthogonal dichotomy.
+  /-- **Aperiodicity / overlap normalization**: the MPV self-overlap converges to `1`.
 
-  TODO: derive this from primitivity of the transfer map (peripheral spectrum = `{1}`), rather
-  than assuming it. -/
+  This field is kept for backward compatibility with the original separated FT interface. In the
+  normal-canonical-form API the same conclusion is derived from irreducibility, left-canonical
+  normalization, and peripheral-spectrum primitivity via
+  `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`. -/
   overlap_tendsto_one :
     ∀ k,
       Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
@@ -324,137 +325,23 @@ theorem mu_norm_injective (hNCF : IsNormalCanonicalForm μ A) :
 
 /-- In a normal canonical form, each block's self-overlap converges to `1`.
 
-This is intended to be derived from left-canonical normalization together with
-peripheral-spectrum primitivity of the transfer map. -/
+This is a direct re-use of
+`MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`. -/
 theorem overlap_tendsto_one
-    [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalForm μ A) (k : Fin r) :
     Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)) := by
-  classical
-  let Ak : MPSTensor d (dim k) := A k
-  let E : Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ]
-      Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
-    transferMap (d := d) (D := dim k) Ak
-  have hIrrMap : IsIrreducibleMap E := by
-    simpa [Ak, E] using
-      (isIrreducibleCP_transferMap_of_isIrreducibleTensor
-        (d := d) (D := dim k) (A k) (hNCF.block_irreducible k))
-  have hCh : IsChannel E := by
-    simpa [Ak, E] using transferMap_isChannel (A := Ak) (hNCF.leftCanonical k)
-  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
-    hCh.exists_posSemidef_fixedPoint (E := E) (hNCF.dim_pos k)
-  have htrρ : Matrix.trace ρ ≠ 0 := by
-    intro htr0
-    exact hρ_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0)
-  have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by
-    intro μ hμ
-    have hμ' : Module.End.HasEigenvalue (mixedTransferMap Ak Ak) μ := by
-      simpa [Ak, E, mixedTransferMap_self] using hμ
-    simpa [Ak, E, mixedTransferMap_self] using
-      (eigenvalue_norm_le_one (A := Ak) (B := Ak)
-        (hNCF.leftCanonical k) (hNCF.leftCanonical k) μ hμ')
-  have hHermitian_zero :
-      ∀ Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-        Y.IsHermitian → E Y = Y → Matrix.trace Y = 0 → Y = 0 := by
-    intro Y hYherm hYfix htrY
-    obtain ⟨Q₁, Q₂, hQ₁_psd, hQ₂_psd, hY_decomp, hEQ₁, hEQ₂⟩ :=
-      IsChannel.posSemidef_parts_of_hermitian_fixedPoint (E := E) hCh hYherm hYfix
-    rcases posSemidef_fixedPoint_unique_of_irreducible (A := Ak) hIrrMap ρ Q₁ hρ_psd hρ_ne
-        hQ₁_psd (by simpa [Ak, E] using hρ_fix) (by simpa [Ak, E] using hEQ₁) with
-      ⟨c₁, rfl⟩
-    rcases posSemidef_fixedPoint_unique_of_irreducible (A := Ak) hIrrMap ρ Q₂ hρ_psd hρ_ne
-        hQ₂_psd (by simpa [Ak, E] using hρ_fix) (by simpa [Ak, E] using hEQ₂) with
-      ⟨c₂, rfl⟩
-    have hc : c₁ = c₂ := by
-      have htrace : Matrix.trace ((c₁ - c₂) • ρ) = 0 := by
-        have : Matrix.trace ((c₁ • ρ) - (c₂ • ρ)) = 0 := by
-          simpa [hY_decomp] using htrY
-        simpa [sub_smul] using this
-      have hmul : (c₁ - c₂) * Matrix.trace ρ = 0 := by
-        simpa [Matrix.trace_smul, smul_eq_mul] using htrace
-      have : c₁ - c₂ = 0 := (mul_eq_zero.mp hmul).resolve_right htrρ
-      exact sub_eq_zero.mp this
-    subst hc
-    simpa using hY_decomp
-  have huniq_fp :
-      ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-        E X = X → Matrix.trace X = 0 → X = 0 := by
-    intro X hXfix htrX
-    have hXstar : E Xᴴ = Xᴴ := by
-      calc
-        E Xᴴ = (E X)ᴴ := by
-          simp [Ak, E, transferMap_apply, Matrix.conjTranspose_sum,
-            Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
-        _ = Xᴴ := by simp [hXfix]
-    let Y₁ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ := X + Xᴴ
-    let Y₂ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ := Complex.I • (X - Xᴴ)
-    have hY₁_herm : Y₁.IsHermitian := by
-      simp [Y₁, Matrix.IsHermitian, Matrix.conjTranspose_add,
-        Matrix.conjTranspose_conjTranspose, add_comm]
-    have hY₂_herm : Y₂.IsHermitian := by
-      simp [Y₂, Matrix.IsHermitian, Matrix.conjTranspose_smul,
-        Matrix.conjTranspose_conjTranspose, sub_eq_add_neg, add_comm]
-    have hY₁_fix : E Y₁ = Y₁ := by
-      simp [E, Y₁, hXfix, hXstar, map_add]
-    have hY₂_fix : E Y₂ = Y₂ := by
-      simp [E, Y₂, hXfix, hXstar, map_smul, map_sub]
-    have htrY₁ : Matrix.trace Y₁ = 0 := by
-      simp [Y₁, htrX, Matrix.trace_add, Matrix.trace_conjTranspose]
-    have htrY₂ : Matrix.trace Y₂ = 0 := by
-      simp [Y₂, htrX, Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose]
-    have hY₁_zero : Y₁ = 0 := hHermitian_zero Y₁ hY₁_herm hY₁_fix htrY₁
-    have hY₂_zero : Y₂ = 0 := hHermitian_zero Y₂ hY₂_herm hY₂_fix htrY₂
-    have hXherm : X = Xᴴ := by
-      have h' : X - Xᴴ = 0 := by
-        have : Complex.I • (X - Xᴴ) = 0 := by simpa [Y₂] using hY₂_zero
-        exact (smul_eq_zero.mp this).resolve_left (by simp)
-      simpa [sub_eq_zero] using h'
-    have h2X : (2 : ℂ) • X = 0 := by
-      have hXXstar : X + Xᴴ = 0 := by
-        simpa [Y₁] using hY₁_zero
-      have hXX : X + X = 0 := by
-        simpa [hXherm.symm] using hXXstar
-      simpa [two_smul] using hXX
-    exact (smul_eq_zero.mp h2X).resolve_left (by norm_num)
-  have hcompl :
-      ∀ ν : ℂ,
-        Module.End.HasEigenvalue (E - fixedPointProj (D := dim k) ρ htrρ) ν → ‖ν‖ < 1 := by
-    intro ν hν
-    exact _root_.compl_eigenvalue_norm_lt_one_of_primitive
-      (E := E) (ρ := ρ) hρ_fix hρ_ne htrρ hCh.tp (hNCF.block_primitive k) hbound huniq_fp ν hν
-  have hgap :
-      spectralRadius ℂ
-        ((Module.End.toContinuousLinearMap (Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
-          (E - fixedPointProj (D := dim k) ρ htrρ)) < 1 := by
-    have h_spec :
-        spectrum ℂ
-            ((Module.End.toContinuousLinearMap (Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
-              (E - fixedPointProj (D := dim k) ρ htrρ)) =
-          spectrum ℂ (E - fixedPointProj (D := dim k) ρ htrρ) :=
-      AlgEquiv.spectrum_eq
-        (Module.End.toContinuousLinearMap (Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
-        (E - fixedPointProj (D := dim k) ρ htrρ)
-    refine (spectrum.spectralRadius_lt_of_forall_lt
-      (a := (Module.End.toContinuousLinearMap (Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
-        (E - fixedPointProj (D := dim k) ρ htrρ))
-      (r := (1 : NNReal)) ?_)
-    intro z hz
-    have hz' : z ∈ spectrum ℂ (E - fixedPointProj (D := dim k) ρ htrρ) := by
-      exact (h_spec ▸ hz)
-    have hEig : Module.End.HasEigenvalue (E - fixedPointProj (D := dim k) ρ htrρ) z :=
-      (Module.End.hasEigenvalue_iff_mem_spectrum).2 hz'
-    have hz_norm : ‖z‖ < 1 := hcompl z hEig
-    have : ((‖z‖₊ : ℝ) < 1) := by simpa using hz_norm
-    exact (NNReal.coe_lt_one).1 this
-  simpa [Ak, E] using
-    (mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one (A := Ak)
-      (hNorm := hNCF.leftCanonical k) (ρ := ρ) (hρ := by simpa [Ak, E] using hρ_fix)
-      hρ_ne hρ_psd (by simpa [Ak, E] using hgap))
+  letI : NeZero (dim k) := ⟨Nat.ne_of_gt (hNCF.dim_pos k)⟩
+  simpa using
+    MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+      (A := A k)
+      (hIrr := hNCF.block_irreducible k)
+      (hNorm := hNCF.leftCanonical k)
+      (hPrim := hNCF.block_primitive k)
 
 /-- Project normal-canonical-form data to the overlap-normalization interface used by the
 existing separated FT statements. -/
-def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
+def toHasNormalizedSelfOverlap
     (hNCF : IsNormalCanonicalForm μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   HasNormalizedSelfOverlap.ofForall hNCF.overlap_tendsto_one
@@ -467,7 +354,7 @@ namespace IsCanonicalForm
 provided irreducibility, peripheral primitivity, and positive bond dimensions are supplied
 separately. -/
 theorem toIsNormalCanonicalForm
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    {r : ℕ} {dim : Fin r → ℕ}
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
     (hCF : IsCanonicalForm μ A)
     (hIrr : ∀ k, IsIrreducibleTensor (A k))
@@ -707,8 +594,10 @@ lemma leftCanonical_mpvOverlap_bound
   have hOverlap : ‖mpvOverlap (d := d) A B N‖ = ‖mpvInner (d := d) A B N‖ := by
     simp [mpvOverlap_eq_star_mpvInner]
   -- Apply the one-sided normalization bounds on each factor.
-  have hA : ‖mpvState (d := d) A N‖ ≤ (D₁ : ℝ) := leftCanonical_mpvState_norm_bound (d := d) A hA_lc N
-  have hB : ‖mpvState (d := d) B N‖ ≤ (D₂ : ℝ) := leftCanonical_mpvState_norm_bound (d := d) B hB_lc N
+  have hA : ‖mpvState (d := d) A N‖ ≤ (D₁ : ℝ) :=
+    leftCanonical_mpvState_norm_bound (d := d) A hA_lc N
+  have hB : ‖mpvState (d := d) B N‖ ≤ (D₂ : ℝ) :=
+    leftCanonical_mpvState_norm_bound (d := d) B hB_lc N
   calc
     ‖mpvOverlap (d := d) A B N‖ = ‖mpvInner (d := d) A B N‖ := hOverlap
     _ ≤ ‖mpvState (d := d) A N‖ * ‖mpvState (d := d) B N‖ := hCS
@@ -1163,7 +1052,8 @@ lemma block_separation_core
                       intro σ hσ
                       -- The inner sum vanishes by `hs_star σ`.
                       exact mul_eq_zero_of_right (mpv (A 0) σ) (hs_star σ)
-            -- Step 2: apply the peeling lemma to show exponential decay of the leading overlap difference.
+            -- Step 2: apply the peeling lemma to show exponential decay of the
+            -- leading overlap difference.
             let δ : Fin (Nat.succ (Nat.succ r)) → ℕ → ℂ :=
               fun k N => mpvOverlap (d := d) (A 0) (A k) N - mpvOverlap (d := d) (A 0) (B k) N
             let Dsum : ℝ := ∑ k : Fin (Nat.succ (Nat.succ r)), (dim k : ℝ)
@@ -1225,7 +1115,9 @@ lemma block_separation_core
                 norm_pos_iff.mpr (hμ_ne_zero 0)
               have h01 : (0 : Fin (Nat.succ (Nat.succ r))) < 1 :=
                 (Fin.zero_lt_one : (0 : Fin (Nat.succ (Nat.succ r))) < 1)
-              have hstrict : ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ < ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ :=
+              have hstrict :
+                  ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ <
+                    ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ :=
                 hμ_strict h01
               exact (div_lt_one hμ0).2 hstrict
             have hρ_bound :
@@ -1285,7 +1177,8 @@ lemma block_separation_core
                   intro k hk
                   simpa using (hρ_bound k hk))
             rcases hpeel with ⟨C, hC_nn, hδ0_le⟩
-            -- Step 3: the leading overlap difference tends to `0`, hence the cross-overlap tends to `1`.
+            -- Step 3: the leading overlap difference tends to `0`, hence the
+            -- cross-overlap tends to `1`.
             have hδ0_tendsto :
                 Filter.Tendsto (fun N => δ (0 : Fin (Nat.succ (Nat.succ r))) N)
                   Filter.atTop (nhds 0) := by
@@ -1447,10 +1340,15 @@ theorem block_separation_all_words
 
 /-- NT / normal-canonical-form version of `block_separation_all_words`.
 
-This is the same peeling / induction argument as `block_separation_core`, but the two
-contradiction steps use the NT overlap-decay lemmas from `SpectralGapNT.lean`:
-`mpvOverlap_tendsto_zero_of_irreducible_TP` in the equal-dimension case and
-`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` in the dimension-mismatch case. -/
+Besides irreducibility and left-canonical normalization on both block families,
+this theorem also assumes the self-overlap convergence hypothesis on the
+`A`-blocks: `mpvOverlap (A k) (A k) N → 1`.
+
+The proof is the same peeling / induction argument as `block_separation_core`,
+but the contradiction steps use the NT overlap-decay lemmas from
+`SpectralGapNT.lean`: `mpvOverlap_tendsto_zero_of_irreducible_TP` in the
+equal-dimension case and `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP`
+in the dimension-mismatch case. -/
 theorem block_separation_all_words_of_irreducible_TP
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -1565,7 +1463,8 @@ theorem block_separation_all_words_of_irreducible_TP
                       intro σ hσ
                       -- The inner sum vanishes by `hs_star σ`.
                       exact mul_eq_zero_of_right (mpv (A 0) σ) (hs_star σ)
-            -- Step 2: apply the peeling lemma to show exponential decay of the leading overlap difference.
+            -- Step 2: apply the peeling lemma to show exponential decay of the
+            -- leading overlap difference.
             let δ : Fin (Nat.succ (Nat.succ r)) → ℕ → ℂ :=
               fun k N => mpvOverlap (d := d) (A 0) (A k) N - mpvOverlap (d := d) (A 0) (B k) N
             let Dsum : ℝ := ∑ k : Fin (Nat.succ (Nat.succ r)), (dim k : ℝ)
@@ -1627,7 +1526,9 @@ theorem block_separation_all_words_of_irreducible_TP
                 norm_pos_iff.mpr (hμ_ne_zero 0)
               have h01 : (0 : Fin (Nat.succ (Nat.succ r))) < 1 :=
                 (Fin.zero_lt_one : (0 : Fin (Nat.succ (Nat.succ r))) < 1)
-              have hstrict : ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ < ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ :=
+              have hstrict :
+                  ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ <
+                    ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖ :=
                 hμ_strict h01
               exact (div_lt_one hμ0).2 hstrict
             have hρ_bound :
@@ -1687,7 +1588,8 @@ theorem block_separation_all_words_of_irreducible_TP
                   intro k hk
                   simpa using (hρ_bound k hk))
             rcases hpeel with ⟨C, hC_nn, hδ0_le⟩
-            -- Step 3: the leading overlap difference tends to `0`, hence the cross-overlap tends to `1`.
+            -- Step 3: the leading overlap difference tends to `0`, hence the
+            -- cross-overlap tends to `1`.
             have hδ0_tendsto :
                 Filter.Tendsto (fun N => δ (0 : Fin (Nat.succ (Nat.succ r))) N)
                   Filter.atTop (nhds 0) := by
@@ -1842,8 +1744,10 @@ theorem per_block_sameMPV_of_canonical_form
 
 /-- Block separation for normal canonical form (NT blocks).
 
-This is the analogue of `per_block_sameMPV_of_canonical_form`, replacing injective
-canonical-form blocks by irreducible + primitive + left-canonical blocks. -/
+This is the analogue of `per_block_sameMPV_of_canonical_form`, replacing
+injective canonical-form blocks by irreducible + primitive + left-canonical
+blocks. Since both block families use the same dimension function, the
+conclusion is the homogeneous predicate `SameMPV`. -/
 theorem per_block_sameMPV_of_normal_canonical_form
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
     (hA : IsNormalCanonicalForm μ A)
@@ -1852,7 +1756,7 @@ theorem per_block_sameMPV_of_normal_canonical_form
     (hB_lc : ∀ k, ∑ i : Fin d, (B k i)ᴴ * (B k i) = 1)
     (hSame₂ : SameMPV₂ (toTensorFromBlocks (d := d) (μ := μ) A)
                         (toTensorFromBlocks (d := d) (μ := μ) B)) :
-    ∀ k, SameMPV₂ (A k) (B k) := by
+    ∀ k, SameMPV (A k) (B k) := by
   by_cases hr : r ≤ 1
   · intro k N σ
     have := sameMPV₂_summed_blocks μ A B hSame₂ N σ

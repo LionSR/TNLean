@@ -10,12 +10,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-set_option linter.unusedSimpArgs false
-set_option linter.style.show false
-
 /-!
 # BNT construction from canonical form
 
@@ -125,6 +119,21 @@ def ofSeparatedData
   blocks_not_equiv := hBlocks
 
 end IsCanonicalFormBNT
+
+/-- An `IsCanonicalForm` family with pairwise distinct block dimensions automatically satisfies
+`IsCanonicalFormBNT`, since the separation axiom is vacuous. -/
+theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
+    {r : ℕ} {dim : Fin r → ℕ}
+    {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+    (hCF : IsCanonicalForm μ A)
+    (hDistinct : Function.Injective dim) :
+    IsCanonicalFormBNT μ A :=
+  IsCanonicalFormBNT.ofSeparatedData
+    hCF.toHasInjectiveBlocks
+    hCF.toIsLeftCanonicalBlockFamily
+    hCF.toHasStrictOrderedNonzeroWeights
+    hCF.toHasNormalizedSelfOverlap
+    (fun _ _ hjk h => absurd (hDistinct h) hjk)
 
 /-! ### `IsNormalCanonicalFormBNT` predicate -/
 

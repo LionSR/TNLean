@@ -5,12 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.BNTConstruction
 import TNLean.Algebra.ScalarPowerSumIdentity
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-set_option linter.unusedSimpArgs false
-set_option linter.style.show false
-
 /-!
 # Full Fundamental Theorem of MPS (Assembly)
 
@@ -373,15 +367,17 @@ theorem perBlock_sameMPV_of_equalMPV_CFBNT
 /-- **Equal-MPV CF-BNT: per-block gauge equivalence implies global gauge equivalence.**
 
 Once per-block gauge equivalence is established, the global block-diagonal gauge equivalence
-follows from the multi-block assembly theorem. -/
+follows from the multi-block assembly theorem. The `hA` hypothesis is retained for compatibility,
+although the proof only uses the supplied blockwise gauge equivalences. -/
 theorem globalGaugeEquiv_of_perBlock_CFBNT
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ}
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : IsCanonicalFormBNT μ A)
     (hGauge : ∀ k, GaugeEquiv (A k) (B k)) :
-    GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
-  gaugeEquiv_toTensorFromBlocks_of_blockGauge μ A B hGauge
+    GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) := by
+  let _ := hA
+  exact gaugeEquiv_toTensorFromBlocks_of_blockGauge μ A B hGauge
 
 /-- **BNT structure from CF-BNT**: each canonical form with BNT separation gives a valid
 `IsBNT` structure. This is a convenient re-export. -/

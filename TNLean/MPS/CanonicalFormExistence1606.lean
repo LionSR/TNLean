@@ -26,7 +26,8 @@ We currently have (sorry-free) components for:
   eigenvector → TP-normalized representative.
 * Appendix A (CFII part): inside that TP gauge, unitary conjugation → diagonal PD fixed point.
 * Appendix A (periodicity): TP + irreducible → primitive after blocking.
-* peripheral primitive → spectral gap → overlap convergence.
+* irreducible + peripheral primitive + left-canonical normalization
+  (`∑ Aᵢ† Aᵢ = I`) → overlap convergence.
 * peripheral primitive + left-canonical normalization (`∑ Aᵢ† Aᵢ = I`)
   + injective + μ ordering → `IsCanonicalForm`.
 
@@ -190,17 +191,18 @@ theorem exists_blockTensor_isPrimitive_pipeline1606
 This is a direct re-export of the existing lemma.
 -/
 
-/-- **Pipeline step:** peripheral-spectrum primitivity of `transferMap A` implies the overlap
-`mpvOverlap A A N` tends to `1`. -/
+/-- **Pipeline step:** if `A` is irreducible, left-canonical, and
+peripheral-spectrum primitive, then `mpvOverlap A A N` tends to `1`. -/
 theorem overlap_tendsto_one_of_peripheralPrimitive_pipeline1606
     [NeZero D]
     (A : MPSTensor d D)
-    (hInj : IsInjective A)
+    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
     Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   simpa using
-    (MPSTensor.overlap_tendsto_one_of_peripheralPrimitive (A := A) hInj hNorm hPrim)
+    (MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+      (A := A) hIrr hNorm hPrim)
 
 
 /-!
@@ -232,28 +234,32 @@ theorem isCanonicalForm_of_peripheralPrimitive_pipeline1606
 
 We now combine step (1) with the CFII normalization step (step (3)). The PF / TP-gauge theorem
 from step (2) and the periodicity theorem from step (4) are available for each irreducible block
-separately, but they are not yet threaded through the block decomposition, and the resulting
-primitive blocked tensors are not yet converted into the stronger injective / `IsNormal`
-hypotheses needed downstream.
+separately, but they are not yet threaded through the block decomposition.
 
-TODO (for full end-to-end canonical-form existence):
+The newer file `TNLean.MPS.NormalCanonicalFormPipeline` packages the later stage once one already
+has a primitive weighted block family with positive bond dimensions and distinct nonzero weights.
+This file does not yet construct that input from an arbitrary tensor.
+
+Remaining gap for a full end-to-end canonical-form existence theorem:
 
 * Thread `exists_tp_data_of_irreducible_pipeline1606` blockwise through
   `exists_irreducible_blockDecomp_pipeline1606`.
 * Apply `exists_blockTensor_isPrimitive_pipeline1606` to those TP representatives.
-* Use blocking/primitivity to derive normality / injectivity-by-blocking (quantum Wielandt).
-* Feed the resulting data into `isCanonicalForm_of_peripheralPrimitive_pipeline1606`.
+* Use blocking/primitivity to derive the stronger normal / injective-by-blocking hypotheses needed
+  by `TNLean.MPS.NormalCanonicalFormPipeline`.
+* Feed the resulting data into `isCanonicalForm_of_peripheralPrimitive_pipeline1606` or the later
+  normal-canonical-form packaging route, depending on the target API.
 -/
 
-/-- **Canonical-form pipeline, assembled up to a CFII handoff (1606.00608 §2.3 + App. A).**
+/-- **Legacy CFII handoff for the 1606 pipeline (1606.00608 §2.3 + App. A).**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
 block, assuming (i) TP gauge and (ii) positive bond dimension, we can produce CFII fixed-point
 data (unitary conjugation + diagonal PD fixed point).
 
-This theorem is intended as a convenient handoff point for the remaining steps; the separately
-available TP-gauge and periodicity wrappers are not yet threaded through this block decomposition.
--/
+This theorem is kept as a continuation-shaped handoff for the still-unthreaded middle stage of the
+pipeline. Later packaging into normal canonical form, once primitive weighted blocks are already in
+hand, lives in `TNLean.MPS.NormalCanonicalFormPipeline`. -/
 theorem exists_irreducible_blockDecomp_with_CFII_handoff
     (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,

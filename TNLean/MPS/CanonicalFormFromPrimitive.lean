@@ -5,17 +5,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.PiAlgebra.CanonicalFormSep
 import TNLean.MPS.PrimitivityBridge
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
+/-!
+# Canonical form from primitive blocks
+
+This file packages blockwise injectivity, left-canonical normalization, strict weight ordering,
+and blockwise primitivity into `IsCanonicalForm`.
+-/
 
 open scoped Matrix BigOperators
-open Filter
 
 namespace MPSTensor
 
-/-- Builder lemma: construct `IsCanonicalForm` once the overlap hypothesis is derived from
-primitivity. -/
+/-- Build `IsCanonicalForm` once the normalized self-overlap hypothesis has been derived from
+blockwise primitivity. -/
 theorem isCanonicalForm_of_primitive
     {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
@@ -25,16 +27,12 @@ theorem isCanonicalForm_of_primitive
     (hμne : ∀ k, μ k ≠ 0)
     (hPrim : ∀ k, MPSTensor.IsPrimitive (A k)) :
     MPSTensor.IsCanonicalForm (d := d) (μ := μ) A := by
-  let hInjData : MPSTensor.HasInjectiveBlocks (d := d) A :=
-    { block_injective := hInj }
-  let hLeftData : MPSTensor.IsLeftCanonicalBlockFamily (d := d) A :=
-    { leftCanonical := hDS }
-  let hμData : MPSTensor.HasStrictOrderedNonzeroWeights μ :=
-    { mu_strict_anti := hμanti, mu_ne_zero := hμne }
-  let hOverlapData : MPSTensor.HasNormalizedSelfOverlap (d := d) A := by
-    refine { overlap_tendsto_one := ?_ }
+  refine MPSTensor.IsCanonicalForm.ofSeparatedData ?_ ?_ ?_ ?_
+  · exact ⟨hInj⟩
+  · exact ⟨hDS⟩
+  · exact ⟨hμanti, hμne⟩
+  · refine ⟨?_⟩
     intro k
     simpa using (IsPrimitive.overlap_tendsto_one (d := d) (A := A k) (hPrim k))
-  exact MPSTensor.IsCanonicalForm.ofSeparatedData hInjData hLeftData hμData hOverlapData
 
 end MPSTensor
