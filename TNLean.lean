@@ -124,3 +124,4 @@ import TNLean.Wielandt.QuantumWielandt
 -- `TNLean.Scratch.*` files are also intentionally excluded from this stable
 -- import surface: they are experimental work-in-progress modules, archived
 -- alternate proofs, or documentary scratch notes.
+import TNLean.Channel.CyclicDecomposition
