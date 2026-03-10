@@ -103,21 +103,6 @@ theorem pow_single_mem_wordSpan (B : MPSTensor d D) (i : Fin d) :
   rw [show D * ([i] : List (Fin d)).length = D from by simp] at hmem
   rwa [← heq] at hmem
 
-/-- Reversing `List.ofFn σ` corresponds to precomposing with `Fin.rev`. -/
-private lemma ofFn_reverse {n : ℕ} {α : Type*} (σ : Fin n → α) :
-    (List.ofFn σ).reverse = List.ofFn (σ ∘ Fin.rev) := by
-  calc
-    (List.ofFn σ).reverse = (List.map σ (List.finRange n)).reverse := by
-      simp [List.ofFn_eq_map]
-    _ = List.map σ (List.finRange n).reverse := by
-      simp [List.map_reverse]
-    _ = List.map σ (List.map Fin.rev (List.finRange n)) := by
-      simp [List.finRange_reverse]
-    _ = List.map (σ ∘ Fin.rev) (List.finRange n) := by
-      simp [List.map_map]
-    _ = List.ofFn (σ ∘ Fin.rev) := by
-      simp [List.ofFn_eq_map]
-
 private structure BlockedTensorRangeData
     (A : MPSTensor d D) (L : ℕ) (σ₀ τ₀ : Fin L → Fin d)
     (φ ψ : Fin D → ℂ) where
@@ -319,7 +304,7 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
   -- ⟹ (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ  where τ₀ = τ₀' ∘ Fin.rev
   set τ₀ : Fin L → Fin d := τ₀' ∘ Fin.rev
   have hτ₀_eq : List.ofFn τ₀ = (List.ofFn τ₀').reverse :=
-    (ofFn_reverse τ₀').symm
+    (List.ofFn_reverse τ₀').symm
   have heigψ : (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ := by
     rw [hτ₀_eq]
     -- Goal: (evalWord A (List.ofFn τ₀').reverse)ᵀ *ᵥ ψ = ν • ψ
@@ -346,8 +331,6 @@ end RankOneExtraction
 
 section WielandtLemma2b
 
-set_option maxHeartbeats 800000 in
--- The blocked assembly involves multiple typeclass unifications across blocked tensor types.
 /-- **Wielandt Lemma 2(b), unconditional version.**
 
 For any `IsNormal` MPS tensor `A` with `[NeZero D]`, there exists `N` such that
@@ -481,8 +464,6 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
   exact ⟨D + N₁ + D, by
     simpa [data.hB] using data.rankOne_mem_wordSpan_of_wordSpan_eq_top hBtop⟩
 
-set_option maxHeartbeats 800000 in
--- The blocked assembly involves multiple typeclass unifications across blocked tensor types.
 /-- **Wielandt Lemma 2(b) blocked assembly — unconditional version with external eigenvectors.**
 
 Given word eigenvectors of length `L` with nonzero eigenvalues and `IsNormal A`,

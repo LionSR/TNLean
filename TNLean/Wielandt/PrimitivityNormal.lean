@@ -87,15 +87,12 @@ theorem exists_nonzero_evalWord_of_isPrimitiveMPS [NeZero D]
     ∃ σ : Fin n → Fin d, evalWord A (List.ofFn σ) ≠ 0 := by
   by_contra hall
   push_neg at hall
-  -- All word products of length n are zero
   have hzero : ∀ σ : Fin n → Fin d, evalWord A (List.ofFn σ) = 0 := hall
-  -- So E^n(ρ) = Σ 0 * ρ * 0† = 0
   have hsum : ((transferMap (d := d) (D := D) A) ^ n) ρ = 0 := by
     rw [transferMap_pow_apply_eq_sum]
-    apply Finset.sum_eq_zero
+    refine Finset.sum_eq_zero ?_
     intro σ _
     rw [hzero σ, Matrix.zero_mul, Matrix.zero_mul]
-  -- But E^n(ρ) = ρ ≠ 0
   have hfix := transferMap_pow_fixed hP.fixedPoint_is_fixed n
   rw [hsum] at hfix
   exact hP.fixedPoint_ne_zero hfix.symm
@@ -105,7 +102,7 @@ nonzero word product. -/
 theorem exists_nonzero_evalWord_of_isPrimitive [NeZero D]
     {A : MPSTensor d D} (hP : IsPrimitive A) (n : ℕ) :
     ∃ σ : Fin n → Fin d, evalWord A (List.ofFn σ) ≠ 0 := by
-  let ⟨_, hρ⟩ := hP
+  rcases hP with ⟨ρ, hρ⟩
   exact exists_nonzero_evalWord_of_isPrimitiveMPS hρ n
 
 /-- **The transfer map iterate is nonzero for all `n`** under primitivity.
@@ -126,7 +123,7 @@ theorem transferMap_pow_ne_zero_of_isPrimitiveMPS [NeZero D]
 theorem transferMap_pow_ne_zero_of_isPrimitive [NeZero D]
     {A : MPSTensor d D} (hP : IsPrimitive A) (n : ℕ) :
     (transferMap (d := d) (D := D) A) ^ n ≠ 0 := by
-  let ⟨_, hρ⟩ := hP
+  rcases hP with ⟨ρ, hρ⟩
   exact transferMap_pow_ne_zero_of_isPrimitiveMPS hρ n
 
 /-! ## Part 3: Re-export the Wielandt chain from normality -/
@@ -142,16 +139,12 @@ Given `IsNormal A`, the full Wielandt chain provides:
 This re-exports `wielandt_chain` from `WielandtBound.lean` with a cleaner name. -/
 theorem wielandt_full_analysis [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
-    -- Step 1: Cumulative span = ⊤
     cumulativeSpan A (D ^ 2) = ⊤ ∧
-    -- Step 2: Nonzero trace word exists
     (∃ (w₀ : List (Fin d)),
       w₀.length ≤ D ^ 2 ∧ Matrix.trace (evalWord A w₀) ≠ 0) ∧
-    -- Step 3: Eigenvalue and eigenvector exist
     (∃ (w₀ : List (Fin d)) (μ : ℂ) (φ : Fin D → ℂ),
       w₀.length ≤ D ^ 2 ∧ μ ≠ 0 ∧ φ ≠ 0 ∧
       evalWord A w₀ *ᵥ φ = μ • φ) ∧
-    -- Step 4: Vector spanning
     (∀ (φ : Fin D → ℂ), φ ≠ 0 →
       cumulativeVectorSpan A φ (D ^ 2) = ⊤) :=
   wielandt_chain A hN

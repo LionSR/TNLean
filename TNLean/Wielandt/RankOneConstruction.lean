@@ -37,6 +37,25 @@ This turns the missing rank-one step into two potentially simpler tasks:
 
 open scoped Matrix
 
+namespace List
+
+/-- Reversing a list built by `ofFn` amounts to precomposing the index map with `Fin.rev`. -/
+theorem ofFn_reverse {n : ℕ} {α : Type*} (f : Fin n → α) :
+    (List.ofFn f).reverse = List.ofFn (f ∘ Fin.rev) := by
+  calc
+    (List.ofFn f).reverse = (List.map f (List.finRange n)).reverse := by
+      simp [List.ofFn_eq_map]
+    _ = List.map f (List.finRange n).reverse := by
+      simp [List.map_reverse]
+    _ = List.map f (List.map Fin.rev (List.finRange n)) := by
+      simp [List.finRange_reverse]
+    _ = List.map (f ∘ Fin.rev) (List.finRange n) := by
+      simp [List.map_map]
+    _ = List.ofFn (f ∘ Fin.rev) := by
+      simp [List.ofFn_eq_map]
+
+end List
+
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -45,22 +64,6 @@ variable {d D : ℕ}
 
 /-- The pointwise transpose of an MPS tensor. -/
 noncomputable def transposeTensor (A : MPSTensor d D) : MPSTensor d D := fun i => (A i)ᵀ
-
-/-- Reversing a word given as `List.ofFn σ` corresponds to precomposing `σ` with `Fin.rev`. -/
-private lemma ofFn_reverse {n : ℕ} (σ : Fin n → Fin d) :
-    (List.ofFn σ).reverse = List.ofFn (σ ∘ Fin.rev) := by
-  -- Rewrite `ofFn` via `finRange`, then use `finRange_reverse`.
-  calc
-    (List.ofFn σ).reverse = (List.map σ (List.finRange n)).reverse := by
-      simp [List.ofFn_eq_map]
-    _ = List.map σ (List.finRange n).reverse := by
-      simp [List.map_reverse]
-    _ = List.map σ (List.map Fin.rev (List.finRange n)) := by
-      simp [List.finRange_reverse]
-    _ = List.map (σ ∘ Fin.rev) (List.finRange n) := by
-      simp [List.map_map]
-    _ = List.ofFn (σ ∘ Fin.rev) := by
-      simp [List.ofFn_eq_map]
 
 /-- Transposing a word product reverses the word.
 
@@ -104,13 +107,13 @@ theorem IsNBlkInjective_transposeTensor
       have htrans :=
         (evalWord_transpose (A := A) (w := List.ofFn (σ ∘ Fin.rev)))
       -- Simplify the reversed word.
-      simpa [ofFn_reverse, hrev] using htrans
+      simpa [List.ofFn_reverse, hrev] using htrans
     · rintro ⟨σ, rfl⟩
       refine ⟨σ ∘ Fin.rev, ?_⟩
       -- Here we use `evalWord_transpose` on `List.ofFn σ` directly.
       have htrans := (evalWord_transpose (A := A) (w := List.ofFn σ))
       -- Rewrite the reversed word via `Fin.rev`, then flip the equality.
-      simpa [ofFn_reverse] using htrans.symm
+      simpa [List.ofFn_reverse] using htrans.symm
   -- Reduce to the span of transposes.
   rw [hrange]
   -- Use that transpose is a linear equivalence on matrices, hence maps spanning sets to
@@ -237,7 +240,7 @@ private lemma vecMul_evalWord_ofFn_eq_evalWord_transposeTensor_mulVec
     _ = evalWord (transposeTensor A) (List.ofFn σ).reverse *ᵥ ψ := by
         simp [evalWord_transpose]
     _ = evalWord (transposeTensor A) (List.ofFn (σ ∘ Fin.rev)) *ᵥ ψ := by
-        simp [ofFn_reverse]
+        simp [List.ofFn_reverse]
 
 /-- `rowSpreadSpan` is a `vectorSpreadSpan` for the pointwise-transposed tensor.
 
