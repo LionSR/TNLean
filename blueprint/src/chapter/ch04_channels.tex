@@ -153,9 +153,8 @@ then applied to transfer maps, which are Kraus maps by construction
     The \emph{adjoint Kraus map} is
     $E^*(X) = \sum_{i=0}^{d-1} K_i^\dagger X K_i$.
     When the $\{K_i\}$ are the matrices of an MPS tensor~$A$,
-    the adjoint Kraus map corresponds to the
-    transfer map $\E_A$ with the roles of $A^i$ and $(A^i)^\dagger$
-    exchanged.
+    this is the transfer map of the conjugate-transposed family
+    $i \mapsto (A^i)^\dagger$.
 \end{definition}
 
 \begin{definition}[Unital Kraus map]\label{def:unital_kraus}
@@ -165,6 +164,7 @@ then applied to transfer maps, which are Kraus maps by construction
     A Kraus map is \emph{unital} if
     $\sum_{i=0}^{d-1} K_i K_i^\dagger = \Id$.
     Equivalently, $E(\Id) = \Id$.
+    In the later gauge language this is the right-canonical condition.
 \end{definition}
 
 \begin{definition}[Trace-preserving Kraus map]\label{def:tp_kraus}
@@ -174,8 +174,9 @@ then applied to transfer maps, which are Kraus maps by construction
     A Kraus map is \emph{trace-preserving} if
     $\sum_{i=0}^{d-1} K_i^\dagger K_i = \Id$.
     Equivalently, the adjoint Kraus map is unital.
-    This is the standard MPS normalization condition, so later
-    Kadison--Schwarz arguments are often applied to the adjoint map.
+    This is the standard MPS normalization condition.
+    In the later gauge language it is the left-canonical condition,
+    so Kadison--Schwarz arguments are often applied to the adjoint map.
 \end{definition}
 
 \begin{theorem}[Kadison--Schwarz inequality]\label{thm:kadison_schwarz}

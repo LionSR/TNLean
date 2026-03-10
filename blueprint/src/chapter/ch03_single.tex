@@ -1,12 +1,15 @@
 \chapter{The Single-Block Fundamental Theorem}\label{ch:single}
 
-This chapter proves that if an injective MPS tensor~$A$ generates
-the same MPV family as another tensor~$B$ (of the same bond dimension),
-then $A$ and $B$ are gauge equivalent.
-The proof here is purely algebraic. The trace-pairing maps introduced
-below are auxiliary devices attached to the chosen generating families
-$\{A^i\}$ and $\{B^i\}$; they are used only to construct the linear
-map that is later shown to be a gauge transform.
+This chapter proves that if an injective MPV tensor~$A$ generates
+the same MPV family as another tensor~$B$ of the same bond dimension,
+then $A$ and $B$ are gauge equivalent. The formalization still uses the
+historical name \texttt{MPSTensor} for these tensors.
+The proof recorded here is purely algebraic and does not use the later
+overlap or normal-form reductions.
+The trace-pairing maps introduced below are auxiliary devices attached
+to the chosen generating families $\{A^i\}$ and $\{B^i\}$; they serve
+only to construct the linear map that is later shown to be a gauge
+transform.
 
 \section{Trace pairing}
 
@@ -50,7 +53,7 @@ map that is later shown to be a gauge transform.
     \lean{MPSTensor.traceMulRightPi}
     \leanok
     \uses{def:mps_tensor}
-    For an MPS tensor~$A$, attach to the chosen family $\{A^i\}$ the
+    For a tensor~$A$, attach to the chosen family $\{A^i\}$ the
     auxiliary linear map $\Phi_A : \MN{D} \to \C^d$ defined by
     \[
         \Phi_A(M)_i =   \tr(M \cdot A^i).
@@ -72,14 +75,14 @@ map that is later shown to be a gauge transform.
     for all~$N$, so $M = 0$ by Theorem~\ref{thm:trace_nondeg}.
 \end{proof}
 
-\begin{lemma}[Nonvanishing trace on injective tensors]\label{lem:trace_ne_zero}
+\begin{theorem}[Nonvanishing trace on injective tensors]\label{thm:trace_ne_zero}
     \lean{MPSTensor.trace_ne_zero_of_injective}
     \leanok
     \uses{def:injective, def:same_mpv}
     If $D \ge 1$, $A$ is injective, $A$ and $B$ generate the same
     MPV family, and $B^i = 0$ for all~$i$, then we have a
     contradiction.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -200,7 +203,8 @@ map that is later shown to be a gauge transform.
     \lean{MPSTensor.linearMapToAlgHom}
     \leanok
     If $T : \MN{D} \to \MN{D}$ is a multiplicative surjective
-    $\C$-linear map, then $T(\Id) = \Id$, and $T$ is a
+    $\C$-linear map, then $T(\Id) = \Id$.
+    Equivalently, the same underlying function defines a
     $\C$-algebra homomorphism.
 \end{lemma}
 
@@ -219,7 +223,7 @@ map that is later shown to be a gauge transform.
     \lean{MPSTensor.fundamentalTheorem_singleBlock}
     \leanok
     \uses{def:injective, def:same_mpv, def:gauge_equiv}
-    Let $A$ be an injective MPS tensor and let $B$ be an MPS tensor
+    Let $A$ be an injective MPV tensor and let $B$ be an MPV tensor
     of the same bond dimension.
     If $A$ and $B$ generate the same MPV family, then they are gauge
     equivalent: there exists $X \in \GL_D(\C)$ such that
@@ -229,12 +233,12 @@ map that is later shown to be a gauge transform.
 \begin{proof}
     \leanok
     \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity,
-          lem:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
+          thm:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
     By Theorem~\ref{thm:linear_ext}, there is a unique linear
     $T$ with $T(A^i) = B^i$.
     By Theorem~\ref{thm:linear_ext_mul}, $T$ is multiplicative.
     $T$ is nonzero: if $T = 0$ then $B^i = 0$ for all~$i$,
-    contradicting Lemma~\ref{lem:trace_ne_zero}.
+    contradicting Theorem~\ref{thm:trace_ne_zero}.
     By Theorem~\ref{thm:simplicity}, $T$ is bijective.
     By Lemma~\ref{lem:linear_map_to_alg}, $T$ is a
     $\C$-algebra automorphism.

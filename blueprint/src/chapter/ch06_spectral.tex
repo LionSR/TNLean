@@ -2,13 +2,18 @@
 
 This chapter proves that the MPV overlaps between distinct
 (non-gauge-phase-equivalent) MPS blocks decay to zero as system
-size grows, while self-overlaps of primitive blocks converge to~$1$.
-The argument is based on a spectral analysis of the \emph{mixed
-transfer operator}, following~\cite{PerezGarcia2007Matrix}.
+size grows. It also proves the corresponding self-overlap convergence
+to~$1$ under the complementary spectral-gap hypothesis that encodes
+primitivity in the cases of interest. The argument is based on a
+spectral analysis of the \emph{mixed transfer operator},
+following~\cite{PerezGarcia2007Matrix}.
 
-Throughout this chapter, all MPS tensors are assumed to satisfy the
-trace-preserving normalization
-$\sum_i (A^i)^\dagger A^i = \Id$.
+The algebraic mixed-transfer identities in the first two sections do
+not use normalization. Starting with the spectral-radius estimates,
+we assume the trace-preserving normalization
+\[
+    \sum_i (A^i)^\dagger A^i = \Id.
+\]
 
 \section{Mixed transfer operator}
 
@@ -134,7 +139,7 @@ mixed transfer power.
     \lean{MPSTensor.trace_mixedTransferMap_pow_eq_mpvOverlap}
     \leanok
     \uses{def:mixed_transfer, def:mpv_overlap}
-    For normalized tensors $A, B$ of bond dimension~$D \ge 1$,
+    For tensors $A, B$ of bond dimension~$D \ge 1$,
     \[
         O_{AB}(N)
         =
@@ -241,7 +246,7 @@ a block embedding of a mixed-transfer eigenvector.
     Theorem~\ref{thm:eigenvalue_bound}.
 \end{proof}
 
-\begin{theorem}[Modulus-one eigenvalue implies gauge-phase equivalence]%
+\begin{theorem}[Spectral radius $\ge 1$ implies gauge-phase equivalence]%
     \label{thm:modulus_one_gauge}
     \lean{MPSTensor.modulus_one_eigenvalue_implies_gauge}
     \leanok
@@ -414,9 +419,15 @@ canonical-form separation arguments.
     Theorem~\ref{thm:qpf}.
 \end{remark}
 
-\section{Primitive overlap convergence}
+\section{Primitive overlap convergence (spectral-gap form)}
 
-\begin{theorem}[Trace of powers converges to $1$]\label{thm:trace_pow_one}
+The theorems in this section are stated directly in terms of the
+complementary map $E - P$. This is the analytic form needed for the later
+overlap argument.
+For primitive normalized transfer maps, Chapter~\ref{ch:channels} supplies
+this spectral-gap input under explicit hypotheses.
+
+\begin{theorem}[Complementary spectral gap implies trace convergence to $1$]\label{thm:trace_pow_one}
     \lean{MPSTensor.linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one}
     \leanok
     \uses{def:fixed_point_proj, def:trace_preserving}
@@ -441,7 +452,7 @@ canonical-form separation arguments.
     we have $\Tr(P) = \frac{\tr(\rho)}{\tr(\rho)} = 1$.
 \end{proof}
 
-\begin{theorem}[Primitive overlap convergence]\label{thm:primitive_overlap}
+\begin{theorem}[Self-overlap convergence from a complementary spectral gap]\label{thm:primitive_overlap}
     \lean{MPSTensor.mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one}
     \leanok
     \uses{def:transfer_map, def:fixed_point_proj, def:mpv_overlap}

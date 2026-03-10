@@ -190,8 +190,8 @@ and~\cite{Cirac2021Matrix}.
 \end{remark}
 
 \begin{remark}[Normal-canonical companion]\label{rem:normal_cf_companion}
-    Definition~\ref{def:is_canonical_form} is the legacy injective predicate.
-    The D1 route instead uses the normal canonical form predicate from
+    Definition~\ref{def:is_canonical_form} is the block-injective predicate.
+    The normal-canonical route instead uses
     Definition~\ref{def:is_normal_canonical_form}: injectivity and the explicit
     self-overlap hypothesis are replaced by irreducibility, TP normalization,
     and primitive transfer maps. Theorem~\ref{thm:ncf_overlap_tendsto_one}
@@ -216,12 +216,13 @@ and~\cite{Cirac2021Matrix}.
 \begin{lemma}[Block separation core]\label{lem:block_sep_core}
     \lean{MPSTensor.block_separation_core}
     \leanok
-    \uses{def:is_canonical_form}
-    Under the hypotheses of the canonical form predicate
-    (strict ordering, TP normalization, self-overlap convergence),
-    if $\sum_k \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
+    \uses{def:is_canonical_form, def:injective}
+    Let $((\mu_k), (A_k))$ satisfy the canonical form predicate,
+    and let $(B_k)$ be injective tensors satisfying the same TP
+    normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$.
+    If $\sum_k \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
     for all $N,\sigma$,
-    then $A_k$ and $B_k$ generate the same MPV for each~$k$.
+    then each pair $(A_k, B_k)$ generates the same MPV family.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -254,39 +255,20 @@ and~\cite{Cirac2021Matrix}.
 
 \begin{proof}
     \leanok
-    \uses{thm:overlap_decay, thm:overlap_decay_rect,
-          thm:proportional_ft}
-    By induction on the number of blocks $r$.
-
-    \textbf{Base case} ($r = 1$):
-    the summed identity
-    $\mu_1^N (V^{(N)}(A_1)_\sigma - V^{(N)}(B_1)_\sigma) = 0$
-    and $\mu_1 \neq 0$ give $A_1$ and $B_1$ same MPV.
-
-    \textbf{Inductive step} ($r \ge 2$):
-    the leading block~$0$ has the largest $|\mu_0|$.
-    Taking overlaps with a test tensor $A_0$ and using
-    the spectral gap (Theorems~\ref{thm:overlap_decay}
-    and~\ref{thm:overlap_decay_rect}), the cross-overlap
-    contributions from non-leading blocks decay to zero.
-    This shows $O_{A_0 A_0}(N) - O_{A_0 B_0}(N) \to 0$,
-    and since $O_{A_0 A_0}(N) \to 1$ (by the primitivity
-    hypothesis), the proportional FT
-    (Theorem~\ref{thm:proportional_ft}) gives
-    $A_0$ and $B_0$ gauge-phase equivalent,
-    hence same MPV.
-
-    Peeling off the leading block and dividing by $\mu_0^N$,
-    the induction hypothesis applies to the remaining $r-1$
-    blocks.
-
+    \uses{lem:block_sep_core}
+    Apply Lemma~\ref{lem:block_sep_core} to the identity obtained from the
+    equality of the two block-diagonal MPV families.
+    The canonical form predicate supplies injectivity, TP normalization,
+    strict nonzero weights, and self-overlap convergence for $(A_k)$, while
+    the hypotheses on $(B_k)$ supply the comparison injectivity and
+    TP normalization.
 \end{proof}
 
 \begin{theorem}[Block separation from normal canonical form]\label{thm:block_sep_normal}
     \lean{MPSTensor.per_block_sameMPV_of_normal_canonical_form}\leanok
     \uses{def:is_normal_canonical_form}
     Let $((\mu_k), (A_k))$ satisfy the normal canonical form predicate,
-    and let $(B_k)$ be irreducible tensors satisfying the same TP
+    and let $(B_k)$ be irreducible tensors of the same bond dimensions, satisfying the same TP
     normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$.
     If the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
@@ -297,26 +279,29 @@ and~\cite{Cirac2021Matrix}.
 \begin{proof}\leanok
     \uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge}
     The proof follows the same peeling argument as
-    Theorem~\ref{thm:block_sep}. The only change is in the spectral step:
-    injectivity is replaced by irreducibility plus TP normalization, and
-    Theorem~\ref{thm:ncf_overlap_tendsto_one} supplies the diagonal overlap
-    limit needed to identify the leading block.
+    Theorem~\ref{thm:block_sep}. Theorem~\ref{thm:ncf_overlap_tendsto_one}
+    replaces the explicit self-overlap hypothesis on the leading block, and
+    Theorem~\ref{thm:nt_modulus_one_gauge} identifies the leading comparison
+    block from the resulting nondecaying mixed overlap.
+    Since both block families already use the same dimension function,
+    the conclusion is direct per-block same MPV.
 \end{proof}
 
-\begin{theorem}[Canonical form fundamental theorem]\label{thm:ft_canonical}
+\begin{theorem}[Canonical form fundamental theorem, same-structure version]\label{thm:ft_canonical}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm}
     \leanok
-    \uses{def:is_canonical_form}
-    Under the hypotheses of Theorem~\ref{thm:block_sep},
-    there exist a permutation $\sigma$ and per-block gauge
-    matrices $X_k$ such that
-    $B_k^i = X_k A_{\sigma(k)}^i X_k^{-1}$.
+    \uses{def:is_canonical_form, def:gauge_equiv, def:tensor_from_blocks}
+    Under the hypotheses of Theorem~\ref{thm:block_sep}, each pair
+    $(A_k, B_k)$ is gauge equivalent. Hence the block-diagonal tensors
+    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
+    are gauge equivalent.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:block_sep, thm:per_block_gauge}
-    Theorem~\ref{thm:block_sep} gives per-block same-MPV.
+    Theorem~\ref{thm:block_sep} gives per-block same MPV.
     Theorem~\ref{thm:per_block_gauge} converts this to
-    per-block gauge equivalence with permutation.
+    per-block gauge equivalence and then to global gauge equivalence
+    of the block-diagonal tensors.
 \end{proof}
