@@ -93,6 +93,159 @@ def IsIrreducibleOnCorner {D : ℕ} (P : MatrixAlg D) (T : MatrixEnd D) : Prop :
 
 namespace MPSTensor
 
+private noncomputable def minEigenvalue {D : ℕ} [Nonempty (Fin D)]
+    {H : MatrixAlg D} (hH : H.IsHermitian) : ℝ :=
+  (Finset.univ.image hH.eigenvalues).min' (Finset.Nonempty.image Finset.univ_nonempty _)
+
+private lemma minEigenvalue_le {D : ℕ} [Nonempty (Fin D)]
+    {H : MatrixAlg D} (hH : H.IsHermitian) (i : Fin D) :
+    minEigenvalue hH ≤ hH.eigenvalues i :=
+  Finset.min'_le _ _ (Finset.mem_image.mpr ⟨i, Finset.mem_univ _, rfl⟩)
+
+private lemma diagonal_sub_smul_one {D : ℕ} (v : Fin D → ℝ) (c : ℝ) :
+    Matrix.diagonal (fun j => (↑(v j) : ℂ)) - (↑c : ℂ) • (1 : MatrixAlg D) =
+      Matrix.diagonal (fun j => (↑(v j - c) : ℂ)) := by
+  ext i j
+  simp [Matrix.diagonal_apply, Matrix.smul_apply, Matrix.one_apply]
+  split <;> simp
+
+private lemma hermitian_sub_scalar_spectral
+    {D : ℕ} {H : MatrixAlg D} (hH : H.IsHermitian) (c : ℝ) :
+    H - (↑c : ℂ) • 1 =
+      (↑hH.eigenvectorUnitary : MatrixAlg D) *
+      Matrix.diagonal (fun j => (↑(hH.eigenvalues j - c) : ℂ)) *
+      (↑hH.eigenvectorUnitary : MatrixAlg D)ᴴ := by
+  set U : MatrixAlg D := ↑hH.eigenvectorUnitary
+  have hUU : U * Uᴴ = 1 := by
+    simpa [U] using eig_mul_conj hH
+  have h_cI : (↑c : ℂ) • (1 : MatrixAlg D) = U * ((↑c : ℂ) • 1) * Uᴴ := by
+    calc
+      (↑c : ℂ) • (1 : MatrixAlg D) = (↑c : ℂ) • (U * Uᴴ) := by rw [hUU]
+      _ = U * ((↑c : ℂ) • 1) * Uᴴ := by
+          rw [Matrix.mul_smul, Matrix.mul_one, smul_mul_assoc]
+  calc
+    H - (↑c : ℂ) • 1
+        = U * Matrix.diagonal (fun j => ↑(hH.eigenvalues j)) * Uᴴ -
+            U * ((↑c : ℂ) • 1) * Uᴴ := by
+              conv_lhs =>
+                rw [spectral_decomp_eq hH]
+                rw [h_cI]
+    _ = U * (Matrix.diagonal (fun j => ↑(hH.eigenvalues j)) - (↑c : ℂ) • 1) * Uᴴ := by
+          noncomm_ring
+    _ = U * Matrix.diagonal (fun j => ↑(hH.eigenvalues j - c)) * Uᴴ := by
+          congr 1
+          congr 1
+          exact diagonal_sub_smul_one hH.eigenvalues c
+
+private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
+    {r D : ℕ} [NeZero D]
+    (K : Fin r → MatrixAlg D)
+    (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
+    (hIrr : IsIrreducibleMap (transferMap (d := r) (D := D) K))
+    (H : MatrixAlg D) (hH : H.IsHermitian)
+    (hfix : transferMap (d := r) (D := D) K H = H) :
+    ∃ c : ℂ, H = c • 1 := by
+  classical
+  haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+  set c0 : ℝ := minEigenvalue hH
+  set U : MatrixAlg D := (↑hH.eigenvectorUnitary : MatrixAlg D)
+  have hU_unit : IsUnit U := by
+    apply (Matrix.isUnit_iff_isUnit_det U).2
+    simpa [U] using Matrix.UnitaryGroup.det_isUnit hH.eigenvectorUnitary
+  have hshift_eq :
+      H - (c0 : ℂ) • 1 =
+        U * Matrix.diagonal (fun i : Fin D => (↑(hH.eigenvalues i - c0) : ℂ)) * Uᴴ := by
+    simpa [U] using hermitian_sub_scalar_spectral hH c0
+  have hshift_psd : (H - (c0 : ℂ) • 1).PosSemidef := by
+    rw [hshift_eq]
+    have hdiag_psd :
+        (Matrix.diagonal (fun i : Fin D => (↑(hH.eigenvalues i - c0) : ℂ))).PosSemidef := by
+      rw [Matrix.posSemidef_diagonal_iff]
+      intro i
+      exact_mod_cast sub_nonneg.mpr (minEigenvalue_le hH i)
+    exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hU_unit).2 hdiag_psd
+  have hone_fix : transferMap (d := r) (D := D) K (1 : MatrixAlg D) = 1 := by
+    simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap,
+      KadisonSchwarz.IsUnitalKraus] using hUnital
+  have hshift_fix :
+      transferMap (d := r) (D := D) K (H - (c0 : ℂ) • 1) = H - (c0 : ℂ) • 1 := by
+    calc
+      transferMap (d := r) (D := D) K (H - (c0 : ℂ) • 1)
+          = transferMap (d := r) (D := D) K H - (c0 : ℂ) • transferMap (d := r) (D := D) K 1 := by
+              simpa using (transferMap (d := r) (D := D) K).map_sub H ((c0 : ℂ) • (1 : MatrixAlg D))
+      _ = H - (c0 : ℂ) • 1 := by simp [hfix, hone_fix]
+  have hone_psd : (1 : MatrixAlg D).PosSemidef := by
+    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
+  rcases posSemidef_fixedPoint_unique_of_irreducible (A := K) hIrr
+      (1 : MatrixAlg D) (H - (c0 : ℂ) • 1) hone_psd one_ne_zero hshift_psd hone_fix hshift_fix with
+    ⟨d, hd⟩
+  refine ⟨d + c0, ?_⟩
+  calc
+    H = (H - (c0 : ℂ) • 1) + (c0 : ℂ) • 1 := by abel
+    _ = d • 1 + (c0 : ℂ) • 1 := by rw [hd]
+    _ = (d + c0) • 1 := by simp [add_smul]
+
+private theorem fixed_eq_scalar_of_irreducible_unital
+    {r D : ℕ} [NeZero D]
+    (K : Fin r → MatrixAlg D)
+    (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
+    (hIrr : IsIrreducibleMap (transferMap (d := r) (D := D) K))
+    (X : MatrixAlg D)
+    (hfix : transferMap (d := r) (D := D) K X = X) :
+    ∃ c : ℂ, X = c • 1 := by
+  have hfix_map : Kraus.map K X = X := by
+    simpa [Kraus.map, MPSTensor.transferMap_apply] using hfix
+  have hfix_star_map : Kraus.map K Xᴴ = Xᴴ := by
+    calc
+      Kraus.map K Xᴴ = (Kraus.map K X)ᴴ := by
+        simpa using (Kraus.map_conjTranspose K X).symm
+      _ = Xᴴ := by simp [hfix_map]
+  have hfix_star : transferMap (d := r) (D := D) K Xᴴ = Xᴴ := by
+    simpa [Kraus.map, MPSTensor.transferMap_apply] using hfix_star_map
+  have hHerm_fix : transferMap (d := r) (D := D) K (X + Xᴴ) = X + Xᴴ := by
+    calc
+      transferMap (d := r) (D := D) K (X + Xᴴ)
+          = transferMap (d := r) (D := D) K X + transferMap (d := r) (D := D) K Xᴴ := by
+              simpa using (transferMap (d := r) (D := D) K).map_add X Xᴴ
+      _ = X + Xᴴ := by simp [hfix, hfix_star]
+  have hSkew_fix :
+      transferMap (d := r) (D := D) K (Complex.I • (X - Xᴴ)) = Complex.I • (X - Xᴴ) := by
+    calc
+      transferMap (d := r) (D := D) K (Complex.I • (X - Xᴴ))
+          = Complex.I • transferMap (d := r) (D := D) K (X - Xᴴ) := by
+              simpa using (transferMap (d := r) (D := D) K).map_smul Complex.I (X - Xᴴ)
+      _ = Complex.I • (transferMap (d := r) (D := D) K X - transferMap (d := r) (D := D) K Xᴴ) := by
+              simpa using congrArg (fun M => Complex.I • M)
+                ((transferMap (d := r) (D := D) K).map_sub X Xᴴ)
+      _ = Complex.I • (X - Xᴴ) := by simp [hfix, hfix_star]
+  have hHerm_herm : (X + Xᴴ).IsHermitian := by
+    simpa [Matrix.IsHermitian, add_comm]
+  have hSkew_herm : (Complex.I • (X - Xᴴ)).IsHermitian := by
+    simpa [Matrix.IsHermitian, sub_eq_add_neg, add_comm]
+  rcases hermitian_fixed_eq_scalar_of_irreducible_unital
+      (K := K) hUnital hIrr (X + Xᴴ) hHerm_herm hHerm_fix with ⟨a, ha⟩
+  rcases hermitian_fixed_eq_scalar_of_irreducible_unital
+      (K := K) hUnital hIrr (Complex.I • (X - Xᴴ)) hSkew_herm hSkew_fix with ⟨b, hb⟩
+  refine ⟨(1 / 2 : ℂ) * (a - Complex.I * b), ?_⟩
+  have hrecon :
+      (X + Xᴴ) - Complex.I • (Complex.I • (X - Xᴴ)) = (2 : ℂ) • X := by
+    calc
+      (X + Xᴴ) - Complex.I • (Complex.I • (X - Xᴴ)) = (X + Xᴴ) + (X - Xᴴ) := by
+            simp [sub_eq_add_neg, smul_smul]
+            abel
+      _ = (2 : ℂ) • X := by rfl
+  calc
+    X = (1 / 2 : ℂ) • ((2 : ℂ) • X) := by simp
+    _ = (1 / 2 : ℂ) • ((X + Xᴴ) - Complex.I • (Complex.I • (X - Xᴴ))) := by rw [← hrecon]
+    _ = (1 / 2 : ℂ) • ((a • (1 : MatrixAlg D)) - Complex.I • (b • (1 : MatrixAlg D))) := by
+          rw [ha, hb]
+    _ = ((1 / 2 : ℂ) * (a - Complex.I * b)) • (1 : MatrixAlg D) := by
+          ext i j
+          by_cases hij : i = j
+          · subst hij
+            simp [sub_eq_add_neg, mul_comm, mul_left_comm]
+          · simp [hij]
+
 section PeripheralUnitary
 
 /-- A peripheral eigenvalue of an irreducible unital Schwarz transfer map admits a unitary
@@ -112,7 +265,108 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
     (hγ : γ ∈ peripheralEigenvalues (transferMap (d := r) (D := D) K)) :
     ∃ U : Matrix.unitaryGroup (Fin D) ℂ,
       transferMap (d := r) (D := D) K (U : MatrixAlg D) = γ • (U : MatrixAlg D) := by
-  sorry
+  classical
+  haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+  rcases hγ with ⟨hγ_eig, hγ_norm⟩
+  rcases hγ_eig.exists_hasEigenvector with ⟨X, hX_eigvec⟩
+  have hX_mem : X ∈ Module.End.eigenspace (transferMap (d := r) (D := D) K) γ :=
+    (Module.End.hasEigenvector_iff.mp hX_eigvec).1
+  have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX_eigvec).2
+  have hEig_transfer : transferMap (d := r) (D := D) K X = γ • X :=
+    (Module.End.mem_eigenspace_iff).1 hX_mem
+  have hEig_map : Kraus.map K X = γ • X := by
+    simpa [Kraus.map, MPSTensor.transferMap_apply] using hEig_transfer
+  have hUnital' : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using hUnital
+  have hKS_map :
+      Kraus.map K (Xᴴ * X) = (Kraus.map K X)ᴴ * Kraus.map K X :=
+    Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
+      K hUnital' hρ hρfix X γ hEig_map hγ_norm
+  have hγ_star_mul : star γ * γ = 1 := by
+    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
+    simp [Complex.normSq_eq_norm_sq, hγ_norm]
+  have hγ_starRing_mul : (starRingEnd ℂ) γ * γ = 1 := by
+    simpa [Complex.star_def] using hγ_star_mul
+  have hXX_fix_map : Kraus.map K (Xᴴ * X) = Xᴴ * X := by
+    calc
+      Kraus.map K (Xᴴ * X) = (Kraus.map K X)ᴴ * Kraus.map K X := hKS_map
+      _ = (γ • X)ᴴ * (γ • X) := by simp [hEig_map]
+      _ = ((starRingEnd ℂ) γ * γ) • (Xᴴ * X) := by
+            simp [conjTranspose_smul, smul_smul, mul_comm]
+      _ = Xᴴ * X := by simp [hγ_starRing_mul]
+  have hXX_fix : transferMap (d := r) (D := D) K (Xᴴ * X) = Xᴴ * X := by
+    simpa [Kraus.map, MPSTensor.transferMap_apply] using hXX_fix_map
+  have hXX_psd : (Xᴴ * X).PosSemidef := by
+    simpa using Matrix.posSemidef_conjTranspose_mul_self X
+  have hXX_ne : Xᴴ * X ≠ 0 := by
+    intro h
+    apply hX_ne
+    exact Matrix.conjTranspose_mul_self_eq_zero.mp h
+  have hone_psd : (1 : MatrixAlg D).PosSemidef := by
+    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
+  have hone_fix : transferMap (d := r) (D := D) K (1 : MatrixAlg D) = 1 := by
+    simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap,
+      KadisonSchwarz.IsUnitalKraus] using hUnital
+  rcases posSemidef_fixedPoint_unique_of_irreducible (A := K) hIrr
+      (1 : MatrixAlg D) (Xᴴ * X) hone_psd one_ne_zero hXX_psd hone_fix hXX_fix with ⟨c, hXX_scalar⟩
+  have hc_ne0 : c ≠ 0 := by
+    intro hc0
+    apply hXX_ne
+    simp [hXX_scalar, hc0]
+  have hc_nonneg : 0 ≤ c := by
+    have hscalar_psd : (c • (1 : MatrixAlg D)).PosSemidef := by
+      simpa [hXX_scalar] using hXX_psd
+    have hdiag_psd : (Matrix.diagonal (fun _ : Fin D => c)).PosSemidef := by
+      simpa [Matrix.smul_one_eq_diagonal] using hscalar_psd
+    have hdiag_nonneg := (Matrix.posSemidef_diagonal_iff).1 hdiag_psd
+    exact hdiag_nonneg ⟨0, NeZero.pos D⟩
+  have hc_eq_real : c = (c.re : ℂ) := by
+    exact Complex.ext rfl (by simpa using (Complex.nonneg_iff.mp hc_nonneg).2.symm)
+  have hcre_nonneg : 0 ≤ c.re := (Complex.nonneg_iff.mp hc_nonneg).1
+  have hcre_ne0 : c.re ≠ 0 := by
+    intro h0
+    apply hc_ne0
+    calc
+      c = (c.re : ℂ) := hc_eq_real
+      _ = 0 := by simp [h0]
+  have hcre_pos : 0 < c.re := lt_of_le_of_ne hcre_nonneg (Ne.symm hcre_ne0)
+  set a : ℂ := (Real.sqrt c.re : ℂ)
+  have ha_ne0 : a ≠ 0 := by
+    have hsqrt_ne : ((Real.sqrt c.re : ℂ)) ≠ 0 := by
+      exact_mod_cast Real.sqrt_ne_zero'.mpr hcre_pos
+    simpa [a] using hsqrt_ne
+  have hstar_a : star a = a := by
+    simp [a]
+  have hstar_a_inv : (starRingEnd ℂ) a⁻¹ = a⁻¹ := by
+    rw [map_inv₀]
+    simpa [Complex.star_def] using hstar_a
+  have hstar_a_inv' : star a⁻¹ = a⁻¹ := by
+    simpa [Complex.star_def] using hstar_a_inv
+  have hc_eq_sq : c = a * a := by
+    calc
+      c = (c.re : ℂ) := hc_eq_real
+      _ = (((Real.sqrt c.re) ^ 2 : ℝ) : ℂ) := by
+            simp [Real.sq_sqrt hcre_nonneg]
+      _ = a * a := by
+            rw [pow_two]
+            simp [a]
+  refine ⟨⟨a⁻¹ • X, by
+    rw [Matrix.mem_unitaryGroup_iff']
+    calc
+      (a⁻¹ • X)ᴴ * (a⁻¹ • X) = ((a⁻¹ * a⁻¹) * c) • (1 : MatrixAlg D) := by
+            rw [conjTranspose_smul, smul_mul_assoc, mul_smul_comm, smul_smul, hXX_scalar, smul_smul,
+              hstar_a_inv']
+      _ = 1 := by
+            have hscalar : ((a⁻¹ * a⁻¹) * c : ℂ) = 1 := by
+              calc
+                (a⁻¹ * a⁻¹) * c = (a⁻¹ * a⁻¹) * (a * a) := by rw [hc_eq_sq]
+                _ = 1 := by field_simp [ha_ne0]
+            simpa [hscalar]⟩, ?_⟩
+  calc
+    transferMap (d := r) (D := D) K (a⁻¹ • X) = a⁻¹ • transferMap (d := r) (D := D) K X := by
+          simp
+    _ = a⁻¹ • (γ • X) := by rw [hEig_transfer]
+    _ = γ • (a⁻¹ • X) := by simp [smul_smul, mul_comm]
 
 /-- Powers of a peripheral unitary remain peripheral eigenvectors. -/
 theorem map_powers_of_peripheral_unitary
@@ -167,7 +421,86 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
     ∃ U : Matrix.unitaryGroup (Fin D) ℂ,
       transferMap (d := r) (D := D) K (U : MatrixAlg D) = γ • (U : MatrixAlg D) ∧
       ((U : MatrixAlg D) ^ m = 1) := by
-  sorry
+  classical
+  haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+  obtain ⟨U, hU⟩ :=
+    exists_peripheral_unitary_of_irreducible_schwarz
+      (K := K) hUnital ρ hρ hρfix hIrr hγ
+  have hPow :
+      ∀ k : ℕ,
+        transferMap (d := r) (D := D) K ((U : MatrixAlg D) ^ k) =
+          γ ^ k • ((U : MatrixAlg D) ^ k) :=
+    map_powers_of_peripheral_unitary
+      (K := K) hUnital ρ hρ hρfix hγ U hU
+  have hUm_fix :
+      transferMap (d := r) (D := D) K ((U : MatrixAlg D) ^ m) = (U : MatrixAlg D) ^ m := by
+    calc
+      transferMap (d := r) (D := D) K ((U : MatrixAlg D) ^ m)
+          = γ ^ m • ((U : MatrixAlg D) ^ m) := hPow m
+      _ = (U : MatrixAlg D) ^ m := by simp [hγprim.pow_eq_one]
+  rcases fixed_eq_scalar_of_irreducible_unital
+      (K := K) hUnital hIrr ((U : MatrixAlg D) ^ m) hUm_fix with ⟨α, hUm_scalar⟩
+  have hUm_unitary : (((U : MatrixAlg D) ^ m)ᴴ * ((U : MatrixAlg D) ^ m)) = 1 := by
+    simpa using Matrix.UnitaryGroup.star_mul_self (U ^ m)
+  have hα_unit_mul : α * (starRingEnd ℂ) α = 1 := by
+    let i0 : Fin D := ⟨0, NeZero.pos D⟩
+    have hscalar_mat : ((α • (1 : MatrixAlg D))ᴴ * (α • (1 : MatrixAlg D)) : MatrixAlg D) = 1 := by
+      simpa [hUm_scalar] using hUm_unitary
+    have hentry := congrFun (congrFun hscalar_mat i0) i0
+    simpa using hentry
+  have hα_unit : star α * α = 1 := by
+    simpa [Complex.star_def, mul_comm] using hα_unit_mul
+  have hα_sq : ‖α‖ ^ 2 = 1 := by
+    have hnormSqC : (↑(Complex.normSq α) : ℂ) = 1 := by
+      calc
+        (↑(Complex.normSq α) : ℂ) = star α * α := by
+          rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
+        _ = 1 := hα_unit
+    have hnormSq : Complex.normSq α = 1 := by
+      exact_mod_cast hnormSqC
+    simpa [Complex.normSq_eq_norm_sq] using hnormSq
+  have hα_norm : ‖α‖ = 1 := by
+    have hnonneg : 0 ≤ ‖α‖ := norm_nonneg α
+    nlinarith
+  set β : ℂ := α⁻¹ ^ (m⁻¹ : ℂ)
+  have hβm : β ^ m = α⁻¹ := by
+    simpa [β] using (Complex.cpow_nat_inv_pow (α⁻¹) (NeZero.ne m))
+  have hβ_norm_pow : ‖β‖ ^ m = 1 := by
+    calc
+      ‖β‖ ^ m = ‖β ^ m‖ := by rw [norm_pow]
+      _ = ‖α⁻¹‖ := by simp [hβm]
+      _ = 1 := by simp [hα_norm]
+  have hβ_norm : ‖β‖ = 1 := by
+    exact (pow_eq_one_iff_of_nonneg (norm_nonneg β) (NeZero.ne m)).1 hβ_norm_pow
+  have hβ_unit : star β * β = 1 := by
+    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
+    simp [Complex.normSq_eq_norm_sq, hβ_norm]
+  have hβ_starRing_mul : (starRingEnd ℂ) β * β = 1 := by
+    simpa [Complex.star_def] using hβ_unit
+  have hU_star_mul : ((U : MatrixAlg D)ᴴ * (U : MatrixAlg D)) = 1 :=
+    Matrix.UnitaryGroup.star_mul_self U
+  refine ⟨⟨β • (U : MatrixAlg D), by
+    rw [Matrix.mem_unitaryGroup_iff']
+    calc
+      (β • (U : MatrixAlg D))ᴴ * (β • (U : MatrixAlg D)) =
+          ((starRingEnd ℂ) β * β) • ((U : MatrixAlg D)ᴴ * (U : MatrixAlg D)) := by
+            simp [conjTranspose_smul, smul_smul, mul_comm]
+      _ = 1 := by rw [hβ_starRing_mul, hU_star_mul]; simp⟩, ?_, ?_⟩
+  · calc
+      transferMap (d := r) (D := D) K (β • (U : MatrixAlg D))
+          = β • transferMap (d := r) (D := D) K (U : MatrixAlg D) := by simp
+      _ = β • (γ • (U : MatrixAlg D)) := by rw [hU]
+      _ = γ • (β • (U : MatrixAlg D)) := by simp [smul_smul, mul_comm]
+  · calc
+      (β • (U : MatrixAlg D)) ^ m = β ^ m • ((U : MatrixAlg D) ^ m) := by
+            simpa using smul_pow β (U : MatrixAlg D) m
+      _ = β ^ m • (α • (1 : MatrixAlg D)) := by rw [hUm_scalar]
+      _ = ((β ^ m) * α) • (1 : MatrixAlg D) := by rw [smul_smul]
+      _ = 1 := by
+            have hα_ne0 : α ≠ 0 := by
+              intro h0
+              simp [h0] at hα_unit
+            simp [hβm, hα_ne0]
 
 end PeripheralUnitary
 
