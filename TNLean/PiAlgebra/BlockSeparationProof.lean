@@ -10,6 +10,15 @@ import Mathlib.LinearAlgebra.Vandermonde
 /-!
 # Block separation proof: from `SameMPV₂` to per-block `SameMPV`
 
+**STATUS: DEPRECATED / VESTIGIAL.** This file contains a `sorry` in
+`per_block_trace_eq_of_summed_blocks` that is **false as stated** (see the counterexample in the
+docstring below). The downstream theorems are never imported by the main build (`TNLean.lean`);
+only `TNLean/Experimental.lean` references this file.
+
+The correct block-separation results are in `TNLean.PiAlgebra.BlockSeparation` and
+`TNLean.PiAlgebra.CanonicalFormSep`, which use `IsCanonicalForm` / `IsNormalCanonicalForm`
+hypotheses to avoid the block-swap issue.
+
 This file proves the block separation theorem under the hypothesis that the
 scaling factors `μ k` are pairwise distinct (injective) and nonzero.
 
