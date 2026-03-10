@@ -39,6 +39,8 @@ private lemma sum_sandwich (L R : Matrix (Fin D) (Fin D) ℂ)
 section SameDimension
 
 set_option maxHeartbeats 1600000 in
+-- This proof is large: it chains gauge transformations, fixed-point uniqueness,
+-- and a Schur decomposition argument simultaneously for two tensor trains.
 private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
@@ -61,7 +63,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     posSemidef_fixedPoint_isPosDef_of_irreducible A hA_irrMap ρA hρA_psd hρA_ne hρA_fix
   have hρB_pd : ρB.PosDef :=
     posSemidef_fixedPoint_isPosDef_of_irreducible B hB_irrMap ρB hρB_psd hρB_ne hρB_fix
-  rcases (Matrix.posDef_iff_eq_conjTranspose_mul_self).1 hρA_pd with
+  rcases CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.1 hρA_pd.isStrictlyPositive with
     ⟨S0A, hS0A_unit, hρA_eq⟩
   let SA : Matrix (Fin D) (Fin D) ℂ := S0Aᴴ
   have hSA_unit : IsUnit SA := by
@@ -75,7 +77,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
       SA * SAᴴ = S0Aᴴ * (S0Aᴴ)ᴴ := by rfl
       _ = S0Aᴴ * S0A := by simp
       _ = ρA := by simpa [Matrix.star_eq_conjTranspose] using hρA_eq.symm
-  rcases (Matrix.posDef_iff_eq_conjTranspose_mul_self).1 hρB_pd with
+  rcases CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.1 hρB_pd.isStrictlyPositive with
     ⟨S0B, hS0B_unit, hρB_eq⟩
   let SB : Matrix (Fin D) (Fin D) ℂ := S0Bᴴ
   have hSB_unit : IsUnit SB := by
@@ -407,8 +409,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     intro N
     calc
       (μ • N) * (μ • N)ᴴ = (((starRingEnd ℂ) μ) * μ) • (N * Nᴴ) := by
-        simp [Matrix.conjTranspose_smul, Matrix.mul_smul, smul_mul_assoc, smul_smul,
-          mul_comm, mul_left_comm, mul_assoc]
+        simp [Matrix.conjTranspose_smul, smul_smul, mul_comm]
       _ = N * Nᴴ := by simp [hμ_starRing_mul]
   have hXXh_fix' : transferMap A' XXh = XXh := by
     have hterm :
@@ -486,19 +487,19 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
         simp [Matrix.mul_assoc, hSAh_mul_inv]
       _ = SA⁻¹ * (c • (SA * SAᴴ)) * (SAᴴ)⁻¹ := hcancel
       _ = c • (SA⁻¹ * (SA * SAᴴ) * (SAᴴ)⁻¹) := by
-        simp [Matrix.mul_assoc, Matrix.mul_smul, smul_mul_assoc]
+        simp [Matrix.mul_assoc]
       _ = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
         simp [Matrix.mul_assoc, hSA_inv_mul, hSAh_mul_inv]
   have hc_ne0 : c ≠ 0 := by
     intro hc0
     apply hXXh_ne
-    simpa [hXXh_scalar, hc0]
+    simp [hXXh_scalar, hc0]
   have hXXh_scalar' : X' * X'ᴴ = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
     simpa [XXh] using hXXh_scalar
   have hX'_right_inv : X' * (c⁻¹ • X'ᴴ) = 1 := by
     calc
       X' * (c⁻¹ • X'ᴴ) = c⁻¹ • (X' * X'ᴴ) := by
-        simp [Matrix.mul_smul]
+        simp
       _ = c⁻¹ • (c • (1 : Matrix (Fin D) (Fin D) ℂ)) := by
         rw [hXXh_scalar']
       _ = 1 := by
@@ -706,9 +707,9 @@ private lemma injective_of_posDef_conjTranspose_mul_self
   by_contra hv0
   have hpos : 0 < star v ⬝ᵥ ((Xᴴ * X) *ᵥ v) := hpd.dotProduct_mulVec_pos hv0
   have hzero : (Xᴴ * X) *ᵥ v = 0 := by
-    have hXh : Xᴴ *ᵥ (X *ᵥ v) = 0 := by simpa [hv]
+    have hXh : Xᴴ *ᵥ (X *ᵥ v) = 0 := by simp [hv]
     simpa [Matrix.mulVec_mulVec] using hXh
-  simpa [hzero] using hpos
+  simp [hzero] at hpos
 
 private lemma dim_le_of_injective_matrix [NeZero D₂]
     (X : Matrix (Fin D₁) (Fin D₂) ℂ)
@@ -754,9 +755,9 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
     posSemidef_fixedPoint_isPosDef_of_irreducible A hIrrA ρA hρA_psd hρA_ne hρA_fix
   have hρB_pd : ρB.PosDef :=
     posSemidef_fixedPoint_isPosDef_of_irreducible B hIrrB ρB hρB_psd hρB_ne hρB_fix
-  rcases (Matrix.posDef_iff_eq_conjTranspose_mul_self).1 hρA_pd with
+  rcases CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.1 hρA_pd.isStrictlyPositive with
     ⟨S0A, hS0A_unit, hρA_eq⟩
-  rcases (Matrix.posDef_iff_eq_conjTranspose_mul_self).1 hρB_pd with
+  rcases CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self.1 hρB_pd.isStrictlyPositive with
     ⟨S0B, hS0B_unit, hρB_eq⟩
   let SA : Matrix (Fin D₁) (Fin D₁) ℂ := S0Aᴴ
   let SB : Matrix (Fin D₂) (Fin D₂) ℂ := S0Bᴴ
@@ -962,7 +963,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
     intro k
     have h22 := congrArg Matrix.conjTranspose (hInter1 k)
     simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
-      Matrix.conjTranspose_smul, starRingEnd_apply, star_star] at h22
+      Matrix.conjTranspose_smul] at h22
     simpa [smul_mul_assoc] using h22
   have hμ_star_mul : star μ * μ = 1 := by
     rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
@@ -978,8 +979,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
     intro N
     calc
       (μ • N) * (μ • N)ᴴ = (((starRingEnd ℂ) μ) * μ) • (N * Nᴴ) := by
-        simp [Matrix.conjTranspose_smul, Matrix.mul_smul, smul_mul_assoc, smul_smul,
-          mul_comm, mul_left_comm, mul_assoc]
+        simp [Matrix.conjTranspose_smul, Matrix.mul_smul, smul_smul, mul_comm]
       _ = N * Nᴴ := by simp [hμ_starRing_mul]
   have hsmul_star_self_mul_conjTranspose :
       ∀ N : Matrix (Fin D₂) (Fin D₁) ℂ,
@@ -988,8 +988,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
     calc
       ((starRingEnd ℂ μ) • N) * (((starRingEnd ℂ μ) • N)ᴴ)
           = (μ * (starRingEnd ℂ μ)) • (N * Nᴴ) := by
-              simp [Matrix.conjTranspose_smul, Matrix.mul_smul, smul_mul_assoc, smul_smul,
-                mul_comm, mul_left_comm, mul_assoc]
+              simp [Matrix.conjTranspose_smul, Matrix.mul_smul, smul_smul]
       _ = N * Nᴴ := by simp [hμ_mul_starRing]
   let σA : Matrix (Fin D₁) (Fin D₁) ℂ := X' * X'ᴴ
   let σB : Matrix (Fin D₂) (Fin D₂) ℂ := X'ᴴ * X'
@@ -1156,7 +1155,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
         simp [Matrix.mul_assoc, hSAh_mul_inv]
       _ = SA⁻¹ * (cA • (SA * SAᴴ)) * (SAᴴ)⁻¹ := hcancel
       _ = cA • (SA⁻¹ * (SA * SAᴴ) * (SAᴴ)⁻¹) := by
-        simp [Matrix.mul_assoc, Matrix.mul_smul, smul_mul_assoc]
+        simp [Matrix.mul_assoc]
       _ = cA • (1 : Matrix (Fin D₁) (Fin D₁) ℂ) := by
         simp [Matrix.mul_assoc, hSA_inv_mul, hSAh_mul_inv]
   have hσB_scalar : σB = cB • (1 : Matrix (Fin D₂) (Fin D₂) ℂ) := by
@@ -1170,7 +1169,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
         simp [Matrix.mul_assoc, hSBh_mul_inv]
       _ = SB⁻¹ * (cB • (SB * SBᴴ)) * (SBᴴ)⁻¹ := hcancel
       _ = cB • (SB⁻¹ * (SB * SBᴴ) * (SBᴴ)⁻¹) := by
-        simp [Matrix.mul_assoc, Matrix.mul_smul, smul_mul_assoc]
+        simp [Matrix.mul_assoc]
       _ = cB • (1 : Matrix (Fin D₂) (Fin D₂) ℂ) := by
         simp [Matrix.mul_assoc, hSB_inv_mul, hSBh_mul_inv]
   have hcA_ne : cA ≠ 0 := by
