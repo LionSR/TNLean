@@ -30,7 +30,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Handoff lemma isolating the remaining bookkeeping after the irreducible block decomposition.
+/-- Handoff lemma isolating the remaining gap after the irreducible block decomposition.
 
 Starting from a fixed irreducible block decomposition of `A`, the remaining assembly tasks are:
 
@@ -38,12 +38,29 @@ Starting from a fixed irreducible block decomposition of `A`, the remaining asse
    Perron--Frobenius rescaling into the block weights;
 2. apply `exists_blockTensor_isPrimitive_pipeline1606` blockwise, choose a common blocking length,
    and reblock all surviving blocks to the same physical dimension;
-3. reorder / merge the resulting weighted blocks so that the final weights are strictly decreasing
+3. **re-decompose** each blocked tensor into primitive irreducible sectors (blocking a periodic
+   irreducible tensor by its period gives `IsPrimitive (transferMap ...)` but NOT necessarily
+   `IsIrreducibleTensor`, since the blocked transfer map `E^p` may be reducible with `p`
+   invariant subspaces);
+4. reorder / merge the resulting weighted blocks so that the final weights are strictly decreasing
    in modulus;
-4. thread the resulting `SameMPV₂` equivalence through blocking and block-diagonal assembly.
+5. thread the resulting `SameMPV₂` equivalence through blocking and block-diagonal assembly.
 
-The theorem below isolates exactly that bookkeeping package. It is the only remaining gap in the
-end-to-end pipeline. -/
+**Known issues with the current statement** (identified 2026-03-10):
+
+* Step (3) is a genuine mathematical gap, not just bookkeeping. After blocking an irreducible
+  tensor with period `p`, the blocked tensor's transfer map `E^p` is primitive
+  (`peripheral eigenvalues = {1}`) but may be **reducible** (with `p` invariant subspaces from
+  the cyclic decomposition). The correct fix is an additional irreducible re-decomposition step
+  after blocking.
+* `StrictAnti (fun k => ‖μ k‖)` requires merging blocks with equal PF radii, which is a
+  nontrivial re-indexing step.
+* Zero-dimensional or all-zero blocks need special handling since
+  `exists_tp_data_of_irreducible_pipeline1606` requires `∃ i, A i ≠ 0`.
+
+Despite these issues, the **downstream FT chain from `IsNormalCanonicalForm` to the final theorem
+is completely sorry-free**. This sorry only affects the "arbitrary tensor → normal canonical form"
+direction. -/
 private theorem exists_blocked_normal_data_of_irreducible_blockDecomp
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
@@ -69,14 +86,15 @@ private theorem exists_blocked_normal_data_of_irreducible_blockDecomp
         (∀ k, μ k ≠ 0) ∧
         (∀ k, 0 < dim k) := by
   /-
-  TODO:
-  * discard zero irreducible blocks (the TP-gauge wrapper assumes a nonzero Kraus operator);
-  * apply `exists_tp_data_of_irreducible_pipeline1606` to each surviving block and record the
-    induced nonzero complex weights;
-  * apply `exists_blockTensor_isPrimitive_pipeline1606` blockwise, choose a common blocking length,
-    and convert the blockwise outputs to a single family over `Fin r`;
-  * thread `SameMPV₂` through gauge equivalence, blocking, and `toTensorFromBlocks`;
-  * reorder / merge blocks so that the final weights satisfy `StrictAnti`.
+  Remaining sub-tasks (see docstring for known issues):
+  1. Handle zero blocks (discard or re-index, with care for N=0 MPV compatibility).
+  2. Apply TP gauge blockwise (`exists_tp_data_of_irreducible_pipeline1606`).
+  3. Common blocking period (`exists_blockTensor_isPrimitive_pipeline1606`).
+  4. **Re-decompose** blocked tensors into primitive irreducible sectors
+     (this is the main mathematical gap — blocking a period-p irreducible tensor gives a
+     reducible transfer map E^p with p invariant subspaces).
+  5. Thread `SameMPV₂` through gauge equivalence, blocking, and `toTensorFromBlocks`.
+  6. Reorder/merge blocks for `StrictAnti` weight ordering.
   -/
   sorry
 
