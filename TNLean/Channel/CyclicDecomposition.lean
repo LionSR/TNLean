@@ -215,7 +215,7 @@ private theorem fixed_eq_scalar_of_irreducible_unital
     calc
       transferMap (d := r) (D := D) K (Complex.I • (X - Xᴴ))
           = Complex.I • transferMap (d := r) (D := D) K (X - Xᴴ) := by
-              simp using (transferMap (d := r) (D := D) K).map_smul Complex.I (X - Xᴴ)
+              simpa using (transferMap (d := r) (D := D) K).map_smul Complex.I (X - Xᴴ)
       _ = Complex.I • (transferMap (d := r) (D := D) K X - transferMap (d := r) (D := D) K Xᴴ) := by
               simpa using congrArg (fun M => Complex.I • M)
                 ((transferMap (d := r) (D := D) K).map_sub X Xᴴ)
@@ -529,7 +529,513 @@ theorem exists_cyclic_projections_of_peripheral_unitary
       (∑ k : Fin m, P k = 1) ∧
       ((U : MatrixAlg D) = ∑ k : Fin m, γ ^ (k : ℕ) • P k) ∧
       (∀ k : Fin m, T (P (k + 1)) = P k) := by
-  sorry
+  classical
+  let invm : ℂ := (↑m : ℂ)⁻¹
+  let oneIdx : ℕ := ((1 : Fin m) : ℕ)
+  let P : Fin m → MatrixAlg D := fun k =>
+    invm • Finset.sum (Finset.range m)
+      (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j))
+  have hm0 : m ≠ 0 := NeZero.ne m
+  have hm_pos : 0 < m := Nat.pos_of_ne_zero hm0
+  have honeIdx_lt : oneIdx < m := by
+    simpa [oneIdx] using ((1 : Fin m).is_lt)
+  have honeIdx_mem : oneIdx ∈ Finset.range m := by
+    simp [honeIdx_lt]
+  have hγ_norm : ‖γ‖ = 1 := Complex.norm_eq_one_of_pow_eq_one hγprim.pow_eq_one hm0
+  have hγ_star_mul : star γ * γ = 1 := by
+    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
+    simp [Complex.normSq_eq_norm_sq, hγ_norm]
+  have hγ_mul_star : γ * star γ = 1 := by
+    simpa [mul_comm] using hγ_star_mul
+  have hγ_star_eq_inv : star γ = γ⁻¹ := by
+    exact eq_inv_of_mul_eq_one_right hγ_mul_star
+  have hγinv_prim : IsPrimitiveRoot (γ⁻¹) m := hγprim.inv
+  have hγpow_mul_starpow (n : ℕ) : γ ^ n * (star γ) ^ n = 1 := by
+    simpa [mul_pow] using congrArg (fun z : ℂ => z ^ n) hγ_mul_star
+  have hstarpow_mul_γpow (n : ℕ) : (star γ) ^ n * γ ^ n = 1 := by
+    simpa [mul_pow] using congrArg (fun z : ℂ => z ^ n) hγ_star_mul
+  have hγ_pow_oneIdx : γ ^ oneIdx = γ := by
+    by_cases hm1 : m = 1
+    · subst hm1
+      simp [oneIdx, IsPrimitiveRoot.one_right_iff.mp hγprim]
+    · have hm_gt : 1 < m := Nat.one_lt_iff_ne_zero_and_ne_one.mpr ⟨hm0, hm1⟩
+      simp [oneIdx, Nat.mod_eq_of_lt hm_gt]
+  have hU_pow_oneIdx : ((U : MatrixAlg D) ^ oneIdx) = (U : MatrixAlg D) := by
+    by_cases hm1 : m = 1
+    · subst hm1
+      have hUeq : (U : MatrixAlg D) = 1 := by simpa using hUm
+      simp [oneIdx, hUeq]
+    · have hm_gt : 1 < m := Nat.one_lt_iff_ne_zero_and_ne_one.mpr ⟨hm0, hm1⟩
+      simp [oneIdx, Nat.mod_eq_of_lt hm_gt]
+  have hsum_powers_fin (x : ℂ) (hxpow : x ^ m = 1) :
+      ∑ k : Fin m, x ^ (k : ℕ) = if x = 1 then (m : ℂ) else 0 := by
+    by_cases hx : x = 1
+    · subst hx
+      rw [if_pos rfl, Fin.sum_univ_eq_sum_range]
+      simp
+    · rw [if_neg hx, Fin.sum_univ_eq_sum_range]
+      have hmul : (Finset.sum (Finset.range m) fun i => x ^ i) * (x - 1) = 0 := by
+        simpa [hxpow] using (geom_sum_mul x m)
+      exact (mul_eq_zero.mp hmul).resolve_right (sub_ne_zero.mpr hx)
+  have hcoeff_sum_proj (j : ℕ) (hj : j < m) :
+      ∑ k : Fin m, ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) = if j = 0 then (m : ℂ) else 0 := by
+    have hpowm : ((((star γ) ^ j : ℂ)) ^ m) = 1 := by
+      calc
+        ((((star γ) ^ j : ℂ)) ^ m) = (star γ : ℂ) ^ (j * m) := by rw [← pow_mul]
+        _ = (star γ : ℂ) ^ (m * j) := by rw [Nat.mul_comm]
+        _ = (((star γ : ℂ) ^ m) ^ j) := by rw [pow_mul]
+        _ = 1 := by rw [hγ_star_eq_inv]; simp [hγprim.pow_eq_one]
+    have hrewrite :
+        ∑ k : Fin m, ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) =
+          ∑ k : Fin m, ((((star γ) ^ j) ^ (k : ℕ) : ℂ)) := by
+      apply Finset.sum_congr rfl
+      intro k hk
+      calc
+        ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) = (star γ : ℂ) ^ ((k : ℕ) * j) := by rw [← pow_mul]
+        _ = (star γ : ℂ) ^ (j * (k : ℕ)) := by rw [Nat.mul_comm]
+        _ = ((((star γ) ^ j) ^ (k : ℕ) : ℂ)) := by rw [pow_mul]
+    rw [hrewrite, hsum_powers_fin ((star γ) ^ j) hpowm]
+    by_cases hj0 : j = 0
+    · subst hj0
+      simp
+    · have hne : ((star γ) ^ j : ℂ) ≠ 1 := by
+        intro hpow
+        have hdvd : m ∣ j := (hγinv_prim.pow_eq_one_iff_dvd j).mp (by simpa [hγ_star_eq_inv] using hpow)
+        exact hj0 (Nat.eq_zero_of_dvd_of_lt hdvd hj)
+      rw [if_neg hne, if_neg hj0]
+  have hcoeff_sum_spec (j : ℕ) (hj : j < m) :
+      ∑ k : Fin m, (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) =
+        if j = oneIdx then (m : ℂ) else 0 := by
+    have hpowm : (γ * (star γ) ^ j) ^ m = 1 := by
+      calc
+        (γ * (star γ) ^ j) ^ m = γ ^ m * ((((star γ) ^ j : ℂ)) ^ m) := by rw [mul_pow]
+        _ = γ ^ m * (((star γ : ℂ) ^ m) ^ j) := by
+              congr 1
+              calc
+                ((((star γ) ^ j : ℂ)) ^ m) = (star γ : ℂ) ^ (j * m) := by rw [← pow_mul]
+                _ = (star γ : ℂ) ^ (m * j) := by rw [Nat.mul_comm]
+                _ = (((star γ : ℂ) ^ m) ^ j) := by rw [pow_mul]
+        _ = 1 := by rw [hγ_star_eq_inv]; simp [hγprim.pow_eq_one]
+    have hrewrite :
+        ∑ k : Fin m, (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) =
+          ∑ k : Fin m, (γ * (star γ) ^ j) ^ (k : ℕ) := by
+      apply Finset.sum_congr rfl
+      intro k hk
+      calc
+        γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))
+            = γ ^ (k : ℕ) * ((((star γ) ^ j) ^ (k : ℕ) : ℂ)) := by
+                congr 1
+                calc
+                  ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) = (star γ : ℂ) ^ ((k : ℕ) * j) := by rw [← pow_mul]
+                  _ = (star γ : ℂ) ^ (j * (k : ℕ)) := by rw [Nat.mul_comm]
+                  _ = ((((star γ) ^ j) ^ (k : ℕ) : ℂ)) := by rw [pow_mul]
+        _ = (γ * (star γ) ^ j) ^ (k : ℕ) := by rw [mul_pow]
+    rw [hrewrite, hsum_powers_fin (γ * (star γ) ^ j) hpowm]
+    by_cases hjeq : j = oneIdx
+    · subst hjeq
+      have hx : γ * (star γ) ^ oneIdx = 1 := by
+        calc
+          γ * (star γ) ^ oneIdx = γ ^ oneIdx * (star γ) ^ oneIdx := by rw [hγ_pow_oneIdx]
+          _ = 1 := hγpow_mul_starpow oneIdx
+      rw [if_pos hx, if_pos rfl]
+    · have hne : γ * (star γ) ^ j ≠ 1 := by
+        intro hx
+        have hpoweq : γ ^ oneIdx = γ ^ j := by
+          calc
+            γ ^ oneIdx = γ := hγ_pow_oneIdx
+            _ = γ * 1 := by simp
+            _ = γ * ((star γ) ^ j * γ ^ j) := by rw [hstarpow_mul_γpow j]
+            _ = (γ * (star γ) ^ j) * γ ^ j := by rw [mul_assoc]
+            _ = 1 * γ ^ j := by rw [hx]
+            _ = γ ^ j := by simp
+        have hidxeq : oneIdx = j := hγprim.injOn_pow honeIdx_mem (by simp [hj]) hpoweq
+        exact hjeq hidxeq.symm
+      rw [if_neg hne, if_neg hjeq]
+  have hbase_cyclic (k : Fin m) : ((star γ) ^ (((k + 1 : Fin m) : ℕ)) : ℂ) * γ = (star γ) ^ (k : ℕ) := by
+    by_cases hk : (k : ℕ) + 1 < m
+    · have hval : (((k + 1 : Fin m) : ℕ)) = (k : ℕ) + 1 := by
+        simp [Fin.val_add, hk, Nat.mod_eq_of_lt hk]
+      rw [hval, pow_succ, mul_assoc, hγ_star_mul]
+      simp
+    · have hk_eq : (k : ℕ) + 1 = m := by
+        have hle : m ≤ (k : ℕ) + 1 := by
+          exact Nat.le_of_not_gt (show ¬ m > (k : ℕ) + 1 by simpa using hk)
+        exact le_antisymm (Nat.succ_le_of_lt k.is_lt) hle
+      have hval0 : (((k + 1 : Fin m) : ℕ)) = 0 := by
+        simp [Fin.val_add, hk_eq, hm0]
+      rw [hval0, pow_zero, one_mul]
+      have hkval : (k : ℕ) = m - 1 := Nat.eq_sub_of_add_eq hk_eq
+      rw [hkval]
+      have hpowm_star : (star γ : ℂ) ^ m = 1 := by
+        rw [hγ_star_eq_inv]
+        simp [hγprim.pow_eq_one]
+      have hmul : (star γ : ℂ) ^ (m - 1) * star γ = 1 := by
+        calc
+          (star γ : ℂ) ^ (m - 1) * star γ = (star γ : ℂ) ^ ((m - 1) + 1) := by
+            simp [pow_succ]
+          _ = 1 := by
+            have hm' : (m - 1) + 1 = m := Nat.sub_add_cancel (Nat.succ_le_of_lt hm_pos)
+            simpa [hm'] using hpowm_star
+      have hpred : (star γ : ℂ) ^ (m - 1) = γ := by
+        calc
+          (star γ : ℂ) ^ (m - 1) = (star γ : ℂ)⁻¹ := eq_inv_of_mul_eq_one_left hmul
+          _ = γ := by rw [hγ_star_eq_inv, inv_inv]
+      simpa using hpred.symm
+  have hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k := by
+    intro k
+    dsimp [P, invm]
+    calc
+      T (((↑m : ℂ)⁻¹) • Finset.sum (Finset.range m)
+          (fun j => ((((star γ) ^ (((k + 1 : Fin m) : ℕ))) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)))
+          = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+              (fun j => ((((star γ) ^ (((k + 1 : Fin m) : ℕ))) ^ j : ℂ)) •
+                T ((U : MatrixAlg D) ^ j)) := by
+              simp [map_sum]
+      _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+            (fun j => (((((star γ) ^ (((k + 1 : Fin m) : ℕ))) ^ j : ℂ) * γ ^ j)) •
+              ((U : MatrixAlg D) ^ j)) := by
+            congr 2
+            ext j
+            rw [hPow j, smul_smul]
+      _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+            (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)) := by
+            congr 2
+            ext j
+            have hcoef :
+                ((((star γ) ^ (((k + 1 : Fin m) : ℕ))) ^ j : ℂ) * γ ^ j) =
+                  ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) := by
+              calc
+                ((((star γ) ^ (((k + 1 : Fin m) : ℕ))) ^ j : ℂ) * γ ^ j)
+                    = ((((star γ) ^ (((k + 1 : Fin m) : ℕ)) : ℂ) * γ) ^ j : ℂ) := by
+                        rw [← mul_pow]
+                _ = ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) := by
+                        rw [hbase_cyclic k]
+            rw [hcoef]
+  have hcoeff_step (k : Fin m) (j : ℕ) :
+      γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ (j + 1) : ℂ)) =
+        ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) := by
+    calc
+      γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ (j + 1) : ℂ))
+          = γ ^ (k : ℕ) * (((star γ) ^ (k : ℕ)) * (((star γ) ^ (k : ℕ)) ^ j)) := by
+              rw [pow_succ']
+      _ = (γ ^ (k : ℕ) * ((star γ) ^ (k : ℕ))) * (((star γ) ^ (k : ℕ)) ^ j) := by
+              rw [mul_assoc]
+      _ = ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) := by
+              rw [hγpow_mul_starpow (k : ℕ)]
+              simp
+  have hcoeff_last (k : Fin m) : ((((star γ) ^ (k : ℕ)) ^ (m - 1) : ℂ)) = γ ^ (k : ℕ) := by
+    have hpowm : ((((star γ) ^ (k : ℕ) : ℂ)) ^ m) = 1 := by
+      calc
+        ((((star γ) ^ (k : ℕ) : ℂ)) ^ m) = (star γ : ℂ) ^ ((k : ℕ) * m) := by rw [← pow_mul]
+        _ = (star γ : ℂ) ^ (m * (k : ℕ)) := by rw [Nat.mul_comm]
+        _ = (((star γ : ℂ) ^ m) ^ (k : ℕ)) := by rw [pow_mul]
+        _ = 1 := by rw [hγ_star_eq_inv]; simp [hγprim.pow_eq_one]
+    have hmul : ((((star γ) ^ (k : ℕ) : ℂ)) ^ (m - 1)) * ((star γ) ^ (k : ℕ)) = 1 := by
+      calc
+        ((((star γ) ^ (k : ℕ) : ℂ)) ^ (m - 1)) * ((star γ) ^ (k : ℕ))
+            = (((star γ) ^ (k : ℕ) : ℂ)) ^ ((m - 1) + 1) := by
+                simp [pow_succ]
+        _ = 1 := by
+            have hm' : (m - 1) + 1 = m := Nat.sub_add_cancel (Nat.succ_le_of_lt hm_pos)
+            simpa [hm'] using hpowm
+    calc
+      ((((star γ) ^ (k : ℕ) : ℂ)) ^ (m - 1)) = (((star γ) ^ (k : ℕ) : ℂ))⁻¹ :=
+        eq_inv_of_mul_eq_one_left hmul
+      _ = γ ^ (k : ℕ) := by
+        rw [hγ_star_eq_inv, inv_pow]
+        simp
+  have hU_left : ∀ k : Fin m, (U : MatrixAlg D) * P k = γ ^ (k : ℕ) • P k := by
+    intro k
+    let a : ℕ → ℂ := fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ))
+    have hm_pred_succ : (m - 1) + 1 = m := Nat.sub_add_cancel (Nat.succ_le_of_lt hm_pos)
+    have hdecomp :
+        Finset.sum (Finset.range (m - 1))
+            (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) + 1 =
+          Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j)) := by
+      simpa [hm_pred_succ, a] using
+        (Finset.sum_range_succ' (fun j : ℕ => a j • ((U : MatrixAlg D) ^ j)) (m - 1)).symm
+    have hfactor :
+        Finset.sum (Finset.range (m - 1))
+            (fun j => (γ ^ (k : ℕ) * a (j + 1)) • ((U : MatrixAlg D) ^ (j + 1))) =
+          γ ^ (k : ℕ) • Finset.sum (Finset.range (m - 1))
+            (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) := by
+      calc
+        Finset.sum (Finset.range (m - 1))
+            (fun j => (γ ^ (k : ℕ) * a (j + 1)) • ((U : MatrixAlg D) ^ (j + 1)))
+            = Finset.sum (Finset.range (m - 1))
+                (fun j => γ ^ (k : ℕ) • (a (j + 1) • ((U : MatrixAlg D) ^ (j + 1)))) := by
+                  apply Finset.sum_congr rfl
+                  intro j hj
+                  rw [smul_smul]
+        _ = γ ^ (k : ℕ) • Finset.sum (Finset.range (m - 1))
+                (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) := by
+                  rw [Finset.smul_sum]
+    dsimp [P, invm]
+    calc
+      (U : MatrixAlg D) * ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j)))
+          = (↑m : ℂ)⁻¹ • ((U : MatrixAlg D) * Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) := by
+                rw [Matrix.mul_smul]
+      _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+            (fun j => a j • ((U : MatrixAlg D) * ((U : MatrixAlg D) ^ j))) := by
+            congr 1
+            simp [Finset.mul_sum, Matrix.mul_add, Matrix.mul_smul, Matrix.mul_assoc]
+      _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+            (fun j => a j • ((U : MatrixAlg D) ^ (j + 1))) := by
+            congr 2
+            ext j
+            rw [pow_succ']
+      _ = (↑m : ℂ)⁻¹ •
+            (Finset.sum (Finset.range (m - 1)) (fun j => a j • ((U : MatrixAlg D) ^ (j + 1))) +
+              a (m - 1) • ((U : MatrixAlg D) ^ m)) := by
+            have hsplit :
+                Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ (j + 1))) =
+                  Finset.sum (Finset.range (m - 1)) (fun j => a j • ((U : MatrixAlg D) ^ (j + 1))) +
+                    a (m - 1) • ((U : MatrixAlg D) ^ m) := by
+              simpa [hm_pred_succ] using
+                (Finset.sum_range_succ (fun j : ℕ => a j • ((U : MatrixAlg D) ^ (j + 1))) (m - 1))
+            rw [hsplit]
+      _ = (↑m : ℂ)⁻¹ •
+            (Finset.sum (Finset.range (m - 1))
+                (fun j => (γ ^ (k : ℕ) * a (j + 1)) • ((U : MatrixAlg D) ^ (j + 1))) +
+              γ ^ (k : ℕ) • (1 : MatrixAlg D)) := by
+            congr 2
+            · apply Finset.sum_congr rfl
+              intro j hj
+              have ha : a j = γ ^ (k : ℕ) * a (j + 1) := by
+                dsimp [a]
+                exact (hcoeff_step k j).symm
+              rw [ha]
+            · change ((((star γ) ^ (k : ℕ)) ^ (m - 1) : ℂ)) • ((U : MatrixAlg D) ^ m) = γ ^ (k : ℕ) • (1 : MatrixAlg D)
+              rw [hcoeff_last k, hUm]
+      _ = (↑m : ℂ)⁻¹ •
+            (γ ^ (k : ℕ) •
+              (Finset.sum (Finset.range (m - 1)) (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) + 1)) := by
+            rw [hfactor, smul_add]
+            simp [smul_smul]
+      _ = (↑m : ℂ)⁻¹ • (γ ^ (k : ℕ) • Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) := by
+            rw [hdecomp]
+      _ = γ ^ (k : ℕ) • ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) := by
+            simp [smul_smul, mul_comm]
+  have hcommUP : ∀ k : Fin m, Commute (U : MatrixAlg D) (P k) := by
+    intro k
+    dsimp [P, invm]
+    refine (Commute.sum_right (Finset.range m)
+      (fun j : ℕ => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j))
+      (U : MatrixAlg D) ?_).smul_right ((↑m : ℂ)⁻¹)
+    intro j hj
+    exact ((Commute.refl (U : MatrixAlg D)).pow_right j).smul_right _
+  have hU_right : ∀ k : Fin m, P k * (U : MatrixAlg D) = γ ^ (k : ℕ) • P k := by
+    intro k
+    rw [← (hcommUP k).eq]
+    exact hU_left k
+  have hPsum : ∑ k : Fin m, P k = 1 := by
+    dsimp [P, invm]
+    calc
+      ∑ k : Fin m, (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+          (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j))
+          = (↑m : ℂ)⁻¹ • ∑ k : Fin m,
+              Finset.sum (Finset.range m) (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)) := by
+                symm
+                rw [Finset.smul_sum]
+      _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+              (fun j => ∑ k : Fin m, ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)) := by
+                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+                rw [Finset.sum_comm]
+      _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+              (fun j => (∑ k : Fin m, ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) • ((U : MatrixAlg D) ^ j)) := by
+                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+                apply Finset.sum_congr rfl
+                intro j hj
+                rw [← Finset.sum_smul]
+      _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+              (fun j => (if j = 0 then (m : ℂ) else 0) • ((U : MatrixAlg D) ^ j)) := by
+                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+                apply Finset.sum_congr rfl
+                intro j hj
+                rw [hcoeff_sum_proj j (Finset.mem_range.mp hj)]
+      _ = (↑m : ℂ)⁻¹ • ((m : ℂ) • ((U : MatrixAlg D) ^ 0)) := by
+            rw [Finset.sum_eq_single 0]
+            · simp
+            · intro j hj hj0
+              simp [hj0]
+            · intro hm
+              exfalso
+              exact hm (by simpa [hm_pos])
+      _ = 1 := by
+            simp [hm0]
+  have hUspec_sum : ∑ k : Fin m, γ ^ (k : ℕ) • P k = (U : MatrixAlg D) := by
+    dsimp [P, invm]
+    calc
+      ∑ k : Fin m, γ ^ (k : ℕ) •
+          ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+            (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)))
+          = (↑m : ℂ)⁻¹ • ∑ k : Fin m,
+              Finset.sum (Finset.range m)
+                (fun j => (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) • ((U : MatrixAlg D) ^ j)) := by
+                  calc
+                    ∑ k : Fin m, γ ^ (k : ℕ) •
+                        ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+                          (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)))
+                        = ∑ k : Fin m, (↑m : ℂ)⁻¹ •
+                            (γ ^ (k : ℕ) • Finset.sum (Finset.range m)
+                              (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j))) := by
+                              apply Finset.sum_congr rfl
+                              intro k hk
+                              simp [smul_smul, mul_comm]
+                    _ = (↑m : ℂ)⁻¹ • ∑ k : Fin m,
+                            γ ^ (k : ℕ) • Finset.sum (Finset.range m)
+                              (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)) := by
+                              symm
+                              rw [Finset.smul_sum]
+                    _ = (↑m : ℂ)⁻¹ • ∑ k : Fin m,
+                            Finset.sum (Finset.range m)
+                              (fun j => (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) • ((U : MatrixAlg D) ^ j)) := by
+                              refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+                              apply Finset.sum_congr rfl
+                              intro k hk
+                              rw [Finset.smul_sum]
+                              apply Finset.sum_congr rfl
+                              intro j hj
+                              rw [smul_smul]
+      _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+              (fun j => ∑ k : Fin m,
+                (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) • ((U : MatrixAlg D) ^ j)) := by
+                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+                rw [Finset.sum_comm]
+      _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+              (fun j => (∑ k : Fin m, γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) •
+                ((U : MatrixAlg D) ^ j)) := by
+                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+                apply Finset.sum_congr rfl
+                intro j hj
+                rw [← Finset.sum_smul]
+      _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+              (fun j => (if j = oneIdx then (m : ℂ) else 0) • ((U : MatrixAlg D) ^ j)) := by
+                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+                apply Finset.sum_congr rfl
+                intro j hj
+                rw [hcoeff_sum_spec j (Finset.mem_range.mp hj)]
+      _ = (↑m : ℂ)⁻¹ • ((m : ℂ) • ((U : MatrixAlg D) ^ oneIdx)) := by
+            rw [Finset.sum_eq_single oneIdx]
+            · simp
+            · intro j hj hj0
+              simp [hj0]
+            · simp [honeIdx_lt]
+      _ = (U : MatrixAlg D) := by
+            simp [hm0, hU_pow_oneIdx]
+  have hpow_inj : ∀ {a b : Fin m}, γ ^ (a : ℕ) = γ ^ (b : ℕ) → a = b := by
+    intro a b hab
+    apply Fin.ext
+    exact hγprim.injOn_pow (by simp [a.is_lt]) (by simp [b.is_lt]) hab
+  have hPmul_zero : ∀ {k l : Fin m}, k ≠ l → P k * P l = 0 := by
+    intro k l hkl
+    have hkEig : (U : MatrixAlg D) * (P k * P l) = γ ^ (k : ℕ) • (P k * P l) := by
+      calc
+        (U : MatrixAlg D) * (P k * P l) = ((U : MatrixAlg D) * P k) * P l := by
+          simp [Matrix.mul_assoc]
+        _ = (γ ^ (k : ℕ) • P k) * P l := by rw [hU_left k]
+        _ = γ ^ (k : ℕ) • (P k * P l) := by
+          simp [smul_mul_assoc, Matrix.mul_assoc]
+    have hlEig : (U : MatrixAlg D) * (P k * P l) = γ ^ (l : ℕ) • (P k * P l) := by
+      calc
+        (U : MatrixAlg D) * (P k * P l) = ((U : MatrixAlg D) * P k) * P l := by
+          simp [Matrix.mul_assoc]
+        _ = (P k * (U : MatrixAlg D)) * P l := by rw [(hcommUP k).eq]
+        _ = P k * ((U : MatrixAlg D) * P l) := by simp [Matrix.mul_assoc]
+        _ = P k * (γ ^ (l : ℕ) • P l) := by rw [hU_left l]
+        _ = γ ^ (l : ℕ) • (P k * P l) := by
+          simp [smul_mul_assoc, Matrix.mul_assoc]
+    have hsub : (γ ^ (k : ℕ) - γ ^ (l : ℕ)) • (P k * P l) = 0 := by
+      calc
+        (γ ^ (k : ℕ) - γ ^ (l : ℕ)) • (P k * P l)
+            = γ ^ (k : ℕ) • (P k * P l) - γ ^ (l : ℕ) • (P k * P l) := by
+                simp [sub_smul]
+        _ = 0 := by rw [← hkEig, ← hlEig]; simp
+    have hneq : γ ^ (k : ℕ) - γ ^ (l : ℕ) ≠ 0 := by
+      refine sub_ne_zero.mpr ?_
+      intro hpow
+      exact hkl (hpow_inj hpow)
+    exact (smul_eq_zero.mp hsub).resolve_left hneq
+  have hPidem : ∀ k : Fin m, P k * P k = P k := by
+    intro k
+    have hsingle : ∑ l : Fin m, P k * P l = P k * P k := by
+      exact Finset.sum_eq_single_of_mem k (Finset.mem_univ k) (by
+        intro l hl hne
+        simpa using hPmul_zero hne.symm)
+    have hEq : P k = P k * P k := by
+      calc
+        P k = P k * (1 : MatrixAlg D) := by simp
+        _ = P k * (∑ l : Fin m, P l) := by rw [hPsum]
+        _ = ∑ l : Fin m, P k * P l := by simp [Finset.mul_sum]
+        _ = P k * P k := hsingle
+    exact hEq.symm
+  have hU_star_left : ∀ k : Fin m, (U : MatrixAlg D) * (P k)ᴴ = γ ^ (k : ℕ) • (P k)ᴴ := by
+    intro k
+    have hstar : (U : MatrixAlg D)ᴴ * (P k)ᴴ = star (γ ^ (k : ℕ)) • (P k)ᴴ := by
+      simpa [Matrix.conjTranspose_mul, Matrix.conjTranspose_smul] using
+        congrArg Matrix.conjTranspose (hU_right k)
+    have hU_mul_star : (U : MatrixAlg D) * (U : MatrixAlg D)ᴴ = 1 := by
+      exact (show (U : MatrixAlg D) * (U : MatrixAlg D)ᴴ = 1 from U.2.2)
+    have hpre : (P k)ᴴ = star (γ ^ (k : ℕ)) • ((U : MatrixAlg D) * (P k)ᴴ) := by
+      calc
+        (P k)ᴴ = (1 : MatrixAlg D) * (P k)ᴴ := by simp
+        _ = ((U : MatrixAlg D) * (U : MatrixAlg D)ᴴ) * (P k)ᴴ := by rw [hU_mul_star]
+        _ = (U : MatrixAlg D) * ((U : MatrixAlg D)ᴴ * (P k)ᴴ) := by simp [Matrix.mul_assoc]
+        _ = (U : MatrixAlg D) * (star (γ ^ (k : ℕ)) • (P k)ᴴ) := by rw [hstar]
+        _ = star (γ ^ (k : ℕ)) • ((U : MatrixAlg D) * (P k)ᴴ) := by rw [Matrix.mul_smul]
+    have hunit : γ ^ (k : ℕ) * star (γ ^ (k : ℕ)) = 1 := by
+      simpa using hγpow_mul_starpow (k : ℕ)
+    have hmain : (U : MatrixAlg D) * (P k)ᴴ = γ ^ (k : ℕ) • (P k)ᴴ := by
+      calc
+        (U : MatrixAlg D) * (P k)ᴴ = (1 : ℂ) • ((U : MatrixAlg D) * (P k)ᴴ) := by simp
+        _ = (γ ^ (k : ℕ) * star (γ ^ (k : ℕ))) • ((U : MatrixAlg D) * (P k)ᴴ) := by rw [← hunit]
+        _ = γ ^ (k : ℕ) • (star (γ ^ (k : ℕ)) • ((U : MatrixAlg D) * (P k)ᴴ)) := by rw [smul_smul]
+        _ = γ ^ (k : ℕ) • (P k)ᴴ := by rw [← hpre]
+    exact hmain
+  have hPmul_star_zero : ∀ {k l : Fin m}, k ≠ l → P l * (P k)ᴴ = 0 := by
+    intro k l hkl
+    have hlEig : (U : MatrixAlg D) * (P l * (P k)ᴴ) = γ ^ (l : ℕ) • (P l * (P k)ᴴ) := by
+      calc
+        (U : MatrixAlg D) * (P l * (P k)ᴴ) = ((U : MatrixAlg D) * P l) * (P k)ᴴ := by
+          simp [Matrix.mul_assoc]
+        _ = (γ ^ (l : ℕ) • P l) * (P k)ᴴ := by rw [hU_left l]
+        _ = γ ^ (l : ℕ) • (P l * (P k)ᴴ) := by
+          simp [smul_mul_assoc, Matrix.mul_assoc]
+    have hkEig : (U : MatrixAlg D) * (P l * (P k)ᴴ) = γ ^ (k : ℕ) • (P l * (P k)ᴴ) := by
+      calc
+        (U : MatrixAlg D) * (P l * (P k)ᴴ) = ((U : MatrixAlg D) * P l) * (P k)ᴴ := by
+          simp [Matrix.mul_assoc]
+        _ = (P l * (U : MatrixAlg D)) * (P k)ᴴ := by rw [(hcommUP l).eq]
+        _ = P l * ((U : MatrixAlg D) * (P k)ᴴ) := by simp [Matrix.mul_assoc]
+        _ = P l * (γ ^ (k : ℕ) • (P k)ᴴ) := by rw [hU_star_left k]
+        _ = γ ^ (k : ℕ) • (P l * (P k)ᴴ) := by
+          simp [smul_mul_assoc, Matrix.mul_assoc]
+    have hsub : (γ ^ (l : ℕ) - γ ^ (k : ℕ)) • (P l * (P k)ᴴ) = 0 := by
+      calc
+        (γ ^ (l : ℕ) - γ ^ (k : ℕ)) • (P l * (P k)ᴴ)
+            = γ ^ (l : ℕ) • (P l * (P k)ᴴ) - γ ^ (k : ℕ) • (P l * (P k)ᴴ) := by
+                simp [sub_smul]
+        _ = 0 := by rw [← hlEig, ← hkEig]; simp
+    have hneq : γ ^ (l : ℕ) - γ ^ (k : ℕ) ≠ 0 := by
+      refine sub_ne_zero.mpr ?_
+      intro hpow
+      exact hkl.symm (hpow_inj hpow)
+    exact (smul_eq_zero.mp hsub).resolve_left hneq
+  have hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k) := by
+    intro k
+    have hstar_eq : (P k)ᴴ = P k * (P k)ᴴ := by
+      calc
+        (P k)ᴴ = (1 : MatrixAlg D) * (P k)ᴴ := by simp
+        _ = (∑ l : Fin m, P l) * (P k)ᴴ := by rw [hPsum]
+        _ = ∑ l : Fin m, P l * (P k)ᴴ := by simp [Finset.sum_mul]
+        _ = P k * (P k)ᴴ := by
+            exact Finset.sum_eq_single_of_mem k (Finset.mem_univ k) (by
+              intro l hl hne
+              simpa using hPmul_star_zero hne.symm)
+    have hself_aux : P k = P k * (P k)ᴴ := by
+      simpa [Matrix.conjTranspose_mul] using congrArg Matrix.conjTranspose hstar_eq
+    refine ⟨hstar_eq.trans hself_aux.symm, hPidem k⟩
+  refine ⟨P, hPproj, hPsum, hUspec_sum.symm, hcyclic⟩
 
 end CyclicProjections
 
@@ -612,7 +1118,7 @@ theorem preserves_corner_pow_of_cyclic_decomp
     ext
     change ((k : ℕ) + (n + 1)) % m = ((((k : ℕ) + n) % m) + 1 % m) % m
     symm
-    simp [Nat.add_assoc] using (Nat.add_mod ((k : ℕ) + n) 1 m)
+    simpa [Nat.add_assoc] using (Nat.add_mod ((k : ℕ) + n) 1 m)
   have hidx_full : ∀ k : Fin m, idx k m = k := by
     intro k
     ext
@@ -738,7 +1244,7 @@ theorem isPrimitive_restriction_of_cyclic_decomp
     ext
     change ((k : ℕ) + (n + 1)) % m = ((((k : ℕ) + n) % m) + 1 % m) % m
     symm
-    simp [Nat.add_assoc] using (Nat.add_mod ((k : ℕ) + n) 1 m)
+    simpa [Nat.add_assoc] using (Nat.add_mod ((k : ℕ) + n) 1 m)
   have hidx_full : ∀ k : Fin m, idx k m = k := by
     intro k
     ext
