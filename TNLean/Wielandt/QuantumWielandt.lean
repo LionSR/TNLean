@@ -9,23 +9,22 @@ import TNLean.Wielandt.CumulativeToWordSpan
 import TNLean.Wielandt.PrimitiveImpliesIrreducible
 
 /-!
-# Quantum Wielandt theorem: IsPrimitive → IsNormal
+# Quantum Wielandt assembly under `PosDef` and aperiodicity
 
-This file assembles the complete quantum Wielandt theorem, chaining together results
-from across the library:
+This file assembles the current conditional primitive-to-normal bridge,
+chaining together results from across the library:
 
 ```
-  IsPrimitiveMPS A ρ  +  ρ.PosDef  +  aperiodicity
-  ──────────────────────────────────────────────────
-  Step 1: IsPrimitiveMPS + PosDef → IsIrreducibleTensor
-          (PrimitiveImpliesIrreducible.lean)
-  Step 2: IsIrreducibleTensor → IsIrreducibleAction
-          (IrreducibleTensorAction.lean)
-  Step 3: IsIrreducibleAction → algSpan A = ⊤
-          (BurnsideTheorem.lean — Burnside/Jacobson density)
-  Step 4: algSpan A = ⊤ + aperiodicity → IsNormal A
-          (CumulativeToWordSpan.lean)
+  IsPrimitiveMPS A ρ + ρ.PosDef + aperiodicity
+    → IsIrreducibleTensor
+    → IsIrreducibleAction
+    → algSpan A = ⊤
+    → IsNormal A
 ```
+
+with the steps implemented in `PrimitiveImpliesIrreducible.lean`,
+`IrreducibleTensorAction.lean`, `BurnsideTheorem.lean`, and
+`CumulativeToWordSpan.lean`.
 
 ## The aperiodicity hypothesis
 

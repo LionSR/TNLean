@@ -35,9 +35,12 @@ The main theorem is
 
 ## Status
 
-This file is kept as a fully compiling archival CFII proof. The active library
-route now uses `TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint`, which is the
-module imported by `TNLean.lean` and by the canonical-form pipeline.
+This file is retained as a fully compiling archival Appendix-A route. It is
+intentionally excluded from `TNLean.lean`, and new code should prefer
+`TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint`.
+
+`TNLean.Spectral.SpectralGapNT` still imports this older CFII development, so
+we keep the full file in place instead of collapsing it to a thinner wrapper.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators

@@ -14,23 +14,20 @@ import Mathlib.RingTheory.RootsOfUnity.PrimitiveRoots
 /-!
 # Cyclic decomposition of periodic irreducible channels
 
-Following Wolf, *Quantum Channels & Operations*, Theorem 6.6.
+This file formalizes the algebraic pieces of Wolf, *Quantum Channels & Operations*,
+Theorem 6.6, for transfer maps of Kraus families.
 
-The statements in this file are arranged in three layers:
+The arguments are organized in three steps:
 
-1. a peripheral eigenvector of an irreducible unital Schwarz map can be normalized
-   to a unitary;
-2. a finite-order peripheral unitary admits a spectral decomposition into orthogonal
-   projections that are cyclically permuted by the channel;
-3. the `m`-th power of the channel restricts to primitive and irreducible dynamics
-   on each cyclic sector.
+1. a peripheral eigenvector of an irreducible unital Schwarz map can be normalized to a
+   unitary;
+2. a finite-order peripheral unitary admits spectral projections that are cyclically permuted by
+   the channel;
+3. the `m`-th power of the channel preserves each cyclic sector, and abstract irreducibility /
+   primitivity hypotheses can be transferred to the resulting corner restrictions.
 
-At present this file is mainly an API scaffold: several proofs are intentionally
-left as `sorry`. The main goal is to pin down the objects and theorem statements
-needed by downstream periodicity-removal and blocked-canonical-form arguments.
-
-To keep the statements algebraic, we use an abstract primitive root `γ` with
-`IsPrimitiveRoot γ m` rather than the analytic expression
+To keep the statements algebraic, the peripheral cycle is represented by an abstract primitive
+root `γ` with `IsPrimitiveRoot γ m` rather than by the analytic expression
 `Complex.exp (2 * π * Complex.I / m)`.
 -/
 
@@ -215,7 +212,7 @@ private theorem fixed_eq_scalar_of_irreducible_unital
     calc
       transferMap (d := r) (D := D) K (Complex.I • (X - Xᴴ))
           = Complex.I • transferMap (d := r) (D := D) K (X - Xᴴ) := by
-              simpa using (transferMap (d := r) (D := D) K).map_smul Complex.I (X - Xᴴ)
+              simp
       _ = Complex.I • (transferMap (d := r) (D := D) K X - transferMap (d := r) (D := D) K Xᴴ) := by
               simpa using congrArg (fun M => Complex.I • M)
                 ((transferMap (d := r) (D := D) K).map_sub X Xᴴ)
@@ -255,9 +252,9 @@ section PeripheralUnitary
 /-- A peripheral eigenvalue of an irreducible unital Schwarz transfer map admits a unitary
 matrix eigenvector.
 
-This is the unitary part of Wolf Theorem 6.6. The current formulation is stated for transfer
-maps of Kraus families because the available Kadison--Schwarz / multiplicative-domain API is
-implemented at that level. -/
+This is the unitary part of Wolf Theorem 6.6. The formulation is stated for transfer maps of
+Kraus families because the available Kadison--Schwarz / multiplicative-domain API is implemented
+at that level. -/
 theorem exists_peripheral_unitary_of_irreducible_schwarz
     {r D : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -600,7 +597,8 @@ theorem exists_cyclic_projections_of_peripheral_unitary
       simp
     · have hne : ((star γ) ^ j : ℂ) ≠ 1 := by
         intro hpow
-        have hdvd : m ∣ j := (hγinv_prim.pow_eq_one_iff_dvd j).mp (by simpa [hγ_star_eq_inv] using hpow)
+        have hdvd : m ∣ j :=
+          (hγinv_prim.pow_eq_one_iff_dvd j).mp (by simpa [hγ_star_eq_inv] using hpow)
         exact hj0 (Nat.eq_zero_of_dvd_of_lt hdvd hj)
       rw [if_neg hne, if_neg hj0]
   have hcoeff_sum_spec (j : ℕ) (hj : j < m) :
@@ -608,14 +606,20 @@ theorem exists_cyclic_projections_of_peripheral_unitary
         if j = oneIdx then (m : ℂ) else 0 := by
     have hpowm : (γ * (star γ) ^ j) ^ m = 1 := by
       calc
-        (γ * (star γ) ^ j) ^ m = γ ^ m * ((((star γ) ^ j : ℂ)) ^ m) := by rw [mul_pow]
+        (γ * (star γ) ^ j) ^ m = γ ^ m * ((((star γ) ^ j : ℂ)) ^ m) := by
+          rw [mul_pow]
         _ = γ ^ m * (((star γ : ℂ) ^ m) ^ j) := by
-              congr 1
-              calc
-                ((((star γ) ^ j : ℂ)) ^ m) = (star γ : ℂ) ^ (j * m) := by rw [← pow_mul]
-                _ = (star γ : ℂ) ^ (m * j) := by rw [Nat.mul_comm]
-                _ = (((star γ : ℂ) ^ m) ^ j) := by rw [pow_mul]
-        _ = 1 := by rw [hγ_star_eq_inv]; simp [hγprim.pow_eq_one]
+          congr 1
+          calc
+            ((((star γ) ^ j : ℂ)) ^ m) = (star γ : ℂ) ^ (j * m) := by
+              rw [← pow_mul]
+            _ = (star γ : ℂ) ^ (m * j) := by
+              rw [Nat.mul_comm]
+            _ = (((star γ : ℂ) ^ m) ^ j) := by
+              rw [pow_mul]
+        _ = 1 := by
+          rw [hγ_star_eq_inv]
+          simp [hγprim.pow_eq_one]
     have hrewrite :
         ∑ k : Fin m, (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) =
           ∑ k : Fin m, (γ * (star γ) ^ j) ^ (k : ℕ) := by
@@ -626,10 +630,15 @@ theorem exists_cyclic_projections_of_peripheral_unitary
             = γ ^ (k : ℕ) * ((((star γ) ^ j) ^ (k : ℕ) : ℂ)) := by
                 congr 1
                 calc
-                  ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) = (star γ : ℂ) ^ ((k : ℕ) * j) := by rw [← pow_mul]
-                  _ = (star γ : ℂ) ^ (j * (k : ℕ)) := by rw [Nat.mul_comm]
-                  _ = ((((star γ) ^ j) ^ (k : ℕ) : ℂ)) := by rw [pow_mul]
-        _ = (γ * (star γ) ^ j) ^ (k : ℕ) := by rw [mul_pow]
+                  ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) =
+                      (star γ : ℂ) ^ ((k : ℕ) * j) := by
+                    rw [← pow_mul]
+                  _ = (star γ : ℂ) ^ (j * (k : ℕ)) := by
+                    rw [Nat.mul_comm]
+                  _ = ((((star γ) ^ j) ^ (k : ℕ) : ℂ)) := by
+                    rw [pow_mul]
+        _ = (γ * (star γ) ^ j) ^ (k : ℕ) := by
+          rw [mul_pow]
     rw [hrewrite, hsum_powers_fin (γ * (star γ) ^ j) hpowm]
     by_cases hjeq : j = oneIdx
     · subst hjeq
@@ -651,10 +660,11 @@ theorem exists_cyclic_projections_of_peripheral_unitary
         have hidxeq : oneIdx = j := hγprim.injOn_pow honeIdx_mem (by simp [hj]) hpoweq
         exact hjeq hidxeq.symm
       rw [if_neg hne, if_neg hjeq]
-  have hbase_cyclic (k : Fin m) : ((star γ) ^ (((k + 1 : Fin m) : ℕ)) : ℂ) * γ = (star γ) ^ (k : ℕ) := by
+  have hbase_cyclic (k : Fin m) :
+      ((star γ) ^ (((k + 1 : Fin m) : ℕ)) : ℂ) * γ = (star γ) ^ (k : ℕ) := by
     by_cases hk : (k : ℕ) + 1 < m
     · have hval : (((k + 1 : Fin m) : ℕ)) = (k : ℕ) + 1 := by
-        simp [Fin.val_add, hk, Nat.mod_eq_of_lt hk]
+        simp [Fin.val_add, Nat.mod_eq_of_lt hk]
       rw [hval, pow_succ, mul_assoc, hγ_star_mul]
       simp
     · have hk_eq : (k : ℕ) + 1 = m := by
@@ -662,7 +672,7 @@ theorem exists_cyclic_projections_of_peripheral_unitary
           exact Nat.le_of_not_gt (show ¬ m > (k : ℕ) + 1 by simpa using hk)
         exact le_antisymm (Nat.succ_le_of_lt k.is_lt) hle
       have hval0 : (((k + 1 : Fin m) : ℕ)) = 0 := by
-        simp [Fin.val_add, hk_eq, hm0]
+        simp [Fin.val_add, hk_eq]
       rw [hval0, pow_zero, one_mul]
       have hkval : (k : ℕ) = m - 1 := Nat.eq_sub_of_add_eq hk_eq
       rw [hkval]
@@ -772,13 +782,16 @@ theorem exists_cyclic_projections_of_peripheral_unitary
                   rw [Finset.smul_sum]
     dsimp [P, invm]
     calc
-      (U : MatrixAlg D) * ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j)))
-          = (↑m : ℂ)⁻¹ • ((U : MatrixAlg D) * Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) := by
+      (U : MatrixAlg D) *
+          ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j)))
+          = (↑m : ℂ)⁻¹ •
+              ((U : MatrixAlg D) *
+                Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) := by
                 rw [Matrix.mul_smul]
       _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
             (fun j => a j • ((U : MatrixAlg D) * ((U : MatrixAlg D) ^ j))) := by
             congr 1
-            simp [Finset.mul_sum, Matrix.mul_add, Matrix.mul_smul, Matrix.mul_assoc]
+            simp [Finset.mul_sum]
       _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
             (fun j => a j • ((U : MatrixAlg D) ^ (j + 1))) := by
             congr 2
@@ -789,10 +802,13 @@ theorem exists_cyclic_projections_of_peripheral_unitary
               a (m - 1) • ((U : MatrixAlg D) ^ m)) := by
             have hsplit :
                 Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ (j + 1))) =
-                  Finset.sum (Finset.range (m - 1)) (fun j => a j • ((U : MatrixAlg D) ^ (j + 1))) +
+                  Finset.sum (Finset.range (m - 1))
+                    (fun j => a j • ((U : MatrixAlg D) ^ (j + 1))) +
                     a (m - 1) • ((U : MatrixAlg D) ^ m) := by
               simpa [hm_pred_succ] using
-                (Finset.sum_range_succ (fun j : ℕ => a j • ((U : MatrixAlg D) ^ (j + 1))) (m - 1))
+                (Finset.sum_range_succ
+                  (fun j : ℕ => a j • ((U : MatrixAlg D) ^ (j + 1)))
+                  (m - 1))
             rw [hsplit]
       _ = (↑m : ℂ)⁻¹ •
             (Finset.sum (Finset.range (m - 1))
@@ -805,16 +821,24 @@ theorem exists_cyclic_projections_of_peripheral_unitary
                 dsimp [a]
                 exact (hcoeff_step k j).symm
               rw [ha]
-            · change ((((star γ) ^ (k : ℕ)) ^ (m - 1) : ℂ)) • ((U : MatrixAlg D) ^ m) = γ ^ (k : ℕ) • (1 : MatrixAlg D)
+            · change
+                ((((star γ) ^ (k : ℕ)) ^ (m - 1) : ℂ)) • ((U : MatrixAlg D) ^ m) =
+                  γ ^ (k : ℕ) • (1 : MatrixAlg D)
               rw [hcoeff_last k, hUm]
       _ = (↑m : ℂ)⁻¹ •
             (γ ^ (k : ℕ) •
-              (Finset.sum (Finset.range (m - 1)) (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) + 1)) := by
+              (Finset.sum (Finset.range (m - 1))
+                  (fun j => a (j + 1) • ((U : MatrixAlg D) ^ (j + 1))) +
+                1)) := by
             rw [hfactor, smul_add]
             simp [smul_smul]
-      _ = (↑m : ℂ)⁻¹ • (γ ^ (k : ℕ) • Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) := by
+      _ = (↑m : ℂ)⁻¹ •
+            (γ ^ (k : ℕ) •
+              Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) := by
             rw [hdecomp]
-      _ = γ ^ (k : ℕ) • ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) := by
+      _ = γ ^ (k : ℕ) •
+            ((↑m : ℂ)⁻¹ •
+              Finset.sum (Finset.range m) (fun j => a j • ((U : MatrixAlg D) ^ j))) := by
             simp [smul_smul, mul_comm]
   have hcommUP : ∀ k : Fin m, Commute (U : MatrixAlg D) (P k) := by
     intro k
@@ -831,28 +855,32 @@ theorem exists_cyclic_projections_of_peripheral_unitary
   have hPsum : ∑ k : Fin m, P k = 1 := by
     dsimp [P, invm]
     calc
-      ∑ k : Fin m, (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
-          (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j))
+      ∑ k : Fin m, (↑m : ℂ)⁻¹ •
+          Finset.sum (Finset.range m)
+            (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j))
           = (↑m : ℂ)⁻¹ • ∑ k : Fin m,
-              Finset.sum (Finset.range m) (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)) := by
-                symm
-                rw [Finset.smul_sum]
+              Finset.sum (Finset.range m)
+                (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)) := by
+              symm
+              rw [Finset.smul_sum]
       _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
-              (fun j => ∑ k : Fin m, ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)) := by
-                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
-                rw [Finset.sum_comm]
+            (fun j =>
+              ∑ k : Fin m, ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)) := by
+            refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+            rw [Finset.sum_comm]
       _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
-              (fun j => (∑ k : Fin m, ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) • ((U : MatrixAlg D) ^ j)) := by
-                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
-                apply Finset.sum_congr rfl
-                intro j hj
-                rw [← Finset.sum_smul]
+            (fun j =>
+              (∑ k : Fin m, ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) • ((U : MatrixAlg D) ^ j)) := by
+            refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+            apply Finset.sum_congr rfl
+            intro j hj
+            rw [← Finset.sum_smul]
       _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
-              (fun j => (if j = 0 then (m : ℂ) else 0) • ((U : MatrixAlg D) ^ j)) := by
-                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
-                apply Finset.sum_congr rfl
-                intro j hj
-                rw [hcoeff_sum_proj j (Finset.mem_range.mp hj)]
+            (fun j => (if j = 0 then (m : ℂ) else 0) • ((U : MatrixAlg D) ^ j)) := by
+            refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+            apply Finset.sum_congr rfl
+            intro j hj
+            rw [hcoeff_sum_proj j (Finset.mem_range.mp hj)]
       _ = (↑m : ℂ)⁻¹ • ((m : ℂ) • ((U : MatrixAlg D) ^ 0)) := by
             rw [Finset.sum_eq_single 0]
             · simp
@@ -860,7 +888,7 @@ theorem exists_cyclic_projections_of_peripheral_unitary
               simp [hj0]
             · intro hm
               exfalso
-              exact hm (by simpa [hm_pos])
+              exact hm (by simp [hm_pos])
       _ = 1 := by
             simp [hm0]
   have hUspec_sum : ∑ k : Fin m, γ ^ (k : ℕ) • P k = (U : MatrixAlg D) := by
@@ -871,50 +899,58 @@ theorem exists_cyclic_projections_of_peripheral_unitary
             (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)))
           = (↑m : ℂ)⁻¹ • ∑ k : Fin m,
               Finset.sum (Finset.range m)
-                (fun j => (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) • ((U : MatrixAlg D) ^ j)) := by
-                  calc
-                    ∑ k : Fin m, γ ^ (k : ℕ) •
-                        ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
-                          (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)))
-                        = ∑ k : Fin m, (↑m : ℂ)⁻¹ •
-                            (γ ^ (k : ℕ) • Finset.sum (Finset.range m)
-                              (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j))) := by
-                              apply Finset.sum_congr rfl
-                              intro k hk
-                              simp [smul_smul, mul_comm]
-                    _ = (↑m : ℂ)⁻¹ • ∑ k : Fin m,
-                            γ ^ (k : ℕ) • Finset.sum (Finset.range m)
-                              (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)) := by
-                              symm
-                              rw [Finset.smul_sum]
-                    _ = (↑m : ℂ)⁻¹ • ∑ k : Fin m,
-                            Finset.sum (Finset.range m)
-                              (fun j => (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) • ((U : MatrixAlg D) ^ j)) := by
-                              refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
-                              apply Finset.sum_congr rfl
-                              intro k hk
-                              rw [Finset.smul_sum]
-                              apply Finset.sum_congr rfl
-                              intro j hj
-                              rw [smul_smul]
+                (fun j =>
+                  (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) •
+                    ((U : MatrixAlg D) ^ j)) := by
+              calc
+                ∑ k : Fin m, γ ^ (k : ℕ) •
+                    ((↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
+                      (fun j => ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)))
+                    = ∑ k : Fin m, (↑m : ℂ)⁻¹ •
+                        (γ ^ (k : ℕ) • Finset.sum (Finset.range m)
+                          (fun j =>
+                            ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j))) := by
+                        apply Finset.sum_congr rfl
+                        intro k hk
+                        simp [smul_smul, mul_comm]
+                _ = (↑m : ℂ)⁻¹ • ∑ k : Fin m,
+                        γ ^ (k : ℕ) • Finset.sum (Finset.range m)
+                          (fun j =>
+                            ((((star γ) ^ (k : ℕ)) ^ j : ℂ)) • ((U : MatrixAlg D) ^ j)) := by
+                        symm
+                        rw [Finset.smul_sum]
+                _ = (↑m : ℂ)⁻¹ • ∑ k : Fin m,
+                        Finset.sum (Finset.range m)
+                          (fun j =>
+                            (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) •
+                              ((U : MatrixAlg D) ^ j)) := by
+                        refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+                        apply Finset.sum_congr rfl
+                        intro k hk
+                        rw [Finset.smul_sum]
+                        apply Finset.sum_congr rfl
+                        intro j hj
+                        rw [smul_smul]
       _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
-              (fun j => ∑ k : Fin m,
+            (fun j =>
+              ∑ k : Fin m,
                 (γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) • ((U : MatrixAlg D) ^ j)) := by
-                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
-                rw [Finset.sum_comm]
+            refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+            rw [Finset.sum_comm]
       _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
-              (fun j => (∑ k : Fin m, γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) •
+            (fun j =>
+              (∑ k : Fin m, γ ^ (k : ℕ) * ((((star γ) ^ (k : ℕ)) ^ j : ℂ))) •
                 ((U : MatrixAlg D) ^ j)) := by
-                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
-                apply Finset.sum_congr rfl
-                intro j hj
-                rw [← Finset.sum_smul]
+            refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+            apply Finset.sum_congr rfl
+            intro j hj
+            rw [← Finset.sum_smul]
       _ = (↑m : ℂ)⁻¹ • Finset.sum (Finset.range m)
-              (fun j => (if j = oneIdx then (m : ℂ) else 0) • ((U : MatrixAlg D) ^ j)) := by
-                refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
-                apply Finset.sum_congr rfl
-                intro j hj
-                rw [hcoeff_sum_spec j (Finset.mem_range.mp hj)]
+            (fun j => (if j = oneIdx then (m : ℂ) else 0) • ((U : MatrixAlg D) ^ j)) := by
+            refine congrArg (fun S => (↑m : ℂ)⁻¹ • S) ?_
+            apply Finset.sum_congr rfl
+            intro j hj
+            rw [hcoeff_sum_spec j (Finset.mem_range.mp hj)]
       _ = (↑m : ℂ)⁻¹ • ((m : ℂ) • ((U : MatrixAlg D) ^ oneIdx)) := by
             rw [Finset.sum_eq_single oneIdx]
             · simp
@@ -935,7 +971,7 @@ theorem exists_cyclic_projections_of_peripheral_unitary
           simp [Matrix.mul_assoc]
         _ = (γ ^ (k : ℕ) • P k) * P l := by rw [hU_left k]
         _ = γ ^ (k : ℕ) • (P k * P l) := by
-          simp [smul_mul_assoc, Matrix.mul_assoc]
+          simp
     have hlEig : (U : MatrixAlg D) * (P k * P l) = γ ^ (l : ℕ) • (P k * P l) := by
       calc
         (U : MatrixAlg D) * (P k * P l) = ((U : MatrixAlg D) * P k) * P l := by
@@ -944,7 +980,7 @@ theorem exists_cyclic_projections_of_peripheral_unitary
         _ = P k * ((U : MatrixAlg D) * P l) := by simp [Matrix.mul_assoc]
         _ = P k * (γ ^ (l : ℕ) • P l) := by rw [hU_left l]
         _ = γ ^ (l : ℕ) • (P k * P l) := by
-          simp [smul_mul_assoc, Matrix.mul_assoc]
+          simp
     have hsub : (γ ^ (k : ℕ) - γ ^ (l : ℕ)) • (P k * P l) = 0 := by
       calc
         (γ ^ (k : ℕ) - γ ^ (l : ℕ)) • (P k * P l)
@@ -1000,7 +1036,7 @@ theorem exists_cyclic_projections_of_peripheral_unitary
           simp [Matrix.mul_assoc]
         _ = (γ ^ (l : ℕ) • P l) * (P k)ᴴ := by rw [hU_left l]
         _ = γ ^ (l : ℕ) • (P l * (P k)ᴴ) := by
-          simp [smul_mul_assoc, Matrix.mul_assoc]
+          simp
     have hkEig : (U : MatrixAlg D) * (P l * (P k)ᴴ) = γ ^ (k : ℕ) • (P l * (P k)ᴴ) := by
       calc
         (U : MatrixAlg D) * (P l * (P k)ᴴ) = ((U : MatrixAlg D) * P l) * (P k)ᴴ := by
@@ -1009,7 +1045,7 @@ theorem exists_cyclic_projections_of_peripheral_unitary
         _ = P l * ((U : MatrixAlg D) * (P k)ᴴ) := by simp [Matrix.mul_assoc]
         _ = P l * (γ ^ (k : ℕ) • (P k)ᴴ) := by rw [hU_star_left k]
         _ = γ ^ (k : ℕ) • (P l * (P k)ᴴ) := by
-          simp [smul_mul_assoc, Matrix.mul_assoc]
+          simp
     have hsub : (γ ^ (l : ℕ) - γ ^ (k : ℕ)) • (P l * (P k)ᴴ) = 0 := by
       calc
         (γ ^ (l : ℕ) - γ ^ (k : ℕ)) • (P l * (P k)ᴴ)
@@ -1092,6 +1128,26 @@ section PrimitivityOfSectors
 
 variable {D m : ℕ} [NeZero m]
 
+private def cyclicIndex (k : Fin m) (n : ℕ) : Fin m :=
+  ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩
+
+@[simp] private lemma cyclicIndex_zero (k : Fin m) :
+    cyclicIndex (m := m) k 0 = k := by
+  ext
+  simp [cyclicIndex, Nat.mod_eq_of_lt k.is_lt]
+
+private lemma cyclicIndex_succ (k : Fin m) (n : ℕ) :
+    cyclicIndex (m := m) k (n + 1) = cyclicIndex k n + 1 := by
+  ext
+  change (((k : ℕ) + n) + 1) % m = ((((k : ℕ) + n) % m) + 1 % m) % m
+  exact Nat.add_mod ((k : ℕ) + n) 1 m
+
+@[simp] private lemma cyclicIndex_self (k : Fin m) :
+    cyclicIndex (m := m) k m = k := by
+  ext
+  change ((k : ℕ) + m) % m = k
+  rw [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt]
+
 /-- The `m`-th power of the channel preserves each cyclic corner `P_k · M_D(ℂ) · P_k`.
 
 The cyclic permutation of the projections alone is not enough for this conclusion for a general
@@ -1107,55 +1163,40 @@ theorem preserves_corner_pow_of_cyclic_decomp
     (hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
     (hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k)) :
     ∀ k : Fin m, PreservesCorner (P k) (T ^ m) := by
-  let idx : Fin m → ℕ → Fin m := fun k n =>
-    ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩
-  have hidx_zero : ∀ k : Fin m, idx k 0 = k := by
-    intro k
-    ext
-    simp [idx, Nat.mod_eq_of_lt k.is_lt]
-  have hidx_succ : ∀ k : Fin m, ∀ n : ℕ, idx k (n + 1) = idx k n + 1 := by
-    intro k n
-    ext
-    change ((k : ℕ) + (n + 1)) % m = ((((k : ℕ) + n) % m) + 1 % m) % m
-    symm
-    simpa [Nat.add_assoc] using (Nat.add_mod ((k : ℕ) + n) 1 m)
-  have hidx_full : ∀ k : Fin m, idx k m = k := by
-    intro k
-    ext
-    change ((k : ℕ) + m) % m = k
-    rw [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt]
   have hstep :
       ∀ n : ℕ, ∀ k : Fin m, ∀ X : MatrixAlg D,
-        (T ^ n) (P (idx k n) * X * P (idx k n)) = P k * ((T ^ n) X) * P k := by
+        (T ^ n) (P (cyclicIndex k n) * X * P (cyclicIndex k n)) =
+          P k * ((T ^ n) X) * P k := by
     intro n
     induction n with
     | zero =>
         intro k X
-        simp [hidx_zero k]
+        simp
     | succ n ih =>
         intro k X
         calc
-          (T ^ (n + 1)) (P (idx k (n + 1)) * X * P (idx k (n + 1)))
-              = (T ^ n) (T (P (idx k (n + 1)) * X * P (idx k (n + 1)))) := by
+          (T ^ (n + 1))
+              (P (cyclicIndex k (n + 1)) * X * P (cyclicIndex k (n + 1)))
+              = (T ^ n) (T (P (cyclicIndex k (n + 1)) * X * P (cyclicIndex k (n + 1)))) := by
                   simp [pow_succ]
-          _ = (T ^ n) (T (P (idx k n + 1) * X * P (idx k n + 1))) := by
-                  rw [hidx_succ k n]
-          _ = (T ^ n) (P (idx k n) * T X * P (idx k n)) := by
+          _ = (T ^ n) (T (P (cyclicIndex k n + 1) * X * P (cyclicIndex k n + 1))) := by
+                  rw [cyclicIndex_succ k n]
+          _ = (T ^ n) (P (cyclicIndex k n) * T X * P (cyclicIndex k n)) := by
                   congr 1
                   calc
-                    T (P (idx k n + 1) * X * P (idx k n + 1))
-                        = T (P (idx k n + 1) * X) * T (P (idx k n + 1)) := by
-                            exact hMulRight (idx k n + 1) (P (idx k n + 1) * X)
-                    _ = (T (P (idx k n + 1)) * T X) * T (P (idx k n + 1)) := by
-                            rw [hMulLeft (idx k n + 1) X]
-                    _ = P (idx k n) * T X * P (idx k n) := by
-                            rw [hcyclic (idx k n)]
+                    T (P (cyclicIndex k n + 1) * X * P (cyclicIndex k n + 1))
+                        = T (P (cyclicIndex k n + 1) * X) * T (P (cyclicIndex k n + 1)) := by
+                            exact hMulRight (cyclicIndex k n + 1) (P (cyclicIndex k n + 1) * X)
+                    _ = (T (P (cyclicIndex k n + 1)) * T X) * T (P (cyclicIndex k n + 1)) := by
+                            rw [hMulLeft (cyclicIndex k n + 1) X]
+                    _ = P (cyclicIndex k n) * T X * P (cyclicIndex k n) := by
+                            rw [hcyclic (cyclicIndex k n)]
           _ = P k * ((T ^ n) (T X)) * P k := ih k (T X)
           _ = P k * ((T ^ (n + 1)) X) * P k := by
                   simp [pow_succ]
   intro k X
-  have hmk := hstep m k X
-  rw [hidx_full k] at hmk
+  have hmk : (T ^ m) (P k * X * P k) = P k * ((T ^ m) X) * P k := by
+    simpa using hstep m k X
   rw [hmk]
   calc
     P k * (P k * ((T ^ m) X) * P k) * P k
@@ -1163,11 +1204,9 @@ theorem preserves_corner_pow_of_cyclic_decomp
             simp [Matrix.mul_assoc]
     _ = P k * ((T ^ m) X) * P k := by
             simp [Matrix.mul_assoc, (hPproj k).2]
-/-- Wolf Theorem 6.6 corollary: the `m`-step dynamics on each cyclic sector is irreducible.
-
-The key missing input is an orbit-sum lift from an invariant subprojection of the corner to a
-`T`-invariant ambient projection. This packages the `R = ∑_j T^j(Q)` construction suggested by
-Wolf's proof. -/
+/-- Wolf Theorem 6.6 corollary: an orbit-sum lift from invariant corner subprojections to
+ambient invariant projections implies irreducibility of the `m`-step dynamics on each cyclic
+sector. -/
 theorem isIrreducible_restriction_of_cyclic_decomp
     {T : MatrixEnd D}
     (hIrr : IsIrreducibleMap T)
@@ -1233,41 +1272,26 @@ theorem isPrimitive_restriction_of_cyclic_decomp
     peripheralEigenvalues_pow_eq_singleton
       (E := T) (p := m) (hp := Nat.pos_of_ne_zero (NeZero.ne m))
       hper_pow ρ hρ_fix hρ_ne
-  let idx : Fin m → ℕ → Fin m := fun k n =>
-    ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩
-  have hidx_zero : ∀ k : Fin m, idx k 0 = k := by
-    intro k
-    ext
-    simp [idx, Nat.mod_eq_of_lt k.is_lt]
-  have hidx_succ : ∀ k : Fin m, ∀ n : ℕ, idx k (n + 1) = idx k n + 1 := by
-    intro k n
-    ext
-    change ((k : ℕ) + (n + 1)) % m = ((((k : ℕ) + n) % m) + 1 % m) % m
-    symm
-    simpa [Nat.add_assoc] using (Nat.add_mod ((k : ℕ) + n) 1 m)
-  have hidx_full : ∀ k : Fin m, idx k m = k := by
-    intro k
-    ext
-    change ((k : ℕ) + m) % m = k
-    rw [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt]
-  have hcyclic_pow : ∀ n : ℕ, ∀ k : Fin m, (T ^ n) (P (idx k n)) = P k := by
+  have hcyclic_pow : ∀ n : ℕ, ∀ k : Fin m, (T ^ n) (P (cyclicIndex k n)) = P k := by
     intro n
     induction n with
     | zero =>
         intro k
-        simp [hidx_zero k]
+        simp
     | succ n ih =>
         intro k
         calc
-          (T ^ (n + 1)) (P (idx k (n + 1))) = (T ^ n) (T (P (idx k (n + 1)))) := by
-            simp [pow_succ]
-          _ = (T ^ n) (T (P (idx k n + 1))) := by rw [hidx_succ k n]
-          _ = (T ^ n) (P (idx k n)) := by rw [hcyclic (idx k n)]
+          (T ^ (n + 1)) (P (cyclicIndex k (n + 1)))
+              = (T ^ n) (T (P (cyclicIndex k (n + 1)))) := by
+                  simp [pow_succ]
+          _ = (T ^ n) (T (P (cyclicIndex k n + 1))) := by
+                  rw [cyclicIndex_succ k n]
+          _ = (T ^ n) (P (cyclicIndex k n)) := by
+                  rw [hcyclic (cyclicIndex k n)]
           _ = P k := ih k
   have hPk_fix : ∀ k : Fin m, (T ^ m) (P k) = P k := by
     intro k
-    have hmk := hcyclic_pow m k
-    simpa [hidx_full k] using hmk
+    simpa using hcyclic_pow m k
   have hPk_corner : ∀ k : Fin m, P k ∈ cornerSubmodule (P k) := by
     intro k
     change P k * P k * P k = P k

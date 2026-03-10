@@ -186,6 +186,33 @@ def ofSeparatedData
 
 end IsNormalCanonicalFormBNT
 
+/-- The block-diagonal tensor `toTensorFromBlocks μ A` carries the obvious coefficient
+expansion over its blocks. -/
+private theorem spans_mpv_toTensorFromBlocks
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) :
+    ∀ N : ℕ, ∃ c : Fin r → ℂ, ∀ σ : Fin N → Fin d,
+      mpv (toTensorFromBlocks μ A) σ = ∑ k : Fin r, c k * mpv (A k) σ := by
+  intro N
+  refine ⟨fun k => μ k ^ N, ?_⟩
+  intro σ
+  simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ
+
+/-- Overlaps converging to the Kronecker delta give eventual linear independence of block MPVs. -/
+private theorem eventually_li_of_overlap_limits
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hSelf : ∀ j,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+    (hOff : ∀ i j, i ≠ j →
+      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
+    ∃ N0 : ℕ, ∀ N > N0,
+      LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N) := by
+  have hOrtho := bntFamilies_eventually_linearIndependent A hSelf hOff
+  rw [Filter.Eventually] at hOrtho
+  obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hOrtho
+  exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩
+
 /-! ### Cross-overlap decay from separated CF-BNT data -/
 
 section SeparatedCFBNT
@@ -255,17 +282,12 @@ theorem isBNT_of_separated_CFBNT_data [∀ k, NeZero (dim k)]
     ext M
     simp only [Set.mem_range, hkey]
     exact ⟨fun ⟨σ, hσ⟩ => ⟨σ 0, hσ⟩, fun ⟨i, hi⟩ => ⟨fun _ => i, hi⟩⟩
-  spans_mpv := fun N =>
-    ⟨fun k => μ k ^ N, fun σ => by
-      simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ⟩
-  eventually_li := by
-    have hOrtho := eventually_linearIndependent_of_overlap_tendsto_orthonormal A
+  spans_mpv := spans_mpv_toTensorFromBlocks μ A
+  eventually_li :=
+    eventually_li_of_overlap_limits A
       hOverlap.overlap_tendsto_one
       (fun i j hij =>
         cross_overlap_tendsto_zero_of_separated_CFBNT_data A hInj hLeft hBlocks i j hij)
-    rw [Filter.Eventually] at hOrtho
-    obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hOrtho
-    exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩
 
 end SeparatedCFBNT
 
@@ -363,20 +385,15 @@ theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero
     (∃ N0 : ℕ, ∀ N > N0,
       LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N)) := by
   constructor
-  · intro N
-    refine ⟨fun k => μ k ^ N, ?_⟩
-    intro σ
-    simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ A σ
-  · have hOrtho := eventually_linearIndependent_of_overlap_tendsto_orthonormal A
+  · exact spans_mpv_toTensorFromBlocks μ A
+  · exact
+      eventually_li_of_overlap_limits A
         (fun j => hNCF.overlap_tendsto_one j)
         (fun i j hij =>
           cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
             hNCF.toHasIrreducibleBlocks
             hNCF.toIsLeftCanonicalBlockFamily
             hBlocks i j hij)
-    rw [Filter.Eventually] at hOrtho
-    obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hOrtho
-    exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩
 
 /-- Split-data version of `IsNormalCanonicalFormBNT.isBNT`, assuming blockwise `IsNormal`
 has already been supplied by an external primitive-to-normal bridge. -/

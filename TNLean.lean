@@ -1,3 +1,18 @@
+/-
+# TNLean
+
+Stable import surface for the maintained TNLean library.
+
+This file re-exports the modules intended for downstream users. The following
+legacy surfaces are intentionally excluded:
+
+* compatibility re-export wrappers `TNLean.PositiveMapSpectral`,
+  `TNLean.TransferSpectral`, and `TNLean.PiAlgebraExtension`;
+* the non-stable entrypoint `TNLean.Experimental`;
+* the archival alternate proof `TNLean.MPS.BlockingPeriodicityCFII2`;
+* the documentary counterexample `TNLean.Scratch.BlockSepCounterexample`.
+-/
+
 -- Layer 0: General algebra
 import TNLean.Algebra.TracePairing
 import TNLean.Algebra.BlockPermutation
@@ -115,13 +130,4 @@ import TNLean.Wielandt.RankOneExtractionFull
 import TNLean.Wielandt.CumulativeToWordSpan
 import TNLean.Wielandt.QuantumWielandt
 
--- NOTE: `TNLean.PositiveMapSpectral`, `TNLean.TransferSpectral`, and
--- `TNLean.PiAlgebraExtension` are backwards-compatible re-export hubs kept for
--- external downstream consumers. They are not imported here because every
--- module they re-export is already covered by the direct imports above.
---
--- `TNLean.Experimental`, `TNLean.MPS.BlockingPeriodicityCFII2`, and the
--- `TNLean.Scratch.*` files are also intentionally excluded from this stable
--- import surface: they are experimental work-in-progress modules, archived
--- alternate proofs, or documentary scratch notes.
 import TNLean.Channel.CyclicDecomposition

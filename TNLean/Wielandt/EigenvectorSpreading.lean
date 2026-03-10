@@ -1,17 +1,16 @@
 /-
 Copyright (c) 2026. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: [Authors]
+Authors: TNLean contributors
 -/
 
-import TNLean.Wielandt.CumulativeSpan
-import Mathlib.LinearAlgebra.Matrix.ToLin
-import Mathlib.LinearAlgebra.Matrix.StdBasis
 import Mathlib.Data.Matrix.Basis
-import Mathlib.LinearAlgebra.FiniteDimensional.Defs
-import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import Mathlib.LinearAlgebra.Dimension.Constructions
+import Mathlib.LinearAlgebra.FiniteDimensional.Basic
+import Mathlib.LinearAlgebra.Matrix.StdBasis
+import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.LinearAlgebra.StdBasis
+import TNLean.Wielandt.CumulativeSpan
 
 /-!
 # Eigenvector Spreading (Lemma 2(a))
@@ -185,9 +184,9 @@ theorem cumulativeVectorSpan_stable (A : MPSTensor d D) (φ : Fin D → ℂ) {n 
 /-- φ is in K_n for all n ≥ 0 (since evalWord A [] *ᵥ φ = φ). -/
 theorem phi_mem_cumulativeVectorSpan (A : MPSTensor d D) (φ : Fin D → ℂ) (n : ℕ) :
     φ ∈ cumulativeVectorSpan A φ n := by
-  have hmem := mem_cumulativeVectorSpan_generator A φ (show ([] : List (Fin d)).length ≤ n by simp)
-  simp only [evalWord, Matrix.one_mulVec] at hmem
-  exact hmem
+  simpa [evalWord] using
+    (mem_cumulativeVectorSpan_generator
+      (A := A) (φ := φ) (w := []) (n := n) (by simp))
 
 /-- Eigenvector anchoring: if A i₀ *ᵥ φ = μ • φ with μ ≠ 0, then φ ∈ H_1
 (and hence in K_n for all n ≥ 1).
@@ -350,32 +349,6 @@ private theorem cumulativeVectorSpan_eq_top_of_exists_level_eq_top [NeZero D]
 
 /-! ### Main theorem -/
 
-/-- **Lemma 2(a)**: If the channel is normal (IsNormal) and A has an eigenvector
-with nonzero eigenvalue, then K_{D-1}(A, φ) = ℂ^D.
-
-Paper: "H_{D-1}(A, φ) = ℂ^D" (arXiv:0909.5347, Lemma 2(a))
-
-Deviation: We prove K_{D-1} = ℂ^D (cumulative span) instead of the paper's
-H_{D-1} = ℂ^D (single-level span). This is strictly weaker than the paper's
-result (K_{D-1} = ⊤ follows from H_{D-1} = ⊤ since H_{D-1} ⊆ K_{D-1}, but
-not vice versa). However, K_{D-1} = ⊤ suffices for all downstream applications
-in this formalization.
-
-The proof uses dimension counting:
-1. K_0 has dim ≥ 1 (contains φ ≠ 0)
-2. Each step either grows dim by ≥ 1 or stabilizes
-3. Stabilization contradicts IsNormal (via cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top)
-4. So dim grows by ≥ 1 each step, reaching D by step D-1 -/
-theorem eigenvector_spreading [NeZero D]
-    (A : MPSTensor d D) (φ : Fin D → ℂ) (hφ : φ ≠ 0)
-    (_i₀ : Fin d) (_μ : ℂ) (_hμ : _μ ≠ 0)
-    (_heig : A _i₀ *ᵥ φ = _μ • φ)
-    (hNormal : IsNormal A) :
-    cumulativeVectorSpan A φ (D - 1) = ⊤ := by
-  obtain ⟨N, hN⟩ := cumulativeSpan_eq_top_of_isNormal A hNormal
-  exact cumulativeVectorSpan_eq_top_of_exists_level_eq_top A φ hφ
-    (cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top A φ hφ hN)
-
 /-- Cumulative-span version of eigenvector spreading: if the cumulative span reaches top
 and `φ ≠ 0`, then the cumulative vector span reaches full at step `D - 1`. -/
 theorem eigenvector_spreading_of_cumulativeSpan_eq_top [NeZero D]
@@ -384,5 +357,26 @@ theorem eigenvector_spreading_of_cumulativeSpan_eq_top [NeZero D]
     cumulativeVectorSpan A φ (D - 1) = ⊤ := by
   exact cumulativeVectorSpan_eq_top_of_exists_level_eq_top A φ hφ
     (cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top A φ hφ hCum)
+
+/-- **Lemma 2(a)**: If the channel is normal and `A` has an eigenvector
+with nonzero eigenvalue, then `K_{D-1}(A, φ) = ℂ^D`.
+
+Paper: `H_{D-1}(A, φ) = ℂ^D` (arXiv:0909.5347, Lemma 2(a)).
+
+Deviation: we prove the cumulative conclusion `K_{D-1} = ⊤` instead of the paper's
+single-level conclusion `H_{D-1} = ⊤`. This is enough for every downstream use in this
+formalization.
+
+The eigenvector data are kept in the statement for API compatibility with the paper and
+with downstream wrappers. The current cumulative proof uses only `hφ` together with
+the normality witness. -/
+theorem eigenvector_spreading [NeZero D]
+    (A : MPSTensor d D) (φ : Fin D → ℂ) (hφ : φ ≠ 0)
+    (_i₀ : Fin d) (_μ : ℂ) (_hμ : _μ ≠ 0)
+    (_heig : A _i₀ *ᵥ φ = _μ • φ)
+    (hNormal : IsNormal A) :
+    cumulativeVectorSpan A φ (D - 1) = ⊤ := by
+  obtain ⟨N, hN⟩ := cumulativeSpan_eq_top_of_isNormal A hNormal
+  exact eigenvector_spreading_of_cumulativeSpan_eq_top A φ hφ hN
 
 end MPSTensor

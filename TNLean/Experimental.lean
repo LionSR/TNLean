@@ -2,16 +2,18 @@
 Copyright (c) 2025 TNLean contributors.
 Released under Apache 2.0 license as described in the file LICENSE.
 
-# Experimental / work-in-progress modules
+# Experimental TNLean entrypoint
 
-This module is **not** imported by `TNLean` (the main stable entrypoint).
-It collects results that are:
-- incomplete (`sorry`),
-- known-false as stated but kept for documentation/counterexamples, or
-- active research prototypes.
+This module is intentionally excluded from `TNLean.lean`. It gathers non-stable
+modules that are kept either for active work or for documentary reasons.
 
-Use this module for exploratory development, while keeping `import TNLean`
-free of sorries for downstream users.
+At present it exposes:
+* `TNLean.PiAlgebra.BlockSeparationProof`, the vestigial Vandermonde-based
+  block-separation sketch with a known-false `sorry`;
+* `TNLean.PiAlgebra.CanonicalFormSep`, the newer non-stable block-separation
+  development.
+
+Use `import TNLean` for the maintained, sorry-free library surface.
 -/
 
 import TNLean

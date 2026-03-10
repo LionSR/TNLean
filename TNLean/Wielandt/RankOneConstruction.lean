@@ -119,39 +119,35 @@ theorem IsNBlkInjective_transposeTensor
     Matrix.transposeLinearEquiv (Fin D) (Fin D) ℂ ℂ
   have hmap :
       Submodule.map (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-          (Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))) =
-        Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ) := by
-    -- `Submodule.map` distributes over `Submodule.span`.
+          (Submodule.span ℂ
+            (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))) =
+        Submodule.span ℂ
+          (Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ) := by
     rw [Submodule.map_span]
-    -- Rewrite the image of a range as a range of a composition.
     have hrange' :
         (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ) ''
             Set.range (fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) =
-          Set.range (fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ) := by
-      -- `Set.range (g ∘ f) = g '' Set.range f`.
+          Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ := by
       simpa [Function.comp] using
         (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ)
           (fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))).symm
-    -- Now simplify the map (it is just transpose) and apply `hrange'`.
     simp [e, hrange']
-  -- Now transport `h : span(range evalWord A) = ⊤` along the transpose equivalence.
-  -- Conclude by rewriting using `hmap`.
-  --
-  -- `Submodule.map (↑e) ⊤ = ⊤` since `e` is an equivalence.
   have :
-      Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ) = ⊤ := by
-    -- Rewrite the span as a mapped submodule.
-    -- Then use `h` and `Submodule.map_top`.
+      Submodule.span ℂ
+        (Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ) = ⊤ := by
     calc
-      Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ)
-          = Submodule.map (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-              (Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))) := by
-              simp [hmap]
-      _ = Submodule.map (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ⊤ := by
-            simp [h]
+      Submodule.span ℂ
+          (Set.range fun σ : Fin N → Fin d => (evalWord A (List.ofFn σ))ᵀ)
+          = Submodule.map
+              (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+              (Submodule.span ℂ
+                (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))) := by
+            simp [hmap]
+      _ = Submodule.map
+            (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ⊤ := by
+          simp [h]
       _ = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
-            -- `map ⊤ = range`, and the range of a linear equivalence is `⊤`.
-            simp [Submodule.map_top, LinearEquiv.range (e := e)]
+          simp [Submodule.map_top, LinearEquiv.range (e := e)]
   simpa using this
 
 /-- Normality is preserved by pointwise transposition. -/

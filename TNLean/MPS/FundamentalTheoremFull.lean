@@ -366,9 +366,9 @@ theorem perBlock_sameMPV_of_equalMPV_CFBNT
     (hA : IsCanonicalFormBNT μ A)
     (hB : IsCanonicalFormBNT μ B)
     (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
-    ∀ k, SameMPV (A k) (B k) :=
-  per_block_sameMPV_of_canonical_form μ A B hA.toIsCanonicalForm hB.block_injective
-    hB.leftCanonical hSame
+    ∀ k, SameMPV (A k) (B k) := by
+  intro k
+  exact GaugeEquiv.sameMPV ((fundamentalTheorem_equalMPV_CFBNT A B hA hB hSame).1 k)
 
 /-- **Equal-MPV CF-BNT: per-block gauge equivalence implies global gauge equivalence.**
 
