@@ -74,8 +74,6 @@ theorem IsPrimitiveMPS.trace_ne_zero
   exact hP.fixedPoint_ne_zero
     ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
 
-set_option maxHeartbeats 800000 in
--- Spectral-radius argument via `le_iSup₂` and `AlgEquiv.spectrum_eq` needs extra elaboration.
 /-- **Any fixed point of E is proportional to ρ** (from spectral gap).
 
 If `E(σ) = σ`, then `σ = (tr(σ)/tr(ρ)) • ρ`.
@@ -144,38 +142,37 @@ theorem IsPrimitiveMPS.complement_pow_tendsto_zero
 
 /-! ## Part 2: Transfer map structure -/
 
-/-- Compatibility wrapper showing that the transfer map attached to
+/-- Preferred theorem showing that the transfer map attached to
 `IsPrimitiveMPS A ρ` is a quantum channel. -/
-theorem IsPrimitiveMPS.transferMap_isChannel'
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) :
-    IsChannel (transferMap (d := d) (D := D) A) :=
-  transferMap_isChannel A hP.norm
-
-/-- Preferred non-primed alias for `IsPrimitiveMPS.transferMap_isChannel'`. -/
 theorem IsPrimitiveMPS.transferMap_isChannel
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) :
     IsChannel (transferMap (d := d) (D := D) A) :=
-  hP.transferMap_isChannel'
+  MPSTensor.transferMap_isChannel A hP.norm
 
-/-- Compatibility wrapper stating that the transfer map attached to
-`IsPrimitiveMPS A ρ` is trace-preserving. -/
-theorem IsPrimitiveMPS.transferMap_trace_preserving'
+/-- Compatibility alias for `IsPrimitiveMPS.transferMap_isChannel`. -/
+theorem IsPrimitiveMPS.transferMap_isChannel'
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    trace (transferMap (d := d) (D := D) A X) = trace X :=
-  hP.transferMap_isChannel'.tp X
+    (hP : IsPrimitiveMPS A ρ) :
+    IsChannel (transferMap (d := d) (D := D) A) :=
+  hP.transferMap_isChannel
 
-/-- Preferred non-primed alias for
-`IsPrimitiveMPS.transferMap_trace_preserving'`. -/
+/-- Preferred theorem stating that the transfer map attached to
+`IsPrimitiveMPS A ρ` is trace-preserving. -/
 theorem IsPrimitiveMPS.transferMap_trace_preserving
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     trace (transferMap (d := d) (D := D) A X) = trace X :=
-  hP.transferMap_trace_preserving' X
+  hP.transferMap_isChannel.tp X
+
+/-- Compatibility alias for `IsPrimitiveMPS.transferMap_trace_preserving`. -/
+theorem IsPrimitiveMPS.transferMap_trace_preserving'
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    trace (transferMap (d := d) (D := D) A X) = trace X :=
+  hP.transferMap_trace_preserving X
 
 /-- **Irreducible transfer map implies a positive-definite fixed point.**
 
