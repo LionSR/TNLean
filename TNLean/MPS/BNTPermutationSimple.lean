@@ -96,8 +96,6 @@ private lemma norm_eq_one_of_selfOverlap_scale
 
 /-! ## Main theorem -/
 
-set_option maxHeartbeats 800000 in
--- The proof involves multiple nested convergence arguments and Gram matrix inversions.
 /--
 **BNT permutation rigidity (primitive branch).**
 

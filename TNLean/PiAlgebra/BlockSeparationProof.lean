@@ -10,19 +10,20 @@ import Mathlib.LinearAlgebra.Vandermonde
 /-!
 # Block separation proof: from `SameMPV₂` to per-block `SameMPV`
 
-**STATUS: RETAINED ONLY AS DOCUMENTARY / EXPERIMENTAL LEGACY.** This
-file records an abandoned Vandermonde-based block-separation route. It contains
-one `sorry`, namely `per_block_trace_eq_of_summed_blocks`, and that statement is
-**false as stated** (see the counterexample below). New code should use
-`TNLean.PiAlgebra.BlockSeparation`; `TNLean.Experimental` is the only in-repo
-import of this file.
+**STATUS: documentary legacy only.** This file records an abandoned
+Vandermonde-based block-separation route. It still contains the `sorry`
+`per_block_trace_eq_of_summed_blocks`, and that statement is **false as
+stated** (see the counterexample below).
 
-The newer non-stable follow-on is `TNLean.PiAlgebra.CanonicalFormSep`, which
-adds `IsCanonicalForm` / `IsNormalCanonicalForm` hypotheses to avoid the
-block-swap issue.
+The only trustworthy public theorem retained here is `sameMPV₂_repeated_word`,
+a repeated-word trace identity extracted from `SameMPV₂`. The downstream
+separation wrappers that depended on the false lemma are now kept private, so
+this module no longer exports unsupported block-separation or
+fundamental-theorem API.
 
-This file proves the block separation theorem under the hypothesis that the
-scaling factors `μ k` are pairwise distinct (injective) and nonzero.
+New work should use `TNLean.PiAlgebra.BlockSeparation` or
+`TNLean.PiAlgebra.CanonicalFormSep`. This file is kept out of the maintained
+library surface and is not re-exported by `TNLean.Experimental`.
 
 ## Strategy
 
@@ -47,10 +48,10 @@ we prove `∀ k, SameMPV (A k) (B k)` when `μ` is injective and nonzero.
 4. **Trace extraction**: Per-block polynomial equality at the linear coefficient
    gives `tr(T_k) = tr(U_k)`, i.e., `mpv(A_k, w) = mpv(B_k, w)` for all `w`.
 
-## Main results
+## Surviving trustworthy content
 
-* `sameMPV_of_sameMPV₂_injective` — per-block SameMPV from SameMPV₂ (injective μ)
-* `fundamentalTheorem_multiBlock_noSep` — the full FT without `hSep`
+* `sameMPV₂_repeated_word` — the repeated-word trace identity extracted from
+  `SameMPV₂`
 
 ## References
 
@@ -168,9 +169,9 @@ Possible fixes:
 2. Weaken the conclusion to `∃ π, ∀ k w, tr(evalWord (A k) w) = tr(evalWord (B (π k)) w)`
 3. Add an explicit "no block swap" hypothesis
 
-For now, this is left as `sorry`. The downstream theorems
-(`fundamentalTheorem_multiBlock_noSep`) also use `IsInjective`, which
-may provide the additional structure needed in the canonical form setting.
+For now, this is left as `sorry`. The legacy downstream wrappers also use
+`IsInjective`, which may provide the additional structure needed in the
+canonical-form setting.
 
 ### Mathematical proof sketch (under appropriate additional hypotheses)
 
@@ -188,12 +189,11 @@ private lemma per_block_trace_eq_of_summed_blocks
       Matrix.trace (evalWord (A k) w) = Matrix.trace (evalWord (B k) w) := by
   sorry
 
-/-- **Per-block SameMPV from injective μ.**
+/-- Legacy downstream wrapper around the false separation lemma above.
 
-If the scaling factors `μ k` are pairwise distinct and nonzero, and the
-block-diagonal tensors generate the same MPV family, then each individual
-block tensor generates the same MPV as its counterpart. -/
-theorem sameMPV_of_sameMPV₂_injective
+This theorem is kept private so the module does not export unsupported per-block
+API. -/
+private theorem sameMPV_of_sameMPV₂_injective
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hμ_ne : ∀ k, μ k ≠ 0)
@@ -215,18 +215,11 @@ section NoSep
 
 variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 
-/-- **Multi-block Fundamental Theorem without the separation hypothesis.**
+/-- Legacy fundamental-theorem wrapper around the false separation lemma above.
 
-Under the assumptions that:
-- Each block tensor `A k` is injective
-- The scaling factors `μ k` are pairwise distinct (`μ` injective)
-- The scaling factors are all nonzero
-- The block-diagonal tensors generate the same MPV₂ family
-
-we conclude:
-- Per-block gauge equivalence: `GaugeEquiv (A k) (B k)` for all `k`
-- Global gauge equivalence of the block-diagonal tensors -/
-theorem fundamentalTheorem_multiBlock_noSep
+This theorem is kept private so the module does not export unsupported FT API.
+-/
+private theorem fundamentalTheorem_multiBlock_noSep
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))
@@ -239,8 +232,11 @@ theorem fundamentalTheorem_multiBlock_noSep
   exact ⟨fun k => fundamentalTheorem_singleBlock (hA k) (hSep k),
          fundamentalTheorem_multiBlock_global μ A B hA hSep⟩
 
-/-- **Multi-block Fundamental Theorem with explicit gauge matrices** (no `hSep`). -/
-theorem fundamentalTheorem_multiBlock_explicit_noSep
+/-- Legacy explicit-gauge wrapper around the false separation lemma above.
+
+This theorem is kept private so the module does not export unsupported FT API.
+-/
+private theorem fundamentalTheorem_multiBlock_explicit_noSep
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))

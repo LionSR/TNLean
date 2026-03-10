@@ -215,8 +215,6 @@ private lemma sum_frobSq₂_words (K : MPSTensor d D₁) (hK : ∑ i : Fin d, (K
   rw [← Complex.re_sum, ← Matrix.trace_sum, word_conjTranspose_mul_sum K hK n]
   simp [Matrix.trace_one, Fintype.card_fin]
 
-set_option maxHeartbeats 800000 in
--- The uniform bound proof chains triangle + CS + Frobenius submultiplicativity over word sums
 /-- **Uniform Frobenius-norm bound**: `‖F₂^n(X)‖_F² ≤ D₁² · ‖X‖_F²` for the rectangular
 mixed transfer operator. -/
 private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
@@ -422,8 +420,6 @@ private lemma isInjective_conjugate {D : ℕ}
       _ = ⊤ := by rw [Submodule.map_top]; exact LinearMap.range_eq_top.2 hφ_surj
   exact this
 
-set_option maxHeartbeats 1600000 in
--- Heartbeat bump: the left-canonical gauge + block-embedding + KS-equality chain is large.
 /-- Core algebraic lemma: if there is an eigenvector of `mixedTransferMap₂ A B` with eigenvalue
 of modulus 1, then `D₁ = D₂`.
 

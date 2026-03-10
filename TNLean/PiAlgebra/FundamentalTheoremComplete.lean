@@ -3,7 +3,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.PiAlgebra.Construction
-import TNLean.MPS.BasisNormal
 import TNLean.MPS.FundamentalTheoremMulti
 
 /-!
@@ -31,10 +30,6 @@ It also handles the single-block case where `SameMPV₂` directly gives `SameMPV
 * [Cirac2017MPS] De las Cuevas, Schuch, Pérez-García, Cirac (arXiv:2011.12127)
 -/
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -44,7 +39,7 @@ variable {d : ℕ}
 /-! ### Full multi-block Fundamental Theorem -/
 section FullMultiBlock
 
-variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+variable {r : ℕ} {dim : Fin r → ℕ}
 
 /-- **The full multi-block Fundamental Theorem of MPS.**
 
@@ -74,6 +69,7 @@ theorem fundamentalTheorem_multiBlock_explicit
 
 /-- **Multi-block FT with decomposition.** -/
 theorem fundamentalTheorem_multiBlock_decomposition
+    [∀ k, NeZero (dim k)]
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :
@@ -100,7 +96,7 @@ quantum Perron–Frobenius theory in this special case.
 -/
 section SingleBlockSeparation
 
-variable {dim₀ : ℕ} [NeZero dim₀]
+variable {dim₀ : ℕ}
 
 /-- For a single block, `SameMPV₂` on the block-diagonal tensor gives `SameMPV` on the block
     tensor, provided the scaling factor is nonzero. -/
@@ -141,7 +137,7 @@ The separation hypothesis `hSep` is needed for `r ≥ 2` (quantum PF theory); fo
 is proved by `sameMPV₂_single_block`. -/
 section EndToEnd
 
-variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+variable {r : ℕ} {dim : Fin r → ℕ}
 
 /-- **End-to-end multi-block FT from `SameMPV₂`.**
 
@@ -149,16 +145,17 @@ Starting from `SameMPV₂` on block-diagonal tensors, the per-block separation h
 (the only piece requiring PF theory) yields:
 - Per-block gauge equivalence `GaugeEquiv (A k) (B k)` for all `k`
 - Global gauge equivalence of the block-diagonal tensors
-- Block-permutation decomposition of the Pi-algebra automorphism -/
+- Block-permutation decomposition of the Pi-algebra automorphism
+
+The `hSame₂` hypothesis is retained so that this theorem continues to present the full end-to-end
+interface, even though the current wrapper proof only uses the supplied separation data `hSep`. -/
 theorem fundamentalTheorem_multiBlock_fromSameMPV₂
+    [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))
     (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B))
-    -- The separation hypothesis: SameMPV₂ ⟹ per-block SameMPV.
-    -- This is the step that requires quantum PF theory in the physics proof.
     (hSep : ∀ k, SameMPV (A k) (B k)) :
-    -- Conclusions:
     (∀ k, GaugeEquiv (A k) (B k)) ∧
     GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) ∧
     (∃ (σ : Fin r ≃ Fin r) (hDeq : ∀ i, dim (σ i) = dim i)
@@ -167,12 +164,17 @@ theorem fundamentalTheorem_multiBlock_fromSameMPV₂
        (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDeq i)))
          (componentMap (piAlgEquiv A B hA hSep).toRingEquiv σ i M) =
          (X i : Matrix (Fin (dim i)) (Fin (dim i)) ℂ) * M *
-           ((X i)⁻¹ : GL (Fin (dim i)) ℂ)) :=
-  ⟨fun k => fundamentalTheorem_singleBlock (hA k) (hSep k),
-   fundamentalTheorem_multiBlock_global μ A B hA hSep,
-   piAlgEquiv_decomposition A B hA hSep⟩
+           ((X i)⁻¹ : GL (Fin (dim i)) ℂ)) := by
+  let _ := hSame₂
+  exact
+    ⟨fun k => fundamentalTheorem_singleBlock (hA k) (hSep k),
+      fundamentalTheorem_multiBlock_global μ A B hA hSep,
+      piAlgEquiv_decomposition A B hA hSep⟩
 
-/-- **End-to-end multi-block FT with explicit gauge matrices.** -/
+/-- **End-to-end multi-block FT with explicit gauge matrices.**
+
+As above, `hSame₂` is kept for interface compatibility, while the wrapper proof itself only uses
+`hSep`. -/
 theorem fundamentalTheorem_multiBlock_explicit_fromSameMPV₂
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -181,15 +183,16 @@ theorem fundamentalTheorem_multiBlock_explicit_fromSameMPV₂
     (hSep : ∀ k, SameMPV (A k) (B k)) :
     ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
     ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
-      (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) :=
-  fundamentalTheorem_multiBlock_explicit A B hA hSep
+      (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
+  let _ := hSame₂
+  exact fundamentalTheorem_multiBlock_explicit A B hA hSep
 
 end EndToEnd
 
 /-! ### Equivalence: per-block SameMPV ↔ per-block GaugeEquiv (under injectivity) -/
 section Equivalence
 
-variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+variable {r : ℕ} {dim : Fin r → ℕ}
 
 /-- **Per-block SameMPV ↔ per-block GaugeEquiv**, under per-block injectivity.
 
@@ -203,7 +206,7 @@ theorem perBlock_sameMPV_iff_gaugeEquiv
   ⟨fun hSame k => fundamentalTheorem_singleBlock (hA k) (hSame k),
    fun hGauge k => (hGauge k).sameMPV⟩
 
-/-- Global SameMPV and per-block SameMPV are equivalent (given per-block injectivity). -/
+/-- Global `SameMPV` follows from per-block `SameMPV` for block-diagonal tensors. -/
 theorem global_sameMPV_of_perBlock
     (μ : Fin r → ℂ) (A B : (k : Fin r) → MPSTensor d (dim k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :

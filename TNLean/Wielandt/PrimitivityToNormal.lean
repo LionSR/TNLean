@@ -11,7 +11,7 @@ import TNLean.QPF.PosDef
 import TNLean.Spectral.MixedTransfer
 
 /-!
-# Preparatory lemmas for the `IsPrimitive → IsNormal` bridge
+# Preparatory lemmas for the current `IsPrimitiveMPS → IsNormal` bridge
 
 This file collects spectral-gap consequences of `IsPrimitiveMPS` together with a
 small transfer-map compatibility API. It stops short of proving any `IsNormal`
@@ -150,7 +150,10 @@ theorem IsPrimitiveMPS.transferMap_isChannel
     IsChannel (transferMap (d := d) (D := D) A) :=
   MPSTensor.transferMap_isChannel A hP.norm
 
-/-- Compatibility alias for `IsPrimitiveMPS.transferMap_isChannel`. -/
+/-- Legacy compatibility alias for `IsPrimitiveMPS.transferMap_isChannel`.
+
+Prefer the unprimed theorem; this alias is retained for older downstream code.
+-/
 theorem IsPrimitiveMPS.transferMap_isChannel'
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) :
@@ -166,7 +169,10 @@ theorem IsPrimitiveMPS.transferMap_trace_preserving
     trace (transferMap (d := d) (D := D) A X) = trace X :=
   hP.transferMap_isChannel.tp X
 
-/-- Compatibility alias for `IsPrimitiveMPS.transferMap_trace_preserving`. -/
+/-- Legacy compatibility alias for `IsPrimitiveMPS.transferMap_trace_preserving`.
+
+Prefer the unprimed theorem; this alias is retained for older downstream code.
+-/
 theorem IsPrimitiveMPS.transferMap_trace_preserving'
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
@@ -232,8 +238,5 @@ For the current assembled route with explicit `PosDef` and aperiodicity
 hypotheses, see `QuantumWielandt.lean`.
 -/
 
-/-- Documentation theorem recording that this file only supplies preparatory
-bridge lemmas. -/
-theorem primitivityToNormal_roadmap : True := trivial
 
 end MPSTensor

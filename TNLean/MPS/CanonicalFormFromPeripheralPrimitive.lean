@@ -5,20 +5,22 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalFormFromPrimitive
 import TNLean.MPS.PeripheralToSpectralGap
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
+/-!
+# Canonical form from peripheral primitive blocks
+
+This file converts peripheral-spectrum primitivity of the transfer maps into the existing
+spectral-gap notion `MPSTensor.IsPrimitive`, and then reuses
+`MPSTensor.isCanonicalForm_of_primitive`.
+-/
 
 open scoped Matrix BigOperators
-open Filter
 
 namespace MPSTensor
 
-/-- Builder lemma: derive `IsCanonicalForm` from *peripheral-spectrum* primitivity of each block.
+/-- Build `IsCanonicalForm` from peripheral-spectrum primitivity of each block transfer map.
 
-This is a lightweight wrapper: we first turn peripheral primitivity of `transferMap` into the
-existing `MPSTensor.IsPrimitive` predicate, then reuse
-`MPSTensor.isCanonicalForm_of_primitive`. -/
+This is a compatibility wrapper: the actual work is delegated first to
+`isPrimitive_of_peripheralPrimitive`, and then to `isCanonicalForm_of_primitive`. -/
 theorem isCanonicalForm_of_peripheralPrimitive
     {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
@@ -29,18 +31,8 @@ theorem isCanonicalForm_of_peripheralPrimitive
     (hPrimPer :
       ∀ k, PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := dim k) (A k))) :
     MPSTensor.IsCanonicalForm (d := d) (μ := μ) A := by
-  let hInjData : MPSTensor.HasInjectiveBlocks (d := d) A :=
-    { block_injective := hInj }
-  let hLeftData : MPSTensor.IsLeftCanonicalBlockFamily (d := d) A :=
-    { leftCanonical := hDS }
-  let hμData : MPSTensor.HasStrictOrderedNonzeroWeights μ :=
-    { mu_strict_anti := hμanti, mu_ne_zero := hμne }
-  let hOverlapData : MPSTensor.HasNormalizedSelfOverlap (d := d) A := by
-    refine { overlap_tendsto_one := ?_ }
-    intro k
-    simpa using
-      (MPSTensor.overlap_tendsto_one_of_peripheralPrimitive (A := A k) (hInj k) (hDS k)
-        (hPrimPer k))
-  exact MPSTensor.IsCanonicalForm.ofSeparatedData hInjData hLeftData hμData hOverlapData
+  refine isCanonicalForm_of_primitive hInj hDS hμanti hμne ?_
+  intro k
+  exact isPrimitive_of_peripheralPrimitive (A := A k) (hInj k) (hDS k) (hPrimPer k)
 
 end MPSTensor

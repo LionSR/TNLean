@@ -175,8 +175,6 @@ private lemma norm_sq_sum_mul_le (a b : Fin D → ℂ) :
     ((norm_sum_le _ _).trans (Finset.sum_le_sum fun _ _ => norm_mul_le _ _)) 2).trans
     (Finset.sum_mul_sq_le_sq_mul_sq _ _ _)
 
-set_option maxHeartbeats 800000 in
--- Frobenius submultiplicativity needs extra heartbeats for simp_rw over double sums
 private lemma frobSq_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
     frobSq (A * B) ≤ frobSq A * frobSq B := by
   simp only [frobSq_eq_sum, Matrix.mul_apply]
@@ -216,8 +214,6 @@ private lemma sum_frobSq_words (K : MPSTensor d D) (hK : ∑ i : Fin d, (K i)ᴴ
   rw [← Complex.re_sum, ← Matrix.trace_sum, word_conjTranspose_mul_sum K hK n]
   simp [Matrix.trace_one, Fintype.card_fin]
 
-set_option maxHeartbeats 1600000 in
--- The uniform bound proof chains triangle + CS + Frobenius submult over word sums
 /-- **Uniform Frobenius-norm bound**: `‖F_{AB}^n(X)‖_F² ≤ D² · ‖X‖_F²`. -/
 private lemma hs_contraction_mixedTransfer [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)

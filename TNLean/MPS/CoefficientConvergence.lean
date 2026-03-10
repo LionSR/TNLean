@@ -5,12 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.FundamentalTheoremFull
 import Mathlib.Analysis.SpecificLimits.Normed
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-set_option linter.unusedSimpArgs false
-set_option linter.style.show false
-
 /-!
 # Coefficient convergence for canonical-form BNT decompositions
 
@@ -64,7 +58,7 @@ variable {d : ℕ}
 
 private lemma fin0_lt_of_ne {r : ℕ} (hr : 0 < r) (k : Fin r) (hk : k ≠ ⟨0, hr⟩) :
     ⟨0, hr⟩ < k := by
-  simp only [Fin.lt_def, Fin.val_mk]
+  simp only [Fin.lt_def]
   have : k.val ≠ 0 := by
     intro heq
     exact hk (Fin.ext heq)
@@ -99,7 +93,7 @@ theorem coeff_ratio_tendsto (hμ : HasStrictOrderedNonzeroWeights μ) (hr : 0 < 
         (nhds (if k = ⟨0, hr⟩ then 1 else 0)) := by
   intro k
   by_cases hk : k = ⟨0, hr⟩
-  · simp only [hk, if_pos rfl, div_self (hμ.mu_ne_zero ⟨0, hr⟩), one_pow]
+  · simp only [hk, div_self (hμ.mu_ne_zero ⟨0, hr⟩), one_pow]
     exact tendsto_const_nhds
   · simp only [if_neg hk]
     exact tendsto_pow_atTop_nhds_zero_of_norm_lt_one

@@ -30,10 +30,6 @@ Pi-algebra automorphism, then applies the block-permutation decomposition theore
 * [Cirac2017MPS] De las Cuevas, Schuch, Pérez-García, Cirac (arXiv:2011.12127)
 -/
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -72,6 +68,7 @@ noncomputable def perBlockLinearExtension
     Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
   (linearExtension_exists_unique (hA k) (hSame k)).choose
 
+omit [∀ k, NeZero (dim k)] in
 theorem perBlockLinearExtension_spec
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))
@@ -80,6 +77,7 @@ theorem perBlockLinearExtension_spec
     ∀ i, perBlockLinearExtension A B hA hSame k (A k i) = B k i :=
   (linearExtension_exists_unique (hA k) (hSame k)).choose_spec.1
 
+omit [∀ k, NeZero (dim k)] in
 /-- Per-block multiplicativity. -/
 theorem perBlockLinearExtension_mul
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -143,8 +141,8 @@ noncomputable def piLinearExtension
   LinearMap.pi fun k =>
     (perBlockLinearExtension A B hA hSame k).comp (LinearMap.proj k)
 
-@[simp]
-theorem piLinearExtension_apply
+omit [∀ k, NeZero (dim k)] in
+@[simp] theorem piLinearExtension_apply
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k))
@@ -265,7 +263,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 noncomputable def piTraceMulRightPi
     (A : (k : Fin r) → MPSTensor d (dim k)) :
     (∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) →ₗ[ℂ]
-    (∀ k : Fin r, Fin d → ℂ) :=
+    (Fin r → Fin d → ℂ) :=
   LinearMap.pi fun k =>
     (traceMulRightPi (A k)).comp (LinearMap.proj k)
 
