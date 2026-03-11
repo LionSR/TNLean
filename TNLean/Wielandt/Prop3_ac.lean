@@ -548,4 +548,119 @@ theorem isIrreducibleTensor_of_isPrimitivePaper
   obtain ⟨φ, hφ_ne, hφ_span⟩ := vectorSpreadSpan_ne_top_of_hasInvariantProj A hInv q
   exact hφ_span (hq φ hφ_ne)
 
+/-! ## Part 8: Multiplicativity of vector spread span
+
+If paper-primitivity witnesses at length `q` (i.e. for every nonzero `φ`,
+length-`q` word products applied to `φ` span all of `ℂ^D`), then the same
+holds at every positive multiple `p * q`.
+
+**Proof idea** (induction on `p`):
+A word of length `(p + 1) * q` splits as a length-`q` prefix followed by a
+length-`p * q` suffix. By the induction hypothesis, suffixes produce a
+spanning set, so at least one suffix image `ψ` is nonzero. The prefix images
+of that single `ψ` then span `ℂ^D` by the `q`-hypothesis. Since these
+prefix-suffix concatenations are legitimate words of length `(p + 1) * q`,
+we conclude `vectorSpreadSpan A φ ((p + 1) * q) = ⊤`.
+
+Paper: this is implicit in Proposition 3's power arguments: once the channel
+is primitive at length `q`, it remains primitive at all multiples `p * q`.
+This is a prerequisite for reasoning about the blocked tensor
+`blockTensor A p` and the cyclic-period contradiction.
+-/
+
+/-- The image of `vectorSpreadSpan A φ n₂` under a word of length `n₁` is
+contained in `vectorSpreadSpan A φ (n₁ + n₂)`.
+
+This is the key "monotonicity under prefixing" fact: left-multiplying by a
+length-`n₁` word maps length-`n₂` spread vectors into the length-`(n₁ + n₂)`
+spread span. The proof uses `Submodule.map_span_le` and the composition
+`evalWord A (w₁ ++ w₂) = evalWord A w₁ * evalWord A w₂`. -/
+private lemma vectorSpreadSpan_map_le
+    (A : MPSTensor d D) (φ : Fin D → ℂ)
+    (n₁ n₂ : ℕ) (σ₁ : Fin n₁ → Fin d) :
+    Submodule.map (Matrix.mulVecLin (evalWord A (List.ofFn σ₁)))
+      (vectorSpreadSpan A φ n₂) ≤
+      vectorSpreadSpan A φ (n₁ + n₂) := by
+  rw [vectorSpreadSpan, Submodule.map_span_le]
+  rintro v ⟨σ₂, rfl⟩
+  simp only [Matrix.mulVecLin_apply, Matrix.mulVec_mulVec,
+    ← evalWord_append, ← List.ofFn_fin_append]
+  apply Submodule.subset_span
+  exact ⟨Fin.append σ₁ σ₂, by simp⟩
+
+/-- **Multiplicativity of the vector spread span witness.**
+
+If `vectorSpreadSpan A φ q = ⊤` for every nonzero `φ` (the paper-primitivity
+witness at length `q`), then the same holds at every positive multiple `p * q`.
+
+This is the key fact enabling reasoning about blocked tensors: primitivity at
+length `q` implies primitivity at length `p * q`, which corresponds to the
+transfer map power `E^{p·q}` being positivity-improving.
+
+Paper: implicit in Proposition 3 (a)→(c) of arXiv:0909.5347, where the
+blocked channel `E^p` inherits primitivity properties from `E`. -/
+theorem vectorSpreadSpan_mul_eq_top
+    (A : MPSTensor d D)
+    {q : ℕ} (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤)
+    (p : ℕ) (hp : 0 < p)
+    (φ : Fin D → ℂ) (hφ : φ ≠ 0) :
+    vectorSpreadSpan A φ (p * q) = ⊤ := by
+  -- Induction on p
+  induction p with
+  | zero => omega
+  | succ p ih =>
+    by_cases hp' : p = 0
+    · -- Base: p = 0, so (0 + 1) * q = q
+      simp [hp', hq φ hφ]
+    · -- Inductive step: (p + 1) * q = q + p * q
+      have hp_pos : 0 < p := Nat.pos_of_ne_zero hp'
+      -- By IH: vectorSpreadSpan A φ (p * q) = ⊤
+      have ih_top : vectorSpreadSpan A φ (p * q) = ⊤ := ih hp_pos
+      -- From vectorSpreadSpan A φ (p * q) = ⊤, extract a nonzero ψ in the span
+      have ⟨ψ, hψ_mem, hψ_ne⟩ : ∃ ψ : Fin D → ℂ,
+          ψ ∈ vectorSpreadSpan A φ (p * q) ∧ ψ ≠ 0 := by
+        by_contra hall
+        push_neg at hall
+        have h_bot : vectorSpreadSpan A φ (p * q) = ⊥ := by
+          rw [Submodule.eq_bot_iff]
+          exact fun x hx => hall x hx
+        rw [ih_top] at h_bot
+        -- h_bot : ⊤ = ⊥, but φ ≠ 0 is in ⊤
+        have hmem : φ ∈ (⊥ : Submodule ℂ (Fin D → ℂ)) := h_bot ▸ Submodule.mem_top
+        simp only [Submodule.mem_bot] at hmem
+        exact hφ hmem
+      -- The q-hypothesis gives vectorSpreadSpan A ψ q = ⊤
+      have hψ_span : vectorSpreadSpan A ψ q = ⊤ := hq ψ hψ_ne
+      -- Rewrite (p + 1) * q = q + p * q
+      have hpq : (p + 1) * q = q + p * q := by ring
+      rw [hpq]
+      -- It suffices to show ⊤ ≤ vectorSpreadSpan A φ (q + p * q)
+      rw [eq_top_iff, ← hψ_span, vectorSpreadSpan]
+      -- Show: span of {evalWord A (ofFn σ₁) *ᵥ ψ} ≤ vectorSpreadSpan A φ (q + p * q)
+      rw [Submodule.span_le]
+      rintro v ⟨σ₁, rfl⟩
+      -- v = evalWord A (List.ofFn σ₁) *ᵥ ψ, with ψ ∈ vectorSpreadSpan A φ (p * q)
+      -- So v ∈ image of vectorSpreadSpan A φ (p * q) under mulVecLin
+      have := vectorSpreadSpan_map_le A φ q (p * q) σ₁
+      apply this
+      exact ⟨ψ, hψ_mem, rfl⟩
+
+/-- **Paper-primitivity witnesses at all positive multiples of the primitive length.**
+
+A direct corollary of `vectorSpreadSpan_mul_eq_top`: if `A` is paper-primitive
+with witness length `q`, then `p * q` is also a valid witness for any `p > 0`.
+
+Paper: this is used when reasoning about the blocked tensor `blockTensor A p`,
+whose primitivity (in the paper's sense) follows from the original tensor's
+primitivity. It is a prerequisite for the cyclic-period contradiction in
+Proposition 3 (a)→(c). -/
+theorem isPrimitivePaper_witness_mul
+    (A : MPSTensor d D)
+    (hPrim : IsPrimitivePaper A)
+    {p : ℕ} (hp : 0 < p) :
+    ∃ q' : ℕ, (∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q' = ⊤) ∧
+      ∃ q : ℕ, q' = p * q := by
+  obtain ⟨q, hq⟩ := hPrim
+  exact ⟨p * q, vectorSpreadSpan_mul_eq_top A hq p hp, q, rfl⟩
+
 end MPSTensor
