@@ -28,7 +28,6 @@ The main lemma is intended to feed directly into
 `peripheral_isRootOfUnity_of_closed_powers`.
 -/
 
-set_option linter.unusedSectionVars false
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex

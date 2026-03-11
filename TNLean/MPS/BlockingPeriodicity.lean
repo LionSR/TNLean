@@ -8,9 +8,6 @@ import TNLean.Channel.PeripheralSpectrum
 import TNLean.Channel.PeripheralClosure
 import TNLean.MPS.Transfer
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
 
 /-!
 # Blocking periodicity removal

@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.PeripheralSpectrum
-import TNLean.Channel.PeripheralClosure
 import TNLean.Channel.PeripheralClosureFixedPoint
 import TNLean.Channel.PeriodicityRemoval
 import TNLean.Channel.Schwarz

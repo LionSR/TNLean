@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Wielandt.PrimitivityToNormal
-import TNLean.MPS.CanonicalFormReduction
 
 /-!
 # Primitive + PosDef ⟹ Irreducible Tensor
@@ -89,7 +88,7 @@ private theorem transferMap_pow_tendsto
   set E := transferMap (d := d) (D := D) A
   set Pρ := fixedPointProj (D := D) ρ hP.trace_ne_zero
   set N := E - Pρ
-  have hTP : IsTracePreservingMap E := hP.transferMap_isChannel'.tp
+  have hTP : IsTracePreservingMap E := hP.transferMap_isChannel.tp
   have hρfix : E ρ = ρ := hP.fixedPoint_is_fixed
   -- E^(n+1) = Pρ + N^(n+1)
   have hdecomp : ∀ n, (E ^ (n + 1)) σ = Pρ σ + (N ^ (n + 1)) σ := by
