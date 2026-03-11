@@ -3,15 +3,26 @@
 This chapter establishes that the transfer map of an injective MPS
 tensor has a unique positive semidefinite fixed point (up to scaling),
 and that this fixed point is positive definite.
-The results follow
-\cite{Evans1978Spectral} and \cite[Ch.~6]{Wolf2012Quantum}.
+The conceptual source is Wolf's treatment of irreducible positive
+maps~\cite[Ch.~6, especially Thms.~6.2--6.3]{Wolf2012Quantum}:
+irreducibility implies, via the growth condition
+$(\Id + T)^{d-1}(X) > 0$, that the spectral-radius eigenvalue is
+non-degenerate and its eigenvector is positive definite
+(Thm.~6.3).
+The chapter also draws on~\cite{Evans1978Spectral}.
 
 \section{Positive definiteness}
 
 \begin{remark}\leanok
-	We begin with the injective-tensor proof because it is the shorter,
-	more MPS-specific argument. The irreducible CP-map version follows
-	immediately afterwards.
+	Wolf's general theory treats irreducible positive maps first
+	(\cite[Thm.~6.2]{Wolf2012Quantum}), then derives non-degeneracy
+	and positive definiteness (\cite[Thm.~6.3]{Wolf2012Quantum}).
+	The formalized proof takes a shortcut: injectivity implies
+	irreducibility plus a direct kernel argument, yielding a shorter
+	self-contained proof for the MPS setting. The irreducible
+	CP-map version (Theorem~\ref{thm:psd_fp_pd_irred}) follows
+	immediately afterwards and uses the support-projection argument
+	that corresponds to Wolf's growth-condition route.
 \end{remark}
 
 \begin{theorem}[PSD fixed point is positive definite]\label{thm:psd_fp_pd}
@@ -38,11 +49,14 @@ The results follow
 	for every matrix $M$. Given any vector $w$, choose $M$ with
 	$M v = w$. Then $\rho w = 0$ for every $w$, so $\rho = 0$,
 	contradicting $\rho \neq 0$.
-	In~\cite[Thm.~6.2]{Wolf2012Quantum}, positive definiteness
-	is proved using the growth condition
-	$(\Id + \E)^{D-1}(X) > 0$ for irreducible maps
-	(\cite[Thm.~6.2, condition~(2)]{Wolf2012Quantum}).
-	Here injectivity rules out a nontrivial kernel directly.
+	\smallskip\noindent\textbf{Relation to Wolf:}
+	In~\cite[Thm.~6.3, item~2]{Wolf2012Quantum},
+	positive definiteness of the Perron--Frobenius eigenvector
+	is established for any irreducible positive map via the
+	growth condition $(\Id + T)^{d-1}(X) > 0$
+	of~\cite[Thm.~6.2, condition~(2)]{Wolf2012Quantum}.
+	The formal proof above does not follow that route;
+	instead, injectivity rules out a nontrivial kernel directly.
 \end{proof}
 
 \begin{theorem}[PSD fixed point is PD --- irreducible version]\label{thm:psd_fp_pd_irred}
@@ -71,6 +85,9 @@ The results follow
 	If $Q = \Id$ then $\rho$ is positive definite,
 	contradicting our assumption.
 	Hence $\rho$ must be positive definite.
+	This argument corresponds to the support-projection direction
+	of~\cite[Thm.~6.2, condition~(1)]{Wolf2012Quantum}; the formal
+	proof uses exactly this invariant-projection contradiction.
 \end{proof}
 
 \section{Uniqueness}
@@ -98,12 +115,16 @@ The results follow
 	(it has a zero eigenvalue by construction of~$c_0$).
 	By Theorem~\ref{thm:psd_fp_pd}, $\tau$ must be zero,
 	giving $\sigma = c_0 \rho$.
-	In~\cite[Thm.~6.2]{Wolf2012Quantum}, uniqueness follows from
-	non-degeneracy of the spectral radius eigenvalue via
-	the $(\Id + \E)^{D-1}$ growth condition.
-	Here the conclusion follows by subtracting the
-	minimal-eigenvalue multiple of $\rho$ and applying
-	Theorem~\ref{thm:psd_fp_pd}.
+	\smallskip\noindent\textbf{Relation to Wolf:}
+	In~\cite[Thm.~6.3, item~2]{Wolf2012Quantum}, uniqueness
+	(non-degeneracy of the spectral-radius eigenvalue) is proved
+	for any irreducible positive map by a minimal-eigenvalue
+	argument using the growth condition
+	of~\cite[Thm.~6.2]{Wolf2012Quantum}.
+	The formal proof uses the same minimal-eigenvalue idea
+	but exploits the injective-tensor positive-definiteness
+	result (Theorem~\ref{thm:psd_fp_pd}) instead of the
+	growth condition.
 \end{proof}
 
 \begin{remark}\leanok

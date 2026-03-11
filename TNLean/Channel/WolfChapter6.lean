@@ -1,0 +1,128 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+import TNLean.Channel.Irreducible
+import TNLean.Channel.CesaroFixedPoint
+import TNLean.Channel.PerronFrobeniusExistence
+import TNLean.Channel.PeripheralSpectrum
+import TNLean.QPF.Assembly
+
+/-!
+# Wolf Chapter 6 — Spectral Properties: Public Theorem Index
+
+This module serves as a **navigational index** that maps the formalized theorems
+in this project to the numbering in:
+
+> M. Wolf, *Quantum Channels & Operations: Guided Tour* (2012), Chapter 6.
+
+Each entry lists the Wolf result, its status (fully formalized / partially
+formalized / not yet formalized), and the Lean declaration(s) that correspond.
+
+No new proofs are introduced here; this is a documentation-only re-export.
+
+---
+
+## §6.2 Irreducible maps and Perron–Frobenius theory
+
+### Wolf Theorem 6.2 (Irreducible positive maps) — PARTIALLY FORMALIZED
+
+**Item 1** (definition via invariant projections):
+* `IsIrreducibleMap` — `TNLean.Channel.Irreducible`
+
+**Items 2–4** (equivalent characterizations: `(id + T)^{d-1}`, `exp[tT]`,
+orthogonal trace condition): NOT FORMALIZED.
+
+### Wolf Theorem 6.3 (Spectral radius of irreducible maps) — MOSTLY FORMALIZED
+
+**Item 2** (non-degenerate eigenvalue, strictly positive eigenvector):
+* Positive definiteness: `posSemidef_fixedPoint_isPosDef` — `TNLean.QPF.PosDef`
+* Positive definiteness (irreducible): `posSemidef_fixedPoint_isPosDef_of_irreducible`
+* Uniqueness (non-degeneracy): `posSemidef_fixedPoint_unique` — `TNLean.QPF.Uniqueness`
+* Uniqueness (irreducible): `posSemidef_fixedPoint_unique_of_irreducible`
+
+**Item 3** (uniqueness of positive eigenvalue):
+* Follows from `posSemidef_fixedPoint_unique` (any PSD eigenvector must have
+  the same eigenvalue as the non-degenerate one).
+
+**Item 4** (spectral radius identity `r = ρ(T)`): NOT DIRECTLY FORMALIZED.
+(We work with the normalized case where the spectral radius is 1.)
+
+### Wolf Theorem 6.4 (Irreducibility from spectral properties) — NOT FORMALIZED
+
+### Wolf Theorem 6.5 (Spectral radius and positive eigenvectors) — FORMALIZED
+
+* `exists_posSemidef_eigenvector` — `TNLean.Channel.PerronFrobeniusExistence`
+
+Uses Brouwer's fixed-point theorem on density matrices (proved in
+`TNLean.Axioms.BrouwerFixedPointDensityMatrices`).
+
+### Wolf Proposition 6.6 (Similarity preserving irreducibility) — PARTIALLY
+
+* Scalar case: `isIrreducibleMap_smul` — `TNLean.Channel.PerronFrobeniusExistence`
+* Full similarity `T' = c C⁻¹ T(C · C†) C⁻†`: NOT FORMALIZED.
+
+### Wolf Theorem 6.6 (Peripheral spectrum of irreducible Schwarz maps)
+
+**Item 1** (roots-of-unity structure): PARTIALLY FORMALIZED
+* `peripheral_isRootOfUnity_of_pow_eigenvalue` — `TNLean.Channel.PeripheralSpectrum`
+
+**Items 2–4** (non-degeneracy, unitary eigenvector, cyclic projections):
+PARTIALLY FORMALIZED in `TNLean.Channel.CyclicDecomposition`.
+
+---
+
+## §6.3 Primitive maps
+
+### Wolf Theorem 6.7 (Primitive maps, 4 equivalent conditions)
+
+**Item 4** (trivial peripheral spectrum, PD eigenvector):
+* `IsPrimitive` — `TNLean.Channel.PeripheralSpectrum`
+* `isPrimitive_of_compl_eigenvalues_lt_one` / `compl_eigenvalue_norm_lt_one_of_primitive`
+
+Other items: PARTIALLY via spectral gap infrastructure in `TNLean.Spectral.*`.
+
+### Wolf Theorem 6.8 (CP primitive maps, Kraus span characterizations)
+
+* `IsPrimitivePaper` — `TNLean.Wielandt.PrimitivePaper`
+  (item 3: `Kₘ = M_d(ℂ)` for `m ≥ q`)
+
+### Wolf Theorem 6.9 (Quantum Wielandt inequality)
+
+* `quantum_wielandt` — `TNLean.Wielandt.QuantumWielandt`
+  (bound `q ≤ d⁴ · (d² - k + 1)`)
+
+---
+
+## §6.4 Fixed points
+
+### Wolf Theorem 6.10 (Brouwer's fixed point theorem)
+
+* `brouwer_fixedPoint_densityMatrices` — `TNLean.Axioms.BrouwerFixedPointDensityMatrices`
+
+### Wolf Theorem 6.11 (Stationary states)
+
+* Via Brouwer: `exists_posSemidef_eigenvector` (for general positive maps)
+* Via Cesàro: `IsChannel.exists_posSemidef_fixedPoint` — `TNLean.Channel.CesaroFixedPoint`
+
+### Wolf Proposition 6.8 (Positive fixed-points)
+
+* `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.CesaroFixedPoint`
+
+---
+
+## §6.5 Cycles and recurrences
+
+### Wolf Theorem 6.16 (Structure of cycles)
+
+* Partially formalized in `TNLean.Channel.CyclicDecomposition`
+
+---
+
+## Assembly: the quantum Perron–Frobenius theorem
+
+* `quantum_perron_frobenius` — `TNLean.QPF.Assembly`
+  Combines existence + positive definiteness + uniqueness (Wolf Thm 6.3).
+
+* `injective_transfer_unique_fixed_point'` — same, without `0 < D` hypothesis.
+-/

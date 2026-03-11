@@ -132,3 +132,6 @@ import TNLean.Wielandt.CumulativeToWordSpan
 import TNLean.Wielandt.QuantumWielandt
 
 import TNLean.Channel.CyclicDecomposition
+
+-- Wolf Chapter 6 index (documentation-only re-export; no new proofs)
+import TNLean.Channel.WolfChapter6

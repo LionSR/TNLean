@@ -19,6 +19,16 @@ import Mathlib.Tactic.NoncommRing
 If `A` is injective (i.e., `{A_i}` spans `M_D(ℂ)`) and `ρ` is a nonzero
 PSD fixed point of `E_A(X) = ∑ A_i X A_i†`, then `ρ` is positive definite.
 
+This formalizes the positive-definiteness part of **Wolf Theorem 6.3**
+(Spectral radius of irreducible maps), item 2: the eigenvector corresponding to
+the spectral radius is strictly positive (`T(X) = rX > 0`). In our setting the
+spectral radius has already been normalized to 1 (i.e., the map is TP), so the
+eigenvalue equation becomes a fixed-point equation.
+
+The irreducibility-based variant `posSemidef_fixedPoint_isPosDef_of_irreducible`
+follows the same strategy but under the weaker hypothesis `IsIrreducibleMap E`
+instead of `IsInjective A`.
+
 ## Main results
 
 * `posSemidef_fixedPoint_isPosDef`: PSD fixed point → PD under injectivity
@@ -26,8 +36,8 @@ PSD fixed point of `E_A(X) = ∑ A_i X A_i†`, then `ρ` is positive definite.
 
 ## References
 
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.3 item 2][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, 2012][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -131,8 +141,9 @@ private lemma ker_contains_all_of_span
   | smul c a _ ha =>
     simp [Matrix.conjTranspose_smul, Matrix.smul_mulVec, Matrix.mulVec_smul, ha]
 
-/-- **Positive definiteness from injectivity**: If `A` is injective and `ρ`
-is a nonzero PSD fixed point of the transfer map, then `ρ` is PD. -/
+/-- **Positive definiteness from injectivity** (Wolf Thm 6.3(2)):
+If `A` is injective and `ρ` is a nonzero PSD fixed point of the transfer map,
+then `ρ` is positive definite. -/
 theorem posSemidef_fixedPoint_isPosDef
     (A : MPSTensor d D) (hA : IsInjective A)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
@@ -170,7 +181,8 @@ theorem posSemidef_fixedPoint_isPosDef
     simpa [Finset.sum_ite_eq, Finset.mem_univ] using h
   exact hρ_ne h_rho_zero
 
--- Corollary for the irreducibility-based formulation
+/-- Corollary for the irreducibility-based formulation (still Wolf Thm 6.3(2),
+but with `IsIrreducibleMap E` instead of `IsInjective A`). -/
 theorem posSemidef_fixedPoint_isPosDef_of_irreducible
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))

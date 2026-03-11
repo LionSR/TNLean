@@ -139,8 +139,10 @@ theorem isRootOfUnity_of_finite_powers (μ : ℂ) (hμ : ‖μ‖ = 1)
         rw [← pow_add, Nat.add_sub_cancel' h.le, mul_one]; exact heq)⟩
 
 /-- **Peripheral eigenvalues with powers-are-eigenvalues property are roots of unity.**
-This is the core of Wolf Theorem 6.6: for irreducible CPTP maps, the multiplicative
-domain theory ensures that powers of peripheral eigenvalues remain eigenvalues. -/
+This is the combinatorial core of **Wolf Theorem 6.6** (Peripheral spectrum of
+irreducible Schwarz maps), item 1: the peripheral spectrum forms a cyclic group
+`{exp(2πik/m)}_{k ∈ ℤ_m}`. For irreducible CPTP maps, the multiplicative domain
+theory ensures that powers of peripheral eigenvalues remain eigenvalues. -/
 theorem peripheral_isRootOfUnity_of_pow_eigenvalue
     {V : Type*} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
     (E : V →ₗ[ℂ] V)

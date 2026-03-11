@@ -7,17 +7,19 @@ import Mathlib.Analysis.SpecificLimits.Normed
 /-!
 # Primitive Quantum Channels
 
-This file contains basic infrastructure toward the theory of **primitive** quantum channels.
+This file contains basic infrastructure toward the theory of **primitive** quantum channels
+(Wolf §6.3, Theorem 6.7: equivalent characterizations of primitivity).
 
-At the moment, we formalize the **rank-one projection** onto a fixed point and the
-algebraic decomposition
+We formalize the **rank-one projection** onto a fixed point and the algebraic decomposition
 \[
   E^n = P + (E-P)^n \qquad (n \ge 1)
 \]
-where `P` is the fixed-point projection.
+where `P` is the fixed-point projection. This decomposition is the algebraic core
+of Wolf Thm 6.7 item 3 → item 1: the spectral gap `‖E - P‖ < 1` ensures
+`(E - P)^n → 0`, so `E^n → P`, giving convergence to the unique fixed state.
 
 ## References
-* Wolf, *Quantum Channels & Operations*, Chapter 6
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.3 Thm 6.7][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
