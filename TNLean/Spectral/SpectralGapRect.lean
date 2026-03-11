@@ -311,31 +311,6 @@ end EigenvalueBound
 
 section DimensionEquality
 
-/-- If `ker(X)` is invariant under all generators `(B k)ᴴ` and `B` is injective (spanning),
-then `ker(X)` is invariant under all matrices.
-
-Generalization of the square-case `ker_X_all_of_inj` to rectangular `X`. -/
-lemma ker_rect_all_of_inj
-    (B : MPSTensor d D₂) (hB : IsInjective B)
-    (X : Matrix (Fin D₁) (Fin D₂) ℂ)
-    (h : ∀ k : Fin d, ∀ v, X *ᵥ v = 0 → X *ᵥ ((B k)ᴴ *ᵥ v) = 0) :
-    ∀ (M : Matrix (Fin D₂) (Fin D₂) ℂ) (v : Fin D₂ → ℂ),
-      X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0 := by
-  intro M v hv
-  suffices ∀ N : Matrix (Fin D₂) (Fin D₂) ℂ, X *ᵥ (Nᴴ *ᵥ v) = 0 by
-    specialize this Mᴴ; rwa [Matrix.conjTranspose_conjTranspose] at this
-  intro N
-  have hN : N ∈ Submodule.span ℂ (Set.range B) := hB ▸ Submodule.mem_top
-  induction hN using Submodule.span_induction with
-  | mem y hy =>
-    obtain ⟨k, rfl⟩ := hy
-    exact h k v hv
-  | zero => simp
-  | add a b _ _ ha hb =>
-    rw [Matrix.conjTranspose_add, Matrix.add_mulVec, Matrix.mulVec_add, ha, hb, add_zero]
-  | smul c a _ ha =>
-    rw [Matrix.conjTranspose_smul, Matrix.smul_mulVec, Matrix.mulVec_smul, ha, smul_zero]
-
 /-- If `X ≠ 0` and `ker(X)` is invariant under all `D₂ × D₂` matrices,
 then `X` has trivial kernel (is injective as a linear map). -/
 private lemma injective_of_ker_all [NeZero D₂]
@@ -372,26 +347,6 @@ private lemma injective_of_ker_all [NeZero D₂]
     rw [show (0 : Matrix (Fin D₁) (Fin D₂) ℂ) i j = 0 from rfl]
     rw [← this]; exact congr_fun h_ej i
   exact hX h_X_zero
-
-/-- If `X : Matrix (Fin D₁) (Fin D₂) ℂ` is injective (trivial kernel), then `D₂ ≤ D₁`. -/
-private lemma dim_le_of_injective_matrix [NeZero D₂]
-    (X : Matrix (Fin D₁) (Fin D₂) ℂ)
-    (h_inj : ∀ v : Fin D₂ → ℂ, X *ᵥ v = 0 → v = 0) :
-    D₂ ≤ D₁ := by
-  -- X defines an injective linear map ℂ^{D₂} → ℂ^{D₁}, so D₂ ≤ D₁.
-  -- Use: injective linear map between finite-dim spaces ⟹ dim(domain) ≤ dim(codomain).
-  let f : (Fin D₂ → ℂ) →ₗ[ℂ] (Fin D₁ → ℂ) := Matrix.toLin' X
-  have hf_inj : Function.Injective f := by
-    intro u v huv
-    have h1 : f u - f v = 0 := sub_eq_zero.mpr huv
-    have h2 : f (u - v) = 0 := by simp [h1]
-    have h3 : X *ᵥ (u - v) = 0 := h2
-    have h4 : u - v = 0 := h_inj _ h3
-    exact eq_of_sub_eq_zero h4
-  have h1 : Module.finrank ℂ (Fin D₂ → ℂ) ≤ Module.finrank ℂ (Fin D₁ → ℂ) :=
-    LinearMap.finrank_le_finrank_of_injective hf_inj
-  simp only [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] at h1
-  exact h1
 
 /-- Conjugation by an invertible matrix preserves injectivity (spanning). -/
 private lemma isInjective_conjugate {D : ℕ}
@@ -647,8 +602,8 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   have hB' : IsInjective B' := isInjective_conjugate B hB SB hSB_det
   -- ker(X') = 0 → X' injective → D₂ ≤ D₁
   have h_D₂_le : D₂ ≤ D₁ :=
-    dim_le_of_injective_matrix X'
-      (injective_of_ker_all X' hX'ne (ker_rect_all_of_inj B' hB' X' hker_X'))
+    Matrix.dim_le_of_mulVec_injective X'
+      (injective_of_ker_all X' hX'ne (ker_all_of_inj B' hB' X' hker_X'))
   -- === 10. ker(X'†) invariant under (A' k)† ===
   have hX'hne : X'ᴴ ≠ 0 := by
     intro h; apply hX'ne; exact Matrix.conjTranspose_eq_zero.mp h
@@ -662,8 +617,8 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   have hA' : IsInjective A' := isInjective_conjugate A hA SA hSA_det
   -- ker(X'†) = 0 → X'† injective → D₁ ≤ D₂
   have h_D₁_le : D₁ ≤ D₂ :=
-    dim_le_of_injective_matrix X'ᴴ
-      (injective_of_ker_all X'ᴴ hX'hne (ker_rect_all_of_inj A' hA' X'ᴴ hker_X'h))
+    Matrix.dim_le_of_mulVec_injective X'ᴴ
+      (injective_of_ker_all X'ᴴ hX'hne (ker_all_of_inj A' hA' X'ᴴ hker_X'h))
   -- === 11. Conclusion ===
   exact le_antisymm h_D₁_le h_D₂_le
 

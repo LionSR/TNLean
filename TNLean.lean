@@ -4,11 +4,13 @@
 Stable import surface for the maintained TNLean library.
 
 This file re-exports the modules intended for downstream users. The following
-legacy surfaces are intentionally excluded:
+legacy or documentary surfaces are intentionally excluded:
 
 * compatibility re-export wrappers `TNLean.PositiveMapSpectral`,
   `TNLean.TransferSpectral`, and `TNLean.PiAlgebraExtension`;
 * the non-stable entrypoint `TNLean.Experimental`;
+* the legacy bi-canonical periodicity wrappers
+  `TNLean.Channel.PeripheralClosure` and `TNLean.MPS.BlockingPeriodicity`;
 * the archival alternate proof `TNLean.MPS.BlockingPeriodicityCFII2`;
 * the documentary counterexample `TNLean.Scratch.BlockSepCounterexample`.
 -/
@@ -69,7 +71,6 @@ import TNLean.MPS.Blocking
 import TNLean.MPS.MPVOverlap
 import TNLean.MPS.Transfer
 import TNLean.MPS.BlockingTransfer
-import TNLean.MPS.BlockingPeriodicity
 import TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint
 import TNLean.MPS.TransferNormalization
 import TNLean.MPS.FixedPointInvariantProjection

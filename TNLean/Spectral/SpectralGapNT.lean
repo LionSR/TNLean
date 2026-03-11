@@ -30,20 +30,6 @@ namespace MPSTensor
 
 variable {d D D₁ D₂ : ℕ}
 
-private lemma sum_sandwich {l m n r : ℕ}
-    (L : Matrix (Fin l) (Fin m) ℂ) (R : Matrix (Fin n) (Fin r) ℂ)
-    (M : Fin d → Matrix (Fin m) (Fin n) ℂ) :
-    ∑ i : Fin d, L * M i * R = L * (∑ i : Fin d, M i) * R := by
-  calc
-    ∑ i : Fin d, L * M i * R = (∑ i : Fin d, L * M i) * R := by
-      simpa [Matrix.mul_assoc] using
-        (Matrix.sum_mul (s := (Finset.univ : Finset (Fin d)))
-          (f := fun i : Fin d => L * M i) (M := R)).symm
-    _ = (L * ∑ i : Fin d, M i) * R := by
-      exact congrArg (fun T => T * R) <|
-        (Matrix.mul_sum (s := (Finset.univ : Finset (Fin d)))
-          (f := fun i : Fin d => M i) (M := L)).symm
-
 private lemma norm_starRingEnd_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
     ‖(starRingEnd ℂ) μ‖ = 1 := by
   simpa [Complex.norm_conj] using hμ
@@ -221,7 +207,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
         simp [hterm]
       _ = SA⁻¹ * (∑ i : Fin d, A i * X * (B i)ᴴ) * (SBᴴ)⁻¹ := by
         simpa using
-          (sum_sandwich (L := SA⁻¹) (R := (SBᴴ)⁻¹)
+          (Matrix.sum_mul_mul (L := SA⁻¹) (R := (SBᴴ)⁻¹)
             (M := fun i : Fin d => A i * X * (B i)ᴴ))
       _ = SA⁻¹ * (μ • X) * (SBᴴ)⁻¹ := by rw [hFXsum]
       _ = μ • (SA⁻¹ * X * (SBᴴ)⁻¹) := by
@@ -319,7 +305,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
             = ∑ i : Fin d, SAᴴ * ((A i)ᴴ * A i) * SA := by
                 simp [htermA]
         _ = SAᴴ * (∑ i : Fin d, (A i)ᴴ * A i) * SA := by
-                simp [sum_sandwich (L := SAᴴ) (R := SA)
+                simp [Matrix.sum_mul_mul (L := SAᴴ) (R := SA)
                     (M := fun i : Fin d => (A i)ᴴ * A i)]
         _ = SAᴴ * 1 * SA := by rw [hA_left]
         _ = SAᴴ * SA := by simp
@@ -355,7 +341,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
             = ∑ i : Fin d, SBᴴ * ((B i)ᴴ * B i) * SB := by
                 simp [htermB]
         _ = SBᴴ * (∑ i : Fin d, (B i)ᴴ * B i) * SB := by
-                simp [sum_sandwich (L := SBᴴ) (R := SB)
+                simp [Matrix.sum_mul_mul (L := SBᴴ) (R := SB)
                     (M := fun i : Fin d => (B i)ᴴ * B i)]
         _ = SBᴴ * 1 * SB := by rw [hB_left]
         _ = SBᴴ * SB := by simp
@@ -444,7 +430,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
         simp [hterm]
       _ = X' * (∑ i : Fin d, B' i * (B' i)ᴴ) * X'ᴴ := by
         simpa using
-          (sum_sandwich (L := X') (R := X'ᴴ)
+          (Matrix.sum_mul_mul (L := X') (R := X'ᴴ)
             (M := fun i : Fin d => B' i * (B' i)ᴴ))
       _ = XXh := by
         simp [XXh, hB'unital]
@@ -479,7 +465,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
         simp [hterm]
       _ = SA * (∑ i : Fin d, A' i * XXh * (A' i)ᴴ) * SAᴴ := by
         simpa using
-          (sum_sandwich (L := SA) (R := SAᴴ)
+          (Matrix.sum_mul_mul (L := SA) (R := SAᴴ)
             (M := fun i : Fin d => A' i * XXh * (A' i)ᴴ))
       _ = SA * transferMap A' XXh * SAᴴ := by
         simp [transferMap_apply]
@@ -718,22 +704,6 @@ private lemma injective_of_posDef_conjTranspose_mul_self
     simpa [Matrix.mulVec_mulVec] using hXh
   simp [hzero] at hpos
 
-private lemma dim_le_of_injective_matrix [NeZero D₂]
-    (X : Matrix (Fin D₁) (Fin D₂) ℂ)
-    (h_inj : ∀ v : Fin D₂ → ℂ, X *ᵥ v = 0 → v = 0) :
-    D₂ ≤ D₁ := by
-  let f : (Fin D₂ → ℂ) →ₗ[ℂ] (Fin D₁ → ℂ) := Matrix.toLin' X
-  have hf_inj : Function.Injective f := by
-    intro u v huv
-    have h1 : f u - f v = 0 := sub_eq_zero.mpr huv
-    have h2 : f (u - v) = 0 := by simp [h1]
-    have h3 : X *ᵥ (u - v) = 0 := h2
-    have h4 : u - v = 0 := h_inj _ h3
-    exact eq_of_sub_eq_zero h4
-  have h1 : Module.finrank ℂ (Fin D₂ → ℂ) ≤ Module.finrank ℂ (Fin D₁ → ℂ) :=
-    LinearMap.finrank_le_finrank_of_injective hf_inj
-  simpa [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] using h1
-
 private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
     [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -840,7 +810,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
               simp [hterm]
       _ = SA⁻¹ * (∑ i : Fin d, A i * X * (B i)ᴴ) * (SBᴴ)⁻¹ := by
             simpa using
-              (sum_sandwich (L := SA⁻¹) (R := (SBᴴ)⁻¹)
+              (Matrix.sum_mul_mul (L := SA⁻¹) (R := (SBᴴ)⁻¹)
                 (M := fun i : Fin d => A i * X * (B i)ᴴ))
       _ = SA⁻¹ * (μ • X) * (SBᴴ)⁻¹ := by rw [hFXsum]
       _ = μ • X' := by
@@ -1005,7 +975,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
         simp [hterm]
       _ = X' * (∑ i : Fin d, B' i * (B' i)ᴴ) * X'ᴴ := by
         simpa using
-          (sum_sandwich (L := X') (R := X'ᴴ)
+          (Matrix.sum_mul_mul (L := X') (R := X'ᴴ)
             (M := fun i : Fin d => B' i * (B' i)ᴴ))
       _ = X' * X'ᴴ := by rw [hB'unital]; simp
       _ = σA := rfl
@@ -1032,7 +1002,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
         simp [hterm]
       _ = X'ᴴ * (∑ i : Fin d, A' i * (A' i)ᴴ) * X' := by
         simpa using
-          (sum_sandwich (L := X'ᴴ) (R := X')
+          (Matrix.sum_mul_mul (L := X'ᴴ) (R := X')
             (M := fun i : Fin d => A' i * (A' i)ᴴ))
       _ = X'ᴴ * X' := by rw [hA'unital]; simp
       _ = σB := rfl
@@ -1073,7 +1043,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
         simp [hterm]
       _ = SA * (∑ i : Fin d, A' i * σA * (A' i)ᴴ) * SAᴴ := by
         simpa using
-          (sum_sandwich (L := SA) (R := SAᴴ)
+          (Matrix.sum_mul_mul (L := SA) (R := SAᴴ)
             (M := fun i : Fin d => A' i * σA * (A' i)ᴴ))
       _ = SA * transferMap A' σA * SAᴴ := by
         simp [transferMap_apply]
@@ -1104,7 +1074,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
         simp [hterm]
       _ = SB * (∑ i : Fin d, B' i * σB * (B' i)ᴴ) * SBᴴ := by
         simpa using
-          (sum_sandwich (L := SB) (R := SBᴴ)
+          (Matrix.sum_mul_mul (L := SB) (R := SBᴴ)
             (M := fun i : Fin d => B' i * σB * (B' i)ᴴ))
       _ = SB * transferMap B' σB * SBᴴ := by
         simp [transferMap_apply]
@@ -1167,9 +1137,9 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
   have hX'hinj : ∀ v : Fin D₁ → ℂ, X'ᴴ *ᵥ v = 0 → v = 0 :=
     injective_of_posDef_conjTranspose_mul_self X'ᴴ (by simpa [σA] using hσA_pd)
   have h_D₂_le : D₂ ≤ D₁ :=
-    dim_le_of_injective_matrix X' hX'inj
+    Matrix.dim_le_of_mulVec_injective X' hX'inj
   have h_D₁_le : D₁ ≤ D₂ :=
-    dim_le_of_injective_matrix X'ᴴ hX'hinj
+    Matrix.dim_le_of_mulVec_injective X'ᴴ hX'hinj
   exact le_antisymm h_D₁_le h_D₂_le
 
 /--

@@ -14,14 +14,20 @@ import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 /-!
 # Peripheral eigenvalues closed under powers (fixed-point version)
 
-`TNLean/Channel/PeripheralClosure.lean` proves that peripheral eigenvalues are closed under
-powers for **irreducible, bi-canonical** Kraus maps.
+This file contains the preferred live formulation of peripheral-spectrum
+closure under powers.
 
-In this file we replace the trace-preserving (TP) assumption by the existence of a
-**positive definite fixed point of the adjoint map** (a faithful invariant state).
+Instead of assuming both unitality and trace preservation, we work with a
+unital Kraus family together with a **positive definite fixed point of the
+adjoint map** (a faithful invariant state).
 
 The key new input is the weighted Kadison–Schwarz equality
-`Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint` from `TNLean/Channel/Schwarz.lean`.
+`Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint` from
+`TNLean/Channel/Schwarz.lean`.
+
+The older special-case wrapper `TNLean/Channel/PeripheralClosure.lean` is
+retained only for compatibility and is intentionally off the stable root
+import surface.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -32,8 +38,8 @@ namespace MPSTensor
 /-- **Peripheral eigenvalues are closed under powers** for irreducible unital Kraus maps
 admitting a positive definite fixed point of the adjoint map.
 
-This is the fixed-point (non-TP) analogue of
-`peripheralEigenvalues_pow_mem_of_irreducible_biCanonical`. -/
+This is the preferred live formulation. The older unital + trace-preserving
+special case is recovered by taking `ρ = 1`. -/
 theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)

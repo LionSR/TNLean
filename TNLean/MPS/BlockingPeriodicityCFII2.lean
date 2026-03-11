@@ -35,9 +35,10 @@ The main theorem is
 
 ## Status
 
-This file is retained as a fully compiling archival Appendix-A route. It is
-intentionally excluded from `TNLean.lean`, and new code should prefer
-`TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint`.
+This file is retained as a fully compiling archival Appendix-A route. The
+stable library surface now keeps only
+`TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint` as the live blocking module,
+so this file remains intentionally excluded from `TNLean.lean`.
 
 No stable in-repo module currently depends on this older CFII development
 exactly, but we keep the full file as a checked alternate proof instead of
