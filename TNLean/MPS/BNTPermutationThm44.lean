@@ -345,6 +345,470 @@ We now combine the two non-vanishing-overlap lemmas with the existing overlap-de
 statement, without assuming span equality.
 -/
 
+/-! ### Shared matching kernels -/
+
+private lemma eq_dim_of_not_tendsto_zero_mpvOverlap
+    {d gA gB : ℕ}
+    {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+    (A : (j : Fin gA) → MPSTensor d (dimA j))
+    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    {j : Fin gA} {k : Fin gB}
+    (h_nonzero :
+      ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0))
+    (h_zero_of_dim_ne :
+      dimA j ≠ dimB k →
+        Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0)) :
+    dimA j = dimB k := by
+  by_contra hdim
+  exact h_nonzero (h_zero_of_dim_ne hdim)
+
+private lemma gaugePhaseEquiv_of_not_tendsto_zero_mpvOverlap
+    {d gA gB : ℕ}
+    {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+    (A : (j : Fin gA) → MPSTensor d (dimA j))
+    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    {j : Fin gA} {k : Fin gB}
+    (hdim : dimA j = dimB k)
+    (h_nonzero :
+      ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0))
+    (h_zero_of_not_gauge :
+      ¬ GaugePhaseEquiv (d := d)
+          (cast (congr_arg (MPSTensor d) hdim) (A j))
+          (B k) →
+        Tendsto
+          (fun N =>
+            mpvOverlap (d := d)
+              (cast (congr_arg (MPSTensor d) hdim) (A j))
+              (B k) N)
+          atTop (nhds 0)) :
+    GaugePhaseEquiv (d := d)
+      (cast (congr_arg (MPSTensor d) hdim) (A j))
+      (B k) := by
+  by_contra hNot
+  exact h_nonzero <|
+    (h_zero_of_not_gauge hNot).congr
+      (fun N => mpvOverlap_cast_dim_left hdim (A j) (B k) N)
+
+private lemma mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_injective
+    {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂] (hdim : D₁ = D₂)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
+    (hNot :
+      ¬ GaugePhaseEquiv (d := d) (cast (congr_arg (MPSTensor d) hdim) A) B) :
+    Tendsto
+      (fun N =>
+        mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) hdim) A) B N)
+      atTop (nhds 0) := by
+  have hAcst_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) A) :=
+    (isInjective_cast_dim hdim A).mpr hA_inj
+  have hAcst_norm : ∑ i : Fin d,
+      ((cast (congr_arg (MPSTensor d) hdim) A) i)ᴴ *
+        ((cast (congr_arg (MPSTensor d) hdim) A) i) = 1 :=
+    (leftCanonical_cast_dim hdim A).mpr hA_norm
+  exact mpvOverlap_tendsto_zero
+    (cast (congr_arg (MPSTensor d) hdim) A) B
+    hAcst_inj hB_inj hAcst_norm hB_norm hNot
+
+private lemma mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_of_irreducible_TP
+    {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂] (hdim : D₁ = D₂)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
+    (hNot :
+      ¬ GaugePhaseEquiv (d := d) (cast (congr_arg (MPSTensor d) hdim) A) B) :
+    Tendsto
+      (fun N =>
+        mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) hdim) A) B N)
+      atTop (nhds 0) := by
+  have hAcst_irr : IsIrreducibleTensor (cast (congr_arg (MPSTensor d) hdim) A) :=
+    (isIrreducibleTensor_cast_dim hdim A).mpr hA_irr
+  have hAcst_norm : ∑ i : Fin d,
+      ((cast (congr_arg (MPSTensor d) hdim) A) i)ᴴ *
+        ((cast (congr_arg (MPSTensor d) hdim) A) i) = 1 :=
+    (leftCanonical_cast_dim hdim A).mpr hA_norm
+  exact mpvOverlap_tendsto_zero_of_irreducible_TP
+    (cast (congr_arg (MPSTensor d) hdim) A) B
+    hAcst_irr hB_irr hAcst_norm hB_norm hNot
+
+private lemma rightMatching_injective_of_gaugePhaseEquiv
+    {d gA gB : ℕ}
+    {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+    [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
+    (A : (j : Fin gA) → MPSTensor d (dimA j))
+    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    (f : Fin gB → Fin gA)
+    (hf_dim : ∀ k : Fin gB, dimA (f k) = dimB k)
+    (hf_gauge : ∀ k : Fin gB,
+      GaugePhaseEquiv (d := d)
+        (cast (congr_arg (MPSTensor d) (hf_dim k)) (A (f k)))
+        (B k))
+    (hA_self : ∀ j,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+    (hB_self : ∀ k,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds (1 : ℂ)))
+    (hB_off : ∀ k₁ k₂, k₁ ≠ k₂ →
+      Tendsto (fun N => mpvOverlap (d := d) (B k₁) (B k₂) N) atTop (nhds 0)) :
+    Function.Injective f := by
+  intro k1 k2 hk
+  by_contra hne
+  have h_cross : Tendsto (fun N => mpvOverlap (d := d) (B k1) (B k2) N) atTop (nhds 0) :=
+    hB_off k1 k2 hne
+  have h_cross_norm_zero : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖)
+      atTop (nhds 0) := by
+    simpa using h_cross.norm
+  obtain ⟨X1, ζ1, _, hX1⟩ := hf_gauge k1
+  obtain ⟨X2, ζ2, _, hX2⟩ := hf_gauge k2
+  have hmpv1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv (B k1) σ = ζ1 ^ N * mpv (A (f k1)) σ := by
+    intro N σ
+    rw [mpv_eq_pow_mul_of_gaugePhase
+      (A := cast (congr_arg (MPSTensor d) (hf_dim k1)) (A (f k1)))
+      (B := B k1) X1 ζ1 hX1 N σ,
+      mpv_cast_dim (hf_dim k1) (A (f k1)) N σ]
+  have hmpv2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv (B k2) σ = ζ2 ^ N * mpv (A (f k1)) σ := by
+    intro N σ
+    rw [mpv_eq_pow_mul_of_gaugePhase
+      (A := cast (congr_arg (MPSTensor d) (hf_dim k2)) (A (f k2)))
+      (B := B k2) X2 ζ2 hX2 N σ,
+      mpv_cast_dim (hf_dim k2) (A (f k2)) N σ,
+      hk.symm]
+  have hAA_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A (f k1)) (A (f k1)) N‖)
+      atTop (nhds 1) := by
+    convert (hA_self (f k1)).norm using 1
+    simp
+  have hBB1_norm : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k1) N‖) atTop (nhds 1) := by
+    convert (hB_self k1).norm using 1
+    simp
+  have hBB2_norm : Tendsto (fun N => ‖mpvOverlap (d := d) (B k2) (B k2) N‖) atTop (nhds 1) := by
+    convert (hB_self k2).norm using 1
+    simp
+  have hζ1_norm : ‖ζ1‖ = 1 :=
+    norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB1_norm
+      (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+        (A := A (f k1)) (B := B k1) (ζ := ζ1) hmpv1)
+  have hζ2_norm : ‖ζ2‖ = 1 :=
+    norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB2_norm
+      (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+        (A := A (f k1)) (B := B k2) (ζ := ζ2) hmpv2)
+  have hζ2 : ζ2 ≠ 0 := by
+    intro h0
+    have hnorm : (‖ζ2‖ : ℝ) = 0 := by simp [h0]
+    rw [hζ2_norm] at hnorm
+    exact one_ne_zero hnorm
+  have hmpv_rel : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv (B k1) σ = (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpv (B k2) σ := by
+    intro N σ
+    have hζ2N : ζ2 ^ N ≠ 0 := pow_ne_zero N hζ2
+    calc
+      mpv (B k1) σ = ζ1 ^ N * mpv (A (f k1)) σ := hmpv1 N σ
+      _ = (ζ1 ^ N * (ζ2 ^ N)⁻¹) * (ζ2 ^ N * mpv (A (f k1)) σ) := by
+        have : (ζ1 ^ N * (ζ2 ^ N)⁻¹) * (ζ2 ^ N * mpv (A (f k1)) σ) =
+            ζ1 ^ N * mpv (A (f k1)) σ := by
+          calc
+            (ζ1 ^ N * (ζ2 ^ N)⁻¹) * (ζ2 ^ N * mpv (A (f k1)) σ)
+                = ζ1 ^ N * ((ζ2 ^ N)⁻¹ * ζ2 ^ N) * mpv (A (f k1)) σ := by ring
+            _ = ζ1 ^ N * 1 * mpv (A (f k1)) σ := by simp [inv_mul_cancel₀ hζ2N]
+            _ = ζ1 ^ N * mpv (A (f k1)) σ := by ring
+        exact this.symm
+      _ = (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpv (B k2) σ := by
+        simp [hmpv2 N σ, mul_assoc]
+  have hCross_eq : ∀ N : ℕ,
+      mpvOverlap (d := d) (B k1) (B k2) N =
+        (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpvOverlap (d := d) (B k2) (B k2) N := by
+    intro N
+    exact mpvOverlap_eq_mul_of_mpv_eq_mul (d := d)
+      (A := B k1) (B := B k2) (N := N)
+      (c := ζ1 ^ N * (ζ2 ^ N)⁻¹) (h := hmpv_rel N) (C := B k2)
+  have hCross_norm_one : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖)
+      atTop (nhds 1) := by
+    have heq : (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖) =
+        fun N => ‖ζ1 ^ N * (ζ2 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (B k2) (B k2) N‖ := by
+      ext N
+      rw [hCross_eq, norm_mul]
+    rw [heq]
+    have heq' : (fun N => ‖ζ1 ^ N * (ζ2 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (B k2) (B k2) N‖) =
+        fun N => 1 * ‖mpvOverlap (d := d) (B k2) (B k2) N‖ := by
+      ext N
+      simp [norm_pow, norm_inv, hζ1_norm, hζ2_norm]
+    rw [heq']
+    simpa using hBB2_norm
+  exact zero_ne_one (tendsto_nhds_unique h_cross_norm_zero hCross_norm_one)
+
+private lemma leftMatching_injective_of_gaugePhaseEquiv
+    {d gA gB : ℕ}
+    {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+    [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
+    (A : (j : Fin gA) → MPSTensor d (dimA j))
+    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    (g : Fin gA → Fin gB)
+    (hg_dim : ∀ j : Fin gA, dimA j = dimB (g j))
+    (hg_gauge : ∀ j : Fin gA,
+      GaugePhaseEquiv (d := d)
+        (cast (congr_arg (MPSTensor d) (hg_dim j)) (A j))
+        (B (g j)))
+    (hA_self : ∀ j,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+    (hA_off : ∀ i j, i ≠ j →
+      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0))
+    (hB_self : ∀ k,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds (1 : ℂ))) :
+    Function.Injective g := by
+  intro j1 j2 hj
+  by_contra hne
+  have h_cross : Tendsto (fun N => mpvOverlap (d := d) (A j1) (A j2) N) atTop (nhds 0) :=
+    hA_off j1 j2 hne
+  have h_cross_norm_zero : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖)
+      atTop (nhds 0) := by
+    simpa using h_cross.norm
+  obtain ⟨X1, ζ1, _, hX1⟩ := hg_gauge j1
+  obtain ⟨X2, ζ2, _, hX2⟩ := hg_gauge j2
+  have hmpvB1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv (B (g j1)) σ = ζ1 ^ N * mpv (A j1) σ := by
+    intro N σ
+    rw [mpv_eq_pow_mul_of_gaugePhase
+      (A := cast (congr_arg (MPSTensor d) (hg_dim j1)) (A j1))
+      (B := B (g j1)) X1 ζ1 hX1 N σ,
+      mpv_cast_dim (hg_dim j1) (A j1) N σ]
+  have hmpvB2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv (B (g j1)) σ = ζ2 ^ N * mpv (A j2) σ := by
+    intro N σ
+    have htmp : mpv (B (g j2)) σ = ζ2 ^ N * mpv (A j2) σ := by
+      rw [mpv_eq_pow_mul_of_gaugePhase
+        (A := cast (congr_arg (MPSTensor d) (hg_dim j2)) (A j2))
+        (B := B (g j2)) X2 ζ2 hX2 N σ,
+        mpv_cast_dim (hg_dim j2) (A j2) N σ]
+    exact Eq.ndrec
+      (motive := fun k : Fin gB => mpv (B k) σ = ζ2 ^ N * mpv (A j2) σ)
+      htmp hj.symm
+  have hB_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (B (g j1)) (B (g j1)) N‖)
+      atTop (nhds 1) := by
+    convert (hB_self (g j1)).norm using 1
+    simp
+  have hA1_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j1) N‖)
+      atTop (nhds 1) := by
+    convert (hA_self j1).norm using 1
+    simp
+  have hA2_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A j2) (A j2) N‖)
+      atTop (nhds 1) := by
+    convert (hA_self j2).norm using 1
+    simp
+  have hζ1_norm : ‖ζ1‖ = 1 :=
+    norm_eq_one_of_selfOverlap_scale hA1_norm_tendsto hB_norm_tendsto
+      (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+        (A := A j1) (B := B (g j1)) (ζ := ζ1) hmpvB1)
+  have hζ2_norm : ‖ζ2‖ = 1 :=
+    norm_eq_one_of_selfOverlap_scale hA2_norm_tendsto hB_norm_tendsto
+      (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+        (A := A j2) (B := B (g j1)) (ζ := ζ2) hmpvB2)
+  have hζ1 : ζ1 ≠ 0 := by
+    intro h0
+    have hnorm : (‖ζ1‖ : ℝ) = 0 := by simp [h0]
+    rw [hζ1_norm] at hnorm
+    exact one_ne_zero hnorm
+  have hmpv_rel : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv (A j1) σ = (ζ2 ^ N * (ζ1 ^ N)⁻¹) * mpv (A j2) σ := by
+    intro N σ
+    have hζ1N : ζ1 ^ N ≠ 0 := pow_ne_zero N hζ1
+    have hInv : (ζ1 ^ N)⁻¹ * mpv (B (g j1)) σ = mpv (A j1) σ := by
+      simpa [hmpvB1 N σ] using (inv_mul_cancel_left₀ hζ1N (mpv (A j1) σ))
+    calc
+      mpv (A j1) σ = (ζ1 ^ N)⁻¹ * mpv (B (g j1)) σ := by simpa using hInv.symm
+      _ = (ζ1 ^ N)⁻¹ * (ζ2 ^ N * mpv (A j2) σ) := by simp [hmpvB2 N σ]
+      _ = (ζ2 ^ N * (ζ1 ^ N)⁻¹) * mpv (A j2) σ := by ring
+  have hCross_eq : ∀ N : ℕ,
+      mpvOverlap (d := d) (A j1) (A j2) N =
+        (ζ2 ^ N * (ζ1 ^ N)⁻¹) * mpvOverlap (d := d) (A j2) (A j2) N := by
+    intro N
+    exact mpvOverlap_eq_mul_of_mpv_eq_mul (d := d)
+      (A := A j1) (B := A j2) (N := N)
+      (c := ζ2 ^ N * (ζ1 ^ N)⁻¹) (h := hmpv_rel N) (C := A j2)
+  have hCross_norm_one : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖)
+      atTop (nhds 1) := by
+    have heq : (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖) =
+        fun N => ‖ζ2 ^ N * (ζ1 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (A j2) (A j2) N‖ := by
+      ext N
+      rw [hCross_eq, norm_mul]
+    rw [heq]
+    have heq' : (fun N => ‖ζ2 ^ N * (ζ1 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (A j2) (A j2) N‖) =
+        fun N => 1 * ‖mpvOverlap (d := d) (A j2) (A j2) N‖ := by
+      ext N
+      simp [norm_pow, norm_inv, hζ1_norm, hζ2_norm]
+    rw [heq']
+    simpa using hA2_norm_tendsto
+  exact zero_ne_one (tendsto_nhds_unique h_cross_norm_zero hCross_norm_one)
+
+private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_rightMatching
+    {d gA gB : ℕ}
+    {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+    [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
+    (A : (j : Fin gA) → MPSTensor d (dimA j))
+    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    (f : Fin gB → Fin gA)
+    (hf_inj : Function.Injective f)
+    (hle_AB : gA ≤ gB)
+    (hf_dim : ∀ k : Fin gB, dimA (f k) = dimB k)
+    (hf_gauge : ∀ k : Fin gB,
+      GaugePhaseEquiv (d := d)
+        (cast (congr_arg (MPSTensor d) (hf_dim k)) (A (f k)))
+        (B k)) :
+    ∃ _h : gA = gB,
+      ∃ perm : Fin gA ≃ Fin gB,
+        ∀ j : Fin gA,
+          ∃ hdim : dimA j = dimB (perm j),
+            GaugePhaseEquiv (d := d)
+              (cast (congr_arg (MPSTensor d) hdim) (A j))
+              (B (perm j)) := by
+  have hle_BA : gB ≤ gA := by
+    simpa using (Fintype.card_le_of_injective f hf_inj)
+  have hg : gA = gB := Nat.le_antisymm hle_AB hle_BA
+  have hcard : Fintype.card (Fin gB) = Fintype.card (Fin gA) := by
+    simp [hg]
+  have hf_bij : Function.Bijective f :=
+    (Fintype.bijective_iff_injective_and_card f).2 ⟨hf_inj, hcard⟩
+  let e : Fin gB ≃ Fin gA := Equiv.ofBijective f hf_bij
+  refine ⟨hg, e.symm, ?_⟩
+  intro j
+  have hfe : f (e.symm j) = j :=
+    Equiv.ofBijective_apply_symm_apply f hf_bij j
+  have hdim : dimA j = dimB (e.symm j) := by
+    simpa [hfe] using hf_dim (e.symm j)
+  refine ⟨hdim, ?_⟩
+  simpa [hdim] using
+    (gaugePhaseEquiv_cast_idx_left
+      (A := A) (B := B) (i₁ := f (e.symm j)) (i₂ := j)
+      (k := e.symm j) hfe (hf_dim (e.symm j)) (hf_gauge (e.symm j)))
+
+private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_core
+    {d gA gB : ℕ}
+    {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+    [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
+    {DtotA DtotB : ℕ}
+    (A : (j : Fin gA) → MPSTensor d (dimA j))
+    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    (hA_self : ∀ j,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+    (hA_off : ∀ i j, i ≠ j →
+      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0))
+    (hB_self : ∀ k,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds (1 : ℂ)))
+    (hB_off : ∀ k₁ k₂, k₁ ≠ k₂ →
+      Tendsto (fun N => mpvOverlap (d := d) (B k₁) (B k₂) N) atTop (nhds 0))
+    (A_total : MPSTensor d DtotA)
+    (B_total : MPSTensor d DtotB)
+    (aCoeff : ℕ → Fin gA → ℂ) (bCoeff : ℕ → Fin gB → ℂ)
+    (aLim : Fin gA → ℂ) (bLim : Fin gB → ℂ)
+    (c : ℕ → ℂ) (cLim : ℂ)
+    (hA_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin gA, (aCoeff N j) * mpv (A j) σ)
+    (hB_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
+    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
+    (_haLim_ne : ∀ j, aLim j ≠ 0)
+    (_hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc : Tendsto c atTop (nhds cLim))
+    (_hcLim_ne : cLim ≠ 0)
+    (h_zero_of_dim_ne : ∀ {j : Fin gA} {k : Fin gB},
+      dimA j ≠ dimB k →
+        Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0))
+    (h_zero_of_not_gauge :
+      ∀ {j : Fin gA} {k : Fin gB} (hdim : dimA j = dimB k),
+        ¬ GaugePhaseEquiv (d := d)
+            (cast (congr_arg (MPSTensor d) hdim) (A j))
+            (B k) →
+          Tendsto
+            (fun N =>
+              mpvOverlap (d := d)
+                (cast (congr_arg (MPSTensor d) hdim) (A j))
+                (B k) N)
+            atTop (nhds 0)) :
+    ∃ _h : gA = gB,
+      ∃ perm : Fin gA ≃ Fin gB,
+        ∀ j : Fin gA,
+          ∃ hdim : dimA j = dimB (perm j),
+            GaugePhaseEquiv (d := d)
+              (cast (congr_arg (MPSTensor d) hdim) (A j))
+              (B (perm j)) := by
+  have hExistsB : ∀ k : Fin gB,
+      ∃ j : Fin gA,
+        ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) :=
+    exists_nonzero_overlap_of_proportional_decomp
+      (A := A) (B := B) (A_total := A_total) (B_total := B_total)
+      (aCoeff := aCoeff) (bCoeff := bCoeff) (aLim := aLim) (bLim := bLim)
+      (c := c) (cLim := cLim)
+      (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
+      (haCoeff := haCoeff) (hbCoeff := hbCoeff)
+      (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
+      (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
+      (hB_self := hB_self) (hB_off := hB_off)
+  let f : Fin gB → Fin gA := fun k => (hExistsB k).choose
+  have hf_spec : ∀ k : Fin gB,
+      ¬ Tendsto (fun N => mpvOverlap (d := d) (A (f k)) (B k) N) atTop (nhds 0) :=
+    fun k => (hExistsB k).choose_spec
+  have hf_dim : ∀ k : Fin gB, dimA (f k) = dimB k := by
+    intro k
+    exact eq_dim_of_not_tendsto_zero_mpvOverlap (A := A) (B := B)
+      (h_nonzero := hf_spec k)
+      (h_zero_of_dim_ne := fun hne => h_zero_of_dim_ne (j := f k) (k := k) hne)
+  have hf_gauge : ∀ k : Fin gB,
+      GaugePhaseEquiv (d := d)
+        (cast (congr_arg (MPSTensor d) (hf_dim k)) (A (f k)))
+        (B k) := by
+    intro k
+    exact gaugePhaseEquiv_of_not_tendsto_zero_mpvOverlap (A := A) (B := B)
+      (hdim := hf_dim k)
+      (h_nonzero := hf_spec k)
+      (h_zero_of_not_gauge :=
+        fun hNot => h_zero_of_not_gauge (j := f k) (k := k) (hf_dim k) hNot)
+  have hf_inj : Function.Injective f :=
+    rightMatching_injective_of_gaugePhaseEquiv
+      (A := A) (B := B) (f := f) (hf_dim := hf_dim) (hf_gauge := hf_gauge)
+      (hA_self := hA_self) (hB_self := hB_self) (hB_off := hB_off)
+  have hExistsA : ∀ j : Fin gA,
+      ∃ k : Fin gB,
+        ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) :=
+    exists_nonzero_overlap_of_proportional_decomp_left
+      (A := A) (B := B) (A_total := A_total) (B_total := B_total)
+      (aCoeff := aCoeff) (bCoeff := bCoeff) (aLim := aLim) (bLim := bLim)
+      (c := c) (cLim := cLim)
+      (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
+      (haCoeff := haCoeff) (hbCoeff := hbCoeff)
+      (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
+      (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
+      (hA_self := hA_self) (hA_off := hA_off)
+  let g : Fin gA → Fin gB := fun j => (hExistsA j).choose
+  have hg_spec : ∀ j : Fin gA,
+      ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B (g j)) N) atTop (nhds 0) :=
+    fun j => (hExistsA j).choose_spec
+  have hg_dim : ∀ j : Fin gA, dimA j = dimB (g j) := by
+    intro j
+    exact eq_dim_of_not_tendsto_zero_mpvOverlap (A := A) (B := B)
+      (h_nonzero := hg_spec j)
+      (h_zero_of_dim_ne := fun hne => h_zero_of_dim_ne (j := j) (k := g j) hne)
+  have hg_gauge : ∀ j : Fin gA,
+      GaugePhaseEquiv (d := d)
+        (cast (congr_arg (MPSTensor d) (hg_dim j)) (A j))
+        (B (g j)) := by
+    intro j
+    exact gaugePhaseEquiv_of_not_tendsto_zero_mpvOverlap (A := A) (B := B)
+      (hdim := hg_dim j)
+      (h_nonzero := hg_spec j)
+      (h_zero_of_not_gauge :=
+        fun hNot => h_zero_of_not_gauge (j := j) (k := g j) (hg_dim j) hNot)
+  have hg_inj : Function.Injective g :=
+    leftMatching_injective_of_gaugePhaseEquiv
+      (A := A) (B := B) (g := g) (hg_dim := hg_dim) (hg_gauge := hg_gauge)
+      (hA_self := hA_self) (hA_off := hA_off) (hB_self := hB_self)
+  have hle_AB : gA ≤ gB := by
+    simpa using (Fintype.card_le_of_injective g hg_inj)
+  exact exists_eq_numBlocks_and_equiv_gaugePhase_of_rightMatching
+    (A := A) (B := B) (f := f) hf_inj hle_AB hf_dim hf_gauge
+
 /--
 **BNT permutation rigidity (primitive branch), paper hypothesis set.**
 
@@ -398,273 +862,28 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
               (cast (congr_arg (MPSTensor d) hdim) (A j))
               (B (perm j)) := by
   classical
-  -- Step 1: build a matching `f : Fin gB → Fin gA` from the B-indexed non-vanishing overlap.
-  have hExistsB : ∀ k : Fin gB,
-      ∃ j : Fin gA,
-        ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) :=
-    exists_nonzero_overlap_of_proportional_decomp
-      (A := A) (B := B) (A_total := A_total) (B_total := B_total)
-      (aCoeff := aCoeff) (bCoeff := bCoeff) (aLim := aLim) (bLim := bLim)
-      (c := c) (cLim := cLim)
-      (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
-      (haCoeff := haCoeff) (hbCoeff := hbCoeff)
-      (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
-      (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
-      (hB_self := hB_self) (hB_off := hB_off)
-  let f : Fin gB → Fin gA := fun k => (hExistsB k).choose
-  have hf_spec : ∀ k : Fin gB,
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (A (f k)) (B k) N) atTop (nhds 0) :=
-    fun k => (hExistsB k).choose_spec
-  have hf_dim : ∀ k : Fin gB, dimA (f k) = dimB k := by
-    intro k
-    by_contra hne
-    exact hf_spec k (mpvOverlap_tendsto_zero_of_dim_ne (A (f k)) (B k)
-      (hA_inj (f k)) (hB_inj k) (hA_norm (f k)) (hB_norm k) hne)
-  have hf_gauge : ∀ k : Fin gB,
-      GaugePhaseEquiv (d := d)
-        (cast (congr_arg (MPSTensor d) (hf_dim k)) (A (f k)))
-        (B k) := by
-    intro k
-    by_contra hNot
-    have hdim := hf_dim k
-    have hAcst_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A (f k))) :=
-      (isInjective_cast_dim hdim (A (f k))).mpr (hA_inj (f k))
-    have hAcst_norm : ∑ i : Fin d,
-        (cast (congr_arg (MPSTensor d) hdim) (A (f k)) i)ᴴ *
-        (cast (congr_arg (MPSTensor d) hdim) (A (f k)) i) = 1 :=
-      (leftCanonical_cast_dim hdim (A (f k))).mpr (hA_norm (f k))
-    have hto0 := mpvOverlap_tendsto_zero
-      (cast (congr_arg (MPSTensor d) hdim) (A (f k))) (B k)
-      hAcst_inj (hB_inj k) hAcst_norm (hB_norm k) hNot
-    exact hf_spec k (hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A (f k)) (B k) N)
-  have hf_inj : Function.Injective f := by
-    intro k1 k2 hk
-    by_contra hne
-    have h_cross : Tendsto (fun N => mpvOverlap (d := d) (B k1) (B k2) N) atTop (nhds 0) :=
-      hB_off k1 k2 hne
-    have h_cross_norm_zero : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖)
-        atTop (nhds 0) := by
-      simpa using h_cross.norm
-    obtain ⟨X1, ζ1, _, hX1⟩ := hf_gauge k1
-    obtain ⟨X2, ζ2, _, hX2⟩ := hf_gauge k2
-    have hmpv1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (B k1) σ = ζ1 ^ N * mpv (A (f k1)) σ := by
-      intro N σ
-      rw [mpv_eq_pow_mul_of_gaugePhase
-        (A := cast (congr_arg (MPSTensor d) (hf_dim k1)) (A (f k1)))
-        (B := B k1) X1 ζ1 hX1 N σ,
-        mpv_cast_dim (hf_dim k1) (A (f k1)) N σ]
-    have hmpv2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (B k2) σ = ζ2 ^ N * mpv (A (f k1)) σ := by
-      intro N σ
-      rw [mpv_eq_pow_mul_of_gaugePhase
-        (A := cast (congr_arg (MPSTensor d) (hf_dim k2)) (A (f k2)))
-        (B := B k2) X2 ζ2 hX2 N σ,
-        mpv_cast_dim (hf_dim k2) (A (f k2)) N σ,
-        hk.symm]
-    have hAA_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A (f k1)) (A (f k1)) N‖)
-        atTop (nhds 1) := by
-      convert (hA_self (f k1)).norm using 1
-      simp
-    have hBB1_norm : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k1) N‖) atTop (nhds 1) := by
-      convert (hB_self k1).norm using 1
-      simp
-    have hBB2_norm : Tendsto (fun N => ‖mpvOverlap (d := d) (B k2) (B k2) N‖) atTop (nhds 1) := by
-      convert (hB_self k2).norm using 1
-      simp
-    have hζ1_norm : ‖ζ1‖ = 1 :=
-      norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB1_norm
-        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
-          (A := A (f k1)) (B := B k1) (ζ := ζ1) hmpv1)
-    have hζ2_norm : ‖ζ2‖ = 1 :=
-      norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB2_norm
-        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
-          (A := A (f k1)) (B := B k2) (ζ := ζ2) hmpv2)
-    have hζ2 : ζ2 ≠ 0 := by
-      intro h0
-      have hnorm : (‖ζ2‖ : ℝ) = 0 := by simp [h0]
-      rw [hζ2_norm] at hnorm
-      exact one_ne_zero hnorm
-    have hmpv_rel : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (B k1) σ = (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpv (B k2) σ := by
-      intro N σ
-      have hζ2N : ζ2 ^ N ≠ 0 := pow_ne_zero N hζ2
-      calc
-        mpv (B k1) σ = ζ1 ^ N * mpv (A (f k1)) σ := hmpv1 N σ
-        _ = (ζ1 ^ N * (ζ2 ^ N)⁻¹) * (ζ2 ^ N * mpv (A (f k1)) σ) := by
-          have : (ζ1 ^ N * (ζ2 ^ N)⁻¹) * (ζ2 ^ N * mpv (A (f k1)) σ) =
-              ζ1 ^ N * mpv (A (f k1)) σ := by
-            calc
-              (ζ1 ^ N * (ζ2 ^ N)⁻¹) * (ζ2 ^ N * mpv (A (f k1)) σ)
-                  = ζ1 ^ N * ((ζ2 ^ N)⁻¹ * ζ2 ^ N) * mpv (A (f k1)) σ := by ring
-              _ = ζ1 ^ N * 1 * mpv (A (f k1)) σ := by simp [inv_mul_cancel₀ hζ2N]
-              _ = ζ1 ^ N * mpv (A (f k1)) σ := by ring
-          exact this.symm
-        _ = (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpv (B k2) σ := by
-          simp [hmpv2 N σ, mul_assoc]
-    have hCross_eq : ∀ N : ℕ,
-        mpvOverlap (d := d) (B k1) (B k2) N =
-          (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpvOverlap (d := d) (B k2) (B k2) N := by
-      intro N
-      exact mpvOverlap_eq_mul_of_mpv_eq_mul (d := d)
-        (A := B k1) (B := B k2) (N := N)
-        (c := ζ1 ^ N * (ζ2 ^ N)⁻¹) (h := hmpv_rel N) (C := B k2)
-    have hCross_norm_one : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖)
-        atTop (nhds 1) := by
-      have heq : (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖) =
-          fun N => ‖ζ1 ^ N * (ζ2 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (B k2) (B k2) N‖ := by
-        ext N
-        rw [hCross_eq, norm_mul]
-      rw [heq]
-      have heq' : (fun N => ‖ζ1 ^ N * (ζ2 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (B k2) (B k2) N‖) =
-          fun N => 1 * ‖mpvOverlap (d := d) (B k2) (B k2) N‖ := by
-        ext N
-        simp [norm_pow, norm_inv, hζ1_norm, hζ2_norm]
-      rw [heq']
-      simpa using hBB2_norm
-    exact zero_ne_one (tendsto_nhds_unique h_cross_norm_zero hCross_norm_one)
-  have hle_BA : gB ≤ gA := by
-    simpa using (Fintype.card_le_of_injective f hf_inj)
-  -- Step 2: build a matching `g : Fin gA → Fin gB` from the A-indexed non-vanishing overlap.
-  have hExistsA : ∀ j : Fin gA,
-      ∃ k : Fin gB,
-        ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) :=
-    exists_nonzero_overlap_of_proportional_decomp_left
-      (A := A) (B := B) (A_total := A_total) (B_total := B_total)
-      (aCoeff := aCoeff) (bCoeff := bCoeff) (aLim := aLim) (bLim := bLim)
-      (c := c) (cLim := cLim)
-      (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
-      (haCoeff := haCoeff) (hbCoeff := hbCoeff)
-      (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
-      (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
-      (hA_self := hA_self) (hA_off := hA_off)
-  let g : Fin gA → Fin gB := fun j => (hExistsA j).choose
-  have hg_spec : ∀ j : Fin gA,
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B (g j)) N) atTop (nhds 0) :=
-    fun j => (hExistsA j).choose_spec
-  have hg_dim : ∀ j : Fin gA, dimA j = dimB (g j) := by
-    intro j
-    by_contra hne
-    exact hg_spec j (mpvOverlap_tendsto_zero_of_dim_ne (A j) (B (g j))
-      (hA_inj j) (hB_inj (g j)) (hA_norm j) (hB_norm (g j)) hne)
-  have hg_gauge : ∀ j : Fin gA,
-      GaugePhaseEquiv (d := d)
-        (cast (congr_arg (MPSTensor d) (hg_dim j)) (A j))
-        (B (g j)) := by
-    intro j
-    by_contra hNot
-    have hdim := hg_dim j
-    have hAcst_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) :=
-      (isInjective_cast_dim hdim (A j)).mpr (hA_inj j)
-    have hAcst_norm : ∑ i : Fin d,
-        (cast (congr_arg (MPSTensor d) hdim) (A j) i)ᴴ *
-        (cast (congr_arg (MPSTensor d) hdim) (A j) i) = 1 :=
-      (leftCanonical_cast_dim hdim (A j)).mpr (hA_norm j)
-    have hto0 := mpvOverlap_tendsto_zero
-      (cast (congr_arg (MPSTensor d) hdim) (A j)) (B (g j))
-      hAcst_inj (hB_inj (g j)) hAcst_norm (hB_norm (g j)) hNot
-    exact hg_spec j (hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A j) (B (g j)) N)
-  have hg_inj : Function.Injective g := by
-    intro j1 j2 hj
-    by_contra hne
-    have h_cross : Tendsto (fun N => mpvOverlap (d := d) (A j1) (A j2) N) atTop (nhds 0) :=
-      hA_off j1 j2 hne
-    have h_cross_norm_zero : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖)
-        atTop (nhds 0) := by
-      simpa using h_cross.norm
-    obtain ⟨X1, ζ1, _, hX1⟩ := hg_gauge j1
-    obtain ⟨X2, ζ2, _, hX2⟩ := hg_gauge j2
-    have hmpvB1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (B (g j1)) σ = ζ1 ^ N * mpv (A j1) σ := by
-      intro N σ
-      rw [mpv_eq_pow_mul_of_gaugePhase
-        (A := cast (congr_arg (MPSTensor d) (hg_dim j1)) (A j1))
-        (B := B (g j1)) X1 ζ1 hX1 N σ,
-        mpv_cast_dim (hg_dim j1) (A j1) N σ]
-    have hmpvB2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (B (g j1)) σ = ζ2 ^ N * mpv (A j2) σ := by
-      intro N σ
-      have htmp : mpv (B (g j2)) σ = ζ2 ^ N * mpv (A j2) σ := by
-        rw [mpv_eq_pow_mul_of_gaugePhase
-          (A := cast (congr_arg (MPSTensor d) (hg_dim j2)) (A j2))
-          (B := B (g j2)) X2 ζ2 hX2 N σ,
-          mpv_cast_dim (hg_dim j2) (A j2) N σ]
-      exact Eq.ndrec
-        (motive := fun k : Fin gB => mpv (B k) σ = ζ2 ^ N * mpv (A j2) σ)
-        htmp hj.symm
-    have hB_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (B (g j1)) (B (g j1)) N‖)
-        atTop (nhds 1) := by
-      convert (hB_self (g j1)).norm using 1
-      simp
-    have hA1_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j1) N‖)
-        atTop (nhds 1) := by
-      convert (hA_self j1).norm using 1
-      simp
-    have hA2_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A j2) (A j2) N‖)
-        atTop (nhds 1) := by
-      convert (hA_self j2).norm using 1
-      simp
-    have hζ1_norm : ‖ζ1‖ = 1 :=
-      norm_eq_one_of_selfOverlap_scale hA1_norm_tendsto hB_norm_tendsto
-        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
-          (A := A j1) (B := B (g j1)) (ζ := ζ1) hmpvB1)
-    have hζ2_norm : ‖ζ2‖ = 1 :=
-      norm_eq_one_of_selfOverlap_scale hA2_norm_tendsto hB_norm_tendsto
-        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
-          (A := A j2) (B := B (g j1)) (ζ := ζ2) hmpvB2)
-    have hζ1 : ζ1 ≠ 0 := by
-      intro h0
-      have hnorm : (‖ζ1‖ : ℝ) = 0 := by simp [h0]
-      rw [hζ1_norm] at hnorm
-      exact one_ne_zero hnorm
-    have hmpv_rel : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (A j1) σ = (ζ2 ^ N * (ζ1 ^ N)⁻¹) * mpv (A j2) σ := by
-      intro N σ
-      have hζ1N : ζ1 ^ N ≠ 0 := pow_ne_zero N hζ1
-      have hInv : (ζ1 ^ N)⁻¹ * mpv (B (g j1)) σ = mpv (A j1) σ := by
-        simpa [hmpvB1 N σ] using (inv_mul_cancel_left₀ hζ1N (mpv (A j1) σ))
-      calc
-        mpv (A j1) σ = (ζ1 ^ N)⁻¹ * mpv (B (g j1)) σ := by simpa using hInv.symm
-        _ = (ζ1 ^ N)⁻¹ * (ζ2 ^ N * mpv (A j2) σ) := by simp [hmpvB2 N σ]
-        _ = (ζ2 ^ N * (ζ1 ^ N)⁻¹) * mpv (A j2) σ := by ring
-    have hCross_eq : ∀ N : ℕ,
-        mpvOverlap (d := d) (A j1) (A j2) N =
-          (ζ2 ^ N * (ζ1 ^ N)⁻¹) * mpvOverlap (d := d) (A j2) (A j2) N := by
-      intro N
-      exact mpvOverlap_eq_mul_of_mpv_eq_mul (d := d)
-        (A := A j1) (B := A j2) (N := N)
-        (c := ζ2 ^ N * (ζ1 ^ N)⁻¹) (h := hmpv_rel N) (C := A j2)
-    have hCross_norm_one : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖)
-        atTop (nhds 1) := by
-      have heq : (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖) =
-          fun N => ‖ζ2 ^ N * (ζ1 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (A j2) (A j2) N‖ := by
-        ext N
-        rw [hCross_eq, norm_mul]
-      rw [heq]
-      have heq' : (fun N => ‖ζ2 ^ N * (ζ1 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (A j2) (A j2) N‖) =
-          fun N => 1 * ‖mpvOverlap (d := d) (A j2) (A j2) N‖ := by
-        ext N
-        simp [norm_pow, norm_inv, hζ1_norm, hζ2_norm]
-      rw [heq']
-      simpa using hA2_norm_tendsto
-    exact zero_ne_one (tendsto_nhds_unique h_cross_norm_zero hCross_norm_one)
-  have hle_AB : gA ≤ gB := by
-    simpa using (Fintype.card_le_of_injective g hg_inj)
-  have hg : gA = gB := Nat.le_antisymm hle_AB hle_BA
-  have hcard : Fintype.card (Fin gB) = Fintype.card (Fin gA) := by
-    simp [hg]
-  have hf_bij : Function.Bijective f :=
-    (Fintype.bijective_iff_injective_and_card f).2 ⟨hf_inj, hcard⟩
-  let e : Fin gB ≃ Fin gA := Equiv.ofBijective f hf_bij
-  refine ⟨hg, e.symm, ?_⟩
-  intro j
-  have hfe : f (e.symm j) = j := Equiv.ofBijective_apply_symm_apply f hf_bij j
-  have hdim : dimA j = dimB (e.symm j) :=
-    Eq.ndrec (motive := fun x : Fin gA => dimA x = dimB (e.symm j)) (hf_dim (e.symm j)) hfe
-  refine ⟨hdim, ?_⟩
-  simpa [hdim] using
-    (gaugePhaseEquiv_cast_idx_left (A := A) (B := B) (i₁ := f (e.symm j)) (i₂ := j)
-      (k := e.symm j) hfe (hf_dim (e.symm j)) (hf_gauge (e.symm j)))
+  refine exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_core
+    (A := A) (B := B)
+    (hA_self := hA_self) (hA_off := hA_off)
+    (hB_self := hB_self) (hB_off := hB_off)
+    (A_total := A_total) (B_total := B_total)
+    (aCoeff := aCoeff) (bCoeff := bCoeff)
+    (aLim := aLim) (bLim := bLim)
+    (c := c) (cLim := cLim)
+    (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
+    (haCoeff := haCoeff) (hbCoeff := hbCoeff)
+    (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
+    (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
+    ?_ ?_
+  · intro j k hne
+    exact mpvOverlap_tendsto_zero_of_dim_ne
+      (A j) (B k) (hA_inj j) (hB_inj k) (hA_norm j) (hB_norm k) hne
+  · intro j k hdim hNot
+    exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_injective
+      (hdim := hdim) (A := A j) (B := B k)
+      (hA_inj := hA_inj j) (hB_inj := hB_inj k)
+      (hA_norm := hA_norm j) (hB_norm := hB_norm k)
+      hNot
 
 /-- NT / irreducible version of
 `exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp`.
@@ -716,270 +935,27 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irred
               (cast (congr_arg (MPSTensor d) hdim) (A j))
               (B (perm j)) := by
   classical
-  have hExistsB : ∀ k : Fin gB,
-      ∃ j : Fin gA,
-        ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) :=
-    exists_nonzero_overlap_of_proportional_decomp
-      (A := A) (B := B) (A_total := A_total) (B_total := B_total)
-      (aCoeff := aCoeff) (bCoeff := bCoeff) (aLim := aLim) (bLim := bLim)
-      (c := c) (cLim := cLim)
-      (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
-      (haCoeff := haCoeff) (hbCoeff := hbCoeff)
-      (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
-      (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
-      (hB_self := hB_self) (hB_off := hB_off)
-  let f : Fin gB → Fin gA := fun k => (hExistsB k).choose
-  have hf_spec : ∀ k : Fin gB,
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (A (f k)) (B k) N) atTop (nhds 0) :=
-    fun k => (hExistsB k).choose_spec
-  have hf_dim : ∀ k : Fin gB, dimA (f k) = dimB k := by
-    intro k
-    by_contra hne
-    exact hf_spec k (mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP (A (f k)) (B k)
-      (hA_irr (f k)) (hB_irr k) (hA_norm (f k)) (hB_norm k) hne)
-  have hf_gauge : ∀ k : Fin gB,
-      GaugePhaseEquiv (d := d)
-        (cast (congr_arg (MPSTensor d) (hf_dim k)) (A (f k)))
-        (B k) := by
-    intro k
-    by_contra hNot
-    have hdim := hf_dim k
-    have hAcst_irr : IsIrreducibleTensor (cast (congr_arg (MPSTensor d) hdim) (A (f k))) :=
-      (isIrreducibleTensor_cast_dim hdim (A (f k))).mpr (hA_irr (f k))
-    have hAcst_norm : ∑ i : Fin d,
-        (cast (congr_arg (MPSTensor d) hdim) (A (f k)) i)ᴴ *
-        (cast (congr_arg (MPSTensor d) hdim) (A (f k)) i) = 1 :=
-      (leftCanonical_cast_dim hdim (A (f k))).mpr (hA_norm (f k))
-    have hto0 := mpvOverlap_tendsto_zero_of_irreducible_TP
-      (cast (congr_arg (MPSTensor d) hdim) (A (f k))) (B k)
-      hAcst_irr (hB_irr k) hAcst_norm (hB_norm k) hNot
-    exact hf_spec k (hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A (f k)) (B k) N)
-  have hf_inj : Function.Injective f := by
-    intro k1 k2 hk
-    by_contra hne
-    have h_cross : Tendsto (fun N => mpvOverlap (d := d) (B k1) (B k2) N) atTop (nhds 0) :=
-      hB_off k1 k2 hne
-    have h_cross_norm_zero : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖)
-        atTop (nhds 0) := by
-      simpa using h_cross.norm
-    obtain ⟨X1, ζ1, _, hX1⟩ := hf_gauge k1
-    obtain ⟨X2, ζ2, _, hX2⟩ := hf_gauge k2
-    have hmpv1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (B k1) σ = ζ1 ^ N * mpv (A (f k1)) σ := by
-      intro N σ
-      rw [mpv_eq_pow_mul_of_gaugePhase
-        (A := cast (congr_arg (MPSTensor d) (hf_dim k1)) (A (f k1)))
-        (B := B k1) X1 ζ1 hX1 N σ,
-        mpv_cast_dim (hf_dim k1) (A (f k1)) N σ]
-    have hmpv2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (B k2) σ = ζ2 ^ N * mpv (A (f k1)) σ := by
-      intro N σ
-      rw [mpv_eq_pow_mul_of_gaugePhase
-        (A := cast (congr_arg (MPSTensor d) (hf_dim k2)) (A (f k2)))
-        (B := B k2) X2 ζ2 hX2 N σ,
-        mpv_cast_dim (hf_dim k2) (A (f k2)) N σ,
-        hk.symm]
-    have hAA_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A (f k1)) (A (f k1)) N‖)
-        atTop (nhds 1) := by
-      convert (hA_self (f k1)).norm using 1
-      simp
-    have hBB1_norm : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k1) N‖) atTop (nhds 1) := by
-      convert (hB_self k1).norm using 1
-      simp
-    have hBB2_norm : Tendsto (fun N => ‖mpvOverlap (d := d) (B k2) (B k2) N‖) atTop (nhds 1) := by
-      convert (hB_self k2).norm using 1
-      simp
-    have hζ1_norm : ‖ζ1‖ = 1 :=
-      norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB1_norm
-        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
-          (A := A (f k1)) (B := B k1) (ζ := ζ1) hmpv1)
-    have hζ2_norm : ‖ζ2‖ = 1 :=
-      norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB2_norm
-        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
-          (A := A (f k1)) (B := B k2) (ζ := ζ2) hmpv2)
-    have hζ2 : ζ2 ≠ 0 := by
-      intro h0
-      have hnorm : (‖ζ2‖ : ℝ) = 0 := by simp [h0]
-      rw [hζ2_norm] at hnorm
-      exact one_ne_zero hnorm
-    have hmpv_rel : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (B k1) σ = (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpv (B k2) σ := by
-      intro N σ
-      have hζ2N : ζ2 ^ N ≠ 0 := pow_ne_zero N hζ2
-      calc
-        mpv (B k1) σ = ζ1 ^ N * mpv (A (f k1)) σ := hmpv1 N σ
-        _ = (ζ1 ^ N * (ζ2 ^ N)⁻¹) * (ζ2 ^ N * mpv (A (f k1)) σ) := by
-          have : (ζ1 ^ N * (ζ2 ^ N)⁻¹) * (ζ2 ^ N * mpv (A (f k1)) σ) =
-              ζ1 ^ N * mpv (A (f k1)) σ := by
-            calc
-              (ζ1 ^ N * (ζ2 ^ N)⁻¹) * (ζ2 ^ N * mpv (A (f k1)) σ)
-                  = ζ1 ^ N * ((ζ2 ^ N)⁻¹ * ζ2 ^ N) * mpv (A (f k1)) σ := by ring
-              _ = ζ1 ^ N * 1 * mpv (A (f k1)) σ := by simp [inv_mul_cancel₀ hζ2N]
-              _ = ζ1 ^ N * mpv (A (f k1)) σ := by ring
-          exact this.symm
-        _ = (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpv (B k2) σ := by
-          simp [hmpv2 N σ, mul_assoc]
-    have hCross_eq : ∀ N : ℕ,
-        mpvOverlap (d := d) (B k1) (B k2) N =
-          (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpvOverlap (d := d) (B k2) (B k2) N := by
-      intro N
-      exact mpvOverlap_eq_mul_of_mpv_eq_mul (d := d)
-        (A := B k1) (B := B k2) (N := N)
-        (c := ζ1 ^ N * (ζ2 ^ N)⁻¹) (h := hmpv_rel N) (C := B k2)
-    have hCross_norm_one : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖)
-        atTop (nhds 1) := by
-      have heq : (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖) =
-          fun N => ‖ζ1 ^ N * (ζ2 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (B k2) (B k2) N‖ := by
-        ext N
-        rw [hCross_eq, norm_mul]
-      rw [heq]
-      have heq' : (fun N => ‖ζ1 ^ N * (ζ2 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (B k2) (B k2) N‖) =
-          fun N => 1 * ‖mpvOverlap (d := d) (B k2) (B k2) N‖ := by
-        ext N
-        simp [norm_pow, norm_inv, hζ1_norm, hζ2_norm]
-      rw [heq']
-      simpa using hBB2_norm
-    exact zero_ne_one (tendsto_nhds_unique h_cross_norm_zero hCross_norm_one)
-  have hle_BA : gB ≤ gA := by
-    simpa using (Fintype.card_le_of_injective f hf_inj)
-  have hExistsA : ∀ j : Fin gA,
-      ∃ k : Fin gB,
-        ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) :=
-    exists_nonzero_overlap_of_proportional_decomp_left
-      (A := A) (B := B) (A_total := A_total) (B_total := B_total)
-      (aCoeff := aCoeff) (bCoeff := bCoeff) (aLim := aLim) (bLim := bLim)
-      (c := c) (cLim := cLim)
-      (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
-      (haCoeff := haCoeff) (hbCoeff := hbCoeff)
-      (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
-      (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
-      (hA_self := hA_self) (hA_off := hA_off)
-  let g : Fin gA → Fin gB := fun j => (hExistsA j).choose
-  have hg_spec : ∀ j : Fin gA,
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B (g j)) N) atTop (nhds 0) :=
-    fun j => (hExistsA j).choose_spec
-  have hg_dim : ∀ j : Fin gA, dimA j = dimB (g j) := by
-    intro j
-    by_contra hne
-    exact hg_spec j (mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP (A j) (B (g j))
-      (hA_irr j) (hB_irr (g j)) (hA_norm j) (hB_norm (g j)) hne)
-  have hg_gauge : ∀ j : Fin gA,
-      GaugePhaseEquiv (d := d)
-        (cast (congr_arg (MPSTensor d) (hg_dim j)) (A j))
-        (B (g j)) := by
-    intro j
-    by_contra hNot
-    have hdim := hg_dim j
-    have hAcst_irr : IsIrreducibleTensor (cast (congr_arg (MPSTensor d) hdim) (A j)) :=
-      (isIrreducibleTensor_cast_dim hdim (A j)).mpr (hA_irr j)
-    have hAcst_norm : ∑ i : Fin d,
-        (cast (congr_arg (MPSTensor d) hdim) (A j) i)ᴴ *
-        (cast (congr_arg (MPSTensor d) hdim) (A j) i) = 1 :=
-      (leftCanonical_cast_dim hdim (A j)).mpr (hA_norm j)
-    have hto0 := mpvOverlap_tendsto_zero_of_irreducible_TP
-      (cast (congr_arg (MPSTensor d) hdim) (A j)) (B (g j))
-      hAcst_irr (hB_irr (g j)) hAcst_norm (hB_norm (g j)) hNot
-    exact hg_spec j (hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A j) (B (g j)) N)
-  have hg_inj : Function.Injective g := by
-    intro j1 j2 hj
-    by_contra hne
-    have h_cross : Tendsto (fun N => mpvOverlap (d := d) (A j1) (A j2) N) atTop (nhds 0) :=
-      hA_off j1 j2 hne
-    have h_cross_norm_zero : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖)
-        atTop (nhds 0) := by
-      simpa using h_cross.norm
-    obtain ⟨X1, ζ1, _, hX1⟩ := hg_gauge j1
-    obtain ⟨X2, ζ2, _, hX2⟩ := hg_gauge j2
-    have hmpvB1 : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (B (g j1)) σ = ζ1 ^ N * mpv (A j1) σ := by
-      intro N σ
-      rw [mpv_eq_pow_mul_of_gaugePhase
-        (A := cast (congr_arg (MPSTensor d) (hg_dim j1)) (A j1))
-        (B := B (g j1)) X1 ζ1 hX1 N σ,
-        mpv_cast_dim (hg_dim j1) (A j1) N σ]
-    have hmpvB2 : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (B (g j1)) σ = ζ2 ^ N * mpv (A j2) σ := by
-      intro N σ
-      have htmp : mpv (B (g j2)) σ = ζ2 ^ N * mpv (A j2) σ := by
-        rw [mpv_eq_pow_mul_of_gaugePhase
-          (A := cast (congr_arg (MPSTensor d) (hg_dim j2)) (A j2))
-          (B := B (g j2)) X2 ζ2 hX2 N σ,
-          mpv_cast_dim (hg_dim j2) (A j2) N σ]
-      exact Eq.ndrec
-        (motive := fun k : Fin gB => mpv (B k) σ = ζ2 ^ N * mpv (A j2) σ)
-        htmp hj.symm
-    have hB_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (B (g j1)) (B (g j1)) N‖)
-        atTop (nhds 1) := by
-      convert (hB_self (g j1)).norm using 1
-      simp
-    have hA1_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j1) N‖)
-        atTop (nhds 1) := by
-      convert (hA_self j1).norm using 1
-      simp
-    have hA2_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A j2) (A j2) N‖)
-        atTop (nhds 1) := by
-      convert (hA_self j2).norm using 1
-      simp
-    have hζ1_norm : ‖ζ1‖ = 1 :=
-      norm_eq_one_of_selfOverlap_scale hA1_norm_tendsto hB_norm_tendsto
-        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
-          (A := A j1) (B := B (g j1)) (ζ := ζ1) hmpvB1)
-    have hζ2_norm : ‖ζ2‖ = 1 :=
-      norm_eq_one_of_selfOverlap_scale hA2_norm_tendsto hB_norm_tendsto
-        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
-          (A := A j2) (B := B (g j1)) (ζ := ζ2) hmpvB2)
-    have hζ1 : ζ1 ≠ 0 := by
-      intro h0
-      have hnorm : (‖ζ1‖ : ℝ) = 0 := by simp [h0]
-      rw [hζ1_norm] at hnorm
-      exact one_ne_zero hnorm
-    have hmpv_rel : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (A j1) σ = (ζ2 ^ N * (ζ1 ^ N)⁻¹) * mpv (A j2) σ := by
-      intro N σ
-      have hζ1N : ζ1 ^ N ≠ 0 := pow_ne_zero N hζ1
-      have hInv : (ζ1 ^ N)⁻¹ * mpv (B (g j1)) σ = mpv (A j1) σ := by
-        simpa [hmpvB1 N σ] using (inv_mul_cancel_left₀ hζ1N (mpv (A j1) σ))
-      calc
-        mpv (A j1) σ = (ζ1 ^ N)⁻¹ * mpv (B (g j1)) σ := by simpa using hInv.symm
-        _ = (ζ1 ^ N)⁻¹ * (ζ2 ^ N * mpv (A j2) σ) := by simp [hmpvB2 N σ]
-        _ = (ζ2 ^ N * (ζ1 ^ N)⁻¹) * mpv (A j2) σ := by ring
-    have hCross_eq : ∀ N : ℕ,
-        mpvOverlap (d := d) (A j1) (A j2) N =
-          (ζ2 ^ N * (ζ1 ^ N)⁻¹) * mpvOverlap (d := d) (A j2) (A j2) N := by
-      intro N
-      exact mpvOverlap_eq_mul_of_mpv_eq_mul (d := d)
-        (A := A j1) (B := A j2) (N := N)
-        (c := ζ2 ^ N * (ζ1 ^ N)⁻¹) (h := hmpv_rel N) (C := A j2)
-    have hCross_norm_one : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖)
-        atTop (nhds 1) := by
-      have heq : (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖) =
-          fun N => ‖ζ2 ^ N * (ζ1 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (A j2) (A j2) N‖ := by
-        ext N
-        rw [hCross_eq, norm_mul]
-      rw [heq]
-      have heq' : (fun N => ‖ζ2 ^ N * (ζ1 ^ N)⁻¹‖ * ‖mpvOverlap (d := d) (A j2) (A j2) N‖) =
-          fun N => 1 * ‖mpvOverlap (d := d) (A j2) (A j2) N‖ := by
-        ext N
-        simp [norm_pow, norm_inv, hζ1_norm, hζ2_norm]
-      rw [heq']
-      simpa using hA2_norm_tendsto
-    exact zero_ne_one (tendsto_nhds_unique h_cross_norm_zero hCross_norm_one)
-  have hle_AB : gA ≤ gB := by
-    simpa using (Fintype.card_le_of_injective g hg_inj)
-  have hg : gA = gB := Nat.le_antisymm hle_AB hle_BA
-  have hcard : Fintype.card (Fin gB) = Fintype.card (Fin gA) := by
-    simp [hg]
-  have hf_bij : Function.Bijective f :=
-    (Fintype.bijective_iff_injective_and_card f).2 ⟨hf_inj, hcard⟩
-  let e : Fin gB ≃ Fin gA := Equiv.ofBijective f hf_bij
-  refine ⟨hg, e.symm, ?_⟩
-  intro j
-  have hfe : f (e.symm j) = j := Equiv.ofBijective_apply_symm_apply f hf_bij j
-  have hdim : dimA j = dimB (e.symm j) :=
-    Eq.ndrec (motive := fun x : Fin gA => dimA x = dimB (e.symm j)) (hf_dim (e.symm j)) hfe
-  refine ⟨hdim, ?_⟩
-  simpa [hdim] using
-    (gaugePhaseEquiv_cast_idx_left (A := A) (B := B) (i₁ := f (e.symm j)) (i₂ := j)
-      (k := e.symm j) hfe (hf_dim (e.symm j)) (hf_gauge (e.symm j)))
+  refine exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_core
+    (A := A) (B := B)
+    (hA_self := hA_self) (hA_off := hA_off)
+    (hB_self := hB_self) (hB_off := hB_off)
+    (A_total := A_total) (B_total := B_total)
+    (aCoeff := aCoeff) (bCoeff := bCoeff)
+    (aLim := aLim) (bLim := bLim)
+    (c := c) (cLim := cLim)
+    (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
+    (haCoeff := haCoeff) (hbCoeff := hbCoeff)
+    (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
+    (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
+    ?_ ?_
+  · intro j k hne
+    exact mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
+      (A j) (B k) (hA_irr j) (hB_irr k) (hA_norm j) (hB_norm k) hne
+  · intro j k hdim hNot
+    exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_of_irreducible_TP
+      (hdim := hdim) (A := A j) (B := B k)
+      (hA_irr := hA_irr j) (hB_irr := hB_irr k)
+      (hA_norm := hA_norm j) (hB_norm := hB_norm k)
+      hNot
 
 end MPSTensor
