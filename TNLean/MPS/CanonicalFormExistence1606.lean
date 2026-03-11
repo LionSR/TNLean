@@ -15,7 +15,7 @@ open Filter
 /-!
 # Canonical form existence pipeline (arXiv:1606.00608, §2.3 + Appendix A)
 
-This file is a **glue layer** assembling already-proved steps of the
+This file is a **glue layer for the early, honest arbitrary-input part** of the
 canonical-form construction for MPS tensors from Cirac–Pérez-García–Schuch–Verstraete,
 arXiv:1606.00608.
 
@@ -26,10 +26,9 @@ We currently have (sorry-free) components for:
   eigenvector → TP-normalized representative.
 * Appendix A (CFII part): inside that TP gauge, unitary conjugation → diagonal PD fixed point.
 * Appendix A (periodicity): TP + irreducible → primitive after blocking.
-* irreducible + peripheral primitive + left-canonical normalization
-  (`∑ Aᵢ† Aᵢ = I`) → overlap convergence.
-* peripheral primitive + left-canonical normalization (`∑ Aᵢ† Aᵢ = I`)
-  + injective + μ ordering → `IsCanonicalForm`.
+
+We also keep a couple of downstream compatibility wrappers for already-normalized primitive /
+injective block families, but those are **not** assembled from arbitrary input in this file.
 
 Note: the Appendix-A CFII story is genuinely two-step:
 first a generally non-unitary TP similarity from the adjoint Perron--Frobenius eigenvector,
@@ -37,17 +36,15 @@ then a unitary diagonalization **within** that TP gauge.
 
 What is **not** yet assembled end-to-end here:
 
-* Thread the TP-gauge and periodicity theorems through the irreducible block decomposition so
-  that each nonzero block is replaced by a primitive blocked TP representative.
-* Bridge primitive blocked tensors to the repository's stronger block-injective / `IsNormal`
-  notion (the quantum-Wielandt / aperiodicity step).
-* Feed the resulting injective blocks into
-  `isCanonicalForm_of_peripheralPrimitive_pipeline1606` and the downstream FT assembly.
+* Thread the TP-gauge and periodicity theorems through the irreducible block decomposition while
+  handling possible zero blocks honestly under `SameMPV₂` (which remembers the `N = 0` sector).
+* Resolve the post-blocking cyclic-sector / equal-weight issues needed to produce a primitive
+  weighted block family with strictly ordered nonzero weights.
+* Bridge that data to the later block-injective / `IsCanonicalForm` builders and downstream FT
+  assembly.
 
-Accordingly, this file now re-exports the PF / TP-gauge and periodicity components,
-but the arbitrary-tensor end-to-end assembly is still incomplete: the missing bridge from
-primitive blocked tensors to the repository's stronger block-injective regime prevents a full
-canonical-form existence theorem from arbitrary input tensors.
+Accordingly, this file should be read as a collection of early-stage pipeline lemmas plus explicit
+handoffs, **not** as a near-endpoint canonical-form existence theorem for arbitrary input tensors.
 -/
 
 namespace MPSTensor
@@ -186,13 +183,17 @@ theorem exists_blockTensor_isPrimitive_pipeline1606
 
 
 /-!
-## (5) Peripheral primitive ⇒ spectral gap ⇒ overlap → 1
+## (5) Downstream compatibility wrappers
 
-This is a direct re-export of the existing lemma.
+The next two theorems are compatibility aliases for later-stage builder lemmas. They are useful
+once one already has irreducible / injective peripheral-primitive blocks, but this file does **not**
+construct those hypotheses from an arbitrary tensor.
 -/
 
-/-- **Pipeline step:** if `A` is irreducible, left-canonical, and
-peripheral-spectrum primitive, then `mpvOverlap A A N` tends to `1`. -/
+/-- **Compatibility wrapper:** if `A` is already irreducible, left-canonical, and
+peripheral-spectrum primitive, then `mpvOverlap A A N` tends to `1`.
+
+This is a late-stage blockwise lemma; it is not an arbitrary-input existence theorem. -/
 theorem overlap_tendsto_one_of_peripheralPrimitive_pipeline1606
     [NeZero D]
     (A : MPSTensor d D)
@@ -205,15 +206,11 @@ theorem overlap_tendsto_one_of_peripheralPrimitive_pipeline1606
       (A := A) hIrr hNorm hPrim)
 
 
-/-!
-## (6) Canonical form builder from peripheral primitivity
+/-- **Compatibility wrapper:** build `IsCanonicalForm` from peripheral-spectrum primitivity
+hypotheses (on each block), together with injectivity + the one-sided normalization
+`∑ Aᵢ† Aᵢ = I` (left-canonical normalization) + μ ordering + μ ≠ 0.
 
-Again, this is just a re-export with a pipeline name.
--/
-
-/-- **Pipeline step:** build `IsCanonicalForm` from peripheral-spectrum primitivity hypotheses
-(on each block), together with injectivity + the one-sided normalization
-`∑ Aᵢ† Aᵢ = I` (left-canonical normalization) + μ ordering + μ ≠ 0. -/
+This is a downstream builder theorem; it is not produced from arbitrary input in this file. -/
 theorem isCanonicalForm_of_peripheralPrimitive_pipeline1606
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
@@ -230,36 +227,83 @@ theorem isCanonicalForm_of_peripheralPrimitive_pipeline1606
 
 
 /-!
-## Near-final existence theorem (still a handoff, not end-to-end)
+## Honest arbitrary-input handoffs (still far from the endpoint)
 
-We now combine step (1) with the CFII normalization step (step (3)). The PF / TP-gauge theorem
-from step (2) and the periodicity theorem from step (4) are available for each irreducible block
-separately, but they are not yet threaded through the block decomposition.
+The last honest arbitrary-input step currently available here is the blockwise PF / TP-gauge
+continuation below: after decomposing `A` into irreducible blocks, one may continue on each block
+once one separately knows that the block has a nonzero Kraus operator. This explicit side condition
+is essential because, under the current `SameMPV₂` relation, zero scalar blocks cannot simply be
+discarded: the `N = 0` sector is remembered.
 
-The newer file `TNLean.MPS.NormalCanonicalFormPipeline` packages the later stage once one already
-has a primitive weighted block family with positive bond dimensions and distinct nonzero weights.
-This file does not yet construct that input from an arbitrary tensor.
+The newer file `TNLean.MPS.NormalCanonicalFormPipeline` packages a later stage once one already has
+a primitive weighted block family with positive bond dimensions and distinct nonzero weights. This
+file does **not** currently construct that input from an arbitrary tensor.
 
 Remaining gap for a full end-to-end canonical-form existence theorem:
 
 * Thread `exists_tp_data_of_irreducible_pipeline1606` blockwise through
-  `exists_irreducible_blockDecomp_pipeline1606`.
-* Apply `exists_blockTensor_isPrimitive_pipeline1606` to those TP representatives.
-* Use blocking/primitivity to derive the stronger normal / injective-by-blocking hypotheses needed
-  by `TNLean.MPS.NormalCanonicalFormPipeline`.
-* Feed the resulting data into `isCanonicalForm_of_peripheralPrimitive_pipeline1606` or the later
-  normal-canonical-form packaging route, depending on the target API.
+  `exists_irreducible_blockDecomp_pipeline1606` while handling possible zero blocks honestly.
+* Apply `exists_blockTensor_isPrimitive_pipeline1606` and then perform the post-blocking cyclic
+  sector / equal-weight bookkeeping needed for strict nonzero weight ordering.
+* Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
+  `TNLean.MPS.NormalCanonicalFormPipeline` and the downstream `IsCanonicalForm` builders.
 -/
+
+/-- **Honest TP-gauge handoff for the 1606 pipeline (1606.00608 §2.3 + App. A).**
+
+From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
+resulting block, if one separately knows that the block has some nonzero Kraus operator, then the
+Perron--Frobenius / TP-gauge step can be applied to that block.
+
+This is the next honest continuation from arbitrary input under the current API. The nonzero side
+condition is explicit because `SameMPV₂` remembers the `N = 0` sector, so zero scalar blocks cannot
+be silently discarded. -/
+theorem exists_irreducible_blockDecomp_with_tpGauge_handoff
+    (A : MPSTensor d D) :
+    ∃ r : ℕ, ∃ dim : Fin r → ℕ,
+    ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
+      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
+      (∀ k,
+        (∃ i, blocks k i ≠ 0) →
+        ∃ (B : MPSTensor d (dim k)) (r : ℝ) (σ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          σ.PosDef ∧ 0 < r ∧
+          (∀ i : Fin d,
+            B i = CFC.sqrt σ *
+              ((↑((Real.sqrt r)⁻¹) : ℂ) • blocks k i) * (CFC.sqrt σ)⁻¹) ∧
+          (∑ i : Fin d, (B i)ᴴ * B i = 1) ∧
+          GaugeEquiv (d := d) (D := dim k)
+            (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks k i) B) := by
+  classical
+  obtain ⟨r, dim, blocks, hIrr, hSame⟩ :=
+    exists_irreducible_blockDecomp_pipeline1606 (d := d) (D := D) A
+  refine ⟨r, dim, blocks, hIrr, hSame, ?_⟩
+  intro k hNonzero
+  have hdim_ne : dim k ≠ 0 := by
+    intro hk0
+    rcases hNonzero with ⟨i, hi⟩
+    have hEmpty : IsEmpty (Fin (dim k)) := by
+      rw [hk0]
+      infer_instance
+    have hzero : blocks k i = 0 := by
+      ext a b
+      exact (hEmpty.false a).elim
+    exact hi hzero
+  letI : NeZero (dim k) := ⟨hdim_ne⟩
+  simpa using
+    (exists_tp_data_of_irreducible_pipeline1606 (d := d) (D := dim k)
+      (A := blocks k) (hIrr := hIrr k) (hA := hNonzero))
 
 /-- **Legacy CFII handoff for the 1606 pipeline (1606.00608 §2.3 + App. A).**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
-block, assuming (i) TP gauge and (ii) positive bond dimension, we can produce CFII fixed-point
-data (unitary conjugation + diagonal PD fixed point).
+block, assuming one has already supplied (i) a TP representative and (ii) positive bond dimension,
+we can produce CFII fixed-point data (unitary conjugation + diagonal PD fixed point).
 
-This theorem is kept as a continuation-shaped handoff for the still-unthreaded middle stage of the
-pipeline. Later packaging into normal canonical form, once primitive weighted blocks are already in
-hand, lives in `TNLean.MPS.NormalCanonicalFormPipeline`. -/
+This is an optional Appendix-A side branch, not a near-endpoint theorem: it does not thread the PF
+/ TP-gauge or periodicity-removal steps through the block decomposition. Later packaging into
+normal canonical form, once primitive weighted blocks are already in hand, lives in
+`TNLean.MPS.NormalCanonicalFormPipeline`. -/
 theorem exists_irreducible_blockDecomp_with_CFII_handoff
     (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,

@@ -9,8 +9,9 @@ import TNLean.Spectral.SpectralGapNT
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.QPF.Assembly
-import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.CanonicalFormReduction
+import TNLean.MPS.FundamentalTheoremProportional
+import TNLean.MPS.IrreducibleFormII
 import TNLean.MPS.PeripheralToSpectralGap
 import TNLean.Channel.PeripheralSpectrum
 import Mathlib.Analysis.Complex.Basic
@@ -84,7 +85,11 @@ def ofForall (hA : ∀ k, IsIrreducibleTensor (A k)) : HasIrreducibleBlocks (d :
 end HasIrreducibleBlocks
 
 /-- Each block transfer map is primitive in the peripheral-spectrum sense
-(`peripheralEigenvalues = {1}`). -/
+(`peripheralEigenvalues = {1}`).
+
+This is intentionally stored separately from `HasIrreducibleBlocks`: under the repository's
+current definition, peripheral-spectrum primitivity alone does not imply irreducibility for an
+arbitrary transfer map. -/
 structure HasPrimitiveBlocks {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block transfer map has `1` as its unique peripheral eigenvalue. -/
@@ -257,8 +262,10 @@ nonzero weights and positive bond dimensions.
 
 This is the weaker “normal tensor” block notion from arXiv:1606.00608:
 each block is irreducible and its transfer map has peripheral spectrum `{1}`.
-The self-overlap normalization is intended to be derived from primitivity
-rather than stored as a field. -/
+The irreducibility field is stored separately on purpose: the repository's peripheral-spectrum
+primitive predicate does not by itself imply irreducibility for arbitrary transfer maps.
+The self-overlap normalization is intended to be derived from primitivity rather than stored as a
+field. -/
 structure IsNormalCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is irreducible in the invariant-projection sense. -/
@@ -813,42 +820,6 @@ private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
       (A := A) (B := B) hA_irr hB_irr hA_lc hB_lc hnot
   have : (0 : ℂ) = 1 := tendsto_nhds_unique hto0 h
   exact zero_ne_one this
-
-private lemma mpv_eq_pow_mul_of_gaugePhase
-    {D : ℕ} (A B : MPSTensor d D)
-    (X : GL (Fin D) ℂ) (ζ : ℂ)
-    (hX :
-      ∀ i : Fin d,
-        B i =
-          ζ •
-            ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
-              ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :
-    ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ := by
-  intro N σ
-  set w : List (Fin d) := List.ofFn σ
-  have hwlen : w.length = N := by simp [w]
-  let C : MPSTensor d D := fun i =>
-    (X : Matrix (Fin D) (Fin D) ℂ) * A i *
-      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  have hB : B = fun i => ζ • C i := by
-    funext i
-    simpa [C] using hX i
-  have hGauge :
-      evalWord C w =
-        (X : Matrix (Fin D) (Fin D) ℂ) * evalWord A w *
-          ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
-    simpa [C] using (evalWord_gauge (A := A) (B := C) X (by intro i; rfl) w)
-  have htrace : Matrix.trace (evalWord C w) = Matrix.trace (evalWord A w) := by
-    simpa [hGauge, Matrix.mul_assoc] using (trace_conj_eq (X := X) (M := evalWord A w))
-  calc
-    mpv B σ = Matrix.trace (evalWord B w) := by simp [mpv, coeff, w]
-    _ = Matrix.trace (evalWord (fun i => ζ • C i) w) := by simp [hB]
-    _ = Matrix.trace ((ζ ^ w.length) • evalWord C w) := by
-          simpa using congrArg Matrix.trace (evalWord_smul (ζ := ζ) (A := C) w)
-    _ = (ζ ^ w.length) * Matrix.trace (evalWord C w) := by
-          simp [Matrix.trace_smul, smul_eq_mul, mul_assoc]
-    _ = (ζ ^ w.length) * Matrix.trace (evalWord A w) := by simp [htrace]
-    _ = ζ ^ N * mpv A σ := by simp [mpv, coeff, w, hwlen, mul_assoc]
 
 private lemma mpvOverlap_eq_pow_mul_self_of_mpv_eq_pow_mul
     {D : ℕ} (A B : MPSTensor d D) (ζ : ℂ)

@@ -2,6 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.MPS.CanonicalFormReduction
 import TNLean.MPS.MPVOverlap
 
 /-!
@@ -9,8 +10,8 @@ import TNLean.MPS.MPVOverlap
 
 When two bond dimensions `D₁` and `D₂` are propositionally equal (`h : D₁ = D₂`),
 the cast `cast (congr_arg (MPSTensor d) h) A` preserves all relevant MPS quantities:
-matrix product vectors, overlaps, injectivity, the left-canonical / trace-preserving
-condition `∑ Aᵢ† Aᵢ = I`, and gauge-phase equivalence.
+matrix product vectors, overlaps, injectivity, irreducibility, the left-canonical /
+trace-preserving condition `∑ Aᵢ† Aᵢ = I`, and gauge-phase equivalence.
 
 These lemmas were previously duplicated as private helpers in
 `BNTPermutationSimple`, `BNTPermutationThm44`, and `BNTConstruction`.
@@ -39,6 +40,12 @@ lemma mpvOverlap_cast_dim_left {d D₁ D₂ D₃ : ℕ} (h : D₁ = D₂)
 lemma isInjective_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
     IsInjective (cast (congr_arg (MPSTensor d) h) A) ↔ IsInjective A := by
   subst h; simp
+
+/-- Casting the bond dimension preserves irreducibility. -/
+lemma isIrreducibleTensor_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
+    IsIrreducibleTensor (cast (congr_arg (MPSTensor d) h) A) ↔ IsIrreducibleTensor A := by
+  subst h
+  rfl
 
 /-- Casting the bond dimension preserves the left-canonical (trace-preserving)
 condition `∑ Aᵢᴴ * Aᵢ = 1`.  A dimension cast is a propositional equality

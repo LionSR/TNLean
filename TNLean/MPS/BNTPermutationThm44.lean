@@ -345,52 +345,6 @@ We now combine the two non-vanishing-overlap lemmas with the existing overlap-de
 statement, without assuming span equality.
 -/
 
-/-! ### Helper: norm of phase from self-overlap scaling -/
-
-/-- If `mpvOverlap B B N = (ζ * star ζ)^N * mpvOverlap A A N` and both self-overlaps have
-norm → 1, then `‖ζ‖ = 1`. -/
-private lemma norm_eq_one_of_selfOverlap_scale
-    {d D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
-    (hAA : Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) atTop (nhds 1))
-    (hBB : Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) atTop (nhds 1))
-    (hSelf : ∀ N : ℕ,
-      mpvOverlap (d := d) B B N =
-      (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N) :
-    ‖ζ‖ = 1 := by
-  have hAA_ne : ∀ᶠ N in atTop, ‖mpvOverlap (d := d) A A N‖ ≠ 0 :=
-    hAA.eventually_ne one_ne_zero
-  have hRatio : Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖ /
-      ‖mpvOverlap (d := d) A A N‖) atTop (nhds 1) := by
-    rw [show (1 : ℝ) = 1 / 1 from (one_div_one).symm]
-    exact hBB.div hAA one_ne_zero
-  have hRatioEq : ∀ᶠ N in atTop,
-      ‖mpvOverlap (d := d) B B N‖ / ‖mpvOverlap (d := d) A A N‖ = (‖ζ‖ ^ 2) ^ N := by
-    filter_upwards [hAA_ne] with N hN
-    rw [hSelf N, norm_mul, norm_pow, show ‖ζ * starRingEnd ℂ ζ‖ = ‖ζ‖ ^ 2 from by
-      rw [norm_mul, RCLike.norm_conj, sq]]
-    rw [← pow_mul, Nat.mul_comm, pow_mul]
-    exact mul_div_cancel_of_imp (fun h => absurd h hN)
-  have hPow : Tendsto (fun N => (‖ζ‖ ^ 2) ^ N) atTop (nhds 1) :=
-    hRatio.congr' hRatioEq
-  have h1 : ‖ζ‖ ^ 2 = 1 := by
-    by_contra hne'
-    rcases lt_or_gt_of_ne hne' with h | h
-    · exact zero_ne_one (tendsto_nhds_unique
-        (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) h) hPow)
-    · have hlt2 : ∀ᶠ n in atTop, (‖ζ‖ ^ 2) ^ n < 2 :=
-        hPow.eventually (Iio_mem_nhds (by norm_num : (1:ℝ) < 2))
-      rcases ((tendsto_atTop.1 (tendsto_pow_atTop_atTop_of_one_lt h) 2).and hlt2).exists
-        with ⟨n, hn1, hn2⟩
-      exact not_lt_of_ge hn1 hn2
-  nlinarith [norm_nonneg ζ]
-
-/-- Casting the bond dimension preserves irreducibility. -/
-private lemma isIrreducibleTensor_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂)
-    (A : MPSTensor d D₁) :
-    IsIrreducibleTensor (cast (congr_arg (MPSTensor d) h) A) ↔ IsIrreducibleTensor A := by
-  cases h
-  rfl
-
 /--
 **BNT permutation rigidity (primitive branch), paper hypothesis set.**
 
@@ -508,21 +462,6 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
         (B := B k2) X2 ζ2 hX2 N σ,
         mpv_cast_dim (hf_dim k2) (A (f k2)) N σ,
         hk.symm]
-    have overlap_self_scale : ∀ (Dk : ℕ) (Bk : MPSTensor d Dk) (ζ : ℂ)
-        (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv Bk σ = ζ ^ N * mpv (A (f k1)) σ),
-        ∀ N : ℕ, mpvOverlap (d := d) Bk Bk N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) (A (f k1)) (A (f k1)) N := by
-      intro Dk Bk ζ hmpv N
-      simp only [mpvOverlap]
-      simp_rw [hmpv N, star_mul, star_pow]
-      simp_rw [show star ζ = starRingEnd ℂ ζ from rfl]
-      simp_rw [show ∀ (x : Cfg d N),
-        ζ ^ N * mpv (A (f k1)) x *
-            (star (mpv (A (f k1)) x) * (starRingEnd ℂ ζ) ^ N) =
-          ζ ^ N * (starRingEnd ℂ ζ) ^ N *
-            (mpv (A (f k1)) x * star (mpv (A (f k1)) x)) from
-        fun x => by ring]
-      rw [← Finset.mul_sum, mul_pow]
     have hAA_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A (f k1)) (A (f k1)) N‖)
         atTop (nhds 1) := by
       convert (hA_self (f k1)).norm using 1
@@ -535,10 +474,12 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
       simp
     have hζ1_norm : ‖ζ1‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB1_norm
-        (overlap_self_scale _ (B k1) ζ1 hmpv1)
+        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+          (A := A (f k1)) (B := B k1) (ζ := ζ1) hmpv1)
     have hζ2_norm : ‖ζ2‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB2_norm
-        (overlap_self_scale _ (B k2) ζ2 hmpv2)
+        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+          (A := A (f k1)) (B := B k2) (ζ := ζ2) hmpv2)
     have hζ2 : ζ2 ≠ 0 := by
       intro h0
       have hnorm : (‖ζ2‖ : ℝ) = 0 := by simp [h0]
@@ -651,19 +592,6 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
       exact Eq.ndrec
         (motive := fun k : Fin gB => mpv (B k) σ = ζ2 ^ N * mpv (A j2) σ)
         htmp hj.symm
-    have overlap_self_scaleA : ∀ (Dk : ℕ) (Bk : MPSTensor d Dk) {D : ℕ} (Aj : MPSTensor d D) (ζ : ℂ)
-        (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv Bk σ = ζ ^ N * mpv Aj σ),
-        ∀ N : ℕ, mpvOverlap (d := d) Bk Bk N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) Aj Aj N := by
-      intro Dk Bk D Aj ζ hmpv N
-      simp only [mpvOverlap]
-      simp_rw [hmpv N, star_mul, star_pow]
-      simp_rw [show star ζ = starRingEnd ℂ ζ from rfl]
-      simp_rw [show ∀ (x : Cfg d N),
-        ζ ^ N * mpv Aj x * (star (mpv Aj x) * (starRingEnd ℂ ζ) ^ N) =
-          ζ ^ N * (starRingEnd ℂ ζ) ^ N * (mpv Aj x * star (mpv Aj x)) from
-        fun x => by ring]
-      rw [← Finset.mul_sum, mul_pow]
     have hB_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (B (g j1)) (B (g j1)) N‖)
         atTop (nhds 1) := by
       convert (hB_self (g j1)).norm using 1
@@ -678,10 +606,12 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
       simp
     have hζ1_norm : ‖ζ1‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hA1_norm_tendsto hB_norm_tendsto
-        (overlap_self_scaleA _ (Bk := B (g j1)) (Aj := A j1) ζ1 hmpvB1)
+        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+          (A := A j1) (B := B (g j1)) (ζ := ζ1) hmpvB1)
     have hζ2_norm : ‖ζ2‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hA2_norm_tendsto hB_norm_tendsto
-        (overlap_self_scaleA _ (Bk := B (g j1)) (Aj := A j2) ζ2 hmpvB2)
+        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+          (A := A j2) (B := B (g j1)) (ζ := ζ2) hmpvB2)
     have hζ1 : ζ1 ≠ 0 := by
       intro h0
       have hnorm : (‖ζ1‖ : ℝ) = 0 := by simp [h0]
@@ -849,21 +779,6 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irred
         (B := B k2) X2 ζ2 hX2 N σ,
         mpv_cast_dim (hf_dim k2) (A (f k2)) N σ,
         hk.symm]
-    have overlap_self_scale : ∀ (Dk : ℕ) (Bk : MPSTensor d Dk) (ζ : ℂ)
-        (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv Bk σ = ζ ^ N * mpv (A (f k1)) σ),
-        ∀ N : ℕ, mpvOverlap (d := d) Bk Bk N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) (A (f k1)) (A (f k1)) N := by
-      intro Dk Bk ζ hmpv N
-      simp only [mpvOverlap]
-      simp_rw [hmpv N, star_mul, star_pow]
-      simp_rw [show star ζ = starRingEnd ℂ ζ from rfl]
-      simp_rw [show ∀ (x : Cfg d N),
-        ζ ^ N * mpv (A (f k1)) x *
-            (star (mpv (A (f k1)) x) * (starRingEnd ℂ ζ) ^ N) =
-          ζ ^ N * (starRingEnd ℂ ζ) ^ N *
-            (mpv (A (f k1)) x * star (mpv (A (f k1)) x)) from
-        fun x => by ring]
-      rw [← Finset.mul_sum, mul_pow]
     have hAA_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A (f k1)) (A (f k1)) N‖)
         atTop (nhds 1) := by
       convert (hA_self (f k1)).norm using 1
@@ -876,10 +791,12 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irred
       simp
     have hζ1_norm : ‖ζ1‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB1_norm
-        (overlap_self_scale _ (B k1) ζ1 hmpv1)
+        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+          (A := A (f k1)) (B := B k1) (ζ := ζ1) hmpv1)
     have hζ2_norm : ‖ζ2‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB2_norm
-        (overlap_self_scale _ (B k2) ζ2 hmpv2)
+        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+          (A := A (f k1)) (B := B k2) (ζ := ζ2) hmpv2)
     have hζ2 : ζ2 ≠ 0 := by
       intro h0
       have hnorm : (‖ζ2‖ : ℝ) = 0 := by simp [h0]
@@ -991,19 +908,6 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irred
       exact Eq.ndrec
         (motive := fun k : Fin gB => mpv (B k) σ = ζ2 ^ N * mpv (A j2) σ)
         htmp hj.symm
-    have overlap_self_scaleA : ∀ (Dk : ℕ) (Bk : MPSTensor d Dk) {D : ℕ} (Aj : MPSTensor d D) (ζ : ℂ)
-        (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv Bk σ = ζ ^ N * mpv Aj σ),
-        ∀ N : ℕ, mpvOverlap (d := d) Bk Bk N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) Aj Aj N := by
-      intro Dk Bk D Aj ζ hmpv N
-      simp only [mpvOverlap]
-      simp_rw [hmpv N, star_mul, star_pow]
-      simp_rw [show star ζ = starRingEnd ℂ ζ from rfl]
-      simp_rw [show ∀ (x : Cfg d N),
-        ζ ^ N * mpv Aj x * (star (mpv Aj x) * (starRingEnd ℂ ζ) ^ N) =
-          ζ ^ N * (starRingEnd ℂ ζ) ^ N * (mpv Aj x * star (mpv Aj x)) from
-        fun x => by ring]
-      rw [← Finset.mul_sum, mul_pow]
     have hB_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (B (g j1)) (B (g j1)) N‖)
         atTop (nhds 1) := by
       convert (hB_self (g j1)).norm using 1
@@ -1018,10 +922,12 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irred
       simp
     have hζ1_norm : ‖ζ1‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hA1_norm_tendsto hB_norm_tendsto
-        (overlap_self_scaleA _ (Bk := B (g j1)) (Aj := A j1) ζ1 hmpvB1)
+        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+          (A := A j1) (B := B (g j1)) (ζ := ζ1) hmpvB1)
     have hζ2_norm : ‖ζ2‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hA2_norm_tendsto hB_norm_tendsto
-        (overlap_self_scaleA _ (Bk := B (g j1)) (Aj := A j2) ζ2 hmpvB2)
+        (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+          (A := A j2) (B := B (g j1)) (ζ := ζ2) hmpvB2)
     have hζ1 : ζ1 ≠ 0 := by
       intro h0
       have hnorm : (‖ζ1‖ : ℝ) = 0 := by simp [h0]

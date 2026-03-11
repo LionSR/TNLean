@@ -8,8 +8,9 @@ import TNLean.MPS.PrimitivityBridge
 /-!
 # Canonical form from primitive blocks
 
-This file packages blockwise injectivity, left-canonical normalization, strict weight ordering,
-and blockwise primitivity into `IsCanonicalForm`.
+This file is a downstream builder: it packages blockwise injectivity, left-canonical
+normalization, strict weight ordering, and blockwise primitivity into `IsCanonicalForm`.
+It does not prove such data from arbitrary input tensors.
 -/
 
 open scoped Matrix BigOperators
@@ -17,7 +18,10 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 /-- Build `IsCanonicalForm` once the normalized self-overlap hypothesis has been derived from
-blockwise primitivity. -/
+blockwise primitivity.
+
+This is a late-stage builder theorem: all blockwise injectivity / normalization / ordering data are
+assumed as inputs. -/
 theorem isCanonicalForm_of_primitive
     {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
