@@ -41,8 +41,9 @@ stable library surface now keeps only
 so this file remains intentionally excluded from `TNLean.lean`.
 
 No stable in-repo module currently depends on this older CFII development
-exactly, but we keep the full file as a checked alternate proof instead of
-collapsing it to a thinner compatibility wrapper.
+exactly. We keep the full file as a checked alternate proof instead of
+collapsing it to a thinner compatibility wrapper, but its auxiliary lemmas are
+archival implementation details rather than supported library API.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators

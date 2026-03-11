@@ -2,12 +2,11 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
--- Direct imports replacing the former TNLean.PositiveMapSpectral hub:
--- • Channel.PositiveMap  – Mathlib PosDef API (re_dotProduct_nonneg, etc.)
--- • Channel.Irreducible  – IsIrreducibleMap, IsOrthogonalProjection
--- Both are already transitively available through TNLean.MPS.CPPrimitive
--- (CPPrimitive → KadisonSchwarz → PositiveMap; CPPrimitive → Irreducible),
--- but are listed explicitly here so the dependency is self-documenting.
+-- Keep these dependencies explicit here for readability:
+-- • `TNLean.Channel.PositiveMap` for the positive-definiteness API
+-- • `TNLean.Channel.Irreducible` for irreducibility/projection lemmas
+-- Both are already transitively available through `TNLean.MPS.CPPrimitive`,
+-- but listing them directly makes the local proof dependencies honest.
 import TNLean.Channel.PositiveMap
 import TNLean.Channel.Irreducible
 import TNLean.MPS.CPPrimitive
