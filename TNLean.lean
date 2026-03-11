@@ -40,6 +40,7 @@ import TNLean.Channel.MultiplicativeDomain
 import TNLean.Channel.MultiplicativeDomainPowers
 import TNLean.Channel.CesaroFixedPoint
 import TNLean.Channel.Irreducible
+import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.PerronFrobeniusNormalization
 import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.Channel.Schwarz
