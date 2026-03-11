@@ -114,6 +114,8 @@ import TNLean.Wielandt.Lemma2b
 import TNLean.Wielandt.RankOneConstruction
 import TNLean.Wielandt.RankOneProducts
 import TNLean.Wielandt.WielandtBound
+import TNLean.Wielandt.PrimitivePaper
+import TNLean.Wielandt.PrimitiveEquiv
 import TNLean.Wielandt.PrimitivityNormal
 import TNLean.Wielandt.PrimitivityToNormal
 import TNLean.Wielandt.PrimitiveImpliesIrreducible
