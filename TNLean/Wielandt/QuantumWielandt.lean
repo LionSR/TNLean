@@ -86,35 +86,37 @@ theorem isNormal_of_isPrimitiveMPS_of_posDef
   -- Step 4: algSpan = ⊤ + aperiodicity → IsNormal
   exact isNormal_of_algSpan_eq_top_of_aperiodic A hAlg hAper
 
-/-- Legacy compatibility wrapper returning the witness form of `IsNormal`.
+/-- Under `IsPrimitiveMPS`, `PosDef`, and aperiodicity, exact word spans are eventually `⊤`.
 
-The name is historical: this theorem still takes the fixed-point witness `ρ`
-explicitly through `IsPrimitiveMPS A ρ`; it does not use the existential
-predicate `MPSTensor.IsPrimitive`. It simply unwraps
-`isNormal_of_isPrimitiveMPS_of_posDef` into the statement that all sufficiently
-long exact word spans are `⊤`. -/
-theorem isNormal_of_isPrimitive_of_posDef
+This is the witness form of `isNormal_of_isPrimitiveMPS_of_posDef`: there is a
+threshold `N` after which every exact-length word span equals the full matrix
+algebra. -/
+theorem wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hPrim : IsPrimitiveMPS A ρ)
     (hPD : ρ.PosDef)
     (hAper : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
-    ∃ N : ℕ, ∀ (n : ℕ), N ≤ n → wordSpan A n = ⊤ := by
+    ∃ N : ℕ, ∀ n : ℕ, N ≤ n → wordSpan A n = ⊤ := by
   obtain ⟨N, hN⟩ := isNormal_of_isPrimitiveMPS_of_posDef hPrim hPD hAper
   rw [← wordSpan_eq_top_iff_isNBlkInjective] at hN
   refine ⟨N, fun n hn => ?_⟩
   exact eq_top_iff.mpr <| by
     simpa [hN] using wordSpan_mono'_of_one_mem_wordSpan_one A hAper hn
 
-/-- Compatibility wrapper around
-`isNormal_of_isIrreducibleTensor_of_aperiodic`.
+/-- Legacy compatibility alias for
+`wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic`.
 
-This is the short route from tensor irreducibility plus aperiodicity to
-`IsNormal`. -/
-theorem isNormal_of_isIrreducibleTensor_aperiodic
-    (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor A)
+The historical name suggests the existential predicate `MPSTensor.IsPrimitive`,
+but the theorem still takes the fixed-point witness `ρ` explicitly through
+`IsPrimitiveMPS A ρ`. Prefer the more honest theorem name above, or
+`isNormal_of_isPrimitiveMPS_of_posDef` when the `IsNormal` conclusion itself is
+the desired API. -/
+theorem isNormal_of_isPrimitive_of_posDef
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hPrim : IsPrimitiveMPS A ρ)
+    (hPD : ρ.PosDef)
     (hAper : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
-    IsNormal A :=
-  isNormal_of_isIrreducibleTensor_of_aperiodic A hIrr hAper
+    ∃ N : ℕ, ∀ n : ℕ, N ≤ n → wordSpan A n = ⊤ :=
+  wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic hPrim hPD hAper
 
 end MPSTensor

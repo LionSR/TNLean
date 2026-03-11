@@ -265,12 +265,13 @@ end
 end TransferAdjoint
 
 /-!
-## Main theorem: periodicity removal by blocking (left-canonical + irreducible)
+## Main theorem: periodicity removal by blocking (preferred live route)
 
-We follow the Appendix-A argument: start from a left-canonical / trace-preserving tensor,
-pass to the conjugate-transposed Kraus family (which is right-canonical / unital), apply the
-root-of-unity lemma there, then take a common power and transport primitivity back across the
-adjoint.
+This is the maintained Appendix-A blocking argument. Starting from a
+left-canonical / trace-preserving tensor, we pass to the
+conjugate-transposed Kraus family, use the adjoint-fixed-point peripheral
+closure theorem, then take a common power and transport primitivity back
+across the adjoint.
 -/
 
 theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor

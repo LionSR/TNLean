@@ -162,13 +162,5 @@ Burnside- or peripheral-spectrum argument, but that infrastructure is kept out
 of this lightweight wrapper file.
 -/
 
-/-- Documentation theorem summarizing the status of the primitive → normal
-bridge.
-
-This file provides only the primitivity-side consequences needed elsewhere and
-re-exports the normality-side Wielandt chain. For the existing conditional
-`IsPrimitiveMPS + PosDef + aperiodicity → IsNormal` theorem, see
-`QuantumWielandt.lean`. -/
-theorem primitivity_normal_roadmap : True := trivial
 
 end MPSTensor

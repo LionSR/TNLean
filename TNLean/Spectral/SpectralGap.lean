@@ -38,6 +38,41 @@ to zero. This is the mechanism by which the mixed transfer operator
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
 
+namespace Matrix
+
+/-- Pull fixed left and right matrix factors through a finite sum indexed by `Fin d`. -/
+theorem sum_mul_mul {α : Type*} [NonUnitalNonAssocSemiring α]
+    {d l m n r : ℕ} (L : Matrix (Fin l) (Fin m) α)
+    (M : Fin d → Matrix (Fin m) (Fin n) α) (R : Matrix (Fin n) (Fin r) α) :
+    ∑ i : Fin d, L * M i * R = L * (∑ i : Fin d, M i) * R := by
+  calc
+    ∑ i : Fin d, L * M i * R = (∑ i : Fin d, L * M i) * R := by
+      simpa [Matrix.mul_assoc] using
+        (Matrix.sum_mul (s := (Finset.univ : Finset (Fin d)))
+          (f := fun i : Fin d => L * M i) (M := R)).symm
+    _ = (L * ∑ i : Fin d, M i) * R := by
+      exact congrArg (fun T => T * R) <|
+        (Matrix.mul_sum (s := (Finset.univ : Finset (Fin d)))
+          (f := fun i : Fin d => M i) (M := L)).symm
+
+/-- If multiplication by a rectangular matrix has trivial kernel, then the source dimension is at
+most the target dimension. -/
+theorem dim_le_of_mulVec_injective {D₁ D₂ : ℕ} [NeZero D₂]
+    (X : Matrix (Fin D₁) (Fin D₂) ℂ)
+    (h_inj : ∀ v : Fin D₂ → ℂ, X *ᵥ v = 0 → v = 0) :
+    D₂ ≤ D₁ := by
+  let f : (Fin D₂ → ℂ) →ₗ[ℂ] (Fin D₁ → ℂ) := Matrix.toLin' X
+  have hf_inj : Function.Injective f := by
+    intro u v huv
+    have h_sub : f (u - v) = 0 := by
+      simpa using congrArg (fun w => w - f v) huv
+    exact sub_eq_zero.mp <| h_inj _ h_sub
+  have hfinrank : Module.finrank ℂ (Fin D₂ → ℂ) ≤ Module.finrank ℂ (Fin D₁ → ℂ) :=
+    LinearMap.finrank_le_finrank_of_injective hf_inj
+  simpa [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] using hfinrank
+
+end Matrix
+
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -112,11 +147,6 @@ lemma eigenvector_pow {V : Type*} [AddCommMonoid V] [Module ℂ V]
 
 /-! ### Helper lemmas for the HS contraction bound -/
 
-private lemma sum_sandwich (A B : Matrix (Fin D) (Fin D) ℂ)
-    (M : Fin d → Matrix (Fin D) (Fin D) ℂ) :
-    ∑ i : Fin d, A * M i * B = A * (∑ i : Fin d, M i) * B := by
-  rw [Finset.mul_sum, Finset.sum_mul]
-
 /-- Iterated TP condition: `∑_σ evalWord(K,σ)† evalWord(K,σ) = I`. -/
 lemma word_conjTranspose_mul_sum (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (hK : ∑ i : Fin d, (K i)ᴴ * K i = 1) (n : ℕ) :
@@ -130,7 +160,8 @@ lemma word_conjTranspose_mul_sum (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
       show ∀ A B C D : Matrix (Fin D) (Fin D) ℂ,
         A * B * (C * D) = A * (B * C) * D from fun _ _ _ _ => by simp [Matrix.mul_assoc]]
     rw [Finset.sum_comm]
-    simp_rw [sum_sandwich _ _ (fun i => (K i)ᴴ * K i), hK, Matrix.mul_one]
+    simp_rw [Matrix.sum_mul_mul
+      (M := fun i => (K i)ᴴ * K i), hK, Matrix.mul_one]
     exact ih
 
 /-- The standard transfer map preserves trace (for TP tensors). -/
@@ -324,22 +355,18 @@ References:
 * Wolf, Quantum Channels & Operations (2012), §6.2
 -/
 
-/-- If ker(X) is B†-invariant and B is injective, then ker(X) is
-invariant under ALL matrices (adapted from QPF/PosDef.lean).
-
-This is a fully proved helper lemma — no sorry. It shows that if a subspace
-(ker X) is invariant under all generators Bₖ†, and B spans all matrices,
-then ker(X) is invariant under every matrix. -/
-private lemma ker_X_all_of_inj
-    (B : MPSTensor d D) (hB : IsInjective B)
-    (X : Matrix (Fin D) (Fin D) ℂ)
+/-- If `ker X` is invariant under all generators `(B k)ᴴ` and `B` is injective, then `ker X`
+is invariant under every matrix of the source dimension. -/
+theorem ker_all_of_inj {D₁ D₂ : ℕ}
+    (B : MPSTensor d D₂) (hB : IsInjective B)
+    (X : Matrix (Fin D₁) (Fin D₂) ℂ)
     (h : ∀ k : Fin d, ∀ v, X *ᵥ v = 0 → X *ᵥ ((B k)ᴴ *ᵥ v) = 0) :
-    ∀ (M : Matrix (Fin D) (Fin D) ℂ) (v : Fin D → ℂ),
+    ∀ (M : Matrix (Fin D₂) (Fin D₂) ℂ) (v : Fin D₂ → ℂ),
       X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0 := by
   intro M v hv
-  -- M† is in span of {B k}, so M†† = M is in span of {(B k)†}
-  suffices ∀ N : Matrix (Fin D) (Fin D) ℂ, X *ᵥ (Nᴴ *ᵥ v) = 0 by
-    specialize this Mᴴ; rwa [Matrix.conjTranspose_conjTranspose] at this
+  suffices ∀ N : Matrix (Fin D₂) (Fin D₂) ℂ, X *ᵥ (Nᴴ *ᵥ v) = 0 by
+    specialize this Mᴴ
+    rwa [Matrix.conjTranspose_conjTranspose] at this
   intro N
   have hN : N ∈ Submodule.span ℂ (Set.range B) := hB ▸ Submodule.mem_top
   induction hN using Submodule.span_induction with
@@ -660,8 +687,9 @@ private lemma eigenvector_gives_gauge [NeZero D]
         simp [hterm]
       _ = SA⁻¹ * (∑ i : Fin d, A i * X * (B i)ᴴ) * (SBᴴ)⁻¹ := by
         simpa using
-          (sum_sandwich (A := SA⁻¹) (B := (SBᴴ)⁻¹)
-            (M := fun i : Fin d => A i * X * (B i)ᴴ))
+          (Matrix.sum_mul_mul
+            (L := SA⁻¹) (M := fun i : Fin d => A i * X * (B i)ᴴ)
+            (R := (SBᴴ)⁻¹))
       _ = SA⁻¹ * (μ • X) * (SBᴴ)⁻¹ := by rw [hFXsum]
       _ = μ • (SA⁻¹ * X * (SBᴴ)⁻¹) := by
         simp [Matrix.mul_assoc]
@@ -784,8 +812,8 @@ private lemma eigenvector_gives_gauge [NeZero D]
             = ∑ i : Fin d, SAᴴ * ((A i)ᴴ * A i) * SA := by
                 simp [htermA]
         _ = SAᴴ * (∑ i : Fin d, (A i)ᴴ * A i) * SA := by
-                simp [sum_sandwich (A := SAᴴ) (B := SA)
-                    (M := fun i : Fin d => (A i)ᴴ * A i)]
+                simp [Matrix.sum_mul_mul
+                    (L := SAᴴ) (M := fun i : Fin d => (A i)ᴴ * A i) (R := SA)]
         _ = SAᴴ * 1 * SA := by rw [hA_norm]
         _ = SAᴴ * SA := by simp
     have hBblock : ∑ i : Fin d, (B' i)ᴴ * (SBᴴ * SB) * (B' i) = SBᴴ * SB := by
@@ -821,8 +849,8 @@ private lemma eigenvector_gives_gauge [NeZero D]
             = ∑ i : Fin d, SBᴴ * ((B i)ᴴ * B i) * SB := by
                 simp [htermB]
         _ = SBᴴ * (∑ i : Fin d, (B i)ᴴ * B i) * SB := by
-                simp [sum_sandwich (A := SBᴴ) (B := SB)
-                    (M := fun i : Fin d => (B i)ᴴ * B i)]
+                simp [Matrix.sum_mul_mul
+                    (L := SBᴴ) (M := fun i : Fin d => (B i)ᴴ * B i) (R := SB)]
         _ = SBᴴ * 1 * SB := by rw [hB_norm]
         _ = SBᴴ * SB := by simp
     have hAdj :
@@ -964,7 +992,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
   have h_all :
       ∀ (M0 : Matrix (Fin D) (Fin D) ℂ) (v : Fin D → ℂ),
         X' *ᵥ v = 0 → X' *ᵥ (M0 *ᵥ v) = 0 :=
-    ker_X_all_of_inj (B := B') hB' X' hker
+    ker_all_of_inj (B := B') hB' X' hker
   have hdetX' : X'.det ≠ 0 := det_ne_zero_of_ker_all (X := X') hX'ne h_all
   have hX'isUnitdet : IsUnit X'.det := Ne.isUnit hdetX'
   -- Per-index relation in the gauged setting.

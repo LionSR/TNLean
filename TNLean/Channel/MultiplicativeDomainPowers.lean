@@ -93,7 +93,7 @@ theorem krausMap_pow_of_ks_equality (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
               -- scalar algebra (commutativity is only in the scalar field).
               simp [pow_succ, smul_smul, mul_comm]
 
-/-- If `E` is bi-canonical (unital + TP) and `E(X)=μX` with `‖μ‖=1`, then
+/-- If `E` is unital and trace-preserving and `E(X)=μX` with `‖μ‖=1`, then
 `E(X^n)=μ^n X^n` for all `n`.
 
 This uses `ks_equality_of_peripheral_eigenvector` to obtain KS equality at `X`. -/

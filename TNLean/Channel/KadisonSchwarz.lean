@@ -218,8 +218,8 @@ theorem hilbertSchmidt_contraction (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
 
 /-- **HS contraction for the adjoint channel** (MPS version).
 
-If `∑ Kᵢ† Kᵢ = I` (TP / left-canonical) AND `∑ Kᵢ Kᵢ† = I`
-(unital / right-canonical, hence bi-canonical), then the adjoint map
+If `∑ Kᵢ† Kᵢ = I` (TP / left-canonical) and `∑ Kᵢ Kᵢ† = I`
+(unital / right-canonical), then the adjoint map
 `E*(X) = ∑ Kᵢ† X Kᵢ` contracts the Hilbert-Schmidt norm:
 `tr(E*(X)† E*(X)) ≤ tr(X† X)`.
 

@@ -128,27 +128,29 @@ theorem fundamentalTheorem_singleBlock_fromMPV₂
 
 end SingleBlockSeparation
 
-/-! ### End-to-end theorems from `SameMPV₂` with explicit separation hypothesis
+/-! ### Compatibility wrappers exposing the `SameMPV₂` + separation interface
 
-These theorems provide the complete pipeline: `SameMPV₂` → per-block `SameMPV` (via `hSep`)
-→ per-block `GaugeEquiv` → global `GaugeEquiv` → block-permutation decomposition.
+These theorems package the complete pipeline
+`SameMPV₂` → per-block `SameMPV` (via `hSep`) → per-block `GaugeEquiv`
+→ global `GaugeEquiv` → block-permutation decomposition.
 
-The separation hypothesis `hSep` is needed for `r ≥ 2` (quantum PF theory); for `r = 1` it
-is proved by `sameMPV₂_single_block`. -/
+The separation hypothesis `hSep` is needed for `r ≥ 2` (quantum PF theory);
+for `r = 1` it is proved by `sameMPV₂_single_block`. -/
 section EndToEnd
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 
-/-- **End-to-end multi-block FT from `SameMPV₂`.**
+/-- **Compatibility wrapper for the end-to-end multi-block FT from `SameMPV₂`.**
 
-Starting from `SameMPV₂` on block-diagonal tensors, the per-block separation hypothesis
-(the only piece requiring PF theory) yields:
+Starting from `SameMPV₂` on block-diagonal tensors, the per-block separation
+hypothesis (the only piece requiring PF theory) yields:
 - Per-block gauge equivalence `GaugeEquiv (A k) (B k)` for all `k`
 - Global gauge equivalence of the block-diagonal tensors
 - Block-permutation decomposition of the Pi-algebra automorphism
 
-The `hSame₂` hypothesis is retained so that this theorem continues to present the full end-to-end
-interface, even though the current wrapper proof only uses the supplied separation data `hSep`. -/
+The `hSame₂` hypothesis is retained so that this theorem continues to present
+the full end-to-end interface, even though the wrapper proof only uses the
+supplied separation data `hSep`. -/
 theorem fundamentalTheorem_multiBlock_fromSameMPV₂
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -171,10 +173,10 @@ theorem fundamentalTheorem_multiBlock_fromSameMPV₂
       fundamentalTheorem_multiBlock_global μ A B hA hSep,
       piAlgEquiv_decomposition A B hA hSep⟩
 
-/-- **End-to-end multi-block FT with explicit gauge matrices.**
+/-- **Compatibility wrapper for the explicit-gauge multi-block FT from `SameMPV₂`.**
 
-As above, `hSame₂` is kept for interface compatibility, while the wrapper proof itself only uses
-`hSep`. -/
+As above, `hSame₂` is kept for interface compatibility, while the wrapper proof
+itself only uses `hSep`. -/
 theorem fundamentalTheorem_multiBlock_explicit_fromSameMPV₂
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))

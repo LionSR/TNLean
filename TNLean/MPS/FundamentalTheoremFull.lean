@@ -364,42 +364,6 @@ theorem perBlock_sameMPV_of_equalMPV_CFBNT
   intro k
   exact GaugeEquiv.sameMPV ((fundamentalTheorem_equalMPV_CFBNT A B hA hB hSame).1 k)
 
-/-- **Equal-MPV CF-BNT: per-block gauge equivalence implies global gauge equivalence.**
-
-Once per-block gauge equivalence is established, the global block-diagonal gauge equivalence
-follows from the multi-block assembly theorem. The `hA` hypothesis is retained for compatibility,
-although the proof only uses the supplied blockwise gauge equivalences. -/
-theorem globalGaugeEquiv_of_perBlock_CFBNT
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    {μ : Fin r → ℂ}
-    (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : IsCanonicalFormBNT μ A)
-    (hGauge : ∀ k, GaugeEquiv (A k) (B k)) :
-    GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) := by
-  let _ := hA
-  exact gaugeEquiv_toTensorFromBlocks_of_blockGauge μ A B hGauge
-
-/-- **BNT structure from CF-BNT**: each canonical form with BNT separation gives a valid
-`IsBNT` structure. This is a convenient re-export. -/
-theorem isBNT_of_CFBNT
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    {μ : Fin r → ℂ}
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (hA : IsCanonicalFormBNT μ A) :
-    IsBNT (toTensorFromBlocks μ A) r dim A :=
-  hA.isBNT
-
-/-- **Cross-overlap decay from CF-BNT**: distinct blocks have decaying overlaps.
-Convenient re-export. -/
-theorem cross_overlap_tendsto_zero_of_CFBNT
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    {μ : Fin r → ℂ}
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (hA : IsCanonicalFormBNT μ A)
-    (j k : Fin r) (hjk : j ≠ k) :
-    Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) :=
-  hA.cross_overlap_tendsto_zero j k hjk
-
 end Corollaries
 
 end MPSTensor
