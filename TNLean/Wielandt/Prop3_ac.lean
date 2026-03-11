@@ -6,7 +6,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Wielandt.PrimitivePaper
 import TNLean.Wielandt.PrimitivityNormal
 import TNLean.MPS.CanonicalFormReduction
+import TNLean.MPS.PeripheralToSpectralGap
 import Mathlib.Analysis.InnerProductSpace.Positive
+import Mathlib.Analysis.Matrix.Spectrum
 
 /-!
 # Proposition 3, direction (a) → (c): Primitivity implies strong irreducibility
@@ -662,5 +664,303 @@ theorem isPrimitivePaper_witness_mul
       ∃ q : ℕ, q' = p * q := by
   obtain ⟨q, hq⟩ := hPrim
   exact ⟨p * q, vectorSpreadSpan_mul_eq_top A hq p hp, q, rfl⟩
+
+
+/-! ## Part 9: Spectral perturbation — from peripheral eigenvectors to PSD non-PosDef fixed points
+
+This section develops the spectral-perturbation machinery needed for the paper's case (iii)
+in Proposition 3 (a)→(c) of arXiv:0909.5347.
+
+**Setup**: Given `ρ.PosDef` with `E(ρ) = ρ`, and a nontrivial peripheral eigenvector
+`X ≠ 0` with `E(X) = μ • X` where `μ ≠ 1`, `‖μ‖ = 1`, `μ ^ p = 1`, we develop
+all ingredients toward constructing a matrix `τ` satisfying:
+- `τ.PosSemidef`, `τ ≠ 0`, `(E ^ p) τ = τ`, `¬ τ.PosDef`
+
+Paper: This corresponds to the spectral-perturbation argument in Proposition 3,
+case (iii), and in Wolf §6.4 Theorem 6.7.
+-/
+
+section SpectralPerturbation
+
+variable {d D : ℕ}
+
+/-! ### Step 1: Transfer map on conjugate-transposed eigenvectors -/
+
+/-- If `E(X) = μ • X`, then `E(X†) = star μ • X†`. -/
+theorem transferMap_conjTranspose_eigenvector
+    (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
+    (hEig : transferMap (d := d) (D := D) A X = μ • X) :
+    transferMap (d := d) (D := D) A Xᴴ = star μ • Xᴴ := by
+  calc transferMap (d := d) (D := D) A Xᴴ
+      = (transferMap (d := d) (D := D) A X)ᴴ := transferMap_conjTranspose A X
+    _ = (μ • X)ᴴ := by rw [hEig]
+    _ = star μ • Xᴴ := Matrix.conjTranspose_smul μ X
+
+/-! ### Step 2: Powers of eigenvectors under roots of unity -/
+
+/-- If `E(X) = μ • X`, then `E^n(X) = μ^n • X`. -/
+theorem transferMap_pow_smul_eigenvector
+    (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
+    (hEig : transferMap (d := d) (D := D) A X = μ • X)
+    (n : ℕ) :
+    ((transferMap (d := d) (D := D) A) ^ n) X = μ ^ n • X := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    -- E^(n+1) = E^n * E, so E^(n+1)(X) = E^n(E(X)) = E^n(μ • X) = μ • E^n(X) = μ^(n+1) • X
+    rw [pow_succ, Module.End.mul_apply, hEig, map_smul, ih, smul_smul]
+    congr 1; ring
+
+/-- If `E(X) = μ • X` and `μ ^ p = 1`, then `E^p(X) = X`. -/
+theorem transferMap_pow_eigenvector_of_root_of_unity
+    (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
+    (hEig : transferMap (d := d) (D := D) A X = μ • X)
+    {p : ℕ} (hroot : μ ^ p = 1) :
+    ((transferMap (d := d) (D := D) A) ^ p) X = X := by
+  rw [transferMap_pow_smul_eigenvector A hEig p, hroot, one_smul]
+
+/-- If `E(X) = μ • X` and `μ^p = 1`, then `E^p(X†) = X†`. -/
+theorem transferMap_pow_conjTranspose_eigenvector_of_root_of_unity
+    (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
+    (hEig : transferMap (d := d) (D := D) A X = μ • X)
+    {p : ℕ} (hroot : μ ^ p = 1) :
+    ((transferMap (d := d) (D := D) A) ^ p) Xᴴ = Xᴴ := by
+  apply transferMap_pow_eigenvector_of_root_of_unity A
+      (transferMap_conjTranspose_eigenvector A hEig)
+  rw [← star_pow, hroot, star_one]
+
+/-! ### Step 3: Hermitian parts are fixed points -/
+
+/-- `X + X†` is always Hermitian. -/
+private lemma isHermitian_add_conjTranspose
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    (X + Xᴴ).IsHermitian := by
+  unfold Matrix.IsHermitian
+  rw [Matrix.conjTranspose_add, Matrix.conjTranspose_conjTranspose]
+  abel
+
+/-- `i • (X† - X)` is always Hermitian. -/
+private lemma isHermitian_smul_I_sub_conjTranspose
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    (Complex.I • (Xᴴ - X)).IsHermitian := by
+  ext i j
+  simp only [Matrix.conjTranspose_apply, Matrix.smul_apply, Matrix.sub_apply, star_smul,
+    star_sub, star_star]
+  have hI : star Complex.I = -Complex.I := by
+    rw [Complex.star_def]; exact Complex.conj_I
+  rw [hI, neg_smul, smul_sub, neg_sub, smul_sub]
+
+/-- If `E(X) = μ • X` and `μ^p = 1`, then `E^p(X + X†) = X + X†`. -/
+theorem transferMap_pow_hermitianPart_fixedPoint
+    (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
+    (hEig : transferMap (d := d) (D := D) A X = μ • X)
+    {p : ℕ} (hroot : μ ^ p = 1) :
+    ((transferMap (d := d) (D := D) A) ^ p) (X + Xᴴ) = X + Xᴴ := by
+  rw [map_add,
+    transferMap_pow_eigenvector_of_root_of_unity A hEig hroot,
+    transferMap_pow_conjTranspose_eigenvector_of_root_of_unity A hEig hroot]
+
+/-- If `E(X) = μ • X` and `μ^p = 1`, then `E^p(i(X† - X)) = i(X† - X)`. -/
+theorem transferMap_pow_antiHermitianPart_fixedPoint
+    (A : MPSTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
+    (hEig : transferMap (d := d) (D := D) A X = μ • X)
+    {p : ℕ} (hroot : μ ^ p = 1) :
+    ((transferMap (d := d) (D := D) A) ^ p) (Complex.I • (Xᴴ - X)) =
+      Complex.I • (Xᴴ - X) := by
+  rw [map_smul, map_sub,
+    transferMap_pow_conjTranspose_eigenvector_of_root_of_unity A hEig hroot,
+    transferMap_pow_eigenvector_of_root_of_unity A hEig hroot]
+
+/-! ### Step 4: Trace vanishes for non-trivial eigenvectors of trace-preserving maps -/
+
+/-- If `E` is trace-preserving and `E(X) = μ • X` with `μ ≠ 1`, then `trace(X) = 0`. -/
+theorem trace_eigenvector_eq_zero
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
+    (hEig : transferMap (d := d) (D := D) A X = μ • X)
+    (hμ_ne : μ ≠ 1) :
+    Matrix.trace X = 0 := by
+  have h1 : μ * Matrix.trace X = Matrix.trace X := by
+    calc μ * Matrix.trace X
+        = Matrix.trace (μ • X) := (Matrix.trace_smul μ X).symm
+      _ = Matrix.trace (transferMap (d := d) (D := D) A X) := by rw [hEig]
+      _ = Matrix.trace X := trace_transferMap A X hNorm
+  have h2 : (μ - 1) * Matrix.trace X = 0 := by linear_combination h1
+  rcases mul_eq_zero.mp h2 with h | h
+  · exact absurd (sub_eq_zero.mp h) hμ_ne
+  · exact h
+
+/-- Trace of `X + X†` vanishes when trace of `X` vanishes. -/
+private lemma trace_hermitianPart_eq_zero
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (htr : Matrix.trace X = 0) :
+    Matrix.trace (X + Xᴴ) = 0 := by
+  rw [Matrix.trace_add, Matrix.trace_conjTranspose, htr, star_zero, add_zero]
+
+/-- Trace of `i(X† - X)` vanishes when trace of `X` vanishes. -/
+private lemma trace_antiHermitianPart_eq_zero
+    {X : Matrix (Fin D) (Fin D) ℂ}
+    (htr : Matrix.trace X = 0) :
+    Matrix.trace (Complex.I • (Xᴴ - X)) = 0 := by
+  rw [Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose, htr, star_zero,
+    sub_zero, smul_zero]
+
+/-- At least one of `X + X†` and `i(X† - X)` is nonzero when `X ≠ 0`. -/
+private lemma hermitianParts_not_both_zero
+    {X : Matrix (Fin D) (Fin D) ℂ} (hne : X ≠ 0) :
+    X + Xᴴ ≠ 0 ∨ Complex.I • (Xᴴ - X) ≠ 0 := by
+  by_contra h
+  push_neg at h
+  obtain ⟨h1, h2⟩ := h
+  apply hne
+  -- From i(X† - X) = 0 and i ≠ 0: X† = X
+  have hX_self : Xᴴ = X := by
+    have hsub : Xᴴ - X = 0 := by
+      rcases smul_eq_zero.mp h2 with hi | hsub
+      · exact absurd hi Complex.I_ne_zero
+      · exact hsub
+    exact eq_of_sub_eq_zero hsub
+  -- From X + X† = 0 and X† = X: 2X = 0 hence X = 0
+  have h2X : X + X = 0 := by rwa [hX_self] at h1
+  have h2sm : (2 : ℂ) • X = 0 := by rw [two_smul]; exact h2X
+  rcases smul_eq_zero.mp h2sm with h | h
+  · exact absurd h two_ne_zero
+  · exact h
+
+/-! ### Step 5: Hermitian, nonzero, trace-zero matrix is not PSD -/
+
+/-- **A nonzero Hermitian matrix with trace zero is not positive semidefinite.**
+
+Proof via eigenvalues: if `H` is PSD, its eigenvalues are `≥ 0`.
+They sum to `trace(H) = 0`, so all eigenvalues are `0`, hence `H = 0`. -/
+theorem not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
+    {H : Matrix (Fin D) (Fin D) ℂ}
+    (_hH : H.IsHermitian) (hne : H ≠ 0) (htr : H.trace = 0) :
+    ¬H.PosSemidef := by
+  intro hpsd
+  apply hne
+  -- PSD → eigenvalues ≥ 0, and they sum to trace = 0
+  have hev_nn := hpsd.eigenvalues_nonneg
+  -- trace = sum of eigenvalues (using hpsd.isHermitian's eigenvalues)
+  have hev_sum_C : H.trace = ∑ i : Fin D, (hpsd.isHermitian.eigenvalues i : ℂ) :=
+    hpsd.isHermitian.trace_eq_sum_eigenvalues
+  have hev_sum : ∑ i : Fin D, hpsd.isHermitian.eigenvalues i = 0 := by
+    have h : ∑ i : Fin D, (hpsd.isHermitian.eigenvalues i : ℂ) = 0 := by
+      rw [← hev_sum_C]; exact htr
+    exact_mod_cast h
+  -- each eigenvalue is 0 (nonneg summing to 0)
+  have hev_zero : hpsd.isHermitian.eigenvalues = 0 := by
+    ext i
+    by_contra hi
+    have hpos : 0 < hpsd.isHermitian.eigenvalues i := lt_of_le_of_ne (hev_nn i) (Ne.symm hi)
+    linarith [Finset.sum_pos' (fun j _ => hev_nn j) ⟨i, Finset.mem_univ _, hpos⟩]
+  exact hpsd.isHermitian.eigenvalues_eq_zero_iff.mp hev_zero
+
+/-! ### Step 6: Assembly — existence of Hermitian, nonzero, trace-zero E^p-fixed point -/
+
+/-- **From a nontrivial peripheral eigenvector, extract a nonzero Hermitian trace-zero
+fixed point of `E^p` that is not positive semidefinite.** -/
+theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
+    (hEig : transferMap (d := d) (D := D) A X = μ • X)
+    (hX_ne : X ≠ 0) (hμ_ne : μ ≠ 1) {p : ℕ} (hroot : μ ^ p = 1) :
+    ∃ H : Matrix (Fin D) (Fin D) ℂ,
+      H.IsHermitian ∧ H ≠ 0 ∧ H.trace = 0 ∧
+      ((transferMap (d := d) (D := D) A) ^ p) H = H ∧
+      ¬H.PosSemidef := by
+  have htr := trace_eigenvector_eq_zero A hNorm hEig hμ_ne
+  rcases hermitianParts_not_both_zero hX_ne with h | h
+  · exact ⟨X + Xᴴ,
+      isHermitian_add_conjTranspose X, h,
+      trace_hermitianPart_eq_zero htr,
+      transferMap_pow_hermitianPart_fixedPoint A hEig hroot,
+      not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
+        (isHermitian_add_conjTranspose X) h (trace_hermitianPart_eq_zero htr)⟩
+  · exact ⟨Complex.I • (Xᴴ - X),
+      isHermitian_smul_I_sub_conjTranspose X, h,
+      trace_antiHermitianPart_eq_zero htr,
+      transferMap_pow_antiHermitianPart_fixedPoint A hEig hroot,
+      not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
+        (isHermitian_smul_I_sub_conjTranspose X) h (trace_antiHermitianPart_eq_zero htr)⟩
+
+/-! ### Step 7: Helper lemmas for the perturbation construction -/
+
+/-- **Negative eigenvalue of non-PSD Hermitian matrix.**
+
+If `H` is Hermitian, nonzero, with trace 0, then it has at least one negative eigenvalue. -/
+theorem exists_neg_eigenvalue_of_hermitian_ne_zero_trace_zero
+    {H : Matrix (Fin D) (Fin D) ℂ}
+    (hH : H.IsHermitian) (hne : H ≠ 0) (htr : H.trace = 0) :
+    ∃ i : Fin D, hH.eigenvalues i < 0 := by
+  have hnotpsd := not_posSemidef_of_hermitian_ne_zero_trace_eq_zero hH hne htr
+  rw [hH.posSemidef_iff_eigenvalues_nonneg] at hnotpsd
+  -- hnotpsd : ¬(0 ≤ hH.eigenvalues), where ≤ is the Pi ordering
+  by_contra hall
+  push_neg at hall  -- hall : ∀ i, 0 ≤ hH.eigenvalues i
+  exact hnotpsd (Pi.le_def.mpr (fun i => hall i))
+
+/-- **Affine combination of `E^p`-fixed points is an `E^p`-fixed point.** -/
+theorem transferMap_pow_fixedPoint_add_smul
+    (A : MPSTensor d D)
+    {ρ H : Matrix (Fin D) (Fin D) ℂ} {p : ℕ}
+    (hρ : ((transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
+    (hH : ((transferMap (d := d) (D := D) A) ^ p) H = H)
+    (t : ℂ) :
+    ((transferMap (d := d) (D := D) A) ^ p) (ρ + t • H) = ρ + t • H := by
+  rw [map_add, map_smul, hρ, hH]
+
+/-- **The perturbation `ρ + t • H` has positive trace when `trace(H) = 0`
+and `ρ` is PosDef, hence is nonzero.** -/
+theorem perturbation_ne_zero_of_trace_zero [NeZero D]
+    {ρ H : Matrix (Fin D) (Fin D) ℂ}
+    (hρ : ρ.PosDef)
+    (htr : H.trace = 0) (t : ℝ) :
+    ρ + (t : ℂ) • H ≠ 0 := by
+  intro h
+  have : (ρ + (t : ℂ) • H).trace = 0 := by rw [h]; simp [Matrix.trace]
+  rw [Matrix.trace_add, Matrix.trace_smul, htr, smul_zero, add_zero] at this
+  have htr_pos : (0 : ℝ) < (ρ.trace).re := by
+    rw [hρ.isHermitian.trace_eq_sum_eigenvalues]
+    -- Goal: 0 < (∑ i, ↑(eigenvalues i)).re
+    -- Since eigenvalues are real, .re of the sum = sum of eigenvalues
+    suffices h : 0 < ∑ i : Fin D, hρ.isHermitian.eigenvalues i by
+      calc (0 : ℝ) < ∑ i : Fin D, hρ.isHermitian.eigenvalues i := h
+        _ = (∑ i, (hρ.isHermitian.eigenvalues i : ℂ)).re := by simp
+        _ = _ := rfl
+    exact Finset.sum_pos (fun i _ => hρ.eigenvalues_pos i) ⟨⟨0, NeZero.pos D⟩, Finset.mem_univ _⟩
+  exact absurd this (ne_of_apply_ne Complex.re (ne_of_gt htr_pos))
+
+/-- **Upper bound on perturbation parameter.**
+
+For any PSD matrix `ρ + t • H`, the parameter `t` is bounded by the PosDef inner product
+condition: `PosSemidef.re_dotProduct_nonneg` gives `Re(v†(ρ + tH)v) ≥ 0`. -/
+theorem perturbation_psd_upper_bound
+    {ρ H : Matrix (Fin D) (Fin D) ℂ}
+    {t : ℝ} (ht_psd : (ρ + (t : ℂ) • H).PosSemidef)
+    (v : Fin D → ℂ) :
+    0 ≤ (star v ⬝ᵥ (ρ *ᵥ v)).re + t * (star v ⬝ᵥ (H *ᵥ v)).re := by
+  have h := ht_psd.re_dotProduct_nonneg v
+  -- Expand (ρ + t•H) *ᵥ v = ρ *ᵥ v + t • (H *ᵥ v)
+  rw [Matrix.add_mulVec, dotProduct_add] at h
+  -- Need to relate (star v ⬝ᵥ ((↑t • H) *ᵥ v)).re to t * (star v ⬝ᵥ (H *ᵥ v)).re
+  rw [show ((t : ℂ) • H) *ᵥ v = (t : ℂ) • (H *ᵥ v) from Matrix.smul_mulVec _ _ _,
+    dotProduct_smul, smul_eq_mul] at h
+  have : ((t : ℂ) * (star v ⬝ᵥ H *ᵥ v)).re = t * (star v ⬝ᵥ H *ᵥ v).re := by
+    rw [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im]; ring
+  -- h uses RCLike.re while goal uses Complex.re; convert
+  change 0 ≤ (star v ⬝ᵥ ρ *ᵥ v + (t : ℂ) * (star v ⬝ᵥ H *ᵥ v)).re at h
+  rw [Complex.add_re] at h
+  linarith [this]
+
+end SpectralPerturbation
 
 end MPSTensor
