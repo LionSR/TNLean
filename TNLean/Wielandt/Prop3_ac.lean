@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.Wielandt.PrimitivePaper
 import TNLean.Wielandt.PrimitivityNormal
+import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
 # Proposition 3, direction (a) → (c): Primitivity implies strong irreducibility
@@ -156,5 +157,84 @@ theorem transferMap_pow_rankOne_posDef
   apply posDef_sum_vecMulVec_of_span_eq_top
   have h := hq φ hφ
   rwa [vectorSpreadSpan] at h
+
+/-! ## Part 5: Positive-definite fixed point from paper-primitivity
+
+This is the key step in the (a)→(c) direction: if `E_A` is primitive (in the
+paper's sense), then every nonzero PSD fixed point of `E_A` must be positive
+definite.
+
+**Proof outline** (following arXiv:0909.5347 Proposition 3):
+1. Decompose the PSD matrix `ρ` as a sum of outer products `Σ |vᵢ⟩⟨vᵢ|`
+   (spectral decomposition / Cholesky).
+2. Since `ρ ≠ 0`, at least one `vⱼ ≠ 0`.
+3. As a fixed point, `ρ = E^q(ρ) = Σ E^q(|vᵢ⟩⟨vᵢ|)` by linearity.
+4. By `transferMap_pow_rankOne_posDef`, `E^q(|vⱼ⟩⟨vⱼ|)` is PosDef.
+5. All other summands `E^q(|vᵢ⟩⟨vᵢ|)` are PSD (outer products are always PSD).
+6. PosDef + PSD = PosDef, so `ρ` is PosDef. -/
+
+/-- If `f(x) = x` (a fixed point of a linear map), then `f^n(x) = x`. -/
+private theorem linearMap_pow_fixed {R M : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M]
+    (f : M →ₗ[R] M) (x : M) (hfix : f x = x) (n : ℕ) :
+    (f ^ n) x = x := by
+  rw [Module.End.pow_apply]
+  exact Function.IsFixedPt.iterate hfix n
+
+/-- Transfer map on rank-one matrices is always PSD (even without primitivity). -/
+private theorem transferMap_pow_rankOne_posSemidef
+    (A : MPSTensor d D) (q : ℕ) (φ : Fin D → ℂ) :
+    (((transferMap (d := d) (D := D) A) ^ q) (vecMulVec φ (star φ))).PosSemidef := by
+  rw [transferMap_pow_rankOne_eq_sum]
+  apply Matrix.posSemidef_sum
+  intro σ _
+  exact Matrix.posSemidef_vecMulVec_self_star _
+
+/-- **A nonzero PSD fixed point of a paper-primitive transfer map is positive definite.**
+
+This is the crucial step in Proposition 3 (a)→(c) of arXiv:0909.5347.
+The proof uses the decomposition of PSD matrices into sums of outer products
+and the positivity-improving property of primitive transfer maps.
+
+Concretely: if `IsPrimitivePaper A` (with witness `q`), `ρ ≥ 0`, `ρ ≠ 0`,
+and `E_A(ρ) = ρ`, then `ρ` is positive definite. -/
+theorem posDef_fixedPoint_of_isPrimitivePaper
+    (A : MPSTensor d D)
+    {q : ℕ} (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤)
+    {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hpsd : ρ.PosSemidef) (hne : ρ ≠ 0)
+    (hfix : transferMap (d := d) (D := D) A ρ = ρ) :
+    ρ.PosDef := by
+  -- Step 1: Decompose ρ = Σ_i |v_i⟩⟨v_i| using PSD decomposition
+  obtain ⟨m, v, hρ_eq⟩ := Matrix.posSemidef_iff_eq_sum_vecMulVec.mp hpsd
+  -- Step 2: Since ρ ≠ 0, find j with v j ≠ 0
+  have hv_ne : ∃ j : Fin m, v j ≠ 0 := by
+    by_contra hall
+    push_neg at hall
+    apply hne
+    rw [hρ_eq]
+    apply Finset.sum_eq_zero
+    intro i _
+    simp [hall i]
+  obtain ⟨j, hj⟩ := hv_ne
+  -- Step 3: ρ = E^q(ρ) by fixed-point iteration
+  have hfix_pow : ((transferMap (d := d) (D := D) A) ^ q) ρ = ρ :=
+    linearMap_pow_fixed _ ρ hfix q
+  -- Step 4: Rewrite using linearity: E^q(Σ |v_i⟩⟨v_i|) = Σ E^q(|v_i⟩⟨v_i|)
+  rw [hρ_eq] at hfix_pow ⊢
+  rw [map_sum] at hfix_pow
+  -- Now: ρ_eq says ρ = Σ |v_i⟩⟨v_i|, and hfix_pow says Σ E^q(|v_i⟩⟨v_i|) = Σ |v_i⟩⟨v_i|
+  -- We'll prove the RHS is PosDef by showing = Σ E^q(|v_i⟩⟨v_i|) with one PosDef summand.
+  rw [← hfix_pow]
+  -- Now goal: (Σ_i E^q(|v_i⟩⟨v_i|)).PosDef
+  -- Step 5: Split off the j-th (PosDef) summand
+  classical
+  rw [← Finset.add_sum_erase Finset.univ _ (Finset.mem_univ j)]
+  apply Matrix.PosDef.add_posSemidef
+  · -- The j-th summand is PosDef
+    exact transferMap_pow_rankOne_posDef A hq (v j) hj
+  · -- The remaining summands are PSD
+    apply Matrix.posSemidef_sum
+    intro i _
+    exact transferMap_pow_rankOne_posSemidef A q (v i)
 
 end MPSTensor
