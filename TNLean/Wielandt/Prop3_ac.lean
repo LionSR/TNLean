@@ -237,4 +237,151 @@ theorem posDef_fixedPoint_of_isPrimitivePaper
     intro i _
     exact transferMap_pow_rankOne_posSemidef A q (v i)
 
+/-! ## Part 6: Positivity-improving map and fixed-point contradiction lemmas
+
+These lemmas form the contradiction machinery for the paper's case analysis
+in the proof of `IsPrimitivePaper A → IsChannelPrimitive A`.
+
+**Paper context** (arXiv:0909.5347 Proposition 3, (a)→(c)):
+The proof proceeds by contradiction. If `E_A` has a nonzero PSD fixed point
+that is *not* positive definite, or a nonzero PSD fixed point of some power
+`E^p` that fails to be PosDef, then `A` cannot be paper-primitive. These
+lemmas formalize those contradictions.
+
+The key hierarchy is:
+1. `transferMap_pow_posSemidef`: `E^n` preserves the PSD cone.
+2. `transferMap_pow_positivity_improving`: `E^q` maps **nonzero** PSD to **PosDef**.
+3. `not_isPrimitivePaper_of_posSemidef_fixedPoint_not_posDef`: contrapositive
+   for `E`-fixed points (paper's case (i)).
+4. `posDef_fixedPoint_of_pow_of_isPrimitivePaper`: fixed points of `E^p` are
+   PosDef under paper-primitivity (paper's cases (ii)–(iii)).
+5. `not_isPrimitivePaper_of_posSemidef_pow_fixedPoint_not_posDef`: contrapositive
+   for `E^p`-fixed points (general contradiction form).
+-/
+
+/-- **The transfer map preserves the PSD cone**: if `ρ ≥ 0` then `E^n(ρ) ≥ 0`.
+
+This follows from the PSD decomposition `ρ = Σ |vᵢ⟩⟨vᵢ|`, linearity of `E^n`,
+and the fact that each rank-one image `E^n(|vᵢ⟩⟨vᵢ|)` is PSD. -/
+theorem transferMap_pow_posSemidef
+    (A : MPSTensor d D) (n : ℕ)
+    {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hpsd : ρ.PosSemidef) :
+    (((transferMap (d := d) (D := D) A) ^ n) ρ).PosSemidef := by
+  obtain ⟨m, v, hρ_eq⟩ := Matrix.posSemidef_iff_eq_sum_vecMulVec.mp hpsd
+  rw [hρ_eq, map_sum]
+  apply Matrix.posSemidef_sum
+  intro i _
+  exact transferMap_pow_rankOne_posSemidef A n (v i)
+
+/-- **Paper-primitivity makes `E^q` positivity-improving**: any nonzero PSD input
+yields PosDef output.
+
+This generalizes `transferMap_pow_rankOne_posDef` from rank-one matrices to
+arbitrary PSD matrices using the decomposition `ρ = Σ |vᵢ⟩⟨vᵢ|`.
+
+Paper: this is the abstract "positivity-improving" property of the channel `E_A`
+that drives the entire (a)→(c) direction. -/
+theorem transferMap_pow_positivity_improving
+    (A : MPSTensor d D)
+    {q : ℕ} (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤)
+    {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hpsd : ρ.PosSemidef) (hne : ρ ≠ 0) :
+    (((transferMap (d := d) (D := D) A) ^ q) ρ).PosDef := by
+  obtain ⟨m, v, hρ_eq⟩ := Matrix.posSemidef_iff_eq_sum_vecMulVec.mp hpsd
+  have hv_ne : ∃ j : Fin m, v j ≠ 0 := by
+    by_contra hall; push_neg at hall
+    exact hne (by rw [hρ_eq]; exact Finset.sum_eq_zero fun i _ => by simp [hall i])
+  obtain ⟨j, hj⟩ := hv_ne
+  rw [hρ_eq, map_sum]
+  classical
+  rw [← Finset.add_sum_erase Finset.univ _ (Finset.mem_univ j)]
+  apply (transferMap_pow_rankOne_posDef A hq (v j) hj).add_posSemidef
+  apply Matrix.posSemidef_sum
+  intro i _
+  exact transferMap_pow_rankOne_posSemidef A q (v i)
+
+/-- **Rank-deficient fixed point contradicts paper-primitivity.**
+
+Contrapositive of `posDef_fixedPoint_of_isPrimitivePaper`: if a nonzero PSD
+matrix is a fixed point of the transfer map but fails to be positive definite,
+then the MPS tensor is not paper-primitive.
+
+Paper: this formalizes case (i) of the contradiction argument in the proof
+of Proposition 3 (a)→(c) — a rank-deficient stationary state witnesses
+non-primitivity. -/
+theorem not_isPrimitivePaper_of_posSemidef_fixedPoint_not_posDef
+    (A : MPSTensor d D)
+    {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hpsd : ρ.PosSemidef) (hne : ρ ≠ 0)
+    (hfix : transferMap (d := d) (D := D) A ρ = ρ)
+    (hnotpd : ¬ρ.PosDef) :
+    ¬IsPrimitivePaper A :=
+  fun ⟨_, hq⟩ => hnotpd (posDef_fixedPoint_of_isPrimitivePaper A hq hpsd hne hfix)
+
+/-- **Under paper-primitivity, every nonzero PSD fixed point of `E^p` is PosDef.**
+
+This generalizes `posDef_fixedPoint_of_isPrimitivePaper` (which handles `p = 1`)
+to fixed points of arbitrary positive powers of the transfer map.
+
+**Proof**: Write `ρ = (E^p)^q(ρ) = E^{pq}(ρ)`. Decompose `E^{pq} = E^q ∘ E^{(p-1)q}`.
+The intermediate image `σ = E^{(p-1)q}(ρ)` is PSD (by `transferMap_pow_posSemidef`)
+and nonzero (otherwise `ρ = E^q(0) = 0`). Then `ρ = E^q(σ)` is PosDef by
+`transferMap_pow_positivity_improving`.
+
+Paper: this is the key ingredient for cases (ii)–(iii) of the contradiction
+argument in Proposition 3 (a)→(c), where the cyclic decomposition yields PSD
+fixed points of `E^p` (p = period) that must all be PosDef. -/
+theorem posDef_fixedPoint_of_pow_of_isPrimitivePaper
+    (A : MPSTensor d D)
+    {q : ℕ} (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤)
+    {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hpsd : ρ.PosSemidef) (hne : ρ ≠ 0)
+    {p : ℕ} (hp : 0 < p)
+    (hfix : ((transferMap (d := d) (D := D) A) ^ p) ρ = ρ) :
+    ρ.PosDef := by
+  -- Step 1: ρ = E^{pq}(ρ) by iterating the fixed-point equation q times
+  have hfixq : ((transferMap (d := d) (D := D) A) ^ (p * q)) ρ = ρ := by
+    rw [pow_mul]; exact linearMap_pow_fixed _ ρ hfix q
+  -- Step 2: Decompose E^{pq} = E^q ∘ E^{(p-1)·q} using p·q = q + (p-1)·q
+  have hpq_split : p * q = q + (p - 1) * q := by
+    have h1 : p - 1 + 1 = p := Nat.sub_add_cancel hp
+    calc p * q = (p - 1 + 1) * q := by rw [h1]
+      _ = (p - 1) * q + 1 * q := by rw [add_mul]
+      _ = (p - 1) * q + q := by rw [one_mul]
+      _ = q + (p - 1) * q := by rw [add_comm]
+  rw [hpq_split, pow_add, Module.End.mul_apply] at hfixq
+  -- Let σ = E^{(p-1)·q}(ρ): the intermediate image
+  set σ := ((transferMap (d := d) (D := D) A) ^ ((p - 1) * q)) ρ with hσ_def
+  -- Now hfixq : E^q(σ) = ρ
+  -- Step 3: σ is PSD (transfer map preserves PSD cone)
+  have hσ_psd : σ.PosSemidef := transferMap_pow_posSemidef A _ hpsd
+  -- Step 4: σ ≠ 0 (otherwise ρ = E^q(0) = 0, contradicting hne)
+  have hσ_ne : σ ≠ 0 := by
+    intro h; apply hne; rw [← hfixq, h, map_zero]
+  -- Step 5: ρ = E^q(σ) is PosDef since E^q maps nonzero PSD to PosDef
+  rw [← hfixq]
+  exact transferMap_pow_positivity_improving A hq hσ_psd hσ_ne
+
+/-- **Rank-deficient power-fixed point contradicts paper-primitivity.**
+
+Contrapositive of `posDef_fixedPoint_of_pow_of_isPrimitivePaper`: if a nonzero
+PSD matrix is a fixed point of `E^p` but fails to be positive definite, then the
+MPS tensor is not paper-primitive.
+
+Paper: this is the general form of the contradiction for all three cases in the
+proof of Proposition 3 (a)→(c). When `p` is the period of the peripheral
+spectrum, the cyclic decomposition yields PSD fixed points of `E^p`, and this
+lemma shows they must all be PosDef if `A` is paper-primitive. -/
+theorem not_isPrimitivePaper_of_posSemidef_pow_fixedPoint_not_posDef
+    (A : MPSTensor d D)
+    {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hpsd : ρ.PosSemidef) (hne : ρ ≠ 0)
+    {p : ℕ} (hp : 0 < p)
+    (hfix : ((transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
+    (hnotpd : ¬ρ.PosDef) :
+    ¬IsPrimitivePaper A :=
+  fun ⟨_, hq⟩ =>
+    hnotpd (posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hpsd hne hp hfix)
+
 end MPSTensor
