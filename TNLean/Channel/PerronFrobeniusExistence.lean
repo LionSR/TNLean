@@ -40,7 +40,7 @@ backwards compatibility even though the file no longer introduces an axiom).
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 6][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2 Thms 6.3/6.5][Wolf2012QChannels]
 * [Cirac et al., arXiv:1606.00608, Appendix A][Cirac2017Annals]
 * [Evans–Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
@@ -52,11 +52,16 @@ variable {d D : ℕ}
 
 /-! ## Core existence theorem -/
 
-/-- **Perron–Frobenius eigenvector existence for positive maps.**
+/-- **Perron–Frobenius eigenvector existence for positive maps**
+(Wolf Theorem 6.5: Spectral radius and positive eigenvectors).
 
 Let `E` be a positive linear map on `M_D(ℂ)` (with `D > 0`) such that `E ρ ≠ 0` for every
 nonzero PSD matrix `ρ`. Then there exists a nonzero PSD matrix `ρ` and a positive real `r`
 such that `E ρ = r • ρ`.
+
+Wolf Thm 6.5 states this for *any* positive map (the spectral radius is always an
+eigenvalue with a PSD eigenvector). Our version adds the nonvanishing hypothesis
+`hNZ` to ensure `r > 0`.
 
 **Proof idea**: consider the normalization map `normMap E : ρ ↦ E(ρ) / tr(E(ρ))`
 on density matrices, apply the proved density-matrix Brouwer theorem to obtain a
@@ -126,7 +131,9 @@ theorem exists_posSemidef_eigenvector
 
 /-! ## Scaling preserves irreducibility -/
 
-/-- Irreducibility is preserved under scaling by a nonzero complex number. -/
+/-- Irreducibility is preserved under scaling by a nonzero complex number.
+This is a special case of Wolf Proposition 6.6 (similarity transformations
+preserving irreducibility) restricted to scalar similarity. -/
 theorem isIrreducibleMap_smul {c : ℂ} (hc : c ≠ 0)
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hIrr : IsIrreducibleMap E) :
@@ -170,7 +177,8 @@ theorem adjointTransferMap_ne_zero_of_nonzero
   have : (A i)ᴴ = 0 := h3 i
   exact hi (Matrix.conjTranspose_eq_zero.mp this)
 
-/-- **PosDef fixed point of the adjoint transfer map (after rescaling).**
+/-- **PosDef fixed point of the adjoint transfer map (after rescaling)**
+(combines Wolf Thm 6.5 for existence with Wolf Thm 6.3(2) for positive definiteness).
 
 For an irreducible MPS tensor `A` with `D > 0` and some `A i ≠ 0`, there exist:
 * a positive definite matrix `σ`,
@@ -182,9 +190,9 @@ In other words: `∑ ((1/√r) • A i)ᴴ * σ * ((1/√r) • A i) = σ`.
 
 This is equivalent to saying `∑ (A i)ᴴ * σ * A i = r • σ` (eigenvector equation).
 
-This theorem is obtained by applying `exists_posSemidef_eigenvector` to the adjoint
-transfer map and then upgrading the resulting PSD fixed point to a PosDef one using
-irreducibility. -/
+This theorem is obtained by applying `exists_posSemidef_eigenvector` (Wolf Thm 6.5)
+to the adjoint transfer map and then upgrading the resulting PSD fixed point to a
+PosDef one using irreducibility (Wolf Thm 6.3 item 2). -/
 theorem exists_posDef_adjoint_eigenvector
     [NeZero D]
     (A : MPSTensor d D)

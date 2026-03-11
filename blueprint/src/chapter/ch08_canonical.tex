@@ -7,9 +7,10 @@ canonical form predicate of Chapter~\ref{ch:block_perm}. The normal-canonical
 route packages a weighted family of irreducible TP-normalized blocks with
 primitive transfer maps and pairwise distinct nonzero weight moduli, in the
 sense of \cite{Cirac2017MPDO_AnnPhys}. What remains is the passage from an
-arbitrary tensor to such weighted primitive data. The reduction procedure
-follows \cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix}, and
-\cite[Ch.~6]{Wolf2012Quantum}.
+arbitrary tensor to such weighted primitive data. The reduction draws on
+\cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix}, and the
+positive-map spectral theory of~\cite[Ch.~6]{Wolf2012Quantum}
+(especially Thms.~6.2--6.5 for irreducibility and PF eigenvectors).
 
 \section{Block-diagonal assembly}
 
@@ -667,9 +668,12 @@ construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 This section establishes the existence of a positive definite
 eigenvector for the adjoint transfer map of an irreducible MPS
 tensor, and uses it to construct a TP-gauge normalization.
-The results correspond to \cite{Evans1978Spectral},
-\cite[Ch.~6]{Wolf2012Quantum}, and
-\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+The PSD-eigenvector step corresponds to
+\cite[Thm.~6.5]{Wolf2012Quantum} (general positive maps) and
+\cite{Evans1978Spectral}; the upgrade to positive definiteness
+uses the irreducible-map theory of
+\cite[Thm.~6.3]{Wolf2012Quantum}. The TP-gauge application
+follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 
 \begin{theorem}[PSD eigenvector for positive maps]%
 	\label{thm:pf_eigenvector_existence}
@@ -683,10 +687,12 @@ The results correspond to \cite{Evans1978Spectral},
 	real $r > 0$ such that $E(\rho) = r \rho$.
 
 	This is the finite-dimensional Perron--Frobenius theorem for
-	positive maps on matrix algebras
-	(\cite{Evans1978Spectral},
-	\cite[Proposition~6.1]{Wolf2012Quantum}).
-	The proof applies Brouwer's fixed-point theorem to the
+	positive maps on matrix algebras.
+	The statement corresponds to
+	\cite[Thm.~6.5]{Wolf2012Quantum}
+	(spectral-radius eigenvalue with a PSD eigenvector for any
+	positive map); see also~\cite{Evans1978Spectral}.
+	The formal proof applies Brouwer's fixed-point theorem to the
 	normalization map $\rho \mapsto E(\rho) / \tr(E(\rho))$ on the
 	compact convex set of density matrices; the required
 	density-matrix Brouwer theorem is now itself formalized.
@@ -734,11 +740,13 @@ The results correspond to \cite{Evans1978Spectral},
 	and a positive real $r > 0$ such that
 	$\E_A^\dagger(\sigma) = r \sigma$.
 
-	This is the adjoint-map Perron--Frobenius step of
-	\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}: after applying
-	Theorem~\ref{thm:pf_eigenvector_existence} to the adjoint transfer
-	map, one upgrades the resulting PSD eigenvector to a positive
-	definite one.
+	This combines the general PF existence
+	(\cite[Thm.~6.5]{Wolf2012Quantum}, used in
+	Theorem~\ref{thm:pf_eigenvector_existence}) with the
+	irreducible upgrade to positive definiteness
+	(\cite[Thm.~6.3, item~2]{Wolf2012Quantum});
+	the application to the adjoint transfer map follows
+	\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 \end{theorem}
 
 \begin{proof}\leanok

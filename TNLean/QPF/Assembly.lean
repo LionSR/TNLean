@@ -19,6 +19,12 @@ This file assembles the quantum Perron–Frobenius theorem from its components:
 3. **Existence** (this file): via Cesàro mean / trace-preserving channel theory
 4. **Assembly** (this file): the combined theorem
 
+Together these formalize the core of **Wolf Theorem 6.3** (Spectral radius of
+irreducible maps), specialized to the trace-preserving (spectral radius = 1) setting:
+- Existence: there is a nonzero PSD fixed point (Wolf Thm 6.11 / Prop 6.3 route)
+- PosDef: under irreducibility the fixed point is strictly positive (Wolf Thm 6.3(2))
+- Uniqueness: the eigenvalue 1 is non-degenerate (Wolf Thm 6.3(2))
+
 ## Main results
 
 * `exists_posSemidef_fixedPoint`: existence of a PSD fixed point
@@ -27,8 +33,8 @@ This file assembles the quantum Perron–Frobenius theorem from its components:
 
 ## References
 
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2 Thm 6.3, §6.4 Thm 6.11][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, 2012][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -72,7 +78,8 @@ end Existence
 
 section Assembly
 
-/-- **The quantum Perron–Frobenius theorem for MPS transfer operators.**
+/-- **The quantum Perron–Frobenius theorem for MPS transfer operators**
+(Wolf Thm 6.3, specialized to CP maps with spectral radius 1).
 
 The transfer map of an injective MPS tensor has a unique PSD fixed point
 (up to scalar), and it is positive definite. -/

@@ -10,14 +10,21 @@ import TNLean.QPF.PosDef
 Under injectivity, any two nonzero PSD fixed points of the transfer map
 are proportional. The proof uses a critical scalar / spectral shift argument.
 
+This formalizes the non-degeneracy part of **Wolf Theorem 6.3**
+(Spectral radius of irreducible maps), item 2: the spectral radius is a
+*non-degenerate* eigenvalue (so the PSD eigenvector is unique up to scalar).
+Item 3 (any positive eigenvalue with PSD eigenvector must equal the spectral
+radius) is also a consequence.
+
 ## Main results
 
-* `posSemidef_fixedPoint_unique`: uniqueness of PSD fixed points
+* `posSemidef_fixedPoint_unique`: uniqueness of PSD fixed points (Wolf Thm 6.3(2))
+* `posSemidef_fixedPoint_unique_of_irreducible`: same under irreducibility
 
 ## References
 
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.3 items 2–3][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, 2012][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -271,8 +278,8 @@ private lemma exists_critical_scalar [Nonempty (Fin D)]
   · rw [h_key, hst]; intro h_pd
     exact hHc_not_pd ((Matrix.IsUnit.posDef_star_right_conjugate_iff hS_unit).mp h_pd)
 
-/-- **Uniqueness**: any two nonzero PSD fixed points of an injective
-transfer map are proportional. -/
+/-- **Uniqueness** (Wolf Thm 6.3(2), non-degeneracy): any two nonzero PSD
+fixed points of an injective transfer map are proportional. -/
 theorem posSemidef_fixedPoint_unique
     (A : MPSTensor d D) (hA : IsInjective A)
     (ρ σ : Matrix (Fin D) (Fin D) ℂ)
@@ -295,8 +302,8 @@ theorem posSemidef_fixedPoint_unique
     · exact ⟨↑c₀, sub_eq_zero.mp hτ_ne⟩
     · exact absurd (posSemidef_fixedPoint_isPosDef A hA τ hτ_psd hτ_ne hτ_fix) hτ_not_pd
 
-/-- **Uniqueness under irreducibility**: any PSD fixed point of an irreducible
-transfer map is proportional to a fixed nonzero PSD fixed point. -/
+/-- **Uniqueness under irreducibility** (Wolf Thm 6.3(2)): any PSD fixed point
+of an irreducible transfer map is proportional to a fixed nonzero PSD fixed point. -/
 theorem posSemidef_fixedPoint_unique_of_irreducible
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))

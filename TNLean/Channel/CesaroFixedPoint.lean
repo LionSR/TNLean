@@ -224,11 +224,13 @@ theorem cesaroMean_telescope (X : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) (_hN : 0
   simp [pow_zero]
 
 /-- **Existence of PSD fixed point for channels** (Cesàro mean argument).
+This is an alternative proof of **Wolf Theorem 6.11** (Stationary states)
+that avoids Brouwer's fixed point theorem (Wolf Thm 6.10) entirely.
 
 Every trace-preserving positive map on `M_D(ℂ)` with `D > 0` has a
 nonzero PSD fixed point.
 
-This avoids Brouwer's fixed point theorem entirely, using only:
+Our proof uses only:
 - compactness of density matrices (finite-dimensional Heine-Borel)
 - sequential compactness (extract convergent subsequence)
 - linearity (telescoping identity)

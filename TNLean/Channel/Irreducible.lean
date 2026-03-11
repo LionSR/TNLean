@@ -26,7 +26,7 @@ on matrix algebras `M_D(ℂ)`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.2][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 
@@ -59,7 +59,10 @@ there is no proper non-zero subspace `S ⊆ ℂ^D` such that `E` maps the
 "compressed" algebra `P_S · M_D · P_S` into itself.
 
 This is the quantum analogue of a positive matrix being irreducible
-(having no non-trivial invariant face in the PSD cone). -/
+(having no non-trivial invariant face in the PSD cone).
+
+This corresponds to item (1) of **Wolf Theorem 6.2** (Irreducible positive maps),
+which also gives three equivalent characterizations (items 2–4) not formalized here. -/
 def IsIrreducibleMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ P : Matrix (Fin D) (Fin D) ℂ,
     IsOrthogonalProjection P →
@@ -69,7 +72,9 @@ def IsIrreducibleMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) 
 /-! ### Unique fixed point property -/
 
 /-- `E` has `ρ` as its unique PSD fixed point (up to scalar multiples), and `ρ` is
-positive definite. This is the conclusion of the quantum Perron–Frobenius theorem. -/
+positive definite. This is the conclusion of the quantum Perron–Frobenius theorem
+(Wolf Theorem 6.3, items 2–3: non-degenerate spectral-radius eigenvalue with
+strictly positive eigenvector). -/
 structure HasUniqueFixedPoint [DecidableEq (Fin D)]
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) : Prop where
