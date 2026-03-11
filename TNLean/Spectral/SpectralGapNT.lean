@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Spectral.SpectralGapRect
 import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.MPS.IrreducibleFormII
-import TNLean.MPS.BlockingPeriodicityCFII2
 
 /-!
 # Spectral gap for normal tensor (irreducible + TP) blocks
@@ -689,12 +688,6 @@ theorem mpvOverlap_tendsto_zero_of_irreducible_TP
 end SameDimensionOverlap
 
 section DifferentDimensions
-
-private lemma injective_vecMul_of_det_unit {D : ℕ}
-    (M : Matrix (Fin D) (Fin D) ℂ) (hM : IsUnit M.det) :
-    Function.Injective M.vecMul := by
-  exact (Matrix.vecMul_injective_iff_isUnit).2
-    ((Matrix.isUnit_iff_isUnit_det (A := M)).2 hM)
 
 private lemma mul_mul_conjTranspose_ne_zero_of_ne_zero {D : ℕ}
     (S : Matrix (Fin D) (Fin D) ℂ) (hS : IsUnit S.det)

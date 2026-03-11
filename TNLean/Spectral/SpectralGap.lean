@@ -440,32 +440,12 @@ open scoped MatrixOrder
 
 /-- **Eigenvector implies gauge equivalence** (PGVWC 2007, Lemma 5; Wolf 2012, §6.2).
 
-If `F_{AB}(X) = μX` where `X ≠ 0`, `|μ| = 1`, both tensors are injective
-and normalized, then `A` and `B` are gauge-phase equivalent.
+If `F_{AB}(X) = μ • X` with `X ≠ 0` and `‖μ‖ = 1`, then injective normalized tensors
+`A` and `B` are gauge-phase equivalent.
 
-**Assembly** (PROVED, no sorry): chains `eigenvector_det_ne_zero` (Step 1)
-and `per_index_from_eigenvector` (Step 2) to construct the GL(D,ℂ) element.
-The GL element is `Y = X⁻¹` with phase `ζ = μ̄ = conj(μ)`.
-
-**Proof outline** (for the sorry helper lemmas):
-
-**Step 1 — X is invertible**: The kernel of X is invariant under all `Bₖ†`.
-Pass to the left-canonical gauge `A'ᵢ = σ⁻¹ᐟ² Aᵢ σ¹ᐟ²` where `σ` is the QPF fixed point.
-The KS equality condition (from `|μ| = 1`) forces kernel invariance.
-Since B is injective, `ker(X)` is invariant under ALL matrices, forcing X = 0.
-
-**Step 2 — Per-index relation**: Set `Cᵢ = X⁻¹AᵢX`, `Dᵢ = μ̄Cᵢ`.
-From `∑ CᵢBᵢ† = μI` (proved in `sum_conj_mul_conjTranspose`), the PSD matrix
-`∑(Dᵢ - Bᵢ)†(Dᵢ - Bᵢ)` has trace = `∑‖Cᵢ‖² - D`. Need `∑‖Cᵢ‖² = D`
-(from multiplicative domain theory). Then `Dᵢ = Bᵢ` for each i.
-
-**Available helpers** (all proved, no sorry):
-`ker_X_all_of_inj`, `det_ne_zero_of_ker_all`, `sum_conj_mul_conjTranspose`,
-`each_zero_of_sum_conjTranspose_mul_self_zero`, `gauged_unital` (Channel/DSGauge).
-
-**Required infrastructure** (~200-500 lines, not yet formalized):
-multiplicative domain theory for peripheral eigenvectors of CP maps.
-Alternative: PGVWC OBC intertwiner approach (quant-ph/0608197, Lemma 5). -/
+The proof passes to the left-canonical gauge, uses the equality case of the Hilbert--Schmidt
+contraction to obtain Kraus-level intertwining, shows that the resulting intertwiner is
+invertible, and then upgrades the intertwining relation to gauge equivalence. -/
 private lemma eigenvector_gives_gauge [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
     (hA : IsInjective A) (hB : IsInjective B)

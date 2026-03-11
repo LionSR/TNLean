@@ -39,8 +39,9 @@ This file is retained as a fully compiling archival Appendix-A route. It is
 intentionally excluded from `TNLean.lean`, and new code should prefer
 `TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint`.
 
-`TNLean.Spectral.SpectralGapNT` still imports this older CFII development, so
-we keep the full file in place instead of collapsing it to a thinner wrapper.
+No stable in-repo module currently depends on this older CFII development
+exactly, but we keep the full file as a checked alternate proof instead of
+collapsing it to a thinner compatibility wrapper.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
