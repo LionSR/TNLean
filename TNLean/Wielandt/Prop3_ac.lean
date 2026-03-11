@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.Wielandt.PrimitivePaper
 import TNLean.Wielandt.PrimitivityNormal
+import TNLean.MPS.CanonicalFormReduction
 import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
@@ -383,5 +384,168 @@ theorem not_isPrimitivePaper_of_posSemidef_pow_fixedPoint_not_posDef
     ¬IsPrimitivePaper A :=
   fun ⟨_, hq⟩ =>
     hnotpd (posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hpsd hne hp hfix)
+
+/-! ## Part 7: Paper-primitivity implies irreducibility of the tensor
+
+The main result of this section: `IsPrimitivePaper A → IsIrreducibleTensor A`.
+
+**Proof sketch** (by contradiction):
+If `A` has a nontrivial invariant projection `P`, then for any `φ` in the range of `P`,
+all vectors in `vectorSpreadSpan A φ q` lie in `range(P)`. Since `P ≠ 1`, this range
+is a proper subspace, so `vectorSpreadSpan A φ q ≠ ⊤`, contradicting paper-primitivity.
+-/
+
+/-- From `(1 - P) * A_i * P = 0`, we get `A_i * P = P * A_i * P`. -/
+private lemma mul_proj_eq_of_invariant
+    {P : Matrix (Fin D) (Fin D) ℂ}
+    (M : Matrix (Fin D) (Fin D) ℂ)
+    (h : (1 - P) * M * P = 0) :
+    M * P = P * M * P := by
+  have h1 : (1 - P) * M * P = M * P - P * M * P := by noncomm_ring
+  rw [h1] at h
+  exact sub_eq_zero.mp h
+
+/-- Invariant projection is preserved by word evaluation:
+if `(1 - P) * A_i * P = 0` for all `i`, then `evalWord A w * P = P * evalWord A w * P`. -/
+private lemma evalWord_mul_proj_eq {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP_idem : P * P = P)
+    (A : MPSTensor d D)
+    (hinv : ∀ i : Fin d, (1 - P) * A i * P = 0)
+    (w : List (Fin d)) :
+    evalWord A w * P = P * evalWord A w * P := by
+  induction w with
+  | nil => simp [evalWord, hP_idem]
+  | cons i w ih =>
+    simp only [evalWord]
+    -- Goal: A i * evalWord A w * P = P * (A i * evalWord A w) * P
+    have h_ai : A i * P = P * A i * P := mul_proj_eq_of_invariant (A i) (hinv i)
+    calc A i * evalWord A w * P
+        = A i * (evalWord A w * P) := Matrix.mul_assoc _ _ _
+      _ = A i * (P * evalWord A w * P) := by rw [ih]
+      _ = A i * (P * (evalWord A w * P)) := by rw [Matrix.mul_assoc P]
+      _ = A i * P * (evalWord A w * P) := by rw [← Matrix.mul_assoc (A i) P]
+      _ = P * A i * P * (evalWord A w * P) := by rw [h_ai]
+      _ = P * A i * (P * (evalWord A w * P)) := by rw [Matrix.mul_assoc (P * A i) P]
+      _ = P * A i * (P * evalWord A w * P) := by rw [← Matrix.mul_assoc P (evalWord A w)]
+      _ = P * A i * (evalWord A w * P) := by rw [← ih]
+      _ = P * (A i * (evalWord A w * P)) := by rw [Matrix.mul_assoc P]
+      _ = P * (A i * evalWord A w * P) := by rw [← Matrix.mul_assoc (A i)]
+      _ = P * (A i * evalWord A w) * P := by rw [← Matrix.mul_assoc P]
+
+/-- For `φ` in the range of projection `P` (i.e. `P *ᵥ φ = φ`), word evaluation
+maps `φ` back into range(P). -/
+private lemma evalWord_mulVec_mem_range_of_proj {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP_idem : P * P = P)
+    (A : MPSTensor d D)
+    (hinv : ∀ i : Fin d, (1 - P) * A i * P = 0)
+    (φ : Fin D → ℂ) (hφ_range : P *ᵥ φ = φ)
+    (w : List (Fin d)) :
+    evalWord A w *ᵥ φ ∈ LinearMap.range (Matrix.mulVecLin P) := by
+  rw [LinearMap.mem_range]
+  -- Witness: (evalWord A w * P) *ᵥ φ works, since
+  -- P *ᵥ ((evalWord A w * P) *ᵥ φ) = (P * evalWord A w * P) *ᵥ φ
+  --   = (evalWord A w * P) *ᵥ φ = evalWord A w *ᵥ (P *ᵥ φ) = evalWord A w *ᵥ φ
+  use (evalWord A w * P) *ᵥ φ
+  simp only [Matrix.mulVecLin_apply]
+  -- Goal: P *ᵥ ((evalWord A w * P) *ᵥ φ) = evalWord A w *ᵥ φ
+  rw [Matrix.mulVec_mulVec φ P (evalWord A w * P)]
+  -- Goal: (P * (evalWord A w * P)) *ᵥ φ = evalWord A w *ᵥ φ
+  -- RHS: evalWord A w *ᵥ φ = evalWord A w *ᵥ (P *ᵥ φ) = (evalWord A w * P) *ᵥ φ
+  conv_rhs => rw [← hφ_range, Matrix.mulVec_mulVec φ (evalWord A w) P]
+  -- Goal: (P * (evalWord A w * P)) *ᵥ φ = (evalWord A w * P) *ᵥ φ
+  congr 1
+  -- Goal: P * (evalWord A w * P) = evalWord A w * P
+  have h := evalWord_mul_proj_eq hP_idem A hinv w
+  rw [Matrix.mul_assoc] at h
+  exact h.symm
+
+/-- If an idempotent square matrix `P` over `ℂ` has range = ⊤ (as mulVecLin), then `P = 1`. -/
+private lemma eq_one_of_idempotent_range_eq_top
+    {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP_idem : P * P = P)
+    (hP_range : LinearMap.range (Matrix.mulVecLin P) = ⊤) :
+    P = 1 := by
+  -- From surjectivity + idempotence: P *ᵥ v = v for all v
+  have hP_surj := (LinearMap.range_eq_top (f := Matrix.mulVecLin P)).mp hP_range
+  have h_fix : ∀ v : Fin D → ℂ, P *ᵥ v = v := by
+    intro v
+    obtain ⟨w, hw⟩ := hP_surj v
+    rw [Matrix.mulVecLin_apply] at hw
+    calc P *ᵥ v = P *ᵥ (P *ᵥ w) := by rw [hw]
+      _ = (P * P) *ᵥ w := by rw [Matrix.mulVec_mulVec]
+      _ = P *ᵥ w := by rw [hP_idem]
+      _ = v := hw
+  -- From P *ᵥ v = v for all v, we get P = 1
+  -- Use P * M = M for all M, then take M = 1
+  have h_mul_eq : ∀ (M : Matrix (Fin D) (Fin D) ℂ), P * M = M := by
+    intro M
+    ext i j
+    -- (P * M) i j = ∑ k, P i k * M k j
+    -- M i j = (h_fix (M · j)) says P *ᵥ (M · j) = M · j
+    have := congr_fun (h_fix (fun k => M k j)) i
+    simp only [Matrix.mulVec, dotProduct] at this
+    simp only [Matrix.mul_apply]
+    exact this
+  have := h_mul_eq 1
+  rwa [mul_one] at this
+
+/-- A nontrivial invariant projection witnesses failure of paper-primitivity. -/
+private lemma vectorSpreadSpan_ne_top_of_hasInvariantProj
+    (A : MPSTensor d D)
+    (hInv : HasInvariantProj A)
+    (q : ℕ) :
+    ∃ φ : Fin D → ℂ, φ ≠ 0 ∧ vectorSpreadSpan A φ q ≠ ⊤ := by
+  obtain ⟨P, ⟨hP_herm, hP_idem⟩, hP_ne0, hP_ne1, hinv⟩ := hInv
+  -- Find φ ≠ 0 in range(P): since P ≠ 0, some column is nonzero
+  have ⟨i, j, hij⟩ : ∃ i j, P i j ≠ 0 := by
+    by_contra h
+    push_neg at h
+    exact hP_ne0 (Matrix.ext fun a b => by simpa using h a b)
+  set φ := P *ᵥ (Pi.single j (1 : ℂ)) with hφ_def
+  have hφ_ne : φ ≠ 0 := by
+    intro h
+    apply hij
+    have h1 : φ i = 0 := congr_fun h i
+    rw [hφ_def, show (P *ᵥ Pi.single j 1) i = P i j from by
+      simp [Matrix.mulVec, dotProduct, Pi.single_apply, Finset.sum_ite_eq',
+        Finset.mem_univ]] at h1
+    exact h1
+  have hφ_range : P *ᵥ φ = φ := by
+    rw [hφ_def, Matrix.mulVec_mulVec, hP_idem]
+  refine ⟨φ, hφ_ne, ?_⟩
+  -- Show vectorSpreadSpan A φ q ≤ range(P·) < ⊤
+  intro h_eq_top
+  apply hP_ne1
+  -- From h_eq_top: range(P·) = ⊤, so P is surjective, so P = 1
+  apply eq_one_of_idempotent_range_eq_top hP_idem
+  -- Show range(P *ᵥ ·) = ⊤
+  apply le_antisymm (le_top)
+  -- ⊤ ≤ range(P·), using vectorSpreadSpan ⊆ range(P·) and vectorSpreadSpan = ⊤
+  rw [← h_eq_top, vectorSpreadSpan, Submodule.span_le]
+  intro v hv
+  obtain ⟨σ, rfl⟩ := hv
+  exact evalWord_mulVec_mem_range_of_proj hP_idem A hinv φ hφ_range (List.ofFn σ)
+
+/-- **Paper-primitivity implies irreducibility of the tensor.**
+
+If `A` is paper-primitive (`IsPrimitivePaper A`), then `A` admits no nontrivial
+invariant orthogonal projection (`IsIrreducibleTensor A`).
+
+**Proof**: By contradiction. A nontrivial invariant projection `P` traps the
+image of any `φ ∈ range(P)` under word evaluation inside `range(P) ⊊ ⊤`,
+preventing `vectorSpreadSpan A φ q = ⊤`.
+
+Paper: This is a consequence of Proposition 3 (a)→(c) of arXiv:0909.5347.
+Primitivity (eventually full Kraus rank) is a strictly stronger condition
+than irreducibility (no invariant subspace). -/
+theorem isIrreducibleTensor_of_isPrimitivePaper
+    (A : MPSTensor d D)
+    (hPrim : IsPrimitivePaper A) :
+    IsIrreducibleTensor A := by
+  rw [IsIrreducibleTensor]
+  intro hInv
+  obtain ⟨q, hq⟩ := hPrim
+  obtain ⟨φ, hφ_ne, hφ_span⟩ := vectorSpreadSpan_ne_top_of_hasInvariantProj A hInv q
+  exact hφ_span (hq φ hφ_ne)
 
 end MPSTensor
