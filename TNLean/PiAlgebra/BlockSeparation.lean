@@ -43,6 +43,7 @@ that is not yet available in Mathlib.
 * `evalWord_replicate` — evalWord on replicated single letters gives matrix powers
 * `evalWord_flatten_replicate` — evalWord on flattened replicated words gives matrix powers
 * `mpv_const_eq_trace_pow` — mpv of constant configurations as traces of powers
+* `sameMPV₂_repeated_word` — the repeated-word trace identity extracted from `SameMPV₂`
 
 ## References
 
@@ -78,12 +79,50 @@ lemma evalWord_flatten_replicate (A : MPSTensor d D) (w : List (Fin d)) (L : ℕ
     evalWord A ((List.replicate L w).flatten) = (evalWord A w) ^ L := by
   induction L with
   | zero => simp [evalWord, List.replicate]
-  | succ n ih => simp only [List.replicate_succ, List.flatten_cons]; rw [evalWord_append, ih, pow_succ']
+  | succ n ih =>
+      simp only [List.replicate_succ, List.flatten_cons]
+      rw [evalWord_append, ih, pow_succ']
 
 /-- The mpv of a constant configuration equals a trace of a matrix power. -/
 lemma mpv_const_eq_trace_pow (A : MPSTensor d D) (i : Fin d) (L : ℕ) :
     mpv A (fun _ : Fin L => i) = Matrix.trace ((A i) ^ L) := by
   simp only [mpv, coeff, List.ofFn_const, evalWord_replicate]
+
+private lemma length_flatten_replicate {α : Type*} (w : List α) (L : ℕ) :
+    ((List.replicate L w).flatten).length = w.length * L := by
+  rw [List.length_flatten, List.map_replicate, List.sum_replicate, smul_eq_mul,
+    Nat.mul_comm]
+
+/-- `SameMPV₂` on block-diagonal tensors implies the repeated-word trace identity. -/
+theorem sameMPV₂_repeated_word
+    (μ : Fin r → ℂ)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B))
+    (w : List (Fin d)) (L : ℕ) :
+    ∑ k, (μ k) ^ (w.length * L) *
+      (Matrix.trace ((evalWord (A k) w) ^ L) -
+       Matrix.trace ((evalWord (B k) w) ^ L)) = 0 := by
+  set flat := (List.replicate L w).flatten with flat_def
+  have hlen : flat.length = w.length * L := length_flatten_replicate w L
+  set σ : Fin (w.length * L) → Fin d :=
+    fun i => flat.get (Fin.cast hlen.symm i) with σ_def
+  have hofFn : List.ofFn σ = flat := by
+    rw [σ_def]
+    conv_rhs => rw [← List.ofFn_getElem flat]
+    apply List.ofFn_congr (by omega)
+  have hsummed := sameMPV₂_summed_blocks μ A B hSame (w.length * L) σ
+  simp only [mpv, coeff, hofFn, flat_def, evalWord_flatten_replicate] at hsummed
+  simp only [smul_eq_mul] at hsummed
+  rw [show (∑ k, (μ k) ^ (w.length * L) *
+      (Matrix.trace ((evalWord (A k) w) ^ L) -
+       Matrix.trace ((evalWord (B k) w) ^ L))) =
+      ∑ k, (μ k) ^ (w.length * L) * Matrix.trace ((evalWord (A k) w) ^ L) -
+        ∑ k, (μ k) ^ (w.length * L) * Matrix.trace ((evalWord (B k) w) ^ L) by
+      rw [← Finset.sum_sub_distrib]
+      congr 1
+      ext k
+      ring]
+  rw [hsummed, sub_self]
 
 /-! #### Block separation: the algebraic core
 
@@ -111,17 +150,24 @@ See also `evalWord_flatten_replicate` for the key combinatorial identity.
 
 The per-block separation statement one might hope for,
 
-`(∀ N σ, ∑ k, (μ k) ^ N • (mpv (A k) σ - mpv (B k) σ) = 0) → ∀ k, SameMPV (A k) (B k)`,
+`(∀ N σ,
+    ∑ k, (μ k) ^ N • (mpv (A k) σ - mpv (B k) σ) = 0) →
+  ∀ k, SameMPV (A k) (B k)`,
 
-is **false** without additional hypotheses (e.g. canonical-form normalization preventing
-rescalings between the block tensors and the phases `μ k`).
+is **false** without additional hypotheses (e.g. canonical-form normalization
+preventing rescalings between the block tensors and the phases `μ k`).
 
-Accordingly, this file currently only provides the combinatorial helper lemmas
-`evalWord_replicate`, `evalWord_flatten_replicate`, and `mpv_const_eq_trace_pow`.
+Accordingly, this file currently only provides the trustworthy helper lemmas
+`evalWord_replicate`, `evalWord_flatten_replicate`, `mpv_const_eq_trace_pow`,
+and `sameMPV₂_repeated_word`.
+
+A checked counterexample to the naive full separation statement is retained in
+`TNLean.Scratch.BlockSepCounterexample`.
 
 For end-to-end results from `SameMPV₂`, use
-`fundamentalTheorem_multiBlock_fromSameMPV₂` (in `PiAlgebra/FundamentalTheoremComplete.lean`),
-which takes per-block separation as an explicit hypothesis.
+`fundamentalTheorem_multiBlock_fromSameMPV₂` (in
+`PiAlgebra/FundamentalTheoremComplete.lean`), which takes per-block separation
+as an explicit hypothesis.
 -/
 
 end BlockSeparation

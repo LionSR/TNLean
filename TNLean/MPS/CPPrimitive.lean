@@ -115,7 +115,7 @@ theorem transferMap_isChannel
 /-! ### Iterated transfer map
 
 The iterated transfer map identity (iterating the transfer map `n` times gives
-the sum over word evaluations) is proved in `TransferSpectral.lean` as
+the sum over word evaluations) is proved in `TNLean.Spectral.MixedTransfer` as
 `transferMap_pow_apply'`, using the more general mixed transfer map framework. -/
 
 end MPSTensor
