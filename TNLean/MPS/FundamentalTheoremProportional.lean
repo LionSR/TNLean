@@ -72,6 +72,62 @@ theorem mpv_eq_pow_mul_of_gaugePhase
     _ = (ζ ^ w.length) * Matrix.trace (evalWord A w) := by simp [htrace]
     _ = ζ ^ N * mpv A σ := by simp [mpv, coeff, w, hwlen]
 
+/-- If `mpv B σ = ζ ^ N * mpv A σ` for every system size `N` and configuration `σ`, then the
+self-overlap of `B` scales by `(ζ * conj ζ) ^ N` times the self-overlap of `A`. -/
+theorem mpvOverlap_self_scale_of_mpv_eq_pow_mul
+    {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
+    (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) :
+    ∀ N : ℕ,
+      mpvOverlap (d := d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N := by
+  intro N
+  classical
+  simp only [mpvOverlap]
+  simp_rw [hmpv N, star_mul, star_pow]
+  simp_rw [show star ζ = starRingEnd ℂ ζ from rfl]
+  simp_rw [show ∀ x : Cfg d N,
+      ζ ^ N * mpv A x * (star (mpv A x) * (starRingEnd ℂ ζ) ^ N) =
+        ζ ^ N * (starRingEnd ℂ ζ) ^ N * (mpv A x * star (mpv A x)) from
+      fun x => by ring]
+  rw [← Finset.mul_sum, mul_pow]
+
+/-- If two self-overlaps both have norm limit `1`, and one scales from the other by powers of
+`ζ * conj ζ`, then `ζ` has unit norm. -/
+theorem norm_eq_one_of_selfOverlap_scale
+    {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
+    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1))
+    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop (nhds 1))
+    (hSelf : ∀ N : ℕ,
+      mpvOverlap (d := d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N) :
+    ‖ζ‖ = 1 := by
+  have hAA_ne : ∀ᶠ N in Filter.atTop, ‖mpvOverlap (d := d) A A N‖ ≠ 0 :=
+    hAA.eventually_ne one_ne_zero
+  have hRatio : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖ /
+      ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1) := by
+    rw [show (1 : ℝ) = 1 / 1 from (one_div_one).symm]
+    exact hBB.div hAA one_ne_zero
+  have hRatioEq : ∀ᶠ N in Filter.atTop,
+      ‖mpvOverlap (d := d) B B N‖ / ‖mpvOverlap (d := d) A A N‖ = (‖ζ‖ ^ 2) ^ N := by
+    filter_upwards [hAA_ne] with N hN
+    rw [hSelf N, norm_mul, norm_pow, show ‖ζ * starRingEnd ℂ ζ‖ = ‖ζ‖ ^ 2 from by
+      rw [norm_mul, RCLike.norm_conj, sq]]
+    rw [← pow_mul, Nat.mul_comm, pow_mul]
+    exact mul_div_cancel_of_imp (fun h => absurd h hN)
+  have hPow : Filter.Tendsto (fun N => (‖ζ‖ ^ 2) ^ N) Filter.atTop (nhds 1) :=
+    hRatio.congr' hRatioEq
+  have h1 : ‖ζ‖ ^ 2 = 1 := by
+    by_contra hne'
+    rcases lt_or_gt_of_ne hne' with h | h
+    · exact zero_ne_one (tendsto_nhds_unique
+        (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) h) hPow)
+    · have hlt2 : ∀ᶠ n in Filter.atTop, (‖ζ‖ ^ 2) ^ n < 2 :=
+        hPow.eventually (Iio_mem_nhds (by norm_num : (1 : ℝ) < 2))
+      rcases ((Filter.tendsto_atTop.1 (tendsto_pow_atTop_atTop_of_one_lt h) 2).and hlt2).exists
+        with ⟨n, hn1, hn2⟩
+      exact not_lt_of_ge hn1 hn2
+  nlinarith [norm_nonneg ζ]
+
 /-! ## Easy direction: gauge-phase ⇒ proportional MPV -/
 
 section EasyDirection

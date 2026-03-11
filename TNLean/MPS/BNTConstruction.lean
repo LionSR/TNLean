@@ -58,12 +58,12 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- Casting the bond dimension preserves irreducibility. -/
-private lemma isIrreducibleTensor_cast_dim {D₁ D₂ : ℕ} (h : D₁ = D₂)
-    (A : MPSTensor d D₁) :
-    IsIrreducibleTensor (cast (congr_arg (MPSTensor d) h) A) ↔ IsIrreducibleTensor A := by
-  cases h
-  rfl
+/-- Distinct equal-dimension blocks in a family are not gauge-phase equivalent. -/
+abbrev BlocksNotGaugePhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
+  ∀ j k : Fin r, j ≠ k →
+    ∀ h : dim j = dim k,
+      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)
 
 /-! ### `IsCanonicalFormBNT` predicate -/
 
@@ -111,9 +111,7 @@ def ofSeparatedData
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hμ : HasStrictOrderedNonzeroWeights μ)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : ∀ j k : Fin r, j ≠ k →
-      ∀ (h : dim j = dim k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsCanonicalFormBNT μ A where
   toIsCanonicalForm := IsCanonicalForm.ofSeparatedData hInj hLeft hμ hOverlap
   blocks_not_equiv := hBlocks
@@ -186,9 +184,7 @@ def ofSeparatedData
     (hPrim : HasPrimitiveBlocks (d := d) A)
     (hμ : HasStrictOrderedNonzeroWeights μ)
     (hDim : ∀ k, 0 < dim k)
-    (hBlocks : ∀ j k : Fin r, j ≠ k →
-      ∀ (h : dim j = dim k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsNormalCanonicalFormBNT μ A where
   toIsNormalCanonicalForm := IsNormalCanonicalForm.ofSeparatedData hIrr hLeft hPrim hμ hDim
   blocks_not_equiv := hBlocks
@@ -237,9 +233,7 @@ theorem cross_overlap_tendsto_zero_of_separated_CFBNT_data
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : HasInjectiveBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hBlocks : ∀ j k : Fin r, j ≠ k →
-      ∀ (h : dim j = dim k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k))
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (j k : Fin r) (hjk : j ≠ k) :
     Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
@@ -274,9 +268,7 @@ theorem isBNT_of_separated_CFBNT_data [∀ k, NeZero (dim k)]
     (hInj : HasInjectiveBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : ∀ j k : Fin r, j ≠ k →
-      ∀ (h : dim j = dim k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsBNT (toTensorFromBlocks μ A) r dim A where
   normal := fun j => by
     refine ⟨1, ?_⟩
@@ -352,9 +344,7 @@ theorem cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hBlocks : ∀ j k : Fin r, j ≠ k →
-      ∀ (h : dim j = dim k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k))
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (j k : Fin r) (hjk : j ≠ k) :
     Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
@@ -386,9 +376,7 @@ theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hNCF : IsNormalCanonicalForm μ A)
-    (hBlocks : ∀ j k : Fin r, j ≠ k →
-      ∀ (h : dim j = dim k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     (∀ N : ℕ, ∃ c : Fin r → ℂ, ∀ σ : Fin N → Fin d,
       mpv (toTensorFromBlocks μ A) σ = ∑ j : Fin r, c j * mpv (A j) σ) ∧
     (∃ N0 : ℕ, ∀ N > N0,
@@ -411,9 +399,7 @@ theorem isBNT_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hNCF : IsNormalCanonicalForm μ A)
     (hNormal : ∀ j, IsNormal (A j))
-    (hBlocks : ∀ j k : Fin r, j ≠ k →
-      ∀ (h : dim j = dim k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsBNT (toTensorFromBlocks μ A) r dim A := by
   obtain ⟨hSpans, hLI⟩ :=
     spans_mpv_and_eventually_li_of_separated_normalCFBNT_data μ A hNCF hBlocks
@@ -467,15 +453,11 @@ theorem fundamentalTheorem_of_separated_CFBNT_data
     (hA_inj : HasInjectiveBlocks (d := d) A)
     (hA_left : IsLeftCanonicalBlockFamily (d := d) A)
     (hA_overlap : HasNormalizedSelfOverlap (d := d) A)
-    (hA_blocks : ∀ j k : Fin rA, j ≠ k →
-      ∀ (h : dimA j = dimA k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k))
+    (hA_blocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hB_inj : HasInjectiveBlocks (d := d) B)
     (hB_left : IsLeftCanonicalBlockFamily (d := d) B)
     (hB_overlap : HasNormalizedSelfOverlap (d := d) B)
-    (hB_blocks : ∀ j k : Fin rB, j ≠ k →
-      ∀ (h : dimB j = dimB k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (B j)) (B k))
+    (hB_blocks : BlocksNotGaugePhaseEquiv (d := d) B)
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
@@ -583,13 +565,9 @@ theorem fundamentalTheorem_of_separated_normalCFBNT_data
     (A : (j : Fin rA) → MPSTensor d (dimA j))
     (B : (k : Fin rB) → MPSTensor d (dimB k))
     (hA_ncf : IsNormalCanonicalForm μA A)
-    (hA_blocks : ∀ j k : Fin rA, j ≠ k →
-      ∀ (h : dimA j = dimA k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k))
+    (hA_blocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hB_ncf : IsNormalCanonicalForm μB B)
-    (hB_blocks : ∀ j k : Fin rB, j ≠ k →
-      ∀ (h : dimB j = dimB k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (B j)) (B k))
+    (hB_blocks : BlocksNotGaugePhaseEquiv (d := d) B)
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)

@@ -19,13 +19,13 @@ The main output is `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecom
 from a weighted family of irreducible, left-canonical, primitive blocks with pairwise distinct
 nonzero weight moduli and produces a blocked normal canonical form.
 
-The intermediate private lemmas isolate the remaining bookkeeping steps: a currently unused
-documentary TP-normalization stage for irreducible nonzero blocks, trivial blocking at length
-`p = 1`, and sorting by decreasing weight norm.
+The intermediate private lemmas isolate the bookkeeping steps that remain honest under the current
+API: a documentary TP-normalization stage for irreducible nonzero blocks, trivial blocking at
+length `p = 1`, and sorting by decreasing weight norm.
 
 Because `SameMPV₂` records the `N = 0` sector, zero irreducible scalar blocks cannot be discarded
-without additional hypotheses. Accordingly, this file does not state an unconditional wrapper from
-an arbitrary tensor.
+without additional hypotheses. Combined with the post-blocking cyclic-sector / equal-weight issues,
+this is why the file does not state an unconditional wrapper from an arbitrary tensor.
 -/
 
 namespace MPSTensor
@@ -136,8 +136,10 @@ private theorem isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
 decomposition.
 
 This theorem is currently unused by the public endpoint below, which starts later from blocks that
-are already primitive and left-canonical. We keep it as a private record of the earlier TP
-normalization route: every input block is assumed to have some nonzero Kraus operator, excluding
+are already primitive and left-canonical. We keep it private as a record of the earlier TP
+normalization route: its extra nonzero-block hypothesis lives on a chosen decomposition, so making
+it public would still not give an honest arbitrary-input endpoint under the current `SameMPV₂`
+interface. Concretely, every input block is assumed to have some nonzero Kraus operator, excluding
 the all-zero scalar counterexample and matching the hypotheses of
 `exists_tp_data_of_irreducible_pipeline1606`. -/
 private theorem exists_tp_gauge_blockwise
@@ -624,12 +626,13 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
 ## Scope of this file
 
 This file stops at the primitive weighted-block stage. A full wrapper from an arbitrary
-irreducible block decomposition would still require a concrete cyclic-sector construction for the
-blocked tensors together with an equal-weight merging step.
+irreducible block decomposition would still require an honest treatment of zero blocks under
+`SameMPV₂`, a concrete cyclic-sector construction for the blocked tensors, and an equal-weight
+merging or reformulation step.
 
-The private theorem `exists_tp_gauge_blockwise` is intentionally retained as an unused
-documentary staging theorem for the earlier TP-normalization route, while the public theorem above
-starts later from blocks where primitivity and pairwise distinct weight norms are already available.
+The private theorem `exists_tp_gauge_blockwise` is intentionally retained as an unused documentary
+staging theorem for the earlier TP-normalization route, while the public theorem above starts later
+from blocks where primitivity and pairwise distinct weight norms are already available.
 -/
 
 end MPSTensor
