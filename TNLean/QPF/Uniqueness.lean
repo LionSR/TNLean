@@ -221,7 +221,11 @@ private lemma key_identity' [DecidableEq (Fin D)]
     simp only [Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_one]
   rw [this, hSHS, sqrtFactor_mul_conjTranspose' hρ hρ_pd]
 
-private lemma exists_critical_scalar [Nonempty (Fin D)]
+/-- **Critical scalar lemma for Perron–Frobenius uniqueness**:
+Given two PosDef matrices `ρ` and `σ`, there exists a positive scalar `c₀` such that
+`σ - c₀ • ρ` is PSD but **not** PosDef. This is the key linear-algebraic ingredient
+for proving uniqueness of PSD eigenvectors under irreducibility. -/
+lemma exists_critical_scalar [Nonempty (Fin D)]
     {ρ σ : Matrix (Fin D) (Fin D) ℂ}
     (hρ_pd : ρ.PosDef) (hσ_pd : σ.PosDef) :
     ∃ c₀ : ℝ, 0 < c₀ ∧ (σ - (↑c₀ : ℂ) • ρ).PosSemidef ∧

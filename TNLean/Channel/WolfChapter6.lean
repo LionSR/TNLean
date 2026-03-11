@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Irreducible
 import TNLean.Channel.IrreducibleGrowth
+import TNLean.Channel.IrreduciblePerronFrobenius
 import TNLean.Channel.CesaroFixedPoint
 import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.Channel.PeripheralSpectrum
@@ -43,14 +44,23 @@ No new proofs are introduced here; this is a documentation-only re-export.
 ### Wolf Theorem 6.3 (Spectral radius of irreducible maps) — MOSTLY FORMALIZED
 
 **Item 2** (non-degenerate eigenvalue, strictly positive eigenvector):
-* Positive definiteness: `posSemidef_fixedPoint_isPosDef` — `TNLean.QPF.PosDef`
-* Positive definiteness (irreducible): `posSemidef_fixedPoint_isPosDef_of_irreducible`
-* Uniqueness (non-degeneracy): `posSemidef_fixedPoint_unique` — `TNLean.QPF.Uniqueness`
-* Uniqueness (irreducible): `posSemidef_fixedPoint_unique_of_irreducible`
+
+Channel-level (general irreducible CP maps) — `TNLean.Channel.IrreduciblePerronFrobenius`:
+* `posDef_of_posSemidef_eigenvector_irreducible_cp`: PSD eigenvector → PosDef
+* `exists_posDef_eigenvector_of_irreducible_cp`: ∃ PosDef eigenvector with `r > 0`
+* `posSemidef_eigenvector_unique_of_irreducible_cp`: uniqueness up to scalar
+
+MPS/QPF-level (transfer maps):
+* `posSemidef_fixedPoint_isPosDef` — `TNLean.QPF.PosDef`
+* `posSemidef_fixedPoint_isPosDef_of_irreducible`
+* `posSemidef_fixedPoint_unique` — `TNLean.QPF.Uniqueness`
+* `posSemidef_fixedPoint_unique_of_irreducible`
 
 **Item 3** (uniqueness of positive eigenvalue):
-* Follows from `posSemidef_fixedPoint_unique` (any PSD eigenvector must have
-  the same eigenvalue as the non-degenerate one).
+* `posSemidef_eigenvector_unique_of_irreducible_cp` shows any two PSD
+  eigenvectors for the same eigenvalue are proportional. As a consequence,
+  any positive eigenvalue with a PSD eigenvector must equal the spectral
+  radius.
 
 **Item 4** (spectral radius identity `r = ρ(T)`): NOT DIRECTLY FORMALIZED.
 (We work with the normalized case where the spectral radius is 1.)

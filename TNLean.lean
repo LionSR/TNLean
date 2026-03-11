@@ -43,6 +43,7 @@ import TNLean.Channel.Irreducible
 import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.PerronFrobeniusNormalization
 import TNLean.Channel.PerronFrobeniusExistence
+import TNLean.Channel.IrreduciblePerronFrobenius
 import TNLean.Channel.Schwarz
 import TNLean.Channel.Primitive
 import TNLean.Channel.PeripheralSpectrum
