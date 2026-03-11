@@ -31,6 +31,9 @@ backwards compatibility even though the file no longer introduces an axiom).
 ## Main results
 
 * `exists_posSemidef_eigenvector`: PSD eigenvector existence for positive maps
+  (with nonvanishing hypothesis, eigenvalue `r > 0`)
+* `exists_posSemidef_eigenvector_general`: PSD eigenvector existence for *any*
+  positive map (no nonvanishing hypothesis, eigenvalue `r ≥ 0`)
 * `MPSTensor.adjointTransferMap_ne_zero_of_nonzero`:
     the adjoint transfer map is nonzero when some `A i ≠ 0`
 * `MPSTensor.exists_posDef_adjoint_eigenvector`:
@@ -128,6 +131,38 @@ theorem exists_posSemidef_eigenvector
   have hEig' : E ρ = (r : ℂ) • ρ := by
     simpa [htr_eq] using hEig
   exact ⟨ρ, r, hρ_psd, hρ_ne, hr_pos, hEig'⟩
+
+/-- **Perron–Frobenius eigenvector existence for general positive maps**
+(Wolf Theorem 6.5, without nonvanishing hypothesis).
+
+For *any* positive linear map `E` on `M_D(ℂ)` (with `D > 0`), there exists a
+nonzero PSD matrix `ρ` and a nonneg real `r ≥ 0` such that `E ρ = r • ρ`.
+
+This generalises `exists_posSemidef_eigenvector` by removing the `hNZ` hypothesis
+(E need not be nonvanishing on the PSD cone). The trade-off is that the eigenvalue
+is only `0 ≤ r` (not `0 < r`): when E annihilates a nonzero PSD matrix, that
+matrix is itself an eigenvector for eigenvalue 0.
+
+The proof is a case split:
+* If E is nonvanishing on nonzero PSD matrices, apply `exists_posSemidef_eigenvector`.
+* Otherwise, any nonzero PSD matrix in the kernel is an eigenvector for eigenvalue 0. -/
+theorem exists_posSemidef_eigenvector_general
+    [NeZero D]
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hpos : IsPositiveMap E) :
+    ∃ (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
+      ρ.PosSemidef ∧ ρ ≠ 0 ∧ 0 ≤ r ∧ E ρ = (r : ℂ) • ρ := by
+  classical
+  -- Case split: does E annihilate some nonzero PSD matrix?
+  by_cases hNZ : ∀ (ρ : Matrix (Fin D) (Fin D) ℂ), ρ.PosSemidef → ρ ≠ 0 → E ρ ≠ 0
+  · -- E is nonvanishing on nonzero PSD matrices → use existing theorem (r > 0).
+    obtain ⟨ρ, r, hρ_psd, hρ_ne, hr_pos, hEig⟩ :=
+      exists_posSemidef_eigenvector E hpos (hNZ := fun hpsd hne => hNZ _ hpsd hne)
+    exact ⟨ρ, r, hρ_psd, hρ_ne, hr_pos.le, hEig⟩
+  · -- E kills some nonzero PSD matrix → eigenvalue 0.
+    push_neg at hNZ
+    obtain ⟨ρ₀, hρ₀_psd, hρ₀_ne, hEρ₀⟩ := hNZ
+    exact ⟨ρ₀, 0, hρ₀_psd, hρ₀_ne, le_refl 0, by simp [hEρ₀]⟩
 
 /-! ## Scaling preserves irreducibility -/
 
