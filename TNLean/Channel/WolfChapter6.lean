@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Irreducible
+import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.CesaroFixedPoint
 import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.Channel.PeripheralSpectrum
@@ -25,13 +26,19 @@ No new proofs are introduced here; this is a documentation-only re-export.
 
 ## §6.2 Irreducible maps and Perron–Frobenius theory
 
-### Wolf Theorem 6.2 (Irreducible positive maps) — PARTIALLY FORMALIZED
+### Wolf Theorem 6.2 (Irreducible positive maps) — MOSTLY FORMALIZED
 
 **Item 1** (definition via invariant projections):
 * `IsIrreducibleMap` — `TNLean.Channel.Irreducible`
 
-**Items 2–4** (equivalent characterizations: `(id + T)^{d-1}`, `exp[tT]`,
-orthogonal trace condition): NOT FORMALIZED.
+**Item 2** (growth condition `(id + T)^{d-1}(A) > 0`):
+* `growth_posDef_of_irreducible_cp` — `TNLean.Channel.IrreducibleGrowth`
+  (for CP maps; proves the (1)→(2) direction)
+* `posDef_of_ker_subset_irreducible_cp` — structural lemma:
+  `ker(A) ⊆ ker(E(A))` + irreducible CP → `A` is PosDef
+* `mulVecLin_ker_idPlusE_lt_of_not_posDef` — strict kernel decrease
+
+**Items 3–4** (exponential, orthogonal trace condition): NOT FORMALIZED.
 
 ### Wolf Theorem 6.3 (Spectral radius of irreducible maps) — MOSTLY FORMALIZED
 
