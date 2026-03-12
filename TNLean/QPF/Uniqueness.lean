@@ -23,7 +23,8 @@ radius) is also a consequence.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2, Thm 6.3 items 2–3][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2,
+  Thm 6.3 items 2–3][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 
@@ -102,7 +103,8 @@ private lemma sqrtFactor_mul_conjTranspose' [DecidableEq (Fin D)]
       = U * (Matrix.diagonal (sqrtΛ' hρ) * Matrix.diagonal (sqrtΛ' hρ)) * Uᴴ := by noncomm_ring
     _ = U * Matrix.diagonal (fun j => (↑(hρ.eigenvalues j) : ℂ)) * Uᴴ := by
         rw [sqrtΛ_mul_sqrtΛ' hρ hρ_pd.posSemidef]
-    _ = ρ := (spectral_decomp_eq hρ).symm
+    _ = ρ := by
+        simpa [U] using (spectral_decomp_eq hρ).symm
 
 private lemma sqrtFactor_mul_invFactor_conj' [DecidableEq (Fin D)]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.IsHermitian) (hρ_pd : ρ.PosDef) :
@@ -117,7 +119,9 @@ private lemma sqrtFactor_mul_invFactor_conj' [DecidableEq (Fin D)]
       = U * (Matrix.diagonal (sqrtΛ' hρ) * Matrix.diagonal (sqrtInvΛ' hρ hρ_pd)) * Uᴴ := by
         noncomm_ring
     _ = U * 1 * Uᴴ := by rw [sqrtΛ_mul_sqrtInvΛ' hρ hρ_pd]
-    _ = 1 := by rw [Matrix.mul_one]; exact eig_mul_conj hρ
+    _ = 1 := by
+        rw [Matrix.mul_one]
+        simpa [U] using eig_mul_conj hρ
 
 private lemma invFactor_mul_sqrtFactor_conj' [DecidableEq (Fin D)]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.IsHermitian) (hρ_pd : ρ.PosDef) :
@@ -132,7 +136,9 @@ private lemma invFactor_mul_sqrtFactor_conj' [DecidableEq (Fin D)]
       = U * (Matrix.diagonal (sqrtInvΛ' hρ hρ_pd) * Matrix.diagonal (sqrtΛ' hρ)) * Uᴴ := by
         noncomm_ring
     _ = U * 1 * Uᴴ := by rw [sqrtInvΛ_mul_sqrtΛ' hρ hρ_pd]
-    _ = 1 := by rw [Matrix.mul_one]; exact eig_mul_conj hρ
+    _ = 1 := by
+        rw [Matrix.mul_one]
+        simpa [U] using eig_mul_conj hρ
 
 private lemma sqrtFactor_isUnit' [DecidableEq (Fin D)]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.IsHermitian) (hρ_pd : ρ.PosDef) :
@@ -158,21 +164,41 @@ private lemma hermitian_sub_scalar_spectral [DecidableEq (Fin D)]
       Matrix.diagonal (fun j => (↑(hA.eigenvalues j - c) : ℂ)) *
       (↑hA.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hA.eigenvectorUnitary
-  have hUUt : U * Uᴴ = 1 := eig_mul_conj hA
+  have hUUt : U * Uᴴ = 1 := by
+    simpa [U] using eig_mul_conj hA
   have h_cI : (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
       U * ((↑c : ℂ) • 1) * Uᴴ := by
     calc (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ)
         = (↑c : ℂ) • (U * Uᴴ) := by rw [hUUt]
       _ = U * ((↑c : ℂ) • 1) * Uᴴ := by
           rw [Matrix.mul_smul, Matrix.mul_one, smul_mul_assoc]
+  have hspec :
+      A = U * Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) * Uᴴ := by
+    simpa [U] using spectral_decomp_eq hA
+  have hA_sub :
+      A - (↑c : ℂ) • 1 =
+        U * Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) * Uᴴ - (↑c : ℂ) • 1 :=
+    congrArg (fun X => X - (↑c : ℂ) • 1) hspec
+  have h_cI_sub :
+      U * Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) * Uᴴ - (↑c : ℂ) • 1 =
+        U * Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) * Uᴴ -
+          U * ((↑c : ℂ) • 1) * Uᴴ :=
+    congrArg
+      (fun X =>
+        U * Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) * Uᴴ - X)
+      h_cI
   calc A - (↑c : ℂ) • 1
-      = U * Matrix.diagonal (fun j => ↑(hA.eigenvalues j)) * Uᴴ -
-        U * ((↑c : ℂ) • 1) * Uᴴ := by
-        conv_lhs => rw [spectral_decomp_eq hA]; rw [h_cI]
-    _ = U * (Matrix.diagonal (fun j => ↑(hA.eigenvalues j)) - (↑c : ℂ) • 1) * Uᴴ := by
+      = U * Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) * Uᴴ - (↑c : ℂ) • 1 :=
+        hA_sub
+    _ = U * Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) * Uᴴ -
+          U * ((↑c : ℂ) • 1) * Uᴴ := h_cI_sub
+    _ = U *
+          (Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) - (↑c : ℂ) • 1) * Uᴴ := by
         noncomm_ring
-    _ = U * Matrix.diagonal (fun j => ↑(hA.eigenvalues j - c)) * Uᴴ := by
-        congr 1; congr 1; exact diagonal_sub_smul_one' hA.eigenvalues c
+    _ = U * Matrix.diagonal (fun j => (↑(hA.eigenvalues j - c) : ℂ)) * Uᴴ := by
+        congr 1
+        congr 1
+        exact diagonal_sub_smul_one' hA.eigenvalues c
 
 /-! ### Min eigenvalue -/
 

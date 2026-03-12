@@ -4,14 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 
-import TNLean.Wielandt.RectangularSpan
 import TNLean.Wielandt.RankOneExtraction
 
 /-!
 # Rank-one span growth lemmas (towards Wielandt Lemma 2(b))
 
-This file is intended to bridge the gap documented at the end of
-`TNLean/Wielandt/RectangularSpan.lean`.
+This file isolates the finite-dimensional linear-algebra input used later by
+`TNLean.Wielandt.RectSpanGrowth` and
+`TNLean.Wielandt.RectSpanUniversality`.
 
 The paper's Lemma 2(b) uses a Jordan/Fitting argument:
 

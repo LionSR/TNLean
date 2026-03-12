@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.Wielandt.Prop3
-import TNLean.Wielandt.RectangularSpan
+import TNLean.Wielandt.RectSpanUniversality
 
 /-!
 # Lemma 2(b) — exact D²−D+1 paper-facing wrapper (arXiv:0909.5347)
@@ -41,7 +41,7 @@ These hypotheses match the paper's Lemma 2(b) statement precisely.
    from `IsPrimitivePaper A` to `HasEventuallyFullKrausRank A`.
 2. Rewrite as `IsNormal A` via `hasEventuallyFullKrausRank_iff_isNormal`.
 3. Apply the sharp backend theorem `vecMulVec_eigenvector_exact_wordSpan` from
-   `TNLean.Wielandt.RectangularSpan`, which assembles:
+   `TNLean.Wielandt.RectSpanUniversality`, which assembles:
    - one-sided `rectSpan` strict growth under normality,
    - the sharp bound `r + D·D̃ ≤ D² − D + 1`,
    - eigenvector padding from the actual word-span level up to `D² − D + 1`.

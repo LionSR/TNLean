@@ -3,12 +3,15 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 -- Keep these dependencies explicit here for readability:
+-- • `TNLean.Algebra.HermitianHelpers` for shared spectral decomposition helpers
 -- • `TNLean.Channel.PositiveMap` for the positive-definiteness API
 -- • `TNLean.Channel.Irreducible` for irreducibility/projection lemmas
--- Both are already transitively available through `TNLean.MPS.CPPrimitive`,
--- but listing them directly makes the local proof dependencies honest.
-import TNLean.Channel.PositiveMap
+-- The channel imports are already transitively available through
+-- `TNLean.MPS.CPPrimitive`, but listing them directly makes the local proof
+-- dependencies honest.
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible
+import TNLean.Channel.PositiveMap
 import TNLean.MPS.CPPrimitive
 
 import Mathlib.Tactic.NoncommRing
@@ -46,43 +49,9 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Shared spectral decomposition helpers
-
-These are non-private so that `QPF.Uniqueness` can reuse them. -/
-
-lemma eig_conj_mul [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Matrix.UnitaryGroup.star_mul_self hM.eigenvectorUnitary
-
-lemma eig_mul_conj [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ = 1 := by
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop
-
-lemma spectral_decomp_eq [DecidableEq (Fin D)]
-    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-      Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-  have h := hM.spectral_theorem
-  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-  convert h using 2
-
 /-! ## Positive definiteness from injectivity -/
 
 section PosDef
-
-/-- Adjoint identity for dot product: `star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y`. -/
-private lemma dotProduct_mulVec_conjTranspose
-    (M : Matrix (Fin D) (Fin D) ℂ)
-    (x y : Fin D → ℂ) :
-    star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y := by
-  rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
 
 private lemma mulVec_eq_zero_of_quadForm_eq_zero
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
@@ -108,7 +77,7 @@ private lemma ker_invariant_under_adjoint
     congr 1; ext i
     rw [show (A i * ρ * (A i)ᴴ) *ᵥ x = A i *ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) from by
       simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]]
-    rw [dotProduct_mulVec_conjTranspose]
+    rw [HermitianHelpers.dotProduct_mulVec_conjTranspose]
   have h_each_zero : ∀ i : Fin d,
       star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) = 0 := by
     intro i

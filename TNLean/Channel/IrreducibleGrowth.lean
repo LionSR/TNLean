@@ -2,14 +2,16 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Channel.PositiveMap
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible
+import TNLean.Channel.PositiveMap
 import TNLean.Channel.Schwarz
 
 import Mathlib.Tactic.NoncommRing
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 import Mathlib.Data.Nat.Choose.Sum
+import Mathlib.Analysis.Normed.Algebra.Exponential
 
 /-!
 # Growth condition for irreducible CP maps (Wolf Theorem 6.2, item 2)
@@ -139,52 +141,6 @@ theorem ker_add_psd_right
 
 end KernelPSD
 
-/-! ## Spectral helpers
-
-These are intentionally self-contained copies of the analogous lemmas in
-`TNLean.QPF.PosDef` and `TNLean.MPS.FixedPointInvariantProjection`.
-They carry the prime suffix (`'`) to distinguish them from those public versions,
-and they are private to this file to keep `IrreducibleGrowth` lightweight
-(no QPF/MPS imports needed). -/
-
-section SpectralHelpers
-
-private lemma eig_conj_mul' {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  classical
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Matrix.UnitaryGroup.star_mul_self hM.eigenvectorUnitary
-
-private lemma eig_mul_conj' {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ = 1 := by
-  classical
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop
-
-private lemma spectral_decomp_eq' {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
-    M = (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-      Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) *
-      (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-  classical
-  have h := hM.spectral_theorem
-  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-  convert h using 2
-
-end SpectralHelpers
-
-/-! ## Adjoint identity -/
-
-/-- Local copy of the adjoint-pairing identity `⟨x, My⟩ = ⟨M†x, y⟩`.
-Duplicated here (with prime suffix) to keep this file independent of
-`TNLean.MPS.FixedPointInvariantProjection`. -/
-private lemma dotProduct_mulVec_conjTranspose'
-    (M : Matrix (Fin D) (Fin D) ℂ)
-    (x y : Fin D → ℂ) :
-    star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y := by
-  rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
-
 /-! ## One-step structural lemma -/
 
 section OneStep
@@ -223,7 +179,7 @@ theorem posDef_of_ker_subset_irreducible_cp
       congr 1; ext j
       have : (K j * A * (K j)ᴴ) *ᵥ v = K j *ᵥ (A *ᵥ ((K j)ᴴ *ᵥ v)) := by
         simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]
-      rw [this, dotProduct_mulVec_conjTranspose']
+      rw [this, HermitianHelpers.dotProduct_mulVec_conjTranspose]
     have h_each : ∀ j : Fin r,
         star ((K j)ᴴ *ᵥ v) ⬝ᵥ (A *ᵥ ((K j)ᴴ *ᵥ v)) = 0 := by
       intro j
@@ -249,8 +205,8 @@ theorem posDef_of_ker_subset_irreducible_cp
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
   set sgnEig : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
   set Q := U * Matrix.diagonal sgnEig * Uᴴ with hQ_def
-  have hUU : Uᴴ * U = 1 := eig_conj_mul' hH
-  have hUU' : U * Uᴴ = 1 := eig_mul_conj' hH
+  have hUU : Uᴴ * U = 1 := eig_conj_mul hH
+  have hUU' : U * Uᴴ = 1 := eig_mul_conj hH
   have hsgnEig_star : star sgnEig = sgnEig := by
     ext i; simp only [sgnEig, Pi.star_apply]; split <;> simp
   have hsgnEig_sq : ∀ i, sgnEig i * sgnEig i = sgnEig i := by
@@ -277,7 +233,7 @@ theorem posDef_of_ker_subset_irreducible_cp
   have hQ_proj : IsOrthogonalProjection Q := ⟨hQ_herm, hQ_idem⟩
   -- Q * A = A
   have hQA : Q * A = A := by
-    have hA_spectral := spectral_decomp_eq' hH
+    have hA_spectral := spectral_decomp_eq hH
     rw [hA_spectral, hQ_def,
         Matrix.mul_assoc, Matrix.mul_assoc, Matrix.mul_assoc,
         ← Matrix.mul_assoc Uᴴ U, hUU, Matrix.one_mul,
@@ -301,7 +257,7 @@ theorem posDef_of_ker_subset_irreducible_cp
     set w := Uᴴ *ᵥ v
     have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
       have hAv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
-        spectral_decomp_eq' hH ▸ hv
+        spectral_decomp_eq hH ▸ hv
       have hUΛw : U *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w) = 0 := by
         rw [Matrix.mulVec_mulVec, show w = Uᴴ *ᵥ v from rfl, Matrix.mulVec_mulVec]; exact hAv
       have : Uᴴ *ᵥ (U *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w)) = 0 := by
@@ -597,7 +553,7 @@ private theorem trace_mul_nonneg_of_posSemidef
   let U : Matrix (Fin D) (Fin D) ℂ := ↑hB.isHermitian.eigenvectorUnitary
   let Λ : Fin D → ℂ := fun i => ↑(hB.isHermitian.eigenvalues i)
   have hspec : B = U * Matrix.diagonal Λ * Uᴴ := by
-    simpa [U, Λ] using spectral_decomp_eq' hB.isHermitian
+    simpa [U, Λ] using spectral_decomp_eq hB.isHermitian
   have hUAU_psd : (Uᴴ * A * U).PosSemidef := by
     simpa [U, Matrix.mul_assoc] using hA.mul_mul_conjTranspose_same (B := Uᴴ)
   have hΛ_nonneg : ∀ i, 0 ≤ Λ i := by
@@ -708,3 +664,213 @@ theorem orthogonal_trace_pos_of_irreducible_cp
   exact (ne_of_gt htrace_growth) this
 
 end OrthogonalTrace
+
+/-! ## Exponential condition (Wolf Theorem 6.2, item 3) -/
+
+section Exponential
+
+private theorem isPositiveMap_smul_nonneg
+    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hE : IsPositiveMap E) {c : ℝ} (hc : 0 ≤ c) :
+    IsPositiveMap ((c : ℂ) • E) := by
+  intro X hX
+  simpa using (hE X hX).smul (by exact_mod_cast hc)
+
+private lemma inv_factorial_nonneg (n : ℕ) :
+    0 ≤ ((n.factorial : ℂ)⁻¹) := by
+  have hfac_pos : (0 : ℂ) < (n.factorial : ℂ) := by
+    exact_mod_cast Nat.factorial_pos n
+  exact le_of_lt (inv_pos.mpr hfac_pos)
+
+private lemma inv_factorial_ne_zero (n : ℕ) :
+    ((n.factorial : ℂ)⁻¹) ≠ 0 := by
+  exact inv_ne_zero (by exact_mod_cast Nat.factorial_ne_zero n)
+
+noncomputable private def quadraticFormCLM (v : Fin D → ℂ) :
+    Matrix (Fin D) (Fin D) ℂ →L[ℂ] ℂ :=
+  LinearMap.toContinuousLinearMap
+    { toFun := fun X => star v ⬝ᵥ (X *ᵥ v)
+      map_add' := by
+        intro X Y
+        simp [Matrix.add_mulVec, dotProduct_add]
+      map_smul' := by
+        intro c X
+        simp [Matrix.smul_mulVec, dotProduct_smul] }
+
+/-- A finite exponential truncation already satisfies Wolf's positivity conclusion:
+for any `t > 0`, the first `D` terms of the exponential series of `E` applied to a
+nonzero PSD input are positive definite. This is the finite-sum core of Wolf's
+proof of Theorem 6.2(3). -/
+theorem exp_truncation_posDef_of_irreducible_cp
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hCP : IsCPMap E) (hIrr : IsIrreducibleMap E)
+    (A : Matrix (Fin D) (Fin D) ℂ) (hA : A.PosSemidef) (hA_ne : A ≠ 0)
+    {t : ℝ} (ht : 0 < t) :
+    (∑ k ∈ Finset.range D, ((k.factorial : ℂ)⁻¹) • ((((t : ℂ) • E) ^ k) A)).PosDef := by
+  classical
+  let F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) := (t : ℂ) • E
+  let term : ℕ → Matrix (Fin D) (Fin D) ℂ := fun k =>
+    ((k.factorial : ℂ)⁻¹) • ((F ^ k) A)
+  have hF_pos : IsPositiveMap F :=
+    isPositiveMap_smul_nonneg hCP.isPositiveMap ht.le
+  have hterm_psd : ∀ k : ℕ, (term k).PosSemidef := by
+    intro k
+    simpa [term] using (iterate_posSemidef hF_pos hA k).smul (inv_factorial_nonneg k)
+  have hsum_psd : (∑ k ∈ Finset.range D, term k).PosSemidef := by
+    refine Matrix.posSemidef_sum (s := Finset.range D) (x := term) ?_
+    intro k hk
+    exact hterm_psd k
+  rw [Matrix.posDef_iff_dotProduct_mulVec]
+  refine ⟨hsum_psd.isHermitian, ?_⟩
+  intro v hv
+  by_contra hq_not_pos
+  have hq_nonneg : 0 ≤ star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v) :=
+    hsum_psd.dotProduct_mulVec_nonneg v
+  have hq_zero : star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v) = 0 := by
+    exact le_antisymm (le_of_not_gt hq_not_pos) hq_nonneg
+  have hsum_zero : (∑ k ∈ Finset.range D, term k) *ᵥ v = 0 :=
+    (hsum_psd.dotProduct_mulVec_zero_iff v).mp hq_zero
+  have hterm_zero_F : ∀ k ∈ Finset.range D, ((F ^ k) A) *ᵥ v = 0 := by
+    intro k hk
+    have hqterm_zero : star v ⬝ᵥ ((term k) *ᵥ v) = 0 := by
+      have hsum_q_zero : ∑ i ∈ Finset.range D, star v ⬝ᵥ ((term i) *ᵥ v) = 0 := by
+        have := congrArg (fun w => star v ⬝ᵥ w) hsum_zero
+        simpa [Matrix.sum_mulVec, dotProduct_sum] using this
+      exact (Finset.sum_eq_zero_iff_of_nonneg
+          (fun i hi => (hterm_psd i).dotProduct_mulVec_nonneg v)).mp hsum_q_zero k hk
+    have hterm_zero : (term k) *ᵥ v = 0 :=
+      (hterm_psd k).dotProduct_mulVec_zero_iff v |>.mp hqterm_zero
+    rw [term, Matrix.smul_mulVec] at hterm_zero
+    exact (smul_eq_zero.mp hterm_zero).resolve_left (inv_factorial_ne_zero k)
+  have hterm_zero_E : ∀ k ∈ Finset.range D, ((E ^ k) A) *ᵥ v = 0 := by
+    intro k hk
+    have hkF : ((F ^ k) A) *ᵥ v = 0 := hterm_zero_F k hk
+    have hkpow : ((F ^ k) A) = ((t : ℂ) ^ k) • ((E ^ k) A) := by
+      simp [F, smul_pow]
+    rw [hkpow, Matrix.smul_mulVec] at hkF
+    exact (smul_eq_zero.mp hkF).resolve_left (pow_ne_zero _ (by exact_mod_cast ht.ne'))
+  let T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) := LinearMap.id + E
+  have h_growth : ((T ^ (D - 1)) A).PosDef := by
+    simpa [T] using growth_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne
+  have h_expand :
+      (T ^ (D - 1)) A = ∑ k ∈ Finset.range D, (D - 1).choose k • ((E ^ k) A) := by
+    simpa [T] using idPlusE_pow_apply_eq_sum (E := E) (n := D - 1) A
+  have hv_growth_zero : ((T ^ (D - 1)) A) *ᵥ v = 0 := by
+    rw [h_expand, Matrix.sum_mulVec]
+    refine Finset.sum_eq_zero ?_
+    intro k hk
+    rw [Matrix.smul_mulVec, hterm_zero_E k hk]
+    simp
+  have hq_growth : 0 < star v ⬝ᵥ (((T ^ (D - 1)) A) *ᵥ v) := by
+    exact (Matrix.posDef_iff_dotProduct_mulVec.mp h_growth).2 hv
+  exact (ne_of_gt hq_growth) (by simp [hv_growth_zero])
+
+/-- **Wolf Theorem 6.2, item 3 (exponential condition for irreducible positive maps)**:
+if `E` is an irreducible completely positive map, `A ≥ 0` is nonzero, and `t > 0`,
+then `exp[t E](A)` is positive definite. Here the exponential is the operator exponential
+on the endomorphism algebra of `M_D(ℂ)`. -/
+theorem exp_posDef_of_irreducible_cp
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hCP : IsCPMap E) (hIrr : IsIrreducibleMap E)
+    (A : Matrix (Fin D) (Fin D) ℂ) (hA : A.PosSemidef) (hA_ne : A ≠ 0)
+    {t : ℝ} (ht : 0 < t) :
+    ((NormedSpace.exp
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) ((t : ℂ) • E))) A).PosDef := by
+  classical
+  let Φ : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) ((t : ℂ) • E)
+  let term : ℕ → Matrix (Fin D) (Fin D) ℂ := fun n =>
+    ((n.factorial : ℂ)⁻¹) • ((((t : ℂ) • E) ^ n) A)
+  have hF_pos : IsPositiveMap ((t : ℂ) • E) :=
+    isPositiveMap_smul_nonneg hCP.isPositiveMap ht.le
+  have hterm_psd : ∀ n : ℕ, (term n).PosSemidef := by
+    intro n
+    simpa [term] using (iterate_posSemidef hF_pos hA n).smul (inv_factorial_nonneg n)
+  have htrunc_pd : (∑ k ∈ Finset.range D, term k).PosDef := by
+    simpa [term] using exp_truncation_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne ht
+  have hseries_ops : Summable (fun n : ℕ => ((n.factorial : ℂ)⁻¹) • (Φ ^ n)) := by
+    simpa [NormedSpace.expSeries_apply_eq] using
+      (NormedSpace.expSeries_summable (ℂ)
+        ((Matrix (Fin D) (Fin D) ℂ) →L[ℂ] Matrix (Fin D) (Fin D) ℂ) Φ)
+  let evA : ((Matrix (Fin D) (Fin D) ℂ) →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℂ]
+      Matrix (Fin D) (Fin D) ℂ := (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ)) A
+  have hseries : Summable term := by
+    simpa [term, Φ, evA, ContinuousLinearMap.apply_apply, map_pow] using evA.summable hseries_ops
+  have hexp_eq :
+      (NormedSpace.exp Φ) A = ∑' n, term n := by
+    have hExp :
+        NormedSpace.exp Φ = ∑' n : ℕ, ((n.factorial : ℂ)⁻¹) • (Φ ^ n) := by
+      simpa using congrArg (fun f => f Φ) (NormedSpace.exp_eq_tsum (𝕂 := ℂ))
+    rw [hExp]
+    simpa [term, Φ, evA, ContinuousLinearMap.apply_apply, map_pow] using evA.map_tsum hseries_ops
+  have hpartial_psd :
+      ∀ N : ℕ, (∑ k ∈ Finset.range N, term k).PosSemidef := by
+    intro N
+    refine Matrix.posSemidef_sum (s := Finset.range N) (x := term) ?_
+    intro k hk
+    exact hterm_psd k
+  have h_partial_tendsto :
+      Filter.Tendsto (fun N : ℕ => ∑ k ∈ Finset.range N, term k) Filter.atTop
+        (nhds ((NormedSpace.exp Φ) A)) := by
+    simpa [hexp_eq] using (Summable.hasSum_iff_tendsto_nat hseries).1 hseries.hasSum
+  have h_exp_psd : ((NormedSpace.exp Φ) A).PosSemidef := by
+    refine isClosed_posSemidef.mem_of_tendsto h_partial_tendsto ?_
+    exact Filter.Eventually.of_forall hpartial_psd
+  have hq_pos : ∀ v : Fin D → ℂ, v ≠ 0 →
+      0 < star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v) := by
+    intro v hv
+    let qCLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] ℂ := quadraticFormCLM v
+    let qterm : ℕ → ℂ := fun n => qCLM (term n)
+    let rqterm : ℕ → ℝ := fun n => (qterm n).re
+    have hqseries : Summable qterm := qCLM.summable hseries
+    have hqeq : star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v) = ∑' n, qterm n := by
+      rw [hexp_eq]
+      simpa [qCLM, qterm, quadraticFormCLM] using qCLM.map_tsum hseries
+    have hrqseries : Summable rqterm := Complex.reCLM.summable hqseries
+    have hrq_nonneg : ∀ n, 0 ≤ rqterm n := by
+      intro n
+      simpa [rqterm, qterm, qCLM, quadraticFormCLM] using
+        (hterm_psd n).dotProduct_mulVec_nonneg v
+    by_contra hq_not_pos
+    have hq_nonneg : 0 ≤ star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v) :=
+      h_exp_psd.dotProduct_mulVec_nonneg v
+    have hq_zero : star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v) = 0 := by
+      exact le_antisymm (le_of_not_gt hq_not_pos) hq_nonneg
+    have hrq_tsum_zero : ∑' n, rqterm n = 0 := by
+      rw [← Complex.re_tsum hqseries, ← hqeq, hq_zero]
+      simp [rqterm]
+    have hrq_zero : ∀ n, rqterm n = 0 := by
+      intro n
+      by_contra hne
+      have hpos : 0 < rqterm n :=
+        lt_of_le_of_ne (hrq_nonneg n) (by simpa [eq_comm] using hne)
+      have htsum_pos : 0 < ∑' m, rqterm m :=
+        Summable.tsum_pos hrqseries hrq_nonneg n hpos
+      rw [hrq_tsum_zero] at htsum_pos
+      exact (lt_irrefl (0 : ℝ)) htsum_pos
+    have hqterm_zero : ∀ n, qterm n = 0 := by
+      intro n
+      have hnonneg : 0 ≤ qterm n := by
+        simpa [qterm, qCLM, quadraticFormCLM] using
+          (hterm_psd n).dotProduct_mulVec_nonneg v
+      rcases Complex.nonneg_iff.mp hnonneg with ⟨hre, him⟩
+      exact Complex.ext (by simpa [rqterm, qterm] using hrq_zero n) him.symm
+    have hterm_zero : ∀ k ∈ Finset.range D, (term k) *ᵥ v = 0 := by
+      intro k hk
+      apply (hterm_psd k).dotProduct_mulVec_zero_iff v |>.mp
+      simpa [qterm, qCLM, quadraticFormCLM] using hqterm_zero k
+    have hv_trunc_zero : (∑ k ∈ Finset.range D, term k) *ᵥ v = 0 := by
+      rw [Matrix.sum_mulVec]
+      refine Finset.sum_eq_zero ?_
+      intro k hk
+      exact hterm_zero k hk
+    have hq_trunc : 0 < star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v) := by
+      exact (Matrix.posDef_iff_dotProduct_mulVec.mp htrunc_pd).2 hv
+    exact (ne_of_gt hq_trunc) (by simp [hv_trunc_zero])
+  rw [show ((NormedSpace.exp
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) ((t : ℂ) • E))) A) =
+      (NormedSpace.exp Φ) A by simp [Φ]]
+  rw [Matrix.posDef_iff_dotProduct_mulVec]
+  exact ⟨h_exp_psd.isHermitian, hq_pos⟩
+
+end Exponential
