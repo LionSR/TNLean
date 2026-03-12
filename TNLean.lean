@@ -39,6 +39,7 @@ import TNLean.Channel.KadisonSchwarz
 import TNLean.Channel.MultiplicativeDomain
 import TNLean.Channel.MultiplicativeDomainPowers
 import TNLean.Channel.CesaroFixedPoint
+import TNLean.Channel.Ergodicity
 import TNLean.Channel.Irreducible
 import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.PerronFrobeniusNormalization
@@ -124,6 +125,7 @@ import TNLean.Wielandt.Prop3
 import TNLean.Wielandt.Prop3_cb
 import TNLean.Wielandt.Lemma1
 import TNLean.Wielandt.Lemma2
+import TNLean.Wielandt.Lemma2bCoarse
 import TNLean.Wielandt.PrimitivityNormal
 import TNLean.Wielandt.PrimitivityToNormal
 import TNLean.Wielandt.PrimitiveImpliesIrreducible
