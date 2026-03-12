@@ -58,23 +58,27 @@ variable {d D : ℕ}
 
 /-! ## Direction (b) → (a) -/
 
-/-- **Proposition 3 (b)→(a)**: Eventually full Kraus rank implies paper-primitivity.
+/-- **Proposition 3 (b)→(a)**: eventually full Kraus rank implies paper
+primitivity.
 
-If `{A₁,…,Aₐ}` has eventually full Kraus rank (there exists `i` with
-`S_i(A) = M_D(ℂ)`), then the transfer map `E_A` is primitive: for every
-nonzero `|φ⟩`, there exists a uniform `q` with `H_q(A,φ) = ℂ^D`.
+If `{A₁, …, Aₐ}` has eventually full Kraus rank, then the transfer map `E_A`
+is primitive in the paper's sense.
 
-Re-exported from `PrimitiveEquiv.lean`. -/
+This is re-exported from `PrimitiveEquiv.lean`.
+Paper: arXiv:0909.5347, Proposition 3(b)→(a); Wolf, Chapter 6.
+-/
 theorem prop3_ba (A : MPSTensor d D)
     (hA : HasEventuallyFullKrausRank A) :
     IsPrimitivePaper A :=
   isPrimitivePaper_of_hasEventuallyFullKrausRank A hA
 
-/-- **Proposition 3 (b)→(a), `IsNormal` version**: `IsNormal A` implies
-paper-primitivity.
+/-- **Proposition 3 (b)→(a)**, `IsNormal` version.
 
-This is the same as `prop3_ba` but takes the library's `IsNormal` predicate
-directly. -/
+If `A` is normal, then `A` is primitive in the paper's sense.
+
+This is the `IsNormal` restatement of Proposition 3(b)→(a).
+Paper: arXiv:0909.5347, Proposition 3(b)→(a); Wolf, Chapter 6.
+-/
 theorem prop3_ba_isNormal (A : MPSTensor d D)
     (hA : IsNormal A) :
     IsPrimitivePaper A :=
@@ -82,13 +86,14 @@ theorem prop3_ba_isNormal (A : MPSTensor d D)
 
 /-! ## Direction (a) → (c) -/
 
-/-- **Proposition 3 (a)→(c)**: Paper-primitivity implies strong irreducibility.
+/-- **Proposition 3 (a)→(c)**: paper primitivity implies strong irreducibility.
 
-If the MPS tensor `A` is paper-primitive and normalized (`∑ Aᵢ† Aᵢ = 1`), then
-it is strongly irreducible: the transfer map `E_A` is irreducible, has a
-positive-definite fixed point, and peripheral spectrum `{1}`.
+If the MPS tensor `A` is paper primitive and normalized (`∑ Aᵢ† Aᵢ = 1`), then
+it is strongly irreducible.
 
-Re-exported from `Prop3_ac.lean`. -/
+This is re-exported from `Prop3_ac.lean`.
+Paper: arXiv:0909.5347, Proposition 3(a)→(c); Wolf, Chapter 6.
+-/
 theorem prop3_ac [NeZero D] (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
@@ -97,14 +102,15 @@ theorem prop3_ac [NeZero D] (A : MPSTensor d D)
 
 /-! ## Direction (c) → (b) -/
 
-/-- **Proposition 3 (c)→(b)**: Strong irreducibility implies eventually full
+/-- **Proposition 3 (c)→(b)**: strong irreducibility implies eventually full
 Kraus rank.
 
-If the MPS tensor `A` is strongly irreducible (`E_A` irreducible, PosDef
-fixed point, peripheral spectrum `{1}`) and normalized (`∑ Aᵢ† Aᵢ = 1`),
-then `A` has eventually full Kraus rank (`∃ i, S_i(A) = M_D(ℂ)`).
+If the MPS tensor `A` is strongly irreducible and normalized (`∑ Aᵢ† Aᵢ = 1`),
+then `A` has eventually full Kraus rank.
 
-Re-exported from `Prop3_cb.lean`. -/
+This is re-exported from `Prop3_cb.lean`.
+Paper: arXiv:0909.5347, Proposition 3(c)→(b); Wolf, Chapter 6.
+-/
 theorem prop3_cb [NeZero D] (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hSI : IsStronglyIrreduciblePaper A) :
@@ -113,13 +119,12 @@ theorem prop3_cb [NeZero D] (A : MPSTensor d D)
 
 /-! ## Combined directions -/
 
-/-- **Proposition 3 (b)→(c)**: Eventually full Kraus rank implies strong irreducibility.
+/-- **Proposition 3 (b)→(c)**: eventually full Kraus rank implies strong
+irreducibility.
 
-Combines the two proved directions: `HasEventuallyFullKrausRank → IsPrimitivePaper`
-and `IsPrimitivePaper → IsStronglyIrreduciblePaper`.
-
-Paper: "The following are equivalent: (a), (b), (c)" — this packages (b)→(a)→(c)
-as a single implication. -/
+This packages the composite implication `(b) → (a) → (c)` from Proposition 3.
+Paper: arXiv:0909.5347, Proposition 3; Wolf, Chapter 6.
+-/
 theorem primitivePaper_implies_stronglyIrreducible [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -127,10 +132,13 @@ theorem primitivePaper_implies_stronglyIrreducible [NeZero D]
     IsStronglyIrreduciblePaper A :=
   prop3_ac A hNorm (prop3_ba A hA)
 
-/-- **Proposition 3 (b)→(c), `IsNormal` version**: `IsNormal A` implies strong
-irreducibility (given normalization).
+/-- **Proposition 3 (b)→(c)**, `IsNormal` version.
 
-Convenience corollary rewriting `HasEventuallyFullKrausRank` as `IsNormal`. -/
+If `A` is normal and normalized, then `A` is strongly irreducible.
+
+This is the `IsNormal` restatement of the composite implication `(b) → (c)`.
+Paper: arXiv:0909.5347, Proposition 3; Wolf, Chapter 6.
+-/
 theorem isNormal_implies_stronglyIrreducible [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -141,10 +149,11 @@ theorem isNormal_implies_stronglyIrreducible [NeZero D]
 
 /-! ## Full equivalences -/
 
-/-- **Proposition 3 (a)↔(b)**: Paper-primitivity is equivalent to eventually full
-Kraus rank (under normalization).
+/-- **Proposition 3 (a)↔(b)**: paper primitivity is equivalent to eventually
+full Kraus rank.
 
-Composes **(b)→(a)** and **(a)→(c)→(b)**. -/
+Paper: arXiv:0909.5347, Proposition 3(a)↔(b); Wolf, Chapter 6.
+-/
 theorem primitivePaper_iff_hasEventuallyFullKrausRank [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -152,10 +161,11 @@ theorem primitivePaper_iff_hasEventuallyFullKrausRank [NeZero D]
   ⟨fun hP => prop3_cb A hNorm (prop3_ac A hNorm hP),
    fun hB => prop3_ba A hB⟩
 
-/-- **Proposition 3 (a)↔(c)**: Paper-primitivity is equivalent to strong
-irreducibility (under normalization).
+/-- **Proposition 3 (a)↔(c)**: paper primitivity is equivalent to strong
+irreducibility.
 
-Composes **(a)→(c)** and **(c)→(b)→(a)**. -/
+Paper: arXiv:0909.5347, Proposition 3(a)↔(c); Wolf, Chapter 6.
+-/
 theorem primitivePaper_iff_stronglyIrreducible [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -163,10 +173,11 @@ theorem primitivePaper_iff_stronglyIrreducible [NeZero D]
   ⟨fun hP => prop3_ac A hNorm hP,
    fun hC => prop3_ba A (prop3_cb A hNorm hC)⟩
 
-/-- **Proposition 3 (b)↔(c)**: Eventually full Kraus rank is equivalent to strong
-irreducibility (under normalization).
+/-- **Proposition 3 (b)↔(c)**: eventually full Kraus rank is equivalent to
+strong irreducibility.
 
-Composes **(b)→(a)→(c)** and **(c)→(b)**. -/
+Paper: arXiv:0909.5347, Proposition 3(b)↔(c); Wolf, Chapter 6.
+-/
 theorem hasEventuallyFullKrausRank_iff_stronglyIrreducible [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -176,11 +187,12 @@ theorem hasEventuallyFullKrausRank_iff_stronglyIrreducible [NeZero D]
 
 /-! ## Channel primitivity (intermediate result) -/
 
-/-- **Proposition 3 (a) implies channel-level primitivity**: Paper-primitivity
-implies that `E_A` has peripheral spectrum `{1}`.
+/-- **Proposition 3 (a)→(c), intermediate step**: paper primitivity implies
+channel-level primitivity.
 
-This is the intermediate step of (a)→(c); strong irreducibility additionally
-produces a PosDef fixed point. -/
+This isolates the channel-primitive consequence used in Proposition 3(a)→(c).
+Paper: arXiv:0909.5347, Proposition 3(a)→(c); Wolf, Chapter 6.
+-/
 theorem prop3_a_implies_channelPrimitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -190,10 +202,12 @@ theorem prop3_a_implies_channelPrimitive [NeZero D]
 
 /-! ## Index bound -/
 
-/-- **q(E_A) ≤ i(A)**: the primitivity index is at most the full-Kraus-rank
+/-- **Equation (2)**: the primitivity index is at most the full-Kraus-rank
 index.
 
-Re-exported from `PrimitiveEquiv.lean`. -/
+This re-exports the quantitative bound following Proposition 3.
+Paper: arXiv:0909.5347, equation (2); Wolf, Theorem 6.9.
+-/
 theorem prop3_qIndex_le_iIndex (A : MPSTensor d D)
     (hA : HasEventuallyFullKrausRank A) :
     qIndex A ≤ iIndex A :=

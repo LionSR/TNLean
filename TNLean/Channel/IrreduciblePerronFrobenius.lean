@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.PerronFrobeniusExistence
-import TNLean.Channel.Schwarz
 import TNLean.QPF.Uniqueness
 
 /-!

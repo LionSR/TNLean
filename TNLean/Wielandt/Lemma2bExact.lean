@@ -59,24 +59,16 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Lemma 2(b) (exact paper bound, D²−D+1).**
+/-- **Lemma 2(b)** (exact paper bound `D² − D + 1`).
 
-If `A` is a normalized MPS tensor that is primitive in the paper's sense
-(`IsPrimitivePaper A`), `A i₀` is **not** invertible, and `φ` is a nonzero
-eigenvector of `A i₀` with eigenvalue `μ ≠ 0`, then for every vector
-`ψ : Fin D → ℂ` the rank-one matrix `vecMulVec φ ψ = |φ⟩⟨ψ|` belongs to
-the word span `S_{D²−D+1}(A)`.
+If `A` is normalized and primitive in the paper's sense, `A i₀` is **not**
+invertible, and `φ` is a nonzero eigenvector of `A i₀` with eigenvalue
+`μ ≠ 0`, then for every vector `ψ : Fin D → ℂ` the rank-one matrix
+`vecMulVec φ ψ = |φ⟩⟨ψ|` belongs to the word span `S_{D²−D+1}(A)`.
 
-This is the **exact fixed-length** conclusion from arXiv:0909.5347, Lemma 2(b).
-The bound `D² − D + 1` is sharp and does not require further existential
-quantification.
-
-**Proof outline.** Paper primitivity implies `IsNormal A` via the chain
-`IsPrimitivePaper → HasEventuallyFullKrausRank → IsNormal`. The backend
-theorem `vecMulVec_eigenvector_exact_wordSpan` then provides the conclusion
-using the one-sided rectangular-span strict-growth machinery and eigenvector
-padding. -/
-theorem vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector
+This is the exact fixed-length conclusion of arXiv:0909.5347, Lemma 2(b).
+Paper: arXiv:0909.5347, Lemma 2(b); Wolf, Chapter 6.
+-/theorem vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector
     [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -96,13 +88,14 @@ theorem vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector
   -- Step 3: Apply the sharp backend theorem
   exact vecMulVec_eigenvector_exact_wordSpan A i₀ hNormal hNotInv hμ heig
 
-/-- **Wolf Lemma 2(b) (exact, alias).** Short alias for
-`vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector`.
+/-- **Wolf Lemma 2(b)** (exact alias).
 
-Under paper primitivity + normalization + noninvertible eigenvector hypotheses,
-every rank-one matrix `|φ⟩⟨ψ|` lies in the word span at the sharp paper bound
-`D² − D + 1`. See the main theorem's docstring for full details. -/
-theorem wolf_lemma2b_exact
+This is a short alias for
+`vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector`.
+Under the paper's hypotheses, every rank-one matrix `|φ⟩⟨ψ|` lies in the word
+span at the sharp bound `D² − D + 1`.
+Paper: arXiv:0909.5347, Lemma 2(b); Wolf, Chapter 6.
+-/theorem wolf_lemma2b_exact
     [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)

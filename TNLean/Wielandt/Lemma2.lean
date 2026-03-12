@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.Wielandt.Prop3
 import TNLean.Wielandt.EigenvectorSpreading
-import TNLean.Wielandt.Lemma2b
 
 /-!
 # Lemma 2(a) — paper-facing eigenvector spreading wrapper (arXiv:0909.5347)
@@ -41,15 +40,15 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Lemma 2(a)** (paper-facing wrapper): if `A` is normalized and primitive in
-the paper sense, and `φ` is an eigenvector of some `A i₀` with nonzero
-corresponding eigenvalue `μ`, then
-`vectorSpreadSpan A φ (D - 1) = ⊤`.
+/-- **Lemma 2(a)** (paper-facing wrapper).
 
-This is the exact fixed-length `H_{D-1}(A,φ) = ℂ^D` form appearing in the
-paper/Wolf statement. The proof goes through Proposition 3 to obtain
-`IsNormal A`, then uses the existing backend cumulative spreading theorem and
-its fixed-length conversion lemma. -/
+If `A` is normalized and primitive in the paper sense, and `φ` is a
+nonzero eigenvector of some `A i₀` with nonzero corresponding eigenvalue `μ`,
+then `vectorSpreadSpan A φ (D - 1) = ⊤`.
+
+This is the paper-faithful fixed-length conclusion `H_{D-1}(A, φ) = ℂ^D`.
+Paper: arXiv:0909.5347, Lemma 2(a); Wolf, Chapter 6.
+-/
 theorem vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)

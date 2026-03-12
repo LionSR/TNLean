@@ -4,14 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible
-import TNLean.Channel.PositiveMap
 import TNLean.Channel.Schwarz
 
-import Mathlib.Tactic.NoncommRing
-import Mathlib.LinearAlgebra.Matrix.ToLin
-import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
-import Mathlib.Data.Nat.Choose.Sum
 import Mathlib.Analysis.Normed.Algebra.Exponential
+import Mathlib.Tactic.NoncommRing
 
 /-!
 # Growth condition for irreducible CP maps (Wolf Theorem 6.2, item 2)
@@ -136,8 +132,7 @@ theorem ker_add_psd_right
     (hA : A.PosSemidef) (hB : B.PosSemidef)
     (v : Fin D → ℂ) (hv : (A + B) *ᵥ v = 0) :
     B *ᵥ v = 0 := by
-  rw [show A + B = B + A from add_comm A B] at hv
-  exact ker_add_psd_left hB hA v hv
+  exact ker_add_psd_left hB hA v (by simpa [add_comm] using hv)
 
 end KernelPSD
 
@@ -670,6 +665,26 @@ end OrthogonalTrace
 section Exponential
 
 open scoped Matrix.Norms.Frobenius
+
+noncomputable local instance :
+    SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+  Matrix.frobeniusSeminormedAddCommGroup
+
+noncomputable local instance :
+    NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+  Matrix.frobeniusNormedAddCommGroup
+
+noncomputable local instance :
+    NormedSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+  Matrix.frobeniusNormedSpace
+
+noncomputable local instance :
+    NormedRing (Matrix (Fin D) (Fin D) ℂ) :=
+  Matrix.frobeniusNormedRing
+
+noncomputable local instance :
+    NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+  Matrix.frobeniusNormedAlgebra
 
 private theorem isPositiveMap_smul_nonneg
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
