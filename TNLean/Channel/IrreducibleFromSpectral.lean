@@ -237,6 +237,7 @@ theorem hasSpectralProperties_of_irreducible_cp
   obtain ⟨ρ, r, hρ_pd, hr, hρ_eig⟩ :=
     exists_posDef_eigenvector_of_irreducible_cp E hCP hIrr hE
   have hρ_ne : ρ ≠ 0 := (Matrix.PosDef.isUnit hρ_pd).ne_zero
+  have hCP₀ : IsCPMap E := hCP
   obtain ⟨n, K, hK⟩ := hCP
   have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K :=
     LinearMap.ext fun X => by
@@ -276,7 +277,18 @@ theorem hasSpectralProperties_of_irreducible_cp
     have hcomplex : (r : ℂ) = (t : ℂ) := mul_right_cancel₀ htr_ne hscalar
     have hreal := congrArg Complex.re hcomplex
     simpa using hreal
-  refine ⟨{
+  have hunique :
+      ∀ τ : Matrix (Fin D) (Fin D) ℂ,
+        τ.PosSemidef → E τ = (r : ℂ) • τ → ∃ c : ℂ, τ = c • ρ := by
+    intro τ hτ_psd hτ_eig
+    exact posSemidef_eigenvector_unique_of_irreducible_cp E hCP₀ hIrr ρ τ r
+      hρ_pd.posSemidef hρ_ne hr hτ_psd hρ_eig hτ_eig
+  have hrad :
+      spectralRadius ℂ
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) =
+        ENNReal.ofReal r :=
+    spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp E hCP₀ hIrr ρ r hρ_pd hr hρ_eig
+  exact ⟨{
       n := n
       K := K
       map_eq := hE_eq
@@ -288,12 +300,8 @@ theorem hasSpectralProperties_of_irreducible_cp
       hr_pos := hr
       right_eig := hρ_eig
       left_eig := by simpa [hr_eq_t] using hσ_eig
-      unique_psd_eigenvector := by
-        intro τ hτ_psd hτ_eig
-        exact posSemidef_eigenvector_unique_of_irreducible_cp E hCP hIrr ρ τ r
-          hρ_pd.posSemidef hρ_ne hr hτ_psd hρ_eig hτ_eig
-      spectralRadius_eq :=
-        spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp E hCP hIrr ρ r hρ_pd hr hρ_eig }⟩
+      unique_psd_eigenvector := hunique
+      spectralRadius_eq := hrad }⟩
 
 /-! ## Channel lemma for the reverse implication -/
 
@@ -515,10 +523,10 @@ theorem isIrreducibleMap_of_hasSpectralProperties
     have hscaled' : S⁻¹ * E' τ * S⁻¹ = (↑r : ℂ)⁻¹ • E (S⁻¹ * τ * S⁻¹) := by
       calc
         S⁻¹ * E' τ * S⁻¹
-            = S⁻¹ * (((↑r : ℂ)⁻¹) • similarityMap (D := D) S⁻¹ E τ) * S⁻¹ := by
-                simp [hE'_def]
-        _ = (↑r : ℂ)⁻¹ • E (((S⁻¹ * S) * τ) * (S * S⁻¹)) := by
-              simp [similarityMap, hS_inv_inv, hS_inv_herm, Matrix.mul_assoc]
+            = S⁻¹ * (((↑r : ℂ)⁻¹) • (S * E (S⁻¹ * τ * S⁻¹) * S)) * S⁻¹ := by
+                simp [hE'_def, similarityMap, hS_inv_inv, hS_inv_herm, Matrix.mul_assoc]
+        _ = (↑r : ℂ)⁻¹ • ((S⁻¹ * S) * E (S⁻¹ * τ * S⁻¹) * (S * S⁻¹)) := by
+              simp [Matrix.mul_assoc]
         _ = (↑r : ℂ)⁻¹ • E (S⁻¹ * τ * S⁻¹) := by
               rw [hS_inv_mul, one_mul, hS_mul_inv, mul_one]
     have hscaled : (↑r : ℂ)⁻¹ • E (S⁻¹ * τ * S⁻¹) = S⁻¹ * τ * S⁻¹ := by
@@ -539,18 +547,33 @@ theorem isIrreducibleMap_of_hasSpectralProperties
   have hsim_back : similarityMap (D := D) S E' = (↑r : ℂ)⁻¹ • E := by
     apply LinearMap.ext
     intro X
+    have hinner : S⁻¹ * (S * X * S) * S⁻¹ = X := by
+      calc
+        S⁻¹ * (S * X * S) * S⁻¹ = ((S⁻¹ * S) * X) * (S * S⁻¹) := by
+          simp [Matrix.mul_assoc]
+        _ = X := by
+          rw [hS_inv_mul, one_mul, hS_mul_inv, mul_one]
     calc
       similarityMap (D := D) S E' X
           = S⁻¹ * E' (S * X * S) * S⁻¹ := by
-              simp [similarityMap, hS_herm, hS_inv_herm]
-      _ = (↑r : ℂ)⁻¹ • E (((S⁻¹ * S) * X) * (S * S⁻¹)) := by
-            simp [hE'_def, similarityMap, hS_inv_herm, hS_inv_inv, Matrix.mul_assoc]
+              simp [similarityMap, hS_herm]
+      _ = S⁻¹ * (((↑r : ℂ)⁻¹) • (S * E (S⁻¹ * (S * X * S) * S⁻¹) * S)) * S⁻¹ := by
+            rw [hE'_def]
+            simp [similarityMap, hS_inv_inv, hS_inv_herm, Matrix.mul_assoc]
+      _ = S⁻¹ * (((↑r : ℂ)⁻¹) • (S * E X * S)) * S⁻¹ := by rw [hinner]
       _ = (↑r : ℂ)⁻¹ • E X := by
-            rw [hS_inv_mul, one_mul, hS_mul_inv, mul_one]
+            calc
+              S⁻¹ * (((↑r : ℂ)⁻¹) • (S * E X * S)) * S⁻¹
+                  = (↑r : ℂ)⁻¹ • (S⁻¹ * (S * E X * S) * S⁻¹) := by
+                      simp [Matrix.mul_assoc]
+              _ = (↑r : ℂ)⁻¹ • (((S⁻¹ * S) * E X) * (S * S⁻¹)) := by
+                    simp [Matrix.mul_assoc]
+              _ = (↑r : ℂ)⁻¹ • E X := by
+                    rw [hS_inv_mul, one_mul, hS_mul_inv, mul_one]
   have hE_back : E = (↑r : ℂ) • similarityMap (D := D) S E' := by
     rw [hsim_back]
     ext X
-    simp [LinearMap.smul_apply, smul_smul, hr.ne']
+    simp [smul_smul, hr.ne']
   rw [hE_back]
   exact isIrreducibleMap_full_similarity (D := D) hr hS_det.ne_zero hIrr_E'
 
