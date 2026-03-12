@@ -1,10 +1,9 @@
 \chapter{The Single-Block Fundamental Theorem}\label{ch:single}
 
-This chapter proves that if an injective MPV tensor~$A$ generates
+This chapter proves that if an injective MPS tensor~$A$ generates
 the same MPV family as another tensor~$B$ of the same bond dimension,
-then $A$ and $B$ are gauge equivalent. The formalization still uses the
-historical name \texttt{MPSTensor} for these tensors.
-The proof recorded here is purely algebraic and does not use the later
+then $A$ and $B$ are gauge equivalent.
+The proof is purely algebraic and does not use the later
 overlap or normal-form reductions.
 The trace-pairing maps introduced below are auxiliary devices attached
 to the chosen generating families $\{A^i\}$ and $\{B^i\}$; they serve
@@ -127,9 +126,11 @@ transform.
 \begin{theorem}[Multiplicativity of the linear extension]\label{thm:linear_ext_mul}
     \lean{MPSTensor.linearExtension_mul}
     \leanok
-    \uses{thm:linear_ext}
-    The linear extension $T$ from Theorem~\ref{thm:linear_ext}
-    is multiplicative: $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$.
+    \uses{def:injective, def:same_mpv}
+    If $A$ is injective and $A$, $B$ generate the same MPV family,
+    and $T : \MN{D} \to \MN{D}$ is the unique linear map satisfying
+    $T(A^i) = B^i$ for all~$i$, then
+    $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$.
 \end{theorem}
 
 \begin{proof}

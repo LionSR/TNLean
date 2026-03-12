@@ -1,19 +1,11 @@
-\chapter{BNT and Full Assembly}\label{ch:assembly}
+\chapter{Basis Normal Tensors}\label{ch:bnt}
 
 This chapter introduces \emph{Basis Normal Tensors} (BNT),
-records the overlap-based permutation rigidity theorems used in the
-final assembly, and states the strongest assembled Fundamental Theorem
-results presently available.
-The proportional theorems still take explicit coefficient-convergence
-input in both the block-injective CF-BNT setting and the normal-canonical
-CF-BNT setting, while the equal-MPV theorem is the common-block-structure
-specialization rather than the full paper-level statement.
-The results combine the canonical form reduction
-(Chapter~\ref{ch:canonical}),
-block separation (Chapter~\ref{ch:block_perm}),
-spectral gap (Chapter~\ref{ch:spectral}),
-and BNT permutation arguments. The Newton--Girard identities included
-later are auxiliary tools for possible weight-matching refinements.
+the canonical-form variants that separate distinct blocks, the
+cross-overlap decay theorem, and the overlap-based permutation
+rigidity arguments used in the final assembly.
+The coefficient-convergence and Newton--Girard auxiliary
+results are also collected here.
 The main references are
 \cite{PerezGarcia2007Matrix} and~\cite{Cirac2021Matrix}.
 
@@ -92,7 +84,7 @@ The main references are
 
 \begin{proof}
 		\leanok
-		\uses{thm:mpv_decomposition, thm:cross_overlap_zero}
+		\uses{def:normal, thm:mpv_decomposition, thm:cross_overlap_zero}
 		Each block is injective, hence $1$-block injective and therefore
 		normal in the sense of Definition~\ref{def:normal}.
 		The MPV decomposition (Theorem~\ref{thm:mpv_decomposition}) gives
@@ -102,24 +94,15 @@ The main references are
 		hypothesis, and off-diagonal entries tend to $0$ by
 		Theorem~\ref{thm:cross_overlap_zero}.
 		Hence $G(N)$ is eventually invertible, so the block MPV vectors are
-		eventually linearly independent. This is the block-injective route;
-		Remark~\ref{rem:normalcf_bnt_gap} explains the corresponding gap for
-		the normal-canonical companion Definition~\ref{def:normal_cf_bnt}.
+		eventually linearly independent.
 \end{proof}
 
 \begin{remark}[The normality gap for normal-CF-BNT]\label{rem:normalcf_bnt_gap}
-		Definition~\ref{def:normal_cf_bnt} uses ``normal'' in the paper's normal-canonical sense,
+		Definition~\ref{def:normal_cf_bnt} uses ``normal'' in the normal-canonical sense,
 		not the eventual block-injective predicate of
 		Definition~\ref{def:normal}. Therefore normal-CF-BNT data do not by
 		themselves yield the BNT predicate of Definition~\ref{def:bnt}; one
-		still needs eventual block injectivity for each block. The missing
-		bridge is the aperiodicity step from primitive blocked TP data to
-		eventual block injectivity:
-		$\mathrm{IsPrimitive} \Rightarrow \Id \in S_1(A)$ has not yet been
-		formalized.
-		This gap does not affect the NT proportional FT chain below, which uses
-		only the MPV spanning and eventual linear-independence consequences of
-		normal-CF-BNT data.
+		still needs eventual block injectivity for each block.
 \end{remark}
 
 \section{BNT permutation rigidity}
@@ -168,9 +151,8 @@ The main references are
 	A nonzero mixed overlap cannot decay, so the spectral gap upgrades it
 	to gauge-phase equivalence of the matched blocks.
 
-	This is the overlap-and-decomposition form of the permutation step used here.
-	It corresponds to the permutation step in
-	\cite[Theorem~4.1]{Cirac2021Matrix}.
+	This is the overlap-and-decomposition form of the permutation step
+	corresponding to \cite[Theorem~4.1]{Cirac2021Matrix}.
 \end{proof}
 
 \begin{theorem}[BNT permutation --- overlap-orthonormal case]\label{thm:bnt_perm_simple}
@@ -192,12 +174,12 @@ The main references are
 		The overlap matrix $O_{A_j B_k}(N)$ converges to a
 		matrix with at most one nonzero entry per row/column
 		(by the spectral gap).
-		Thus the overlap orthonormality hypotheses are
+		The overlap orthonormality hypotheses are
 		assumed directly, rather than derived from
 		proportional MPVs together with coefficient convergence.
-		The NT variant uses the same matching argument with the
-		irreducible-TP overlap decay theorems in place of the injective ones,
-		and underlies the normal-CF-BNT proportional theorem below.
+		The irreducible-TP variant uses the same matching argument
+		with the irreducible-TP overlap decay theorems in place of
+		the injective ones.
 \end{proof}
 
 \section{Coefficient convergence}
@@ -223,7 +205,7 @@ The main references are
 	$|\mu_0| > |\mu_k|$ for $k \ge 1$.
 	The oscillatory case
 	$\sum_q \mu_{j,q}^N$ with $|\mu_{j,q}| = 1$
-	is treated separately in the full paper and is not formalized here.
+	is treated separately in the full paper.
 \end{remark}
 
 \section{Newton--Girard identities}
@@ -263,156 +245,4 @@ The main references are
 	By Theorem~\ref{thm:newton_girard}, the characteristic
 	polynomials agree: $\prod_i (X - \alpha_i) = \prod_i (X - \beta_i)$.
 	Extracting roots gives multiset equality.
-\end{proof}
-
-\section{Primitivity bridge}
-
-\begin{definition}[Primitive MPS tensor]\label{def:primitive_mps}
-	\lean{MPSTensor.IsPrimitiveMPS}
-	\leanok
-	\uses{def:mps_tensor, def:transfer_map, def:fixed_point_proj}
-	Assume $D > 0$.
-	A tensor $A$ together with a matrix $\rho \in \MN{D}$ is
-	\emph{primitive} if
-	\[
-		\sum_i (A^i)^\dagger A^i = \Id,
-		\qquad \rho \ge 0,
-		\qquad \rho \neq 0,
-		\qquad \E_A(\rho) = \rho,
-	\]
-	and, if $P$ is the fixed-point projection associated to $\rho$,
-	then $\rho_{\mathrm{spec}}(\E_A - P) < 1$.
-	When the choice of $\rho$ is irrelevant, we simply say that $A$
-	is a primitive MPS tensor.
-\end{definition}
-
-\begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
-	\lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
-	\leanok
-	\uses{def:primitive_mps, def:mpv_overlap}
-	If $A$ is a primitive MPS tensor, then
-	$O_{AA}(N) \to 1$.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:primitive_overlap}
-	Immediate from the primitive overlap convergence
-	(Theorem~\ref{thm:primitive_overlap}).
-\end{proof}
-
-\section{Full assembly}
-
-\begin{theorem}[Fundamental Theorem --- proportional MPV case]\label{thm:ft_proportional}
-	\lean{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT}
-	\leanok
-	\uses{def:cf_bnt, def:gauge_phase_equiv}
-	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
-	equipped with CF-BNT families $(\mu_j^A, A_j)_{j=1}^{r_A}$ and
-	$(\mu_k^B, B_k)_{k=1}^{r_B}$.
-	Assume one is given coefficient arrays $a_{N,j}$, $b_{N,k}$ and
-	nonzero limits $a_j^\infty$, $b_k^\infty$, $c^\infty$ such that
-	\[
-		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= \sum_{j=1}^{r_A} a_{N,j} V^{(N)}(A_j)_\sigma,
-		\qquad
-		V^{(N)}(B_{\mathrm{tot}})_\sigma
-		= \sum_{k=1}^{r_B} b_{N,k} V^{(N)}(B_k)_\sigma,
-	\]
-	with $a_{N,j} \to a_j^\infty \neq 0$ and
-	$b_{N,k} \to b_k^\infty \neq 0$, and suppose also that
-	\[
-		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
-	\]
-	for a sequence $c_N \to c^\infty \neq 0$.
-	Then $r_A = r_B$, and there is a permutation $\pi$ such that
-	$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
-	$B_{\pi(j)}$ for each~$j$.
-	At present these coefficient and convergence data are taken as
-	hypotheses; they are not yet derived automatically from arbitrary
-	input tensors.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{thm:cross_overlap_zero, thm:bnt_perm_prop}
-	Apply Theorem~\ref{thm:bnt_perm_prop} to the two CF-BNT
-	decompositions.
-	The CF-BNT hypotheses provide injectivity, TP normalization,
-	diagonal overlap limits, and off-diagonal decay via
-	Theorem~\ref{thm:cross_overlap_zero}.
-	With the supplied decomposition identities and convergence
-	hypotheses, Theorem~\ref{thm:bnt_perm_prop} yields the equality of
-	block counts, the permutation, and the per-block gauge-phase
-	equivalence.
-\end{proof}
-
-\begin{theorem}[Fundamental Theorem --- proportional MPV case, NT route]\label{thm:ft_proportional_nt}
-		\lean{MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT}\leanok
-		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
-		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
-		equipped with normal-CF-BNT families $(\mu_j^A, A_j)_{j=1}^{r_A}$ and
-		$(\mu_k^B, B_k)_{k=1}^{r_B}$.
-		Assume one is given coefficient arrays $a_{N,j}$, $b_{N,k}$ and
-		nonzero limits $a_j^\infty$, $b_k^\infty$, $c^\infty$ such that
-		\[
-			V^{(N)}(A_{\mathrm{tot}})_\sigma
-			= \sum_{j=1}^{r_A} a_{N,j} V^{(N)}(A_j)_\sigma,
-			\qquad
-			V^{(N)}(B_{\mathrm{tot}})_\sigma
-			= \sum_{k=1}^{r_B} b_{N,k} V^{(N)}(B_k)_\sigma,
-		\]
-		with $a_{N,j} \to a_j^\infty \neq 0$ and
-		$b_{N,k} \to b_k^\infty \neq 0$, and suppose also that
-		\[
-			V^{(N)}(A_{\mathrm{tot}})_\sigma
-			= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
-		\]
-		for a sequence $c_N \to c^\infty \neq 0$.
-		Then $r_A = r_B$, and there is a permutation $\pi$ such that
-		$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
-		$B_{\pi(j)}$ for each~$j$.
-\end{theorem}
-
-\begin{proof}\leanok
-		\uses{thm:ncf_overlap_tendsto_one, rem:normalcf_bnt_gap}
-		The proof uses the proportional theorem for separated
-		normal-CF-BNT data rather than first passing through a full BNT
-		decomposition.
-		Normal-CF-BNT data provide irreducibility, TP normalization,
-		primitive self-overlap convergence via
-		Theorem~\ref{thm:ncf_overlap_tendsto_one}, and the same
-		off-diagonal decay mechanism as in the injective CF-BNT case.
-		Hence the same matching argument yields the block permutation and
-		gauge-phase equivalence.
-		Remark~\ref{rem:normalcf_bnt_gap} explains why the argument stops at
-		this separated form.
-\end{proof}
-
-\begin{theorem}[Fundamental Theorem --- equal MPV case]\label{thm:ft_equal}
-	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
-	\leanok
-	\uses{def:cf_bnt, def:gauge_equiv}
-	Fix a common block structure: the same number of blocks~$r$,
-	the same bond dimensions $(D_k)_{k=1}^r$, and the same weights
-	$(\mu_k)_{k=1}^r$.
-	Let $(\mu_k, A_k)$ and $(\mu_k, B_k)$ be two CF-BNT families on
-	this common data.
-	If the block-diagonal tensors
-	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
-	generate the same MPV family, then each pair $(A_k, B_k)$ is
-	gauge equivalent, and hence the assembled block-diagonal tensors
-	are gauge equivalent.
-	This is the common-block-structure equal-MPV theorem proved here;
-	it does not yet cover independently specified block data.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{thm:ft_canonical}
-	Forget the extra BNT-separation field and retain only the
-	underlying canonical-form data.
-	The canonical-form fundamental theorem
-	(Theorem~\ref{thm:ft_canonical}) then applies directly to this
-	common $(r, D_k, \mu_k)$ structure, yielding per-block gauge
-	equivalence and hence global gauge equivalence.
 \end{proof}

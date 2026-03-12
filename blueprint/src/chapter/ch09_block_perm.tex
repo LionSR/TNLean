@@ -90,11 +90,10 @@ and~\cite{Cirac2021Matrix}.
 \begin{definition}[Product algebra automorphism]\label{def:pi_alg_equiv}
     \lean{MPSTensor.piAlgEquiv}
     \leanok
-    \uses{def:per_block_linear_ext, lem:linear_map_to_alg}
-    The per-block linear extensions $T_k$ are promoted to
-    $\C$-algebra homomorphisms
-    (Lemma~\ref{lem:linear_map_to_alg}) and assembled into
-    a single $\C$-algebra automorphism
+    \uses{def:per_block_linear_ext}
+    The per-block linear extensions $T_k$ are $\C$-algebra homomorphisms,
+    and assembling them blockwise gives a single
+    $\C$-algebra automorphism
     $T:\prod_k\MN{D_k}\xrightarrow{\sim}\prod_k\MN{D_k}$.
 \end{definition}
 
@@ -124,7 +123,7 @@ and~\cite{Cirac2021Matrix}.
     permutation + per-block inner automorphisms.
 \end{proof}
 
-\begin{theorem}[Per-block SameMPV gives global gauge equivalence]\label{thm:per_block_gauge}
+\begin{theorem}[Per-block same MPV gives global gauge equivalence]\label{thm:per_block_gauge}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
     \uses{def:injective, def:gauge_equiv, def:tensor_from_blocks}
@@ -277,7 +276,7 @@ and~\cite{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge}
+    \uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge, thm:block_sep}
     The proof follows the same peeling argument as
     Theorem~\ref{thm:block_sep}. Theorem~\ref{thm:ncf_overlap_tendsto_one}
     replaces the explicit self-overlap hypothesis on the leading block, and

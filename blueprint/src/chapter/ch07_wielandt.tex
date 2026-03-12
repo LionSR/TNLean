@@ -383,7 +383,7 @@ The results follow~\cite{Sanz2010Quantum}.
     cumulative-span bound.
     The sharper explicit blocking-length estimates from
     \cite{Sanz2010Quantum} --- at most $D^4$ for injectivity and at
-    most $3D^5$ for the biCF form --- are not currently formalized here.
+    most $3D^5$ for the bi-canonical form --- are not proved here.
 \end{remark}
 
 \section{Lemma~2(b): fixed-length matrix spanning}\label{sec:lemma2b}
@@ -394,8 +394,6 @@ eigenvector spreading gives a cumulative vector span $K_{D-1}(A,\varphi) = \C^D$
 The next stage is to pass to a span at one fixed length,
 namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
 (i.e.\ word products of \emph{exactly} one length span all matrices).
-The results below first formalize the assembly step and then derive a
-blocked fixed-length spanning theorem.
 
 \begin{definition}[Fixed-length vector span]\label{def:vector_spread_span}
     \lean{MPSTensor.vectorSpreadSpan}
@@ -506,14 +504,14 @@ blocked fixed-length spanning theorem.
 
 \begin{remark}[Relation with Lemma~2(b)]\label{rem:lemma2b_status}\leanok
     In~\cite{Sanz2010Quantum}, Lemma~2(b) combines a rank-one
-    extraction statement for fixed-length spans with an assembly
+    extraction for fixed-length spans with an assembly
     argument turning fixed-length vector spanning into fixed-length
     matrix spanning.
-    Theorem~\ref{thm:lemma2b_assembly} formalizes the second step.
+    Theorem~\ref{thm:lemma2b_assembly} is the second step.
     Theorem~\ref{thm:rankone_extraction_blockTensor} supplies the
     rank-one input in blocked form, and
-    Theorem~\ref{thm:wielandt_lemma2b} then derives a blocked,
-    fixed-length word-span saturation result from that pipeline.
+    Theorem~\ref{thm:wielandt_lemma2b} then gives a blocked,
+    fixed-length word-span saturation result.
 \end{remark}
 
 \section{Blocked tensor and rectangular span}\label{sec:rectangular_span}
@@ -683,6 +681,41 @@ used to produce rank-one elements.
     Thus the fixed-length span of $A$ is reached through a blocked
     auxiliary tensor rather than by a direct unblocked argument.
 \end{remark}
+
+\section{Primitive MPS tensors}
+
+\begin{definition}[Primitive MPS tensor]\label{def:primitive_mps}
+	\lean{MPSTensor.IsPrimitiveMPS}
+	\leanok
+	\uses{def:mps_tensor, def:transfer_map, def:fixed_point_proj}
+	Assume $D > 0$.
+	A tensor $A$ together with a matrix $\rho \in \MN{D}$ is
+	\emph{primitive} if
+	\[
+		\sum_i (A^i)^\dagger A^i = \Id,
+		\qquad \rho \ge 0,
+		\qquad \rho \neq 0,
+		\qquad \E_A(\rho) = \rho,
+	\]
+	and, if $P$ is the fixed-point projection associated to $\rho$,
+	then $\rho_{\mathrm{spec}}(\E_A - P) < 1$.
+	When the choice of $\rho$ is irrelevant, we simply say that $A$
+	is a primitive MPS tensor.
+\end{definition}
+
+\begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
+	\lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
+	\leanok
+	\uses{def:primitive_mps, def:mpv_overlap}
+	If $A$ is a primitive MPS tensor, then
+	$O_{AA}(N) \to 1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:primitive_overlap}
+	Immediate from the self-overlap convergence under a
+	complementary spectral gap
+	(Theorem~\ref{thm:primitive_overlap}).
+\end{proof}
 
 \section{Primitivity and normality}
 
@@ -969,8 +1002,7 @@ The gap is closed by an aperiodicity hypothesis.
     \label{thm:primitive_posDef_aperiodic_normal}
     \lean{MPSTensor.isNormal_of_isPrimitiveMPS_of_posDef}
     \leanok
-    \uses{def:primitive_mps, thm:primitive_implies_irreducible,
-          thm:irred_tensor_aperiodic_normal}
+    \uses{def:primitive_mps, def:normal, def:word_span}
     If $A$ is a primitive MPS tensor with fixed point $\rho$,
     $\rho$ is positive definite, and $\Id \in S_1(A)$, then $A$ is normal.
 \end{theorem}
@@ -986,7 +1018,7 @@ The gap is closed by an aperiodicity hypothesis.
     The aperiodicity results in \S\ref{sec:cumspan_to_wordspan} are needed only for the
     block-injective route through Definition~\ref{def:normal}, where one upgrades cumulative
     spanning to eventual block injectivity. The normal-canonical route used later in
-    Chapters~\ref{ch:canonical}--\ref{ch:assembly} does not pass through this step:
+    Chapters~\ref{ch:canonical}--\ref{ch:bnt} does not pass through this step:
     it works directly with irreducible TP-normalized blocks whose blocked transfer maps
     are primitive and, once the corresponding weighted block data are available,
     packages them as normal canonical form in the sense of

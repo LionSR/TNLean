@@ -1,0 +1,124 @@
+\chapter{Full Assembly}\label{ch:assembly}
+
+This chapter states the assembled Fundamental Theorem results.
+The proportional-MPV theorems take explicit coefficient-convergence
+input in both the block-injective CF-BNT setting and the normal-canonical
+CF-BNT setting. The equal-MPV theorem is the common-block-structure
+specialization.
+The results combine the canonical form reduction
+(Chapter~\ref{ch:canonical}),
+block separation (Chapter~\ref{ch:block_perm}),
+spectral gap (Chapter~\ref{ch:spectral}),
+and the BNT permutation arguments of Chapter~\ref{ch:bnt}.
+
+\section{Proportional Fundamental Theorem}
+
+\begin{theorem}[Fundamental Theorem --- proportional MPV case]\label{thm:ft_proportional}
+	\lean{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, def:gauge_phase_equiv}
+	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
+	equipped with CF-BNT families $(\mu_j^A, A_j)_{j=1}^{r_A}$ and
+	$(\mu_k^B, B_k)_{k=1}^{r_B}$.
+	Assume one is given coefficient arrays $a_{N,j}$, $b_{N,k}$ and
+	nonzero limits $a_j^\infty$, $b_k^\infty$, $c^\infty$ such that
+	\[
+		V^{(N)}(A_{\mathrm{tot}})_\sigma
+		= \sum_{j=1}^{r_A} a_{N,j} V^{(N)}(A_j)_\sigma,
+		\qquad
+		V^{(N)}(B_{\mathrm{tot}})_\sigma
+		= \sum_{k=1}^{r_B} b_{N,k} V^{(N)}(B_k)_\sigma,
+	\]
+	with $a_{N,j} \to a_j^\infty \neq 0$ and
+	$b_{N,k} \to b_k^\infty \neq 0$, and suppose also that
+	\[
+		V^{(N)}(A_{\mathrm{tot}})_\sigma
+		= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
+	\]
+	for a sequence $c_N \to c^\infty \neq 0$.
+	Then $r_A = r_B$, and there is a permutation $\pi$ such that
+	$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
+	$B_{\pi(j)}$ for each~$j$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:cross_overlap_zero, thm:bnt_perm_prop}
+	Apply Theorem~\ref{thm:bnt_perm_prop} to the two CF-BNT
+	decompositions.
+	The CF-BNT hypotheses provide injectivity, TP normalization,
+	diagonal overlap limits, and off-diagonal decay via
+	Theorem~\ref{thm:cross_overlap_zero}.
+	With the supplied decomposition identities and convergence
+	hypotheses, Theorem~\ref{thm:bnt_perm_prop} yields the equality of
+	block counts, the permutation, and the per-block gauge-phase
+	equivalence.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem --- proportional MPV case, NT route]\label{thm:ft_proportional_nt}
+		\lean{MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT}\leanok
+		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
+		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
+		equipped with normal-CF-BNT families $(\mu_j^A, A_j)_{j=1}^{r_A}$ and
+		$(\mu_k^B, B_k)_{k=1}^{r_B}$.
+		Assume one is given coefficient arrays $a_{N,j}$, $b_{N,k}$ and
+		nonzero limits $a_j^\infty$, $b_k^\infty$, $c^\infty$ such that
+		\[
+			V^{(N)}(A_{\mathrm{tot}})_\sigma
+			= \sum_{j=1}^{r_A} a_{N,j} V^{(N)}(A_j)_\sigma,
+			\qquad
+			V^{(N)}(B_{\mathrm{tot}})_\sigma
+			= \sum_{k=1}^{r_B} b_{N,k} V^{(N)}(B_k)_\sigma,
+		\]
+		with $a_{N,j} \to a_j^\infty \neq 0$ and
+		$b_{N,k} \to b_k^\infty \neq 0$, and suppose also that
+		\[
+			V^{(N)}(A_{\mathrm{tot}})_\sigma
+			= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
+		\]
+		for a sequence $c_N \to c^\infty \neq 0$.
+		Then $r_A = r_B$, and there is a permutation $\pi$ such that
+		$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
+		$B_{\pi(j)}$ for each~$j$.
+\end{theorem}
+
+\begin{proof}\leanok
+		\uses{thm:ncf_overlap_tendsto_one, rem:normalcf_bnt_gap}
+		Normal-CF-BNT data provide irreducibility, TP normalization,
+		primitive self-overlap convergence via
+		Theorem~\ref{thm:ncf_overlap_tendsto_one}, and the same
+		off-diagonal decay mechanism as in the injective CF-BNT case.
+		The same matching argument yields the block permutation and
+		gauge-phase equivalence.
+		Remark~\ref{rem:normalcf_bnt_gap} explains why the argument stops at
+		this separated form.
+\end{proof}
+
+\section{Equal-MPV Fundamental Theorem}
+
+\begin{theorem}[Fundamental Theorem --- equal MPV case]\label{thm:ft_equal}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, def:gauge_equiv}
+	Fix a common block structure: the same number of blocks~$r$,
+	the same bond dimensions $(D_k)_{k=1}^r$, and the same weights
+	$(\mu_k)_{k=1}^r$.
+	Let $(\mu_k, A_k)$ and $(\mu_k, B_k)$ be two CF-BNT families on
+	this common data.
+	If the block-diagonal tensors
+	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
+	generate the same MPV family, then each pair $(A_k, B_k)$ is
+	gauge equivalent, and hence the assembled block-diagonal tensors
+	are gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:ft_canonical}
+	Forget the extra BNT-separation field and retain only the
+	underlying canonical-form data.
+	The canonical-form fundamental theorem
+	(Theorem~\ref{thm:ft_canonical}) then applies directly to this
+	common $(r, D_k, \mu_k)$ structure, yielding per-block gauge
+	equivalence and hence global gauge equivalence.
+\end{proof}
