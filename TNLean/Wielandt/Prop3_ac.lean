@@ -1281,15 +1281,19 @@ theorem isChannelPrimitive_of_isPrimitivePaper [NeZero D]
 
 If the MPS tensor `A` is paper-primitive (`IsPrimitivePaper A`) and normalized
 (`∑ Aᵢ† Aᵢ = 1`), then it is strongly irreducible: its transfer map `E_A` has
-a positive-definite fixed point and peripheral spectrum `{1}`.
+a positive-definite fixed point, peripheral spectrum `{1}`, and is irreducible
+(no nontrivial invariant projections).
 
-**Proof**: Combine three ingredients already proved in this file:
+**Proof**: Combine four ingredients already proved in this file / its imports:
 1. The channel `E_A` has a nonzero PSD fixed point (quantum channel fixed-point
    existence).
 2. Paper-primitivity upgrades this PSD fixed point to PosDef
    (`posDef_fixedPoint_of_isPrimitivePaper`).
 3. Paper-primitivity implies channel primitivity
    (`isChannelPrimitive_of_isPrimitivePaper`).
+4. Paper-primitivity implies `IsIrreducibleTensor`, which lifts to
+   `IsIrreducibleMap` on the transfer map
+   (`isIrreducibleCP_transferMap_of_isIrreducibleTensor`).
 
 Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347.
 This is the full paper-facing (a)→(c) direction. -/
@@ -1310,8 +1314,12 @@ theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
   -- Step 4: Get channel primitivity
   have hCPrim : IsChannelPrimitive A :=
     isChannelPrimitive_of_isPrimitivePaper A hNorm ⟨q, hq⟩
-  -- Step 5: Package into IsStronglyIrreduciblePaper
-  exact isStronglyIrreduciblePaper_of ρ hρ_pd hρ_fix hCPrim
+  -- Step 5: Get irreducibility of the transfer map
+  have hIrr : IsIrreducibleMap E :=
+    isIrreducibleCP_transferMap_of_isIrreducibleTensor A
+      (isIrreducibleTensor_of_isPrimitivePaper A ⟨q, hq⟩)
+  -- Step 6: Package into IsStronglyIrreduciblePaper
+  exact isStronglyIrreduciblePaper_of ρ hρ_pd hρ_fix hCPrim hIrr
 
 end Assembly
 

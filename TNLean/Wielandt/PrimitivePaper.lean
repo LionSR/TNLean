@@ -164,8 +164,13 @@ theorem isChannelPrimitive_iff (A : MPSTensor d D) :
 /-- **Strong irreducibility** (Proposition 3(c) of arXiv:0909.5347):
 the transfer map `E_A` is strongly irreducible if it has:
 
-1. A positive-definite fixed point `ρ > 0`, and
-2. Unique peripheral eigenvalue: `peripheralEigenvalues(E_A) = {1}`.
+1. A positive-definite fixed point `ρ > 0`,
+2. Unique peripheral eigenvalue: `peripheralEigenvalues(E_A) = {1}`, and
+3. Irreducibility: no nontrivial invariant projection for `E_A`.
+
+Conditions (1) and (3) together force the eigenvalue-1 eigenspace to be
+one-dimensional (spanned by `ρ`), which is essential for the (c)→(b) direction
+of Proposition 3.
 
 This corresponds to Wolf Ch6 Theorem 6.7 condition (3): the channel is
 irreducible and aperiodic, with the irreducibility giving `ρ > 0` (via the
@@ -179,12 +184,16 @@ point is automatically PosDef, so the two notions coincide in that case.
 
 **Paper**: "E_A is strongly irreducible ⟺ 1 is the unique eigenvalue of E_A
 with modulus 1, and the corresponding eigenvector ρ is positive definite."
-(arXiv:0909.5347, Proposition 3(c)) -/
+(arXiv:0909.5347, Proposition 3(c))
+
+The `IsIrreducibleMap` conjunct formalises the paper's use of "THE corresponding
+eigenvector", which implicitly asserts uniqueness of the fixed-point space. -/
 def IsStronglyIrreduciblePaper (A : MPSTensor d D) : Prop :=
   ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
     ρ.PosDef ∧
     transferMap (d := d) (D := D) A ρ = ρ ∧
-    IsChannelPrimitive A
+    IsChannelPrimitive A ∧
+    IsIrreducibleMap (transferMap (d := d) (D := D) A)
 
 /-- Constructor for `IsStronglyIrreduciblePaper` from separate hypotheses. -/
 theorem isStronglyIrreduciblePaper_of
@@ -192,24 +201,32 @@ theorem isStronglyIrreduciblePaper_of
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hpd : ρ.PosDef)
     (hfix : transferMap (d := d) (D := D) A ρ = ρ)
-    (hprim : IsChannelPrimitive A) :
+    (hprim : IsChannelPrimitive A)
+    (hirr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
     IsStronglyIrreduciblePaper A :=
-  ⟨ρ, hpd, hfix, hprim⟩
+  ⟨ρ, hpd, hfix, hprim, hirr⟩
 
 /-- Extract the positive-definite fixed point from strong irreducibility. -/
 theorem IsStronglyIrreduciblePaper.posDef_fixedPoint
     {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       ρ.PosDef ∧ transferMap (d := d) (D := D) A ρ = ρ := by
-  obtain ⟨ρ, hpd, hfix, _⟩ := h
+  obtain ⟨ρ, hpd, hfix, _, _⟩ := h
   exact ⟨ρ, hpd, hfix⟩
 
 /-- Strong irreducibility implies channel primitivity. -/
 theorem IsStronglyIrreduciblePaper.isChannelPrimitive
     {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
     IsChannelPrimitive A := by
-  obtain ⟨_, _, _, hprim⟩ := h
+  obtain ⟨_, _, _, hprim, _⟩ := h
   exact hprim
+
+/-- Strong irreducibility implies irreducibility of the transfer map. -/
+theorem IsStronglyIrreduciblePaper.isIrreducibleMap
+    {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
+    IsIrreducibleMap (transferMap (d := d) (D := D) A) := by
+  obtain ⟨_, _, _, _, hirr⟩ := h
+  exact hirr
 
 /-- Strong irreducibility implies the peripheral spectrum is `{1}`. -/
 theorem IsStronglyIrreduciblePaper.peripheralEigenvalues_eq
