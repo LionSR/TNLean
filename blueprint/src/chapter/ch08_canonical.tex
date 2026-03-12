@@ -6,11 +6,13 @@ The block-injective route aims at injective TP-normalized blocks and the
 canonical form predicate of Chapter~\ref{ch:block_perm}. The normal-canonical
 route packages a weighted family of irreducible TP-normalized blocks with
 primitive transfer maps and pairwise distinct nonzero weight moduli, in the
-sense of \cite{Cirac2017MPDO_AnnPhys}. What remains is the passage from an
-arbitrary tensor to such weighted primitive data. The reduction draws on
-\cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix}, and the
-positive-map spectral theory of~\cite[Ch.~6]{Wolf2012Quantum}
-(especially Thms.~6.2--6.5 for irreducibility and PF eigenvectors).
+sense of \cite{Cirac2017MPDO_AnnPhys}.
+The Perron--Frobenius eigenvector existence and TP-gauge construction
+are in Chapter~\ref{ch:qpf}; this chapter uses them to produce
+CFII data and the normal canonical form packaging.
+The reduction draws on
+\cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
+and~\cite[Ch.~6]{Wolf2012Quantum}.
 
 \section{Block-diagonal assembly}
 
@@ -43,7 +45,7 @@ positive-map spectral theory of~\cite[Ch.~6]{Wolf2012Quantum}
 	(Theorem~\ref{thm:ft_single}) to each block independently.
 \end{proof}
 
-\begin{theorem}[Per-block SameMPV implies global SameMPV]\label{thm:block_to_global_mpv}
+\begin{theorem}[Per-block same MPV implies global same MPV]\label{thm:block_to_global_mpv}
 	\lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
 	\leanok
 	\uses{def:tensor_from_blocks, def:same_mpv}
@@ -137,7 +139,7 @@ positive-map spectral theory of~\cite[Ch.~6]{Wolf2012Quantum}
 
 \section{Invariant subspace decomposition}
 
-\begin{theorem}[Unitary conjugation preserves SameMPV]\label{thm:samempv_unitary}
+\begin{theorem}[Unitary conjugation preserves the MPV family]\label{thm:samempv_unitary}
 	\lean{MPSTensor.sameMPV_conj_unitary}
 	\leanok
 	\uses{def:same_mpv}
@@ -473,6 +475,7 @@ removing it as an independent assumption.
 
 \begin{proof}
 	\leanok
+		\uses{def:is_canonical_form}
 	Each block is injective and TP-normalized. Peripheral-spectrum primitivity
 	therefore implies the spectral-gap primitive condition used in
 	Chapter~\ref{ch:spectral}, and hence the required self-overlap convergence.
@@ -652,169 +655,14 @@ construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	if that block has already been placed in TP gauge and $D_k > 0$,
 	one obtains CFII data (unitary, diagonal PD fixed point,
 	MPV preservation).
-	This theorem stops at the older CFII stage; it does not yet
-	produce the normal-canonical-form output of the normal-canonical route.
+	The conclusion is CFII data; the normal-canonical-form
+	packaging requires additional downstream steps.
 \end{theorem}
 
 \begin{proof}\leanok
 	\uses{thm:irred_decomp_pipeline, thm:CFII_data}
 	Combine Theorems~\ref{thm:irred_decomp_pipeline}
 	and~\ref{thm:CFII_data}.
-\end{proof}
-
-\section{Perron--Frobenius eigenvector existence}%
-\label{sec:pf_eigenvector}
-
-This section establishes the existence of a positive definite
-eigenvector for the adjoint transfer map of an irreducible MPS
-tensor, and uses it to construct a TP-gauge normalization.
-The PSD-eigenvector step corresponds to
-\cite[Thm.~6.5]{Wolf2012Quantum} (general positive maps) and
-\cite{Evans1978Spectral}; the upgrade to positive definiteness
-uses the irreducible-map theory of
-\cite[Thm.~6.3]{Wolf2012Quantum}. The TP-gauge application
-follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
-
-\begin{theorem}[PSD eigenvector for positive maps]%
-	\label{thm:pf_eigenvector_existence}
-	\lean{exists_posSemidef_eigenvector}
-	\leanok
-	\uses{def:positive_map}
-	Let $E : \MN{D} \to \MN{D}$ be a positive linear map with
-	$D > 0$, and assume that $E(\sigma) \neq 0$ for every nonzero
-	PSD matrix $\sigma$.
-	Then there exist a nonzero PSD matrix $\rho$ and a positive
-	real $r > 0$ such that $E(\rho) = r \rho$.
-
-	This is the finite-dimensional Perron--Frobenius theorem for
-	positive maps on matrix algebras.
-	The statement corresponds to
-	\cite[Thm.~6.5]{Wolf2012Quantum}
-	(spectral-radius eigenvalue with a PSD eigenvector for any
-	positive map); see also~\cite{Evans1978Spectral}.
-	The formal proof applies Brouwer's fixed-point theorem to the
-	normalization map $\rho \mapsto E(\rho) / \tr(E(\rho))$ on the
-	compact convex set of density matrices; the required
-	density-matrix Brouwer theorem is now itself formalized.
-\end{theorem}
-
-\begin{theorem}[Scaling preserves irreducibility]%
-	\label{thm:irred_map_smul}
-	\lean{isIrreducibleMap_smul}
-	\leanok
-	\uses{def:irreducible_cp}
-	If $E$ is an irreducible map and $c \neq 0$, then $c E$
-	is also irreducible.
-
-	This is the scalar special case ($C = \Id$) of
-	\cite[Prop.~6.6]{Wolf2012Quantum}.
-	The full similarity version --- $E'(X) = c \cdot C^{-1} E(C X C^\dagger)(C^\dagger)^{-1}$
-	is irreducible whenever $E$ is irreducible, $c > 0$, and $C$ is invertible ---
-	is now fully formalized; see Lemma~\ref{lem:similarity_irred}
-	in Chapter~\ref{ch:qpf}.
-\end{theorem}
-
-\begin{proof}\leanok
-	An invariant projection for $cE$ is an invariant projection
-	for $E$ (scale out the nonzero constant from the commutation
-	relation).
-\end{proof}
-
-\begin{theorem}[Adjoint transfer map is nonzero]%
-	\label{thm:adjoint_transfer_ne_zero}
-	\lean{MPSTensor.adjointTransferMap_ne_zero_of_nonzero}
-	\leanok
-	\uses{def:transfer_map}
-	If some Kraus operator $A^i \neq 0$, then the adjoint transfer
-	map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is nonzero.
-\end{theorem}
-
-\begin{proof}\leanok
-	If $\E_A^\dagger = 0$ then $\E_A^\dagger(\Id) = 0$,
-	so $\sum_i (A^i)^\dagger A^i = 0$.
-	Since each summand $(A^i)^\dagger A^i$ is PSD,
-	each $(A^i)^\dagger = 0$ and hence each $A^i = 0$.
-\end{proof}
-
-\begin{theorem}[PosDef adjoint eigenvector for irreducible tensors]%
-	\label{thm:posDef_adjoint_eigenvector}
-	\lean{MPSTensor.exists_posDef_adjoint_eigenvector}
-	\leanok
-	\uses{def:irreducible_tensor, def:transfer_map}
-	Let $A$ be an irreducible MPS tensor with $D > 0$
-	and some $A^i \neq 0$.
-	Then there exist a positive definite matrix~$\sigma$
-	and a positive real $r > 0$ such that
-	$\E_A^\dagger(\sigma) = r \sigma$.
-
-	This combines the general PF existence
-	(\cite[Thm.~6.5]{Wolf2012Quantum}, used in
-	Theorem~\ref{thm:pf_eigenvector_existence}) with the
-	irreducible upgrade to positive definiteness
-	(\cite[Thm.~6.3, item~2]{Wolf2012Quantum});
-	the application to the adjoint transfer map follows
-	\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:pf_eigenvector_existence, thm:irred_map_smul,
-		thm:adjoint_transfer_ne_zero, thm:psd_fp_pd_irred}
-	By Theorem~\ref{thm:adjoint_transfer_ne_zero},
-	$\E_A^\dagger \neq 0$.
-	Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
-	Kraus map, it is positive. Irreducibility of $A$ transfers to the
-	adjoint transfer map, and together with $\E_A^\dagger \neq 0$
-	this implies $\E_A^\dagger(\tau) \neq 0$ for every nonzero
-	PSD matrix $\tau$.
-	Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to
-	$\E_A^\dagger$, giving $\sigma_0 \ge 0$ (PSD, nonzero)
-	and $r > 0$ with $\E_A^\dagger(\sigma_0) = r \sigma_0$.
-	Rescale: set $T^i = r^{-1/2} (A^i)^\dagger$.
-	Then $\E_T(\sigma_0) = \sigma_0$,
-	and $\E_T$ is irreducible
-	(by Theorem~\ref{thm:irred_map_smul},
-	since irreducibility of $\E_A$ transfers to the
-	adjoint and is preserved under scaling).
-	Since $\E_T$ is irreducible with a PSD fixed point,
-	the PSD-to-PosDef upgrade
-	(Theorem~\ref{thm:psd_fp_pd_irred})
-	gives $\sigma_0$ positive definite.
-\end{proof}
-
-\begin{theorem}[TP-gauge existence for irreducible tensors]%
-	\label{thm:tp_data_irreducible}
-	\lean{MPSTensor.exists_tp_data_of_irreducible}
-	\leanok
-	\uses{def:irreducible_tensor}
-	Let $A$ be an irreducible MPS tensor with $D > 0$
-	and some $A^i \neq 0$.
-	Then there exist a positive real~$r$, a positive definite
-	matrix~$\sigma$, and a gauge-equivalent tensor~$B$ such that
-	\[
-		B^i = \sigma^{1/2} \cdot (r^{-1/2} A^i) \cdot \sigma^{-1/2}
-	\]
-	is trace-preserving:
-	$\sum_i (B^i)^\dagger B^i = \Id$.
-
-	This is the ``spectral rescaling $+$ TP gauge'' step of
-	\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}, now formalized using
-	Theorem~\ref{thm:posDef_adjoint_eigenvector} and the explicit TP
-	gauge construction. This similarity is generally non-unitary.
-	The subsequent CFII step applies an additional unitary conjugation
-	to this already TP-normalized representative.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:posDef_adjoint_eigenvector, thm:left_canonical_gauge}
-	By Theorem~\ref{thm:posDef_adjoint_eigenvector},
-	obtain $\sigma$ positive definite and $r > 0$ with
-	$\E_A^\dagger(\sigma) = r \sigma$.
-	Set $c = r^{-1/2}$ and $A'^i = c A^i$.
-	Then $\E_{A'}^\dagger(\sigma) = \sigma$.
-	By the TP gauge construction
-	(Theorem~\ref{thm:left_canonical_gauge}),
-	$B^i = \sigma^{1/2} A'^i \sigma^{-1/2}$
-	satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
 \end{proof}
 
 \begin{theorem}[Normal canonical form from a primitive block decomposition]%
@@ -850,25 +698,26 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 		Definition~\ref{def:is_normal_canonical_form}.
 \end{proof}
 
-\section{Status of the canonical form reduction}\label{sec:pipeline_status}
+\section{Open directions}\label{sec:pipeline_status}
 
-\begin{remark}[Status of the canonical form reduction]%
+\begin{remark}[Canonical form reduction: remaining steps]%
 		\label{rem:canonical_pipeline_gaps}
 		\notready
-		The Perron--Frobenius, TP-gauge, CFII, periodicity-removal, and
-		normal-canonical-form packaging steps are now in place. What remains is
-		the upstream passage from an arbitrary tensor to the primitive weighted
-		block data required by Theorem~\ref{thm:exists_normal_canonical_form}.
+		The Perron--Frobenius (Chapter~\ref{ch:qpf}), TP-gauge, CFII,
+		periodicity-removal, and normal-canonical-form packaging steps are
+		in place. The upstream passage from an arbitrary tensor to the
+		primitive weighted block data required by
+		Theorem~\ref{thm:exists_normal_canonical_form} remains open.
 
-		The block-injective route toward Definition~\ref{def:is_canonical_form}
-		still requires turning blocked primitive TP data into injective blocks and
-		eventual block injectivity.
+		On the block-injective side, turning blocked primitive TP data into
+		injective blocks and establishing eventual block injectivity are the
+		open steps toward Definition~\ref{def:is_canonical_form}.
 
 		On the normal-canonical side,
-		Theorem~\ref{thm:exists_normal_canonical_form} already provides the
+		Theorem~\ref{thm:exists_normal_canonical_form} provides the
 		downstream packaging once primitive weighted blocks with positive
-		dimensions and pairwise distinct nonzero weight moduli are given. The
-		remaining gap is that Theorem~\ref{thm:pipeline_handoff} stops earlier:
-		it gives only the CFII continuation after irreducible block
-		decomposition, not an end-to-end construction from arbitrary tensors.
+		dimensions and pairwise distinct nonzero weight moduli are given.
+		Theorem~\ref{thm:pipeline_handoff} gives the CFII continuation after
+		irreducible block decomposition; the end-to-end construction from
+		arbitrary tensors requires additional work.
 \end{remark}

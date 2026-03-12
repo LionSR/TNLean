@@ -172,6 +172,7 @@ mixed transfer power.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:overlap_trace}
     Expand the operator trace over the rectangular matrix-unit basis.
     Then apply the rectangular iterated-transfer formula and sum over
     the matrix-unit indices exactly as in
@@ -319,6 +320,7 @@ a block embedding of a mixed-transfer eigenvector.
 
 \begin{proof}
     \leanok
+    \uses{thm:eigenvalue_bound}
     The same word-expansion argument as in
     Theorem~\ref{thm:eigenvalue_bound} gives $|\mu| \le 1$
     for every eigenvalue of $F_{AB}^{\mathrm{rect}}$.

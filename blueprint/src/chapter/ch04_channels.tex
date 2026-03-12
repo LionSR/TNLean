@@ -474,9 +474,8 @@ then applied to transfer maps, which are Kraus maps by construction
         P(X) =  \frac{\tr(X)}{\tr(\rho)} \rho.
     \]
     This projects onto the span of $\rho$ along the kernel of the
-    trace functional. At this stage it is a projection onto the
-    chosen fixed point, not yet onto the full fixed-point space;
-    the uniqueness statement is proved later.
+    trace functional. When the fixed point is unique up to scaling,
+    this span is the full fixed-point space.
 \end{definition}
 
 \begin{theorem}[Power decomposition]\label{thm:pow_decomp}
@@ -651,60 +650,23 @@ then applied to transfer maps, which are Kraus maps by construction
 
 For a normalized MPS tensor, the transfer map is naturally trace-preserving but need
 not be unital. In general one should not expect a single gauge choice to make it
-both unital and trace-preserving. The next result therefore treats a special
-bi-canonical (unital + TP) case; the general MPS situation is handled in
-Subsection~\ref{subsec:peripheral_closure_fixedpoint}.
+both unital and trace-preserving.
 
-\begin{lemma}[Peripheral eigenvalues closed under powers]\label{lem:peripheral_closed_powers_irred_ds}
-    \lean{peripheralEigenvalues_pow_mem_of_irreducible_biCanonical}
-    \leanok
-    \uses{def:unital_kraus, def:tp_kraus, def:irreducible_cp}
-    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is both
-    unital and trace-preserving, and assume that $E$ is irreducible.
-    Then $\mathrm{peripheral}(E)$ is closed under powers:
-    if $\mu \in \mathrm{peripheral}(E)$ then $\mu^n \in \mathrm{peripheral}(E)$
-    for every $n \in \N$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:ks_peripheral, thm:psd_fp_pd_irred}
-    Let $E(X) = \mu X$ with $|\mu| = 1$.
-    The Kadison--Schwarz equality for peripheral eigenvectors
-    (Theorem~\ref{thm:ks_peripheral})
-    shows that $X^\dagger X$ is a positive semidefinite fixed point.
-    By irreducibility, this fixed point is positive definite
-    (Theorem~\ref{thm:psd_fp_pd_irred}), hence $X$ is invertible.
-    Multiplicative-domain powers then give $E(X^n) = \mu^n X^n$,
-    so $\mu^n$ is again peripheral.
-\end{proof}
-
-\begin{theorem}[Roots of unity for irreducible bi-canonical (unital + TP) maps]%
-    \label{thm:peripheral_roots_of_unity_irred_ds}
-    \lean{peripheral_isRootOfUnity_of_irreducible_biCanonical}
-    \leanok
-    \uses{def:unital_kraus, def:tp_kraus, def:irreducible_cp,
-          def:peripheral_eigenvalues}
-    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a Kraus map that is both
-    unital and trace-preserving, and assume that $E$ is irreducible.
-    Then every peripheral eigenvalue $\mu$ of $E$ is a root of unity:
-    there exists $p > 0$ with $\mu^p = 1$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:peripheral_closed_powers_irred_ds, thm:peripheral_powers}
-    Combine the closure-under-powers result
-    (Lemma~\ref{lem:peripheral_closed_powers_irred_ds})
-    with Theorem~\ref{thm:peripheral_powers}.
-\end{proof}
+\begin{remark}[Bi-canonical special case]\label{rem:bicanonical_special_case}\leanok
+    When a Kraus map happens to be both unital and trace-preserving
+    (the ``bi-canonical'' case), the Kadison--Schwarz equality at peripheral
+    eigenvectors (Theorem~\ref{thm:ks_peripheral}) shows directly that the
+    peripheral eigenvalues are closed under powers, and hence are roots of unity
+    by Theorem~\ref{thm:peripheral_powers}. This is the simplest route, but
+    it requires both normalizations simultaneously. The more general adjoint-fixed-point
+    formulation below covers the case where only unitality and a positive definite
+    adjoint fixed point are available.
+\end{remark}
 
 \subsection{Peripheral closure via adjoint fixed point}%
 \label{subsec:peripheral_closure_fixedpoint}
 
-The bi-canonical (unital + TP) hypothesis in
-Lemma~\ref{lem:peripheral_closed_powers_irred_ds}
-can be weakened: trace preservation is only used to derive
-the Kadison--Schwarz equality at peripheral eigenvectors.
-The following result replaces the TP condition by the existence
+The following results replace the trace-preservation hypothesis by the existence
 of a positive definite fixed point for the \emph{adjoint} Kraus map,
 matching the weighted-trace argument in
 \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
@@ -762,10 +724,8 @@ matching the weighted-trace argument in
 \begin{remark}\label{rem:adjoint_fp_more_general}\leanok
     Lemma~\ref{lem:peripheral_closed_powers_irred_fp}
     and Theorem~\ref{thm:peripheral_roots_irred_fp}
-    strictly generalise
-    Lemma~\ref{lem:peripheral_closed_powers_irred_ds}
-    and Theorem~\ref{thm:peripheral_roots_of_unity_irred_ds}:
-    the bi-canonical (unital + TP) condition implies
+    cover the bi-canonical (unital + TP) case as well:
+    trace preservation gives
     $E^*(\Id) = \Id$, which is a positive definite fixed
     point of the adjoint.
     The adjoint-fixed-point formulation matches the

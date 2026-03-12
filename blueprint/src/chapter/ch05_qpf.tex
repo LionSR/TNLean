@@ -1,15 +1,13 @@
-\chapter{Quantum Perron--Frobenius Theory}\label{ch:qpf}
+\chapter{Perron--Frobenius Theory for Channels and Transfer Maps}\label{ch:qpf}
 
-This chapter establishes that the transfer map of an injective MPS
-tensor has a unique positive semidefinite fixed point (up to scaling),
-and that this fixed point is positive definite.
+This chapter establishes the Perron--Frobenius theory used throughout
+the blueprint: existence, positive definiteness, and uniqueness of
+fixed points for injective and irreducible transfer maps, canonical
+gauge constructions, and the general PF eigenvector existence theorem
+for positive maps.
 The conceptual source is Wolf's treatment of irreducible positive
-maps~\cite[Ch.~6, especially Thms.~6.2--6.3]{Wolf2012Quantum}:
-irreducibility implies, via the growth condition
-$(\Id + T)^{d-1}(X) > 0$, that the spectral-radius eigenvalue is
-non-degenerate and its eigenvector is positive definite
-(Thm.~6.3).
-The chapter also draws on~\cite{Evans1978Spectral}.
+maps~\cite[Ch.~6, especially Thms.~6.2--6.5]{Wolf2012Quantum}
+and~\cite{Evans1978Spectral}.
 
 \section{Positive definiteness}
 
@@ -17,12 +15,10 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 	Wolf's general theory treats irreducible positive maps first
 	(\cite[Thm.~6.2]{Wolf2012Quantum}), then derives non-degeneracy
 	and positive definiteness (\cite[Thm.~6.3]{Wolf2012Quantum}).
-	The formalized proof takes a shortcut: injectivity implies
-	irreducibility plus a direct kernel argument, yielding a shorter
-	self-contained proof for the MPS setting. The irreducible
+	The injective-tensor version (Theorem~\ref{thm:psd_fp_pd}) uses
+	a shorter direct kernel argument; the irreducible
 	CP-map version (Theorem~\ref{thm:psd_fp_pd_irred}) follows
-	immediately afterwards and uses the support-projection argument
-	that corresponds to Wolf's growth-condition route.
+	via the support-projection route of~\cite[Thm.~6.2]{Wolf2012Quantum}.
 \end{remark}
 
 \begin{theorem}[PSD fixed point is positive definite]\label{thm:psd_fp_pd}
@@ -49,14 +45,12 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 	for every matrix $M$. Given any vector $w$, choose $M$ with
 	$M v = w$. Then $\rho w = 0$ for every $w$, so $\rho = 0$,
 	contradicting $\rho \neq 0$.
-	\smallskip\noindent\textbf{Relation to Wolf:}
 	In~\cite[Thm.~6.3, item~2]{Wolf2012Quantum},
-	positive definiteness of the Perron--Frobenius eigenvector
-	is established for any irreducible positive map via the
+	the same conclusion is reached via the
 	growth condition $(\Id + T)^{d-1}(X) > 0$
-	of~\cite[Thm.~6.2, condition~(2)]{Wolf2012Quantum}.
-	The formal proof above does not follow that route;
-	instead, injectivity rules out a nontrivial kernel directly.
+	of~\cite[Thm.~6.2, condition~(2)]{Wolf2012Quantum};
+	here the direct kernel argument is shorter under
+	injectivity.
 \end{proof}
 
 \begin{theorem}[PSD fixed point is PD --- irreducible version]\label{thm:psd_fp_pd_irred}
@@ -85,9 +79,8 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 	If $Q = \Id$ then $\rho$ is positive definite,
 	contradicting our assumption.
 	Hence $\rho$ must be positive definite.
-	This argument corresponds to the support-projection direction
-	of~\cite[Thm.~6.2, condition~(1)]{Wolf2012Quantum}; the formal
-	proof uses exactly this invariant-projection contradiction.
+	This is the support-projection direction
+	of~\cite[Thm.~6.2, condition~(1)]{Wolf2012Quantum}.
 \end{proof}
 
 \begin{theorem}[Orthogonal trace condition]\label{thm:orthogonal_trace_cond}
@@ -119,11 +112,7 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 	($\tr(B A) = 0$).
 	Hence at least one $k \in \{1, \ldots, D-1\}$ contributes
 	a strictly positive term.
-	\smallskip\noindent\textbf{Relation to Wolf:}
-	This is~\cite[Thm.~6.2, item~4]{Wolf2012Quantum},
-	which gives the orthogonal-pair trace positivity condition
-	as an equivalent characterisation of irreducibility.
-	The formal proof follows Wolf's route exactly:
+	This is~\cite[Thm.~6.2, item~4]{Wolf2012Quantum}:
 	item~(2) (growth condition) implies item~(4)
 	by a binomial expansion and PSD positivity argument.
 \end{proof}
@@ -155,21 +144,18 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 	giving $\sigma = c_0 \rho$.
 	\smallskip\noindent\textbf{Relation to Wolf:}
 	In~\cite[Thm.~6.3, item~2]{Wolf2012Quantum}, uniqueness
-	(non-degeneracy of the spectral-radius eigenvalue) is proved
-	for any irreducible positive map by a minimal-eigenvalue
-	argument using the growth condition
+	is proved via the growth condition
 	of~\cite[Thm.~6.2]{Wolf2012Quantum}.
-	The formal proof uses the same minimal-eigenvalue idea
-	but exploits the injective-tensor positive-definiteness
-	result (Theorem~\ref{thm:psd_fp_pd}) instead of the
+	The same minimal-eigenvalue argument applies here, using the
+	injective-tensor positive-definiteness
+	(Theorem~\ref{thm:psd_fp_pd}) in place of the
 	growth condition.
 \end{proof}
 
 \begin{remark}\leanok
-	The proof actually produces a positive real scalar $c_0 > 0$:
+	The proof produces a positive real scalar $c_0 > 0$:
 	it is the minimal eigenvalue of the positive definite Hermitian
-	matrix $H = (S^\dagger)^{-1} \sigma S^{-1}$. The formal statement
-	records the resulting proportionality in the ambient scalar field $\C$.
+	matrix $H = (S^\dagger)^{-1} \sigma S^{-1}$.
 \end{remark}
 
 \begin{theorem}[Uniqueness of positive eigenvalue for irreducible CP maps]%
@@ -187,6 +173,7 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 
 \begin{proof}
 	\leanok
+		\uses{thm:pf_eigenvector_existence, thm:psd_fp_pd_irred}
 	Extract Kraus operators $K$ for $E$.
 	Irreducibility of $E$ passes to the adjoint transfer map
 	$E^\dagger(\,\cdot\,) = \sum_i K_i^\dagger\,(\,\cdot\,)\,K_i$,
@@ -212,8 +199,8 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 	\smallskip\noindent\textbf{Relation to Wolf:}
 	This is~\cite[Thm.~6.3, item~3]{Wolf2012Quantum},
 	establishing non-degeneracy of the spectral-radius eigenvalue
-	for irreducible CP maps.
-	The formal proof follows Wolf's dual-map trace argument.
+	for irreducible CP maps. The proof follows Wolf's dual-map
+	trace argument.
 \end{proof}
 
 \section{Existence and assembly}
@@ -335,33 +322,153 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 	$Q \neq 0$, $Q \neq \Id$, and
 	$({\Id} - Q) E'(Q X Q) Q = 0$ for all~$X$.
 	Setting $R = C Q C^\dagger$, the support projection~$P$ of $R$
-	(Definition~\ref{def:support_proj})
 	is an invariant projection for $E$.
 	Irreducibility of $E$ forces $P = 0$ or $P = \Id$.
 	The invertibility of $C$ then forces $Q = 0$ or $Q = \Id$,
 	a contradiction.
-	\smallskip\noindent\textbf{Relation to Wolf:}
 	This is the full similarity version of
-	\cite[Prop.~6.6]{Wolf2012Quantum}.
-	The scalar case ($C = \Id$) is Lemma~\ref{thm:irred_map_smul}
-	in Chapter~\ref{ch:canonical};
-	the general invertible-$C$ case is proved here by a
-	support-projection argument.
+	\cite[Prop.~6.6]{Wolf2012Quantum};
+	the scalar case ($C = \Id$) gives the scaling result stated next.
 \end{proof}
 
-\begin{remark}[Eigenvector existence for general positive maps]%
-	\label{rem:pf_eigenvector_pointer}
-	The trace-preserving fixed-point statements in this chapter are
-	already unconditional: Theorem~\ref{thm:psd_fp_exists} obtains a
-	PSD fixed point from the Ces\`aro argument of
-	Theorem~\ref{thm:cesaro_fixedpoint}.
-	The later Perron--Frobenius and TP-gauge step of
-	Chapter~\ref{ch:canonical}, \S\ref{sec:pf_eigenvector}, is now
-	also formalized: Theorem~\ref{thm:pf_eigenvector_existence}
-	gives a Perron--Frobenius eigenvector for a general positive map,
-	and Theorem~\ref{thm:tp_data_irreducible} uses it to put an
-	irreducible tensor into TP gauge.
-	The remaining gap lies later in the end-to-end
-	canonical-form / separation assembly, not in the
-	Perron--Frobenius existence step itself.
-\end{remark}
+\begin{theorem}[Scaling preserves irreducibility]%
+	\label{thm:irred_map_smul}
+	\lean{isIrreducibleMap_smul}
+	\leanok
+	\uses{def:irreducible_cp}
+	If $E$ is an irreducible map and $c \neq 0$, then $c E$
+	is also irreducible.
+	This is the scalar special case ($C = \Id$) of
+	\cite[Prop.~6.6]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+	An invariant projection for $cE$ is an invariant projection
+	for $E$ (scale out the nonzero constant from the commutation
+	relation).
+\end{proof}
+
+\section{Perron--Frobenius eigenvector existence}%
+\label{sec:pf_eigenvector}
+
+This section establishes the existence of a positive definite
+eigenvector for the adjoint transfer map of an irreducible MPS
+tensor, and uses it to construct a TP-gauge normalization.
+The PSD-eigenvector step corresponds to
+\cite[Thm.~6.5]{Wolf2012Quantum} (general positive maps) and
+\cite{Evans1978Spectral}; the upgrade to positive definiteness
+uses the irreducible-map theory of
+\cite[Thm.~6.3]{Wolf2012Quantum}. The TP-gauge application
+follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+
+\begin{theorem}[PSD eigenvector for positive maps]%
+	\label{thm:pf_eigenvector_existence}
+	\lean{exists_posSemidef_eigenvector}
+	\leanok
+	\uses{def:positive_map}
+	Let $E : \MN{D} \to \MN{D}$ be a positive linear map with
+	$D > 0$, and assume that $E(\sigma) \neq 0$ for every nonzero
+	PSD matrix $\sigma$.
+	Then there exist a nonzero PSD matrix $\rho$ and a positive
+	real $r > 0$ such that $E(\rho) = r \rho$.
+
+	This is the finite-dimensional Perron--Frobenius theorem for
+	positive maps on matrix algebras
+	(\cite[Thm.~6.5]{Wolf2012Quantum}; see also~\cite{Evans1978Spectral}).
+	The proof applies Brouwer's fixed-point theorem to the
+	normalization map $\rho \mapsto E(\rho) / \tr(E(\rho))$ on the
+	compact convex set of density matrices.
+\end{theorem}
+
+\begin{theorem}[Adjoint transfer map is nonzero]%
+	\label{thm:adjoint_transfer_ne_zero}
+	\lean{MPSTensor.adjointTransferMap_ne_zero_of_nonzero}
+	\leanok
+	\uses{def:transfer_map}
+	If some Kraus operator $A^i \neq 0$, then the adjoint transfer
+	map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is nonzero.
+\end{theorem}
+
+\begin{proof}\leanok
+	If $\E_A^\dagger = 0$ then $\E_A^\dagger(\Id) = 0$,
+	so $\sum_i (A^i)^\dagger A^i = 0$.
+	Since each summand $(A^i)^\dagger A^i$ is PSD,
+	each $(A^i)^\dagger = 0$ and hence each $A^i = 0$.
+\end{proof}
+
+\begin{theorem}[PosDef adjoint eigenvector for irreducible tensors]%
+	\label{thm:posDef_adjoint_eigenvector}
+	\lean{MPSTensor.exists_posDef_adjoint_eigenvector}
+	\leanok
+	\uses{def:irreducible_tensor, def:transfer_map}
+	Let $A$ be an irreducible MPS tensor with $D > 0$
+	and some $A^i \neq 0$.
+	Then there exist a positive definite matrix~$\sigma$
+	and a positive real $r > 0$ such that
+	$\E_A^\dagger(\sigma) = r \sigma$.
+
+	This combines the general PF existence
+	(\cite[Thm.~6.5]{Wolf2012Quantum}) with the
+	irreducible upgrade to positive definiteness
+	(\cite[Thm.~6.3, item~2]{Wolf2012Quantum});
+	the application to the adjoint transfer map follows
+	\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:pf_eigenvector_existence, thm:irred_map_smul,
+		thm:adjoint_transfer_ne_zero, thm:psd_fp_pd_irred}
+	By Theorem~\ref{thm:adjoint_transfer_ne_zero},
+	$\E_A^\dagger \neq 0$.
+	Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
+	Kraus map, it is positive. Irreducibility of $A$ transfers to the
+	adjoint transfer map, and together with $\E_A^\dagger \neq 0$
+	this implies $\E_A^\dagger(\tau) \neq 0$ for every nonzero
+	PSD matrix $\tau$.
+	Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to
+	$\E_A^\dagger$, giving $\sigma_0 \ge 0$ (PSD, nonzero)
+	and $r > 0$ with $\E_A^\dagger(\sigma_0) = r \sigma_0$.
+	Rescale: set $T^i = r^{-1/2} (A^i)^\dagger$.
+	Then $\E_T(\sigma_0) = \sigma_0$,
+	and $\E_T$ is irreducible
+	(by Theorem~\ref{thm:irred_map_smul},
+	since irreducibility of $\E_A$ transfers to the
+	adjoint and is preserved under scaling).
+	Since $\E_T$ is irreducible with a PSD fixed point,
+	the PSD-to-PosDef upgrade
+	(Theorem~\ref{thm:psd_fp_pd_irred})
+	gives $\sigma_0$ positive definite.
+\end{proof}
+
+\begin{theorem}[TP-gauge existence for irreducible tensors]%
+	\label{thm:tp_data_irreducible}
+	\lean{MPSTensor.exists_tp_data_of_irreducible}
+	\leanok
+	\uses{def:irreducible_tensor}
+	Let $A$ be an irreducible MPS tensor with $D > 0$
+	and some $A^i \neq 0$.
+	Then there exist a positive real~$r$, a positive definite
+	matrix~$\sigma$, and a gauge-equivalent tensor~$B$ such that
+	\[
+		B^i = \sigma^{1/2} \cdot (r^{-1/2} A^i) \cdot \sigma^{-1/2}
+	\]
+	is trace-preserving:
+	$\sum_i (B^i)^\dagger B^i = \Id$.
+
+	This is the ``spectral rescaling $+$ TP gauge'' step of
+	\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
+	The similarity is generally non-unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:posDef_adjoint_eigenvector, thm:left_canonical_gauge}
+	By Theorem~\ref{thm:posDef_adjoint_eigenvector},
+	obtain $\sigma$ positive definite and $r > 0$ with
+	$\E_A^\dagger(\sigma) = r \sigma$.
+	Set $c = r^{-1/2}$ and $A'^i = c A^i$.
+	Then $\E_{A'}^\dagger(\sigma) = \sigma$.
+	By the TP gauge construction
+	(Theorem~\ref{thm:left_canonical_gauge}),
+	$B^i = \sigma^{1/2} A'^i \sigma^{-1/2}$
+	satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
+\end{proof}
