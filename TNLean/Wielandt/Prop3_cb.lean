@@ -64,7 +64,7 @@ remaining gap.
 - [Wolf, *Quantum Channels & Operations: Guided Tour*], §6.2–6.4
 -/
 
-open scoped Matrix BigOperators ComplexConjugate ComplexOrder
+open scoped Matrix BigOperators ComplexConjugate ComplexOrder NNReal
 open Matrix Filter
 
 namespace MPSTensor
@@ -411,6 +411,270 @@ private theorem eq_zero_of_trace_conjTranspose_mul_posDef_mul_eq_zero
       Matrix.mulVec_mulVec, Matrix.mul_assoc]
   rw [this, hBρB] at hpos
   simp at hpos
+
+/-! ### Part 7: Uniform positivity lemmas
+
+These two lemmas set up the final compactness/uniform-positivity argument for the
+main theorem `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`.
+
+**Lemma A** (`wordSpan_eq_top_of_tracePairBilin_re_pos`): if the trace-pairing
+bilinear form `Q_{E^n}(B).re > 0` for every nonzero `B`, then `wordSpan A n = ⊤`.
+This is the "nondegeneracy → full span" direction.
+
+**Lemma B** (`norm_tracePairBilin_le`): operator-norm bound on the bilinear form:
+`‖Q_F(B)‖ ≤ D² · ‖Bᴴ‖ · ‖Φ(F)‖ · ‖B‖`,
+where `Φ = Module.End.toContinuousLinearMap` and `‖·‖` is the `l∞`-operator norm
+(the scoped norm in the `MPSTensor` namespace via `SpectralGap.lean`).
+This bounds the error term `Q_{(E − P_ρ)^n}(B)` uniformly. -/
+
+section UniformPositivity
+
+/-! #### Helper: representing dual functionals via the trace pairing
+
+Every linear functional `φ : M_D(ℂ) → ℂ` can be represented as
+`φ(N) = tr(M_φ · N)` for a unique matrix `M_φ`.  We prove this concretely
+by exhibiting `M_φ i j = φ(e_{ji})` and checking the trace identity. -/
+
+/-- Decomposition of a matrix as a sum of scalar multiples of standard basis
+matrices. -/
+private theorem matrix_eq_sum_smul_single
+    (M : Matrix (Fin D) (Fin D) ℂ) :
+    M = ∑ i, ∑ j, M i j • Matrix.single i j (1 : ℂ) := by
+  ext a b
+  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
+    Matrix.single_apply, mul_ite, mul_one, mul_zero]
+  conv_rhs =>
+    arg 2; ext i; arg 2; ext j
+    rw [show (if i = a ∧ j = b then M i j else 0) =
+      (if i = a then (if j = b then M i j else 0) else 0)
+      from by split_ifs <;> simp_all]
+  simp [Finset.sum_ite_eq', Finset.mem_univ]
+
+/-- Every linear functional `φ` on `M_D(ℂ)` decomposes as
+`φ(N) = ∑_{i,j} N i j · φ(e_{ij})`. -/
+private theorem linearMap_apply_eq_sum
+    (φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ)
+    (N : Matrix (Fin D) (Fin D) ℂ) :
+    φ N = ∑ i : Fin D, ∑ j : Fin D,
+      N i j * φ (Matrix.single i j 1) := by
+  conv_lhs => rw [matrix_eq_sum_smul_single N]
+  simp only [map_sum, LinearMap.map_smul, smul_eq_mul]
+
+/-- The **trace-pairing representation**: for every linear functional `φ`,
+`φ(N) = tr(M_φ · N)` where `M_φ i j = φ(e_{ji})`. -/
+private theorem phi_eq_trace_mul
+    (φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ)
+    (N : Matrix (Fin D) (Fin D) ℂ) :
+    φ N = Matrix.trace
+      ((Matrix.of fun i j => φ (Matrix.single j i 1)) * N) := by
+  rw [linearMap_apply_eq_sum φ N]
+  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply,
+    Matrix.of_apply]
+  rw [Finset.sum_comm]
+  congr 1; ext i; congr 1; ext j; ring
+
+/-- The representing matrix is zero iff the functional is zero. -/
+private theorem rep_eq_zero_iff [NeZero D]
+    (φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ) :
+    (Matrix.of fun i j =>
+      φ (Matrix.single j i (1 : ℂ))) = 0 ↔ φ = 0 := by
+  constructor
+  · intro hrep; ext N
+    rw [phi_eq_trace_mul φ N, hrep, zero_mul,
+      Matrix.trace_zero, LinearMap.zero_apply]
+  · intro hφ; ext i j
+    simp [Matrix.of_apply, show φ = 0 from hφ]
+
+/-! #### Lemma A: trace-pairing positivity → full word span -/
+
+/-- **Lemma A**: If the trace-pairing bilinear form `Q_{E^n}(B)` has
+strictly positive real part for every nonzero `B`, then the word span at
+length `n` is all of `M_D(ℂ)`.
+
+The proof goes by contradiction: if `wordSpan ≠ ⊤`, the dual annihilator
+contains a nonzero functional `φ`, which we represent as `N ↦ tr(M · N)`.
+Setting `B = M†` gives `tr(B† A_σ) = 0` for all words `σ`, so the
+trace-pairing identity forces `Q_{E^n}(B) = 0`, contradicting
+positivity. -/
+private theorem wordSpan_eq_top_of_tracePairBilin_re_pos
+    [NeZero D]
+    (A : MPSTensor d D) (n : ℕ)
+    (hpos : ∀ B : Matrix (Fin D) (Fin D) ℂ, B ≠ 0 →
+      0 < (tracePairBilin
+        (((transferMap (d := d) (D := D) A) ^ n : _)) B).re) :
+    wordSpan A n = ⊤ := by
+  by_contra hne
+  -- Dual annihilator of a proper subspace is nontrivial
+  have hann : (wordSpan A n).dualAnnihilator ≠ ⊥ :=
+    fun h => hne (Submodule.dualAnnihilator_eq_bot_iff.mp h)
+  -- Get a nonzero functional φ vanishing on wordSpan
+  obtain ⟨φ, hφmem, hφne⟩ :=
+    Submodule.exists_mem_ne_zero_of_ne_bot hann
+  -- Construct M with φ(N) = tr(M · N)
+  set M := Matrix.of fun i j =>
+    φ (Matrix.single j i (1 : ℂ)) with hMdef
+  have hMne : M ≠ 0 := by
+    rwa [hMdef, ne_eq, rep_eq_zero_iff]
+  -- φ vanishes on generators: tr(M · A_σ) = 0
+  have hvanish : ∀ σ : Fin n → Fin d,
+      Matrix.trace (M * evalWord A (List.ofFn σ)) = 0 := by
+    intro σ
+    rw [← phi_eq_trace_mul φ (evalWord A (List.ofFn σ))]
+    exact (Submodule.mem_dualAnnihilator φ).mp hφmem _
+      (Submodule.subset_span ⟨σ, rfl⟩)
+  -- Set B = M†, so tr(B† A_σ) = tr(M A_σ) = 0
+  set B := Mᴴ with hBdef
+  have hBne : B ≠ 0 :=
+    fun h => hMne (Matrix.conjTranspose_eq_zero.mp h)
+  have hBvanish : ∀ σ : Fin n → Fin d,
+      Matrix.trace (Bᴴ * evalWord A (List.ofFn σ)) = 0 := by
+    intro σ
+    rw [hBdef, Matrix.conjTranspose_conjTranspose]
+    exact hvanish σ
+  -- tracePairBilin(E^n)(B).re > 0 by hypothesis
+  have hrhs := hpos B hBne
+  -- trace-pairing identity
+  have hident :=
+    sum_normSq_trace_conjTranspose_mul_evalWord A n B
+  -- LHS = 0 since all traces vanish
+  have hlhs : (∑ σ : Fin n → Fin d,
+      ‖Matrix.trace (Bᴴ * evalWord A (List.ofFn σ))‖ ^ 2
+        : ℝ) = 0 := by
+    apply Finset.sum_eq_zero; intro σ _; simp [hBvanish σ]
+  -- tracePairBilin is definitionally the RHS of the identity
+  have hdef : (tracePairBilin
+      (((transferMap (d := d) (D := D) A) ^ n : _)) B).re =
+    (∑ i : Fin D, ∑ k : Fin D,
+      (Bᴴ * ((transferMap (d := d) (D := D) A) ^ n)
+        (Matrix.single i k 1) * B) i k).re := rfl
+  linarith [hident, hdef]
+
+/-! #### Lemma B: operator-norm bound on the bilinear form
+
+The norm on `Matrix (Fin D) (Fin D) ℂ` in the `MPSTensor` namespace is the
+`l∞`-operator norm (scoped instance from `SpectralGap.lean`), under which
+matrix multiplication is submultiplicative (`norm_mul_le`).  We prove entry
+bounds and single-matrix norm bounds directly for this norm. -/
+
+set_option maxHeartbeats 400000 in
+-- NNReal cast reasoning requires extra heartbeats
+/-- Entry bound for the `l∞`-operator norm: `‖M i j‖ ≤ ‖M‖`.
+
+Under the `l∞`-op norm `‖M‖ = sup_i (∑_j ‖M i j‖)`, each entry is
+bounded by the row sum, which is bounded by the sup. -/
+private theorem linftyOp_norm_entry_le [NeZero D]
+    (M : Matrix (Fin D) (Fin D) ℂ) (i j : Fin D) :
+    ‖M i j‖ ≤ ‖M‖ := by
+  rw [Matrix.linfty_opNorm_def M]
+  -- ‖M i j‖ ≤ ∑_k ‖M i k‖ (single ≤ sum of nonneg terms)
+  have h1 : ‖M i j‖ ≤ ∑ k : Fin D, ‖M i k‖ :=
+    Finset.single_le_sum (f := fun k => ‖M i k‖)
+      (fun _ _ => norm_nonneg _) (Finset.mem_univ j)
+  -- Row i sum ≤ sup of row sums (at NNReal level, then cast)
+  set f : Fin D → ℝ≥0 := fun a => ∑ b : Fin D, ‖M a b‖₊
+  have h2 : f i ≤ Finset.univ.sup f := Finset.le_sup (Finset.mem_univ i)
+  have h3 : (∑ k : Fin D, ‖M i k‖) = ↑(f i) := by
+    simp only [f, NNReal.coe_sum, coe_nnnorm]
+  linarith [NNReal.coe_le_coe.mpr h2]
+
+/-- The `l∞`-operator norm of a standard basis matrix is ≤ 1. -/
+private theorem linftyOp_norm_single_le [NeZero D]
+    (i k : Fin D) :
+    ‖Matrix.single i k (1 : ℂ)‖ ≤ 1 := by
+  rw [Matrix.linfty_opNorm_def]
+  suffices h : (Finset.univ.sup fun (a : Fin D) =>
+      ∑ (b : Fin D), ‖Matrix.single i k (1 : ℂ) a b‖₊) ≤ 1 by
+    exact_mod_cast h
+  apply Finset.sup_le; intro a _
+  by_cases ha : a = i
+  · subst ha
+    -- Row a (= i): single a k 1 a b = if k = b then 1 else 0
+    -- Row a (= i): single a k 1 a b = if k = b then 1 else 0
+    -- so ∑_b ‖...‖₊ = ‖1‖₊ = 1
+    have hrow : ∀ b : Fin D,
+        Matrix.single a k (1 : ℂ) a b = if k = b then 1 else 0 := by
+      intro b; simp [Matrix.single_apply]
+    simp_rw [hrow, apply_ite (‖·‖₊), nnnorm_one, nnnorm_zero]
+    simp [Finset.sum_ite_eq, Finset.mem_univ]
+  · -- Row a ≠ i: all entries are 0, so sum is 0 ≤ 1
+    have hrow : ∀ b : Fin D,
+        Matrix.single i k (1 : ℂ) a b = 0 := by
+      intro b; simp [Ne.symm ha]
+    simp_rw [hrow, nnnorm_zero, Finset.sum_const_zero]
+    exact zero_le_one
+
+/-- **Lemma B**: Operator-norm bound on the trace-pairing bilinear form.
+
+For any linear endomorphism `F` on `M_D(ℂ)` and any matrix `B`:
+`‖Q_F(B)‖ ≤ D² · ‖Bᴴ‖ · ‖Φ(F)‖ · ‖B‖`
+where `Φ = Module.End.toContinuousLinearMap` and `‖·‖` is the `l∞`-op norm.
+
+This is used to bound the error in the trace-pairing decomposition
+`Q_{E^n} = Q_{P_ρ} + Q_{N^n}`: since `‖Φ(N^n)‖ → 0`, the error vanishes
+uniformly. -/
+private theorem norm_tracePairBilin_le [NeZero D]
+    (F : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
+      Matrix (Fin D) (Fin D) ℂ)
+    (B : Matrix (Fin D) (Fin D) ℂ) :
+    ‖tracePairBilin F B‖ ≤
+      (Fintype.card (Fin D)) ^ 2 * ‖Bᴴ‖ *
+      ‖Module.End.toContinuousLinearMap
+        (Matrix (Fin D) (Fin D) ℂ) F‖ *
+      ‖B‖ := by
+  set Φ := Module.End.toContinuousLinearMap
+    (Matrix (Fin D) (Fin D) ℂ) F
+  set d2 := Fintype.card (Fin D)
+  change ‖∑ i : Fin D, ∑ k : Fin D,
+    (Bᴴ * F (Matrix.single i k 1) * B) i k‖ ≤
+    d2 ^ 2 * ‖Bᴴ‖ * ‖Φ‖ * ‖B‖
+  rw [← Finset.sum_product']
+  calc ‖∑ p ∈ Finset.univ ×ˢ Finset.univ,
+      (Bᴴ * F (Matrix.single p.1 p.2 1) * B) p.1 p.2‖
+      ≤ ∑ p ∈ Finset.univ ×ˢ Finset.univ,
+        ‖(Bᴴ * F (Matrix.single p.1 p.2 1) * B) p.1 p.2‖ :=
+          norm_sum_le _ _
+    _ ≤ ∑ p ∈ Finset.univ ×ˢ Finset.univ,
+        ‖Bᴴ‖ * ‖Φ‖ * ‖B‖ := by
+          apply Finset.sum_le_sum; intro p _
+          -- ‖F x‖ = ‖Φ x‖ since Φ wraps F with continuous structure
+          have hFΦ : ‖F (Matrix.single p.1 p.2 1)‖ =
+              ‖Φ (Matrix.single p.1 p.2 (1 : ℂ))‖ := by rfl
+          calc ‖(Bᴴ * F (Matrix.single p.1 p.2 1) *
+                  B) p.1 p.2‖
+              ≤ ‖Bᴴ * F (Matrix.single p.1 p.2 1) * B‖ :=
+                linftyOp_norm_entry_le _ p.1 p.2
+            _ ≤ ‖Bᴴ‖ * ‖F (Matrix.single p.1 p.2 1)‖ *
+                  ‖B‖ := by
+                calc ‖Bᴴ * F (Matrix.single p.1 p.2 1) * B‖
+                    = ‖Bᴴ * (F (Matrix.single p.1 p.2 1) *
+                        B)‖ := by rw [Matrix.mul_assoc]
+                  _ ≤ ‖Bᴴ‖ * ‖F (Matrix.single p.1 p.2 1) *
+                        B‖ := norm_mul_le _ _
+                  _ ≤ ‖Bᴴ‖ *
+                      (‖F (Matrix.single p.1 p.2 1)‖ *
+                        ‖B‖) := by
+                      apply mul_le_mul_of_nonneg_left
+                        (norm_mul_le _ _) (norm_nonneg _)
+                  _ = _ := by ring
+            _ ≤ ‖Bᴴ‖ * ‖Φ‖ * ‖B‖ := by
+                rw [hFΦ]
+                have hop := ContinuousLinearMap.le_opNorm Φ
+                  (Matrix.single p.1 p.2 (1 : ℂ))
+                have hsing := linftyOp_norm_single_le p.1 p.2
+                -- ‖Φ x‖ ≤ ‖Φ‖ * ‖x‖ ≤ ‖Φ‖ * 1 = ‖Φ‖
+                have hΦx : ‖Φ (Matrix.single p.1 p.2 (1 : ℂ))‖ ≤ ‖Φ‖ :=
+                  le_trans hop (by nlinarith [norm_nonneg Φ])
+                exact le_trans
+                  (mul_le_mul_of_nonneg_right
+                    (mul_le_mul_of_nonneg_left hΦx (norm_nonneg _))
+                    (norm_nonneg _))
+                  (le_refl _)
+    _ = d2 ^ 2 * ‖Bᴴ‖ * ‖Φ‖ * ‖B‖ := by
+        simp only [Finset.sum_const, Finset.card_product,
+          Finset.card_univ]
+        ring
+
+end UniformPositivity
 
 end MPSTensor
 
