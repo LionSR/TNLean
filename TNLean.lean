@@ -112,7 +112,7 @@ import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.PiAlgebra.BlockSeparation
 
--- Layer 6: Quantum Wielandt bound (arXiv:0909.5347)
+-- Layer 6a: Quantum Wielandt backend / span-growth infrastructure
 import TNLean.Wielandt.CumulativeSpan
 import TNLean.Wielandt.NonzeroTraceProduct
 import TNLean.Wielandt.FittingDecomposition
@@ -121,6 +121,11 @@ import TNLean.Wielandt.Lemma2b
 import TNLean.Wielandt.RankOneConstruction
 import TNLean.Wielandt.RankOneProducts
 import TNLean.Wielandt.WielandtBound
+
+-- Layer 6b: Paper-facing Proposition 3 / Theorem 1 endpoints
+-- These wrappers are currently standalone with respect to the canonical / FT /
+-- BNT assembly above; they are re-exported for direct users and the Wolf
+-- Chapter 6 index.
 import TNLean.Wielandt.PrimitivePaper
 import TNLean.Wielandt.PrimitiveEquiv
 import TNLean.Wielandt.Prop3_ac
@@ -131,6 +136,8 @@ import TNLean.Wielandt.Lemma2
 import TNLean.Wielandt.Lemma2bCoarse
 import TNLean.Wielandt.Lemma2bExact
 import TNLean.Wielandt.Theorem1
+
+-- Layer 6c: Conditional primitive-to-normal / exact-span assembly
 import TNLean.Wielandt.InvertibleWordSpanGrowth
 import TNLean.Wielandt.PrimitivityNormal
 import TNLean.Wielandt.PrimitivityToNormal

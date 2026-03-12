@@ -57,12 +57,9 @@ theorem vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector [NeZero D]
     (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
     (heig : A i₀ *ᵥ φ = μ • φ) :
     vectorSpreadSpan A φ (D - 1) = ⊤ := by
-  have hEventually : HasEventuallyFullKrausRank A :=
-    (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hPrim
-  have hNormal : IsNormal A :=
-    (hasEventuallyFullKrausRank_iff_isNormal A).mp hEventually
   have hCum : cumulativeVectorSpan A φ (D - 1) = ⊤ :=
-    eigenvector_spreading A φ hφ i₀ μ hμ heig hNormal
+    eigenvector_spreading A φ hφ i₀ μ hμ heig
+      (isNormal_of_isPrimitivePaper A hNorm hPrim)
   exact
     vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
       A φ (D - 1) i₀ μ hμ heig hCum

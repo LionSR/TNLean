@@ -804,8 +804,7 @@ private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
   by_contra hnot
   have hto0 :=
     mpvOverlap_tendsto_zero (A := A) (B := B) hA_inj hB_inj hA_lc hB_lc hnot
-  have : (0 : ℂ) = 1 := tendsto_nhds_unique hto0 h
-  exact zero_ne_one this
+  exact (h.ne_nhds one_ne_zero) hto0
 
 private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
     {D : ℕ} [NeZero D] (A B : MPSTensor d D)
@@ -818,8 +817,7 @@ private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
   have hto0 :=
     mpvOverlap_tendsto_zero_of_irreducible_TP
       (A := A) (B := B) hA_irr hB_irr hA_lc hB_lc hnot
-  have : (0 : ℂ) = 1 := tendsto_nhds_unique hto0 h
-  exact zero_ne_one this
+  exact (h.ne_nhds one_ne_zero) hto0
 
 private lemma mpvOverlap_eq_pow_mul_self_of_mpv_eq_pow_mul
     {D : ℕ} (A B : MPSTensor d D) (ζ : ℂ)
@@ -1418,6 +1416,20 @@ section CanonicalFormSeparation
 
 variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 
+private lemma summed_block_difference_eq_zero_of_sameMPV₂
+    (μ : Fin r → ℂ)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+    ∀ (N : ℕ) (σ : Fin N → Fin d),
+      ∑ k : Fin r, (μ k) ^ N * (mpv (A k) σ - mpv (B k) σ) = 0 := by
+  intro N σ
+  have hEq := sameMPV₂_summed_blocks μ A B hSame₂ N σ
+  have hSub :
+      ∑ k : Fin r, (μ k) ^ N * mpv (A k) σ -
+          ∑ k : Fin r, (μ k) ^ N * mpv (B k) σ = 0 := by
+    exact sub_eq_zero.mpr (by simpa [smul_eq_mul] using hEq)
+  simpa [Finset.sum_sub_distrib, mul_sub] using hSub
+
 /-- Additive split version of `per_block_sameMPV_of_canonical_form`.
 
 This theorem isolates exactly the pieces of the canonical-form bundle used in the
@@ -1446,17 +1458,10 @@ theorem per_block_sameMPV_of_separated_canonical_data
       simp only [Fin.sum_univ_one, smul_eq_mul] at this
       exact mul_left_cancel₀ (pow_ne_zero N (hWeights.mu_ne_zero 0)) this
   · push_neg at hr
-    have h_summed : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        ∑ k : Fin r, (μ k) ^ N * (mpv (A k) σ - mpv (B k) σ) = 0 := by
-      intro N σ
-      have heq := sameMPV₂_summed_blocks μ A B hSame₂ N σ
-      simp only [smul_eq_mul] at heq
-      simp only [mul_sub]
-      rw [Finset.sum_sub_distrib]
-      exact sub_eq_zero.mpr heq
     exact block_separation_all_words μ A B hWeights.mu_strict_anti hWeights.mu_ne_zero
       hA_inj.block_injective hB_inj.block_injective hA_left.leftCanonical hB_left.leftCanonical
-      hA_overlap.overlap_tendsto_one h_summed
+      hA_overlap.overlap_tendsto_one
+      (summed_block_difference_eq_zero_of_sameMPV₂ μ A B hSame₂)
 
 /-- Backwards-compatible wrapper extracting per-block `SameMPV` from canonical-form data. -/
 theorem per_block_sameMPV_of_canonical_form
@@ -1501,18 +1506,11 @@ theorem per_block_sameMPV_of_normal_canonical_form
       simp only [Fin.sum_univ_one, smul_eq_mul] at this
       exact mul_left_cancel₀ (pow_ne_zero N (hA.mu_ne_zero 0)) this
   · push_neg at hr
-    have h_summed : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        ∑ k : Fin r, (μ k) ^ N * (mpv (A k) σ - mpv (B k) σ) = 0 := by
-      intro N σ
-      have heq := sameMPV₂_summed_blocks μ A B hSame₂ N σ
-      simp only [smul_eq_mul] at heq
-      simp only [mul_sub]
-      rw [Finset.sum_sub_distrib]
-      exact sub_eq_zero.mpr heq
     intro k
     exact block_separation_all_words_of_irreducible_TP μ A B
       hA.mu_strict_anti hA.mu_ne_zero hA.block_irreducible hB_irr hA.leftCanonical hB_lc
-      (fun j => hA.overlap_tendsto_one j) h_summed k
+      (fun j => hA.overlap_tendsto_one j)
+      (summed_block_difference_eq_zero_of_sameMPV₂ μ A B hSame₂) k
 
 /-- Separated-data variant of `fundamentalTheorem_canonicalForm`.
 
@@ -1533,10 +1531,7 @@ theorem fundamentalTheorem_of_separated_canonical_data
     GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) := by
   have hSep := per_block_sameMPV_of_separated_canonical_data μ A B
     hWeights hA_inj hA_left hA_overlap hB_inj hB_left hSame₂
-  exact
-    ⟨fundamentalTheorem_multiBlock_blocks
-        (A := A) (B := B) hA_inj.block_injective hSep,
-      fundamentalTheorem_multiBlock_global μ A B hA_inj.block_injective hSep⟩
+  exact fundamentalTheorem_multiBlock_full μ A B hA_inj.block_injective hSep
 
 /-- Explicit gauge-matrix version of `fundamentalTheorem_of_separated_canonical_data`. -/
 theorem fundamentalTheorem_of_separated_canonical_data_explicit

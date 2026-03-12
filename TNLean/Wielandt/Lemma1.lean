@@ -60,10 +60,6 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
     ∃ w : List (Fin d), w.length ≤ D ^ 2 ∧ Matrix.trace (evalWord A w) ≠ 0 := by
-  have hEventually : HasEventuallyFullKrausRank A :=
-    (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hPrim
-  have hNormal : IsNormal A :=
-    (hasEventuallyFullKrausRank_iff_isNormal A).mp hEventually
-  exact exists_nonzero_trace_word A hNormal
+  exact exists_nonzero_trace_word A (isNormal_of_isPrimitivePaper A hNorm hPrim)
 
 end MPSTensor

@@ -125,11 +125,10 @@ end GaugeAssembly
 section FundamentalTheoremMulti
 
 variable {r : ℕ} {dim : Fin r → ℕ}
-variable (μ : Fin r → ℂ)
-variable (A B : (k : Fin r) → MPSTensor d (dim k))
 
 /-- Blockwise application of the single-block Fundamental Theorem. -/
 theorem fundamentalTheorem_multiBlock_blocks
+    (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k : Fin r, IsInjective (A k))
     (hSame : ∀ k : Fin r, SameMPV (A k) (B k)) :
     ∀ k : Fin r, GaugeEquiv (A k) (B k) :=
@@ -137,6 +136,8 @@ theorem fundamentalTheorem_multiBlock_blocks
 
 /-- Global multi-block Fundamental Theorem (assembly version). -/
 theorem fundamentalTheorem_multiBlock_global
+    (μ : Fin r → ℂ)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k : Fin r, IsInjective (A k))
     (hSame : ∀ k : Fin r, SameMPV (A k) (B k)) :
     GaugeEquiv (toTensorFromBlocks (d := d) (μ := μ) A)

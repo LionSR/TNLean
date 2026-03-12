@@ -50,6 +50,10 @@ These are **paper-facing wrappers only**. The internal proof chain flows through
 `IsNormal`, `IsPrimitiveMPS`, etc. The full equivalence of all three Proposition 3
 conditions is assembled in `Prop3.lean`.
 
+At present this layer is not imported by the canonical / FT / BNT assembly in
+`TNLean.MPS.*` or `TNLean.PiAlgebra.*`; it serves the standalone paper-facing
+endpoint modules below.
+
 ## References
 
 - [Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's inequality*,
