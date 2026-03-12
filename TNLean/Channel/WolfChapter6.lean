@@ -47,7 +47,7 @@ No new proofs are introduced here; this is a documentation-only re-export.
 * `orthogonal_trace_pos_of_irreducible_cp` — `TNLean.Channel.IrreducibleGrowth`
   For orthogonal PSD `A, B` (tr(BA)=0), ∃ t ∈ {1,...,D-1}, tr(B·T^t(A)) > 0.
 
-### Wolf Theorem 6.3 (Spectral radius of irreducible maps) — ITEMS 2,3 FORMALIZED
+### Wolf Theorem 6.3 (Spectral radius of irreducible maps) — ITEMS 2,3,4 FORMALIZED
 
 **Item 2** (non-degenerate eigenvalue, strictly positive eigenvector):
 
@@ -68,8 +68,13 @@ MPS/QPF-level (transfer maps):
 * `posSemidef_eigenvector_unique_of_irreducible_cp` shows any two PSD
   eigenvectors for the same eigenvalue are proportional.
 
-**Item 4** (spectral radius identity `r = ρ(T)`): NOT DIRECTLY FORMALIZED.
-(We work with the normalized case where the spectral radius is 1.)
+**Item 4** (spectral radius identity `r = ρ(T)`):
+* `spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp`
+  — ENNReal-valued statement `ρ(T) = ofReal r`
+* `spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp`
+  — real-valued statement `(ρ(T)).toReal = r`
+* Combined with `exists_posDef_eigenvector_of_irreducible_cp`, this gives Wolf's
+  item 4 for the Perron–Frobenius eigenvalue from item 2.
 
 ### Wolf Corollary 6.3 (Time-average / ergodicity) — FORMALIZED
 
