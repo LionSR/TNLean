@@ -40,8 +40,21 @@ out in `RankOneExtractionFull.lean`.
 - `mulLeft_mem_rectSpan_pow_succ` : left-multiplication by `A i₀` maps `rectSpan` level `n` → `n+1`
 - `rectSpanLeftStep` : the linear map packaging this
 - `rectSpanLeftStep_injective` : injectivity when `P = (A i₀)^D`
+- `rectSpanLeftStep_surjective_of_finrank_eq` : surjectivity when finrank stabilizes
+- `rectSpanLeftStep_bijective_of_finrank_eq` : bijectivity when finrank stabilizes
 - `rectSpan_finrank_mono` : finrank is non-decreasing
 - `exists_finrank_eq_succ_of_rectSpan` : pigeonhole stabilization within `D²` steps
+
+### Stabilization — rectSpan meets full range
+- `rectSpan_le_range` : basic containment in range of left-multiplication
+- `rectSpan_eq_range_of_wordSpan_eq_top` : rectSpan = range when wordSpan = ⊤
+- `exists_rectSpan_eq_range_of_isNormal` : under `IsNormal`, some level reaches range
+- `rectSpan_eq_range_of_finrank_eq_range` : finrank test for rectSpan = range
+- `cumulativeRectSpan_le_range` : cumulative version of basic containment
+- `cumulativeRectSpan_eq_of_finrank_eq` : consecutive finrank equality → subspace equality
+- `cumulativeRectSpan_eq_range_of_finrank_eq_range_finrank` : finrank test (cumulative)
+- `cumulativeRectSpan_finrank_mono` : finrank non-decreasing (cumulative)
+- `exists_cumulativeRectSpan_finrank_eq_succ` : pigeonhole stabilization within D² steps
 
 ### Assembly theorems
 - `wielandt_lemma2b_conditional` : if rank-one ∈ bounded wordSpan, then wordSpan = ⊤
@@ -590,7 +603,154 @@ theorem exists_finrank_eq_succ_of_rectSpan :
   · exact fun n => rectSpan_finrank_mono A i₀ n
   · exact fun n => rectSpan_finrank_le ((A i₀) ^ D) A n
 
+/-! ### Surjectivity of the left-step from finrank stabilization
+
+When `finrank (rectSpan P A n) = finrank (rectSpan P A (n+1))`, the injective
+left-step becomes a bijection (hence surjective) in finite dimension.
+-/
+
+/-- The left-step map is surjective when the finrank of consecutive rectSpans agree.
+This follows from `LinearMap.injective_iff_surjective_of_finrank_eq_finrank`:
+an injection between finite-dimensional spaces of equal dimension is surjective. -/
+theorem rectSpanLeftStep_surjective_of_finrank_eq (n : ℕ)
+    (hfin : finrank ℂ (rectSpan ((A i₀) ^ D) A n) =
+            finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1))) :
+    Function.Surjective (rectSpanLeftStep A i₀ n) := by
+  haveI : FiniteDimensional ℂ (rectSpan ((A i₀) ^ D) A n) :=
+    FiniteDimensional.finiteDimensional_submodule _
+  haveI : FiniteDimensional ℂ (rectSpan ((A i₀) ^ D) A (n + 1)) :=
+    FiniteDimensional.finiteDimensional_submodule _
+  exact (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hfin).mp
+    (rectSpanLeftStep_injective A i₀ n)
+
+/-- The left-step is bijective when finrank stabilizes. -/
+theorem rectSpanLeftStep_bijective_of_finrank_eq (n : ℕ)
+    (hfin : finrank ℂ (rectSpan ((A i₀) ^ D) A n) =
+            finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1))) :
+    Function.Bijective (rectSpanLeftStep A i₀ n) :=
+  ⟨rectSpanLeftStep_injective A i₀ n,
+   rectSpanLeftStep_surjective_of_finrank_eq A i₀ n hfin⟩
+
 end RectSpanGrowth
+
+/-! ## Section 8b: Stabilization — rectSpan meets full range
+
+This section provides the connection between `rectSpan`/`cumulativeRectSpan` and
+`LinearMap.range (mulLeft ℂ P)`:
+
+- `rectSpan_le_range` / `cumulativeRectSpan_le_range` : basic containment
+- `rectSpan_eq_range_of_wordSpan_eq_top` : rectSpan = range when wordSpan = ⊤
+- `exists_rectSpan_eq_range_of_isNormal` : under `IsNormal`, some level reaches range
+- `rectSpan_eq_range_of_finrank_eq_range` : finrank criterion for rectSpan = range
+- `cumulativeRectSpan_eq_of_finrank_eq` : consecutive finrank eq → subspace equality
+- `cumulativeRectSpan_eq_range_of_finrank_eq_range_finrank` : finrank criterion (cumulative)
+- `cumulativeRectSpan_finrank_mono` : finrank is non-decreasing
+- `exists_cumulativeRectSpan_finrank_eq_succ` : pigeonhole stabilization within D² steps
+-/
+
+section RectSpanStabilization
+
+open Module
+
+variable {d D : ℕ}
+
+/-- `rectSpan P A n` is always contained in the range of left-multiplication by `P`. -/
+theorem rectSpan_le_range (P : Matrix (Fin D) (Fin D) ℂ)
+    (A : MPSTensor d D) (n : ℕ) :
+    rectSpan P A n ≤ LinearMap.range (LinearMap.mulLeft ℂ P) := by
+  rw [rectSpan, ← Submodule.map_top (f := LinearMap.mulLeft ℂ P)]
+  exact Submodule.map_mono le_top
+
+/-- When `wordSpan A n = ⊤`, the rectangular span equals the full range. -/
+theorem rectSpan_eq_range_of_wordSpan_eq_top
+    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
+    {n : ℕ} (htop : wordSpan A n = ⊤) :
+    rectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
+  simp [rectSpan, htop, Submodule.map_top]
+
+/-- Under `IsNormal`, there exists a level at which `rectSpan P A n = range(mulLeft P)`. -/
+theorem exists_rectSpan_eq_range_of_isNormal
+    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
+    (hN : IsNormal A) :
+    ∃ n, rectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
+  obtain ⟨N₀, hN₀⟩ := hN
+  exact ⟨N₀, rectSpan_eq_range_of_wordSpan_eq_top P A
+    ((wordSpan_eq_top_iff_isNBlkInjective A N₀).mpr hN₀)⟩
+
+/-- If `finrank (rectSpan P A n)` equals `finrank (range (mulLeft P))`, then
+`rectSpan P A n = range (mulLeft P)`.
+
+Combines `rectSpan_le_range` with `Submodule.eq_of_le_of_finrank_eq`. -/
+theorem rectSpan_eq_range_of_finrank_eq_range
+    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) {n : ℕ}
+    (hfin : finrank ℂ (rectSpan P A n) =
+            finrank ℂ (LinearMap.range (LinearMap.mulLeft ℂ P))) :
+    rectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
+  haveI : FiniteDimensional ℂ (LinearMap.range (LinearMap.mulLeft ℂ P)) :=
+    FiniteDimensional.finiteDimensional_submodule _
+  exact Submodule.eq_of_le_of_finrank_eq (rectSpan_le_range P A n) hfin
+
+/-! ### Cumulative rectangular span: stabilization and full range -/
+
+/-- `cumulativeRectSpan P A n` is always contained in the range of `mulLeft P`. -/
+theorem cumulativeRectSpan_le_range (P : Matrix (Fin D) (Fin D) ℂ)
+    (A : MPSTensor d D) (n : ℕ) :
+    cumulativeRectSpan P A n ≤ LinearMap.range (LinearMap.mulLeft ℂ P) := by
+  rw [cumulativeRectSpan, ← Submodule.map_top (f := LinearMap.mulLeft ℂ P)]
+  exact Submodule.map_mono le_top
+
+/-- If finrank of consecutive cumulative rectangular spans are equal, they coincide
+as submodules. This uses monotonicity + `Submodule.eq_of_le_of_finrank_eq`. -/
+theorem cumulativeRectSpan_eq_of_finrank_eq
+    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) {n : ℕ}
+    (hfin : finrank ℂ (cumulativeRectSpan P A n) =
+            finrank ℂ (cumulativeRectSpan P A (n + 1))) :
+    cumulativeRectSpan P A n = cumulativeRectSpan P A (n + 1) := by
+  haveI : FiniteDimensional ℂ (cumulativeRectSpan P A (n + 1)) :=
+    FiniteDimensional.finiteDimensional_submodule _
+  exact Submodule.eq_of_le_of_finrank_eq (cumulativeRectSpan_mono P A n) hfin
+
+/-- If `finrank (cumulativeRectSpan P A n)` equals `finrank (range (mulLeft P))`, then
+`cumulativeRectSpan P A n = range (mulLeft P)`. -/
+theorem cumulativeRectSpan_eq_range_of_finrank_eq_range_finrank
+    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) {n : ℕ}
+    (hfin : finrank ℂ (cumulativeRectSpan P A n) =
+            finrank ℂ (LinearMap.range (LinearMap.mulLeft ℂ P))) :
+    cumulativeRectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
+  haveI : FiniteDimensional ℂ (LinearMap.range (LinearMap.mulLeft ℂ P)) :=
+    FiniteDimensional.finiteDimensional_submodule _
+  exact Submodule.eq_of_le_of_finrank_eq (cumulativeRectSpan_le_range P A n) hfin
+
+/-- Finrank of the cumulative rectangular span is non-decreasing. -/
+theorem cumulativeRectSpan_finrank_mono
+    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) (n : ℕ) :
+    finrank ℂ (cumulativeRectSpan P A n) ≤
+      finrank ℂ (cumulativeRectSpan P A (n + 1)) :=
+  Submodule.finrank_mono (cumulativeRectSpan_mono P A n)
+
+/-- Pigeonhole: the non-decreasing bounded sequence
+`n ↦ finrank(cumulativeRectSpan P A n)` has a consecutive equality within `D²` steps. -/
+theorem exists_cumulativeRectSpan_finrank_eq_succ
+    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) :
+    ∃ n ≤ D ^ 2,
+      finrank ℂ (cumulativeRectSpan P A n) =
+      finrank ℂ (cumulativeRectSpan P A (n + 1)) :=
+  exists_consecutive_eq_of_monotone_bounded'
+    (fun n => cumulativeRectSpan_finrank_mono P A n)
+    (fun n => cumulativeRectSpan_finrank_le P A n)
+
+/-- Under `IsNormal`, the finrank of `rectSpan P A n` at the normal-witness level equals
+the finrank of `range(mulLeft P)`. Combined with `rectSpan_eq_range_of_finrank_eq_range`,
+this gives the ceiling. -/
+theorem rectSpan_finrank_eq_range_of_isNormal
+    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
+    (hN : IsNormal A) :
+    ∃ n, finrank ℂ (rectSpan P A n) =
+         finrank ℂ (LinearMap.range (LinearMap.mulLeft ℂ P)) := by
+  obtain ⟨N₀, heq⟩ := exists_rectSpan_eq_range_of_isNormal P A hN
+  exact ⟨N₀, by rw [heq]⟩
+
+end RectSpanStabilization
 
 /-! ## Section 9: Summary -/
 
