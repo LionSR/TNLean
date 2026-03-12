@@ -669,6 +669,8 @@ end OrthogonalTrace
 
 section Exponential
 
+open scoped Matrix.Norms.Frobenius
+
 private theorem isPositiveMap_smul_nonneg
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hE : IsPositiveMap E) {c : ℝ} (hc : 0 ≤ c) :
@@ -686,7 +688,16 @@ private lemma inv_factorial_ne_zero (n : ℕ) :
     ((n.factorial : ℂ)⁻¹) ≠ 0 := by
   exact inv_ne_zero (by exact_mod_cast Nat.factorial_ne_zero n)
 
-noncomputable private def quadraticFormCLM (v : Fin D → ℂ) :
+private lemma pos_of_matrix_ne_zero
+    {A : Matrix (Fin D) (Fin D) ℂ} (hA : A ≠ 0) : 0 < D := by
+  by_contra hD
+  have hD0 : D = 0 := Nat.eq_zero_of_not_pos hD
+  subst hD0
+  apply hA
+  ext i j
+  exact Fin.elim0 i
+
+private noncomputable def quadraticFormCLM (v : Fin D → ℂ) :
     Matrix (Fin D) (Fin D) ℂ →L[ℂ] ℂ :=
   LinearMap.toContinuousLinearMap
     { toFun := fun X => star v ⬝ᵥ (X *ᵥ v)
@@ -708,6 +719,7 @@ theorem exp_truncation_posDef_of_irreducible_cp
     {t : ℝ} (ht : 0 < t) :
     (∑ k ∈ Finset.range D, ((k.factorial : ℂ)⁻¹) • ((((t : ℂ) • E) ^ k) A)).PosDef := by
   classical
+  have hD : 0 < D := pos_of_matrix_ne_zero hA_ne
   let F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) := (t : ℂ) • E
   let term : ℕ → Matrix (Fin D) (Fin D) ℂ := fun k =>
     ((k.factorial : ℂ)⁻¹) • ((F ^ k) A)
@@ -727,7 +739,13 @@ theorem exp_truncation_posDef_of_irreducible_cp
   have hq_nonneg : 0 ≤ star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v) :=
     hsum_psd.dotProduct_mulVec_nonneg v
   have hq_zero : star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v) = 0 := by
-    exact le_antisymm (le_of_not_gt hq_not_pos) hq_nonneg
+    rcases Complex.nonneg_iff.mp hq_nonneg with ⟨hre_nonneg, him_zero⟩
+    have h_re_not_pos : ¬ 0 < (star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v)).re := by
+      intro hre_pos
+      exact hq_not_pos ((Complex.pos_iff).2 ⟨hre_pos, him_zero⟩)
+    have h_re_zero : (star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v)).re = 0 := by
+      exact le_antisymm (le_of_not_gt h_re_not_pos) hre_nonneg
+    exact Complex.ext h_re_zero him_zero.symm
   have hsum_zero : (∑ k ∈ Finset.range D, term k) *ᵥ v = 0 :=
     (hsum_psd.dotProduct_mulVec_zero_iff v).mp hq_zero
   have hterm_zero_F : ∀ k ∈ Finset.range D, ((F ^ k) A) *ᵥ v = 0 := by
@@ -740,13 +758,16 @@ theorem exp_truncation_posDef_of_irreducible_cp
           (fun i hi => (hterm_psd i).dotProduct_mulVec_nonneg v)).mp hsum_q_zero k hk
     have hterm_zero : (term k) *ᵥ v = 0 :=
       (hterm_psd k).dotProduct_mulVec_zero_iff v |>.mp hqterm_zero
-    rw [term, Matrix.smul_mulVec] at hterm_zero
+    change (((k.factorial : ℂ)⁻¹) • ((F ^ k) A)) *ᵥ v = 0 at hterm_zero
+    rw [Matrix.smul_mulVec] at hterm_zero
     exact (smul_eq_zero.mp hterm_zero).resolve_left (inv_factorial_ne_zero k)
   have hterm_zero_E : ∀ k ∈ Finset.range D, ((E ^ k) A) *ᵥ v = 0 := by
     intro k hk
     have hkF : ((F ^ k) A) *ᵥ v = 0 := hterm_zero_F k hk
     have hkpow : ((F ^ k) A) = ((t : ℂ) ^ k) • ((E ^ k) A) := by
-      simp [F, smul_pow]
+      change ((((t : ℂ) • E) ^ k) A) = ((t : ℂ) ^ k) • ((E ^ k) A)
+      rw [smul_pow]
+      rfl
     rw [hkpow, Matrix.smul_mulVec] at hkF
     exact (smul_eq_zero.mp hkF).resolve_left (pow_ne_zero _ (by exact_mod_cast ht.ne'))
   let T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) := LinearMap.id + E
@@ -754,7 +775,7 @@ theorem exp_truncation_posDef_of_irreducible_cp
     simpa [T] using growth_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne
   have h_expand :
       (T ^ (D - 1)) A = ∑ k ∈ Finset.range D, (D - 1).choose k • ((E ^ k) A) := by
-    simpa [T] using idPlusE_pow_apply_eq_sum (E := E) (n := D - 1) A
+    simpa [T, Nat.sub_add_cancel hD] using idPlusE_pow_apply_eq_sum (E := E) (n := D - 1) A
   have hv_growth_zero : ((T ^ (D - 1)) A) *ᵥ v = 0 := by
     rw [h_expand, Matrix.sum_mulVec]
     refine Finset.sum_eq_zero ?_
@@ -775,34 +796,41 @@ theorem exp_posDef_of_irreducible_cp
     (A : Matrix (Fin D) (Fin D) ℂ) (hA : A.PosSemidef) (hA_ne : A ≠ 0)
     {t : ℝ} (ht : 0 < t) :
     ((NormedSpace.exp
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) ((t : ℂ) • E))) A).PosDef := by
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          ((t : ℂ) • E))) A).PosDef := by
   classical
   let Φ : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) ((t : ℂ) • E)
   let term : ℕ → Matrix (Fin D) (Fin D) ℂ := fun n =>
-    ((n.factorial : ℂ)⁻¹) • ((((t : ℂ) • E) ^ n) A)
+    ((n.factorial : ℂ)⁻¹) • ((Φ ^ n) A)
   have hF_pos : IsPositiveMap ((t : ℂ) • E) :=
     isPositiveMap_smul_nonneg hCP.isPositiveMap ht.le
+  have hpow_apply : ∀ n : ℕ, (Φ ^ n) A = ((((t : ℂ) • E) ^ n) A) := by
+    intro n
+    rw [← map_pow (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) ((t : ℂ) • E) n]
+    rfl
   have hterm_psd : ∀ n : ℕ, (term n).PosSemidef := by
     intro n
-    simpa [term] using (iterate_posSemidef hF_pos hA n).smul (inv_factorial_nonneg n)
+    simpa [term, hpow_apply n] using (iterate_posSemidef hF_pos hA n).smul (inv_factorial_nonneg n)
   have htrunc_pd : (∑ k ∈ Finset.range D, term k).PosDef := by
-    simpa [term] using exp_truncation_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne ht
+    simpa [term, hpow_apply] using exp_truncation_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne ht
   have hseries_ops : Summable (fun n : ℕ => ((n.factorial : ℂ)⁻¹) • (Φ ^ n)) := by
     simpa [NormedSpace.expSeries_apply_eq] using
-      (NormedSpace.expSeries_summable (ℂ)
-        ((Matrix (Fin D) (Fin D) ℂ) →L[ℂ] Matrix (Fin D) (Fin D) ℂ) Φ)
+      (NormedSpace.expSeries_summable
+        (𝕂 := ℂ)
+        (𝔸 := (Matrix (Fin D) (Fin D) ℂ) →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+        Φ)
   let evA : ((Matrix (Fin D) (Fin D) ℂ) →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℂ]
       Matrix (Fin D) (Fin D) ℂ := (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ)) A
   have hseries : Summable term := by
-    simpa [term, Φ, evA, ContinuousLinearMap.apply_apply, map_pow] using evA.summable hseries_ops
+    simpa [term, evA, ContinuousLinearMap.apply_apply, hpow_apply] using evA.summable hseries_ops
   have hexp_eq :
       (NormedSpace.exp Φ) A = ∑' n, term n := by
     have hExp :
         NormedSpace.exp Φ = ∑' n : ℕ, ((n.factorial : ℂ)⁻¹) • (Φ ^ n) := by
       simpa using congrArg (fun f => f Φ) (NormedSpace.exp_eq_tsum (𝕂 := ℂ))
     rw [hExp]
-    simpa [term, Φ, evA, ContinuousLinearMap.apply_apply, map_pow] using evA.map_tsum hseries_ops
+    simpa [term, evA, ContinuousLinearMap.apply_apply, hpow_apply] using evA.map_tsum hseries_ops
   have hpartial_psd :
       ∀ N : ℕ, (∑ k ∈ Finset.range N, term k).PosSemidef := by
     intro N
@@ -829,16 +857,23 @@ theorem exp_posDef_of_irreducible_cp
     have hrqseries : Summable rqterm := Complex.reCLM.summable hqseries
     have hrq_nonneg : ∀ n, 0 ≤ rqterm n := by
       intro n
-      simpa [rqterm, qterm, qCLM, quadraticFormCLM] using
-        (hterm_psd n).dotProduct_mulVec_nonneg v
+      exact (Complex.nonneg_iff.mp (by
+        simpa [qterm, qCLM, quadraticFormCLM] using
+          (hterm_psd n).dotProduct_mulVec_nonneg v)).1
     by_contra hq_not_pos
     have hq_nonneg : 0 ≤ star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v) :=
       h_exp_psd.dotProduct_mulVec_nonneg v
     have hq_zero : star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v) = 0 := by
-      exact le_antisymm (le_of_not_gt hq_not_pos) hq_nonneg
+      rcases Complex.nonneg_iff.mp hq_nonneg with ⟨hre_nonneg, him_zero⟩
+      have h_re_not_pos : ¬ 0 < (star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v)).re := by
+        intro hre_pos
+        exact hq_not_pos ((Complex.pos_iff).2 ⟨hre_pos, him_zero⟩)
+      have h_re_zero : (star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v)).re = 0 := by
+        exact le_antisymm (le_of_not_gt h_re_not_pos) hre_nonneg
+      exact Complex.ext h_re_zero him_zero.symm
     have hrq_tsum_zero : ∑' n, rqterm n = 0 := by
       rw [← Complex.re_tsum hqseries, ← hqeq, hq_zero]
-      simp [rqterm]
+      simp
     have hrq_zero : ∀ n, rqterm n = 0 := by
       intro n
       by_contra hne
@@ -867,10 +902,9 @@ theorem exp_posDef_of_irreducible_cp
     have hq_trunc : 0 < star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v) := by
       exact (Matrix.posDef_iff_dotProduct_mulVec.mp htrunc_pd).2 hv
     exact (ne_of_gt hq_trunc) (by simp [hv_trunc_zero])
-  rw [show ((NormedSpace.exp
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) ((t : ℂ) • E))) A) =
-      (NormedSpace.exp Φ) A by simp [Φ]]
-  rw [Matrix.posDef_iff_dotProduct_mulVec]
-  exact ⟨h_exp_psd.isHermitian, hq_pos⟩
+  have hfinal : ((NormedSpace.exp Φ) A).PosDef := by
+    rw [Matrix.posDef_iff_dotProduct_mulVec]
+    exact ⟨h_exp_psd.isHermitian, hq_pos⟩
+  simpa [Φ] using hfinal
 
 end Exponential

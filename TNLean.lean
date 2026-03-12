@@ -48,6 +48,7 @@ import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.Channel.SimilarityIrreducible
 import TNLean.Channel.IrreduciblePerronFrobenius
 import TNLean.Channel.IrreducibleSpectralRadius
+import TNLean.Channel.IrreducibleFromSpectral
 import TNLean.Channel.Schwarz
 import TNLean.Channel.Primitive
 import TNLean.Channel.PeripheralSpectrum
