@@ -907,18 +907,14 @@ This is the "power membership" ingredient needed by
 `vecMulVec_mem_wordSpan_of_rectSpan_eq_range`. -/
 theorem pow_mem_wordSpan (A : MPSTensor d D) (i₀ : Fin d) :
     (A i₀) ^ D ∈ wordSpan A D := by
-  rw [← evalWord_replicate_eq_pow A i₀ D]
-  have hlen : (List.replicate D i₀).length = D := List.length_replicate D i₀
-  rw [← hlen]
-  exact evalWord_mem_wordSpan A (List.replicate D i₀)
+  have h := evalWord_mem_wordSpan A (List.replicate D i₀)
+  rwa [evalWord_replicate_eq_pow, List.length_replicate] at h
 
 /-- **More general power membership**: `(A i₀)^k ∈ wordSpan A k` for any `k`. -/
 theorem pow_mem_wordSpan' (A : MPSTensor d D) (i₀ : Fin d) (k : ℕ) :
     (A i₀) ^ k ∈ wordSpan A k := by
-  rw [← evalWord_replicate_eq_pow A i₀ k]
-  have hlen : (List.replicate k i₀).length = k := List.length_replicate k i₀
-  rw [← hlen]
-  exact evalWord_mem_wordSpan A (List.replicate k i₀)
+  have h := evalWord_mem_wordSpan A (List.replicate k i₀)
+  rwa [evalWord_replicate_eq_pow, List.length_replicate] at h
 
 /-- Iterating the eigenvalue equation: if `M *ᵥ φ = μ • φ`, then `M^k *ᵥ φ = μ^k • φ`.
 
@@ -930,7 +926,10 @@ private theorem pow_mulVec_eigenvector
   induction k with
   | zero => simp [Matrix.one_mulVec]
   | succ n ih =>
-    rw [pow_succ, Matrix.mul_mulVec, ih, Matrix.mulVec_smul, heig, smul_smul, pow_succ]
+    -- M^(n+1) = M^n * M, use mulVec_mulVec to decompose
+    rw [pow_succ, ← Matrix.mulVec_mulVec φ (M ^ n) M, heig,
+        Matrix.mulVec_smul, ih, smul_smul]
+    congr 1; ring
 
 /-- **Eigenvector lies in the range of the D-th power.**
 
@@ -947,11 +946,10 @@ theorem eigenvector_mem_range_toLin_pow
     φ ∈ LinearMap.range (Matrix.toLin' ((A i₀) ^ D)) := by
   have hpow : (A i₀ ^ D) *ᵥ φ = (μ ^ D) • φ :=
     pow_mulVec_eigenvector heig D
-  have hμD : μ ^ D ≠ 0 := pow_ne_zero D hμ
   rw [LinearMap.mem_range]
   refine ⟨(μ⁻¹ ^ D) • φ, ?_⟩
-  rw [Matrix.toLin'_apply, Matrix.mulVec_smul, hpow, smul_smul]
-  simp [← mul_pow, mul_comm μ (μ⁻¹), inv_mul_cancel₀ hμ]
+  rw [Matrix.toLin'_apply, Matrix.mulVec_smul, hpow, smul_smul,
+      ← mul_pow, inv_mul_cancel₀ hμ, one_pow, one_smul]
 
 /-- **More general version**: eigenvector lies in the range of any power `k`. -/
 theorem eigenvector_mem_range_toLin_pow'
@@ -961,11 +959,10 @@ theorem eigenvector_mem_range_toLin_pow'
     φ ∈ LinearMap.range (Matrix.toLin' ((A i₀) ^ k)) := by
   have hpow : (A i₀ ^ k) *ᵥ φ = (μ ^ k) • φ :=
     pow_mulVec_eigenvector heig k
-  have hμk : μ ^ k ≠ 0 := pow_ne_zero k hμ
   rw [LinearMap.mem_range]
   refine ⟨(μ⁻¹ ^ k) • φ, ?_⟩
-  rw [Matrix.toLin'_apply, Matrix.mulVec_smul, hpow, smul_smul]
-  simp [← mul_pow, mul_comm μ (μ⁻¹), inv_mul_cancel₀ hμ]
+  rw [Matrix.toLin'_apply, Matrix.mulVec_smul, hpow, smul_smul,
+      ← mul_pow, inv_mul_cancel₀ hμ, one_pow, one_smul]
 
 /-! ### Combined packaging: eigenvector rank-one in wordSpan -/
 
