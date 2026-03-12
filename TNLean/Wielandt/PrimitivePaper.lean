@@ -34,11 +34,9 @@ Wielandt bound in paper notation, without changing the internal proof machinery.
 
 * `HasEventuallyFullKrausRank A ↔ IsNormal A` — proved as
   `hasEventuallyFullKrausRank_iff_isNormal`.
-* `IsPrimitivePaper A` is **stronger** than the current `IsPrimitive A`
-  (which only asks for a spectral gap with PSD fixed point). The easy direction
-  `HasEventuallyFullKrausRank → IsPrimitivePaper` is proved in `PrimitiveEquiv.lean`.
-  The converse (and full equivalence with `IsPrimitive`) requires additional
-  spectral infrastructure and is deferred.
+* `IsPrimitivePaper A` is equivalent to `HasEventuallyFullKrausRank A`
+  (and to `IsStronglyIrreduciblePaper A` under normalization). The full circular
+  equivalence **(a)↔(b)↔(c)** is proved in `Prop3.lean`.
 * `IsStronglyIrreduciblePaper` combines `PeripheralSpectrum.IsPrimitive` (unique
   peripheral eigenvalue) with positive definiteness of the fixed point. This is
   Proposition 3(c) in the paper and Theorem 6.7(3) in Wolf's Chapter 6.
@@ -48,9 +46,9 @@ Wielandt bound in paper notation, without changing the internal proof machinery.
 
 ## Design notes
 
-These are **paper-facing wrappers only**. The internal proof chain still flows
-through `IsNormal`, `IsPrimitiveMPS`, etc. The harder equivalence directions
-of Proposition 3 are deferred to future files.
+These are **paper-facing wrappers only**. The internal proof chain flows through
+`IsNormal`, `IsPrimitiveMPS`, etc. The full equivalence of all three Proposition 3
+conditions is assembled in `Prop3.lean`.
 
 ## References
 
@@ -108,11 +106,9 @@ products applied to `φ` span all of `ℂ^D`.
 Paper: "E_A is primitive ⟺ for all |φ⟩ ≠ 0, ∃ q s.t. H_q(A,φ) = ℂ^D."
 The uniform `q` (independent of `φ`) is part of the paper's definition.
 
-Note: the paper's Proposition 3 states several equivalent conditions.
-The full equivalence is deferred. In particular, the relationship between
-`IsPrimitivePaper` and the spectral-gap definition `IsPrimitive` used
-internally in this library is established only partially so far
-(see `PrimitiveEquiv.lean`). -/
+Note: The full equivalence of all three Proposition 3 conditions is assembled
+in `Prop3.lean`; see `primitivePaper_iff_hasEventuallyFullKrausRank` and
+`primitivePaper_iff_stronglyIrreducible`. -/
 def IsPrimitivePaper (A : MPSTensor d D) : Prop :=
   ∃ q : ℕ, ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤
 

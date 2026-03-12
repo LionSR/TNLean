@@ -95,7 +95,8 @@ theorem idPlusE_ne_zero
     mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true] at this
   exact this
 
-/-- PD + PSD = PD: `A + E(A)` is PosDef when `A` is PosDef and `E` is positive. -/
+/-- `A + E(A)` is PosDef when `A` is PosDef and `E` is a positive map.
+Used in the dimension-descent induction step of `growth_posDef_of_irreducible_cp`. -/
 theorem idPlusE_posDef
     (hE : IsPositiveMap E)
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosDef) :
@@ -138,7 +139,13 @@ theorem ker_add_psd_right
 
 end KernelPSD
 
-/-! ## Spectral helpers (self-contained, no MPS imports) -/
+/-! ## Spectral helpers
+
+These are intentionally self-contained copies of the analogous lemmas in
+`TNLean.QPF.PosDef` and `TNLean.MPS.FixedPointInvariantProjection`.
+They carry the prime suffix (`'`) to distinguish them from those public versions,
+and they are private to this file to keep `IrreducibleGrowth` lightweight
+(no QPF/MPS imports needed). -/
 
 section SpectralHelpers
 
@@ -169,6 +176,9 @@ end SpectralHelpers
 
 /-! ## Adjoint identity -/
 
+/-- Local copy of the adjoint-pairing identity `⟨x, My⟩ = ⟨M†x, y⟩`.
+Duplicated here (with prime suffix) to keep this file independent of
+`TNLean.MPS.FixedPointInvariantProjection`. -/
 private lemma dotProduct_mulVec_conjTranspose'
     (M : Matrix (Fin D) (Fin D) ℂ)
     (x y : Fin D → ℂ) :
@@ -377,7 +387,8 @@ end OneStep
 
 section KernelDecrease
 
-/-- For PSD `B` and positive `E`, `ker(B + E(B)) ⊆ ker(B)` as submodules. -/
+/-- For PSD `B` and positive `E`, `ker(B + E(B)) ⊆ ker(B)` as submodules.
+Immediate consequence of `ker_add_psd_left`; used in the strict kernel-decrease lemma. -/
 private lemma mulVecLin_ker_idPlusE_le
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hE : IsPositiveMap E)
