@@ -17,6 +17,7 @@ import TNLean.Algebra.TracePairing
 import TNLean.Algebra.BlockPermutation
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.GramMatrixLI
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
@@ -46,6 +47,7 @@ import TNLean.Channel.PerronFrobeniusNormalization
 import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.Channel.SimilarityIrreducible
 import TNLean.Channel.IrreduciblePerronFrobenius
+import TNLean.Channel.IrreducibleSpectralRadius
 import TNLean.Channel.Schwarz
 import TNLean.Channel.Primitive
 import TNLean.Channel.PeripheralSpectrum
@@ -127,6 +129,7 @@ import TNLean.Wielandt.Lemma1
 import TNLean.Wielandt.Lemma2
 import TNLean.Wielandt.Lemma2bCoarse
 import TNLean.Wielandt.Lemma2bExact
+import TNLean.Wielandt.Theorem1
 import TNLean.Wielandt.PrimitivityNormal
 import TNLean.Wielandt.PrimitivityToNormal
 import TNLean.Wielandt.PrimitiveImpliesIrreducible
@@ -136,6 +139,8 @@ import TNLean.Wielandt.RankOneSpanGrowth
 import TNLean.Wielandt.RankOneManufacture
 import TNLean.Wielandt.RectangularRanges
 import TNLean.Wielandt.RectangularSpan
+import TNLean.Wielandt.RectSpanGrowth
+import TNLean.Wielandt.RectSpanUniversality
 import TNLean.Wielandt.RankOneBoundedWord
 import TNLean.Wielandt.RankOneExtractionFull
 import TNLean.Wielandt.CumulativeToWordSpan
