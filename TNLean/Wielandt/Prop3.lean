@@ -21,8 +21,8 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
   `H_q(A,φ) = ℂ^D` (the transfer map is primitive).
 * **(b)** `HasEventuallyFullKrausRank A`: there exists `i` with `S_i(A) = M_D(ℂ)`
   (equivalently, `IsNormal A`).
-* **(c)** `IsStronglyIrreduciblePaper A`: `E_A` has a positive-definite fixed point
-  and peripheral spectrum `{1}`.
+* **(c)** `IsStronglyIrreduciblePaper A`: `E_A` is irreducible, has a
+  positive-definite fixed point, and peripheral spectrum `{1}`.
 
 ## Directions proved
 
@@ -93,8 +93,8 @@ theorem prop3_ba_isNormal (A : MPSTensor d D)
 /-- **Proposition 3 (a)→(c)**: Paper-primitivity implies strong irreducibility.
 
 If the MPS tensor `A` is paper-primitive and normalized (`∑ Aᵢ† Aᵢ = 1`), then
-it is strongly irreducible: the transfer map `E_A` has a positive-definite fixed
-point and peripheral spectrum `{1}`.
+it is strongly irreducible: the transfer map `E_A` is irreducible, has a
+positive-definite fixed point, and peripheral spectrum `{1}`.
 
 Re-exported from `Prop3_ac.lean`. -/
 theorem prop3_ac [NeZero D] (A : MPSTensor d D)
