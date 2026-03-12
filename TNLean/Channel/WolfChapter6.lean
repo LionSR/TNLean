@@ -6,6 +6,7 @@ import TNLean.Channel.Irreducible
 import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.IrreduciblePerronFrobenius
 import TNLean.Channel.CesaroFixedPoint
+import TNLean.Channel.Ergodicity
 import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.Channel.SimilarityIrreducible
 import TNLean.Channel.PeripheralSpectrum
@@ -69,6 +70,16 @@ MPS/QPF-level (transfer maps):
 
 **Item 4** (spectral radius identity `r = ρ(T)`): NOT DIRECTLY FORMALIZED.
 (We work with the normalized case where the spectral radius is 1.)
+
+### Wolf Corollary 6.3 (Time-average / ergodicity) — FORMALIZED
+
+* `IsChannel.exists_unique_density_fixedPoint_of_irreducible` —
+  `TNLean.Channel.Ergodicity`
+  Qualitative form: an irreducible channel has a unique density-matrix fixed
+  point, and it is positive definite.
+* `IsChannel.cesaroMean_tendsto_of_irreducible` — `TNLean.Channel.Ergodicity`
+  Full Cesàro convergence: for every density matrix `ρ`,
+  `(1/N) ∑_{t=0}^{N-1} E^[t](ρ) → σ`.
 
 ### Wolf Theorem 6.4 (Irreducibility from spectral properties) — NOT FORMALIZED
 
