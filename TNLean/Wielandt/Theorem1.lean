@@ -6,6 +6,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Wielandt.Prop3
 import TNLean.Wielandt.Lemma2
 import TNLean.Wielandt.Lemma2bExact
+import TNLean.Wielandt.InvertibleWordSpanGrowth
 
 /-!
 # Theorem 1 — Quantum Wielandt's inequality (arXiv:0909.5347 / Wolf §6.9)
@@ -38,27 +39,29 @@ then `i(A) ≤ D²`.*
 * `iIndex_le_sq_of_noninvertible_eigenvector`:
   the corresponding numeric bound `iIndex A ≤ D ^ 2`.
 
-## Partial progress toward case (2)
+### Part 3 — Case (2): invertible Kraus operator
 
-`InvertibleWordSpanGrowth.lean` provides sorry-free infrastructure for
-the invertible-element case:
+The paper's Theorem 1 also states:
+*if some Kraus operator `A_{i₀}` is invertible, then
+`i(A) ≤ D² − krausRank(A) + 1`.*
 
-* `wordSpan_finrank_mono_of_isUnit`: `dim(S_{n+1}) ≥ dim(S_n)` when `A i₀`
-  is invertible.
-* `wordSpan_eq_top_of_ge_of_isUnit`: **permanence** — once `S_N = ⊤`,
-  `S_m = ⊤` for all `m ≥ N` under invertibility.
+* `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit`:
+  under paper primitivity, normalization, and `IsUnit (A i₀)`, we prove
+  `wordSpan A (D ^ 2 - krausRank A + 1) = ⊤`.
+
+* `iIndex_le_of_isPrimitivePaper_of_isUnit`:
+  the corresponding numeric bound
+  `iIndex A ≤ D ^ 2 - krausRank A + 1`.
+
+These case-(2) wrappers pass from paper primitivity to `IsNormal A`, note the
+ambient estimate `krausRank A ≤ D²` via `wordSpan_finrank_le A 1`, and then
+invoke the backend theorem `wordSpan_eq_top_of_isNormal_of_isUnit` from
+`InvertibleWordSpanGrowth.lean`.
 
 ## What remains as future work
 
-* **Case (2) sharp bound**: `i(A) ≤ D² − krausRank(A) + 1` when some
-  Kraus operator is invertible. This requires the **strict growth** claim:
-  if `dim(S_n) < D²` then `dim(S_{n+1}) > dim(S_n)`. The infrastructure
-  (monotonicity, permanence) is in place; the gap is the formal proof
-  that dimensional stabilization below `D²` contradicts `IsNormal`,
-  following PVWC07 Appendix A.
-
 * **Case (1)** / full general bound: `i(A) ≤ (D² − krausRank(A) + 1) · D²`,
-  which combines cases (2) and (3).  Blocked by case (2) sharp bound.
+  which combines cases (2) and (3).
 
 * **Sharp Lemma 1** using `krausRank A` rather than the raw parameter `d`.
 
@@ -69,6 +72,13 @@ the invertible-element case:
 The proof chains:
 1. `IsPrimitivePaper → HasEventuallyFullKrausRank` (Proposition 3)
 2. `HasEventuallyFullKrausRank → qIndex A ≤ iIndex A` (PrimitiveEquiv)
+
+### Case (2)
+
+The proof chains:
+1. `IsPrimitivePaper → HasEventuallyFullKrausRank → IsNormal A`
+2. `krausRank A ≤ D²` from `wordSpan_finrank_le A 1`
+3. Apply `wordSpan_eq_top_of_isNormal_of_isUnit`
 
 ### Case (3)
 
@@ -192,5 +202,61 @@ theorem iIndex_le_sq_of_noninvertible_eigenvector
     wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector
       A hNorm hPrim i₀ hNotInv hφ hμ heig
   exact Nat.sInf_le (show D ^ 2 ∈ {n : ℕ | wordSpan A n = ⊤} from htop)
+
+
+/-! ## Part 3: Case (2) — invertible Kraus operator -/
+
+/-- **Theorem 1, case (2): `wordSpan A (D² − krausRank A + 1) = ⊤`** under an
+invertible Kraus operator hypothesis (arXiv:0909.5347 / Wolf 6.9).
+
+If `A` is normalized and primitive in the paper's sense and some Kraus operator
+`A i₀` is invertible, then the sharp case-(2) word-length bound holds:
+`wordSpan A (D ^ 2 - krausRank A + 1) = ⊤`.
+
+**Proof outline.**
+1. `IsPrimitivePaper → HasEventuallyFullKrausRank` by Proposition 3.
+2. `HasEventuallyFullKrausRank → IsNormal` via `hasEventuallyFullKrausRank_iff_isNormal`.
+3. `krausRank A ≤ D²` from the ambient-dimension bound `wordSpan_finrank_le A 1`.
+4. Apply the backend theorem `wordSpan_eq_top_of_isNormal_of_isUnit`. -/
+theorem wordSpan_eq_top_of_isPrimitivePaper_of_isUnit
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitivePaper A)
+    (i₀ : Fin d)
+    (hInv : IsUnit (A i₀)) :
+    wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
+  -- Step 1: IsPrimitivePaper → HasEventuallyFullKrausRank
+  have hEventually : HasEventuallyFullKrausRank A :=
+    (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hPrim
+  -- Step 2: HasEventuallyFullKrausRank → IsNormal
+  have hNormal : IsNormal A :=
+    (hasEventuallyFullKrausRank_iff_isNormal A).mp hEventually
+  -- Step 3: krausRank A ≤ D²
+  have hRank : krausRank A ≤ D ^ 2 := by
+    simpa [krausRank] using wordSpan_finrank_le A 1
+  -- Step 4: Apply the backend theorem
+  exact wordSpan_eq_top_of_isNormal_of_isUnit A i₀ hInv hNormal
+
+/-- **Theorem 1, case (2): `iIndex A ≤ D² − krausRank A + 1`** under an
+invertible Kraus operator hypothesis (arXiv:0909.5347 / Wolf 6.9).
+
+If `A` is normalized and primitive in the paper's sense and some Kraus operator
+`A i₀` is invertible, then the full-Kraus-rank index satisfies the sharp
+case-(2) bound `iIndex A ≤ D ^ 2 - krausRank A + 1`.
+
+This is the numeric form of `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit`. -/
+theorem iIndex_le_of_isPrimitivePaper_of_isUnit
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitivePaper A)
+    (i₀ : Fin d)
+    (hInv : IsUnit (A i₀)) :
+    iIndex A ≤ D ^ 2 - krausRank A + 1 := by
+  have htop : wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ :=
+    wordSpan_eq_top_of_isPrimitivePaper_of_isUnit A hNorm hPrim i₀ hInv
+  exact Nat.sInf_le
+    (show D ^ 2 - krausRank A + 1 ∈ {n : ℕ | wordSpan A n = ⊤} from htop)
 
 end MPSTensor
