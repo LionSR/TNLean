@@ -126,6 +126,7 @@ import TNLean.Wielandt.Prop3_cb
 import TNLean.Wielandt.Lemma1
 import TNLean.Wielandt.Lemma2
 import TNLean.Wielandt.Lemma2bCoarse
+import TNLean.Wielandt.Lemma2bExact
 import TNLean.Wielandt.PrimitivityNormal
 import TNLean.Wielandt.PrimitivityToNormal
 import TNLean.Wielandt.PrimitiveImpliesIrreducible
