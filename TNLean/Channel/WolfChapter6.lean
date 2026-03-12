@@ -70,11 +70,13 @@ MPS/QPF-level (transfer maps):
 
 **Item 4** (spectral radius identity `r = ρ(T)`):
 * `spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp`
-  — ENNReal-valued statement `ρ(T) = ofReal r`
+  — `ENNReal`-valued statement `ρ(E) = ofReal r`
 * `spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp`
-  — real-valued statement `(ρ(T)).toReal = r`
-* Combined with `exists_posDef_eigenvector_of_irreducible_cp`, this gives Wolf's
-  item 4 for the Perron–Frobenius eigenvalue from item 2.
+  — real-valued corollary `(ρ(E)).toReal = r`
+
+Both in `TNLean.Channel.IrreduciblePerronFrobenius`.
+Combined with `exists_posDef_eigenvector_of_irreducible_cp`, these give the full Wolf
+item 4 for the Perron–Frobenius eigenvalue.
 
 ### Wolf Corollary 6.3 (Time-average / ergodicity) — FORMALIZED
 
@@ -85,6 +87,11 @@ MPS/QPF-level (transfer maps):
 * `IsChannel.cesaroMean_tendsto_of_irreducible` — `TNLean.Channel.Ergodicity`
   Full Cesàro convergence: for every density matrix `ρ`,
   `(1/N) ∑_{t=0}^{N-1} E^[t](ρ) → σ`.
+
+Supporting infrastructure in `TNLean.Channel.Ergodicity`:
+* `IsChannel.iter_mem_densityMatrices`: iterates of a channel preserve density matrices.
+* `IsChannel.cesaroMean_subseq_limit_fixedPoint`: any subsequential Cesàro limit is
+  a density-matrix fixed point (compactness + telescoping argument).
 
 ### Wolf Theorem 6.4 (Irreducibility from spectral properties) — NOT FORMALIZED
 

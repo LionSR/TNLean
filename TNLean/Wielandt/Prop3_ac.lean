@@ -226,7 +226,7 @@ theorem posDef_fixedPoint_of_isPrimitivePaper
   -- Step 4: Rewrite using linearity: E^q(Σ |v_i⟩⟨v_i|) = Σ E^q(|v_i⟩⟨v_i|)
   rw [hρ_eq] at hfix_pow ⊢
   rw [map_sum] at hfix_pow
-  -- Now: ρ_eq says ρ = Σ |v_i⟩⟨v_i|, and hfix_pow says Σ E^q(|v_i⟩⟨v_i|) = Σ |v_i⟩⟨v_i|
+  -- Now: hfix_pow says Σ E^q(|v_i⟩⟨v_i|) = Σ |v_i⟩⟨v_i| = ρ
   -- We'll prove the RHS is PosDef by showing = Σ E^q(|v_i⟩⟨v_i|) with one PosDef summand.
   rw [← hfix_pow]
   -- Now goal: (Σ_i E^q(|v_i⟩⟨v_i|)).PosDef
@@ -937,7 +937,8 @@ theorem perturbation_ne_zero_of_trace_zero [NeZero D]
       calc (0 : ℝ) < ∑ i : Fin D, hρ.isHermitian.eigenvalues i := h
         _ = (∑ i, (hρ.isHermitian.eigenvalues i : ℂ)).re := by simp
         _ = _ := rfl
-    exact Finset.sum_pos (fun i _ => hρ.eigenvalues_pos i) ⟨⟨0, NeZero.pos D⟩, Finset.mem_univ _⟩
+    exact Finset.sum_pos (fun i _ => hρ.eigenvalues_pos i)
+      ⟨⟨0, NeZero.pos D⟩, Finset.mem_univ _⟩
   exact absurd this (ne_of_apply_ne Complex.re (ne_of_gt htr_pos))
 
 /-- **Upper bound on perturbation parameter.**
@@ -1129,7 +1130,8 @@ theorem hermitian_pow_fixedPoint_eq_zero_of_trace_eq_zero_of_isPrimitivePaper [N
     simp only [Ep]
     exact linearMap_pow_fixed _ ρ₀ hρ₀_fix p
   -- ρ₀ is PosDef by upgrade
-  have hρ₀_pd := posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hρ₀_psd hρ₀_ne hp hρ₀_pow_fix
+  have hρ₀_pd :=
+    posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hρ₀_psd hρ₀_ne hp hρ₀_pow_fix
   -- Step 4: trace(ρ₀) ≠ 0
   haveI : Nonempty (Fin D) := ⟨⟨0, hDpos⟩⟩
   have hρ₀_tr : Matrix.trace ρ₀ ≠ 0 := by

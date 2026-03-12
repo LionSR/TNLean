@@ -2,7 +2,6 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Algebra.TracePairing
 import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.Channel.Schwarz
@@ -69,6 +68,31 @@ noncomputable instance : NormedRing (Matrix (Fin D) (Fin D) ℂ) :=
 
 noncomputable instance : NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.linftyOpNormedAlgebra
+
+/-! ## Shared spectral helper -/
+
+/-- The adjoint trace-pairing identity: `tr(ρ * E(X)) = tr(E†(ρ) * X)`, expressed in
+terms of the adjoint (conjugate-transposed Kraus) transfer map.
+
+Shared by the uniqueness and spectral-radius proofs (Wolf Thm 6.3(3) and (4)). -/
+private lemma trace_mul_transferMap_adjoint
+    {n : ℕ}
+    (K : MPSTensor n D)
+    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K)
+    (ρ X : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.trace (ρ * E X) =
+      Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) ρ * X) :=
+  calc
+    Matrix.trace (ρ * E X)
+        = Matrix.trace (ρ * MPSTensor.transferMap (d := n) (D := D) K X) := by rw [hE_eq]
+    _ = Matrix.trace (Kraus.adjointMap K ρ * X) := by
+          simpa [Kraus.map, MPSTensor.transferMap_apply] using
+            (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) ρ X)
+    _ = Matrix.trace
+          (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) ρ * X) := by
+          simp [Kraus.adjointMap, MPSTensor.transferMap_apply,
+            Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
 
 /-! ## PSD eigenvector → PosDef (Wolf 6.3(2), upgrade) -/
 
@@ -236,20 +260,8 @@ theorem eigenvalue_unique_of_irreducible_cp
     MPSTensor.exists_posDef_adjoint_eigenvector (d := n) (D := D) K hIrrK hK_nonzero
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       Matrix.trace (τ * E X) =
-        Matrix.trace
-          (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) τ * X) := by
-    intro X
-    calc
-      Matrix.trace (τ * E X)
-          = Matrix.trace (τ * MPSTensor.transferMap (d := n) (D := D) K X) := by
-              rw [hE_eq]
-      _ = Matrix.trace (Kraus.adjointMap K τ * X) := by
-            simpa [Kraus.map, MPSTensor.transferMap_apply] using
-              (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) τ X)
-      _ = Matrix.trace
-            (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) τ * X) := by
-            simp [Kraus.adjointMap, MPSTensor.transferMap_apply,
-              Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+        Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) τ * X) :=
+    fun X => trace_mul_transferMap_adjoint K hE_eq τ X
   have hEigenvalue_eq_t :
       ∀ (X : Matrix (Fin D) (Fin D) ℂ) (s : ℝ),
         X.PosSemidef → X ≠ 0 → E X = (s : ℂ) • X → s = t := by
@@ -461,20 +473,8 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     MPSTensor.exists_posDef_adjoint_eigenvector (d := n) (D := D) K hIrrK hK_nonzero
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       Matrix.trace (σ * E X) =
-        Matrix.trace
-          (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * X) := by
-    intro X
-    calc
-      Matrix.trace (σ * E X)
-          = Matrix.trace (σ * MPSTensor.transferMap (d := n) (D := D) K X) := by
-              rw [hE_eq]
-      _ = Matrix.trace (Kraus.adjointMap K σ * X) := by
-            simpa [Kraus.map, MPSTensor.transferMap_apply] using
-              (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) σ X)
-      _ = Matrix.trace
-            (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * X) := by
-            simp [Kraus.adjointMap, MPSTensor.transferMap_apply,
-              Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+        Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * X) :=
+    fun X => trace_mul_transferMap_adjoint K hE_eq σ X
   have htr_ne : Matrix.trace (σ * ρ) ≠ 0 := by
     intro htr_zero
     exact hρ_ne
@@ -688,7 +688,11 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     _ = ENNReal.ofReal r * 1 := by rw [hscaled_one]
     _ = ENNReal.ofReal r := by simp
 
-/-- Real-valued form of Wolf Thm 6.3(4). -/
+/-- **Real-valued spectral-radius identity** (Wolf Thm 6.3(4), real form).
+
+Convenience corollary of `spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp`:
+the Perron–Frobenius eigenvalue `r > 0` equals the `ℝ`-valued spectral radius
+`(ρ(E)).toReal`. -/
 theorem spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp
     [NeZero D]
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)

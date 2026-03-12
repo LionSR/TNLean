@@ -51,26 +51,28 @@ private lemma ne_zero_of_mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ}
   rw [hρ0, Matrix.trace_zero (Fin D) ℂ] at htr
   exact zero_ne_one htr
 
+/-- Iterates of a channel preserve the set of density matrices. -/
+private lemma IsChannel.iter_mem_densityMatrices
+    (hE : IsChannel E) {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hρ : ρ ∈ densityMatrices D) (n : ℕ) : (E ^ n) ρ ∈ densityMatrices D := by
+  induction n with
+  | zero => simpa [pow_zero] using hρ
+  | succ n ih =>
+      change (E ^ (n + 1)) ρ ∈ densityMatrices D
+      rw [pow_succ']
+      exact IsChannel.map_densityMatrices E hE ((E ^ n) ρ) ih
+
 /-- Cesàro means of a channel applied to a density matrix remain density matrices. -/
 theorem IsChannel.cesaroMean_mem_densityMatrices
     (hE : IsChannel E) {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ρ ∈ densityMatrices D) :
     ∀ N : ℕ, cesaroMean E ρ (N + 1) ∈ densityMatrices D := by
-  have h_iter : ∀ n : ℕ, (E ^ n) ρ ∈ densityMatrices D := by
-    intro n
-    induction n with
-    | zero => simpa [pow_zero] using hρ
-    | succ n ih =>
-        change (E ^ (n + 1)) ρ ∈ densityMatrices D
-        rw [pow_succ']
-        exact IsChannel.map_densityMatrices E hE ((E ^ n) ρ) ih
+  have h_iter := IsChannel.iter_mem_densityMatrices (E := E) hE hρ
   intro N
   refine ⟨?_, ?_⟩
   · unfold cesaroMean
     exact (Matrix.posSemidef_sum _ fun n _ => (h_iter n).1).smul
-      (by
-        rw [one_div]
-        exact_mod_cast inv_nonneg_of_nonneg (Nat.cast_nonneg' (N + 1)))
+      (by rw [one_div]; exact_mod_cast inv_nonneg_of_nonneg (Nat.cast_nonneg' (N + 1)))
   · unfold cesaroMean
     rw [trace_smul, trace_sum,
       Finset.sum_congr rfl (fun n _ => (h_iter n).2),
@@ -88,14 +90,7 @@ theorem IsChannel.cesaroMean_subseq_limit_fixedPoint
     (hσ_tendsto : Filter.Tendsto (fun k => cesaroMean E ρ (ψ k + 1))
       Filter.atTop (nhds σ)) :
     σ ∈ densityMatrices D ∧ E σ = σ := by
-  have h_iter : ∀ n : ℕ, (E ^ n) ρ ∈ densityMatrices D := by
-    intro n
-    induction n with
-    | zero => simpa [pow_zero] using hρ
-    | succ n ih =>
-        change (E ^ (n + 1)) ρ ∈ densityMatrices D
-        rw [pow_succ']
-        exact IsChannel.map_densityMatrices E hE ((E ^ n) ρ) ih
+  have h_iter := IsChannel.iter_mem_densityMatrices (E := E) hE hρ
   have hces_mem : ∀ N : ℕ, cesaroMean E ρ (N + 1) ∈ densityMatrices D :=
     IsChannel.cesaroMean_mem_densityMatrices (E := E) hE hρ
   have hσ_mem : σ ∈ densityMatrices D :=
@@ -124,15 +119,11 @@ theorem IsChannel.cesaroMean_subseq_limit_fixedPoint
     · simp_rw [one_div]
       exact (tendsto_inv_atTop_nhds_zero_nat (𝕜 := ℂ)).comp
         ((Filter.tendsto_add_atTop_nat 1).comp hψ_tendsto)
-    · have hbdd := densityMatrices_isCompact (D := D) |>.isBounded
-      rw [Metric.isBounded_iff_subset_ball 0] at hbdd
-      obtain ⟨R, hR⟩ := hbdd
+    · obtain ⟨R, hR⟩ := densityMatrices_isCompact (D := D) |>.isBounded.exists_norm_le
       apply Filter.isBoundedUnder_of
-      refine ⟨R + R, fun k => ?_⟩
-      have h1 := hR (h_iter (ψ k + 1))
-      have h2 := hR hρ
-      rw [Metric.mem_ball, dist_zero_right] at h1 h2
-      exact le_trans (norm_sub_le _ _) (by linarith)
+      exact ⟨R + R, fun k =>
+        le_trans (norm_sub_le _ _)
+          (add_le_add (hR _ (h_iter (ψ k + 1))) (hR _ hρ))⟩
   have h_eq : E σ - σ = 0 :=
     tendsto_nhds_unique (h_diff.congr h_telesc) h_rhs_zero
   exact ⟨hσ_mem, sub_eq_zero.mp h_eq⟩

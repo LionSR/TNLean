@@ -50,7 +50,7 @@ private lemma smul_mul_conjTranspose_of_norm_eq_one {m n : ℕ}
 section SameDimension
 
 set_option maxHeartbeats 250000 in
--- This same-dimension rigidity proof still sits just above the default heartbeat limit.
+-- Proof size exceeds the default 200000 heartbeat limit.
 private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
@@ -174,16 +174,19 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
         simp [B', Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv, mul_assoc]
       calc
         (A' i) * X' * (B' i)ᴴ
-            = (SA⁻¹ * A i * SA) * (SA⁻¹ * X * (SBᴴ)⁻¹) * (SBᴴ * (B i)ᴴ * (SBᴴ)⁻¹) := by
+            = (SA⁻¹ * A i * SA) * (SA⁻¹ * X * (SBᴴ)⁻¹) *
+                (SBᴴ * (B i)ᴴ * (SBᴴ)⁻¹) := by
                 simp [A', X', hBstar, mul_assoc]
         _ = SA⁻¹ * (A i * X * (B i)ᴴ) * (SBᴴ)⁻¹ := by
-                have hSA_cancel' (Z : Matrix (Fin D) (Fin D) ℂ) : SA * (SA⁻¹ * Z) = Z := by
+                have hSA_cancel' (Z : Matrix (Fin D) (Fin D) ℂ) :
+                    SA * (SA⁻¹ * Z) = Z := by
                   calc
                     SA * (SA⁻¹ * Z) = (SA * SA⁻¹) * Z := by
                       simp [mul_assoc]
                     _ = (1 : Matrix (Fin D) (Fin D) ℂ) * Z := by simp [hSA_mul_inv]
                     _ = Z := by simp
-                have hSBh_cancel' (Z : Matrix (Fin D) (Fin D) ℂ) : (SBᴴ)⁻¹ * (SBᴴ * Z) = Z := by
+                have hSBh_cancel' (Z : Matrix (Fin D) (Fin D) ℂ) :
+                    (SBᴴ)⁻¹ * (SBᴴ * Z) = Z := by
                   calc
                     (SBᴴ)⁻¹ * (SBᴴ * Z) = ((SBᴴ)⁻¹ * SBᴴ) * Z := by
                       simp [mul_assoc]
@@ -235,7 +238,8 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
           = Matrix.fromBlocks (∑ i : Fin d, (A' i) * (A' i)ᴴ)
               (0 : Matrix (Fin D) (Fin D) ℂ) (0 : Matrix (Fin D) (Fin D) ℂ)
               (∑ i : Fin d, (B' i) * (B' i)ᴴ) := hsum
-      _ = Matrix.fromBlocks (1 : Matrix (Fin D) (Fin D) ℂ) 0 0 (1 : Matrix (Fin D) (Fin D) ℂ) := by
+      _ = Matrix.fromBlocks (1 : Matrix (Fin D) (Fin D) ℂ) 0
+            0 (1 : Matrix (Fin D) (Fin D) ℂ) := by
         simp [hA'unital, hB'unital]
       _ = (1 : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ) := by
         simp
@@ -373,7 +377,8 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
   have hKS_Mstar :
       Kraus.map K (Mᴴᴴ * Mᴴ) = (Kraus.map K Mᴴ)ᴴ * Kraus.map K Mᴴ :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
-      (K := K) hK_unital (ρ := rhoT) hrhoT_pd hrhoT_fix Mᴴ (starRingEnd ℂ μ) hEigMstar hμ_conj
+      (K := K) hK_unital (ρ := rhoT) hrhoT_pd hrhoT_fix
+      Mᴴ (starRingEnd ℂ μ) hEigMstar hμ_conj
   have hComm_Mstar : ∀ i : Fin d, Mᴴ * (K i)ᴴ = (K i)ᴴ * Kraus.map K Mᴴ :=
     Kraus.kraus_commute_of_ks_equality (K := K) hK_unital Mᴴ hKS_Mstar
   have hInter2 : ∀ i : Fin d, A' i * X' = μ • X' * B' i := by
@@ -798,7 +803,8 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
       have hBstar : (B' i)ᴴ = SBᴴ * (B i)ᴴ * (SBᴴ)⁻¹ := by
         simp [B', Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv, Matrix.mul_assoc]
       calc (A' i) * X' * (B' i)ᴴ
-          = (SA⁻¹ * A i * SA) * (SA⁻¹ * X * (SBᴴ)⁻¹) * (SBᴴ * (B i)ᴴ * (SBᴴ)⁻¹) := by
+          = (SA⁻¹ * A i * SA) * (SA⁻¹ * X * (SBᴴ)⁻¹) *
+              (SBᴴ * (B i)ᴴ * (SBᴴ)⁻¹) := by
             simp [A', X', hBstar]
         _ = SA⁻¹ * (A i * X * (B i)ᴴ) * (SBᴴ)⁻¹ := by
             simp only [Matrix.mul_assoc]
@@ -914,7 +920,8 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
       K hK_unital hrhoT_pd hrhoT_fix Mᴴ (starRingEnd ℂ μ) hEigMstar hμ_conj
   have hComm_Ms : ∀ i : Fin d, Mᴴ * (K i)ᴴ = (K i)ᴴ * Kraus.map K Mᴴ :=
     Kraus.kraus_commute_of_ks_equality K hK_unital Mᴴ hKS_Ms
-  have hInter2h : ∀ k : Fin d, X'ᴴ * (A' k)ᴴ = (starRingEnd ℂ μ) • ((B' k)ᴴ * X'ᴴ) := by
+  have hInter2h : ∀ k : Fin d,
+      X'ᴴ * (A' k)ᴴ = (starRingEnd ℂ μ) • ((B' k)ᴴ * X'ᴴ) := by
     intro k
     have h' : Mᴴ * (K k)ᴴ = (K k)ᴴ * ((starRingEnd ℂ μ) • Mᴴ) := by
       rw [hComm_Ms k, hEigMstar]
@@ -988,7 +995,8 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
       calc
         B' i * σB * (B' i)ᴴ = (B' i * X'ᴴ) * (B' i * X'ᴴ)ᴴ := by
           simp [σB, Matrix.mul_assoc, Matrix.conjTranspose_mul]
-        _ = ((starRingEnd ℂ μ) • (X'ᴴ * A' i)) * (((starRingEnd ℂ μ) • (X'ᴴ * A' i))ᴴ) := by
+        _ = ((starRingEnd ℂ μ) • (X'ᴴ * A' i)) *
+              (((starRingEnd ℂ μ) • (X'ᴴ * A' i))ᴴ) := by
           simp [hBX i]
         _ = (X'ᴴ * A' i) * (X'ᴴ * A' i)ᴴ := by
           simpa using
@@ -1167,7 +1175,8 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
   intro hEq
   unfold mixedTransferSpectralRadius₂ at hEq
   set F : (Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
-    (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
+    (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
+      (mixedTransferMap₂ A B)
   have hEqF : spectralRadius ℂ F = 1 := by
     simpa [F] using hEq
   obtain ⟨μ, hμ_spec, hμ_rad⟩ := spectrum.exists_nnnorm_eq_spectralRadius (a := F)
@@ -1180,7 +1189,8 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
     simpa [coe_nnnorm] using this
   have h_spec :=
     AlgEquiv.spectrum_eq
-      (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
+      (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
+      (mixedTransferMap₂ A B)
   have hμ_spec' : μ ∈ spectrum ℂ (mixedTransferMap₂ A B) := by
     have : μ ∈ spectrum ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))

@@ -28,17 +28,16 @@ eventually full Kraus rank, and strong irreducibility.
   The primitivity index `q(E_A)` is at most the full-Kraus-rank index `i(A)`,
   provided the tensor has eventually full Kraus rank.
 
-## What is deferred
+## The full equivalence
 
-The harder directions are:
+All three directions of Proposition 3 are now proved:
 
-* **(a)→(b)**: Primitivity → eventually full Kraus rank.
-  Requires the contradiction argument via convergence of `E^n → E^∞`
-  (paper's proof uses `tr(ρ B†B) → 0` to contradict `ρ` being full-rank).
-  Deferred to future work.
+* **(b)→(a)**: Proved here (`isPrimitivePaper_of_hasEventuallyFullKrausRank`).
+* **(a)→(c)**: Proved in `Prop3_ac.lean` (`isStronglyIrreduciblePaper_of_isPrimitivePaper`).
+* **(c)→(b)**: Proved in `Prop3_cb.lean`
+  (`hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`).
 
-* **(a)→(c)** and **(c)→(b)**: Connections to strong irreducibility.
-  Require spectral/peripheral infrastructure not yet available.
+The full circular equivalence and `Iff` statements are assembled in `Prop3.lean`.
 
 ## References
 

@@ -51,15 +51,6 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 * `IsPrimitiveMPS.transferMap_pow_apply_tendsto` — convergence `E^n → P_ρ`
 * `eq_zero_of_trace_conjTranspose_mul_posDef_mul_eq_zero` — PosDef nondegeneracy
 
-## Remaining step for the full `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`
-
-The final assembly needs a **uniform convergence** step: showing that the RHS of the
-trace-pairing identity is eventually positive for *all* nonzero `B` simultaneously
-(not just for each fixed `B`). This is a standard finite-dimensional analysis
-argument — either via norm bounds on the error bilinear form, or via the openness of
-the positive-definite cone in the space of quadratic forms — and is the sole
-remaining gap.
-
 ## References
 
 - [Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347], Proposition 3
@@ -220,7 +211,8 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
   -- Step 1: IsIrreducibleMap → IsIrreducibleTensor
   have hIrrT : IsIrreducibleTensor A := isIrreducibleTensor_of_isIrreducibleMap A hIrrMap
   -- Step 2: Peripheral primitivity + irreducibility → IsPrimitive (spectral-gap form)
-  obtain ⟨ρ', hPrimMPS⟩ := isPrimitive_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
+  obtain ⟨ρ', hPrimMPS⟩ :=
+    isPrimitive_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
   -- Step 3: The fixed point is PosDef (irreducibility + PSD + nonzero → PosDef)
   have hρ'PD : ρ'.PosDef :=
     posSemidef_fixedPoint_isPosDef_of_irreducible A hIrrMap ρ'
@@ -334,7 +326,8 @@ private theorem tracePairBilin_fixedPointProj [NeZero D]
   simp_rw [hinner, ← Finset.mul_sum]
   -- ρ.trace⁻¹ * ∑ i, (B†ρB) i i = (B†ρB).trace / ρ.trace
   -- ∑ i, M i i = M.trace, then use a⁻¹ * b = b / a
-  change (Matrix.trace ρ)⁻¹ * Matrix.trace (Bᴴ * ρ * B) = Matrix.trace (Bᴴ * ρ * B) / Matrix.trace ρ
+  change (Matrix.trace ρ)⁻¹ * Matrix.trace (Bᴴ * ρ * B) =
+      Matrix.trace (Bᴴ * ρ * B) / Matrix.trace ρ
   ring
 
 /-! ### Part 5: Nondegeneracy of the PosDef inner product
@@ -558,8 +551,6 @@ The norm on `Matrix (Fin D) (Fin D) ℂ` in the `MPSTensor` namespace is the
 matrix multiplication is submultiplicative (`norm_mul_le`).  We prove entry
 bounds and single-matrix norm bounds directly for this norm. -/
 
-set_option maxHeartbeats 400000 in
--- NNReal cast reasoning requires extra heartbeats
 /-- Entry bound for the `l∞`-operator norm: `‖M i j‖ ≤ ‖M‖`.
 
 Under the `l∞`-op norm `‖M‖ = sup_i (∑_j ‖M i j‖)`, each entry is
@@ -567,17 +558,16 @@ bounded by the row sum, which is bounded by the sup. -/
 private theorem linftyOp_norm_entry_le [NeZero D]
     (M : Matrix (Fin D) (Fin D) ℂ) (i j : Fin D) :
     ‖M i j‖ ≤ ‖M‖ := by
-  rw [Matrix.linfty_opNorm_def M]
-  -- ‖M i j‖ ≤ ∑_k ‖M i k‖ (single ≤ sum of nonneg terms)
-  have h1 : ‖M i j‖ ≤ ∑ k : Fin D, ‖M i k‖ :=
-    Finset.single_le_sum (f := fun k => ‖M i k‖)
-      (fun _ _ => norm_nonneg _) (Finset.mem_univ j)
-  -- Row i sum ≤ sup of row sums (at NNReal level, then cast)
-  set f : Fin D → ℝ≥0 := fun a => ∑ b : Fin D, ‖M a b‖₊
-  have h2 : f i ≤ Finset.univ.sup f := Finset.le_sup (Finset.mem_univ i)
-  have h3 : (∑ k : Fin D, ‖M i k‖) = ↑(f i) := by
-    simp only [f, NNReal.coe_sum, coe_nnnorm]
-  linarith [NNReal.coe_le_coe.mpr h2]
+  -- Work in ℝ≥0 to avoid cast detours, then lift to ℝ
+  have h : ‖M i j‖₊ ≤ ‖M‖₊ := by
+    rw [Matrix.linfty_opNNNorm_def]
+    have h1 : ‖M i j‖₊ ≤ ∑ k : Fin D, ‖M i k‖₊ :=
+      Finset.single_le_sum (f := fun k => ‖M i k‖₊) (fun _ _ => zero_le _) (Finset.mem_univ j)
+    have h2 : ∑ k : Fin D, ‖M i k‖₊ ≤
+        Finset.univ.sup (fun a : Fin D => ∑ k : Fin D, ‖M a k‖₊) :=
+      Finset.le_sup (f := fun a : Fin D => ∑ k : Fin D, ‖M a k‖₊) (Finset.mem_univ i)
+    exact h1.trans h2
+  exact_mod_cast h
 
 /-- The `l∞`-operator norm of a standard basis matrix is ≤ 1. -/
 private theorem linftyOp_norm_single_le [NeZero D]
@@ -598,7 +588,7 @@ private theorem linftyOp_norm_single_le [NeZero D]
       intro b; simp [Matrix.single_apply]
     simp_rw [hrow, apply_ite (‖·‖₊), nnnorm_one, nnnorm_zero]
     simp [Finset.sum_ite_eq, Finset.mem_univ]
-  · -- Row a ≠ i: all entries are 0, so sum is 0 ≤ 1
+  · -- Row a ≠ i: all entries vanish, so sum is 0 ≤ 1
     have hrow : ∀ b : Fin D,
         Matrix.single i k (1 : ℂ) a b = 0 := by
       intro b; simp [Ne.symm ha]
@@ -683,7 +673,8 @@ The **quadratic form** `B ↦ tr(B† ρ B).re` is positive definite when `ρ.Po
 matrix space, we upgrade pointwise positivity to a uniform lower bound
 `c * ‖B‖² ≤ tr(B† ρ B).re` for some `c > 0`. -/
 
-/-- Quadratic homogeneity of the trace form: `tr((c•B)† ρ (c•B)) = |c|² · tr(B† ρ B)`. -/
+/-- Quadratic homogeneity of the trace form:
+`tr((c•B)† ρ (c•B)) = |c|² · tr(B† ρ B)`. -/
 private theorem trace_conjTranspose_smul_mul [NeZero D]
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (c : ℂ) (B : Matrix (Fin D) (Fin D) ℂ) :
@@ -766,10 +757,11 @@ private theorem trace_conjTranspose_posDef_mul_lower [NeZero D]
         inv_mul_cancel₀ hBnorm_pos.ne']
     -- f(B') ≥ c from the minimum on the sphere
     have hfB'_ge_c : c ≤ f B' := hB₀min hB'mem
-    -- Quadratic homogeneity: tr((‖B‖•B')†ρ(‖B‖•B')).re = ‖B‖² * tr(B'†ρB').re
+    -- Homogeneity: tr((‖B‖ • B')† ρ (‖B‖ • B')).re = ‖B‖² · tr(B'† ρ B').re
     have hBB' : B = (‖B‖ : ℂ) • B' := by
       simp [B', smul_smul, mul_inv_cancel₀ hBnorm_ne, one_smul]
-    have hscale : (Matrix.trace (Bᴴ * ρ * B)).re = ‖B‖ ^ 2 * (Matrix.trace (B'ᴴ * ρ * B')).re := by
+    have hscale :
+        (Matrix.trace (Bᴴ * ρ * B)).re = ‖B‖ ^ 2 * (Matrix.trace (B'ᴴ * ρ * B')).re := by
       conv_lhs => rw [hBB']
       rw [trace_conjTranspose_smul_mul ρ (↑‖B‖) B', Complex.conj_ofReal]
       -- Goal: (↑‖B‖ * ↑‖B‖ * tr(B'†ρB')).re = ‖B‖² * tr(B'†ρB').re
@@ -789,8 +781,6 @@ strong irreducibility implies eventually full Kraus rank. -/
 
 section FinalAssembly
 
-set_option maxHeartbeats 400000 in
--- NNReal cast reasoning in the linftyOp norm bound requires extra heartbeats
 /-- The `l∞`-operator norm of `Bᴴ` is at most `D · ‖B‖`, converting between
 the max-row-sum and max-column-sum interpretations. Each entry satisfies
 `‖B_{ij}‖ ≤ ‖B‖` (from `linftyOp_norm_entry_le`), so each of the `D` row-sums
@@ -798,19 +788,19 @@ of `Bᴴ` is at most `D · ‖B‖`. -/
 private theorem norm_conjTranspose_le_card_mul [NeZero D]
     (B : Matrix (Fin D) (Fin D) ℂ) :
     ‖Bᴴ‖ ≤ ↑(Fintype.card (Fin D)) * ‖B‖ := by
-  rw [Matrix.linfty_opNorm_def]
-  set D' := Fintype.card (Fin D)
-  set bound : ℝ≥0 := D' • ‖B‖₊
-  suffices hsup : Finset.univ.sup (fun a : Fin D => ∑ b, ‖(Bᴴ) a b‖₊) ≤ bound from
-    calc (↑(Finset.univ.sup fun a : Fin D => ∑ b, ‖(Bᴴ) a b‖₊) : ℝ)
-        ≤ ↑bound := NNReal.coe_le_coe.mpr hsup
-      _ = ↑D' * ‖B‖ := by simp [bound, nsmul_eq_mul, coe_nnnorm]
-  apply Finset.sup_le; intro a _
-  calc ∑ b : Fin D, ‖(Bᴴ) a b‖₊
-      ≤ ∑ _ : Fin D, ‖B‖₊ := Finset.sum_le_sum fun b _ => by
-        rw [Matrix.conjTranspose_apply, nnnorm_star]
-        exact_mod_cast linftyOp_norm_entry_le B b a
-    _ = D' • ‖B‖₊ := by rw [Finset.sum_const, Finset.card_univ]
+  -- Work in ℝ≥0 then cast; nsmul → mul via nsmul_eq_mul
+  have h : ‖Bᴴ‖₊ ≤ Fintype.card (Fin D) • ‖B‖₊ := by
+    rw [Matrix.linfty_opNNNorm_def]
+    apply Finset.sup_le; intro a _
+    calc ∑ b : Fin D, ‖(Bᴴ) a b‖₊
+        ≤ ∑ _ : Fin D, ‖B‖₊ := Finset.sum_le_sum fun b _ => by
+          simp only [Matrix.conjTranspose_apply, nnnorm_star]
+          exact_mod_cast linftyOp_norm_entry_le B b a
+      _ = Fintype.card (Fin D) • ‖B‖₊ := by
+            rw [Finset.sum_const, Finset.card_univ]
+  have h2 := NNReal.coe_le_coe.mpr h
+  simp only [coe_nnnorm, nsmul_eq_mul] at h2
+  exact h2
 
 /-- Combined error bound: `‖Q_F(B)‖ ≤ D³ · ‖Φ(F)‖ · ‖B‖²`.
 
@@ -837,8 +827,6 @@ private theorem norm_tracePairBilin_le_sq [NeZero D]
         ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F‖ *
         ‖B‖ ^ 2 := by ring
 
-set_option maxHeartbeats 800000 in
--- The proof chains several intermediate lemmas, requiring increased heartbeats.
 /-- **Proposition 3(c)→(b)**: Strong irreducibility implies eventually full Kraus rank.
 
 This is the hardest implication of Proposition 3 in Sanz–Pérez-García–Wolf–Cirac

@@ -189,7 +189,14 @@ private lemma not_posDef_of_conj_projection_ne_one
   have hpos := hR_pd.dotProduct_mulVec_pos hu_ne
   simp [hRu] at hpos
 
-/-- Irreducibility is preserved by similarity transformations. -/
+/-- **Wolf Proposition 6.6 (Similarity preserves irreducibility)**:
+if `E` is an irreducible CP map and `C` is an invertible matrix, then
+`X ↦ C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹` is also irreducible.
+
+The proof shows that any invariant projection `Q` for the similarity transform
+gives rise to a projection `P = supportProj(CQCᴴ)` that is invariant for `E`;
+irreducibility of `E` then forces `P = 0` or `P = 1`, which in turn forces
+`Q = 0` or `Q = 1`. -/
 theorem isIrreducibleMap_similarity
     {C : Matrix (Fin D) (Fin D) ℂ}
     (hC : C.det ≠ 0)
@@ -296,7 +303,8 @@ theorem isIrreducibleMap_similarity
     by_contra hQ1
     exact not_posDef_of_conj_projection_ne_one (D := D) hQ_proj hQ1 hC hR_pd
 
-/-- Irreducibility is preserved by a nonzero scalar multiple of a similarity transform. -/
+/-- Irreducibility is preserved by a nonzero scalar multiple of a similarity transform
+(corollary of `isIrreducibleMap_similarity` and `isIrreducibleMap_smul`). -/
 theorem isIrreducibleMap_similarity_smul
     {c : ℂ} (hc : c ≠ 0)
     {C : Matrix (Fin D) (Fin D) ℂ} (hC : C.det ≠ 0)
