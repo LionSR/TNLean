@@ -41,6 +41,9 @@ with a positive-definite fixed point — the aperiodicity condition should follo
 from spectral analysis of the transfer map. Formalizing that bridge from the
 current hypotheses is left as future work.
 
+Within TNLean this conditional assembly is currently standalone: the
+normal/canonical-form pipeline in `TNLean.MPS.*` does not import it directly.
+
 ## References
 
 - Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's inequality*,

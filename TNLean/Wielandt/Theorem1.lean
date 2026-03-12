@@ -57,6 +57,9 @@ These case-(2) wrappers pass from paper primitivity to `IsNormal A` and then
 invoke the backend theorem `wordSpan_eq_top_of_isNormal_of_isUnit` from
 `InvertibleWordSpanGrowth.lean`.
 
+Within TNLean these results are currently standalone paper-facing endpoints:
+the canonical / FT / BNT assembly does not import them directly.
+
 ## What remains as future work
 
 * **Case (1)** / full general bound:
@@ -89,9 +92,7 @@ theorem qIndex_le_iIndex_of_isPrimitivePaper [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
     qIndex A ≤ iIndex A := by
-  have hEventually : HasEventuallyFullKrausRank A :=
-    (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hPrim
-  exact qIndex_le_iIndex A hEventually
+  exact qIndex_le_iIndex A (hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim)
 
 /-! ## Part 2: Case (3) — noninvertible with nonzero eigenvalue gives `D²` -/
 
@@ -174,11 +175,8 @@ theorem wordSpan_eq_top_of_isPrimitivePaper_of_isUnit
     (i₀ : Fin d)
     (hInv : IsUnit (A i₀)) :
     wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
-  have hEventually : HasEventuallyFullKrausRank A :=
-    (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hPrim
-  have hNormal : IsNormal A :=
-    (hasEventuallyFullKrausRank_iff_isNormal A).mp hEventually
-  exact wordSpan_eq_top_of_isNormal_of_isUnit A i₀ hInv hNormal
+  exact wordSpan_eq_top_of_isNormal_of_isUnit A i₀ hInv
+    (isNormal_of_isPrimitivePaper A hNorm hPrim)
 
 /-- **Theorem 1, case (2)**: under an invertible Kraus operator hypothesis,
 `iIndex A ≤ D ^ 2 - krausRank A + 1`.

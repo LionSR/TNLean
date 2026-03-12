@@ -64,11 +64,7 @@ theorem exists_wordSpan_eq_top_of_isPrimitivePaper [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
     ∃ N : ℕ, wordSpan A N = ⊤ := by
-  have hEventually : HasEventuallyFullKrausRank A :=
-    (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hPrim
-  have hNormal : IsNormal A :=
-    (hasEventuallyFullKrausRank_iff_isNormal A).mp hEventually
-  exact wielandt_lemma2b A hNormal
+  exact wielandt_lemma2b A (isNormal_of_isPrimitivePaper A hNorm hPrim)
 
 /-- **Lemma 2(b)** (coarse rank-one corollary).
 

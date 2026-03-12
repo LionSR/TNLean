@@ -53,8 +53,8 @@ theorem fundamentalTheorem_multiBlock_full
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     (∀ k, GaugeEquiv (A k) (B k)) ∧
     GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
-  ⟨fun k => fundamentalTheorem_singleBlock (hA k) (hSame k),
-   fundamentalTheorem_multiBlock_global μ A B hA hSame⟩
+  ⟨fundamentalTheorem_multiBlock_blocks A B hA hSame,
+    fundamentalTheorem_multiBlock_global μ A B hA hSame⟩
 
 /-- **Multi-block FT with explicit gauge matrices.** -/
 theorem fundamentalTheorem_multiBlock_explicit
@@ -63,9 +63,10 @@ theorem fundamentalTheorem_multiBlock_explicit
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
     ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
-      (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) :=
-  ⟨fun k => (fundamentalTheorem_singleBlock (hA k) (hSame k)).choose,
-   fun k => (fundamentalTheorem_singleBlock (hA k) (hSame k)).choose_spec⟩
+      (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
+  classical
+  let hGauge := fundamentalTheorem_multiBlock_blocks A B hA hSame
+  exact ⟨fun k => (hGauge k).choose, fun k => (hGauge k).choose_spec⟩
 
 /-- **Multi-block FT with decomposition.** -/
 theorem fundamentalTheorem_multiBlock_decomposition
@@ -168,10 +169,8 @@ theorem fundamentalTheorem_multiBlock_fromSameMPV₂
          (X i : Matrix (Fin (dim i)) (Fin (dim i)) ℂ) * M *
            ((X i)⁻¹ : GL (Fin (dim i)) ℂ)) := by
   let _ := hSame₂
-  exact
-    ⟨fun k => fundamentalTheorem_singleBlock (hA k) (hSep k),
-      fundamentalTheorem_multiBlock_global μ A B hA hSep,
-      piAlgEquiv_decomposition A B hA hSep⟩
+  let hFull := fundamentalTheorem_multiBlock_full μ A B hA hSep
+  exact ⟨hFull.1, hFull.2, piAlgEquiv_decomposition A B hA hSep⟩
 
 /-- **Compatibility wrapper for the explicit-gauge multi-block FT from `SameMPV₂`.**
 

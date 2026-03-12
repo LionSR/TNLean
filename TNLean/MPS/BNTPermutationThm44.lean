@@ -200,9 +200,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp
   have hAB_ne : cLim * bLim k ≠ (0 : ℂ) := by
     exact mul_ne_zero _hcLim_ne (_hbLim_ne k)
   -- Contradiction: overlap tends to both 0 and a nonzero limit.
-  have : (cLim * bLim k) = (0 : ℂ) :=
-    tendsto_nhds_unique hAB_overlap_lim hA0
-  exact hAB_ne this
+  exact (hAB_overlap_lim.ne_nhds hAB_ne) hA0
 
 
 /-! ## Symmetric key step (A-indexed)
@@ -333,9 +331,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
       simp
     simpa [hEq, hRhs] using hSum
   -- Contradiction: the overlap tends both to `0` and to `aLim j ≠ 0`.
-  have : (aLim j) = (0 : ℂ) :=
-    tendsto_nhds_unique hA_overlap_lim hA0
-  exact _haLim_ne j this
+  exact (hA_overlap_lim.ne_nhds (_haLim_ne j)) hA0
 
 
 /-! ## Full permutation/phase matching (paper hypotheses, no span-equality)
@@ -536,7 +532,7 @@ private lemma rightMatching_injective_of_gaugePhaseEquiv
       simp [norm_pow, norm_inv, hζ1_norm, hζ2_norm]
     rw [heq']
     simpa using hBB2_norm
-  exact zero_ne_one (tendsto_nhds_unique h_cross_norm_zero hCross_norm_one)
+  exact (hCross_norm_one.ne_nhds one_ne_zero) h_cross_norm_zero
 
 private lemma leftMatching_injective_of_gaugePhaseEquiv
     {d gA gB : ℕ}
@@ -639,7 +635,7 @@ private lemma leftMatching_injective_of_gaugePhaseEquiv
       simp [norm_pow, norm_inv, hζ1_norm, hζ2_norm]
     rw [heq']
     simpa using hA2_norm_tendsto
-  exact zero_ne_one (tendsto_nhds_unique h_cross_norm_zero hCross_norm_one)
+  exact (hCross_norm_one.ne_nhds one_ne_zero) h_cross_norm_zero
 
 private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_rightMatching
     {d gA gB : ℕ}

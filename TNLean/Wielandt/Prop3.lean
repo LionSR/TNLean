@@ -36,6 +36,9 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 Together these close the cycle **(a) → (c) → (b) → (a)**, establishing the
 full equivalence of all three conditions.
 
+Within TNLean this remains a standalone paper-facing equivalence package: the
+canonical / FT / BNT assembly does not import these wrappers directly.
+
 ## Full-equivalence corollaries
 
 * `primitivePaper_iff_hasEventuallyFullKrausRank`: **(a) ↔ (b)**
@@ -125,12 +128,25 @@ irreducibility.
 This packages the composite implication `(b) → (a) → (c)` from Proposition 3.
 Paper: arXiv:0909.5347, Proposition 3; Wolf, Chapter 6.
 -/
-theorem primitivePaper_implies_stronglyIrreducible [NeZero D]
+theorem isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : HasEventuallyFullKrausRank A) :
     IsStronglyIrreduciblePaper A :=
   prop3_ac A hNorm (prop3_ba A hA)
+
+/-- Legacy compatibility alias for
+`isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank`.
+
+The older theorem name suggested a hypothesis `IsPrimitivePaper A`, but the
+actual assumption is `HasEventuallyFullKrausRank A`. Prefer the more explicit
+name above in new code. -/
+theorem primitivePaper_implies_stronglyIrreducible [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hA : HasEventuallyFullKrausRank A) :
+    IsStronglyIrreduciblePaper A :=
+  isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm hA
 
 /-- **Proposition 3 (b)→(c)**, `IsNormal` version.
 
@@ -144,7 +160,7 @@ theorem isNormal_implies_stronglyIrreducible [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : IsNormal A) :
     IsStronglyIrreduciblePaper A :=
-  primitivePaper_implies_stronglyIrreducible A hNorm
+  isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm
     ((hasEventuallyFullKrausRank_iff_isNormal A).mpr hA)
 
 /-! ## Full equivalences -/
@@ -160,6 +176,23 @@ theorem primitivePaper_iff_hasEventuallyFullKrausRank [NeZero D]
     IsPrimitivePaper A ↔ HasEventuallyFullKrausRank A :=
   ⟨fun hP => prop3_cb A hNorm (prop3_ac A hNorm hP),
    fun hB => prop3_ba A hB⟩
+
+/-- Under normalization, paper primitivity implies eventually full Kraus rank. -/
+theorem hasEventuallyFullKrausRank_of_isPrimitivePaper [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitivePaper A) :
+    HasEventuallyFullKrausRank A :=
+  (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hPrim
+
+/-- Under normalization, paper primitivity implies normality. -/
+theorem isNormal_of_isPrimitivePaper [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitivePaper A) :
+    IsNormal A :=
+  (hasEventuallyFullKrausRank_iff_isNormal A).mp
+    (hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim)
 
 /-- **Proposition 3 (a)↔(c)**: paper primitivity is equivalent to strong
 irreducibility.
@@ -182,7 +215,7 @@ theorem hasEventuallyFullKrausRank_iff_stronglyIrreducible [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     HasEventuallyFullKrausRank A ↔ IsStronglyIrreduciblePaper A :=
-  ⟨fun hB => primitivePaper_implies_stronglyIrreducible A hNorm hB,
+  ⟨fun hB => isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm hB,
    fun hC => prop3_cb A hNorm hC⟩
 
 /-! ## Channel primitivity (intermediate result) -/

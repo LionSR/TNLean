@@ -68,7 +68,8 @@ invertible, and `φ` is a nonzero eigenvector of `A i₀` with eigenvalue
 
 This is the exact fixed-length conclusion of arXiv:0909.5347, Lemma 2(b).
 Paper: arXiv:0909.5347, Lemma 2(b); Wolf, Chapter 6.
--/theorem vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector
+-/
+theorem vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector
     [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -79,14 +80,9 @@ Paper: arXiv:0909.5347, Lemma 2(b); Wolf, Chapter 6.
     (heig : A i₀ *ᵥ φ = μ • φ) :
     ∀ ψ : Fin D → ℂ,
       Matrix.vecMulVec φ ψ ∈ wordSpan A (D ^ 2 - D + 1) := by
-  -- Step 1: IsPrimitivePaper → HasEventuallyFullKrausRank
-  have hEventually : HasEventuallyFullKrausRank A :=
-    (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hPrim
-  -- Step 2: HasEventuallyFullKrausRank → IsNormal
-  have hNormal : IsNormal A :=
-    (hasEventuallyFullKrausRank_iff_isNormal A).mp hEventually
-  -- Step 3: Apply the sharp backend theorem
-  exact vecMulVec_eigenvector_exact_wordSpan A i₀ hNormal hNotInv hμ heig
+  -- Proposition 3 supplies the normality needed by the sharp backend theorem.
+  exact vecMulVec_eigenvector_exact_wordSpan A i₀
+    (isNormal_of_isPrimitivePaper A hNorm hPrim) hNotInv hμ heig
 
 /-- **Wolf Lemma 2(b)** (exact alias).
 
@@ -95,7 +91,8 @@ This is a short alias for
 Under the paper's hypotheses, every rank-one matrix `|φ⟩⟨ψ|` lies in the word
 span at the sharp bound `D² − D + 1`.
 Paper: arXiv:0909.5347, Lemma 2(b); Wolf, Chapter 6.
--/theorem wolf_lemma2b_exact
+-/
+theorem wolf_lemma2b_exact
     [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
