@@ -119,6 +119,7 @@ import TNLean.Wielandt.WielandtBound
 import TNLean.Wielandt.PrimitivePaper
 import TNLean.Wielandt.PrimitiveEquiv
 import TNLean.Wielandt.Prop3_ac
+import TNLean.Wielandt.Prop3
 import TNLean.Wielandt.PrimitivityNormal
 import TNLean.Wielandt.PrimitivityToNormal
 import TNLean.Wielandt.PrimitiveImpliesIrreducible
