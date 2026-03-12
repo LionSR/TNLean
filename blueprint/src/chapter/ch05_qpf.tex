@@ -90,6 +90,44 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 	proof uses exactly this invariant-projection contradiction.
 \end{proof}
 
+\begin{theorem}[Orthogonal trace condition]\label{thm:orthogonal_trace_cond}
+	\lean{orthogonal_trace_pos_of_irreducible_cp}
+	\leanok
+	\uses{def:irreducible_cp}
+	Let $E$ be an irreducible completely positive map on $\MN{D}$,
+	and let $A, B \ge 0$ be nonzero positive semidefinite matrices
+	with $\tr(B A) = 0$.
+	Then there exists $t$ with $1 \le t \le D - 1$ such that
+	\[
+		\tr\bigl(B \cdot E^t(A)\bigr) > 0.
+	\]
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	The growth theorem for irreducible CP maps
+	(\cite[Thm.~6.2, item~2]{Wolf2012Quantum}) gives
+	$(\Id + E)^{D-1}(A) > 0$ (positive definite).
+	Since $B \ge 0$ is nonzero,
+	$\tr\bigl(B \cdot (\Id + E)^{D-1}(A)\bigr) > 0$.
+	Expanding by the binomial theorem:
+	\[
+		\tr\Bigl(B \cdot \sum_{k=0}^{D-1} \tbinom{D-1}{k} E^k(A)\Bigr) > 0.
+	\]
+	Each term $\tr(B \cdot E^k(A)) \ge 0$ since both factors are PSD.
+	The $k = 0$ term vanishes by hypothesis
+	($\tr(B A) = 0$).
+	Hence at least one $k \in \{1, \ldots, D-1\}$ contributes
+	a strictly positive term.
+	\smallskip\noindent\textbf{Relation to Wolf:}
+	This is~\cite[Thm.~6.2, item~4]{Wolf2012Quantum},
+	which gives the orthogonal-pair trace positivity condition
+	as an equivalent characterisation of irreducibility.
+	The formal proof follows Wolf's route exactly:
+	item~(2) (growth condition) implies item~(4)
+	by a binomial expansion and PSD positivity argument.
+\end{proof}
+
 \section{Uniqueness}
 
 \begin{theorem}[Uniqueness of PSD fixed point]\label{thm:psd_fp_unique}
@@ -133,6 +171,50 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 	matrix $H = (S^\dagger)^{-1} \sigma S^{-1}$. The formal statement
 	records the resulting proportionality in the ambient scalar field $\C$.
 \end{remark}
+
+\begin{theorem}[Uniqueness of positive eigenvalue for irreducible CP maps]%
+	\label{thm:eigenvalue_unique_irred}
+	\lean{eigenvalue_unique_of_irreducible_cp}
+	\leanok
+	\uses{def:irreducible_cp}
+	Let $D \ge 1$ and let $E$ be an irreducible completely positive map
+	on $\MN{D}$.
+	Suppose $\rho, \sigma \ge 0$ are nonzero positive semidefinite matrices
+	satisfying $E(\rho) = r_1 \rho$ and $E(\sigma) = r_2 \sigma$
+	for real scalars $r_1, r_2 > 0$.
+	Then $r_1 = r_2$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Extract Kraus operators $K$ for $E$.
+	Irreducibility of $E$ passes to the adjoint transfer map
+	$E^\dagger(\,\cdot\,) = \sum_i K_i^\dagger\,(\,\cdot\,)\,K_i$,
+	which is a positive CP map.
+	The Perron--Frobenius existence theorem
+	(Theorem~\ref{thm:pf_eigenvector_existence}) together with the
+	irreducible PSD-to-PosDef upgrade
+	(Theorem~\ref{thm:psd_fp_pd_irred}) gives a positive definite
+	eigenvector $\tau > 0$ with eigenvalue $t > 0$:
+	$E^\dagger(\tau) = t\,\tau$.
+	For any nonzero PSD $X$ with $E(X) = s X$,
+	the trace pairing identity yields
+	\[
+		s \cdot \tr(\tau X)
+		  = \tr\bigl(\tau \cdot E(X)\bigr)
+		  = \tr\bigl(E^\dagger(\tau) \cdot X\bigr)
+		  = t \cdot \tr(\tau X).
+	\]
+	Since $\tau > 0$ and $X \ge 0$, $X \neq 0$,
+	the scalar $\tr(\tau X) > 0$, so $s = t$.
+	Applying this to both $(\rho, r_1)$ and $(\sigma, r_2)$
+	gives $r_1 = t = r_2$.
+	\smallskip\noindent\textbf{Relation to Wolf:}
+	This is~\cite[Thm.~6.3, item~3]{Wolf2012Quantum},
+	establishing non-degeneracy of the spectral-radius eigenvalue
+	for irreducible CP maps.
+	The formal proof follows Wolf's dual-map trace argument.
+\end{proof}
 
 \section{Existence and assembly}
 
@@ -228,6 +310,44 @@ The chapter also draws on~\cite{Evans1978Spectral}.
 	This section does not claim that a single gauge makes the transfer map
 	simultaneously unital and trace-preserving.
 \end{remark}
+
+\section{Similarity preserves irreducibility}
+
+\begin{lemma}[Similarity transform preserves irreducibility]%
+	\label{lem:similarity_irred}
+	\lean{isIrreducibleMap_full_similarity}
+	\leanok
+	\uses{def:irreducible_cp}
+	Let $E$ be an irreducible completely positive map on $\MN{D}$,
+	let $C \in \MN{D}$ be invertible ($\det C \neq 0$), and let
+	$c > 0$.
+	Define the similarity-transformed map
+	\[
+		E'(X) \;=\; c \cdot C^{-1}\, E\!\bigl(C\,X\,C^\dagger\bigr)\,(C^\dagger)^{-1}.
+	\]
+	Then $E'$ is also irreducible.
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	\uses{def:irreducible_cp}
+	Suppose $Q$ is an invariant projection for $E'$:
+	$Q \neq 0$, $Q \neq \Id$, and
+	$({\Id} - Q) E'(Q X Q) Q = 0$ for all~$X$.
+	Setting $R = C Q C^\dagger$, the support projection~$P$ of $R$
+	(Definition~\ref{def:support_proj})
+	is an invariant projection for $E$.
+	Irreducibility of $E$ forces $P = 0$ or $P = \Id$.
+	The invertibility of $C$ then forces $Q = 0$ or $Q = \Id$,
+	a contradiction.
+	\smallskip\noindent\textbf{Relation to Wolf:}
+	This is the full similarity version of
+	\cite[Prop.~6.6]{Wolf2012Quantum}.
+	The scalar case ($C = \Id$) is Lemma~\ref{thm:irred_map_smul}
+	in Chapter~\ref{ch:canonical};
+	the general invertible-$C$ case is proved here by a
+	support-projection argument.
+\end{proof}
 
 \begin{remark}[Eigenvector existence for general positive maps]%
 	\label{rem:pf_eigenvector_pointer}
