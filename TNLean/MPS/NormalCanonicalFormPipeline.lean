@@ -136,13 +136,13 @@ private theorem isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
 decomposition.
 
 This theorem is currently unused by the public endpoint below, which starts later from blocks that
-are already primitive and left-canonical. We keep it private as a record of the earlier TP
-normalization route: its extra nonzero-block hypothesis lives on a chosen decomposition, so making
-it public would still not give an honest arbitrary-input endpoint under the current `SameMPV₂`
+are already primitive and left-canonical. We keep it as a public record of the earlier TP
+normalization route: its extra nonzero-block hypothesis lives on a chosen decomposition, so it
+still does not by itself give an honest arbitrary-input endpoint under the current `SameMPV₂`
 interface. Concretely, every input block is assumed to have some nonzero Kraus operator, excluding
 the all-zero scalar counterexample and matching the hypotheses of
 `exists_tp_data_of_irreducible_pipeline1606`. -/
-private theorem exists_tp_gauge_blockwise
+theorem exists_tp_gauge_blockwise
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
     (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
@@ -630,9 +630,9 @@ irreducible block decomposition would still require an honest treatment of zero 
 `SameMPV₂`, a concrete cyclic-sector construction for the blocked tensors, and an equal-weight
 merging or reformulation step.
 
-The private theorem `exists_tp_gauge_blockwise` is intentionally retained as an unused documentary
-staging theorem for the earlier TP-normalization route, while the public theorem above starts later
-from blocks where primitivity and pairwise distinct weight norms are already available.
+The theorem `exists_tp_gauge_blockwise` is retained as an unused documentary staging theorem for
+the earlier TP-normalization route, while the public theorem above starts later from blocks where
+primitivity and pairwise distinct weight norms are already available.
 -/
 
 end MPSTensor

@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Ergodicity
 import TNLean.Channel.IrreducibleSpectralRadius
-import TNLean.MPS.CPPrimitive
 
 /-!
 # Irreducibility from spectral properties (Wolf Theorem 6.4)
@@ -215,7 +214,8 @@ structure SpectralProperties
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E) =
       ENNReal.ofReal r
 
-/-- Proposition-valued wrapper around the concrete spectral witness. -/
+/-- `HasSpectralProperties E` asserts that `E` admits a witness of
+`SpectralProperties`. -/
 def HasSpectralProperties
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
   Nonempty (SpectralProperties (D := D) E)

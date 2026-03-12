@@ -23,7 +23,8 @@ open MPSTensor
 
 variable {D : ℕ}
 
-/-- Similarity transformation of a linear map on `M_D(ℂ)`. -/
+/-- `similarityMap C E` is the map
+`X ↦ C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹`. -/
 noncomputable def similarityMap (C : Matrix (Fin D) (Fin D) ℂ)
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where

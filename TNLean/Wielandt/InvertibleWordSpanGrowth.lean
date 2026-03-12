@@ -56,7 +56,10 @@ variable {d D : ℕ}
 
 /-! ## Basic dimension bound for wordSpan -/
 
-/-- The dimension of `S_n(A) = wordSpan A n` is bounded by `D²`. -/
+/-- The dimension of `S_n(A) = wordSpan A n` is bounded by `D²`.
+
+This is the ambient dimension bound used in the proof of arXiv:0909.5347,
+Theorem 1 case (2); Wolf, Theorem 6.9. -/
 theorem wordSpan_finrank_le (A : MPSTensor d D) (n : ℕ) :
     Module.finrank ℂ (wordSpan A n) ≤ D ^ 2 := by
   calc Module.finrank ℂ (wordSpan A n)
@@ -69,7 +72,10 @@ theorem wordSpan_finrank_le (A : MPSTensor d D) (n : ℕ) :
 
 /-! ## Left multiplication maps S_n into S_{n+1} -/
 
-/-- Left multiplication by `A i₀` maps `S_n` into `S_{n+1}`. -/
+/-- Left multiplication by `A i₀` maps `S_n` into `S_{n+1}`.
+
+This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
+Theorem 6.9. -/
 theorem mulLeft_image_wordSpan_le_succ (A : MPSTensor d D)
     (i₀ : Fin d) (n : ℕ) :
     Submodule.map (LinearMap.mulLeft ℂ (A i₀)) (wordSpan A n) ≤
@@ -84,7 +90,10 @@ theorem mulLeft_image_wordSpan_le_succ (A : MPSTensor d D)
   apply Submodule.subset_span
   exact ⟨Fin.cons i₀ σ, by simp [List.ofFn_succ]⟩
 
-/-- Left multiplication by `A i₀ ^ k` maps `S_n` into `S_{n+k}`. -/
+/-- Left multiplication by `A i₀ ^ k` maps `S_n` into `S_{n+k}`.
+
+This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
+Theorem 6.9. -/
 theorem mulLeft_pow_image_wordSpan_le (A : MPSTensor d D)
     (i₀ : Fin d) (n k : ℕ) :
     Submodule.map (LinearMap.mulLeft ℂ (A i₀ ^ k)) (wordSpan A n) ≤
@@ -106,7 +115,10 @@ theorem mulLeft_pow_image_wordSpan_le (A : MPSTensor d D)
 
 /-! ## S_{n+1} = span{A_i} * S_n -/
 
-/-- `S_{n+1} = span{A_i} · S_n` (left-multiplication decomposition). -/
+/-- `S_{n+1} = span{A_i} · S_n` (left-multiplication decomposition).
+
+This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
+Theorem 6.9. -/
 theorem wordSpan_succ_eq_mul_left (A : MPSTensor d D) (n : ℕ) :
     wordSpan A (n + 1) =
       (Submodule.span ℂ (Set.range A)) * wordSpan A n := by
@@ -130,8 +142,9 @@ theorem wordSpan_succ_eq_mul_left (A : MPSTensor d D) (n : ℕ) :
 
 /-- When `A i₀` is invertible, `dim(S_{n+1}) ≥ dim(S_n)`.
 
-Left-multiplication by an invertible matrix is injective; its image in
-`S_{n+1}` has the same dimension as `S_n`. -/
+Left multiplication by an invertible matrix is injective, so its image in
+`S_{n+1}` has the same dimension as `S_n`. This is an auxiliary step for
+arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9. -/
 theorem wordSpan_finrank_mono_of_isUnit (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) (n : ℕ) :
     Module.finrank ℂ (wordSpan A n) ≤
@@ -164,7 +177,10 @@ theorem wordSpan_finrank_mono_of_isUnit (A : MPSTensor d D)
   linarith
 
 /-- General monotonicity: `dim(S_m) ≤ dim(S_n)` for `m ≤ n` when `A i₀`
-is invertible. -/
+is invertible.
+
+This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
+Theorem 6.9. -/
 theorem wordSpan_finrank_mono_of_isUnit' (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) {m n : ℕ} (h : m ≤ n) :
     Module.finrank ℂ (wordSpan A m) ≤
@@ -184,8 +200,8 @@ theorem wordSpan_finrank_mono_of_isUnit' (A : MPSTensor d D)
 /-- **Permanence**: if `S_N = ⊤` and `A i₀` is invertible, then `S_m = ⊤`
 for all `m ≥ N`.
 
-Proof: `A i₀ ^ (m - N)` is invertible, so its left-multiplication maps
-`S_N = M_D(ℂ)` surjectively into `S_m`, giving `S_m = ⊤`. -/
+This is the permanence step used in arXiv:0909.5347, Theorem 1 case (2);
+Wolf, Theorem 6.9. -/
 theorem wordSpan_eq_top_of_ge_of_isUnit (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) {N : ℕ}
     (hN : wordSpan A N = ⊤) {m : ℕ} (hm : N ≤ m) :
@@ -245,7 +261,10 @@ private theorem finrank_eq_finrank_map_mulRight_of_isUnit
   let e := Submodule.equivMapOfInjective (LinearMap.mulRight ℂ b) hinj S
   exact LinearEquiv.finrank_eq e
 
-/-- Right multiplication by `A i₀` maps `S_n` into `S_{n+1}`. -/
+/-- Right multiplication by `A i₀` maps `S_n` into `S_{n+1}`.
+
+This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
+Theorem 6.9. -/
 theorem mulRight_image_wordSpan_le_succ (A : MPSTensor d D)
     (i₀ : Fin d) (n : ℕ) :
     Submodule.map (LinearMap.mulRight ℂ (A i₀)) (wordSpan A n) ≤
@@ -257,7 +276,10 @@ theorem mulRight_image_wordSpan_le_succ (A : MPSTensor d D)
   exact Submodule.mul_mem_mul hM (gen_mem_wordSpan_one A i₀)
 
 /-- When `A i₀` is invertible, right multiplication also gives
-`dim(S_{n+1}) ≥ dim(S_n)`. -/
+`dim(S_{n+1}) ≥ dim(S_n)`.
+
+This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
+Theorem 6.9. -/
 theorem wordSpan_finrank_mono_of_isUnit_right (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) (n : ℕ) :
     Module.finrank ℂ (wordSpan A n) ≤
@@ -273,8 +295,11 @@ theorem wordSpan_finrank_mono_of_isUnit_right (A : MPSTensor d D)
     finrank_eq_finrank_map_mulRight_of_isUnit (S := wordSpan A n) hU
   omega
 
-/-- If `dim(S_r) = dim(S_{r+1})`, then `S_{r+1}` is exactly the right-multiplication
-image of `S_r` by the invertible generator `A i₀`. -/
+/-- If `dim(S_r) = dim(S_{r+1})`, then `S_{r+1}` is exactly the
+right-multiplication image of `S_r` by the invertible generator `A i₀`.
+
+This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
+Theorem 6.9. -/
 theorem wordSpan_succ_eq_mulRight_image_of_finrank_eq (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) (r : ℕ)
     (hfin : Module.finrank ℂ (wordSpan A r) =
@@ -317,8 +342,11 @@ private theorem map_mulRight_map_mulRight
   ext x
   simp [LinearMap.comp_apply, LinearMap.mulRight_apply, Matrix.mul_assoc]
 
-/-- If `dim(S_r) = dim(S_{r+1})`, then every later word span is absorbed into the
-right-multiplication image of `S_r` by powers of the invertible generator. -/
+/-- If `dim(S_r) = dim(S_{r+1})`, then every later word span is absorbed into
+the right-multiplication image of `S_r` by powers of the invertible generator.
+
+This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
+Theorem 6.9. -/
 theorem wordSpan_le_mulRight_pow_image (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) (r k : ℕ)
     (hfin : Module.finrank ℂ (wordSpan A r) =
@@ -379,8 +407,11 @@ private theorem wordSpan_finrank_constant_of_finrank_eq
     wordSpan_finrank_mono_of_isUnit' A i₀ hU (by omega)
   omega
 
-/-- **Strict growth in the invertible case**: under `IsNormal A`, the dimensions of
-word spans strictly increase until they reach the ceiling `D²`. -/
+/-- **Strict growth in the invertible case**: under `IsNormal A`, the
+dimensions of word spans strictly increase until they reach the ceiling `D²`.
+
+This is the strict-growth step behind arXiv:0909.5347, Theorem 1 case (2);
+Wolf, Theorem 6.9. -/
 theorem wordSpan_finrank_strict_mono_of_isUnit_of_isNormal
     (A : MPSTensor d D) (i₀ : Fin d)
     (hU : IsUnit (A i₀)) (hN : IsNormal A) (n : ℕ)
@@ -428,8 +459,11 @@ private theorem wordSpan_finrank_lt_of_ne_top
     omega
   exact hneq (wordSpan_eq_top_of_finrank_eq_sq A n hfin)
 
-/-- **Sharp invertible-case bound**: if some Kraus operator is invertible and `A`
-is normal, then the exact word span at level `D² - krausRank(A) + 1` is full. -/
+/-- **Sharp invertible-case bound**: if some Kraus operator is invertible and
+`A` is normal, then the exact word span at level `D² - krausRank(A) + 1` is
+full.
+
+Paper: arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9. -/
 theorem wordSpan_eq_top_of_isNormal_of_isUnit (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) (hN : IsNormal A) :
     wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
@@ -485,7 +519,9 @@ theorem wordSpan_eq_top_of_isNormal_of_isUnit (A : MPSTensor d D)
     omega
   exact htop (wordSpan_eq_top_of_finrank_eq_sq A k hfin)
 
-/-- The invertible-case sharp numerical bound on the full-Kraus-rank index. -/
+/-- The invertible-case sharp numerical bound on the full-Kraus-rank index.
+
+Paper: arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9. -/
 theorem iIndex_le_of_isNormal_of_isUnit (A : MPSTensor d D)
     (i₀ : Fin d) (hU : IsUnit (A i₀)) (hN : IsNormal A) :
     iIndex A ≤ D ^ 2 - krausRank A + 1 := by

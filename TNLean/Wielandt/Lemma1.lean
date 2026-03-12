@@ -45,13 +45,16 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Lemma 1** (paper-facing wrapper): if `A` is normalized and primitive in the
-paper sense, then there exists a word `w` with `|w| ≤ D^2` such that
-`tr(evalWord A w) ≠ 0`.
+/-- **Lemma 1** (paper-facing wrapper).
+
+If `A` is normalized and primitive in the paper sense, then there exists a
+word `w` with `|w| ≤ D^2` such that `tr (evalWord A w) ≠ 0`.
 
 This is the current coarse formal bound coming from
 `exists_nonzero_trace_word`. The sharper paper/Wolf bound
-`D^2 - krausRank A + 1` is still future work. -/
+`D^2 - krausRank A + 1` is still future work.
+Paper: arXiv:0909.5347, Lemma 1; Wolf, Chapter 6.
+-/
 theorem exists_nonzero_trace_word_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)

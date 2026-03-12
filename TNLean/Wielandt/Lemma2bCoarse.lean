@@ -25,14 +25,15 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 
 ## Quantitative status
 
-These are intentionally honest **coarse existential** wrappers. The backend
-theorem `wielandt_lemma2b` currently gives a sorry-free witness `N` whose value
-depends on blocking parameters and is not the sharp paper/Wolf bound.
+These wrappers are intentionally **coarse existential** statements. They use the
+backend theorem `wielandt_lemma2b`, which produces a sorry-free witness `N`
+without claiming the paper's exact bound.
 
-The exact quantitative statement from the paper is that one can take
-`N = D² − D + 1` (under additional hypotheses on the Kraus operator chosen for
-the eigenvector). That precise bound is **not** formalized yet and remains
-future work requiring the one-sided `rectSpan` growth infrastructure.
+The exact paper-level statement with bound `N = D² − D + 1` is now formalized in
+`Lemma2bExact.lean`, but it requires the additional hypothesis that a chosen
+Kraus operator `A i₀` is noninvertible and has a nonzero eigenvector. This file
+keeps the weaker existential consequence that follows from paper primitivity
+alone.
 
 ## Proof strategy
 
@@ -49,12 +50,15 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Lemma 2(b) (coarse existential)**: if `A` is normalized and primitive in
-the paper sense, then there exists `N` such that `S_N(A) = M_D(ℂ)`.
+/-- **Lemma 2(b)** (coarse existential wrapper).
 
-This is the coarse existential form — it does *not* claim the exact
-paper/Wolf bound `N = D² − D + 1`, only the existence of some `N`.
-See the module docstring for quantitative status. -/
+If `A` is normalized and primitive in the paper sense, then there exists `N`
+such that `S_N(A) = M_D(ℂ)`.
+
+This is the coarse existential consequence of Lemma 2(b): it does *not* claim
+that one may take `N = D² − D + 1`.
+Paper: arXiv:0909.5347, Lemma 2(b); Wolf, Chapter 6.
+-/
 theorem exists_wordSpan_eq_top_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -66,12 +70,15 @@ theorem exists_wordSpan_eq_top_of_isPrimitivePaper [NeZero D]
     (hasEventuallyFullKrausRank_iff_isNormal A).mp hEventually
   exact wielandt_lemma2b A hNormal
 
-/-- **Lemma 2(b) corollary — rank-one membership**: if `A` is normalized and
-primitive in the paper sense, then there exists `N` such that every rank-one
-matrix `|φ⟩⟨ψ|` belongs to `S_N(A)`.
+/-- **Lemma 2(b)** (coarse rank-one corollary).
 
-This is an immediate consequence of `exists_wordSpan_eq_top_of_isPrimitivePaper`:
-when the word span is the full matrix algebra, every matrix is a member. -/
+If `A` is normalized and primitive in the paper sense, then there exists `N`
+such that every rank-one matrix `|φ⟩⟨ψ|` belongs to `S_N(A)`.
+
+This packages the same existential consequence of Lemma 2(b) as
+`exists_wordSpan_eq_top_of_isPrimitivePaper`, but stated for rank-one matrices.
+Paper: arXiv:0909.5347, Lemma 2(b); Wolf, Chapter 6.
+-/
 theorem forall_vecMulVec_mem_wordSpan_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
