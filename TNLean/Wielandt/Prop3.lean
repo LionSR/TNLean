@@ -10,16 +10,16 @@ import TNLean.Wielandt.Prop3_cb
 /-!
 # Proposition 3 — Full Equivalence (arXiv:0909.5347)
 
-This file assembles the three directions of **Proposition 3** from
+This file assembles the paper-facing development of **Proposition 3** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
-(arXiv:0909.5347, Section II) and packages the complete circular equivalence.
+(arXiv:0909.5347, Section II), and packages the full circular equivalence.
 
 ## Proposition 3 (paper statement)
 
 The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 
 * **(a)** `IsPrimitivePaper A`: there exists `q` such that for all `|φ⟩ ≠ 0`,
-  `H_q(A,φ) = ℂ^D` (the transfer map is primitive).
+  `H_q(A,φ) = ℂ^D`.
 * **(b)** `HasEventuallyFullKrausRank A`: there exists `i` with `S_i(A) = M_D(ℂ)`
   (equivalently, `IsNormal A`).
 * **(c)** `IsStronglyIrreduciblePaper A`: `E_A` is irreducible, has a
@@ -33,8 +33,8 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 | **(a) → (c)** | `isStronglyIrreduciblePaper_of_isPrimitivePaper` | `Prop3_ac.lean` |
 | **(c) → (b)** | `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper` | `Prop3_cb.lean` |
 
-Together these close the cycle **(a) → (c) → (b) → (a)**, establishing
-the full equivalence of all three conditions.
+Together these close the cycle **(a) → (c) → (b) → (a)**, establishing the
+full equivalence of all three conditions.
 
 ## Full-equivalence corollaries
 
