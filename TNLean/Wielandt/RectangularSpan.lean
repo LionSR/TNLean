@@ -117,6 +117,12 @@ out in `RankOneExtractionFull.lean`.
 - `rectSpan_eq_mulLeft_image_of_finrank_eq` : finrank stabilization → R_{n+1} = A i₀ · R_n
 - `proj_gen_in_leftStep_of_finrank_eq` : all generators captured by i₀ when finrank stabilizes
 
+### Eigenvector padding and exact wordSpan (Section 8h, Part 7)
+- `vecMulVec_eigenvector_pad_wordSpan` : one-step padding via eigenvector
+- `vecMulVec_eigenvector_pad_wordSpan_add` : iterated padding by k levels
+- `vecMulVec_eigenvector_mem_wordSpan_of_le` : monotone padding n ≤ m → ∈ wordSpan m
+- `vecMulVec_eigenvector_exact_wordSpan` : **exact wordSpan at D² - D + 1** ⭐⭐⭐
+
 ## References
 
 - arXiv:0909.5347, Lemma 2(b), Theorem 1
@@ -2472,6 +2478,129 @@ theorem wielandt_sharp_unconditional
   wielandt_unconditional_sharp_of_strict_growth A i₀ hNotInv hμ heig
     (fun n hlt => rectSpan_nilpIndex_strict_growth_of_isNormal A i₀ hN n hlt)
 
+/-! ### Part 7: Padding from cumulativeSpan to exact wordSpan
+
+The key insight: if `A i₀ *ᵥ φ = μ • φ` with `μ ≠ 0`, then
+`(A i₀) * vecMulVec φ ψ = μ • vecMulVec φ ψ`, so
+`vecMulVec φ ψ = μ⁻¹ • ((A i₀) * vecMulVec φ ψ)`.
+Since left-multiplication by a generator sends `wordSpan A n` into `wordSpan A (n+1)`,
+and `wordSpan A (n+1)` is a submodule (closed under scalar multiplication),
+we can pad any `vecMulVec φ ψ ∈ wordSpan A n` up to `wordSpan A (n + k)` for all `k`.
+
+This upgrades the `cumulativeSpan` result to an exact `wordSpan` result at the
+paper level `D² - D + 1`. -/
+
+/-- Left-multiplying by `A i₀` sends `wordSpan A n` into `wordSpan A (n+1)`. -/
+private theorem gen_mul_mem_wordSpan_succ (A : MPSTensor d D) (i₀ : Fin d)
+    {M : Matrix (Fin D) (Fin D) ℂ} {n : ℕ} (hM : M ∈ wordSpan A n) :
+    (A i₀) * M ∈ wordSpan A (n + 1) := by
+  have hA : A i₀ ∈ wordSpan A 1 := by
+    simpa [evalWord] using evalWord_mem_wordSpan A ([i₀] : List (Fin d))
+  have hmul : (A i₀) * M ∈ (wordSpan A 1) * (wordSpan A n) :=
+    Submodule.mul_mem_mul hA hM
+  simpa [Nat.add_comm] using (wordSpan_mul_le A 1 n) hmul
+
+/-- **Eigenvector padding**: if `A i₀ *ᵥ φ = μ • φ` with `μ ≠ 0` and
+`vecMulVec φ ψ ∈ wordSpan A n`, then `vecMulVec φ ψ ∈ wordSpan A (n + 1)`.
+
+The proof uses `(A i₀) * vecMulVec φ ψ = μ • vecMulVec φ ψ`, so
+`vecMulVec φ ψ = μ⁻¹ • (...)` lies in `wordSpan A (n+1)`. -/
+theorem vecMulVec_eigenvector_pad_wordSpan
+    (A : MPSTensor d D) (i₀ : Fin d)
+    {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)
+    (heig : A i₀ *ᵥ φ = μ • φ)
+    {ψ : Fin D → ℂ} {n : ℕ}
+    (hmem : vecMulVec φ ψ ∈ wordSpan A n) :
+    vecMulVec φ ψ ∈ wordSpan A (n + 1) := by
+  -- Step 1: (A i₀) * vecMulVec φ ψ ∈ wordSpan A (n+1)
+  have hprod : (A i₀) * vecMulVec φ ψ ∈ wordSpan A (n + 1) :=
+    gen_mul_mem_wordSpan_succ A i₀ hmem
+  -- Step 2: (A i₀) * vecMulVec φ ψ = μ • vecMulVec φ ψ
+  have heq : (A i₀) * vecMulVec φ ψ = μ • vecMulVec φ ψ := by
+    rw [Matrix.mul_vecMulVec, heig, Matrix.smul_vecMulVec]
+  -- Step 3: μ • vecMulVec φ ψ ∈ wordSpan A (n+1), so vecMulVec φ ψ ∈ wordSpan A (n+1)
+  rw [heq] at hprod
+  have hsmul := (wordSpan A (n + 1)).smul_mem μ⁻¹ hprod
+  rwa [inv_smul_smul₀ hμ] at hsmul
+
+/-- **Iterated eigenvector padding**: if `vecMulVec φ ψ ∈ wordSpan A n`, then
+`vecMulVec φ ψ ∈ wordSpan A (n + k)` for all `k`. -/
+theorem vecMulVec_eigenvector_pad_wordSpan_add
+    (A : MPSTensor d D) (i₀ : Fin d)
+    {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)
+    (heig : A i₀ *ᵥ φ = μ • φ)
+    {ψ : Fin D → ℂ} {n : ℕ}
+    (hmem : vecMulVec φ ψ ∈ wordSpan A n)
+    (k : ℕ) :
+    vecMulVec φ ψ ∈ wordSpan A (n + k) := by
+  induction k with
+  | zero => simpa
+  | succ k ih =>
+    rw [show n + (k + 1) = (n + k) + 1 from by omega]
+    exact vecMulVec_eigenvector_pad_wordSpan A i₀ hμ heig ih
+
+/-- **Eigenvector padding monotonicity**: if `vecMulVec φ ψ ∈ wordSpan A n` and `n ≤ m`,
+then `vecMulVec φ ψ ∈ wordSpan A m`. -/
+theorem vecMulVec_eigenvector_mem_wordSpan_of_le
+    (A : MPSTensor d D) (i₀ : Fin d)
+    {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)
+    (heig : A i₀ *ᵥ φ = μ • φ)
+    {ψ : Fin D → ℂ} {n m : ℕ} (hnm : n ≤ m)
+    (hmem : vecMulVec φ ψ ∈ wordSpan A n) :
+    vecMulVec φ ψ ∈ wordSpan A m := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hnm
+  exact vecMulVec_eigenvector_pad_wordSpan_add A i₀ hμ heig hmem k
+
+/-- **Exact wordSpan Lemma 2(b)**: under `IsNormal`, `¬IsUnit`, and eigenvector,
+every rank-one matrix `vecMulVec φ ψ` lies in `wordSpan A (D² - D + 1)`.
+
+This upgrades `wielandt_sharp_unconditional` (which gives `cumulativeSpan`) to the
+exact word-length level, using the eigenvector padding lemma. The paper (arXiv:0909.5347)
+Lemma 2(b) states membership at exactly level `D² - D + 1`. -/
+theorem vecMulVec_eigenvector_exact_wordSpan
+    [NeZero D]
+    (A : MPSTensor d D) (i₀ : Fin d)
+    (hN : IsNormal A)
+    (hNotInv : ¬ IsUnit (toLin' (A i₀)))
+    {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)
+    (heig : A i₀ *ᵥ φ = μ • φ) :
+    ∀ ψ : Fin D → ℂ,
+      vecMulVec φ ψ ∈ wordSpan A (D ^ 2 - D + 1) := by
+  -- From wielandt_sharp_unconditional we know:
+  -- vecMulVec φ ψ ∈ cumulativeSpan A (D^2 - D + 1)
+  -- i.e., it lies in some wordSpan A k with k ≤ D^2 - D + 1.
+  -- We pad up to exactly D^2 - D + 1 using the eigenvector.
+  intro ψ
+  -- Get the cumulativeSpan membership
+  have hcum := wielandt_sharp_unconditional A i₀ hN hNotInv hμ heig ψ
+  -- Unpack: vecMulVec φ ψ is in the span of words of length ≤ D^2-D+1
+  -- By definition of cumulativeSpan, it's a linear combination of evalWord's.
+  -- We use a more direct route: the proof actually goes through
+  -- wordSpan A (r + n₀) where r + n₀ ≤ D^2 - D + 1.
+  -- We replicate the inner proof to extract the exact wordSpan level.
+  set r := nilpIndex (toLin' (A i₀))
+  -- Get strict growth
+  have hStrict : ∀ n,
+      finrank ℂ (rectSpan ((A i₀) ^ r) A n) <
+        D * ((A i₀) ^ D).rank →
+      finrank ℂ (rectSpan ((A i₀) ^ r) A n) <
+        finrank ℂ (rectSpan ((A i₀) ^ r) A (n + 1)) :=
+    fun n hlt => rectSpan_nilpIndex_strict_growth_of_isNormal A i₀ hN n hlt
+  -- Get n₀ ≤ D * D̃ with rectSpan = range
+  obtain ⟨n₀, hn₀, hstab⟩ :=
+    rectSpan_nilpIndex_eq_range_of_strict_growth A i₀ hStrict
+  -- vecMulVec φ ψ ∈ wordSpan A (r + n₀) from the direct route
+  have hmem : vecMulVec φ ψ ∈ wordSpan A (r + n₀) :=
+    vecMulVec_eigenvector_mem_wordSpan_nilpIndex A i₀ hμ heig hstab ψ
+  -- r + n₀ ≤ D^2 - D + 1 from sharp_bound_le
+  have hbound : r + n₀ ≤ D ^ 2 - D + 1 := by
+    calc r + n₀ ≤ r + D * ((A i₀) ^ D).rank :=
+          Nat.add_le_add_left hn₀ _
+      _ = D * ((A i₀) ^ D).rank + r := by ring
+      _ ≤ D ^ 2 - D + 1 := sharp_bound_le A i₀ hNotInv
+  -- Pad from r + n₀ up to D^2 - D + 1
+  exact vecMulVec_eigenvector_mem_wordSpan_of_le A i₀ hμ heig hbound hmem
+
 end ExactPropagation
 
 /-! ## Section 9: Summary -/
@@ -2529,9 +2658,17 @@ The permanence chain that closes the Appendix-A bottleneck:
 - `wielandt_sharp_unconditional`: **unconditional sharp D²-D+1 Lemma 2(b)** ⭐⭐
   — `IsNormal → ¬IsUnit → eigenvector → ∀ψ, vecMulVec φ ψ ∈ cumulativeSpan A (D²-D+1)`
 
-This completes the exact-level backend. The remaining work to get a fully
-unconditional `wordSpan A N = ⊤` for `N = D²-D+1` is purely in the
-top-level assembly: connecting eigenvector existence, blocking, and
+### Eigenvector padding and exact wordSpan (Section 8h, Part 7)  ⭐⭐⭐ NEW
+Upgrades the cumulativeSpan result to exact wordSpan at the paper level D²-D+1:
+- `vecMulVec_eigenvector_pad_wordSpan`: one-step padding via eigenvector
+- `vecMulVec_eigenvector_pad_wordSpan_add`: iterated padding by `k` levels
+- `vecMulVec_eigenvector_mem_wordSpan_of_le`: monotone padding `n ≤ m → ∈ wordSpan m`
+- `vecMulVec_eigenvector_exact_wordSpan`: **exact paper-level D²-D+1** ⭐⭐⭐
+  — `IsNormal → ¬IsUnit → eigenvector → ∀ψ, vecMulVec φ ψ ∈ wordSpan A (D²-D+1)`
+
+This completes the exact-level backend at the paper level. The remaining work
+to get a fully unconditional `wordSpan A N = ⊤` for `N = D²-D+1` is purely
+in the top-level assembly: connecting eigenvector existence, blocking, and
 the sharp rank-one placement.
 -/
 theorem wielandt_summary_documentation : True := trivial
