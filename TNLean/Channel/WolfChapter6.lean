@@ -8,6 +8,7 @@ import TNLean.Channel.Irreducible
 import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.IrreduciblePerronFrobenius
 import TNLean.Channel.IrreducibleSpectralRadius
+import TNLean.Channel.IrreducibleFromSpectral
 import TNLean.Channel.PeripheralSpectrum
 import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.Channel.SimilarityIrreducible
@@ -95,7 +96,16 @@ Supporting infrastructure in `TNLean.Channel.Ergodicity`:
 * `IsChannel.cesaroMean_subseq_limit_fixedPoint`: any subsequential Cesàro limit is
   a density-matrix fixed point (compactness + telescoping argument).
 
-### Wolf Theorem 6.4 (Irreducibility from spectral properties) — NOT FORMALIZED
+### Wolf Theorem 6.4 (Irreducibility from spectral properties) — FORMALIZED
+
+In `TNLean.Channel.IrreducibleFromSpectral`:
+* `HasSpectralProperties` — Kraus-witness bundle of the spectral assumptions
+  in Wolf's theorem (PD right/left eigenvectors, PSD uniqueness, spectral radius).
+* `hasSpectralProperties_of_irreducible_cp` — the forward implication
+  `irreducible → spectral properties`.
+* `isIrreducibleMap_of_hasSpectralProperties` — the reverse implication via
+  TP gauge reduction + channel fixed-point contradiction.
+* `isIrreducibleMap_iff_spectral_properties` — the final iff statement.
 
 ### Wolf Theorem 6.5 (Spectral radius and positive eigenvectors) — FORMALIZED
 
