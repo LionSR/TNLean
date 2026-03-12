@@ -705,6 +705,13 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	\uses{def:irreducible_cp}
 	If $E$ is an irreducible map and $c \neq 0$, then $c E$
 	is also irreducible.
+
+	This is the scalar special case ($C = \Id$) of
+	\cite[Prop.~6.6]{Wolf2012Quantum}.
+	The full similarity version --- $E'(X) = c \cdot C^{-1} E(C X C^\dagger)(C^\dagger)^{-1}$
+	is irreducible whenever $E$ is irreducible, $c > 0$, and $C$ is invertible ---
+	is now fully formalized; see Lemma~\ref{lem:similarity_irred}
+	in Chapter~\ref{ch:qpf}.
 \end{theorem}
 
 \begin{proof}\leanok
