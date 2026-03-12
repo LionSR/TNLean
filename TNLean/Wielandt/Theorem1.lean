@@ -38,18 +38,29 @@ then `i(A) ≤ D²`.*
 * `iIndex_le_sq_of_noninvertible_eigenvector`:
   the corresponding numeric bound `iIndex A ≤ D ^ 2`.
 
+## Partial progress toward case (2)
+
+`InvertibleWordSpanGrowth.lean` provides sorry-free infrastructure for
+the invertible-element case:
+
+* `wordSpan_finrank_mono_of_isUnit`: `dim(S_{n+1}) ≥ dim(S_n)` when `A i₀`
+  is invertible.
+* `wordSpan_eq_top_of_ge_of_isUnit`: **permanence** — once `S_N = ⊤`,
+  `S_m = ⊤` for all `m ≥ N` under invertibility.
+
 ## What remains as future work
 
-* **Case (2)**: if some Kraus operator is invertible, then `i(A) ≤ D² − d + 1`.
-  This requires strict monotonicity of `dim(wordSpan)` under an invertible
-  element (cf. PVWC07 Appendix A Proposition 2), which is not yet formalized.
+* **Case (2) sharp bound**: `i(A) ≤ D² − krausRank(A) + 1` when some
+  Kraus operator is invertible. This requires the **strict growth** claim:
+  if `dim(S_n) < D²` then `dim(S_{n+1}) > dim(S_n)`. The infrastructure
+  (monotonicity, permanence) is in place; the gap is the formal proof
+  that dimensional stabilization below `D²` contradicts `IsNormal`,
+  following PVWC07 Appendix A.
 
-* **Case (1)** / full general bound: `i(A) ≤ (D² − d + 1) · D²`, which
-  combines cases (2) and (3).  Blocked by case (2).
+* **Case (1)** / full general bound: `i(A) ≤ (D² − krausRank(A) + 1) · D²`,
+  which combines cases (2) and (3).  Blocked by case (2) sharp bound.
 
-* **Sharp bounds using `krausRank A`** rather than the raw parameter `d`:
-  the paper/Wolf state the bound in terms of the Kraus rank
-  `k = krausRank A ≤ d`, giving `i(A) ≤ (D² − k + 1) · D²`.
+* **Sharp Lemma 1** using `krausRank A` rather than the raw parameter `d`.
 
 ## Proof strategy
 
