@@ -7,6 +7,7 @@ import TNLean.Wielandt.PrimitivePaper
 import TNLean.Wielandt.PrimitivityNormal
 import TNLean.MPS.CanonicalFormReduction
 import TNLean.MPS.PeripheralToSpectralGap
+import TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.Matrix.Spectrum
 
@@ -1198,5 +1199,84 @@ theorem not_isPrimitivePaper_of_root_of_unity_eigenvector [NeZero D]
     A hq hNorm hH_herm hH_tr hp hH_fix)
 
 end PeripheralContradiction
+
+/-! ## Part 14: Assembly — IsPrimitivePaper implies IsChannelPrimitive
+
+The culminating theorem of the (a)→(c) direction: paper-primitivity of an MPS
+tensor `A` implies channel-level primitivity of its transfer map.
+
+**Proof strategy** (following Wolf §6.4 / arXiv:0909.5347 Proposition 3):
+
+1. Paper-primitivity implies tensor-irreducibility (Part 7).
+2. Tensor-irreducibility + normalization imply (via the blocking-periodicity
+   pipeline) that some power `E^p` is channel-primitive (peripheral spectrum `{1}`).
+3. Any norm-1 eigenvalue `μ` of `E` satisfies `μ^p = 1` (since `μ^p` is a
+   norm-1 eigenvalue of `E^p`).
+4. If `μ ≠ 1`, the contradiction engine (Part 13) gives `¬IsPrimitivePaper A`.
+5. Hence every peripheral eigenvalue is `1`, so `E` itself is channel-primitive.
+-/
+
+section Assembly
+
+variable {d D : ℕ}
+
+/-- **Proposition 3, direction (a)→(c): paper-primitivity implies channel-level primitivity.**
+
+If the MPS tensor `A` is paper-primitive (`IsPrimitivePaper A`) and normalized
+(`∑ Aᵢ† Aᵢ = 1`), then its transfer map `E_A` has peripheral spectrum `{1}`,
+i.e., `1` is the only eigenvalue on the unit circle (`IsChannelPrimitive A`).
+
+**Proof**: Combine the irreducibility theorem (Part 7), the blocking-periodicity
+pipeline (`exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`),
+eigenvector power lifting, and the peripheral-eigenvalue contradiction engine
+(Part 13).
+
+Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347. Wolf §6.4 Theorem 6.7. -/
+theorem isChannelPrimitive_of_isPrimitivePaper [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitivePaper A) :
+    IsChannelPrimitive A := by
+  -- Step 1: Paper-primitivity implies tensor-irreducibility
+  have hIrr : IsIrreducibleTensor A := isIrreducibleTensor_of_isPrimitivePaper A hPrim
+  -- Step 2: Get a nonzero PSD fixed point of E (quantum channel has one)
+  set E := transferMap (d := d) (D := D) A with hE_def
+  have hCh : IsChannel E := transferMap_isChannel A hNorm
+  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := hCh.exists_posSemidef_fixedPoint (E := E) hDpos
+  -- Step 3: Blocking-periodicity gives p > 0 with IsPrimitive (E^p)
+  obtain ⟨p, hp_pos, hPrimP⟩ :=
+    exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor A hNorm hIrr hDpos
+  -- Rewrite: transferMap (blockTensor A p) = E^p
+  rw [transferMap_blockTensor] at hPrimP
+  -- Step 4: Every norm-1 eigenvalue of E equals 1
+  have huniq : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ = 1 → μ = 1 := by
+    intro μ hμ_eig hμ_norm
+    -- Get an eigenvector X ≠ 0 with E X = μ • X
+    obtain ⟨X, hX_eigvec⟩ := hμ_eig.exists_hasEigenvector
+    have hX_ne : X ≠ 0 := hX_eigvec.2
+    have hEig : E X = μ • X := Module.End.HasEigenvector.apply_eq_smul hX_eigvec
+    -- E^p X = μ^p • X
+    have hEigP : (E ^ p) X = μ ^ p • X :=
+      transferMap_pow_smul_eigenvector A hEig p
+    -- So HasEigenvalue (E^p) (μ^p)
+    have hμp_eig : Module.End.HasEigenvalue (E ^ p) (μ ^ p) := by
+      exact Module.End.hasEigenvalue_of_hasEigenvector
+        ((Module.End.hasEigenvector_iff.mpr
+          ⟨Module.End.mem_eigenspace_iff.mpr hEigP, hX_ne⟩))
+    -- ‖μ^p‖ = 1
+    have hμp_norm : ‖μ ^ p‖ = 1 := norm_pow_eq_one_of_norm_eq_one hμ_norm p
+    -- By IsPrimitive (E^p): μ^p = 1
+    have hμp_eq : μ ^ p = 1 := hPrimP.unique_peripheral (μ ^ p) hμp_eig hμp_norm
+    -- If μ ≠ 1, get contradiction via Part 13
+    by_contra hμ_ne
+    exact not_isPrimitivePaper_of_root_of_unity_eigenvector A hNorm hEig hX_ne hμ_ne hp_pos hμp_eq
+      hPrim
+  -- Step 5: Conclude IsChannelPrimitive
+  change IsChannelPrimitive A
+  rw [isChannelPrimitive_iff]
+  exact isPrimitive_of_unique_norm_one E ρ hρ_fix hρ_ne huniq
+
+end Assembly
 
 end MPSTensor
