@@ -1277,6 +1277,42 @@ theorem isChannelPrimitive_of_isPrimitivePaper [NeZero D]
   rw [isChannelPrimitive_iff]
   exact isPrimitive_of_unique_norm_one E ρ hρ_fix hρ_ne huniq
 
+/-- **Paper-primitivity implies strong irreducibility.**
+
+If the MPS tensor `A` is paper-primitive (`IsPrimitivePaper A`) and normalized
+(`∑ Aᵢ† Aᵢ = 1`), then it is strongly irreducible: its transfer map `E_A` has
+a positive-definite fixed point and peripheral spectrum `{1}`.
+
+**Proof**: Combine three ingredients already proved in this file:
+1. The channel `E_A` has a nonzero PSD fixed point (quantum channel fixed-point
+   existence).
+2. Paper-primitivity upgrades this PSD fixed point to PosDef
+   (`posDef_fixedPoint_of_isPrimitivePaper`).
+3. Paper-primitivity implies channel primitivity
+   (`isChannelPrimitive_of_isPrimitivePaper`).
+
+Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347.
+This is the full paper-facing (a)→(c) direction. -/
+theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitivePaper A) :
+    IsStronglyIrreduciblePaper A := by
+  -- Step 1: Extract the primitivity witness q
+  obtain ⟨q, hq⟩ := hPrim
+  -- Step 2: Get a nonzero PSD fixed point of E_A from channel theory
+  set E := transferMap (d := d) (D := D) A with hE_def
+  have hCh : IsChannel E := transferMap_isChannel A hNorm
+  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := hCh.exists_posSemidef_fixedPoint (E := E) hDpos
+  -- Step 3: Upgrade ρ to PosDef using paper-primitivity
+  have hρ_pd : ρ.PosDef := posDef_fixedPoint_of_isPrimitivePaper A hq hρ_psd hρ_ne hρ_fix
+  -- Step 4: Get channel primitivity
+  have hCPrim : IsChannelPrimitive A :=
+    isChannelPrimitive_of_isPrimitivePaper A hNorm ⟨q, hq⟩
+  -- Step 5: Package into IsStronglyIrreduciblePaper
+  exact isStronglyIrreduciblePaper_of ρ hρ_pd hρ_fix hCPrim
+
 end Assembly
 
 end MPSTensor
