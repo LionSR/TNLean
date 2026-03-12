@@ -21,12 +21,16 @@ to channel / QPF normalization, following:
 
 ## Main results
 
-### Part 1: Bridge `IsIrreducibleTensor` → `IsIrreducibleMap (transferMap A)`
+### Part 1: Bridge `IsIrreducibleTensor` ↔ `IsIrreducibleMap (transferMap A)`
 
 * `MPSTensor.invariance_implies_lowerZero`: the invariance condition for a projection
   under a transfer map implies `(1 - P) * A i * P = 0` for all `i`.
+* `MPSTensor.lowerZero_implies_invariance`: the converse — the lower-zero condition
+  on Kraus operators implies the invariance condition for the transfer map.
 * `MPSTensor.isIrreducibleCP_transferMap_of_isIrreducibleTensor`: if the MPS tensor
   has no nontrivial invariant projection, then the transfer map is irreducible as a CP map.
+* `MPSTensor.isIrreducibleTensor_of_isIrreducibleMap`: the converse — if the transfer
+  map is irreducible as a CP map, then the MPS tensor has no nontrivial invariant projection.
 
 ### Part 2: CFII-style diagonal fixed point
 
@@ -107,6 +111,83 @@ theorem isIrreducibleCP_transferMap_of_isIrreducibleTensor
   push_neg at h_neither
   obtain ⟨hP0, hP1⟩ := h_neither
   exact hIrr ⟨P, hProj, hP0, hP1, hLower⟩
+
+/-- The "lower-zero" condition on Kraus operators implies the invariance condition
+for the transfer map.  This is the converse direction of `invariance_implies_lowerZero`.
+
+Given an orthogonal projection `P` with `(1 - P) * A i * P = 0` for all `i`,
+we show `P * E(P X P) * P = E(P X P)` for all `X`, where `E = transferMap A`.
+
+**Proof.**  From `(1 - P) * Aᵢ * P = 0` we obtain `Aᵢ * P = P * Aᵢ * P`.
+Taking conjugate transposes gives `P * Aᵢ† = P * Aᵢ† * P`.
+Then each Kraus term `Aᵢ (PXP) Aᵢ†` simplifies to
+`P * (Aᵢ (PXP) Aᵢ†) * P` using idempotence `P * P = P`,
+so the whole transfer-map image is sandwiched by `P`. -/
+lemma lowerZero_implies_invariance
+    (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
+    (hProj : IsOrthogonalProjection P)
+    (hLower : ∀ i : Fin d, (1 - P) * A i * P = 0) :
+    ∀ X, P * transferMap (d := d) (D := D) A (P * X * P) * P =
+         transferMap (d := d) (D := D) A (P * X * P) := by
+  intro X
+  -- Key identities from the projection and lower-zero conditions
+  have hPH : Pᴴ = P := hProj.1.eq
+  -- From (1-P)*Aᵢ*P = 0: Aᵢ*P = P*Aᵢ*P
+  have hAP : ∀ i : Fin d, A i * P = P * A i * P := by
+    intro i
+    have key : A i * P - P * A i * P = 0 := by
+      have h : (1 - P) * A i * P = A i * P - P * A i * P := by noncomm_ring
+      rw [← h]; exact hLower i
+    exact eq_of_sub_eq_zero key
+  -- Conjugate transpose: P*Aᵢ†*(1-P) = 0, hence P*Aᵢ† = P*Aᵢ†*P
+  have hPAd : ∀ i : Fin d, P * (A i)ᴴ = P * (A i)ᴴ * P := by
+    intro i
+    have h2 : P * (A i)ᴴ * (1 - P) = 0 := by
+      have h3 := congr_arg Matrix.conjTranspose (hLower i)
+      simp only [Matrix.conjTranspose_zero, Matrix.conjTranspose_mul,
+        Matrix.conjTranspose_sub, Matrix.conjTranspose_one, hPH] at h3
+      -- h3 : P * ((A i)ᴴ * (1 - P)) = 0, need P * (A i)ᴴ * (1 - P) = 0
+      rwa [Matrix.mul_assoc]
+    have key : P * (A i)ᴴ - P * (A i)ᴴ * P = 0 := by
+      have : P * (A i)ᴴ * (1 - P) = P * (A i)ᴴ - P * (A i)ᴴ * P := by noncomm_ring
+      rwa [← this]
+    exact eq_of_sub_eq_zero key
+  -- Now show each Kraus term is sandwiched by P
+  -- Goal: P * E(PXP) * P = E(PXP), suffices to show per summand
+  simp only [transferMap_apply]
+  rw [Finset.mul_sum, Finset.sum_mul]
+  congr 1; ext1 i
+  -- Goal: P * (Aᵢ * (PXP) * Aᵢ†) * P = Aᵢ * (PXP) * Aᵢ†
+  -- Strategy: both sides equal (P*Aᵢ*P)*X*(P*Aᵢ†*P) by ring identity + hAP + hPAd
+  have step1 : A i * (P * X * P) * (A i)ᴴ =
+      (A i * P) * X * (P * (A i)ᴴ) := by noncomm_ring
+  have step2 : (A i * P) * X * (P * (A i)ᴴ) =
+      (P * A i * P) * X * (P * (A i)ᴴ * P) := by
+    conv_lhs => rw [hAP i, hPAd i]
+  have step3 : (P * A i * P) * X * (P * (A i)ᴴ * P) =
+      P * (A i * (P * X * P) * (A i)ᴴ) * P := by noncomm_ring
+  exact ((step1.trans step2).trans step3).symm
+
+/-- **Irreducible CP map ⇒ irreducible tensor.**
+
+If the transfer map `E_A(X) = ∑ᵢ Aᵢ X Aᵢ†` is irreducible as a CP map,
+then the MPS tensor `A` has no nontrivial invariant orthogonal projection.
+
+**Proof.** By contrapositive: if `A` has a nontrivial invariant projection `P`
+(i.e., `(1 - P) * Aᵢ * P = 0` for all `i`), then `lowerZero_implies_invariance`
+shows that `P * E(PXP) * P = E(PXP)` for all `X`.  Since `P ≠ 0` and `P ≠ 1`,
+this contradicts the irreducibility of `E`. -/
+theorem isIrreducibleTensor_of_isIrreducibleMap
+    (A : MPSTensor d D)
+    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
+    IsIrreducibleTensor A := by
+  intro ⟨P, hProj, hP0, hP1, hLower⟩
+  -- Build the invariance condition from the lower-zero condition
+  have hInv := lowerZero_implies_invariance A P hProj hLower
+  -- Apply irreducibility of the transfer map
+  have hTrivial := hIrr P hProj hInv
+  -- But P is nontrivial: P ≠ 0 and P ≠ 1
+  exact hTrivial.elim hP0 hP1
 
 /-! ## Part 2: CFII-style diagonal positive-definite fixed point -/
 
