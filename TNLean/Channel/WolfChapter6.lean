@@ -7,6 +7,7 @@ import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.IrreduciblePerronFrobenius
 import TNLean.Channel.CesaroFixedPoint
 import TNLean.Channel.PerronFrobeniusExistence
+import TNLean.Channel.SimilarityIrreducible
 import TNLean.Channel.PeripheralSpectrum
 import TNLean.QPF.Assembly
 
@@ -27,7 +28,7 @@ No new proofs are introduced here; this is a documentation-only re-export.
 
 ## §6.2 Irreducible maps and Perron–Frobenius theory
 
-### Wolf Theorem 6.2 (Irreducible positive maps) — MOSTLY FORMALIZED
+### Wolf Theorem 6.2 (Irreducible positive maps) — ITEMS 1,2,4 FORMALIZED
 
 **Item 1** (definition via invariant projections):
 * `IsIrreducibleMap` — `TNLean.Channel.Irreducible`
@@ -39,9 +40,13 @@ No new proofs are introduced here; this is a documentation-only re-export.
   `ker(A) ⊆ ker(E(A))` + irreducible CP → `A` is PosDef
 * `mulVecLin_ker_idPlusE_lt_of_not_posDef` — strict kernel decrease
 
-**Items 3–4** (exponential, orthogonal trace condition): NOT FORMALIZED.
+**Item 3** (exponential condition `exp[tT](A) > 0`): NOT FORMALIZED.
 
-### Wolf Theorem 6.3 (Spectral radius of irreducible maps) — MOSTLY FORMALIZED
+**Item 4** (orthogonal trace condition):
+* `orthogonal_trace_pos_of_irreducible_cp` — `TNLean.Channel.IrreducibleGrowth`
+  For orthogonal PSD `A, B` (tr(BA)=0), ∃ t ∈ {1,...,D-1}, tr(B·T^t(A)) > 0.
+
+### Wolf Theorem 6.3 (Spectral radius of irreducible maps) — ITEMS 2,3 FORMALIZED
 
 **Item 2** (non-degenerate eigenvalue, strictly positive eigenvector):
 
@@ -57,10 +62,10 @@ MPS/QPF-level (transfer maps):
 * `posSemidef_fixedPoint_unique_of_irreducible`
 
 **Item 3** (uniqueness of positive eigenvalue):
+* `eigenvalue_unique_of_irreducible_cp` — `TNLean.Channel.IrreduciblePerronFrobenius`
+  Any two positive eigenvalues with nonzero PSD eigenvectors must coincide.
 * `posSemidef_eigenvector_unique_of_irreducible_cp` shows any two PSD
-  eigenvectors for the same eigenvalue are proportional. As a consequence,
-  any positive eigenvalue with a PSD eigenvector must equal the spectral
-  radius.
+  eigenvectors for the same eigenvalue are proportional.
 
 **Item 4** (spectral radius identity `r = ρ(T)`): NOT DIRECTLY FORMALIZED.
 (We work with the normalized case where the spectral radius is 1.)
@@ -74,10 +79,13 @@ MPS/QPF-level (transfer maps):
 Uses Brouwer's fixed-point theorem on density matrices (proved in
 `TNLean.Axioms.BrouwerFixedPointDensityMatrices`).
 
-### Wolf Proposition 6.6 (Similarity preserving irreducibility) — PARTIALLY
+### Wolf Proposition 6.6 (Similarity preserving irreducibility) — FORMALIZED
 
 * Scalar case: `isIrreducibleMap_smul` — `TNLean.Channel.PerronFrobeniusExistence`
-* Full similarity `T' = c C⁻¹ T(C · C†) C⁻†`: NOT FORMALIZED.
+* Similarity case: `isIrreducibleMap_similarity` — `TNLean.Channel.SimilarityIrreducible`
+* Full Wolf form `T' = c C⁻¹ T(C · C†) C⁻†`:
+  `isIrreducibleMap_full_similarity` (and the stronger
+  `isIrreducibleMap_similarity_smul`) — `TNLean.Channel.SimilarityIrreducible`
 
 ### Wolf Theorem 6.6 (Peripheral spectrum of irreducible Schwarz maps)
 

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.PerronFrobeniusExistence
+import TNLean.Channel.Schwarz
 import TNLean.QPF.Uniqueness
 
 /-!
@@ -26,6 +27,10 @@ to Wolf's Theorem 6.3 (Spectral radius of irreducible maps), items 2–3.
 * `posSemidef_eigenvector_unique_of_irreducible_cp`:
   **Uniqueness/proportionality** — any two nonzero PSD eigenvectors for the
   same positive eigenvalue are proportional.
+
+* `eigenvalue_unique_of_irreducible_cp`:
+  **Unique positive eigenvalue** — nonzero PSD eigenvectors cannot occur at two
+  different positive eigenvalues.
 
 ## Proof strategy
 
@@ -166,3 +171,97 @@ theorem posSemidef_eigenvector_unique_of_irreducible_cp
   -- Apply existing QPF uniqueness theorem.
   exact MPSTensor.posSemidef_fixedPoint_unique_of_irreducible K' hIrr' ρ σ
     hρ_psd hρ_ne hσ_psd hρ_fix hσ_fix
+
+/-- **Positive eigenvalue is unique for irreducible CP maps** (Wolf Thm 6.3(3)).
+
+If `ρ` and `σ` are nonzero PSD eigenvectors of an irreducible CP map `E`
+with positive real eigenvalues `r₁` and `r₂`, then `r₁ = r₂`.
+
+The proof follows Wolf's dual-map trace argument. After extracting Kraus
+operators for `E`, we use the adjoint transfer map to obtain a
+positive-definite eigenvector `τ > 0` with positive eigenvalue `t`. The
+weighted trace identity
+`tr(τ · E(X)) = tr(E†(τ) · X)`
+then gives
+`rᵢ · tr(τ · X) = t · tr(τ · X)`
+for each PSD eigenvector `X`. Since `τ > 0` and `X ≥ 0`, `X ≠ 0`, the weighted
+trace cannot vanish, so `rᵢ = t`. Hence `r₁ = r₂`. -/
+theorem eigenvalue_unique_of_irreducible_cp
+    [NeZero D]
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hCP : IsCPMap E) (hIrr : IsIrreducibleMap E)
+    (ρ σ : Matrix (Fin D) (Fin D) ℂ) (r₁ r₂ : ℝ)
+    (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0) (hr₁ : 0 < r₁)
+    (hσ_psd : σ.PosSemidef) (hσ_ne : σ ≠ 0) (_ : 0 < r₂)
+    (hρ_eig : E ρ = (r₁ : ℂ) • ρ)
+    (hσ_eig : E σ = (r₂ : ℂ) • σ) :
+    r₁ = r₂ := by
+  obtain ⟨n, K, hK⟩ := hCP
+  have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K :=
+    LinearMap.ext fun X => by
+      simpa [MPSTensor.transferMap_apply] using hK X
+  have hIrrK_map : IsIrreducibleMap (MPSTensor.transferMap (d := n) (D := D) K) := by
+    simpa [hE_eq] using hIrr
+  have hIrrK : MPSTensor.IsIrreducibleTensor (d := n) (D := D) K :=
+    MPSTensor.isIrreducibleTensor_of_isIrreducibleMap K hIrrK_map
+  have hE_ne : E ≠ 0 := by
+    intro hE0
+    have hρ_zero : (r₁ : ℂ) • ρ = 0 := by
+      simpa [hE0] using hρ_eig.symm
+    have hr₁_ne : (r₁ : ℂ) ≠ 0 := by
+      exact_mod_cast hr₁.ne'
+    exact hρ_ne ((smul_eq_zero.mp hρ_zero).resolve_left hr₁_ne)
+  have hK_nonzero : ∃ i : Fin n, K i ≠ 0 := by
+    by_contra hK_zero
+    push_neg at hK_zero
+    have htransfer_zero : MPSTensor.transferMap (d := n) (D := D) K = 0 :=
+      LinearMap.ext fun X => by
+        simp [MPSTensor.transferMap_apply, hK_zero]
+    exact hE_ne (by simpa [hE_eq] using htransfer_zero)
+  obtain ⟨τ, t, hτ_pd, ht_pos, hτ_eig⟩ :=
+    MPSTensor.exists_posDef_adjoint_eigenvector (d := n) (D := D) K hIrrK hK_nonzero
+  have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      Matrix.trace (τ * E X) =
+        Matrix.trace
+          (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) τ * X) := by
+    intro X
+    calc
+      Matrix.trace (τ * E X)
+          = Matrix.trace (τ * MPSTensor.transferMap (d := n) (D := D) K X) := by
+              rw [hE_eq]
+      _ = Matrix.trace (Kraus.adjointMap K τ * X) := by
+            simpa [Kraus.map, MPSTensor.transferMap_apply] using
+              (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) τ X)
+      _ = Matrix.trace
+            (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) τ * X) := by
+            simp [Kraus.adjointMap, MPSTensor.transferMap_apply,
+              Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+  have hEigenvalue_eq_t :
+      ∀ (X : Matrix (Fin D) (Fin D) ℂ) (s : ℝ),
+        X.PosSemidef → X ≠ 0 → E X = (s : ℂ) • X → s = t := by
+    intro X s hX_psd hX_ne hX_eig
+    have htr_ne : Matrix.trace (τ * X) ≠ 0 := by
+      intro htr_zero
+      exact hX_ne
+        (Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero hX_psd hτ_pd htr_zero)
+    have hscalar : (s : ℂ) * Matrix.trace (τ * X) = (t : ℂ) * Matrix.trace (τ * X) := by
+      calc
+        (s : ℂ) * Matrix.trace (τ * X)
+            = Matrix.trace (τ * ((s : ℂ) • X)) := by
+                simp
+        _ = Matrix.trace (τ * E X) := by rw [hX_eig]
+        _ = Matrix.trace
+              (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) τ * X) :=
+              htrace X
+        _ = Matrix.trace (((t : ℂ) • τ) * X) := by rw [hτ_eig]
+        _ = (t : ℂ) * Matrix.trace (τ * X) := by
+              simp
+    have hs_eq_t_complex : (s : ℂ) = (t : ℂ) :=
+      mul_right_cancel₀ htr_ne hscalar
+    have hs_eq_t : s = t := by
+      have hreal := congrArg Complex.re hs_eq_t_complex
+      simpa using hreal
+    exact hs_eq_t
+  have hr₁_eq_t : r₁ = t := hEigenvalue_eq_t ρ r₁ hρ_psd hρ_ne hρ_eig
+  have hr₂_eq_t : r₂ = t := hEigenvalue_eq_t σ r₂ hσ_psd hσ_ne hσ_eig
+  exact hr₁_eq_t.trans hr₂_eq_t.symm
