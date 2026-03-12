@@ -12,16 +12,16 @@ import Mathlib.LinearAlgebra.Matrix.ToLin
 /-!
 # Rank-one extraction for Wielandt Lemma 2(b)
 
-This file is meant to close the last missing step documented at the end of
-`TNLean/Wielandt/RectangularSpan.lean`:
-
-> Produce `Matrix.vecMulVec φ ψ ∈ wordSpan (blockTensor A L) m_blocked` for bounded `m_blocked`.
+This file provides the generalized-eigenspace/Fitting input used downstream by
+`TNLean.Wielandt.RectSpanGrowth`,
+`TNLean.Wielandt.RectSpanUniversality`, and
+`TNLean.Wielandt.RankOneExtractionFull`.
 
 The paper (arXiv:0909.5347, Lemma 2(b)) proves this using Jordan normal form.
 Our development replaces Jordan form by Mathlib's generalized eigenspaces
 (`maxGenEigenspace`) and the associated Fitting decomposition.
 
-## Status in this file (2026-02-28)
+## Main linear-algebra contribution
 
 In this round we focus on a key linear-algebra lemma which is used implicitly in
 Jordan/Fitting arguments:
@@ -32,11 +32,9 @@ all generalized eigenspaces for **nonzero** eigenvalues.*
 This strengthens `range_pow_le_iSup_maxGenEigenspace_ne_zero` from
 `RankOneElement.lean` (which was only the `≤` direction).
 
-What remains afterwards (not yet formalized here):
-
-* a quantitative “rectangular span” growth/stabilization lemma turning the above
-  range description into an explicit word-span bound producing a rank-one matrix
-  `Matrix.vecMulVec φ ψ`.
+The downstream rectangular-span growth, stabilization, and exact word-span
+consequences are developed in `TNLean.Wielandt.RectSpanGrowth` and
+`TNLean.Wielandt.RectSpanUniversality`.
 
 -/
 

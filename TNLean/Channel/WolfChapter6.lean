@@ -2,14 +2,15 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Channel.CesaroFixedPoint
+import TNLean.Channel.Ergodicity
 import TNLean.Channel.Irreducible
 import TNLean.Channel.IrreducibleGrowth
 import TNLean.Channel.IrreduciblePerronFrobenius
-import TNLean.Channel.CesaroFixedPoint
-import TNLean.Channel.Ergodicity
+import TNLean.Channel.IrreducibleSpectralRadius
+import TNLean.Channel.PeripheralSpectrum
 import TNLean.Channel.PerronFrobeniusExistence
 import TNLean.Channel.SimilarityIrreducible
-import TNLean.Channel.PeripheralSpectrum
 import TNLean.QPF.Assembly
 
 /-!
@@ -74,9 +75,10 @@ MPS/QPF-level (transfer maps):
 * `spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp`
   — real-valued corollary `(ρ(E)).toReal = r`
 
-Both in `TNLean.Channel.IrreduciblePerronFrobenius`.
-Combined with `exists_posDef_eigenvector_of_irreducible_cp`, these give the full Wolf
-item 4 for the Perron–Frobenius eigenvalue.
+Both in `TNLean.Channel.IrreducibleSpectralRadius`.
+Combined with `exists_posDef_eigenvector_of_irreducible_cp` from
+`TNLean.Channel.IrreduciblePerronFrobenius`, these give the full Wolf item 4
+for the Perron–Frobenius eigenvalue.
 
 ### Wolf Corollary 6.3 (Time-average / ergodicity) — FORMALIZED
 
