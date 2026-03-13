@@ -11,6 +11,7 @@ import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Wielandt.Primitivity.ToNormal
 import TNLean.Channel.Primitive
+import TNLean.Channel.Irreducible.FromSpectral
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Data.Complex.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Trace
@@ -223,6 +224,76 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
     posSemidef_fixedPoint_isPosDef_of_irreducible A hIrrMap ρ'
       hPrimMPS.fixedPoint_psd hPrimMPS.fixedPoint_ne_zero hPrimMPS.fixedPoint_is_fixed
   exact ⟨ρ', hPrimMPS, hρ'PD⟩
+
+/-- A primitive MPS tensor in the spectral-gap sense is channel-primitive in the
+paper's peripheral-spectrum sense.
+
+This is the easy spectral implication: if the complementary map `E - P_ρ` has
+spectral radius $< 1$, then every eigenvalue of `E - P_ρ` has norm $< 1$; the
+standard peripheral-spectrum lemma then shows that `1` is the only unit-modulus
+eigenvalue of `E`. -/
+theorem IsPrimitiveMPS.isChannelPrimitive [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) :
+    IsChannelPrimitive A := by
+  let E := transferMap (d := d) (D := D) A
+  let Pρ := fixedPointProj (D := D) ρ hP.trace_ne_zero
+  have hcompl : ∀ ν : ℂ, Module.End.HasEigenvalue (E - Pρ) ν → ‖ν‖ < 1 := by
+    intro ν hν
+    have hν_mem : ν ∈ spectrum ℂ
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (E - Pρ)) := by
+      have hspec :
+          spectrum ℂ
+              ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (E - Pρ)) =
+            spectrum ℂ (E - Pρ) :=
+        AlgEquiv.spectrum_eq (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          (E - Pρ)
+      exact hspec.symm ▸ hν.mem_spectrum
+    have hν_le : (‖ν‖₊ : ENNReal) ≤
+        spectralRadius ℂ
+          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (E - Pρ)) := by
+      exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ _) _
+        (fun z _ => (‖z‖₊ : ENNReal)) ν hν_mem
+    have hν_lt : (‖ν‖₊ : ENNReal) < 1 :=
+      lt_of_le_of_lt hν_le hP.spectral_gap
+    have : ((‖ν‖₊ : ℝ) < 1) := by
+      simpa using hν_lt
+    simpa using this
+  exact _root_.isPrimitive_of_compl_eigenvalues_lt_one
+    (E := E) (ρ := ρ) hP.fixedPoint_is_fixed hP.fixedPoint_ne_zero hP.trace_ne_zero
+    hP.transferMap_isChannel.tp hcompl
+
+/-- A primitive MPS tensor with a positive-definite fixed point has an
+irreducible transfer map.
+
+The spectral gap gives uniqueness of the fixed-point space via
+`IsPrimitiveMPS.fixedPoint_unique`; combined with `ρ.PosDef`, Wolf's fixed-point
+criterion for irreducibility applies directly. -/
+theorem isIrreducibleMap_of_isPrimitiveMPS_of_posDef [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ)
+    (hρ_pd : ρ.PosDef) :
+    IsIrreducibleMap (transferMap (d := d) (D := D) A) := by
+  let E := transferMap (d := d) (D := D) A
+  have huniq :
+      ∀ σ : Matrix (Fin D) (Fin D) ℂ,
+        σ.PosSemidef → E σ = σ → ∃ c : ℂ, σ = c • ρ := by
+    intro σ _ hσ
+    refine ⟨Matrix.trace σ / Matrix.trace ρ, ?_⟩
+    simpa [E] using hP.fixedPoint_unique σ (by simpa [E] using hσ)
+  exact isIrreducibleMap_of_channel_posDef_fixedPoint_unique E hP.transferMap_isChannel ρ
+    hρ_pd (by simpa [E] using hP.fixedPoint_is_fixed) huniq
+
+/-- Primitive spectral-gap data plus a positive-definite fixed point packages to
+paper strong irreducibility. -/
+theorem isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ)
+    (hρ_pd : ρ.PosDef) :
+    IsStronglyIrreduciblePaper A := by
+  exact isStronglyIrreduciblePaper_of ρ hρ_pd hP.fixedPoint_is_fixed
+    hP.isChannelPrimitive
+    (isIrreducibleMap_of_isPrimitiveMPS_of_posDef hP hρ_pd)
 
 /-! ### Part 3: Convergence of the transfer map
 
@@ -924,6 +995,29 @@ theorem hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper [NeZero D]
   linarith [hQ_decomp_re, hQPρ_lower, herror_re]
 
 end FinalAssembly
+
+/-- A primitive MPS tensor with a positive-definite fixed point has eventually
+full Kraus rank.
+
+This is the Prop.~3 route `(IsPrimitiveMPS + ρ.PosDef) → (c) → (b)`: first
+package the data as `IsStronglyIrreduciblePaper`, then apply the already
+formalized `StronglyIrreducible → HasEventuallyFullKrausRank` implication. -/
+theorem hasEventuallyFullKrausRank_of_isPrimitiveMPS_of_posDef [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ)
+    (hρ_pd : ρ.PosDef) :
+    HasEventuallyFullKrausRank A := by
+  exact hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper A hP.norm
+    (isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef hP hρ_pd)
+
+/-- `IsPrimitiveMPS` plus a positive-definite fixed point implies normality. -/
+theorem isNormal_of_isPrimitiveMPS_with_posDef [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ)
+    (hρ_pd : ρ.PosDef) :
+    IsNormal A := by
+  exact (hasEventuallyFullKrausRank_iff_isNormal A).mp
+    (hasEventuallyFullKrausRank_of_isPrimitiveMPS_of_posDef hP hρ_pd)
 
 end MPSTensor
 

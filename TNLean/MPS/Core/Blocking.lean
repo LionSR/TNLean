@@ -7,6 +7,7 @@ import TNLean.MPS.Defs
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Fintype.EquivFin
+import Mathlib.Data.Fin.Tuple.Basic
 
 
 open scoped Matrix
@@ -81,6 +82,115 @@ lemma length_flattenBlockedWord (d L : ℕ) :
       -- Flattening splits off the first block word.
       simp [flattenBlockedWord_cons, ih, length_wordOfBlock,
         Nat.succ_mul, Nat.add_comm]
+
+private theorem sum_evalWord_conjTranspose_mul_evalWord
+    (A : MPSTensor d D)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    ∀ L : ℕ,
+      ∑ σ : Fin L → Fin d,
+        (evalWord A (List.ofFn σ))ᴴ * evalWord A (List.ofFn σ) = 1 := by
+  intro L
+  induction L with
+  | zero =>
+      simp [MPSTensor.evalWord]
+  | succ L ih =>
+      let e : Fin d × (Fin L → Fin d) ≃ (Fin (L + 1) → Fin d) :=
+        Fin.consEquiv (fun _ => Fin d)
+      calc
+        ∑ σ : Fin (L + 1) → Fin d,
+            (evalWord A (List.ofFn σ))ᴴ * evalWord A (List.ofFn σ)
+          = ∑ p : Fin d × (Fin L → Fin d),
+              (evalWord A (List.ofFn (e p)))ᴴ * evalWord A (List.ofFn (e p)) := by
+                simpa [e] using
+                  (Fintype.sum_equiv e
+                    (f := fun p : Fin d × (Fin L → Fin d) =>
+                      (evalWord A (List.ofFn (e p)))ᴴ * evalWord A (List.ofFn (e p)))
+                    (g := fun σ : Fin (L + 1) → Fin d =>
+                      (evalWord A (List.ofFn σ))ᴴ * evalWord A (List.ofFn σ))
+                    (by intro p; rfl)).symm
+        _ = ∑ τ : Fin L → Fin d,
+              ∑ i : Fin d,
+                (evalWord A (List.ofFn (e (i, τ))))ᴴ *
+                  evalWord A (List.ofFn (e (i, τ))) := by
+                simpa using
+                  (Fintype.sum_prod_type_right'
+                    (f := fun i : Fin d => fun τ : Fin L → Fin d =>
+                      (evalWord A (List.ofFn (e (i, τ))))ᴴ *
+                        evalWord A (List.ofFn (e (i, τ)))))
+        _ = ∑ τ : Fin L → Fin d,
+              (evalWord A (List.ofFn τ))ᴴ * evalWord A (List.ofFn τ) := by
+                refine Finset.sum_congr rfl ?_
+                intro τ _
+                have hτ :
+                    ∑ i : Fin d,
+                      (evalWord A (List.ofFn (Fin.cons i τ)))ᴴ *
+                        evalWord A (List.ofFn (Fin.cons i τ)) =
+                    (evalWord A (List.ofFn τ))ᴴ * evalWord A (List.ofFn τ) := by
+                  calc
+                    ∑ i : Fin d,
+                        (evalWord A (List.ofFn (Fin.cons i τ)))ᴴ *
+                          evalWord A (List.ofFn (Fin.cons i τ))
+                      = ∑ i : Fin d,
+                          (evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i *
+                            evalWord A (List.ofFn τ) := by
+                              simp [MPSTensor.evalWord,
+                                Matrix.conjTranspose_mul, Matrix.mul_assoc]
+                    _ = (evalWord A (List.ofFn τ))ᴴ *
+                          (∑ i : Fin d, (A i)ᴴ * A i) *
+                          evalWord A (List.ofFn τ) := by
+                            have hsum_right :
+                                ∑ i : Fin d,
+                                    (evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i *
+                                      evalWord A (List.ofFn τ)
+                                  = (∑ i : Fin d,
+                                      (evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i) *
+                                      evalWord A (List.ofFn τ) := by
+                                    simpa [Matrix.mul_assoc] using
+                                      (Finset.sum_mul
+                                        (s := (Finset.univ : Finset (Fin d)))
+                                        (f := fun i : Fin d =>
+                                          (evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i)
+                                        (a := evalWord A (List.ofFn τ))).symm
+                            have hsum_left :
+                                ∑ i : Fin d,
+                                    (evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i
+                                  = (evalWord A (List.ofFn τ))ᴴ *
+                                      ∑ i : Fin d, (A i)ᴴ * A i := by
+                                    simpa [Matrix.mul_assoc] using
+                                      (Finset.mul_sum
+                                        (s := (Finset.univ : Finset (Fin d)))
+                                        (a := (evalWord A (List.ofFn τ))ᴴ)
+                                        (f := fun i : Fin d => (A i)ᴴ * A i)).symm
+                            rw [hsum_right, hsum_left]
+                    _ = (evalWord A (List.ofFn τ))ᴴ * evalWord A (List.ofFn τ) := by
+                          rw [hLeft]
+                          simp
+                simpa [e] using hτ
+        _ = 1 := ih
+
+/-- Left-canonical normalization is preserved by physical blocking. -/
+theorem leftCanonical_blockTensor
+    (A : MPSTensor d D) (L : ℕ)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    ∑ i : Fin (blockPhysDim d L),
+      (blockTensor (d := d) (D := D) A L i)ᴴ *
+        blockTensor (d := d) (D := D) A L i = 1 := by
+  let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
+    (Fintype.equivFin (Fin L → Fin d)).symm
+  calc
+    ∑ i : Fin (blockPhysDim d L),
+        (blockTensor (d := d) (D := D) A L i)ᴴ *
+          blockTensor (d := d) (D := D) A L i
+      = ∑ σ : Fin L → Fin d,
+          (evalWord A (List.ofFn σ))ᴴ * evalWord A (List.ofFn σ) := by
+            simpa [blockTensor, wordOfBlock, decodeBlock, e, blockPhysDim] using
+              (Fintype.sum_equiv e
+                (f := fun i : Fin (blockPhysDim d L) =>
+                  (evalWord A (List.ofFn (e i)))ᴴ * evalWord A (List.ofFn (e i)))
+                (g := fun σ : Fin L → Fin d =>
+                  (evalWord A (List.ofFn σ))ᴴ * evalWord A (List.ofFn σ))
+                (by intro i; rfl))
+    _ = 1 := sum_evalWord_conjTranspose_mul_evalWord (A := A) hLeft L
 
 lemma mpv_blockTensor_eq_mpv (A : MPSTensor d D) (L N : ℕ)
     (σ : Fin N → Fin (blockPhysDim d L)) :

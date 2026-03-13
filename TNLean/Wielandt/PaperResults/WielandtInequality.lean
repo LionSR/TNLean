@@ -69,7 +69,8 @@ conditional aperiodicity-based route and is not the default paper-facing API.
 * **Case (1)** / full general bound:
   `i(A) ≤ (D² − krausRank(A) + 1) · D²`, which combines cases (2) and (3).
 
-* **Sharp Lemma 1** using `krausRank A` rather than the raw parameter `d`.
+Note: **Sharp Lemma 1** using `krausRank A` is now available in
+`NonzeroTraceWord.lean` as `exists_nonzero_trace_word_of_isPrimitivePaper_sharp`.
 
 ## References
 

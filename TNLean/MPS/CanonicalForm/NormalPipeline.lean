@@ -313,20 +313,7 @@ private theorem leftCanonical_blockTensor_one
     ∑ i : Fin (blockPhysDim d 1),
       (blockTensor (d := d) (D := D) A 1 i)ᴴ *
         blockTensor (d := d) (D := D) A 1 i = 1 := by
-  let e : Fin (blockPhysDim d 1) ≃ Fin d := singleBlockEquiv d
-  calc
-    ∑ i : Fin (blockPhysDim d 1),
-        (blockTensor (d := d) (D := D) A 1 i)ᴴ *
-          blockTensor (d := d) (D := D) A 1 i
-      = ∑ i : Fin (blockPhysDim d 1), (A (e i))ᴴ * A (e i) := by
-          simp [e]
-    _ = ∑ j : Fin d, (A j)ᴴ * A j := by
-          simpa [e] using
-            (Fintype.sum_equiv e
-              (f := fun i : Fin (blockPhysDim d 1) => (A (e i))ᴴ * A (e i))
-              (g := fun j : Fin d => (A j)ᴴ * A j)
-              (by intro i; rfl))
-    _ = 1 := hLeft
+  simpa using leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := 1) hLeft
 
 /-- A primitive weighted block family with distinct weight norms is already in common blocking
 length `p = 1`. -/

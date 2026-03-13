@@ -7,6 +7,7 @@ import TNLean.Algebra.BurnsideTheorem
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.Primitivity.ImpliesIrreducible
+import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 /-!
 # Quantum Wielandt assembly under `PosDef` and aperiodicity
@@ -65,33 +66,23 @@ variable {d D : ℕ} [NeZero D]
 
 /-! ## Main assembly theorem -/
 
-/-- **Quantum Wielandt theorem (conditional on aperiodicity).**
+/-- **Quantum Wielandt theorem.**
 
-If `A` satisfies the spectral-gap predicate `IsPrimitiveMPS A ρ`, the fixed
-point `ρ` is positive definite, and the identity matrix lies in the span of the
-Kraus operators (aperiodicity), then `A` is normal: word products of some fixed
-length span the full matrix algebra.
+If `A` satisfies the spectral-gap predicate `IsPrimitiveMPS A ρ` and the fixed
+point `ρ` is positive definite, then `A` is normal.
 
-The proof chains four results:
-1. `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef`:
-   primitivity + PosDef → no invariant projections
-2. `isIrreducibleAction_of_isIrreducibleTensor`: no invariant projections → no invariant subspaces
-3. `burnside_matrix`: irreducible action → algebra span = ⊤ (Burnside's theorem)
-4. `isNormal_of_algSpan_eq_top_of_aperiodic`: full algebra + aperiodicity → word span = ⊤ -/
+The extra aperiodicity argument `hAper` is now kept only for backward
+compatibility with the older API of this file; it is not needed for the
+`IsNormal` conclusion itself. The actual proof now goes through the already
+formalized Proposition~3 bridge
+`IsPrimitiveMPS + ρ.PosDef → IsStronglyIrreduciblePaper → HasEventuallyFullKrausRank`. -/
 theorem isNormal_of_isPrimitiveMPS_of_posDef
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hPrim : IsPrimitiveMPS A ρ)
     (hPD : ρ.PosDef)
-    (hAper : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
+    (_hAper : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
     IsNormal A := by
-  -- Step 1: IsPrimitiveMPS + PosDef → IsIrreducibleTensor
-  have hIrr := isIrreducibleTensor_of_isPrimitiveMPS_of_posDef hPrim hPD
-  -- Step 2: IsIrreducibleTensor → IsIrreducibleAction
-  have hAct := isIrreducibleAction_of_isIrreducibleTensor A hIrr
-  -- Step 3: IsIrreducibleAction → algSpan = ⊤ (Burnside)
-  have hAlg := burnside_matrix A hAct
-  -- Step 4: algSpan = ⊤ + aperiodicity → IsNormal
-  exact isNormal_of_algSpan_eq_top_of_aperiodic A hAlg hAper
+  exact isNormal_of_isPrimitiveMPS_with_posDef hPrim hPD
 
 /-- Under `IsPrimitiveMPS`, `PosDef`, and aperiodicity, exact word spans are eventually `⊤`.
 
