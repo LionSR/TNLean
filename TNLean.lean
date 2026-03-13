@@ -7,12 +7,13 @@ This file re-exports the modules intended for downstream users. A few
 specialized helper or documentary modules are intentionally omitted from the
 root import list; they remain available via direct imports when needed.
 
-The following legacy or documentary modules are intentionally excluded:
+The following legacy or documentary modules are intentionally excluded
+(they live in `TNLean/Archive/`):
 
 * the legacy bi-canonical periodicity wrappers
-  `TNLean.Channel.PeripheralClosure` and `TNLean.MPS.BlockingPeriodicity`;
-* the archival alternate proof `TNLean.MPS.BlockingPeriodicityCFII2`;
-* the documentary counterexample `TNLean.Scratch.BlockSepCounterexample`.
+  `TNLean.Archive.PeripheralClosure` and `TNLean.Archive.BlockingPeriodicity`;
+* the archival alternate proof `TNLean.Archive.BlockingPeriodicityCFII2`;
+* the documentary counterexample `TNLean.Archive.BlockSepCounterexample`.
 -/
 
 -- Layer 0: General algebra
@@ -59,7 +60,7 @@ import TNLean.Channel.Peripheral.Conjugation
 import TNLean.Channel.Peripheral.Powers
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 
--- Layer 2: Spectral theory (QPF + spectral gap)
+-- Layer 2c: Spectral theory (QPF + spectral gap)
 import TNLean.QPF.PosDef
 import TNLean.QPF.Uniqueness
 import TNLean.QPF.Assembly

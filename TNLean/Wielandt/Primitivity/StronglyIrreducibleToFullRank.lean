@@ -29,7 +29,7 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 > eventually full Kraus rank (i.e., word products eventually span `M_D(ℂ)`).
 
 It is a direction-specific implementation module. For the packaged public
-Proposition 3 API, prefer `TNLean.Wielandt.Prop3`; this file is retained for
+Proposition 3 API, prefer `TNLean.Wielandt.Primitivity.Equivalence`; this file is retained for
 specialized access to the (c)→(b) proof route and its quantitative
 intermediates.
 

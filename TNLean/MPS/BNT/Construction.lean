@@ -38,7 +38,7 @@ in arXiv:2011.12127 and arXiv:1606.00608, lines 1145–1148.
    **`fundamentalTheorem_of_IsCanonicalFormBNT`**: if two CF-BNT decompositions generate
    proportional MPVs with convergent nonzero coefficients, then the blocks match up to
    permutation, dimension equality, and gauge-phase equivalence. This is a bridge from
-   canonical/BNT split data to the hypotheses of `BNTPermutationThm44`.
+   canonical/BNT split data to the hypotheses of `BNT/PermutationRigidity`.
 
 ## Design note on coefficients
 
@@ -422,7 +422,7 @@ theorem isBNT [∀ k, NeZero (dim k)]
 
 end IsNormalCanonicalFormBNT
 
-/-! ### Bridge to BNTPermutationThm44 -/
+/-! ### Bridge to BNT/PermutationRigidity -/
 
 /-- Split-data bridge theorem for CF-BNT-style decompositions (Thm 4.4).
 

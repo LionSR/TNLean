@@ -18,7 +18,7 @@ The general definitions (`IsOrthogonalProjection`, `IsIrreducibleMap`,
 `HasUniqueFixedPoint`) and the supporting matrix-algebra lemmas
 (`diagonal_mul_conjTranspose_eq_normSq_sum`,
 `eq_zero_of_sum_mul_conjTranspose_eq_zero`) live in
-`TNLean.Channel.Irreducible`.
+`TNLean.Channel.Irreducible.Basic`.
 
 This file proves the MPS-specific connection: injectivity of an MPS tensor
 implies irreducibility of its transfer map.

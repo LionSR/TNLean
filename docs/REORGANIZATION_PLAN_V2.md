@@ -442,7 +442,7 @@ Shims are excluded from `TNLean.lean` and removed after one release cycle.
 ### Phase 6: Cleanup
 - [ ] Remove all shim files
 - [ ] Final `lake build`
-- [ ] Update blueprint references
+- [x] Update blueprint references — reviewed 2026-03-13; no module-path refs exist in blueprint sources (blueprint uses declaration names only); fixed 1 duplicate entry in `lean_decls` (`MPSTensor.toTensorFromBlocks`)
 
 ---
 

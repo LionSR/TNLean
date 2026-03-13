@@ -7,4 +7,4 @@ This directory contains retired and documentary Lean files.
 - They are **not** part of the active TNLean library surface.
 - They are excluded from the root `TNLean.lean` import list.
 
-Where compatibility matters, the original module paths are temporarily kept as shims that re-import the archived module. Those shims are intended to be removed in a future release.
+The compatibility shims at the old module paths have been removed as part of the post-reorganization cleanup. Code that previously imported `TNLean.Channel.PeripheralClosure`, `TNLean.MPS.BlockingPeriodicity`, or `TNLean.MPS.BlockingPeriodicityCFII2` should be updated to use the new `TNLean.Archive.*` paths or the current active modules.

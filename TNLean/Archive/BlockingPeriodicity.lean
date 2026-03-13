@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.Spectrum
-import TNLean.Channel.PeripheralClosure
+import TNLean.Archive.PeripheralClosure
 import TNLean.MPS.Core.Transfer
 
 /-!

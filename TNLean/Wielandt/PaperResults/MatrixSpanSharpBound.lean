@@ -28,7 +28,7 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 
 ## Quantitative status
 
-Unlike `Lemma2bCoarse.lean` (which provides only a coarse existential `∃ N`
+Unlike `PaperResults/MatrixSpanExistence.lean` (which provides only a coarse existential `∃ N`
 witness), this file delivers the **exact paper bound** `D² − D + 1` under
 the additional hypotheses that a specific Kraus operator `A i₀` is
 noninvertible and possesses a nonzero eigenvector `φ`.
@@ -41,7 +41,7 @@ These hypotheses match the paper's Lemma 2(b) statement precisely.
    from `IsPrimitivePaper A` to `HasEventuallyFullKrausRank A`.
 2. Rewrite as `IsNormal A` via `hasEventuallyFullKrausRank_iff_isNormal`.
 3. Apply the sharp backend theorem `vecMulVec_eigenvector_exact_wordSpan` from
-   `TNLean.Wielandt.RectSpanUniversality`, which assembles:
+   `TNLean.Wielandt.RectangularSpan.Universality`, which assembles:
    - one-sided `rectSpan` strict growth under normality,
    - the sharp bound `r + D·D̃ ≤ D² − D + 1`,
    - eigenvector padding from the actual word-span level up to `D² − D + 1`.
