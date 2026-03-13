@@ -5,8 +5,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.Algebra.BurnsideTheorem
 import TNLean.Algebra.IrreducibleTensorAction
-import TNLean.Wielandt.CumulativeToWordSpan
-import TNLean.Wielandt.PrimitiveImpliesIrreducible
+import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
+import TNLean.Wielandt.Primitivity.ImpliesIrreducible
 
 /-!
 # Quantum Wielandt assembly under `PosDef` and aperiodicity

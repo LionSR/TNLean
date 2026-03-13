@@ -2,10 +2,10 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.BlockPermutationMPS
-import TNLean.MPS.LinearExtension
-import TNLean.MPS.MultiBlock
-import TNLean.MPS.FundamentalTheoremMulti
+import TNLean.MPS.Structure.BlockPermutation
+import TNLean.MPS.Structure.LinearExtension
+import TNLean.MPS.Core.MultiBlock
+import TNLean.MPS.FundamentalTheorem.Multi
 
 import Mathlib.LinearAlgebra.Pi
 import Mathlib.LinearAlgebra.Matrix.Trace

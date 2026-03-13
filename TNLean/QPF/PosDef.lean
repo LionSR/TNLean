@@ -10,9 +10,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -- `TNLean.MPS.CPPrimitive`, but listing them directly makes the local proof
 -- dependencies honest.
 import TNLean.Algebra.HermitianHelpers
-import TNLean.Channel.Irreducible
-import TNLean.Channel.PositiveMap
-import TNLean.MPS.CPPrimitive
+import TNLean.Channel.Irreducible.Basic
+import TNLean.Channel.Basic
+import TNLean.MPS.Core.CPPrimitive
 
 import Mathlib.Tactic.NoncommRing
 

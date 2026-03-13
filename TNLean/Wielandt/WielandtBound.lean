@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: [Authors]
 -/
 
-import TNLean.Wielandt.RankOneProducts
-import TNLean.Wielandt.EigenvectorSpreading
+import TNLean.Wielandt.RankOne.Products
+import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
 
 /-!
 # Quantum Wielandt Bound — Main Theorem Assembly

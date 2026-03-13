@@ -32,32 +32,32 @@ import TNLean.Topology.BrouwerProduct
 import TNLean.Topology.CompactRetractFixedPoint
 
 -- Layer 2: Quantum channels (general theory)
-import TNLean.Channel.PositiveMap
+import TNLean.Channel.Basic
 import TNLean.Channel.DensityRetract
 
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
-import TNLean.Axioms.BrouwerFixedPointDensityMatrices
+import TNLean.Axioms.BrouwerFixedPoint
 
 -- Layer 2b: Quantum channels (general theory)
-import TNLean.Channel.KadisonSchwarz
-import TNLean.Channel.MultiplicativeDomain
-import TNLean.Channel.MultiplicativeDomainPowers
-import TNLean.Channel.CesaroFixedPoint
-import TNLean.Channel.Ergodicity
-import TNLean.Channel.Irreducible
-import TNLean.Channel.IrreducibleGrowth
-import TNLean.Channel.PerronFrobeniusNormalization
-import TNLean.Channel.PerronFrobeniusExistence
-import TNLean.Channel.SimilarityIrreducible
-import TNLean.Channel.IrreduciblePerronFrobenius
-import TNLean.Channel.IrreducibleSpectralRadius
-import TNLean.Channel.IrreducibleFromSpectral
-import TNLean.Channel.Schwarz
+import TNLean.Channel.Schwarz.KadisonSchwarz
+import TNLean.Channel.Schwarz.MultiplicativeDomain
+import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
+import TNLean.Channel.FixedPoint.Cesaro
+import TNLean.Channel.Irreducible.Ergodicity
+import TNLean.Channel.Irreducible.Basic
+import TNLean.Channel.Irreducible.Growth
+import TNLean.Channel.PerronFrobenius.Normalization
+import TNLean.Channel.PerronFrobenius.Existence
+import TNLean.Channel.Irreducible.Similarity
+import TNLean.Channel.Irreducible.PerronFrobenius
+import TNLean.Channel.Irreducible.SpectralRadius
+import TNLean.Channel.Irreducible.FromSpectral
+import TNLean.Channel.Schwarz.Basic
 import TNLean.Channel.Primitive
-import TNLean.Channel.PeripheralSpectrum
-import TNLean.Channel.ConjugationSpectrum
-import TNLean.Channel.PeripheralPowers
-import TNLean.Channel.PeriodicityRemoval
+import TNLean.Channel.Peripheral.Spectrum
+import TNLean.Channel.Peripheral.Conjugation
+import TNLean.Channel.Peripheral.Powers
+import TNLean.Channel.Peripheral.PeriodicityRemoval
 
 -- Layer 2: Spectral theory (QPF + spectral gap)
 import TNLean.QPF.PosDef
@@ -73,56 +73,56 @@ import TNLean.Spectral.CrossCorrelation
 
 -- Layer 3: MPS core
 import TNLean.MPS.Defs
-import TNLean.MPS.CastLemmas
-import TNLean.MPS.Blocking
-import TNLean.MPS.MPVOverlap
-import TNLean.MPS.Transfer
-import TNLean.MPS.BlockingTransfer
-import TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint
-import TNLean.MPS.TransferNormalization
-import TNLean.MPS.FixedPointInvariantProjection
-import TNLean.MPS.CPPrimitive
+import TNLean.MPS.Overlap.CastLemmas
+import TNLean.MPS.Core.Blocking
+import TNLean.MPS.Overlap.Basic
+import TNLean.MPS.Core.Transfer
+import TNLean.MPS.Core.BlockingTransfer
+import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
+import TNLean.MPS.FundamentalTheorem.TransferNormalization
+import TNLean.MPS.Irreducible.FixedPointProjection
+import TNLean.MPS.Core.CPPrimitive
 
 -- Layer 4: Fundamental theorem (single block)
-import TNLean.MPS.LinearExtension
-import TNLean.MPS.FundamentalTheorem
-import TNLean.MPS.FundamentalTheoremProportional
+import TNLean.MPS.Structure.LinearExtension
+import TNLean.MPS.FundamentalTheorem.Basic
+import TNLean.MPS.FundamentalTheorem.Proportional
 
 -- Layer 5: Multi-block
-import TNLean.MPS.MultiBlock
+import TNLean.MPS.Core.MultiBlock
 import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
-import TNLean.MPS.BasisNormal
-import TNLean.MPS.BNT
-import TNLean.MPS.BNTPermutationSimple
-import TNLean.MPS.BNTPermutationThm44
-import TNLean.MPS.BNTConstruction
-import TNLean.MPS.PrimitivityBridge
-import TNLean.MPS.PeripheralToSpectralGap
-import TNLean.MPS.CanonicalFormFromPrimitive
-import TNLean.MPS.FundamentalTheoremFull
-import TNLean.MPS.CoefficientConvergence
-import TNLean.MPS.FundamentalTheoremMulti
-import TNLean.MPS.InvariantSubspaceDecomp
-import TNLean.MPS.CanonicalFormReduction
-import TNLean.MPS.CanonicalFormExistence1606
-import TNLean.MPS.NormalCanonicalFormPipeline
-import TNLean.MPS.IrreducibleFormII
-import TNLean.MPS.IrreducibleAdjoint
-import TNLean.MPS.TPGaugeFromAdjointFixedPoint
-import TNLean.MPS.BlockPermutationMPS
+import TNLean.MPS.BNT.BasisNormal
+import TNLean.MPS.BNT.Basic
+import TNLean.MPS.BNT.PermutationRigidityPrimitive
+import TNLean.MPS.BNT.PermutationRigidity
+import TNLean.MPS.BNT.Construction
+import TNLean.MPS.Structure.PrimitivityBridge
+import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.CanonicalForm.FromPrimitive
+import TNLean.MPS.FundamentalTheorem.Full
+import TNLean.MPS.FundamentalTheorem.CoefficientConvergence
+import TNLean.MPS.FundamentalTheorem.Multi
+import TNLean.MPS.Structure.InvariantSubspaceDecomp
+import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.CanonicalForm.Existence
+import TNLean.MPS.CanonicalForm.NormalPipeline
+import TNLean.MPS.Irreducible.FormII
+import TNLean.MPS.Irreducible.Adjoint
+import TNLean.MPS.Core.TPGauge
+import TNLean.MPS.Structure.BlockPermutation
 import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.PiAlgebra.BlockSeparation
 
 -- Layer 6a: Quantum Wielandt backend / span-growth infrastructure
-import TNLean.Wielandt.CumulativeSpan
-import TNLean.Wielandt.NonzeroTraceProduct
+import TNLean.Wielandt.SpanGrowth.CumulativeSpan
+import TNLean.Wielandt.SpanGrowth.NonzeroTraceProduct
 import TNLean.Wielandt.FittingDecomposition
-import TNLean.Wielandt.EigenvectorSpreading
-import TNLean.Wielandt.Lemma2b
-import TNLean.Wielandt.RankOneConstruction
-import TNLean.Wielandt.RankOneProducts
+import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
+import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
+import TNLean.Wielandt.RankOne.Construction
+import TNLean.Wielandt.RankOne.Products
 import TNLean.Wielandt.WielandtBound
 
 -- Layer 6b: Preferred paper-facing Proposition 3 / Theorem 1 endpoints
@@ -130,37 +130,37 @@ import TNLean.Wielandt.WielandtBound
 -- assembly above. `Prop3.lean` is the preferred Proposition 3 entry point; the
 -- direction-specific files `Prop3_ac` and `Prop3_cb` remain available
 -- transitively through `Prop3` for specialized use.
-import TNLean.Wielandt.PrimitivePaper
-import TNLean.Wielandt.PrimitiveEquiv
-import TNLean.Wielandt.Prop3
-import TNLean.Wielandt.Lemma1
-import TNLean.Wielandt.Lemma2
-import TNLean.Wielandt.Lemma2bCoarse
-import TNLean.Wielandt.Lemma2bExact
-import TNLean.Wielandt.Theorem1
+import TNLean.Wielandt.Primitivity.PaperDefinitions
+import TNLean.Wielandt.Primitivity.EasyDirections
+import TNLean.Wielandt.Primitivity.Equivalence
+import TNLean.Wielandt.PaperResults.NonzeroTraceWord
+import TNLean.Wielandt.PaperResults.EigenvectorSpreading
+import TNLean.Wielandt.PaperResults.MatrixSpanExistence
+import TNLean.Wielandt.PaperResults.MatrixSpanSharpBound
+import TNLean.Wielandt.PaperResults.WielandtInequality
 
 -- Layer 6c: Conditional / backend Wielandt assembly
 -- These modules support specialized span-growth and aperiodicity routes. They
 -- are not on the active canonical / FT / BNT path, but they remain root-visible
 -- where convenient for direct users.
-import TNLean.Wielandt.InvertibleWordSpanGrowth
-import TNLean.Wielandt.PrimitivityNormal
-import TNLean.Wielandt.PrimitivityToNormal
-import TNLean.Wielandt.PrimitiveImpliesIrreducible
-import TNLean.Wielandt.RankOneElement
-import TNLean.Wielandt.RankOneExtraction
-import TNLean.Wielandt.RankOneSpanGrowth
-import TNLean.Wielandt.RankOneManufacture
-import TNLean.Wielandt.RectangularRanges
-import TNLean.Wielandt.RectangularSpan
-import TNLean.Wielandt.RectSpanGrowth
-import TNLean.Wielandt.RectSpanUniversality
-import TNLean.Wielandt.RankOneBoundedWord
-import TNLean.Wielandt.RankOneExtractionFull
-import TNLean.Wielandt.CumulativeToWordSpan
+import TNLean.Wielandt.SpanGrowth.InvertibleWordSpan
+import TNLean.Wielandt.Primitivity.Normal
+import TNLean.Wielandt.Primitivity.ToNormal
+import TNLean.Wielandt.Primitivity.ImpliesIrreducible
+import TNLean.Wielandt.RankOne.Element
+import TNLean.Wielandt.RankOne.Extraction
+import TNLean.Wielandt.RankOne.SpanGrowth
+import TNLean.Wielandt.RankOne.Manufacture
+import TNLean.Wielandt.RectangularSpan.Ranges
+import TNLean.Wielandt.RectangularSpan.Basic
+import TNLean.Wielandt.RectangularSpan.Growth
+import TNLean.Wielandt.RectangularSpan.Universality
+import TNLean.Wielandt.RankOne.BoundedWord
+import TNLean.Wielandt.RankOne.ExtractionFull
+import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.QuantumWielandt
 
-import TNLean.Channel.CyclicDecomposition
+import TNLean.Channel.Peripheral.CyclicDecomposition
 
 -- Wolf Chapter 6 index (documentation-only re-export; no new proofs)
-import TNLean.Channel.WolfChapter6
+import TNLean.Channel.WolfChapter6Index

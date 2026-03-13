@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.Algebra.BurnsideTheorem
-import TNLean.MPS.CanonicalFormReduction
-import TNLean.Wielandt.CumulativeSpan
+import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 
 import Mathlib.Algebra.Algebra.Subalgebra.Lattice
 import Mathlib.RingTheory.Noetherian.Defs

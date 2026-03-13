@@ -9,11 +9,11 @@ import TNLean.Spectral.SpectralGapNT
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.QPF.Assembly
-import TNLean.MPS.CanonicalFormReduction
-import TNLean.MPS.FundamentalTheoremProportional
-import TNLean.MPS.IrreducibleFormII
-import TNLean.MPS.PeripheralToSpectralGap
-import TNLean.Channel.PeripheralSpectrum
+import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.FundamentalTheorem.Proportional
+import TNLean.MPS.Irreducible.FormII
+import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.Channel.Peripheral.Spectrum
 import Mathlib.Analysis.Complex.Basic
 
 /-!
