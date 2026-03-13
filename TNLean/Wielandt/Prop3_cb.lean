@@ -28,6 +28,11 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 > point, irreducible, unique peripheral eigenvalue `{1}`), then `A` has
 > eventually full Kraus rank (i.e., word products eventually span `M_D(ℂ)`).
 
+It is a direction-specific implementation module. For the packaged public
+Proposition 3 API, prefer `TNLean.Wielandt.Prop3`; this file is retained for
+specialized access to the (c)→(b) proof route and its quantitative
+intermediates.
+
 ## Proof strategy (following the paper / Wolf Ch6)
 
 1. **Trace-pairing identity** (`sum_normSq_trace_conjTranspose_mul_evalWord`):

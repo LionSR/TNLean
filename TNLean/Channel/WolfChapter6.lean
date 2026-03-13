@@ -149,8 +149,16 @@ Other items: PARTIALLY via spectral gap infrastructure in `TNLean.Spectral.*`.
 
 ### Wolf Theorem 6.9 (Quantum Wielandt inequality)
 
-* `quantum_wielandt` — `TNLean.Wielandt.QuantumWielandt`
-  (bound `q ≤ d⁴ · (d² - k + 1)`)
+Current paper-facing wrappers live in `TNLean.Wielandt.Theorem1`:
+* `qIndex_le_iIndex_of_isPrimitivePaper`
+* `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit` /
+  `iIndex_le_of_isPrimitivePaper_of_isUnit`
+* `wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector` /
+  `iIndex_le_sq_of_noninvertible_eigenvector`
+
+The auxiliary aperiodicity-based assembly remains in
+`TNLean.Wielandt.QuantumWielandt`; it is not the default paper-facing
+endpoint.
 
 ---
 

@@ -44,6 +44,10 @@ current hypotheses is left as future work.
 Within TNLean this conditional assembly is currently standalone: the
 normal/canonical-form pipeline in `TNLean.MPS.*` does not import it directly.
 
+This module is intentionally auxiliary rather than the default paper-facing
+endpoint. Downstream users who only need Proposition 3 / Theorem 1 wrappers
+should prefer `Prop3.lean` and `Theorem1.lean`.
+
 ## References
 
 - Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's inequality*,
