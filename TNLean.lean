@@ -36,6 +36,14 @@ import TNLean.Topology.CompactRetractFixedPoint
 import TNLean.Channel.Basic
 import TNLean.Channel.DensityRetract
 
+-- Layer 2 (Ch. 2 infrastructure): Choi–Jamiolkowski, Kraus, Stinespring
+import TNLean.Channel.PartialTrace
+import TNLean.Channel.MaximallyEntangled
+import TNLean.Channel.TensorMap
+import TNLean.Channel.ChoiJamiolkowski
+import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.Stinespring
+
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPoint
 
@@ -108,6 +116,7 @@ import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.CanonicalForm.NormalPipeline
+import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.Assembly
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
@@ -164,6 +173,9 @@ import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.QuantumWielandt
 
 import TNLean.Channel.Peripheral.CyclicDecomposition
+
+-- Wolf Chapter 2 index (documentation-only re-export; no new proofs)
+import TNLean.Channel.WolfChapter2Index
 
 -- Wolf Chapter 6 index (documentation-only re-export; no new proofs)
 import TNLean.Channel.WolfChapter6Index
