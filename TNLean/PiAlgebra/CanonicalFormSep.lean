@@ -1430,6 +1430,22 @@ private lemma summed_block_difference_eq_zero_of_sameMPV₂
     exact sub_eq_zero.mpr (by simpa [smul_eq_mul] using hEq)
   simpa [Finset.sum_sub_distrib, mul_sub] using hSub
 
+private lemma per_block_sameMPV_of_sameMPV₂_of_card_le_one
+    (μ : Fin r → ℂ)
+    (A B : (k : Fin r) → MPSTensor d (dim k))
+    (hμ_ne_zero : ∀ k, μ k ≠ 0)
+    (hr : r ≤ 1)
+    (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
+    ∀ k, SameMPV (A k) (B k) := by
+  intro k N σ
+  have hEq := sameMPV₂_summed_blocks μ A B hSame₂ N σ
+  interval_cases r
+  · exact k.elim0
+  · have hk : k = 0 := Fin.ext (by omega)
+    subst hk
+    simp only [Fin.sum_univ_one, smul_eq_mul] at hEq
+    exact mul_left_cancel₀ (pow_ne_zero N (hμ_ne_zero 0)) hEq
+
 /-- Additive split version of `per_block_sameMPV_of_canonical_form`.
 
 This theorem isolates exactly the pieces of the canonical-form bundle used in the
@@ -1449,14 +1465,7 @@ theorem per_block_sameMPV_of_separated_canonical_data
     (hSame₂ : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
     ∀ k, SameMPV (A k) (B k) := by
   by_cases hr : r ≤ 1
-  · intro k N σ
-    have := sameMPV₂_summed_blocks μ A B hSame₂ N σ
-    interval_cases r
-    · exact k.elim0
-    · have hk : k = 0 := Fin.ext (by omega)
-      subst hk
-      simp only [Fin.sum_univ_one, smul_eq_mul] at this
-      exact mul_left_cancel₀ (pow_ne_zero N (hWeights.mu_ne_zero 0)) this
+  · exact per_block_sameMPV_of_sameMPV₂_of_card_le_one μ A B hWeights.mu_ne_zero hr hSame₂
   · push_neg at hr
     exact block_separation_all_words μ A B hWeights.mu_strict_anti hWeights.mu_ne_zero
       hA_inj.block_injective hB_inj.block_injective hA_left.leftCanonical hB_left.leftCanonical
@@ -1497,14 +1506,7 @@ theorem per_block_sameMPV_of_normal_canonical_form
                         (toTensorFromBlocks (d := d) (μ := μ) B)) :
     ∀ k, SameMPV (A k) (B k) := by
   by_cases hr : r ≤ 1
-  · intro k N σ
-    have := sameMPV₂_summed_blocks μ A B hSame₂ N σ
-    interval_cases r
-    · exact k.elim0
-    · have hk : k = 0 := Fin.ext (by omega)
-      subst hk
-      simp only [Fin.sum_univ_one, smul_eq_mul] at this
-      exact mul_left_cancel₀ (pow_ne_zero N (hA.mu_ne_zero 0)) this
+  · exact per_block_sameMPV_of_sameMPV₂_of_card_le_one μ A B hA.mu_ne_zero hr hSame₂
   · push_neg at hr
     intro k
     exact block_separation_all_words_of_irreducible_TP μ A B

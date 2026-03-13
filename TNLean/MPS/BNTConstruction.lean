@@ -3,7 +3,7 @@ import TNLean.Spectral.SpectralGapRect
 import TNLean.Spectral.SpectralGapNT
 import TNLean.MPS.BNT
 import TNLean.MPS.BNTPermutationThm44
-import TNLean.MPS.CastLemmas
+import TNLean.MPS.CastOverlapDecay
 
 /-
 Copyright (c) 2025 TNLean contributors. All rights reserved.
@@ -237,20 +237,13 @@ theorem cross_overlap_tendsto_zero_of_separated_CFBNT_data
     (j k : Fin r) (hjk : j ≠ k) :
     Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
-  · have hNotEquiv : ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k) :=
-      hBlocks j k hjk hdim
-    have hAj_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) :=
-      (isInjective_cast_dim hdim (A j)).mpr (hInj.block_injective j)
-    have hAj_norm : ∑ i : Fin d,
-        (cast (congr_arg (MPSTensor d) hdim) (A j) i)ᴴ *
-        (cast (congr_arg (MPSTensor d) hdim) (A j) i) = 1 :=
-      (leftCanonical_cast_dim hdim (A j)).mpr (hLeft.leftCanonical j)
-    have hto0 := mpvOverlap_tendsto_zero
-      (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k)
-      hAj_inj (hInj.block_injective k)
-      hAj_norm (hLeft.leftCanonical k)
-      hNotEquiv
-    exact hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A j) (A k) N
+  · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left
+      (hdim := hdim) (A := A j) (B := A k)
+      (hA_inj := hInj.block_injective j)
+      (hB_inj := hInj.block_injective k)
+      (hA_norm := hLeft.leftCanonical j)
+      (hB_norm := hLeft.leftCanonical k)
+      (hNot := hBlocks j k hjk hdim)
   · exact mpvOverlap_tendsto_zero_of_dim_ne (A j) (A k)
       (hInj.block_injective j)
       (hInj.block_injective k)
@@ -348,20 +341,13 @@ theorem cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
     (j k : Fin r) (hjk : j ≠ k) :
     Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
-  · have hNotEquiv : ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k) :=
-      hBlocks j k hjk hdim
-    have hAj_irr : IsIrreducibleTensor (cast (congr_arg (MPSTensor d) hdim) (A j)) :=
-      (isIrreducibleTensor_cast_dim hdim (A j)).mpr (hIrr.block_irreducible j)
-    have hAj_norm : ∑ i : Fin d,
-        (cast (congr_arg (MPSTensor d) hdim) (A j) i)ᴴ *
-        (cast (congr_arg (MPSTensor d) hdim) (A j) i) = 1 :=
-      (leftCanonical_cast_dim hdim (A j)).mpr (hLeft.leftCanonical j)
-    have hto0 := mpvOverlap_tendsto_zero_of_irreducible_TP
-      (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k)
-      hAj_irr (hIrr.block_irreducible k)
-      hAj_norm (hLeft.leftCanonical k)
-      hNotEquiv
-    exact hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A j) (A k) N
+  · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
+      (hdim := hdim) (A := A j) (B := A k)
+      (hA_irr := hIrr.block_irreducible j)
+      (hB_irr := hIrr.block_irreducible k)
+      (hA_norm := hLeft.leftCanonical j)
+      (hB_norm := hLeft.leftCanonical k)
+      (hNot := hBlocks j k hjk hdim)
   · exact mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP (A j) (A k)
       (hIrr.block_irreducible j)
       (hIrr.block_irreducible k)

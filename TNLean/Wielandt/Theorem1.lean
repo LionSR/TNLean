@@ -60,6 +60,10 @@ invoke the backend theorem `wordSpan_eq_top_of_isNormal_of_isUnit` from
 Within TNLean these results are currently standalone paper-facing endpoints:
 the canonical / FT / BNT assembly does not import them directly.
 
+This file is the preferred public entry point for the currently formalized
+Theorem 1 wrappers. The auxiliary module `QuantumWielandt.lean` packages a
+conditional aperiodicity-based route and is not the default paper-facing API.
+
 ## What remains as future work
 
 * **Case (1)** / full general bound:
@@ -92,7 +96,8 @@ theorem qIndex_le_iIndex_of_isPrimitivePaper [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
     qIndex A ≤ iIndex A := by
-  exact qIndex_le_iIndex A (hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim)
+  exact prop3_qIndex_le_iIndex A
+    (hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim)
 
 /-! ## Part 2: Case (3) — noninvertible with nonzero eigenvalue gives `D²` -/
 

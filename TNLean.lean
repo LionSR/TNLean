@@ -3,8 +3,11 @@
 
 Stable import surface for the maintained TNLean library.
 
-This file re-exports the modules intended for downstream users. The following
-legacy or documentary modules are intentionally excluded:
+This file re-exports the modules intended for downstream users. A few
+specialized helper or documentary modules are intentionally omitted from the
+root import list; they remain available via direct imports when needed.
+
+The following legacy or documentary modules are intentionally excluded:
 
 * the legacy bi-canonical periodicity wrappers
   `TNLean.Channel.PeripheralClosure` and `TNLean.MPS.BlockingPeriodicity`;
@@ -122,22 +125,24 @@ import TNLean.Wielandt.RankOneConstruction
 import TNLean.Wielandt.RankOneProducts
 import TNLean.Wielandt.WielandtBound
 
--- Layer 6b: Paper-facing Proposition 3 / Theorem 1 endpoints
--- These wrappers are currently standalone with respect to the canonical / FT /
--- BNT assembly above; they are re-exported for direct users and the Wolf
--- Chapter 6 index.
+-- Layer 6b: Preferred paper-facing Proposition 3 / Theorem 1 endpoints
+-- These wrappers remain standalone with respect to the canonical / FT / BNT
+-- assembly above. `Prop3.lean` is the preferred Proposition 3 entry point; the
+-- direction-specific files `Prop3_ac` and `Prop3_cb` remain available
+-- transitively through `Prop3` for specialized use.
 import TNLean.Wielandt.PrimitivePaper
 import TNLean.Wielandt.PrimitiveEquiv
-import TNLean.Wielandt.Prop3_ac
 import TNLean.Wielandt.Prop3
-import TNLean.Wielandt.Prop3_cb
 import TNLean.Wielandt.Lemma1
 import TNLean.Wielandt.Lemma2
 import TNLean.Wielandt.Lemma2bCoarse
 import TNLean.Wielandt.Lemma2bExact
 import TNLean.Wielandt.Theorem1
 
--- Layer 6c: Conditional primitive-to-normal / exact-span assembly
+-- Layer 6c: Conditional / backend Wielandt assembly
+-- These modules support specialized span-growth and aperiodicity routes. They
+-- are not on the active canonical / FT / BNT path, but they remain root-visible
+-- where convenient for direct users.
 import TNLean.Wielandt.InvertibleWordSpanGrowth
 import TNLean.Wielandt.PrimitivityNormal
 import TNLean.Wielandt.PrimitivityToNormal

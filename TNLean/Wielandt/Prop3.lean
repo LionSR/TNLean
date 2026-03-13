@@ -36,8 +36,10 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 Together these close the cycle **(a) → (c) → (b) → (a)**, establishing the
 full equivalence of all three conditions.
 
-Within TNLean this remains a standalone paper-facing equivalence package: the
-canonical / FT / BNT assembly does not import these wrappers directly.
+Within TNLean this is the preferred Proposition 3 entry point on the root
+import surface. The direction-specific files `Prop3_ac.lean` and
+`Prop3_cb.lean` remain specialized implementation modules, while the canonical /
+FT / BNT assembly does not import these wrappers directly.
 
 ## Full-equivalence corollaries
 

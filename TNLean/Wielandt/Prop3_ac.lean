@@ -17,6 +17,10 @@ import Mathlib.Analysis.Matrix.Spectrum
 This file develops helper lemmas toward the (a)→(c) direction of Proposition 3
 from arXiv:0909.5347: **IsPrimitivePaper A → IsStronglyIrreduciblePaper A**.
 
+It is a direction-specific implementation module. For the packaged public
+Proposition 3 API, prefer `TNLean.Wielandt.Prop3`; this file is retained for
+specialized access to the intermediate lemmas used in the (a)→(c) proof.
+
 ## Proof strategy (following Wolf Ch6 / arXiv:0909.5347)
 
 1. **Sandwich identity** (`sandwich_vecMulVec`): `M * |φ⟩⟨φ| * M† = |Mφ⟩⟨Mφ|`.
