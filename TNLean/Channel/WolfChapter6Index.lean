@@ -34,10 +34,10 @@ No new proofs are introduced here; this is a documentation-only re-export.
 ### Wolf Theorem 6.2 (Irreducible positive maps) — ITEMS 1,2,4 FORMALIZED
 
 **Item 1** (definition via invariant projections):
-* `IsIrreducibleMap` — `TNLean.Channel.Irreducible`
+* `IsIrreducibleMap` — `TNLean.Channel.Irreducible.Basic`
 
 **Item 2** (growth condition `(id + T)^{d-1}(A) > 0`):
-* `growth_posDef_of_irreducible_cp` — `TNLean.Channel.IrreducibleGrowth`
+* `growth_posDef_of_irreducible_cp` — `TNLean.Channel.Irreducible.Growth`
   (for CP maps; proves the (1)→(2) direction)
 * `posDef_of_ker_subset_irreducible_cp` — structural lemma:
   `ker(A) ⊆ ker(E(A))` + irreducible CP → `A` is PosDef
@@ -46,14 +46,14 @@ No new proofs are introduced here; this is a documentation-only re-export.
 **Item 3** (exponential condition `exp[tT](A) > 0`): NOT FORMALIZED.
 
 **Item 4** (orthogonal trace condition):
-* `orthogonal_trace_pos_of_irreducible_cp` — `TNLean.Channel.IrreducibleGrowth`
+* `orthogonal_trace_pos_of_irreducible_cp` — `TNLean.Channel.Irreducible.Growth`
   For orthogonal PSD `A, B` (tr(BA)=0), ∃ t ∈ {1,...,D-1}, tr(B·T^t(A)) > 0.
 
 ### Wolf Theorem 6.3 (Spectral radius of irreducible maps) — ITEMS 2,3,4 FORMALIZED
 
 **Item 2** (non-degenerate eigenvalue, strictly positive eigenvector):
 
-Channel-level (general irreducible CP maps) — `TNLean.Channel.IrreduciblePerronFrobenius`:
+Channel-level (general irreducible CP maps) — `TNLean.Channel.Irreducible.PerronFrobenius`:
 * `posDef_of_posSemidef_eigenvector_irreducible_cp`: PSD eigenvector → PosDef
 * `exists_posDef_eigenvector_of_irreducible_cp`: ∃ PosDef eigenvector with `r > 0`
 * `posSemidef_eigenvector_unique_of_irreducible_cp`: uniqueness up to scalar
@@ -65,7 +65,7 @@ MPS/QPF-level (transfer maps):
 * `posSemidef_fixedPoint_unique_of_irreducible`
 
 **Item 3** (uniqueness of positive eigenvalue):
-* `eigenvalue_unique_of_irreducible_cp` — `TNLean.Channel.IrreduciblePerronFrobenius`
+* `eigenvalue_unique_of_irreducible_cp` — `TNLean.Channel.Irreducible.PerronFrobenius`
   Any two positive eigenvalues with nonzero PSD eigenvectors must coincide.
 * `posSemidef_eigenvector_unique_of_irreducible_cp` shows any two PSD
   eigenvectors for the same eigenvalue are proportional.
@@ -76,29 +76,29 @@ MPS/QPF-level (transfer maps):
 * `spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp`
   — real-valued corollary `(ρ(E)).toReal = r`
 
-Both in `TNLean.Channel.IrreducibleSpectralRadius`.
+Both in `TNLean.Channel.Irreducible.SpectralRadius`.
 Combined with `exists_posDef_eigenvector_of_irreducible_cp` from
-`TNLean.Channel.IrreduciblePerronFrobenius`, these give the full Wolf item 4
+`TNLean.Channel.Irreducible.PerronFrobenius`, these give the full Wolf item 4
 for the Perron–Frobenius eigenvalue.
 
 ### Wolf Corollary 6.3 (Time-average / ergodicity) — FORMALIZED
 
 * `IsChannel.exists_unique_density_fixedPoint_of_irreducible` —
-  `TNLean.Channel.Ergodicity`
+  `TNLean.Channel.Irreducible.Ergodicity`
   Qualitative form: an irreducible channel has a unique density-matrix fixed
   point, and it is positive definite.
-* `IsChannel.cesaroMean_tendsto_of_irreducible` — `TNLean.Channel.Ergodicity`
+* `IsChannel.cesaroMean_tendsto_of_irreducible` — `TNLean.Channel.Irreducible.Ergodicity`
   Full Cesàro convergence: for every density matrix `ρ`,
   `(1/N) ∑_{t=0}^{N-1} E^[t](ρ) → σ`.
 
-Supporting infrastructure in `TNLean.Channel.Ergodicity`:
+Supporting infrastructure in `TNLean.Channel.Irreducible.Ergodicity`:
 * `IsChannel.iter_mem_densityMatrices`: iterates of a channel preserve density matrices.
 * `IsChannel.cesaroMean_subseq_limit_fixedPoint`: any subsequential Cesàro limit is
   a density-matrix fixed point (compactness + telescoping argument).
 
 ### Wolf Theorem 6.4 (Irreducibility from spectral properties) — FORMALIZED
 
-In `TNLean.Channel.IrreducibleFromSpectral`:
+In `TNLean.Channel.Irreducible.FromSpectral`:
 * `HasSpectralProperties` — Kraus-witness bundle of the spectral assumptions
   in Wolf's theorem (PD right/left eigenvectors, PSD uniqueness, spectral radius).
 * `hasSpectralProperties_of_irreducible_cp` — the forward implication
@@ -109,26 +109,26 @@ In `TNLean.Channel.IrreducibleFromSpectral`:
 
 ### Wolf Theorem 6.5 (Spectral radius and positive eigenvectors) — FORMALIZED
 
-* `exists_posSemidef_eigenvector` — `TNLean.Channel.PerronFrobeniusExistence`
+* `exists_posSemidef_eigenvector` — `TNLean.Channel.PerronFrobenius.Existence`
 
 Uses Brouwer's fixed-point theorem on density matrices (proved in
-`TNLean.Axioms.BrouwerFixedPointDensityMatrices`).
+`TNLean.Axioms.BrouwerFixedPoint`).
 
 ### Wolf Proposition 6.6 (Similarity preserving irreducibility) — FORMALIZED
 
-* Scalar case: `isIrreducibleMap_smul` — `TNLean.Channel.PerronFrobeniusExistence`
-* Similarity case: `isIrreducibleMap_similarity` — `TNLean.Channel.SimilarityIrreducible`
+* Scalar case: `isIrreducibleMap_smul` — `TNLean.Channel.PerronFrobenius.Existence`
+* Similarity case: `isIrreducibleMap_similarity` — `TNLean.Channel.Irreducible.Similarity`
 * Full Wolf form `T' = c C⁻¹ T(C · C†) C⁻†`:
   `isIrreducibleMap_full_similarity` (and the stronger
-  `isIrreducibleMap_similarity_smul`) — `TNLean.Channel.SimilarityIrreducible`
+  `isIrreducibleMap_similarity_smul`) — `TNLean.Channel.Irreducible.Similarity`
 
 ### Wolf Theorem 6.6 (Peripheral spectrum of irreducible Schwarz maps)
 
 **Item 1** (roots-of-unity structure): PARTIALLY FORMALIZED
-* `peripheral_isRootOfUnity_of_pow_eigenvalue` — `TNLean.Channel.PeripheralSpectrum`
+* `peripheral_isRootOfUnity_of_pow_eigenvalue` — `TNLean.Channel.Peripheral.Spectrum`
 
 **Items 2–4** (non-degeneracy, unitary eigenvector, cyclic projections):
-PARTIALLY FORMALIZED in `TNLean.Channel.CyclicDecomposition`.
+PARTIALLY FORMALIZED in `TNLean.Channel.Peripheral.CyclicDecomposition`.
 
 ---
 
@@ -137,19 +137,19 @@ PARTIALLY FORMALIZED in `TNLean.Channel.CyclicDecomposition`.
 ### Wolf Theorem 6.7 (Primitive maps, 4 equivalent conditions)
 
 **Item 4** (trivial peripheral spectrum, PD eigenvector):
-* `IsPrimitive` — `TNLean.Channel.PeripheralSpectrum`
+* `IsPrimitive` — `TNLean.Channel.Peripheral.Spectrum`
 * `isPrimitive_of_compl_eigenvalues_lt_one` / `compl_eigenvalue_norm_lt_one_of_primitive`
 
 Other items: PARTIALLY via spectral gap infrastructure in `TNLean.Spectral.*`.
 
 ### Wolf Theorem 6.8 (CP primitive maps, Kraus span characterizations)
 
-* `IsPrimitivePaper` — `TNLean.Wielandt.PrimitivePaper`
+* `IsPrimitivePaper` — `TNLean.Wielandt.Primitivity.PaperDefinitions`
   (item 3: `Kₘ = M_d(ℂ)` for `m ≥ q`)
 
 ### Wolf Theorem 6.9 (Quantum Wielandt inequality)
 
-Current paper-facing wrappers live in `TNLean.Wielandt.Theorem1`:
+Current paper-facing wrappers live in `TNLean.Wielandt.PaperResults.WielandtInequality`:
 * `qIndex_le_iIndex_of_isPrimitivePaper`
 * `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit` /
   `iIndex_le_of_isPrimitivePaper_of_isUnit`
@@ -166,16 +166,16 @@ endpoint.
 
 ### Wolf Theorem 6.10 (Brouwer's fixed point theorem)
 
-* `brouwer_fixedPoint_densityMatrices` — `TNLean.Axioms.BrouwerFixedPointDensityMatrices`
+* `brouwer_fixedPoint_densityMatrices` — `TNLean.Axioms.BrouwerFixedPoint`
 
 ### Wolf Theorem 6.11 (Stationary states)
 
 * Via Brouwer: `exists_posSemidef_eigenvector` (for general positive maps)
-* Via Cesàro: `IsChannel.exists_posSemidef_fixedPoint` — `TNLean.Channel.CesaroFixedPoint`
+* Via Cesàro: `IsChannel.exists_posSemidef_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
 
 ### Wolf Proposition 6.8 (Positive fixed-points)
 
-* `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.CesaroFixedPoint`
+* `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
 
 ---
 
@@ -183,7 +183,7 @@ endpoint.
 
 ### Wolf Theorem 6.16 (Structure of cycles)
 
-* Partially formalized in `TNLean.Channel.CyclicDecomposition`
+* Partially formalized in `TNLean.Channel.Peripheral.CyclicDecomposition`
 
 ---
 

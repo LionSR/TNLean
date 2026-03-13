@@ -31,7 +31,7 @@ open Matrix Filter
 /-!
 ## Step 0: naming hygiene
 
-`TNLean.Channel.PeripheralSpectrum` currently defines its primitivity predicate and spectral-gap
+`TNLean.Channel.Peripheral.Spectrum` currently defines its primitivity predicate and spectral-gap
 lemmas in the root namespace. For clarity (and to avoid confusion with
 `MPSTensor.IsPrimitive`), we provide local aliases in the namespace `PeripheralSpectrum`.
 -/
@@ -41,7 +41,7 @@ namespace PeripheralSpectrum
 /-- Channel-level primitivity: `peripheralEigenvalues E = {1}`.
 
 This is an alias for the root-level definition from
-`TNLean.Channel.PeripheralSpectrum`, placed in a dedicated namespace to avoid
+`TNLean.Channel.Peripheral.Spectrum`, placed in a dedicated namespace to avoid
 confusion with `MPSTensor.IsPrimitive`. -/
 abbrev IsPrimitive {V : Type*} [AddCommGroup V] [Module ℂ V]
     (E : V →ₗ[ℂ] V) : Prop :=

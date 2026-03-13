@@ -29,16 +29,16 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 
 | Direction | Theorem | File |
 |-----------|---------|------|
-| **(b) → (a)** | `isPrimitivePaper_of_hasEventuallyFullKrausRank` | `PrimitiveEquiv.lean` |
-| **(a) → (c)** | `isStronglyIrreduciblePaper_of_isPrimitivePaper` | `Prop3_ac.lean` |
-| **(c) → (b)** | `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper` | `Prop3_cb.lean` |
+| **(b) → (a)** | `isPrimitivePaper_of_hasEventuallyFullKrausRank` | `Primitivity/EasyDirections.lean` |
+| **(a) → (c)** | `isStronglyIrreduciblePaper_of_isPrimitivePaper` | `Primitivity/ImpliesStronglyIrreducible.lean` |
+| **(c) → (b)** | `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper` | `Primitivity/StronglyIrreducibleToFullRank.lean` |
 
 Together these close the cycle **(a) → (c) → (b) → (a)**, establishing the
 full equivalence of all three conditions.
 
 Within TNLean this is the preferred Proposition 3 entry point on the root
-import surface. The direction-specific files `Prop3_ac.lean` and
-`Prop3_cb.lean` remain specialized implementation modules, while the canonical /
+import surface. The direction-specific files `Primitivity/ImpliesStronglyIrreducible.lean` and
+`Primitivity/StronglyIrreducibleToFullRank.lean` remain specialized implementation modules, while the canonical /
 FT / BNT assembly does not import these wrappers directly.
 
 ## Full-equivalence corollaries
@@ -69,7 +69,7 @@ primitivity.
 If `{A₁, …, Aₐ}` has eventually full Kraus rank, then the transfer map `E_A`
 is primitive in the paper's sense.
 
-This is re-exported from `PrimitiveEquiv.lean`.
+This is re-exported from `Primitivity/EasyDirections.lean`.
 Paper: arXiv:0909.5347, Proposition 3(b)→(a); Wolf, Chapter 6.
 -/
 theorem prop3_ba (A : MPSTensor d D)
@@ -96,7 +96,7 @@ theorem prop3_ba_isNormal (A : MPSTensor d D)
 If the MPS tensor `A` is paper primitive and normalized (`∑ Aᵢ† Aᵢ = 1`), then
 it is strongly irreducible.
 
-This is re-exported from `Prop3_ac.lean`.
+This is re-exported from `Primitivity/ImpliesStronglyIrreducible.lean`.
 Paper: arXiv:0909.5347, Proposition 3(a)→(c); Wolf, Chapter 6.
 -/
 theorem prop3_ac [NeZero D] (A : MPSTensor d D)
@@ -113,7 +113,7 @@ Kraus rank.
 If the MPS tensor `A` is strongly irreducible and normalized (`∑ Aᵢ† Aᵢ = 1`),
 then `A` has eventually full Kraus rank.
 
-This is re-exported from `Prop3_cb.lean`.
+This is re-exported from `Primitivity/StronglyIrreducibleToFullRank.lean`.
 Paper: arXiv:0909.5347, Proposition 3(c)→(b); Wolf, Chapter 6.
 -/
 theorem prop3_cb [NeZero D] (A : MPSTensor d D)

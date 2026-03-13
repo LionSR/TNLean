@@ -1,5 +1,7 @@
 # TNLean Code Reorganization Plan
 
+> **⚠ SUPERSEDED**: This is the initial v1 plan. Two validation passes found issues (see §11 of the v2 plan). The executed plan is `docs/REORGANIZATION_PLAN_V2.md`. Key differences from v1: `Lemma2 → PaperResults/EigenvectorSpreading` (not `EigenvectorSpreadingPaper`), `Lemma2b → SpanGrowth/VectorToMatrixSpan` (not `PaperResults/VectorToMatrixSpan`). See v2 for the full corrected mapping.
+
 **Date**: 2026-03-13  
 **Scope**: Full directory restructuring to Mathlib-standard naming and hierarchy  
 **Current state**: 132 files, 40,701 lines, 10 flat directories, 0 subfolders

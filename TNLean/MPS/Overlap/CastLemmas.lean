@@ -14,7 +14,7 @@ matrix product vectors, overlaps, injectivity, irreducibility, the left-canonica
 trace-preserving condition `∑ Aᵢ† Aᵢ = I`, and gauge-phase equivalence.
 
 These lemmas were previously duplicated as private helpers in
-`BNTPermutationSimple`, `BNTPermutationThm44`, and `BNTConstruction`.
+`BNT/PermutationRigidityPrimitive`, `BNT/PermutationRigidity`, and `BNT/Construction`.
 -/
 
 open scoped BigOperators Matrix

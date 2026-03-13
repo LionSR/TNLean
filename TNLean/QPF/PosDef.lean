@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 -- Keep these dependencies explicit here for readability:
 -- • `TNLean.Algebra.HermitianHelpers` for shared spectral decomposition helpers
--- • `TNLean.Channel.PositiveMap` for the positive-definiteness API
--- • `TNLean.Channel.Irreducible` for irreducibility/projection lemmas
+-- • `TNLean.Channel.Basic` for the positive-definiteness API
+-- • `TNLean.Channel.Irreducible.Basic` for irreducibility/projection lemmas
 -- The channel imports are already transitively available through
 -- `TNLean.MPS.CPPrimitive`, but listing them directly makes the local proof
 -- dependencies honest.

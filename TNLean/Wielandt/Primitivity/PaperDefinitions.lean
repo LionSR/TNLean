@@ -36,7 +36,7 @@ Wielandt bound in paper notation, without changing the internal proof machinery.
   `hasEventuallyFullKrausRank_iff_isNormal`.
 * `IsPrimitivePaper A` is equivalent to `HasEventuallyFullKrausRank A`
   (and to `IsStronglyIrreduciblePaper A` under normalization). The full circular
-  equivalence **(a)↔(b)↔(c)** is proved in `Prop3.lean`.
+  equivalence **(a)↔(b)↔(c)** is proved in `Primitivity/Equivalence.lean`.
 * `IsStronglyIrreduciblePaper` combines `PeripheralSpectrum.IsPrimitive` (unique
   peripheral eigenvalue) with positive definiteness of the fixed point. This is
   Proposition 3(c) in the paper and Theorem 6.7(3) in Wolf's Chapter 6.
@@ -48,7 +48,7 @@ Wielandt bound in paper notation, without changing the internal proof machinery.
 
 These are **paper-facing wrappers only**. The internal proof chain flows through
 `IsNormal`, `IsPrimitiveMPS`, etc. The full equivalence of all three Proposition 3
-conditions is assembled in `Prop3.lean`.
+conditions is assembled in `Primitivity/Equivalence.lean`.
 
 At present this layer is not imported by the canonical / FT / BNT assembly in
 `TNLean.MPS.*` or `TNLean.PiAlgebra.*`; it serves the standalone paper-facing
@@ -111,7 +111,7 @@ Paper: "E_A is primitive ⟺ for all |φ⟩ ≠ 0, ∃ q s.t. H_q(A,φ) = ℂ^D.
 The uniform `q` (independent of `φ`) is part of the paper's definition.
 
 Note: The full equivalence of all three Proposition 3 conditions is assembled
-in `Prop3.lean`; see `primitivePaper_iff_hasEventuallyFullKrausRank` and
+in `Primitivity/Equivalence.lean`; see `primitivePaper_iff_hasEventuallyFullKrausRank` and
 `primitivePaper_iff_stronglyIrreducible`. -/
 def IsPrimitivePaper (A : MPSTensor d D) : Prop :=
   ∃ q : ℕ, ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤

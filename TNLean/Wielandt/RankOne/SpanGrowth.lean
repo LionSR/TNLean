@@ -10,8 +10,8 @@ import TNLean.Wielandt.RankOne.Extraction
 # Rank-one span growth lemmas (towards Wielandt Lemma 2(b))
 
 This file isolates the finite-dimensional linear-algebra input used later by
-`TNLean.Wielandt.RectSpanGrowth` and
-`TNLean.Wielandt.RectSpanUniversality`.
+`TNLean.Wielandt.RectangularSpan.Growth` and
+`TNLean.Wielandt.RectangularSpan.Universality`.
 
 The paper's Lemma 2(b) uses a Jordan/Fitting argument:
 

@@ -13,9 +13,9 @@ import Mathlib.LinearAlgebra.Matrix.ToLin
 # Rank-one extraction for Wielandt Lemma 2(b)
 
 This file provides the generalized-eigenspace/Fitting input used downstream by
-`TNLean.Wielandt.RectSpanGrowth`,
-`TNLean.Wielandt.RectSpanUniversality`, and
-`TNLean.Wielandt.RankOneExtractionFull`.
+`TNLean.Wielandt.RectangularSpan.Growth`,
+`TNLean.Wielandt.RectangularSpan.Universality`, and
+`TNLean.Wielandt.RankOne.ExtractionFull`.
 
 The paper (arXiv:0909.5347, Lemma 2(b)) proves this using Jordan normal form.
 Our development replaces Jordan form by Mathlib's generalized eigenspaces
@@ -33,8 +33,8 @@ This strengthens `range_pow_le_iSup_maxGenEigenspace_ne_zero` from
 `RankOneElement.lean` (which was only the `≤` direction).
 
 The downstream rectangular-span growth, stabilization, and exact word-span
-consequences are developed in `TNLean.Wielandt.RectSpanGrowth` and
-`TNLean.Wielandt.RectSpanUniversality`.
+consequences are developed in `TNLean.Wielandt.RectangularSpan.Growth` and
+`TNLean.Wielandt.RectangularSpan.Universality`.
 
 -/
 

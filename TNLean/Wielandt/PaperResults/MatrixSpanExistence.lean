@@ -30,7 +30,7 @@ backend theorem `wielandt_lemma2b`, which produces a sorry-free witness `N`
 without claiming the paper's exact bound.
 
 The exact paper-level statement with bound `N = D² − D + 1` is now formalized in
-`Lemma2bExact.lean`, but it requires the additional hypothesis that a chosen
+`PaperResults/MatrixSpanSharpBound.lean`, but it requires the additional hypothesis that a chosen
 Kraus operator `A i₀` is noninvertible and has a nonzero eigenvector. This file
 keeps the weaker existential consequence that follows from paper primitivity
 alone.

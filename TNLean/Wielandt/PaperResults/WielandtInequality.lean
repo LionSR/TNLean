@@ -55,7 +55,7 @@ Theorem 1 also gives the case-(2) bound:
 
 These case-(2) wrappers pass from paper primitivity to `IsNormal A` and then
 invoke the backend theorem `wordSpan_eq_top_of_isNormal_of_isUnit` from
-`InvertibleWordSpanGrowth.lean`.
+`SpanGrowth/InvertibleWordSpan.lean`.
 
 Within TNLean these results are currently standalone paper-facing endpoints:
 the canonical / FT / BNT assembly does not import them directly.

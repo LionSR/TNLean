@@ -25,7 +25,7 @@ This module assembles the **Fundamental Theorem of Matrix Product States** by co
 4. **`FundamentalTheoremMulti.lean`**: `toTensorFromBlocks`, `mpv_toTensorFromBlocks_eq_sum`,
    `gaugeEquiv_toTensorFromBlocks_of_blockConj` (block-diagonal assembly).
 
-5. **`BNTPermutationThm44.lean`**: `exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp`
+5. **`BNT/PermutationRigidity.lean`**: `exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp`
    (permutation + gauge-phase from proportional MPVs — the core of Thm 4.4).
 
 ## Main results

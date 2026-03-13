@@ -1822,7 +1822,7 @@ end ExactPropagation
 /-! ## Section 9: Summary -/
 
 /-- The rank-one extraction and unconditional assembly are provided in
-`RankOneExtractionFull.lean`:
+`RankOne/ExtractionFull.lean`:
 - `exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors`: given external
   word eigenvectors and `IsNormal A`, places `vecMulVec φ ψ` in a word span of
   the blocked tensor.

@@ -20,8 +20,8 @@ one-sided and cumulative rectangular spans, and the conditional and blocked
 assembly steps for Lemma 2(b).
 
 The later growth, stabilization, universality, and sharp quantitative backends
-live in `TNLean.Wielandt.RectSpanGrowth` and
-`TNLean.Wielandt.RectSpanUniversality`.
+live in `TNLean.Wielandt.RectangularSpan.Growth` and
+`TNLean.Wielandt.RectangularSpan.Universality`.
 
 ## Main results
 

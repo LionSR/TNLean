@@ -46,7 +46,7 @@ normal/canonical-form pipeline in `TNLean.MPS.*` does not import it directly.
 
 This module is intentionally auxiliary rather than the default paper-facing
 endpoint. Downstream users who only need Proposition 3 / Theorem 1 wrappers
-should prefer `Prop3.lean` and `Theorem1.lean`.
+should prefer `Primitivity/Equivalence.lean` and `PaperResults/WielandtInequality.lean`.
 
 ## References
 

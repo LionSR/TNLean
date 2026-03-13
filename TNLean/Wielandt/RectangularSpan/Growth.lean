@@ -15,7 +15,7 @@ induces an injective step map on `rectSpan ((A i₀)^D) A n`, deduces monotonici
 of the associated finrank sequence, and records the stabilization criteria that
 identify `rectSpan` and `cumulativeRectSpan` with `range (mulLeft P)`.
 
-`TNLean.Wielandt.RectSpanUniversality` builds on this file to turn stabilized
+`TNLean.Wielandt.RectangularSpan.Universality` builds on this file to turn stabilized
 rectangular spans into rank-one universality and the later sharp D²-D+1
 backends.
 -/
