@@ -610,16 +610,82 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
       hDim
 
 /-!
+## Zero-block separation + TP gauge threading (1606.00608 §2.3 + App. A)
+
+This section composes the honest zero-block separation from `Existence.lean` with the
+blockwise Perron–Frobenius / TP-gauge theorem `exists_tp_gauge_blockwise`, producing an
+arbitrary-input result: from any `A : MPSTensor d D`, we obtain:
+
+* a zero-tail dimension `zeroTailDim` (accumulating all-zero irreducible blocks), and
+* a TP-gauged family of irreducible blocks with nonzero weights.
+
+The MPV relationship honestly accounts for both contributions:
+
+  `mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv (toTensorFromBlocks μ blocks) σ`
+
+This is the furthest honest arbitrary-input step available before periodicity removal and
+cyclic-sector / equal-weight bookkeeping.
+-/
+
+/-- **Arbitrary-input TP-gauge pipeline (1606.00608 §2.3 + App. A, zero-block honest).**
+
+From any `A : MPSTensor d D`, produce:
+* a zero-tail of dimension `zeroTailDim` accumulating all-zero irreducible blocks;
+* TP-gauged irreducible blocks `blocks k` with nonzero weights `μ k`.
+
+Every live block satisfies:
+* `IsIrreducibleTensor`;
+* left-canonical normalization `∑ᵢ (Bᵢ)ᴴ Bᵢ = I`;
+* positive bond dimension;
+* nonzero weight.
+
+The MPV of `A` equals the zero-tail contribution plus the weighted live-block sum. -/
+theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
+    ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
+      (μ : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
+      (∀ k, μ k ≠ 0) ∧
+      (∀ k, 0 < dim k) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ) := by
+  classical
+  -- Step 1: Obtain the zero-block-separated irreducible decomposition.
+  obtain ⟨zeroTailDim, r₀, dim₀, blocks₀, hIrr₀, hNonzero₀, hDim₀, hMPV₀⟩ :=
+    exists_irreducible_blockDecomp_liveBlocks (d := d) (D := D) A
+  -- Step 2: Apply blockwise TP gauge to the live blocks.
+  -- We feed `A_live := toTensorFromBlocks μ=1 blocks₀` as the input tensor.
+  -- The SameMPV₂ hypothesis for `exists_tp_gauge_blockwise` holds by reflexivity.
+  let A_live := toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀
+  have hSame_refl : SameMPV₂ A_live
+      (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀) :=
+    fun _ _ => rfl
+  obtain ⟨r₁, dim₁, μ₁, blocks₁, hSame₁, hIrr₁, hLeft₁, hμNe₁, hDim₁⟩ :=
+    exists_tp_gauge_blockwise A_live blocks₀ hIrr₀ hSame_refl hNonzero₀
+  -- Step 3: Assemble the result.
+  refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hIrr₁, hLeft₁, hμNe₁, hDim₁, ?_⟩
+  -- The MPV relationship chains through the zero-block separation and TP gauge.
+  intro N σ
+  calc mpv A σ
+      = mpv (zeroMPSTensor d zeroTailDim) σ + mpv A_live σ := hMPV₀ N σ
+    _ = mpv (zeroMPSTensor d zeroTailDim) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μ₁) blocks₁) σ := by
+        congr 1
+        exact hSame₁ N σ
+
+/-!
 ## Scope of this file
 
-This file stops at the primitive weighted-block stage. A full wrapper from an arbitrary
-irreducible block decomposition would still require an honest treatment of zero blocks under
-`SameMPV₂`, a concrete cyclic-sector construction for the blocked tensors, and an equal-weight
-merging or reformulation step.
+This file packages primitive weighted block decompositions into normal canonical form and provides
+the honest arbitrary-input TP-gauge pipeline (with zero-block separation).
 
-The theorem `exists_tp_gauge_blockwise` is retained as an unused documentary staging theorem for
-the earlier TP-normalization route, while the public theorem above starts later from blocks where
-primitivity and pairwise distinct weight norms are already available.
+A full wrapper to the endpoint canonical form would still require:
+* periodicity removal by blocking (applying `exists_blockTensor_isPrimitive_pipeline1606` to each
+  TP-gauged block);
+* cyclic-sector decomposition after blocking;
+* equal-weight merging or grouping for strict weight ordering.
 -/
 
 end MPSTensor
