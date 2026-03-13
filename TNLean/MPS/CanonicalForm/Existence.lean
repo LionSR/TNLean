@@ -8,6 +8,7 @@ import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.MPS.CanonicalForm.FromPeripheralPrimitive
+import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
@@ -181,6 +182,35 @@ theorem exists_blockTensor_isPrimitive_pipeline1606
   simpa using
     (exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor (A := A) hTP hIrr hDpos)
 
+/-- **Pipeline step (1606.00608 Appendix A, TP bookkeeping after blocking).**
+
+If `A` is trace-preserving and irreducible, then some physical blocking makes the
+blocked transfer map primitive, and the blocked tensor remains left-canonical. -/
+theorem exists_blockTensor_leftCanonical_isPrimitive_pipeline1606
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
+    ∃ p : ℕ, 0 < p ∧
+      (∑ i : Fin (blockPhysDim d p),
+          (blockTensor (d := d) (D := D) A p i)ᴴ *
+            blockTensor (d := d) (D := D) A p i = 1) ∧
+      _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p)) := by
+  obtain ⟨p, hp, hPrim⟩ :=
+    exists_blockTensor_isPrimitive_pipeline1606 (A := A) hTP hIrr
+  refine ⟨p, hp, leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := p) hTP, hPrim⟩
+
+/-- **Pipeline compatibility wrapper:** spectral-gap primitivity with a positive-definite
+fixed point implies normality. -/
+theorem isNormal_of_isPrimitiveMPS_pipeline1606
+    [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hPrim : IsPrimitiveMPS A ρ)
+    (hPD : ρ.PosDef) :
+    IsNormal A :=
+  isNormal_of_isPrimitiveMPS_with_posDef hPrim hPD
+
 
 /-!
 ## (5) Downstream compatibility wrappers
@@ -277,12 +307,8 @@ theorem exists_nonzero_kraus_of_isIrreducibleTensor
   have hPproj : IsOrthogonalProjection P := by
     refine ⟨?_, ?_⟩
     · change P.conjTranspose = P
-      simpa [P] using
-        (Matrix.diagonal_conjTranspose (fun j : Fin D => if j = i0 then (1 : ℂ) else 0))
-    · simpa [P] using
-        (Matrix.diagonal_mul_diagonal
-          (fun j : Fin D => if j = i0 then (1 : ℂ) else 0)
-          (fun j : Fin D => if j = i0 then (1 : ℂ) else 0))
+      simp [P]
+    · simp [P]
   have hi10 : i1 ≠ i0 := by
     intro hEq
     have hval : (1 : ℕ) = 0 := by
