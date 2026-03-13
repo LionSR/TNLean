@@ -1,4 +1,4 @@
-import TNLean.Channel.PositiveMap
+import TNLean.Channel.Basic
 import Mathlib.LinearAlgebra.Trace
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula

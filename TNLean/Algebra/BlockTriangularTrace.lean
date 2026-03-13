@@ -1,5 +1,5 @@
 import TNLean.MPS.Defs
-import TNLean.MPS.MultiBlock
+import TNLean.MPS.Core.MultiBlock
 
 import Mathlib.Data.Matrix.Block
 import Mathlib.Logic.Equiv.Fin.Basic

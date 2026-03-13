@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.QPF.PosDef
 import TNLean.QPF.Uniqueness
-import TNLean.MPS.CPPrimitive
+import TNLean.MPS.Core.CPPrimitive
 -- Needed for `IsChannel.exists_posSemidef_fixedPoint`.
 -- We import it directly here instead of relying on a legacy transitive route.
-import TNLean.Channel.CesaroFixedPoint
+import TNLean.Channel.FixedPoint.Cesaro
 
 /-!
 # Quantum Perron–Frobenius Theory for MPS Transfer Operators
