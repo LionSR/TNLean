@@ -3,7 +3,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
-import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.InnerProductSpace.JointEigenspace
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -75,23 +74,23 @@ section NormalGenerators
 variable {A : Matrix (Fin D) (Fin D) ℂ}
 
 /-- A normal matrix commutes with its adjoint. -/
-theorem commute_conjTranspose_of_normal
+private theorem commute_conjTranspose_of_normal
     (hA : Aᴴ * A = A * Aᴴ) : Commute A Aᴴ := by
   simpa [Commute] using hA.symm
 
 /-- For a normal matrix `A`, the generator `A` commutes with `Aᴴ * A`. -/
-theorem commute_conjTranspose_mul_self_of_normal
+private theorem commute_conjTranspose_mul_self_of_normal
     (hA : Aᴴ * A = A * Aᴴ) : Commute A (Aᴴ * A) :=
   (commute_conjTranspose_of_normal (A := A) hA).mul_right (Commute.refl A)
 
 /-- For a normal matrix `A`, the generator `Aᴴ` commutes with `Aᴴ * A`. -/
-theorem conjTranspose_commute_conjTranspose_mul_self_of_normal
+private theorem conjTranspose_commute_conjTranspose_mul_self_of_normal
     (hA : Aᴴ * A = A * Aᴴ) : Commute Aᴴ (Aᴴ * A) :=
   (Commute.refl Aᴴ).mul_right
     (Commute.symm (commute_conjTranspose_of_normal (A := A) hA))
 
 /-- For a normal matrix `A`, the generators `{A, Aᴴ, Aᴴ * A, 1}` commute pairwise. -/
-theorem normal_generators_pairwise_commute
+private theorem normal_generators_pairwise_commute
     (hA : Aᴴ * A = A * Aᴴ) :
     Commute A Aᴴ ∧
       Commute A (Aᴴ * A) ∧
@@ -111,13 +110,13 @@ end NormalGenerators
 section DiagonalFamily
 
 /-- A rectangular Kraus-type map `X ↦ ∑ᵢ Kᵢ X Kᵢ†`. -/
-noncomputable def rectKrausMap {ι m n : Type*}
+private noncomputable def rectKrausMap {ι m n : Type*}
     [Fintype ι] [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
     (K : ι → Matrix m n ℂ) (X : Matrix n n ℂ) : Matrix m m ℂ :=
   ∑ i : ι, K i * X * (K i)ᴴ
 
 /-- Kadison--Schwarz for a unital rectangular Kraus family. -/
-theorem rect_kadison_schwarz_le
+private theorem rect_kadison_schwarz_le
     {ι m n : Type*} [Fintype ι] [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
     (K : ι → Matrix m n ℂ)
     (h_unital : ∑ i : ι, K i * (K i)ᴴ = (1 : Matrix m m ℂ))
@@ -178,18 +177,18 @@ theorem rect_kadison_schwarz_le
 
 /-- The single-column Kraus operators used to package a finite positive family as a
 unital rectangular Kraus map after adjoining one zero coordinate. -/
-noncomputable def familyMainKraus {ι : Type*} [Fintype ι] [DecidableEq ι]
+private noncomputable def familyMainKraus {ι : Type*} [Fintype ι] [DecidableEq ι]
     (C : ι → Matrix (Fin D) (Fin D) ℂ) (ip : ι × Fin D) :
     Matrix (Fin D) (Option ι) ℂ :=
   fun r o => if o = some ip.1 then C ip.1 r ip.2 else 0
 
 /-- The defect Kraus operators supported on the adjoined zero coordinate. -/
-noncomputable def familyDefectKraus {ι : Type*} [Fintype ι] [DecidableEq ι]
+private noncomputable def familyDefectKraus {ι : Type*} [Fintype ι] [DecidableEq ι]
     (S : Matrix (Fin D) (Fin D) ℂ) (p : Fin D) : Matrix (Fin D) (Option ι) ℂ :=
   fun r o => if o = none then S r p else 0
 
 /-- The full unital Kraus family attached to a finite PSD family and its defect. -/
-noncomputable def familyKraus {ι : Type*} [Fintype ι] [DecidableEq ι]
+private noncomputable def familyKraus {ι : Type*} [Fintype ι] [DecidableEq ι]
     (C : ι → Matrix (Fin D) (Fin D) ℂ) (S : Matrix (Fin D) (Fin D) ℂ) :
     ((ι × Fin D) ⊕ Fin D) → Matrix (Fin D) (Option ι) ℂ
   | Sum.inl ip => familyMainKraus C ip
@@ -273,9 +272,7 @@ theorem diagonal_family_schwarz_le
             have hS' : S * Sᴴ = 1 - ∑ i, B i := by
               simpa [Matrix.star_eq_conjTranspose] using hS.symm
             simp [hC, hS']
-      _ = 1 := by
-        simpa [sub_eq_add_neg, add_comm] using
-          (add_sub_cancel (∑ i, B i) (1 : Matrix (Fin D) (Fin D) ℂ))
+      _ = 1 := by simp [sub_eq_add_neg, add_comm]
   have hMainTerm (i : ι) (p : Fin D) :
       familyMainKraus C (i, p) * X * (familyMainKraus C (i, p))ᴴ =
         z i • (familyMainKraus C (i, p) * (familyMainKraus C (i, p))ᴴ) := by
@@ -353,7 +350,7 @@ theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
 
 This packages `quadraticForm_nonneg_of_isPositiveMap_of_commuting_images` into a
 single reusable predicate. -/
-theorem isPositiveOnCommuting_of_isPositiveMap
+private theorem isPositiveOnCommuting_of_isPositiveMap
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) :
     IsPositiveOnCommuting T := by
@@ -366,7 +363,7 @@ local notation "E" => EuclideanSpace ℂ (Fin D)
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 private theorem linearMap_eq_sum_rankOne_of_orthonormalBasis
-    {s : Type*} [Fintype s] [DecidableEq s]
+    {s : Type*} [Fintype s]
     (b : OrthonormalBasis s ℂ E)
     (L : E →ₗ[ℂ] E) (μ : s → ℂ)
     (hL : ∀ i, L (b i) = μ i • b i) :
@@ -387,20 +384,20 @@ private theorem linearMap_eq_sum_rankOne_of_orthonormalBasis
       (↑((((InnerProductSpace.rankOne ℂ) (b i)) (b i)) : E →L[ℂ] E) : E →ₗ[ℂ] E)) v := by
       simp [InnerProductSpace.rankOne_apply, smul_smul]
 
-private theorem commute_parts_of_normal [DecidableEq (Fin D)]
+private theorem commute_parts_of_normal
     (A : Mat) (hA : Aᴴ * A = A * Aᴴ) :
-    Commute (((1 / 2 : ℂ)) • (A + Aᴴ)) (((Complex.I / 2 : ℂ)) • (Aᴴ - A)) := by
+    Commute ((1 / 2 : ℂ) • (A + Aᴴ)) ((Complex.I / 2 : ℂ) • (Aᴴ - A)) := by
   have hAA : Commute A Aᴴ := commute_conjTranspose_of_normal (A := A) hA
   -- Commute (A + Aᴴ) with (Aᴴ - A) by combining the individual commutators.
   have hsum_sub : Commute (A + Aᴴ) (Aᴴ - A) :=
     (hAA.add_left (Commute.refl Aᴴ)).sub_right ((Commute.refl A).add_left hAA.symm)
   simpa [Matrix.smul_mul, Matrix.mul_smul, mul_comm, mul_left_comm, mul_assoc] using
-    (hsum_sub.smul_left ((1 / 2 : ℂ))).smul_right ((Complex.I / 2 : ℂ))
+    (hsum_sub.smul_left (1 / 2 : ℂ)).smul_right (Complex.I / 2 : ℂ)
 
-set_option maxHeartbeats 1500000 in
+set_option maxHeartbeats 800000 in
 -- Elaborating the simultaneous-diagonalization argument expands enough basis-level
 -- definitions that the default heartbeat limit times out during `whnf`.
-theorem exists_diagonal_family_of_normal
+private theorem exists_diagonal_family_of_normal
     {A : Mat} (hA : Aᴴ * A = A * Aᴴ) :
     ∃ (s : Type) (_ : Fintype s) (_ : DecidableEq s)
       (b : OrthonormalBasis s ℂ E) (eig : s → ℂ),
@@ -412,8 +409,8 @@ theorem exists_diagonal_family_of_normal
       (∀ i, (P i).PosSemidef) ∧
       (∑ i, P i = 1) := by
   classical
-  let H : Mat := ((1 / 2 : ℂ)) • (A + Aᴴ)
-  let K : Mat := ((Complex.I / 2 : ℂ)) • (Aᴴ - A)
+  let H : Mat := (1 / 2 : ℂ) • (A + Aᴴ)
+  let K : Mat := (Complex.I / 2 : ℂ) • (Aᴴ - A)
   have hH : H.IsHermitian := by
     ext i j
     simp [H, add_comm]
@@ -429,13 +426,16 @@ theorem exists_diagonal_family_of_normal
     simpa [Hlin] using ((Matrix.isHermitian_iff_isSymmetric (A := H)).mp hH)
   have hKlin : Klin.IsSymmetric := by
     simpa [Klin] using ((Matrix.isHermitian_iff_isSymmetric (A := K)).mp hK)
-  have hHKlin : Commute Hlin Klin := by
-    rw [Commute]
-    dsimp [Hlin, Klin]
-    apply LinearMap.ext
-    intro v
-    apply (WithLp.ofLp_injective 2)
-    simp [Matrix.ofLp_toEuclideanLin_apply, Matrix.mulVec_mulVec, hHKmat.eq]
+  -- Multiplicativity of toEuclideanLin: used to lift commutativity from matrices to linear maps.
+  have hEuclMul : ∀ (A B : Mat),
+      (Matrix.toEuclideanLin A : E →ₗ[ℂ] E) * Matrix.toEuclideanLin B =
+        Matrix.toEuclideanLin (A * B) := fun A B => by
+    simp only [Matrix.toEuclideanLin_eq_toLin_orthonormal]
+    exact (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
+  have hHKlin : Commute Hlin Klin :=
+    hEuclMul H K |>.trans (congrArg Matrix.toEuclideanLin hHKmat.eq) |>.trans (hEuclMul K H).symm
   -- Factor out the eigenspace-invariance proof for Klin once, then use it for
   -- both the restriction operator and the orthonormal basis construction.
   have hKinv : ∀ (μ : Eigenvalues Hlin),
@@ -466,7 +466,7 @@ theorem exists_diagonal_family_of_normal
   let ν : s → ℂ := fun a => ↑((hKrestr a.1).eigenvalues rfl a.2)
   let eig : s → ℂ := fun a => (a.1 : ℂ) + Complex.I * ν a
   have hb_eq (a : s) : b a = (((bFamily a.1) a.2 : Module.End.eigenspace Hlin a.1) : E) := by
-    rw [show b a = cBasis a by simpa [b] using congrFun (Module.Basis.coe_toOrthonormalBasis cBasis hOrthoC) a]
+    rw [show b a = cBasis a by simp [b]]
     change cBasis a = (((bFamily a.1).toBasis a.2 : Module.End.eigenspace Hlin a.1) : E)
     exact congrFun
       (hHlin.direct_sum_isInternal.collectedBasis_coe (fun i => (bFamily i).toBasis)) a
@@ -475,8 +475,8 @@ theorem exists_diagonal_family_of_normal
     exact (Module.End.mem_eigenspace_iff).mp ((bFamily a.1 a.2).2)
   have hKb (a : s) : Klin (b a) = ν a • b a := by
     have hv_eq : Krestr a.1 ((bFamily a.1) a.2) =
-        (↑((hKrestr a.1).eigenvalues rfl a.2) : ℂ) • (bFamily a.1) a.2 := by
-      exact (Module.End.mem_eigenspace_iff).mp
+        (↑((hKrestr a.1).eigenvalues rfl a.2) : ℂ) • (bFamily a.1) a.2 :=
+      (Module.End.mem_eigenspace_iff).mp
         (((hKrestr a.1).hasEigenvector_eigenvectorBasis rfl a.2).1)
     have hv' := congrArg (fun x : Module.End.eigenspace Hlin a.1 => (x : E)) hv_eq
     rw [hb_eq a]
@@ -519,11 +519,13 @@ theorem exists_diagonal_family_of_normal
       _ = ((a.1 : ℂ) + -(Complex.I * ν a)) • b a := by
           simp [sub_eq_add_neg, add_smul, smul_smul]
       _ = star (eig a) • b a := by
-          simp [eig, hμreal, hνreal, sub_eq_add_neg, add_comm, add_left_comm, add_assoc]
+          simp [eig, hμreal, hνreal]
   have hAb_ofLp (a : s) : A.mulVec (b a).ofLp = eig a • (b a).ofLp := by
-    simpa [Matrix.ofLp_toEuclideanLin_apply] using congrArg WithLp.ofLp (hAb a)
+    simpa [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply, WithLp.ofLp_smul]
+      using congrArg WithLp.ofLp (hAb a)
   have hAstarb_ofLp (a : s) : Aᴴ.mulVec (b a).ofLp = star (eig a) • (b a).ofLp := by
-    simpa [Matrix.ofLp_toEuclideanLin_apply] using congrArg WithLp.ofLp (hAstarb a)
+    simpa [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply, WithLp.ofLp_smul]
+      using congrArg WithLp.ofLp (hAstarb a)
   have hAstarAb (a : s) : Matrix.toEuclideanLin (Aᴴ * A) (b a) =
       (star (eig a) * eig a) • b a := by
     apply (WithLp.ofLp_injective 2)
@@ -534,8 +536,9 @@ theorem exists_diagonal_family_of_normal
           rw [Matrix.mulVec_smul]
         _ = eig a • (star (eig a) • (b a).ofLp) := by rw [hAstarb_ofLp a]
         _ = ((star (eig a) * eig a) • b a).ofLp := by
-            simpa [WithLp.ofLp_smul, smul_smul, mul_comm]
-    simpa [Matrix.ofLp_toEuclideanLin_apply, Matrix.mulVec_mulVec] using hmul
+            simp [WithLp.ofLp_smul, smul_smul, mul_comm]
+    simpa [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply,
+      Matrix.mulVec_mulVec, WithLp.ofLp_smul] using hmul
   have hAstarA_matrix : Aᴴ * A = ∑ i, (star (eig i) * eig i) • P i := by
     apply Matrix.toEuclideanLin.injective
     simpa [P] using

@@ -35,7 +35,7 @@ general PSD case follows by approximating `D` with `D + ε · I`.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
-open Matrix Finset
+open Matrix
 
 /-! ### C*-algebra infrastructure for matrices -/
 
@@ -96,7 +96,7 @@ private lemma commuting_dominant_right_bound_posDef
   have hS_selfAdjoint : IsSelfAdjoint S := by
     simpa [S] using (CFC.sqrt_nonneg (a := Dom)).isSelfAdjoint
   have hSA : Commute S A := by
-    simpa [S] using (show Commute Dom A from hComm).cfcₙ_nnreal NNReal.sqrt
+    simpa [S] using hComm.cfcₙ_nnreal NNReal.sqrt
   obtain ⟨u, hu⟩ : ∃ u : Matˣ, (u : Mat) = S := by
     have hS_unit : IsUnit S := by
       dsimp [S]
@@ -107,8 +107,8 @@ private lemma commuting_dominant_right_bound_posDef
     refine Units.ext ?_
     simpa [hu] using hS_selfAdjoint.star_eq
   have hSi_selfAdjoint : IsSelfAdjoint (u⁻¹ : Matˣ) := hU_selfAdjoint.inv
-  have hSi_star : star (↑u⁻¹ : Mat) = (↑u⁻¹ : Mat) := by
-    exact congrArg (fun v : Matˣ => (v : Mat)) hSi_selfAdjoint.star_eq
+  have hSi_star : star (↑u⁻¹ : Mat) = (↑u⁻¹ : Mat) :=
+    congrArg (fun v : Matˣ => (v : Mat)) hSi_selfAdjoint.star_eq
   have hSiS : (↑u⁻¹ : Mat) * S = 1 := by
     rw [← hu]
     simp
@@ -122,15 +122,15 @@ private lemma commuting_dominant_right_bound_posDef
         dsimp [X]
         rw [conjTranspose_mul,
           show ((↑u⁻¹ : Mat))ᴴ = star (↑u⁻¹ : Mat) from rfl, hSi_star]
-        simp [mul_assoc]
+        simp only [mul_assoc]
       _ ≤ star (↑u⁻¹ : Mat) * Dom * (↑u⁻¹ : Mat) :=
         star_left_conjugate_le_conjugate hDom (↑u⁻¹ : Mat)
       _ = 1 := by
         rw [hSi_star, ← hS_sq]
         calc
           (↑u⁻¹ : Mat) * (S * S) * (↑u⁻¹ : Mat) =
-              ((↑u⁻¹ : Mat) * S) * (S * (↑u⁻¹ : Mat)) := by simp [mul_assoc]
-          _ = 1 := by rw [hSiS, hSSi]; simp
+              ((↑u⁻¹ : Mat) * S) * (S * (↑u⁻¹ : Mat)) := by simp only [mul_assoc]
+          _ = 1 := by rw [hSiS, hSSi]; simp only [one_mul]
   have hSX : S * X = A := by
     dsimp [X]
     calc
@@ -147,7 +147,7 @@ private lemma commuting_dominant_right_bound_posDef
     A * Aᴴ = S * (X * Xᴴ) * S := by
       calc
         A * Aᴴ = (S * X) * Aᴴ := by rw [hSX]
-        _ = S * (X * Xᴴ) * S := by rw [← hXstarS]; simp [mul_assoc]
+        _ = S * (X * Xᴴ) * S := by rw [← hXstarS]; simp only [mul_assoc]
     _ ≤ S * 1 * S := by
       simpa [hS_selfAdjoint.star_eq] using
         star_left_conjugate_le_conjugate (contraction_conjTranspose X hX_contr) S
@@ -236,7 +236,7 @@ noncomputable def krausAdjointMapLinear (K : Fin d → Mat) : Mat →ₗ[ℂ] Ma
     simp [krausAdjointMap, Finset.smul_sum, Matrix.mul_assoc]
 
 /-- The adjoint Kraus map is positive. -/
-theorem krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :
+private theorem krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :
     IsPositiveMap (krausAdjointMapLinear (d := d) (D := D) K) := by
   intro X hX
   classical
@@ -292,10 +292,12 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
       krausAdjointMap K A * krausAdjointMap K (Aᴴ) ≤ krausAdjointMap K Dom := by
   let T : Mat →ₗ[ℂ] Mat := krausAdjointMapLinear (d := d) (D := D) K
   have hPosT : IsPositiveMap T := krausAdjointMapLinear_isPositiveMap (d := d) (D := D) K
-  have hKSLeft' : (krausAdjointMap K A)ᴴ * krausAdjointMap K A ≤ krausAdjointMap K (Aᴴ * A) := by
+  have hKSLeft' : (krausAdjointMap K A)ᴴ * krausAdjointMap K A ≤
+      krausAdjointMap K (Aᴴ * A) := by
     rw [Matrix.le_iff]
     exact kadison_schwarz_adjoint K h_tp A
-  have hKSLeft : krausAdjointMap K (Aᴴ) * krausAdjointMap K A ≤ krausAdjointMap K (Aᴴ * A) := by
+  have hKSLeft : krausAdjointMap K (Aᴴ) * krausAdjointMap K A ≤
+      krausAdjointMap K (Aᴴ * A) := by
     simpa [krausAdjointMap_conjTranspose] using hKSLeft'
   have hDomLeftMap : krausAdjointMap K (Aᴴ * A) ≤ krausAdjointMap K Dom := by
     simpa [T] using hPosT.map_le_map hDomLeft

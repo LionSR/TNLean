@@ -40,8 +40,7 @@ Within `section SpectralGapDecomposition`, we use local notation:
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.3 Thm 6.7][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators
-open Matrix Finset Filter
+open Matrix
 
 variable {D : ℕ}
 
@@ -54,8 +53,9 @@ cancel denominators. -/
 noncomputable def fixedPointProj (ρ : Matrix (Fin D) (Fin D) ℂ) (_htr : trace ρ ≠ 0) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
   toFun X := (trace X / trace ρ) • ρ
-  map_add' X Y := by simp [add_div, add_smul]
-  map_smul' c X := by simp [mul_div_assoc, smul_smul]
+  map_add' X Y := by simp only [Matrix.trace_add, add_div, add_smul]
+  map_smul' c X := by
+    simp only [Matrix.trace_smul, smul_eq_mul, mul_div_assoc, smul_smul, RingHom.id_apply]
 
 theorem fixedPointProj_idempotent (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : trace ρ ≠ 0)
     (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -141,7 +141,7 @@ theorem pow_succ_eq_fixedPointProj_add_compl_pow
     (hTP : IsTracePreservingMap E) (hρ : E ρ = ρ) (n : ℕ) :
     E ^ (n + 1) = P + N ^ (n + 1) := by
   induction n with
-  | zero => simp [pow_one]
+  | zero => simp only [Nat.zero_add, pow_one, add_sub_cancel]
   | succ n ih =>
       have hPP : P * P = P := fixedPointProj_mul_self (ρ := ρ) (htr := htr)
       have hPN : P * N = 0 := fixedPointProj_mul_compl (E := E) (ρ := ρ) (htr := htr) hTP
