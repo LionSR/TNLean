@@ -304,7 +304,7 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
     · show star Complex.I • F.H = -Complex.I • F.H
       rw [Complex.star_def, Complex.conj_I, neg_smul]
     · show star (1 / 2 : ℂ) • S = (1 / 2 : ℂ) • S
-      simp [Complex.star_def]
+      simp
   rw [hκ_conj]
   -- Expand dissipator
   simp only [dissipator]
@@ -316,8 +316,9 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
     (1 / 2 : ℂ) • (S * ρ) -
     (1 / 2 : ℂ) • (ρ * S) := by
     simp only [Finset.sum_sub_distrib]
-    congr 1; congr 1
-    · rw [← Finset.smul_sum]; congr 1; rw [hS_def, Finset.sum_mul]
+    congr 1
+    · congr 1
+      rw [← Finset.smul_sum]; congr 1; rw [hS_def, Finset.sum_mul]
     · rw [← Finset.smul_sum]; congr 1; rw [hS_def, Finset.mul_sum]
   rw [hsplit]
   -- Now we have:
@@ -331,7 +332,9 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
   -- Now expand I • (ρH - Hρ) = I • ρH + I • (-(Hρ)) = I • ρH - I • Hρ
   simp only [sub_eq_add_neg, neg_add, neg_neg]
   rw [smul_add (Complex.I) (ρ * F.H) (-(F.H * ρ))]
-  -- Now all terms are separated, abel can handle
+  -- Complex.I • -(F.H * ρ) = -(Complex.I • (F.H * ρ))
+  rw [smul_neg]
+  -- Now all terms are separated with consistent scalar ordering, abel can handle
   abel
 
 /-- A Lindblad form is CCP. -/
@@ -531,14 +534,15 @@ theorem kossakowski_iff_lindblad
 - `LindbladForm` definition and `toLinearMap` (linearity)
 - `IsTraceAnnihilating` definition
 - `IsGKSLGenerator` definition
-- `KossakowskiForm` definition and `toLinearMap` (linearity)
+- `KossakowskiForm` definition
 - `LindbladForm.isTraceAnnihilating` — Lindblad form is trace-annihilating ✓
+- `LindbladForm.toLinearMap_eq_generatorDecomp` — Lindblad form = (φ,κ) decomposition ✓
+- `LindbladForm.isCCP` — Lindblad form is CCP ✓
 - `GeneratorDecomp.traceAnnihilating_of_traceConstraint` — φ*(1)=κ+κ† ⟹ trace-annihilating ✓
 - `exists_traceless_kraus_shift` — traceless Kraus operators exist ✓
 - `cp_semigroup_iff_ccp_generator` — equivalence (from two directions)
 
 ### Sorry (deep results requiring more infrastructure):
-- `LindbladForm.toLinearMap_eq_generatorDecomp` — algebraic identity (conjTranspose computation)
 - `choi_projected_posSemidef_implies_ccp` — Prop 7.2 reverse direction
 - `cp_semigroup_implies_ccp_generator` — Prop 7.3 forward (infinitesimal expansion)
 - `ccp_generator_implies_cp_semigroup` — Prop 7.3 reverse (Lie–Trotter)
