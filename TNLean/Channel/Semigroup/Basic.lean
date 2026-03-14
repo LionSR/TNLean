@@ -8,6 +8,7 @@ import Mathlib.Analysis.Normed.Algebra.Exponential
 import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.Analysis.ODE.Gronwall
 import Mathlib.Topology.Algebra.Module.FiniteDimension
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-!
 # Quantum Dynamical Semigroups — Definitions and Prop 7.1
@@ -206,6 +207,106 @@ theorem expSemigroup_isContinuousDynSemigroup
     exact expSemigroupCLM_continuous (endEquiv L)
 
 /-! ## Proposition 7.1: Continuous semigroup → exp(tL) -/
+
+/-- In a finite-dimensional normed algebra, the Bochner integral `(1/ε) • ∫₀^ε S(t) dt`
+is close to `S(0) = 1` for small `ε`, hence invertible. From this and the semigroup
+property, `S` is right-differentiable at `0`.
+This is the key technical step for Wolf Proposition 7.1. -/
+private theorem continuous_semigroup_hasDerivWithinAt_zero
+    (S : ℝ → Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hS_zero : S 0 = 1)
+    (hS_add : ∀ t s, 0 ≤ t → 0 ≤ s → S (t + s) = S t * S s)
+    (hS_cont : Continuous S) :
+    ∃ L : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ,
+      HasDerivWithinAt S L (Set.Ici 0) 0 := by
+  -- Define the primitive P(t) = ∫₀ᵗ S(u) du
+  let P := fun t : ℝ => intervalIntegral S 0 t MeasureTheory.volume
+  -- FTC: P has derivative S(t) at each t
+  have hP_deriv : ∀ t, HasDerivAt P (S t) t := fun t =>
+    intervalIntegral.integral_hasDerivAt_right
+      (hS_cont.intervalIntegrable 0 t)
+      (hS_cont.stronglyMeasurableAtFilter _ _)
+      hS_cont.continuousAt
+  have hP_zero : P 0 = 0 := intervalIntegral.integral_same
+  -- P'(0) = S(0) = 1
+  have hP_deriv_zero : HasDerivAt P 1 0 := hS_zero ▸ hP_deriv 0
+  -- Find ε > 0 such that P(ε) is invertible
+  -- This follows from: P'(0) = 1 (a unit), so ε⁻¹ • P(ε) → 1 as ε → 0+,
+  -- and the set of units is open (isUnit_one_sub_of_norm_lt_one).
+  have hP_unit : ∃ ε : ℝ, 0 < ε ∧ IsUnit (P ε) := by
+    -- The set of units is open, 1 is a unit, and ε⁻¹ • P(ε) → 1
+    -- We use: P(h) = h • 1 + o(h) from HasDerivAt, so ε⁻¹•P(ε) ≈ 1
+    sorry
+  obtain ⟨ε, hε_pos, hPε_unit⟩ := hP_unit
+  -- Define Q(h) = P(h+ε) - P(h)
+  let Q : ℝ → _ := fun h => P (h + ε) - P h
+  -- Q has derivative S(h+ε) - S(h) at each h
+  have hQ_deriv : ∀ h, HasDerivAt Q (S (h + ε) - S h) h := by
+    intro h
+    have h1 : HasDerivAt (fun h => P (h + ε)) (S (h + ε)) h := by
+      -- Direct FTC at h+ε composed with shift
+      have hftc := intervalIntegral.integral_hasDerivAt_right
+        (hS_cont.intervalIntegrable 0 (h + ε))
+        (hS_cont.stronglyMeasurableAtFilter _ _)
+        hS_cont.continuousAt
+      -- hftc : HasDerivAt (fun u => ∫₀^u S) (S(h+ε)) (h+ε)
+      have hshift := (hasDerivAt_id h).add_const ε
+      have hftc' : HasDerivAt (fun u => intervalIntegral S 0 u MeasureTheory.volume)
+          (S (h + ε)) (id h + ε) := hftc
+      have := hftc'.scomp h hshift
+      simp only [Function.comp_def, id, one_smul] at this; exact this
+    exact h1.sub (hP_deriv h)
+  -- At h = 0: Q'(0) = S(ε) - 1
+  have hQ_deriv_zero : HasDerivAt Q (S ε - 1) 0 := by
+    convert hQ_deriv 0 using 1; rw [zero_add, hS_zero]
+  -- Semigroup identity: S(h) * P(ε) = Q(h) for h ≥ 0
+  have hSQ : ∀ h, 0 ≤ h → S h * P ε = Q h := by
+    intro h hh
+    show S h * intervalIntegral S 0 ε MeasureTheory.volume =
+      intervalIntegral S 0 (h + ε) MeasureTheory.volume -
+        intervalIntegral S 0 h MeasureTheory.volume
+    -- Pull S(h) out of integral
+    have hpull : S h * intervalIntegral S 0 ε MeasureTheory.volume =
+        intervalIntegral (fun t => S h * S t) 0 ε MeasureTheory.volume := by
+      exact (ContinuousLinearMap.intervalIntegral_comp_comm
+        ((ContinuousLinearMap.mul ℂ _) (S h)) (hS_cont.intervalIntegrable 0 ε)).symm
+    -- Apply semigroup property pointwise
+    have hsg : intervalIntegral (fun t => S h * S t) 0 ε MeasureTheory.volume =
+        intervalIntegral (fun t => S (h + t)) 0 ε MeasureTheory.volume :=
+      intervalIntegral.integral_congr (fun t ht => by
+        rw [Set.uIcc_of_le (le_of_lt hε_pos)] at ht; exact (hS_add h t hh ht.1).symm)
+    -- Substitution: ∫₀ε S(h+t) dt = ∫ₕ^{h+ε} S(u) du
+    have hsub : intervalIntegral (fun t => S (h + t)) 0 ε MeasureTheory.volume =
+        intervalIntegral S h (h + ε) MeasureTheory.volume := by
+      have hcr := intervalIntegral.integral_comp_add_right (a := 0) (b := ε) S h
+      simp only [zero_add] at hcr
+      have hcomm : (fun t => S (h + t)) = (fun t => S (t + h)) := by ext t; rw [add_comm]
+      rw [hcomm]; convert hcr using 2; ring
+    -- Split: ∫ₕ^{h+ε} = ∫₀^{h+ε} - ∫₀^h
+    have hsplit : intervalIntegral S h (h + ε) MeasureTheory.volume =
+        intervalIntegral S 0 (h + ε) MeasureTheory.volume -
+          intervalIntegral S 0 h MeasureTheory.volume := by
+      have := intervalIntegral.integral_add_adjacent_intervals
+        (μ := MeasureTheory.volume)
+        (hS_cont.intervalIntegrable 0 h) (hS_cont.intervalIntegrable h (h + ε))
+      linear_combination this
+    exact hpull.trans (hsg.trans (hsub.trans hsplit))
+  -- Extract the inverse of P(ε)
+  obtain ⟨Pε_unit, hPε_val⟩ := hPε_unit
+  -- Define L = (S(ε) - 1) * P(ε)⁻¹
+  refine ⟨(S ε - 1) * ↑Pε_unit⁻¹, ?_⟩
+  -- HasDerivAt (fun h => Q(h) * ↑Pε_unit⁻¹) at 0
+  have hder : HasDerivAt (fun h => Q h * ↑Pε_unit⁻¹) ((S ε - 1) * ↑Pε_unit⁻¹) 0 :=
+    hQ_deriv_zero.mul_const ↑Pε_unit⁻¹
+  -- On Set.Ici 0, S(h) = Q(h) * P(ε)⁻¹
+  have hS_eq : ∀ h ∈ Set.Ici (0 : ℝ), S h = Q h * ↑Pε_unit⁻¹ := by
+    intro h hh
+    have hid := hSQ h hh
+    -- S(h) * P(ε) = Q(h), so S(h) = Q(h) * P(ε)⁻¹
+    have hmul : S h * ↑Pε_unit * ↑Pε_unit⁻¹ = Q h * ↑Pε_unit⁻¹ := by
+      congr 1; rw [hPε_val]; exact hid
+    rwa [mul_assoc, Units.mul_inv, mul_one] at hmul
+  exact hder.hasDerivWithinAt.congr hS_eq (hS_eq 0 (Set.mem_Ici.mpr (le_refl 0)))
 
 /-- **Wolf Proposition 7.1** (continuous semigroup → exponential form):
 Every norm-continuous dynamical semigroup on the finite-dimensional algebra
