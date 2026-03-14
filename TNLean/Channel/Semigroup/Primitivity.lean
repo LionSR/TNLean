@@ -6,6 +6,8 @@ import TNLean.Channel.Semigroup.Basic
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.FixedPoint.Cesaro
+import TNLean.Channel.KrausRepresentation
+import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import Mathlib.NumberTheory.Real.Irrational
 
 /-!
@@ -79,24 +81,35 @@ structure IsQuantumDynSemigroup
 If `λ` is an eigenvalue of `exp(t₀ · L)`, then `λ^(t/t₀)` is an eigenvalue
 of `exp(t · L)`. This uses `spectrum.exp_mem_exp`. -/
 
+set_option maxHeartbeats 5000000
+
 /-- If `μ` is an eigenvalue of `L`, then `exp(t · μ)` is an eigenvalue of
 `exp(t · L)` (spectral mapping theorem for exp). -/
 theorem eigenvalue_exp_of_eigenvalue_generator
     (L : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (μ : ℂ) (hμ : μ ∈ spectrum ℂ L) (t : ℂ) :
     Complex.exp (t * μ) ∈ spectrum ℂ (NormedSpace.exp (t • L)) := by
-  rw [Complex.exp_eq_exp_ℂ]
-  apply spectrum.exp_mem_exp
   have hnt : Nontrivial (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := by
     by_contra h
     rw [not_nontrivial_iff_subsingleton] at h
     exact (spectrum.of_subsingleton (R := ℂ) L ▸ hμ : μ ∈ (∅ : Set ℂ))
-  by_cases ht : t = 0
-  · subst ht; simp only [zero_mul, zero_smul]
-    rw [spectrum.zero_eq]; exact Set.mem_singleton _
-  · have hu : IsUnit t := isUnit_iff_ne_zero.mpr ht
-    rw [show t * μ = t • μ from (smul_eq_mul t μ).symm]
-    exact (spectrum.smul_mem_smul_iff (r := hu.unit)).mpr hμ
+  have htmul : t * μ ∈ spectrum ℂ (t • L) := by
+    by_cases ht : t = 0
+    · subst ht
+      have hzero : (0 : ℂ) ∈ spectrum ℂ
+          (0 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := by
+        rw [spectrum.zero_eq]
+        exact Set.mem_singleton _
+      have hmul : (0 : ℂ) * μ = 0 := by simp
+      have hzsmul : (0 : ℂ) • L = 0 := zero_smul ℂ L
+      rw [hmul, hzsmul]
+      exact hzero
+    · have hu : IsUnit t := isUnit_iff_ne_zero.mpr ht
+      rw [show t * μ = t • μ from (smul_eq_mul t μ).symm]
+      exact (spectrum.smul_mem_smul_iff (a := L) (r := hu.unit)).mpr hμ
+  simpa [Complex.exp_eq_exp_ℂ] using (spectrum.exp_mem_exp (a := t • L) htmul)
+
+set_option maxHeartbeats 200000
 
 /-! ## Key lemma: exp(itθ) root of unity for all t > 0 implies θ = 0
 
@@ -196,6 +209,41 @@ theorem re_eq_zero_of_peripheral_generator
     exact (Real.exp_eq_one_iff _).mp hnorm
   exact (mul_eq_zero.mp h).resolve_left (ne_of_gt ht₀)
 
+/-- **Irreducible channels have root-of-unity peripheral spectrum.**
+
+Choose a Kraus representation `E = transferMap K`. Trace preservation gives the
+normalization `∑ Kᵢ† Kᵢ = 1`, irreducibility of `E` converts to tensor
+irreducibility of `K`, and the existing blocking-periodicity theorem provides a
+power `p > 0` with `(transferMap K)^p` primitive. Then every peripheral
+eigenvalue `μ` of `E` satisfies `(μ^p) = 1`. -/
+theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hE : IsChannel E) (hIrr : IsIrreducibleMap E) :
+    ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
+  classical
+  obtain ⟨r, K, hK⟩ := hE.cp
+  have hE_eq : E = MPSTensor.transferMap (d := r) (D := D) K := by
+    apply LinearMap.ext
+    intro X
+    simpa [MPSTensor.transferMap_apply] using hK X
+  have hIrrK_map : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K) := by
+    simpa [hE_eq] using hIrr
+  have hIrrK : MPSTensor.IsIrreducibleTensor (d := r) (D := D) K :=
+    MPSTensor.isIrreducibleTensor_of_isIrreducibleMap K hIrrK_map
+  have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
+    kraus_sum_conjTranspose_mul_of_tp K E hK hE.tp
+  obtain ⟨p, hp_pos, hPrimP⟩ :=
+    MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
+      (A := K) hK_tp hIrrK (Nat.pos_of_ne_zero (NeZero.ne D))
+  rw [MPSTensor.transferMap_blockTensor] at hPrimP
+  intro μ hμ
+  rcases hμ with ⟨hμ_eig, hμ_norm⟩
+  have hμp_eig : Module.End.HasEigenvalue
+      ((MPSTensor.transferMap (d := r) (D := D) K) ^ p) (μ ^ p) := by
+    simpa [hE_eq] using hμ_eig.pow p
+  have hμp_norm : ‖μ ^ p‖ = 1 := norm_pow_eq_one_of_norm_eq_one hμ_norm p
+  exact ⟨p, hp_pos, hPrimP.unique_peripheral (μ ^ p) hμp_eig hμp_norm⟩
+
 /-! ## Prop 7.5: Irreducibility implies primitivity for QDS -/
 
 /-- **Wolf Proposition 7.5** (1 → 3): If `T_{t₀}` is irreducible for some
@@ -242,23 +290,25 @@ theorem irreducible_semigroup_implies_primitive
     -- (2) T_{t₀} irr ↔ L irreducible as a generator
     -- (3) L irreducible ↔ T_t irr for all t > 0
     sorry
-  -- **Step B**: Wolf Thm 6.6 for T_t (missing for `M_D(ℂ) →ₗ[ℂ] M_D(ℂ)` setting):
-  -- Irreducible CPTP map → peripheral eigenvalues are roots of unity.
-  -- Specifically, if μ ∈ peripheralEigenvalues (T t), then ∀ n, μ^n is also an
-  -- eigenvalue of T t (powers are eigenvalues, from the multiplicative domain).
-  -- Then `peripheral_isRootOfUnity_of_pow_eigenvalue` (finite-dim pigeonhole) gives
-  -- ∃ p > 0, μ^p = 1.
-  -- (For MPSTensor.transferMap this is proved in Channel/Peripheral/ClosureFixedPoint.lean.)
+  -- **Step B**: root-of-unity peripheral spectrum is now available for irreducible
+  -- channels via `peripheral_isRootOfUnity_of_irreducible_channel`.  The only extra
+  -- bookkeeping here is the vacuous `D = 0` corner, where `peripheralEigenvalues (T t)`
+  -- is empty because the matrix space is subsingleton.
   have hROU : ∀ μ : ℂ, μ ∈ peripheralEigenvalues (T t) →
       ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
-    intro μ ⟨hμ_eig, hμ_norm⟩
-    -- Use `peripheral_isRootOfUnity_of_pow_eigenvalue` once the powers-are-eigenvalues
-    -- property is established for T t (from irreducibility + multiplicative domain).
-    apply peripheral_isRootOfUnity_of_pow_eigenvalue (T t) μ hμ_norm
-    -- Missing: ∀ n, HasEigenvalue (T t) (μ^n).
-    -- For an irreducible CPTP map with unital dual, this follows from Wolf Thm 6.6.
-    intro n
-    sorry
+    by_cases hD0 : D = 0
+    · intro μ hμ
+      have hfalse : False := by
+        subst D
+        haveI : Subsingleton (Matrix (Fin 0) (Fin 0) ℂ) := by infer_instance
+        rcases hμ with ⟨hμ_eig, _⟩
+        obtain ⟨X, hX⟩ := hμ_eig.exists_hasEigenvector
+        exact hX.2 (Subsingleton.elim X 0)
+      exact False.elim hfalse
+    · haveI : NeZero D := ⟨hD0⟩
+      intro μ hμ
+      exact peripheral_isRootOfUnity_of_irreducible_channel
+        (E := T t) hTt_ch hT_irr μ hμ
   -- **Step C**: All norm-1 eigenvalues of T_t equal 1 → T_t is primitive.
   -- Use `isPrimitive_of_unique_norm_one` with the unique norm-1 eigenvalue property.
   -- For D > 0: T_t is a channel, so it has a PSD fixed point ρ ≠ 0 by
@@ -302,16 +352,21 @@ theorem qds_irreducible_iff_primitive
     exact irreducible_semigroup_implies_primitive L T hT hexp t₀ ht₀ hirr
   · -- Backward: ∀ t > 0, primitive T_t → ∃ t₀ > 0, irreducible T_{t₀}.
     -- We take t₀ = 1. Since T_1 is primitive and a channel, it should be irreducible.
-    -- The proof chain is:
+    -- The intended proof chain would be:
     --   IsPrimitive (T 1) + IsChannel (T 1)
     --   → T_1 has a unique positive-definite density-matrix fixed point σ
     --   → IsIrreducibleMap T_1 (by isIrreducibleMap_of_channel_posDef_fixedPoint_unique)
     --
-    -- The first implication requires Wolf Thm 6.7 (equivalent characterizations
-    -- of primitive channels), specifically: primitive CPTP → spectral gap of T - P < 1
-    -- → T^n → P (rank-1 projection) → unique convergence to positive-definite fixed pt.
-    -- This requires the Jordan decomposition / spectral theorem for matrices,
-    -- which is currently not fully available for the `M_D(ℂ) →ₗ[ℂ] M_D(ℂ)` setting.
+    -- However, the current definition `IsPrimitive E := peripheralEigenvalues E = {1}`
+    -- is too weak for this reverse implication: it records only the *set* of peripheral
+    -- eigenvalues and does NOT exclude a higher-dimensional fixed-point eigenspace at `1`.
+    -- Reducible dephasing-type channels can have peripheral set `{1}` while still having
+    -- several linearly independent fixed points, so the implication to irreducibility is
+    -- false without strengthening the statement.
+    --
+    -- To close this theorem correctly, the RHS should be replaced by a stronger notion,
+    -- e.g. spectral-gap primitivity / uniqueness of the PSD fixed point, or by the full
+    -- Wolf Thm 6.7 package rather than the current set-valued `IsPrimitive` predicate.
     intro hprim
     exact ⟨1, one_pos, by
       -- IsPrimitive (T 1) + IsChannel (T 1) → IsIrreducibleMap (T 1)
