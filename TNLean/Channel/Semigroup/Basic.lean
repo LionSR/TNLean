@@ -234,9 +234,53 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
   -- This follows from: P'(0) = 1 (a unit), so ε⁻¹ • P(ε) → 1 as ε → 0+,
   -- and the set of units is open (isUnit_one_sub_of_norm_lt_one).
   have hP_unit : ∃ ε : ℝ, 0 < ε ∧ IsUnit (P ε) := by
-    -- The set of units is open, 1 is a unit, and ε⁻¹ • P(ε) → 1
-    -- We use: P(h) = h • 1 + o(h) from HasDerivAt, so ε⁻¹•P(ε) ≈ 1
-    sorry
+    -- P is continuous (differentiable ⟹ continuous) and P(0) = 0, P'(0) = 1
+    -- So h⁻¹ • P(h) → 1 as h → 0. Since 1 is a unit and units are open,
+    -- h⁻¹ • P(h) is a unit for small h > 0. Combined with h • 1 being a unit
+    -- for h ≠ 0, P(h) = (h • 1) * (h⁻¹ • P(h)) is a unit.
+    -- Step 1: Extract the o(h) bound from HasDerivAt
+    have hlo : ∀ᶠ h in nhds (0 : ℝ),
+        ‖P h - h • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] _)‖ ≤ 1/2 * |h| := by
+      have := (hP_deriv_zero.isLittleO.norm_left).def (by positivity : (0:ℝ) < 1/2)
+      simp only [hP_zero, sub_zero, Real.norm_eq_abs,
+        ContinuousLinearMap.toSpanSingleton_apply] at this
+      exact this.mono (fun x hx => le_trans (le_abs_self _) hx)
+    -- Step 2: Get explicit δ
+    obtain ⟨δ, hδ_pos, hδ_ball⟩ := Metric.eventually_nhds_iff.mp hlo
+    -- Step 3: Pick ε = δ/2
+    refine ⟨δ / 2, by positivity, ?_⟩
+    have hε_pos : (0 : ℝ) < δ / 2 := by positivity
+    have hε_in : dist (δ / 2) 0 < δ := by
+      rw [dist_zero_right, Real.norm_eq_abs, abs_of_pos hε_pos]; linarith
+    have hbound := hδ_ball hε_in
+    simp only [abs_of_pos hε_pos] at hbound
+    -- Step 4: Show ε⁻¹ • P(ε) is close to 1
+    have hnear : ‖(1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] _) - (δ/2)⁻¹ • P (δ/2)‖ < 1 := by
+      have : (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] _) - (δ/2)⁻¹ • P (δ/2) =
+          (δ/2)⁻¹ • ((δ/2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] _) - P (δ/2)) := by
+        rw [smul_sub, smul_smul, inv_mul_cancel₀ (ne_of_gt hε_pos), one_smul]
+      rw [this, norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos hε_pos, norm_sub_rev]
+      calc (δ / 2)⁻¹ * ‖P (δ / 2) - (δ / 2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] _)‖
+          ≤ (δ / 2)⁻¹ * (1 / 2 * (δ / 2)) := by
+            exact mul_le_mul_of_nonneg_left hbound (inv_nonneg.mpr (le_of_lt hε_pos))
+        _ = 1 / 2 := by field_simp
+        _ < 1 := by norm_num
+    -- Step 5: (δ/2)⁻¹ • P(δ/2) is a unit
+    have hu1 : IsUnit ((δ/2)⁻¹ • P (δ/2)) := by
+      rw [show (δ/2)⁻¹ • P (δ/2) = 1 - (1 - (δ/2)⁻¹ • P (δ/2)) from by abel]
+      exact isUnit_one_sub_of_norm_lt_one hnear
+    -- Step 6: (δ/2) • 1 is a unit (algebraMap of nonzero scalar)
+    have hu2 : IsUnit ((δ/2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ]
+        Matrix (Fin D) (Fin D) ℂ)) := by
+      rw [show (δ/2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) =
+          algebraMap ℝ _ (δ/2) from (Algebra.algebraMap_eq_smul_one _).symm]
+      exact (IsUnit.mk0 (δ/2) (ne_of_gt hε_pos)).map (algebraMap ℝ _)
+    -- Step 7: P(δ/2) = (δ/2 • 1) * ((δ/2)⁻¹ • P(δ/2))
+    have hfact : P (δ/2) = (δ/2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] _) *
+        ((δ/2)⁻¹ • P (δ/2)) := by
+      rw [Algebra.smul_mul_assoc, one_mul, smul_smul,
+          mul_inv_cancel₀ (ne_of_gt hε_pos), one_smul]
+    rw [hfact]; exact hu2.mul hu1
   obtain ⟨ε, hε_pos, hPε_unit⟩ := hP_unit
   -- Define Q(h) = P(h+ε) - P(h)
   let Q : ℝ → _ := fun h => P (h + ε) - P h
@@ -262,7 +306,7 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
   -- Semigroup identity: S(h) * P(ε) = Q(h) for h ≥ 0
   have hSQ : ∀ h, 0 ≤ h → S h * P ε = Q h := by
     intro h hh
-    show S h * intervalIntegral S 0 ε MeasureTheory.volume =
+    change S h * intervalIntegral S 0 ε MeasureTheory.volume =
       intervalIntegral S 0 (h + ε) MeasureTheory.volume -
         intervalIntegral S 0 h MeasureTheory.volume
     -- Pull S(h) out of integral
@@ -289,7 +333,10 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
       have := intervalIntegral.integral_add_adjacent_intervals
         (μ := MeasureTheory.volume)
         (hS_cont.intervalIntegrable 0 h) (hS_cont.intervalIntegrable h (h + ε))
-      linear_combination this
+      change intervalIntegral S 0 h MeasureTheory.volume +
+        intervalIntegral S h (h + ε) MeasureTheory.volume =
+        intervalIntegral S 0 (h + ε) MeasureTheory.volume at this
+      exact eq_sub_of_add_eq' this
     exact hpull.trans (hsg.trans (hsub.trans hsplit))
   -- Extract the inverse of P(ε)
   obtain ⟨Pε_unit, hPε_val⟩ := hPε_unit
@@ -316,7 +363,69 @@ theorem continuousDynSemigroup_eq_exp
     (hT : IsContinuousDynSemigroup T) :
     ∃ L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
       ∀ t : ℝ, 0 ≤ t → T t = expSemigroup L t := by
-  sorry
+  -- Lift to CLM algebra
+  set S : ℝ → (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    fun t => endEquiv (T t) with hS_def
+  -- Properties of S
+  have hS_zero : S 0 = 1 := by
+    change endEquiv (T 0) = 1; rw [hT.semigroup.zero]; exact map_one endEquiv
+  have hS_add : ∀ t s, 0 ≤ t → 0 ≤ s → S (t + s) = S t * S s := by
+    intro t s ht hs
+    change endEquiv (T (t + s)) = endEquiv (T t) * endEquiv (T s)
+    rw [hT.semigroup.comp t s ht hs]; exact map_mul endEquiv (T t) (T s)
+  have hS_cont : Continuous S := hT.continuous
+  -- Key lemma: S is right-differentiable at 0 with some derivative L_CLM
+  obtain ⟨L_CLM, hL_deriv⟩ := continuous_semigroup_hasDerivWithinAt_zero S hS_zero hS_add hS_cont
+  -- Define the generator L
+  refine ⟨endEquiv.symm L_CLM, fun t ht => ?_⟩
+  apply endEquiv.injective
+  rw [expSemigroup_toCLM, AlgEquiv.apply_symm_apply]
+  change S t = expSemigroupCLM L_CLM t
+  -- Right derivative of S at any u ≥ 0 is S(u) * L_CLM
+  suffices hS_deriv : ∀ u, 0 ≤ u →
+      HasDerivWithinAt S (S u * L_CLM) (Set.Ici u) u by
+    -- Apply ODE uniqueness on [0, t]
+    have hv_lip : ∀ (u : ℝ), LipschitzWith ‖L_CLM‖₊
+        (fun (x : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) =>
+          x * L_CLM) := by
+      intro _
+      rw [lipschitzWith_iff_dist_le_mul]
+      intro x y
+      simp only [dist_eq_norm]
+      calc ‖x * L_CLM - y * L_CLM‖
+          = ‖(x - y) * L_CLM‖ := by rw [sub_mul]
+        _ ≤ ‖x - y‖ * ‖L_CLM‖ := norm_mul_le _ _
+        _ = ↑‖L_CLM‖₊ * ‖x - y‖ := by
+            simp [coe_nnnorm, mul_comm]
+    exact (ODE_solution_unique hv_lip
+      hS_cont.continuousOn
+      (fun u hu => hS_deriv u hu.1)
+      (expSemigroupCLM_continuous L_CLM).continuousOn
+      (fun u _ => (hasDerivAt_expSemigroupCLM L_CLM u).hasDerivWithinAt)
+      (by rw [hS_zero, expSemigroupCLM_zero]))
+      (Set.right_mem_Icc.mpr ht)
+  -- Proof of hS_deriv: right derivative at any u ≥ 0
+  intro u hu
+  have h_sub : HasDerivWithinAt (fun v => v - u) 1 (Set.Ici u) u :=
+    (hasDerivWithinAt_id u _).sub_const u
+  have h_maps : Set.MapsTo (fun v => v - u) (Set.Ici u) (Set.Ici 0) :=
+    fun v (hv : u ≤ v) => show 0 ≤ v - u from sub_nonneg.mpr hv
+  have hcomp : HasDerivWithinAt (fun v => S (v - u)) L_CLM (Set.Ici u) u := by
+    have hL_at : HasDerivWithinAt S L_CLM (Set.Ici 0) (u - u) := by
+      convert hL_deriv using 2; simp
+    have := HasDerivWithinAt.scomp (h := fun v => v - u)
+      (g₁ := S) (g₁' := L_CLM) (t' := Set.Ici 0)
+      u hL_at h_sub h_maps
+    simpa [Function.comp_def, one_smul] using this
+  have hmul : HasDerivWithinAt (fun v => S u * S (v - u))
+      (S u * L_CLM) (Set.Ici u) u :=
+    HasDerivWithinAt.const_mul (S u) hcomp
+  exact hmul.congr
+    (fun v hv => by
+      have hvt : u ≤ v := hv
+      conv_lhs => rw [show v = u + (v - u) from by ring]
+      exact hS_add u (v - u) hu (sub_nonneg.mpr hvt))
+    (by simp only [sub_self, hS_zero, mul_one])
 
 /-- Uniqueness of the generator: if `exp(t•L) = exp(t•L')` for all `t ≥ 0`,
 then `L = L'`. Proof: both CLM semigroups agree on `[0,∞)`, hence their
