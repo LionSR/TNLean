@@ -1,0 +1,472 @@
+\chapter{Schwarz Inequalities and Multiplicative Domains}\label{ch:schwarz}
+
+This chapter collects the Schwarz-inequality material from Wolf's Chapter~5~\cite{Wolf2012Quantum}. We begin with the Kadison--Schwarz inequality for Kraus maps, then describe the multiplicative domain and its algebraic structure. We also record the extension to normal operators for positive subunital maps, the resulting order and spectral contractivity statements, and Wolf's standard example of a Schwarz map that is not completely positive.
+
+\section{Kadison--Schwarz inequality}
+
+A Kraus map is the concrete realisation of a completely positive map
+(Definition~\ref{def:cp_map}). The Kadison--Schwarz inequality and the
+multiplicative-domain characterisation are proved first for Kraus maps.
+The transfer map is a Kraus map by construction
+(Remark~\ref{thm:transfer_cp}), so these results apply directly to transfer
+maps.
+
+\begin{definition}[Kraus map]\label{def:kraus_map}
+    \lean{KadisonSchwarz.krausMap}
+    \leanok
+    \uses{def:cp_map}
+    Given operators $\{K_i\}_{i=0}^{d-1}$ with $K_i \in \MN{D}$,
+    the \emph{Kraus map} is
+    $E(X) = \sum_{i=0}^{d-1} K_i X K_i^\dagger$.
+    A linear map is completely positive
+    (Definition~\ref{def:cp_map}) if and only if it can be written
+    in this form.
+\end{definition}
+
+\begin{definition}[Adjoint Kraus map]\label{def:kraus_adjoint_map}
+    \lean{KadisonSchwarz.krausAdjointMap}
+    \leanok
+    \uses{def:kraus_map}
+    The \emph{adjoint Kraus map} is
+    $E^*(X) = \sum_{i=0}^{d-1} K_i^\dagger X K_i$.
+    When the $\{K_i\}$ are the matrices of an MPS tensor~$A$,
+    this is the transfer map of the conjugate-transposed family
+    $i \mapsto (A^i)^\dagger$.
+\end{definition}
+
+\begin{definition}[Unital Kraus map]\label{def:unital_kraus}
+    \lean{KadisonSchwarz.IsUnitalKraus}
+    \leanok
+    \uses{def:kraus_map}
+    A Kraus map is \emph{unital} if
+    $\sum_{i=0}^{d-1} K_i K_i^\dagger = \Id$.
+    Equivalently, $E(\Id) = \Id$.
+    In the later gauge language this is the right-canonical condition.
+\end{definition}
+
+\begin{definition}[Trace-preserving Kraus map]\label{def:tp_kraus}
+    \lean{KadisonSchwarz.IsTPKraus}
+    \leanok
+    \uses{def:kraus_map}
+    A Kraus map is \emph{trace-preserving} if
+    $\sum_{i=0}^{d-1} K_i^\dagger K_i = \Id$.
+    Equivalently, the adjoint Kraus map is unital.
+    This is the standard MPS normalization condition.
+    In the later gauge language it is the left-canonical condition,
+    so Kadison--Schwarz arguments are often applied to the adjoint map.
+\end{definition}
+
+\begin{theorem}[Kadison--Schwarz inequality]\label{thm:kadison_schwarz}
+    \lean{KadisonSchwarz.kadison_schwarz}
+    \leanok
+    \uses{def:unital_kraus}
+    Let $E(X) = \sum_i K_i X K_i^\dagger$ be a \emph{unital}
+    Kraus map (i.e.\ $\sum_i K_i K_i^\dagger = \Id$).
+    Then for all $X \in \MN{D}$,
+    \[
+        E(X^\dagger X) \ge E(X)^\dagger E(X).
+    \]
+    This is \cite[Eq.~(5.2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The $2 \times 2$ block matrix
+    $[\begin{smallmatrix} X^\dagger X & X^\dagger \\ X & \Id \end{smallmatrix}]$
+    is PSD ($= v v^\dagger$ with $v = [X^\dagger,\, \Id]^T$).
+    Applying the unital CP map blockwise preserves positive semidefiniteness
+    (each block $K_i (\cdot) K_i^\dagger$ preserves PSD, and unitality
+    ensures the $(2,2)$-block maps to~$\Id$).
+    The Schur complement of the $(2,2)$-block $\Id$ gives the result.
+\end{proof}
+
+\begin{theorem}[Kadison--Schwarz for the adjoint channel]\label{thm:kadison_schwarz_adjoint}
+    \lean{KadisonSchwarz.kadison_schwarz_adjoint}
+    \leanok
+    \uses{def:tp_kraus, def:kraus_adjoint_map}
+    If $\sum_i K_i^\dagger K_i = \Id$ (trace-preserving), then
+    the adjoint Kraus map satisfies
+    $E^*(X^\dagger X) \ge E^*(X)^\dagger E^*(X)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kadison_schwarz}
+    The adjoint operators $\{K_i^\dagger\}$ satisfy
+    $\sum_i K_i^\dagger (K_i^\dagger)^\dagger = \sum_i K_i^\dagger K_i = \Id$,
+    so they form a unital family.
+    Apply Theorem~\ref{thm:kadison_schwarz} to $\{K_i^\dagger\}$.
+\end{proof}
+
+\begin{theorem}[Hilbert--Schmidt contraction]\label{thm:hs_contraction}
+    \lean{KadisonSchwarz.hilbertSchmidt_contraction}
+    \leanok
+    \uses{def:unital_kraus, def:tp_kraus}
+    If a Kraus map is both unital and trace-preserving, then
+    $\tr(E(X)^\dagger E(X)) \le \tr(X^\dagger X)$
+    for all $X \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:kadison_schwarz}
+    By Theorem~\ref{thm:kadison_schwarz},
+    $E(X^\dagger X) - E(X)^\dagger E(X) \ge 0$,
+    so $\tr(E(X^\dagger X)) \ge \tr(E(X)^\dagger E(X))$.
+    Trace preservation gives $\tr(E(X^\dagger X)) = \tr(X^\dagger X)$.
+\end{proof}
+
+\section{Multiplicative domain}
+
+\begin{theorem}[KS gap decomposition]\label{thm:ks_gap_decomp}
+    \lean{KadisonSchwarz.ks_gap_eq_sum_squares}
+    \leanok
+    \uses{def:unital_kraus, def:kraus_map}
+    For a unital Kraus map $E$,
+    the Kadison--Schwarz gap decomposes as
+    \[
+        E(X^\dagger X) - E(X)^\dagger E(X)
+        =
+        \sum_{i=0}^{d-1} R_i^\dagger R_i,
+    \]
+    where $R_i := X K_i^\dagger - K_i^\dagger E(X)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:unital_kraus}
+    Expand the right-hand side
+    $\sum_i (X K_i^\dagger - K_i^\dagger E(X))^\dagger
+           (X K_i^\dagger - K_i^\dagger E(X))$,
+    distribute, and use unitality $\sum_i K_i K_i^\dagger = \Id$
+    to identify the result with the KS gap.
+\end{proof}
+
+\begin{theorem}[KS equality implies Kraus commutation]\label{thm:kraus_commute}
+    \lean{KadisonSchwarz.kraus_commute_of_ks_equality}
+    \leanok
+    \uses{def:unital_kraus}
+    Let $E$ be a unital Kraus map.
+    If $E(X^\dagger X) = E(X)^\dagger E(X)$ for some $X$,
+    then $X K_i^\dagger = K_i^\dagger E(X)$ for all~$i$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:ks_gap_decomp}
+    By Theorem~\ref{thm:ks_gap_decomp},
+    the KS gap is $\sum_i R_i^\dagger R_i$ with
+    $R_i = X K_i^\dagger - K_i^\dagger E(X)$.
+    If the gap vanishes, $\sum_i R_i^\dagger R_i = 0$.
+    Each summand $R_i^\dagger R_i$ is PSD, so each must be zero,
+    giving $R_i = 0$.
+\end{proof}
+
+\begin{theorem}[KS equality for peripheral eigenvectors]\label{thm:ks_peripheral}
+    \lean{KadisonSchwarz.ks_equality_of_peripheral_eigenvector}
+    \leanok
+    \uses{def:unital_kraus, def:tp_kraus}
+    Let $E$ be a Kraus map that is both unital and trace-preserving.
+    If $E(X) = \mu X$ with $|\mu| = 1$, then the KS gap vanishes:
+    $E(X^\dagger X) = E(X)^\dagger E(X)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kadison_schwarz}
+    The gap $G := E(X^\dagger X) - E(X)^\dagger E(X)$ is PSD
+    by Theorem~\ref{thm:kadison_schwarz}.
+    Its trace satisfies
+    $\tr(G) = \tr(E(X^\dagger X)) - \tr(E(X)^\dagger E(X))$.
+    Trace preservation gives $\tr(E(X^\dagger X)) = \tr(X^\dagger X)$.
+    Using $E(X) = \mu X$ and $|\mu| = 1$,
+    $\tr(E(X)^\dagger E(X)) = |\mu|^2 \tr(X^\dagger X) = \tr(X^\dagger X)$.
+    So $\tr(G) = 0$, and a PSD matrix with zero trace must be zero.
+\end{proof}
+
+\begin{theorem}[One-sided multiplicative-domain identity]\label{thm:multiplicative_domain}
+    \lean{KadisonSchwarz.multiplicative_domain_left}
+    \leanok
+    \uses{def:unital_kraus}
+    Let $E$ be a unital Kraus map.
+    If $E(X^\dagger X) = E(X)^\dagger E(X)$, then
+    $E(X^\dagger Y) = E(X)^\dagger E(Y)$ for all $Y \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_commute}
+    From Theorem~\ref{thm:kraus_commute},
+    $X K_i^\dagger = K_i^\dagger E(X)$ for all~$i$.
+    Taking conjugate transposes:
+    $K_i X^\dagger = E(X)^\dagger K_i$.
+    Then
+    \begin{align*}
+        E(X^\dagger Y)
+        &= \sum_i K_i X^\dagger Y K_i^\dagger \\
+        &= \sum_i E(X)^\dagger K_i Y K_i^\dagger \\
+        &= E(X)^\dagger E(Y).
+    \end{align*}
+\end{proof}
+
+\subsection{Full multiplicative-domain structure}
+
+\begin{definition}[Right and left multiplicative domains]\label{def:one_sided_multiplicative_domains}
+    \lean{KadisonSchwarz.rightMultiplicativeDomain, KadisonSchwarz.leftMultiplicativeDomain}
+    \leanok
+    \uses{def:kraus_map}
+    For a Kraus map $E$, define
+    \[
+        \mc{A}_R(E) := \{X \in \MN{D} : E(XY) = E(X) E(Y) \text{ for all } Y \in \MN{D}\}
+    \]
+    and
+    \[
+        \mc{A}_L(E) := \{X \in \MN{D} : E(YX) = E(Y) E(X) \text{ for all } Y \in \MN{D}\}.
+    \]
+    We follow the convention that $\mc{A}_R(E)$ controls right multiplication
+    and $\mc{A}_L(E)$ controls left multiplication.
+    These are the two one-sided multiplicative domains from
+    \cite[Eqs.~(5.11)--(5.12)]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{definition}[Full multiplicative domain]\label{def:full_multiplicative_domain}
+    \lean{KadisonSchwarz.multiplicativeDomain}
+    \leanok
+    \uses{def:one_sided_multiplicative_domains}
+    The \emph{multiplicative domain} of $E$ is
+    \[
+        \mc{A}(E) := \mc{A}_R(E) \cap \mc{A}_L(E).
+    \]
+\end{definition}
+
+\begin{theorem}[Multiplicative-domain characterization]\label{thm:md_characterization}
+    \lean{KadisonSchwarz.mem_rightMultiplicativeDomain_iff, KadisonSchwarz.mem_leftMultiplicativeDomain_iff}
+    \leanok
+    \uses{def:one_sided_multiplicative_domains, def:unital_kraus}
+    Let $E$ be a unital Kraus map. Then
+    \[
+        X \in \mc{A}_R(E) \iff E(X X^\dagger) = E(X) E(X)^\dagger
+    \]
+    and
+    \[
+        X \in \mc{A}_L(E) \iff E(X^\dagger X) = E(X)^\dagger E(X).
+    \]
+    Together these are the two one-sided characterizations from
+    \cite[Thm.~5.7]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:multiplicative_domain}
+    If $X$ lies in a one-sided multiplicative domain, evaluate the defining
+    identity at $Y = X^\dagger$.
+    Conversely, the left-domain implication is exactly
+    Theorem~\ref{thm:multiplicative_domain}, and the right-domain implication
+    follows by applying Theorem~\ref{thm:multiplicative_domain} to $X^\dagger$.
+\end{proof}
+
+\begin{definition}[One-sided multiplicative domains are subalgebras]\label{def:one_sided_md_subalgebras}
+    \lean{KadisonSchwarz.rightMultiplicativeDomainSubalgebra, KadisonSchwarz.leftMultiplicativeDomainSubalgebra}
+    \leanok
+    \uses{def:one_sided_multiplicative_domains, def:unital_kraus}
+    For a unital Kraus map $E$, both $\mc{A}_R(E)$ and $\mc{A}_L(E)$ are
+    unital subalgebras of $\MN{D}$.
+\end{definition}
+
+\begin{definition}[Multiplicative domain as a $*$-subalgebra]\label{def:md_star_subalgebra}
+    \lean{KadisonSchwarz.multiplicativeDomainStarSubalgebra}
+    \leanok
+    \uses{def:full_multiplicative_domain, def:one_sided_md_subalgebras}
+    For a unital Kraus map $E$, the full multiplicative domain $\mc{A}(E)$ is
+    a $*$-subalgebra of $\MN{D}$.
+    This is the algebraic content of \cite[Thm.~5.7]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{definition}[Restriction to the multiplicative domain]\label{def:md_star_alg_hom}
+    \lean{KadisonSchwarz.krausMapStarAlgHom}
+    \leanok
+    \uses{def:md_star_subalgebra, def:kraus_map}
+    If $E$ is unital, then the restricted map
+    $E|_{\mc{A}(E)} : \mc{A}(E) \to \MN{D}$
+    is a $*$-algebra homomorphism.
+    This is the homomorphism conclusion of \cite[Thm.~5.7]{Wolf2012Quantum}.
+\end{definition}
+
+\subsection{Schwarz inequality for normal operators}
+
+\begin{theorem}[CP Schwarz inequality for normal operators]\label{thm:ks_normal_cp}
+    \lean{KadisonSchwarz.kadison_schwarz_normal_cp, KadisonSchwarz.kadison_schwarz_normal_cp_le}
+    \leanok
+    \uses{def:tp_kraus, def:kraus_adjoint_map}
+    Let $E^*(X) = \sum_i K_i^\dagger X K_i$ be the adjoint Kraus map of a
+    trace-preserving Kraus family, and let $A \in \MN{D}$ be normal.
+    Then the Schwarz gap
+    \[
+        E^*(A^\dagger A) - E^*(A^\dagger) E^*(A)
+    \]
+    is positive semidefinite. Equivalently,
+    \[
+        E^*(A^\dagger) E^*(A) \le E^*(A^\dagger A).
+    \]
+    This is the completely positive case of \cite[Prop.~5.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kadison_schwarz_adjoint}
+    The positivity statement is exactly Theorem~\ref{thm:kadison_schwarz_adjoint}.
+    The second formulation is just the corresponding Loewner-order reformulation.
+\end{proof}
+
+\begin{theorem}[Prop.~5.1: Schwarz inequality for normal operators]\label{thm:schwarz_normal_operator}
+    \lean{KadisonSchwarz.schwarz_inequality_normal_operator}
+    \notready
+    \uses{def:positive_map}
+    Let $T : \MN{D} \to \MN{D}$ be a positive linear map with
+    $T(\Id) \le \Id$.
+    If $A \in \MN{D}$ is normal, then
+    \[
+        T(A^\dagger A) - T(A^\dagger) T(A) \ge 0.
+    \]
+    This is \cite[Prop.~5.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \notready
+    \uses{thm:kadison_schwarz}
+    Restrict $T$ to the commutative $*$-subalgebra generated by
+    $\Id$, $A$, $A^\dagger$, and $A^\dagger A$.
+    On this domain the map is completely positive, so the Kraus-form
+    Kadison--Schwarz inequality from Theorem~\ref{thm:kadison_schwarz}
+    applies and yields the claim.
+\end{proof}
+
+\subsection{Positive maps preserve order and spectral intervals}
+
+\begin{theorem}[Positive maps are monotone]\label{thm:positive_map_monotone}
+    \lean{IsPositiveMap.map_le_map}
+    \leanok
+    \uses{def:positive_map}
+    If $T : \MN{D} \to \MN{D}$ is positive and $A \le B$, then
+    $T(A) \le T(B)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $B - A \ge 0$, positivity gives $T(B - A) \ge 0$.
+    By linearity, this is $T(B) - T(A) \ge 0$.
+\end{proof}
+
+\begin{theorem}[Positive maps preserve adjoints]\label{thm:positive_map_conjTranspose}
+    \lean{IsPositiveMap.map_conjTranspose}
+    \leanok
+    \uses{def:positive_map}
+    If $T : \MN{D} \to \MN{D}$ is positive, then
+    $T(A^\dagger) = T(A)^\dagger$ for all $A \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $A = B + i C$ with $B$ and $C$ Hermitian.
+    Positive maps send Hermitian matrices to Hermitian matrices,
+    so they preserve this decomposition and commute with taking adjoints.
+\end{proof}
+
+\begin{theorem}[Order intervals are preserved]\label{thm:positive_map_image_bounded}
+    \lean{IsPositiveMap.image_bounded}
+    \leanok
+    \uses{thm:positive_map_monotone, def:positive_map}
+    Let $T : \MN{D} \to \MN{D}$ be positive with $T(\Id) \le \Id$.
+    If $a \le 0 \le b$ and
+    $a \Id \le A \le b \Id$,
+    then
+    \[
+        a \Id \le T(A) \le b \Id.
+    \]
+    This is the matrix form of \cite[Eq.~(5.21)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:positive_map_monotone}
+    Apply monotonicity to the inequalities
+    $a \Id \le A \le b \Id$.
+    The scalar bounds are preserved because $a \le 0 \le b$ and
+    $T(\Id) \le \Id$.
+\end{proof}
+
+\begin{theorem}[Spectral interval contractivity]\label{thm:positive_map_spectrum_contractivity}
+    \lean{IsPositiveMap.spectrum_contractivity}
+    \leanok
+    \uses{thm:positive_map_image_bounded}
+    Let $T : \MN{D} \to \MN{D}$ be positive with $T(\Id) \le \Id$, and let
+    $A \in \MN{D}$ be Hermitian.
+    If $\spec(A) \subseteq [a,b]$ with $a \le 0 \le b$, then
+    \[
+        \spec(T(A)) \subseteq [a,b].
+    \]
+    This is \cite[Eq.~(5.21)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:positive_map_image_bounded}
+    For Hermitian matrices, the inclusion
+    $\spec(A) \subseteq [a,b]$ is equivalent to the order bounds
+    $a \Id \le A \le b \Id$.
+    Apply Theorem~\ref{thm:positive_map_image_bounded} and translate the
+    resulting inequalities back into spectral bounds.
+\end{proof}
+
+\subsection{Wolf Example 5.3}
+
+\begin{definition}[Wolf Example 5.3 map]\label{def:wolf_example53}
+    \lean{wolfExample53}
+    \leanok
+    Consider the linear map $T : M_2(\C) \to M_2(\C)$ defined by
+    \[
+        T(A) = \frac{1}{2} A^T + \frac{1}{4} \tr(A) \Id.
+    \]
+    This is the map from \cite[Ex.~5.3]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Wolf Example 5.3 is positive]\label{thm:wolf_example53_positive}
+    \lean{wolfExample53_isPositive}
+    \leanok
+    \uses{def:wolf_example53, def:positive_map}
+    The map from Definition~\ref{def:wolf_example53} is positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    It is a convex combination of the transpose map and the map
+    $A \mapsto \tr(A) \Id$, and both of these maps send positive
+    semidefinite matrices to positive semidefinite matrices.
+\end{proof}
+
+\begin{theorem}[Wolf Example 5.3 satisfies the Schwarz inequality]\label{thm:wolf_example53_schwarz}
+    \lean{wolfExample53_satisfies_schwarz}
+    \leanok
+    \uses{def:wolf_example53}
+    For every $A \in M_2(\C)$,
+    \[
+        T(A^\dagger A) - T(A^\dagger) T(A) \ge 0,
+    \]
+    where $T$ is the map from Definition~\ref{def:wolf_example53}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write the Schwarz gap as $F(A)$.
+    One checks that $F(A + \lambda \Id) = F(A)$ for every scalar $\lambda$,
+    so it is enough to treat the case $\tr(A) = 0$.
+    In that case a direct $2 \times 2$ computation shows that
+    $F(A)$ dominates $\frac12 (A^\dagger A)^T$, hence is positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Wolf Example 5.3 is not completely positive]\label{thm:wolf_example53_not_cp}
+    \lean{wolfExample53_not_cp}
+    \leanok
+    \uses{def:wolf_example53, def:cp_map}
+    The map from Definition~\ref{def:wolf_example53} is not completely positive.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Compute the Choi matrix of $T$ and test it on the antisymmetric vector
+    $\ket{01} - \ket{10}$.
+    The resulting expectation value is negative, so the Choi matrix is not
+    positive semidefinite.
+\end{proof}
