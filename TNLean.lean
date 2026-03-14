@@ -50,6 +50,8 @@ import TNLean.Axioms.BrouwerFixedPoint
 -- Layer 2b: Quantum channels (general theory)
 import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
+import TNLean.Channel.Schwarz.Douglas
+import TNLean.Channel.Schwarz.OperatorMonotone
 import TNLean.Channel.Schwarz.PositiveOnAbelian
 import TNLean.Channel.Schwarz.SchwarzNormal
 import TNLean.Channel.Schwarz.SchwarzNotCP

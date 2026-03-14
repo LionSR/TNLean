@@ -283,8 +283,9 @@ noncomputable def fixedPoints_starSubalgebra
     (X : Mat) :
     X ∈ fixedPoints_starSubalgebra (K := K) h_tp hρ hρ_fix ↔
       X ∈ adjointFixedPoints K := by
-  simp [fixedPoints_starSubalgebra] using
-    mem_adjointFixedPointsStarSubalgebra (K := K) h_tp hρ hρ_fix X
+  change X ∈ adjointFixedPointsStarSubalgebra (K := K) h_tp hρ hρ_fix ↔
+    X ∈ adjointFixedPoints K
+  simp
 
 /-- **Wolf Thm 6.13** with the prompt's naming convention.
 
@@ -309,7 +310,10 @@ theorem fixedPoint_commutes_kraus
       _ = (map (fun i => (K i)ᴴ) X)ᴴ * map (fun i => (K i)ᴴ) X := by rw [hX']
   have h_comm := kraus_commute_of_ks_equality (K := fun i => (K i)ᴴ) h_unital X h_eq
   intro i
-  simpa [map, adjointMap, hX'] using h_comm i
+  calc
+    X * K i = K i * map (fun j => (K j)ᴴ) X := by
+      simpa [map] using h_comm i
+    _ = K i * X := by rw [hX']
 
 end Wolf612613
 
