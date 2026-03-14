@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
+import Mathlib.Analysis.CStarAlgebra.PositiveLinearMap
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
 
 /-!
@@ -35,6 +36,38 @@ theorem IsPositiveMap.map_le_map
     (hT : IsPositiveMap T) (hAB : A ≤ B) : T A ≤ T B := by
   rw [Matrix.le_iff] at hAB ⊢
   simpa [map_sub] using hT (B - A) hAB
+
+/-- Positive maps preserve adjoints. -/
+theorem IsPositiveMap.map_conjTranspose
+    {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (A : Mat) :
+    T Aᴴ = (T A)ᴴ := by
+  let B : Mat := (1 / 2 : ℝ) • (A + Aᴴ)
+  let C : Mat := (1 / 2 : ℝ) • (Complex.I • (Aᴴ - A))
+  have hB : B.IsHermitian := by
+    ext i j
+    simp [B, add_comm]
+  have hC : C.IsHermitian := by
+    ext i j
+    simp [C, sub_eq_add_neg, add_comm]
+  have hA_decomp : A = B + Complex.I • C := by
+    ext i j
+    have hI2 : (Complex.I : ℂ) ^ 2 = -1 := by norm_num
+    simp [B, C, sub_eq_add_neg]
+    rw [hI2]
+    ring
+  have hAstar_decomp : Aᴴ = B - Complex.I • C := by
+    ext i j
+    have hI2 : (Complex.I : ℂ) ^ 2 = -1 := by norm_num
+    simp [B, C, sub_eq_add_neg]
+    rw [hI2]
+    ring
+  have hTB : (T B).IsHermitian := hT.map_isHermitian hB
+  have hTC : (T C).IsHermitian := hT.map_isHermitian hC
+  have hTA_decomp : T A = T B + Complex.I • T C := by
+    rw [hA_decomp]
+    simp
+  rw [hAstar_decomp, hTA_decomp]
+  simp [sub_eq_add_neg, hTB.eq, hTC.eq, Matrix.conjTranspose_add, Matrix.conjTranspose_smul]
 
 /-- If `T` is positive and subunital, then it preserves order intervals `[a • 1, b • 1]`
 whenever `0 ∈ [a,b]`. -/

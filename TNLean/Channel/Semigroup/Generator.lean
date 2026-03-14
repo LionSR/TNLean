@@ -317,14 +317,23 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
     (1 / 2 : ℂ) • (ρ * S) := by
     simp only [Finset.sum_sub_distrib]
     congr 1; congr 1
-    · rw [hS_def, ← Finset.smul_sum, smul_mul_assoc]
-    · rw [hS_def, ← Finset.smul_sum, mul_smul_comm]
+    · rw [Finset.smul_sum]
+    · rw [Finset.smul_sum]
   rw [hsplit]
-  -- Expand (iH + ½S)ρ and ρ(-iH + ½S)
-  rw [add_mul, smul_mul_assoc, smul_mul_assoc,
-      mul_add, mul_smul_comm, mul_smul_comm]
+  -- Now we have:
+  -- LHS: I•(ρH - Hρ) + ΣLρL† - ½(Sρ) - ½(ρS)
+  -- RHS: ΣLρL† - (iH + ½S)ρ - ρ(-iH + ½S)
+  -- Expand κρ = (iH + ½S)ρ = iHρ + ½Sρ
+  rw [add_mul, smul_mul_assoc, smul_mul_assoc]
+  -- Expand ρκ† = ρ(-iH + ½S) = -iρH + ½ρS
+  rw [mul_add, mul_smul_comm, mul_smul_comm]
   rw [neg_smul]
-  -- Now it's just rearrangement
+  -- Both sides have the same terms, just rearranged.
+  -- LHS: I•(ρH) + I•(-Hρ) + ΣLρL† - ½Sρ - ½ρS
+  -- RHS: ΣLρL† - ½Sρ - ½ρS - I•Hρ + I•ρH
+  -- Rewrite I•(ρH + -Hρ) = I•ρH + I•(-Hρ) = I•ρH - I•Hρ
+  rw [smul_add]
+  -- Now all terms are separated, abel can match them
   abel
 
 /-- A Lindblad form is CCP. -/
