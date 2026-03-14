@@ -3,10 +3,11 @@
 This chapter establishes the Perron--Frobenius theory used throughout
 the blueprint: existence, positive definiteness, and uniqueness of
 fixed points for injective and irreducible transfer maps, canonical
-gauge constructions, and the general PF eigenvector existence theorem
-for positive maps.
+gauge constructions, ergodicity of irreducible channels, the
+spectral-radius identification of Perron eigenvalues, and Wolf's
+spectral characterization of irreducibility.
 The conceptual source is Wolf's treatment of irreducible positive
-maps~\cite[Ch.~6, especially Thms.~6.2--6.5]{Wolf2012Quantum}
+maps~\cite[Ch.~6, especially Thms.~6.2--6.5 and Cor.~6.3]{Wolf2012Quantum}
 and~\cite{Evans1978Spectral}.
 
 \section{Positive definiteness}
@@ -472,3 +473,211 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	$B^i = \sigma^{1/2} A'^i \sigma^{-1/2}$
 	satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
 \end{proof}
+
+\section{Exponential positivity for irreducible CP maps}
+
+\begin{theorem}[Exponential truncation is positive definite]
+	\label{thm:exp_truncation_pd_irred}
+	\lean{exp_truncation_posDef_of_irreducible_cp}
+	\leanok
+	\uses{def:irreducible_cp}
+	Let $E$ be an irreducible completely positive map on $\MN{D}$,
+	let $A \ge 0$ be nonzero, and let $t > 0$.
+	Then the finite exponential truncation
+	\[
+		\sum_{k=0}^{D-1} \frac{t^k}{k!} E^k(A)
+	\]
+	is positive definite.
+	This is the finite-sum core of \cite[Thm.~6.2, item~(3)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	If a nonzero vector $v$ annihilated this quadratic form, then every term
+	$E^k(A)$ with $0 \le k \le D-1$ would annihilate $v$.
+	The growth theorem for irreducible CP maps then forces
+	$(\Id + E)^{D-1}(A)$ to annihilate $v$, contradicting its positive
+	definiteness.
+\end{proof}
+
+\begin{theorem}[Exponential positivity for irreducible CP maps]
+	\label{thm:exp_pd_irred}
+	\lean{exp_posDef_of_irreducible_cp}
+	\leanok
+	\uses{def:irreducible_cp, thm:exp_truncation_pd_irred}
+	Let $E$ be an irreducible completely positive map on $\MN{D}$,
+	let $A \ge 0$ be nonzero, and let $t > 0$.
+	Then
+	\[
+		\exp(tE)(A) = \sum_{k=0}^{\infty} \frac{t^k}{k!} E^k(A)
+	\]
+	is positive definite.
+	This is \cite[Thm.~6.2, item~(3)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	By Theorem~\ref{thm:exp_truncation_pd_irred}, the first $D$ terms already
+	form a positive definite matrix.
+	Every remaining term is positive semidefinite, so the full exponential
+	series is the sum of a positive definite matrix and a positive semidefinite
+	tail.
+\end{proof}
+
+\section{Ergodicity of irreducible channels}
+
+\begin{theorem}[Unique density-matrix fixed point for an irreducible channel]
+	\label{thm:channel_density_fp_irred}
+	\lean{IsChannel.exists_unique_density_fixedPoint_of_irreducible}
+	\leanok
+	\uses{def:channel, def:irreducible_cp}
+	Let $E$ be an irreducible quantum channel on $\MN{D}$ with $D > 0$.
+	Then there exists a unique density matrix $\sigma$ such that $E(\sigma)=\sigma$.
+	Moreover $\sigma$ is positive definite.
+	This is the qualitative form of \cite[Cor.~6.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:cesaro_fixedpoint}
+	Every Ces\`aro mean of a density matrix stays inside the compact convex set
+	of density matrices, so a subsequence converges.
+	Its limit is a fixed point by the telescoping argument, positive
+	definiteness follows from irreducibility, and uniqueness comes from the
+	uniqueness of positive semidefinite Perron eigenvectors at eigenvalue~$1$.
+\end{proof}
+
+\begin{theorem}[Ces\`aro convergence for irreducible channels]
+	\label{thm:channel_cesaro_irred}
+	\lean{IsChannel.cesaroMean_tendsto_of_irreducible}
+	\leanok
+	\uses{def:channel, def:irreducible_cp, def:cesaro_mean,
+		  thm:channel_density_fp_irred}
+	Let $E$ be an irreducible quantum channel on $\MN{D}$ with $D > 0$,
+	and let $\rho$ be any density matrix.
+	Then the Ces\`aro means
+	\[
+		\frac{1}{N} \sum_{n=0}^{N-1} E^n(\rho)
+	\]
+	converge to the unique positive definite density-matrix fixed point of~$E$.
+	This is \cite[Cor.~6.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Every subsequential limit of the Ces\`aro means is again a density-matrix
+	fixed point.
+	By Theorem~\ref{thm:channel_density_fp_irred}, there is only one such
+	fixed point, so every convergent subsequence has the same limit.
+	Compactness then forces the whole sequence to converge to that limit.
+\end{proof}
+
+\section{Spectral radius at the Perron eigenvalue}
+
+\begin{theorem}[Spectral radius is the Perron eigenvalue]
+	\label{thm:spectral_radius_pf_irred}
+	\lean{spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp}
+	\leanok
+	\uses{def:irreducible_cp}
+	Let $E$ be an irreducible completely positive map on $\MN{D}$.
+	Suppose $\rho > 0$ and $E(\rho) = r\rho$ with $r > 0$.
+	Then the spectral radius of $E$ is $r$.
+	This is \cite[Thm.~6.3, item~(4)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Choose a positive definite eigenvector for the adjoint map with the same
+	eigenvalue, gauge by its square root, and rescale by $r^{-1}$.
+	The resulting map is trace-preserving and has a positive definite fixed
+	point, so its spectral radius is~$1$.
+	Undoing the similarity and scalar rescaling recovers the spectral radius
+	of~$E$.
+\end{proof}
+
+\begin{theorem}[Real spectral-radius identity]
+	\label{thm:spectral_radius_real_pf_irred}
+	\lean{spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp}
+	\leanok
+	\uses{thm:spectral_radius_pf_irred}
+	Under the hypotheses of Theorem~\ref{thm:spectral_radius_pf_irred}, the
+	real-valued spectral radius of $E$ is also equal to~$r$.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	This is the real-valued reformulation of
+	Theorem~\ref{thm:spectral_radius_pf_irred}.
+\end{proof}
+
+\section{Spectral characterization of irreducibility}
+
+\begin{definition}[Wolf spectral properties]
+	\label{def:has_spectral_properties}
+	\lean{HasSpectralProperties}
+	\leanok
+	\uses{def:cp_map}
+	A completely positive map $E$ on $\MN{D}$ has the \emph{spectral properties}
+	of \cite[Thm.~6.4]{Wolf2012Quantum} if there exist a positive real number $r$,
+	a positive definite right eigenvector $\rho$, and a positive definite left
+	eigenvector $\sigma$ for the adjoint map such that
+	$E(\rho)=r\rho$, $E^\dagger(\sigma)=r\sigma$, every positive semidefinite
+	right eigenvector for eigenvalue $r$ is a scalar multiple of $\rho$, and the
+	spectral radius of $E$ is equal to~$r$.
+\end{definition}
+
+\begin{theorem}[Irreducibility gives the spectral properties]
+	\label{thm:has_spectral_properties_irred}
+	\lean{hasSpectralProperties_of_irreducible_cp}
+	\leanok
+	\uses{def:has_spectral_properties, def:irreducible_cp}
+	Every nonzero irreducible completely positive map on $\MN{D}$ has the
+	spectral properties of Definition~\ref{def:has_spectral_properties}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Combine Perron--Frobenius existence for the map and its adjoint with the
+	uniqueness theorem for positive semidefinite Perron eigenvectors and the
+	spectral-radius identity of
+	Theorem~\ref{thm:spectral_radius_pf_irred}.
+\end{proof}
+
+\begin{theorem}[Spectral properties imply irreducibility]
+	\label{thm:irred_from_spectral_properties}
+	\lean{isIrreducibleMap_of_hasSpectralProperties}
+	\leanok
+	\uses{def:has_spectral_properties}
+	If a completely positive map on $\MN{D}$ has the spectral properties of
+	Definition~\ref{def:has_spectral_properties}, then it is irreducible.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Gauge by the positive definite left eigenvector and rescale by the Perron
+	eigenvalue to obtain a trace-preserving map with a positive definite fixed
+	point.
+	A nontrivial invariant projection would then produce, by Ces\`aro averaging in
+	its corner algebra, a second positive semidefinite fixed point not proportional
+	to the Perron vector, contradicting the uniqueness clause in
+	Definition~\ref{def:has_spectral_properties}.
+\end{proof}
+
+\begin{theorem}[Irreducibility iff Wolf's spectral properties]
+	\label{thm:irred_iff_spectral_properties}
+	\lean{isIrreducibleMap_iff_spectral_properties}
+	\leanok
+	\uses{def:has_spectral_properties, def:irreducible_cp,
+		  thm:has_spectral_properties_irred, thm:irred_from_spectral_properties}
+	Let $E$ be a nonzero completely positive map on $\MN{D}$.
+	Then $E$ is irreducible if and only if it has the spectral properties of
+	Definition~\ref{def:has_spectral_properties}.
+	This is \cite[Thm.~6.4]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	Combine Theorems~\ref{thm:has_spectral_properties_irred}
+	and~\ref{thm:irred_from_spectral_properties}.
+\end{proof}
+
