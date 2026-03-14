@@ -54,6 +54,7 @@ import TNLean.Channel.Schwarz.Douglas
 import TNLean.Channel.Schwarz.OperatorMonotone
 import TNLean.Channel.Schwarz.PositiveOnAbelian
 import TNLean.Channel.Schwarz.SchwarzNormal
+import TNLean.Channel.Schwarz.SchwarzSubnormal
 import TNLean.Channel.Schwarz.SchwarzNotCP
 import TNLean.Channel.Schwarz.MultiplicativeDomain
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
