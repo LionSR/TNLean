@@ -366,11 +366,20 @@ theorem ccp_implies_choi_projected_posSemidef
   trivial
 
 /-- **Wolf Proposition 7.2 (direction 2 → 1)**: If `L` is Hermiticity-preserving
-and `P τ_L P ≥ 0`, then `L` is CCP. -/
+and `P τ_L P ≥ 0`, then `L` is CCP.
+
+**Status**: The hypothesis `hL_proj` is a placeholder (`True`). The real condition
+requires the projected Choi matrix `P (L⊗id)(|Ω⟩⟨Ω|) P ≥ 0` where
+`P = 𝟙 - |Ω⟩⟨Ω|`. Formalizing this needs:
+1. The Choi-Jamiołkowski map `L ↦ (L⊗id)(|Ω⟩⟨Ω|)` (partially available)
+2. The projection `P` and the factorization `PτP = (φ⊗id)(|Ω⟩⟨Ω|)`
+3. Spectral decomposition to extract Kraus operators from the PSD matrix `PτP`
+
+This is not provable with the current placeholder hypothesis. -/
 theorem choi_projected_posSemidef_implies_ccp
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hL_herm : ∀ (ρ : Matrix (Fin D) (Fin D) ℂ), ρ.IsHermitian → (L ρ).IsHermitian)
-    (hL_proj : True) -- Placeholder for the projection condition
+    (hL_proj : True) -- Placeholder: needs `P (choiMatrix L) P ≥ 0`
     : IsCCP L := by
   sorry
 
@@ -379,8 +388,14 @@ theorem choi_projected_posSemidef_implies_ccp
 /-- **Wolf Proposition 7.3 (direction 1 → 2)**: If `T_t = exp(tL)` is a semigroup
 of completely positive maps, then `L` is conditionally completely positive.
 
-Proof sketch: From `(T_t ⊗ id)(|Ω⟩⟨Ω|) ≥ 0` for all `t ≥ 0`, expand at
-infinitesimal `t` and project onto `P` to get `P(L⊗id)(|Ω⟩⟨Ω|)P ≥ 0`. -/
+**Proof sketch** (Wolf): From `(T_t ⊗ id)(|Ω⟩⟨Ω|) ≥ 0` for all `t ≥ 0`, differentiate
+at `t = 0` to get `(L⊗id)(|Ω⟩⟨Ω|) + |Ω⟩⟨Ω|·(L⊗id)† ≥ 0` on the range of `P`,
+i.e. `P(L⊗id)(|Ω⟩⟨Ω|)P ≥ 0`. Then Prop 7.2 gives CCP.
+
+**Formalization needs**:
+1. Choi matrix of `exp(tL)` is PSD (from CP hypothesis)
+2. Derivative of a PSD-valued function at a boundary point has the PSD projection property
+3. Extract CCP decomposition from projected PSD Choi matrix (Prop 7.2 reverse) -/
 theorem cp_semigroup_implies_ccp_generator
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCP : ∀ t : ℝ, 0 ≤ t → IsCPMap (expSemigroup L t)) :
@@ -390,9 +405,20 @@ theorem cp_semigroup_implies_ccp_generator
 /-- **Wolf Proposition 7.3 (direction 2 → 1)**: If `L` is CCP, then `T_t = exp(tL)`
 is completely positive for all `t ≥ 0`.
 
-Proof sketch: Write `L = φ + φ_κ` where `φ` is CP and `φ_κ(ρ) = -κρ - ρκ†`.
-By Lie–Trotter, `exp(tL) = lim (exp(tφ/n) exp(tφ_κ/n))^n`.
-Both factors are CP, and concatenations of CP maps are CP. -/
+**Proof sketch** (Wolf, Lie–Trotter): Write `L = φ + ψ` where
+- `φ(ρ) = Σ Kᵢ ρ Kᵢ†` is CP
+- `ψ(ρ) = -κρ - ρκ†`
+
+Key facts:
+1. `exp(tψ)(ρ) = e^{-tκ} ρ e^{-tκ†}` is CP (single Kraus operator `e^{-tκ}`)
+2. `exp(tφ)` is CP for `t ≥ 0` (non-negative combination of CP maps `φⁿ/n!`)
+3. Lie–Trotter: `exp(tL) = limₙ (exp(tφ/n) ∘ exp(tψ/n))ⁿ`
+4. Composition of CP maps is CP; limit of CP maps (finite dim) is CP
+
+**Formalization needs**:
+- `exp(tψ)(ρ) = e^{-tκ} ρ e^{-tκ†}`: commutativity of left/right multiplication operators
+- Lie–Trotter product formula for bounded linear operators on `End(M_d)`
+- Closedness of CP maps under limits in operator norm -/
 theorem ccp_generator_implies_cp_semigroup
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCCP : IsCCP L) :
@@ -748,6 +774,17 @@ theorem gksl_iff_ccp_and_traceAnnihilating
     exact ⟨ccp_generator_implies_cp_semigroup L hCCP t ht,
            isTracePreservingMap_expSemigroup_of_isTraceAnnihilating L hTA t⟩
 
+/-- Key algebraic identity: `i·H + ½·S = κ` where `H = (i/2)(κ†-κ)` and `S = κ+κ†`.
+This recovers the original κ from the Hamiltonian/Lindblad decomposition. -/
+private theorem iH_half_S_eq_κ (κ S : Matrix (Fin D) (Fin D) ℂ) (hS : S = κ + κᴴ) :
+    Complex.I • ((Complex.I / 2) • (κᴴ - κ)) + (1 / 2 : ℂ) • S = κ := by
+  rw [smul_smul]
+  have h1 : Complex.I * (Complex.I / 2) = -(1 : ℂ) / 2 := by
+    rw [div_eq_mul_inv, ← mul_assoc, Complex.I_mul_I]; ring
+  rw [h1, neg_div, neg_smul, ← smul_neg, neg_sub, one_div, hS, ← smul_add]
+  have : κ - κᴴ + (κ + κᴴ) = (2 : ℂ) • κ := by rw [two_smul]; abel
+  rw [this, smul_smul]; norm_num
+
 /-- **Wolf Theorem 7.1 (Lindblad form)**: `L` is a GKSL generator iff it can be
 written in the standard Lindblad form (Eq. 7.21):
 `L(ρ) = i[ρ, H] + Σⱼ (Lⱼ ρ Lⱼ† - ½ {Lⱼ†Lⱼ, ρ}₊)`
@@ -757,9 +794,30 @@ theorem gksl_iff_lindbladForm
     IsGKSLGenerator L ↔ ∃ F : LindbladForm D, L = F.toLinearMap := by
   constructor
   · -- Forward: GKSL → ∃ LindbladForm
-    -- This is the deep direction: extract H and {Lⱼ} from the generator.
-    -- Requires: CCP → (φ,κ) decomposition → traceless Kraus shift → Lindblad form
-    sorry
+    -- Extract (φ,κ) decomposition with trace constraint, then build Lindblad form
+    intro hL
+    obtain ⟨G, hG_eq, hG_tc⟩ := generatorDecomp_of_gksl L hL
+    obtain ⟨r, K, hK_rep, hK_norm⟩ := hG_tc
+    -- Define Hamiltonian H = (i/2)(κ† - κ), which is Hermitian
+    set H := (Complex.I / 2) • (G.κᴴ - G.κ) with hH_def
+    have hH_herm : H.IsHermitian := by
+      rw [Matrix.IsHermitian, hH_def,
+        conjTranspose_smul, conjTranspose_sub, conjTranspose_conjTranspose]
+      have h : star (Complex.I / 2 : ℂ) = -Complex.I / 2 := by simp [Complex.conj_I]
+      rw [h, neg_div, neg_smul, ← smul_neg, neg_sub]
+    refine ⟨⟨r, H, K, hH_herm⟩, ?_⟩
+    -- Show L = F.toLinearMap by showing the generator decompositions match
+    rw [hG_eq, LindbladForm.toLinearMap_eq_generatorDecomp]
+    -- Key identity: iH + ½ΣK†K = G.κ
+    have hκ_eq : Complex.I • H + (1 / 2 : ℂ) • ∑ j : Fin r, (K j)ᴴ * K j = G.κ :=
+      iH_half_S_eq_κ G.κ _ hK_norm
+    ext1 ρ
+    simp only [GeneratorDecomp.toLinearMap_apply, LindbladForm.toGeneratorDecomp,
+      LinearMap.coe_mk, AddHom.coe_mk]
+    rw [hK_rep]
+    congr 1
+    · congr 1; exact congrArg (· * ρ) hκ_eq.symm
+    · exact congrArg (ρ * ·) (congrArg Matrix.conjTranspose hκ_eq.symm)
   · -- Backward: LindbladForm → GKSL
     intro ⟨F, hF⟩
     rw [hF]
@@ -872,6 +930,80 @@ def KossakowskiForm.toLinearMap (K : KossakowskiForm D) :
     rw [smul_add]
     simp only [RingHom.id_apply]
 
+/-! ### Helpers for Kossakowski ↔ Lindblad conversion -/
+
+/-- Collapsing a sum weighted by the identity matrix:
+`∑_l (1 : Matrix) l k • f(l) = f(k)`. -/
+private theorem sum_one_smul_eq {n : ℕ}
+    {M : Type*} [AddCommMonoid M] [Module ℂ M]
+    (k : Fin n) (f : Fin n → M) :
+    ∑ l : Fin n,
+      (1 : Matrix (Fin n) (Fin n) ℂ) l k • f l = f k := by
+  simp only [Matrix.one_apply]
+  have : ∀ l : Fin n,
+      (if l = k then (1 : ℂ) else 0) • f l =
+      if l = k then f l else 0 := by
+    intro l; split_ifs <;> simp
+  simp_rw [this]
+  exact (Finset.sum_ite_eq' _ k (fun l => f l)).trans
+    (by simp)
+
+/-- The dissipator equals ½ of the Kossakowski commutator sum
+(for a single operator). This bridges the two forms. -/
+private theorem dissipator_eq_half_kossakowski
+    (Lop ρ : Matrix (Fin D) (Fin D) ℂ) :
+    dissipator Lop ρ = (1/2 : ℂ) • (
+      (Lop * ρ * Lopᴴ - Lopᴴ * Lop * ρ) +
+      (Lop * ρ * Lopᴴ - ρ * Lopᴴ * Lop)) := by
+  simp only [dissipator]
+  -- Align parenthesization: ρ*(L†*L) = ρ*L†*L
+  rw [show ρ * (Lopᴴ * Lop) = ρ * Lopᴴ * Lop from
+    (mul_assoc ρ Lopᴴ Lop).symm]
+  -- Both sides now use left-associative products.
+  -- This is a ℂ-module identity: a-(1/2)b-(1/2)c = (1/2)((a-b)+(a-c))
+  module
+
+/-- The PSD factorization: for `C ≥ 0`, `√C† * √C = C`. -/
+private theorem posSemidef_sqrt_factorization {n : ℕ}
+    (C : Matrix (Fin n) (Fin n) ℂ) (hC : C.PosSemidef) :
+    (CFC.sqrt C)ᴴ * CFC.sqrt C = C := by
+  have hsqrt_psd : (CFC.sqrt C).PosSemidef :=
+    Matrix.PosSemidef.posSemidef_sqrt
+  rw [hsqrt_psd.isHermitian.eq, ← sq]
+  exact hC.sq_sqrt
+
+/-- Bilinear sum identity: `Σⱼ (Σₖ B_{jk}•Fₖ) * M * (Σₖ B_{jk}•Fₖ)†`
+equals `Σₖₗ (B†B)_{lk} • (Fₖ * M * Fₗ†)`. Used in Kossakowski ↔ Lindblad. -/
+private theorem kraus_sum_eq_double_sum {n : ℕ}
+    (B : Matrix (Fin n) (Fin n) ℂ)
+    (F : Fin n → Matrix (Fin D) (Fin D) ℂ)
+    (M : Matrix (Fin D) (Fin D) ℂ) :
+    ∑ j : Fin n, (∑ k, B j k • F k) * M * (∑ k, B j k • F k)ᴴ =
+    ∑ k : Fin n, ∑ l : Fin n, (Bᴴ * B) l k • (F k * M * (F l)ᴴ) := by
+  simp_rw [conjTranspose_sum, Matrix.conjTranspose_smul, Complex.star_def]
+  simp_rw [Finset.sum_mul, Finset.mul_sum, smul_mul_assoc, mul_smul_comm, smul_smul,
+    mul_assoc]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl; intro k _
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl; intro l _
+  rw [← Finset.sum_smul]; congr 1
+  simp [conjTranspose_apply, mul_apply, mul_comm]
+
+/-- Adjoint variant: `Σⱼ Lⱼ†Lⱼ = Σₗ Σₖ (B†B)_{lk} • (Fₗ†Fₖ)`. -/
+private theorem adj_kraus_sum_eq_double_sum {n : ℕ}
+    (B : Matrix (Fin n) (Fin n) ℂ)
+    (F : Fin n → Matrix (Fin D) (Fin D) ℂ) :
+    ∑ j : Fin n, (∑ k, B j k • F k)ᴴ * (∑ k, B j k • F k) =
+    ∑ l : Fin n, ∑ k : Fin n, (Bᴴ * B) l k • ((F l)ᴴ * F k) := by
+  simp_rw [conjTranspose_sum, Matrix.conjTranspose_smul, Complex.star_def]
+  simp_rw [Finset.sum_mul, Finset.mul_sum, smul_mul_assoc, mul_smul_comm, smul_smul]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl; intro l _
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl; intro k _
+  rw [← Finset.sum_smul]; congr 1
+
 /-- The Kossakowski form is equivalent to the Lindblad form:
 diagonalizing `C = M†M` converts between the two.
 (Wolf proof of Thm 7.1, last paragraph) -/
@@ -879,7 +1011,75 @@ theorem kossakowski_iff_lindblad
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     (∃ K : KossakowskiForm D, L = K.toLinearMap) ↔
     (∃ F : LindbladForm D, L = F.toLinearMap) := by
-  sorry
+  constructor
+  · -- Forward: Kossakowski → Lindblad via C = B†B factorization
+    rintro ⟨KF, hKF⟩
+    -- Factor C = B†B
+    obtain ⟨B, hB⟩ := Matrix.posSemidef_iff_eq_conjTranspose_mul_self.mp KF.C_posSemidef
+    -- Define Lindblad operators: Lⱼ = Σₖ B_{jk} • Fₖ
+    refine ⟨⟨KF.n, KF.H, fun j => ∑ k, B j k • KF.F k, KF.H_hermitian⟩, ?_⟩
+    rw [hKF]
+    -- Show the linear maps agree pointwise
+    ext1 ρ
+    simp only [KossakowskiForm.toLinearMap, LindbladForm.toLinearMap,
+      LinearMap.coe_mk, AddHom.coe_mk]
+    -- Hamiltonian parts are identical
+    congr 1
+    -- Dissipative parts: rewrite Lindblad using half-Kossakowski form
+    simp_rw [dissipator_eq_half_kossakowski]
+    rw [← Finset.smul_sum]
+    congr 1
+    -- Use the bilinear sum identities with C = B†B
+    have hLML : ∀ N : Matrix (Fin D) (Fin D) ℂ,
+        ∑ j : Fin KF.n, (∑ k, B j k • KF.F k) * N * (∑ k, B j k • KF.F k)ᴴ =
+        ∑ k, ∑ l, KF.C l k • (KF.F k * N * (KF.F l)ᴴ) :=
+      fun N => by rw [kraus_sum_eq_double_sum]; simp_rw [hB]
+    have hLtL : ∑ j : Fin KF.n, (∑ k, B j k • KF.F k)ᴴ * (∑ k, B j k • KF.F k) =
+        ∑ k, ∑ l, KF.C l k • ((KF.F l)ᴴ * KF.F k) := by
+      rw [adj_kraus_sum_eq_double_sum, Finset.sum_comm]; simp_rw [hB]
+    -- Convert Lindblad form (RHS) → Kossakowski form (LHS)
+    symm
+    -- Distribute the single sum over +/-
+    simp_rw [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+    -- Convert all L_j * N * L_j† terms to double sums
+    simp_rw [hLML]
+    -- Factor L†L*ρ: Σ_j (L†L)*ρ = (Σ_j L†L)*ρ
+    rw [← Finset.sum_mul]
+    -- Fix associativity: ρ*L†*L → ρ*(L†*L)
+    simp_rw [mul_assoc ρ]
+    -- Factor ρ*L†L: Σ_j ρ*(L†L) = ρ*(Σ_j L†L)
+    rw [← Finset.mul_sum]
+    -- Apply L†L factorization
+    rw [hLtL]
+    -- Distribute (Σ C•(F†F))*ρ and ρ*(Σ C•(F†F)) into double sums
+    simp_rw [Finset.sum_mul, Finset.mul_sum,
+      smul_mul_assoc, mul_smul_comm]
+    -- Recombine separate double sums into one
+    simp_rw [← Finset.sum_sub_distrib,
+      ← Finset.sum_add_distrib,
+      ← smul_sub, ← smul_add]
+  · -- Backward: Lindblad → Kossakowski (set C = 𝟙, F_k = L_k)
+    rintro ⟨F, hF⟩
+    refine ⟨⟨F.r, F.H, F.L, 1, F.H_hermitian,
+      Matrix.PosSemidef.one⟩, ?_⟩
+    rw [hF]
+    -- Show LindbladForm.toLinearMap = KossakowskiForm.toLinearMap
+    ext1 ρ
+    simp only [LindbladForm.toLinearMap, KossakowskiForm.toLinearMap,
+      LinearMap.coe_mk, AddHom.coe_mk]
+    -- Hamiltonian parts are identical
+    congr 1
+    -- Dissipative: convert dissipator to Kossakowski comm form
+    simp_rw [dissipator_eq_half_kossakowski]
+    -- LHS: Σ_j (1/2)•(comm terms for j,j)
+    -- RHS: (1/2)•Σ_k Σ_l (𝟙 l k)•(comm terms for k,l)
+    rw [← Finset.smul_sum]
+    congr 1
+    -- Collapse inner sum with identity matrix
+    apply Finset.sum_congr rfl
+    intro k _
+    symm
+    exact sum_one_smul_eq k _
 
 /-! ## Summary of sorry status -/
 
@@ -908,13 +1108,35 @@ theorem kossakowski_iff_lindblad
   (trace constraint derived algebraically from TA + trace pairing non-degeneracy)
 - `gksl_iff_ccp_and_traceAnnihilating` — Thm 7.1 ↔ (CCP ∧ TA) ✓
 - `gksl_iff_lindbladForm` backward — LindbladForm → GKSL ✓
+- `gksl_iff_lindbladForm` forward — GKSL → LindbladForm ✓
+  (algebraic: decompose κ = iH + ½S via `iH_half_S_eq_κ`, construct LindbladForm,
+  verify via `LindbladForm.toLinearMap_eq_generatorDecomp`)
+- `kossakowski_iff_lindblad` — Form (ii) ↔ Form (iii) ✓ (BOTH directions!)
+  Forward (Kossakowski → Lindblad): PSD factorization C = B†B via
+  `posSemidef_iff_eq_conjTranspose_mul_self`, then bilinear sum identities
+  `kraus_sum_eq_double_sum` and `adj_kraus_sum_eq_double_sum` to convert
+  L_j = Σ_k B_{jk}•F_k operators to the Kossakowski double sum.
+  Backward (Lindblad → Kossakowski): set C = 𝟙, F_k = L_k, collapse
+  identity matrix sum via `sum_one_smul_eq`, and bridge dissipator forms
+  via `dissipator_eq_half_kossakowski` (a ℂ-module identity).
 
-### Sorry — deep results (5):
-- `choi_projected_posSemidef_implies_ccp` — Prop 7.2 reverse (spectral decomp of Choi)
-- `cp_semigroup_implies_ccp_generator` — Prop 7.3 forward (infinitesimal Choi expansion)
-- `ccp_generator_implies_cp_semigroup` — Prop 7.3 reverse (Lie–Trotter product formula)
-- `gksl_iff_lindbladForm` forward — GKSL → LindbladForm (CCP + TA → Lindblad decomp)
-- `kossakowski_iff_lindblad` — Form (ii) ↔ Form (iii) (change of basis via C = M†M)
+### Sorry — deep results (3):
+- `choi_projected_posSemidef_implies_ccp` — Prop 7.2 reverse direction.
+  **Blocker**: The hypothesis `hL_proj : True` is a placeholder for the real condition
+  `P (choiMatrix L) P ≥ 0`. Needs formalized Choi matrix projection + spectral decomposition.
+- `cp_semigroup_implies_ccp_generator` — Prop 7.3 forward (CP semigroup → CCP generator).
+  **Blocker**: Requires differentiation of the Choi matrix `(T_t⊗id)(|Ω⟩⟨Ω|)` at `t=0`
+  and the projection argument. Depends on `choi_projected_posSemidef_implies_ccp`.
+- `ccp_generator_implies_cp_semigroup` — Prop 7.3 reverse (CCP → CP semigroup).
+  **Blocker**: Requires the Lie–Trotter product formula for operators,
+  `exp(tψ)(ρ) = e^{-tκ}ρe^{-tκ†}` being CP, and closedness of CP maps under limits.
+
+### Results that chain through these 3 sorries:
+- `gksl_iff_lindbladForm` forward direction (GKSL → LindbladForm):
+  proven algebraically but depends on `cp_semigroup_implies_ccp_generator` via
+  `generatorDecomp_of_gksl`.
+- `gksl_of_generatorDecomp_with_traceConstraint` (Thm 7.1 Form i → GKSL):
+  depends on `ccp_generator_implies_cp_semigroup`.
 -/
 
 end -- noncomputable section
