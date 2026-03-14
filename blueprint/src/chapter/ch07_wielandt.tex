@@ -205,6 +205,87 @@ The results follow~\cite{Sanz2010Quantum}.
     (since $\tr(\Id) = D \neq 0$).
 \end{proof}
 
+\begin{theorem}[Cumulative span reaches $\MN{D}$ --- sharp bound]%
+    \label{thm:cumulative_span_sharp}
+    \lean{MPSTensor.cumulativeSpan_eq_top_of_isNormal_sharp}
+    \leanok
+    \uses{def:cumulative_span, def:normal}
+    If $A$ is normal, then
+    $T_{D^2 - d' + 1}(A) = \MN{D}$,
+    where $d' = \dim S_1(A) = \operatorname{krausRank}(A)$.
+    This is the sharp form of \cite[Lemma~1]{Sanz2010Quantum}:
+    the cumulative span already reaches $\MN{D}$ by index
+    $D^2 - d' + 1 \le D^2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cumulative_strict_mono, lem:cumulative_finrank_le}
+    The key observation is that if $T_n(A) \neq T_{n+1}(A)$,
+    the dimension strictly increases.
+    Starting from $T_1(A) = S_1(A)$ with dimension~$d'$,
+    after at most $D^2 - d'$ additional strict-growth steps
+    the dimension reaches $D^2 = \dim \MN{D}$.
+    Stabilisation before reaching $\MN{D}$ contradicts normality.
+    Hence $T_{D^2 - d' + 1}(A) = \MN{D}$.
+\end{proof}
+
+\begin{theorem}[Sharp nonzero trace product]%
+    \label{thm:nonzero_trace_word_sharp}
+    \lean{MPSTensor.exists_nonzero_trace_word_sharp}
+    \leanok
+    \uses{def:normal}
+    If $A$ is normal, then there exists a word $w$ of length
+    $\le D^2 - \operatorname{krausRank}(A) + 1$ such that
+    $\tr(A^w) \neq 0$.
+    This is \cite[Lemma~1]{Sanz2010Quantum} with the sharp
+    length bound.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cumulative_span_sharp}
+    By Theorem~\ref{thm:cumulative_span_sharp},
+    the identity $\Id$ lies in $T_{D^2 - d' + 1}(A)$,
+    hence is a linear combination of word products of length
+    $\le D^2 - d' + 1$.
+    At least one such product has nonzero trace.
+\end{proof}
+
+\begin{theorem}[Sharp nonzero trace product --- positive length]%
+    \label{thm:nonzero_trace_word_sharp_pos}
+    \lean{MPSTensor.exists_nonzero_trace_word_sharp_pos}
+    \leanok
+    \uses{def:normal}
+    If $A$ is normal and $D \ge 2$, then there exists a word~$w$
+    of \emph{positive} length $1 \le |w| \le D^2 - \operatorname{krausRank}(A) + 1$
+    such that $\tr(A^w) \neq 0$.
+    This strengthens
+    Theorem~\ref{thm:nonzero_trace_word_sharp} by requiring
+    $|w| \ge 1$, which is needed for the blocking argument in
+    Theorem~\ref{thm:wielandt_general}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cumulative_span_sharp}
+    Define the \emph{positive-level} cumulative span
+    $V_n = \spn\{A^w : 1 \le |w| \le n\}$.
+    For $D \ge 2$, the span $S_0(A) = \spn\{\Id\}$ has dimension $1$,
+    so $V_1 \supseteq S_1(A)$ has dimension $\ge d' \ge 1$.
+    The same stabilization-or-strict-growth dichotomy shows
+    $V_{D^2 - d' + 1} = \MN{D}$:
+    if $V_n$ stabilises and is not $\MN{D}$, then
+    $V_n$ is closed under left-multiplication by each $A^i$,
+    so $\operatorname{wordSpan}(A, N) \subseteq V_n \neq \MN{D}$
+    for all $N \ge 1$, contradicting normality.
+    Since $V_{D^2 - d' + 1} = \MN{D}$ and
+    $D \ge 2$ implies $\Id \notin V_{D^2 - d' + 1}$
+    (dimension of $\MN{D}$ is $D^2 \ge 4$,
+    but $\spn\{\Id\}$ has dimension~$1$),
+    at least one generator has nonzero trace.
+\end{proof}
+
 \section{Eigenvector extraction}
 
 \begin{theorem}[Nonzero trace implies eigenvector]\label{thm:eigenvector_from_trace}
@@ -378,13 +459,64 @@ The results follow~\cite{Sanz2010Quantum}.
     Immediate from Theorem~\ref{thm:cumulative_eq_top}.
 \end{proof}
 
-\begin{remark}[Explicit blocking-length estimates]\notready
+\begin{remark}[Explicit blocking-length estimates]\leanok
     Theorem~\ref{thm:wielandt_bound} gives the $D^2$
     cumulative-span bound.
-    The sharper explicit blocking-length estimates from
-    \cite{Sanz2010Quantum} --- at most $D^4$ for injectivity and at
-    most $3D^5$ for the bi-canonical form --- are not proved here.
+    The full-rank index bound $\iota(A) \le (D^2 - d + 1) \cdot D^2$
+    (Theorem 1 case (1) of \cite{Sanz2010Quantum}) is proved in
+    Theorem~\ref{thm:wielandt_general} below.
+    The sharp blocking-length estimates for injectivity ($D^4$)
+    and bi-canonical form ($3D^5$) from \cite{Sanz2010Quantum}
+    are not proved here.
 \end{remark}
+
+\begin{theorem}[Wielandt's inequality --- general bound]%
+    \label{thm:wielandt_general}
+    \lean{MPSTensor.iIndex_le_general_of_isPrimitivePaper}
+    \leanok
+    \uses{def:normal}
+    Let $A$ be a normalized MPS tensor ($\sum_i (A^i)^\dagger A^i = \Id$)
+    that is primitive in the paper sense.
+    Then
+    \[
+        \iota(A) \;\le\;
+        (D^2 - \operatorname{krausRank}(A) + 1) \cdot D^2,
+    \]
+    where $\iota(A) = \min\{n : S_n(A) = \MN{D}\}$ is the full-Kraus-rank index.
+    This is \cite[Theorem~1, case~(1)]{Sanz2010Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:nonzero_trace_word_sharp_pos, thm:isNormal_blockTensor}
+    \begin{enumerate}
+    \item \emph{$D = 1$:} In this case $\iota(A) = 0$, so the bound
+          holds trivially.
+    \item \emph{$D \ge 2$:}
+        By Theorem~\ref{thm:nonzero_trace_word_sharp_pos},
+        there exists a \emph{positive-length} word~$w$ with
+        $|w| \le D^2 - d' + 1$ and $\tr(A^w) \neq 0$,
+        where $d' = \operatorname{krausRank}(A)$.
+        The matrix $A^w$ has nonzero trace,
+        hence a nonzero eigenvalue $\mu$ and eigenvector $\varphi$
+        (Theorem~\ref{thm:eigenvector_from_trace}).
+        Set $n = |w|$ and let $B = A^{[n]}$ be the blocked tensor.
+        Then $B$ is normal (Theorem~\ref{thm:isNormal_blockTensor}),
+        and the encoding of $w$ as a single block index gives
+        $B^{i_0} = A^w$.
+        \begin{enumerate}
+        \item If $A^w$ is invertible (invertible case),
+              $S_{D^2}(B) = \MN{D}$, whence
+              $S_{D^2 \cdot n}(A) = \MN{D}$.
+        \item If $A^w$ is non-invertible (non-invertible case),
+              the eigenvector $\varphi$ spans a proper subspace,
+              and the Wielandt chain argument gives
+              $S_{D^2}(B) = \MN{D}$, whence
+              $S_{D^2 \cdot n}(A) = \MN{D}$.
+        \end{enumerate}
+        In both cases $\iota(A) \le D^2 \cdot n \le D^2 \cdot (D^2 - d' + 1)$.
+    \end{enumerate}
+\end{proof}
 
 \section{Lemma~2(b): fixed-length matrix spanning}\label{sec:lemma2b}
 
@@ -869,6 +1001,94 @@ spectral gap. It is connected to normality through the following results.
               From $(\Id - P) \rho = 0$ we get $\Id - P = 0$,
               i.e.\ $P = \Id$, contradicting $P \neq \Id$.
     \end{enumerate}
+\end{proof}
+
+\subsection{Primitivity bridge to strong irreducibility and normality}%
+\label{subsec:prim_bridge_normality}
+
+The results in this subsection remove the aperiodicity assumption
+from the normality conclusions.
+They connect the spectral-gap primitivity of
+Definition~\ref{def:primitive_mps} directly to normality
+(eventually full Kraus rank),
+using the convergence of the transfer-map iterates to the
+projection onto the fixed-point subspace.
+
+\begin{theorem}[Primitive MPS with PosDef fixed point has irreducible transfer map]%
+    \label{thm:irreducible_map_from_primitive}
+    \lean{MPSTensor.isIrreducibleMap_of_isPrimitiveMPS_of_posDef}
+    \leanok
+    \uses{def:primitive_mps}
+    If $A$ is a primitive MPS tensor with positive-definite fixed
+    point~$\rho$, then the transfer map $\E_A$ is irreducible.
+
+    The proof uses fixed-point uniqueness
+    (Theorem~\ref{thm:fixedpoint_unique_spectral}):
+    every PSD fixed point is proportional to $\rho$,
+    so Wolf's criterion for irreducibility
+    (positive-definite fixed point implies irreducibility)
+    applies directly.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fixedpoint_unique_spectral}
+    By Theorem~\ref{thm:fixedpoint_unique_spectral},
+    if $\sigma \ge 0$ and $\E_A(\sigma) = \sigma$, then
+    $\sigma = \frac{\tr\sigma}{\tr\rho} \rho$.
+    Since $\rho > 0$, Wolf's uniqueness criterion for
+    irreducibility applies.
+\end{proof}
+
+\begin{theorem}[Primitive MPS with PosDef fixed point is strongly irreducible]%
+    \label{thm:strongly_irred_from_primitive}
+    \lean{MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef}
+    \leanok
+    \uses{def:primitive_mps}
+    If $A$ is a primitive MPS tensor with positive-definite fixed
+    point~$\rho$, then $A$ is strongly irreducible in the sense of
+    \cite[Proposition~3(c)]{Sanz2010Quantum}:
+    $\E_A$ is irreducible, the fixed point $\rho$ is positive
+    definite, and the peripheral spectrum of $\E_A$ is $\{1\}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:irreducible_map_from_primitive, thm:prim_overlap_one}
+    Combine Theorem~\ref{thm:irreducible_map_from_primitive}
+    (irreducibility) with the peripheral-spectrum primitivity from
+    the spectral-gap hypothesis
+    (Theorem~\ref{thm:prim_overlap_one}).
+\end{proof}
+
+\begin{theorem}[Primitive MPS with PosDef fixed point is normal]%
+    \label{thm:normal_from_primitive_posdef}
+    \lean{MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef}
+    \leanok
+    \uses{def:primitive_mps, def:normal}
+    If $A$ is a primitive MPS tensor with positive-definite fixed
+    point~$\rho$, then $A$ is normal
+    (has eventually full Kraus rank).
+    No aperiodicity assumption is needed.
+
+    This is the key bridge between the spectral-gap
+    primitivity of Definition~\ref{def:primitive_mps} and
+    normality, filling the gap that the aperiodicity-based route
+    in \S\ref{sec:cumspan_to_wordspan} leaves open.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:strongly_irred_from_primitive}
+    By Theorem~\ref{thm:strongly_irred_from_primitive},
+    $A$ is strongly irreducible.
+    The implication (c)$\Rightarrow$(b) of
+    \cite[Proposition~3]{Sanz2010Quantum}
+    (strong irreducibility implies eventually full Kraus rank)
+    then gives normality.
+    (Formally: strong irreducibility implies
+    $\langle A \rangle_n = \MN{D}$ for large $n$,
+    which is exactly the definition of normality.)
 \end{proof}
 
 \section{Cumulative span to word span}\label{sec:cumspan_to_wordspan}

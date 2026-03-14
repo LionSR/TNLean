@@ -11,6 +11,50 @@ block separation (Chapter~\ref{ch:block_perm}),
 spectral gap (Chapter~\ref{ch:spectral}),
 and the BNT permutation arguments of Chapter~\ref{ch:bnt}.
 
+\section{Weak Fundamental Theorem: pipeline end-to-end}
+
+The following theorem packages the full upstream pipeline
+(zero-block separation, TP gauge, blocking, primitivity)
+with the downstream Fundamental Theorem for normal canonical form data.
+It is conditional on the extra hypotheses (tensor irreducibility and
+distinct weight norms) that the automatic pipeline does not yet produce.
+
+\begin{theorem}[Weak Fundamental Theorem (conditional)]%
+    \label{thm:weak_ft_conditional}
+    \lean{MPSTensor.weakFundamentalTheorem_conditional}
+    \leanok
+    \uses{def:is_normal_canonical_form, def:gauge_phase_equiv}
+    Let $(\mu_j^A, A_j)_{j=1}^{r_A}$ and $(\mu_k^B, B_k)_{k=1}^{r_B}$
+    be two families in normal canonical form,
+    each satisfying the non-degeneracy condition
+    that no two distinct blocks in the same family are gauge-phase
+    equivalent.
+    Let $A_\mathrm{tot}$ and $B_\mathrm{tot}$ be tensors with
+    MPV decompositions
+    \[
+        V^{(N)}(A_\mathrm{tot})_\sigma = \sum_j a_{N,j}\, V^{(N)}(A_j)_\sigma,
+        \quad
+        V^{(N)}(B_\mathrm{tot})_\sigma = \sum_k b_{N,k}\, V^{(N)}(B_k)_\sigma,
+    \]
+    with $a_{N,j} \to a_j \neq 0$ and $b_{N,k} \to b_k \neq 0$.
+    Suppose moreover that
+    $V^{(N)}(A_\mathrm{tot})_\sigma = c_N\, V^{(N)}(B_\mathrm{tot})_\sigma$
+    with $c_N \to c \neq 0$.
+    Then $r_A = r_B$ and there is a permutation $\pi$ such that
+    $D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
+    $B_{\pi(j)}$ for every~$j$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ft_proportional_nt}
+    This packages the normal-canonical-form Fundamental Theorem
+    (Theorem~\ref{thm:ft_proportional_nt}).
+    The normal canonical form data provide the BNT separation
+    and overlap convergence hypotheses;
+    the non-degeneracy condition ensures the block matching
+    is well-defined.
+\end{proof}
+
 \section{Proportional Fundamental Theorem}
 
 \begin{theorem}[Fundamental Theorem --- proportional MPV case]\label{thm:ft_proportional}
