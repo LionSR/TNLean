@@ -213,15 +213,23 @@ theorem exists_compressedTensor_of_supported_projection
     rw [(Matrix.fromBlocks_toBlocks (X i)).symm] at hsupp_block
     simp only [P0, Matrix.fromBlocks_multiply, Matrix.one_mul, Matrix.mul_one,
       Matrix.zero_mul, Matrix.mul_zero, add_zero, zero_add] at hsupp_block
-    -- hsupp_block : fromBlocks toBlocks₁₁ 0 0 0 = fromBlocks toBlocks₁₁ toBlocks₁₂ toBlocks₂₁ toBlocks₂₂
-    have extract := fun (x y : S ⊕ T) =>
-        congrFun (congrFun hsupp_block x) y
+    -- `hsupp_block` forces all blocks outside the `S`-sector to vanish.
+    have extract (x y : S ⊕ T) := congrFun (congrFun hsupp_block x) y
     have h12 : (X i).toBlocks₁₂ = 0 := by
-      ext s t; have := extract (Sum.inl s) (Sum.inr t); simp [Matrix.fromBlocks] at this; exact this.symm
+      ext s t
+      have h := extract (Sum.inl s) (Sum.inr t)
+      simp [Matrix.fromBlocks] at h
+      exact h.symm
     have h21 : (X i).toBlocks₂₁ = 0 := by
-      ext t s; have := extract (Sum.inr t) (Sum.inl s); simp [Matrix.fromBlocks] at this; exact this.symm
+      ext t s
+      have h := extract (Sum.inr t) (Sum.inl s)
+      simp [Matrix.fromBlocks] at h
+      exact h.symm
     have h22 : (X i).toBlocks₂₂ = 0 := by
-      ext t t'; have := extract (Sum.inr t) (Sum.inr t'); simp [Matrix.fromBlocks] at this; exact this.symm
+      ext t t'
+      have h := extract (Sum.inr t) (Sum.inr t')
+      simp [Matrix.fromBlocks] at h
+      exact h.symm
     rw [h12, h21, h22]
   -- Compressed tensor
   let C : MPSTensor d n := fun i => Matrix.reindex eS eS (B11 i)
@@ -380,9 +388,10 @@ theorem exists_compressedTensor_of_supported_projection
         rw [Finset.sum_eq_single s]
         · simp [P0, Matrix.fromBlocks_apply₁₁]
         · intro s' _ hs'
-          have : P0 (Sum.inl s) (Sum.inl s') = 0 := by
-            simp [P0, Matrix.fromBlocks_apply₁₁, Matrix.one_apply, show ¬(s = s') from hs' ∘ Eq.symm]
-          simp [this]
+          have hsne : s ≠ s' := hs' ∘ Eq.symm
+          have hzero : P0 (Sum.inl s) (Sum.inl s') = 0 := by
+            simp [P0, Matrix.fromBlocks_apply₁₁, Matrix.one_apply, hsne]
+          simp [hzero]
         · intro h; exact absurd (Finset.mem_univ s) h
       simp_rw [hS_eq]
       -- Now: ∑_{s:S} evalWord X w (inl s) (inl s) = ∑_{s:S} evalWord B11 w s s
@@ -488,18 +497,14 @@ theorem exists_blockDecomp_of_commuting_projections
   -- For non-empty w with P² = P and P Ai = Ai P:
   -- evalWord(P * A)(w) = P * A_j * P * ... * P * A_jn
   -- Using PA = AP: = P^n * A_j * ... * A_jn = P * evalWord A w
-  -- For empty: evalWord(P * A)([]) = 1 ≠ P
-  -- BUT tr(P k * evalWord A w) handles the empty case: tr(P k * 1) = tr(P k)
-  -- and tr(P k * evalWord(P k * A)([])) = tr(P k * 1) = tr(P k). ✓ only if hMPVblocks gives tr(P k * evalWord(P*A)(w))
-  -- hMPVblocks says: mpv(blocks k) σ = tr(P k * evalWord (fun i => P k * A i) (List.ofFn σ))
-  -- We need: tr(P k * evalWord A w) = tr(P k * evalWord (fun i => P k * A i) w)
-  -- i.e., P k * evalWord A w = P k * evalWord (P k * A) w
-  -- This follows from left_mul_evalWord_leftSectorTensor_of_commutes!
-  -- tr(P k * evalWord A w) = tr(P k * evalWord(leftSectorTensor(P k) A)(w)) = mpv(blocks k)(σ)
-  rw [show (P k * evalWord A (List.ofFn σ)).trace =
-      (P k * evalWord (leftSectorTensor (P k) A) (List.ofFn σ)).trace from by
+  -- The sector trace can be computed using the left-sector tensor, even for the empty word.
+  have htrace_sector :
+      (P k * evalWord A (List.ofFn σ)).trace =
+        (P k * evalWord (leftSectorTensor (P k) A) (List.ofFn σ)).trace := by
     congr 1
-    exact (left_mul_evalWord_leftSectorTensor_of_commutes (P k) A (hPproj k).2 (hComm k) _).symm]
+    exact
+      (left_mul_evalWord_leftSectorTensor_of_commutes (P k) A (hPproj k).2 (hComm k) _).symm
+  rw [htrace_sector]
   -- leftSectorTensor (P k) A = fun i => P k * A i by definition
   change (P k * evalWord (fun i => P k * A i) (List.ofFn σ)).trace =
       ((blocks k).evalWord (List.ofFn σ)).trace

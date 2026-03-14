@@ -6,6 +6,7 @@ import TNLean.Channel.Semigroup.Basic
 import TNLean.Channel.Basic
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.KrausRepresentation
+import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
 # GKSL/Lindblad Generators — Wolf Prop 7.2–7.4 and Theorem 7.1
@@ -40,6 +41,10 @@ open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
 open Matrix Finset NormedSpace
 
 noncomputable section
+
+-- Local instances needed for NormedAddCommGroup on Matrix (for CLM infrastructure)
+attribute [local instance] Matrix.linftyOpNormedRing
+attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 
@@ -494,6 +499,36 @@ theorem Matrix.eq_zero_of_forall_trace_mul_eq_zero
 
 /-! ## Bridge: trace-annihilating ↔ trace-preserving semigroup -/
 
+-- Private helpers for the CLM-level proofs
+private abbrev endEquivLocal :
+    (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
+    (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+  Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+
+/-- The trace-evaluation functional as an ℝ-continuous linear map:
+`T ↦ trace(T(ρ))` for a fixed matrix `ρ`. -/
+private def traceEvalCLM (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℝ] ℂ :=
+  ((Matrix.traceLinearMap (Fin D) ℂ ℂ).toContinuousLinearMap.comp
+    (ContinuousLinearMap.apply ℂ _ ρ)).restrictScalars ℝ
+
+private theorem traceEvalCLM_apply
+    (T : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    traceEvalCLM ρ T = trace (T ρ) := by
+  simp [traceEvalCLM, Matrix.traceLinearMap_apply]
+
+/-- `exp(tL) * L = L * exp(tL)` in the CLM algebra, because `L` commutes with `tL`. -/
+private theorem expSemigroupCLM_mul_comm_local
+    (L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (s : ℝ) :
+    expSemigroupCLM L_CLM s * L_CLM = L_CLM * expSemigroupCLM L_CLM s := by
+  unfold expSemigroupCLM
+  have hc : Commute ((s : ℂ) • L_CLM) L_CLM := by
+    change (s : ℂ) • L_CLM * L_CLM = L_CLM * ((s : ℂ) • L_CLM)
+    rw [smul_mul_assoc, mul_smul_comm]
+  exact hc.exp_left.eq
+
 /-- `trace(Lⁿ(ρ)) = 0` for `n ≥ 1` when `L` is trace-annihilating.
 This follows from `trace(Lⁿ(ρ)) = trace(L(Lⁿ⁻¹(ρ))) = 0`. -/
 theorem trace_iterate_eq_zero
@@ -508,27 +543,53 @@ theorem trace_iterate_eq_zero
   change trace (L ((L ^ k) ρ)) = 0
   exact hTA _
 
+/-- CLM-level version: trace-annihilating → trace constant under exp semigroup. -/
+private theorem trace_expSemigroupCLM_eq
+    (L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hTA : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, trace (L_CLM ρ) = 0)
+    (t : ℝ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    trace ((expSemigroupCLM L_CLM t) ρ) = trace ρ := by
+  set g := traceEvalCLM ρ
+  set f : ℝ → ℂ := fun s => g (expSemigroupCLM L_CLM s)
+  suffices hsuff : ∀ x y : ℝ, f x = f y by
+    have h0 : f 0 = trace ρ := by
+      simp [f, g, traceEvalCLM_apply, expSemigroupCLM_zero]
+    have ht : f t = trace ((expSemigroupCLM L_CLM t) ρ) := by
+      simp [f, g, traceEvalCLM_apply]
+    rw [← h0, ← hsuff t 0, ht]
+  apply is_const_of_deriv_eq_zero
+  · -- Differentiable
+    intro s
+    exact (g.hasFDerivAt.comp_hasDerivAt s
+      (hasDerivAt_expSemigroupCLM L_CLM s)).differentiableAt
+  · -- deriv = 0
+    intro s
+    have hd : HasDerivAt f (g (expSemigroupCLM L_CLM s * L_CLM)) s :=
+      g.hasFDerivAt.comp_hasDerivAt s (hasDerivAt_expSemigroupCLM L_CLM s)
+    rw [hd.deriv, traceEvalCLM_apply, expSemigroupCLM_mul_comm_local]
+    change trace (L_CLM ((expSemigroupCLM L_CLM s) ρ)) = 0
+    exact hTA _
+
 /-- If `L` is trace-annihilating, then `exp(tL)` is trace-preserving for all `t`.
 
-**Proof**: `trace(exp(tL)(ρ)) = Σₙ (tⁿ/n!) trace(Lⁿ(ρ))`. For `n ≥ 1`,
-`trace(Lⁿ(ρ)) = trace(L(Lⁿ⁻¹(ρ))) = 0` by the trace-annihilating condition.
-So the sum equals `trace(L⁰(ρ)) = trace(ρ)`.
-
-In finite dimensions, the interchange of trace with the convergent power series
-defining `exp(tL)` is justified by continuity of trace. This uses the derivative
-characterization: `d/dt trace(exp(tL)(ρ)) = trace(L(exp(tL)(ρ))) = 0`, so the
-function is constant and equals its value at `t = 0`. -/
+**Proof**: The function `f(t) = trace(exp(tL)(ρ))` has derivative
+`trace(L(exp(tL)(ρ))) = 0` everywhere (by TA and commutativity of `L` with `exp(tL)`).
+By `is_const_of_deriv_eq_zero`, `f` is constant, and `f(0) = trace(ρ)`. -/
 theorem isTracePreservingMap_expSemigroup_of_isTraceAnnihilating
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hTA : IsTraceAnnihilating L)
     (t : ℝ) :
     IsTracePreservingMap (expSemigroup L t) := by
-  -- This follows from the ODE argument: if trace(L(X)) = 0 for all X,
-  -- then d/dt trace(exp(tL)(ρ)) = trace(L(exp(tL)(ρ))) = 0,
-  -- so trace(exp(tL)(ρ)) = trace(exp(0)(ρ)) = trace(ρ).
-  -- The formal proof requires the derivative of exp at the CLM level
-  -- composed with evaluation and trace (both continuous linear maps).
-  sorry
+  intro ρ
+  -- Reduce to CLM version using endEquivLocal
+  set L_CLM := endEquivLocal L
+  have hTA_CLM : ∀ ρ, trace (L_CLM ρ) = 0 := fun ρ => by
+    change trace ((endEquivLocal L) ρ) = 0
+    simp only [endEquivLocal]
+    exact hTA ρ
+  have h := trace_expSemigroupCLM_eq L_CLM hTA_CLM t ρ
+  -- trace(expSemigroup L t ρ) = trace(expSemigroupCLM L_CLM t ρ) = trace ρ
+  convert h using 2
 
 /-- If `exp(tL)` is trace-preserving for all `t ≥ 0`, then `L` is trace-annihilating.
 
@@ -539,9 +600,9 @@ theorem isTraceAnnihilating_of_isTracePreservingMap_semigroup
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hTP : ∀ t : ℝ, 0 ≤ t → IsTracePreservingMap (expSemigroup L t)) :
     IsTraceAnnihilating L := by
-  -- This follows from the infinitesimal argument:
-  -- (trace(exp(hL)(ρ)) - trace(ρ))/h = trace(L(ρ)) + O(h) → 0 as h → 0
-  -- since trace(exp(hL)(ρ)) = trace(ρ) for h ≥ 0.
+  -- The TA → TP direction gives us trace(exp(tL)(ρ)) = trace(ρ) for all t.
+  -- But we can't use that here (it's the REVERSE direction).
+  -- Instead: TP semigroup → at t=0, d/dt trace(exp(tL)(ρ)) = trace(L(ρ)) = 0.
   sorry
 
 /-! ## Theorem 7.1: GKSL/Lindblad theorem (Wolf Theorem 7.1) -/
@@ -620,7 +681,9 @@ theorem generatorDecomp_of_gksl
     rw [← trace_sub, ← trace_sub] at h
     convert h using 1
     simp [sub_mul]
-  linarith [hdiff]  -- Σ Kᵢ†Kᵢ - G.κ - G.κ† = 0 ⟹ Σ Kᵢ†Kᵢ = G.κ + G.κ†
+  -- Σ Kᵢ†Kᵢ - G.κ - G.κ† = 0 ⟹ Σ Kᵢ†Kᵢ = G.κ + G.κ†
+  rw [sub_sub] at hdiff
+  exact sub_eq_zero.mp hdiff
 
 /-- **Wolf Theorem 7.1 (equivalence)**: `L` is a GKSL generator iff it is CCP
 and trace-annihilating. -/

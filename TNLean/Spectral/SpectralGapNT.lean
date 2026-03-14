@@ -49,6 +49,9 @@ private lemma smul_mul_conjTranspose_of_norm_eq_one {m n : ℕ}
 
 section SameDimension
 
+set_option maxHeartbeats 250000 in
+-- Elaborating the Perron--Frobenius gauge extraction below slightly exceeds the
+-- default heartbeat limit during `whnf`, so we keep a small local bump.
 private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
