@@ -255,44 +255,68 @@ theorem exists_compressedTensor_of_supported_projection
               simp [Matrix.mul_assoc]
           _ = Umatᴴ * ((A i)ᴴ * A i) * Umat := by rw [hUU, Matrix.mul_one]
       simp_rw [hterm]
-      -- Pull U† and U out of the sum
-      have : ∑ i : Fin d, Umatᴴ * ((A i)ᴴ * A i) * Umat =
-          Umatᴴ * (∑ i : Fin d, (A i)ᴴ * A i) * Umat := by
-        rw [Finset.mul_sum, Finset.sum_mul]; congr 1; ext; simp [Matrix.mul_assoc]
-      rw [this, hTP]
+      -- ∑ i, U† ((A i)† A i) U = U† (∑ (A i)† A i) U = U† P U = Pdiag
+      trans Umatᴴ * (∑ i : Fin d, (A i)ᴴ * A i) * Umat
+      · rw [Finset.mul_sum, Finset.sum_mul]
+      · rw [hTP]
     -- Transport to S⊕T: ∑ B11_i† B11_i = 1_S
     have hTPblock : ∑ i : Fin d, (B11 i)ᴴ * B11 i = (1 : Matrix S S ℂ) := by
-      -- φ(∑ B_i† B_i) = φ(Pdiag) = P0
-      have h := congrArg φ hTPB; simp only [map_sum, map_mul] at h
-      -- φ(B_i†) * φ(B_i) = X_i† * X_i (since φ preserves conjTranspose)
-      have hφ_eq : ∀ i, φ ((B i)ᴴ) * φ (B i) = (X i)ᴴ * X i := by
-        intro i; congr 1
-        ext a b; simp [φ, X, Matrix.reindex_apply, Matrix.conjTranspose_apply,
+      -- φ(∑ B_i† B_i) = ∑ φ(B_i† * B_i) = ∑ (X_i)† (X_i) = P0
+      -- But we also need φ(B_i†) = (X_i)†
+      have hφ_ct : ∀ i, φ ((B i)ᴴ) = (X i)ᴴ := by
+        intro i; ext a b
+        simp [φ, X, Matrix.reindex_apply, Matrix.conjTranspose_apply,
           Matrix.submatrix_apply, Matrix.reindexAlgEquiv]
-      rw [show ∑ i, φ ((B i)ᴴ) * φ (B i) = ∑ i, (X i)ᴴ * X i from
-        Finset.sum_congr rfl (fun i _ => hφ_eq i), hPdiag_std] at h
-      -- h : ∑ X_i† X_i = P0
+      -- h : ∑ (X_i)† * X_i = P0
+      have h : ∑ i : Fin d, (X i)ᴴ * X i = P0 := by
+        have h0 := congrArg φ hTPB
+        rw [map_sum] at h0
+        simp only [map_mul] at h0
+        -- h0 : ∑ φ (B i)ᴴ * φ (B i) = φ Pdiag
+        -- φ (B i)ᴴ is actually φ((B i)ᴴ) after map_mul, which equals (X i)ᴴ by hφ_ct
+        -- Actually hφ_ct says φ (B i)ᴴ = (X i)ᴴ where φ (B i) = X i
+        -- So φ (B i)ᴴ = (X i)ᴴ, and φ (B i) = X i
+        simp only [show ∀ i, φ (B i) = X i from fun i => rfl] at h0
+        -- Now need: φ (B i)ᴴ = (X i)ᴴ... but after map_mul, what does h0 look like?
+        -- Let me just use the fact that φ preserves star/conjTranspose
+        rw [hPdiag_std] at h0
+        convert h0 using 1
       -- Substitute block form X_i = fromBlocks(B11_i, 0, 0, 0)
       have hblock : ∀ i, (X i)ᴴ * X i =
           Matrix.fromBlocks ((B11 i)ᴴ * B11 i) 0 0 (0 : Matrix T T ℂ) := by
         intro i; rw [hX_block i]
         simp [Matrix.fromBlocks_conjTranspose, Matrix.fromBlocks_multiply]
       simp_rw [hblock] at h
-      have hfb : ∑ i : Fin d, Matrix.fromBlocks ((B11 i)ᴴ * B11 i) 0 0 (0 : Matrix T T ℂ) =
-          Matrix.fromBlocks (∑ i : Fin d, (B11 i)ᴴ * B11 i) 0 0 (0 : Matrix T T ℂ) := by
-        ext x y; cases x <;> cases y <;> simp [Matrix.fromBlocks]
-      rw [hfb] at h
-      ext s s'; exact congrFun (congrFun (Matrix.ext_iff.mp h) (Sum.inl s)) (Sum.inl s')
+      -- Extract (S,S) block from h
+      ext s s'
+      have h1 := congrFun (congrFun h (Sum.inl s)) (Sum.inl s')
+      -- LHS of h1: (∑ fromBlocks(...))(inl s)(inl s') = ∑ (fromBlocks(...))(inl s)(inl s')
+      -- = ∑ (B11 i)† * B11 i s s'
+      -- RHS of h1: P0 (inl s) (inl s') = 1 s s'
+      -- h1 : (∑ x, fromBlocks((B11 x)† * B11 x, 0, 0, 0))(inl s)(inl s') = 1 s s'
+      -- goal : (∑ i, (B11 i)† * B11 i) s s' = 1 s s'
+      exact congrFun (congrFun (show ∑ i : Fin d, (B11 i)ᴴ * B11 i = (1 : Matrix S S ℂ) from by
+        ext s1 s2
+        have h2 := congrFun (congrFun h (Sum.inl s1)) (Sum.inl s2)
+        simp only [P0, Matrix.fromBlocks_apply₁₁, Matrix.sum_apply,
+          Matrix.fromBlocks_apply₁₁] at h2
+        rwa [Matrix.sum_apply]) s) s'
     -- Transport to Fin n
     have hterm : ∀ i, (C i)ᴴ * C i = Matrix.reindex eS eS ((B11 i)ᴴ * B11 i) := by
       intro i; show (Matrix.reindex eS eS (B11 i))ᴴ * Matrix.reindex eS eS (B11 i) = _
       rw [show (Matrix.reindex eS eS (B11 i))ᴴ = Matrix.reindex eS eS ((B11 i)ᴴ) from by
         ext a b; simp [Matrix.reindex_apply, Matrix.conjTranspose_apply, Matrix.submatrix_apply]]
       simp [Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
-    simp_rw [hterm, show ∑ i : Fin d, Matrix.reindex eS eS ((B11 i)ᴴ * B11 i) =
-        Matrix.reindex eS eS (∑ i : Fin d, (B11 i)ᴴ * B11 i) from by simp [map_sum],
-      hTPblock]
-    simp
+    simp_rw [hterm]
+    -- ∑ reindex eS eS (f i) = reindex eS eS (∑ f i)
+    ext a b
+    simp only [Matrix.sum_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
+      Matrix.one_apply]
+    rw [show (∑ i : Fin d, ((B11 i)ᴴ * B11 i) (eS.symm a) (eS.symm b)) =
+        (∑ i : Fin d, (B11 i)ᴴ * B11 i) (eS.symm a) (eS.symm b) from
+      (Matrix.sum_apply (eS.symm a) (eS.symm b) _ _).symm]
+    rw [hTPblock, Matrix.one_apply]
+    simp only [EmbeddingLike.apply_eq_iff_eq]
   -- (3) MPV identity
   · intro N σ
     set w := List.ofFn σ
@@ -322,7 +346,8 @@ theorem exists_compressedTensor_of_supported_projection
       rw [hφ_eval]
       -- Now: tr(P0 * evalWord X w) = tr(evalWord B11 w)
       -- Entrywise argument
-      show Matrix.trace (P0 * _root_.evalWord X w) = Matrix.trace (_root_.evalWord B11 w)
+      show Matrix.trace (_root_.evalWord B11 w) = Matrix.trace (P0 * _root_.evalWord X w)
+      symm
       -- tr(P0 * M) = ∑_{s:S} M (inl s) (inl s) for any M
       rw [show Matrix.trace (P0 * _root_.evalWord X w) =
           ∑ x : S ⊕ T, (P0 * _root_.evalWord X w) x x from rfl,
@@ -349,7 +374,10 @@ theorem exists_compressedTensor_of_supported_projection
         rw [hT, add_zero]
         rw [Finset.sum_eq_single s]
         · simp [P0, Matrix.fromBlocks_apply₁₁]
-        · intro s' _ hs'; simp [P0, Matrix.fromBlocks_apply₁₁, hs' ∘ Eq.symm]
+        · intro s' _ hs'
+          have : P0 (Sum.inl s) (Sum.inl s') = 0 := by
+            simp [P0, Matrix.fromBlocks_apply₁₁, Matrix.one_apply, show ¬(s = s') from hs' ∘ Eq.symm]
+          simp [this]
         · intro h; exact absurd (Finset.mem_univ s) h
       simp_rw [hS_eq]
       -- Now: ∑_{s:S} evalWord X w (inl s) (inl s) = ∑_{s:S} evalWord B11 w s s
@@ -362,9 +390,7 @@ theorem exists_compressedTensor_of_supported_projection
           _root_.evalWord B11 ww s1 s2 from this w s s
       intro ww; induction ww with
       | nil =>
-          intro s1 s2
-          simp only [_root_.evalWord, Matrix.one_apply, Sum.inl.injEq]
-          split <;> simp_all
+          intro s1 s2; simp [_root_.evalWord, Matrix.one_apply, Sum.inl.injEq]
       | cons j ww ih =>
           intro s1 s2
           simp only [_root_.evalWord, Matrix.mul_apply, Fintype.sum_sum_type]
@@ -391,12 +417,9 @@ theorem exists_compressedTensor_of_supported_projection
       set M := evalWord A (List.ofFn σ)
       -- U†PU * U†MU = U†P(UU†)MU = U†(PM)U, tr = tr(PM) by trace_conj
       have hprod : Umatᴴ * P * Umat * (Umatᴴ * M * Umat) = Umatᴴ * (P * M) * Umat := by
-        simp only [Matrix.mul_assoc]
-        congr 1; congr 1
-        calc Umatᴴ * (P * (Umat * (Umatᴴ * (M * Umat))))
-            = Umatᴴ * (P * ((Umat * Umatᴴ) * M * Umat)) := by ring_nf
-          _ = Umatᴴ * (P * (M * Umat)) := by simp [hUU]
-          _ = Umatᴴ * (P * M * Umat) := by rw [← Matrix.mul_assoc P M Umat]
+        calc Umatᴴ * P * Umat * (Umatᴴ * M * Umat)
+            = Umatᴴ * (P * (Umat * Umatᴴ) * M) * Umat := by simp [Matrix.mul_assoc]
+          _ = Umatᴴ * (P * M) * Umat := by rw [hUU, Matrix.mul_one]
       rw [hprod, trace_conj]
     calc mpv C σ
         = Matrix.trace (_root_.evalWord B11 w) := hmpv_C
@@ -433,9 +456,11 @@ theorem exists_blockDecomp_of_commuting_projections
     intro k
     have hterm : ∀ i, (P k * A i)ᴴ * (P k * A i) = (A i)ᴴ * A i * P k := by
       intro i
-      rw [Matrix.conjTranspose_mul, Matrix.mul_assoc,
-        show (P k)ᴴ * (P k * A i) = (P k)ᴴ * P k * A i from (Matrix.mul_assoc _ _ _).symm,
-        (hPproj k).1.eq, (hPproj k).2, ← hComm k i, ← Matrix.mul_assoc]
+      rw [Matrix.conjTranspose_mul, Matrix.mul_assoc]
+      -- Goal: (A i)ᴴ * ((P k)ᴴ * (P k * A i)) = (A i)ᴴ * A i * P k
+      rw [← Matrix.mul_assoc (P k)ᴴ (P k) (A i), (hPproj k).1.eq, (hPproj k).2]
+      -- Goal: (A i)ᴴ * (P k * A i) = (A i)ᴴ * A i * P k
+      rw [hComm k i, ← Matrix.mul_assoc]
     simp_rw [hterm, ← Finset.sum_mul, hLeft, Matrix.one_mul]
   -- Apply compression to each sector
   choose dim blocks hDim hTPblocks hMPVblocks using fun k =>
@@ -445,9 +470,36 @@ theorem exists_blockDecomp_of_commuting_projections
   intro N σ
   rw [mpv_toTensorFromBlocks_eq_sum]; simp only [one_pow, one_smul]
   simp only [mpv, coeff]
-  rw [show evalWord A (List.ofFn σ) = 1 * evalWord A (List.ofFn σ) from by rw [Matrix.one_mul],
-    ← hPsum, Finset.sum_mul, map_sum]
-  congr 1; ext k; rw [← hMPVblocks k N σ]
+  conv_lhs => rw [show evalWord A (List.ofFn σ) = 1 * evalWord A (List.ofFn σ) from by
+    rw [Matrix.one_mul]]
+  rw [show (1 : MatrixAlg D) = ∑ k : Fin m, P k from hPsum.symm]
+  rw [Finset.sum_mul, Matrix.trace_sum]
+  congr 1; ext k
+  -- Need: tr(P k * evalWord A w) = mpv(blocks k) σ
+  -- hMPVblocks k says: mpv(blocks k) σ = tr(P k * evalWord (fun i => P k * A i) w)
+  -- But evalWord(P k * A_i)(w) = evalWord A_i (w) when P_k commutes with A_i, because
+  -- P_k * A_i₁ * P_k * A_i₂ * ... = P_k * A_i₁ * A_i₂ * ... (using P² = P and commutation)
+  -- Actually, evalWord(P k * A)(w) ≠ P k * evalWord A w in general!
+  -- evalWord(P k * A)(j :: w) = (P k * A j) * evalWord(P k * A)(w)
+  -- For non-empty w with P² = P and P Ai = Ai P:
+  -- evalWord(P * A)(w) = P * A_j * P * ... * P * A_jn
+  -- Using PA = AP: = P^n * A_j * ... * A_jn = P * evalWord A w
+  -- For empty: evalWord(P * A)([]) = 1 ≠ P
+  -- BUT tr(P k * evalWord A w) handles the empty case: tr(P k * 1) = tr(P k)
+  -- and tr(P k * evalWord(P k * A)([])) = tr(P k * 1) = tr(P k). ✓ only if hMPVblocks gives tr(P k * evalWord(P*A)(w))
+  -- hMPVblocks says: mpv(blocks k) σ = tr(P k * evalWord (fun i => P k * A i) (List.ofFn σ))
+  -- We need: tr(P k * evalWord A w) = tr(P k * evalWord (fun i => P k * A i) w)
+  -- i.e., P k * evalWord A w = P k * evalWord (P k * A) w
+  -- This follows from left_mul_evalWord_leftSectorTensor_of_commutes!
+  -- tr(P k * evalWord A w) = tr(P k * evalWord(leftSectorTensor(P k) A)(w)) = mpv(blocks k)(σ)
+  rw [show (P k * evalWord A (List.ofFn σ)).trace =
+      (P k * evalWord (leftSectorTensor (P k) A) (List.ofFn σ)).trace from by
+    congr 1
+    exact (left_mul_evalWord_leftSectorTensor_of_commutes (P k) A (hPproj k).2 (hComm k) _).symm]
+  -- leftSectorTensor (P k) A = fun i => P k * A i by definition
+  change (P k * evalWord (fun i => P k * A i) (List.ofFn σ)).trace =
+      ((blocks k).evalWord (List.ofFn σ)).trace
+  rw [← hMPVblocks k N σ, mpv, coeff]
 
 end CommutingProjectionDecomposition
 
