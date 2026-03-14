@@ -698,26 +698,328 @@ construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 		Definition~\ref{def:is_normal_canonical_form}.
 \end{proof}
 
+\section{Zero-block separation and honest block decomposition}%
+\label{sec:zero_block_separation}
+
+In the irreducible block decomposition, some blocks may have all-zero
+Kraus operators. Such blocks contribute to the MPV only at word length
+$N = 0$ (where their contribution equals their bond dimension).
+The following results separate the zero blocks from the
+``live'' (nonzero) blocks.
+
+\begin{definition}[Zero MPS tensor]\label{def:zero_mps_tensor}
+	\lean{MPSTensor.zeroMPSTensor}
+	\leanok
+	The \emph{zero MPS tensor} of physical dimension $d$ and bond
+	dimension $D$, denoted $\mathbf{0}_{d,D}$, is the tensor whose
+	Kraus operators are all zero.
+\end{definition}
+
+\begin{theorem}[MPV of zero tensor]\label{thm:mpv_zero_tensor}
+	\lean{MPSTensor.mpv_zeroMPSTensor}
+	\leanok
+	\uses{def:zero_mps_tensor}
+	For any spin configuration $\sigma$ of length $N$,
+	\[
+		V^{(N)}(\mathbf{0}_{d,D})_\sigma
+		= \begin{cases} D & \text{if } N = 0, \\ 0 & \text{if } N \ge 1. \end{cases}
+	\]
+\end{theorem}
+
+\begin{proof}\leanok
+	For $N = 0$, $\operatorname{evalWord}(\mathbf{0}, []) = \Id_{D}$,
+	so the MPV equals $\tr(\Id_D) = D$.
+	For $N \ge 1$, every word product of a zero tensor is zero.
+\end{proof}
+
+\begin{theorem}[Zero-block separation]%
+	\label{thm:zero_block_separation}
+	\lean{MPSTensor.exists_irreducible_blockDecomp_liveBlocks}
+	\leanok
+	\uses{def:irreducible_tensor, def:zero_mps_tensor}
+	Every MPS tensor $A$ admits a block decomposition into:
+	\begin{enumerate}
+		\item a \emph{zero tail} of bond dimension $D_0$
+		      (accumulating all all-zero irreducible blocks), and
+		\item a finite family of \emph{live blocks} $(B_k)_{k=1}^r$,
+		      each irreducible, each with at least one nonzero Kraus
+		      operator, and each with positive bond dimension,
+	\end{enumerate}
+	such that
+	\[
+		V^{(N)}(A)_\sigma
+		= V^{(N)}(\mathbf{0}_{d,D_0})_\sigma
+		+ V^{(N)}\!\bigl(\textstyle\bigoplus_{k=1}^r B_k\bigr)_\sigma
+	\]
+	for every spin configuration $\sigma$ of length $N$.
+	At $N = 0$ this reads $D = D_0 + \sum_{k=1}^r D_k$.
+	For $N \ge 1$ the zero-tail term vanishes.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:irred_decomp, thm:mpv_zero_tensor}
+	Apply the irreducible block decomposition
+	(Theorem~\ref{thm:irred_decomp}) and partition the blocks
+	by whether each has a nonzero Kraus operator.
+	The all-zero blocks satisfy a dimension bound via
+	irreducibility; their total bond dimension is $D_0$.
+	The MPV identity follows from the block structure.
+\end{proof}
+
+\section{Arbitrary-input TP-gauge pipeline}%
+\label{sec:tp_gauge_arbitrary}
+
+\begin{theorem}[Arbitrary-input TP-gauge pipeline with zero-block separation]%
+	\label{thm:tp_gauge_arbitrary}
+	\lean{MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail}
+	\leanok
+	\uses{def:irreducible_tensor, def:zero_mps_tensor}
+	For any MPS tensor $A$, there exist:
+	\begin{enumerate}
+		\item a zero-tail bond dimension $D_0$,
+		\item live blocks $(B_k)_{k=1}^r$ with nonzero weights
+		      $(\mu_k)_{k=1}^r$, each block irreducible and
+		      left-canonical ($\sum_i (B_k^i)^\dagger B_k^i = \Id$),
+		      with positive bond dimension,
+	\end{enumerate}
+	such that
+	\[
+		V^{(N)}(A)_\sigma
+		= V^{(N)}(\mathbf{0}_{d,D_0})_\sigma
+		+ V^{(N)}\!\bigl(\textstyle\bigoplus_{k=1}^r \mu_k B_k\bigr)_\sigma.
+	\]
+	This is the furthest honest arbitrary-input pipeline step available
+	before periodicity removal.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:zero_block_separation, thm:tp_data_irreducible}
+	Apply Theorem~\ref{thm:zero_block_separation} to separate the
+	zero tail and live blocks. Then apply the blockwise TP-gauge theorem
+	to the live blocks. The MPV identity chains through both steps.
+\end{proof}
+
+\section{Blocking infrastructure}%
+\label{sec:blocking_infrastructure}
+
+\begin{theorem}[Blocking distributes over MPV equivalence]%
+	\label{thm:samempv_blocking_distributes}
+	\lean{MPSTensor.sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks}
+	\leanok
+	\uses{def:blocked_tensor}
+	If $A$ generates the same MPV family as $\bigoplus_k \mu_k B_k$,
+	then for any $p \ge 0$,
+	\[
+		A^{[p]} \sim \bigoplus_k \mu_k^p\, B_k^{[p]}.
+	\]
+\end{theorem}
+
+\begin{proof}\leanok
+	The identity $V^{(N)}(A^{[p]})_\sigma = V^{(Np)}(A)_{\sigma_\mathrm{flat}}$
+	holds for any tensor by definition of blocking.
+	The MPV equivalence of $A$ and $\bigoplus_k \mu_k B_k$ at length $Np$
+	then gives the equivalence at length $N$ with weights $\mu_k^p$.
+\end{proof}
+
+\begin{theorem}[Primitive channels remain primitive under powers]%
+	\label{thm:primitive_pow}
+	\lean{MPSTensor.isPrimitive_pow_of_isPrimitive}
+	\leanok
+	If $\E$ has peripheral spectrum $\{1\}$ (is primitive) and $m \ge 1$,
+	then $\E^m$ is also primitive.
+\end{theorem}
+
+\begin{proof}\leanok
+	The peripheral spectrum of $\E^m$ is the set of $m$-th powers of
+	that of $\E$.  Since $\{1\}^m = \{1\}$, the result follows.
+\end{proof}
+
+\begin{theorem}[Blocking-period divisibility preserves primitivity]%
+	\label{thm:primitive_blocking_divisible}
+	\lean{MPSTensor.isPrimitive_transferMap_blockTensor_of_dvd}
+	\leanok
+	\uses{def:blocked_tensor}
+	If the transfer map of $A^{[p]}$ is primitive, $p \mid q$,
+	and $q \ge 1$, then the transfer map of $A^{[q]}$ is also primitive.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:primitive_pow}
+	Write $q = p \cdot m$.
+	Then $\E_{A^{[q]}} = \E_{A^{[p]}}^m$.
+	Apply Theorem~\ref{thm:primitive_pow} with $\E = \E_{A^{[p]}}$.
+\end{proof}
+
+\begin{theorem}[Common blocking period for a block family]%
+	\label{thm:common_blocking_period}
+	\lean{MPSTensor.exists_common_blocking_all_primitive}
+	\leanok
+	\uses{def:blocked_tensor}
+	Let $(B_k)_{k=1}^r$ be a finite family of MPS tensors with
+	positive bond dimensions, each admitting a blocking period~$p_k$
+	making its transfer map primitive.
+	Then $p = \operatorname{lcm}(p_1, \ldots, p_r)$ is a common
+	period: $\E_{B_k^{[p]}}$ is primitive for every~$k$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:primitive_blocking_divisible}
+	Each $p_k \mid p$,
+	so Theorem~\ref{thm:primitive_blocking_divisible} applies.
+\end{proof}
+
+\section{Cyclic sector decomposition}%
+\label{sec:cyclic_sectors}
+
+\begin{theorem}[Compression to a supported projection sector]%
+	\label{thm:compressed_sector}
+	\lean{MPSTensor.exists_compressedTensor_of_supported_projection}
+	\leanok
+	Let $A$ be a left-canonical MPS tensor with
+	$\sum_i (A^i)^\dagger A^i = P$ for an orthogonal projection $P$,
+	and suppose $P A^i P = A^i$ for every~$i$.
+	Then there exists a left-canonical tensor $C$ of bond dimension
+	$n = \tr(P)$ with
+	\[
+		V^{(N)}(C)_\sigma = \tr\!\bigl(P \cdot A^\sigma\bigr)
+	\]
+	for every~$\sigma$.
+\end{theorem}
+
+\begin{proof}\leanok
+	Diagonalize $P$ via a unitary $U$ (spectral theorem).
+	The eigenvalues are in $\{0,1\}$.
+	Set $n = \tr P$; let $C^i$ be the top-left $n\times n$ block
+	of $U^\dagger A^i U$ (restricted to eigenvalue-$1$ indices).
+	TP follows from the projection normalization;
+	the MPV identity follows from trace cyclicity.
+\end{proof}
+
+\begin{theorem}[Block decomposition from commuting projections]%
+	\label{thm:blockdecomp_commuting_projs}
+	\lean{MPSTensor.exists_blockDecomp_of_commuting_projections}
+	\leanok
+	\uses{def:irreducible_tensor}
+	Let $A$ be a left-canonical MPS tensor, and let
+	$(P_k)_{k=1}^m$ be orthogonal projections summing to $\Id$
+	that commute with every Kraus operator:
+	$P_k A^i = A^i P_k$ for all $i, k$.
+	Then there exist left-canonical blocks $(C_k)_{k=1}^m$
+	with unit weights such that $A$ generates the same MPV family
+	as $\bigoplus_{k=1}^m C_k$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:compressed_sector}
+	For each $k$, the tensor $P_k A^i$ is supported on $P_k$
+	(using commutativity and $P_k^2 = P_k$).
+	The TP condition $\sum_i (P_k A^i)^\dagger (P_k A^i) = P_k$
+	follows from $\sum_i (A^i)^\dagger A^i = \Id$.
+	Apply Theorem~\ref{thm:compressed_sector} to each sector.
+	The MPV identity uses $\sum_k P_k = \Id$ and linearity of trace.
+\end{proof}
+
+\begin{theorem}[Block decomposition from adjoint-fixed projections]%
+	\label{thm:blockdecomp_adjoint_fixed}
+	\lean{MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections}
+	\leanok
+	\uses{def:irreducible_tensor}
+	Let $A$ be a left-canonical MPS tensor, and let
+	$(P_k)_{k=1}^m$ be orthogonal projections summing to $\Id$
+	that are fixed by the adjoint transfer map:
+	$\E_A^\dagger(P_k) = P_k$ for every $k$.
+	Then the same block decomposition conclusion holds as in
+	Theorem~\ref{thm:blockdecomp_commuting_projs}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:blockdecomp_commuting_projs}
+	The Kadison--Schwarz equality condition for a TP map implies
+	that a projection fixed by $\E_A^\dagger$ commutes with every
+	Kraus operator.
+	Apply Theorem~\ref{thm:blockdecomp_commuting_projs}.
+\end{proof}
+
+\section{Assembly: arbitrary tensor to primitive block decomposition}%
+\label{sec:assembly_pipeline}
+
+\begin{theorem}[Arbitrary tensor to primitive block decomposition]%
+	\label{thm:tp_primitive_blockdecomp}
+	\lean{MPSTensor.exists_tp_primitive_blockDecomp_after_blocking}
+	\leanok
+	\uses{def:blocked_tensor, def:zero_mps_tensor}
+	For any MPS tensor $A$, there exist a period $p \ge 1$,
+	a zero-tail bond dimension $D_0$, nonzero weights $(\mu_k)_{k=1}^r$,
+	and left-canonical blocks $(B_k)_{k=1}^r$ with primitive transfer
+	maps and positive bond dimensions, such that
+	\[
+		V^{(N)}\!\bigl(A^{[p]}\bigr)_\sigma
+		= V^{(N)}\!\bigl(\mathbf{0}_{d^{[p]},D_0}\bigr)_\sigma
+		+ V^{(N)}\!\bigl(\textstyle\bigoplus_k \mu_k B_k\bigr)_\sigma.
+	\]
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:tp_gauge_arbitrary, thm:common_blocking_period,
+	      thm:samempv_blocking_distributes}
+	Apply Theorem~\ref{thm:tp_gauge_arbitrary} to get the zero tail
+	and left-canonical live blocks.
+	Apply Theorem~\ref{thm:common_blocking_period} to find a common
+	blocking period $p$ making all transfer maps primitive.
+	Thread through via Theorem~\ref{thm:samempv_blocking_distributes}.
+\end{proof}
+
+\begin{theorem}[TP-primitive irreducible tensor is normal]%
+	\label{thm:normal_tp_primitive_irred}
+	\lean{MPSTensor.isNormal_of_tp_primitive_irreducible}
+	\leanok
+	\uses{def:primitive_mps, def:irreducible_tensor, def:normal}
+	Let $A$ be a left-canonical MPS tensor with $D > 0$,
+	irreducible transfer map, and peripheral spectrum $\{1\}$.
+	Then $A$ is normal.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:normal_from_primitive_posdef, thm:psd_fp_pd_irred}
+	Peripheral primitivity and irreducibility yield the spectral-gap
+	condition.  The PSD fixed point is positive definite by
+	Theorem~\ref{thm:psd_fp_pd_irred}.
+	Apply Theorem~\ref{thm:normal_from_primitive_posdef}.
+\end{proof}
+
+\begin{theorem}[Blocking preserves normality]%
+	\label{thm:normal_blocking_preserved}
+	\lean{MPSTensor.isNormal_blockTensor_of_isNormal}
+	\leanok
+	\uses{def:normal, def:blocked_tensor}
+	If $A$ is normal and $p \ge 1$, then $A^{[p]}$ is normal.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:isNormal_blockTensor}
+	Since $A$ is normal, there exists $N$ with $S_N(A) = \MN{D}$.
+	Then $S_{Np}(A) = \MN{D}$ (word products at multiples still span),
+	and $S_N(A^{[p]}) \supseteq S_{Np}(A) = \MN{D}$.
+\end{proof}
+
 \section{Open directions}\label{sec:pipeline_status}
 
-\begin{remark}[Canonical form reduction: remaining steps]%
-		\label{rem:canonical_pipeline_gaps}
-		\notready
-		The Perron--Frobenius (Chapter~\ref{ch:qpf}), TP-gauge, CFII,
-		periodicity-removal, and normal-canonical-form packaging steps are
-		in place. The upstream passage from an arbitrary tensor to the
-		primitive weighted block data required by
-		Theorem~\ref{thm:exists_normal_canonical_form} remains open.
+\begin{remark}[Canonical form pipeline: current status]%
+	\label{rem:canonical_pipeline_gaps}
+	\leanok
+	The core pipeline steps are in place.
+	The arbitrary-input pipeline
+	(Theorem~\ref{thm:tp_gauge_arbitrary}) produces a zero tail plus
+	left-canonical live blocks. After a common blocking step
+	(Theorem~\ref{thm:tp_primitive_blockdecomp}), the blocked blocks
+	have primitive transfer maps.
 
-		On the block-injective side, turning blocked primitive TP data into
-		injective blocks and establishing eventual block injectivity are the
-		open steps toward Definition~\ref{def:is_canonical_form}.
-
-		On the normal-canonical side,
-		Theorem~\ref{thm:exists_normal_canonical_form} provides the
-		downstream packaging once primitive weighted blocks with positive
-		dimensions and pairwise distinct nonzero weight moduli are given.
-		Theorem~\ref{thm:pipeline_handoff} gives the CFII continuation after
-		irreducible block decomposition; the end-to-end construction from
-		arbitrary tensors requires additional work.
+	The remaining steps to full normal canonical form require:
+	establishing tensor irreducibility for each blocked block
+	(blocking does not in general preserve tensor irreducibility),
+	and establishing pairwise distinct weight norms.
+	The cyclic-sector decomposition
+	(Theorems~\ref{thm:blockdecomp_commuting_projs}
+	and~\ref{thm:blockdecomp_adjoint_fixed}) provides the infrastructure
+	for the periodic-to-aperiodic splitting.
 \end{remark}

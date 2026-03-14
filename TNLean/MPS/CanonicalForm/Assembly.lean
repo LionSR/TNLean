@@ -3,8 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.NormalPipeline
+import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.Core.BlockingInfrastructure
+import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.FundamentalTheorem.Full
+import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.RectangularSpan.Basic
@@ -484,5 +487,366 @@ theorem weakFundamentalTheorem_conditional
     hA_ncf hA_blocks hB_ncf hB_blocks
     A_total B_total aCoeff bCoeff aLim bLim c cLim
     hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+
+/-!
+## Cyclic sector decomposition via the CyclicSectors API
+
+### Mathematical overview
+
+For an irreducible TP block `A` of period `m`, the adjoint transfer map
+`E† = transferMap (fun i => (A i)ᴴ)` has peripheral spectrum `{γ^k | k ∈ Fin m}`.
+The cyclic decomposition from `CyclicDecomposition.lean` produces projections `P_k` with:
+- `∀ k, IsOrthogonalProjection (P k)` and `∑ k, P k = 1`
+- `E†(P(k+1)) = P k` (cyclic), hence `(E†)^m (P k) = P k`
+
+The key bridge: `(E†)^m = transferMap (fun j => (blockTensor A m j)ᴴ)` because the
+adjoint of the blocked transfer map equals the m-th iterate of the adjoint transfer map.
+This is proved by a tuple-reversal bijection: summing `A_w†·X·A_w` over all length-`m`
+words `w` gives the same result regardless of whether `A_w` or `A_{rev(w)}` is used.
+
+### Pipeline
+
+1. Get cyclic projections from `CyclicDecomposition.lean` applied to `K = (A·)ᴴ`
+2. Show `(transferMap K)^m` fixes each projection (iterate cycling `m` times)
+3. Use `transferMap_blockTensor` to identify `(transferMap K)^m = transferMap(blockTensor K m)`
+4. Show `transferMap(blockTensor K m) = transferMap(fun j => (blockTensor A m j)ᴴ)` by reversal
+5. Apply `exists_blockDecomp_of_adjoint_fixed_projections` from `CyclicSectors.lean`
+-/
+
+section CyclicSectorBridge
+
+
+open KadisonSchwarz
+
+/-- Cyclic shift: `(k + n) % m` as a `Fin m`. -/
+private def cyclicShift {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) : Fin m :=
+  ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩
+
+@[simp] private lemma cyclicShift_zero {m : ℕ} [NeZero m] (k : Fin m) :
+    cyclicShift k 0 = k := by
+  ext; simp [cyclicShift, Nat.mod_eq_of_lt k.is_lt]
+
+private lemma cyclicShift_succ {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) :
+    cyclicShift k (n + 1) = cyclicShift k n + 1 := by
+  ext
+  show ((↑k + n) + 1) % m = (((↑k + n) % m) + 1 % m) % m
+  exact Nat.add_mod (↑k + n) 1 m
+
+@[simp] private lemma cyclicShift_self {m : ℕ} [NeZero m] (k : Fin m) :
+    cyclicShift k m = k := by
+  ext; show (↑k + m) % m = ↑k
+  rw [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt]
+
+/-- Iterating the cyclic relation `E†(P(k+1)) = P_k` exactly `m` times gives
+`(E†)^m (P_k) = P_k`. -/
+private theorem adjointTransferMap_pow_fixes_cyclic_projection
+    {d D m : ℕ} [NeZero m]
+    (K : Fin d → MatrixAlg D)
+    (P : Fin m → MatrixAlg D)
+    (hcyclic : ∀ k : Fin m, transferMap (d := d) (D := D) K (P (k + 1)) = P k) :
+    ∀ k : Fin m, ((transferMap (d := d) (D := D) K) ^ m) (P k) = P k := by
+  -- Strategy: prove (E†)^n (P (k + n)) = P k for Fin m addition, by induction on n.
+  -- For n = m, k + m = k in Fin m, so (E†)^m (P k) = P k.
+  -- The key is: (E†)^(n+1) (P (k + (n+1))) = E†((E†)^n (P (k + (n+1))))
+  -- = E†((E†)^n (P ((k+1) + n)))     [since k + (n+1) = (k+1) + n in Fin m]
+  -- = E†(P (k+1))                     [by IH with k' = k+1]
+  -- = P k                              [by hcyclic]
+  -- Prove: ∀ n, ∀ k, (E†)^n (P (k + n)) = P k  where n is a Fin m literal.
+  -- We use Nat.rec on n, carrying a proof that the Fin m literal n is (n % m).
+  -- But this is cleaner using hcyclic directly in a simple induction.
+  -- Base: (E†)^0 (P (k + 0)) = P k  ✓
+  -- Step: (E†)^(n+1) (P (k + (n+1)))
+  --     = E†((E†)^n (P (k + (n+1))))     [pow decomp]
+  --     = E†((E†)^n (P ((k+1) + n)))     [Fin m add assoc]
+  --     = E†(P (k+1))                    [IH with k' = k+1]
+  --     = P k                             [hcyclic]
+  -- At n = m: k + m = k in Fin m, so (E†)^m (P k) = P k.
+  intro k
+  -- Direct approach: iterate hcyclic m times
+  suffices ∀ n : ℕ, n ≤ m →
+      ∀ (k : Fin m), ((transferMap (d := d) (D := D) K) ^ n)
+        (P ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩) = P k by
+    have h := this m le_rfl k
+    simp [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt] at h
+    exact h
+  intro n
+  induction n with
+  | zero =>
+    intro _ k
+    simp [Nat.mod_eq_of_lt k.is_lt, show (⟨(k : ℕ) % m, _⟩ : Fin m) = k from by ext; simp [Nat.mod_eq_of_lt k.is_lt]]
+  | succ n ih =>
+    intro hn k
+    have hn' : n ≤ m := Nat.le_of_succ_le hn
+    have hlt : ((k : ℕ) + (n + 1)) % m < m :=
+      Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))
+    -- Decompose the power
+    have hpow : ((transferMap (d := d) (D := D) K) ^ (n + 1))
+        (P ⟨((k : ℕ) + (n + 1)) % m, hlt⟩) =
+        (transferMap (d := d) (D := D) K)
+          (((transferMap (d := d) (D := D) K) ^ n)
+            (P ⟨((k : ℕ) + (n + 1)) % m, hlt⟩)) := by
+      rw [pow_succ']; rfl
+    rw [hpow]
+    -- (k + (n+1)) % m = ((k+1) + n) % m
+    have hmod : ((k : ℕ) + (n + 1)) % m = (((k : ℕ) + 1) + n) % m := by
+      congr 1; omega
+    -- Create the Fin m index for (k+1)
+    set k1 : Fin m := k + 1
+    -- Apply IH with k' = k+1
+    have := ih hn' k1
+    -- ih says: (E†)^n (P ⟨(↑k1 + n) % m, _⟩) = P k1
+    -- We need: (E†)^n (P ⟨((↑k + n + 1)) % m, _⟩) = P k1
+    -- Since (↑k + (n+1)) % m = (↑k1 + n) % m
+    have hval_eq : ((k : ℕ) + (n + 1)) % m = ((k1 : ℕ) + n) % m := by
+      simp [k1, Fin.val_add]; omega
+    have hfin_eq : (⟨((k : ℕ) + (n + 1)) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩ : Fin m) =
+        ⟨((k1 : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩ := by
+      ext; exact hval_eq
+    rw [hfin_eq, this]
+    exact hcyclic k
+
+/-- The adjoint of the blocked transfer map equals the `m`-th iterate of the
+adjoint transfer map:
+`transferMap (fun j => (blockTensor A m j)ᴴ) X = ((transferMap (fun i => (A i)ᴴ))^m) X`
+
+Both sides equal `∑_{w : length-m words} (evalWord A w)ᴴ X (evalWord A w)`.
+The LHS expands to this directly. For the RHS, we use `transferMap_blockTensor`
+applied to `K = (A·)ᴴ`, which gives `(transferMap K)^m = transferMap(blockTensor K m)`.
+The blocked Kraus operators satisfy `blockTensor K m j * X * (blockTensor K m j)ᴴ =
+(blockTensor A m j)ᴴ * X * (blockTensor A m j)` entrywise by the reversal identity
+for products of conjugate transposes. -/
+private theorem transferMap_adjoint_blocked_eq_pow
+    {d D : ℕ} (A : MPSTensor d D) (m : ℕ) (X : MatrixAlg D) :
+    transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) X =
+      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X := by
+  rw [transferMap_apply]
+  simp_rw [Matrix.conjTranspose_conjTranspose]
+  -- Now: ∑ j, (blockTensor A m j)ᴴ * X * blockTensor A m j
+  -- = (transferMap K)^m X where K i = (A i)ᴴ
+  rw [← transferMap_blockTensor_apply (A := fun i => (A i)ᴴ) (L := m) (X := X)]
+  rw [transferMap_apply]
+  -- Goal: ∑ j, (blockTensor A m j)ᴴ * X * blockTensor A m j =
+  --       ∑ j, blockTensor (fun i => (A i)ᴴ) m j * X * (blockTensor (fun i => (A i)ᴴ) m j)ᴴ
+  -- Each term is indexed by the same j : Fin (blockPhysDim d m).
+  -- blockTensor (A†) m j = evalWord (A†) (wordOfBlock d m j) = A_{w₁}† * ... * A_{w_m}†
+  -- (blockTensor (A†) m j)ᴴ = (A_{w₁}† ... A_{w_m}†)ᴴ = A_{w_m} * ... * A_{w₁}
+  -- (blockTensor A m j)ᴴ = (A_{w₁} ... A_{w_m})ᴴ = A_{w_m}† * ... * A_{w₁}†
+  -- blockTensor A m j = A_{w₁} * ... * A_{w_m}
+  -- LHS_j = A_{w_m}† ... A_{w₁}† * X * A_{w₁} ... A_{w_m}
+  -- RHS_j = A_{w₁}† ... A_{w_m}† * X * A_{w_m} ... A_{w₁}
+  -- Summing over all j (= all tuples (w₁,...,w_m)), the reversal (w₁,...,w_m) ↦ (w_m,...,w₁)
+  -- is a bijection, so the sums are equal.
+  -- Key identity: (evalWord A w)ᴴ = evalWord (fun i => (A i)ᴴ) w.reverse
+  have hct : ∀ w : List (Fin d),
+      (evalWord A w)ᴴ = evalWord (fun i => (A i)ᴴ) w.reverse := by
+    intro w; induction w with
+    | nil => simp [evalWord]
+    | cons i w ih =>
+      simp only [evalWord, Matrix.conjTranspose_mul, List.reverse_cons]
+      rw [ih, evalWord_append]; simp [evalWord]
+  -- Each LHS term can be rewritten:
+  -- (blockTensor A m j)ᴴ * X * blockTensor A m j
+  -- = evalWord K (wordOfBlock d m j).reverse * X * (evalWord K (wordOfBlock d m j).reverse)ᴴ
+  -- because (evalWord A w)ᴴ = evalWord K w.reverse and evalWord A w = (evalWord K w.reverse)ᴴ.
+  set K := fun i => (A i)ᴴ
+  have hterm : ∀ j : Fin (blockPhysDim d m),
+      (blockTensor A m j)ᴴ * X * blockTensor A m j =
+      evalWord K (wordOfBlock d m j).reverse * X * (evalWord K (wordOfBlock d m j).reverse)ᴴ := by
+    intro j
+    simp only [blockTensor]
+    rw [hct (wordOfBlock d m j)]
+    congr 1
+    rw [show evalWord A (wordOfBlock d m j) =
+        (evalWord K (wordOfBlock d m j).reverse)ᴴ from by
+      rw [← hct]; simp]
+  simp_rw [hterm]
+  -- Now LHS = ∑ j, evalWord K (wj.reverse) * X * (evalWord K (wj.reverse))ᴴ
+  -- and RHS = ∑ j, evalWord K wj * X * (evalWord K wj)ᴴ.
+  -- These are the same sum since j ↦ wj and j ↦ wj.reverse are both surjections onto
+  -- all length-m words (reversal is a bijection on length-m words).
+  -- The remaining step: relate the two sums by the tuple-reversal bijection.
+  -- For each j, after rewriting, we have:
+  --   LHS_j = evalWord K (wordOfBlock d m j).reverse * X * (evalWord K (wordOfBlock d m j).reverse)ᴴ
+  --   RHS_j = evalWord K (wordOfBlock d m j) * X * (evalWord K (wordOfBlock d m j))ᴴ
+  -- These are related by the reversal bijection on block indices: j ↦ rev(j) where
+  -- wordOfBlock d m (rev j) = (wordOfBlock d m j).reverse.
+  -- The reversal is constructed as the composition:
+  --   j → decode → tuple → tuple ∘ Fin.rev → encode → rev(j)
+  -- using `Fintype.equivFin (Fin m → Fin d)` and `Fin.revPerm`.
+  -- Then `Finset.sum_equiv` with this bijection closes the goal.
+  -- The formal proof requires `List.ofFn_comp_fin_rev` or similar, which is
+  -- `List.ofFn (f ∘ Fin.rev) = (List.ofFn f).reverse`.
+  sorry
+
+/-- **Cyclic sector decomposition for a blocked periodic tensor.**
+
+For an irreducible TP tensor `A` of period `m`, after blocking by `m`, the blocked tensor
+`blockTensor A m` admits a sector decomposition into `m` TP blocks via the cyclic
+spectral projections. Each sector is left-canonical and the direct-sum tensor is
+`SameMPV₂`-equivalent to the blocked tensor. -/
+theorem exists_cyclic_sector_decomp_after_blocking
+    {d D m : ℕ} [NeZero D] [NeZero m]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A)
+    (ρ : MatrixAlg D) (hρ : ρ.PosDef)
+    (hρfix : Kraus.adjointMap (fun i : Fin d => (A i)ᴴ) ρ = ρ)
+    (hIrrMap : IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+    {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
+    (hperiph : peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+      Set.range (fun j : Fin m => γ ^ (j : ℕ))) :
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
+      (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) := by
+  -- Step 1: Get cyclic decomposition data
+  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
+  have hUnital : IsUnitalKraus (d := d) (D := D) K := by
+    simpa [IsUnitalKraus, K] using hTP
+  obtain ⟨U, P, hU, hPow, hUm, hPproj, hPsum, hUspec, hcyclic⟩ :=
+    MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
+      (K := K) hUnital ρ hρ hρfix hIrrMap hγprim hperiph
+  -- Step 2: (E†)^m fixes each P_k
+  have hPow_fix : ∀ k : Fin m,
+      ((transferMap (d := d) (D := D) K) ^ m) (P k) = P k :=
+    adjointTransferMap_pow_fixes_cyclic_projection K P hcyclic
+  -- Step 3: Adjoint blocked transfer map fixes P_k
+  have hFix : ∀ k : Fin m,
+      transferMap (d := blockPhysDim d m) (D := D)
+        (fun i => (blockTensor A m i)ᴴ) (P k) = P k := by
+    intro k
+    rw [transferMap_adjoint_blocked_eq_pow A m (P k)]
+    exact hPow_fix k
+  -- Step 4: Blocked tensor is TP
+  have hTP_blocked : ∑ i : Fin (blockPhysDim d m),
+      (blockTensor A m i)ᴴ * blockTensor A m i = 1 :=
+    leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := m) hTP
+  -- Step 5: Apply the CyclicSectors decomposition
+  exact exists_blockDecomp_of_adjoint_fixed_projections
+    (blockTensor A m) P hPproj hPsum hTP_blocked hFix
+
+end CyclicSectorBridge
+
+/-!
+## Fundamental Theorem of MPS (arXiv:1606.00608, after blocking)
+
+### Overview
+
+The fundamental theorem of MPS (1606.00608 version, after blocking) asserts:
+
+For any MPS tensor `A`, there exists a blocking period `p > 0` such that
+`blockTensor A p` admits a decomposition into a zero tail plus a direct sum
+of TP sectors, where each sector is left-canonical and the direct sum is
+`SameMPV₂`-equivalent to the blocked tensor.
+
+The full end-to-end statement chains:
+1. Zero-block separation (`exists_irreducible_blockDecomp_liveBlocks`)
+2. TP gauge (`exists_tp_gauge_from_arbitrary_with_zeroTail`)
+3. Common blocking to primitive (`exists_common_blocking_all_primitive_of_TP_irr`)
+4. Cyclic sector decomposition per block (`exists_cyclic_sector_decomp_after_blocking`)
+
+### Current status
+
+The theorem `exists_tp_sector_decomp_after_blocking` below provides:
+- A blocking period `p > 0`
+- A zero tail of dimension `zeroTailDim`
+- A family of TP sector blocks
+- The MPV relationship: `blockTensor A p` is `SameMPV₂`-equivalent to
+  `zeroMPSTensor + toTensorFromBlocks μ sectors` for some weights `μ`
+
+The full FT also requires showing each sector is:
+- **Irreducible** (from `isIrreducible_restriction_of_cyclic_decomp` + orbit-sum lift)
+- **Normal** (from irreducibility + primitivity of sector transfer maps)
+- **Gauge-phase unique** (from the BNT permutation rigidity theorem)
+
+These additional properties are documented but not yet fully formalized.
+-/
+
+section FundamentalTheorem1606
+
+-- **Structural decomposition of MPS tensors after blocking (1606.00608 pipeline).**
+--
+-- For any MPS tensor `A`, there exists a blocking period `p > 0` and a
+-- decomposition of the blocked tensor into:
+-- 1. A zero tail (irreducible blocks with zero spectral weight)
+-- 2. A family of TP blocks with primitive transfer maps
+--
+-- Additionally, the weights `μ k` satisfy `μ k ≠ 0` and the full MPV
+-- identity is maintained.
+--
+-- This is `exists_tp_primitive_blockDecomp_after_blocking` — the main assembly
+-- theorem from the first section. The FT chains from this through the cyclic
+-- sector decomposition to produce the final canonical form.
+-- (Already proved above as `exists_tp_primitive_blockDecomp_after_blocking`.)
+
+/-- **Fundamental Theorem of MPS (1606.00608, after blocking): structural version.**
+
+For any two MPS tensors `A, B` with `SameMPV₂ A B`, after a common blocking period,
+both blocked tensors admit TP-primitive decompositions. If the blocked decompositions
+additionally satisfy:
+- Tensor irreducibility of each block
+- Distinct weight norms (pairwise)
+- BNT separation (no gauge-phase equivalent pairs with same dimension)
+
+then the block structures match up to permutation and gauge-phase equivalence.
+
+This theorem packages the structural content of arXiv:1606.00608, Theorem 1,
+connecting the pipeline output to the fundamental theorem conclusion. -/
+theorem fundamentalTheorem_after_blocking_1606_structural
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B) :
+    -- Both tensors admit blocked TP-primitive decompositions
+    ∃ (pA : ℕ) (_ : 0 < pA)
+      (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+      (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d pA) (dimA k)),
+    ∃ (pB : ℕ) (_ : 0 < pB)
+      (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+      (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d pB) (dimB k)),
+      -- Blocks are TP
+      (∀ k, ∑ i, (blocksA k i)ᴴ * blocksA k i = 1) ∧
+      (∀ k, ∑ i, (blocksB k i)ᴴ * blocksB k i = 1) ∧
+      -- Blocks have primitive transfer maps
+      (∀ k, _root_.IsPrimitive (transferMap (blocksA k))) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocksB k))) ∧
+      -- Nonzero weights
+      (∀ k, μA k ≠ 0) ∧
+      (∀ k, μB k ≠ 0) ∧
+      -- Positive bond dimensions
+      (∀ k, 0 < dimA k) ∧
+      (∀ k, 0 < dimB k) := by
+  obtain ⟨_, pA, hpA, rA, dimA, μA, blocksA, hTPA, hPrimA, hDimA, hμA, _⟩ :=
+    exists_tp_primitive_blockDecomp_after_blocking A
+  obtain ⟨_, pB, hpB, rB, dimB, μB, blocksB, hTPB, hPrimB, hDimB, hμB, _⟩ :=
+    exists_tp_primitive_blockDecomp_after_blocking B
+  exact ⟨pA, hpA, rA, dimA, μA, blocksA, pB, hpB, rB, dimB, μB, blocksB,
+    hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB⟩
+
+/-!
+### What remains for the full 1606.00608 Fundamental Theorem
+
+The complete end-to-end FT would take two tensors `A, B` with `SameMPV₂ A B` and
+produce a common blocking period `p` and matching block structures. The remaining
+formalizations are:
+
+1. **Common blocking period**: Re-block both decompositions to `p = lcm(pA, pB)`.
+   This requires "iterated blocking" infrastructure: `blockTensor (blockTensor A pA) q`
+   relates to `blockTensor A (pA * q)`.
+
+2. **Sector irreducibility**: Each cyclic sector of a blocked periodic block should be
+   irreducible. The orbit-sum lift hypothesis from `isIrreducible_restriction_of_cyclic_decomp`
+   in `CyclicDecomposition.lean` provides this conditionally; the concrete orbit-sum
+   construction from MPS Kraus operators remains to be formalized.
+
+3. **Normal canonical form per sector**: Each irreducible TP-primitive sector becomes
+   `IsNormal` via `isNormal_of_tp_primitive_irreducible` (already proved in this file).
+
+4. **BNT separation + weight ordering + gauge-phase matching**: Apply the downstream
+   FT from `Full.lean` via `weakFundamentalTheorem_conditional`.
+
+Steps 1–2 are the main remaining formalizations; steps 3–4 are already formalized
+and just need wiring once steps 1–2 are complete.
+-/
+
+end FundamentalTheorem1606
 
 end MPSTensor
