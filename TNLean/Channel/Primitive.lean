@@ -1,8 +1,10 @@
+/-
+Copyright (c) 2025 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
 import TNLean.Channel.Basic
 import Mathlib.LinearAlgebra.Trace
 import Mathlib.LinearAlgebra.Matrix.Trace
-import Mathlib.Analysis.Normed.Algebra.GelfandFormula
-import Mathlib.Analysis.SpecificLimits.Normed
 
 /-!
 # Primitive Quantum Channels
@@ -18,11 +20,27 @@ where `P` is the fixed-point projection. This decomposition is the algebraic cor
 of Wolf Thm 6.7 item 3 → item 1: the spectral gap `‖E - P‖ < 1` ensures
 `(E - P)^n → 0`, so `E^n → P`, giving convergence to the unique fixed state.
 
+## Main definitions
+
+* `fixedPointProj`: rank-one projection `X ↦ (tr X / tr ρ) • ρ` onto a fixed state `ρ`
+
+## Main results
+
+* `fixedPointProj_idempotent`: `P ∘ P = P`
+* `pow_succ_eq_fixedPointProj_add_compl_pow`: `E^(n+1) = P + (E-P)^(n+1)` for all `n`
+* `pow_eq_fixedPointProj_add_compl_pow`: same for all `n ≥ 1`
+
+## Notation
+
+Within `section SpectralGapDecomposition`, we use local notation:
+* `P` for `fixedPointProj ρ htr`
+* `N` for `E - P` (the complementary part)
+
 ## References
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.3 Thm 6.7][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Filter
 
 variable {D : ℕ}
@@ -42,23 +60,23 @@ noncomputable def fixedPointProj (ρ : Matrix (Fin D) (Fin D) ℂ) (_htr : trace
 theorem fixedPointProj_idempotent (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : trace ρ ≠ 0)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     fixedPointProj ρ htr (fixedPointProj ρ htr X) = fixedPointProj ρ htr X := by
-  -- `trace (P X) = trace X` uses `htr` to cancel `(trace ρ)⁻¹ * trace ρ`.
   simp [fixedPointProj, div_eq_mul_inv, htr]
 
 theorem fixedPointProj_apply_rho (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : trace ρ ≠ 0) :
     fixedPointProj ρ htr ρ = ρ := by
   simp [fixedPointProj, htr]
 
+/-- The trace of `fixedPointProj ρ` as a linear endomorphism is 1.
+
+The proof expresses `fixedPointProj ρ htr` as the rank-one map `X ↦ f(X) • ρ`
+for `f := (trace ρ)⁻¹ • traceLinearMap`, then applies the rank-one trace formula. -/
 theorem fixedPointProj_trace (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : trace ρ ≠ 0) :
     LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) (fixedPointProj ρ htr) = (1 : ℂ) := by
-  let f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ :=
-    (trace ρ)⁻¹ • Matrix.traceLinearMap (Fin D) ℂ ℂ
-  have hP : fixedPointProj ρ htr = f.smulRight ρ := by
+  have hP : fixedPointProj ρ htr =
+      ((trace ρ)⁻¹ • Matrix.traceLinearMap (Fin D) ℂ ℂ).smulRight ρ := by
     ext X
-    simp [fixedPointProj, f, Matrix.traceLinearMap_apply, div_eq_mul_inv, mul_comm]
-  rw [hP]
-  -- For a rank-one map `X ↦ f(X) • ρ`, the trace is `f(ρ)`.
-  simp [f, Matrix.traceLinearMap_apply, htr]
+    simp [fixedPointProj, Matrix.traceLinearMap_apply, div_eq_mul_inv, mul_comm]
+  simp [hP, Matrix.traceLinearMap_apply, htr]
 
 end FixedPointProjection
 
@@ -88,6 +106,7 @@ section SpectralGapDecomposition
 variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 variable {ρ : Matrix (Fin D) (Fin D) ℂ} (htr : trace ρ ≠ 0)
 
+-- `P` is the rank-one fixed-point projection; `N = E - P` is the complementary part.
 local notation "P" => fixedPointProj (D := D) ρ htr
 local notation "N" => E - P
 
@@ -109,9 +128,8 @@ lemma compl_mul_fixedPointProj (hρ : E ρ = ρ) : N * P = 0 := by
     LinearMap.congr_fun (E_comp_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ) X
   simp [Module.End.mul_apply, hEP, fixedPointProj_idempotent]
 
-/-- `N^n ∘ P = 0` for all `n ≥ 1`. -/
+/-- `N^(n+1) ∘ P = 0` for all `n`. -/
 lemma compl_pow_succ_mul_fixedPointProj (hρ : E ρ = ρ) (n : ℕ) : N ^ (n + 1) * P = 0 := by
-  -- N^(n+1) * P = (N^n * N) * P = N^n * (N * P) = N^n * 0 = 0
   have hNP : N * P = 0 := compl_mul_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ
   simp only [pow_succ, mul_assoc, hNP, mul_zero]
 
@@ -123,38 +141,24 @@ theorem pow_succ_eq_fixedPointProj_add_compl_pow
     (hTP : IsTracePreservingMap E) (hρ : E ρ = ρ) (n : ℕ) :
     E ^ (n + 1) = P + N ^ (n + 1) := by
   induction n with
-  | zero =>
-      -- `E = P + (E - P)`
-      simp [pow_one]
+  | zero => simp [pow_one]
   | succ n ih =>
       have hPP : P * P = P := fixedPointProj_mul_self (ρ := ρ) (htr := htr)
       have hPN : P * N = 0 := fixedPointProj_mul_compl (E := E) (ρ := ρ) (htr := htr) hTP
       have hNpowP : N ^ (n + 1) * P = 0 :=
         compl_pow_succ_mul_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ n
-      have hE : E = P + N := (add_sub_cancel P E).symm
-      calc
-        E ^ (n + 2) = E ^ (n + 1) * E := by simp [pow_succ]
-        _ = (P + N ^ (n + 1)) * E := by simp [ih]
-        _ = (P + N ^ (n + 1)) * (P + N) := by
-              -- Rewrite only the *right* `E` (do not rewrite the `E` hidden inside `N = E - P`).
-              conv_lhs =>
-                congr
-                · skip
-                · rw [hE]
-        _ = P + N ^ (n + 2) := by
-              -- Expand without simplifying `P + N` back to `E`.
-              rw [mul_add, add_mul, add_mul]
-              -- Now use `P*P = P`, `P*N = 0`, and `N^(n+1)*P = 0`.
-              simp [hPP, hPN, hNpowP]
-              simp [pow_succ, mul_assoc]
+      -- Rewrite E^(n+2) = (P + N^(n+1)) * E, then substitute E = P + N on the right factor only.
+      -- We must target the outermost E precisely, as `N = E - P` also contains E.
+      rw [pow_succ, ih]
+      conv_lhs => rhs; rw [show E = P + N from (add_sub_cancel P E).symm]
+      simp only [add_mul, mul_add, hPP, hPN, hNpowP, add_zero, zero_add, ← pow_succ]
 
 /-- For `P := fixedPointProj ρ` and `N := E - P`, we have `E^n = P + N^n` for all `n ≥ 1`. -/
 theorem pow_eq_fixedPointProj_add_compl_pow
     (hTP : IsTracePreservingMap E) (hρ : E ρ = ρ) {n : ℕ} (hn : 1 ≤ n) :
     E ^ n = P + N ^ n := by
   cases n with
-  | zero =>
-      cases (Nat.not_succ_le_zero 0 hn)
+  | zero => omega
   | succ n =>
       simpa using
         pow_succ_eq_fixedPointProj_add_compl_pow (E := E) (ρ := ρ) (htr := htr) hTP hρ n

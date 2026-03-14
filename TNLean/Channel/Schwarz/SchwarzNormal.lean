@@ -12,9 +12,10 @@ operators and states the abstract positive-map version of Wolf Proposition 5.1.
 
 ## Main results
 
-* `KadisonSchwarz.kadison_schwarz_normal_cp`
-* `KadisonSchwarz.kadison_schwarz_normal_cp_le`
-* `KadisonSchwarz.schwarz_inequality_normal_operator`
+* `KadisonSchwarz.krausAdjointMap_conjTranspose`: adjoint Kraus maps commute with `†`
+* `KadisonSchwarz.kadison_schwarz_normal_cp`: Kadison–Schwarz restricted to normal inputs
+* `KadisonSchwarz.kadison_schwarz_normal_cp_le`: Loewner-order form of the above
+* `KadisonSchwarz.schwarz_inequality_normal_operator`: Wolf Prop. 5.1 for positive maps
 
 ## References
 
@@ -28,30 +29,34 @@ namespace KadisonSchwarz
 
 variable {d D : ℕ}
 
-@[simp] theorem krausAdjointMap_conjTranspose
+@[simp]
+theorem krausAdjointMap_conjTranspose
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    krausAdjointMap K (Xᴴ) = (krausAdjointMap K X)ᴴ := by
+    krausAdjointMap K Xᴴ = (krausAdjointMap K X)ᴴ := by
   simp [krausAdjointMap, Matrix.conjTranspose_sum, Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
-/-- Kadison-Schwarz for adjoint Kraus maps, restricted to normal inputs.
+/-- Kadison–Schwarz for adjoint Kraus maps, restricted to normal inputs.
 
 This is the CP/Kraus special case of Wolf Proposition 5.1. The normality
-assumption is included to match the statement of the proposition, although the
-proof does not use it since Kadison-Schwarz already holds for arbitrary inputs. -/
-theorem kadison_schwarz_normal_cp (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+assumption is included to match the statement of the proposition; the proof does
+not use it since Kadison–Schwarz already holds for all inputs (see
+`kadison_schwarz_adjoint`). -/
+theorem kadison_schwarz_normal_cp
+    (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_tp : IsTPKraus K)
     (A : Matrix (Fin D) (Fin D) ℂ)
     (_hNormal : Aᴴ * A = A * Aᴴ) :
-    (krausAdjointMap K (Aᴴ * A) - krausAdjointMap K (Aᴴ) * krausAdjointMap K A).PosSemidef := by
+    (krausAdjointMap K (Aᴴ * A) - krausAdjointMap K Aᴴ * krausAdjointMap K A).PosSemidef := by
   simpa using kadison_schwarz_adjoint K h_tp A
 
 /-- Loewner-order reformulation of `kadison_schwarz_normal_cp`. -/
-theorem kadison_schwarz_normal_cp_le (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+theorem kadison_schwarz_normal_cp_le
+    (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_tp : IsTPKraus K)
     (A : Matrix (Fin D) (Fin D) ℂ)
     (hNormal : Aᴴ * A = A * Aᴴ) :
-    krausAdjointMap K (Aᴴ) * krausAdjointMap K A ≤ krausAdjointMap K (Aᴴ * A) := by
+    krausAdjointMap K Aᴴ * krausAdjointMap K A ≤ krausAdjointMap K (Aᴴ * A) := by
   rw [Matrix.le_iff]
   exact kadison_schwarz_normal_cp K h_tp A hNormal
 
@@ -67,7 +72,7 @@ theorem schwarz_inequality_normal_operator
     (hSub : T 1 ≤ (1 : Matrix (Fin D) (Fin D) ℂ))
     (A : Matrix (Fin D) (Fin D) ℂ)
     (hNormal : Aᴴ * A = A * Aᴴ) :
-    (T (Aᴴ * A) - T (Aᴴ) * T A).PosSemidef := by
+    (T (Aᴴ * A) - T Aᴴ * T A).PosSemidef := by
   rw [← Matrix.le_iff]
   exact PositiveOnAbelian.map_conjTranspose_mul_map_le_of_normal_of_subunital hPos hNormal hSub
 
