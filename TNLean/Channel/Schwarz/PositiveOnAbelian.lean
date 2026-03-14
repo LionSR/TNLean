@@ -402,7 +402,7 @@ private theorem commute_parts_of_normal [DecidableEq (Fin D)]
 set_option maxHeartbeats 1500000 in
 -- Elaborating the simultaneous-diagonalization argument expands enough basis-level
 -- definitions that the default heartbeat limit times out during `whnf`.
-private theorem exists_diagonal_family_of_normal
+theorem exists_diagonal_family_of_normal
     {A : Mat} (hA : Aᴴ * A = A * Aᴴ) :
     ∃ (s : Type) (_ : Fintype s) (_ : DecidableEq s)
       (b : OrthonormalBasis s ℂ E) (eig : s → ℂ),
