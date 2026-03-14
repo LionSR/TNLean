@@ -4,6 +4,15 @@ import TNLean.MPS.Core.MultiBlock
 import Mathlib.Data.Matrix.Block
 import Mathlib.Logic.Equiv.Fin.Basic
 
+/-!
+# Block-triangular trace invariance for MPS tensors
+
+This file packages the observation that strict upper-right blocks do not affect
+word traces of block upper-triangular tensors. It defines block-sum and
+reindexing helpers and proves `sameMPV_upperFin_diagFin`, reducing an
+upper-triangular tensor to its block-diagonal part.
+-/
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

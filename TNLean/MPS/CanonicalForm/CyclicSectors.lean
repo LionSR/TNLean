@@ -13,16 +13,22 @@ import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.Logic.Equiv.Sum
 import Mathlib.Tactic.NoncommRing
 
+/-!
+# Cyclic-sector decompositions for blocked MPS tensors
+
+This file develops the projection and compression tools used to split blocked
+left-canonical tensors into cyclic sectors. The main results compress tensors
+supported on orthogonal projections and assemble commuting projection data into
+multi-block decompositions, following the peripheral-spectrum decomposition used
+in canonical-form arguments.
+-/
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Matrix Finset Complex KadisonSchwarz
 
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-!
-# Cyclic sector decomposition for blocked periodic tensors
--/
 
 section BasicProjectionWordLemmas
 
@@ -109,7 +115,6 @@ private lemma evalWord_conj_unitary
         _ = (↑U : MatrixAlg D)ᴴ * (A i * evalWord A w) * (↑U : MatrixAlg D) := by
               simp [hUU, Matrix.mul_assoc]
 
-set_option maxHeartbeats 1600000 in
 /-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
 space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
 -/
@@ -432,7 +437,6 @@ section CommutingProjectionDecomposition
 
 variable {m : ℕ}
 
-set_option maxHeartbeats 400000 in
 /-- If a left-canonical tensor commutes with a family of orthogonal projections summing to `1`,
 then it decomposes into compressed sectors whose direct-sum tensor is `SameMPV₂`-equivalent to the
 original tensor. -/

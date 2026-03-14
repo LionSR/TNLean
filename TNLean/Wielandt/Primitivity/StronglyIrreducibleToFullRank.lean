@@ -19,6 +19,16 @@ import Mathlib.Topology.MetricSpace.ProperSpace
 import Mathlib.Analysis.Normed.Module.RCLike.Real
 
 /-!
+# Strong irreducibility implies eventual full Kraus rank
+
+This file proves the $(c) \to (b)$ direction of Proposition 3 from
+Sanz--Pérez-García--Wolf--Cirac (arXiv:0909.5347): strong irreducibility of the
+transfer map forces eventual full word span / Kraus rank. It packages the
+primitivity bridge, convergence of transfer powers, and the final full-rank
+conclusion used by the public equivalence API.
+-/
+
+/-!
 # Proposition 3(c)→(b): Strong irreducibility implies eventually full Kraus rank
 
 This file proves the **(c) → (b)** implication of Proposition 3 in

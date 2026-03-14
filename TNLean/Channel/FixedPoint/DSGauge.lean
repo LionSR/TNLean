@@ -1,17 +1,16 @@
-/-
-# Gauge normalizations from fixed points
-
-This file records two separate similarity-gauge constructions.
-A fixed point `ρ` of `E_A` yields a gauge `A'_i = S⁻¹ A_i S` for which
-`∑ A'_i A'_i† = I`, so the transfer map becomes unital; in the project's
-terminology, this is the **right-canonical** gauge.
-A fixed point `σ` of the adjoint yields a gauge `A'_i = S A_i S⁻¹` for which
-`∑ A'_iᴴ * A'_i = I`, so the transfer map becomes trace-preserving; this is the
-**left-canonical** gauge.
-In general these gauges need not coincide.
--/
 import TNLean.QPF.Assembly
 import TNLean.Spectral.MixedTransfer
+
+/-!
+# Gauge normalizations from transfer fixed points
+
+This file records the two standard similarity gauges extracted from fixed
+points of the transfer map and its adjoint. `gauged_unital` gives the
+right-canonical/unital gauge, while `gauged_tracePreserving` gives the
+left-canonical/trace-preserving gauge. The aliases
+`gauged_rightCanonical` and `gauged_leftCanonical` package the same formulas
+in the project's MPS terminology.
+-/
 
 open scoped Matrix ComplexOrder BigOperators
 open MPSTensor

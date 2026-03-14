@@ -2,11 +2,22 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.Transfer
 import TNLean.Spectral.MixedTransfer
 
 import Mathlib.LinearAlgebra.Eigenspace.Basic
+
+/-!
+# Transfer maps under physical blocking
+
+This file identifies the transfer map of a physically blocked tensor with the
+corresponding iterate of the original transfer map. As consequences,
+`transferMap_blockTensor_hasEigenvalue` and
+`transferMap_blockTensor_fixedPoint` transport eigenvalues and fixed points
+through blocking.
+-/
 
 open scoped Matrix ComplexOrder BigOperators
 

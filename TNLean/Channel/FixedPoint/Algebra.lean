@@ -192,9 +192,9 @@ noncomputable def fixedPointsStarSubalgebra
     exact mul_mem_fixedPoints (K := K) h_unital hρ hρ_fix hX hY
   algebraMap_mem' := by
     intro μ
-    simpa [fixedPoints, Algebra.algebraMap_eq_smul_one] using
-      (show map K (μ • (1 : Mat)) = μ • (1 : Mat) by
-        rw [map_smul, map_one_of_isUnital K h_unital])
+    have hμ : map K (μ • (1 : Mat)) = μ • (1 : Mat) := by
+      rw [map_smul, map_one_of_isUnital K h_unital]
+    simpa [fixedPoints, Algebra.algebraMap_eq_smul_one] using hμ
   star_mem' := by
     intro X hX
     change Xᴴ ∈ fixedPoints K
@@ -336,25 +336,8 @@ theorem commute_with_kraus_of_mem_adjointFixedPoints_of_mul_self_mem_adjointFixe
     (K : Fin d → Mat) (h_tp : IsTP K) {X : Mat}
     (hX : X ∈ adjointFixedPoints K)
     (hXX : Xᴴ * X ∈ adjointFixedPoints K) :
-    ∀ i : Fin d, X * K i = K i * X := by
-  have h_unital : IsUnital (fun i => (K i)ᴴ) :=
-    isUnital_conjTranspose_of_isTP K h_tp
-  have hX' : map (fun i => (K i)ᴴ) X = X := by
-    simpa [adjointFixedPoints, adjointMap, map] using hX
-  have hXX' : map (fun i => (K i)ᴴ) (Xᴴ * X) = Xᴴ * X := by
-    simpa [adjointFixedPoints, adjointMap, map] using hXX
-  have h_eq :
-      map (fun i => (K i)ᴴ) (Xᴴ * X) =
-        (map (fun i => (K i)ᴴ) X)ᴴ * map (fun i => (K i)ᴴ) X := by
-    calc
-      map (fun i => (K i)ᴴ) (Xᴴ * X) = Xᴴ * X := hXX'
-      _ = (map (fun i => (K i)ᴴ) X)ᴴ * map (fun i => (K i)ᴴ) X := by rw [hX']
-  have h_comm := kraus_commute_of_ks_equality (K := fun i => (K i)ᴴ) h_unital X h_eq
-  intro i
-  calc
-    X * K i = K i * map (fun j => (K j)ᴴ) X := by
-      simpa [map] using h_comm i
-    _ = K i * X := by rw [hX']
+    ∀ i : Fin d, X * K i = K i * X :=
+  fixedPoint_commutes_kraus (K := K) h_tp hX hXX
 
 /-- If `X` and `X * Xᴴ` are fixed by the adjoint map, then `X` commutes with the
 adjoints of the Kraus operators. -/
@@ -379,12 +362,12 @@ noncomputable def krausCommutantStarSubalgebra (K : Fin d → Mat) :
   carrier := krausCommutant K
   zero_mem' := by
     intro i
-    constructor <;> simp
+    refine ⟨by simp, by simp⟩
   add_mem' := by
     intro X Y hX hY i
     rcases hX i with ⟨hXK, hXKstar⟩
     rcases hY i with ⟨hYK, hYKstar⟩
-    constructor
+    refine ⟨?_, ?_⟩
     · calc
         (X + Y) * K i = X * K i + Y * K i := by simp [add_mul]
         _ = K i * X + K i * Y := by rw [hXK, hYK]
@@ -395,12 +378,12 @@ noncomputable def krausCommutantStarSubalgebra (K : Fin d → Mat) :
         _ = (K i)ᴴ * (X + Y) := by simp [mul_add]
   one_mem' := by
     intro i
-    constructor <;> simp
+    refine ⟨by simp, by simp⟩
   mul_mem' := by
     intro X Y hX hY i
     rcases hX i with ⟨hXK, hXKstar⟩
     rcases hY i with ⟨hYK, hYKstar⟩
-    constructor
+    refine ⟨?_, ?_⟩
     · calc
         (X * Y) * K i = X * (Y * K i) := by simp [mul_assoc]
         _ = X * (K i * Y) := by rw [hYK]
@@ -415,15 +398,13 @@ noncomputable def krausCommutantStarSubalgebra (K : Fin d → Mat) :
         _ = (K i)ᴴ * (X * Y) := by simp [mul_assoc]
   algebraMap_mem' := by
     intro μ i
-    constructor
-    · exact Algebra.commutes μ (K i)
-    · exact Algebra.commutes μ ((K i)ᴴ)
+    exact ⟨Algebra.commutes μ (K i), Algebra.commutes μ ((K i)ᴴ)⟩
   star_mem' := by
     intro X hX
     change Xᴴ ∈ krausCommutant K
     intro i
     rcases hX i with ⟨hXK, hXKstar⟩
-    constructor
+    refine ⟨?_, ?_⟩
     · have h := congrArg Matrix.conjTranspose hXKstar
       simpa [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose] using h.symm
     · have h := congrArg Matrix.conjTranspose hXK

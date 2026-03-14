@@ -49,8 +49,6 @@ private lemma smul_mul_conjTranspose_of_norm_eq_one {m n : ℕ}
 
 section SameDimension
 
-set_option maxHeartbeats 250000 in
--- Proof size exceeds the default 200000 heartbeat limit.
 private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     (A B : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)

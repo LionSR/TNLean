@@ -1,31 +1,22 @@
 /-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-
-# TP gauge from an adjoint positive definite fixed point
-
-Given an MPS tensor `A : MPSTensor d D` and a positive definite matrix `ρ` satisfying the
-**adjoint fixed-point** equation
-
-`∑ i, (A i)ᴴ * ρ * A i = ρ`,
-
-we define the gauge-transformed tensor
-
-`B i := (CFC.sqrt ρ) * A i * (CFC.sqrt ρ)⁻¹`
-
-and prove:
-
-* **TP normalisation**: `∑ i, (B i)ᴴ * (B i) = 1`.
-* **MPV invariance**: `SameMPV A B`.
-
-This isolates the Perron–Frobenius existence gap: once a strictly positive adjoint fixed point is
-available, the TP gauge construction is purely algebraic.
 -/
 
 import TNLean.MPS.Core.Transfer
 
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+
+/-!
+# TP gauge from adjoint fixed points
+
+This file constructs the standard trace-preserving gauge from a positive
+definite fixed point of the adjoint transfer map. It defines `tpGauge` and
+proves the TP normalization theorem
+`tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint` together with the
+resulting gauge and MPV invariance statements.
+-/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 

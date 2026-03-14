@@ -5,9 +5,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Semigroup.Basic
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Peripheral.Spectrum
+import TNLean.Channel.Peripheral.IrreducibleChannel
 import TNLean.Channel.FixedPoint.Cesaro
-import TNLean.Channel.KrausRepresentation
-import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import Mathlib.NumberTheory.Real.Irrational
 
 /-!
@@ -33,11 +32,10 @@ generates an irreducible semigroup: `T_t` is irreducible for ALL `t > 0`.
 *Missing infrastructure*: formalization of "generator irreducibility ↔ T_t irr ∀ t".
 
 **Step B**: `T_t` irreducible + channel → peripheral eigenvalues of `T_t` are roots
-of unity (Wolf Thm 6.6). Specifically, if `μ` is a peripheral eigenvalue of `T_t`
-(a CPTP map), then `μ^n` is a peripheral eigenvalue for all `n`, hence by
-`peripheral_isRootOfUnity_of_pow_eigenvalue` (pigeonhole), `μ` is a root of unity.
-*Missing infrastructure*: Thm 6.6 for the channel-as-linear-map setting
-(i.e., `peripheralEigenvalues_pow_mem` for `T t : M_D(ℂ) →ₗ[ℂ] M_D(ℂ)`).
+of unity (Wolf Thm 6.6). This channel-level bridge is now available as
+`peripheral_isRootOfUnity_of_irreducible_channel`, proved by choosing a Kraus
+representation, converting to an irreducible tensor, and applying the existing
+blocking-periodicity theorem.
 
 **Step C**: Spectral mapping `Re(μ) = 0` for peripheral generator eigenvalues
 (proved via `re_eq_zero_of_peripheral_generator`).
@@ -48,7 +46,7 @@ of unity (Wolf Thm 6.6). Specifically, if `μ` is a peripheral eigenvalue of `T_
 
 The three helper lemmas `eigenvalue_exp_of_eigenvalue_generator`,
 `eq_zero_of_exp_mul_I_isRootOfUnity`, and `re_eq_zero_of_peripheral_generator`
-are fully proved. Steps A and B require additional formalization.
+are fully proved. Step A still requires additional formalization.
 
 ## References
 
@@ -81,8 +79,6 @@ structure IsQuantumDynSemigroup
 If `λ` is an eigenvalue of `exp(t₀ · L)`, then `λ^(t/t₀)` is an eigenvalue
 of `exp(t · L)`. This uses `spectrum.exp_mem_exp`. -/
 
-set_option maxHeartbeats 5000000
-
 /-- If `μ` is an eigenvalue of `L`, then `exp(t · μ)` is an eigenvalue of
 `exp(t · L)` (spectral mapping theorem for exp). -/
 theorem eigenvalue_exp_of_eigenvalue_generator
@@ -108,8 +104,6 @@ theorem eigenvalue_exp_of_eigenvalue_generator
       rw [show t * μ = t • μ from (smul_eq_mul t μ).symm]
       exact (spectrum.smul_mem_smul_iff (a := L) (r := hu.unit)).mpr hμ
   simpa [Complex.exp_eq_exp_ℂ] using (spectrum.exp_mem_exp (a := t • L) htmul)
-
-set_option maxHeartbeats 200000
 
 /-! ## Key lemma: exp(itθ) root of unity for all t > 0 implies θ = 0
 
@@ -208,41 +202,6 @@ theorem re_eq_zero_of_peripheral_generator
     rw [hre] at hnorm
     exact (Real.exp_eq_one_iff _).mp hnorm
   exact (mul_eq_zero.mp h).resolve_left (ne_of_gt ht₀)
-
-/-- **Irreducible channels have root-of-unity peripheral spectrum.**
-
-Choose a Kraus representation `E = transferMap K`. Trace preservation gives the
-normalization `∑ Kᵢ† Kᵢ = 1`, irreducibility of `E` converts to tensor
-irreducibility of `K`, and the existing blocking-periodicity theorem provides a
-power `p > 0` with `(transferMap K)^p` primitive. Then every peripheral
-eigenvalue `μ` of `E` satisfies `(μ^p) = 1`. -/
-theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
-    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hE : IsChannel E) (hIrr : IsIrreducibleMap E) :
-    ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
-  classical
-  obtain ⟨r, K, hK⟩ := hE.cp
-  have hE_eq : E = MPSTensor.transferMap (d := r) (D := D) K := by
-    apply LinearMap.ext
-    intro X
-    simpa [MPSTensor.transferMap_apply] using hK X
-  have hIrrK_map : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K) := by
-    simpa [hE_eq] using hIrr
-  have hIrrK : MPSTensor.IsIrreducibleTensor (d := r) (D := D) K :=
-    MPSTensor.isIrreducibleTensor_of_isIrreducibleMap K hIrrK_map
-  have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
-    kraus_sum_conjTranspose_mul_of_tp K E hK hE.tp
-  obtain ⟨p, hp_pos, hPrimP⟩ :=
-    MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
-      (A := K) hK_tp hIrrK (Nat.pos_of_ne_zero (NeZero.ne D))
-  rw [MPSTensor.transferMap_blockTensor] at hPrimP
-  intro μ hμ
-  rcases hμ with ⟨hμ_eig, hμ_norm⟩
-  have hμp_eig : Module.End.HasEigenvalue
-      ((MPSTensor.transferMap (d := r) (D := D) K) ^ p) (μ ^ p) := by
-    simpa [hE_eq] using hμ_eig.pow p
-  have hμp_norm : ‖μ ^ p‖ = 1 := norm_pow_eq_one_of_norm_eq_one hμ_norm p
-  exact ⟨p, hp_pos, hPrimP.unique_peripheral (μ ^ p) hμp_eig hμp_norm⟩
 
 /-! ## Prop 7.5: Irreducibility implies primitivity for QDS -/
 
