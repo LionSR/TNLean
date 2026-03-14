@@ -3,7 +3,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.LinearAlgebra.Matrix.Kronecker
-import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Complex.Basic
 
 /-!
@@ -18,8 +17,10 @@ This is the key operation for constructing the Choi matrix
 
 ## Main definitions
 
+* `Matrix.bipartiteSlice`: the `(i₂, j₂)`-block of a bipartite matrix
 * `Matrix.tensorMapId`: `(T ⊗ id)(X)` for a linear map `T` and bipartite
   matrix `X`
+* `Matrix.tensorMapIdLM`: `tensorMapId T` as a linear map
 
 ## Main results
 
@@ -45,6 +46,12 @@ noncomputable def bipartiteSlice
     (i₂ j₂ : Fin d'') : Matrix (Fin d) (Fin d) ℂ :=
   fun i₁ j₁ => X (i₁, i₂) (j₁, j₂)
 
+@[simp]
+theorem bipartiteSlice_apply
+    (X : Matrix (Fin d × Fin d'') (Fin d × Fin d'') ℂ)
+    (i₂ j₂ : Fin d'') (i₁ j₁ : Fin d) :
+    bipartiteSlice X i₂ j₂ i₁ j₁ = X (i₁, i₂) (j₁, j₂) := rfl
+
 /-- The tensor product of a linear map `T : M_d → M_{d'}` with the identity
 on `M_{d''}`. The result acts on bipartite matrices indexed by
 `(Fin d' × Fin d'')`:
@@ -67,13 +74,7 @@ theorem tensorMapId_apply
     tensorMapId T X (i₁, i₂) (j₁, j₂) =
       (T (bipartiteSlice X i₂ j₂)) i₁ j₁ := rfl
 
-@[simp]
-theorem bipartiteSlice_apply
-    (X : Matrix (Fin d × Fin d'') (Fin d × Fin d'') ℂ)
-    (i₂ j₂ : Fin d'') (i₁ j₁ : Fin d) :
-    bipartiteSlice X i₂ j₂ i₁ j₁ = X (i₁, i₂) (j₁, j₂) := rfl
-
-/-- `tensorMapId` is linear in `X`. -/
+/-- `tensorMapId T` as a linear map in `X`. -/
 noncomputable def tensorMapIdLM
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ) :
     Matrix (Fin d × Fin d'') (Fin d × Fin d'') ℂ →ₗ[ℂ]
@@ -88,8 +89,7 @@ noncomputable def tensorMapIdLM
     simp [map_add]
   map_smul' c X := by
     ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-    simp only [tensorMapId_apply, Matrix.smul_apply, smul_eq_mul,
-      RingHom.id_apply]
+    simp only [tensorMapId_apply, Matrix.smul_apply, smul_eq_mul, RingHom.id_apply]
     rw [show bipartiteSlice (c • X) i₂ j₂ =
       c • bipartiteSlice X i₂ j₂ from by
         ext; simp [bipartiteSlice, Matrix.smul_apply, smul_eq_mul]]

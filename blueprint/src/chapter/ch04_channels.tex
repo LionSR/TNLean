@@ -814,3 +814,499 @@ matching the weighted-trace argument in
     so $\nu \, \tr(X) = 0$ and therefore $\nu = 0$.
     In either case, $|\nu| < 1$.
 \end{proof}
+
+%% =========================================================
+\section{Representations: infrastructure}
+\label{sec:representations_infrastructure}
+%% =========================================================
+
+The following infrastructure supports the Choi--Jamiol\-kowski isomorphism
+(Theorem~\ref{thm:cp_iff_choi_posSemidef}) and the representation theorems
+of~\cite[Ch.~2]{Wolf2012Quantum}.
+
+\begin{definition}[Partial traces]\label{def:partial_trace}
+    \lean{Matrix.traceLeft}
+    \leanok
+    Let $X \in \MN{d \cdot d'}$ be a bipartite matrix indexed by
+    $(\mathrm{Fin}\,d \times \mathrm{Fin}\,d')^2$.
+    The \emph{left partial trace} $\operatorname{tr}_A(X)$ and
+    \emph{right partial trace} $\operatorname{tr}_B(X)$ are the
+    $d' \times d'$ and $d \times d$ matrices defined by
+    \[
+        (\operatorname{tr}_A(X))_{ij}
+          = \sum_{k} X_{(k,i),(k,j)},
+        \qquad
+        (\operatorname{tr}_B(X))_{ij}
+          = \sum_{k} X_{(i,k),(j,k)}.
+    \]
+    In Lean these are \texttt{Matrix.traceLeft} and
+    \texttt{Matrix.traceRight} respectively.
+\end{definition}
+
+\begin{definition}[Maximally entangled state]\label{def:maximally_entangled}
+    \lean{Matrix.omegaProj}
+    \leanok
+    The \emph{maximally entangled state} on $\C^d \otimes \C^d$ is the
+    rank-one projector
+    \[
+        \lvert\Omega\rangle\!\langle\Omega\rvert,
+        \quad
+        \lvert\Omega\rangle
+          = \frac{1}{\sqrt{d}} \sum_{j=0}^{d-1} \lvert j,j\rangle.
+    \]
+    Concretely, $(\lvert\Omega\rangle\!\langle\Omega\rvert)_{(i_1,i_2),(j_1,j_2)}
+    = \frac{1}{d}\,\delta_{i_1 j_1}\delta_{i_2 j_2}$
+    and $\operatorname{tr}(\lvert\Omega\rangle\!\langle\Omega\rvert) = 1$.
+    In Lean this is \texttt{Matrix.omegaProj}.
+\end{definition}
+
+\begin{definition}[Tensor product of a map with identity]\label{def:tensor_map_id}
+    \lean{Matrix.tensorMapId}
+    \leanok
+    Given a linear map $T : \MN{D} \to \MN{D}$,
+    the \emph{tensor extension} $T \otimes \id$ acts on bipartite matrices
+    $X \in M_{D \times D}(\C)$ by applying $T$ to each ``slice'':
+    \[
+        (T \otimes \id)(X)_{(i_1,i_2),(j_1,j_2)}
+          = (T(X^{(i_2,j_2)}))_{i_1 j_1},
+    \]
+    where $X^{(i_2,j_2)}_{ab} = X_{(a,i_2),(b,j_2)}$ is the
+    bipartite slice.
+    In Lean this is \texttt{Matrix.tensorMapId}.
+\end{definition}
+
+%% =========================================================
+\section{Choi--Jamio\l{}kowski isomorphism (Wolf Prop.~2.1)}
+\label{sec:choi_jamiolkowski}
+%% =========================================================
+
+\begin{definition}[Choi matrix]\label{def:choi_matrix}
+    \lean{ChoiJamiolkowski.choiMatrix}
+    \leanok
+    \uses{def:maximally_entangled, def:tensor_map_id}
+    The \emph{Choi matrix} of a linear map
+    $T : \MN{D} \to \MN{D}$ is
+    \[
+        \tau
+          = (T \otimes \id)(\lvert\Omega\rangle\!\langle\Omega\rvert)
+          \;\in\; M_{D \times D}(\C).
+    \]
+    Concretely,
+    $\tau_{(i_1,i_2),(j_1,j_2)}
+       = \frac{1}{D}\,(T(E_{i_2 j_2}))_{i_1 j_1}$
+    where $E_{i_2 j_2}$ is the matrix unit.
+    This is the Choi--Jamiol\-kowski convention of
+    \cite[Prop.~2.1]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Prop.~2.1: CP iff Choi matrix is PSD]\label{thm:cp_iff_choi_posSemidef}
+    \lean{ChoiJamiolkowski.cp_iff_choi_posSemidef}
+    \leanok
+    \uses{def:choi_matrix, def:cp_map}
+    A linear map $T : \MN{D} \to \MN{D}$ is completely positive
+    (in the Kraus sense) if and only if its Choi matrix $\tau \ge 0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:choi_matrix, def:cp_map}
+    ($\Rightarrow$) If $T(X) = \sum_i K_i X K_i^\dagger$, then
+    $\tau = \sum_i \lvert v_i\rangle\!\langle v_i\rvert$ where
+    $(v_i)_{(a,b)} = c\,K_i(a,b)$ and $c = 1/\sqrt{D}$.
+    This is a sum of rank-one PSD matrices.
+
+    ($\Leftarrow$) If $\tau \ge 0$, write
+    $\tau = \sum_m \lvert v_m\rangle\!\langle v_m\rvert$
+    by spectral decomposition, define $K_m(a,b) = v_m(a,b)/c$,
+    and recover $T(X) = \sum_m K_m X K_m^\dagger$ by linearity on
+    matrix units.
+\end{proof}
+
+\begin{theorem}[Prop.~2.1: TP implies partial trace condition]\label{thm:traceLeft_choiMatrix_of_tp}
+    \lean{ChoiJamiolkowski.traceLeft_choiMatrix_of_tp}
+    \leanok
+    \uses{def:choi_matrix, def:partial_trace, def:trace_preserving}
+    If $T$ is trace-preserving, then
+    $\operatorname{tr}_A(\tau) = \frac{1}{D} \Id_D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:choi_matrix, def:partial_trace}
+    $(\operatorname{tr}_A(\tau))_{ij}
+       = \operatorname{tr}(T(\Omega^{(ij)}))
+       = \operatorname{tr}(\Omega^{(ij)})$
+    by trace preservation, where
+    $\Omega^{(ij)} = \frac{1}{D} E_{ij}$ is the $(i,j)$-slice of
+    $\lvert\Omega\rangle\!\langle\Omega\rvert$.
+    Taking the trace gives $\frac{1}{D}\delta_{ij}$.
+\end{proof}
+
+\begin{theorem}[Prop.~2.1: Hermiticity correspondence]\label{thm:choiMatrix_isHermitian_iff_hermiticityPreserving}
+    \lean{ChoiJamiolkowski.choiMatrix_isHermitian_iff_hermiticityPreserving}
+    \leanok
+    \uses{def:choi_matrix}
+    The Choi matrix $\tau$ is Hermitian if and only if
+    $T(B^\dagger) = T(B)^\dagger$ for all $B \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:choi_matrix}
+    The Choi matrix entries satisfy
+    $\tau_{(a,i),(b,j)} = \frac{1}{D}(T(E_{ij}))_{ab}$.
+    Hermiticity of $\tau$ says
+    $\overline{\tau_{(b,j),(a,i)}} = \tau_{(a,i),(b,j)}$, which
+    unravels to $T(E_{ji})_{ba} = \overline{T(E_{ij})_{ab}}$, i.e.,
+    $T(E_{ij}^\dagger) = T(E_{ij})^\dagger$.
+    By linearity this extends to all $B$.
+\end{proof}
+
+\begin{theorem}[Prop.~2.1: Trace of Choi matrix for TP map]\label{thm:trace_choiMatrix_of_tp}
+    \lean{ChoiJamiolkowski.trace_choiMatrix_of_tp}
+    \leanok
+    \uses{def:choi_matrix, def:trace_preserving, thm:traceLeft_choiMatrix_of_tp}
+    If $T$ is trace-preserving, then $\operatorname{tr}(\tau) = 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:traceLeft_choiMatrix_of_tp}
+    $\operatorname{tr}(\tau)
+       = \operatorname{tr}(\operatorname{tr}_A(\tau))
+       = \operatorname{tr}(\frac{1}{D}\Id_D)
+       = 1$.
+\end{proof}
+
+%% =========================================================
+\section{Kraus representation theorem (Wolf Thm.~2.1)}
+\label{sec:kraus_representation}
+%% =========================================================
+
+\begin{theorem}[Thm.~2.1: TP implies Kraus normalization]\label{thm:kraus_sum_conjTranspose_mul_of_tp}
+    \lean{kraus_sum_conjTranspose_mul_of_tp}
+    \leanok
+    \uses{def:cp_map, def:trace_preserving}
+    If $T(X) = \sum_i K_i X K_i^\dagger$ is trace-preserving, then
+    $\sum_i K_i^\dagger K_i = \Id$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:trace_preserving}
+    For any $N$,
+    $\operatorname{tr}((\sum_i K_i^\dagger K_i)\,N)
+       = \sum_i \operatorname{tr}(K_i^\dagger K_i N)
+       = \sum_i \operatorname{tr}(K_i N K_i^\dagger)
+       = \operatorname{tr}(T(N))
+       = \operatorname{tr}(N)$.
+    Non-degeneracy of the trace pairing forces
+    $\sum_i K_i^\dagger K_i = \Id$.
+\end{proof}
+
+\begin{theorem}[Thm.~2.1: Kraus normalization implies TP]\label{thm:kraus_tp_of_sum_conjTranspose_mul}
+    \lean{kraus_tp_of_sum_conjTranspose_mul}
+    \leanok
+    \uses{def:cp_map, def:trace_preserving}
+    If $\sum_i K_i^\dagger K_i = \Id$, then
+    $T(X) = \sum_i K_i X K_i^\dagger$ is trace-preserving.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    $\operatorname{tr}(T(X))
+       = \sum_i \operatorname{tr}(K_i X K_i^\dagger)
+       = \sum_i \operatorname{tr}(K_i^\dagger K_i X)
+       = \operatorname{tr}((\textstyle\sum_i K_i^\dagger K_i)\,X)
+       = \operatorname{tr}(X)$.
+\end{proof}
+
+\begin{theorem}[Thm.~2.1: Unitary freedom in Kraus operators]\label{thm:kraus_same_map_of_unitary_combination}
+    \lean{kraus_same_map_of_unitary_combination}
+    \leanok
+    \uses{def:cp_map}
+    Let $U$ be a unitary $r \times r$ matrix ($U^\dagger U = \Id$)
+    and suppose $K_j = \sum_\ell U_{j\ell}\,\tilde{K}_\ell$.
+    Then $\{K_j\}$ and $\{\tilde{K}_\ell\}$ define the same Kraus map:
+    \[
+        \sum_j K_j X K_j^\dagger
+          = \sum_\ell \tilde{K}_\ell X \tilde{K}_\ell^\dagger
+        \quad \forall\, X \in \MN{D}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Substitute the combination formula, expand the triple sum over
+    $j,\ell,\ell'$, swap summation order, and use the entry-wise form
+    of $U^\dagger U = \Id$ to collapse to $\ell = \ell'$ diagonal terms.
+\end{proof}
+
+%% =========================================================
+\section{Stinespring dilation (Wolf Thm.~2.2)}
+\label{sec:stinespring}
+%% =========================================================
+
+\begin{definition}[Stinespring isometry]\label{def:stinespring_v}
+    \lean{stinespringV}
+    \leanok
+    \uses{def:cp_map}
+    Given Kraus operators $\{K_j\}_{j=0}^{r-1}$ with
+    $K_j \in \MN{D}$, the \emph{Stinespring isometry}
+    $V : \C^D \to \C^D \otimes \C^r$ is the
+    $(D \cdot r) \times D$ matrix
+    \[
+        V_{(i,j),k} = (K_j)_{ik}.
+    \]
+    This implements $V = \sum_j K_j \otimes \lvert j\rangle$.
+\end{definition}
+
+\begin{theorem}[Thm.~2.2: Stinespring dual representation]\label{thm:stinespring_dual_representation}
+    \lean{stinespring_dual_representation}
+    \leanok
+    \uses{def:stinespring_v, def:cp_map}
+    For Kraus operators $\{K_j\}$ and $A \in \MN{D}$,
+    \[
+        V^\dagger\,(A \otimes \Id_r)\,V
+          = \sum_j K_j^\dagger A\,K_j
+          = T^*(A).
+    \]
+    This is the Stinespring representation of the \emph{dual} (Heisenberg
+    picture) map $T^*$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:stinespring_v}
+    Compute $(V^\dagger (A \otimes \Id_r) V)_{ab}$
+    by summing over the product index $(i,j)$;
+    the $\delta_{jl}$ from $\Id_r$ collapses the sum over $l$, giving
+    $\sum_j K_j^\dagger A K_j$.
+\end{proof}
+
+\begin{theorem}[Thm.~2.2: Isometry condition iff TP]\label{thm:stinespringV_isometry_iff_kraus_normalized}
+    \lean{stinespringV_isometry_iff_kraus_normalized}
+    \leanok
+    \uses{def:stinespring_v, def:trace_preserving}
+    $V^\dagger V = \Id_D$ if and only if
+    $\sum_j K_j^\dagger K_j = \Id_D$.
+    In particular, $V$ is an isometry precisely when the Kraus map is
+    trace-preserving.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:stinespring_v}
+    $(V^\dagger V)_{ab}
+       = \sum_{(i,j)} \overline{V_{(i,j),a}}\,V_{(i,j),b}
+       = \sum_j \sum_i \overline{(K_j)_{ia}}\,(K_j)_{ib}
+       = (\sum_j K_j^\dagger K_j)_{ab}$.
+\end{proof}
+
+\begin{theorem}[Thm.~2.2: Stinespring Schr\"odinger representation]\label{thm:stinespring_schrodinger_representation}
+    \lean{stinespring_schrodinger_representation}
+    \leanok
+    \uses{def:stinespring_v, def:cp_map, def:partial_trace}
+    The Kraus map $T(\rho) = \sum_j K_j \rho K_j^\dagger$ equals
+    the partial trace over the dilation space:
+    \[
+        T(\rho)_{ij}
+          = \sum_{k=0}^{r-1}
+              (V \rho V^\dagger)_{(i,k),(j,k)}
+          = \operatorname{tr}_r(V\rho V^\dagger).
+    \]
+    This is the Schr\"odinger-picture Stinespring representation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:stinespring_v}
+    Expand $(V\rho V^\dagger)_{(i,k),(j,k)}$
+    and sum over $k$ to recover $\sum_k K_k \rho K_k^\dagger$.
+\end{proof}
+
+%% =========================================================
+\section{Quantum dynamical semigroups (Wolf Ch.~7, Workstream A)}
+\label{sec:quantum_dynamical_semigroups}
+%% =========================================================
+
+This section develops the theory of one-parameter semigroups of quantum
+channels following~\cite[Ch.~7]{Wolf2012Quantum}.
+The main structural result (Proposition~\ref{thm:continuousDynSemigroup_eq_exp})
+is that every norm-continuous dynamical semigroup on a finite-dimensional
+algebra is the matrix exponential of a generator.
+
+\begin{definition}[Dynamical semigroup]\label{def:dyn_semigroup}
+    \lean{IsDynSemigroup}
+    \leanok
+    A family of linear maps
+    $T : \R_{\geq 0} \to (\MN{D} \to_{\ell} \MN{D})$
+    is a \emph{dynamical semigroup} if
+    \begin{enumerate}
+        \item (semigroup law) $T(t+s) = T(t) \circ T(s)$
+              for all $t,s \ge 0$; and
+        \item (initial condition) $T(0) = \id$.
+    \end{enumerate}
+    This is Wolf Eq.~(7.1).
+\end{definition}
+
+\begin{definition}[Continuous dynamical semigroup]\label{def:continuous_dyn_semigroup}
+    \lean{IsContinuousDynSemigroup}
+    \leanok
+    \uses{def:dyn_semigroup}
+    A dynamical semigroup $T$ is \emph{norm-continuous} if the map
+    $t \mapsto T(t)$ is continuous with respect to the operator norm.
+    In finite dimensions, norm-continuity is equivalent to strong
+    continuity~\cite[§7.1]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{definition}[Exponential semigroup]\label{def:exp_semigroup}
+    \lean{expSemigroup}
+    \leanok
+    \uses{def:dyn_semigroup}
+    Given a generator $L \in \mathrm{End}_{\C}(\MN{D})$, the
+    \emph{exponential semigroup} is
+    \[
+        T_t^L = e^{tL},
+        \quad t \ge 0,
+    \]
+    where $e^{tL} = \sum_{n=0}^\infty \frac{(tL)^n}{n!}$ is the
+    operator exponential.
+    The family $t \mapsto e^{tL}$ is a dynamical semigroup
+    (Theorem~\ref{thm:expSemigroupCLM_add}) and is
+    norm-continuous
+    (Theorem~\ref{thm:expSemigroupCLM_continuous}).
+\end{definition}
+
+\begin{theorem}[Semigroup law for the exponential]\label{thm:expSemigroupCLM_add}
+    \lean{expSemigroupCLM_add}
+    \leanok
+    \uses{def:exp_semigroup}
+    For all $t, s \in \R$,
+    \[
+        e^{(t+s)L} = e^{tL} \cdot e^{sL}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    $t \cdot L$ and $s \cdot L$ commute (both are scalar multiples of
+    $L$), so $e^{(t+s)L} = e^{tL+sL} = e^{tL}\cdot e^{sL}$ by the
+    Banach-algebra addition formula for commuting elements.
+\end{proof}
+
+\begin{theorem}[Continuity of the exponential semigroup]\label{thm:expSemigroupCLM_continuous}
+    \lean{expSemigroupCLM_continuous}
+    \leanok
+    \uses{def:exp_semigroup}
+    The map $t \mapsto e^{tL}$ is continuous in the operator norm.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The map $t \mapsto tL$ is continuous (as a real-to-complex-scalar
+    multiple), and the matrix exponential is analytic on the whole
+    algebra, hence continuous.
+\end{proof}
+
+\begin{theorem}[Derivative of the exponential semigroup]\label{thm:hasDerivAt_expSemigroupCLM}
+    \lean{hasDerivAt_expSemigroupCLM}
+    \leanok
+    \uses{def:exp_semigroup}
+    For all $t \in \R$,
+    \[
+        \frac{d}{dt}\,e^{tL} = e^{tL} \cdot L.
+    \]
+    This is Wolf Eq.~(7.2).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By the chain rule, differentiating $t \mapsto e^{(t : \C) \cdot L}$
+    via the real-to-complex inclusion and the Mathlib lemma
+    \texttt{hasDerivAt\_exp\_smul\_const}.
+\end{proof}
+
+\begin{theorem}[Generator uniqueness]\label{thm:generator_unique}
+    \lean{generator_unique}
+    \leanok
+    \uses{def:exp_semigroup}
+    If $e^{tL} = e^{tL'}$ for all $t \ge 0$, then $L = L'$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The two functions agree on $[0,\infty)$, so they have the same
+    right-derivative at $t = 0$ within $[0,\infty)$.
+    The set $[0,\infty)$ has unique differentials at $0$, so the
+    derivatives $L$ and $L'$ agree.
+\end{proof}
+
+\begin{theorem}[Prop.~7.1: Every continuous semigroup is exponential]\label{thm:continuousDynSemigroup_eq_exp}
+    \lean{continuousDynSemigroup_eq_exp}
+    \uses{def:continuous_dyn_semigroup, def:exp_semigroup,
+          thm:generator_unique}
+    Every norm-continuous dynamical semigroup $T$ on $\MN{D}$ is
+    of the form
+    \[
+        T_t = e^{tL}
+    \]
+    for a unique generator $L \in \mathrm{End}_{\C}(\MN{D})$.
+    This is \cite[Prop.~7.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    By finite-dimensionality, $\MN{D}$ is a Banach algebra and every
+    norm-continuous semigroup on a Banach algebra is uniformly
+    continuous; the generator $L = \lim_{h \downarrow 0} (T_h - \id)/h$
+    exists in the operator norm, and the fundamental theorem of
+    calculus for ODEs gives $T_t = e^{tL}$.
+    (Formalization in progress.)
+\end{proof}
+
+\begin{theorem}[Lem.~7.1: Duhamel formula]\label{thm:duhamel_formula}
+    \lean{duhamel_formula}
+    \uses{def:exp_semigroup, thm:hasDerivAt_expSemigroupCLM}
+    Let $\Delta = L' - L$.  For $t \ge 0$,
+    \[
+        e^{tL'} - e^{tL}
+          = \int_0^t e^{(t-s)L}\,\Delta\,e^{sL'}\,ds.
+    \]
+    This is \cite[Lem.~7.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    Define $f(s) = e^{(t-s)L} e^{sL'}$.
+    Then $f'(s) = e^{(t-s)L}\,\Delta\,e^{sL'}$
+    (Theorem~\ref{thm:hasDerivAt_expSemigroupCLM}),
+    and $e^{tL'} - e^{tL} = f(t) - f(0) = \int_0^t f'(s)\,ds$.
+    (Formalization in progress.)
+\end{proof}
+
+\begin{theorem}[Cor.~7.1: Perturbation bound]\label{thm:perturbation_bound}
+    \lean{perturbation_bound}
+    \uses{thm:duhamel_formula}
+    For $t \ge 0$,
+    \[
+        \bigl\|e^{tL'} - e^{tL}\bigr\|
+          \le t\,\|\Delta\|
+             \cdot \sup_{s \in [0,t]}\|e^{sL}\|
+             \cdot \sup_{s \in [0,t]}\|e^{sL'}\|,
+    \]
+    where $\Delta = L' - L$.
+    This is \cite[Cor.~7.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    Apply the triangle inequality and submultiplicativity of the
+    operator norm to the Duhamel integral
+    (Lemma~\ref{thm:duhamel_formula}):
+    \[
+        \bigl\|e^{tL'} - e^{tL}\bigr\|
+          \le \int_0^t \|e^{(t-s)L}\|\,\|\Delta\|\,\|e^{sL'}\|\,ds
+          \le t\,\|\Delta\|
+             \cdot \sup_s\|e^{sL}\|
+             \cdot \sup_s\|e^{sL'}\|.
+    \]
+    (Formalization in progress.)
+\end{proof}

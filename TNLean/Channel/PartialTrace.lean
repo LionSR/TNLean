@@ -25,6 +25,8 @@ as needed for the Choi–Jamiolkowski isomorphism (Wolf Ch. 2, Prop 2.1).
 * `Matrix.trace_eq_trace_traceRight`: `tr(X) = tr(tr_B(X))`
 * `Matrix.traceLeft_kronecker`: `tr_A(A ⊗ B) = tr(A) • B`
 * `Matrix.traceRight_kronecker`: `tr_B(A ⊗ B) = A • tr(B)`
+* `Matrix.traceLeft_one`: `tr_A(1) = d • 1`
+* `Matrix.traceRight_one`: `tr_B(1) = d' • 1`
 
 ## References
 
@@ -80,29 +82,25 @@ theorem trace_eq_trace_traceRight (X : Matrix (Fin d × Fin d') (Fin d × Fin d'
   simp only [Matrix.trace, Matrix.diag, traceRight_apply]
   exact Fintype.sum_prod_type _
 
-/-- `traceLeft` is linear. -/
+/-- `traceLeft` is additive. -/
 theorem traceLeft_add (X Y : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
     traceLeft (X + Y) = traceLeft X + traceLeft Y := by
-  ext i j
-  simp [traceLeft_apply, Finset.sum_add_distrib]
+  ext i j; simp [traceLeft_apply, Finset.sum_add_distrib]
 
 /-- `traceLeft` commutes with scalar multiplication. -/
 theorem traceLeft_smul (c : ℂ) (X : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
     traceLeft (c • X) = c • traceLeft X := by
-  ext i j
-  simp [traceLeft_apply, Finset.mul_sum]
+  ext i j; simp [traceLeft_apply, Finset.mul_sum]
 
-/-- `traceRight` is linear. -/
+/-- `traceRight` is additive. -/
 theorem traceRight_add (X Y : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
     traceRight (X + Y) = traceRight X + traceRight Y := by
-  ext i j
-  simp [traceRight_apply, Finset.sum_add_distrib]
+  ext i j; simp [traceRight_apply, Finset.sum_add_distrib]
 
 /-- `traceRight` commutes with scalar multiplication. -/
 theorem traceRight_smul (c : ℂ) (X : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
     traceRight (c • X) = c • traceRight X := by
-  ext i j
-  simp [traceRight_apply, Finset.mul_sum]
+  ext i j; simp [traceRight_apply, Finset.mul_sum]
 
 /-- `traceLeft` as a linear map. -/
 noncomputable def traceLeftLM (d d' : ℕ) :
@@ -125,7 +123,7 @@ theorem traceLeft_kronecker (A : Matrix (Fin d) (Fin d) ℂ) (B : Matrix (Fin d'
   simp only [traceLeft_apply, kroneckerMap_apply, Matrix.smul_apply, Matrix.trace,
     Matrix.diag, smul_eq_mul, Finset.sum_mul]
 
-/-- Right partial trace of a Kronecker product: `tr_B(A ⊗ B) = A • tr(B)`. -/
+/-- Right partial trace of a Kronecker product: `tr_B(A ⊗ B) = tr(B) • A`. -/
 theorem traceRight_kronecker (A : Matrix (Fin d) (Fin d) ℂ) (B : Matrix (Fin d') (Fin d') ℂ) :
     traceRight (kroneckerMap (· * ·) A B) = B.trace • A := by
   ext i j
@@ -133,28 +131,24 @@ theorem traceRight_kronecker (A : Matrix (Fin d) (Fin d) ℂ) (B : Matrix (Fin d
     Matrix.diag, smul_eq_mul, ← Finset.mul_sum]
   ring
 
-/-- `traceLeft` applied to the identity gives `d • 1`. -/
+/-- `traceLeft` of the identity is `(d : ℂ) • 1`. -/
 theorem traceLeft_one :
     traceLeft (1 : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) = (d : ℂ) • 1 := by
   ext i j
-  simp only [traceLeft_apply, Matrix.one_apply, Prod.mk.injEq, Matrix.smul_apply, smul_eq_mul,
-    Matrix.one_apply]
+  simp only [traceLeft_apply, Matrix.one_apply, Prod.mk.injEq, Matrix.smul_apply,
+    smul_eq_mul, Matrix.one_apply]
   by_cases hij : i = j
-  · subst hij
-    simp only [and_true, ite_true, Finset.sum_const, Finset.card_univ, Fintype.card_fin]
-    simp
-  · simp only [hij, and_false, ite_false, Finset.sum_const_zero, mul_zero]
+  · simp [hij, Finset.sum_const, Finset.card_univ, Fintype.card_fin]
+  · simp [hij]
 
-/-- `traceRight` applied to the identity gives `d' • 1`. -/
+/-- `traceRight` of the identity is `(d' : ℂ) • 1`. -/
 theorem traceRight_one :
     traceRight (1 : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) = (d' : ℂ) • 1 := by
   ext i j
-  simp only [traceRight_apply, Matrix.one_apply, Prod.mk.injEq, Matrix.smul_apply, smul_eq_mul,
-    Matrix.one_apply]
+  simp only [traceRight_apply, Matrix.one_apply, Prod.mk.injEq, Matrix.smul_apply,
+    smul_eq_mul, Matrix.one_apply]
   by_cases hij : i = j
-  · subst hij
-    simp only [true_and, ite_true, Finset.sum_const, Finset.card_univ, Fintype.card_fin]
-    simp
-  · simp only [hij, false_and, ite_false, Finset.sum_const_zero, mul_zero]
+  · simp [hij, Finset.sum_const, Finset.card_univ, Fintype.card_fin]
+  · simp [hij]
 
 end Matrix

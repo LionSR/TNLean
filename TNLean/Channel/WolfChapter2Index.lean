@@ -18,32 +18,37 @@ representations of quantum channels.
 
 ## Coverage summary
 
-### §2.1 Jamiolkowski and Choi
+### §2.1 Choi–Jamiolkowski and Kraus
 
 * **Prop 2.1** (CJ isomorphism):
-  - `ChoiJamiolkowski.choiMatrix` — Choi matrix definition
-  - `cp_iff_choi_posSemidef` — CP ↔ τ ≥ 0 (5 sorries)
-  - `choiMatrix_id` — τ of identity = |Ω⟩⟨Ω| ✅
+  - `ChoiJamiolkowski.choiMatrix` — Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` ✅
+  - `ChoiJamiolkowski.cp_iff_choi_posSemidef` — CP ↔ `τ ≥ 0` ✅
+  - `ChoiJamiolkowski.traceLeft_choiMatrix_of_tp` — TP ⟹ `tr_A(τ) = 𝟙/D` ✅
+  - `ChoiJamiolkowski.choiMatrix_isHermitian_iff_hermiticityPreserving` —
+    Hermiticity-preserving ↔ `τ` is Hermitian ✅
+  - `ChoiJamiolkowski.trace_choiMatrix_of_tp` — `tr(τ) = 1` for TP ✅
+  - `ChoiJamiolkowski.choiMatrix_id` — `τ` of identity = `|Ω⟩⟨Ω|` ✅
 
 * **Thm 2.1** (Kraus representation):
-  - `kraus_tp_of_sum_conjTranspose_mul` — norm ⟹ TP ✅
-  - `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ norm ✅
-  - `kraus_sum_mul_conjTranspose_of_unital` — unital ✅
+  - `kraus_tp_of_sum_conjTranspose_mul` — `∑Kᵢ†Kᵢ = 𝟙` ⟹ TP ✅
+  - `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑Kᵢ†Kᵢ = 𝟙` ✅
+  - `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑KᵢKᵢ† = 𝟙` ✅
+  - `kraus_same_map_of_unitary_combination` — unitary freedom (sufficient direction) ✅
 
 * **Thm 2.2** (Stinespring dilation):
-  - `stinespring_dual_representation` — T*(A)=V†(A⊗1)V ✅
-  - `stinespringV_isometry_iff_kraus_normalized` ✅
-  - `stinespring_schrodinger_representation` ✅
+  - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
+  - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅
+  - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅
 
 ### Infrastructure
 
 | Definition | File | Lean name |
-|-----------|------|-----------|
+|------------|------|-----------|
 | Partial trace (left) | `PartialTrace.lean` | `Matrix.traceLeft` |
 | Partial trace (right) | `PartialTrace.lean` | `Matrix.traceRight` |
 | Maximally entangled vector | `MaximallyEntangled.lean` | `Matrix.omegaVec` |
 | Maximally entangled projector | `MaximallyEntangled.lean` | `Matrix.omegaProj` |
-| SWAP operator F | `MaximallyEntangled.lean` | `Matrix.swap_matrix` |
+| SWAP operator F | `MaximallyEntangled.lean` | `Matrix.swapMatrix` |
 | Tensor product of maps | `TensorMap.lean` | `Matrix.tensorMapId` |
 | Choi matrix | `ChoiJamiolkowski.lean` | `ChoiJamiolkowski.choiMatrix` |
 | Stinespring isometry | `Stinespring.lean` | `stinespringV` |
@@ -54,12 +59,13 @@ representations of quantum channels.
 |--------|-------|
 | Prop 2.2 (decomp into CP) | Straightforward from CJ |
 | Prop 2.3 (no info w/o disturbance) | Needs pure state uniqueness |
-| Prop 2.4 (equiv of ensembles) | Needs purification/Schmidt |
-| Thm 2.3 (ordered cp-maps) | Needs Stinespring + contraction |
+| Prop 2.4 (equiv of ensembles) | Needs purification/Schmidt decomp |
+| Thm 2.1 item 4 (unitary freedom, necessary direction) | Needs Choi eigendecomp |
+| Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
-| Thm 2.5 (open-system rep) | Embedding into unitary |
-| Thm 2.6 (Neumark) | POVM embedding |
-| §2.2 (transfer matrix) | Matrix representation |
+| Thm 2.5 (open-system representation) | Embedding into unitary |
+| Thm 2.6 (Neumark's theorem) | POVM embedding |
+| §2.2 (transfer matrix) | Matrix representation of channels |
 | §2.3 (normal forms) | Lorentz normal form etc. |
 
 ## References

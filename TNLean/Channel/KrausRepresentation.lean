@@ -9,24 +9,22 @@ import TNLean.Algebra.TracePairing
 /-!
 # Kraus representation theorem (Wolf Ch. 2, Thm 2.1)
 
-This file states and (partially) proves the full Kraus representation theorem:
-a linear map is completely positive if and only if it admits a Kraus
-decomposition `T(A) = ∑ⱼ Kⱼ A Kⱼ†`.
+This file proves key properties of the Kraus representation of completely
+positive maps `T(A) = ∑ⱼ Kⱼ A Kⱼ†`.
 
-## Main results
+## Main results (Wolf Thm 2.1)
 
-* `IsCPMap_iff_kraus`: CP ↔ Kraus (currently the ⟸ direction is the definition)
-* `kraus_tp_iff`: Kraus normalization conditions for trace-preserving and
-  unital maps
-* `kraus_unitary_freedom`: two Kraus decompositions of the same map differ by
-  a unitary matrix (stated)
+* `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑ᵢ Kᵢ†Kᵢ = 𝟙`
+* `kraus_tp_of_sum_conjTranspose_mul` — `∑ᵢ Kᵢ†Kᵢ = 𝟙` ⟹ TP
+* `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑ᵢ Kᵢ Kᵢ† = 𝟙`
+* `kraus_same_map_of_unitary_combination` — unitary freedom (sufficient direction)
 
 ## Design notes
 
 In the current TNLean codebase, `IsCPMap` is *defined* as the existence of a
-Kraus representation. This file documents the fact that the Choi–Jamiolkowski
-isomorphism provides the equivalence with positivity of the Choi matrix,
-and records additional properties of the Kraus representation.
+Kraus representation. The Choi–Jamiolkowski isomorphism
+(`ChoiJamiolkowski.cp_iff_choi_posSemidef`) provides the equivalence with
+positivity of the Choi matrix.
 
 ## References
 
@@ -40,18 +38,16 @@ variable {D : ℕ}
 
 /-! ### Kraus normalization conditions (Thm 2.1, item 1) -/
 
-/-- **Thm 2.1, item 1 (trace-preserving ⟹ Kraus normalization)**:
-If `T` is trace-preserving and has Kraus form `T(X) = ∑ᵢ Kᵢ X Kᵢ†`,
-then `∑ᵢ Kᵢ† Kᵢ = 𝟙`. -/
+/-- **Thm 2.1 item 1 (TP ⟹ normalization)**:
+If `T(X) = ∑ᵢ Kᵢ X Kᵢ†` is trace-preserving, then `∑ᵢ Kᵢ†Kᵢ = 𝟙`. -/
 theorem kraus_sum_conjTranspose_mul_of_tp
     {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hK : ∀ X, T X = ∑ i : Fin r, K i * X * (K i)ᴴ)
     (htp : IsTracePreservingMap T) :
     ∑ i : Fin r, (K i)ᴴ * K i = 1 := by
-  -- Strategy: show ∑ᵢ Kᵢ† Kᵢ - 1 = 0 via trace pairing nondegeneracy
-  -- For any X: tr((∑ᵢ Kᵢ† Kᵢ) X) = ∑ᵢ tr(Kᵢ† Kᵢ X) = ∑ᵢ tr(Kᵢ X Kᵢ†)
-  -- = tr(T(X)) = tr(X) = tr(1 * X)
+  -- Show `∑ᵢ Kᵢ†Kᵢ - 1 = 0` via trace pairing nondegeneracy.
+  -- For any `N`: `tr((∑ᵢ Kᵢ†Kᵢ) N) = ∑ᵢ tr(Kᵢ†KᵢN) = ∑ᵢ tr(KᵢNKᵢ†) = tr(T(N)) = tr(N)`.
   suffices h : ∀ N : Matrix (Fin D) (Fin D) ℂ,
       trace ((∑ i : Fin r, (K i)ᴴ * K i - 1) * N) = 0 by
     have := (Matrix.trace_mul_right_eq_zero_iff _).mp h
@@ -59,21 +55,17 @@ theorem kraus_sum_conjTranspose_mul_of_tp
   intro N
   rw [sub_mul, Matrix.one_mul]
   rw [show ((∑ i, (K i)ᴴ * K i) * N - N).trace =
-    ((∑ i, (K i)ᴴ * K i) * N).trace - N.trace from
-    Matrix.trace_sub _ _]
+    ((∑ i, (K i)ᴴ * K i) * N).trace - N.trace from Matrix.trace_sub _ _]
   rw [Finset.sum_mul, Matrix.trace_sum]
   simp_rw [show ∀ i : Fin r,
     ((K i)ᴴ * K i * N).trace = (K i * N * (K i)ᴴ).trace from
-    fun i => by
-      rw [Matrix.mul_assoc ((K i)ᴴ)]
-      rw [Matrix.trace_mul_comm, Matrix.mul_assoc]]
+    fun i => by rw [Matrix.mul_assoc ((K i)ᴴ), Matrix.trace_mul_comm, Matrix.mul_assoc]]
   rw [← Matrix.trace_sum]
-  -- Now: tr(∑ Kᵢ N Kᵢ†) - tr(N) = tr(T(N)) - tr(N) = 0
   conv_lhs => rw [← hK N]
   rw [htp N, sub_self]
 
-/-- **Thm 2.1, item 1 (Kraus normalization ⟹ trace-preserving)**:
-If `∑ᵢ Kᵢ† Kᵢ = 𝟙`, then the Kraus map is trace-preserving. -/
+/-- **Thm 2.1 item 1 (normalization ⟹ TP)**:
+If `∑ᵢ Kᵢ†Kᵢ = 𝟙`, then `T(X) = ∑ᵢ Kᵢ X Kᵢ†` is trace-preserving. -/
 theorem kraus_tp_of_sum_conjTranspose_mul
     {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
     (hK_norm : ∑ i : Fin r, (K i)ᴴ * K i = 1) :
@@ -81,13 +73,11 @@ theorem kraus_tp_of_sum_conjTranspose_mul
       trace (∑ i : Fin r, K i * X * (K i)ᴴ) = trace X := by
   intro X
   rw [Matrix.trace_sum]
-  -- Each term: tr(Kᵢ X Kᵢ†) = tr(Kᵢ† Kᵢ X) by cyclic property
+  -- Each term: `tr(KᵢXKᵢ†) = tr(Kᵢ†KᵢX)` by the cyclic property of trace.
   simp_rw [show ∀ i : Fin r,
     trace (K i * X * (K i)ᴴ) = trace ((K i)ᴴ * K i * X) from fun i => by
       rw [Matrix.trace_mul_cycle, Matrix.mul_assoc]]
-  -- ∑ᵢ tr(Kᵢ† Kᵢ X) = tr((∑ᵢ Kᵢ† Kᵢ) X)
-  rw [← Matrix.trace_sum, ← Finset.sum_mul]
-  rw [hK_norm, Matrix.one_mul]
+  rw [← Matrix.trace_sum, ← Finset.sum_mul, hK_norm, Matrix.one_mul]
 
 /-! ### Kraus normalization for unital maps (Thm 2.1, item 1) -/
 
@@ -105,11 +95,9 @@ theorem kraus_sum_mul_conjTranspose_of_unital
 
 /-! ### Unitary freedom in Kraus operators (Thm 2.1, item 4) -/
 
-/-- **Thm 2.1, item 4 (unitary freedom, sufficient direction)**:
-If `U` is unitary and `Kⱼ = ∑ₗ Uⱼₗ K̃ₗ`, then `{Kⱼ}` and `{K̃ₗ}`
-give the same Kraus map.
-
-(This is the easier direction of the unitary freedom result.) -/
+/-- **Thm 2.1 item 4 (unitary freedom, sufficient direction)**:
+If `U` is unitary (`Uᴴ U = 1`) and `Kⱼ = ∑ₗ Uⱼₗ K̃ₗ`, then `{Kⱼ}` and
+`{K̃ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K̃ₗ X K̃ₗ†`. -/
 theorem kraus_same_map_of_unitary_combination
     {r : ℕ}
     (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
@@ -121,21 +109,21 @@ theorem kraus_same_map_of_unitary_combination
       ∑ j : Fin r, K j * X * (K j)ᴴ =
       ∑ l : Fin r, K' l * X * (K' l)ᴴ := by
   intro X
+  -- Extract the orthogonality relation `∑ⱼ conj(Uⱼₗ') * Uⱼₗ = δ_{l,l'}` from `Uᴴ U = 1`.
   have hU_entry : ∀ l l' : Fin r,
-      ∑ j : Fin r, ((starRingEnd ℂ) (U j l)) * U j l' = if l = l' then 1 else 0 := by
+      ∑ j : Fin r, (starRingEnd ℂ) (U j l) * U j l' = if l = l' then 1 else 0 := by
     intro l l'
     have h := congrArg (fun M : Matrix (Fin r) (Fin r) ℂ => M l l') hU
     simpa [Matrix.mul_apply, Matrix.one_apply] using h
   calc
     ∑ j : Fin r, K j * X * (K j)ᴴ
-        = ∑ j : Fin r, (∑ l : Fin r, U j l • K' l) * X * ((∑ l : Fin r, U j l • K' l)ᴴ) := by
-            simp [hK]
+        = ∑ j : Fin r,
+            (∑ l : Fin r, U j l • K' l) * X *
+            ((∑ l : Fin r, U j l • K' l)ᴴ) := by simp [hK]
     _ = ∑ j : Fin r, ∑ l : Fin r, ∑ l' : Fin r,
           (((starRingEnd ℂ) (U j l')) * U j l) • (K' l * X * (K' l')ᴴ) := by
-          simp_rw [Matrix.sum_mul]
-          simp_rw [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul]
-          simp_rw [Matrix.mul_sum]
-          simp_rw [smul_mul_assoc, mul_smul_comm, Matrix.mul_assoc, smul_smul]
+          simp_rw [Matrix.sum_mul, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul,
+            Matrix.mul_sum, smul_mul_assoc, mul_smul_comm, Matrix.mul_assoc, smul_smul]
           simp [mul_comm]
     _ = ∑ l : Fin r, ∑ l' : Fin r,
           (∑ j : Fin r, ((starRingEnd ℂ) (U j l')) * U j l) • (K' l * X * (K' l')ᴴ) := by
@@ -146,7 +134,5 @@ theorem kraus_same_map_of_unitary_combination
           simp_rw [← Finset.sum_smul]
     _ = ∑ l : Fin r, ∑ l' : Fin r,
           (if l' = l then 1 else 0) • (K' l * X * (K' l')ᴴ) := by
-          simp_rw [hU_entry]
-          simp
-    _ = ∑ l : Fin r, K' l * X * (K' l)ᴴ := by
-          simp
+          simp_rw [hU_entry]; simp
+    _ = ∑ l : Fin r, K' l * X * (K' l)ᴴ := by simp
