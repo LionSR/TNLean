@@ -609,74 +609,52 @@ private theorem adjointTransferMap_pow_fixes_cyclic_projection
 adjoint transfer map:
 `transferMap (fun j => (blockTensor A m j)ᴴ) X = ((transferMap (fun i => (A i)ᴴ))^m) X`
 
-Both sides equal `∑_{w : length-m words} (evalWord A w)ᴴ X (evalWord A w)`.
-The LHS expands to this directly. For the RHS, we use `transferMap_blockTensor`
-applied to `K = (A·)ᴴ`, which gives `(transferMap K)^m = transferMap(blockTensor K m)`.
-The blocked Kraus operators satisfy `blockTensor K m j * X * (blockTensor K m j)ᴴ =
-(blockTensor A m j)ᴴ * X * (blockTensor A m j)` entrywise by the reversal identity
-for products of conjugate transposes. -/
+This is proved by passing to Frobenius adjoints. First,
+`transferMap (fun i => (A i)ᴴ) = (transferMap A).adjoint`, and likewise for the blocked
+family `blockTensor A m`. Second, `transferMap (blockTensor A m) = (transferMap A)^m` by
+`transferMap_blockTensor`. Finally, adjoint commutes with powers, so
+`((transferMap A)^m).adjoint = ((transferMap A).adjoint)^m`. -/
 private theorem transferMap_adjoint_blocked_eq_pow
     {d D : ℕ} (A : MPSTensor d D) (m : ℕ) (X : MatrixAlg D) :
     transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) X =
       ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X := by
-  rw [transferMap_apply]
-  simp_rw [Matrix.conjTranspose_conjTranspose]
-  -- Now: ∑ j, (blockTensor A m j)ᴴ * X * blockTensor A m j
-  -- = (transferMap K)^m X where K i = (A i)ᴴ
-  rw [← transferMap_blockTensor_apply (A := fun i => (A i)ᴴ) (L := m) (X := X)]
-  rw [transferMap_apply]
-  -- Goal: ∑ j, (blockTensor A m j)ᴴ * X * blockTensor A m j =
-  --       ∑ j, blockTensor (fun i => (A i)ᴴ) m j * X * (blockTensor (fun i => (A i)ᴴ) m j)ᴴ
-  -- Each term is indexed by the same j : Fin (blockPhysDim d m).
-  -- blockTensor (A†) m j = evalWord (A†) (wordOfBlock d m j) = A_{w₁}† * ... * A_{w_m}†
-  -- (blockTensor (A†) m j)ᴴ = (A_{w₁}† ... A_{w_m}†)ᴴ = A_{w_m} * ... * A_{w₁}
-  -- (blockTensor A m j)ᴴ = (A_{w₁} ... A_{w_m})ᴴ = A_{w_m}† * ... * A_{w₁}†
-  -- blockTensor A m j = A_{w₁} * ... * A_{w_m}
-  -- LHS_j = A_{w_m}† ... A_{w₁}† * X * A_{w₁} ... A_{w_m}
-  -- RHS_j = A_{w₁}† ... A_{w_m}† * X * A_{w_m} ... A_{w₁}
-  -- Summing over all j (= all tuples (w₁,...,w_m)), the reversal (w₁,...,w_m) ↦ (w_m,...,w₁)
-  -- is a bijection, so the sums are equal.
-  -- Key identity: (evalWord A w)ᴴ = evalWord (fun i => (A i)ᴴ) w.reverse
-  have hct : ∀ w : List (Fin d),
-      (evalWord A w)ᴴ = evalWord (fun i => (A i)ᴴ) w.reverse := by
-    intro w; induction w with
-    | nil => simp [evalWord]
-    | cons i w ih =>
-      simp only [evalWord, Matrix.conjTranspose_mul, List.reverse_cons]
-      rw [ih, evalWord_append]; simp [evalWord]
-  -- Each LHS term can be rewritten:
-  -- (blockTensor A m j)ᴴ * X * blockTensor A m j
-  -- = evalWord K (wordOfBlock d m j).reverse * X * (evalWord K (wordOfBlock d m j).reverse)ᴴ
-  -- because (evalWord A w)ᴴ = evalWord K w.reverse and evalWord A w = (evalWord K w.reverse)ᴴ.
-  set K := fun i => (A i)ᴴ
-  have hterm : ∀ j : Fin (blockPhysDim d m),
-      (blockTensor A m j)ᴴ * X * blockTensor A m j =
-      evalWord K (wordOfBlock d m j).reverse * X * (evalWord K (wordOfBlock d m j).reverse)ᴴ := by
-    intro j
-    simp only [blockTensor]
-    rw [hct (wordOfBlock d m j)]
-    congr 1
-    rw [show evalWord A (wordOfBlock d m j) =
-        (evalWord K (wordOfBlock d m j).reverse)ᴴ from by
-      rw [← hct]; simp]
-  simp_rw [hterm]
-  -- Now LHS = ∑ j, evalWord K (wj.reverse) * X * (evalWord K (wj.reverse))ᴴ
-  -- and RHS = ∑ j, evalWord K wj * X * (evalWord K wj)ᴴ.
-  -- These are the same sum since j ↦ wj and j ↦ wj.reverse are both surjections onto
-  -- all length-m words (reversal is a bijection on length-m words).
-  -- The remaining step: relate the two sums by the tuple-reversal bijection.
-  -- For each j, after rewriting, we have:
-  --   LHS_j = evalWord K (wordOfBlock d m j).reverse * X * (evalWord K (wordOfBlock d m j).reverse)ᴴ
-  --   RHS_j = evalWord K (wordOfBlock d m j) * X * (evalWord K (wordOfBlock d m j))ᴴ
-  -- These are related by the reversal bijection on block indices: j ↦ rev(j) where
-  -- wordOfBlock d m (rev j) = (wordOfBlock d m j).reverse.
-  -- The reversal is constructed as the composition:
-  --   j → decode → tuple → tuple ∘ Fin.rev → encode → rev(j)
-  -- using `Fintype.equivFin (Fin m → Fin d)` and `Fin.revPerm`.
-  -- Then `Finset.sum_equiv` with this bijection closes the goal.
-  -- The formal proof requires `List.ofFn_comp_fin_rev` or similar, which is
-  -- `List.ofFn (f ∘ Fin.rev) = (List.ofFn f).reverse`.
-  sorry
+  classical
+  have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := by
+    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ))
+  letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
+  letI : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixSeminormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
+  letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
+  have hBlockedAdj :
+      transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) =
+        (transferMap (d := blockPhysDim d m) (D := D) (blockTensor A m)).adjoint := by
+    simpa using
+      (transferMap_conjTranspose_eq_adjoint
+        (d := blockPhysDim d m) (D := D) (A := blockTensor A m))
+  have hAdj :
+      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) =
+        (transferMap (d := d) (D := D) A).adjoint := by
+    simpa using
+      (transferMap_conjTranspose_eq_adjoint (d := d) (D := D) (A := A))
+  have hPowAdj :
+      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) =
+        (((transferMap (d := d) (D := D) A) ^ m).adjoint) := by
+    rw [hAdj]
+    have hpow : (((transferMap (d := d) (D := D) A) ^ m).adjoint) =
+        ((transferMap (d := d) (D := D) A).adjoint) ^ m := by
+      simpa only [LinearMap.star_eq_adjoint] using
+        (star_pow (x := transferMap (d := d) (D := D) A) (n := m))
+    simpa using hpow.symm
+  calc
+    transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) X
+        = ((transferMap (d := blockPhysDim d m) (D := D) (blockTensor A m)).adjoint) X := by
+            rw [hBlockedAdj]
+    _ = (((transferMap (d := d) (D := D) A) ^ m).adjoint) X := by
+          rw [transferMap_blockTensor]
+    _ = ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X := by
+          rw [← hPowAdj]
 
 /-- **Cyclic sector decomposition for a blocked periodic tensor.**
 
