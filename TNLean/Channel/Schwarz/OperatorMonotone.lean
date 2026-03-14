@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Order
@@ -30,9 +31,26 @@ not yet formalized in TNLean, so this file does two things:
 open scoped Matrix ComplexOrder MatrixOrder
 open Matrix
 
+noncomputable section
+
 variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
+
+private local instance instOperatorMonotoneNormedRing : NormedRing Mat :=
+  Matrix.instL2OpNormedRing
+private local instance instOperatorMonotoneNormedAlgebra : NormedAlgebra ℂ Mat :=
+  Matrix.instL2OpNormedAlgebra
+private local instance instOperatorMonotoneCStarRing : CStarRing Mat :=
+  Matrix.instCStarRing
+private local instance instOperatorMonotonePartialOrder : PartialOrder Mat :=
+  Matrix.instPartialOrder
+private local instance instOperatorMonotoneStarOrderedRing : StarOrderedRing Mat :=
+  Matrix.instStarOrderedRing
+private local instance instOperatorMonotoneNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
+  Matrix.instNonnegSpectrumClass
+private local instance instOperatorMonotoneCStarAlgebra : CStarAlgebra Mat :=
+  CStarAlgebra.mk
 
 /-- Matrix-specialized operator monotonicity of `x ↦ x^p` for `p ∈ [0,1]`. -/
 theorem matrix_rpow_le_rpow
@@ -74,3 +92,5 @@ axiom IsPositiveMap.cor52_item3_log_of_subunital
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {A : Mat} (hA : A.PosDef) :
     T (CFC.log A) ≤ CFC.log (T A)
+
+end
