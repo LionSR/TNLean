@@ -106,14 +106,25 @@ theorem duhamel_formula
       HasDerivAt (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
         (expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s) s :=
     fun s _ => hasDerivAt_semigroup_product L L' t s
-  -- Step 2 & 3: Apply FTC
-  -- Apply FTC: ∫₀ᵗ f'(s) ds = f(t) - f(0) where f(s) = exp((t-s)L) * exp(sL')
-  -- Technical note: The FTC step involves a TopologicalSpace instance diamond for
-  -- ContinuousLinearMap in Mathlib v4.28.0 (ContinuousLinearMap.topologicalSpace vs
-  -- PseudoMetricSpace.toUniformSpace.toTopologicalSpace).
-  -- The mathematical content: f is differentiable with derivative f', both are continuous
-  -- on [0,t], so ∫₀ᵗ f'(s) ds = f(t) - f(0) by FTC.
-  sorry
+  -- Step 2: Integrability of the derivative (continuous → integrable)
+  have hintble : IntervalIntegrable
+      (fun s => expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s)
+      MeasureTheory.volume 0 t := by
+    apply ContinuousOn.intervalIntegrable
+    apply ContinuousOn.mul
+    · apply ContinuousOn.mul
+      · -- expSemigroupCLM L (t - ·) is continuous
+        exact (expSemigroupCLM_continuous L).continuousOn.comp
+          (continuous_const.sub continuous_id).continuousOn (Set.mapsTo_univ _ _)
+      · exact continuousOn_const
+    · exact (expSemigroupCLM_continuous L').continuousOn
+  -- Step 3: Apply FTC-2: ∫₀ᵗ f'(s) ds = f(t) - f(0)
+  -- where f(s) = expSemigroupCLM L (t - s) * expSemigroupCLM L' s
+  rw [intervalIntegral.integral_eq_sub_of_hasDerivAt hderiv hintble]
+  -- Simplify f(t) - f(0):
+  -- f(t) = expSemigroupCLM L (t - t) * expSemigroupCLM L' t = 1 * T' t = T' t
+  -- f(0) = expSemigroupCLM L (t - 0) * expSemigroupCLM L' 0 = T t * 1 = T t
+  simp only [sub_self, sub_zero, expSemigroupCLM_zero, one_mul, mul_one]
 
 /-! ## Helper for biSup bounds -/
 
