@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
 import TNLean.Channel.Peripheral.IrreducibleChannel
+import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.LinearAlgebra.Determinant
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
@@ -122,7 +123,7 @@ theorem channelDet_eq_zero_iff_not_bijective (T : MatrixEnd d) :
 /-- The determinant of the identity channel is `1`. -/
 @[simp] theorem channelDet_id :
     channelDet (1 : MatrixEnd d) = 1 := by
-  simp [channelDet_eq_linearMap_det]
+  simp only [channelDet_eq_linearMap_det, map_one]
 
 end Determinant
 
@@ -132,9 +133,9 @@ section Unitary
 noncomputable def unitaryChannel (U : Matrix.unitaryGroup (Fin d) ℂ) : MatrixEnd d where
   toFun X := (U : MatrixAlg d) * X * (U : MatrixAlg d)ᴴ
   map_add' X Y := by
-    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
+    simp only [mul_add, add_mul]
   map_smul' a X := by
-    simp [Matrix.mul_assoc]
+    simp only [mul_smul_comm, smul_mul_assoc, RingHom.id_apply]
 
 /-- Unitary conjugation is positive. -/
 theorem unitaryChannel_isPositiveMap (U : Matrix.unitaryGroup (Fin d) ℂ) :
@@ -148,7 +149,7 @@ theorem unitaryChannel_isCPMap (U : Matrix.unitaryGroup (Fin d) ℂ) :
     IsCPMap (unitaryChannel U) := by
   refine ⟨1, fun _ => (U : MatrixAlg d), ?_⟩
   intro X
-  simp [unitaryChannel]
+  simp only [unitaryChannel, Fin.sum_univ_one, LinearMap.coe_mk, AddHom.coe_mk]
 
 /-- Unitary conjugation is trace-preserving. -/
 theorem unitaryChannel_isTracePreserving (U : Matrix.unitaryGroup (Fin d) ℂ) :
@@ -188,7 +189,7 @@ theorem channelDet_norm_le_one_of_channel
   by_cases hd : d = 0
   · subst hd
     rw [channelDet_eq_linearMap_det, LinearMap.det_eq_one_of_subsingleton]
-    simp
+    norm_num
   · haveI : NeZero d := ⟨hd⟩
     let A : Matrix (MatrixBasisIndex d) (MatrixBasisIndex d) ℂ := channelMatrix T
     have hspectrum : spectrum ℂ A = spectrum ℂ T := by
@@ -210,21 +211,21 @@ theorem channelDet_norm_le_one_of_channel
       intro s
       refine Multiset.induction_on s ?_ ?_
       · intro _
-        simp
+        simp only [Multiset.prod_zero, norm_one, le_refl]
       · intro a s ih hs
-        have ha : ‖a‖ ≤ 1 := hs a (by simp)
+        have ha : ‖a‖ ≤ 1 := hs a (Multiset.mem_cons_self a s)
         have hs' : ∀ μ ∈ s, ‖μ‖ ≤ 1 := by
           intro μ hμ
-          exact hs μ (by simp [hμ])
+          exact hs μ (Multiset.mem_cons_of_mem hμ)
         calc
-          ‖(a ::ₘ s).prod‖ = ‖a * s.prod‖ := by simp
+          ‖(a ::ₘ s).prod‖ = ‖a * s.prod‖ := by simp only [Multiset.prod_cons]
           _ = ‖a‖ * ‖s.prod‖ := by rw [norm_mul]
           _ ≤ 1 * 1 := by gcongr; exact ih hs'
           _ = 1 := by norm_num
     have hprod_le : ‖A.charpoly.roots.prod‖ ≤ 1 :=
       hprod_le_aux A.charpoly.roots hroot_le
     calc
-      ‖channelDet T‖ = ‖A.det‖ := by simp [A, channelDet]
+      ‖channelDet T‖ = ‖A.det‖ := rfl
       _ = ‖A.charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
       _ ≤ 1 := hprod_le
 
@@ -298,12 +299,10 @@ theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
           rw [hdet_map_star, mul_pow]
     _ = 1 := by rw [hdet_unitary, one_pow]
 
-alias channelDet_unitary_eq_phase_pow := channelDet_unitary_eq_one
-
 /-- Every unitary channel has determinant of modulus `1`. -/
 theorem channelDet_norm_eq_one_of_unitaryChannel (U : Matrix.unitaryGroup (Fin d) ℂ) :
     ‖channelDet (unitaryChannel U)‖ = 1 := by
   rw [channelDet_unitary_eq_one]
-  simp
+  exact norm_one
 
 end WolfStatements

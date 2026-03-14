@@ -23,7 +23,7 @@ operators and states the abstract positive-map version of Wolf Proposition 5.1.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
-open Matrix Finset
+open Matrix
 
 namespace KadisonSchwarz
 
@@ -34,7 +34,8 @@ theorem krausAdjointMap_conjTranspose
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     krausAdjointMap K Xᴴ = (krausAdjointMap K X)ᴴ := by
-  simp [krausAdjointMap, Matrix.conjTranspose_sum, Matrix.conjTranspose_mul, Matrix.mul_assoc]
+  simp only [krausAdjointMap, Matrix.conjTranspose_sum, Matrix.conjTranspose_mul,
+    Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
 
 /-- Kadison–Schwarz for adjoint Kraus maps, restricted to normal inputs.
 

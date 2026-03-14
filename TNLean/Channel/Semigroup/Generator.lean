@@ -2,8 +2,6 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Channel.ChoiJamiolkowski
-import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Semigroup.Basic
 import Mathlib.Analysis.Calculus.MeanValue
 
@@ -37,7 +35,7 @@ characterizes generators of CPTP semigroups.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
-open Matrix Finset NormedSpace
+open Matrix
 
 noncomputable section
 
@@ -86,7 +84,6 @@ def GeneratorDecomp.toLinearMap (G : GeneratorDecomp D) :
   toFun ρ := G.φ ρ - G.κ * ρ - ρ * G.κᴴ
   map_add' ρ σ := by
     simp only [map_add, mul_add, add_mul]
-    -- noncommutative ring: a - b*c - c*d expanded for sum
     abel
   map_smul' c ρ := by
     simp only [RingHom.id_apply, map_smul, mul_smul_comm, smul_mul_assoc,
@@ -185,13 +182,8 @@ private theorem dissipator_add (Lop : Matrix (Fin D) (Fin D) ℂ)
 private theorem dissipator_smul (Lop : Matrix (Fin D) (Fin D) ℂ)
     (c : ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
     dissipator Lop (c • ρ) = c • dissipator Lop ρ := by
-  simp only [dissipator, mul_smul_comm, smul_mul_assoc]
-  simp only [smul_sub, smul_smul]
-  -- Goal: c•(LρL†) - (1/2*c)•(L†Lρ) - (1/2*c)•(ρL†L)
-  --     = c•(LρL†) - (c*(1/2))•(L†Lρ) - (c*(1/2))•(ρL†L)
-  -- Just need 1/2 * c = c * 1/2
-  have hcomm : (1 : ℂ) / 2 * c = c * (1 / 2) := by ring
-  rw [hcomm]
+  simp only [dissipator, mul_smul_comm, smul_mul_assoc, smul_sub, smul_smul]
+  rw [mul_comm ((1 : ℂ) / 2) c]
 
 /-- The linear map defined by a Lindblad form:
 `L(ρ) = i[ρ, H] + Σⱼ (Lⱼ ρ Lⱼ† - ½ {Lⱼ†Lⱼ, ρ}₊)`. -/
@@ -239,7 +231,7 @@ theorem LindbladForm.isTraceAnnihilating (F : LindbladForm D) :
   -- Hamiltonian part: tr(i(ρH - Hρ)) = 0
   have hH : trace (Complex.I • (ρ * F.H - F.H * ρ)) = 0 := by
     rw [Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_mul_comm ρ F.H]
-    simp
+    simp only [sub_self, smul_zero]
   rw [hH, zero_add]
   -- Dissipative part
   rw [Matrix.trace_sum]
@@ -287,7 +279,7 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
     · change star Complex.I • F.H = -Complex.I • F.H
       rw [Complex.star_def, Complex.conj_I, neg_smul]
     · change star (1 / 2 : ℂ) • S = (1 / 2 : ℂ) • S
-      simp
+      simp only [one_div, star_inv₀, star_ofNat]
   rw [hκ_conj]
   -- Expand dissipator
   simp only [dissipator]
@@ -304,20 +296,12 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
       rw [← Finset.smul_sum]; congr 1; rw [hS_def, Finset.sum_mul]
     · rw [← Finset.smul_sum]; congr 1; rw [hS_def, Finset.mul_sum]
   rw [hsplit]
-  -- Now we have:
-  -- LHS: I•(ρH - Hρ) + ΣLρL† - ½(Sρ) - ½(ρS)
-  -- RHS: ΣLρL† - (iH + ½S)ρ - ρ(-iH + ½S)
   -- Expand κρ = (iH + ½S)ρ = iHρ + ½Sρ
   rw [add_mul, smul_mul_assoc, smul_mul_assoc]
   -- Expand ρκ† = ρ(-iH + ½S) = -iρH + ½ρS
-  rw [mul_add, mul_smul_comm, mul_smul_comm]
-  rw [neg_smul]
-  -- Now expand I • (ρH - Hρ) = I • ρH + I • (-(Hρ)) = I • ρH - I • Hρ
+  rw [mul_add, mul_smul_comm, mul_smul_comm, neg_smul]
   simp only [sub_eq_add_neg, neg_add, neg_neg]
-  rw [smul_add (Complex.I) (ρ * F.H) (-(F.H * ρ))]
-  -- Complex.I • -(F.H * ρ) = -(Complex.I • (F.H * ρ))
-  rw [smul_neg]
-  -- Now all terms are separated with consistent scalar ordering, abel can handle
+  rw [smul_add (Complex.I) (ρ * F.H) (-(F.H * ρ)), smul_neg]
   abel
 
 /-- A Lindblad form is CCP. -/
@@ -432,7 +416,7 @@ theorem generator_shift_invariance
     mul_add, add_mul, Finset.sum_add_distrib, Finset.mul_sum, Finset.sum_mul,
     smul_add, mul_smul_comm, smul_mul_assoc, sub_eq_add_neg, neg_add]
   have hmu : star (Complex.I * ↑mu) = (-Complex.I) * ↑mu := by
-    simp
+    simp only [star_mul', Complex.star_def, Complex.conj_I, Complex.conj_ofReal]
   simp only [hmu, RCLike.star_def, one_div, RingHomCompTriple.comp_apply,
     RingHom.id_apply, star_mul', neg_mul, neg_smul, neg_neg, star_inv₀,
     star_ofNat]
@@ -448,10 +432,8 @@ theorem generator_shift_invariance
   have hScancel : S + (-((2 : ℂ)⁻¹)) • S + (-((2 : ℂ)⁻¹)) • S = 0 := by
     rw [← one_smul ℂ S]
     simp only [smul_smul, mul_one]
-    rw [← add_smul, ← add_smul]
-    have hscalar : ((1 : ℂ) + -((2 : ℂ)⁻¹)) + -((2 : ℂ)⁻¹) = 0 := by
-      ring
-    simp [hscalar]
+    rw [← add_smul, ← add_smul,
+        show (1 : ℂ) + -((2 : ℂ)⁻¹) + -((2 : ℂ)⁻¹) = 0 from by norm_num, zero_smul]
   have hgoal :
       ∑ x, K x * (ρ * (K x)ᴴ) + A + (B + S) +
           (-(κ * ρ) + -B + -X + (-((2 : ℂ)⁻¹)) • S) +
@@ -466,8 +448,7 @@ theorem generator_shift_invariance
         abel
       _ = ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) + 0 := by
         rw [hScancel]
-      _ = ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) := by
-        simp
+      _ = ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) := add_zero _
   simpa [neg_smul] using hgoal
 
 /-- **Wolf Proposition 7.4 (item 2 — existence of traceless Kraus operators)**:
@@ -502,7 +483,6 @@ theorem Matrix.eq_zero_of_forall_trace_mul_eq_zero
 
 /-! ## Bridge: trace-annihilating ↔ trace-preserving semigroup -/
 
--- Private helpers for the CLM-level proofs
 private abbrev endEquivLocal :
     (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
     (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
@@ -534,7 +514,7 @@ private theorem expSemigroupCLM_mul_comm_local
 
 /-- `trace(Lⁿ(ρ)) = 0` for `n ≥ 1` when `L` is trace-annihilating.
 This follows from `trace(Lⁿ(ρ)) = trace(L(Lⁿ⁻¹(ρ))) = 0`. -/
-theorem trace_iterate_eq_zero
+private theorem trace_iterate_eq_zero
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hTA : IsTraceAnnihilating L)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
@@ -556,9 +536,9 @@ private theorem trace_expSemigroupCLM_eq
   set f : ℝ → ℂ := fun s => g (expSemigroupCLM L_CLM s)
   suffices hsuff : ∀ x y : ℝ, f x = f y by
     have h0 : f 0 = trace ρ := by
-      simp [f, g, traceEvalCLM_apply, expSemigroupCLM_zero]
+      simp only [f, g, traceEvalCLM_apply, expSemigroupCLM_zero, ContinuousLinearMap.one_apply]
     have ht : f t = trace ((expSemigroupCLM L_CLM t) ρ) := by
-      simp [f, g, traceEvalCLM_apply]
+      simp only [f, g, traceEvalCLM_apply]
     rw [← h0, ← hsuff t 0, ht]
   apply is_const_of_deriv_eq_zero
   · -- Differentiable
@@ -584,15 +564,11 @@ theorem isTracePreservingMap_expSemigroup_of_isTraceAnnihilating
     (t : ℝ) :
     IsTracePreservingMap (expSemigroup L t) := by
   intro ρ
-  -- Reduce to CLM version using endEquivLocal
   set L_CLM := endEquivLocal L
   have hTA_CLM : ∀ ρ, trace (L_CLM ρ) = 0 := fun ρ => by
     change trace ((endEquivLocal L) ρ) = 0
-    simp only [endEquivLocal]
-    exact hTA ρ
-  have h := trace_expSemigroupCLM_eq L_CLM hTA_CLM t ρ
-  -- trace(expSemigroup L t ρ) = trace(expSemigroupCLM L_CLM t ρ) = trace ρ
-  convert h using 2
+    simp only [endEquivLocal]; exact hTA ρ
+  convert trace_expSemigroupCLM_eq L_CLM hTA_CLM t ρ using 2
 
 /-- If `exp(tL)` is trace-preserving for all `t ≥ 0`, then `L` is trace-annihilating.
 
@@ -614,44 +590,24 @@ theorem isTraceAnnihilating_of_isTracePreservingMap_semigroup
       (g (expSemigroupCLM L_CLM 0 * L_CLM)) 0 :=
     g.hasFDerivAt.comp_hasDerivAt 0 (hasDerivAt_expSemigroupCLM L_CLM 0)
   simp only [expSemigroupCLM_zero, one_mul] at hd0
-  -- hd0 : HasDerivAt (fun s => g(exp(sL))) (g(L_CLM)) 0
-  -- g(L_CLM) = trace(L_CLM(ρ)) = trace(L(ρ))
-  have hg_L : g L_CLM = trace (L ρ) := by
-    rw [traceEvalCLM_apply]
-    rfl
+  have hg_L : g L_CLM = trace (L ρ) := by rw [traceEvalCLM_apply]; rfl
   rw [hg_L] at hd0
-  -- For t ≥ 0: g(exp(tL)) = trace(ρ) (from TP hypothesis)
-  have hconst : ∀ t : ℝ, 0 ≤ t →
-      g (expSemigroupCLM L_CLM t) = trace ρ := by
-    intro t ht
-    rw [traceEvalCLM_apply]
-    convert hTP t ht ρ using 2
-  -- At 0: g(exp(0)) = trace(ρ)
+  -- For t ≥ 0: g(exp(tL)) = trace(ρ) (constant from TP hypothesis)
+  have hconst : ∀ t : ℝ, 0 ≤ t → g (expSemigroupCLM L_CLM t) = trace ρ := fun t ht => by
+    rw [traceEvalCLM_apply]; convert hTP t ht ρ using 2
   have h0 : g (expSemigroupCLM L_CLM 0) = trace ρ := hconst 0 le_rfl
-  -- Strategy: HasDerivAt gives the slope → trace(L(ρ)) in nhdsWithin 0 {0}ᶜ.
-  -- But the slope is 0 on (0,∞) (since f is constant there).
-  -- Since nhdsWithin 0 (Set.Ioi 0) ≤ nhdsWithin 0 {0}ᶜ and is NeBot,
-  -- the slope also tends to trace(L(ρ)) in nhdsWithin 0 (Set.Ioi 0).
-  -- But slope = 0 on (0,∞), so the limit from the right is 0.
-  -- By uniqueness of limits in T2 space: trace(L(ρ)) = 0.
+  -- f(t) = const on [0,∞) → slope from the right tends to 0;
+  -- HasDerivAt gives slope tending to trace(L(ρ)); uniqueness gives 0.
   rw [hasDerivAt_iff_tendsto_slope] at hd0
-  -- hd0 : Tendsto (slope f' 0) (nhdsWithin 0 {0}ᶜ) (nhds (trace(L(ρ))))
-  -- where f' s = g(expSemigroupCLM L_CLM s)
-  -- Restrict to right: nhdsWithin 0 (Set.Ioi 0)
   have hright : Filter.Tendsto (slope (fun s => g (expSemigroupCLM L_CLM s)) 0)
       (nhdsWithin 0 (Set.Ioi 0)) (nhds (trace (L ρ))) :=
     hd0.mono_left (nhdsWithin_mono 0 (fun x hx => Set.mem_compl_singleton_iff.mpr
       (ne_of_gt hx)))
-  -- The slope is 0 on (0,∞) since f is constant there
   have hslope_zero : Filter.Tendsto (slope (fun s => g (expSemigroupCLM L_CLM s)) 0)
-      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
-    have hev : (fun _ : ℝ => (0 : ℂ)) =ᶠ[nhdsWithin 0 (Set.Ioi 0)]
-        slope (fun s => g (expSemigroupCLM L_CLM s)) 0 :=
-      eventually_nhdsWithin_of_forall fun h hh => by
-        simp only [slope, vsub_eq_sub]
-        rw [hconst h (le_of_lt hh), h0, sub_self, smul_zero]
-    exact tendsto_const_nhds.congr' hev
-  -- By uniqueness of limits: trace(L(ρ)) = 0
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) :=
+    tendsto_const_nhds.congr' <| eventually_nhdsWithin_of_forall fun h hh => by
+      simp only [slope, vsub_eq_sub]
+      rw [hconst h (le_of_lt hh), h0, sub_self, smul_zero]
   haveI : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
   exact (tendsto_nhds_unique hslope_zero hright).symm
 
@@ -683,37 +639,21 @@ theorem generatorDecomp_of_gksl
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hL : IsGKSLGenerator L) :
     ∃ G : GeneratorDecomp D, L = G.toLinearMap ∧ G.isTraceConstraint := by
-  -- Step 1: GKSL → CP semigroup → CCP → ∃ generator decomposition
-  have hCP : ∀ t : ℝ, 0 ≤ t → IsCPMap (expSemigroup L t) :=
-    fun t ht => (hL t ht).cp
-  have hCCP := cp_semigroup_implies_ccp_generator L hCP
-  obtain ⟨G, hG⟩ := hCCP
-  -- Step 2: Extract trace constraint from trace-annihilating
-  -- TA follows from TP semigroup
+  have hCP : ∀ t : ℝ, 0 ≤ t → IsCPMap (expSemigroup L t) := fun t ht => (hL t ht).cp
+  obtain ⟨G, hG⟩ := cp_semigroup_implies_ccp_generator L hCP
   have hTA : IsTraceAnnihilating L :=
-    isTraceAnnihilating_of_isTracePreservingMap_semigroup L
-      (fun t ht => (hL t ht).tp)
-  -- Step 3: The trace constraint follows algebraically from TA + Kraus form
+    isTraceAnnihilating_of_isTracePreservingMap_semigroup L (fun t ht => (hL t ht).tp)
   refine ⟨G, hG, ?_⟩
-  -- Get Kraus operators from G.φ being CP
   obtain ⟨r, K, hK⟩ := G.φ_cp
   refine ⟨r, K, hK, ?_⟩
-  -- Need: Σ Kᵢ†Kᵢ = G.κ + G.κ†
-  -- From TA: trace(L(ρ)) = 0 for all ρ
-  -- L(ρ) = G.φ(ρ) - G.κ * ρ - ρ * G.κ† = (Σ Kᵢ ρ Kᵢ†) - G.κ * ρ - ρ * G.κ†
-  -- trace(L(ρ)) = trace((Σ Kᵢ†Kᵢ)ρ) - trace(G.κ ρ) - trace(G.κ† ρ)
-  --             = trace((Σ Kᵢ†Kᵢ - G.κ - G.κ†)ρ) = 0
-  -- By trace pairing non-degeneracy: Σ Kᵢ†Kᵢ - G.κ - G.κ† = 0
+  -- Need: Σ Kᵢ†Kᵢ = G.κ + G.κ† (from TA via trace pairing non-degeneracy)
   have hTA_G : IsTraceAnnihilating G.toLinearMap := hG ▸ hTA
-  -- Use trace pairing non-degeneracy
   have hdiff : ∑ i : Fin r, (K i)ᴴ * K i - G.κ - G.κᴴ = 0 := by
     apply Matrix.eq_zero_of_forall_trace_mul_eq_zero
     intro ρ
     have h := hTA_G ρ
     simp only [GeneratorDecomp.toLinearMap_apply] at h
     rw [hK] at h
-    -- h : trace ((Σ Kᵢ ρ Kᵢ†) - G.κ * ρ - ρ * G.κ†) = 0
-    -- Rewrite to trace((Σ Kᵢ†Kᵢ - G.κ - G.κ†) * ρ) = 0
     rw [trace_sub, trace_sub] at h
     -- trace(Σ Kᵢ ρ Kᵢ†) = trace((Σ Kᵢ†Kᵢ) ρ) by cyclic property
     have hcycl : trace (∑ i, K i * ρ * (K i)ᴴ) =
@@ -725,12 +665,9 @@ theorem generatorDecomp_of_gksl
       rw [Matrix.trace_mul_cycle, Matrix.mul_assoc]
     rw [hcycl] at h
     -- trace(ρ * G.κ†) = trace(G.κ† * ρ) by cyclic property
-    rw [Matrix.trace_mul_comm ρ G.κᴴ] at h
-    -- Now: trace((Σ Kᵢ†Kᵢ) * ρ) - trace(G.κ * ρ) - trace(G.κ† * ρ) = 0
-    -- = trace((Σ Kᵢ†Kᵢ - G.κ - G.κ†) * ρ) = 0
-    rw [← trace_sub, ← trace_sub] at h
+    rw [Matrix.trace_mul_comm ρ G.κᴴ, ← trace_sub, ← trace_sub] at h
     convert h using 1
-    simp [sub_mul]
+    simp only [sub_mul]
   -- Σ Kᵢ†Kᵢ - G.κ - G.κ† = 0 ⟹ Σ Kᵢ†Kᵢ = G.κ + G.κ†
   rw [sub_sub] at hdiff
   exact sub_eq_zero.mp hdiff
@@ -925,11 +862,8 @@ private theorem posSemidef_sqrt_factorization {n : ℕ}
   have hC_nonneg : 0 ≤ C := Matrix.nonneg_iff_posSemidef.mpr hC
   have hsqrt_psd : (CFC.sqrt C).PosSemidef :=
     Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg C)
-  calc
-    (CFC.sqrt C)ᴴ * CFC.sqrt C = CFC.sqrt C * CFC.sqrt C := by
-      rw [hsqrt_psd.isHermitian.eq]
-    _ = C := by
-      simpa using (CFC.sqrt_mul_sqrt_self C hC_nonneg)
+  rw [hsqrt_psd.isHermitian.eq]
+  simpa using CFC.sqrt_mul_sqrt_self C hC_nonneg
 
 /-- Bilinear sum identity: `Σⱼ (Σₖ B_{jk}•Fₖ) * M * (Σₖ B_{jk}•Fₖ)†`
 equals `Σₖₗ (B†B)_{lk} • (Fₖ * M * Fₗ†)`. Used in Kossakowski ↔ Lindblad. -/
