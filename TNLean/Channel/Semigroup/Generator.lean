@@ -600,10 +600,57 @@ theorem isTraceAnnihilating_of_isTracePreservingMap_semigroup
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hTP : ∀ t : ℝ, 0 ≤ t → IsTracePreservingMap (expSemigroup L t)) :
     IsTraceAnnihilating L := by
-  -- The TA → TP direction gives us trace(exp(tL)(ρ)) = trace(ρ) for all t.
-  -- But we can't use that here (it's the REVERSE direction).
-  -- Instead: TP semigroup → at t=0, d/dt trace(exp(tL)(ρ)) = trace(L(ρ)) = 0.
-  sorry
+  intro ρ
+  -- f(t) = trace(exp(tL)(ρ)) has HasDerivAt f trace(L(ρ)) 0.
+  -- For t ≥ 0, f(t) = trace(ρ) (TP hypothesis).
+  -- So trace(L(ρ)) must be 0 (derivative of a locally constant function).
+  set L_CLM := endEquivLocal L
+  set g := traceEvalCLM ρ
+  -- HasDerivAt at 0 with derivative trace(L(ρ))
+  have hd0 : HasDerivAt (fun s => g (expSemigroupCLM L_CLM s))
+      (g (expSemigroupCLM L_CLM 0 * L_CLM)) 0 :=
+    g.hasFDerivAt.comp_hasDerivAt 0 (hasDerivAt_expSemigroupCLM L_CLM 0)
+  simp only [expSemigroupCLM_zero, one_mul] at hd0
+  -- hd0 : HasDerivAt (fun s => g(exp(sL))) (g(L_CLM)) 0
+  -- g(L_CLM) = trace(L_CLM(ρ)) = trace(L(ρ))
+  have hg_L : g L_CLM = trace (L ρ) := by
+    rw [traceEvalCLM_apply]
+    rfl
+  rw [hg_L] at hd0
+  -- For t ≥ 0: g(exp(tL)) = trace(ρ) (from TP hypothesis)
+  have hconst : ∀ t : ℝ, 0 ≤ t →
+      g (expSemigroupCLM L_CLM t) = trace ρ := by
+    intro t ht
+    rw [traceEvalCLM_apply]
+    convert hTP t ht ρ using 2
+  -- At 0: g(exp(0)) = trace(ρ)
+  have h0 : g (expSemigroupCLM L_CLM 0) = trace ρ := hconst 0 le_rfl
+  -- Strategy: HasDerivAt gives the slope → trace(L(ρ)) in nhdsWithin 0 {0}ᶜ.
+  -- But the slope is 0 on (0,∞) (since f is constant there).
+  -- Since nhdsWithin 0 (Set.Ioi 0) ≤ nhdsWithin 0 {0}ᶜ and is NeBot,
+  -- the slope also tends to trace(L(ρ)) in nhdsWithin 0 (Set.Ioi 0).
+  -- But slope = 0 on (0,∞), so the limit from the right is 0.
+  -- By uniqueness of limits in T2 space: trace(L(ρ)) = 0.
+  rw [hasDerivAt_iff_tendsto_slope] at hd0
+  -- hd0 : Tendsto (slope f' 0) (nhdsWithin 0 {0}ᶜ) (nhds (trace(L(ρ))))
+  -- where f' s = g(expSemigroupCLM L_CLM s)
+  -- Restrict to right: nhdsWithin 0 (Set.Ioi 0)
+  have hright : Filter.Tendsto (slope (fun s => g (expSemigroupCLM L_CLM s)) 0)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds (trace (L ρ))) :=
+    hd0.mono_left (nhdsWithin_mono 0 (fun x hx => Set.mem_compl_singleton_iff.mpr
+      (ne_of_gt hx)))
+  -- The slope is 0 on (0,∞) since f is constant there
+  have hslope_zero : Filter.Tendsto (slope (fun s => g (expSemigroupCLM L_CLM s)) 0)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    have hev : (fun _ : ℝ => (0 : ℂ)) =ᶠ[nhdsWithin 0 (Set.Ioi 0)]
+        slope (fun s => g (expSemigroupCLM L_CLM s)) 0 :=
+      eventually_nhdsWithin_of_forall fun h hh => by
+        simp only [slope, vsub_eq_sub]
+        rw [hconst h (le_of_lt hh), h0, sub_self, smul_zero]
+    exact tendsto_const_nhds.congr' hev
+  -- By uniqueness of limits: trace(L(ρ)) = 0
+  haveI : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
+  exact (tendsto_nhds_unique hslope_zero hright).symm
 
 /-! ## Theorem 7.1: GKSL/Lindblad theorem (Wolf Theorem 7.1) -/
 
@@ -838,36 +885,35 @@ theorem kossakowski_iff_lindblad
 
 /-!
 ### Fully proven (sorry-free):
-- `GeneratorDecomp` definition and `toLinearMap` (linearity)
-- `IsCCP` definition
-- `LindbladForm` definition and `toLinearMap` (linearity)
-- `IsTraceAnnihilating` definition
-- `IsGKSLGenerator` definition
-- `KossakowskiForm` definition and `toLinearMap` (linearity)
+- All definitions: `GeneratorDecomp`, `IsCCP`, `LindbladForm`, `IsTraceAnnihilating`,
+  `IsGKSLGenerator`, `KossakowskiForm`
+- `GeneratorDecomp.toLinearMap` — linearity ✓
+- `LindbladForm.toLinearMap` — linearity ✓
+- `KossakowskiForm.toLinearMap` — linearity ✓
 - `LindbladForm.isTraceAnnihilating` — Lindblad form is trace-annihilating ✓
-- `LindbladForm.toLinearMap_eq_generatorDecomp` — Lindblad form = (φ,κ) decomposition ✓
+- `LindbladForm.toLinearMap_eq_generatorDecomp` — Lindblad = (φ,κ) decomposition ✓
 - `LindbladForm.isCCP` — Lindblad form is CCP ✓
-- `GeneratorDecomp.traceAnnihilating_of_traceConstraint` — φ*(1)=κ+κ† ⟹ trace-annihilating ✓
+- `GeneratorDecomp.traceAnnihilating_of_traceConstraint` — φ*(1)=κ+κ† ⟹ TA ✓
 - `exists_traceless_kraus_shift` — traceless Kraus operators exist ✓
 - `generator_shift_invariance` — Prop 7.4 Kraus shift invariance ✓
 - `trace_iterate_eq_zero` — trace(Lⁿ(ρ)) = 0 for n ≥ 1 ✓
+- `Matrix.eq_zero_of_forall_trace_mul_eq_zero` — trace pairing non-degeneracy ✓
+- `isTracePreservingMap_expSemigroup_of_isTraceAnnihilating` — TA → TP semigroup ✓
+  (via ODE argument: is_const_of_deriv_eq_zero + commutativity of L with exp(tL))
+- `isTraceAnnihilating_of_isTracePreservingMap_semigroup` — TP semigroup → TA ✓
+  (via infinitesimal argument: slope → 0 from right + uniqueness of limits)
 - `cp_semigroup_iff_ccp_generator` — Prop 7.3 equivalence ✓
-- `gksl_iff_ccp_and_traceAnnihilating` — Thm 7.1 ↔ (CCP ∧ TA) ✓ (modulo infrastructure)
-- `gksl_iff_lindbladForm` backward — LindbladForm → GKSL ✓ (modulo infrastructure)
-- `gksl_of_generatorDecomp_with_traceConstraint` — TP part now uses helper ✓
-
-### Sorry — infrastructure lemmas (2, analytic):
-- `isTracePreservingMap_expSemigroup_of_isTraceAnnihilating` — TA → TP semigroup
-  (needs: derivative of exp(tL) + trace chain rule + constant function thm)
-- `isTraceAnnihilating_of_isTracePreservingMap_semigroup` — TP semigroup → TA
-  (needs: infinitesimal TP → TA via d/dt|₀ trace(exp(tL)(ρ)) = trace(L(ρ)))
+- `gksl_of_generatorDecomp_with_traceConstraint` — Thm 7.1 Form i → GKSL ✓
+- `generatorDecomp_of_gksl` — Thm 7.1 GKSL → Form i ✓
+  (trace constraint derived algebraically from TA + trace pairing non-degeneracy)
+- `gksl_iff_ccp_and_traceAnnihilating` — Thm 7.1 ↔ (CCP ∧ TA) ✓
+- `gksl_iff_lindbladForm` backward — LindbladForm → GKSL ✓
 
 ### Sorry — deep results (5):
-- `choi_projected_posSemidef_implies_ccp` — Prop 7.2 reverse (needs spectral decomp)
+- `choi_projected_posSemidef_implies_ccp` — Prop 7.2 reverse (spectral decomp of Choi)
 - `cp_semigroup_implies_ccp_generator` — Prop 7.3 forward (infinitesimal Choi expansion)
 - `ccp_generator_implies_cp_semigroup` — Prop 7.3 reverse (Lie–Trotter product formula)
-- `generatorDecomp_of_gksl` (partial) — trace constraint from TA (needs trace pairing)
-- `gksl_iff_lindbladForm` forward — GKSL → LindbladForm (needs CCP decomposition)
+- `gksl_iff_lindbladForm` forward — GKSL → LindbladForm (CCP + TA → Lindblad decomp)
 - `kossakowski_iff_lindblad` — Form (ii) ↔ Form (iii) (change of basis via C = M†M)
 -/
 
