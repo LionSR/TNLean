@@ -416,7 +416,49 @@ theorem generator_shift_invariance
     ∀ ρ : Matrix (Fin D) (Fin D) ℂ,
       (∑ i, K' i * ρ * (K' i)ᴴ) - κ' * ρ - ρ * κ'ᴴ =
       (∑ i, K i * ρ * (K i)ᴴ) - κ * ρ - ρ * κᴴ := by
-  sorry
+  dsimp
+  intro ρ
+  simp only [conjTranspose_add, conjTranspose_sum, conjTranspose_smul,
+    conjTranspose_one, Matrix.one_mul, Matrix.mul_one, Matrix.mul_assoc,
+    mul_add, add_mul, Finset.sum_add_distrib, Finset.sum_sub_distrib,
+    Finset.mul_sum, Finset.sum_mul, smul_add, smul_sub, mul_smul_comm,
+    smul_mul_assoc, sub_eq_add_neg, neg_add, neg_neg]
+  have hmu : star (Complex.I * ↑mu) = (-Complex.I) * ↑mu := by
+    simp
+  simp [hmu]
+  have hnorm : ∀ i : Fin r, c i * starRingEnd ℂ (c i) = starRingEnd ℂ (c i) * c i := by
+    intro i
+    ring
+  simp_rw [hnorm]
+  simp only [smul_smul]
+  set A : Matrix (Fin D) (Fin D) ℂ := ∑ x, c x • (ρ * (K x)ᴴ)
+  set B : Matrix (Fin D) (Fin D) ℂ := ∑ x, (starRingEnd ℂ (c x)) • (K x * ρ)
+  set S : Matrix (Fin D) (Fin D) ℂ := ∑ x, ((starRingEnd ℂ (c x) * c x) • ρ)
+  set X : Matrix (Fin D) (Fin D) ℂ := (Complex.I * ↑mu) • ρ
+  have hScancel : S + (-((2 : ℂ)⁻¹)) • S + (-((2 : ℂ)⁻¹)) • S = 0 := by
+    rw [← one_smul ℂ S]
+    simp only [smul_smul, mul_one]
+    rw [← add_smul, ← add_smul]
+    have hscalar : ((1 : ℂ) + -((2 : ℂ)⁻¹)) + -((2 : ℂ)⁻¹) = 0 := by
+      ring
+    simp [hscalar]
+  have hgoal :
+      ∑ x, K x * (ρ * (K x)ᴴ) + A + (B + S) +
+          (-(κ * ρ) + -B + -X + (-((2 : ℂ)⁻¹)) • S) +
+          (-(ρ * κᴴ) + -A + X + (-((2 : ℂ)⁻¹)) • S) =
+        ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) := by
+    calc
+      ∑ x, K x * (ρ * (K x)ᴴ) + A + (B + S) +
+          (-(κ * ρ) + -B + -X + (-((2 : ℂ)⁻¹)) • S) +
+          (-(ρ * κᴴ) + -A + X + (-((2 : ℂ)⁻¹)) • S) =
+        ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) +
+          (S + (-((2 : ℂ)⁻¹)) • S + (-((2 : ℂ)⁻¹)) • S) := by
+        abel
+      _ = ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) + 0 := by
+        rw [hScancel]
+      _ = ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) := by
+        simp
+  simpa [neg_smul] using hgoal
 
 /-- **Wolf Proposition 7.4 (item 2 — existence of traceless Kraus operators)**:
 Given any Kraus representation `{Lⱼ}`, there exist shifts `cⱼ` such that
@@ -510,11 +552,79 @@ def KossakowskiForm.toLinearMap (K : KossakowskiForm D) :
       K.C l k • (
         (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
         (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k))
-  map_add' _ _ := by
-    -- Linearity of the Kossakowski form in ρ (routine but tedious algebra)
-    sorry
-  map_smul' _ _ := by
-    sorry
+  map_add' ρ σ := by
+    have hham : Complex.I • ((ρ + σ) * K.H - K.H * (ρ + σ)) =
+        Complex.I • (ρ * K.H - K.H * ρ) + Complex.I • (σ * K.H - K.H * σ) := by
+      rw [← smul_add]
+      congr 1
+      simp only [mul_add, add_mul]
+      abel
+    rw [hham]
+    have hterm : ∀ k l : Fin K.n,
+        K.C l k • (
+          (K.F k * (ρ + σ) * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * (ρ + σ)) +
+          (K.F k * (ρ + σ) * (K.F l)ᴴ - (ρ + σ) * (K.F l)ᴴ * K.F k)) =
+        K.C l k • (
+          (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
+          (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k)) +
+        K.C l k • (
+          (K.F k * σ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * σ) +
+          (K.F k * σ * (K.F l)ᴴ - σ * (K.F l)ᴴ * K.F k)) := by
+      intro k l
+      simp only [mul_add, add_mul, smul_add, smul_sub]
+      abel
+    have hdiss :
+        (1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
+          K.C l k • (
+            (K.F k * (ρ + σ) * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * (ρ + σ)) +
+            (K.F k * (ρ + σ) * (K.F l)ᴴ - (ρ + σ) * (K.F l)ᴴ * K.F k)) =
+        (1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
+          K.C l k • (
+            (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
+            (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k)) +
+        (1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
+          K.C l k • (
+            (K.F k * σ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * σ) +
+            (K.F k * σ * (K.F l)ᴴ - σ * (K.F l)ᴴ * K.F k)) := by
+      simp_rw [hterm]
+      simp_rw [Finset.sum_add_distrib]
+      rw [smul_add]
+    rw [hdiss]
+    abel
+  map_smul' c ρ := by
+    have hham : Complex.I • (c • ρ * K.H - K.H * (c • ρ)) =
+        c • (Complex.I • (ρ * K.H - K.H * ρ)) := by
+      simp only [mul_smul_comm, smul_mul_assoc, smul_sub, smul_smul]
+      congr 1 <;> ring
+    rw [hham]
+    have hterm : ∀ k l : Fin K.n,
+        K.C l k • (
+          (K.F k * (c • ρ) * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * (c • ρ)) +
+          (K.F k * (c • ρ) * (K.F l)ᴴ - (c • ρ) * (K.F l)ᴴ * K.F k)) =
+        c • (K.C l k • (
+          (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
+          (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k))) := by
+      intro k l
+      simp only [mul_smul_comm, smul_mul_assoc, smul_sub, smul_add, smul_smul]
+      have hcomm : K.C l k * c = c * K.C l k := by ring
+      rw [hcomm]
+    have hdiss :
+        (1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
+          K.C l k • (
+            (K.F k * (c • ρ) * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * (c • ρ)) +
+            (K.F k * (c • ρ) * (K.F l)ᴴ - (c • ρ) * (K.F l)ᴴ * K.F k)) =
+        c • ((1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
+          K.C l k • (
+            (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
+            (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k))) := by
+      simp_rw [hterm]
+      simp_rw [← Finset.smul_sum]
+      rw [smul_smul, smul_smul]
+      congr 1
+      ring
+    rw [hdiss]
+    rw [smul_add]
+    simp only [RingHom.id_apply]
 
 /-- The Kossakowski form is equivalent to the Lindblad form:
 diagonalizing `C = M†M` converts between the two.
