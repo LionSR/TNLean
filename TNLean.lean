@@ -58,6 +58,7 @@ import TNLean.Channel.Schwarz.SchwarzNotCP
 import TNLean.Channel.Schwarz.MultiplicativeDomain
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
+import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic

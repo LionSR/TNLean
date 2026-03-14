@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
@@ -163,6 +164,37 @@ endpoint.
 ---
 
 ## §6.4 Fixed points
+
+### Wolf Theorem 6.12 (Fixed points form a *-algebra) — FORMALIZED
+
+In `TNLean.Channel.FixedPoint.Algebra`:
+
+* `Kraus.fixedPointsStarSubalgebra` — Schrödinger-picture form:
+  if `map K` is unital and `adjointMap K` has a positive definite fixed point,
+  the fixed points of `map K` form a `StarSubalgebra`.
+* `Kraus.adjointFixedPointsStarSubalgebra` — Heisenberg-picture form:
+  if `adjointMap K` is unital (`IsTP K`) and `map K` has a positive definite
+  fixed point, the fixed points of `adjointMap K` form a `StarSubalgebra`.
+* `Kraus.fixedPoints_in_multiplicativeDomain` — the key intermediate step:
+  every fixed point of the adjoint map lies in the multiplicative domain.
+* `Kraus.fixedPoints_starSubalgebra` / `Kraus.mem_fixedPoints_starSubalgebra`
+  — prompt-facing wrapper with Wolf naming convention.
+
+### Wolf Theorem 6.13 (Fixed points and Kraus commutant) — FORMALIZED
+
+In `TNLean.Channel.FixedPoint.Algebra`:
+
+* `Kraus.fixedPoint_commutes_kraus` — if `X` and `Xᴴ * X` are both fixed by
+  the Heisenberg-picture map `adjointMap K`, then `X` commutes with every
+  Kraus operator `K i`.
+* `Kraus.krausCommutantStarSubalgebra` — the commutant of {K_i, K_i†} forms
+  a `StarSubalgebra`.
+* `Kraus.krausCommutantStarSubalgebra_isGreatest_adjointFixedPointStarSubalgebras`
+  — the Kraus commutant is the **largest** `*`-subalgebra contained in the
+  fixed-point set of the adjoint map.
+* `Kraus.adjointFixedPointsStarSubalgebra_eq_krausCommutantStarSubalgebra`
+  — under the hypotheses of Thm 6.12, the full adjoint fixed-point
+  `*`-subalgebra coincides with the Kraus commutant.
 
 ### Wolf Theorem 6.10 (Brouwer's fixed point theorem)
 
