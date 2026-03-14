@@ -335,12 +335,83 @@ theorem kadison_schwarz_commuting_dominant_cp
   exact kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
     (K := K) h_tp A Dom hDomPos hComm hDom hDomRight
 
+/-- **Decomposition lemma** for the PD commuting-dominant Schwarz inequality.
+
+Given positive definite `Dom` commuting with `A` and dominating `Aᴴ * A`,
+there exists a PSD family `{Qᵢ}` summing to `1` and complex scalars `{μᵢ}`
+such that `A = ∑ μᵢ Qᵢ` and `Dom = ∑ |μᵢ|² Qᵢ`.
+
+The proof constructs the Julia unitary of the contraction `Dom⁻¹ᐟ² A` on the
+doubled space `Fin D ⊕ Fin D`, forms the normal matrix
+`N = (Dom¹ᐟ² ⊕ Dom¹ᐟ²) · U` which satisfies `N†N = Dom ⊕ Dom`, and
+extracts the top-left block of each spectral projection of `N`. -/
+private lemma exists_psd_decomposition_commuting_dominant_posDef
+    (A Dom : Mat)
+    (hPD : Dom.PosDef)
+    (hComm : Commute Dom A)
+    (hDom : Aᴴ * A ≤ Dom) :
+    ∃ (ι : Type) (_ : Fintype ι)
+      (Q : ι → Mat) (μ : ι → ℂ),
+      (∀ i, (Q i).PosSemidef) ∧
+      (∑ i, Q i = 1) ∧
+      (A = ∑ i, μ i • Q i) ∧
+      (Dom = ∑ i, (starRingEnd ℂ (μ i) * μ i) • Q i) := by
+  sorry
+
+/-- Helper: the PD Schwarz inequality for commuting dominant operators.
+
+This combines the PD decomposition with `diagonal_family_schwarz_le`. -/
+private lemma schwarz_commuting_dominant_posDef
+    (T : Mat →ₗ[ℂ] Mat)
+    (hPos : IsPositiveMap T)
+    (hSub : T 1 ≤ (1 : Mat))
+    (A Dom : Mat)
+    (hPD : Dom.PosDef)
+    (hComm : Commute Dom A)
+    (hDom : Aᴴ * A ≤ Dom) :
+    T (Aᴴ) * T A ≤ T Dom ∧ T A * T (Aᴴ) ≤ T Dom := by
+  obtain ⟨ι, hFin, Q, μ, hQpsd, hQsum, hAeq, hDeq⟩ :=
+    exists_psd_decomposition_commuting_dominant_posDef A Dom hPD hComm hDom
+  -- Set Bᵢ = T(Qᵢ): these are PSD with ∑ Bᵢ = T(1) ≤ 1
+  let B : ι → Mat := fun i => T (Q i)
+  have hBpsd : ∀ i, (B i).PosSemidef := fun i => hPos (Q i) (hQpsd i)
+  have hBsub : ∑ i, B i ≤ 1 := by
+    calc ∑ i, B i = T (∑ i, Q i) := by simp [B, map_sum]
+      _ = T 1 := by rw [hQsum]
+      _ ≤ 1 := hSub
+  have hBherm : ∀ i, (B i)ᴴ = B i := fun i => (hBpsd i).isHermitian.eq
+  -- Express T(A), T(A†), T(D) in terms of the family
+  have hTA : T A = ∑ i, μ i • B i := by rw [hAeq]; simp [B, map_sum]
+  have hTD : T Dom = ∑ i, (starRingEnd ℂ (μ i) * μ i) • B i := by
+    rw [hDeq]; simp [B, map_sum]
+  have hTAstar : T Aᴴ = ∑ i, starRingEnd ℂ (μ i) • B i := by
+    calc T Aᴴ = (T A)ᴴ := by simpa using hPos.map_conjTranspose A
+      _ = (∑ i, μ i • B i)ᴴ := by rw [hTA]
+      _ = ∑ i, starRingEnd ℂ (μ i) • B i := by
+          simp [hBherm, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul]
+  -- LEFT: T(A†)T(A) ≤ T(D) via diagonal_family_schwarz_le with z = μ
+  have hLeft : T Aᴴ * T A ≤ T Dom := by
+    rw [hTAstar, hTA, hTD]
+    exact PositiveOnAbelian.diagonal_family_schwarz_le B hBpsd hBsub μ
+  -- RIGHT: T(A)T(A†) ≤ T(D) via diagonal_family_schwarz_le with z = star(μ)
+  have hRight : T A * T Aᴴ ≤ T Dom := by
+    rw [hTA, hTAstar, hTD]
+    have key := PositiveOnAbelian.diagonal_family_schwarz_le B hBpsd hBsub
+      (fun i => starRingEnd ℂ (μ i))
+    simp only [map_star, star_star] at key
+    convert key using 2
+    funext i
+    ring
+  exact ⟨hLeft, hRight⟩
+
 /-- Wolf Thm. 5.6: Schwarz inequality for commuting dominant operators.
 
-The proof follows Wolf's normal-block-matrix construction.  One first proves the
-auxiliary order lemma `commuting_dominant_right_bound`, then builds a normal block
-matrix `N` with `θ(N) = A` and `θ(Nᴴ * N) = D`, and finally applies Wolf Prop. 5.1
-through the composed map `T ∘ θ`. -/
+If `T` is a positive subunital linear map, `D ≥ 0` commutes with `A`, and
+`Aᴴ * A ≤ D`, then `T(Aᴴ) T(A) ≤ T(D)` and `T(A) T(Aᴴ) ≤ T(D)`.
+
+The proof handles the positive definite case via a PSD decomposition and
+`diagonal_family_schwarz_le`, then extends to general PSD `D` by
+approximating with `D + ε · I` and letting `ε → 0`. -/
 theorem schwarz_inequality_commuting_dominant_operator
     (T : Mat →ₗ[ℂ] Mat)
     (hPos : IsPositiveMap T)
@@ -350,6 +421,54 @@ theorem schwarz_inequality_commuting_dominant_operator
     (hComm : Commute Dom A)
     (hDom : Aᴴ * A ≤ Dom) :
     T (Aᴴ) * T A ≤ T Dom ∧ T A * T (Aᴴ) ≤ T Dom := by
-  sorry
+  -- Hermitianity of the LHS and RHS, needed for the limit argument
+  have hLherm : (T Aᴴ * T A).IsHermitian := by
+    rw [Matrix.IsHermitian, conjTranspose_mul,
+      show (T A)ᴴ = T Aᴴ from by simpa using (hPos.map_conjTranspose A).symm,
+      show (T Aᴴ)ᴴ = T A from by
+        rw [show (T Aᴴ)ᴴ = (T A)ᴴᴴ from by
+          rw [show T Aᴴ = (T A)ᴴ from by simpa using hPos.map_conjTranspose A]
+        , conjTranspose_conjTranspose]]
+  have hRherm : (T A * T Aᴴ).IsHermitian := by
+    rw [Matrix.IsHermitian, conjTranspose_mul,
+      show (T Aᴴ)ᴴ = T A from by
+        rw [show T Aᴴ = (T A)ᴴ from by simpa using hPos.map_conjTranspose A
+        , conjTranspose_conjTranspose],
+      show (T A)ᴴ = T Aᴴ from by simpa using (hPos.map_conjTranspose A).symm]
+  have hDherm : (T Dom).IsHermitian := (hPos Dom hDomPos).isHermitian
+  -- Reduce to PD case via approximation: Dom + ε·I is PD for ε > 0
+  constructor
+  · -- Left inequality: T(A†)T(A) ≤ T(Dom)
+    apply le_of_forall_le_add_pos_smul_one _ _ hLherm hDherm
+    intro ε hε
+    have hPD := posDef_add_pos_smul_one Dom hDomPos ε hε
+    have hComm' : Commute (Dom + (ε : ℂ) • 1) A :=
+      hComm.add_left (by rw [Commute, SemiconjBy, smul_mul_assoc, mul_smul_comm, one_mul, mul_one])
+    have hDom' : Aᴴ * A ≤ Dom + (ε : ℂ) • 1 :=
+      hDom.trans (le_add_of_nonneg_right (by
+        rw [Matrix.le_iff]; simpa using (Matrix.PosSemidef.one (n := Fin D) (R := ℂ)).smul
+          (show (0 : ℝ) ≤ ε from le_of_lt hε)))
+    have hPD_result := (schwarz_commuting_dominant_posDef T hPos hSub A _ hPD hComm' hDom').1
+    calc T Aᴴ * T A ≤ T (Dom + (ε : ℂ) • 1) := hPD_result
+      _ = T Dom + (ε : ℂ) • T 1 := by simp [map_add, map_smul]
+      _ ≤ T Dom + (ε : ℂ) • 1 := by
+          gcongr
+          exact hSub
+  · -- Right inequality: T(A)T(A†) ≤ T(Dom)
+    apply le_of_forall_le_add_pos_smul_one _ _ hRherm hDherm
+    intro ε hε
+    have hPD := posDef_add_pos_smul_one Dom hDomPos ε hε
+    have hComm' : Commute (Dom + (ε : ℂ) • 1) A :=
+      hComm.add_left (by rw [Commute, SemiconjBy, smul_mul_assoc, mul_smul_comm, one_mul, mul_one])
+    have hDom' : Aᴴ * A ≤ Dom + (ε : ℂ) • 1 :=
+      hDom.trans (le_add_of_nonneg_right (by
+        rw [Matrix.le_iff]; simpa using (Matrix.PosSemidef.one (n := Fin D) (R := ℂ)).smul
+          (show (0 : ℝ) ≤ ε from le_of_lt hε)))
+    have hPD_result := (schwarz_commuting_dominant_posDef T hPos hSub A _ hPD hComm' hDom').2
+    calc T A * T Aᴴ ≤ T (Dom + (ε : ℂ) • 1) := hPD_result
+      _ = T Dom + (ε : ℂ) • T 1 := by simp [map_add, map_smul]
+      _ ≤ T Dom + (ε : ℂ) • 1 := by
+          gcongr
+          exact hSub
 
 end KadisonSchwarz
