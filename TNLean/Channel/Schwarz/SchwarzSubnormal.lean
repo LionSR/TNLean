@@ -3,6 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Schwarz.SchwarzNormal
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+import Mathlib.Analysis.SpecificLimits.Basic
 
 /-!
 # Schwarz inequalities for subnormal and commuting dominant operators
@@ -19,10 +23,11 @@ that appear in Wolf's notes.
 * `KadisonSchwarz.kadison_schwarz_commuting_dominant_cp`
 * `KadisonSchwarz.schwarz_inequality_commuting_dominant_operator`
 
-The full positive-map statements are recorded with placeholders for the block-matrix
-and subnormal-extension infrastructure.  The CP/Kraus proof is available in the
-two-sided-bound variant, where the conclusion is an immediate consequence of the
-existing Kadison--Schwarz inequality together with monotonicity of positive maps.
+The key new result is `commuting_dominant_right_bound`: if `D ≥ 0` commutes with
+`A` and dominates `A† A`, then it also dominates `A A†`.  The proof uses the
+C*-algebra structure on matrices: the PD case uses the CFC square root and the
+contraction lemma `B† B ≤ 1 → B B† ≤ 1` (proved via the C*-identity), and the
+general PSD case follows by approximating `D` with `D + ε · I`.
 
 ## References
 
@@ -32,11 +37,166 @@ existing Kadison--Schwarz inequality together with monotonicity of positive maps
 open scoped Matrix ComplexOrder MatrixOrder
 open Matrix Finset
 
+/-! ### C*-algebra infrastructure for matrices -/
+
+private lemma nnreal_le_one_of_mul_self_le_one (a : NNReal) (h : a * a ≤ 1) : a ≤ 1 := by
+  rcases le_total a 1 with h1 | h1
+  · exact h1
+  · exact (le_mul_of_one_le_left (zero_le a) h1).trans h
+
 namespace KadisonSchwarz
 
 variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
+
+-- Equip matrices with the L2 operator norm for the C*-algebra structure.
+attribute [local instance] Matrix.instL2OpNormedAddCommGroup
+attribute [local instance] Matrix.instL2OpNormedRing
+attribute [local instance] Matrix.instL2OpNormedAlgebra
+
+noncomputable local instance : CStarAlgebra Mat where
+  toNormedRing := Matrix.instL2OpNormedRing
+  toStarRing := inferInstance
+  toCompleteSpace := inferInstance
+  toCStarRing := Matrix.instCStarRing
+  toNormedAlgebra := Matrix.instL2OpNormedAlgebra
+  toStarModule := inferInstance
+
+/-! ### Contraction lemma -/
+
+set_option maxHeartbeats 800000 in
+/-- The **contraction lemma**: for any square matrix `B`, if `B† B ≤ 1` then `B B† ≤ 1`.
+The proof uses the C*-identity `‖x* x‖ = ‖x‖²`. -/
+private lemma contraction_conjTranspose
+    (B : Mat) (h : Bᴴ * B ≤ 1) : B * Bᴴ ≤ 1 := by
+  show B * star B ≤ 1
+  have h' : star B * B ≤ 1 := h
+  have h1 : ‖star B * B‖₊ ≤ 1 :=
+    (CStarAlgebra.nnnorm_le_one_iff_of_nonneg _ (star_mul_self_nonneg B)).mpr h'
+  have hn : ‖B‖₊ ≤ 1 :=
+    nnreal_le_one_of_mul_self_le_one _ (CStarRing.nnnorm_star_mul_self (x := B) ▸ h1)
+  have h5 : ‖B * star B‖₊ ≤ 1 := by
+    rw [show B * star B = star (star B) * star B from by rw [star_star]]
+    rw [CStarRing.nnnorm_star_mul_self (x := star B)]
+    exact mul_le_one' ((nnnorm_star B) ▸ hn) ((nnnorm_star B) ▸ hn)
+  exact (CStarAlgebra.nnnorm_le_one_iff_of_nonneg _ (mul_star_self_nonneg B)).mp h5
+
+/-! ### Positive definite case -/
+
+set_option maxHeartbeats 12800000 in
+/-- The commuting-dominant right bound for the **positive definite** case.
+If `Dom` is PD, `[Dom, A] = 0`, and `A† A ≤ Dom`, then `A A† ≤ Dom`.
+
+The proof sets `S = √Dom` (CFC square root), `X = A S⁻¹`, shows `X† X ≤ 1`
+by conjugation, applies `contraction_conjTranspose` to get `X X† ≤ 1`, and
+then reconstitutes `A A† = S (X X†) S ≤ S² = Dom`. -/
+private lemma commuting_dominant_right_bound_posDef
+    (A Dom : Mat) (hPD : Dom.PosDef) (hComm : Commute Dom A)
+    (hDom : Aᴴ * A ≤ Dom) :
+    A * Aᴴ ≤ Dom := by
+  -- S = √Dom: S² = Dom, star S = S, S invertible, S * A = A * S
+  have h0 : (0 : Mat) ≤ Dom := by rw [Matrix.le_iff]; simpa using hPD.posSemidef
+  have hSS : CFC.sqrt Dom * CFC.sqrt Dom = Dom := CFC.sqrt_mul_sqrt_self Dom h0
+  have hSs : star (CFC.sqrt Dom) = CFC.sqrt Dom :=
+    (CFC.sqrt_nonneg (a := Dom)).isSelfAdjoint.star_eq
+  have hSA : CFC.sqrt Dom * A = A * CFC.sqrt Dom :=
+    ((show Commute Dom A from hComm).cfcₙ_nnreal NNReal.sqrt).eq
+  obtain ⟨u, hu⟩ :=
+    (show IsUnit (CFC.sqrt Dom) by rw [CFC.isUnit_sqrt_iff Dom h0]; exact hPD.isUnit)
+  -- Si = S⁻¹: Si * S = 1, S * Si = 1
+  have hSiS : (↑u⁻¹ : Mat) * CFC.sqrt Dom = 1 := by rw [← hu]; simp
+  have hSSi : CFC.sqrt Dom * (↑u⁻¹ : Mat) = 1 := by rw [← hu]; simp
+  -- star Si = Si (Si is Hermitian)
+  have hSis : star (↑u⁻¹ : Mat) = (↑u⁻¹ : Mat) := by
+    have h3 : star (↑u⁻¹ : Mat) * CFC.sqrt Dom = 1 := by
+      rw [← hSs, ← StarMul.star_mul (CFC.sqrt Dom) (↑u⁻¹ : Mat), hSSi]; exact star_one _
+    calc star (↑u⁻¹ : Mat)
+        = star (↑u⁻¹ : Mat) * (CFC.sqrt Dom * (↑u⁻¹ : Mat)) := by rw [hSSi, mul_one]
+      _ = (star (↑u⁻¹ : Mat) * CFC.sqrt Dom) * (↑u⁻¹ : Mat) := (mul_assoc _ _ _).symm
+      _ = (↑u⁻¹ : Mat) := by rw [h3, one_mul]
+  -- Si * A = A * Si (inverse commutes)
+  have hSiA : (↑u⁻¹ : Mat) * A = A * (↑u⁻¹ : Mat) := by
+    have lhs : (↑u⁻¹ : Mat) * A * CFC.sqrt Dom = A := by
+      rw [mul_assoc, ← hSA, ← mul_assoc, hSiS, one_mul]
+    calc (↑u⁻¹ : Mat) * A
+        = (↑u⁻¹ : Mat) * A * (CFC.sqrt Dom * (↑u⁻¹ : Mat)) := by rw [hSSi, mul_one]
+      _ = ((↑u⁻¹ : Mat) * A * CFC.sqrt Dom) * (↑u⁻¹ : Mat) := by rw [mul_assoc ((↑u⁻¹ : Mat) * A)]
+      _ = A * (↑u⁻¹ : Mat) := by rw [lhs]
+  -- X†X ≤ 1: Si * (A†A) * Si ≤ Si * Dom * Si = 1
+  have hContr : (A * (↑u⁻¹ : Mat))ᴴ * (A * (↑u⁻¹ : Mat)) ≤ 1 := by
+    rw [conjTranspose_mul, show ((↑u⁻¹ : Mat))ᴴ = star (↑u⁻¹ : Mat) from rfl, hSis]
+    have : (↑u⁻¹ : Mat) * Aᴴ * (A * (↑u⁻¹ : Mat)) =
+        (↑u⁻¹ : Mat) * (Aᴴ * A) * (↑u⁻¹ : Mat) := by simp only [mul_assoc]
+    rw [this, show (↑u⁻¹ : Mat) * (Aᴴ * A) * (↑u⁻¹ : Mat) =
+        star (↑u⁻¹ : Mat) * (Aᴴ * A) * (↑u⁻¹ : Mat) from by rw [hSis]]
+    calc star (↑u⁻¹ : Mat) * (Aᴴ * A) * (↑u⁻¹ : Mat) ≤
+          star (↑u⁻¹ : Mat) * Dom * (↑u⁻¹ : Mat) :=
+            star_left_conjugate_le_conjugate hDom (↑u⁻¹ : Mat)
+      _ = 1 := by rw [hSis, ← hSS]; simp only [mul_assoc]; rw [hSSi, mul_one, hSiS]
+  -- A = S * X
+  have hA_eq : CFC.sqrt Dom * (A * (↑u⁻¹ : Mat)) = A := by
+    rw [← mul_assoc, hSA, mul_assoc, hSSi, mul_one]
+  -- AA† = S(XX†)S ≤ S·1·S = Dom
+  have hAAstar : A * Aᴴ = CFC.sqrt Dom * ((A * (↑u⁻¹ : Mat)) * (A * (↑u⁻¹ : Mat))ᴴ) *
+      CFC.sqrt Dom := by
+    conv_lhs => rw [← hA_eq]
+    rw [conjTranspose_mul, show (CFC.sqrt Dom)ᴴ = star (CFC.sqrt Dom) from rfl, hSs]
+    simp only [mul_assoc]
+  rw [hAAstar, show CFC.sqrt Dom * ((A * ↑u⁻¹) * (A * ↑u⁻¹)ᴴ) * CFC.sqrt Dom =
+      star (CFC.sqrt Dom) * ((A * ↑u⁻¹) * (A * ↑u⁻¹)ᴴ) * CFC.sqrt Dom from by rw [hSs]]
+  calc star (CFC.sqrt Dom) * ((A * ↑u⁻¹) * (A * ↑u⁻¹)ᴴ) * CFC.sqrt Dom ≤
+      star (CFC.sqrt Dom) * 1 * CFC.sqrt Dom :=
+        star_left_conjugate_le_conjugate (contraction_conjTranspose _ hContr) (CFC.sqrt Dom)
+    _ = Dom := by rw [mul_one, hSs, hSS]
+
+/-! ### General PSD case -/
+
+/-- `Dom.PosSemidef` implies `(Dom + ε • 1).PosDef` for `ε > 0`. -/
+private lemma posDef_add_pos_smul_one (Dom : Mat) (hPSD : Dom.PosSemidef)
+    (ε : ℝ) (hε : 0 < ε) :
+    (Dom + (ε : ℂ) • (1 : Mat)).PosDef := by
+  rw [add_comm]
+  apply Matrix.PosDef.add_posSemidef _ hPSD
+  have h1 : (ε : ℂ) • (1 : Mat) = (ε : ℝ) • (1 : Mat) := by
+    ext i j; simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
+  rw [h1]
+  exact Matrix.PosDef.one.smul hε
+
+/-- If `B ≤ D + ε • 1` for all `ε > 0`, and both `B` and `D` are Hermitian, then `B ≤ D`.
+This encodes the topological closedness of the PSD cone. -/
+private lemma le_of_forall_le_add_pos_smul_one (B D : Mat)
+    (hBH : B.IsHermitian) (hDH : D.IsHermitian)
+    (h : ∀ ε : ℝ, 0 < ε → B ≤ D + (ε : ℂ) • (1 : Mat)) :
+    B ≤ D := by
+  rw [Matrix.le_iff]
+  have : (D - B).IsHermitian := hDH.sub hBH
+  suffices h0 : (0 : Mat) ≤ D - B by simpa using h0
+  have hClosed : IsClosed {a : Mat | 0 ≤ a} := CStarAlgebra.isClosed_nonneg
+  let g : ℕ → Mat := fun n => (D - B) + ((1 / (n : ℝ)) : ℝ) • (1 : Mat)
+  apply hClosed.mem_of_tendsto (b := Filter.atTop) (f := g)
+  · show Filter.Tendsto g Filter.atTop (nhds (D - B))
+    have : Filter.Tendsto (fun n : ℕ => ((1 / (n : ℝ)) : ℝ) • (1 : Mat))
+        Filter.atTop (nhds (0 : Mat)) := by
+      rw [show (0 : Mat) = (0 : ℝ) • (1 : Mat) from by simp]
+      exact (tendsto_const_div_atTop_nhds_zero_nat (1 : ℝ)).smul_const (1 : Mat)
+    simpa [g, add_zero] using this.const_add (D - B)
+  · rw [Filter.eventually_atTop]
+    refine ⟨1, ?_⟩
+    intro n hn
+    show g n ∈ {a | 0 ≤ a}
+    change 0 ≤ g n
+    have h_smul : ((1 / (n : ℝ)) : ℝ) • (1 : Mat) = ((1 / (n : ℝ) : ℝ) : ℂ) • (1 : Mat) := by
+      ext i j
+      simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
+    have h_eq : g n = (D + ((1 / (n : ℝ) : ℝ) : ℂ) • 1) - B := by
+      change (D - B) + ((1 / (n : ℝ)) : ℝ) • 1 = _
+      rw [h_smul]
+      abel
+    rw [h_eq, show (0 : Mat) ≤ _ ↔ (D + (((1 / (n : ℝ) : ℝ) : ℂ)) • 1 - B).PosSemidef from by
+      rw [Matrix.le_iff]
+      simp, ← Matrix.le_iff]
+    exact h (1 / (n : ℝ)) (by positivity)
 
 /-- An operator `A` is subnormal if it is the north-west block of a normal
 block-upper-triangular operator on a larger space `H ⊕ H⊥`. -/
@@ -84,18 +244,38 @@ theorem krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :
       (fun i _ => by
         simpa [Matrix.mul_assoc] using hX.mul_mul_conjTranspose_same (B := (K i)ᴴ))
 
+set_option maxHeartbeats 12800000 in
 /-- The missing order-theoretic step in Wolf Thm. 5.6: if `D ≥ 0` commutes with
 `A` and dominates `Aᴴ * A`, then it also dominates `A * Aᴴ`.
 
 Wolf proves this first for invertible `D` using `X = A D^{-1/2}`, and then passes
-to the general case by replacing `D` with `D + ε • 1` and letting `ε → 0`. -/
+to the general case by replacing `D` with `D + ε • 1` and letting `ε → 0`.
+
+The proof uses:
+1. **Contraction lemma** (`contraction_conjTranspose`): `B† B ≤ 1 → B B† ≤ 1`
+   via the C*-identity.
+2. **CFC square root** and commutativity propagation for the invertible case.
+3. **Approximation**: `D + ε I` is PD for `ε > 0`, and the result follows by
+   letting `ε → 0`. -/
 lemma commuting_dominant_right_bound
     (A Dom : Mat)
     (hDomPos : Dom.PosSemidef)
     (hComm : Commute Dom A)
     (hDom : Aᴴ * A ≤ Dom) :
     A * Aᴴ ≤ Dom := by
-  sorry
+  apply le_of_forall_le_add_pos_smul_one _ _
+    (Matrix.isHermitian_mul_conjTranspose_self A) hDomPos.isHermitian
+  intro ε hε
+  have hPD : (Dom + (ε : ℂ) • (1 : Mat)).PosDef :=
+    posDef_add_pos_smul_one Dom hDomPos ε hε
+  have hComm' : Commute (Dom + (ε : ℂ) • (1 : Mat)) A := by
+    exact hComm.add_left (by
+      rw [Commute, SemiconjBy, smul_mul_assoc, mul_smul_comm, one_mul, mul_one])
+  have hDom' : Aᴴ * A ≤ Dom + (ε : ℂ) • (1 : Mat) :=
+    hDom.trans (le_add_of_nonneg_right (by
+      rw [Matrix.le_iff]; simpa using (Matrix.PosSemidef.one (n := Fin D) (R := ℂ)).smul
+        (show (0 : ℝ) ≤ ε from le_of_lt hε)))
+  exact commuting_dominant_right_bound_posDef A _ hPD hComm' hDom'
 
 /-- CP/Kraus version of Wolf Thm. 5.6 under both dominant bounds.
 
