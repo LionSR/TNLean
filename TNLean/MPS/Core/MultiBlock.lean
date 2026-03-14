@@ -4,6 +4,15 @@ import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.Reindex
 
+/-!
+# Multi-block canonical forms for MPS tensors
+
+This file introduces the lightweight `CanonicalForm` structure for
+block-diagonal MPS tensors with injective blocks. It constructs the associated
+tensor `CanonicalForm.toTensor` and proves the block-diagonal word-evaluation
+and trace/reindexing lemmas used in the multi-block Fundamental Theorem.
+-/
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor

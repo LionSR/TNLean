@@ -3,6 +3,15 @@ import Mathlib.Data.List.OfFn
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.LinearAlgebra.Matrix.Trace
 
+/-!
+# Basic definitions for matrix product state tensors
+
+This file contains the core definitions used throughout the MPS development:
+`MPSTensor`, word evaluation, MPV coefficients, gauge equivalence, and the
+notions of injectivity, block injectivity, and normality. It also proves the
+basic gauge-invariance lemmas for `evalWord` and `SameMPV`.
+-/
+
 open scoped Matrix
 
 /-- A (periodic, translation-invariant) tensor generating an MPV family:

@@ -93,7 +93,6 @@ private theorem hasDerivAt_semigroup_product
   -- This is -a + b = b - a in the additive group of matrices
   abel
 
-set_option maxHeartbeats 800000 in
 /-- **Lemma 7.1** (Duhamel formula for matrix semigroups). -/
 theorem duhamel_formula
     (L L' : CLM D) (t : ℝ) (ht : 0 ≤ t) :

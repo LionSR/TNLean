@@ -1,17 +1,16 @@
-/-
-Copyright (c) 2025.
-Lem1 from MPDO papers 1606.00608 / 1708.00029:
-Eventual linear independence from Gram-matrix convergence.
-
-If a finite family of vectors v_i(N) in a complex inner product space has
-Gram matrix entries ⟪v_i(N), v_j(N)⟫ → δ_{ij}, then for N large enough
-the vectors {v_i(N)} are linearly independent.
--/
-
 import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.LinearAlgebra.Matrix.Nondegenerate
 import Mathlib.Topology.Instances.Matrix
 import Mathlib.Topology.Separation.Basic
+
+/-!
+# Gram-matrix convergence implies eventual linear independence
+
+This file proves an eventual linear-independence criterion from convergence of
+Gram matrices to the identity. The main theorem
+`eventually_linearIndependent_of_gram_tendsto_id` packages the finite-dimensional
+argument used in the MPDO papers arXiv:1606.00608 and arXiv:1708.00029.
+-/
 
 open scoped BigOperators InnerProductSpace
 open Filter

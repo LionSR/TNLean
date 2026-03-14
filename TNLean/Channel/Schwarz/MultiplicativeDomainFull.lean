@@ -110,7 +110,7 @@ theorem mem_rightMultiplicativeDomain_iff (K : Fin d → Mat)
     (h_unital : IsUnitalKraus K) (X : Mat) :
     X ∈ rightMultiplicativeDomain K ↔
       krausMap K (X * Xᴴ) = krausMap K X * (krausMap K X)ᴴ := by
-  constructor
+  refine ⟨?_, ?_⟩
   · exact ks_equality_of_rightMultiplicativeDomain (K := K) X
   · exact rightMultiplicativeDomain_of_ks_equality (K := K) h_unital X
 
@@ -119,7 +119,7 @@ theorem mem_leftMultiplicativeDomain_iff (K : Fin d → Mat)
     (h_unital : IsUnitalKraus K) (X : Mat) :
     X ∈ leftMultiplicativeDomain K ↔
       krausMap K (Xᴴ * X) = (krausMap K X)ᴴ * krausMap K X := by
-  constructor
+  refine ⟨?_, ?_⟩
   · exact ks_equality_of_leftMultiplicativeDomain (K := K) X
   · exact leftMultiplicativeDomain_of_ks_equality (K := K) h_unital X
 

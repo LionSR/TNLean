@@ -3,6 +3,15 @@ import TNLean.MPS.Defs
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.PosDef
 
+/-!
+# Transfer maps of MPS tensors
+
+This file defines the transfer operator `transferMap` associated to an MPS
+tensor. It proves the basic API needed later: the evaluation formula, gauge
+covariance, and preservation of positive semidefiniteness. These lemmas bridge
+between tensor data and channel-theoretic arguments.
+-/
+
 open scoped Matrix ComplexOrder BigOperators
 
 namespace MPSTensor

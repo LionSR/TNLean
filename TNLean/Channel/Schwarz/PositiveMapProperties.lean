@@ -104,7 +104,7 @@ theorem IsPositiveMap.image_bounded
       simp [I, sub_eq_add_neg]
     rw [hEq]
     exact hSub_psd.smul hb0
-  constructor
+  refine ⟨?_, ?_⟩
   · calc
       (a : ℝ) • I ≤ T ((a : ℝ) • I) := hLowerScalar
       _ ≤ T A := hT.map_le_map ha

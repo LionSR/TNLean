@@ -228,8 +228,10 @@ noncomputable def wolfExample53AntisymmVec : Fin 2 × Fin 2 → ℂ
 private lemma omegaCoeff_fin2 :
     (((1 : ℂ) / ((2 : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((2 : ℝ).sqrt : ℂ))) =
       (1 / 2 : ℂ) := by
-  rw [show star ((1 : ℂ) / ((2 : ℝ).sqrt : ℂ)) = (1 : ℂ) / ((2 : ℝ).sqrt : ℂ) by
-    simp [Complex.conj_ofReal]]
+  have hstar :
+      star ((1 : ℂ) / ((2 : ℝ).sqrt : ℂ)) = (1 : ℂ) / ((2 : ℝ).sqrt : ℂ) := by
+    simp [Complex.conj_ofReal]
+  rw [hstar]
   have hne : (((2 : ℝ).sqrt : ℂ)) ≠ 0 := by
     apply Complex.ofReal_ne_zero.mpr
     positivity

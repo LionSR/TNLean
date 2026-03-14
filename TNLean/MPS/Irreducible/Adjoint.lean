@@ -2,8 +2,19 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Channel.Irreducible.Basic
+
+/-!
+# Irreducibility and conjugate-transposed Kraus families
+
+This file transfers irreducibility between an MPS tensor and the CP map built
+from its conjugate-transposed Kraus family. The main theorem
+`isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor` is
+complemented by the unital/TP conversion lemmas for conjugate-transposed Kraus
+families.
+-/
 
 open scoped Matrix BigOperators ComplexOrder
 
