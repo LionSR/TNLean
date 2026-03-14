@@ -31,7 +31,6 @@ open scoped Matrix ComplexOrder MatrixOrder
 open Matrix Finset
 
 local notation "M2" => Matrix (Fin 2) (Fin 2) ℂ
-local notation "M4" => Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) ℂ
 
 private lemma complex_one_half_nonneg : (0 : ℂ) ≤ (1 / 2 : ℂ) := by
   rw [Complex.nonneg_iff]
@@ -93,13 +92,59 @@ noncomputable def wolfExample53AntisymmVec : Fin 2 × Fin 2 → ℂ
   | (1, 0) => -1
   | _ => 0
 
+private lemma omegaCoeff_fin2 :
+    (((1 : ℂ) / ((2 : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((2 : ℝ).sqrt : ℂ))) =
+      (1 / 2 : ℂ) := by
+  rw [show star ((1 : ℂ) / ((2 : ℝ).sqrt : ℂ)) = (1 : ℂ) / ((2 : ℝ).sqrt : ℂ) by
+    simp [Complex.conj_ofReal]]
+  have hne : (((2 : ℝ).sqrt : ℂ)) ≠ 0 := by
+    apply Complex.ofReal_ne_zero.mpr
+    positivity
+  field_simp [hne]
+  have hsqR : ((2 : ℝ).sqrt) ^ 2 = 2 := by
+    simp [Real.sq_sqrt]
+  have hsq : (((2 : ℝ).sqrt : ℂ) ^ 2) = (2 : ℂ) := by
+    exact_mod_cast hsqR
+  simpa using hsq.symm
+
+private lemma omegaSlice_fin2 (i j : Fin 2) :
+    Matrix.bipartiteSlice (Matrix.omegaProj 2) i j = (1 / 2 : ℂ) • Matrix.single i j (1 : ℂ) := by
+  ext a b
+  by_cases ha : a = i <;> by_cases hb : b = j
+  · subst ha; subst hb
+    simp [Matrix.bipartiteSlice, Matrix.omegaProj_apply, Matrix.omegaVec_apply]
+    simpa [one_div, Complex.conj_ofReal] using omegaCoeff_fin2
+  · simp [Matrix.bipartiteSlice, Matrix.omegaProj_apply, Matrix.omegaVec_apply, Matrix.single_apply,
+      ha, hb]
+    simpa [eq_comm] using hb
+  · simp [Matrix.bipartiteSlice, Matrix.omegaProj_apply, Matrix.omegaVec_apply, Matrix.single_apply,
+      ha, hb]
+    simpa [eq_comm] using ha
+  · have hleft : Matrix.bipartiteSlice (Matrix.omegaProj 2) i j a b = 0 := by
+      simp [Matrix.bipartiteSlice, Matrix.omegaProj_apply, Matrix.omegaVec_apply, ha]
+    have hright : ((1 / 2 : ℂ) • Matrix.single i j (1 : ℂ)) a b = 0 := by
+      have hia : ¬ i = a := by
+        simpa [eq_comm] using ha
+      simp [Matrix.smul_apply, hia]
+    exact hleft.trans hright.symm
+
+private lemma wolfExample53_choi_apply (i1 i2 j1 j2 : Fin 2) :
+    ChoiJamiolkowski.choiMatrix wolfExample53 (i1, i2) (j1, j2) =
+      (1 / 4 : ℂ) * (if i1 = j2 ∧ i2 = j1 then 1 else 0) +
+      (1 / 8 : ℂ) * (if i1 = j1 ∧ i2 = j2 then 1 else 0) := by
+  rw [ChoiJamiolkowski.choiMatrix_apply, omegaSlice_fin2]
+  fin_cases i1 <;> fin_cases i2 <;> fin_cases j1 <;> fin_cases j2 <;>
+    simp [wolfExample53, Matrix.trace] <;> ring
+
 /-- The Choi matrix of `wolfExample53` has a negative expectation value on the
 antisymmetric vector `|01⟩ - |10⟩`, hence is not positive semidefinite. -/
 theorem wolfExample53_choi_negative_antisymm :
     star wolfExample53AntisymmVec ⬝ᵥ
         (ChoiJamiolkowski.choiMatrix wolfExample53).mulVec wolfExample53AntisymmVec =
       (- (1 / 4 : ℂ)) := by
-  sorry -- Wolf Ex 5.3
+  simp [dotProduct, Matrix.mulVec, Fintype.sum_prod_type, wolfExample53AntisymmVec,
+    wolfExample53_choi_apply]
+  ring
 
 /-- Wolf Example 5.3 is not completely positive. -/
 theorem wolfExample53_not_cp : ¬ IsCPMap wolfExample53 := by

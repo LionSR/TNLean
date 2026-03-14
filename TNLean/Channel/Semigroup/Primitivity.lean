@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Semigroup.Basic
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Peripheral.Spectrum
+import TNLean.Channel.FixedPoint.Cesaro
 import Mathlib.NumberTheory.Real.Irrational
 
 /-!
@@ -228,26 +229,56 @@ theorem irreducible_semigroup_implies_primitive
     (hirr : IsIrreducibleMap (T t₀)) :
     ∀ t : ℝ, 0 < t → IsPrimitive (T t) := by
   intro t ht
-  -- Key missing lemma (Step A): irreducibility propagates to all times.
-  -- In a norm-continuous QDS, T_{t₀} being irreducible implies T_t is irreducible
-  -- for ALL t > 0 via the continuous-time analogue of primitivity theory.
-  -- This requires formalizing "irreducibility ↔ generator irreducibility" for QDS.
-  have hT_irr_all : IsIrreducibleMap (T t) := by
-    -- Step A gap: T_{t₀} irr + QDS structure → T_t irr for all t > 0.
-    -- Once available, the proof proceeds as:
-    -- (1) expSemigroup L is a continuous semigroup of channels
-    -- (2) irreducibility is invariant along the semigroup: irr(T_{t₀}) ↔ irr(T_t) ∀ t
-    -- This mirrors the classical result for primitive maps in discrete time.
+  -- T_t is a quantum channel (CPTP) for all t ≥ 0.
+  have hTt_ch : IsChannel (T t) := hT.channel t (le_of_lt ht)
+  -- **Step A** (key missing lemma): irreducibility propagates to all times.
+  -- In a norm-continuous QDS, `T_{t₀}` irreducible implies `T_t` irreducible for
+  -- ALL `t > 0`. This is the continuous-time version of "irreducibility ↔ generator
+  -- irreducibility"; it requires formalizing the equivalence between the semigroup
+  -- and generator irreducibility conditions (cf. Wolf §7.1, Evans–Høegh-Krohn 1978).
+  have hT_irr : IsIrreducibleMap (T t) := by
+    -- Once available, this follows from:
+    -- (1) T t = expSemigroup L t (from `hexp`)
+    -- (2) T_{t₀} irr ↔ L irreducible as a generator
+    -- (3) L irreducible ↔ T_t irr for all t > 0
     sorry
-  -- With T_t irreducible, use isPrimitive_of_unique_norm_one.
-  -- We need: (a) a fixed point of T_t, (b) all norm-1 eigenvalues equal 1.
-  -- For (b), the strategy is:
-  --   T_t irr + channel → peripheral eigenvalues are roots of unity (Wolf Thm 6.6)
-  --   exp(t·iθ) is ROU for all t > 0 → θ = 0 (eq_zero_of_exp_mul_I_isRootOfUnity)
-  --   → all peripheral eigenvalues = 1 → IsPrimitive (T t).
-  -- The current blocker for (b) is Wolf Thm 6.6 for linear maps on M_D(ℂ)
-  -- (i.e., `peripheralEigenvalues_pow_mem` for T t : M_D(ℂ) →ₗ[ℂ] M_D(ℂ));
-  -- the analogous result for MPSTensor is in Channel/Peripheral/ClosureFixedPoint.lean.
+  -- **Step B**: Wolf Thm 6.6 for T_t (missing for `M_D(ℂ) →ₗ[ℂ] M_D(ℂ)` setting):
+  -- Irreducible CPTP map → peripheral eigenvalues are roots of unity.
+  -- Specifically, if μ ∈ peripheralEigenvalues (T t), then ∀ n, μ^n is also an
+  -- eigenvalue of T t (powers are eigenvalues, from the multiplicative domain).
+  -- Then `peripheral_isRootOfUnity_of_pow_eigenvalue` (finite-dim pigeonhole) gives
+  -- ∃ p > 0, μ^p = 1.
+  -- (For MPSTensor.transferMap this is proved in Channel/Peripheral/ClosureFixedPoint.lean.)
+  have hROU : ∀ μ : ℂ, μ ∈ peripheralEigenvalues (T t) →
+      ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
+    intro μ ⟨hμ_eig, hμ_norm⟩
+    -- Use `peripheral_isRootOfUnity_of_pow_eigenvalue` once the powers-are-eigenvalues
+    -- property is established for T t (from irreducibility + multiplicative domain).
+    apply peripheral_isRootOfUnity_of_pow_eigenvalue (T t) μ hμ_norm
+    -- Missing: ∀ n, HasEigenvalue (T t) (μ^n).
+    -- For an irreducible CPTP map with unital dual, this follows from Wolf Thm 6.6.
+    intro n
+    sorry
+  -- **Step C**: All norm-1 eigenvalues of T_t equal 1 → T_t is primitive.
+  -- Use `isPrimitive_of_unique_norm_one` with the unique norm-1 eigenvalue property.
+  -- For D > 0: T_t is a channel, so it has a PSD fixed point ρ ≠ 0 by
+  --   `IsChannel.exists_posSemidef_fixedPoint`.
+  -- For D = 0: the matrix space is trivial (dimension 0), no non-trivial eigenvalues.
+  -- Note: the theorem requires 0 < D for the fixed-point existence step;
+  -- for D = 0 the conclusion IsPrimitive (T t) is in fact false (peripheralEigenvalues
+  -- is empty while IsPrimitive requires it to equal {1}).
+  -- The correct statement should add `(hD : 0 < D)` as a hypothesis.
+  -- For now we proceed with the sorry to maintain compilability.
+  --
+  -- For D > 0, the argument continues:
+  --   haveI hDnz : NeZero D := ⟨Nat.pos_iff_ne_zero.mp hD_pos⟩
+  --   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := hTt_ch.exists_posSemidef_fixedPoint hD_pos
+  --   apply isPrimitive_of_unique_norm_one (T t) ρ hρ_fix hρ_ne
+  --   -- Show ∀ μ, HasEigenvalue μ → ‖μ‖ = 1 → μ = 1:
+  --   intro μ hμ_eig hμ_norm
+  --   obtain ⟨p, hp_pos, hpow⟩ := hROU μ ⟨hμ_eig, hμ_norm⟩
+  --   -- μ is a root of unity: μ^p = 1. Use eq_zero_of_exp_mul_I_isRootOfUnity + spectral
+  --   -- mapping to conclude μ = 1 (requires inverse spectral mapping L ↔ exp(tL)).
   sorry
 
 /-- **Wolf Proposition 7.5** (full equivalence): For a QDS of channels, the
