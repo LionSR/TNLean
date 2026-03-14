@@ -77,6 +77,130 @@ theorem wolfExample53_isPositive : IsPositiveMap wolfExample53 := by
     exact htrace.smul complex_one_quarter_nonneg
   simpa [wolfExample53] using htranspose.add htraceId
 
+private noncomputable def wolfExample53Gap (A : M2) : M2 :=
+  wolfExample53 (Aᴴ * A) - wolfExample53 (Aᴴ) * wolfExample53 A
+
+private def wolfExample53J : M2 := ![![0, -1], ![1, 0]]
+
+private lemma trace_smul_one_sub_eq_wolfExample53J_mul_transpose_mul_conjTranspose (M : M2) :
+    Matrix.trace M • (1 : M2) - M = wolfExample53J * Mᵀ * wolfExample53Jᴴ := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [wolfExample53J, Matrix.mul_apply, Matrix.trace, Fin.sum_univ_two]
+
+private lemma trace_smul_one_sub_posSemidef_of_posSemidef (M : M2) (hM : M.PosSemidef) :
+    (Matrix.trace M • (1 : M2) - M).PosSemidef := by
+  rw [trace_smul_one_sub_eq_wolfExample53J_mul_transpose_mul_conjTranspose]
+  exact (hM.transpose).mul_mul_conjTranspose_same wolfExample53J
+
+private lemma add_smul_one_mul_add_smul_one (X Y : M2) (a b : ℂ) :
+    (X + a • (1 : M2)) * (Y + b • (1 : M2)) =
+      X * Y + b • X + a • Y + (a * b) • (1 : M2) := by
+  calc
+    (X + a • (1 : M2)) * (Y + b • (1 : M2))
+        = X * Y + X * (b • (1 : M2)) + (a • (1 : M2)) * Y + (a • (1 : M2)) * (b • (1 : M2)) := by
+            simp [Matrix.add_mul, Matrix.mul_add, add_assoc, add_left_comm, add_comm]
+    _ = X * Y + b • X + a • Y + (a * b) • (1 : M2) := by
+            simp [smul_smul, add_assoc, add_left_comm, add_comm, mul_comm]
+
+private lemma wolfExample53_smul_one (z : ℂ) :
+    wolfExample53 (z • (1 : M2)) = z • (1 : M2) := by
+  rw [map_smul, wolfExample53_one]
+
+private lemma wolfExample53_add_smul_one (X : M2) (z : ℂ) :
+    wolfExample53 (X + z • (1 : M2)) = wolfExample53 X + z • (1 : M2) := by
+  rw [map_add, wolfExample53_smul_one]
+
+private lemma wolfExample53Gap_translate (A : M2) (z : ℂ) :
+    wolfExample53Gap (A + z • (1 : M2)) = wolfExample53Gap A := by
+  have hmul :
+      (A + z • (1 : M2))ᴴ * (A + z • (1 : M2)) =
+        Aᴴ * A + z • Aᴴ + star z • A + (star z * z) • (1 : M2) := by
+    calc
+      (A + z • (1 : M2))ᴴ * (A + z • (1 : M2))
+          = (Aᴴ + star z • (1 : M2)) * (A + z • (1 : M2)) := by simp
+      _ = Aᴴ * A + z • Aᴴ + star z • A + (star z * z) • (1 : M2) :=
+        add_smul_one_mul_add_smul_one (X := Aᴴ) (Y := A) (a := star z) (b := z)
+  have hleft : wolfExample53 ((A + z • (1 : M2))ᴴ) = wolfExample53 Aᴴ + star z • (1 : M2) := by
+    calc
+      wolfExample53 ((A + z • (1 : M2))ᴴ)
+          = wolfExample53 (Aᴴ + star z • (1 : M2)) := by simp
+      _ = wolfExample53 Aᴴ + star z • (1 : M2) :=
+        wolfExample53_add_smul_one (X := Aᴴ) (z := star z)
+  have hright : wolfExample53 (A + z • (1 : M2)) = wolfExample53 A + z • (1 : M2) :=
+    wolfExample53_add_smul_one (X := A) (z := z)
+  have himage :
+      wolfExample53 ((A + z • (1 : M2))ᴴ * (A + z • (1 : M2))) =
+        wolfExample53 (Aᴴ * A) + z • wolfExample53 Aᴴ + star z • wolfExample53 A +
+          (star z * z) • (1 : M2) := by
+    rw [hmul, map_add, map_add, map_add, map_smul, map_smul, wolfExample53_smul_one]
+  have hprod :
+      (wolfExample53 Aᴴ + star z • (1 : M2)) * (wolfExample53 A + z • (1 : M2)) =
+        wolfExample53 Aᴴ * wolfExample53 A + z • wolfExample53 Aᴴ +
+          star z • wolfExample53 A + (star z * z) • (1 : M2) :=
+    add_smul_one_mul_add_smul_one (X := wolfExample53 Aᴴ) (Y := wolfExample53 A)
+      (a := star z) (b := z)
+  calc
+    wolfExample53Gap (A + z • (1 : M2))
+        = (wolfExample53 (Aᴴ * A) + z • wolfExample53 Aᴴ + star z • wolfExample53 A +
+              (star z * z) • (1 : M2)) -
+            ((wolfExample53 Aᴴ + star z • (1 : M2)) * (wolfExample53 A + z • (1 : M2))) := by
+          rw [wolfExample53Gap, himage, hleft, hright]
+    _ = (wolfExample53 (Aᴴ * A) + z • wolfExample53 Aᴴ + star z • wolfExample53 A +
+            (star z * z) • (1 : M2)) -
+          (wolfExample53 Aᴴ * wolfExample53 A + z • wolfExample53 Aᴴ +
+            star z • wolfExample53 A + (star z * z) • (1 : M2)) := by rw [hprod]
+    _ = wolfExample53Gap A := by
+          simp [wolfExample53Gap, sub_eq_add_neg]
+          abel_nf
+
+private lemma wolfExample53Gap_eq_of_trace_zero (A : M2) (htr : Matrix.trace A = 0) :
+    wolfExample53Gap A =
+      (1 / 2 : ℂ) • (Aᴴ * A)ᵀ +
+        (1 / 4 : ℂ) • ((Matrix.trace (Aᴴ * A) • (1 : M2) - A * Aᴴ)ᵀ) := by
+  have hA : wolfExample53 A = (1 / 2 : ℂ) • Aᵀ := by
+    simp [wolfExample53, htr]
+  have hAadj : wolfExample53 Aᴴ = (1 / 2 : ℂ) • (Aᴴ)ᵀ := by
+    simp [wolfExample53, Matrix.trace_conjTranspose, htr]
+  have hquarter : ((1 / 2 : ℂ) * (1 / 2 : ℂ)) = (1 / 4 : ℂ) := by
+    ring
+  have hprod : wolfExample53 Aᴴ * wolfExample53 A = (1 / 4 : ℂ) • ((A * Aᴴ)ᵀ) := by
+    calc
+      wolfExample53 Aᴴ * wolfExample53 A
+          = ((1 / 2 : ℂ) • (Aᴴ)ᵀ) * ((1 / 2 : ℂ) • Aᵀ) := by rw [hAadj, hA]
+      _ = ((1 / 2 : ℂ) * (1 / 2 : ℂ)) • ((Aᴴ)ᵀ * Aᵀ) := by
+            simp [smul_smul]
+      _ = (1 / 4 : ℂ) • ((A * Aᴴ)ᵀ) := by
+            rw [hquarter]
+            have hmulT : (A * Aᴴ)ᵀ = (Aᴴ)ᵀ * Aᵀ := by
+              exact Matrix.transpose_mul A Aᴴ
+            rw [hmulT]
+  calc
+    wolfExample53Gap A = wolfExample53 (Aᴴ * A) - (1 / 4 : ℂ) • ((A * Aᴴ)ᵀ) := by
+      rw [wolfExample53Gap, hprod]
+    _ = ((1 / 2 : ℂ) • (Aᴴ * A)ᵀ + (1 / 4 : ℂ) • (Matrix.trace (Aᴴ * A) • (1 : M2))) -
+            (1 / 4 : ℂ) • ((A * Aᴴ)ᵀ) := by
+      rfl
+    _ = (1 / 2 : ℂ) • (Aᴴ * A)ᵀ +
+          (1 / 4 : ℂ) • ((Matrix.trace (Aᴴ * A) • (1 : M2) - A * Aᴴ)ᵀ) := by
+      simp [sub_eq_add_neg, smul_add, add_left_comm, add_comm]
+
+private lemma wolfExample53Gap_posSemidef_of_trace_zero (A : M2) (htr : Matrix.trace A = 0) :
+    (wolfExample53Gap A).PosSemidef := by
+  rw [wolfExample53Gap_eq_of_trace_zero A htr]
+  have h1 : ((1 / 2 : ℂ) • (Aᴴ * A)ᵀ).PosSemidef := by
+    exact (Matrix.posSemidef_conjTranspose_mul_self A).transpose.smul complex_one_half_nonneg
+  have h2base : (Matrix.trace (A * Aᴴ) • (1 : M2) - A * Aᴴ).PosSemidef := by
+    exact trace_smul_one_sub_posSemidef_of_posSemidef (A * Aᴴ)
+      (Matrix.posSemidef_self_mul_conjTranspose A)
+  have htrace : Matrix.trace (Aᴴ * A) = Matrix.trace (A * Aᴴ) := by
+    simpa using Matrix.trace_mul_comm Aᴴ A
+  have h2 : ((1 / 4 : ℂ) • ((Matrix.trace (Aᴴ * A) • (1 : M2) - A * Aᴴ)ᵀ)).PosSemidef := by
+    have h2' : ((Matrix.trace (Aᴴ * A) • (1 : M2) - A * Aᴴ)ᵀ).PosSemidef := by
+      simpa [htrace] using h2base.transpose
+    exact h2'.smul complex_one_quarter_nonneg
+  exact h1.add h2
+
 /-- Wolf Example 5.3 satisfies the Schwarz inequality.
 
 The intended proof is the concrete $2 \times 2$ argument from Wolf: after
@@ -84,7 +208,16 @@ shifting by a scalar multiple of the identity one may assume `trace A = 0`, and
 then the Schwarz gap dominates `(1/2) • (Aᴴ * A)ᵀ`. -/
 theorem wolfExample53_satisfies_schwarz (A : M2) :
     (wolfExample53 (Aᴴ * A) - wolfExample53 (Aᴴ) * wolfExample53 A).PosSemidef := by
-  sorry -- Wolf Ex 5.3
+  let B : M2 := A - ((Matrix.trace A) / 2 : ℂ) • (1 : M2)
+  have hBtr : Matrix.trace B = 0 := by
+    simp [B, Matrix.trace, Fin.sum_univ_two]
+    ring
+  have htranslate : wolfExample53Gap B = wolfExample53Gap A := by
+    simpa [B, sub_eq_add_neg] using wolfExample53Gap_translate A (-(Matrix.trace A / 2 : ℂ))
+  have hB : (wolfExample53Gap B).PosSemidef := wolfExample53Gap_posSemidef_of_trace_zero B hBtr
+  have hA' : (wolfExample53Gap A).PosSemidef := by
+    simpa [htranslate] using hB
+  simpa [wolfExample53Gap] using hA'
 
 /-- A concrete antisymmetric witness for the non-CP statement. -/
 noncomputable def wolfExample53AntisymmVec : Fin 2 × Fin 2 → ℂ
