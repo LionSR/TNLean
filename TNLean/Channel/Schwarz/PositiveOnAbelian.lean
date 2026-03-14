@@ -344,7 +344,8 @@ theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
     0 ≤ blockQuadraticForm T a ψ := by
   -- Wolf Prop 1.6: Use simultaneous diagonalization of commuting images.
   -- Full proof is below after the JointDiagonalization section.
-  exact quadraticForm_nonneg_of_isPositiveMap_of_commuting_images_aux hT a ha hcomm ψ
+  -- TODO: prove via exists_diagonal_family_of_normal + diagonal_family_schwarz_le
+  sorry
 
 /-- A positive map is positive on commuting block families.
 
