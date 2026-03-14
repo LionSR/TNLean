@@ -66,11 +66,12 @@ noncomputable local instance : CStarAlgebra Mat where
 /-! ### Contraction lemma -/
 
 set_option maxHeartbeats 800000 in
+-- CFC normalization requires extra heartbeats for the C*-algebra instance resolution
 /-- The **contraction lemma**: for any square matrix `B`, if `B† B ≤ 1` then `B B† ≤ 1`.
 The proof uses the C*-identity `‖x* x‖ = ‖x‖²`. -/
 private lemma contraction_conjTranspose
     (B : Mat) (h : Bᴴ * B ≤ 1) : B * Bᴴ ≤ 1 := by
-  show B * star B ≤ 1
+  change B * star B ≤ 1
   have h' : star B * B ≤ 1 := h
   have h1 : ‖star B * B‖₊ ≤ 1 :=
     (CStarAlgebra.nnnorm_le_one_iff_of_nonneg _ (star_mul_self_nonneg B)).mpr h'
@@ -85,6 +86,7 @@ private lemma contraction_conjTranspose
 /-! ### Positive definite case -/
 
 set_option maxHeartbeats 12800000 in
+-- CFC square root + inverse commutativity chain needs extra heartbeats
 /-- The commuting-dominant right bound for the **positive definite** case.
 If `Dom` is PD, `[Dom, A] = 0`, and `A† A ≤ Dom`, then `A A† ≤ Dom`.
 
@@ -245,6 +247,7 @@ theorem krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :
         simpa [Matrix.mul_assoc] using hX.mul_mul_conjTranspose_same (B := (K i)ᴴ))
 
 set_option maxHeartbeats 12800000 in
+-- Calls commuting_dominant_right_bound_posDef which chains through CFC infrastructure
 /-- The missing order-theoretic step in Wolf Thm. 5.6: if `D ≥ 0` commutes with
 `A` and dominates `Aᴴ * A`, then it also dominates `A * Aᴴ`.
 
@@ -304,9 +307,9 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
   have hKSRight' : (krausAdjointMap K (Aᴴ))ᴴ * krausAdjointMap K (Aᴴ) ≤
       krausAdjointMap K (A * Aᴴ) := by
     simpa [conjTranspose_conjTranspose] using
-      (show (krausAdjointMap K (Aᴴ))ᴴ * krausAdjointMap K (Aᴴ) ≤ krausAdjointMap K ((Aᴴ)ᴴ * Aᴴ) from by
-        rw [Matrix.le_iff]
-        exact kadison_schwarz_adjoint K h_tp (Aᴴ))
+      (show (krausAdjointMap K (Aᴴ))ᴴ * krausAdjointMap K (Aᴴ) ≤
+          krausAdjointMap K ((Aᴴ)ᴴ * Aᴴ) from by
+        rw [Matrix.le_iff]; exact kadison_schwarz_adjoint K h_tp (Aᴴ))
   have hKSRight : krausAdjointMap K A * krausAdjointMap K (Aᴴ) ≤
       krausAdjointMap K (A * Aᴴ) := by
     simpa [krausAdjointMap_conjTranspose] using hKSRight'
