@@ -2,10 +2,9 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Channel.Semigroup.Basic
-import TNLean.Channel.Basic
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.Semigroup.Basic
 import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
@@ -48,25 +47,23 @@ attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 
-/-! ## Helper definitions: commutator and anticommutator -/
+section CommutatorHelpers
+
+/-! ## Commutator and anticommutator helpers -/
 
 /-- The **commutator** `[A, B] = AB - BA`. -/
-def Matrix.commutator (A B : Matrix (Fin D) (Fin D) ℂ) :
+abbrev Matrix.commutator (A B : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ :=
   A * B - B * A
 
 /-- The **anticommutator** `{A, B}₊ = AB + BA`. -/
-def Matrix.anticommutator (A B : Matrix (Fin D) (Fin D) ℂ) :
+abbrev Matrix.anticommutator (A B : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ :=
   A * B + B * A
 
-@[simp]
-theorem Matrix.commutator_def (A B : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix.commutator A B = A * B - B * A := rfl
+end CommutatorHelpers
 
-@[simp]
-theorem Matrix.anticommutator_def (A B : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix.anticommutator A B = A * B + B * A := rfl
+section GeneratorTheory
 
 /-! ## The (φ, κ) generator decomposition (Wolf Eq. 7.14) -/
 
@@ -122,20 +119,7 @@ def IsTraceAnnihilating
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ ρ : Matrix (Fin D) (Fin D) ℂ, trace (L ρ) = 0
 
-/-! ## The adjoint map (Hilbert-Schmidt / trace pairing) -/
-
-/-- The **Hilbert-Schmidt adjoint** of a Kraus map `φ(ρ) = Σᵢ Kᵢ ρ Kᵢ†`
-is `φ*(X) = Σᵢ Kᵢ† X Kᵢ`. This is defined for Kraus representations. -/
-def krausAdjointMap {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
-    (X : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
-  ∑ i : Fin r, (K i)ᴴ * X * K i
-
-/-- `φ*(𝟙) = Σᵢ Kᵢ† Kᵢ` for the adjoint of a Kraus map. -/
-theorem krausAdjointMap_one {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ) :
-    krausAdjointMap K 1 = ∑ i : Fin r, (K i)ᴴ * K i := by
-  simp [krausAdjointMap]
-
-/-! ## The TP constraint for generators: φ*(𝟙) = κ + κ† (Wolf Eq. 7.20) -/
+/-! ## The TP constraint for generators: `φ*(𝟙) = κ + κ†` (Wolf Eq. 7.20) -/
 
 /-- The trace-preservation constraint for a generator decomposition:
 `φ*(𝟙) = κ + κ†`. This is the infinitesimal trace-preservation condition
@@ -164,6 +148,8 @@ theorem GeneratorDecomp.traceAnnihilating_of_traceConstraint
   -- tr((κ + κ†) ρ) - tr(κ ρ) - tr(ρ κ†) = 0
   rw [Matrix.add_mul, Matrix.trace_add, Matrix.trace_mul_comm G.κᴴ ρ]
   ring
+
+section LindbladForms
 
 /-! ## The Lindblad form (Wolf Eq. 7.21) -/
 
@@ -217,25 +203,16 @@ def LindbladForm.toLinearMap (F : LindbladForm D) :
     -- Dissipative part
     ∑ j : Fin F.r, dissipator (F.L j) ρ
   map_add' ρ σ := by
-    simp only [mul_add, add_mul, dissipator_add]
-    rw [Finset.sum_add_distrib]
-    -- Both sides have: I•(Ham part) + Σ diss(ρ) + I•(Ham part σ) + Σ diss(σ)
-    -- LHS: I•(ρH + σH - (Hρ + Hσ)) + Σ(diss ρ + diss σ)
-    -- RHS: I•(ρH - Hρ) + Σ diss ρ + I•(σH - Hσ) + Σ diss σ
-    have : Complex.I • (ρ * F.H + σ * F.H - (F.H * ρ + F.H * σ)) =
-        Complex.I • (ρ * F.H - F.H * ρ) + Complex.I • (σ * F.H - F.H * σ) := by
-      rw [← smul_add]; congr 1; abel
-    rw [this]; abel
+    simp only [dissipator_add, mul_add, add_mul, smul_add, smul_sub,
+      Finset.sum_add_distrib]
+    abel
   map_smul' c ρ := by
-    simp only [RingHom.id_apply, mul_smul_comm, smul_mul_assoc, smul_sub,
-      dissipator_smul]
-    rw [← Finset.smul_sum]
-    -- LHS: I • c • (ρH) - I • c • (Hρ) + c • Σ diss
-    -- RHS: c • (I • (ρH) - I • (Hρ) + Σ diss)
-    -- = c • I • (ρH) - c • I • (Hρ) + c • Σ diss
-    rw [smul_add, smul_sub]
+    simp only [RingHom.id_apply, dissipator_smul, mul_smul_comm, smul_mul_assoc,
+      smul_sub]
+    rw [← Finset.smul_sum, smul_add, smul_sub]
     simp only [smul_smul]
-    congr 1; congr 1 <;> ring
+    congr 1
+    congr 1 <;> ring_nf
 
 /-- Each dissipator term has trace zero. -/
 private theorem trace_dissipator_eq_zero (Lop : Matrix (Fin D) (Fin D) ℂ)
@@ -824,19 +801,24 @@ theorem gksl_iff_lindbladForm
     exact (gksl_iff_ccp_and_traceAnnihilating F.toLinearMap).mpr
       ⟨F.isCCP, F.isTraceAnnihilating⟩
 
+end LindbladForms
+
+section KossakowskiForms
+
 /-! ## Wolf Theorem 7.1, Form (ii): Kossakowski matrix form (Eq. 7.23) -/
 
 /-- The **Kossakowski form** of a generator (Wolf Eq. 7.23):
 `L(ρ) = i[ρ,H] + ½ Σ_{k,l} C_{kl} ([F_k, ρ F_l†] + [F_k ρ, F_l†])`
-where `C ≥ 0` is the Kossakowski matrix and `{F_k}` is an orthonormal basis
-of traceless matrices. This is equivalent to the Lindblad form by
-diagonalizing `C = M†M`. -/
+where `C ≥ 0` is the Kossakowski matrix and `F` is the chosen family of
+matrices. In the paper this family is a basis of traceless matrices; the
+current structure records only the data used in the algebraic conversion to
+Lindblad form. -/
 structure KossakowskiForm (D : ℕ) where
-  /-- Dimension of the traceless basis. -/
+  /-- The number of matrices in the chosen family `F`. -/
   n : ℕ
   /-- The Hamiltonian (must be Hermitian). -/
   H : Matrix (Fin D) (Fin D) ℂ
-  /-- The traceless basis matrices. -/
+  /-- The family of matrices appearing in the Kossakowski sum. -/
   F : Fin n → Matrix (Fin D) (Fin D) ℂ
   /-- The Kossakowski matrix (must be PSD). -/
   C : Matrix (Fin n) (Fin n) ℂ
@@ -845,90 +827,63 @@ structure KossakowskiForm (D : ℕ) where
   /-- PSD of C. -/
   C_posSemidef : C.PosSemidef
 
+/-- A single summand in the dissipative part of a Kossakowski form. -/
+private def kossakowskiTerm (K : KossakowskiForm D) (k l : Fin K.n)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
+  K.C l k • (
+    (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
+    (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k))
+
+private theorem kossakowskiTerm_add (K : KossakowskiForm D)
+    (k l : Fin K.n) (ρ σ : Matrix (Fin D) (Fin D) ℂ) :
+    kossakowskiTerm K k l (ρ + σ) =
+      kossakowskiTerm K k l ρ + kossakowskiTerm K k l σ := by
+  simp only [kossakowskiTerm, mul_add, add_mul, smul_add, smul_sub]
+  abel
+
+private theorem kossakowskiTerm_smul (K : KossakowskiForm D)
+    (k l : Fin K.n) (c : ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    kossakowskiTerm K k l (c • ρ) = c • kossakowskiTerm K k l ρ := by
+  simp only [kossakowskiTerm, mul_smul_comm, smul_mul_assoc, smul_add,
+    smul_sub, smul_smul]
+  rw [mul_comm]
+
+/-- The dissipative part of a Kossakowski form. -/
+private def kossakowskiDissipator (K : KossakowskiForm D)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
+  (1 / 2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n, kossakowskiTerm K k l ρ
+
+private theorem kossakowskiDissipator_add (K : KossakowskiForm D)
+    (ρ σ : Matrix (Fin D) (Fin D) ℂ) :
+    kossakowskiDissipator K (ρ + σ) =
+      kossakowskiDissipator K ρ + kossakowskiDissipator K σ := by
+  simp_rw [kossakowskiDissipator, kossakowskiTerm_add, Finset.sum_add_distrib]
+  rw [smul_add]
+
+private theorem kossakowskiDissipator_smul (K : KossakowskiForm D)
+    (c : ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    kossakowskiDissipator K (c • ρ) = c • kossakowskiDissipator K ρ := by
+  simp_rw [kossakowskiDissipator, kossakowskiTerm_smul, ← Finset.smul_sum]
+  rw [smul_smul, smul_smul]
+  congr 1
+  ring
+
 /-- The linear map defined by a Kossakowski form. -/
 def KossakowskiForm.toLinearMap (K : KossakowskiForm D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
   toFun ρ :=
-    -- Hamiltonian part
     Complex.I • (ρ * K.H - K.H * ρ) +
-    -- Dissipative part with Kossakowski matrix
-    (1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
-      K.C l k • (
-        (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
-        (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k))
+      kossakowskiDissipator K ρ
   map_add' ρ σ := by
-    have hham : Complex.I • ((ρ + σ) * K.H - K.H * (ρ + σ)) =
-        Complex.I • (ρ * K.H - K.H * ρ) + Complex.I • (σ * K.H - K.H * σ) := by
-      rw [← smul_add]
-      congr 1
-      simp only [mul_add, add_mul]
-      abel
-    rw [hham]
-    have hterm : ∀ k l : Fin K.n,
-        K.C l k • (
-          (K.F k * (ρ + σ) * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * (ρ + σ)) +
-          (K.F k * (ρ + σ) * (K.F l)ᴴ - (ρ + σ) * (K.F l)ᴴ * K.F k)) =
-        K.C l k • (
-          (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
-          (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k)) +
-        K.C l k • (
-          (K.F k * σ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * σ) +
-          (K.F k * σ * (K.F l)ᴴ - σ * (K.F l)ᴴ * K.F k)) := by
-      intro k l
-      simp only [mul_add, add_mul, smul_add, smul_sub]
-      abel
-    have hdiss :
-        (1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
-          K.C l k • (
-            (K.F k * (ρ + σ) * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * (ρ + σ)) +
-            (K.F k * (ρ + σ) * (K.F l)ᴴ - (ρ + σ) * (K.F l)ᴴ * K.F k)) =
-        (1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
-          K.C l k • (
-            (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
-            (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k)) +
-        (1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
-          K.C l k • (
-            (K.F k * σ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * σ) +
-            (K.F k * σ * (K.F l)ᴴ - σ * (K.F l)ᴴ * K.F k)) := by
-      simp_rw [hterm]
-      simp_rw [Finset.sum_add_distrib]
-      rw [smul_add]
-    rw [hdiss]
+    simp only [kossakowskiDissipator_add, mul_add, add_mul, smul_add, smul_sub]
     abel
   map_smul' c ρ := by
-    have hham : Complex.I • (c • ρ * K.H - K.H * (c • ρ)) =
-        c • (Complex.I • (ρ * K.H - K.H * ρ)) := by
-      simp only [mul_smul_comm, smul_mul_assoc, smul_sub, smul_smul]
-      congr 1 <;> ring
-    rw [hham]
-    have hterm : ∀ k l : Fin K.n,
-        K.C l k • (
-          (K.F k * (c • ρ) * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * (c • ρ)) +
-          (K.F k * (c • ρ) * (K.F l)ᴴ - (c • ρ) * (K.F l)ᴴ * K.F k)) =
-        c • (K.C l k • (
-          (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
-          (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k))) := by
-      intro k l
-      simp only [mul_smul_comm, smul_mul_assoc, smul_sub, smul_add, smul_smul]
-      have hcomm : K.C l k * c = c * K.C l k := by ring
-      rw [hcomm]
-    have hdiss :
-        (1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
-          K.C l k • (
-            (K.F k * (c • ρ) * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * (c • ρ)) +
-            (K.F k * (c • ρ) * (K.F l)ᴴ - (c • ρ) * (K.F l)ᴴ * K.F k)) =
-        c • ((1/2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n,
-          K.C l k • (
-            (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
-            (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k))) := by
-      simp_rw [hterm]
-      simp_rw [← Finset.smul_sum]
-      rw [smul_smul, smul_smul]
-      congr 1
-      ring
-    rw [hdiss]
-    rw [smul_add]
-    simp only [RingHom.id_apply]
+    simp only [RingHom.id_apply, kossakowskiDissipator_smul, mul_smul_comm,
+      smul_mul_assoc, smul_sub]
+    rw [smul_add, smul_sub]
+    simp only [smul_smul]
+    congr 1
+    congr 1 <;> ring_nf
 
 /-! ### Helpers for Kossakowski ↔ Lindblad conversion -/
 
@@ -967,10 +922,14 @@ private theorem dissipator_eq_half_kossakowski
 private theorem posSemidef_sqrt_factorization {n : ℕ}
     (C : Matrix (Fin n) (Fin n) ℂ) (hC : C.PosSemidef) :
     (CFC.sqrt C)ᴴ * CFC.sqrt C = C := by
+  have hC_nonneg : 0 ≤ C := Matrix.nonneg_iff_posSemidef.mpr hC
   have hsqrt_psd : (CFC.sqrt C).PosSemidef :=
-    Matrix.PosSemidef.posSemidef_sqrt
-  rw [hsqrt_psd.isHermitian.eq, ← sq]
-  exact hC.sq_sqrt
+    Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg C)
+  calc
+    (CFC.sqrt C)ᴴ * CFC.sqrt C = CFC.sqrt C * CFC.sqrt C := by
+      rw [hsqrt_psd.isHermitian.eq]
+    _ = C := by
+      simpa using (CFC.sqrt_mul_sqrt_self C hC_nonneg)
 
 /-- Bilinear sum identity: `Σⱼ (Σₖ B_{jk}•Fₖ) * M * (Σₖ B_{jk}•Fₖ)†`
 equals `Σₖₗ (B†B)_{lk} • (Fₖ * M * Fₗ†)`. Used in Kossakowski ↔ Lindblad. -/
@@ -1012,17 +971,18 @@ theorem kossakowski_iff_lindblad
     (∃ K : KossakowskiForm D, L = K.toLinearMap) ↔
     (∃ F : LindbladForm D, L = F.toLinearMap) := by
   constructor
-  · -- Forward: Kossakowski → Lindblad via C = B†B factorization
+  · -- Forward: Kossakowski → Lindblad via `C = Bᴴ * B`
     rintro ⟨KF, hKF⟩
-    -- Factor C = B†B
-    obtain ⟨B, hB⟩ := Matrix.posSemidef_iff_eq_conjTranspose_mul_self.mp KF.C_posSemidef
-    -- Define Lindblad operators: Lⱼ = Σₖ B_{jk} • Fₖ
+    let B : Matrix (Fin KF.n) (Fin KF.n) ℂ := CFC.sqrt KF.C
+    have hB : KF.C = Bᴴ * B := by
+      simpa [B] using (posSemidef_sqrt_factorization KF.C KF.C_posSemidef).symm
+    -- Define Lindblad operators: `Lⱼ = Σₖ B_{jk} • Fₖ`
     refine ⟨⟨KF.n, KF.H, fun j => ∑ k, B j k • KF.F k, KF.H_hermitian⟩, ?_⟩
     rw [hKF]
-    -- Show the linear maps agree pointwise
+    -- Show the linear maps agree pointwise.
     ext1 ρ
     simp only [KossakowskiForm.toLinearMap, LindbladForm.toLinearMap,
-      LinearMap.coe_mk, AddHom.coe_mk]
+      kossakowskiDissipator, kossakowskiTerm, LinearMap.coe_mk, AddHom.coe_mk]
     -- Hamiltonian parts are identical
     congr 1
     -- Dissipative parts: rewrite Lindblad using half-Kossakowski form
@@ -1081,62 +1041,23 @@ theorem kossakowski_iff_lindblad
     symm
     exact sum_one_smul_eq k _
 
-/-! ## Summary of sorry status -/
+end KossakowskiForms
 
-/-!
-### Fully proven (sorry-free):
-- All definitions: `GeneratorDecomp`, `IsCCP`, `LindbladForm`, `IsTraceAnnihilating`,
-  `IsGKSLGenerator`, `KossakowskiForm`
-- `GeneratorDecomp.toLinearMap` — linearity ✓
-- `LindbladForm.toLinearMap` — linearity ✓
-- `KossakowskiForm.toLinearMap` — linearity ✓
-- `LindbladForm.isTraceAnnihilating` — Lindblad form is trace-annihilating ✓
-- `LindbladForm.toLinearMap_eq_generatorDecomp` — Lindblad = (φ,κ) decomposition ✓
-- `LindbladForm.isCCP` — Lindblad form is CCP ✓
-- `GeneratorDecomp.traceAnnihilating_of_traceConstraint` — φ*(1)=κ+κ† ⟹ TA ✓
-- `exists_traceless_kraus_shift` — traceless Kraus operators exist ✓
-- `generator_shift_invariance` — Prop 7.4 Kraus shift invariance ✓
-- `trace_iterate_eq_zero` — trace(Lⁿ(ρ)) = 0 for n ≥ 1 ✓
-- `Matrix.eq_zero_of_forall_trace_mul_eq_zero` — trace pairing non-degeneracy ✓
-- `isTracePreservingMap_expSemigroup_of_isTraceAnnihilating` — TA → TP semigroup ✓
-  (via ODE argument: is_const_of_deriv_eq_zero + commutativity of L with exp(tL))
-- `isTraceAnnihilating_of_isTracePreservingMap_semigroup` — TP semigroup → TA ✓
-  (via infinitesimal argument: slope → 0 from right + uniqueness of limits)
-- `cp_semigroup_iff_ccp_generator` — Prop 7.3 equivalence ✓
-- `gksl_of_generatorDecomp_with_traceConstraint` — Thm 7.1 Form i → GKSL ✓
-- `generatorDecomp_of_gksl` — Thm 7.1 GKSL → Form i ✓
-  (trace constraint derived algebraically from TA + trace pairing non-degeneracy)
-- `gksl_iff_ccp_and_traceAnnihilating` — Thm 7.1 ↔ (CCP ∧ TA) ✓
-- `gksl_iff_lindbladForm` backward — LindbladForm → GKSL ✓
-- `gksl_iff_lindbladForm` forward — GKSL → LindbladForm ✓
-  (algebraic: decompose κ = iH + ½S via `iH_half_S_eq_κ`, construct LindbladForm,
-  verify via `LindbladForm.toLinearMap_eq_generatorDecomp`)
-- `kossakowski_iff_lindblad` — Form (ii) ↔ Form (iii) ✓ (BOTH directions!)
-  Forward (Kossakowski → Lindblad): PSD factorization C = B†B via
-  `posSemidef_iff_eq_conjTranspose_mul_self`, then bilinear sum identities
-  `kraus_sum_eq_double_sum` and `adj_kraus_sum_eq_double_sum` to convert
-  L_j = Σ_k B_{jk}•F_k operators to the Kossakowski double sum.
-  Backward (Lindblad → Kossakowski): set C = 𝟙, F_k = L_k, collapse
-  identity matrix sum via `sum_one_smul_eq`, and bridge dissipator forms
-  via `dissipator_eq_half_kossakowski` (a ℂ-module identity).
+/-! ## Remaining formalization gaps
 
-### Sorry — deep results (3):
-- `choi_projected_posSemidef_implies_ccp` — Prop 7.2 reverse direction.
-  **Blocker**: The hypothesis `hL_proj : True` is a placeholder for the real condition
-  `P (choiMatrix L) P ≥ 0`. Needs formalized Choi matrix projection + spectral decomposition.
-- `cp_semigroup_implies_ccp_generator` — Prop 7.3 forward (CP semigroup → CCP generator).
-  **Blocker**: Requires differentiation of the Choi matrix `(T_t⊗id)(|Ω⟩⟨Ω|)` at `t=0`
-  and the projection argument. Depends on `choi_projected_posSemidef_implies_ccp`.
-- `ccp_generator_implies_cp_semigroup` — Prop 7.3 reverse (CCP → CP semigroup).
-  **Blocker**: Requires the Lie–Trotter product formula for operators,
-  `exp(tψ)(ρ) = e^{-tκ}ρe^{-tκ†}` being CP, and closedness of CP maps under limits.
+The only remaining placeholders are the three structural results connecting CCP
+maps with CP semigroups:
 
-### Results that chain through these 3 sorries:
-- `gksl_iff_lindbladForm` forward direction (GKSL → LindbladForm):
-  proven algebraically but depends on `cp_semigroup_implies_ccp_generator` via
-  `generatorDecomp_of_gksl`.
-- `gksl_of_generatorDecomp_with_traceConstraint` (Thm 7.1 Form i → GKSL):
-  depends on `ccp_generator_implies_cp_semigroup`.
+* `choi_projected_posSemidef_implies_ccp`: needs the projected Choi positivity
+  hypothesis in a usable formal form, together with a Kraus extraction argument.
+* `cp_semigroup_implies_ccp_generator`: needs differentiation of the projected
+  Choi matrix at `t = 0`, building on the previous theorem.
+* `ccp_generator_implies_cp_semigroup`: needs a Lie–Trotter argument and
+  closedness of complete positivity under limits.
+
+The later GKSL equivalences are fully reduced to these three inputs.
 -/
+
+end GeneratorTheory
 
 end -- noncomputable section

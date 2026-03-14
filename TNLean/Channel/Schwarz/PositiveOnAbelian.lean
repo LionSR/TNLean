@@ -60,8 +60,8 @@ noncomputable def blockQuadraticForm {n D : ℕ}
 /-- A map is **positive on commuting block families** if it preserves
 block-quadratic-form positivity whenever the image family is pairwise commuting.
 
-This is the concrete stand-in for “the restriction to a commutative
-`*`-subalgebra is completely positive” that is sufficient for the normal-input
+This is the concrete stand-in for "the restriction to a commutative
+`*`-subalgebra is completely positive" that is sufficient for the normal-input
 Schwarz argument used later in the project. -/
 def IsPositiveOnCommuting
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
@@ -81,13 +81,13 @@ theorem commute_conjTranspose_of_normal
 
 /-- For a normal matrix `A`, the generator `A` commutes with `Aᴴ * A`. -/
 theorem commute_conjTranspose_mul_self_of_normal
-    (hA : Aᴴ * A = A * Aᴴ) : Commute A (Aᴴ * A) := by
-  exact (commute_conjTranspose_of_normal (A := A) hA).mul_right (Commute.refl A)
+    (hA : Aᴴ * A = A * Aᴴ) : Commute A (Aᴴ * A) :=
+  (commute_conjTranspose_of_normal (A := A) hA).mul_right (Commute.refl A)
 
 /-- For a normal matrix `A`, the generator `Aᴴ` commutes with `Aᴴ * A`. -/
 theorem conjTranspose_commute_conjTranspose_mul_self_of_normal
-    (hA : Aᴴ * A = A * Aᴴ) : Commute Aᴴ (Aᴴ * A) := by
-  exact (Commute.refl Aᴴ).mul_right
+    (hA : Aᴴ * A = A * Aᴴ) : Commute Aᴴ (Aᴴ * A) :=
+  (Commute.refl Aᴴ).mul_right
     (Commute.symm (commute_conjTranspose_of_normal (A := A) hA))
 
 /-- For a normal matrix `A`, the generators `{A, Aᴴ, Aᴴ * A, 1}` commute pairwise. -/
@@ -98,12 +98,13 @@ theorem normal_generators_pairwise_commute
       Commute A (1 : Matrix (Fin D) (Fin D) ℂ) ∧
       Commute Aᴴ (Aᴴ * A) ∧
       Commute Aᴴ (1 : Matrix (Fin D) (Fin D) ℂ) ∧
-      Commute (Aᴴ * A) (1 : Matrix (Fin D) (Fin D) ℂ) := by
-  refine ⟨commute_conjTranspose_of_normal (A := A) hA, ?_⟩
-  refine ⟨commute_conjTranspose_mul_self_of_normal (A := A) hA, ?_⟩
-  refine ⟨Commute.one_right A, ?_⟩
-  refine ⟨conjTranspose_commute_conjTranspose_mul_self_of_normal (A := A) hA, ?_⟩
-  exact ⟨Commute.one_right Aᴴ, Commute.one_right (Aᴴ * A)⟩
+      Commute (Aᴴ * A) (1 : Matrix (Fin D) (Fin D) ℂ) :=
+  ⟨commute_conjTranspose_of_normal (A := A) hA,
+   commute_conjTranspose_mul_self_of_normal (A := A) hA,
+   Commute.one_right A,
+   conjTranspose_commute_conjTranspose_mul_self_of_normal (A := A) hA,
+   Commute.one_right Aᴴ,
+   Commute.one_right (Aᴴ * A)⟩
 
 end NormalGenerators
 
@@ -140,35 +141,31 @@ theorem rect_kadison_schwarz_le
   have h_sum_psd : (∑ i : ι, K₂ i * P * (K₂ i)ᴴ).PosSemidef :=
     Matrix.posSemidef_sum (s := Finset.univ) (x := fun i => K₂ i * P * (K₂ i)ᴴ)
       (fun i _ => hP.mul_mul_conjTranspose_same (B := K₂ i))
+  -- Key identity: the block sum equals the expected block matrix.
+  have h_sfb :
+      ∀ (A' B' C' D' : ι → Matrix m m ℂ),
+        (∑ i : ι, Matrix.fromBlocks (A' i) (B' i) (C' i) (D' i)) =
+          Matrix.fromBlocks (∑ i : ι, A' i) (∑ i : ι, B' i)
+            (∑ i : ι, C' i) (∑ i : ι, D' i) := by
+    intros A' B' C' D'
+    ext i j
+    rcases i with i' | i' <;> rcases j with j' | j' <;>
+      simp [Matrix.sum_apply]
   have h_block_eq :
       (∑ i : ι, K₂ i * P * (K₂ i)ᴴ) =
         Matrix.fromBlocks (rectKrausMap K (Xᴴ * X)) ((rectKrausMap K X)ᴴ)
           ((rectKrausMap K X)ᴴᴴ) (1 : Matrix m m ℂ) := by
     simp_rw [h_term]
-    have h_sfb :
-        ∀ (A' B' C' D' : ι → Matrix m m ℂ),
-          (∑ i : ι, Matrix.fromBlocks (A' i) (B' i) (C' i) (D' i)) =
-            Matrix.fromBlocks (∑ i : ι, A' i) (∑ i : ι, B' i) (∑ i : ι, C' i) (∑ i : ι, D' i) := by
-      intro A' B' C' D'
-      induction (Finset.univ : Finset ι) using Finset.cons_induction with
-      | empty => simp [Matrix.fromBlocks_zero]
-      | cons a s ha ih =>
-          simp only [Finset.sum_cons]
-          rw [ih, Matrix.fromBlocks_add]
     rw [h_sfb]
-    refine (Matrix.fromBlocks_inj).2 ?_
-    constructor
-    · simp [rectKrausMap]
-    constructor
-    · calc
-        (∑ i : ι, K i * Xᴴ * (K i)ᴴ) = rectKrausMap K Xᴴ := by
-          simp [rectKrausMap]
-        _ = (rectKrausMap K X)ᴴ := by
-            simp [rectKrausMap, Matrix.conjTranspose_sum,
-              Matrix.conjTranspose_mul, Matrix.mul_assoc]
-    constructor
-    · simp [rectKrausMap, conjTranspose_conjTranspose]
-    · simpa using h_unital
+    exact Matrix.fromBlocks_inj.mpr
+      ⟨by simp [rectKrausMap],
+       by calc
+           (∑ i : ι, K i * Xᴴ * (K i)ᴴ) = rectKrausMap K Xᴴ := by simp [rectKrausMap]
+           _ = (rectKrausMap K X)ᴴ := by
+               simp [rectKrausMap, Matrix.conjTranspose_sum,
+                 Matrix.conjTranspose_mul, Matrix.mul_assoc],
+       by simp [rectKrausMap, conjTranspose_conjTranspose],
+       by simpa using h_unital⟩
   have h_block_psd :
       (Matrix.fromBlocks (rectKrausMap K (Xᴴ * X)) ((rectKrausMap K X)ᴴ)
         ((rectKrausMap K X)ᴴᴴ) (1 : Matrix m m ℂ)).PosSemidef := by
@@ -332,7 +329,12 @@ end DiagonalFamily
 
 /-- Wolf Proposition 1.6 in the block-quadratic-form form used later in the
 pipeline: positivity upgrades to positivity of every finite amplification once
-all block images commute pairwise. -/
+all block images commute pairwise.
+
+TODO: Prove via `exists_diagonal_family_of_normal` and `diagonal_family_schwarz_le`
+by simultaneously diagonalizing the commuting Hermitian images of the block entries
+and reducing to the scalar case. This requires Wolf Prop 1.6 (abelian subalgebra
+implies CP) and is tracked separately. -/
 theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T)
@@ -343,8 +345,8 @@ theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
     (ψ : Fin n → Fin D → ℂ) :
     0 ≤ blockQuadraticForm T a ψ := by
   -- Wolf Prop 1.6: Use simultaneous diagonalization of commuting images.
-  -- Full proof is below after the JointDiagonalization section.
-  -- TODO: prove via exists_diagonal_family_of_normal + diagonal_family_schwarz_le
+  -- Full proof requires building a joint eigenbasis for all T(a_{ij}),
+  -- then reducing to the scalar diagonal case via diagonal_family_schwarz_le.
   sorry
 
 /-- A positive map is positive on commuting block families.
@@ -378,7 +380,7 @@ private theorem linearMap_eq_sum_rankOne_of_orthonormalBasis
     _ = ∑ i, inner ℂ (b i) v • (μ i • b i) := by simp [hL]
     _ = ∑ i, μ i • (inner ℂ (b i) v • b i) := by
       apply Finset.sum_congr rfl
-      intro i hi
+      intro i _
       rw [smul_smul, smul_smul]
       ring
     _ = (∑ i, μ i •
@@ -389,13 +391,9 @@ private theorem commute_parts_of_normal [DecidableEq (Fin D)]
     (A : Mat) (hA : Aᴴ * A = A * Aᴴ) :
     Commute (((1 / 2 : ℂ)) • (A + Aᴴ)) (((Complex.I / 2 : ℂ)) • (Aᴴ - A)) := by
   have hAA : Commute A Aᴴ := commute_conjTranspose_of_normal (A := A) hA
-  have hsum_right_Astar : Commute (A + Aᴴ) Aᴴ := by
-    exact hAA.add_left (Commute.refl Aᴴ)
-  have hsum_right_A : Commute (A + Aᴴ) A := by
-    exact (Commute.refl A).add_left hAA.symm
-  have hsum_sub : Commute (A + Aᴴ) (Aᴴ - A) := by
-    rw [sub_eq_add_neg]
-    simpa using hsum_right_Astar.add_right (hsum_right_A.smul_right (-1 : ℂ))
+  -- Commute (A + Aᴴ) with (Aᴴ - A) by combining the individual commutators.
+  have hsum_sub : Commute (A + Aᴴ) (Aᴴ - A) :=
+    (hAA.add_left (Commute.refl Aᴴ)).sub_right ((Commute.refl A).add_left hAA.symm)
   simpa [Matrix.smul_mul, Matrix.mul_smul, mul_comm, mul_left_comm, mul_assoc] using
     (hsum_sub.smul_left ((1 / 2 : ℂ))).smul_right ((Complex.I / 2 : ℂ))
 
@@ -438,39 +436,24 @@ theorem exists_diagonal_family_of_normal
     intro v
     apply (WithLp.ofLp_injective 2)
     simp [Matrix.ofLp_toEuclideanLin_apply, Matrix.mulVec_mulVec, hHKmat.eq]
-  let s := Σ μ : Eigenvalues Hlin,
-    Fin (Module.finrank ℂ (Module.End.eigenspace Hlin μ))
+  -- Factor out the eigenspace-invariance proof for Klin once, then use it for
+  -- both the restriction operator and the orthonormal basis construction.
+  have hKinv : ∀ (μ : Eigenvalues Hlin),
+      ∀ x ∈ Module.End.eigenspace Hlin μ, Klin x ∈ Module.End.eigenspace Hlin μ :=
+    fun μ x hx => (Module.End.mem_eigenspace_iff).mpr <|
+      (Module.End.mem_genEigenspace_one).mp <|
+        (Module.End.mapsTo_genEigenspace_of_comm hHKlin μ 1) hx
+  let Krestr : ∀ μ : Eigenvalues Hlin,
+      Module.End ℂ (Module.End.eigenspace Hlin μ) :=
+    fun μ => Klin.restrict (hKinv μ)
+  have hKrestr : ∀ μ : Eigenvalues Hlin, (Krestr μ).IsSymmetric :=
+    fun μ => hKlin.restrict_invariant (hKinv μ)
   let bFamily : ∀ μ : Eigenvalues Hlin,
       OrthonormalBasis (Fin (Module.finrank ℂ (Module.End.eigenspace Hlin μ))) ℂ
-        (Module.End.eigenspace Hlin μ) := by
-    intro μ
-    let Kμ : Module.End ℂ (Module.End.eigenspace Hlin μ) :=
-      Klin.restrict (by
-        intro x hx
-        exact (Module.End.mem_eigenspace_iff).mpr <|
-          (Module.End.mem_genEigenspace_one).mp <|
-            (Module.End.mapsTo_genEigenspace_of_comm hHKlin μ 1) hx)
-    have hKμ : Kμ.IsSymmetric :=
-      hKlin.restrict_invariant (by
-        intro x hx
-        exact (Module.End.mem_eigenspace_iff).mpr <|
-          (Module.End.mem_genEigenspace_one).mp <|
-            (Module.End.mapsTo_genEigenspace_of_comm hHKlin μ 1) hx)
-    exact hKμ.eigenvectorBasis rfl
-  let Krestr : ∀ μ : Eigenvalues Hlin,
-      Module.End ℂ (Module.End.eigenspace Hlin μ) := fun μ =>
-    Klin.restrict (by
-      intro x hx
-      exact (Module.End.mem_eigenspace_iff).mpr <|
-        (Module.End.mem_genEigenspace_one).mp <|
-          (Module.End.mapsTo_genEigenspace_of_comm hHKlin μ 1) hx)
-  have hKrestr : ∀ μ : Eigenvalues Hlin, (Krestr μ).IsSymmetric := by
-    intro μ
-    exact hKlin.restrict_invariant (by
-      intro x hx
-      exact (Module.End.mem_eigenspace_iff).mpr <|
-        (Module.End.mem_genEigenspace_one).mp <|
-          (Module.End.mapsTo_genEigenspace_of_comm hHKlin μ 1) hx)
+        (Module.End.eigenspace Hlin μ) :=
+    fun μ => (hKrestr μ).eigenvectorBasis rfl
+  let s := Σ μ : Eigenvalues Hlin,
+    Fin (Module.finrank ℂ (Module.End.eigenspace Hlin μ))
   let cBasis : Module.Basis s ℂ E :=
     (hHlin.direct_sum_isInternal).collectedBasis (fun i => (bFamily i).toBasis)
   have hOrthoC : Orthonormal ℂ cBasis :=
@@ -595,20 +578,16 @@ theorem map_conjTranspose_mul_map_le_of_normal_of_subunital
       (↑((((InnerProductSpace.rankOne ℂ) (b i)) (b i)) :
         EuclideanSpace ℂ (Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D)))
   let B : s → Matrix (Fin D) (Fin D) ℂ := fun i => T (P i)
-  have hB : ∀ i, (B i).PosSemidef := by
-    intro i
-    exact hT (P i) (hPpsd i)
+  have hB : ∀ i, (B i).PosSemidef := fun i => hT (P i) (hPpsd i)
   have hsub : ∑ i, B i ≤ (1 : Matrix (Fin D) (Fin D) ℂ) := by
     calc
       ∑ i, B i = T (∑ i, P i) := by simp [B, map_sum]
       _ = T 1 := by rw [hPsum]
       _ ≤ 1 := h_subunital
   have hTA : T A = ∑ i, eig i • B i := by
-    rw [hA_decomp]
-    simp [B, P, map_sum]
+    rw [hA_decomp]; simp [B, P, map_sum]
   have hTAA : T (Aᴴ * A) = ∑ i, (star (eig i) * eig i) • B i := by
-    rw [hAstarA_decomp]
-    simp [B, P, map_sum]
+    rw [hAstarA_decomp]; simp [B, P, map_sum]
   have hBherm : ∀ i, (B i)ᴴ = B i := fun i => (hB i).isHermitian.eq
   have hTAstar : T Aᴴ = ∑ i, star (eig i) • B i := by
     calc

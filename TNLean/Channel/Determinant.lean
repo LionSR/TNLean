@@ -4,11 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
 import TNLean.Channel.Peripheral.IrreducibleChannel
-import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.LinearAlgebra.Determinant
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
-import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
+import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.LinearAlgebra.Matrix.StdBasis
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.LinearAlgebra.Matrix.Trace
@@ -48,39 +47,29 @@ open Matrix
 variable {d : ℕ}
 
 /-- The ambient matrix algebra `M_d(ℂ)`. -/
-abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
+private abbrev MatrixAlg (d : ℕ) := Matrix (Fin d) (Fin d) ℂ
 
 /-- Endomorphisms of `M_d(ℂ)`. -/
-abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
+private abbrev MatrixEnd (d : ℕ) := MatrixAlg d →ₗ[ℂ] MatrixAlg d
 
 /-- Index type for the standard basis of `M_d(ℂ)`.
 
 We use `Fin d × Fin d × Unit`, which has cardinality $d^2$. -/
-abbrev MatrixBasisIndex (d : ℕ) := Fin d × Fin d × Unit
+private abbrev MatrixBasisIndex (d : ℕ) := Fin d × Fin d × Unit
 
 /-- The standard basis of `M_d(ℂ)` coming from matrix units. -/
-noncomputable def matrixSpaceBasis (d : ℕ) :
+private noncomputable def matrixSpaceBasis (d : ℕ) :
     Module.Basis (MatrixBasisIndex d) ℂ (MatrixAlg d) :=
   Module.Basis.matrix (Fin d) (Fin d) (Module.Basis.singleton Unit ℂ)
 
 /-- Column-stacking vectorization as a linear equivalence. -/
-noncomputable def matrixVecLinearEquiv (d : ℕ) :
-    MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) where
-  toFun := Matrix.vec
-  invFun v i j := v (j, i)
-  left_inv X := by
-    ext i j
-    rfl
-  right_inv v := by
-    ext ij
-    cases ij
-    rfl
-  map_add' X Y := by
-    ext ij
-    rfl
-  map_smul' a X := by
-    ext ij
-    rfl
+private noncomputable def matrixVecLinearEquiv (d : ℕ) :
+    MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) :=
+  LinearEquiv.ofBijective
+    { toFun := Matrix.vec
+      map_add' := Matrix.vec_add
+      map_smul' := Matrix.vec_smul }
+    Matrix.vec_bijective
 
 section Determinant
 
@@ -99,50 +88,41 @@ noncomputable def channelDet (T : MatrixEnd d) : ℂ :=
 theorem channelDet_eq_linearMap_det (T : MatrixEnd d) :
     channelDet T = LinearMap.det T := by
   unfold channelDet channelMatrix
-  exact (LinearMap.det_toMatrix (matrixSpaceBasis d) T)
+  exact LinearMap.det_toMatrix (matrixSpaceBasis d) T
 
 /-- A channel determinant is nonzero exactly when the underlying linear map is invertible in
 `Module.End`. -/
 theorem channelDet_ne_zero_iff_isUnit (T : MatrixEnd d) :
     channelDet T ≠ 0 ↔ IsUnit T := by
-  rw [channelDet_eq_linearMap_det]
-  constructor
-  · intro hdet
-    exact (LinearMap.isUnit_iff_isUnit_det (f := T)).2 (isUnit_iff_ne_zero.mpr hdet)
-  · intro hT
-    exact isUnit_iff_ne_zero.mp ((LinearMap.isUnit_iff_isUnit_det (f := T)).1 hT)
+  simpa [channelDet_eq_linearMap_det] using
+    ((isUnit_iff_ne_zero : IsUnit (LinearMap.det T) ↔ LinearMap.det T ≠ 0).symm.trans
+      (LinearMap.isUnit_iff_isUnit_det (f := T)).symm)
 
 /-- A channel determinant is nonzero exactly when the underlying linear map is injective. -/
 theorem channelDet_ne_zero_iff_injective (T : MatrixEnd d) :
     channelDet T ≠ 0 ↔ Function.Injective T := by
-  constructor
-  · intro hdet
-    have hT : IsUnit T := (channelDet_ne_zero_iff_isUnit T).1 hdet
-    exact (LinearMap.ker_eq_bot).1 ((LinearMap.isUnit_iff_ker_eq_bot T).1 hT)
-  · intro hT
-    have hker : T.ker = ⊥ := (LinearMap.ker_eq_bot).2 hT
-    exact (channelDet_ne_zero_iff_isUnit T).2 ((LinearMap.isUnit_iff_ker_eq_bot T).2 hker)
+  simpa [LinearMap.ker_eq_bot] using
+    (channelDet_ne_zero_iff_isUnit (T := T)).trans (LinearMap.isUnit_iff_ker_eq_bot T)
 
 /-- A channel determinant is nonzero exactly when the underlying linear map is bijective. -/
 theorem channelDet_ne_zero_iff_bijective (T : MatrixEnd d) :
     channelDet T ≠ 0 ↔ Function.Bijective T := by
-  constructor
-  · intro hdet
-    have hT : Function.Injective T := (channelDet_ne_zero_iff_injective T).1 hdet
-    exact ⟨hT, (LinearMap.injective_iff_surjective (f := T)).1 hT⟩
-  · intro hT
-    exact (channelDet_ne_zero_iff_injective T).2 hT.1
+  have hbij : Function.Injective T ↔ Function.Bijective T := by
+    constructor
+    · intro hT
+      exact ⟨hT, (LinearMap.injective_iff_surjective (f := T)).1 hT⟩
+    · exact fun hT => hT.1
+  exact (channelDet_ne_zero_iff_injective (T := T)).trans hbij
 
 /-- Wolf Thm 6.1: `det T = 0` iff `T` is not invertible as a linear map on `M_d(ℂ)`. -/
 theorem channelDet_eq_zero_iff_not_bijective (T : MatrixEnd d) :
     channelDet T = 0 ↔ ¬ Function.Bijective T := by
   simpa using not_congr (channelDet_ne_zero_iff_bijective (d := d) T)
 
+/-- The determinant of the identity channel is `1`. -/
 @[simp] theorem channelDet_id :
     channelDet (1 : MatrixEnd d) = 1 := by
-  rw [channelDet_eq_linearMap_det]
-  exact
-    (LinearMap.det_id : LinearMap.det (LinearMap.id : MatrixAlg d →ₗ[ℂ] MatrixAlg d) = 1)
+  simp [channelDet_eq_linearMap_det]
 
 end Determinant
 
@@ -174,17 +154,10 @@ theorem unitaryChannel_isCPMap (U : Matrix.unitaryGroup (Fin d) ℂ) :
 theorem unitaryChannel_isTracePreserving (U : Matrix.unitaryGroup (Fin d) ℂ) :
     IsTracePreservingMap (unitaryChannel U) := by
   intro X
-  have hU : ((U : MatrixAlg d)ᴴ) * (U : MatrixAlg d) = 1 := by
+  have hU : (U : MatrixAlg d)ᴴ * (U : MatrixAlg d) = 1 := by
     simpa [Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self U
-  calc
-    trace (unitaryChannel U X)
-        = trace (((U : MatrixAlg d) * X) * (U : MatrixAlg d)ᴴ) := by
-            rfl
-    _ = trace (((U : MatrixAlg d)ᴴ) * (U : MatrixAlg d) * X) := by
-          simpa [Matrix.mul_assoc] using
-            (Matrix.trace_mul_cycle (U : MatrixAlg d) X ((U : MatrixAlg d)ᴴ))
-    _ = trace X := by
-          simp [hU]
+  simpa [unitaryChannel, Matrix.mul_assoc, hU] using
+    (Matrix.trace_mul_cycle (U : MatrixAlg d) X ((U : MatrixAlg d)ᴴ))
 
 /-- Unitary conjugation is a quantum channel. -/
 theorem unitaryChannel_isChannel (U : Matrix.unitaryGroup (Fin d) ℂ) :
@@ -197,8 +170,11 @@ section WolfStatements
 
 variable {T : MatrixEnd d}
 
-/-- Wolf Thm 6.1: for a positive trace-preserving map on `M_d(ℂ)`, the channel determinant
-satisfies `|det T| ≤ 1`. -/
+/-- Wolf Thm. 6.1(1): for a positive trace-preserving map on `M_d(ℂ)`, the channel
+determinant satisfies `|det T| ≤ 1`.
+
+This theorem is currently recorded as a statement; the analytic proof remains to be formalized.
+-/
 theorem channelDet_norm_le_one_of_positive_tracePreserving
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
     ‖channelDet T‖ ≤ 1 := by
@@ -211,10 +187,8 @@ theorem channelDet_norm_le_one_of_channel
   classical
   by_cases hd : d = 0
   · subst hd
-    rw [channelDet_eq_linearMap_det]
-    simpa using (show ‖LinearMap.det T‖ ≤ 1 by
-      rw [LinearMap.det_eq_one_of_subsingleton]
-      simp)
+    rw [channelDet_eq_linearMap_det, LinearMap.det_eq_one_of_subsingleton]
+    simp
   · haveI : NeZero d := ⟨hd⟩
     let A : Matrix (MatrixBasisIndex d) (MatrixBasisIndex d) ℂ := channelMatrix T
     have hspectrum : spectrum ℂ A = spectrum ℂ T := by
@@ -254,8 +228,12 @@ theorem channelDet_norm_le_one_of_channel
       _ = ‖A.charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
       _ ≤ 1 := hprod_le
 
-/-- Wolf Thm 6.1: for positive trace-preserving maps, `|det T| = 1` iff `T` is unitary
-conjugation. -/
+/-- This file records the unitary-conjugation branch of Wolf Thm. 6.1(2): for a positive
+trace-preserving map on `M_d(ℂ)`, the identity `|det T| = 1` is characterized by unitary
+conjugation.
+
+The full Wolf statement also includes maps unitarily equivalent to transposition; that branch is
+not yet formalized here. -/
 theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
     ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
@@ -265,12 +243,12 @@ theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
 theorem channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel
     (hT : IsChannel T) :
     ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
-  exact channelDet_norm_eq_one_iff_exists_unitaryChannel (T := T) hT.pos hT.tp
+  simpa using channelDet_norm_eq_one_iff_exists_unitaryChannel (T := T) hT.pos hT.tp
 
 /-- Wolf Thm. 6.1(3): the determinant of a unitary channel is `1`. With the matrix-unit
 basis, the representing matrix is `U ⊗ conj U`, whose determinant is
 `(det U)^d * conj(det U)^d = 1`. -/
-theorem channelDet_unitary_eq_phase_pow (U : Matrix.unitaryGroup (Fin d) ℂ) :
+theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
     channelDet (unitaryChannel U) = 1 := by
   let e : MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) := matrixVecLinearEquiv d
   let M : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
@@ -293,9 +271,11 @@ theorem channelDet_unitary_eq_phase_pow (U : Matrix.unitaryGroup (Fin d) ℂ) :
     intro w
     ext ij
     simpa [e] using congrFun (hvec (e.symm w)) ij
-  have hdet_map_star : ((U : MatrixAlg d).map star).det = star (Matrix.det (U : MatrixAlg d)) := by
+  have hdet_map_star :
+      ((U : MatrixAlg d).map star).det = star (Matrix.det (U : MatrixAlg d)) := by
     simpa using (RingEquiv.map_det (starRingAut : ℂ ≃+* ℂ) (U : MatrixAlg d)).symm
-  have hdet_unitary : star (Matrix.det (U : MatrixAlg d)) * Matrix.det (U : MatrixAlg d) = 1 := by
+  have hdet_unitary :
+      star (Matrix.det (U : MatrixAlg d)) * Matrix.det (U : MatrixAlg d) = 1 := by
     have hU : ((U : MatrixAlg d)ᴴ) * (U : MatrixAlg d) = 1 := by
       simpa [Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self U
     have h := congrArg Matrix.det hU
@@ -303,10 +283,11 @@ theorem channelDet_unitary_eq_phase_pow (U : Matrix.unitaryGroup (Fin d) ℂ) :
   calc
     channelDet (unitaryChannel U) = LinearMap.det (unitaryChannel U) :=
       channelDet_eq_linearMap_det (T := unitaryChannel U)
-    _ = LinearMap.det (((e : MatrixAlg d →ₗ[ℂ] (Fin d × Fin d → ℂ)) ∘ₗ unitaryChannel U ∘ₗ
-          ((e.symm : (Fin d × Fin d → ℂ) ≃ₗ[ℂ] MatrixAlg d) :
-            (Fin d × Fin d → ℂ) →ₗ[ℂ] MatrixAlg d))) :=
-          (LinearMap.det_conj (f := unitaryChannel U) (e := e)).symm
+    _ = LinearMap.det
+          (((e : MatrixAlg d →ₗ[ℂ] (Fin d × Fin d → ℂ)) ∘ₗ unitaryChannel U ∘ₗ
+            ((e.symm : (Fin d × Fin d → ℂ) ≃ₗ[ℂ] MatrixAlg d) :
+              (Fin d × Fin d → ℂ) →ₗ[ℂ] MatrixAlg d))) :=
+        (LinearMap.det_conj (f := unitaryChannel U) (e := e)).symm
     _ = LinearMap.det (Matrix.toLin' M) := by rw [hconj]
     _ = Matrix.det M := by rw [LinearMap.det_toLin']
     _ = ((U : MatrixAlg d).map star).det ^ d * Matrix.det (U : MatrixAlg d) ^ d := by
@@ -315,13 +296,14 @@ theorem channelDet_unitary_eq_phase_pow (U : Matrix.unitaryGroup (Fin d) ℂ) :
               (B := (U : MatrixAlg d)))
     _ = (star (Matrix.det (U : MatrixAlg d)) * Matrix.det (U : MatrixAlg d)) ^ d := by
           rw [hdet_map_star, mul_pow]
-    _ = 1 := by
-          rw [hdet_unitary, one_pow]
+    _ = 1 := by rw [hdet_unitary, one_pow]
+
+alias channelDet_unitary_eq_phase_pow := channelDet_unitary_eq_one
 
 /-- Every unitary channel has determinant of modulus `1`. -/
 theorem channelDet_norm_eq_one_of_unitaryChannel (U : Matrix.unitaryGroup (Fin d) ℂ) :
     ‖channelDet (unitaryChannel U)‖ = 1 := by
-  rw [channelDet_unitary_eq_phase_pow]
+  rw [channelDet_unitary_eq_one]
   simp
 
 end WolfStatements
