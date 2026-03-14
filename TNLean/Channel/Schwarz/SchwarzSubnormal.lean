@@ -398,10 +398,12 @@ private lemma schwarz_commuting_dominant_posDef
     rw [hTA, hTAstar, hTD]
     have key := PositiveOnAbelian.diagonal_family_schwarz_le B hBpsd hBsub
       (fun i => starRingEnd ℂ (μ i))
-    simp only [map_star, star_star] at key
-    convert key using 2
-    funext i
-    ring
+    have h1 : ∀ i, starRingEnd ℂ (starRingEnd ℂ (μ i)) = μ i := fun i => star_star (μ i)
+    simp_rw [h1] at key
+    have h2 : ∀ i, μ i * starRingEnd ℂ (μ i) = starRingEnd ℂ (μ i) * μ i :=
+      fun i => mul_comm _ _
+    simp_rw [h2] at key
+    exact key
   exact ⟨hLeft, hRight⟩
 
 /-- Wolf Thm. 5.6: Schwarz inequality for commuting dominant operators.
@@ -450,10 +452,8 @@ theorem schwarz_inequality_commuting_dominant_operator
           (show (0 : ℝ) ≤ ε from le_of_lt hε)))
     have hPD_result := (schwarz_commuting_dominant_posDef T hPos hSub A _ hPD hComm' hDom').1
     calc T Aᴴ * T A ≤ T (Dom + (ε : ℂ) • 1) := hPD_result
-      _ = T Dom + (ε : ℂ) • T 1 := by simp [map_add, map_smul]
-      _ ≤ T Dom + (ε : ℂ) • 1 := by
-          gcongr
-          exact hSub
+      _ = T Dom + (ε : ℂ) • T 1 := by simp [map_add]
+      _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
   · -- Right inequality: T(A)T(A†) ≤ T(Dom)
     apply le_of_forall_le_add_pos_smul_one _ _ hRherm hDherm
     intro ε hε
@@ -466,9 +466,7 @@ theorem schwarz_inequality_commuting_dominant_operator
           (show (0 : ℝ) ≤ ε from le_of_lt hε)))
     have hPD_result := (schwarz_commuting_dominant_posDef T hPos hSub A _ hPD hComm' hDom').2
     calc T A * T Aᴴ ≤ T (Dom + (ε : ℂ) • 1) := hPD_result
-      _ = T Dom + (ε : ℂ) • T 1 := by simp [map_add, map_smul]
-      _ ≤ T Dom + (ε : ℂ) • 1 := by
-          gcongr
-          exact hSub
+      _ = T Dom + (ε : ℂ) • T 1 := by simp [map_add]
+      _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
 
 end KadisonSchwarz
