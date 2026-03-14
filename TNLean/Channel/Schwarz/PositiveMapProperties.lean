@@ -3,7 +3,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
-import Mathlib.Analysis.CStarAlgebra.PositiveLinearMap
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
 
 /-!
@@ -49,17 +48,26 @@ theorem IsPositiveMap.map_conjTranspose
   have hC : C.IsHermitian := by
     ext i j
     simp [C, sub_eq_add_neg, add_comm]
-  have hA_decomp : A = B + Complex.I • C := by
+  have hmulI (z : ℂ) : Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * z)) = -((2 : ℂ)⁻¹ * z) := by
+    calc
+      Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * z)) = (Complex.I * Complex.I) * ((2 : ℂ)⁻¹ * z) := by
+        ring
+      _ = -((2 : ℂ)⁻¹ * z) := by norm_num [Complex.I_sq]
+  have hIC : Complex.I • C = (1 / 2 : ℝ) • (A - Aᴴ) := by
     ext i j
-    have hI2 : (Complex.I : ℂ) ^ 2 = -1 := by norm_num
-    simp [B, C, sub_eq_add_neg]
-    rw [hI2]
+    simp [C, sub_eq_add_neg, mul_add, hmulI, add_comm]
+  have hNegIC : -(Complex.I • C) = (1 / 2 : ℝ) • (Aᴴ - A) := by
+    ext i j
+    simp [C, sub_eq_add_neg, hmulI, add_comm]
+  have hA_decomp : A = B + Complex.I • C := by
+    rw [hIC]
+    ext i j
+    simp [B, sub_eq_add_neg]
     ring
   have hAstar_decomp : Aᴴ = B - Complex.I • C := by
+    rw [sub_eq_add_neg, hNegIC]
     ext i j
-    have hI2 : (Complex.I : ℂ) ^ 2 = -1 := by norm_num
-    simp [B, C, sub_eq_add_neg]
-    rw [hI2]
+    simp [B, sub_eq_add_neg]
     ring
   have hTB : (T B).IsHermitian := hT.map_isHermitian hB
   have hTC : (T C).IsHermitian := hT.map_isHermitian hC

@@ -317,8 +317,8 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
     (1 / 2 : ℂ) • (ρ * S) := by
     simp only [Finset.sum_sub_distrib]
     congr 1; congr 1
-    · rw [Finset.smul_sum]
-    · rw [Finset.smul_sum]
+    · rw [← Finset.smul_sum]; congr 1; rw [hS_def, Finset.sum_mul]
+    · rw [← Finset.smul_sum]; congr 1; rw [hS_def, Finset.mul_sum]
   rw [hsplit]
   -- Now we have:
   -- LHS: I•(ρH - Hρ) + ΣLρL† - ½(Sρ) - ½(ρS)
@@ -328,12 +328,10 @@ theorem LindbladForm.toLinearMap_eq_generatorDecomp (F : LindbladForm D) :
   -- Expand ρκ† = ρ(-iH + ½S) = -iρH + ½ρS
   rw [mul_add, mul_smul_comm, mul_smul_comm]
   rw [neg_smul]
-  -- Both sides have the same terms, just rearranged.
-  -- LHS: I•(ρH) + I•(-Hρ) + ΣLρL† - ½Sρ - ½ρS
-  -- RHS: ΣLρL† - ½Sρ - ½ρS - I•Hρ + I•ρH
-  -- Rewrite I•(ρH + -Hρ) = I•ρH + I•(-Hρ) = I•ρH - I•Hρ
-  rw [smul_add]
-  -- Now all terms are separated, abel can match them
+  -- Now expand I • (ρH - Hρ) = I • ρH + I • (-(Hρ)) = I • ρH - I • Hρ
+  simp only [sub_eq_add_neg, neg_add, neg_neg]
+  rw [smul_add (Complex.I) (ρ * F.H) (-(F.H * ρ))]
+  -- Now all terms are separated, abel can handle
   abel
 
 /-- A Lindblad form is CCP. -/

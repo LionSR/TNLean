@@ -33,24 +33,27 @@ No new proofs are introduced here; this is a documentation-only re-export.
 * `expSemigroupCLM` / `expSemigroup` — the exponential semigroup `exp(t•L)`
   — `TNLean.Channel.Semigroup.Basic`
 
-**Wolf Proposition 7.1** (continuous semigroup → exponential form) — PARTIALLY FORMALIZED
+**Wolf Proposition 7.1** (continuous semigroup → exponential form) — FORMALIZED ✓
 * Forward direction (`exp(t•L)` is a continuous semigroup): FORMALIZED
   - `expSemigroupCLM_add` — semigroup law
   - `expSemigroupCLM_zero` — initial condition
-  - `expSemigroupCLM_continuous` — continuity (SORRY)
+  - `expSemigroupCLM_continuous` — continuity
   - `expSemigroup_isDynSemigroup` — combined semigroup law
-  - `expSemigroup_isContinuousDynSemigroup` — combined (SORRY via continuous)
+  - `expSemigroup_isContinuousDynSemigroup` — combined
 * Derivative (Wolf Eq. 7.2):
-  - `hasDerivAt_expSemigroupCLM` — `d/dt exp(t•L) = exp(t•L) * L` (SORRY)
+  - `hasDerivAt_expSemigroupCLM` — `d/dt exp(t•L) = exp(t•L) * L`
   - `hasDerivAt_expSemigroupCLM_zero` — at t=0, derivative is L
 * Reverse direction (any continuous semigroup = exp(tL)):
-  - `continuousDynSemigroup_eq_exp` — Prop 7.1 (SORRY)
-  - `generator_unique` — uniqueness of generator (SORRY)
+  - `continuousDynSemigroup_eq_exp` — Prop 7.1
+  - `generator_unique` — uniqueness of generator
 
-### Wolf Lemma 7.1 (Duhamel/perturbation formula) — SORRY
+### Wolf Lemma 7.1 (Duhamel/perturbation formula) — FORMALIZED ✓
 * `duhamel_formula` — `TNLean.Channel.Semigroup.Perturbation`
+  Proof: FTC via `intervalIntegral.integral_eq_sub_of_hasDerivAt` on the
+  CLM-valued function `s ↦ exp((t-s)L) * exp(sL')` with derivative
+  `exp((t-s)L) * (L'-L) * exp(sL')`.
 
-### Wolf Corollary 7.1 (perturbation bound) — SORRY
+### Wolf Corollary 7.1 (perturbation bound) — FORMALIZED ✓
 * `perturbation_bound` — `TNLean.Channel.Semigroup.Perturbation`
 * `perturbation_bound_unit_norm` — simplified version for channels
 
@@ -59,7 +62,7 @@ No new proofs are introduced here; this is a documentation-only re-export.
 ## §7.1.2 Quantum dynamical semigroups
 
 ### Wolf Proposition 7.5 (irreducibility implies primitivity for QDS)
-— SORRY (structure and statement formalized)
+— PARTIALLY FORMALIZED (helper lemmas complete; main theorem has 2 infrastructure gaps)
 
 * `IsQuantumDynSemigroup` — quantum dynamical semigroup definition
   — `TNLean.Channel.Semigroup.Primitivity`
