@@ -623,7 +623,7 @@ The following infrastructure supports the Choi--Jamiol\-kowski isomorphism
 of~\cite[Ch.~2]{Wolf2012Quantum}.
 
 \begin{definition}[Partial traces]\label{def:partial_trace}
-    \lean{Matrix.traceLeft}
+    \lean{Matrix.traceLeft, Matrix.traceRight}
     \leanok
     Let $X \in \MN{d \cdot d'}$ be a bipartite matrix indexed by
     $(\mathrm{Fin}\,d \times \mathrm{Fin}\,d')^2$.
@@ -637,8 +637,6 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
         (\operatorname{tr}_B(X))_{ij}
           = \sum_{k} X_{(i,k),(j,k)}.
     \]
-    In Lean these are \texttt{Matrix.traceLeft} and
-    \texttt{Matrix.traceRight} respectively.
 \end{definition}
 
 \begin{definition}[Maximally entangled state]\label{def:maximally_entangled}
@@ -655,7 +653,6 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Concretely, $(\lvert\Omega\rangle\!\langle\Omega\rvert)_{(i_1,i_2),(j_1,j_2)}
     = \frac{1}{d}\,\delta_{i_1 j_1}\delta_{i_2 j_2}$
     and $\operatorname{tr}(\lvert\Omega\rangle\!\langle\Omega\rvert) = 1$.
-    In Lean this is \texttt{Matrix.omegaProj}.
 \end{definition}
 
 \begin{definition}[Tensor product of a map with identity]\label{def:tensor_map_id}
@@ -670,7 +667,6 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \]
     where $X^{(i_2,j_2)}_{ab} = X_{(a,i_2),(b,j_2)}$ is the
     bipartite slice.
-    In Lean this is \texttt{Matrix.tensorMapId}.
 \end{definition}
 
 %% =========================================================
