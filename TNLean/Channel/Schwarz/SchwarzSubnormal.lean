@@ -109,12 +109,8 @@ private lemma commuting_dominant_right_bound_posDef
   have hSi_selfAdjoint : IsSelfAdjoint (u⁻¹ : Matˣ) := hU_selfAdjoint.inv
   have hSi_star : star (↑u⁻¹ : Mat) = (↑u⁻¹ : Mat) :=
     congrArg (fun v : Matˣ => (v : Mat)) hSi_selfAdjoint.star_eq
-  have hSiS : (↑u⁻¹ : Mat) * S = 1 := by
-    rw [← hu]
-    simp
-  have hSSi : S * (↑u⁻¹ : Mat) = 1 := by
-    rw [← hu]
-    simp
+  have hSiS : (↑u⁻¹ : Mat) * S = 1 := by rw [← hu]; simp
+  have hSSi : S * (↑u⁻¹ : Mat) = 1 := by rw [← hu]; simp
   let X : Mat := A * (↑u⁻¹ : Mat)
   have hX_contr : Xᴴ * X ≤ 1 := by
     calc
@@ -127,26 +123,22 @@ private lemma commuting_dominant_right_bound_posDef
         star_left_conjugate_le_conjugate hDom (↑u⁻¹ : Mat)
       _ = 1 := by
         rw [hSi_star, ← hS_sq]
-        calc
-          (↑u⁻¹ : Mat) * (S * S) * (↑u⁻¹ : Mat) =
+        calc (↑u⁻¹ : Mat) * (S * S) * (↑u⁻¹ : Mat) =
               ((↑u⁻¹ : Mat) * S) * (S * (↑u⁻¹ : Mat)) := by simp only [mul_assoc]
           _ = 1 := by rw [hSiS, hSSi]; simp only [one_mul]
   have hSX : S * X = A := by
     dsimp [X]
-    calc
-      S * (A * (↑u⁻¹ : Mat)) = A * S * (↑u⁻¹ : Mat) := by
-        rw [← mul_assoc, hSA.eq, mul_assoc]
+    calc S * (A * (↑u⁻¹ : Mat)) = A * S * (↑u⁻¹ : Mat) := by
+          rw [← mul_assoc, hSA.eq, mul_assoc]
       _ = A := by simpa [mul_assoc] using congrArg (fun M : Mat => A * M) hSSi
-  have hS_conjTranspose : Sᴴ = S := by
-    simpa using hS_selfAdjoint.star_eq
+  have hS_conjTranspose : Sᴴ = S := by simpa using hS_selfAdjoint.star_eq
   have hXstarS : Xᴴ * S = Aᴴ := by
     have hXstarS' : Xᴴ * Sᴴ = Aᴴ := by
       simpa [conjTranspose_mul] using congrArg Matrix.conjTranspose hSX
     simpa [hS_conjTranspose] using hXstarS'
   calc
     A * Aᴴ = S * (X * Xᴴ) * S := by
-      calc
-        A * Aᴴ = (S * X) * Aᴴ := by rw [hSX]
+      calc A * Aᴴ = (S * X) * Aᴴ := by rw [hSX]
         _ = S * (X * Xᴴ) * S := by rw [← hXstarS]; simp only [mul_assoc]
     _ ≤ S * 1 * S := by
       simpa [hS_selfAdjoint.star_eq] using
@@ -194,9 +186,8 @@ private lemma le_of_forall_le_add_pos_smul_one (B D : Mat)
     simpa using h (1 / ((n : ℝ) + 1)) (by positivity)
   simpa [Matrix.le_iff] using ge_of_tendsto' hg_tendsto hg_nonneg
 
-/-- An operator `A` is subnormal if it is the north-west block of a normal
-block-upper-triangular operator on a larger space `H ⊕ H⊥`. -/
-/-- An operator is subnormal if it is the north-west block of a normal operator. -/
+/-- An operator is subnormal if it is the north-west block of a normal operator
+on a larger space `H ⊕ H⊥`. -/
 def IsSubnormal (A : Mat) : Prop :=
   ∃ E : ℕ,
     ∃ B : Matrix (Fin D) (Fin E) ℂ,
@@ -237,7 +228,7 @@ noncomputable def krausAdjointMapLinear (K : Fin d → Mat) : Mat →ₗ[ℂ] Ma
     simp [krausAdjointMap, Finset.smul_sum, Matrix.mul_assoc]
 
 /-- The adjoint Kraus map is positive. -/
-private theorem krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :
+private lemma krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :
     IsPositiveMap (krausAdjointMapLinear (d := d) (D := D) K) := by
   intro X hX
   classical
@@ -258,7 +249,7 @@ The proof uses:
 2. **CFC square root** and commutativity propagation for the invertible case.
 3. **Approximation**: `D + ε I` is PD for `ε > 0`, and the result follows by
    letting `ε → 0`. -/
-lemma commuting_dominant_right_bound
+theorem commuting_dominant_right_bound
     (A Dom : Mat)
     (hDomPos : Dom.PosSemidef)
     (hComm : Commute Dom A)
@@ -317,8 +308,8 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
 
 /-- Wolf Thm. 5.6 in the CP/Kraus setting.
 
-The only missing ingredient beyond the previous theorem is the right-dominance
-lemma `commuting_dominant_right_bound`. -/
+The only missing ingredient beyond `kadison_schwarz_commuting_dominant_cp_of_two_sided_bound`
+is the right-dominance lemma `commuting_dominant_right_bound`. -/
 theorem kadison_schwarz_commuting_dominant_cp
     (K : Fin d → Mat)
     (h_tp : IsTPKraus K)
@@ -396,11 +387,11 @@ private lemma schwarz_commuting_dominant_posDef
     rw [hTA, hTAstar, hTD]
     have key := PositiveOnAbelian.diagonal_family_schwarz_le B hBpsd hBsub
       (fun i => starRingEnd ℂ (μ i))
-    have h1 : ∀ i, starRingEnd ℂ (starRingEnd ℂ (μ i)) = μ i := fun i => star_star (μ i)
-    simp_rw [h1] at key
+    have h1 : ∀ i, starRingEnd ℂ (starRingEnd ℂ (μ i)) = μ i :=
+      fun i => star_star (μ i)
     have h2 : ∀ i, μ i * starRingEnd ℂ (μ i) = starRingEnd ℂ (μ i) * μ i :=
       fun i => mul_comm _ _
-    simp_rw [h2] at key
+    simp_rw [h1, h2] at key
     exact key
   exact ⟨hLeft, hRight⟩
 
@@ -436,16 +427,14 @@ theorem schwarz_inequality_commuting_dominant_operator
       schwarz_commuting_dominant_posDef T hPos hSub A _ hPD (hComm_add (ε : ℂ))
         (hDom_add ε hε.le)
     refine ⟨?_, ?_⟩
-    · calc
-        T Aᴴ * T A ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.1
+    · calc T Aᴴ * T A ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.1
         _ = T Dom + (ε : ℂ) • T 1 := by simp [map_add]
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
-    · calc
-        T A * T Aᴴ ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.2
+    · calc T A * T Aᴴ ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.2
         _ = T Dom + (ε : ℂ) • T 1 := by simp [map_add]
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
-  refine ⟨?_, ?_⟩
-  · exact le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).1
-  · exact le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).2
+  exact ⟨le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).1,
+         le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).2⟩
 
 end KadisonSchwarz
+
