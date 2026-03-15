@@ -90,6 +90,7 @@ def GeneratorDecomp.toLinearMap (G : GeneratorDecomp D) :
     simp only [RingHom.id_apply, map_smul, mul_smul_comm, smul_mul_assoc,
       smul_sub]
 
+/-- Simp lemma: `G.toLinearMap ρ = G.φ ρ - G.κ * ρ - ρ * G.κᴴ`. -/
 @[simp]
 theorem GeneratorDecomp.toLinearMap_apply (G : GeneratorDecomp D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) :
@@ -174,13 +175,13 @@ private def dissipator (Lop : Matrix (Fin D) (Fin D) ℂ)
   (1/2 : ℂ) • (Lopᴴ * Lop * ρ) -
   (1/2 : ℂ) • (ρ * (Lopᴴ * Lop))
 
-private theorem dissipator_add (Lop : Matrix (Fin D) (Fin D) ℂ)
+private lemma dissipator_add (Lop : Matrix (Fin D) (Fin D) ℂ)
     (ρ σ : Matrix (Fin D) (Fin D) ℂ) :
     dissipator Lop (ρ + σ) = dissipator Lop ρ + dissipator Lop σ := by
   simp only [dissipator, mul_add, add_mul, smul_add]
   abel
 
-private theorem dissipator_smul (Lop : Matrix (Fin D) (Fin D) ℂ)
+private lemma dissipator_smul (Lop : Matrix (Fin D) (Fin D) ℂ)
     (c : ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
     dissipator Lop (c • ρ) = c • dissipator Lop ρ := by
   simp only [dissipator, mul_smul_comm, smul_mul_assoc, smul_sub, smul_smul]
@@ -208,7 +209,7 @@ def LindbladForm.toLinearMap (F : LindbladForm D) :
     congr 1 <;> ring_nf
 
 /-- Each dissipator term has trace zero. -/
-private theorem trace_dissipator_eq_zero (Lop : Matrix (Fin D) (Fin D) ℂ)
+private lemma trace_dissipator_eq_zero (Lop : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) :
     trace (dissipator Lop ρ) = 0 := by
   simp only [dissipator]
@@ -424,8 +425,7 @@ theorem generator_shift_invariance
     RingHom.id_apply, star_mul', neg_mul, neg_smul, neg_neg, star_inv₀,
     star_ofNat]
   have hnorm : ∀ i : Fin r, c i * starRingEnd ℂ (c i) = starRingEnd ℂ (c i) * c i := by
-    intro i
-    ring
+    intro i; ring
   simp_rw [hnorm]
   simp only [smul_smul]
   set A : Matrix (Fin D) (Fin D) ℂ := ∑ x, c x • (ρ * (K x)ᴴ)
@@ -442,16 +442,13 @@ theorem generator_shift_invariance
           (-(κ * ρ) + -B + -X + (-((2 : ℂ)⁻¹)) • S) +
           (-(ρ * κᴴ) + -A + X + (-((2 : ℂ)⁻¹)) • S) =
         ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) := by
-    calc
-      ∑ x, K x * (ρ * (K x)ᴴ) + A + (B + S) +
-          (-(κ * ρ) + -B + -X + (-((2 : ℂ)⁻¹)) • S) +
-          (-(ρ * κᴴ) + -A + X + (-((2 : ℂ)⁻¹)) • S) =
-        ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) +
-          (S + (-((2 : ℂ)⁻¹)) • S + (-((2 : ℂ)⁻¹)) • S) := by
-        abel
-      _ = ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) + 0 := by
-        rw [hScancel]
-      _ = ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) := add_zero _
+    have hrearr :
+        ∑ x, K x * (ρ * (K x)ᴴ) + A + (B + S) +
+            (-(κ * ρ) + -B + -X + (-((2 : ℂ)⁻¹)) • S) +
+            (-(ρ * κᴴ) + -A + X + (-((2 : ℂ)⁻¹)) • S) =
+          ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) +
+            (S + (-((2 : ℂ)⁻¹)) • S + (-((2 : ℂ)⁻¹)) • S) := by abel
+    rw [hrearr, hScancel, add_zero]
   simpa [neg_smul] using hgoal
 
 /-- **Wolf Proposition 7.4 (item 2 — existence of traceless Kraus operators)**:
@@ -498,14 +495,14 @@ private def traceEvalCLM (ρ : Matrix (Fin D) (Fin D) ℂ) :
   ((Matrix.traceLinearMap (Fin D) ℂ ℂ).toContinuousLinearMap.comp
     (ContinuousLinearMap.apply ℂ _ ρ)).restrictScalars ℝ
 
-private theorem traceEvalCLM_apply
+private lemma traceEvalCLM_apply
     (T : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) :
     traceEvalCLM ρ T = trace (T ρ) := by
   simp [traceEvalCLM, Matrix.traceLinearMap_apply]
 
 /-- `exp(tL) * L = L * exp(tL)` in the CLM algebra, because `L` commutes with `tL`. -/
-private theorem expSemigroupCLM_mul_comm_local
+private lemma expSemigroupCLM_mul_comm_local
     (L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (s : ℝ) :
     expSemigroupCLM L_CLM s * L_CLM = L_CLM * expSemigroupCLM L_CLM s := by
@@ -517,7 +514,7 @@ private theorem expSemigroupCLM_mul_comm_local
 
 /-- `trace(Lⁿ(ρ)) = 0` for `n ≥ 1` when `L` is trace-annihilating.
 This follows from `trace(Lⁿ(ρ)) = trace(L(Lⁿ⁻¹(ρ))) = 0`. -/
-private theorem trace_iterate_eq_zero
+private lemma trace_iterate_eq_zero
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hTA : IsTraceAnnihilating L)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
@@ -530,7 +527,7 @@ private theorem trace_iterate_eq_zero
   exact hTA _
 
 /-- CLM-level version: trace-annihilating → trace constant under exp semigroup. -/
-private theorem trace_expSemigroupCLM_eq
+private lemma trace_expSemigroupCLM_eq
     (L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hTA : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, trace (L_CLM ρ) = 0)
     (t : ℝ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
@@ -539,10 +536,10 @@ private theorem trace_expSemigroupCLM_eq
   set f : ℝ → ℂ := fun s => g (expSemigroupCLM L_CLM s)
   suffices hsuff : ∀ x y : ℝ, f x = f y by
     have h0 : f 0 = trace ρ := by
-      simp only [f, g, traceEvalCLM_apply, expSemigroupCLM_zero, ContinuousLinearMap.one_apply]
-    have ht : f t = trace ((expSemigroupCLM L_CLM t) ρ) := by
-      simp only [f, g, traceEvalCLM_apply]
-    rw [← h0, ← hsuff t 0, ht]
+      simp only [f, g, traceEvalCLM_apply, expSemigroupCLM_zero,
+        ContinuousLinearMap.one_apply]
+    change f t = trace ρ
+    exact (hsuff t 0).trans h0
   apply is_const_of_deriv_eq_zero
   · -- Differentiable
     intro s
@@ -596,8 +593,8 @@ theorem isTraceAnnihilating_of_isTracePreservingMap_semigroup
   have hg_L : g L_CLM = trace (L ρ) := by rw [traceEvalCLM_apply]; rfl
   rw [hg_L] at hd0
   -- For t ≥ 0: g(exp(tL)) = trace(ρ) (constant from TP hypothesis)
-  have hconst : ∀ t : ℝ, 0 ≤ t → g (expSemigroupCLM L_CLM t) = trace ρ := fun t ht => by
-    rw [traceEvalCLM_apply]; convert hTP t ht ρ using 2
+  have hconst : ∀ t : ℝ, 0 ≤ t → g (expSemigroupCLM L_CLM t) = trace ρ :=
+    fun t ht => by rw [traceEvalCLM_apply]; convert hTP t ht ρ using 2
   have h0 : g (expSemigroupCLM L_CLM 0) = trace ρ := hconst 0 le_rfl
   -- f(t) = const on [0,∞) → slope from the right tends to 0;
   -- HasDerivAt gives slope tending to trace(L(ρ)); uniqueness gives 0.
@@ -629,12 +626,9 @@ theorem gksl_of_generatorDecomp_with_traceConstraint
     (hTC : G.isTraceConstraint) :
     IsGKSLGenerator G.toLinearMap := by
   intro t ht
-  refine ⟨?_, ?_⟩
-  · -- CP: from CCP + Prop 7.3
-    exact ccp_generator_implies_cp_semigroup G.toLinearMap G.isCCP t ht
-  · -- TP: trace-annihilating generator implies trace-preserving semigroup
-    exact isTracePreservingMap_expSemigroup_of_isTraceAnnihilating
-      G.toLinearMap (G.traceAnnihilating_of_traceConstraint hTC) t
+  exact ⟨ccp_generator_implies_cp_semigroup G.toLinearMap G.isCCP t ht,
+    isTracePreservingMap_expSemigroup_of_isTraceAnnihilating
+      G.toLinearMap (G.traceAnnihilating_of_traceConstraint hTC) t⟩
 
 /-- **Wolf Theorem 7.1 (GKSL → Form i)**: If `L` generates a CPTP semigroup,
 then `L(ρ) = φ(ρ) - κρ - ρκ†` with `φ` CP and `φ*(𝟙) = κ + κ†`. -/
@@ -686,14 +680,14 @@ theorem gksl_iff_ccp_and_traceAnnihilating
     exact ⟨cp_semigroup_implies_ccp_generator L (fun t ht => (hL t ht).cp),
            isTraceAnnihilating_of_isTracePreservingMap_semigroup L
              (fun t ht => (hL t ht).tp)⟩
-  · -- Backward: CCP ∧ TA → GKSL
+  · -- Backward: CCP ∧ TA → GKSLs
     intro ⟨hCCP, hTA⟩ t ht
     exact ⟨ccp_generator_implies_cp_semigroup L hCCP t ht,
            isTracePreservingMap_expSemigroup_of_isTraceAnnihilating L hTA t⟩
 
 /-- Key algebraic identity: `i·H + ½·S = κ` where `H = (i/2)(κ†-κ)` and `S = κ+κ†`.
 This recovers the original κ from the Hamiltonian/Lindblad decomposition. -/
-private theorem iH_half_S_eq_κ (κ S : Matrix (Fin D) (Fin D) ℂ) (hS : S = κ + κᴴ) :
+private lemma iH_half_S_eq_κ (κ S : Matrix (Fin D) (Fin D) ℂ) (hS : S = κ + κᴴ) :
     Complex.I • ((Complex.I / 2) • (κᴴ - κ)) + (1 / 2 : ℂ) • S = κ := by
   rw [smul_smul]
   have h1 : Complex.I * (Complex.I / 2) = -(1 : ℂ) / 2 := by
@@ -774,14 +768,14 @@ private def kossakowskiTerm (K : KossakowskiForm D) (k l : Fin K.n)
     (K.F k * ρ * (K.F l)ᴴ - (K.F l)ᴴ * K.F k * ρ) +
     (K.F k * ρ * (K.F l)ᴴ - ρ * (K.F l)ᴴ * K.F k))
 
-private theorem kossakowskiTerm_add (K : KossakowskiForm D)
+private lemma kossakowskiTerm_add (K : KossakowskiForm D)
     (k l : Fin K.n) (ρ σ : Matrix (Fin D) (Fin D) ℂ) :
     kossakowskiTerm K k l (ρ + σ) =
       kossakowskiTerm K k l ρ + kossakowskiTerm K k l σ := by
   simp only [kossakowskiTerm, mul_add, add_mul, smul_add, smul_sub]
   abel
 
-private theorem kossakowskiTerm_smul (K : KossakowskiForm D)
+private lemma kossakowskiTerm_smul (K : KossakowskiForm D)
     (k l : Fin K.n) (c : ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
     kossakowskiTerm K k l (c • ρ) = c • kossakowskiTerm K k l ρ := by
   simp only [kossakowskiTerm, mul_smul_comm, smul_mul_assoc, smul_add,
@@ -793,14 +787,14 @@ private def kossakowskiDissipator (K : KossakowskiForm D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   (1 / 2 : ℂ) • ∑ k : Fin K.n, ∑ l : Fin K.n, kossakowskiTerm K k l ρ
 
-private theorem kossakowskiDissipator_add (K : KossakowskiForm D)
+private lemma kossakowskiDissipator_add (K : KossakowskiForm D)
     (ρ σ : Matrix (Fin D) (Fin D) ℂ) :
     kossakowskiDissipator K (ρ + σ) =
       kossakowskiDissipator K ρ + kossakowskiDissipator K σ := by
   simp_rw [kossakowskiDissipator, kossakowskiTerm_add, Finset.sum_add_distrib]
   rw [smul_add]
 
-private theorem kossakowskiDissipator_smul (K : KossakowskiForm D)
+private lemma kossakowskiDissipator_smul (K : KossakowskiForm D)
     (c : ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
     kossakowskiDissipator K (c • ρ) = c • kossakowskiDissipator K ρ := by
   simp_rw [kossakowskiDissipator, kossakowskiTerm_smul, ← Finset.smul_sum]
@@ -829,7 +823,7 @@ def KossakowskiForm.toLinearMap (K : KossakowskiForm D) :
 
 /-- Collapsing a sum weighted by the identity matrix:
 `∑_l (1 : Matrix) l k • f(l) = f(k)`. -/
-private theorem sum_one_smul_eq {n : ℕ}
+private lemma sum_one_smul_eq {n : ℕ}
     {M : Type*} [AddCommMonoid M] [Module ℂ M]
     (k : Fin n) (f : Fin n → M) :
     ∑ l : Fin n,
@@ -845,7 +839,7 @@ private theorem sum_one_smul_eq {n : ℕ}
 
 /-- The dissipator equals ½ of the Kossakowski commutator sum
 (for a single operator). This bridges the two forms. -/
-private theorem dissipator_eq_half_kossakowski
+private lemma dissipator_eq_half_kossakowski
     (Lop ρ : Matrix (Fin D) (Fin D) ℂ) :
     dissipator Lop ρ = (1/2 : ℂ) • (
       (Lop * ρ * Lopᴴ - Lopᴴ * Lop * ρ) +
@@ -859,7 +853,7 @@ private theorem dissipator_eq_half_kossakowski
   module
 
 /-- The PSD factorization: for `C ≥ 0`, `√C† * √C = C`. -/
-private theorem posSemidef_sqrt_factorization {n : ℕ}
+private lemma posSemidef_sqrt_factorization {n : ℕ}
     (C : Matrix (Fin n) (Fin n) ℂ) (hC : C.PosSemidef) :
     (CFC.sqrt C)ᴴ * CFC.sqrt C = C := by
   have hC_nonneg : 0 ≤ C := Matrix.nonneg_iff_posSemidef.mpr hC
@@ -870,7 +864,7 @@ private theorem posSemidef_sqrt_factorization {n : ℕ}
 
 /-- Bilinear sum identity: `Σⱼ (Σₖ B_{jk}•Fₖ) * M * (Σₖ B_{jk}•Fₖ)†`
 equals `Σₖₗ (B†B)_{lk} • (Fₖ * M * Fₗ†)`. Used in Kossakowski ↔ Lindblad. -/
-private theorem kraus_sum_eq_double_sum {n : ℕ}
+private lemma kraus_sum_eq_double_sum {n : ℕ}
     (B : Matrix (Fin n) (Fin n) ℂ)
     (F : Fin n → Matrix (Fin D) (Fin D) ℂ)
     (M : Matrix (Fin D) (Fin D) ℂ) :
@@ -887,7 +881,7 @@ private theorem kraus_sum_eq_double_sum {n : ℕ}
   simp [conjTranspose_apply, mul_apply, mul_comm]
 
 /-- Adjoint variant: `Σⱼ Lⱼ†Lⱼ = Σₗ Σₖ (B†B)_{lk} • (Fₗ†Fₖ)`. -/
-private theorem adj_kraus_sum_eq_double_sum {n : ℕ}
+private lemma adj_kraus_sum_eq_double_sum {n : ℕ}
     (B : Matrix (Fin n) (Fin n) ℂ)
     (F : Fin n → Matrix (Fin D) (Fin D) ℂ) :
     ∑ j : Fin n, (∑ k, B j k • F k)ᴴ * (∑ k, B j k • F k) =

@@ -112,26 +112,28 @@ variable {ρ : Matrix (Fin D) (Fin D) ℂ} (htr : trace ρ ≠ 0)
 local notation "P" => fixedPointProj (D := D) ρ htr
 local notation "N" => E - P
 
-lemma fixedPointProj_mul_self : P * P = P := by
+/-- The fixed-point projection is idempotent as an endomorphism: `P * P = P`. -/
+theorem fixedPointProj_mul_self : P * P = P := by
   ext X
   simp [Module.End.mul_apply, fixedPointProj_idempotent]
 
 /-- `P ∘ N = 0` for `P := fixedPointProj ρ` and `N := E - P`. -/
-lemma fixedPointProj_mul_compl (hTP : IsTracePreservingMap E) : P * N = 0 := by
+theorem fixedPointProj_mul_compl (hTP : IsTracePreservingMap E) : P * N = 0 := by
   ext X
   have hPE : P (E X) = P X :=
     LinearMap.congr_fun (fixedPointProj_comp_E (E := E) (ρ := ρ) (htr := htr) hTP) X
   simp [Module.End.mul_apply, hPE, fixedPointProj_idempotent]
 
 /-- `N ∘ P = 0` for `P := fixedPointProj ρ` and `N := E - P`. -/
-lemma compl_mul_fixedPointProj (hρ : E ρ = ρ) : N * P = 0 := by
+theorem compl_mul_fixedPointProj (hρ : E ρ = ρ) : N * P = 0 := by
   ext X
   have hEP : E (P X) = P X :=
     LinearMap.congr_fun (E_comp_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ) X
   simp [Module.End.mul_apply, hEP, fixedPointProj_idempotent]
 
 /-- `N^(n+1) ∘ P = 0` for all `n`. -/
-lemma compl_pow_succ_mul_fixedPointProj (hρ : E ρ = ρ) (n : ℕ) : N ^ (n + 1) * P = 0 := by
+theorem compl_pow_succ_mul_fixedPointProj (hρ : E ρ = ρ) (n : ℕ) :
+    N ^ (n + 1) * P = 0 := by
   have hNP : N * P = 0 := compl_mul_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ
   simp only [pow_succ, mul_assoc, hNP, mul_zero]
 
@@ -149,8 +151,7 @@ theorem pow_succ_eq_fixedPointProj_add_compl_pow
       have hPN : P * N = 0 := fixedPointProj_mul_compl (E := E) (ρ := ρ) (htr := htr) hTP
       have hNpowP : N ^ (n + 1) * P = 0 :=
         compl_pow_succ_mul_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ n
-      -- Rewrite E^(n+2) = (P + N^(n+1)) * E, then substitute E = P + N on the right factor only.
-      -- We must target the outermost E precisely, as `N = E - P` also contains E.
+      -- Rewrite E^(n+2) = (P + N^(n+1)) * E, then substitute E = P + N on the right factor.
       rw [pow_succ, ih]
       conv_lhs => rhs; rw [show E = P + N from (add_sub_cancel P E).symm]
       simp only [add_mul, mul_add, hPP, hPN, hNpowP, add_zero, zero_add, ← pow_succ]

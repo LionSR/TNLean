@@ -2,6 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveOnAbelian
 
 /-!
@@ -29,8 +30,8 @@ namespace KadisonSchwarz
 
 variable {d D : ℕ}
 
-@[simp]
 /-- The adjoint Kraus map commutes with `conjTranspose`. -/
+@[simp]
 theorem krausAdjointMap_conjTranspose
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :

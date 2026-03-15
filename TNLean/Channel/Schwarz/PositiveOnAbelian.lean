@@ -74,23 +74,23 @@ section NormalGenerators
 variable {A : Matrix (Fin D) (Fin D) ℂ}
 
 /-- A normal matrix commutes with its adjoint. -/
-private theorem commute_conjTranspose_of_normal
+private lemma commute_conjTranspose_of_normal
     (hA : Aᴴ * A = A * Aᴴ) : Commute A Aᴴ := by
   simpa [Commute] using hA.symm
 
 /-- For a normal matrix `A`, the generator `A` commutes with `Aᴴ * A`. -/
-private theorem commute_conjTranspose_mul_self_of_normal
+private lemma commute_conjTranspose_mul_self_of_normal
     (hA : Aᴴ * A = A * Aᴴ) : Commute A (Aᴴ * A) :=
   (commute_conjTranspose_of_normal (A := A) hA).mul_right (Commute.refl A)
 
 /-- For a normal matrix `A`, the generator `Aᴴ` commutes with `Aᴴ * A`. -/
-private theorem conjTranspose_commute_conjTranspose_mul_self_of_normal
+private lemma conjTranspose_commute_conjTranspose_mul_self_of_normal
     (hA : Aᴴ * A = A * Aᴴ) : Commute Aᴴ (Aᴴ * A) :=
   (Commute.refl Aᴴ).mul_right
     (Commute.symm (commute_conjTranspose_of_normal (A := A) hA))
 
 /-- For a normal matrix `A`, the generators `{A, Aᴴ, Aᴴ * A, 1}` commute pairwise. -/
-private theorem normal_generators_pairwise_commute
+private lemma normal_generators_pairwise_commute
     (hA : Aᴴ * A = A * Aᴴ) :
     Commute A Aᴴ ∧
       Commute A (Aᴴ * A) ∧
@@ -116,7 +116,7 @@ private noncomputable def rectKrausMap {ι m n : Type*}
   ∑ i : ι, K i * X * (K i)ᴴ
 
 /-- Kadison--Schwarz for a unital rectangular Kraus family. -/
-private theorem rect_kadison_schwarz_le
+private lemma rect_kadison_schwarz_le
     {ι m n : Type*} [Fintype ι] [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
     (K : ι → Matrix m n ℂ)
     (h_unital : ∑ i : ι, K i * (K i)ᴴ = (1 : Matrix m m ℂ))
@@ -352,7 +352,7 @@ theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
 
 This packages `quadraticForm_nonneg_of_isPositiveMap_of_commuting_images` into a
 single reusable predicate. -/
-private theorem isPositiveOnCommuting_of_isPositiveMap
+private lemma isPositiveOnCommuting_of_isPositiveMap
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) :
     IsPositiveOnCommuting T := by
@@ -364,7 +364,7 @@ section NormalDiagonalization
 local notation "E" => EuclideanSpace ℂ (Fin D)
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-private theorem linearMap_eq_sum_rankOne_of_orthonormalBasis
+private lemma linearMap_eq_sum_rankOne_of_orthonormalBasis
     {s : Type*} [Fintype s]
     (b : OrthonormalBasis s ℂ E)
     (L : E →ₗ[ℂ] E) (μ : s → ℂ)
@@ -381,13 +381,13 @@ private theorem linearMap_eq_sum_rankOne_of_orthonormalBasis
       apply Finset.sum_congr rfl
       intro i _
       rw [smul_smul, smul_smul]
-      ring
+      ring_nf
     _ = (∑ i, μ i •
       (↑((((InnerProductSpace.rankOne ℂ) (b i)) (b i)) :
         E →L[ℂ] E) : E →ₗ[ℂ] E)) v := by
       simp [InnerProductSpace.rankOne_apply, smul_smul]
 
-private theorem commute_parts_of_normal
+private lemma commute_parts_of_normal
     (A : Mat) (hA : Aᴴ * A = A * Aᴴ) :
     Commute ((1 / 2 : ℂ) • (A + Aᴴ)) ((Complex.I / 2 : ℂ) • (Aᴴ - A)) := by
   have hAA : Commute A Aᴴ := commute_conjTranspose_of_normal (A := A) hA
@@ -400,7 +400,7 @@ private theorem commute_parts_of_normal
 set_option maxHeartbeats 800000 in
 -- Elaborating the simultaneous-diagonalization argument expands enough basis-level
 -- definitions that the default heartbeat limit times out during `whnf`.
-private theorem exists_diagonal_family_of_normal
+private lemma exists_diagonal_family_of_normal
     {A : Mat} (hA : Aᴴ * A = A * Aᴴ) :
     ∃ (s : Type) (_ : Fintype s) (_ : DecidableEq s)
       (b : OrthonormalBasis s ℂ E) (eig : s → ℂ),
