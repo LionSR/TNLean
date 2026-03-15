@@ -57,11 +57,13 @@ noncomputable def fixedPointProj (ρ : Matrix (Fin D) (Fin D) ℂ) (_htr : trace
   map_smul' c X := by
     simp only [Matrix.trace_smul, smul_eq_mul, mul_div_assoc, smul_smul, RingHom.id_apply]
 
+/-- The fixed-point projection is idempotent. -/
 theorem fixedPointProj_idempotent (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : trace ρ ≠ 0)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     fixedPointProj ρ htr (fixedPointProj ρ htr X) = fixedPointProj ρ htr X := by
   simp [fixedPointProj, div_eq_mul_inv, htr]
 
+/-- The fixed-point projection fixes `ρ`. -/
 theorem fixedPointProj_apply_rho (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : trace ρ ≠ 0) :
     fixedPointProj ρ htr ρ = ρ := by
   simp [fixedPointProj, htr]

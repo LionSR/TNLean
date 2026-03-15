@@ -25,7 +25,8 @@ characterizes generators of CPTP semigroups.
 
 * `GeneratorDecomp.isCCP` — any decomposition witnesses CCP (definition).
 * `LindbladForm.isTraceAnnihilating` — the Lindblad form is trace-annihilating.
-* `GeneratorDecomp.traceAnnihilating_of_traceConstraint` — φ*(𝟙)=κ+κ† ⟹ trace-annihilating.
+* `GeneratorDecomp.traceAnnihilating_of_traceConstraint` —
+  φ*(𝟙)=κ+κ† ⟹ trace-annihilating.
 * `cp_semigroup_iff_ccp_generator` — **Prop 7.3**: CP semigroup ↔ CCP generator.
 * `gksl_iff_lindbladForm` — **Thm 7.1**: GKSL ↔ Lindblad form.
 
@@ -316,7 +317,8 @@ theorem LindbladForm.isCCP (F : LindbladForm D) :
 then `L` is Hermiticity-preserving and `P τ_L P ≥ 0` where `P = 𝟙 - |Ω⟩⟨Ω|`
 and `τ_L` is the Choi matrix of `L`.
 
-The proof: `P ((L⊗id)(|Ω⟩⟨Ω|)) P = P ((φ⊗id)(|Ω⟩⟨Ω|)) P ≥ 0` since `P` annihilates
+The proof: `P ((L⊗id)(|Ω⟩⟨Ω|)) P = P ((φ⊗id)(|Ω⟩⟨Ω|)) P ≥ 0`
+since `P` annihilates
 the `κ` terms acting on `|Ω⟩`. -/
 theorem ccp_implies_choi_projected_posSemidef
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -405,7 +407,8 @@ theorem generator_shift_invariance
     let K' := fun i => K i + c i • (1 : Matrix (Fin D) (Fin D) ℂ)
     let κ' := κ + ∑ i, (starRingEnd ℂ (c i)) • K i +
               (Complex.I * ↑mu) • (1 : Matrix (Fin D) (Fin D) ℂ) +
-              (1/2 : ℂ) • (∑ i, (starRingEnd ℂ (c i) * c i) • (1 : Matrix (Fin D) (Fin D) ℂ))
+              (1/2 : ℂ) •
+                (∑ i, (starRingEnd ℂ (c i) * c i) • (1 : Matrix (Fin D) (Fin D) ℂ))
     ∀ ρ : Matrix (Fin D) (Fin D) ℂ,
       (∑ i, K' i * ρ * (K' i)ᴴ) - κ' * ρ - ρ * κ'ᴴ =
       (∑ i, K i * ρ * (K i)ᴴ) - κ * ρ - ρ * κᴴ := by

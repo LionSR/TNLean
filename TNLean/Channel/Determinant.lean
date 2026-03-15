@@ -81,11 +81,13 @@ noncomputable def channelMatrix (T : MatrixEnd d) :
 
 /-- The determinant of a channel, defined as the determinant of its matrix
 representation on the $d^2$-dimensional space of matrices. -/
+/-- The determinant of a channel's matrix representation on `M_d(ℂ)`. -/
 noncomputable def channelDet (T : MatrixEnd d) : ℂ :=
   Matrix.det (n := MatrixBasisIndex d) (channelMatrix T)
 
 /-- The chosen matrix determinant agrees with the basis-independent determinant
 `LinearMap.det`. -/
+/-- `channelDet` agrees with the basis-independent `LinearMap.det`. -/
 theorem channelDet_eq_linearMap_det (T : MatrixEnd d) :
     channelDet T = LinearMap.det T := by
   unfold channelDet channelMatrix
@@ -93,6 +95,7 @@ theorem channelDet_eq_linearMap_det (T : MatrixEnd d) :
 
 /-- A channel determinant is nonzero exactly when the underlying linear map is invertible in
 `Module.End`. -/
+/-- Nonzero channel determinant iff the map is a unit in `Module.End`. -/
 theorem channelDet_ne_zero_iff_isUnit (T : MatrixEnd d) :
     channelDet T ≠ 0 ↔ IsUnit T := by
   simpa [channelDet_eq_linearMap_det] using
@@ -249,6 +252,7 @@ theorem channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel
 /-- Wolf Thm. 6.1(3): the determinant of a unitary channel is `1`. With the matrix-unit
 basis, the representing matrix is `U ⊗ conj U`, whose determinant is
 `(det U)^d * conj(det U)^d = 1`. -/
+/-- The determinant of a unitary channel equals `1`. -/
 theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
     channelDet (unitaryChannel U) = 1 := by
   let e : MatrixAlg d ≃ₗ[ℂ] (Fin d × Fin d → ℂ) := matrixVecLinearEquiv d

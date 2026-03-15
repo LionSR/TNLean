@@ -196,6 +196,7 @@ private lemma le_of_forall_le_add_pos_smul_one (B D : Mat)
 
 /-- An operator `A` is subnormal if it is the north-west block of a normal
 block-upper-triangular operator on a larger space `H ⊕ H⊥`. -/
+/-- An operator is subnormal if it is the north-west block of a normal operator. -/
 def IsSubnormal (A : Mat) : Prop :=
   ∃ E : ℕ,
     ∃ B : Matrix (Fin D) (Fin E) ℂ,
