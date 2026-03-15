@@ -304,7 +304,8 @@ theorem diagonal_family_schwarz_le
     rw [hXsq]
     simpa [rectKrausMap, zsq] using familyMain_term_eq (C := C) (z := zsq) i p
   have hDefTermSq (p : Fin D) :
-      familyDefectKraus (ι := ι) S p * (Xᴴ * X) * (familyDefectKraus (ι := ι) S p)ᴴ = 0 := by
+      familyDefectKraus (ι := ι) S p * (Xᴴ * X) *
+        (familyDefectKraus (ι := ι) S p)ᴴ = 0 := by
     rw [hXsq]
     simpa [rectKrausMap] using familyDefect_term_zero (ι := ι) (S := S) (z := zsq) p
   have hmap_star : rectKrausMap K (Xᴴ * X) = ∑ i, zsq i • B i := by
@@ -312,7 +313,8 @@ theorem diagonal_family_schwarz_le
     calc
       (∑ x, ∑ x_1, K (Sum.inl (x, x_1)) * (Xᴴ * X) * (K (Sum.inl (x, x_1)))ᴴ) +
           ∑ x, K (Sum.inr x) * (Xᴴ * X) * (K (Sum.inr x))ᴴ =
-            (∑ x, zsq x • ∑ x_1, familyMainKraus C (x, x_1) * (familyMainKraus C (x, x_1))ᴴ) +
+            (∑ x, zsq x •
+              ∑ x_1, familyMainKraus C (x, x_1) * (familyMainKraus C (x, x_1))ᴴ) +
               ∑ x : Fin D, 0 := by
               simp [K, familyKraus, hMainTermSq, hDefTermSq, Finset.smul_sum]
       _ = ∑ x, zsq x • (C x * (C x)ᴴ) := by simp [familyMain_outer_sum]
@@ -328,7 +330,7 @@ end DiagonalFamily
 pipeline: positivity upgrades to positivity of every finite amplification once
 all block images commute pairwise.
 
-TODO: Prove via `exists_diagonal_family_of_normal` and `diagonal_family_schwarz_le`
+**Proof outline**: Use `exists_diagonal_family_of_normal` and `diagonal_family_schwarz_le`
 by simultaneously diagonalizing the commuting Hermitian images of the block entries
 and reducing to the scalar case. This requires Wolf Prop 1.6 (abelian subalgebra
 implies CP) and is tracked separately. -/
@@ -381,7 +383,8 @@ private theorem linearMap_eq_sum_rankOne_of_orthonormalBasis
       rw [smul_smul, smul_smul]
       ring
     _ = (∑ i, μ i •
-      (↑((((InnerProductSpace.rankOne ℂ) (b i)) (b i)) : E →L[ℂ] E) : E →ₗ[ℂ] E)) v := by
+      (↑((((InnerProductSpace.rankOne ℂ) (b i)) (b i)) :
+        E →L[ℂ] E) : E →ₗ[ℂ] E)) v := by
       simp [InnerProductSpace.rankOne_apply, smul_smul]
 
 private theorem commute_parts_of_normal

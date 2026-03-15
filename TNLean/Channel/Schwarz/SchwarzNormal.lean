@@ -30,6 +30,7 @@ namespace KadisonSchwarz
 variable {d D : ℕ}
 
 @[simp]
+/-- The adjoint Kraus map commutes with `conjTranspose`. -/
 theorem krausAdjointMap_conjTranspose
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
