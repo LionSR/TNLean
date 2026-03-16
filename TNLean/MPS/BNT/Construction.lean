@@ -11,12 +11,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 /-!
-# BNT construction from canonical form
+# Construction of bases of normal tensors from canonical form
 
 This module introduces `IsCanonicalFormBNT`, which extends `IsCanonicalForm` with the
 requirement that distinct blocks are not gauge-phase equivalent (i.e., equivalent blocks
-have already been merged). This captures the "BNT" property of Def. 4.2 / Prop. char-BNT
-in arXiv:2011.12127 and arXiv:1606.00608, lines 1145–1148.
+have already been merged). This captures the "basis of normal tensors" (BNT) property of
+Def. 4.2 / Prop. char-BNT in arXiv:2011.12127 and arXiv:1606.00608, lines 1145–1148.
 
 ## Main results
 
@@ -31,8 +31,8 @@ in arXiv:2011.12127 and arXiv:1606.00608, lines 1145–1148.
      `¬GaugePhaseEquiv`)
 
 3. **`isBNT_of_separated_CFBNT_data`** and the legacy wrapper **`IsCanonicalFormBNT.isBNT`**:
-   a canonical-form BNT decomposition yields a valid `IsBNT` structure, assembling all overlap
-   and independence properties.
+   a canonical-form decomposition into a basis of normal tensors yields a valid `IsBNT`
+   structure, assembling all overlap and independence properties.
 
 4. **`fundamentalTheorem_of_separated_CFBNT_data`** and the legacy wrapper
    **`fundamentalTheorem_of_IsCanonicalFormBNT`**: if two CF-BNT decompositions generate
@@ -42,13 +42,13 @@ in arXiv:2011.12127 and arXiv:1606.00608, lines 1145–1148.
 
 ## Design note on coefficients
 
-In the full paper (arXiv:1606.00608, eq. decBSV), the BNT decomposition uses summed
-coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
+In the full paper (arXiv:1606.00608, eq. decBSV), the decomposition into a basis of normal
+tensors uses summed coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
 These coefficients do **not** converge in general after normalization: unit-modulus terms can
 still oscillate. The present `IsCanonicalFormBNT` predicate sidesteps that issue by requiring
-that the grouping has already been done (each BNT block corresponds to a single CF block), and
-the proportional-case theorem below takes whatever convergent coefficient data it needs as
-explicit hypotheses.
+that the grouping has already been done (each block in the basis of normal tensors corresponds
+to a single CF block), and the proportional-case theorem below takes whatever convergent
+coefficient data it needs as explicit hypotheses.
 -/
 
 open scoped Matrix BigOperators
@@ -67,12 +67,13 @@ abbrev BlocksNotGaugePhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
 
 /-! ### `IsCanonicalFormBNT` predicate -/
 
-/-- **Canonical form with BNT separation**: extends `IsCanonicalForm` with the requirement
-that distinct blocks are not gauge-phase equivalent. This means that the "BNT grouping"
-step (merging gauge-phase-equivalent CF blocks) has already been performed.
+/-- **Canonical form with basis-of-normal-tensors (BNT) separation**: extends
+`IsCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent.
+This means that the BNT grouping step (merging gauge-phase-equivalent CF blocks) has already
+been performed.
 
 In the language of arXiv:2011.12127 Def. 4.2, this corresponds to a canonical form where
-each BNT block is represented by a single CF block. -/
+each block in the basis of normal tensors is represented by a single CF block. -/
 structure IsCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsCanonicalForm μ A where
@@ -135,8 +136,9 @@ theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
 
 /-! ### `IsNormalCanonicalFormBNT` predicate -/
 
-/-- Normal canonical form with BNT separation: extends `IsNormalCanonicalForm` with the
-requirement that distinct blocks are not gauge-phase equivalent. -/
+/-- Normal canonical form with basis-of-normal-tensors (BNT) separation: extends
+`IsNormalCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent.
+-/
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsNormalCanonicalForm μ A where
@@ -308,7 +310,8 @@ theorem cross_overlap_tendsto_zero
 
 /-! ### BNT structure from CF-BNT -/
 
-/-- A canonical-form BNT decomposition yields a valid `IsBNT` structure.
+/-- A canonical-form decomposition into a basis of normal tensors yields a valid `IsBNT`
+structure.
 
 This legacy theorem now delegates to `isBNT_of_separated_CFBNT_data`. -/
 theorem isBNT [∀ k, NeZero (dim k)]
@@ -409,8 +412,8 @@ theorem cross_overlap_tendsto_zero
     hNCF.blocks_not_equiv
     j k hjk
 
-/-- A normal-canonical-form BNT decomposition yields a valid `IsBNT` structure once
-blockwise `IsNormal` is supplied separately. -/
+/-- A normal-canonical-form decomposition into a basis of normal tensors yields a valid
+`IsBNT` structure once blockwise `IsNormal` is supplied separately. -/
 theorem isBNT [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A)
     (hNormal : ∀ j, IsNormal (A j)) :

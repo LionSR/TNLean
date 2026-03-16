@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Spectral.MixedTransfer
 import TNLean.QPF.Assembly
-import TNLean.Channel.FixedPoint.DSGauge
+import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Schwarz.Basic
 import Mathlib.Data.Matrix.Block
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula

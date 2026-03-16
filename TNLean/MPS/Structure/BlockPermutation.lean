@@ -16,6 +16,13 @@ Given a ℂ-algebra automorphism `T` of `∏_i M_{D_i}(ℂ)`, we decompose it as
 2. A proof that `σ` preserves dimensions: `D (σ i) = D i`
 3. Per-block inner automorphisms (Skolem–Noether)
 
+Technical note on the two-level algebraic structure:
+
+* the block-ideal permutation step and the raw `componentMap` identities are proved first at the
+  `RingEquiv` level, since they use only ideal transport and multiplicative structure;
+* the dimension-preservation step and the final Skolem–Noether decomposition require ℂ-linearity,
+  so they are stated for `AlgEquiv`s.
+
 ## Main results
 
 * `mem_blockIdeal_iff` — block ideal membership characterisation

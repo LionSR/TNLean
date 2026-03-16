@@ -147,7 +147,7 @@ Starting from `SameMPV₂` on block-diagonal tensors, the per-block separation
 hypothesis (the only piece requiring PF theory) yields:
 - Per-block gauge equivalence `GaugeEquiv (A k) (B k)` for all `k`
 - Global gauge equivalence of the block-diagonal tensors
-- Block-permutation decomposition of the Pi-algebra automorphism
+- Block-permutation decomposition of the product algebra automorphism
 
 The `hSame₂` hypothesis is retained so that this theorem continues to present
 the full end-to-end interface, even though the wrapper proof only uses the

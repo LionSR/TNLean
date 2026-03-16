@@ -17,6 +17,9 @@ This file reduces the gap between `IsIrreducibleTensor` (no nontrivial invariant
 orthogonal projection) and `IsNormal` (word products span `M_D(ℂ)`) to a single,
 cleanly stated algebraic theorem: **Burnside's theorem for matrix algebras**.
 
+Burnside's theorem (Jacobson density theorem) is formalized directly in this
+project rather than imported from Mathlib.
+
 ## Main definitions
 
 * `MPSTensor.algSpan A`: the unital subalgebra `Algebra.adjoin ℂ (Set.range A)`.

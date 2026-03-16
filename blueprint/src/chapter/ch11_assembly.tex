@@ -1,10 +1,11 @@
 \chapter{Full Assembly}\label{ch:assembly}
 
-This chapter states the assembled Fundamental Theorem results.
-The proportional-MPV theorems take explicit coefficient-convergence
-input in both the block-injective CF-BNT setting and the normal-canonical
-CF-BNT setting. The equal-MPV theorem is the common-block-structure
-specialization.
+This chapter proves the Fundamental Theorem of Matrix Product States.
+We state the Fundamental Theorem in two versions: one for block-injective
+tensors in canonical form with basis of normal tensors (BNT) separation
+(CF-BNT), and one for the normal-canonical variant.
+We then treat the equal-MPV case, including the common-block-structure
+specialization that deduces gauge equivalence.
 The results combine the canonical form reduction
 (Chapter~\ref{ch:canonical}),
 block separation (Chapter~\ref{ch:block_perm}),
@@ -34,7 +35,7 @@ distinct weight norms) that the automatic pipeline does not yet produce.
     \lean{MPSTensor.weakFundamentalTheorem_conditional}
     \leanok
     \uses{def:is_normal_canonical_form, def:gauge_phase_equiv}
-    Let $(\mu_j^A, A_j)_{j=1}^{r_A}$ and $(\mu_k^B, B_k)_{k=1}^{r_B}$
+    Let $(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$
     be two families in normal canonical form,
     each satisfying the non-degeneracy condition
     that no two distinct blocks in the same family are gauge-phase
@@ -50,7 +51,7 @@ distinct weight norms) that the automatic pipeline does not yet produce.
     Suppose moreover that
     $V^{(N)}(A_\mathrm{tot})_\sigma = c_N\, V^{(N)}(B_\mathrm{tot})_\sigma$
     with $c_N \to c \neq 0$.
-    Then $r_A = r_B$ and there is a permutation $\pi$ such that
+    Then $g_A = g_B$ and there is a permutation $\pi$ such that
     $D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
     $B_{\pi(j)}$ for every~$j$.
 \end{theorem}
@@ -73,16 +74,16 @@ distinct weight norms) that the automatic pipeline does not yet produce.
 	\leanok
 	\uses{def:cf_bnt, def:gauge_phase_equiv}
 	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
-	equipped with CF-BNT families $(\mu_j^A, A_j)_{j=1}^{r_A}$ and
-	$(\mu_k^B, B_k)_{k=1}^{r_B}$.
-	Assume one is given coefficient arrays $a_{N,j}$, $b_{N,k}$ and
+	in canonical form with BNT separation, with associated families
+	$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
+	Suppose there exist coefficient arrays $a_{N,j}$, $b_{N,k}$ and
 	nonzero limits $a_j^\infty$, $b_k^\infty$, $c^\infty$ such that
 	\[
 		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= \sum_{j=1}^{r_A} a_{N,j} V^{(N)}(A_j)_\sigma,
+		= \sum_{j=1}^{g_A} a_{N,j} V^{(N)}(A_j)_\sigma,
 		\qquad
 		V^{(N)}(B_{\mathrm{tot}})_\sigma
-		= \sum_{k=1}^{r_B} b_{N,k} V^{(N)}(B_k)_\sigma,
+		= \sum_{k=1}^{g_B} b_{N,k} V^{(N)}(B_k)_\sigma,
 	\]
 	with $a_{N,j} \to a_j^\infty \neq 0$ and
 	$b_{N,k} \to b_k^\infty \neq 0$, and suppose also that
@@ -91,7 +92,7 @@ distinct weight norms) that the automatic pipeline does not yet produce.
 		= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
 	\]
 	for a sequence $c_N \to c^\infty \neq 0$.
-	Then $r_A = r_B$, and there is a permutation $\pi$ such that
+	Then $g_A = g_B$, and there is a permutation $\pi$ such that
 	$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
 	$B_{\pi(j)}$ for each~$j$.
 \end{theorem}
@@ -110,20 +111,45 @@ distinct weight norms) that the automatic pipeline does not yet produce.
 	equivalence.
 \end{proof}
 
+\begin{remark}[Coefficient arrays in the CF-BNT setting]
+	In applications the coefficient arrays in
+	Theorem~\ref{thm:ft_proportional} come from the block-diagonal
+	decomposition itself. If
+	\[
+		A_{\mathrm{tot}} = \bigoplus_{j=1}^{g_A} \mu_j^A A_j,
+		\qquad
+		B_{\mathrm{tot}} = \bigoplus_{k=1}^{g_B} \mu_k^B B_k,
+	\]
+	then Theorem~\ref{thm:mpv_decomposition} gives
+	\[
+		V^{(N)}(A_{\mathrm{tot}})_\sigma
+		= \sum_{j=1}^{g_A} (\mu_j^A)^N V^{(N)}(A_j)_\sigma,
+		\qquad
+		V^{(N)}(B_{\mathrm{tot}})_\sigma
+		= \sum_{k=1}^{g_B} (\mu_k^B)^N V^{(N)}(B_k)_\sigma.
+	\]
+	Thus one takes $a_{N,j} = (\mu_j^A)^N$ and
+	$b_{N,k} = (\mu_k^B)^N$, while the sequence $c_N$ is the global
+	proportionality factor from the hypothesis
+	$V^{(N)}(A_{\mathrm{tot}}) = c_N V^{(N)}(B_{\mathrm{tot}})$.
+	Theorem~\ref{thm:ft_proportional} keeps these arrays explicit because
+	Theorem~\ref{thm:bnt_perm_prop} is formulated in that abstract form.
+\end{remark}
+
 \begin{theorem}[Fundamental Theorem --- proportional MPV case, NT route]\label{thm:ft_proportional_nt}
 		\lean{MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT}\leanok
 		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
 		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
-		equipped with normal-CF-BNT families $(\mu_j^A, A_j)_{j=1}^{r_A}$ and
-		$(\mu_k^B, B_k)_{k=1}^{r_B}$.
-		Assume one is given coefficient arrays $a_{N,j}$, $b_{N,k}$ and
+		in normal canonical form with BNT separation, with associated families
+		$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
+		Suppose there exist coefficient arrays $a_{N,j}$, $b_{N,k}$ and
 		nonzero limits $a_j^\infty$, $b_k^\infty$, $c^\infty$ such that
 		\[
 			V^{(N)}(A_{\mathrm{tot}})_\sigma
-			= \sum_{j=1}^{r_A} a_{N,j} V^{(N)}(A_j)_\sigma,
+			= \sum_{j=1}^{g_A} a_{N,j} V^{(N)}(A_j)_\sigma,
 			\qquad
 			V^{(N)}(B_{\mathrm{tot}})_\sigma
-			= \sum_{k=1}^{r_B} b_{N,k} V^{(N)}(B_k)_\sigma,
+			= \sum_{k=1}^{g_B} b_{N,k} V^{(N)}(B_k)_\sigma,
 		\]
 		with $a_{N,j} \to a_j^\infty \neq 0$ and
 		$b_{N,k} \to b_k^\infty \neq 0$, and suppose also that
@@ -132,35 +158,109 @@ distinct weight norms) that the automatic pipeline does not yet produce.
 			= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
 		\]
 		for a sequence $c_N \to c^\infty \neq 0$.
-		Then $r_A = r_B$, and there is a permutation $\pi$ such that
+		Then $g_A = g_B$, and there is a permutation $\pi$ such that
 		$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
 		$B_{\pi(j)}$ for each~$j$.
 \end{theorem}
 
 \begin{proof}\leanok
-		\uses{thm:ncf_overlap_tendsto_one, rem:normalcf_bnt_gap}
-		Normal-CF-BNT data provide irreducibility, TP normalization,
-		primitive self-overlap convergence via
-		Theorem~\ref{thm:ncf_overlap_tendsto_one}, and the same
-		off-diagonal decay mechanism as in the injective CF-BNT case.
-		The same matching argument yields the block permutation and
-		gauge-phase equivalence.
+		\uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge, rem:normalcf_bnt_gap}
+		Normal canonical form with BNT separation provides irreducibility,
+		TP normalization, and primitive self-overlap convergence via
+		Theorem~\ref{thm:ncf_overlap_tendsto_one}.
+		Theorem~\ref{thm:nt_modulus_one_gauge} supplies the leading-block
+		identification step: a nondecaying mixed overlap forces the
+		corresponding comparison block to be gauge-phase equivalent.
+		The same peeling argument as in the injective CF-BNT case therefore
+		yields the block permutation and gauge-phase equivalence.
 		Remark~\ref{rem:normalcf_bnt_gap} explains why the argument stops at
-		this separated form.
+		this separated normal-canonical level.
 \end{proof}
 
 \section{Equal-MPV Fundamental Theorem}%
 \label{sec:assembly_equal}
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case]\label{thm:ft_equal}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_full}
+	\notready
+	\uses{thm:ft_proportional, def:gauge_equiv}
+	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be as in
+	Theorem~\ref{thm:ft_proportional}, with associated families
+	$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
+	If
+	\[
+		V^{(N)}(A_{\mathrm{tot}})_\sigma
+		= V^{(N)}(B_{\mathrm{tot}})_\sigma
+	\]
+	for every $N$ and $\sigma$, then the block-diagonal tensors
+	$\bigoplus_{j=1}^{g_A} \mu_j^A A_j$ and
+	$\bigoplus_{k=1}^{g_B} \mu_k^B B_k$
+	are gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+	\uses{thm:ft_proportional, thm:cf_bnt_is_bnt, def:bnt, thm:mpv_decomposition}
+	Apply Theorem~\ref{thm:ft_proportional} with $c_N = 1$.
+	Then $g_A = g_B$, and after reindexing the $B$-blocks by a permutation
+	$\pi$ there are phases $e^{i\phi_j}$ and invertible matrices $X_j$ such that
+	\[
+		B_{\pi(j)}^i = e^{i\phi_j} X_j A_j^i X_j^{-1}
+	\]
+	for every block $j$ and physical index~$i$.
+	By Theorem~\ref{thm:mpv_decomposition},
+	\[
+		V^{(N)}(A_{\mathrm{tot}})_\sigma
+		= \sum_{j=1}^{g_A} (\mu_j^A)^N V^{(N)}(A_j)_\sigma,
+		\qquad
+		V^{(N)}(B_{\mathrm{tot}})_\sigma
+		= \sum_{j=1}^{g_A} (\mu_{\pi(j)}^B)^N V^{(N)}(B_{\pi(j)})_\sigma.
+	\]
+	The gauge-phase identity gives
+	\[
+		V^{(N)}(B_{\pi(j)})_\sigma = e^{iN\phi_j} V^{(N)}(A_j)_\sigma,
+	\]
+	so the equality of MPVs becomes
+	\[
+		\sum_{j=1}^{g_A}
+		\left((\mu_j^A)^N - (\mu_{\pi(j)}^B e^{i\phi_j})^N\right)
+		V^{(N)}(A_j)_\sigma = 0.
+	\]
+	By Theorem~\ref{thm:cf_bnt_is_bnt} and Definition~\ref{def:bnt},
+	the block MPVs $\{V^{(N)}(A_j)\}_{j=1}^{g_A}$ are linearly independent
+	for all sufficiently large $N$.
+	Hence, for each $j$ and all large $N$,
+	\[
+		(\mu_j^A)^N = (\mu_{\pi(j)}^B e^{i\phi_j})^N.
+	\]
+	Taking two consecutive large values of $N$ and using that the weights are
+	nonzero gives
+	\[
+		\mu_j^A = \mu_{\pi(j)}^B e^{i\phi_j}.
+	\]
+	Therefore
+	\[
+		\mu_{\pi(j)}^B B_{\pi(j)}^i
+		= \mu_j^A X_j A_j^i X_j^{-1}
+	\]
+	for every $j$ and~$i$.
+	With $X = \bigoplus_j X_j$, the reindexed block-diagonal tensors satisfy
+	\[
+		\bigoplus_j \mu_{\pi(j)}^B B_{\pi(j)}^i
+		= X\left(\bigoplus_j \mu_j^A A_j^i\right)X^{-1}.
+	\]
+	Composing with the permutation matrix of $\pi$ gives gauge equivalence of
+	the original block-diagonal tensors.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem --- equal MPV case, common block structure]\label{thm:ft_equal_same_structure}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
 	\leanok
 	\uses{def:cf_bnt, def:gauge_equiv}
-	Fix a common block structure: the same number of blocks~$r$,
-	the same bond dimensions $(D_k)_{k=1}^r$, and the same weights
-	$(\mu_k)_{k=1}^r$.
-	Let $(\mu_k, A_k)$ and $(\mu_k, B_k)$ be two CF-BNT families on
-	this common data.
+	Fix a common block structure: the same number of blocks~$g$,
+	the same bond dimensions $(D_k)_{k=1}^g$, and the same weights
+	$(\mu_k)_{k=1}^g$.
+	Let $(\mu_k, A_k)_{k=1}^g$ and $(\mu_k, B_k)_{k=1}^g$ be two families in
+	canonical form with BNT separation on this common data.
 	If the block-diagonal tensors
 	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
 	generate the same MPV family, then each pair $(A_k, B_k)$ is
@@ -171,13 +271,26 @@ distinct weight norms) that the automatic pipeline does not yet produce.
 \begin{proof}
 	\leanok
 	\uses{thm:ft_canonical}
-	Forget the extra BNT-separation field and retain only the
-	underlying canonical-form data.
+	Since both families share the canonical form data, the BNT separation
+	condition is not needed.
 	The canonical-form fundamental theorem
 	(Theorem~\ref{thm:ft_canonical}) then applies directly to this
-	common $(r, D_k, \mu_k)$ structure, yielding per-block gauge
+	common $(g, D_k, \mu_k)$ structure, yielding per-block gauge
 	equivalence and hence global gauge equivalence.
 \end{proof}
+
+\begin{remark}[Recovery of the literature statement]
+	Theorem~\ref{thm:ft_equal_same_structure} is the common-block-structure
+	specialization.
+	The proof of Theorem~\ref{thm:ft_equal} combines
+	Theorem~\ref{thm:ft_proportional} with the BNT linear independence
+	furnished by Theorem~\ref{thm:cf_bnt_is_bnt} and
+	Definition~\ref{def:bnt}, and therefore recovers the full
+	\cite[Corollary~IV.5]{Cirac2021Matrix} without assuming common block
+	structure.
+	The weight matching is obtained directly from the BNT expansion,
+	rather than from Newton--Girard identities.
+\end{remark}
 
 \section{Periodic Fundamental Theorem (de las Cuevas--Cirac--Schuch--Pérez-García)}%
 \label{sec:periodic_ft}

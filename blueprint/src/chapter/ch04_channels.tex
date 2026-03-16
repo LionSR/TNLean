@@ -487,11 +487,21 @@ matching the weighted-trace argument in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_pd_irred}
-    Let $E(X) = \mu X$ with $|\mu| = 1$.
-    The weighted Kadison--Schwarz equality (using the adjoint
-    fixed point $\rho$ in place of trace preservation)
-    shows $E(X^\dagger X) = E(X)^\dagger E(X)$.
+    \uses{thm:kadison_schwarz, thm:psd_fp_pd_irred}
+    Let $E(X) = \mu X$ with $|\mu| = 1$, and set
+    $G := E(X^\dagger X) - E(X)^\dagger E(X)$.
+    By Kadison--Schwarz, $G \ge 0$.
+    Since $E^*(\rho) = \rho$,
+    \[
+        \tr(\rho G)
+        = \tr(\rho E(X^\dagger X)) - \tr(\rho E(X)^\dagger E(X))
+        = \tr(E^*(\rho) X^\dagger X) - \tr(\rho E(X)^\dagger E(X))
+        = \tr(\rho X^\dagger X) - |\mu|^2 \tr(\rho X^\dagger X)
+        = 0.
+    \]
+    Thus the trace of the Kadison--Schwarz gap against the adjoint
+    fixed point vanishes. Because $\rho > 0$ and $G \ge 0$, this forces
+    $G = 0$, so $E(X^\dagger X) = E(X)^\dagger E(X)$.
     Hence $X^\dagger X$ is a PSD fixed point, which is
     positive definite by irreducibility
     (Theorem~\ref{thm:psd_fp_pd_irred}).
