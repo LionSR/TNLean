@@ -10,12 +10,13 @@ import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Fintype.EquivFin
 
 /-!
-# BNT permutation rigidity — Thm 4.4 (paper hypotheses, no span-equality)
+# Permutation rigidity for bases of normal tensors (BNT) — Thm 4.4
+(paper hypotheses, no span-equality)
 
 This module replaces the extra span-equality hypothesis used in
 `BNTPermutationSimple.lean` with the **paper-style** hypotheses from Thm 4.4
 (arXiv:2011.12127 / 1606.00608, primitive branch): proportionality of the *full*
-MPV families together with explicit BNT decompositions.
+MPV families together with explicit decompositions into bases of normal tensors.
 
 It contains both directions of the key nonvanishing-overlap step and the resulting
 full permutation / gauge-phase matching theorems, in both the injective and
@@ -772,7 +773,7 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
     (A := A) (B := B) (f := f) hf_inj hle_AB hf_dim hf_gauge
 
 /--
-**BNT permutation rigidity (primitive branch), paper hypothesis set.**
+**Permutation rigidity for bases of normal tensors (primitive branch), paper hypothesis set.**
 
 Two BNT-like families `A j` and `B k` with asymptotically orthonormal overlaps, together with
 explicit decompositions of proportional full MPV families `A_total`, `B_total`, agree blockwise up

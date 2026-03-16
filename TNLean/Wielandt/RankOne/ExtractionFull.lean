@@ -25,8 +25,9 @@ element `Matrix.vecMulVec φ ψ` inside a bounded word span of a blocked tensor.
    column and row (transpose) sides.
 
 3. **Two-sided range embedding:** Setting `P = M₀^D` and `Q = M₁^D` (powers of the
-   eigenvector words), and using `wordSpan B N₀ = ⊤`, the rank-one matrix
-   `vecMulVec φ ψ` lies in `wordSpan B (2D + N₀)`.
+   eigenvector words), and using a normality witness `N₁` for the blocked tensor `B`
+   with `wordSpan B N₁ = ⊤`, the rank-one matrix `vecMulVec φ ψ` lies in
+   `wordSpan B (D + N₁ + D)`.
 
 ## Main results
 
@@ -275,7 +276,9 @@ assembly theorem:
 The key insight: since `wordSpan A N₀ = ⊤` and `tr(I) = D ≠ 0`, at least one
 length-`N₀` word has nonzero trace, providing eigenvectors on both sides.
 The rank-one matrix is then embedded via the two-sided multiplication map
-`X ↦ P * X * Q` where `P, Q ∈ wordSpan B D`. -/
+`X ↦ P * X * Q`, where `P, Q ∈ wordSpan B D` and the middle factor `X`
+comes from the full blocked word span `wordSpan B N₀ = ⊤`.
+This is the blocked-tensor normality witness used in the `D + N₀ + D` bound. -/
 theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
     (A : MPSTensor d D) {N₀ : ℕ} (hN₀ : IsNBlkInjective A N₀) (hN₀pos : 0 < N₀) :
     ∃ (σ₀ τ₀ : Fin N₀ → Fin d)
@@ -339,8 +342,10 @@ For any `IsNormal` MPS tensor `A` with `[NeZero D]`, there exists `N` such that
 This combines the rank-one extraction with the blocked assembly theorem.
 
 - When `N₀ = 0`: `wordSpan A 0 = ⊤` directly.
-- When `N₀ ≥ 1`: the rank-one extraction gives `vecMulVec φ ψ ∈ wordSpan B (2D + N₀)`,
-  and the blocked assembly produces `wordSpan A ((4D - 2 + N₀) * N₀) = ⊤`.
+- When `N₀ ≥ 1`: writing `B := blockTensor A N₀`, the rank-one extraction gives
+  `vecMulVec φ ψ ∈ wordSpan B (D + N₀ + D)`, where the middle `N₀` is the
+  blocked-tensor full-span witness `wordSpan B N₀ = ⊤`; the blocked assembly then
+  produces `wordSpan A ((4D - 2 + N₀) * N₀) = ⊤`.
 
 The bound `N = (4D - 2 + N₀) * N₀` is coarse but sorry-free. -/
 theorem wielandt_lemma2b [NeZero D]
@@ -439,7 +444,8 @@ we place `vecMulVec φ ψ` in a bounded word span of the blocked tensor.
 5. Since `B` is normal, `wordSpan B N₁ = ⊤` for some `N₁`, so
    `range(mulLeft P ∘ mulRight Q) ≤ wordSpan B (D + N₁ + D)`.
 
-The bound `m_blocked = 2D + N₁` depends on the normality witness `N₁` of the blocked tensor. -/
+The resulting bound is `m_blocked = D + N₁ + D = 2D + N₁`, where `N₁` is the
+normality witness of the blocked tensor `B`. -/
 theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
     [NeZero D]
     (A : MPSTensor d D)

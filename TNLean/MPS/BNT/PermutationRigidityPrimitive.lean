@@ -10,11 +10,12 @@ import Mathlib.Topology.Instances.Matrix
 import Mathlib.LinearAlgebra.Dimension.Constructions
 
 /-!
-# BNT permutation rigidity — simplified (primitive branch)
+# Permutation rigidity for bases of normal tensors (BNT) — simplified (primitive branch)
 
 This is a *simpler* alternative to `BNTPermutation.lean`, implementing the
-permutation/phase-rigidity step for BNT families in the primitive (aperiodic) branch
-of the Fundamental Theorem of MPS (Theorem 4.4 of arXiv:2011.12127).
+permutation/phase-rigidity step for families of bases of normal tensors (BNT) in the
+primitive (aperiodic) branch of the Fundamental Theorem of MPS (Theorem 4.4 of
+arXiv:2011.12127).
 
 ## Main result
 
@@ -58,7 +59,7 @@ private lemma tendsto_mpvInner_one_of_overlap_one
 /-! ## Main theorem -/
 
 /--
-**BNT permutation rigidity (primitive branch).**
+**Permutation rigidity for bases of normal tensors (primitive branch).**
 
 Two finite families of primitive blocks whose MPV overlaps are asymptotically orthonormal
 and which span the same MPV subspace at each system size must agree blockwise up to a
@@ -364,7 +365,7 @@ end MPSTensor
 /-!
 ## Fundamental Theorem — Thm 4.4, span-equality formulation (variable block count)
 
-This section packages the BNT permutation rigidity lemma
+This section packages the permutation-rigidity lemma for bases of normal tensors
 (`MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho` above) into a more
 general **paper-style** statement where the two BNT families may have **different**
 numbers of blocks (`gA ≠ gB`).
@@ -393,7 +394,7 @@ entangled pair states*, Rev. Mod. Phys. **93** (2021) 045003; arXiv:2011.12127.
 namespace MPSTensor
 
 /--
-**Thm 4.4 (primitive/BNT permutation step), span-equality formulation.**
+**Thm 4.4 (primitive, basis-of-normal-tensors permutation step), span-equality formulation.**
 
 Two BNT-like families with possibly different numbers of blocks `gA`, `gB`
 that are injective, normalised, asymptotically orthonormal, and span the same

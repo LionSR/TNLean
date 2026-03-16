@@ -180,7 +180,7 @@ maps.
     So $\tr(G) = 0$, and a PSD matrix with zero trace must be zero.
 \end{proof}
 
-\begin{theorem}[One-sided multiplicative-domain identity]\label{thm:multiplicative_domain}
+\begin{theorem}[Left multiplicative identity from KS equality]\label{thm:left_multiplicative_identity}
     \lean{KadisonSchwarz.multiplicative_domain_left}
     \leanok
     \uses{def:unital_kraus}
@@ -253,12 +253,12 @@ maps.
 
 \begin{proof}
     \leanok
-    \uses{thm:multiplicative_domain}
+    \uses{thm:left_multiplicative_identity}
     If $X$ lies in a one-sided multiplicative domain, evaluate the defining
     identity at $Y = X^\dagger$.
     Conversely, the left-domain implication is exactly
-    Theorem~\ref{thm:multiplicative_domain}, and the right-domain implication
-    follows by applying Theorem~\ref{thm:multiplicative_domain} to $X^\dagger$.
+    Theorem~\ref{thm:left_multiplicative_identity}, and the right-domain implication
+    follows by applying Theorem~\ref{thm:left_multiplicative_identity} to $X^\dagger$.
 \end{proof}
 
 \begin{definition}[One-sided multiplicative domains are subalgebras]\label{def:one_sided_md_subalgebras}

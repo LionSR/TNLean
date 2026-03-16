@@ -11,15 +11,15 @@ import Mathlib.LinearAlgebra.Pi
 import Mathlib.LinearAlgebra.Matrix.Trace
 
 /-!
-# Pi-algebra equivalence construction
+# Product algebra equivalence construction
 
 This file constructs the per-block linear extension from `SameMPV` and promotes it to a
-Pi-algebra automorphism, then applies the block-permutation decomposition theorem.
+product algebra automorphism, then applies the block-permutation decomposition theorem.
 
 ## Main results
 
 * `perBlockLinearExtension` — per-block linear map `T_k : M_{D_k} → M_{D_k}` from SameMPV
-* `piAlgEquiv` — the assembled Pi-algebra automorphism
+* `piAlgEquiv` — the assembled product algebra automorphism
 * `piAlgEquiv_decomposition` — decomposition as block permutation + inner automorphisms
 * `piTrace_mul_right_eq_zero` — nondegeneracy of the Pi-trace pairing
 * `piTraceMulRightPi` — per-block Gram map and its injectivity
@@ -53,7 +53,7 @@ theorem sameMPV₂_summed_blocks
 
 end SummedTraces
 
-/-! ### Per-block linear extension and Pi-algebra automorphism -/
+/-! ### Per-block linear extension and product algebra automorphism -/
 section PiAlgEquivConstruction
 
 variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -131,7 +131,7 @@ theorem perBlockLinearExtension_commutes
     perBlockLinearExtension A B hA hSame k (algebraMap ℂ _ c) = algebraMap ℂ _ c := by
   simp only [Algebra.algebraMap_eq_smul_one, map_smul, perBlockLinearExtension_one A B hA hSame k]
 
-/-- The assembled Pi-algebra map: apply `T_k` on each block independently. -/
+/-- The assembled product algebra map: apply `T_k` on each block independently. -/
 noncomputable def piLinearExtension
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))
@@ -151,7 +151,7 @@ omit [∀ k, NeZero (dim k)] in
       perBlockLinearExtension A B hA hSame k (M k) := by
   simp [piLinearExtension]
 
-/-- The Pi-algebra map is bijective. -/
+/-- The product algebra map is bijective. -/
 theorem piLinearExtension_bijective
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))
@@ -190,7 +190,7 @@ noncomputable def piAlgEquiv
   AlgEquiv.ofBijective (piAlgHom A B hA hSame)
     (piLinearExtension_bijective A B hA hSame)
 
-/-- The Pi-algebra equivalence agrees with per-block T_k on each component. -/
+/-- The product algebra equivalence agrees with per-block T_k on each component. -/
 @[simp]
 theorem piAlgEquiv_apply
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -201,7 +201,7 @@ theorem piAlgEquiv_apply
       perBlockLinearExtension A B hA hSame k (M k) := by
   simp [piAlgEquiv, AlgEquiv.ofBijective, piAlgHom, piLinearExtension_apply]
 
-/-- The Pi-algebra map sends `A_k i` to `B_k i` in each block. -/
+/-- The product algebra map sends `A_k i` to `B_k i` in each block. -/
 theorem piAlgEquiv_on_single
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k, IsInjective (A k))
@@ -217,7 +217,7 @@ section Decomposition
 
 variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 
-/-- The per-block linear extension, when assembled into a Pi-algebra automorphism,
+/-- The per-block linear extension, when assembled into a product algebra automorphism,
 decomposes as a block permutation + per-block inner automorphisms. -/
 theorem piAlgEquiv_decomposition
     (A B : (k : Fin r) → MPSTensor d (dim k))

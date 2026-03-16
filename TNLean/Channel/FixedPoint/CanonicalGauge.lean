@@ -2,14 +2,15 @@ import TNLean.QPF.Assembly
 import TNLean.Spectral.MixedTransfer
 
 /-!
-# Gauge normalizations from transfer fixed points
+# Canonical gauge normalizations from transfer fixed points
 
-This file records the two standard similarity gauges extracted from fixed
-points of the transfer map and its adjoint. `gauged_unital` gives the
+This file records the two standard one-sided similarity gauges extracted from
+fixed points of the transfer map and its adjoint. It is **not** a formalization
+of a doubly stochastic gauge. Instead, `gauged_unital` gives the
 right-canonical/unital gauge, while `gauged_tracePreserving` gives the
-left-canonical/trace-preserving gauge. The aliases
-`gauged_rightCanonical` and `gauged_leftCanonical` package the same formulas
-in the project's MPS terminology.
+left-canonical/trace-preserving gauge. The aliases `gauged_rightCanonical` and
+`gauged_leftCanonical` package the same formulas in the project's MPS
+terminology.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -17,7 +18,7 @@ open MPSTensor
 
 variable {d D : ℕ}
 
-section DSGauge
+section CanonicalGauge
 
 variable [DecidableEq (Fin D)] [NeZero D]
 
@@ -110,4 +111,4 @@ theorem gauged_leftCanonical
     ∑ i : Fin d, (S * A i * S⁻¹)ᴴ * (S * A i * S⁻¹) = 1 :=
   gauged_tracePreserving A S σ hS_inv hStS hfix
 
-end DSGauge
+end CanonicalGauge

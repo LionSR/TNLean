@@ -4,8 +4,11 @@ This chapter establishes the algebraic structure of
 automorphisms of products of matrix algebras and uses it
 to prove that the same-MPV condition on block-diagonal
 tensors descends to per-block gauge equivalence.
-The approach follows~\cite{PerezGarcia2007Matrix}
-and~\cite{Cirac2021Matrix}.
+The results correspond to the canonical form uniqueness
+of~\cite{PerezGarcia2007Matrix} and the block separation
+results of~\cite{Cirac2021Matrix}. The proof technique
+used here---induction on blocks via the spectral
+gap---is specific to this formalization.
 
 \section{Block permutation algebra}
 
@@ -13,10 +16,10 @@ and~\cite{Cirac2021Matrix}.
     \lean{MPSTensor.ringEquiv_pi_simple_permutes_blockIdeals}
     \leanok
     Let $\{R_k\}_{k=1}^r$ be simple rings.
-    Every ring isomorphism $T : \prod_k R_k \xrightarrow{\sim} \prod_k R_k$
+    Every ring isomorphism $T : \prod_k R_k \to \prod_k R_k$
     permutes the block ideals:
-    there exists a permutation $\sigma$ such that
-    $T$ maps the $k$-th block ideal to the $\sigma(k)$-th block ideal.
+    there exists a permutation $\pi$ such that
+    $T$ maps the $k$-th block ideal to the $\pi(k)$-th block ideal.
 \end{theorem}
 
 \begin{proof}
@@ -27,52 +30,69 @@ and~\cite{Cirac2021Matrix}.
     A ring isomorphism preserves the ideal lattice and hence
     permutes the atoms.
     Injectivity of the induced map on atoms gives the
-    permutation~$\sigma$.
+    permutation~$\pi$.
 \end{proof}
+
+\begin{remark}[Ring level versus algebra level]\label{rem:ring_vs_alg}
+    Theorem~\ref{thm:ring_perm} is a ring-level statement: it only uses the
+    ideal structure of $\prod_k R_k$.
+    Theorems~\ref{thm:dim_preserved}
+    and~\ref{thm:pi_auto_decomp} require an upgrade to $\C$-algebra
+    automorphisms. The reason is threefold: dimension preservation compares
+    the blocks as $\C$-vector spaces; Skolem--Noether applies to the resulting
+    central simple $\C$-algebras; and the per-block maps extracted from $T$
+    must commute with scalar multiplication. Thus the formalization separates
+    the ring-level permutation step from the later algebra-level
+    decomposition.
+\end{remark}
 
 \begin{theorem}[Dimension preservation]\label{thm:dim_preserved}
     \lean{MPSTensor.dim_preserved}
     \leanok
     If $T$ is an algebra automorphism of
     $\prod_{k=1}^r \MN{D_k}$,
-    and $\sigma$ is the induced permutation, then
-    $D_{\sigma(k)} = D_k$ for all~$k$.
+    and $\pi$ is the induced permutation, then
+    $D_{\pi(k)} = D_k$ for all~$k$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:ring_perm}
     The restriction of $T$ to the $k$-th block ideal
     induces a $\C$-algebra isomorphism
-    $\MN{D_k} \cong \MN{D_{\sigma(k)}}$,
-    which forces $D_k = D_{\sigma(k)}$
+    $\MN{D_k} \cong \MN{D_{\pi(k)}}$,
+    which forces $D_k = D_{\pi(k)}$
     (by comparing dimensions as $\C$-vector spaces).
 \end{proof}
 
 \begin{theorem}[Decomposition of automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
     \lean{MPSTensor.algEquiv_pi_matrix_decomposition}
     \leanok
-    Every $\C$-algebra automorphism of $\prod_{k=1}^r \MN{D_k}$
-    decomposes as a block permutation~$\sigma$ followed by
+    Every $\C$-algebra automorphism $T$ of $\prod_{k=1}^r \MN{D_k}$
+    decomposes as a block permutation~$\pi$ followed by
     per-block inner automorphisms:
-    there exist $\sigma \in S_r$ with $D_{\sigma(k)} = D_k$
-    and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that
-    $T(M)_k = X_k M_{\sigma(k)} X_k^{-1}$.
+    there exist $\pi \in S_r$ with $D_{\pi(k)} = D_k$
+    and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that,
+    for every tuple $M = (M_1,\ldots,M_r)$,
+    $T(M)_k = X_k M_{\pi(k)} X_k^{-1}$,
+    where $T(M)_k$ denotes the $k$-th block component of $T(M)$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:ring_perm, thm:dim_preserved, thm:skolem_noether}
-    Theorem~\ref{thm:ring_perm} gives the permutation $\sigma$.
-    Theorem~\ref{thm:dim_preserved} gives $D_{\sigma(k)} = D_k$.
-    The restriction of $T$ to each block is a $\C$-algebra
-    automorphism of $\MN{D_k}$, which is inner by
-    Skolem--Noether (Theorem~\ref{thm:skolem_noether}).
+    Theorem~\ref{thm:ring_perm} gives the permutation $\pi$.
+    Theorem~\ref{thm:dim_preserved} gives $D_{\pi(k)} = D_k$.
+    The restriction of $T$ to the $k$-th block ideal yields a $\C$-algebra
+    isomorphism $\MN{D_k} \cong \MN{D_{\pi(k)}}$; after
+    Theorem~\ref{thm:dim_preserved} identifies the two matrix sizes,
+    Skolem--Noether (Theorem~\ref{thm:skolem_noether}) makes this
+    restriction inner.
 
     This is a standard result in the theory of
     semisimple algebras;
     see \cite[§IV.A]{Cirac2021Matrix} for the MPS context.
 \end{proof}
 
-\section{Pi-algebra linear extension}
+\section{Product algebra linear extension}
 
 \begin{definition}[Per-block linear extension]\label{def:per_block_linear_ext}
     \lean{MPSTensor.perBlockLinearExtension}
@@ -91,23 +111,25 @@ and~\cite{Cirac2021Matrix}.
     \lean{MPSTensor.piAlgEquiv}
     \leanok
     \uses{def:per_block_linear_ext}
-    The per-block linear extensions $T_k$ are $\C$-algebra homomorphisms,
-    and assembling them blockwise gives a single
-    $\C$-algebra automorphism
-    $T:\prod_k\MN{D_k}\xrightarrow{\sim}\prod_k\MN{D_k}$.
+    The \emph{product algebra automorphism} is the blockwise assembled map
+    $T:\prod_k\MN{D_k}\to\prod_k\MN{D_k}$ defined by
+    $T(M)_k := T_k(M_k)$.
+    Theorem~\ref{thm:pi_linear_ext} shows that each $T_k$ is a
+    $\C$-algebra homomorphism and that this assembled map is indeed a
+    $\C$-algebra automorphism.
 \end{definition}
 
 \begin{theorem}[Per-block linear extensions assemble]\label{thm:pi_linear_ext}
     \lean{MPSTensor.piAlgEquiv_decomposition}
     \leanok
-    \uses{def:injective}
+    \uses{def:injective, def:per_block_linear_ext}
     Let $A_k$ and $B_k$ be injective tensors of bond dimension
     $D_k$ for $k = 1, \ldots, r$, and suppose the per-block
     same-MPV condition holds.
     Then the per-block linear extensions $T_k : A_k^i \mapsto B_k^i$
     assemble into an algebra automorphism of $\prod_k \MN{D_k}$,
-    which decomposes as a permutation $\sigma$ with
-    $D_{\sigma(k)} = D_k$ and per-block conjugation matrices $X_k$.
+    which decomposes as a permutation $\pi$ with
+    $D_{\pi(k)} = D_k$ and per-block conjugation matrices $X_k$.
 \end{theorem}
 
 \begin{proof}
@@ -118,9 +140,13 @@ and~\cite{Cirac2021Matrix}.
     Theorems~\ref{thm:linear_ext} and~\ref{thm:linear_ext_mul}.
     Promotion to algebra homomorphisms
     (Lemma~\ref{lem:linear_map_to_alg}) and assembly into
-    the product gives an algebra automorphism.
-    Theorem~\ref{thm:pi_auto_decomp} decomposes it into
-    permutation + per-block inner automorphisms.
+    the product gives an algebra automorphism $T$.
+    Theorem~\ref{thm:pi_auto_decomp} decomposes $T$ into
+    a permutation plus per-block inner automorphisms.
+    Because $T$ is assembled blockwise, it preserves each block ideal,
+    so in this theorem the permutation is actually $\pi = \mathrm{id}$.
+    A nontrivial block permutation only appears after block separation
+    identifies which blocks match globally.
 \end{proof}
 
 \begin{theorem}[Per-block same MPV gives global gauge equivalence]\label{thm:per_block_gauge}
@@ -145,6 +171,14 @@ and~\cite{Cirac2021Matrix}.
 \end{proof}
 
 \section{Block separation}
+
+Recall from Definition~\ref{def:mpv_overlap}
+and Theorem~\ref{thm:overlap_trace} that the bilinear overlap is
+\[
+    O_{AB}(N) = \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
+    V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma} = \Tr(F_{AB}^N).
+\]
+We use this notation throughout the block-separation argument.
 
 \begin{definition}[Canonical form predicate]\label{def:is_canonical_form}
     \lean{MPSTensor.IsCanonicalForm}
@@ -176,6 +210,17 @@ and~\cite{Cirac2021Matrix}.
     proof.
 \end{definition}
 
+\begin{remark}[Normalization convention]\label{rem:tp_vs_unital}
+    The convention here differs from
+    \cite[Thm.~4]{PerezGarcia2007Matrix}, which uses the unital gauge
+    $\sum_i A_k^i (A_k^i)^\dagger = \Id$.
+    This chapter instead works in the dual TP gauge
+    $\sum_i (A_k^i)^\dagger A_k^i = \Id$.
+    A positive-definite fixed point of the adjoint transfer map provides a
+    gauge transformation between these two normalizations
+    (Theorem~\ref{thm:left_canonical_gauge}).
+\end{remark}
+
 \begin{remark}\label{rem:overlap_hypothesis}\leanok
     In the literature~\cite{Cirac2021Matrix},
     condition~(5) is derived from primitivity of the
@@ -184,8 +229,7 @@ and~\cite{Cirac2021Matrix}.
     per-block primitivity implies overlap convergence,
     so condition~(5) is redundant when primitivity holds.
     The canonical form predicate retains condition~(5)
-    explicitly because the overlap limit may also be
-    assumed directly.
+    explicitly because it can be verified independently of primitivity.
 \end{remark}
 
 \begin{remark}[Normal-canonical companion]\label{rem:normal_cf_companion}
@@ -225,16 +269,21 @@ and~\cite{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:overlap_decay, thm:overlap_decay_rect,
-          thm:proportional_ft}
+    \uses{thm:overlap_decay, thm:overlap_decay_rect}
     By induction on the number of blocks~$r$.
     In the inductive step, take overlaps with the
-    leading block $A_0$; cross-block contributions
-    from $k \ge 1$ decay exponentially (by the
-    spectral gap), leaving
+    leading block $A_0$; after division by $\mu_0^N$,
+    the contributions from $k \ge 1$ decay exponentially by
+    Theorems~\ref{thm:overlap_decay_rect}
+    and~\ref{thm:overlap_decay}, leaving
     $O_{A_0 A_0}(N) - O_{A_0 B_0}(N) \to 0$.
-    The proportional FT (Theorem~\ref{thm:proportional_ft})
-    gives $A_0 \simeq B_0$.
+    Condition~(5) gives $O_{A_0 A_0}(N) \to 1$, hence
+    $O_{A_0 B_0}(N) \to 1$.
+    Since this limit is nonzero, the contrapositive of
+    Theorem~\ref{thm:overlap_decay} forces $A_0$ and $B_0$
+    to be gauge-phase equivalent; the limit $O_{A_0 B_0}(N) \to 1$
+    then makes the phase trivial, so $A_0$ and $B_0$
+    generate the same MPV family.
     Peeling off the leading block and dividing by
     $\mu_0^N$, the induction hypothesis applies.
 \end{proof}
@@ -304,3 +353,12 @@ and~\cite{Cirac2021Matrix}.
     per-block gauge equivalence and then to global gauge equivalence
     of the block-diagonal tensors.
 \end{proof}
+
+\begin{remark}[Relation to the literature]\label{rem:block_perm_literature}
+    The results of this chapter correspond to the canonical-form uniqueness
+    of~\cite{PerezGarcia2007Matrix} and the block-separation statements
+    of~\cite{Cirac2021Matrix}.
+    The proof technique used here---an induction on the number of blocks
+    driven by the spectral gap of the mixed transfer operators---is specific
+    to this formalization.
+\end{remark}

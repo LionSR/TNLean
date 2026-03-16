@@ -10,7 +10,8 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 
 This module assembles the **Fundamental Theorem of Matrix Product States** by combining:
 
-1. **`BNTConstruction.lean`**: `IsCanonicalFormBNT` structure, the legacy bridge theorem
+1. **`BNTConstruction.lean`**: the `IsCanonicalFormBNT` structure for canonical forms with
+   basis-of-normal-tensors (BNT) separation, the legacy bridge theorem
    `fundamentalTheorem_of_IsCanonicalFormBNT`, and the weaker split-data bridge
    `fundamentalTheorem_of_separated_CFBNT_data` (proportional MPVs with convergent coefficients
    → permutation + gauge-phase matching).
@@ -33,16 +34,18 @@ This module assembles the **Fundamental Theorem of Matrix Product States** by co
 ### Theorem 1: Equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
 (`fundamentalTheorem_equalMPV_CFBNT`)
 
-**Corollary II_cor2 (equal case)**: If two families of tensors in canonical form (with BNT
-separation) share the same `μ`-weights, same block count `r`, and same block dimensions, and
+**Corollary II_cor2 (equal case)**: If two families of tensors in canonical form with
+basis-of-normal-tensors (BNT) separation share the same `μ`-weights, same block count `r`, and
+same block dimensions, and
 generate *equal* MPVs for all system sizes, then per-block gauge equivalence holds together
 with a global gauge equivalence of the block-diagonal tensors.
 
 ### Theorem 2: Proportional-MPV Fundamental Theorem (Thm 4.4)
 (`fundamentalTheorem_proportionalMPV_CFBNT`)
 
-**Theorem 4.4 (proportional case)**: If two families of tensors in canonical form with BNT
-separation generate proportional MPVs, and the decomposition coefficients converge to
+**Theorem 4.4 (proportional case)**: If two families of tensors in canonical form with
+basis-of-normal-tensors (BNT) separation generate proportional MPVs, and the decomposition
+coefficients converge to
 nonzero limits, then the block counts are equal and blocks match up to permutation,
 dimension equality, and gauge-phase equivalence.
 
@@ -66,12 +69,12 @@ If two sequences of complex numbers have equal power sums for all exponents, the
 
 ## Design notes
 
-The **coefficient convergence** question: In the full paper, the BNT decomposition uses
-coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
+The **coefficient convergence** question: In the full paper, the decomposition into a basis of
+normal tensors uses coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
 These coefficients need not converge in general after normalization, because unit-modulus
-terms can still oscillate. The `IsCanonicalFormBNT` predicate sidesteps this by requiring BNT
-grouping already done, and the proportional-case theorem takes whatever convergent coefficient
-data it needs as explicit hypotheses.
+terms can still oscillate. The `IsCanonicalFormBNT` predicate sidesteps this by requiring the
+BNT grouping already done, and the proportional-case theorem takes whatever convergent
+coefficient data it needs as explicit hypotheses.
 -/
 
 open scoped Matrix BigOperators
@@ -325,6 +328,44 @@ theorem sameMPV₂_implies_proportionalMPV₂
     ProportionalMPV₂ A B := by
   intro N
   exact ⟨1, fun σ => by simp [h N σ]⟩
+
+/-- **Full equal-MPV Fundamental Theorem for CF-BNT.**
+
+This is the heterogeneous full equal-MPV version corresponding to blueprint theorem
+`thm:ft_equal`.
+
+Unlike the proportional theorem, this statement takes only the CF-BNT data and equality of MPVs.
+The auxiliary coefficient arrays are intended to be derived internally from
+`mpv_toTensorFromBlocks_eq_sum`, while the convergence input needed for the proportional route is
+intended to come from the coefficient-convergence lemmas in `CoefficientConvergence.lean`
+(such as `coeff_ratio_tendsto`), together with the constant proportionality sequence `c N = 1`.
+
+The planned proof strategy is:
+1. derive the decomposition identities and coefficient convergence internally,
+2. apply `fundamentalTheorem_proportionalMPV_CFBNT` with proportionality sequence `c N = 1`,
+3. use the BNT linear independence furnished by `hA.isBNT` to match the weights blockwise after
+   the resulting permutation and gauge-phase equivalence,
+4. absorb the block phases into the weights, and
+5. assemble the resulting blockwise conjugacies into a global gauge equivalence.
+
+Because `GaugeEquiv` is homogeneous in the total bond dimension, the conclusion is encoded as an
+explicit equality of total bond dimensions together with a casted `GaugeEquiv`. The proof is still
+pending. -/
+theorem fundamentalTheorem_equalMPV_full
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hEqual : SameMPV₂ (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    ∃ htot : ∑ j : Fin rA, dimA j = ∑ k : Fin rB, dimB k,
+      GaugeEquiv
+        (cast (congr_arg (MPSTensor d) htot) (toTensorFromBlocks μA A))
+        (toTensorFromBlocks μB B) := by
+  sorry
 
 /-! ## Theorem 4: Power-sum multiset equality (Lem:app_simple)
 

@@ -17,7 +17,7 @@ The results follow~\cite{Sanz2010Quantum}.
         S_n(A) =  \spn_{\C}\{A^w : |w| = n\}
         \subseteq  \MN{D}.
     \]
-    This is \cite[Eq.~(1)]{Sanz2010Quantum}.
+    This is \cite[\S II]{Sanz2010Quantum}.
 \end{definition}
 
 \begin{definition}[Cumulative span]\label{def:cumulative_span}
@@ -192,6 +192,8 @@ The results follow~\cite{Sanz2010Quantum}.
     If $A$ is normal, then there exists a word $w$ of length
     $\le D^2$ such that $\tr(A^w) \neq 0$.
     This is \cite[Lemma~1]{Sanz2010Quantum}.
+    For the trace argument below, the nontrivial case is $D \ge 1$;
+    when $D = 0$ the normality hypothesis is vacuous.
 \end{theorem}
 
 \begin{proof}
@@ -201,7 +203,7 @@ The results follow~\cite{Sanz2010Quantum}.
     $\Id \in T_{D^2}(A)$,
     so $\Id$ is a linear combination of word products
     of length $\le D^2$.
-    At least one has nonzero trace
+    In the nontrivial case $D \ge 1$, at least one has nonzero trace
     (since $\tr(\Id) = D \neq 0$).
 \end{proof}
 
@@ -303,8 +305,11 @@ The results follow~\cite{Sanz2010Quantum}.
     (since trace = sum of eigenvalues counted with multiplicity).
     The Fitting decomposition
     (Theorem~\ref{thm:fitting_decomp})
-    ensures the corresponding generalized eigenspace is nontrivial,
-    yielding an eigenvector.
+    ensures that the corresponding generalized eigenspace is nontrivial.
+    On that generalized eigenspace, $M - \mu \Id$ is nilpotent,
+    so its kernel is nontrivial.
+    Any nonzero vector in $\ker(M - \mu \Id)$ is therefore a
+    genuine eigenvector with eigenvalue~$\mu$.
 \end{proof}
 
 \begin{theorem}[Eigenvalue extraction]\label{thm:eigenvalue_extraction}
@@ -448,9 +453,10 @@ The results follow~\cite{Sanz2010Quantum}.
     then $T_{D^2}(A) = \MN{D}$.
     In particular, the cumulative span stabilises at index
     at most $D^2$.
-    This is \cite[Theorem~1]{Sanz2010Quantum}
-    (which gives the sharper bound $D^2 - d + 1$ in certain
-    cases; here we prove the $D^2$ bound).
+    This is the cumulative-span part of \cite[Theorem~1]{Sanz2010Quantum}.
+    The paper's theorem is stronger: via Lemma~2(b) it upgrades this to a
+    fixed-length conclusion $S_N(A) = \MN{D}$, proved below in
+    Theorem~\ref{thm:wielandt_lemma2b}.
 \end{theorem}
 
 \begin{proof}
@@ -661,10 +667,19 @@ used to produce rank-one elements.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:word_span_le_blockTensor}
-    If $S_N(A) = \MN{D}$ then
-    $S_{NL}(A) = \MN{D}$
-    (padding by repeated single-letter words).
+    \uses{lem:word_span_le_blockTensor, lem:word_span_mul}
+    Choose $N$ with $S_N(A) = \MN{D}$. Then $\Id \in S_N(A)$.
+    For any $M \in S_N(A)$, write
+    $\Id = \sum_r c_r A^{w_r}$ with each $|w_r| = N$.
+    Then
+    \[
+        M = M \cdot \Id = \sum_r c_r \, M A^{w_r}
+        \in S_N(A) \cdot S_N(A) \subseteq S_{2N}(A)
+    \]
+    by Lemma~\ref{lem:word_span_mul}.
+    Iterating this inclusion gives $S_N(A) \subseteq S_{kN}(A)$
+    for every $k \ge 1$; taking $k = L$ yields
+    $\MN{D} = S_N(A) \subseteq S_{NL}(A)$.
     By Lemma~\ref{lem:word_span_le_blockTensor},
     $S_{NL}(A) \subseteq S_N(A^{[L]})$,
     so $S_N(A^{[L]}) = \MN{D}$.
@@ -758,26 +773,29 @@ used to produce rank-one elements.
 
 \begin{proof}
     \leanok
-    \uses{thm:isNormal_blockTensor, thm:nonzero_trace_word,
+    \uses{def:blocked_tensor, thm:isNormal_blockTensor,
           thm:eigenvector_from_trace}
     Set $B = A^{[N_0]}$.
-    Since $S_{N_0}(A) = \MN{D}$,
-    a nonzero-trace word exists
-    (Theorem~\ref{thm:nonzero_trace_word}),
-    yielding a column eigenvector $\varphi$
-    via Theorem~\ref{thm:eigenvector_from_trace}.
-    A row eigenvector $\psi$ is obtained analogously
-    from the transpose tensor.
-    Set $P = (B^{j_0})^D$ and $Q = (B^{k_0})^D$,
-    where $j_0, k_0$ encode $\sigma_0, \tau_0$
-    in the blocked alphabet.
-    The Fitting decomposition ensures
-    $\varphi \in \operatorname{range}(P)$
-    and $\psi \in \operatorname{range}(Q^T)$,
-    so $\varphi \psi^T \in
-    \operatorname{range}(\mathrm{mulLeft}(P)
-    \circ \mathrm{mulRight}(Q))
-    \subseteq S_{2D}(B)$.
+    Since $S_{N_0}(A) = \MN{D}$, we have $S_1(B) = \MN{D}$
+    by definition of the blocked tensor.
+    Hence $\Id \in S_1(B)$, so in the nontrivial case $D \ge 1$
+    not all blocked generators can have trace zero.
+    Choose $j_0$ with $\tr(B^{j_0}) \neq 0$.
+    By Theorem~\ref{thm:eigenvector_from_trace},
+    $B^{j_0}$ has a nonzero eigenvector $\varphi$
+    with eigenvalue $\mu \neq 0$.
+    Writing $j_0$ as the blocked index corresponding to a word
+    $\sigma_0$ of length~$N_0$ gives
+    $A^{\sigma_0} \varphi = \mu \varphi$.
+    Applying the same argument to the transpose blocked tensor gives
+    a word $\tau_0$ of length~$N_0$, a nonzero vector $\psi$,
+    and $\nu \neq 0$ with $(A^{\tau_0})^T \psi = \nu \psi$.
+    Since $A$ is normal and $N_0 \ge 1$,
+    the blocked tensor $B$ is normal by
+    Theorem~\ref{thm:isNormal_blockTensor}.
+    Therefore there exists $M$ with $S_M(B) = \MN{D}$.
+    In particular $\varphi \psi^T \in S_M(B)$.
+    Taking $m = M$ proves~(3).
 \end{proof}
 
 \begin{theorem}[Fixed-length word-span saturation via blocking]\label{thm:wielandt_lemma2b}
@@ -833,6 +851,11 @@ used to produce rank-one elements.
 	then $\rho_{\mathrm{spec}}(\E_A - P) < 1$.
 	When the choice of $\rho$ is irrelevant, we simply say that $A$
 	is a primitive MPS tensor.
+	This is weaker than the paper's notion, which requires
+	$\rho > 0$; see Remark~\ref{rem:prim_definition_mismatch}.
+	The stronger positive-definite hypothesis is imposed separately in
+	Theorems~\ref{thm:primitive_implies_irreducible}
+	and~\ref{thm:primitive_posDef_aperiodic_normal}.
 \end{definition}
 
 \begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
@@ -957,6 +980,10 @@ spectral gap. It is connected to normality through the following results.
     \]
     The last step uses the aperiodicity condition
     $\Id \in S_1(A)$ from Remark~\ref{rem:aperiodicity}.
+    After restoring the positive-definite hypothesis,
+    \cite[Proposition~3]{Sanz2010Quantum} identifies the paper's
+    primitive/strongly irreducible condition with eventual full
+    Kraus rank, i.e. with our notion of normality.
 \end{remark}
 
 \subsection{Primitive implies irreducible}\label{subsec:prim_implies_irred}
@@ -1204,7 +1231,13 @@ The gap is closed by an aperiodicity hypothesis.
         \;\xrightarrow{\ref{thm:algspan_to_normal}}\;
         \text{normal}.
     \]
-    This corresponds to \cite[Theorem~1 / Proposition~3]{Sanz2010Quantum}.
+    This corresponds to the irreducibility-to-normality direction of
+    \cite[Proposition~3]{Sanz2010Quantum}.
+    For the Burnside step, we appeal forward to
+    Theorems~\ref{thm:irreducible_tensor_to_action}
+    and~\ref{thm:burnside_matrix} in Chapter~\ref{ch:canonical};
+    this is a presentation-level forward dependency,
+    but the mathematical dependency is acyclic.
 \end{theorem}
 
 \begin{proof}\leanok

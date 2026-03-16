@@ -19,13 +19,16 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 \begin{definition}[Block-diagonal tensor from blocks]\label{def:tensor_from_blocks}
 	\lean{MPSTensor.toTensorFromBlocks}
 	\leanok
-	\uses{def:mps_tensor}
+	\uses{def:block_diagonal_tensor}
+	Recall the block-diagonal tensor of
+	Definition~\ref{def:block_diagonal_tensor}.
 	Given $r$ blocks with bond dimensions $(D_k)_{k=1}^r$,
 	per-block MPS tensors $\{A_k^i\}$,
 	and scaling factors $(\mu_k)_{k=1}^r$,
-	define the block-diagonal tensor
-	$A^i = \bigoplus_{k=1}^r \mu_k A_k^i$
-	of total bond dimension $D = \sum_k D_k$.
+	we write
+	$\bigoplus_{k=1}^r \mu_k A_k$
+	for the tensor of total bond dimension $D = \sum_k D_k$ whose Kraus
+	operators are $A^i = \bigoplus_{k=1}^r \mu_k A_k^i$.
 \end{definition}
 
 \begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
@@ -122,19 +125,31 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	\lean{MPSTensor.mpv_normalize_blocks}
 	\leanok
 	\uses{def:tensor_from_blocks, def:mpv}
-	For any nonzero scaling factors $\mu_k$,
-	write $\mu_k = |\mu_k| \cdot (\mu_k / |\mu_k|)$.
-	The MPVs of $\bigoplus_k \mu_k A_k$ and
-	$\bigoplus_k |\mu_k| \cdot (\mu_k / |\mu_k|) A_k$
-	agree.
+	For any nonzero scaling factors $\mu_k$, set
+	$\eta_k := \mu_k / |\mu_k|$ and $B_k := |\mu_k| A_k$.
+	Then $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \eta_k B_k$
+	generate the same MPV family.
+	Equivalently, the $k$-th block contribution factors as
+	\[
+		\mu_k^N V^{(N)}(A_k)_\sigma
+		= \eta_k^N |\mu_k|^N V^{(N)}(A_k)_\sigma,
+	\]
+	so the modulus contributes only through $|\mu_k|^N$, while the
+	remaining factor $\eta_k$ is a unit-modulus phase.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:mpv_decomposition, lem:eval_word_smul}
 	By the MPV decomposition
 	(Theorem~\ref{thm:mpv_decomposition}),
-	the $k$-th term is $\mu_k^N V^{(N)}(A_k)_\sigma$.
-	The scaling identity (Lemma~\ref{lem:eval_word_smul})
-	absorbs the phase into the word evaluation.
+	the $k$-th contribution of $\bigoplus_k \mu_k A_k$ is
+	$\mu_k^N V^{(N)}(A_k)_\sigma$.
+	For $B_k = |\mu_k| A_k$, Lemma~\ref{lem:eval_word_smul} gives
+	$V^{(N)}(B_k)_\sigma = |\mu_k|^N V^{(N)}(A_k)_\sigma$.
+	Hence
+	$\eta_k^N V^{(N)}(B_k)_\sigma
+	= \eta_k^N |\mu_k|^N V^{(N)}(A_k)_\sigma
+	= \mu_k^N V^{(N)}(A_k)_\sigma$
+	for every block, so the total MPV families agree.
 \end{proof}
 
 \section{Invariant subspace decomposition}
@@ -217,7 +232,8 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	\emph{not} positive definite (i.e.\ $\rho$ has a nontrivial
 	kernel), then $A$ is unitarily equivalent to a
 	two-block upper-triangular tensor.
-	Moreover, the diagonal blocks generate the same MPV as~$A$.
+	Moreover, the block-diagonal tensor obtained by discarding the
+	off-diagonal blocks generates the same MPV family as~$A$.
 \end{theorem}
 
 \begin{proof}
@@ -232,8 +248,9 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	(Theorem~\ref{thm:samempv_unitary} ensures the MPV
 	is preserved by the conjugation).
 	The trace of the upper-triangular product equals the sum
-	of the block-diagonal traces, so the MPV
-	decomposes into block contributions.
+	of the diagonal-block traces, so the block-diagonal tensor
+	obtained by discarding the off-diagonal blocks has the same MPV
+	coefficients as the conjugated tensor, and hence as~$A$.
 \end{proof}
 
 \section{Iterated reduction}
@@ -241,12 +258,10 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 \begin{definition}[Irreducible tensor]\label{def:irreducible_tensor}
 	\lean{MPSTensor.IsIrreducibleTensor}
 	\leanok
-	\uses{def:mps_tensor}
+	\uses{def:transfer_map, def:irreducible_cp}
 	An MPS tensor~$A$ is \emph{irreducible}
-	(in the sense of~\cite{Cirac2021Matrix})
-	if the transfer map $\E_A$ has no nontrivial invariant
-	projection, i.e.\ $\E_A$ is irreducible
-	(Definition~\ref{def:irreducible_cp}).
+	if its transfer map $\E_A$ is irreducible in the sense of
+	Definition~\ref{def:irreducible_cp}.
 \end{definition}
 
 \begin{theorem}[Irreducible block decomposition]\label{thm:irred_decomp}
@@ -262,15 +277,21 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 
 \begin{proof}
 	\leanok
-	\uses{thm:two_block_decomp}
+	\uses{thm:two_block_decomp, thm:pf_eigenvector_existence}
 	By strong induction on the bond dimension~$D$.
 	If $A$ is already irreducible, take $r = 1$.
-	Otherwise, the transfer map has a PSD fixed point that
-	is not PD (by the Ces\`aro argument), and
-	Theorem~\ref{thm:two_block_decomp} splits $A$ into
-	two blocks of strictly smaller bond dimension.
-	Apply the induction hypothesis to each block and
-	concatenate.
+	Otherwise, by Definition~\ref{def:irreducible_tensor},
+	$A$ has a nontrivial invariant projection~$P$.
+	Diagonalizing~$P$ yields the same two-block upper-triangular
+	splitting used in Theorem~\ref{thm:two_block_decomp}; the
+	block-diagonal tensor obtained by discarding the off-diagonal part
+	has the same MPV family as~$A$, and the two diagonal blocks have
+	strictly smaller bond dimensions.
+	Apply the induction hypothesis to each block and concatenate.
+	(If one prefers a positive-eigenvector route without assuming TP
+	normalization, the correct replacement for the channel-specific
+	Ces\`aro theorem is Theorem~\ref{thm:pf_eigenvector_existence};
+	the induction itself needs only the invariant projection.)
 
 	Both~\cite{PerezGarcia2007Matrix} (Theorem~4, ``TI
 	canonical form'') and~\cite{Cirac2021Matrix} (§IV.A.1)
@@ -390,6 +411,14 @@ For Burnside-style arguments it is more natural to work with invariant
 	$\operatorname{End}_{\C}(\C^D)$.
 \end{proof}
 
+\begin{remark}\leanok
+	This Burnside/Jacobson-density step is a substantial external algebraic
+	dependency for the formalization. In the current project it is formalized
+	directly as the theorem tagged above, rather than imported from Mathlib;
+	if Mathlib later acquires a suitable finite-dimensional Burnside theorem,
+	this chapter could be retargeted to that library result.
+\end{remark}
+
 \begin{theorem}[Irreducible action implies eventual cumulative spanning]%
 	\label{thm:irreducible_action_cumulative_span}
 	\lean{MPSTensor.exists_cumulativeSpan_eq_top_of_isIrreducibleAction}\leanok
@@ -475,11 +504,28 @@ removing it as an independent assumption.
 
 \begin{proof}
 	\leanok
-		\uses{def:is_canonical_form}
-	Each block is injective and TP-normalized. Peripheral-spectrum primitivity
-	therefore implies the spectral-gap primitive condition used in
-	Chapter~\ref{ch:spectral}, and hence the required self-overlap convergence.
-	This supplies the final field in Definition~\ref{def:is_canonical_form}.
+		\uses{thm:qpf, thm:eigenvalue_bound, thm:psd_fp_unique,
+			thm:primitive_compl_lt_one, thm:primitive_overlap}
+	Fix a block $k$ and write $E := \E_{A_k}$.
+	By injectivity and TP normalization, Theorem~\ref{thm:qpf} provides a
+	nonzero positive definite fixed point for~$E$.
+	To apply the spectral-gap criterion
+	(Theorem~\ref{thm:primitive_compl_lt_one}), we check its three hypotheses:
+	\begin{enumerate}
+		\item $E$ is primitive, since the peripheral spectrum is $\{1\}$ by assumption;
+		\item every eigenvalue of $E$ has modulus at most~$1$, because
+		      $E = F_{A_k A_k}$ is a normalized mixed transfer operator and
+		      Theorem~\ref{thm:eigenvalue_bound} applies;
+		\item any trace-zero fixed point of $E$ is zero; this is the
+		      trace-zero uniqueness consequence extracted in Chapter~\ref{ch:qpf}
+		      from the uniqueness of the PSD fixed point
+		      (Theorem~\ref{thm:psd_fp_unique}).
+	\end{enumerate}
+	Hence $E$ has a spectral gap on the complement of its fixed-point
+	projection. Theorem~\ref{thm:primitive_overlap} then gives
+	$O_{A_k A_k}(N) \to 1$.
+	Since this holds for every block, the overlap clause required in
+	Definition~\ref{def:is_canonical_form} follows from the other hypotheses.
 \end{proof}
 
 \begin{remark}\label{rem:primitivity_reduces_assumptions}\leanok
@@ -553,10 +599,12 @@ removing it as an independent assumption.
 			\item all $\mu_k \neq 0$,
 			\item all bond dimensions are positive.
 		\end{enumerate}
-		Here ``normal'' is used in the sense of
-		\cite{Cirac2017MPDO_AnnPhys}: irreducible blocks with trivial
-		peripheral spectrum after TP normalization. It is not the same as
-		Definition~\ref{def:normal}, which means eventual block injectivity.
+		Here ``normal'' is used in the spectral sense of
+		\cite{Cirac2017MPDO_AnnPhys}: irreducible blocks whose TP-normalized
+		transfer maps are primitive. As noted in the remark after
+		Definition~\ref{def:normal}, this is equivalent to the eventual
+		block-injectivity formulation of Definition~\ref{def:normal}; see
+		\cite[Proposition~3]{Sanz2010Quantum}.
 \end{definition}
 
 \begin{theorem}[Self-overlap is derived in normal canonical form]%
@@ -572,7 +620,8 @@ removing it as an independent assumption.
 		Peripheral-spectrum primitivity is part of the data. Together with
 		irreducibility and TP normalization, it yields the spectral-gap
 		primitive theorem needed for overlap convergence, so the self-overlap
-		condition is derived rather than stored as an extra field.
+		condition follows from the other hypotheses rather than appearing as
+		a separate assumption.
 \end{proof}
 
 \begin{theorem}[Modulus-one eigenvalue rigidity for irreducible TP blocks]%
@@ -588,10 +637,23 @@ removing it as an independent assumption.
 \end{theorem}
 
 \begin{proof}\leanok
-		A modulus-one eigenvector for the mixed transfer map saturates the
-		channel Schwarz inequality. Irreducibility then upgrades this
-		eigenvector to an intertwiner between the two Kraus families, which is
-		exactly gauge-phase equivalence.
+		\uses{thm:modulus_one_gauge, thm:psd_fp_exists,
+			thm:psd_fp_pd_irred, thm:right_canonical_gauge}
+		The argument is the same as in Theorem~\ref{thm:modulus_one_gauge},
+		but the fixed-point input comes from irreducibility rather than
+		injectivity.
+		Take a modulus-one eigenvector of the mixed transfer map.
+		Because $A$ and $B$ are TP-normalized, each transfer map has a nonzero
+		PSD fixed point by Theorem~\ref{thm:psd_fp_exists}.
+		Irreducibility upgrades these fixed points to positive definite ones by
+		Theorem~\ref{thm:psd_fp_pd_irred}.
+		Theorem~\ref{thm:right_canonical_gauge} therefore gauges $A$ and $B$
+		separately to unital Kraus families.
+		In this unital gauge, the embedded modulus-one eigenvector saturates the
+		Kadison--Schwarz inequality, and the same equality / multiplicative-domain
+		argument as in Theorem~\ref{thm:modulus_one_gauge} produces an
+		invertible intertwiner between the two Kraus families.
+		That intertwiner is exactly the required gauge-phase equivalence.
 \end{proof}
 
 \section{Steps toward canonical form existence}%
@@ -694,12 +756,19 @@ for a discussion of that extension.
 
 \begin{proof}\leanok
 		\uses{def:is_normal_canonical_form}
-		The theorem first performs a common blocking of the already primitive
-		blocks; in the present statement this blocking is trivial, so one may
-		take $p = 1$. It then reorders the blocks by decreasing weight norm.
-		The resulting irreducibility, TP, primitivity, nonzero-weight, and
-		positive-dimension data are exactly those required by
-		Definition~\ref{def:is_normal_canonical_form}.
+		No new blocking is needed here: the input blocks are already primitive,
+		so one may take $p = 1$.
+		The theorem is stated with a blocking length because earlier reduction
+		steps may require a common blocking period; under the present hypotheses
+		that period can be chosen to be $1$.
+		Since the moduli $|\mu_k|$ are pairwise distinct, there is a reordering
+		of the blocks for which they become strictly decreasing.
+		After this reindexing, set $\nu_k := \mu_k$ and $B_k := A_k$ in the new
+		order.
+		Irreducibility, TP normalization, primitivity, nonzero weights, and
+		positive bond dimensions are unchanged by the reordering, so the
+		reordered family satisfies Definition~\ref{def:is_normal_canonical_form}
+		and generates the same MPV family as~$A$.
 \end{proof}
 
 \section{Zero-block separation and honest block decomposition}%

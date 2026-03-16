@@ -245,15 +245,22 @@ boundary conditions (PBC).
 \end{definition}
 
 \begin{remark}\leanok
-    In the block-injective route developed here, ``normal'' means eventual
-    block injectivity.
-    The NT notion in \cite{Cirac2021Matrix} is spectral:
-    it is phrased in terms of irreducibility and the peripheral spectrum
-    of the transfer map.
-    The bridge to that viewpoint is supplied later by
-    Theorem~\ref{thm:blocking_primitivity},
-    Theorem~\ref{thm:primitive_implies_irreducible}, and
-    Theorem~\ref{thm:irred_tensor_aperiodic_normal}.
+    The algebraic characterization of normality in
+    Definition~\ref{def:normal} --- eventual full Kraus rank,
+    equivalently eventual block injectivity --- is equivalent to the
+    spectral characterization used in
+    \cite[Definition~IV.1]{Cirac2021Matrix}: after TP normalization, the
+    transfer map $\E_A$ is a primitive channel, equivalently irreducible
+    with trivial peripheral spectrum. This equivalence is proved in
+    \cite[Proposition~3]{Sanz2010Quantum}. Within this blueprint, the
+    directions of the equivalence are supplied by
+    Theorem~\ref{thm:primitive_implies_irreducible},
+    Theorem~\ref{thm:irred_tensor_aperiodic_normal}, and
+    Theorem~\ref{thm:blocking_primitivity}. In particular, every
+    subsequent use of ``normal'' in this blueprint refers to this single
+    notion;
+    Definition~\ref{def:is_normal_canonical_form} employs the spectral
+    formulation, but it describes the same class of tensors.
 \end{remark}
 
 \section{Canonical form}
