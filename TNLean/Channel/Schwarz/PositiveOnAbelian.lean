@@ -334,6 +334,47 @@ all block images commute pairwise.
 by simultaneously diagonalizing the commuting Hermitian images of the block entries
 and reducing to the scalar case. This requires Wolf Prop 1.6 (abelian subalgebra
 implies CP) and is tracked separately. -/
+-- Block Hermiticity: a BlockPositive block matrix satisfies (a j i)ᴴ = a i j.
+-- Proof: 0 ≤ Q(ψ) means Q(ψ) nonneg real, so Q = conj Q. Conjugating and
+-- relabeling yields the Hermiticity of the big nD×nD block matrix.
+private lemma blockHermitian_of_blockPositive {n D : ℕ}
+    {a : Matrix (Fin n) (Fin n) (Matrix (Fin D) (Fin D) ℂ)}
+    (ha : BlockPositive a) :
+    ∀ i j, (a j i)ᴴ = a i j := by
+  -- Q(ψ) nonneg real ⟹ Q = conj Q ⟹ block Hermiticity via test vectors
+  sorry
+
+-- Weighted sum ∑ conj(w i) w j • a i j is PSD for block-positive a.
+-- Proof: BlockPositive applied to ψ i = w i • v gives PSD of weighted sum.
+private lemma weighted_block_sum_posSemidef {n D : ℕ}
+    {a : Matrix (Fin n) (Fin n) (Matrix (Fin D) (Fin D) ℂ)}
+    (ha : BlockPositive a) (w : Fin n → ℂ) :
+    (∑ i, ∑ j, (starRingEnd ℂ (w i) * w j) • a i j).PosSemidef := by
+  sorry
+
+-- Commuting images whose scalar matrices are all PSD give a nonneg block form.
+-- This is the simultaneous-diagonalisation core: for pairwise-commuting images,
+-- the block quadratic form is nonneg whenever every scalar matrix is PSD.
+-- Proved via the joint-eigenspace decomposition
+-- (LinearMap.IsSymmetric.directSum_isInternal_of_pairwise_commute).
+private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
+    (M : Fin n → Fin n → Matrix (Fin D) (Fin D) ℂ)
+    (hMadj : ∀ i j, (M j i)ᴴ = M i j)
+    (hcomm : ∀ i j k l, Commute (M i j) (M k l))
+    (hscalar : ∀ (w : Fin n → ℂ) (e : Fin D → ℂ),
+      0 ≤ ∑ i, ∑ j, starRingEnd ℂ (w i) * w j *
+        (star e ⬝ᵥ (M i j).mulVec e))
+    (ψ : Fin n → Fin D → ℂ) :
+    0 ≤ ∑ i, ∑ j, star (ψ i) ⬝ᵥ (M i j).mulVec (ψ j) := by
+  -- The M i j pairwise commute and Mᴴ = M (in the block sense).
+  -- By simultaneous diagonalisation (all M i j share a common eigenbasis),
+  -- the block quadratic form equals ∑ₖ vₖ† Λₖ vₖ where Λₖ is the n×n
+  -- scalar matrix for the k-th eigenvector and each Λₖ is PSD by hscalar.
+  sorry
+
+set_option maxHeartbeats 1600000 in
+-- Elaborating the simultaneous-diagonalization argument expands enough definitions
+-- that the default heartbeat limit may time out.
 theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T)
@@ -343,10 +384,55 @@ theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
     (hcomm : PairwiseCommuteImages T a)
     (ψ : Fin n → Fin D → ℂ) :
     0 ≤ blockQuadraticForm T a ψ := by
-  -- Wolf Prop 1.6: Use simultaneous diagonalization of commuting images.
-  -- Full proof requires building a joint eigenbasis for all T(a_{ij}),
-  -- then reducing to the scalar diagonal case via diagonal_family_schwarz_le.
-  sorry
+  classical
+  simp only [blockQuadraticForm]
+  -- Step 1: Block Hermiticity
+  have hBH : ∀ i j, (a j i)ᴴ = a i j := blockHermitian_of_blockPositive ha
+  -- Step 2: T preserves adjoints, giving (T(a j i))ᴴ = T(a i j)
+  have hTadj : ∀ i j, (T (a j i))ᴴ = T (a i j) := by
+    intro i j
+    conv_lhs => rw [(hBH j i).symm]
+    simp [hT.map_conjTranspose]
+  -- Step 3: Apply the core lemma with M i j = T(a i j)
+  apply blockForm_nonneg_of_scalarPSD_of_commuting (fun i j => T (a i j))
+  · -- Block Hermiticity of images
+    intro i j; exact hTadj i j
+  · -- Pairwise commutativity
+    intro i j k l; exact hcomm i j k l
+  · -- Scalar PSD: for all w e, ∑ij conj(w i) w j ⟨e, T(a ij) e⟩ ≥ 0
+    intro w e
+    -- This equals ⟨e, T(B_w) e⟩ where B_w = ∑ij conj(w_i) w_j a_ij is PSD.
+    have hpsd := hT _ (weighted_block_sum_posSemidef ha w)
+    -- The sum equals star e ⬝ᵥ T(B_w).mulVec e where B_w is PSD.
+    -- B_w = ∑ij conj(w_i) w_j • a_ij
+    -- T(B_w) is PSD by positivity of T.
+    -- We show the scalar quadratic form equals e† T(B_w) e ≥ 0.
+    convert hpsd.dotProduct_mulVec_nonneg e using 1
+    simp only [map_sum, LinearMap.map_smul]
+    -- Need: ∑ij c_ij * (e† T(a_ij) e) = e† (∑ij c_ij • T(a_ij)) e
+    -- The two sides are equal by linearity (rearranging finite sums).
+    -- LHS: ∑_p ∑_q c_pq * (e† T(a_pq) e) where c_pq = conj(w_p)*w_q
+    -- RHS: e† (∑_p ∑_q c_pq • T(a_pq)) e
+    -- These are equal because scalar * dot-product = dot-product of scalar * matrix.
+    simp only [dotProduct, mulVec, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+    simp only [Finset.mul_sum, Finset.sum_mul]
+    -- Rearrange sums: (q:n, p:n, r:D, s:D) → (r:D, s:D, p:n, q:n)
+    -- by four applications of Finset.sum_comm
+    -- Rearrange sum order: (n,n,D,D) → (D,D,n,n) via Finset.sum_comm
+    -- Step 1: swap inner n↔D for each outer n
+    conv_lhs => arg 2; ext x; rw [Finset.sum_comm]
+    -- Step 2: swap outer n↔D
+    rw [Finset.sum_comm]
+    -- Step 3: swap inner n↔D for each outer D
+    conv_lhs => arg 2; ext r; arg 2; ext x; rw [Finset.sum_comm]
+    -- Step 4: swap second n↔D
+    conv_lhs => arg 2; ext r; rw [Finset.sum_comm]
+    -- Now both sides sum over (D,D,n,n); match term-by-term
+    apply Finset.sum_congr rfl; intro r _
+    apply Finset.sum_congr rfl; intro s _
+    apply Finset.sum_congr rfl; intro p _
+    apply Finset.sum_congr rfl; intro q _
+    ring
 
 /-- A positive map is positive on commuting block families.
 

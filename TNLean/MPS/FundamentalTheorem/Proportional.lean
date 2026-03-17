@@ -148,7 +148,8 @@ theorem proportionalMPV₂_of_gaugePhaseEquiv
   have hζN : ζ ^ N ≠ 0 := pow_ne_zero N hζ
   have h1 : (ζ ^ N)⁻¹ * mpv B σ = mpv A σ := by
     -- Rewrite `mpv B σ` using the gauge-phase relation and cancel `ζ ^ N`.
-    simpa [hmpv] using (inv_mul_cancel_left₀ hζN (mpv A σ))
+    rw [hmpv]
+    exact inv_mul_cancel_left₀ hζN _
   exact h1.symm
 
 end EasyDirection
@@ -176,12 +177,22 @@ private theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one_of_
       ∀ N : ℕ,
         mpvOverlap (d := d) A B N = c N * mpvOverlap (d := d) B B N := by
     intro N
-    simp [mpvOverlap, hc N, Finset.mul_sum, mul_assoc]
+    unfold mpvOverlap
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro σ _
+    rw [hc N σ]; ring
   have hOverlapAA :
       ∀ N : ℕ,
         mpvOverlap (d := d) A A N = (c N * star (c N)) * mpvOverlap (d := d) B B N := by
     intro N
-    simp [mpvOverlap, hc N, Finset.mul_sum, star_mul, mul_assoc, mul_left_comm, mul_comm]
+    unfold mpvOverlap
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro σ _
+    rw [hc N σ]
+    simp only [star_mul]
+    ring
   have hA_self_norm :
       Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds (1 : ℝ)) := by
     simpa using hA_self.norm
