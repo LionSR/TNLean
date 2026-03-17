@@ -369,8 +369,9 @@ private theorem block_separation_core_of_crossOverlap_tendsto_one
                     (μ k.succ) ^ N * (mpv (A k.succ) σ - mpv (B k.succ) σ) = 0 := by
               simpa [Fin.sum_univ_succ] using h_summed N σ
             have hhead : (μ 0) ^ N * (mpv (A 0) σ - mpv (B 0) σ) = 0 := by
-              simp [hHead N σ]
-            simpa [hhead] using hsum
+              rw [hHead N σ, sub_self, mul_zero]
+            rw [hhead, zero_add] at hsum
+            exact hsum
           have hTail :
               ∀ k : Fin (Nat.succ r), SameMPV (A k.succ) (B k.succ) := by
             have hμ_strict_tail :

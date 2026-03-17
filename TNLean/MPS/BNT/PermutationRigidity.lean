@@ -51,9 +51,10 @@ private lemma mpvOverlap_eq_sum_of_decomp_left
   calc
     mpvOverlap (d := d) A_total B N =
         ∑ σ : Cfg d N, (∑ j : Fin g, c j * mpv (A j) σ) * star (mpv B σ) := by
-          simp [mpvOverlap, hdecomp]
+          simp only [mpvOverlap]
+          congr 1; ext σ; rw [hdecomp σ]
     _ = ∑ σ : Cfg d N, ∑ j : Fin g, c j * (mpv (A j) σ * star (mpv B σ)) := by
-          simp [Finset.sum_mul, mul_assoc]
+          congr 1; ext σ; rw [Finset.sum_mul]; congr 1; ext j; ring
     _ = ∑ j : Fin g, ∑ σ : Cfg d N, c j * (mpv (A j) σ * star (mpv B σ)) := by
           -- Swap the two finite sums.
           simpa using
@@ -79,7 +80,9 @@ private lemma mpvOverlap_eq_mul_of_mpv_eq_mul
     mpvOverlap (d := d) A C N = c * mpvOverlap (d := d) B C N := by
   classical
   -- Factor out the scalar `c` from the overlap sum.
-  simp [mpvOverlap, h, Finset.mul_sum, mul_assoc]
+  simp only [mpvOverlap]
+  rw [Finset.mul_sum]
+  congr 1; ext σ; rw [h σ]; ring
 
 /-! ## Key paper step: some mixed overlap does not decay -/
 
@@ -492,7 +495,7 @@ private lemma rightMatching_injective_of_gaugePhaseEquiv
             _ = ζ1 ^ N * mpv (A (f k1)) σ := by ring
         exact this.symm
       _ = (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpv (B k2) σ := by
-        simp [hmpv2 N σ, mul_assoc]
+        rw [hmpv2 N σ]
   have hCross_eq : ∀ N : ℕ,
       mpvOverlap (d := d) (B k1) (B k2) N =
         (ζ1 ^ N * (ζ2 ^ N)⁻¹) * mpvOverlap (d := d) (B k2) (B k2) N := by
@@ -583,10 +586,10 @@ private lemma leftMatching_injective_of_gaugePhaseEquiv
     intro N σ
     have hζ1N : ζ1 ^ N ≠ 0 := pow_ne_zero N hζ1
     have hInv : (ζ1 ^ N)⁻¹ * mpv (B (g j1)) σ = mpv (A j1) σ := by
-      simpa [hmpvB1 N σ] using (inv_mul_cancel_left₀ hζ1N (mpv (A j1) σ))
+      rw [hmpvB1 N σ, inv_mul_cancel_left₀ hζ1N]
     calc
-      mpv (A j1) σ = (ζ1 ^ N)⁻¹ * mpv (B (g j1)) σ := by simpa using hInv.symm
-      _ = (ζ1 ^ N)⁻¹ * (ζ2 ^ N * mpv (A j2) σ) := by simp [hmpvB2 N σ]
+      mpv (A j1) σ = (ζ1 ^ N)⁻¹ * mpv (B (g j1)) σ := hInv.symm
+      _ = (ζ1 ^ N)⁻¹ * (ζ2 ^ N * mpv (A j2) σ) := by rw [hmpvB2 N σ]
       _ = (ζ2 ^ N * (ζ1 ^ N)⁻¹) * mpv (A j2) σ := by ring
   have hCross_eq : ∀ N : ℕ,
       mpvOverlap (d := d) (A j1) (A j2) N =

@@ -259,7 +259,8 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
           Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, mul_assoc]
       · simp [Kraus.map, K, M, Matrix.sum_apply, mixedTransferMap_apply,
           Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, mul_assoc]
-    simp [hmap, M, hFX', Matrix.fromBlocks_smul]
+    rw [hmap, hFX']
+    simp [M, Matrix.fromBlocks_smul]
   let rhoT : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ :=
     Matrix.fromBlocks (SAᴴ * SA) 0 0 (SBᴴ * SB)
   have hrhoT_pd : rhoT.PosDef := by
@@ -365,15 +366,15 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
           Matrix.fromBlocks_conjTranspose, mul_assoc]
       · simp [Kraus.adjointMap, K, rhoT, Matrix.sum_apply, Matrix.fromBlocks_multiply,
           Matrix.fromBlocks_conjTranspose, mul_assoc]
-    simp [hAdj, rhoT, hAblock, hBblock]
+    rw [hAdj, hAblock, hBblock]
   have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 :=
     norm_starRingEnd_eq_one hμ
   have hEigMstar : Kraus.map K Mᴴ = (starRingEnd ℂ μ) • Mᴴ := by
-    have h1 : Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := by
-      simp [Kraus.map_conjTranspose (K := K) M]
+    have h1 : Kraus.map K Mᴴ = (Kraus.map K M)ᴴ :=
+      (Kraus.map_conjTranspose (K := K) M).symm
     calc
       Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := h1
-      _ = (μ • M)ᴴ := by simp [hEigM]
+      _ = (μ • M)ᴴ := by rw [hEigM]
       _ = (starRingEnd ℂ μ) • Mᴴ := by simp [Matrix.conjTranspose_smul]
   have hKS_Mstar :
       Kraus.map K (Mᴴᴴ * Mᴴ) = (Kraus.map K Mᴴ)ᴴ * Kraus.map K Mᴴ :=
@@ -385,7 +386,7 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
   have hInter2 : ∀ i : Fin d, A' i * X' = μ • X' * B' i := by
     intro i
     have h' : Mᴴ * (K i)ᴴ = (K i)ᴴ * ((starRingEnd ℂ μ) • Mᴴ) := by
-      simp [hEigMstar, hComm_Mstar i]
+      rw [hComm_Mstar i, hEigMstar, mul_smul_comm]
     have hL : Mᴴ * (K i)ᴴ =
         Matrix.fromBlocks (0 : Matrix (Fin D) (Fin D) ℂ) (0 : Matrix (Fin D) (Fin D) ℂ)
           (X'ᴴ * (A' i)ᴴ) (0 : Matrix (Fin D) (Fin D) ℂ) := by
@@ -842,7 +843,8 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
       rcases a with (a | a) <;> rcases b with (b | b) <;>
         simp [Kraus.map, K, M, Matrix.sum_apply, Matrix.fromBlocks_multiply,
           Matrix.fromBlocks_conjTranspose]
-    simp [hmap, hFX', M, Matrix.fromBlocks_smul]
+    rw [hmap, hFX']
+    simp [M, Matrix.fromBlocks_smul]
   let rhoT : Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
     Matrix.fromBlocks (SAᴴ * SA) 0 0 (SBᴴ * SB)
   have hrhoT_pd : rhoT.PosDef := by
@@ -893,7 +895,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
       rcases a with (a | a) <;> rcases b with (b | b) <;>
         simp [Kraus.adjointMap, K, rhoT, Matrix.sum_apply, Matrix.fromBlocks_multiply,
           Matrix.fromBlocks_conjTranspose]
-    simp [hAdj, rhoT, hAblock, hBblock]
+    rw [hAdj, hAblock, hBblock]
   have hKS_M : Kraus.map K (Mᴴ * M) = (Kraus.map K M)ᴴ * Kraus.map K M :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
       K hK_unital hrhoT_pd hrhoT_fix M μ hEigM hμ
@@ -913,9 +915,10 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
   have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 :=
     norm_starRingEnd_eq_one hμ
   have hEigMstar : Kraus.map K Mᴴ = (starRingEnd ℂ μ) • Mᴴ := by
-    calc Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := by
-          simpa using (Kraus.map_conjTranspose (K := K) M).symm
-      _ = (starRingEnd ℂ μ) • Mᴴ := by simp [hEigM, Matrix.conjTranspose_smul]
+    calc Kraus.map K Mᴴ = (Kraus.map K M)ᴴ :=
+          (Kraus.map_conjTranspose (K := K) M).symm
+      _ = (μ • M)ᴴ := by rw [hEigM]
+      _ = (starRingEnd ℂ μ) • Mᴴ := by simp [Matrix.conjTranspose_smul]
   have hKS_Ms : Kraus.map K (Mᴴᴴ * Mᴴ) = (Kraus.map K Mᴴ)ᴴ * Kraus.map K Mᴴ :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
       K hK_unital hrhoT_pd hrhoT_fix Mᴴ (starRingEnd ℂ μ) hEigMstar hμ_conj

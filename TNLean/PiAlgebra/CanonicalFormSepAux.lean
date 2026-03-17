@@ -807,7 +807,7 @@ private lemma eq_one_of_tendsto_pow_atTop_nhds_one (z : ℂ)
   have huniq := tendsto_nhds_unique hz_shift hz_mul
   simpa [eq_comm] using huniq
 
-private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
+lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
     {D : ℕ} [NeZero D] (A B : MPSTensor d D)
     (hA_inj : IsInjective A) (hB_inj : IsInjective B)
     (hA_lc : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
@@ -819,7 +819,7 @@ private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
     mpvOverlap_tendsto_zero (A := A) (B := B) hA_inj hB_inj hA_lc hB_lc hnot
   exact (h.ne_nhds one_ne_zero) hto0
 
-private lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
+lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
     {D : ℕ} [NeZero D] (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
     (hA_lc : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
@@ -845,7 +845,7 @@ private lemma mpvOverlap_eq_pow_mul_self_of_mpv_eq_pow_mul
     _ = ∑ σ : Fin N → Fin d, mpv A σ * star (ζ ^ N * mpv A σ) := by
       refine Finset.sum_congr rfl ?_
       intro σ _
-      simp [hmpv]
+      rw [hmpv N σ]
     _ = ∑ σ : Fin N → Fin d, mpv A σ * (star (mpv A σ) * (star ζ) ^ N) := by
       refine Finset.sum_congr rfl ?_
       intro σ _
@@ -856,7 +856,7 @@ private lemma mpvOverlap_eq_pow_mul_self_of_mpv_eq_pow_mul
     _ = (star ζ) ^ N * mpvOverlap (d := d) A A N := by
       simp [mpvOverlap]
 
-private lemma sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one
+lemma sameMPV_of_gaugePhaseEquiv_of_mpvOverlap_tendsto_one
     {D : ℕ} (A B : MPSTensor d D)
     (hSelf : Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)))
     (hCross : Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds (1 : ℂ)))

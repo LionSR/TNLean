@@ -258,7 +258,7 @@ lemma transferMap_conjTranspose_eq_adjoint (A : MPSTensor d D) :
       _ = Matrix.trace (Kraus.adjointMap K Y * Xᴴ) := by
             simpa using htrace
       _ = Matrix.trace (transferMap (d := d) (D := D) A Y * Xᴴ) := by
-            simp [hadj]
+            rw [hadj]
 
 end
 
