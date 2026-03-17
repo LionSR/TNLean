@@ -23,9 +23,9 @@ adjoint map** (a faithful invariant state).
 
 The key new input is the weighted Kadison–Schwarz equality
 `Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint` from
-`TNLean/Channel/Schwarz.lean`.
+`TNLean/Channel/Schwarz/Basic.lean`.
 
-The older special-case wrapper `TNLean/Channel/PeripheralClosure.lean` is
+The older special-case wrapper `TNLean/Archive/PeripheralClosure.lean` is
 retained only for compatibility and is intentionally off the stable root
 import surface.
 -/

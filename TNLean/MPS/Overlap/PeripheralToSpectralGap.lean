@@ -16,13 +16,14 @@ import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 
 This file bridges the **peripheral-spectrum** notion of primitivity for quantum channels
 (`peripheralEigenvalues E = {1}`) to the existing **spectral-gap** notion used in the MPS
-proof chain (`MPSTensor.IsPrimitiveMPS` / `MPSTensor.IsPrimitive`).
+proof chain (`MPSTensor.IsPrimitiveMPS` / `MPSTensor.HasPrimitiveFixedPoint`).
 
 Concretely, for the transfer map of an injective normalized tensor `A`, we prove:
 
 * trace-zero fixed points are trivial (`X = 0`),
 * peripheral primitivity implies a spectral gap for the complementary map `E - P`,
-* hence `MPSTensor.IsPrimitive A` and the overlap convergence `mpvOverlap → 1`.
+* hence `MPSTensor.HasPrimitiveFixedPoint A` and the overlap convergence
+  `mpvOverlap → 1`.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
@@ -33,7 +34,8 @@ open Matrix Filter
 
 `TNLean.Channel.Peripheral.Spectrum` currently defines its primitivity predicate and spectral-gap
 lemmas in the root namespace. For clarity (and to avoid confusion with
-`MPSTensor.IsPrimitive`), we provide local aliases in the namespace `PeripheralSpectrum`.
+`MPSTensor.HasPrimitiveFixedPoint`), we provide local aliases in the namespace
+`PeripheralSpectrum`.
 -/
 
 namespace PeripheralSpectrum
@@ -42,7 +44,7 @@ namespace PeripheralSpectrum
 
 This is an alias for the root-level definition from
 `TNLean.Channel.Peripheral.Spectrum`, placed in a dedicated namespace to avoid
-confusion with `MPSTensor.IsPrimitive`. -/
+confusion with `MPSTensor.HasPrimitiveFixedPoint`. -/
 abbrev IsPrimitive {V : Type*} [AddCommGroup V] [Module ℂ V]
     (E : V →ₗ[ℂ] V) : Prop :=
   _root_.IsPrimitive E
@@ -380,15 +382,15 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive
 
 /-! ## Step 3: package as MPS primitivity + overlap -/
 
-/-- Peripheral primitivity of the transfer map implies `MPSTensor.IsPrimitive` (spectral-gap
-primitivity). -/
-theorem isPrimitive_of_peripheralPrimitive
+/-- Peripheral primitivity of the transfer map implies
+`MPSTensor.HasPrimitiveFixedPoint` (spectral-gap primitivity). -/
+theorem hasPrimitiveFixedPoint_of_peripheralPrimitive
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hInj : IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
-    MPSTensor.IsPrimitive A := by
+    MPSTensor.HasPrimitiveFixedPoint A := by
   classical
   rcases spectralRadius_compl_lt_one_of_peripheralPrimitive
       (A := A) hInj hNorm hPrim with
@@ -406,11 +408,11 @@ theorem overlap_tendsto_one_of_peripheralPrimitive
     (hInj : IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
-    Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
+    Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
-  have hP : MPSTensor.IsPrimitive A :=
-    isPrimitive_of_peripheralPrimitive (A := A) hInj hNorm hPrim
-  simpa using (MPSTensor.IsPrimitive.overlap_tendsto_one (A := A) hP)
+  have hP : MPSTensor.HasPrimitiveFixedPoint A :=
+    hasPrimitiveFixedPoint_of_peripheralPrimitive (A := A) hInj hNorm hPrim
+  simpa using (MPSTensor.HasPrimitiveFixedPoint.overlap_tendsto_one (A := A) hP)
 
 /-- Irreducible analogue of `spectralRadius_compl_lt_one_of_peripheralPrimitive`.
 
@@ -452,14 +454,14 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
   exact ⟨ρ, hρ_psd, hρ_ne, hρ_fix, htrρ, hgap⟩
 
 /-- Peripheral primitivity of an irreducible left-canonical tensor implies
-`MPSTensor.IsPrimitive`. -/
-theorem isPrimitive_of_peripheralPrimitive_of_irreducible
+`MPSTensor.HasPrimitiveFixedPoint`. -/
+theorem hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleTensor A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
-    MPSTensor.IsPrimitive A := by
+    MPSTensor.HasPrimitiveFixedPoint A := by
   classical
   rcases spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
       (A := A) hIrr hNorm hPrim with
@@ -476,10 +478,10 @@ theorem overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
     (hIrr : IsIrreducibleTensor A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
-    Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
+    Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
-  have hP : MPSTensor.IsPrimitive A :=
-    isPrimitive_of_peripheralPrimitive_of_irreducible (A := A) hIrr hNorm hPrim
-  simpa using (MPSTensor.IsPrimitive.overlap_tendsto_one (A := A) hP)
+  have hP : MPSTensor.HasPrimitiveFixedPoint A :=
+    hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible (A := A) hIrr hNorm hPrim
+  simpa using (MPSTensor.HasPrimitiveFixedPoint.overlap_tendsto_one (A := A) hP)
 
 end MPSTensor

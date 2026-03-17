@@ -40,20 +40,20 @@ Chapter 6 of Wolf's lecture notes.
 open scoped Matrix ComplexOrder MatrixOrder
 open Matrix Finset
 
-variable {D : ℕ}
-
 /-! ## Positive maps -/
 
 section PositiveMap
 
-/-- A linear map `E : M_D(ℂ) →ₗ[ℂ] M_D(ℂ)` is **positive** if it maps
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- A linear map `E : M_n(ℂ) →ₗ[ℂ] M_n(ℂ)` is **positive** if it maps
 positive semidefinite matrices to positive semidefinite matrices. -/
-def IsPositiveMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  ∀ X : Matrix (Fin D) (Fin D) ℂ, X.PosSemidef → (E X).PosSemidef
+def IsPositiveMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
+  ∀ X : Matrix n n ℂ, X.PosSemidef → (E X).PosSemidef
 
 /-- A linear map is **trace-preserving** if `Tr(E(X)) = Tr(X)` for all `X`. -/
-def IsTracePreservingMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  ∀ X : Matrix (Fin D) (Fin D) ℂ, trace (E X) = trace X
+def IsTracePreservingMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
+  ∀ X : Matrix n n ℂ, trace (E X) = trace X
 
 /-- A linear map is **completely positive** if it admits a Kraus representation:
 `E(X) = ∑ᵢ Kᵢ X Kᵢ†` for some family of operators `{Kᵢ}`.
@@ -61,12 +61,12 @@ def IsTracePreservingMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin
 Equivalently (by Choi's theorem), `E` is completely positive iff `E ⊗ idₙ`
 is positive for all `n`.  We use the Kraus characterisation since it matches
 the formulation used in the Kadison–Schwarz and multiplicative-domain proofs. -/
-def IsCPMap (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  ∃ (r : ℕ) (K : Fin r → Matrix (Fin D) (Fin D) ℂ),
+def IsCPMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
+  ∃ (r : ℕ) (K : Fin r → Matrix n n ℂ),
     ∀ X, E X = ∑ i : Fin r, K i * X * (K i)ᴴ
 
 /-- A completely positive map is positive. -/
-theorem IsCPMap.isPositiveMap {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+theorem IsCPMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (h : IsCPMap E) : IsPositiveMap E := by
   obtain ⟨r, K, hK⟩ := h
   intro X hX
@@ -81,12 +81,12 @@ This matches the standard definition in quantum information theory
 formalisation required only positivity; the upgrade to complete positivity
 is important because the Kadison–Schwarz inequality and the multiplicative
 domain characterisation require CP, not merely positivity. -/
-structure IsChannel (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop where
+structure IsChannel (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop where
   cp : IsCPMap E
   tp : IsTracePreservingMap E
 
 /-- A channel is a positive map (derived from complete positivity). -/
-theorem IsChannel.pos {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+theorem IsChannel.pos {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hE : IsChannel E) : IsPositiveMap E := hE.cp.isPositiveMap
 
 /-- Positive maps preserve Hermiticity.
@@ -94,8 +94,8 @@ theorem IsChannel.pos {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D)
 Proof: decompose `X = X⁺ - X⁻` using the CFC positive/negative parts.
 Both parts are PSD, so `E(X⁺)` and `E(X⁻)` are PSD (hence Hermitian),
 and `E(X) = E(X⁺) - E(X⁻)` is a difference of Hermitian matrices. -/
-theorem IsPositiveMap.map_isHermitian (hE : IsPositiveMap E)
-    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :
+theorem IsPositiveMap.map_isHermitian {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    (hE : IsPositiveMap E) {X : Matrix n n ℂ} (hX : X.IsHermitian) :
     (E X).IsHermitian := by
   have h_decomp := CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)
   have h_pos_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X)
@@ -109,11 +109,16 @@ end PositiveMap
 
 section DensityMatrices
 
+variable {D : ℕ}
+
 open scoped Matrix.Norms.Frobenius
 
 /-- The set of density matrices: PSD matrices with trace 1. -/
 def densityMatrices (D : ℕ) : Set (Matrix (Fin D) (Fin D) ℂ) :=
   {ρ | ρ.PosSemidef ∧ trace ρ = 1}
+
+@[simp] lemma mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ} :
+    ρ ∈ densityMatrices D ↔ ρ.PosSemidef ∧ trace ρ = 1 := Iff.rfl
 
 /-! ### Auxiliary lemmas for closedness -/
 
@@ -272,6 +277,7 @@ end DensityMatrices
 
 section ChannelPreserves
 
+variable {D : ℕ}
 variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
 /-- A channel (CPTP map) maps density matrices to density matrices. -/

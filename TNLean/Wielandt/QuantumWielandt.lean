@@ -104,11 +104,11 @@ theorem wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic
 /-- Legacy compatibility alias for
 `wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic`.
 
-The historical name suggests the existential predicate `MPSTensor.IsPrimitive`,
-but the theorem still takes the fixed-point witness `ρ` explicitly through
-`IsPrimitiveMPS A ρ`. Prefer the more honest theorem name above, or
-`isNormal_of_isPrimitiveMPS_of_posDef` when the `IsNormal` conclusion itself is
-the desired API. -/
+The historical name suggests the existential spectral-gap wrapper from
+`PrimitivityBridge.lean`, but the theorem still takes the fixed-point witness `ρ`
+explicitly through `IsPrimitiveMPS A ρ`. Prefer the more honest theorem name
+above, or `isNormal_of_isPrimitiveMPS_of_posDef` when the `IsNormal` conclusion
+itself is the desired API. -/
 theorem isNormal_of_isPrimitive_of_posDef
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hPrim : IsPrimitiveMPS A ρ)

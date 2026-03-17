@@ -33,9 +33,35 @@ variable [Fintype n] [DecidableEq n]
 noncomputable def map (K : ι → Matrix n n ℂ) (X : Matrix n n ℂ) : Matrix n n ℂ :=
   ∑ i : ι, K i * X * (K i)ᴴ
 
+omit [DecidableEq n] in
+lemma map_apply (K : ι → Matrix n n ℂ) (X : Matrix n n ℂ) :
+    map K X = ∑ i : ι, K i * X * (K i)ᴴ := rfl
+
+/-- The Kraus map as a `ℂ`-linear map: `mapLM K X = ∑ᵢ Kᵢ X Kᵢ†`. -/
+noncomputable def mapLM (K : ι → Matrix n n ℂ) : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ where
+  toFun := map K
+  map_add' X Y := by simp [map, add_mul, mul_add, Finset.sum_add_distrib]
+  map_smul' c X := by simp [map, Finset.smul_sum]
+
+@[simp] lemma mapLM_apply (K : ι → Matrix n n ℂ) (X : Matrix n n ℂ) :
+    mapLM K X = map K X := rfl
+
 /-- Apply the adjoint Kraus map: `adjointMap K X = ∑ᵢ Kᵢ† X Kᵢ`. -/
 noncomputable def adjointMap (K : ι → Matrix n n ℂ) (X : Matrix n n ℂ) : Matrix n n ℂ :=
   ∑ i : ι, (K i)ᴴ * X * K i
+
+omit [DecidableEq n] in
+lemma adjointMap_apply (K : ι → Matrix n n ℂ) (X : Matrix n n ℂ) :
+    adjointMap K X = ∑ i : ι, (K i)ᴴ * X * K i := rfl
+
+/-- The adjoint Kraus map as a `ℂ`-linear map: `adjointMapLM K X = ∑ᵢ Kᵢ† X Kᵢ`. -/
+noncomputable def adjointMapLM (K : ι → Matrix n n ℂ) : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ where
+  toFun := adjointMap K
+  map_add' X Y := by simp [adjointMap, add_mul, mul_add, Finset.sum_add_distrib]
+  map_smul' c X := by simp [adjointMap, Finset.smul_sum, Matrix.mul_assoc]
+
+@[simp] lemma adjointMapLM_apply (K : ι → Matrix n n ℂ) (X : Matrix n n ℂ) :
+    adjointMapLM K X = adjointMap K X := rfl
 
 /-- Unitality: `∑ᵢ Kᵢ Kᵢ† = I`. -/
 def IsUnital (K : ι → Matrix n n ℂ) : Prop :=
@@ -343,5 +369,7 @@ theorem kraus_commute_of_ks_equality (K : ι → Matrix n n ℂ)
       (R := fun i => X * (K i)ᴴ - (K i)ᴴ * map K X) h_sum_zero
   intro i
   exact sub_eq_zero.mp (h_each i)
+
+attribute [simp] map_apply adjointMap_apply
 
 end Kraus

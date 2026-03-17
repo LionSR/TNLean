@@ -248,7 +248,7 @@ theorem posDef_fixedPoint_of_isPrimitivePaper
 /-! ## Part 6: Positivity-improving map and fixed-point contradiction lemmas
 
 These lemmas form the contradiction machinery for the paper's case analysis
-in the proof of `IsPrimitivePaper A → IsChannelPrimitive A`.
+in the proof of `IsPrimitivePaper A → IsPeripherallyPrimitive A`.
 
 **Paper context** (arXiv:0909.5347 Proposition 3, (a)→(c)):
 The proof proceeds by contradiction. If `E_A` has a nonzero PSD fixed point
@@ -1206,10 +1206,10 @@ theorem not_isPrimitivePaper_of_root_of_unity_eigenvector [NeZero D]
 
 end PeripheralContradiction
 
-/-! ## Part 14: Assembly — IsPrimitivePaper implies IsChannelPrimitive
+/-! ## Part 14: Assembly — IsPrimitivePaper implies IsPeripherallyPrimitive
 
 The culminating theorem of the (a)→(c) direction: paper-primitivity of an MPS
-tensor `A` implies channel-level primitivity of its transfer map.
+tensor `A` implies peripheral primitivity of its transfer map.
 
 **Proof strategy** (following Wolf §6.4 / arXiv:0909.5347 Proposition 3):
 
@@ -1219,18 +1219,18 @@ tensor `A` implies channel-level primitivity of its transfer map.
 3. Any norm-1 eigenvalue `μ` of `E` satisfies `μ^p = 1` (since `μ^p` is a
    norm-1 eigenvalue of `E^p`).
 4. If `μ ≠ 1`, the contradiction engine (Part 13) gives `¬IsPrimitivePaper A`.
-5. Hence every peripheral eigenvalue is `1`, so `E` itself is channel-primitive.
+5. Hence every peripheral eigenvalue is `1`, so `E` itself is peripherally primitive.
 -/
 
 section Assembly
 
 variable {d D : ℕ}
 
-/-- **Proposition 3, direction (a)→(c): paper-primitivity implies channel-level primitivity.**
+/-- **Proposition 3, direction (a)→(c): paper-primitivity implies peripheral primitivity.**
 
 If the MPS tensor `A` is paper-primitive (`IsPrimitivePaper A`) and normalized
 (`∑ Aᵢ† Aᵢ = 1`), then its transfer map `E_A` has peripheral spectrum `{1}`,
-i.e., `1` is the only eigenvalue on the unit circle (`IsChannelPrimitive A`).
+i.e., `1` is the only eigenvalue on the unit circle (`IsPeripherallyPrimitive A`).
 
 **Proof**: Combine the irreducibility theorem (Part 7), the blocking-periodicity
 pipeline (`exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`),
@@ -1238,11 +1238,11 @@ eigenvector power lifting, and the peripheral-eigenvalue contradiction engine
 (Part 13).
 
 Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347. Wolf §6.4 Theorem 6.7. -/
-theorem isChannelPrimitive_of_isPrimitivePaper [NeZero D]
+theorem isPeripherallyPrimitive_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
-    IsChannelPrimitive A := by
+    IsPeripherallyPrimitive A := by
   -- Step 1: Paper-primitivity implies tensor-irreducibility
   have hIrr : IsIrreducibleTensor A := isIrreducibleTensor_of_isPrimitivePaper A hPrim
   -- Step 2: Get a nonzero PSD fixed point of E (quantum channel has one)
@@ -1278,9 +1278,9 @@ theorem isChannelPrimitive_of_isPrimitivePaper [NeZero D]
     by_contra hμ_ne
     exact not_isPrimitivePaper_of_root_of_unity_eigenvector A hNorm hEig hX_ne hμ_ne hp_pos hμp_eq
       hPrim
-  -- Step 5: Conclude IsChannelPrimitive
-  change IsChannelPrimitive A
-  rw [isChannelPrimitive_iff]
+  -- Step 5: Conclude IsPeripherallyPrimitive
+  change IsPeripherallyPrimitive A
+  rw [isPeripherallyPrimitive_iff]
   exact isPrimitive_of_unique_norm_one E ρ hρ_fix hρ_ne huniq
 
 /-- **Paper-primitivity implies strong irreducibility.**
@@ -1295,8 +1295,8 @@ a positive-definite fixed point, peripheral spectrum `{1}`, and is irreducible
    existence).
 2. Paper-primitivity upgrades this PSD fixed point to PosDef
    (`posDef_fixedPoint_of_isPrimitivePaper`).
-3. Paper-primitivity implies channel primitivity
-   (`isChannelPrimitive_of_isPrimitivePaper`).
+3. Paper-primitivity implies peripheral primitivity
+   (`isPeripherallyPrimitive_of_isPrimitivePaper`).
 4. Paper-primitivity implies `IsIrreducibleTensor`, which lifts to
    `IsIrreducibleMap` on the transfer map
    (`isIrreducibleCP_transferMap_of_isIrreducibleTensor`).
@@ -1317,9 +1317,9 @@ theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := hCh.exists_posSemidef_fixedPoint (E := E) hDpos
   -- Step 3: Upgrade ρ to PosDef using paper-primitivity
   have hρ_pd : ρ.PosDef := posDef_fixedPoint_of_isPrimitivePaper A hq hρ_psd hρ_ne hρ_fix
-  -- Step 4: Get channel primitivity
-  have hCPrim : IsChannelPrimitive A :=
-    isChannelPrimitive_of_isPrimitivePaper A hNorm ⟨q, hq⟩
+  -- Step 4: Get peripheral primitivity
+  have hCPrim : IsPeripherallyPrimitive A :=
+    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm ⟨q, hq⟩
   -- Step 5: Get irreducibility of the transfer map
   have hIrr : IsIrreducibleMap E :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor A

@@ -912,7 +912,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
       hρA_ne
 
   refine ⟨p, hp_pos, ?_⟩
-  unfold _root_.IsPrimitive
+  rw [isPrimitive_iff]
   -- Convert from a power to blocking.
   rw [MPSTensor.transferMap_blockTensor (A := A) (L := p)]
   simpa using hprim_pow

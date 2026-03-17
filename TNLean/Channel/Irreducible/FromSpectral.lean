@@ -348,7 +348,7 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
   have hces_corner : ∀ N : ℕ,
       P * cesaroMean E ρ₀ (N + 1) * P = cesaroMean E ρ₀ (N + 1) := by
     intro N
-    unfold cesaroMean
+    rw [cesaroMean_eq]
     rw [Matrix.mul_smul, Matrix.smul_mul, Finset.mul_sum, Finset.sum_mul]
     congr 1
     exact Finset.sum_congr rfl (fun n _ => hcorner_iter n)

@@ -116,7 +116,7 @@ theorem Module.End.hasEigenvalue_adjoint_iff (E : V →ₗ[ℂ] V) (μ : ℂ) :
 theorem IsPrimitive.adjoint_iff (E : V →ₗ[ℂ] V) :
     _root_.IsPrimitive E.adjoint ↔ _root_.IsPrimitive E := by
   classical
-  unfold _root_.IsPrimitive
+  rw [isPrimitive_iff, isPrimitive_iff]
   constructor
   · intro hAdj
     ext μ
@@ -364,8 +364,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
     -- Rearrange to match the goal.
     simpa using hpow.symm
   have hprim_adj : _root_.IsPrimitive (((transferMap (d := d) (D := D) A) ^ p).adjoint) := by
-    -- unfold `IsPrimitive` and rewrite using `hpow_adj`.
-    unfold _root_.IsPrimitive
+    rw [isPrimitive_iff]
     -- `hprim_pow_adj` is exactly the peripheral eigenvalue statement.
     simpa [hpow_adj] using hprim_pow_adj
   have hprim_pow : _root_.IsPrimitive ((transferMap (d := d) (D := D) A) ^ p) :=

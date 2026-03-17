@@ -94,6 +94,12 @@ noncomputable def mixedTransferSpectralRadius (A B : MPSTensor d D) : ENNReal :=
   spectralRadius ℂ
     ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (mixedTransferMap A B))
 
+theorem mixedTransferSpectralRadius_eq (A B : MPSTensor d D) :
+    mixedTransferSpectralRadius A B =
+      spectralRadius ℂ
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          (mixedTransferMap A B)) := rfl
+
 /-! ### Frobenius norm squared -/
 
 /-- Frobenius norm squared of a matrix: `tr(X† X).re`. -/
@@ -311,7 +317,7 @@ theorem spectralRadius_mixedTransfer_le_one
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1) :
     mixedTransferSpectralRadius A B ≤ 1 := by
-  unfold mixedTransferSpectralRadius
+  rw [mixedTransferSpectralRadius_eq]
   rcases eq_or_ne D 0 with rfl | hD
   · have : Subsingleton (Matrix (Fin 0) (Fin 0) ℂ) := ⟨fun a b => by ext i; exact i.elim0⟩
     have : Subsingleton (Matrix (Fin 0) (Fin 0) ℂ →L[ℂ] Matrix (Fin 0) (Fin 0) ℂ) :=

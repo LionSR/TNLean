@@ -31,6 +31,11 @@ def evalWord (A : MPSTensor d D) : List (Fin d) → Matrix (Fin D) (Fin D) ℂ
   | [] => 1
   | i :: w => A i * evalWord A w
 
+@[simp] lemma evalWord_nil (A : MPSTensor d D) : evalWord A [] = 1 := rfl
+
+@[simp] lemma evalWord_cons (A : MPSTensor d D) (i : Fin d) (w : List (Fin d)) :
+    evalWord A (i :: w) = A i * evalWord A w := rfl
+
 /-- Word evaluation respects concatenation:
 `evalWord A (w1 ++ w2) = evalWord A w1 * evalWord A w2`. -/
 lemma evalWord_append (A : MPSTensor d D) :
@@ -53,11 +58,17 @@ lemma evalWord_smul (ζ : ℂ) (A : MPSTensor d D) :
 def coeff (A : MPSTensor d D) (w : List (Fin d)) : ℂ :=
   Matrix.trace (evalWord A w)
 
+@[simp] lemma coeff_eq (A : MPSTensor d D) (w : List (Fin d)) :
+    coeff A w = Matrix.trace (evalWord A w) := rfl
+
 /-- The Matrix Product Vector (MPV) for system size `N`: for each basis state
 `σ : Fin N → Fin d`, this returns the coefficient
 `trace (A (σ 0) * A (σ 1) * ⋯ * A (σ (N-1)))`. -/
 def mpv (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) : ℂ :=
   coeff A (List.ofFn σ)
+
+@[simp] lemma mpv_eq (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
+    mpv A σ = coeff A (List.ofFn σ) := rfl
 
 /-- Gauge equivalence: `A` and `B` are related by simultaneous similarity
 `B i = X * A i * X⁻¹` for some `X ∈ GL(D,ℂ)`. -/
@@ -109,6 +120,9 @@ def IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop :=
 there exists some blocking length `N` such that the tensor is `N`-block-injective. -/
 def IsNormal (A : MPSTensor d D) : Prop :=
   ∃ N : ℕ, IsNBlkInjective (d := d) (D := D) A N
+
+@[simp] lemma isNormal_iff (A : MPSTensor d D) :
+    IsNormal A ↔ ∃ N, IsNBlkInjective A N := Iff.rfl
 
 /-! ### Gauge invariance -/
 

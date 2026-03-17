@@ -182,9 +182,3 @@ import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.QuantumWielandt
 
 import TNLean.Channel.Peripheral.CyclicDecomposition
-
--- Wolf Chapter 2 index (documentation-only re-export; no new proofs)
-import TNLean.Channel.WolfChapter2Index
-
--- Wolf Chapter 6 index (documentation-only re-export; no new proofs)
-import TNLean.Channel.WolfChapter6Index

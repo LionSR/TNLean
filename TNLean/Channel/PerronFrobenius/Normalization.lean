@@ -155,7 +155,7 @@ this is done by the explicit hypothesis `E ≠ 0`.
 theorem IsIrreducibleMap.map_posSemidef_ne_zero
     {D : ℕ} [NeZero D]
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hcp : IsCPMap (D := D) E)
+    (hcp : IsCPMap (n := Fin D) E)
     (hIrr : IsIrreducibleMap (D := D) E)
     (hE : E ≠ 0) :
     ∀ {ρ : Matrix (Fin D) (Fin D) ℂ}, ρ.PosSemidef → ρ ≠ 0 → E ρ ≠ 0 := by
@@ -227,6 +227,10 @@ noncomputable def normMap
     (ρ : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   (1 / Matrix.trace (E ρ)) • E ρ
 
+theorem normMap_eq
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    normMap (D := D) E = fun ρ => (1 / Matrix.trace (E ρ)) • E ρ := rfl
+
 /-- `normMap` sends density matrices to density matrices if the denominator does not vanish.
 
 The key input is that for PSD matrices, `trace = 0` iff the matrix is zero.
@@ -234,7 +238,7 @@ The key input is that for PSD matrices, `trace = 0` iff the matrix is zero.
 theorem normMap_mem_densityMatrices
     {D : ℕ} [NeZero D]
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hEpos : IsPositiveMap (D := D) E)
+    (hEpos : IsPositiveMap (n := Fin D) E)
     (hNZ : ∀ ρ ∈ densityMatrices D, E ρ ≠ 0) :
     ∀ ρ ∈ densityMatrices D, normMap (D := D) E ρ ∈ densityMatrices D := by
   classical
@@ -263,7 +267,7 @@ theorem eq_normMap_iff_eigenvector
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace (E ρ) ≠ 0) :
     normMap (D := D) E ρ = ρ ↔ E ρ = (Matrix.trace (E ρ)) • ρ := by
-  unfold normMap
+  rw [normMap_eq]
   constructor
   · intro h
     have := congrArg (fun X => (Matrix.trace (E ρ)) • X) h
@@ -292,14 +296,14 @@ theorem continuousAt_normMap
       ContinuousAt (fun ρ : Matrix (Fin D) (Fin D) ℂ => (1 / Matrix.trace (E ρ))) ρ := by
     simpa [one_div] using hinv
   -- Multiply by the numerator.
-  unfold normMap
+  rw [normMap_eq]
   exact ContinuousAt.smul hden hE.continuousAt
 
 /-- `normMap` is continuous on density matrices, assuming the denominator never vanishes there. -/
 theorem continuousOn_normMap_densityMatrices
     {D : ℕ} [NeZero D]
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hEpos : IsPositiveMap (D := D) E)
+    (hEpos : IsPositiveMap (n := Fin D) E)
     (hNZ : ∀ ρ ∈ densityMatrices D, E ρ ≠ 0) :
     ContinuousOn (normMap (D := D) E) (densityMatrices D) := by
   intro ρ hρ_mem

@@ -29,7 +29,7 @@ theorem isCanonicalForm_of_primitive
     (hDS : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hμanti : StrictAnti (fun k : Fin r => ‖μ k‖))
     (hμne : ∀ k, μ k ≠ 0)
-    (hPrim : ∀ k, MPSTensor.IsPrimitive (A k)) :
+    (hPrim : ∀ k, MPSTensor.HasPrimitiveFixedPoint (A k)) :
     MPSTensor.IsCanonicalForm (d := d) (μ := μ) A := by
   refine MPSTensor.IsCanonicalForm.ofSeparatedData ?_ ?_ ?_ ?_
   · exact ⟨hInj⟩
@@ -37,6 +37,7 @@ theorem isCanonicalForm_of_primitive
   · exact ⟨hμanti, hμne⟩
   · refine ⟨?_⟩
     intro k
-    simpa using (IsPrimitive.overlap_tendsto_one (d := d) (A := A k) (hPrim k))
+    simpa using
+      (HasPrimitiveFixedPoint.overlap_tendsto_one (d := d) (A := A k) (hPrim k))
 
 end MPSTensor

@@ -68,7 +68,7 @@ theorem exists_blockTensor_isPrimitive_of_irreducible_biCanonical
   have hprim_pow : peripheralEigenvalues (E ^ p) = {1} :=
     peripheralEigenvalues_pow_eq_singleton (E := E) (p := p) hp_pos hper 1 hfix hone_ne
   refine ⟨p, hp_pos, ?_⟩
-  unfold IsPrimitive
+  rw [isPrimitive_iff]
   rw [MPSTensor.transferMap_blockTensor (A := A) (L := p)]
   simpa [E] using hprim_pow
 
