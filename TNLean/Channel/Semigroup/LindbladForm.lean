@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Semigroup.GeneratorDefs
 import TNLean.Channel.Semigroup.CPClosure
 import TNLean.Channel.Semigroup.Dissipative
+import TNLean.Channel.Semigroup.ProductFormula
 import TNLean.Channel.ChoiJamiolkowski
 import Mathlib.Analysis.Calculus.MeanValue
 
@@ -266,28 +267,343 @@ theorem cp_semigroup_implies_ccp_generator
     IsCCP L := by
   sorry
 
+/-! ### Euler approximation helpers for CCP → CP -/
+
+private abbrev sgMat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
+private abbrev sgLM (D : ℕ) := sgMat D →ₗ[ℂ] sgMat D
+private abbrev sgCLM (D : ℕ) := sgMat D →L[ℂ] sgMat D
+
+private abbrev sgEndEquiv (D : ℕ) : sgLM D ≃ₐ[ℂ] sgCLM D :=
+  Module.End.toContinuousLinearMap (sgMat D)
+
+private theorem norm_exp_sub_one_sub_self_le {A : Type*}
+    [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A] [NormOneClass A]
+    (x : A) :
+    ‖NormedSpace.exp x - 1 - x‖ ≤ ‖x‖ ^ 2 * Real.exp ‖x‖ := by
+  have hsum : HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • x ^ n)
+      (NormedSpace.exp x) :=
+    NormedSpace.exp_series_hasSum_exp' (𝕂 := ℂ) x
+  have htail := (hasSum_nat_add_iff' 2).2 hsum
+  have htail_eq :
+      NormedSpace.exp x - 1 - x =
+        ∑' n : ℕ, ((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2) := by
+    have := htail.tsum_eq
+    simpa [Finset.sum_range_succ, sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using
+      this.symm
+  rw [htail_eq]
+  have hsummable_tail : Summable (fun n : ℕ =>
+      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖) := by
+    have hfull : Summable (fun n : ℕ => ‖((Nat.factorial n : ℂ)⁻¹) • x ^ n‖) := by
+      simpa using (NormedSpace.norm_expSeries_summable' (𝕂 := ℂ) x)
+    exact (summable_nat_add_iff 2).2 hfull
+  have hsummable_cmp : Summable (fun n : ℕ => ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n)) := by
+    exact (Real.summable_pow_div_factorial ‖x‖).mul_left (‖x‖ ^ 2)
+  have hterm : ∀ n : ℕ,
+      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ ≤
+        ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by
+    intro n
+    calc
+      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ =
+          ‖((Nat.factorial (n + 2) : ℂ)⁻¹)‖ * ‖x ^ (n + 2)‖ := norm_smul _ _
+      _ ≤ ‖((Nat.factorial (n + 2) : ℂ)⁻¹)‖ * ‖x‖ ^ (n + 2) := by
+            gcongr
+            exact norm_pow_le _ _
+      _ = ‖x‖ ^ (n + 2) / Nat.factorial (n + 2) := by
+            simp [div_eq_mul_inv, mul_comm]
+      _ ≤ ‖x‖ ^ (n + 2) / Nat.factorial n := by
+            have hfac : (Nat.factorial n : ℝ) ≤ Nat.factorial (n + 2) := by
+              exact_mod_cast Nat.factorial_le (show n ≤ n + 2 by omega)
+            exact div_le_div_of_nonneg_left (pow_nonneg (norm_nonneg x) _) (by positivity)
+              hfac
+      _ = ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by
+            rw [pow_add, div_eq_mul_inv]
+            ring
+  calc
+    ‖∑' n : ℕ, ((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ ≤
+        ∑' n : ℕ, ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ :=
+      norm_tsum_le_tsum_norm hsummable_tail
+    _ ≤ ∑' n : ℕ, ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by
+          exact Summable.tsum_le_tsum hterm hsummable_tail hsummable_cmp
+    _ = ‖x‖ ^ 2 * Real.exp ‖x‖ := by
+          rw [tsum_mul_left]
+          have hexp : ∑' n : ℕ, ‖x‖ ^ n / Nat.factorial n = Real.exp ‖x‖ := by
+            simpa [Real.exp_eq_exp_ℝ] using
+              (congrFun (NormedSpace.exp_eq_tsum_div (𝔸 := ℝ)) ‖x‖).symm
+          rw [hexp]
+
+private def quadMap (G : GeneratorDecomp D) : sgLM D :=
+  Kraus.mapLM (fun _ : Fin 1 => G.κ)
+
+private def eulerStep (G : GeneratorDecomp D) (s : ℝ) : sgLM D :=
+  Kraus.mapLM (fun _ : Fin 1 => (1 : sgMat D) - (s : ℂ) • G.κ) + (s : ℂ) • G.φ
+
+private theorem quadMap_apply (G : GeneratorDecomp D) (ρ : sgMat D) :
+    quadMap G ρ = G.κ * ρ * G.κᴴ := by
+  simp [quadMap, Kraus.mapLM_apply, Kraus.map_apply]
+
+private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
+    eulerStep G s ρ =
+      ρ + (s : ℂ) • (G.toLinearMap ρ) + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ := by
+  simp [eulerStep, GeneratorDecomp.toLinearMap_apply, quadMap_apply, Matrix.mul_assoc,
+    sub_eq_add_neg, add_mul, mul_add, smul_add, conjTranspose_smul, pow_two, smul_smul]
+  have hcast : ((↑s * ↑s : ℂ)) • (G.κ * (ρ * G.κᴴ)) =
+      (s * s) • (G.κ * (ρ * G.κᴴ)) := by
+    rw [show (↑s * ↑s : ℂ) = (((s * s : ℝ)) : ℂ) by norm_num]
+    change (((s * s : ℝ) : ℂ)) • (G.κ * (ρ * G.κᴴ)) =
+      (((s * s : ℝ) : ℂ)) • (G.κ * (ρ * G.κᴴ))
+    rfl
+  rw [hcast]
+  abel
+
+private theorem eulerStep_cp (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
+    IsCPMap (eulerStep G s) := by
+  refine (isCPMap_of_krausMapLM (fun _ : Fin 1 => (1 : sgMat D) - (s : ℂ) • G.κ)).add ?_
+  exact G.φ_cp.smul_nonneg hs
+
+private theorem eulerStep_toCLM_eq (G : GeneratorDecomp D) (s : ℝ) :
+    sgEndEquiv D (eulerStep G s) =
+      1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
+        sgEndEquiv D (quadMap G) := by
+  ext ρ i j
+  change (eulerStep G s ρ) i j =
+    (ρ + (s : ℂ) • G.toLinearMap ρ + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ) i j
+  rw [eulerStep_apply]
+
+set_option maxHeartbeats 1000000 in
+-- The specialization of the generic exponential remainder estimate to CLM endomorphisms
+-- requires a large normalization simp step.
+private theorem norm_expSemigroupCLM_sub_one_add_smul_le [NeZero D]
+    (A : sgCLM D) {s : ℝ} (hs : 0 ≤ s) :
+    ‖expSemigroupCLM A s - (1 + (s : ℂ) • A)‖ ≤ s ^ 2 * ‖A‖ ^ 2 * Real.exp (s * ‖A‖) := by
+  have h := norm_exp_sub_one_sub_self_le (((s : ℂ) • A))
+  simpa [expSemigroupCLM, sub_eq_add_neg, add_assoc, add_left_comm, add_comm, norm_smul,
+    Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs, pow_two, mul_assoc,
+    mul_left_comm, mul_comm] using h
+
+private theorem norm_eulerStep_sub_expSemigroupCLM_le [NeZero D]
+    (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
+    ‖sgEndEquiv D (eulerStep G s) - expSemigroupCLM (sgEndEquiv D G.toLinearMap) s‖ ≤
+      s ^ 2 *
+        (‖sgEndEquiv D G.toLinearMap‖ ^ 2 *
+            Real.exp (s * ‖sgEndEquiv D G.toLinearMap‖) +
+          ‖sgEndEquiv D (quadMap G)‖) := by
+  rw [eulerStep_toCLM_eq]
+  have hsplit :
+      (1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
+          sgEndEquiv D (quadMap G)) - expSemigroupCLM (sgEndEquiv D G.toLinearMap) s =
+        ((1 + (s : ℂ) • sgEndEquiv D G.toLinearMap) -
+            expSemigroupCLM (sgEndEquiv D G.toLinearMap) s) +
+          ((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G) := by
+    abel
+  rw [hsplit]
+  calc
+    ‖((1 + (s : ℂ) • sgEndEquiv D G.toLinearMap) -
+          expSemigroupCLM (sgEndEquiv D G.toLinearMap) s) +
+        ((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ ≤
+        ‖(1 + (s : ℂ) • sgEndEquiv D G.toLinearMap) -
+            expSemigroupCLM (sgEndEquiv D G.toLinearMap) s‖ +
+          ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := norm_add_le _ _
+    _ = ‖expSemigroupCLM (sgEndEquiv D G.toLinearMap) s -
+            (1 + (s : ℂ) • sgEndEquiv D G.toLinearMap)‖ +
+          ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by rw [norm_sub_rev]
+    _ ≤ s ^ 2 * ‖sgEndEquiv D G.toLinearMap‖ ^ 2 *
+            Real.exp (s * ‖sgEndEquiv D G.toLinearMap‖) +
+          ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by
+          gcongr
+          exact norm_expSemigroupCLM_sub_one_add_smul_le (A := sgEndEquiv D G.toLinearMap) hs
+    _ = s ^ 2 *
+          (‖sgEndEquiv D G.toLinearMap‖ ^ 2 * Real.exp (s * ‖sgEndEquiv D G.toLinearMap‖) +
+            ‖sgEndEquiv D (quadMap G)‖) := by
+          rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (sq_nonneg s)]
+          ring
+
+private theorem norm_eulerStep_toCLM_le [NeZero D]
+    (G : GeneratorDecomp D) {s T : ℝ} (hs : 0 ≤ s) (hT : s ≤ T) :
+    ‖sgEndEquiv D (eulerStep G s)‖ ≤
+      Real.exp (s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖)) := by
+  rw [eulerStep_toCLM_eq]
+  have hbasic : ‖1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
+      sgEndEquiv D (quadMap G)‖ ≤
+      1 + s * ‖sgEndEquiv D G.toLinearMap‖ + s ^ 2 * ‖sgEndEquiv D (quadMap G)‖ := by
+    calc
+      ‖1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
+          sgEndEquiv D (quadMap G)‖ ≤
+          ‖1 + (s : ℂ) • sgEndEquiv D G.toLinearMap‖ +
+            ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := norm_add_le _ _
+      _ ≤ (‖(1 : sgCLM D)‖ + ‖(s : ℂ) • sgEndEquiv D G.toLinearMap‖) +
+            ‖((s ^ 2 : ℝ) : ℂ) • sgEndEquiv D (quadMap G)‖ := by
+            gcongr
+            exact norm_add_le _ _
+      _ = 1 + s * ‖sgEndEquiv D G.toLinearMap‖ + s ^ 2 * ‖sgEndEquiv D (quadMap G)‖ := by
+            rw [norm_one, norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs,
+              norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (sq_nonneg s)]
+  have hsq_le : s ^ 2 * ‖sgEndEquiv D (quadMap G)‖ ≤ s * (T * ‖sgEndEquiv D (quadMap G)‖) := by
+    have hquad_nonneg : 0 ≤ ‖sgEndEquiv D (quadMap G)‖ := norm_nonneg _
+    have hs_le : s ^ 2 ≤ s * T := by
+      nlinarith
+    simpa [mul_assoc] using mul_le_mul_of_nonneg_right hs_le hquad_nonneg
+  have hlin : 1 + s * ‖sgEndEquiv D G.toLinearMap‖ + s ^ 2 * ‖sgEndEquiv D (quadMap G)‖ ≤
+      1 + s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖) := by
+    nlinarith
+  calc
+    ‖1 + (s : ℂ) • sgEndEquiv D G.toLinearMap + ((s ^ 2 : ℝ) : ℂ) •
+        sgEndEquiv D (quadMap G)‖ ≤
+        1 + s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖) :=
+      hbasic.trans hlin
+    _ ≤ Real.exp (s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖)) := by
+          simpa [add_comm] using
+            Real.add_one_le_exp
+              (s * (‖sgEndEquiv D G.toLinearMap‖ + T * ‖sgEndEquiv D (quadMap G)‖))
+
+private theorem norm_pow_sub_pow_le [NeZero D]
+    {A B : sgCLM D} {M : ℝ} (hM : 1 ≤ M) (hA : ‖A‖ ≤ M) (hB : ‖B‖ ≤ M) :
+    ∀ m : ℕ, ‖A ^ m - B ^ m‖ ≤ (m : ℝ) * M ^ m * ‖A - B‖
+  | 0 => by simp
+  | m + 1 => by
+      have hm := norm_pow_sub_pow_le hM hA hB m
+      have hsplit : A ^ (m + 1) - B ^ (m + 1) = A ^ m * (A - B) + (A ^ m - B ^ m) * B := by
+        rw [pow_succ, pow_succ, mul_sub, sub_mul]
+        abel
+      rw [hsplit]
+      have hM_nonneg : 0 ≤ M := le_trans (by norm_num) hM
+      have hδ_nonneg : 0 ≤ ‖A - B‖ := norm_nonneg _
+      calc
+        ‖A ^ m * (A - B) + (A ^ m - B ^ m) * B‖ ≤
+            ‖A ^ m * (A - B)‖ + ‖(A ^ m - B ^ m) * B‖ := norm_add_le _ _
+        _ ≤ ‖A ^ m‖ * ‖A - B‖ + ‖A ^ m - B ^ m‖ * ‖B‖ := by
+              gcongr <;> exact norm_mul_le _ _
+        _ ≤ M ^ m * ‖A - B‖ + ((m : ℝ) * M ^ m * ‖A - B‖) * M := by
+              gcongr
+              · exact norm_pow_le _ _ |>.trans <|
+                  pow_le_pow_left₀ (show 0 ≤ ‖A‖ from norm_nonneg _) hA _
+        _ = M ^ m * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
+              ring_nf
+        _ ≤ M ^ (m + 1) * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
+              have hpowδ : M ^ m * ‖A - B‖ ≤ M ^ (m + 1) * ‖A - B‖ := by
+                exact mul_le_mul_of_nonneg_right (pow_le_pow_right₀ hM (Nat.le_succ m)) hδ_nonneg
+              nlinarith
+        _ = ((m + 1 : ℕ) : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
+              rw [Nat.cast_add, Nat.cast_one]
+              ring
+
+private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
+    ∀ t : ℝ, 0 ≤ t → IsCPMap (expSemigroup G.toLinearMap t) := by
+  intro t ht
+  by_cases hD : D = 0
+  · subst hD
+    exact isCPMap_finZero _
+  · haveI : NeZero D := ⟨hD⟩
+    let approx : ℕ → sgLM D := fun n => (eulerStep G (t / (n + 1))) ^ (n + 1)
+    have happrox_cp : ∀ n : ℕ, IsCPMap (approx n) := by
+      intro n
+      have hs : 0 ≤ t / (n + 1) := by positivity
+      exact (eulerStep_cp G hs).pow (n + 1)
+    let Lc : sgCLM D := sgEndEquiv D G.toLinearMap
+    let Qc : sgCLM D := sgEndEquiv D (quadMap G)
+    let C0 : ℝ := ‖Lc‖ + t * ‖Qc‖
+    let C1 : ℝ := ‖Lc‖ ^ 2 * Real.exp (t * ‖Lc‖) + ‖Qc‖
+    have hbound : ∀ n : ℕ,
+        ‖sgEndEquiv D (approx n) - sgEndEquiv D (expSemigroup G.toLinearMap t)‖ ≤
+          t ^ 2 * Real.exp (t * C0) * C1 / (n + 1) := by
+      intro n
+      let s : ℝ := t / (n + 1)
+      let F : sgCLM D := sgEndEquiv D (eulerStep G s)
+      let S : sgCLM D := expSemigroupCLM Lc s
+      have hs_nonneg : 0 ≤ s := by
+        dsimp [s]
+        positivity
+      have hs_le_t : s ≤ t := by
+        dsimp [s]
+        have h1 : (1 : ℝ) ≤ (n + 1 : ℝ) := by
+          exact_mod_cast Nat.succ_le_succ (Nat.zero_le n)
+        exact div_le_self ht h1
+      have hF_le : ‖F‖ ≤ Real.exp (s * C0) := by
+        simpa [F, s, C0, Lc, Qc] using norm_eulerStep_toCLM_le (G := G) hs_nonneg hs_le_t
+      have hS_le0 : ‖S‖ ≤ Real.exp (s * ‖Lc‖) := by
+        simpa [S, Lc] using norm_expSemigroupCLM_le (A := Lc) s hs_nonneg
+      have hC0_ge : ‖Lc‖ ≤ C0 := by
+        dsimp [C0]
+        nlinarith [norm_nonneg Qc, ht]
+      have hS_le : ‖S‖ ≤ Real.exp (s * C0) := by
+        have hsmono : s * ‖Lc‖ ≤ s * C0 := by nlinarith [hs_nonneg, hC0_ge]
+        exact hS_le0.trans <| by gcongr
+      have hC0_nonneg : 0 ≤ C0 := by
+        dsimp [C0]
+        nlinarith [norm_nonneg Lc, mul_nonneg ht (norm_nonneg Qc)]
+      have hM : 1 ≤ Real.exp (s * C0) := by
+        exact Real.one_le_exp (mul_nonneg hs_nonneg hC0_nonneg)
+      have hlocal0 : ‖F - S‖ ≤ s ^ 2 * (‖Lc‖ ^ 2 * Real.exp (s * ‖Lc‖) + ‖Qc‖) := by
+        simpa [F, S, s, Lc, Qc] using norm_eulerStep_sub_expSemigroupCLM_le (G := G) hs_nonneg
+      have hlocal : ‖F - S‖ ≤ s ^ 2 * C1 := by
+        have hexp_le : Real.exp (s * ‖Lc‖) ≤ Real.exp (t * ‖Lc‖) := by
+          have : s * ‖Lc‖ ≤ t * ‖Lc‖ := by nlinarith [hs_le_t, norm_nonneg Lc]
+          gcongr
+        have hinside : ‖Lc‖ ^ 2 * Real.exp (s * ‖Lc‖) + ‖Qc‖ ≤ C1 := by
+          dsimp [C1]
+          gcongr
+        exact hlocal0.trans <| mul_le_mul_of_nonneg_left hinside (sq_nonneg s)
+      have hpow : ‖F ^ (n + 1) - S ^ (n + 1)‖ ≤
+          ((n + 1 : ℕ) : ℝ) * (Real.exp (s * C0)) ^ (n + 1) * ‖F - S‖ := by
+        exact norm_pow_sub_pow_le (D := D) (A := F) (B := S) (M := Real.exp (s * C0))
+          hM hF_le hS_le (n + 1)
+      have hMpow : (Real.exp (s * C0)) ^ (n + 1) = Real.exp (t * C0) := by
+        dsimp [s]
+        rw [← Real.exp_nat_mul]
+        congr 1
+        rw [Nat.cast_add, Nat.cast_one]
+        field_simp
+      have hs_sq : ((n + 1 : ℕ) : ℝ) * s ^ 2 = t ^ 2 / (n + 1) := by
+        dsimp [s]
+        rw [Nat.cast_add, Nat.cast_one]
+        field_simp
+      have happrox_eq : sgEndEquiv D (approx n) = F ^ (n + 1) := by
+        dsimp [approx, F]
+        rw [map_pow]
+      have hexp_eq : sgEndEquiv D (expSemigroup G.toLinearMap t) = S ^ (n + 1) := by
+        dsimp [S, Lc, s]
+        rw [expSemigroup_toCLM]
+        symm
+        rw [expSemigroupCLM_pow_eq
+          (A := sgEndEquiv D G.toLinearMap) (s := t / (n + 1)) (m := n + 1)]
+        congr 1
+        rw [Nat.cast_add, Nat.cast_one]
+        field_simp
+      rw [happrox_eq, hexp_eq]
+      calc
+        ‖F ^ (n + 1) - S ^ (n + 1)‖ ≤
+            ((n + 1 : ℕ) : ℝ) * (Real.exp (s * C0)) ^ (n + 1) * ‖F - S‖ := hpow
+        _ ≤ ((n + 1 : ℕ) : ℝ) * Real.exp (t * C0) * (s ^ 2 * C1) := by
+              rw [hMpow]
+              gcongr
+        _ = t ^ 2 * Real.exp (t * C0) * C1 / (n + 1) := by
+              calc
+                ((n + 1 : ℕ) : ℝ) * Real.exp (t * C0) * (s ^ 2 * C1) =
+                    (((n + 1 : ℕ) : ℝ) * s ^ 2) * Real.exp (t * C0) * C1 := by ring
+                _ = (t ^ 2 / (n + 1)) * Real.exp (t * C0) * C1 := by rw [hs_sq]
+                _ = t ^ 2 * Real.exp (t * C0) * C1 / (n + 1) := by field_simp
+    have hbound_tendsto : Filter.Tendsto
+        (fun n : ℕ => t ^ 2 * Real.exp (t * C0) * C1 / (n + 1)) Filter.atTop (nhds 0) := by
+      have hden : Filter.Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ)) Filter.atTop Filter.atTop := by
+        exact tendsto_natCast_atTop_atTop.comp (Filter.tendsto_add_atTop_nat 1)
+      simpa using (Filter.Tendsto.div_atTop tendsto_const_nhds hden)
+    have hlim : Filter.Tendsto (fun n : ℕ => sgEndEquiv D (approx n)) Filter.atTop
+        (nhds (sgEndEquiv D (expSemigroup G.toLinearMap t))) := by
+      rw [tendsto_iff_norm_sub_tendsto_zero]
+      exact squeeze_zero (fun n => norm_nonneg _) hbound hbound_tendsto
+    exact IsCPMap.of_tendsto_toCLM (D := D) happrox_cp hlim
+
 /-- **Wolf Proposition 7.3 (direction 2 → 1)**: If `L` is CCP, then `T_t = exp(tL)`
 is completely positive for all `t ≥ 0`.
 
-**Proof sketch** (Wolf, Lie–Trotter): Write `L = φ + ψ` where
-- `φ(ρ) = Σ Kᵢ ρ Kᵢ†` is CP
-- `ψ(ρ) = -κρ - ρκ†`
-
-Key facts:
-1. `exp(tψ)(ρ) = e^{-tκ} ρ e^{-tκ†}` is CP (single Kraus operator `e^{-tκ}`)
-2. `exp(tφ)` is CP for `t ≥ 0` (non-negative combination of CP maps `φⁿ/n!`)
-3. Lie–Trotter: `exp(tL) = limₙ (exp(tφ/n) ∘ exp(tψ/n))ⁿ`
-4. Composition of CP maps is CP; limit of CP maps (finite dim) is CP
-
-**Formalization needs**:
-- `exp(tψ)(ρ) = e^{-tκ} ρ e^{-tκ†}`: commutativity of left/right multiplication operators
-- Lie–Trotter product formula for bounded linear operators on `End(M_d)`
-- Closedness of CP maps under limits in operator norm -/
+The formal proof uses a finite-dimensional **Euler/Chernoff approximation** by the CP steps
+`ρ ↦ (1 - hκ) ρ (1 - hκ)† + h φ(ρ)`, together with norm estimates showing that
+these powers converge to `exp(tL)` and closedness of the CP cone under operator-norm limits. -/
 theorem ccp_generator_implies_cp_semigroup
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCCP : IsCCP L) :
     ∀ t : ℝ, 0 ≤ t → IsCPMap (expSemigroup L t) := by
-  sorry
+  rcases hCCP with ⟨G, rfl⟩
+  exact generatorDecomp_cp_semigroup G
 
 /-- **Wolf Proposition 7.3**: `T_t = exp(tL)` is a semigroup of CP maps iff
 `L` is conditionally completely positive. -/

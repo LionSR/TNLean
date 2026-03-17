@@ -37,14 +37,13 @@ of unity (Wolf Thm 6.6). This channel-level bridge is now available as
 representation, converting to an irreducible tensor, and applying the existing
 blocking-periodicity theorem.
 
-**Step C**: Spectral mapping `Re(μ) = 0` for peripheral generator eigenvalues
-(proved via `re_eq_zero_of_peripheral_generator`).
+**Step C**: For an irreducible channel `T_t` with period `p` (i.e., `μ^p = 1` for
+peripheral `μ`), the eigenvector `V` with `T_t V = μ V` satisfies
+`T_{pt} V = V`.  Since `T_{pt}` is also irreducible, its fixed-point space
+is one-dimensional.  Thus `V = c · σ'` (the unique faithful density fixed point),
+and `T_t σ' = μ σ'`.  Trace preservation forces `μ = 1`.
 
-**Step D**: From steps B + C: `exp(t·iθ)` is a root of unity for all `t > 0`
-→ by `eq_zero_of_exp_mul_I_isRootOfUnity`, `θ = 0` → all peripheral eigenvalues = 1
-→ `T_t` is primitive (by `isPrimitive_of_unique_norm_one`).
-
-The three helper lemmas `eigenvalue_exp_of_eigenvalue_generator`,
+The helper lemmas `eigenvalue_exp_of_eigenvalue_generator`,
 `eq_zero_of_exp_mul_I_isRootOfUnity`, and `re_eq_zero_of_peripheral_generator`
 are fully proved. Step A still requires additional formalization.
 
@@ -203,31 +202,68 @@ theorem re_eq_zero_of_peripheral_generator
     exact (Real.exp_eq_one_iff _).mp hnorm
   exact (mul_eq_zero.mp h).resolve_left (ne_of_gt ht₀)
 
+/-! ## Helper lemmas for the primitivity proof -/
+
+/-- Semigroup iteration: `T (n * t) = (T t) ^ n` for nonneg `t`. -/
+private theorem semigroup_pow
+    (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hS : IsDynSemigroup T) (t : ℝ) (ht : 0 ≤ t) (n : ℕ) :
+    T (↑n * t) = (T t) ^ n := by
+  induction n with
+  | zero =>
+    simp only [Nat.cast_zero, zero_mul, pow_zero]
+    change T 0 = LinearMap.id
+    exact hS.zero
+  | succ n ih =>
+    have hnt : 0 ≤ (↑n : ℝ) * t := mul_nonneg (Nat.cast_nonneg n) ht
+    have hcast : (↑(n + 1) : ℝ) * t = ↑n * t + t := by push_cast; ring
+    have hcomp := hS.comp (↑n * t) t hnt ht
+    rw [hcast, hcomp, ih]
+    exact (pow_succ (T t) n).symm
+
+/-- Eigenvector equation for powers of a linear map: if `f v = μ • v` then
+`(f ^ n) v = μ ^ n • v`. -/
+private theorem pow_apply_eigenvector
+    {V : Type*} [AddCommGroup V] [Module ℂ V]
+    (f : V →ₗ[ℂ] V) (v : V) (μ : ℂ) (n : ℕ) (hv : f v = μ • v) :
+    (f ^ n) v = μ ^ n • v := by
+  induction n with
+  | zero => simp [pow_zero]
+  | succ n ih =>
+    have hstep : (f ^ (n + 1)) v = (f ^ n) (f v) := by
+      change (f ^ n * f) v = (f ^ n) (f v)
+      rfl
+    rw [hstep, hv, map_smul, ih, smul_smul, pow_succ']
+
+/-- A density matrix is nonzero. -/
+private lemma ne_zero_of_mem_densityMatrices' {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hρ : ρ ∈ densityMatrices D) : ρ ≠ 0 := by
+  intro h; subst h
+  simp [mem_densityMatrices, Matrix.trace_zero (Fin D) ℂ] at hρ
+
 /-! ## Prop 7.5: Irreducibility implies primitivity for QDS -/
 
 /-- **Wolf Proposition 7.5** (1 → 3): If `T_{t₀}` is irreducible for some
 `t₀ > 0`, then `T_t` is primitive for all `t > 0`.
 
-The proof has two independent blocks of infrastructure, each available in the
-codebase in almost complete form; what is missing is the "glue" between them:
+The proof has two parts:
 
-**Block 1 — continuous-time irr. propagation** (see module comment, Step A):
-`T_{t₀}` irreducible → `T_t` irreducible for ALL `t > 0`.
-This is the key continuous-time fact, dual to the discrete-time result that
-a power of a primitive map is primitive.
+**Part 1 — Irreducibility propagation** (`hT_irr_all`):
+`T_{t₀}` irreducible → `T_s` irreducible for ALL `s > 0`.
+This is the continuous-time fact, dual to the discrete-time result that
+a power of a primitive map is primitive. It requires formalizing the
+equivalence between generator and semigroup irreducibility conditions
+(cf. Wolf §7.1, Evans–Høegh-Krohn 1978). **Currently left as sorry.**
 
-**Block 2 — irr. → primitivity** (Steps B–D):
-If `T_t` is irreducible for every `t > 0`, then every peripheral eigenvalue
-`exp(t·iθ)` is a root of unity for every `t > 0`
-(Wolf Thm 6.6; proved here via `peripheral_isRootOfUnity_of_pow_eigenvalue`
-once Block 1 provides the needed `∀ n, HasEigenvalue T_t (exp(t·iθ)^n)`).
-Then `eq_zero_of_exp_mul_I_isRootOfUnity` forces `θ = 0`, giving
-all peripheral eigenvalues equal `1`, i.e., `T_t` is primitive.
-
-The helper lemmas `eigenvalue_exp_of_eigenvalue_generator`,
-`eq_zero_of_exp_mul_I_isRootOfUnity`, and `re_eq_zero_of_peripheral_generator`
-are fully proved above. -/
+**Part 2 — Roots of unity → primitivity**:
+Given irreducibility at all times, peripheral eigenvalues are roots of unity
+(Wolf Thm 6.6). If `μ` is a peripheral eigenvalue of `T_t` with `μ^p = 1`,
+the eigenvector `V` is a fixed point of `T_{pt}`. By irreducibility of
+`T_{pt}`, `V` must be proportional to the unique faithful density fixed
+point `σ'`, giving `T_t σ' = μ σ'`. Trace preservation then forces `μ = 1`.
+**This part is fully proved.** -/
 theorem irreducible_semigroup_implies_primitive
+    [NeZero D]
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
@@ -235,60 +271,85 @@ theorem irreducible_semigroup_implies_primitive
     (t₀ : ℝ) (ht₀ : 0 < t₀)
     (hirr : IsIrreducibleMap (T t₀)) :
     ∀ t : ℝ, 0 < t → IsPrimitive (T t) := by
-  intro t ht
-  -- T_t is a quantum channel (CPTP) for all t ≥ 0.
-  have hTt_ch : IsChannel (T t) := hT.channel t (le_of_lt ht)
-  -- **Step A** (key missing lemma): irreducibility propagates to all times.
-  -- In a norm-continuous QDS, `T_{t₀}` irreducible implies `T_t` irreducible for
-  -- ALL `t > 0`. This is the continuous-time version of "irreducibility ↔ generator
-  -- irreducibility"; it requires formalizing the equivalence between the semigroup
-  -- and generator irreducibility conditions (cf. Wolf §7.1, Evans–Høegh-Krohn 1978).
-  have hT_irr : IsIrreducibleMap (T t) := by
-    -- Once available, this follows from:
-    -- (1) T t = expSemigroup L t (from `hexp`)
-    -- (2) T_{t₀} irr ↔ L irreducible as a generator
-    -- (3) L irreducible ↔ T_t irr for all t > 0
+  -- **Part 1**: Irreducibility propagation (the remaining sorry).
+  -- In a norm-continuous QDS, `T_{t₀}` irreducible implies `T_s` irreducible
+  -- for ALL `s > 0`. This is a generator-level property: irreducibility of
+  -- `T_{t₀}` implies that `L` has no non-trivial invariant face, which is
+  -- equivalent to `T_s` being irreducible for every `s > 0`.
+  -- The proof requires formalizing the equivalence between semigroup and
+  -- generator irreducibility (Wolf §7.1, Evans–Høegh-Krohn 1978).
+  have hT_irr_all : ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s) := by
     sorry
-  -- **Step B**: root-of-unity peripheral spectrum is now available for irreducible
-  -- channels via `peripheral_isRootOfUnity_of_irreducible_channel`.  The only extra
-  -- bookkeeping here is the vacuous `D = 0` corner, where `peripheralEigenvalues (T t)`
-  -- is empty because the matrix space is subsingleton.
-  have hROU : ∀ μ : ℂ, μ ∈ peripheralEigenvalues (T t) →
-      ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
-    by_cases hD0 : D = 0
-    · intro μ hμ
-      have hfalse : False := by
-        subst D
-        haveI : Subsingleton (Matrix (Fin 0) (Fin 0) ℂ) := by infer_instance
-        rcases hμ with ⟨hμ_eig, _⟩
-        obtain ⟨X, hX⟩ := hμ_eig.exists_hasEigenvector
-        exact hX.2 (Subsingleton.elim X 0)
-      exact False.elim hfalse
-    · haveI : NeZero D := ⟨hD0⟩
-      intro μ hμ
-      exact peripheral_isRootOfUnity_of_irreducible_channel
-        (E := T t) hTt_ch hT_irr μ hμ
-  -- **Step C**: All norm-1 eigenvalues of T_t equal 1 → T_t is primitive.
-  -- Use `isPrimitive_of_unique_norm_one` with the unique norm-1 eigenvalue property.
-  -- For D > 0: T_t is a channel, so it has a PSD fixed point ρ ≠ 0 by
-  --   `IsChannel.exists_posSemidef_fixedPoint`.
-  -- For D = 0: the matrix space is trivial (dimension 0), no non-trivial eigenvalues.
-  -- Note: the theorem requires 0 < D for the fixed-point existence step;
-  -- for D = 0 the conclusion IsPrimitive (T t) is in fact false (peripheralEigenvalues
-  -- is empty while IsPrimitive requires it to equal {1}).
-  -- The correct statement should add `(hD : 0 < D)` as a hypothesis.
-  -- For now we proceed with the sorry to maintain compilability.
-  --
-  -- For D > 0, the argument continues:
-  --   haveI hDnz : NeZero D := ⟨Nat.pos_iff_ne_zero.mp hD_pos⟩
-  --   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := hTt_ch.exists_posSemidef_fixedPoint hD_pos
-  --   apply isPrimitive_of_unique_norm_one (T t) ρ hρ_fix hρ_ne
-  --   -- Show ∀ μ, HasEigenvalue μ → ‖μ‖ = 1 → μ = 1:
-  --   intro μ hμ_eig hμ_norm
-  --   obtain ⟨p, hp_pos, hpow⟩ := hROU μ ⟨hμ_eig, hμ_norm⟩
-  --   -- μ is a root of unity: μ^p = 1. Use eq_zero_of_exp_mul_I_isRootOfUnity + spectral
-  --   -- mapping to conclude μ = 1 (requires inverse spectral mapping L ↔ exp(tL)).
-  sorry
+  -- **Part 2**: Roots of unity → primitivity (fully proved below).
+  intro t ht
+  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hTt_ch : IsChannel (T t) := hT.channel t (le_of_lt ht)
+  have hT_irr : IsIrreducibleMap (T t) := hT_irr_all t ht
+  -- Get the unique PosDef density-matrix fixed point σ of T_t.
+  obtain ⟨σ, hσ_mem, _hσ_pd, hσ_fix, _hσ_uniq⟩ :=
+    hTt_ch.exists_unique_density_fixedPoint_of_irreducible hT_irr hD
+  have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices' hσ_mem
+  -- Apply isPrimitive_of_unique_norm_one: suffices to show μ = 1 for all
+  -- peripheral eigenvalues μ.
+  apply isPrimitive_of_unique_norm_one (T t) σ hσ_fix hσ_ne
+  intro μ hμ_eig hμ_norm
+  -- Peripheral eigenvalues of T_t are roots of unity (Wolf Thm 6.6).
+  obtain ⟨p, hp_pos, hpow⟩ :=
+    peripheral_isRootOfUnity_of_irreducible_channel (T t) hTt_ch hT_irr μ ⟨hμ_eig, hμ_norm⟩
+  -- Get eigenvector V with (T t) V = μ • V, V ≠ 0.
+  obtain ⟨V, hV_ev⟩ := hμ_eig.exists_hasEigenvector
+  have hV_ne : V ≠ 0 := hV_ev.2
+  have hTV : (T t) V = μ • V := Module.End.mem_eigenspace_iff.mp hV_ev.1
+  -- (T t)^p V = μ^p • V = 1 • V = V: V is a fixed point of T_{pt}.
+  have hTpV : ((T t) ^ p) V = V := by
+    rw [pow_apply_eigenvector (T t) V μ p hTV, hpow, one_smul]
+  -- T_{pt} = (T t)^p by the semigroup law.
+  have hTpow : (T t) ^ p = T (↑p * t) :=
+    (semigroup_pow T hT.semigroup.semigroup t (le_of_lt ht) p).symm
+  -- T_{pt} is an irreducible channel.
+  have hpt_pos : 0 < (↑p : ℝ) * t := mul_pos (Nat.cast_pos.mpr hp_pos) ht
+  have hpt_ch : IsChannel (T (↑p * t)) := hT.channel _ (le_of_lt hpt_pos)
+  have hpt_irr : IsIrreducibleMap (T (↑p * t)) := hT_irr_all _ hpt_pos
+  -- V is a fixed point of T_{pt}.
+  have hV_fix : T (↑p * t) V = V := by rw [← hTpow]; exact hTpV
+  -- Get unique PosDef density-matrix fixed point σ' of T_{pt}.
+  obtain ⟨σ', hσ'_mem, _hσ'_pd, hσ'_fix, _⟩ :=
+    hpt_ch.exists_unique_density_fixedPoint_of_irreducible hpt_irr hD
+  -- V has nonzero trace (trace-zero fixed points of irreducible channels are zero).
+  have hV_tr_ne : Matrix.trace V ≠ 0 := by
+    intro htr
+    exact hV_ne (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
+      hpt_ch hpt_irr V hV_fix htr)
+  -- The fixed-point space of T_{pt} is one-dimensional: V = (trace V) • σ'.
+  have hV_eq : V = (Matrix.trace V) • σ' := by
+    have hW_fix : T (↑p * t) (V - (Matrix.trace V) • σ') = V - (Matrix.trace V) • σ' := by
+      rw [map_sub, map_smul, hV_fix, hσ'_fix]
+    have hW_tr : Matrix.trace (V - (Matrix.trace V) • σ') = 0 := by
+      rw [Matrix.trace_sub, Matrix.trace_smul, hσ'_mem.2, smul_eq_mul, mul_one, sub_self]
+    exact sub_eq_zero.mp
+      (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
+        hpt_ch hpt_irr _ hW_fix hW_tr)
+  -- Derive T_t σ' = μ • σ' from the eigenvector equation.
+  have hTσ' : (T t) σ' = μ • σ' := by
+    have h1 : (Matrix.trace V) • (T t) σ' = (μ * Matrix.trace V) • σ' := by
+      calc (Matrix.trace V) • (T t) σ'
+          = (T t) ((Matrix.trace V) • σ') := (map_smul (T t) _ σ').symm
+        _ = (T t) V := by rw [← hV_eq]
+        _ = μ • V := hTV
+        _ = μ • ((Matrix.trace V) • σ') := by rw [hV_eq]
+        _ = (μ * Matrix.trace V) • σ' := by rw [smul_smul]
+    -- Cancel the nonzero scalar (trace V).
+    have h2 : (Matrix.trace V) • (T t) σ' = (Matrix.trace V) • (μ • σ') := by
+      rw [h1, smul_smul]
+    have h3 := congr_arg ((Matrix.trace V)⁻¹ • ·) h2
+    simp only [smul_smul, inv_mul_cancel₀ hV_tr_ne, one_smul] at h3
+    exact h3
+  -- **Key step**: trace preservation forces μ = 1.
+  -- trace(T_t σ') = trace(σ') = 1 (TP), and trace(μ • σ') = μ · trace(σ') = μ.
+  have htp : IsTracePreservingMap (T t) := hTt_ch.tp
+  have h_tr_eq : Matrix.trace ((T t) σ') = Matrix.trace σ' := htp σ'
+  rw [hTσ', Matrix.trace_smul, hσ'_mem.2, smul_eq_mul, mul_one] at h_tr_eq
+  exact h_tr_eq
 
 /-- **Wolf Proposition 7.5** (full equivalence): For a QDS of channels, the
 following are equivalent:
@@ -299,6 +360,7 @@ following are equivalent:
    density matrices `ρ`.
 5. `ker(L)` is one-dimensional and spanned by a positive definite `ρ_∞`. -/
 theorem qds_irreducible_iff_primitive
+    [NeZero D]
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
@@ -311,31 +373,20 @@ theorem qds_irreducible_iff_primitive
     exact irreducible_semigroup_implies_primitive L T hT hexp t₀ ht₀ hirr
   · -- Backward: ∀ t > 0, primitive T_t → ∃ t₀ > 0, irreducible T_{t₀}.
     -- We take t₀ = 1. Since T_1 is primitive and a channel, it should be irreducible.
-    -- The intended proof chain would be:
-    --   IsPrimitive (T 1) + IsChannel (T 1)
-    --   → T_1 has a unique positive-definite density-matrix fixed point σ
-    --   → IsIrreducibleMap T_1 (by isIrreducibleMap_of_channel_posDef_fixedPoint_unique)
     --
-    -- However, the current definition `IsPrimitive E := peripheralEigenvalues E = {1}`
-    -- is too weak for this reverse implication: it records only the *set* of peripheral
-    -- eigenvalues and does NOT exclude a higher-dimensional fixed-point eigenspace at `1`.
-    -- Reducible dephasing-type channels can have peripheral set `{1}` while still having
-    -- several linearly independent fixed points, so the implication to irreducibility is
-    -- false without strengthening the statement.
+    -- **Status**: this direction is not provable with the current definition
+    -- `IsPrimitive E := peripheralEigenvalues E = {1}`.
     --
-    -- To close this theorem correctly, the RHS should be replaced by a stronger notion,
-    -- e.g. spectral-gap primitivity / uniqueness of the PSD fixed point, or by the full
-    -- Wolf Thm 6.7 package rather than the current set-valued `IsPrimitive` predicate.
+    -- The issue is that `IsPrimitive` records only the *set* of peripheral
+    -- eigenvalues and does NOT exclude a higher-dimensional eigenspace at `1`.
+    -- Reducible dephasing-type channels (e.g., the identity on `M₂(ℂ)`) have
+    -- peripheral set `{1}` while still having several linearly independent
+    -- fixed points, making the implication to irreducibility false.
+    --
+    -- To close this theorem correctly, the RHS should be replaced by a stronger
+    -- notion, e.g. spectral-gap primitivity (spectral radius of `E - P` < 1),
+    -- uniqueness of the PSD fixed point, or the full Wolf Thm 6.7 package.
     intro hprim
-    exact ⟨1, one_pos, by
-      -- IsPrimitive (T 1) + IsChannel (T 1) → IsIrreducibleMap (T 1)
-      -- Missing: Wolf Thm 6.7 connecting spectral primitivity to unique PD fixed point.
-      -- Once available:
-      --   have hch := hT.channel 1 le_rfl
-      --   obtain ⟨σ, hσ_mem, hσ_pd, hσ_fix, hσ_uniq⟩ :=
-      --     IsChannel.exists_unique_density_fixedPoint_of_primitive hch (hprim 1 one_pos) hD
-      --   exact isIrreducibleMap_of_channel_posDef_fixedPoint_unique
-      --     (T 1) hch σ hσ_pd (hσ_mem.2 ▸ hσ_fix) (fun τ hτ hfix => ...)
-      sorry⟩
+    exact ⟨1, one_pos, by sorry⟩
 
 end -- noncomputable section
