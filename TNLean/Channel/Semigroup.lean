@@ -5,7 +5,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Semigroup.Basic
 import TNLean.Channel.Semigroup.Perturbation
 import TNLean.Channel.Semigroup.Primitivity
-import TNLean.Channel.Semigroup.Generator
+import TNLean.Channel.Semigroup.GeneratorDefs
+import TNLean.Channel.Semigroup.LindbladForm
+import TNLean.Channel.Semigroup.KossakowskiForm
 
 /-!
 # Wolf Chapter 7 — Semigroup Structure: Public Theorem Index
@@ -78,17 +80,17 @@ No new proofs are introduced here; this is a documentation-only re-export.
 
 ### Definitions
 * `GeneratorDecomp` — (φ, κ) decomposition L(ρ) = φ(ρ) - κρ - ρκ†
-  — `TNLean.Channel.Semigroup.Generator`
+  — `TNLean.Channel.Semigroup.GeneratorDefs`
 * `IsCCP` — conditionally completely positive map
-  — `TNLean.Channel.Semigroup.Generator`
+  — `TNLean.Channel.Semigroup.GeneratorDefs`
 * `IsTraceAnnihilating` — tr(L(ρ)) = 0 for all ρ
-  — `TNLean.Channel.Semigroup.Generator`
+  — `TNLean.Channel.Semigroup.GeneratorDefs`
 * `LindbladForm` — standard Lindblad form with Hamiltonian and Lindblad operators
-  — `TNLean.Channel.Semigroup.Generator`
+  — `TNLean.Channel.Semigroup.LindbladForm`
 * `KossakowskiForm` — Kossakowski matrix form
-  — `TNLean.Channel.Semigroup.Generator`
+  — `TNLean.Channel.Semigroup.KossakowskiForm`
 * `IsGKSLGenerator` — generates a CPTP semigroup
-  — `TNLean.Channel.Semigroup.Generator`
+  — `TNLean.Channel.Semigroup.LindbladForm`
 
 **Wolf Proposition 7.2** (conditional complete positivity) — PARTIALLY FORMALIZED
 * `GeneratorDecomp.isCCP` — CCP definition via (φ,κ) form ✅
@@ -100,16 +102,19 @@ No new proofs are introduced here; this is a documentation-only re-export.
 * `cp_semigroup_implies_ccp_generator` — forward direction: SORRY
 * `ccp_generator_implies_cp_semigroup` — reverse direction (Lie-Trotter): SORRY
 
-**Wolf Proposition 7.4** (freedom in generator representation) — PARTIALLY FORMALIZED
-* `generator_shift_invariance` — shift invariance: SORRY
+**Wolf Proposition 7.4** (freedom in generator representation) — FORMALIZED ✅
+* `generator_shift_invariance` — shift invariance: FORMALIZED ✅
 * `exists_traceless_kraus_shift` — traceless Kraus operators exist: FORMALIZED ✅
 
 **Wolf Theorem 7.1** (GKSL/Lindblad generator) — PARTIALLY FORMALIZED
 * `LindbladForm.isTraceAnnihilating` — Lindblad form is trace-annihilating ✅
 * `GeneratorDecomp.traceAnnihilating_of_traceConstraint` — φ*(1)=κ+κ† ⟹ TA ✅
 * `LindbladForm.toLinearMap_eq_generatorDecomp` — Lindblad = (φ,κ) form ✅
-* `gksl_iff_lindbladForm` — GKSL ↔ Lindblad form: SORRY
-* `gksl_iff_ccp_and_traceAnnihilating` — GKSL ↔ CCP + TA: SORRY
+* `gksl_iff_lindbladForm` — GKSL ↔ Lindblad form (modulo Prop 7.3 sorry inputs) ✅
+* `gksl_iff_ccp_and_traceAnnihilating` — GKSL ↔ CCP + TA (modulo Prop 7.3) ✅
+* `kossakowski_iff_lindblad` — Kossakowski ↔ Lindblad form: FORMALIZED ✅
+* `isTracePreservingMap_expSemigroup_of_isTraceAnnihilating` — TA → TP semigroup ✅
+* `isTraceAnnihilating_of_isTracePreservingMap_semigroup` — TP semigroup → TA ✅
 
 ---
 

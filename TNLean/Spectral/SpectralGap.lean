@@ -159,7 +159,7 @@ lemma word_conjTranspose_mul_sum (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     ∑ σ : Fin n → Fin d,
       (evalWord K (List.ofFn σ))ᴴ * evalWord K (List.ofFn σ) = 1 := by
   induction n with
-  | zero => simp [evalWord, Finset.univ_unique]
+  | zero => simp [Finset.univ_unique]
   | succ n ih =>
     rw [sum_fin_succ_eq]
     simp_rw [List.ofFn_cons, evalWord, Matrix.conjTranspose_mul,
@@ -738,22 +738,43 @@ private lemma eigenvector_gives_gauge [NeZero D]
     have hmap :
         Kraus.map K M =
           Matrix.fromBlocks (0 : Matrix (Fin D) (Fin D) ℂ)
-            (mixedTransferMap A' B' X') 0 0 := by
+            (∑ i : Fin d, A' i * X' * (B' i)ᴴ)
+            (0 : Matrix (Fin D) (Fin D) ℂ)
+            (0 : Matrix (Fin D) (Fin D) ℂ) := by
       ext a b
       rcases a with (a | a) <;> rcases b with (b | b)
       · -- (1,1) block
-        simp [Kraus.map, K, M, Matrix.sum_apply, mixedTransferMap_apply,
+        simp [Kraus.map, K, M, Matrix.sum_apply,
           Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, mul_assoc]
       · -- (1,2) block
-        simp [Kraus.map, K, M, Matrix.sum_apply, mixedTransferMap_apply,
+        simp [Kraus.map, K, M, Matrix.sum_apply,
           Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, mul_assoc]
       · -- (2,1) block
-        simp [Kraus.map, K, M, Matrix.sum_apply, mixedTransferMap_apply,
+        simp [Kraus.map, K, M, Matrix.sum_apply,
           Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, mul_assoc]
       · -- (2,2) block
-        simp [Kraus.map, K, M, Matrix.sum_apply, mixedTransferMap_apply,
+        simp [Kraus.map, K, M, Matrix.sum_apply,
           Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose, mul_assoc]
-    simp [hmap, M, hFX', Matrix.fromBlocks_smul]
+    calc
+      Kraus.map K M =
+          Matrix.fromBlocks (0 : Matrix (Fin D) (Fin D) ℂ)
+            (∑ i : Fin d, A' i * X' * (B' i)ᴴ)
+            (0 : Matrix (Fin D) (Fin D) ℂ)
+            (0 : Matrix (Fin D) (Fin D) ℂ) := hmap
+      _ = Matrix.fromBlocks (0 : Matrix (Fin D) (Fin D) ℂ) (μ • X')
+            (0 : Matrix (Fin D) (Fin D) ℂ)
+            (0 : Matrix (Fin D) (Fin D) ℂ) := by
+        simpa [mixedTransferMap_apply] using
+          congrArg
+            (fun Y : Matrix (Fin D) (Fin D) ℂ =>
+              Matrix.fromBlocks
+                (0 : Matrix (Fin D) (Fin D) ℂ)
+                Y
+                (0 : Matrix (Fin D) (Fin D) ℂ)
+                (0 : Matrix (Fin D) (Fin D) ℂ))
+            hFX'
+      _ = μ • M := by
+        simp [M, Matrix.fromBlocks_smul]
   -- Positive definite fixed point for the adjoint Kraus map.
   let rhoT : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ :=
     Matrix.fromBlocks (SAᴴ * SA) 0 0 (SBᴴ * SB)
@@ -878,7 +899,14 @@ private lemma eigenvector_gives_gauge [NeZero D]
       · -- (2,2)
         simp [Kraus.adjointMap, K, rhoT, Matrix.sum_apply, Matrix.fromBlocks_multiply,
           Matrix.fromBlocks_conjTranspose, mul_assoc]
-    simp [hAdj, rhoT, hAblock, hBblock]
+    calc
+      Kraus.adjointMap K rhoT =
+          Matrix.fromBlocks (∑ i : Fin d, (A' i)ᴴ * (SAᴴ * SA) * (A' i))
+            (0 : Matrix (Fin D) (Fin D) ℂ) (0 : Matrix (Fin D) (Fin D) ℂ)
+            (∑ i : Fin d, (B' i)ᴴ * (SBᴴ * SB) * (B' i)) := hAdj
+      _ = Matrix.fromBlocks (SAᴴ * SA) 0 0 (SBᴴ * SB) := by
+        simp [hAblock, hBblock]
+      _ = rhoT := rfl
   -- Weighted KS equality gives multiplicative-domain commutation.
   have hKS_M :
       Kraus.map K (Mᴴ * M) = (Kraus.map K M)ᴴ * Kraus.map K M :=
@@ -889,7 +917,7 @@ private lemma eigenvector_gives_gauge [NeZero D]
   have hInter1 : ∀ i : Fin d, X' * (B' i)ᴴ = μ • (A' i)ᴴ * X' := by
     intro i
     have h' : M * (K i)ᴴ = (K i)ᴴ * (μ • M) := by
-      simp [hEigM, hComm_M i]
+      rw [hComm_M i, hEigM]
     have hL : M * (K i)ᴴ =
         Matrix.fromBlocks (0 : Matrix (Fin D) (Fin D) ℂ) (X' * (B' i)ᴴ)
           (0 : Matrix (Fin D) (Fin D) ℂ) (0 : Matrix (Fin D) (Fin D) ℂ) := by
@@ -899,33 +927,30 @@ private lemma eigenvector_gives_gauge [NeZero D]
           (0 : Matrix (Fin D) (Fin D) ℂ) (0 : Matrix (Fin D) (Fin D) ℂ) := by
       simp [M, K, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose,
         Matrix.fromBlocks_smul]
-    have hfb :
-        Matrix.fromBlocks (0 : Matrix (Fin D) (Fin D) ℂ) (X' * (B' i)ᴴ)
-            (0 : Matrix (Fin D) (Fin D) ℂ) (0 : Matrix (Fin D) (Fin D) ℂ) =
-          Matrix.fromBlocks (0 : Matrix (Fin D) (Fin D) ℂ) (μ • ((A' i)ᴴ * X'))
-            (0 : Matrix (Fin D) (Fin D) ℂ) (0 : Matrix (Fin D) (Fin D) ℂ) := by
-      simpa [hL, hR] using h'
+    have h_eq := hL ▸ hR ▸ h'
     rw [smul_mul_assoc]
-    exact (Matrix.fromBlocks_inj.1 hfb).2.1
+    exact (Matrix.fromBlocks_inj.1 h_eq).2.1
   have hμ_conj : ‖(starRingEnd ℂ) μ‖ = 1 := by
     simpa [Complex.norm_conj] using hμ
   have hEigMstar : Kraus.map K Mᴴ = (starRingEnd ℂ μ) • Mᴴ := by
-    have h1 : Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := by
-      simp [Kraus.map_conjTranspose (K := K) M]
     calc
-      Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := h1
-      _ = (μ • M)ᴴ := by simp [hEigM]
-      _ = (starRingEnd ℂ μ) • Mᴴ := by simp [Matrix.conjTranspose_smul]
+      Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := by
+        simpa using (Kraus.map_conjTranspose (K := K) M).symm
+      _ = (μ • M)ᴴ := by
+        rw [hEigM]
+      _ = (starRingEnd ℂ μ) • Mᴴ := by
+        simp
   have hKS_Mstar :
       Kraus.map K (Mᴴᴴ * Mᴴ) = (Kraus.map K Mᴴ)ᴴ * Kraus.map K Mᴴ :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
       (K := K) hK_unital (ρ := rhoT) hrhoT_pd hrhoT_fix Mᴴ (starRingEnd ℂ μ) hEigMstar hμ_conj
   have hComm_Mstar : ∀ i : Fin d, Mᴴ * (K i)ᴴ = (K i)ᴴ * Kraus.map K Mᴴ :=
     Kraus.kraus_commute_of_ks_equality (K := K) hK_unital Mᴴ hKS_Mstar
-  have hInter2 : ∀ i : Fin d, A' i * X' = μ • X' * B' i := by
+  have hInter2h : ∀ i : Fin d,
+      X'ᴴ * (A' i)ᴴ = (starRingEnd ℂ μ) • ((B' i)ᴴ * X'ᴴ) := by
     intro i
     have h' : Mᴴ * (K i)ᴴ = (K i)ᴴ * ((starRingEnd ℂ μ) • Mᴴ) := by
-      simp [hEigMstar, hComm_Mstar i]
+      rw [hComm_Mstar i, hEigMstar]
     have hL : Mᴴ * (K i)ᴴ =
         Matrix.fromBlocks (0 : Matrix (Fin D) (Fin D) ℂ) (0 : Matrix (Fin D) (Fin D) ℂ)
           (X'ᴴ * (A' i)ᴴ) (0 : Matrix (Fin D) (Fin D) ℂ) := by
@@ -935,21 +960,14 @@ private lemma eigenvector_gives_gauge [NeZero D]
           ((starRingEnd ℂ μ) • ((B' i)ᴴ * X'ᴴ)) (0 : Matrix (Fin D) (Fin D) ℂ) := by
       simp [M, K, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose,
         Matrix.fromBlocks_smul]
-    have hfb :
-        Matrix.fromBlocks (0 : Matrix (Fin D) (Fin D) ℂ) (0 : Matrix (Fin D) (Fin D) ℂ)
-            (X'ᴴ * (A' i)ᴴ) (0 : Matrix (Fin D) (Fin D) ℂ) =
-          Matrix.fromBlocks (0 : Matrix (Fin D) (Fin D) ℂ) (0 : Matrix (Fin D) (Fin D) ℂ)
-            ((starRingEnd ℂ μ) • ((B' i)ᴴ * X'ᴴ)) (0 : Matrix (Fin D) (Fin D) ℂ) := by
-      simpa [hL, hR] using h'
-    have h21 : X'ᴴ * (A' i)ᴴ = (starRingEnd ℂ μ) • ((B' i)ᴴ * X'ᴴ) :=
-      (Matrix.fromBlocks_inj.1 hfb).2.2.1
-    -- Take conjugate transpose to obtain `A' i * X' = μ • X' * B' i`.
-    -- (Note: `conj(conj μ) = μ`.)
-    have h22 := congrArg Matrix.conjTranspose h21
+    have h_eq := hL ▸ hR ▸ h'
+    exact (Matrix.fromBlocks_inj.1 h_eq).2.2.1
+  have hInter2 : ∀ i : Fin d, A' i * X' = μ • X' * B' i := by
+    intro i
+    have h22 := congrArg Matrix.conjTranspose (hInter2h i)
     simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       Matrix.conjTranspose_smul, starRingEnd_apply, star_star] at h22
-    rw [← smul_mul_assoc] at h22
-    exact h22
+    simpa [smul_mul_assoc] using h22
   -- Kernel invariance under `(B' i)ᴴ`.
   have hker : ∀ k : Fin d, ∀ v, X' *ᵥ v = 0 → X' *ᵥ ((B' k)ᴴ *ᵥ v) = 0 := by
     intro k v hv

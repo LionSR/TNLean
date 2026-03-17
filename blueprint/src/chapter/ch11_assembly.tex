@@ -312,17 +312,107 @@ distinct weight norms) that the automatic pipeline does not yet produce.
 	equivalence and hence global gauge equivalence.
 \end{proof}
 
+\subsection{Route~B: Paper-faithful multiplicity layer}%
+\label{sec:route_b}
+
+The paper-faithful multiplicity interface keeps the literature's
+per-block-copy structure separate from the merged
+\texttt{IsCanonicalFormBNT} predicate.
+
+\begin{definition}[Paper sector data and decomposition]%
+\label{def:paper_sector_data}
+	\lean{MPSTensor.SectorWeightData, MPSTensor.SectorDecomposition}
+	\leanok
+	A \emph{paper sector data} over $g$ basis blocks specifies:
+	multiplicities $r_j > 0$, sector weights
+	$\mu_{j,q} \neq 0$ for $q \in \{1,\dotsc,r_j\}$, and the
+	\emph{paper coefficient}
+	$\mathrm{coeff}(N,j) := \sum_{q=1}^{r_j} \mu_{j,q}^N$.
+	A \emph{paper decomposition} bundles the basis blocks $(A_j)_{j=1}^g$
+	with their sector data.
+\end{definition}
+
+\begin{theorem}[Paper decomposition formula]%
+\label{thm:paper_decomp_formula}
+	\lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_coeff}
+	\leanok
+	\uses{def:paper_sector_data}
+	For a paper decomposition $P$, the MPV of the assembled tensor satisfies
+	\[
+		V^{(N)}(P.\mathrm{toTensor})_\sigma
+		= \sum_{j=1}^{g} \mathrm{coeff}(N,j) \cdot V^{(N)}(A_j)_\sigma.
+	\]
+\end{theorem}
+
+\begin{theorem}[Eventual coefficient comparison from BNT linear independence]%
+\label{thm:coeff_eventually_eq}
+	\lean{MPSTensor.SectorWeightData.coeff_eventually_eq_of_sameMPV}
+	\leanok
+	\uses{def:paper_sector_data, def:bnt}
+	If two sector data $S, T$ over the same basis produce equal total MPVs
+	and the basis is eventually linearly independent (the BNT property),
+	then $S.\mathrm{coeff}(N,j) = T.\mathrm{coeff}(N,j)$ for all
+	sufficiently large $N$.
+\end{theorem}
+
+\begin{theorem}[Geometric sequence extrapolation]%
+\label{thm:geom_extrapolation}
+	\lean{MPSTensor.power_sums_eq_of_eventually_eq}
+	\leanok
+	If two finite families of nonzero complex numbers have equal power sums
+	$\sum_i \alpha_i^k = \sum_j \beta_j^k$ for all $k > N_0$, then
+	equality holds for all $k \geq 0$.
+	The proof uses induction on the number of terms with a telescoping
+	argument: subtract a geometric factor to reduce the number of terms,
+	apply the induction hypothesis, and conclude via a geometric
+	recurrence.
+\end{theorem}
+
+\begin{theorem}[Route~B equal-case corollary: weight multiset recovery]%
+\label{thm:route_b_equal}
+	\lean{MPSTensor.SectorWeightData.weight_multiset_eq_of_sameMPV_bnt}
+	\leanok
+	\uses{thm:coeff_eventually_eq, thm:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
+	Let $S$ and $T$ be two paper sector data over the same basis with
+	the same multiplicities ($r_j^S = r_j^T$ for all~$j$).
+	If the basis is eventually linearly independent and the total MPVs
+	of $S$ and $T$ agree, then for each basis block~$j$ the sector weight
+	multisets $\{\mu_{j,q}^S\}$ and $\{\mu_{j,q}^T\}$ are equal.
+
+	The proof chains:
+	\begin{enumerate}
+		\item BNT LI $+$ equal MPVs $\Rightarrow$ eventual coefficient
+		      equality (Theorem~\ref{thm:coeff_eventually_eq});
+		\item Geometric extrapolation $\Rightarrow$ full coefficient
+		      equality for all positive~$k$
+		      (Theorem~\ref{thm:geom_extrapolation});
+		\item Newton--Girard $\Rightarrow$ equal weight multisets
+		      (Theorem~\ref{thm:power_sum_multiset}).
+	\end{enumerate}
+\end{theorem}
+
 \begin{remark}[Current formalized endpoint versus the literature]
-	Theorem~\ref{thm:ft_equal_explicit} is the current Lean-backed
-	equal-case upgrade of Theorem~\ref{thm:ft_proportional}.
-	It still depends on explicit coefficient arrays with nonzero limits,
-	and therefore does not yet recover Theorem~\ref{thm:ft_equal} or the
-	full \cite[Corollary~IV.5]{Cirac2021Matrix}.
-	Theorem~\ref{thm:ft_equal_same_structure} is a different formalized
-	special case with a fixed common block structure.
-	The general literature statement requires additional multiplicity
-	bookkeeping and a power-sum step, as indicated in the proof sketch of
-	Theorem~\ref{thm:ft_equal}.
+	The formalization provides three complementary equal-case results:
+	\begin{enumerate}
+		\item Theorem~\ref{thm:ft_equal_explicit}: the explicit-coefficient
+		      equal-case theorem (upgrade of
+		      Theorem~\ref{thm:ft_proportional} with $c_N = 1$),
+		      concluding a global gauge equivalence of the reindexed
+		      weighted block-diagonal tensors.
+		\item Theorem~\ref{thm:ft_equal_same_structure}: the common
+		      block-structure special case.
+		\item Theorem~\ref{thm:route_b_equal}: the Route~B equal-case
+		      corollary, which from the paper's richer multiplicity data
+		      recovers the sector weight multisets without requiring
+		      explicit coefficient convergence hypotheses.
+	\end{enumerate}
+	The literature-level unconditional Theorem~\ref{thm:ft_equal}
+	(\cite[Corollary~IV.5]{Cirac2021Matrix}) remains \texttt{\textbackslash notready}.
+	To close it, one must compose the Route~B weight recovery with:
+	(a)~the proportional FT for block matching and gauge-phase equivalences,
+	(b)~phase absorption into weights, and
+	(c)~global gauge assembly via permutation and cast transport
+	(all of which are now formalized individually in \texttt{Multi.lean}).
 \end{remark}
 
 \section{Periodic Fundamental Theorem (de las Cuevas--Cirac--Schuch--Pérez-García)}%

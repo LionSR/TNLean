@@ -160,4 +160,25 @@ theorem GaugeEquiv.sameMPV {A B : MPSTensor d D} : GaugeEquiv A B → SameMPV A 
 
 end GaugeInvariance
 
+/-- `GaugeEquiv` is reflexive. -/
+theorem GaugeEquiv.refl (A : MPSTensor d D) : GaugeEquiv A A :=
+  ⟨1, fun i => by simp⟩
+
+/-- `GaugeEquiv` is symmetric. -/
+theorem GaugeEquiv.symm {A B : MPSTensor d D} (h : GaugeEquiv A B) : GaugeEquiv B A := by
+  obtain ⟨X, hX⟩ := h
+  refine ⟨X⁻¹, fun i => ?_⟩
+  rw [hX i]
+  simp [Matrix.mul_assoc]
+
+/-- `GaugeEquiv` is transitive. -/
+theorem GaugeEquiv.trans {A B C : MPSTensor d D}
+    (hAB : GaugeEquiv A B) (hBC : GaugeEquiv B C) :
+    GaugeEquiv A C := by
+  obtain ⟨X, hX⟩ := hAB
+  obtain ⟨Y, hY⟩ := hBC
+  refine ⟨Y * X, fun i => ?_⟩
+  rw [hY i, hX i]
+  simp [Matrix.mul_assoc, mul_inv_rev]
+
 end MPSTensor
