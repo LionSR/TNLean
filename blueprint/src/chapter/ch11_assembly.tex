@@ -180,12 +180,11 @@ distinct weight norms) that the automatic pipeline does not yet produce.
 \section{Equal-MPV Fundamental Theorem}%
 \label{sec:assembly_equal}
 
-\begin{theorem}[Fundamental Theorem --- equal MPV case]\label{thm:ft_equal}
-	\lean{MPSTensor.fundamentalTheorem_equalMPV_full}
+\begin{theorem}[Fundamental Theorem --- equal MPV case (target statement)]\label{thm:ft_equal}
 	\notready
-	\uses{thm:ft_proportional, def:gauge_equiv}
-	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be as in
-	Theorem~\ref{thm:ft_proportional}, with associated families
+	\uses{def:cf_bnt, def:gauge_equiv}
+	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
+	in canonical form with BNT separation, with associated families
 	$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
 	If
 	\[
@@ -199,57 +198,91 @@ distinct weight norms) that the automatic pipeline does not yet produce.
 \end{theorem}
 
 \begin{proof}
-	\uses{thm:ft_proportional, thm:cf_bnt_is_bnt, def:bnt, thm:mpv_decomposition}
-	Apply Theorem~\ref{thm:ft_proportional} with $c_N = 1$.
-	Then $g_A = g_B$, and after reindexing the $B$-blocks by a permutation
-	$\pi$ there are phases $e^{i\phi_j}$ and invertible matrices $X_j$ such that
+	\uses{thm:ft_proportional, thm:mpv_decomposition, thm:power_sum_multiset}
+	The intended literature route begins by applying
+	Theorem~\ref{thm:ft_proportional} with $c_N = 1$, which yields a
+	permutation of the matched blocks and blockwise gauge-phase equivalences.
+	One then compares the resulting MPV expansions from
+	Theorem~\ref{thm:mpv_decomposition}. In the general equal case the
+	weights occur with multiplicities, so recovering the individual weights
+	requires a power-sum argument such as
+	Theorem~\ref{thm:power_sum_multiset}. After the weights are identified,
+	the phase factors are absorbed into them and the blockwise conjugacies
+	assemble to a global gauge equivalence. This full route is not yet
+	formalized here.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem --- equal MPV case with explicit coefficient data]\label{thm:ft_equal_explicit}
+	\lean{MPSTensor.fundamentalTheorem_equalMPV_full}
+	\leanok
+	\uses{def:cf_bnt, def:gauge_equiv}
+	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
+	in canonical form with BNT separation, with associated families
+	$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
+	Suppose there exist coefficient arrays $a_{N,j}$, $b_{N,k}$ and
+	nonzero limits $a_j^\infty$, $b_k^\infty$ such that
 	\[
-		B_{\pi(j)}^i = e^{i\phi_j} X_j A_j^i X_j^{-1}
+		V^{(N)}(A_{\mathrm{tot}})_\sigma
+		= \sum_{j=1}^{g_A} a_{N,j} V^{(N)}(A_j)_\sigma,
+		\qquad
+		V^{(N)}(B_{\mathrm{tot}})_\sigma
+		= \sum_{k=1}^{g_B} b_{N,k} V^{(N)}(B_k)_\sigma,
 	\]
-	for every block $j$ and physical index~$i$.
+	with $a_{N,j} \to a_j^\infty \neq 0$ and
+	$b_{N,k} \to b_k^\infty \neq 0$.
+	If
+	\[
+		V^{(N)}(A_{\mathrm{tot}})_\sigma
+		= V^{(N)}(B_{\mathrm{tot}})_\sigma
+	\]
+	for every $N$ and $\sigma$, then $g_A = g_B$, and there is a
+	permutation $\pi$ such that $D_j^A = D_{\pi(j)}^B$ and, after
+	reindexing the $B$-blocks by $\pi$, the weighted block-diagonal tensors
+	$\bigoplus_{j=1}^{g_A} \mu_j^A A_j$ and
+	$\bigoplus_{j=1}^{g_A} \mu_{\pi(j)}^B B_{\pi(j)}$
+	are gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:ft_proportional, thm:cf_bnt_is_bnt, def:bnt, thm:mpv_decomposition, def:gauge_phase_equiv}
+	Apply Theorem~\ref{thm:ft_proportional} with $c_N = 1$.
+	This yields $g_A = g_B$, a permutation $\pi$, equal block dimensions,
+	and for each $j$ a gauge-phase equivalence
+	\[
+		B_{\pi(j)}^i = \zeta_j X_j A_j^i X_j^{-1}.
+	\]
 	By Theorem~\ref{thm:mpv_decomposition},
 	\[
 		V^{(N)}(A_{\mathrm{tot}})_\sigma
 		= \sum_{j=1}^{g_A} (\mu_j^A)^N V^{(N)}(A_j)_\sigma,
-		\qquad
-		V^{(N)}(B_{\mathrm{tot}})_\sigma
-		= \sum_{j=1}^{g_A} (\mu_{\pi(j)}^B)^N V^{(N)}(B_{\pi(j)})_\sigma.
 	\]
-	The gauge-phase identity gives
+	and similarly for $B_{\mathrm{tot}}$.
+	Reindex the $B$-sum by $\pi$ and use the gauge-phase identity to rewrite
 	\[
-		V^{(N)}(B_{\pi(j)})_\sigma = e^{iN\phi_j} V^{(N)}(A_j)_\sigma,
+		V^{(N)}(B_{\pi(j)})_\sigma = \zeta_j^N V^{(N)}(A_j)_\sigma.
 	\]
-	so the equality of MPVs becomes
+	Then equality of MPVs implies
 	\[
 		\sum_{j=1}^{g_A}
-		\left((\mu_j^A)^N - (\mu_{\pi(j)}^B e^{i\phi_j})^N\right)
+		\left((\mu_j^A)^N - (\mu_{\pi(j)}^B \zeta_j)^N\right)
 		V^{(N)}(A_j)_\sigma = 0.
 	\]
-	By Theorem~\ref{thm:cf_bnt_is_bnt} and Definition~\ref{def:bnt},
-	the block MPVs $\{V^{(N)}(A_j)\}_{j=1}^{g_A}$ are linearly independent
-	for all sufficiently large $N$.
-	Hence, for each $j$ and all large $N$,
+	By Theorem~\ref{thm:cf_bnt_is_bnt} and Definition~\ref{def:bnt}, the
+	family $\{V^{(N)}(A_j)\}_{j=1}^{g_A}$ is linearly independent for all
+	sufficiently large $N$, so
 	\[
-		(\mu_j^A)^N = (\mu_{\pi(j)}^B e^{i\phi_j})^N.
+		(\mu_j^A)^N = (\mu_{\pi(j)}^B \zeta_j)^N
 	\]
-	Taking two consecutive large values of $N$ and using that the weights are
+	for every $j$ and all large $N$.
+	Comparing two consecutive values of $N$ and using that the weights are
 	nonzero gives
 	\[
-		\mu_j^A = \mu_{\pi(j)}^B e^{i\phi_j}.
+		\mu_j^A = \mu_{\pi(j)}^B \zeta_j.
 	\]
-	Therefore
-	\[
-		\mu_{\pi(j)}^B B_{\pi(j)}^i
-		= \mu_j^A X_j A_j^i X_j^{-1}
-	\]
-	for every $j$ and~$i$.
-	With $X = \bigoplus_j X_j$, the reindexed block-diagonal tensors satisfy
-	\[
-		\bigoplus_j \mu_{\pi(j)}^B B_{\pi(j)}^i
-		= X\left(\bigoplus_j \mu_j^A A_j^i\right)X^{-1}.
-	\]
-	Composing with the permutation matrix of $\pi$ gives gauge equivalence of
-	the original block-diagonal tensors.
+	Thus the phase factors can be absorbed into the weights, and the
+	blockwise conjugacies assemble to a gauge equivalence of the reindexed
+	weighted block-diagonal tensors.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case, common block structure]\label{thm:ft_equal_same_structure}
@@ -279,17 +312,17 @@ distinct weight norms) that the automatic pipeline does not yet produce.
 	equivalence and hence global gauge equivalence.
 \end{proof}
 
-\begin{remark}[Recovery of the literature statement]
-	Theorem~\ref{thm:ft_equal_same_structure} is the common-block-structure
-	specialization.
-	The proof of Theorem~\ref{thm:ft_equal} combines
-	Theorem~\ref{thm:ft_proportional} with the BNT linear independence
-	furnished by Theorem~\ref{thm:cf_bnt_is_bnt} and
-	Definition~\ref{def:bnt}, and therefore recovers the full
-	\cite[Corollary~IV.5]{Cirac2021Matrix} without assuming common block
-	structure.
-	The weight matching is obtained directly from the BNT expansion,
-	rather than from Newton--Girard identities.
+\begin{remark}[Current formalized endpoint versus the literature]
+	Theorem~\ref{thm:ft_equal_explicit} is the current Lean-backed
+	equal-case upgrade of Theorem~\ref{thm:ft_proportional}.
+	It still depends on explicit coefficient arrays with nonzero limits,
+	and therefore does not yet recover Theorem~\ref{thm:ft_equal} or the
+	full \cite[Corollary~IV.5]{Cirac2021Matrix}.
+	Theorem~\ref{thm:ft_equal_same_structure} is a different formalized
+	special case with a fixed common block structure.
+	The general literature statement requires additional multiplicity
+	bookkeeping and a power-sum step, as indicated in the proof sketch of
+	Theorem~\ref{thm:ft_equal}.
 \end{remark}
 
 \section{Periodic Fundamental Theorem (de las Cuevas--Cirac--Schuch--Pérez-García)}%
