@@ -224,13 +224,7 @@ lemma evalWord_diagPart_eq (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
         _ = P * A i * P * evalWord A w * P + (1 - P) * A i * (1 - P) * evalWord A w * (1 - P) := by
                   simpa [Matrix.mul_assoc] using hMulDiag
         _ = P * evalWord A (i :: w) * P + (1 - P) * evalWord A (i :: w) * (1 - P) := by
-                  -- rewrite the RHS terms using the two helper equalities
-                  have :
-                      P * evalWord A (i :: w) * P + (1 - P) * evalWord A (i :: w) * (1 - P)
-                        = P * A i * P * evalWord A w * P +
-                            (1 - P) * A i * (1 - P) * evalWord A w * (1 - P) := by
-                    simp [hPpart, hQpart]
-                  simpa using this.symm
+                  rw [← hPpart, ← hQpart]
 
 
 /-- Trace decomposition with respect to an idempotent projection `P`.

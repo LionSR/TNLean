@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.BNT.Construction
 import TNLean.Algebra.ScalarPowerSumIdentity
+import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 /-!
 # Full Fundamental Theorem of MPS (Assembly)
@@ -532,5 +533,375 @@ theorem perBlock_sameMPV_of_equalMPV_CFBNT
   exact GaugeEquiv.sameMPV ((fundamentalTheorem_equalMPV_CFBNT A B hA hB hSame).1 k)
 
 end Corollaries
+
+/-! ## Theorem 5: Self-contained equal-case FT for heterogeneous CF-BNT
+
+This section builds toward the **strongest equal-case fundamental theorem** currently
+formalizable: given two `IsCanonicalFormBNT` families with *different* block structures
+(`rA`, `rB`, `dimA`, `dimB`, `μA`, `μB`), the hypothesis `SameMPV₂` alone (no coefficient
+convergence data from the caller) forces block-count equality, a block permutation, and
+blockwise gauge-phase equivalence.
+
+### References
+
+- [CPSV21, Corollary IV.5] Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states
+  and projected entangled pair states*, Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
+- [CPSV17, Theorem 4.4 + equal-case corollary] Cirac, Pérez-García, Schuch, Verstraete,
+  *Fundamental Theorems for PEPS*, arXiv:1606.00608 (2017).
+
+### Proof architecture
+
+**Layer 1 — Exponential polynomial uniqueness** (`blocks_match_of_sameMPV₂_CFBNT`):
+The BNT decomposition via `mpv_toTensorFromBlocks_eq_sum` gives
+  `∑_j (μA j)^N * mpv(A j) σ = ∑_k (μB k)^N * mpv(B k) σ`   (all N, σ).
+Since all `μA` values are distinct (injective, from `HasStrictOrderedNonzeroWeights`) and all
+`μB` values are distinct, the combined identity is a vanishing exponential polynomial whose
+bases are the union `{μA j} ∪ {μB k}`. Grouping terms by common base value and applying
+Vandermonde uniqueness (`Matrix.det_vandermonde_ne_zero_iff` from Mathlib) shows:
+- Each `μA` value must match some `μB` value (otherwise `mpv(A j) ≡ 0`, contradicting
+  self-overlap → 1 / BNT nontriviality).
+- For matched pairs, the block MPVs agree pointwise.
+- The matching is a bijection (injective map between finite sets of equal cardinality).
+
+**Layer 2 — Overlap dichotomy → dim + GaugePhaseEquiv**
+(`gaugePhaseEquiv_of_block_sameMPV₂_CFBNT`):
+Per-block `SameMPV₂` makes the cross-overlap equal the self-overlap (→ 1), so it cannot
+decay.  The overlap-dichotomy lemmas then force:
+  (a) dimension equality (contrapositive of dim-mismatch decay), and
+  (b) gauge-phase equivalence (contrapositive of non-GPE decay).
+
+**Layer 3 — Assembly** (`fundamentalTheorem_equalMPV_CFBNT_hetero`):
+Compose Layer 1 and Layer 2.
+-/
+
+section HeteroEqualCase
+
+/-- Overlap of two blocks with pointwise-equal MPVs equals the self-overlap of the first. -/
+private lemma mpvOverlap_eq_selfOverlap_of_forall_mpv_eq
+    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (h : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ) :
+    ∀ N, mpvOverlap (d := d) A B N = mpvOverlap (d := d) A A N := by
+  intro N
+  simp only [mpvOverlap, h]
+
+/-- **Layer 2: Per-block `SameMPV₂` + block properties → dim equality + GaugePhaseEquiv.**
+
+Given two individual blocks with pointwise-equal MPVs, both injective and left-canonical,
+and with the first block's self-overlap tending to 1:
+1. The cross-overlap equals the self-overlap (→ 1), hence does not decay to 0.
+2. Dimension mismatch would force overlap → 0 (`mpvOverlap_tendsto_zero_of_dim_ne`).
+   Contradiction ⟹ dimensions match.
+3. Non-gauge-phase-equivalence would force overlap → 0
+   (`mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left`).
+   Contradiction ⟹ gauge-phase equivalent. -/
+private lemma gaugePhaseEquiv_of_block_sameMPV₂
+    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
+    (hA_norm : (∑ i : Fin d, (A i)ᴴ * (A i)) = 1)
+    (hB_norm : (∑ i : Fin d, (B i)ᴴ * (B i)) = 1)
+    (hA_self : Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)))
+    (hSameMPV : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ) :
+    ∃ hdim : D₁ = D₂,
+      GaugePhaseEquiv (d := d)
+        (cast (congr_arg (MPSTensor d) hdim) A) B := by
+  -- Cross-overlap = self-overlap → 1.
+  have hOvEq := mpvOverlap_eq_selfOverlap_of_forall_mpv_eq A B hSameMPV
+  have hOvOne : Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds (1 : ℂ)) :=
+    hA_self.congr (fun N => (hOvEq N).symm)
+  have hOvNot0 : ¬ Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds 0) :=
+    fun h0 => one_ne_zero (tendsto_nhds_unique hOvOne h0)
+  -- Dim equality by contradiction.
+  have hdim : D₁ = D₂ := by
+    by_contra hne
+    exact hOvNot0
+      (mpvOverlap_tendsto_zero_of_dim_ne A B hA_inj hB_inj hA_norm hB_norm hne)
+  refine ⟨hdim, ?_⟩
+  -- GaugePhaseEquiv by contradiction.
+  by_contra hNotGPE
+  exact hOvNot0
+    (mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left
+      hdim A B hA_inj hB_inj hA_norm hB_norm hNotGPE)
+
+/-- **Layer 1: Block matching from equal weighted MPV sums**
+(exponential polynomial uniqueness).
+
+Given two `IsCanonicalFormBNT` families generating equal total MPVs via
+`toTensorFromBlocks`, this lemma produces the block matching: equal block counts,
+a permutation, and per-block MPV agreement.
+
+### Mathematical content
+
+The `SameMPV₂` hypothesis combined with `mpv_toTensorFromBlocks_eq_sum` gives the identity
+  `∑_j (μA j)^N * mpv(A j) σ = ∑_k (μB k)^N * mpv(B k) σ`   for all N, σ.
+This is a **vanishing exponential polynomial** (linear combination of distinct geometric
+sequences indexed by the combined weight set `{μA j} ∪ {μB k}`).
+
+The `HasStrictOrderedNonzeroWeights` condition (from `IsCanonicalFormBNT`) ensures that
+`μA` and `μB` are each injective (distinct norms → distinct values) and nonzero. Grouping
+terms by their common base value (at most one from each family per group, since each is
+injective) and applying Vandermonde uniqueness gives:
+
+(a) Every `μA j` must equal some `μB k` — otherwise the "unmatched" coefficient
+    `mpv(A j)(σ) = 0` for all σ, contradicting `hA.toHasNormalizedSelfOverlap` which
+    gives `∑_σ |mpv(A j)(σ)|² → 1 > 0`.
+(b) Symmetrically, every `μB k` matches some `μA j`.
+(c) The matching is a bijection `rA = rB` + permutation.
+(d) For each matched pair: `mpv(A j)(σ) = mpv(B (perm j))(σ)` for all N, σ.
+
+### Formalization status
+
+The Vandermonde determinant (`Matrix.det_vandermonde_ne_zero_iff`) and the linear-algebra
+conclusion (`Matrix.eq_zero_of_mulVec_eq_zero`) are available in Mathlib. The remaining
+gap is the **grouping step** — merging terms with equal bases in the combined exponential
+polynomial — which requires moderate combinatorial bookkeeping (partitioning
+`Fin (rA + rB)` by weight value and reindexing the Vandermonde argument over the quotient).
+This is mathematically elementary but not yet formalized; the proof is left as `sorry`.
+
+An alternative path uses the `geom_sum_eventually_zero` telescoping induction (already
+proved in `SectorDecomposition.lean`, though currently `private`) to establish the full
+power-sum vanishing, then derives individual coefficient vanishing via Vandermonde. -/
+private lemma blocks_match_of_sameMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hEqual : SameMPV₂ (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    ∃ _h : rA = rB,
+      ∃ perm : Fin rA ≃ Fin rB,
+        ∀ j : Fin rA,
+          ∀ (N : ℕ) (σ : Fin N → Fin d), mpv (A j) σ = mpv (B (perm j)) σ := by
+  /- The proof uses the BNT linear independence from both sides together with
+     `geom_sum_eventually_zero` (from SectorDecomposition.lean) to reduce the
+     exponential-polynomial identity to a multiset equality of weights via
+     `Matrix.sum_pow_eq_implies_multiset_eq`.
+
+     Step 1: Derive the weighted sum identity from SameMPV₂.
+     Step 2: Use BNT LI for A (eventually) + BNT LI for B (eventually) to
+             extract per-component coefficient equations for large N.
+     Step 3: Use `geom_sum_eventually_zero` to extend to all N ≥ 1.
+     Step 4: Use `Matrix.sum_pow_eq_implies_multiset_eq` to get weight multiset equality.
+     Step 5: From weight injectivity, derive rA = rB and a weight-matching permutation.
+     Step 6: From the permutation + BNT LI, derive per-block MPV equality. -/
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- Step 0: Extract basic data from the BNT hypotheses.
+  -- ═══════════════════════════════════════════════════════════════════════════
+  have hμA_ne := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero
+  have hμB_ne := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero
+  have hμA_inj := hA.toHasStrictOrderedNonzeroWeights.mu_injective
+  have hμB_inj := hB.toHasStrictOrderedNonzeroWeights.mu_injective
+  obtain ⟨N0A, hLIA⟩ := hA.isBNT.eventually_li
+  obtain ⟨N0B, hLIB⟩ := hB.isBNT.eventually_li
+  set N0 := max N0A N0B with hN0_def
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- Step 1: The weighted-sum identity (in mpvState form).
+  -- ═══════════════════════════════════════════════════════════════════════════
+  have hSum : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      ∑ j : Fin rA, (μA j) ^ N * mpv (A j) σ =
+        ∑ k : Fin rB, (μB k) ^ N * mpv (B k) σ := by
+    intro N σ
+    have hA_eq := mpv_toTensorFromBlocks_eq_sum μA A σ
+    have hB_eq := mpv_toTensorFromBlocks_eq_sum μB B σ
+    simp only [smul_eq_mul] at hA_eq hB_eq
+    rw [← hA_eq, hEqual N σ, hB_eq]
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- Step 2: BNT LI from both sides — coefficient extraction for large N.
+  -- For N > N0, both {mpvState(A j, N)} and {mpvState(B k, N)} are LI.
+  -- From the vector identity, subtracting gives a vanishing linear combination
+  -- of the combined family. Applying LI on each side gives coefficient equations.
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- For large N, the identity in mpvState form:
+  have hSumState : ∀ N : ℕ,
+      ∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N =
+        ∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N := by
+    intro N; ext σ; simp [mpvState_apply, smul_eq_mul]; exact hSum N σ
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- Step 3: For each j, using LI of {mpvState(A j, N)} at large N:
+  -- The B-sum ∑_k (μB k)^N • g_k = ∑_j (μA j)^N • f_j lies in span{f_j}.
+  -- Since both sides are the same vector, the A-side decomposition is unique.
+  --
+  -- Now consider two consecutive large N values. From the identity at N and N+1,
+  -- together with LI, we extract: for each j, (μA j)^N = ∑_k (μB k)^N * α_{jk}
+  -- where α_{jk} are the "B-to-A expansion coefficients" (via the Gram matrix).
+  --
+  -- Instead, we use a more direct route via `sum_pow_eq_implies_multiset_eq`:
+  -- The identity ∑_j (μA j)^N * mpv(A j)(σ) = ∑_k (μB k)^N * mpv(B k)(σ)
+  -- combined with BNT LI gives weight multiset equality.
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- Key step: show the weight multisets are equal.
+  -- We use `geom_sum_eventually_zero` for the extension argument, then
+  -- `Matrix.sum_pow_eq_implies_multiset_eq` for the multiset conclusion.
+  --
+  -- From LI of A at N > N0A: The identity says ∑_j (μA j)^N • f_j = ∑_k (μB k)^N • g_k.
+  -- Since f_j are LI and the LHS uniquely determines the coefficients w.r.t. f_j,
+  -- the B-side must have the SAME expansion w.r.t. f_j.
+  -- For this, each g_k must lie in span{f_j}. The sum ∑_k (μB k)^N • g_k ∈ span{f_j}.
+  --
+  -- CRUCIAL: g_k ∈ span{f_j} for large N follows from the identity holding for ALL N.
+  -- (At each N, the specific linear combination is in span{f_j}. Since the coefficients
+  -- vary with N in a Vandermonde-like way, the individual g_k must be in span{f_j}.)
+  --
+  -- This requires the following intermediate result:
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- Intermediate: show that for large N, each mpvState(B k, N) ∈ span{mpvState(A j, N)}.
+  -- Then extract: mpvState(B k, N) = ∑_j β_{jk}(N) • mpvState(A j, N)
+  -- and use LI of A to get: (μA j)^N = ∑_k (μB k)^N * β_{jk}(N) for each j.
+  -- The β coefficients converge (via the Gram matrix convergence), and
+  -- `geom_sum_eventually_zero` extends the relation to all N.
+  --
+  -- For now, we proceed via a direct argument using the BNT structure.
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- We use the approach from the existing `fundamentalTheorem_equalMPV_full` proof:
+  -- Given that both families generate the same mpvState sums (weighted by powers),
+  -- and the BNT LI holds, we derive the block matching directly.
+  --
+  -- The key insight: if rB > 0, then for each B-block there must be a matching A-block,
+  -- using the overlap dichotomy + the weighted identity.
+  -- If no A-block matches, the overlap analysis leads to a contradiction with BNT
+  -- (the B-block would have self-overlap → 0, contradicting → 1).
+  --
+  -- This argument parallels the PermutationRigidityPrimitive but without needing
+  -- convergent coefficients; instead, we use the exponential-polynomial identity
+  -- directly.
+  --
+  -- For the formal proof, we delegate to an auxiliary lemma that performs
+  -- the induction on (rA + rB), using:
+  -- 1. The weighted sum identity (hSum)
+  -- 2. BNT LI from both sides
+  -- 3. The overlap dichotomy (dim mismatch → 0, not GPE → 0)
+  -- 4. `geom_sum_eventually_zero` for extrapolation
+  -- 5. `Matrix.sum_pow_eq_implies_multiset_eq` for multiset matching
+  --
+  -- The detailed argument proceeds as follows:
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- Step A: Handle rA = 0 or rB = 0.
+  -- ═══════════════════════════════════════════════════════════════════════════
+  by_cases hrA : rA = 0
+  · -- rA = 0: LHS is an empty sum = 0 for all N, σ.
+    subst hrA
+    -- If rB > 0, take large N where B-states are LI. The identity gives
+    -- ∑_k (μB k)^N • mpvState(B k, N) = 0 with LI family and nonzero coefficients.
+    -- Contradiction.
+    have hrB : rB = 0 := by
+      by_contra hrB_ne
+      have hrB_pos : 0 < rB := Nat.pos_of_ne_zero hrB_ne
+      have hN := hLIB (N0B + 1) (by omega)
+      have hzero : ∑ k : Fin rB, (μB k) ^ (N0B + 1) • mpvState (d := d) (B k) (N0B + 1) = 0 := by
+        rw [← hSumState (N0B + 1)]
+        simp [Finset.sum_empty]
+      exact absurd
+        (Fintype.linearIndependent_iff.mp hN _ hzero ⟨0, hrB_pos⟩)
+        (pow_ne_zero (N0B + 1) (hμB_ne ⟨0, hrB_pos⟩))
+    subst hrB
+    exact ⟨rfl, Equiv.refl _, fun j => Fin.elim0 j⟩
+  by_cases hrB : rB = 0
+  · -- rB = 0: symmetric argument.
+    subst hrB
+    exfalso
+    have hrA_pos : 0 < rA := Nat.pos_of_ne_zero hrA
+    have hN := hLIA (N0A + 1) (by omega)
+    have hzero : ∑ j : Fin rA, (μA j) ^ (N0A + 1) • mpvState (d := d) (A j) (N0A + 1) = 0 := by
+      rw [hSumState (N0A + 1)]
+      simp [Finset.sum_empty]
+    exact pow_ne_zero (N0A + 1) (hμA_ne ⟨0, hrA_pos⟩)
+      (Fintype.linearIndependent_iff.mp hN _ hzero ⟨0, hrA_pos⟩)
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- Step B: Main case — rA, rB ≥ 1.
+  --
+  -- The full proof requires establishing that the exponential-polynomial identity
+  --   ∑_j (μA j)^N * mpv(A j)(σ) = ∑_k (μB k)^N * mpv(B k)(σ)
+  -- forces a weight-matching bijection between {μA j} and {μB k}, and that
+  -- matched blocks have pointwise-equal MPVs.
+  --
+  -- This is mathematically elementary but formally requires one of:
+  --   (a) Eigenvalue decomposition of cross-transfer matrices to convert the
+  --       overlap scalar identity into a power-sum identity suitable for
+  --       `Matrix.sum_pow_eq_implies_multiset_eq`, or
+  --   (b) A Gram-matrix inversion argument + `geom_sum_eventually_zero` to
+  --       extract per-component coefficient equations from the BNT LI, or
+  --   (c) A dominant-norm induction argument using overlap convergence rates.
+  --
+  -- The infrastructure for approach (a) requires Tr(M^N) = ∑ eigenvalue^N
+  -- (not yet available). Approach (b) requires continuous inverse convergence
+  -- of the Gram matrix (available in principle via Mathlib but not yet wired).
+  -- Approach (c) requires quantitative spectral-gap bounds on transfer matrices.
+  --
+  -- All three approaches are planned developments. The `geom_sum_eventually_zero`
+  -- lemma (now public in SectorDecomposition.lean) provides the key extrapolation
+  -- step once the per-component equations are established.
+  --
+  -- ═══════════════════════════════════════════════════════════════════════════
+  -- Known consequences that are fully proved elsewhere:
+  --   • The base cases (rA = 0 or rB = 0) are handled above.
+  --   • Given a permutation with per-block GPE, the weight identity and
+  --     per-block MPV equality follow (see `fundamentalTheorem_equalMPV_full`).
+  --   • The overlap dichotomy (dim mismatch → 0, not GPE → 0) is available.
+  --   • `geom_sum_eventually_zero` extends eventual coefficient equations to
+  --     all N.
+  -- ═══════════════════════════════════════════════════════════════════════════
+  sorry
+
+/-- **Self-contained equal-case Fundamental Theorem for heterogeneous CF-BNT**
+([CPSV21, Corollary IV.5] / [CPSV17, Theorem 4.4 + equal-case corollary]).
+
+Given two `IsCanonicalFormBNT` families with *different* block structures
+(`rA`, `rB`, `dimA`, `dimB`, `μA`, `μB`), the hypothesis `SameMPV₂` for the assembled
+block-diagonal tensors — with **no** coefficient convergence data from the caller —
+forces:
+1. Equal block counts: `rA = rB`.
+2. A block permutation: `perm : Fin rA ≃ Fin rB`.
+3. Blockwise gauge-phase equivalence: for each `j`, `dimA j = dimB (perm j)` and
+   `GaugePhaseEquiv (cast … (A j)) (B (perm j))`.
+
+Unlike `fundamentalTheorem_proportionalMPV_CFBNT` and `fundamentalTheorem_equalMPV_full`,
+this theorem requires **no** explicit `aCoeff`, `bCoeff`, `aLim`, `bLim` arguments. The
+coefficient convergence question that plagues the general proportional-case theorem is
+bypassed entirely: the BNT decomposition identity
+  `∑_j (μA j)^N * mpv(A j) σ = ∑_k (μB k)^N * mpv(B k) σ`
+is analyzed directly via exponential-polynomial uniqueness (Vandermonde + grouping),
+yielding per-block MPV agreement, from which the overlap dichotomy gives the full
+gauge-phase matching.
+
+### Proof status
+
+The **Layer 2** step (overlap dichotomy → dim + GaugePhaseEquiv from per-block SameMPV₂)
+is fully proved. The **Layer 1** step (exponential polynomial uniqueness → block matching)
+is stated with a `sorry` — see `blocks_match_of_sameMPV₂_CFBNT` for the precise gap
+description and proof strategy. -/
+theorem fundamentalTheorem_equalMPV_CFBNT_hetero
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hEqual : SameMPV₂ (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    ∃ _h : rA = rB,
+      ∃ perm : Fin rA ≃ Fin rB,
+        ∀ j : Fin rA,
+          ∃ hdim : dimA j = dimB (perm j),
+            GaugePhaseEquiv (d := d)
+              (cast (congr_arg (MPSTensor d) hdim) (A j))
+              (B (perm j)) := by
+  -- Layer 1: block matching from exponential polynomial uniqueness.
+  obtain ⟨hcount, perm, hBlockSameMPV⟩ :=
+    blocks_match_of_sameMPV₂_CFBNT A B hA hB hEqual
+  refine ⟨hcount, perm, fun j => ?_⟩
+  -- Layer 2: per-block SameMPV₂ → dim equality + GaugePhaseEquiv.
+  exact gaugePhaseEquiv_of_block_sameMPV₂ (A j) (B (perm j))
+    (hA.toHasInjectiveBlocks.block_injective j)
+    (hB.toHasInjectiveBlocks.block_injective (perm j))
+    (hA.toIsLeftCanonicalBlockFamily.leftCanonical j)
+    (hB.toIsLeftCanonicalBlockFamily.leftCanonical (perm j))
+    (hA.toHasNormalizedSelfOverlap.overlap_tendsto_one j)
+    (hBlockSameMPV j)
+
+end HeteroEqualCase
 
 end MPSTensor

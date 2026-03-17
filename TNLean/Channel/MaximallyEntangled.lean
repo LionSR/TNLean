@@ -62,6 +62,15 @@ theorem omegaProj_apply (i₁ i₂ j₁ j₂ : Fin d) :
       omegaVec d (i₁, i₂) * star (omegaVec d (j₁, j₂)) := by
   simp only [omegaProj, vecMulVec_apply, Pi.star_apply]
 
+/-- The entries of `omegaVec` are real, so complex conjugation fixes it. -/
+theorem star_omegaVec :
+    star (omegaVec d) = omegaVec d := by
+  funext p
+  rcases p with ⟨i, j⟩
+  by_cases hij : i = j
+  · simp [omegaVec, hij]
+  · simp [omegaVec, hij]
+
 /-! ### The SWAP operator -/
 
 /-- The SWAP operator `F` on `ℂ^d ⊗ ℂ^d`, defined by `F|i,j⟩ = |j,i⟩`.
@@ -146,5 +155,68 @@ theorem trace_omegaProj (hd : 0 < d) :
   rw [Real.sq_sqrt hdr.le]
   rw [nsmul_eq_mul, show (d : ℂ) = ((d : ℝ) : ℂ) from by simp]
   exact mul_div_cancel₀ _ hd_ne
+
+theorem omegaVec_dotProduct_self (hd : 0 < d) :
+    omegaVec d ⬝ᵥ omegaVec d = 1 := by
+  simpa [omegaProj, star_omegaVec (d := d)] using trace_omegaProj (d := d) hd
+
+theorem omegaProj_conjTranspose :
+    (omegaProj d)ᴴ = omegaProj d := by
+  simp [omegaProj, Matrix.conjTranspose_vecMulVec, star_omegaVec]
+
+theorem omegaProj_mul_self :
+    omegaProj d * omegaProj d = omegaProj d := by
+  by_cases hd : 0 < d
+  · simpa [omegaProj, star_omegaVec (d := d), omegaVec_dotProduct_self (d := d) hd] using
+      (Matrix.vecMulVec_mul_vecMulVec (u := omegaVec d) (v := omegaVec d)
+        (w := omegaVec d) (x := omegaVec d))
+  · have hd0 : d = 0 := Nat.eq_zero_of_not_pos hd
+    subst hd0
+    exact Subsingleton.elim _ _
+
+theorem one_sub_omegaProj_conjTranspose :
+    (((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d)ᴴ) =
+      (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d := by
+  simp [omegaProj_conjTranspose]
+
+theorem one_sub_omegaProj_mul_omegaProj :
+    ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) * omegaProj d = 0 := by
+  rw [sub_mul, one_mul, omegaProj_mul_self, sub_self]
+
+theorem omegaProj_mul_one_sub_omegaProj :
+    omegaProj d * ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) = 0 := by
+  rw [mul_sub, mul_one, omegaProj_mul_self, sub_self]
+
+theorem one_sub_omegaProj_mul_self :
+    ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) *
+        ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) =
+      (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d := by
+  rw [sub_mul, one_mul, omegaProj_mul_one_sub_omegaProj, sub_zero]
+
+theorem omegaProj_mulVec_omegaVec :
+    omegaProj d *ᵥ omegaVec d = omegaVec d := by
+  by_cases hd : 0 < d
+  · simpa [omegaProj, star_omegaVec (d := d), omegaVec_dotProduct_self (d := d) hd] using
+      (Matrix.vecMulVec_mulVec (u := omegaVec d) (v := omegaVec d) (w := omegaVec d))
+  · have hd0 : d = 0 := Nat.eq_zero_of_not_pos hd
+    subst hd0
+    exact Subsingleton.elim _ _
+
+theorem omegaVec_vecMul_omegaProj :
+    omegaVec d ᵥ* omegaProj d = omegaVec d := by
+  by_cases hd : 0 < d
+  · simpa [omegaProj, star_omegaVec (d := d), omegaVec_dotProduct_self (d := d) hd] using
+      (Matrix.vecMul_vecMulVec (u := omegaVec d) (v := omegaVec d) (w := omegaVec d))
+  · have hd0 : d = 0 := Nat.eq_zero_of_not_pos hd
+    subst hd0
+    exact Subsingleton.elim _ _
+
+theorem one_sub_omegaProj_mulVec_omegaVec :
+    ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) *ᵥ omegaVec d = 0 := by
+  rw [Matrix.sub_mulVec, Matrix.one_mulVec, omegaProj_mulVec_omegaVec, sub_self]
+
+theorem omegaVec_vecMul_one_sub_omegaProj :
+    omegaVec d ᵥ* ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) - omegaProj d) = 0 := by
+  rw [Matrix.vecMul_sub, Matrix.vecMul_one, omegaVec_vecMul_omegaProj, sub_self]
 
 end Matrix

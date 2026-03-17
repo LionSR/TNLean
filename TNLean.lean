@@ -121,6 +121,7 @@ import TNLean.MPS.CanonicalForm.FromPrimitive
 import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.FundamentalTheorem.CoefficientConvergence
 import TNLean.MPS.FundamentalTheorem.Multi
+import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.CanonicalForm.Existence
