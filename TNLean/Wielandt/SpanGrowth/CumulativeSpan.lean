@@ -62,11 +62,6 @@ theorem evalWord_mem_wordSpan (A : MPSTensor d D)
   apply Submodule.subset_span
   exact ⟨w.get, by simp [List.ofFn_get]⟩
 
-/-- `evalWord A` respects the cons operation. -/
-theorem evalWord_cons (A : MPSTensor d D) (i : Fin d)
-    (w : List (Fin d)) :
-    evalWord A (i :: w) = A i * evalWord A w := rfl
-
 /-- For `σ : Fin (n+1) → Fin d`, we have
 `evalWord A (List.ofFn σ) = A (σ 0) * evalWord A (List.ofFn (σ ∘ Fin.succ))`. -/
 theorem evalWord_ofFn_succ (A : MPSTensor d D) {n : ℕ}
@@ -260,8 +255,8 @@ theorem wordSpan_zero (A : MPSTensor d D) :
   simp only [Set.mem_range, Set.mem_singleton_iff]
   constructor
   · rintro ⟨σ, rfl⟩
-    simp [List.ofFn, evalWord]
+    simp
   · intro hx
-    exact ⟨Fin.elim0, by simp [List.ofFn, evalWord, hx]⟩
+    exact ⟨Fin.elim0, by simp [hx]⟩
 
 end MPSTensor

@@ -529,7 +529,7 @@ theorem exists_twoBlock_decomp_of_lowerZero
               ((diagPart (d := d) (D := D) Aconj Pdiag) i)) w) := hTrace_reindex
       _ = Matrix.trace (_root_.evalWord A11raw w) +
             Matrix.trace (_root_.evalWord A22raw w) := htr_blocks
-      _ = mpv A₁ σ + mpv A₂ σ := by simp [hmpv₁, hmpv₂]
+      _ = mpv A₁ σ + mpv A₂ σ := by rw [← hmpv₁, ← hmpv₂]
   -- MPV of the explicit block-diagonal tensor is the sum of block MPVs.
   have hmpv_twoBlockTensor :
       mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ = mpv A₁ σ + mpv A₂ σ := by
@@ -573,8 +573,7 @@ theorem exists_twoBlock_decomp_of_lowerZero
     mpv A σ = mpv Aconj σ := hA_Aconj
     _ = mpv (diagPart (d := d) (D := D) Aconj Pdiag) σ := hAconj_diag
     _ = mpv A₁ σ + mpv A₂ σ := hTrace_diagPart
-    _ = mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ := by
-          simp [hmpv_twoBlockTensor]
+    _ = mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ := hmpv_twoBlockTensor.symm
 
 
 /-! ## Strict dimension decrease variant
@@ -837,7 +836,7 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
             ((diagPart Aconj Pdiag) i)) w) := hTrace_reindex
       _ = Matrix.trace (_root_.evalWord A11raw w) +
             Matrix.trace (_root_.evalWord A22raw w) := htr_blocks
-      _ = mpv A₁ σ + mpv A₂ σ := by simp [hmpv₁, hmpv₂]
+      _ = mpv A₁ σ + mpv A₂ σ := by rw [← hmpv₁, ← hmpv₂]
   have hmpv_twoBlockTensor :
       mpv (twoBlockTensor A₁ A₂) σ = mpv A₁ σ + mpv A₂ σ := by
     have h := mpv_toTensorFromBlocks_eq_sum (r := 2) (dim := ![n, m])

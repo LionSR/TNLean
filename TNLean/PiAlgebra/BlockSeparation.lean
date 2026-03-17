@@ -71,14 +71,14 @@ variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 lemma evalWord_replicate (A : MPSTensor d D) (i : Fin d) (L : ℕ) :
     evalWord A (List.replicate L i) = (A i) ^ L := by
   induction L with
-  | zero => simp [evalWord]
+  | zero => simp
   | succ n ih => rw [List.replicate_succ, evalWord, ih, pow_succ']
 
 /-- `evalWord A` on a flattened replicated word gives a matrix power. -/
 lemma evalWord_flatten_replicate (A : MPSTensor d D) (w : List (Fin d)) (L : ℕ) :
     evalWord A ((List.replicate L w).flatten) = (evalWord A w) ^ L := by
   induction L with
-  | zero => simp [evalWord, List.replicate]
+  | zero => simp [List.replicate]
   | succ n ih =>
       simp only [List.replicate_succ, List.flatten_cons]
       rw [evalWord_append, ih, pow_succ']

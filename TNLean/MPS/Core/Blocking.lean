@@ -101,7 +101,7 @@ private theorem sum_evalWord_conjTranspose_mul_evalWord
   intro L
   induction L with
   | zero =>
-      simp [MPSTensor.evalWord]
+      simp
   | succ L ih =>
       let e : Fin d × (Fin L → Fin d) ≃ (Fin (L + 1) → Fin d) :=
         Fin.consEquiv (fun _ => Fin d)
@@ -142,8 +142,7 @@ private theorem sum_evalWord_conjTranspose_mul_evalWord
                       = ∑ i : Fin d,
                           (evalWord A (List.ofFn τ))ᴴ * (A i)ᴴ * A i *
                             evalWord A (List.ofFn τ) := by
-                              simp [MPSTensor.evalWord,
-                                Matrix.conjTranspose_mul, Matrix.mul_assoc]
+                              simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
                     _ = (evalWord A (List.ofFn τ))ᴴ *
                           (∑ i : Fin d, (A i)ᴴ * A i) *
                           evalWord A (List.ofFn τ) := by
