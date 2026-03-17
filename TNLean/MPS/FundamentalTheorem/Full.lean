@@ -327,30 +327,20 @@ theorem sameMPV₂_implies_proportionalMPV₂
     (h : SameMPV₂ A B) :
     ProportionalMPV₂ A B := by
   intro N
-  exact ⟨1, fun σ => by simp [h N σ]⟩
+  exact ⟨1, fun σ => by simpa using h N σ⟩
 
-/-- **Full equal-MPV Fundamental Theorem for CF-BNT.**
+/-- **Equal-MPV upgrade of the current formalized proportional FT for CF-BNT.**
 
-This is the heterogeneous full equal-MPV version corresponding to blueprint theorem
-`thm:ft_equal`.
+The literature-level equal-MPV FT (`thm:ft_equal` in the blueprint) should start from only the
+CF-BNT data and `SameMPV₂`.  The current local machinery is weaker: the available proportional FT
+`fundamentalTheorem_proportionalMPV_CFBNT` still requires explicit decomposition coefficients with
+nonzero limits, and its conclusion is a block permutation together with per-block
+`GaugePhaseEquiv` data.
 
-Unlike the proportional theorem, this statement takes only the CF-BNT data and equality of MPVs.
-The auxiliary coefficient arrays are intended to be derived internally from
-`mpv_toTensorFromBlocks_eq_sum`, while the convergence input needed for the proportional route is
-intended to come from the coefficient-convergence lemmas in `CoefficientConvergence.lean`
-(such as `coeff_ratio_tendsto`), together with the constant proportionality sequence `c N = 1`.
-
-The planned proof strategy is:
-1. derive the decomposition identities and coefficient convergence internally,
-2. apply `fundamentalTheorem_proportionalMPV_CFBNT` with proportionality sequence `c N = 1`,
-3. use the BNT linear independence furnished by `hA.isBNT` to match the weights blockwise after
-   the resulting permutation and gauge-phase equivalence,
-4. absorb the block phases into the weights, and
-5. assemble the resulting blockwise conjugacies into a global gauge equivalence.
-
-Because `GaugeEquiv` is homogeneous in the total bond dimension, the conclusion is encoded as an
-explicit equality of total bond dimensions together with a casted `GaugeEquiv`. The proof is still
-pending. -/
+This theorem records the equal-case endpoint that *is* derivable from that machinery.  Under the
+same coefficient hypotheses as the proportional theorem, equal MPVs force the phase-corrected
+weights to match blockwise.  After reindexing the `B`-family by the permutation from the
+proportional FT, the assembled weighted block tensors are globally gauge equivalent. -/
 theorem fundamentalTheorem_equalMPV_full
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -360,12 +350,148 @@ theorem fundamentalTheorem_equalMPV_full
     (B : (k : Fin rB) → MPSTensor d (dimB k))
     (hA : IsCanonicalFormBNT μA A)
     (hB : IsCanonicalFormBNT μB B)
+    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (hA_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv (toTensorFromBlocks μA A) σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
+    (hB_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv (toTensorFromBlocks μB B) σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
+    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0)
+    (hbLim_ne : ∀ k, bLim k ≠ 0)
     (hEqual : SameMPV₂ (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
-    ∃ htot : ∑ j : Fin rA, dimA j = ∑ k : Fin rB, dimB k,
-      GaugeEquiv
-        (cast (congr_arg (MPSTensor d) htot) (toTensorFromBlocks μA A))
-        (toTensorFromBlocks μB B) := by
-  sorry
+    ∃ perm : Fin rA ≃ Fin rB,
+      ∃ hdim : ∀ j : Fin rA, dimA j = dimB (perm j),
+        GaugeEquiv
+          (toTensorFromBlocks μA
+            (fun j => cast (congr_arg (MPSTensor d) (hdim j)) (A j)))
+          (toTensorFromBlocks (fun j => μB (perm j))
+            (fun j => B (perm j))) := by
+  have hProp : ∀ N (σ : Fin N → Fin d),
+      mpv (toTensorFromBlocks μA A) σ = (1 : ℂ) * mpv (toTensorFromBlocks μB B) σ := by
+    intro N σ
+    simpa using hEqual N σ
+  obtain ⟨_hcount, perm, hperm⟩ :=
+    fundamentalTheorem_proportionalMPV_CFBNT A B hA hB
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)
+      aCoeff bCoeff aLim bLim (fun _ => (1 : ℂ)) (1 : ℂ)
+      hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne
+      hProp tendsto_const_nhds one_ne_zero
+  choose hdim hGP using hperm
+  choose X ζ hζ hX using hGP
+  have hBNTA := hA.isBNT
+  obtain ⟨N0, hLI⟩ := hBNTA.eventually_li
+  have hμA_ne : ∀ j : Fin rA, μA j ≠ 0 :=
+    hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero
+  have hμB_ne : ∀ k : Fin rB, μB k ≠ 0 :=
+    hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero
+  have hCoeffEq :
+      ∀ N : ℕ, N > N0 →
+        ∀ j : Fin rA, μA j ^ N = (μB (perm j) * ζ j) ^ N := by
+    intro N hN j
+    have hLIN : LinearIndependent ℂ (fun j : Fin rA => mpvState (d := d) (A j) N) := hLI N hN
+    have hsums :
+        ∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N =
+          ∑ j : Fin rA, (μB (perm j) * ζ j) ^ N • mpvState (d := d) (A j) N := by
+      ext σ
+      simp [mpvState_apply, smul_eq_mul]
+      calc
+        ∑ j : Fin rA, (μA j) ^ N * mpv (A j) σ
+            = mpv (toTensorFromBlocks μA A) σ := by
+              symm
+              simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μA A σ
+        _ = mpv (toTensorFromBlocks μB B) σ := hEqual N σ
+        _ = ∑ k : Fin rB, (μB k) ^ N * mpv (B k) σ := by
+              simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μB B σ
+        _ = ∑ j : Fin rA, (μB (perm j)) ^ N * mpv (B (perm j)) σ := by
+              simpa using (Equiv.sum_comp perm (fun k : Fin rB => (μB k) ^ N * mpv (B k) σ)).symm
+        _ = ∑ j : Fin rA, (μB (perm j) * ζ j) ^ N * mpv (A j) σ := by
+              refine Finset.sum_congr rfl ?_
+              intro j _
+              have hmpv :=
+                mpv_eq_pow_mul_of_gaugePhase
+                  (A := cast (congr_arg (MPSTensor d) (hdim j)) (A j))
+                  (B := B (perm j))
+                  (X := X j) (ζ := ζ j) (hX := hX j)
+                  N σ
+              rw [hmpv, mpv_cast_dim (hdim j) (A j) N σ]
+              calc
+                (μB (perm j)) ^ N * (ζ j ^ N * mpv (A j) σ)
+                    = ((μB (perm j)) ^ N * ζ j ^ N) * mpv (A j) σ := by ring
+                _ = (μB (perm j) * ζ j) ^ N * mpv (A j) σ := by rw [← mul_pow]
+    have hdiff :
+        ∑ j : Fin rA, ((μA j) ^ N - (μB (perm j) * ζ j) ^ N) •
+            mpvState (d := d) (A j) N = 0 := by
+      simpa [Finset.sum_sub_distrib, sub_smul] using (sub_eq_zero.mpr hsums)
+    have hzero :=
+      Fintype.linearIndependent_iff.mp hLIN
+        (fun j : Fin rA => (μA j) ^ N - (μB (perm j) * ζ j) ^ N)
+        hdiff
+    exact sub_eq_zero.mp (hzero j)
+  have hWeight : ∀ j : Fin rA, μA j = μB (perm j) * ζ j := by
+    intro j
+    have hpow1 := hCoeffEq (N0 + 1) (Nat.lt_succ_self N0) j
+    have hpow2 := hCoeffEq ((N0 + 1) + 1) (by omega) j
+    have hmul :
+        μA j ^ (N0 + 1) * μA j = μA j ^ (N0 + 1) * (μB (perm j) * ζ j) := by
+      calc
+        μA j ^ (N0 + 1) * μA j = μA j ^ ((N0 + 1) + 1) := by
+          simp [pow_succ, mul_assoc]
+        _ = (μB (perm j) * ζ j) ^ ((N0 + 1) + 1) := hpow2
+        _ = (μB (perm j) * ζ j) ^ (N0 + 1) * (μB (perm j) * ζ j) := by
+          simp [pow_succ, mul_assoc]
+        _ = μA j ^ (N0 + 1) * (μB (perm j) * ζ j) := by rw [hpow1]
+    exact mul_left_cancel₀ (pow_ne_zero (N0 + 1) (hμA_ne j)) hmul
+  let Acast : (j : Fin rA) → MPSTensor d (dimB (perm j)) :=
+    fun j => cast (congr_arg (MPSTensor d) (hdim j)) (A j)
+  let Aweighted : (j : Fin rA) → MPSTensor d (dimB (perm j)) :=
+    fun j i => (μA j) • Acast j i
+  let Bweighted : (j : Fin rA) → MPSTensor d (dimB (perm j)) :=
+    fun j i => (μB (perm j)) • B (perm j) i
+  have hWeightedConj : ∀ j : Fin rA, ∀ i : Fin d,
+      Bweighted j i =
+        (X j : Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ) *
+          Aweighted j i *
+          (((X j)⁻¹ : GL (Fin (dimB (perm j))) ℂ) :
+            Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ) := by
+    intro j i
+    calc
+      Bweighted j i
+          = (μB (perm j) * ζ j) •
+              ((X j : Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ) *
+                Acast j i *
+                (((X j)⁻¹ : GL (Fin (dimB (perm j))) ℂ) :
+                  Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ)) := by
+            simp [Bweighted, Acast, hX j i, smul_smul, mul_comm, mul_assoc]
+      _ = (μA j) •
+            ((X j : Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ) *
+              Acast j i *
+              (((X j)⁻¹ : GL (Fin (dimB (perm j))) ℂ) :
+                Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ)) := by
+            rw [(hWeight j).symm]
+      _ = (X j : Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ) *
+            Aweighted j i *
+            (((X j)⁻¹ : GL (Fin (dimB (perm j))) ℂ) :
+              Matrix (Fin (dimB (perm j))) (Fin (dimB (perm j))) ℂ) := by
+            simp [Aweighted, Acast, Algebra.mul_smul_comm, Algebra.smul_mul_assoc,
+              Matrix.mul_assoc]
+  refine ⟨perm, hdim, ?_⟩
+  have hGaugeWeighted :=
+    gaugeEquiv_toTensorFromBlocks_of_blockConj (d := d) (μ := fun _ : Fin rA => (1 : ℂ))
+      Aweighted Bweighted X hWeightedConj
+  have hA_tot :
+      toTensorFromBlocks μA (fun j => cast (congr_arg (MPSTensor d) (hdim j)) (A j)) =
+        toTensorFromBlocks (fun _ : Fin rA => (1 : ℂ)) Aweighted := by
+    ext i
+    simp [toTensorFromBlocks, Aweighted, Acast]
+  have hB_tot :
+      toTensorFromBlocks (fun j => μB (perm j)) (fun j => B (perm j)) =
+        toTensorFromBlocks (fun _ : Fin rA => (1 : ℂ)) Bweighted := by
+    ext i
+    simp [toTensorFromBlocks, Bweighted]
+  rw [hA_tot, hB_tot]
+  exact hGaugeWeighted
 
 /-! ## Theorem 4: Power-sum multiset equality (Lem:app_simple)
 
