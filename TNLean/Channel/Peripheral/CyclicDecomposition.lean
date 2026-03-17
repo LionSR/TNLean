@@ -197,7 +197,7 @@ private theorem fixed_eq_scalar_of_irreducible_unital
     calc
       Kraus.map K Xᴴ = (Kraus.map K X)ᴴ := by
         simpa using (Kraus.map_conjTranspose K X).symm
-      _ = Xᴴ := by simp [hfix_map]
+      _ = Xᴴ := by rw [hfix_map]
   have hfix_star : transferMap (d := r) (D := D) K Xᴴ = Xᴴ := by
     simpa [Kraus.map, MPSTensor.transferMap_apply] using hfix_star_map
   have hHerm_fix : transferMap (d := r) (D := D) K (X + Xᴴ) = X + Xᴴ := by
@@ -290,7 +290,7 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
   have hXX_fix_map : Kraus.map K (Xᴴ * X) = Xᴴ * X := by
     calc
       Kraus.map K (Xᴴ * X) = (Kraus.map K X)ᴴ * Kraus.map K X := hKS_map
-      _ = (γ • X)ᴴ * (γ • X) := by simp [hEig_map]
+      _ = (γ • X)ᴴ * (γ • X) := by rw [hEig_map]
       _ = ((starRingEnd ℂ) γ * γ) • (Xᴴ * X) := by
             simp [conjTranspose_smul, smul_smul, mul_comm]
       _ = Xᴴ * X := by simp [hγ_starRing_mul]

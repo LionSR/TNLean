@@ -504,7 +504,9 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
       ext a b; rcases a with (a | a) <;> rcases b with (b | b) <;>
         simp [Kraus.map, K, M, Matrix.sum_apply, Matrix.fromBlocks_multiply,
               Matrix.fromBlocks_conjTranspose]
-    simp [hmap, hFX', M, Matrix.fromBlocks_smul]
+    rw [hmap, hFX']
+    change Matrix.fromBlocks 0 (μ • X') 0 0 = μ • Matrix.fromBlocks 0 X' 0 0
+    simp [Matrix.fromBlocks_smul]
   -- PD fixed point for adjoint Kraus map
   let rhoT : Matrix (Fin D₁ ⊕ Fin D₂) (Fin D₁ ⊕ Fin D₂) ℂ :=
     Matrix.fromBlocks (SAᴴ * SA) 0 0 (SBᴴ * SB)
@@ -556,7 +558,7 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
       ext a b; rcases a with (a | a) <;> rcases b with (b | b) <;>
         simp [Kraus.adjointMap, K, rhoT, Matrix.sum_apply, Matrix.fromBlocks_multiply,
               Matrix.fromBlocks_conjTranspose]
-    simp [hAdj, rhoT, hAblock, hBblock]
+    rw [hAdj, hAblock, hBblock]
   -- === 6. KS equality + commutation ===
   have hKS_M : Kraus.map K (Mᴴ * M) = (Kraus.map K M)ᴴ * Kraus.map K M :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
@@ -566,7 +568,7 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   -- === 7. Intertwining: X' * (B' k)† = μ • (A' k)† * X' ===
   have hInter1 : ∀ k : Fin d, X' * (B' k)ᴴ = μ • ((A' k)ᴴ * X') := by
     intro k
-    have h' : M * (K k)ᴴ = (K k)ᴴ * (μ • M) := by simp [hEigM, hComm_M k]
+    have h' : M * (K k)ᴴ = (K k)ᴴ * (μ • M) := by rw [hComm_M k, hEigM]
     have hL : M * (K k)ᴴ = Matrix.fromBlocks 0 (X' * (B' k)ᴴ) 0 0 := by
       simp [M, K, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
     have hR : (K k)ᴴ * (μ • M) = Matrix.fromBlocks 0 (μ • ((A' k)ᴴ * X')) 0 0 := by
@@ -579,7 +581,8 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   have hEigMstar : Kraus.map K Mᴴ = (starRingEnd ℂ μ) • Mᴴ := by
     calc Kraus.map K Mᴴ = (Kraus.map K M)ᴴ := by
           simpa using (Kraus.map_conjTranspose (K := K) M).symm
-      _ = (starRingEnd ℂ μ) • Mᴴ := by simp [hEigM, Matrix.conjTranspose_smul]
+      _ = (starRingEnd ℂ μ) • Mᴴ := by
+          simp only [hEigM, Matrix.conjTranspose_smul, starRingEnd_apply]
   have hKS_Ms : Kraus.map K (Mᴴᴴ * Mᴴ) = (Kraus.map K Mᴴ)ᴴ * Kraus.map K Mᴴ :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
       K hK_unital hrhoT_pd hrhoT_fix Mᴴ (starRingEnd ℂ μ) hEigMstar hμ_conj
@@ -588,7 +591,7 @@ private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
   have hInter2 : ∀ k : Fin d, X'ᴴ * (A' k)ᴴ = (starRingEnd ℂ μ) • ((B' k)ᴴ * X'ᴴ) := by
     intro k
     have h' : Mᴴ * (K k)ᴴ = (K k)ᴴ * ((starRingEnd ℂ μ) • Mᴴ) := by
-      simp [hEigMstar, hComm_Ms k]
+      rw [hComm_Ms k, hEigMstar]
     have hL : Mᴴ * (K k)ᴴ =
         Matrix.fromBlocks 0 0 (X'ᴴ * (A' k)ᴴ) 0 := by
       simp [M, K, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]

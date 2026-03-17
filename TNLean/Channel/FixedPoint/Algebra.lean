@@ -92,7 +92,8 @@ theorem conjTranspose_mem_fixedPoints (K : Fin d → Mat) {X : Mat}
     (hX : X ∈ fixedPoints K) :
     Xᴴ ∈ fixedPoints K := by
   change map K Xᴴ = Xᴴ
-  simpa [fixedPoints, map_conjTranspose] using congrArg Matrix.conjTranspose hX
+  rw [← map_conjTranspose]
+  exact congrArg Matrix.conjTranspose hX
 
 /-- For a fixed point, the weighted Kadison--Schwarz equality collapses to
 `E(Xᴴ X) = Xᴴ X`. This is the key step in Wolf Theorem 6.12. -/
@@ -108,7 +109,8 @@ theorem ks_equality_of_mem_fixedPoints
   have hKS : map K (Xᴴ * X) = (map K X)ᴴ * map K X :=
     ks_equality_of_peripheral_eigenvector_of_fixedPoint K h_unital hρ hρ_fix X 1 hX'
       (by simp)
-  simpa [hXeq] using hKS
+  rw [hXeq] at hKS
+  exact hKS
 
 /-- Every fixed point lies in the multiplicative domain once the adjoint map has
     a positive definite fixed point. -/
@@ -224,7 +226,8 @@ theorem conjTranspose_mem_adjointFixedPoints (K : Fin d → Mat) {X : Mat}
     (hX : X ∈ adjointFixedPoints K) :
     Xᴴ ∈ adjointFixedPoints K := by
   change adjointMap K Xᴴ = Xᴴ
-  simpa [adjointFixedPoints, adjointMap_conjTranspose] using congrArg Matrix.conjTranspose hX
+  rw [adjointMap_conjTranspose]
+  exact congrArg Matrix.conjTranspose hX
 
 /-- **Wolf Theorem 6.12** in the Heisenberg picture.
 

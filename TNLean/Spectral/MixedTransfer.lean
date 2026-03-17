@@ -110,7 +110,7 @@ theorem mixedTransferMap_pow_apply (A B : MPSTensor d D) (N : ℕ) :
         ∑ σ : Fin N → Fin d,
           evalWord A (List.ofFn σ) * X * (evalWord B (List.ofFn σ))ᴴ := by
   induction N with
-  | zero => intro X; simp [evalWord, Finset.univ_unique]
+  | zero => intro X; simp [Finset.univ_unique]
   | succ n ih =>
     intro X
     rw [pow_succ']
@@ -119,7 +119,7 @@ theorem mixedTransferMap_pow_apply (A B : MPSTensor d D) (N : ℕ) :
     rw [Finset.sum_comm, sum_fin_succ_eq]
     congr 1; funext i
     apply Finset.sum_congr rfl; intro τ _
-    simp [evalWord, Matrix.conjTranspose_mul, Matrix.mul_assoc]
+    simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
 /-- Specialization to the diagonal case: iterating the standard
 transfer map gives the sum over word evaluations. -/
@@ -194,7 +194,7 @@ theorem mixedTransferMap₂_pow_apply {d D₁ D₂ : ℕ}
   induction N with
   | zero =>
       intro X
-      simp [evalWord, Finset.univ_unique]
+      simp [Finset.univ_unique]
   | succ n ih =>
       intro X
       rw [pow_succ']
@@ -209,7 +209,7 @@ theorem mixedTransferMap₂_pow_apply {d D₁ D₂ : ℕ}
       funext i
       apply Finset.sum_congr rfl
       intro τ _
-      simp [evalWord, Matrix.conjTranspose_mul, Matrix.mul_assoc]
+      simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
 end IteratedTransferRect
 

@@ -122,7 +122,8 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
   by_cases hirr : IsIrreducibleTensor A
   · -- A is already irreducible: take a single block.
     refine ⟨1, fun _ => D, fun _ => A, fun _ => hirr, fun N σ => ?_⟩
-    simp [mpv_toTensorFromBlocks_eq_sum]
+    rw [mpv_toTensorFromBlocks_eq_sum]
+    simp
   · -- A has a nontrivial invariant projection; split into two strictly-smaller blocks.
     rw [IsIrreducibleTensor, not_not] at hirr
     obtain ⟨P, hP_proj, hP0, hP1, hLower⟩ := hirr
