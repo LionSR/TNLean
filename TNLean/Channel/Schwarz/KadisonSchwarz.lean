@@ -53,6 +53,12 @@ In the project's MPS terminology, this is the **left-canonical** condition. -/
 def IsTPKraus (K : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∑ i : Fin d, (K i)ᴴ * K i = 1
 
+@[simp] theorem isUnitalKraus_iff (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
+    IsUnitalKraus K ↔ ∑ i : Fin d, K i * (K i)ᴴ = 1 := Iff.rfl
+
+@[simp] theorem isTPKraus_iff (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
+    IsTPKraus K ↔ ∑ i : Fin d, (K i)ᴴ * K i = 1 := Iff.rfl
+
 /-- Alias: unital Kraus families are right-canonical. -/
 abbrev IsRightCanonicalKraus (K : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   IsUnitalKraus K

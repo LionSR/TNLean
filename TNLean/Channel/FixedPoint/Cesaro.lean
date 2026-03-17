@@ -206,11 +206,14 @@ noncomputable def cesaroMean (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix 
     (X : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) : Matrix (Fin D) (Fin D) ℂ :=
   (1 / (N : ℂ)) • ∑ n ∈ Finset.range N, (E ^ n) X
 
+theorem cesaroMean_eq (X : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
+    cesaroMean E X N = (1 / (N : ℂ)) • ∑ n ∈ Finset.range N, (E ^ n) X := rfl
+
 /-- Key lemma: telescoping. `E(σ_N) - σ_N = (E^N(X) - X) / N`. -/
 theorem cesaroMean_telescope (X : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) (_hN : 0 < N) :
     E (cesaroMean E X N) - cesaroMean E X N =
       (1 / (N : ℂ)) • ((E ^ N) X - X) := by
-  simp only [cesaroMean]
+  simp only [cesaroMean_eq]
   rw [map_smul, map_sum]
   rw [← smul_sub]
   congr 1
@@ -266,12 +269,12 @@ theorem IsChannel.exists_posSemidef_fixedPoint
     refine ⟨?_, ?_⟩
     · -- PSD: (1/(N+1)) • Σ E^n(ρ₀) is PSD
       change cesaroMean E ρ₀ (N + 1) |>.PosSemidef
-      unfold cesaroMean
+      rw [cesaroMean_eq]
       exact (Matrix.posSemidef_sum _ fun n _ => (h_iter n ρ₀ hρ₀).1).smul
         (by rw [one_div]; exact_mod_cast inv_nonneg_of_nonneg (Nat.cast_nonneg' (N + 1)))
     · -- Trace = 1
       change (cesaroMean E ρ₀ (N + 1)).trace = 1
-      unfold cesaroMean
+      rw [cesaroMean_eq]
       rw [trace_smul, trace_sum,
         Finset.sum_congr rfl (fun n _ => (h_iter n ρ₀ hρ₀).2),
         Finset.sum_const, Finset.card_range, nsmul_eq_mul, mul_one, one_div]

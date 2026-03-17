@@ -69,10 +69,10 @@ theorem IsChannel.cesaroMean_mem_densityMatrices
   have h_iter := IsChannel.iter_mem_densityMatrices (E := E) hE hρ
   intro N
   refine ⟨?_, ?_⟩
-  · unfold cesaroMean
+  · rw [cesaroMean_eq]
     exact (Matrix.posSemidef_sum _ fun n _ => (h_iter n).1).smul
       (by rw [one_div]; exact_mod_cast inv_nonneg_of_nonneg (Nat.cast_nonneg' (N + 1)))
-  · unfold cesaroMean
+  · rw [cesaroMean_eq]
     rw [trace_smul, trace_sum,
       Finset.sum_congr rfl (fun n _ => (h_iter n).2),
       Finset.sum_const, Finset.card_range, nsmul_eq_mul, mul_one, one_div]

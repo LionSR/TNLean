@@ -194,11 +194,12 @@ theorem sum_normSq_trace_conjTranspose_mul_evalWord
 
 From `IsStronglyIrreduciblePaper A` + left-canonical normalization, we derive
 `IsPrimitiveMPS A ρ` with the *same* positive-definite fixed point `ρ` from the
-definition.  The proof chains:
+definition. The proof chains:
 
 1. `IsIrreducibleMap E` → `IsIrreducibleTensor A`
 2. `IsIrreducibleTensor` → unique trace-zero fixed point (`huniq_fp`)
-3. `huniq_fp` + `IsChannelPrimitive` → spectral gap (complement spectral radius < 1)
+3. `huniq_fp` + `IsPeripherallyPrimitive` → spectral gap
+   (complement spectral radius < 1)
 4. Package as `IsPrimitiveMPS A ρ`
 -/
 
@@ -212,8 +213,9 @@ convergence theory.
 
 The proof chains:
 1. `IsIrreducibleMap E → IsIrreducibleTensor A`
-2. `IsIrreducibleTensor + IsChannelPrimitive + hNorm → IsPrimitive A`
-   (via `isPrimitive_of_peripheralPrimitive_of_irreducible`)
+2. `IsIrreducibleTensor + IsPeripherallyPrimitive + hNorm`
+   → `HasPrimitiveFixedPoint A`
+   (via `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`)
 3. Every nonzero PSD fixed point of an irreducible transfer map is PosDef
    (via `posSemidef_fixedPoint_isPosDef_of_irreducible`)
 -/
@@ -226,26 +228,26 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
   obtain ⟨_, _, _, hPrim, hIrrMap⟩ := hSI
   -- Step 1: IsIrreducibleMap → IsIrreducibleTensor
   have hIrrT : IsIrreducibleTensor A := isIrreducibleTensor_of_isIrreducibleMap A hIrrMap
-  -- Step 2: Peripheral primitivity + irreducibility → IsPrimitive (spectral-gap form)
+  -- Step 2: Peripheral primitivity + irreducibility → HasPrimitiveFixedPoint
   obtain ⟨ρ', hPrimMPS⟩ :=
-    isPrimitive_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
+    hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
   -- Step 3: The fixed point is PosDef (irreducibility + PSD + nonzero → PosDef)
   have hρ'PD : ρ'.PosDef :=
     posSemidef_fixedPoint_isPosDef_of_irreducible A hIrrMap ρ'
       hPrimMPS.fixedPoint_psd hPrimMPS.fixedPoint_ne_zero hPrimMPS.fixedPoint_is_fixed
   exact ⟨ρ', hPrimMPS, hρ'PD⟩
 
-/-- A primitive MPS tensor in the spectral-gap sense is channel-primitive in the
-paper's peripheral-spectrum sense.
+/-- A primitive MPS tensor in the spectral-gap sense is peripherally primitive in the
+paper-facing transfer-map sense.
 
 This is the easy spectral implication: if the complementary map `E - P_ρ` has
 spectral radius $< 1$, then every eigenvalue of `E - P_ρ` has norm $< 1$; the
 standard peripheral-spectrum lemma then shows that `1` is the only unit-modulus
 eigenvalue of `E`. -/
-theorem IsPrimitiveMPS.isChannelPrimitive [NeZero D]
+theorem IsPrimitiveMPS.isPeripherallyPrimitive [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) :
-    IsChannelPrimitive A := by
+    IsPeripherallyPrimitive A := by
   let E := transferMap (d := d) (D := D) A
   let Pρ := fixedPointProj (D := D) ρ hP.trace_ne_zero
   have hcompl : ∀ ν : ℂ, Module.End.HasEigenvalue (E - Pρ) ν → ‖ν‖ < 1 := by
@@ -302,7 +304,7 @@ theorem isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef [NeZero D]
     (hρ_pd : ρ.PosDef) :
     IsStronglyIrreduciblePaper A := by
   exact isStronglyIrreduciblePaper_of ρ hρ_pd hP.fixedPoint_is_fixed
-    hP.isChannelPrimitive
+    hP.isPeripherallyPrimitive
     (isIrreducibleMap_of_isPrimitiveMPS_of_posDef hP hρ_pd)
 
 /-! ### Part 3: Convergence of the transfer map

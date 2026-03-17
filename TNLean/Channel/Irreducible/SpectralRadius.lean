@@ -357,8 +357,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
                 (MPSTensor.transferMap (d := n) (D := D) B)) := by
                   rw [← hB_eq]
       _ = MPSTensor.mixedTransferSpectralRadius B B := by
-            unfold MPSTensor.mixedTransferSpectralRadius
-            rw [MPSTensor.mixedTransferMap_self]
+            rw [MPSTensor.mixedTransferSpectralRadius_eq, MPSTensor.mixedTransferMap_self]
       _ ≤ 1 := MPSTensor.spectralRadius_mixedTransfer_le_one B B hB_tp hB_tp
   have hY_eig : E' (S * ρ * S) = S * ρ * S := by
     calc

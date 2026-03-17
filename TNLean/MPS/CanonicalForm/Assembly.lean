@@ -295,7 +295,8 @@ For a single block that is TP, has a primitive transfer map, AND is irreducible
 (all three conditions), the full chain to `IsNormal` is available:
 
 1. `_root_.IsPrimitive (transferMap A)` + `IsIrreducibleTensor A` + TP
-   → `isPrimitive_of_peripheralPrimitive_of_irreducible` → `∃ ρ, IsPrimitiveMPS A ρ`
+   → `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`
+   → `∃ ρ, IsPrimitiveMPS A ρ`
 2. `IsPrimitiveMPS A ρ` + `IsIrreducibleTensor A`
    → `posDef_of_isIrreducibleTensor_of_isPrimitiveMPS` → `ρ.PosDef`
 3. `IsPrimitiveMPS A ρ` + `ρ.PosDef`
@@ -311,7 +312,7 @@ For a single MPS tensor that is left-canonical (TP), has a primitive transfer ma
 projection), the tensor is normal (eventually full Kraus rank).
 
 This chains:
-- Peripheral primitivity + irreducibility → spectral-gap primitivity
+- Peripheral primitivity + irreducibility → existence of a primitive fixed point
 - Spectral-gap + irreducibility → PosDef fixed point
 - Spectral-gap + PosDef → HasEventuallyFullKrausRank → IsNormal -/
 theorem isNormal_of_tp_primitive_irreducible [NeZero D]
@@ -321,8 +322,8 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
     (hIrr : IsIrreducibleTensor A) :
     IsNormal A := by
   -- Step 1: Get spectral-gap primitivity from peripheral primitivity + irreducibility.
-  have hMPSPrim : MPSTensor.IsPrimitive A :=
-    isPrimitive_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
+  have hMPSPrim : MPSTensor.HasPrimitiveFixedPoint A :=
+    hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
   -- Step 2: Extract the PSD fixed point.
   obtain ⟨ρ, hPrimMPS⟩ := hMPSPrim
   -- Step 3: Upgrade PSD → PosDef using tensor irreducibility.

@@ -179,6 +179,10 @@ def IsPrimitive {V : Type*} [AddCommGroup V] [Module ℂ V]
     (E : V →ₗ[ℂ] V) : Prop :=
   peripheralEigenvalues E = {1}
 
+theorem isPrimitive_iff {V : Type*} [AddCommGroup V] [Module ℂ V]
+    (E : V →ₗ[ℂ] V) :
+    IsPrimitive E ↔ peripheralEigenvalues E = {1} := Iff.rfl
+
 /-- Primitive channels have unique peripheral eigenvalue. -/
 theorem IsPrimitive.unique_peripheral
     {V : Type*} [AddCommGroup V] [Module ℂ V]

@@ -2,7 +2,6 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-
 import TNLean.Wielandt.WielandtBound
 import TNLean.MPS.Core.Transfer
 import TNLean.Channel.Peripheral.Spectrum
@@ -30,25 +29,39 @@ Wielandt bound in paper notation, without changing the internal proof machinery.
 * `iIndex A`: `sInf {n | S_n(A) = M_D(ℂ)}` — the full-Kraus-rank index `i(A)`.
 * `qIndex A`: `sInf {q | ∀ φ ≠ 0, H_q(A,φ) = ℂ^D}` — the primitivity index `q(E_A)`.
 
-## Relationship to existing definitions
+## Relationship to the other primitivity definitions
+
+There are four distinct primitivity predicates in the codebase:
+
+* `_root_.IsPrimitive E` in `TNLean/Channel/Peripheral/Spectrum.lean`: the canonical
+  peripheral-spectrum predicate for an arbitrary linear map `E`, defined by
+  `peripheralEigenvalues E = {1}`.
+* `MPSTensor.HasPrimitiveFixedPoint A` in
+  `TNLean/MPS/Structure/PrimitivityBridge.lean`: the existential wrapper
+  `∃ ρ, IsPrimitiveMPS A ρ`, encoding the spectral-gap formulation used in the MPS
+  proof chain.
+* `IsPrimitivePaper A` in this file: the paper-faithful uniform spreading condition from
+  Proposition 3(a).
+* `IsPeripherallyPrimitive A` in this file: the transfer-map wrapper around
+  `_root_.IsPrimitive (transferMap A)`.
+
+The intended relationships are:
 
 * `HasEventuallyFullKrausRank A ↔ IsNormal A` — proved as
   `hasEventuallyFullKrausRank_iff_isNormal`.
 * `IsPrimitivePaper A` is equivalent to `HasEventuallyFullKrausRank A`
   (and to `IsStronglyIrreduciblePaper A` under normalization). The full circular
   equivalence **(a)↔(b)↔(c)** is proved in `Primitivity/Equivalence.lean`.
-* `IsStronglyIrreduciblePaper` combines `PeripheralSpectrum.IsPrimitive` (unique
-  peripheral eigenvalue) with positive definiteness of the fixed point. This is
-  Proposition 3(c) in the paper and Theorem 6.7(3) in Wolf's Chapter 6.
-* `IsChannelPrimitive A` is a namespaced alias for `IsPrimitive (transferMap A)`
-  from `PeripheralSpectrum.lean`, meaning `peripheralEigenvalues (transferMap A) = {1}`.
-  This avoids collision with `MPSTensor.IsPrimitive` from `PrimitivityBridge.lean`.
+* `IsPeripherallyPrimitive A` is definitionally `_root_.IsPrimitive (transferMap A)`.
+* `IsStronglyIrreduciblePaper` combines `IsPeripherallyPrimitive A` with a
+  positive-definite fixed point and irreducibility. This is Proposition 3(c) in the paper
+  and Theorem 6.7(3) in Wolf's Chapter 6.
 
 ## Design notes
 
 These are **paper-facing wrappers only**. The internal proof chain flows through
-`IsNormal`, `IsPrimitiveMPS`, etc. The full equivalence of all three Proposition 3
-conditions is assembled in `Primitivity/Equivalence.lean`.
+`IsNormal`, `IsPrimitiveMPS`, `HasPrimitiveFixedPoint`, etc. The full equivalence of
+all three Proposition 3 conditions is assembled in `Primitivity/Equivalence.lean`.
 
 At present this layer is not imported by the canonical / FT / BNT assembly in
 `TNLean.MPS.*` or `TNLean.PiAlgebra.*`; it serves the standalone paper-facing
@@ -139,23 +152,32 @@ if no such `q` exists. -/
 noncomputable def qIndex (A : MPSTensor d D) : ℕ :=
   sInf {q : ℕ | ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤}
 
-/-! ## Channel primitivity (namespaced alias) -/
+/-! ## Peripheral primitivity (transfer-map wrapper) -/
 
-/-- **Channel-level primitivity** of an MPS tensor: the transfer map `E_A` has
-peripheral spectrum `{1}`, i.e. 1 is the only eigenvalue of `E_A` on the unit circle.
+/-- **Peripheral primitivity** of an MPS tensor: the transfer map `E_A` has
+peripheral spectrum `{1}`, i.e. `1` is the only eigenvalue of `E_A` on the unit
+circle.
 
-This is a namespaced alias for `IsPrimitive (transferMap A)` from
-`PeripheralSpectrum.lean`, wrapped to avoid collision with `MPSTensor.IsPrimitive`
-(which is the spectral-gap formulation from `PrimitivityBridge.lean`).
+This is the transfer-map wrapper around the canonical predicate
+`_root_.IsPrimitive (transferMap A)` from
+`TNLean/Channel/Peripheral/Spectrum.lean`.
+
+For orientation, the codebase distinguishes four related notions:
+
+* `_root_.IsPrimitive E`: generic peripheral-spectrum primitivity for any linear map `E`;
+* `MPSTensor.HasPrimitiveFixedPoint A`: existential wrapper around the spectral-gap
+  predicate `IsPrimitiveMPS`;
+* `IsPrimitivePaper A`: the paper-faithful uniform spreading condition;
+* `IsPeripherallyPrimitive A`: this thin transfer-map wrapper.
 
 Paper: "E_A is primitive" means `1` is the only eigenvalue with `|λ| = 1`.
 Wolf Ch6 Definition 6.2(2). -/
-def IsChannelPrimitive (A : MPSTensor d D) : Prop :=
+def IsPeripherallyPrimitive (A : MPSTensor d D) : Prop :=
   _root_.IsPrimitive (transferMap (d := d) (D := D) A)
 
-/-- Unfold `IsChannelPrimitive` to its definition in terms of `peripheralEigenvalues`. -/
-theorem isChannelPrimitive_iff (A : MPSTensor d D) :
-    IsChannelPrimitive A ↔
+/-- Unfold `IsPeripherallyPrimitive` to the peripheral-spectrum equation. -/
+theorem isPeripherallyPrimitive_iff (A : MPSTensor d D) :
+    IsPeripherallyPrimitive A ↔
       peripheralEigenvalues (transferMap (d := d) (D := D) A) = {1} :=
   Iff.rfl
 
@@ -177,10 +199,11 @@ irreducible and aperiodic, with the irreducibility giving `ρ > 0` (via the
 quantum Perron–Frobenius theorem) and aperiodicity giving uniqueness of the
 peripheral eigenvalue.
 
-**Relationship to `IsPrimitiveMPS`**: This is strictly stronger than
-`IsPrimitiveMPS` because the fixed point is required to be positive *definite*
-(not merely positive semidefinite). For irreducible channels, the PSD fixed
-point is automatically PosDef, so the two notions coincide in that case.
+**Relationship to `IsPrimitiveMPS` / `HasPrimitiveFixedPoint`**: this is
+strictly stronger than the spectral-gap wrapper because the fixed point is
+required to be positive *definite* (not merely positive semidefinite). For
+irreducible channels, the PSD fixed point is automatically PosDef, so the two
+notions coincide in that case.
 
 **Paper**: "E_A is strongly irreducible ⟺ 1 is the unique eigenvalue of E_A
 with modulus 1, and the corresponding eigenvector ρ is positive definite."
@@ -192,7 +215,7 @@ def IsStronglyIrreduciblePaper (A : MPSTensor d D) : Prop :=
   ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
     ρ.PosDef ∧
     transferMap (d := d) (D := D) A ρ = ρ ∧
-    IsChannelPrimitive A ∧
+    IsPeripherallyPrimitive A ∧
     IsIrreducibleMap (transferMap (d := d) (D := D) A)
 
 /-- Constructor for `IsStronglyIrreduciblePaper` from separate hypotheses. -/
@@ -201,7 +224,7 @@ theorem isStronglyIrreduciblePaper_of
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hpd : ρ.PosDef)
     (hfix : transferMap (d := d) (D := D) A ρ = ρ)
-    (hprim : IsChannelPrimitive A)
+    (hprim : IsPeripherallyPrimitive A)
     (hirr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
     IsStronglyIrreduciblePaper A :=
   ⟨ρ, hpd, hfix, hprim, hirr⟩
@@ -214,10 +237,10 @@ theorem IsStronglyIrreduciblePaper.posDef_fixedPoint
   obtain ⟨ρ, hpd, hfix, _, _⟩ := h
   exact ⟨ρ, hpd, hfix⟩
 
-/-- Strong irreducibility implies channel primitivity. -/
-theorem IsStronglyIrreduciblePaper.isChannelPrimitive
+/-- Strong irreducibility implies peripheral primitivity. -/
+theorem IsStronglyIrreduciblePaper.isPeripherallyPrimitive
     {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
-    IsChannelPrimitive A := by
+    IsPeripherallyPrimitive A := by
   obtain ⟨_, _, _, hprim, _⟩ := h
   exact hprim
 
@@ -232,6 +255,6 @@ theorem IsStronglyIrreduciblePaper.isIrreducibleMap
 theorem IsStronglyIrreduciblePaper.peripheralEigenvalues_eq
     {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
     peripheralEigenvalues (transferMap (d := d) (D := D) A) = {1} :=
-  h.isChannelPrimitive
+  h.isPeripherallyPrimitive
 
 end MPSTensor

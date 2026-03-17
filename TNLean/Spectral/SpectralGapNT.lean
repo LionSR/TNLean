@@ -1174,7 +1174,7 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
     spectralRadius_mixedTransfer₂_le_one (A := A) (B := B) hA_left hB_left
   refine lt_of_le_of_ne hle ?_
   intro hEq
-  unfold mixedTransferSpectralRadius₂ at hEq
+  rw [MPSTensor.mixedTransferSpectralRadius₂_eq] at hEq
   set F : (Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
     (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
       (mixedTransferMap₂ A B)

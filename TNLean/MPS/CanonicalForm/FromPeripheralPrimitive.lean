@@ -9,8 +9,8 @@ import TNLean.MPS.Overlap.PeripheralToSpectralGap
 # Canonical form from peripheral primitive blocks
 
 This file is a downstream compatibility layer: it converts peripheral-spectrum primitivity of the
-transfer maps into the existing spectral-gap notion `MPSTensor.IsPrimitive`, and then reuses
-`MPSTensor.isCanonicalForm_of_primitive`.
+transfer maps into the existing spectral-gap notion `MPSTensor.HasPrimitiveFixedPoint`, and then
+reuses `MPSTensor.isCanonicalForm_of_primitive`.
 It does not produce canonical-form data from arbitrary input tensors.
 -/
 
@@ -21,9 +21,9 @@ namespace MPSTensor
 /-- Build `IsCanonicalForm` from peripheral-spectrum primitivity of each block transfer map.
 
 This is a compatibility wrapper: the actual work is delegated first to
-`isPrimitive_of_peripheralPrimitive`, and then to `isCanonicalForm_of_primitive`. As in the
-primitive-builder file, all blockwise injectivity / normalization / ordering data are assumed as
-inputs. -/
+`hasPrimitiveFixedPoint_of_peripheralPrimitive`, and then to
+`isCanonicalForm_of_primitive`. As in the primitive-builder file, all blockwise injectivity /
+normalization / ordering data are assumed as inputs. -/
 theorem isCanonicalForm_of_peripheralPrimitive
     {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
@@ -36,6 +36,7 @@ theorem isCanonicalForm_of_peripheralPrimitive
     MPSTensor.IsCanonicalForm (d := d) (μ := μ) A := by
   refine isCanonicalForm_of_primitive hInj hDS hμanti hμne ?_
   intro k
-  exact isPrimitive_of_peripheralPrimitive (A := A k) (hInj k) (hDS k) (hPrimPer k)
+  exact hasPrimitiveFixedPoint_of_peripheralPrimitive
+    (A := A k) (hInj k) (hDS k) (hPrimPer k)
 
 end MPSTensor

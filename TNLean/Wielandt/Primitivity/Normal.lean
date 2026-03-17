@@ -10,11 +10,11 @@ import TNLean.Wielandt.WielandtBound
 /-!
 # Primitivity consequences and normality re-exports
 
-This file records the low-level consequences of `IsPrimitive` used in the
+This file records the low-level consequences of `HasPrimitiveFixedPoint` used in the
 Wielandt development and re-exports the normality side of the chain from
 `WielandtBound.lean`.
 
-It does **not** prove `IsPrimitive → IsNormal`. The currently formalized bridge
+It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized bridge
 with extra `ρ.PosDef` and aperiodicity hypotheses is assembled in
 `QuantumWielandt.lean`; the unconditional implication remains future work.
 
@@ -26,8 +26,8 @@ with extra `ρ.PosDef` and aperiodicity hypotheses is assembled in
 * `transferMap_pow_apply_eq_sum`: `E^n(X) = Σ_σ (evalWord A σ) X (evalWord A σ)†`
 * `exists_nonzero_evalWord_of_isPrimitiveMPS`: for every `n`, some length-`n`
   word product is nonzero
-* `exists_nonzero_evalWord_of_isPrimitive`: existential wrapper
-* `transferMap_pow_ne_zero_of_isPrimitive`: every transfer-map iterate is nonzero
+* `exists_nonzero_evalWord_of_hasPrimitiveFixedPoint`: existential wrapper
+* `transferMap_pow_ne_zero_of_hasPrimitiveFixedPoint`: every transfer-map iterate is nonzero
 
 ### From normality
 
@@ -97,10 +97,10 @@ theorem exists_nonzero_evalWord_of_isPrimitiveMPS [NeZero D]
   rw [hsum] at hfix
   exact hP.fixedPoint_ne_zero hfix.symm
 
-/-- Existential wrapper: if `A` is primitive, every word length has a
+/-- Existential wrapper: if `A` has a primitive fixed point, every word length has a
 nonzero word product. -/
-theorem exists_nonzero_evalWord_of_isPrimitive [NeZero D]
-    {A : MPSTensor d D} (hP : IsPrimitive A) (n : ℕ) :
+theorem exists_nonzero_evalWord_of_hasPrimitiveFixedPoint [NeZero D]
+    {A : MPSTensor d D} (hP : HasPrimitiveFixedPoint A) (n : ℕ) :
     ∃ σ : Fin n → Fin d, evalWord A (List.ofFn σ) ≠ 0 := by
   rcases hP with ⟨ρ, hρ⟩
   exact exists_nonzero_evalWord_of_isPrimitiveMPS hρ n
@@ -120,8 +120,8 @@ theorem transferMap_pow_ne_zero_of_isPrimitiveMPS [NeZero D]
   exact hP.fixedPoint_ne_zero this
 
 /-- Existential wrapper for `transferMap_pow_ne_zero`. -/
-theorem transferMap_pow_ne_zero_of_isPrimitive [NeZero D]
-    {A : MPSTensor d D} (hP : IsPrimitive A) (n : ℕ) :
+theorem transferMap_pow_ne_zero_of_hasPrimitiveFixedPoint [NeZero D]
+    {A : MPSTensor d D} (hP : HasPrimitiveFixedPoint A) (n : ℕ) :
     (transferMap (d := d) (D := D) A) ^ n ≠ 0 := by
   rcases hP with ⟨ρ, hρ⟩
   exact transferMap_pow_ne_zero_of_isPrimitiveMPS hρ n
@@ -151,8 +151,8 @@ theorem wielandt_full_analysis [NeZero D]
 
 /-! ## Part 4: Status of the primitive → normal bridge
 
-The unconditional implication `IsPrimitive → IsNormal` is still open in this
-file. The currently formalized route in `QuantumWielandt.lean` proves
+The unconditional implication `HasPrimitiveFixedPoint → IsNormal` is still open
+in this file. The currently formalized route in `QuantumWielandt.lean` proves
 `IsNormal` from `IsPrimitiveMPS A ρ` under the extra hypotheses that `ρ` is
 positive definite and `1 ∈ wordSpan A 1`.
 

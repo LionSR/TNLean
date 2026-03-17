@@ -111,14 +111,14 @@ adjoint family `i ↦ Kᵢ†`. -/
 theorem isUnitalKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (h : IsTPKraus (d := d) (D := D) K) :
     IsUnitalKraus (d := d) (D := D) (fun i => (K i)ᴴ) := by
-  unfold IsUnitalKraus IsTPKraus at *
+  rw [isUnitalKraus_iff, isTPKraus_iff] at *
   simpa [Matrix.conjTranspose_conjTranspose] using h
 
 /-- The conjugate-transposed operators of a unital family form a TP family. -/
 theorem isTPKraus_conjTranspose {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (h : IsUnitalKraus (d := d) (D := D) K) :
     IsTPKraus (d := d) (D := D) (fun i => (K i)ᴴ) := by
-  unfold IsUnitalKraus IsTPKraus at *
+  rw [isUnitalKraus_iff, isTPKraus_iff] at *
   simpa [Matrix.conjTranspose_conjTranspose] using h
 
 end KadisonSchwarz

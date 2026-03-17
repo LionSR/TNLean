@@ -220,20 +220,20 @@ theorem hasEventuallyFullKrausRank_iff_stronglyIrreducible [NeZero D]
   ⟨fun hB => isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm hB,
    fun hC => prop3_cb A hNorm hC⟩
 
-/-! ## Channel primitivity (intermediate result) -/
+/-! ## Peripheral primitivity (intermediate result) -/
 
 /-- **Proposition 3 (a)→(c), intermediate step**: paper primitivity implies
-channel-level primitivity.
+peripheral primitivity of the transfer map.
 
-This isolates the channel-primitive consequence used in Proposition 3(a)→(c).
+This isolates the peripherally primitive consequence used in Proposition 3(a)→(c).
 Paper: arXiv:0909.5347, Proposition 3(a)→(c); Wolf, Chapter 6.
 -/
-theorem prop3_a_implies_channelPrimitive [NeZero D]
+theorem prop3_a_implies_peripherallyPrimitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
-    IsChannelPrimitive A :=
-  isChannelPrimitive_of_isPrimitivePaper A hNorm hPrim
+    IsPeripherallyPrimitive A :=
+  isPeripherallyPrimitive_of_isPrimitivePaper A hNorm hPrim
 
 /-! ## Index bound -/
 

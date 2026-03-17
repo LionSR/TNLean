@@ -57,6 +57,13 @@ noncomputable def mixedTransferSpectralRadius₂
     ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
       (mixedTransferMap₂ A B))
 
+theorem mixedTransferSpectralRadius₂_eq
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+    mixedTransferSpectralRadius₂ A B =
+      spectralRadius ℂ
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
+          (mixedTransferMap₂ A B)) := rfl
+
 /-! ## Rectangular Frobenius norm -/
 
 section FrobeniusRect
@@ -285,7 +292,7 @@ theorem spectralRadius_mixedTransfer₂_le_one
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1) :
     mixedTransferSpectralRadius₂ A B ≤ 1 := by
-  unfold mixedTransferSpectralRadius₂
+  rw [mixedTransferSpectralRadius₂_eq]
   rcases eq_or_ne D₁ 0 with rfl | hD₁
   · have : Subsingleton (Matrix (Fin 0) (Fin D₂) ℂ) := ⟨fun a b => by ext i; exact i.elim0⟩
     have : Subsingleton (Matrix (Fin 0) (Fin D₂) ℂ →L[ℂ] Matrix (Fin 0) (Fin D₂) ℂ) :=
@@ -645,7 +652,7 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
   refine lt_of_le_of_ne hle ?_
   intro hEq
   -- Set `F` to be the continuous-linear version of the mixed transfer map.
-  unfold mixedTransferSpectralRadius₂ at hEq
+  rw [mixedTransferSpectralRadius₂_eq] at hEq
   set F : (Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
     (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
   have hEqF : spectralRadius ℂ F = 1 := by simpa [F] using hEq
