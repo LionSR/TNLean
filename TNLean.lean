@@ -5,8 +5,9 @@ Stable import surface for the maintained TNLean library.
 
 This file re-exports the modules intended for downstream users. Most
 specialized helper modules are still omitted from the root import list, but the
-public chapter-index modules are re-exported so that blueprint links and the
-generated documentation can see them.
+public chapter-index modules and the chapter-facing semigroup modules are
+re-exported so that blueprint links and the generated documentation can see
+them.
 
 The following legacy archival modules are intentionally excluded
 (they live in `TNLean/Archive/`):
@@ -188,4 +189,10 @@ import TNLean.Channel.Peripheral.CyclicDecomposition
 -- Public documentation index modules
 import TNLean.Channel.WolfChapter2Index
 import TNLean.Channel.WolfChapter6Index
-import TNLean.Channel.Semigroup
+
+-- Chapter 7 semigroup material exposed for blueprint/doc links
+import TNLean.Channel.Semigroup.Basic
+import TNLean.Channel.Semigroup.Perturbation
+import TNLean.Channel.Semigroup.GeneratorDefs
+import TNLean.Channel.Semigroup.LindbladForm
+import TNLean.Channel.Semigroup.KossakowskiForm
