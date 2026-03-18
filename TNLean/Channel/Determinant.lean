@@ -34,8 +34,8 @@ space `Matrix (Fin d) (Fin d) ℂ`, following Wolf §6.1.1.
 * `channelDet_eq_zero_iff_not_bijective` : determinant zero iff the underlying linear map is
   not invertible
 * `channelDet_norm_le_one_of_positive_tracePreserving` : Wolf's determinant bound (statement)
-* `channelDet_norm_eq_one_iff_exists_unitaryChannel` : Wolf's unitary characterization
-  (statement)
+* `channelDet_norm_eq_one_iff_exists_unitaryChannel` : Wolf's unitary characterization for CPTP
+  maps (backward direction proved; forward direction is a documented sorry)
 
 ## References
 
@@ -425,22 +425,46 @@ theorem channelDet_norm_le_one_of_channel
       _ = ‖A.charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
       _ ≤ 1 := hprod_le
 
-/-- This file records the unitary-conjugation branch of Wolf Thm. 6.1(2): for a positive
-trace-preserving map on `M_d(ℂ)`, the identity `|det T| = 1` is characterized by unitary
-conjugation.
+/-- Wolf Thm 6.1(2) restricted to CPTP maps: a quantum channel `T` on `M_d(ℂ)` satisfies
+`‖det T‖ = 1` if and only if `T` is a unitary channel `X ↦ U X U†`.
 
-The full Wolf statement also includes maps unitarily equivalent to transposition; that branch is
-not yet formalized here. -/
+**Why CPTP and not merely positive TP?**
+Wolf's full Thm 6.1(2) states that for a *positive* trace-preserving map the condition
+`‖det T‖ = 1` characterises *two* branches:
+  (1) unitary conjugation `X ↦ U X U†`, and
+  (2) maps unitarily equivalent to transposition `X ↦ U Xᵀ U†`.
+The transposition map has `‖det T‖ = 1` but is **not** completely positive; it is the
+canonical example of a positive-but-not-CP map.  Therefore the transposition branch does not
+appear for CPTP maps, and the biconditional `‖det T‖ = 1 ↔ ∃ U, T = unitaryChannel U` is
+correct under the `IsChannel` hypothesis.
+
+**Proof status.**
+- Backward direction (`←`): proved — `channelDet_norm_eq_one_of_unitaryChannel`.
+- Forward direction (`→`): *sorry* — requires formalising the spectral argument from Wolf's
+  proof that the only CPTP fixed points of the bound `‖det T‖ ≤ 1` are unitary conjugations.
+  In outline: `‖det T‖ = 1` forces every eigenvalue of T (as a map on `M_d²(ℂ)`) to have
+  modulus 1; combined with complete positivity and trace-preservation this forces T to be
+  unitary conjugation (Wolf §6.1.1). -/
 theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
-    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
-    ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
-  sorry
-
-/-- CPTP specialization of the unitary characterization. -/
-theorem channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel
     (hT : IsChannel T) :
     ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
-  simpa using channelDet_norm_eq_one_iff_exists_unitaryChannel (T := T) hT.pos hT.tp
+  constructor
+  · -- Forward direction: |det T| = 1 → T is a unitary channel.
+    -- This is the hard part of Wolf Thm 6.1(2); it requires the spectral argument that
+    -- complete positivity and trace-preservation, combined with all eigenvalues having
+    -- modulus 1, force T to be unitary conjugation.
+    intro _h
+    sorry
+  · -- Backward direction: if T is a unitary channel then |det T| = 1.
+    rintro ⟨U, rfl⟩
+    exact channelDet_norm_eq_one_of_unitaryChannel U
+
+/-- CPTP specialization of the unitary characterization (alias of
+`channelDet_norm_eq_one_iff_exists_unitaryChannel`). -/
+theorem channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel
+    (hT : IsChannel T) :
+    ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U :=
+  channelDet_norm_eq_one_iff_exists_unitaryChannel hT
 
 /-- The determinant of a unitary channel equals `1`. -/
 theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
