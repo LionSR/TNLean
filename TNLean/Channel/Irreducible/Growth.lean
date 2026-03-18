@@ -595,7 +595,10 @@ private theorem trace_mul_pos_of_posDef_posSemidef_ne_zero
 
 /-- **Wolf Theorem 6.2, item 4**: if `E` is an irreducible completely positive map and
 `A`, `B` are nonzero PSD matrices with `trace (B * A) = 0`, then some iterate
-`E^t(A)` with `1 ≤ t ≤ D - 1` has strictly positive trace overlap with `B`. -/
+`E^t(A)` with `1 ≤ t ≤ D - 1` has strictly positive trace overlap with `B`.
+
+The proof expands the positive-definite matrix `(LinearMap.id + E)^(D - 1) A`
+supplied by `growth_posDef_of_irreducible_cp`. -/
 theorem orthogonal_trace_pos_of_irreducible_cp
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCP : IsCPMap E) (hIrr : IsIrreducibleMap E)
@@ -726,7 +729,9 @@ private noncomputable def quadraticFormCLM (v : Fin D → ℂ) :
 /-- A finite exponential truncation already satisfies Wolf's positivity conclusion:
 for any `t > 0`, the first `D` terms of the exponential series of `E` applied to a
 nonzero PSD input are positive definite. This is the finite-sum core of Wolf's
-proof of Theorem 6.2(3). -/
+proof of Theorem 6.2(3). The contradiction step uses
+`growth_posDef_of_irreducible_cp`, i.e. the `(LinearMap.id + E)^(D - 1) A > 0`
+growth statement already used in `orthogonal_trace_pos_of_irreducible_cp`. -/
 theorem exp_truncation_posDef_of_irreducible_cp
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCP : IsCPMap E) (hIrr : IsIrreducibleMap E)
@@ -786,6 +791,8 @@ theorem exp_truncation_posDef_of_irreducible_cp
     rw [hkpow, Matrix.smul_mulVec] at hkF
     exact (smul_eq_zero.mp hkF).resolve_left (pow_ne_zero _ (by exact_mod_cast ht.ne'))
   let T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) := LinearMap.id + E
+  -- This is the same `(id + E)^(D - 1) A > 0` growth theorem used in
+  -- `orthogonal_trace_pos_of_irreducible_cp`.
   have h_growth : ((T ^ (D - 1)) A).PosDef := by
     simpa [T] using growth_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne
   have h_expand :

@@ -33,7 +33,7 @@ boundary conditions (PBC).
     $A^\varnothing = \Id_D$.
 \end{definition}
 
-\begin{lemma}[Word evaluation respects concatenation]\label{lem:eval_word_append}
+\begin{lemma}[Multiplicativity of word evaluation]\label{lem:eval_word_append}
     \lean{MPSTensor.evalWord_append}
     \leanok
     \uses{def:eval_word}
@@ -143,7 +143,7 @@ boundary conditions (PBC).
     $\ket{V^{(N)}(A)} = c_N \, \ket{V^{(N)}(B)}$.
 \end{definition}
 
-\begin{lemma}[Word evaluation under scaling]\label{lem:eval_word_smul}
+\begin{lemma}[Scaling of word evaluation]\label{lem:eval_word_smul}
     \lean{MPSTensor.evalWord_smul}
     \leanok
     \uses{def:eval_word}
@@ -181,7 +181,7 @@ boundary conditions (PBC).
     statements keep the block-scaling factors explicit.
 \end{remark}
 
-\begin{lemma}[Word evaluation under conjugation]\label{lem:eval_word_gauge}
+\begin{lemma}[Gauge covariance of word evaluation]\label{lem:eval_word_gauge}
     \lean{MPSTensor.evalWord_gauge}
     \leanok
     \uses{def:eval_word}
@@ -246,19 +246,18 @@ boundary conditions (PBC).
 
 \begin{remark}\leanok
     The algebraic characterization of normality in
-    Definition~\ref{def:normal} --- eventual full Kraus rank,
+    Definition~\ref{def:normal} --- eventual full matrix span,
     equivalently eventual block injectivity --- is equivalent to the
     spectral characterization used in
     \cite[Definition~IV.1]{Cirac2021Matrix}: after TP normalization, the
     transfer map $\E_A$ is a primitive channel, equivalently irreducible
     with trivial peripheral spectrum. This equivalence is proved in
-    \cite[Proposition~3]{Sanz2010Quantum}. Within this blueprint, the
+    \cite[Proposition~3]{Sanz2010Quantum}. In what follows, the
     directions of the equivalence are supplied by
     Theorem~\ref{thm:primitive_implies_irreducible},
     Theorem~\ref{thm:irred_tensor_aperiodic_normal}, and
     Theorem~\ref{thm:blocking_primitivity}. In particular, every
-    subsequent use of ``normal'' in this blueprint refers to this single
-    notion;
+    subsequent use of ``normal'' here refers to this single notion;
     Definition~\ref{def:is_normal_canonical_form} employs the spectral
     formulation, but it describes the same class of tensors.
 \end{remark}
@@ -269,7 +268,7 @@ boundary conditions (PBC).
     \lean{MPSTensor.CanonicalForm}
     \leanok
     \uses{def:mps_tensor, def:injective}
-    In this blueprint, a \emph{block-injective canonical form} for a
+    Here, a \emph{block-injective canonical form} for a
     tensor consists of:
     \begin{enumerate}
         \item a number of blocks $r \ge 1$,
@@ -288,15 +287,15 @@ boundary conditions (PBC).
 \end{definition}
 
 \begin{remark}\label{rem:cf_injective_vs_normal}\leanok
-    This blueprint uses the block-injective (biCF-style) canonical form:
+    Here we use the block-injective (biCF-style) canonical form:
     each block is injective in the sense of
     Definition~\ref{def:injective}.
     This is stronger than the NT-block canonical form of
     \cite{Cirac2021Matrix}, where the blocks are only normal in the
     paper's spectral sense. The paper-faithful NT/BNT/CFII route is
     developed later in Chapter~\ref{ch:canonical}; the present section
-    records the stronger block-injective package used in the later
-    block-injective assembly.
+    records the stronger block-injective form used in the later
+    block-injective canonical form construction.
 \end{remark}
 
 \begin{definition}[Block-diagonal tensor from blocks]\label{def:block_diagonal_tensor}
@@ -466,7 +465,7 @@ boundary conditions (PBC).
         \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
         V^{(N)}(A)_\sigma \; \overline{V^{(N)}(B)_\sigma}.
     \]
-    This is the bilinear physics-oriented overlap used later. By
+    This is the bilinear overlap (without complex conjugation) used later. By
     Lemma~\ref{lem:overlap_eq_inner}, it is the complex conjugate of
     the Hilbert-space inner product from Definition~\ref{def:mpv_inner}.
 \end{definition}

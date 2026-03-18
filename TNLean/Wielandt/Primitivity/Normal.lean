@@ -8,10 +8,10 @@ import TNLean.Spectral.MixedTransfer
 import TNLean.Wielandt.WielandtBound
 
 /-!
-# Primitivity consequences and normality re-exports
+# Primitivity consequences and normality restatements
 
 This file records the low-level consequences of `HasPrimitiveFixedPoint` used in the
-Wielandt development and re-exports the normality side of the chain from
+Wielandt development and recalls the normality side of the chain from
 `WielandtBound.lean`.
 
 It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized bridge
@@ -126,7 +126,7 @@ theorem transferMap_pow_ne_zero_of_hasPrimitiveFixedPoint [NeZero D]
   rcases hP with ⟨ρ, hρ⟩
   exact transferMap_pow_ne_zero_of_isPrimitiveMPS hρ n
 
-/-! ## Part 3: Re-export the Wielandt chain from normality -/
+/-! ## Part 3: Recall the Wielandt chain from normality -/
 
 /-- **The complete Wielandt analysis from normality.**
 
@@ -136,7 +136,7 @@ Given `IsNormal A`, the full Wielandt chain provides:
 3. A nonzero eigenvalue μ and eigenvector φ for evalWord A w₀
 4. Vector spanning: for any nonzero φ, word products applied to φ span ℂ^D
 
-This re-exports `wielandt_chain` from `WielandtBound.lean` with a cleaner name. -/
+This records `wielandt_chain` from `WielandtBound.lean` under a cleaner name. -/
 theorem wielandt_full_analysis [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     cumulativeSpan A (D ^ 2) = ⊤ ∧

@@ -14,9 +14,9 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 
 /-!
-# Canonical form existence pipeline (arXiv:1606.00608, §2.3 + Appendix A)
+# Canonical form existence reduction (arXiv:1606.00608, §2.3 + Appendix A)
 
-This file is a **glue layer for the early, honest arbitrary-input part** of the
+This file is an **intermediate construction for the early arbitrary-input part** of the
 canonical-form construction for MPS tensors from Cirac–Pérez-García–Schuch–Verstraete,
 arXiv:1606.00608.
 
@@ -38,14 +38,14 @@ then a unitary diagonalization **within** that TP gauge.
 What is **not** yet assembled end-to-end here:
 
 * Thread the TP-gauge and periodicity theorems through the irreducible block decomposition while
-  handling possible zero blocks honestly under `SameMPV₂` (which remembers the `N = 0` sector).
+  handling possible zero blocks exactly under `SameMPV₂` (which remembers the `N = 0` sector).
 * Resolve the post-blocking cyclic-sector / equal-weight issues needed to produce a primitive
   weighted block family with strictly ordered nonzero weights.
-* Bridge that data to the later block-injective / `IsCanonicalForm` builders and downstream FT
-  assembly.
+* Pass that data to the later block-injective / `IsCanonicalForm` builders and downstream FT
+  results.
 
-Accordingly, this file should be read as a collection of early-stage pipeline lemmas plus explicit
-handoffs, **not** as a near-endpoint canonical-form existence theorem for arbitrary input tensors.
+Accordingly, this file should be read as a collection of early-stage reduction lemmas plus explicit
+continuation statements, **not** as a near-endpoint canonical-form existence theorem for arbitrary input tensors.
 -/
 
 namespace MPSTensor
@@ -55,52 +55,16 @@ variable {d D : ℕ}
 /-!
 ## (1) Irreducible block decomposition (1606.00608 §2.3)
 
-This is a re-export of `MPSTensor.exists_irreducible_blockDecomp` with a pipeline-oriented name.
+We use `MPSTensor.exists_irreducible_blockDecomp` from `Reduction.lean` directly below.
 -/
-
-/-- **Pipeline step (1606.00608 §2.3).**
-
-Every tensor is `SameMPV₂`-equivalent to a block-diagonal tensor whose blocks are irreducible
-(with respect to invariant orthogonal projections).
-
-This is just `MPSTensor.exists_irreducible_blockDecomp`. -/
-theorem exists_irreducible_blockDecomp_pipeline1606 (A : MPSTensor d D) :
-    ∃ r : ℕ, ∃ dim : Fin r → ℕ,
-    ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
-  simpa using (exists_irreducible_blockDecomp (d := d) (D := D) A)
 
 
 /-!
 ## (2) Perron–Frobenius / TP gauge for irreducible blocks (1606.00608 Appendix A)
 
-This is a re-export of `MPSTensor.exists_tp_data_of_irreducible` with a pipeline-oriented name.
+We use `MPSTensor.exists_tp_data_of_irreducible` from
+`Channel/PerronFrobenius/Existence.lean` directly below.
 -/
-
-/-- **Pipeline step (1606.00608 Appendix A, PF / TP gauge).**
-
-For an irreducible tensor `A` with `0 < D` and some nonzero Kraus operator, there exist
-
-* a positive real `r`,
-* a positive definite matrix `σ`,
-* a TP tensor `B` gauge-equivalent to `(1/√r) • A`.
-
-This is just `MPSTensor.exists_tp_data_of_irreducible`. -/
-theorem exists_tp_data_of_irreducible_pipeline1606
-    [NeZero D]
-    (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
-    (hA : ∃ i, A i ≠ 0) :
-    ∃ (B : MPSTensor d D) (r : ℝ) (σ : Matrix (Fin D) (Fin D) ℂ),
-      σ.PosDef ∧ 0 < r ∧
-      (∀ i : Fin d,
-        B i = CFC.sqrt σ *
-          ((↑((Real.sqrt r)⁻¹) : ℂ) • A i) * (CFC.sqrt σ)⁻¹) ∧
-      (∑ i : Fin d, (B i)ᴴ * B i = 1) ∧
-      GaugeEquiv (d := d) (D := D)
-        (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
-  simpa using (exists_tp_data_of_irreducible (A := A) hIrr hA)
 
 
 /-!
@@ -114,7 +78,7 @@ PF / TP-gauge step is generally a non-unitary similarity; the unitary appearing 
 after one has already moved into the one-sided TP gauge.
 -/
 
-/-- **Pipeline step (1606.00608 Appendix A, CFII).**
+/-- **Reduction step (1606.00608 Appendix A, CFII).**
 
 For an irreducible tensor `A` in the TP gauge (`∑ Aᵢ†Aᵢ = I`) and with `0 < D`, there exist
 
@@ -166,11 +130,11 @@ This is the Appendix-A periodicity-removal step for TP irreducible blocks, route
 adjoint-transfer formulation.
 -/
 
-/-- **Pipeline step (1606.00608 Appendix A): periodicity removal by blocking.**
+/-- **Reduction step (1606.00608 Appendix A): periodicity removal by blocking.**
 
 If `A` is trace-preserving and irreducible (tensor sense), then some physical blocking makes the
 transfer map primitive. -/
-theorem exists_blockTensor_isPrimitive_pipeline1606
+theorem exists_blockTensor_isPrimitive
     [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -182,11 +146,11 @@ theorem exists_blockTensor_isPrimitive_pipeline1606
   simpa using
     (exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor (A := A) hTP hIrr hDpos)
 
-/-- **Pipeline step (1606.00608 Appendix A, TP bookkeeping after blocking).**
+/-- **Reduction step (1606.00608 Appendix A, TP bookkeeping after blocking).**
 
 If `A` is trace-preserving and irreducible, then some physical blocking makes the
 blocked transfer map primitive, and the blocked tensor remains left-canonical. -/
-theorem exists_blockTensor_leftCanonical_isPrimitive_pipeline1606
+theorem exists_blockTensor_leftCanonical_isPrimitive
     [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -198,12 +162,12 @@ theorem exists_blockTensor_leftCanonical_isPrimitive_pipeline1606
       _root_.IsPrimitive
         (transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p)) := by
   obtain ⟨p, hp, hPrim⟩ :=
-    exists_blockTensor_isPrimitive_pipeline1606 (A := A) hTP hIrr
+    exists_blockTensor_isPrimitive (A := A) hTP hIrr
   refine ⟨p, hp, leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := p) hTP, hPrim⟩
 
-/-- **Pipeline compatibility wrapper:** spectral-gap primitivity with a positive-definite
+/-- **Reduction compatibility wrapper:** spectral-gap primitivity with a positive-definite
 fixed point implies normality. -/
-theorem isNormal_of_isPrimitiveMPS_pipeline1606
+theorem isNormal_of_isPrimitiveMPS
     [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hPrim : IsPrimitiveMPS A ρ)
@@ -213,53 +177,16 @@ theorem isNormal_of_isPrimitiveMPS_pipeline1606
 
 
 /-!
-## (5) Downstream compatibility wrappers
+## (5) Downstream compatibility imports
 
-The next two theorems are compatibility aliases for later-stage builder lemmas. They are useful
-once one already has irreducible / injective peripheral-primitive blocks, but this file does **not**
-construct those hypotheses from an arbitrary tensor.
+For later-stage overlap and canonical-form builders we use the dedicated results from
+`PeripheralToSpectralGap.lean` and `FromPeripheralPrimitive.lean` directly.
 -/
-
-/-- **Compatibility wrapper:** if `A` is already irreducible, left-canonical, and
-peripheral-spectrum primitive, then `mpvOverlap A A N` tends to `1`.
-
-This is a late-stage blockwise lemma; it is not an arbitrary-input existence theorem. -/
-theorem overlap_tendsto_one_of_peripheralPrimitive_pipeline1606
-    [NeZero D]
-    (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
-    Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
-  simpa using
-    (MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      (A := A) hIrr hNorm hPrim)
-
-
-/-- **Compatibility wrapper:** build `IsCanonicalForm` from peripheral-spectrum primitivity
-hypotheses (on each block), together with injectivity + the one-sided normalization
-`∑ Aᵢ† Aᵢ = I` (left-canonical normalization) + μ ordering + μ ≠ 0.
-
-This is a downstream builder theorem; it is not produced from arbitrary input in this file. -/
-theorem isCanonicalForm_of_peripheralPrimitive_pipeline1606
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
-    (hInj : ∀ k, IsInjective (A k))
-    (hDS : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
-    (hμanti : StrictAnti (fun k : Fin r => ‖μ k‖))
-    (hμne : ∀ k, μ k ≠ 0)
-    (hPrimPer :
-      ∀ k, PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := dim k) (A k))) :
-    MPSTensor.IsCanonicalForm (d := d) (μ := μ) A := by
-  simpa using
-    (MPSTensor.isCanonicalForm_of_peripheralPrimitive
-      (hInj := hInj) (hDS := hDS) (hμanti := hμanti) (hμne := hμne) (hPrimPer := hPrimPer))
-
 
 /-!
 ## Zero-block vanishing at positive length
 
-These are the first low-level facts needed for an honest treatment of zero blocks.
+These are the first low-level facts needed for a complete treatment of zero blocks.
 They show that an all-zero tensor contributes nothing on nonempty words, hence nothing to MPVs for
 system sizes `N ≥ 1`. This still does **not** permit silently discarding zero scalar blocks under
 `SameMPV₂`, because the `N = 0` sector continues to remember the total bond dimension.
@@ -343,38 +270,38 @@ theorem isIrreducibleTensor_allZero_dim_le_one
 
 
 /-!
-## Honest arbitrary-input handoffs (still far from the endpoint)
+## Honest arbitrary-input continuations (still far from the endpoint)
 
-The last honest arbitrary-input step currently available here is the blockwise PF / TP-gauge
+The last unconditional arbitrary-input step currently available here is the blockwise PF / TP-gauge
 continuation below: after decomposing `A` into irreducible blocks, one may continue on each block
 once one separately knows that the block has a nonzero Kraus operator. This explicit side condition
 is essential because, under the current `SameMPV₂` relation, zero scalar blocks cannot simply be
 discarded: the `N = 0` sector is remembered.
 
-The newer file `TNLean.MPS.NormalCanonicalFormPipeline` packages a later stage once one already has
+The newer normal-canonical-form packaging file packages a later stage once one already has
 a primitive weighted block family with positive bond dimensions and distinct nonzero weights. This
 file does **not** currently construct that input from an arbitrary tensor.
 
 Remaining gap for a full end-to-end canonical-form existence theorem:
 
-* Thread `exists_tp_data_of_irreducible_pipeline1606` blockwise through
-  `exists_irreducible_blockDecomp_pipeline1606` while handling possible zero blocks honestly.
-* Apply `exists_blockTensor_isPrimitive_pipeline1606` and then perform the post-blocking cyclic
+* Thread the irreducible-to-TP-gauge wrapper blockwise through the irreducible block decomposition
+  while handling possible zero blocks exactly.
+* Apply the TP-irreducible-to-primitive blocking theorem and then perform the post-blocking cyclic
   sector / equal-weight bookkeeping needed for strict nonzero weight ordering.
 * Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
-  `TNLean.MPS.NormalCanonicalFormPipeline` and the downstream `IsCanonicalForm` builders.
+  the later normal-canonical-form packaging lemmas and the downstream `IsCanonicalForm` builders.
 -/
 
-/-- **Honest TP-gauge handoff for the 1606 pipeline (1606.00608 §2.3 + App. A).**
+/-- **Honest TP-gauge continuation for the 1606 reduction (1606.00608 §2.3 + App. A).**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
 resulting block, if one separately knows that the block has some nonzero Kraus operator, then the
 Perron--Frobenius / TP-gauge step can be applied to that block.
 
-This is the next honest continuation from arbitrary input under the current API. The nonzero side
+This is the next unconditional continuation from arbitrary input under the current API. The nonzero side
 condition is explicit because `SameMPV₂` remembers the `N = 0` sector, so zero scalar blocks cannot
 be silently discarded. -/
-theorem exists_irreducible_blockDecomp_with_tpGauge_handoff
+theorem exists_irreducible_blockDecomp_with_tpGauge
     (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,
     ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
@@ -392,7 +319,7 @@ theorem exists_irreducible_blockDecomp_with_tpGauge_handoff
             (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks k i) B) := by
   classical
   obtain ⟨r, dim, blocks, hIrr, hSame⟩ :=
-    exists_irreducible_blockDecomp_pipeline1606 (d := d) (D := D) A
+    exists_irreducible_blockDecomp (d := d) (D := D) A
   refine ⟨r, dim, blocks, hIrr, hSame, ?_⟩
   intro k hNonzero
   have hdim_ne : dim k ≠ 0 := by
@@ -407,10 +334,10 @@ theorem exists_irreducible_blockDecomp_with_tpGauge_handoff
     exact hi hzero
   letI : NeZero (dim k) := ⟨hdim_ne⟩
   simpa using
-    (exists_tp_data_of_irreducible_pipeline1606 (d := d) (D := dim k)
+    (exists_tp_data_of_irreducible (d := d) (D := dim k)
       (A := blocks k) (hIrr := hIrr k) (hA := hNonzero))
 
-/-- **Legacy CFII handoff for the 1606 pipeline (1606.00608 §2.3 + App. A).**
+/-- **Legacy CFII continuation for the 1606 reduction (1606.00608 §2.3 + App. A).**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
 block, assuming one has already supplied (i) a TP representative and (ii) positive bond dimension,
@@ -418,9 +345,9 @@ we can produce CFII fixed-point data (unitary conjugation + diagonal PD fixed po
 
 This is an optional Appendix-A side branch, not a near-endpoint theorem: it does not thread the PF
 / TP-gauge or periodicity-removal steps through the block decomposition. Later packaging into
-normal canonical form, once primitive weighted blocks are already in hand, lives in
-`TNLean.MPS.NormalCanonicalFormPipeline`. -/
-theorem exists_irreducible_blockDecomp_with_CFII_handoff
+normal canonical form, once primitive weighted blocks are already in hand, lives in the later
+normal-canonical-form packaging file. -/
+theorem exists_irreducible_blockDecomp_with_CFII
     (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,
     ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
@@ -441,7 +368,7 @@ theorem exists_irreducible_blockDecomp_with_CFII_handoff
             transferMap (d := d) (D := dim k) B Λ = Λ) := by
   classical
   obtain ⟨r, dim, blocks, hIrr, hSame⟩ :=
-    exists_irreducible_blockDecomp_pipeline1606 (d := d) (D := D) A
+    exists_irreducible_blockDecomp (d := d) (D := D) A
   refine ⟨r, dim, blocks, hIrr, hSame, ?_⟩
   intro k hTPk hDk
   -- Apply the packaged CFII lemma to the k-th block.
@@ -450,7 +377,7 @@ theorem exists_irreducible_blockDecomp_with_CFII_handoff
       (A := blocks k) (hTP := hTPk) (hIrr := hIrr k) (hD := hDk))
 
 /-!
-## Zero-block separation (1606.00608 §2.3: honest partition into zero tail + live blocks)
+## Zero-block separation (1606.00608 §2.3: partition into zero tail + live blocks)
 
 The irreducible block decomposition may produce all-zero blocks. Because `SameMPV₂` at `N = 0`
 records `trace(I_D) = D`, we cannot silently drop these. Instead we accumulate them into a
@@ -477,7 +404,7 @@ theorem mpv_zeroMPSTensor {N : ℕ} (σ : Fin N → Fin d') (D' : ℕ) :
   split
   case isTrue hN =>
     subst hN
-    simp [mpv, coeff, evalWord, Matrix.trace_one]
+    simp [mpv, coeff, Matrix.trace_one]
   case isFalse hN =>
     have hpos : 0 < N := Nat.pos_of_ne_zero hN
     exact mpv_eq_zero_of_all_zero (zeroMPSTensor d' D')
@@ -487,11 +414,11 @@ theorem mpv_zeroMPSTensor {N : ℕ} (σ : Fin N → Fin d') (D' : ℕ) :
 spin configuration `σ : Fin 0 → Fin d` equals `(D : ℂ)` (the trace of the identity). -/
 private theorem mpv_eq_dim_at_zero (A : MPSTensor d' D') (σ : Fin 0 → Fin d') :
     mpv A σ = (D' : ℂ) := by
-  simp [mpv, coeff, evalWord, Matrix.trace_one]
+  simp [mpv, coeff, Matrix.trace_one]
 
 /-- **Zero-block separation (1606.00608 §2.3).**
 
-Every MPS tensor `A : MPSTensor d D` admits an irreducible block decomposition that is honestly
+Every MPS tensor `A : MPSTensor d D` admits an irreducible block decomposition that faithfully
 partitioned into:
 
 * a **zero tail** of dimension `zeroTailDim` (accumulating all-zero irreducible blocks), and
@@ -505,7 +432,7 @@ The MPV relationship is:
 which at `N = 0` reduces to `D = zeroTailDim + ∑ k, dim k` and at `N > 0` reduces to
 `mpv A σ = mpv (toTensorFromBlocks μ≡1 blocks) σ` (zero tail vanishes).
 
-This separation is **honest**: the zero tail is not silently discarded, and the `N = 0`
+This separation is **exact**: the zero tail is not silently discarded, and the `N = 0`
 bookkeeping is preserved. -/
 theorem exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)

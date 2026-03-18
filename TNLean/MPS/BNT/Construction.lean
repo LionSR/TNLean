@@ -11,7 +11,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 /-!
-# Construction of bases of normal tensors from canonical form
+# Construction of basis-of-normal-tensors data from canonical form
 
 This module introduces `IsCanonicalFormBNT`, which extends `IsCanonicalForm` with the
 requirement that distinct blocks are not gauge-phase equivalent (i.e., equivalent blocks
@@ -44,11 +44,13 @@ Def. 4.2 / Prop. char-BNT in arXiv:2011.12127 and arXiv:1606.00608, lines 1145�
 
 In the full paper (arXiv:1606.00608, eq. decBSV), the decomposition into a basis of normal
 tensors uses summed coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
-These coefficients do **not** converge in general after normalization: unit-modulus terms can
-still oscillate. The present `IsCanonicalFormBNT` predicate sidesteps that issue by requiring
-that the grouping has already been done (each block in the basis of normal tensors corresponds
-to a single CF block), and the proportional-case theorem below takes whatever convergent
-coefficient data it needs as explicit hypotheses.
+In the strict-dominance branch one first normalizes by the dominant weight, so the relevant
+coefficients are `(μ j / μ 0)^N` and the discarded factor `μ 0^N` is absorbed into the overall
+proportionality constant. In the grouped setting, the normalized sums can still oscillate: unit-
+modulus terms may survive inside a single group. The present `IsCanonicalFormBNT` predicate
+sidesteps that issue by requiring that the grouping has already been done (each block in the
+basis of normal tensors corresponds to a single CF block), and the proportional-case theorem
+below takes whatever convergent coefficient data it needs as explicit hypotheses.
 -/
 
 open scoped Matrix BigOperators
@@ -138,7 +140,11 @@ theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
 
 /-- Normal canonical form with basis-of-normal-tensors (BNT) separation: extends
 `IsNormalCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent.
--/
+
+Here `IsNormalCanonicalForm` packages the spectral / primitive-transfer-map version of
+normality. The later `IsBNT` predicate instead asks for blockwise `IsNormal`, i.e. the
+equivalent algebraic eventual-block-injectivity notion, so the primitive-to-normal bridge must be
+supplied explicitly when passing from this predicate to `IsBNT`. -/
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsNormalCanonicalForm μ A where
@@ -381,8 +387,12 @@ theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero
             hNCF.toIsLeftCanonicalBlockFamily
             hBlocks i j hij)
 
-/-- Split-data version of `IsNormalCanonicalFormBNT.isBNT`, assuming blockwise `IsNormal`
-has already been supplied by an external primitive-to-normal bridge. -/
+/-- Split-data version of `IsNormalCanonicalFormBNT.isBNT`.
+
+Here `hNCF` supplies normality via the primitive-transfer-map characterization packaged by
+`IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `IsNormal` predicate
+(eventual block injectivity) required by `IsBNT`. In applications `hNormal` comes from the
+Wielandt / primitive-to-normal bridge. -/
 theorem isBNT_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -412,8 +422,9 @@ theorem cross_overlap_tendsto_zero
     hNCF.blocks_not_equiv
     j k hjk
 
-/-- A normal-canonical-form decomposition into a basis of normal tensors yields a valid
-`IsBNT` structure once blockwise `IsNormal` is supplied separately. -/
+/-- A normal-canonical-form decomposition with BNT separation yields a valid `IsBNT`
+structure once the equivalent blockwise `IsNormal` witnesses (eventual block injectivity) are
+supplied explicitly. -/
 theorem isBNT [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A)
     (hNormal : ∀ j, IsNormal (A j)) :

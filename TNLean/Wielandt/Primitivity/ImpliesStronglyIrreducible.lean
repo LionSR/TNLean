@@ -868,7 +868,7 @@ theorem not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
     linarith [Finset.sum_pos' (fun j _ => hev_nn j) ⟨i, Finset.mem_univ _, hpos⟩]
   exact hpsd.isHermitian.eigenvalues_eq_zero_iff.mp hev_zero
 
-/-! ### Step 6: Assembly — existence of Hermitian, nonzero, trace-zero E^p-fixed point -/
+/-! ### Step 6: Conclusion — existence of a Hermitian, nonzero, trace-zero E^p-fixed point -/
 
 /-- **From a nontrivial peripheral eigenvector, extract a nonzero Hermitian trace-zero
 fixed point of `E^p` that is not positive semidefinite.** -/
@@ -1206,7 +1206,7 @@ theorem not_isPrimitivePaper_of_root_of_unity_eigenvector [NeZero D]
 
 end PeripheralContradiction
 
-/-! ## Part 14: Assembly — IsPrimitivePaper implies IsPeripherallyPrimitive
+/-! ## Part 14: Proposition 3(a) → (c) conclusion — IsPrimitivePaper implies IsPeripherallyPrimitive
 
 The culminating theorem of the (a)→(c) direction: paper-primitivity of an MPS
 tensor `A` implies peripheral primitivity of its transfer map.
@@ -1215,14 +1215,14 @@ tensor `A` implies peripheral primitivity of its transfer map.
 
 1. Paper-primitivity implies tensor-irreducibility (Part 7).
 2. Tensor-irreducibility + normalization imply (via the blocking-periodicity
-   pipeline) that some power `E^p` is channel-primitive (peripheral spectrum `{1}`).
+   reduction) that some power `E^p` is channel-primitive (peripheral spectrum `{1}`).
 3. Any norm-1 eigenvalue `μ` of `E` satisfies `μ^p = 1` (since `μ^p` is a
    norm-1 eigenvalue of `E^p`).
 4. If `μ ≠ 1`, the contradiction engine (Part 13) gives `¬IsPrimitivePaper A`.
 5. Hence every peripheral eigenvalue is `1`, so `E` itself is peripherally primitive.
 -/
 
-section Assembly
+section Construction
 
 variable {d D : ℕ}
 
@@ -1233,7 +1233,7 @@ If the MPS tensor `A` is paper-primitive (`IsPrimitivePaper A`) and normalized
 i.e., `1` is the only eigenvalue on the unit circle (`IsPeripherallyPrimitive A`).
 
 **Proof**: Combine the irreducibility theorem (Part 7), the blocking-periodicity
-pipeline (`exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`),
+reduction (`exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`),
 eigenvector power lifting, and the peripheral-eigenvalue contradiction engine
 (Part 13).
 
@@ -1301,6 +1301,10 @@ a positive-definite fixed point, peripheral spectrum `{1}`, and is irreducible
    `IsIrreducibleMap` on the transfer map
    (`isIrreducibleCP_transferMap_of_isIrreducibleTensor`).
 
+This packaged strong-irreducibility statement is exactly the input later fed
+into Proposition 3(c)→(b): peripheral spectrum `{1}` supplies the aperiodicity
+used by the irreducibility-to-normality endpoint.
+
 Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347.
 This is the full paper-facing (a)→(c) direction. -/
 theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
@@ -1327,6 +1331,6 @@ theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
   -- Step 6: Package into IsStronglyIrreduciblePaper
   exact isStronglyIrreduciblePaper_of ρ hρ_pd hρ_fix hCPrim hIrr
 
-end Assembly
+end Construction
 
 end MPSTensor

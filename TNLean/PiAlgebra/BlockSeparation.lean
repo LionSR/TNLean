@@ -15,7 +15,7 @@ individual block equalities `mpv(A_k, σ) = mpv(B_k, σ)` for each `k`.
 requires *fixed* coefficients at each power, but here the "coefficients"
 `mpv(A_k, σ) - mpv(B_k, σ)` depend on `σ : Fin N → Fin d` whose type varies with `N`.
 
-**Proof strategy (repeated-word / Newton's identities)**:
+**Alternative route recorded here (repeated-word / Newton's identities)**:
 
 1. For any fixed word `w` of length `M`, consider the `L`-fold concatenation `w^L` of
    length `M · L`. The evalWord identity gives
@@ -37,6 +37,13 @@ Steps 1, 2 (for the multiset equality), and 4 are elementary. The main gap is st
 separating the combined eigenvalue multiset into per-block multisets. This is a
 polynomial/algebraic-geometry argument (Zariski density of the non-collision locus)
 that is not yet available in Mathlib.
+
+This file records that alternative Vandermonde / Newton route and the elementary
+repeated-word lemmas supporting it. It is **not** part of the current checked
+end-to-end proof chain: the canonical-form reduction uses the mixed-transfer
+peeling argument in `CanonicalFormSep.lean`, and the later weight-multiset
+matching in the BNT stage is handled by linear independence rather than
+Newton--Girard identities.
 
 ## Main results
 
@@ -124,7 +131,7 @@ theorem sameMPV₂_repeated_word
       ring]
   rw [hsummed, sub_self]
 
-/-! #### Block separation: the algebraic core
+/-! #### Block separation: an alternative algebraic route
 
 The step from `∑_k μ_k^N · (mpv(A_k,σ) - mpv(B_k,σ)) = 0` (for all N, σ) to
 per-block `mpv(A_k,σ) = mpv(B_k,σ)` uses the multiplicative structure of `evalWord`:
@@ -141,6 +148,10 @@ per-block `mpv(A_k,σ) = mpv(B_k,σ)` uses the multiplicative structure of `eval
 
 The formal gap is step (3): the genericity argument (Zariski density of the non-collision
 locus) requires algebraic geometry tools not currently in Mathlib.
+
+This comment records the same alternative route as the module docstring. The
+current checked reduction instead proceeds through `CanonicalFormSep.lean` and
+later BNT linear-independence arguments.
 
 See also `evalWord_flatten_replicate` for the key combinatorial identity.
 -/
@@ -167,7 +178,8 @@ A checked counterexample to the naive full separation statement is retained in
 For end-to-end results from `SameMPV₂`, use
 `fundamentalTheorem_multiBlock_fromSameMPV₂` (in
 `PiAlgebra/FundamentalTheoremComplete.lean`), which takes per-block separation
-as an explicit hypothesis.
+as an explicit hypothesis. The repeated-word / Newton route in this file is
+retained only as an alternative route.
 -/
 
 end BlockSeparation

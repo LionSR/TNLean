@@ -267,19 +267,51 @@ a block embedding of a mixed-transfer eigenvector.
     and $\rho(F_{AB}) \ge 1$ by hypothesis, there exists an
     eigenvalue~$\mu$ with $|\mu| = 1$ and eigenvector $X \neq 0$:
     $F_{AB}(X) = \mu X$.
+    The proof proceeds in five steps.
 
-    Choose positive fixed points of the transfer maps of $A$ and $B$
-    (Theorem~\ref{thm:qpf}) and gauge the two tensors separately to
-    unital Kraus families (Theorem~\ref{thm:right_canonical_gauge}).
-    Gauge $X$ accordingly and embed it as an off-diagonal block matrix
-    for the block Kraus family with diagonal blocks $A'^i$ and $B'^i$.
-    The KS equality for peripheral eigenvectors
-    (Theorem~\ref{thm:ks_peripheral}) and the resulting Kraus
-    commutation relation (Theorem~\ref{thm:kraus_commute}) yield
-    intertwining identities between $A'^i$, $B'^i$, and the gauged
-    eigenvector. Injectivity and the multiplicative-domain argument
-    force this intertwiner to be invertible; Skolem--Noether
-    (Theorem~\ref{thm:skolem_noether}) then yields
+    \emph{Step~1 (Separate gauging).}
+    Choose positive definite fixed points $\rho_A, \rho_B$ of the
+    transfer maps $\E_A, \E_B$ (Theorem~\ref{thm:qpf}) and gauge each
+    tensor separately to a unital Kraus family
+    (Theorem~\ref{thm:right_canonical_gauge}): set
+    $A'^i = \rho_A^{1/2} A^i \rho_A^{-1/2}$ and similarly for~$B$.
+    Let $X' = \rho_A^{1/2} X \rho_B^{-1/2}$ denote the correspondingly
+    gauged eigenvector.
+
+    \emph{Step~2 (Block Kraus family and off-diagonal embedding).}
+    Form the block Kraus operators $C^i = \bigl(\begin{smallmatrix}
+    A'^i & 0 \\ 0 & B'^i\end{smallmatrix}\bigr)$.
+    These constitute a unital Kraus family on $\MN{2D}$.
+    The off-diagonal matrix
+    $Y = \bigl(\begin{smallmatrix} 0 & X' \\ 0 & 0\end{smallmatrix}\bigr)$
+    satisfies $E_C(Y) = \mu Y$.
+
+    \emph{Step~3 (KS equality and Kraus commutation).}
+    Because $|\mu| = 1$ and $E_C$ is unital and trace-preserving,
+    the Kadison--Schwarz equality for peripheral eigenvectors
+    (Theorem~\ref{thm:ks_peripheral}) gives
+    $E_C(Y^\dagger Y) = E_C(Y)^\dagger E_C(Y)$.
+    By the Kraus commutation relation
+    (Theorem~\ref{thm:kraus_commute}), $Y$ commutes with every block
+    Kraus operator: $C^i Y = Y C^i$ for all~$i$.
+
+    \emph{Step~4 (Intertwining identity and invertibility).}
+    Expanding the commutation relation block by block gives
+    $A'^i X' = X' B'^i$ for every~$i$.
+    Since $\{A'^i\}$ span $\MN{D}$ (injectivity of~$A$), $X'$ is a
+    nonzero intertwiner from $\MN{D}$ to $\MN{D}$.
+    The left multiplicative identity
+    (Theorem~\ref{thm:left_multiplicative_identity})
+    gives $E_C(Y^\dagger Y) = E_C(Y^\dagger) E_C(Y)$, so
+    $X'^\dagger X'$ is a positive semi-definite fixed point of
+    $\E_{B'}$, positive definite by injectivity.
+    Hence $X'$ is invertible.
+
+    \emph{Step~5 (Skolem--Noether conclusion).}
+    The map $M \mapsto X' M (X')^{-1}$ is a $\CC$-algebra automorphism
+    of $\MN{D}$ sending $B'^i$ to $A'^i$.
+    By Skolem--Noether (Theorem~\ref{thm:skolem_noether}) this is an
+    inner automorphism.  Undoing the separate gauges gives
     $B^i = \bar{\mu} \, X \, A^i \, X^{-1}$ for all~$i$,
     establishing gauge-phase equivalence
     (Definition~\ref{def:gauge_phase_equiv}).
@@ -325,13 +357,22 @@ a block embedding of a mixed-transfer eigenvector.
     Theorem~\ref{thm:eigenvalue_bound} gives $|\mu| \le 1$
     for every eigenvalue of $F_{AB}^{\mathrm{rect}}$.
     If $\rho(F_{AB}^{\mathrm{rect}}) = 1$, choose a
-    modulus-one eigenvector $X$.
+    modulus-one eigenvector $X \in M_{D_1 \times D_2}(\CC) \setminus \{0\}$.
 
     Gauge $A$ and $B$ separately to unital Kraus families and apply the
-    same block-embedding Kadison--Schwarz argument as in the square case.
-    It shows that $\ker(X)$ is invariant under all matrices on
-    $\C^{D_2}$, so $X$ is injective and therefore $D_2 \le D_1$.
-    Applying the same argument to $X^\dagger$ gives $D_1 \le D_2$.
+    block-embedding Kadison--Schwarz argument as in the square case
+    (Theorem~\ref{thm:modulus_one_gauge}, Steps~2--3).
+    The Kraus commutation relation gives $A'^i X' = X' B'^i$
+    for all~$i$.
+    Now consider $\ker(X') \subseteq \CC^{D_2}$. If $v \in \ker(X')$,
+    then $X' B'^i v = A'^i X' v = 0$, so $B'^i v \in \ker(X')$ for
+    every~$i$.  Since $B$ is injective, $\{B'^i\}$ spans $M_{D_2}(\CC)$,
+    so $\ker(X')$ is invariant under every $D_2 \times D_2$ matrix and
+    is therefore either $\{0\}$ or $\CC^{D_2}$.  Since $X' \ne 0$,
+    we have $\ker(X') = \{0\}$, so $X'$ is injective as a linear
+    map $\CC^{D_2} \to \CC^{D_1}$ and $D_2 \le D_1$.
+    Applying the same argument to $X'^\dagger$ (using the commutation
+    relation for the adjoint block family) gives $D_1 \le D_2$.
     Hence $D_1 = D_2$, contradicting the hypothesis.
 \end{proof}
 

@@ -8,7 +8,7 @@ import TNLean.MPS.FundamentalTheorem.Multi
 /-!
 # End-to-end multi-block Fundamental Theorem from per-block SameMPV
 
-This file provides the complete pipeline from per-block `SameMPV` to:
+This file provides the complete construction from per-block `SameMPV` to:
 - Per-block gauge equivalence
 - Global gauge equivalence of block-diagonal tensors
 - Block-permutation decomposition
@@ -131,12 +131,15 @@ end SingleBlockSeparation
 
 /-! ### Compatibility wrappers exposing the `SameMPV₂` + separation interface
 
-These theorems package the complete pipeline
+These theorems package the complete construction
 `SameMPV₂` → per-block `SameMPV` (via `hSep`) → per-block `GaugeEquiv`
 → global `GaugeEquiv` → block-permutation decomposition.
 
-The separation hypothesis `hSep` is needed for `r ≥ 2` (quantum PF theory);
-for `r = 1` it is proved by `sameMPV₂_single_block`. -/
+In the current checked development, the separation input `hSep` is furnished by
+the mixed-transfer / peeling results in `CanonicalFormSep.lean`; the
+repeated-word / Vandermonde sketch in `BlockSeparation.lean` is retained only as
+an alternative route. The separation hypothesis `hSep` is needed for `r ≥ 2`
+(quantum PF theory); for `r = 1` it is proved by `sameMPV₂_single_block`. -/
 section EndToEnd
 
 variable {r : ℕ} {dim : Fin r → ℕ}

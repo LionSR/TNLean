@@ -69,7 +69,7 @@ primitivity.
 If `{A₁, …, Aₐ}` has eventually full Kraus rank, then the transfer map `E_A`
 is primitive in the paper's sense.
 
-This is re-exported from `Primitivity/EasyDirections.lean`.
+This is proved in `Primitivity/EasyDirections.lean` and recalled here for convenience.
 Paper: arXiv:0909.5347, Proposition 3(b)→(a); Wolf, Chapter 6.
 -/
 theorem prop3_ba (A : MPSTensor d D)
@@ -96,7 +96,7 @@ theorem prop3_ba_isNormal (A : MPSTensor d D)
 If the MPS tensor `A` is paper primitive and normalized (`∑ Aᵢ† Aᵢ = 1`), then
 it is strongly irreducible.
 
-This is re-exported from `Primitivity/ImpliesStronglyIrreducible.lean`.
+This is proved in `Primitivity/ImpliesStronglyIrreducible.lean` and recalled here for convenience.
 Paper: arXiv:0909.5347, Proposition 3(a)→(c); Wolf, Chapter 6.
 -/
 theorem prop3_ac [NeZero D] (A : MPSTensor d D)
@@ -113,7 +113,7 @@ Kraus rank.
 If the MPS tensor `A` is strongly irreducible and normalized (`∑ Aᵢ† Aᵢ = 1`),
 then `A` has eventually full Kraus rank.
 
-This is re-exported from `Primitivity/StronglyIrreducibleToFullRank.lean`.
+This is proved in `Primitivity/StronglyIrreducibleToFullRank.lean` and recalled here for convenience.
 Paper: arXiv:0909.5347, Proposition 3(c)→(b); Wolf, Chapter 6.
 -/
 theorem prop3_cb [NeZero D] (A : MPSTensor d D)
@@ -240,7 +240,7 @@ theorem prop3_a_implies_peripherallyPrimitive [NeZero D]
 /-- **Equation (2)**: the primitivity index is at most the full-Kraus-rank
 index.
 
-This re-exports the quantitative bound following Proposition 3.
+This records the quantitative bound following Proposition 3.
 Paper: arXiv:0909.5347, equation (2); Wolf, Theorem 6.9.
 -/
 theorem prop3_qIndex_le_iIndex (A : MPSTensor d D)

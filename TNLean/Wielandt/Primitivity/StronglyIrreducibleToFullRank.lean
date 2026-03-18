@@ -859,7 +859,7 @@ private theorem trace_conjTranspose_posDef_mul_lower [NeZero D]
 
 end UniformPositivity
 
-/-! ### Part 8: Final assembly — (c) → (b)
+/-! ### Part 8: Final construction — (c) → (b)
 
 Combining the trace-pairing identity (Part 1), primitivity bridge (Part 2),
 convergence (Part 3), trace-pairing computation (Part 4), PosDef nondegeneracy
@@ -867,7 +867,7 @@ convergence (Part 3), trace-pairing computation (Part 4), PosDef nondegeneracy
 and compactness lower bound (Step C), we prove the main theorem:
 strong irreducibility implies eventually full Kraus rank. -/
 
-section FinalAssembly
+section FinalConstruction
 
 /-- The `l∞`-operator norm of `Bᴴ` is at most `D · ‖B‖`, converting between
 the max-row-sum and max-column-sum interpretations. Each entry satisfies
@@ -1006,7 +1006,7 @@ theorem hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper [NeZero D]
     mul_pos (by linarith) hBnorm_sq_pos
   linarith [hQ_decomp_re, hQPρ_lower, herror_re]
 
-end FinalAssembly
+end FinalConstruction
 
 /-- A primitive MPS tensor with a positive-definite fixed point has eventually
 full Kraus rank.

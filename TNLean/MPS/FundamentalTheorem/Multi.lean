@@ -63,9 +63,9 @@ variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
 
 end ReindexGL
 
-/-! ## Block-diagonal gauge assembly -/
+/-! ## Block-diagonal gauge construction -/
 
-section GaugeAssembly
+section GaugeConstruction
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable (μ : Fin r → ℂ)
@@ -165,7 +165,7 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight
     (B := fun k i => μB k • B k i)
     hGauge
 
-end GaugeAssembly
+end GaugeConstruction
 
 /-! ## Multi-block Fundamental Theorem (parametric version) -/
 

@@ -731,8 +731,10 @@ for k ≠ 0 with ρ < 1), and all δ_k are uniformly bounded, then δ₀(L)
 decays exponentially: |δ₀(L)| ≤ C · ρ^L.
 
 This is the key technical tool for extracting per-block information from
-the global identity. It works by isolating δ₀ from the sum and bounding
-the remaining terms using the dominance gap. -/
+the global identity. In the canonical-form application, the geometric decay
+comes from strict weight ordering after dividing by the leading weight
+(`|μ_k / μ₀| ≤ ρ < 1` for `k ≠ 0`), while the overlap estimates are used
+only to provide the uniform bounds on the coefficients `δ_k(L)`. -/
 theorem peeling_exponential_bound
     {r : ℕ} (hr : 0 < r)
     (α : Fin r → ℂ) (hα₀ : α ⟨0, hr⟩ ≠ 0)
@@ -807,6 +809,12 @@ private lemma eq_one_of_tendsto_pow_atTop_nhds_one (z : ℂ)
   have huniq := tendsto_nhds_unique hz_shift hz_mul
   simpa [eq_comm] using huniq
 
+/-- For injective left-canonical tensors of the same bond dimension, a mixed overlap
+converging to `1` forces gauge-phase equivalence.
+
+In the block-separation proof, the equal-dimension hypothesis is encoded by the
+shared type parameter `D`; any bond-dimension mismatch is excluded one step earlier
+by the rectangular overlap-decay lemma. -/
 lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
     {D : ℕ} [NeZero D] (A B : MPSTensor d D)
     (hA_inj : IsInjective A) (hB_inj : IsInjective B)
@@ -819,6 +827,13 @@ lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
     mpvOverlap_tendsto_zero (A := A) (B := B) hA_inj hB_inj hA_lc hB_lc hnot
   exact (h.ne_nhds one_ne_zero) hto0
 
+/-- Irreducible TP analogue of `gaugePhaseEquiv_of_mpvOverlap_tendsto_one`.
+
+Again the two tensors already share the bond dimension `D`; in the block-separation
+proof the dimension-mismatch case is ruled out separately by
+`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP`, and the nondecaying
+equal-dimension overlap is then identified via the modulus-one-eigenvalue
+rigidity theorem for irreducible tensors. -/
 lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
     {D : ℕ} [NeZero D] (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)

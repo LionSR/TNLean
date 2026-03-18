@@ -14,7 +14,7 @@ The reduction draws on
 \cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
 and~\cite[Ch.~6]{Wolf2012Quantum}.
 
-\section{Block-diagonal assembly}
+\section{Block-diagonal construction}
 
 \begin{definition}[Block-diagonal tensor from blocks]\label{def:tensor_from_blocks}
 	\lean{MPSTensor.toTensorFromBlocks}
@@ -337,7 +337,7 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	normalization.
 \end{proof}
 
-\subsection{Burnside bridge: irreducibility and spanning}
+\subsection{From irreducibility to full spanning via Burnside's theorem}
 \label{subsec:burnside_bridge}
 
 The irreducible-tensor predicate (Definition~\ref{def:irreducible_tensor}) is formulated
@@ -659,7 +659,7 @@ removing it as an independent assumption.
 \section{Steps toward canonical form existence}%
 \label{sec:canonical_pipeline_1606}
 
-This section assembles the components of the canonical-form
+This section combines the components of the canonical-form
 construction following \cite[\S2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 The approach here requires blocking to remove non-trivial periodicity.
 An alternative framework that handles periodic blocks without blocking
@@ -668,7 +668,7 @@ for a discussion of that extension.
 
 \begin{theorem}[Irreducible block decomposition]%
 	\label{thm:irred_decomp_pipeline}
-	\lean{MPSTensor.exists_irreducible_blockDecomp_pipeline1606}
+	\lean{MPSTensor.exists_irreducible_blockDecomp}
 	\leanok
 	\uses{def:irreducible_tensor}
 	Every MPS tensor $A$ generates the same MPV family as
@@ -712,7 +712,7 @@ for a discussion of that extension.
 
 \begin{theorem}[CFII continuation after irreducible block decomposition]%
 	\label{thm:pipeline_handoff}
-	\lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII_handoff}
+	\lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII}
 	\leanok
 	\uses{def:irreducible_tensor}
 	For any MPS tensor~$A$, there exist irreducible blocks
@@ -771,7 +771,7 @@ for a discussion of that extension.
 		and generates the same MPV family as~$A$.
 \end{proof}
 
-\section{Zero-block separation and honest block decomposition}%
+\section{Zero-block separation}%
 \label{sec:zero_block_separation}
 
 In the irreducible block decomposition, some blocks may have all-zero
@@ -839,10 +839,10 @@ The following results separate the zero blocks from the
 	The MPV identity follows from the block structure.
 \end{proof}
 
-\section{Arbitrary-input TP-gauge pipeline}%
+\section{Arbitrary-input TP-gauge reduction}%
 \label{sec:tp_gauge_arbitrary}
 
-\begin{theorem}[Arbitrary-input TP-gauge pipeline with zero-block separation]%
+\begin{theorem}[Arbitrary-input TP-gauge reduction with zero-block separation]%
 	\label{thm:tp_gauge_arbitrary}
 	\lean{MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail}
 	\leanok
@@ -861,7 +861,7 @@ The following results separate the zero blocks from the
 		= V^{(N)}(\mathbf{0}_{d,D_0})_\sigma
 		+ V^{(N)}\!\bigl(\textstyle\bigoplus_{k=1}^r \mu_k B_k\bigr)_\sigma.
 	\]
-	This is the furthest honest arbitrary-input pipeline step available
+	This is the furthest unconditional arbitrary-input reduction step available
 	before periodicity removal.
 \end{theorem}
 
@@ -948,7 +948,7 @@ The following results separate the zero blocks from the
 	\label{thm:compressed_sector}
 	\lean{MPSTensor.exists_compressedTensor_of_supported_projection}
 	\leanok
-	Let $A$ be a left-canonical MPS tensor with
+	Let $A$ be an MPS tensor satisfying
 	$\sum_i (A^i)^\dagger A^i = P$ for an orthogonal projection $P$,
 	and suppose $P A^i P = A^i$ for every~$i$.
 	Then there exists a left-canonical tensor $C$ of bond dimension
@@ -1006,14 +1006,14 @@ The following results separate the zero blocks from the
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:blockdecomp_commuting_projs}
-	The Kadison--Schwarz equality condition for a TP map implies
-	that a projection fixed by $\E_A^\dagger$ commutes with every
-	Kraus operator.
+	\uses{thm:blockdecomp_commuting_projs, thm:kraus_commute}
+	The Kadison--Schwarz equality condition for a TP map
+	(Theorem~\ref{thm:kraus_commute}) implies that a projection fixed by
+	$\E_A^\dagger$ commutes with every Kraus operator.
 	Apply Theorem~\ref{thm:blockdecomp_commuting_projs}.
 \end{proof}
 
-\section{Assembly: arbitrary tensor to primitive block decomposition}%
+\section{Reduction to primitive blocks}%
 \label{sec:assembly_pipeline}
 
 \begin{theorem}[Arbitrary tensor to primitive block decomposition]%
@@ -1077,11 +1077,11 @@ The following results separate the zero blocks from the
 
 \section{Open directions}\label{sec:pipeline_status}
 
-\begin{remark}[Canonical form pipeline: current status]%
+\begin{remark}[Canonical form reduction: current status]%
 	\label{rem:canonical_pipeline_gaps}
 	\leanok
-	The core pipeline steps are in place.
-	The arbitrary-input pipeline
+	The core reduction steps are in place.
+	The arbitrary-input reduction
 	(Theorem~\ref{thm:tp_gauge_arbitrary}) produces a zero tail plus
 	left-canonical live blocks. After a common blocking step
 	(Theorem~\ref{thm:tp_primitive_blockdecomp}), the blocked blocks

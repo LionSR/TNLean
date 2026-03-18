@@ -15,8 +15,10 @@ import TNLean.Spectral.MixedTransfer
 
 This file collects spectral-gap consequences of `IsPrimitiveMPS` together with a
 small transfer-map compatibility API. It stops short of proving any `IsNormal`
-theorem; the current conditional assembly with extra `ρ.PosDef` and
-aperiodicity hypotheses lives in `QuantumWielandt.lean`.
+theorem; the actual primitive-to-normal bridge now lives in
+`Primitivity/StronglyIrreducibleToFullRank.lean`, while `QuantumWielandt.lean`
+keeps a backward-compatible exact-word-span witness theorem whose public
+statement still carries an aperiodicity parameter.
 
 ## Main results
 
@@ -175,7 +177,7 @@ theorem posDef_of_isIrreducibleMap_of_isPrimitiveMPS
     hP.fixedPoint_psd hP.fixedPoint_ne_zero hP.fixedPoint_is_fixed
 
 omit [NeZero D] in
-/-- Bridge from irreducible tensor to irreducible map (re-export). -/
+/-- Bridge from irreducible tensor to irreducible map, recorded here for convenience. -/
 theorem isIrreducibleMap_of_isIrreducibleTensor
     (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
     IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
@@ -213,8 +215,10 @@ not force `ρ.PosDef`; the standard rank-deficient `2 × 2` example still applie
 So the paper's primitive condition is stronger than the bare spectral-gap data
 formalized here.
 
-For the current assembled route with explicit `PosDef` and aperiodicity
-hypotheses, see `QuantumWielandt.lean`.
+For the legacy exact-word-span witness theorem with an explicit aperiodicity
+parameter, see `QuantumWielandt.lean`. For the actual
+`IsPrimitiveMPS + PosDef → IsNormal` bridge, see
+`Primitivity/StronglyIrreducibleToFullRank.lean`.
 -/
 
 

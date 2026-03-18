@@ -9,7 +9,7 @@ import Mathlib.LinearAlgebra.Eigenspace.Basic
 # Multiplicative domain: right version and powers
 
 This file extends `TNLean/Channel/MultiplicativeDomain.lean` with two tools
-used in the “periodicity removal / peripheral spectrum” pipeline:
+used in the “periodicity removal / peripheral spectrum” reduction:
 
 * `multiplicative_domain_right`:
   if KS equality holds at `X`, then `E(Y * X) = E(Y) * E(X)` for all `Y`.
