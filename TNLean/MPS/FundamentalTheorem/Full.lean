@@ -1426,18 +1426,13 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       -- ratio^N = (ratio^N * inner) - ratio^N * (inner - 1)
       -- First part → 1, second part → 0 (bounded × → 0).
       have h_err : Tendsto (fun N => ratio ^ N *
-          (mpvInner (d := d) (A a0) (A a0) N - 1)) atTop (nhds 0) := by
-        apply squeeze_zero_norm (f := fun N =>
-            ‖mpvInner (d := d) (A a0) (A a0) N - 1‖) (fun N => ?_)
-        · have := (hA_inner_diag a0).sub tendsto_const_nhds
-          simpa [show (1 : ℂ) - 1 = 0 from by ring] using this.norm
-        · calc ‖ratio ^ N * (mpvInner (d := d) (A a0) (A a0) N - 1)‖
-              = ‖ratio ^ N‖ * ‖mpvInner (d := d) (A a0) (A a0) N - 1‖ := norm_mul ..
-            _ = 1 * ‖mpvInner (d := d) (A a0) (A a0) N - 1‖ := by
-                rw [norm_pow, hratio_norm, one_pow]
-            _ = ‖mpvInner (d := d) (A a0) (A a0) N - 1‖ := one_mul _
-      have h_decomp : ∀ N, ratio ^ N = ratio ^ N * mpvInner (d := d) (A a0) (A a0) N -
-          ratio ^ N * (mpvInner (d := d) (A a0) (A a0) N - 1) := by
+          (mpvInner (d := d) (A a0) (A a0) N - 1)) atTop (nhds 0) :=
+        bounded_mul_tendsto_zero ratio _ (by rw [hratio_norm])
+          (show Tendsto (fun N => mpvInner (d := d) (A a0) (A a0) N - 1) atTop (nhds 0) by
+            have := (hA_inner_diag a0).sub (tendsto_const_nhds (x := (1 : ℂ)))
+            simp only [sub_self] at this; exact this)
+      have h_decomp : ∀ N, ratio ^ N * mpvInner (d := d) (A a0) (A a0) N -
+          ratio ^ N * (mpvInner (d := d) (A a0) (A a0) N - 1) = ratio ^ N := by
         intro N; ring
       have h_sub := h_prod.sub h_err
       rw [show (1 : ℂ) - 0 = 1 from by ring] at h_sub
@@ -1480,8 +1475,8 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
   -- For j : Fin (rA - 1), succA j : Fin rA is the (j+1)-th element.
   let succA : Fin (rA - 1) → Fin rA := fun j => ⟨j.val + 1, by omega⟩
   let succB : Fin (rB - 1) → Fin rB := fun k => ⟨k.val + 1, by omega⟩
-  have succA_ne_a0 : ∀ j, succA j ≠ a0 := fun j => by simp [succA, a0]; omega
-  have succB_ne_b0 : ∀ k, succB k ≠ b0 := fun k => by simp [succB, b0]; omega
+  have succA_ne_a0 : ∀ j, succA j ≠ a0 := fun j => by simp [succA, a0]
+  have succB_ne_b0 : ∀ k, succB k ≠ b0 := fun k => by simp [succB, b0]
   have succA_inj : Function.Injective succA := fun j₁ j₂ h => by
     simp [succA, Fin.ext_iff] at h; exact Fin.ext (by omega)
   have succB_inj : Function.Injective succB := fun k₁ k₂ h => by
@@ -1491,24 +1486,36 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       ∑ j ∈ Finset.univ.erase a0, μA j ^ N • (A j).mpvState N =
       ∑ j : Fin (rA - 1), μA (succA j) ^ N • (A (succA j)).mpvState N := by
     intro N
-    symm; apply Finset.sum_nbij succA
-    · intro j _; exact Finset.mem_erase.mpr ⟨succA_ne_a0 j, Finset.mem_univ _⟩
-    · intro j₁ _ j₂ _ h; exact succA_inj h
-    · intro x hx
-      simp only [Finset.mem_coe, Finset.mem_erase, Finset.mem_univ, true_and] at hx
-      refine ⟨⟨x.val - 1, by omega⟩, Finset.mem_univ _, Fin.ext (by simp [succA]; omega)⟩
-    · intro j _; rfl
+    have h_eq : Finset.univ.erase a0 = (Finset.univ : Finset (Fin (rA - 1))).image succA := by
+      ext x; constructor
+      · intro hx
+        rw [Finset.mem_erase] at hx
+        have hx_ne : x ≠ a0 := hx.1
+        have hx_pos : 0 < x.val := by
+          by_contra h; push_neg at h; exact hx_ne (Fin.ext (by omega))
+        exact Finset.mem_image.mpr ⟨⟨x.val - 1, by omega⟩, Finset.mem_univ _,
+          Fin.ext (by simp [succA]; omega)⟩
+      · intro hx
+        obtain ⟨j, _, rfl⟩ := Finset.mem_image.mp hx
+        exact Finset.mem_erase.mpr ⟨succA_ne_a0 j, Finset.mem_univ _⟩
+    rw [h_eq, Finset.sum_image (fun j _ k _ h => succA_inj h)]
   have hSumB_reindex : ∀ N,
       ∑ k ∈ Finset.univ.erase b0, μB k ^ N • (B k).mpvState N =
       ∑ k : Fin (rB - 1), μB (succB k) ^ N • (B (succB k)).mpvState N := by
     intro N
-    symm; apply Finset.sum_nbij succB
-    · intro k _; exact Finset.mem_erase.mpr ⟨succB_ne_b0 k, Finset.mem_univ _⟩
-    · intro k₁ _ k₂ _ h; exact succB_inj h
-    · intro x hx
-      simp only [Finset.mem_coe, Finset.mem_erase, Finset.mem_univ, true_and] at hx
-      refine ⟨⟨x.val - 1, by omega⟩, Finset.mem_univ _, Fin.ext (by simp [succB]; omega)⟩
-    · intro k _; rfl
+    have h_eq : Finset.univ.erase b0 = (Finset.univ : Finset (Fin (rB - 1))).image succB := by
+      ext x; constructor
+      · intro hx
+        rw [Finset.mem_erase] at hx
+        have hx_ne : x ≠ b0 := hx.1
+        have hx_pos : 0 < x.val := by
+          by_contra h; push_neg at h; exact hx_ne (Fin.ext (by omega))
+        exact Finset.mem_image.mpr ⟨⟨x.val - 1, by omega⟩, Finset.mem_univ _,
+          Fin.ext (by simp [succB]; omega)⟩
+      · intro hx
+        obtain ⟨k, _, rfl⟩ := Finset.mem_image.mp hx
+        exact Finset.mem_erase.mpr ⟨succB_ne_b0 k, Finset.mem_univ _⟩
+    rw [h_eq, Finset.sum_image (fun k _ l _ h => succB_inj h)]
   -- ── Reindexed tail identity ──
   have hTailReindex : ∀ N,
       ∑ j : Fin (rA - 1), μA (succA j) ^ N • (A (succA j)).mpvState N =
@@ -1571,10 +1578,16 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
         have hB_eq := mpv_toTensorFromBlocks_eq_sum (μB ∘ succB) (fun k => B (succB k)) σ
         simp only [Function.comp, smul_eq_mul] at hA_eq hB_eq
         rw [hA_eq, hB_eq]
-        -- Extract pointwise from the PiLp equality (hTailReindex).
-        have h := congr_arg (fun (v : PiLp 2 (fun _ : Cfg d N => ℂ)) => v σ) (hTailReindex N)
-        simp only [Finset.sum_apply, PiLp.smul_apply, smul_eq_mul, mpvState_apply] at h
-        exact h
+        -- Extract pointwise from the reindexed tail state identity.
+        have h := hTailReindex N
+        have h_pw := PiLp.ext_iff.mp h σ
+        -- h_pw : (...).ofLp σ = (...).ofLp σ
+        -- Unfold to get the scalar identity.
+        change (∑ j, μA (succA j) ^ N • (A (succA j)).mpvState N).1 σ =
+          (∑ k, μB (succB k) ^ N • (B (succB k)).mpvState N).1 σ at h_pw
+        simp only [WithLp.IsEquiv.piLp_sum, WithLp.IsEquiv.piLp_smul, Finset.sum_apply,
+          Pi.smul_apply, smul_eq_mul, mpvState_apply] at h_pw
+        exact h_pw
       -- ── Tail hSumState ──
       have hSumState_tail : ∀ N,
           ∑ j : Fin (rA - 1), (μA (succA j)) ^ N • (A (succA j)).mpvState N =
@@ -1663,9 +1676,13 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
         have hB_eq := mpv_toTensorFromBlocks_eq_sum (μB ∘ succB) (fun k => B (succB k)) σ
         simp only [Function.comp, smul_eq_mul] at hA_eq hB_eq
         rw [hA_eq, hB_eq]
-        have h := congr_arg (fun (v : PiLp 2 (fun _ : Cfg d N => ℂ)) => v σ) (hTailReindex N)
-        simp only [Finset.sum_apply, PiLp.smul_apply, smul_eq_mul, mpvState_apply] at h
-        exact h
+        have h := hTailReindex N
+        have h_pw := PiLp.ext_iff.mp h σ
+        change (∑ j, μA (succA j) ^ N • (A (succA j)).mpvState N).1 σ =
+          (∑ k, μB (succB k) ^ N • (B (succB k)).mpvState N).1 σ at h_pw
+        simp only [WithLp.IsEquiv.piLp_sum, WithLp.IsEquiv.piLp_smul, Finset.sum_apply,
+          Pi.smul_apply, smul_eq_mul, mpvState_apply] at h_pw
+        exact h_pw
       -- ── Tail hSumState ──
       have hSumState_tail : ∀ N,
           ∑ j : Fin (rA - 1), (μA (succA j)) ^ N • (A (succA j)).mpvState N =

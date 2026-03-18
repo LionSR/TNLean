@@ -245,7 +245,7 @@ private lemma ne_zero_of_mem_densityMatrices' {ρ : Matrix (Fin D) (Fin D) ℂ}
 
 /-! ## Prop 7.5: Irreducibility implies primitivity for QDS -/
 
-set_option maxHeartbeats 4000000 in
+set_option maxHeartbeats 16000000 in
 /-- **Wolf Proposition 7.5** (1 → 3): If `T_{t₀}` is irreducible for some
 `t₀ > 0`, then `T_t` is primitive for all `t > 0`.
 
