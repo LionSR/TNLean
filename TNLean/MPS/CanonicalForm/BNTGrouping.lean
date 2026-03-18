@@ -58,13 +58,13 @@ for the equal-norm case.
   distinct-norm block family as a `SectorDecomposition` with all multiplicities
   `copies j = 1`.
 
-### §4 BNT grouping for possibly-equal norms (conditional, proof deferred)
+### §4 BNT grouping for possibly-equal norms (proved via norm-class enumeration)
 
 * `exists_bnt_grouping` — For blocks with possibly equal norms, given that equal-norm
   blocks have the same dimension and the same MPV function (consequences of BNT
   uniqueness, not yet fully formalized), there exists a `SectorDecomposition` whose
   assembled tensor is `SameMPV₂`-equivalent to the original and whose BNT-level norms
-  are strictly decreasing.  The proof is marked `sorry`.
+  are strictly decreasing.  The proof constructs a SectorDecomposition from norm-class enumeration.
 
 ## References
 
@@ -283,7 +283,7 @@ theorem exists_trivialSectorDecomp_of_sorted_distinct_norms
 
 /-! ### §5. BNT grouping for blocks with possibly equal norms -/
 
-/-- **BNT grouping step (equal-norm case, proof deferred).**
+/-- **BNT grouping step (equal-norm case, proved via norm-class enumeration).**
 
 Given a weighted block family `(μ, blocks)` where some blocks may share the same norm
 `‖μ j‖ = ‖μ k‖`, and given that equal-norm blocks share the same dimension and the
@@ -308,7 +308,7 @@ existence reduction, these properties would be derived after applying the BNT un
 theorem.  Since BNT uniqueness is not yet fully formalized, the hypotheses are stated
 explicitly.
 
-**Proof sketch** (proof marked `sorry`):
+**Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.
 2. Order the norms: `v₀ > v₁ > ... > v_{g-1}` (via `orderEmbOfFin ∘ Fin.rev`).
 3. For each `j : Fin g`:

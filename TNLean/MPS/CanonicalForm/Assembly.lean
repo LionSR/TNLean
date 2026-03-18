@@ -506,12 +506,9 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
     have htr_σ' : Matrix.trace σ' = 0 := by
       simp [σ'_def, Matrix.trace_sub, Matrix.trace_smul, c_def,
             div_mul_cancel₀ _ hPrimMPS.trace_ne_zero]
-    -- E^P ρ = ρ (ρ is fixed by all iterates of E).
+    -- E^P ρ = ρ (ρ is fixed by the blocked transfer map, hence by E^P).
     have hE_pow_ρ : (E ^ P) ρ = ρ := by
-      induction P with
-      | zero => simp
-      | succ n ih =>
-          simpa [pow_succ', ih, hPrimMPS.fixedPoint_is_fixed]
+      simpa [E_def, transferMap_blockTensor_apply (A := A) (L := P) (X := ρ)] using hρ_fix_blocked
     -- E^P σ' = σ'.
     have hEP_σ' : (E ^ P) σ' = σ' := by
       simp only [σ'_def, map_sub, LinearMap.map_smul_of_tower, hσ_fix, hE_pow_ρ]
@@ -523,30 +520,33 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
       | succ n ih =>
           simpa [pow_succ', ih, hEP_σ']
     -- N^{Pk} σ' = σ' for all k ≥ 1.
-    have hN_pow_σ' : ∀ k : ℕ, 0 < k → N ^ (P * k) σ' = σ' := by
+    have hN_pow_σ' : ∀ k : ℕ, 0 < k → (N ^ (P * k)) σ' = σ' := by
       intro k hk
       have hPk_pos : 1 ≤ P * k := Nat.mul_pos hP hk
       -- E^{Pk} = Pρ + N^{Pk} (from pow_eq_fixedPointProj_add_compl_pow).
-      have hdecomp : E ^ (P * k) σ' = Pρ σ' + N ^ (P * k) σ' := by
+      have hdecomp : (E ^ (P * k)) σ' = Pρ σ' + (N ^ (P * k)) σ' := by
         have h := pow_eq_fixedPointProj_add_compl_pow E hPrimMPS.trace_ne_zero
           hPrimMPS.transferMap_isChannel.tp hPrimMPS.fixedPoint_is_fixed hPk_pos
-        simp only [h, LinearMap.add_apply]
+        have happ := congrArg (fun T => T σ') h
+        simpa [Pρ_def, N_def, LinearMap.add_apply] using happ
       -- E^{Pk} σ' = σ' (from hEPk_σ').
-      have hEPk : E ^ (P * k) σ' = σ' := by
-        rw [pow_mul]; exact hEPk_σ' k
+      have hEPk : (E ^ (P * k)) σ' = σ' := by
+        rw [pow_mul]
+        exact hEPk_σ' k
       -- Pρ σ' = 0 (since tr σ' = 0).
       have hPρ_σ' : Pρ σ' = 0 := by
         simp [Pρ_def, fixedPointProj, htr_σ']
       -- Combine: N^{Pk} σ' = E^{Pk} σ' - Pρ σ' = σ'.
-      calc N ^ (P * k) σ'
-          = 0 + N ^ (P * k) σ' := (zero_add _).symm
-        _ = Pρ σ' + N ^ (P * k) σ' := by rw [hPρ_σ']
-        _ = E ^ (P * k) σ' := hdecomp.symm
+      calc
+        (N ^ (P * k)) σ'
+            = 0 + (N ^ (P * k)) σ' := (zero_add _).symm
+        _ = Pρ σ' + (N ^ (P * k)) σ' := by rw [hPρ_σ']
+        _ = (E ^ (P * k)) σ' := hdecomp.symm
         _ = σ' := hEPk
     -- N^n σ' → 0 (from complement_pow_tendsto_zero applied to σ').
-    have hN_tendsto : Filter.Tendsto (fun n => N ^ n σ') Filter.atTop (nhds 0) := by
+    have hN_tendsto : Filter.Tendsto (fun n => (N ^ n) σ') Filter.atTop (nhds 0) := by
       let V := Matrix (Fin D) (Fin D) ℂ
-      let Φ := Module.End.toContinuousLinearMap V
+      let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
       -- (Φ N)^n → 0 as CLMs.
       have hN_clm : Filter.Tendsto (fun n => (Φ N) ^ n) Filter.atTop (nhds 0) :=
         hPrimMPS.complement_pow_tendsto_zero
@@ -557,9 +557,11 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
       have hconv := heval.comp hN_clm
       -- Convert CLM powers to LinearMap powers: (Φ N)^n σ' = N^n σ'.
       suffices hsuff : ∀ n, ((Φ N) ^ n) σ' = (N ^ n) σ' by
-        simp_rw [← hsuff]; exact hconv
+        simp_rw [← hsuff]
+        exact hconv
       intro n
-      rw [← map_pow Φ N n]; rfl
+      rw [← map_pow Φ N n]
+      rfl
     -- σ' = 0: the subsequence N^{P*(k+1)} σ' = σ' → 0 shows σ' = 0.
     have hg_tendsto : Filter.Tendsto (fun k : ℕ => P * (k + 1)) Filter.atTop Filter.atTop :=
       Filter.tendsto_atTop_atTop.mpr fun b =>
@@ -568,10 +570,11 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
           have hPk1 : P * (k + 1) ≥ k + 1 := Nat.le_mul_of_pos_left _ hP
           omega⟩
     have hconst_tendsto : Filter.Tendsto (fun _ : ℕ => σ') Filter.atTop (nhds 0) := by
-      have hconv2 : Filter.Tendsto (fun k => N ^ (P * (k + 1)) σ') Filter.atTop (nhds 0) :=
+      have hconv2 : Filter.Tendsto (fun k => (N ^ (P * (k + 1))) σ') Filter.atTop (nhds 0) :=
         hN_tendsto.comp hg_tendsto
-      have heq : (fun k : ℕ => N ^ (P * (k + 1)) σ') = fun _ => σ' := by
-        funext k; exact hN_pow_σ' (k + 1) (Nat.succ_pos k)
+      have heq : (fun k : ℕ => (N ^ (P * (k + 1))) σ') = fun _ => σ' := by
+        funext k
+        exact hN_pow_σ' (k + 1) (Nat.succ_pos k)
       rwa [heq] at hconv2
     exact tendsto_nhds_unique tendsto_const_nhds hconst_tendsto
   -- Step 6: Apply isIrreducibleMap_of_channel_posDef_fixedPoint_unique.

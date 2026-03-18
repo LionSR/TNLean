@@ -8,6 +8,7 @@ import TNLean.Channel.Semigroup.Primitivity
 import TNLean.Channel.Semigroup.GeneratorDefs
 import TNLean.Channel.Semigroup.LindbladForm
 import TNLean.Channel.Semigroup.KossakowskiForm
+import TNLean.Channel.Semigroup.ReducibleQDS
 
 /-!
 # Wolf Chapter 7 — Semigroup Structure: Public Theorem Index
@@ -118,9 +119,24 @@ No new proofs are introduced here; this is a documentation-only index module.
 
 ---
 
+### Wolf Proposition 7.6 (reducible QDS) — PARTIALLY FORMALIZED
+
+* `IsReducibleQDS` — reducible QDS definition
+  — `TNLean.Channel.Semigroup.ReducibleQDS`
+* `HasRankDeficientFixedDensity` — condition (1): rank-deficient fixed density
+* `HasRankDeficientKernelElement` — condition (2): rank-deficient kernel element
+* `HasInvariantCompression` — condition (3): invariant compression
+* `HasBlockUpperTriangularLindblad` — condition (4): block-upper-triangular Lindblad
+* `wolf_prop_7_6_one_iff_two` — (1) ↔ (2): FORMALIZED ✅
+* `generatorPreservesCompression_of_semigroupPreservesCompression` — semigroup→generator: FORMALIZED ✅
+* `sum_conjTranspose_mul_self_eq_zero_imp` — sum-of-squares vanishing: FORMALIZED ✅
+* `wolf_prop_7_6_four_implies_three` — (4) → (3): partially formalized (reduces to two sorry lemmas)
+* `wolf_prop_7_6_three_implies_four` — (3) → (4): SORRY
+
+---
+
 ## Not yet formalized
 
-* Wolf Proposition 7.6 (reducible QDS)
 * Wolf Corollary 7.2 (necessary conditions for relaxation)
 * Wolf Theorem 7.2 (kernel of Liouvillian)
 -/

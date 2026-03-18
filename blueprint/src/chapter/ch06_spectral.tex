@@ -308,7 +308,7 @@ a block embedding of a mixed-transfer eigenvector.
     Hence $X'$ is invertible.
 
     \emph{Step~5 (Skolem--Noether conclusion).}
-    The map $M \mapsto X' M (X')^{-1}$ is a $\CC$-algebra automorphism
+    The map $M \mapsto X' M (X')^{-1}$ is a $\C$-algebra automorphism
     of $\MN{D}$ sending $B'^i$ to $A'^i$.
     By Skolem--Noether (Theorem~\ref{thm:skolem_noether}) this is an
     inner automorphism.  Undoing the separate gauges gives
@@ -357,20 +357,20 @@ a block embedding of a mixed-transfer eigenvector.
     Theorem~\ref{thm:eigenvalue_bound} gives $|\mu| \le 1$
     for every eigenvalue of $F_{AB}^{\mathrm{rect}}$.
     If $\rho(F_{AB}^{\mathrm{rect}}) = 1$, choose a
-    modulus-one eigenvector $X \in M_{D_1 \times D_2}(\CC) \setminus \{0\}$.
+    modulus-one eigenvector $X \in M_{D_1 \times D_2}(\C) \setminus \{0\}$.
 
     Gauge $A$ and $B$ separately to unital Kraus families and apply the
     block-embedding Kadison--Schwarz argument as in the square case
     (Theorem~\ref{thm:modulus_one_gauge}, Steps~2--3).
     The Kraus commutation relation gives $A'^i X' = X' B'^i$
     for all~$i$.
-    Now consider $\ker(X') \subseteq \CC^{D_2}$. If $v \in \ker(X')$,
+    Now consider $\ker(X') \subseteq \C^{D_2}$. If $v \in \ker(X')$,
     then $X' B'^i v = A'^i X' v = 0$, so $B'^i v \in \ker(X')$ for
-    every~$i$.  Since $B$ is injective, $\{B'^i\}$ spans $M_{D_2}(\CC)$,
+    every~$i$.  Since $B$ is injective, $\{B'^i\}$ spans $M_{D_2}(\C)$,
     so $\ker(X')$ is invariant under every $D_2 \times D_2$ matrix and
-    is therefore either $\{0\}$ or $\CC^{D_2}$.  Since $X' \ne 0$,
+    is therefore either $\{0\}$ or $\C^{D_2}$.  Since $X' \ne 0$,
     we have $\ker(X') = \{0\}$, so $X'$ is injective as a linear
-    map $\CC^{D_2} \to \CC^{D_1}$ and $D_2 \le D_1$.
+    map $\C^{D_2} \to \C^{D_1}$ and $D_2 \le D_1$.
     Applying the same argument to $X'^\dagger$ (using the commutation
     relation for the adjoint block family) gives $D_1 \le D_2$.
     Hence $D_1 = D_2$, contradicting the hypothesis.
