@@ -34,6 +34,10 @@ the additional hypotheses that a specific Kraus operator `A i₀` is
 noninvertible and possesses a nonzero eigenvector `φ`.
 
 These hypotheses match the paper's Lemma 2(b) statement precisely.
+Consequently, this file supplies the exact fixed-length ingredient behind the
+blocked noninvertible branch of `PaperResults/WielandtInequality.lean`; it is
+strictly stronger than the qualitative `∃ N` statement exported by
+`PaperResults/MatrixSpanExistence.lean`.
 
 ## Proof strategy
 

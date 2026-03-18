@@ -199,6 +199,10 @@ private theorem leading_block_sameMPV_of_crossOverlap_tendsto_one
             simpa [mul_assoc, mul_left_comm, mul_comm] using this
       _ = Bbound := by
             simp [Bbound, mul_assoc, mul_left_comm, mul_comm]
+  -- After dividing by the leading weight `μ 0`, the tail terms decay because
+  -- strict weight ordering gives a geometric factor `ρ < 1`. The overlap
+  -- estimates above are used only to bound the coefficients `δ k N`; they are
+  -- not the source of the decay themselves.
   let ρ : ℝ :=
     ‖μ (1 : Fin (Nat.succ (Nat.succ r)))‖ / ‖μ (0 : Fin (Nat.succ (Nat.succ r)))‖
   have hρ_pos : 0 < ρ := by
@@ -410,9 +414,14 @@ Compared to the naive statement in `PiAlgebra/BlockSeparation.lean`, we assume:
   in the equal-or-orthogonal dichotomy.
 
 The proof follows Pérez-García et al. (2007, Appendix E) / Cirac et al. (2021, Thm. IV.3):
-we take overlaps with the leading block, apply `peeling_exponential_bound` to obtain
-exponential decay of the leading overlap difference, conclude equality of the leading
-block via overlap decay, and finally iterate by induction on the number of blocks.
+we take overlaps with the leading block, divide by the leading weight, and use the
+strict modulus ordering of the weights together with uniform overlap bounds to invoke
+`peeling_exponential_bound`. Thus the geometric decay comes from the weight ratio,
+while the overlap theorems are used only for boundedness and contradiction steps.
+Once the leading mixed overlap is shown to tend to `1`, a nonzero limit first rules
+out a bond-dimension mismatch via the rectangular decay lemma; in the equal-dimension
+case, the usual overlap-decay contradiction forces gauge-phase equivalence of the
+leading block. Finally one iterates by induction on the number of blocks.
 -/
 lemma block_separation_core
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -519,11 +528,15 @@ Besides irreducibility and left-canonical normalization on both block families,
 this theorem also assumes the self-overlap convergence hypothesis on the
 `A`-blocks: `mpvOverlap (A k) (A k) N → 1`.
 
-The proof is the same peeling / induction argument as `block_separation_core`,
-but the contradiction steps use the NT overlap-decay lemmas from
-`SpectralGapNT.lean`: `mpvOverlap_tendsto_zero_of_irreducible_TP` in the
-equal-dimension case and `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP`
-in the dimension-mismatch case. -/
+The proof is the same peeling / induction argument as `block_separation_core`.
+The geometric decay again comes from the strict weight ordering after dividing by
+the leading weight, while the NT overlap lemmas provide the boundedness and
+contradiction inputs. At the identification step,
+`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` first excludes a
+bond-dimension mismatch, and
+`gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP` replaces the
+injective equal-dimension overlap-decay contradiction via the irreducible
+modulus-one-eigenvalue-rigidity route. -/
 theorem block_separation_all_words_of_irreducible_TP
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -637,7 +650,11 @@ theorem per_block_sameMPV_of_canonical_form
 
 This is the analogue of `per_block_sameMPV_of_canonical_form`, replacing
 injective canonical-form blocks by irreducible + primitive + left-canonical
-blocks. Since both block families use the same dimension function, the
+blocks. The underlying proof uses the same peeling argument as the injective
+canonical-form theorem, but the leading-block identification step uses the
+irreducible modulus-one-eigenvalue-rigidity theorem (after separately ruling out
+a bond-dimension mismatch) instead of the injective overlap-decay
+contradiction. Since both block families use the same dimension function, the
 conclusion is the homogeneous predicate `SameMPV`. -/
 theorem per_block_sameMPV_of_normal_canonical_form
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}

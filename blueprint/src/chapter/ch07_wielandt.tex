@@ -225,8 +225,9 @@ The results follow~\cite{Sanz2010Quantum}.
     \uses{thm:cumulative_strict_mono, lem:cumulative_finrank_le}
     The key observation is that if $T_n(A) \neq T_{n+1}(A)$,
     the dimension strictly increases.
-    Starting from $T_1(A) = S_1(A)$ with dimension~$d'$,
-    after at most $D^2 - d'$ additional strict-growth steps
+    Since $S_1(A) \subseteq T_1(A)$ and $\dim S_1(A) = d'$,
+    we have $\dim T_1(A) \ge d'$.
+    After at most $D^2 - d'$ additional strict-growth steps
     the dimension reaches $D^2 = \dim \MN{D}$.
     Stabilisation before reaching $\MN{D}$ contradicts normality.
     Hence $T_{D^2 - d' + 1}(A) = \MN{D}$.
@@ -281,11 +282,10 @@ The results follow~\cite{Sanz2010Quantum}.
     $V_n$ is closed under left-multiplication by each $A^i$,
     so $\operatorname{wordSpan}(A, N) \subseteq V_n \neq \MN{D}$
     for all $N \ge 1$, contradicting normality.
-    Since $V_{D^2 - d' + 1} = \MN{D}$ and
-    $D \ge 2$ implies $\Id \notin V_{D^2 - d' + 1}$
-    (dimension of $\MN{D}$ is $D^2 \ge 4$,
-    but $\spn\{\Id\}$ has dimension~$1$),
-    at least one generator has nonzero trace.
+    Since $V_{D^2-d'+1} = \MN{D}$, the identity $\mathbf{1}$ lies in
+    $V_{D^2-d'+1}$ and is therefore a linear combination of word products of
+    positive length. At least one such product has nonzero trace
+    (since $\tr(\mathbf{1}) = D \geq 2 \neq 0$).
 \end{proof}
 
 \section{Eigenvector extraction}
@@ -401,7 +401,7 @@ The results follow~\cite{Sanz2010Quantum}.
     reaching $D$ by step $D - 1$.
 \end{proof}
 
-\section{Assembly}
+\section{Proof of the cumulative Wielandt bound}
 
 \begin{definition}[Wielandt analysis]\label{def:wielandt_analysis}
     \lean{MPSTensor.WielandtAnalysis}
@@ -520,6 +520,15 @@ The results follow~\cite{Sanz2010Quantum}.
               $S_{D^2}(B) = \MN{D}$, whence
               $S_{D^2 \cdot n}(A) = \MN{D}$.
         \end{enumerate}
+        In the invertible case, the invertible Kraus operator $B^{i_0}$ allows
+        direct dimension growth, giving
+        $S_{D^2-k_B+1}(B) = \MN{D}$ where
+        $k_B = \operatorname{krausRank}(B)$.
+        In the non-invertible case, the bound $S_{D^2}(B) = \MN{D}$ follows
+        from tracking indices through the rank-one extraction argument of
+        \cite[Lemma~2(b)]{Sanz2010Quantum};
+        Theorem~\ref{thm:wielandt_lemma2b} only gives the qualitative
+        conclusion $\exists N : S_N(B) = \MN{D}$ without this explicit bound.
         In both cases $\iota(A) \le D^2 \cdot n \le D^2 \cdot (D^2 - d' + 1)$.
     \end{enumerate}
 \end{proof}
@@ -909,7 +918,7 @@ spectral radius $< 1$.
     so $\E_A^n(\rho)$ has a nonzero summand.
 \end{proof}
 
-\subsection{Primitivity-to-normality bridge}\label{subsec:prim_to_normal}
+\subsection{From primitivity to normality}\label{subsec:prim_to_normal}
 
 The primitivity condition of Definition~\ref{def:primitive_mps}
 combines TP normalization, a nonzero PSD fixed point, and a complementary
@@ -966,7 +975,7 @@ spectral gap. It is connected to normality through the following results.
     With the additional hypothesis $\rho > 0$,
     Theorem~\ref{thm:primitive_implies_irreducible} gives
     irreducibility.
-    Together with the Burnside bridge
+    Together with Burnside's theorem
     (Chapter~\ref{ch:canonical}, \S\ref{subsec:burnside_bridge})
     and Theorem~\ref{thm:algspan_to_normal}, one obtains
     \[
@@ -1030,7 +1039,7 @@ spectral gap. It is connected to normality through the following results.
     \end{enumerate}
 \end{proof}
 
-\subsection{Primitivity bridge to strong irreducibility and normality}%
+\subsection{From primitivity to strong irreducibility and normality}%
 \label{subsec:prim_bridge_normality}
 
 The results in this subsection remove the aperiodicity assumption
@@ -1098,7 +1107,7 @@ projection onto the fixed-point subspace.
     (has eventually full Kraus rank).
     No aperiodicity assumption is needed.
 
-    This is the key bridge between the spectral-gap
+    This is the key connection between the spectral-gap
     primitivity of Definition~\ref{def:primitive_mps} and
     normality, filling the gap that the aperiodicity-based route
     in \S\ref{sec:cumspan_to_wordspan} leaves open.
@@ -1109,13 +1118,11 @@ projection onto the fixed-point subspace.
     \uses{thm:strongly_irred_from_primitive}
     By Theorem~\ref{thm:strongly_irred_from_primitive},
     $A$ is strongly irreducible.
-    The implication (c)$\Rightarrow$(b) of
-    \cite[Proposition~3]{Sanz2010Quantum}
-    (strong irreducibility implies eventually full Kraus rank)
-    then gives normality.
-    (Formally: strong irreducibility implies
-    $\langle A \rangle_n = \MN{D}$ for large $n$,
-    which is exactly the definition of normality.)
+    The implication from strong irreducibility to normality proceeds as
+    follows: strong irreducibility gives peripheral spectrum $\{1\}$,
+    hence the aperiodicity condition $\Id \in S_1(A)$.
+    Combined with irreducibility, Theorem~\ref{thm:irred_tensor_aperiodic_normal}
+    then yields normality.
 \end{proof}
 
 \section{Cumulative span to word span}\label{sec:cumspan_to_wordspan}
@@ -1137,7 +1144,7 @@ The gap is closed by an aperiodicity hypothesis.
     (peripheral-spectrum primitivity together with a positive-definite
     fixed point), one expects aperiodicity to follow from spectral
     analysis of the transfer map. That implication is not used in the
-    present Wielandt bridge, so the condition is kept explicit.
+    present Wielandt argument, so the condition is kept explicit.
 \end{remark}
 
 \begin{remark}[Counterexample: cumulative spanning does not imply normality]%

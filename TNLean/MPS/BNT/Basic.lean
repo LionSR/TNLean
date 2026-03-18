@@ -8,13 +8,13 @@ import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!
-# Bases of normal tensors (BNT) and matching infrastructure
+# Basis of normal tensors (BNT) and matching infrastructure
 
 This module combines two natural units:
 
 ## Part 1: Basic BNT infrastructure (from `BasisNormalTensors`)
 
-Introduces the basic infrastructure for **bases of normal tensors** (BNT), as in
+Introduces the basic infrastructure for the **basis of normal tensors** (BNT) notion, as in
 Def. 4.2 of arXiv:2011.12127.
 
 A decomposition into a basis of normal tensors for a tensor `A_total` is a finite family of
@@ -41,7 +41,7 @@ Theorem 4.4 of arXiv:2011.12127 (Cirac–Pérez-García–Schuch–Verstraete, R
 
 ### MPS application
 
-* `MPSTensor.bntFamilies_eventually_linearIndependent`: Re-exports the BNT Gram-matrix criterion
+* `MPSTensor.bntFamilies_eventually_linearIndependent`: packages the BNT Gram-matrix criterion
   in a form suited to families with per-block bond dimension.
 
 * `MPSTensor.eventually_exists_invertible_changeBasis`: If two BNT-like families produce MPV
@@ -68,7 +68,8 @@ namespace MPSTensor
 for `A_total` in the sense of Def. 4.2 of arXiv:2011.12127.
 
 Informally, `A_bnt` is a finite family of normal tensors which spans the MPV family of `A_total`
-and whose MPV states become linearly independent for large enough system size.
+and whose MPV states become linearly independent for large enough system size. Here `IsNormal`
+is the algebraic normality predicate used in this project, i.e. eventual block injectivity.
 -/
 structure IsBNT {d Dtot : ℕ} (A_total : MPSTensor d Dtot)
     (g : ℕ) (dim : Fin g → ℕ) (A_bnt : (j : Fin g) → MPSTensor d (dim j)) : Prop where

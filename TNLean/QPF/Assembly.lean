@@ -12,12 +12,13 @@ import TNLean.Channel.FixedPoint.Cesaro
 /-!
 # Quantum Perron–Frobenius Theory for MPS Transfer Operators
 
-This file assembles the quantum Perron–Frobenius theorem from its components:
+This file provides the existence step and the final quantum Perron–Frobenius
+theorem from its components:
 
 1. **Positive definiteness** (`QPF.PosDef`): PSD fixed points → PD under injectivity
 2. **Uniqueness** (`QPF.Uniqueness`): PSD fixed points are unique up to scalar
 3. **Existence** (this file): via Cesàro mean / trace-preserving channel theory
-4. **Assembly** (this file): the combined theorem
+4. **The quantum Perron–Frobenius theorem** (this file): the combined result
 
 Together these formalize the core of **Wolf Theorem 6.3** (Spectral radius of
 irreducible maps), specialized to the trace-preserving (spectral radius = 1) setting:
@@ -74,9 +75,9 @@ theorem exists_posSemidef_fixedPoint
 
 end Existence
 
-/-! ## Part 4: Assembling the quantum PF theorem -/
+/-! ## Part 4: The quantum Perron–Frobenius theorem -/
 
-section Assembly
+section PerronFrobenius
 
 /-- **The quantum Perron–Frobenius theorem for MPS transfer operators**
 (Wolf Thm 6.3, specialized to CP maps with spectral radius 1).
@@ -100,7 +101,7 @@ theorem quantum_perron_frobenius [DecidableEq (Fin D)]
       · exact posSemidef_fixedPoint_unique A hA ρ σ hρ_psd hρ_ne hσ_psd hσ hρ_fix hσ_fix
   }⟩
 
-/-! ### Bridge: handle the `D = 0` edge case
+/-! ### Reduction: handle the `D = 0` edge case
 
 `quantum_perron_frobenius` requires `0 < D`. The theorem below lifts this restriction. -/
 
@@ -126,6 +127,6 @@ theorem injective_transfer_unique_fixed_point' [DecidableEq (Fin D)]
       unique := fun σ _ _ => ⟨0, by ext i; exact Fin.elim0 i⟩
     }⟩
 
-end Assembly
+end PerronFrobenius
 
 end MPSTensor

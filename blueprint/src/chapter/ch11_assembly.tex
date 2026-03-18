@@ -1,4 +1,4 @@
-\chapter{Full Assembly}\label{ch:assembly}
+\chapter{Proof of the Fundamental Theorem}\label{ch:assembly}
 
 This chapter proves the Fundamental Theorem of Matrix Product States.
 We state the Fundamental Theorem in two versions: one for block-injective
@@ -21,14 +21,14 @@ Section~\ref{sec:periodic_ft} outlines the stronger
 which gives a fundamental theorem valid for periodic tensors directly,
 with an extra $Z$-gauge degree of freedom.
 
-\section{Weak Fundamental Theorem: pipeline end-to-end}%
+\section{Weak Fundamental Theorem}%
 \label{sec:assembly_weak}
 
-The following theorem packages the full upstream pipeline
+The following theorem combines the full upstream reduction
 (zero-block separation, TP gauge, blocking, primitivity)
 with the downstream Fundamental Theorem for normal canonical form data.
 It is conditional on the extra hypotheses (tensor irreducibility and
-distinct weight norms) that the automatic pipeline does not yet produce.
+distinct weight norms) that the automatic reduction does not yet produce.
 
 \begin{theorem}[Weak Fundamental Theorem (conditional)]%
     \label{thm:weak_ft_conditional}
@@ -411,7 +411,7 @@ per-block-copy structure separate from the merged
 	To close it, one must compose the Route~B weight recovery with:
 	(a)~the proportional FT for block matching and gauge-phase equivalences,
 	(b)~phase absorption into weights, and
-	(c)~global gauge assembly via permutation and cast transport
+	(c)~global gauge construction via permutation and cast transport
 	(all of which are now formalized individually in \texttt{Multi.lean}).
 \end{remark}
 

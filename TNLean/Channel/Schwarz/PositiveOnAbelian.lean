@@ -14,7 +14,7 @@ This file records the finite-dimensional matrix-endomorphism scaffold around Wol
 Proposition 1.6: a positive map is completely positive when restricted to a
 commutative `*`-subalgebra.
 
-For the current TNLean pipeline we isolate the concrete matrix ingredients needed
+For the current TNLean construction we isolate the concrete matrix ingredients needed
 later for the normal-operator Schwarz inequality. The key definition
 `IsPositiveOnCommuting` is phrased in terms of quadratic forms of block matrices
 whose images under the map commute pairwise.
@@ -327,7 +327,7 @@ theorem diagonal_family_schwarz_le
 end DiagonalFamily
 
 /-- Wolf Proposition 1.6 in the block-quadratic-form form used later in the
-pipeline: positivity upgrades to positivity of every finite amplification once
+construction: positivity upgrades to positivity of every finite amplification once
 all block images commute pairwise.
 
 **Proof outline**: Use `exists_diagonal_family_of_normal` and `diagonal_family_schwarz_le`

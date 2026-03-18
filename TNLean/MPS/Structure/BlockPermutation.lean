@@ -9,7 +9,7 @@ import Mathlib.LinearAlgebra.Matrix.Reindex
 /-!
 # Decomposition of algebra automorphisms of products of matrix algebras
 
-This file bridges `BlockPermutation.lean` to the MPS gauge-equivalence machinery.
+This file connects `BlockPermutation.lean` with the MPS gauge-equivalence machinery.
 
 Given a ℂ-algebra automorphism `T` of `∏_i M_{D_i}(ℂ)`, we decompose it as:
 1. A block permutation `σ : ι ≃ ι`

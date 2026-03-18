@@ -256,6 +256,13 @@ We use this notation throughout the block-separation argument.
     Injectivity of $\mu$ makes $V$ invertible.
 \end{proof}
 
+\begin{remark}
+    Theorem~\ref{thm:vandermonde_sep} is not used in the current proof chain.
+    It is retained for potential alternative routes; the current path to
+    Theorem~12.5 uses BNT linear independence (Chapter~11) rather than
+    Newton--Girard identities to match the weight multiset.
+\end{remark}
+
 \begin{lemma}[Block separation core]\label{lem:block_sep_core}
     \lean{MPSTensor.block_separation_core}
     \leanok
@@ -273,13 +280,18 @@ We use this notation throughout the block-separation argument.
     By induction on the number of blocks~$r$.
     In the inductive step, take overlaps with the
     leading block $A_0$; after division by $\mu_0^N$,
-    the contributions from $k \ge 1$ decay exponentially by
-    Theorems~\ref{thm:overlap_decay_rect}
-    and~\ref{thm:overlap_decay}, leaving
+    the contributions from $k \ge 1$ decay because
+    $|\mu_k / \mu_0| < 1$ (strict weight ordering) and the bilinear overlaps
+    $O_{A_0 A_k}(N)$ and $O_{A_0 B_k}(N)$ are bounded
+    (Theorems~\ref{thm:overlap_decay_rect}
+    and~\ref{thm:overlap_decay} supply the relevant bounds), leaving
     $O_{A_0 A_0}(N) - O_{A_0 B_0}(N) \to 0$.
     Condition~(5) gives $O_{A_0 A_0}(N) \to 1$, hence
     $O_{A_0 B_0}(N) \to 1$.
-    Since this limit is nonzero, the contrapositive of
+    Since $O_{A_0 B_0}(N) \to 1 \neq 0$, the bond dimensions must match:
+    $D_{A_0} = D_{B_0}$; otherwise Theorem~\ref{thm:overlap_decay_rect}
+    would give $O_{A_0 B_0}(N) \to 0$, a contradiction.
+    With equal bond dimensions established, the contrapositive of
     Theorem~\ref{thm:overlap_decay} forces $A_0$ and $B_0$
     to be gauge-phase equivalent; the limit $O_{A_0 B_0}(N) \to 1$
     then makes the phase trivial, so $A_0$ and $B_0$
@@ -326,11 +338,13 @@ We use this notation throughout the block-separation argument.
 
 \begin{proof}\leanok
     \uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge, thm:block_sep}
-    The proof follows the same peeling argument as
-    Theorem~\ref{thm:block_sep}. Theorem~\ref{thm:ncf_overlap_tendsto_one}
-    replaces the explicit self-overlap hypothesis on the leading block, and
-    Theorem~\ref{thm:nt_modulus_one_gauge} identifies the leading comparison
-    block from the resulting nondecaying mixed overlap.
+    The proof follows the same peeling argument as Theorem~\ref{thm:block_sep},
+    with Theorem~\ref{thm:nt_modulus_one_gauge} (modulus-one eigenvalue rigidity
+    for irreducible tensors) replacing the contrapositive of
+    Theorem~\ref{thm:overlap_decay} at the identification step, since the blocks
+    are irreducible rather than injective.
+    Theorem~\ref{thm:ncf_overlap_tendsto_one}
+    replaces the explicit self-overlap hypothesis on the leading block.
     Since both block families already use the same dimension function,
     the conclusion is direct per-block same MPV.
 \end{proof}

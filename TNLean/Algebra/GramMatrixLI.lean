@@ -23,7 +23,8 @@ Gram-matrix convergence.
 
 For a finite family of vectors `v i N` in a complex inner product space,
 if the Gram matrix entries converge `⟪v i N, v j N⟫_ℂ → δ_{ij}` as `N → ∞`,
-then for `N` large enough the vectors `{v i N}` are linearly independent.
+then the Gram matrices converge to the identity. Hence for `N` large enough the Gram matrix is
+invertible, and the vectors `{v i N}` are linearly independent.
 -/
 theorem eventually_linearIndependent_of_gram_tendsto_id
     {ι : Type} [Finite ι] [DecidableEq ι]

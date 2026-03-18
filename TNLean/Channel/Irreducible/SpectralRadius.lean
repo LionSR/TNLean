@@ -215,8 +215,9 @@ TP-gauge infrastructure:
 1. obtain a positive-definite left eigenvector `σ > 0` for the adjoint map;
 2. use the weighted trace identity to show its eigenvalue also equals `r`;
 3. gauge by `σ^{1/2}` and rescale by `1 / r` to obtain a TP map;
-4. the TP map has spectral radius `1` by the existing spectral-gap bound and
-   the transformed eigenvector;
+4. the TP map has spectral radius `≤ 1` because trace preservation bounds the
+   growth of iterates, while the transformed positive-definite fixed point gives
+   eigenvalue `1`, hence spectral radius `1`;
 5. undo scalar rescaling and similarity. -/
 theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     [NeZero D]
@@ -347,6 +348,10 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
             simp [similarityMap, hS_inv_inv, hS_inv_herm, Matrix.mul_assoc]
   set E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     (↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E with hE'_def
+  -- The TP-normalized map has spectral radius `≤ 1`. In the formal proof we
+  -- invoke `MPSTensor.spectralRadius_mixedTransfer_le_one`; conceptually this is
+  -- the usual trace-preserving bound, since `trace ((E'^n) X) = trace X` for all
+  -- `n`, while the transformed fixed point will supply the matching lower bound.
   have hrad'_le : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E') ≤ 1 := by
     calc

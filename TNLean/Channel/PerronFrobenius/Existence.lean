@@ -226,8 +226,11 @@ In other words: `∑ ((1/√r) • A i)ᴴ * σ * ((1/√r) • A i) = σ`.
 This is equivalent to saying `∑ (A i)ᴴ * σ * A i = r • σ` (eigenvector equation).
 
 This theorem is obtained by applying `exists_posSemidef_eigenvector` (Wolf Thm 6.5)
-to the adjoint transfer map and then upgrading the resulting PSD fixed point to a
-PosDef one using irreducibility (Wolf Thm 6.3 item 2). -/
+to the adjoint transfer map, noting that irreducibility transfers to that adjoint
+map because an invariant projection there would yield the complementary invariant
+projection for the original transfer map after taking adjoints, and then upgrading
+the resulting PSD fixed point to a PosDef one using irreducibility
+(Wolf Thm 6.3 item 2). -/
 theorem exists_posDef_adjoint_eigenvector
     [NeZero D]
     (A : MPSTensor d D)
@@ -242,8 +245,10 @@ theorem exists_posDef_adjoint_eigenvector
   -- Step 2: E† is nonzero.
   have hE_ne : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ≠ 0 :=
     adjointTransferMap_ne_zero_of_nonzero A hA
-  -- Step 3: The adjoint transfer map is irreducible, hence it does not annihilate
-  -- nonzero PSD matrices.
+  -- Step 3: The adjoint transfer map is irreducible: if it had a nontrivial
+  -- invariant projection `P`, then taking adjoints would show that `1 - P`
+  -- is invariant for the original transfer map, contradicting `hIrr`. Hence
+  -- it does not annihilate nonzero PSD matrices.
   have hIrrAdj : IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) :=
     isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrr
   have hNZ :

@@ -19,7 +19,7 @@ The main output is `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecom
 from a weighted family of irreducible, left-canonical, primitive blocks with pairwise distinct
 nonzero weight moduli and produces a blocked normal canonical form.
 
-The intermediate private lemmas isolate the bookkeeping steps that remain honest under the current
+The intermediate private lemmas isolate the bookkeeping steps that remain valid under the current
 API: a documentary TP-normalization stage for irreducible nonzero blocks, trivial blocking at
 length `p = 1`, and sorting by decreasing weight norm.
 
@@ -138,10 +138,10 @@ decomposition.
 This theorem is currently unused by the public endpoint below, which starts later from blocks that
 are already primitive and left-canonical. We keep it as a public record of the earlier TP
 normalization route: its extra nonzero-block hypothesis lives on a chosen decomposition, so it
-still does not by itself give an honest arbitrary-input endpoint under the current `SameMPV₂`
+still does not by itself give an unconditional arbitrary-input endpoint under the current `SameMPV₂`
 interface. Concretely, every input block is assumed to have some nonzero Kraus operator, excluding
-the all-zero scalar counterexample and matching the hypotheses of
-`exists_tp_data_of_irreducible_pipeline1606`. -/
+the all-zero scalar counterexample and matching the hypotheses of the
+corresponding irreducible-to-TP wrapper from `Existence.lean`. -/
 theorem exists_tp_gauge_blockwise
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
@@ -185,7 +185,7 @@ theorem exists_tp_gauge_blockwise
     intro k
     letI : NeZero (dim0 k) := ⟨hdim0_ne k⟩
     exact
-      exists_tp_data_of_irreducible_pipeline1606
+      exists_tp_data_of_irreducible
         (A := blocks0 k) (hIrr := hIrr0 k) (hA := hNonzero0 k)
   choose blocks1 r1 σ1 hσpd1 hrpos1 hform1 hLeft1 hGauge1 using htp
   let μ1 : Fin r0 → ℂ := fun k => (↑(Real.sqrt (r1 k)) : ℂ)
@@ -612,22 +612,22 @@ theorem exists_normalCanonicalForm_of_primitive_blockDecomp
 /-!
 ## Zero-block separation + TP gauge threading (1606.00608 §2.3 + App. A)
 
-This section composes the honest zero-block separation from `Existence.lean` with the
+This section composes the zero-block separation from `Existence.lean` with the
 blockwise Perron–Frobenius / TP-gauge theorem `exists_tp_gauge_blockwise`, producing an
 arbitrary-input result: from any `A : MPSTensor d D`, we obtain:
 
 * a zero-tail dimension `zeroTailDim` (accumulating all-zero irreducible blocks), and
 * a TP-gauged family of irreducible blocks with nonzero weights.
 
-The MPV relationship honestly accounts for both contributions:
+The MPV relationship accounts exactly for both contributions:
 
   `mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv (toTensorFromBlocks μ blocks) σ`
 
-This is the furthest honest arbitrary-input step available before periodicity removal and
+This is the furthest unconditional arbitrary-input step available before periodicity removal and
 cyclic-sector / equal-weight bookkeeping.
 -/
 
-/-- **Arbitrary-input TP-gauge pipeline (1606.00608 §2.3 + App. A, zero-block honest).**
+/-- **Arbitrary-input TP-gauge reduction (1606.00608 §2.3 + App. A, with zero-block separation).**
 
 From any `A : MPSTensor d D`, produce:
 * a zero-tail of dimension `zeroTailDim` accumulating all-zero irreducible blocks;
@@ -679,10 +679,10 @@ theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
 ## Scope of this file
 
 This file packages primitive weighted block decompositions into normal canonical form and provides
-the honest arbitrary-input TP-gauge pipeline (with zero-block separation).
+the unconditional arbitrary-input TP-gauge reduction (with zero-block separation).
 
 A full wrapper to the endpoint canonical form would still require:
-* periodicity removal by blocking (applying `exists_blockTensor_isPrimitive_pipeline1606` to each
+* periodicity removal by blocking (applying the irreducible-to-primitive blocking theorem to each
   TP-gauged block);
 * cyclic-sector decomposition after blocking;
 * equal-weight merging or grouping for strict weight ordering.

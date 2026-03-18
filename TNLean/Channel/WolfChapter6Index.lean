@@ -26,7 +26,7 @@ in this project to the numbering in:
 Each entry lists the Wolf result, its status (fully formalized / partially
 formalized / not yet formalized), and the Lean declaration(s) that correspond.
 
-No new proofs are introduced here; this is a documentation-only re-export.
+No new proofs are introduced here; this is a documentation-only index module.
 
 ---
 
@@ -219,7 +219,7 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 
 ---
 
-## Assembly: the quantum Perron–Frobenius theorem
+## The quantum Perron–Frobenius theorem
 
 * `quantum_perron_frobenius` — `TNLean.QPF.Assembly`
   Combines existence + positive definiteness + uniqueness (Wolf Thm 6.3).

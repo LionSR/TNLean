@@ -28,7 +28,7 @@ as the trace of the $N$-th power of the mixed transfer operator.
 
 The trace-expansion helpers (`linearMap_trace_eq_sum_apply_single`,
 `entry_mul_single_mul`) are now provided by
-`TNLean.Spectral.TraceExpansion` and re-exported from this module
+`TNLean.Spectral.TraceExpansion` and are also available from this module
 for backwards compatibility.
 
 ## Rectangular (heterogeneous bond dimensions)

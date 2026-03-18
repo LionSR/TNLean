@@ -1,15 +1,15 @@
-\chapter{Bases of Normal Tensors}\label{ch:bnt}
+\chapter{Basis of Normal Tensors}\label{ch:bnt}
 
-This chapter introduces \emph{bases of normal tensors} (BNT),
+This chapter introduces the \emph{basis of normal tensors} (BNT) notion,
 the canonical-form variants with BNT separation, the
 cross-overlap decay theorem, and the permutation-rigidity
-arguments used in the final assembly.
-This chapter also contains the auxiliary results on
-coefficient convergence and the Newton--Girard identities.
+arguments used in the proof of the Fundamental Theorem.
+The chapter concludes with auxiliary results on
+coefficient convergence and Newton--Girard identities.
 The main references are
 \cite{PerezGarcia2007Matrix} and~\cite{Cirac2021Matrix}.
 
-\section{Bases of normal tensors}
+\section{Basis of normal tensors}
 
 \begin{definition}[Basis of Normal Tensors (BNT)]\label{def:bnt}
 	\lean{MPSTensor.IsBNT}
@@ -96,28 +96,26 @@ The main references are
 			G_{jk}(N) = \braket{V^{(N)}(A_j)}{V^{(N)}(A_k)}.
 		\]
 		By Lemma~\ref{lem:overlap_eq_inner},
-		$G_{jk}(N)=\overline{O_{A_j A_k}(N)}$, so the same convergence
-		statements hold after conjugation: the diagonal entries tend to $1$
-		by the self-overlap part of the canonical-form hypothesis, and the
-		off-diagonal entries tend to $0$ by
-		Theorem~\ref{thm:cross_overlap_zero}.
-		Thus $G(N) \to I$, hence $G(N)$ is eventually invertible.
+		$G_{jk}(N)=\overline{O_{A_j A_k}(N)}$. The self-overlap
+		$O_{A_j A_j}(N) \to 1$ is real-valued under TP normalization, hence
+		$G_{jj}(N) \to \overline{1} = 1$. For $j \neq k$,
+		Theorem~\ref{thm:cross_overlap_zero} gives
+		$O_{A_j A_k}(N) \to 0$, so $G_{jk}(N) \to \overline{0} = 0$.
+		Thus $G(N) \to I_g$, hence the Gram matrix is eventually invertible.
 		Therefore the vectors $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly
 		independent for all sufficiently large~$N$.
 \end{proof}
 
 \begin{remark}[The normality gap for normal canonical form with BNT separation]\label{rem:normalcf_bnt_gap}
-		Definition~\ref{def:normal_cf_bnt} uses ``normal'' in the normal-canonical sense,
-		not the eventual block-injective predicate of
-		Definition~\ref{def:normal}. Therefore data satisfying
-		Definition~\ref{def:normal_cf_bnt} do not by themselves yield a basis
-		of normal tensors in the sense of Definition~\ref{def:bnt}; one still
-		needs eventual block injectivity for each block.
-		This gap is closable: primitivity of the transfer map implies eventual
-		full Kraus rank by \cite[Proposition~3]{Sanz2010Quantum}, and the bridge
-		from a primitive transfer map to eventual block injectivity is available
-		via the Wielandt theory of Chapter~\ref{ch:wielandt}. It is simply not
-		built into Definition~\ref{def:normal_cf_bnt} itself.
+		Definition~\ref{def:normal_cf_bnt} references the normal canonical form
+		predicate (Definition~\ref{def:is_normal_canonical_form}), which encodes
+		normality via the spectral characterization (primitive transfer map).
+		Definition~\ref{def:bnt} requires normality via the algebraic
+		characterization (eventual block injectivity,
+		Definition~\ref{def:normal}). These are equivalent by Remark~2.20, but
+		the equivalence must be invoked explicitly: the Wielandt theory of
+		Chapter~\ref{ch:wielandt} provides the implication from primitivity to
+		eventual block injectivity needed in the formalization.
 \end{remark}
 
 \section{Permutation rigidity for bases of normal tensors}
@@ -153,6 +151,8 @@ The main references are
 	Then $g_A = g_B$, and there is a permutation $\pi$ of the common
 	block index set such that $A_{\pi(k)}$ and $B_k$ have the same bond
 	dimension and are gauge-phase equivalent for each~$k$.
+	The canonical-form application of these hypotheses is described in
+	Remark~\ref{rem:bnt_perm_prop_canonical}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:overlap_decay, thm:overlap_decay_rect}
@@ -174,7 +174,7 @@ The main references are
 	corresponding to \cite[Theorem~4.1]{Cirac2021Matrix}.
 \end{proof}
 
-\begin{remark}
+\begin{remark}\label{rem:bnt_perm_prop_canonical}
 	In the canonical-form application, the abstract data above come from
 	block-diagonal assemblies
 	\[
@@ -184,6 +184,14 @@ The main references are
 	\]
 	and Theorem~\ref{thm:mpv_decomposition} gives the coefficient arrays
 	$a_{N,j} = \mu_j^N$ and $b_{N,k} = \nu_k^N$.
+	To fit the convergence hypotheses of
+	Theorem~\ref{thm:bnt_perm_prop}, one first normalizes by the dominant
+	weight on each side: the relevant arrays are $(\mu_j/\mu_0)^N$ and
+	$(\nu_k/\nu_0)^N$, with $(\mu_j/\mu_0)^N \to 0$ for $j \ge 1$ and
+	$(\nu_k/\nu_0)^N \to 0$ for $k \ge 1$ by
+	Theorem~\ref{thm:coeff_ratio_decay}, while the overall factors
+	$\mu_0^N$ and $\nu_0^N$ are absorbed into the proportionality
+	constant $c_N$.
 	Definition~\ref{def:cf_bnt} supplies injectivity, TP normalization,
 	and the within-family overlap limits, so the theorem isolates the
 	abstract permutation argument from this canonical-form packaging.

@@ -1,6 +1,6 @@
 \chapter{Schwarz Inequalities and Multiplicative Domains}\label{ch:schwarz}
 
-This chapter collects the Schwarz-inequality material from Wolf's Chapter~5~\cite{Wolf2012Quantum}. We begin with the Kadison--Schwarz inequality for Kraus maps, then describe the multiplicative domain and its algebraic structure. We also record the extension to normal operators for positive subunital maps, the resulting order and spectral contractivity statements, and Wolf's standard example of a Schwarz map that is not completely positive.
+This chapter develops the Schwarz-inequality theory from Wolf's Chapter~5~\cite{Wolf2012Quantum}. We begin with the Kadison--Schwarz inequality for Kraus maps, then describe the multiplicative domain and its algebraic structure. We also establish the extension to normal operators for positive subunital maps, the resulting order and spectral contractivity statements, and Wolf's standard example of a Schwarz map that is not completely positive.
 
 \section{Kadison--Schwarz inequality}
 
@@ -10,6 +10,10 @@ multiplicative-domain characterisation are proved first for Kraus maps.
 The transfer map is a Kraus map by construction
 (Remark~\ref{thm:transfer_cp}), so these results apply directly to transfer
 maps.
+
+Definitions~\ref{def:kraus_map}--\ref{def:tp_kraus} below restate the
+Kraus-map notions from Chapter~\ref{ch:channels} for the reader's
+convenience.
 
 \begin{definition}[Kraus map]\label{def:kraus_map}
     \lean{KadisonSchwarz.krausMap}
@@ -261,32 +265,64 @@ maps.
     follows by applying Theorem~\ref{thm:left_multiplicative_identity} to $X^\dagger$.
 \end{proof}
 
-\begin{definition}[One-sided multiplicative domains are subalgebras]\label{def:one_sided_md_subalgebras}
+\begin{theorem}[One-sided multiplicative domains are subalgebras]\label{thm:one_sided_md_subalgebras}
     \lean{KadisonSchwarz.rightMultiplicativeDomainSubalgebra, KadisonSchwarz.leftMultiplicativeDomainSubalgebra}
     \leanok
     \uses{def:one_sided_multiplicative_domains, def:unital_kraus}
     For a unital Kraus map $E$, both $\mc{A}_R(E)$ and $\mc{A}_L(E)$ are
     unital subalgebras of $\MN{D}$.
-\end{definition}
+\end{theorem}
 
-\begin{definition}[Multiplicative domain as a $*$-subalgebra]\label{def:md_star_subalgebra}
+\begin{proof}
+    \leanok
+    \uses{thm:md_characterization}
+    Closure under addition follows from linearity of $E$.
+    Closure under multiplication: if $X, Y \in \mc{A}_R(E)$, then
+    $E((X Y) Z) = E(X) E(Y Z) = E(X) E(Y) E(Z)$ for all $Z$, using
+    Theorem~\ref{thm:md_characterization} iteratively, and the
+    $\mc{A}_L(E)$ case is analogous.
+    Containment of $\Id$ follows from unitality of $E$.
+\end{proof}
+
+\begin{theorem}[Multiplicative domain is a $*$-subalgebra]\label{thm:md_star_subalgebra}
     \lean{KadisonSchwarz.multiplicativeDomainStarSubalgebra}
     \leanok
-    \uses{def:full_multiplicative_domain, def:one_sided_md_subalgebras}
+    \uses{def:full_multiplicative_domain, thm:one_sided_md_subalgebras}
     For a unital Kraus map $E$, the full multiplicative domain $\mc{A}(E)$ is
     a $*$-subalgebra of $\MN{D}$.
     This is the algebraic content of \cite[Thm.~5.7]{Wolf2012Quantum}.
-\end{definition}
+\end{theorem}
 
-\begin{definition}[Restriction to the multiplicative domain]\label{def:md_star_alg_hom}
+\begin{proof}
+    \leanok
+    \uses{thm:md_characterization, thm:one_sided_md_subalgebras}
+    If $X \in \mc{A}(E) = \mc{A}_R(E) \cap \mc{A}_L(E)$, then
+    $E(X^\dagger X) = E(X)^\dagger E(X)$ and
+    $E(X X^\dagger) = E(X) E(X)^\dagger$.
+    The characterization of Theorem~\ref{thm:md_characterization} shows
+    $X^\dagger \in \mc{A}(E)$.
+    Combined with Theorem~\ref{thm:one_sided_md_subalgebras}, this gives a
+    $*$-subalgebra.
+\end{proof}
+
+\begin{theorem}[Restriction to multiplicative domain is a $*$-homomorphism]\label{thm:md_star_alg_hom}
     \lean{KadisonSchwarz.krausMapStarAlgHom}
     \leanok
-    \uses{def:md_star_subalgebra, def:kraus_map}
+    \uses{thm:md_star_subalgebra, def:kraus_map}
     If $E$ is unital, then the restricted map
     $E|_{\mc{A}(E)} : \mc{A}(E) \to \MN{D}$
     is a $*$-algebra homomorphism.
     This is the homomorphism conclusion of \cite[Thm.~5.7]{Wolf2012Quantum}.
-\end{definition}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_commute}
+    Multiplicativity on $\mc{A}(E)$ is immediate from the definition.
+    For $X \in \mc{A}(E)$, the Kraus commutation relation from
+    Theorem~\ref{thm:kraus_commute} gives $E(X^\dagger) = E(X)^\dagger$,
+    so the restriction preserves adjoints.
+\end{proof}
 
 \subsection{Schwarz inequality for normal operators}
 
@@ -337,6 +373,15 @@ maps.
     applies and yields the claim.
 \end{proof}
 
+\begin{remark}
+    The restriction-to-commutative-subalgebra step invokes two results not
+    proved here: (a)~a positive map restricted to a commutative
+    $C^*$-subalgebra is completely positive
+    \cite[Prop.~1.6]{Wolf2012Quantum}, and (b)~the Arveson extension theorem
+    \cite[Prop.~1.7]{Wolf2012Quantum}, which lifts the restricted CP map back
+    to $\MN{D}$.
+\end{remark}
+
 \subsection{Positive maps preserve order and spectral intervals}
 
 \begin{theorem}[Positive maps are monotone]\label{thm:positive_map_monotone}
@@ -383,10 +428,12 @@ maps.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:positive_map_monotone}
-    Apply monotonicity to the inequalities
-    $a \Id \le A \le b \Id$.
-    The scalar bounds are preserved because $a \le 0 \le b$ and
-    $T(\Id) \le \Id$.
+    By monotonicity,
+    $T(a \Id) \le T(A) \le T(b \Id)$.
+    For the lower bound, $T(a \Id) = a \, T(\Id)$.
+    Since $a \le 0$ and $T(\Id) \le \Id$, we have $a \, T(\Id) \ge a \Id$.
+    For the upper bound, $T(b \Id) = b \, T(\Id) \le b \Id$ since $b \ge 0$.
+    Therefore $a \Id \le T(A) \le b \Id$.
 \end{proof}
 
 \begin{theorem}[Spectral interval contractivity]\label{thm:positive_map_spectrum_contractivity}
@@ -412,7 +459,7 @@ maps.
 
 \subsection{Wolf Example 5.3}
 
-\begin{definition}[Wolf Example 5.3 map]\label{def:wolf_example53}
+\begin{example}[Wolf Example 5.3 map]\label{def:wolf_example53}
     \lean{wolfExample53}
     \leanok
     Consider the linear map $T : M_2(\C) \to M_2(\C)$ defined by
@@ -420,18 +467,18 @@ maps.
         T(A) = \frac{1}{2} A^T + \frac{1}{4} \tr(A) \Id.
     \]
     This is the map from \cite[Ex.~5.3]{Wolf2012Quantum}.
-\end{definition}
+\end{example}
 
 \begin{theorem}[Wolf Example 5.3 is positive]\label{thm:wolf_example53_positive}
     \lean{wolfExample53_isPositive}
     \leanok
     \uses{def:wolf_example53, def:positive_map}
-    The map from Definition~\ref{def:wolf_example53} is positive.
+    The map from Example~\ref{def:wolf_example53} is positive.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    It is a convex combination of the transpose map and the map
+    It is a nonnegative linear combination of the transpose map and the map
     $A \mapsto \tr(A) \Id$, and both of these maps send positive
     semidefinite matrices to positive semidefinite matrices.
 \end{proof}
@@ -444,7 +491,7 @@ maps.
     \[
         T(A^\dagger A) - T(A^\dagger) T(A) \ge 0,
     \]
-    where $T$ is the map from Definition~\ref{def:wolf_example53}.
+    where $T$ is the map from Example~\ref{def:wolf_example53}.
 \end{theorem}
 
 \begin{proof}
@@ -460,7 +507,7 @@ maps.
     \lean{wolfExample53_not_cp}
     \leanok
     \uses{def:wolf_example53, def:cp_map}
-    The map from Definition~\ref{def:wolf_example53} is not completely positive.
+    The map from Example~\ref{def:wolf_example53} is not completely positive.
 \end{theorem}
 
 \begin{proof}

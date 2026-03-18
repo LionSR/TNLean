@@ -10,40 +10,40 @@ import TNLean.Wielandt.Primitivity.ImpliesIrreducible
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 /-!
-# Quantum Wielandt assembly under `PosDef` and aperiodicity
+# Quantum Wielandt primitive-to-normal packaging under `PosDef`
 
-This file assembles the current conditional primitive-to-normal bridge,
-chaining together results from across the library:
+This file packages the current primitive-to-normal bridge around
+`isNormal_of_isPrimitiveMPS_of_posDef`, together with a legacy exact-word-span
+witness theorem whose public statement still carries an explicit aperiodicity
+argument.
+
+## Proof route for normality
 
 ```
-  IsPrimitiveMPS A ρ + ρ.PosDef + aperiodicity
-    → IsIrreducibleTensor
-    → IsIrreducibleAction
-    → algSpan A = ⊤
+  IsPrimitiveMPS A ρ + ρ.PosDef
+    → IsStronglyIrreduciblePaper A
+    → HasEventuallyFullKrausRank A
     → IsNormal A
 ```
 
-with the steps implemented in `PrimitiveImpliesIrreducible.lean`,
-`IrreducibleTensorAction.lean`, `BurnsideTheorem.lean`, and
-`CumulativeToWordSpan.lean`.
+The `(a)→(c)` part is provided by `ImpliesStronglyIrreducible.lean`, while the
+`(c)→(b)` part is provided by `Primitivity/StronglyIrreducibleToFullRank.lean`.
 
 ## The aperiodicity hypothesis
 
-The assembly requires `1 ∈ wordSpan A 1`, i.e., the identity matrix lies in the
-linear span of the Kraus operators `{A 0, …, A (d-1)}`. This is **not** automatic
-from left-canonical / trace-preserving normalization (`∑ᵢ Aᵢᴴ Aᵢ = I`), which only gives
-a quadratic identity and at best places `I` in a length-2 span.
-Without aperiodicity, `IsNormal` can fail even when `algSpan = ⊤`. The standard
-counterexample is `A₁ = e₁₂, A₂ = e₂₁` in `M₂(ℂ)`: these generate the full matrix
-algebra but have period 2, so no single word-length spans `M₂(ℂ)`.
+The theorem `isNormal_of_isPrimitiveMPS_of_posDef` itself no longer uses an
+aperiodicity assumption. The extra argument `hAper : 1 ∈ wordSpan A 1` survives
+only in the legacy witness theorem
+`wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic`, where it
+upgrades `IsNormal A` to monotone exact-length word spans.
 
-For the paper-style primitive notion — peripheral-spectrum primitivity together
-with a positive-definite fixed point — the aperiodicity condition should follow
-from spectral analysis of the transfer map. Formalizing that bridge from the
-current hypotheses is left as future work.
+Conceptually, this matches Proposition 3: strong irreducibility packages
+irreducibility together with peripheral spectrum `{1}`. That peripheral
+condition is the source of the aperiodicity used by the
+`CumulativeToWordSpan.lean` endpoint.
 
-Within TNLean this conditional assembly is currently standalone: the
-normal/canonical-form pipeline in `TNLean.MPS.*` does not import it directly.
+Within TNLean this auxiliary packaging is currently standalone: the
+normal/canonical-form reduction in `TNLean.MPS.*` does not import it directly.
 
 This module is intentionally auxiliary rather than the default paper-facing
 endpoint. Downstream users who only need Proposition 3 / Theorem 1 wrappers
@@ -64,18 +64,19 @@ namespace MPSTensor
 
 variable {d D : ℕ} [NeZero D]
 
-/-! ## Main assembly theorem -/
+/-! ## Main primitive-to-normal theorem -/
 
 /-- **Quantum Wielandt theorem.**
 
 If `A` satisfies the spectral-gap predicate `IsPrimitiveMPS A ρ` and the fixed
 point `ρ` is positive definite, then `A` is normal.
 
-The extra aperiodicity argument `hAper` is now kept only for backward
-compatibility with the older API of this file; it is not needed for the
-`IsNormal` conclusion itself. The actual proof now goes through the already
-formalized Proposition~3 bridge
-`IsPrimitiveMPS + ρ.PosDef → IsStronglyIrreduciblePaper → HasEventuallyFullKrausRank`. -/
+Conceptually, the proof factors through strong irreducibility. From
+`IsPrimitiveMPS + ρ.PosDef` one gets `IsStronglyIrreduciblePaper A`; this gives
+peripheral spectrum `{1}` (hence aperiodicity) together with irreducibility, and
+the Proposition 3(c)→(b) backend then yields eventual full Kraus rank. The
+extra aperiodicity argument `hAper` is kept only for backward compatibility with
+the older API of this file and is not used by the proof term. -/
 theorem isNormal_of_isPrimitiveMPS_of_posDef
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hPrim : IsPrimitiveMPS A ρ)
@@ -86,9 +87,10 @@ theorem isNormal_of_isPrimitiveMPS_of_posDef
 
 /-- Under `IsPrimitiveMPS`, `PosDef`, and aperiodicity, exact word spans are eventually `⊤`.
 
-This is the witness form of `isNormal_of_isPrimitiveMPS_of_posDef`: there is a
-threshold `N` after which every exact-length word span equals the full matrix
-algebra. -/
+This is the witness form of `isNormal_of_isPrimitiveMPS_of_posDef`: once
+`IsNormal A` is known, the extra aperiodicity hypothesis makes exact word spans
+monotone, so from one full span one gets `wordSpan A n = ⊤` for all sufficiently
+large `n`. -/
 theorem wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hPrim : IsPrimitiveMPS A ρ)
@@ -106,7 +108,7 @@ theorem wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic
 
 The historical name suggests the existential spectral-gap wrapper from
 `PrimitivityBridge.lean`, but the theorem still takes the fixed-point witness `ρ`
-explicitly through `IsPrimitiveMPS A ρ`. Prefer the more honest theorem name
+explicitly through `IsPrimitiveMPS A ρ`. Prefer the more precise theorem name
 above, or `isNormal_of_isPrimitiveMPS_of_posDef` when the `IsNormal` conclusion
 itself is the desired API. -/
 theorem isNormal_of_isPrimitive_of_posDef

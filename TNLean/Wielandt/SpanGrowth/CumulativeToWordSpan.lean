@@ -30,6 +30,10 @@ span of the Kraus operators) ensures that word spans are **monotone**:
 `wordSpan A n ≤ wordSpan A (n+1)`. Once monotone, the cumulative span collapses
 to the word span at the top level, yielding `wordSpan A N = ⊤`.
 
+In the Proposition 3 proof, this file isolates the last step
+"irreducibility + aperiodicity ⇒ normality". The needed aperiodicity is later
+supplied by strong irreducibility, i.e. peripheral spectrum `{1}`.
+
 ## Main results
 
 * `exists_nonzero_trace_word_of_cumulativeSpan_eq_top`:
@@ -210,7 +214,8 @@ theorem isNormal_of_isIrreducibleAction_of_aperiodic [NeZero D]
 /-- If `IsIrreducibleTensor A`, `1 ∈ wordSpan A 1`, and `NeZero D`, then `IsNormal A`.
 
 Extends the chain with `IsIrreducibleTensor → IsIrreducibleAction`
-(proved in `IrreducibleTensorAction.lean`). -/
+(proved in `IrreducibleTensorAction.lean`). This is the endpoint later combined
+with strong irreducibility, which supplies the aperiodicity hypothesis. -/
 theorem isNormal_of_isIrreducibleTensor_of_aperiodic [NeZero D]
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleTensor A)

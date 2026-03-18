@@ -60,11 +60,12 @@ invoke the backend theorem `wordSpan_eq_top_of_isNormal_of_isUnit` from
 `SpanGrowth/InvertibleWordSpan.lean`.
 
 Within TNLean these results are currently standalone paper-facing endpoints:
-the canonical / FT / BNT assembly does not import them directly.
+the canonical / FT / BNT development does not import them directly.
 
 This file is the preferred public entry point for the currently formalized
-Theorem 1 wrappers. The auxiliary module `QuantumWielandt.lean` packages a
-conditional aperiodicity-based route and is not the default paper-facing API.
+Theorem 1 wrappers. The auxiliary module `QuantumWielandt.lean` keeps a
+backward-compatible exact-word-span witness theorem with an explicit
+aperiodicity argument in its statement; it is not the default paper-facing API.
 
 ### Part 4 — Case (1): general bound
 
@@ -72,14 +73,18 @@ conditional aperiodicity-based route and is not the default paper-facing API.
   the full general bound `i(A) ≤ (D² − krausRank(A) + 1) · D²`.
 
 The proof uses the blocking trick: the sharp Lemma 1 word product of length
-`n ≤ D²−d+1` becomes a Kraus operator of the n-blocked tensor, and cases
-(2)/(3) applied to the blocked tensor transfer back to the original.
+`n ≤ D² − krausRank(A) + 1` becomes a Kraus operator of the `n`-blocked tensor.
+Writing `B := blockTensor A n`, the blocked invertible case uses case (2) to get
+`wordSpan B (D² - krausRank B + 1) = ⊤`, which is then padded to level `D²`.
+The blocked noninvertible case uses case (3) to get `wordSpan B (D²) = ⊤`
+directly. Transferring the blocked conclusion back to the original tensor
+yields the general bound.
 
 The proof handles the edge case where all Kraus operators are nilpotent
 (no Kraus operator has a nonzero eigenvalue) by using the positive-length
-strengthening of Lemma 1: for D ≥ 2, the positive-level cumulative span
-T⁺_{D²−d'+1} = M_D(ℂ), so there always exists a positive-length word with
-nonzero trace within the sharp bound.
+strengthening of Lemma 1: for `D ≥ 2`, the positive-level cumulative span of
+positive-length words reaches `M_D(ℂ)` by the sharp bound, so there is always a
+positive-length word with nonzero trace within that range.
 
 ## References
 
@@ -214,10 +219,12 @@ theorem iIndex_le_of_isPrimitivePaper_of_isUnit
 /-! ## Part 4: Case (1) — General bound via blocking
 
 The full Wielandt bound combines sharp Lemma 1 (a word product of length
-≤ D²−d+1 has nonzero trace) with the blocking trick: the word product
-is a Kraus operator of the n-blocked tensor, and cases (2)/(3) applied
-to the blocked tensor give `wordSpan (blockTensor A n) (D²) = ⊤`,
-which transfers to `wordSpan A (D² · n) = ⊤`.
+≤ D² − krausRank(A) + 1 has nonzero trace) with the blocking trick: the word
+product becomes a Kraus operator of the `n`-blocked tensor. In the blocked
+invertible case, case (2) gives a sharper level
+`D² - krausRank (blockTensor A n) + 1`, which is then padded to `D²`; in the
+blocked noninvertible case, case (3) gives `wordSpan (blockTensor A n) (D²) = ⊤`
+directly. This transfers to `wordSpan A (D² · n) = ⊤`.
 
 Paper: arXiv:0909.5347, Theorem 1 case (1); Wolf, Theorem 6.9. -/
 
@@ -245,14 +252,17 @@ private theorem iIndex_eq_zero_of_D_eq_one
 `iIndex A ≤ (D² − krausRank A + 1) · D²`.
 
 Under paper primitivity and normalization:
-1. By sharp Lemma 1, there exists a word `w` of length `n ≤ D²−d+1`
-   with `tr(evalWord A w) ≠ 0`.
+1. By sharp Lemma 1, there exists a word `w` of length
+   `n ≤ D² − krausRank(A) + 1` with `tr(evalWord A w) ≠ 0`.
 2. This matrix has a nonzero eigenvalue `μ` with eigenvector `φ`.
-3. The n-blocked tensor `blockTensor A n` has this matrix as a Kraus operator.
-4. Applying case (2) or (3) to the blocked tensor gives
-   `wordSpan (blockTensor A n) (D²) = ⊤`.
+3. The `n`-blocked tensor `blockTensor A n` has this matrix as a Kraus operator.
+4. In the blocked invertible case, case (2) yields
+   `wordSpan (blockTensor A n) (D² - krausRank (blockTensor A n) + 1) = ⊤`,
+   hence also `wordSpan (blockTensor A n) (D²) = ⊤`; in the blocked
+   noninvertible case, case (3) gives `wordSpan (blockTensor A n) (D²) = ⊤`
+   directly.
 5. Transferring back: `wordSpan A (D² · n) = ⊤`.
-6. Hence `i(A) ≤ D² · n ≤ (D² − d + 1) · D²`.
+6. Hence `i(A) ≤ D² · n ≤ (D² − krausRank(A) + 1) · D²`.
 
 Paper: arXiv:0909.5347, Theorem 1; Wolf, Theorem 6.9.
 -/

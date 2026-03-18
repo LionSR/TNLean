@@ -22,9 +22,9 @@ This file packages the family `σ ↦ mpv A σ` as a vector `mpvState A N` in th
 the first argument, so `⟪mpvState A N, mpvState B N⟫_ℂ` expands to
 `∑ σ, mpv B σ * star (mpv A σ)`.
 
-In the physics literature one often uses the overlap with the opposite conjugation,
-`∑ σ, mpv A σ * star (mpv B σ)`. We define this as `mpvOverlap A B N`; it differs from Lean's inner
-product by a complex conjugation.
+In the physics literature one often uses the bilinear overlap without complex conjugation
+on the first factor, `∑ σ, mpv A σ * star (mpv B σ)`. We define this as `mpvOverlap A B N`;
+it differs from Lean's inner product by a complex conjugation.
 -/
 
 namespace MPSTensor
@@ -48,7 +48,8 @@ noncomputable def mpvState {d D : ℕ} (A : MPSTensor d D) (N : ℕ) : MPVSpace 
 noncomputable def mpvInner {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) : ℂ :=
   ⟪mpvState (d := d) A N, mpvState (d := d) B N⟫_ℂ
 
-/-- The “literature orientation” overlap: `∑ σ, mpv A σ * conj (mpv B σ)`. -/
+/-- The bilinear overlap without complex conjugation on the first factor:
+`∑ σ, mpv A σ * conj (mpv B σ)`. -/
 noncomputable def mpvOverlap {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) : ℂ :=
   ∑ σ : Cfg d N, mpv A σ * star (mpv B σ)
 

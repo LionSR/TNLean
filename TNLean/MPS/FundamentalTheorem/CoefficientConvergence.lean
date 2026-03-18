@@ -29,7 +29,8 @@ The original block-diagonal MPV factors as `μ₀^N` times the normalized block-
 
 ### `proportional_normalized_of_proportional`
 Proportionality of original block-diagonal MPVs transfers to normalized versions with
-an adjusted proportionality constant.
+an adjusted proportionality constant; equivalently, the dominant factors `μ₀^N` are absorbed
+into `c`.
 
 ### `fundamentalTheorem_proportionalMPV_CFBNT_auto`
 Self-contained Fundamental Theorem (Thm 4.4) that derives the BNT decomposition
@@ -38,6 +39,7 @@ data automatically from `IsCanonicalFormBNT`. The user supplies:
 - A proportionality constant `c : ℕ → ℂ` with
   `mpv(toTensorFromBlocks μA A) σ = c N * mpv(toTensorFromBlocks μB B) σ`
 - Convergent nonzero coefficients `aLim`, `bLim` for re-weighted decompositions
+  (typically built from `(μ j / μ 0)^N` after dominant-weight normalization)
 
 ## References
 
@@ -177,8 +179,10 @@ theorem mpv_toTensorFromBlocks_eq_mu0_pow_mul_normalized
 /-- If the original block-diagonal MPVs are proportional, the normalized versions are too
 with an adjusted proportionality constant `c N * (μB₀ / μA₀)^N`.
 
-From `mpv(A_total) σ = c N * mpv(B_total) σ` and the factorization
-`mpv(A_total) σ = μA₀^N * mpv(A_norm) σ`, we get
+This is the formal counterpart of normalizing by the dominant weight: the factors `μA₀^N` and
+`μB₀^N` are moved out of the decomposition, and the leftover ratio is absorbed into the new
+proportionality constant. Concretely, from `mpv(A_total) σ = c N * mpv(B_total) σ` and the
+factorization `mpv(A_total) σ = μA₀^N * mpv(A_norm) σ`, we get
 `mpv(A_norm) σ = c N * (μB₀/μA₀)^N * mpv(B_norm) σ`. -/
 theorem proportional_normalized_of_proportional
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -218,9 +222,13 @@ The user only needs to supply:
 3. The convergence of the (adjusted) proportionality constant
 
 The coefficient data `aLim`/`bLim` is needed because the raw decomposition coefficients
-`(μ k)^N` do not converge in general: they oscillate when `|μ_k|` is constant. The paper
-resolves this via induction on block count, matching dominant blocks first and
-stripping them off. Our formalization takes the coefficients as explicit data.
+`(μ k)^N` do not satisfy the convergence hypotheses directly. In the strict-dominance regime one
+first normalizes by the dominant weight, so the relevant arrays are `(μ k / μ 0)^N`; these
+converge to `0` for non-dominant blocks, while the overall factor `μ 0^N` is absorbed into the
+proportionality constant. In grouped equal-modulus sectors even the normalized sums can still
+oscillate. The paper resolves this via induction on block count, matching dominant blocks first
+and stripping them off. Our formalization takes the needed convergent coefficient data as
+explicit hypotheses.
 
 **What is derived automatically from `IsCanonicalFormBNT`:**
 - The overlap properties (self → 1, cross → 0)

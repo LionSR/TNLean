@@ -10,13 +10,13 @@ import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Fintype.EquivFin
 
 /-!
-# Permutation rigidity for bases of normal tensors (BNT) — Thm 4.4
+# Permutation rigidity for basis-of-normal-tensors (BNT) decompositions — Thm 4.4
 (paper hypotheses, no span-equality)
 
 This module replaces the extra span-equality hypothesis used in
 `BNTPermutationSimple.lean` with the **paper-style** hypotheses from Thm 4.4
 (arXiv:2011.12127 / 1606.00608, primitive branch): proportionality of the *full*
-MPV families together with explicit decompositions into bases of normal tensors.
+MPV families together with explicit decompositions into BNT families.
 
 It contains both directions of the key nonvanishing-overlap step and the resulting
 full permutation / gauge-phase matching theorems, in both the injective and
@@ -25,6 +25,10 @@ irreducible trace-preserving settings.
 The overlap arguments follow the Appendix-A strategy: take overlaps of the
 proportional full states with individual block states and use the asymptotic
 orthogonality inside each BNT family.
+
+In canonical-form applications one first normalizes by the dominant weights, so the relevant
+coefficient arrays are `(μ j / μ 0)^N`; the discarded dominant factors are absorbed into the
+proportionality constant.
 -/
 
 open scoped BigOperators Matrix
@@ -776,11 +780,16 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
     (A := A) (B := B) (f := f) hf_inj hle_AB hf_dim hf_gauge
 
 /--
-**Permutation rigidity for bases of normal tensors (primitive branch), paper hypothesis set.**
+**Permutation rigidity for basis-of-normal-tensors (BNT) decompositions, primitive branch,
+paper hypothesis set.**
 
 Two BNT-like families `A j` and `B k` with asymptotically orthonormal overlaps, together with
 explicit decompositions of proportional full MPV families `A_total`, `B_total`, agree blockwise up
 to a permutation, dimension equality, and gauge-phase equivalence.
+
+In canonical-form applications the coefficient arrays are obtained after dominant-weight
+normalization, so the relevant data are `(μ j / μ 0)^N` and the discarded dominant factors are
+absorbed into the proportionality constant.
 
 This is the span-equality-free analogue of
 `exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho`.

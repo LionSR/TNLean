@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.NormalPipeline
+import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
@@ -16,14 +16,14 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 
 /-!
-# End-to-end canonical form assembly (arXiv:1606.00608, §2.3 + Appendix A)
+# End-to-end canonical form reduction (arXiv:1606.00608, §2.3 + Appendix A)
 
-This file assembles the individual pipeline components into end-to-end theorems
+This file combines the individual reduction steps into end-to-end theorems
 connecting an **arbitrary MPS tensor** to a blocked canonical form.
 
-## Pipeline overview
+## Reduction overview
 
-The assembly threads through the following components:
+The reduction threads through the following components:
 
 1. **Zero-block separation** (`exists_irreducible_blockDecomp_liveBlocks`):
    split an arbitrary tensor into zero tail + live irreducible blocks.
@@ -77,7 +77,7 @@ decomposes each periodic block into primitive sectors before blocking.
 
 2. **Direct route for the primitive case**: If a block happens to already be primitive
    (period 1), then `p = 1` suffices and `isIrreducibleTensor_blockTensor_one`
-   from `NormalPipeline.lean` gives irreducibility directly. The
+   gives irreducibility directly. The
    `exists_normalCanonicalForm_of_primitive_blockDecomp` theorem handles this.
 
 ## References
@@ -91,13 +91,13 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-!
-## The main assembly theorem
+## The main reduction theorem
 
-We compose the individual pipeline steps into a single theorem that takes
+We compose the individual reduction steps into a single theorem that takes
 an arbitrary `A : MPSTensor d D` and produces blocked TP-primitive data.
 -/
 
-/-- **Main assembly: arbitrary MPS tensor → blocked TP-primitive decomposition.**
+/-- **Main reduction: arbitrary MPS tensor → blocked TP-primitive decomposition.**
 
 For any `A : MPSTensor d D`, there exists a blocking period `p > 0` and
 a decomposition:
@@ -218,7 +218,7 @@ blocks are irreducible, then the data can be packaged as `IsNormalCanonicalForm`
 after sorting by weight norm.
 
 This is a conditional theorem: the two extra hypotheses are genuine conditions
-that the pipeline does not produce automatically (see gap documentation above).
+that the reduction does not produce automatically (see gap documentation above).
 -/
 
 /-- **Conditional normal canonical form after blocking.**
@@ -250,7 +250,7 @@ theorem isNormalCanonicalForm_of_tp_primitive_irr_sorted
     hDim
 
 /-!
-## Pipeline shortcut for pre-primitive blocks
+## Reduction shortcut for pre-primitive blocks
 
 When the input already has primitive blocks with distinct weight norms
 (e.g., from an external construction or a tensor that is already aperiodic),
@@ -258,7 +258,7 @@ the blocking step is trivial (p = 1) and the full `IsNormalCanonicalForm`
 follows directly via `exists_normalCanonicalForm_of_primitive_blockDecomp`.
 -/
 
-/-- **Pipeline shortcut for pre-primitive blocks.**
+/-- **Reduction shortcut for pre-primitive blocks.**
 
 If an arbitrary tensor `A` already admits a primitive block decomposition with
 pairwise distinct weight norms, then the normal canonical form exists after
@@ -333,7 +333,7 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
   exact isNormal_of_isPrimitiveMPS_with_posDef hPrimMPS hPD
 
 /-!
-## Combined pipeline: arbitrary → IsNormal (per block, for primitive blocks)
+## Combined reduction: arbitrary → IsNormal (per block, for primitive blocks)
 
 For the pre-blocking blocks (which ARE irreducible), the chain to IsNormal
 works directly. This shows that the original (unblocked) live blocks become
@@ -342,7 +342,7 @@ normal once we know their transfer maps are primitive.
 
 /-- **Pre-blocking blocks are normal once primitive.**
 
-For the live blocks from the arbitrary-input TP gauge pipeline, if a block
+For the live blocks from the arbitrary-input TP-gauge reduction, if a block
 additionally has a primitive transfer map, then it is normal. -/
 theorem isNormal_live_block_of_primitive [NeZero D]
     (A : MPSTensor d D)
@@ -507,22 +507,21 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
       simp [σ'_def, Matrix.trace_sub, Matrix.trace_smul, c_def,
             div_mul_cancel₀ _ hPrimMPS.trace_ne_zero]
     -- E^P ρ = ρ (ρ is fixed by all iterates of E).
-    have hE_pow_ρ : E ^ P ρ = ρ := by
+    have hE_pow_ρ : (E ^ P) ρ = ρ := by
       induction P with
       | zero => simp
       | succ n ih =>
-        simp only [pow_succ', LinearMap.mul_apply]
-        rw [ih, hPrimMPS.fixedPoint_is_fixed]
+          simpa [pow_succ', ih, hPrimMPS.fixedPoint_is_fixed]
     -- E^P σ' = σ'.
-    have hEP_σ' : E ^ P σ' = σ' := by
+    have hEP_σ' : (E ^ P) σ' = σ' := by
       simp only [σ'_def, map_sub, LinearMap.map_smul_of_tower, hσ_fix, hE_pow_ρ]
     -- (E^P)^k σ' = σ' for all k (by induction on k).
-    have hEPk_σ' : ∀ k : ℕ, (E ^ P) ^ k σ' = σ' := by
+    have hEPk_σ' : ∀ k : ℕ, ((E ^ P) ^ k) σ' = σ' := by
       intro k
       induction k with
       | zero => simp
       | succ n ih =>
-        simp only [pow_succ', LinearMap.mul_apply, ih, hEP_σ']
+          simpa [pow_succ', ih, hEP_σ']
     -- N^{Pk} σ' = σ' for all k ≥ 1.
     have hN_pow_σ' : ∀ k : ℕ, 0 < k → N ^ (P * k) σ' = σ' := by
       intro k hk
@@ -587,11 +586,11 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
 /-!
 ## Weak FT: proportional MPVs → block matching (for TP-primitive blocks)
 
-This packages the full pipeline output together with the downstream
-FT theorems, showing how the assembly connects to the fundamental theorem
+This packages the full reduction output together with the downstream
+FT theorems, showing how the reduction connects to the fundamental theorem
 conclusions.
 
-For two arbitrary tensors A, B with proportional MPVs, the pipeline produces
+For two arbitrary tensors A, B with proportional MPVs, the reduction produces
 blocked TP-primitive decompositions. Under the additional hypotheses needed
 for `IsNormalCanonicalForm` (irreducibility + distinct weight norms), the
 downstream FT gives permutation + gauge-phase matching of blocks.
@@ -663,7 +662,7 @@ adjoint of the blocked transfer map equals the m-th iterate of the adjoint trans
 This is proved by a tuple-reversal bijection: summing `A_w†·X·A_w` over all length-`m`
 words `w` gives the same result regardless of whether `A_w` or `A_{rev(w)}` is used.
 
-### Pipeline
+### Reduction
 
 1. Get cyclic projections from `CyclicDecomposition.lean` applied to `K = (A·)ᴴ`
 2. Show `(transferMap K)^m` fixes each projection (iterate cycling `m` times)
@@ -900,7 +899,7 @@ These additional properties are documented but not yet fully formalized.
 
 section FundamentalTheorem1606
 
--- **Structural decomposition of MPS tensors after blocking (1606.00608 pipeline).**
+-- **Structural decomposition of MPS tensors after blocking (1606.00608 reduction).**
 --
 -- For any MPS tensor `A`, there exists a blocking period `p > 0` and a
 -- decomposition of the blocked tensor into:
@@ -910,7 +909,7 @@ section FundamentalTheorem1606
 -- Additionally, the weights `μ k` satisfy `μ k ≠ 0` and the full MPV
 -- identity is maintained.
 --
--- This is `exists_tp_primitive_blockDecomp_after_blocking` — the main assembly
+-- This is `exists_tp_primitive_blockDecomp_after_blocking` — the main reduction
 -- theorem from the first section. The FT chains from this through the cyclic
 -- sector decomposition to produce the final canonical form.
 -- (Already proved above as `exists_tp_primitive_blockDecomp_after_blocking`.)
@@ -927,7 +926,7 @@ additionally satisfy:
 then the block structures match up to permutation and gauge-phase equivalence.
 
 This theorem packages the structural content of arXiv:1606.00608, Theorem 1,
-connecting the pipeline output to the fundamental theorem conclusion. -/
+connecting the reduction output to the fundamental theorem conclusion. -/
 theorem fundamentalTheorem_after_blocking_1606_structural
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -981,7 +980,7 @@ formalizations are:
    FT from `Full.lean` via `weakFundamentalTheorem_conditional`.
 
 Steps 1–2 are the main remaining formalizations; steps 3–4 are already formalized
-and just need wiring once steps 1–2 are complete.
+and just need to be combined once steps 1–2 are complete.
 -/
 
 end FundamentalTheorem1606

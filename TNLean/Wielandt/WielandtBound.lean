@@ -8,9 +8,9 @@ import TNLean.Wielandt.RankOne.Products
 import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
 
 /-!
-# Quantum Wielandt Bound — Main Theorem Assembly
+# Quantum Wielandt Bound — proof roadmap
 
-This file assembles the main results of the quantum Wielandt bound
+This file packages the main results of the quantum Wielandt bound
 from arXiv:0909.5347 (Sanz, Pérez-García, Wolf, Cirac).
 
 ## Main theorem (paper)
@@ -38,7 +38,7 @@ We formalize the proof chain up to the following:
 4. **Eigenvector spreading**: The cumulative vector span reaches ⊤ in D-1 steps
    (`eigenvector_spreading` from `EigenvectorSpreading.lean`)
 
-5. **Assembly**: Connecting these pieces into the Wielandt bound.
+5. **Proof synthesis**: connecting these pieces into the Wielandt bound.
 
 The gap between vector spanning (step 4) and matrix spanning (the full bound)
 corresponds to Lemma 2(b) of the paper, which requires converting
@@ -198,7 +198,7 @@ theorem isNormal_implies_cumulativeSpan [NeZero D]
 
 /-! ## Part 4: The complete Wielandt analysis chain
 
-Here we document and assemble the full chain of results. -/
+Here we document the full chain of results. -/
 
 /-- **The full Wielandt chain**: Given `IsNormal A`:
 1. Cumulative span reaches ⊤ at level D²

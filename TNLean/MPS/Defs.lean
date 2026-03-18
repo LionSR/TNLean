@@ -36,7 +36,7 @@ def evalWord (A : MPSTensor d D) : List (Fin d) → Matrix (Fin D) (Fin D) ℂ
 @[simp] lemma evalWord_cons (A : MPSTensor d D) (i : Fin d) (w : List (Fin d)) :
     evalWord A (i :: w) = A i * evalWord A w := rfl
 
-/-- Word evaluation respects concatenation:
+/-- Multiplicativity of word evaluation:
 `evalWord A (w1 ++ w2) = evalWord A w1 * evalWord A w2`. -/
 lemma evalWord_append (A : MPSTensor d D) :
     ∀ w1 w2 : List (Fin d), evalWord A (w1 ++ w2) = evalWord A w1 * evalWord A w2 := by
@@ -45,7 +45,7 @@ lemma evalWord_append (A : MPSTensor d D) :
   | nil => simp [evalWord]
   | cons i w1 ih => simp [evalWord, ih, Matrix.mul_assoc]
 
-/-- Scaling every matrix by a scalar `ζ` scales `evalWord` by the factor `ζ ^ w.length`. -/
+/-- Scaling of word evaluation: scaling every matrix by a scalar `ζ` scales `evalWord` by the factor `ζ ^ w.length`. -/
 lemma evalWord_smul (ζ : ℂ) (A : MPSTensor d D) :
     ∀ w : List (Fin d), evalWord (fun i => ζ • A i) w = (ζ ^ w.length) • evalWord A w := by
   intro w
@@ -130,7 +130,7 @@ section GaugeInvariance
 
 variable {A B : MPSTensor d D}
 
-/-- If `B i = X * A i * X⁻¹`, then word evaluation is conjugated:
+/-- Gauge covariance of word evaluation: if `B i = X * A i * X⁻¹`, then
 `evalWord B w = X * evalWord A w * X⁻¹`. -/
 lemma evalWord_gauge (X : GL (Fin D) ℂ)
     (hX : ∀ i : Fin d,

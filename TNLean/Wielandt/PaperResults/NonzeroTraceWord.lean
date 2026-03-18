@@ -28,6 +28,13 @@ paper-facing `IsPrimitivePaper` language.
 * `cumulativeSpan_eq_top_of_isPrimitivePaper_sharp`:
   (sharp) the cumulative span T_{D²−krausRank(A)+1}(A) = M_D(ℂ).
 
+* `exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos`:
+  for `D ≥ 2`, there is a positive-length word of length
+  ≤ D² − krausRank(A) + 1 with nonzero trace. The proof uses the
+  positive-level cumulative span of positive-length words: once this span is all
+  of `M_D(ℂ)`, the identity matrix is a linear combination of positive-length
+  word products, so one of them has nonzero trace.
+
 ## Proof strategy
 
 Use Proposition 3 to pass from `IsPrimitivePaper A` to eventually full Kraus
@@ -107,7 +114,10 @@ such that `tr(evalWord A w) ≠ 0`.
 
 This strengthens `exists_nonzero_trace_word_of_isPrimitivePaper_sharp` by
 additionally requiring `1 ≤ w.length`, which is needed for the blocking
-argument in Theorem 1 case (1).
+argument in Theorem 1 case (1). Equivalently, the positive-level cumulative
+span of positive-length words reaches `⊤` by this sharp bound, so `1` is a
+linear combination of positive-length word products; since `tr(1) = D ≠ 0`,
+one of those products has nonzero trace.
 
 Paper: arXiv:0909.5347, Lemma 1 (positive-length strengthening).
 -/

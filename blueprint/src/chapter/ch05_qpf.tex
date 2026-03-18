@@ -204,7 +204,7 @@ and~\cite{Evans1978Spectral}.
 	trace argument.
 \end{proof}
 
-\section{Existence and assembly}
+\section{Existence and the Perron--Frobenius theorem}
 
 \begin{theorem}[Existence of PSD fixed point]\label{thm:psd_fp_exists}
 	\lean{MPSTensor.exists_posSemidef_fixedPoint}
@@ -423,9 +423,11 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	$\E_A^\dagger \neq 0$.
 	Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
 	Kraus map, it is positive. Irreducibility of $A$ transfers to the
-	adjoint transfer map, and together with $\E_A^\dagger \neq 0$
-	this implies $\E_A^\dagger(\tau) \neq 0$ for every nonzero
-	PSD matrix $\tau$.
+	adjoint transfer map (if $\E_A^\dagger$ had a nontrivial invariant
+	projection $P$, then taking adjoints would show that $\Id - P$ is
+	invariant for $\E_A$, contradicting irreducibility of $\E_A$), and
+	together with $\E_A^\dagger \neq 0$ this implies
+	$\E_A^\dagger(\tau) \neq 0$ for every nonzero PSD matrix $\tau$.
 	Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to
 	$\E_A^\dagger$, giving $\sigma_0 \ge 0$ (PSD, nonzero)
 	and $r > 0$ with $\E_A^\dagger(\sigma_0) = r \sigma_0$.
@@ -495,7 +497,10 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	\leanok
 	If a nonzero vector $v$ annihilated this quadratic form, then every term
 	$E^k(A)$ with $0 \le k \le D-1$ would annihilate $v$.
-	The growth theorem for irreducible CP maps then forces
+	The growth theorem for irreducible CP maps
+	(that is, $(\Id + E)^{D-1}(A) > 0$ for irreducible $E$ and nonzero
+	PSD $A$, as established in the proof of
+	Theorem~\ref{thm:orthogonal_trace_cond}) then forces
 	$(\Id + E)^{D-1}(A)$ to annihilate $v$, contradicting its positive
 	definiteness.
 \end{proof}
@@ -590,7 +595,9 @@ follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
 	Choose a positive definite eigenvector for the adjoint map with the same
 	eigenvalue, gauge by its square root, and rescale by $r^{-1}$.
 	The resulting map is trace-preserving and has a positive definite fixed
-	point, so its spectral radius is~$1$.
+	point, so $1$ is an eigenvalue. The spectral radius of a trace-preserving
+	map $F$ satisfies $\rho(F) \le 1$, since $\tr(F^n(X)) = \tr(X)$ for all
+	$n$ bounds the growth of iterates. Hence its spectral radius is~$1$.
 	Undoing the similarity and scalar rescaling recovers the spectral radius
 	of~$E$.
 \end{proof}

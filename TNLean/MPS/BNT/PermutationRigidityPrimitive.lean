@@ -10,10 +10,12 @@ import Mathlib.Topology.Instances.Matrix
 import Mathlib.LinearAlgebra.Dimension.Constructions
 
 /-!
-# Permutation rigidity for bases of normal tensors (BNT) — simplified (primitive branch)
+# Permutation rigidity for basis-of-normal-tensors (BNT) decompositions — simplified
+(primitive branch)
 
 This is a *simpler* alternative to `BNTPermutation.lean`, implementing the
-permutation/phase-rigidity step for families of bases of normal tensors (BNT) in the
+permutation/phase-rigidity step for families satisfying the basis-of-normal-tensors (BNT)
+condition in the
 primitive (aperiodic) branch of the Fundamental Theorem of MPS (Theorem 4.4 of
 arXiv:2011.12127).
 
@@ -59,7 +61,7 @@ private lemma tendsto_mpvInner_one_of_overlap_one
 /-! ## Main theorem -/
 
 /--
-**Permutation rigidity for bases of normal tensors (primitive branch).**
+**Permutation rigidity for basis-of-normal-tensors (BNT) decompositions, primitive branch.**
 
 Two finite families of primitive blocks whose MPV overlaps are asymptotically orthonormal
 and which span the same MPV subspace at each system size must agree blockwise up to a
@@ -112,7 +114,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     exact (hN0 N hN).choose_spec
   --
   -- ═══════════════════════════════════════════════════════════════════════════
-  -- Step 1: Gram matrix of A tends to 1, and its inverse tends to 1.
+  -- Step 1: The Gram matrix of A tends to the identity, and so does its inverse.
   -- ═══════════════════════════════════════════════════════════════════════════
   have hA_inner_diag : ∀ i : Fin g,
       Tendsto (fun N => mpvInner (d := d) (A i) (A i) N) atTop (nhds (1 : ℂ)) :=
@@ -365,7 +367,7 @@ end MPSTensor
 /-!
 ## Fundamental Theorem — Thm 4.4, span-equality formulation (variable block count)
 
-This section packages the permutation-rigidity lemma for bases of normal tensors
+This section packages the permutation-rigidity lemma for BNT decompositions
 (`MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho` above) into a more
 general **paper-style** statement where the two BNT families may have **different**
 numbers of blocks (`gA ≠ gB`).

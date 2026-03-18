@@ -8,7 +8,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -- • `TNLean.Channel.Irreducible.Basic` for irreducibility/projection lemmas
 -- The channel imports are already transitively available through
 -- `TNLean.MPS.CPPrimitive`, but listing them directly makes the local proof
--- dependencies honest.
+-- dependencies explicit.
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Basic

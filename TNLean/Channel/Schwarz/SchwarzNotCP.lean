@@ -65,8 +65,8 @@ noncomputable def wolfExample53 : M2 →ₗ[ℂ] M2 where
     ring
   · simp [wolfExample53, hij]
 
-/-- The Wolf Example 5.3 map is positive, as a convex combination of transpose
-and trace-times-identity. -/
+/-- The Wolf Example 5.3 map is positive, as a nonnegative linear combination of
+transpose and trace-times-identity. -/
 theorem wolfExample53_isPositive : IsPositiveMap wolfExample53 := by
   intro A hA
   have htranspose : ((1 / 2 : ℂ) • Aᵀ).PosSemidef := by

@@ -505,8 +505,11 @@ matching the weighted-trace argument in
     Hence $X^\dagger X$ is a PSD fixed point, which is
     positive definite by irreducibility
     (Theorem~\ref{thm:psd_fp_pd_irred}).
-    So $X$ is invertible, and multiplicative-domain powers
-    give $E(X^n) = \mu^n X^n$, so $\mu^n$ is peripheral.
+    So $X$ is invertible.
+    By Theorem~\ref{thm:kraus_commute} (KS equality implies Kraus commutation),
+    $X$ commutes with each Kraus operator; iterating via the left
+    multiplicative identity (Theorem~\ref{thm:mult_domain_powers})
+    gives $E(X^n) = \mu^n X^n$, so $\mu^n$ is peripheral.
 \end{proof}
 
 \begin{theorem}[Roots of unity via adjoint fixed point]%

@@ -232,7 +232,7 @@ theorem exists_common_blocking_all_primitive
   haveI : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
   exact isPrimitive_transferMap_blockTensor_of_dvd (blocks k) (pk k) P hk_dvd hP_pos (pk_prim k)
 
-/-- Common blocking from TP + irreducible hypotheses (the standard pipeline entry point).
+/-- Common blocking from TP + irreducible hypotheses (the standard reduction entry point).
 
 This combines `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor` (per-block
 periodicity removal) with `exists_common_blocking_all_primitive` (LCM common period). -/

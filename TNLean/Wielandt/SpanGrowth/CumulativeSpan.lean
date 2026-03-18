@@ -32,6 +32,13 @@ arXiv:0909.5347 (Sanz, Pérez-García, Wolf, Cirac).
 - `cumulativeSpan_finrank_strict_mono`: strict inclusion ⇒ strict dim growth
 - `wordSpan_eq_top_iff_isNBlkInjective`: connects wordSpan to IsNBlkInjective
 
+## Sharp-bound note
+
+The later sharp Lemma 1 argument in `NonzeroTraceProduct.lean` does **not**
+identify `T₁(A)` with `S₁(A)`. It uses only the inclusion
+`wordSpan A 1 ≤ cumulativeSpan A 1`, hence
+`dim(cumulativeSpan A 1) ≥ dim(wordSpan A 1)`.
+
 ## References
 
 - [Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's inequality*,

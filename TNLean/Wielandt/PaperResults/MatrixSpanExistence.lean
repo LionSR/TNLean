@@ -29,11 +29,11 @@ These wrappers are intentionally **coarse existential** statements. They use the
 backend theorem `wielandt_lemma2b`, which produces a sorry-free witness `N`
 without claiming the paper's exact bound.
 
-The exact paper-level statement with bound `N = D² − D + 1` is now formalized in
-`PaperResults/MatrixSpanSharpBound.lean`, but it requires the additional hypothesis that a chosen
-Kraus operator `A i₀` is noninvertible and has a nonzero eigenvector. This file
-keeps the weaker existential consequence that follows from paper primitivity
-alone.
+They record only the qualitative conclusion `∃ N, S_N(A) = M_D(ℂ)`. In
+particular, they do **not** track the explicit `D²` blocked noninvertible bound
+or the sharp `D² − D + 1` fixed-length bound. Those quantitative statements are
+formalized separately in `PaperResults/MatrixSpanSharpBound.lean` and in the
+case analysis of `PaperResults/WielandtInequality.lean`.
 
 ## Proof strategy
 
