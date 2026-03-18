@@ -1,11 +1,8 @@
 %% =========================================================
 %% Chapter: Quantum Dynamical Semigroups and GKSL Generators
-%% Covers: TNLean/Channel/Semigroup/{Basic,Perturbation,Primitivity,Generator}.lean
+%% Covers: TNLean/Channel/Semigroup/{Basic,Perturbation,GeneratorDefs,LindbladForm,KossakowskiForm}.lean
 %% Wolf reference: Chapter 7
 %% =========================================================
-%% The semigroup declarations live in specialized modules that are not
-%% re-exported from TNLean.lean, so this chapter intentionally records
-%% formalization status without direct \lean{} tags.
 
 \chapter{Quantum Dynamical Semigroups}
 \label{ch:semigroup}
@@ -29,9 +26,9 @@ and proves the GKSL theorem.
 %% ---------------------------------------------------------
 
 \begin{definition}[Dynamical semigroup]\label{def:dyn_semigroup_ch12}
-    \leanok
+    \lean{IsDynSemigroup}\leanok
     A family of linear maps
-    $T : \R_{\geq 0} \to (\MN{D} \to_{\ell} \MN{D})$
+    $T : \R \to (\MN{D} \to_{\ell} \MN{D})$
     is a \emph{dynamical semigroup} if
     \begin{enumerate}
         \item (semigroup law) $T(t+s) = T(t) \circ T(s)$
@@ -42,7 +39,7 @@ and proves the GKSL theorem.
 \end{definition}
 
 \begin{definition}[Continuous dynamical semigroup]\label{def:continuous_dyn_semigroup_ch12}
-    \leanok
+    \lean{IsContinuousDynSemigroup}\leanok
     \uses{def:dyn_semigroup_ch12}
     A dynamical semigroup $T$ is \emph{norm-continuous} if the map
     $t \mapsto T(t)$ is continuous in the operator norm topology.
@@ -50,7 +47,7 @@ and proves the GKSL theorem.
 \end{definition}
 
 \begin{definition}[Exponential semigroup]\label{def:exp_semigroup_ch12}
-    \leanok
+    \lean{expSemigroup, expSemigroupCLM}\leanok
     Given a generator $L \in \mathrm{End}_{\C}(\MN{D})$, the
     \emph{exponential semigroup} is
     \[
@@ -59,7 +56,7 @@ and proves the GKSL theorem.
 \end{definition}
 
 \begin{theorem}[Semigroup law for the exponential]\label{thm:expSemigroupCLM_add_ch12}
-    \leanok
+    \lean{expSemigroupCLM_add, expSemigroup_comp}\leanok
     \uses{def:exp_semigroup_ch12}
     For all $t,s \in \R$,
     $e^{(t+s)L} = e^{tL} \cdot e^{sL}$.
@@ -73,7 +70,7 @@ and proves the GKSL theorem.
 \end{proof}
 
 \begin{theorem}[Continuity of the exponential semigroup]\label{thm:expSemigroupCLM_continuous_ch12}
-    \leanok
+    \lean{expSemigroupCLM_continuous, expSemigroup_isContinuousDynSemigroup}\leanok
     \uses{def:exp_semigroup_ch12}
     The map $t \mapsto e^{tL}$ is continuous in the operator norm topology.
 \end{theorem}
@@ -85,7 +82,7 @@ and proves the GKSL theorem.
 \end{proof}
 
 \begin{theorem}[Derivative of the exponential semigroup]\label{thm:hasDerivAt_expSemigroupCLM_ch12}
-    \leanok
+    \lean{hasDerivAt_expSemigroupCLM}\leanok
     \uses{def:exp_semigroup_ch12}
     For all $t \in \R$,
     \[
@@ -102,7 +99,7 @@ and proves the GKSL theorem.
 \end{proof}
 
 \begin{theorem}[Generator uniqueness]\label{thm:generator_unique_ch12}
-    \leanok
+    \lean{generator_unique}\leanok
     \uses{def:exp_semigroup_ch12}
     If $e^{tL} = e^{tL'}$ for all $t \ge 0$, then $L = L'$.
 \end{theorem}
@@ -116,15 +113,14 @@ and proves the GKSL theorem.
 
 \begin{theorem}[Prop.~7.1: Every continuous semigroup is exponential]
     \label{thm:continuousDynSemigroup_eq_exp_ch12}
-    \leanok
-    \uses{def:continuous_dyn_semigroup_ch12, def:exp_semigroup_ch12,
-          thm:generator_unique_ch12}
+    \lean{continuousDynSemigroup_eq_exp}\leanok
+    \uses{def:continuous_dyn_semigroup_ch12, def:exp_semigroup_ch12}
     Every norm-continuous dynamical semigroup $T$ on $\MN{D}$ is
     of the form
     \[
         T_t = e^{tL}
     \]
-    for a unique generator $L \in \mathrm{End}_{\C}(\MN{D})$.
+    for some generator $L \in \mathrm{End}_{\C}(\MN{D})$ and every $t \ge 0$.
     This is \cite[Prop.~7.1]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -135,8 +131,8 @@ and proves the GKSL theorem.
     $\varepsilon > 0$.
     Using the semigroup property,
     $T_t = M_\varepsilon^{-1}(M_{t+\varepsilon} - M_t)$
-    is differentiable.
-    ODE uniqueness gives $T_t = e^{tL}$ with $L = T'(0)$.
+    is differentiable for $t \ge 0$.
+    ODE uniqueness then gives $T_t = e^{tL}$ for all $t \ge 0$.
 \end{proof}
 
 %% ---------------------------------------------------------
@@ -145,7 +141,7 @@ and proves the GKSL theorem.
 %% ---------------------------------------------------------
 
 \begin{theorem}[Lem.~7.1: Duhamel formula]\label{thm:duhamel_formula_ch12}
-    \leanok
+    \lean{duhamel_formula}\leanok
     \uses{def:exp_semigroup_ch12, thm:hasDerivAt_expSemigroupCLM_ch12}
     Let $\Delta = L' - L$. For $t \ge 0$,
     \[
@@ -164,7 +160,7 @@ and proves the GKSL theorem.
 \end{proof}
 
 \begin{theorem}[Cor.~7.1: Perturbation bound]\label{thm:perturbation_bound_ch12}
-    \leanok
+    \lean{perturbation_bound}\leanok
     \uses{thm:duhamel_formula_ch12}
     For $t \ge 0$,
     \[
@@ -198,7 +194,7 @@ which shows that such generators have the standard Lindblad form.
 \subsection{Generator decomposition and conditional complete positivity}
 
 \begin{definition}[Generator decomposition]\label{def:generator_decomp}
-    \leanok
+    \lean{GeneratorDecomp}\leanok
     A \emph{generator decomposition} consists of a completely positive map
     $\phi : \MN{d} \to \MN{d}$ and a matrix $\kappa \in \MN{d}$, defining
     the linear map
@@ -209,7 +205,7 @@ which shows that such generators have the standard Lindblad form.
 \end{definition}
 
 \begin{definition}[Conditional complete positivity]\label{def:is_ccp}
-    \leanok
+    \lean{IsCCP}\leanok
     \uses{def:generator_decomp}
     A linear map $L : \MN{d} \to \MN{d}$ is \emph{conditionally
     completely positive} (CCP) if it admits a generator decomposition,
@@ -219,14 +215,14 @@ which shows that such generators have the standard Lindblad form.
 \end{definition}
 
 \begin{definition}[Trace-annihilating map]\label{def:is_trace_annihilating}
-    \leanok
+    \lean{IsTraceAnnihilating}\leanok
     A linear map $L : \MN{d} \to \MN{d}$ is \emph{trace-annihilating} if
     $\tr(L(\rho)) = 0$ for all $\rho \in \MN{d}$.
     This is the infinitesimal version of trace preservation.
 \end{definition}
 
 \begin{definition}[Trace constraint]\label{def:is_trace_constraint}
-    \leanok
+    \lean{GeneratorDecomp.isTraceConstraint}\leanok
     \uses{def:generator_decomp}
     A generator decomposition $(\phi, \kappa)$ satisfies the
     \emph{trace constraint} if $\phi^*(\Id) = \kappa + \kappa^\dagger$,
@@ -236,7 +232,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Trace constraint implies trace-annihilating]
     \label{thm:traceAnnihilating_of_traceConstraint}
-    \leanok
+    \lean{GeneratorDecomp.traceAnnihilating_of_traceConstraint}\leanok
     \uses{def:generator_decomp, def:is_trace_annihilating,
           def:is_trace_constraint}
     If $(\phi, \kappa)$ satisfies $\phi^*(\Id) = \kappa + \kappa^\dagger$,
@@ -259,7 +255,7 @@ which shows that such generators have the standard Lindblad form.
 \subsection{The Lindblad form}
 
 \begin{definition}[Lindblad form]\label{def:lindblad_form}
-    \leanok
+    \lean{LindbladForm}\leanok
     A \emph{Lindblad form} consists of a Hermitian matrix $H = H^\dagger$
     (the Hamiltonian) and a family of matrices $\{L_j\}_{j=0}^{r-1}$
     (the Lindblad operators), defining the linear map
@@ -276,7 +272,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Lindblad form is trace-annihilating]
     \label{thm:lindbladForm_isTraceAnnihilating}
-    \leanok
+    \lean{LindbladForm.isTraceAnnihilating}\leanok
     \uses{def:lindblad_form, def:is_trace_annihilating}
     Every Lindblad form defines a trace-annihilating linear map.
 \end{theorem}
@@ -293,7 +289,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Lindblad form equals generator decomposition]
     \label{thm:lindbladForm_eq_generatorDecomp}
-    \leanok
+    \lean{LindbladForm.toLinearMap_eq_generatorDecomp}\leanok
     \uses{def:lindblad_form, def:generator_decomp}
     A Lindblad form with Hamiltonian $H$ and operators $\{L_j\}$ defines
     the same linear map as the generator decomposition $(\phi, \kappa)$
@@ -316,9 +312,8 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Lindblad form is CCP]
     \label{thm:lindbladForm_isCCP}
-    \leanok
-    \uses{def:lindblad_form, def:is_ccp,
-          thm:lindbladForm_eq_generatorDecomp}
+    \lean{LindbladForm.isCCP}\leanok
+    \uses{def:lindblad_form, def:is_ccp}
     Every Lindblad form defines a conditionally completely positive map.
 \end{theorem}
 
@@ -331,9 +326,28 @@ which shows that such generators have the standard Lindblad form.
 
 \subsection{Prop.~7.2: Characterization of conditional complete positivity}
 
+\begin{theorem}[Prop.~7.2, direction 1$\to$2]
+    \label{thm:ccp_implies_choi_projected}
+    \lean{ccp_implies_choi_projected_posSemidef}\leanok
+    \uses{def:is_ccp}
+    If $L$ is CCP and $P = \Id - \ketbra{\Omega}{\Omega}$, then
+    \[
+        P((L \otimes \id)(\ketbra{\Omega}{\Omega}))P \ge 0.
+    \]
+    This is \cite[Prop.~7.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$.
+    The left- and right-multiplication terms are annihilated by $P$, so the
+    projected Choi matrix reduces to the projected Choi matrix of $\phi$, which
+    is positive.
+\end{proof}
+
 \begin{theorem}[Prop.~7.2, direction 2$\to$1]
     \label{thm:choi_projected_implies_ccp}
-    \notready
+    \lean{choi_projected_posSemidef_implies_ccp}
     \uses{def:is_ccp}
     If $L$ is Hermiticity-preserving and
     $P((L \otimes \id)(\ketbra{\Omega}{\Omega}))P \ge 0$
@@ -343,7 +357,6 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{proof}
-    \notready
     Decompose the Hermitian Choi matrix as
     $\tau_L = Q - \ket{\psi}\bra{\Omega} - \ket{\Omega}\bra{\psi}$
     with $Q \ge 0$ supported on $\ket{\Omega}^\perp$.
@@ -356,48 +369,49 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.3: CP semigroup implies CCP generator]
     \label{thm:cp_semigroup_implies_ccp}
-    \notready
-    \uses{def:is_ccp, def:exp_semigroup_ch12}
+    \lean{cp_semigroup_implies_ccp_generator}
+    \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
     If $e^{tL}$ is CP for all $t \ge 0$, then $L$ is CCP.
     This is \cite[Prop.~7.3]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
-    \notready
+    \uses{thm:choi_projected_implies_ccp}
     From $(e^{tL} \otimes \id)(\ketbra{\Omega}{\Omega}) \ge 0$,
     expand at infinitesimal $t$ and project onto $P$ to get
     $P(L\otimes\id)(\ketbra{\Omega}{\Omega})P \ge 0$.
+    Then Theorem~\ref{thm:choi_projected_implies_ccp} gives CCP.
 \end{proof}
 
 \begin{theorem}[Prop.~7.3: CCP generator implies CP semigroup]
     \label{thm:ccp_implies_cp_semigroup}
-    \notready
-    \uses{def:is_ccp, def:exp_semigroup_ch12}
+    \lean{ccp_generator_implies_cp_semigroup}\leanok
+    \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
     If $L$ is CCP, then $e^{tL}$ is CP for all $t \ge 0$.
     This is \cite[Prop.~7.3]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    Write $L = \phi + \phi_\kappa$ with
-    $\phi_\kappa(\rho) = -\kappa\rho - \rho\kappa^\dagger$.
-    By Lie--Trotter,
-    $e^{tL} = \lim_{n \to \infty}(e^{t\phi/n}e^{t\phi_\kappa/n})^n$.
-    Both factors are CP:
-    $e^{t\phi/n}$ by Taylor expansion of a CP map, and
-    $e^{t\phi_\kappa/n}(\rho) = K\rho K^\dagger$ with $K = e^{-t\kappa/n}$.
+    \leanok
+    Approximate $e^{tL}$ by the completely positive Euler steps
+    \[
+        \rho \mapsto (\Id - h\kappa)\rho(\Id - h\kappa)^\dagger + h\phi(\rho),
+        \qquad h = \frac{t}{n+1}.
+    \]
+    Each step is CP, hence so are its powers. These powers converge in operator
+    norm to $e^{tL}$, and the cone of CP maps is closed.
 \end{proof}
 
 \begin{theorem}[Prop.~7.3: CP semigroup iff CCP generator]
     \label{thm:cp_semigroup_iff_ccp}
-    \leanok
-    \uses{thm:cp_semigroup_implies_ccp, thm:ccp_implies_cp_semigroup}
+    \lean{cp_semigroup_iff_ccp_generator}
+    \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
     $e^{tL}$ is CP for all $t \ge 0$ if and only if $L$ is CCP.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    Theorems~\ref{thm:cp_semigroup_implies_ccp}
+    \uses{thm:cp_semigroup_implies_ccp, thm:ccp_implies_cp_semigroup}
+    Combine Theorems~\ref{thm:cp_semigroup_implies_ccp}
     and~\ref{thm:ccp_implies_cp_semigroup}.
 \end{proof}
 
@@ -405,9 +419,8 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Traceless Kraus operators exist]
     \label{thm:exists_traceless_kraus_shift}
-    \leanok
-    \uses{def:generator_decomp}
-    Given any Kraus operators $\{K_j\}$, there exist $c_j \in \C$
+    \lean{exists_traceless_kraus_shift}\leanok
+    Assume $d > 0$. Given any Kraus operators $\{K_j\}$, there exist $c_j \in \C$
     such that $K_j' = K_j + c_j \Id$ is traceless.
     This is part of \cite[Prop.~7.4]{Wolf2012Quantum}.
 \end{theorem}
@@ -419,8 +432,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Shift invariance of generators]
     \label{thm:generator_shift_invariance}
-    \leanok
-    \uses{def:generator_decomp}
+    \lean{generator_shift_invariance}\leanok
     If $K_j' = K_j + c_j \Id$ and $\kappa'$ is adjusted per
     \cite[Eq.~(7.19)]{Wolf2012Quantum},
     then $(\phi', \kappa')$ and $(\phi, \kappa)$ define the same generator.
@@ -431,20 +443,51 @@ which shows that such generators have the standard Lindblad form.
     Direct algebraic expansion.
 \end{proof}
 
+\subsection{Trace-annihilation and trace preservation}
+
+\begin{theorem}[Trace-annihilating generators yield trace-preserving semigroups]
+    \label{thm:ta_implies_tp_semigroup}
+    \lean{isTracePreservingMap_expSemigroup_of_isTraceAnnihilating}\leanok
+    \uses{def:is_trace_annihilating, def:trace_preserving, def:exp_semigroup_ch12}
+    If $L$ is trace-annihilating, then $e^{tL}$ is trace-preserving for every
+    $t \in \R$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For fixed $\rho$, the function $f(t) = \tr(e^{tL}(\rho))$ has derivative
+    $f'(t) = \tr(L(e^{tL}(\rho))) = 0$, so $f$ is constant and
+    $\tr(e^{tL}(\rho)) = f(t) = f(0) = \tr(\rho)$.
+\end{proof}
+
+\begin{theorem}[Trace-preserving semigroups have trace-annihilating generators]
+    \label{thm:tp_semigroup_implies_ta}
+    \lean{isTraceAnnihilating_of_isTracePreservingMap_semigroup}\leanok
+    \uses{def:is_trace_annihilating, def:trace_preserving, def:exp_semigroup_ch12}
+    If $e^{tL}$ is trace-preserving for every $t \ge 0$, then $L$ is
+    trace-annihilating.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Differentiate the identity $\tr(e^{tL}(\rho)) = \tr(\rho)$ at $t = 0$
+    from the right.
+\end{proof}
+
 \subsection{Thm.~7.1: The GKSL/Lindblad theorem}
 
 \begin{definition}[GKSL generator]\label{def:is_gksl_generator}
-    \leanok
-    \uses{def:exp_semigroup_ch12}
+    \lean{IsGKSLGenerator}\leanok
+    \uses{def:channel, def:exp_semigroup_ch12}
     A linear map $L : \MN{d} \to \MN{d}$ is a \emph{GKSL generator}
     if $e^{tL}$ is a quantum channel (CPTP) for all $t \ge 0$.
 \end{definition}
 
 \begin{theorem}[Thm.~7.1, Form~(i)]
     \label{thm:gksl_of_generatorDecomp}
-    \notready
-    \uses{def:is_gksl_generator, def:generator_decomp,
-          def:is_trace_constraint, thm:ccp_implies_cp_semigroup}
+    \lean{gksl_of_generatorDecomp_with_traceConstraint}\leanok
+    \uses{def:cp_map, def:is_gksl_generator, def:generator_decomp,
+          def:is_trace_constraint}
     If $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ with
     $\phi$ CP and $\phi^*(\Id) = \kappa + \kappa^\dagger$,
     then $L$ is a GKSL generator.
@@ -452,31 +495,56 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    CP follows from CCP via Theorem~\ref{thm:ccp_implies_cp_semigroup}.
-    TP follows from
-    Theorem~\ref{thm:traceAnnihilating_of_traceConstraint}.
+    \leanok
+    \uses{thm:ccp_implies_cp_semigroup, thm:traceAnnihilating_of_traceConstraint,
+          thm:ta_implies_tp_semigroup}
+    CP follows from Theorem~\ref{thm:ccp_implies_cp_semigroup}.
+    The trace constraint implies trace-annihilation by
+    Theorem~\ref{thm:traceAnnihilating_of_traceConstraint}, so
+    Theorem~\ref{thm:ta_implies_tp_semigroup} gives trace preservation.
+\end{proof}
+
+\begin{theorem}[Thm.~7.1, Form~(i) conversely]
+    \label{thm:generatorDecomp_of_gksl}
+    \lean{generatorDecomp_of_gksl}
+    \uses{def:cp_map, def:is_gksl_generator, def:generator_decomp, def:is_trace_constraint}
+    If $L$ is a GKSL generator, then there exist a CP map $\phi$ and a matrix
+    $\kappa$ such that
+    \[
+        L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger
+    \]
+    and $\phi^*(\Id) = \kappa + \kappa^\dagger$.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:cp_semigroup_implies_ccp, thm:tp_semigroup_implies_ta}
+    Apply Theorem~\ref{thm:cp_semigroup_implies_ccp} to obtain a CCP
+    decomposition. Then apply Theorem~\ref{thm:tp_semigroup_implies_ta} to the
+    trace-preserving part of the semigroup and rewrite the resulting
+    trace-annihilation condition as $\phi^*(\Id) = \kappa + \kappa^\dagger$.
 \end{proof}
 
 \begin{theorem}[Thm.~7.1: GKSL iff CCP + trace-annihilating]
     \label{thm:gksl_iff_ccp_ta}
-    \notready
+    \lean{gksl_iff_ccp_and_traceAnnihilating}
     \uses{def:is_gksl_generator, def:is_ccp, def:is_trace_annihilating}
     $L$ is a GKSL generator if and only if $L$ is CCP and
     trace-annihilating.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    Combines Props.~7.2--7.3 with the trace constraint.
+    \uses{thm:cp_semigroup_implies_ccp, thm:ccp_implies_cp_semigroup,
+          thm:ta_implies_tp_semigroup, thm:tp_semigroup_implies_ta}
+    Forward: apply Theorem~\ref{thm:cp_semigroup_implies_ccp} to the CP part and
+    Theorem~\ref{thm:tp_semigroup_implies_ta} to the TP part.
+    Reverse: combine Theorem~\ref{thm:ccp_implies_cp_semigroup} with
+    Theorem~\ref{thm:ta_implies_tp_semigroup}.
 \end{proof}
 
 \begin{theorem}[Thm.~7.1: GKSL iff Lindblad form]
     \label{thm:gksl_iff_lindblad}
-    \notready
-    \uses{def:is_gksl_generator, def:lindblad_form,
-          thm:gksl_iff_ccp_ta, thm:lindbladForm_eq_generatorDecomp,
-          thm:exists_traceless_kraus_shift}
+    \lean{gksl_iff_lindbladForm}
+    \uses{def:is_gksl_generator, def:lindblad_form}
     $L$ is a GKSL generator if and only if
     \[
         L(\rho)
@@ -490,43 +558,50 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    \uses{thm:gksl_iff_ccp_ta, thm:lindbladForm_eq_generatorDecomp,
+    \uses{thm:generatorDecomp_of_gksl, thm:gksl_iff_ccp_ta,
+          thm:lindbladForm_eq_generatorDecomp, thm:lindbladForm_isCCP,
+          thm:lindbladForm_isTraceAnnihilating,
           thm:exists_traceless_kraus_shift}
-    Forward: by CCP, write $L(\rho) = \phi(\rho) - \kappa\rho
-    - \rho\kappa^\dagger$; take traceless Kraus operators
-    (Theorem~\ref{thm:exists_traceless_kraus_shift}) and set
-    $\kappa = iH + \frac{1}{2}\phi^*(\Id)$
-    (Theorem~\ref{thm:lindbladForm_eq_generatorDecomp}).
-    Reverse: Theorem~\ref{thm:gksl_iff_ccp_ta}.
+    Forward: apply Theorem~\ref{thm:generatorDecomp_of_gksl} to write
+    $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ with trace
+    constraint. Then choose traceless Kraus operators by
+    Theorem~\ref{thm:exists_traceless_kraus_shift} and rewrite $\kappa$ as
+    $iH + \frac{1}{2}\phi^*(\Id)$; Theorem~\ref{thm:lindbladForm_eq_generatorDecomp}
+    gives the Lindblad formula.
+    Reverse: Theorems~\ref{thm:lindbladForm_isCCP}
+    and~\ref{thm:lindbladForm_isTraceAnnihilating} show that every Lindblad form
+    satisfies the right-hand side of Theorem~\ref{thm:gksl_iff_ccp_ta}.
 \end{proof}
 
 \subsection{Kossakowski matrix form}
 
 \begin{definition}[Kossakowski form]\label{def:kossakowski_form}
-    \leanok
-    A \emph{Kossakowski form} consists of $H = H^\dagger$,
-    a basis $\{F_k\}_{k=0}^{d^2-2}$ of traceless matrices,
-    and a PSD matrix $C \in \MN{d^2-1}$, defining
+    \lean{KossakowskiForm}\leanok
+    A \emph{Kossakowski form} consists of $H = H^\dagger$, a finite family
+    of matrices $\{F_k\}_{k=0}^{n-1}$, and a positive semidefinite matrix
+    $C \in \MN{n}$, defining
     \[
         L(\rho)
         = i[\rho, H]
         + \tfrac{1}{2}\sum_{k,l} C_{lk}\bigl(        [F_k, \rho F_l^\dagger] + [F_k\rho, F_l^\dagger]
           \bigr).
     \]
-    This is \cite[Eq.~(7.23)]{Wolf2012Quantum}.
+    In Wolf's formula one takes $\{F_k\}$ to be a basis of traceless matrices;
+    the Lean structure keeps only the algebraic data needed for the conversion to
+    Lindblad form.
 \end{definition}
 
 \begin{theorem}[Kossakowski form iff Lindblad form]
     \label{thm:kossakowski_iff_lindblad}
-    \leanok
+    \lean{kossakowski_iff_lindblad}\leanok
     \uses{def:kossakowski_form, def:lindblad_form}
     A linear map admits a Kossakowski form iff it admits a Lindblad form.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Diagonalize $C = M^\dagger M$ and set $L_j = \sum_k M_{jk} F_k$.
-    Conversely, expand traceless $L_j = \sum_k M_{jk} F_k$ and set
-    $C = M^\dagger M \ge 0$.
+    Forward: diagonalize $C = B^\dagger B$ and set
+    $L_j = \sum_k B_{jk} F_k$.
+    Reverse: keep the same Hamiltonian and family $F_k = L_k$, and take
+    $C = \,\Id$.
 \end{proof}

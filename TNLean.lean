@@ -3,11 +3,12 @@
 
 Stable import surface for the maintained TNLean library.
 
-This file re-exports the modules intended for downstream users. A few
-specialized helper or documentary modules are intentionally omitted from the
-root import list; they remain available via direct imports when needed.
+This file re-exports the modules intended for downstream users. Most
+specialized helper modules are still omitted from the root import list, but the
+public chapter-index modules are re-exported so that blueprint links and the
+generated documentation can see them.
 
-The following legacy or documentary modules are intentionally excluded
+The following legacy archival modules are intentionally excluded
 (they live in `TNLean/Archive/`):
 
 * the legacy bi-canonical periodicity wrappers
@@ -183,3 +184,8 @@ import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.QuantumWielandt
 
 import TNLean.Channel.Peripheral.CyclicDecomposition
+
+-- Public documentation index modules
+import TNLean.Channel.WolfChapter2Index
+import TNLean.Channel.WolfChapter6Index
+import TNLean.Channel.Semigroup
