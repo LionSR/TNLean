@@ -403,10 +403,10 @@ theorem fundamentalTheorem_equalMPV_full
         ∑ j : Fin rA, (μA j) ^ N * mpv (A j) σ
             = mpv (toTensorFromBlocks μA A) σ := by
               symm
-              simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μA A σ
+              simpa only [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μA A σ
         _ = mpv (toTensorFromBlocks μB B) σ := hEqual N σ
         _ = ∑ k : Fin rB, (μB k) ^ N * mpv (B k) σ := by
-              simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μB B σ
+              simpa only [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μB B σ
         _ = ∑ j : Fin rA, (μB (perm j)) ^ N * mpv (B (perm j)) σ := by
               simpa using (Equiv.sum_comp perm (fun k : Fin rB => (μB k) ^ N * mpv (B k) σ)).symm
         _ = ∑ j : Fin rA, (μB (perm j) * ζ j) ^ N * mpv (A j) σ := by
@@ -426,7 +426,7 @@ theorem fundamentalTheorem_equalMPV_full
     have hdiff :
         ∑ j : Fin rA, ((μA j) ^ N - (μB (perm j) * ζ j) ^ N) •
             mpvState (d := d) (A j) N = 0 := by
-      simpa [Finset.sum_sub_distrib, sub_smul] using (sub_eq_zero.mpr hsums)
+      simpa only [Finset.sum_sub_distrib, sub_smul] using (sub_eq_zero.mpr hsums)
     have hzero :=
       Fintype.linearIndependent_iff.mp hLIN
         (fun j : Fin rA => (μA j) ^ N - (μB (perm j) * ζ j) ^ N)
@@ -439,11 +439,9 @@ theorem fundamentalTheorem_equalMPV_full
     have hmul :
         μA j ^ (N0 + 1) * μA j = μA j ^ (N0 + 1) * (μB (perm j) * ζ j) := by
       calc
-        μA j ^ (N0 + 1) * μA j = μA j ^ ((N0 + 1) + 1) := by
-          simp [pow_succ, mul_assoc]
+        μA j ^ (N0 + 1) * μA j = μA j ^ ((N0 + 1) + 1) := by ring
         _ = (μB (perm j) * ζ j) ^ ((N0 + 1) + 1) := hpow2
-        _ = (μB (perm j) * ζ j) ^ (N0 + 1) * (μB (perm j) * ζ j) := by
-          simp [pow_succ, mul_assoc]
+        _ = (μB (perm j) * ζ j) ^ (N0 + 1) * (μB (perm j) * ζ j) := by ring
         _ = μA j ^ (N0 + 1) * (μB (perm j) * ζ j) := by rw [hpow1]
     exact mul_left_cancel₀ (pow_ne_zero (N0 + 1) (hμA_ne j)) hmul
   let Acast : (j : Fin rA) → MPSTensor d (dimB (perm j)) :=
@@ -530,9 +528,8 @@ theorem perBlock_sameMPV_of_equalMPV_CFBNT
     (hA : IsCanonicalFormBNT μ A)
     (hB : IsCanonicalFormBNT μ B)
     (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
-    ∀ k, SameMPV (A k) (B k) := by
-  intro k
-  exact GaugeEquiv.sameMPV ((fundamentalTheorem_equalMPV_CFBNT A B hA hB hSame).1 k)
+    ∀ k, SameMPV (A k) (B k) :=
+  fun k => GaugeEquiv.sameMPV ((fundamentalTheorem_equalMPV_CFBNT A B hA hB hSame).1 k)
 
 end Corollaries
 
@@ -671,7 +668,14 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
   -- Step A: ‖μA 0‖ = ‖μB 0‖ via normalized inner-product identity (both cases).
   -- Step B: Dominant match existence via contradiction (inner product → 1 vs → 0).
   -- Step C: Non-dominant blocks by strong induction on rA + rB (tail reduction).
-  -- ────────────────────────────────────────────────────────────────────────────
+  -- --------------------------------------------------------------------------
+  -- NOTE (file split): `tendsto_inner_zero`, `tendsto_inner_one`,
+  -- `bounded_mul_tendsto_zero`, `geometric_mul_bounded_tendsto_zero`,
+  -- `geometric_mul_inner_tendsto_zero`, and `sum_tendsto_one_of_diag` are
+  -- general-purpose convergence helpers that do not depend on the BNT
+  -- structure.  A future refactor could extract them to a dedicated utility
+  -- file such as `TNLean/MPS/FundamentalTheorem/OverlapConvergence.lean`.
+  -- --------------------------------------------------------------------------
   have hrA_pos : 0 < rA := Nat.pos_of_ne_zero hrA
   have hrB_pos : 0 < rB := Nat.pos_of_ne_zero hrB
   -- ── Helper: mpvOverlap → 0 implies mpvInner → 0 ──
@@ -679,15 +683,13 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       Tendsto (fun N => mpvOverlap (d := d) X Y N) atTop (nhds 0) →
       Tendsto (fun N => mpvInner (d := d) X Y N) atTop (nhds 0) := by
     intro D₁ D₂ X Y hOv
-    have h' := hOv.star
-    simpa [mpvOverlap_eq_star_mpvInner] using h'
+    simpa [mpvOverlap_eq_star_mpvInner] using hOv.star
   -- ── Helper: mpvOverlap → 1 implies mpvInner → 1 (self) ──
   have tendsto_inner_one : ∀ {D : ℕ} (X : MPSTensor d D),
       Tendsto (fun N => mpvOverlap (d := d) X X N) atTop (nhds 1) →
       Tendsto (fun N => mpvInner (d := d) X X N) atTop (nhds 1) := by
     intro D X hOv
-    have h' := hOv.star
-    simpa [mpvOverlap_eq_star_mpvInner] using h'
+    simpa [mpvOverlap_eq_star_mpvInner] using hOv.star
   -- ── Inner product identity from hSumState ──
   have inner_identity : ∀ {D : ℕ} (X : MPSTensor d D) (N : ℕ),
       ∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N =
@@ -736,7 +738,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       Tendsto (fun N => c ^ N * f N) atTop (nhds 0) := by
     intro c f hc hf
     have hfn : Tendsto (fun N => ‖f N‖) atTop (nhds 0) := by
-      have := hf.norm; simp only [norm_zero] at this; exact this
+      convert hf.norm using 1; simp only [norm_zero]
     apply squeeze_zero_norm (fun N => ?_) hfn
     calc ‖c ^ N * f N‖ = ‖c ^ N‖ * ‖f N‖ := norm_mul _ _
       _ = ‖c‖ ^ N * ‖f N‖ := by rw [norm_pow]
@@ -752,7 +754,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       have h1 : Tendsto (fun N => (‖c‖ : ℝ) ^ N) atTop (nhds 0) :=
         tendsto_pow_atTop_nhds_zero_of_norm_lt_one (by rwa [Real.norm_of_nonneg (norm_nonneg c)])
       have h2 := h1.mul_const C
-      simpa [zero_mul] using h2
+      simpa only [zero_mul] using h2
     apply squeeze_zero_norm (fun N => ?_) hgeom
     calc ‖c ^ N * f N‖ = ‖c ^ N‖ * ‖f N‖ := norm_mul _ _
       _ ≤ ‖c ^ N‖ * C := mul_le_mul_of_nonneg_left (hbound N) (norm_nonneg _)
@@ -776,13 +778,15 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     have hYY_bdd : ∀ N, ‖mpvInner (d := d) Y Y N‖ ≤ C_Y :=
       fun N => hC_Y _ (Set.mem_range_self N)
     -- ‖mpvState X N‖² = ‖mpvInner X X N‖ via inner_self_eq_norm_sq_to_K.
-    have hXX_sq : ∀ N, ‖mpvState (d := d) X N‖ ^ 2 = ‖mpvInner (d := d) X X N‖ := fun N => by
+    have hXX_sq : ∀ N,
+        ‖mpvState (d := d) X N‖ ^ 2 = ‖mpvInner (d := d) X X N‖ := fun N => by
       have heq : mpvInner (d := d) X X N = ↑(‖mpvState (d := d) X N‖ ^ 2 : ℝ) := by
         unfold mpvInner
         rw [inner_self_eq_norm_sq_to_K]
         push_cast; rfl
       rw [heq, Complex.norm_real, Real.norm_of_nonneg (sq_nonneg _)]
-    have hYY_sq : ∀ N, ‖mpvState (d := d) Y N‖ ^ 2 = ‖mpvInner (d := d) Y Y N‖ := fun N => by
+    have hYY_sq : ∀ N,
+        ‖mpvState (d := d) Y N‖ ^ 2 = ‖mpvInner (d := d) Y Y N‖ := fun N => by
       have heq : mpvInner (d := d) Y Y N = ↑(‖mpvState (d := d) Y N‖ ^ 2 : ℝ) := by
         unfold mpvInner
         rw [inner_self_eq_norm_sq_to_K]
@@ -827,7 +831,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
             (hratio j (Finset.ne_of_mem_erase hj))).mul
           (hcross j (Finset.ne_of_mem_erase hj)))
       simpa using this
-    convert h1.add h2 using 1; simp
+    convert h1.add h2 using 1; simp only [add_zero]
   -- ── Step A: Prove ‖μA 0‖ = ‖μB 0‖. ──
   have mu0_norm_eq : ‖μA ⟨0, hrA_pos⟩‖ = ‖μB ⟨0, hrB_pos⟩‖ := by
     by_contra hne
@@ -992,13 +996,13 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     -- Norm of phases = 1.
     have hBB_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B k) (B k) N‖) atTop (nhds 1) := by
-      convert (hB_self k).norm using 1; simp
+      convert (hB_self k).norm using 1; simp only [norm_one]
     have hAA1_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A j₁) (A j₁) N‖) atTop (nhds 1) := by
-      convert (hA_self j₁).norm using 1; simp
+      convert (hA_self j₁).norm using 1; simp only [norm_one]
     have hAA2_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A j₂) (A j₂) N‖) atTop (nhds 1) := by
-      convert (hA_self j₂).norm using 1; simp
+      convert (hA_self j₂).norm using 1; simp only [norm_one]
     have hζ1_norm : ‖ζ1‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hAA1_norm hBB_norm
         (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := A j₁) (B := B k) (ζ := ζ1) hmpv1)
@@ -1044,7 +1048,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       rw [this]; simpa using hBB_norm
     have hCross_norm_zero :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A j₁) (A j₂) N‖) atTop (nhds 0) := by
-      convert (hA_cross j₁ j₂ hne).norm using 1; simp
+      convert (hA_cross j₁ j₂ hne).norm using 1; simp only [norm_zero]
     exact zero_ne_one (tendsto_nhds_unique hCross_norm_zero hCross_norm_one)
   -- ── Similarly for B-side uniqueness ──
   have unique_B_match : ∀ (j : Fin rA) (k₁ k₂ : Fin rB),
@@ -1077,13 +1081,13 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       rw [mpv_eq_pow_mul_of_gaugePhase _ _ Y2 ω2 hY2 N σ, mpv_cast_dim hdim2]
     have hAA_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A j) (A j) N‖) atTop (nhds 1) := by
-      convert (hA_self j).norm using 1; simp
+      convert (hA_self j).norm using 1; simp only [norm_one]
     have hBB1_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B k₁) (B k₁) N‖) atTop (nhds 1) := by
-      convert (hB_self k₁).norm using 1; simp
+      convert (hB_self k₁).norm using 1; simp only [norm_one]
     have hBB2_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B k₂) (B k₂) N‖) atTop (nhds 1) := by
-      convert (hB_self k₂).norm using 1; simp
+      convert (hB_self k₂).norm using 1; simp only [norm_one]
     have hω1_norm : ‖ω1‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hAA_norm hBB1_norm
         (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := A j) (B := B k₁) (ζ := ω1) hmpv1)
@@ -1116,7 +1120,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       rw [this]; simpa using hAA_norm
     have hCross_norm_zero :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B k₁) (B k₂) N‖) atTop (nhds 0) := by
-      convert (hB_cross k₁ k₂ hne).norm using 1; simp
+      convert (hB_cross k₁ k₂ hne).norm using 1; simp only [norm_zero]
     exact zero_ne_one (tendsto_nhds_unique hCross_norm_zero hCross_norm_one)
   -- ── Step D: For each B-block, choose its unique A-match ──
   -- From domB, B b0 has a match. For other B-blocks k, if ∀ j,
@@ -1161,10 +1165,10 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
         rw [mpv_eq_pow_mul_of_gaugePhase _ _ X ω hX N σ, mpv_cast_dim hdim1]
       have hBB_norm :
           Tendsto (fun N => ‖mpvOverlap (d := d) (B b0) (B b0) N‖) atTop (nhds 1) := by
-        convert (hB_self b0).norm using 1; simp
+        convert (hB_self b0).norm using 1; simp only [norm_one]
       have hAA_norm :
           Tendsto (fun N => ‖mpvOverlap (d := d) (A j₁) (A j₁) N‖) atTop (nhds 1) := by
-        convert (hA_self j₁).norm using 1; simp
+        convert (hA_self j₁).norm using 1; simp only [norm_one]
       have hω_norm : ‖ω‖ = 1 :=
         norm_eq_one_of_selfOverlap_scale hAA_norm hBB_norm
           (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := A j₁) (B := B b0) (ζ := ω) hmpv)
@@ -1252,8 +1256,8 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply, hmpv_dom]
   have hζ_norm : ‖ζ‖ = 1 :=
     norm_eq_one_of_selfOverlap_scale
-      (by convert (hA_self a0).norm using 1; simp)
-      (by convert (hB_self b0).norm using 1; simp)
+      (by convert (hA_self a0).norm using 1; simp only [norm_one])
+      (by convert (hB_self b0).norm using 1; simp only [norm_one])
       (mpvOverlap_self_scale_of_mpv_eq_pow_mul
         (A := A a0) (B := B b0) (ζ := ζ) hmpv_dom)
   -- ── Show μA a0 = μB b0 * ζ ──
@@ -1313,7 +1317,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
           ratio ^ N * mpvInner (d := d) (A a0) (A a0) N := by
         intro N; rw [hsplit]; ring
       have h_sub := ((hLHS.congr (fun N => h_ni N)).sub h_rest).congr hRHS_eq
-      rwa [show (1 : ℂ) - 0 = 1 from by ring] at h_sub
+      rwa [sub_zero] at h_sub
     have h_ratio_tendsto : Tendsto (fun N => ratio ^ N) atTop (nhds 1) := by
       have h_err : Tendsto (fun N => ratio ^ N *
           (mpvInner (d := d) (A a0) (A a0) N - 1)) atTop (nhds 0) :=
@@ -1325,8 +1329,11 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
           ratio ^ N * (mpvInner (d := d) (A a0) (A a0) N - 1) = ratio ^ N := by
         intro N; ring
       have h_sub := h_prod.sub h_err
-      rw [show (1 : ℂ) - 0 = 1 from by ring] at h_sub
+      rw [sub_zero] at h_sub
       exact h_sub.congr h_decomp
+    -- NOTE (extract): The "c^N → 1 and ‖c‖ = 1 implies c = 1" argument below
+    -- (shift + unique-limit) is a general-purpose lemma.  A future refactor
+    -- could extract it as `eq_one_of_pow_tendsto_nhds_one` in a utility file.
     -- ratio^N → 1 implies ratio = 1 (shift argument).
     have h_shift : Tendsto (fun N => ratio ^ (N + 1)) atTop (nhds 1) :=
       h_ratio_tendsto.comp (tendsto_add_atTop_nat 1)
@@ -1409,7 +1416,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     simp only [Function.comp, smul_eq_mul] at hA_eq hB_eq
     rw [hA_eq, hB_eq]
     have h := congr_arg (· σ) (hTailReindex N)
-    simpa [WithLp.ofLp_sum, WithLp.ofLp_smul, Finset.sum_apply, Pi.smul_apply,
+    simpa only [WithLp.ofLp_sum, WithLp.ofLp_smul, Finset.sum_apply, Pi.smul_apply,
       smul_eq_mul, mpvState_apply] using h
   have hA_tail : IsCanonicalFormBNT (μA ∘ succA) (fun j => A (succA j)) :=
     IsCanonicalFormBNT.ofSeparatedData
@@ -1524,6 +1531,16 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       rw [hk0_eq]; exact hall (succA j')
 termination_by rA + rB
 
+/-!
+NOTE (file split): `exists_nondecaying_overlap_of_sameMPV₂_CFBNT` and
+`blocks_match_of_sameMPV₂_CFBNT` are the two core private lemmas driving
+`fundamentalTheorem_equalMPV_CFBNT_hetero`.  Because they are large (~350 lines
+combined) and self-contained modulo the BNT API, a future refactor could move
+them to a dedicated file such as
+`TNLean/MPS/FundamentalTheorem/BlockMatching.lean`, leaving only the public
+theorems in this file.
+-/
+
 /-- **Block matching from equal weighted MPV sums via overlap dichotomy.**
 
 Given two `IsCanonicalFormBNT` families generating equal total MPVs via
@@ -1624,7 +1641,8 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
       by_contra hrB_ne
       have hrB_pos : 0 < rB := Nat.pos_of_ne_zero hrB_ne
       have hN := hLIB (N0B + 1) (by omega)
-      have hzero : ∑ k : Fin rB, (μB k) ^ (N0B + 1) • mpvState (d := d) (B k) (N0B + 1) = 0 := by
+      have hzero :
+          ∑ k : Fin rB, (μB k) ^ (N0B + 1) • mpvState (d := d) (B k) (N0B + 1) = 0 := by
         rw [← hSumState (N0B + 1)]
         simp [Finset.sum_empty]
       exact absurd
@@ -1656,12 +1674,12 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
   have hB_cross : ∀ j k : Fin rB, j ≠ k →
       Tendsto (fun N => mpvOverlap (d := d) (B j) (B k) N) atTop (nhds 0) :=
     fun j k hjk => hB.cross_overlap_tendsto_zero j k hjk
-  -- ═══════════════════════════════════════════════════════════════════════════
+  -- ===========================================================================
   -- 3b. KEY STEP: For each A-block, there exists a B-block with non-decaying
   -- overlap (and vice versa).  Proved via strong induction on rA + rB by
   -- `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`; see its docstring for the
   -- dominant-weight projection argument (CPSV17 Appendix A).
-  -- ═══════════════════════════════════════════════════════════════════════════
+  -- ===========================================================================
   have h_nondecaying := exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     A B hA hB hEqual hrA hrB hSumState hA_self hB_self hA_cross hB_cross
   have exists_nondecaying_A : ∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
@@ -1695,12 +1713,12 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
         hdim (A j) (B (fA j))
         (hA_inj j) (hB_inj (fA j))
         (hA_left j) (hB_left (fA j)) hNotGPE)
-  -- ═══════════════════════════════════════════════════════════════════════════
+  -- ===========================================================================
   -- 3d. fA is injective (from A-BNT separation).
   -- If fA(j₁) = fA(j₂) for j₁ ≠ j₂, then both A j₁ and A j₂ are GPE with
   -- B(fA j₁). From the MPV scaling formulas, the cross-overlap
   -- mpvOverlap(A j₁, A j₂) has norm → 1, contradicting A-BNT cross-overlap → 0.
-  -- ═══════════════════════════════════════════════════════════════════════════
+  -- ===========================================================================
   have hfA_inj : Function.Injective fA := by
     intro j1 j2 hfj
     by_contra hne
@@ -1719,13 +1737,13 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
           mpv_cast_dim (hfA_dim j2)]
     have hBB_norm_tendsto :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B (fA j1)) (B (fA j1)) N‖) atTop (nhds 1) := by
-      convert (hB_self (fA j1)).norm using 1; simp
+      convert (hB_self (fA j1)).norm using 1; simp only [norm_one]
     have hAA1_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j1) N‖) atTop (nhds 1) := by
-      convert (hA_self j1).norm using 1; simp
+      convert (hA_self j1).norm using 1; simp only [norm_one]
     have hAA2_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A j2) (A j2) N‖) atTop (nhds 1) := by
-      convert (hA_self j2).norm using 1; simp
+      convert (hA_self j2).norm using 1; simp only [norm_one]
     have hζ1_norm : ‖ζ1‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hAA1_norm hBB_norm_tendsto
         (mpvOverlap_self_scale_of_mpv_eq_pow_mul
@@ -1758,7 +1776,8 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
         intro σ; rw [hA1_eq σ, ← hmpv1 N σ, hA2_eq σ, ← hmpv2 N σ]
       simp_rw [hStep1]
       simp only [star_mul, star_pow, RCLike.star_def, starRingEnd_self_apply]
-      rw [show ((starRingEnd ℂ) ζ1 * ζ2) ^ N = (starRingEnd ℂ) ζ1 ^ N * ζ2 ^ N from mul_pow _ _ _]
+      rw [show ((starRingEnd ℂ) ζ1 * ζ2) ^ N =
+          (starRingEnd ℂ) ζ1 ^ N * ζ2 ^ N from mul_pow _ _ _]
       rw [Finset.mul_sum]
       congr 1; ext σ; ring
     -- Norm of phase factor is 1.
@@ -1779,7 +1798,7 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
       rw [this]; simpa using hBB_norm_tendsto
     have hCross_norm_zero :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j2) N‖) atTop (nhds 0) := by
-      convert (hA_cross j1 j2 hne).norm using 1; simp
+      convert (hA_cross j1 j2 hne).norm using 1; simp only [norm_zero]
     exact zero_ne_one (tendsto_nhds_unique hCross_norm_zero hCross_norm_one)
   -- Matching function from B-blocks to A-blocks, also injective.
   let gB : Fin rB → Fin rA := fun k => (exists_nondecaying_B k).choose
@@ -1820,13 +1839,13 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
           mpv_cast_dim (hgB_dim k2)]
     have hAA_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (A (gB k1)) (A (gB k1)) N‖) atTop (nhds 1) := by
-      convert (hA_self (gB k1)).norm using 1; simp
+      convert (hA_self (gB k1)).norm using 1; simp only [norm_one]
     have hBB1_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k1) N‖) atTop (nhds 1) := by
-      convert (hB_self k1).norm using 1; simp
+      convert (hB_self k1).norm using 1; simp only [norm_one]
     have hBB2_norm :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B k2) (B k2) N‖) atTop (nhds 1) := by
-      convert (hB_self k2).norm using 1; simp
+      convert (hB_self k2).norm using 1; simp only [norm_one]
     have hω1_norm : ‖ω1‖ = 1 :=
       norm_eq_one_of_selfOverlap_scale hAA_norm hBB1_norm
         (mpvOverlap_self_scale_of_mpv_eq_pow_mul
@@ -1866,7 +1885,7 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
       rw [this]; simpa using hAA_norm
     have hCross_norm_zero :
         Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k2) N‖) atTop (nhds 0) := by
-      convert (hB_cross k1 k2 hne).norm using 1; simp
+      convert (hB_cross k1 k2 hne).norm using 1; simp only [norm_zero]
     exact zero_ne_one (tendsto_nhds_unique hCross_norm_zero hCross_norm_one)
   -- rA = rB from injective maps between finite types.
   have hrA_le_rB : Fintype.card (Fin rA) ≤ Fintype.card (Fin rB) :=

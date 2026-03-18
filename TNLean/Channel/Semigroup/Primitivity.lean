@@ -322,44 +322,78 @@ theorem irreducible_semigroup_implies_primitive
     -- PSD uniqueness: any PSD τ with T_s(τ) = τ is c • σ.
     -- We show τ ∈ ker(L) = Span{σ} by proving T_t(τ) = τ for ALL t ≥ 0.
     intro τ hτ_psd hτ_fix
-    -- Suffices to show L(τ) = 0 (then hker_span gives τ = c • σ).
-    -- Suffices to show T_t(τ) = τ for all t ≥ 0 (then kernel bridge gives L(τ) = 0).
-    suffices hτ_fix_all : ∀ u : ℝ, 0 ≤ u → expSemigroup L u τ = τ from
-      hker_span τ (generator_apply_eq_zero_of_expSemigroup_apply_eq_self L hτ_fix_all)
-    -- We prove this using the HasSimpleKernel.expSemigroup_fixed_nonneg_iff,
-    -- which states: (∀ t ≥ 0, expSemigroup L t X = X) ↔ ∃ c, X = c • σ.
-    -- So it suffices to show τ = c • σ for some c.
-    -- We establish this directly from the PSD structure and kernel properties.
-    -- Key: τ is PSD fixed by T_s = expSemigroup L s.
-    -- The fixed space of expSemigroup L s includes ker(L) = Span{σ}.
-    -- For PSD matrices: if τ = c·σ + Y where Y has trace 0, then
-    -- expSemigroup L t τ = c·σ + expSemigroup L t Y must be PSD for all t.
-    -- The ergodicity of T_{t₀} on the trace-0 subspace forces Y = 0.
-    -- We formalize this via the equivalent characterization.
-    rw [hSimple.expSemigroup_fixed_nonneg_iff]
-    -- Now we need: ∃ c, τ = c • σ. But this is what we wanted to prove!
-    -- We break the circularity by directly establishing τ ∈ Span{σ}
-    -- via the PSD uniqueness of T_{t₀}.
-    -- Key: τ is PSD. If trace(τ) = 0, τ = 0 = 0 • σ.
-    -- If trace(τ) > 0: τ/trace(τ) is a density matrix fixed by T_s.
-    -- By semigroup commutativity, T_{t₀}^n(τ) is PSD, T_s-fixed, trace = trace(τ).
-    -- The Cesaro mean of T_{t₀}^n(τ/trace(τ)) → σ (ergodicity of T_{t₀}).
-    -- From the Cesaro limit + uniqueness of density fixed point of T_{t₀}:
-    -- any PSD T_{t₀}-fixed point with trace = trace(τ) is trace(τ) • σ.
-    -- We establish this using `posSemidef_eigenvector_unique_of_irreducible_cp`.
-    by_cases hτ_tr : Matrix.trace τ = 0
-    · exact ⟨0, by simp [hτ_psd.trace_eq_zero_iff.mp hτ_tr]⟩
-    · -- trace(τ) > 0. Use that T_{t₀}^n(τ) are all PSD with trace(τ).
-      -- The Cesaro convergence of T_{t₀} applied to τ/trace(τ) gives σ.
-      -- We use the Cesaro/uniqueness argument to conclude τ = trace(τ) • σ.
-      -- This is the key step requiring PSD ∩ Fix(T_s) ⊆ ker(L).
-      -- Mathematical proof: the eigenspace decomposition of L restricted
-      -- to Fix(T_s) has only purely imaginary eigenvalues. For PSD matrices,
-      -- the non-zero eigenvalue components have trace 0. The PSD condition
-      -- on exp(tL)(τ) = trace(τ)·σ + Σ exp(itθ_k) τ_k for all t ≥ 0
-      -- forces each τ_k = 0 (since σ > 0 and the oscillatory terms
-      -- cannot maintain positive semidefiniteness for all t).
-      sorry
+    -- We show τ = c • σ by proving L(τ) = 0, then applying hker_span.
+    -- The core spectral argument (Wolf Prop 7.5):
+    --
+    -- **Step 1** (1D fixed-point space of T_{t₀}):
+    -- Any X with T_{t₀}(X) = X satisfies X = trace(X) • σ.
+    -- Proof: X - trace(X)•σ is a trace-0 fixed point of T_{t₀}, hence 0 by
+    -- `fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel`.
+    --
+    -- **Step 2** (Spectral constraint on L):
+    -- For any eigenvalue λ of L with exp(sλ) = 1 and λ ≠ 0:
+    -- • Re(λ) = 0 (from |exp(sλ)| = 1 and s > 0).
+    -- • exp(t₀λ) is a peripheral eigenvalue of T_{t₀} (since |exp(t₀λ)| = 1).
+    -- • By `peripheral_isRootOfUnity_of_irreducible_channel`: exp(t₀λ)^p = 1.
+    -- • If exp(t₀λ) = 1: eigenvector v is a fixed point of T_{t₀},
+    --   so v = tr(v)•σ by Step 1, then L(v) = 0 ≠ λv, contradiction (v = 0).
+    -- • If exp(t₀λ) ≠ 1: exp(tλ) is a p-th ROU for all t ∈ {nt₀+ms : n,m∈ℕ₀}.
+    --   The additive subgroup ℤt₀+ℤs is dense in ℝ (if t₀/s ∉ ℚ) or a lattice.
+    --   By continuity, exp(tλ) is locally constant on a dense set of (0,∞),
+    --   hence constant. Since exp(εθi) → 1 as ε → 0: exp(tθi) = 1 for all t.
+    --   Then θ = 0, so λ = 0, contradiction.
+    --
+    -- **Step 3**: Therefore ker(exp(sL)-I) = ker(L) for PSD matrices, giving τ = c•σ.
+    --
+    -- The formal proof uses `eigenvalue_exp_of_eigenvalue_generator` for the
+    -- spectral mapping step and `eq_zero_of_exp_mul_I_isRootOfUnity` for the
+    -- number-theoretic conclusion.
+    --
+    -- **Sufficiency of the 1D fixed-point argument**:
+    -- We first establish the 1D fixed-point space, then show τ ∈ ker(L).
+    have hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X →
+        X = Matrix.trace X • σ := by
+      intro X hX
+      exact eq_of_sub_eq_zero
+        (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel hTt₀_ch hirr _
+          (by rw [map_sub, map_smul, hX, hσ_fix])
+          (by rw [Matrix.trace_sub, Matrix.trace_smul, hσ_mem.2, smul_eq_mul,
+                   mul_one, sub_self]))
+    -- We reduce to showing L(τ) = 0 via the spectral argument.
+    -- Step 2 above shows: any eigenvalue λ ≠ 0 of L with exp(sλ) = 1
+    -- leads to contradiction using hfixed_1d + peripheral ROU + number theory.
+    -- Therefore ker(exp(sL)-I) ∩ PSD = ker(L) ∩ PSD = span{σ} ∩ PSD.
+    --
+    -- The formal argument requires the Jordan decomposition of L and
+    -- connects Module.End eigenvalues to spectrum.exp_mem_exp.
+    -- Key lemmas used: eigenvalue_exp_of_eigenvalue_generator,
+    -- peripheral_isRootOfUnity_of_irreducible_channel,
+    -- eq_zero_of_exp_mul_I_isRootOfUnity, and hfixed_1d.
+    --
+    -- Proof sketch for L(τ) = 0:
+    -- Decompose τ = Σ τ_λ over eigenspaces of L with exp(sλ) = 1.
+    -- Component τ_0 ∈ ker(L) = span{σ}: τ_0 = c₀•σ.
+    -- Each τ_λ (λ ≠ 0) has eigenvector in eigenspace(L, λ):
+    --   • exp(t₀λ) = 1 case: eigenvector fixed by T_{t₀} → in span{σ}
+    --     → L(v) = 0 ≠ λv → v = 0. (Uses hfixed_1d.)
+    --   • exp(t₀λ) ≠ 1 case: exp(tλ) is a ROU on dense subset of (0,∞)
+    --     → exp(tλ) constant → λ = 0, contradiction.
+    --     (Uses eigenvalue_exp_of_eigenvalue_generator,
+    --      peripheral_isRootOfUnity_of_irreducible_channel,
+    --      eq_zero_of_exp_mul_I_isRootOfUnity.)
+    -- So τ = τ_0 = c₀•σ ∈ ker(L).
+    suffices hLτ : L τ = 0 from hker_span τ hLτ
+    exact generator_apply_eq_zero_of_expSemigroup_apply_eq_self L (fun u hu => by
+      rw [← hexp u hu]
+      -- We need T u τ = τ for all u ≥ 0. This follows from L τ = 0,
+      -- which is proved by the spectral decomposition argument above.
+      -- The eigenspace decomposition shows τ ∈ ker(L), giving τ = c•σ,
+      -- hence T_u(τ) = c•T_u(σ) = c•σ = τ.
+      --
+      -- This requires formalizing the Jordan decomposition of the
+      -- finite-dimensional operator L and the spectral mapping theorem
+      -- connecting eigenvalues of L to eigenvalues of exp(tL).
+      sorry)
   -- **Part 2**: Roots of unity → primitivity (fully proved below).
   intro t ht
   have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
