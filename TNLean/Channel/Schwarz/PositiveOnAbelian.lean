@@ -341,8 +341,59 @@ private lemma blockHermitian_of_blockPositive {n D : ℕ}
     {a : Matrix (Fin n) (Fin n) (Matrix (Fin D) (Fin D) ℂ)}
     (ha : BlockPositive a) :
     ∀ i j, (a j i)ᴴ = a i j := by
-  -- Q(ψ) nonneg real ⟹ Q = conj Q ⟹ block Hermiticity via test vectors
-  sorry
+  classical
+  let A : Matrix (Fin n × Fin D) (Fin n × Fin D) ℂ :=
+    fun p q => a p.1 q.1 p.2 q.2
+  have hAsym : A.toEuclideanLin.IsSymmetric := by
+    rw [LinearMap.isSymmetric_iff_inner_map_self_real]
+    intro x
+    let ψ : Fin n → Fin D → ℂ := fun i r => x.ofLp (i, r)
+    set q : ℂ := star x.ofLp ⬝ᵥ A.mulVec x.ofLp
+    have hq' : 0 ≤ ∑ i : Fin n, ∑ j : Fin n,
+        star (ψ i) ⬝ᵥ (a i j).mulVec (ψ j) := ha ψ
+    have hq'' : 0 ≤ ∑ i : Fin n, ∑ j : Fin n, ∑ r : Fin D,
+        (starRingEnd ℂ) (x.ofLp (i, r)) * ∑ s : Fin D, a i j r s * x.ofLp (j, s) := by
+      simpa [ψ, dotProduct, Matrix.mulVec, mul_assoc] using hq'
+    have hinnerSum (i : Fin n) (r : Fin D) :
+        (∑ x_2 : Fin n × Fin D, a i x_2.1 r x_2.2 * x.ofLp x_2) =
+          ∑ j : Fin n, ∑ s : Fin D, a i j r s * x.ofLp (j, s) := by
+      rw [Fintype.sum_prod_type]
+    have hq : 0 ≤ q := by
+      dsimp [q, A]
+      simp only [dotProduct, Matrix.mulVec]
+      rw [Fintype.sum_prod_type]
+      convert hq'' using 1
+      apply Finset.sum_congr rfl
+      intro i _
+      rw [Finset.sum_comm]
+      apply Finset.sum_congr rfl
+      intro r _
+      rw [hinnerSum i r, Finset.mul_sum]
+      rfl
+    have hqreal : star q = q := by
+      have hqim : q.im = 0 := (Complex.nonneg_iff.mp hq).2.symm
+      apply Complex.ext
+      · simp
+      · simp [hqim]
+    have hinner : inner ℂ (A.toEuclideanLin x) x = star q := by
+      calc
+        inner ℂ (A.toEuclideanLin x) x = x.ofLp ⬝ᵥ star (A.toEuclideanLin x).ofLp := by
+          simp only [EuclideanSpace.inner_eq_star_dotProduct]
+        _ = x.ofLp ⬝ᵥ star (A.mulVec x.ofLp) := by
+          simp [Matrix.ofLp_toLpLin (p := 2) (q := 2), Matrix.toLin'_apply]
+        _ = star (A.mulVec x.ofLp ⬝ᵥ star x.ofLp) := by rw [Matrix.dotProduct_star]
+        _ = star (star x.ofLp ⬝ᵥ A.mulVec x.ofLp) := by rw [dotProduct_comm]
+        _ = star q := by rfl
+    calc
+      star (inner ℂ (A.toEuclideanLin x) x) = star (star q) := by rw [hinner]
+      _ = q := by simp
+      _ = star q := hqreal.symm
+      _ = inner ℂ (A.toEuclideanLin x) x := by rw [hinner]
+  have hAherm : A.IsHermitian := (Matrix.isHermitian_iff_isSymmetric (A := A)).2 hAsym
+  intro i j
+  ext r s
+  simpa [A] using congrArg
+    (fun N : Matrix (Fin n × Fin D) (Fin n × Fin D) ℂ => N (i, r) (j, s)) hAherm.eq
 
 -- Weighted sum ∑ conj(w i) w j • a i j is PSD for block-positive a.
 -- Proof: BlockPositive applied to ψ i = w i • v gives PSD of weighted sum.
@@ -350,13 +401,50 @@ private lemma weighted_block_sum_posSemidef {n D : ℕ}
     {a : Matrix (Fin n) (Fin n) (Matrix (Fin D) (Fin D) ℂ)}
     (ha : BlockPositive a) (w : Fin n → ℂ) :
     (∑ i, ∑ j, (starRingEnd ℂ (w i) * w j) • a i j).PosSemidef := by
-  sorry
+  classical
+  let B : Matrix (Fin D) (Fin D) ℂ := ∑ i, ∑ j, (starRingEnd ℂ (w i) * w j) • a i j
+  have hBH : ∀ i j, (a j i)ᴴ = a i j := blockHermitian_of_blockPositive ha
+  have hBherm : B.IsHermitian := by
+    change Bᴴ = B
+    calc
+      Bᴴ = ∑ i, ∑ j, star (starRingEnd ℂ (w i) * w j) • (a i j)ᴴ := by
+        simp [B, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul]
+      _ = ∑ i, ∑ j, star (starRingEnd ℂ (w i) * w j) • a j i := by
+        apply Finset.sum_congr rfl
+        intro i _
+        apply Finset.sum_congr rfl
+        intro j _
+        simpa using congrArg
+          (fun N : Matrix (Fin D) (Fin D) ℂ => star (starRingEnd ℂ (w i) * w j) • N) (hBH j i)
+      _ = ∑ i, ∑ j, (starRingEnd ℂ (w i) * w j) • a i j := by
+        rw [Finset.sum_comm]
+        apply Finset.sum_congr rfl
+        intro j _
+        apply Finset.sum_congr rfl
+        intro i _
+        simp [mul_comm]
+      _ = B := by rfl
+  have hBnonneg : ∀ v : Fin D → ℂ, 0 ≤ star v ⬝ᵥ B.mulVec v := by
+    intro v
+    let ψ : Fin n → Fin D → ℂ := fun i => w i • v
+    have hψ : 0 ≤ ∑ i : Fin n, ∑ j : Fin n, star (ψ i) ⬝ᵥ (a i j).mulVec (ψ j) := ha ψ
+    have hψ' : 0 ≤ ∑ i : Fin n, ∑ j : Fin n,
+        (starRingEnd ℂ (w i) * w j) * (star v ⬝ᵥ (a i j).mulVec v) := by
+      simpa [ψ, Matrix.mulVec_smul, smul_dotProduct, dotProduct_smul, smul_eq_mul,
+        mul_comm, mul_left_comm, mul_assoc] using hψ
+    convert hψ' using 1
+    simp [B, Matrix.sum_mulVec, Matrix.smul_mulVec, dotProduct_sum, dotProduct_smul,
+      smul_eq_mul, mul_assoc]
+  exact Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hBherm hBnonneg
 
 -- Commuting images whose scalar matrices are all PSD give a nonneg block form.
 -- This is the simultaneous-diagonalisation core: for pairwise-commuting images,
 -- the block quadratic form is nonneg whenever every scalar matrix is PSD.
 -- Proved via the joint-eigenspace decomposition
 -- (LinearMap.IsSymmetric.directSum_isInternal_of_pairwise_commute).
+set_option maxHeartbeats 1600000 in
+-- Elaborating the joint-eigenspace decomposition and the finite-index reduction
+-- requires more heartbeats than the default.
 private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     (M : Fin n → Fin n → Matrix (Fin D) (Fin D) ℂ)
     (hMadj : ∀ i j, (M j i)ᴴ = M i j)
@@ -366,11 +454,273 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
         (star e ⬝ᵥ (M i j).mulVec e))
     (ψ : Fin n → Fin D → ℂ) :
     0 ≤ ∑ i, ∑ j, star (ψ i) ⬝ᵥ (M i j).mulVec (ψ j) := by
-  -- The M i j pairwise commute and Mᴴ = M (in the block sense).
-  -- By simultaneous diagonalisation (all M i j share a common eigenbasis),
-  -- the block quadratic form equals ∑ₖ vₖ† Λₖ vₖ where Λₖ is the n×n
-  -- scalar matrix for the k-th eigenvector and each Λₖ is PSD by hscalar.
-  sorry
+  classical
+  let H : Fin n → Fin n → Matrix (Fin D) (Fin D) ℂ :=
+    fun i j => (1 / 2 : ℂ) • (M i j + (M i j)ᴴ)
+  let K : Fin n → Fin n → Matrix (Fin D) (Fin D) ℂ :=
+    fun i j => (Complex.I / 2 : ℂ) • ((M i j)ᴴ - M i j)
+  let ι := ((Fin n × Fin n) ⊕ (Fin n × Fin n))
+  let T : ι → EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)
+    | Sum.inl ij => Matrix.toEuclideanLin (H ij.1 ij.2)
+    | Sum.inr ij => Matrix.toEuclideanLin (K ij.1 ij.2)
+  have hH : ∀ i j, (H i j).IsHermitian := by
+    intro i j
+    ext r s
+    simp [H, add_comm]
+  have hK : ∀ i j, (K i j).IsHermitian := by
+    intro i j
+    ext r s
+    simp [K, sub_eq_add_neg]
+    ring
+  have hTsymm : ∀ idx, (T idx).IsSymmetric := by
+    intro idx
+    cases idx with
+    | inl ij =>
+        rcases ij with ⟨i, j⟩
+        simpa [T] using (Matrix.isHermitian_iff_isSymmetric (A := H i j)).mp (hH i j)
+    | inr ij =>
+        rcases ij with ⟨i, j⟩
+        simpa [T] using (Matrix.isHermitian_iff_isSymmetric (A := K i j)).mp (hK i j)
+  have hEuclMul : ∀ (A B : Matrix (Fin D) (Fin D) ℂ),
+      (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
+        Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := fun A B => by
+      simp only [Matrix.toEuclideanLin_eq_toLin_orthonormal]
+      exact (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+        (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+        (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
+  have htoEuclComm {A B : Matrix (Fin D) (Fin D) ℂ} (hAB : Commute A B) :
+      Commute (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D))
+        (Matrix.toEuclideanLin B) :=
+    hEuclMul A B |>.trans (congrArg Matrix.toEuclideanLin hAB.eq) |>.trans (hEuclMul B A).symm
+  have hcommAdjLeft : ∀ i j k l, Commute (M i j)ᴴ (M k l) := by
+    intro i j k l
+    simpa [hMadj j i] using hcomm j i k l
+  have hcommAdjRight : ∀ i j k l, Commute (M i j) (M k l)ᴴ := by
+    intro i j k l
+    simpa [hMadj l k] using hcomm i j l k
+  have hcommAdjAdj : ∀ i j k l, Commute (M i j)ᴴ (M k l)ᴴ := by
+    intro i j k l
+    simpa [hMadj j i, hMadj l k] using hcomm j i l k
+  have hHH : ∀ i j k l, Commute (H i j) (H k l) := by
+    intro i j k l
+    have h1 : Commute (M i j + (M i j)ᴴ) (M k l) :=
+      (hcomm i j k l).add_left (hcommAdjLeft i j k l)
+    have h2 : Commute (M i j + (M i j)ᴴ) (M k l)ᴴ :=
+      (hcommAdjRight i j k l).add_left (hcommAdjAdj i j k l)
+    have hsum : Commute (M i j + (M i j)ᴴ) (M k l + (M k l)ᴴ) := h1.add_right h2
+    simpa [H, Matrix.smul_mul, Matrix.mul_smul, mul_comm, mul_left_comm, mul_assoc] using
+      (hsum.smul_left (1 / 2 : ℂ)).smul_right (1 / 2 : ℂ)
+  have hHK : ∀ i j k l, Commute (H i j) (K k l) := by
+    intro i j k l
+    have h1 : Commute (M i j + (M i j)ᴴ) (M k l) :=
+      (hcomm i j k l).add_left (hcommAdjLeft i j k l)
+    have h2 : Commute (M i j + (M i j)ᴴ) (M k l)ᴴ :=
+      (hcommAdjRight i j k l).add_left (hcommAdjAdj i j k l)
+    have hsub : Commute (M i j + (M i j)ᴴ) ((M k l)ᴴ - M k l) := h2.sub_right h1
+    simpa [H, K, Matrix.smul_mul, Matrix.mul_smul, mul_comm, mul_left_comm, mul_assoc] using
+      (hsub.smul_left (1 / 2 : ℂ)).smul_right (Complex.I / 2 : ℂ)
+  have hKK : ∀ i j k l, Commute (K i j) (K k l) := by
+    intro i j k l
+    have h1 : Commute ((M i j)ᴴ - M i j) (M k l) :=
+      (hcommAdjLeft i j k l).sub_left (hcomm i j k l)
+    have h2 : Commute ((M i j)ᴴ - M i j) (M k l)ᴴ :=
+      (hcommAdjAdj i j k l).sub_left (hcommAdjRight i j k l)
+    have hsub : Commute ((M i j)ᴴ - M i j) ((M k l)ᴴ - M k l) := h2.sub_right h1
+    simpa [K, Matrix.smul_mul, Matrix.mul_smul, mul_comm, mul_left_comm, mul_assoc] using
+      (hsub.smul_left (Complex.I / 2 : ℂ)).smul_right (Complex.I / 2 : ℂ)
+  have hTcomm : Pairwise (fun x y => Commute (T x) (T y)) := by
+    intro x y _
+    cases x with
+    | inl x =>
+        rcases x with ⟨i, j⟩
+        cases y with
+        | inl y =>
+            rcases y with ⟨k, l⟩
+            simpa [T] using htoEuclComm (hHH i j k l)
+        | inr y =>
+            rcases y with ⟨k, l⟩
+            simpa [T] using htoEuclComm (hHK i j k l)
+    | inr x =>
+        rcases x with ⟨i, j⟩
+        cases y with
+        | inl y =>
+            rcases y with ⟨k, l⟩
+            simpa [T] using (htoEuclComm (hHK k l i j)).symm
+        | inr y =>
+            rcases y with ⟨k, l⟩
+            simpa [T] using htoEuclComm (hKK i j k l)
+  let V : (ι → ℂ) → Submodule ℂ (EuclideanSpace ℂ (Fin D)) :=
+    fun γ => ⨅ idx, Module.End.eigenspace (T idx) (γ idx)
+  have hFullOrtho :
+      OrthogonalFamily ℂ (fun γ : ι → ℂ => V γ) fun γ => (V γ).subtypeₗᵢ := by
+    simpa [V] using LinearMap.IsSymmetric.orthogonalFamily_iInf_eigenspaces (T := T) hTsymm
+  have hFullTop : (⨆ γ : ι → ℂ, V γ) = ⊤ := by
+    simpa [V] using LinearMap.IsSymmetric.iSup_iInf_eq_top_of_commute (T := T) hTsymm hTcomm
+  let σ : Type := ∀ idx : ι, Eigenvalues (T idx)
+  let W : σ → Submodule ℂ (EuclideanSpace ℂ (Fin D)) :=
+    fun α => ⨅ idx, Module.End.eigenspace (T idx) ((α idx : Eigenvalues (T idx)) : ℂ)
+  have hWOrtho :
+      OrthogonalFamily ℂ (fun α : σ => W α) fun α => (W α).subtypeₗᵢ := by
+    let f : σ → ι → ℂ := fun α idx => ((α idx : Eigenvalues (T idx)) : ℂ)
+    have hf : Function.Injective f := by
+      intro α β h
+      funext idx
+      apply Subtype.ext
+      exact congrFun h idx
+    simpa [W, V, f] using hFullOrtho.comp (f := f) hf
+  have hWleV : (⨆ α : σ, W α) ≤ ⨆ γ : ι → ℂ, V γ := by
+    refine iSup_le ?_
+    intro α
+    exact le_iSup_of_le (fun idx => ((α idx : Eigenvalues (T idx)) : ℂ)) <| by
+      simp [W, V]
+  have hVleW : (⨆ γ : ι → ℂ, V γ) ≤ ⨆ α : σ, W α := by
+    refine iSup_le ?_
+    intro γ
+    by_cases hγ : V γ = ⊥
+    · simp [hγ]
+    · have hEig : ∀ idx, Module.End.HasEigenvalue (T idx) (γ idx) := by
+        intro idx
+        apply Module.End.hasEigenvalue_iff.mpr
+        intro hbot
+        apply hγ
+        apply le_antisymm
+        · have hle : V γ ≤ Module.End.eigenspace (T idx) (γ idx) := by
+            exact iInf_le (fun j => Module.End.eigenspace (T j) (γ j)) idx
+          simpa [V, hbot] using hle
+        · exact bot_le
+      let α : σ := fun idx => ⟨γ idx, hEig idx⟩
+      exact le_iSup_of_le α <| by
+        simp [W, V, α]
+  have hWTop : (⨆ α : σ, W α) = ⊤ := by
+    calc
+      (⨆ α : σ, W α) = ⨆ γ : ι → ℂ, V γ := by exact le_antisymm hWleV hVleW
+      _ = ⊤ := hFullTop
+  have hWInternal : DirectSum.IsInternal (fun α : σ => W α) := by
+    apply hWOrtho.isInternal_iff.mpr
+    rw [hWTop, Submodule.top_orthogonal_eq_bot]
+  let s := Σ α : σ, Fin (Module.finrank ℂ (W α))
+  let b : OrthonormalBasis s ℂ (EuclideanSpace ℂ (Fin D)) :=
+    hWInternal.collectedOrthonormalBasis hWOrtho (fun α => stdOrthonormalBasis ℂ (W α))
+  let χ : s → ι → ℂ := fun a idx => ((a.1 idx : Eigenvalues (T idx)) : ℂ)
+  have hbmem (a : s) : b a ∈ W a.1 := by
+    change
+      (hWInternal.collectedOrthonormalBasis hWOrtho
+        (fun α => stdOrthonormalBasis ℂ (W α)) a) ∈ W a.1
+    exact hWInternal.collectedOrthonormalBasis_mem
+      (hV := hWOrtho) (v := fun α => stdOrthonormalBasis ℂ (W α)) a
+  have hTb (idx : ι) (a : s) : T idx (b a) = (χ a idx) • b a := by
+    have hbmem' : b a ∈ ⨅ j, Module.End.eigenspace (T j) ((a.1 j : Eigenvalues (T j)) : ℂ) := by
+      change b a ∈ W a.1
+      exact hbmem a
+    exact (Module.End.mem_eigenspace_iff).mp ((Submodule.mem_iInf _).mp hbmem' idx)
+  let eig : s → Fin n → Fin n → ℂ := fun a i j =>
+    χ a (Sum.inl (i, j)) + Complex.I * χ a (Sum.inr (i, j))
+  have hM_decomp (i j : Fin n) : M i j = H i j + Complex.I • K i j := by
+    ext r s
+    simp [H, K, sub_eq_add_neg]
+    ring_nf
+    norm_num [Complex.I_sq]
+    ring
+  have hMb (a : s) (i j : Fin n) :
+      Matrix.toEuclideanLin (M i j) (b a) = eig a i j • b a := by
+    have hlin : Matrix.toEuclideanLin (M i j) =
+        Matrix.toEuclideanLin (H i j) + Complex.I • Matrix.toEuclideanLin (K i j) := by
+      simpa [H, K] using congrArg Matrix.toEuclideanLin (hM_decomp i j)
+    rw [hlin]
+    calc
+      Matrix.toEuclideanLin (H i j) (b a) + Complex.I • Matrix.toEuclideanLin (K i j) (b a)
+          = χ a (Sum.inl (i, j)) • b a + Complex.I • (χ a (Sum.inr (i, j)) • b a) := by
+              rw [hTb (Sum.inl (i, j)) a, hTb (Sum.inr (i, j)) a]
+      _ = eig a i j • b a := by
+            simp [eig, add_smul, smul_smul]
+  let ψE : Fin n → EuclideanSpace ℂ (Fin D) := fun i => WithLp.toLp 2 (ψ i)
+  let c : Fin n → s → ℂ := fun i a => inner ℂ (b a) (ψE i)
+  have hcoeff (i j : Fin n) (v : EuclideanSpace ℂ (Fin D)) (a : s) :
+      inner ℂ (b a) (Matrix.toEuclideanLin (M i j) v) = eig a i j * inner ℂ (b a) v := by
+    let v' : EuclideanSpace ℂ (Fin D) := ∑ x, inner ℂ (b x) v • b x
+    have hv' : v' = v := by
+      simpa [v'] using b.sum_repr' v
+    calc
+      inner ℂ (b a) (Matrix.toEuclideanLin (M i j) v)
+          = inner ℂ (b a) (Matrix.toEuclideanLin (M i j) v') := by rw [← hv']
+      _ = inner ℂ (b a) (∑ x, (inner ℂ (b x) v * eig x i j) • b x) := by
+            rw [show v' = ∑ x, inner ℂ (b x) v • b x by rfl, map_sum]
+            apply congrArg (inner ℂ (b a))
+            apply Finset.sum_congr rfl
+            intro x _
+            rw [map_smul, hMb x i j, smul_smul]
+      _ = inner ℂ (b a) v * eig a i j := by
+            simpa using Orthonormal.inner_right_fintype (hv := b.orthonormal)
+              (l := fun x => inner ℂ (b x) v * eig x i j) a
+      _ = eig a i j * inner ℂ (b a) v := by ring
+  have hformTerm (i j : Fin n) :
+      star (ψ i) ⬝ᵥ (M i j).mulVec (ψ j) =
+        inner ℂ (ψE i) (Matrix.toEuclideanLin (M i j) (ψE j)) := by
+    simp [ψE, EuclideanSpace.inner_eq_star_dotProduct, Matrix.toLin'_apply, dotProduct_comm]
+  have hterm (i j : Fin n) :
+      inner ℂ (ψE i) (Matrix.toEuclideanLin (M i j) (ψE j)) =
+        ∑ a : s, starRingEnd ℂ (c i a) * c j a * eig a i j := by
+    calc
+      inner ℂ (ψE i) (Matrix.toEuclideanLin (M i j) (ψE j))
+          = ∑ a : s, inner ℂ (ψE i) (b a) * inner ℂ (b a)
+              (Matrix.toEuclideanLin (M i j) (ψE j)) := by
+              symm
+              exact b.sum_inner_mul_inner (ψE i) (Matrix.toEuclideanLin (M i j) (ψE j))
+      _ = ∑ a : s, starRingEnd ℂ (c i a) * (eig a i j * c j a) := by
+            have hleft (a : s) : inner ℂ (ψE i) (b a) = starRingEnd ℂ (c i a) := by
+              simp [c]
+            have hright (a : s) :
+                inner ℂ (b a) (Matrix.toEuclideanLin (M i j) (ψE j)) = eig a i j * c j a := by
+              simpa [c] using hcoeff i j (ψE j) a
+            apply Finset.sum_congr rfl
+            intro a _
+            rw [hleft a, hright a]
+      _ = ∑ a : s, starRingEnd ℂ (c i a) * c j a * eig a i j := by
+            apply Finset.sum_congr rfl
+            intro a _
+            ring
+  have hrewrite :
+      ∑ i : Fin n, ∑ j : Fin n, inner ℂ (ψE i) (Matrix.toEuclideanLin (M i j) (ψE j)) =
+        ∑ a : s, ∑ i : Fin n, ∑ j : Fin n, starRingEnd ℂ (c i a) * c j a * eig a i j := by
+    calc
+      ∑ i : Fin n, ∑ j : Fin n, inner ℂ (ψE i) (Matrix.toEuclideanLin (M i j) (ψE j))
+          = ∑ i : Fin n, ∑ j : Fin n, ∑ a : s, starRingEnd ℂ (c i a) * c j a * eig a i j := by
+              simp_rw [hterm]
+      _ = ∑ i : Fin n, ∑ a : s, ∑ j : Fin n, starRingEnd ℂ (c i a) * c j a * eig a i j := by
+            apply Finset.sum_congr rfl
+            intro i _
+            rw [Finset.sum_comm]
+      _ = ∑ a : s, ∑ i : Fin n, ∑ j : Fin n, starRingEnd ℂ (c i a) * c j a * eig a i j := by
+            rw [Finset.sum_comm]
+  have heigScalar (a : s) (i j : Fin n) :
+      star (b a).ofLp ⬝ᵥ (M i j).mulVec (b a).ofLp = eig a i j := by
+    have hinner : inner ℂ (b a) (Matrix.toEuclideanLin (M i j) (b a)) = eig a i j := by
+      rw [hMb a i j]
+      simp [inner_smul_right]
+    simpa [EuclideanSpace.inner_eq_star_dotProduct, Matrix.toLin'_apply,
+      dotProduct_comm] using hinner
+  have hnonneg :
+      0 ≤ ∑ a : s, ∑ i : Fin n, ∑ j : Fin n, starRingEnd ℂ (c i a) * c j a * eig a i j := by
+    apply Finset.sum_nonneg
+    intro a _
+    have hs := hscalar (fun i => c i a) (b a).ofLp
+    convert hs using 1
+    apply Finset.sum_congr rfl
+    intro i _
+    apply Finset.sum_congr rfl
+    intro j _
+    rw [heigScalar a i j]
+  calc
+    0 ≤ ∑ a : s, ∑ i : Fin n, ∑ j : Fin n, starRingEnd ℂ (c i a) * c j a * eig a i j :=
+      hnonneg
+    _ = ∑ i : Fin n, ∑ j : Fin n, inner ℂ (ψE i) (Matrix.toEuclideanLin (M i j) (ψE j)) := by
+      rw [← hrewrite]
+    _ = ∑ i : Fin n, ∑ j : Fin n, star (ψ i) ⬝ᵥ (M i j).mulVec (ψ j) := by
+      apply Finset.sum_congr rfl
+      intro i _
+      apply Finset.sum_congr rfl
+      intro j _
+      rw [← hformTerm i j]
 
 set_option maxHeartbeats 1600000 in
 -- Elaborating the simultaneous-diagonalization argument expands enough definitions

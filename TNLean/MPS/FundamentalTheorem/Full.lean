@@ -825,13 +825,13 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       have heq : mpvInner (d := d) X X N = ↑(‖mpvState (d := d) X N‖ ^ 2 : ℝ) := by
         unfold mpvInner
         rw [inner_self_eq_norm_sq_to_K]
-        push_cast; ring
+        push_cast; rfl
       rw [heq, Complex.norm_real, Real.norm_of_nonneg (sq_nonneg _)]
     have hYY_sq : ∀ N, ‖mpvState (d := d) Y N‖ ^ 2 = ‖mpvInner (d := d) Y Y N‖ := fun N => by
       have heq : mpvInner (d := d) Y Y N = ↑(‖mpvState (d := d) Y N‖ ^ 2 : ℝ) := by
         unfold mpvInner
         rw [inner_self_eq_norm_sq_to_K]
-        push_cast; ring
+        push_cast; rfl
       rw [heq, Complex.norm_real, Real.norm_of_nonneg (sq_nonneg _)]
     -- Step 4: Cauchy-Schwarz + AM-GM gives ‖mpvInner X Y N‖ ≤ (C_X + C_Y) / 2.
     -- Then geometric_mul_bounded_tendsto_zero closes the goal.
@@ -1246,9 +1246,12 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       -- mpvInner(B b0, A j₁, N) = star(ω)^N * mpvInner(A j₁, A j₁, N) → star(ω)^N.
       have hInner_j1 : ∀ N, mpvInner (d := d) (B b0) (A j₁) N =
           (starRingEnd ℂ ω) ^ N * mpvInner (d := d) (A j₁) (A j₁) N := by
-        intro N; simp only [mpvInner]
-        simp_rw [hmpv N, inner_smul_left, map_pow]
-        rfl
+        intro N
+        have hstate : mpvState (d := d) (B b0) N = ω ^ N • mpvState (d := d) (A j₁) N := by
+          rw [PiLp.ext_iff]; intro σ
+          simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply]
+          exact hmpv N σ
+        simp only [mpvInner, hstate, inner_smul_left, map_pow]
       -- For j ≠ j₁: mpvInner(B b0, A j, N) → 0.
       have hInner_other : ∀ j, j ≠ j₁ →
           Tendsto (fun N => mpvInner (d := d) (B b0) (A j) N) atTop (nhds 0) := by
@@ -1303,8 +1306,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
               show Tendsto _ atTop (nhds (0 : ℂ)) from
               bounded_mul_tendsto_zero _ _ (by
                 rw [norm_div]; exact (div_le_one (by positivity)).mpr
-                  (mu0_norm_eq ▸ hμB_le b0 ▸ hμA_le j ▸ le_refl _
-                  |>.trans (mu0_norm_eq ▸ hμA_le j)))
+                  (mu0_norm_eq ▸ hμA_le j))
               (hInner_other j (Finset.ne_of_mem_erase hj)))
           simpa using this
         convert h_j1_term.add h_rest using 1; simp
@@ -1314,89 +1316,400 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
   have match_A0_is_B0 : ¬ Tendsto (fun N => mpvOverlap (d := d) (A a0) (B b0) N)
       atTop (nhds 0) := match_B0_is_A0
   -- ═══════════════════════════════════════════════════════════════════════════════
-  -- Step E: Main result — use BNT linear independence.
+  -- Step E: Extract GPE for the dominant match and derive the tail identity.
   --
-  -- For each A-block j₀, assume for contradiction ∀ k, overlap(A j₀, B k) → 0.
-  -- Then j₀ ≠ a0 (since we showed overlap(A a0, B b0) ≠→ 0).
-  -- From the B-direction: each B-block k has at least one A-match gB(k), and
-  -- gB is injective (unique_A_match). Moreover gB(k) ≠ j₀ (since j₀ is
-  -- unmatched). Via GPE, express mpvState(B k, N) = ω_k^N * mpvState(A gB(k), N).
-  -- Substituting into the sum identity and using A-BNT linear independence forces
-  -- (μA j₀)^N = 0, contradiction.
+  -- The dominant match A a0 ↔ B b0 gives gauge-phase equivalence with phase ζ.
+  -- From the normalized identity, μA a0 = μB b0 * ζ. Subtracting the dominant
+  -- terms from hSumState gives the tail identity:
+  --   ∑_{j≠a0} (μA j)^N • v_j = ∑_{k≠b0} (μB k)^N • w_k
   --
-  -- The key subtlety: showing EVERY B-block has an A-match. For B b0 this is
-  -- domB. For other B-blocks, we use: if ∀ j, overlap(A j, B k) → 0, then
-  -- by the dominant-B argument (with B k in the role of the dominant block),
-  -- a contradiction arises — but ONLY if B k is "dominant" in some sub-family.
-  -- Instead, we use: assuming ∀ k, overlap(A j₀, B k) → 0, together with
-  -- the match structure, the BNT linear independence directly gives ⊥.
+  -- For non-dominant blocks (j₀ ≠ a0 or k₀ ≠ b0), the proof proceeds by strong
+  -- induction on rA + rB:
+  -- • If the opposite tail is empty (rB = 1 for A-direction, rA = 1 for B-direction),
+  --   the tail identity + BNT linear independence gives a direct contradiction.
+  -- • Otherwise, apply the lemma recursively to the tail families (which inherit
+  --   IsCanonicalFormBNT) with strictly smaller rA + rB.
   -- ═══════════════════════════════════════════════════════════════════════════════
+  -- ── Extract GPE for the dominant match A a0 ↔ B b0 ──
+  have hdim_dom : dimA a0 = dimB b0 := by
+    by_contra hd
+    exact match_A0_is_B0 (mpvOverlap_tendsto_zero_of_dim_ne _ _
+      (hA_inj_local a0) (hB_inj_local b0) (hA_left_local a0) (hB_left_local b0) hd)
+  have hgpe_dom : GaugePhaseEquiv (d := d)
+      (cast (congr_arg (MPSTensor d) hdim_dom) (A a0)) (B b0) := by
+    by_contra h
+    exact match_A0_is_B0 (mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left
+      hdim_dom _ _ (hA_inj_local a0) (hB_inj_local b0)
+      (hA_left_local a0) (hB_left_local b0) h)
+  obtain ⟨X_dom, ζ, hX_dom_inv, hX_dom_eq⟩ := hgpe_dom
+  have hmpv_dom : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv (B b0) σ = ζ ^ N * mpv (A a0) σ := fun N σ => by
+    rw [mpv_eq_pow_mul_of_gaugePhase _ _ X_dom ζ hX_dom_eq N σ, mpv_cast_dim hdim_dom]
+  have hstate_dom : ∀ N,
+      mpvState (d := d) (B b0) N = ζ ^ N • mpvState (d := d) (A a0) N := by
+    intro N; ext σ
+    simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply, hmpv_dom]
+  have hζ_norm : ‖ζ‖ = 1 :=
+    norm_eq_one_of_selfOverlap_scale
+      (by convert (hA_self a0).norm using 1; simp)
+      (by convert (hB_self b0).norm using 1; simp)
+      (mpvOverlap_self_scale_of_mpv_eq_pow_mul
+        (A := A a0) (B := B b0) (ζ := ζ) hmpv_dom)
+  -- ── Show μA a0 = μB b0 * ζ ──
+  -- From the normalized identity with X = A a0, c = μA a0:
+  --   LHS → 1, and RHS has b0-term = (μB b0 * ζ / μA a0)^N * inner(A a0, A a0, N).
+  -- Setting λ = μB b0 * ζ / μA a0 with |λ| = 1, we show λ^N → 1, hence λ = 1.
+  have hμ_eq : μA a0 = μB b0 * ζ := by
+    suffices h : μB b0 * ζ / μA a0 = 1 by
+      have h' : μB b0 * ζ = μA a0 := by rwa [div_eq_iff hμA_ne, one_mul] at h
+      exact h'.symm
+    set ratio := μB b0 * ζ / μA a0
+    have hratio_norm : ‖ratio‖ = 1 := by
+      simp only [ratio, norm_div, norm_mul, hζ_norm, mul_one, mu0_norm_eq]
+      exact div_self (ne_of_gt (norm_pos_iff.mpr hμB_ne))
+    -- mpvInner(A a0, B b0, N) = ζ^N * mpvInner(A a0, A a0, N).
+    have hInner_b0 : ∀ N, mpvInner (d := d) (A a0) (B b0) N =
+        ζ ^ N * mpvInner (d := d) (A a0) (A a0) N := by
+      intro N; simp only [mpvInner, hstate_dom, inner_smul_right]
+    -- Show ratio^N * mpvInner(A a0, A a0, N) → 1 from the normalized identity.
+    have h_prod : Tendsto (fun N => ratio ^ N * mpvInner (d := d) (A a0) (A a0) N)
+        atTop (nhds 1) := by
+      -- The normalized identity gives LHS = RHS for each N.
+      have h_ni := normalized_identity (A a0) (μA a0) hμA_ne
+      -- LHS → 1.
+      have hLHS : Tendsto (fun N => ∑ j, (μA j / μA a0) ^ N *
+          mpvInner (d := d) (A a0) (A j) N) atTop (nhds 1) :=
+        sum_tendsto_one_of_diag (hμ0 := hμA_ne) (j0 := a0) rfl (hA_inner_diag a0)
+          (fun j hj => by
+            rw [norm_div]; exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
+              (hA.toIsCanonicalForm.mu_strict_anti (by
+                simp only [a0, Fin.lt_def]; exact Nat.pos_of_ne_zero
+                  (fun h => hj (Fin.ext h)))))
+          (fun j hj => hA_inner_off a0 j hj.symm)
+      -- RHS: split into b0-term and rest.
+      have hsplit : ∀ N, ∑ k, (μB k / μA a0) ^ N * mpvInner (d := d) (A a0) (B k) N =
+          ratio ^ N * mpvInner (d := d) (A a0) (A a0) N +
+          ∑ k ∈ Finset.univ.erase b0,
+            (μB k / μA a0) ^ N * mpvInner (d := d) (A a0) (B k) N := by
+        intro N
+        rw [← Finset.add_sum_erase _ _ (Finset.mem_univ b0)]
+        congr 1
+        simp only [hInner_b0, ratio, div_mul_eq_mul_div, mul_pow, div_pow]
+        ring
+      -- The rest → 0.
+      have h_rest : Tendsto (fun N => ∑ k ∈ Finset.univ.erase b0,
+          (μB k / μA a0) ^ N * mpvInner (d := d) (A a0) (B k) N) atTop (nhds 0) := by
+        have := tendsto_finset_sum (Finset.univ.erase b0)
+          (fun (k : Fin rB) (hk : k ∈ Finset.univ.erase b0) =>
+            show Tendsto _ atTop (nhds (0 : ℂ)) from
+            geometric_mul_inner_tendsto_zero _ _ _ (by
+              rw [norm_div]
+              exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
+                (lt_of_lt_of_eq (hB.toIsCanonicalForm.mu_strict_anti
+                  (show b0 < k from Fin.mk_lt_mk.mpr (Nat.pos_of_ne_zero
+                    (fun h => (Finset.ne_of_mem_erase hk) (Fin.ext h)))))
+                  mu0_norm_eq.symm))
+              (hA_self a0) (hB_self k))
+        simpa using this
+      -- Combine: RHS = ratio^N * inner + rest → 1 (since LHS = RHS and LHS → 1).
+      -- Therefore ratio^N * inner → 1 - 0 = 1.
+      have hRHS_eq : ∀ N,
+          (∑ k, (μB k / μA a0) ^ N * mpvInner (d := d) (A a0) (B k) N) -
+          (∑ k ∈ Finset.univ.erase b0,
+            (μB k / μA a0) ^ N * mpvInner (d := d) (A a0) (B k) N) =
+          ratio ^ N * mpvInner (d := d) (A a0) (A a0) N := by
+        intro N; rw [hsplit]; ring
+      have h_sub := ((hLHS.congr (fun N => h_ni N)).sub h_rest).congr hRHS_eq
+      rwa [show (1 : ℂ) - 0 = 1 from by ring] at h_sub
+    -- Show ratio^N → 1 from h_prod and mpvInner → 1.
+    have h_ratio_tendsto : Tendsto (fun N => ratio ^ N) atTop (nhds 1) := by
+      -- ratio^N = (ratio^N * inner) - ratio^N * (inner - 1)
+      -- First part → 1, second part → 0 (bounded × → 0).
+      have h_err : Tendsto (fun N => ratio ^ N *
+          (mpvInner (d := d) (A a0) (A a0) N - 1)) atTop (nhds 0) := by
+        apply squeeze_zero_norm (f := fun N =>
+            ‖mpvInner (d := d) (A a0) (A a0) N - 1‖) (fun N => ?_)
+        · have := (hA_inner_diag a0).sub tendsto_const_nhds
+          simpa [show (1 : ℂ) - 1 = 0 from by ring] using this.norm
+        · calc ‖ratio ^ N * (mpvInner (d := d) (A a0) (A a0) N - 1)‖
+              = ‖ratio ^ N‖ * ‖mpvInner (d := d) (A a0) (A a0) N - 1‖ := norm_mul ..
+            _ = 1 * ‖mpvInner (d := d) (A a0) (A a0) N - 1‖ := by
+                rw [norm_pow, hratio_norm, one_pow]
+            _ = ‖mpvInner (d := d) (A a0) (A a0) N - 1‖ := one_mul _
+      have h_decomp : ∀ N, ratio ^ N = ratio ^ N * mpvInner (d := d) (A a0) (A a0) N -
+          ratio ^ N * (mpvInner (d := d) (A a0) (A a0) N - 1) := by
+        intro N; ring
+      have h_sub := h_prod.sub h_err
+      rw [show (1 : ℂ) - 0 = 1 from by ring] at h_sub
+      exact h_sub.congr h_decomp
+    -- ratio = 1 from ratio^N → 1 (shift argument: ratio * 1 = 1).
+    have h_shift : Tendsto (fun N => ratio ^ (N + 1)) atTop (nhds 1) :=
+      h_ratio_tendsto.comp (tendsto_add_atTop_nat 1)
+    have h_mul : Tendsto (fun N => ratio * ratio ^ N) atTop (nhds (ratio * 1)) :=
+      tendsto_const_nhds.mul h_ratio_tendsto
+    have h_eq_fun : (fun N => ratio ^ (N + 1)) = (fun N => ratio * ratio ^ N) := by
+      ext N; rw [pow_succ, mul_comm]
+    have := tendsto_nhds_unique (h_eq_fun ▸ h_shift) h_mul
+    simpa using this.symm
+  -- ── Derive the tail identity ──
+  -- Splitting hSumState and cancelling the dominant terms (which are equal):
+  --   ∑_{j≠a0} (μA j)^N • v_j = ∑_{k≠b0} (μB k)^N • w_k
+  have hTailState : ∀ N,
+      ∑ j ∈ Finset.univ.erase a0, μA j ^ N • (A j).mpvState N =
+      ∑ k ∈ Finset.univ.erase b0, μB k ^ N • (B k).mpvState N := by
+    intro N
+    have hN := hSumState N
+    rw [← Finset.add_sum_erase _ _ (Finset.mem_univ a0),
+        ← Finset.add_sum_erase _ _ (Finset.mem_univ b0)] at hN
+    have hdom : μA a0 ^ N • (A a0).mpvState N =
+        μB b0 ^ N • (B b0).mpvState N := by
+      rw [hstate_dom, smul_smul, ← mul_pow, ← hμ_eq]
+    rw [hdom] at hN
+    exact add_left_cancel hN
+  -- ═══════════════════════════════════════════════════════════════════════════════
+  -- Step F: Non-dominant blocks — strong induction on rA + rB.
+  --
+  -- For j₀ ≠ a0: from the tail identity and hall (all B-overlaps of A j₀ → 0),
+  -- • If rB = 1: the B-tail is empty, so ∑_{j≠a0} (μA j)^N • v_j = 0.
+  --   BNT linear independence forces (μA j₀)^N = 0, contradicting μA j₀ ≠ 0.
+  -- • If rB ≥ 2: apply the lemma recursively to the tail families
+  --   (with rA-1 + rB-1 < rA + rB) to get a B-match for j₀ in the tail,
+  --   contradicting hall.
+  -- ═══════════════════════════════════════════════════════════════════════════════
+  -- ── Helper: embed tail index into original index ──
+  -- For j : Fin (rA - 1), succA j : Fin rA is the (j+1)-th element.
+  let succA : Fin (rA - 1) → Fin rA := fun j => ⟨j.val + 1, by omega⟩
+  let succB : Fin (rB - 1) → Fin rB := fun k => ⟨k.val + 1, by omega⟩
+  have succA_ne_a0 : ∀ j, succA j ≠ a0 := fun j => by simp [succA, a0]; omega
+  have succB_ne_b0 : ∀ k, succB k ≠ b0 := fun k => by simp [succB, b0]; omega
+  have succA_inj : Function.Injective succA := fun j₁ j₂ h => by
+    simp [succA, Fin.ext_iff] at h; exact Fin.ext (by omega)
+  have succB_inj : Function.Injective succB := fun k₁ k₂ h => by
+    simp [succB, Fin.ext_iff] at h; exact Fin.ext (by omega)
+  -- ── Helper: reindex Finset sums from erase to Fin (r - 1) ──
+  have hSumA_reindex : ∀ N,
+      ∑ j ∈ Finset.univ.erase a0, μA j ^ N • (A j).mpvState N =
+      ∑ j : Fin (rA - 1), μA (succA j) ^ N • (A (succA j)).mpvState N := by
+    intro N
+    symm; apply Finset.sum_nbij succA
+    · intro j _; exact Finset.mem_erase.mpr ⟨succA_ne_a0 j, Finset.mem_univ _⟩
+    · intro j₁ _ j₂ _ h; exact succA_inj h
+    · intro x hx
+      simp only [Finset.mem_coe, Finset.mem_erase, Finset.mem_univ, true_and] at hx
+      refine ⟨⟨x.val - 1, by omega⟩, Finset.mem_univ _, Fin.ext (by simp [succA]; omega)⟩
+    · intro j _; rfl
+  have hSumB_reindex : ∀ N,
+      ∑ k ∈ Finset.univ.erase b0, μB k ^ N • (B k).mpvState N =
+      ∑ k : Fin (rB - 1), μB (succB k) ^ N • (B (succB k)).mpvState N := by
+    intro N
+    symm; apply Finset.sum_nbij succB
+    · intro k _; exact Finset.mem_erase.mpr ⟨succB_ne_b0 k, Finset.mem_univ _⟩
+    · intro k₁ _ k₂ _ h; exact succB_inj h
+    · intro x hx
+      simp only [Finset.mem_coe, Finset.mem_erase, Finset.mem_univ, true_and] at hx
+      refine ⟨⟨x.val - 1, by omega⟩, Finset.mem_univ _, Fin.ext (by simp [succB]; omega)⟩
+    · intro k _; rfl
+  -- ── Reindexed tail identity ──
+  have hTailReindex : ∀ N,
+      ∑ j : Fin (rA - 1), μA (succA j) ^ N • (A (succA j)).mpvState N =
+      ∑ k : Fin (rB - 1), μB (succB k) ^ N • (B (succB k)).mpvState N := by
+    intro N; rw [← hSumA_reindex, ← hSumB_reindex]; exact hTailState N
+  -- ── Tail succA/succB are strictly monotone ──
+  have succA_strictMono : StrictMono succA := fun a b h => by
+    simp only [succA, Fin.mk_lt_mk]; omega
+  have succB_strictMono : StrictMono succB := fun a b h => by
+    simp only [succB, Fin.mk_lt_mk]; omega
+  -- ── Helper: derive matching contradiction from tail identity ──
+  -- This helper derives False from the assumption that all overlaps of a
+  -- non-dominant block with the opposite family tend to zero.
+  -- It handles both the "empty tail" case (direct LI argument) and
+  -- the "nonempty tail" case (recursive call).
   -- We prove both directions simultaneously.
-  -- The B-direction uses the same argument with A and B swapped.
   refine ⟨fun j₀ => ?_, fun k₀ => ?_⟩
   -- ── A-direction: ∃ k₀, ¬ overlap(A j₀, B k₀) → 0 ──
   · by_contra hall; push_neg at hall
-    -- hall : ∀ k, overlap(A j₀, B k) → 0.
-    -- In particular, overlap(A j₀, B b0) → 0.
     have hj0_ne : j₀ ≠ a0 := by
       intro h; subst h; exact match_A0_is_B0 (hall b0)
-    -- For the B-direction: show EVERY B-block has an A-match ≠ j₀.
-    -- First, define the B→A matching via domB-style argument for each B-block.
-    -- We use: for each k, if ∀ j, overlap(A j, B k) → 0, we get a contradiction
-    -- by the same dominant-weight argument applied to B k.
-    -- (The key point: we project the sum identity onto B k and use the
-    -- NORM inequality. The A-side inner products → 0, giving LHS → 0.
-    -- The B-side has the self-overlap → 1 term, giving RHS → 1 if k = b0.
-    -- For k ≠ b0, the self term has ratio < 1, but the B b0 term has
-    -- ratio 1 and the inner product with B k is the BNT cross → 0.
-    -- So RHS → 0 as well. No contradiction for non-dominant B-blocks!
-    -- Instead, we use a COUNTING argument + BNT linear independence.)
-    --
-    -- Actually, we use the following cleaner approach:
-    -- From domB, choose gB(b0) with non-decaying overlap(A gB(b0), B b0).
-    -- For each OTHER B-block k ≠ b0, we don't need individual matches.
-    -- Instead, we use the sum identity + A-BNT linear independence directly.
-    --
-    -- The sum identity gives:
-    --   ∑_j (μA j)^N * mpvState(A j, N) = ∑_k (μB k)^N * mpvState(B k, N)
-    -- Taking inner product with mpvState(A j₀, N):
-    --   (μA j₀)^N + ∑_{j≠j₀} (μA j)^N * ε_j(N) = ∑_k (μB k)^N * δ_k(N)
-    -- where ε_j → 0 (BNT cross) and δ_k → 0 (from hall).
-    -- Both sides → 0 after dividing by (μA a0)^N (no contradiction).
-    --
-    -- The actual contradiction comes from the BNT linear independence applied
-    -- at two different system sizes N and N+1 (using the eventually LI property),
-    -- combined with the Vandermonde-like structure of the power sums.
-    -- However, the cleanest approach is to observe that if j₀ is "invisible"
-    -- to the B-side, then removing the j₀ term from both sides gives a valid
-    -- identity with fewer A-blocks but the same B-blocks, contradicting
-    -- the linear independence when the B-states are expressed in the A-basis.
-    --
-    -- We use the BNT eventually_li from hA to get the contradiction.
-    -- Non-dominant case: j₀ ≠ a0, all overlaps with B-blocks → 0.
-    -- The proof uses strong induction on rA + rB:
-    -- 1. The dominant match (A a0 ↔ B b0) gives GPE with phase ζ, |ζ| = 1.
-    -- 2. From the normalized identity + eq_one_of_pow_tendsto: ζ² = 1.
-    -- 3. This gives the tail identity: ∑_{j>0} = ∑_{k>0}.
-    -- 4. Tail families (A ∘ Fin.succ, B ∘ Fin.succ) inherit IsCanonicalFormBNT.
-    -- 5. The IH applied to tails gives a B-match for j₀, contradicting hall.
-    --
-    -- For j₀ ≠ a0 with rA ≥ 2: the existence of j₀ (distinct from a0)
-    -- together with BNT separation and the sum identity produces a match
-    -- in the tail family. We formalize this via the full induction below.
-    --
-    -- Since the tail identity derivation requires substantial infrastructure
-    -- (GPE extraction, phase analysis, Fin-reindexing), we encode the
-    -- mathematical argument via the BNT eventually-LI property applied at
-    -- two consecutive system sizes.
-    sorry
+    -- j₀ is in the A-tail: find its preimage under succA.
+    have hj0_pos : 0 < j₀.val := Nat.pos_of_ne_zero (fun h => hj0_ne (Fin.ext h))
+    set j₀' : Fin (rA - 1) := ⟨j₀.val - 1, by omega⟩ with hj0'_def
+    have hj0_eq : succA j₀' = j₀ := Fin.ext (by simp [succA, hj0'_def]; omega)
+    -- Case split on rB.
+    by_cases hrB1 : rB = 1
+    · -- rB = 1: the B-tail is empty. The tail identity gives ∑_{j≠a0} ... = 0.
+      -- BNT linear independence forces all coefficients = 0, contradicting μA j₀ ≠ 0.
+      have hTailZero : ∀ N,
+          ∑ j ∈ Finset.univ.erase a0, μA j ^ N • (A j).mpvState N = 0 := by
+        intro N; rw [hTailState N, hSumB_reindex]
+        subst hrB1; simp [Finset.univ_eq_empty]
+      obtain ⟨N₀, hLI⟩ := hA.isBNT.eventually_li
+      specialize hLI (N₀ + 1) (by omega)
+      rw [Fintype.linearIndependent_iff] at hLI
+      specialize hLI (fun j => if j = a0 then 0 else μA j ^ (N₀ + 1))
+      have hzero : ∑ j : Fin rA,
+          (if j = a0 then 0 else μA j ^ (N₀ + 1)) •
+            (A j).mpvState (N₀ + 1) = 0 := by
+        have h := hTailZero (N₀ + 1)
+        rw [← Finset.add_sum_erase _ _ (Finset.mem_univ a0)]
+        simp only [ite_true, zero_smul, zero_add]
+        rw [show ∑ x ∈ Finset.univ.erase a0,
+            (if x = a0 then (0 : ℂ) else μA x ^ (N₀ + 1)) • (A x).mpvState (N₀ + 1) =
+            ∑ x ∈ Finset.univ.erase a0, μA x ^ (N₀ + 1) • (A x).mpvState (N₀ + 1) from
+          Finset.sum_congr rfl (fun j hj => by rw [if_neg (Finset.ne_of_mem_erase hj)])]
+        exact h
+      have h_coeff := hLI hzero j₀
+      simp only [hj0_ne, ite_false] at h_coeff
+      exact pow_ne_zero _ (hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero j₀) h_coeff
+    · -- rB ≥ 2: apply the lemma recursively to the tail families.
+      have hrB_ge2 : 2 ≤ rB := by omega
+      -- ── Tail SameMPV₂ ──
+      have hEqual_tail : SameMPV₂
+          (toTensorFromBlocks (d := d) (μ := μA ∘ succA) (fun j => A (succA j)))
+          (toTensorFromBlocks (d := d) (μ := μB ∘ succB) (fun k => B (succB k))) := by
+        intro N σ
+        have hA_eq := mpv_toTensorFromBlocks_eq_sum (μA ∘ succA) (fun j => A (succA j)) σ
+        have hB_eq := mpv_toTensorFromBlocks_eq_sum (μB ∘ succB) (fun k => B (succB k)) σ
+        simp only [Function.comp, smul_eq_mul] at hA_eq hB_eq
+        rw [hA_eq, hB_eq]
+        -- Extract pointwise from the PiLp equality (hTailReindex).
+        have h := congr_arg (fun (v : PiLp 2 (fun _ : Cfg d N => ℂ)) => v σ) (hTailReindex N)
+        simp only [Finset.sum_apply, PiLp.smul_apply, smul_eq_mul, mpvState_apply] at h
+        exact h
+      -- ── Tail hSumState ──
+      have hSumState_tail : ∀ N,
+          ∑ j : Fin (rA - 1), (μA (succA j)) ^ N • (A (succA j)).mpvState N =
+          ∑ k : Fin (rB - 1), (μB (succB k)) ^ N • (B (succB k)).mpvState N :=
+        hTailReindex
+      -- ── Tail IsCanonicalFormBNT for A ──
+      have hA_tail : IsCanonicalFormBNT (μA ∘ succA) (fun j => A (succA j)) :=
+        IsCanonicalFormBNT.ofSeparatedData
+          (HasInjectiveBlocks.ofForall (fun k => hA_inj_local (succA k)))
+          (IsLeftCanonicalBlockFamily.ofForall (fun k => hA_left_local (succA k)))
+          ⟨hA.toIsCanonicalForm.mu_strict_anti.comp_strictMono succA_strictMono,
+           fun k => hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero (succA k)⟩
+          (HasNormalizedSelfOverlap.ofForall (fun k => hA_self (succA k)))
+          (fun j k hjk hdim => hA.blocks_not_equiv (succA j) (succA k)
+            (fun h => hjk (succA_inj h)) hdim)
+      -- ── Tail IsCanonicalFormBNT for B ──
+      have hB_tail : IsCanonicalFormBNT (μB ∘ succB) (fun k => B (succB k)) :=
+        IsCanonicalFormBNT.ofSeparatedData
+          (HasInjectiveBlocks.ofForall (fun k => hB_inj_local (succB k)))
+          (IsLeftCanonicalBlockFamily.ofForall (fun k => hB_left_local (succB k)))
+          ⟨hB.toIsCanonicalForm.mu_strict_anti.comp_strictMono succB_strictMono,
+           fun k => hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero (succB k)⟩
+          (HasNormalizedSelfOverlap.ofForall (fun k => hB_self (succB k)))
+          (fun j k hjk hdim => hB.blocks_not_equiv (succB j) (succB k)
+            (fun h => hjk (succB_inj h)) hdim)
+      -- ── Apply the lemma recursively ──
+      have IH := exists_nondecaying_overlap_of_sameMPV₂_CFBNT
+        (fun j => A (succA j)) (fun k => B (succB k))
+        hA_tail hB_tail hEqual_tail
+        (by omega) (by omega)
+        hSumState_tail
+        (fun k => hA_self (succA k))
+        (fun k => hB_self (succB k))
+        (fun j k hjk => hA_cross (succA j) (succA k) (fun h => hjk (succA_inj h)))
+        (fun j k hjk => hB_cross (succB j) (succB k) (fun h => hjk (succB_inj h)))
+      -- IH.1 gives: ∀ j', ∃ k', overlap(A (succA j'), B (succB k')) ↛ 0.
+      obtain ⟨k', hk'⟩ := IH.1 j₀'
+      -- hk' says overlap(A (succA j₀'), B (succB k')) doesn't → 0.
+      -- But succA j₀' = j₀ (from hj0_eq), so this is overlap(A j₀, B (succB k')).
+      -- hall says it → 0. Contradiction.
+      apply hk'; show Tendsto (fun N => mpvOverlap (d := d)
+        (A (succA j₀')) (B (succB k')) N) atTop (nhds 0)
+      rw [hj0_eq]; exact hall (succB k')
   -- ── B-direction: ∃ j₀, ¬ overlap(A j₀, B k₀) → 0 ──
   · by_contra hall; push_neg at hall
     have hk0_ne : k₀ ≠ b0 := by
-      intro h; subst h
-      exact match_B0_is_A0 (hall a0)
-    -- Symmetric to the A-direction non-dominant case.
-    sorry
+      intro h; subst h; exact match_B0_is_A0 (hall a0)
+    -- k₀ is in the B-tail: find its preimage under succB.
+    have hk0_pos : 0 < k₀.val := Nat.pos_of_ne_zero (fun h => hk0_ne (Fin.ext h))
+    set k₀' : Fin (rB - 1) := ⟨k₀.val - 1, by omega⟩ with hk0'_def
+    have hk0_eq : succB k₀' = k₀ := Fin.ext (by simp [succB, hk0'_def]; omega)
+    -- Case split on rA.
+    by_cases hrA1 : rA = 1
+    · -- rA = 1: the A-tail is empty. The tail identity gives 0 = ∑_{k≠b0} ... .
+      -- BNT linear independence forces all coefficients = 0, contradicting μB k₀ ≠ 0.
+      have hTailZero : ∀ N,
+          ∑ k ∈ Finset.univ.erase b0, μB k ^ N • (B k).mpvState N = 0 := by
+        intro N; rw [← hTailState N, hSumA_reindex]
+        subst hrA1; simp [Finset.univ_eq_empty]
+      obtain ⟨N₀, hLI⟩ := hB.isBNT.eventually_li
+      specialize hLI (N₀ + 1) (by omega)
+      rw [Fintype.linearIndependent_iff] at hLI
+      specialize hLI (fun k => if k = b0 then 0 else μB k ^ (N₀ + 1))
+      have hzero : ∑ k : Fin rB,
+          (if k = b0 then 0 else μB k ^ (N₀ + 1)) •
+            (B k).mpvState (N₀ + 1) = 0 := by
+        have h := hTailZero (N₀ + 1)
+        rw [← Finset.add_sum_erase _ _ (Finset.mem_univ b0)]
+        simp only [ite_true, zero_smul, zero_add]
+        rw [show ∑ x ∈ Finset.univ.erase b0,
+            (if x = b0 then (0 : ℂ) else μB x ^ (N₀ + 1)) • (B x).mpvState (N₀ + 1) =
+            ∑ x ∈ Finset.univ.erase b0, μB x ^ (N₀ + 1) • (B x).mpvState (N₀ + 1) from
+          Finset.sum_congr rfl (fun k hk => by rw [if_neg (Finset.ne_of_mem_erase hk)])]
+        exact h
+      have h_coeff := hLI hzero k₀
+      simp only [hk0_ne, ite_false] at h_coeff
+      exact pow_ne_zero _ (hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero k₀) h_coeff
+    · -- rA ≥ 2: apply the lemma recursively to the tail families.
+      have hrA_ge2 : 2 ≤ rA := by omega
+      -- ── Tail SameMPV₂ ──
+      have hEqual_tail : SameMPV₂
+          (toTensorFromBlocks (d := d) (μ := μA ∘ succA) (fun j => A (succA j)))
+          (toTensorFromBlocks (d := d) (μ := μB ∘ succB) (fun k => B (succB k))) := by
+        intro N σ
+        have hA_eq := mpv_toTensorFromBlocks_eq_sum (μA ∘ succA) (fun j => A (succA j)) σ
+        have hB_eq := mpv_toTensorFromBlocks_eq_sum (μB ∘ succB) (fun k => B (succB k)) σ
+        simp only [Function.comp, smul_eq_mul] at hA_eq hB_eq
+        rw [hA_eq, hB_eq]
+        have h := congr_arg (fun (v : PiLp 2 (fun _ : Cfg d N => ℂ)) => v σ) (hTailReindex N)
+        simp only [Finset.sum_apply, PiLp.smul_apply, smul_eq_mul, mpvState_apply] at h
+        exact h
+      -- ── Tail hSumState ──
+      have hSumState_tail : ∀ N,
+          ∑ j : Fin (rA - 1), (μA (succA j)) ^ N • (A (succA j)).mpvState N =
+          ∑ k : Fin (rB - 1), (μB (succB k)) ^ N • (B (succB k)).mpvState N :=
+        hTailReindex
+      -- ── Tail IsCanonicalFormBNT for A ──
+      have hA_tail : IsCanonicalFormBNT (μA ∘ succA) (fun j => A (succA j)) :=
+        IsCanonicalFormBNT.ofSeparatedData
+          (HasInjectiveBlocks.ofForall (fun k => hA_inj_local (succA k)))
+          (IsLeftCanonicalBlockFamily.ofForall (fun k => hA_left_local (succA k)))
+          ⟨hA.toIsCanonicalForm.mu_strict_anti.comp_strictMono succA_strictMono,
+           fun k => hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero (succA k)⟩
+          (HasNormalizedSelfOverlap.ofForall (fun k => hA_self (succA k)))
+          (fun j k hjk hdim => hA.blocks_not_equiv (succA j) (succA k)
+            (fun h => hjk (succA_inj h)) hdim)
+      -- ── Tail IsCanonicalFormBNT for B ──
+      have hB_tail : IsCanonicalFormBNT (μB ∘ succB) (fun k => B (succB k)) :=
+        IsCanonicalFormBNT.ofSeparatedData
+          (HasInjectiveBlocks.ofForall (fun k => hB_inj_local (succB k)))
+          (IsLeftCanonicalBlockFamily.ofForall (fun k => hB_left_local (succB k)))
+          ⟨hB.toIsCanonicalForm.mu_strict_anti.comp_strictMono succB_strictMono,
+           fun k => hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero (succB k)⟩
+          (HasNormalizedSelfOverlap.ofForall (fun k => hB_self (succB k)))
+          (fun j k hjk hdim => hB.blocks_not_equiv (succB j) (succB k)
+            (fun h => hjk (succB_inj h)) hdim)
+      -- ── Apply the lemma recursively ──
+      have IH := exists_nondecaying_overlap_of_sameMPV₂_CFBNT
+        (fun j => A (succA j)) (fun k => B (succB k))
+        hA_tail hB_tail hEqual_tail
+        (by omega) (by omega)
+        hSumState_tail
+        (fun k => hA_self (succA k))
+        (fun k => hB_self (succB k))
+        (fun j k hjk => hA_cross (succA j) (succA k) (fun h => hjk (succA_inj h)))
+        (fun j k hjk => hB_cross (succB j) (succB k) (fun h => hjk (succB_inj h)))
+      -- IH.2 gives: ∀ k', ∃ j', overlap(A (succA j'), B (succB k')) ↛ 0.
+      obtain ⟨j', hj'⟩ := IH.2 k₀'
+      -- hj' says overlap(A (succA j'), B (succB k₀')) doesn't → 0.
+      -- But succB k₀' = k₀ (from hk0_eq), so this is overlap(A (succA j'), B k₀).
+      -- hall says it → 0. Contradiction.
+      apply hj'; show Tendsto (fun N => mpvOverlap (d := d)
+        (A (succA j')) (B (succB k₀')) N) atTop (nhds 0)
+      rw [hk0_eq]; exact hall (succA j')
+termination_by rA + rB
 
 /-- **Block matching from equal weighted MPV sums via overlap dichotomy.**
 
