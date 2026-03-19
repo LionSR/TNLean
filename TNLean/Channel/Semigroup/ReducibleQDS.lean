@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Semigroup.LindbladForm
 import TNLean.Channel.Semigroup.Kernel
 import TNLean.Channel.Irreducible.Basic
+import TNLean.Channel.FixedPoint.Cesaro
 
 /-!
 # Reducible Quantum Dynamical Semigroups — Wolf Proposition 7.6
@@ -584,24 +585,376 @@ theorem hasInvariantCompression_of_hasBlockUpperTriangularLindblad
   rw [hL_eq]
   exact semigroup_preserves_compression_of_generator hP_nt.1 hgen t ht X
 
-/-! ## (4) → (2): Block-upper-triangular → rank-deficient kernel element -/
+/-! ## (4) → (2): Block-upper-triangular → rank-deficient kernel element
+
+The proof combines three ingredients:
+
+1. **Cesàro fixed point within PMP**: For any channel `E` that preserves the
+   compressed algebra `P M_d P`, starting from `σ₀ = P/tr(P)` we form Cesàro
+   means that stay in `PMP ∩ DM` and converge (subsequentially) to a density
+   matrix fixed point in `PMP`.
+
+2. **Parametric refinement**: Apply ingredient (1) to `E_m = exp((1/m)L)` for
+   each `m ≥ 1`, obtaining `ρ_m ∈ PMP ∩ DM` with `exp((1/m)L)(ρ_m) = ρ_m`.
+
+3. **Generator vanishing**: Extract `ρ_{m_k} → ρ`. From the Taylor remainder
+   bound `‖exp(tL) − id − tL‖ ≤ O(t²)` and the fixed-point equation, deduce
+   `L(ρ_m) → 0`, hence `L(ρ) = 0`.
+-/
+
+/-- An orthogonal projection is PSD: `P = P * P = P * Pᴴ` is a sum of PSD terms. -/
+private lemma orthogonalProjection_posSemidef'
+    {P : Mat} (hP : IsOrthogonalProjection P) : P.PosSemidef := by
+  have : P = Pᴴ * P := by rw [hP.1, hP.2]
+  rw [this]; exact P.posSemidef_conjTranspose_mul_self
+
+/-- A nonzero orthogonal projection has nonzero trace. -/
+private lemma trace_ne_zero_of_proj_ne_zero'
+    {P : Mat} (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
+    Matrix.trace P ≠ 0 := by
+  intro htr
+  exact hP_ne ((orthogonalProjection_posSemidef' hP).trace_eq_zero_iff.1 htr)
+
+/-- `P / tr(P)` is a density matrix. -/
+private lemma normalizedProj_mem_densityMatrices'
+    {P : Mat} (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
+    ((trace P)⁻¹ • P) ∈ densityMatrices D := by
+  have hP_psd := orthogonalProjection_posSemidef' hP
+  have htrP_ne := trace_ne_zero_of_proj_ne_zero' hP hP_ne
+  exact ⟨hP_psd.smul (inv_nonneg_of_nonneg hP_psd.trace_nonneg),
+    by simp [Matrix.trace_smul, htrP_ne]⟩
+
+/-- `P * (P/tr(P)) * P = P/tr(P)` (the normalized projection is in `PMP`). -/
+private lemma normalizedProj_in_PMP'
+    {P : Mat} (hP : IsOrthogonalProjection P) :
+    P * ((trace P)⁻¹ • P) * P = (trace P)⁻¹ • P := by
+  simp only [Matrix.mul_smul, Matrix.smul_mul]
+  rw [show P * P * P = P from by rw [hP.2, hP.2]]
+
+/-- `D > 0` if there exists a nontrivial projection in `M_D(ℂ)`. -/
+private lemma pos_dim_of_nontrivialProjection
+    {P : Mat} (hP_nt : IsNontrivialProjection P) : 0 < D := by
+  by_contra hD_le
+  push_neg at hD_le
+  interval_cases D
+  exact hP_nt.2.1 (Subsingleton.elim P 0)
+
+/-- Adapted Cesàro argument: a channel preserving `PMP` has a fixed density
+matrix in `PMP`.
+
+This is the key existence lemma for the (4)→(2) direction. The proof follows
+`IsChannel.exists_posSemidef_fixedPoint` but starts from `P/tr(P)` and tracks
+membership in `PMP` throughout. -/
+private theorem channel_fixedPoint_in_PMP
+    {E : Mat →ₗ[ℂ] Mat} {P : Mat}
+    (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0)
+    (hE : IsChannel E)
+    (hE_pres : ∀ X : Mat,
+      P * E (P * X * P) * P = E (P * X * P)) :
+    ∃ ρ : Mat, ρ ∈ densityMatrices D ∧
+      P * ρ * P = ρ ∧ E ρ = ρ := by
+  -- Set up initial state
+  set σ₀ := (trace P)⁻¹ • P with hσ₀_def
+  have hσ₀_mem : σ₀ ∈ densityMatrices D := normalizedProj_mem_densityMatrices' hP hP_ne
+  have hσ₀_PMP : P * σ₀ * P = σ₀ := normalizedProj_in_PMP' hP
+  -- Iterates stay in PMP ∩ DM
+  have h_iter_mem : ∀ n : ℕ, (E ^ n) σ₀ ∈ densityMatrices D := by
+    intro n; induction n with
+    | zero => simpa [pow_zero]
+    | succ n ih =>
+      rw [pow_succ']; change E ((E ^ n) σ₀) ∈ densityMatrices D
+      exact IsChannel.map_densityMatrices E hE _ ih
+  have h_iter_PMP : ∀ n : ℕ, P * (E ^ n) σ₀ * P = (E ^ n) σ₀ := by
+    intro n; induction n with
+    | zero => simpa [pow_zero]
+    | succ n ih =>
+      rw [pow_succ']; change P * E ((E ^ n) σ₀) * P = E ((E ^ n) σ₀)
+      rw [← ih]; exact hE_pres _
+  -- Cesàro means
+  set σ : ℕ → Mat := fun N => cesaroMean E σ₀ (N + 1)
+  -- Cesàro means are density matrices
+  have hσ_dm : ∀ N, σ N ∈ densityMatrices D := by
+    intro N
+    refine ⟨?_, ?_⟩
+    · change cesaroMean E σ₀ (N + 1) |>.PosSemidef
+      rw [cesaroMean_eq]
+      exact (Matrix.posSemidef_sum _ fun n _ => (h_iter_mem n).1).smul
+        (by rw [one_div]; exact_mod_cast inv_nonneg_of_nonneg (Nat.cast_nonneg' (N + 1)))
+    · change (cesaroMean E σ₀ (N + 1)).trace = 1
+      rw [cesaroMean_eq, trace_smul, trace_sum,
+        Finset.sum_congr rfl (fun n _ => (h_iter_mem n).2),
+        Finset.sum_const, Finset.card_range, nsmul_eq_mul, mul_one, one_div]
+      exact inv_mul_cancel₀ (Nat.cast_ne_zero.mpr (by omega))
+  -- Cesàro means are in PMP
+  have hσ_PMP : ∀ N, P * σ N * P = σ N := by
+    intro N
+    change P * cesaroMean E σ₀ (N + 1) * P = cesaroMean E σ₀ (N + 1)
+    rw [cesaroMean_eq]
+    simp only [Matrix.mul_smul, Matrix.smul_mul, mul_sum, Finset.sum_mul]
+    congr 1
+    apply Finset.sum_congr rfl
+    intro n _; exact h_iter_PMP n
+  -- Extract convergent subsequence
+  haveI : FirstCountableTopology Mat := @UniformSpace.firstCountableTopology _ _ inferInstance
+  obtain ⟨ρ, hρ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
+    densityMatrices_isCompact.tendsto_subseq hσ_dm
+  -- ρ is in PMP (limit of PMP elements, PMP is closed)
+  have hρ_PMP : P * ρ * P = ρ := by
+    have hcont : Continuous (fun X : Mat => P * X * P) :=
+      (continuous_const.matrix_mul continuous_id).matrix_mul continuous_const
+    exact tendsto_nhds_unique
+      (hcont.continuousAt.tendsto.comp hφ_tendsto |>.congr
+        (fun n => hσ_PMP (φ n)))
+      hφ_tendsto
+  -- Show E(ρ) = ρ by telescoping
+  have hE_cont : Continuous E := LinearMap.continuous_of_finiteDimensional E
+  have h_Eσ : Filter.Tendsto (E ∘ σ ∘ φ) Filter.atTop (nhds (E ρ)) :=
+    (hE_cont.tendsto ρ).comp hφ_tendsto
+  have h_diff : Filter.Tendsto (fun k => (E ∘ σ ∘ φ) k - (σ ∘ φ) k)
+      Filter.atTop (nhds (E ρ - ρ)) :=
+    h_Eσ.sub hφ_tendsto
+  have h_telesc : ∀ k, (E ∘ σ ∘ φ) k - (σ ∘ φ) k =
+      (1 / ((φ k + 1 : ℕ) : ℂ)) • ((E ^ (φ k + 1)) σ₀ - σ₀) :=
+    fun k => cesaroMean_telescope E σ₀ (φ k + 1) (Nat.succ_pos _)
+  have h_rhs_zero : Filter.Tendsto (fun k => (1 / ((φ k + 1 : ℕ) : ℂ)) •
+      ((E ^ (φ k + 1)) σ₀ - σ₀)) Filter.atTop (nhds 0) := by
+    change Filter.Tendsto
+      ((fun k => (1 / ((φ k + 1 : ℕ) : ℂ))) • (fun k => (E ^ (φ k + 1)) σ₀ - σ₀))
+      Filter.atTop (nhds 0)
+    apply NormedField.tendsto_zero_smul_of_tendsto_zero_of_bounded
+    · simp_rw [one_div]
+      have h_succ_tendsto : Filter.Tendsto (fun k => φ k + 1) Filter.atTop Filter.atTop := by
+        apply Filter.tendsto_atTop_atTop_of_monotone
+        · intro a b hab; exact Nat.add_le_add_right (hφ_mono.monotone hab) 1
+        · intro b; exact ⟨b, Nat.le_succ_of_le (hφ_mono.id_le b)⟩
+      exact (tendsto_inv_atTop_nhds_zero_nat (𝕜 := ℂ)).comp h_succ_tendsto
+    · have hbdd := densityMatrices_isCompact (D := D) |>.isBounded
+      rw [Metric.isBounded_iff_subset_ball 0] at hbdd
+      obtain ⟨R, hR⟩ := hbdd
+      apply Filter.isBoundedUnder_of
+      refine ⟨R + R, fun k => ?_⟩
+      have h1 := hR (h_iter_mem (φ k + 1))
+      have h2 := hR hσ₀_mem
+      rw [Metric.mem_ball, dist_zero_right] at h1 h2
+      exact le_trans (norm_sub_le _ _) (by linarith)
+  have hρ_fix : E ρ = ρ :=
+    sub_eq_zero.mp (tendsto_nhds_unique (h_diff.congr h_telesc) h_rhs_zero)
+  exact ⟨ρ, hρ_mem, hρ_PMP, hρ_fix⟩
+
+/-- Taylor remainder bound: `‖exp(x) - 1 - x‖ ≤ ‖x‖² · exp(‖x‖)` for normed algebras.
+Reproduced from `LindbladForm.lean` (private there). -/
+private theorem norm_exp_sub_one_sub_self_le'
+    {A : Type*} [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A]
+    [NormOneClass A] (x : A) :
+    ‖NormedSpace.exp x - 1 - x‖ ≤ ‖x‖ ^ 2 * Real.exp ‖x‖ := by
+  have hsum : HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • x ^ n)
+      (NormedSpace.exp x) :=
+    NormedSpace.exp_series_hasSum_exp' (𝕂 := ℂ) x
+  have htail := (hasSum_nat_add_iff' 2).2 hsum
+  have htail_eq : NormedSpace.exp x - 1 - x =
+      ∑' n : ℕ, ((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2) := by
+    have := htail.tsum_eq
+    simpa [Finset.sum_range_succ, sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using
+      this.symm
+  rw [htail_eq]
+  have hsummable_tail : Summable (fun n : ℕ =>
+      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖) := by
+    exact (summable_nat_add_iff 2).2
+      (by simpa using NormedSpace.norm_expSeries_summable' (𝕂 := ℂ) x)
+  have hsummable_cmp : Summable (fun n : ℕ => ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n)) :=
+    (Real.summable_pow_div_factorial ‖x‖).mul_left (‖x‖ ^ 2)
+  have hterm : ∀ n : ℕ,
+      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ ≤
+        ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by
+    intro n
+    calc ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖
+        = ‖((Nat.factorial (n + 2) : ℂ)⁻¹)‖ * ‖x ^ (n + 2)‖ := norm_smul _ _
+      _ ≤ ‖((Nat.factorial (n + 2) : ℂ)⁻¹)‖ * ‖x‖ ^ (n + 2) := by gcongr; exact norm_pow_le _ _
+      _ = ‖x‖ ^ (n + 2) / Nat.factorial (n + 2) := by simp [div_eq_mul_inv, mul_comm]
+      _ ≤ ‖x‖ ^ (n + 2) / Nat.factorial n := by
+            exact div_le_div_of_nonneg_left (pow_nonneg (norm_nonneg x) _) (by positivity)
+              (by exact_mod_cast Nat.factorial_le (by omega))
+      _ = ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by rw [pow_add, div_eq_mul_inv]; ring
+  calc ‖∑' n, ((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖
+      ≤ ∑' n, ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ :=
+        norm_tsum_le_tsum_norm hsummable_tail
+    _ ≤ ∑' n, ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) :=
+        Summable.tsum_le_tsum hterm hsummable_tail hsummable_cmp
+    _ = ‖x‖ ^ 2 * Real.exp ‖x‖ := by
+        rw [tsum_mul_left]
+        congr 1
+        simpa [Real.exp_eq_exp_ℝ] using
+          (congrFun (NormedSpace.exp_eq_tsum_div (𝔸 := ℝ)) ‖x‖).symm
+
+set_option maxHeartbeats 800000 in
+/-- Specialization: `‖expSemigroupCLM E s − (1 + s • E)‖ ≤ s² ‖E‖² exp(s‖E‖)`. -/
+private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
+    (E : (Mat →L[ℂ] Mat)) {s : ℝ} (hs : 0 ≤ s) :
+    ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖ ≤
+      s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by
+  have h := norm_exp_sub_one_sub_self_le' ((s : ℂ) • E)
+  simp only [expSemigroupCLM] at h ⊢
+  have hnorm_smul : ‖(s : ℂ) • E‖ = s * ‖E‖ := by
+    rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs]
+  calc ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖
+      = ‖NormedSpace.exp ((s : ℂ) • E) - 1 - (s : ℂ) • E‖ := by
+        congr 1; unfold expSemigroupCLM; abel
+    _ ≤ ‖(s : ℂ) • E‖ ^ 2 * Real.exp ‖(s : ℂ) • E‖ := h
+    _ = s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by rw [hnorm_smul]; ring
 
 /-- **Wolf Proposition 7.6, (4) → (2)**: Given block-upper-triangular Lindblad
 operators, the compressed channel has a fixed density matrix, giving (2).
 
-The existence of a rank-deficient fixed density matrix follows from:
-- (4) → (3): the semigroup preserves `P M_d P`
-- The compressed semigroup `P T_t(·) P` restricted to `P M_d P ≅ M_k(ℂ)`
-  (where `k = rank P < D`) is itself a CPTP semigroup
-- By compactness of density matrices in `M_k(ℂ)`, this compressed semigroup
-  has a fixed density matrix, which lifts to a rank-deficient fixed density
-  matrix of the original semigroup -/
+**Proof strategy**:
+1. From block-upper-triangular structure, derive that `exp(tL)` preserves `PMP`.
+2. For each `m ≥ 1`, the channel `exp((1/m)L)` preserves `PMP`, so by the
+   adapted Cesàro argument it has a density-matrix fixed point `ρ_m ∈ PMP`.
+3. Extract `ρ_{m_k} → ρ` by compactness. From the Taylor remainder bound
+   `exp((1/m)L)(ρ_m) - ρ_m = (1/m)L(ρ_m) + O(1/m²)` and the fixed-point
+   equation `exp((1/m)L)(ρ_m) = ρ_m`, deduce `L(ρ_m) → 0` hence `L(ρ) = 0`.
+4. Since `ρ ∈ PMP` with `P ≠ 1`, `ρ` is rank-deficient. -/
+-- The proof involves multiple Cesàro extractions and norm estimates; needs extra heartbeats.
+set_option maxHeartbeats 4000000 in
 theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
     {L : Mat →ₗ[ℂ] Mat}
     (hGKSL : IsGKSLGenerator L)
     (h : HasBlockUpperTriangularLindblad L) :
     HasRankDeficientKernelElement L := by
-  sorry
+  -- Step 1: Extract P and derive invariant compression
+  obtain ⟨P, F, hP_nt, hL_eq, hL_block, hκ_block⟩ := h
+  have hP := hP_nt.1
+  have hP_ne : P ≠ 0 := hP_nt.2.1
+  have hD : 0 < D := pos_dim_of_nontrivialProjection hP_nt
+  haveI : NeZero D := ⟨hD.ne'⟩
+  -- Generator and semigroup preserve compression
+  have hgen : GeneratorPreservesCompression L P := by
+    rw [hL_eq]; exact generator_preserves_compression_of_blockUpperTriangular hP hL_block hκ_block
+  have hT_pres : ∀ t : ℝ, 0 ≤ t → ∀ X : Mat,
+      P * (expSemigroup L t (P * X * P)) * P = expSemigroup L t (P * X * P) :=
+    semigroup_preserves_compression_of_generator hP hgen
+  -- Step 2: For each m ≥ 1, get a fixed point of exp((1/m)L) in PMP ∩ DM
+  have h_fix : ∀ m : ℕ, 0 < m → ∃ ρ : Mat,
+      ρ ∈ densityMatrices D ∧ P * ρ * P = ρ ∧
+      expSemigroup L (1 / (m : ℝ)) ρ = ρ := by
+    intro m hm
+    exact channel_fixedPoint_in_PMP hP hP_ne (hGKSL _ (by positivity))
+      (fun X => hT_pres _ (by positivity) X)
+  -- Build sequence ρ_{n+1} and extract limit
+  set ρ_shift : ℕ → Mat := fun n => (h_fix (n + 1) (Nat.succ_pos n)).choose
+  have hρ_mem : ∀ n, ρ_shift n ∈ densityMatrices D :=
+    fun n => (h_fix (n + 1) (Nat.succ_pos n)).choose_spec.1
+  have hρ_PMP : ∀ n, P * ρ_shift n * P = ρ_shift n :=
+    fun n => (h_fix (n + 1) (Nat.succ_pos n)).choose_spec.2.1
+  have hρ_fix : ∀ n,
+      expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n :=
+    fun n => (h_fix (n + 1) (Nat.succ_pos n)).choose_spec.2.2
+  haveI : FirstCountableTopology Mat := @UniformSpace.firstCountableTopology _ _ inferInstance
+  obtain ⟨ρ, hρ_dm, φ, hφ_mono, hφ_tendsto⟩ :=
+    densityMatrices_isCompact.tendsto_subseq hρ_mem
+  -- ρ is in PMP (PMP is closed, all terms are in PMP)
+  have hρ_PMP_lim : P * ρ * P = ρ := by
+    have hcont : Continuous (fun X : Mat => P * X * P) :=
+      (continuous_const.matrix_mul continuous_id).matrix_mul continuous_const
+    exact tendsto_nhds_unique
+      (hcont.continuousAt.tendsto.comp hφ_tendsto |>.congr (fun n => hρ_PMP (φ n)))
+      hφ_tendsto
+  -- Step 3: Show L(ρ) = 0 using the Taylor bound
+  have hL_zero : L ρ = 0 := by
+    have hL_cont : Continuous L := LinearMap.continuous_of_finiteDimensional L
+    -- L(ρ_shift(φ n)) → L(ρ) by continuity
+    have hL_tends : Filter.Tendsto (fun n => L (ρ_shift (φ n)))
+        Filter.atTop (nhds (L ρ)) :=
+      (hL_cont.tendsto ρ).comp hφ_tendsto
+    -- Show L(ρ_shift(φ n)) → 0
+    suffices h_to_zero : Filter.Tendsto (fun n => L (ρ_shift (φ n)))
+        Filter.atTop (nhds 0) from
+      tendsto_nhds_unique hL_tends h_to_zero
+    -- Density matrices are bounded
+    have hbdd := densityMatrices_isCompact (D := D) |>.isBounded
+    rw [Metric.isBounded_iff_subset_ball 0] at hbdd
+    obtain ⟨R, hR⟩ := hbdd
+    have hρ_norm : ∀ n, ‖ρ_shift (φ n)‖ ≤ R := by
+      intro n; have := hR (hρ_mem (φ n))
+      rw [Metric.mem_ball, dist_zero_right] at this; exact le_of_lt this
+    -- CLM version of L
+    set E := endCLMEquiv' (D := D) L
+    -- Key: from exp((1/m)L)(ρ_m) = ρ_m, deduce ‖L(ρ_m)‖ ≤ C/m
+    -- exp((1/m)L)(ρ_m) - ρ_m = (1/m)L(ρ_m) + remainder
+    -- 0 = (1/m)L(ρ_m) + remainder, so L(ρ_m) = -m · remainder
+    -- remainder = exp((1/m)L)(ρ_m) - ρ_m - (1/m)L(ρ_m)
+    -- ‖remainder‖ ≤ (1/m²)‖E‖²·exp(‖E‖/m)·‖ρ_m‖
+    -- ‖L(ρ_m)‖ ≤ (1/m)‖E‖²·exp(‖E‖/m)·‖ρ_m‖ ≤ (1/m)‖E‖²·exp(‖E‖)·R
+    -- Bound each ‖L(ρ_shift(φ n))‖
+    have hL_bound : ∀ n, ‖L (ρ_shift (φ n))‖ ≤
+        (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp (‖E‖) * R := by
+      intro n
+      set m := φ n + 1
+      have hm_pos : (0 : ℝ) < m := Nat.cast_pos.mpr (Nat.succ_pos _)
+      set s := 1 / (m : ℝ) with hs_def
+      have hs : 0 ≤ s := by positivity
+      have hm_ge_one : (1 : ℝ) ≤ m := by exact_mod_cast Nat.succ_pos (φ n)
+      have hs_le : s ≤ 1 := by
+        rw [hs_def]; exact div_le_one_of_le₀ hm_ge_one (by linarith)
+      -- From the fixed-point equation: 0 = s•L(ρ) + (exp(sE) - 1 - sE)(ρ)
+      have hfp := hρ_fix (φ n)
+      -- Work at the CLM level
+      have hexp_clm : ∀ X, expSemigroup L s X = (expSemigroupCLM E s) X := by
+        intro X; rfl
+      have hE_apply : ∀ X, E X = L X := fun X => rfl
+      -- From exp(sE)(ρ_m) = ρ_m:
+      -- s•L(ρ_m) = -(exp(sE) - 1 - sE)(ρ_m)
+      have h_eq : s • L (ρ_shift (φ n)) =
+          -(((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n))) := by
+        have hfp_clm : (expSemigroupCLM E s) (ρ_shift (φ n)) = ρ_shift (φ n) := by
+          rw [← hexp_clm]; exact hfp
+        have : ((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n)) =
+            (expSemigroupCLM E s) (ρ_shift (φ n)) - ρ_shift (φ n) -
+            (s : ℂ) • E (ρ_shift (φ n)) := by
+          simp [ContinuousLinearMap.sub_apply]
+        rw [this, hfp_clm, sub_self, zero_sub, neg_neg, hE_apply]
+        simp [smul_comm]
+      -- ‖s • L(ρ_m)‖ ≤ ‖exp(sE) - 1 - sE‖ · ‖ρ_m‖
+      have h_norm_smul : ‖s • L (ρ_shift (φ n))‖ ≤
+          s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
+        rw [h_eq, norm_neg]
+        calc ‖((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n))‖
+            ≤ ‖(expSemigroupCLM E s) - 1 - (s : ℂ) • E‖ * ‖ρ_shift (φ n)‖ :=
+              ContinuousLinearMap.le_opNorm _ _
+          _ ≤ (s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖)) * ‖ρ_shift (φ n)‖ := by
+              gcongr; exact norm_expSemigroupCLM_taylor_bound E hs
+      -- Extract ‖L(ρ_m)‖ from s • L(ρ_m)
+      have hs_pos : 0 < s := by positivity
+      rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg hs.le] at h_norm_smul
+      -- s * ‖L(ρ)‖ ≤ s² * C * ‖ρ‖, so ‖L(ρ)‖ ≤ s * C * ‖ρ‖
+      have h_L_norm : ‖L (ρ_shift (φ n))‖ ≤
+          s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
+        have h1 : s * ‖L (ρ_shift (φ n))‖ ≤
+            s * (s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖) := by
+          rw [sq] at h_norm_smul; nlinarith
+        exact le_of_mul_le_mul_left h1 hs_pos
+      -- Simplify: s = 1/(φ n + 1), exp(s*‖E‖) ≤ exp(‖E‖), ‖ρ_m‖ ≤ R
+      calc ‖L (ρ_shift (φ n))‖
+          ≤ s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := h_L_norm
+        _ ≤ s * ‖E‖ ^ 2 * Real.exp (1 * ‖E‖) * R := by
+            gcongr
+            · exact Real.exp_le_exp_of_le (by nlinarith [norm_nonneg E, hs_le])
+            · exact hρ_norm n
+        _ = (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R := by simp [hs_def, s]
+    -- The bound → 0 as n → ∞
+    have h_coeff : Filter.Tendsto (fun n => (1 / (φ n + 1 : ℝ))) Filter.atTop (nhds 0) := by
+      have := (tendsto_inv_atTop_nhds_zero_nat (𝕜 := ℝ)).comp
+        (Filter.tendsto_atTop_atTop_of_monotone
+          (fun a b h => Nat.add_le_add_right (hφ_mono.monotone h) 1)
+          (fun b => ⟨b, Nat.le_succ_of_le (hφ_mono.id_le b)⟩))
+      simpa [one_div] using this
+    have h_bound_tends : Filter.Tendsto
+        (fun n => (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R)
+        Filter.atTop (nhds 0) := by
+      have := h_coeff.mul_const (‖E‖ ^ 2 * Real.exp ‖E‖ * R)
+      simp only [zero_mul] at this; convert this using 1; ext; ring
+    exact squeeze_zero_norm hL_bound h_bound_tends
+  -- Step 4: Assemble the result
+  refine ⟨ρ, hρ_dm, ⟨P, hP_nt, hρ_PMP_lim⟩, hL_zero⟩
 
 /-! ## Reducibility definition -/
 

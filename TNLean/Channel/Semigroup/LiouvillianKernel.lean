@@ -35,7 +35,7 @@ the Hamiltonian term in `L*` is `i (H A - A H)`.
   Hamiltonian, the Lindblad operators, and their adjoints, then `L*(A) = 0`
   (Wolf Theorem 7.2, easy direction).
 * `LindbladForm.adjointKernel_eq_commutant_of_hasFaithfulStationaryState` — the
-  faithful-direction statement, presently reduced to one remaining sorry.
+  Wolf Theorem 7.2, faithful direction.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
@@ -263,26 +263,215 @@ theorem commutant_subset_adjointKernel (F : LindbladForm D) :
   intro A hA
   exact F.mem_adjointKernel_of_mem_commutant hA
 
+/-- `κ + κ† = Σⱼ Lⱼ†Lⱼ` for the generator decomposition of a Lindblad form.
+This follows from `κ = iH + ½S` and `κ† = −iH + ½S` with `S = Σⱼ Lⱼ†Lⱼ`. -/
+private theorem κ_add_conjTranspose_κ (F : LindbladForm D) :
+    F.toGeneratorDecomp.κ + F.toGeneratorDecomp.κᴴ =
+      ∑ j : Fin F.r, (F.L j)ᴴ * F.L j := by
+  set S : Mat := ∑ j : Fin F.r, (F.L j)ᴴ * F.L j with hS_def
+  have hS_herm : Sᴴ = S := by
+    rw [hS_def, Matrix.conjTranspose_sum]
+    congr 1; ext j
+    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+  change Complex.I • F.H + (1 / 2 : ℂ) • S +
+    (Complex.I • F.H + (1 / 2 : ℂ) • S)ᴴ = S
+  rw [Matrix.conjTranspose_add, Matrix.conjTranspose_smul, Matrix.conjTranspose_smul,
+    F.H_hermitian, hS_herm]
+  simp only [Complex.star_def, Complex.conj_I, one_div, star_inv₀, star_ofNat]
+  have h1 : (-(Complex.I : ℂ)) • F.H = -Complex.I • F.H := rfl
+  rw [h1, neg_smul]
+  have h2 : Complex.I • F.H + (2 : ℂ)⁻¹ • S + (-(Complex.I • F.H) + (2 : ℂ)⁻¹ • S) =
+      (2 : ℂ)⁻¹ • S + (2 : ℂ)⁻¹ • S := by abel
+  rw [h2, ← two_smul ℂ ((2 : ℂ)⁻¹ • S), smul_smul]
+  norm_num
+
+/-- **Lindblad identity** (Wolf Eq. 7.27 variant).
+
+For any `A` in the adjoint kernel of a Lindblad form `F`, we have
+`F.toAdjointLinearMap (Aᴴ * A) = ∑ⱼ (A * F.L j − F.L j * A)ᴴ * (A * F.L j − F.L j * A)`.
+
+The proof uses `L*(A) = 0`, hence `φ*(A) = A κ + κ† A`, and expands both sides
+to verify they coincide. -/
+private theorem toAdjointLinearMap_conjTranspose_mul_self_eq_sum_commutator
+    (F : LindbladForm D) {A : Mat}
+    (hA : F.toAdjointLinearMap A = 0) :
+    F.toAdjointLinearMap (Aᴴ * A) =
+      ∑ j : Fin F.r,
+        (A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A) := by
+  -- Set up notation
+  set κ := F.toGeneratorDecomp.κ
+  set φ := Kraus.adjointMap F.L
+  set S := ∑ j : Fin F.r, (F.L j)ᴴ * F.L j with hS_def
+  -- Key fact: κ + κ† = S
+  have hκS : κ + κᴴ = S := F.κ_add_conjTranspose_κ
+  -- From L*(A) = 0: φ(A) = Aκ + κ†A
+  have hφA : φ A = A * κ + κᴴ * A := by
+    have h := hA
+    rw [toAdjointLinearMap_apply_raw] at h
+    have hsub : φ A - A * κ - κᴴ * A = 0 := h
+    have : φ A = φ A - A * κ - κᴴ * A + (A * κ + κᴴ * A) := by abel
+    rw [this, hsub, zero_add]
+  -- From L*(A†) = 0: φ(A†) = A†κ + κ†A†
+  have hφAstar : φ Aᴴ = Aᴴ * κ + κᴴ * Aᴴ := by
+    have hAstar_ker : F.toAdjointLinearMap Aᴴ = 0 := by
+      rw [toAdjointLinearMap_conjTranspose]; simp [hA]
+    rw [toAdjointLinearMap_apply_raw] at hAstar_ker
+    have hsub : φ Aᴴ - Aᴴ * κ - κᴴ * Aᴴ = 0 := hAstar_ker
+    have : φ Aᴴ = φ Aᴴ - Aᴴ * κ - κᴴ * Aᴴ + (Aᴴ * κ + κᴴ * Aᴴ) := by abel
+    rw [this, hsub, zero_add]
+  -- Strategy: show LHS = φ(A†A) - φ(A†)·A - A†·φ(A) + A†·S·A = RHS
+  -- where the middle identity uses hφA, hφAstar, hκS.
+  -- Part 1: Expand the RHS into sums
+  have hRHS_expand : ∀ j : Fin F.r,
+      (A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A) =
+      (F.L j)ᴴ * (Aᴴ * A) * F.L j - ((F.L j)ᴴ * Aᴴ * F.L j) * A -
+      Aᴴ * ((F.L j)ᴴ * A * F.L j) + Aᴴ * ((F.L j)ᴴ * F.L j) * A := by
+    intro j
+    simp only [Matrix.conjTranspose_sub, Matrix.conjTranspose_mul,
+      Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_assoc]
+    abel
+  -- Part 2: Sum the expansion and factor into φ, S
+  have hRHS_sum :
+      (∑ j, (A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A)) =
+      φ (Aᴴ * A) - φ Aᴴ * A - Aᴴ * φ A + Aᴴ * S * A := by
+    simp_rw [hRHS_expand]
+    simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib]
+    congr 1
+    · congr 1
+      · congr 1
+        -- ∑ (F.L j)ᴴ * Aᴴ * F.L j * A = φ(A†) · A
+        exact (Finset.sum_mul _ _ _).symm
+      -- A† · ∑ (F.L j)ᴴ * A * F.L j = A† · φ(A)
+      exact (Finset.mul_sum _ _ _).symm
+    -- ∑ A† · ((F.L j)ᴴ * F.L j) * A = A† · S · A
+    rw [← Finset.sum_mul, ← Finset.mul_sum, hS_def]
+  -- Part 3: Connect LHS to the same expression
+  rw [toAdjointLinearMap_apply_raw, hRHS_sum]
+  -- Goal: φ(A†A) - A†A·κ - κ†·A†A = φ(A†A) - φ(A†)·A - A†·φ(A) + A†·S·A
+  -- Substitute φ(A) and φ(A†) and use κ + κ† = S
+  rw [hφA, hφAstar]
+  simp only [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc]
+  -- Cancel using κ + κ† = S
+  -- Goal should now be a pure matrix additive identity with φ(A†A), κ, κᴴ, S
+  -- The key cancellation: A†κA + A†κ†A = A†SA (since κ + κ† = S)
+  rw [show S = κ + κᴴ from hκS.symm]
+  simp only [Matrix.add_mul, Matrix.mul_add]
+  abel
+
+/-- Sum of `[A, Lⱼ]ᴴ [A, Lⱼ]` is positive semidefinite. -/
+private theorem posSemidef_sum_commutator_conjTranspose_mul_self
+    (F : LindbladForm D) (A : Mat) :
+    (∑ j : Fin F.r,
+      (A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A)).PosSemidef :=
+  Matrix.posSemidef_sum _ fun _ _ =>
+    Matrix.posSemidef_conjTranspose_mul_self _
+
+/-- Each commutator `[A, Lⱼ] = 0` when the sum of squares vanishes. -/
+private theorem each_commutator_eq_zero_of_sum_eq_zero
+    (F : LindbladForm D) (A : Mat)
+    (h : ∑ j : Fin F.r,
+      (A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A) = 0) :
+    ∀ j : Fin F.r, A * F.L j = F.L j * A := by
+  intro j
+  have hj : A * F.L j - F.L j * A = 0 := by
+    have h_psd_j := Matrix.posSemidef_conjTranspose_mul_self (A * F.L j - F.L j * A)
+    have h_each_nonneg : ∀ k : Fin F.r,
+        0 ≤ ((A * F.L k - F.L k * A)ᴴ * (A * F.L k - F.L k * A)).trace.re :=
+      fun k => (Complex.le_def.mp
+        (Matrix.posSemidef_conjTranspose_mul_self (A * F.L k - F.L k * A)).trace_nonneg).1
+    have h_tr_sum_re :
+        (∑ k : Fin F.r,
+          ((A * F.L k - F.L k * A)ᴴ * (A * F.L k - F.L k * A)).trace.re) = 0 := by
+      rw [← Complex.re_sum, ← Matrix.trace_sum, h]; simp
+    have h_tr_re :
+        ((A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A)).trace.re = 0 :=
+      le_antisymm
+        (by linarith [Finset.sum_eq_zero_iff_of_nonneg (fun k _ => h_each_nonneg k)
+            |>.mp h_tr_sum_re j (Finset.mem_univ j)])
+        (h_each_nonneg j)
+    have h_tr_zero :
+        ((A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A)).trace = 0 :=
+      Complex.ext h_tr_re (Complex.le_def.mp h_psd_j.trace_nonneg).2.symm
+    exact Matrix.conjTranspose_mul_self_eq_zero.mp (h_psd_j.trace_eq_zero_iff.mp h_tr_zero)
+  exact sub_eq_zero.mp hj
+
 /-- Wolf Theorem 7.2, faithful direction.
 
-The intended proof is the standard argument from Wolf:
+The proof uses the direct algebraic approach (Wolf Eq. 7.27):
 
-1. choose a generic time `t > 0` with `Fix (exp (t L*)) = ker L*`,
-2. use `FixedPoint.Algebra` to obtain a `*`-algebra structure on that fixed-point set,
-3. deduce that `Aᴴ * A` and `A * Aᴴ` are again fixed,
-4. combine this with the Lindblad identity analogous to Wolf Eq. (7.27) to show
-   that `A` commutes with each Lindblad operator and its adjoint,
-5. use the Hamiltonian part of `L*(A) = 0` to conclude that `A` also commutes
-   with `H`.
-
-The remaining gap is the current semigroup-to-channel interface for the generic-time
-fixed-point algebra argument. -/
+1. From `L*(A) = 0`, derive `L*(Aᴴ) = 0` (conjugation property).
+2. Prove the **Lindblad identity**: `L*(Aᴴ A) = Σⱼ [A, Lⱼ]ᴴ [A, Lⱼ]`.
+3. The RHS is PSD (sum of `X†X`), hence `L*(Aᴴ A) ≥ 0`.
+4. By the trace pairing: `tr(ρ · L*(Aᴴ A)) = tr(L(ρ) · Aᴴ A) = 0`.
+5. By faithfulness of ρ: `L*(Aᴴ A) = 0`, hence `Σⱼ [A, Lⱼ]ᴴ [A, Lⱼ] = 0`.
+6. Each `[A, Lⱼ] = 0` (sum of PSD = 0 ⇒ each = 0).
+7. Similarly, `[Aᴴ, Lⱼ] = 0` implies `[A, Lⱼᴴ] = 0`.
+8. From `L*(A) = 0` and `[A, Lⱼ] = [A, Lⱼᴴ] = 0`, get `[H, A] = 0`. -/
 theorem mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState
     (F : LindbladForm D)
     (hstat : HasFaithfulStationaryState (D := D) F.toLinearMap)
     {A : Mat} (hA : A ∈ F.adjointKernel) :
     A ∈ F.commutant := by
-  sorry
+  -- Extract the faithful stationary state
+  obtain ⟨ρ, hρ_dm, hρ_pd, hρ_ker⟩ := hstat
+  -- Extract L*(A) = 0
+  have hLA : F.toAdjointLinearMap A = 0 := hA
+  -- Step 1: L*(A†) = 0
+  have hLAstar : F.toAdjointLinearMap Aᴴ = 0 := by
+    rw [toAdjointLinearMap_conjTranspose, hLA]; simp
+  -- Step 2: L*(A†A) = Σⱼ [A,Lⱼ]†[A,Lⱼ]
+  have hid := toAdjointLinearMap_conjTranspose_mul_self_eq_sum_commutator F hLA
+  -- Step 3: L*(A†A) is PSD
+  have hpsd : (F.toAdjointLinearMap (Aᴴ * A)).PosSemidef := by
+    rw [hid]; exact posSemidef_sum_commutator_conjTranspose_mul_self F A
+  -- Step 4: trace(ρ · L*(A†A)) = 0
+  have htr : Matrix.trace (ρ * F.toAdjointLinearMap (Aᴴ * A)) = 0 := by
+    rw [trace_mul_toAdjointLinearMap_eq_trace_toLinearMap_mul, hρ_ker, Matrix.zero_mul,
+      Matrix.trace_zero]
+  -- Step 5: L*(A†A) = 0
+  have hLAA : F.toAdjointLinearMap (Aᴴ * A) = 0 :=
+    Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero hpsd hρ_pd htr
+  -- Step 6: Each [A, Lⱼ] = 0
+  have hcomm_sum_zero : ∑ j : Fin F.r,
+      (A * F.L j - F.L j * A)ᴴ * (A * F.L j - F.L j * A) = 0 := by
+    rw [← hid, hLAA]
+  have hAL : ∀ j : Fin F.r, A * F.L j = F.L j * A :=
+    each_commutator_eq_zero_of_sum_eq_zero F A hcomm_sum_zero
+  -- Step 7: Similarly for A†, get [A†, Lⱼ] = 0, hence [A, Lⱼ†] = 0
+  have hid' := toAdjointLinearMap_conjTranspose_mul_self_eq_sum_commutator F hLAstar
+  simp only [Matrix.conjTranspose_conjTranspose] at hid'
+  have hpsd' : (F.toAdjointLinearMap (A * Aᴴ)).PosSemidef := by
+    rw [hid']; exact posSemidef_sum_commutator_conjTranspose_mul_self F Aᴴ
+  have htr' : Matrix.trace (ρ * F.toAdjointLinearMap (A * Aᴴ)) = 0 := by
+    rw [trace_mul_toAdjointLinearMap_eq_trace_toLinearMap_mul, hρ_ker, Matrix.zero_mul,
+      Matrix.trace_zero]
+  have hLAAstar : F.toAdjointLinearMap (A * Aᴴ) = 0 :=
+    Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero hpsd' hρ_pd htr'
+  have hcomm_sum_zero' : ∑ j : Fin F.r,
+      (Aᴴ * F.L j - F.L j * Aᴴ)ᴴ * (Aᴴ * F.L j - F.L j * Aᴴ) = 0 := by
+    rw [← hid', hLAAstar]
+  have hAstarL : ∀ j : Fin F.r, Aᴴ * F.L j = F.L j * Aᴴ :=
+    each_commutator_eq_zero_of_sum_eq_zero F Aᴴ hcomm_sum_zero'
+  -- From [A†, Lⱼ] = 0, take conjugate transpose to get [Lⱼ†, A] = 0
+  have hALstar : ∀ j : Fin F.r, A * (F.L j)ᴴ = (F.L j)ᴴ * A := by
+    intro j
+    have h := congrArg Matrix.conjTranspose (hAstarL j)
+    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose] at h
+    exact h.symm
+  -- Step 8: [H, A] = 0
+  have hHA : A * F.H = F.H * A := by
+    have hLAexp := hLA
+    rw [toAdjointLinearMap_apply] at hLAexp
+    have hsum_zero : ∑ j : Fin F.r, adjointDissipator (F.L j) A = 0 :=
+      Finset.sum_eq_zero fun j _ => adjointDissipator_eq_zero_of_commute (hAL j) (hALstar j)
+    rw [hsum_zero, add_zero] at hLAexp
+    -- hLAexp : Complex.I • (F.H * A - A * F.H) = 0
+    have h : F.H * A - A * F.H = 0 := by
+      rwa [smul_eq_zero, or_iff_right Complex.I_ne_zero] at hLAexp
+    exact eq_of_sub_eq_zero h |>.symm
+  -- Assemble the commutant membership
+  rw [mem_commutant]
+  exact ⟨hHA, fun j => ⟨hAL j, hALstar j⟩⟩
 
 /-- Wolf Theorem 7.2 with the current formalization status: under a faithful
 stationary state, the adjoint kernel equals the commutant. -/

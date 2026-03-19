@@ -4,7 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
 import TNLean.Channel.Peripheral.IrreducibleChannel
+import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.Schwarz.MultiplicativeDomainFull
+import TNLean.Algebra.SkolemNoether
+import Mathlib.Algebra.Central.Matrix
 import Mathlib.Analysis.Complex.Polynomial.Basic
+import Mathlib.Analysis.InnerProductSpace.Adjoint
+import Mathlib.Analysis.InnerProductSpace.Positive
+import Mathlib.Analysis.InnerProductSpace.Trace
+import Mathlib.Analysis.MeanInequalities
 import Mathlib.LinearAlgebra.Determinant
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
@@ -35,7 +43,7 @@ space `Matrix (Fin d) (Fin d) ℂ`, following Wolf §6.1.1.
   not invertible
 * `channelDet_norm_le_one_of_positive_tracePreserving` : Wolf's determinant bound (statement)
 * `channelDet_norm_eq_one_iff_exists_unitaryChannel` : Wolf's unitary characterization for CPTP
-  maps (backward direction proved; forward direction is a documented sorry)
+  maps (both directions proved; forward direction uses two sorry'd analytical helpers)
 
 ## References
 
@@ -425,46 +433,235 @@ theorem channelDet_norm_le_one_of_channel
       _ = ‖A.charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
       _ ≤ 1 := hprod_le
 
-/-- Wolf Thm 6.1(2) restricted to CPTP maps: a quantum channel `T` on `M_d(ℂ)` satisfies
-`‖det T‖ = 1` if and only if `T` is a unitary channel `X ↦ U X U†`.
+/-! ### Helper lemmas for the forward direction of Wolf Thm 6.1(2) -/
 
-**Why CPTP and not merely positive TP?**
-Wolf's full Thm 6.1(2) states that for a *positive* trace-preserving map the condition
-`‖det T‖ = 1` characterises *two* branches:
-  (1) unitary conjugation `X ↦ U X U†`, and
-  (2) maps unitarily equivalent to transposition `X ↦ U Xᵀ U†`.
-The transposition map has `‖det T‖ = 1` but is **not** completely positive; it is the
-canonical example of a positive-but-not-CP map.  Therefore the transposition branch does not
-appear for CPTP maps, and the biconditional `‖det T‖ = 1 ↔ ∃ U, T = unitaryChannel U` is
-correct under the `IsChannel` hypothesis.
+/-- If every factor in a finite product has norm at most `1`, then the product also has norm at
+most `1`. -/
+private lemma norm_prod_le_one_of_forall_mem
+    (s : Multiset ℂ) (hs : ∀ μ ∈ s, ‖μ‖ ≤ 1) :
+    ‖s.prod‖ ≤ 1 := by
+  induction s using Multiset.induction with
+  | empty => simp
+  | @cons a s ih =>
+      have ha : ‖a‖ ≤ 1 := hs a (Multiset.mem_cons_self a s)
+      have hs' : ∀ ν ∈ s, ‖ν‖ ≤ 1 := fun ν hν => hs ν (Multiset.mem_cons_of_mem hν)
+      calc
+        ‖(a ::ₘ s).prod‖ = ‖a * s.prod‖ := by simp [Multiset.prod_cons]
+        _ = ‖a‖ * ‖s.prod‖ := by rw [norm_mul]
+        _ ≤ 1 * 1 := by gcongr; exact ih hs'
+        _ = 1 := by norm_num
 
-**Proof status.**
-- Backward direction (`←`): proved — `channelDet_norm_eq_one_of_unitaryChannel`.
-- Forward direction (`→`): *sorry* — requires formalising the spectral argument from Wolf's
-  proof that the only CPTP fixed points of the bound `‖det T‖ ≤ 1` are unitary conjugations.
-  In outline: `‖det T‖ = 1` forces every eigenvalue of T (as a map on `M_d²(ℂ)`) to have
-  modulus 1; combined with complete positivity and trace-preservation this forces T to be
-  unitary conjugation (Wolf §6.1.1). -/
-theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
-    (hT : IsChannel T) :
-    ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
-  constructor
-  · -- Forward direction: |det T| = 1 → T is a unitary channel.
-    -- This is the hard part of Wolf Thm 6.1(2); it requires the spectral argument that
-    -- complete positivity and trace-preservation, combined with all eigenvalues having
-    -- modulus 1, force T to be unitary conjugation.
-    intro _h
-    sorry
-  · -- Backward direction: if T is a unitary channel then |det T| = 1.
-    rintro ⟨U, rfl⟩
-    exact channelDet_norm_eq_one_of_unitaryChannel U
+/-- Product of norms = 1 with each factor ≤ 1 implies each factor = 1. -/
+private lemma norm_eq_one_of_prod_norm_eq_one
+    (s : Multiset ℂ) (hs : ∀ μ ∈ s, ‖μ‖ ≤ 1) (hprod : ‖s.prod‖ = 1) :
+    ∀ μ ∈ s, ‖μ‖ = 1 := by
+  induction s using Multiset.induction with
+  | empty => intro μ hμ; simp at hμ
+  | @cons a s ih =>
+    intro μ hμ
+    have ha : ‖a‖ ≤ 1 := hs a (Multiset.mem_cons_self a s)
+    have hs' : ∀ ν ∈ s, ‖ν‖ ≤ 1 := fun ν hν => hs ν (Multiset.mem_cons_of_mem hν)
+    rw [Multiset.prod_cons, norm_mul] at hprod
+    have hprod_s_le : ‖s.prod‖ ≤ 1 := norm_prod_le_one_of_forall_mem s hs'
+    have ha_eq : ‖a‖ = 1 := by nlinarith [norm_nonneg a, norm_nonneg s.prod]
+    have hs_eq : ‖s.prod‖ = 1 := by nlinarith [norm_nonneg a]
+    rcases Multiset.mem_cons.mp hμ with rfl | hμs
+    · exact ha_eq
+    · exact ih hs' hs_eq μ hμs
 
-/-- CPTP specialization of the unitary characterization (alias of
-`channelDet_norm_eq_one_iff_exists_unitaryChannel`). -/
-theorem channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel
-    (hT : IsChannel T) :
-    ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U :=
-  channelDet_norm_eq_one_iff_exists_unitaryChannel hT
+/-- For a CPTP map with `‖det T‖ = 1`, every eigenvalue has modulus exactly 1. -/
+private theorem channel_all_eigenvalues_norm_one [NeZero d]
+    (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue T μ → ‖μ‖ = 1 := by
+  let A : Matrix (MatrixBasisIndex d) (MatrixBasisIndex d) ℂ := channelMatrix T
+  have hspectrum : spectrum ℂ A = spectrum ℂ T :=
+    AlgEquiv.spectrum_eq (LinearMap.toMatrixAlgEquiv (matrixSpaceBasis d)) T
+  have hroot_le : ∀ μ ∈ A.charpoly.roots, ‖μ‖ ≤ 1 := by
+    intro μ hμ
+    exact IsChannel.eigenvalue_norm_le_one hT μ
+      (Module.End.hasEigenvalue_iff_mem_spectrum.2
+        (hspectrum ▸ Matrix.mem_spectrum_of_isRoot_charpoly
+          ((Polynomial.mem_roots A.charpoly_monic.ne_zero).1 hμ)))
+  have hprod_eq : ‖A.charpoly.roots.prod‖ = 1 := by
+    have : ‖channelDet T‖ = ‖A.charpoly.roots.prod‖ := by
+      show ‖A.det‖ = _; rw [Matrix.det_eq_prod_roots_charpoly]
+    rw [← this]; exact hdet
+  have hroot_eq := norm_eq_one_of_prod_norm_eq_one _ hroot_le hprod_eq
+  intro μ hμ_eig
+  have hμ_specT : μ ∈ spectrum ℂ T := Module.End.hasEigenvalue_iff_mem_spectrum.1 hμ_eig
+  have hμ_specA : μ ∈ spectrum ℂ A := hspectrum ▸ hμ_specT
+  exact hroot_eq μ ((Polynomial.mem_roots A.charpoly_monic.ne_zero).2
+    ((Matrix.mem_spectrum_iff_isRoot_charpoly).1 hμ_specA))
+
+private theorem stdBasis_conjTranspose_mul_self (i j : Fin d) :
+    (Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j))ᴴ *
+        Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j) =
+      Matrix.single j j (1 : ℂ) := by
+  ext a b
+  rw [Matrix.stdBasis_eq_single, Matrix.conjTranspose_single]
+  by_cases hja : j = a
+  · by_cases hjb : j = b
+    · subst hja; subst hjb
+      simp [Matrix.mul_apply, Matrix.single]
+    · have hab : a ≠ b := by simpa [hja] using hjb
+      simp [Matrix.mul_apply, Matrix.single, hja, hab]
+  · simp [Matrix.mul_apply, Matrix.single, hja]
+
+private theorem stdBasis_conjTranspose_eq_swap (i j : Fin d) :
+    (Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j))ᴴ =
+      Matrix.stdBasis ℂ (Fin d) (Fin d) (j, i) := by
+  rw [Matrix.stdBasis_eq_single, Matrix.stdBasis_eq_single, Matrix.conjTranspose_single]
+  simp
+
+private theorem sum_single_diag_one :
+    ∑ j : Fin d, Matrix.single j j (1 : ℂ) = (1 : MatrixAlg d) := by
+  ext a b
+  rw [Finset.sum_apply]
+  by_cases hab : a = b
+  · subst hab
+    simp [Matrix.single]
+  · simp [Matrix.single, hab]
+
+private theorem stdBasis_orthonormal_of_inner_eq_trace
+    [NormedAddCommGroup (MatrixAlg d)] [InnerProductSpace ℂ (MatrixAlg d)]
+    (hinner : ∀ X Y : MatrixAlg d, inner ℂ X Y = Matrix.trace (Y * Xᴴ)) :
+    Orthonormal ℂ ⇑(Matrix.stdBasis ℂ (Fin d) (Fin d)) := by
+  rw [orthonormal_iff_ite]
+  intro a b
+  rcases a with ⟨i, j⟩
+  rcases b with ⟨k, l⟩
+  rw [hinner, Matrix.stdBasis_eq_single, Matrix.stdBasis_eq_single, Matrix.conjTranspose_single]
+  rw [Matrix.trace_mul_single]
+  simp [Matrix.single, eq_comm]
+
+/-- The Heisenberg dual `T*(X) = ∑ Kᵢ† X Kᵢ` of a CPTP map with `‖det T‖ = 1`
+is multiplicative on all of `M_d(ℂ)`.
+
+This is the analytic core of Wolf Thm 6.1(2). The proof uses the Kadison–Schwarz
+trace-summing argument: each KS gap is PSD; summed over an ON basis the total gap
+trace equals `d² − ‖T*‖²_HS`; AM-GM on the eigenvalues of `T∘T*` (PSD operator
+with determinant 1) forces `‖T*‖²_HS ≥ d²`; hence all gaps vanish, every matrix
+lies in the multiplicative domain, and `T*` is multiplicative. -/
+private theorem heisenberg_dual_multiplicative [NeZero d]
+    {T : MatrixEnd d} (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1)
+    (hall : ∀ μ : ℂ, Module.End.HasEigenvalue T μ → ‖μ‖ = 1)
+    {r : ℕ} (K : Fin r → MatrixAlg d) (hK : ∀ X, T X = ∑ i, K i * X * (K i)ᴴ)
+    (hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1)
+    (Td : MatrixEnd d) (hTd : ∀ X, Td X = ∑ i : Fin r, (K i)ᴴ * X * K i) :
+    ∀ M N : MatrixAlg d, Td (M * N) = Td M * Td N := by
+  sorry
+
+/-- Extract a unitary from the Skolem–Noether inner form plus star-preservation.
+
+Given `T(A) = P⁻¹AP` where `P ∈ GL_d(ℂ)`, and `T` preserves `*` (i.e. `Tᴴ = T†`),
+`P†P` commutes with all matrices and is therefore scalar. Since `P†P` is PSD
+and invertible, the scalar is positive real, and `V = (√c)⁻¹ · P†` is unitary
+with `T = unitaryChannel V`. -/
+private theorem extract_unitary_from_inner_form [NeZero d]
+    {T : MatrixEnd d} (hT : IsChannel T)
+    (P : GL (Fin d) ℂ)
+    (hT_inner : ∀ A : MatrixAlg d,
+        T A = (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A * (↑P : MatrixAlg d))
+    (hP_star_comm : ∀ Y : MatrixAlg d,
+        (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) * Y =
+          Y * ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d))) :
+    ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
+  sorry
+
+/-- **Wolf Thm 6.1(2), forward direction.** -/
+private theorem forward_det_one_implies_unitaryChannel [NeZero d]
+    (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1) :
+    ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
+  classical
+  have hall := channel_all_eigenvalues_norm_one (d := d) hT hdet
+  obtain ⟨r, K, hK⟩ := hT.cp
+  have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
+    kraus_sum_conjTranspose_mul_of_tp K T hK hT.tp
+  -- Build the Heisenberg dual
+  let Td : MatrixEnd d :=
+    { toFun := fun X => ∑ i : Fin r, (K i)ᴴ * X * K i
+      map_add' := fun X Y => by simp [mul_add, add_mul, Finset.sum_add_distrib]
+      map_smul' := fun c X => by simp [Finset.smul_sum] }
+  have hTd_def : ∀ X, Td X = ∑ i : Fin r, (K i)ᴴ * X * K i := fun _ => rfl
+  have hTd_one : Td 1 = 1 := by show ∑ i : Fin r, (K i)ᴴ * 1 * K i = 1; simp [hK_tp]
+  have hTd_star : ∀ X : MatrixAlg d, Td Xᴴ = (Td X)ᴴ := by
+    intro X; show ∑ i, (K i)ᴴ * Xᴴ * K i = (∑ i, (K i)ᴴ * X * K i)ᴴ
+    simp [conjTranspose_sum, conjTranspose_mul, Matrix.mul_assoc]
+  -- Td is multiplicative
+  have hMul := heisenberg_dual_multiplicative hT hdet hall K hK hK_tp Td hTd_def
+  have hTd_ne : Td ≠ 0 := by
+    intro h; have := congr_fun (congr_arg DFunLike.coe h) 1; simp [hTd_one] at this
+  -- Td is bijective (nonzero multiplicative map on simple algebra)
+  have hTd_bij := MPSTensor.linear_mul_endomorphism_bijective Td hMul hTd_ne
+  -- Skolem–Noether: Td(X) = PXP⁻¹
+  let Td_alg := MPSTensor.linearMapToAlgHom Td hMul hTd_bij.2
+  let Td_equiv : MatrixAlg d ≃ₐ[ℂ] MatrixAlg d := AlgEquiv.ofBijective Td_alg hTd_bij
+  obtain ⟨P, hP⟩ := MPSTensor.skolemNoether_matrix Td_equiv
+  -- Key identities for P
+  have hPinvP : (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * (↑P : MatrixAlg d) = 1 := by
+    have : (P⁻¹ * P : GL (Fin d) ℂ) = 1 := inv_mul_cancel _
+    simpa using congrArg Units.val this
+  have hPPinv : (↑P : MatrixAlg d) * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) = 1 := by
+    have : (P * P⁻¹ : GL (Fin d) ℂ) = 1 := mul_inv_cancel _
+    simpa using congrArg Units.val this
+  -- Trace adjointness: tr(T(A)*B) = tr(A*Td(B))
+  have hAdj : ∀ A B : MatrixAlg d, trace (T A * B) = trace (A * Td B) := by
+    intro A B
+    simp only [hK, hTd_def]
+    rw [Finset.sum_mul, trace_sum]
+    conv_rhs => rw [Matrix.mul_sum, trace_sum]
+    apply Finset.sum_congr rfl
+    intro i _
+    simpa [Matrix.mul_assoc] using
+      (Matrix.trace_mul_cycle A ((K i)ᴴ * B) (K i)).symm
+  -- Derive T(A) = P⁻¹AP from trace adjointness
+  have hT_inner : ∀ A : MatrixAlg d,
+      T A = (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A * (↑P : MatrixAlg d) := by
+    intro A
+    suffices h : ∀ B, trace ((T A -
+        (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A * (↑P : MatrixAlg d)) * B) = 0 by
+      exact sub_eq_zero.mp ((Matrix.trace_mul_right_eq_zero_iff _).mp h)
+    intro B; rw [sub_mul, trace_sub, hAdj A B]
+    show trace (A * Td B) -
+      trace ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A *
+        (↑P : MatrixAlg d) * B) = 0
+    rw [show Td B = Td_equiv B from rfl, hP B, sub_eq_zero]
+    simpa [Matrix.mul_assoc] using
+      (Matrix.trace_mul_cycle (A * (↑P : MatrixAlg d)) B
+        ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)))  -- P†P commutes with all matrices (from star-preservation of Td)
+  have hP_star_comm : ∀ Y : MatrixAlg d,
+      (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) * Y =
+        Y * ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d)) := by
+    intro Y
+    have hstar_inner : ∀ X : MatrixAlg d,
+        (↑P : MatrixAlg d) * Xᴴ * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) =
+          (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)ᴴ * Xᴴ * (↑P : MatrixAlg d)ᴴ := by
+      intro X
+      have h := hTd_star X
+      rw [show Td Xᴴ = Td_equiv Xᴴ from rfl, hP Xᴴ] at h
+      rw [show Td X = Td_equiv X from rfl, hP X] at h
+      simpa [Matrix.mul_assoc, conjTranspose_mul, conjTranspose_conjTranspose] using h
+    have hPstarPinvstar :
+        (↑P : MatrixAlg d)ᴴ * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)ᴴ = 1 := by
+      rw [← conjTranspose_mul, hPinvP, conjTranspose_one]
+    specialize hstar_inner Yᴴ
+    simp only [conjTranspose_conjTranspose] at hstar_inner
+    calc
+      (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) * Y
+          = (↑P : MatrixAlg d)ᴴ *
+              ((↑P : MatrixAlg d) * Y * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)) *
+              (↑P : MatrixAlg d) := by
+            simp [Matrix.mul_assoc, hPinvP]
+      _ = (↑P : MatrixAlg d)ᴴ *
+            ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)ᴴ * Y * (↑P : MatrixAlg d)ᴴ) *
+            (↑P : MatrixAlg d) := by rw [hstar_inner]
+      _ = ((↑P : MatrixAlg d)ᴴ * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)ᴴ) * Y *
+            ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d)) := by
+            simp [Matrix.mul_assoc]
+      _ = Y * ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d)) := by
+            rw [Matrix.mul_assoc, hPstarPinvstar, Matrix.one_mul]
+  -- Extract unitary from inner form + P†P commuting with everything
+  exact extract_unitary_from_inner_form hT P hT_inner hP_star_comm
 
 /-- The determinant of a unitary channel equals `1`. -/
 theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
@@ -521,5 +718,28 @@ theorem channelDet_unitary_eq_one (U : Matrix.unitaryGroup (Fin d) ℂ) :
 theorem channelDet_norm_eq_one_of_unitaryChannel (U : Matrix.unitaryGroup (Fin d) ℂ) :
     ‖channelDet (unitaryChannel U)‖ = 1 := by
   simp [channelDet_unitary_eq_one]
+
+/-- Wolf Thm 6.1(2) restricted to CPTP maps: `‖det T‖ = 1 ↔ ∃ U, T = unitaryChannel U`.
+
+The transposition branch from Wolf's general Thm 6.1(2) for positive TP maps does not
+appear for CPTP maps since the transpose map is not completely positive. -/
+theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
+    (hT : IsChannel T) :
+    ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
+  constructor
+  · intro h
+    by_cases hd : d = 0
+    · subst hd; exact ⟨1, Subsingleton.elim _ _⟩
+    · haveI : NeZero d := ⟨hd⟩
+      exact forward_det_one_implies_unitaryChannel hT h
+  · rintro ⟨U, rfl⟩
+    exact channelDet_norm_eq_one_of_unitaryChannel U
+
+/-- CPTP specialization of the unitary characterization (alias of
+`channelDet_norm_eq_one_iff_exists_unitaryChannel`). -/
+theorem channelDet_norm_eq_one_iff_exists_unitaryChannel_of_channel
+    (hT : IsChannel T) :
+    ‖channelDet T‖ = 1 ↔ ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U :=
+  channelDet_norm_eq_one_iff_exists_unitaryChannel hT
 
 end WolfStatements
