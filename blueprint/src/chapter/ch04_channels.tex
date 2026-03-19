@@ -932,6 +932,66 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     and sum over $k$ to recover $\sum_k K_k \rho K_k^\dagger$.
 \end{proof}
 
+%% The following sections will not be needed for the fundamental theorem of the matrix product states.
+
+%% =========================================================
+\section{Determinant of a quantum channel (Wolf \S6.1.1)}
+\label{sec:channel_determinant}
+%% =========================================================
+
+%% Wolf §6.1.1, Thm 6.1(2)
+
+\begin{definition}[Channel determinant]\label{def:channel_det}
+    \lean{channelDet}\leanok
+    For a linear map $T : \MN{D} \to \MN{D}$, the
+    \emph{channel determinant} $\det T$ is the determinant of the
+    matrix of $T$ with respect to the standard matrix-unit basis
+    of $\MN{D}$.
+    This is the quantity studied in \cite[§6.1.1]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{definition}[Unitary channel]\label{def:unitary_channel}
+    \lean{unitaryChannel}\leanok
+    For a unitary matrix $U \in \mathcal{U}(D)$, the
+    \emph{unitary channel} is $T(\rho) = U\rho U^\dagger$.
+\end{definition}
+
+\begin{theorem}[Thm.~6.1(1): Determinant bound for positive TP maps]
+    \label{thm:channelDet_norm_le_one}
+    \lean{channelDet_norm_le_one_of_positive_tracePreserving}
+    \uses{def:channel_det}
+    For any positive trace-preserving map $T : \MN{D} \to \MN{D}$,
+    $|\det T| \le 1$.
+    This is \cite[Thm.~6.1(1)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    By compactness of the set of density matrices and
+    the AM--GM inequality on the Kraus singular values.
+\end{proof}
+
+\begin{theorem}[Thm.~6.1(2): Determinant one iff unitary channel]
+    \label{thm:channelDet_norm_eq_one_iff_unitary}
+    \lean{channelDet_norm_eq_one_iff_exists_unitaryChannel}\leanok
+    \uses{def:channel, def:channel_det, def:unitary_channel}
+    For a CPTP map $T : \MN{D} \to \MN{D}$,
+    \[
+        |\det T| = 1
+        \;\iff\;
+        \exists\, U \in \mathcal{U}(D),\quad T(\rho) = U\rho U^\dagger.
+    \]
+    This is \cite[Thm.~6.1(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:channelDet_norm_le_one}
+    Reverse direction: $|\det(U\,\cdot\, U^\dagger)| = |\det U|^{2d^2} = 1$.
+    Forward direction: $|\det T| = 1$ and Kadison--Schwarz forces each Kraus
+    operator $K_i$ to be a scalar multiple of a unitary; the
+    trace-preservation constraint then pins $T = U\,\cdot\, U^\dagger$.
+\end{proof}
+
 %% =========================================================
 \section{Quantum dynamical semigroups}
 \label{sec:quantum_dynamical_semigroups}
