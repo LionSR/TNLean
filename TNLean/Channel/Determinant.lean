@@ -542,6 +542,35 @@ trace-summing argument: each KS gap is PSD; summed over an ON basis the total ga
 trace equals `d² − ‖T*‖²_HS`; AM-GM on the eigenvalues of `T∘T*` (PSD operator
 with determinant 1) forces `‖T*‖²_HS ≥ d²`; hence all gaps vanish, every matrix
 lies in the multiplicative domain, and `T*` is multiplicative. -/
+-- Helper: For a PSD matrix with trace 0, the matrix is 0.
+-- (Already available as Matrix.PosSemidef.trace_eq_zero_iff.)
+
+-- Helper: If nonneg reals sum to ≤ 0, each is 0.
+private lemma eq_zero_of_nonneg_of_sum_le_zero {ι : Type*} [Fintype ι]
+    (f : ι → ℝ) (hf : ∀ i, 0 ≤ f i) (hsum : ∑ i, f i ≤ 0) :
+    ∀ i, f i = 0 := by
+  intro i
+  have h1 : ∑ i, f i ≥ 0 := Finset.sum_nonneg (fun i _ => hf i)
+  have h2 : ∑ i, f i = 0 := le_antisymm hsum h1
+  have h3 := Finset.sum_eq_zero_iff_of_nonneg (fun i _ => hf i) |>.mp h2
+  exact h3 i (Finset.mem_univ i)
+
+/-- **AM-GM lower bound on Hilbert-Schmidt norm via determinant.**
+
+For a linear endomorphism `Φ` of the matrix algebra with `‖det Φ‖ = 1`,
+the Hilbert-Schmidt norm satisfies `‖Φ‖²_HS ≥ d²`. This follows from AM-GM
+on the singular values: their product is `|det Φ| = 1`, so their squared sum
+(= the HS norm) is at least `d²`.
+
+This is the analytic ingredient for Wolf Thm 6.1(2). -/
+private lemma channelDet_norm_one_hs_norm_ge [NeZero d]
+    (Φ : MatrixEnd d) (hdet_Φ : ‖channelDet Φ‖ = 1) :
+    (d : ℝ) ^ 2 ≤ ∑ ij : Fin d × Fin d,
+      (Matrix.trace ((Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))ᴴ *
+        Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).re := by
+  sorry
+
+set_option maxHeartbeats 400000 in
 private theorem heisenberg_dual_multiplicative [NeZero d]
     {T : MatrixEnd d} (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1)
     (hall : ∀ μ : ℂ, Module.End.HasEigenvalue T μ → ‖μ‖ = 1)
@@ -549,7 +578,132 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
     (hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1)
     (Td : MatrixEnd d) (hTd : ∀ X, Td X = ∑ i : Fin r, (K i)ᴴ * X * K i) :
     ∀ M N : MatrixAlg d, Td (M * N) = Td M * Td N := by
-  sorry
+  -- ── Setup: Td is a Kraus map with conjugate-transposed operators ──
+  -- Define the Kraus operators for Td
+  set L : Fin r → MatrixAlg d := fun i => (K i)ᴴ with hL_def
+  -- Td(X) = ∑ L_i X L_i† = krausMap L X
+  have hTd_kraus : ∀ X, Td X = KadisonSchwarz.krausMap L X := by
+    intro X; simp only [KadisonSchwarz.krausMap, hL_def, hTd, conjTranspose_conjTranspose]
+  -- L is unital: ∑ L_i L_i† = ∑ K_i† K_i = I
+  have hL_unital : KadisonSchwarz.IsUnitalKraus L := by
+    show ∑ i, (K i)ᴴ * ((K i)ᴴ)ᴴ = 1
+    simp [conjTranspose_conjTranspose, hK_tp]
+  -- ── Step 1: KS equality for every standard basis element ──
+  -- For each (i,j), e_{ij} * e_{ij}† = e_{ii}, and the KS gap
+  -- G(e_{ij}) = Td(e_{ij}e_{ij}†) - Td(e_{ij})Td(e_{ij})† ≥ 0
+  -- We show ∑ G(e_{ij}) = 0 (matrix), hence each G(e_{ij}) = 0.
+  -- ‖channelDet Td‖ = 1
+  have hdet_Td : ‖channelDet Td‖ = 1 := by
+    -- The matrix of Td is the conjugate transpose of the matrix of T,
+    -- hence their determinants are complex conjugates with the same norm.
+    sorry
+  -- Each KS gap G(e_{ij}) = Td(e_{ij}·e_{ij}†) - Td(e_{ij})·Td(e_{ij})† is PSD
+  have hgap_psd : ∀ ij : Fin d × Fin d,
+      (KadisonSchwarz.krausMap L
+        (Matrix.stdBasis ℂ (Fin d) (Fin d) ij *
+         (Matrix.stdBasis ℂ (Fin d) (Fin d) ij)ᴴ) -
+      KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) *
+        (KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))ᴴ).PosSemidef := by
+    intro ij
+    -- Apply KS to X = e_{ij}†; this gives the "right" gap ≥ 0
+    have h := KadisonSchwarz.kadison_schwarz L hL_unital
+                (Matrix.stdBasis ℂ (Fin d) (Fin d) ij)ᴴ
+    simp only [conjTranspose_conjTranspose,
+      KadisonSchwarz.krausMap_conjTranspose] at h
+    exact h
+  -- Each gap has nonneg trace (since PSD)
+  have hgap_trace_nonneg : ∀ ij : Fin d × Fin d,
+      0 ≤ (Matrix.trace (KadisonSchwarz.krausMap L
+        (Matrix.stdBasis ℂ (Fin d) (Fin d) ij *
+         (Matrix.stdBasis ℂ (Fin d) (Fin d) ij)ᴴ) -
+      KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) *
+        (KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))ᴴ)).re := by
+    intro ij
+    exact (Complex.le_def.mp (hgap_psd ij).trace_nonneg).1
+  -- Sum of gap traces = d² - ‖Td‖²_HS
+  -- First, sum of traces of Td(e_{ij}e_{ij}†) = d²
+  -- Second, sum of traces of Td(e_{ij})Td(e_{ij})† = ‖Td‖²_HS
+  -- Combined with AM-GM lower bound ‖Td‖²_HS ≥ d², the sum of gap traces ≤ 0
+  have hgap_trace_sum_le : ∑ ij : Fin d × Fin d,
+      (Matrix.trace (KadisonSchwarz.krausMap L
+        (Matrix.stdBasis ℂ (Fin d) (Fin d) ij *
+         (Matrix.stdBasis ℂ (Fin d) (Fin d) ij)ᴴ) -
+      KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) *
+        (KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))ᴴ)).re ≤ 0 := by
+    sorry -- trace computation + AM-GM lower bound
+  -- Each gap trace = 0 (nonneg terms summing to ≤ 0)
+  have hgap_trace_zero : ∀ ij : Fin d × Fin d,
+      (Matrix.trace (KadisonSchwarz.krausMap L
+        (Matrix.stdBasis ℂ (Fin d) (Fin d) ij *
+         (Matrix.stdBasis ℂ (Fin d) (Fin d) ij)ᴴ) -
+      KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) *
+        (KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))ᴴ)).re = 0 :=
+    eq_zero_of_nonneg_of_sum_le_zero _ hgap_trace_nonneg hgap_trace_sum_le
+  -- Each gap = 0 (PSD with real-part-of-trace 0 → trace 0 → matrix 0)
+  have hks_all_basis : ∀ ij : Fin d × Fin d,
+      KadisonSchwarz.krausMap L
+        (Matrix.stdBasis ℂ (Fin d) (Fin d) ij *
+         (Matrix.stdBasis ℂ (Fin d) (Fin d) ij)ᴴ) =
+      KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) *
+        (KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))ᴴ := by
+    intro ij
+    have hpsd := hgap_psd ij
+    have htr_re := hgap_trace_zero ij
+    have htr_im := (Complex.le_def.mp hpsd.trace_nonneg).2.symm
+    have htr : Matrix.trace (KadisonSchwarz.krausMap L
+        (Matrix.stdBasis ℂ (Fin d) (Fin d) ij *
+         (Matrix.stdBasis ℂ (Fin d) (Fin d) ij)ᴴ) -
+      KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) *
+        (KadisonSchwarz.krausMap L (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))ᴴ) = 0 :=
+      Complex.ext htr_re htr_im
+    exact sub_eq_zero.mp (hpsd.trace_eq_zero_iff.mp htr)
+  -- ── Step 2: Kraus commutation for basis elements ──
+  have hbasis_commute : ∀ (ij : Fin d × Fin d) (a : Fin r),
+      Matrix.stdBasis ℂ (Fin d) (Fin d) ij * K a =
+        K a * Td (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) := by
+    intro ij
+    have h := KadisonSchwarz.kraus_commute_of_ks_equality L hL_unital _ (hks_all_basis ij)
+    intro a; have ha := h a
+    simp only [hL_def, conjTranspose_conjTranspose] at ha
+    rwa [← hTd_kraus] at ha
+  -- ── Step 3: Kraus commutation for ALL matrices (by linearity) ──
+  have hcommute : ∀ (X : MatrixAlg d) (a : Fin r), X * K a = K a * Td X := by
+    intro X a
+    -- The map F : X ↦ X * K a - K a * Td X is linear and vanishes on
+    -- every standard basis element. Use basis extensionality to conclude F = 0.
+    set F : MatrixEnd d :=
+      LinearMap.mulRight ℂ (K a) - (LinearMap.mulLeft ℂ (K a)).comp Td
+    have hF_apply : ∀ Y, F Y = Y * K a - K a * Td Y := fun Y => by
+      simp [F, LinearMap.mulRight_apply, LinearMap.mulLeft_apply]
+    have hF_zero : F = 0 := by
+      apply Module.Basis.ext (matrixSpaceBasis d)
+      intro ⟨i, j, u⟩
+      simp only [LinearMap.zero_apply]
+      rw [hF_apply]
+      obtain rfl : u = () := Subsingleton.elim u ()
+      -- matrixSpaceBasis d (i, j, ()) relates to stdBasis ℂ (Fin d) (Fin d) (i, j)
+      have hbasis_eq : matrixSpaceBasis d (i, j, ()) =
+          Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j) := by
+        simp only [matrixSpaceBasis, Module.Basis.matrix_apply,
+          Module.Basis.singleton_apply, Matrix.stdBasis_eq_single]
+      rw [hbasis_eq, hbasis_commute (i, j) a]; ring
+    calc X * K a - K a * Td X = F X := (hF_apply X).symm
+      _ = (0 : MatrixEnd d) X := by rw [hF_zero]
+      _ = 0 := LinearMap.zero_apply X
+  -- ── Step 4: Conclude multiplicativity from Kraus commutation ──
+  intro M N
+  simp only [hTd]
+  -- Rewrite RHS: (∑ K_i† M K_i) * (∑ K_j† N K_j) = ∑ (K_i† M K_i) * (∑ K_j† N K_j)
+  rw [Finset.sum_mul]
+  -- Suffices to show term-by-term equality
+  congr 1; ext a
+  have hNKa := hcommute N a
+  calc (K a)ᴴ * (M * N) * K a
+      = (K a)ᴴ * M * (N * K a) := by ring
+    _ = (K a)ᴴ * M * (K a * Td N) := by rw [hNKa]
+    _ = (K a)ᴴ * M * K a * Td N := by ring
+    _ = (K a)ᴴ * M * K a * ∑ b : Fin r, (K b)ᴴ * N * K b := by
+        rw [show Td N = ∑ b : Fin r, (K b)ᴴ * N * K b from hTd N]
 
 /-- Extract a unitary from the Skolem–Noether inner form plus star-preservation.
 
@@ -566,7 +720,102 @@ private theorem extract_unitary_from_inner_form [NeZero d]
         (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) * Y =
           Y * ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d))) :
     ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
-  sorry
+  -- GL identities
+  have hPinvP : (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * (↑P : MatrixAlg d) = 1 := by
+    simp [show (P⁻¹ * P : GL (Fin d) ℂ) = 1 from inv_mul_cancel _]
+  have hPPinv : (↑P : MatrixAlg d) * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) = 1 := by
+    simp [show (P * P⁻¹ : GL (Fin d) ℂ) = 1 from mul_inv_cancel _]
+  -- Step 1: P†P is in the center → is a scalar matrix
+  have hPHP_center :
+      (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) ∈
+        Set.range (Matrix.scalar (Fin d) : ℂ →+* MatrixAlg d) := by
+    rw [← Matrix.center_eq_range, Semigroup.mem_center_iff]
+    exact fun Y => (hP_star_comm Y).symm
+  obtain ⟨c, hc_eq⟩ := hPHP_center
+  rw [Matrix.scalar_apply] at hc_eq
+  have hPHP_smul :
+      (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) = c • (1 : MatrixAlg d) := by
+    rw [← hc_eq, ← Matrix.smul_one_eq_diagonal]
+  -- Step 2: c ≥ 0 (from PSD)
+  have hPHP_psd : ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d)).PosSemidef :=
+    Matrix.posSemidef_conjTranspose_mul_self _
+  have hc_nonneg : 0 ≤ c := by
+    have := hPHP_psd.diag_nonneg (i := (0 : Fin d))
+    rwa [hPHP_smul, Pi.smul_apply, Pi.smul_apply, one_apply_eq,
+      smul_eq_mul, mul_one] at this
+  -- Step 3: c ≠ 0 (from invertibility of P)
+  have hc_ne : c ≠ 0 := by
+    intro hc0
+    have h0 : (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) = 0 := by
+      rw [hPHP_smul, hc0, zero_smul]
+    have hPH_zero : (↑P : MatrixAlg d)ᴴ = 0 := by
+      have := congr_arg (· * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)) h0
+      simp only [zero_mul, Matrix.mul_assoc] at this
+      rwa [hPPinv, mul_one] at this
+    have hP_zero : (↑P : MatrixAlg d) = 0 := by
+      rw [← conjTranspose_conjTranspose (↑P : MatrixAlg d),
+        hPH_zero, conjTranspose_zero]
+    exact one_ne_zero (show (1 : MatrixAlg d) = 0 by
+      rw [← hPPinv, hP_zero, zero_mul])
+  -- Step 4: c is a positive real number
+  have hc_re_nonneg : 0 ≤ c.re := (Complex.nonneg_iff.mp hc_nonneg).1
+  have hc_im_zero : c.im = 0 := (Complex.nonneg_iff.mp hc_nonneg).2.symm
+  have hc_re_pos : 0 < c.re := by
+    rcases lt_or_eq_of_le hc_re_nonneg with h | h
+    · exact h
+    · exact absurd (Complex.ext h.symm (by simp [hc_im_zero])) hc_ne
+  -- Step 5: Define V = (√c)⁻¹ • P and prove V†V = 1
+  set r := Real.sqrt c.re with hr_def
+  have hr_pos : 0 < r := Real.sqrt_pos.mpr hc_re_pos
+  have hr_ne : (r : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hr_pos.ne'
+  have hr_sq : (↑r : ℂ) * (↑r : ℂ) = c := by
+    rw [← Complex.ofReal_mul, Real.mul_self_sqrt hc_re_nonneg]
+    exact Complex.ext (Complex.ofReal_re _) (by simp [hc_im_zero])
+  set V : MatrixAlg d := (↑r : ℂ)⁻¹ • (↑P : MatrixAlg d) with hV_def
+  have hstar_r_inv : star ((↑r : ℂ)⁻¹) = (↑r : ℂ)⁻¹ := by
+    rw [star_inv₀, show star (↑r : ℂ) = ↑r from RCLike.conj_ofReal r]
+  have hVHV : Vᴴ * V = 1 := by
+    simp only [hV_def, conjTranspose_smul, smul_mul_assoc, mul_smul_comm, hPHP_smul,
+      hstar_r_inv, smul_smul]
+    rw [show (↑r : ℂ)⁻¹ * ((↑r : ℂ)⁻¹ * c) = 1 from by
+      field_simp; rw [sq]; exact hr_sq.symm]
+    exact one_smul _ _
+  -- Step 6: U = V† is unitary
+  have hU_mem : Vᴴ ∈ Matrix.unitaryGroup (Fin d) ℂ := by
+    rw [Matrix.mem_unitaryGroup_iff]
+    have : star Vᴴ = V := by
+      rw [Matrix.star_eq_conjTranspose, conjTranspose_conjTranspose]
+    rw [this]
+    exact hVHV
+  set U : Matrix.unitaryGroup (Fin d) ℂ := ⟨Vᴴ, hU_mem⟩
+  -- Step 7: T = unitaryChannel U
+  -- Key: Pm = ↑r • V and Pinvm = (↑r)⁻¹ • V†
+  have hPm_eq : (↑P : MatrixAlg d) = (↑r : ℂ) • V := by
+    simp [hV_def, smul_smul, mul_inv_cancel₀ hr_ne]
+  have hPinvm_eq :
+      (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) = (↑r : ℂ)⁻¹ • Vᴴ := by
+    have hVPinv : V * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) =
+        (↑r : ℂ)⁻¹ • (1 : MatrixAlg d) := by
+      have h : (↑r : ℂ) • (V * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)) = 1 := by
+        rw [← smul_mul_assoc, ← hPm_eq]; exact hPPinv
+      rw [show V * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) =
+          (↑r : ℂ)⁻¹ • (1 : MatrixAlg d) from by
+        have := congr_arg ((↑r : ℂ)⁻¹ • ·) h
+        simp only [smul_smul, inv_mul_cancel₀ hr_ne, one_smul] at this
+        exact this]
+    calc (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)
+        = 1 * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) := (one_mul _).symm
+      _ = (Vᴴ * V) * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) := by rw [hVHV]
+      _ = Vᴴ * (V * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)) := by
+          rw [Matrix.mul_assoc]
+      _ = Vᴴ * ((↑r : ℂ)⁻¹ • (1 : MatrixAlg d)) := by rw [hVPinv]
+      _ = (↑r : ℂ)⁻¹ • Vᴴ := by rw [mul_smul_comm, mul_one]
+  refine ⟨U, LinearMap.ext fun A => ?_⟩
+  simp only [unitaryChannel, LinearMap.coe_mk, AddHom.coe_mk]
+  change T A = Vᴴ * A * (Vᴴ)ᴴ
+  rw [conjTranspose_conjTranspose, hT_inner A, hPinvm_eq, hPm_eq,
+    smul_mul_assoc, smul_mul_assoc, mul_smul_comm, smul_smul,
+    inv_mul_cancel₀ hr_ne, one_smul]
 
 /-- **Wolf Thm 6.1(2), forward direction.** -/
 private theorem forward_det_one_implies_unitaryChannel [NeZero d]
