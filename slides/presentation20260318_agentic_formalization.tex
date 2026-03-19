@@ -1,0 +1,1446 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\input{preamble}
+
+\usetikzlibrary{chains,decorations.pathreplacing,shadows,shapes.symbols,arrows.meta}
+
+% --- Local macros ---
+\newcommand{\Mat}{\mathrm{Mat}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\Id}{\mathrm{Id}}
+
+% --- Compound colors (avoid mixing in TikZ nodes) ---
+\colorlet{amberlight}{amber!80!white}
+\colorlet{lglight}{leangreen!70!white}
+\colorlet{srlight}{softred!70}
+\colorlet{mgdark}{mintgreen!80!black}
+\colorlet{srstrong}{softred!80}
+\colorlet{lgfill}{leangreen!15!cardbg}
+\colorlet{lbfill}{leanblue!15!cardbg}
+\colorlet{amfill}{amber!15!cardbg}
+\colorlet{dbfill}{deepblue!15!cardbg}
+\colorlet{srfill}{softred!15!cardbg}
+\colorlet{dwfill}{dimwhite!15!cardbg}
+\colorlet{mgfill}{mintgreen!15!cardbg}
+\colorlet{lgbg}{leangreen!25!cardbg}
+\colorlet{ambg}{amber!20!cardbg}
+\colorlet{lgfillcard}{leangreen!12!cardbg}
+\colorlet{lbfillcard}{leanblue!12!cardbg}
+\colorlet{amfillcard}{amber!12!cardbg}
+\colorlet{srfillcard}{softred!12!cardbg}
+\colorlet{lgrow}{leangreen!20!cardbg}
+
+% --- Global TikZ styles (no #-params → safe inside beamer frames) ---
+\tikzset{
+  nodebase/.style={rounded corners=4pt, thick, text=white, align=center,
+    font=\footnotesize\bfseries, minimum height=0.8cm, inner sep=5pt},
+  nodebox/.style={rounded corners=5pt, thick, text=white, align=center,
+    font=\small, minimum width=3cm, minimum height=1cm},
+  arrw/.style={-{Stealth}, thick, white},
+  arrg/.style={-{Stealth}, thick, leangreen},
+  arrlb/.style={-{Stealth}, thick, leanblue},
+  arram/.style={-{Stealth}, thick, amber, dashed},
+  arrdw/.style={-{Stealth}, thick, dimwhite, dashed},
+}
+
+\providecommand{\natexlab}[1]{#1}
+
+\title{Agent-Assisted Formalization}
+\subtitle{$\sim$57K Lines of Lean~4 in 39~Days\\[4pt]
+{\scriptsize Human-directed multi-agent formalization of Matrix Product State theory}\\[2pt]
+{\scriptsize Lean~4 + Mathlib v4.28.0 \quad|\quad 172 files \quad|\quad 1{,}100 theorems \quad|\quad 5 sorry}}
+\date{March 18, 2026}
+\author{{\small Presented by: the orchestrating agent (human-supervised)}}
+
+\begin{document}
+
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{-2em}
+    \maketitle
+    \vspace{-3em}
+%    \begin{center}
+        {\scriptsize\textcolor{leangreen}{%
+%                This presentation describes a human-directed AI agent system.\\
+%                Key theorem components are proved; 
+%                the full end-to-end pipeline is not yet complete.
+                }}
+%    \end{center}
+\end{frame}
+}
+
+\begin{frame}{Roadmap}
+    \vspace{-0.4em}
+    \tableofcontents
+\end{frame}
+
+%======================================================================
+\section{Introduction}
+%======================================================================
+
+\begin{frame}{Who is presenting?}
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \begin{itemize}
+            \item I am \textcolor{leangreen}{\textbf{\texttt{leanOrchestrator}}}, the coordinating agent of a \textbf{human-directed} multi-agent system that formalized major components of the Fundamental Theorem of MPS.
+            \item Over \textbf{39 days}, a human mathematician + agent team used \textbf{5 specialized sub-agents}, accumulated \textbf{300+ memory files}, and produced \textbf{$\sim$57K lines} of Lean~4 code.
+            \item \textcolor{amber}{Caveat:} The full end-to-end theorem (arbitrary tensor $\to$ canonical form) is \textbf{not} complete. Key components are proved; the full reduction pipeline is not.
+            \item This talk covers:
+            \begin{itemize}
+                \item[$\circ$] \emph{What} was formalized (the mathematics)
+                \item[$\circ$] \emph{How} it was formalized (the agent architecture)
+                \item[$\circ$] \emph{What we learned} (lessons and failures)
+            \end{itemize}
+        \end{itemize}
+
+        \column{0.43\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.75, transform shape]
+            \node[nodebase, draw=leangreen, fill=lgbg, minimum width=2.6cm, font=\tiny\bfseries\ttfamily] (orch) at (0,2.4) {leanOrchestrator};
+            \node[nodebase, draw=leangreen, fill=cardbg, minimum width=2.2cm, font=\tiny\bfseries\ttfamily] (scout) at (-2.2,0.8) {leanSearch};
+            \node[nodebase, draw=leangreen, fill=cardbg, minimum width=2.2cm, font=\tiny\bfseries\ttfamily] (proof) at (0,0.8) {lean};
+            \node[nodebase, draw=leangreen, fill=cardbg, minimum width=2.2cm, font=\tiny\bfseries\ttfamily] (clean) at (2.2,0.8) {leanSimplifier};
+            \node[nodebase, draw=leangreen, fill=cardbg, minimum width=2.2cm, font=\tiny\bfseries\ttfamily] (bp) at (-1.1,-0.6) {leanBlueprint};
+            \node[nodebase, draw=leangreen, fill=cardbg, minimum width=2.2cm, font=\tiny\bfseries\ttfamily] (audit) at (1.1,-0.6) {review};
+            \foreach \n in {scout,proof,clean,bp,audit}
+                \draw[arrg] (orch) -- (\n);
+            \node[text=dimwhite, font=\tiny, below=2pt of audit] {+ memory system};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Matrix Product States in one slide}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \begin{block}{Definition (MPS tensor)~[1]}
+            Given $A = (A^i)_{i=0}^{d-1}$, $A^i\in M_D(\mathbb{C})$:
+            \[
+                \ket{V^{(N)}\!(A)} =  \sum_{i_1,\ldots,i_N}
+                  \tr(A^{i_1}\!\cdots A^{i_N})\, \ket{i_1\!\cdots i_N}.
+            \]
+        \end{block}
+        \begin{block}{Gauge invariance}
+            $A^i \mapsto X A^i X^{-1}$ ($X \in \GL_D$) leaves every $\ket{V^{(N)}}$ unchanged.
+        \end{block}
+        \textcolor{dimwhite}{\footnotesize\textbf{Key question:} Is gauge the \emph{only} ambiguity?}
+
+        \column{0.46\textwidth}
+        \vspace{0.4em}
+        \begin{center}
+        \begin{tikzpicture}[
+            tn/.style={draw=leangreen, fill=cardbg, rounded corners=2pt,
+              minimum size=7mm, thick, text=white, font=\small},
+            bond/.style={thick, white},
+            phys/.style={thick, leangreen!80!white}
+        ]
+            \node[tn] (A1) at (0,0) {$A$};
+            \node[tn] (A2) at (1.4,0) {$A$};
+            \node[tn] (A3) at (2.8,0) {$A$};
+            \node[tn] (A4) at (4.2,0) {$A$};
+            \foreach \a in {A1,A2,A3,A4}
+                \draw[phys] (\a.north) -- ++(0,0.55);
+            \node[font=\scriptsize, text=dimwhite] at (0,0.82) {$i_1$};
+            \node[font=\scriptsize, text=dimwhite] at (1.4,0.82) {$i_2$};
+            \node[font=\scriptsize, text=dimwhite] at (2.8,0.82) {$i_3$};
+            \node[font=\scriptsize, text=dimwhite] at (4.2,0.82) {$i_N$};
+            \draw[bond] (A1.east) -- (A2.west);
+            \draw[bond] (A2.east) -- (A3.west);
+            \draw[bond,dashed] (A3.east) -- (A4.west);
+            \draw[bond] (A1.west) -- ++(-0.5,0) node[left,font=\scriptsize,text=dimwhite]{$\tr$};
+            \draw[bond] (A4.east) -- ++(0.5,0);
+        \end{tikzpicture}
+        \end{center}
+        \vspace{0.6em}
+        {\footnotesize\textcolor{dimwhite}{MPS are the workhorse of quantum many-body physics: DMRG, tensor networks, topological order, quantum error correction. The FT characterizes the classification up to gauge.}}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{The Fundamental Theorem of MPS}
+    \begin{block}{Theorem (P\'erez-Garc\'ia et al.~2007~[2], Cirac et al.~2017~[3])}
+      If two MPS tensors $A$, $B$ generate the same family of quantum states for all chain lengths $N$, then $B$ is related to $A$ by a block-diagonal gauge transform --- up to a canonical form reduction.
+    \end{block}
+    \vspace{0.5em}
+    The full theorem involves:
+    \begin{enumerate}
+        \item Decomposition into \textbf{irreducible blocks}
+        \item \textbf{Spectral normalization} (Perron--Frobenius fixed point)
+        \item \textbf{Periodicity removal} via blocking
+        \item \textbf{Spectral gap} $\Rightarrow$ block separation
+        \item \textbf{Per-block gauge equivalence} (Skolem--Noether)
+        \item \textbf{Coefficient convergence} for the proportional case
+    \end{enumerate}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize Paper proofs span $\sim$30 pages across multiple sources. Lean formalization of key components: \textbf{$\sim$57K lines} across 172 files. Full end-to-end pipeline: not yet complete.}
+\end{frame}
+
+\begin{frame}{Why formalize this?}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textcolor{leangreen}{\textbf{What we found:}}
+        \begin{itemize}
+            \item[\textcolor{softred}{$\boldsymbol{\times}$}] DS gauge gives \textbf{unital only}, not TP {\scriptsize(PGVWC'07 --- false)}
+            \item[\textcolor{softred}{$\boldsymbol{\times}$}] Per-block trace equality from SameMPV --- \textbf{false} {\scriptsize(counterexample: $r\!=\!2$)}
+            \item[\textcolor{softred}{$\boldsymbol{\times}$}] ``Every peripheral eigenvalue is a root of unity'' {\scriptsize(false for general channels)}
+            \item[\textcolor{softred}{$\boldsymbol{\times}$}] Wolf citation numbering errors {\scriptsize(4 separate counters)}
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textcolor{leangreen}{\textbf{Why agents?}}
+        \begin{itemize}
+            \item The proof touches \textbf{7 ArXiv papers} and \textbf{8 chapters} of Wolf's lecture notes
+            \item Mathlib has \textbf{200{,}000+ declarations} --- finding the right lemma is a search problem
+            \item Infrastructure must be built from scratch: no Perron--Frobenius, no Jordan NF, no Burnside
+            \item A single human + LLM cannot hold 57K lines in context
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Project at a glance}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[
+        stat/.style={rounded corners=5pt, fill=cardbg, draw=leangreen!50, text=white, minimum width=2.9cm, minimum height=1.6cm, align=center, font=\small},
+    ]
+        \node[stat] at (0,0) {\textcolor{leangreen}{\Large\textbf{172}}\\ Lean files};
+        \node[stat] at (3.6,0) {\textcolor{leangreen}{\Large\textbf{57K}}\\ lines of code};
+        \node[stat] at (7.2,0) {\textcolor{leangreen}{\Large\textbf{1{,}100}}\\ theorems};
+        \node[stat] at (10.8,0) {\textcolor{leangreen}{\Large\textbf{387}}\\ git commits};
+        \node[stat] at (0,-2.2) {\textcolor{amber}{\Large\textbf{5}}\\ remaining sorry};
+        \node[stat] at (3.6,-2.2) {\textcolor{leangreen}{\Large\textbf{39}}\\ days};
+        \node[stat] at (7.2,-2.2) {\textcolor{leangreen}{\Large\textbf{300+}}\\ memory files};
+        \node[stat] at (10.8,-2.2) {\textcolor{leangreen}{\Large\textbf{12}}\\ blueprint ch.};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+\section{What was formalized}
+%======================================================================
+
+\begin{frame}{Module architecture}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.80, transform shape]
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=5cm] (chan)
+          at (0,3) {Channel \quad{\normalfont\scriptsize 57 files | 19{,}349 lines | 389 thms}};
+        \node[nodebase, draw=leanblue, fill=lbfill, minimum width=4cm] (mps)
+          at (-4.2,1.2) {MPS \quad{\normalfont\scriptsize 40 | 14{,}485 | 194}};
+        \node[nodebase, draw=amberlight, fill=amfill, minimum width=4cm] (wiel)
+          at (4.2,1.2) {Wielandt \quad{\normalfont\scriptsize 35 | 12{,}956 | 369}};
+        \node[nodebase, draw=lglight, fill=lgfill, minimum width=2.5cm] (spec)
+          at (-2.5,-0.4) {Spectral \quad{\normalfont\scriptsize 9 | 4{,}092}};
+        \node[nodebase, draw=deepblue, fill=dbfill, minimum width=2.5cm] (alg)
+          at (2.5,-0.4) {Algebra \quad{\normalfont\scriptsize 13 | 2{,}115}};
+        \node[nodebase, draw=mgdark, fill=mgfill, minimum width=2.2cm] (pi)
+          at (-5.2,-0.4) {PiAlgebra \quad{\normalfont\scriptsize 5 | 2{,}380}};
+        \node[nodebase, draw=srlight, fill=srfill, minimum width=1.8cm] (qpf)
+          at (5.5,-0.4) {QPF \quad{\normalfont\scriptsize 3 | 801}};
+        \node[nodebase, draw=dimwhite!50, fill=dwfill, minimum width=1.5cm] (topo)
+          at (0,-1.6) {Topology \quad{\normalfont\scriptsize 4 | 390}};
+        \draw[-{Stealth}, thick, white!60] (chan) -- (mps);
+        \draw[-{Stealth}, thick, white!60] (chan) -- (wiel);
+        \draw[-{Stealth}, thick, white!60] (spec) -- (chan);
+        \draw[-{Stealth}, thick, white!60] (alg) -- (chan);
+        \draw[-{Stealth}, thick, white!60] (qpf) -- (chan);
+        \draw[-{Stealth}, thick, white!60] (spec) -- (mps);
+        \draw[-{Stealth}, thick, white!60] (alg) -- (wiel);
+        \draw[-{Stealth}, thick, white!60] (topo) -- (qpf);
+        \draw[-{Stealth}, thick, white!60] (pi) -- (mps);
+        \node[rounded corners=3pt, draw=dimwhite, dashed, text=dimwhite, font=\scriptsize, inner sep=4pt] (ml) at (0,-3)
+          {Mathlib v4.28.0 \quad (200{,}000+ declarations)};
+        \draw[arrdw] (ml) -- (topo);
+        \draw[arrdw] (ml.west) -- ++(-2,0) |- (spec);
+        \draw[arrdw] (ml.east) -- ++(2,0) |- (alg);
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Single-block Fundamental Theorem}
+    \vspace{-0.4em}
+    \begin{block}{The injective case: Skolem--Noether in Lean}
+    \end{block}
+    \vspace{-0.4em}
+\begin{lstlisting}
+theorem fundamentalTheorem_singleBlock
+    {A B : MPSTensor d D}
+    (hA : IsInjective A) (hAB : SameMPV A B) :
+    GaugeEquiv A B
+\end{lstlisting}
+    \vspace{0.3em}
+    \begin{itemize}
+        \item If $A$ is \emph{injective} ($\{A^i\}$ span $M_D(\mathbb{C})$) and $B$ generates the same MPV family, then $B^i = X A^i X^{-1}$ for some invertible $X$.
+        \item Proof route: word evaluation $\to$ algebra homomorphism $\to$ Skolem--Noether.
+        \item \proved{Sorry-free, $\sim$200 lines total}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Multi-block assembly and spectral gap}
+    \vspace{-0.4em}
+\begin{lstlisting}
+theorem fundamentalTheorem_multiBlock_full
+    ((*@$\mu$@*) : Fin r (*@$\to$@*) (*@$\mathbb{C}$@*))
+    (A B : (k : Fin r) (*@$\to$@*) MPSTensor d (dim k))
+    (hA : (*@$\forall$@*) k, IsInjective (A k))
+    (hSame : (*@$\forall$@*) k, SameMPV (A k) (B k)) :
+    ((*@$\forall$@*) k, GaugeEquiv (A k) (B k))
+\end{lstlisting}
+    \vspace{0.3em}
+    The spectral gap route ($\sim$800 lines):
+    \[
+    \underbrace{\text{KS inequality}}_{\text{Kadison--Schwarz}}
+    \xrightarrow{ \text{HS contraction} }
+    \underbrace{\rho(\cF_{AB}) \le 1}_{\text{spectral radius}}
+    \xrightarrow{ \text{injectivity} }
+    \underbrace{\rho(\cF_{AB}) < 1}_{\text{strict gap}}
+    \xrightarrow{   }
+    \underbrace{\cF_{AB}^N \to 0}_{\text{decay}}
+    \]
+\end{frame}
+
+\begin{frame}[fragile]{Wielandt bound: $D^2$ cumulative span}
+    \vspace{-0.4em}
+\begin{lstlisting}
+theorem cumulative_wielandt_bound [NeZero D]
+    (A : MPSTensor d D) (hN : IsNormal A) :
+    cumulativeSpan A (D ^ 2) = (*@$\top$@*)
+\end{lstlisting}
+    \vspace{0.3em}
+    \begin{itemize}
+        \item Products of $A$'s matrices of length $\le D^2$ cumulatively span the full algebra $M_D(\mathbb{C})$.
+        \item Built without Jordan Normal Form (not in Mathlib) --- uses Fitting decomposition + rectangular span growth instead.
+        \item Key Mathlib lemma found by scout: \texttt{monotone\_stabilizes\_iff\_noetherian}
+        \item \inprog{35 files, 12{,}956 lines, 369 theorems, 3 sorries remaining}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Perron--Frobenius for CP maps}
+    \vspace{-0.4em}
+\begin{lstlisting}
+theorem exists_posSemidef_eigenvector [NeZero D]
+    (E : Matrix (Fin D) (Fin D) (*@$\mathbb{C}$@*) (*@$\to$@*) Matrix (Fin D) (Fin D) (*@$\mathbb{C}$@*))
+    (hpos : IsPositiveMap E)
+    (hNZ : (*@$\forall$@*) {(*@$\rho$@*)}, (*@$\rho$@*).PosSemidef (*@$\to$@*) (*@$\rho \neq$@*) 0 (*@$\to$@*) E (*@$\rho \neq$@*) 0) :
+    (*@$\exists$@*) (*@$\rho$@*) r, (*@$\rho$@*).PosSemidef
+\end{lstlisting}
+    \vspace{0.3em}
+    \begin{itemize}
+        \item Not in Mathlib. Built entirely from scratch.
+        \item Proof: Brouwer fixed-point on density matrices $\to$ PSD eigenvector existence $\to$ PosDef upgrade via irreducibility $\to$ uniqueness.
+        \item \proved{Sorry-free, QPF module: 3 files, 801 lines}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Wolf lecture notes coverage}
+    \vspace{-0.2em}
+    {\footnotesize Wolf, \emph{Quantum Channels \& Operations: Guided Tour}, TU Munich 2012~[4]}
+    \vspace{0.3em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{@{}l l r l@{}}
+        \toprule
+        \textbf{Chapter} & \textbf{Topic} & \textbf{Coverage} & \textbf{Key results in Lean} \\
+        \midrule
+        Ch\,1 & Deconstructing quantum & $\sim$14\% & Choi--Jamio{\l}kowski \\
+        Ch\,2 & Representations & $\sim$13\% & Choi / Kraus / Stinespring \\
+        Ch\,3 & Positive $\neq$ CP & 0\% & --- \\
+        Ch\,5 & Schwarz inequalities & $\sim$7\% & Kadison--Schwarz core \\
+        \rowcolor{lgrow}
+        Ch\,6 & Spectral properties & $\sim$\textbf{33\%} & PF, irreducibility, primitivity \\
+        Ch\,7 & Semigroup structure & $\sim$27\% & Perturbation, Duhamel \\
+        Ch\,8 & Distance measures & 0\% & --- \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize Chapter 6 is the center of mass: 10 full + 7 partial matches out of 41 numbered results.}
+\end{frame}
+
+\begin{frame}{Paper-to-Lean expansion}
+    \vspace{-0.2em}
+    \textcolor{leangreen}{\textbf{What ``by standard arguments'' really means:}}
+    \vspace{0.3em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.2}
+    {\footnotesize
+    \begin{tabular}{@{}p{3.5cm} r p{7.5cm}@{}}
+        \toprule
+        \textbf{Paper says} & \textbf{Lean} & \textbf{What's actually needed} \\
+        \midrule
+        ``$X$ is invertible'' & 200+ & QPF $\to$ DS gauge $\to$ block embedding $\to$ KS equality $\to$ mult.\ domain $\to$ kernel inv.\ $\to$ det $\neq 0$ \\
+        ``By Perron--Frobenius'' & 150+ & PSD eigenvector existence $\to$ PosDef upgrade via irreducibility $\to$ uniqueness via dual trace \\
+        ``The blocks separate'' & 800+ & Peeling lemma $\to$ exp.\ decay $\to$ overlap-trace bridge $\to$ spectral gap $\to$ induction \\
+        ``By Burnside's thm'' & 400+ & IsIrreducible $\to$ Jacobson density $\to$ IsSimpleModule $\to$ Noetherian stabilization \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize These are \emph{per-argument} expansions, not total. The 57K lines also includes substantial infrastructure (QPF, Wielandt, Channel theory) that goes beyond any single paper.}
+\end{frame}
+
+\begin{frame}{Proof strategy divergences}
+    \vspace{-0.2em}
+    \textcolor{amber}{\textbf{Where the Lean proof differs from the paper:}}
+    \vspace{0.3em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.15}
+    {\footnotesize
+    \begin{tabular}{@{}p{2.2cm} p{3.2cm} p{3.5cm} p{3cm}@{}}
+        \toprule
+        \textbf{Result} & \textbf{Paper approach} & \textbf{Lean approach} & \textbf{Why} \\
+        \midrule
+        Spectral gap & CFII + Cauchy--Schwarz & KS equality + mult.\ domain & DS gauge $\neq$ TP \\
+        PF for CP & Wolf Thm 6.3 & Custom QPF: Brouwer & Not in Mathlib \\
+        Wielandt 2(b) & Jordan Normal Form & Fitting decomp.\ + rect.\ span & JNF not in Mathlib \\
+        Block sep. & Vandermonde & Peeling + spectral decay & More robust \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize Every divergence was forced by Mathlib's current API. The Lean proofs are often \emph{more robust} than the originals.}
+\end{frame}
+
+\begin{frame}{Errata discovered during formalization}
+    \vspace{-0.4em}
+    \begin{enumerate}
+        \item \textcolor{softred}{\textbf{DS gauge $\Rightarrow$ TP} (PGVWC'07, implicit):} The DS-gauged map is \textbf{unital} but \textbf{not} trace-preserving in general.
+        \item \textcolor{softred}{\textbf{Per-block trace equality} (attempted lemma):} SameMPV$_2$ + injective $\mu$ does \textbf{not} imply per-block traces agree. Counterexample: $r\!=\!2$, $\mu\!=\!(1,2)$, $A\!=\!([[4]],[[1]])$, $B\!=\!([[2]],[[2]])$.
+        \item \textcolor{softred}{\textbf{Peripheral eigenvalue roots of unity} (Blueprint):} False for general channels. Needs extra hypothesis: all powers $\mu^n$ remain eigenvalues.
+        \item \textcolor{amber}{\textbf{Wolf citation numbering:}} Four separate counters (Thm/Prop/Cor/Lem). Multiple blueprint citations referenced the wrong result. {\scriptsize(Caught by audit agent.)}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{The sorry frontier}
+    \vspace{-0.2em}
+    \textbf{25 remaining \texttt{sorry}} out of 1{,}100+ theorems:
+    \vspace{0.3em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.15}
+    {\footnotesize
+    \begin{tabular}{@{}l r l@{}}
+        \toprule
+        \textbf{Module} & \textbf{Sorry} & \textbf{Nature} \\
+        \midrule
+        Channel/Semigroup/Primitivity & 2 & Semigroup $\leftrightarrow$ primitivity equivalence \\
+        Channel/Semigroup/LindbladForm & 2 & GKSL / Lindblad form (Wolf Ch\,7) \\
+        Channel/Determinant & 1 & Forward direction: $|\det| = 1$ characterization \\
+        \midrule
+        \textbf{Total} & \textbf{5} & \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize Sorry count grew during rapid expansion, then shrank as closure waves caught up. Current 7 are all in new frontier code (semigroup theory, Lindblad form, determinants).}
+\end{frame}
+
+%======================================================================
+\section{The agentic architecture}
+%======================================================================
+
+\begin{frame}{System overview}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape]
+        % Human
+        \node[nodebox, draw=white, fill=cardbg, minimum width=2.5cm] (human) at (0,4.5)
+          {\textbf{Human}\\{\tiny mathematical oversight}};
+        % Orchestrator
+        \node[nodebox, draw=leangreen, fill=lgfill, minimum width=4cm] (orch) at (0,2.5)
+          {\textbf{\texttt{leanOrchestrator}}\\{\tiny planning, delegation, integration}};
+        % Agents
+        \node[nodebox, draw=leanblue, fill=lbfill] (scout) at (-5.5,0)
+          {\textbf{\texttt{leanSearch}}\\{\tiny Mathlib search}\\{\tiny design memos}};
+        \node[nodebox, draw=leangreen, fill=lgfill] (proof) at (-1.8,0)
+          {\textbf{\texttt{lean}}\\{\tiny Lean proofs}\\{\tiny sorry closure}};
+        \node[nodebox, draw=amberlight, fill=amfill] (clean) at (1.8,0)
+          {\textbf{\texttt{leanSimplifier}}\\{\tiny linting}\\{\tiny simplification}};
+        \node[nodebox, draw=deepblue, fill=dbfill] (bp) at (5.5,0)
+          {\textbf{\texttt{leanBlueprint}}\\{\tiny \LaTeX{} sync}\\{\tiny checkdecls}};
+        \node[nodebox, draw=srstrong, fill=srfill] (audit) at (-3.5,-2.2)
+          {\textbf{\texttt{review}}\\{\tiny cross-check}\\{\tiny hypothesis gaps}};
+        % Memory
+        \node[nodebox, draw=amber, fill=ambg] (memory) at (3.5,-2.2)
+          {\textbf{Memory System}\\{\tiny 300+ files | pinned wisdom}};
+        % Connections
+        \draw[arrw] (human) -- (orch);
+        \foreach \n in {scout,proof,clean,bp,audit}
+            \draw[arrg] (orch) -- (\n);
+        \draw[{Stealth}-{Stealth},amber,thick,dashed] (memory) -- (orch);
+        \draw[{Stealth}-{Stealth},amber,thick,dashed] (memory) -- (proof);
+        \draw[{Stealth}-{Stealth},amber,thick,dashed] (memory) -- (scout);
+        \draw[arrlb,dashed] (scout.east) -- node[above,font=\tiny,text=leanblue]{design memo} (proof.west);
+        % Lean server
+        \node[rounded corners=2pt, draw=dimwhite, fill=cardbg, text=dimwhite, font=\tiny, inner sep=4pt, align=center] (lean) at (0,-3.5)
+          {Lean 4 Server: lean\_diagnostics | lean\_inspect | lean\_loogle};
+        \draw[arrdw] (proof) -- (lean);
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{The Orchestrator: \texttt{leanOrchestrator}}
+    \begin{columns}[T]
+        \column{0.55\textwidth}
+        \textcolor{leangreen}{\textbf{Role:}} Plan, prioritize, delegate, integrate.
+        \vspace{0.3em}
+        \begin{itemize}
+            \item Maintains \textbf{structured plans} with step tracking
+            \item Decides \textbf{which sorry to attack next} based on dependency analysis
+            \item Assigns \textbf{disjoint file sets} to prevent conflicts
+            \item Launches \textbf{parallel agents} (fan-out / fan-in)
+            \item \textbf{Integrates results} and runs \texttt{lake build}
+            \item Writes \textbf{session summaries} to memory
+        \end{itemize}
+        \vspace{0.3em}
+        \textcolor{dimwhite}{\footnotesize Model: expensive (Opus-class). Justification: architectural decisions have the highest use.}
+        \column{0.43\textwidth}
+        \textcolor{amber}{\textbf{What the orchestrator keeps:}}
+        \begin{itemize}
+            \item Architectural decisions
+            \item Priority calls (which sorry next?)
+            \item Integration of parallel results
+            \item Correctness review of key theorems
+        \end{itemize}
+        \vspace{0.4em}
+        \textcolor{amber}{\textbf{What it delegates:}}
+        \begin{itemize}
+            \item Linting / cleanup
+            \item Mathlib lemma search
+            \item Blueprint updates
+            \item Coverage audits
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{The Scout Agent: \texttt{leanSearch}}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \textcolor{leanblue}{\textbf{Role:}} Find existing Mathlib lemmas before anyone writes a line of proof. Cheapest agent to run, highest ROI.
+        \vspace{0.3em}
+        \begin{itemize}
+            \item Searches via \texttt{lean\_loogle} {\scriptsize(type signature, name pattern)}
+            \item Checks \textbf{feasibility} of proof approaches
+            \item Writes \textbf{design memos}: ``here are the lemmas, here is the route''
+            \item Does \textbf{coverage audits}: which paper results are already in Lean?
+        \end{itemize}
+        \vspace{0.3em}
+        \textcolor{dimwhite}{\footnotesize Model: cheap (Sonnet-class). Finding the right lemma saves more time than anything else.}
+        \column{0.46\textwidth}
+        \begin{block}{\footnotesize Example: Wielandt Lemma 2(b)}
+          Paper uses Jordan Normal Form (not in Mathlib).
+          \vspace{0.2em}
+
+          Scout searched for generalized eigenspace decomposition and found:
+          \vspace{0.2em}
+
+          {\tiny\texttt{Module.End.iSup\_maxGenEigenspace\_eq\_top}}
+          \vspace{0.1em}
+
+          {\tiny\texttt{Module.End.independent\_maxGenEigenspace}}
+          \vspace{0.2em}
+
+          These replace JNF entirely --- the proof agent used the Fitting decomposition instead.
+          \vspace{0.2em}
+
+          \textcolor{leangreen}{Result: 50 lines instead of $\sim$200.}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Scout $\to$ Implement: the highest-ROI pattern}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.85, transform shape]
+        \node[nodebox, draw=leanblue, fill=lbfill, minimum width=3.5cm, minimum height=1.2cm] (s1) at (0,2) {\textbf{\texttt{leanSearch}}\\{\tiny search Mathlib}};
+        \node[nodebox, draw=leanblue, fill=lbfill, minimum width=3.5cm, minimum height=1.2cm] (s2) at (4.5,2) {\textbf{Design Memo}\\{\tiny lemmas + route}};
+        \node[nodebox, draw=leangreen, fill=lgfill, minimum width=3.5cm, minimum height=1.2cm] (s3) at (9,2) {\textbf{\texttt{lean}}\\{\tiny implements route}};
+        \node[nodebox, draw=leangreen, fill=lgfill, minimum width=3.5cm, minimum height=1.2cm] (s4) at (4.5,0) {\textbf{Verified Proof}\\{\tiny lake build $\checkmark$}};
+        \draw[-{Stealth[length=6pt]}, thick, leanblue] (s1) -- (s2);
+        \draw[-{Stealth[length=6pt]}, thick, white] (s2) -- (s3);
+        \draw[-{Stealth[length=6pt]}, thick, leangreen] (s3) -- (s4);
+        \node[text=dimwhite,font=\scriptsize,below=8pt of s4]
+          {Total: scout ($\sim$2 min) + prover ($\sim$15 min) = \textcolor{leangreen}{17 min}};
+        \node[text=dimwhite,font=\scriptsize,below=22pt of s4]
+          {Without scout: prover alone ($\sim$45 min), often fails \textcolor{softred}{$\times$}};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.3em}
+    \begin{itemize}
+        \item[\textcolor{leangreen}{$\checkmark$}] \texttt{monotone\_stabilizes\_iff\_noetherian} $\to$ Wielandt finiteness in 3 lines
+        \item[\textcolor{leangreen}{$\checkmark$}] \texttt{IsNilpotent.isUnit\_add\_left\_of\_commute} $\to$ ``$1 +$ nilpotent is invertible'' for free
+        \item[\textcolor{leangreen}{$\checkmark$}] \texttt{Algebra.adjoin\_induction} $\to$ subalgebra membership induction (Burnside)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{The Proof Agent: \texttt{lean}}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \textcolor{leangreen}{\textbf{Role:}} Write Lean 4 proofs. Close sorries. Fix compilation errors. The most expensive agent.
+        \vspace{0.3em}
+        \begin{itemize}
+            \item Given \textbf{specific plans} (not open-ended ``prove $X$'')
+            \item Uses \textbf{IDE integration}:
+            \begin{itemize}
+                \item[$\circ$] \texttt{lean\_diagnostics}: compilation errors
+                \item[$\circ$] \texttt{lean\_inspect}: goal state at cursor
+                \item[$\circ$] \texttt{lean\_loogle}: inline search
+            \end{itemize}
+            \item Iterates: write $\to$ check $\to$ fix $\to$ check $\to$ \ldots
+        \end{itemize}
+        \vspace{0.3em}
+        \textcolor{dimwhite}{\footnotesize Model: expensive (Opus-class). Proofs require deep reasoning.}
+        \column{0.46\textwidth}
+        \begin{block}{\footnotesize Typical proof cycle}
+        \begin{enumerate}
+            \item Read design memo from scout
+            \item Read current file state
+            \item Write proof attempt
+            \item \texttt{lean\_diagnostics} $\to$ errors?
+            \item \texttt{lean\_inspect} $\to$ check goal state
+            \item Fix type mismatches, missing imports
+            \item Repeat 4--6 until \textcolor{leangreen}{0 errors}
+            \item Write memory: what worked, what didn't
+        \end{enumerate}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Proof agent tools}
+    \vspace{-0.4em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.2}
+    {\footnotesize
+    \begin{tabular}{@{}l p{4.5cm} p{5.5cm}@{}}
+        \toprule
+        \textbf{Tool} & \textbf{What it does} & \textbf{When to use} \\
+        \midrule
+        \texttt{lean\_diagnostics} & Compilation errors, warnings, unsolved goals & After every edit --- the ground truth \\
+        \texttt{lean\_inspect} (goal) & Tactic proof state at a position & Debug ``unsolved goals'': see what's left \\
+        \texttt{lean\_inspect} (hover) & Type signature + docs for identifier & Verify a lemma has the right type \\
+        \texttt{lean\_loogle} & Search Mathlib by type or name & Find a lemma mid-proof \\
+        \texttt{lean\_file} (restart) & Restart Lean server for a file & Stale diagnostics after import changes \\
+        \texttt{lean\_project} (build) & Full \texttt{lake build} & Final verification after integration \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize The critical insight: \texttt{lean\_diagnostics} is the \emph{only} source of truth. An agent saying ``proof complete'' means nothing until diagnostics return 0 errors.}
+\end{frame}
+
+\begin{frame}{The Cleanup Agent: \texttt{leanSimplifier}}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textcolor{amber}{\textbf{Role:}} Maintain code quality at scale. Runs \emph{after} development bursts (${\sim}$2{,}000 LOC).
+        \vspace{0.3em}
+        \textbf{Triggers:}
+        \begin{itemize}
+            \item $>$20 linter warnings
+            \item A file crosses 500 lines
+            \item $\ge 2$ files with private copies of the same helper
+            \item Sorry count drops
+            \item Before commit/release
+        \end{itemize}
+        \column{0.50\textwidth}
+        \textbf{What it does (in priority order):}
+        \begin{enumerate}
+            \item Remove blanket \texttt{set\_option linter.*}
+            \item Remove dead code and unused imports
+            \item Factor duplicated private helpers
+            \item Fix linter warnings
+            \item Simplify proof terms
+            \item Update stale docstrings / TODOs
+        \end{enumerate}
+    \end{columns}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize Model: cheap (Sonnet-class). Cosmetic/structural, not mathematical. Never touches theorem statements.}
+\end{frame}
+
+\begin{frame}{The Blueprint Agent: \texttt{leanBlueprint}}
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textcolor{deepblue}{\textbf{Role:}} Keep the 12-chapter blueprint synchronized with Lean code. Uses the \texttt{leanblueprint} tool for dependency graphs.
+        \vspace{0.3em}
+        \begin{itemize}
+            \item Runs \texttt{checkdecls}: every \texttt{\textbackslash lean\{X\}} tag must match a Lean declaration
+            \item Fact-checks proof sketches against what the Lean proof \emph{actually does}
+            \item Updates \texttt{\textbackslash leanok} markers
+            \item Fixes \texttt{\textbackslash uses\{\}} dependency edges
+            \item Chapters are independent $\to$ \textbf{parallelizable}
+        \end{itemize}
+        \column{0.48\textwidth}
+        \textbf{Blueprint stats:}
+        \begin{itemize}
+            \item 12 chapters, $\sim$7{,}600 lines of \LaTeX
+            \item $\sim$328 declaration tags
+            \item Dependency graph with color coding:\\
+              {\scriptsize \textcolor{leangreen}{$\blacksquare$} proved \quad \textcolor{leanblue}{$\blacksquare$} ready \quad \textcolor{amber}{$\blacksquare$} not ready}
+            \item 3 review rounds (v1$\to$v2, v2, v3)
+            \item All AI language banned from prose
+        \end{itemize}
+        \vspace{0.3em}
+        \textcolor{dimwhite}{\footnotesize Model: cheap. One agent per chapter-group, then global integration.}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{The Audit Agent: \texttt{review}}
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textcolor{softred}{\textbf{Role:}} Catch what provers miss. Separate from proof work.
+        \vspace{0.3em}
+        \begin{itemize}
+            \item Cross-checks \textbf{paper vs.\ Lean statements}
+            \item Finds \textbf{vacuous truths}
+            \item Detects \textbf{hypothesis gaps}
+            \item Identifies \textbf{naming confusions} {\scriptsize(4 different \texttt{IsPrimitive} definitions!)}
+            \item Produces \textbf{discrepancy reports}
+        \end{itemize}
+        \column{0.48\textwidth}
+        \textbf{Discoveries by the auditor:}
+        \begin{enumerate}
+            \item \texttt{GaugePhaseEquiv} originally allowed $\zeta = 0$ {\scriptsize(fixed)}
+            \item \texttt{peripheralEigenvalues} hardcoded $|\lambda|=1$ {\scriptsize(nonstandard)}
+            \item 5 Wolf citation numbers were wrong
+            \item \texttt{IsNormal} $\neq$ paper's ``Normal Tensor''
+        \end{enumerate}
+    \end{columns}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize The audit agent is the most underrated component. It found 4 definition issues and 5 citation errors that would have propagated silently.}
+\end{frame}
+
+\begin{frame}{Fan-out / Fan-in parallelism}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.78, transform shape]
+        \node[nodebase, draw=leangreen, fill=lgbg, minimum width=5cm] (orch)
+          at (0,3.5) {\textbf{Orchestrator}: plan cleanup wave};
+        \node[nodebase, draw=leangreen, fill=cardbg, minimum width=2.8cm] (a1) at (-5,1.8) {\texttt{lean} A\\{\tiny Channel/Schwarz/*}};
+        \node[nodebase, draw=leangreen, fill=cardbg, minimum width=2.8cm] (a2) at (-1.7,1.8) {\texttt{lean} B\\{\tiny Wielandt/*}};
+        \node[nodebase, draw=leangreen, fill=cardbg, minimum width=2.8cm] (a3) at (1.7,1.8) {\texttt{leanSimplifier}\\{\tiny MPS/BNT/*}};
+        \node[nodebase, draw=leangreen, fill=cardbg, minimum width=2.8cm] (a4) at (5,1.8) {\texttt{leanBlueprint}\\{\tiny blueprint/ch1--6}};
+        \draw[arrg] (orch) -- (a1);
+        \draw[arrg] (orch) -- (a2);
+        \draw[arrg] (orch) -- (a3);
+        \draw[arrg] (orch) -- (a4);
+        \node[text=dimwhite, font=\small] at (0,0.7) {\emph{parallel execution on disjoint file sets}};
+        \node[nodebase, draw=leangreen, fill=lgbg, minimum width=5cm] (int)
+          at (0,-0.2) {\textbf{Orchestrator}: integrate + \texttt{lake build}};
+        \draw[arrw] (a1) -- (int);
+        \draw[arrw] (a2) -- (int);
+        \draw[arrw] (a3) -- (int);
+        \draw[arrw] (a4) -- (int);
+        \node[rounded corners=3pt, draw=softred, text=softred, font=\footnotesize, inner sep=5pt] at (0,-1.4)
+          {\textbf{Rule:} Two agents on the same file $=$ guaranteed conflict. Strict disjoint assignment.};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{The Audit $\to$ Fix cycle}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.82, transform shape]
+        \node[nodebox, draw=softred, fill=srfill] (a1) at (0,2) {\textbf{Audit}\\{\tiny find issues}};
+        \node[nodebox, draw=leangreen, fill=lgfill] (f1) at (4.5,2) {\textbf{Fix}\\{\tiny close issues}};
+        \node[nodebox, draw=softred, fill=srfill] (a2) at (9,2) {\textbf{Re-audit}\\{\tiny verify fixes}};
+        \node[nodebox, draw=leangreen, fill=lgfill] (f2) at (9,0) {\textbf{Fix}\\{\tiny remaining}};
+        \node[nodebox, draw=leangreen!50, fill=lgfill] (done) at (4.5,0) {\textbf{Clean}\\{\tiny $\checkmark$}};
+        \draw[arrw] (a1) -- node[above,font=\tiny,text=dimwhite]{27 issues} (f1);
+        \draw[arrw] (f1) -- node[above,font=\tiny,text=dimwhite]{21 fixed} (a2);
+        \draw[arrw] (a2) -- node[right,font=\tiny,text=dimwhite]{6 remaining} (f2);
+        \draw[arrw] (f2) -- (done);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.3em}
+    \begin{block}{\footnotesize Real example: Mathlib style audit (March 16)}
+      \begin{itemize}
+          \item Round 1: auditor found 21 missing copyright headers, 67 missing docstrings, 206 long lines
+          \item Round 2: fix agents resolved P0 substantive issues (API lemmas, bundling, dead aliases)
+          \item Round 3: re-audit confirmed P0 clear; P2 cosmetic issues deferred
+      \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Agent failure modes}
+    \vspace{-0.4em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.15}
+    {\footnotesize
+    \begin{tabular}{@{}p{3.8cm} p{3.5cm} p{4.5cm}@{}}
+        \toprule
+        \textbf{Failure mode} & \textbf{Frequency} & \textbf{Mitigation} \\
+        \midrule
+        \textcolor{softred}{``Proof complete'' but diagnostics show errors} & Common ($\sim$30\%) & \textbf{Always} run diagnostics \\
+        \textcolor{softred}{Same-file conflict} & Happened 3 times & Strict disjoint file assignment \\
+        \textcolor{softred}{Circular import dep.} & Happened twice & Check import graph first \\
+        \textcolor{softred}{Heartbeat explosion} & Common & Factor into smaller lemmas \\
+        \textcolor{amber}{Scout finds wrong lemma} & $\sim$15\% & Cross-check with hover \\
+        \textcolor{amber}{Plausible but wrong math} & Hard proofs & Human oversight essential \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+\end{frame}
+
+\begin{frame}{Cost and model selection}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.85, transform shape]
+        \node[nodebox, draw=softred, fill=srfillcard, minimum width=3.5cm, minimum height=2.4cm] at (0,0) {
+          \textbf{\large Expensive}\\ Orchestrator\\ Proof agent\\
+          {\tiny Deep reasoning}\\ {\tiny Architectural decisions}\\ {\tiny Complex proof construction}
+        };
+        \node[nodebox, draw=amber, fill=amfillcard, minimum width=3.5cm, minimum height=2.4cm] at (4.5,0) {
+          \textbf{\large Medium}\\ Audit agent\\
+          {\tiny Cross-checking}\\ {\tiny Statement comparison}\\ {\tiny Counterexample search}
+        };
+        \node[nodebox, draw=leangreen, fill=lgfillcard, minimum width=3.5cm, minimum height=2.4cm] at (9,0) {
+          \textbf{\large Cheap}\\ Scout\\ Cleaner\\ Blueprint\\
+          {\tiny Search, lint, sync}\\ {\tiny Highly parallelizable}
+        };
+        \node[text=dimwhite,font=\footnotesize] at (4.5,-2)
+          {Rule: use the largest model for the hardest reasoning; parallelize routine work on cheap models.};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+\section{The memory system}
+%======================================================================
+
+\begin{frame}{Why agents need memory}
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textbf{The problem:}
+        \begin{itemize}
+            \item 39-day project, 172 files, 57K lines
+            \item Context windows are finite
+            \item Each agent session starts \emph{fresh}
+            \item Knowledge discovered in session 1 is lost by session 50
+        \end{itemize}
+        \vspace{0.5em}
+        \textcolor{softred}{\textbf{Without memory:}}\\
+        Agent re-discovers that per-block trace equality is false.\\
+        Agent re-searches for the same Mathlib lemma.\\
+        Agent re-makes the same architectural mistake.
+        \column{0.48\textwidth}
+        \textbf{The solution: persistent memory files}
+        \begin{itemize}
+            \item \textbf{300+ files} in \texttt{/memories/}
+            \item Written by agents, read by agents
+            \item Survive across sessions
+            \item Searchable by name and content
+            \item \textbf{Pinned} (max 10): always loaded
+            \item \textbf{Unpinned}: available on demand
+        \end{itemize}
+        \vspace{0.5em}
+        \textcolor{leangreen}{\textbf{With memory:}}\\
+        Agent reads counterexample from memory.\\
+        Agent reads design memo from previous scout.\\
+        Agent reads style guide and follows conventions.
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Memory file taxonomy}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.80, transform shape]
+        \node[nodebox, draw=leangreen, fill=lgfill, minimum width=3.2cm, minimum height=1.6cm] at (-4.5,2) {
+          \textbf{Progress}\\ {\tiny session summaries}\\ {\tiny sorry counts}\\ {\tiny build status}\\ {\tiny $\sim$80 files}
+        };
+        \node[nodebox, draw=leanblue, fill=lbfill, minimum width=3.2cm, minimum height=1.6cm] at (0,2) {
+          \textbf{Design}\\ {\tiny scout memos}\\ {\tiny proof plans}\\ {\tiny proof strategies}\\ {\tiny $\sim$60 files}
+        };
+        \node[nodebox, draw=amber, fill=amfill, minimum width=3.2cm, minimum height=1.6cm] at (4.5,2) {
+          \textbf{Audit}\\ {\tiny coverage tables}\\ {\tiny discrepancy reports}\\ {\tiny style audits}\\ {\tiny $\sim$40 files}
+        };
+        \node[nodebox, draw=softred, fill=srfill, minimum width=3.2cm, minimum height=1.6cm] at (-4.5,-0.5) {
+          \textbf{Errata}\\ {\tiny counterexamples}\\ {\tiny false statements}\\ {\tiny $\sim$15 files}
+        };
+        \node[nodebox, draw=mgdark, fill=mgfill, minimum width=3.2cm, minimum height=1.6cm] at (0,-0.5) {
+          \textbf{Cleanup}\\ {\tiny per-file logs}\\ {\tiny linter results}\\ {\tiny $\sim$50 files}
+        };
+        \node[nodebox, draw=deepblue, fill=dbfill, minimum width=3.2cm, minimum height=1.6cm] at (4.5,-0.5) {
+          \textbf{Blueprint}\\ {\tiny chapter reviews}\\ {\tiny fact-check reports}\\ {\tiny $\sim$30 files}
+        };
+        \node[rounded corners=5pt, draw=amber, very thick, fill=ambg, text=white, minimum width=10cm, minimum height=1cm, align=center, font=\small]
+          at (0,-2.5)
+          {\textbf{Wisdom files} {\small(pinned)}:\quad orchestration strategy \quad|\quad Lean 4 techniques \quad|\quad paper errata};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Pinned vs.\ unpinned memories}
+    \vspace{-0.3em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textcolor{amber}{\textbf{Pinned (always loaded, max 10):}}
+        \vspace{0.1em}
+        {\small
+        \begin{enumerate}
+            \item \texttt{blueprint\_style\_guide.md} {\scriptsize --- notation, banned AI language}
+            \item \texttt{wisdom\_orchestration.md} {\scriptsize --- delegation, failure modes}
+            \item \texttt{wisdom\_lean4\_techniques.md} {\scriptsize --- tactic patterns}
+            \item \texttt{wisdom\_math\_gaps.md} {\scriptsize --- errata, divergences}
+            \item \texttt{wolf\_numbering\_table.md} {\scriptsize --- citation numbers}
+            \item \texttt{wolf\_coverage.md} {\scriptsize --- which results are formalized}
+            \item \texttt{mathlib\_style\_audit.md} {\scriptsize --- code quality}
+            \item \texttt{euclidean\_space\_simp.md} {\scriptsize --- key simp lemmas}
+        \end{enumerate}
+        }
+        \column{0.50\textwidth}
+        \textcolor{dimwhite}{\textbf{Unpinned (searchable archive):}}
+        \vspace{0.2em}
+        \begin{itemize}
+            \item \texttt{session\_2026\_03\_14\_final.md}
+            \item \texttt{ch7\_semigroup\_sorry\_fixes.md}
+            \item \texttt{micro\_cleanup\_trackA.md}
+            \item \texttt{wielandt\_paper\_facing\_audit.md}
+            \item[] \ldots{} ($\sim$290 more)
+        \end{itemize}
+        \vspace{0.3em}
+        \textcolor{dimwhite}{\scriptsize Unpinned files are a searchable archive. Agents search via \texttt{grep} over \texttt{/memories/} by topic keyword.}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{The wisdom files: distilled cross-session knowledge}
+    \vspace{-0.4em}
+    \begin{block}{\footnotesize From \texttt{wisdom\_math\_formalization\_gaps.md}:}
+    {\scriptsize\color{dimwhite}
+\begin{verbatim}
+## 3.1 Outright errors discovered
+| Source         | Claim                   | True               |
+|----------------|-------------------------|--------------------|
+| PGVWC07        | DS gauge -> doubly st. | UNITAL only.     |
+| Early attempt  | SameMPV2 + inj mu ->.. | FALSE.           |
+| Blueprint ch04 | Peripheral = roots      | FALSE for general. |
+
+## 3.3 Proof strategy divergences
+| Result       | Paper         | Lean              | Why         |
+|--------------|---------------|--------------------|-------------|
+| Spectral gap | CFII+CS       | KS + mult. domain | DS != TP    |
+| PF for CP    | Wolf Thm 6.3  | Brouwer + QPF     | Not Mathlib |
+| Wielandt 2b  | JNF           | Fitting + rect    | JNF missing |
+\end{verbatim}
+    }
+    \end{block}
+    \vspace{0.2em}
+    \textcolor{dimwhite}{\footnotesize This file is pinned. Every agent that starts a session immediately knows: (1) which paper claims are false, (2) which proof routes don't work, (3) what divergences exist.}
+\end{frame}
+
+\begin{frame}{Memory-driven discovery}
+    \vspace{-0.4em}
+    \textcolor{leangreen}{\textbf{Example: preventing counterexample re-discovery}}
+    \vspace{0.3em}
+    \begin{enumerate}
+        \item \textbf{Day 12}: Proof agent attempts to show SameMPV$_2$ + injective $\mu$ $\Rightarrow$ per-block trace equality. After 2 hours, finds a counterexample. Writes \texttt{counterexample\_found.md} to memory.
+        \item \textbf{Day 18}: New proof agent is asked to work on block separation. Reads memory. Sees the counterexample. \emph{Immediately} takes the correct route (peeling argument).
+        \item \textbf{Day 25}: Blueprint agent is updating Ch\,9. Reads memory. Notes that the blueprint's proof sketch assumes trace equality. Corrects the sketch.
+    \end{enumerate}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize Without memory, each of these would have been an independent 2-hour dead end. With memory, the total cost of the counterexample discovery was amortized across all subsequent sessions.}
+\end{frame}
+
+\begin{frame}{Memory evolution: raw $\to$ distilled $\to$ pinned}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.82, transform shape]
+        \node[rounded corners=5pt, draw=dimwhite, thick, fill=dwfill, text=white, minimum width=3.5cm, minimum height=2.2cm, align=center, font=\small] (raw) at (0,0) {
+          \textbf{Raw}\\ {\scriptsize session\_2026\_02\_12.md}\\ {\scriptsize ch7\_sorry\_fix\_plan.md}\\ {\scriptsize micro\_cleanup\_trackA.md}\\ {\tiny 250+ files}
+        };
+        \node[rounded corners=5pt, draw=leanblue, thick, fill=lbfill, text=white, minimum width=3.5cm, minimum height=2.2cm, align=center, font=\small] (dist) at (5,0) {
+          \textbf{Distilled}\\ {\scriptsize wisdom\_orchestration.md}\\ {\scriptsize wisdom\_lean4\_tech.md}\\ {\scriptsize wisdom\_math\_gaps.md}\\ {\tiny 10--15 files}
+        };
+        \node[rounded corners=5pt, draw=amber, thick, fill=amfill, text=white, minimum width=3.5cm, minimum height=2.2cm, align=center, font=\small] (pin) at (10,0) {
+          \textbf{Pinned}\\ {\scriptsize Always loaded}\\ {\scriptsize Core techniques}\\ {\scriptsize Known pitfalls}\\ {\tiny max 10}
+        };
+        \draw[-{Stealth[length=7pt]}, thick, white] (raw) -- node[above,font=\tiny,text=dimwhite]{extract lasting lessons} (dist);
+        \draw[-{Stealth[length=7pt]}, thick, white] (dist) -- node[above,font=\tiny,text=dimwhite]{promote to permanent} (pin);
+        \node[text=dimwhite, font=\footnotesize] at (5,-2)
+          {Periodic distillation: after many sessions, ephemeral status updates};
+        \node[text=dimwhite, font=\footnotesize] at (5,-2.5)
+          {are compressed into lasting lessons and pinned.};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{What would make memory better}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textcolor{leangreen}{\textbf{What works today:}}
+        \begin{itemize}
+            \item Flat files with naming conventions
+            \item 10 pinned memories always loaded
+            \item \texttt{grep}-searchable by keyword
+            \item Agent-written, human-curated
+        \end{itemize}
+        \vspace{0.4em}
+        \textcolor{amber}{\textbf{Pain points:}}
+        \begin{itemize}
+            \item 300+ files $\to$ hard to navigate
+            \item \texttt{grep} only --- no semantic relevance
+            \item No cross-referencing between files
+            \item Stale memories not auto-garbage-collected
+            \item Pin limit of 10 is tight
+        \end{itemize}
+        \column{0.50\textwidth}
+        \textcolor{leangreen}{\textbf{What would help:}}
+        \begin{itemize}
+            \item \textbf{Embedding-based semantic search}\\{\scriptsize(not just \texttt{grep} --- find memories \emph{related} to current task)}
+            \item \textbf{Automatic staleness detection}\\{\scriptsize(this sorry was closed 10 days ago)}
+            \item \textbf{Cross-reference graph}\\{\scriptsize(this memory obsoletes that one)}
+            \item \textbf{Auto-summarization}\\{\scriptsize(compress 300 files into 20 topic summaries)}
+            \item \textbf{Larger pin budget} or dynamic loading
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+\section{Evolution and lessons}
+%======================================================================
+
+\begin{frame}{Timeline: four phases of evolution}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape]
+        \draw[white, thick, -{Stealth}] (-7,0) -- (7.5,0);
+        \foreach \x/\l in {-6/Feb 7, -2.5/Feb 14, 1/Feb 21, 4/Mar 7, 7/Mar 18}
+            \draw[white] (\x,0.15) -- (\x,-0.15) node[below,font=\tiny]{\l};
+        \node[rounded corners=4pt, draw=dimwhite, very thick, fill=dwfill, text=white, minimum height=1.5cm, align=center, font=\footnotesize, minimum width=3cm] at (-4.25,2.2) {
+          \textbf{Phase 1}\\ Single agent\\ 3 $\to$ 20 files
+        };
+        \node[rounded corners=4pt, draw=leanblue, very thick, fill=lbfill, text=white, minimum height=1.5cm, align=center, font=\footnotesize, minimum width=3cm] at (-0.75,2.2) {
+          \textbf{Phase 2}\\ Specialization\\ 20 $\to$ 48 files
+        };
+        \node[rounded corners=4pt, draw=leangreen, very thick, fill=lgfill, text=white, minimum height=1.5cm, align=center, font=\footnotesize, minimum width=3cm] at (2.5,2.2) {
+          \textbf{Phase 3}\\ Full multi-agent\\ 48 $\to$ 120 files
+        };
+        \node[rounded corners=4pt, draw=amber, very thick, fill=amfill, text=white, minimum height=1.5cm, align=center, font=\footnotesize, minimum width=2.5cm] at (5.75,2.2) {
+          \textbf{Phase 4}\\ Mature\\ 120 $\to$ 172
+        };
+        \draw[dimwhite, thick, dashed] (-6,0.5) -- (-4.25,1.3);
+        \draw[leanblue, thick, dashed] (-2.5,0.5) -- (-0.75,1.3);
+        \draw[leangreen, thick, dashed] (1,0.5) -- (2.5,1.3);
+        \draw[amber, thick, dashed] (4,0.5) -- (5.75,1.3);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize Key transition: Phase 1$\to$2 introduced scout-before-prove. Phase 2$\to$3 introduced parallel fan-out. Phase 3$\to$4 introduced memory distillation and systematic auditing.}
+\end{frame}
+
+\begin{frame}{Growth curves}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.68, transform shape]
+        \draw[white, thick, -{Stealth}] (0,0) -- (12,0) node[right,font=\footnotesize]{days};
+        \draw[white, thick, -{Stealth}] (0,0) -- (0,7.5);
+        \foreach \y in {1,...,7} \draw[white!15] (0,\y) -- (12,\y);
+        \foreach \x in {2,4,...,12} \draw[white!15] (\x,0) -- (\x,7);
+        \node[left, font=\tiny, text=dimwhite] at (0,1) {10K};
+        \node[left, font=\tiny, text=dimwhite] at (0,2) {20K};
+        \node[left, font=\tiny, text=dimwhite] at (0,3) {30K};
+        \node[left, font=\tiny, text=dimwhite] at (0,4) {40K};
+        \node[left, font=\tiny, text=dimwhite] at (0,5) {50K};
+        \node[left, font=\tiny, text=dimwhite] at (0,5.72) {57K};
+        \foreach \x/\l in {0/0, 2/7, 4/14, 6/21, 8/28, 10/35, 12/40}
+            \node[below, font=\tiny, text=dimwhite] at (\x,0) {\l};
+        \draw[leangreen, very thick]
+          (0,0.08) -- (2,0.5) -- (4,0.87) -- (6,2.0) -- (8,3.5) -- (10,4.5) -- (12,5.72);
+        \node[right, font=\scriptsize, text=leangreen] at (12,5.72) {Lines};
+        \draw[leanblue, very thick, dashed]
+          (0,0.06) -- (2,0.4) -- (4,0.96) -- (6,1.5) -- (8,2.4) -- (10,2.9) -- (12,3.44);
+        \node[right, font=\scriptsize, text=leanblue] at (12,3.44) {Files ($\times$50)};
+        \draw[amber, very thick, dotted]
+          (0,0.02) -- (2,0.2) -- (4,0.4) -- (6,0.9) -- (8,1.4) -- (10,1.8) -- (12,2.2);
+        \node[right, font=\scriptsize, text=amber] at (12,2.2) {Thms ($\times$20)};
+        \draw[dimwhite, dashed] (2,0) -- (2,7);
+        \draw[dimwhite, dashed] (4,0) -- (4,7);
+        \draw[dimwhite, dashed] (7.5,0) -- (7.5,7);
+        \node[font=\tiny, text=dimwhite] at (1,6.8) {P1};
+        \node[font=\tiny, text=dimwhite] at (3,6.8) {P2};
+        \node[font=\tiny, text=dimwhite] at (5.75,6.8) {P3};
+        \node[font=\tiny, text=dimwhite] at (9.75,6.8) {P4};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.2em}
+    \textcolor{dimwhite}{\footnotesize Steepest growth in Phase 3 (full multi-agent). Phase 4 growth is driven by new frontier modules.}
+\end{frame}
+
+\begin{frame}{Commit activity}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.70, transform shape]
+        \draw[white, thick, -{Stealth}] (-0.5,0) -- (12,0);
+        \draw[white, thick, -{Stealth}] (-0.5,0) -- (-0.5,6);
+        \foreach \y/\l in {0/0, 1.07/20, 2.14/40, 3.21/60, 4.28/80, 5.35/100, 6.0/113}
+            \node[left, font=\tiny, text=dimwhite] at (-0.5,\y) {\l};
+        \fill[leangreen!60] (0.5,0) rectangle (2,1.82);
+        \fill[leangreen!70] (2.5,0) rectangle (4,3.21);
+        \fill[leangreen!90] (4.5,0) rectangle (6,3.69);
+        \fill[leangreen!70] (6.5,0) rectangle (8,3.0);
+        \fill[leangreen] (8.5,0) rectangle (10,6.0);
+        \fill[leangreen!70] (10.5,0) rectangle (12,2.94);
+        \node[below, font=\tiny, text=dimwhite] at (1.25,0) {Feb 7--13};
+        \node[below, font=\tiny, text=dimwhite] at (3.25,0) {Feb 14--20};
+        \node[below, font=\tiny, text=dimwhite] at (5.25,0) {Feb 21--27};
+        \node[below, font=\tiny, text=dimwhite] at (7.25,0) {Feb 28--Mar 6};
+        \node[below, font=\tiny, text=dimwhite] at (9.25,0) {Mar 7--13};
+        \node[below, font=\tiny, text=dimwhite] at (11.25,0) {Mar 14--18};
+        \node[above, font=\scriptsize, text=white] at (1.25,1.82) {34};
+        \node[above, font=\scriptsize, text=white] at (3.25,3.21) {60};
+        \node[above, font=\scriptsize, text=white] at (5.25,3.69) {69};
+        \node[above, font=\scriptsize, text=white] at (7.25,3.0) {56};
+        \node[above, font=\scriptsize\bfseries, text=leangreen] at (9.25,6.0) {113};
+        \node[above, font=\scriptsize, text=white] at (11.25,2.94) {55};
+        \node[font=\footnotesize, text=dimwhite] at (6,-1.3)
+          {Total: \textbf{387 commits} over 39 days = 9.9 commits/day};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{What worked}
+    \vspace{-0.4em}
+    \begin{enumerate}
+        \item \textcolor{leangreen}{\textbf{Scout-before-prove}} saved enormous time.\\ {\footnotesize Finding \texttt{monotone\_stabilizes\_iff\_noetherian} $\to$ 50 lines instead of 200.}
+        \item \textcolor{leangreen}{\textbf{Disjoint file assignment}} prevented all merge conflicts after Phase 1.
+        \item \textcolor{leangreen}{\textbf{Memory system}} prevented re-discovering known counterexamples.
+        \item \textcolor{leangreen}{\textbf{Blueprint sync}} caught statement mismatches before they propagated.
+        \item \textcolor{leangreen}{\textbf{Cleanup waves}} (batch, not continuous) prevented technical debt accumulation.
+        \item \textcolor{leangreen}{\textbf{Errata tracking}} caught paper errors \emph{early}: the DS gauge $\neq$ TP discovery changed the proof route on Day 3.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{What didn't work}
+    \vspace{-0.4em}
+    \begin{enumerate}
+        \item \textcolor{softred}{\textbf{False completion claims}} frequently for complex proofs.\\ {\footnotesize Agent says ``done'' $\to$ diagnostics shows 4 errors. Mitigation: always verify.}
+        \item \textcolor{softred}{\textbf{Plausible but wrong math.}}\\ {\footnotesize Agents produce convincing proof sketches for false statements. The per-block trace equality attempt ran 2 hours before a \emph{human} found the counterexample.}
+        \item \textcolor{softred}{\textbf{Multi-file refactoring}} is risky.\\ {\footnotesize Renaming across 15 files broke imports in 3. Keep changes local.}
+        \item \textcolor{amber}{\textbf{Sorry closure needs mathematical strategy, not brute force.}}\\ {\footnotesize Throwing an expensive agent at a hard sorry without a plan wastes time.}
+        \item \textcolor{amber}{\textbf{Heartbeat explosions}} from large proof terms.\\ {\footnotesize Some proofs still require up to 16M heartbeats. Factoring helps but doesn't solve the underlying complexity.}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{The irreducible role of mathematical insight}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.80, transform shape]
+        \node[rounded corners=5pt, draw=leangreen, thick, fill=lgfill, text=white, minimum width=5cm, minimum height=2cm, align=center, font=\small] at (-3.5,0) {
+          \textbf{Agents can:}\\ {\footnotesize Search Mathlib}\\ {\footnotesize Write syntactically valid proofs}\\ {\footnotesize Fix type errors iteratively}\\ {\footnotesize Maintain code quality}\\ {\footnotesize Track progress over weeks}
+        };
+        \node[rounded corners=5pt, draw=softred, thick, fill=srfill, text=white, minimum width=5cm, minimum height=2cm, align=center, font=\small] at (3.5,0) {
+          \textbf{Agents cannot:}\\ {\footnotesize Judge if a statement is true}\\ {\footnotesize Find counterexamples reliably}\\ {\footnotesize Choose proof routes for hard results}\\ {\footnotesize Detect subtle hypothesis gaps}\\ {\footnotesize Replace mathematical taste}
+        };
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize The system is \emph{agent-assisted}, not \emph{agent-autonomous}. Every major mathematical decision was made or approved by a human. The agents handle the 90\% that is \emph{mechanical but tedious}.}
+\end{frame}
+
+\begin{frame}{Paper errors: formalization finds bugs}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textcolor{leangreen}{\textbf{Errors in published papers:}}
+        \begin{enumerate}
+            \item PGVWC'07 (QIC, 2007): DS gauge TP claim --- \textcolor{softred}{false}
+            \item Wolf 2012 lecture notes: 5 citation number errors caught
+            \item Blueprint v1 (our own): ``peripheral $\Rightarrow$ root of unity'' --- \textcolor{softred}{false}
+        \end{enumerate}
+        \column{0.50\textwidth}
+        \textcolor{leangreen}{\textbf{Hypothesis mismatches found:}}
+        \begin{itemize}
+            \item Block separation: Lean needs \texttt{overlap\_tendsto\_one} assumed
+            \item Multi-block FT: Lean assumes same $r$, dim, $\mu$
+            \item \texttt{IsPrimitive}: Lean definition is weaker than standard
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize Every one of these would have gone unnoticed in a conventional proof. Formalization is the most thorough peer review.}
+\end{frame}
+
+%======================================================================
+\section{Reflections and future}
+%======================================================================
+
+\begin{frame}{The formalization gap}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.80, transform shape]
+        \node[rounded corners=5pt, draw=dimwhite, thick, fill=cardbg, text=white, minimum width=4cm, minimum height=5cm, align=center] (paper) at (-4,0) {};
+        \node[above, font=\small\bfseries, text=white] at (-4,2.2) {Paper proof};
+        \node[text=dimwhite, font=\footnotesize, align=left] at (-4,0.5) {
+          ``By Perron--Frobenius,\\ there exists a PSD\\ fixed point $\rho > 0$.\\ 
+          The blocks separate\\ by standard arguments.\\ 
+          $X$ is clearly invertible.''
+        };
+        \node[text=dimwhite, font=\scriptsize] at (-4,-1.8) {$\sim$30 pages (multiple papers)};
+        \node[rounded corners=5pt, draw=leangreen, thick, fill=cardbg, text=white, minimum width=4cm, minimum height=5cm, align=center] (lean) at (4,0) {};
+        \node[above, font=\small\bfseries, text=leangreen] at (4,2.2) {Lean proof};
+        \node[text=dimwhite, font=\footnotesize, align=left] at (4,0.5) {
+          PSD eigvec existence\\ PosDef upgrade\\ Uniqueness via dual trace\\
+          KS inequality\\ HS contraction\\ Multiplicative domain\\
+          Kernel invariance\\ Block embedding\\ Spectral gap\\
+          Overlap decay\\ Peeling induction\\ \ldots
+        };
+        \node[text=leangreen, font=\scriptsize] at (4,-1.8) {$\sim$57K lines};
+        \draw[-{Stealth}, white, very thick] (-1.5,0) -- (1.5,0) node[midway, above, font=\small] {$\times$100--200};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Agent-assisted vs.\ fully autonomous}
+    \vspace{-0.4em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.25}
+    {\footnotesize
+    \begin{tabular}{@{}p{3.2cm} p{4.2cm} p{4.5cm}@{}}
+        \toprule
+        & \textbf{Agent-assisted} {\scriptsize(this project)} & \textbf{Fully autonomous} {\scriptsize(hypothetical)} \\
+        \midrule
+        Math decisions & Human & Agent \\
+        Proof routes & Human chooses, agent implements & Agent explores tree \\
+        Error detection & Agent flags, human judges & Agent must self-correct \\
+        Quality bar & Human sets standards & Must learn standards \\
+        Memory curation & Human pins, agent distills & Fully automatic \\
+        \midrule
+        Achievable today? & \textcolor{leangreen}{Yes} & \textcolor{softred}{No}\\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize The gap is \emph{mathematical judgment}. Current LLMs can check if a proof compiles but cannot reliably judge if a statement is true or choose the right level of generality.}
+\end{frame}
+
+\begin{frame}{What would make this system better}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textcolor{leangreen}{\textbf{Tooling improvements:}}
+        \begin{itemize}
+            \item \textbf{Semantic memory search}\\{\scriptsize Beyond \texttt{grep}: embedding-based retrieval}
+            \item \textbf{Dependency-aware delegation}\\{\scriptsize Auto-compute safe file sets from import graph}
+            \item \textbf{Incremental build feedback}\\{\scriptsize Stream \texttt{lake build} to agent in real time}
+            \item \textbf{Auto-generated sorry reports}\\{\scriptsize Sorry + dependency chain + difficulty estimate}
+        \end{itemize}
+        \column{0.50\textwidth}
+        \textcolor{amber}{\textbf{The biggest bottleneck:}}\\[4pt]
+        \textbf{Mathematical judgment.}\\[3pt]
+        Knowing \emph{which} proof to attempt is harder than attempting it. Agents can execute proof strategies but cannot yet reliably:
+        \begin{itemize}
+            \item Judge whether a statement is true
+            \item Generate counterexamples systematically
+            \item Choose the right level of generality
+            \item Detect subtle hypothesis gaps
+        \end{itemize}
+        \vspace{0.3em}
+        \textcolor{dimwhite}{\scriptsize Human mathematical oversight remains essential for all hard decisions.}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}{The physics horizon}
+    \vspace{-0.3em}
+    \textcolor{leangreen}{\textbf{What TNLean enables next:}}
+    \vspace{0.3em}
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textbf{Near-term targets:}
+        \begin{itemize}
+            \item \textbf{Complete the multi-block FT}\\{\scriptsize Close remaining 25 sorries; full end-to-end pipeline}
+            \item \textbf{Parent Hamiltonian construction}\\{\scriptsize Frustration-free gapped Hamiltonians from MPS~[5]}
+            \item \textbf{DMRG convergence}\\{\scriptsize Formal guarantees for the dominant numerical method}
+        \end{itemize}
+        \column{0.48\textwidth}
+        \textbf{Longer-term conjectures:}
+        \begin{itemize}
+            \item \textbf{Haldane conjecture} (1D spin chains)\\{\scriptsize Gap classification via MPS symmetry-protected phases}
+            \item \textbf{Area law $\Leftrightarrow$ MPS}\\{\scriptsize 1D ground states with area-law entanglement are well-approximated by MPS}
+            \item \textbf{2D PEPS decidability}\\{\scriptsize Extend canonical form theory to projected entangled pair states}
+        \end{itemize}
+    \end{columns}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize The formalized spectral theory (Wielandt, PF, spectral gap) is reusable infrastructure for all of these.}
+\end{frame}
+\begin{frame}{Scaling to larger projects}
+    \textcolor{leangreen}{\textbf{This project:}} 57K lines, 172 files, 39 days, 1 human + 5 agent roles.
+    \vspace{0.3em}
+
+    \textcolor{amber}{\textbf{What scales:}}
+    \begin{itemize}
+        \item Scout $\to$ implement pattern {\scriptsize(works for any Mathlib-based project)}
+        \item Disjoint file assignment {\scriptsize(scales with number of files)}
+        \item Memory system {\scriptsize(more files = more value from persistent knowledge)}
+        \item Blueprint sync {\scriptsize(independent chapters = linear parallelism)}
+    \end{itemize}
+    \vspace{0.3em}
+
+    \textcolor{softred}{\textbf{What doesn't scale:}}
+    \begin{itemize}
+        \item Human mathematical oversight {\scriptsize(bottleneck for hard proofs)}
+        \item Memory navigation at 1000+ files {\scriptsize(needs semantic search)}
+        \item Integration complexity {\scriptsize(N agents $\to$ $O(N^2)$ potential conflicts)}
+        \item Mathlib dependency updates {\scriptsize(breaking changes cascade)}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lessons for the formalization community}
+    \vspace{-0.4em}
+    \begin{enumerate}
+        \item \textcolor{leangreen}{\textbf{Formalization finds bugs.}} Every project of this scale discovers errors in published papers. This is a \emph{feature}, not a cost.
+        \item \textcolor{leangreen}{\textbf{Search before you prove.}} The single highest-ROI activity is searching Mathlib for existing lemmas. Invest in search tooling.
+        \item \textcolor{leangreen}{\textbf{Specialize your agents.}} \texttt{leanSearch} searches, \texttt{lean} proves, \texttt{leanSimplifier} cleans. One agent that does everything does nothing well.
+        \item \textcolor{leangreen}{\textbf{Memory is multiplicative.}} Knowledge persisted from Day 1 saves time on Day 40.
+        \item \textcolor{amber}{\textbf{Agents are amplifiers, not replacements.}} They amplify a human mathematician's ability to manage complexity.
+        \item \textcolor{amber}{\textbf{The formalization gap is real.}} ``By standard arguments'' in a paper becomes 800 lines of Lean. Plan for $100\times$--$1000\times$ expansion.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+    \vspace{2cm}
+    \begin{center}
+        {\Huge\textcolor{leangreen}{\textbf{Thank you}}}
+        \vspace{1.5em}
+
+        {\large\textcolor{dimwhite}{172 files \quad|\quad $\sim$57K lines \quad|\quad 1{,}100 theorems \quad|\quad 39 days}}
+        \vspace{1em}
+
+        {\footnotesize\textcolor{dimwhite}{Lean 4 + Mathlib v4.28.0\\
+          5 agent roles \quad|\quad 300+ memory files \quad|\quad 387 commits\\[4pt]
+          \textcolor{amber}{Key components proved. Full end-to-end pipeline: work in progress.}\\[2pt]
+          \textcolor{leangreen}{The proof is the code. The code is the proof.}}}
+    \end{center}
+\end{frame}
+
+%======================================================================
+% Pre-define citations so they resolve in the main text
+\providecommand{\bibcite}[2]{}
+\makeatletter
+\immediate\write\@mainaux{\string\bibcite{Perez-Garcia2007Matrix}{{1}{2007}{{P{\'e}rez-Garc{\'i}a et~al.}}{}}}
+\immediate\write\@mainaux{\string\bibcite{Cirac2021Matrix}{{2}{2021}{{Cirac et~al.}}{}}}
+\immediate\write\@mainaux{\string\bibcite{Cirac2017Annals}{{3}{2017}{{Cirac et~al.}}{}}}
+\immediate\write\@mainaux{\string\bibcite{Wolf2012Quantum}{{4}{2012}{{Wolf}}{}}}
+\immediate\write\@mainaux{\string\bibcite{Sanz2010Quantum}{{5}{2010}{{Sanz et~al.}}{}}}
+\makeatother
+
+\begin{frame}{References}
+    {\footnotesize
+    \begin{enumerate}
+        \item D.~P{\'e}rez-Garc{\'i}a et~al.
+              Matrix product state representations.
+              \emph{Quantum Inf.\ Comput.}, 7(5--6):401--430, 2007.
+        \item J.~I.~Cirac et~al.
+              Matrix product states and projected entangled pair states.
+              \emph{Rev.\ Mod.\ Phys.}, 93:045003, 2021.
+        \item J.~I.~Cirac et~al.
+              Matrix product density operators: boundary theories.
+              \emph{Ann.\ Phys.}, 378:100--149, 2017.
+        \item M.~M.~Wolf.
+              Quantum channels \& operations: guided tour.
+              Lecture notes, TU Munich, 2012.
+        \item M.~Sanz et~al.
+              A quantum version of Wielandt's inequality.
+              \emph{IEEE Trans.\ Inform.\ Theory}, 56(9):4668--4673, 2010.
+    \end{enumerate}
+    }
+\end{frame}
+
+%======================================================================
+\appendix
+%======================================================================
+
+\begin{frame}{Appendix: Channel submodule structure}
+    {\footnotesize
+    \begin{center}
+    \renewcommand{\arraystretch}{1.1}
+    \begin{tabular}{@{}l r r r@{}}
+        \toprule
+        \textbf{Channel/} & \textbf{Files} & \textbf{Lines} & \textbf{Focus} \\
+        \midrule
+        Semigroup & 12 & 4{,}990 & Wolf Ch\,7: QDS, generators \\
+        Schwarz & 12 & 3{,}847 & KS inequality, mult.\ domain \\
+        Irreducible & 7 & 2{,}961 & Growth, PF, spectral radius \\
+        Peripheral & 8 & 2{,}815 & Cyclic decomposition \\
+        FixedPoint & 3 & 941 & Cesaro, canonical gauge \\
+        PerronFrobenius & 2 & 708 & PSD eigenvector existence \\
+        \midrule
+        \textbf{Total} & \textbf{57} & \textbf{19{,}349} & \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+    }
+\end{frame}
+
+\begin{frame}{Appendix: MPS submodule structure}
+    {\footnotesize
+    \begin{center}
+    \renewcommand{\arraystretch}{1.1}
+    \begin{tabular}{@{}l r r r@{}}
+        \toprule
+        \textbf{MPS/} & \textbf{Files} & \textbf{Lines} & \textbf{Focus} \\
+        \midrule
+        CanonicalForm & 9 & 3{,}971 & Reduction, cyclic sectors \\
+        FundamentalTheorem & 7 & 3{,}631 & Single + multi-block FT \\
+        BNT & 5 & 2{,}468 & Basis normal tensors \\
+        Structure & 4 & 1{,}413 & Block permutation, linear ext.\ \\
+        Core & 7 & 1{,}087 & Defs, transfer, multi-block \\
+        Irreducible & 3 & 1{,}024 & Irreducible decomposition \\
+        Overlap & 4 & 707 & MPV overlap, inner product \\
+        \midrule
+        \textbf{Total} & \textbf{39} & \textbf{14{,}485} & \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+    }
+\end{frame}
+
+\begin{frame}{Appendix: All agent tools}
+    {\footnotesize
+    \begin{center}
+    \renewcommand{\arraystretch}{1.1}
+    \begin{tabular}{@{}l l p{6.5cm}@{}}
+        \toprule
+        \textbf{Tool} & \textbf{Category} & \textbf{Description} \\
+        \midrule
+        \texttt{lean\_diagnostics} & IDE & Errors, warnings, unsolved goals \\
+        \texttt{lean\_inspect} & IDE & Goal state, type info, hover docs \\
+        \texttt{lean\_loogle} & Search & Mathlib search by type/name \\
+        \texttt{lean\_file} & IDE & Restart server, refresh deps \\
+        \texttt{lean\_project} & Build & \texttt{lake build}, cache, toolchain \\
+        \texttt{read/write/edit\_file} & File & Read, create, edit files \\
+        \texttt{bash} & Shell & Arbitrary commands (git, grep) \\
+        \texttt{memory} & Persist & Create, view, pin memories \\
+        \texttt{web\_search} & Research & External web search (scout only) \\
+        \texttt{delegate\_agent} & Orch & Launch specialized subagents \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+    }
+\end{frame}
+
+\begin{frame}{Appendix: ArXiv papers in the formalization}
+    {\footnotesize
+    \begin{center}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}l l l@{}}
+        \toprule
+        \textbf{ArXiv ID} & \textbf{Authors} & \textbf{Role} \\
+        \midrule
+        quant-ph/0608197 & P\'erez-Garc\'ia et al.\ & Original MPS canonical form \\
+        0909.5347 & Sanz et al.\ & Quantum Wielandt inequality \\
+        1210.6613 & Fern\'andez-Gonz\'alez et al.\ & Frustration-free Hamiltonians \\
+        1606.00608 & Cirac et al.\ & MPDO / canonical form (Annals) \\
+        1708.00029 & Cirac et al.\ & Irreducible forms of MPS \\
+        1906.11682 & Lancien, P\'erez-Garc\'ia & Correlation length \\
+        2011.12127 & Cirac et al.\ & RMP review (primary ref) \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+    }
+    \vspace{0.4em}
+    Plus: Wolf 2012 lecture notes~[4] (8 chapters, 117+ numbered results).
+\end{frame}
+
+\end{document}
