@@ -347,7 +347,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.2, direction 2$\to$1]
     \label{thm:choi_projected_implies_ccp}
-    \lean{choi_projected_posSemidef_implies_ccp}
+    \lean{choi_projected_posSemidef_implies_ccp}\leanok
     \uses{def:is_ccp}
     If $L$ is Hermiticity-preserving and
     $P((L \otimes \id)(\ketbra{\Omega}{\Omega}))P \ge 0$
@@ -357,6 +357,7 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     Decompose the Hermitian Choi matrix as
     $\tau_L = Q - \ket{\psi}\bra{\Omega} - \ket{\Omega}\bra{\psi}$
     with $Q \ge 0$ supported on $\ket{\Omega}^\perp$.
@@ -369,13 +370,14 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.3: CP semigroup implies CCP generator]
     \label{thm:cp_semigroup_implies_ccp}
-    \lean{cp_semigroup_implies_ccp_generator}
+    \lean{cp_semigroup_implies_ccp_generator}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
     If $e^{tL}$ is CP for all $t \ge 0$, then $L$ is CCP.
     This is \cite[Prop.~7.3]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:choi_projected_implies_ccp}
     From $(e^{tL} \otimes \id)(\ketbra{\Omega}{\Omega}) \ge 0$,
     expand at infinitesimal $t$ and project onto $P$ to get
@@ -404,12 +406,13 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.3: CP semigroup iff CCP generator]
     \label{thm:cp_semigroup_iff_ccp}
-    \lean{cp_semigroup_iff_ccp_generator}
+    \lean{cp_semigroup_iff_ccp_generator}\leanok
     \uses{def:cp_map, def:is_ccp, def:exp_semigroup_ch12}
     $e^{tL}$ is CP for all $t \ge 0$ if and only if $L$ is CCP.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:cp_semigroup_implies_ccp, thm:ccp_implies_cp_semigroup}
     Combine Theorems~\ref{thm:cp_semigroup_implies_ccp}
     and~\ref{thm:ccp_implies_cp_semigroup}.
@@ -604,4 +607,146 @@ which shows that such generators have the standard Lindblad form.
     $L_j = \sum_k B_{jk} F_k$.
     Reverse: keep the same Hamiltonian and family $F_k = L_k$, and take
     $C = \,\Id$.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Primitivity and irreducibility of QDS}
+\label{sec:qds_primitivity}
+%% ---------------------------------------------------------
+
+%% Wolf §7.1, Prop 7.5
+
+\begin{theorem}[Prop.~7.5: Irreducible semigroup implies primitive]
+    \label{thm:irreducible_semigroup_implies_primitive}
+    \lean{irreducible_semigroup_implies_primitive}\leanok
+    \uses{def:exp_semigroup_ch12}
+    Let $T_t = e^{tL}$ be a quantum dynamical semigroup.
+    If $T_{t_0}$ is irreducible for some $t_0 > 0$, then
+    $T_t$ is primitive (and irreducible) for every $t > 0$.
+    This is \cite[Prop.~7.5]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The unique faithful density fixed point $\sigma$ of $T_{t_0}$
+    is also fixed by all $T_u$ (semigroup commutativity), so by
+    uniqueness it is the common fixed point.
+    Irreducibility of each $T_t$ then follows from uniqueness of the
+    positive definite fixed point and the spectral-gap argument.
+    Primitivity is then the one-dimensional peripheral-eigenvalue
+    characterisation, using that $T_t$ irreducible implies
+    all peripheral eigenvalues are roots of unity, and the
+    faithful fixed point forces those eigenvalues to equal~$1$.
+\end{proof}
+
+\begin{theorem}[Prop.~7.5: Irreducibility iff primitivity for QDS]
+    \label{thm:qds_irreducible_iff_primitive}
+    \lean{qds_irreducible_iff_primitive}\leanok
+    \uses{thm:irreducible_semigroup_implies_primitive}
+    For a quantum dynamical semigroup $T_t = e^{tL}$:
+    \[
+        (\exists\, t_0 > 0,\ T_{t_0}\ \text{irreducible})
+        \;\iff\;
+        (\forall\, t > 0,\ T_t\ \text{primitive and irreducible}).
+    \]
+    This is \cite[Prop.~7.5]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:irreducible_semigroup_implies_primitive}
+    Forward: apply Theorem~\ref{thm:irreducible_semigroup_implies_primitive}.
+    Reverse: take $t_0 = 1$ (or any positive time); primitivity
+    implies irreducibility by definition.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Kernel of the adjoint Liouvillian}
+\label{sec:liouvillian_kernel}
+%% ---------------------------------------------------------
+
+%% Wolf §7.1, Thm 7.2
+
+\begin{theorem}[Thm.~7.2: Adjoint kernel equals commutant (faithful state)]
+    \label{thm:adjointKernel_eq_commutant}
+    \lean{mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState}\leanok
+    \uses{def:lindblad_form, def:is_gksl_generator}
+    Let $L$ be a GKSL generator in Lindblad form with Hamiltonian $H$
+    and Lindblad operators $\{L_j\}$.
+    Define the adjoint generator $L^*$ by
+    $\operatorname{tr}(\rho\,L^*(A)) = \operatorname{tr}(L(\rho)\,A)$.
+    If $L$ has a faithful stationary state $\rho_0 > 0$ with $L(\rho_0) = 0$,
+    then for any $A$:
+    \[
+        L^*(A) = 0
+        \;\implies\;
+        [A,H] = [A,L_j] = [A,L_j^\dagger] = 0\ \forall j.
+    \]
+    That is, $\ker(L^*) \subseteq \{H, L_j, L_j^\dagger\}'$.
+    This is \cite[Thm.~7.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    From $L^*(A) = 0$ and $L^*(A^\dagger) = 0$, compute
+    $L^*(A^\dagger A) = \sum_j [A, L_j]^\dagger [A, L_j]$.
+    Faithfulness of $\rho_0$ and $\operatorname{tr}(\rho_0 L^*(A^\dagger A)) = 0$
+    force $[A, L_j] = 0$ for all $j$.
+    Similarly $[A, L_j^\dagger] = 0$, and then $L^*(A) = 0$ directly gives
+    $[A, H] = 0$.
+\end{proof}
+
+\begin{theorem}[Thm.~7.2: Adjoint kernel equals commutant (full equivalence)]
+    \label{thm:adjointKernel_eq_commutant_full}
+    \lean{adjointKernel_eq_commutant_of_hasFaithfulStationaryState}\leanok
+    \uses{thm:adjointKernel_eq_commutant, def:lindblad_form}
+    Under the same hypotheses as
+    Theorem~\ref{thm:adjointKernel_eq_commutant},
+    \[
+        \ker(L^*) = \{H, L_j, L_j^\dagger\}',
+    \]
+    i.e.\ the adjoint kernel equals the commutant of $\{H, L_j, L_j^\dagger\}$.
+    This is \cite[Thm.~7.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:adjointKernel_eq_commutant}
+    The inclusion $\supseteq$ is the easy direction
+    (commutant elements are in the kernel by a direct calculation).
+    The reverse $\subseteq$ is
+    Theorem~\ref{thm:adjointKernel_eq_commutant}.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Reducibility of quantum dynamical semigroups}
+\label{sec:qds_reducibility}
+%% ---------------------------------------------------------
+
+%% Wolf §7.1.2, Prop 7.6
+
+\begin{theorem}[Prop.~7.6, (4)$\to$(2): Block-upper-triangular implies rank-deficient kernel]
+    \label{thm:blockUpperTriangular_implies_rankDeficient}
+    \lean{hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad}\leanok
+    \uses{def:is_gksl_generator, def:lindblad_form}
+    Let $L$ be a GKSL generator with Lindblad form $(H, \{L_j\}, \kappa)$.
+    If there exists a nontrivial projector $P$ such that
+    $(1-P)L_j P = 0$ and $(1-P)\kappa P = 0$ for all $j$
+    (i.e.\ the Lindblad data are block-upper-triangular with respect to $P$),
+    then there exists a density matrix $\rho_0$ with nontrivial kernel
+    satisfying $L(\rho_0) = 0$.
+    This is \cite[Prop.~7.6, (4)$\to$(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The block-upper-triangular structure implies $L$ preserves the
+    compression $P M_d(\C) P$.
+    Therefore the semigroup $e^{tL}$ also preserves $P M_d(\C) P$
+    for all $t \ge 0$.
+    By the Brouwer fixed-point theorem, $e^{(1/m)L}$ has a fixed
+    density matrix $\rho_m$ supported in $P M_d(\C) P$ for each $m$.
+    Passing to a subsequential limit gives a density matrix
+    $\rho_0$ with $P \rho_0 P = \rho_0$ and $L(\rho_0) = 0$.
+    Since $P \neq \Id$, the matrix $\rho_0$ has nontrivial kernel.
 \end{proof}
