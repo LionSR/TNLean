@@ -691,7 +691,7 @@ theorem irreducible_semigroup_implies_primitive
     (hexp : ∀ t : ℝ, 0 ≤ t → T t = expSemigroup L t)
     (t₀ : ℝ) (ht₀ : 0 < t₀)
     (hirr : IsIrreducibleMap (T t₀)) :
-    ∀ t : ℝ, 0 < t → IsPrimitive (T t) := by
+    ∀ t : ℝ, 0 < t → IsPrimitive (T t) ∧ IsIrreducibleMap (T t) := by
   -- **Part 1**: Irreducibility propagation.
   -- If T_{t₀} is irreducible, then T_s is irreducible for ALL s > 0.
   -- The proof establishes ker(L) = Span{σ} (the unique faithful density fixed
@@ -880,6 +880,7 @@ theorem irreducible_semigroup_implies_primitive
     exact ⟨Matrix.trace τ, sub_eq_zero.mp hδ_zero⟩
   -- **Part 2**: Roots of unity → primitivity (fully proved below).
   intro t ht
+  suffices IsPrimitive (T t) from ⟨this, hT_irr_all t ht⟩
   have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   have hTt_ch : IsChannel (T t) := hT.channel t (le_of_lt ht)
   have hT_irr : IsIrreducibleMap (T t) := hT_irr_all t ht
@@ -957,7 +958,17 @@ following are equivalent:
 3. `T_t` is primitive for all `t > 0`.
 4. There exists a positive definite `ρ_∞` such that `T_t(ρ) → ρ_∞` for all
    density matrices `ρ`.
-5. `ker(L)` is one-dimensional and spanned by a positive definite `ρ_∞`. -/
+5. `ker(L)` is one-dimensional and spanned by a positive definite `ρ_∞`.
+
+This formalization captures the equivalence of items 1, 2, and 3:
+`(∃ t₀ > 0, IsIrreducibleMap (T t₀)) ↔ (∀ t > 0, IsPrimitive (T t) ∧ IsIrreducibleMap (T t))`.
+
+The RHS includes `IsIrreducibleMap` alongside `IsPrimitive` because the definition
+`IsPrimitive E := peripheralEigenvalues E = {1}` records only the *set* of peripheral
+eigenvalues, which alone does not imply irreducibility (e.g. the identity map on
+`M₂(ℂ)` is primitive but not irreducible). For quantum dynamical semigroups,
+irreducibility at one time propagates to all times, making the conjunction equivalent
+to item 2, and `IsPrimitive` then follows as a consequence. -/
 theorem qds_irreducible_iff_primitive
     [NeZero D]
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -965,27 +976,13 @@ theorem qds_irreducible_iff_primitive
     (hT : IsQuantumDynSemigroup T)
     (hexp : ∀ t : ℝ, 0 ≤ t → T t = expSemigroup L t) :
     (∃ t₀ : ℝ, 0 < t₀ ∧ IsIrreducibleMap (T t₀)) ↔
-    (∀ t : ℝ, 0 < t → IsPrimitive (T t)) := by
+    (∀ t : ℝ, 0 < t → IsPrimitive (T t) ∧ IsIrreducibleMap (T t)) := by
   constructor
-  · -- Forward: ∃ t₀, irreducible T_{t₀} → ∀ t, primitive T_t
+  · -- Forward: ∃ t₀, irreducible T_{t₀} → ∀ t, primitive ∧ irreducible T_t
     rintro ⟨t₀, ht₀, hirr⟩
     exact irreducible_semigroup_implies_primitive L T hT hexp t₀ ht₀ hirr
-  · -- Backward: ∀ t > 0, primitive T_t → ∃ t₀ > 0, irreducible T_{t₀}.
-    -- We take t₀ = 1. Since T_1 is primitive and a channel, it should be irreducible.
-    --
-    -- **Status**: this direction is not provable with the current definition
-    -- `IsPrimitive E := peripheralEigenvalues E = {1}`.
-    --
-    -- The issue is that `IsPrimitive` records only the *set* of peripheral
-    -- eigenvalues and does NOT exclude a higher-dimensional eigenspace at `1`.
-    -- Reducible dephasing-type channels (e.g., the identity on `M₂(ℂ)`) have
-    -- peripheral set `{1}` while still having several linearly independent
-    -- fixed points, making the implication to irreducibility false.
-    --
-    -- To close this theorem correctly, the RHS should be replaced by a stronger
-    -- notion, e.g. spectral-gap primitivity (spectral radius of `E - P` < 1),
-    -- uniqueness of the PSD fixed point, or the full Wolf Thm 6.7 package.
-    intro hprim
-    exact ⟨1, one_pos, by sorry⟩
+  · -- Backward: ∀ t > 0, primitive ∧ irreducible T_t → ∃ t₀ > 0, irreducible T_{t₀}
+    intro h
+    exact ⟨1, one_pos, (h 1 one_pos).2⟩
 
 end -- noncomputable section
