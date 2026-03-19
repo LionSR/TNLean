@@ -570,7 +570,8 @@ private lemma channelDet_norm_one_hs_norm_ge [NeZero d]
         Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).re := by
   sorry
 
-set_option maxHeartbeats 400000 in
+-- KS trace-summing + Kraus commutation + basis extensionality
+set_option maxHeartbeats 16000000 in
 private theorem heisenberg_dual_multiplicative [NeZero d]
     {T : MatrixEnd d} (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1)
     (hall : ∀ μ : ℂ, Module.End.HasEigenvalue T μ → ‖μ‖ = 1)
