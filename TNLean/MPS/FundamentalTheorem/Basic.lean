@@ -4,8 +4,9 @@ import TNLean.Algebra.SkolemNoether
 /-!
 # The single-block Fundamental Theorem of Matrix Product States
 
-This file proves the main single-block result: if `A` is an injective MPS tensor and `B` generates the same
-MPV family (`SameMPV A B`), then `A` and `B` are gauge equivalent (`GaugeEquiv A B`), i.e.
+This file proves the main single-block result: if `A` is an injective MPS
+tensor and `B` generates the same MPV family (`SameMPV A B`), then `A` and `B`
+are gauge equivalent (`GaugeEquiv A B`), i.e.
 `B i = X * A i * X⁻¹` for some invertible matrix `X`.
 
 The proof combines:

@@ -45,7 +45,9 @@ lemma evalWord_append (A : MPSTensor d D) :
   | nil => simp [evalWord]
   | cons i w1 ih => simp [evalWord, ih, Matrix.mul_assoc]
 
-/-- Scaling of word evaluation: scaling every matrix by a scalar `ζ` scales `evalWord` by the factor `ζ ^ w.length`. -/
+/-- Scaling of word evaluation:
+scaling every matrix by a scalar `ζ` scales `evalWord` by the factor
+`ζ ^ w.length`. -/
 lemma evalWord_smul (ζ : ℂ) (A : MPSTensor d D) :
     ∀ w : List (Fin d), evalWord (fun i => ζ • A i) w = (ζ ^ w.length) • evalWord A w := by
   intro w

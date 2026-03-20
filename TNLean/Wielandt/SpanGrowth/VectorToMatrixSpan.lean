@@ -160,13 +160,13 @@ theorem cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector
   have hrep : evalWord A (List.replicate k i₀) *ᵥ φ = μ ^ k • φ := by
     induction k with
     | zero =>
-      simp [MPSTensor.evalWord]
+      simp
     | succ k ih =>
       -- `replicate (k+1) i₀ = i₀ :: replicate k i₀`.
       calc
         evalWord A (List.replicate (k + 1) i₀) *ᵥ φ
             = (A i₀ * evalWord A (List.replicate k i₀)) *ᵥ φ := by
-                simp [List.replicate_succ, MPSTensor.evalWord]
+                simp [List.replicate_succ]
         _ = A i₀ *ᵥ (evalWord A (List.replicate k i₀) *ᵥ φ) := by
               exact (Matrix.mulVec_mulVec φ (A i₀) (evalWord A (List.replicate k i₀))).symm
         _ = A i₀ *ᵥ (μ ^ k • φ) := by

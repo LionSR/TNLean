@@ -34,7 +34,8 @@ irreducible maps), specialized to the trace-preserving (spectral radius = 1) set
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2 Thm 6.3, §6.4 Thm 6.11][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §6.2 Thm 6.3,
+  §6.4 Thm 6.11][Wolf2012QChannels]
 * [Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/
 

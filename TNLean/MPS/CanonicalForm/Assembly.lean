@@ -734,7 +734,10 @@ private theorem adjointTransferMap_pow_fixes_cyclic_projection
   induction n with
   | zero =>
     intro _ k
-    simp [Nat.mod_eq_of_lt k.is_lt, show (⟨(k : ℕ) % m, _⟩ : Fin m) = k from by ext; simp [Nat.mod_eq_of_lt k.is_lt]]
+    have hkmod : (⟨(k : ℕ) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩ : Fin m) = k := by
+      ext
+      simp [Nat.mod_eq_of_lt k.is_lt]
+    simpa [Nat.mod_eq_of_lt k.is_lt, hkmod]
   | succ n ih =>
     intro hn k
     have hn' : n ≤ m := Nat.le_of_succ_le hn
@@ -827,7 +830,7 @@ theorem exists_cyclic_sector_decomp_after_blocking
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor A)
+    (_hIrr : IsIrreducibleTensor A)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap (fun i : Fin d => (A i)ᴴ) ρ = ρ)
     (hIrrMap : IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
@@ -933,7 +936,7 @@ connecting the reduction output to the fundamental theorem conclusion. -/
 theorem fundamentalTheorem_after_blocking_1606_structural
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B) :
+    (_hSame : SameMPV₂ A B) :
     -- Both tensors admit blocked TP-primitive decompositions
     ∃ (pA : ℕ) (_ : 0 < pA)
       (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)

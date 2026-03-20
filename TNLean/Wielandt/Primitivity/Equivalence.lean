@@ -29,17 +29,22 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 
 | Direction | Theorem | File |
 |-----------|---------|------|
-| **(b) → (a)** | `isPrimitivePaper_of_hasEventuallyFullKrausRank` | `Primitivity/EasyDirections.lean` |
-| **(a) → (c)** | `isStronglyIrreduciblePaper_of_isPrimitivePaper` | `Primitivity/ImpliesStronglyIrreducible.lean` |
-| **(c) → (b)** | `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper` | `Primitivity/StronglyIrreducibleToFullRank.lean` |
+* **(b) → (a)**: `isPrimitivePaper_of_hasEventuallyFullKrausRank`
+  in `Primitivity/EasyDirections.lean`
+* **(a) → (c)**: `isStronglyIrreduciblePaper_of_isPrimitivePaper`
+  in `Primitivity/ImpliesStronglyIrreducible.lean`
+* **(c) → (b)**: `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`
+  in `Primitivity/StronglyIrreducibleToFullRank.lean`
 
 Together these close the cycle **(a) → (c) → (b) → (a)**, establishing the
 full equivalence of all three conditions.
 
 Within TNLean this is the preferred Proposition 3 entry point on the root
-import surface. The direction-specific files `Primitivity/ImpliesStronglyIrreducible.lean` and
-`Primitivity/StronglyIrreducibleToFullRank.lean` remain specialized implementation modules, while the canonical /
-FT / BNT assembly does not import these wrappers directly.
+import surface. The direction-specific files
+`Primitivity/ImpliesStronglyIrreducible.lean` and
+`Primitivity/StronglyIrreducibleToFullRank.lean` remain specialized
+implementation modules, while the canonical / FT / BNT assembly does not
+import these wrappers directly.
 
 ## Full-equivalence corollaries
 
@@ -113,7 +118,8 @@ Kraus rank.
 If the MPS tensor `A` is strongly irreducible and normalized (`∑ Aᵢ† Aᵢ = 1`),
 then `A` has eventually full Kraus rank.
 
-This is proved in `Primitivity/StronglyIrreducibleToFullRank.lean` and recalled here for convenience.
+This is proved in `Primitivity/StronglyIrreducibleToFullRank.lean` and
+recalled here for convenience.
 Paper: arXiv:0909.5347, Proposition 3(c)→(b); Wolf, Chapter 6.
 -/
 theorem prop3_cb [NeZero D] (A : MPSTensor d D)

@@ -69,9 +69,16 @@ theorem isCPMap_of_krausMapLM {ι : Type*} [Fintype ι]
           (fun i : Fin (Fintype.card ι) => K (e.symm i) * X * (K (e.symm i))ᴴ)
           (fun j => by simp))
 
+end GenericCPClosure
+
+section GenericCPClosure
+
+variable {n : Type*} [Fintype n]
+
 /-- The zero map is completely positive. -/
 theorem isCPMap_zero :
     IsCPMap (0 : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) := by
+  classical
   refine ⟨0, Fin.elim0, ?_⟩
   intro X
   simp
@@ -79,6 +86,7 @@ theorem isCPMap_zero :
 /-- The identity map is completely positive. -/
 theorem isCPMap_id :
     IsCPMap (LinearMap.id : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) := by
+  classical
   refine ⟨1, fun _ => (1 : Matrix n n ℂ), ?_⟩
   intro X
   simp
@@ -120,6 +128,7 @@ theorem isCPMap_smul_id_nonneg {c : ℝ}
     (hc : 0 ≤ c) :
     IsCPMap (((c : ℂ) •
       (LinearMap.id : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ))) := by
+  classical
   refine ⟨1, fun _ => (Real.sqrt c : ℂ) • (1 : Matrix n n ℂ), ?_⟩
   intro X
   ext i j
@@ -127,7 +136,10 @@ theorem isCPMap_smul_id_nonneg {c : ℝ}
     nlinarith [Real.sq_sqrt hc]
   have hsqC : (c : ℂ) = (Real.sqrt c : ℂ) * (Real.sqrt c : ℂ) := by
     exact_mod_cast hsqR.symm
-  simp
+  simp only [Complex.coe_smul, LinearMap.smul_apply, LinearMap.id_coe, id_eq, smul_apply,
+    Complex.real_smul, univ_unique, Fin.default_eq_zero, Fin.isValue, Algebra.smul_mul_assoc,
+    one_mul, conjTranspose_smul, star_trivial, conjTranspose_one, Algebra.mul_smul_comm, mul_one,
+    sum_const, card_singleton, one_smul]
   rw [hsqC, mul_assoc]
 
 /-- Completely positive maps are closed under nonnegative scalar multiples. -/
@@ -149,7 +161,7 @@ theorem IsCPMap.pow
 
 /-- Finite sums of completely positive maps are completely positive. -/
 theorem Finset.isCPMap_sum
-    {ι : Type*} [DecidableEq ι]
+    {ι : Type*}
     (s : Finset ι)
     (E : ι → Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ)
     (hE : ∀ i ∈ s, IsCPMap (E i)) :
@@ -167,7 +179,7 @@ end GenericCPClosure
 
 section PosSemidefiniteClosure
 
-variable {m : Type*} [Fintype m] [DecidableEq m]
+variable {m : Type*}
 
 /-- The nonnegative cone of `ℂ` is closed. -/
 private lemma isClosed_complex_nonneg_generic :
@@ -180,14 +192,16 @@ private lemma isClosed_complex_nonneg_generic :
     (isClosed_eq Complex.continuous_im continuous_const)
 
 /-- The quadratic form `X ↦ star v ⬝ᵥ X.mulVec v` is continuous. -/
-private lemma continuous_quadraticForm_generic (v : m → ℂ) :
+private lemma continuous_quadraticForm_generic [Fintype m] (v : m → ℂ) :
     Continuous (fun X : Matrix m m ℂ => star v ⬝ᵥ X.mulVec v) :=
   Continuous.dotProduct continuous_const
     (Continuous.matrix_mulVec continuous_id continuous_const)
 
 /-- The PSD cone is closed for matrices over any finite index type. -/
-theorem matrix_isClosed_posSemidef :
+theorem matrix_isClosed_posSemidef [Finite m] :
     IsClosed {X : Matrix m m ℂ | X.PosSemidef} := by
+  classical
+  letI := Fintype.ofFinite m
   have : {X : Matrix m m ℂ | X.PosSemidef}
       = {X | X.IsHermitian} ∩
         ⋂ (v : m → ℂ), {X | 0 ≤ star v ⬝ᵥ X.mulVec v} := by
@@ -306,7 +320,7 @@ theorem IsCPMap.expSemigroup
         calc
           (endEquiv D).symm ((((t : ℂ) • endEquiv D L) ^ n))
               = ((endEquiv D).symm (((t : ℂ) • endEquiv D L))) ^ n := by
-                  simpa using map_pow (endEquiv D).symm ((t : ℂ) • endEquiv D L) n
+                  exact map_pow (endEquiv D).symm ((t : ℂ) • endEquiv D L) n
           _ = (((t : ℂ) • L) ^ n) := by rw [hbase]
       have hterm_eq : termLM n = (((t ^ n / Nat.factorial n : ℝ) : ℂ) • (L ^ n)) := by
         calc

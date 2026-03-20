@@ -44,8 +44,9 @@ What is **not** yet assembled end-to-end here:
 * Pass that data to the later block-injective / `IsCanonicalForm` builders and downstream FT
   results.
 
-Accordingly, this file should be read as a collection of early-stage reduction lemmas plus explicit
-continuation statements, **not** as a near-endpoint canonical-form existence theorem for arbitrary input tensors.
+Accordingly, this file should be read as a collection of early-stage
+reduction lemmas plus explicit continuation statements, **not** as a
+near-endpoint canonical-form existence theorem for arbitrary input tensors.
 -/
 
 namespace MPSTensor
@@ -298,9 +299,10 @@ From an arbitrary tensor `A` we produce an irreducible block decomposition. More
 resulting block, if one separately knows that the block has some nonzero Kraus operator, then the
 Perron--Frobenius / TP-gauge step can be applied to that block.
 
-This is the next unconditional continuation from arbitrary input under the current API. The nonzero side
-condition is explicit because `SameMPV₂` remembers the `N = 0` sector, so zero scalar blocks cannot
-be silently discarded. -/
+This is the next unconditional continuation from arbitrary input under the
+current API. The nonzero side condition is explicit because `SameMPV₂`
+remembers the `N = 0` sector, so zero scalar blocks cannot be silently
+discarded. -/
 theorem exists_irreducible_blockDecomp_with_tpGauge
     (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,
