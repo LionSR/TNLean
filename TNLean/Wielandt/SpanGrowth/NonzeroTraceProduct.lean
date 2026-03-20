@@ -238,7 +238,7 @@ private theorem cumulativeSpan_dim_growth_from_one
             cumulativeSpan A (1 + k + 1) :=
           lt_of_le_of_ne (cumulativeSpan_mono A (1 + k)) hstab
         have hstrict := cumulativeSpan_finrank_strict_mono A hlt
-        show Module.finrank ℂ (cumulativeSpan A (1 + (k + 1))) ≥ _
+        change Module.finrank ℂ (cumulativeSpan A (1 + (k + 1))) ≥ _
         rw [show 1 + (k + 1) = 1 + k + 1 from by omega]
         omega
 
@@ -468,10 +468,10 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       rw [Submodule.map_le_iff_le_comap]
       apply Submodule.span_le.mpr
       rintro M ⟨w, hw1, hw2, rfl⟩
-      show (LinearMap.mulLeft ℂ (A i)) (evalWord A w) ∈ V n
+      change (LinearMap.mulLeft ℂ (A i)) (evalWord A w) ∈ V n
       simp only [LinearMap.mulLeft_apply]
       -- A i * evalWord A w = evalWord A (i :: w)
-      show evalWord A (i :: w) ∈ V n
+      change evalWord A (i :: w) ∈ V n
       by_cases hle : w.length + 1 ≤ n
       · exact Submodule.subset_span ⟨i :: w,
           show 1 ≤ (i :: w).length by simp,
@@ -501,7 +501,9 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
               have := evalWord_mem_wordSpan A ([i] : List (Fin d))
               simp [evalWord] at this
               apply Submodule.subset_span
-              exact ⟨[i], by simp, by simp; exact hn, by simp [evalWord]⟩
+              exact ⟨[i], by simp,
+                by simpa only [List.length_cons, List.length_nil, zero_add] using hn,
+                by simp [evalWord]⟩
             exact this
           · have hw1' : 1 ≤ w.length := by
               cases w with
@@ -517,7 +519,7 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       intro m hm
       apply Submodule.span_le.mpr
       rintro M ⟨σ, rfl⟩
-      exact hword_all (List.ofFn σ) (by simp; exact hm)
+      exact hword_all (List.ofFn σ) (by simpa only [List.length_ofFn] using hm)
     -- But IsNormal gives N ≥ 1 with wordSpan A N = ⊤
     obtain ⟨N, hN1, hNtop⟩ := isNormal_index_pos hD A hN
     have := hws_all N hN1
@@ -567,10 +569,11 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
     induction k with
     | zero =>
       intro _
-      right; simp
       haveI : FiniteDimensional ℂ ↥(V 1) :=
         FiniteDimensional.finiteDimensional_submodule _
-      exact Submodule.finrank_mono hV1_ge
+      right
+      simpa only [Nat.add_zero, add_zero, ge_iff_le] using
+        (Submodule.finrank_mono hV1_ge)
     | succ k ih =>
       intro hk
       have hk' : k ≤ D ^ 2 - r := by omega

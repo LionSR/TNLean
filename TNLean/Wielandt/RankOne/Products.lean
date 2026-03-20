@@ -285,15 +285,13 @@ theorem evalWord_replicate_eigenvector (A : MPSTensor d D)
     ∀ k : ℕ, evalWord A ((List.replicate k w₀).flatten) *ᵥ φ = μ ^ k • φ := by
   intro k
   induction k with
-  | zero => simp [evalWord, Matrix.one_mulVec]
+  | zero => simp [Matrix.one_mulVec]
   | succ k ih =>
     rw [List.replicate_succ, List.flatten_cons, evalWord_append]
     -- (evalWord A w₀ * evalWord A ...) *ᵥ φ
     -- = evalWord A w₀ *ᵥ (evalWord A ... *ᵥ φ)  by mulVec_mulVec
-    rw [show (evalWord A w₀ * evalWord A (List.replicate k w₀).flatten) *ᵥ φ =
-        evalWord A w₀ *ᵥ (evalWord A (List.replicate k w₀).flatten *ᵥ φ) from
-      (Matrix.mulVec_mulVec φ (evalWord A w₀)
-        (evalWord A (List.replicate k w₀).flatten)).symm]
+    rw [(Matrix.mulVec_mulVec φ (evalWord A w₀)
+      (evalWord A (List.replicate k w₀).flatten)).symm]
     rw [ih]
     -- evalWord A w₀ *ᵥ (μ ^ k • φ) = μ ^ (k + 1) • φ
     rw [Matrix.mulVec_smul, heig, smul_smul, pow_succ]

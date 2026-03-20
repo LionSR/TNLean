@@ -65,15 +65,6 @@ def IsCPMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
   ∃ (r : ℕ) (K : Fin r → Matrix n n ℂ),
     ∀ X, E X = ∑ i : Fin r, K i * X * (K i)ᴴ
 
-/-- A completely positive map is positive. -/
-theorem IsCPMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
-    (h : IsCPMap E) : IsPositiveMap E := by
-  obtain ⟨r, K, hK⟩ := h
-  intro X hX
-  rw [hK]
-  exact Matrix.posSemidef_sum (s := Finset.univ) (x := fun i => K i * X * (K i)ᴴ)
-    (fun i _ => by simpa [Matrix.mul_assoc] using hX.mul_mul_conjTranspose_same (B := K i))
-
 /-- A **quantum channel** is a completely positive trace-preserving (CPTP) map.
 
 This matches the standard definition in quantum information theory
@@ -85,25 +76,49 @@ structure IsChannel (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop where
   cp : IsCPMap E
   tp : IsTracePreservingMap E
 
+end PositiveMap
+
+section PositiveMap
+
+variable {n : Type*} [Fintype n]
+
+/-- A completely positive map is positive. -/
+theorem IsCPMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    (h : IsCPMap E) : IsPositiveMap E := by
+  obtain ⟨r, K, hK⟩ := h
+  intro X hX
+  rw [hK]
+  exact Matrix.posSemidef_sum (s := Finset.univ) (x := fun i => K i * X * (K i)ᴴ)
+    (fun i _ => by simpa [Matrix.mul_assoc] using hX.mul_mul_conjTranspose_same (B := K i))
+
 /-- A channel is a positive map (derived from complete positivity). -/
 theorem IsChannel.pos {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hE : IsChannel E) : IsPositiveMap E := hE.cp.isPositiveMap
+
+end PositiveMap
+
+section PositiveMapHermitian
+
+variable {n : Type*} [Finite n]
 
 /-- Positive maps preserve Hermiticity.
 
 Proof: decompose `X = X⁺ - X⁻` using the CFC positive/negative parts.
 Both parts are PSD, so `E(X⁺)` and `E(X⁻)` are PSD (hence Hermitian),
 and `E(X) = E(X⁺) - E(X⁻)` is a difference of Hermitian matrices. -/
-theorem IsPositiveMap.map_isHermitian {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+theorem IsPositiveMap.map_isHermitian
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hE : IsPositiveMap E) {X : Matrix n n ℂ} (hX : X.IsHermitian) :
     (E X).IsHermitian := by
+  classical
+  letI := Fintype.ofFinite n
   have h_decomp := CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)
   have h_pos_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X)
   have h_neg_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg X)
   rw [show E X = E (X⁺) - E (X⁻) by conv_lhs => rw [← h_decomp]; simp [map_sub]]
   exact (hE _ h_pos_psd).isHermitian.sub (hE _ h_neg_psd).isHermitian
 
-end PositiveMap
+end PositiveMapHermitian
 
 /-! ## Density matrices: compactness and convexity -/
 

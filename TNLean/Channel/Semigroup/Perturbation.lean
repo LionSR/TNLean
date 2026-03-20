@@ -141,7 +141,7 @@ private lemma norm_expSemigroup_le_biSup (L : CLM D) {t : ℝ} (ht : 0 ≤ t)
       (fun s => ⨆ (_ : s ∈ Set.Icc 0 t), ‖expSemigroupCLM L s‖)) := by
     refine ⟨C, fun a ⟨s, hs⟩ => ?_⟩
     subst hs
-    show (⨆ (_ : s ∈ Set.Icc 0 t), ‖expSemigroupCLM L s‖) ≤ C
+    change (⨆ (_ : s ∈ Set.Icc 0 t), ‖expSemigroupCLM L s‖) ≤ C
     by_cases hsm : s ∈ Set.Icc 0 t
     · rw [ciSup_pos hsm]; exact hC ⟨s, hsm, rfl⟩
     · rw [ciSup_neg hsm, Real.sSup_empty]; exact hC_nonneg

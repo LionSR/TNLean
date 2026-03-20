@@ -147,7 +147,7 @@ theorem exists_compressedTensor_of_supported_projection
     have h := hHerm.conjStarAlgAut_star_eigenvectorUnitary
     simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply] using h
   have hPdiag_idem : Pdiag * Pdiag = Pdiag := by
-    show Umatᴴ * P * Umat * (Umatᴴ * P * Umat) = Umatᴴ * P * Umat
+    change Umatᴴ * P * Umat * (Umatᴴ * P * Umat) = Umatᴴ * P * Umat
     calc Umatᴴ * P * Umat * (Umatᴴ * P * Umat)
         = Umatᴴ * (P * (Umat * Umatᴴ) * P) * Umat := by simp [Matrix.mul_assoc]
       _ = Umatᴴ * (P * P) * Umat := by rw [hUU, Matrix.mul_one]
@@ -176,7 +176,7 @@ theorem exists_compressedTensor_of_supported_projection
     Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ)
   -- Pdiag in S⊕T basis
   have hPdiag_std : φ Pdiag = P0 := by
-    show Matrix.reindex eST eST Pdiag = P0
+    change Matrix.reindex eST eST Pdiag = P0
     rw [hPdiag_eq, show Matrix.reindex eST eST (Matrix.diagonal f) =
         Matrix.diagonal (f ∘ eST.symm) from by simp [Matrix.reindex_apply]]
     ext x y; cases x with
@@ -194,7 +194,7 @@ theorem exists_compressedTensor_of_supported_projection
   have hBsupp : ∀ i : Fin d, Pdiag * B i * Pdiag = B i := by
     intro i
     have hkey : Pdiag * B i * Pdiag = Umatᴴ * (P * A i * P) * Umat := by
-      show Umatᴴ * P * Umat * (Umatᴴ * A i * Umat) * (Umatᴴ * P * Umat) =
+      change Umatᴴ * P * Umat * (Umatᴴ * A i * Umat) * (Umatᴴ * P * Umat) =
           Umatᴴ * (P * A i * P) * Umat
       calc Umatᴴ * P * Umat * (Umatᴴ * A i * Umat) * (Umatᴴ * P * Umat)
           = Umatᴴ * (P * (Umat * Umatᴴ) * A i * (Umat * Umatᴴ) * P) * Umat := by
@@ -212,7 +212,7 @@ theorem exists_compressedTensor_of_supported_projection
     rw [(Matrix.fromBlocks_toBlocks (X i)).symm]
     rw [(Matrix.fromBlocks_toBlocks (X i)).symm] at hsupp_block
     simp only [P0, Matrix.fromBlocks_multiply, Matrix.one_mul, Matrix.mul_one,
-      Matrix.zero_mul, Matrix.mul_zero, add_zero, zero_add] at hsupp_block
+      Matrix.zero_mul, Matrix.mul_zero, add_zero] at hsupp_block
     -- `hsupp_block` forces all blocks outside the `S`-sector to vanish.
     have extract (x y : S ⊕ T) := congrFun (congrFun hsupp_block x) y
     have h12 : (X i).toBlocks₁₂ = 0 := by
@@ -237,7 +237,7 @@ theorem exists_compressedTensor_of_supported_projection
   -- (1) Trace identity: n = tr P
   · show (n : ℂ) = Matrix.trace P
     have : Matrix.trace P = Matrix.trace Pdiag := by
-      show Matrix.trace P = Matrix.trace (Umatᴴ * P * Umat)
+      change Matrix.trace P = Matrix.trace (Umatᴴ * P * Umat)
       rw [trace_conj]
     rw [this, hPdiag_eq, Matrix.trace_diagonal]
     have hfsum : ∑ j : Fin D, f j = ∑ j : Fin D, if p j then (1 : ℂ) else 0 := by
@@ -247,7 +247,7 @@ theorem exists_compressedTensor_of_supported_projection
       · simp [hp, show f j = 0 from (hf01 j).resolve_right hp]
     rw [hfsum, ← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_one]
     congr 1
-    show n = (Finset.univ.filter p).card
+    change n = (Finset.univ.filter p).card
     exact Fintype.card_subtype p
   -- (2) TP condition: ∑ C_i† C_i = 1
   · show ∑ i : Fin d, (C i)ᴴ * C i = 1
@@ -255,7 +255,8 @@ theorem exists_compressedTensor_of_supported_projection
     have hTPB : ∑ i : Fin d, (B i)ᴴ * B i = Pdiag := by
       have hterm : ∀ i, (B i)ᴴ * B i = Umatᴴ * ((A i)ᴴ * A i) * Umat := by
         intro i
-        show (Umatᴴ * A i * Umat)ᴴ * (Umatᴴ * A i * Umat) = Umatᴴ * ((A i)ᴴ * A i) * Umat
+        change
+          (Umatᴴ * A i * Umat)ᴴ * (Umatᴴ * A i * Umat) = Umatᴴ * ((A i)ᴴ * A i) * Umat
         -- (U† A U)† = U† A† U†† = U† A† U (note U†† = U)
         have hconj : (Umatᴴ * A i * Umat)ᴴ = Umatᴴ * (A i)ᴴ * Umat := by
           rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
@@ -316,7 +317,10 @@ theorem exists_compressedTensor_of_supported_projection
         rwa [Matrix.sum_apply]) s) s'
     -- Transport to Fin n
     have hterm : ∀ i, (C i)ᴴ * C i = Matrix.reindex eS eS ((B11 i)ᴴ * B11 i) := by
-      intro i; show (Matrix.reindex eS eS (B11 i))ᴴ * Matrix.reindex eS eS (B11 i) = _
+      intro i
+      change
+        (Matrix.reindex eS eS (B11 i))ᴴ * Matrix.reindex eS eS (B11 i) =
+          Matrix.reindex eS eS ((B11 i)ᴴ * B11 i)
       rw [show (Matrix.reindex eS eS (B11 i))ᴴ = Matrix.reindex eS eS ((B11 i)ᴴ) from by
         ext a b; simp [Matrix.reindex_apply, Matrix.conjTranspose_apply, Matrix.submatrix_apply]]
       simp [Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
@@ -345,13 +349,17 @@ theorem exists_compressedTensor_of_supported_projection
         Matrix.trace (Pdiag * evalWord B w) := by
       -- Both sides = ∑_{s:S} (evalWord B11 w) s s
       -- Reindex RHS to S⊕T
-      rw [show Matrix.trace (Pdiag * evalWord B w) =
-          Matrix.trace (φ (Pdiag * evalWord B w)) from by
-        show _ = Matrix.trace (Matrix.reindex eST eST _); rw [Matrix.trace_reindex]]
+      have htrace_reindex :
+          Matrix.trace (Pdiag * evalWord B w) =
+            Matrix.trace (φ (Pdiag * evalWord B w)) := by
+        change Matrix.trace (Pdiag * evalWord B w) =
+          Matrix.trace (Matrix.reindex eST eST (Pdiag * evalWord B w))
+        rw [Matrix.trace_reindex]
+      rw [htrace_reindex]
       rw [map_mul, hPdiag_std]
       -- φ(evalWord B w) = evalWord X w
       have hφ_eval : φ (evalWord B w) = _root_.evalWord X w := by
-        show Matrix.reindex eST eST (evalWord B w) = _root_.evalWord X w
+        change Matrix.reindex eST eST (evalWord B w) = _root_.evalWord X w
         have h := evalWord_reindex_fin (e := eST) (A := B) w
         rw [show (fun i => Matrix.reindex eST eST (B i)) = X from by
           ext i; simp [φ, X]] at h
@@ -359,7 +367,8 @@ theorem exists_compressedTensor_of_supported_projection
       rw [hφ_eval]
       -- Now: tr(P0 * evalWord X w) = tr(evalWord B11 w)
       -- Entrywise argument
-      show Matrix.trace (_root_.evalWord B11 w) = Matrix.trace (P0 * _root_.evalWord X w)
+      change Matrix.trace (_root_.evalWord B11 w) =
+        Matrix.trace (P0 * _root_.evalWord X w)
       symm
       -- tr(P0 * M) = ∑_{s:S} M (inl s) (inl s) for any M
       rw [show Matrix.trace (P0 * _root_.evalWord X w) =
@@ -368,7 +377,7 @@ theorem exists_compressedTensor_of_supported_projection
       -- T part is zero since P0 has zero T-rows
       have hT_zero : ∑ t : T, (P0 * _root_.evalWord X w) (Sum.inr t) (Sum.inr t) = 0 := by
         apply Finset.sum_eq_zero; intro t _
-        show (P0 * _root_.evalWord X w) (Sum.inr t) (Sum.inr t) = 0
+        change (P0 * _root_.evalWord X w) (Sum.inr t) (Sum.inr t) = 0
         simp only [Matrix.mul_apply]
         apply Finset.sum_eq_zero; intro y _
         cases y with
@@ -390,7 +399,7 @@ theorem exists_compressedTensor_of_supported_projection
         · intro s' _ hs'
           have hsne : s ≠ s' := hs' ∘ Eq.symm
           have hzero : P0 (Sum.inl s) (Sum.inl s') = 0 := by
-            simp [P0, Matrix.fromBlocks_apply₁₁, Matrix.one_apply, hsne]
+            simp [P0, Matrix.fromBlocks_apply₁₁, hsne]
           simp [hzero]
         · intro h; exact absurd (Finset.mem_univ s) h
       simp_rw [hS_eq]
@@ -426,7 +435,8 @@ theorem exists_compressedTensor_of_supported_projection
       have hEvalB := evalWord_conj_unitary A U (List.ofFn σ)
       rw [show (fun i => (↑U : MatrixAlg D)ᴴ * A i * (↑U : MatrixAlg D)) = B from rfl] at hEvalB
       rw [hEvalB]
-      show Matrix.trace (Umatᴴ * P * Umat * (Umatᴴ * evalWord A (List.ofFn σ) * Umat)) =
+      change
+        Matrix.trace (Umatᴴ * P * Umat * (Umatᴴ * evalWord A (List.ofFn σ) * Umat)) =
           Matrix.trace (P * evalWord A (List.ofFn σ))
       set M := evalWord A (List.ofFn σ)
       -- U†PU * U†MU = U†P(UU†)MU = U†(PM)U, tr = tr(PM) by trace_conj

@@ -162,7 +162,7 @@ reproved to avoid adding an import. -/
 private theorem evalWord_replicate_eq_pow (A : MPSTensor d D) (i : Fin d) (L : ℕ) :
     evalWord A (List.replicate L i) = (A i) ^ L := by
   induction L with
-  | zero => simp [evalWord]
+  | zero => simp
   | succ n ih => rw [List.replicate_succ, evalWord, ih, pow_succ']
 
 /-- **The D-th power of a Kraus operator lies in wordSpan A D.**

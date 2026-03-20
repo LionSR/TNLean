@@ -33,7 +33,8 @@ eventually full Kraus rank, and strong irreducibility.
 All three directions of Proposition 3 are now proved:
 
 * **(b)→(a)**: Proved here (`isPrimitivePaper_of_hasEventuallyFullKrausRank`).
-* **(a)→(c)**: Proved in `Primitivity/ImpliesStronglyIrreducible.lean` (`isStronglyIrreduciblePaper_of_isPrimitivePaper`).
+* **(a)→(c)**: Proved in `Primitivity/ImpliesStronglyIrreducible.lean`
+  (`isStronglyIrreduciblePaper_of_isPrimitivePaper`).
 * **(c)→(b)**: Proved in `Primitivity/StronglyIrreducibleToFullRank.lean`
   (`hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`).
 
