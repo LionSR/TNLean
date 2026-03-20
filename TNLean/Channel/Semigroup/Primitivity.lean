@@ -503,12 +503,13 @@ private theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZe
     have h_term_adj : ∀ i : Fin r,
         S * (K i)ᴴ * S⁻¹ * σ * (S⁻¹ * K i * S) = S * ((K i)ᴴ * K i) * S := by
       intro i
-      simp only [Matrix.mul_assoc]
-      congr 1
-      calc (K i)ᴴ * (S⁻¹ * (σ * (S⁻¹ * (K i * S))))
-          = (K i)ᴴ * ((S⁻¹ * σ * S⁻¹) * (K i * S)) := by simp only [Matrix.mul_assoc]
-        _ = (K i)ᴴ * (1 * (K i * S)) := by rw [hcancel]
-        _ = (K i)ᴴ * (K i * S) := by rw [Matrix.one_mul]
+      calc
+        S * (K i)ᴴ * S⁻¹ * σ * (S⁻¹ * K i * S)
+            = S * ((K i)ᴴ * ((S⁻¹ * σ * S⁻¹) * (K i * S))) := by
+                simp only [Matrix.mul_assoc]
+        _ = S * ((K i)ᴴ * (1 * (K i * S))) := by rw [hcancel]
+        _ = S * ((K i)ᴴ * K i * S) := by rw [Matrix.one_mul]
+        _ = S * ((K i)ᴴ * K i) * S := by simp only [Matrix.mul_assoc]
     simp_rw [h_term_adj]
     -- ∑ S * ((K i)ᴴ * K i) * S = S * (∑ (K i)ᴴ * K i) * S = σ
     rw [← Finset.sum_mul, ← Finset.mul_sum, hK_tp, Matrix.mul_one, hS_sq]
@@ -526,7 +527,6 @@ private theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZe
     simp only [MPSTensor.transferMap_apply]
     simp_rw [h_term _ X]
     rw [← Finset.sum_mul, ← Finset.mul_sum]
-    congr 1; congr 1
     rw [hE_eq, MPSTensor.transferMap_apply]
   -- ── Step 7: transferMap L is irreducible ──
   have hL_irr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) L) := by

@@ -212,8 +212,8 @@ private lemma lowerZero_implies_invariance'
     exact eq_of_sub_eq_zero hkey
   simp only [MPSTensor.transferMap_apply]
   rw [Finset.mul_sum, Finset.sum_mul]
-  congr 1
-  ext1 i
+  apply Finset.sum_congr rfl
+  intro i _
   have h1 : K i * (P * X * P) * (K i)ᴴ =
       (K i * P) * X * (P * (K i)ᴴ) := by
     noncomm_ring
@@ -695,15 +695,10 @@ theorem semigroup_preserves_compression_of_generator
       compressCLM ((((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y) =
       (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y := by
     intro n
-    rw [hcompress_clm, ContinuousLinearMap.smul_apply,
-      mul_smul_comm, smul_mul_assoc]
-    congr 1
-    rw [smul_pow, ContinuousLinearMap.smul_apply,
-      mul_smul_comm, smul_mul_assoc]
-    congr 1
     have hEn : E ^ n = endCLMEquiv' (L ^ n) := (map_pow endCLMEquiv' L n).symm
-    rw [hEn]
-    exact compression_preserved_by_iterate hP hgen X n
+    simpa [hcompress_clm, ContinuousLinearMap.smul_apply, smul_pow,
+      mul_smul_comm, smul_mul_assoc, Y, hEn] using
+      compression_preserved_by_iterate hP hgen X n
   have hsame_sum : HasSum (fun n : ℕ => (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)
       (compressCLM (expSemigroup L t Y)) := by
     rwa [show (fun n => compressCLM ((((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)) =
@@ -831,9 +826,8 @@ private theorem channel_fixedPoint_in_PMP
     change P * cesaroMean E σ₀ (N + 1) * P = cesaroMean E σ₀ (N + 1)
     rw [cesaroMean_eq]
     simp only [Matrix.mul_smul, Matrix.smul_mul, mul_sum, Finset.sum_mul]
-    congr 1
-    apply Finset.sum_congr rfl
-    intro n _; exact h_iter_PMP n
+    refine congrArg ((1 / ↑(N + 1 : ℕ) : ℂ) • ·) ?_
+    exact Finset.sum_congr rfl (fun n _ => h_iter_PMP n)
   -- Extract convergent subsequence
   haveI : FirstCountableTopology Mat := @UniformSpace.firstCountableTopology _ _ inferInstance
   obtain ⟨ρ, hρ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
