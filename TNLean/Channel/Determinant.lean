@@ -542,7 +542,10 @@ private theorem sum_stdBasis_mul_conjTranspose :
             rcases ij with ⟨i, j⟩
             simpa using stdBasis_mul_conjTranspose_self (d := d) i j
     _ = ∑ i : Fin d, ∑ j : Fin d, Matrix.single i i (1 : ℂ) := by
-          rw [← Finset.univ_product_univ, Finset.sum_product']
+          simpa using
+            (Finset.sum_product' (s := (Finset.univ : Finset (Fin d)))
+              (t := (Finset.univ : Finset (Fin d)))
+              (f := fun i j => Matrix.single i i (1 : ℂ)))
     _ = ∑ i : Fin d, (d : ℂ) • Matrix.single i i (1 : ℂ) := by
           refine Finset.sum_congr rfl ?_
           intro i _
@@ -670,7 +673,24 @@ private lemma channelDet_norm_one_hs_norm_ge [NeZero d]
               Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).re := by
             refine Finset.sum_congr rfl ?_
             intro ij _
-            simpa using
+            have hsum_sq :
+                ∑ kl : Fin d × Fin d, ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) kl.1 kl.2‖ ^ 2 =
+                  ∑ j : Fin d, ∑ i : Fin d,
+                    ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) i j‖ ^ 2 := by
+              calc
+                ∑ kl : Fin d × Fin d, ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) kl.1 kl.2‖ ^ 2
+                    = ∑ i : Fin d, ∑ j : Fin d,
+                        ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) i j‖ ^ 2 := by
+                          simpa [Finset.univ_product_univ] using
+                            (Finset.sum_product'
+                              (s := (Finset.univ : Finset (Fin d)))
+                              (t := (Finset.univ : Finset (Fin d)))
+                              (f := fun i j =>
+                                ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) i j‖ ^ 2))
+                _ = ∑ j : Fin d, ∑ i : Fin d,
+                      ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) i j‖ ^ 2 := by
+                        rw [Finset.sum_comm]
+            exact hsum_sq.trans
               (trace_conjTranspose_mul_self_re_eq_sum_sq
                 (A := Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).symm
   calc
@@ -681,10 +701,11 @@ private lemma channelDet_norm_one_hs_norm_ge [NeZero d]
             Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).re := hA_hs
 
 -- KS trace-summing + Kraus commutation + basis extensionality
-set_option maxHeartbeats 16000000 in
+set_option maxHeartbeats 50000000 in
+-- This theorem performs a long Kadison-Schwarz trace-summing argument over matrix bases.
 private theorem heisenberg_dual_multiplicative [NeZero d]
-    {T : MatrixEnd d} (hT : IsChannel T) (hdet : ‖channelDet T‖ = 1)
-    (hall : ∀ μ : ℂ, Module.End.HasEigenvalue T μ → ‖μ‖ = 1)
+    {T : MatrixEnd d} (_hT : IsChannel T) (hdet : ‖channelDet T‖ = 1)
+    (_hall : ∀ μ : ℂ, Module.End.HasEigenvalue T μ → ‖μ‖ = 1)
     {r : ℕ} (K : Fin r → MatrixAlg d) (hK : ∀ X, T X = ∑ i, K i * X * (K i)ᴴ)
     (hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1)
     (Td : MatrixEnd d) (hTd : ∀ X, Td X = ∑ i : Fin r, (K i)ᴴ * X * K i) :
@@ -744,12 +765,13 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
       simpa [b, Matrix.stdBasis] using hcoef
     calc
       ‖channelDet Td‖ = ‖LinearMap.det Td‖ := by rw [channelDet_eq_linearMap_det]
-      _ = ‖Matrix.det (LinearMap.toMatrix b b Td)‖ := by rw [← LinearMap.det_toMatrix]
+      _ = ‖Matrix.det (LinearMap.toMatrix b b Td)‖ := by
+            rw [← LinearMap.det_toMatrix (b := b) (f := Td)]
       _ = ‖Matrix.det ((LinearMap.toMatrix b b T)ᴴ)‖ := by rw [hmat]
       _ = ‖star (Matrix.det (LinearMap.toMatrix b b T))‖ := by
             rw [Matrix.det_conjTranspose]
       _ = ‖Matrix.det (LinearMap.toMatrix b b T)‖ := by simp
-      _ = ‖LinearMap.det T‖ := by rw [LinearMap.det_toMatrix]
+      _ = ‖LinearMap.det T‖ := by rw [LinearMap.det_toMatrix (b := b) (f := T)]
       _ = ‖channelDet T‖ := by rw [← channelDet_eq_linearMap_det]
       _ = 1 := hdet
   -- Each KS gap G(e_{ij}) = Td(e_{ij}·e_{ij}†) - Td(e_{ij})·Td(e_{ij})† is PSD
@@ -808,7 +830,7 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
     have hfirst : ∑ ij : Fin d × Fin d,
         (Matrix.trace (KadisonSchwarz.krausMap L (e ij * (e ij)ᴴ))).re = (d : ℝ) ^ 2 := by
       rw [← Complex.re_sum, hfirstC]
-      simp [pow_two, Nat.cast_mul]
+      simp [pow_two]
     have hsecond_eq : ∑ ij : Fin d × Fin d,
         (Matrix.trace (KadisonSchwarz.krausMap L (e ij) *
           (KadisonSchwarz.krausMap L (e ij))ᴴ)).re =
@@ -832,7 +854,7 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
           (∑ ij : Fin d × Fin d,
             (Matrix.trace (KadisonSchwarz.krausMap L (e ij) *
               (KadisonSchwarz.krausMap L (e ij))ᴴ)).re) := by
-      simp [Matrix.trace_sub, Complex.re_sub, Finset.sum_sub_distrib]
+      simp [Matrix.trace_sub, Complex.sub_re, Finset.sum_sub_distrib]
     rw [show (∑ ij : Fin d × Fin d,
         (Matrix.trace (KadisonSchwarz.krausMap L
           (Matrix.stdBasis ℂ (Fin d) (Fin d) ij *
@@ -876,7 +898,29 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
       Matrix.stdBasis ℂ (Fin d) (Fin d) ij * K a =
         K a * Td (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) := by
     intro ij
-    have h := KadisonSchwarz.kraus_commute_of_ks_equality L hL_unital _ (hks_all_basis ij)
+    let e : MatrixAlg d := Matrix.stdBasis ℂ (Fin d) (Fin d) ij
+    let es : MatrixAlg d := Matrix.stdBasis ℂ (Fin d) (Fin d) (ij.2, ij.1)
+    have hes : es = eᴴ := by
+      exact (stdBasis_conjTranspose_eq_swap (d := d) ij.1 ij.2).symm
+    have hes_star : esᴴ = e := by
+      rw [hes, conjTranspose_conjTranspose]
+    have hTd_es : KadisonSchwarz.krausMap L es = (KadisonSchwarz.krausMap L e)ᴴ := by
+      rw [hes, KadisonSchwarz.krausMap_conjTranspose]
+    have hks_basis :
+        KadisonSchwarz.krausMap L (eᴴ * e) =
+          (KadisonSchwarz.krausMap L e)ᴴ * KadisonSchwarz.krausMap L e := by
+      calc
+        KadisonSchwarz.krausMap L (eᴴ * e)
+            = KadisonSchwarz.krausMap L (es * esᴴ) := by
+                rw [hes]
+                simp
+        _ = KadisonSchwarz.krausMap L es * (KadisonSchwarz.krausMap L es)ᴴ :=
+              hks_all_basis (ij.2, ij.1)
+        _ = (KadisonSchwarz.krausMap L e)ᴴ * KadisonSchwarz.krausMap L e := by
+              rw [hTd_es]
+              simp
+    have h := KadisonSchwarz.kraus_commute_of_ks_equality
+      (K := L) hL_unital (X := e) hks_basis
     intro a; have ha := h a
     simp only [hL_def, conjTranspose_conjTranspose] at ha
     rwa [← hTd_kraus] at ha
@@ -900,22 +944,24 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
           Matrix.stdBasis ℂ (Fin d) (Fin d) (i, j) := by
         simp only [matrixSpaceBasis, Module.Basis.matrix_apply,
           Module.Basis.singleton_apply, Matrix.stdBasis_eq_single]
-      rw [hbasis_eq, hbasis_commute (i, j) a]; ring
-    calc X * K a - K a * Td X = F X := (hF_apply X).symm
-      _ = (0 : MatrixEnd d) X := by rw [hF_zero]
-      _ = 0 := LinearMap.zero_apply X
+      rw [hbasis_eq]
+      exact sub_eq_zero.mpr (hbasis_commute (i, j) a)
+    have hFX : X * K a - K a * Td X = 0 := by
+      simpa [hF_apply X] using congrArg (fun G : MatrixEnd d => G X) hF_zero
+    exact sub_eq_zero.mp hFX
   -- ── Step 4: Conclude multiplicativity from Kraus commutation ──
   intro M N
   simp only [hTd]
   -- Rewrite RHS: (∑ K_i† M K_i) * (∑ K_j† N K_j) = ∑ (K_i† M K_i) * (∑ K_j† N K_j)
   rw [Finset.sum_mul]
   -- Suffices to show term-by-term equality
-  congr 1; ext a
+  refine Finset.sum_congr rfl ?_
+  intro a _
   have hNKa := hcommute N a
   calc (K a)ᴴ * (M * N) * K a
-      = (K a)ᴴ * M * (N * K a) := by ring
+      = (K a)ᴴ * M * (N * K a) := by simp [Matrix.mul_assoc]
     _ = (K a)ᴴ * M * (K a * Td N) := by rw [hNKa]
-    _ = (K a)ᴴ * M * K a * Td N := by ring
+    _ = (K a)ᴴ * M * K a * Td N := by simp [Matrix.mul_assoc]
     _ = (K a)ᴴ * M * K a * ∑ b : Fin r, (K b)ᴴ * N * K b := by
         rw [show Td N = ∑ b : Fin r, (K b)ᴴ * N * K b from hTd N]
 
@@ -926,7 +972,7 @@ Given `T(A) = P⁻¹AP` where `P ∈ GL_d(ℂ)`, and `T` preserves `*` (i.e. `T�
 and invertible, the scalar is positive real, and `V = (√c)⁻¹ · P†` is unitary
 with `T = unitaryChannel V`. -/
 private theorem extract_unitary_from_inner_form [NeZero d]
-    {T : MatrixEnd d} (hT : IsChannel T)
+    {T : MatrixEnd d} (_hT : IsChannel T)
     (P : GL (Fin d) ℂ)
     (hT_inner : ∀ A : MatrixAlg d,
         T A = (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A * (↑P : MatrixAlg d))
@@ -936,9 +982,9 @@ private theorem extract_unitary_from_inner_form [NeZero d]
     ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
   -- GL identities
   have hPinvP : (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * (↑P : MatrixAlg d) = 1 := by
-    simp [show (P⁻¹ * P : GL (Fin d) ℂ) = 1 from inv_mul_cancel _]
+    exact congrArg Units.val (inv_mul_cancel P)
   have hPPinv : (↑P : MatrixAlg d) * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) = 1 := by
-    simp [show (P * P⁻¹ : GL (Fin d) ℂ) = 1 from mul_inv_cancel _]
+    exact congrArg Units.val (mul_inv_cancel P)
   -- Step 1: P†P is in the center → is a scalar matrix
   have hPHP_center :
       (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) ∈
@@ -1063,10 +1109,10 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
   -- Key identities for P
   have hPinvP : (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * (↑P : MatrixAlg d) = 1 := by
     have : (P⁻¹ * P : GL (Fin d) ℂ) = 1 := inv_mul_cancel _
-    simpa using congrArg Units.val this
+    exact congrArg Units.val this
   have hPPinv : (↑P : MatrixAlg d) * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) = 1 := by
     have : (P * P⁻¹ : GL (Fin d) ℂ) = 1 := mul_inv_cancel _
-    simpa using congrArg Units.val this
+    exact congrArg Units.val this
   -- Trace adjointness: tr(T(A)*B) = tr(A*Td(B))
   have hAdj : ∀ A B : MatrixAlg d, trace (T A * B) = trace (A * Td B) := by
     intro A B
@@ -1114,7 +1160,7 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
           = (↑P : MatrixAlg d)ᴴ *
               ((↑P : MatrixAlg d) * Y * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)) *
               (↑P : MatrixAlg d) := by
-            simp [Matrix.mul_assoc, hPinvP]
+            simp [Matrix.mul_assoc]
       _ = (↑P : MatrixAlg d)ᴴ *
             ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)ᴴ * Y * (↑P : MatrixAlg d)ᴴ) *
             (↑P : MatrixAlg d) := by rw [hstar_inner]

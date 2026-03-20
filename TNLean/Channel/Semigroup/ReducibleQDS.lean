@@ -261,8 +261,9 @@ private lemma not_posDef_of_proj_sandwich_eq_self
     rw [sub_mul, one_mul, hP.2, sub_self]
   have hQρ : (1 - P) * ρ = 0 := by
     conv_lhs => rw [← hρ]
-    rw [show (1 - P) * (P * ρ * P) = ((1 - P) * P) * ρ * P from by noncomm_ring,
-        hQP, Matrix.zero_mul, Matrix.zero_mul]
+    have h_expand : (1 - P) * (P * ρ * P) = ((1 - P) * P) * ρ * P := by
+      noncomm_ring
+    rw [h_expand, hQP, Matrix.zero_mul, Matrix.zero_mul]
   obtain ⟨u, hu⟩ := hρ_pd.isUnit
   have hQu : (1 - P) * (u : Mat) = 0 := by
     simpa [hu] using hQρ
@@ -500,16 +501,11 @@ theorem hasBlockUpperTriangularLindblad_of_hasInvariantCompression
         (1 - P) * (∑ j : Fin F.r, F.L j * P * (F.L j)ᴴ) * (1 - P) by
       rw [hLHS, hQ_phi_eq_Q_kappa]
       simp only [Matrix.mul_assoc]
-      rw [show κ * (P * (1 - P)) = κ * 0 from by rw [hPQ], Matrix.mul_zero, Matrix.mul_zero]
+      rw [hPQ, Matrix.mul_zero, Matrix.mul_zero]
     rw [mul_sum, Finset.sum_mul]
     congr 1; ext j
-    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_sub,
-      Matrix.conjTranspose_one, Matrix.conjTranspose_conjTranspose, hP_herm,
-      Matrix.mul_assoc]
-    congr 1
-    rw [show F.L j * (P * (P * ((F.L j)ᴴ * (1 - P)))) =
-        F.L j * ((P * P) * ((F.L j)ᴴ * (1 - P))) from by rw [Matrix.mul_assoc P P]]
-    rw [hPP]
+    simpa only [Matrix.conjTranspose_mul, Matrix.conjTranspose_sub,
+      Matrix.conjTranspose_one, hP_herm, Matrix.mul_assoc, hPP]
   -- Each (1-P)*Lⱼ*P = 0
   have hL_block : ∀ j : Fin F.r, (1 - P) * F.L j * P = 0 :=
     eq_zero_of_sum_mul_conjTranspose_eq_zero _ hsum_zero
@@ -596,42 +592,42 @@ theorem generator_preserves_compression_of_blockUpperTriangular
   simp only [GeneratorDecomp.toLinearMap_apply, LindbladForm.toGeneratorDecomp]
   have hQ_phi_Y : (1 - P) * (∑ j : Fin F.r, F.L j * Y * (F.L j)ᴴ) = 0 := by
     rw [mul_sum]; apply Finset.sum_eq_zero; intro j _
-    show (1 - P) * (F.L j * (P * X * P) * (F.L j)ᴴ) = 0
+    change (1 - P) * (F.L j * (P * X * P) * (F.L j)ᴴ) = 0
     calc (1 - P) * (F.L j * (P * X * P) * (F.L j)ᴴ)
         = ((1 - P) * F.L j * P) * (X * P * (F.L j)ᴴ) := by simp only [Matrix.mul_assoc]
       _ = 0 := by rw [hL_block j, Matrix.zero_mul]
   have hphi_Y_Q : (∑ j : Fin F.r, F.L j * Y * (F.L j)ᴴ) * (1 - P) = 0 := by
     rw [Finset.sum_mul]; apply Finset.sum_eq_zero; intro j _
-    show F.L j * (P * X * P) * (F.L j)ᴴ * (1 - P) = 0
+    change F.L j * (P * X * P) * (F.L j)ᴴ * (1 - P) = 0
     calc F.L j * (P * X * P) * (F.L j)ᴴ * (1 - P)
         = F.L j * (P * X * (P * (F.L j)ᴴ * (1 - P))) := by simp only [Matrix.mul_assoc]
       _ = 0 := by rw [hL_block_ct j, Matrix.mul_zero, Matrix.mul_zero]
   have hQ_κ_Y : (1 - P) * (κ * Y) = 0 := by
-    show (1 - P) * (κ * (P * X * P)) = 0
+    change (1 - P) * (κ * (P * X * P)) = 0
     calc (1 - P) * (κ * (P * X * P))
         = ((1 - P) * κ * P) * (X * P) := by simp only [Matrix.mul_assoc]
       _ = 0 := by rw [hκ_block, Matrix.zero_mul]
   have hQ_Y_κct : (1 - P) * (Y * κᴴ) = 0 := by
-    show (1 - P) * (P * X * P * κᴴ) = 0
+    change (1 - P) * (P * X * P * κᴴ) = 0
     calc (1 - P) * (P * X * P * κᴴ)
         = ((1 - P) * P) * (X * P * κᴴ) := by simp only [Matrix.mul_assoc]
       _ = 0 := by rw [hQP, Matrix.zero_mul]
   have hY_Q : Y * (1 - P) = 0 := by
-    show P * X * P * (1 - P) = 0
+    change P * X * P * (1 - P) = 0
     rw [Matrix.mul_assoc, hPQ, Matrix.mul_zero]
   have hκ_Y_Q : κ * Y * (1 - P) = 0 := by
     rw [Matrix.mul_assoc, hY_Q, Matrix.mul_zero]
   have hY_κct_Q : Y * κᴴ * (1 - P) = 0 := by
-    show P * X * P * κᴴ * (1 - P) = 0
+    change P * X * P * κᴴ * (1 - P) = 0
     calc P * X * P * κᴴ * (1 - P)
         = P * X * (P * κᴴ * (1 - P)) := by simp only [Matrix.mul_assoc]
       _ = 0 := by rw [hκ_block_ct, Matrix.mul_zero]
   set M : Mat := ∑ j : Fin F.r, F.L j * Y * (F.L j)ᴴ - κ * Y - Y * κᴴ
   have hQ_M : (1 - P) * M = 0 := by
-    show (1 - P) * (∑ j, F.L j * Y * (F.L j)ᴴ - κ * Y - Y * κᴴ) = 0
+    change (1 - P) * (∑ j, F.L j * Y * (F.L j)ᴴ - κ * Y - Y * κᴴ) = 0
     rw [Matrix.mul_sub, Matrix.mul_sub, hQ_phi_Y, hQ_κ_Y, hQ_Y_κct]; simp
   have hM_Q : M * (1 - P) = 0 := by
-    show (∑ j, F.L j * Y * (F.L j)ᴴ - κ * Y - Y * κᴴ) * (1 - P) = 0
+    change (∑ j, F.L j * Y * (F.L j)ᴴ - κ * Y - Y * κᴴ) * (1 - P) = 0
     rw [Matrix.sub_mul, Matrix.sub_mul, hphi_Y_Q, hκ_Y_Q, hY_κct_Q]; simp
   have hPM : P * M = M := by
     have h1 : (P + (1 - P)) * M = M := by simp [one_mul]
@@ -667,6 +663,8 @@ private theorem compression_preserved_by_iterate
     change P * (L ((L ^ n) (P * X * P))) * P = L ((L ^ n) (P * X * P))
     rw [← ih]; exact hgen _
 
+set_option maxHeartbeats 12000000 in
+-- The exp-series proof below pushes several `HasSum` transport steps through CLMs.
 theorem semigroup_preserves_compression_of_generator
     {L : Mat →ₗ[ℂ] Mat} {P : Mat} (hP : IsOrthogonalProjection P)
     (hgen : GeneratorPreservesCompression L P) :
@@ -683,7 +681,7 @@ theorem semigroup_preserves_compression_of_generator
   have hcompress_clm : ∀ M : Mat, compressCLM M = P * M * P := hcompress
   have hexp_sum : HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n)
       (NormedSpace.exp ((t : ℂ) • E)) :=
-    NormedSpace.exp_series_hasSum_exp' _
+    NormedSpace.exp_series_hasSum_exp' ((t : ℂ) • E)
   let ev_Y : (Mat →L[ℂ] Mat) →L[ℂ] Mat := ContinuousLinearMap.apply ℂ Mat Y
   have heval_sum : HasSum (fun n : ℕ => (((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n) Y)
       (expSemigroup L t Y) := by
@@ -771,7 +769,7 @@ private lemma normalizedProj_in_PMP'
     {P : Mat} (hP : IsOrthogonalProjection P) :
     P * ((trace P)⁻¹ • P) * P = (trace P)⁻¹ • P := by
   simp only [Matrix.mul_smul, Matrix.smul_mul]
-  rw [show P * P * P = P from by rw [hP.2, hP.2]]
+  rw [hP.2, hP.2]
 
 /-- `D > 0` if there exists a nontrivial projection in `M_D(ℂ)`. -/
 private lemma pos_dim_of_nontrivialProjection
@@ -928,8 +926,8 @@ private theorem norm_exp_sub_one_sub_self_le'
         simpa [Real.exp_eq_exp_ℝ] using
           (congrFun (NormedSpace.exp_eq_tsum_div (𝔸 := ℝ)) ‖x‖).symm
 
--- The Taylor remainder specialization requires expensive norm-computation elaboration
 set_option maxHeartbeats 800000 in
+-- The Taylor remainder specialization triggers expensive norm-expression elaboration.
 /-- Specialization: `‖expSemigroupCLM E s − (1 + s • E)‖ ≤ s² ‖E‖² exp(s‖E‖)`. -/
 private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
     (E : (Mat →L[ℂ] Mat)) {s : ℝ} (hs : 0 ≤ s) :
@@ -945,8 +943,116 @@ private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
     _ ≤ ‖(s : ℂ) • E‖ ^ 2 * Real.exp ‖(s : ℂ) • E‖ := h
     _ = s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by rw [hnorm_smul]; ring
 
--- The proof involves multiple Cesàro extractions and norm estimates; needs extra heartbeats.
-set_option maxHeartbeats 4000000 in
+set_option maxHeartbeats 25000000 in
+-- This limit argument combines a compactness subsequence with a uniform
+-- Taylor bound for `exp((n+1)⁻¹ L)` on density matrices.
+private theorem generator_zero_of_subseq_fixed_points
+    [NeZero D]
+    {L : Mat →ₗ[ℂ] Mat}
+    (ρ_shift : ℕ → Mat)
+    (hρ_mem : ∀ n, ρ_shift n ∈ densityMatrices D)
+    (hρ_fix : ∀ n,
+      expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n)
+    {ρ : Mat} {φ : ℕ → ℕ}
+    (hφ_mono : StrictMono φ)
+    (hφ_tendsto : Filter.Tendsto (fun n => ρ_shift (φ n)) Filter.atTop (nhds ρ)) :
+    L ρ = 0 := by
+  have hL_cont : Continuous L := LinearMap.continuous_of_finiteDimensional L
+  have hL_tends : Filter.Tendsto (fun n => L (ρ_shift (φ n)))
+      Filter.atTop (nhds (L ρ)) :=
+    (hL_cont.tendsto ρ).comp hφ_tendsto
+  suffices h_to_zero : Filter.Tendsto (fun n => L (ρ_shift (φ n)))
+      Filter.atTop (nhds 0) from
+    tendsto_nhds_unique hL_tends h_to_zero
+  have hbdd := densityMatrices_isCompact (D := D) |>.isBounded
+  rw [Metric.isBounded_iff_subset_ball 0] at hbdd
+  obtain ⟨R, hR⟩ := hbdd
+  have hρ_norm : ∀ n, ‖ρ_shift (φ n)‖ ≤ R := by
+    intro n
+    have h_mem := hR (hρ_mem (φ n))
+    rw [Metric.mem_ball, dist_zero_right] at h_mem
+    exact le_of_lt h_mem
+  set E := endCLMEquiv' (D := D) L
+  have hL_bound : ∀ n, ‖L (ρ_shift (φ n))‖ ≤
+      (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp (‖E‖) * R := by
+    intro n
+    set m := φ n + 1
+    have hm_pos : (0 : ℝ) < m := Nat.cast_pos.mpr (Nat.succ_pos _)
+    set s := 1 / (m : ℝ) with hs_def
+    have hs : 0 ≤ s := by positivity
+    have hm_ge_one : (1 : ℝ) ≤ m := by exact_mod_cast Nat.succ_pos (φ n)
+    have hs_le : s ≤ 1 := by
+      rw [hs_def]
+      exact div_le_one_of_le₀ hm_ge_one (by linarith)
+    have hfp := hρ_fix (φ n)
+    have hexp_clm : ∀ X, expSemigroup L s X = (expSemigroupCLM E s) X := by
+      intro X
+      rfl
+    have hE_apply : ∀ X, E X = L X := fun X => rfl
+    have h_eq : s • L (ρ_shift (φ n)) =
+        -(((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n))) := by
+      have hfp_clm : (expSemigroupCLM E s) (ρ_shift (φ n)) = ρ_shift (φ n) := by
+        rw [← hexp_clm]
+        exact hfp
+      have h_expand :
+          ((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n)) =
+            (expSemigroupCLM E s) (ρ_shift (φ n)) - ρ_shift (φ n) -
+              (s : ℂ) • E (ρ_shift (φ n)) := by
+        simp [ContinuousLinearMap.sub_apply]
+      rw [h_expand, hfp_clm, sub_self, zero_sub, neg_neg, hE_apply]
+      simp
+    have h_norm_smul : ‖s • L (ρ_shift (φ n))‖ ≤
+        s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
+      rw [h_eq, norm_neg]
+      have h_taylor_bound :
+          ‖(expSemigroupCLM E s) - 1 - (s : ℂ) • E‖ ≤
+            s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) :=
+        norm_expSemigroupCLM_taylor_bound E hs
+      calc
+        ‖((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n))‖
+            ≤ ‖(expSemigroupCLM E s) - 1 - (s : ℂ) • E‖ * ‖ρ_shift (φ n)‖ :=
+              ContinuousLinearMap.le_opNorm _ _
+        _ ≤ (s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖)) * ‖ρ_shift (φ n)‖ := by
+            exact mul_le_mul_of_nonneg_right h_taylor_bound (norm_nonneg _)
+    have hs_pos : 0 < s := by positivity
+    rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg hs.le] at h_norm_smul
+    have h_L_norm : ‖L (ρ_shift (φ n))‖ ≤
+        s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
+      have h1 : s * ‖L (ρ_shift (φ n))‖ ≤
+          s * (s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖) := by
+        rw [sq] at h_norm_smul
+        nlinarith
+      exact le_of_mul_le_mul_left h1 hs_pos
+    calc
+      ‖L (ρ_shift (φ n))‖
+          ≤ s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := h_L_norm
+      _ ≤ s * ‖E‖ ^ 2 * Real.exp (1 * ‖E‖) * R := by
+          have h_exp_le : Real.exp (s * ‖E‖) ≤ Real.exp (1 * ‖E‖) := by
+            exact Real.exp_le_exp.mpr (by nlinarith [norm_nonneg E, hs_le])
+          have h_mul_le :
+              s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) ≤
+                s * ‖E‖ ^ 2 * Real.exp (1 * ‖E‖) := by
+            exact mul_le_mul_of_nonneg_left h_exp_le (by positivity)
+          exact mul_le_mul h_mul_le (hρ_norm n) (by positivity) (by positivity)
+      _ = (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R := by
+          simp [hs_def, s]
+  have hφ_tendsto_atTop : Filter.Tendsto φ Filter.atTop Filter.atTop := by
+    apply Filter.tendsto_atTop_atTop_of_monotone
+    · intro a b hab
+      exact hφ_mono.monotone hab
+    · intro b
+      exact ⟨b, hφ_mono.id_le b⟩
+  have h_coeff : Filter.Tendsto (fun n => (1 / (φ n + 1 : ℝ))) Filter.atTop (nhds 0) := by
+    exact (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)).comp hφ_tendsto_atTop
+  have h_bound_tends : Filter.Tendsto
+      (fun n => (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R)
+      Filter.atTop (nhds 0) := by
+    have := h_coeff.mul_const (‖E‖ ^ 2 * Real.exp ‖E‖ * R)
+    simpa [mul_assoc] using this
+  exact squeeze_zero_norm hL_bound h_bound_tends
+
+set_option maxHeartbeats 50000000 in
+-- The proof mixes compactness extraction with operator-norm bounds and needs extra heartbeats.
 /-- **Wolf Proposition 7.6, (4) → (2)**: Given block-upper-triangular Lindblad
 operators, the compressed channel has a fixed density matrix, giving (2).
 
@@ -971,7 +1077,8 @@ theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
   haveI : NeZero D := ⟨hD.ne'⟩
   -- Generator and semigroup preserve compression
   have hgen : GeneratorPreservesCompression L P := by
-    rw [hL_eq]; exact generator_preserves_compression_of_blockUpperTriangular hP hL_block hκ_block
+    rw [hL_eq]
+    exact generator_preserves_compression_of_blockUpperTriangular hP hL_block hκ_block
   have hT_pres : ∀ t : ℝ, 0 ≤ t → ∀ X : Mat,
       P * (expSemigroup L t (P * X * P)) * P = expSemigroup L t (P * X * P) :=
     semigroup_preserves_compression_of_generator hP hgen
@@ -1002,100 +1109,8 @@ theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
       (hcont.continuousAt.tendsto.comp hφ_tendsto |>.congr (fun n => hρ_PMP (φ n)))
       hφ_tendsto
   -- Step 3: Show L(ρ) = 0 using the Taylor bound
-  have hL_zero : L ρ = 0 := by
-    have hL_cont : Continuous L := LinearMap.continuous_of_finiteDimensional L
-    -- L(ρ_shift(φ n)) → L(ρ) by continuity
-    have hL_tends : Filter.Tendsto (fun n => L (ρ_shift (φ n)))
-        Filter.atTop (nhds (L ρ)) :=
-      (hL_cont.tendsto ρ).comp hφ_tendsto
-    -- Show L(ρ_shift(φ n)) → 0
-    suffices h_to_zero : Filter.Tendsto (fun n => L (ρ_shift (φ n)))
-        Filter.atTop (nhds 0) from
-      tendsto_nhds_unique hL_tends h_to_zero
-    -- Density matrices are bounded
-    have hbdd := densityMatrices_isCompact (D := D) |>.isBounded
-    rw [Metric.isBounded_iff_subset_ball 0] at hbdd
-    obtain ⟨R, hR⟩ := hbdd
-    have hρ_norm : ∀ n, ‖ρ_shift (φ n)‖ ≤ R := by
-      intro n; have := hR (hρ_mem (φ n))
-      rw [Metric.mem_ball, dist_zero_right] at this; exact le_of_lt this
-    -- CLM version of L
-    set E := endCLMEquiv' (D := D) L
-    -- Key: from exp((1/m)L)(ρ_m) = ρ_m, deduce ‖L(ρ_m)‖ ≤ C/m
-    -- exp((1/m)L)(ρ_m) - ρ_m = (1/m)L(ρ_m) + remainder
-    -- 0 = (1/m)L(ρ_m) + remainder, so L(ρ_m) = -m · remainder
-    -- remainder = exp((1/m)L)(ρ_m) - ρ_m - (1/m)L(ρ_m)
-    -- ‖remainder‖ ≤ (1/m²)‖E‖²·exp(‖E‖/m)·‖ρ_m‖
-    -- ‖L(ρ_m)‖ ≤ (1/m)‖E‖²·exp(‖E‖/m)·‖ρ_m‖ ≤ (1/m)‖E‖²·exp(‖E‖)·R
-    -- Bound each ‖L(ρ_shift(φ n))‖
-    have hL_bound : ∀ n, ‖L (ρ_shift (φ n))‖ ≤
-        (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp (‖E‖) * R := by
-      intro n
-      set m := φ n + 1
-      have hm_pos : (0 : ℝ) < m := Nat.cast_pos.mpr (Nat.succ_pos _)
-      set s := 1 / (m : ℝ) with hs_def
-      have hs : 0 ≤ s := by positivity
-      have hm_ge_one : (1 : ℝ) ≤ m := by exact_mod_cast Nat.succ_pos (φ n)
-      have hs_le : s ≤ 1 := by
-        rw [hs_def]; exact div_le_one_of_le₀ hm_ge_one (by linarith)
-      -- From the fixed-point equation: 0 = s•L(ρ) + (exp(sE) - 1 - sE)(ρ)
-      have hfp := hρ_fix (φ n)
-      -- Work at the CLM level
-      have hexp_clm : ∀ X, expSemigroup L s X = (expSemigroupCLM E s) X := by
-        intro X; rfl
-      have hE_apply : ∀ X, E X = L X := fun X => rfl
-      -- From exp(sE)(ρ_m) = ρ_m:
-      -- s•L(ρ_m) = -(exp(sE) - 1 - sE)(ρ_m)
-      have h_eq : s • L (ρ_shift (φ n)) =
-          -(((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n))) := by
-        have hfp_clm : (expSemigroupCLM E s) (ρ_shift (φ n)) = ρ_shift (φ n) := by
-          rw [← hexp_clm]; exact hfp
-        have : ((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n)) =
-            (expSemigroupCLM E s) (ρ_shift (φ n)) - ρ_shift (φ n) -
-            (s : ℂ) • E (ρ_shift (φ n)) := by
-          simp [ContinuousLinearMap.sub_apply]
-        rw [this, hfp_clm, sub_self, zero_sub, neg_neg, hE_apply]
-        simp [smul_comm]
-      -- ‖s • L(ρ_m)‖ ≤ ‖exp(sE) - 1 - sE‖ · ‖ρ_m‖
-      have h_norm_smul : ‖s • L (ρ_shift (φ n))‖ ≤
-          s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
-        rw [h_eq, norm_neg]
-        calc ‖((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n))‖
-            ≤ ‖(expSemigroupCLM E s) - 1 - (s : ℂ) • E‖ * ‖ρ_shift (φ n)‖ :=
-              ContinuousLinearMap.le_opNorm _ _
-          _ ≤ (s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖)) * ‖ρ_shift (φ n)‖ := by
-              gcongr; exact norm_expSemigroupCLM_taylor_bound E hs
-      -- Extract ‖L(ρ_m)‖ from s • L(ρ_m)
-      have hs_pos : 0 < s := by positivity
-      rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg hs.le] at h_norm_smul
-      -- s * ‖L(ρ)‖ ≤ s² * C * ‖ρ‖, so ‖L(ρ)‖ ≤ s * C * ‖ρ‖
-      have h_L_norm : ‖L (ρ_shift (φ n))‖ ≤
-          s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
-        have h1 : s * ‖L (ρ_shift (φ n))‖ ≤
-            s * (s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖) := by
-          rw [sq] at h_norm_smul; nlinarith
-        exact le_of_mul_le_mul_left h1 hs_pos
-      -- Simplify: s = 1/(φ n + 1), exp(s*‖E‖) ≤ exp(‖E‖), ‖ρ_m‖ ≤ R
-      calc ‖L (ρ_shift (φ n))‖
-          ≤ s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := h_L_norm
-        _ ≤ s * ‖E‖ ^ 2 * Real.exp (1 * ‖E‖) * R := by
-            gcongr
-            · exact Real.exp_le_exp_of_le (by nlinarith [norm_nonneg E, hs_le])
-            · exact hρ_norm n
-        _ = (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R := by simp [hs_def, s]
-    -- The bound → 0 as n → ∞
-    have h_coeff : Filter.Tendsto (fun n => (1 / (φ n + 1 : ℝ))) Filter.atTop (nhds 0) := by
-      have := (tendsto_inv_atTop_nhds_zero_nat (𝕜 := ℝ)).comp
-        (Filter.tendsto_atTop_atTop_of_monotone
-          (fun a b h => Nat.add_le_add_right (hφ_mono.monotone h) 1)
-          (fun b => ⟨b, Nat.le_succ_of_le (hφ_mono.id_le b)⟩))
-      simpa [one_div] using this
-    have h_bound_tends : Filter.Tendsto
-        (fun n => (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R)
-        Filter.atTop (nhds 0) := by
-      have := h_coeff.mul_const (‖E‖ ^ 2 * Real.exp ‖E‖ * R)
-      simp only [zero_mul] at this; convert this using 1; ext; ring
-    exact squeeze_zero_norm hL_bound h_bound_tends
+  have hL_zero : L ρ = 0 :=
+    generator_zero_of_subseq_fixed_points ρ_shift hρ_mem hρ_fix hφ_mono hφ_tendsto
   -- Step 4: Assemble the result
   refine ⟨ρ, hρ_dm, ⟨P, hP_nt, hρ_PMP_lim⟩, hL_zero⟩
 
