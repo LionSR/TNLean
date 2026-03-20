@@ -958,16 +958,19 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
 
 \begin{theorem}[Thm.~6.1(1): Determinant bound for positive TP maps]
     \label{thm:channelDet_norm_le_one}
-    \lean{channelDet_norm_le_one_of_positive_tracePreserving}
-    \uses{def:channel_det}
+    \lean{channelDet_norm_le_one_of_positive_tracePreserving}\leanok
+    \uses{def:channel_det, def:positive_map, def:trace_preserving}
     For any positive trace-preserving map $T : \MN{D} \to \MN{D}$,
     $|\det T| \le 1$.
     This is \cite[Thm.~6.1(1)]{Wolf2012Quantum}.
 \end{theorem}
 
-\begin{proof}
-    By compactness of the set of density matrices and
-    the AM--GM inequality on the Kraus singular values.
+\begin{proof}\leanok
+    Every eigenvalue $\mu$ of $T$ satisfies $|\mu| \le 1$
+    (positivity and trace preservation force spectral radius~$\le 1$).
+    Since $\det T$ is the product of the eigenvalues
+    (counted with algebraic multiplicity), the bound
+    $|\det T| = \prod_i |\mu_i| \le 1$ follows by induction.
 \end{proof}
 
 \begin{theorem}[Thm.~6.1(2): Determinant one iff unitary channel]
@@ -990,6 +993,98 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     Forward direction: $|\det T| = 1$ and Kadison--Schwarz forces each Kraus
     operator $K_i$ to be a scalar multiple of a unitary; the
     trace-preservation constraint then pins $T = U\,\cdot\, U^\dagger$.
+\end{proof}
+
+%% =========================================================
+\section{Fixed-point algebra (Wolf Thms.~6.12--6.13)}
+\label{sec:fixed_point_algebra}
+%% =========================================================
+
+\begin{definition}[Kraus fixed points]\label{def:kraus_fixed_points}
+    \lean{Kraus.fixedPoints}\leanok
+    \uses{def:kraus_map}
+    The \emph{fixed-point set} of a Kraus map
+    $E(X) = \sum_i K_i X K_i^\dagger$ is
+    $\mathrm{Fix}(E) = \{X \in \MN{D} : E(X) = X\}$.
+\end{definition}
+
+\begin{theorem}[Thm.~6.12: Fixed points form a $*$-subalgebra]
+    \label{thm:fixedPointsStarSubalgebra}
+    \lean{Kraus.fixedPointsStarSubalgebra}\leanok
+    \uses{def:kraus_fixed_points, def:unital_kraus}
+    Let $E$ be a unital Kraus map whose adjoint map $E^*$ has a positive
+    definite fixed point $\rho > 0$.
+    Then $\mathrm{Fix}(E)$ is a $*$-subalgebra of $\MN{D}$.
+    This is \cite[Thm.~6.12]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_commute, thm:kadison_schwarz}
+    Closure under addition and scalar multiplication is immediate from
+    linearity.
+    Closure under $\dagger$: if $E(X) = X$ then $E(X^\dagger) = X^\dagger$
+    because $E$ preserves Hermitian and skew-Hermitian parts.
+    Closure under multiplication: if $E(X) = X$ and $E(Y) = Y$, the
+    Kadison--Schwarz gap $E(X^\dagger X) - X^\dagger X$ is PSD and has
+    zero weighted trace against $\rho > 0$, so it vanishes.
+    This places $X$ in the multiplicative domain, and then
+    $E(XY) = E(X) E(Y) = XY$.
+\end{proof}
+
+\begin{definition}[Adjoint fixed points]\label{def:adjoint_fixed_points}
+    \lean{Kraus.adjointFixedPoints}\leanok
+    \uses{def:kraus_adjoint_map}
+    The \emph{adjoint fixed-point set}
+    $\mathrm{Fix}(E^*) = \{X \in \MN{D} : E^*(X) = X\}$,
+    where $E^*(X) = \sum_i K_i^\dagger X K_i$.
+\end{definition}
+
+\begin{theorem}[Thm.~6.12 in the Heisenberg picture]
+    \label{thm:adjointFixedPointsStarSubalgebra}
+    \lean{Kraus.adjointFixedPointsStarSubalgebra}\leanok
+    \uses{def:adjoint_fixed_points, def:tp_kraus}
+    If the Kraus map is trace-preserving and has a positive definite
+    fixed point $\rho > 0$ with $E(\rho) = \rho$,
+    then $\mathrm{Fix}(E^*)$ is a $*$-subalgebra of $\MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:fixedPointsStarSubalgebra}
+    Apply Theorem~\ref{thm:fixedPointsStarSubalgebra} to the adjoint
+    family $\{K_i^\dagger\}$.
+\end{proof}
+
+\begin{definition}[Kraus commutant]\label{def:kraus_commutant}
+    \lean{Kraus.krausCommutantStarSubalgebra}\leanok
+    \uses{def:kraus_map}
+    The \emph{Kraus commutant} is
+    $\{K_i, K_i^\dagger\}' = \{X \in \MN{D} :
+    [X, K_i] = [X, K_i^\dagger] = 0 \;\forall i\}$.
+    It is a $*$-subalgebra of $\MN{D}$.
+\end{definition}
+
+\begin{theorem}[Thm.~6.13: Adjoint fixed points = Kraus commutant]
+    \label{thm:adjointFixedPoints_eq_krausCommutant}
+    \lean{Kraus.adjointFixedPointsStarSubalgebra_eq_krausCommutantStarSubalgebra}\leanok
+    \uses{def:adjoint_fixed_points, def:kraus_commutant, def:tp_kraus}
+    Under the hypotheses of Theorem~\ref{thm:adjointFixedPointsStarSubalgebra},
+    the adjoint fixed-point $*$-subalgebra equals the Kraus commutant:
+    \[
+        \mathrm{Fix}(E^*) = \{K_i, K_i^\dagger\}'.
+    \]
+    This is \cite[Thm.~6.13]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:adjointFixedPointsStarSubalgebra}
+    ($\supseteq$): if $X$ commutes with all $K_i$ and $K_i^\dagger$,
+    then $E^*(X) = \sum_i K_i^\dagger X K_i = X \sum_i K_i^\dagger K_i = X$
+    by trace preservation.
+    ($\subseteq$): any $*$-subalgebra inside $\mathrm{Fix}(E^*)$
+    lies in the Kraus commutant, because for $X \in \mathrm{Fix}(E^*)$
+    with $X^\dagger X \in \mathrm{Fix}(E^*)$ the Kadison--Schwarz
+    gap vanishes, which forces $X K_i = K_i X$ and
+    $X K_i^\dagger = K_i^\dagger X$.
 \end{proof}
 
 %% =========================================================

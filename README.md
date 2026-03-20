@@ -1,10 +1,10 @@
 # TNLean
 
-A Lean 4 formalization of major components of the **Fundamental Theorem of Matrix Product States** and the repository's **cumulative Quantum Wielandt theory**, using [Mathlib](https://github.com/leanprover-community/mathlib4) v4.28.0.
+A Lean 4 formalization of major components of the **Fundamental Theorem of Matrix Product States**, the repository's **cumulative Quantum Wielandt theory**, and a growing body of finite-dimensional **quantum-channel theory** inspired by M. M. Wolf's *Quantum Channels & Operations*, using [Mathlib](https://github.com/leanprover-community/mathlib4) v4.28.0.
 
 ## Overview
 
-[Matrix Product States](https://en.wikipedia.org/wiki/Matrix_product_state) (MPS) — equivalently, Tensor Networks with one-dimensional geometry — are a central tool in quantum information theory and condensed matter physics. The **Fundamental Theorem of MPS** states that two MPS tensors generating the same family of quantum states must be related by a gauge transform. The **Quantum Wielandt Bound** gives a constructive upper bound on the length needed for products of matrices to span the full algebra. This repository currently formalizes the injective single-block theorem, substantial Perron–Frobenius / canonical-form infrastructure, and strong-hypothesis multi-block and canonical-form assembly theorems, but not yet a full arbitrary-tensor → final canonical-form / biCF pipeline matching Section 2 + Appendix A of [arXiv:1606.00608](https://arxiv.org/abs/1606.00608).
+[Matrix Product States](https://en.wikipedia.org/wiki/Matrix_product_state) (MPS) — equivalently, Tensor Networks with one-dimensional geometry — are a central tool in quantum information theory and condensed matter physics. The **Fundamental Theorem of MPS** states that two MPS tensors generating the same family of quantum states must be related by a gauge transform. The **Quantum Wielandt Bound** gives a constructive upper bound on the length needed for products of matrices to span the full algebra. On the MPS side, this repository formalizes the injective single-block theorem, substantial Perron–Frobenius / canonical-form infrastructure, and strong-hypothesis multi-block and canonical-form assembly theorems, but not yet a full arbitrary-tensor → final canonical-form / biCF pipeline matching Section 2 + Appendix A of [arXiv:1606.00608](https://arxiv.org/abs/1606.00608). In parallel, the channel side now includes Choi/Kraus/Stinespring representation theory, a substantial Chapter-5 Schwarz package, a broad Chapter-6 spectral / fixed-point package, and a near-complete Chapter-7 semigroup / GKSL package.
 
 ## Current Status
 
@@ -22,6 +22,26 @@ Still not assembled end-to-end:
 - arbitrary tensor → final repository canonical form / biCF theorem matching Section 2 + Appendix A of [arXiv:1606.00608](https://arxiv.org/abs/1606.00608)
 - the bridge from primitive blocked TP / CFII data to the stronger block-injective / `IsNormal` hypotheses used by the final canonical-form predicate
 - the fully automatic multi-block proportional assembly in the oscillatory / coefficient-convergence regime
+
+Complementary channel-side milestones now in Lean:
+
+- Choi, Kraus, and Stinespring representation results from Wolf Chapter 2
+- Wolf Proposition 5.1, Theorems 5.5–5.7, and Example 5.3 in the Schwarz package
+- Wolf Theorem 6.1 together with substantial Chapter-6 spectral / fixed-point theory, including Theorems 6.12–6.13
+- Wolf Chapter-7 semigroup / GKSL package through Proposition 7.6 and Theorem 7.2; only Corollary 7.2 remains unformalized
+
+### Wolf channel-side snapshot (audit of 2026-03-19)
+
+| Wolf chapter | Topic | Estimated theorem-level coverage |
+|---|---|---:|
+| Ch1 | Deconstructing quantum | ~18% |
+| Ch2 | Representations | ~13% |
+| Ch3 | Positive not completely positive | 0% |
+| Ch4 | Convex structure | equation-only |
+| Ch5 | Schwarz inequalities | ~23% |
+| Ch6 | Spectral properties | ~44% |
+| Ch7 | Semigroup structure | ~91% |
+| Ch8 | Distance measures | 0% |
 
 ## Main Results
 
@@ -108,6 +128,21 @@ lake build
 
 Requires Lean 4 v4.28.0 (managed via `lean-toolchain`).
 
+## Blueprint
+
+The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the channel-side Wolf material. After the 2026-03-20 documentation sync, the blueprint chapters `ch04_channels.tex`, `ch05_schwarz.tex`, and `ch12_semigroup.tex` reflect the current Lean status of the representation, Schwarz, determinant / fixed-point, and semigroup packages.
+
+Typical blueprint commands:
+
+```bash
+lake build TNLean
+cd blueprint
+leanblueprint checkdecls
+leanblueprint web   # or: leanblueprint pdf / leanblueprint all
+```
+
+The blueprint tooling assumes that the Lean project itself builds successfully; if you are working with local experimental edits, rebuild the affected Lean modules before running `checkdecls`.
+
 ## References
 
 The formalization follows these papers:
@@ -117,5 +152,5 @@ The formalization follows these papers:
 - J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete, *Matrix Product Density Operators*, [arXiv:1606.00608](https://arxiv.org/abs/1606.00608), Annals of Physics **378** (2017) — MPDO canonical form, irreducible decomposition (Appendix A)
 - G. De las Cuevas, J. I. Cirac, N. Schuch, D. Pérez-García, *Irreducible forms of Matrix Product States: Theory and Applications*, [arXiv:1708.00029](https://arxiv.org/abs/1708.00029), J. Math. Phys. **58**, 121901 (2017) — irreducible forms, Gram matrix characterization
 - J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete, *Matrix Product States and Projected Entangled Pair States*, [arXiv:2011.12127](https://arxiv.org/abs/2011.12127), Rev. Mod. Phys. **93**, 045003 (2021) — review, Theorem 4.4 (proportional MPV), BNT permutation structure
-- M. M. Wolf, *Quantum Channels & Operations: Guided Tour* (2012) — positive map spectral theory, Kadison–Schwarz inequality
+- M. M. Wolf, *Quantum Channels & Operations: Guided Tour* (2012) — representation theory, positive maps, Schwarz inequalities, spectral theory, and semigroups
 - [Mathlib4](https://github.com/leanprover-community/mathlib4) — Lean 4 mathematics library

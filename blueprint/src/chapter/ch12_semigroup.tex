@@ -509,7 +509,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Thm.~7.1, Form~(i) conversely]
     \label{thm:generatorDecomp_of_gksl}
-    \lean{generatorDecomp_of_gksl}
+    \lean{generatorDecomp_of_gksl}\leanok
     \uses{def:cp_map, def:is_gksl_generator, def:generator_decomp, def:is_trace_constraint}
     If $L$ is a GKSL generator, then there exist a CP map $\phi$ and a matrix
     $\kappa$ such that
@@ -519,7 +519,7 @@ which shows that such generators have the standard Lindblad form.
     and $\phi^*(\Id) = \kappa + \kappa^\dagger$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:cp_semigroup_implies_ccp, thm:tp_semigroup_implies_ta}
     Apply Theorem~\ref{thm:cp_semigroup_implies_ccp} to obtain a CCP
     decomposition. Then apply Theorem~\ref{thm:tp_semigroup_implies_ta} to the
@@ -529,13 +529,13 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Thm.~7.1: GKSL iff CCP + trace-annihilating]
     \label{thm:gksl_iff_ccp_ta}
-    \lean{gksl_iff_ccp_and_traceAnnihilating}
+    \lean{gksl_iff_ccp_and_traceAnnihilating}\leanok
     \uses{def:is_gksl_generator, def:is_ccp, def:is_trace_annihilating}
     $L$ is a GKSL generator if and only if $L$ is CCP and
     trace-annihilating.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:cp_semigroup_implies_ccp, thm:ccp_implies_cp_semigroup,
           thm:ta_implies_tp_semigroup, thm:tp_semigroup_implies_ta}
     Forward: apply Theorem~\ref{thm:cp_semigroup_implies_ccp} to the CP part and
@@ -546,7 +546,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Thm.~7.1: GKSL iff Lindblad form]
     \label{thm:gksl_iff_lindblad}
-    \lean{gksl_iff_lindbladForm}
+    \lean{gksl_iff_lindbladForm}\leanok
     \uses{def:is_gksl_generator, def:lindblad_form}
     $L$ is a GKSL generator if and only if
     \[
@@ -560,7 +560,7 @@ which shows that such generators have the standard Lindblad form.
     This is \cite[Thm.~7.1]{Wolf2012Quantum}.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:generatorDecomp_of_gksl, thm:gksl_iff_ccp_ta,
           thm:lindbladForm_eq_generatorDecomp, thm:lindbladForm_isCCP,
           thm:lindbladForm_isTraceAnnihilating,
@@ -725,14 +725,102 @@ which shows that such generators have the standard Lindblad form.
 
 %% Wolf §7.1.2, Prop 7.6
 
-\begin{theorem}[Prop.~7.6, (4)$\to$(2): Block-upper-triangular implies rank-deficient kernel]
+The four equivalent reducibility conditions of
+\cite[Prop.~7.6]{Wolf2012Quantum} are as follows.
+
+\begin{definition}[Rank-deficient fixed density]\label{def:has_rank_deficient_fixed_density}
+    \lean{HasRankDeficientFixedDensity}\leanok
+    \uses{def:is_gksl_generator, def:exp_semigroup_ch12}
+    Condition~(1): there exists a density matrix $\rho_0$ with nontrivial
+    kernel such that $e^{tL}(\rho_0) = \rho_0$ for all $t \ge 0$.
+\end{definition}
+
+\begin{definition}[Rank-deficient kernel element]\label{def:has_rank_deficient_kernel_element}
+    \lean{HasRankDeficientKernelElement}\leanok
+    \uses{def:is_gksl_generator}
+    Condition~(2): there exists a density matrix $\rho_0$ with nontrivial
+    kernel satisfying $L(\rho_0) = 0$.
+\end{definition}
+
+\begin{definition}[Invariant compression]\label{def:has_invariant_compression}
+    \lean{HasInvariantCompression}\leanok
+    \uses{def:is_gksl_generator, def:exp_semigroup_ch12}
+    Condition~(3): there exists a nontrivial orthogonal projector $P$ such
+    that $e^{tL}(P \MN{D} P) \subseteq P \MN{D} P$ for all $t \ge 0$.
+\end{definition}
+
+\begin{definition}[Block-upper-triangular Lindblad form]\label{def:has_block_upper_triangular_lindblad}
+    \lean{HasBlockUpperTriangularLindblad}\leanok
+    \uses{def:lindblad_form}
+    Condition~(4): there exists a nontrivial projector $P$ and a Lindblad form
+    $(H, \{L_j\})$ for $L$ such that $(1-P)L_j P = 0$ and
+    $(1-P)\kappa P = 0$ for all $j$, where
+    $\kappa = iH + \frac{1}{2}\sum_j L_j^\dagger L_j$.
+\end{definition}
+
+\begin{theorem}[Prop.~7.6, (1)$\leftrightarrow$(2)]
+    \label{thm:wolf_prop_7_6_one_iff_two}
+    \lean{wolf_prop_7_6_one_iff_two}\leanok
+    \uses{def:has_rank_deficient_fixed_density,
+          def:has_rank_deficient_kernel_element}
+    A rank-deficient density matrix is a fixed point of $e^{tL}$ for all
+    $t \ge 0$ if and only if it lies in $\ker L$.
+    This is \cite[Prop.~7.6, (1)$\leftrightarrow$(2)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The equivalence $L(\rho) = 0 \iff e^{tL}(\rho) = \rho$ for all $t \ge 0$
+    follows from the generator--semigroup correspondence: differentiate
+    at $t=0$ for the forward direction, and exponentiate for the reverse.
+\end{proof}
+
+\begin{theorem}[Prop.~7.6, (1)$\to$(3)]
+    \label{thm:wolf_prop_7_6_one_implies_three}
+    \lean{wolf_prop_7_6_one_implies_three}\leanok
+    \uses{def:has_rank_deficient_fixed_density,
+          def:has_invariant_compression, def:is_gksl_generator}
+    If $L$ is a GKSL generator and there exists a rank-deficient fixed
+    density matrix, then the semigroup preserves a nontrivial compression.
+    This is \cite[Prop.~7.6, (1)$\to$(3)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\rho_0$ be a rank-deficient fixed density.
+    Let $P$ be the support projection of $\rho_0$.
+    Since $\rho_0$ is rank-deficient, $P \neq \Id$;
+    since $\rho_0 \neq 0$, $P \neq 0$.
+    Channel positivity and trace preservation force $e^{tL}$ to
+    preserve $P \MN{D} P$.
+\end{proof}
+
+\begin{theorem}[Prop.~7.6, (3)$\leftrightarrow$(4)]
+    \label{thm:wolf_prop_7_6_three_iff_four}
+    \lean{wolf_prop_7_6_three_implies_four, wolf_prop_7_6_four_implies_three}\leanok
+    \uses{def:has_invariant_compression,
+          def:has_block_upper_triangular_lindblad, def:is_gksl_generator}
+    For a GKSL generator $L$, the semigroup preserves a nontrivial
+    compression if and only if the Lindblad data can be chosen
+    block-upper-triangular.
+    This is \cite[Prop.~7.6, (3)$\leftrightarrow$(4)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    (4)$\to$(3): block-upper-triangular Lindblad operators immediately
+    imply that $L$ preserves the compression $P \MN{D} P$, and hence
+    so does $e^{tL}$.
+    (3)$\to$(4): the semigroup preserving $P \MN{D} P$ implies
+    (by differentiation) that $L$ preserves $P \MN{D} P$; the vanishing of
+    $(1-P) L(P X P)$ for all $X$ forces $(1-P)L_j P = 0$ and
+    $(1-P)\kappa P = 0$ via the sum-of-squares identity.
+\end{proof}
+
+\begin{theorem}[Prop.~7.6, (4)$\to$(2)]
     \label{thm:blockUpperTriangular_implies_rankDeficient}
     \lean{hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad}\leanok
-    \uses{def:is_gksl_generator, def:lindblad_form}
-    Let $L$ be a GKSL generator with Lindblad form $(H, \{L_j\}, \kappa)$.
-    If there exists a nontrivial projector $P$ such that
-    $(1-P)L_j P = 0$ and $(1-P)\kappa P = 0$ for all $j$
-    (i.e.\ the Lindblad data are block-upper-triangular with respect to $P$),
+    \uses{def:has_block_upper_triangular_lindblad,
+          def:has_rank_deficient_kernel_element, def:is_gksl_generator}
+    If the Lindblad data of a GKSL generator are block-upper-triangular
+    with respect to some nontrivial projector $P$,
     then there exists a density matrix $\rho_0$ with nontrivial kernel
     satisfying $L(\rho_0) = 0$.
     This is \cite[Prop.~7.6, (4)$\to$(2)]{Wolf2012Quantum}.
@@ -749,4 +837,32 @@ which shows that such generators have the standard Lindblad form.
     Passing to a subsequential limit gives a density matrix
     $\rho_0$ with $P \rho_0 P = \rho_0$ and $L(\rho_0) = 0$.
     Since $P \neq \Id$, the matrix $\rho_0$ has nontrivial kernel.
+\end{proof}
+
+\begin{theorem}[Prop.~7.6: Full equivalence]
+    \label{thm:wolf_prop_7_6_full}
+    \lean{wolf_prop_7_6_full_equivalence}\leanok
+    \uses{def:is_gksl_generator, def:has_rank_deficient_fixed_density,
+          def:has_rank_deficient_kernel_element,
+          def:has_invariant_compression,
+          def:has_block_upper_triangular_lindblad}
+    For a GKSL generator $L : \MN{D} \to \MN{D}$, the four conditions
+    \begin{enumerate}
+        \item rank-deficient fixed density,
+        \item rank-deficient kernel element,
+        \item invariant compression, and
+        \item block-upper-triangular Lindblad form
+    \end{enumerate}
+    are equivalent.
+    This is \cite[Prop.~7.6]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:wolf_prop_7_6_one_iff_two,
+          thm:wolf_prop_7_6_one_implies_three,
+          thm:wolf_prop_7_6_three_iff_four,
+          thm:blockUpperTriangular_implies_rankDeficient}
+    The cycle (1)$\leftrightarrow$(2), (1)$\to$(3),
+    (3)$\leftrightarrow$(4), and (4)$\to$(2) closes
+    the equivalence chain.
 \end{proof}
