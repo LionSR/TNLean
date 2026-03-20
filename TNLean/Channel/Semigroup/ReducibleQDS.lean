@@ -503,7 +503,8 @@ theorem hasBlockUpperTriangularLindblad_of_hasInvariantCompression
       simp only [Matrix.mul_assoc]
       rw [hPQ, Matrix.mul_zero, Matrix.mul_zero]
     rw [mul_sum, Finset.sum_mul]
-    congr 1; ext j
+    apply Finset.sum_congr rfl
+    intro j _
     simpa only [Matrix.conjTranspose_mul, Matrix.conjTranspose_sub,
       Matrix.conjTranspose_one, hP_herm, Matrix.mul_assoc, hPP]
   -- Each (1-P)*Lⱼ*P = 0
@@ -915,10 +916,9 @@ private theorem norm_exp_sub_one_sub_self_le'
     _ ≤ ∑' n, ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) :=
         Summable.tsum_le_tsum hterm hsummable_tail hsummable_cmp
     _ = ‖x‖ ^ 2 * Real.exp ‖x‖ := by
-        rw [tsum_mul_left]
-        congr 1
         simpa [Real.exp_eq_exp_ℝ] using
-          (congrFun (NormedSpace.exp_eq_tsum_div (𝔸 := ℝ)) ‖x‖).symm
+          congrArg (fun y => ‖x‖ ^ 2 * y)
+            ((congrFun (NormedSpace.exp_eq_tsum_div (𝔸 := ℝ)) ‖x‖).symm)
 
 set_option maxHeartbeats 800000 in
 -- The Taylor remainder specialization triggers expensive norm-expression elaboration.
@@ -933,7 +933,7 @@ private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
     rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs]
   calc ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖
       = ‖NormedSpace.exp ((s : ℂ) • E) - 1 - (s : ℂ) • E‖ := by
-        congr 1; unfold expSemigroupCLM; abel
+        simpa [expSemigroupCLM, sub_eq_add_neg, add_assoc, add_left_comm, add_comm]
     _ ≤ ‖(s : ℂ) • E‖ ^ 2 * Real.exp ‖(s : ℂ) • E‖ := h
     _ = s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by rw [hnorm_smul]; ring
 
