@@ -93,6 +93,7 @@ import TNLean.Spectral.CrossCorrelation
 
 -- Layer 3: MPS core
 import TNLean.MPS.Defs
+import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Overlap.Basic
