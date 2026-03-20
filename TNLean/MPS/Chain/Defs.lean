@@ -46,6 +46,9 @@ def cyclicSucc : Fin n → Fin n
       | 0 => False.elim (Nat.not_lt_zero _ hi)
       | m + 1 => ⟨(i + 1) % (m + 1), Nat.mod_lt _ (Nat.succ_pos _)⟩
 
+@[simp] lemma cyclicSucc_val (k : Fin (n + 1)) :
+    (cyclicSucc k).val = (k.val + 1) % (n + 1) := rfl
+
 /-- Cyclic gauge equivalence on a periodic chain:
 `Bₖ^σ = Zₖ Aₖ^σ Zₖ₊₁⁻¹`, where the successor is taken modulo `n`. -/
 def GaugeEquiv (A B : MPSChainTensor d D n) : Prop :=
@@ -59,12 +62,13 @@ def GaugeEquiv (A B : MPSChainTensor d D n) : Prop :=
 
 @[simp] lemma eval_succ (A : MPSChainTensor d D (n + 1)) (σ : Fin (n + 1) → Fin d) :
     eval A σ = A 0 (σ 0) * eval (fun k => A k.succ) (fun k => σ k.succ) := by
+  -- `Fin.prod_succ` splits off the first factor in the ordered product.
   simpa [eval] using Fin.prod_succ (fun k : Fin (n + 1) => A k (σ k))
 
 @[simp] lemma coeff_eq (A : MPSChainTensor d D n) (σ : Fin n → Fin d) :
     coeff A σ = Matrix.trace (eval A σ) := rfl
 
-@[simp] theorem SameState.refl (A : MPSChainTensor d D n) : SameState A A := by
+theorem SameState.refl (A : MPSChainTensor d D n) : SameState A A := by
   intro σ
   rfl
 
@@ -79,7 +83,7 @@ theorem SameState.trans {A B C : MPSChainTensor d D n}
   intro σ
   exact (hAB σ).trans (hBC σ)
 
-@[simp] theorem GaugeEquiv.refl (A : MPSChainTensor d D n) : GaugeEquiv A A := by
+theorem GaugeEquiv.refl (A : MPSChainTensor d D n) : GaugeEquiv A A := by
   refine ⟨fun _ => 1, ?_⟩
   intro k i
   simp
