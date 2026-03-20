@@ -6,6 +6,7 @@ import TNLean.Channel.Semigroup.LindbladForm
 import TNLean.Channel.Semigroup.Kernel
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.FixedPoint.Cesaro
+import TNLean.MPS.Irreducible.FixedPointProjection
 
 /-!
 # Reducible Quantum Dynamical Semigroups — Wolf Proposition 7.6
@@ -49,9 +50,16 @@ equivalent conditions holds:
 
 ## Main results
 
-* `wolf_prop_7_6_one_iff_two` — **(1) ↔ (2)**: fully proved.
-* `wolf_prop_7_6_four_implies_three` — **(4) → (3)**: fully proved.
-* `wolf_prop_7_6_three_implies_four` — **(3) → (4)**: fully proved.
+* `wolf_prop_7_6_one_iff_two` — **(1) ↔ (2)**: fixed density ↔ kernel element.
+* `wolf_prop_7_6_one_implies_three` — **(1) → (3)**: support projection gives
+  an invariant compression.
+* `wolf_prop_7_6_four_implies_three` — **(4) → (3)**: block-upper-triangular
+  Lindblad form implies invariant compression.
+* `wolf_prop_7_6_three_implies_four` — **(3) → (4)**: invariant compression
+  forces a block-upper-triangular Lindblad form.
+* `hasBlockUpperTriangularLindblad_of_hasRankDeficientKernelElement` —
+  **(2) → (4)** via `(2) → (1) → (3) → (4)`.
+* `wolf_prop_7_6_full_equivalence` — the bundled four-way equivalence.
 
 ## References
 
@@ -165,6 +173,140 @@ theorem wolf_prop_7_6_one_iff_two (L : Mat →ₗ[ℂ] Mat) :
     HasRankDeficientFixedDensity L ↔ HasRankDeficientKernelElement L :=
   ⟨hasRankDeficientKernelElement_of_hasRankDeficientFixedDensity,
    hasRankDeficientFixedDensity_of_hasRankDeficientKernelElement⟩
+
+/-! ## (1) → (3): Fixed density → invariant compression
+
+For a fixed density matrix `ρ₀`, every channel `expSemigroup L t` preserves the
+support of `ρ₀`. Taking the support projection therefore produces a nontrivial
+compression invariant under the whole semigroup.
+-/
+
+private lemma lowerZero_implies_invariance'
+    {r : ℕ} (K : Fin r → Mat) {P : Mat}
+    (hP : IsOrthogonalProjection P)
+    (hLower : ∀ i : Fin r, (1 - P) * K i * P = 0) :
+    ∀ X : Mat,
+      P * MPSTensor.transferMap (d := r) (D := D) K (P * X * P) * P =
+        MPSTensor.transferMap (d := r) (D := D) K (P * X * P) := by
+  intro X
+  have hP_herm : Pᴴ = P := hP.1
+  have hAP : ∀ i : Fin r, K i * P = P * K i * P := by
+    intro i
+    have hkey : K i * P - P * K i * P = 0 := by
+      have h : (1 - P) * K i * P = K i * P - P * K i * P := by
+        noncomm_ring
+      rw [← h]
+      exact hLower i
+    exact eq_of_sub_eq_zero hkey
+  have hPAd : ∀ i : Fin r, P * (K i)ᴴ = P * (K i)ᴴ * P := by
+    intro i
+    have hct : P * (K i)ᴴ * (1 - P) = 0 := by
+      have h := congrArg Matrix.conjTranspose (hLower i)
+      simp only [Matrix.conjTranspose_zero, Matrix.conjTranspose_mul,
+        Matrix.conjTranspose_sub, Matrix.conjTranspose_one, hP_herm] at h
+      simpa [Matrix.mul_assoc]
+    have hkey : P * (K i)ᴴ - P * (K i)ᴴ * P = 0 := by
+      have h : P * (K i)ᴴ * (1 - P) = P * (K i)ᴴ - P * (K i)ᴴ * P := by
+        noncomm_ring
+      rwa [← h]
+    exact eq_of_sub_eq_zero hkey
+  simp only [MPSTensor.transferMap_apply]
+  rw [Finset.mul_sum, Finset.sum_mul]
+  congr 1
+  ext1 i
+  have h1 : K i * (P * X * P) * (K i)ᴴ =
+      (K i * P) * X * (P * (K i)ᴴ) := by
+    noncomm_ring
+  have h2 : (K i * P) * X * (P * (K i)ᴴ) =
+      (P * K i * P) * X * (P * (K i)ᴴ * P) := by
+    conv_lhs => rw [hAP i, hPAd i]
+  have h3 : (P * K i * P) * X * (P * (K i)ᴴ * P) =
+      P * (K i * (P * X * P) * (K i)ᴴ) * P := by
+    noncomm_ring
+  exact ((h1.trans h2).trans h3).symm
+
+private theorem invariantCompression_of_supportProj_fixed_by_channel
+    {E : Mat →ₗ[ℂ] Mat} (hE : IsChannel E) {ρ : Mat}
+    (hρ_psd : ρ.PosSemidef) (hρ_fix : E ρ = ρ) :
+    let P := MPSTensor.supportProj (D := D) ρ hρ_psd
+    IsOrthogonalProjection P ∧
+      ∀ X : Mat, P * E (P * X * P) * P = E (P * X * P) := by
+  obtain ⟨r, K, hK⟩ := hE.cp
+  have hE_eq_transfer : E = MPSTensor.transferMap (d := r) (D := D) K := by
+    ext1 X
+    simp only [MPSTensor.transferMap_apply]
+    exact hK X
+  have hρ_fix' : MPSTensor.transferMap (d := r) (D := D) K ρ = ρ := by
+    simpa [hE_eq_transfer] using hρ_fix
+  let P := MPSTensor.supportProj (D := D) ρ hρ_psd
+  have hP_data :
+      IsOrthogonalProjection P ∧
+        (∀ i : Fin r, (1 - P) * K i * P = 0) := by
+    simpa [P] using
+      (MPSTensor.lowerZero_of_posSemidef_fixedPoint
+        (d := r) (D := D) K ρ hρ_psd hρ_fix')
+  refine ⟨hP_data.1, ?_⟩
+  intro X
+  rw [hE_eq_transfer]
+  exact lowerZero_implies_invariance' (D := D) K hP_data.1 hP_data.2 X
+
+private lemma not_posDef_of_proj_sandwich_eq_self
+    {P ρ : Mat}
+    (hP : IsOrthogonalProjection P)
+    (hP1 : P ≠ 1)
+    (hρ : P * ρ * P = ρ) :
+    ¬ ρ.PosDef := by
+  intro hρ_pd
+  have hQP : (1 - P) * P = 0 := by
+    rw [sub_mul, one_mul, hP.2, sub_self]
+  have hQρ : (1 - P) * ρ = 0 := by
+    conv_lhs => rw [← hρ]
+    rw [show (1 - P) * (P * ρ * P) = ((1 - P) * P) * ρ * P from by noncomm_ring,
+        hQP, Matrix.zero_mul, Matrix.zero_mul]
+  obtain ⟨u, hu⟩ := hρ_pd.isUnit
+  have hQu : (1 - P) * (u : Mat) = 0 := by
+    simpa [hu] using hQρ
+  have h1P : 1 - P = 0 := by
+    calc
+      1 - P = (1 - P) * 1 := (Matrix.mul_one _).symm
+      _ = (1 - P) * ((u : Mat) * (↑u⁻¹ : Mat)) := by rw [Units.mul_inv]
+      _ = ((1 - P) * (u : Mat)) * (↑u⁻¹ : Mat) := (Matrix.mul_assoc _ _ _).symm
+      _ = 0 * (↑u⁻¹ : Mat) := by rw [hQu]
+      _ = 0 := Matrix.zero_mul _
+  exact hP1 (sub_eq_zero.mp h1P).symm
+
+/-- **Wolf Proposition 7.6, (1) → (3)**: A rank-deficient fixed density matrix
+produces an invariant compression via its support projection. -/
+theorem wolf_prop_7_6_one_implies_three
+    {L : Mat →ₗ[ℂ] Mat}
+    (hGKSL : IsGKSLGenerator L)
+    (h : HasRankDeficientFixedDensity L) :
+    HasInvariantCompression L := by
+  obtain ⟨ρ₀, hρ_mem, ⟨Q, hQ_nt, hQρ⟩, hρ_fix⟩ := h
+  have hρ_psd : ρ₀.PosSemidef := hρ_mem.1
+  have hρ_ne : ρ₀ ≠ 0 := by
+    intro hρ_zero
+    simpa [hρ_zero] using hρ_mem.2
+  have hρ_not_pd : ¬ ρ₀.PosDef :=
+    not_posDef_of_proj_sandwich_eq_self hQ_nt.1 hQ_nt.2.2 hQρ
+  let P : Mat := MPSTensor.supportProj (D := D) ρ₀ hρ_psd
+  have hP_proj : IsOrthogonalProjection P :=
+    MPSTensor.isOrthogonalProjection_supportProj (D := D) (ρ := ρ₀) (hρ := hρ_psd)
+  have hP0 : P ≠ 0 :=
+    MPSTensor.supportProj_ne_zero_of_ne_zero ρ₀ hρ_psd hρ_ne
+  have hP1 : P ≠ 1 :=
+    MPSTensor.supportProj_ne_one_of_not_posDef ρ₀ hρ_psd hρ_not_pd
+  refine ⟨P, ⟨hP_proj, hP0, hP1⟩, ?_⟩
+  intro t ht X
+  have hChannel : IsChannel (expSemigroup L t) := hGKSL t ht
+  have hInv :
+      IsOrthogonalProjection P ∧
+        (∀ Y : Mat, P * expSemigroup L t (P * Y * P) * P =
+          expSemigroup L t (P * Y * P)) := by
+    simpa [P] using
+      (invariantCompression_of_supportProj_fixed_by_channel
+        (D := D) hChannel hρ_psd (hρ_fix t ht))
+  exact hInv.2 X
 
 /-! ## Generator-level compression preservation
 
@@ -786,6 +928,7 @@ private theorem norm_exp_sub_one_sub_self_le'
         simpa [Real.exp_eq_exp_ℝ] using
           (congrFun (NormedSpace.exp_eq_tsum_div (𝔸 := ℝ)) ‖x‖).symm
 
+-- The Taylor remainder specialization requires expensive norm-computation elaboration
 set_option maxHeartbeats 800000 in
 /-- Specialization: `‖expSemigroupCLM E s − (1 + s • E)‖ ≤ s² ‖E‖² exp(s‖E‖)`. -/
 private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
@@ -802,6 +945,8 @@ private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
     _ ≤ ‖(s : ℂ) • E‖ ^ 2 * Real.exp ‖(s : ℂ) • E‖ := h
     _ = s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by rw [hnorm_smul]; ring
 
+-- The proof involves multiple Cesàro extractions and norm estimates; needs extra heartbeats.
+set_option maxHeartbeats 4000000 in
 /-- **Wolf Proposition 7.6, (4) → (2)**: Given block-upper-triangular Lindblad
 operators, the compressed channel has a fixed density matrix, giving (2).
 
@@ -813,8 +958,6 @@ operators, the compressed channel has a fixed density matrix, giving (2).
    `exp((1/m)L)(ρ_m) - ρ_m = (1/m)L(ρ_m) + O(1/m²)` and the fixed-point
    equation `exp((1/m)L)(ρ_m) = ρ_m`, deduce `L(ρ_m) → 0` hence `L(ρ) = 0`.
 4. Since `ρ ∈ PMP` with `P ≠ 1`, `ρ` is rank-deficient. -/
--- The proof involves multiple Cesàro extractions and norm estimates; needs extra heartbeats.
-set_option maxHeartbeats 4000000 in
 theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
     {L : Mat →ₗ[ℂ] Mat}
     (hGKSL : IsGKSLGenerator L)
@@ -987,29 +1130,32 @@ theorem isReducibleQDS_iff_generator_preserves_compression
 
 /-! ## The full equivalence (Wolf Proposition 7.6)
 
-We state the four-way equivalence as named theorems.
-The fully proved direction is (1) ↔ (2), using the kernel bridge.
-The algebraic directions (3) ↔ (4) are stated with proofs delegated to sorry.
-The geometric direction (1) → (3) (support projector) requires additional
-PSD/support infrastructure not yet available.
+All four conditions in Wolf Proposition 7.6 are now connected by proved
+implications:
+
+* **(1) ↔ (2)**: `wolf_prop_7_6_one_iff_two`
+* **(1) → (3)**: `wolf_prop_7_6_one_implies_three`
+* **(3) ↔ (4)**: `wolf_prop_7_6_three_implies_four` and
+  `wolf_prop_7_6_four_implies_three`
+* **(4) → (2)**: `hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad`
+
+In particular, condition (2) also implies condition (4) by the chain
+`(2) → (1) → (3) → (4)`.
 -/
 
-/-- **Wolf Proposition 7.6 (summary)**: For a GKSL generator `L`, the
-following are equivalent:
-(1) `HasRankDeficientFixedDensity L`
-(2) `HasRankDeficientKernelElement L`
-(3) `HasInvariantCompression L`
-(4) `HasBlockUpperTriangularLindblad L`
+/-- **Wolf Proposition 7.6, (2) → (4)**: A rank-deficient kernel element of a
+GKSL generator yields a block-upper-triangular Lindblad form. -/
+theorem hasBlockUpperTriangularLindblad_of_hasRankDeficientKernelElement
+    {L : Mat →ₗ[ℂ] Mat}
+    (hGKSL : IsGKSLGenerator L)
+    (h : HasRankDeficientKernelElement L) :
+    HasBlockUpperTriangularLindblad L := by
+  apply hasBlockUpperTriangularLindblad_of_hasInvariantCompression hGKSL
+  exact wolf_prop_7_6_one_implies_three hGKSL
+    (hasRankDeficientFixedDensity_of_hasRankDeficientKernelElement h)
 
-### Proved directions
-- **(1) ↔ (2)**: `wolf_prop_7_6_one_iff_two` — fully proved via kernel bridge
-- **(3) ↔ (4)**: `wolf_prop_7_6_three_implies_four` and `wolf_prop_7_6_four_implies_three` —
-  fully proved via differentiation, sum-of-squares vanishing, and power series invariance
-
-### Remaining gaps
-- **(4) → (2)**: needs compressed semigroup fixed-point existence
-- **(1) → (3)**: needs support projector theory
--/
+/-- **Wolf Proposition 7.6, (4) → (3)**: Block-upper-triangular Lindblad
+operators imply the semigroup preserves the compressed algebra. -/
 theorem wolf_prop_7_6_four_implies_three
     {L : Mat →ₗ[ℂ] Mat}
     (h : HasBlockUpperTriangularLindblad L) :
@@ -1032,6 +1178,26 @@ theorem wolf_prop_7_6_three_implies_two
     HasRankDeficientKernelElement L :=
   hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad hGKSL
     (hasBlockUpperTriangularLindblad_of_hasInvariantCompression hGKSL h)
+
+/-- **Wolf Proposition 7.6 (full equivalence)**: For a GKSL generator `L`, the
+four reducibility conditions are equivalent. We package the result by taking
+condition (1) as the base condition. -/
+theorem wolf_prop_7_6_full_equivalence
+    {L : Mat →ₗ[ℂ] Mat}
+    (hGKSL : IsGKSLGenerator L) :
+    HasRankDeficientFixedDensity L ↔
+      HasRankDeficientKernelElement L ∧
+        HasInvariantCompression L ∧
+        HasBlockUpperTriangularLindblad L := by
+  constructor
+  · intro h1
+    refine ⟨?_, ?_, ?_⟩
+    · exact hasRankDeficientKernelElement_of_hasRankDeficientFixedDensity h1
+    · exact wolf_prop_7_6_one_implies_three hGKSL h1
+    · exact hasBlockUpperTriangularLindblad_of_hasRankDeficientKernelElement hGKSL
+        (hasRankDeficientKernelElement_of_hasRankDeficientFixedDensity h1)
+  · intro h1234
+    exact hasRankDeficientFixedDensity_of_hasRankDeficientKernelElement h1234.1
 
 /-! ## Sum-of-squares vanishing lemma
 
