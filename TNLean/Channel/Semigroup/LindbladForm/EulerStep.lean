@@ -262,10 +262,9 @@ private theorem quadMap_apply (G : GeneratorDecomp D) (ρ : sgMat D) :
 set_option maxHeartbeats 800000 in
 -- Expanding the one-step Kraus map into the generator-plus-quadratic form
 -- needs extra normalization heartbeats, but only in this local theorem.
-private axiom eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
+private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
     eulerStep G s ρ =
-      ρ + (s : ℂ) • (G.toLinearMap ρ) + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ
-/-
+      ρ + (s : ℂ) • (G.toLinearMap ρ) + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ := by
   change Kraus.mapLM (fun _ : Fin 1 => (1 : sgMat D) - (s : ℂ) • G.κ) ρ + (s : ℂ) • G.φ ρ =
     ρ + (s : ℂ) • (G.toLinearMap ρ) + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ
   simp only [Complex.coe_smul, Kraus.mapLM_apply, Kraus.map_apply, Finset.univ_unique,
@@ -278,8 +277,7 @@ private axiom eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
   simp only [Matrix.mul_add, add_mul, Matrix.mul_one, Matrix.one_mul, smul_mul_assoc,
     mul_smul_comm, smul_add, smul_smul, mul_assoc, neg_mul, mul_neg, smul_neg,
     neg_add_rev, neg_neg]
-  rw [add_comm (s • G.φ ρ) ((s * s) • (G.κ * (ρ * G.κᴴ)))]
--/
+  abel
 
 private theorem eulerStep_cp (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
     IsCPMap (eulerStep G s) := by

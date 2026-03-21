@@ -308,7 +308,6 @@ private theorem compression_preserved_by_iterate
     change P * (L ((L ^ n) (P * X * P))) * P = L ((L ^ n) (P * X * P))
     rw [← ih]; exact hgen _
 
-set_option maxHeartbeats 12000000 in
 -- The exp-series proof below pushes several `HasSum` transport steps through CLMs.
 theorem semigroup_preserves_compression_of_generator
     {L : Mat →ₗ[ℂ] Mat} {P : Mat} (hP : IsOrthogonalProjection P)
