@@ -1,4 +1,5 @@
 import TNLean.Algebra.TracePairing
+import TNLean.MPS.Chain.OneSidedInverse
 
 import Mathlib.Algebra.Module.Submodule.Range
 import Mathlib.LinearAlgebra.Basis.VectorSpace
@@ -42,7 +43,7 @@ theorem linearExtension_exists_unique {A B : MPSTensor d D}
   let lcA := Fintype.linearCombination ℂ A
   let lcB := Fintype.linearCombination ℂ B
   have hSurj_lcA : Function.Surjective lcA :=
-    (span_range_eq_top_iff_surjective_fintypeLinearCombination ℂ A).mp hA.span_eq_top
+    hA.linearCombination_surjective
   -- The two "Gram matrix" maps `Φ ∘ lc` coincide.
   have hComp : (ΦA ∘ₗ lcA) = (ΦB ∘ₗ lcB) := by
     ext c j
