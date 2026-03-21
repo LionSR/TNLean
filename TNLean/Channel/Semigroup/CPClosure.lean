@@ -316,7 +316,8 @@ theorem IsCPMap.expSemigroup
       have hbase : (endEquivD D).symm (((t : ℂ) • endEquivD D L)) = ((t : ℂ) • L) := by
         apply (endEquivD D).injective
         simpa using (map_smul (endEquivD D) (t : ℂ) L).symm
-      have hpow_map : (endEquivD D).symm ((((t : ℂ) • endEquivD D L) ^ n)) = (((t : ℂ) • L) ^ n) := by
+      have hpow_map : (endEquivD D).symm ((((t : ℂ) • endEquivD D L) ^ n)) =
+          (((t : ℂ) • L) ^ n) := by
         calc
           (endEquivD D).symm ((((t : ℂ) • endEquivD D L) ^ n))
               = ((endEquivD D).symm (((t : ℂ) • endEquivD D L))) ^ n := by
