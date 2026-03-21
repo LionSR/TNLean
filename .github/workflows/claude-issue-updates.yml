@@ -1,0 +1,80 @@
+name: Claude Issue Updates on PR Merge
+
+# Triggers when a PR is merged into main
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  update-issues:
+    # Only run when the PR was actually merged (not just closed)
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code — Update related issues
+        id: claude-update
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: |
+            --model claude-opus-4-6
+            --allowed-tools "Bash(gh issue:*),Bash(gh pr:*),Bash(gh api:*),Bash(gh search:*),Bash(grep *)"
+            --append-system-prompt "You are a project management assistant for a Lean 4 / Mathlib repository."
+          prompt: |
+            A pull request has just been merged:
+
+            - PR #${{ github.event.pull_request.number }}
+            - Title: ${{ github.event.pull_request.title }}
+            - Author: ${{ github.event.pull_request.user.login }}
+            - Branch: ${{ github.event.pull_request.head.ref }}
+            - Body: ${{ github.event.pull_request.body }}
+
+            Please do the following:
+
+            ## 1. Update Related Issues
+
+            Find all issues that are related to this PR by:
+            - Looking at the PR body/title for issue references (e.g., #123, fixes #123, closes #123, relates to #123)
+            - Searching open issues whose titles or bodies mention topics covered by this PR
+
+            For each related issue:
+            - Post a comment summarizing what was accomplished in this PR and how it relates to the issue
+            - If the PR fully resolves the issue, close it with a summary comment
+            - If the PR partially addresses the issue, update it with progress notes and a checkbox-style status update
+
+            ## 2. Launch Next Queued Job
+
+            Check for issues labeled "queue-next" (sorted by creation date, oldest first).
+            If one exists:
+            - Remove the "queue-next" label from it
+            - Add the label "queue-active" to it
+            - Post a comment on that issue: "🚀 This issue is now next in the queue. The previous PR (#${{ github.event.pull_request.number }}) has been merged."
+            - If the issue has a clear task description, also tag @claude in the comment to start working on it
+
+            If no "queue-next" issues exist, check for issues labeled "queue" (oldest first):
+            - Pick the oldest one
+            - Add the "queue-next" label
+            - Post a comment noting it has been promoted in the queue
+
+            ## 3. Summary
+
+            After completing the above, post a summary comment on the merged PR listing:
+            - Which issues were updated
+            - Which issues were closed
+            - Which issue (if any) was promoted or activated from the queue
+
+            Use `gh issue` and `gh pr` commands for all GitHub operations.
