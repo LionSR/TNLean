@@ -77,49 +77,6 @@ theorem compression_preserved_by_pow
       rw [← ih X]
       exact hInv ((E ^ n) (P * X * P))
 
-abbrev endCLMEquiv' :
-    (Mat →ₗ[ℂ] Mat) ≃ₐ[ℂ] (Mat →L[ℂ] Mat) :=
-  Module.End.toContinuousLinearMap Mat
-
-theorem expSemigroup_toCLM''
-    (L : Mat →ₗ[ℂ] Mat) (t : ℝ) :
-    endCLMEquiv' (expSemigroup L t) = expSemigroupCLM (endCLMEquiv' L) t := by
-  simp [expSemigroup, endCLMEquiv']
-
-abbrev applyCLMReal' :
-    (Mat →L[ℂ] Mat) →L[ℝ] Mat →L[ℝ] Mat :=
-  (ContinuousLinearMap.flip
-      (ContinuousLinearMap.apply ℂ Mat :
-        Mat →L[ℂ] (Mat →L[ℂ] Mat) →L[ℂ] Mat)).bilinearRestrictScalars ℝ
-
-set_option maxHeartbeats 1000000 in
--- Bundling the semigroup as a real-bilinear derivative introduces heavy elaboration.
-theorem hasDerivAt_expSemigroup_apply'
-    (L : Mat →ₗ[ℂ] Mat) (X : Mat) (t : ℝ) :
-    HasDerivAt (fun u : ℝ => expSemigroup L u X) (expSemigroup L t (L X)) t := by
-  have hCLM :
-      HasDerivAt
-        (fun u : ℝ => expSemigroupCLM (endCLMEquiv' L) u)
-        (expSemigroupCLM (endCLMEquiv' L) t * endCLMEquiv' L) t :=
-    hasDerivAt_expSemigroupCLM (endCLMEquiv' L) t
-  have hApply :
-      HasDerivAt
-        (fun u : ℝ => applyCLMReal' (D := D) (expSemigroupCLM (endCLMEquiv' L) u) X)
-        (applyCLMReal' (D := D) (expSemigroupCLM (endCLMEquiv' L) t) 0 +
-          applyCLMReal' (D := D)
-            (expSemigroupCLM (endCLMEquiv' L) t * endCLMEquiv' L) X)
-        t := by
-    simpa using
-      (ContinuousLinearMap.hasDerivAt_of_bilinear
-        (B := applyCLMReal' (D := D))
-        (u := fun u : ℝ => expSemigroupCLM (endCLMEquiv' L) u)
-        (v := fun _ : ℝ => X)
-        (u' := expSemigroupCLM (endCLMEquiv' L) t * endCLMEquiv' L)
-        (v' := 0)
-        hCLM (hasDerivAt_const t X))
-  simpa [applyCLMReal', expSemigroup_toCLM'',
-    ContinuousLinearMap.bilinearRestrictScalars_apply_apply] using hApply
-
 /-- A genuine eigenvector of the generator stays an eigenvector for the whole semigroup. -/
 theorem expSemigroup_apply_eigenvector
     (L : Mat →ₗ[ℂ] Mat) (X : Mat) (μ : ℂ)
@@ -137,7 +94,7 @@ theorem expSemigroup_apply_eigenvector
       simpa using (Complex.hasDerivAt_exp (-((u : ℂ) * μ))).comp u hmul.neg
     have hg : HasDerivAt g (μ • g u) u := by
       dsimp [g]
-      simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply' (D := D) L X u
+      simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply (D := D) L X u
     exact (hc.smul hg).differentiableAt
   have hderiv : ∀ u : ℝ, deriv f u = 0 := by
     intro u
@@ -148,7 +105,7 @@ theorem expSemigroup_apply_eigenvector
       simpa using (Complex.hasDerivAt_exp (-((u : ℂ) * μ))).comp u hmul.neg
     have hg : HasDerivAt g (μ • g u) u := by
       dsimp [g]
-      simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply' (D := D) L X u
+      simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply (D := D) L X u
     have hf : HasDerivAt f (c u • (μ • g u) + (-(c u * μ)) • g u) u := by
       simpa [f, c, g] using hc.smul hg
     have hz : c u • (μ • g u) + (-(c u * μ)) • g u = 0 := by

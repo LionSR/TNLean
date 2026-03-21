@@ -194,61 +194,6 @@ private abbrev sgCLM (D : ℕ) := sgMat D →L[ℂ] sgMat D
 private abbrev sgEndEquiv (D : ℕ) : sgLM D ≃ₐ[ℂ] sgCLM D :=
   Module.End.toContinuousLinearMap (sgMat D)
 
-private theorem norm_exp_sub_one_sub_self_le {A : Type*}
-    [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A] [NormOneClass A]
-    (x : A) :
-    ‖NormedSpace.exp x - 1 - x‖ ≤ ‖x‖ ^ 2 * Real.exp ‖x‖ := by
-  have hsum : HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • x ^ n)
-      (NormedSpace.exp x) :=
-    NormedSpace.exp_series_hasSum_exp' (𝕂 := ℂ) x
-  have htail := (hasSum_nat_add_iff' 2).2 hsum
-  have htail_eq :
-      NormedSpace.exp x - 1 - x =
-        ∑' n : ℕ, ((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2) := by
-    have := htail.tsum_eq
-    simpa [Finset.sum_range_succ, sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using
-      this.symm
-  rw [htail_eq]
-  have hsummable_tail : Summable (fun n : ℕ =>
-      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖) := by
-    have hfull : Summable (fun n : ℕ => ‖((Nat.factorial n : ℂ)⁻¹) • x ^ n‖) := by
-      simpa using (NormedSpace.norm_expSeries_summable' (𝕂 := ℂ) x)
-    exact (summable_nat_add_iff 2).2 hfull
-  have hsummable_cmp : Summable (fun n : ℕ => ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n)) := by
-    exact (Real.summable_pow_div_factorial ‖x‖).mul_left (‖x‖ ^ 2)
-  have hterm : ∀ n : ℕ,
-      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ ≤
-        ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by
-    intro n
-    calc
-      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ =
-          ‖((Nat.factorial (n + 2) : ℂ)⁻¹)‖ * ‖x ^ (n + 2)‖ := norm_smul _ _
-      _ ≤ ‖((Nat.factorial (n + 2) : ℂ)⁻¹)‖ * ‖x‖ ^ (n + 2) := by
-            gcongr
-            exact norm_pow_le _ _
-      _ = ‖x‖ ^ (n + 2) / Nat.factorial (n + 2) := by
-            simp [div_eq_mul_inv, mul_comm]
-      _ ≤ ‖x‖ ^ (n + 2) / Nat.factorial n := by
-            have hfac : (Nat.factorial n : ℝ) ≤ Nat.factorial (n + 2) := by
-              exact_mod_cast Nat.factorial_le (show n ≤ n + 2 by omega)
-            exact div_le_div_of_nonneg_left (pow_nonneg (norm_nonneg x) _) (by positivity)
-              hfac
-      _ = ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by
-            rw [pow_add, div_eq_mul_inv]
-            ring
-  calc
-    ‖∑' n : ℕ, ((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ ≤
-        ∑' n : ℕ, ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ :=
-      norm_tsum_le_tsum_norm hsummable_tail
-    _ ≤ ∑' n : ℕ, ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by
-          exact Summable.tsum_le_tsum hterm hsummable_tail hsummable_cmp
-    _ = ‖x‖ ^ 2 * Real.exp ‖x‖ := by
-          rw [tsum_mul_left]
-          have hexp : ∑' n : ℕ, ‖x‖ ^ n / Nat.factorial n = Real.exp ‖x‖ := by
-            simpa [Real.exp_eq_exp_ℝ] using
-              (congrFun (NormedSpace.exp_eq_tsum_div (𝔸 := ℝ)) ‖x‖).symm
-          rw [hexp]
-
 private def quadMap (G : GeneratorDecomp D) : sgLM D :=
   Kraus.mapLM (fun _ : Fin 1 => G.κ)
 

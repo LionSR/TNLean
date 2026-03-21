@@ -18,11 +18,48 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-! ## Prop 7.5: Irreducibility implies primitivity for QDS -/
 
-axiom primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
+theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
     (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (hIrr : IsIrreducibleMap E)
     (σ : Mat) (hσ_mem : σ ∈ densityMatrices D) (hσ_fix : E σ = σ)
     (hPrim : IsPrimitive E) {X : Mat} (htrX : Matrix.trace X = 0) :
-    Filter.Tendsto (fun n : ℕ => (E ^ n) X) Filter.atTop (nhds 0)
+    Filter.Tendsto (fun n : ℕ => (E ^ n) X) Filter.atTop (nhds 0) := by
+  have htrσ : Matrix.trace σ ≠ 0 := by
+    simpa [hσ_mem.2]
+  let P : Mat →ₗ[ℂ] Mat := fixedPointProj (D := D) σ htrσ
+  have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices' hσ_mem
+  have hcompl_lt : ∀ ν : ℂ, Module.End.HasEigenvalue (E - P) ν → ‖ν‖ < 1 := by
+    intro ν hν
+    exact compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel
+      E hE hIrr σ hσ_fix hσ_ne htrσ hPrim ν hν
+  have hsr_lt : spectralRadius ℂ ((Module.End.toContinuousLinearMap Mat) (E - P)) < 1 :=
+    spectralRadius_lt_one_of_eigenvalues_lt_one (D := D) (E - P) hcompl_lt
+  have hpow0 : Filter.Tendsto
+      (fun n : ℕ => ((Module.End.toContinuousLinearMap Mat) (E - P)) ^ n)
+      Filter.atTop (nhds 0) :=
+    MPSTensor.pow_tendsto_zero_of_spectralRadius_lt_one _ hsr_lt
+  have hNpow0 : Filter.Tendsto (fun n : ℕ => ((E - P) ^ n) X) Filter.atTop (nhds 0) := by
+    have hEval : Continuous (fun A : Mat →L[ℂ] Mat => A X) :=
+      (ContinuousLinearMap.apply ℂ Mat X).continuous
+    have hEvalT : Filter.Tendsto
+        (fun n : ℕ => (((Module.End.toContinuousLinearMap Mat) (E - P)) ^ n) X)
+        Filter.atTop (nhds 0) :=
+      (hEval.tendsto 0).comp hpow0
+    refine hEvalT.congr' ?_
+    filter_upwards [] with n
+    exact toContinuousLinearMap_pow_apply (D := D) (E - P) X n
+  have hPX : P X = 0 := by
+    simp [P, fixedPointProj, htrX]
+  refine hNpow0.congr' ?_
+  filter_upwards [Filter.eventually_gt_atTop 0] with n hn
+  have hn1 : 1 ≤ n := by
+    omega
+  have hpowEq :=
+    pow_eq_fixedPointProj_add_compl_pow (D := D) (E := E) (ρ := σ) htrσ hE.tp hσ_fix hn1
+  have hsumX : (P + (E - P) ^ n) X = ((E - P) ^ n) X := by
+    simp [LinearMap.add_apply, hPX]
+  calc
+    ((E - P) ^ n) X = (P + (E - P) ^ n) X := by symm; exact hsumX
+    _ = (E ^ n) X := by rw [← hpowEq]
 
 theorem fixedPoint_eq_trace_smul_of_irreducible_channel
     [NeZero D]

@@ -48,11 +48,6 @@ theorem Matrix.eq_zero_of_forall_trace_mul_eq_zero
 
 /-! ## Bridge: trace-annihilating ↔ trace-preserving semigroup -/
 
-private abbrev endEquivLocal :
-    (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
-    (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-  Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
-
 /-- The trace-evaluation functional as an ℝ-continuous linear map:
 `T ↦ trace(T(ρ))` for a fixed matrix `ρ`. -/
 private def traceEvalCLM (ρ : Matrix (Fin D) (Fin D) ℂ) :
@@ -143,10 +138,10 @@ theorem isTracePreservingMap_expSemigroup_of_isTraceAnnihilating
     (t : ℝ) :
     IsTracePreservingMap (expSemigroup L t) := by
   intro ρ
-  set L_CLM := endEquivLocal L
+  set L_CLM := endEquiv L
   have hTA_CLM : ∀ ρ, trace (L_CLM ρ) = 0 := fun ρ => by
-    change trace ((endEquivLocal L) ρ) = 0
-    simp only [endEquivLocal]; exact hTA ρ
+    change trace ((endEquiv L) ρ) = 0
+    simp only [endEquiv]; exact hTA ρ
   convert trace_expSemigroupCLM_eq L_CLM hTA_CLM t ρ using 2
 
 
@@ -165,7 +160,7 @@ theorem isTraceAnnihilating_of_isTracePreservingMap_semigroup
   -- f(t) = trace(exp(tL)(ρ)) has HasDerivAt f trace(L(ρ)) 0.
   -- For t ≥ 0, f(t) = trace(ρ) (TP hypothesis).
   -- So trace(L(ρ)) must be 0 (derivative of a locally constant function).
-  set L_CLM := endEquivLocal L
+  set L_CLM := endEquiv L
   set g := traceEvalCLM ρ
   -- HasDerivAt at 0 with derivative trace(L(ρ))
   have hg0 : HasFDerivAt g g (expSemigroupCLM L_CLM 0) := g.hasFDerivAt
