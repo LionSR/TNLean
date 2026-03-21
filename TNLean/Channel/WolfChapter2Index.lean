@@ -8,6 +8,7 @@ import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Stinespring
+import TNLean.Channel.TransferMatrix
 
 /-!
 # Wolf Lecture Notes — Chapter 2: Representations
@@ -40,6 +41,18 @@ representations of quantum channels.
   - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅
   - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅
 
+### §2.2 Transfer matrix
+
+* `transferMatrix` — the `D² × D²` matrix representing `T` in the
+  standard-basis vectorization ✅
+* `transferMatrix_mulVec_eq` — `T̂ *ᵥ vec(ρ) = vec(T(ρ))` ✅
+* `transferMatrix_comp` — `(S ∘ T)^ = Ŝ * T̂` ✅
+* `transferMatrix_id` — transfer matrix of identity = identity ✅
+* `transferMatrix_injective` — the representation is faithful ✅
+* `transferMatrix_kraus` — Kraus form: `T̂ = ∑ᵢ Kᵢ ⊗ K̄ᵢ` ✅
+* `MPSTensor.transferMatrix_eq` — MPS bridge:
+  `E_A` has transfer matrix `∑ᵢ Aᵢ ⊗ Āᵢ` ✅
+
 ### Infrastructure
 
 | Definition | File | Lean name |
@@ -52,6 +65,8 @@ representations of quantum channels.
 | Tensor product of maps | `TensorMap.lean` | `Matrix.tensorMapId` |
 | Choi matrix | `ChoiJamiolkowski.lean` | `ChoiJamiolkowski.choiMatrix` |
 | Stinespring isometry | `Stinespring.lean` | `stinespringV` |
+| Transfer matrix | `TransferMatrix.lean` | `transferMatrix` |
+| Vectorization | `TransferMatrix.lean` | `Matrix.vecMatrix` |
 
 ### Not yet formalized
 
@@ -65,7 +80,6 @@ representations of quantum channels.
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
 | Thm 2.6 (Neumark's theorem) | POVM embedding |
-| §2.2 (transfer matrix) | Matrix representation of channels |
 | §2.3 (normal forms) | Lorentz normal form etc. |
 
 ## References
