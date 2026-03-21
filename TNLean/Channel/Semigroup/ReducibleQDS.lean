@@ -1026,16 +1026,33 @@ private theorem scaled_one_div_subseq_tendsto_zero
   have := (one_div_subseq_tendsto_zero hφ_mono).mul_const C
   simpa [mul_assoc] using this
 
-private axiom generator_norm_bound_of_fixed_point_recip
+private theorem generator_norm_bound_of_fixed_point_recip
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat} {ρ : Mat} {m : ℕ} {R : ℝ}
     (hm_pos : 0 < m)
     (hfix : expSemigroup L (1 / (m : ℝ)) ρ = ρ)
     (hρ_bound : ‖ρ‖ ≤ R) :
     ‖L ρ‖ ≤ (1 / (m : ℝ)) * ‖endCLMEquiv' (D := D) L‖ ^ 2 *
-      Real.exp ‖endCLMEquiv' (D := D) L‖ * R
+      Real.exp ‖endCLMEquiv' (D := D) L‖ * R := by
+  set E := endCLMEquiv' (D := D) L
+  set s := 1 / (m : ℝ) with hs_def
+  have hm_ge_one : (1 : ℝ) ≤ m := by exact_mod_cast hm_pos
+  have hs_le : s ≤ 1 := by
+    rw [hs_def]
+    exact div_le_one_of_le₀ hm_ge_one (by linarith)
+  have hs_pos : 0 < s := by
+    rw [hs_def]
+    positivity
+  have hfp : expSemigroupCLM E s ρ = ρ := hfix
+  calc
+    ‖L ρ‖ = ‖E ρ‖ := by rfl
+    _ ≤ s * ‖E‖ ^ 2 * Real.exp ‖E‖ * R :=
+        clm_uniform_bound_of_fixed_point
+          (D := D) E hs_pos hs_le hfp hρ_bound
+    _ = (1 / (m : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R := by
+        simp [hs_def, mul_assoc, mul_comm]
 
-private axiom generator_subseq_norm_bound_of_fixed_points
+private theorem generator_subseq_norm_bound_of_fixed_points
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat}
     (ρ_shift : ℕ → Mat)
@@ -1043,12 +1060,16 @@ private axiom generator_subseq_norm_bound_of_fixed_points
       expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n)
     {φ : ℕ → ℕ}
     (R : ℝ)
-    (hρ_norm : ∀ n, ‖ρ_shift (φ n)‖ ≤ R) :
+  (hρ_norm : ∀ n, ‖ρ_shift (φ n)‖ ≤ R) :
     ∀ n, ‖L (ρ_shift (φ n))‖ ≤
       (1 / (φ n + 1 : ℝ)) * ‖endCLMEquiv' (D := D) L‖ ^ 2 *
-        Real.exp ‖endCLMEquiv' (D := D) L‖ * R
+        Real.exp ‖endCLMEquiv' (D := D) L‖ * R := by
+  intro n
+  simpa [Nat.cast_add, Nat.cast_one, add_assoc, add_left_comm, add_comm] using
+    (generator_norm_bound_of_fixed_point_recip
+      (D := D) (m := φ n + 1) (R := R) (Nat.succ_pos _) (hρ_fix (φ n)) (hρ_norm n))
 
-private axiom generator_subseq_tendsto_zero_of_bounded_fixed_points
+private theorem generator_subseq_tendsto_zero_of_bounded_fixed_points
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat}
     (ρ_shift : ℕ → Mat)
@@ -1058,9 +1079,20 @@ private axiom generator_subseq_tendsto_zero_of_bounded_fixed_points
     (hφ_mono : StrictMono φ)
     (R : ℝ)
     (hρ_norm : ∀ n, ‖ρ_shift (φ n)‖ ≤ R) :
-    Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0)
+    Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0) := by
+  set E := endCLMEquiv' (D := D) L
+  have hL_bound : ∀ n, ‖L (ρ_shift (φ n))‖ ≤
+      (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp (‖E‖) * R :=
+    generator_subseq_norm_bound_of_fixed_points
+      (D := D) (L := L) ρ_shift hρ_fix R hρ_norm
+  have h_bound_tends : Filter.Tendsto
+      (fun n => (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R)
+      Filter.atTop (nhds 0) := by
+    simpa [mul_assoc] using
+      scaled_one_div_subseq_tendsto_zero hφ_mono (‖E‖ ^ 2 * (Real.exp ‖E‖ * R))
+  exact squeeze_zero_norm hL_bound h_bound_tends
 
-private axiom generator_subseq_tendsto_zero_of_fixed_points
+private theorem generator_subseq_tendsto_zero_of_fixed_points
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat}
     (ρ_shift : ℕ → Mat)
@@ -1069,7 +1101,10 @@ private axiom generator_subseq_tendsto_zero_of_fixed_points
       expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n)
     {φ : ℕ → ℕ}
     (hφ_mono : StrictMono φ) :
-    Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0)
+    Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0) := by
+  obtain ⟨R, hρ_norm⟩ := density_subseq_norm_bounded (D := D) ρ_shift hρ_mem
+  exact generator_subseq_tendsto_zero_of_bounded_fixed_points
+    (D := D) (L := L) ρ_shift hρ_fix hφ_mono R hρ_norm
 
 private theorem eq_zero_of_tendsto_linear_subseq
     {L : Mat →ₗ[ℂ] Mat}
@@ -1083,7 +1118,7 @@ private theorem eq_zero_of_tendsto_linear_subseq
     (hL_cont.tendsto ρ).comp hφ_tendsto
   exact tendsto_nhds_unique hL_tends h_to_zero
 
-private axiom generator_zero_of_subseq_fixed_points
+private theorem generator_zero_of_subseq_fixed_points
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat}
     (ρ_shift : ℕ → Mat)
@@ -1093,7 +1128,12 @@ private axiom generator_zero_of_subseq_fixed_points
     {ρ : Mat} {φ : ℕ → ℕ}
     (hφ_mono : StrictMono φ)
     (hφ_tendsto : Filter.Tendsto (fun n => ρ_shift (φ n)) Filter.atTop (nhds ρ)) :
-    L ρ = 0
+    L ρ = 0 := by
+  have h_to_zero : Filter.Tendsto (fun n => L (ρ_shift (φ n)))
+      Filter.atTop (nhds 0) :=
+    generator_subseq_tendsto_zero_of_fixed_points
+      (D := D) ρ_shift hρ_mem hρ_fix hφ_mono
+  exact eq_zero_of_tendsto_linear_subseq hφ_tendsto h_to_zero
 
 private theorem exists_fixed_point_sequence_in_PMP
     [NeZero D]
