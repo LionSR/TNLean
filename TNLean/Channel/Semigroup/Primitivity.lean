@@ -350,10 +350,11 @@ private theorem expSemigroup_apply_eigenvector
     have hf : HasDerivAt f (c u • (μ • g u) + (-(c u * μ)) • g u) u := by
       simpa [f, c, g] using hc.smul hg
     have hz : c u • (μ • g u) + (-(c u * μ)) • g u = 0 := by
-      have : ((c u * μ) + (-(c u * μ))) • g u = 0 := by
-        simp
-      simp [smul_smul, add_smul, mul_assoc] at this
-      exact this
+      calc
+        c u • (μ • g u) + (-(c u * μ)) • g u
+            = (c u * μ) • g u + (-(c u * μ)) • g u := by
+                simp [smul_smul]
+        _ = 0 := by simp
     rw [hf.deriv, hz]
   have hconst := is_const_of_deriv_eq_zero hdiff hderiv 0 t
   have hft0 : f 0 = X := by
@@ -508,7 +509,7 @@ private theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZe
             = S * ((K i)ᴴ * ((S⁻¹ * σ * S⁻¹) * (K i * S))) := by
                 simp only [Matrix.mul_assoc]
         _ = S * ((K i)ᴴ * (1 * (K i * S))) := by rw [hcancel]
-        _ = S * ((K i)ᴴ * K i * S) := by rw [Matrix.one_mul]
+        _ = S * (((K i)ᴴ * K i) * S) := by simp [Matrix.mul_assoc]
         _ = S * ((K i)ᴴ * K i) * S := by simp only [Matrix.mul_assoc]
     simp_rw [h_term_adj]
     -- ∑ S * ((K i)ᴴ * K i) * S = S * (∑ (K i)ᴴ * K i) * S = σ
@@ -599,7 +600,7 @@ private theorem toContinuousLinearMap_pow_apply [NeZero D]
     (((Module.End.toContinuousLinearMap Mat) F) ^ n) X = (F ^ n) X := by
   have hpowEq : ((Module.End.toContinuousLinearMap Mat) F) ^ n =
       (Module.End.toContinuousLinearMap Mat) (F ^ n) := by
-    exact map_pow (Module.End.toContinuousLinearMap Mat) F n
+    exact (map_pow (Module.End.toContinuousLinearMap Mat) F n).symm
   rw [hpowEq]
   rfl
 
@@ -668,24 +669,44 @@ private theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
 
 /-! ## Prop 7.5: Irreducibility implies primitivity for QDS -/
 
-set_option maxHeartbeats 15000000 in
--- The peripheral-spectrum reduction is shorter than the propagation step, but
--- still needs extra heartbeats for eigenvector and fixed-point elaboration.
-private theorem primitive_of_irreducible_all
+private theorem fixedPoint_eq_trace_smul_of_irreducible_channel
+    [NeZero D]
+    (E : Mat →ₗ[ℂ] Mat)
+    (hE_ch : IsChannel E)
+    (hE_irr : IsIrreducibleMap E)
+    {σ : Mat}
+    (hσ_mem : σ ∈ densityMatrices D)
+    (hσ_fix : E σ = σ)
+    {V : Mat}
+    (hV_fix : E V = V)
+    (hV_ne : V ≠ 0) :
+    V = Matrix.trace V • σ := by
+  have hV_tr_ne : Matrix.trace V ≠ 0 := by
+    intro htr
+    exact hV_ne (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
+      hE_ch hE_irr V hV_fix htr)
+  have hW_fix : E (V - (Matrix.trace V) • σ) = V - (Matrix.trace V) • σ := by
+    rw [map_sub, map_smul, hV_fix, hσ_fix]
+  have hW_tr : Matrix.trace (V - (Matrix.trace V) • σ) = 0 := by
+    rw [Matrix.trace_sub, Matrix.trace_smul, hσ_mem.2, smul_eq_mul, mul_one, sub_self]
+  exact sub_eq_zero.mp
+    (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
+      hE_ch hE_irr _ hW_fix hW_tr)
+
+set_option maxHeartbeats 25000000 in
+-- The peripheral-spectrum reduction still needs extra heartbeats for
+-- root-of-unity extraction plus the fixed-point uniqueness argument on `T (p * t)`.
+private theorem peripheral_eq_one_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
-    (hT_irr_all : ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s)) :
-    ∀ t : ℝ, 0 < t → IsPrimitive (T t) := by
-  intro t ht
+    (hT_irr_all : ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s))
+    {t : ℝ} (ht : 0 < t)
+    {μ : ℂ} (hμ_eig : Module.End.HasEigenvalue (T t) μ) (hμ_norm : ‖μ‖ = 1) :
+    μ = 1 := by
   have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   have hTt_ch : IsChannel (T t) := hT.channel t (le_of_lt ht)
   have hT_irr : IsIrreducibleMap (T t) := hT_irr_all t ht
-  obtain ⟨σ, hσ_mem, _hσ_pd, hσ_fix, _hσ_uniq⟩ :=
-    IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := T t) hTt_ch hT_irr hD
-  have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices' hσ_mem
-  apply isPrimitive_of_unique_norm_one (T t) σ hσ_fix hσ_ne
-  intro μ hμ_eig hμ_norm
   obtain ⟨p, hp_pos, hpow⟩ :=
     peripheral_isRootOfUnity_of_irreducible_channel (T t) hTt_ch hT_irr μ ⟨hμ_eig, hμ_norm⟩
   obtain ⟨V, hV_ev⟩ := hμ_eig.exists_hasEigenvector
@@ -702,68 +723,53 @@ private theorem primitive_of_irreducible_all
   obtain ⟨σ', hσ'_mem, _hσ'_pd, hσ'_fix, _⟩ :=
     IsChannel.exists_unique_density_fixedPoint_of_irreducible
       (E := T (↑p * t)) hpt_ch hpt_irr hD
+  have hV_eq : V = (Matrix.trace V) • σ' :=
+    fixedPoint_eq_trace_smul_of_irreducible_channel
+      (T (↑p * t)) hpt_ch hpt_irr hσ'_mem hσ'_fix hV_fix hV_ne
   have hV_tr_ne : Matrix.trace V ≠ 0 := by
     intro htr
-    exact hV_ne (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
-      hpt_ch hpt_irr V hV_fix htr)
-  have hV_eq : V = (Matrix.trace V) • σ' := by
-    have hW_fix : T (↑p * t) (V - (Matrix.trace V) • σ') = V - (Matrix.trace V) • σ' := by
-      rw [map_sub, map_smul, hV_fix, hσ'_fix]
-    have hW_tr : Matrix.trace (V - (Matrix.trace V) • σ') = 0 := by
-      rw [Matrix.trace_sub, Matrix.trace_smul, hσ'_mem.2, smul_eq_mul, mul_one, sub_self]
-    exact sub_eq_zero.mp
-      (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
-        hpt_ch hpt_irr _ hW_fix hW_tr)
-  have hTσ' : (T t) σ' = μ • σ' := by
-    have h1 : (Matrix.trace V) • (T t) σ' = (Matrix.trace V) • (μ • σ') := by
-      calc
-        (Matrix.trace V) • (T t) σ' = (T t) ((Matrix.trace V) • σ') := (map_smul (T t) _ σ').symm
-        _ = (T t) V := by rw [← hV_eq]
-        _ = μ • V := hTV
-        _ = μ • ((Matrix.trace V) • σ') := by
-            simpa using congrArg (fun W => μ • W) hV_eq
-        _ = (Matrix.trace V) • (μ • σ') := by
-            simp [smul_smul, mul_comm, mul_left_comm, mul_assoc]
-    have h2 := congr_arg ((Matrix.trace V)⁻¹ • ·) h1
-    simpa [smul_smul, hV_tr_ne, mul_comm, mul_left_comm, mul_assoc] using h2
+    apply hV_ne
+    rw [hV_eq, htr]
+    simp
   have htp : IsTracePreservingMap (T t) := hTt_ch.tp
-  have h_tr_eq : Matrix.trace ((T t) σ') = Matrix.trace σ' := htp σ'
-  rw [hTσ', Matrix.trace_smul, hσ'_mem.2, smul_eq_mul, mul_one] at h_tr_eq
-  exact h_tr_eq
+  have htrV : μ * Matrix.trace V = Matrix.trace V := by
+    simpa [hTV, Matrix.trace_smul, smul_eq_mul] using htp V
+  have hzero : (μ - 1) * Matrix.trace V = 0 := by
+    calc
+      (μ - 1) * Matrix.trace V = μ * Matrix.trace V - Matrix.trace V := by ring
+      _ = 0 := by rw [htrV, sub_self]
+  exact sub_eq_zero.mp ((mul_eq_zero.mp hzero).resolve_right hV_tr_ne)
 
-set_option maxHeartbeats 25000000 in
--- The uniqueness step for positive fixed points uses the compactness extraction
--- and semigroup inversion argument from Wolf Prop. 7.5.
-private theorem fixedPoint_eq_trace_smul_of_primitive_slice
+private theorem primitive_of_irreducible_all
     [NeZero D]
-    (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
-    (hexp : ∀ t : ℝ, 0 ≤ t → T t = expSemigroup L t)
-    (σ : Mat) (hσ_mem : σ ∈ densityMatrices D)
-    (hσ_fix_all : ∀ u : ℝ, 0 ≤ u → T u σ = σ)
+    (hT_irr_all : ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s)) :
+    ∀ t : ℝ, 0 < t → IsPrimitive (T t) := by
+  intro t ht
+  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hTt_ch : IsChannel (T t) := hT.channel t (le_of_lt ht)
+  have hT_irr : IsIrreducibleMap (T t) := hT_irr_all t ht
+  obtain ⟨σ, hσ_mem, _hσ_pd, hσ_fix, _hσ_uniq⟩ :=
+    IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := T t) hTt_ch hT_irr hD
+  have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices' hσ_mem
+  apply isPrimitive_of_unique_norm_one (T t) σ hσ_fix hσ_ne
+  intro μ hμ_eig hμ_norm
+  exact peripheral_eq_one_of_irreducible_all T hT hT_irr_all ht hμ_eig hμ_norm
+
+set_option maxHeartbeats 25000000 in
+-- The residual-time compactness argument is the expensive part of the
+-- primitive-slice uniqueness proof.
+private theorem exists_residual_time_eq_zero_of_fixedPoint
+    [NeZero D]
+    (T : ℝ → Mat →ₗ[ℂ] Mat)
+    (hT : IsQuantumDynSemigroup T)
     (u : ℝ) (hu_nonneg : 0 ≤ u)
-    (hTu_ch : IsChannel (T u))
-    (hTu_irr : IsIrreducibleMap (T u))
-    (hTu_fix : T u σ = σ)
-    (hTu_prim : IsPrimitive (T u))
     (s : ℝ) (hs : 0 < s)
-    {τ : Mat} (hτ_fix : T s τ = τ) :
-    τ = Matrix.trace τ • σ := by
-  let δ : Mat := τ - Matrix.trace τ • σ
-  have hδ_tr : Matrix.trace δ = 0 := by
-    dsimp [δ]
-    rw [Matrix.trace_sub, Matrix.trace_smul, hσ_mem.2, smul_eq_mul, mul_one, sub_self]
-  have hδ_fix : T s δ = δ := by
-    dsimp [δ]
-    rw [map_sub, map_smul, hτ_fix, hσ_fix_all s (le_of_lt hs)]
-  have hδ_decay : Filter.Tendsto (fun n : ℕ => T ((n : ℝ) * u) δ) Filter.atTop (nhds 0) := by
-    have hpow_decay :=
-      primitive_channel_pow_tendsto_zero_of_trace_zero
-        (E := T u) hTu_ch hTu_irr σ hσ_mem hTu_fix hTu_prim hδ_tr
-    refine hpow_decay.congr' ?_
-    filter_upwards [] with n
-    rw [← semigroup_pow T hT.semigroup.semigroup u hu_nonneg n]
+    {δ : Mat}
+    (hδ_decay : Filter.Tendsto (fun n : ℕ => T ((n : ℝ) * u) δ) Filter.atTop (nhds 0))
+    (hδ_fix : T s δ = δ) :
+    ∃ a ∈ Set.Icc 0 s, T a δ = 0 := by
   let m : ℕ → ℕ := fun n => Int.toNat ⌊((n : ℝ) * u) / s⌋
   let r : ℕ → ℝ := fun n => s * Int.fract (((n : ℝ) * u) / s)
   have hr_mem : ∀ n : ℕ, r n ∈ Set.Icc 0 s := by
@@ -782,7 +788,7 @@ private theorem fixedPoint_eq_trace_smul_of_primitive_slice
     have hfloor_nonneg : 0 ≤ ⌊((n : ℝ) * u) / s⌋ := by
       apply Int.floor_nonneg.mpr
       positivity
-    have htoNat : ((Int.toNat ⌊((n : ℝ) * u) / s⌋ : ℕ) : ℝ) = ↑⌊((n : ℝ) * u) / s⌋ := by
+    have htoNat : ((Int.toNat ⌊((n : ℝ) * u) / s⌋ : ℕ) : ℝ) = ↑⌊((n : ℝ) * u / s)⌋ := by
       exact_mod_cast Int.toNat_of_nonneg hfloor_nonneg
     have hmulha :
         s * (↑⌊((n : ℝ) * u / s)⌋ + Int.fract (((n : ℝ) * u) / s)) =
@@ -791,7 +797,7 @@ private theorem fixedPoint_eq_trace_smul_of_primitive_slice
     calc
       (n : ℝ) * u = s * (((n : ℝ) * u) / s) := by field_simp [hs.ne']
       _ = s * (↑⌊((n : ℝ) * u / s)⌋ + Int.fract (((n : ℝ) * u) / s)) := by
-            simp [hmulha]
+            exact hmulha.symm
       _ = ((Int.toNat ⌊((n : ℝ) * u) / s⌋ : ℕ) : ℝ) * s +
             s * Int.fract (((n : ℝ) * u) / s) := by
             rw [mul_add, htoNat]
@@ -834,58 +840,75 @@ private theorem fixedPoint_eq_trace_smul_of_primitive_slice
   have hsub_res_zero : Filter.Tendsto (fun k : ℕ => T (r (φ k)) δ) Filter.atTop (nhds 0) := by
     refine hsub_decay.congr' ?_
     exact Filter.Eventually.of_forall (fun k => hres_eq (φ k))
-  have hTa_zero : T a δ = 0 := tendsto_nhds_unique hsub_res hsub_res_zero
-  have hδ_zero_exp : expSemigroup L a δ = 0 := by
-    rw [← hexp a ha_mem.1]
-    exact hTa_zero
-  have hδ_zero : δ = 0 := by
-    have h := congrArg (fun Y => expSemigroup L (-a) Y) hδ_zero_exp
-    simp only [map_zero] at h
-    have hcomp : (expSemigroup L (-a)) ((expSemigroup L a) δ) =
-        (expSemigroup L (-a)).comp (expSemigroup L a) δ := rfl
-    rw [hcomp, ← expSemigroup_comp, neg_add_cancel a,
-      expSemigroup_zero, LinearMap.id_apply] at h
-    exact h
-  exact sub_eq_zero.mp hδ_zero
+  exact ⟨a, ha_mem, tendsto_nhds_unique hsub_res hsub_res_zero⟩
 
-set_option maxHeartbeats 35000000 in
--- Propagating irreducibility uses the compactness/subsequence argument and the
--- semigroup inversion step, which remains the dominant elaboration cost here.
-private theorem irreducible_all_of_irreducible_time
+private theorem eq_zero_of_expSemigroup_apply_eq_zero
+    (L : Mat →ₗ[ℂ] Mat) {a : ℝ} {δ : Mat}
+    (hδ_zero_exp : expSemigroup L a δ = 0) :
+    δ = 0 := by
+  have h := congrArg (fun Y => expSemigroup L (-a) Y) hδ_zero_exp
+  simp only [map_zero] at h
+  have hcomp : (expSemigroup L (-a)) ((expSemigroup L a) δ) =
+      (expSemigroup L (-a)).comp (expSemigroup L a) δ := rfl
+  rw [hcomp, ← expSemigroup_comp, neg_add_cancel a,
+    expSemigroup_zero, LinearMap.id_apply] at h
+  exact h
+
+set_option maxHeartbeats 5000000 in
+-- After isolating the residual-time compactness argument above, the wrapper
+-- theorem only combines that helper with the semigroup inversion step.
+private theorem fixedPoint_eq_trace_smul_of_primitive_slice
     [NeZero D]
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
     (hexp : ∀ t : ℝ, 0 ≤ t → T t = expSemigroup L t)
+    (σ : Mat) (hσ_mem : σ ∈ densityMatrices D)
+    (hσ_fix_all : ∀ u : ℝ, 0 ≤ u → T u σ = σ)
+    (u : ℝ) (hu_nonneg : 0 ≤ u)
+    (hTu_ch : IsChannel (T u))
+    (hTu_irr : IsIrreducibleMap (T u))
+    (hTu_fix : T u σ = σ)
+    (hTu_prim : IsPrimitive (T u))
+    (s : ℝ) (hs : 0 < s)
+    {τ : Mat} (hτ_fix : T s τ = τ) :
+    τ = Matrix.trace τ • σ := by
+  let δ : Mat := τ - Matrix.trace τ • σ
+  have hδ_tr : Matrix.trace δ = 0 := by
+    dsimp [δ]
+    rw [Matrix.trace_sub, Matrix.trace_smul, hσ_mem.2, smul_eq_mul, mul_one, sub_self]
+  have hδ_fix : T s δ = δ := by
+    dsimp [δ]
+    rw [map_sub, map_smul, hτ_fix, hσ_fix_all s (le_of_lt hs)]
+  have hδ_decay : Filter.Tendsto (fun n : ℕ => T ((n : ℝ) * u) δ) Filter.atTop (nhds 0) := by
+    have hpow_decay :=
+      primitive_channel_pow_tendsto_zero_of_trace_zero
+        (E := T u) hTu_ch hTu_irr σ hσ_mem hTu_fix hTu_prim hδ_tr
+    refine hpow_decay.congr' ?_
+    filter_upwards [] with n
+    rw [← semigroup_pow T hT.semigroup.semigroup u hu_nonneg n]
+  obtain ⟨a, ha_mem, hTa_zero⟩ :=
+    exists_residual_time_eq_zero_of_fixedPoint T hT u hu_nonneg s hs hδ_decay hδ_fix
+  have hδ_zero_exp : expSemigroup L a δ = 0 := by
+    rw [← hexp a ha_mem.1]
+    exact hTa_zero
+  have hδ_zero : δ = 0 := eq_zero_of_expSemigroup_apply_eq_zero L hδ_zero_exp
+  exact sub_eq_zero.mp hδ_zero
+
+set_option maxHeartbeats 25000000 in
+-- Propagating irreducibility uses the compactness/subsequence argument and the
+-- semigroup inversion step, which remains the dominant elaboration cost here.
+private theorem exists_primitive_fraction_slice
+    [NeZero D]
+    (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hT : IsQuantumDynSemigroup T)
     (t₀ : ℝ) (ht₀ : 0 < t₀)
-    (hirr : IsIrreducibleMap (T t₀)) :
-    ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s) := by
-  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  have hTt₀_ch : IsChannel (T t₀) := hT.channel t₀ (le_of_lt ht₀)
-  obtain ⟨σ, hσ_mem, hσ_pd, hσ_fix, hσ_unique⟩ :=
-    IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := T t₀) hTt₀_ch hirr hD
-  have hσ_fix_all : ∀ u : ℝ, 0 ≤ u → T u σ = σ := by
-    intro u hu
-    exact hσ_unique (T u σ)
-      (IsChannel.map_densityMatrices _ (hT.channel u hu) σ hσ_mem)
-      (by
-        have h1 := hT.semigroup.semigroup.comp t₀ u (le_of_lt ht₀) hu
-        have h2 := hT.semigroup.semigroup.comp u t₀ hu (le_of_lt ht₀)
-        show T t₀ (T u σ) = T u σ
-        have heval1 : (T t₀).comp (T u) σ = T (t₀ + u) σ := by
-          rw [h1]
-        have heval2 : (T u).comp (T t₀) σ = T (u + t₀) σ := by
-          rw [h2]
-        simp only [LinearMap.comp_apply] at heval1 heval2
-        rw [heval1, add_comm, ← heval2, hσ_fix])
-  have hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X →
-      X = Matrix.trace X • σ := by
-    intro X hX
-    exact eq_of_sub_eq_zero
-      (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel hTt₀_ch hirr _
-        (by rw [map_sub, map_smul, hX, hσ_fix])
-        (by rw [Matrix.trace_sub, Matrix.trace_smul, hσ_mem.2, smul_eq_mul,
-                 mul_one, sub_self]))
+    (hirr : IsIrreducibleMap (T t₀))
+    (σ : Mat) (hσ_mem : σ ∈ densityMatrices D) (hσ_pd : σ.PosDef)
+    (hσ_fix_all : ∀ u : ℝ, 0 ≤ u → T u σ = σ)
+    (hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X → X = Matrix.trace X • σ) :
+    ∃ u : ℝ, 0 < u ∧ 0 ≤ u ∧ IsChannel (T u) ∧ IsIrreducibleMap (T u) ∧
+      T u σ = σ ∧ IsPrimitive (T u) := by
   let N : ℕ := Nat.factorial (Module.finrank ℂ Mat)
   have hN_pos : 0 < N := Nat.factorial_pos _
   let u : ℝ := t₀ / N
@@ -940,6 +963,45 @@ private theorem irreducible_all_of_irreducible_time
         (μ - 1) * Matrix.trace X = μ * Matrix.trace X - Matrix.trace X := by ring
         _ = 0 := by rw [htpX', sub_self]
     exact sub_eq_zero.mp ((mul_eq_zero.mp hzero).resolve_right htr_ne)
+  exact ⟨u, hu_pos, hu_nonneg, hTu_ch, hTu_irr, hTu_fix, hTu_prim⟩
+
+private theorem irreducible_all_of_irreducible_time
+    [NeZero D]
+    (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hT : IsQuantumDynSemigroup T)
+    (hexp : ∀ t : ℝ, 0 ≤ t → T t = expSemigroup L t)
+    (t₀ : ℝ) (ht₀ : 0 < t₀)
+    (hirr : IsIrreducibleMap (T t₀)) :
+    ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s) := by
+  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hTt₀_ch : IsChannel (T t₀) := hT.channel t₀ (le_of_lt ht₀)
+  obtain ⟨σ, hσ_mem, hσ_pd, hσ_fix, hσ_unique⟩ :=
+    IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := T t₀) hTt₀_ch hirr hD
+  have hσ_fix_all : ∀ u : ℝ, 0 ≤ u → T u σ = σ := by
+    intro u hu
+    exact hσ_unique (T u σ)
+      (IsChannel.map_densityMatrices _ (hT.channel u hu) σ hσ_mem)
+      (by
+        have h1 := hT.semigroup.semigroup.comp t₀ u (le_of_lt ht₀) hu
+        have h2 := hT.semigroup.semigroup.comp u t₀ hu (le_of_lt ht₀)
+        show T t₀ (T u σ) = T u σ
+        have heval1 : (T t₀).comp (T u) σ = T (t₀ + u) σ := by
+          rw [h1]
+        have heval2 : (T u).comp (T t₀) σ = T (u + t₀) σ := by
+          rw [h2]
+        simp only [LinearMap.comp_apply] at heval1 heval2
+        rw [heval1, add_comm, ← heval2, hσ_fix])
+  have hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X →
+      X = Matrix.trace X • σ := by
+    intro X hX
+    exact eq_of_sub_eq_zero
+      (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel hTt₀_ch hirr _
+        (by rw [map_sub, map_smul, hX, hσ_fix])
+        (by rw [Matrix.trace_sub, Matrix.trace_smul, hσ_mem.2, smul_eq_mul,
+                 mul_one, sub_self]))
+  obtain ⟨u, hu_pos, hu_nonneg, hTu_ch, hTu_irr, hTu_fix, hTu_prim⟩ :=
+    exists_primitive_fraction_slice T hT t₀ ht₀ hirr σ hσ_mem hσ_pd hσ_fix_all hfixed_1d
   intro s hs
   apply isIrreducibleMap_of_channel_posDef_fixedPoint_unique (T s)
     (hT.channel s (le_of_lt hs)) σ hσ_pd (hσ_fix_all s (le_of_lt hs))
