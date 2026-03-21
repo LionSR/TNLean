@@ -1,4 +1,4 @@
-name: Claude Code Review
+name: Claude Code Review (Lean)
 
 on:
   pull_request:
@@ -31,6 +31,11 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Set up Lean toolchain and cache
+        uses: leanprover/lean-action@v1
+        with:
+          use-mathlib-cache: true
+
       - name: Run Claude Code Review
         id: claude-review
         uses: anthropics/claude-code-action@v1
@@ -41,4 +46,3 @@ jobs:
           prompt: '/code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
-

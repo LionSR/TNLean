@@ -1,4 +1,4 @@
-name: Claude Code
+name: Claude Code (Lean)
 
 on:
   issue_comment:
@@ -18,17 +18,25 @@ jobs:
       (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
       (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
     runs-on: ubuntu-latest
+
     permissions:
-      contents: read
-      pull-requests: read
-      issues: read
+      contents: write
+      pull-requests: write
+      issues: write
       id-token: write
       actions: read # Required for Claude to read CI results on PRs
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+
+      - name: Set up Lean toolchain and cache
+        uses: leanprover/lean-action@v1
+        with:
+          use-mathlib-cache: true
+          build: false
 
       - name: Run Claude Code
         id: claude
@@ -46,7 +54,10 @@ jobs:
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
+          # claude_args: '--allowed-tools Bash(gh pr:*)'
           claude_args: |
             --model claude-opus-4-6
-            --allowed-tools Bash(gh pr:*)
+            --allowed-tools "Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*)"
+            --append-system-prompt "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. Before changing theorem statements, first try to complete the proof using existing lemmas. Validate with: lake build. Do not leave unrelated new sorrys."
 
+          # TODO: Explore adding MCP servers (e.g. sequential-thinking for complex proofs)
