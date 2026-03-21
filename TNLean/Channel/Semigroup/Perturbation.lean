@@ -220,4 +220,67 @@ theorem perturbation_bound_unit_norm
         rw [Real.volume_Icc, ENNReal.toReal_ofReal (by linarith : (0 : ℝ) ≤ t - 0)]
         ring
 
+/-! ## Dyson-Phillips iterates -/
+
+/-- Recursive Dyson-Phillips terms built from the unperturbed semigroup `L`
+and perturbation `L' - L`. -/
+noncomputable def dysonTerm
+    (L L' : CLM D) (t : ℝ) : ℕ → CLM D
+  | 0 => expSemigroupCLM L t
+  | n + 1 =>
+      ∫ s in Set.Icc 0 t,
+        expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n
+
+@[simp] lemma dysonTerm_zero (L L' : CLM D) (t : ℝ) :
+    dysonTerm L L' t 0 = expSemigroupCLM L t := rfl
+
+@[simp] lemma dysonTerm_succ (L L' : CLM D) (t : ℝ) (n : ℕ) :
+    dysonTerm L L' t (n + 1) =
+      ∫ s in Set.Icc 0 t,
+        expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n := rfl
+
+/-- Zeroth Dyson term is controlled by the same compact-interval `iSup` used above. -/
+lemma norm_dysonTerm_zero_le
+    (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) :
+    ‖dysonTerm L L' t 0‖ ≤ ⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖ := by
+  simpa [dysonTerm] using
+    (norm_expSemigroup_le_biSup (L := L) (t := t) ht (x := t) (Set.right_mem_Icc.mpr ht))
+
+/-- One-step norm estimate for the Dyson recursion.
+This is the inductive estimate used to bootstrap higher-order bounds. -/
+lemma norm_dysonTerm_succ_le
+    (L L' : CLM D) {t K : ℝ} (ht : 0 ≤ t) (n : ℕ)
+    (hK : ∀ s ∈ Set.Icc 0 t, ‖dysonTerm L L' s n‖ ≤ K) :
+    ‖dysonTerm L L' t (n + 1)‖ ≤
+      t *
+        (⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖) * ‖L' - L‖ * K := by
+  rw [dysonTerm_succ]
+  set M : ℝ := ⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖
+  have hmeas : volume (Set.Icc (0 : ℝ) t) < ⊤ := by
+    rw [Real.volume_Icc]
+    exact ENNReal.ofReal_lt_top
+  have hpointwise : ∀ s ∈ Set.Icc 0 t,
+      ‖expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n‖ ≤ M * ‖L' - L‖ * K := by
+    intro s hs
+    calc ‖expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n‖
+        ≤ ‖expSemigroupCLM L (t - s) * (L' - L)‖ * ‖dysonTerm L L' s n‖ := norm_mul_le _ _
+      _ ≤ ‖expSemigroupCLM L (t - s)‖ * ‖L' - L‖ * ‖dysonTerm L L' s n‖ :=
+          mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _)
+      _ ≤ M * ‖L' - L‖ * K := by
+          apply mul_le_mul (mul_le_mul_of_nonneg_right ?_ (norm_nonneg _)) ?_
+            (norm_nonneg _) (mul_nonneg ?_ (norm_nonneg _))
+          · exact norm_expSemigroup_le_biSup L ht
+              ⟨sub_nonneg.mpr hs.2, sub_le_self t hs.1⟩
+          · exact hK s hs
+          · exact le_trans (norm_nonneg _)
+              (norm_expSemigroup_le_biSup L ht (Set.left_mem_Icc.mpr ht))
+  calc ‖∫ s in Set.Icc 0 t, expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n‖
+      ≤ M * ‖L' - L‖ * K * (volume (Set.Icc (0 : ℝ) t)).toReal :=
+        norm_setIntegral_le_of_norm_le_const hmeas hpointwise
+    _ = t * M * ‖L' - L‖ * K := by
+        rw [Real.volume_Icc, ENNReal.toReal_ofReal (by linarith : (0 : ℝ) ≤ t - 0)]
+        ring
+    _ = t * (⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖) * ‖L' - L‖ * K := by
+        simp [M, mul_left_comm, mul_comm]
+
 end -- noncomputable section
