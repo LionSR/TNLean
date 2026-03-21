@@ -9,6 +9,7 @@ import TNLean.Channel.Semigroup.GeneratorDefs
 import TNLean.Channel.Semigroup.LindbladForm
 import TNLean.Channel.Semigroup.KossakowskiForm
 import TNLean.Channel.Semigroup.ReducibleQDS
+import TNLean.Channel.Semigroup.RelaxationConditions
 
 /-!
 # Wolf Chapter 7 — Semigroup Structure: Public Theorem Index

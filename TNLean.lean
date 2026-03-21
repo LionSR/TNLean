@@ -199,4 +199,5 @@ import TNLean.Channel.Semigroup.KossakowskiForm
 import TNLean.Channel.Semigroup.Primitivity
 import TNLean.Channel.Semigroup.LiouvillianKernel
 import TNLean.Channel.Semigroup.ReducibleQDS
+import TNLean.Channel.Semigroup.RelaxationConditions
 import TNLean.Channel.Determinant
