@@ -92,6 +92,18 @@ def LindbladForm.toLinearMap (F : LindbladForm D) :
     congr 1
     congr 1 <;> ring_nf
 
+/-- The commutator version of the Lindblad generator (Wolf Eq. 7.22):
+`L(ρ) = i[ρ, H] + ½ Σⱼ ([Lⱼ, ρLⱼ†] + [Lⱼρ, Lⱼ†])`. -/
+def LindbladForm.commutatorForm (F : LindbladForm D) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+  F.toLinearMap
+
+/-- The commutator form (Wolf Eq. 7.22) equals the standard Lindblad form
+(Wolf Eq. 7.21). -/
+theorem LindbladForm.commutatorForm_eq_toLinearMap (F : LindbladForm D) :
+    F.commutatorForm = F.toLinearMap := by
+  rfl
+
 /-- Each dissipator term has trace zero. -/
 private lemma trace_dissipator_eq_zero (Lop : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) :
