@@ -615,10 +615,17 @@ which shows that such generators have the standard Lindblad form.
 %% ---------------------------------------------------------
 
 %% Wolf §7.1, Prop 7.5
+\begin{remark}[Status note]\notready
+    The Lean declarations for Proposition~7.5 and the
+    Proposition~7.6 implication (4)$\to$(2) are currently implemented via
+    axioms to keep CI/elaboration time manageable; accordingly these results are
+    marked \texttt{notready} in the blueprint until full proofs are restored.
+\end{remark}
+
 
 \begin{theorem}[Prop.~7.5: Irreducible semigroup implies primitive]
     \label{thm:irreducible_semigroup_implies_primitive}
-    \lean{irreducible_semigroup_implies_primitive}\leanok
+    \lean{irreducible_semigroup_implies_primitive}\notready
     \uses{def:exp_semigroup_ch12}
     Let $T_t = e^{tL}$ be a quantum dynamical semigroup.
     If $T_{t_0}$ is irreducible for some $t_0 > 0$, then
@@ -627,7 +634,7 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{proof}
-    \leanok
+    \notready
     The unique faithful density fixed point $\sigma$ of $T_{t_0}$
     is also fixed by all $T_u$ (semigroup commutativity), so by
     uniqueness it is the common fixed point.
@@ -641,7 +648,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.5: Irreducibility iff primitivity for QDS]
     \label{thm:qds_irreducible_iff_primitive}
-    \lean{qds_irreducible_iff_primitive}\leanok
+    \lean{qds_irreducible_iff_primitive}\notready
     \uses{thm:irreducible_semigroup_implies_primitive}
     For a quantum dynamical semigroup $T_t = e^{tL}$:
     \[
@@ -653,7 +660,7 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{proof}
-    \leanok
+    \notready
     \uses{thm:irreducible_semigroup_implies_primitive}
     Forward: apply Theorem~\ref{thm:irreducible_semigroup_implies_primitive}.
     Reverse: take $t_0 = 1$ (or any positive time); primitivity
@@ -816,7 +823,7 @@ The four equivalent reducibility conditions of
 
 \begin{theorem}[Prop.~7.6, (4)$\to$(2)]
     \label{thm:blockUpperTriangular_implies_rankDeficient}
-    \lean{hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad}\leanok
+    \lean{hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad}\notready
     \uses{def:has_block_upper_triangular_lindblad,
           def:has_rank_deficient_kernel_element, def:is_gksl_generator}
     If the Lindblad data of a GKSL generator are block-upper-triangular
@@ -827,7 +834,7 @@ The four equivalent reducibility conditions of
 \end{theorem}
 
 \begin{proof}
-    \leanok
+    \notready
     The block-upper-triangular structure implies $L$ preserves the
     compression $P M_d(\C) P$.
     Therefore the semigroup $e^{tL}$ also preserves $P M_d(\C) P$
@@ -841,7 +848,7 @@ The four equivalent reducibility conditions of
 
 \begin{theorem}[Prop.~7.6: Full equivalence]
     \label{thm:wolf_prop_7_6_full}
-    \lean{wolf_prop_7_6_full_equivalence}\leanok
+    \lean{wolf_prop_7_6_full_equivalence}\notready
     \uses{def:is_gksl_generator, def:has_rank_deficient_fixed_density,
           def:has_rank_deficient_kernel_element,
           def:has_invariant_compression,
@@ -857,7 +864,7 @@ The four equivalent reducibility conditions of
     This is \cite[Prop.~7.6]{Wolf2012Quantum}.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}\notready
     \uses{thm:wolf_prop_7_6_one_iff_two,
           thm:wolf_prop_7_6_one_implies_three,
           thm:wolf_prop_7_6_three_iff_four,
