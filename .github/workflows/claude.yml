@@ -17,8 +17,13 @@ jobs:
       (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
       (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
       (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude'))) ||
-      (github.event_name == 'issues' && github.event.action == 'labeled' && github.event.label.name == 'queue-active')
+      (github.event_name == 'issues' && github.event.action == 'labeled' && github.event.label.name == 'claude')
     runs-on: ubuntu-latest
+
+    # Serialize per issue/PR — don't run two Claude sessions on the same item
+    concurrency:
+      group: claude-${{ github.event.issue.number || github.event.pull_request.number }}
+      cancel-in-progress: false
 
     permissions:
       contents: write
@@ -44,21 +49,15 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          trigger_phrase: "@claude"
+          label_trigger: "claude"
+          use_sticky_comment: true
 
-          # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
             actions: read
 
-          # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
-          # prompt: 'Update the pull request description to include a summary of changes.'
-
-          # Optional: Add claude_args to customize behavior and configuration
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://code.claude.com/docs/en/cli-reference for available options
-          # claude_args: '--allowed-tools Bash(gh pr:*)'
           claude_args: |
             --model claude-opus-4-6
+            --max-turns 50
             --allowed-tools "Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*)"
             --append-system-prompt "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. Before changing theorem statements, first try to complete the proof using existing lemmas. Validate with: lake build. Do not leave unrelated new sorrys."
-
-          # TODO: Explore adding MCP servers (e.g. sequential-thinking for complex proofs)

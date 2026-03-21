@@ -6,38 +6,62 @@ on:
     branches: [main]
 
 jobs:
-  # Job 1: Lightweight — promote next issue in queue (pure gh CLI, no AI needed)
-  promote-queue:
+  # Job 1: Pure gh CLI — promote next issue in queue, update related issues
+  promote-and-update:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       issues: write
-    outputs:
-      promoted_issue: ${{ steps.promote.outputs.issue_number }}
+      pull-requests: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Update related issues with progress
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+          PR_TITLE="${{ github.event.pull_request.title }}"
+
+          # Use GitHub's closingIssuesReferences API to find linked issues
+          LINKED=$(gh api graphql -f query='
+            query {
+              repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
+                pullRequest(number: '"$PR_NUM"') {
+                  closingIssuesReferences(first: 20) {
+                    nodes { number title state }
+                  }
+                }
+              }
+            }' --jq '.data.repository.pullRequest.closingIssuesReferences.nodes')
+
+          # Post progress comment on issues that are still open (partially addressed)
+          echo "$LINKED" | jq -c '.[] | select(.state == "OPEN")' | while read -r issue; do
+            ISSUE_NUM=$(echo "$issue" | jq -r '.number')
+            echo "Posting progress update on issue #$ISSUE_NUM"
+            gh issue comment "$ISSUE_NUM" --repo "$GITHUB_REPOSITORY" \
+              --body "Progress update: PR #$PR_NUM ($PR_TITLE) has been merged and partially addresses this issue."
+          done
+
       - name: Promote next queued issue
         id: promote
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
 
-          # 1. Find the oldest "queue-next" issue
+          # 1. Activate the oldest "queue-next" issue
           NEXT=$(gh issue list --repo "$GITHUB_REPOSITORY" \
             --label "queue-next" --state open --sort created --json number \
             --jq '.[0].number // empty')
 
           if [ -n "$NEXT" ]; then
-            echo "Promoting queue-next issue #$NEXT to queue-active"
+            echo "Activating queue-next issue #$NEXT"
             gh issue edit "$NEXT" --repo "$GITHUB_REPOSITORY" \
-              --remove-label "queue-next" --add-label "queue-active"
+              --remove-label "queue-next" --add-label "claude"
             gh issue comment "$NEXT" --repo "$GITHUB_REPOSITORY" \
-              --body "PR #$PR_NUM has been merged. This issue is now active. @claude please start working on this."
-            echo "issue_number=$NEXT" >> "$GITHUB_OUTPUT"
+              --body "@claude PR #$PR_NUM has been merged. Please start working on this issue."
+            echo "activated=$NEXT" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # 2. No queue-next? Promote the oldest "queue" issue to queue-next
+          # 2. No queue-next? Promote the oldest "queue" issue
           QUEUED=$(gh issue list --repo "$GITHUB_REPOSITORY" \
             --label "queue" --state open --sort created --json number \
             --jq '.[0].number // empty')
@@ -48,42 +72,6 @@ jobs:
               --remove-label "queue" --add-label "queue-next"
             gh issue comment "$QUEUED" --repo "$GITHUB_REPOSITORY" \
               --body "PR #$PR_NUM has been merged. This issue has been promoted to next in queue."
-            echo "issue_number=$QUEUED" >> "$GITHUB_OUTPUT"
           else
             echo "No queued issues found."
           fi
-
-  # Job 2: AI-powered — only if you want smart summaries on related issues (optional)
-  update-related-issues:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
-      id-token: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Claude — summarize impact on related issues
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          claude_args: |
-            --model claude-sonnet-4-6
-            --allowed-tools "Bash(gh issue:*),Bash(gh pr:*),Bash(gh api:*)"
-            --append-system-prompt "You are a concise project tracker for a Lean 4 / Mathlib repository. Keep comments brief."
-          prompt: |
-            PR #${{ github.event.pull_request.number }} ("${{ github.event.pull_request.title }}") was just merged.
-            Body: ${{ github.event.pull_request.body }}
-
-            1. Use `gh pr view ${{ github.event.pull_request.number }} --json closingIssuesReferences` to find linked issues.
-            2. For each issue that was NOT auto-closed by GitHub (i.e. still open), post a short progress comment.
-            3. Search for other open issues whose title overlaps with this PR's changes, and post a brief cross-reference comment if relevant.
-
-            Do NOT close any issues — GitHub handles that via "fixes #N" keywords.
-            Do NOT touch queue labels — another job handles that.
-            Keep comments under 5 lines.
