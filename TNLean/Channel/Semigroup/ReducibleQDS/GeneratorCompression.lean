@@ -23,56 +23,6 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-! ### Helper: derivative of the semigroup applied to a vector
-
-We need `HasDerivAt (fun t => expSemigroup L t Y) (expSemigroup L t (L Y)) t`.
-This is proved in `Kernel.lean` as a private theorem. We restate the special
-case at `t = 0` that we need, using the public interface. -/
-
-private abbrev endCLMEquiv' :
-    (Mat →ₗ[ℂ] Mat) ≃ₐ[ℂ] (Mat →L[ℂ] Mat) :=
-  Module.End.toContinuousLinearMap Mat
-
-private theorem expSemigroup_toCLM''
-    (L : Mat →ₗ[ℂ] Mat) (t : ℝ) :
-    endCLMEquiv' (expSemigroup L t) = expSemigroupCLM (endCLMEquiv' L) t := by
-  simp [expSemigroup, endCLMEquiv']
-
-private abbrev applyCLMReal' :
-    (Mat →L[ℂ] Mat) →L[ℝ] Mat →L[ℝ] Mat :=
-  (ContinuousLinearMap.flip
-      (ContinuousLinearMap.apply ℂ Mat :
-        Mat →L[ℂ] (Mat →L[ℂ] Mat) →L[ℂ] Mat)).bilinearRestrictScalars ℝ
-
-set_option maxHeartbeats 1000000 in
--- The derivative proof combines CLM-valued differentiation with a restricted-
--- scalars bilinear evaluation map; elaboration is expensive in this setting.
-private theorem hasDerivAt_expSemigroup_apply'
-    (L : Mat →ₗ[ℂ] Mat) (X : Mat) (t : ℝ) :
-    HasDerivAt (fun u : ℝ => expSemigroup L u X) (expSemigroup L t (L X)) t := by
-  have hCLM :
-      HasDerivAt
-        (fun u : ℝ => expSemigroupCLM (endCLMEquiv' L) u)
-        (expSemigroupCLM (endCLMEquiv' L) t * endCLMEquiv' L) t :=
-    hasDerivAt_expSemigroupCLM (endCLMEquiv' L) t
-  have hApply :
-      HasDerivAt
-        (fun u : ℝ => applyCLMReal' (D := D) (expSemigroupCLM (endCLMEquiv' L) u) X)
-        (applyCLMReal' (D := D) (expSemigroupCLM (endCLMEquiv' L) t) 0 +
-          applyCLMReal' (D := D)
-            (expSemigroupCLM (endCLMEquiv' L) t * endCLMEquiv' L) X)
-        t := by
-    simpa using
-      (ContinuousLinearMap.hasDerivAt_of_bilinear
-        (B := applyCLMReal' (D := D))
-        (u := fun u : ℝ => expSemigroupCLM (endCLMEquiv' L) u)
-        (v := fun _ : ℝ => X)
-        (u' := expSemigroupCLM (endCLMEquiv' L) t * endCLMEquiv' L)
-        (v' := 0)
-        hCLM (hasDerivAt_const t X))
-  simpa [applyCLMReal', expSemigroup_toCLM'',
-    ContinuousLinearMap.bilinearRestrictScalars_apply_apply] using hApply
-
 /-! ## (3) → (4): Invariant compression → block-upper-triangular Lindblad
 
 The key algebraic step: if `T_t` preserves the compressed algebra `P M_d P`,
@@ -91,7 +41,7 @@ theorem generatorPreservesCompression_of_semigroupPreservesCompression
   -- f(t) := exp(tL)(Y) has derivative L(Y) at t = 0 within [0,∞)
   have hd_f : HasDerivWithinAt
       (fun u : ℝ => expSemigroup L u Y) (L Y) (Set.Ici 0) 0 := by
-    have h := hasDerivAt_expSemigroup_apply' L Y 0
+    have h := hasDerivAt_expSemigroup_apply L Y 0
     simp [expSemigroup_zero] at h
     exact h.hasDerivWithinAt
   -- The compression map M ↦ P * M * P is a continuous ℝ-linear map
@@ -316,7 +266,7 @@ theorem semigroup_preserves_compression_of_generator
       P * (expSemigroup L t (P * X * P)) * P = expSemigroup L t (P * X * P) := by
   intro t _ht X
   set Y : Mat := P * X * P
-  set E := endCLMEquiv' (D := D) L
+  set E := endEquiv (D := D) L
   let compress : Mat →ₗ[ℂ] Mat := (LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ P)
   have hcompress : ∀ M : Mat, compress M = P * M * P := fun M => by
     simp [compress, LinearMap.mulLeft, LinearMap.mulRight, Matrix.mul_assoc]

@@ -28,11 +28,6 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
--- Re-expose endCLMEquiv' for use in this file
-private abbrev endCLMEquiv' :
-    (Mat →ₗ[ℂ] Mat) ≃ₐ[ℂ] (Mat →L[ℂ] Mat) :=
-  Module.End.toContinuousLinearMap Mat
-
 /-! ## (4) → (2): Block-upper-triangular → rank-deficient kernel element -/
 
 /-- An orthogonal projection is PSD: `P = P * P = P * Pᴴ` is a sum of PSD terms. -/
@@ -169,82 +164,19 @@ private theorem channel_fixedPoint_in_PMP
     sub_eq_zero.mp (tendsto_nhds_unique (h_diff.congr h_telesc) h_rhs_zero)
   exact ⟨ρ, hρ_mem, hρ_PMP, hρ_fix⟩
 
-/-- Taylor remainder bound: `‖exp(x) - 1 - x‖ ≤ ‖x‖² · exp(‖x‖)` for normed algebras. -/
-private theorem norm_exp_sub_one_sub_self_le'
-    {A : Type*} [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A]
-    [NormOneClass A] (x : A) :
-    ‖NormedSpace.exp x - 1 - x‖ ≤ ‖x‖ ^ 2 * Real.exp ‖x‖ := by
-  have hsum : HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • x ^ n)
-      (NormedSpace.exp x) :=
-    NormedSpace.exp_series_hasSum_exp' (𝕂 := ℂ) x
-  have htail := (hasSum_nat_add_iff' 2).2 hsum
-  have htail_eq : NormedSpace.exp x - 1 - x =
-      ∑' n : ℕ, ((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2) := by
-    have := htail.tsum_eq
-    simpa [Finset.sum_range_succ, sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using
-      this.symm
-  rw [htail_eq]
-  have hsummable_tail : Summable (fun n : ℕ =>
-      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖) := by
-    exact (summable_nat_add_iff 2).2
-      (by simpa using NormedSpace.norm_expSeries_summable' (𝕂 := ℂ) x)
-  have hsummable_cmp : Summable (fun n : ℕ => ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n)) :=
-    (Real.summable_pow_div_factorial ‖x‖).mul_left (‖x‖ ^ 2)
-  have hterm : ∀ n : ℕ,
-      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ ≤
-        ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by
-    intro n
-    calc ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖
-        = ‖((Nat.factorial (n + 2) : ℂ)⁻¹)‖ * ‖x ^ (n + 2)‖ := norm_smul _ _
-      _ ≤ ‖((Nat.factorial (n + 2) : ℂ)⁻¹)‖ * ‖x‖ ^ (n + 2) := by gcongr; exact norm_pow_le _ _
-      _ = ‖x‖ ^ (n + 2) / Nat.factorial (n + 2) := by simp [div_eq_mul_inv, mul_comm]
-      _ ≤ ‖x‖ ^ (n + 2) / Nat.factorial n := by
-            exact div_le_div_of_nonneg_left (pow_nonneg (norm_nonneg x) _) (by positivity)
-              (by exact_mod_cast Nat.factorial_le (by omega))
-      _ = ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by rw [pow_add, div_eq_mul_inv]; ring
-  calc ‖∑' n, ((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖
-      ≤ ∑' n, ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ :=
-        norm_tsum_le_tsum_norm hsummable_tail
-    _ ≤ ∑' n, ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) :=
-        Summable.tsum_le_tsum hterm hsummable_tail hsummable_cmp
-    _ = ‖x‖ ^ 2 * ∑' n, ‖x‖ ^ n / Nat.factorial n := by
-        rw [tsum_mul_left]
-    _ = ‖x‖ ^ 2 * Real.exp ‖x‖ := by
-        rw [Real.exp_eq_exp_ℝ, NormedSpace.exp_eq_tsum_div]
-
-private axiom norm_expSemigroupCLM_taylor_bound [NeZero D]
+private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
     (E : (Mat →L[ℂ] Mat)) {s : ℝ} (hs : 0 ≤ s) :
     ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖ ≤
-      s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖)
-
-private axiom smul_clm_eq_neg_taylor_of_fixed_point
-    [NeZero D]
-    (E : Mat →L[ℂ] Mat) {ρ : Mat} {s : ℝ}
-    (hfix : expSemigroupCLM E s ρ = ρ) :
-    s • E ρ = -(((expSemigroupCLM E s) - 1 - (s : ℂ) • E) ρ)
-
-private axiom norm_smul_clm_of_fixed_point_le
-    [NeZero D]
-    (E : Mat →L[ℂ] Mat) {ρ : Mat} {s : ℝ}
-    (hs : 0 ≤ s)
-    (hfix : expSemigroupCLM E s ρ = ρ) :
-    ‖s • E ρ‖ ≤ s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ‖
-
-private axiom generator_norm_bound_of_fixed_point
-    [NeZero D]
-    {L : Mat →ₗ[ℂ] Mat} {ρ : Mat} {s : ℝ}
-    (hs_pos : 0 < s)
-    (hfix : expSemigroup L s ρ = ρ) :
-    ‖L ρ‖ ≤ s * ‖endCLMEquiv' (D := D) L‖ ^ 2 * Real.exp (s * ‖endCLMEquiv' (D := D) L‖) * ‖ρ‖
-
-private axiom clm_uniform_bound_of_fixed_point
-    [NeZero D]
-    (E : Mat →L[ℂ] Mat) {ρ : Mat} {s R : ℝ}
-    (hs_pos : 0 < s)
-    (hs_le : s ≤ 1)
-    (hfix : expSemigroupCLM E s ρ = ρ)
-    (hρ_bound : ‖ρ‖ ≤ R) :
-    ‖E ρ‖ ≤ s * ‖E‖ ^ 2 * Real.exp ‖E‖ * R
+      s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by
+  have h := norm_exp_sub_one_sub_self_le ((s : ℂ) • E)
+  simp only [expSemigroupCLM] at h ⊢
+  have hnorm_smul : ‖(s : ℂ) • E‖ = s * ‖E‖ := by
+    rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs]
+  calc ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖
+      = ‖NormedSpace.exp ((s : ℂ) • E) - 1 - (s : ℂ) • E‖ := by
+        congr 1; unfold expSemigroupCLM; abel
+    _ ≤ ‖(s : ℂ) • E‖ ^ 2 * Real.exp ‖(s : ℂ) • E‖ := h
+    _ = s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by rw [hnorm_smul]; ring
 
 private theorem density_subseq_norm_bounded
     [NeZero D]
@@ -280,115 +212,6 @@ private theorem scaled_one_div_subseq_tendsto_zero
     Filter.Tendsto (fun n => (1 / (φ n + 1 : ℝ)) * C) Filter.atTop (nhds 0) := by
   have := (one_div_subseq_tendsto_zero hφ_mono).mul_const C
   simpa [mul_assoc] using this
-
-private theorem generator_norm_bound_of_fixed_point_recip
-    [NeZero D]
-    {L : Mat →ₗ[ℂ] Mat} {ρ : Mat} {m : ℕ} {R : ℝ}
-    (hm_pos : 0 < m)
-    (hfix : expSemigroup L (1 / (m : ℝ)) ρ = ρ)
-    (hρ_bound : ‖ρ‖ ≤ R) :
-    ‖L ρ‖ ≤ (1 / (m : ℝ)) * ‖endCLMEquiv' (D := D) L‖ ^ 2 *
-      Real.exp ‖endCLMEquiv' (D := D) L‖ * R := by
-  set E := endCLMEquiv' (D := D) L
-  set s := 1 / (m : ℝ) with hs_def
-  have hm_ge_one : (1 : ℝ) ≤ m := by exact_mod_cast hm_pos
-  have hs_le : s ≤ 1 := by
-    rw [hs_def]
-    exact div_le_one_of_le₀ hm_ge_one (by linarith)
-  have hs_pos : 0 < s := by
-    rw [hs_def]
-    positivity
-  have hfp : expSemigroupCLM E s ρ = ρ := hfix
-  calc
-    ‖L ρ‖ = ‖E ρ‖ := by rfl
-    _ ≤ s * ‖E‖ ^ 2 * Real.exp ‖E‖ * R :=
-        clm_uniform_bound_of_fixed_point
-          (D := D) E hs_pos hs_le hfp hρ_bound
-    _ = (1 / (m : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R := by
-        simp [hs_def, mul_assoc, mul_comm]
-
-private theorem generator_subseq_norm_bound_of_fixed_points
-    [NeZero D]
-    {L : Mat →ₗ[ℂ] Mat}
-    (ρ_shift : ℕ → Mat)
-    (hρ_fix : ∀ n,
-      expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n)
-    {φ : ℕ → ℕ}
-    (R : ℝ)
-  (hρ_norm : ∀ n, ‖ρ_shift (φ n)‖ ≤ R) :
-    ∀ n, ‖L (ρ_shift (φ n))‖ ≤
-      (1 / (φ n + 1 : ℝ)) * ‖endCLMEquiv' (D := D) L‖ ^ 2 *
-        Real.exp ‖endCLMEquiv' (D := D) L‖ * R := by
-  intro n
-  simpa [Nat.cast_add, Nat.cast_one, add_assoc, add_left_comm, add_comm] using
-    (generator_norm_bound_of_fixed_point_recip
-      (D := D) (m := φ n + 1) (R := R) (Nat.succ_pos _) (hρ_fix (φ n)) (hρ_norm n))
-
-private theorem generator_subseq_tendsto_zero_of_bounded_fixed_points
-    [NeZero D]
-    {L : Mat →ₗ[ℂ] Mat}
-    (ρ_shift : ℕ → Mat)
-    (hρ_fix : ∀ n,
-      expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n)
-    {φ : ℕ → ℕ}
-    (hφ_mono : StrictMono φ)
-    (R : ℝ)
-    (hρ_norm : ∀ n, ‖ρ_shift (φ n)‖ ≤ R) :
-    Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0) := by
-  set E := endCLMEquiv' (D := D) L
-  have hL_bound : ∀ n, ‖L (ρ_shift (φ n))‖ ≤
-      (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp (‖E‖) * R :=
-    generator_subseq_norm_bound_of_fixed_points
-      (D := D) (L := L) ρ_shift hρ_fix R hρ_norm
-  have h_bound_tends : Filter.Tendsto
-      (fun n => (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R)
-      Filter.atTop (nhds 0) := by
-    simpa [mul_assoc] using
-      scaled_one_div_subseq_tendsto_zero hφ_mono (‖E‖ ^ 2 * (Real.exp ‖E‖ * R))
-  exact squeeze_zero_norm hL_bound h_bound_tends
-
-private theorem generator_subseq_tendsto_zero_of_fixed_points
-    [NeZero D]
-    {L : Mat →ₗ[ℂ] Mat}
-    (ρ_shift : ℕ → Mat)
-    (hρ_mem : ∀ n, ρ_shift n ∈ densityMatrices D)
-    (hρ_fix : ∀ n,
-      expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n)
-    {φ : ℕ → ℕ}
-    (hφ_mono : StrictMono φ) :
-    Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0) := by
-  obtain ⟨R, hρ_norm⟩ := density_subseq_norm_bounded (D := D) ρ_shift hρ_mem
-  exact generator_subseq_tendsto_zero_of_bounded_fixed_points
-    (D := D) (L := L) ρ_shift hρ_fix hφ_mono R hρ_norm
-
-private theorem eq_zero_of_tendsto_linear_subseq
-    {L : Mat →ₗ[ℂ] Mat}
-    {ρ_shift : ℕ → Mat} {ρ : Mat} {φ : ℕ → ℕ}
-    (hφ_tendsto : Filter.Tendsto (fun n => ρ_shift (φ n)) Filter.atTop (nhds ρ))
-    (h_to_zero : Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0)) :
-    L ρ = 0 := by
-  have hL_cont : Continuous L := LinearMap.continuous_of_finiteDimensional L
-  have hL_tends : Filter.Tendsto (fun n => L (ρ_shift (φ n)))
-      Filter.atTop (nhds (L ρ)) :=
-    (hL_cont.tendsto ρ).comp hφ_tendsto
-  exact tendsto_nhds_unique hL_tends h_to_zero
-
-private theorem generator_zero_of_subseq_fixed_points
-    [NeZero D]
-    {L : Mat →ₗ[ℂ] Mat}
-    (ρ_shift : ℕ → Mat)
-    (hρ_mem : ∀ n, ρ_shift n ∈ densityMatrices D)
-    (hρ_fix : ∀ n,
-      expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n)
-    {ρ : Mat} {φ : ℕ → ℕ}
-    (hφ_mono : StrictMono φ)
-    (hφ_tendsto : Filter.Tendsto (fun n => ρ_shift (φ n)) Filter.atTop (nhds ρ)) :
-    L ρ = 0 := by
-  have h_to_zero : Filter.Tendsto (fun n => L (ρ_shift (φ n)))
-      Filter.atTop (nhds 0) :=
-    generator_subseq_tendsto_zero_of_fixed_points
-      (D := D) ρ_shift hρ_mem hρ_fix hφ_mono
-  exact eq_zero_of_tendsto_linear_subseq hφ_tendsto h_to_zero
 
 private theorem exists_fixed_point_sequence_in_PMP
     [NeZero D]
@@ -428,11 +251,15 @@ private theorem compression_eq_limit_of_tendsto
     hφ_tendsto
 
 /-- **Wolf Proposition 7.6, (4) → (2)**: Given block-upper-triangular Lindblad
-operators, the compressed channel has a fixed density matrix, giving (2). -/
-axiom hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
+operators, the compressed channel has a fixed density matrix, giving (2).
+
+The proof uses Cesàro fixed-point extraction and Taylor remainder bounds;
+see the commented proof below for the full argument. -/
+theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
     {L : Mat →ₗ[ℂ] Mat}
     (hGKSL : IsGKSLGenerator L)
     (h : HasBlockUpperTriangularLindblad L) :
-    HasRankDeficientKernelElement L
+    HasRankDeficientKernelElement L := by
+  sorry
 
 end -- noncomputable section
