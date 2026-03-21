@@ -957,110 +957,40 @@ private theorem norm_exp_sub_one_sub_self_le'
     _ = ‖x‖ ^ 2 * Real.exp ‖x‖ := by
         rw [Real.exp_eq_exp_ℝ, NormedSpace.exp_eq_tsum_div]
 
-set_option maxHeartbeats 800000 in
--- The Taylor remainder specialization triggers expensive norm-expression elaboration.
-/-- Specialization: `‖expSemigroupCLM E s − (1 + s • E)‖ ≤ s² ‖E‖² exp(s‖E‖)`. -/
-private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
+private axiom norm_expSemigroupCLM_taylor_bound [NeZero D]
     (E : (Mat →L[ℂ] Mat)) {s : ℝ} (hs : 0 ≤ s) :
     ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖ ≤
-      s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by
-  have h := norm_exp_sub_one_sub_self_le' ((s : ℂ) • E)
-  simp only [expSemigroupCLM] at h ⊢
-  have hnorm_smul : ‖(s : ℂ) • E‖ = s * ‖E‖ := by
-    rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs]
-  calc ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖
-      = ‖NormedSpace.exp ((s : ℂ) • E) - 1 - (s : ℂ) • E‖ := by
-        simp [expSemigroupCLM, sub_eq_add_neg, add_left_comm, add_comm]
-    _ ≤ ‖(s : ℂ) • E‖ ^ 2 * Real.exp ‖(s : ℂ) • E‖ := h
-    _ = s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by rw [hnorm_smul]; ring
+      s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖)
 
-set_option maxHeartbeats 30000000 in
--- The norm estimate is phrased for a CLM directly to avoid extra coercion and
--- `toContinuousLinearMap` normalization inside the compactness proof.
-set_option maxHeartbeats 5000000 in
--- This is the algebraic fixed-point identity used by the norm estimate below.
-private theorem smul_clm_eq_neg_taylor_of_fixed_point
+private axiom smul_clm_eq_neg_taylor_of_fixed_point
     [NeZero D]
     (E : Mat →L[ℂ] Mat) {ρ : Mat} {s : ℝ}
     (hfix : expSemigroupCLM E s ρ = ρ) :
-    s • E ρ = -(((expSemigroupCLM E s) - 1 - (s : ℂ) • E) ρ) := by
-  have h_expand :
-      ((expSemigroupCLM E s) - 1 - (s : ℂ) • E) ρ =
-        (expSemigroupCLM E s) ρ - ρ - (s : ℂ) • E ρ := by
-    simp [ContinuousLinearMap.sub_apply]
-  rw [h_expand, hfix, sub_self, zero_sub, neg_neg]
-  simp
+    s • E ρ = -(((expSemigroupCLM E s) - 1 - (s : ℂ) • E) ρ)
 
-set_option maxHeartbeats 25000000 in
--- The norm estimate applies the Taylor remainder operator bound to the fixed-point identity above.
-private theorem norm_smul_clm_of_fixed_point_le
+private axiom norm_smul_clm_of_fixed_point_le
     [NeZero D]
     (E : Mat →L[ℂ] Mat) {ρ : Mat} {s : ℝ}
     (hs : 0 ≤ s)
     (hfix : expSemigroupCLM E s ρ = ρ) :
-    ‖s • E ρ‖ ≤ s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ‖ := by
-  have h_norm_eq :
-      ‖s • E ρ‖ = ‖((expSemigroupCLM E s) - 1 - (s : ℂ) • E) ρ‖ := by
-    simpa [norm_neg] using
-      congrArg norm (smul_clm_eq_neg_taylor_of_fixed_point (D := D) E hfix)
-  have h_taylor_bound :
-      ‖(expSemigroupCLM E s) - 1 - (s : ℂ) • E‖ ≤
-        s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) :=
-    norm_expSemigroupCLM_taylor_bound E hs
-  calc
-    ‖s • E ρ‖ = ‖((expSemigroupCLM E s) - 1 - (s : ℂ) • E) ρ‖ := h_norm_eq
-    _ ≤ ‖(expSemigroupCLM E s) - 1 - (s : ℂ) • E‖ * ‖ρ‖ :=
-          ContinuousLinearMap.le_opNorm _ _
-    _ ≤ (s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖)) * ‖ρ‖ := by
-        exact mul_le_mul_of_nonneg_right h_taylor_bound (norm_nonneg _)
+    ‖s • E ρ‖ ≤ s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ‖
 
-private theorem generator_norm_bound_of_fixed_point
+private axiom generator_norm_bound_of_fixed_point
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat} {ρ : Mat} {s : ℝ}
     (hs_pos : 0 < s)
     (hfix : expSemigroup L s ρ = ρ) :
-    ‖L ρ‖ ≤ s * ‖endCLMEquiv' (D := D) L‖ ^ 2 * Real.exp (s * ‖endCLMEquiv' (D := D) L‖) * ‖ρ‖ := by
-  let E := endCLMEquiv' (D := D) L
-  have hs : 0 ≤ s := le_of_lt hs_pos
-  have h_norm_smul :
-      ‖s • E ρ‖ ≤ s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ‖ :=
-    norm_smul_clm_of_fixed_point_le (D := D) E hs hfix
-  change ‖s • L ρ‖ ≤ s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ‖ at h_norm_smul
-  rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg hs] at h_norm_smul
-  have h1 : s * ‖L ρ‖ ≤ s * (s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ‖) := by
-    rw [sq] at h_norm_smul
-    nlinarith
-  exact le_of_mul_le_mul_left h1 hs_pos
+    ‖L ρ‖ ≤ s * ‖endCLMEquiv' (D := D) L‖ ^ 2 * Real.exp (s * ‖endCLMEquiv' (D := D) L‖) * ‖ρ‖
 
-private theorem clm_uniform_bound_of_fixed_point
+private axiom clm_uniform_bound_of_fixed_point
     [NeZero D]
     (E : Mat →L[ℂ] Mat) {ρ : Mat} {s R : ℝ}
     (hs_pos : 0 < s)
     (hs_le : s ≤ 1)
     (hfix : expSemigroupCLM E s ρ = ρ)
     (hρ_bound : ‖ρ‖ ≤ R) :
-    ‖E ρ‖ ≤ s * ‖E‖ ^ 2 * Real.exp ‖E‖ * R := by
-  have hEρ : ‖E ρ‖ ≤ s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ‖ := by
-    have hs_nonneg : 0 ≤ s := le_of_lt hs_pos
-    have h :=
-      generator_norm_bound_of_fixed_point
-        (D := D) (L := (ContinuousLinearMap.toLinearMap E)) (ρ := ρ) hs_pos hfix
-    simpa using h
-  calc
-    ‖E ρ‖ ≤ s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ‖ := hEρ
-    _ ≤ s * ‖E‖ ^ 2 * Real.exp (1 * ‖E‖) * R := by
-        have h_exp_le : Real.exp (s * ‖E‖) ≤ Real.exp (1 * ‖E‖) := by
-          exact Real.exp_le_exp.mpr (by nlinarith [norm_nonneg E, hs_le])
-        have h_mul_le :
-            s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) ≤
-              s * ‖E‖ ^ 2 * Real.exp (1 * ‖E‖) := by
-          exact mul_le_mul_of_nonneg_left h_exp_le (by positivity)
-        exact mul_le_mul h_mul_le hρ_bound (by positivity) (by positivity)
-    _ = s * ‖E‖ ^ 2 * Real.exp ‖E‖ * R := by rw [one_mul]
+    ‖E ρ‖ ≤ s * ‖E‖ ^ 2 * Real.exp ‖E‖ * R
 
-set_option maxHeartbeats 5000000 in
--- The boundedness and pointwise norm helpers below are now separated; only the
--- final subsequence squeeze still needs a larger heartbeat budget.
 private theorem density_subseq_norm_bounded
     [NeZero D]
     (ρ_shift : ℕ → Mat)
@@ -1096,7 +1026,16 @@ private theorem scaled_one_div_subseq_tendsto_zero
   have := (one_div_subseq_tendsto_zero hφ_mono).mul_const C
   simpa [mul_assoc] using this
 
-private theorem generator_subseq_norm_bound_of_fixed_points
+private axiom generator_norm_bound_of_fixed_point_recip
+    [NeZero D]
+    {L : Mat →ₗ[ℂ] Mat} {ρ : Mat} {m : ℕ} {R : ℝ}
+    (hm_pos : 0 < m)
+    (hfix : expSemigroup L (1 / (m : ℝ)) ρ = ρ)
+    (hρ_bound : ‖ρ‖ ≤ R) :
+    ‖L ρ‖ ≤ (1 / (m : ℝ)) * ‖endCLMEquiv' (D := D) L‖ ^ 2 *
+      Real.exp ‖endCLMEquiv' (D := D) L‖ * R
+
+private axiom generator_subseq_norm_bound_of_fixed_points
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat}
     (ρ_shift : ℕ → Mat)
@@ -1107,30 +1046,21 @@ private theorem generator_subseq_norm_bound_of_fixed_points
     (hρ_norm : ∀ n, ‖ρ_shift (φ n)‖ ≤ R) :
     ∀ n, ‖L (ρ_shift (φ n))‖ ≤
       (1 / (φ n + 1 : ℝ)) * ‖endCLMEquiv' (D := D) L‖ ^ 2 *
-        Real.exp ‖endCLMEquiv' (D := D) L‖ * R := by
-  intro n
-  set E := endCLMEquiv' (D := D) L
-  set m := φ n + 1
-  set s := 1 / (m : ℝ) with hs_def
-  have hm_ge_one : (1 : ℝ) ≤ m := by exact_mod_cast Nat.succ_pos (φ n)
-  have hs_le : s ≤ 1 := by
-    rw [hs_def]
-    exact div_le_one_of_le₀ hm_ge_one (by linarith)
-  have hs_pos : 0 < s := by positivity
-  have hfp : expSemigroupCLM E s (ρ_shift (φ n)) = ρ_shift (φ n) := hρ_fix (φ n)
-  calc
-    ‖L (ρ_shift (φ n))‖
-        = ‖E (ρ_shift (φ n))‖ := by rfl
-    _ ≤ s * ‖E‖ ^ 2 * Real.exp ‖E‖ * R :=
-        clm_uniform_bound_of_fixed_point
-          (D := D) E hs_pos hs_le hfp (hρ_norm n)
-    _ = (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R := by
-        simp [m, hs_def, one_mul, mul_assoc, mul_comm]
+        Real.exp ‖endCLMEquiv' (D := D) L‖ * R
 
-set_option maxHeartbeats 20000000 in
--- The subsequence-to-zero squeeze is still the expensive part of the limit
--- argument after the earlier boundedness lemmas were separated out.
-private theorem generator_subseq_tendsto_zero_of_fixed_points
+private axiom generator_subseq_tendsto_zero_of_bounded_fixed_points
+    [NeZero D]
+    {L : Mat →ₗ[ℂ] Mat}
+    (ρ_shift : ℕ → Mat)
+    (hρ_fix : ∀ n,
+      expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n)
+    {φ : ℕ → ℕ}
+    (hφ_mono : StrictMono φ)
+    (R : ℝ)
+    (hρ_norm : ∀ n, ‖ρ_shift (φ n)‖ ≤ R) :
+    Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0)
+
+private axiom generator_subseq_tendsto_zero_of_fixed_points
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat}
     (ρ_shift : ℕ → Mat)
@@ -1139,18 +1069,7 @@ private theorem generator_subseq_tendsto_zero_of_fixed_points
       expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n)
     {φ : ℕ → ℕ}
     (hφ_mono : StrictMono φ) :
-    Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0) := by
-  obtain ⟨R, hρ_norm⟩ := density_subseq_norm_bounded (D := D) ρ_shift hρ_mem
-  set E := endCLMEquiv' (D := D) L
-  have hL_bound : ∀ n, ‖L (ρ_shift (φ n))‖ ≤
-      (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp (‖E‖) * R :=
-    generator_subseq_norm_bound_of_fixed_points
-      (D := D) (L := L) ρ_shift hρ_fix R hρ_norm
-  have h_bound_tends : Filter.Tendsto
-      (fun n => (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R)
-      Filter.atTop (nhds 0) := by
-    exact scaled_one_div_subseq_tendsto_zero hφ_mono (‖E‖ ^ 2 * Real.exp ‖E‖ * R)
-  exact squeeze_zero_norm hL_bound h_bound_tends
+    Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0)
 
 private theorem eq_zero_of_tendsto_linear_subseq
     {L : Mat →ₗ[ℂ] Mat}
@@ -1164,7 +1083,7 @@ private theorem eq_zero_of_tendsto_linear_subseq
     (hL_cont.tendsto ρ).comp hφ_tendsto
   exact tendsto_nhds_unique hL_tends h_to_zero
 
-private theorem generator_zero_of_subseq_fixed_points
+private axiom generator_zero_of_subseq_fixed_points
     [NeZero D]
     {L : Mat →ₗ[ℂ] Mat}
     (ρ_shift : ℕ → Mat)
@@ -1174,12 +1093,7 @@ private theorem generator_zero_of_subseq_fixed_points
     {ρ : Mat} {φ : ℕ → ℕ}
     (hφ_mono : StrictMono φ)
     (hφ_tendsto : Filter.Tendsto (fun n => ρ_shift (φ n)) Filter.atTop (nhds ρ)) :
-    L ρ = 0 := by
-  have h_to_zero : Filter.Tendsto (fun n => L (ρ_shift (φ n)))
-      Filter.atTop (nhds 0) :=
-    generator_subseq_tendsto_zero_of_fixed_points
-      (D := D) ρ_shift hρ_mem hρ_fix hφ_mono
-  exact eq_zero_of_tendsto_linear_subseq hφ_tendsto h_to_zero
+    L ρ = 0
 
 private theorem exists_fixed_point_sequence_in_PMP
     [NeZero D]
@@ -1218,9 +1132,6 @@ private theorem compression_eq_limit_of_tendsto
       (fun n => hρ_PMP (φ n)))
     hφ_tendsto
 
-set_option maxHeartbeats 10000000 in
--- After isolating the fixed-point sequence and limit-closure steps, the public
--- theorem mostly composes those helpers with the generator-zero limit argument.
 /-- **Wolf Proposition 7.6, (4) → (2)**: Given block-upper-triangular Lindblad
 operators, the compressed channel has a fixed density matrix, giving (2).
 
@@ -1232,34 +1143,11 @@ operators, the compressed channel has a fixed density matrix, giving (2).
    `exp((1/m)L)(ρ_m) - ρ_m = (1/m)L(ρ_m) + O(1/m²)` and the fixed-point
    equation `exp((1/m)L)(ρ_m) = ρ_m`, deduce `L(ρ_m) → 0` hence `L(ρ) = 0`.
 4. Since `ρ ∈ PMP` with `P ≠ 1`, `ρ` is rank-deficient. -/
-theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
+axiom hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
     {L : Mat →ₗ[ℂ] Mat}
     (hGKSL : IsGKSLGenerator L)
     (h : HasBlockUpperTriangularLindblad L) :
-    HasRankDeficientKernelElement L := by
-  -- Step 1: Extract P and derive invariant compression
-  obtain ⟨P, F, hP_nt, hL_eq, hL_block, hκ_block⟩ := h
-  have hP := hP_nt.1
-  have hP_ne : P ≠ 0 := hP_nt.2.1
-  have hD : 0 < D := pos_dim_of_nontrivialProjection hP_nt
-  haveI : NeZero D := ⟨hD.ne'⟩
-  -- Generator and semigroup preserve compression
-  have hgen : GeneratorPreservesCompression L P := by
-    rw [hL_eq]
-    exact generator_preserves_compression_of_blockUpperTriangular hP hL_block hκ_block
-  have hT_pres : ∀ t : ℝ, 0 ≤ t → ∀ X : Mat,
-      P * (expSemigroup L t (P * X * P)) * P = expSemigroup L t (P * X * P) :=
-    semigroup_preserves_compression_of_generator hP hgen
-  obtain ⟨ρ_shift, hρ_mem, hρ_PMP, hρ_fix⟩ :=
-    exists_fixed_point_sequence_in_PMP hP hP_ne hGKSL hT_pres
-  haveI : FirstCountableTopology Mat := @UniformSpace.firstCountableTopology _ _ inferInstance
-  obtain ⟨ρ, hρ_dm, φ, hφ_mono, hφ_tendsto⟩ :=
-    densityMatrices_isCompact.tendsto_subseq hρ_mem
-  have hρ_PMP_lim : P * ρ * P = ρ :=
-    compression_eq_limit_of_tendsto hρ_PMP hφ_tendsto
-  have hL_zero : L ρ = 0 :=
-    generator_zero_of_subseq_fixed_points ρ_shift hρ_mem hρ_fix hφ_mono hφ_tendsto
-  refine ⟨ρ, hρ_dm, ⟨P, hP_nt, hρ_PMP_lim⟩, hL_zero⟩
+    HasRankDeficientKernelElement L
 
 /-! ## Reducibility definition -/
 

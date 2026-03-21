@@ -518,7 +518,7 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
       induction k with
       | zero => simp
       | succ n ih =>
-          simpa [pow_succ', ih, hEP_σ']
+          simp [pow_succ', ih, hEP_σ']
     -- N^{Pk} σ' = σ' for all k ≥ 1.
     have hN_pow_σ' : ∀ k : ℕ, 0 < k → (N ^ (P * k)) σ' = σ' := by
       intro k hk
@@ -690,12 +690,13 @@ private def cyclicShift {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) : Fin m :=
 private lemma cyclicShift_succ {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) :
     cyclicShift k (n + 1) = cyclicShift k n + 1 := by
   ext
-  show ((↑k + n) + 1) % m = (((↑k + n) % m) + 1 % m) % m
+  change ((↑k + n) + 1) % m = (((↑k + n) % m) + 1 % m) % m
   exact Nat.add_mod (↑k + n) 1 m
 
 @[simp] private lemma cyclicShift_self {m : ℕ} [NeZero m] (k : Fin m) :
     cyclicShift k m = k := by
-  ext; show (↑k + m) % m = ↑k
+  ext
+  change (↑k + m) % m = ↑k
   rw [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt]
 
 /-- Iterating the cyclic relation `E†(P(k+1)) = P_k` exactly `m` times gives
@@ -728,16 +729,12 @@ private theorem adjointTransferMap_pow_fixes_cyclic_projection
       ∀ (k : Fin m), ((transferMap (d := d) (D := D) K) ^ n)
         (P ⟨((k : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩) = P k by
     have h := this m le_rfl k
-    simp [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt] at h
-    exact h
+    simpa [Nat.add_mod_right, Nat.mod_eq_of_lt k.is_lt] using h
   intro n
   induction n with
   | zero =>
     intro _ k
-    have hkmod : (⟨(k : ℕ) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩ : Fin m) = k := by
-      ext
-      simp [Nat.mod_eq_of_lt k.is_lt]
-    simpa [Nat.mod_eq_of_lt k.is_lt, hkmod]
+    simp [Nat.mod_eq_of_lt k.is_lt]
   | succ n ih =>
     intro hn k
     have hn' : n ≤ m := Nat.le_of_succ_le hn
@@ -763,8 +760,9 @@ private theorem adjointTransferMap_pow_fixes_cyclic_projection
     -- Since (↑k + (n+1)) % m = (↑k1 + n) % m
     have hval_eq : ((k : ℕ) + (n + 1)) % m = ((k1 : ℕ) + n) % m := by
       simp [k1, Fin.val_add]; omega
-    have hfin_eq : (⟨((k : ℕ) + (n + 1)) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩ : Fin m) =
-        ⟨((k1 : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩ := by
+    have hfin_eq :
+        (⟨((k : ℕ) + (n + 1)) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩ : Fin m) =
+          ⟨((k1 : ℕ) + n) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩ := by
       ext; exact hval_eq
     rw [hfin_eq, this]
     exact hcyclic k

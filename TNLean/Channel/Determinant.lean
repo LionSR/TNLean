@@ -176,7 +176,8 @@ private theorem trace_zero_hermitian_eq_smul_density_sub_density [NeZero d]
     {X : MatrixAlg d} (hX : X.IsHermitian) (htrX : Matrix.trace X = 0) :
     ∃ c : ℂ, 0 ≤ c ∧ ∃ ρ σ : MatrixAlg d,
       ρ ∈ densityMatrices d ∧ σ ∈ densityMatrices d ∧ X = c • (ρ - σ) := by
-  obtain ⟨ρ₀, hρ₀_mem⟩ := densityMatrices_nonempty (D := d) (Nat.pos_of_ne_zero (NeZero.ne d))
+  obtain ⟨ρ₀, hρ₀_mem⟩ :=
+    densityMatrices_nonempty (D := d) (Nat.pos_of_ne_zero (NeZero.ne d))
   by_cases hX0 : X = 0
   · exact ⟨0, by simp, ρ₀, ρ₀, hρ₀_mem, hρ₀_mem, by simp [hX0]⟩
   · let Q₁ : MatrixAlg d := X⁺
@@ -224,7 +225,8 @@ private theorem positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian [N
     {T : MatrixEnd d} (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
     {X : MatrixAlg d} (hX : X.IsHermitian) (htrX : Matrix.trace X = 0) :
     ∃ C : ℝ, ∀ n : ℕ, ‖(T ^ n) X‖ ≤ C := by
-  have hmap_density : ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d → T ρ ∈ densityMatrices d := by
+  have hmap_density :
+      ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d → T ρ ∈ densityMatrices d := by
     intro ρ hρ
     exact ⟨hPos ρ hρ.1, by rw [hTP ρ, hρ.2]⟩
   have hiter_density : ∀ n : ℕ, ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d →
@@ -238,7 +240,8 @@ private theorem positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian [N
         intro ρ hρ
         rw [pow_succ']
         exact hmap_density ((T ^ n) ρ) (ih ρ hρ)
-  have hbounded_density : ∃ M : ℝ, ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d → ‖ρ‖ ≤ M := by
+  have hbounded_density :
+      ∃ M : ℝ, ∀ ρ : MatrixAlg d, ρ ∈ densityMatrices d → ‖ρ‖ ≤ M := by
     have hbd : Bornology.IsBounded
         {X : MatrixAlg d | X.PosSemidef ∧ ‖Matrix.trace X‖ ≤ 1} :=
       posSemidef_trace_bounded_isBounded (D := d) 1
@@ -282,7 +285,8 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
       simp [x, htrz]
     have hy_tr : Matrix.trace y = 0 := by
       simp [y, htrz]
-    have hmulI (w : ℂ) : Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * w)) = -((2 : ℂ)⁻¹ * w) := by
+    have hmulI (w : ℂ) :
+        Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * w)) = -((2 : ℂ)⁻¹ * w) := by
       calc
         Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * w)) =
             (Complex.I * Complex.I) * ((2 : ℂ)⁻¹ * w) := by
@@ -484,7 +488,8 @@ private theorem channel_all_eigenvalues_norm_one [NeZero d]
           ((Polynomial.mem_roots A.charpoly_monic.ne_zero).1 hμ)))
   have hprod_eq : ‖A.charpoly.roots.prod‖ = 1 := by
     have : ‖channelDet T‖ = ‖A.charpoly.roots.prod‖ := by
-      show ‖A.det‖ = _; rw [Matrix.det_eq_prod_roots_charpoly]
+      change ‖A.det‖ = ‖A.charpoly.roots.prod‖
+      rw [Matrix.det_eq_prod_roots_charpoly]
     rw [← this]; exact hdet
   have hroot_eq := norm_eq_one_of_prod_norm_eq_one _ hroot_le hprod_eq
   intro μ hμ_eig
@@ -611,7 +616,7 @@ private lemma matrix_det_norm_one_trace_conjTranspose_mul_self_ge [NeZero d]
   have hBpsd : B.PosSemidef := by
     simpa [B] using Matrix.posSemidef_conjTranspose_mul_self A
   have hdetB : Matrix.det B = 1 := by
-    show Matrix.det (Aᴴ * A) = 1
+    change Matrix.det (Aᴴ * A) = 1
     rw [Matrix.det_mul, Matrix.det_conjTranspose]
     have hconj : star A.det * A.det = ((‖A.det‖ ^ 2 : ℝ) : ℂ) := by
       simpa [show star A.det = starRingEnd ℂ A.det from rfl, ← Complex.ofReal_pow] using
@@ -674,11 +679,13 @@ private lemma channelDet_norm_one_hs_norm_ge [NeZero d]
             refine Finset.sum_congr rfl ?_
             intro ij _
             have hsum_sq :
-                ∑ kl : Fin d × Fin d, ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) kl.1 kl.2‖ ^ 2 =
+                ∑ kl : Fin d × Fin d,
+                    ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) kl.1 kl.2‖ ^ 2 =
                   ∑ j : Fin d, ∑ i : Fin d,
                     ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) i j‖ ^ 2 := by
               calc
-                ∑ kl : Fin d × Fin d, ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) kl.1 kl.2‖ ^ 2
+                ∑ kl : Fin d × Fin d,
+                    ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) kl.1 kl.2‖ ^ 2
                     = ∑ i : Fin d, ∑ j : Fin d,
                         ‖Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) i j‖ ^ 2 := by
                           simpa [Finset.univ_product_univ] using
@@ -718,7 +725,7 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
     intro X; simp only [KadisonSchwarz.krausMap, hL_def, hTd, conjTranspose_conjTranspose]
   -- L is unital: ∑ L_i L_i† = ∑ K_i† K_i = I
   have hL_unital : KadisonSchwarz.IsUnitalKraus L := by
-    show ∑ i, (K i)ᴴ * ((K i)ᴴ)ᴴ = 1
+    change ∑ i, (K i)ᴴ * ((K i)ᴴ)ᴴ = 1
     simp [conjTranspose_conjTranspose, hK_tp]
   -- ── Step 1: KS equality for every standard basis element ──
   -- For each (i,j), e_{ij} * e_{ij}† = e_{ii}, and the KS gap
@@ -738,7 +745,7 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
       simp [hK, Matrix.conjTranspose_sum, Matrix.conjTranspose_mul, Matrix.mul_assoc]
     have hmat : LinearMap.toMatrix b b Td = (LinearMap.toMatrix b b T)ᴴ := by
       ext i j
-      simp [Matrix.conjTranspose_apply, LinearMap.toMatrix_apply, b]
+      simp only [Matrix.conjTranspose_apply, LinearMap.toMatrix_apply, b, RCLike.star_def]
       have hcoef : (Td (Matrix.stdBasis ℂ (Fin d) (Fin d) j)) i.1 i.2 =
           star ((T (Matrix.stdBasis ℂ (Fin d) (Fin d) i)) j.1 j.2) := by
         calc
@@ -822,7 +829,8 @@ private theorem heisenberg_dual_multiplicative [NeZero d]
         _ = Matrix.trace (Td (∑ ij : Fin d × Fin d, e ij * (e ij)ᴴ)) := by
               rw [← Matrix.trace_sum, ← map_sum]
         _ = Matrix.trace (Td ((d : ℂ) • (1 : MatrixAlg d))) := by
-              rw [show (∑ ij : Fin d × Fin d, e ij * (e ij)ᴴ) = (d : ℂ) • (1 : MatrixAlg d) by
+              rw [show (∑ ij : Fin d × Fin d, e ij * (e ij)ᴴ) =
+                  (d : ℂ) • (1 : MatrixAlg d) by
                 simpa [e] using sum_stdBasis_mul_conjTranspose (d := d)]
         _ = Matrix.trace ((d : ℂ) • Td (1 : MatrixAlg d)) := by simp
         _ = Matrix.trace ((d : ℂ) • (1 : MatrixAlg d)) := by rw [hTd_one]
@@ -1092,9 +1100,12 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
       map_add' := fun X Y => by simp [mul_add, add_mul, Finset.sum_add_distrib]
       map_smul' := fun c X => by simp [Finset.smul_sum] }
   have hTd_def : ∀ X, Td X = ∑ i : Fin r, (K i)ᴴ * X * K i := fun _ => rfl
-  have hTd_one : Td 1 = 1 := by show ∑ i : Fin r, (K i)ᴴ * 1 * K i = 1; simp [hK_tp]
+  have hTd_one : Td 1 = 1 := by
+    change ∑ i : Fin r, (K i)ᴴ * 1 * K i = 1
+    simp [hK_tp]
   have hTd_star : ∀ X : MatrixAlg d, Td Xᴴ = (Td X)ᴴ := by
-    intro X; show ∑ i, (K i)ᴴ * Xᴴ * K i = (∑ i, (K i)ᴴ * X * K i)ᴴ
+    intro X
+    change ∑ i, (K i)ᴴ * Xᴴ * K i = (∑ i, (K i)ᴴ * X * K i)ᴴ
     simp [conjTranspose_sum, conjTranspose_mul, Matrix.mul_assoc]
   -- Td is multiplicative
   have hMul := heisenberg_dual_multiplicative hT hdet hall K hK hK_tp Td hTd_def
@@ -1130,14 +1141,16 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
     suffices h : ∀ B, trace ((T A -
         (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A * (↑P : MatrixAlg d)) * B) = 0 by
       exact sub_eq_zero.mp ((Matrix.trace_mul_right_eq_zero_iff _).mp h)
-    intro B; rw [sub_mul, trace_sub, hAdj A B]
-    show trace (A * Td B) -
+    intro B
+    rw [sub_mul, trace_sub, hAdj A B]
+    change trace (A * Td B) -
       trace ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * A *
         (↑P : MatrixAlg d) * B) = 0
     rw [show Td B = Td_equiv B from rfl, hP B, sub_eq_zero]
     simpa [Matrix.mul_assoc] using
       (Matrix.trace_mul_cycle (A * (↑P : MatrixAlg d)) B
-        ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)))  -- P†P commutes with all matrices (from star-preservation of Td)
+        ((↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d)))
+  -- `Pᴴ * P` commutes with all matrices, from star-preservation of `Td`.
   have hP_star_comm : ∀ Y : MatrixAlg d,
       (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) * Y =
         Y * ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d)) := by

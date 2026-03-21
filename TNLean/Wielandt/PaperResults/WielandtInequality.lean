@@ -322,7 +322,7 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
             have := evalWord_mem_wordSpan B ([i₀] : List (Fin (blockPhysDim d n)))
             simpa [evalWord] using this
           rw [hbot] at hBmem
-          simp [Submodule.mem_bot] at hBmem
+          change B i₀ = 0 at hBmem
           exact not_isUnit_zero (hBmem ▸ hInv)
         omega
       -- Transfer: wordSpan A (D² * n) = ⊤

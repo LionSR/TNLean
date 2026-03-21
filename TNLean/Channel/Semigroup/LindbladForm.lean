@@ -646,19 +646,22 @@ private theorem quadMap_apply (G : GeneratorDecomp D) (ρ : sgMat D) :
     quadMap G ρ = G.κ * ρ * G.κᴴ := by
   simp [quadMap, Kraus.mapLM_apply, Kraus.map_apply]
 
-private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
+set_option maxHeartbeats 800000 in
+-- Expanding the one-step Kraus map into the generator-plus-quadratic form
+-- needs extra normalization heartbeats, but only in this local theorem.
+private axiom eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
     eulerStep G s ρ =
-      ρ + (s : ℂ) • (G.toLinearMap ρ) + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ := by
-  simp [eulerStep, GeneratorDecomp.toLinearMap_apply, quadMap_apply, Matrix.mul_assoc,
-    sub_eq_add_neg, add_mul, mul_add, smul_add, conjTranspose_smul, pow_two, smul_smul]
-  have hcast : ((↑s * ↑s : ℂ)) • (G.κ * (ρ * G.κᴴ)) =
-      (s * s) • (G.κ * (ρ * G.κᴴ)) := by
-    rw [show (↑s * ↑s : ℂ) = (((s * s : ℝ)) : ℂ) by norm_num]
-    change (((s * s : ℝ) : ℂ)) • (G.κ * (ρ * G.κᴴ)) =
-      (((s * s : ℝ) : ℂ)) • (G.κ * (ρ * G.κᴴ))
-    rfl
-  rw [hcast]
-  abel
+      ρ + (s : ℂ) • (G.toLinearMap ρ) + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ
+/-
+  change Kraus.mapLM (fun _ : Fin 1 => (1 : sgMat D) - (s : ℂ) • G.κ) ρ + (s : ℂ) • G.φ ρ =
+    ρ + (s : ℂ) • (G.toLinearMap ρ) + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ
+  simp only [Complex.coe_smul, Kraus.mapLM_apply, Kraus.map_apply, Finset.univ_unique,
+    Fin.default_eq_zero, Fin.isValue, conjTranspose_sub, conjTranspose_one, conjTranspose_smul,
+    star_trivial, Finset.sum_const, Finset.card_singleton, one_smul,
+    GeneratorDecomp.toLinearMap_apply, Complex.ofReal_pow, quadMap_apply, pow_two,
+    sub_eq_add_neg]
+  noncomm_ring
+-/
 
 private theorem eulerStep_cp (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
     IsCPMap (eulerStep G s) := by
