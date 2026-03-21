@@ -49,9 +49,9 @@ representations of quantum channels.
 * `transferMatrix_comp` — `(S ∘ T)^ = Ŝ * T̂` ✅
 * `transferMatrix_id` — transfer matrix of identity = identity ✅
 * `transferMatrix_injective` — the representation is faithful ✅
-* `transferMatrix_kraus` — Kraus form: `T̂ = ∑ᵢ Kᵢ ⊗ K̄ᵢ` ✅
+* `transferMatrix_kraus` — Kraus form: `T̂ = ∑ᵢ K̄ᵢ ⊗ₖ Kᵢ` ✅
 * `MPSTensor.transferMatrix_eq` — MPS bridge:
-  `E_A` has transfer matrix `∑ᵢ Aᵢ ⊗ Āᵢ` ✅
+  `E_A` has transfer matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ` ✅
 
 ### Infrastructure
 
@@ -66,7 +66,7 @@ representations of quantum channels.
 | Choi matrix | `ChoiJamiolkowski.lean` | `ChoiJamiolkowski.choiMatrix` |
 | Stinespring isometry | `Stinespring.lean` | `stinespringV` |
 | Transfer matrix | `TransferMatrix.lean` | `transferMatrix` |
-| Vectorization | `TransferMatrix.lean` | `Matrix.vecMatrix` |
+| Vectorization | `Mathlib.LinearAlgebra.Matrix.Vec` | `Matrix.vec` |
 
 ### Not yet formalized
 
