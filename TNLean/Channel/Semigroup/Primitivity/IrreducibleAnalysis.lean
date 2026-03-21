@@ -24,7 +24,7 @@ theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
     (hPrim : IsPrimitive E) {X : Mat} (htrX : Matrix.trace X = 0) :
     Filter.Tendsto (fun n : ℕ => (E ^ n) X) Filter.atTop (nhds 0) := by
   have htrσ : Matrix.trace σ ≠ 0 := by
-    simpa [hσ_mem.2]
+    simp [hσ_mem.2]
   let P : Mat →ₗ[ℂ] Mat := fixedPointProj (D := D) σ htrσ
   have hσ_ne : σ ≠ 0 := ne_zero_of_mem_densityMatrices' hσ_mem
   have hcompl_lt : ∀ ν : ℂ, Module.End.HasEigenvalue (E - P) ν → ‖ν‖ < 1 := by
