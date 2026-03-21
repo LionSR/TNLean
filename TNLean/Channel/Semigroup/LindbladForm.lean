@@ -656,11 +656,16 @@ private axiom eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
   change Kraus.mapLM (fun _ : Fin 1 => (1 : sgMat D) - (s : ℂ) • G.κ) ρ + (s : ℂ) • G.φ ρ =
     ρ + (s : ℂ) • (G.toLinearMap ρ) + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ
   simp only [Complex.coe_smul, Kraus.mapLM_apply, Kraus.map_apply, Finset.univ_unique,
-    Fin.default_eq_zero, Fin.isValue, conjTranspose_sub, conjTranspose_one, conjTranspose_smul,
-    star_trivial, Finset.sum_const, Finset.card_singleton, one_smul,
-    GeneratorDecomp.toLinearMap_apply, Complex.ofReal_pow, quadMap_apply, pow_two,
+    Fin.default_eq_zero, Fin.isValue, Finset.sum_const, Finset.card_singleton, one_smul,
+    GeneratorDecomp.toLinearMap_apply, quadMap_apply, pow_two,
     sub_eq_add_neg]
-  noncomm_ring
+  have hconj : ((1 : sgMat D) + -(s • G.κ))ᴴ = 1 + -(s • G.κᴴ) := by
+    simp
+  rw [hconj]
+  simp only [Matrix.mul_add, add_mul, Matrix.mul_one, Matrix.one_mul, smul_mul_assoc,
+    mul_smul_comm, smul_add, smul_smul, mul_assoc, neg_mul, mul_neg, smul_neg,
+    neg_add_rev, neg_neg]
+  rw [add_comm (s • G.φ ρ) ((s * s) • (G.κ * (ρ * G.κᴴ)))]
 -/
 
 private theorem eulerStep_cp (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
