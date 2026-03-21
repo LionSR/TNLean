@@ -115,6 +115,13 @@ theorem transferMatrix_apply
     (i j k l : Fin D) :
     transferMatrix T (i, j) (k, l) = (T (Matrix.single k l 1)) i j := rfl
 
+private lemma sum_smul_single_eq (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    ρ = ∑ k : Fin D, ∑ l : Fin D, ρ k l • Matrix.single k l 1 := by
+  conv_lhs => rw [Matrix.matrix_eq_sum_single ρ]
+  refine Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun l _ => ?_
+  ext a b
+  simp [Matrix.single_apply, smul_eq_mul]
+
 /-! ### Fundamental property: T̂ represents T in the vectorized picture -/
 
 /-- **Key property**: the transfer matrix faithfully represents `T`:
@@ -128,15 +135,13 @@ theorem transferMatrix_mulVec_eq
     transferMatrix T *ᵥ Matrix.vecMatrix ρ =
       Matrix.vecMatrix (T ρ) := by
   ext ⟨i, j⟩
-  simp only [Matrix.mulVec_def, Matrix.dotProduct, transferMatrix_apply,
+  simp only [Matrix.mulVec, dotProduct, transferMatrix_apply,
     Matrix.vecMatrix_apply, Fintype.sum_prod_type]
-  -- Expand ρ in the standard basis: ρ = ∑_{k,l} ρ_{kl} · E_{kl}
-  conv_rhs =>
-    rw [show ρ = ∑ k : Fin D, ∑ l : Fin D, ρ k l • Matrix.single k l 1 from by
-      ext a b
-      simp [Matrix.sum_apply, Matrix.smul_apply, Matrix.single, smul_eq_mul,
-        Finset.sum_ite_eq', Finset.mem_univ]]
-  simp [map_sum, LinearMap.map_smul, Matrix.smul_apply, smul_eq_mul]
+  have key : T ρ = ∑ k, ∑ l, ρ k l • T (Matrix.single k l 1) := by
+    conv_lhs => rw [sum_smul_single_eq ρ]
+    simp_rw [map_sum, LinearMap.map_smul]
+  rw [key]
+  simp [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, mul_comm]
 
 /-! ### Compatibility with composition -/
 
@@ -147,25 +152,21 @@ theorem transferMatrix_comp
   ext ⟨i, j⟩ ⟨k, l⟩
   simp only [transferMatrix_apply, LinearMap.comp_apply, Matrix.mul_apply,
     Fintype.sum_prod_type]
-  -- S(T(E_{kl})) = S(∑_{a,b} (T(E_{kl}))_{ab} · E_{ab}) = ∑_{a,b} (T(E_{kl}))_{ab} · S(E_{ab})
-  conv_lhs =>
-    rw [show T (Matrix.single k l 1) =
-      ∑ a : Fin D, ∑ b : Fin D,
-        (T (Matrix.single k l 1)) a b • Matrix.single a b 1 from by
-      ext x y
-      simp [Matrix.sum_apply, Matrix.smul_apply, Matrix.single, smul_eq_mul,
-        Finset.sum_ite_eq', Finset.mem_univ]]
-  simp [map_sum, LinearMap.map_smul, Matrix.smul_apply, smul_eq_mul]
+  have key : S (T (Matrix.single k l 1)) =
+      ∑ a, ∑ b, (T (Matrix.single k l 1)) a b • S (Matrix.single a b 1) := by
+    conv_lhs => rw [sum_smul_single_eq (T (Matrix.single k l 1))]
+    simp_rw [map_sum, LinearMap.map_smul]
+  rw [key]
+  simp [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, mul_comm]
 
 /-- The transfer matrix of the identity map is the identity matrix. -/
 @[simp]
 theorem transferMatrix_id :
     transferMatrix (LinearMap.id : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] _) = 1 := by
   ext ⟨i, j⟩ ⟨k, l⟩
-  simp [transferMatrix_apply, Matrix.single, Matrix.one_apply, Prod.ext_iff]
-  constructor
-  · rintro ⟨rfl, rfl⟩; rfl
-  · intro h; exact ⟨h.1, h.2⟩
+  simp only [transferMatrix_apply, LinearMap.id_apply, Matrix.one_apply, Prod.mk.injEq]
+  rw [Matrix.single_apply]
+  simp [eq_comm]
 
 /-- `transferMatrix` is injective: distinct linear maps have distinct
 transfer matrices. -/
@@ -207,17 +208,15 @@ theorem transferMatrix_kraus
     (hK : ∀ X, T X = ∑ i : Fin r, K i * X * (K i)ᴴ) :
     transferMatrix T =
       ∑ n : Fin r,
-        kroneckerMap (· * ·) (K n) (star (K n)) := by
+        kroneckerMap (· * ·) (K n) ((K n).map (starRingEnd ℂ)) := by
   ext ⟨i, j⟩ ⟨k, l⟩
-  simp only [transferMatrix_apply, hK, Matrix.sum_apply, kroneckerMap_apply,
-    Matrix.conjTranspose_apply, Pi.star_apply, starRingEnd_self_apply]
+  simp only [transferMatrix_apply, hK, Matrix.sum_apply, kroneckerMap_apply, Matrix.map_apply,
+    starRingEnd_apply]
   congr 1; ext n
-  simp only [Matrix.mul_apply, Matrix.single, Matrix.of_apply]
-  -- (K n * E_{kl} * (K n)ᴴ)_{ij} = (K n)_{ik} * conj((K n)_{jl})
-  simp_rw [Finset.mul_sum]
-  simp only [ite_mul, one_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte,
-    Matrix.conjTranspose_apply]
-  ring
+  -- (K n * E_{kl} * (K n)ᴴ)_{ij} = (K n)_{ik} * star((K n)_{jl})
+  simp only [Matrix.mul_apply, Matrix.single_apply, Matrix.conjTranspose_apply]
+  simp only [ite_and, mul_ite, mul_one, mul_zero, ite_mul, zero_mul,
+    Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte]
 
 /-! ### Connection to MPS transfer maps -/
 
@@ -231,7 +230,7 @@ transfer operator. -/
 theorem transferMatrix_eq (A : MPSTensor d D) :
     transferMatrix (MPSTensor.transferMap A) =
       ∑ n : Fin d,
-        kroneckerMap (· * ·) (A n) (star (A n)) :=
+        kroneckerMap (· * ·) (A n) ((A n).map (starRingEnd ℂ)) :=
   transferMatrix_kraus A _ (fun X => by simp [transferMap_apply])
 
 end MPSTensor
