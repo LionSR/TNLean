@@ -345,103 +345,9 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
         _ = 1 * Matrix.trace z := by simp
     simp [hμ_eq]
 
-/-- Wolf Thm. 6.1(1): for a positive trace-preserving map on `M_d(ℂ)`, the channel
-determinant satisfies `|det T| ≤ 1`.
-
-This theorem is currently recorded as a statement; the analytic proof remains to be formalized.
--/
-theorem channelDet_norm_le_one_of_positive_tracePreserving
-    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
-    ‖channelDet T‖ ≤ 1 := by
-  classical
-  by_cases hd : d = 0
-  · subst hd
-    rw [channelDet_eq_linearMap_det, LinearMap.det_eq_one_of_subsingleton]
-    norm_num
-  · haveI : NeZero d := ⟨hd⟩
-    let A : Matrix (MatrixBasisIndex d) (MatrixBasisIndex d) ℂ := channelMatrix T
-    have hspectrum : spectrum ℂ A = spectrum ℂ T := by
-      change spectrum ℂ (channelMatrix T) = spectrum ℂ T
-      exact AlgEquiv.spectrum_eq (LinearMap.toMatrixAlgEquiv (matrixSpaceBasis d)) T
-    have hroot_le : ∀ μ ∈ A.charpoly.roots, ‖μ‖ ≤ 1 := by
-      intro μ hμ
-      have hμ_root : Polynomial.IsRoot A.charpoly μ :=
-        (Polynomial.mem_roots A.charpoly_monic.ne_zero).1 hμ
-      have hμ_specA : μ ∈ spectrum ℂ A :=
-        Matrix.mem_spectrum_of_isRoot_charpoly hμ_root
-      have hμ_specT : μ ∈ spectrum ℂ T := by simpa [hspectrum] using hμ_specA
-      have hμ_eig : Module.End.HasEigenvalue T μ :=
-        (Module.End.hasEigenvalue_iff_mem_spectrum).2 hμ_specT
-      exact positiveTracePreserving_eigenvalue_norm_le_one (d := d) hPos hTP μ hμ_eig
-    have hprod_le_aux :
-        ∀ s : Multiset ℂ, (∀ μ ∈ s, ‖μ‖ ≤ 1) → ‖s.prod‖ ≤ 1 := by
-      intro s
-      refine Multiset.induction_on s ?_ ?_
-      · intro _
-        simp only [Multiset.prod_zero, norm_one, le_refl]
-      · intro a s ih hs
-        have ha : ‖a‖ ≤ 1 := hs a (Multiset.mem_cons_self a s)
-        have hs' : ∀ μ ∈ s, ‖μ‖ ≤ 1 :=
-          fun μ hμ => hs μ (Multiset.mem_cons_of_mem hμ)
-        calc ‖(a ::ₘ s).prod‖ = ‖a * s.prod‖ := by simp only [Multiset.prod_cons]
-          _ = ‖a‖ * ‖s.prod‖ := by rw [norm_mul]
-          _ ≤ 1 * 1 := by gcongr; exact ih hs'
-          _ = 1 := by norm_num
-    have hprod_le : ‖A.charpoly.roots.prod‖ ≤ 1 :=
-      hprod_le_aux A.charpoly.roots hroot_le
-    calc ‖channelDet T‖ = ‖A.det‖ := rfl
-      _ = ‖A.charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
-      _ ≤ 1 := hprod_le
-
-/-- CPTP specialization of Wolf's determinant bound. -/
-theorem channelDet_norm_le_one_of_channel
-    (hT : IsChannel T) :
-    ‖channelDet T‖ ≤ 1 := by
-  classical
-  by_cases hd : d = 0
-  · subst hd
-    rw [channelDet_eq_linearMap_det, LinearMap.det_eq_one_of_subsingleton]
-    norm_num
-  · haveI : NeZero d := ⟨hd⟩
-    let A : Matrix (MatrixBasisIndex d) (MatrixBasisIndex d) ℂ := channelMatrix T
-    have hspectrum : spectrum ℂ A = spectrum ℂ T := by
-      change spectrum ℂ (channelMatrix T) = spectrum ℂ T
-      exact AlgEquiv.spectrum_eq (LinearMap.toMatrixAlgEquiv (matrixSpaceBasis d)) T
-    have hroot_le : ∀ μ ∈ A.charpoly.roots, ‖μ‖ ≤ 1 := by
-      intro μ hμ
-      have hμ_root : Polynomial.IsRoot A.charpoly μ :=
-        (Polynomial.mem_roots A.charpoly_monic.ne_zero).1 hμ
-      have hμ_specA : μ ∈ spectrum ℂ A :=
-        Matrix.mem_spectrum_of_isRoot_charpoly hμ_root
-      have hμ_specT : μ ∈ spectrum ℂ T := by simpa [hspectrum] using hμ_specA
-      have hμ_eig : Module.End.HasEigenvalue T μ :=
-        (Module.End.hasEigenvalue_iff_mem_spectrum).2 hμ_specT
-      exact IsChannel.eigenvalue_norm_le_one hT μ hμ_eig
-    have hprod_le_aux :
-        ∀ s : Multiset ℂ, (∀ μ ∈ s, ‖μ‖ ≤ 1) → ‖s.prod‖ ≤ 1 := by
-      intro s
-      refine Multiset.induction_on s ?_ ?_
-      · intro _
-        simp only [Multiset.prod_zero, norm_one, le_refl]
-      · intro a s ih hs
-        have ha : ‖a‖ ≤ 1 := hs a (Multiset.mem_cons_self a s)
-        have hs' : ∀ μ ∈ s, ‖μ‖ ≤ 1 :=
-          fun μ hμ => hs μ (Multiset.mem_cons_of_mem hμ)
-        calc ‖(a ::ₘ s).prod‖ = ‖a * s.prod‖ := by simp only [Multiset.prod_cons]
-          _ = ‖a‖ * ‖s.prod‖ := by rw [norm_mul]
-          _ ≤ 1 * 1 := by gcongr; exact ih hs'
-          _ = 1 := by norm_num
-    have hprod_le : ‖A.charpoly.roots.prod‖ ≤ 1 :=
-      hprod_le_aux A.charpoly.roots hroot_le
-    calc ‖channelDet T‖ = ‖A.det‖ := rfl
-      _ = ‖A.charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
-      _ ≤ 1 := hprod_le
-
-/-! ### Helper lemmas for the forward direction of Wolf Thm 6.1(2) -/
-
 /-- If every factor in a finite product has norm at most `1`, then the product also has norm at
 most `1`. -/
-private lemma norm_prod_le_one_of_forall_mem
+private lemma norm_prod_le_one_of_forall_mem'
     (s : Multiset ℂ) (hs : ∀ μ ∈ s, ‖μ‖ ≤ 1) :
     ‖s.prod‖ ≤ 1 := by
   induction s using Multiset.induction with
@@ -455,6 +361,42 @@ private lemma norm_prod_le_one_of_forall_mem
         _ ≤ 1 * 1 := by gcongr; exact ih hs'
         _ = 1 := by norm_num
 
+/-- Eigenvalues of a positive trace-preserving map on `M_d(ℂ)` determine roots of the
+characteristic polynomial with norm ≤ 1, so the determinant (= product of roots) has norm ≤ 1. -/
+private lemma channelDet_norm_le_one_of_eigenvalues_bounded
+    (hroot_le : ∀ μ ∈ (channelMatrix T).charpoly.roots, ‖μ‖ ≤ 1) :
+    ‖channelDet T‖ ≤ 1 := by
+  calc ‖channelDet T‖ = ‖(channelMatrix T).det‖ := rfl
+    _ = ‖(channelMatrix T).charpoly.roots.prod‖ := by rw [Matrix.det_eq_prod_roots_charpoly]
+    _ ≤ 1 := norm_prod_le_one_of_forall_mem' _ hroot_le
+
+/-- Wolf Thm. 6.1(1): for a positive trace-preserving map on `M_d(ℂ)`, the channel
+determinant satisfies `|det T| ≤ 1`. -/
+theorem channelDet_norm_le_one_of_positive_tracePreserving
+    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
+    ‖channelDet T‖ ≤ 1 := by
+  classical
+  by_cases hd : d = 0
+  · subst hd
+    rw [channelDet_eq_linearMap_det, LinearMap.det_eq_one_of_subsingleton]
+    norm_num
+  · haveI : NeZero d := ⟨hd⟩
+    apply channelDet_norm_le_one_of_eigenvalues_bounded
+    intro μ hμ
+    exact positiveTracePreserving_eigenvalue_norm_le_one (d := d) hPos hTP μ
+      (Module.End.hasEigenvalue_iff_mem_spectrum.2
+        ((AlgEquiv.spectrum_eq (LinearMap.toMatrixAlgEquiv (matrixSpaceBasis d)) T) ▸
+          Matrix.mem_spectrum_of_isRoot_charpoly
+            ((Polynomial.mem_roots (channelMatrix T).charpoly_monic.ne_zero).1 hμ)))
+
+/-- CPTP specialization of Wolf's determinant bound. -/
+theorem channelDet_norm_le_one_of_channel
+    (hT : IsChannel T) :
+    ‖channelDet T‖ ≤ 1 :=
+  channelDet_norm_le_one_of_positive_tracePreserving hT.cp.isPositiveMap hT.tp
+
+/-! ### Helper lemmas for the forward direction of Wolf Thm 6.1(2) -/
+
 /-- Product of norms = 1 with each factor ≤ 1 implies each factor = 1. -/
 private lemma norm_eq_one_of_prod_norm_eq_one
     (s : Multiset ℂ) (hs : ∀ μ ∈ s, ‖μ‖ ≤ 1) (hprod : ‖s.prod‖ = 1) :
@@ -466,7 +408,7 @@ private lemma norm_eq_one_of_prod_norm_eq_one
     have ha : ‖a‖ ≤ 1 := hs a (Multiset.mem_cons_self a s)
     have hs' : ∀ ν ∈ s, ‖ν‖ ≤ 1 := fun ν hν => hs ν (Multiset.mem_cons_of_mem hν)
     rw [Multiset.prod_cons, norm_mul] at hprod
-    have hprod_s_le : ‖s.prod‖ ≤ 1 := norm_prod_le_one_of_forall_mem s hs'
+    have hprod_s_le : ‖s.prod‖ ≤ 1 := norm_prod_le_one_of_forall_mem' s hs'
     have ha_eq : ‖a‖ = 1 := by nlinarith [norm_nonneg a, norm_nonneg s.prod]
     have hs_eq : ‖s.prod‖ = 1 := by nlinarith [norm_nonneg a]
     rcases Multiset.mem_cons.mp hμ with rfl | hμs
@@ -708,7 +650,6 @@ private lemma channelDet_norm_one_hs_norm_ge [NeZero d]
             Φ (Matrix.stdBasis ℂ (Fin d) (Fin d) ij))).re := hA_hs
 
 -- KS trace-summing + Kraus commutation + basis extensionality
-set_option maxHeartbeats 50000000 in
 -- This theorem performs a long Kadison-Schwarz trace-summing argument over matrix bases.
 private theorem heisenberg_dual_multiplicative [NeZero d]
     {T : MatrixEnd d} (_hT : IsChannel T) (hdet : ‖channelDet T‖ = 1)
