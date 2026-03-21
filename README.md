@@ -1,5 +1,7 @@
 # TNLean
 
+[![Lean Action CI](https://github.com/LionSR/TNLean/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/LionSR/TNLean/actions/workflows/lean_action_ci.yml)
+
 A Lean 4 formalization of major components of the **Fundamental Theorem of Matrix Product States**, the repository's **cumulative Quantum Wielandt theory**, and a growing body of finite-dimensional **quantum-channel theory** inspired by M. M. Wolf's *Quantum Channels & Operations*, using [Mathlib](https://github.com/leanprover-community/mathlib4) v4.28.0.
 
 ## Overview
