@@ -48,21 +48,6 @@ attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-private abbrev endCLMEquiv :
-    (Mat →ₗ[ℂ] Mat) ≃ₐ[ℂ] (Mat →L[ℂ] Mat) :=
-  Module.End.toContinuousLinearMap Mat
-
-private theorem expSemigroup_toCLM'
-    (L : Mat →ₗ[ℂ] Mat) (t : ℝ) :
-    endCLMEquiv (expSemigroup L t) = expSemigroupCLM (endCLMEquiv L) t := by
-  simp [expSemigroup, endCLMEquiv]
-
-private abbrev applyCLMReal :
-    (Mat →L[ℂ] Mat) →L[ℝ] Mat →L[ℝ] Mat :=
-  (ContinuousLinearMap.flip
-      (ContinuousLinearMap.apply ℂ Mat :
-        Mat →L[ℂ] (Mat →L[ℂ] Mat) →L[ℂ] Mat)).bilinearRestrictScalars ℝ
-
 /-- `L` has a faithful stationary state if its kernel contains a positive-definite
 trace-one matrix. -/
 def HasFaithfulStationaryState (L : Mat →ₗ[ℂ] Mat) : Prop :=
@@ -92,35 +77,6 @@ def RelaxesTo (T : ℝ → Mat →ₗ[ℂ] Mat) (ρInf : Mat) : Prop :=
 /-- A semigroup is relaxing if it relaxes to some faithful density matrix. -/
 def IsRelaxingQDS (T : ℝ → Mat →ₗ[ℂ] Mat) : Prop :=
   ∃ ρInf : Mat, RelaxesTo (D := D) T ρInf
-
-set_option maxHeartbeats 1000000 in
--- The derivative proof combines CLM-valued differentiation with a restricted-
--- scalars bilinear evaluation map; elaboration is otherwise too expensive.
-private theorem hasDerivAt_expSemigroup_apply
-    (L : Mat →ₗ[ℂ] Mat) (X : Mat) (t : ℝ) :
-    HasDerivAt (fun u : ℝ => expSemigroup L u X) (expSemigroup L t (L X)) t := by
-  have hCLM :
-      HasDerivAt
-        (fun u : ℝ => expSemigroupCLM (endCLMEquiv L) u)
-        (expSemigroupCLM (endCLMEquiv L) t * endCLMEquiv L) t :=
-    hasDerivAt_expSemigroupCLM (endCLMEquiv L) t
-  have hApply :
-      HasDerivAt
-        (fun u : ℝ => applyCLMReal (D := D) (expSemigroupCLM (endCLMEquiv L) u) X)
-        (applyCLMReal (D := D) (expSemigroupCLM (endCLMEquiv L) t) 0 +
-          applyCLMReal (D := D)
-            (expSemigroupCLM (endCLMEquiv L) t * endCLMEquiv L) X)
-        t := by
-    simpa using
-      (ContinuousLinearMap.hasDerivAt_of_bilinear
-        (B := applyCLMReal (D := D))
-        (u := fun u : ℝ => expSemigroupCLM (endCLMEquiv L) u)
-        (v := fun _ : ℝ => X)
-        (u' := expSemigroupCLM (endCLMEquiv L) t * endCLMEquiv L)
-        (v' := 0)
-        hCLM (hasDerivAt_const t X))
-  simpa [applyCLMReal, expSemigroup_toCLM',
-    ContinuousLinearMap.bilinearRestrictScalars_apply_apply] using hApply
 
 /-- If `L X = 0`, then `X` is fixed by the exponential semigroup at every
 nonnegative time. -/
