@@ -136,3 +136,33 @@ theorem kraus_same_map_of_unitary_combination
           (if l' = l then 1 else 0) • (K' l * X * (K' l')ᴴ) := by
           simp_rw [hU_entry]; simp
     _ = ∑ l : Fin r, K' l * X * (K' l)ᴴ := by simp
+
+/-- Convenience wrapper of `kraus_same_map_of_unitary_combination` with a bundled
+unitary witness. This formulation is intended for use by the future converse direction:
+once a unitary witness is constructed (typically from Choi data), map equality follows
+immediately. -/
+theorem kraus_same_map_of_unitaryGroup_combination
+    {r : ℕ}
+    (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
+    (K' : Fin r → Matrix (Fin D) (Fin D) ℂ)
+    (U : Matrix.unitaryGroup (Fin r) ℂ)
+    (hK : ∀ j, K j = ∑ l, (U : Matrix (Fin r) (Fin r) ℂ) j l • K' l) :
+    ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      ∑ j : Fin r, K j * X * (K j)ᴴ =
+      ∑ l : Fin r, K' l * X * (K' l)ᴴ := by
+  exact kraus_same_map_of_unitary_combination K K' (U : Matrix (Fin r) (Fin r) ℂ)
+    (Matrix.mem_unitaryGroup_iff'.mp U.prop) hK
+
+/-- Existentially packaged sufficient direction for Kraus unitary freedom:
+if a unitary mixing witness exists, the two Kraus families define the same map. -/
+theorem kraus_same_map_of_exists_unitary_combination
+    {r : ℕ}
+    (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
+    (K' : Fin r → Matrix (Fin D) (Fin D) ℂ)
+    (hU : ∃ U : Matrix.unitaryGroup (Fin r) ℂ,
+      ∀ j, K j = ∑ l, (U : Matrix (Fin r) (Fin r) ℂ) j l • K' l) :
+    ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      ∑ j : Fin r, K j * X * (K j)ᴴ =
+      ∑ l : Fin r, K' l * X * (K' l)ᴴ := by
+  rcases hU with ⟨U, hKU⟩
+  exact kraus_same_map_of_unitaryGroup_combination K K' U hKU
