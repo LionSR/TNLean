@@ -33,6 +33,9 @@ presentation*.pdf
 .DS_Store
 Thumbs.db
 
+# Editor/tool local settings
+.claude/settings.local.json
+
 # Intermediate / generated analysis docs
 FINAL_STATUS.md
 STATUS_UPDATE.md

@@ -44,7 +44,7 @@ private abbrev LM (D : ℕ) :=
 private abbrev CLM (D : ℕ) :=
   Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
 
-private abbrev endEquiv (D : ℕ) : LM D ≃ₐ[ℂ] CLM D :=
+private abbrev endEquivD (D : ℕ) : LM D ≃ₐ[ℂ] CLM D :=
   Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
 
 section GenericCPClosure
@@ -263,8 +263,8 @@ theorem isClosed_setOf_isCPMap [NeZero D] :
 theorem IsCPMap.of_tendsto_toCLM [NeZero D]
     {E : ℕ → LM D} {F : LM D}
     (hE : ∀ n, IsCPMap (E n))
-    (hlim : Filter.Tendsto (fun n => endEquiv D (E n)) Filter.atTop
-      (nhds (endEquiv D F))) :
+    (hlim : Filter.Tendsto (fun n => endEquivD D (E n)) Filter.atTop
+      (nhds (endEquivD D F))) :
     IsCPMap F := by
   exact (isClosed_setOf_isCPMap (D := D)).mem_of_tendsto hlim
     (Filter.Eventually.of_forall hE)
@@ -286,10 +286,10 @@ variable {D : ℕ}
 
 private theorem hasSum_expSemigroup_series
     (L : LM D) (t : ℝ) :
-    HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • endEquiv D L) ^ n))
-      (expSemigroupCLM (endEquiv D L) t) := by
+    HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • endEquivD D L) ^ n))
+      (expSemigroupCLM (endEquivD D L) t) := by
   simpa [expSemigroupCLM] using
-    (NormedSpace.exp_series_hasSum_exp' (𝕂 := ℂ) (((t : ℂ) • endEquiv D L)))
+    (NormedSpace.exp_series_hasSum_exp' (𝕂 := ℂ) (((t : ℂ) • endEquivD D L)))
 
 /-- If `L` itself is completely positive, then `exp(tL)` is completely positive for all `t ≥ 0`. -/
 theorem IsCPMap.expSemigroup
@@ -301,7 +301,7 @@ theorem IsCPMap.expSemigroup
     exact isCPMap_finZero _
   · haveI : NeZero D := ⟨hD⟩
     let termLM : ℕ → LM D := fun n =>
-      (endEquiv D).symm (((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • endEquiv D L) ^ n))
+      (endEquivD D).symm (((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • endEquivD D L) ^ n))
     have hterm : ∀ n : ℕ, IsCPMap (termLM n) := by
       intro n
       have hcoef : ((t : ℂ) ^ n / Nat.factorial n : ℂ) =
@@ -313,19 +313,20 @@ theorem IsCPMap.expSemigroup
           _ = (((t ^ n / Nat.factorial n : ℝ)) : ℂ) := by
             rw [← Complex.ofReal_div]
       have hpowCP : IsCPMap (L ^ n) := hL.pow n
-      have hbase : (endEquiv D).symm (((t : ℂ) • endEquiv D L)) = ((t : ℂ) • L) := by
-        apply (endEquiv D).injective
-        simpa using (map_smul (endEquiv D) (t : ℂ) L).symm
-      have hpow_map : (endEquiv D).symm ((((t : ℂ) • endEquiv D L) ^ n)) = (((t : ℂ) • L) ^ n) := by
+      have hbase : (endEquivD D).symm (((t : ℂ) • endEquivD D L)) = ((t : ℂ) • L) := by
+        apply (endEquivD D).injective
+        simpa using (map_smul (endEquivD D) (t : ℂ) L).symm
+      have hpow_map : (endEquivD D).symm ((((t : ℂ) • endEquivD D L) ^ n)) =
+          (((t : ℂ) • L) ^ n) := by
         calc
-          (endEquiv D).symm ((((t : ℂ) • endEquiv D L) ^ n))
-              = ((endEquiv D).symm (((t : ℂ) • endEquiv D L))) ^ n := by
-                  exact map_pow (endEquiv D).symm ((t : ℂ) • endEquiv D L) n
+          (endEquivD D).symm ((((t : ℂ) • endEquivD D L) ^ n))
+              = ((endEquivD D).symm (((t : ℂ) • endEquivD D L))) ^ n := by
+                  exact map_pow (endEquivD D).symm ((t : ℂ) • endEquivD D L) n
           _ = (((t : ℂ) • L) ^ n) := by rw [hbase]
       have hterm_eq : termLM n = (((t ^ n / Nat.factorial n : ℝ) : ℂ) • (L ^ n)) := by
         calc
           termLM n = ((Nat.factorial n : ℂ)⁻¹) •
-              ((endEquiv D).symm ((((t : ℂ) • endEquiv D L) ^ n))) := by
+              ((endEquivD D).symm ((((t : ℂ) • endEquivD D L) ^ n))) := by
                 simp [termLM]
           _ = ((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • L) ^ n) := by
                 rw [hpow_map]
@@ -341,8 +342,8 @@ theorem IsCPMap.expSemigroup
     have hpartial : ∀ n : ℕ, IsCPMap (partialLM n) := by
       intro n
       exact Finset.isCPMap_sum (s := Finset.range n) termLM (fun i hi => hterm i)
-    have hlim : Filter.Tendsto (fun n => endEquiv D (partialLM n)) Filter.atTop
-        (nhds (endEquiv D (_root_.expSemigroup L t))) := by
+    have hlim : Filter.Tendsto (fun n => endEquivD D (partialLM n)) Filter.atTop
+        (nhds (endEquivD D (_root_.expSemigroup L t))) := by
       simpa [partialLM, termLM, _root_.expSemigroup, expSemigroup_toCLM] using
         (hasSum_expSemigroup_series (D := D) L t).tendsto_sum_nat
     exact IsCPMap.of_tendsto_toCLM (D := D) hpartial hlim

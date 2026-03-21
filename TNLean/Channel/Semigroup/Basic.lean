@@ -8,6 +8,7 @@ import Mathlib.Analysis.Normed.Algebra.Exponential
 import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.Analysis.ODE.Gronwall
 import Mathlib.Topology.Algebra.Module.FiniteDimension
+import Mathlib.Analysis.Calculus.Deriv.Mul
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-!
@@ -44,6 +45,51 @@ open Matrix Finset NormedSpace
 
 noncomputable section
 
+/-! ## Taylor remainder bound for the matrix exponential -/
+
+/-- Taylor remainder bound: `‖exp(x) - 1 - x‖ ≤ ‖x‖² · exp(‖x‖)` for normed algebras. -/
+theorem norm_exp_sub_one_sub_self_le
+    {A : Type*} [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A]
+    [NormOneClass A] (x : A) :
+    ‖NormedSpace.exp x - 1 - x‖ ≤ ‖x‖ ^ 2 * Real.exp ‖x‖ := by
+  have hsum : HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • x ^ n)
+      (NormedSpace.exp x) :=
+    NormedSpace.exp_series_hasSum_exp' (𝕂 := ℂ) x
+  have htail := (hasSum_nat_add_iff' 2).2 hsum
+  have htail_eq : NormedSpace.exp x - 1 - x =
+      ∑' n : ℕ, ((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2) := by
+    have := htail.tsum_eq
+    simpa [Finset.sum_range_succ, sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using
+      this.symm
+  rw [htail_eq]
+  have hsummable_tail : Summable (fun n : ℕ =>
+      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖) := by
+    exact (summable_nat_add_iff 2).2
+      (by simpa using NormedSpace.norm_expSeries_summable' (𝕂 := ℂ) x)
+  have hsummable_cmp : Summable (fun n : ℕ => ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n)) :=
+    (Real.summable_pow_div_factorial ‖x‖).mul_left (‖x‖ ^ 2)
+  have hterm : ∀ n : ℕ,
+      ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ ≤
+        ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by
+    intro n
+    calc ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖
+        = ‖((Nat.factorial (n + 2) : ℂ)⁻¹)‖ * ‖x ^ (n + 2)‖ := norm_smul _ _
+      _ ≤ ‖((Nat.factorial (n + 2) : ℂ)⁻¹)‖ * ‖x‖ ^ (n + 2) := by gcongr; exact norm_pow_le _ _
+      _ = ‖x‖ ^ (n + 2) / Nat.factorial (n + 2) := by simp [div_eq_mul_inv, mul_comm]
+      _ ≤ ‖x‖ ^ (n + 2) / Nat.factorial n := by
+            exact div_le_div_of_nonneg_left (pow_nonneg (norm_nonneg x) _) (by positivity)
+              (by exact_mod_cast Nat.factorial_le (by omega))
+      _ = ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) := by rw [pow_add, div_eq_mul_inv]; ring
+  calc ‖∑' n, ((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖
+      ≤ ∑' n, ‖((Nat.factorial (n + 2) : ℂ)⁻¹) • x ^ (n + 2)‖ :=
+        norm_tsum_le_tsum_norm hsummable_tail
+    _ ≤ ∑' n, ‖x‖ ^ 2 * (‖x‖ ^ n / Nat.factorial n) :=
+        Summable.tsum_le_tsum hterm hsummable_tail hsummable_cmp
+    _ = ‖x‖ ^ 2 * ∑' n, ‖x‖ ^ n / Nat.factorial n := by
+        rw [tsum_mul_left]
+    _ = ‖x‖ ^ 2 * Real.exp ‖x‖ := by
+        rw [Real.exp_eq_exp_ℝ, NormedSpace.exp_eq_tsum_div]
+
 variable {D : ℕ}
 
 /-! ## Normed algebra instances for matrices -/
@@ -55,7 +101,7 @@ attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 /-- The algebra equivalence between linear and continuous linear endomorphisms.
 This uses finite-dimensionality of `Matrix (Fin D) (Fin D) ℂ`. -/
-private abbrev endEquiv :
+abbrev endEquiv :
     (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
     (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
   Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
@@ -177,6 +223,48 @@ theorem expSemigroup_toCLM
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) (t : ℝ) :
     endEquiv (expSemigroup L t) = expSemigroupCLM (endEquiv L) t := by
   simp [expSemigroup, AlgEquiv.apply_symm_apply]
+
+/-- The bilinear restricted-scalars evaluation map used for differentiating
+the semigroup applied to a fixed matrix. -/
+abbrev applyCLMReal :
+    (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℝ]
+    Matrix (Fin D) (Fin D) ℂ →L[ℝ] Matrix (Fin D) (Fin D) ℂ :=
+  (ContinuousLinearMap.flip
+      (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) :
+        Matrix (Fin D) (Fin D) ℂ →L[ℂ]
+        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℂ]
+        Matrix (Fin D) (Fin D) ℂ)).bilinearRestrictScalars ℝ
+
+set_option maxHeartbeats 1000000 in
+-- The derivative proof combines CLM-valued differentiation with a restricted-
+-- scalars bilinear evaluation map; elaboration is otherwise too expensive.
+/-- The derivative of `t ↦ exp(tL)(X)` at time `t` is `exp(tL)(L X)`. -/
+theorem hasDerivAt_expSemigroup_apply
+    (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ) (t : ℝ) :
+    HasDerivAt (fun u : ℝ => expSemigroup L u X) (expSemigroup L t (L X)) t := by
+  have hCLM :
+      HasDerivAt
+        (fun u : ℝ => expSemigroupCLM (endEquiv L) u)
+        (expSemigroupCLM (endEquiv L) t * endEquiv L) t :=
+    hasDerivAt_expSemigroupCLM (endEquiv L) t
+  have hApply :
+      HasDerivAt
+        (fun u : ℝ => applyCLMReal (D := D) (expSemigroupCLM (endEquiv L) u) X)
+        (applyCLMReal (D := D) (expSemigroupCLM (endEquiv L) t) 0 +
+          applyCLMReal (D := D)
+            (expSemigroupCLM (endEquiv L) t * endEquiv L) X)
+        t := by
+    simpa using
+      (ContinuousLinearMap.hasDerivAt_of_bilinear
+        (B := applyCLMReal (D := D))
+        (u := fun u : ℝ => expSemigroupCLM (endEquiv L) u)
+        (v := fun _ : ℝ => X)
+        (u' := expSemigroupCLM (endEquiv L) t * endEquiv L)
+        (v' := 0)
+        hCLM (hasDerivAt_const t X))
+  simpa [applyCLMReal, expSemigroup_toCLM,
+    ContinuousLinearMap.bilinearRestrictScalars_apply_apply] using hApply
 
 theorem expSemigroup_comp
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
