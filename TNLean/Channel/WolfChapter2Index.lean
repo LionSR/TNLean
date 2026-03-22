@@ -34,6 +34,8 @@ representations of quantum channels.
   - `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑Kᵢ†Kᵢ = 𝟙` ✅
   - `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑KᵢKᵢ† = 𝟙` ✅
   - `kraus_same_map_of_unitary_combination` — unitary freedom (sufficient direction) ✅
+  - `kraus_same_map_of_unitaryGroup_combination` / `kraus_same_map_of_exists_unitary_combination`
+    — bundled/existential unitary-witness wrappers for reuse in the converse roadmap ✅
 
 * **Thm 2.2** (Stinespring dilation):
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
