@@ -196,6 +196,63 @@ theorem LindbladForm.isCCP (F : LindbladForm D) :
   rw [F.toLinearMap_eq_generatorDecomp]
   exact F.toGeneratorDecomp.isCCP
 
+/-! ## Commutator form of the Lindblad equation (Wolf Eq. 7.22) -/
+
+/-- Expanding the commutator brackets in the double-commutator form gives the
+standard dissipator for a single Lindblad operator:
+`½ ([L, ρL†] + [Lρ, L†]) = L ρ L† − ½ L†L ρ − ½ ρ L†L`. -/
+private lemma commutator_dissipator_eq (Lop ρ : Matrix (Fin D) (Fin D) ℂ) :
+    (1/2 : ℂ) • ((Lop * (ρ * Lopᴴ) - (ρ * Lopᴴ) * Lop) +
+                   (Lop * ρ * Lopᴴ - Lopᴴ * (Lop * ρ))) =
+    dissipator Lop ρ := by
+  simp only [dissipator, ← mul_assoc, smul_add, smul_sub]
+  module
+
+/-- The commutator-form expression equals `toLinearMap` pointwise. -/
+private lemma commutator_form_eq_toLinearMap_apply (F : LindbladForm D)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    Complex.I • (ρ * F.H - F.H * ρ) +
+    (1/2 : ℂ) • ∑ j : Fin F.r,
+      ((F.L j * (ρ * (F.L j)ᴴ) - (ρ * (F.L j)ᴴ) * F.L j) +
+       (F.L j * ρ * (F.L j)ᴴ - (F.L j)ᴴ * (F.L j * ρ))) =
+    F.toLinearMap ρ := by
+  simp only [LindbladForm.toLinearMap, LinearMap.coe_mk, AddHom.coe_mk]
+  congr 1
+  rw [Finset.smul_sum]
+  exact Finset.sum_congr rfl (fun j _ => commutator_dissipator_eq (F.L j) ρ)
+
+/-- The **commutator form** of the Lindblad equation (Wolf Eq. 7.22):
+```
+  L(ρ) = i[ρ, H] + ½ Σⱼ ([Lⱼ, ρ Lⱼ†] + [Lⱼ ρ, Lⱼ†])
+```
+where `[A, B] = A * B − B * A` is the matrix commutator. -/
+def LindbladForm.commutatorForm (F : LindbladForm D) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
+  toFun ρ :=
+    -- Hamiltonian part: i[ρ, H] = i(ρH − Hρ)
+    Complex.I • (ρ * F.H - F.H * ρ) +
+    -- Dissipative part: ½ Σⱼ ([Lⱼ, ρ Lⱼ†] + [Lⱼ ρ, Lⱼ†])
+    (1/2 : ℂ) • ∑ j : Fin F.r,
+      (-- [Lⱼ, ρ Lⱼ†] = Lⱼ(ρLⱼ†) − (ρLⱼ†)Lⱼ
+       (F.L j * (ρ * (F.L j)ᴴ) - (ρ * (F.L j)ᴴ) * F.L j) +
+       -- [Lⱼρ, Lⱼ†] = (Lⱼρ)Lⱼ† − Lⱼ†(Lⱼρ)
+       (F.L j * ρ * (F.L j)ᴴ - (F.L j)ᴴ * (F.L j * ρ)))
+  map_add' ρ σ := by
+    simp only [commutator_form_eq_toLinearMap_apply]
+    exact map_add F.toLinearMap ρ σ
+  map_smul' c ρ := by
+    simp only [RingHom.id_apply, commutator_form_eq_toLinearMap_apply]
+    exact F.toLinearMap.map_smul c ρ
+
+/-- The commutator form (Wolf Eq. 7.22) equals the standard Lindblad form
+(Wolf Eq. 7.21). This is a purely algebraic identity: expanding the commutators
+`[Lⱼ, ρ Lⱼ†]` and `[Lⱼ ρ, Lⱼ†]` gives the standard dissipator terms. -/
+theorem LindbladForm.commutatorForm_eq_toLinearMap (F : LindbladForm D) :
+    F.commutatorForm = F.toLinearMap := by
+  ext1 ρ
+  simp only [commutatorForm, LinearMap.coe_mk, AddHom.coe_mk]
+  exact commutator_form_eq_toLinearMap_apply F ρ
+
 end LindbladForms
 
 end -- noncomputable section
