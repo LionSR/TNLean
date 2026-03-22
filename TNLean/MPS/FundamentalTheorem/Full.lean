@@ -86,6 +86,24 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
+/-- Local alias for the common proportional-decomposition input package. -/
+abbrev FTProportionalData
+    {rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (DtotA DtotB : ℕ) : Type :=
+  ProportionalDecompositionData (d := d) A B DtotA DtotB
+
+/-- Local alias for the common proportional FT conclusion. -/
+abbrev FTProportionalConclusion
+    {rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k)) : Prop :=
+  ProportionalDecompositionConclusion (d := d) A B
+
 /-! ## Theorem 1: Equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
 
 This is the content of Corollary II_cor2 from arXiv:2011.12127 / arXiv:1606.00608,
@@ -157,34 +175,12 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
     (hB_blocks : ∀ j k : Fin rB, j ≠ k →
       ∀ (h : dimB j = dimB k),
         ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (B j)) (B k))
-    (A_total : MPSTensor d DtotA)
-    (B_total : MPSTensor d DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    (hDecomp : FTProportionalData (d := d) A B DtotA DtotB) :
+    FTProportionalConclusion (d := d) A B :=
   fundamentalTheorem_of_separated_CFBNT_data A B
     hA_inj hA_left hA_overlap hA_blocks
     hB_inj hB_left hB_overlap hB_blocks
-    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
-      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
+    hDecomp
 
 /-- **Proportional-MPV Fundamental Theorem for CF-BNT (Thm 4.4).**
 
@@ -210,31 +206,12 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT
     (B : (k : Fin rB) → MPSTensor d (dimB k))
     (hA : IsCanonicalFormBNT μA A)
     (hB : IsCanonicalFormBNT μB B)
-    (A_total : MPSTensor d DtotA)
-    (B_total : MPSTensor d DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
-  fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB A_total B_total aCoeff bCoeff aLim bLim c
-    cLim hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+    (hDecomp : FTProportionalData (d := d) A B DtotA DtotB) :
+    FTProportionalConclusion (d := d) A B :=
+  fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB
+    hDecomp.A_total hDecomp.B_total hDecomp.aCoeff hDecomp.bCoeff hDecomp.aLim hDecomp.bLim
+    hDecomp.c hDecomp.cLim hDecomp.hA_decomp hDecomp.hB_decomp hDecomp.haCoeff hDecomp.hbCoeff
+    hDecomp.haLim_ne hDecomp.hbLim_ne hDecomp.hProp hDecomp.hc hDecomp.hcLim_ne
 
 /-- Split-data proportional-MPV Fundamental Theorem for normal-CF-BNT-style data. -/
 theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
@@ -253,33 +230,11 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
     (hB_blocks : ∀ j k : Fin rB, j ≠ k →
       ∀ (h : dimB j = dimB k),
         ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (B j)) (B k))
-    (A_total : MPSTensor d DtotA)
-    (B_total : MPSTensor d DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    (hDecomp : FTProportionalData (d := d) A B DtotA DtotB) :
+    FTProportionalConclusion (d := d) A B :=
   fundamentalTheorem_of_separated_normalCFBNT_data A B
     hA_ncf hA_blocks hB_ncf hB_blocks
-    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
-      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
+    hDecomp
 
 /-- Fundamental Theorem (proportional case) for normal canonical form blocks. -/
 theorem fundamentalTheorem_proportionalMPV_normalCFBNT
@@ -292,32 +247,12 @@ theorem fundamentalTheorem_proportionalMPV_normalCFBNT
     (B : (k : Fin rB) → MPSTensor d (dimB k))
     (hA : IsNormalCanonicalFormBNT μA A)
     (hB : IsNormalCanonicalFormBNT μB B)
-    (A_total : MPSTensor d DtotA)
-    (B_total : MPSTensor d DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    (hDecomp : FTProportionalData (d := d) A B DtotA DtotB) :
+    FTProportionalConclusion (d := d) A B :=
   fundamentalTheorem_of_IsNormalCanonicalFormBNT A B hA hB
-    A_total B_total aCoeff bCoeff aLim bLim c cLim
-    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+    hDecomp.A_total hDecomp.B_total hDecomp.aCoeff hDecomp.bCoeff hDecomp.aLim hDecomp.bLim
+    hDecomp.c hDecomp.cLim hDecomp.hA_decomp hDecomp.hB_decomp hDecomp.haCoeff hDecomp.hbCoeff
+    hDecomp.haLim_ne hDecomp.hbLim_ne hDecomp.hProp hDecomp.hc hDecomp.hcLim_ne
 
 /-! ## Theorem 3: Equal MPVs imply proportional MPVs -/
 
@@ -376,10 +311,10 @@ theorem fundamentalTheorem_equalMPV_full
     simpa using hEqual N σ
   obtain ⟨_hcount, perm, hperm⟩ :=
     fundamentalTheorem_proportionalMPV_CFBNT A B hA hB
-      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)
-      aCoeff bCoeff aLim bLim (fun _ => (1 : ℂ)) (1 : ℂ)
-      hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne
-      hProp tendsto_const_nhds one_ne_zero
+      ⟨toTensorFromBlocks μA A, toTensorFromBlocks μB B,
+        aCoeff, bCoeff, aLim, bLim, (fun _ => (1 : ℂ)), (1 : ℂ),
+        hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne,
+        hProp, tendsto_const_nhds, one_ne_zero⟩
   choose hdim hGP using hperm
   choose X ζ hζ hX using hGP
   have hBNTA := hA.isBNT

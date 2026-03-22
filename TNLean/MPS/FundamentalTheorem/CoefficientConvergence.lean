@@ -278,8 +278,8 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT_auto
               (cast (congr_arg (MPSTensor d) hdim) (A j))
               (B (perm j)) :=
   fundamentalTheorem_proportionalMPV_CFBNT A B hA hB
-    (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)
-    aCoeff bCoeff aLim bLim c cLim
-    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+    ⟨toTensorFromBlocks μA A, toTensorFromBlocks μB B,
+      aCoeff, bCoeff, aLim, bLim, c, cLim,
+      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
 end MPSTensor

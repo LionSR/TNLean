@@ -646,8 +646,8 @@ theorem weakFundamentalTheorem_conditional
               (B (perm j)) :=
   MPSTensor.fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data A B
     hA_ncf hA_blocks hB_ncf hB_blocks
-    A_total B_total aCoeff bCoeff aLim bLim c cLim
-    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
+      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
 /-!
 ## Cyclic sector decomposition via the CyclicSectors API
