@@ -8,6 +8,7 @@ on:
       - "TNLean.lean"
       - "lakefile.toml"
       - "lean-toolchain"
+      - "blueprint/src/**/*.tex"
 
 jobs:
   claude-review:
