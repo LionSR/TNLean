@@ -446,29 +446,7 @@ section OverlapBounds
 
 variable {d : ℕ}
 
-/-- Cauchy–Schwarz for complex sums, in a convenient squared form.
-
-This is the same estimate as `MPSTensor.norm_sq_sum_mul_le` in `SpectralGap.lean`, but we keep a
-local copy here to avoid depending on private lemmas. -/
-private lemma norm_sq_sum_mul_le {ι : Type*} [Fintype ι] (a b : ι → ℂ) :
-    ‖(∑ i : ι, a i * b i)‖ ^ 2 ≤ (∑ i : ι, ‖a i‖ ^ 2) * (∑ i : ι, ‖b i‖ ^ 2) := by
-  classical
-  -- Triangle inequality + Cauchy–Schwarz for real sequences of norms.
-  have h :
-      ‖(∑ i : ι, a i * b i)‖ ≤ ∑ i : ι, ‖a i‖ * ‖b i‖ := by
-    -- `Fintype.sum` is definitionally a `Finset.univ` sum.
-    simpa [norm_mul] using
-      (norm_sum_le (s := (Finset.univ : Finset ι)) (f := fun i => a i * b i)).trans
-        (Finset.sum_le_sum (fun i _ => by simp [norm_mul]))
-  have hsq :
-      ‖(∑ i : ι, a i * b i)‖ ^ 2 ≤ (∑ i : ι, ‖a i‖ * ‖b i‖) ^ 2 :=
-    pow_le_pow_left₀ (norm_nonneg _) h 2
-  have hcs :
-      (∑ i : ι, ‖a i‖ * ‖b i‖) ^ 2 ≤ (∑ i : ι, ‖a i‖ ^ 2) * (∑ i : ι, ‖b i‖ ^ 2) := by
-    simpa using
-      (Finset.sum_mul_sq_le_sq_mul_sq (s := (Finset.univ : Finset ι))
-        (f := fun i => ‖a i‖) (g := fun i => ‖b i‖))
-  exact hsq.trans hcs
+-- `norm_sq_sum_mul_le` is now provided by `TNLean.Spectral.FrobeniusNorm`.
 
 /-- Trace inequality: $|\mathrm{tr}(M)|^2 \le D\,\mathrm{tr}(M^\dagger M)$. -/
 private lemma norm_trace_sq_le_dim_mul_trace_conjTranspose_mul
@@ -498,8 +476,8 @@ private lemma norm_trace_sq_le_dim_mul_trace_conjTranspose_mul
       exact hsingle
     exact Finset.sum_le_sum (fun i _ => hper i)
   -- Rewrite the Frobenius square sum as `trace(M†M).re`.
-  have hfrob : (Matrix.trace (Mᴴ * M)).re = ∑ i : Fin D, ∑ j : Fin D, ‖M i j‖ ^ 2 := by
-    simpa [MPSTensor.frobSq] using (MPSTensor.frobSq_eq_sum (D := D) M)
+  have hfrob : (Matrix.trace (Mᴴ * M)).re = ∑ i : Fin D, ∑ j : Fin D, ‖M i j‖ ^ 2 :=
+    (MPSTensor.frobSq_trace M).symm
   -- Assemble.
   calc
     ‖Matrix.trace M‖ ^ 2
