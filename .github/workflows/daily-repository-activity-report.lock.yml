@@ -21,12 +21,12 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"1dbe8b2ea347fa549ec6ebd5a929045759d9f66f999c17665acfb6f0ba852fc3","compiler_version":"v0.62.5","strict":true,"agent_id":"copilot"}
+# gh-aw-metadata: {"schema_version":"v3","frontmatter_hash":"80ab26b35fc8594470265d44fee2e768e15987cd20b9207c47b2e981f2ee6724","compiler_version":"v0.62.5","strict":true,"agent_id":"copilot"}
 
 name: "Daily repository activity report"
 "on":
   schedule:
-  - cron: "0 8 * * 1-5"
+  - cron: "0 8 * * *"
   workflow_dispatch:
 
 permissions: {}
