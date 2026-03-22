@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
+import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth
@@ -164,6 +165,19 @@ endpoint.
 ---
 
 ## §6.4 Fixed points
+
+### Wolf §6 stationary-support package (Props. 6.9--6.11, Lems. 6.4--6.5)
+
+In `TNLean.Channel.FixedPoint.StationarySupport`:
+
+* `Channel.support_proj_fixed` — support projection of a PSD fixed point is
+  invariant under the compressed channel action.
+* `Channel.stationarySupport` — support projection of the unique density-matrix
+  fixed point of an irreducible channel.
+* `Channel.stationarySupport_eq_one` / `Channel.irreducible_iff_support_full`
+  — irreducible channels have full stationary support.
+* `Channel.stationary_support_minimal` — every nonzero invariant projection
+  coincides with the stationary support.
 
 ### Wolf Theorem 6.12 (Fixed points form a *-algebra) — FORMALIZED
 
