@@ -133,6 +133,22 @@ This is the content of Theorem 4.4 from arXiv:1606.00608 (primitive branch).
 The theorem takes convergent coefficient data as explicit hypotheses.
 -/
 
+/-- Common conclusion shape for proportional-MPV fundamental theorem variants:
+block-count equality together with a block permutation matching dimensions and
+gauge-phase classes. -/
+abbrev ProportionalMPVPermutationConclusion
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k)) : Prop :=
+  ∃ _h : rA = rB,
+    ∃ perm : Fin rA ≃ Fin rB,
+      ∀ j : Fin rA,
+        ∃ hdim : dimA j = dimB (perm j),
+          GaugePhaseEquiv (d := d)
+            (cast (congr_arg (MPSTensor d) hdim) (A j))
+            (B (perm j))
+
 /-- Split-data proportional-MPV Fundamental Theorem for CF-BNT-style data (Thm 4.4).
 
 This is the Stage B low-risk interface: it packages only the hypotheses actually used by the
@@ -173,13 +189,7 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    ProportionalMPVPermutationConclusion (d := d) (dimA := dimA) (dimB := dimB) A B :=
   fundamentalTheorem_of_separated_CFBNT_data A B
     hA_inj hA_left hA_overlap hA_blocks
     hB_inj hB_left hB_overlap hB_blocks
@@ -226,13 +236,7 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    ProportionalMPVPermutationConclusion (d := d) (dimA := dimA) (dimB := dimB) A B :=
   fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB A_total B_total aCoeff bCoeff aLim bLim c
     cLim hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
@@ -269,13 +273,7 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    ProportionalMPVPermutationConclusion (d := d) (dimA := dimA) (dimB := dimB) A B :=
   fundamentalTheorem_of_separated_normalCFBNT_data A B
     hA_ncf hA_blocks hB_ncf hB_blocks
     A_total B_total aCoeff bCoeff aLim bLim c cLim
@@ -308,13 +306,7 @@ theorem fundamentalTheorem_proportionalMPV_normalCFBNT
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    ProportionalMPVPermutationConclusion (d := d) (dimA := dimA) (dimB := dimB) A B :=
   fundamentalTheorem_of_IsNormalCanonicalFormBNT A B hA hB
     A_total B_total aCoeff bCoeff aLim bLim c cLim
     hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne

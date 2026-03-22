@@ -637,13 +637,8 @@ theorem weakFundamentalTheorem_conditional
     (hProp : ∀ N (σ : Fin N → Fin d'), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d')
-              (cast (congr_arg (MPSTensor d') hdim) (A j))
-              (B (perm j)) :=
+    MPSTensor.ProportionalMPVPermutationConclusion
+      (d := d') (dimA := dimA) (dimB := dimB) A B :=
   MPSTensor.fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data A B
     hA_ncf hA_blocks hB_ncf hB_blocks
     A_total B_total aCoeff bCoeff aLim bLim c cLim
