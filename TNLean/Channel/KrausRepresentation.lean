@@ -190,9 +190,51 @@ theorem kraus_unitary_combination_of_same_map
     ∃ U : Matrix (Fin r) (Fin r) ℂ, Uᴴ * U = 1 ∧
       ∀ j, K j = ∑ l : Fin r, U j l • K' l := by
   -- Vectorise: define v_j(a,i) = (K_j)_{a,i}, w_l(a,i) = (K'_l)_{a,i}.
+  let v : Fin r → (Fin D × Fin D → ℂ) := fun j p => K j p.1 p.2
+  let w : Fin r → (Fin D × Fin D → ℂ) := fun j p => K' j p.1 p.2
+  -- Key extraction: entry (a,b) of ∑_j K_j * |i⟩⟨k| * K_j† equals
+  -- ∑_j K_j(a,i) * star(K_j(b,k)).
+  have entry_eq : ∀ (K₀ : Fin r → Matrix (Fin D) (Fin D) ℂ) (a b i k : Fin D),
+      ∑ j : Fin r, K₀ j a i * star (K₀ j b k) =
+      (∑ j : Fin r, K₀ j * Matrix.single i k (1 : ℂ) * (K₀ j)ᴴ) a b := by
+    intro K₀ a b i k
+    simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
+    congr 1; ext j
+    -- Goal: K₀ j a i * star (K₀ j b k) =
+    --   ∑ c, (∑ d, K₀ j a d * single i k 1 d c) * star (K₀ j b c)
+    -- The inner sum ∑_d K₀ j a d * single i k 1 d c = if k = c then K₀ j a i else 0
+    have inner : ∀ c, (∑ d, K₀ j a d * Matrix.single i k 1 d c) =
+        if k = c then K₀ j a i else 0 := by
+      intro c
+      simp only [Matrix.single_apply]
+      by_cases hc : k = c
+      · subst hc; simp
+      · rw [show (∑ d, K₀ j a d * if i = d ∧ k = c then 1 else 0) = 0 from
+          Finset.sum_eq_zero fun d _ => by simp [show ¬(i = d ∧ k = c) from fun h => hc h.2]]
+        exact (if_neg hc).symm
+    -- Rewrite the inner sums and simplify to a single term at c = k.
+    symm
+    calc ∑ c, (∑ d, K₀ j a d * single i k 1 d c) * star (K₀ j b c)
+        = ∑ c, (if k = c then K₀ j a i else 0) * star (K₀ j b c) := by
+          congr 1; ext c; rw [inner]
+      _ = K₀ j a i * star (K₀ j b k) := by
+          simp [ite_mul]
   -- The map equality on rank-1 inputs gives ∑ⱼ v_j v_j† = ∑ₗ w_l w_l†.
+  have houter : ∑ j : Fin r, Matrix.vecMulVec (v j) (star (v j)) =
+      ∑ l : Fin r, Matrix.vecMulVec (w l) (star (w l)) := by
+    ext ⟨a, i⟩ ⟨b, k⟩
+    simp only [Matrix.sum_apply, Matrix.vecMulVec_apply, Pi.star_apply, v, w]
+    rw [entry_eq K a b i k, entry_eq K' a b i k]
+    exact congrFun (congrFun (hmap (Matrix.single i k 1)) a) b
   -- The core linear algebra lemma then produces the unitary U.
-  sorry
+  obtain ⟨U, hU, hUvw⟩ := exists_unitary_of_sum_vecMulVec_star_eq v w houter
+  -- Convert from pointwise scalar multiplication back to matrix smul.
+  exact ⟨U, hU, fun j => by
+    ext a i'
+    simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+    have := hUvw j (a, i')
+    simp only [v, w] at this
+    exact this⟩
 
 /-- **Thm 2.1 item 4 (unitary freedom, full characterisation)**:
 two same-size Kraus families define the same map **if and only if** they

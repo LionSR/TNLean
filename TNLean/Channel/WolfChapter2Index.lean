@@ -63,7 +63,6 @@ representations of quantum channels.
 | Prop 2.2 (decomp into CP) | Straightforward from CJ |
 | Prop 2.3 (no info w/o disturbance) | Needs pure state uniqueness |
 | Prop 2.4 (equiv of ensembles) | Needs purification/Schmidt decomp |
-| Thm 2.1 item 4 (unitary freedom, converse) | `sorry` on core LA lemma |
 | Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
