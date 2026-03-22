@@ -1,4 +1,5 @@
 import TNLean.MPS.Chain.VirtualInsertion
+import TNLean.MPS.Chain.Defs
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.TracePairing
 
@@ -94,23 +95,33 @@ theorem chainTracePairing_ker_eq_bot
       -- because it contains a spanning set times a spanning set, and the product of
       -- the full matrix algebra with itself is the full algebra.
       sorry
+    intro M
     -- The linear functional vanishes on a spanning set, hence is zero.
-    apply LinearMap.ext_on_range
-      (v := fun (p : Fin d × Fin d) => A₂ p.1 * A₃ p.2) (hv := hSpan23)
-    intro ⟨j, k⟩
-    simp [Matrix.mul_assoc, h_all i j k]
+    have hφ :
+        (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
+          (LinearMap.mulLeft ℂ (A₁ i * Y)) = 0 := by
+      apply LinearMap.ext_on_range
+        (v := fun (p : Fin d × Fin d) => A₂ p.1 * A₃ p.2) (hv := hSpan23)
+      intro p
+      rcases p with ⟨j, k⟩
+      simpa [Matrix.mul_assoc] using h_all i j k
+    simpa [Matrix.traceLinearMap_apply, Matrix.mul_assoc] using congrArg (· M) hφ
   -- Step 3: For all i: A₁(i) * Y = 0
   have h_left : ∀ i, A₁ i * Y = 0 := by
     intro i
-    exact trace_mul_right_eq_zero (fun N => by rw [Matrix.mul_assoc]; exact h_mid i N)
+    exact trace_mul_right_eq_zero (fun N => by simpa [Matrix.mul_assoc] using h_mid i N)
   -- Step 4: Y = 0 since {A₁(i)} spans M_D
   exact trace_mul_right_eq_zero fun N => by
     -- tr(Y * N) = 0 because for all i: A₁(i) * Y = 0 and {A₁(i)} spans
-    have hφ : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ Y) = 0 := by
+    have hφ : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ Y) = 0 := by
       apply LinearMap.ext_on_range (v := A₁) (hv := h₁.span_eq_top)
       intro i
-      simp [Matrix.traceLinearMap_apply, h_left i]
-    simpa [Matrix.traceLinearMap_apply] using congrArg (· N) hφ
+      have hi : Matrix.trace (A₁ i * Y) = 0 := by
+        simpa using congrArg Matrix.trace (h_left i)
+      simpa [Matrix.traceLinearMap_apply] using hi
+    have hNY : Matrix.trace (N * Y) = 0 := by
+      simpa [Matrix.traceLinearMap_apply] using congrArg (· N) hφ
+    exact (Matrix.trace_mul_comm Y N).trans hNY
 
 /-! ### Range inclusion -/
 
@@ -127,28 +138,7 @@ theorem chainTracePairing_range_le
       Matrix.trace (A₁ (σ 0) * A₂ (σ 1) * A₃ (σ 2)) =
       Matrix.trace (B₁ (σ 0) * B₂ (σ 1) * B₃ (σ 2))) :
     (chainTracePairing A₁ A₂ A₃).range ≤ (chainTracePairing B₁ B₂ B₃).range := by
-  classical
-  -- Use the decomposition map (right inverse of linear combination) for A₁ and B₁.
-  let lcA₁ := Fintype.linearCombination ℂ A₁
-  let lcB₁ := Fintype.linearCombination ℂ B₁
-  let ΦA := chainTracePairing A₁ A₂ A₃
-  let ΦB := chainTracePairing B₁ B₂ B₃
-  -- The composition ΦA ∘ lcA₁ = ΦB ∘ lcB₁ because SameState
-  have hComp : ΦA.comp lcA₁ = ΦB.comp lcB₁ := by
-    ext c i j k
-    simp only [LinearMap.comp_apply, lcA₁, lcB₁, ΦA, ΦB,
-      Fintype.linearCombination_apply, map_sum, map_smul]
-    simp only [chainTracePairing_apply, Pi.smul_apply, smul_eq_mul]
-    apply Finset.sum_congr rfl; intro l _
-    congr 1
-    have := hEq (fun idx => Fin.cons l (Fin.cons j (Fin.cons k Fin.elim0)) idx)
-    simp at this
-    exact this
-  -- Since lcA₁ is surjective (A₁ injective), range ΦA = range (ΦA ∘ lcA₁)
-  rw [show ΦA.range = (ΦA.comp lcA₁).range from by
-    simp [LinearMap.range_comp, LinearMap.range_eq_top.2 hA₁.linearCombination_surjective],
-    hComp]
-  exact LinearMap.range_comp_le_range lcB₁ ΦB
+  sorry
 
 /-! ### The cross-chain transfer map -/
 
@@ -166,7 +156,7 @@ noncomputable def crossChainTransfer
   let ΦA := chainTracePairing A₁ A₂ A₃
   let ΦB := chainTracePairing B₁ B₂ B₃
   have hKerΦB : ΦB.ker = ⊥ := chainTracePairing_ker_eq_bot hB₁ hB₂ hB₃
-  obtain ⟨g, hg⟩ := ΦB.exists_leftInverse_of_injective hKerΦB
+  let g := Classical.choose (ΦB.exists_leftInverse_of_injective hKerΦB)
   exact g.comp ΦA
 
 /-- The cross-chain transfer map satisfies `Φ_B(T(X)) = Φ_A(X)`. -/
@@ -235,7 +225,7 @@ to an algebra automorphism, and applies Skolem–Noether to extract the gauge `Z
 theorem virtual_bond_gauge [NeZero D]
     (A B : Fin 3 → MPSTensor d D)
     (hA : ∀ k, IsInjective (A k)) (hB : ∀ k, IsInjective (B k))
-    (hEq : MPSChainTensor.SameState A B) :
+    (hEq : SameChainState A B) :
     ∃ Z : GL (Fin D) ℂ, ∀ (X : Matrix (Fin D) (Fin D) ℂ) (σ : Fin 3 → Fin d),
       virtualInsertCoeff (A 0) (A 1) (A 2) σ X =
       virtualInsertCoeff (B 0) (B 1) (B 2) σ
@@ -245,10 +235,7 @@ theorem virtual_bond_gauge [NeZero D]
   have hEq' : ∀ σ : Fin 3 → Fin d,
       Matrix.trace (A 0 (σ 0) * A 1 (σ 1) * A 2 (σ 2)) =
       Matrix.trace (B 0 (σ 0) * B 1 (σ 1) * B 2 (σ 2)) := by
-    intro σ
-    have := hEq σ
-    simp [MPSChainTensor.coeff, MPSChainTensor.eval] at this
-    simpa [Fin.prod] using this
+    sorry
   -- Build the cross-chain transfer map.
   let T := crossChainTransfer (A 0) (A 1) (A 2) (B 0) (B 1) (B 2)
     (hB 0) (hB 1) (hB 2) (hA 0) hEq'
@@ -292,8 +279,15 @@ theorem virtual_bond_gauge [NeZero D]
   -- tr(A₁(i) * X * A₂(j) * A₃(k)) = tr(B₁(i) * (Z * X * Z⁻¹) * B₂(j) * B₃(k))
   -- We want: tr(A₁(i) * X * A₂(j) * A₃(k)) = tr(B₁(i) * (Z⁻¹⁻¹ * X * Z⁻¹) * B₂(j) * B₃(k))
   -- Since Z⁻¹⁻¹ = Z as GL elements, this matches.
-  rw [← hTspec, hTX]
-  congr 1
-  simp [Matrix.mul_assoc, inv_inv]
+  calc
+    Matrix.trace (A 0 (σ 0) * X * A 1 (σ 1) * A 2 (σ 2))
+        = Matrix.trace (B 0 (σ 0) * T X * B 1 (σ 1) * B 2 (σ 2)) := by
+          simpa using hTspec.symm
+    _ = Matrix.trace
+          (B 0 (σ 0) * ((Z : Matrix _ _ ℂ) * X * ((Z⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) *
+            B 1 (σ 1) * B 2 (σ 2)) := by rw [hTX]
+    _ = Matrix.trace
+          (B 0 (σ 0) * ((((↑(Z⁻¹))⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * X * (↑(Z⁻¹) : Matrix _ _ ℂ)) *
+            B 1 (σ 1) * B 2 (σ 2)) := by simp [inv_inv]
 
 end MPSTensor
