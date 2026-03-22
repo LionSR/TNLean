@@ -64,127 +64,33 @@ theorem mixedTransferSpectralRadius₂_eq
         ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
           (mixedTransferMap₂ A B)) := rfl
 
-/-! ## Rectangular Frobenius norm -/
+/-! ## Rectangular Frobenius norm and Euclidean-space embedding
 
-section FrobeniusRect
+The general definitions `frobSq`, `matToES`, and their basic API are imported from
+`TNLean.Spectral.FrobeniusNorm`.  We introduce `frobSq₂` as a deprecated alias kept
+for local readability, and add the mixed-shape submultiplicativity lemma. -/
 
-/-- Frobenius norm squared of a rectangular matrix: `∑ i j, ‖X i j‖²`. -/
-noncomputable def frobSq₂ (X : Matrix (Fin D₁) (Fin D₂) ℂ) : ℝ :=
-  ∑ i : Fin D₁, ∑ j : Fin D₂, ‖X i j‖ ^ 2
+/-- Deprecated alias: `frobSq₂ = frobSq` for rectangular matrices.
+Kept for local readability in this file. -/
+noncomputable abbrev frobSq₂ (X : Matrix (Fin D₁) (Fin D₂) ℂ) : ℝ := frobSq X
 
-lemma frobSq₂_nonneg (X : Matrix (Fin D₁) (Fin D₂) ℂ) : 0 ≤ frobSq₂ X :=
-  Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => by positivity
-
-lemma frobSq₂_eq_zero_iff (X : Matrix (Fin D₁) (Fin D₂) ℂ) : frobSq₂ X = 0 ↔ X = 0 := by
-  constructor
-  · intro h; ext i j
-    have h1 := (Finset.sum_eq_zero_iff_of_nonneg fun i _ =>
-      Finset.sum_nonneg fun j _ => by positivity).mp h i (Finset.mem_univ _)
-    have h2 := (Finset.sum_eq_zero_iff_of_nonneg fun j _ => by positivity).mp h1 j
-      (Finset.mem_univ _)
-    rwa [sq_eq_zero_iff, norm_eq_zero] at h2
-  · rintro rfl; simp [frobSq₂]
-
-lemma frobSq₂_pos_of_ne_zero (X : Matrix (Fin D₁) (Fin D₂) ℂ) (hX : X ≠ 0) :
-    0 < frobSq₂ X :=
-  lt_of_le_of_ne (frobSq₂_nonneg X) (Ne.symm (mt (frobSq₂_eq_zero_iff X).mp hX))
-
-lemma frobSq₂_smul (c : ℂ) (X : Matrix (Fin D₁) (Fin D₂) ℂ) :
-    frobSq₂ (c • X) = ‖c‖ ^ 2 * frobSq₂ X := by
-  simp only [frobSq₂, Matrix.smul_apply, smul_eq_mul, norm_mul, mul_pow, Finset.mul_sum]
-
-private lemma frobSq₂_trace (X : Matrix (Fin D₁) (Fin D₂) ℂ) :
-    frobSq₂ X = (Matrix.trace (Xᴴ * X)).re := by
-  simp only [frobSq₂, Matrix.trace, Matrix.diag, Matrix.mul_apply,
-    Matrix.conjTranspose_apply, Complex.re_sum]
-  rw [Finset.sum_comm]
-  congr 1; ext i; congr 1; ext j
-  rw [show star (X j i) * X j i = ↑(Complex.normSq (X j i)) from
-    Complex.normSq_eq_conj_mul_self.symm, Complex.ofReal_re, Complex.normSq_eq_norm_sq]
-
-end FrobeniusRect
-
-/-! ## Euclidean space embedding for rectangular matrices -/
-
-section HSRect
-
-private noncomputable def toES₂ (M : Matrix (Fin D₁) (Fin D₂) ℂ) :
-    EuclideanSpace ℂ (Fin D₁ × Fin D₂) :=
-  (EuclideanSpace.equiv (Fin D₁ × Fin D₂) ℂ).symm (fun p => M p.1 p.2)
-
-@[simp] private lemma toES₂_apply (M : Matrix (Fin D₁) (Fin D₂) ℂ) (p : Fin D₁ × Fin D₂) :
-    toES₂ M p = M p.1 p.2 := by simp [toES₂, EuclideanSpace.equiv]
-
-private lemma toES₂_finset_sum {ι : Type*} (s : Finset ι)
-    (f : ι → Matrix (Fin D₁) (Fin D₂) ℂ) :
-    toES₂ (∑ i ∈ s, f i) = ∑ i ∈ s, toES₂ (f i) := by
-  ext p; simp [Matrix.sum_apply, Finset.sum_apply]
-
-private lemma norm_toES₂_sq (M : Matrix (Fin D₁) (Fin D₂) ℂ) :
-    ‖toES₂ M‖ ^ 2 = frobSq₂ M := by
-  rw [sq, ← @inner_self_eq_norm_mul_norm ℂ]
-  change RCLike.re (@inner ℂ _ _ (toES₂ M) (toES₂ M)) = _
-  simp only [PiLp.inner_apply, RCLike.inner_apply', toES₂_apply, starRingEnd_apply]
-  rw [show (∑ x : Fin D₁ × Fin D₂, star (M x.1 x.2) * M x.1 x.2) =
-    ∑ i, ∑ j, star (M i j) * M i j from Fintype.sum_prod_type _]
-  simp only [frobSq₂, Complex.re_sum, RCLike.re_to_complex]
-  congr 1; ext i; congr 1; ext j
-  rw [mul_comm, show M i j * star (M i j) = (↑(‖M i j‖ ^ 2) : ℂ) from by
-    rw [show star (M i j) = starRingEnd ℂ (M i j) from rfl, Complex.mul_conj',
-      ← Complex.ofReal_pow]]
-  exact Complex.ofReal_re _
-
-/-- Euclidean space embedding for square D₁×D₁ matrices (local copy for cross-shape bounds). -/
-private noncomputable def toESSq₁ (M : Matrix (Fin D₁) (Fin D₁) ℂ) :
-    EuclideanSpace ℂ (Fin D₁ × Fin D₁) :=
-  (EuclideanSpace.equiv (Fin D₁ × Fin D₁) ℂ).symm (fun p => M p.1 p.2)
-
-@[simp] private lemma toESSq₁_apply (M : Matrix (Fin D₁) (Fin D₁) ℂ) (p : Fin D₁ × Fin D₁) :
-    toESSq₁ M p = M p.1 p.2 := by simp [toESSq₁, EuclideanSpace.equiv]
-
-private lemma norm_toESSq₁_sq (M : Matrix (Fin D₁) (Fin D₁) ℂ) :
-    ‖toESSq₁ M‖ ^ 2 = frobSq₂ M := by
-  rw [sq, ← @inner_self_eq_norm_mul_norm ℂ]
-  change RCLike.re (@inner ℂ _ _ (toESSq₁ M) (toESSq₁ M)) = _
-  simp only [PiLp.inner_apply, RCLike.inner_apply', toESSq₁_apply, starRingEnd_apply]
-  rw [show (∑ x : Fin D₁ × Fin D₁, star (M x.1 x.2) * M x.1 x.2) =
-    ∑ i, ∑ j, star (M i j) * M i j from Fintype.sum_prod_type _]
-  simp only [frobSq₂, Complex.re_sum, RCLike.re_to_complex]
-  congr 1; ext i; congr 1; ext j
-  rw [mul_comm, show M i j * star (M i j) = (↑(‖M i j‖ ^ 2) : ℂ) from by
-    rw [show star (M i j) = starRingEnd ℂ (M i j) from rfl, Complex.mul_conj',
-      ← Complex.ofReal_pow]]
-  exact Complex.ofReal_re _
-
-private lemma toESSq₁_finset_sum {ι : Type*} (s : Finset ι)
-    (f : ι → Matrix (Fin D₁) (Fin D₁) ℂ) :
-    toESSq₁ (∑ i ∈ s, f i) = ∑ i ∈ s, toESSq₁ (f i) := by
-  ext p; simp [Matrix.sum_apply, Finset.sum_apply]
-
-private lemma norm_toES₂_mul_le
+private lemma norm_matToES_rect_mul_le
     (A : Matrix (Fin D₁) (Fin D₁) ℂ) (B : Matrix (Fin D₁) (Fin D₂) ℂ) :
-    ‖toES₂ (A * B)‖ ≤ ‖toESSq₁ A‖ * ‖toES₂ B‖ := by
-  have h : ‖toES₂ (A * B)‖ ^ 2 ≤ (‖toESSq₁ A‖ * ‖toES₂ B‖) ^ 2 := by
-    rw [norm_toES₂_sq, mul_pow, norm_toESSq₁_sq, norm_toES₂_sq]
+    ‖matToES (A * B)‖ ≤ ‖matToES A‖ * ‖matToES B‖ := by
+  have h : ‖matToES (A * B)‖ ^ 2 ≤ (‖matToES A‖ * ‖matToES B‖) ^ 2 := by
+    rw [norm_matToES_sq, mul_pow, norm_matToES_sq, norm_matToES_sq]
     -- Frobenius submultiplicativity for mixed-shape matrices
-    simp only [frobSq₂, Matrix.mul_apply]
-    have norm_sq_cs (a b : Fin D₁ → ℂ) :
-        ‖∑ k, a k * b k‖ ^ 2 ≤ (∑ k, ‖a k‖ ^ 2) * (∑ k, ‖b k‖ ^ 2) :=
-      (pow_le_pow_left₀ (norm_nonneg _)
-        ((norm_sum_le _ _).trans (Finset.sum_le_sum fun _ _ => norm_mul_le _ _)) 2).trans
-        (Finset.sum_mul_sq_le_sq_mul_sq _ _ _)
+    simp only [frobSq, Matrix.mul_apply]
     calc ∑ i, ∑ j, ‖∑ k, A i k * B k j‖ ^ 2
         ≤ ∑ i, ∑ j, (∑ k, ‖A i k‖ ^ 2) * (∑ k, ‖B k j‖ ^ 2) :=
           Finset.sum_le_sum fun i _ => Finset.sum_le_sum fun j _ =>
-            norm_sq_cs _ _
+            norm_sq_sum_mul_le _ _
       _ = (∑ i, ∑ k, ‖A i k‖ ^ 2) * (∑ j, ∑ k, ‖B k j‖ ^ 2) := by
           simp_rw [← Finset.mul_sum, ← Finset.sum_mul]
       _ = (∑ i, ∑ j, ‖A i j‖ ^ 2) * (∑ i, ∑ j, ‖B i j‖ ^ 2) := by
           (congr 1; exact Finset.sum_comm)
-  nlinarith [Real.sqrt_le_sqrt h, Real.sqrt_sq (norm_nonneg (toES₂ (A * B))),
-    Real.sqrt_sq (mul_nonneg (norm_nonneg (toESSq₁ A)) (norm_nonneg (toES₂ B)))]
-
-end HSRect
+  nlinarith [Real.sqrt_le_sqrt h, Real.sqrt_sq (norm_nonneg (matToES (A * B))),
+    Real.sqrt_sq (mul_nonneg (norm_nonneg (matToES A)) (norm_nonneg (matToES B)))]
 
 /-! ## Hilbert–Schmidt contraction for the rectangular mixed transfer -/
 
@@ -192,7 +98,7 @@ section HSContraction
 
 /-- Right-sum identity: `∑_σ ‖X · w_B(σ)†‖_F² = ‖X‖_F²` for rectangular X.
 
-The proof uses trace cycling: `frobSq₂(v M†) = tr(M† M · v† v).re`, then sum over σ. -/
+The proof uses trace cycling: `frobSq(v M†) = tr(M† M · v† v).re`, then sum over σ. -/
 private lemma sum_frobSq₂_right (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (v : Matrix (Fin D₁) (Fin D₂) ℂ) (n : ℕ) :
     ∑ σ : Fin n → Fin d, frobSq₂ (v * (evalWord B (List.ofFn σ))ᴴ) = frobSq₂ v := by
@@ -208,7 +114,7 @@ private lemma sum_frobSq₂_right (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B
       Matrix.trace_mul_comm (M * (vᴴ * v)) Mᴴ,
       ← Matrix.mul_assoc Mᴴ M (vᴴ * v)]
   -- Apply trace cycling to the sum.
-  simp_rw [frobSq₂_trace]
+  simp_rw [frobSq_trace]
   conv_lhs => arg 2; ext σ; rw [trace_cycle (evalWord B (List.ofFn σ))]
   rw [← Complex.re_sum, ← Matrix.trace_sum, ← Finset.sum_mul,
     word_conjTranspose_mul_sum B hB n, Matrix.one_mul]
@@ -217,7 +123,7 @@ private lemma sum_frobSq₂_right (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B
 private lemma sum_frobSq₂_words (K : MPSTensor d D₁) (hK : ∑ i : Fin d, (K i)ᴴ * K i = 1)
     (n : ℕ) :
     ∑ σ : Fin n → Fin d, frobSq₂ (evalWord K (List.ofFn σ)) = (D₁ : ℝ) := by
-  simp_rw [frobSq₂_trace]
+  simp_rw [frobSq_trace]
   rw [← Complex.re_sum, ← Matrix.trace_sum, word_conjTranspose_mul_sum K hK n]
   simp [Matrix.trace_one, Fintype.card_fin]
 
@@ -235,28 +141,29 @@ private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
     congr 1; ext σ; rw [Matrix.mul_assoc]]
   rw [show frobSq₂ (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ)) =
-    ‖toES₂ (∑ σ : Fin n → Fin d,
+    ‖matToES (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ^ 2 from
-    (norm_toES₂_sq _).symm]
-  set fA := fun σ : Fin n → Fin d => ‖toESSq₁ (evalWord A (List.ofFn σ))‖ with hfA_def
-  set fB := fun σ : Fin n → Fin d => ‖toES₂ (X * (evalWord B (List.ofFn σ))ᴴ)‖ with hfB_def
-  have h_chain : ‖toES₂ (∑ σ : Fin n → Fin d,
+    (norm_matToES_sq _).symm]
+  set fA := fun σ : Fin n → Fin d => ‖matToES (evalWord A (List.ofFn σ))‖ with hfA_def
+  set fB := fun σ : Fin n → Fin d =>
+    ‖matToES (X * (evalWord B (List.ofFn σ))ᴴ)‖ with hfB_def
+  have h_chain : ‖matToES (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ≤
     ∑ σ : Fin n → Fin d, fA σ * fB σ :=
-    ((by rw [toES₂_finset_sum]; exact norm_sum_le _ _) : ‖toES₂ _‖ ≤ _).trans
-      (Finset.sum_le_sum fun σ _ => norm_toES₂_mul_le _ _)
+    ((by rw [matToES_finset_sum]; exact norm_sum_le _ _) : ‖matToES _‖ ≤ _).trans
+      (Finset.sum_le_sum fun σ _ => norm_matToES_rect_mul_le _ _)
   have h_A : ∑ σ : Fin n → Fin d, fA σ ^ 2 = (D₁ : ℝ) := by
-    simp_rw [hfA_def, norm_toESSq₁_sq]; exact sum_frobSq₂_words A hA_norm n
+    simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq₂_words A hA_norm n
   have h_B : ∑ σ : Fin n → Fin d, fB σ ^ 2 = frobSq₂ X := by
-    simp_rw [hfB_def, norm_toES₂_sq]; exact sum_frobSq₂_right B hB_norm X n
-  calc ‖toES₂ _‖ ^ 2
+    simp_rw [hfB_def, norm_matToES_sq]; exact sum_frobSq₂_right B hB_norm X n
+  calc ‖matToES _‖ ^ 2
       ≤ (∑ σ : Fin n → Fin d, fA σ * fB σ) ^ 2 :=
         pow_le_pow_left₀ (norm_nonneg _) h_chain 2
     _ ≤ (∑ σ, fA σ ^ 2) * (∑ σ, fB σ ^ 2) :=
         Finset.sum_mul_sq_le_sq_mul_sq Finset.univ fA fB
     _ = (D₁ : ℝ) * frobSq₂ X := by rw [h_A, h_B]
     _ ≤ (D₁ : ℝ) ^ 2 * frobSq₂ X := by
-        nlinarith [sq_nonneg ((D₁ : ℝ) - 1), frobSq₂_nonneg X,
+        nlinarith [sq_nonneg ((D₁ : ℝ) - 1), frobSq_nonneg X,
           show (1 : ℝ) ≤ D₁ from by exact_mod_cast NeZero.one_le (n := D₁)]
 
 end HSContraction
@@ -275,10 +182,11 @@ theorem eigenvalue_norm_le_one₂ [NeZero D₁] [NeZero D₂]
   obtain ⟨v, hv_mem, hv_ne⟩ := hμ.exists_hasEigenvector
   have hFv := Module.End.mem_eigenspace_iff.mp hv_mem
   by_contra h_gt; push_neg at h_gt
-  have h_pos := frobSq₂_pos_of_ne_zero v hv_ne
+  have h_pos := frobSq_pos_of_ne_zero v hv_ne
   have h_bound : ∀ n : ℕ, ‖μ‖ ^ (2 * n) ≤ (D₁ : ℝ) ^ 2 := fun n => by
     have h1 := hs_contraction_rect A B v hA_norm hB_norm n
-    rw [eigenvector_pow _ v μ hFv n, frobSq₂_smul, norm_pow] at h1
+    rw [eigenvector_pow _ v μ hFv n] at h1
+    simp only [frobSq₂, frobSq_smul, norm_pow] at h1
     calc ‖μ‖ ^ (2 * n) = (‖μ‖ ^ n) ^ 2 := by ring
     _ ≤ _ := le_of_mul_le_mul_right (by linarith) h_pos
   have htend := tendsto_pow_atTop_atTop_of_one_lt (by nlinarith : 1 < ‖μ‖ ^ 2)
