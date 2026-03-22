@@ -138,6 +138,11 @@ theorem chainTracePairing_range_le
       Matrix.trace (A₁ (σ 0) * A₂ (σ 1) * A₃ (σ 2)) =
       Matrix.trace (B₁ (σ 0) * B₂ (σ 1) * B₃ (σ 2))) :
     (chainTracePairing A₁ A₂ A₃).range ≤ (chainTracePairing B₁ B₂ B₃).range := by
+  -- The proof uses `ker_bot_of_range_le` from TracePairing.lean:
+  -- Since Φ_A is injective and range(Φ_A) ≤ range(Φ_B), Φ_B is also injective.
+  -- The range inclusion follows from the SameState condition via the decomposition
+  -- map technique, but requires matching the Φ_A/Φ_B evaluation which involves
+  -- products of length > 3. This is a genuine proof obligation.
   sorry
 
 /-! ### The cross-chain transfer map -/
@@ -235,7 +240,11 @@ theorem virtual_bond_gauge [NeZero D]
   have hEq' : ∀ σ : Fin 3 → Fin d,
       Matrix.trace (A 0 (σ 0) * A 1 (σ 1) * A 2 (σ 2)) =
       Matrix.trace (B 0 (σ 0) * B 1 (σ 1) * B 2 (σ 2)) := by
-    sorry
+    intro σ
+    have h := hEq σ
+    simp only [MPSChainTensor.coeff, MPSChainTensor.eval] at h
+    simp only [Fin.prod, Fin.foldr, Fin.foldr.loop] at h
+    simpa [Matrix.mul_assoc] using h
   -- Build the cross-chain transfer map.
   let T := crossChainTransfer (A 0) (A 1) (A 2) (B 0) (B 1) (B 2)
     (hB 0) (hB 1) (hB 2) (hA 0) hEq'
