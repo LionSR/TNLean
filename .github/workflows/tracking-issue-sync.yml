@@ -57,5 +57,4 @@ jobs:
 
           claude_args: |
             --model claude-sonnet-4-6
-            --max-turns 10
             --allowedTools "Bash(gh issue:*),Bash(gh pr:*)"
