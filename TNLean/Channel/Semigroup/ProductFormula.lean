@@ -113,13 +113,13 @@ theorem expSemigroupCLM_pow_eq
         ring
       rw [← expSemigroupCLM_add, hm]
 
-/-- Telescope estimate for powers in a normed algebra. -/
-theorem norm_pow_sub_pow_le [NeZero D]
+/-- Telescope estimate for powers in a normed algebra under uniform norm bounds. -/
+theorem norm_pow_sub_pow_le_of_norm_le [NeZero D]
     {A B : CLM D} {M : ℝ} (hM : 1 ≤ M) (hA : ‖A‖ ≤ M) (hB : ‖B‖ ≤ M) :
     ∀ m : ℕ, ‖A ^ m - B ^ m‖ ≤ (m : ℝ) * M ^ m * ‖A - B‖
   | 0 => by simp
   | m + 1 => by
-      have hm := norm_pow_sub_pow_le hM hA hB m
+      have hm := norm_pow_sub_pow_le_of_norm_le hM hA hB m
       have hsplit : A ^ (m + 1) - B ^ (m + 1) = A ^ m * (A - B) + (A ^ m - B ^ m) * B := by
         rw [pow_succ, pow_succ, mul_sub, sub_mul]
         abel
@@ -175,7 +175,8 @@ theorem norm_trotter_pow_sub_exp_le_of_step [NeZero D]
     exact Real.one_le_exp (mul_nonneg hs_nonneg (add_nonneg (norm_nonneg _) (norm_nonneg _)))
   have hpow : ‖E ^ (n + 1) - S ^ (n + 1)‖ ≤
       ((n + 1 : ℕ) : ℝ) * (Real.exp (s * (‖A‖ + ‖B‖))) ^ (n + 1) * ‖E - S‖ := by
-    exact norm_pow_sub_pow_le (D := D) (A := E) (B := S) (M := Real.exp (s * (‖A‖ + ‖B‖)))
+    exact norm_pow_sub_pow_le_of_norm_le (D := D) (A := E) (B := S)
+      (M := Real.exp (s * (‖A‖ + ‖B‖)))
       hM hE_le hS_le (n + 1)
   have hMpow : (Real.exp (s * (‖A‖ + ‖B‖))) ^ (n + 1) = Real.exp (t * (‖A‖ + ‖B‖)) := by
     dsimp [s]
