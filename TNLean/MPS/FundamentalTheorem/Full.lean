@@ -183,8 +183,8 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
   fundamentalTheorem_of_separated_CFBNT_data A B
     hA_inj hA_left hA_overlap hA_blocks
     hB_inj hB_left hB_overlap hB_blocks
-    A_total B_total aCoeff bCoeff aLim bLim c cLim
-    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
+      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
 /-- **Proportional-MPV Fundamental Theorem for CF-BNT (Thm 4.4).**
 
@@ -278,8 +278,8 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
               (B (perm j)) :=
   fundamentalTheorem_of_separated_normalCFBNT_data A B
     hA_ncf hA_blocks hB_ncf hB_blocks
-    A_total B_total aCoeff bCoeff aLim bLim c cLim
-    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
+      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
 /-- Fundamental Theorem (proportional case) for normal canonical form blocks. -/
 theorem fundamentalTheorem_proportionalMPV_normalCFBNT
