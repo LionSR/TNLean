@@ -138,6 +138,19 @@ The theorem takes convergent coefficient data as explicit hypotheses.
 This is the Stage B low-risk interface: it packages only the hypotheses actually used by the
 proportional-MPV argument, and leaves the legacy `IsCanonicalFormBNT` wrapper theorem below
 unchanged. -/
+abbrev BlockPermutationGaugeWitness
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k)) : Prop :=
+  ∃ _h : rA = rB,
+    ∃ perm : Fin rA ≃ Fin rB,
+      ∀ j : Fin rA,
+        ∃ hdim : dimA j = dimB (perm j),
+          GaugePhaseEquiv (d := d)
+            (cast (congr_arg (MPSTensor d) hdim) (A j))
+            (B (perm j))
+
 theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -173,13 +186,7 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    BlockPermutationGaugeWitness (d := d) A B :=
   fundamentalTheorem_of_separated_CFBNT_data A B
     hA_inj hA_left hA_overlap hA_blocks
     hB_inj hB_left hB_overlap hB_blocks
@@ -226,13 +233,7 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    BlockPermutationGaugeWitness (d := d) A B :=
   fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB A_total B_total aCoeff bCoeff aLim bLim c
     cLim hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
@@ -269,13 +270,7 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    BlockPermutationGaugeWitness (d := d) A B :=
   fundamentalTheorem_of_separated_normalCFBNT_data A B
     hA_ncf hA_blocks hB_ncf hB_blocks
     A_total B_total aCoeff bCoeff aLim bLim c cLim
@@ -308,13 +303,7 @@ theorem fundamentalTheorem_proportionalMPV_normalCFBNT
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    BlockPermutationGaugeWitness (d := d) A B :=
   fundamentalTheorem_of_IsNormalCanonicalFormBNT A B hA hB
     A_total B_total aCoeff bCoeff aLim bLim c cLim
     hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
@@ -1604,13 +1593,7 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
     (hA : IsCanonicalFormBNT μA A)
     (hB : IsCanonicalFormBNT μB B)
     (hEqual : SameMPV₂ (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) := by
+    BlockPermutationGaugeWitness (d := d) A B := by
   have hμA_ne := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero
   have hμB_ne := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero
   obtain ⟨N0A, hLIA⟩ := hA.isBNT.eventually_li
@@ -1902,8 +1885,9 @@ private lemma blocks_match_of_sameMPV₂_CFBNT
   let perm : Fin rA ≃ Fin rA := Equiv.ofBijective fA hfA_bij
   refine ⟨perm, fun j => ?_⟩
   have hpj : perm j = fA j := Equiv.ofBijective_apply fA hfA_bij j
-  rw [hpj]
-  exact ⟨hfA_dim j, hfA_gpe j⟩
+  refine ⟨?_, ?_⟩
+  · simpa [hpj] using hfA_dim j
+  · simpa [hpj] using hfA_gpe j
 
 /-- **Self-contained equal-case Fundamental Theorem for heterogeneous CF-BNT**
 ([CPSV21, Corollary IV.5] / [CPSV17, Theorem 4.4 + equal-case corollary]).
@@ -1948,13 +1932,7 @@ theorem fundamentalTheorem_equalMPV_CFBNT_hetero
     (hA : IsCanonicalFormBNT μA A)
     (hB : IsCanonicalFormBNT μB B)
     (hEqual : SameMPV₂ (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    BlockPermutationGaugeWitness (d := d) A B :=
   blocks_match_of_sameMPV₂_CFBNT A B hA hB hEqual
 
 end HeteroEqualCase
