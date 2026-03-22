@@ -1,0 +1,234 @@
+name: Tracking Issue Sync
+
+on:
+  issues:
+    types: [closed, reopened, labeled, unlabeled]
+  pull_request:
+    types: [closed, reopened, labeled, unlabeled]
+
+permissions:
+  issues: write
+  pull-requests: read
+  contents: read
+
+jobs:
+  update-tracking-issues:
+    runs-on: ubuntu-latest
+    # Only act on issues/PRs that reference a tracking issue
+    steps:
+      - name: Update tracking issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const eventName = context.eventName;
+            const payload = context.payload;
+
+            // Determine the item that triggered this event
+            const item = eventName === 'issues' ? payload.issue : payload.pull_request;
+            const itemNumber = item.number;
+            const itemTitle = item.title;
+            const itemType = eventName === 'issues' ? 'Issue' : 'PR';
+            const isMerged = eventName === 'pull_request' && item.merged === true;
+            const isClosed = payload.action === 'closed';
+            const isReopened = payload.action === 'reopened';
+
+            // Status emoji
+            let statusEmoji = '⬜';
+            if (isClosed && eventName === 'issues') statusEmoji = '✅';
+            if (isMerged) statusEmoji = '✅';
+            if (isClosed && eventName === 'pull_request' && !isMerged) statusEmoji = '❌';
+            if (isReopened) statusEmoji = '🔄';
+
+            // Check if this item has a "tracked" label or references a tracking issue
+            const hasTrackedLabel = item.labels?.some(l => l.name === 'tracked');
+
+            // --- Strategy 1: Find tracking issues by scanning item body for "Tracking: #N" ---
+            const trackingRefs = [];
+            if (item.body) {
+              const trackingPattern = /[Tt]racking(?:\s+[Ii]ssue)?:\s*#(\d+)/g;
+              let match;
+              while ((match = trackingPattern.exec(item.body)) !== null) {
+                trackingRefs.push(parseInt(match[1]));
+              }
+            }
+
+            // --- Strategy 2: Find tracking issues that reference this item ---
+            // Search for open tracking issues
+            const trackingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'tracking',
+              state: 'open',
+              per_page: 50,
+            });
+
+            // Also check closed tracking issues (they might need reopening)
+            const closedTrackingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'tracking',
+              state: 'closed',
+              per_page: 20,
+            });
+
+            const allTrackingIssues = [...trackingIssues.data, ...closedTrackingIssues.data];
+
+            // Find tracking issues that mention this item number in their body
+            for (const tracker of allTrackingIssues) {
+              if (tracker.body && tracker.body.includes(`#${itemNumber}`)) {
+                if (!trackingRefs.includes(tracker.number)) {
+                  trackingRefs.push(tracker.number);
+                }
+              }
+            }
+
+            if (trackingRefs.length === 0 && !hasTrackedLabel) {
+              console.log(`No tracking references found for ${itemType} #${itemNumber}, skipping.`);
+              return;
+            }
+
+            // For each tracking issue, update the checklist
+            for (const trackingNumber of trackingRefs) {
+              console.log(`Updating tracking issue #${trackingNumber} for ${itemType} #${itemNumber}`);
+
+              let tracker;
+              try {
+                const resp = await github.rest.issues.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: trackingNumber,
+                });
+                tracker = resp.data;
+              } catch (e) {
+                console.log(`Could not fetch tracking issue #${trackingNumber}: ${e.message}`);
+                continue;
+              }
+
+              // Verify it has the "tracking" label
+              const isTracker = tracker.labels?.some(l => l.name === 'tracking');
+              if (!isTracker) {
+                console.log(`Issue #${trackingNumber} is not a tracking issue (no 'tracking' label), skipping.`);
+                continue;
+              }
+
+              let body = tracker.body || '';
+
+              // Update checkbox state for this item
+              // Matches patterns like: - [ ] #123 or - [x] #123 (with optional text after)
+              const checkboxPattern = new RegExp(
+                `- \\[([ xX])\\] #${itemNumber}\\b(.*)`,
+                'g'
+              );
+
+              let updated = false;
+              if (checkboxPattern.test(body)) {
+                // Reset regex
+                checkboxPattern.lastIndex = 0;
+
+                const shouldCheck = (isClosed && eventName === 'issues') || isMerged;
+                const newState = shouldCheck ? 'x' : ' ';
+
+                body = body.replace(checkboxPattern, (match, state, rest) => {
+                  updated = true;
+                  return `- [${newState}] #${itemNumber}${rest}`;
+                });
+              }
+
+              if (updated) {
+                // Count progress
+                const totalTasks = (body.match(/- \[[ xX]\] #\d+/g) || []).length;
+                const completedTasks = (body.match(/- \[[xX]\] #\d+/g) || []).length;
+
+                // Update the tracking issue body
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: trackingNumber,
+                  body: body,
+                });
+
+                // Add a comment about the status change
+                const action = isMerged ? 'merged' : (isClosed ? 'closed' : 'reopened');
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: trackingNumber,
+                  body: `${statusEmoji} ${itemType} #${itemNumber} (*${itemTitle}*) was **${action}**. Progress: **${completedTasks}/${totalTasks}** tasks completed.`,
+                });
+
+                // If all tasks are done, add a comment (but don't auto-close)
+                if (totalTasks > 0 && completedTasks === totalTasks) {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: trackingNumber,
+                    body: `🎉 All **${totalTasks}** tracked tasks are now complete! This tracking issue can be closed.`,
+                  });
+
+                  // Add "all-resolved" label
+                  try {
+                    await github.rest.issues.addLabels({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: trackingNumber,
+                      labels: ['all-resolved'],
+                    });
+                  } catch (e) {
+                    console.log(`Could not add 'all-resolved' label: ${e.message}`);
+                  }
+                } else if (completedTasks < totalTasks) {
+                  // Remove "all-resolved" if it was there and items got reopened
+                  try {
+                    await github.rest.issues.removeLabel({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: trackingNumber,
+                      name: 'all-resolved',
+                    });
+                  } catch (e) {
+                    // Label might not exist, that's fine
+                  }
+                }
+
+                console.log(`Updated tracking issue #${trackingNumber}: ${completedTasks}/${totalTasks} complete`);
+              } else {
+                console.log(`No checkbox found for #${itemNumber} in tracking issue #${trackingNumber}`);
+              }
+            }
+
+  # Auto-label issues/PRs that are added to tracking issues
+  auto-label-tracked:
+    runs-on: ubuntu-latest
+    if: >
+      (github.event_name == 'issues' || github.event_name == 'pull_request') &&
+      (github.event.action == 'labeled') &&
+      contains(github.event.label.name, 'tracking')
+    steps:
+      - name: Label sub-issues as tracked
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const item = context.payload.issue || context.payload.pull_request;
+            const body = item.body || '';
+
+            // Find all issue/PR references in checklist items
+            const refs = [];
+            const pattern = /- \[[ xX]\] #(\d+)/g;
+            let match;
+            while ((match = pattern.exec(body)) !== null) {
+              refs.push(parseInt(match[1]));
+            }
+
+            for (const num of refs) {
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: num,
+                  labels: ['tracked'],
+                });
+                console.log(`Added 'tracked' label to #${num}`);
+              } catch (e) {
+                console.log(`Could not label #${num}: ${e.message}`);
+              }
+            }
