@@ -26,9 +26,11 @@ noncomputable def physRealize (A : MPSTensor d D) (hA : IsInjective A)
 in the span of `{A j}` with coefficients read from `physRealize`. -/
 theorem physRealize_spec (A : MPSTensor d D) (hA : IsInjective A)
     (X : Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
-    A i * X = ∑ j, (physRealize A hA X) i j • A j := by
-  simpa [physRealize] using
-    (decompositionMap_sum (A := A) hA (A i * X)).symm
+    A i * X = ∑ j, (physRealize A hA X) i j • A j :=
+  set_option linter.unnecessarySimpa false in
+  by
+    simpa [physRealize] using
+      (decompositionMap_sum (A := A) hA (A i * X)).symm
 
 /-- Left-bond analogue of `physRealize`:
 `physRealizeLeft A hA X` records coefficients that rewrite each `X * A i`. -/
@@ -39,9 +41,11 @@ noncomputable def physRealizeLeft (A : MPSTensor d D) (hA : IsInjective A)
 /-- Defining property for the left-bond realization map. -/
 theorem physRealizeLeft_spec (A : MPSTensor d D) (hA : IsInjective A)
     (X : Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
-    X * A i = ∑ j, (physRealizeLeft A hA X) i j • A j := by
-  simpa [physRealizeLeft] using
-    (decompositionMap_sum (A := A) hA (X * A i)).symm
+    X * A i = ∑ j, (physRealizeLeft A hA X) i j • A j :=
+  set_option linter.unnecessarySimpa false in
+  by
+    simpa [physRealizeLeft] using
+      (decompositionMap_sum (A := A) hA (X * A i)).symm
 
 /-- `physRealize` is linear in the inserted matrix. -/
 theorem physRealize_linear (A : MPSTensor d D) (hA : IsInjective A) :
@@ -60,7 +64,7 @@ theorem physRealize_one (A : MPSTensor d D) (hA : IsInjective A)
   have hc : Fintype.linearCombination ℂ A c = A i := by
     simpa [c, Fintype.linearCombination_apply] using (physRealize_spec A hA 1 i).symm
   have hsingle : Fintype.linearCombination ℂ A (Pi.single i (1 : ℂ)) = A i := by
-    simpa using (Fintype.linearCombination_apply_single (R := ℂ) (v := A) i (1 : ℂ))
+    simp [Fintype.linearCombination_apply_single]
   have hc' : c = Pi.single i (1 : ℂ) :=
     hLin.fintypeLinearCombination_injective (hc.trans hsingle.symm)
   simpa [c, Matrix.one_apply, Pi.single_apply, eq_comm] using congrArg (fun f => f j) hc'
@@ -88,11 +92,13 @@ theorem physRealize_mul (A : MPSTensor d D) (hA : IsInjective A)
       _ = ∑ j, (physRealize A hA X) i j • (∑ k', (physRealize A hA Y) j k' • A k') := by
             refine Finset.sum_congr rfl ?_
             intro j hj
-            simp [Finset.smul_sum, mul_smul, smul_assoc]
+            simp [Finset.smul_sum, mul_smul]
       _ = ∑ j, (physRealize A hA X) i j • (A j * Y) := by
             refine Finset.sum_congr rfl ?_
             intro j hj
-            simpa using congrArg (fun M => (physRealize A hA X) i j • M) (physRealize_spec A hA Y j).symm
+            simpa using
+              congrArg (fun M => (physRealize A hA X) i j • M)
+                (physRealize_spec A hA Y j).symm
       _ = (∑ j, (physRealize A hA X) i j • A j) * Y := by
             simp [Finset.sum_mul]
       _ = (A i * X) * Y := by simpa using congrArg (fun M => M * Y) (physRealize_spec A hA X i).symm
@@ -114,8 +120,8 @@ theorem physRealize_injective (A : MPSTensor d D) (hA : IsInjective A)
   have hX0 : X = 0 := by
     calc
       X = (1 : Matrix (Fin D) (Fin D) ℂ) * X := by simp
-      _ = (∑ i, c i • A i) * X := by simpa [hc]
-      _ = ∑ i, c i • (A i * X) := by simp [Finset.sum_mul, smul_mul_assoc]
+      _ = (∑ i, c i • A i) * X := by simp [hc]
+      _ = ∑ i, c i • (A i * X) := by simp [Finset.sum_mul]
       _ = 0 := by simp [hAll]
   exact hX hX0
 
