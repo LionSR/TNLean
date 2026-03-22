@@ -92,10 +92,90 @@ theorem tensor_proportional
     internal_products_eq A₁ A₂ B₁ B₂ hInt
   have hProdR : ∀ i j, A₁ i * A₂ j = B₁ i * B₂ j :=
     external_products_eq A₁ A₂ B₁ B₂ hExt
-
-  -- The remaining algebraic argument (linear extension from injectivity,
-  -- centrality, and center of full matrix algebra) is recorded as a TODO.
-  -- It follows the standard blueprint route described in the PR thread.
-  sorry
+  -- Handle D = 0: all matrices are trivially equal (subsingleton).
+  rcases Nat.eq_zero_or_pos D with rfl | hD
+  · exact ⟨1, one_ne_zero, fun i => Subsingleton.elim _ _, fun j => Subsingleton.elim _ _⟩
+  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  -- Step 3: Decompose 1 in terms of A₂ to define Z, then show A₁ i = Z * B₁ i.
+  set Z := ∑ j, decompositionMap hA₂ 1 j • B₂ j with hZ_def
+  have hA₁_eq : ∀ i, A₁ i = Z * B₁ i := by
+    intro i
+    have h1 : A₁ i = (∑ j, decompositionMap hA₂ 1 j • A₂ j) * A₁ i := by
+      rw [decompositionMap_sum, one_mul]
+    rw [h1, Finset.sum_mul]
+    simp_rw [smul_mul_assoc, hProdL i, ← smul_mul_assoc]
+    rw [← Finset.sum_mul]
+  -- Step 4: Decompose 1 in terms of A₁ to define W, then show A₂ j = W * B₂ j.
+  set W := ∑ i, decompositionMap hA₁ 1 i • B₁ i with hW_def
+  have hA₂_eq : ∀ j, A₂ j = W * B₂ j := by
+    intro j
+    have h1 : A₂ j = (∑ i, decompositionMap hA₁ 1 i • A₁ i) * A₂ j := by
+      rw [decompositionMap_sum, one_mul]
+    rw [h1, Finset.sum_mul]
+    simp_rw [smul_mul_assoc, hProdR, ← smul_mul_assoc]
+    rw [← Finset.sum_mul]
+  -- Step 5: Show W * B₂ j * Z = B₂ j (using spanning of B₁).
+  have hWBZ : ∀ j, W * B₂ j * Z = B₂ j := by
+    intro j
+    have h_vanish : ∀ i, (W * B₂ j * Z - B₂ j) * B₁ i = 0 := by
+      intro i
+      rw [sub_mul, sub_eq_zero, mul_assoc (W * B₂ j) Z (B₁ i), ← hA₂_eq j, ← hA₁_eq i]
+      exact hProdL i j
+    have hL : LinearMap.mulLeft ℂ (W * B₂ j * Z - B₂ j) = 0 :=
+      LinearMap.ext_on_range (hv := hB₁.span_eq_top) fun i => by
+        simp only [LinearMap.mulLeft_apply, LinearMap.zero_apply, h_vanish i]
+    have h1 := LinearMap.congr_fun hL 1
+    simp only [LinearMap.mulLeft_apply, mul_one, LinearMap.zero_apply] at h1
+    exact sub_eq_zero.mp h1
+  -- Step 6: Show W * M * Z = M for all M (using spanning of B₂).
+  have hWMZ : ∀ M, W * M * Z = M := by
+    have hL : (LinearMap.mulLeft ℂ W).comp (LinearMap.mulRight ℂ Z) = LinearMap.id :=
+      LinearMap.ext_on_range (hv := hB₂.span_eq_top) fun j => by
+        simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
+          LinearMap.id_apply]
+        rw [← mul_assoc]; exact hWBZ j
+    intro M
+    have := LinearMap.congr_fun hL M
+    simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply,
+      LinearMap.id_apply] at this
+    rw [mul_assoc]; exact this
+  -- Step 7: W * Z = 1 and Z * W = 1.
+  have hWZ : W * Z = 1 := by simpa [mul_one] using hWMZ 1
+  have hZW : Z * W = 1 := by
+    have h := hWMZ (Z * W)
+    have h2 : W * (Z * W) * Z = 1 := by
+      rw [← mul_assoc W Z W, mul_assoc (W * Z)]
+      simp only [hWZ, one_mul]
+    exact h.symm.trans h2
+  -- Step 8: Z commutes with all matrices.
+  have hZ_comm : ∀ M, Z * M = M * Z := by
+    intro M
+    have h := hWMZ (Z * M)
+    rw [← mul_assoc W Z M, hWZ, one_mul] at h
+    exact h.symm
+  -- Step 9: Z is in the center of the matrix algebra, hence scalar.
+  have hZ_center : Z ∈ Set.center (Matrix (Fin D) (Fin D) ℂ) := by
+    rw [Semigroup.mem_center_iff]
+    exact fun M => (hZ_comm M).symm
+  rw [Matrix.center_eq_range ℂ] at hZ_center
+  obtain ⟨lambda_, hLam⟩ := hZ_center
+  have hZ_eq : Z = lambda_ • 1 := by
+    rw [← hLam, Matrix.scalar_apply, Matrix.smul_one_eq_diagonal]
+  -- Step 10: lambda_ ≠ 0 (from W * Z = 1 and Z = lambda_ • 1).
+  have hLam_ne : lambda_ ≠ 0 := by
+    intro h0; have h := hWZ
+    rw [hZ_eq, mul_smul_comm, mul_one, h0, zero_smul] at h
+    exact zero_ne_one h
+  -- Step 11: W = lambda_⁻¹ • 1.
+  have hW_eq : W = lambda_⁻¹ • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    have h : lambda_ • W = 1 := by
+      have := hWZ; rwa [hZ_eq, mul_smul_comm, mul_one] at this
+    calc W = lambda_⁻¹ • (lambda_ • W) := by
+              rw [smul_smul, inv_mul_cancel₀ hLam_ne, one_smul]
+      _ = lambda_⁻¹ • 1 := by rw [h]
+  -- Step 12: Assemble the result.
+  exact ⟨lambda_, hLam_ne,
+    fun i => by rw [hA₁_eq i, hZ_eq, smul_mul_assoc, one_mul],
+    fun j => by rw [hA₂_eq j, hW_eq, smul_mul_assoc, one_mul]⟩
 
 end MPSTensor
