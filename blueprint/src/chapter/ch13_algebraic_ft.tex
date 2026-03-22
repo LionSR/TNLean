@@ -290,8 +290,19 @@ inner automorphism.
     Define $O_{A,k}(X) \in \MN{d^{\ell}}$ (where $\ell$ is the block
     size) via the physical realisation map for the blocked tensor adjacent
     to bond~$k$.
-    By Theorem~\ref{thm:physRealize_mul}, $X \mapsto O_{A,k}(X)$
+    The map $X \mapsto O_{A,k}(X)$
     is a $\C$-algebra homomorphism from $\MN{D}$ to $\MN{d^{\ell}}$.
+
+    \emph{Note.} The blocked tensor has physical dimension $d^{\ell}$,
+    which generically exceeds $D^2$; thus
+    Theorem~\ref{thm:physRealize_mul} (which is proved only for the
+    basis case $d = D^2$) does not directly apply.
+    The paper \cite{Molnar2018NormalPEPS} establishes multiplicativity
+    by a different route: it constructs the algebra homomorphisms
+    $X \mapsto O_1$, $O_1 \mapsto Y$ through diagrammatic inversion,
+    avoiding the coefficient-uniqueness issue entirely
+    (see Remark~\ref{rem:physRealize_mul_general}).
+    The formalisation of this alternative argument is future work.
 
     \textbf{Step 2} (transfer of physical operations).
     Since $\mathbf{A}$ and $\mathbf{B}$ generate the same state,
@@ -309,8 +320,9 @@ inner automorphism.
     imply that $T$ is $\C$-linear.
 
     \textbf{Step 4} (multiplicativity).
-    Since $O_{A,k}$ and $O_{B,k}$ are algebra homomorphisms
-    (Theorem~\ref{thm:physRealize_mul}), $T(XY) = T(X)T(Y)$.
+    Since both $X \mapsto O_{A,k}(X)$ and $X \mapsto O_{B,k}(X)$ are
+    algebra homomorphisms (see the note in Step~1),
+    $T(XY) = T(X)T(Y)$.
 
     \textbf{Step 5} (bijectivity).
     $T$ is a nonzero $\C$-algebra endomorphism of $\MN{D}$.
