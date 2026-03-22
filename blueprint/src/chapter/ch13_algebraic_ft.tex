@@ -107,7 +107,8 @@ virtual bond has the same effect on any multi-site amplitude as acting
 with $O$ on a physical index?
 
 \begin{definition}[Physical realisation map]\label{def:phys_realize}
-    \notready
+    \lean{MPSTensor.physRealize}
+    \leanok
     \uses{def:decomposition_map}
     Let $A$ be an injective tensor.
     For $X \in \MN{D}$, define the $d \times d$ matrix
@@ -122,7 +123,8 @@ with $O$ on a physical index?
 
 \begin{lemma}[Defining property of the physical realisation map]%
     \label{lem:physRealize_spec}
-    \notready
+    \lean{MPSTensor.physRealize_spec}
+    \leanok
     \uses{def:phys_realize, def:decomposition_map}
     For every $X \in \MN{D}$ and every physical index $i$,
     \[
@@ -131,6 +133,7 @@ with $O$ on a physical index?
 \end{lemma}
 
 \begin{proof}
+    \leanok
     By definition, $O_A(X)_{ij} = (\Psi_A(A^i X))_j$.
     Applying $\Phi_A$ gives
     $\sum_j O_A(X)_{ij} A^j = \Phi_A(\Psi_A(A^i X)) = A^i X$,
@@ -139,7 +142,7 @@ with $O$ on a physical index?
 
 \begin{theorem}[Physical realisation is multiplicative]%
     \label{thm:physRealize_mul}
-    \notready
+    \lean{MPSTensor.physRealize_mul}
     \uses{def:phys_realize, lem:physRealize_spec}
     Let $A$ be injective.
     For all $X, Y \in \MN{D}$,
