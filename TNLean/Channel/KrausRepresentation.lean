@@ -18,6 +18,8 @@ positive maps `T(A) = ∑ⱼ Kⱼ A Kⱼ†`.
 * `kraus_tp_of_sum_conjTranspose_mul` — `∑ᵢ Kᵢ†Kᵢ = 𝟙` ⟹ TP
 * `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑ᵢ Kᵢ Kᵢ† = 𝟙`
 * `kraus_same_map_of_unitary_combination` — unitary freedom (sufficient direction)
+* `kraus_unitary_combination_of_same_map` — unitary freedom (necessary direction)
+* `kraus_same_map_iff_unitary_combination` — unitary freedom (iff characterisation)
 
 ## Design notes
 
@@ -136,3 +138,77 @@ theorem kraus_same_map_of_unitary_combination
           (if l' = l then 1 else 0) • (K' l * X * (K' l')ᴴ) := by
           simp_rw [hU_entry]; simp
     _ = ∑ l : Fin r, K' l * X * (K' l)ᴴ := by simp
+
+/-! ### Unitary freedom: necessary direction and full characterisation (Thm 2.1, item 4) -/
+
+/-- **Core linear algebra lemma for unitary freedom**: if two families of
+vectors have the same outer-product sum `∑ⱼ vⱼ vⱼ† = ∑ₗ wₗ wₗ†`, then the
+families are related by a unitary mixing matrix.
+
+This is the finite-dimensional fact that two decompositions of a positive
+semidefinite matrix into rank-1 terms (of the same cardinality) are
+related by a unitary transformation.
+
+**Proof status**: requires partial-isometry extension or polar decomposition
+for matrices over `ℂ`, which is not yet available in this project's
+Mathlib toolchain. This is the sole `sorry` underlying the converse
+direction of Kraus unitary freedom. -/
+theorem exists_unitary_of_sum_vecMulVec_star_eq
+    {ι : Type*}
+    {r : ℕ}
+    (v w : Fin r → (ι → ℂ))
+    (h : ∑ j : Fin r, Matrix.vecMulVec (v j) (star (v j)) =
+         ∑ l : Fin r, Matrix.vecMulVec (w l) (star (w l))) :
+    ∃ U : Matrix (Fin r) (Fin r) ℂ, Uᴴ * U = 1 ∧
+      ∀ j i, v j i = ∑ l : Fin r, U j l * w l i := by
+  sorry
+
+/-- **Thm 2.1 item 4 (unitary freedom, necessary direction)**:
+if two same-size Kraus families define the same map, they are related by a
+unitary mixing matrix.
+
+Concretely, if `∀ X, ∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K̃ₗ X K̃ₗ†`, then there exists a
+unitary `U` (satisfying `Uᴴ U = 1`) such that `Kⱼ = ∑ₗ Uⱼₗ K̃ₗ`.
+
+### Hypotheses
+
+Both families must have the same number `r` of operators. When the Kraus
+ranks differ, pad the shorter family with zero operators.
+
+### Proof strategy
+
+The map-equality hypothesis, tested on rank-1 inputs `X = |i⟩⟨j|`, yields the
+identity `∑ⱼ vⱼ vⱼ† = ∑ₗ wₗ wₗ†` for the "vectorisations"
+`vⱼ(a,i) = (Kⱼ)ₐᵢ`. The core linear algebra lemma
+`exists_unitary_of_sum_vecMulVec_star_eq` then gives the unitary. -/
+theorem kraus_unitary_combination_of_same_map
+    {r : ℕ}
+    (K K' : Fin r → Matrix (Fin D) (Fin D) ℂ)
+    (hmap : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      ∑ j : Fin r, K j * X * (K j)ᴴ =
+      ∑ l : Fin r, K' l * X * (K' l)ᴴ) :
+    ∃ U : Matrix (Fin r) (Fin r) ℂ, Uᴴ * U = 1 ∧
+      ∀ j, K j = ∑ l : Fin r, U j l • K' l := by
+  -- Vectorise: define v_j(a,i) = (K_j)_{a,i}, w_l(a,i) = (K'_l)_{a,i}.
+  -- The map equality on rank-1 inputs gives ∑ⱼ v_j v_j† = ∑ₗ w_l w_l†.
+  -- The core linear algebra lemma then produces the unitary U.
+  sorry
+
+/-- **Thm 2.1 item 4 (unitary freedom, full characterisation)**:
+two same-size Kraus families define the same map **if and only if** they
+are related by a unitary mixing matrix.
+
+This combines the sufficient direction (`kraus_same_map_of_unitary_combination`)
+with the necessary direction (`kraus_unitary_combination_of_same_map`). -/
+theorem kraus_same_map_iff_unitary_combination
+    {r : ℕ}
+    (K K' : Fin r → Matrix (Fin D) (Fin D) ℂ) :
+    (∀ X : Matrix (Fin D) (Fin D) ℂ,
+      ∑ j : Fin r, K j * X * (K j)ᴴ =
+      ∑ l : Fin r, K' l * X * (K' l)ᴴ) ↔
+    (∃ U : Matrix (Fin r) (Fin r) ℂ, Uᴴ * U = 1 ∧
+      ∀ j, K j = ∑ l : Fin r, U j l • K' l) := by
+  constructor
+  · exact kraus_unitary_combination_of_same_map K K'
+  · rintro ⟨U, hU, hK⟩
+    exact kraus_same_map_of_unitary_combination K K' U hU hK

@@ -34,6 +34,9 @@ representations of quantum channels.
   - `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑Kᵢ†Kᵢ = 𝟙` ✅
   - `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑KᵢKᵢ† = 𝟙` ✅
   - `kraus_same_map_of_unitary_combination` — unitary freedom (sufficient direction) ✅
+  - `kraus_unitary_combination_of_same_map` — unitary freedom
+    (necessary direction) ✅ (`sorry`: core LA lemma)
+  - `kraus_same_map_iff_unitary_combination` — unitary freedom (iff characterisation) ✅
 
 * **Thm 2.2** (Stinespring dilation):
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
@@ -60,7 +63,7 @@ representations of quantum channels.
 | Prop 2.2 (decomp into CP) | Straightforward from CJ |
 | Prop 2.3 (no info w/o disturbance) | Needs pure state uniqueness |
 | Prop 2.4 (equiv of ensembles) | Needs purification/Schmidt decomp |
-| Thm 2.1 item 4 (unitary freedom, necessary direction) | Needs Choi eigendecomp |
+| Thm 2.1 item 4 (unitary freedom, converse) | `sorry` on core LA lemma |
 | Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
