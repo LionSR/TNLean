@@ -70,12 +70,8 @@ noncomputable def choiMatrixLinearMap :
     (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ]
       Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
   toFun := choiMatrix
-  map_add' T S := by
-    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-    simp [choiMatrix, Matrix.tensorMapId_apply]
-  map_smul' c T := by
-    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-    simp [choiMatrix, Matrix.tensorMapId_apply]
+  map_add' T S := by ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩; simp [choiMatrix, Matrix.tensorMapId_apply]
+  map_smul' c T := by ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩; simp [choiMatrix, Matrix.tensorMapId_apply]
 
 /-- The projected Choi matrix `P τ P` with `P = 𝟙 - |Ω⟩⟨Ω|`. -/
 noncomputable def projectedChoiMatrix
@@ -602,12 +598,9 @@ theorem exists_cpMap_of_choi_posSemidef [NeZero D]
   let K : Fin r → Matrix (Fin D) (Fin D) ℂ := fun m a b => v m (a, b) / c
   let T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     { toFun := fun X => ∑ m : Fin r, K m * X * (K m)ᴴ
-      map_add' := by
-        intro X Y
-        simp [Matrix.add_mul, Matrix.mul_add, Finset.sum_add_distrib]
+      map_add' := by intro X Y; simp [Matrix.add_mul, Matrix.mul_add, Finset.sum_add_distrib]
       map_smul' := by
-        intro z X
-        simp only [RingHom.id_apply, mul_smul_comm, smul_mul_assoc]
+        intro z X; simp only [RingHom.id_apply, mul_smul_comm, smul_mul_assoc]
         rw [← Finset.smul_sum] }
   have hchoi : choiMatrix T = ∑ m : Fin r, Matrix.vecMulVec (v m) (star (v m)) := by
     have hchoi' : choiMatrix T = ∑ m : Fin r,

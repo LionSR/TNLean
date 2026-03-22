@@ -116,10 +116,8 @@ section Eigenvalue
 noncomputable def krausMapL (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
   toFun := krausMap K
-  map_add' X Y := by
-    simp [krausMap, mul_add, add_mul, Finset.sum_add_distrib, mul_assoc]
-  map_smul' μ X := by
-    simp [krausMap, Finset.smul_sum, mul_assoc]
+  map_add' X Y := by simp [krausMap, mul_add, add_mul, Finset.sum_add_distrib, mul_assoc]
+  map_smul' μ X := by simp [krausMap, Finset.smul_sum, mul_assoc]
 
 @[simp] lemma krausMapL_apply (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :

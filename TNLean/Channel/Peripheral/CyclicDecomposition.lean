@@ -70,14 +70,8 @@ def cornerRestriction {D : ℕ} (P : MatrixAlg D) (T : MatrixEnd D)
     have hX : P * X.1 * P = X.1 := by
       exact X.2
     simpa [hX] using hInv X.1⟩
-  map_add' X Y := by
-    apply Subtype.ext
-    ext i j
-    simp
-  map_smul' c X := by
-    apply Subtype.ext
-    ext i j
-    simp
+  map_add' X Y := by apply Subtype.ext; ext i j; simp
+  map_smul' c X := by apply Subtype.ext; ext i j; simp
 
 /-- Ambient reformulation of irreducibility for the restriction of `T` to the corner
 `P · M_D(ℂ) · P`. -/

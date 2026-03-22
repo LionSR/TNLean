@@ -223,16 +223,8 @@ variable {D : ℕ}
 private noncomputable def choiLinearOnCLM :
     CLM D →ₗ[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
   toFun := fun T => choiMatrix T.toLinearMap
-  map_add' T S := by
-    ext ij kl
-    rcases ij with ⟨i₁, i₂⟩
-    rcases kl with ⟨j₁, j₂⟩
-    simp [choiMatrix_apply]
-  map_smul' c T := by
-    ext ij kl
-    rcases ij with ⟨i₁, i₂⟩
-    rcases kl with ⟨j₁, j₂⟩
-    simp [choiMatrix_apply]
+  map_add' T S := by ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩; simp [choiMatrix_apply]
+  map_smul' c T := by ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩; simp [choiMatrix_apply]
 
 /-- The Choi matrix as a continuous linear map on continuous endomorphisms. -/
 noncomputable def choiCLM :

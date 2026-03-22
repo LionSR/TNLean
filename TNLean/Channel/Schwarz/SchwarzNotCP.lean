@@ -44,12 +44,8 @@ private lemma complex_one_quarter_nonneg : (0 : ℂ) ≤ (1 / 4 : ℂ) := by
 `T_*(A) = (1/2) A^T + (1/4) tr(A) I` on `M₂(ℂ)`. -/
 noncomputable def wolfExample53 : M2 →ₗ[ℂ] M2 where
   toFun A := (1 / 2 : ℂ) • Aᵀ + (1 / 4 : ℂ) • (Matrix.trace A • (1 : M2))
-  map_add' := by
-    intro A B
-    simp [add_smul, smul_add, Matrix.trace_add, add_assoc, add_left_comm]
-  map_smul' := by
-    intro c A
-    simp [smul_add, smul_smul, Matrix.trace_smul, mul_comm, mul_left_comm]
+  map_add' := by intro A B; simp [add_smul, smul_add, Matrix.trace_add, add_assoc, add_left_comm]
+  map_smul' := by intro c A; simp [smul_add, smul_smul, Matrix.trace_smul, mul_comm, mul_left_comm]
 
 @[simp] theorem wolfExample53_apply (A : M2) :
     wolfExample53 A = (1 / 2 : ℂ) • (Aᵀ + (1 / 2 : ℂ) • (Matrix.trace A • (1 : M2))) := by

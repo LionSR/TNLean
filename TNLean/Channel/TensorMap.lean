@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.Data.Complex.Basic
+import TNLean.Aesop.Rules
 
 /-!
 # Tensor product of a linear map with the identity
@@ -81,18 +82,16 @@ noncomputable def tensorMapIdLM
     Matrix (Fin d' × Fin d'') (Fin d' × Fin d'') ℂ where
   toFun := tensorMapId T
   map_add' X Y := by
-    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-    simp only [tensorMapId_apply, Matrix.add_apply]
+    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩; simp only [tensorMapId_apply, Matrix.add_apply]
     rw [show bipartiteSlice (X + Y) i₂ j₂ =
-      bipartiteSlice X i₂ j₂ + bipartiteSlice Y i₂ j₂ from by
-        ext; simp [bipartiteSlice]]
+      bipartiteSlice X i₂ j₂ + bipartiteSlice Y i₂ j₂ from by ext; simp [bipartiteSlice]]
     simp [map_add]
   map_smul' c X := by
-    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
-    simp only [tensorMapId_apply, Matrix.smul_apply, smul_eq_mul, RingHom.id_apply]
+    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩; simp only [tensorMapId_apply, Matrix.smul_apply, smul_eq_mul,
+      RingHom.id_apply]
     rw [show bipartiteSlice (c • X) i₂ j₂ =
-      c • bipartiteSlice X i₂ j₂ from by
-        ext; simp [bipartiteSlice, Matrix.smul_apply, smul_eq_mul]]
+      c • bipartiteSlice X i₂ j₂ from by ext; simp [bipartiteSlice, Matrix.smul_apply,
+        smul_eq_mul]]
     simp [map_smul]
 
 /-- The key property: `(T ⊗ id)(A ⊗ B) = T(A) ⊗ B` for Kronecker products. -/

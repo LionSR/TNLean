@@ -76,9 +76,7 @@ structure GeneratorDecomp (D : ℕ) where
 def GeneratorDecomp.toLinearMap (G : GeneratorDecomp D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
   toFun ρ := G.φ ρ - G.κ * ρ - ρ * G.κᴴ
-  map_add' ρ σ := by
-    simp only [map_add, mul_add, add_mul]
-    abel
+  map_add' ρ σ := by simp only [map_add, mul_add, add_mul]; abel
   map_smul' c ρ := by
     simp only [RingHom.id_apply, map_smul, mul_smul_comm, smul_mul_assoc,
       smul_sub]

@@ -239,14 +239,12 @@ private noncomputable def nwExtendLinearMap (T : Mat →ₗ[ℂ] Mat) (E : ℕ) 
     intro M N
     have hAdd : T ((M + N).toBlocks₁₁) = T (M.toBlocks₁₁) + T (N.toBlocks₁₁) := by
       simpa [Matrix.toBlocks₁₁] using T.map_add M.toBlocks₁₁ N.toBlocks₁₁
-    ext i j
-    rcases i with i | i <;> rcases j with j | j <;> simp [hAdd]
+    ext i j; rcases i with i | i <;> rcases j with j | j <;> simp [hAdd]
   map_smul' := by
     intro c M
     have hSmul : T ((c • M).toBlocks₁₁) = c • T (M.toBlocks₁₁) := by
       simpa [Matrix.toBlocks₁₁] using T.map_smul c M.toBlocks₁₁
-    ext i j
-    rcases i with i | i <;> rcases j with j | j <;> simp [hSmul]
+    ext i j; rcases i with i | i <;> rcases j with j | j <;> simp [hSmul]
 
 private lemma nwExtendLinearMap_isPositiveMap (T : Mat →ₗ[ℂ] Mat)
     (hPos : IsPositiveMap T) (E : ℕ) :
@@ -396,12 +394,8 @@ formula with the same name; inside `namespace KadisonSchwarz`, this wrapper
 intentionally uses the canonical Schwarz-side definition. -/
 noncomputable def krausAdjointMapLinear (K : Fin d → Mat) : Mat →ₗ[ℂ] Mat where
   toFun := krausAdjointMap K
-  map_add' := by
-    intro X Y
-    simp [krausAdjointMap, Matrix.mul_add, Matrix.add_mul, Finset.sum_add_distrib]
-  map_smul' := by
-    intro c X
-    simp [krausAdjointMap, Finset.smul_sum, Matrix.mul_assoc]
+  map_add' := by intro X Y; simp [krausAdjointMap, Matrix.mul_add, Matrix.add_mul, Finset.sum_add_distrib]
+  map_smul' := by intro c X; simp [krausAdjointMap, Finset.smul_sum, Matrix.mul_assoc]
 
 /-- The adjoint Kraus map is positive. -/
 private lemma krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :

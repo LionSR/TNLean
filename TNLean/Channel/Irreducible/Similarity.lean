@@ -29,10 +29,8 @@ noncomputable def similarityMap (C : Matrix (Fin D) (Fin D) ℂ)
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
   toFun X := C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹
-  map_add' X Y := by
-    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
-  map_smul' a X := by
-    simp [Matrix.mul_assoc]
+  map_add' X Y := by simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
+  map_smul' a X := by simp [Matrix.mul_assoc]
 
 private lemma dotProduct_mulVec_conjTranspose
     (M : Matrix (Fin D) (Fin D) ℂ)

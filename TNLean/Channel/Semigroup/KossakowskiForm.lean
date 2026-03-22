@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Semigroup.LindbladForm
+import TNLean.Aesop.Rules
 
 /-!
 # Kossakowski Matrix Form — Wolf Theorem 7.1, Form (ii)
@@ -71,14 +72,12 @@ private lemma kossakowskiTerm_add (K : KossakowskiForm D)
     (k l : Fin K.n) (ρ σ : Matrix (Fin D) (Fin D) ℂ) :
     kossakowskiTerm K k l (ρ + σ) =
       kossakowskiTerm K k l ρ + kossakowskiTerm K k l σ := by
-  simp only [kossakowskiTerm, mul_add, add_mul, smul_add, smul_sub]
-  abel
+  simp only [kossakowskiTerm, mul_add, add_mul, smul_add, smul_sub]; abel
 
 private lemma kossakowskiTerm_smul (K : KossakowskiForm D)
     (k l : Fin K.n) (c : ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
     kossakowskiTerm K k l (c • ρ) = c • kossakowskiTerm K k l ρ := by
-  simp only [kossakowskiTerm, mul_smul_comm, smul_mul_assoc, smul_add,
-    smul_sub, smul_smul]
+  simp only [kossakowskiTerm, mul_smul_comm, smul_mul_assoc, smul_add, smul_sub, smul_smul]
   rw [mul_comm]
 
 /-- The dissipative part of a Kossakowski form. -/
@@ -108,15 +107,11 @@ def KossakowskiForm.toLinearMap (K : KossakowskiForm D) :
     Complex.I • (ρ * K.H - K.H * ρ) +
       kossakowskiDissipator K ρ
   map_add' ρ σ := by
-    simp only [kossakowskiDissipator_add, mul_add, add_mul, smul_add, smul_sub]
-    abel
+    simp only [kossakowskiDissipator_add, mul_add, add_mul, smul_add, smul_sub]; abel
   map_smul' c ρ := by
     simp only [RingHom.id_apply, kossakowskiDissipator_smul, mul_smul_comm,
-      smul_mul_assoc, smul_sub]
-    rw [smul_add, smul_sub]
-    simp only [smul_smul]
-    congr 1
-    congr 1 <;> ring_nf
+      smul_mul_assoc, smul_sub]; rw [smul_add, smul_sub]
+    simp only [smul_smul]; congr 1; congr 1 <;> ring_nf
 
 /-! ### Helpers for Kossakowski ↔ Lindblad conversion -/
 

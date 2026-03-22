@@ -67,21 +67,12 @@ private theorem mem_exp_ball {A : Type*}
 
 private def rightMulAlgHom (D : ℕ) : (Mat D)ᵐᵒᵖ →ₐ[ℂ] LM D where
   toFun := fun B => LinearMap.mulRight ℂ (MulOpposite.unop B)
-  map_zero' := by
-    ext ρ i j
-    simp
-  map_add' A B := by
-    ext ρ i j
-    simp [Matrix.mul_add]
-  map_one' := by
-    ext ρ i j
-    simp
-  map_mul' A B := by
-    ext ρ i j
-    simp [mul_assoc]
+  map_zero' := by ext ρ i j; simp
+  map_add' A B := by ext ρ i j; simp [Matrix.mul_add]
+  map_one' := by ext ρ i j; simp
+  map_mul' A B := by ext ρ i j; simp [mul_assoc]
   commutes' c := by
-    ext ρ i j
-    rw [MulOpposite.algebraMap_apply]
+    ext ρ i j; rw [MulOpposite.algebraMap_apply]
     simp [LinearMap.mulRight_apply, Algebra.algebraMap_eq_smul_one]
 
 private theorem rightMulAlgHom_apply (A : (Mat D)ᵐᵒᵖ) (ρ : Mat D) :

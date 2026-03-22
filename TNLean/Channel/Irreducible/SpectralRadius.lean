@@ -80,10 +80,8 @@ private noncomputable def sandwichLinearMap
     (L R : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
   toFun X := L * X * R
-  map_add' X Y := by
-    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
-  map_smul' a X := by
-    simp [Matrix.mul_assoc]
+  map_add' X Y := by simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
+  map_smul' a X := by simp [Matrix.mul_assoc]
 
 private noncomputable def sandwichEquiv
     (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0) :
@@ -116,10 +114,8 @@ private noncomputable def sandwichEquiv
       _ = X := by
             simp [Matrix.mul_nonsing_inv C hC_unit,
               Matrix.nonsing_inv_mul Cᴴ hCstar_unit]
-  map_add' X Y := by
-    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
-  map_smul' a X := by
-    simp [Matrix.mul_assoc]
+  map_add' X Y := by simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
+  map_smul' a X := by simp [Matrix.mul_assoc]
   continuous_toFun :=
     (LinearMap.toContinuousLinearMap (sandwichLinearMap (D := D) C Cᴴ)).continuous
   continuous_invFun :=

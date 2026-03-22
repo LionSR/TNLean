@@ -50,10 +50,8 @@ private noncomputable def sandwichLinearMap
     (L R : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
   toFun X := L * X * R
-  map_add' X Y := by
-    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
-  map_smul' a X := by
-    simp [Matrix.mul_assoc]
+  map_add' X Y := by simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
+  map_smul' a X := by simp [Matrix.mul_assoc]
 
 private lemma trace_mul_transferMap_adjoint
     {n : ℕ}

@@ -143,12 +143,9 @@ noncomputable def transferMatrixLM :
     (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ]
       Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
   toFun := transferMatrix
-  map_add' S T := by
-    ext ⟨j, i⟩ ⟨l, k⟩
-    simp [transferMatrix, LinearMap.add_apply, Matrix.add_apply]
+  map_add' S T := by ext ⟨j, i⟩ ⟨l, k⟩; simp [transferMatrix, LinearMap.add_apply, Matrix.add_apply]
   map_smul' c T := by
-    ext ⟨j, i⟩ ⟨l, k⟩
-    simp [transferMatrix, LinearMap.smul_apply, Matrix.smul_apply, smul_eq_mul]
+    ext ⟨j, i⟩ ⟨l, k⟩; simp [transferMatrix, LinearMap.smul_apply, Matrix.smul_apply, smul_eq_mul]
 
 /-! ### Kraus representation of the transfer matrix -/
 

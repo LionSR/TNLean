@@ -74,12 +74,8 @@ private noncomputable def gaugeMulVecLinearEquiv {D : ℕ} (X : GL (Fin D) ℂ) 
               simp [Matrix.mulVec_mulVec]
       _ = v := by
             simp
-  map_add' := by
-    intro v w
-    simp [Matrix.mulVec_add]
-  map_smul' := by
-    intro c v
-    simp [Matrix.mulVec_smul]
+  map_add' := by intro v w; simp [Matrix.mulVec_add]
+  map_smul' := by intro c v; simp [Matrix.mulVec_smul]
 
 private theorem isIrreducibleAction_gaugeEquiv
     {D : ℕ} {A B : MPSTensor d D}

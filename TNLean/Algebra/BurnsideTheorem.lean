@@ -143,9 +143,7 @@ theorem burnside_matrix [NeZero D]
       RingHomSurjective.mk hAlgSurj
     let f : V →ₛₗ[algebraMap ℂ (Module.End R V)] V :=
       LinearMap.mk (toAddHom := AddMonoidHom.id V) (map_smul' := by
-        intro c v
-        -- `algebraMap` into `Module.End R V` gives scalar multiplication maps on `V`.
-        simp [Algebra.algebraMap_eq_smul_one])
+        intro c v; simp [Algebra.algebraMap_eq_smul_one])
     have hf : Function.Surjective f := by
       intro v
       exact ⟨v, rfl⟩
@@ -166,13 +164,9 @@ theorem burnside_matrix [NeZero D]
     -- Regard `f` as `Module.End R V`-linear using surjectivity of `algebraMap`.
     let g : Module.End (Module.End R V) V :=
       { toFun := fun v => f v
-        map_add' := by
-          intro v w
-          exact f.map_add v w
+        map_add' := by intro v w; exact f.map_add v w
         map_smul' := by
-          intro d v
-          rcases hAlgSurj d with ⟨c, rfl⟩
-          -- `algebraMap` into `Module.End R V` acts on `V` by scalar multiplication.
+          intro d v; rcases hAlgSurj d with ⟨c, rfl⟩
           simp }
     rcases hJD g with ⟨r, hr⟩
     have hrf : (r : Module.End ℂ V) = f := by

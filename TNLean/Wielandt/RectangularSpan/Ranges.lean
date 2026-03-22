@@ -140,16 +140,8 @@ noncomputable def colRangeSubmoduleEquiv (P : Matrix (Fin D) (Fin D) ℂ) :
     apply Subtype.ext
     ext i
     rfl
-  map_add' M N := by
-    funext j
-    apply Subtype.ext
-    ext i
-    simp [Matrix.col_apply]
-  map_smul' a M := by
-    funext j
-    apply Subtype.ext
-    ext i
-    simp [Matrix.col_apply]
+  map_add' M N := by funext j; apply Subtype.ext; ext i; simp [Matrix.col_apply]
+  map_smul' a M := by funext j; apply Subtype.ext; ext i; simp [Matrix.col_apply]
 
 /-- Finite-dimensional formula for the range of left multiplication:
 `finrank(range(mulLeft P)) = D * rank(P)`. -/
@@ -273,16 +265,8 @@ noncomputable def rowRangeSubmoduleEquiv (Q : Matrix (Fin D) (Fin D) ℂ) :
     apply Subtype.ext
     ext j
     rfl
-  map_add' M N := by
-    funext i
-    apply Subtype.ext
-    ext j
-    simp [Matrix.row_apply]
-  map_smul' a M := by
-    funext i
-    apply Subtype.ext
-    ext j
-    simp [Matrix.row_apply]
+  map_add' M N := by funext i; apply Subtype.ext; ext j; simp [Matrix.row_apply]
+  map_smul' a M := by funext i; apply Subtype.ext; ext j; simp [Matrix.row_apply]
 
 /-- Finite-dimensional formula for the range of right multiplication:
 `finrank(range(mulRight Q)) = D * rank(Q)`. -/

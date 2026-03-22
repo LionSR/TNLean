@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Semigroup.GeneratorDefs
+import TNLean.Aesop.Rules
 
 /-!
 # Lindblad Form — Basic Definitions and Properties
@@ -59,12 +60,13 @@ def dissipator (Lop : Matrix (Fin D) (Fin D) ℂ)
   (1/2 : ℂ) • (Lopᴴ * Lop * ρ) -
   (1/2 : ℂ) • (ρ * (Lopᴴ * Lop))
 
+@[aesop safe apply (rule_sets := [TNLean])]
 theorem dissipator_add (Lop : Matrix (Fin D) (Fin D) ℂ)
     (ρ σ : Matrix (Fin D) (Fin D) ℂ) :
     dissipator Lop (ρ + σ) = dissipator Lop ρ + dissipator Lop σ := by
-  simp only [dissipator, mul_add, add_mul, smul_add]
-  abel
+  simp only [dissipator, mul_add, add_mul, smul_add]; abel
 
+@[aesop safe apply (rule_sets := [TNLean])]
 theorem dissipator_smul (Lop : Matrix (Fin D) (Fin D) ℂ)
     (c : ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ) :
     dissipator Lop (c • ρ) = c • dissipator Lop ρ := by
@@ -82,30 +84,21 @@ def LindbladForm.toLinearMap (F : LindbladForm D) :
     ∑ j : Fin F.r, dissipator (F.L j) ρ
   map_add' ρ σ := by
     simp only [dissipator_add, mul_add, add_mul, smul_add, smul_sub,
-      Finset.sum_add_distrib]
-    abel
+      Finset.sum_add_distrib]; abel
   map_smul' c ρ := by
     simp only [RingHom.id_apply, dissipator_smul, mul_smul_comm, smul_mul_assoc,
-      smul_sub]
-    rw [← Finset.smul_sum, smul_add, smul_sub]
-    simp only [smul_smul]
-    congr 1
-    congr 1 <;> ring_nf
+      smul_sub]; rw [← Finset.smul_sum, smul_add, smul_sub]
+    simp only [smul_smul]; congr 1; congr 1 <;> ring_nf
 
 /-- Each dissipator term has trace zero. -/
 private lemma trace_dissipator_eq_zero (Lop : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) :
     trace (dissipator Lop ρ) = 0 := by
-  simp only [dissipator]
-  rw [trace_sub, trace_sub, trace_smul, trace_smul]
-  -- tr(L ρ L†) = tr(L† L ρ) by cyclic property
-  have h1 : trace (Lop * ρ * Lopᴴ) = trace (Lopᴴ * Lop * ρ) := by
-    rw [Matrix.trace_mul_cycle, Matrix.mul_assoc]
-  -- tr(L† L ρ) = tr(ρ L† L) by cyclic property
-  have h2 : trace (Lopᴴ * Lop * ρ) = trace (ρ * (Lopᴴ * Lop)) := by
-    rw [Matrix.trace_mul_comm]
-  rw [h1, h2]
-  simp only [one_div, smul_eq_mul]
+  simp only [dissipator, trace_sub, trace_smul, one_div, smul_eq_mul]
+  rw [show trace (Lop * ρ * Lopᴴ) = trace (Lopᴴ * Lop * ρ) from
+    by rw [Matrix.trace_mul_cycle, Matrix.mul_assoc]]
+  rw [show trace (Lopᴴ * Lop * ρ) = trace (ρ * (Lopᴴ * Lop)) from
+    Matrix.trace_mul_comm _ _]
   ring
 
 /-- The Lindblad form is trace-annihilating (Wolf Eq. 7.21 preserves trace). -/
@@ -133,11 +126,9 @@ def LindbladForm.toGeneratorDecomp (F : LindbladForm D) :
   φ := {
     toFun := fun ρ => ∑ j : Fin F.r, F.L j * ρ * (F.L j)ᴴ
     map_add' := fun ρ σ => by
-      simp only [mul_add, add_mul]
-      rw [← Finset.sum_add_distrib]
+      simp only [mul_add, add_mul]; rw [← Finset.sum_add_distrib]
     map_smul' := fun c ρ => by
-      simp only [RingHom.id_apply, mul_smul_comm, smul_mul_assoc]
-      rw [← Finset.smul_sum]
+      simp only [RingHom.id_apply, mul_smul_comm, smul_mul_assoc]; rw [← Finset.smul_sum]
   }
   κ := Complex.I • F.H + (1/2 : ℂ) • ∑ j : Fin F.r, (F.L j)ᴴ * F.L j
   φ_cp := ⟨F.r, F.L, fun X => rfl⟩

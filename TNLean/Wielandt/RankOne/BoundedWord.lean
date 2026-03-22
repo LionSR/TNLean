@@ -435,12 +435,8 @@ noncomputable def biRectSpanLeftStep (n : ℕ) :
       (W (d := d) (D := D) (B := B) (i₀ := i₀) (i₁ := i₁) (n + 1)) where
   toFun x := ⟨(B i₀) * x.1, mulLeft_mem_biRectSpan_pow_succ (d := d) (D := D) (B := B)
     (i₀ := i₀) (i₁ := i₁) n x.2⟩
-  map_add' x y := by
-    ext i j
-    simp [Matrix.mul_add]
-  map_smul' a x := by
-    ext i j
-    simp
+  map_add' x y := by ext i j; simp [Matrix.mul_add]
+  map_smul' a x := by ext i j; simp
 
 /-- The left-step map is injective: multiplication by `B i₀` is injective on the range of
 left multiplication by `((B i₀)^D)`. -/

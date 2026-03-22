@@ -719,12 +719,8 @@ private noncomputable def quadraticFormCLM (v : Fin D → ℂ) :
     Matrix (Fin D) (Fin D) ℂ →L[ℂ] ℂ :=
   LinearMap.toContinuousLinearMap
     { toFun := fun X => star v ⬝ᵥ (X *ᵥ v)
-      map_add' := by
-        intro X Y
-        simp [Matrix.add_mulVec, dotProduct_add]
-      map_smul' := by
-        intro c X
-        simp [Matrix.smul_mulVec, dotProduct_smul] }
+      map_add' := by intro X Y; simp [Matrix.add_mulVec, dotProduct_add]
+      map_smul' := by intro c X; simp [Matrix.smul_mulVec, dotProduct_smul] }
 
 /-- A finite exponential truncation already satisfies Wolf's positivity conclusion:
 for any `t > 0`, the first `D` terms of the exponential series of `E` applied to a
