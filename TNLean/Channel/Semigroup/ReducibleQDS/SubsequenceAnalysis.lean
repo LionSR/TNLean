@@ -250,6 +250,109 @@ private theorem compression_eq_limit_of_tendsto
       (fun n => hρ_PMP (φ n)))
     hφ_tendsto
 
+set_option maxHeartbeats 4000000 in
+-- Needed for the Taylor remainder normalization step inside the subsequence limit argument.
+private theorem generator_vanishes_at_limit
+    [NeZero D]
+    {L : Mat →ₗ[ℂ] Mat}
+    {ρ : Mat} {ρ_shift : ℕ → Mat} {φ : ℕ → ℕ}
+    (hρ_mem : ∀ n, ρ_shift n ∈ densityMatrices D)
+    (hρ_fix : ∀ n, expSemigroup L (1 / ((n + 1 : ℕ) : ℝ)) (ρ_shift n) = ρ_shift n)
+    (hφ_mono : StrictMono φ)
+    (hφ_tendsto : Filter.Tendsto (fun n => ρ_shift (φ n)) Filter.atTop (nhds ρ)) :
+    L ρ = 0 := by
+  have hL_cont : Continuous L := LinearMap.continuous_of_finiteDimensional L
+  have hL_tendsto : Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds (L ρ)) :=
+    (hL_cont.tendsto ρ).comp hφ_tendsto
+  suffices h_to_zero :
+      Filter.Tendsto (fun n => L (ρ_shift (φ n))) Filter.atTop (nhds 0) by
+    exact tendsto_nhds_unique hL_tendsto h_to_zero
+  obtain ⟨R, hR⟩ := density_subseq_norm_bounded (D := D) ρ_shift hρ_mem (φ := φ)
+  set E : Mat →L[ℂ] Mat := endEquiv L
+  have hE_apply : ∀ X : Mat, E X = L X := by
+    intro X
+    rfl
+  have hL_bound : ∀ n, ‖L (ρ_shift (φ n))‖ ≤
+      (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R := by
+    intro n
+    set m : ℕ := φ n + 1
+    set s : ℝ := 1 / (m : ℝ)
+    have hs_nonneg : 0 ≤ s := by
+      dsimp [s, m]
+      positivity
+    have hs_le_one : s ≤ 1 := by
+      dsimp [s, m]
+      have hm_ge_one : (1 : ℝ) ≤ (φ n + 1 : ℕ) := by exact_mod_cast Nat.succ_pos (φ n)
+      exact div_le_one_of_le₀ hm_ge_one (by positivity)
+    have hfp : expSemigroup L s (ρ_shift (φ n)) = ρ_shift (φ n) := by
+      simpa [s, m] using hρ_fix (φ n)
+    have hfp_clm : (expSemigroupCLM E s) (ρ_shift (φ n)) = ρ_shift (φ n) := by
+      have hfp' : endEquiv (expSemigroup L s) (ρ_shift (φ n)) = ρ_shift (φ n) := by
+        simpa using hfp
+      simpa [E, expSemigroup_toCLM (L := L) s] using hfp'
+    have h_eq_clm :
+        (s : ℂ) • (endEquiv L) (ρ_shift (φ n)) =
+          -(((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n))) := by
+      have h_eval :
+          ((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n)) =
+            (expSemigroupCLM E s) (ρ_shift (φ n)) - ρ_shift (φ n) -
+              (s : ℂ) • E (ρ_shift (φ n)) := by
+        simp [ContinuousLinearMap.sub_apply]
+      rw [h_eval, hfp_clm, sub_self, zero_sub, neg_neg]
+    have h_norm_smul_clm : ‖(s : ℂ) • (endEquiv L) (ρ_shift (φ n))‖ ≤
+        s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
+      have hTaylor :
+          ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖ ≤
+            s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) :=
+        norm_expSemigroupCLM_taylor_bound E hs_nonneg
+      have hTaylor' :
+          ‖expSemigroupCLM E s - 1 - (s : ℂ) • E‖ ≤
+            s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) := by
+        simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using hTaylor
+      rw [h_eq_clm, norm_neg]
+      calc ‖((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n))‖
+          ≤ ‖(expSemigroupCLM E s) - 1 - (s : ℂ) • E‖ * ‖ρ_shift (φ n)‖ :=
+            ContinuousLinearMap.le_opNorm _ _
+        _ ≤ (s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖)) * ‖ρ_shift (φ n)‖ := by
+            exact mul_le_mul_of_nonneg_right
+              hTaylor'
+              (norm_nonneg _)
+    have h_norm_smul : ‖s • L (ρ_shift (φ n))‖ ≤
+        s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
+      simpa [hE_apply] using h_norm_smul_clm
+    have hs_pos : 0 < s := by
+      dsimp [s, m]
+      positivity
+    rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg hs_nonneg] at h_norm_smul
+    have hL_norm : ‖L (ρ_shift (φ n))‖ ≤
+        s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
+      have hmul : s * ‖L (ρ_shift (φ n))‖ ≤
+          s * (s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖) := by
+        simpa [pow_two, mul_assoc, mul_left_comm, mul_comm] using h_norm_smul
+      exact le_of_mul_le_mul_left hmul hs_pos
+    calc ‖L (ρ_shift (φ n))‖
+        ≤ s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := hL_norm
+      _ ≤ s * ‖E‖ ^ 2 * Real.exp (1 * ‖E‖) * R := by
+          have h_exp : Real.exp (s * ‖E‖) ≤ Real.exp (1 * ‖E‖) := by
+            exact Real.exp_le_exp_of_le (by nlinarith [norm_nonneg E, hs_le_one])
+          have h_mul :
+              Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ ≤
+                Real.exp (1 * ‖E‖) * R :=
+            mul_le_mul h_exp (hR n) (by positivity) (by positivity)
+          have hsE_nonneg : 0 ≤ s * ‖E‖ ^ 2 := by positivity
+          have := mul_le_mul_of_nonneg_left h_mul hsE_nonneg
+          simpa [mul_assoc, mul_left_comm, mul_comm] using this
+      _ = (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R := by
+          simp [s, m]
+  have h_bound_tendsto :
+      Filter.Tendsto (fun n => (1 / (φ n + 1 : ℝ)) * ‖E‖ ^ 2 * Real.exp ‖E‖ * R)
+        Filter.atTop (nhds 0) := by
+    have hscaled := scaled_one_div_subseq_tendsto_zero hφ_mono (‖E‖ ^ 2 * Real.exp ‖E‖ * R)
+    convert hscaled using 1
+    ext n
+    ring
+  exact squeeze_zero_norm hL_bound h_bound_tendsto
+
 /-- **Wolf Proposition 7.6, (4) → (2)**: Given block-upper-triangular Lindblad
 operators, the compressed channel has a fixed density matrix, giving (2).
 
@@ -260,6 +363,23 @@ theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
     (hGKSL : IsGKSLGenerator L)
     (h : HasBlockUpperTriangularLindblad L) :
     HasRankDeficientKernelElement L := by
-  sorry
+  obtain ⟨P, F, hP_nt, hL_eq, hL_block, hκ_block⟩ := h
+  have hP_ne : P ≠ 0 := hP_nt.2.1
+  have hD : 0 < D := pos_dim_of_nontrivialProjection hP_nt
+  haveI : NeZero D := ⟨hD.ne'⟩
+  have hgen : GeneratorPreservesCompression L P := by
+    rw [hL_eq]
+    exact generator_preserves_compression_of_blockUpperTriangular hP_nt.1 hL_block hκ_block
+  have hT_pres := semigroup_preserves_compression_of_generator hP_nt.1 hgen
+  obtain ⟨ρ_shift, hρ_mem, hρ_PMP, hρ_fix⟩ :=
+    exists_fixed_point_sequence_in_PMP hP_nt.1 hP_ne hGKSL hT_pres
+  haveI : FirstCountableTopology Mat := @UniformSpace.firstCountableTopology _ _ inferInstance
+  obtain ⟨ρ, hρ_dm, φ, hφ_mono, hφ_tendsto⟩ :=
+    densityMatrices_isCompact.tendsto_subseq hρ_mem
+  have hρ_PMP_lim : P * ρ * P = ρ :=
+    compression_eq_limit_of_tendsto hρ_PMP hφ_tendsto
+  have hL_zero : L ρ = 0 :=
+    generator_vanishes_at_limit hρ_mem hρ_fix hφ_mono hφ_tendsto
+  exact ⟨ρ, hρ_dm, ⟨P, hP_nt, hρ_PMP_lim⟩, hL_zero⟩
 
 end -- noncomputable section
