@@ -2,175 +2,15 @@ name: Tracking Issue Sync
 
 on:
   issues:
-    types: [closed, reopened, labeled, unlabeled]
+    types: [closed, reopened, labeled]
   pull_request:
-    types: [closed, reopened, labeled, unlabeled]
-
-permissions:
-  contents: read
-  issues: write
-  pull-requests: read
-  id-token: write
+    types: [closed, reopened]
 
 jobs:
-  # Step 1: Mechanically update checkboxes and collect context (fast, reliable)
-  update-checkboxes:
-    runs-on: ubuntu-latest
-    outputs:
-      tracking_issues_updated: ${{ steps.update.outputs.tracking_issues_updated }}
-      summary_context: ${{ steps.update.outputs.summary_context }}
-    steps:
-      - name: Update tracking issue checkboxes
-        id: update
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const eventName = context.eventName;
-            const payload = context.payload;
-            const item = eventName === 'issues' ? payload.issue : payload.pull_request;
-            const itemNumber = item.number;
-            const itemTitle = item.title;
-            const itemType = eventName === 'issues' ? 'Issue' : 'PR';
-            const isMerged = eventName === 'pull_request' && item.merged === true;
-            const isClosed = payload.action === 'closed';
-            const isReopened = payload.action === 'reopened';
-
-            // Skip label-only events unless it's the "tracking" label being applied
-            if (payload.action === 'labeled' || payload.action === 'unlabeled') {
-              return;
-            }
-
-            // Find all tracking issues (open + recently closed)
-            const [openTrackers, closedTrackers] = await Promise.all([
-              github.rest.issues.listForRepo({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                labels: 'tracking',
-                state: 'open',
-                per_page: 50,
-              }),
-              github.rest.issues.listForRepo({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                labels: 'tracking',
-                state: 'closed',
-                per_page: 20,
-              }),
-            ]);
-
-            const allTrackers = [...openTrackers.data, ...closedTrackers.data];
-
-            // Also check if the item body has "Tracking: #N" references
-            const trackingRefs = new Set();
-            if (item.body) {
-              const pattern = /[Tt]racking(?:\s+[Ii]ssue)?:\s*#(\d+)/g;
-              let m;
-              while ((m = pattern.exec(item.body)) !== null) {
-                trackingRefs.add(parseInt(m[1]));
-              }
-            }
-
-            // Find trackers that reference this item
-            for (const tracker of allTrackers) {
-              if (tracker.body && tracker.body.includes(`#${itemNumber}`)) {
-                trackingRefs.add(tracker.number);
-              }
-            }
-
-            if (trackingRefs.size === 0) {
-              console.log(`No tracking references for ${itemType} #${itemNumber}`);
-              core.setOutput('tracking_issues_updated', '');
-              core.setOutput('summary_context', '');
-              return;
-            }
-
-            const updatedTrackers = [];
-            const summaryParts = [];
-
-            for (const trackingNumber of trackingRefs) {
-              let tracker;
-              try {
-                tracker = (await github.rest.issues.get({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: trackingNumber,
-                })).data;
-              } catch (e) {
-                console.log(`Could not fetch #${trackingNumber}: ${e.message}`);
-                continue;
-              }
-
-              if (!tracker.labels?.some(l => l.name === 'tracking')) continue;
-
-              let body = tracker.body || '';
-              const checkboxRe = new RegExp(`- \\[([ xX])\\] #${itemNumber}\\b(.*)`, 'g');
-
-              if (!checkboxRe.test(body)) {
-                console.log(`No checkbox for #${itemNumber} in tracking issue #${trackingNumber}`);
-                continue;
-              }
-              checkboxRe.lastIndex = 0;
-
-              const shouldCheck = (isClosed && eventName === 'issues') || isMerged;
-              const newState = shouldCheck ? 'x' : ' ';
-
-              body = body.replace(checkboxRe, (_, _state, rest) => `- [${newState}] #${itemNumber}${rest}`);
-
-              const totalTasks = (body.match(/- \[[ xX]\] #\d+/g) || []).length;
-              const completedTasks = (body.match(/- \[[xX]\] #\d+/g) || []).length;
-
-              await github.rest.issues.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: trackingNumber,
-                body: body,
-              });
-
-              // Manage "all-resolved" label
-              if (totalTasks > 0 && completedTasks === totalTasks) {
-                try {
-                  await github.rest.issues.addLabels({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: trackingNumber,
-                    labels: ['all-resolved'],
-                  });
-                } catch (e) { /* label may not exist yet */ }
-              } else {
-                try {
-                  await github.rest.issues.removeLabel({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: trackingNumber,
-                    name: 'all-resolved',
-                  });
-                } catch (e) { /* not present */ }
-              }
-
-              updatedTrackers.push(trackingNumber);
-
-              const action = isMerged ? 'merged' : (isClosed ? 'closed' : 'reopened');
-              summaryParts.push(JSON.stringify({
-                trackingIssue: trackingNumber,
-                trackingTitle: tracker.title,
-                triggeredBy: `${itemType} #${itemNumber}`,
-                triggeredTitle: itemTitle,
-                action: action,
-                completed: completedTasks,
-                total: totalTasks,
-                allDone: completedTasks === totalTasks,
-              }));
-
-              console.log(`Updated #${trackingNumber}: ${completedTasks}/${totalTasks}`);
-            }
-
-            core.setOutput('tracking_issues_updated', updatedTrackers.join(','));
-            core.setOutput('summary_context', `[${summaryParts.join(',')}]`);
-
-  # Step 2: Use Claude to write an intelligent progress comment
-  claude-summary:
-    needs: update-checkboxes
-    if: needs.update-checkboxes.outputs.tracking_issues_updated != ''
+  sync:
+    if: |
+      (github.event.action == 'closed' || github.event.action == 'reopened') ||
+      (github.event.action == 'labeled' && github.event.label.name == 'tracking')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -183,60 +23,39 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Claude writes tracking update
+      - name: Sync tracking issues
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
-            You are updating tracking issues in this repository after a sub-task was resolved.
+            EVENT: ${{ github.event_name }}
+            ACTION: ${{ github.event.action }}
+            REPO: ${{ github.repository }}
+            NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+            TITLE: ${{ github.event.issue.title || github.event.pull_request.title }}
+            MERGED: ${{ github.event.pull_request.merged }}
+            LABEL: ${{ github.event.label.name }}
 
-            CONTEXT (JSON array of updates):
-            ${{ needs.update-checkboxes.outputs.summary_context }}
+            You manage tracking issues in this repo. Tracking issues have the "tracking" label and contain checklists like `- [ ] #123`.
 
-            For EACH tracking issue in the context:
-            1. Read the tracking issue to understand the overall goal
-            2. Post a concise progress comment on that tracking issue with:
-               - What just happened (which issue/PR was closed/merged/reopened)
-               - Current progress (X/Y tasks complete)
-               - If ALL tasks are done, congratulate and suggest closing
-               - If tasks remain, briefly note what's still open
-            3. Keep comments short and informative — no filler
+            **If ACTION is "labeled" and LABEL is "tracking":**
+            - Read the issue body, find all `#N` references in checklist items
+            - Add the "tracked" label to each referenced issue: `gh issue edit N --add-label tracked`
 
-            Use `gh issue view <number>` to read tracking issues.
-            Use `gh issue comment <number> --body "..."` to post comments.
-
-          claude_args: |
-            --model claude-sonnet-4-6
-            --max-turns 6
-            --allowedTools "Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue list:*)"
-          track_progress: true
-
-  # Step 3: Auto-label sub-issues when "tracking" label is applied to a parent
-  auto-label-tracked:
-    runs-on: ubuntu-latest
-    if: >
-      github.event.action == 'labeled' &&
-      github.event.label.name == 'tracking'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-
-      - name: Claude labels tracked sub-issues
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          prompt: |
-            A "tracking" label was just added to issue #${{ github.event.issue.number }}.
-
-            1. Read the issue body with `gh issue view ${{ github.event.issue.number }}`
-            2. Find all issue/PR numbers referenced in checkbox items (pattern: `- [ ] #N` or `- [x] #N`)
-            3. For each referenced issue, add the "tracked" label:
-               `gh issue edit <number> --add-label "tracked"`
-            4. Report what you labeled
+            **If ACTION is "closed" or "reopened":**
+            - Find tracking issues that reference #NUMBER:
+              `gh issue list --label tracking --state all --json number,body --limit 50`
+            - For each tracking issue containing `#NUMBER` in a checklist:
+              - If the item was closed (issues) or merged (PRs): check the box `[x]`
+              - If closed but not merged (PR): uncheck `[ ]`
+              - If reopened: uncheck `[ ]`
+              - Update the body: `gh issue edit <tracker> --body "..."`
+            - Post a short progress comment: `gh issue comment <tracker> --body "..."`
+              Include: what happened, progress (X/Y done), what remains
+            - If all tasks complete: add "all-resolved" label
+            - If not all complete: remove "all-resolved" label (ignore errors)
 
           claude_args: |
             --model claude-sonnet-4-6
-            --max-turns 6
-            --allowedTools "Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue list:*)"
+            --max-turns 10
+            --allowedTools "Bash(gh issue:*),Bash(gh pr:*)"
