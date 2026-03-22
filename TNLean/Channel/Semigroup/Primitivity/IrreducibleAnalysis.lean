@@ -85,7 +85,7 @@ theorem fixedPoint_eq_trace_smul_of_irreducible_channel
     (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
       hE_ch hE_irr _ hW_fix hW_tr)
 
-axiom trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel
+theorem trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel
     [NeZero D]
     (E : Mat →ₗ[ℂ] Mat)
     (hE_ch : IsChannel E)
@@ -93,7 +93,10 @@ axiom trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel
     {V : Mat}
     (hV_fix : E V = V)
     (hV_ne : V ≠ 0) :
-    Matrix.trace V ≠ 0
+    Matrix.trace V ≠ 0 := by
+  intro htr
+  exact hV_ne (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
+    hE_ch hE_irr V hV_fix htr)
 
 axiom exists_power_fixed_eigenvector_of_peripheral
     [NeZero D]
@@ -483,7 +486,7 @@ axiom exists_primitive_fraction_slice
     ∃ u : ℝ, 0 < u ∧ 0 ≤ u ∧ IsChannel (T u) ∧ IsIrreducibleMap (T u) ∧
       T u σ = σ ∧ IsPrimitive (T u)
 
-axiom irreducible_all_of_irreducible_time
+theorem irreducible_all_of_irreducible_time
     [NeZero D]
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -491,6 +494,25 @@ axiom irreducible_all_of_irreducible_time
     (hexp : ∀ t : ℝ, 0 ≤ t → T t = expSemigroup L t)
     (t₀ : ℝ) (ht₀ : 0 < t₀)
     (hirr : IsIrreducibleMap (T t₀)) :
-    ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s)
+    ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s) := by
+  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hTt₀_ch : IsChannel (T t₀) := hT.channel t₀ (le_of_lt ht₀)
+  obtain ⟨σ, hσ_mem, hσ_pd, hσ_fix, hσ_unique⟩ :=
+    IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := T t₀) hTt₀_ch hirr hD
+  have hσ_fix_all : ∀ u : ℝ, 0 ≤ u → T u σ = σ :=
+    fixed_density_fixed_for_all_times_of_irreducible_time
+      T hT t₀ ht₀ σ hσ_mem hσ_fix hσ_unique
+  have hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X →
+      X = Matrix.trace X • σ :=
+    fixedPoint_eq_trace_smul_at_irreducible_time T t₀ hTt₀_ch hirr σ hσ_mem hσ_fix
+  obtain ⟨u, hu_pos, hu_nonneg, hTu_ch, hTu_irr, hTu_fix, hTu_prim⟩ :=
+    exists_primitive_fraction_slice T hT t₀ ht₀ hirr σ hσ_mem hσ_pd hσ_fix_all hfixed_1d
+  intro s hs
+  apply isIrreducibleMap_of_channel_posDef_fixedPoint_unique (T s)
+    (hT.channel s (le_of_lt hs)) σ hσ_pd (hσ_fix_all s (le_of_lt hs))
+  intro τ hτ_psd hτ_fix
+  refine ⟨Matrix.trace τ, ?_⟩
+  exact fixedPoint_eq_trace_smul_of_primitive_slice
+    L T hT hexp σ hσ_mem hσ_fix_all u hu_nonneg hTu_ch hTu_irr hTu_fix hTu_prim s hs hτ_fix
 
 end -- noncomputable section
