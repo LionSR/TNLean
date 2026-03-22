@@ -140,11 +140,14 @@ with $O$ on a physical index?
     where the last step uses $\Phi_A \circ \Psi_A = \mathrm{id}$.
 \end{proof}
 
-\begin{theorem}[Physical realisation is multiplicative]%
+\begin{theorem}[Physical realisation is multiplicative -- basis case]%
     \label{thm:physRealize_mul}
     \lean{MPSTensor.physRealize_mul}
-    \uses{def:phys_realize, lem:physRealize_spec}
-    Let $A$ be injective.
+    \leanok
+    \uses{def:phys_realize, lem:physRealize_spec, def:injective}
+    Let $A$ be an injective MPS tensor such that $\{A^i\}_{i=0}^{d-1}$
+    is a \emph{basis} of $\MN{D}$ (i.e.\ $d = D^2$ and the matrices are
+    linearly independent).
     For all $X, Y \in \MN{D}$,
     \[
         O_A(XY) = O_A(X)\, O_A(Y).
@@ -152,6 +155,7 @@ with $O$ on a physical index?
 \end{theorem}
 
 \begin{proof}
+    \leanok
     By Lemma~\ref{lem:physRealize_spec} applied to $Y$,
     \[
         A^j\, Y = \sum_{k} O_A(Y)_{jk}\, A^k.
@@ -173,13 +177,33 @@ with $O$ on a physical index?
     \end{align*}
     Thus $\sum_j O_A(XY)_{ij} A^j = \sum_k (O_A(X) O_A(Y))_{ik} A^k$
     for every $i$.
-    When the $\{A^j\}$ are linearly independent ($d = D^2$ and
-    $\{A^j\}$ a basis of $\MN{D}$), uniqueness of the decomposition
-    gives $O_A(XY) = O_A(X) O_A(Y)$ immediately.
-    The general injective case ($d \ge D^2$, decomposition may not be
-    unique) requires an additional argument to identify the
-    coefficients; this is the remaining gap in the Lean formalisation.
+    Since $\{A^j\}$ is a basis of $\MN{D}$, the decomposition coefficients
+    are unique, and comparing both sides gives
+    $O_A(XY)_{ik} = (O_A(X)\, O_A(Y))_{ik}$ for all $i, k$.
 \end{proof}
+
+\begin{remark}[General injective case -- open problem]
+    \label{rem:physRealize_mul_general}
+    \uses{thm:physRealize_mul, def:injective}
+    The multiplicativity $O_A(XY) = O_A(X)\,O_A(Y)$ is expected to hold
+    for any injective $A$ (not just the basis case $d = D^2$), but the
+    proof above breaks down when $d > D^2$ because the decomposition is
+    no longer unique.
+    In this over-complete setting the coefficient vectors
+    $\{O_A(XY)_{i\bullet}\}$ and $\{(O_A(X)\,O_A(Y))_{i\bullet}\}$
+    need not be equal even though they define the same element of $\MN{D}$.
+
+    The paper \cite{Molnar2018NormalPEPS} sidesteps this difficulty by
+    reformulating the key comparison in Lemma~2 in terms of
+    \emph{traces} (see Lemma~\ref{lem:tensor_proportional} and
+    Section~\ref{sec:tensor_proportional}): instead of requiring
+    equality of operator-level virtual insertions, the proof works with
+    the trace pairing $\tr(\,\cdot\,)$, which is non-degenerate and
+    therefore recovers the matrix product $A_2^j A_1^i = B_2^j B_1^i$
+    from the trace identity.
+    The general multiplicativity of $O_A$ for $d > D^2$ remains
+    unverified in the Lean formalisation and is left as an open problem.
+\end{remark}
 
 %% ---------------------------------------------------------
 \section{Intermediate lemmas}%
@@ -266,8 +290,19 @@ inner automorphism.
     Define $O_{A,k}(X) \in \MN{d^{\ell}}$ (where $\ell$ is the block
     size) via the physical realisation map for the blocked tensor adjacent
     to bond~$k$.
-    By Theorem~\ref{thm:physRealize_mul}, $X \mapsto O_{A,k}(X)$
+    The map $X \mapsto O_{A,k}(X)$
     is a $\C$-algebra homomorphism from $\MN{D}$ to $\MN{d^{\ell}}$.
+
+    \emph{Note.} The blocked tensor has physical dimension $d^{\ell}$,
+    which generically exceeds $D^2$; thus
+    Theorem~\ref{thm:physRealize_mul} (which is proved only for the
+    basis case $d = D^2$) does not directly apply.
+    The paper \cite{Molnar2018NormalPEPS} establishes multiplicativity
+    by a different route: it constructs the algebra homomorphisms
+    $X \mapsto O_1$, $O_1 \mapsto Y$ through diagrammatic inversion,
+    avoiding the coefficient-uniqueness issue entirely
+    (see Remark~\ref{rem:physRealize_mul_general}).
+    The formalisation of this alternative argument is future work.
 
     \textbf{Step 2} (transfer of physical operations).
     Since $\mathbf{A}$ and $\mathbf{B}$ generate the same state,
@@ -285,8 +320,9 @@ inner automorphism.
     imply that $T$ is $\C$-linear.
 
     \textbf{Step 4} (multiplicativity).
-    Since $O_{A,k}$ and $O_{B,k}$ are algebra homomorphisms
-    (Theorem~\ref{thm:physRealize_mul}), $T(XY) = T(X)T(Y)$.
+    Since both $X \mapsto O_{A,k}(X)$ and $X \mapsto O_{B,k}(X)$ are
+    algebra homomorphisms (see the note in Step~1),
+    $T(XY) = T(X)T(Y)$.
 
     \textbf{Step 5} (bijectivity).
     $T$ is a nonzero $\C$-algebra endomorphism of $\MN{D}$.
@@ -323,19 +359,20 @@ proportional.
     Suppose that for all $X \in \MN{D}$ (on the internal bond) and
     all $Y \in \MN{D}$ (on the external bond),
     \begin{align}
-        \sum_{j} A_2^{j}\, X\, A_1^{i}
-        &= \sum_{j} B_2^{j}\, X\, B_1^{i}
-        \qquad \text{for all } i,
+        \operatorname{tr}(A_1^{i}\, X\, A_2^{j})
+        &= \operatorname{tr}(B_1^{i}\, X\, B_2^{j})
+        \qquad \text{for all } i, j,
         \label{eq:internal_bond} \\
-        A_1^{i}\, Y\, A_2^{j}
-        &= B_1^{i}\, Y\, B_2^{j}
+        \operatorname{tr}(A_2^{j}\, Y\, A_1^{i})
+        &= \operatorname{tr}(B_2^{j}\, Y\, B_1^{i})
         \qquad \text{for all } i, j.
         \label{eq:external_bond}
     \end{align}
     (Here \eqref{eq:internal_bond} says: inserting $X$ on the bond
-    between sites $1$ and $2$ gives the same two-site amplitude for
-    both chains. Condition \eqref{eq:external_bond} says the same for
-    insertions on the external bond.)
+    between sites $1$ and $2$ gives the same trace -- i.e.\ the same
+    contribution to the state amplitude -- in both chains.
+    Condition~\eqref{eq:external_bond} says the same for the
+    external bond, with $Y$ inserted and the cyclic order reversed.)
 
     Then there exists a nonzero scalar $\lambda \in \C^{\times}$ such
     that
@@ -350,44 +387,79 @@ proportional.
 \begin{proof}
     \uses{def:decomposition_map, lem:center_scalar}
 
-    \textbf{Step 1} (remove the insertion).
-    Setting $X = \Id_D$ in \eqref{eq:internal_bond} gives
-    $A_2^{j} A_1^{i} = B_2^{j} B_1^{i}$ for all $i,j$.
-    Setting $Y = \Id_D$ in \eqref{eq:external_bond} gives
-    $A_1^{i} A_2^{j} = B_1^{i} B_2^{j}$ for all $i,j$.
+    \textbf{Step 1} (trace pairing to matrix products).
+    The trace pairing $(M, N) \mapsto \operatorname{tr}(MN)$ on $\MN{D}$
+    is non-degenerate: if $\operatorname{tr}(MX) = 0$ for all $X$, then
+    $M = 0$.
+    Condition~\eqref{eq:internal_bond} gives
+    $\operatorname{tr}\bigl((A_2^{j} A_1^{i} - B_2^{j} B_1^{i}) X\bigr)
+    = \operatorname{tr}(A_1^{i} X A_2^{j}) - \operatorname{tr}(B_1^{i} X B_2^{j}) = 0$
+    for all $X$ (using cyclicity of the trace).
+    By non-degeneracy,
+    \begin{equation}\label{eq:prodL}
+        A_2^{j} A_1^{i} = B_2^{j} B_1^{i} \qquad \text{for all } i,j.
+    \end{equation}
+    Likewise, \eqref{eq:external_bond} yields
+    $\operatorname{tr}\bigl((A_1^{i} A_2^{j} - B_1^{i} B_2^{j}) Y\bigr) = 0$
+    for all $Y$, giving
+    \begin{equation}\label{eq:prodR}
+        A_1^{i} A_2^{j} = B_1^{i} B_2^{j} \qquad \text{for all } i,j.
+    \end{equation}
 
-    \textbf{Step 2} (extract right and left factors).
-    Since $X$ in \eqref{eq:internal_bond} is arbitrary, we may take
-    $X$ to range over the full matrix algebra.
-    Using the decomposition map $\Psi_{B_2}$ (which exists by
-    injectivity of $B_2$), the first identity $A_2^{j} A_1^{i}
-    = B_2^{j} B_1^{i}$ yields a matrix $Z \in \MN{D}$ with
+    \textbf{Step 2} (extract left and right factors via decomposition maps).
+    Since $A_2$ is injective, the matrices $\{A_2^{j}\}$ span $\MN{D}$.
+    Write $\Id_D = \Phi_{A_2}(\Psi_{A_2}(\Id_D)) = \sum_j c_j\, A_2^{j}$,
+    where $c = \Psi_{A_2}(\Id_D) \in \C^d$.
+    Using \eqref{eq:prodL},
+    \[
+        A_1^{i}
+        = \Id_D \cdot A_1^{i}
+        = \Bigl(\sum_j c_j\, A_2^{j}\Bigr) A_1^{i}
+        = \sum_j c_j\, A_2^{j} A_1^{i}
+        = \sum_j c_j\, B_2^{j} B_1^{i}
+        = Z\, B_1^{i},
+    \]
+    where we define
     \begin{equation}\label{eq:A1_ZB1}
-        A_1^{i} = Z\, B_1^{i} \qquad \text{for all } i.
+        Z := \Phi_{B_2}(\Psi_{A_2}(\Id_D))
+           = \sum_j c_j\, B_2^{j} \;\in\; \MN{D}.
     \end{equation}
-    Concretely: $A_2^{j} A_1^i = B_2^{j} B_1^{i}$ implies
-    $A_1^{i}$ and $B_1^{i}$ have the same left action by any element
-    of $\operatorname{span}\{A_2^j\} = \MN{D}$, and the right inverse
-    of $B_2$ extracts~$Z$.
+    Hence $A_1^{i} = Z\, B_1^{i}$ for all~$i$.
 
-    Similarly, from $A_1^{i} A_2^{j} = B_1^{i} B_2^{j}$ and the
-    decomposition map of $B_1$, there exists $W \in \MN{D}$ with
+    For the right factor, use \eqref{eq:prodR} and the same coefficients $c$:
+    \[
+        A_1^{i}
+        = A_1^{i} \cdot \Id_D
+        = A_1^{i} \Bigl(\sum_j c_j\, A_2^{j}\Bigr)
+        = \sum_j c_j\, A_1^{i} A_2^{j}
+        = \sum_j c_j\, B_1^{i} B_2^{j}
+        = B_1^{i}\, W,
+    \]
+    where
     \begin{equation}\label{eq:A1_B1W}
-        A_1^{i} = B_1^{i}\, W \qquad \text{for all } i.
+        W := \Phi_{B_2}(\Psi_{A_2}(\Id_D)) = Z.
     \end{equation}
+    Hence $A_1^{i} = B_1^{i}\, W$ for all~$i$ with $W = Z$.
 
     \textbf{Step 3} (both factors are scalar).
-    From \eqref{eq:A1_ZB1}, $Z\, B_1^{i} = A_1^{i}$ for all $i$.
-    Since $\{B_1^{i}\}_i$ spans $\MN{D}$ (injectivity of $B_1$),
-    $Z$ commutes with every element of $\MN{D}$ on the right.
-    Similarly, from \eqref{eq:A1_B1W}, $W$ commutes with every element
-    on the left.
-    By Lemma~\ref{lem:center_scalar}, $Z = \lambda \Id_D$ and
-    $W = \mu \Id_D$ for some $\lambda, \mu \in \C$.
+    From \eqref{eq:A1_ZB1} and \eqref{eq:A1_B1W} we have
+    $Z\, B_1^{i} = A_1^{i} = B_1^{i}\, Z$ for all $i$.
+    Since $\{B_1^{i}\}_i$ spans $\MN{D}$ (injectivity of $B_1$), for any
+    $M \in \MN{D}$ write $M = \sum_i e_i\, B_1^{i}$; then
+    \[
+        Z M = Z \sum_i e_i\, B_1^{i}
+            = \sum_i e_i\, Z B_1^{i}
+            = \sum_i e_i\, B_1^{i} Z
+            = M Z.
+    \]
+    Thus $Z$ commutes with every element of $\MN{D}$.
+    Setting $M = \Id_D$ confirms $Z = W$.
+    By Lemma~\ref{lem:center_scalar}, $Z = \lambda \Id_D$ for some
+    $\lambda \in \C$.
 
     \textbf{Step 4} (conclusion).
     Hence $A_1^{i} = \lambda\, B_1^{i}$ for all $i$.
-    Substituting into $A_2^{j} A_1^{i} = B_2^{j} B_1^{i}$ gives
+    Substituting into \eqref{eq:prodL} gives
     $\lambda\, A_2^{j} B_1^{i} = B_2^{j} B_1^{i}$.
     Since $\{B_1^{i}\}_i$ spans $\MN{D}$, this forces
     $A_2^{j} = \lambda^{-1} B_2^{j}$ for all $j$.
@@ -455,10 +527,26 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     Hence $A_k^i = \lambda_k \widetilde{B}_k^i$ for some
     $\lambda_k \in \C^{\times}$.
     Applying this to each adjacent pair gives scalars
-    $\lambda_0, \dots, \lambda_{n-1}$ with
-    $\prod_{k=0}^{n-1} \lambda_k = 1$
-    (since the product of all local proportionality constants must be
-    compatible with the cyclic trace).
+    $\lambda_0, \dots, \lambda_{n-1}$.
+    To see that $\prod_{k=0}^{n-1} \lambda_k = 1$: since both chains
+    generate the same state, for any configuration
+    $\sigma = (\sigma_0, \dots, \sigma_{n-1})$ we have
+    \[
+        \operatorname{tr}\!\bigl(A_0^{\sigma_0} \cdots A_{n-1}^{\sigma_{n-1}}\bigr)
+        =
+        \operatorname{tr}\!\bigl(\widetilde{B}_0^{\sigma_0} \cdots
+                                 \widetilde{B}_{n-1}^{\sigma_{n-1}}\bigr).
+    \]
+    Substituting $A_k^{\sigma_k} = \lambda_k\, \widetilde{B}_k^{\sigma_k}$
+    yields
+    $\bigl(\prod_{k=0}^{n-1} \lambda_k\bigr)
+     \operatorname{tr}(\widetilde{B}_0^{\sigma_0} \cdots
+                       \widetilde{B}_{n-1}^{\sigma_{n-1}})
+     = \operatorname{tr}(\widetilde{B}_0^{\sigma_0} \cdots
+                         \widetilde{B}_{n-1}^{\sigma_{n-1}})$
+    for all $\sigma$.
+    Choosing $\sigma$ so that the trace is nonzero (possible by
+    injectivity) gives $\prod_{k=0}^{n-1} \lambda_k = 1$.
 
     \textbf{Step 4} (absorbing scalars).
     Define $\mu_0 = 1$ and $\mu_k = \prod_{j=0}^{k-1} \lambda_j$ for
@@ -471,6 +559,36 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     Uniqueness of the gauges up to a common scalar follows from the
     uniqueness clause in Lemma~\ref{lem:virtual_bond_gauge}.
 \end{proof}
+
+\begin{remark}[Relationship to the translation-invariant all-sizes theorem]
+    \label{rem:ft_vs_singleBlock}
+    \uses{thm:fundamentalTheorem_injective_chain, def:injective}
+    The Lean library also contains a proof of a different, and in some
+    respects stronger, version of the Fundamental Theorem
+    (\lean{MPSTensor.fundamentalTheorem_singleBlock}).
+    This result states: if $A$ is injective and $A$, $B$ generate the
+    same MPV family \emph{for all system sizes} $N$ (i.e.\ \texttt{SameMPV A B}),
+    then $A$ and $B$ are gauge equivalent without any phase ambiguity
+    ($B^i = X A^i X^{-1}$ for some invertible $X$).
+
+    The two results are complementary:
+    \begin{itemize}
+        \item \textbf{Theorem~\ref{thm:fundamentalTheorem_injective_chain}}
+              (this chapter, from \cite{Molnar2018NormalPEPS}) works for
+              \emph{non-TI} chains of \emph{fixed} length $n \ge 3$, and
+              concludes gauge equivalence up to a common scalar factor.
+              It does not require translation invariance.
+        \item \textbf{\texttt{fundamentalTheorem\_singleBlock}} (Lean) is
+              restricted to \emph{translation-invariant} pairs $A, B$ but
+              assumes agreement for \emph{all} system sizes; the
+              all-sizes hypothesis eliminates the phase ambiguity so the
+              conclusion is exact gauge equivalence $B^i = X A^i X^{-1}$
+              with no phase.
+    \end{itemize}
+    The fixed-size version is more general in allowing non-TI chains;
+    the all-sizes version yields a cleaner conclusion.
+    Neither result implies the other in full generality.
+\end{remark}
 
 %% ---------------------------------------------------------
 \section{Corollaries}%
