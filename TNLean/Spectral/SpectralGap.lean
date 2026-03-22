@@ -556,10 +556,6 @@ private lemma eigenvector_gives_gauge [NeZero D]
   have hSAh_det : (SAᴴ).det ≠ 0 := by
     simpa [Matrix.det_conjTranspose] using star_ne_zero.mpr hSA_det
   have hSAh_isUnitdet : IsUnit (SAᴴ).det := Ne.isUnit hSAh_det
-  have hSAh_inv_mul : (SAᴴ)⁻¹ * SAᴴ = (1 : Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.nonsing_inv_mul SAᴴ hSAh_isUnitdet
-  have hSAh_mul_inv : SAᴴ * (SAᴴ)⁻¹ = (1 : Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.mul_nonsing_inv SAᴴ hSAh_isUnitdet
   -- Left-canonical-gauged tensors.
   let A' : MPSTensor d D := fun i => SA⁻¹ * A i * SA
   let B' : MPSTensor d D := fun i => SB⁻¹ * B i * SB
