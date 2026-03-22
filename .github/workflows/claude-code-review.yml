@@ -3,25 +3,19 @@ name: Claude Code Review (Lean)
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review, reopened]
-    # Optional: Only run on specific file changes
-    # paths:
-    #   - "src/**/*.ts"
-    #   - "src/**/*.tsx"
-    #   - "src/**/*.js"
-    #   - "src/**/*.jsx"
+    paths:
+      - "TNLean/**/*.lean"
+      - "TNLean.lean"
+      - "lakefile.toml"
+      - "lean-toolchain"
+      - "blueprint/src/**/*.tex"
 
 jobs:
   claude-review:
-    # Optional: Filter by PR author
-    # if: |
-    #   github.event.pull_request.user.login == 'external-contributor' ||
-    #   github.event.pull_request.user.login == 'new-developer' ||
-    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: read
+      pull-requests: write
       issues: read
       id-token: write
 
@@ -35,14 +29,32 @@ jobs:
         uses: leanprover/lean-action@v1
         with:
           use-mathlib-cache: true
+          build: false
 
       - name: Run Claude Code Review
         id: claude-review
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          plugin_marketplaces: 'https://github.com/anthropics/claude-code.git'
-          plugins: 'code-review@claude-code-plugins'
-          prompt: '/code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://code.claude.com/docs/en/cli-reference for available options
+          plugin_marketplaces: 'anthropics/claude-code'
+          plugins: 'code-review@anthropics-claude-code'
+          prompt: |
+            Review this Lean 4 pull request: ${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+
+            Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
+
+            Focus your review on:
+            1. **Proof correctness**: Are there any `sorry`s introduced? Are proof terms well-structured?
+            2. **Mathlib style**: Does the code follow Mathlib conventions (naming, tactic style, imports)?
+            3. **Type safety**: Any type mismatches, universe issues, or coercion problems?
+            4. **Performance**: Will any proofs cause timeouts? Are there unnecessarily expensive tactics (e.g., `decide` on large types)?
+            5. **Modularity**: Are new lemmas general enough? Could any be upstreamed to Mathlib?
+            6. **Documentation**: Do new definitions/theorems have docstrings where appropriate?
+
+            For each issue found, post an inline comment on the relevant line using the GitHub CLI.
+            At the end, post a summary comment on the PR with your overall assessment.
+
+          claude_args: |
+            --model claude-opus-4-6
+            --allowed-tools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *)"
+            --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Flag any sorry that is not clearly marked as a known TODO."
