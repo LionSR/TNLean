@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Spectral.MixedTransfer
+import TNLean.Spectral.FrobeniusNorm
 import TNLean.QPF.Assembly
 import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Schwarz.Basic
@@ -10,8 +11,6 @@ import Mathlib.Data.Matrix.Block
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.LinearAlgebra.Eigenspace.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Analysis.Matrix.Order
 
 /-!
 # Spectral gap for the mixed transfer operator
@@ -100,44 +99,16 @@ theorem mixedTransferSpectralRadius_eq (A B : MPSTensor d D) :
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
           (mixedTransferMap A B)) := rfl
 
-/-! ### Frobenius norm squared -/
+/-! ### Frobenius norm squared
 
-/-- Frobenius norm squared of a matrix: `tr(X† X).re`. -/
-noncomputable def frobSq (X : Matrix (Fin D) (Fin D) ℂ) : ℝ :=
-  (Matrix.trace (Xᴴ * X)).re
+The definition and basic API (`frobSq`, `frobSq_nonneg`, `frobSq_eq_zero_iff`,
+`frobSq_pos_of_ne_zero`, `frobSq_smul`, `frobSq_trace`, `matToES`, …) are
+provided by `TNLean.Spectral.FrobeniusNorm` for general rectangular matrices.
+Below we add the square-matrix-specific lemma `frobSq_mul_le`. -/
 
-lemma frobSq_nonneg (X : Matrix (Fin D) (Fin D) ℂ) : 0 ≤ frobSq X :=
-  (Complex.le_def.mp (Matrix.posSemidef_conjTranspose_mul_self X).trace_nonneg).1
-
-private lemma complex_mul_star_re (z : ℂ) : (z * star z).re = ‖z‖ ^ 2 := by
-  rw [show star z = starRingEnd ℂ z from rfl, Complex.mul_conj', ← Complex.ofReal_pow]
-  exact Complex.ofReal_re _
-
+/-- `frobSq X = ∑ i j, ‖X i j‖²` (definitional; kept for backward compatibility). -/
 lemma frobSq_eq_sum (X : Matrix (Fin D) (Fin D) ℂ) :
-    frobSq X = ∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2 := by
-  simp only [frobSq, Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.conjTranspose_apply]
-  rw [show (∑ i, ∑ j, star (X j i) * X j i) =
-      (∑ j, ∑ i, star (X j i) * X j i) from Finset.sum_comm]
-  simp only [Complex.re_sum]; congr 1; ext i; congr 1; ext j
-  rw [mul_comm, complex_mul_star_re]
-
-lemma frobSq_eq_zero_iff (X : Matrix (Fin D) (Fin D) ℂ) : frobSq X = 0 ↔ X = 0 := by
-  rw [frobSq_eq_sum]; constructor
-  · intro h; ext i j
-    have := (Finset.sum_eq_zero_iff_of_nonneg fun i _ =>
-      Finset.sum_nonneg fun j _ => by positivity).mp h i (Finset.mem_univ _)
-    have := (Finset.sum_eq_zero_iff_of_nonneg fun j _ => by positivity).mp this j
-      (Finset.mem_univ _)
-    rwa [sq_eq_zero_iff, norm_eq_zero] at this
-  · rintro rfl; simp
-
-lemma frobSq_pos_of_ne_zero (X : Matrix (Fin D) (Fin D) ℂ) (hX : X ≠ 0) :
-    0 < frobSq X :=
-  lt_of_le_of_ne (frobSq_nonneg X) (Ne.symm (mt (frobSq_eq_zero_iff X).mp hX))
-
-lemma frobSq_smul (c : ℂ) (X : Matrix (Fin D) (Fin D) ℂ) :
-    frobSq (c • X) = ‖c‖ ^ 2 * frobSq X := by
-  simp only [frobSq_eq_sum, Matrix.smul_apply, smul_eq_mul, norm_mul, mul_pow, Finset.mul_sum]
+    frobSq X = ∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2 := rfl
 
 /-! ### Eigenvector iteration -/
 
@@ -180,41 +151,14 @@ lemma trace_transferMap (A : MPSTensor d D) (Z : Matrix (Fin D) (Fin D) ℂ)
       rw [Matrix.trace_mul_comm (A i * Z) _, Matrix.mul_assoc]]
   rw [← Matrix.trace_sum, ← Finset.sum_mul, hA, one_mul]
 
-/-! ### Hilbert–Schmidt contraction for the mixed transfer operator -/
+/-! ### Hilbert–Schmidt contraction for the mixed transfer operator
 
-private noncomputable def toES (M : Matrix (Fin D) (Fin D) ℂ) :
-    EuclideanSpace ℂ (Fin D × Fin D) :=
-  (EuclideanSpace.equiv (Fin D × Fin D) ℂ).symm (fun p => M p.1 p.2)
-
-@[simp] private lemma toES_apply (M : Matrix (Fin D) (Fin D) ℂ) (p : Fin D × Fin D) :
-    toES M p = M p.1 p.2 := by simp [toES, EuclideanSpace.equiv]
-
-private lemma toES_finset_sum {ι : Type*} (s : Finset ι)
-    (f : ι → Matrix (Fin D) (Fin D) ℂ) :
-    toES (∑ i ∈ s, f i) = ∑ i ∈ s, toES (f i) := by
-  ext p; simp [Matrix.sum_apply, Finset.sum_apply]
-
-private lemma norm_toES_sq (M : Matrix (Fin D) (Fin D) ℂ) :
-    ‖toES M‖ ^ 2 = frobSq M := by
-  rw [sq, ← @inner_self_eq_norm_mul_norm ℂ]
-  change RCLike.re (@inner ℂ _ _ (toES M) (toES M)) = _
-  simp only [PiLp.inner_apply, RCLike.inner_apply', toES_apply, starRingEnd_apply,
-    frobSq, Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.conjTranspose_apply]
-  rw [show (∑ x : Fin D × Fin D, star (M x.1 x.2) * M x.1 x.2) =
-    ∑ i, ∑ j, star (M i j) * M i j from Fintype.sum_prod_type _,
-    show (∑ i, ∑ j, star (M i j) * M i j) =
-    ∑ j, ∑ i, star (M i j) * M i j from Finset.sum_comm]
-  simp [RCLike.re_to_complex]
-
-private lemma norm_sq_sum_mul_le (a b : Fin D → ℂ) :
-    ‖∑ k, a k * b k‖ ^ 2 ≤ (∑ k, ‖a k‖ ^ 2) * (∑ k, ‖b k‖ ^ 2) :=
-  (pow_le_pow_left₀ (norm_nonneg _)
-    ((norm_sum_le _ _).trans (Finset.sum_le_sum fun _ _ => norm_mul_le _ _)) 2).trans
-    (Finset.sum_mul_sq_le_sq_mul_sq _ _ _)
+The Euclidean-space embedding `matToES` and its basic API are imported from
+`TNLean.Spectral.FrobeniusNorm`.  Below we add square-matrix submultiplicativity. -/
 
 private lemma frobSq_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
     frobSq (A * B) ≤ frobSq A * frobSq B := by
-  simp only [frobSq_eq_sum, Matrix.mul_apply]
+  simp only [frobSq, Matrix.mul_apply]
   calc ∑ i, ∑ j, ‖∑ k, A i k * B k j‖ ^ 2
       ≤ ∑ i, ∑ j, (∑ k, ‖A i k‖ ^ 2) * (∑ k, ‖B k j‖ ^ 2) :=
         Finset.sum_le_sum fun i _ => Finset.sum_le_sum fun j _ => norm_sq_sum_mul_le _ _
@@ -222,12 +166,12 @@ private lemma frobSq_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
         simp_rw [← Finset.mul_sum, ← Finset.sum_mul]
     _ = _ := by congr 1; exact Finset.sum_comm
 
-private lemma norm_toES_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
-    ‖toES (A * B)‖ ≤ ‖toES A‖ * ‖toES B‖ := by
-  have h : ‖toES (A * B)‖ ^ 2 ≤ (‖toES A‖ * ‖toES B‖) ^ 2 := by
-    rw [norm_toES_sq, mul_pow, norm_toES_sq, norm_toES_sq]; exact frobSq_mul_le A B
-  nlinarith [Real.sqrt_le_sqrt h, Real.sqrt_sq (norm_nonneg (toES (A * B))),
-    Real.sqrt_sq (mul_nonneg (norm_nonneg (toES A)) (norm_nonneg (toES B)))]
+private lemma norm_matToES_mul_le (A B : Matrix (Fin D) (Fin D) ℂ) :
+    ‖matToES (A * B)‖ ≤ ‖matToES A‖ * ‖matToES B‖ := by
+  have h : ‖matToES (A * B)‖ ^ 2 ≤ (‖matToES A‖ * ‖matToES B‖) ^ 2 := by
+    rw [norm_matToES_sq, mul_pow, norm_matToES_sq, norm_matToES_sq]; exact frobSq_mul_le A B
+  nlinarith [Real.sqrt_le_sqrt h, Real.sqrt_sq (norm_nonneg (matToES (A * B))),
+    Real.sqrt_sq (mul_nonneg (norm_nonneg (matToES A)) (norm_nonneg (matToES B)))]
 
 private lemma trace_cycle_for_frobSq (w v : Matrix (Fin D) (Fin D) ℂ) :
     (w * vᴴ * (v * wᴴ)).trace = (wᴴ * w * (vᴴ * v)).trace := by
@@ -239,7 +183,7 @@ private lemma trace_cycle_for_frobSq (w v : Matrix (Fin D) (Fin D) ℂ) :
 private lemma sum_frobSq_right (B : MPSTensor d D) (hB : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (v : Matrix (Fin D) (Fin D) ℂ) (n : ℕ) :
     ∑ σ : Fin n → Fin d, frobSq (v * (evalWord B (List.ofFn σ))ᴴ) = frobSq v := by
-  simp only [frobSq, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+  simp only [frobSq_trace, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
   conv_lhs => arg 2; ext σ; rw [trace_cycle_for_frobSq (evalWord B (List.ofFn σ)) v]
   rw [← Complex.re_sum, ← Matrix.trace_sum, ← Finset.sum_mul,
       word_conjTranspose_mul_sum B hB n, Matrix.one_mul]
@@ -247,7 +191,7 @@ private lemma sum_frobSq_right (B : MPSTensor d D) (hB : ∑ i : Fin d, (B i)ᴴ
 private lemma sum_frobSq_words (K : MPSTensor d D) (hK : ∑ i : Fin d, (K i)ᴴ * K i = 1)
     (n : ℕ) :
     ∑ σ : Fin n → Fin d, frobSq (evalWord K (List.ofFn σ)) = (D : ℝ) := by
-  simp only [frobSq]
+  simp only [frobSq_trace]
   rw [← Complex.re_sum, ← Matrix.trace_sum, word_conjTranspose_mul_sum K hK n]
   simp [Matrix.trace_one, Fintype.card_fin]
 
@@ -264,21 +208,21 @@ private lemma hs_contraction_mixedTransfer [NeZero D]
     congr 1; ext σ; rw [Matrix.mul_assoc]]
   rw [show frobSq (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ)) =
-    ‖toES (∑ σ : Fin n → Fin d,
+    ‖matToES (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ^ 2 from
-    (norm_toES_sq _).symm]
-  set fA := fun σ : Fin n → Fin d => ‖toES (evalWord A (List.ofFn σ))‖ with hfA_def
-  set fB := fun σ : Fin n → Fin d => ‖toES (X * (evalWord B (List.ofFn σ))ᴴ)‖ with hfB_def
-  have h_chain : ‖toES (∑ σ : Fin n → Fin d,
+    (norm_matToES_sq _).symm]
+  set fA := fun σ : Fin n → Fin d => ‖matToES (evalWord A (List.ofFn σ))‖ with hfA_def
+  set fB := fun σ : Fin n → Fin d => ‖matToES (X * (evalWord B (List.ofFn σ))ᴴ)‖ with hfB_def
+  have h_chain : ‖matToES (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ≤
     ∑ σ : Fin n → Fin d, fA σ * fB σ :=
-    ((by rw [toES_finset_sum]; exact norm_sum_le _ _) : ‖toES _‖ ≤ _).trans
-      (Finset.sum_le_sum fun σ _ => norm_toES_mul_le _ _)
+    ((by rw [matToES_finset_sum]; exact norm_sum_le _ _) : ‖matToES _‖ ≤ _).trans
+      (Finset.sum_le_sum fun σ _ => norm_matToES_mul_le _ _)
   have h_A : ∑ σ : Fin n → Fin d, fA σ ^ 2 = (D : ℝ) := by
-    simp_rw [hfA_def, norm_toES_sq]; exact sum_frobSq_words A hA_norm n
+    simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq_words A hA_norm n
   have h_B : ∑ σ : Fin n → Fin d, fB σ ^ 2 = frobSq X := by
-    simp_rw [hfB_def, norm_toES_sq]; exact sum_frobSq_right B hB_norm X n
-  calc ‖toES _‖ ^ 2
+    simp_rw [hfB_def, norm_matToES_sq]; exact sum_frobSq_right B hB_norm X n
+  calc ‖matToES _‖ ^ 2
       ≤ (∑ σ : Fin n → Fin d, fA σ * fB σ) ^ 2 :=
         pow_le_pow_left₀ (norm_nonneg _) h_chain 2
     _ ≤ (∑ σ, fA σ ^ 2) * (∑ σ, fB σ ^ 2) :=
