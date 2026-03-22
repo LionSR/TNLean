@@ -10,40 +10,31 @@
 This chapter formalises the one-dimensional MPS results of
 \cite{Molnar2018NormalPEPS}: the Fundamental Theorem for injective
 and normal MPS on a finite periodic chain of fixed length.
-The approach is purely algebraic---it never appeals to operator-norm
-limits or spectral theory of transfer maps, working instead with the
-matrix algebra $\MN{D}$ directly.
-Two preparatory lemmas (the virtual bond gauge and the proportionality
-lemma) carry the entire argument; their combination yields the main
-theorem and its corollaries for translation-invariant chains, non-TI
-descriptions of TI states, physical symmetries, and normal MPS.
+The argument is purely algebraic, working directly with $\MN{D}$.
+Two preparatory lemmas---the virtual bond gauge
+(Lemma~\ref{lem:virtual_bond_gauge}) and the proportionality lemma
+(Lemma~\ref{lem:tensor_proportional})---carry the entire argument,
+yielding the main theorem and its corollaries for translation-invariant
+chains, non-TI descriptions of TI states, physical symmetries, and
+normal MPS.
 
-Throughout we fix a constant bond dimension $D$ and physical
-dimension $d$ with $d \ge D^2$.
-The paper \cite{Molnar2018NormalPEPS} also treats injective PEPS on
-arbitrary graphs, normal PEPS, and an improved system-size bound
-($2L+1$ in place of $3L$); those extensions are left for future work.
-
+Throughout, $D$ is the bond dimension and $d$ is the physical dimension
+with $d \ge D^2$.
+The extensions to injective and normal PEPS on arbitrary graphs and the
+improved system-size bound ($2L+1$ in place of $3L$) are left for
+future work.
 The chain bookkeeping layer (Definition~\ref{def:non_ti_chain}),
-including the notions of same chain state, injectivity, and cyclic gauge
-equivalence, was introduced in Chapter~\ref{ch:single}.
+including same chain state, injectivity, and cyclic gauge equivalence,
+was introduced in Chapter~\ref{ch:single}.
 
 %% ---------------------------------------------------------
 \section{One-sided inverse and decomposition}%
 \label{sec:decomposition_map}
 %% ---------------------------------------------------------
 
-Let $A = \{A^i\}_{i=0}^{d-1}$ be an injective MPS tensor with bond
-dimension $D$.
-Recall from Definition~\ref{def:injective} that injectivity means that
-the matrices $\{A^i\}$ span $\MN{D}$.
-The \emph{linear combination map}
-\[
-    \Phi_A : \C^d \to \MN{D},
-    \qquad
-    \Phi_A(c) := \sum_{i=0}^{d-1} c_i A^i,
-\]
-is therefore surjective, and a right inverse exists.
+If $A$ is injective, the linear combination map
+$\Phi_A(c) := \sum_{i} c_i A^i : \C^d \to \MN{D}$
+is surjective and admits a right inverse.
 
 \begin{lemma}[Existence of a right inverse]\label{lem:exists_rightInverse}
     \lean{MPSTensor.IsInjective.exists_rightInverse}
@@ -87,13 +78,11 @@ is therefore surjective, and a right inverse exists.
 
 \begin{remark}[Non-uniqueness of the decomposition]
     \label{rem:decomposition_nonunique}
-    When $d > D^2$ the map $\Phi_A$ has a nontrivial kernel and the
-    decomposition is not unique.
-    The decomposition map $\Psi_A$ is any fixed section; its choice
-    does not affect the statements that follow because those statements
-    only depend on the image $\Phi_A \circ \Psi_A = \mathrm{id}$.
-    Uniqueness of the decomposition holds if and only if $d = D^2$ and
-    the matrices $\{A^i\}$ form a basis of $\MN{D}$.
+    When $d > D^2$, the map $\Phi_A$ has a nontrivial kernel, so
+    the section $\Psi_A$ is not unique.
+    The statements that follow depend only on
+    $\Phi_A \circ \Psi_A = \mathrm{id}$, so the choice does not
+    affect the conclusions.
 \end{remark}
 
 %% ---------------------------------------------------------
@@ -101,10 +90,9 @@ is therefore surjective, and a right inverse exists.
 \label{sec:phys_realize}
 %% ---------------------------------------------------------
 
-Given an injective tensor $A$ and a matrix $X \in \MN{D}$, one can
-ask: is there a $d \times d$ matrix $O$ such that inserting $X$ on the
-virtual bond has the same effect on any multi-site amplitude as acting
-with $O$ on a physical index?
+For an injective tensor $A$, the physical realisation map encodes the
+effect of inserting a virtual matrix $X$ on the bond as a $d \times d$
+operation on the physical indices.
 
 \begin{definition}[Physical realisation map]\label{def:phys_realize}
     \lean{MPSTensor.physRealize}
@@ -156,62 +144,29 @@ with $O$ on a physical index?
 
 \begin{proof}
     \leanok
-    By Lemma~\ref{lem:physRealize_spec} applied to $Y$,
-    \[
-        A^j\, Y = \sum_{k} O_A(Y)_{jk}\, A^k.
-    \]
-    Apply Lemma~\ref{lem:physRealize_spec} to $XY$ and also to $X$:
-    \begin{align*}
-        A^i\,(XY)
-        &= \sum_j O_A(XY)_{ij}\, A^j, \\
-        A^i\, X
-        &= \sum_j O_A(X)_{ij}\, A^j.
-    \end{align*}
-    Using associativity and the formula for $A^j Y$,
-    \begin{align*}
-        A^i\,(XY) = (A^i X)\,Y
-        &= \left(\sum_j O_A(X)_{ij}\, A^j\right) Y
-         = \sum_j O_A(X)_{ij}\, (A^j Y) \\
-        &= \sum_j O_A(X)_{ij} \sum_k O_A(Y)_{jk}\, A^k
-         = \sum_k (O_A(X)\, O_A(Y))_{ik}\, A^k.
-    \end{align*}
-    Thus $\sum_j O_A(XY)_{ij} A^j = \sum_k (O_A(X) O_A(Y))_{ik} A^k$
-    for every $i$.
-    Since $\{A^j\}$ is a basis of $\MN{D}$, the decomposition coefficients
-    are unique, and comparing both sides gives
-    $O_A(XY)_{ik} = (O_A(X)\, O_A(Y))_{ik}$ for all $i, k$.
+    Applying Lemma~\ref{lem:physRealize_spec} to $X$ and substituting
+    the resulting formula for $A^j Y$ gives
+    $A^i(XY) = \sum_k (O_A(X)\, O_A(Y))_{ik} A^k$.
+    Applying Lemma~\ref{lem:physRealize_spec} directly to $XY$ gives
+    $A^i(XY) = \sum_k O_A(XY)_{ik} A^k$.
+    Since $\{A^k\}$ is a basis, the coefficients agree.
 \end{proof}
 
-\begin{remark}[General injective case -- open problem]
+\begin{remark}[General injective case]
     \label{rem:physRealize_mul_general}
     \uses{thm:physRealize_mul, def:injective}
-    The multiplicativity $O_A(XY) = O_A(X)\,O_A(Y)$ is expected to hold
-    for any injective $A$ (not just the basis case $d = D^2$), but the
-    proof above breaks down when $d > D^2$ because the decomposition is
-    no longer unique.
-    In this over-complete setting the coefficient vectors
-    $\{O_A(XY)_{i\bullet}\}$ and $\{(O_A(X)\,O_A(Y))_{i\bullet}\}$
-    need not be equal even though they define the same element of $\MN{D}$.
-
-    The paper \cite{Molnar2018NormalPEPS} sidesteps this difficulty by
-    reformulating the key comparison in Lemma~2 in terms of
-    \emph{traces} (see Lemma~\ref{lem:tensor_proportional} and
-    Section~\ref{sec:tensor_proportional}): instead of requiring
-    equality of operator-level virtual insertions, the proof works with
-    the trace pairing $\tr(\,\cdot\,)$, which is non-degenerate and
-    therefore recovers the matrix product $A_2^j A_1^i = B_2^j B_1^i$
-    from the trace identity.
-    The general multiplicativity of $O_A$ for $d > D^2$ remains
-    unverified in the Lean formalisation and is left as an open problem.
+    When $d > D^2$, the decomposition is non-unique, so
+    $O_A(XY) = O_A(X)\,O_A(Y)$ need not hold coefficient-wise even
+    though both sides define the same matrix in $\MN{D}$.
+    The general multiplicativity for arbitrary injective $A$ is tracked
+    as an open problem (GitHub issue~\#74); the proofs below avoid it
+    by working with trace pairings instead.
 \end{remark}
 
 %% ---------------------------------------------------------
 \section{Intermediate lemmas}%
 \label{sec:intermediate}
 %% ---------------------------------------------------------
-
-Two auxiliary facts are used repeatedly. We state them here so that the
-dependency graph records them as explicit nodes.
 
 \begin{lemma}[Blocking preserves injectivity]\label{lem:blocking_preserves_injectivity}
     \notready
@@ -281,61 +236,25 @@ inner automorphism.
 \begin{proof}
     \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether,
           lem:blocking_preserves_injectivity}
-
-    \textbf{Step 1} (blocking to three sites).
-    Block the sites on either side of bond~$k$ into a single site each,
-    producing a three-site chain.
-    By Lemma~\ref{lem:blocking_preserves_injectivity}, all three blocked
-    tensors are injective.
-    Define $O_{A,k}(X) \in \MN{d^{\ell}}$ (where $\ell$ is the block
-    size) via the physical realisation map for the blocked tensor adjacent
-    to bond~$k$.
-    The map $X \mapsto O_{A,k}(X)$
-    is a $\C$-algebra homomorphism from $\MN{D}$ to $\MN{d^{\ell}}$.
-
-    \emph{Note.} The blocked tensor has physical dimension $d^{\ell}$,
-    which generically exceeds $D^2$; thus
-    Theorem~\ref{thm:physRealize_mul} (which is proved only for the
-    basis case $d = D^2$) does not directly apply.
-    The paper \cite{Molnar2018NormalPEPS} establishes multiplicativity
-    by a different route: it constructs the algebra homomorphisms
-    $X \mapsto O_1$, $O_1 \mapsto Y$ through diagrammatic inversion,
-    avoiding the coefficient-uniqueness issue entirely
-    (see Remark~\ref{rem:physRealize_mul_general}).
-    The formalisation of this alternative argument is future work.
-
-    \textbf{Step 2} (transfer of physical operations).
-    Since $\mathbf{A}$ and $\mathbf{B}$ generate the same state,
-    inserting any virtual matrix $X$ on bond~$k$ in the
-    $\mathbf{A}$-chain produces the same physical-level amplitude
-    change as some virtual insertion in the $\mathbf{B}$-chain.
-    The physical operation $O_{A,k}(X)$ can therefore be realised on
-    the $\mathbf{B}$-chain: there exists $Y \in \MN{D}$ with
-    $O_{A,k}(X) = O_{B,k}(Y)$.
-    By injectivity of $\mathbf{B}$, this $Y$ is unique.
-
-    \textbf{Step 3} (the map $T$).
-    Define $T : \MN{D} \to \MN{D}$ by $T(X) = Y$ as in Step~2.
-    Linearity of $O_{A,k}$ and $O_{B,k}$ and uniqueness of $Y$
-    imply that $T$ is $\C$-linear.
-
-    \textbf{Step 4} (multiplicativity).
-    Since both $X \mapsto O_{A,k}(X)$ and $X \mapsto O_{B,k}(X)$ are
-    algebra homomorphisms (see the note in Step~1),
-    $T(XY) = T(X)T(Y)$.
-
-    \textbf{Step 5} (bijectivity).
-    $T$ is a nonzero $\C$-algebra endomorphism of $\MN{D}$.
-    By Theorem~\ref{thm:simplicity}, $T$ is bijective.
-
-    \textbf{Step 6} (Skolem--Noether).
-    By Theorem~\ref{thm:skolem_noether}, every automorphism of
-    $\MN{D}$ is inner.
-    Hence $T(X) = Z_k^{-1} X Z_k$ for some $Z_k \in \GL_D(\C)$.
-    The matrix $Z_k$ is unique up to a scalar factor because two
-    inner automorphisms $\operatorname{Ad}(Z)$ and $\operatorname{Ad}(Z')$
-    coincide iff $Z' Z^{-1}$ is central, i.e.\ scalar
-    (Lemma~\ref{lem:center_scalar}).
+    Block the sites on either side of bond~$k$ into a three-site chain;
+    Lemma~\ref{lem:blocking_preserves_injectivity} ensures injectivity,
+    and both $O_{A,k}$ and $O_{B,k}$ are algebra homomorphisms from
+    $\MN{D}$ (established in \cite{Molnar2018NormalPEPS} via
+    diagrammatic inversion rather than coefficient uniqueness;
+    see Remark~\ref{rem:physRealize_mul_general}).
+    Since both chains generate the same state, for every $X \in \MN{D}$
+    there is a unique $Y \in \MN{D}$ with $O_{A,k}(X) = O_{B,k}(Y)$;
+    set $T(X) = Y$.
+    Linearity of $O_{A,k}$ and $O_{B,k}$ and uniqueness of $Y$ make $T$
+    $\C$-linear, and since both maps are algebra homomorphisms, $T$ is
+    multiplicative.
+    Thus $T$ is a nonzero $\C$-algebra endomorphism of $\MN{D}$, hence
+    bijective by Theorem~\ref{thm:simplicity}.
+    Skolem--Noether (Theorem~\ref{thm:skolem_noether}) gives
+    $Z_k \in \GL_D(\C)$ with $T(X) = Z_k^{-1} X Z_k$, and uniqueness
+    up to a scalar follows because two inner automorphisms
+    $\operatorname{Ad}(Z)$ and $\operatorname{Ad}(Z')$ agree iff
+    $Z' Z^{-1}$ is central (Lemma~\ref{lem:center_scalar}).
 \end{proof}
 
 %% ---------------------------------------------------------
@@ -346,9 +265,8 @@ inner automorphism.
 After applying Lemma~\ref{lem:virtual_bond_gauge} to each bond and
 absorbing the gauge matrices, one obtains two chains whose
 virtual-insertion operations agree on every bond.
-Lemma~2 of \cite{Molnar2018NormalPEPS} shows that agreement on
-\emph{both} bonds of a two-site block forces the local tensors to be
-proportional.
+Lemma~2 of \cite{Molnar2018NormalPEPS} shows that this agreement
+forces the local tensors to be proportional.
 
 \begin{lemma}[Aligned gauges force proportionality -- Lemma~2 of \protect\cite{Molnar2018NormalPEPS}]%
     \label{lem:tensor_proportional}
@@ -386,84 +304,25 @@ proportional.
 
 \begin{proof}
     \uses{def:decomposition_map, lem:center_scalar}
-
-    \textbf{Step 1} (trace pairing to matrix products).
-    The trace pairing $(M, N) \mapsto \operatorname{tr}(MN)$ on $\MN{D}$
-    is non-degenerate: if $\operatorname{tr}(MX) = 0$ for all $X$, then
-    $M = 0$.
-    Condition~\eqref{eq:internal_bond} gives
-    $\operatorname{tr}\bigl((A_2^{j} A_1^{i} - B_2^{j} B_1^{i}) X\bigr)
-    = \operatorname{tr}(A_1^{i} X A_2^{j}) - \operatorname{tr}(B_1^{i} X B_2^{j}) = 0$
-    for all $X$ (using cyclicity of the trace).
-    By non-degeneracy,
-    \begin{equation}\label{eq:prodL}
-        A_2^{j} A_1^{i} = B_2^{j} B_1^{i} \qquad \text{for all } i,j.
-    \end{equation}
-    Likewise, \eqref{eq:external_bond} yields
-    $\operatorname{tr}\bigl((A_1^{i} A_2^{j} - B_1^{i} B_2^{j}) Y\bigr) = 0$
-    for all $Y$, giving
-    \begin{equation}\label{eq:prodR}
-        A_1^{i} A_2^{j} = B_1^{i} B_2^{j} \qquad \text{for all } i,j.
-    \end{equation}
-
-    \textbf{Step 2} (extract left and right factors via decomposition maps).
-    Since $A_2$ is injective, the matrices $\{A_2^{j}\}$ span $\MN{D}$.
-    Write $\Id_D = \Phi_{A_2}(\Psi_{A_2}(\Id_D)) = \sum_j c_j\, A_2^{j}$,
-    where $c = \Psi_{A_2}(\Id_D) \in \C^d$.
-    Using \eqref{eq:prodL},
+    By cyclicity and non-degeneracy of the trace pairing,
+    conditions \eqref{eq:internal_bond} and \eqref{eq:external_bond}
+    give
     \[
-        A_1^{i}
-        = \Id_D \cdot A_1^{i}
-        = \Bigl(\sum_j c_j\, A_2^{j}\Bigr) A_1^{i}
-        = \sum_j c_j\, A_2^{j} A_1^{i}
-        = \sum_j c_j\, B_2^{j} B_1^{i}
-        = Z\, B_1^{i},
+        A_2^{j} A_1^{i} = B_2^{j} B_1^{i}
+        \qquad\text{and}\qquad
+        A_1^{i} A_2^{j} = B_1^{i} B_2^{j}
+        \qquad\text{for all } i, j.
     \]
-    where we define
-    \begin{equation}\label{eq:A1_ZB1}
-        Z := \Phi_{B_2}(\Psi_{A_2}(\Id_D))
-           = \sum_j c_j\, B_2^{j} \;\in\; \MN{D}.
-    \end{equation}
-    Hence $A_1^{i} = Z\, B_1^{i}$ for all~$i$.
-
-    For the right factor, use \eqref{eq:prodR} and the same coefficients $c$:
-    \[
-        A_1^{i}
-        = A_1^{i} \cdot \Id_D
-        = A_1^{i} \Bigl(\sum_j c_j\, A_2^{j}\Bigr)
-        = \sum_j c_j\, A_1^{i} A_2^{j}
-        = \sum_j c_j\, B_1^{i} B_2^{j}
-        = B_1^{i}\, W,
-    \]
-    where
-    \begin{equation}\label{eq:A1_B1W}
-        W := \Phi_{B_2}(\Psi_{A_2}(\Id_D)) = Z.
-    \end{equation}
-    Hence $A_1^{i} = B_1^{i}\, W$ for all~$i$ with $W = Z$.
-
-    \textbf{Step 3} (both factors are scalar).
-    From \eqref{eq:A1_ZB1} and \eqref{eq:A1_B1W} we have
-    $Z\, B_1^{i} = A_1^{i} = B_1^{i}\, Z$ for all $i$.
-    Since $\{B_1^{i}\}_i$ spans $\MN{D}$ (injectivity of $B_1$), for any
-    $M \in \MN{D}$ write $M = \sum_i e_i\, B_1^{i}$; then
-    \[
-        Z M = Z \sum_i e_i\, B_1^{i}
-            = \sum_i e_i\, Z B_1^{i}
-            = \sum_i e_i\, B_1^{i} Z
-            = M Z.
-    \]
-    Thus $Z$ commutes with every element of $\MN{D}$.
-    Setting $M = \Id_D$ confirms $Z = W$.
+    Write $\Id_D = \sum_j c_j A_2^j$ using the decomposition map
+    $\Psi_{A_2}$, and define $Z := \sum_j c_j B_2^j \in \MN{D}$.
+    The first product identity gives $A_1^i = Z B_1^i$, and the second
+    gives $A_1^i = B_1^i Z$.
+    Hence $Z$ commutes with every $B_1^i$; since $\{B_1^i\}$ spans
+    $\MN{D}$, $Z$ is central.
     By Lemma~\ref{lem:center_scalar}, $Z = \lambda \Id_D$ for some
-    $\lambda \in \C$.
-
-    \textbf{Step 4} (conclusion).
-    Hence $A_1^{i} = \lambda\, B_1^{i}$ for all $i$.
-    Substituting into \eqref{eq:prodL} gives
-    $\lambda\, A_2^{j} B_1^{i} = B_2^{j} B_1^{i}$.
-    Since $\{B_1^{i}\}_i$ spans $\MN{D}$, this forces
-    $A_2^{j} = \lambda^{-1} B_2^{j}$ for all $j$.
-    The tensors are nonzero, so $\lambda \neq 0$.
+    $\lambda \in \C^{\times}$ (nonzero since the tensors are nonzero).
+    Thus $A_1^i = \lambda B_1^i$, and substituting into the first
+    product identity forces $A_2^j = \lambda^{-1} B_2^j$.
 \end{proof}
 
 %% ---------------------------------------------------------
@@ -496,98 +355,40 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
 \begin{proof}
     \uses{lem:virtual_bond_gauge, lem:tensor_proportional,
           lem:blocking_preserves_injectivity}
-
-    \textbf{Step 1} (gauge on each bond via Lemma~1).
-    Fix a bond $(k, k{+}1)$.
-    Block all sites except $k$ and $k{+}1$ into a single site to
-    form a three-site chain, which is injective by
-    Lemma~\ref{lem:blocking_preserves_injectivity}.
-    Apply Lemma~\ref{lem:virtual_bond_gauge} to obtain
-    $Z_k \in \GL_D(\C)$ such that inserting $X$ on bond~$k$ in the
-    $\mathbf{A}$-chain equals inserting $Z_k^{-1} X Z_k$ in the
-    $\mathbf{B}$-chain.
-    Repeat for every bond.
-
-    \textbf{Step 2} (absorbing gauges).
-    Define $\widetilde{B}_k^i := Z_k\, B_k^i\, Z_{k+1}^{-1}$ for each
-    site~$k$.
-    After this redefinition, the virtual insertion operations for
-    $\mathbf{A}$ and $\widetilde{\mathbf{B}}$ agree on every bond:
-    for every bond $k$ and every $X \in \MN{D}$, inserting $X$ gives
-    the same amplitude in both chains.
-
-    \textbf{Step 3} (proportionality via Lemma~2).
-    Fix a pair of adjacent sites $(k, k{+}1)$.
-    Block all other sites so that the chain becomes a two-site MPS.
-    The agreement of virtual insertions on both the internal bond
-    (between $k$ and $k{+}1$) and the external bond (through the
-    blocked complement) gives precisely the two hypotheses
-    \eqref{eq:internal_bond}--\eqref{eq:external_bond} of
-    Lemma~\ref{lem:tensor_proportional}.
-    Hence $A_k^i = \lambda_k \widetilde{B}_k^i$ for some
+    Apply Lemma~\ref{lem:virtual_bond_gauge} at each bond to obtain
+    $Z_k \in \GL_D(\C)$ with $O_{A,k}(X) = O_{B,k}(Z_k^{-1} X Z_k)$.
+    Redefine $\widetilde{B}_k^i := Z_k B_k^i Z_{k+1}^{-1}$; the
+    virtual insertion operations of $\mathbf{A}$ and
+    $\widetilde{\mathbf{B}}$ then agree on every bond.
+    For each adjacent pair $(k, k{+}1)$, block the remaining sites into
+    a two-site chain; the agreement on both bonds gives exactly
+    hypotheses \eqref{eq:internal_bond}--\eqref{eq:external_bond} of
+    Lemma~\ref{lem:tensor_proportional}, yielding
+    $A_k^i = \lambda_k \widetilde{B}_k^i$ for some
     $\lambda_k \in \C^{\times}$.
-    Applying this to each adjacent pair gives scalars
-    $\lambda_0, \dots, \lambda_{n-1}$.
-    To see that $\prod_{k=0}^{n-1} \lambda_k = 1$: since both chains
-    generate the same state, for any configuration
-    $\sigma = (\sigma_0, \dots, \sigma_{n-1})$ we have
-    \[
-        \operatorname{tr}\!\bigl(A_0^{\sigma_0} \cdots A_{n-1}^{\sigma_{n-1}}\bigr)
-        =
-        \operatorname{tr}\!\bigl(\widetilde{B}_0^{\sigma_0} \cdots
-                                 \widetilde{B}_{n-1}^{\sigma_{n-1}}\bigr).
-    \]
-    Substituting $A_k^{\sigma_k} = \lambda_k\, \widetilde{B}_k^{\sigma_k}$
-    yields
-    $\bigl(\prod_{k=0}^{n-1} \lambda_k\bigr)
-     \operatorname{tr}(\widetilde{B}_0^{\sigma_0} \cdots
-                       \widetilde{B}_{n-1}^{\sigma_{n-1}})
-     = \operatorname{tr}(\widetilde{B}_0^{\sigma_0} \cdots
-                         \widetilde{B}_{n-1}^{\sigma_{n-1}})$
-    for all $\sigma$.
-    Choosing $\sigma$ so that the trace is nonzero (possible by
-    injectivity) gives $\prod_{k=0}^{n-1} \lambda_k = 1$.
-
-    \textbf{Step 4} (absorbing scalars).
-    Define $\mu_0 = 1$ and $\mu_k = \prod_{j=0}^{k-1} \lambda_j$ for
-    $k = 1, \dots, n-1$.
-    The condition $\prod_k \lambda_k = 1$ ensures $\mu_n = 1$.
-    Replace $Z_k$ by $\mu_k\, Z_k$.
-    Then $B_k^i = Z_k^{-1}\, A_k^i\, Z_{k+1}$ for all $k$ and $i$,
-    with $Z_n = Z_0$.
-
-    Uniqueness of the gauges up to a common scalar follows from the
-    uniqueness clause in Lemma~\ref{lem:virtual_bond_gauge}.
+    Choosing a configuration $\sigma$ with nonzero trace and
+    substituting $A_k^{\sigma_k} = \lambda_k \widetilde{B}_k^{\sigma_k}$
+    into the chain-state identity forces $\prod_k \lambda_k = 1$.
+    Set $\mu_k = \prod_{j < k} \lambda_j$ and replace $Z_k$ by
+    $\mu_k Z_k$; then $B_k^i = Z_k^{-1} A_k^i Z_{k+1}$ for all $k$
+    and $i$, with $Z_n = Z_0$.
+    Uniqueness up to a common scalar follows from the uniqueness clause
+    of Lemma~\ref{lem:virtual_bond_gauge}.
 \end{proof}
 
 \begin{remark}[Relationship to the translation-invariant all-sizes theorem]
     \label{rem:ft_vs_singleBlock}
     \uses{thm:fundamentalTheorem_injective_chain, def:injective}
-    The Lean library also contains a proof of a different, and in some
-    respects stronger, version of the Fundamental Theorem
-    (\lean{MPSTensor.fundamentalTheorem_singleBlock}).
-    This result states: if $A$ is injective and $A$, $B$ generate the
-    same MPV family \emph{for all system sizes} $N$ (i.e.\ \texttt{SameMPV A B}),
-    then $A$ and $B$ are gauge equivalent without any phase ambiguity
-    ($B^i = X A^i X^{-1}$ for some invertible $X$).
-
-    The two results are complementary:
-    \begin{itemize}
-        \item \textbf{Theorem~\ref{thm:fundamentalTheorem_injective_chain}}
-              (this chapter, from \cite{Molnar2018NormalPEPS}) works for
-              \emph{non-TI} chains of \emph{fixed} length $n \ge 3$, and
-              concludes gauge equivalence up to a common scalar factor.
-              It does not require translation invariance.
-        \item \textbf{\texttt{fundamentalTheorem\_singleBlock}} (Lean) is
-              restricted to \emph{translation-invariant} pairs $A, B$ but
-              assumes agreement for \emph{all} system sizes; the
-              all-sizes hypothesis eliminates the phase ambiguity so the
-              conclusion is exact gauge equivalence $B^i = X A^i X^{-1}$
-              with no phase.
-    \end{itemize}
-    The fixed-size version is more general in allowing non-TI chains;
-    the all-sizes version yields a cleaner conclusion.
-    Neither result implies the other in full generality.
+    Theorem~\ref{thm:fundamentalTheorem_injective_chain} handles non-TI
+    chains at fixed length $n \ge 3$, concluding gauge equivalence up to
+    a common scalar.
+    The all-sizes translation-invariant result
+    (\lean{MPSTensor.fundamentalTheorem_singleBlock}) instead assumes
+    agreement for every system size; the additional hypothesis eliminates
+    the phase ambiguity, yielding exact gauge equivalence
+    $B^i = X A^i X^{-1}$.
+    The two results are complementary and neither implies the other in
+    full generality.
 \end{remark}
 
 %% ---------------------------------------------------------
@@ -614,17 +415,15 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
 \end{corollary}
 
 \begin{proof}
-    Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain}
-    to the two constant chains.
-    This yields invertible matrices $Z_0, \dots, Z_{n-1}$ with
+    Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain} to the
+    two constant chains to obtain $Z_0, \dots, Z_{n-1}$ with
     $B^i = Z_k^{-1} A^i Z_{k+1}$ for all $k$ and $i$.
     Setting $G_k = Z_k Z_0^{-1}$, the relation
     $Z_k^{-1} A^i Z_{k+1} = Z_{k+1}^{-1} A^i Z_{k+2}$ shows
-    $A^i = G_k^{-1} A^i G_k$ for suitable $G_k$.
+    $A^i = G_k^{-1} A^i G_k$ for each $k$.
     Since $\{A^i\}$ spans $\MN{D}$, each $G_k$ commutes with all of
     $\MN{D}$, so $G_k = \mu_k \Id$ by Lemma~\ref{lem:center_scalar}.
-    Hence $Z_k = \mu_k Z_0$.
-    The cyclic condition $Z_n = Z_0$ forces $\mu_0 = 1$ and
+    Hence $Z_k = \mu_k Z_0$, and the cyclic condition $Z_n = Z_0$ forces
     $(\mu_1)^n = 1$.
     Setting $Z = Z_0$ and $\lambda = \mu_1$ yields the result.
 \end{proof}
@@ -655,26 +454,16 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     there exist invertible $Z_0, \dots, Z_{n-1}$ with
     $A_{k+1}^i = Z_k^{-1}\, A_k^i\, Z_{k+1}$ for all $k$ and $i$
     (indices mod~$n$).
-
     Define $L_k = Z_0 Z_1 \cdots Z_{k-1}$ and
     $R_k = Z_1 Z_2 \cdots Z_k$ for $k \ge 1$, with $L_0 = R_0 = \Id$.
-    Iterating the gauge relation gives
+    Iterating the gauge relation gives $A_k^i = L_k^{-1}\, A_0^i\, R_k$.
+    Since $R_k\, L_{k+1}^{-1} = Z_0^{-1}$ for every $k$, substituting
+    into the trace yields
     \[
-        A_k^i = L_k^{-1}\, A_0^i\, R_k.
-    \]
-    Observe that $R_k\, L_{k+1}^{-1} = Z_0^{-1}$ for every $k$
-    (since $L_{k+1} = Z_0\, R_k$).
-
-    For the periodic chain ($A_n = A_0$) we need
-    $R_n = L_n$, i.e.\ $Z_1 \cdots Z_n = Z_0 Z_1 \cdots Z_{n-1}$.
-    The gauge relation at $k = n{-}1$ gives this closure.
-    Substituting $A_k = L_k^{-1} A_0 R_k$ into the trace yields
-    \begin{align*}
         \tr(A_0^{\sigma_0} \cdots A_{n-1}^{\sigma_{n-1}})
-        &= \tr\bigl(A_0^{\sigma_0}\, Z_0^{-1}\, A_0^{\sigma_1}
-           Z_0^{-1} \cdots A_0^{\sigma_{n-1}}\, Z_0^{-1}\bigr),
-    \end{align*}
-    using $R_k L_{k+1}^{-1} = Z_0^{-1}$ at each junction.
+        = \tr\bigl(A_0^{\sigma_0}\, Z_0^{-1}\, A_0^{\sigma_1}
+           Z_0^{-1} \cdots A_0^{\sigma_{n-1}}\, Z_0^{-1}\bigr).
+    \]
     Hence the state is generated by the TI chain with tensor
     $B^i := A_0^i\, Z_0^{-1}$.
     Since $A_0$ is injective and $Z_0$ is invertible, $B$ is injective.
@@ -739,20 +528,15 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     \uses{thm:fundamentalTheorem_injective_chain,
           lem:blocking_preserves_injectivity}
     Block every $L$ consecutive sites to form a chain of length
-    $m = \lfloor n/L \rfloor \ge 3$ whose local tensors are the
-    $L$-blocked tensors $A^{[L]}$ and $B^{[L]}$.
-    These are injective by hypothesis.
-    The blocked chains generate the same state (blocking is an isometry
-    on the physical Hilbert space), so
+    $m = \lfloor n/L \rfloor \ge 3$ with injective local tensors
+    $A^{[L]}$ and $B^{[L]}$ (injective by hypothesis).
+    The blocked chains generate the same state, so
     Theorem~\ref{thm:fundamentalTheorem_injective_chain} gives
     invertible gauges $\widehat{Z}_0, \dots, \widehat{Z}_{m-1}$ with
     $(B^{[L]})_k = \widehat{Z}_k^{-1}\, (A^{[L]})_k\, \widehat{Z}_{k+1}$.
-
-    Now apply Lemma~\ref{lem:tensor_proportional} within each $L$-block
-    to decompose the blocked gauge equivalence into site-by-site gauge
-    equivalence: the proportionality constants at each site absorb into
-    the bond gauges, yielding $Z_0, \dots, Z_{n-1}$ for the original
-    tensors.
+    Applying Lemma~\ref{lem:tensor_proportional} within each $L$-block
+    then decomposes the blocked gauge equivalence into site-by-site
+    gauges, yielding $Z_0, \dots, Z_{n-1}$ for the original tensors.
 \end{proof}
 
 %% ---------------------------------------------------------
