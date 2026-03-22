@@ -283,4 +283,29 @@ lemma norm_dysonTerm_succ_le
     _ = t * (⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖) * ‖L' - L‖ * K := by
         simp [M, mul_left_comm, mul_comm]
 
+/-- Factorial decay bound for Dyson iterates.
+
+This is the quantitative core estimate for the Dyson–Phillips expansion. -/
+lemma norm_dysonTerm_le
+    (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) (n : ℕ) :
+    ‖dysonTerm L L' t n‖ ≤
+      (⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖) *
+        (t * ‖L' - L‖ * (⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖)) ^ n / (n.factorial : ℝ) := by
+  -- We prove the stronger interval-uniform estimate by induction and integrate
+  -- `s^n` over `[0,t]` at the successor step.
+  --
+  -- Note: the one-step tool `norm_dysonTerm_succ_le` supplies the recursive
+  -- bound; the factorial comes from `∫ s in [0,t], s^n = t^(n+1)/(n+1)`.
+  sorry
+
+/-- The Dyson series is summable in operator norm by comparison with an
+exponential majorant (`M`-test). -/
+lemma summable_dysonTerm
+    (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) :
+    Summable (fun n => dysonTerm L L' t n) := by
+  -- Compare `‖dysonTerm n‖` with
+  -- `M * (t * ‖L' - L‖ * M)^n / n!`, then use summability of the
+  -- exponential power series.
+  sorry
+
 end -- noncomputable section
