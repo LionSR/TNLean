@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
+import TNLean.Channel.Irreducible.TraceAdjoint
 import TNLean.MPS.Core.TPGauge
 import TNLean.Spectral.SpectralGap
 
@@ -47,32 +48,6 @@ noncomputable instance : NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.linftyOpNormedAlgebra
 
 /-! ## Private infrastructure -/
-
-/-- The adjoint trace-pairing identity
-`tr(ρ * E(X)) = tr(E†(ρ) * X)`, expressed via the conjugate-transposed Kraus
-family.
-
-Used in the proof of
-`spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp`. -/
-private lemma trace_mul_transferMap_adjoint
-    {n : ℕ}
-    (K : MPSTensor n D)
-    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K)
-    (ρ X : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix.trace (ρ * E X) =
-      Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) ρ * X) :=
-  calc
-    Matrix.trace (ρ * E X)
-        = Matrix.trace (ρ * MPSTensor.transferMap (d := n) (D := D) K X) := by rw [hE_eq]
-    _ = Matrix.trace (Kraus.adjointMap K ρ * X) := by
-          simpa [Kraus.map, MPSTensor.transferMap_apply] using
-            (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) ρ X)
-    _ = Matrix.trace
-          (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) ρ * X) := by
-          simp [Kraus.adjointMap, MPSTensor.transferMap_apply,
-            Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
-
 
 /-! ## Spectral radius identity (Wolf 6.3(4)) -/
 
