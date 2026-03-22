@@ -215,7 +215,10 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 
 ### Wolf Theorem 6.16 (Structure of cycles)
 
-* Partially formalized in `TNLean.Channel.Peripheral.CyclicDecomposition`
+* Partially formalized in `TNLean.Channel.Peripheral.CyclicDecomposition`.
+* Reusable infrastructure for the multi-cycle direction:
+  `preserves_corner_pow_orderOf_of_perm_decomp` (permutation-of-blocks iterate
+  preserves each corner after `orderOf` steps).
 
 ---
 
