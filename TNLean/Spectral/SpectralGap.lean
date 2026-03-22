@@ -139,21 +139,6 @@ lemma frobSq_smul (c : ℂ) (X : Matrix (Fin D) (Fin D) ℂ) :
     frobSq (c • X) = ‖c‖ ^ 2 * frobSq X := by
   simp only [frobSq_eq_sum, Matrix.smul_apply, smul_eq_mul, norm_mul, mul_pow, Finset.mul_sum]
 
-private lemma mul_inv_mul_assoc_cancel {n : ℕ}
-    (S Z : Matrix (Fin n) (Fin n) ℂ) (hS : S * S⁻¹ = 1) :
-    S * (S⁻¹ * Z) = Z := by
-  calc
-    S * (S⁻¹ * Z) = (S * S⁻¹) * Z := by simp [mul_assoc]
-    _ = (1 : Matrix (Fin n) (Fin n) ℂ) * Z := by simpa [hS]
-    _ = Z := by simp
-
-private lemma inv_mul_mul_assoc_cancel {n : ℕ}
-    (S Z : Matrix (Fin n) (Fin n) ℂ) (hS : S⁻¹ * S = 1) :
-    S⁻¹ * (S * Z) = Z := by
-  calc
-    S⁻¹ * (S * Z) = (S⁻¹ * S) * Z := by simp [mul_assoc]
-    _ = (1 : Matrix (Fin n) (Fin n) ℂ) * Z := by simpa [hS]
-    _ = Z := by simp
 
 /-! ### Eigenvector iteration -/
 
@@ -679,16 +664,16 @@ private lemma eigenvector_gives_gauge [NeZero D]
                   -- rewrite the inner parenthesis using `hSBh_cancel'`
                   simpa [mul_assoc] using
                     congrArg (fun T => X * T)
-                      (inv_mul_mul_assoc_cancel (S := SBᴴ)
-                        (((B i)ᴴ) * (SBᴴ)⁻¹) hSBh_inv_mul)
+                      (Matrix.nonsing_inv_mul_cancel_left SBᴴ
+                        (((B i)ᴴ) * (SBᴴ)⁻¹) hSBh_isUnitdet)
                 -- Now cancel the `SA` pair.
                 have hSAstep :
                     A i * (SA * (SA⁻¹ * (X * ((B i)ᴴ * (SBᴴ)⁻¹)))) =
                       A i * (X * ((B i)ᴴ * (SBᴴ)⁻¹)) := by
                   simpa [mul_assoc] using
                     congrArg (fun T => A i * T)
-                      (mul_inv_mul_assoc_cancel (S := SA)
-                        (X * ((B i)ᴴ * (SBᴴ)⁻¹)) hSA_mul_inv)
+                      (Matrix.mul_nonsing_inv_cancel_left SA
+                        (X * ((B i)ᴴ * (SBᴴ)⁻¹)) hSA_isUnitdet)
                 -- Put it together.
                 -- (The left `SA⁻¹` is common on both sides, so `simp` can finish.)
                 simpa [mul_assoc, hSBstep] using congrArg (fun T => SA⁻¹ * T) hSAstep
@@ -822,11 +807,11 @@ private lemma eigenvector_gives_gauge [NeZero D]
 
                   -- rewrite `(SAᴴ)⁻¹ * (SAᴴ * SA)`
                   have hmid : (SAᴴ)⁻¹ * (SAᴴ * SA) = SA :=
-                    inv_mul_mul_assoc_cancel (S := SAᴴ) SA hSAh_inv_mul
+                    Matrix.nonsing_inv_mul_cancel_left SAᴴ SA hSAh_isUnitdet
                   -- rewrite `SA * (SA⁻¹ * (A i * SA))`
                   have hright : SA * (SA⁻¹ * (A i * SA)) = A i * SA := by
                     simpa using
-                      mul_inv_mul_assoc_cancel (S := SA) (A i * SA) hSA_mul_inv
+                      Matrix.mul_nonsing_inv_cancel_left SA (A i * SA) hSA_isUnitdet
                   -- now finish by reassociation
                   -- (we keep it mostly in simp form after providing the two key rewrites)
                   simp [mul_assoc, hmid, hright]
@@ -852,10 +837,10 @@ private lemma eigenvector_gives_gauge [NeZero D]
                   simp [B', Matrix.conjTranspose_nonsing_inv, mul_assoc]
           _ = SBᴴ * ((B i)ᴴ * B i) * SB := by
                   have hmid : (SBᴴ)⁻¹ * (SBᴴ * SB) = SB :=
-                    inv_mul_mul_assoc_cancel (S := SBᴴ) SB hSBh_inv_mul
+                    Matrix.nonsing_inv_mul_cancel_left SBᴴ SB hSBh_isUnitdet
                   have hright : SB * (SB⁻¹ * (B i * SB)) = B i * SB := by
                     simpa using
-                      mul_inv_mul_assoc_cancel (S := SB) (B i * SB) hSB_mul_inv
+                      Matrix.mul_nonsing_inv_cancel_left SB (B i * SB) hSB_isUnitdet
                   simp [mul_assoc, hmid, hright]
       calc
         ∑ i : Fin d, (B' i)ᴴ * (SBᴴ * SB) * (B' i)
