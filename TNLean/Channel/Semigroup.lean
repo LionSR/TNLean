@@ -9,6 +9,7 @@ import TNLean.Channel.Semigroup.GeneratorDefs
 import TNLean.Channel.Semigroup.LindbladForm
 import TNLean.Channel.Semigroup.KossakowskiForm
 import TNLean.Channel.Semigroup.ReducibleQDS
+import TNLean.Channel.Semigroup.RelaxationConditions
 
 /-!
 # Wolf Chapter 7 — Semigroup Structure: Public Theorem Index
@@ -135,8 +136,29 @@ No new proofs are introduced here; this is a documentation-only index module.
 
 ---
 
+### Wolf Corollary 7.2 (sufficient conditions for relaxation) — PARTIALLY FORMALIZED
+
+* **Condition (1)** — Full algebra generation:
+  - `blockUpperTriangular_mul_closed` — block-UT matrices closed under products ✅
+  - `blockUpperTriangular_add_closed` — closed under addition ✅
+  - `blockUpperTriangular_smul_closed` — closed under scalar multiplication ✅
+  - `blockUpperTriangular_one` — identity is block-UT ✅
+  - `blockUpperTriangular_operators_in_proper_subalgebra` — operators live in proper subalgebra ✅
+* **Condition (2)** — Hermitian span with trivial commutant:
+  - `LindbladSpanHermitianClosed` — definition ✅
+  - `LindbladSpanTrivialCommutant` — definition ✅
+  - `adjoint_blockUpperTriangular_of_hermitianClosed` — adjoint inherits block structure ✅
+  - `not_hasBlockUpperTriangularLindblad_of_hermitian_span_trivial_commutant` — SORRY
+    (needs transferring block structure between equivalent Lindblad forms)
+  - `not_isReducibleQDS_of_hermitian_span_trivial_commutant` — wraps condition (2) ✅
+* **Condition (3)** — Large Kossakowski rank:
+  - `not_hasBlockUpperTriangularLindblad_of_large_kossakowski_rank` — SORRY
+    (needs dimension counting for block-UT subspace)
+  - `not_isReducibleQDS_of_large_kossakowski_rank` — wraps condition (3) ✅
+
+---
+
 ## Not yet formalized
 
-* Wolf Corollary 7.2 (necessary conditions for relaxation)
 * Wolf Theorem 7.2 (kernel of Liouvillian)
 -/
