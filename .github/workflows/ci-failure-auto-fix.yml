@@ -27,9 +27,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_branch }}
+          ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 5
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Attach to PR branch
+        run: |
+          # Checkout put us in detached HEAD at the exact failing SHA.
+          # Create a local branch tracking the PR branch so pushes work.
+          git checkout -B "${{ github.event.workflow_run.head_branch }}"
 
       - name: Check for previous auto-fix attempts
         id: loop_guard
