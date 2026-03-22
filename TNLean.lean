@@ -95,6 +95,9 @@ import TNLean.Spectral.CrossCorrelation
 import TNLean.MPS.Defs
 import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Chain.VirtualInsertion
+import TNLean.MPS.Chain.AlgebraIsomorphism
+import TNLean.MPS.Chain.TensorEquality
+import TNLean.MPS.Chain.FundamentalTheorem
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Overlap.Basic
