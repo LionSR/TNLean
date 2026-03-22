@@ -270,13 +270,7 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT_auto
       mpv (toTensorFromBlocks μA A) σ = c N * mpv (toTensorFromBlocks μB B) σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    ProportionalMPVPermutationConclusion (d := d) (dimA := dimA) (dimB := dimB) A B :=
   fundamentalTheorem_proportionalMPV_CFBNT A B hA hB
     (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)
     aCoeff bCoeff aLim bLim c cLim
