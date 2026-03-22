@@ -81,20 +81,25 @@ theorem chainTracePairing_ker_eq_bot
         A₂ p.1 * A₃ p.2) = ⊤ := by
       rw [eq_top_iff]
       intro M _
-      -- A₃ is injective so {A₃ k} spans M_D
-      -- A₂ is injective so {A₂ j} spans M_D
-      -- For any M, decompose as M = ∑ k, c_k • A₃ k (wrong direction, we need products)
-      -- Actually: any M is in span of {A₂ j} via A₂ injective.
-      -- Then A₂ j * (anything) can reach anything via A₃.
-      -- Let's use that span(A₂) = ⊤ means any matrix is ∑ c_j • A₂ j
-      -- and span(A₃) = ⊤ means any matrix is ∑ d_k • A₃ k
-      -- So any product MN = (∑ c_j • A₂ j)(∑ d_k • A₃ k) = ∑ c_j d_k • A₂ j * A₃ k
-      -- Since 1 = (∑ c_j • A₂ j) ∈ span(A₂), for any M: M = M * 1 = M * ∑ d_k • A₃ k
-      -- Hmm, we need that M is in span of products.
-      -- Since {A₂ j} spans ⊤ and {A₃ k} spans ⊤, the set {A₂ j * A₃ k} spans ⊤
-      -- because it contains a spanning set times a spanning set, and the product of
-      -- the full matrix algebra with itself is the full algebra.
-      sorry
+      -- Since A₂ is injective, M ∈ span{A₂ j}; decompose M = ∑ c_j • A₂ j
+      have hM := h₂.span_eq_top ▸ Submodule.mem_top (x := M)
+      rw [Submodule.mem_span_range_iff_exists_fun] at hM
+      obtain ⟨c, hc⟩ := hM
+      -- Since A₃ is injective, 1 ∈ span{A₃ k}; decompose 1 = ∑ e_k • A₃ k
+      have hOne := h₃.span_eq_top ▸ Submodule.mem_top (x := (1 : Matrix (Fin D) (Fin D) ℂ))
+      rw [Submodule.mem_span_range_iff_exists_fun] at hOne
+      obtain ⟨e, he⟩ := hOne
+      -- M = M * 1 = (∑ c_j • A₂ j) * (∑ e_k • A₃ k) = ∑ j k, (c_j * e_k) • (A₂ j * A₃ k)
+      rw [show M = M * 1 from (mul_one M).symm, ← hc, ← he, Finset.sum_mul]
+      apply Submodule.sum_mem
+      intro j _
+      rw [smul_mul_assoc]
+      apply Submodule.smul_mem
+      rw [Finset.mul_sum]
+      apply Submodule.sum_mem
+      intro k _
+      rw [mul_smul_comm]
+      exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨(j, k), rfl⟩)
     intro M
     -- The linear functional vanishes on a spanning set, hence is zero.
     have hφ :
@@ -138,11 +143,12 @@ theorem chainTracePairing_range_le
       Matrix.trace (A₁ (σ 0) * A₂ (σ 1) * A₃ (σ 2)) =
       Matrix.trace (B₁ (σ 0) * B₂ (σ 1) * B₃ (σ 2))) :
     (chainTracePairing A₁ A₂ A₃).range ≤ (chainTracePairing B₁ B₂ B₃).range := by
-  -- The proof uses `ker_bot_of_range_le` from TracePairing.lean:
-  -- Since Φ_A is injective and range(Φ_A) ≤ range(Φ_B), Φ_B is also injective.
-  -- The range inclusion follows from the SameState condition via the decomposition
-  -- map technique, but requires matching the Φ_A/Φ_B evaluation which involves
-  -- products of length > 3. This is a genuine proof obligation.
+  -- TODO: This requires showing Φ_A(X) ∈ range(Φ_B) for all X. The natural approach
+  -- (decompose X = ∑ cₗ A₁(l) and define Y = ∑ cₗ B₁(l)) produces 4-matrix trace
+  -- equalities tr(A₁ i * A₁ l * A₂ j * A₃ k) = tr(B₁ i * B₁ l * B₂ j * B₃ k),
+  -- which cannot be derived from the 3-site SameState hypothesis. This is a genuine
+  -- gap in the current proof route: either a different construction of T is needed,
+  -- or the hypothesis must be strengthened to longer-chain trace agreement.
   sorry
 
 /-! ### The cross-chain transfer map -/
@@ -177,7 +183,27 @@ theorem crossChainTransfer_spec
       Matrix.trace (B₁ i * crossChainTransfer A₁ A₂ A₃ B₁ B₂ B₃ hB₁ hB₂ hB₃ hA₁ hEq X *
         B₂ j * B₃ k) =
       Matrix.trace (A₁ i * X * A₂ j * A₃ k) := by
-  sorry
+  intro i j k
+  -- Key properties
+  have hKerΦB := chainTracePairing_ker_eq_bot hB₁ hB₂ hB₃
+  have hRange := chainTracePairing_range_le hA₁ hB₁ hEq
+  -- Φ_A(X) ∈ range(Φ_B) by range inclusion
+  obtain ⟨Y, hY⟩ := hRange ⟨X, rfl⟩
+  -- Left inverse spec: g ∘ Φ_B = id
+  have hg := Classical.choose_spec
+    ((chainTracePairing B₁ B₂ B₃).exists_leftInverse_of_injective hKerΦB)
+  have hgΦB : ∀ Z, (Classical.choose
+      ((chainTracePairing B₁ B₂ B₃).exists_leftInverse_of_injective hKerΦB))
+      ((chainTracePairing B₁ B₂ B₃) Z) = Z := fun Z => by
+    have := DFunLike.congr_fun hg Z; simpa using this
+  -- T(X) = g(Φ_A(X)) = g(Φ_B(Y)) = Y by definition + left inverse
+  have hTX : crossChainTransfer A₁ A₂ A₃ B₁ B₂ B₃ hB₁ hB₂ hB₃ hA₁ hEq X = Y := by
+    unfold crossChainTransfer
+    simp only [LinearMap.comp_apply, hY.symm, hgΦB]
+  -- Φ_B(T(X)) = Φ_B(Y) = Φ_A(X) evaluated at (i,j,k)
+  rw [hTX]
+  have := congrFun (congrFun (congrFun hY i) j) k
+  simpa [chainTracePairing_apply] using this
 
 /-! ### Multiplicativity of the transfer map -/
 
@@ -197,6 +223,13 @@ theorem crossChainTransfer_mul
       Matrix.trace (B₁ (σ 0) * B₂ (σ 1) * B₃ (σ 2))) :
     let T := crossChainTransfer A₁ A₂ A₃ B₁ B₂ B₃ hB₁ hB₂ hB₃ hA₁ hEq
     ∀ M N : Matrix (Fin D) (Fin D) ℂ, T (M * N) = T M * T N := by
+  -- TODO: The linearExtension_mul pattern (show T(A₂ j * A₃ k) = B₂ j * B₃ k,
+  -- then extend bilinearly) requires ΦB-injectivity to equate T(A₂ j * A₃ k) and
+  -- B₂ j * B₃ k. But ΦA(A₂ j * A₃ k)(i',j',k') = tr(A₁ i' * A₂ j * A₃ k * A₂ j' * A₃ k')
+  -- involves 5-matrix products, which the 3-site SameState cannot match.
+  -- This is the same gap as in chainTracePairing_range_le. Resolving it requires
+  -- either stronger hypotheses (longer-chain trace agreement) or a fundamentally
+  -- different construction of T.
   sorry
 
 /-- The cross-chain transfer map is nonzero when `D ≥ 1`.
@@ -211,7 +244,27 @@ theorem crossChainTransfer_nonzero [NeZero D]
       Matrix.trace (A₁ (σ 0) * A₂ (σ 1) * A₃ (σ 2)) =
       Matrix.trace (B₁ (σ 0) * B₂ (σ 1) * B₃ (σ 2))) :
     crossChainTransfer A₁ A₂ A₃ B₁ B₂ B₃ hB₁ hB₂ hB₃ hA₁ hEq ≠ 0 := by
-  sorry
+  intro hT0
+  -- If T = 0, then Φ_A = 0 (since Φ_B ∘ T = Φ_A and T = 0 gives Φ_B(0) = 0 = Φ_A(X))
+  have hΦA_zero : chainTracePairing A₁ A₂ A₃ = 0 := by
+    ext X : 1
+    funext i j k
+    have hspec := crossChainTransfer_spec hB₁ hB₂ hB₃ hA₁ hEq X i j k
+    rw [show crossChainTransfer A₁ A₂ A₃ B₁ B₂ B₃ hB₁ hB₂ hB₃ hA₁ hEq X = 0 from
+      DFunLike.congr_fun hT0 X] at hspec
+    simp only [Matrix.mul_zero, Matrix.zero_mul, Matrix.trace_zero] at hspec
+    simpa [chainTracePairing_apply] using hspec.symm
+  -- But Φ_A is injective: ker Φ_A = ⊥
+  have hKer := chainTracePairing_ker_eq_bot hA₁ hA₂ hA₃
+  -- If Φ_A = 0, then 1 ∈ ker Φ_A, so 1 = 0 in M_D
+  have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
+    rw [← Submodule.mem_bot (R := ℂ), ← hKer, LinearMap.mem_ker, hΦA_zero]
+    simp
+  -- But trace(1) = D ≠ 0
+  have : (D : ℂ) = 0 := by
+    have := congrArg Matrix.trace h1
+    simpa [Matrix.trace_one, Fintype.card_fin] using this
+  exact absurd this (Nat.cast_ne_zero.mpr (NeZero.ne D))
 
 /-! ### The main theorem -/
 
