@@ -20,7 +20,7 @@ open Filter
 namespace MPSTensor
 
 /-- Transport an overlap-decay limit from a casted left tensor back to the original tensor. -/
-private theorem tendsto_mpvOverlap_uncast_left
+theorem tendsto_mpvOverlap_uncast_left
     {d D₁ D₂ : ℕ} (hdim : D₁ = D₂)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hcast :

@@ -3,6 +3,7 @@ import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.Spectral.SpectralGapRect
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.CastLemmas
+import TNLean.MPS.Overlap.CastDecay
 
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Data.Fintype.Card
@@ -261,10 +262,10 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
         (cast (congr_arg (MPSTensor d) hdim) (A (f j)) i)ᴴ *
         (cast (congr_arg (MPSTensor d) hdim) (A (f j)) i) = 1 :=
       (leftCanonical_cast_dim hdim (A (f j))).mpr (hA_norm (f j))
-    have hto0 := mpvOverlap_tendsto_zero
-      (cast (congr_arg (MPSTensor d) hdim) (A (f j))) (B j)
-      hAcst_inj (hB_inj j) hAcst_norm (hB_norm j) hNot
-    exact hf_spec j (hto0.congr fun N => mpvOverlap_cast_dim_left hdim (A (f j)) (B j) N)
+    exact hf_spec j (tendsto_mpvOverlap_uncast_left hdim (A (f j)) (B j) <|
+      mpvOverlap_tendsto_zero
+        (cast (congr_arg (MPSTensor d) hdim) (A (f j))) (B j)
+        hAcst_inj (hB_inj j) hAcst_norm (hB_norm j) hNot)
   --
   -- ═══════════════════════════════════════════════════════════════════════════
   -- Step 4: Show f is injective (hence a bijection on Fin g).
