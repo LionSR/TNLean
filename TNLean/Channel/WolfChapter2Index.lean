@@ -8,6 +8,7 @@ import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Stinespring
+import TNLean.Channel.TransferMatrix
 
 /-!
 # Wolf Lecture Notes — Chapter 2: Representations
@@ -34,6 +35,8 @@ representations of quantum channels.
   - `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑Kᵢ†Kᵢ = 𝟙` ✅
   - `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑KᵢKᵢ† = 𝟙` ✅
   - `kraus_same_map_of_unitary_combination` — unitary freedom (sufficient direction) ✅
+  - `kraus_same_map_of_unitaryGroup_combination` / `kraus_same_map_of_exists_unitary_combination`
+    — bundled/existential unitary-witness wrappers for reuse in the converse roadmap ✅
   - `kraus_unitary_combination_of_same_map` — unitary freedom
     (necessary direction) ✅ (`sorry`: core LA lemma)
   - `kraus_same_map_iff_unitary_combination` — unitary freedom (iff characterisation) ✅
@@ -42,6 +45,18 @@ representations of quantum channels.
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
   - `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ TP ✅
   - `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` ✅
+
+### §2.2 Transfer matrix
+
+* `transferMatrix` — the `D² × D²` matrix representing `T` in the
+  standard-basis vectorization ✅
+* `transferMatrix_mulVec_eq` — `T̂ *ᵥ vec(ρ) = vec(T(ρ))` ✅
+* `transferMatrix_comp` — `(S ∘ T)^ = Ŝ * T̂` ✅
+* `transferMatrix_id` — transfer matrix of identity = identity ✅
+* `transferMatrix_injective` — the representation is faithful ✅
+* `transferMatrix_kraus` — Kraus form: `T̂ = ∑ᵢ K̄ᵢ ⊗ₖ Kᵢ` ✅
+* `MPSTensor.transferMatrix_eq` — MPS bridge:
+  `E_A` has transfer matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ` ✅
 
 ### Infrastructure
 
@@ -55,6 +70,8 @@ representations of quantum channels.
 | Tensor product of maps | `TensorMap.lean` | `Matrix.tensorMapId` |
 | Choi matrix | `ChoiJamiolkowski.lean` | `ChoiJamiolkowski.choiMatrix` |
 | Stinespring isometry | `Stinespring.lean` | `stinespringV` |
+| Transfer matrix | `TransferMatrix.lean` | `transferMatrix` |
+| Vectorization | `Mathlib.LinearAlgebra.Matrix.Vec` | `Matrix.vec` |
 
 ### Not yet formalized
 
@@ -67,7 +84,6 @@ representations of quantum channels.
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
 | Thm 2.6 (Neumark's theorem) | POVM embedding |
-| §2.2 (transfer matrix) | Matrix representation of channels |
 | §2.3 (normal forms) | Lorentz normal form etc. |
 
 ## References

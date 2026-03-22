@@ -45,6 +45,7 @@ import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Stinespring
+import TNLean.Channel.TransferMatrix
 
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPoint
@@ -94,6 +95,10 @@ import TNLean.Spectral.CrossCorrelation
 -- Layer 3: MPS core
 import TNLean.MPS.Defs
 import TNLean.MPS.Chain.Defs
+import TNLean.MPS.Chain.VirtualInsertion
+import TNLean.MPS.Chain.TensorEquality
+import TNLean.MPS.Chain.AlgebraIsomorphism
+import TNLean.MPS.Chain.FundamentalTheorem
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Overlap.Basic
