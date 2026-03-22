@@ -438,6 +438,48 @@ end IsNormalCanonicalFormBNT
 
 /-! ### Bridge to BNT/PermutationRigidity -/
 
+/-- Common proportional-decomposition hypotheses used by the BNT bridge theorems. -/
+structure ProportionalDecompositionData
+    {rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (DtotA DtotB : ℕ) : Type where
+  A_total : MPSTensor d DtotA
+  B_total : MPSTensor d DtotB
+  aCoeff : ℕ → Fin rA → ℂ
+  bCoeff : ℕ → Fin rB → ℂ
+  aLim : Fin rA → ℂ
+  bLim : Fin rB → ℂ
+  c : ℕ → ℂ
+  cLim : ℂ
+  hA_decomp : ∀ N (σ : Fin N → Fin d),
+    mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ
+  hB_decomp : ∀ N (σ : Fin N → Fin d),
+    mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ
+  haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j))
+  hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k))
+  haLim_ne : ∀ j, aLim j ≠ 0
+  hbLim_ne : ∀ k, bLim k ≠ 0
+  hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ
+  hc : Tendsto c atTop (nhds cLim)
+  hcLim_ne : cLim ≠ 0
+
+/-- Conclusion shared by the BNT proportional-MPV bridge theorems. -/
+abbrev ProportionalDecompositionConclusion
+    {rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k)) : Prop :=
+  ∃ _h : rA = rB,
+    ∃ perm : Fin rA ≃ Fin rB,
+      ∀ j : Fin rA,
+        ∃ hdim : dimA j = dimB (perm j),
+          GaugePhaseEquiv (d := d)
+            (cast (congr_arg (MPSTensor d) hdim) (A j))
+            (B (perm j))
+
 /-- Split-data bridge theorem for CF-BNT-style decompositions (Thm 4.4).
 
 The theorem only needs the separated pieces of data used by the proportional-MPV argument:
@@ -458,29 +500,8 @@ theorem fundamentalTheorem_of_separated_CFBNT_data
     (hB_left : IsLeftCanonicalBlockFamily (d := d) B)
     (hB_overlap : HasNormalizedSelfOverlap (d := d) B)
     (hB_blocks : BlocksNotGaugePhaseEquiv (d := d) B)
-    (A_total : MPSTensor d DtotA)
-    (B_total : MPSTensor d DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    (hDecomp : ProportionalDecompositionData (d := d) A B DtotA DtotB) :
+    ProportionalDecompositionConclusion (d := d) A B :=
   exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     (A := A) (B := B)
     (hA_inj := hA_inj.block_injective)
@@ -493,14 +514,14 @@ theorem fundamentalTheorem_of_separated_CFBNT_data
     (hB_self := hB_overlap.overlap_tendsto_one)
     (hB_off := fun i j hij =>
       cross_overlap_tendsto_zero_of_separated_CFBNT_data B hB_inj hB_left hB_blocks i j hij)
-    (A_total := A_total) (B_total := B_total)
-    (aCoeff := aCoeff) (bCoeff := bCoeff)
-    (aLim := aLim) (bLim := bLim)
-    (c := c) (cLim := cLim)
-    (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
-    (haCoeff := haCoeff) (hbCoeff := hbCoeff)
-    (_haLim_ne := haLim_ne) (_hbLim_ne := hbLim_ne)
-    (hProp := hProp) (hc := hc) (_hcLim_ne := hcLim_ne)
+    (A_total := hDecomp.A_total) (B_total := hDecomp.B_total)
+    (aCoeff := hDecomp.aCoeff) (bCoeff := hDecomp.bCoeff)
+    (aLim := hDecomp.aLim) (bLim := hDecomp.bLim)
+    (c := hDecomp.c) (cLim := hDecomp.cLim)
+    (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
+    (haCoeff := hDecomp.haCoeff) (hbCoeff := hDecomp.hbCoeff)
+    (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
+    (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
 /-- **Fundamental theorem bridge for CF-BNT decompositions (Thm 4.4).**
 
@@ -536,13 +557,7 @@ theorem fundamentalTheorem_of_IsCanonicalFormBNT
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    ProportionalDecompositionConclusion (d := d) A B :=
   fundamentalTheorem_of_separated_CFBNT_data A B
     hA.toHasInjectiveBlocks
     hA.toIsLeftCanonicalBlockFamily
@@ -552,8 +567,8 @@ theorem fundamentalTheorem_of_IsCanonicalFormBNT
     hB.toIsLeftCanonicalBlockFamily
     hB.toHasNormalizedSelfOverlap
     hB.blocks_not_equiv
-    A_total B_total aCoeff bCoeff aLim bLim c cLim
-    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
+      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
 /-- Split-data bridge theorem for normal-CF-BNT-style decompositions (NT Thm 4.4). -/
 theorem fundamentalTheorem_of_separated_normalCFBNT_data
@@ -568,29 +583,8 @@ theorem fundamentalTheorem_of_separated_normalCFBNT_data
     (hA_blocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hB_ncf : IsNormalCanonicalForm μB B)
     (hB_blocks : BlocksNotGaugePhaseEquiv (d := d) B)
-    (A_total : MPSTensor d DtotA)
-    (B_total : MPSTensor d DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    (hDecomp : ProportionalDecompositionData (d := d) A B DtotA DtotB) :
+    ProportionalDecompositionConclusion (d := d) A B :=
   exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP
     (A := A) (B := B)
     (hA_irr := hA_ncf.block_irreducible)
@@ -609,14 +603,14 @@ theorem fundamentalTheorem_of_separated_normalCFBNT_data
         hB_ncf.toHasIrreducibleBlocks
         hB_ncf.toIsLeftCanonicalBlockFamily
         hB_blocks i j hij)
-    (A_total := A_total) (B_total := B_total)
-    (aCoeff := aCoeff) (bCoeff := bCoeff)
-    (aLim := aLim) (bLim := bLim)
-    (c := c) (cLim := cLim)
-    (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
-    (haCoeff := haCoeff) (hbCoeff := hbCoeff)
-    (_haLim_ne := haLim_ne) (_hbLim_ne := hbLim_ne)
-    (hProp := hProp) (hc := hc) (_hcLim_ne := hcLim_ne)
+    (A_total := hDecomp.A_total) (B_total := hDecomp.B_total)
+    (aCoeff := hDecomp.aCoeff) (bCoeff := hDecomp.bCoeff)
+    (aLim := hDecomp.aLim) (bLim := hDecomp.bLim)
+    (c := hDecomp.c) (cLim := hDecomp.cLim)
+    (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
+    (haCoeff := hDecomp.haCoeff) (hbCoeff := hDecomp.hbCoeff)
+    (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
+    (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
 /-- Fundamental theorem bridge for normal-CF-BNT decompositions (NT Thm 4.4). -/
 theorem fundamentalTheorem_of_IsNormalCanonicalFormBNT
@@ -645,17 +639,11 @@ theorem fundamentalTheorem_of_IsNormalCanonicalFormBNT
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc : Tendsto c atTop (nhds cLim))
     (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d)
-              (cast (congr_arg (MPSTensor d) hdim) (A j))
-              (B (perm j)) :=
+    ProportionalDecompositionConclusion (d := d) A B :=
   fundamentalTheorem_of_separated_normalCFBNT_data A B
     hA.toIsNormalCanonicalForm hA.blocks_not_equiv
     hB.toIsNormalCanonicalForm hB.blocks_not_equiv
-    A_total B_total aCoeff bCoeff aLim bLim c cLim
-    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
+      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
 end MPSTensor
