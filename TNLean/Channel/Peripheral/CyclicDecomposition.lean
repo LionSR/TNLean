@@ -1293,6 +1293,43 @@ theorem isIrreducible_restriction_of_cyclic_decomp
     exact hQzero.mpr hR0
   · right
     exact hQfull.mpr hR1
+
+/-- Concrete orbit-sum packaging for the `hLift` hypothesis used in
+`isIrreducible_restriction_of_cyclic_decomp`.
+
+Given a candidate corner projection `Q ≤ P k` invariant under `T ^ m`, define
+`R = ∑ l : Fin m, (T ^ (l : ℕ)) Q`.  This theorem records the exact shape needed by
+`isIrreducible_restriction_of_cyclic_decomp`: once one has proved the four orbit-sum facts
+(projection, `T`-corner invariance, and the two endpoint equivalences), the abstract `hLift`
+hypothesis is discharged directly. -/
+theorem orbitSum_hLift_of_cyclic_decomp
+    {T : MatrixEnd D}
+    (P : Fin m → MatrixAlg D)
+    (hLiftOrbit :
+      ∀ k : Fin m, ∀ Q : MatrixAlg D,
+        IsOrthogonalProjection Q →
+        Q * P k = Q →
+        P k * Q = Q →
+        PreservesCorner Q (T ^ m) →
+        let R : MatrixAlg D := ∑ l : Fin m, (T ^ (l : ℕ)) Q
+        IsOrthogonalProjection R ∧
+          PreservesCorner R T ∧
+          (Q = 0 ↔ R = 0) ∧
+          (Q = P k ↔ R = 1)) :
+    ∀ k : Fin m, ∀ Q : MatrixAlg D,
+      IsOrthogonalProjection Q →
+      Q * P k = Q →
+      P k * Q = Q →
+      PreservesCorner Q (T ^ m) →
+      ∃ R : MatrixAlg D,
+        IsOrthogonalProjection R ∧
+        PreservesCorner R T ∧
+        (Q = 0 ↔ R = 0) ∧
+        (Q = P k ↔ R = 1) := by
+  intro k Q hQproj hQP hPQ hQinv
+  refine ⟨∑ l : Fin m, (T ^ (l : ℕ)) Q, ?_⟩
+  simpa using hLiftOrbit k Q hQproj hQP hPQ hQinv
+
 /-- Wolf Theorem 6.6 corollary: the `m`-step dynamics on each cyclic sector is primitive. -/
 theorem isPrimitive_restriction_of_cyclic_decomp
     {T : MatrixEnd D} [NeZero D] {γ : ℂ}
