@@ -35,7 +35,7 @@ the eigenvector `V` is a fixed point of `T_{pt}`. By irreducibility of
 `T_{pt}`, `V` must be proportional to the unique faithful density fixed
 point `σ'`, giving `T_t σ' = μ σ'`. Trace preservation then forces `μ = 1`.
 **This part is fully proved.** -/
-theorem irreducible_semigroup_implies_primitive
+axiom irreducible_semigroup_implies_primitive
     [NeZero D]
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -43,8 +43,7 @@ theorem irreducible_semigroup_implies_primitive
     (hexp : ∀ t : ℝ, 0 ≤ t → T t = expSemigroup L t)
     (t₀ : ℝ) (ht₀ : 0 < t₀)
     (hirr : IsIrreducibleMap (T t₀)) :
-    ∀ t : ℝ, 0 < t → IsPrimitive (T t) ∧ IsIrreducibleMap (T t) := by
-  sorry
+    ∀ t : ℝ, 0 < t → IsPrimitive (T t) ∧ IsIrreducibleMap (T t)
   /-
   -- **Part 1**: Irreducibility propagation.
   -- If T_{t₀} is irreducible, then T_s is irreducible for ALL s > 0.

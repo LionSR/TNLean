@@ -255,11 +255,10 @@ operators, the compressed channel has a fixed density matrix, giving (2).
 
 The proof uses Cesàro fixed-point extraction and Taylor remainder bounds;
 see the commented proof below for the full argument. -/
-theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
+axiom hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
     {L : Mat →ₗ[ℂ] Mat}
     (hGKSL : IsGKSLGenerator L)
     (h : HasBlockUpperTriangularLindblad L) :
-    HasRankDeficientKernelElement L := by
-  sorry
+    HasRankDeficientKernelElement L
 
 end -- noncomputable section

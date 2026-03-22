@@ -45,7 +45,7 @@ variable {d D : ℕ}
               simp [sub_mul]
       _ = Matrix.trace (A₁ i * X * A₂ j) - Matrix.trace (B₁ i * X * B₂ j) := by
             rw [hcycA, hcycB]
-      _ = 0 := by simpa [hX]
+      _ = 0 := by simp [hX]
   exact sub_eq_zero.mp hzero
 
 /-- External insertion trace agreement implies equality of the mixed products
@@ -73,7 +73,7 @@ variable {d D : ℕ}
               simp [sub_mul]
       _ = Matrix.trace (A₂ j * Y * A₁ i) - Matrix.trace (B₂ j * Y * B₁ i) := by
             rw [hcycA, hcycB]
-      _ = 0 := by simpa [hY]
+      _ = 0 := by simp [hY]
   exact sub_eq_zero.mp hzero
 
 /-- Lemma 2 of arXiv:1804.04964 (2-site case): two injective tensor pairs that
