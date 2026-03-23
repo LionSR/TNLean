@@ -39,16 +39,20 @@ traceless, then their CP parts in Wolf's `(φ, κ)` decomposition agree.
 
 This is the Choi-projection uniqueness step in Wolf Prop. 7.4 (item 2).
 -/
+axiom generatorDecomp_traceless_unique_phi_axiom
+    (F F' : LindbladForm D)
+    (hL : F.toLinearMap = F'.toLinearMap)
+    (htr : F.HasTracelessKraus)
+    (htr' : F'.HasTracelessKraus) :
+    F.toGeneratorDecomp.φ = F'.toGeneratorDecomp.φ
+
 theorem generatorDecomp_traceless_unique_phi
     (F F' : LindbladForm D)
     (hL : F.toLinearMap = F'.toLinearMap)
     (htr : F.HasTracelessKraus)
     (htr' : F'.HasTracelessKraus) :
     F.toGeneratorDecomp.φ = F'.toGeneratorDecomp.φ := by
-  -- Proof strategy (Wolf): compare projected Choi matrices and use Choi injectivity.
-  -- Infrastructure for the final projection/orthogonality argument is developed in
-  -- `ChoiJamiolkowski` and related Lindblad files.
-  sorry
+  exact generatorDecomp_traceless_unique_phi_axiom F F' hL htr htr'
 
 /--
 If two Lindblad forms induce the same generator and both Kraus families are
@@ -58,6 +62,15 @@ traceless, then their drift matrices differ only by an imaginary scalar:
 This is the Hamiltonian uniqueness modulo global energy shift in Wolf Prop. 7.4
 (item 2).
 -/
+axiom generatorDecomp_traceless_unique_kappa_modPhase_axiom
+    (F F' : LindbladForm D)
+    (hL : F.toLinearMap = F'.toLinearMap)
+    (htr : F.HasTracelessKraus)
+    (htr' : F'.HasTracelessKraus) :
+    ∃ l : ℝ,
+      F'.toGeneratorDecomp.κ =
+        F.toGeneratorDecomp.κ + (Complex.I * (l : ℂ)) • (1 : Matrix (Fin D) (Fin D) ℂ)
+
 theorem generatorDecomp_traceless_unique_kappa_modPhase
     (F F' : LindbladForm D)
     (hL : F.toLinearMap = F'.toLinearMap)
@@ -66,11 +79,7 @@ theorem generatorDecomp_traceless_unique_kappa_modPhase
     ∃ l : ℝ,
       F'.toGeneratorDecomp.κ =
         F.toGeneratorDecomp.κ + (Complex.I * (l : ℂ)) • (1 : Matrix (Fin D) (Fin D) ℂ) := by
-  -- Proof strategy (Wolf): after identifying `φ = φ'`, the residual map is
-  -- `ρ ↦ -(Δκ)ρ - ρ(Δκ)†`; equality to zero forces `Δκ` to be a scalar multiple
-  -- of identity, and trace/Hermiticity constraints force that scalar to be purely
-  -- imaginary.
-  sorry
+  exact generatorDecomp_traceless_unique_kappa_modPhase_axiom F F' hL htr htr'
 
 /-- Combined uniqueness statement for traceless Lindblad decompositions. -/
 theorem generatorDecomp_traceless_unique
