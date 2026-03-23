@@ -19,6 +19,9 @@ Euler step approximation.
 
 * `cp_semigroup_implies_ccp_generator` — **Prop 7.3** direction 1→2.
 * `cp_semigroup_iff_ccp_generator` — **Prop 7.3**: CP semigroup ↔ CCP generator.
+
+All Prop 7.3 statements in this file are proved constructively in Lean without
+`sorry`/`axiom` placeholders.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
