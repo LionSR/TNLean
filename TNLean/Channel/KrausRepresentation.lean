@@ -166,3 +166,38 @@ theorem kraus_same_map_of_exists_unitary_combination
       ∑ l : Fin r, K' l * X * (K' l)ᴴ := by
   rcases hU with ⟨U, hKU⟩
   exact kraus_same_map_of_unitaryGroup_combination K K' U hKU
+
+/-- A converse-style uniqueness lemma for the Kraus transition matrix:
+if two same-size Kraus families are related by a mixing matrix `U`, and both
+families are Hilbert–Schmidt orthonormal, then `U` is unitary.
+
+This isolates the linear-algebraic core used in Wolf Thm. 2.1 item 4:
+orthonormal Kraus decompositions have unitary change-of-coordinates. -/
+theorem kraus_transition_unitary_of_hs_orthonormal
+    {r : ℕ}
+    (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
+    (K' : Fin r → Matrix (Fin D) (Fin D) ℂ)
+    (U : Matrix (Fin r) (Fin r) ℂ)
+    (hK : ∀ j, K j = ∑ l, U j l • K' l)
+    (horthK : ∀ i j : Fin r,
+      trace ((K j)ᴴ * K i) = if i = j then 1 else 0)
+    (horthK' : ∀ i j : Fin r,
+      trace ((K' j)ᴴ * K' i) = if i = j then 1 else 0) :
+    Uᴴ * U = 1 := by
+  have hUUh : U * Uᴴ = 1 := by
+    ext i j
+    have hleft : trace ((K j)ᴴ * K i) = if i = j then 1 else 0 := horthK i j
+    have hright :
+        trace ((K j)ᴴ * K i)
+          = ∑ l : Fin r, U i l * (starRingEnd ℂ) (U j l) := by
+      rw [hK i, hK j]
+      simp [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, Matrix.sum_mul, Matrix.mul_sum,
+        Matrix.trace_sum, mul_comm, horthK']
+    have h_entry : (U * Uᴴ) i j = if i = j then 1 else 0 := by
+      calc
+        (U * Uᴴ) i j = ∑ l : Fin r, U i l * (Uᴴ) l j := by simp [Matrix.mul_apply]
+        _ = ∑ l : Fin r, U i l * (starRingEnd ℂ) (U j l) := by simp [Matrix.conjTranspose_apply]
+        _ = trace ((K j)ᴴ * K i) := hright.symm
+        _ = if i = j then 1 else 0 := hleft
+    simpa [Matrix.one_apply] using h_entry
+  exact (mul_eq_one_comm).1 hUUh
