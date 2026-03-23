@@ -1264,6 +1264,87 @@ theorem preserves_corner_pow_orderOf_of_perm_decomp
     _ = P k * ((T ^ orderOf σ) X) * P k := by
             simp [Matrix.mul_assoc, (hPproj k).2]
     _ = (T ^ orderOf σ) (P k * X * P k) := by rw [hmk]
+
+section PermutationBlockStructure
+
+variable {ι : Type*} {n : ℕ}
+
+/-- Families of `n × n` matrix blocks indexed by `ι`. -/
+abbrev BlockFamily (ι : Type*) (n : ℕ) := ι → MatrixAlg n
+
+/-- Wolf Thm. 6.16 block action in the equal-size case:
+on each index `k`, apply unitary conjugation and pull the source block from `σ k`. -/
+noncomputable def permuteConjBlockMap (σ : Equiv.Perm ι)
+    (U : ι → Matrix.unitaryGroup (Fin n) ℂ) :
+    BlockFamily ι n →ₗ[ℂ] BlockFamily ι n where
+  toFun X k := (U k : MatrixAlg n) * X (σ k) * (U k : MatrixAlg n)ᴴ
+  map_add' X Y := by
+    funext k
+    simp [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
+  map_smul' c X := by
+    funext k
+    simp [Matrix.mul_assoc]
+
+/-- Ordered product of transport unitaries along the `σ`-orbit of `k`. -/
+noncomputable def orbitUnitaryPow (σ : Equiv.Perm ι)
+    (U : ι → Matrix.unitaryGroup (Fin n) ℂ) : ℕ → ι → MatrixAlg n
+  | 0, _ => 1
+  | m + 1, k => orbitUnitaryPow σ U m k * (U ((σ ^ m) k) : MatrixAlg n)
+
+@[simp] lemma orbitUnitaryPow_zero (σ : Equiv.Perm ι)
+    (U : ι → Matrix.unitaryGroup (Fin n) ℂ) (k : ι) :
+    orbitUnitaryPow σ U 0 k = 1 := rfl
+
+@[simp] lemma orbitUnitaryPow_succ (σ : Equiv.Perm ι)
+    (U : ι → Matrix.unitaryGroup (Fin n) ℂ) (m : ℕ) (k : ι) :
+    orbitUnitaryPow σ U (m + 1) k =
+      orbitUnitaryPow σ U m k * (U ((σ ^ m) k) : MatrixAlg n) := rfl
+
+/-- Iterates of the block-permutation action have the expected orbit formula. -/
+lemma permuteConjBlockMap_pow_apply
+    (σ : Equiv.Perm ι)
+    (U : ι → Matrix.unitaryGroup (Fin n) ℂ)
+    (m : ℕ) (X : BlockFamily ι n) (k : ι) :
+    ((permuteConjBlockMap (ι := ι) (n := n) σ U) ^ m) X k =
+      orbitUnitaryPow (ι := ι) (n := n) σ U m k * X ((σ ^ m) k) *
+        (orbitUnitaryPow (ι := ι) (n := n) σ U m k)ᴴ := by
+  induction m generalizing X k with
+  | zero =>
+      simp [orbitUnitaryPow]
+  | succ m ih =>
+      calc
+        ((permuteConjBlockMap (ι := ι) (n := n) σ U) ^ (m + 1)) X k
+            = ((permuteConjBlockMap (ι := ι) (n := n) σ U) ^ m)
+                ((permuteConjBlockMap (ι := ι) (n := n) σ U) X) k := by
+                  simp [pow_succ]
+        _ = orbitUnitaryPow (ι := ι) (n := n) σ U m k *
+              ((permuteConjBlockMap (ι := ι) (n := n) σ U) X) ((σ ^ m) k) *
+              (orbitUnitaryPow (ι := ι) (n := n) σ U m k)ᴴ := by
+              rw [ih (X := (permuteConjBlockMap (ι := ι) (n := n) σ U) X) (k := k)]
+        _ = orbitUnitaryPow (ι := ι) (n := n) σ U m k *
+              ((U ((σ ^ m) k) : MatrixAlg n) * X (σ ((σ ^ m) k)) *
+                (U ((σ ^ m) k) : MatrixAlg n)ᴴ) *
+              (orbitUnitaryPow (ι := ι) (n := n) σ U m k)ᴴ := by
+              rfl
+        _ = orbitUnitaryPow (ι := ι) (n := n) σ U (m + 1) k * X ((σ ^ (m + 1)) k) *
+              (orbitUnitaryPow (ι := ι) (n := n) σ U (m + 1) k)ᴴ := by
+              simp [orbitUnitaryPow, pow_succ', Matrix.mul_assoc]
+
+/-- At `orderOf σ`, the block permutation closes and each block is acted on by
+an inner automorphism. This matches the cyclic part of Wolf Thm. 6.16 in the
+equal-size block sector. -/
+lemma permuteConjBlockMap_pow_orderOf_apply
+    (σ : Equiv.Perm ι)
+    (U : ι → Matrix.unitaryGroup (Fin n) ℂ)
+    (X : BlockFamily ι n) (k : ι) :
+    ((permuteConjBlockMap (ι := ι) (n := n) σ U) ^ orderOf σ) X k =
+      orbitUnitaryPow (ι := ι) (n := n) σ U (orderOf σ) k * X k *
+        (orbitUnitaryPow (ι := ι) (n := n) σ U (orderOf σ) k)ᴴ := by
+  simpa [pow_orderOf_eq_one σ] using
+    permuteConjBlockMap_pow_apply (ι := ι) (n := n) σ U (orderOf σ) X k
+
+end PermutationBlockStructure
+
 /-- Wolf Theorem 6.6 corollary: an orbit-sum lift from invariant corner subprojections to
 ambient invariant projections implies irreducibility of the `m`-step dynamics on each cyclic
 sector. -/

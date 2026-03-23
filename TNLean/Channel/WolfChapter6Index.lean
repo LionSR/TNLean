@@ -219,6 +219,9 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 * Reusable infrastructure for the multi-cycle direction:
   `preserves_corner_pow_orderOf_of_perm_decomp` (permutation-of-blocks iterate
   preserves each corner after `orderOf` steps).
+* Equal-size block action package for Eq. (6.68)-style dynamics:
+  `permuteConjBlockMap`, `permuteConjBlockMap_pow_apply`, and
+  `permuteConjBlockMap_pow_orderOf_apply`.
 
 ---
 
