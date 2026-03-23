@@ -676,7 +676,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Thm.~7.2: Adjoint kernel equals commutant (faithful state)]
     \label{thm:adjointKernel_eq_commutant}
-    \lean{mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState}\leanok
+    \lean{LindbladForm.mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState}\leanok
     \uses{def:lindblad_form, def:is_gksl_generator}
     Let $L$ be a GKSL generator in Lindblad form with Hamiltonian $H$
     and Lindblad operators $\{L_j\}$.
@@ -705,7 +705,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Thm.~7.2: Adjoint kernel equals commutant (full equivalence)]
     \label{thm:adjointKernel_eq_commutant_full}
-    \lean{adjointKernel_eq_commutant_of_hasFaithfulStationaryState}\leanok
+    \lean{LindbladForm.adjointKernel_eq_commutant_of_hasFaithfulStationaryState}\leanok
     \uses{thm:adjointKernel_eq_commutant, def:lindblad_form}
     Under the same hypotheses as
     Theorem~\ref{thm:adjointKernel_eq_commutant},
