@@ -1204,66 +1204,6 @@ theorem preserves_corner_pow_of_cyclic_decomp
     _ = P k * ((T ^ m) X) * P k := by
             simp [Matrix.mul_assoc, (hPproj k).2]
 
-/-- Permutation-based variant of `preserves_corner_pow_of_cyclic_decomp`.
-
-This isolates the part of Wolf Thm. 6.16 that only needs a permutation action on blocks:
-if `T` permutes a family of sector projections via a permutation `σ`, then the `orderOf σ`-th
-iterate preserves each sector corner. -/
-theorem preserves_corner_pow_orderOf_of_perm_decomp
-    {ι : Type*}
-    {T : MatrixEnd D}
-    (σ : Equiv.Perm ι)
-    (P : ι → MatrixAlg D)
-    (hPproj : ∀ k : ι, IsOrthogonalProjection (P k))
-    (hperm : ∀ k : ι, T (P (σ k)) = P k)
-    (hMulLeft : ∀ k : ι, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
-    (hMulRight : ∀ k : ι, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k)) :
-    ∀ k : ι, PreservesCorner (P k) (T ^ orderOf σ) := by
-  have hstep :
-      ∀ n : ℕ, ∀ k : ι, ∀ X : MatrixAlg D,
-        (T ^ n) (P ((σ ^ n) k) * X * P ((σ ^ n) k)) =
-          P k * ((T ^ n) X) * P k := by
-    intro n
-    induction n with
-    | zero =>
-        intro k X
-        simp
-    | succ n ih =>
-        intro k X
-        calc
-          (T ^ (n + 1)) (P ((σ ^ (n + 1)) k) * X * P ((σ ^ (n + 1)) k))
-              = (T ^ n) (T (P ((σ ^ (n + 1)) k) * X * P ((σ ^ (n + 1)) k))) := by
-                  simp [pow_succ]
-          _ = (T ^ n) (T (P (σ ((σ ^ n) k)) * X * P (σ ((σ ^ n) k)))) := by
-                  simp [pow_succ']
-          _ = (T ^ n) (P ((σ ^ n) k) * T X * P ((σ ^ n) k)) := by
-                  congr 1
-                  calc
-                    T (P (σ ((σ ^ n) k)) * X * P (σ ((σ ^ n) k))
-                        ) = T (P (σ ((σ ^ n) k)) * X) * T (P (σ ((σ ^ n) k))) := by
-                              exact hMulRight (σ ((σ ^ n) k)) (P (σ ((σ ^ n) k)) * X)
-                    _ = (T (P (σ ((σ ^ n) k))) * T X) * T (P (σ ((σ ^ n) k))) := by
-                          rw [hMulLeft (σ ((σ ^ n) k)) X]
-                    _ = P ((σ ^ n) k) * T X * P ((σ ^ n) k) := by
-                          rw [hperm ((σ ^ n) k)]
-          _ = P k * ((T ^ n) (T X)) * P k := ih k (T X)
-          _ = P k * ((T ^ (n + 1)) X) * P k := by simp [pow_succ]
-  intro k X
-  have hmain :
-      (T ^ orderOf σ) (P ((σ ^ orderOf σ) k) * X * P ((σ ^ orderOf σ) k)) =
-        P k * ((T ^ orderOf σ) X) * P k := hstep (orderOf σ) k X
-  have hσ : (σ ^ orderOf σ) = 1 := by
-    exact pow_orderOf_eq_one σ
-  have hmk : (T ^ orderOf σ) (P k * X * P k) = P k * ((T ^ orderOf σ) X) * P k := by
-    simpa [hσ] using hmain
-  calc
-    P k * (T ^ orderOf σ) (P k * X * P k) * P k
-        = P k * (P k * ((T ^ orderOf σ) X) * P k) * P k := by rw [hmk]
-    _ = (P k * P k) * ((T ^ orderOf σ) X) * (P k * P k) := by
-            simp [Matrix.mul_assoc]
-    _ = P k * ((T ^ orderOf σ) X) * P k := by
-            simp [Matrix.mul_assoc, (hPproj k).2]
-    _ = (T ^ orderOf σ) (P k * X * P k) := by rw [hmk]
 /-- Wolf Theorem 6.6 corollary: an orbit-sum lift from invariant corner subprojections to
 ambient invariant projections implies irreducibility of the `m`-step dynamics on each cyclic
 sector. -/
@@ -1397,4 +1337,72 @@ theorem isPrimitive_restriction_of_cyclic_decomp
     (hcorner_fix k)
     (hcorner_ne k)
     (huniq k)
+section PermutationBlockStructure
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+/-- Permutation-based variant of `preserves_corner_pow_of_cyclic_decomp`.
+
+This isolates the part of Wolf Thm. 6.16 that only needs a permutation action on blocks:
+if `T` permutes a family of sector projections via a permutation `σ`, then the `orderOf σ`-th
+iterate preserves each sector corner. -/
+theorem preserves_corner_pow_orderOf_of_perm_decomp
+    {T : MatrixEnd D}
+    (σ : Equiv.Perm ι)
+    (P : ι → MatrixAlg D)
+    (hPproj : ∀ k : ι, IsOrthogonalProjection (P k))
+    (hperm : ∀ k : ι, T (P (σ k)) = P k)
+    (hMulLeft : ∀ k : ι, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
+    (hMulRight : ∀ k : ι, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k)) :
+    ∀ k : ι, PreservesCorner (P k) (T ^ orderOf σ) := by
+  let _ := (inferInstance : DecidableEq ι)
+  have hstep :
+      ∀ n : ℕ, ∀ k : ι, ∀ X : MatrixAlg D,
+        (T ^ n) (P ((σ ^ n) k) * X * P ((σ ^ n) k)) =
+          P k * ((T ^ n) X) * P k := by
+    intro n
+    induction n with
+    | zero =>
+        intro k X
+        simp
+    | succ n ih =>
+        intro k X
+        calc
+          (T ^ (n + 1)) (P ((σ ^ (n + 1)) k) * X * P ((σ ^ (n + 1)) k))
+              = (T ^ n) (T (P ((σ ^ (n + 1)) k) * X * P ((σ ^ (n + 1)) k))) := by
+                  simp [pow_succ]
+          _ = (T ^ n) (T (P (σ ((σ ^ n) k)) * X * P (σ ((σ ^ n) k)))) := by
+                  simp [pow_succ']
+          _ = (T ^ n) (P ((σ ^ n) k) * T X * P ((σ ^ n) k)) := by
+                  congr 1
+                  calc
+                    T (P (σ ((σ ^ n) k)) * X * P (σ ((σ ^ n) k))
+                        ) = T (P (σ ((σ ^ n) k)) * X) * T (P (σ ((σ ^ n) k))) := by
+                              exact hMulRight (σ ((σ ^ n) k)) (P (σ ((σ ^ n) k)) * X)
+                    _ = (T (P (σ ((σ ^ n) k))) * T X) * T (P (σ ((σ ^ n) k))) := by
+                          rw [hMulLeft (σ ((σ ^ n) k)) X]
+                    _ = P ((σ ^ n) k) * T X * P ((σ ^ n) k) := by
+                          rw [hperm ((σ ^ n) k)]
+          _ = P k * ((T ^ n) (T X)) * P k := ih k (T X)
+          _ = P k * ((T ^ (n + 1)) X) * P k := by simp [pow_succ]
+  intro k X
+  have horder_pos : 0 < orderOf σ := orderOf_pos σ
+  have hmain :
+      (T ^ orderOf σ) (P ((σ ^ orderOf σ) k) * X * P ((σ ^ orderOf σ) k)) =
+        P k * ((T ^ orderOf σ) X) * P k := hstep (orderOf σ) k X
+  have hσ : (σ ^ orderOf σ) = 1 := by
+    exact pow_orderOf_eq_one σ
+  have hmk : (T ^ orderOf σ) (P k * X * P k) = P k * ((T ^ orderOf σ) X) * P k := by
+    simpa [hσ] using hmain
+  calc
+    P k * (T ^ orderOf σ) (P k * X * P k) * P k
+        = P k * (P k * ((T ^ orderOf σ) X) * P k) * P k := by rw [hmk]
+    _ = (P k * P k) * ((T ^ orderOf σ) X) * (P k * P k) := by
+            simp [Matrix.mul_assoc]
+    _ = P k * ((T ^ orderOf σ) X) * P k := by
+            simp [Matrix.mul_assoc, (hPproj k).2]
+    _ = (T ^ orderOf σ) (P k * X * P k) := by rw [hmk]
+
+end PermutationBlockStructure
+
 end PrimitivityOfSectors
