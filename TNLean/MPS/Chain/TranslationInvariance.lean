@@ -4,7 +4,7 @@ import TNLean.MPS.Chain.FundamentalTheorem
 # Translation-invariance corollaries for injective MPS chains
 
 This file packages the translation-invariant specialization of the chain
-fundamental theorem as two corollaries.
+fundamental theorem as a corollary.
 
 Because `fundamentalTheorem_injective_chain` currently yields a uniform gauge,
 the translation-invariant collapse can be witnessed with scalar `λ = 1`.
@@ -52,23 +52,5 @@ theorem ti_tensors_collapse_to_single_gauge
       simpa [MPSTensor.chainCombinedTensor_apply] using
         hX (finProdFinEquiv (k0, i))
     simpa [smul_eq_mul, Matrix.mul_assoc] using hXi
-
-/-- Corollary 2 (gauge periodicity).
-
-Any witness produced by `ti_tensors_collapse_to_single_gauge` satisfies the
-root-of-unity condition `lam ^ n = 1`. -/
-theorem ti_gauge_periodicity
-    (A B : MPSTensor d D)
-    (hn : 0 < n)
-    (hA : MPSTensor.IsInjective A)
-    (hB : MPSTensor.IsInjective B)
-    (hMPV : MPSTensor.SameMPV
-      (MPSTensor.chainCombinedTensor (fun _ : Fin n => A))
-      (MPSTensor.chainCombinedTensor (fun _ : Fin n => B))) :
-    ∃ lam : ℂ, lam ^ n = 1 := by
-  rcases ti_tensors_collapse_to_single_gauge
-      (A := A) (B := B) hn hA hB hMPV with
-    ⟨_, lam, _, hlam, _⟩
-  exact ⟨lam, hlam⟩
 
 end MPSChainTensor

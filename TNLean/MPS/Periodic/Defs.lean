@@ -132,6 +132,29 @@ theorem EquivalentBlocks.to_repeatedBlocks {A B : MPSTensor d D}
   intro i
   simpa [hY i]
 
+/-- `EquivalentBlocks` is equivalent to ordinary `GaugeEquiv`. -/
+theorem equivalentBlocks_iff_gaugeEquiv {A B : MPSTensor d D} :
+    EquivalentBlocks A B ↔ GaugeEquiv A B := by
+  constructor
+  · intro h
+    rcases h with ⟨Y, hY⟩
+    refine ⟨Y⁻¹, ?_⟩
+    intro i
+    have hYi := hY i
+    apply_fun (fun M =>
+      (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * M *
+        (Y : Matrix (Fin D) (Fin D) ℂ))) at hYi
+    simpa [Matrix.mul_assoc] using hYi.symm
+  · intro h
+    rcases h with ⟨X, hX⟩
+    refine ⟨X⁻¹, ?_⟩
+    intro i
+    have hXi := hX i
+    apply_fun (fun M =>
+      (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * M *
+        (X : Matrix (Fin D) (Fin D) ℂ))) at hXi
+    simpa [Matrix.mul_assoc] using hXi.symm
+
 /-- Symmetry of repeated blocks. -/
 theorem RepeatedBlocks.symm {A B : MPSTensor d D}
     (h : RepeatedBlocks A B) : RepeatedBlocks B A := by
