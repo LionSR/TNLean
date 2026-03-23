@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Semigroup.Basic
 import TNLean.Channel.Semigroup.Perturbation
+import TNLean.Channel.Semigroup.Resolvent
 import TNLean.Channel.Semigroup.Primitivity
 import TNLean.Channel.Semigroup.GeneratorDefs
 import TNLean.Channel.Semigroup.LindbladForm
