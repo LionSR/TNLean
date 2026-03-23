@@ -16,6 +16,7 @@ for an explicit isometry `V` constructed from the Kraus operators.
 
 * `stinespringV`: the Stinespring isometry `V = ∑ⱼ Kⱼ ⊗ |j⟩`, a `(D·r) × D`
   matrix satisfying `V(i, j) k = (Kⱼ)_{ik}`
+* `stinespringV_apply`: coordinate formula for `stinespringV`
 
 ## Main results (Wolf Thm 2.2)
 
@@ -77,7 +78,11 @@ theorem stinespringV_isometry_iff_kraus_normalized {r : ℕ}
   `T*(A) = V† (A ⊗ 𝟙_r) V`
 
 where `V` is the Stinespring isometry. This matches the Kraus form
-`T*(A) = ∑ⱼ Kⱼ† A Kⱼ`. -/
+`T*(A) = ∑ⱼ Kⱼ† A Kⱼ`.
+
+The `A` factor appears between a conjugate-transposed and non-transposed Kraus
+operator because this is the Heisenberg action (`T*` on observables), i.e. the
+adjoint of the Schrödinger map used on states. -/
 theorem stinespring_dual_representation {r : ℕ}
     (K : Fin r → Matrix (Fin D) (Fin D) ℂ) (A : Matrix (Fin D) (Fin D) ℂ) :
     (stinespringV K)ᴴ *
@@ -103,5 +108,6 @@ theorem stinespring_schrodinger_representation {r : ℕ}
     (∑ l : Fin r, K l * X * (K l)ᴴ) i j =
     ∑ k : Fin r,
       (stinespringV K * X * (stinespringV K)ᴴ) (i, k) (j, k) := by
+  -- Conjugation trick: rewrite the adjoint-side Kraus family as `fun l => (K l)ᴴ`.
   simp only [Matrix.mul_apply, Matrix.sum_apply,
     stinespringV_apply, Matrix.conjTranspose_apply]
