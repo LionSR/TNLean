@@ -18,6 +18,11 @@ operators and states the abstract positive-map version of Wolf Proposition 5.1.
 * `KadisonSchwarz.kadison_schwarz_normal_cp_le`: Loewner-order form of the above
 * `KadisonSchwarz.schwarz_inequality_normal_operator`: Wolf Prop. 5.1 for positive maps
 
+## Notes
+
+The normal-input inequality from this file is reused by the subnormal and
+commuting-dominant developments in `TNLean/Channel/Schwarz/SchwarzSubnormal.lean`.
+
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 5.1][Wolf2012QChannels]
