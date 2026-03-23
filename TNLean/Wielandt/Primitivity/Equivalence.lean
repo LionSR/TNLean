@@ -226,6 +226,42 @@ theorem hasEventuallyFullKrausRank_iff_stronglyIrreducible [NeZero D]
   ⟨fun hB => isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm hB,
    fun hC => prop3_cb A hNorm hC⟩
 
+/-! ## Wolf Theorem 6.8 assembly -/
+
+/-- Kraus-span characterization in paper notation:
+`A` is primitive iff some fixed-length Kraus word span is the full matrix algebra.
+
+This is just `IsPrimitivePaper ↔ HasEventuallyFullKrausRank`, restated with
+Wolf Chapter 6 wording.
+-/
+theorem primitivePaper_iff_krausSpan_top [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    IsPrimitivePaper A ↔ ∃ m : ℕ, wordSpan A m = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
+  primitivePaper_iff_hasEventuallyFullKrausRank A hNorm
+
+/-- **Wolf Theorem 6.8 (CP primitive maps):** bundled four-way characterization.
+
+Under normalization, the following are equivalent ways to express primitivity:
+1. paper primitivity (`IsPrimitivePaper A`);
+2. eventual full Kraus span (`HasEventuallyFullKrausRank A`);
+3. normality (`IsNormal A`);
+4. strong irreducibility (`IsStronglyIrreduciblePaper A`).
+-/
+theorem wolf_theorem_6_8_four_characterizations [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    IsPrimitivePaper A ↔
+      HasEventuallyFullKrausRank A ∧ IsNormal A ∧ IsStronglyIrreduciblePaper A := by
+  constructor
+  · intro hP
+    refine ⟨?_, ?_, ?_⟩
+    · exact (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hP
+    · exact (isNormal_of_isPrimitivePaper A hNorm hP)
+    · exact (primitivePaper_iff_stronglyIrreducible A hNorm).mp hP
+  · rintro ⟨hB, _, _⟩
+    exact (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mpr hB
+
 /-! ## Peripheral primitivity (intermediate result) -/
 
 /-- **Proposition 3 (a)→(c), intermediate step**: paper primitivity implies
