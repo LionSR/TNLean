@@ -427,8 +427,10 @@ directly to periodic tensors.
 
 \subsection{Irreducible form}
 
-\begin{definition}[Periodic tensor]\notready
+\begin{definition}[Periodic tensor]
 	\label{def:periodic_tensor}
+	\lean{MPSTensor.IsPeriodic}
+	\leanok
 	An irreducible MPS tensor $A$ of bond dimension $D$ is
 	\emph{$m$-periodic} (for some $m \ge 1$) if the peripheral spectrum
 	of its transfer map $\E_A$ is exactly the $m$-th roots of unity
@@ -437,8 +439,10 @@ directly to periodic tensors.
 	primitive transfer map (Definition~\ref{def:primitive_channel}).
 \end{definition}
 
-\begin{definition}[Irreducible form]\notready
+\begin{definition}[Irreducible form]
 	\label{def:irreducible_form}
+	\lean{MPSTensor.IsIrreducibleForm}
+	\leanok
 	A tensor $A$ is in \emph{irreducible form} if it is block-diagonal
 	\[
 		A^i = \bigoplus_{j \in J} \mu_j\, A_j^i,
@@ -479,8 +483,10 @@ directly to periodic tensors.
 
 \subsection{The \texorpdfstring{$Z$}{Z}-gauge degree of freedom}
 
-\begin{definition}[$Z$-gauge equivalence]\notready
+\begin{definition}[$Z$-gauge equivalence]
 	\label{def:z_gauge_equiv}
+	\lean{MPSTensor.ZGaugeEquiv}
+	\leanok
 	Let $A$ be an $m$-periodic irreducible tensor of bond dimension $D$.
 	A \emph{$Z$-gauge transformation} of $A$ is a diagonal unitary
 	matrix $Z \in \MN{D}$ satisfying:
@@ -497,8 +503,10 @@ directly to periodic tensors.
 	$Z A^i = Y B^i Y^{-1}$ for all~$i$.
 \end{definition}
 
-\begin{remark}[$Z$-gauge is trivial for period-$1$ blocks]\notready
+\begin{remark}[$Z$-gauge is trivial for period-$1$ blocks]
 	\label{rem:z_gauge_trivial_period1}
+	\lean{MPSTensor.ZGaugeEquiv.of_period_one}
+	\leanok
 	When $m = 1$ the condition $Z^1 = \Id$ forces $Z = \Id$,
 	so $Z$-gauge equivalence reduces to ordinary gauge equivalence
 	(Definition~\ref{def:gauge_equiv}).
