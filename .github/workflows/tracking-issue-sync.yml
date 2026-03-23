@@ -6,6 +6,10 @@ on:
   pull_request:
     types: [closed, reopened]
 
+concurrency:
+  group: tracking-issue-sync
+  cancel-in-progress: false
+
 jobs:
   sync:
     if: |
