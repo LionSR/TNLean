@@ -1,0 +1,64 @@
+name: Tracking Issue Sync
+
+on:
+  issues:
+    types: [closed, reopened, labeled]
+  pull_request:
+    types: [closed, reopened]
+
+concurrency:
+  group: tracking-issue-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: |
+      (github.event.action == 'closed' || github.event.action == 'reopened') ||
+      (github.event.action == 'labeled' && github.event.label.name == 'tracking')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Sync tracking issues
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            EVENT: ${{ github.event_name }}
+            ACTION: ${{ github.event.action }}
+            REPO: ${{ github.repository }}
+            NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+            TITLE: ${{ github.event.issue.title || github.event.pull_request.title }}
+            MERGED: ${{ github.event.pull_request.merged }}
+            LABEL: ${{ github.event.label.name }}
+
+            You manage tracking issues in this repo. Tracking issues have the "tracking" label and contain checklists like `- [ ] #123`.
+
+            **If ACTION is "labeled" and LABEL is "tracking":**
+            - Read the issue body, find all `#N` references in checklist items
+            - Add the "tracked" label to each referenced issue: `gh issue edit N --add-label tracked`
+
+            **If ACTION is "closed" or "reopened":**
+            - Find tracking issues that reference #NUMBER:
+              `gh issue list --label tracking --state all --json number,body --limit 50`
+            - For each tracking issue containing `#NUMBER` in a checklist:
+              - If the item was closed (issues) or merged (PRs): check the box `[x]`
+              - If closed but not merged (PR): uncheck `[ ]`
+              - If reopened: uncheck `[ ]`
+              - Update the body: `gh issue edit <tracker> --body "..."`
+            - Post a short progress comment: `gh issue comment <tracker> --body "..."`
+              Include: what happened, progress (X/Y done), what remains
+            - If all tasks complete: add "all-resolved" label
+            - If not all complete: remove "all-resolved" label (ignore errors)
+
+          claude_args: |
+            --model claude-sonnet-4-6
+            --allowedTools "Bash(gh issue:*),Bash(gh pr:*)"
