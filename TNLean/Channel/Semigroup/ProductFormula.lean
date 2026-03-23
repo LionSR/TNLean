@@ -200,6 +200,76 @@ theorem norm_trotter_pow_sub_exp_le_of_step [NeZero D]
           gcongr
     _ = ((n + 1 : ℕ) : ℝ) * Real.exp (t * (‖A‖ + ‖B‖)) * δ := by rw [hMpow]
 
+/-- If the one-step defect has a quadratic mesh bound, the global Trotter error is `O(1/n)`. -/
+theorem norm_trotter_pow_sub_exp_le_of_quadratic_step [NeZero D]
+    (A B : CLM D) (t : ℝ) (n : ℕ) (ht : 0 ≤ t) {C : ℝ}
+    (hstep :
+      ‖expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))
+        - expSemigroupCLM (A + B) (t / (n + 1))‖
+        ≤ C * (t / (n + 1)) ^ 2 * Real.exp ((t / (n + 1)) * (‖A‖ + ‖B‖))) :
+    ‖(expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))) ^ (n + 1)
+      - expSemigroupCLM (A + B) t‖
+      ≤ (C * t ^ 2 / (n + 1)) *
+          Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
+  let s : ℝ := t / (n + 1)
+  have hs : 0 ≤ s := by
+    dsimp [s]
+    positivity
+  have hmain := norm_trotter_pow_sub_exp_le_of_step
+      (A := A) (B := B) (t := t) (n := n) ht (δ := C * s ^ 2 * Real.exp (s * (‖A‖ + ‖B‖)))
+      (by simpa [s] using hstep)
+  have hcast_pos : (0 : ℝ) < (n + 1) := by positivity
+  have hfac :
+      ((n + 1 : ℕ) : ℝ) * (C * s ^ 2 * Real.exp (s * (‖A‖ + ‖B‖))) =
+        (C * t ^ 2 / (n + 1)) * Real.exp (s * (‖A‖ + ‖B‖)) := by
+    have hrat : ((n + 1 : ℕ) : ℝ) * (C * s ^ 2) = C * t ^ 2 / (n + 1) := by
+      dsimp [s]
+      field_simp [hcast_pos.ne']
+      rw [Nat.cast_add, Nat.cast_one]
+      ring
+    calc
+      ((n + 1 : ℕ) : ℝ) * (C * s ^ 2 * Real.exp (s * (‖A‖ + ‖B‖)))
+          = (((n + 1 : ℕ) : ℝ) * (C * s ^ 2)) * Real.exp (s * (‖A‖ + ‖B‖)) := by ring
+      _ = (C * t ^ 2 / (n + 1)) * Real.exp (s * (‖A‖ + ‖B‖)) := by rw [hrat]
+  have hexp :
+      Real.exp (t * (‖A‖ + ‖B‖)) * Real.exp (s * (‖A‖ + ‖B‖)) =
+        Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
+    rw [← Real.exp_add]
+    dsimp [s]
+    congr 1
+    norm_num [Nat.cast_add]
+    field_simp [hcast_pos.ne']
+    ring
+  calc
+    ‖(expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))) ^ (n + 1)
+      - expSemigroupCLM (A + B) t‖
+        ≤ ((n + 1 : ℕ) : ℝ) * Real.exp (t * (‖A‖ + ‖B‖)) *
+            (C * s ^ 2 * Real.exp (s * (‖A‖ + ‖B‖))) := hmain
+    _ = Real.exp (t * (‖A‖ + ‖B‖)) *
+          (((n + 1 : ℕ) : ℝ) * (C * s ^ 2 * Real.exp (s * (‖A‖ + ‖B‖)))) := by ring
+    _ = Real.exp (t * (‖A‖ + ‖B‖)) *
+          ((C * t ^ 2 / (n + 1)) * Real.exp (s * (‖A‖ + ‖B‖))) := by rw [hfac]
+    _ = (C * t ^ 2 / (n + 1)) *
+          (Real.exp (t * (‖A‖ + ‖B‖)) * Real.exp (s * (‖A‖ + ‖B‖))) := by ring
+    _ = (C * t ^ 2 / (n + 1)) *
+          Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by rw [hexp]
+
+/-- Suzuki/Wolf-style global bound from a one-step constant `2*(‖A‖+‖B‖)^2`. -/
+theorem lie_trotter_suzuki_bound_of_step [NeZero D]
+    (A B : CLM D) (t : ℝ) (n : ℕ) (ht : 0 ≤ t)
+    (hstep :
+      ‖expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))
+        - expSemigroupCLM (A + B) (t / (n + 1))‖
+        ≤ (2 * (‖A‖ + ‖B‖) ^ 2) * (t / (n + 1)) ^ 2 *
+            Real.exp ((t / (n + 1)) * (‖A‖ + ‖B‖))) :
+    ‖(expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))) ^ (n + 1)
+      - expSemigroupCLM (A + B) t‖
+      ≤ ((2 * t ^ 2 / (n + 1)) * (‖A‖ + ‖B‖) ^ 2) *
+          Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
+  simpa [mul_assoc, mul_left_comm, mul_comm, div_eq_mul_inv] using
+    norm_trotter_pow_sub_exp_le_of_quadratic_step (A := A) (B := B) (t := t) (n := n) ht
+      (C := 2 * (‖A‖ + ‖B‖) ^ 2) hstep
+
 end ProductFormulaHelpers
 
 end -- noncomputable section
