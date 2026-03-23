@@ -169,7 +169,8 @@ operation on the physical indices.
 %% ---------------------------------------------------------
 
 \begin{lemma}[Blocking preserves injectivity]\label{lem:blocking_preserves_injectivity}
-    \notready
+    \lean{MPSTensor.chainCombinedTensor_isInjective}
+    \leanok
     \uses{def:injective, def:blocked_tensor}
     Let $A_0, \dots, A_{m-1}$ be injective MPS tensors with compatible
     bond dimensions.
@@ -180,19 +181,31 @@ operation on the physical indices.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     The span of the blocked matrices contains all products
     $A_0^{i_0} \cdots A_{m-1}^{i_{m-1}}$.
     Since each $\{A_k^i\}_i$ spans $\MN{D}$, these products span
     all of $\MN{D}$.
 \end{proof}
 
+\begin{remark}[Lean formalisation note]
+    \label{rem:blocking_vs_combined}
+    The Lean proof uses a combined tensor approach
+    (\lean{MPSTensor.chainCombinedTensor_isInjective}) rather than
+    literal tensor blocking: it shows that if any site tensor is injective,
+    the combined tensor (union of all site matrices) spans $\MN{D}$.
+    This serves the same role in the chain fundamental theorem proof.
+\end{remark}
+
 \begin{lemma}[Centre of $\MN{D}$]\label{lem:center_scalar}
-    \notready
+    \lean{Matrix.center_eq_range}
+    \leanok
     If $Z \in \MN{D}$ commutes with every element of $\MN{D}$, then
     $Z = \lambda \Id_D$ for some $\lambda \in \C$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     Standard: $Z$ commutes with every matrix unit $E_{ij}$, which
     forces all off-diagonal entries to vanish and all diagonal entries
     to agree.
@@ -210,7 +223,8 @@ inner automorphism.
 
 \begin{lemma}[Virtual bond gauge -- Lemma~1 of \protect\cite{Molnar2018NormalPEPS}]%
     \label{lem:virtual_bond_gauge}
-    \notready
+    \lean{MPSTensor.virtual_bond_gauge}
+    \leanok
     \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether,
           def:non_ti_chain, lem:blocking_preserves_injectivity}
     Let $\mathbf{A} = (A_0, \dots, A_{n-1})$ and
@@ -234,6 +248,7 @@ inner automorphism.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether,
           lem:blocking_preserves_injectivity}
     Block the sites on either side of bond~$k$ into a three-site chain;
@@ -270,7 +285,8 @@ forces the local tensors to be proportional.
 
 \begin{lemma}[Aligned gauges force proportionality -- Lemma~2 of \protect\cite{Molnar2018NormalPEPS}]%
     \label{lem:tensor_proportional}
-    \notready
+    \lean{MPSTensor.tensor_proportional}
+    \leanok
     \uses{def:injective, def:decomposition_map, lem:center_scalar}
     Let $A_1, A_2$ and $B_1, B_2$ be injective MPS tensors with
     the same bond dimension $D$.
@@ -303,6 +319,7 @@ forces the local tensors to be proportional.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     \uses{def:decomposition_map, lem:center_scalar}
     By cyclicity and non-degeneracy of the trace pairing,
     conditions \eqref{eq:internal_bond} and \eqref{eq:external_bond}
@@ -336,7 +353,8 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
 
 \begin{theorem}[Fundamental Theorem for injective chains -- Theorem~1 of \protect\cite{Molnar2018NormalPEPS}]%
     \label{thm:fundamentalTheorem_injective_chain}
-    \notready
+    \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
+    \leanok
     \uses{lem:virtual_bond_gauge, lem:tensor_proportional,
           def:non_ti_chain}
     Let $\mathbf{A} = (A_0, \dots, A_{n-1})$ and
@@ -353,6 +371,7 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{lem:virtual_bond_gauge, lem:tensor_proportional,
           lem:blocking_preserves_injectivity}
     Apply Lemma~\ref{lem:virtual_bond_gauge} at each bond to obtain
@@ -375,6 +394,19 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     Uniqueness up to a common scalar follows from the uniqueness clause
     of Lemma~\ref{lem:virtual_bond_gauge}.
 \end{proof}
+
+\begin{remark}[Stronger hypothesis in the Lean formalisation]
+    \label{rem:ft_chain_sameMPV}
+    \uses{thm:fundamentalTheorem_injective_chain}
+    The Lean theorem \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
+    assumes \texttt{SameMPV} on the combined tensor (trace agreement for
+    mixed-site words of \emph{all} lengths), which is stronger than the
+    paper's \texttt{SameState} (trace agreement at a single chain length
+    $n \ge 3$).
+    The paper bridges this gap via a blocking argument requiring $n \ge 3$;
+    that bridging step is not yet formalised, so the theorem is stated with the
+    stronger hypothesis.
+\end{remark}
 
 \begin{remark}[Relationship to the translation-invariant all-sizes theorem]
     \label{rem:ft_vs_singleBlock}
@@ -399,7 +431,8 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
 \subsection{Translation-invariant chains}
 
 \begin{corollary}[TI case]\label{cor:ft_ti_chain}
-    \notready
+    \lean{MPSChainTensor.ti_tensors_collapse_to_single_gauge}
+    \leanok
     \uses{thm:fundamentalTheorem_injective_chain, def:non_ti_chain}
     Let $A$ and $B$ be injective MPS tensors of bond dimension $D$.
     Suppose the two translation-invariant chains
@@ -415,6 +448,7 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
 \end{corollary}
 
 \begin{proof}
+    \leanok
     Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain} to the
     two constant chains to obtain $Z_0, \dots, Z_{n-1}$ with
     $B^i = Z_k^{-1} A^i Z_{k+1}$ for all $k$ and $i$.
