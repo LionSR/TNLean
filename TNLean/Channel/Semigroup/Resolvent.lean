@@ -18,7 +18,7 @@ namespace TNLean.Channel.Semigroup
 
 variable {D : ℕ}
 
-abbrev CLM (D : ℕ) :=
+private abbrev CLM (D : ℕ) :=
   Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
 
 /-- Resolvent of a semigroup generator (`R(z,L) = (z • 1 - L)⁻¹`). -/
