@@ -9,6 +9,7 @@ import TNLean.Channel.Semigroup.GeneratorDefs
 import TNLean.Channel.Semigroup.LindbladForm
 import TNLean.Channel.Semigroup.KossakowskiForm
 import TNLean.Channel.Semigroup.ReducibleQDS
+import TNLean.Channel.Semigroup.RelaxationConditions
 
 /-!
 # Wolf Chapter 7 — Semigroup Structure: Public Theorem Index
@@ -137,6 +138,7 @@ No new proofs are introduced here; this is a documentation-only index module.
 
 ## Not yet formalized
 
-* Wolf Corollary 7.2 (necessary conditions for relaxation)
+* Wolf Corollary 7.2 (sufficient conditions for relaxation) — PARTIALLY FORMALIZED
+  (`TNLean.Channel.Semigroup.RelaxationConditions`: currently non-reducibility criterion only)
 * Wolf Theorem 7.2 (kernel of Liouvillian)
 -/
