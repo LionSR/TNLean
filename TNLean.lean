@@ -21,6 +21,7 @@ The following legacy archival modules are intentionally excluded
 -- Layer 0: General algebra
 import TNLean.Algebra.TracePairing
 import TNLean.Algebra.BlockPermutation
+import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
