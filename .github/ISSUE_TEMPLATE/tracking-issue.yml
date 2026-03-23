@@ -1,0 +1,54 @@
+name: Tracking Issue
+description: Create a tracking issue to monitor progress across multiple issues and PRs
+labels: ["tracking"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Tracking Issue
+        Use this template to create an issue that tracks progress across multiple related issues and PRs.
+        List each sub-task as a checkbox item with an issue/PR reference (e.g., `- [ ] #123`).
+
+  - type: input
+    id: area
+    attributes:
+      label: Area
+      description: Which area of the project does this track?
+      placeholder: e.g., MPS, Channel, Wielandt, Infrastructure
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the goal this tracking issue covers
+      placeholder: What is the overall objective?
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tracked Tasks
+      description: |
+        List issues/PRs to track. Use checkbox format with issue references.
+        The workflow will automatically update these checkboxes when issues are closed or PRs are merged.
+      value: |
+        - [ ] #
+        - [ ] #
+        - [ ] #
+      placeholder: |
+        - [ ] #42 Formalize quantum channel composition
+        - [ ] #43 Prove Schwarz inequality for CP maps
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Any extra context, dependencies, or milestones
+      placeholder: Optional notes
+    validations:
+      required: false
