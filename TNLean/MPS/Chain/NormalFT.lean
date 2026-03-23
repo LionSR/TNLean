@@ -5,9 +5,8 @@ import TNLean.MPS.Chain.FundamentalTheorem
 # Fundamental theorem endpoint for normal MPS via blocking
 
 This module packages a blocked-chain endpoint. The theorem
-`fundamentalTheorem_normal` is stated in terms of project normality
-(`MPSTensor.IsNormal`) together with a common blocking length `L` that makes
-both tensors `L`-block injective.
+`fundamentalTheorem_blockedChain` is stated at a common blocking length `L`
+that makes both tensors `L`-block injective.
 -/
 
 open scoped Matrix
@@ -65,25 +64,18 @@ lemma blockedChain_isInjective (A : MPSTensor d D) (L n : ℕ)
   simpa [blockedChain] using
     (MPSTensor.IsNBlkInjective_iff_blockTensor_isInjective A L).1 hA
 
-/-- Fundamental theorem endpoint for normal tensors at a common blocking length.
+/-- Fundamental theorem endpoint for blocked chains at a common blocking length.
 
-The assumptions `hA_normal` and `hB_normal` make the normality intent explicit,
-while `hA_block`/`hB_block` choose a common witness `L` used in the blocked-chain
-reduction to the injective-chain theorem. -/
-theorem fundamentalTheorem_normal
+The assumptions `hA_block`/`hB_block` choose a common witness `L` used in the
+blocked-chain reduction to the injective-chain theorem. -/
+theorem fundamentalTheorem_blockedChain
     (A B : MPSTensor d D) (L n : ℕ)
-    (hA_normal : MPSTensor.IsNormal A)
-    (hB_normal : MPSTensor.IsNormal B)
     (hA_block : MPSTensor.IsNBlkInjective A L)
     (_hB_block : MPSTensor.IsNBlkInjective B L)
     (hMPV : MPSTensor.SameMPV
       (MPSTensor.chainCombinedTensor (blockedChain A L n))
       (MPSTensor.chainCombinedTensor (blockedChain B L n))) :
     GaugeEquiv (blockedChain A L n) (blockedChain B L n) := by
-  -- The common block-injectivity witnesses imply project normality; keep these
-  -- as explicit `have`s so the theorem genuinely uses the `IsNormal` hypotheses.
-  have _ : MPSTensor.IsNormal A := hA_normal
-  have _ : MPSTensor.IsNormal B := hB_normal
   exact fundamentalTheorem_injective_chain
     (blockedChain A L n)
     (blockedChain B L n)
