@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible.Basic
+import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
 import TNLean.Channel.Schwarz.Basic
 
 import Mathlib.Analysis.Normed.Algebra.Exponential
@@ -928,5 +929,75 @@ theorem exp_posDef_of_irreducible_cp
     rw [Matrix.posDef_iff_dotProduct_mulVec]
     exact ⟨h_exp_psd.isHermitian, hq_pos⟩
   simpa [Φ] using hfinal
+
+/-- **Wolf Theorem 6.2, item 3 (equivalence form)**:
+for CP maps on `M_D(ℂ)`, irreducibility is equivalent to strict positivity of
+the exponential action on every nonzero PSD input at every positive time. -/
+theorem irreducible_iff_exp_posDef_forall
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hCP : IsCPMap E) :
+    IsIrreducibleMap E ↔
+      ∀ t : ℝ, 0 < t →
+      ∀ A : Matrix (Fin D) (Fin D) ℂ, A.PosSemidef → A ≠ 0 →
+        ((NormedSpace.exp
+          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+            ((t : ℂ) • E))) A).PosDef := by
+  constructor
+  · intro hIrr t ht A hA hA_ne
+    exact exp_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne ht
+  · intro hExp
+    intro P hP hInv
+    by_cases hP0 : P = 0
+    · exact Or.inl hP0
+    · right
+      have hsemigroup_inv :
+          ∀ t : ℝ, 0 ≤ t → ∀ X : Matrix (Fin D) (Fin D) ℂ,
+            P * (expSemigroup E t (P * X * P)) * P = expSemigroup E t (P * X * P) :=
+        semigroup_preserves_compression_of_generator (hP := hP) (hgen := hInv)
+      have hPP : P * P = P := hP.2
+      have hPherm : Pᴴ = P := hP.1.eq
+      have hA_psd : (P * Pᴴ).PosSemidef :=
+        Matrix.posSemidef_self_mul_conjTranspose P
+      have hA_ne : P * Pᴴ ≠ 0 := by
+        rw [hPherm, hPP]
+        exact hP0
+      have hExpPD :
+          ((NormedSpace.exp
+            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+              ((1 : ℂ) • E))) (P * Pᴴ)).PosDef :=
+        hExp 1 zero_lt_one (P * Pᴴ) hA_psd hA_ne
+      have hExp_compressed :
+          P * (expSemigroup E 1 (P * Pᴴ)) * P = expSemigroup E 1 (P * Pᴴ) := by
+        simpa [hPherm, hPP] using hsemigroup_inv 1 (show (0 : ℝ) ≤ 1 by norm_num) Pᴴ
+      have h_left_zero : (1 - P) * expSemigroup E 1 (P * Pᴴ) = 0 := by
+        calc
+          (1 - P) * expSemigroup E 1 (P * Pᴴ)
+              = (1 - P) * (P * expSemigroup E 1 (P * Pᴴ) * P) := by rw [hExp_compressed]
+          _ = ((1 - P) * P) * expSemigroup E 1 (P * Pᴴ) * P := by noncomm_ring
+          _ = 0 := by
+              have hsub : (1 - P) * P = 0 := by
+                rw [sub_mul, one_mul, hPP, sub_self]
+              rw [hsub, zero_mul, zero_mul]
+      have h_eval :
+          expSemigroup E 1 (P * Pᴴ) =
+            (NormedSpace.exp
+              ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+                ((1 : ℂ) • E))) (P * Pᴴ) := by
+        simpa [expSemigroupCLM] using
+          congrArg (fun F => F (P * Pᴴ)) (expSemigroup_toCLM (L := E) 1)
+      have hExp_unit : IsUnit (expSemigroup E 1 (P * Pᴴ)) :=
+        Matrix.PosDef.isUnit (by simpa [h_eval] using hExpPD)
+      rcases hExp_unit with ⟨u, hu⟩
+      let U : Matrix (Fin D) (Fin D) ℂ := ↑u
+      have hU : U = expSemigroup E 1 (P * Pᴴ) := by simpa [U] using hu
+      have hu_inv : (expSemigroup E 1 (P * Pᴴ)) * U⁻¹ = 1 := by
+        rw [← hU]
+        simpa [U] using Units.val_mul_inv u
+      have hsub : 1 - P = 0 := by
+        have hmul0 := congrArg (fun Z => Z * U⁻¹) h_left_zero
+        have hmul0' : (1 - P) * ((expSemigroup E 1 (P * Pᴴ)) * U⁻¹) = 0 := by
+          simpa [Matrix.mul_assoc] using hmul0
+        simpa [hu_inv] using hmul0'
+      exact (sub_eq_zero.mp hsub).symm
 
 end Exponential
