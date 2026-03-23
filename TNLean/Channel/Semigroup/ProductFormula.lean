@@ -22,6 +22,9 @@ needed for finite-dimensional product-formula arguments on `End(M_D(ℂ))`.
 These lemmas are enough to support later completion of a full Lie--Trotter
 convergence theorem, but that convergence statement itself is not yet included
 here.
+
+* `norm_trotter_pow_sub_exp_le_of_quadratic_step` — global error from a quadratic one-step bound
+* `lie_trotter_suzuki_bound_of_step` — Wolf/Suzuki-style explicit global constant
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
@@ -237,7 +240,7 @@ theorem norm_trotter_pow_sub_exp_le_of_quadratic_step [NeZero D]
     rw [← Real.exp_add]
     dsimp [s]
     congr 1
-    norm_num [Nat.cast_add]
+    push_cast
     field_simp [hcast_pos.ne']
     ring
   calc
@@ -266,9 +269,17 @@ theorem lie_trotter_suzuki_bound_of_step [NeZero D]
       - expSemigroupCLM (A + B) t‖
       ≤ ((2 * t ^ 2 / (n + 1)) * (‖A‖ + ‖B‖) ^ 2) *
           Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
-  simpa [mul_assoc, mul_left_comm, mul_comm, div_eq_mul_inv] using
+  have hquad :=
     norm_trotter_pow_sub_exp_le_of_quadratic_step (A := A) (B := B) (t := t) (n := n) ht
       (C := 2 * (‖A‖ + ‖B‖) ^ 2) hstep
+  calc
+    ‖(expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))) ^ (n + 1)
+      - expSemigroupCLM (A + B) t‖
+        ≤ (2 * (‖A‖ + ‖B‖) ^ 2 * t ^ 2 / (n + 1)) *
+            Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := hquad
+    _ = ((2 * t ^ 2 / (n + 1)) * (‖A‖ + ‖B‖) ^ 2) *
+          Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
+            ring
 
 end ProductFormulaHelpers
 

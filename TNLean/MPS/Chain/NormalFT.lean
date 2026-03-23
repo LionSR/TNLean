@@ -4,10 +4,9 @@ import TNLean.MPS.Chain.FundamentalTheorem
 /-!
 # Fundamental theorem endpoint for normal MPS via blocking
 
-This module packages a blocked-chain endpoint. The theorem
-`fundamentalTheorem_normal` is stated in terms of project normality
-(`MPSTensor.IsNormal`) together with a common blocking length `L` that makes
-both tensors `L`-block injective.
+This module packages a blocked-chain endpoint for blocked chains.
+The theorem `fundamentalTheorem_normal` concludes gauge equivalence of the
+constant `L`-blocked chains associated to the original tensors.
 -/
 
 open scoped Matrix
@@ -18,7 +17,7 @@ variable {d D : ℕ}
 
 /-- Bridge between project `N`-block injectivity and injectivity of the physically
 blocked tensor `blockTensor A N`. -/
-lemma IsNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) :
+lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) :
     IsNBlkInjective A N ↔ IsInjective (blockTensor A N) := by
   classical
   have hRange :
@@ -63,27 +62,20 @@ lemma blockedChain_isInjective (A : MPSTensor d D) (L n : ℕ)
     IsInjective (blockedChain A L n) := by
   intro k
   simpa [blockedChain] using
-    (MPSTensor.IsNBlkInjective_iff_blockTensor_isInjective A L).1 hA
+    (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective A L).1 hA
 
 /-- Fundamental theorem endpoint for normal tensors at a common blocking length.
 
-The assumptions `hA_normal` and `hB_normal` make the normality intent explicit,
-while `hA_block`/`hB_block` choose a common witness `L` used in the blocked-chain
-reduction to the injective-chain theorem. -/
+The conclusion is about the constant chains of `L`-blocked tensors;
+`hA_block` picks the common witness `L` used in the reduction to the
+injective-chain theorem. -/
 theorem fundamentalTheorem_normal
     (A B : MPSTensor d D) (L n : ℕ)
-    (hA_normal : MPSTensor.IsNormal A)
-    (hB_normal : MPSTensor.IsNormal B)
     (hA_block : MPSTensor.IsNBlkInjective A L)
-    (_hB_block : MPSTensor.IsNBlkInjective B L)
     (hMPV : MPSTensor.SameMPV
       (MPSTensor.chainCombinedTensor (blockedChain A L n))
       (MPSTensor.chainCombinedTensor (blockedChain B L n))) :
     GaugeEquiv (blockedChain A L n) (blockedChain B L n) := by
-  -- The common block-injectivity witnesses imply project normality; keep these
-  -- as explicit `have`s so the theorem genuinely uses the `IsNormal` hypotheses.
-  have _ : MPSTensor.IsNormal A := hA_normal
-  have _ : MPSTensor.IsNormal B := hB_normal
   exact fundamentalTheorem_injective_chain
     (blockedChain A L n)
     (blockedChain B L n)
