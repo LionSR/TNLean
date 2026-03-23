@@ -101,7 +101,7 @@ import TNLean.MPS.Chain.VirtualInsertion
 import TNLean.MPS.Chain.TensorEquality
 import TNLean.MPS.Chain.AlgebraIsomorphism
 import TNLean.MPS.Chain.FundamentalTheorem
-import TNLean.MPS.Chain.NormalFT
+import TNLean.MPS.Chain.BlockedChainFT
 import TNLean.MPS.Chain.TranslationInvariance
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Core.Blocking
