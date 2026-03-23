@@ -17,6 +17,8 @@ operators and states the abstract positive-map version of Wolf Proposition 5.1.
 * `KadisonSchwarz.kadison_schwarz_normal_cp`: Kadison–Schwarz restricted to normal inputs
 * `KadisonSchwarz.kadison_schwarz_normal_cp_le`: Loewner-order form of the above
 * `KadisonSchwarz.schwarz_inequality_normal_operator`: Wolf Prop. 5.1 for positive maps
+* This normal-input inequality is reused in the formal proofs of Wolf Thms. 5.5
+  and 5.6 in `SchwarzSubnormal.lean`.
 
 ## References
 

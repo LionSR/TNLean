@@ -22,6 +22,7 @@ that appear in Wolf's notes.
 * `KadisonSchwarz.kadison_schwarz_commuting_dominant_cp_of_two_sided_bound`
 * `KadisonSchwarz.kadison_schwarz_commuting_dominant_cp`
 * `KadisonSchwarz.schwarz_inequality_commuting_dominant_operator`
+* `KadisonSchwarz.wolf_thm_5_5` / `KadisonSchwarz.wolf_thm_5_6` (named aliases)
 
 The key new result is `commuting_dominant_right_bound`: if `D ≥ 0` commutes with
 `A` and dominates `A† A`, then it also dominates `A A†`.  The proof uses the
@@ -385,6 +386,16 @@ theorem schwarz_inequality_subnormal_operator
     topLeft_schwarz_of_normal_extension (D := D) T hPos hSub
       (Matrix.fromBlocks A B 0 C) hNormal
 
+/-- Named alias for Wolf Thm. 5.5 (subnormal-input Schwarz inequality). -/
+theorem wolf_thm_5_5
+    (T : Mat →ₗ[ℂ] Mat)
+    (hPos : IsPositiveMap T)
+    (hSub : T 1 ≤ (1 : Mat))
+    (A : Mat)
+    (hSubnormal : IsSubnormal A) :
+    T (Aᴴ) * T A ≤ T (Aᴴ * A) ∧ T A * T (Aᴴ) ≤ T (Aᴴ * A) :=
+  schwarz_inequality_subnormal_operator (D := D) T hPos hSub A hSubnormal
+
 /-- Linear-map wrapper for the canonical adjoint Kraus map.
 
 This bundles `KadisonSchwarz.krausAdjointMap` from `KadisonSchwarz.lean` as a
@@ -699,5 +710,17 @@ theorem schwarz_inequality_commuting_dominant_operator
   exact ⟨le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).1,
          le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).2⟩
 
-end KadisonSchwarz
+/-- Named alias for Wolf Thm. 5.6 (commuting-dominant Schwarz inequality). -/
+theorem wolf_thm_5_6
+    (T : Mat →ₗ[ℂ] Mat)
+    (hPos : IsPositiveMap T)
+    (hSub : T 1 ≤ (1 : Mat))
+    (A Dom : Mat)
+    (hDomPos : Dom.PosSemidef)
+    (hComm : Commute Dom A)
+    (hDom : Aᴴ * A ≤ Dom) :
+    T (Aᴴ) * T A ≤ T Dom ∧ T A * T (Aᴴ) ≤ T Dom :=
+  schwarz_inequality_commuting_dominant_operator
+    (D := D) T hPos hSub A Dom hDomPos hComm hDom
 
+end KadisonSchwarz
