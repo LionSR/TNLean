@@ -55,8 +55,8 @@ theorem ti_tensors_collapse_to_single_gauge
 
 /-- Corollary 2 (gauge periodicity).
 
-Any witness produced by `ti_tensors_collapse_to_single_gauge` satisfies the
-root-of-unity condition `lam ^ n = 1`. -/
+There is a gauge witness `Z` and phase `lam` such that `lam` is both
+`n`-periodic and the scalar relating `B` to `A` through that gauge. -/
 theorem ti_gauge_periodicity
     (A B : MPSTensor d D)
     (hn : 0 < n)
@@ -65,10 +65,12 @@ theorem ti_gauge_periodicity
     (hMPV : MPSTensor.SameMPV
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => A))
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => B))) :
-    ∃ lam : ℂ, lam ^ n = 1 := by
+    ∃ Z : Matrix (Fin D) (Fin D) ℂ, ∃ lam : ℂ,
+      IsUnit Z ∧ lam ^ n = 1 ∧
+      ∀ i : Fin d, B i = lam • (Z⁻¹ * A i * Z) := by
   rcases ti_tensors_collapse_to_single_gauge
       (A := A) (B := B) hn hA hB hMPV with
-    ⟨_, lam, _, hlam, _⟩
-  exact ⟨lam, hlam⟩
+    ⟨Z, lam, hZ, hlam, hrel⟩
+  exact ⟨Z, lam, hZ, hlam, hrel⟩
 
 end MPSChainTensor

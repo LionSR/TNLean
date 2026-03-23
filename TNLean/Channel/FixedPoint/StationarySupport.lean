@@ -206,32 +206,14 @@ theorem stationarySupport_eq_one
     exact hP_ne hP0
   · simpa [P] using hP1
 
-/-- Prop. 6.9 packaged as an `iff`: irreducibility is equivalent to full
-stationary support (for the chosen irreducible witness). -/
-theorem irreducible_iff_support_full
-    {E : Mat →ₗ[ℂ] Mat} (hE : IsChannel E) (hD : 0 < D) :
-    IsIrreducibleMap E ↔
-      ∃ hIrr : IsIrreducibleMap E, stationarySupport E hE hIrr hD = 1 := by
-  constructor
-  · intro hIrr
-    exact ⟨hIrr, stationarySupport_eq_one (E := E) hE hIrr hD⟩
-  · rintro ⟨hIrr, _⟩
-    exact hIrr
+/- TODO(#23): Replace with the non-vacuous Wolf Prop. 6.9 statement about
+maximal support of stationary states (Notes/WolfNoteTexSource/ch06_spectral_properties.tex,
+around lines 1220-1260). The previous `irreducible_iff_support_full` theorem
+was vacuous and has been removed.
 
-/-- Prop. 6.10: the stationary support is the minimal nonzero invariant
-projection (under irreducibility every such projection coincides with it). -/
-theorem stationary_support_minimal
-    {E : Mat →ₗ[ℂ] Mat} (hE : IsChannel E)
-    (hIrr : IsIrreducibleMap E) (hD : 0 < D)
-    {P : Mat} (hP_proj : IsOrthogonalProjection P)
-    (hP_inv : ∀ X : Mat, P * E (P * X * P) * P = E (P * X * P))
-    (hP_ne : P ≠ 0) :
-    stationarySupport E hE hIrr hD = P := by
-  have hP_zero_or_one : P = 0 ∨ P = 1 := hIrr P hP_proj hP_inv
-  have hP_one : P = 1 := by
-    rcases hP_zero_or_one with hP0 | hP1
-    · exact (hP_ne hP0).elim
-    · exact hP1
-  rw [stationarySupport_eq_one (E := E) hE hIrr hD, hP_one]
+TODO(#23): Replace with the non-vacuous Wolf Prop. 6.10 statement on
+stationary subspaces / sub-harmonic projections (Notes/WolfNoteTexSource/ch06_spectral_properties.tex,
+around lines 1260-1300). The previous `stationary_support_minimal` theorem
+was vacuous under irreducibility and has been removed. -/
 
 end Channel

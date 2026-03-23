@@ -52,6 +52,29 @@ def EquivalentBlocks (A B : MPSTensor d D) : Prop :=
       A i = (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
 
+/-- `EquivalentBlocks` is exactly `GaugeEquiv`. -/
+theorem EquivalentBlocks_iff_gaugeEquiv (A B : MPSTensor d D) :
+    EquivalentBlocks A B ↔ GaugeEquiv A B := by
+  constructor
+  · rintro ⟨Y, hY⟩
+    refine ⟨Y⁻¹, ?_⟩
+    intro i
+    have hAi : A i = (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
+        (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := hY i
+    have := congrArg (fun M =>
+      (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * M *
+        (Y : Matrix (Fin D) (Fin D) ℂ))) hAi
+    simpa [Matrix.mul_assoc] using this.symm
+  · rintro ⟨X, hX⟩
+    refine ⟨X⁻¹, ?_⟩
+    intro i
+    have hBi : B i = (X : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := hX i
+    have := congrArg (fun M =>
+      (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * M *
+        (X : Matrix (Fin D) (Fin D) ℂ))) hBi
+    simpa [Matrix.mul_assoc] using this.symm
+
 /-- Basis data for periodic tensors in irreducible form.
 
 This is a lightweight container: a family of periodic blocks indexed by `Fin r`,
@@ -81,7 +104,7 @@ structure IsIrreducibleForm (A : MPSTensor d D) where
   /-- Periodicity of each block. -/
   periodic : ∀ k, IsPeriodic (period k) (blocks k)
   /-- Weights are strictly positive real scalars (embedded in `ℂ`). -/
-  weight_pos : ∀ k, 0 < (μ k).re
+  weight_pos : ∀ k, 0 < (μ k).re ∧ (μ k).im = 0
   /-- Reassembled block tensor generates the same MPV family. -/
   sameMPV : SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ) blocks)
 
@@ -179,7 +202,6 @@ theorem ZGaugeEquiv.of_period_one {A B : MPSTensor d D}
 theorem IsPeriodic.period_eq_of_repeatedBlocks
     {m n : ℕ} {A B : MPSTensor d D}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
-    (_hRep : RepeatedBlocks A B)
     (hSpec : peripheralEigenvalues (transferMap (d := d) (D := D) A) =
       peripheralEigenvalues (transferMap (d := d) (D := D) B)) :
     m = n := by
