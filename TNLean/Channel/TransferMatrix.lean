@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Basic
 import TNLean.MPS.Core.Transfer
 import Mathlib.LinearAlgebra.Matrix.Vec
+import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Data.Matrix.Basis
 
 /-!
@@ -45,6 +46,57 @@ open scoped Matrix BigOperators Kronecker
 open Matrix Finset
 
 variable {D : ℕ}
+
+/-! ### Basis expansion via trace-pairing coefficients -/
+
+section TracePairingExpansion
+
+variable {ι : Type*} [Fintype ι]
+
+/-- A basis is `trace`-self-dual when its coordinate functionals are given by
+`X ↦ trace (σ i * X)`. -/
+def TracePairingSelfDualBasis
+    (σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ)) : Prop :=
+  ∀ i X, σ.repr X i = Matrix.trace (σ i * X)
+
+/-- Canonical trace-pairing coefficients of a linear map in a self-dual basis. -/
+noncomputable def tracePairingCoeff
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ)) (i j : ι) : ℂ :=
+  Matrix.trace (σ i * T (σ j))
+
+/-- Expansion of any linear map in a trace-pairing self-dual basis:
+`T(ρ) = ∑ᵢ ∑ⱼ tᵢⱼ • (trace (σⱼ ρ) • σᵢ)` with
+`tᵢⱼ = trace (σᵢ * T(σⱼ))`. -/
+theorem linearMap_expand_tracePairing
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ))
+    (hσ : TracePairingSelfDualBasis σ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    T ρ = ∑ i, ∑ j, tracePairingCoeff (D := D) T σ i j •
+      (Matrix.trace (σ j * ρ) • σ i) := by
+  have hT : ∀ j : ι, T (σ j) = ∑ i, σ.repr (T (σ j)) i • σ i := by
+    intro j
+    simp [σ.sum_repr]
+  rw [← σ.sum_repr ρ]
+  simp_rw [map_sum, LinearMap.map_smul]
+  have hExpand :
+      ∑ j, σ.repr ρ j • T (σ j) =
+        ∑ j, σ.repr ρ j • (∑ i, σ.repr (T (σ j)) i • σ i) := by
+    refine Finset.sum_congr rfl ?_
+    intro j hj
+    nth_rewrite 1 [hT j]
+    rfl
+  rw [hExpand]
+  simp_rw [smul_sum, smul_smul]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl ?_
+  intro i hi
+  refine Finset.sum_congr rfl ?_
+  intro j hj
+  simp [tracePairingCoeff, hσ i (T (σ j)), hσ j ρ, mul_comm]
+
+end TracePairingExpansion
 
 /-! ### The transfer matrix -/
 
