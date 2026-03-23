@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
+import TNLean.Algebra.TracePairing
 import TNLean.MPS.Core.Transfer
 import Mathlib.LinearAlgebra.Matrix.Vec
 import Mathlib.Data.Matrix.Basis
@@ -45,6 +46,65 @@ open scoped Matrix BigOperators Kronecker
 open Matrix Finset
 
 variable {D : ℕ}
+
+section TracePairingExpansion
+
+/-!
+## Wolf Props. 2.5–2.6: expansion in a trace-orthonormal operator basis
+
+This section gives the abstract transfer-matrix representation with respect to
+an arbitrary operator basis `σ` that is self-dual for the trace pairing, i.e.
+
+`X = ∑ j, tr(σ_j * X) • σ_j`.
+
+Then every linear map `T` admits coefficients `tᵢⱼ = tr(σᵢ * T(σⱼ))` such that
+
+`T(ρ) = ∑ i j, tᵢⱼ • σᵢ • tr(σⱼ * ρ)`.
+-/
+
+/-- A family `σ` is self-dual for the trace pairing if every matrix expands as
+`X = ∑ j, tr(σ_j * X) • σ_j`. -/
+def TracePairingSelfDualBasis (σ : Fin (D * D) → Matrix (Fin D) (Fin D) ℂ) : Prop :=
+  ∀ X : Matrix (Fin D) (Fin D) ℂ, X = ∑ j : Fin (D * D), Matrix.trace (σ j * X) • σ j
+
+theorem channel_expand_tracePairing
+    (σ : Fin (D * D) → Matrix (Fin D) (Fin D) ℂ)
+    (hσ : TracePairingSelfDualBasis (D := D) σ)
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    ∃ t : Fin (D * D) → Fin (D * D) → ℂ,
+      ∀ ρ : Matrix (Fin D) (Fin D) ℂ,
+        T ρ = ∑ i : Fin (D * D), ∑ j : Fin (D * D),
+          t i j • (Matrix.trace (σ j * ρ) • σ i) := by
+  refine ⟨fun i j => Matrix.trace (σ i * T (σ j)), ?_⟩
+  intro ρ
+  calc
+    T ρ = T (∑ j : Fin (D * D), Matrix.trace (σ j * ρ) • σ j) := by
+      conv_lhs => rw [hσ ρ]
+    _ = ∑ j : Fin (D * D), Matrix.trace (σ j * ρ) • T (σ j) := by
+      simp [map_sum, map_smul]
+    _ = ∑ j : Fin (D * D), Matrix.trace (σ j * ρ) •
+        (∑ i : Fin (D * D), Matrix.trace (σ i * T (σ j)) • σ i) := by
+      refine Finset.sum_congr rfl (fun j _ => ?_)
+      exact congrArg (fun X => Matrix.trace (σ j * ρ) • X) (hσ (T (σ j)))
+    _ = ∑ i : Fin (D * D), ∑ j : Fin (D * D),
+        (Matrix.trace (σ i * T (σ j))) • (Matrix.trace (σ j * ρ) • σ i) := by
+      calc
+        ∑ j : Fin (D * D), Matrix.trace (σ j * ρ) •
+            (∑ i : Fin (D * D), Matrix.trace (σ i * T (σ j)) • σ i)
+            =
+            ∑ j : Fin (D * D), ∑ i : Fin (D * D),
+              (Matrix.trace (σ j * ρ) * Matrix.trace (σ i * T (σ j))) • σ i := by
+              simp [smul_sum, smul_smul]
+        _ = ∑ i : Fin (D * D), ∑ j : Fin (D * D),
+              (Matrix.trace (σ j * ρ) * Matrix.trace (σ i * T (σ j))) • σ i := by
+            rw [Finset.sum_comm]
+        _ = ∑ i : Fin (D * D), ∑ j : Fin (D * D),
+              (Matrix.trace (σ i * T (σ j))) • (Matrix.trace (σ j * ρ) • σ i) := by
+            refine Finset.sum_congr rfl (fun i _ => ?_)
+            refine Finset.sum_congr rfl (fun j _ => ?_)
+            simp [smul_smul, mul_comm]
+
+end TracePairingExpansion
 
 /-! ### The transfer matrix -/
 
