@@ -226,6 +226,28 @@ theorem hasEventuallyFullKrausRank_iff_stronglyIrreducible [NeZero D]
   ⟨fun hB => isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm hB,
    fun hC => prop3_cb A hNorm hC⟩
 
+/-- **Wolf Theorem 6.8 (packaged form)**: paper primitivity is equivalent to the
+conjunction of eventual full Kraus rank, normality, and strong irreducibility.
+
+This theorem is intentionally stated as a single `↔` with a conjunction on the
+right. The pairwise equivalences are available separately as:
+`primitivePaper_iff_hasEventuallyFullKrausRank`,
+`primitivePaper_iff_stronglyIrreducible`, and
+`hasEventuallyFullKrausRank_iff_stronglyIrreducible`.
+-/
+theorem wolf_theorem_6_8_four_characterizations [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    IsPrimitivePaper A ↔
+      (HasEventuallyFullKrausRank A ∧ IsNormal A ∧ IsStronglyIrreduciblePaper A) := by
+  constructor
+  · intro hPrim
+    refine ⟨hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim, ?_, ?_⟩
+    · exact isNormal_of_isPrimitivePaper A hNorm hPrim
+    · exact (primitivePaper_iff_stronglyIrreducible A hNorm).mp hPrim
+  · intro hAll
+    exact (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mpr hAll.1
+
 /-! ## Peripheral primitivity (intermediate result) -/
 
 /-- **Proposition 3 (a)→(c), intermediate step**: paper primitivity implies

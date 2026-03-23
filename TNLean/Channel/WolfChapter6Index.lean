@@ -148,6 +148,12 @@ Other items: PARTIALLY via spectral gap infrastructure in `TNLean.Spectral.*`.
 
 * `IsPrimitivePaper` — `TNLean.Wielandt.Primitivity.PaperDefinitions`
   (item 3: `Kₘ = M_d(ℂ)` for `m ≥ q`)
+* Pairwise Proposition 3 equivalences (in `TNLean.Wielandt.Primitivity.Equivalence`):
+  `primitivePaper_iff_hasEventuallyFullKrausRank`,
+  `primitivePaper_iff_stronglyIrreducible`,
+  `hasEventuallyFullKrausRank_iff_stronglyIrreducible`
+* Packaged conjunction form (also in `TNLean.Wielandt.Primitivity.Equivalence`):
+  `wolf_theorem_6_8_four_characterizations`
 
 ### Wolf Theorem 6.9 (Quantum Wielandt inequality)
 
