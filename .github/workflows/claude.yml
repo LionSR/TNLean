@@ -39,7 +39,7 @@ jobs:
           build: false
 
       - name: Install leanblueprint
-        run: pip install leanblueprint
+        run: pipx install leanblueprint
 
       - name: Run Claude Code
         id: claude
