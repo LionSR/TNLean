@@ -21,7 +21,8 @@ Wedderburn block decomposition from Wolf Theorem 6.14 (issue #27).
 
 * `IsConditionalExpectation`: predicate recording that a linear map is
   idempotent, unital, maps into a `StarSubalgebra`, and fixes it pointwise.
-* `scalarConditionalExpectationLM`: the linear map `X ↦ (tr(σX)/tr(σ)) • 1`.
+  Defined generically over any `StarAlgebra` for upstream compatibility.
+* `scalarConditionalExpectation`: the linear map `X ↦ (tr(σX)/tr(σ)) • 1`.
 * `scalarConditionalExpectation_idempotent`: `E_σ² = E_σ`.
 * `scalarConditionalExpectation_unital`: `E_σ(1) = 1`.
 * `scalarConditionalExpectation_absorbs_adjointMap`:
@@ -59,19 +60,23 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-! ## Abstract conditional expectation -/
 
-/-- A **conditional expectation** onto a `StarSubalgebra` `A ⊆ M_D(ℂ)` is a
-ℂ-linear map that is idempotent, unital, maps into `A`, and fixes every
-element of `A`. This is the abstract property from Wolf Theorem 6.15. -/
-structure IsConditionalExpectation
-    (E : Mat →ₗ[ℂ] Mat) (A : StarSubalgebra ℂ Mat) : Prop where
+/-- A **conditional expectation** onto a `StarSubalgebra` `S ⊆ A` is a
+ℂ-linear map that is idempotent, unital, maps into `S`, and fixes every
+element of `S`. This is the abstract property from Wolf Theorem 6.15.
+
+The definition is generic over any `StarAlgebra` so that it can be reused
+for non-matrix algebras (e.g., Wedderburn blocks) in future work. -/
+structure IsConditionalExpectation {A : Type*}
+    [Semiring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
+    (E : A →ₗ[ℂ] A) (S : StarSubalgebra ℂ A) : Prop where
   /-- Idempotent: `E(E(X)) = E(X)`. -/
-  idempotent : ∀ X : Mat, E (E X) = E X
+  idempotent : ∀ X : A, E (E X) = E X
   /-- Unital: `E(1) = 1`. -/
   unital : E 1 = 1
-  /-- Range contained in `A`. -/
-  range_subset : ∀ X : Mat, E X ∈ A
-  /-- Fixes `A` pointwise. -/
-  fixes : ∀ X : Mat, X ∈ A → E X = X
+  /-- Range contained in `S`. -/
+  range_subset : ∀ X : A, E X ∈ S
+  /-- Fixes `S` pointwise. -/
+  fixes : ∀ X : A, X ∈ S → E X = X
 
 /-! ## Scalar conditional expectation -/
 
@@ -81,9 +86,13 @@ structure IsConditionalExpectation
 
 This is the conditional expectation from Wolf Theorem 6.15 in the case where
 the fixed-point *-subalgebra of the adjoint map is the scalar algebra `ℂ · 1`
-(i.e., the channel is primitive). -/
-noncomputable def scalarConditionalExpectationLM
-    (σ : Mat) (_hσ_tr : trace σ ≠ 0) : Mat →ₗ[ℂ] Mat where
+(i.e., the channel is primitive).
+
+The definition does not require `trace σ ≠ 0`; when `trace σ = 0` the map
+sends everything to zero. The nonzero-trace hypothesis is instead required
+by the theorems that use this map (idempotence, unitality, etc.). -/
+noncomputable def scalarConditionalExpectation
+    (σ : Mat) : Mat →ₗ[ℂ] Mat where
   toFun X := (trace (σ * X) / trace σ) • (1 : Mat)
   map_add' X Y := by
     change (trace (σ * (X + Y)) / trace σ) • (1 : Mat) =
@@ -95,43 +104,43 @@ noncomputable def scalarConditionalExpectationLM
     rw [Algebra.mul_smul_comm, trace_smul, smul_eq_mul, mul_div_assoc]
 
 @[simp]
-theorem scalarConditionalExpectationLM_apply
-    (σ : Mat) (hσ_tr : trace σ ≠ 0) (X : Mat) :
-    scalarConditionalExpectationLM σ hσ_tr X =
+theorem scalarConditionalExpectation_apply
+    (σ : Mat) (X : Mat) :
+    scalarConditionalExpectation σ X =
       (trace (σ * X) / trace σ) • (1 : Mat) := rfl
 
 /-- `E_σ(1) = 1`: the scalar conditional expectation is unital. -/
 @[simp]
 theorem scalarConditionalExpectation_unital
     (σ : Mat) (hσ_tr : trace σ ≠ 0) :
-    scalarConditionalExpectationLM σ hσ_tr 1 = (1 : Mat) := by
-  simp [scalarConditionalExpectationLM_apply, mul_one, div_self hσ_tr]
+    scalarConditionalExpectation σ 1 = (1 : Mat) := by
+  simp [scalarConditionalExpectation_apply, mul_one, div_self hσ_tr]
 
 /-- `E_σ(E_σ(X)) = E_σ(X)`: the scalar conditional expectation is
 idempotent. -/
 theorem scalarConditionalExpectation_idempotent
     (σ : Mat) (hσ_tr : trace σ ≠ 0) (X : Mat) :
-    scalarConditionalExpectationLM σ hσ_tr
-      (scalarConditionalExpectationLM σ hσ_tr X) =
-      scalarConditionalExpectationLM σ hσ_tr X := by
-  simp only [scalarConditionalExpectationLM_apply]
+    scalarConditionalExpectation σ
+      (scalarConditionalExpectation σ X) =
+      scalarConditionalExpectation σ X := by
+  simp only [scalarConditionalExpectation_apply]
   congr 1
   rw [Algebra.mul_smul_comm, mul_one, trace_smul, smul_eq_mul,
     div_mul_cancel₀ (trace (σ * X)) hσ_tr]
 
 /-- `E_σ` maps every matrix to a scalar multiple of `1`. -/
 theorem scalarConditionalExpectation_range_scalar
-    (σ : Mat) (hσ_tr : trace σ ≠ 0) (X : Mat) :
-    ∃ c : ℂ, scalarConditionalExpectationLM σ hσ_tr X = c • (1 : Mat) :=
+    (σ : Mat) (X : Mat) :
+    ∃ c : ℂ, scalarConditionalExpectation σ X = c • (1 : Mat) :=
   ⟨trace (σ * X) / trace σ, rfl⟩
 
 /-- `E_σ(c • 1) = c • 1`: the scalar conditional expectation fixes scalar
 matrices. -/
 theorem scalarConditionalExpectation_fixes_scalar
     (σ : Mat) (hσ_tr : trace σ ≠ 0) (c : ℂ) :
-    scalarConditionalExpectationLM σ hσ_tr (c • (1 : Mat)) =
+    scalarConditionalExpectation σ (c • (1 : Mat)) =
       c • (1 : Mat) := by
-  simp only [scalarConditionalExpectationLM_apply, Algebra.mul_smul_comm, mul_one,
+  simp only [scalarConditionalExpectation_apply, Algebra.mul_smul_comm, mul_one,
     trace_smul, smul_eq_mul, mul_div_cancel_right₀ c hσ_tr]
 
 /-! ## Commutation with the adjoint map -/
@@ -142,11 +151,11 @@ provided `σ` is a fixed point of `map K`.
 This uses the Kraus adjointness identity
 `tr(ρ · map K X) = tr(adjointMap K ρ · X)`. -/
 theorem scalarConditionalExpectation_absorbs_adjointMap
-    (σ : Mat) (hσ_tr : trace σ ≠ 0)
+    (σ : Mat)
     (K : Fin d → Mat) (hσ_fix : map K σ = σ) (X : Mat) :
-    scalarConditionalExpectationLM σ hσ_tr (adjointMap K X) =
-      scalarConditionalExpectationLM σ hσ_tr X := by
-  simp only [scalarConditionalExpectationLM_apply]
+    scalarConditionalExpectation σ (adjointMap K X) =
+      scalarConditionalExpectation σ X := by
+  simp only [scalarConditionalExpectation_apply]
   congr 1
   have : trace (σ * adjointMap K X) = trace (σ * X) :=
     calc trace (σ * adjointMap K X)
@@ -160,32 +169,19 @@ theorem scalarConditionalExpectation_absorbs_adjointMap
 /-- The adjoint map absorbs `E_σ`: `adjointMap K (E_σ(X)) = E_σ(X)`,
 provided `K` is trace-preserving (equivalently, `adjointMap K` is unital). -/
 theorem adjointMap_absorbs_scalarConditionalExpectation
-    (σ : Mat) (hσ_tr : trace σ ≠ 0)
+    (σ : Mat)
     (K : Fin d → Mat) (h_tp : IsTP K) (X : Mat) :
-    adjointMap K (scalarConditionalExpectationLM σ hσ_tr X) =
-      scalarConditionalExpectationLM σ hσ_tr X := by
-  simp only [scalarConditionalExpectationLM_apply, adjointMap_smul,
+    adjointMap K (scalarConditionalExpectation σ X) =
+      scalarConditionalExpectation σ X := by
+  simp only [scalarConditionalExpectation_apply, adjointMap_smul,
     adjointMap_one_of_isTP K h_tp]
 
 /-- `E_σ(X)` is always a fixed point of the adjoint map (when `K` is TP). -/
 theorem scalarConditionalExpectation_mem_adjointFixedPoints
-    (σ : Mat) (hσ_tr : trace σ ≠ 0)
+    (σ : Mat)
     (K : Fin d → Mat) (h_tp : IsTP K) (X : Mat) :
-    scalarConditionalExpectationLM σ hσ_tr X ∈ adjointFixedPoints K :=
-  adjointMap_absorbs_scalarConditionalExpectation σ hσ_tr K h_tp X
-
-/-- The scalar conditional expectation commutes with the adjoint map in both
-senses: `E_σ(adjointMap K X) = E_σ(X)` and
-`adjointMap K (E_σ(X)) = E_σ(X)`. -/
-theorem scalarConditionalExpectation_commutes_adjointMap
-    (σ : Mat) (hσ_tr : trace σ ≠ 0)
-    (K : Fin d → Mat) (h_tp : IsTP K) (hσ_fix : map K σ = σ) (X : Mat) :
-    scalarConditionalExpectationLM σ hσ_tr (adjointMap K X) =
-      scalarConditionalExpectationLM σ hσ_tr X ∧
-    adjointMap K (scalarConditionalExpectationLM σ hσ_tr X) =
-      scalarConditionalExpectationLM σ hσ_tr X :=
-  ⟨scalarConditionalExpectation_absorbs_adjointMap σ hσ_tr K hσ_fix X,
-   adjointMap_absorbs_scalarConditionalExpectation σ hσ_tr K h_tp X⟩
+    scalarConditionalExpectation σ X ∈ adjointFixedPoints K :=
+  adjointMap_absorbs_scalarConditionalExpectation σ K h_tp X
 
 /-! ## Conditional expectation onto the adjoint fixed-point *-subalgebra -/
 
@@ -201,23 +197,26 @@ with period `h > 1`, the fixed-point algebra is `h`-dimensional and the
 conditional expectation requires the Wedderburn block decomposition
 (Wolf Theorem 6.14, issue #27). -/
 theorem scalarConditionalExpectation_isConditionalExpectation
+    [NeZero D]
     (K : Fin d → Mat) (h_tp : IsTP K)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ)
-    (hρ_tr : trace ρ ≠ 0)
     (h_scalar : ∀ X : Mat, X ∈ adjointFixedPoints K →
       ∃ c : ℂ, X = c • (1 : Mat)) :
     IsConditionalExpectation
-      (scalarConditionalExpectationLM ρ hρ_tr)
+      (scalarConditionalExpectation ρ)
       (adjointFixedPointsStarSubalgebra K h_tp hρ hρ_fix) where
-  idempotent := scalarConditionalExpectation_idempotent ρ hρ_tr
-  unital := scalarConditionalExpectation_unital ρ hρ_tr
+  idempotent := scalarConditionalExpectation_idempotent ρ
+    (ne_of_gt hρ.trace_pos)
+  unital := scalarConditionalExpectation_unital ρ
+    (ne_of_gt hρ.trace_pos)
   range_subset X := by
     rw [mem_adjointFixedPointsStarSubalgebra]
-    exact scalarConditionalExpectation_mem_adjointFixedPoints ρ hρ_tr K h_tp X
+    exact scalarConditionalExpectation_mem_adjointFixedPoints ρ K h_tp X
   fixes X hX := by
     rw [mem_adjointFixedPointsStarSubalgebra] at hX
     obtain ⟨c, hc⟩ := h_scalar X hX
     rw [hc]
-    exact scalarConditionalExpectation_fixes_scalar ρ hρ_tr c
+    exact scalarConditionalExpectation_fixes_scalar ρ
+      (ne_of_gt hρ.trace_pos) c
 
 end Kraus

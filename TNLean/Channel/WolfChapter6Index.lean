@@ -229,9 +229,9 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 
 In `TNLean.Channel.FixedPoint.ConditionalExpectation`:
 
-* `Kraus.IsConditionalExpectation` — abstract predicate: idempotent, unital,
-  range ⊆ `A`, fixes `A` pointwise.
-* `Kraus.scalarConditionalExpectationLM` — the linear map
+* `Kraus.IsConditionalExpectation` — abstract predicate (generic over any
+  `StarAlgebra`): idempotent, unital, range ⊆ `S`, fixes `S` pointwise.
+* `Kraus.scalarConditionalExpectation` — the linear map
   `E_σ(X) = (tr(σ X) / tr(σ)) • 1` for the scalar fixed-point algebra case.
 * `Kraus.scalarConditionalExpectation_idempotent` — `E_σ² = E_σ`.
 * `Kraus.scalarConditionalExpectation_unital` — `E_σ(1) = 1`.
