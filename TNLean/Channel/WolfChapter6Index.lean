@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
+import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
@@ -223,6 +224,26 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 ### Wolf Proposition 6.8 (Positive fixed-points)
 
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
+
+### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — PARTIALLY FORMALIZED
+
+In `TNLean.Channel.FixedPoint.ConditionalExpectation`:
+
+* `Kraus.IsConditionalExpectation` — abstract predicate: idempotent, unital,
+  range ⊆ `A`, fixes `A` pointwise.
+* `Kraus.scalarConditionalExpectationLM` — the linear map
+  `E_σ(X) = (tr(σ X) / tr(σ)) • 1` for the scalar fixed-point algebra case.
+* `Kraus.scalarConditionalExpectation_idempotent` — `E_σ² = E_σ`.
+* `Kraus.scalarConditionalExpectation_unital` — `E_σ(1) = 1`.
+* `Kraus.scalarConditionalExpectation_absorbs_adjointMap` —
+  `E_σ(T*(X)) = E_σ(X)` when `T(σ) = σ`.
+* `Kraus.adjointMap_absorbs_scalarConditionalExpectation` —
+  `T*(E_σ(X)) = E_σ(X)` when `T` is TP.
+* `Kraus.scalarConditionalExpectation_isConditionalExpectation` —
+  bundles everything into `IsConditionalExpectation` for the scalar case.
+
+The general irreducible case with period `h > 1` requires Wedderburn blocks
+(Wolf Theorem 6.14, issue #27).
 
 ---
 
