@@ -96,6 +96,7 @@ import TNLean.Spectral.CrossCorrelation
 
 -- Layer 3: MPS core
 import TNLean.MPS.Defs
+import TNLean.PEPS.Defs
 import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Chain.VirtualInsertion
 import TNLean.MPS.Chain.TensorEquality
