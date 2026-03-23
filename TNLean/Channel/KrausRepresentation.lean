@@ -181,10 +181,10 @@ This is the finite-dimensional fact that two decompositions of a positive
 semidefinite matrix into rank-1 terms (of the same cardinality) are
 related by a unitary transformation.
 
-**Proof status**: requires partial-isometry extension or polar decomposition
-for matrices over `ℂ`, which is not yet available in this project's
-Mathlib toolchain. This is the sole `sorry` underlying the converse
-direction of Kraus unitary freedom. -/
+**Proof status**: currently blocked on a reusable finite-dimensional
+polar-decomposition/partial-isometry-extension lemma for matrices over `ℂ`
+in this project's Mathlib toolchain. This is the sole `sorry` underlying
+the converse direction of Kraus unitary freedom. -/
 theorem exists_unitary_of_sum_vecMulVec_star_eq
     {ι : Type*}
     {r : ℕ}
