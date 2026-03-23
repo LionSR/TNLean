@@ -174,10 +174,11 @@ In `TNLean.Channel.FixedPoint.StationarySupport`:
   invariant under the compressed channel action.
 * `Channel.stationarySupport` — support projection of the unique density-matrix
   fixed point of an irreducible channel.
-* `Channel.stationarySupport_eq_one` / `Channel.irreducible_iff_support_full`
-  — irreducible channels have full stationary support.
-* `Channel.stationary_support_minimal` — every nonzero invariant projection
-  coincides with the stationary support.
+* `Channel.stationarySupport_eq_one` — irreducible channels have full
+  stationary support.
+* TODO: non-vacuous formalizations of Wolf Prop. 6.9 and Prop. 6.10
+  (`irreducible_iff_support_full`, `stationary_support_minimal`) remain to be
+  reinstated.
 
 ### Wolf Theorem 6.12 (Fixed points form a *-algebra) — FORMALIZED
 
