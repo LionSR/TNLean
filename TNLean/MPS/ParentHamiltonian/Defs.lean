@@ -20,6 +20,8 @@ This is currently represented by a linear operator placeholder; in the full
 construction this will be refined to the orthogonal projector onto `G_L(A)ᗮ`. -/
 noncomputable def parentInteraction (_A : MPSTensor d D) (_L : ℕ) :
     NSiteSpace d L →ₗ[ℂ] NSiteSpace d L :=
+  -- TODO(parent-hamiltonian): replace this zero placeholder with the orthogonal
+  -- projector onto `groundSpace A L`ᗮ once the geometric construction is added.
   0
 
 /-- Placeholder translated local term on an `N`-site periodic chain.
@@ -42,15 +44,14 @@ candidate state. -/
 def IsFrustrationFree (A : MPSTensor d D) (L N : ℕ) (ψ : NSiteSpace d N) : Prop :=
   ∀ i : Fin N, localTerm A L N i ψ = 0
 
-@[simp] lemma localTerm_apply (A : MPSTensor d D) (L N : ℕ) (i : Fin N)
+lemma localTerm_apply (A : MPSTensor d D) (L N : ℕ) (i : Fin N)
     (ψ : NSiteSpace d N) :
     localTerm A L N i ψ = 0 := by
   simp [localTerm]
 
-@[simp] lemma parentHamiltonian_apply (A : MPSTensor d D) (L N : ℕ)
+lemma parentHamiltonian_apply (A : MPSTensor d D) (L N : ℕ)
     (ψ : NSiteSpace d N) :
     parentHamiltonian A L N ψ = 0 := by
-  classical
   simp [parentHamiltonian, localTerm]
 
 end MPSTensor

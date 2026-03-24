@@ -1,4 +1,5 @@
 import TNLean.MPS.Defs
+import TNLean.MPS.Overlap.Basic
 
 import Mathlib.LinearAlgebra.Dimension.Finite
 import Mathlib.LinearAlgebra.Pi
@@ -19,7 +20,7 @@ variable {d D : ℕ}
 
 /-- The local Hilbert space on `N` sites, represented as coefficient functions on
 configurations `σ : Fin N → Fin d`. -/
-abbrev NSiteSpace (d N : ℕ) := (Fin N → Fin d) → ℂ
+abbrev NSiteSpace (d N : ℕ) := Cfg d N → ℂ
 
 /-- The linear map whose image is the local MPS ground space. -/
 noncomputable def groundSpaceMap (A : MPSTensor d D) (L : ℕ) :
@@ -58,8 +59,8 @@ lemma nSiteSpace_finrank (d L : ℕ) :
     Module.finrank ℂ (NSiteSpace d L) = d ^ L := by
   calc
     Module.finrank ℂ (NSiteSpace d L)
-        = Fintype.card (Fin L → Fin d) := by
-            simpa [NSiteSpace] using (Module.finrank_fintype_fun_eq_card ℂ (η := Fin L → Fin d))
+        = Fintype.card (Cfg d L) := by
+            simpa [NSiteSpace] using (Module.finrank_fintype_fun_eq_card ℂ (η := Cfg d L))
     _ = d ^ L := by simp
 
 /-- If `d^L > D^2`, then `G_L(A)` is a proper subspace. -/
