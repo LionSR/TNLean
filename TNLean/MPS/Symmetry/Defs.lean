@@ -10,8 +10,6 @@ functoriality, establishing the algebraic foundations for on-site symmetric MPS.
 
 * `MPSTensor.twistedTensor` : twist an MPS tensor by a group representation on the physical index
 * `MPSTensor.IsOnSiteSymmetric` : predicate for on-site symmetry under a representation
-* `MPSTensor.sameMPV_iff_gaugeEquiv_of_injective` :
-  for injective tensors, MPV equality ↔ gauge equivalence
 
 ## Main results
 
@@ -69,16 +67,6 @@ lemma twistedTensor_mul (A : MPSTensor d D)
     _ = ∑ j : Fin d, ∑ k : Fin d, (U g i j * U h j k) • A k := Finset.sum_comm
     _ = twistedTensor (twistedTensor A U h) U g i := by
           simp [twistedTensor, Finset.smul_sum, smul_smul]
-
-/-- For injective `A`, MPV equality with any `B` is equivalent to gauge equivalence. -/
-theorem sameMPV_iff_gaugeEquiv_of_injective {A B : MPSTensor d D}
-    (hA : IsInjective A) :
-    SameMPV A B ↔ GaugeEquiv A B := by
-  constructor
-  · intro hAB
-    exact fundamentalTheorem_singleBlock hA hAB
-  · intro hAB
-    exact GaugeEquiv.sameMPV hAB
 
 /-- Injective on-site symmetry implies each twisted tensor is gauge equivalent to `A`. -/
 theorem gaugeEquiv_twistedTensor_of_injective
