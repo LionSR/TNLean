@@ -113,9 +113,6 @@ import TNLean.MPS.FundamentalTheorem.TransferNormalization
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.MPS.Core.CPPrimitive
 
--- PEPS
-import TNLean.PEPS.Defs
-
 -- Layer 4: Fundamental theorem (single block)
 import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.FundamentalTheorem.Basic
@@ -214,3 +211,6 @@ import TNLean.Channel.Semigroup.Primitivity
 import TNLean.Channel.Semigroup.LiouvillianKernel
 import TNLean.Channel.Semigroup.ReducibleQDS
 import TNLean.Channel.Determinant
+
+-- PEPS (exploratory)
+import TNLean.PEPS.Defs

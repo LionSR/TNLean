@@ -23,9 +23,8 @@ variable {V : Type*} [Fintype V] [DecidableEq V] [LinearOrder V]
 
 /-- Undirected edges of `G`, represented by ordered endpoint pairs `(u, v)` with
 `u < v` to avoid double-counting. -/
-def Edge (G : SimpleGraph V) : Type _ :=
+abbrev Edge (G : SimpleGraph V) : Type _ :=
   { uv : V × V // uv.1 < uv.2 ∧ G.Adj uv.1 uv.2 }
-
 
 instance instFintypeEdge (G : SimpleGraph V) [DecidableRel G.Adj] : Fintype (Edge G) := by
   classical
@@ -33,8 +32,14 @@ instance instFintypeEdge (G : SimpleGraph V) [DecidableRel G.Adj] : Fintype (Edg
   infer_instance
 
 /-- Edges incident to a vertex `v`. -/
-def IncidentEdge (G : SimpleGraph V) (v : V) : Type _ :=
+abbrev IncidentEdge (G : SimpleGraph V) (v : V) : Type _ :=
   { e : Edge G // e.1.1 = v ∨ e.1.2 = v }
+
+instance instFintypeIncidentEdge (G : SimpleGraph V) [DecidableRel G.Adj] (v : V) :
+    Fintype (IncidentEdge G v) := by
+  classical
+  unfold IncidentEdge
+  infer_instance
 
 /-- A PEPS tensor family with one physical index per vertex and edge-dependent
 virtual bond dimensions. -/
@@ -45,14 +50,11 @@ structure Tensor (G : SimpleGraph V) [DecidableRel G.Adj] (d : ℕ) where
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
 /-- A global assignment of virtual indices to all edges. -/
-def VirtualConfig (A : Tensor G d) : Type _ :=
+abbrev VirtualConfig (A : Tensor G d) : Type _ :=
   (e : Edge G) → Fin (A.bondDim e)
 
-noncomputable instance instFintypeVirtualConfig (A : Tensor G d) : Fintype (VirtualConfig A) := by
-  letI : Fintype (Edge G) := inferInstance
-  letI : ∀ e : Edge G, Fintype (Fin (A.bondDim e)) := fun _ => inferInstance
-  simpa [VirtualConfig] using
-    (show Fintype ((e : Edge G) → Fin (A.bondDim e)) from (open Classical in inferInstance))
+noncomputable instance instFintypeVirtualConfig (A : Tensor G d) : Fintype (VirtualConfig A) :=
+  inferInstance
 
 /-- PEPS state coefficient for a physical configuration `σ`, obtained by
 contracting all virtual indices. -/
