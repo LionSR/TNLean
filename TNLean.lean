@@ -119,6 +119,7 @@ import TNLean.MPS.ParentHamiltonian.Correlations
 import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
+import TNLean.MPS.FundamentalTheorem.Applications
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
