@@ -155,8 +155,8 @@ Other items: PARTIALLY via spectral gap infrastructure in `TNLean.Spectral.*`.
   * `hasEventuallyFullKrausRank_iff_isNormal`
   (in `TNLean.Wielandt.Primitivity.Equivalence`)
 * Packaged Wolf-facing wrappers:
-  * `primitivePaper_iff_krausSpan_top`
-  * `wolf_theorem_6_8_four_characterizations`
+  * `wolf_theorem_6_8_krausSpan`
+  * `wolf_theorem_6_8_conjunction`
   (in `TNLean.Wielandt.Primitivity.Equivalence`)
 
 ### Wolf Theorem 6.9 (Quantum Wielandt inequality)

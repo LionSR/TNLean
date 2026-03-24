@@ -234,7 +234,7 @@ paper primitivity is equivalent to eventual full Kraus-word span.
 This is a naming wrapper around `primitivePaper_iff_hasEventuallyFullKrausRank`,
 matching Wolf's Chapter 6 wording ("the Kraus operators eventually span all
 matrices"). -/
-theorem primitivePaper_iff_krausSpan_top [NeZero D]
+theorem wolf_theorem_6_8_krausSpan [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     IsPrimitivePaper A ↔ HasEventuallyFullKrausRank A :=
@@ -250,7 +250,7 @@ For explicit pairwise equivalences, use:
 `primitivePaper_iff_hasEventuallyFullKrausRank`,
 `primitivePaper_iff_stronglyIrreducible`, and
 `hasEventuallyFullKrausRank_iff_isNormal`. -/
-theorem wolf_theorem_6_8_four_characterizations [NeZero D]
+theorem wolf_theorem_6_8_conjunction [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     IsPrimitivePaper A ↔
@@ -262,6 +262,7 @@ theorem wolf_theorem_6_8_four_characterizations [NeZero D]
     · exact isNormal_of_isPrimitivePaper A hNorm hPrim
     · exact (primitivePaper_iff_stronglyIrreducible A hNorm).mp hPrim
   · intro h
+    -- any single conjunct suffices; we use h.1
     exact (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mpr h.1
 
 /-! ## Peripheral primitivity (intermediate result) -/
