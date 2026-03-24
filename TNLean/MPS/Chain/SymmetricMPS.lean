@@ -11,7 +11,7 @@ TODO: add a direct proof of the composition law (`twistedTensor_mul`).
 
 open scoped Matrix BigOperators
 
-namespace MPSChainTensor
+namespace MPSTensor
 
 variable {d D : ℕ}
 
@@ -24,4 +24,4 @@ def twistedTensor (U : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) : MPSTens
   funext i
   simp [twistedTensor, Matrix.one_apply]
 
-end MPSChainTensor
+end MPSTensor
