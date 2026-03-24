@@ -92,6 +92,37 @@ boundary conditions (PBC).
     framework appears in Chapter~\ref{ch:channels}.
 \end{remark}
 
+\section{Periodic-chain aliases}
+
+\begin{definition}[Periodic-chain tensor alias]\label{def:periodic_mps_tensor}
+    \lean{MPSTensor.PeriodicMPSTensor}
+    \leanok
+    For a fixed period $m$, a \emph{periodic-chain tensor} is a
+    site-dependent tensor family indexed by $\{0,\ldots,m-1\}$, with
+    local physical dimension~$d$ and bond dimension~$D$.
+\end{definition}
+
+\begin{definition}[Periodic same-state and gauge-equivalence relations]\label{def:periodic_relations}
+    \lean{MPSTensor.PeriodicMPSTensor.SameState}
+    \lean{MPSTensor.PeriodicMPSTensor.GaugeEquiv}
+    \leanok
+    \uses{def:periodic_mps_tensor}
+    For periodic-chain tensors $A,B$ at fixed period~$m$:
+    \begin{itemize}
+        \item equality of the induced periodic-chain states;
+        \item cyclic gauge equivalence.
+    \end{itemize}
+\end{definition}
+
+\begin{lemma}[Equivalence structures for periodic relations]\label{lem:periodic_relation_equivalences}
+    \lean{MPSTensor.PeriodicMPSTensor.instEquivalenceSameState}
+    \lean{MPSTensor.PeriodicMPSTensor.instEquivalenceGaugeEquiv}
+    \leanok
+    \uses{def:periodic_relations}
+    Both periodic relations are equivalence relations (reflexive,
+    symmetric, transitive).
+\end{lemma}
+
 \section{Gauge equivalence and same MPV}
 
 \begin{definition}[Gauge equivalence]\label{def:gauge_equiv}
