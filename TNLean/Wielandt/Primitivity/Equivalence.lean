@@ -226,6 +226,44 @@ theorem hasEventuallyFullKrausRank_iff_stronglyIrreducible [NeZero D]
   ⟨fun hB => isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm hB,
    fun hC => prop3_cb A hNorm hC⟩
 
+/-! ## Wolf Theorem 6.8 packaged forms -/
+
+/-- **Wolf Theorem 6.8 (Kraus-span form)**:
+paper primitivity is equivalent to eventual full Kraus-word span.
+
+This is a naming wrapper around `primitivePaper_iff_hasEventuallyFullKrausRank`,
+matching Wolf's Chapter 6 wording ("the Kraus operators eventually span all
+matrices"). -/
+theorem primitivePaper_iff_krausSpan_top [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    IsPrimitivePaper A ↔ HasEventuallyFullKrausRank A :=
+  primitivePaper_iff_hasEventuallyFullKrausRank A hNorm
+
+/-- **Wolf Theorem 6.8 (packaged conjunction form)**:
+paper primitivity is equivalent to the conjunction of eventual full Kraus rank,
+normality, and strong irreducibility.
+
+This theorem is intentionally stated as
+`IsPrimitivePaper A ↔ (HasEventuallyFullKrausRank A ∧ IsNormal A ∧ IsStronglyIrreduciblePaper A)`.
+For explicit pairwise equivalences, use:
+`primitivePaper_iff_hasEventuallyFullKrausRank`,
+`primitivePaper_iff_stronglyIrreducible`, and
+`hasEventuallyFullKrausRank_iff_isNormal`. -/
+theorem wolf_theorem_6_8_four_characterizations [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    IsPrimitivePaper A ↔
+      (HasEventuallyFullKrausRank A ∧ IsNormal A ∧ IsStronglyIrreduciblePaper A) := by
+  constructor
+  · intro hPrim
+    refine ⟨?_, ?_, ?_⟩
+    · exact hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim
+    · exact isNormal_of_isPrimitivePaper A hNorm hPrim
+    · exact (primitivePaper_iff_stronglyIrreducible A hNorm).mp hPrim
+  · intro h
+    exact (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mpr h.1
+
 /-! ## Peripheral primitivity (intermediate result) -/
 
 /-- **Proposition 3 (a)→(c), intermediate step**: paper primitivity implies

@@ -15,6 +15,7 @@ import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.QPF.Assembly
+import TNLean.Wielandt.Primitivity.Equivalence
 
 /-!
 # Wolf Chapter 6 — Spectral Properties: Public Theorem Index
@@ -148,6 +149,15 @@ Other items: PARTIALLY via spectral gap infrastructure in `TNLean.Spectral.*`.
 
 * `IsPrimitivePaper` — `TNLean.Wielandt.Primitivity.PaperDefinitions`
   (item 3: `Kₘ = M_d(ℂ)` for `m ≥ q`)
+* Pairwise equivalences from Proposition 3 assembly:
+  * `primitivePaper_iff_hasEventuallyFullKrausRank`
+  * `primitivePaper_iff_stronglyIrreducible`
+  * `hasEventuallyFullKrausRank_iff_isNormal`
+  (in `TNLean.Wielandt.Primitivity.Equivalence`)
+* Packaged Wolf-facing wrappers:
+  * `primitivePaper_iff_krausSpan_top`
+  * `wolf_theorem_6_8_four_characterizations`
+  (in `TNLean.Wielandt.Primitivity.Equivalence`)
 
 ### Wolf Theorem 6.9 (Quantum Wielandt inequality)
 
