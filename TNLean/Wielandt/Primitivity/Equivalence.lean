@@ -226,6 +226,51 @@ theorem hasEventuallyFullKrausRank_iff_stronglyIrreducible [NeZero D]
   ⟨fun hB => isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm hB,
    fun hC => prop3_cb A hNorm hC⟩
 
+/-! ## Wolf Theorem 6.8 wrappers -/
+
+/-- **Wolf Theorem 6.8 (Kraus-span form)**: paper primitivity is equivalent to
+eventually full Kraus rank.
+
+This is a Wolf-facing wrapper of Proposition 3(a)↔(b). We use the explicit
+name `..._krausSpan` to reflect the semantic content (eventual full Kraus-word
+span) without suggesting a specific `⊤`-equality theorem statement.
+-/
+theorem wolf_theorem_6_8_krausSpan [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    IsPrimitivePaper A ↔ HasEventuallyFullKrausRank A :=
+  primitivePaper_iff_hasEventuallyFullKrausRank A hNorm
+
+/-- Legacy compatibility alias for `wolf_theorem_6_8_krausSpan`. -/
+theorem primitivePaper_iff_krausSpan_top [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    IsPrimitivePaper A ↔ HasEventuallyFullKrausRank A :=
+  wolf_theorem_6_8_krausSpan A hNorm
+
+/-- **Wolf Theorem 6.8 (packaged conjunction form)**.
+
+This theorem keeps a single bundled statement convenient for direct
+applications: proving `IsPrimitivePaper A` can be done by constructing all
+three companion properties at once. The pairwise equivalences remain available
+as `primitivePaper_iff_hasEventuallyFullKrausRank`,
+`primitivePaper_iff_stronglyIrreducible`, and
+`hasEventuallyFullKrausRank_iff_isNormal`.
+-/
+theorem wolf_theorem_6_8_four_characterizations [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    IsPrimitivePaper A ↔
+      (HasEventuallyFullKrausRank A ∧ IsNormal A ∧ IsStronglyIrreduciblePaper A) := by
+  constructor
+  · intro hPrim
+    refine ⟨?_, ?_, ?_⟩
+    · exact (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mp hPrim
+    · exact isNormal_of_isPrimitivePaper A hNorm hPrim
+    · exact (primitivePaper_iff_stronglyIrreducible A hNorm).mp hPrim
+  · intro h
+    exact (primitivePaper_iff_hasEventuallyFullKrausRank A hNorm).mpr h.1
+
 /-! ## Peripheral primitivity (intermediate result) -/
 
 /-- **Proposition 3 (a)→(c), intermediate step**: paper primitivity implies
