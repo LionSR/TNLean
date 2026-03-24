@@ -16,6 +16,20 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- Number of periodic blocks after blocking a period-`m` tensor by `p`. -/
+def periodicBlockCount (m p : ℕ) : ℕ := Nat.gcd m p
+
+/-- New period length after blocking a period-`m` tensor by `p`. -/
+def periodicBlockPeriod (m p : ℕ) : ℕ := m / periodicBlockCount m p
+
+theorem periodicBlockCount_comm (m p : ℕ) :
+    periodicBlockCount m p = periodicBlockCount p m := by
+  simp [periodicBlockCount, Nat.gcd_comm]
+
+@[simp] theorem periodicBlockCount_self (m : ℕ) :
+    periodicBlockCount m m = m := by
+  simp [periodicBlockCount]
+
 /-- Left-canonical (trace-preserving) condition for an MPS tensor. -/
 def IsLeftCanonical (A : MPSTensor d D) : Prop :=
   ∑ i : Fin d, (A i)ᴴ * A i = 1

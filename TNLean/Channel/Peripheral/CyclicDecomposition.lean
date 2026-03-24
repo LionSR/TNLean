@@ -1207,6 +1207,32 @@ theorem preserves_corner_pow_of_cyclic_decomp
 /-- Wolf Theorem 6.6 corollary: an orbit-sum lift from invariant corner subprojections to
 ambient invariant projections implies irreducibility of the `m`-step dynamics on each cyclic
 sector. -/
+theorem orbitSum_hLift_of_cyclic_decomp
+    {T : MatrixEnd D}
+    (P : Fin m → MatrixAlg D)
+    (k : Fin m) (Q : MatrixAlg D)
+    (hQproj : IsOrthogonalProjection Q)
+    (hQP : Q * P k = Q)
+    (hPQ : P k * Q = Q)
+    (hQinv : PreservesCorner Q (T ^ m))
+    (hLift :
+      ∀ k : Fin m, ∀ Q : MatrixAlg D,
+        IsOrthogonalProjection Q →
+        Q * P k = Q →
+        P k * Q = Q →
+        PreservesCorner Q (T ^ m) →
+        ∃ R : MatrixAlg D,
+          IsOrthogonalProjection R ∧
+          PreservesCorner R T ∧
+          (Q = 0 ↔ R = 0) ∧
+          (Q = P k ↔ R = 1)) :
+    ∃ R : MatrixAlg D,
+      IsOrthogonalProjection R ∧
+      PreservesCorner R T ∧
+      (Q = 0 ↔ R = 0) ∧
+      (Q = P k ↔ R = 1) :=
+  hLift k Q hQproj hQP hPQ hQinv
+
 theorem isIrreducible_restriction_of_cyclic_decomp
     {T : MatrixEnd D}
     (hIrr : IsIrreducibleMap T)

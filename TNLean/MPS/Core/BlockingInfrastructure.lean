@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
+import TNLean.MPS.Periodic.Defs
 
 import Mathlib.Algebra.GCDMonoid.Finset
 
@@ -44,6 +45,19 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 variable {d : ℕ}
+
+section PeriodicArithmetic
+
+theorem periodicBlockCount_dvd_left (m p : ℕ) :
+    periodicBlockCount m p ∣ m := by
+  simpa [periodicBlockCount] using Nat.gcd_dvd_left m p
+
+theorem periodicBlockPeriod_mul_count (m p : ℕ) :
+    periodicBlockPeriod m p * periodicBlockCount m p = m := by
+  refine Nat.div_mul_cancel ?_
+  exact periodicBlockCount_dvd_left m p
+
+end PeriodicArithmetic
 
 /-!
 ## Part A: SameMPV₂ compatibility under blocking
