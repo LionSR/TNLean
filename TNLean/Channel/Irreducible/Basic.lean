@@ -49,6 +49,14 @@ lemma isOrthogonalProjection_zero : IsOrthogonalProjection (0 : Matrix (Fin D) (
 lemma isOrthogonalProjection_one : IsOrthogonalProjection (1 : Matrix (Fin D) (Fin D) ℂ) :=
   ⟨Matrix.isHermitian_one, by simp⟩
 
+/-- An orthogonal projection is positive semidefinite. -/
+theorem isOrthogonalProjection_posSemidef {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) :
+    P.PosSemidef := by
+  have hPP : P = Pᴴ * P := by rw [hP.1, hP.2]
+  rw [hPP]
+  exact P.posSemidef_conjTranspose_mul_self
+
 /-! ### Irreducibility of CP maps -/
 
 /-- A CP map `E` is *irreducible* if the only orthogonal projections `P` satisfying

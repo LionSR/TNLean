@@ -930,14 +930,6 @@ theorem exp_posDef_of_irreducible_cp
     exact ⟨h_exp_psd.isHermitian, hq_pos⟩
   simpa [Φ] using hfinal
 
-/-- An orthogonal projection is positive semidefinite. -/
-theorem IsOrthogonalProjection.posSemidef {P : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsOrthogonalProjection P) :
-    P.PosSemidef := by
-  have hPP : P = Pᴴ * P := by rw [hP.1, hP.2]
-  rw [hPP]
-  exact P.posSemidef_conjTranspose_mul_self
-
 /-- **Wolf Theorem 6.2, item 3 (equivalence form)**:
 for a completely positive map `E`, irreducibility is equivalent to strict
 positivity of the exponential semigroup on every nonzero PSD input:
@@ -957,7 +949,7 @@ theorem irreducible_iff_exp_posDef_forall
     intro P hP hP_inv
     by_cases hP0 : P = 0
     · exact Or.inl hP0
-    · have hP_psd : P.PosSemidef := hP.posSemidef
+    · have hP_psd : P.PosSemidef := isOrthogonalProjection_posSemidef hP
       have hsemigroup_inv :
           ∀ t : ℝ, 0 ≤ t → ∀ X : Matrix (Fin D) (Fin D) ℂ,
             P * expSemigroup E t (P * X * P) * P = expSemigroup E t (P * X * P) :=

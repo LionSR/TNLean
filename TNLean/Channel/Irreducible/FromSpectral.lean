@@ -56,28 +56,6 @@ private noncomputable def sandwichLinearMap
   map_smul' a X := by
     simp [Matrix.mul_assoc]
 
-private lemma dotProduct_mulVec_conjTranspose
-    (M : Matrix (Fin D) (Fin D) ℂ)
-    (x y : Fin D → ℂ) :
-    star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y := by
-  rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
-
-private lemma orthogonalProjection_posSemidef
-    {P : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsOrthogonalProjection P) :
-    P.PosSemidef := by
-  refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hP.1 ?_
-  intro x
-  have h₁ : star x ⬝ᵥ (P *ᵥ x) = star (P *ᵥ x) ⬝ᵥ x := by
-    simpa [hP.1.eq] using (dotProduct_mulVec_conjTranspose P x x)
-  have h₂ : star (P *ᵥ x) ⬝ᵥ x = star (P *ᵥ x) ⬝ᵥ (P *ᵥ x) := by
-    simpa [hP.1.eq, hP.2, Matrix.mulVec_mulVec] using
-      (dotProduct_mulVec_conjTranspose P (P *ᵥ x) x).symm
-  calc
-    0 ≤ star (P *ᵥ x) ⬝ᵥ (P *ᵥ x) := dotProduct_star_self_nonneg _
-    _ = star (P *ᵥ x) ⬝ᵥ x := h₂.symm
-    _ = star x ⬝ᵥ (P *ᵥ x) := h₁.symm
-
 private lemma isOrthogonalProjection_one_sub
     {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) :
@@ -94,7 +72,7 @@ private lemma trace_ne_zero_of_orthogonalProjection_ne_zero
     {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
     Matrix.trace P ≠ 0 := by
-  have hP_psd : P.PosSemidef := orthogonalProjection_posSemidef hP
+  have hP_psd : P.PosSemidef := isOrthogonalProjection_posSemidef hP
   intro htr
   exact hP_ne ((hP_psd.trace_eq_zero_iff).1 htr)
 
@@ -111,7 +89,7 @@ private lemma normalizedProjection_mem_densityMatrices
     {P : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
     (((Matrix.trace P)⁻¹) • P) ∈ densityMatrices D := by
-  have hP_psd : P.PosSemidef := orthogonalProjection_posSemidef hP
+  have hP_psd : P.PosSemidef := isOrthogonalProjection_posSemidef hP
   have htrP_ne : Matrix.trace P ≠ 0 := trace_ne_zero_of_orthogonalProjection_ne_zero hP hP_ne
   refine ⟨?_, ?_⟩
   · exact hP_psd.smul (inv_nonneg_of_nonneg hP_psd.trace_nonneg)
