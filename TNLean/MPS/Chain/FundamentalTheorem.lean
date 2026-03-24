@@ -53,6 +53,9 @@ theorem fundamentalTheorem_injective_chain
     (hMPV : MPSTensor.SameMPV (MPSTensor.chainCombinedTensor A)
       (MPSTensor.chainCombinedTensor B)) :
     GaugeEquiv A B := by
+  /- Note: this formulation only assumes injectivity of `A`. The proof applies
+  the single-block theorem to `chainCombinedTensor A`; no separate injectivity
+  hypothesis on `B` is required. -/
   rcases n with _ | n
   · -- n = 0: no sites, gauge equivalence is vacuously true.
     exact ⟨Fin.elim0, fun k => k.elim0⟩
