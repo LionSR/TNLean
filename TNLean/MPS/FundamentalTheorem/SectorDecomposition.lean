@@ -496,9 +496,9 @@ theorem weight_multiset_eq_of_sameMPV_bnt
     ∀ j : Fin g,
       Finset.univ.val.map (S.weight j) =
         Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies j) q)) := by
-  obtain ⟨N0, hN0⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
-  have hAll := eventually_coeff_eq_implies_all_pos_eq S T hCopies hN0
-  exact weight_multiset_eq_of_copies_eq_of_coeff_eq S T hCopies hAll
+  obtain ⟨N0, hCoeffEventuallyEq⟩ := coeff_eventually_eq_of_sameMPV basis S T hLI hSame
+  have hCoeffAllPosEq := eventually_coeff_eq_implies_all_pos_eq S T hCopies hCoeffEventuallyEq
+  exact weight_multiset_eq_of_copies_eq_of_coeff_eq S T hCopies hCoeffAllPosEq
 
 end SectorWeightData
 
@@ -548,12 +548,12 @@ theorem fundamentalTheorem_equalMPV_sectorDecomposition
         Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies j) q)) := by
   apply SectorWeightData.weight_multiset_eq_of_sameMPV_bnt basis S T hCopies hLI
   intro N σ
-  have hP := (SectorDecomposition.mk g dim basis S).mpv_toTensor_eq_sum_coeff σ (N := N)
-  have hQ := (SectorDecomposition.mk g dim basis T).mpv_toTensor_eq_sum_coeff σ (N := N)
-  -- hP and hQ unfold to the coefficient expansion; the goal is definitionally equivalent
+  have hExpandS := (SectorDecomposition.mk g dim basis S).mpv_toTensor_eq_sum_coeff σ (N := N)
+  have hExpandT := (SectorDecomposition.mk g dim basis T).mpv_toTensor_eq_sum_coeff σ (N := N)
+  -- These are exactly the coefficient expansions for the two assembled tensors.
   calc ∑ j, S.coeff N j * mpv (basis j) σ
-      = mpv (SectorDecomposition.mk g dim basis S).toTensor σ := hP.symm
+      = mpv (SectorDecomposition.mk g dim basis S).toTensor σ := hExpandS.symm
     _ = mpv (SectorDecomposition.mk g dim basis T).toTensor σ := hEqual N σ
-    _ = ∑ j, T.coeff N j * mpv (basis j) σ := hQ
+    _ = ∑ j, T.coeff N j * mpv (basis j) σ := hExpandT
 
 end MPSTensor
