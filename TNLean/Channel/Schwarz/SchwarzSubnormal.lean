@@ -18,10 +18,12 @@ that appear in Wolf's notes.
 
 * `KadisonSchwarz.IsSubnormal`
 * `KadisonSchwarz.schwarz_inequality_subnormal_operator`
+* `KadisonSchwarz.wolf_theorem_5_5`
 * `KadisonSchwarz.commuting_dominant_right_bound`
 * `KadisonSchwarz.kadison_schwarz_commuting_dominant_cp_of_two_sided_bound`
 * `KadisonSchwarz.kadison_schwarz_commuting_dominant_cp`
 * `KadisonSchwarz.schwarz_inequality_commuting_dominant_operator`
+* `KadisonSchwarz.wolf_theorem_5_6`
 
 The key new result is `commuting_dominant_right_bound`: if `D ≥ 0` commutes with
 `A` and dominates `A† A`, then it also dominates `A A†`.  The proof uses the
@@ -385,13 +387,16 @@ theorem schwarz_inequality_subnormal_operator
     topLeft_schwarz_of_normal_extension (D := D) T hPos hSub
       (Matrix.fromBlocks A B 0 C) hNormal
 
+/-- Alias for `schwarz_inequality_subnormal_operator` matching Wolf Theorem 5.5. -/
+alias wolf_theorem_5_5 := schwarz_inequality_subnormal_operator
+
 /-- Linear-map wrapper for the canonical adjoint Kraus map.
 
 This bundles `KadisonSchwarz.krausAdjointMap` from `KadisonSchwarz.lean` as a
 linear map. It is convenient for reusing the generic positivity/monotonicity
 API from `PositiveMapProperties`.
 
-Note: `TNLean/Channel/Semigroup/Generator.lean` contains an older duplicate
+Note: `TNLean.Channel.Semigroup.Generator` contains an older duplicate
 formula with the same name; inside `namespace KadisonSchwarz`, this wrapper
 intentionally uses the canonical Schwarz-side definition. -/
 noncomputable def krausAdjointMapLinear (K : Fin d → Mat) : Mat →ₗ[ℂ] Mat where
@@ -699,5 +704,7 @@ theorem schwarz_inequality_commuting_dominant_operator
   exact ⟨le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).1,
          le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).2⟩
 
-end KadisonSchwarz
+/-- Alias for `schwarz_inequality_commuting_dominant_operator` matching Wolf Theorem 5.6. -/
+alias wolf_theorem_5_6 := schwarz_inequality_commuting_dominant_operator
 
+end KadisonSchwarz
