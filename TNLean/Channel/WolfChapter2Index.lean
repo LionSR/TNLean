@@ -37,6 +37,8 @@ representations of quantum channels.
   - `kraus_same_map_of_unitary_combination` — unitary freedom (sufficient direction) ✅
   - `kraus_same_map_of_unitaryGroup_combination` / `kraus_same_map_of_exists_unitary_combination`
     — bundled/existential unitary-witness wrappers for reuse in the converse roadmap ✅
+  - `kraus_transition_unitary_of_hs_orthonormal`
+    — converse linear-algebra core: orthonormal Kraus frames force unitary transition ✅
 
 * **Thm 2.2** (Stinespring dilation):
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
