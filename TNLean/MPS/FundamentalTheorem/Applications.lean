@@ -7,9 +7,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 # Applications of the (single-block) Fundamental Theorem
 
 This module packages a lightweight symmetry corollary used by the periodic FT
-pipeline: rotating physical indices by a matrix defines a new tensor, and any
-MPV-level symmetry hypothesis can be converted into a virtual gauge statement
-by `fundamentalTheorem_singleBlock`.
+pipeline: rotating physical indices by a matrix defines a new tensor, and for
+an injective tensor `A`, an MPV-level symmetry hypothesis can be converted into
+a virtual gauge statement by `fundamentalTheorem_singleBlock`.
 
 This is the project-level Lean wrapper for the easy part of the arXiv:1708.00029
 §4 application pattern (`Bⁱ := ∑ⱼ uᵢⱼ Aʲ`, then apply FT to `A` and `B`).
