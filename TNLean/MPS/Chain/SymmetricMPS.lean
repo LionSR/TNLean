@@ -1,10 +1,14 @@
+import Mathlib.Algebra.BigOperators.Basic
+import Mathlib.Algebra.Group.Hom.Defs
+import Mathlib.Data.Matrix.Basic
 import TNLean.MPS.Defs
 
 /-!
 # Symmetry helpers for MPS tensors
 
 This file introduces the tensor obtained by twisting a physical index with a
-matrix representation and proves the basic composition laws.
+matrix representation and proves the identity law. The composition law is left
+as a TODO.
 -/
 
 open scoped Matrix BigOperators
