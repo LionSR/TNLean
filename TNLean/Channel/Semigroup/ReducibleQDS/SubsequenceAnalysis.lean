@@ -30,11 +30,11 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-! ## (4) → (2): Block-upper-triangular → rank-deficient kernel element -/
 
-/-- An orthogonal projection is PSD: `P = P * P = P * Pᴴ` is a sum of PSD terms. -/
+/-- An orthogonal projection is PSD: `Pᴴ * P = P * P = P`. -/
 private lemma orthogonalProjection_posSemidef'
     {P : Mat} (hP : IsOrthogonalProjection P) : P.PosSemidef := by
-  have : P = Pᴴ * P := by rw [hP.1, hP.2]
-  rw [this]; exact P.posSemidef_conjTranspose_mul_self
+  have h : (Pᴴ * P).PosSemidef := Matrix.posSemidef_conjTranspose_mul_self P
+  rwa [hP.1, hP.2] at h
 
 /-- A nonzero orthogonal projection has nonzero trace. -/
 private lemma trace_ne_zero_of_proj_ne_zero'
