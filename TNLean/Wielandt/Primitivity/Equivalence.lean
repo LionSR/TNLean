@@ -241,13 +241,6 @@ theorem wolf_theorem_6_8_krausSpan [NeZero D]
     IsPrimitivePaper A ↔ HasEventuallyFullKrausRank A :=
   primitivePaper_iff_hasEventuallyFullKrausRank A hNorm
 
-/-- Legacy compatibility alias for `wolf_theorem_6_8_krausSpan`. -/
-theorem primitivePaper_iff_krausSpan_top [NeZero D]
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    IsPrimitivePaper A ↔ HasEventuallyFullKrausRank A :=
-  wolf_theorem_6_8_krausSpan A hNorm
-
 /-- **Wolf Theorem 6.8 (packaged conjunction form)**.
 
 This theorem keeps a single bundled statement convenient for direct
