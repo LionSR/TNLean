@@ -22,6 +22,7 @@ noncomputable def parentInteraction (_A : MPSTensor d D) (_L : ℕ) :
     NSiteSpace d L →ₗ[ℂ] NSiteSpace d L :=
   -- TODO(parent-hamiltonian): replace this zero placeholder with the orthogonal
   -- projector onto `groundSpace A L`ᗮ once the geometric construction is added.
+  -- TODO: used in GroundSpace/Basic after localTerm embeds this interaction.
   0
 
 /-- Placeholder translated local term on an `N`-site periodic chain.
@@ -31,6 +32,8 @@ space is introduced in a later installment; for now this is the zero term,
 which still gives the expected algebraic API for summing translated terms. -/
 noncomputable def localTerm (_A : MPSTensor d D) (_L N : ℕ) (_i : Fin N) :
     NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
+  -- TODO(parent-hamiltonian): replace this zero placeholder with the translated
+  -- embedding of `parentInteraction A L` at site `i` on the periodic chain.
   0
 
 /-- Parent Hamiltonian on an `N`-site periodic chain:
