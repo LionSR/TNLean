@@ -115,13 +115,14 @@ import TNLean.MPS.FundamentalTheorem.TransferNormalization
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Core.Correlations
-import TNLean.MPS.Symmetry.Defs
 
 -- Layer 4: Fundamental theorem (single block)
 import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.FundamentalTheorem.Applications
+-- Symmetry
+import TNLean.MPS.Symmetry.Defs
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
