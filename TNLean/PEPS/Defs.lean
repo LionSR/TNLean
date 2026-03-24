@@ -5,6 +5,8 @@ import Mathlib.Data.Complex.BigOperators
 # Exploratory PEPS definitions on finite simple graphs
 
 This file introduces a lightweight PEPS scaffold on a finite graph.
+The index type aliases (`Edge`, `IncidentEdge`, `VirtualConfig`) are kept as
+`abbrev` so they stay transparent for simplification and instance synthesis.
 
 ## Design note on decidability
 
