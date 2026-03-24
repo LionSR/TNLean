@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
+import TNLean.Channel.Irreducible.Basic
 
 /-!
 # Subsequence Analysis: (4) → (2) via Cesàro + subsequences
@@ -30,24 +31,18 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-! ## (4) → (2): Block-upper-triangular → rank-deficient kernel element -/
 
-/-- An orthogonal projection is PSD: `P = P * P = P * Pᴴ` is a sum of PSD terms. -/
-private lemma orthogonalProjection_posSemidef'
-    {P : Mat} (hP : IsOrthogonalProjection P) : P.PosSemidef := by
-  have : P = Pᴴ * P := by rw [hP.1, hP.2]
-  rw [this]; exact P.posSemidef_conjTranspose_mul_self
-
 /-- A nonzero orthogonal projection has nonzero trace. -/
 private lemma trace_ne_zero_of_proj_ne_zero'
     {P : Mat} (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
     Matrix.trace P ≠ 0 := by
   intro htr
-  exact hP_ne ((orthogonalProjection_posSemidef' hP).trace_eq_zero_iff.1 htr)
+  exact hP_ne ((orthogonalProjection_posSemidef hP).trace_eq_zero_iff.1 htr)
 
 /-- `P / tr(P)` is a density matrix. -/
 private lemma normalizedProj_mem_densityMatrices'
     {P : Mat} (hP : IsOrthogonalProjection P) (hP_ne : P ≠ 0) :
     ((trace P)⁻¹ • P) ∈ densityMatrices D := by
-  have hP_psd := orthogonalProjection_posSemidef' hP
+  have hP_psd := orthogonalProjection_posSemidef hP
   have htrP_ne := trace_ne_zero_of_proj_ne_zero' hP hP_ne
   exact ⟨hP_psd.smul (inv_nonneg_of_nonneg hP_psd.trace_nonneg),
     by simp [Matrix.trace_smul, htrP_ne]⟩
