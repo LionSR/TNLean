@@ -11,7 +11,6 @@ This file records that blocking step as an explicit hypothesis object and
 provides convenience lemmas/theorems that consume it.
 -/
 
-open scoped Matrix
 
 namespace MPSChainTensor
 
@@ -21,6 +20,8 @@ variable {d D n : ℕ}
 
 If `A` is injective and two chains agree at fixed length `n ≥ 3` (`SameState`),
 then their combined tensors satisfy `SameMPV`. -/
+/- Design note: this is a `structure` (rather than a `class`) so callers pass
+   this bridge assumption explicitly instead of relying on instance search. -/
 structure SameStateBridgeHyp (d D : ℕ) : Prop where
   sameMPV_of_sameState :
     ∀ ⦃n : ℕ⦄ (A B : MPSChainTensor d D n),
@@ -52,8 +53,8 @@ theorem fundamentalTheorem_injective_chain_of_sameState
     (hA : IsInjective A)
     (hn : 3 ≤ n)
     (hState : SameState A B) :
-    GaugeEquiv A B := by
-  exact fundamentalTheorem_injective_chain A B hA
+    GaugeEquiv A B :=
+  fundamentalTheorem_injective_chain A B hA
     (sameMPV_chainCombined_of_sameState hBridge A B hA hn hState)
 
 end MPSChainTensor
