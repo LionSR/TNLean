@@ -16,32 +16,37 @@ namespace MPSChainTensor
 
 variable {d D n : ℕ}
 
-/-- Abstract hypothesis encapsulating the missing blocking argument from
-`SameState` (at some chain length `n ≥ 3`) to `SameMPV` on combined tensors.
+/-- Abstract hypothesis carrying the chain-length side condition (`n ≥ 3`) used
+by the blocking step from `SameState` to `SameMPV`.
 
-The injectivity precondition on `A` matches the paper-facing route used by the
-chain fundamental theorem endpoint. -/
+TODO: replace the `sorry` in `sameMPV_chainCombined_of_sameState` with a full
+formalization of the blocking argument under this side condition. -/
 structure SameStateBridgeHyp (A B : MPSChainTensor d D n) : Prop where
   n_ge_three : 3 ≤ n
-  bridge :
-    IsInjective A →
-    SameState A B →
-    MPSTensor.SameMPV (MPSTensor.chainCombinedTensor A)
-      (MPSTensor.chainCombinedTensor B)
 
-/-- Bridge lemma: from the abstract blocking hypothesis and fixed-length
-`SameState`, obtain `SameMPV` for the combined tensors. -/
+/-- Bridge lemma (currently conditional): from fixed-length `SameState`,
+injectivity, and `n ≥ 3`, derive `SameMPV` for the combined tensors.
+
+TODO: this theorem is intentionally left as `sorry` until the blocking argument
+is formalized in Lean. -/
 theorem sameMPV_chainCombined_of_sameState
     (A B : MPSChainTensor d D n)
     (hBridge : SameStateBridgeHyp A B)
     (hA : IsInjective A)
     (hState : SameState A B) :
     MPSTensor.SameMPV (MPSTensor.chainCombinedTensor A)
-      (MPSTensor.chainCombinedTensor B) :=
-  hBridge.bridge hA hState
+      (MPSTensor.chainCombinedTensor B) := by
+  have hn_ge_three : 3 ≤ n := hBridge.n_ge_three
+  let _ := hn_ge_three
+  let _ := hA
+  let _ := hState
+  sorry
 
 /-- Paper-style endpoint: `SameState` plus the bridge hypothesis implies the
-usual chain fundamental-theorem conclusion `GaugeEquiv`. -/
+usual chain fundamental-theorem conclusion `GaugeEquiv`.
+
+TODO: this endpoint remains conditional on the missing blocking argument used
+in `sameMPV_chainCombined_of_sameState`. -/
 theorem fundamentalTheorem_injective_chain_of_sameState
     (A B : MPSChainTensor d D n)
     (hBridge : SameStateBridgeHyp A B)
