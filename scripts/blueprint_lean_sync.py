@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import sys
 from dataclasses import dataclass, field
@@ -138,14 +137,15 @@ def collect_lean_decls(lean_root: Path) -> dict[str, LeanDecl]:
             m = _LEAN_DECL_RE.match(line)
             if m:
                 short_name = m.group(1)
-                # If the short name already contains dots, it's already qualified
-                if "." in short_name:
-                    fqn = short_name
-                else:
-                    prefix = ".".join(ns_stack) + "." if ns_stack else ""
-                    fqn = prefix + short_name
+                prefix = ".".join(ns_stack) + "." if ns_stack else ""
+                fqn = prefix + short_name
                 rel = str(lean_file.relative_to(lean_root.parent))
                 decls[fqn] = LeanDecl(file=rel, line=i, fqn=fqn)
+                # Also store without namespace prefix if the name already
+                # contains dots (e.g. `Foo.bar` at top level), so both
+                # the bare dotted name and the fully-qualified name match.
+                if "." in short_name and fqn != short_name:
+                    decls[short_name] = LeanDecl(file=rel, line=i, fqn=fqn)
 
     return decls
 
@@ -220,6 +220,10 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
                     "has_leanok": bool(_TEX_LEANOK_RE.search(line)),
                 }
                 continue
+
+            # Inside a proof block: detect \leanok on its own line
+            if in_proof and current_proof and _TEX_LEANOK_RE.search(line):
+                current_proof["has_leanok"] = True
 
             # Proof end
             m = _TEX_PROOF_END_RE.search(line)
