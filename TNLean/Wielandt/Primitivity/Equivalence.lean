@@ -234,7 +234,7 @@ paper primitivity is equivalent to eventual full Kraus-word span.
 This is a naming wrapper around `primitivePaper_iff_hasEventuallyFullKrausRank`,
 matching Wolf's Chapter 6 wording ("the Kraus operators eventually span all
 matrices"). -/
-theorem wolf_theorem_6_8_krausSpan [NeZero D]
+theorem wolf_theorem_6_8_kraus_span [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     IsPrimitivePaper A ↔ HasEventuallyFullKrausRank A :=

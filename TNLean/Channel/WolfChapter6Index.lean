@@ -150,12 +150,12 @@ Other items: PARTIALLY via spectral gap infrastructure in `TNLean.Spectral.*`.
 * `IsPrimitivePaper` — `TNLean.Wielandt.Primitivity.PaperDefinitions`
   (item 3: `Kₘ = M_d(ℂ)` for `m ≥ q`)
 * Pairwise equivalences from Proposition 3 assembly:
-  * `primitivePaper_iff_hasEventuallyFullKrausRank`
-  * `primitivePaper_iff_stronglyIrreducible`
+  * `primitivePaper_iff_hasEventuallyFullKrausRank` / `primitivePaper_iff_stronglyIrreducible`
+    (in `TNLean.Wielandt.Primitivity.Equivalence`)
   * `hasEventuallyFullKrausRank_iff_isNormal`
-  (in `TNLean.Wielandt.Primitivity.Equivalence`)
+    (in `TNLean.Wielandt.Primitivity.PaperDefinitions`)
 * Packaged Wolf-facing wrappers:
-  * `wolf_theorem_6_8_krausSpan`
+  * `wolf_theorem_6_8_kraus_span`
   * `wolf_theorem_6_8_conjunction`
   (in `TNLean.Wielandt.Primitivity.Equivalence`)
 
