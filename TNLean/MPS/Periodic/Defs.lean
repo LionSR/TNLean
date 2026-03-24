@@ -54,6 +54,8 @@ theorem SameState.trans {A B C : PeriodicMPSTensor (d := d) (D := D) m}
 
 instance instEquivalenceSameState :
     Equivalence (SameState (d := d) (D := D) (m := m)) where
+  -- `Equivalence` is a structure (not a class): this is a convenience bundle,
+  -- not intended to be found via typeclass search.
   refl := SameState.refl
   symm := SameState.symm
   trans := SameState.trans
@@ -72,6 +74,8 @@ theorem GaugeEquiv.trans {A B C : PeriodicMPSTensor (d := d) (D := D) m}
 
 instance instEquivalenceGaugeEquiv :
     Equivalence (GaugeEquiv (d := d) (D := D) (m := m)) where
+  -- `Equivalence` is a structure (not a class): this is a convenience bundle,
+  -- not intended to be found via typeclass search.
   refl := GaugeEquiv.refl
   symm := GaugeEquiv.symm
   trans := GaugeEquiv.trans
