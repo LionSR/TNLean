@@ -97,13 +97,9 @@ boundary conditions (PBC).
 \begin{definition}[Periodic-chain tensor alias]\label{def:periodic_mps_tensor}
     \lean{MPSTensor.PeriodicMPSTensor}
     \leanok
-    For a fixed period $m$, \emph{periodic-chain tensors} are represented
-    by the alias
-    \[
-        \texttt{PeriodicMPSTensor}\; d\; D\; m,
-    \]
-    i.e.\ site-dependent tensors on $\Fin m$ with local physical
-    dimension~$d$ and bond dimension~$D$.
+    For a fixed period $m$, a \emph{periodic-chain tensor} is a
+    site-dependent tensor family indexed by $\{0,\ldots,m-1\}$, with
+    local physical dimension~$d$ and bond dimension~$D$.
 \end{definition}
 
 \begin{definition}[Periodic same-state and gauge-equivalence relations]\label{def:periodic_relations}
@@ -113,8 +109,8 @@ boundary conditions (PBC).
     \uses{def:periodic_mps_tensor}
     For periodic-chain tensors $A,B$ at fixed period~$m$:
     \begin{itemize}
-        \item \texttt{SameState} means equality of the induced periodic-chain state;
-        \item \texttt{GaugeEquiv} means cyclic gauge equivalence of the periodic chain.
+        \item equality of the induced periodic-chain states;
+        \item cyclic gauge equivalence.
     \end{itemize}
 \end{definition}
 
@@ -123,8 +119,8 @@ boundary conditions (PBC).
     \lean{MPSTensor.PeriodicMPSTensor.instEquivalenceGaugeEquiv}
     \leanok
     \uses{def:periodic_relations}
-    Both periodic relations above carry bundled \texttt{Equivalence}
-    structures (reflexive, symmetric, transitive).
+    Both periodic relations are equivalence relations (reflexive,
+    symmetric, transitive).
 \end{lemma}
 
 \section{Gauge equivalence and same MPV}
