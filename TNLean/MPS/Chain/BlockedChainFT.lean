@@ -17,7 +17,7 @@ variable {d D : ℕ}
 
 /-- Bridge between project `N`-block injectivity and injectivity of the physically
 blocked tensor `blockTensor A N`. -/
-lemma IsNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) :
+lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) :
     IsNBlkInjective A N ↔ IsInjective (blockTensor A N) := by
   classical
   have hRange :
@@ -37,7 +37,7 @@ lemma IsNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) 
           (Set.range fun i : Fin (blockPhysDim d N) =>
             evalWord A (List.ofFn (decodeBlock d N i))) =
         Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) := by
-    simpa [hRange]
+    simp [hRange]
   constructor
   · intro h
     exact hSpan.trans h
@@ -62,7 +62,7 @@ lemma blockedChain_isInjective (A : MPSTensor d D) (L n : ℕ)
     IsInjective (blockedChain A L n) := by
   intro k
   simpa [blockedChain] using
-    (MPSTensor.IsNBlkInjective_iff_blockTensor_isInjective A L).1 hA
+    (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective A L).1 hA
 
 /-- Fundamental theorem endpoint for blocked chains at a common blocking length.
 
