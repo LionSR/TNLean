@@ -106,7 +106,6 @@ theorem stinespring_schrodinger_representation {r : ℕ}
     (∑ l : Fin r, K l * X * (K l)ᴴ) i j =
     ∑ k : Fin r,
       (stinespringV K * X * (stinespringV K)ᴴ) (i, k) (j, k) := by
-  -- Use `fun l => (K l)ᴴ` inside `stinespringV` so the partial trace reproduces
-  -- the Schrödinger Kraus expansion with factors `K l * X * (K l)ᴴ`.
+  -- Unfold stinespringV and match matrix entries on both sides.
   simp only [Matrix.mul_apply, Matrix.sum_apply,
     stinespringV_apply, Matrix.conjTranspose_apply]
