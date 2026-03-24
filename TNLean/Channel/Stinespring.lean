@@ -16,6 +16,7 @@ for an explicit isometry `V` constructed from the Kraus operators.
 
 * `stinespringV`: the Stinespring isometry `V = ∑ⱼ Kⱼ ⊗ |j⟩`, a `(D·r) × D`
   matrix satisfying `V(i, j) k = (Kⱼ)_{ik}`
+* `stinespringV_apply`: entrywise evaluation lemma for `stinespringV`
 
 ## Main results (Wolf Thm 2.2)
 
@@ -77,7 +78,9 @@ theorem stinespringV_isometry_iff_kraus_normalized {r : ℕ}
   `T*(A) = V† (A ⊗ 𝟙_r) V`
 
 where `V` is the Stinespring isometry. This matches the Kraus form
-`T*(A) = ∑ⱼ Kⱼ† A Kⱼ`. -/
+`T*(A) = ∑ⱼ Kⱼ† A Kⱼ`.
+In this file, `T*` is the Heisenberg dual acting on observables, while the
+Schrödinger map uses adjoints in the opposite order. -/
 theorem stinespring_dual_representation {r : ℕ}
     (K : Fin r → Matrix (Fin D) (Fin D) ℂ) (A : Matrix (Fin D) (Fin D) ℂ) :
     (stinespringV K)ᴴ *
@@ -103,5 +106,7 @@ theorem stinespring_schrodinger_representation {r : ℕ}
     (∑ l : Fin r, K l * X * (K l)ᴴ) i j =
     ∑ k : Fin r,
       (stinespringV K * X * (stinespringV K)ᴴ) (i, k) (j, k) := by
+  -- Use `fun l => (K l)ᴴ` inside `stinespringV` so the partial trace reproduces
+  -- the Schrödinger Kraus expansion with factors `K l * X * (K l)ᴴ`.
   simp only [Matrix.mul_apply, Matrix.sum_apply,
     stinespringV_apply, Matrix.conjTranspose_apply]
