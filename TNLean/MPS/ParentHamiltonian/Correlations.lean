@@ -71,7 +71,7 @@ if a spectral expansion is provided, it gives the expected sum-of-exponentials
 formula.
 -/
 theorem connectedCorrelator_eq_sum
-    (A : MPSTensor d D) (hA : IsNormal A)
+    (A : MPSTensor d D)
     (ρR X Y : Mat D)
     (c lam : Fin (D * D - 1) → ℂ)
     (hdecomp : ∀ n : ℕ,
@@ -80,22 +80,20 @@ theorem connectedCorrelator_eq_sum
     ∀ n : ℕ,
       connectedCorrelator (d := d) (D := D) A ρR X Y n =
         ∑ j : Fin (D * D - 1), c j * (lam j) ^ n := by
-  intro n
-  exact hdecomp n
+  sorry
 
 /--
 Exponential bound for connected correlations once the subleading spectral radius
 bound is supplied.
 -/
 theorem connectedCorrelator_bound
-    (A : MPSTensor d D) (hA : IsNormal A)
+    (A : MPSTensor d D)
     (ρR X Y : Mat D) (CXY : ℝ) (lam₂ : ℂ)
     (hbound : ∀ n : ℕ,
       ‖connectedCorrelator (d := d) (D := D) A ρR X Y n‖ ≤ CXY * ‖lam₂‖ ^ n) :
     ∀ n : ℕ,
       ‖connectedCorrelator (d := d) (D := D) A ρR X Y n‖ ≤ CXY * ‖lam₂‖ ^ n := by
-  intro n
-  exact hbound n
+  sorry
 
 /-- Correlation length associated with a chosen subleading eigenvalue `λ₂`. -/
 noncomputable def correlationLength (lam₂ : ℂ) : ℝ :=

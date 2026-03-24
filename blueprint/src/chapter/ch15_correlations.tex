@@ -46,7 +46,6 @@ transfer map.
 
 \begin{theorem}[Sum of exponentials]
     \lean{MPSTensor.connectedCorrelator_eq_sum}
-    \leanok
     \uses{def:transfer_map}
     For a normal MPS, the connected correlator admits a spectral expansion of
     the form
@@ -57,7 +56,6 @@ transfer map.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     The leading eigenvalue contribution ($\lambda_1=1$) equals
     $\langle X_0\rangle\langle Y_0\rangle$ and cancels in the connected part.
     Apply spectral decomposition to $\E_A^n$.
@@ -65,7 +63,6 @@ transfer map.
 
 \begin{theorem}[Exponential decay bound]
     \lean{MPSTensor.connectedCorrelator_bound}
-    \leanok
     \uses{thm:spectral_radius_lt_one}
     If $|\lambda_j| \le |\lambda_2| < 1$ for all subleading eigenvalues, then
     there exists $C_{XY}\ge 0$ such that
@@ -75,7 +72,6 @@ transfer map.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     Combine the sum-of-exponentials expansion with the triangle inequality.
 \end{proof}
 
