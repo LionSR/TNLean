@@ -119,7 +119,7 @@ convenience.
 \end{proof}
 
 \begin{lemma}[Trace pairing for Kraus map and adjoint map]\label{lem:trace_mul_map_eq_trace_adjointMap_mul}
-    \lean{KadisonSchwarz.trace_mul_map_eq_trace_adjointMap_mul}
+    \lean{Kraus.trace_mul_map_eq_trace_adjointMap_mul}
     \leanok
     \uses{def:kraus_map, def:kraus_adjoint_map}
     For all $X,Y \in \MN{D}$,
@@ -129,14 +129,14 @@ convenience.
 \end{lemma}
 
 \begin{lemma}[Positive-definite trace test]\label{lem:posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
-    \lean{KadisonSchwarz.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
+    \lean{Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
     \leanok
     If $A>0$, $X\ge 0$, and $\tr(AX)=0$, then $X=0$.
 \end{lemma}
 
 \begin{theorem}[Fixed-point peripheral eigenvectors satisfy KS equality]
     \label{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint}
-    \lean{KadisonSchwarz.ks_equality_of_peripheral_eigenvector_of_fixedPoint}
+    \lean{Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint}
     \leanok
     \uses{thm:kadison_schwarz, lem:trace_mul_map_eq_trace_adjointMap_mul,
           lem:posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
