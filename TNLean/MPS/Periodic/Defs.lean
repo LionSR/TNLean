@@ -1,4 +1,5 @@
 import TNLean.MPS.Irreducible.FormII
+import TNLean.MPS.Chain.Defs
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import Mathlib.RingTheory.RootsOfUnity.PrimitiveRoots
@@ -15,6 +16,67 @@ used by the periodic form theory (arXiv:1708.00029, §2.1).
 namespace MPSTensor
 
 variable {d D : ℕ}
+
+/-- Period-`m` periodic-chain tensor (site-dependent tensor family on `Fin m`). -/
+abbrev PeriodicMPSTensor (m : ℕ) := MPSChainTensor d D m
+
+namespace PeriodicMPSTensor
+
+variable {m : ℕ}
+
+/-- Interpret a translation-invariant local tensor as a periodic chain of length `m`. -/
+abbrev toChain (A : MPSTensor d D) : PeriodicMPSTensor (d := d) (D := D) m :=
+  fun _ => A
+
+/-- Coefficient of a periodic chain at configuration `σ`. -/
+abbrev coeff (A : PeriodicMPSTensor (d := d) (D := D) m) (σ : Fin m → Fin d) : ℂ :=
+  MPSChainTensor.coeff A σ
+
+/-- Equality of periodic-chain states at fixed period `m`. -/
+abbrev SameState (A B : PeriodicMPSTensor (d := d) (D := D) m) : Prop :=
+  MPSChainTensor.SameState A B
+
+/-- Cyclic gauge equivalence of periodic chains at fixed period `m`. -/
+abbrev GaugeEquiv (A B : PeriodicMPSTensor (d := d) (D := D) m) : Prop :=
+  MPSChainTensor.GaugeEquiv A B
+
+theorem SameState.refl (A : PeriodicMPSTensor (d := d) (D := D) m) : SameState A A :=
+  MPSChainTensor.SameState.refl A
+
+theorem SameState.symm {A B : PeriodicMPSTensor (d := d) (D := D) m}
+    (h : SameState A B) : SameState B A :=
+  MPSChainTensor.SameState.symm h
+
+theorem SameState.trans {A B C : PeriodicMPSTensor (d := d) (D := D) m}
+    (hAB : SameState A B) (hBC : SameState B C) :
+    SameState A C :=
+  MPSChainTensor.SameState.trans hAB hBC
+
+instance instEquivalenceSameState :
+    Equivalence (SameState (d := d) (D := D) (m := m)) where
+  refl := SameState.refl
+  symm := SameState.symm
+  trans := SameState.trans
+
+theorem GaugeEquiv.refl (A : PeriodicMPSTensor (d := d) (D := D) m) : GaugeEquiv A A :=
+  MPSChainTensor.GaugeEquiv.refl A
+
+theorem GaugeEquiv.symm {A B : PeriodicMPSTensor (d := d) (D := D) m}
+    (h : GaugeEquiv A B) : GaugeEquiv B A :=
+  MPSChainTensor.GaugeEquiv.symm h
+
+theorem GaugeEquiv.trans {A B C : PeriodicMPSTensor (d := d) (D := D) m}
+    (hAB : GaugeEquiv A B) (hBC : GaugeEquiv B C) :
+    GaugeEquiv A C :=
+  MPSChainTensor.GaugeEquiv.trans hAB hBC
+
+instance instEquivalenceGaugeEquiv :
+    Equivalence (GaugeEquiv (d := d) (D := D) (m := m)) where
+  refl := GaugeEquiv.refl
+  symm := GaugeEquiv.symm
+  trans := GaugeEquiv.trans
+
+end PeriodicMPSTensor
 
 /-- Left-canonical (trace-preserving) condition for an MPS tensor. -/
 def IsLeftCanonical (A : MPSTensor d D) : Prop :=
