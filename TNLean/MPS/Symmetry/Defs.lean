@@ -1,5 +1,31 @@
 import TNLean.MPS.FundamentalTheorem.Basic
 
+/-!
+# MPS Symmetry Primitives
+
+This module defines the symmetry-twisted tensor construction and proves its
+functoriality, establishing the algebraic foundations for on-site symmetric MPS.
+
+## Main definitions
+
+* `MPSTensor.twistedTensor` : twist an MPS tensor by a group representation on the physical index
+* `MPSTensor.IsOnSiteSymmetric` : predicate for on-site symmetry under a representation
+* `MPSTensor.sameMPV_iff_gaugeEquiv_of_injective` :
+  for injective tensors, MPV equality ↔ gauge equivalence
+
+## Main results
+
+* `MPSTensor.twistedTensor_one` : twisting by the identity is trivial
+* `MPSTensor.twistedTensor_mul` : twisting is functorial (composition law)
+* `MPSTensor.gaugeEquiv_twistedTensor_of_injective` :
+  injective symmetric tensors have gauge-equivalent twists
+
+## References
+
+* Wolf, *Quantum Channels & Operations*, Chapter 2
+* Pérez-García et al., *Matrix Product State Representations*, arXiv:0608197
+-/
+
 open scoped Matrix BigOperators
 
 namespace MPSTensor
@@ -53,13 +79,6 @@ theorem sameMPV_iff_gaugeEquiv_of_injective {A B : MPSTensor d D}
     exact fundamentalTheorem_singleBlock hA hAB
   · intro hAB
     exact GaugeEquiv.sameMPV hAB
-
-/-- Twisted specialization of `sameMPV_iff_gaugeEquiv_of_injective`. -/
-theorem sameMPV_twistedTensor_iff_gaugeEquiv
-    (A : MPSTensor d D) (hA : IsInjective A)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
-    SameMPV A (twistedTensor A U g) ↔ GaugeEquiv A (twistedTensor A U g) :=
-  sameMPV_iff_gaugeEquiv_of_injective hA
 
 /-- Injective on-site symmetry implies each twisted tensor is gauge equivalent to `A`. -/
 theorem gaugeEquiv_twistedTensor_of_injective
