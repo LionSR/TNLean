@@ -1,0 +1,96 @@
+\chapter{Exponential Decay of Correlations}\label{ch:correlations}
+
+This chapter records the transfer-matrix expression for thermodynamic-limit
+correlators of a normal MPS and the resulting exponential decay estimate.
+The key mechanism is spectral: after removing the leading eigenvalue
+contribution, the connected part is governed by subleading eigenvalues of the
+transfer map.
+
+\section{Connected correlators from the transfer map}
+
+\begin{definition}[One-point expectation]
+    \lean{MPSTensor.onePointExpectation}
+    \leanok
+    \uses{def:transfer_map}
+    Fix an MPS tensor $A$ and a right fixed point $\rho^R$ of its transfer map.
+    For a local observable $X \in \MN{D}$ define
+    \[
+        \langle X_0 \rangle := \tr(X\rho^R).
+    \]
+\end{definition}
+
+\begin{definition}[Two-point expectation at distance $n$]
+    \lean{MPSTensor.twoPointExpectation}
+    \leanok
+    \uses{def:transfer_map}
+    For observables $X,Y \in \MN{D}$ and $n\ge 0$,
+    \[
+        \langle X_0 Y_n \rangle
+        := \tr\!\left(Y\,\E_A^n(X\rho^R)\right).
+    \]
+    Equivalently: insert $X$ at site $0$, propagate by $\E_A^n$, then insert
+    $Y$ and take the trace.
+\end{definition}
+
+\begin{definition}[Connected correlator]
+    \lean{MPSTensor.connectedCorrelator}
+    \leanok
+    \uses{def:transfer_map}
+    The connected two-point function is
+    \[
+        C(X,Y;n) := \langle X_0Y_n\rangle - \langle X_0\rangle\langle Y_0\rangle.
+    \]
+\end{definition}
+
+\section{Spectral expansion and exponential decay}
+
+\begin{theorem}[Sum of exponentials]
+    \lean{MPSTensor.connectedCorrelator_eq_sum}
+    \leanok
+    \uses{def:transfer_map}
+    For a normal MPS, the connected correlator admits a spectral expansion of
+    the form
+    \[
+        C(X,Y;n) = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n,
+    \]
+    where $\lambda_j$ are subleading transfer-matrix eigenvalues.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The leading eigenvalue contribution ($\lambda_1=1$) equals
+    $\langle X_0\rangle\langle Y_0\rangle$ and cancels in the connected part.
+    Apply spectral decomposition to $\E_A^n$.
+\end{proof}
+
+\begin{theorem}[Exponential decay bound]
+    \lean{MPSTensor.connectedCorrelator_bound}
+    \leanok
+    \uses{thm:spectral_radius_lt_one}
+    If $|\lambda_j| \le |\lambda_2| < 1$ for all subleading eigenvalues, then
+    there exists $C_{XY}\ge 0$ such that
+    \[
+        |C(X,Y;n)| \le C_{XY}\,|\lambda_2|^n.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Combine the sum-of-exponentials expansion with the triangle inequality.
+\end{proof}
+
+\begin{definition}[Correlation length]
+    \lean{MPSTensor.correlationLength}
+    \leanok
+    The correlation length associated with $\lambda_2$ is
+    \[
+        \xi := -\frac{1}{\log|\lambda_2|}.
+    \]
+\end{definition}
+
+\begin{remark}
+    \uses{thm:spectral_radius_lt_one}
+    The identity $\E^2=\E$ is equivalent to vanishing subleading spectrum;
+    equivalently, $\xi=0$ and connected correlations vanish at nonzero
+    separation.
+\end{remark}
