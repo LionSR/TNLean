@@ -19,6 +19,7 @@ Done in Lean today:
 - CFII / diagonal fixed-point data and periodicity removal by blocking
 - strong-hypothesis canonical-form / CF-BNT theorems, including the same-structure equal-MPV theorem and the proportional theorem with explicit coefficient-convergence data
 - the cumulative `D²` Wielandt bound for the project's `IsNormal` notion
+- injective chain FT for non-translation-invariant periodic chains (`MPSChainTensor.fundamentalTheorem_injective_chain`) and its TI-collapse corollary (`MPSChainTensor.ti_tensors_collapse_to_single_gauge`); a blocked-chain endpoint (`MPSChainTensor.fundamentalTheorem_blockedChain`) bridges `IsNBlkInjective` to the chain theorem
 
 Still not assembled end-to-end:
 
@@ -133,7 +134,7 @@ Requires Lean 4 v4.28.0 (managed via `lean-toolchain`).
 
 ## Blueprint
 
-The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the channel-side Wolf material. After the 2026-03-20 documentation sync, the blueprint chapters `ch04_channels.tex`, `ch05_schwarz.tex`, and `ch12_semigroup.tex` reflect the current Lean status of the representation, Schwarz, determinant / fixed-point, and semigroup packages.
+The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the channel-side Wolf material. After the 2026-03-23 documentation sync, the blueprint chapters `ch04_channels.tex`, `ch05_schwarz.tex`, `ch06_spectral.tex`, `ch11_assembly.tex`, `ch12_semigroup.tex`, and `ch13_algebraic_ft.tex` reflect the current Lean status of the representation, Schwarz, spectral / stationary-support, periodic-tensor assembly, semigroup, and algebraic chain-FT packages.
 
 Typical blueprint commands:
 
