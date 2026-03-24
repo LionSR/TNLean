@@ -112,6 +112,7 @@ import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.FundamentalTheorem.TransferNormalization
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.MPS.Core.CPPrimitive
+import TNLean.MPS.ParentHamiltonian.Correlations
 
 -- Layer 4: Fundamental theorem (single block)
 import TNLean.MPS.Structure.LinearExtension
