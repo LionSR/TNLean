@@ -953,8 +953,7 @@ theorem irreducible_iff_exp_posDef_forall
       have hsemigroup_inv :
           ∀ t : ℝ, 0 ≤ t → ∀ X : Matrix (Fin D) (Fin D) ℂ,
             P * expSemigroup E t (P * X * P) * P = expSemigroup E t (P * X * P) :=
-        -- This `simpa` is exactly the definitional unfolding of
-        -- `GeneratorPreservesCompression E P`.
+        -- unfold `GeneratorPreservesCompression E P`
         semigroup_preserves_compression_of_generator hP (by simpa using hP_inv)
       have hP_exp_pd : (expSemigroup E 1 P).PosDef := by
         simpa [expSemigroup, expSemigroupCLM, one_smul] using
@@ -973,11 +972,8 @@ theorem irreducible_iff_exp_posDef_forall
         rcases Matrix.PosDef.isUnit hP_exp_pd with ⟨U, hU⟩
         have hzero : (1 - P) * (↑U : Matrix (Fin D) (Fin D) ℂ) = 0 := by
           simpa [hU] using h_exp_zero_on_compl
-        have hzero' : (1 - P) * (↑U : Matrix (Fin D) (Fin D) ℂ) =
-            0 * (↑U : Matrix (Fin D) (Fin D) ℂ) := by
-          simpa [zero_mul] using hzero
         have hU_unit : IsUnit (↑U : Matrix (Fin D) (Fin D) ℂ) := ⟨U, rfl⟩
-        exact IsUnit.mul_right_cancel hU_unit hzero'
+        exact IsUnit.mul_right_cancel hU_unit (by simpa [zero_mul] using hzero)
       exact Or.inr (by simpa [eq_comm] using sub_eq_zero.mp h_compl_eq_zero)
 
 end Exponential
