@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
-import TNLean.MPS.Periodic.Defs
 
 import Mathlib.Algebra.GCDMonoid.Finset
 

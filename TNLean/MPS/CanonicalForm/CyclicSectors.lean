@@ -3,7 +3,6 @@ import TNLean.Channel.Peripheral.Conjugation
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.Core.BlockingInfrastructure
-import TNLean.MPS.Periodic.Defs
 
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Data.Fintype.EquivFin
