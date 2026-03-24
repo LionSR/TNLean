@@ -483,6 +483,67 @@ directly to periodic tensors.
 
 \subsection{The \texorpdfstring{$Z$}{Z}-gauge degree of freedom}
 
+\begin{definition}[Entrywise periodic \(Z\)-gauge ratio]\label{def:z_gauge_entry}
+	\lean{MPSTensor.zGaugeEntry}
+	\leanok
+	Given complex weights $\mu,\nu$, define the entrywise
+	\(Z\)-gauge ratio by
+	\[
+		z(\mu,\nu) := \mu/\nu.
+	\]
+\end{definition}
+
+\begin{lemma}[Matched powers imply root-of-unity ratio]\label{lem:z_gauge_entry_pow}
+	\lean{MPSTensor.zGaugeEntry_pow_eq_one_of_pow_eq}
+	\leanok
+	\uses{def:z_gauge_entry}
+	If $\mu^m=\nu^m$ and $\nu\neq 0$, then
+	\[
+		z(\mu,\nu)^m = 1.
+	\]
+\end{lemma}
+
+\begin{lemma}[Ratio rescales denominator back to numerator]\label{lem:z_gauge_entry_mul}
+	\lean{MPSTensor.zGaugeEntry_mul_right}
+	\leanok
+	\uses{def:z_gauge_entry}
+	If $\nu\neq 0$, then
+	\[
+		z(\mu,\nu)\,\nu=\mu.
+	\]
+\end{lemma}
+
+\begin{definition}[Diagonal periodic \(Z\)-gauge matrix]\label{def:z_gauge_diagonal}
+	\lean{MPSTensor.zGaugeDiagonal}
+	\leanok
+	\uses{def:z_gauge_entry}
+	For matched weight families $(\mu_i)_i$ and $(\nu_i)_i$ on a finite
+	index type, define the diagonal matrix
+	\[
+		Z := \diag\!\bigl(z(\mu_i,\nu_i)\bigr)_i.
+	\]
+\end{definition}
+
+\begin{lemma}[Diagonal \(Z\)-gauge has finite order under matched powers]\label{lem:z_gauge_diagonal_pow}
+	\lean{MPSTensor.zGaugeDiagonal_pow_eq_one}
+	\leanok
+	\uses{def:z_gauge_diagonal, lem:z_gauge_entry_pow}
+	If $\mu_i^m=\nu_i^m$ and $\nu_i\neq 0$ for all~$i$, then
+	\[
+		Z^m=\Id.
+	\]
+\end{lemma}
+
+\begin{lemma}[Diagonal \(Z\)-gauge transports diagonal weights]\label{lem:z_gauge_diagonal_mul}
+	\lean{MPSTensor.zGaugeDiagonal_mul_diagonal}
+	\leanok
+	\uses{def:z_gauge_diagonal, lem:z_gauge_entry_mul}
+	Under $\nu_i\neq 0$ for all~$i$,
+	\[
+		Z\,\diag(\nu)=\diag(\mu).
+	\]
+\end{lemma}
+
 \begin{definition}[$Z$-gauge equivalence]
 	\label{def:z_gauge_equiv}
 	\lean{MPSTensor.ZGaugeEquiv}
