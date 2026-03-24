@@ -139,15 +139,17 @@ theorem stinespringPi_mul {r : ℕ}
     (A B : Matrix (Fin D) (Fin D) ℂ) :
     stinespringPi (r := r) (A * B) = stinespringPi (r := r) A * stinespringPi (r := r) B := by
   unfold stinespringPi
-  simpa using Matrix.mul_kronecker_mul (A := A) (B := B)
-    (A' := (1 : Matrix (Fin r) (Fin r) ℂ)) (B' := (1 : Matrix (Fin r) (Fin r) ℂ))
+  convert Matrix.mul_kronecker_mul (A := A) (B := B)
+      (A' := (1 : Matrix (Fin r) (Fin r) ℂ)) (B' := (1 : Matrix (Fin r) (Fin r) ℂ)) using 1
+  simp
 
 @[simp]
 theorem stinespringPi_conjTranspose {r : ℕ}
     (A : Matrix (Fin D) (Fin D) ℂ) :
     (stinespringPi (r := r) A)ᴴ = stinespringPi (r := r) Aᴴ := by
   unfold stinespringPi
-  simpa using Matrix.conjTranspose_kronecker (x := A) (y := (1 : Matrix (Fin r) (Fin r) ℂ))
+  convert Matrix.conjTranspose_kronecker (x := A) (y := (1 : Matrix (Fin r) (Fin r) ℂ)) using 1
+  simp
 
 /-- **Stinespring dilation (existential form, Wolf Thm 2.2)**:
 every CP map `E` admits an ancilla dimension `r`, a Kraus family `K`,
