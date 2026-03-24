@@ -1,4 +1,4 @@
-import Mathlib.Algebra.BigOperators.Basic
+import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Algebra.Group.Hom.Defs
 import Mathlib.Data.Matrix.Basic
 import TNLean.MPS.Defs
