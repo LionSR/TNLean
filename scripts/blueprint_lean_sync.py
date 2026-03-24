@@ -30,9 +30,6 @@ from pathlib import Path
 # Helpers
 # ---------------------------------------------------------------------------
 
-# Lean declaration keywords that start a new declaration
-_LEAN_DECL_KW = r"(?:def|theorem|lemma|abbrev|instance|class|structure|inductive|noncomputable\s+def|noncomputable\s+abbrev|protected\s+def|private\s+def|@\[.*?\]\s*(?:def|theorem|lemma|abbrev|instance|class|structure|inductive))"
-
 _LEAN_DECL_RE = re.compile(
     r"^\s*(?:@\[.*?\]\s*)?(?:noncomputable\s+)?(?:protected\s+)?(?:private\s+)?(?:def|theorem|lemma|abbrev|instance|class|structure|inductive)\s+([\w.]+)",
     re.MULTILINE,
@@ -172,6 +169,7 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
         env_stack: list[dict] = []
         in_proof = False
         current_proof: dict | None = None
+        last_env: dict | None = None  # last closed environment
 
         for i, line in enumerate(lines, 1):
             # Check for environment begin
@@ -188,13 +186,17 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
                 env_stack.append(env)
                 # Check rest of line for \lean{} and \leanok
                 for lm in _TEX_LEAN_RE.finditer(line):
-                    env["lean_decls"].append(lm.group(1))
+                    for decl in lm.group(1).split(","):
+                        decl = decl.strip()
+                        if decl:
+                            env["lean_decls"].append(decl)
                 continue
 
             # Check for environment end
             m = _TEX_ENV_END_RE.search(line)
             if m and env_stack:
                 env = env_stack.pop()
+                env_entry_start = len(entries)
                 for decl in env["lean_decls"]:
                     entries.append(BlueprintEntry(
                         file=env["file"],
@@ -205,6 +207,9 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
                         has_leanok=env["has_leanok"],
                         proof_has_leanok=False,
                     ))
+                env["_entry_start"] = env_entry_start
+                env["_entry_end"] = len(entries)
+                last_env = env
                 continue
 
             # Proof begin
@@ -219,17 +224,19 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
             # Proof end
             m = _TEX_PROOF_END_RE.search(line)
             if m and in_proof:
-                # Attach proof leanok to last entry if applicable
-                if entries and current_proof and current_proof["has_leanok"]:
-                    entries[-1] = BlueprintEntry(
-                        file=entries[-1].file,
-                        line=entries[-1].line,
-                        env_type=entries[-1].env_type,
-                        label=entries[-1].label,
-                        lean_decl=entries[-1].lean_decl,
-                        has_leanok=entries[-1].has_leanok,
-                        proof_has_leanok=True,
-                    )
+                # Attach proof leanok to all entries from the preceding environment
+                if current_proof and current_proof["has_leanok"] and last_env:
+                    for idx in range(last_env["_entry_start"], last_env["_entry_end"]):
+                        e = entries[idx]
+                        entries[idx] = BlueprintEntry(
+                            file=e.file,
+                            line=e.line,
+                            env_type=e.env_type,
+                            label=e.label,
+                            lean_decl=e.lean_decl,
+                            has_leanok=e.has_leanok,
+                            proof_has_leanok=True,
+                        )
                 in_proof = False
                 current_proof = None
                 continue
@@ -237,7 +244,10 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
             # Inside an environment: collect \lean{} and \leanok
             if env_stack:
                 for lm in _TEX_LEAN_RE.finditer(line):
-                    env_stack[-1]["lean_decls"].append(lm.group(1))
+                    for decl in lm.group(1).split(","):
+                        decl = decl.strip()
+                        if decl:
+                            env_stack[-1]["lean_decls"].append(decl)
                 if _TEX_LEANOK_RE.search(line):
                     env_stack[-1]["has_leanok"] = True
 
@@ -353,7 +363,7 @@ def _print_report(report: SyncReport, root: Path) -> None:
     for chapter in sorted(stats):
         s = stats[chapter]
         pct = 100 * s["formalized"] / s["total"] if s["total"] else 0
-        short = chapter.replace("blueprint/src/chapter/", "")
+        short = chapter.replace("src/chapter/", "")
         print(f"  {short:<50} {s['formalized']:>5} / {s['total']:>5}  {pct:>5.1f}%")
         total_done += s["formalized"]
         total_all += s["total"]
