@@ -206,7 +206,13 @@ end SupportProjLemmas
 
 section FixedPointInvariant
 
-/-- Adjoint identity for dot product: `star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y`. -/
+/-- Adjoint identity for dot product: `star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y`.
+
+This helper is intentionally kept local to this file: unlike
+`orthogonalProjection_posSemidef` in `Irreducible/Basic`, this is a small linear-algebra
+rewrite used only in the fixed-point support-projection argument below, and exporting it
+would add API surface without a second in-repo call site.
+-/
 private lemma dotProduct_mulVec_conjTranspose
     (M : Matrix (Fin D) (Fin D) ℂ)
     (x y : Fin D → ℂ) :
