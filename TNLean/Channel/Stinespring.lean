@@ -154,7 +154,10 @@ theorem stinespringPi_conjTranspose {r : ℕ}
 /-- **Stinespring dilation (existential form, Wolf Thm 2.2)**:
 every CP map `E` admits an ancilla dimension `r`, a Kraus family `K`,
 and the concrete `*`-representation `π(A) = A ⊗ 𝟙_r` such that
-`E(A) = V† π(A) V` with `V = stinespringV K`. -/
+`E(A) = V† π(A) V` with `V = stinespringV K`.
+
+Convention: the returned witness `K` is in the Heisenberg orientation
+(i.e. conjugated relative to a Schrödinger-form Kraus family). -/
 theorem exists_stinespring_dilation
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hE : IsCPMap E) :
