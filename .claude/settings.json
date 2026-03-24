@@ -9,7 +9,9 @@
       "Bash(lake update:*)",
       "Bash(lake env)",
       "Bash(lake env:*)",
-      "Bash(leanblueprint *)"
+      "Bash(leanblueprint *)",
+      "Bash(gh *)",
+      "Bash(*)"
     ]
   }
 }
