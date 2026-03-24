@@ -18,6 +18,7 @@ for an explicit isometry `V` constructed from the Kraus operators.
 * `stinespringV`: the Stinespring isometry `V = ∑ⱼ Kⱼ ⊗ |j⟩`, a `(D·r) × D`
   matrix satisfying `V(i, j) k = (Kⱼ)_{ik}`
 * `stinespringV_apply`: entrywise evaluation lemma for `stinespringV`
+* `stinespringPi`: the concrete finite-dimensional representation `π(A) = A ⊗ 𝟙_r`
 
 ## Main results (Wolf Thm 2.2)
 
@@ -25,6 +26,8 @@ for an explicit isometry `V` constructed from the Kraus operators.
 * `stinespringV_isometry_iff_kraus_normalized` — `V†V = 𝟙` ↔ `∑ⱼ Kⱼ†Kⱼ = 𝟙`
 * `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` (Heisenberg picture)
 * `stinespring_schrodinger_representation` — `T(ρ) = tr_r(VρV†)` (Schrödinger picture)
+* `exists_stinespring_dilation` — existential Heisenberg-form dilation witness for CP maps
+* `exists_stinespring_isometry_of_cptp` — existential isometric dilation witness for CPTP maps
 
 ## References
 
@@ -128,23 +131,23 @@ theorem stinespringPi_apply {r : ℕ}
 @[simp]
 theorem stinespringPi_one {r : ℕ} :
     stinespringPi (D := D) (r := r) (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  simpa [stinespringPi] using
-    (Matrix.one_kronecker_one (m := Fin D) (n := Fin r) (α := ℂ))
+  unfold stinespringPi
+  exact Matrix.one_kronecker_one (m := Fin D) (n := Fin r) (α := ℂ)
 
 @[simp]
 theorem stinespringPi_mul {r : ℕ}
     (A B : Matrix (Fin D) (Fin D) ℂ) :
     stinespringPi (r := r) (A * B) = stinespringPi (r := r) A * stinespringPi (r := r) B := by
-  simpa [stinespringPi] using
-    (Matrix.mul_kronecker_mul (A := A) (B := B)
-      (A' := (1 : Matrix (Fin r) (Fin r) ℂ)) (B' := (1 : Matrix (Fin r) (Fin r) ℂ)))
+  unfold stinespringPi
+  simpa using Matrix.mul_kronecker_mul (A := A) (B := B)
+    (A' := (1 : Matrix (Fin r) (Fin r) ℂ)) (B' := (1 : Matrix (Fin r) (Fin r) ℂ))
 
 @[simp]
 theorem stinespringPi_conjTranspose {r : ℕ}
     (A : Matrix (Fin D) (Fin D) ℂ) :
     (stinespringPi (r := r) A)ᴴ = stinespringPi (r := r) Aᴴ := by
-  simpa [stinespringPi] using
-    (Matrix.conjTranspose_kronecker (x := A) (y := (1 : Matrix (Fin r) (Fin r) ℂ)))
+  unfold stinespringPi
+  simpa using Matrix.conjTranspose_kronecker (x := A) (y := (1 : Matrix (Fin r) (Fin r) ℂ))
 
 /-- **Stinespring dilation (existential form, Wolf Thm 2.2)**:
 every CP map `E` admits an ancilla dimension `r`, a Kraus family `K`,
@@ -156,6 +159,7 @@ theorem exists_stinespring_dilation
     ∃ (r : ℕ) (K : Fin r → Matrix (Fin D) (Fin D) ℂ),
       ∀ A, E A = (stinespringV K)ᴴ * stinespringPi (r := r) A * stinespringV K := by
   rcases hE with ⟨r, K, hK⟩
+  -- Conjugating `K` converts Schrödinger-form Kraus terms into the Heisenberg-form witness.
   refine ⟨r, fun j => (K j)ᴴ, ?_⟩
   intro A
   calc
@@ -166,11 +170,14 @@ theorem exists_stinespring_dilation
           stinespringV (fun j => (K j)ᴴ) :=
       (stinespring_dual_representation (K := fun j => (K j)ᴴ) (A := A)).symm
 
-/-- **Stinespring dilation with isometry (TP case)**:
+/-- **Stinespring dilation with isometry (CPTP case)**:
 if `E` is CP and trace-preserving, the Stinespring witness can be chosen so that
 `V†V = 𝟙`, i.e. `V` is an isometry, and `E` is recovered by partial trace:
-`E(ρ)_{ij} = ∑ₖ (VρV†)_{(i,k),(j,k)}`. -/
-theorem exists_stinespring_isometry_of_tp
+`E(ρ)_{ij} = ∑ₖ (VρV†)_{(i,k),(j,k)}`.
+
+Unlike `exists_stinespring_dilation` (Heisenberg picture, conjugated Kraus witness),
+this theorem keeps the original Schrödinger-picture Kraus family. -/
+theorem exists_stinespring_isometry_of_cptp
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hEcp : IsCPMap E) (hEtp : IsTracePreservingMap E) :
     ∃ (r : ℕ) (K : Fin r → Matrix (Fin D) (Fin D) ℂ),
