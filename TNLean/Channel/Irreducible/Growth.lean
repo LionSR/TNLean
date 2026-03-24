@@ -930,6 +930,14 @@ theorem exp_posDef_of_irreducible_cp
     exact ⟨h_exp_psd.isHermitian, hq_pos⟩
   simpa [Φ] using hfinal
 
+/-- An orthogonal projection is positive semidefinite. -/
+theorem IsOrthogonalProjection.posSemidef {P : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) :
+    P.PosSemidef := by
+  have hPP : P = Pᴴ * P := by rw [hP.1, hP.2]
+  rw [hPP]
+  exact P.posSemidef_conjTranspose_mul_self
+
 /-- **Wolf Theorem 6.2, item 3 (equivalence form)**:
 for a completely positive map `E`, irreducibility is equivalent to strict
 positivity of the exponential semigroup on every nonzero PSD input:
@@ -949,13 +957,12 @@ theorem irreducible_iff_exp_posDef_forall
     intro P hP hP_inv
     by_cases hP0 : P = 0
     · exact Or.inl hP0
-    · have hP_psd : P.PosSemidef := by
-        have hPP : P = Pᴴ * P := by rw [hP.1, hP.2]
-        rw [hPP]
-        exact P.posSemidef_conjTranspose_mul_self
+    · have hP_psd : P.PosSemidef := hP.posSemidef
       have hsemigroup_inv :
           ∀ t : ℝ, 0 ≤ t → ∀ X : Matrix (Fin D) (Fin D) ℂ,
             P * expSemigroup E t (P * X * P) * P = expSemigroup E t (P * X * P) :=
+        -- This `simpa` is exactly the definitional unfolding of
+        -- `GeneratorPreservesCompression E P`.
         semigroup_preserves_compression_of_generator hP (by simpa using hP_inv)
       have hP_exp_pd : (expSemigroup E 1 P).PosDef := by
         simpa [expSemigroup, expSemigroupCLM, one_smul] using
@@ -974,8 +981,11 @@ theorem irreducible_iff_exp_posDef_forall
         rcases Matrix.PosDef.isUnit hP_exp_pd with ⟨U, hU⟩
         have hzero : (1 - P) * (↑U : Matrix (Fin D) (Fin D) ℂ) = 0 := by
           simpa [hU] using h_exp_zero_on_compl
-        have hzero' := congrArg (fun M => M * ((↑U⁻¹ : Matrix (Fin D) (Fin D) ℂ))) hzero
-        simpa [Matrix.mul_assoc] using hzero'
+        have hzero' : (1 - P) * (↑U : Matrix (Fin D) (Fin D) ℂ) =
+            0 * (↑U : Matrix (Fin D) (Fin D) ℂ) := by
+          simpa [zero_mul] using hzero
+        have hU_unit : IsUnit (↑U : Matrix (Fin D) (Fin D) ℂ) := ⟨U, rfl⟩
+        exact IsUnit.mul_right_cancel hU_unit hzero'
       exact Or.inr (by simpa [eq_comm] using sub_eq_zero.mp h_compl_eq_zero)
 
 end Exponential
