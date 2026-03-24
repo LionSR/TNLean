@@ -20,6 +20,9 @@ Done in Lean today:
 - strong-hypothesis canonical-form / CF-BNT theorems, including the same-structure equal-MPV theorem and the proportional theorem with explicit coefficient-convergence data
 - the cumulative `D²` Wielandt bound for the project's `IsNormal` notion
 - injective chain FT for non-translation-invariant periodic chains (`MPSChainTensor.fundamentalTheorem_injective_chain`) and its TI-collapse corollary (`MPSChainTensor.ti_tensors_collapse_to_single_gauge`); a blocked-chain endpoint (`MPSChainTensor.fundamentalTheorem_blockedChain`) bridges `IsNBlkInjective` to the chain theorem
+- periodic tensor definitions for the irreducible-form theory (`IsPeriodic`, `IsIrreducibleForm`, `ZGaugeEquiv`, `RepeatedBlocks`)
+- translation-invariance corollary for injective MPS chains (`ti_tensors_collapse_to_single_gauge`)
+- blocked normal-chain FT endpoint via `IsNBlkInjective` bridge (`IsNBlkInjective_iff_blockTensor_isInjective`)
 
 Still not assembled end-to-end:
 
@@ -31,10 +34,10 @@ Complementary channel-side milestones now in Lean:
 
 - Choi, Kraus, and Stinespring representation results from Wolf Chapter 2
 - Wolf Proposition 5.1, Theorems 5.5–5.7, and Example 5.3 in the Schwarz package
-- Wolf Theorem 6.1 together with substantial Chapter-6 spectral / fixed-point theory, including Theorems 6.12–6.13
-- Wolf Chapter-7 semigroup / GKSL package through Proposition 7.6 and Theorem 7.2; only Corollary 7.2 remains unformalized
+- Wolf Theorem 6.1 together with substantial Chapter-6 spectral / fixed-point theory, including Theorems 6.12–6.13 and the stationary-support package (Lemma 6.4, Proposition 6.9, `stationaryState`, `stationarySupport`)
+- Wolf Chapter-7 semigroup / GKSL package through Proposition 7.6 and Theorem 7.2, Proposition 7.5 (irreducible implies primitive for QDS), and a partial non-reducibility criterion for Corollary 7.2; the full convergence statement of Corollary 7.2 remains unformalized
 
-### Wolf channel-side snapshot (audit of 2026-03-19)
+### Wolf channel-side snapshot (audit of 2026-03-23)
 
 | Wolf chapter | Topic | Estimated theorem-level coverage |
 |---|---|---:|
@@ -43,8 +46,8 @@ Complementary channel-side milestones now in Lean:
 | Ch3 | Positive not completely positive | 0% |
 | Ch4 | Convex structure | equation-only |
 | Ch5 | Schwarz inequalities | ~23% |
-| Ch6 | Spectral properties | ~44% |
-| Ch7 | Semigroup structure | ~91% |
+| Ch6 | Spectral properties | ~50% |
+| Ch7 | Semigroup structure | ~95% |
 | Ch8 | Distance measures | 0% |
 
 ## Main Results
