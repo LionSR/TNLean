@@ -45,6 +45,13 @@ lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) 
   · intro h
     exact hSpan.symm.trans h
 
+/-- Deprecated compatibility alias for
+`isNBlkInjective_iff_blockTensor_isInjective`. -/
+@[deprecated isNBlkInjective_iff_blockTensor_isInjective (since := "2026-03-24")]
+lemma IsNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) :
+    IsNBlkInjective A N ↔ IsInjective (blockTensor A N) :=
+  isNBlkInjective_iff_blockTensor_isInjective A N
+
 end MPSTensor
 
 namespace MPSChainTensor

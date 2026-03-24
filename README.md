@@ -21,7 +21,7 @@ Done in Lean today:
 - the cumulative `D²` Wielandt bound for the project's `IsNormal` notion
 - periodic tensor definitions for the irreducible-form theory (`IsPeriodic`, `IsIrreducibleForm`, `ZGaugeEquiv`, `RepeatedBlocks`)
 - translation-invariance corollary for injective MPS chains (`ti_tensors_collapse_to_single_gauge`)
-- blocked normal-chain FT endpoint via `IsNBlkInjective` bridge (`IsNBlkInjective_iff_blockTensor_isInjective`)
+- blocked normal-chain FT endpoint via `IsNBlkInjective` bridge (`isNBlkInjective_iff_blockTensor_isInjective`)
 
 Still not assembled end-to-end:
 
