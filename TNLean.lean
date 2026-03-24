@@ -106,6 +106,8 @@ import TNLean.MPS.Chain.TranslationInvariance
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Overlap.Basic
+import TNLean.MPS.ParentHamiltonian.GroundSpace
+import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
