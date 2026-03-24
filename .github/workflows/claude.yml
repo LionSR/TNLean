@@ -38,6 +38,9 @@ jobs:
           use-mathlib-cache: true
           build: false
 
+      - name: Install leanblueprint
+        run: pipx install leanblueprint
+
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
@@ -57,7 +60,7 @@ jobs:
           # claude_args: '--allowed-tools Bash(gh pr:*)'
           claude_args: |
             --model claude-opus-4-6
-            --allowed-tools "Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*)"
+            --allowed-tools "Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*),Bash(leanblueprint *)"
             --append-system-prompt "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. Before changing theorem statements, first try to complete the proof using existing lemmas. Validate with: lake build. Do not leave unrelated new sorrys."
 
           # TODO: Explore adding MCP servers (e.g. sequential-thinking for complex proofs)
