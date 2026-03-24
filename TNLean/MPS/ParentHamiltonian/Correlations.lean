@@ -23,8 +23,8 @@ variable {d D : ℕ}
 
 /-- Placeholder one-point expectation value in the thermodynamic limit. -/
 noncomputable def onePointExpectation (_A : MPSTensor d D)
-    (X : Matrix (Fin D) (Fin D) ℂ) : ℂ :=
-  Matrix.trace X
+    (_X : Matrix (Fin D) (Fin D) ℂ) : ℂ :=
+  0
 
 /-- Placeholder two-point expectation value at separation `n`. -/
 noncomputable def twoPointExpectation (_A : MPSTensor d D)
@@ -40,19 +40,19 @@ noncomputable def connectedCorrelator (A : MPSTensor d D)
 theorem connectedCorrelator_eq_sum
     (A : MPSTensor d D)
     (X Y : Matrix (Fin D) (Fin D) ℂ)
-    (n : ℕ)
-    (c lam : Fin (D ^ 2 - 1) → ℂ) :
-    connectedCorrelator A X Y n =
-      ∑ j : Fin (D ^ 2 - 1), c j * (lam j) ^ n := by
+    (n : ℕ) :
+    ∃ c lam : Fin (D ^ 2 - 1) → ℂ,
+      connectedCorrelator A X Y n =
+        ∑ j : Fin (D ^ 2 - 1), c j * (lam j) ^ n := by
   sorry
 
 /-- Exponential decay bound interface for the connected correlator. -/
 theorem connectedCorrelator_bound
     (A : MPSTensor d D)
     (X Y : Matrix (Fin D) (Fin D) ℂ)
-    (n : ℕ)
-    (C_XY lambda2 : ℝ) :
-    ‖connectedCorrelator A X Y n‖ ≤ C_XY * |lambda2| ^ n := by
+    (n : ℕ) :
+    ∃ C_XY lambda2 : ℝ,
+      0 ≤ C_XY ∧ ‖connectedCorrelator A X Y n‖ ≤ C_XY * |lambda2| ^ n := by
   sorry
 
 /-- Correlation length extracted from the subleading transfer eigenvalue. -/
