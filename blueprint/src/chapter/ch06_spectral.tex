@@ -551,6 +551,58 @@ The formalized results are in
     These remain TODO in the formalization.
 \end{remark}
 
+\section{Additional Wolf Chapter~6 declaration wrappers}
+
+This section records declaration wrappers used in cross-chapter references.
+
+\begin{theorem}[Wolf Thm.~6.2(3): exponential positivity condition]%
+    \label{thm:wolf_6_2_item_3}
+    \lean{exp_posDef_of_irreducible_cp}
+    \leanok
+    \uses{def:irreducible_cp}
+    Let $E$ be an irreducible completely positive map, $A \ge 0$ with
+    $A \neq 0$, and $t > 0$. Then $\exp(tE)(A)$ is positive definite.
+\end{theorem}
+
+\begin{theorem}[Wolf Thm.~6.8: Kraus-span equivalence]%
+    \label{thm:wolf_6_8_kraus_span}
+    \lean{MPSTensor.wolf_theorem_6_8_kraus_span}
+    \leanok
+    \uses{def:primitive}
+    Under normalization, paper primitivity is equivalent to eventual
+    full Kraus rank.
+\end{theorem}
+
+\begin{theorem}[Wolf Thm.~6.8: conjunction wrapper]%
+    \label{thm:wolf_6_8_conjunction}
+    \lean{MPSTensor.wolf_theorem_6_8_conjunction}
+    \leanok
+    \uses{thm:wolf_6_8_kraus_span}
+    Under normalization, paper primitivity is equivalent to the conjunction
+    of eventual full Kraus rank, normality, and strong irreducibility.
+\end{theorem}
+
+\begin{remark}[Wolf Thm.~6.8 pairwise equivalence declarations]
+    \label{rem:wolf_6_8_pairwise}
+    \lean{MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank}
+    \lean{MPSTensor.primitivePaper_iff_stronglyIrreducible}
+    \lean{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible}
+    \lean{MPSTensor.hasEventuallyFullKrausRank_iff_isNormal}
+    \leanok
+    These are the pairwise equivalence declarations referenced by the
+    packaged Wolf Thm.~6.8 wrappers.
+\end{remark}
+
+\begin{theorem}[Wolf Thm.~6.15 (scalar fixed-point algebra case)]
+    \label{thm:wolf_6_15_scalar_conditional_expectation}
+    \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
+    \leanok
+    \uses{def:channel}
+    In the scalar fixed-point algebra setting, the weighted map
+    $X \mapsto \frac{\tr(\rho X)}{\tr(\rho)}\Id$ is a conditional
+    expectation onto the adjoint fixed-point $*$-subalgebra.
+\end{theorem}
+
 \section{Primitive overlap convergence (spectral-gap form)}
 
 The theorems in this section are stated directly in terms of the
