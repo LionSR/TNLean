@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.Basic
+import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
 
 import Mathlib.Analysis.Normed.Algebra.Exponential
 import Mathlib.Tactic.NoncommRing
@@ -928,5 +929,51 @@ theorem exp_posDef_of_irreducible_cp
     rw [Matrix.posDef_iff_dotProduct_mulVec]
     exact ⟨h_exp_psd.isHermitian, hq_pos⟩
   simpa [Φ] using hfinal
+
+/-- **Wolf Theorem 6.2, item 3 (equivalence form)**:
+for a completely positive map `E`, irreducibility is equivalent to strict
+positivity of the exponential semigroup on every nonzero PSD input:
+`exp(tE)(A)` is positive definite for all `t > 0` and all `A ≥ 0`, `A ≠ 0`. -/
+theorem irreducible_iff_exp_posDef_forall
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hCP : IsCPMap E) :
+    IsIrreducibleMap E ↔
+      ∀ t : ℝ, 0 < t → ∀ A : Matrix (Fin D) (Fin D) ℂ, A.PosSemidef → A ≠ 0 →
+        ((NormedSpace.exp
+          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+            ((t : ℂ) • E))) A).PosDef := by
+  constructor
+  · intro hIrr t ht A hA hA_ne
+    exact exp_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne ht
+  · intro hExp
+    intro P hP hP_inv
+    by_cases hP0 : P = 0
+    · exact Or.inl hP0
+    · have hP_psd : P.PosSemidef := isOrthogonalProjection_posSemidef hP
+      have hsemigroup_inv :
+          ∀ t : ℝ, 0 ≤ t → ∀ X : Matrix (Fin D) (Fin D) ℂ,
+            P * expSemigroup E t (P * X * P) * P = expSemigroup E t (P * X * P) :=
+        -- unfold `GeneratorPreservesCompression E P`
+        semigroup_preserves_compression_of_generator hP (by simpa using hP_inv)
+      have hP_exp_pd : (expSemigroup E 1 P).PosDef := by
+        simpa [expSemigroup, expSemigroupCLM, one_smul] using
+          hExp 1 zero_lt_one P hP_psd hP0
+      have hcompress_at_one :
+          P * expSemigroup E 1 P * P = expSemigroup E 1 P := by
+        simpa [hP.2] using hsemigroup_inv 1 zero_le_one 1
+      have h_exp_zero_on_compl :
+          (1 - P) * expSemigroup E 1 P = 0 := by
+        calc
+          (1 - P) * expSemigroup E 1 P
+              = (1 - P) * (P * expSemigroup E 1 P * P) := by rw [hcompress_at_one]
+          _ = ((1 - P) * P) * (expSemigroup E 1 P * P) := by simp [Matrix.mul_assoc]
+          _ = 0 := by rw [sub_mul, one_mul, hP.2, sub_self, Matrix.zero_mul]
+      have h_compl_eq_zero : 1 - P = 0 := by
+        rcases Matrix.PosDef.isUnit hP_exp_pd with ⟨U, hU⟩
+        have hzero : (1 - P) * (↑U : Matrix (Fin D) (Fin D) ℂ) = 0 := by
+          simpa [hU] using h_exp_zero_on_compl
+        have hU_unit : IsUnit (↑U : Matrix (Fin D) (Fin D) ℂ) := ⟨U, rfl⟩
+        exact IsUnit.mul_right_cancel hU_unit (by simpa [zero_mul] using hzero)
+      exact Or.inr (by simpa [eq_comm] using sub_eq_zero.mp h_compl_eq_zero)
 
 end Exponential

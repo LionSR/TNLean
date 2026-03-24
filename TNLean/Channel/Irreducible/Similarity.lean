@@ -34,28 +34,6 @@ noncomputable def similarityMap (C : Matrix (Fin D) (Fin D) ℂ)
   map_smul' a X := by
     simp [Matrix.mul_assoc]
 
-private lemma dotProduct_mulVec_conjTranspose
-    (M : Matrix (Fin D) (Fin D) ℂ)
-    (x y : Fin D → ℂ) :
-    star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y := by
-  rw [Matrix.dotProduct_mulVec, Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
-
-private lemma orthogonalProjection_posSemidef
-    {Q : Matrix (Fin D) (Fin D) ℂ}
-    (hQ : IsOrthogonalProjection Q) :
-    Q.PosSemidef := by
-  refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hQ.1 ?_
-  intro x
-  have h₁ : star x ⬝ᵥ (Q *ᵥ x) = star (Q *ᵥ x) ⬝ᵥ x := by
-    simpa [hQ.1.eq] using (dotProduct_mulVec_conjTranspose Q x x)
-  have h₂ : star (Q *ᵥ x) ⬝ᵥ x = star (Q *ᵥ x) ⬝ᵥ (Q *ᵥ x) := by
-    simpa [hQ.1.eq, hQ.2, Matrix.mulVec_mulVec] using
-      (dotProduct_mulVec_conjTranspose Q (Q *ᵥ x) x).symm
-  calc
-    0 ≤ star (Q *ᵥ x) ⬝ᵥ (Q *ᵥ x) := dotProduct_star_self_nonneg _
-    _ = star (Q *ᵥ x) ⬝ᵥ x := h₂.symm
-    _ = star x ⬝ᵥ (Q *ᵥ x) := h₁.symm
-
 private noncomputable def supportInv
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
     Matrix (Fin D) (Fin D) ℂ :=
@@ -206,7 +184,7 @@ theorem isIrreducibleMap_similarity
     IsIrreducibleMap (similarityMap (D := D) C E) := by
   classical
   intro Q hQ_proj hQ_inv
-  have hQ_psd : Q.PosSemidef := orthogonalProjection_posSemidef hQ_proj
+  have hQ_psd : Q.PosSemidef := isOrthogonalProjection_posSemidef hQ_proj
   let R : Matrix (Fin D) (Fin D) ℂ := C * Q * Cᴴ
   have hR_psd : R.PosSemidef := by
     simpa [R, Matrix.mul_assoc] using hQ_psd.mul_mul_conjTranspose_same C
