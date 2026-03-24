@@ -211,3 +211,4 @@ import TNLean.Channel.Semigroup.Primitivity
 import TNLean.Channel.Semigroup.LiouvillianKernel
 import TNLean.Channel.Semigroup.ReducibleQDS
 import TNLean.Channel.Determinant
+import TNLean.MPS.ParentHamiltonian.Correlations

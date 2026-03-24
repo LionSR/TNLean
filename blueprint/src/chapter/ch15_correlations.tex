@@ -1,0 +1,35 @@
+\chapter{Exponential Decay of Correlations}\label{ch:correlations}
+
+This chapter states the connected-correlator interfaces used in the parent-Hamiltonian
+pipeline. The corresponding Lean declarations currently exist as explicit placeholders,
+so we intentionally avoid \texttt{\textbackslash leanok} tags for those statements.
+
+\section{Connected correlator}
+
+\begin{definition}[Connected two-point correlator]\label{def:connected_correlator}
+    \lean{MPSTensor.connectedCorrelator}
+    For an MPS tensor $A$ and local observables $X,Y$, define
+    \[
+        C_{X,Y}(n) = \langle X_0 Y_n \rangle - \langle X_0 \rangle\,\langle Y_n \rangle.
+    \]
+\end{definition}
+
+\begin{theorem}[Sum-of-exponentials form]\label{thm:connected_sum}
+    \lean{MPSTensor.connectedCorrelator_eq_sum}
+    The connected correlator can be expanded into a finite sum of exponentials
+    indexed by the non-leading transfer eigenmodes.
+\end{theorem}
+
+\begin{theorem}[Exponential decay bound]\label{thm:connected_bound}
+    \lean{MPSTensor.connectedCorrelator_bound}
+    The connected correlator is bounded by a geometric envelope determined by
+    the subleading transfer eigenvalue modulus.
+\end{theorem}
+
+\begin{definition}[Correlation length]\label{def:correlation_length}
+    \lean{MPSTensor.correlationLength}
+    The correlation length is defined by
+    \[
+        \xi = -\frac{1}{\log |\lambda_2|}.
+    \]
+\end{definition}
