@@ -7,9 +7,13 @@ import TNLean.MPS.Chain.FundamentalTheorem
 This module packages a blocked-chain endpoint. The theorem
 `fundamentalTheorem_blockedChain` is stated for blocked chains built from a
 common blocking length `L`.
--/
 
-open scoped Matrix
+## Design note
+
+This endpoint is kept as a theorem with explicit assumptions (rather than
+packaging assumptions in a class) so callers can provide their own blocking
+witnesses and reuse existing hypotheses directly.
+-/
 
 namespace MPSTensor
 
@@ -74,8 +78,8 @@ theorem fundamentalTheorem_blockedChain
     (hMPV : MPSTensor.SameMPV
       (MPSTensor.chainCombinedTensor (blockedChain A L n))
       (MPSTensor.chainCombinedTensor (blockedChain B L n))) :
-    GaugeEquiv (blockedChain A L n) (blockedChain B L n) := by
-  exact fundamentalTheorem_injective_chain
+    GaugeEquiv (blockedChain A L n) (blockedChain B L n) :=
+  fundamentalTheorem_injective_chain
     (blockedChain A L n)
     (blockedChain B L n)
     (blockedChain_isInjective A L n hA_block)
