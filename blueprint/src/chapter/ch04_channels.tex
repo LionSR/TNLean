@@ -849,6 +849,27 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     of $U^\dagger U = \Id$ to collapse to $\ell = \ell'$ diagonal terms.
 \end{proof}
 
+\begin{theorem}[Thm.~2.1: Orthonormal Kraus transition is unitary]\label{thm:kraus_transition_unitary_of_hs_orthonormal}
+    \lean{kraus_transition_unitary_of_hs_orthonormal}
+    \leanok
+    \uses{def:cp_map}
+    Let $\{K_j\}_{j=0}^{r-1}$ and $\{K'_j\}_{j=0}^{r-1}$ be two
+    Hilbert--Schmidt orthonormal Kraus families, and suppose
+    \[
+        K_j = \sum_{\ell=0}^{r-1} U_{j\ell}\,K'_\ell.
+    \]
+    Then the transition matrix $U$ is unitary:
+    $U^\dagger U = \Id_r$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand $\operatorname{tr}(K_j^\dagger K_i)$ using the change of basis.
+    Hilbert--Schmidt orthonormality of both Kraus families identifies
+    the Gram matrix with the identity, yielding the matrix identity
+    $U U^\dagger = \Id_r$, hence also $U^\dagger U = \Id_r$.
+\end{proof}
+
 %% =========================================================
 \section{Stinespring dilation (Wolf Thm.~2.2)}
 \label{sec:stinespring}
@@ -930,6 +951,54 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     \uses{def:stinespring_v}
     Expand $(V\rho V^\dagger)_{(i,k),(j,k)}$
     and sum over $k$ to recover $\sum_k K_k \rho K_k^\dagger$.
+\end{proof}
+
+%% =========================================================
+\subsection{Trace-pairing expansion in transfer-matrix form}
+\label{subsec:trace_pairing_expansion}
+%% =========================================================
+
+\begin{definition}[Trace-self-dual basis]\label{def:trace_pairing_self_dual_basis}
+    \lean{TracePairingSelfDualBasis}
+    \leanok
+    A basis $\{\sigma_i\}_i$ of $\MN{D}$ is \emph{trace-self-dual} when
+    its coordinate functionals are given by trace pairing:
+    \[
+        X = \sum_i \operatorname{tr}(\sigma_i X)\,\sigma_i.
+    \]
+\end{definition}
+
+\begin{definition}[Trace-pairing coefficients]\label{def:trace_pairing_coeff}
+    \lean{tracePairingCoeff}
+    \leanok
+    \uses{def:trace_pairing_self_dual_basis}
+    For a linear map $T : \MN{D} \to \MN{D}$ and a trace-self-dual basis
+    $\{\sigma_i\}$, define coefficients
+    \[
+        t_{ij} := \operatorname{tr}(\sigma_i\,T(\sigma_j)).
+    \]
+\end{definition}
+
+\begin{theorem}[Trace-pairing expansion of a linear map]\label{thm:linearMap_expand_tracePairing}
+    \lean{linearMap_expand_tracePairing}
+    \leanok
+    \uses{def:trace_pairing_self_dual_basis, def:trace_pairing_coeff}
+    If $\{\sigma_i\}$ is trace-self-dual, then every linear map
+    $T : \MN{D} \to \MN{D}$ admits the expansion
+    \[
+        T(\rho)
+          = \sum_i \sum_j t_{ij}\,
+              \operatorname{tr}(\sigma_j \rho)\,\sigma_i,
+        \qquad
+        t_{ij} = \operatorname{tr}(\sigma_i T(\sigma_j)).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand $\rho$ and each $T(\sigma_j)$ in the chosen basis and substitute.
+    The trace-self-dual identity replaces coordinates by traces, giving the
+    stated double-sum formula.
 \end{proof}
 
 %% The following sections will not be needed for the fundamental theorem of the matrix product states.
