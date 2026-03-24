@@ -115,6 +115,9 @@ import TNLean.MPS.FundamentalTheorem.TransferNormalization
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Core.Correlations
+import TNLean.MPS.ParentHamiltonian.GroundSpace
+import TNLean.MPS.ParentHamiltonian.Defs
+import TNLean.MPS.ParentHamiltonian.Basic
 
 -- Layer 4: Fundamental theorem (single block)
 import TNLean.MPS.Structure.LinearExtension
