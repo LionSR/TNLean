@@ -7,7 +7,7 @@ body:
       value: |
         ## Tracking Issue
         Use this template to create an issue that tracks progress across multiple related issues and PRs.
-        List each sub-task as a checkbox item with an issue/PR reference (e.g., `- [ ] #123`).
+        List each sub-task inside a native tasklist block so GitHub shows "Tracked by" on child issues.
 
   - type: input
     id: area
@@ -32,15 +32,22 @@ body:
     attributes:
       label: Tracked Tasks
       description: |
-        List issues/PRs to track. Use checkbox format with issue references.
-        The workflow will automatically update these checkboxes when issues are closed or PRs are merged.
+        List issues/PRs to track using a native tasklist block.
+        Each line must contain only the issue reference (no descriptions).
+        The workflow will automatically update checkboxes when issues are closed or PRs are merged.
       value: |
+        ```[tasklist]
+        ### Tasks
         - [ ] #
         - [ ] #
         - [ ] #
+        ```
       placeholder: |
-        - [ ] #42 Formalize quantum channel composition
-        - [ ] #43 Prove Schwarz inequality for CP maps
+        ```[tasklist]
+        ### Tasks
+        - [ ] #42
+        - [ ] #43
+        ```
     validations:
       required: true
 
