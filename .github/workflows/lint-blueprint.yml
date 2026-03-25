@@ -1,0 +1,33 @@
+name: Lint blueprint
+
+on:
+  push:
+    paths:
+      - 'blueprint/src/**'
+  pull_request:
+    paths:
+      - 'blueprint/src/**'
+
+jobs:
+  lint-blueprint:
+    runs-on: ubuntu-latest
+    name: Check blueprint compiles without errors
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install leanblueprint
+        run: pip install leanblueprint
+
+      - name: Run leanblueprint web and check for errors
+        working-directory: blueprint
+        run: |
+          output=$(leanblueprint web 2>&1)
+          echo "$output"
+          if echo "$output" | grep -q "^ERROR:"; then
+            echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
+            exit 1
+          fi
