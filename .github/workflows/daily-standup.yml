@@ -26,7 +26,7 @@ jobs:
 
       - name: Gather recent activity
         id: activity
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
