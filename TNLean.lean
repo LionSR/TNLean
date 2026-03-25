@@ -126,6 +126,7 @@ import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.FundamentalTheorem.Applications
 -- Symmetry
 import TNLean.MPS.Symmetry.Defs
+import TNLean.MPS.Symmetry.GaugeUniqueness
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
