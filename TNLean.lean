@@ -216,3 +216,6 @@ import TNLean.Channel.Semigroup.Primitivity
 import TNLean.Channel.Semigroup.LiouvillianKernel
 import TNLean.Channel.Semigroup.ReducibleQDS
 import TNLean.Channel.Determinant
+
+-- PEPS (exploratory)
+import TNLean.PEPS.Defs
