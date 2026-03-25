@@ -29,6 +29,7 @@ import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.MatrixFrobenius
 import TNLean.Algebra.ProjectiveRepresentation
+import TNLean.Algebra.ScalarCommutant
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection

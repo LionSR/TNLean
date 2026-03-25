@@ -13,7 +13,7 @@ of the full matrix algebra over a commutative ring is trivial.
 
 ## Main results
 
-* `Matrix.commute_span_top_isScalar`: if `Z` commutes with a spanning set,
+* `Matrix.isScalar_of_commute_span_eq_top`: if `Z` commutes with a spanning set,
   then `Z = scalar n c` for some `c`.
 -/
 
@@ -26,7 +26,7 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 
 /-- A matrix that commutes with a spanning set of `M_n(R)` lies in the center,
 hence is a scalar matrix. -/
-theorem commute_span_top_isScalar
+theorem isScalar_of_commute_span_eq_top
     (Z : Matrix n n R)
     {S : Set (Matrix n n R)}
     (hS : Submodule.span R S = ⊤)
@@ -44,7 +44,7 @@ theorem commute_span_top_isScalar
   have hcenter : Z ∈ Set.center (Matrix n n R) := by
     rw [Set.mem_center_iff]
     exact {
-      comm := fun a => show Z * a = a * Z from hcomm_all a
+      comm := fun a => hcomm_all a
       left_assoc := fun b c => (mul_assoc Z b c).symm
       right_assoc := fun a b => mul_assoc a b Z
     }
