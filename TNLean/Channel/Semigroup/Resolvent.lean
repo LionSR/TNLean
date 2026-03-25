@@ -23,7 +23,7 @@ private abbrev CLM (D : ℕ) :=
 
 /-- Neumann-series specialization at `z = 1`:
 if `‖L‖ < 1`, then `R(1,L) = ∑ₙ L^n`. -/
-theorem generatorResolventCLM_one_neumann
+theorem resolvent_one_neumann
     (L : CLM D) (hL : ‖L‖ < 1) :
     resolvent L (1 : ℂ) = ∑' n : ℕ, L ^ n := by
   simpa [resolvent, Algebra.algebraMap_eq_smul_one, one_smul] using
