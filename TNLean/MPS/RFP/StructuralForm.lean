@@ -56,7 +56,7 @@ theorem rfp_nt_structural (A : MPSTensor d D)
       (∑ j, (Λ j : ℂ) = 1) ∧
       (∀ i, (U i).conjTranspose * U i = 1) ∧
       ∀ i, A i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) *
-        U i * Ring.inverse X := by
+        U i * X⁻¹ := by
   sorry
 
 /-- **Theorem 3.11** (arXiv:1606.00608): For a canonical-form tensor that is
@@ -75,7 +75,9 @@ theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
       IsUnit X ∧
       (∀ j, 0 ≤ Λ j) ∧
       (∑ j, (Λ j : ℂ) = 1) ∧
-      (∀ i, (U i).conjTranspose * U i = 1) := by
+      (∀ i, (U i).conjTranspose * U i = 1) ∧
+      ∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) *
+        U i * X⁻¹ := by
   sorry
 
 /-- **Corollary 3.12** (arXiv:1606.00608): The BNT elements of an RFP tensor
@@ -93,7 +95,7 @@ theorem rfp_bnt_structural {r : ℕ} {dim : Fin r → ℕ}
       (∑ j, (Λ j : ℂ) = 1) ∧
       (∀ i, (U i).conjTranspose * U i = 1) ∧
       ∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) *
-        U i * Ring.inverse X := by
+        U i * X⁻¹ := by
   sorry
 
 end MPSTensor

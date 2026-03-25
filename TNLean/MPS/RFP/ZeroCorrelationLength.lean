@@ -36,16 +36,19 @@ of any pair of local observables is independent of the separation between
 them. See arXiv:1606.00608, Definition 3.3.
 
 TODO: formalize in terms of `twoPointExpectation` from `Core/Correlations`. -/
-def IsCID (_A : MPSTensor d D) : Prop :=
-  sorry
+def IsCID (A : MPSTensor d D) : Prop :=
+  ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
+    ρ.PosSemidef ∧ ρ.trace = 1 ∧
+    ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      transferMap A X = X.trace • ρ
 
 /-- Local orthogonality: the BNT elements of `A` have vanishing mixed
 transfer operators, i.e. `Σ_i A^i_j ⊗ Ā^i_{j'} = 0` for `j ≠ j'`.
 See arXiv:1606.00608, Definition 3.5.
 
 TODO: formalize in terms of `mixedTransferMap` from `Spectral/`. -/
-def IsLocallyOrthogonal (_A : MPSTensor d D) : Prop :=
-  sorry
+def IsLocallyOrthogonal (A : MPSTensor d D) : Prop :=
+  ∀ i j : Fin d, i ≠ j → (A i)ᴴ * A j = 0
 
 /-- Zero correlation length: a tensor has ZCL when it is both locally
 orthogonal and has correlations independent of distance.
