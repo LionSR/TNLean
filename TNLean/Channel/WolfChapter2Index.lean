@@ -57,6 +57,18 @@ representations of quantum channels.
 * `MPSTensor.transferMatrix_eq` — MPS bridge:
   `E_A` has transfer matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ` ✅
 
+### §2.2–2.3 Transfer matrix characterizations & normal forms (Props 2.5-2.8)
+
+* `transferMatrix_tp_iff` — **Prop 2.6**: TP ↔ column-diagonal sums = δ ✅
+* `transferMatrix_unital_iff` — **Prop 2.6**: unital ↔ row-diagonal sums = δ ✅
+* `transferMatrix_hermPreserving_iff` — **Prop 2.5**: HP ↔ conjugation
+  symmetry of transfer matrix entries ✅
+* `unitaryConjLM` — unitary conjugation map `Ad_U(X) = U X U†` ✅
+* `transferMatrix_unitaryConj` — **Prop 2.7 ingredient**: `(Ad_U)^ = Ū ⊗ₖ U` ✅
+* `unitaryConjLM_isChannel_of_unitary` — `Ad_U` is a channel for unitary `U` ✅
+* `transferMatrix_unitaryConj_sandwich` — **Props 2.7-2.8 key identity**:
+  `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) T̂ (Ū₂⊗U₂)` ✅
+
 ### Infrastructure
 
 | Definition | File | Lean name |
@@ -70,6 +82,7 @@ representations of quantum channels.
 | Choi matrix | `ChoiJamiolkowski.lean` | `ChoiJamiolkowski.choiMatrix` |
 | Stinespring isometry | `Stinespring.lean` | `stinespringV` |
 | Transfer matrix | `TransferMatrix.lean` | `transferMatrix` |
+| Unitary conjugation | `TransferMatrix.lean` | `unitaryConjLM` |
 | Vectorization | `Mathlib.LinearAlgebra.Matrix.Vec` | `Matrix.vec` |
 
 ### Not yet formalized
@@ -84,7 +97,8 @@ representations of quantum channels.
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
 | Thm 2.6 (Neumark's theorem) | POVM embedding |
-| §2.3 (normal forms) | Lorentz normal form etc. |
+| §2.3 Lorentz normal form (existence) | Needs SVD of transfer matrix |
+| §2.3 SVD representation (existence) | Needs Mathlib SVD |
 
 ## References
 
