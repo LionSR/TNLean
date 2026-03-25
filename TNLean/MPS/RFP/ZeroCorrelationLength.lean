@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Core.Transfer
+import TNLean.MPS.Core.Correlations
 import TNLean.MPS.BNT.Construction
 import TNLean.Spectral.SpectralGap
 import TNLean.Algebra.ScalarPowerSumIdentity
@@ -35,17 +36,19 @@ variable {d D : ℕ}
 of any pair of local observables is independent of the separation between
 them. See arXiv:1606.00608, Definition 3.3.
 
-TODO: formalize in terms of `twoPointExpectation` from `Core/Correlations`. -/
-def IsCID (_A : MPSTensor d D) : Prop :=
-  sorry
+Concretely, for every right density `ρR` and observables `X`, `Y`, the
+connected correlator `⟨X₀ Yₙ⟩ − ⟨X⟩⟨Y⟩` is the same for all distances `n`. -/
+def IsCID (A : MPSTensor d D) : Prop :=
+  ∀ (ρR X Y : Matrix (Fin D) (Fin D) ℂ) (m n : ℕ),
+    twoPointExpectation A ρR X Y m = twoPointExpectation A ρR X Y n
 
-/-- Local orthogonality: the BNT elements of `A` have vanishing mixed
-transfer operators, i.e. `Σ_i A^i_j ⊗ Ā^i_{j'} = 0` for `j ≠ j'`.
-See arXiv:1606.00608, Definition 3.5.
-
-TODO: formalize in terms of `mixedTransferMap` from `Spectral/`. -/
-def IsLocallyOrthogonal (_A : MPSTensor d D) : Prop :=
-  sorry
+/-- Local orthogonality: the Kraus operators of `A` satisfy trace-orthogonality,
+i.e. `∑ k, (A k i)ᴴ * (A k j) = 0` for `i ≠ j`.
+Equivalently, the mixed transfer map `E_{A_i, A_j}` vanishes for distinct
+block indices. See arXiv:1606.00608, Definition 3.5. -/
+def IsLocallyOrthogonal (A : MPSTensor d D) : Prop :=
+  ∀ i j : Fin d, i ≠ j →
+    (A i)ᴴ * (A j) = 0
 
 /-- Zero correlation length: a tensor has ZCL when it is both locally
 orthogonal and has correlations independent of distance.
