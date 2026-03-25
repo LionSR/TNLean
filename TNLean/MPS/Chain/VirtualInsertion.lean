@@ -71,41 +71,34 @@ theorem physRealize_one (A : MPSTensor d D) (hA : IsInjective A)
 
 /-- `physRealize` preserves multiplication. -/
 theorem physRealize_mul (A : MPSTensor d D) (hA : IsInjective A)
-    (hLin : LinearIndependent ℂ A)
     (X Y : Matrix (Fin D) (Fin D) ℂ) :
     physRealize A hA (X * Y) = physRealize A hA X * physRealize A hA Y := by
   ext i k
-  let cXY : Fin d → ℂ := fun k' => physRealize A hA (X * Y) i k'
-  let cProd : Fin d → ℂ := fun k' => (physRealize A hA X * physRealize A hA Y) i k'
-  have hcXY : Fintype.linearCombination ℂ A cXY = A i * (X * Y) := by
-    simpa [cXY, Fintype.linearCombination_apply] using (physRealize_spec A hA (X * Y) i).symm
-  have hcProd : Fintype.linearCombination ℂ A cProd = A i * (X * Y) := by
+  change decompositionMap (A := A) hA (A i * (X * Y)) k =
+    (physRealize A hA X * physRealize A hA Y) i k
+  have hdecomp :
+      decompositionMap (A := A) hA (A i * (X * Y))
+        = ∑ j, (physRealize A hA X) i j • decompositionMap (A := A) hA (A j * Y) := by
     calc
-      Fintype.linearCombination ℂ A cProd
-          = ∑ k', cProd k' • A k' := by simp [Fintype.linearCombination_apply]
-      _ = ∑ k', (∑ j, (physRealize A hA X) i j * (physRealize A hA Y) j k') • A k' := by
-            simp [cProd, Matrix.mul_apply]
-      _ = ∑ k', ∑ j, ((physRealize A hA X) i j * (physRealize A hA Y) j k') • A k' := by
-            simp [Finset.sum_smul]
-      _ = ∑ j, ∑ k', ((physRealize A hA X) i j * (physRealize A hA Y) j k') • A k' := by
-            rw [Finset.sum_comm]
-      _ = ∑ j, (physRealize A hA X) i j • (∑ k', (physRealize A hA Y) j k' • A k') := by
-            refine Finset.sum_congr rfl ?_
-            intro j hj
-            simp [Finset.smul_sum, mul_smul]
-      _ = ∑ j, (physRealize A hA X) i j • (A j * Y) := by
-            refine Finset.sum_congr rfl ?_
-            intro j hj
-            simpa using
-              congrArg (fun M => (physRealize A hA X) i j • M)
-                (physRealize_spec A hA Y j).symm
-      _ = (∑ j, (physRealize A hA X) i j • A j) * Y := by
+      decompositionMap (A := A) hA (A i * (X * Y))
+          = decompositionMap (A := A) hA ((A i * X) * Y) := by
+              simp [Matrix.mul_assoc]
+      _ = decompositionMap (A := A) hA ((∑ j, (physRealize A hA X) i j • A j) * Y) := by
+            rw [← physRealize_spec A hA X i]
+      _ = decompositionMap (A := A) hA (∑ j, (physRealize A hA X) i j • (A j * Y)) := by
             simp [Finset.sum_mul]
-      _ = (A i * X) * Y := by simpa using congrArg (fun M => M * Y) (physRealize_spec A hA X i).symm
-      _ = A i * (X * Y) := by simp [Matrix.mul_assoc]
-  have hcoeff : cXY = cProd :=
-    hLin.fintypeLinearCombination_injective (hcXY.trans hcProd.symm)
-  simpa [cXY, cProd] using congrArg (fun f => f k) hcoeff
+      _ = ∑ j, (physRealize A hA X) i j • decompositionMap (A := A) hA (A j * Y) := by
+            simp
+  calc
+    decompositionMap (A := A) hA (A i * (X * Y)) k
+        = (∑ j, (physRealize A hA X) i j • decompositionMap (A := A) hA (A j * Y)) k := by
+            simpa using congrArg (fun f => f k) hdecomp
+    _ = ∑ j, (physRealize A hA X) i j * (decompositionMap (A := A) hA (A j * Y)) k := by
+          simp
+    _ = ∑ j, (physRealize A hA X) i j * (physRealize A hA Y) j k := by
+          simp [physRealize]
+    _ = (physRealize A hA X * physRealize A hA Y) i k := by
+          simp [Matrix.mul_apply]
 
 /-- Nonzero insertion gives nonzero physical operation. -/
 theorem physRealize_injective (A : MPSTensor d D) (hA : IsInjective A)
