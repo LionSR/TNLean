@@ -18,11 +18,12 @@ variable {d D : ℕ}
 
 This is currently represented by a linear operator placeholder; in the full
 construction this will be refined to the orthogonal projector onto `G_L(A)ᗮ`. -/
-noncomputable def parentInteraction (_A : MPSTensor d D) (_L : ℕ) :
+noncomputable def parentInteraction (_A : MPSTensor d D) (L : ℕ) :
     NSiteSpace d L →ₗ[ℂ] NSiteSpace d L :=
   -- TODO(parent-hamiltonian): replace this zero placeholder with the orthogonal
   -- projector onto `groundSpace A L`ᗮ once the geometric construction is added.
-  -- TODO: used in GroundSpace/Basic after localTerm embeds this interaction.
+  -- TODO(parent-hamiltonian): consumed by `localTerm` and then by
+  -- `parentHamiltonian_annihilates`/`parentHamiltonian_frustrationFree`.
   0
 
 /-- Placeholder translated local term on an `N`-site periodic chain.
