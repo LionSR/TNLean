@@ -28,7 +28,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {G : Type*} [Group G] {d D : ℕ}
+variable {G : Type*} [Monoid G] {d D : ℕ}
 
 /-- Tensor twisted by physical action of `g ∈ G`.
 
