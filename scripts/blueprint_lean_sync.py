@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 Blueprint ↔ Lean code synchronisation checker.
 
 Parses the blueprint .tex files for \lean{DeclName} and \leanok annotations,
@@ -30,12 +30,15 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 _LEAN_DECL_RE = re.compile(
-    r"^\s*(?:@\[.*?\]\s*)?(?:noncomputable\s+)?(?:protected\s+)?(?:private\s+)?(?:def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque)\s+([\w.'+]+)",
+    r"^\s*(?:@\[.*?\]\s*)?(?:(?:noncomputable|protected|private)\s+)*(?:def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque)\s+([\w.'+]+)",
     re.MULTILINE,
 )
 
 _NAMESPACE_OPEN_RE = re.compile(r"^\s*namespace\s+([\w.]+)", re.MULTILINE)
-_SECTION_OPEN_RE = re.compile(r"^\s*(?:noncomputable\s+)?section\s+([\w.]+)", re.MULTILINE)
+_SECTION_OPEN_RE = re.compile(
+    r"^\s*(?:(?:noncomputable|private|protected|local)\s+)*section\s+([\w.]+)",
+    re.MULTILINE,
+)
 _NAMESPACE_CLOSE_RE = re.compile(r"^\s*end\s+([\w.]+)", re.MULTILINE)
 
 _TEX_LEAN_RE = re.compile(r"\\lean\{([^}]+)\}")
@@ -238,6 +241,7 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
             # Inside a proof block: detect \leanok on its own line
             if in_proof and current_proof and _TEX_LEANOK_RE.search(line):
                 current_proof["has_leanok"] = True
+                continue
 
             # Proof end
             m = _TEX_PROOF_END_RE.search(line)
