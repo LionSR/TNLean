@@ -889,10 +889,30 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     This implements $V = \sum_j K_j \otimes \lvert j\rangle$.
 \end{definition}
 
+\begin{lemma}[Entry formula for the Stinespring isometry]\label{lem:stinespring_v_apply}
+    \lean{stinespringV_apply}
+    \leanok
+    \uses{def:stinespring_v}
+    For indices $i,k \in \{0,\dots,D-1\}$ and $j \in \{0,\dots,r-1\}$,
+    \[
+        V_{(i,j),k} = (K_j)_{ik}.
+    \]
+\end{lemma}
+
+\begin{theorem}[Stinespring Gram identity]\label{thm:stinespring_v_conjTranspose_mul}
+    \lean{stinespringV_conjTranspose_mul}
+    \leanok
+    \uses{def:stinespring_v}
+    The Stinespring isometry satisfies
+    \[
+        V^\dagger V = \sum_{j=0}^{r-1} K_j^\dagger K_j.
+    \]
+\end{theorem}
+
 \begin{theorem}[Thm.~2.2: Stinespring dual representation]\label{thm:stinespring_dual_representation}
     \lean{stinespring_dual_representation}
     \leanok
-    \uses{def:stinespring_v, def:cp_map}
+    \uses{def:stinespring_v, def:cp_map, thm:stinespring_v_conjTranspose_mul}
     For Kraus operators $\{K_j\}$ and $A \in \MN{D}$,
     \[
         V^\dagger\,(A \otimes \Id_r)\,V

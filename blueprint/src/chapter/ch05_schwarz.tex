@@ -118,6 +118,35 @@ convenience.
     Trace preservation gives $\tr(E(X^\dagger X)) = \tr(X^\dagger X)$.
 \end{proof}
 
+\begin{lemma}[Trace pairing for Kraus map and adjoint map]\label{lem:trace_mul_map_eq_trace_adjointMap_mul}
+    \lean{Kraus.trace_mul_map_eq_trace_adjointMap_mul}
+    \leanok
+    \uses{def:kraus_map, def:kraus_adjoint_map}
+    For all $X,Y \in \MN{D}$,
+    \[
+      \tr\!\bigl(X\,E(Y)\bigr) = \tr\!\bigl(E^*(X)\,Y\bigr).
+    \]
+\end{lemma}
+
+\begin{lemma}[Positive-definite trace test]\label{lem:posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
+    \lean{Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
+    \leanok
+    If $A>0$, $X\ge 0$, and $\tr(AX)=0$, then $X=0$.
+\end{lemma}
+
+\begin{theorem}[Fixed-point peripheral eigenvectors satisfy KS equality]
+    \label{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint}
+    \lean{Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint}
+    \leanok
+    \uses{thm:kadison_schwarz, lem:trace_mul_map_eq_trace_adjointMap_mul,
+          lem:posSemidef_eq_zero_of_posDef_trace_mul_eq_zero}
+    Let $E$ be unital and let $E^*$ be trace-preserving with a positive
+    definite fixed point $\rho>0$. If $E(X)=\mu X$ with $|\mu|=1$, then
+    \[
+      E(X^\dagger X)=E(X)^\dagger E(X).
+    \]
+\end{theorem}
+
 \section{Multiplicative domain}
 
 \begin{theorem}[KS gap decomposition]\label{thm:ks_gap_decomp}

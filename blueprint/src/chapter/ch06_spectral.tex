@@ -462,6 +462,103 @@ canonical-form separation arguments.
     Theorem~\ref{thm:qpf}.
 \end{remark}
 
+\section{Conditional expectation from a faithful fixed point (Wolf Thm.~6.15)}
+
+\begin{definition}[Conditional expectation predicate]\label{def:is_conditional_expectation}
+    \lean{Kraus.IsConditionalExpectation}
+    \leanok
+    Given a $*$-subalgebra $S \subseteq \MN{D}$, a linear map
+    $P : \MN{D} \to \MN{D}$ is a conditional expectation onto $S$ if it is
+    idempotent, unital, has range contained in $S$, and satisfies
+    $P(X)=X$ for all $X \in S$.
+\end{definition}
+
+\begin{definition}[Scalar conditional expectation]\label{def:scalar_conditional_expectation}
+    \lean{Kraus.scalarConditionalExpectation}
+    \leanok
+    \uses{def:is_conditional_expectation}
+    For $\sigma \ge 0$ with $\tr(\sigma)\neq 0$, define
+    \[
+      E_\sigma(X) := \frac{\tr(\sigma X)}{\tr(\sigma)}\,\Id.
+    \]
+\end{definition}
+
+\begin{lemma}[Evaluation formula]\label{lem:scalar_conditional_expectation_apply}
+    \lean{Kraus.scalarConditionalExpectation_apply}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    $E_\sigma(X)=\dfrac{\tr(\sigma X)}{\tr(\sigma)}\,\Id$.
+\end{lemma}
+
+\begin{theorem}[Unitality]\label{thm:scalar_conditional_expectation_unital}
+    \lean{Kraus.scalarConditionalExpectation_unital}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    $E_\sigma(\Id)=\Id$.
+\end{theorem}
+
+\begin{theorem}[Idempotence]\label{thm:scalar_conditional_expectation_idempotent}
+    \lean{Kraus.scalarConditionalExpectation_idempotent}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    $E_\sigma(E_\sigma(X)) = E_\sigma(X)$ for all $X$.
+\end{theorem}
+
+\begin{lemma}[Range is scalar]\label{lem:scalar_conditional_expectation_range_scalar}
+    \lean{Kraus.scalarConditionalExpectation_range_scalar}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    For every $X$, there exists $c\in\C$ with $E_\sigma(X)=c\,\Id$.
+\end{lemma}
+
+\begin{lemma}[Fixes scalar operators]\label{lem:scalar_conditional_expectation_fixes_scalar}
+    \lean{Kraus.scalarConditionalExpectation_fixes_scalar}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    For $c\in\C$, $E_\sigma(c\,\Id)=c\,\Id$.
+\end{lemma}
+
+\begin{theorem}[Absorbs the adjoint map]\label{thm:scalar_conditional_expectation_absorbs_adjointMap}
+    \lean{Kraus.scalarConditionalExpectation_absorbs_adjointMap}
+    \leanok
+    \uses{def:scalar_conditional_expectation}
+    If $T(\sigma)=\sigma$, then
+    $E_\sigma\circ T^* = E_\sigma$.
+\end{theorem}
+
+\begin{theorem}[Adjoint map absorbs scalar projection]
+    \label{thm:adjointMap_absorbs_scalarConditionalExpectation}
+    \lean{Kraus.adjointMap_absorbs_scalarConditionalExpectation}
+    \leanok
+    \uses{def:scalar_conditional_expectation, def:tp_kraus}
+    If $T$ is trace-preserving, then
+    $T^*\circ E_\sigma = E_\sigma$.
+\end{theorem}
+
+\begin{lemma}[Image lies in adjoint fixed points]
+    \label{lem:scalar_conditional_expectation_mem_adjointFixedPoints}
+    \lean{Kraus.scalarConditionalExpectation_mem_adjointFixedPoints}
+    \leanok
+    \uses{thm:adjointMap_absorbs_scalarConditionalExpectation}
+    For all $X$, $E_\sigma(X)$ is fixed by $T^*$.
+\end{lemma}
+
+\begin{theorem}[Scalar map is a conditional expectation]
+    \label{thm:scalar_conditional_expectation_isConditionalExpectation}
+    \leanok
+    \uses{def:is_conditional_expectation, def:scalar_conditional_expectation,
+          def:tp_kraus,
+          thm:scalar_conditional_expectation_unital,
+          thm:scalar_conditional_expectation_idempotent,
+          lem:scalar_conditional_expectation_mem_adjointFixedPoints,
+          lem:scalar_conditional_expectation_fixes_scalar}
+    Let $K$ be trace-preserving, let $\rho>0$ be a positive-definite fixed
+    point of the associated map $T\coloneqq \map K$ (so $T(\rho)=\rho$), and
+    assume every adjoint fixed point of $T^*$ is a scalar multiple of $\Id$.
+    Then $E_\rho$ is a conditional expectation onto the adjoint fixed-point
+    $*$-subalgebra.
+\end{theorem}
+
 \section{Stationary support (Wolf \S6.4)}
 
 This section records the channel-side support-projection infrastructure
