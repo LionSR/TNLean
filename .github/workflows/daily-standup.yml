@@ -20,43 +20,49 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Compute today's date
+        id: date
+        run: echo "today=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
       - name: Gather recent activity
         id: activity
         uses: actions/github-script@v7
         with:
           script: |
             const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+            const sinceDate = since.split('T')[0];
 
             // Merged PRs in the last 24 hours
             const mergedPRs = await github.rest.search.issuesAndPullRequests({
-              q: `repo:${context.repo.owner}/${context.repo.repo} is:pr is:merged merged:>=${since}`,
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:pr is:merged merged:>=${sinceDate}`,
               per_page: 50
             });
 
             // Open PRs with recent activity
             const activePRs = await github.rest.search.issuesAndPullRequests({
-              q: `repo:${context.repo.owner}/${context.repo.repo} is:pr is:open updated:>=${since}`,
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:pr is:open updated:>=${sinceDate}`,
               per_page: 50
             });
 
             // Recently closed issues
             const closedIssues = await github.rest.search.issuesAndPullRequests({
-              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:closed closed:>=${since}`,
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:closed closed:>=${sinceDate}`,
               per_page: 50
             });
 
             // Recently opened issues
             const openedIssues = await github.rest.search.issuesAndPullRequests({
-              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:open created:>=${since}`,
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:open created:>=${sinceDate}`,
               per_page: 50
             });
 
-            // Recent commits on main
+            // Recent commits on the default branch
             let recentCommits = [];
             try {
               const commits = await github.rest.repos.listCommits({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
+                sha: 'main',
                 since: since,
                 per_page: 50
               });
@@ -67,6 +73,7 @@ jobs:
                 date: c.commit.author.date
               }));
             } catch (e) {
+              core.warning(`Failed to fetch commits: ${e.message}`);
               recentCommits = [];
             }
 
@@ -89,7 +96,9 @@ jobs:
                     author: c.user.login
                   });
                 }
-              } catch (e) { /* skip */ }
+              } catch (e) {
+                core.warning(`Failed to fetch review comments for PR #${pr.number}: ${e.message}`);
+              }
             }
 
             return {
@@ -130,7 +139,7 @@ jobs:
             (${{ github.repository }}), a Lean 4 formalization project for quantum
             information theory (Matrix Product States, Wielandt theory, quantum channels).
 
-            Today's date: ${{ github.event.schedule && 'scheduled run' || 'manual trigger' }}
+            Today's date: ${{ steps.date.outputs.today }}
             Activity window: last 24 hours (since ${{ fromJSON(steps.activity.outputs.result).since }})
 
             === REPOSITORY ACTIVITY DATA ===
@@ -159,8 +168,15 @@ jobs:
             context, you may read files referenced in PRs/commits (use Read/Glob/Grep).
             Look at git log and diff for the last 24 hours to understand what changed.
 
-            Create a GitHub issue with the title: "Daily Standup — <today's date YYYY-MM-DD>"
-            and label it "standup". Create the label first if it does not exist.
+            Before creating any issue, use "Bash(gh issue list *)" to check whether a
+            standup issue for today's date already exists (filter by title
+            "Daily Standup — ${{ steps.date.outputs.today }}" and/or the "standup" label).
+            If such an issue exists, DO NOT create a new one — instead, update or comment
+            on the existing issue as appropriate.
+
+            If no such issue exists, create a GitHub issue with the title:
+            "Daily Standup — ${{ steps.date.outputs.today }}" and label it "standup".
+            Create the label first if it does not exist.
 
             The issue body MUST follow this structure:
 
