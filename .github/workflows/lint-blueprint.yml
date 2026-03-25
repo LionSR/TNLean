@@ -1,0 +1,53 @@
+name: Lint blueprint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'blueprint/src/**'
+  pull_request:
+    paths:
+      - 'blueprint/src/**'
+
+jobs:
+  lint-blueprint:
+    runs-on: ubuntu-latest
+    name: Check blueprint compiles without errors
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
+
+      - name: Install leanblueprint
+        run: |
+          pip install leanblueprint
+          pip install plastex
+
+      - name: Run leanblueprint web and check for errors
+        working-directory: blueprint
+        run: |
+          set -o pipefail
+          tmp_output_file="$(mktemp)"
+
+          # Run leanblueprint, streaming output to the log and capturing it to a file
+          set +o pipefail
+          leanblueprint web 2>&1 | tee "$tmp_output_file"
+          cmd_status=${PIPESTATUS[0]}
+          set -o pipefail
+
+          # Check for blueprint ERROR lines in the captured output
+          if grep -q "^ERROR:" "$tmp_output_file"; then
+            echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
+            exit 1
+          fi
+
+          # If leanblueprint itself failed, propagate its exit status
+          if [ "$cmd_status" -ne 0 ]; then
+            exit "$cmd_status"
+          fi
