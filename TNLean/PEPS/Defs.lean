@@ -5,15 +5,15 @@ import Mathlib.Data.Complex.BigOperators
 # Exploratory PEPS definitions on finite simple graphs
 
 This file introduces a lightweight PEPS scaffold on a finite graph.
-The index type aliases (`Edge`, `IncidentEdge`, `VirtualConfig`) are kept as
-`abbrev` so they stay transparent for simplification and instance synthesis.
+The index types (`Edge`, `IncidentEdge`, `VirtualConfig`) are lightweight
+wrappers used for PEPS indexing.
 
 ## Design note on decidability
 
 We keep `[DecidableRel G.Adj]` explicit (rather than deriving locally) because
 edge/incident-edge index types are subtypes over adjacency and are used in
-computable finite sums/products (`stateCoeff`). Keeping adjacency decidable at
-module scope makes these constructions and instance synthesis predictable.
+finite sums/products (`stateCoeff`). Keeping adjacency decidable at module
+scope makes these constructions and instance synthesis predictable.
 -/
 
 open scoped BigOperators
@@ -21,23 +21,27 @@ open scoped BigOperators
 namespace TNLean
 namespace PEPS
 
-variable {V : Type*} [Fintype V] [DecidableEq V] [LinearOrder V]
+variable {V : Type*} [Fintype V] [LinearOrder V]
 
 /-- Undirected edges of `G`, represented by ordered endpoint pairs `(u, v)` with
 `u < v` to avoid double-counting. -/
-abbrev Edge (G : SimpleGraph V) : Type _ :=
+def Edge (G : SimpleGraph V) : Type _ :=
   { uv : V × V // uv.1 < uv.2 ∧ G.Adj uv.1 uv.2 }
 
-instance instFintypeEdge (G : SimpleGraph V) [DecidableRel G.Adj] : Fintype (Edge G) :=
-  inferInstance
+instance instFintypeEdge (G : SimpleGraph V) [DecidableRel G.Adj] : Fintype (Edge G) := by
+  classical
+  unfold Edge
+  infer_instance
 
 /-- Edges incident to a vertex `v`. -/
-abbrev IncidentEdge (G : SimpleGraph V) (v : V) : Type _ :=
+def IncidentEdge (G : SimpleGraph V) (v : V) : Type _ :=
   { e : Edge G // e.1.1 = v ∨ e.1.2 = v }
 
 instance instFintypeIncidentEdge (G : SimpleGraph V) [DecidableRel G.Adj] (v : V) :
-    Fintype (IncidentEdge G v) :=
-  inferInstance
+    Fintype (IncidentEdge G v) := by
+  classical
+  unfold IncidentEdge
+  infer_instance
 
 /-- A PEPS tensor family with one physical index per vertex and edge-dependent
 virtual bond dimensions. -/
@@ -48,11 +52,15 @@ structure Tensor (G : SimpleGraph V) [DecidableRel G.Adj] (d : ℕ) where
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
 /-- A global assignment of virtual indices to all edges. -/
-abbrev VirtualConfig (A : Tensor G d) : Type _ :=
+def VirtualConfig (A : Tensor G d) : Type _ :=
   (e : Edge G) → Fin (A.bondDim e)
 
-noncomputable instance instFintypeVirtualConfig (A : Tensor G d) : Fintype (VirtualConfig A) :=
-  inferInstance
+noncomputable instance instFintypeVirtualConfig (A : Tensor G d) : Fintype (VirtualConfig A) := by
+  letI : Fintype (Edge G) := instFintypeEdge (G := G)
+  letI : ∀ e : Edge G, Fintype (Fin (A.bondDim e)) := fun _ => inferInstance
+  classical
+  unfold VirtualConfig
+  infer_instance
 
 /-- PEPS state coefficient for a physical configuration `σ`, obtained by
 contracting all virtual indices. -/
