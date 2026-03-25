@@ -63,7 +63,7 @@ transfer map.
 
 \begin{theorem}[Exponential decay bound]
     \lean{MPSTensor.connectedCorrelator_bound}
-    \uses{thm:spectral_radius_lt_one}
+    \uses{thm:spectral_radius_le_one}
     If $|\lambda_j| \le |\lambda_2| < 1$ for all subleading eigenvalues, then
     there exists $C_{XY}\ge 0$ such that
     \[
@@ -85,7 +85,7 @@ transfer map.
 \end{definition}
 
 \begin{remark}
-    \uses{thm:spectral_radius_lt_one}
+    \uses{thm:spectral_radius_le_one}
     The identity $\E^2=\E$ is equivalent to vanishing subleading spectrum;
     equivalently, $\xi=0$ and connected correlations vanish at nonzero
     separation.

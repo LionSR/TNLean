@@ -29,12 +29,9 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 
 | Direction | Theorem | File |
 |-----------|---------|------|
-* **(b) → (a)**: `isPrimitivePaper_of_hasEventuallyFullKrausRank`
-  in `Primitivity/EasyDirections.lean`
-* **(a) → (c)**: `isStronglyIrreduciblePaper_of_isPrimitivePaper`
-  in `Primitivity/ImpliesStronglyIrreducible.lean`
-* **(c) → (b)**: `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`
-  in `Primitivity/StronglyIrreducibleToFullRank.lean`
+| **(b) → (a)** | `isPrimitivePaper_of_hasEventuallyFullKrausRank` | `Primitivity/EasyDirections.lean` |
+| **(a) → (c)** | `isStronglyIrreduciblePaper_of_isPrimitivePaper` | `Primitivity/ImpliesStronglyIrreducible.lean` |
+| **(c) → (b)** | `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper` | `Primitivity/StronglyIrreducibleToFullRank.lean` |
 
 Together these close the cycle **(a) → (c) → (b) → (a)**, establishing the
 full equivalence of all three conditions.
