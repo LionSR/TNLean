@@ -45,15 +45,4 @@ theorem not_isReducibleQDS_of_no_blockUpperTriangular_lindblad
   intro hReducible
   exact hNoBlockUT (wolf_prop_7_6_three_implies_four hGKSL hReducible)
 
-/--
-Rephrasing of `not_isReducibleQDS_of_no_blockUpperTriangular_lindblad` with
-the assumptions in the opposite order.
--/
-theorem no_blockUpperTriangular_lindblad_implies_not_isReducibleQDS
-    {L : Mat →ₗ[ℂ] Mat}
-    (hNoBlockUT : ¬ HasBlockUpperTriangularLindblad L)
-    (hGKSL : IsGKSLGenerator L) :
-    ¬ IsReducibleQDS L :=
-  not_isReducibleQDS_of_no_blockUpperTriangular_lindblad hGKSL hNoBlockUT
-
 end -- noncomputable section

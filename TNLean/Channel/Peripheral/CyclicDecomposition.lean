@@ -1337,6 +1337,7 @@ theorem isPrimitive_restriction_of_cyclic_decomp
     (hcorner_fix k)
     (hcorner_ne k)
     (huniq k)
+
 section PermutationBlockStructure
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -1355,7 +1356,6 @@ theorem preserves_corner_pow_orderOf_of_perm_decomp
     (hMulLeft : ∀ k : ι, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
     (hMulRight : ∀ k : ι, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k)) :
     ∀ k : ι, PreservesCorner (P k) (T ^ orderOf σ) := by
-  let _ := (inferInstance : DecidableEq ι)
   have hstep :
       ∀ n : ℕ, ∀ k : ι, ∀ X : MatrixAlg D,
         (T ^ n) (P ((σ ^ n) k) * X * P ((σ ^ n) k)) =
@@ -1386,12 +1386,10 @@ theorem preserves_corner_pow_orderOf_of_perm_decomp
           _ = P k * ((T ^ n) (T X)) * P k := ih k (T X)
           _ = P k * ((T ^ (n + 1)) X) * P k := by simp [pow_succ]
   intro k X
-  have horder_pos : 0 < orderOf σ := orderOf_pos σ
   have hmain :
       (T ^ orderOf σ) (P ((σ ^ orderOf σ) k) * X * P ((σ ^ orderOf σ) k)) =
         P k * ((T ^ orderOf σ) X) * P k := hstep (orderOf σ) k X
-  have hσ : (σ ^ orderOf σ) = 1 := by
-    exact pow_orderOf_eq_one σ
+  have hσ : (σ ^ orderOf σ) = 1 := pow_orderOf_eq_one σ
   have hmk : (T ^ orderOf σ) (P k * X * P k) = P k * ((T ^ orderOf σ) X) * P k := by
     simpa [hσ] using hmain
   calc
