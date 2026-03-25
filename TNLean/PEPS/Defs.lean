@@ -43,7 +43,7 @@ instance instFintypeIncidentEdge (G : SimpleGraph V) [DecidableRel G.Adj] (v : V
 virtual bond dimensions. -/
 structure Tensor (G : SimpleGraph V) [DecidableRel G.Adj] (d : ℕ) where
   bondDim : Edge G → ℕ
-  tensor : (v : V) → ((ie : IncidentEdge G v) → Fin (bondDim ie.1)) → Fin d → ℂ
+  component : (v : V) → ((ie : IncidentEdge G v) → Fin (bondDim ie.1)) → Fin d → ℂ
 
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
@@ -58,7 +58,7 @@ instance instFintypeVirtualConfig (A : Tensor G d) : Fintype (VirtualConfig A) :
 contracting all virtual indices. -/
 noncomputable def stateCoeff (A : Tensor G d) (σ : V → Fin d) : ℂ :=
   ∑ η : VirtualConfig A,
-    ∏ v : V, A.tensor v (fun ie => η ie.1) (σ v)
+    ∏ v : V, A.component v (fun ie => η ie.1) (σ v)
 
 /-- Two PEPS tensors represent the same state when all coefficients agree. -/
 def SameState (A B : Tensor G d) : Prop :=
@@ -67,7 +67,7 @@ def SameState (A B : Tensor G d) : Prop :=
 /-- Vertex-wise injectivity: each local tensor map (virtual → physical data) is
 injective. This is a basic exploratory surrogate for PEPS injectivity. -/
 def IsVertexInjective (A : Tensor G d) : Prop :=
-  ∀ v : V, Function.Injective (A.tensor v)
+  ∀ v : V, Function.Injective (A.component v)
 
 end PEPS
 end TNLean
