@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.BNT.Construction
 import TNLean.Spectral.SpectralGap
+import TNLean.MPS.RFP.Defs
 
 /-!
 # RG flow convergence for canonical-form MPS tensors
@@ -24,7 +25,7 @@ converges to an idempotent (the RFP).
 * `rg_flow_converges_of_cf`: the sequence of blocked transfer maps converges
   to an idempotent for any canonical-form tensor.
 
-TODO: add `IsCanonicalForm` hypothesis and formalize the convergence.
+TODO: formalize the convergence in operator norm.
 -/
 
 open scoped Matrix
@@ -36,12 +37,21 @@ variable {d D : ℕ}
 /-- **Appendix B** (arXiv:1606.00608): For a tensor in canonical form, the
 iterated blocking `E^{2^n}` converges to an idempotent transfer map.
 
-TODO: state with `IsCanonicalForm` hypothesis. The convergence is in
-operator norm on the `D² × D²` transfer matrix space. -/
-theorem rg_flow_converges_of_cf (A : MPSTensor d D)
-    /- (hCF : IsCanonicalForm μ A) -/ :
-    ∃ (_E_infty : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ),
-      True := by -- refine to: E_infty is idempotent and limit of E^(2^n)
+The convergence is entry-wise on the `D² × D²` transfer matrix space:
+`∀ ρ, (E^{2^n}) ρ → E_∞ ρ` where `E_∞ ∘ E_∞ = E_∞`.
+
+TODO: prove. -/
+theorem rg_flow_converges_of_cf {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalForm μ A) (k : Fin r) :
+    ∃ (E_infty : Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ]
+                 Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+      E_infty ∘ₗ E_infty = E_infty ∧
+      ∀ ρ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+        Filter.Tendsto
+          (fun n : ℕ => ((transferMap (A k) ^ (2 ^ n : ℕ) : _) ρ))
+          Filter.atTop
+          (nhds (E_infty ρ)) := by
   sorry
 
 end MPSTensor

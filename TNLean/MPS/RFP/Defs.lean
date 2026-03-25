@@ -31,14 +31,19 @@ def IsRFP (A : MPSTensor d D) : Prop :=
   transferMap A ∘ₗ transferMap A = transferMap A
 
 /-- The RFP condition is equivalent to a Kraus-level condition: there exists
-an isometry `U` on the physical index such that `A^{i₁} A^{i₂} = Σ_j U_{(i₁,i₂),j} A^j`.
+an isometry `V : Fin d × Fin d → Fin d → ℂ` (i.e. a `(d²×d)` matrix) such
+that `A i₁ * A i₂ = ∑ j, V (i₁, i₂) j • A j` for all `i₁ i₂`.
 This follows from Stinespring: two Kraus representations of the same CPM
 are related by an isometry on the physical index.
 See arXiv:1606.00608, Theorem 3.1.
 
-TODO: state the Kraus-level condition precisely and prove the equivalence. -/
+TODO: prove the equivalence. -/
 theorem isRFP_iff_kraus (A : MPSTensor d D) :
-    IsRFP A ↔ ∃ _U : Matrix (Fin (d * d)) (Fin d) ℂ, True := by
+    IsRFP A ↔
+      ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
+        V.conjTranspose * V = 1 ∧
+        ∀ i₁ i₂ : Fin d,
+          A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j := by
   sorry
 
 end MPSTensor

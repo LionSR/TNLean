@@ -35,8 +35,10 @@ direction is deferred.
 
 TODO: assemble the proof from `zcl_iff_idempotent_transfer` and the
 structural form results. -/
-theorem rfp_iff_zcl (A : MPSTensor d D) :
-    IsRFP A ↔ IsZCL A := by
+theorem rfp_iff_zcl {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalForm μ A) (k : Fin r) :
+    IsRFP (A k) ↔ IsZCL (A k) := by
   sorry
 
 end MPSTensor

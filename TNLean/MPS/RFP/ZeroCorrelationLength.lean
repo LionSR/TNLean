@@ -61,10 +61,11 @@ Forward: `E² = E` implies CID (from the correlation formula) and LO
 Reverse: if `E² ≠ E`, block-injectivity constructs observables detecting
 a subleading eigenvalue; Newton–Girard handles the μ-coefficient phases.
 
-TODO: add `IsCanonicalForm` hypothesis and prove both directions. -/
-theorem zcl_iff_idempotent_transfer (A : MPSTensor d D)
-    /- (hCF : IsCanonicalForm μ A) -/ :
-    IsZCL A ↔ IsRFP A := by
+TODO: prove both directions. -/
+theorem zcl_iff_idempotent_transfer {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalForm μ A) (k : Fin r) :
+    IsZCL (A k) ↔ IsRFP (A k) := by
   sorry
 
 end MPSTensor
