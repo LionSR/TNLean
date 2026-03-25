@@ -16,6 +16,9 @@ needed for finite-dimensional product-formula arguments on `End(M_D(ℂ))`.
 * `norm_exp_le_real_exp_norm` — `‖exp x‖ ≤ exp ‖x‖`
 * `norm_expSemigroupCLM_le` — `‖exp(tA)‖ ≤ exp(t‖A‖)` for `t ≥ 0`
 * `norm_trotter_step_le` — norm bound for one Lie--Trotter step
+* `norm_trotter_pow_sub_exp_le_of_quadratic_step` —
+  global `O(1/n)` bound from a quadratic step defect
+* `lie_trotter_suzuki_bound_of_step` — Suzuki/Wolf-style specialization of the quadratic-step bound
 * `expSemigroupCLM_mul_comm` — `exp(tA)` commutes with `A`
 * `expSemigroupCLM_pow_eq` — powers of `exp(tA)` collapse to one exponential
 
@@ -237,7 +240,7 @@ theorem norm_trotter_pow_sub_exp_le_of_quadratic_step [NeZero D]
     rw [← Real.exp_add]
     dsimp [s]
     congr 1
-    norm_num [Nat.cast_add]
+    push_cast
     field_simp [hcast_pos.ne']
     ring
   calc
@@ -266,9 +269,18 @@ theorem lie_trotter_suzuki_bound_of_step [NeZero D]
       - expSemigroupCLM (A + B) t‖
       ≤ ((2 * t ^ 2 / (n + 1)) * (‖A‖ + ‖B‖) ^ 2) *
           Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
-  simpa [mul_assoc, mul_left_comm, mul_comm, div_eq_mul_inv] using
+  have hquad :=
     norm_trotter_pow_sub_exp_le_of_quadratic_step (A := A) (B := B) (t := t) (n := n) ht
       (C := 2 * (‖A‖ + ‖B‖) ^ 2) hstep
+  calc
+    ‖(expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))) ^ (n + 1)
+      - expSemigroupCLM (A + B) t‖
+        ≤ ((2 * (‖A‖ + ‖B‖) ^ 2) * t ^ 2 / (n + 1)) *
+            Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
+              simpa using hquad
+    _ = ((2 * t ^ 2 / (n + 1)) * (‖A‖ + ‖B‖) ^ 2) *
+          Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
+            ring
 
 end ProductFormulaHelpers
 
