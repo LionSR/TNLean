@@ -64,20 +64,23 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	Per-block equality of MPV coefficients gives global equality.
 \end{proof}
 
-\begin{theorem}[Global gauge from block gauge]\label{thm:multi_block_global}
+\begin{theorem}[Global multi-block fundamental theorem]\label{thm:multi_block_global}
 	\lean{MPSTensor.fundamentalTheorem_multiBlock_global}
 	\leanok
-	\uses{def:tensor_from_blocks, def:gauge_equiv}
-	If each pair $(A_k, B_k)$ is gauge equivalent
-	($B_k^i = X_k A_k^i X_k^{-1}$),
-	then the block-diagonal tensors are gauge equivalent
-	via the block-diagonal matrix $X = \bigoplus_k X_k$.
+	\uses{def:tensor_from_blocks, def:gauge_equiv, thm:multi_block_ft}
+	If all block tensors $A_k$ are injective and the per-block
+	same-MPV condition holds ($A_k$ and $B_k$ generate the same
+	MPV family for each~$k$),
+	then the block-diagonal tensors $\bigoplus_k \mu_k A_k$ and
+	$\bigoplus_k \mu_k B_k$ are gauge equivalent.
 \end{theorem}
 
 \begin{proof}\leanok
-	Block-diagonal conjugation: $X (\bigoplus_k \mu_k A_k^i) X^{-1}
-		= \bigoplus_k \mu_k X_k A_k^i X_k^{-1}
-		= \bigoplus_k \mu_k B_k^i$.
+	\uses{thm:multi_block_ft}
+	By Theorem~\ref{thm:multi_block_ft}, each pair $(A_k, B_k)$
+	is gauge equivalent via some $X_k$.
+	Block-diagonal conjugation by $X = \bigoplus_k X_k$ then gives
+	the global gauge equivalence.
 \end{proof}
 
 \section{Transfer map normalization}
@@ -258,10 +261,11 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 \begin{definition}[Irreducible tensor]\label{def:irreducible_tensor}
 	\lean{MPSTensor.IsIrreducibleTensor}
 	\leanok
-	\uses{def:transfer_map, def:irreducible_cp}
+	\uses{def:has_inv_proj}
 	An MPS tensor~$A$ is \emph{irreducible}
-	if its transfer map $\E_A$ is irreducible in the sense of
-	Definition~\ref{def:irreducible_cp}.
+	if it has no nontrivial invariant orthogonal projection,
+	i.e.\ $\lnot\mathsf{HasInvariantProj}(A)$
+	(Definition~\ref{def:has_inv_proj}).
 \end{definition}
 
 \begin{theorem}[Irreducible block decomposition]\label{thm:irred_decomp}
