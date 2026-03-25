@@ -655,10 +655,13 @@ This section records declaration wrappers used in cross-chapter references.
 \begin{theorem}[Wolf Thm.~6.2(3): exponential positivity condition]%
     \label{thm:wolf_6_2_item_3}
     \lean{exp_posDef_of_irreducible_cp}
+    \lean{irreducible_iff_exp_posDef_forall}
     \leanok
     \uses{def:irreducible_cp}
     Let $E$ be an irreducible completely positive map, $A \ge 0$ with
     $A \neq 0$, and $t > 0$. Then $\exp(tE)(A)$ is positive definite.
+    Conversely, if $\exp(tE)(A)$ is positive definite for every such $t$, $A$,
+    then $E$ is irreducible (full equivalence \lean{irreducible_iff_exp_posDef_forall}).
 \end{theorem}
 
 \begin{theorem}[Wolf Thm.~6.8: Kraus-span equivalence]%

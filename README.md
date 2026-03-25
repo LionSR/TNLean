@@ -22,6 +22,8 @@ Done in Lean today:
 - periodic tensor definitions for the irreducible-form theory (`IsPeriodic`, `IsIrreducibleForm`, `ZGaugeEquiv`, `RepeatedBlocks`)
 - translation-invariance corollary for injective MPS chains (`ti_tensors_collapse_to_single_gauge`)
 - blocked normal-chain FT endpoint via `IsNBlkInjective` bridge (`isNBlkInjective_iff_blockTensor_isInjective`)
+- physical-rotation symmetry corollary: physical `u`-action on MPS implies virtual Z-gauge equivalence (`gaugeEquiv_of_sameMPV_rotatePhysical`; Corollary 4.1 of [arXiv:1708.00029](https://arxiv.org/abs/1708.00029))
+- SameState-to-SameMPV bridge interface for injective chains (`SameStateBridgeHyp`), providing `fundamentalTheorem_injective_chain_of_sameState` as a weaker-hypothesis chain FT endpoint; the actual proof that `SameState` implies `SameMPV` is packaged as an abstract hypothesis rather than a completed argument
 
 Still not assembled end-to-end:
 
@@ -33,7 +35,7 @@ Complementary channel-side milestones now in Lean:
 
 - Choi, Kraus, and Stinespring representation results from Wolf Chapter 2
 - Wolf Proposition 5.1, Theorems 5.5–5.7, and Example 5.3 in the Schwarz package
-- Wolf Theorem 6.1 together with substantial Chapter-6 spectral / fixed-point theory, including Theorems 6.12–6.13 and the stationary-support package (Lemma 6.4, Proposition 6.9, `stationaryState`, `stationarySupport`)
+- Wolf Theorem 6.1 together with substantial Chapter-6 spectral / fixed-point theory, including Theorems 6.12–6.13, the stationary-support package (Lemma 6.4, Proposition 6.9, `stationaryState`, `stationarySupport`), and the full bidirectional equivalence for Wolf Theorem 6.2 item 3 (irreducibility ↔ exponential semigroup strict positivity, `irreducible_iff_exp_posDef_forall`)
 - Wolf Chapter-7 semigroup / GKSL package through Proposition 7.6 and Theorem 7.2, Proposition 7.5 (irreducible implies primitive for QDS), and a partial non-reducibility criterion for Corollary 7.2; the full convergence statement of Corollary 7.2 remains unformalized
 
 ### Wolf channel-side snapshot (audit of 2026-03-23)
