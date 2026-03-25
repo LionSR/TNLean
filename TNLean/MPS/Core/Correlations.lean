@@ -99,4 +99,11 @@ theorem connectedCorrelator_bound
 noncomputable def correlationLength (lam₂ : ℂ) : ℝ :=
   -1 / Real.log ‖lam₂‖
 
+/-- The correlation length is positive when `0 < ‖λ₂‖ < 1`. -/
+theorem correlationLength_pos {lam₂ : ℂ} (h0 : 0 < ‖lam₂‖) (h1 : ‖lam₂‖ < 1) :
+    0 < correlationLength lam₂ := by
+  unfold correlationLength
+  rw [neg_div, neg_pos]
+  exact div_neg_of_pos_of_neg one_pos (Real.log_neg h0 h1)
+
 end MPSTensor
