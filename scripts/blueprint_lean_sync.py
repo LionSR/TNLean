@@ -30,11 +30,12 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 _LEAN_DECL_RE = re.compile(
-    r"^\s*(?:@\[.*?\]\s*)?(?:noncomputable\s+)?(?:protected\s+)?(?:private\s+)?(?:def|theorem|lemma|abbrev|instance|class|structure|inductive)\s+([\w.]+)",
+    r"^\s*(?:@\[.*?\]\s*)?(?:noncomputable\s+)?(?:protected\s+)?(?:private\s+)?(?:def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque)\s+([\w.'+]+)",
     re.MULTILINE,
 )
 
 _NAMESPACE_OPEN_RE = re.compile(r"^\s*namespace\s+([\w.]+)", re.MULTILINE)
+_SECTION_OPEN_RE = re.compile(r"^\s*section\s+([\w.]+)", re.MULTILINE)
 _NAMESPACE_CLOSE_RE = re.compile(r"^\s*end\s+([\w.]+)", re.MULTILINE)
 
 _TEX_LEAN_RE = re.compile(r"\\lean\{([^}]+)\}")
@@ -108,8 +109,9 @@ def collect_lean_decls(lean_root: Path) -> dict[str, LeanDecl]:
         text = lean_file.read_text(errors="replace")
         lines = text.splitlines()
 
-        # Track namespace stack
+        # Track namespace and section stacks separately
         ns_stack: list[str] = []
+        section_stack: list[str] = []
 
         for i, line in enumerate(lines, 1):
             # Namespace open
@@ -118,15 +120,24 @@ def collect_lean_decls(lean_root: Path) -> dict[str, LeanDecl]:
                 ns_stack.append(m.group(1))
                 continue
 
-            # Namespace close
+            # Section open (tracked to avoid confusing `end Section` with namespace close)
+            m = _SECTION_OPEN_RE.match(line)
+            if m:
+                section_stack.append(m.group(1))
+                continue
+
+            # Namespace/section close
             m = _NAMESPACE_CLOSE_RE.match(line)
             if m:
                 closed = m.group(1)
-                # Pop matching namespace(s)
+                # Check if this closes a section first
+                if section_stack and section_stack[-1] == closed:
+                    section_stack.pop()
+                    continue
+                # Otherwise pop matching namespace
                 if ns_stack and ns_stack[-1] == closed:
                     ns_stack.pop()
                 elif ns_stack:
-                    # Try to find it further up
                     for j in range(len(ns_stack) - 1, -1, -1):
                         if ns_stack[j] == closed:
                             ns_stack = ns_stack[:j]
