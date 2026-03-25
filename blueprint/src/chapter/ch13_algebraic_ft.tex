@@ -403,9 +403,16 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     mixed-site words of \emph{all} lengths), which is stronger than the
     paper's \texttt{SameState} (trace agreement at a single chain length
     $n \ge 3$).
-    The paper bridges this gap via a blocking argument requiring $n \ge 3$;
-    that bridging step is not yet formalised, so the theorem is stated with the
-    stronger hypothesis.
+    The paper bridges this gap via a blocking argument requiring $n \ge 3$.
+    This bridging step is now packaged as an abstract interface
+    \lean{MPSChainTensor.SameStateBridgeHyp}: a \texttt{structure} that
+    encapsulates the blocking hypothesis.
+    Given this bridge, the theorem
+    \lean{MPSChainTensor.fundamentalTheorem_injective_chain_of_sameState}
+    delivers the chain FT endpoint under the weaker \texttt{SameState}
+    hypothesis; however, the actual proof that \texttt{SameState} implies
+    \texttt{SameMPV} (i.e.\ the content of the bridge) has not yet been
+    established in the formalization.
 \end{remark}
 
 \begin{remark}[Relationship to the translation-invariant all-sizes theorem]
