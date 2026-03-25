@@ -1,8 +1,8 @@
 ---
 name: Blueprint ↔ Lean Sync
-description: Weekly workflow to detect blueprint .tex annotations that are out of sync with the Lean source code and open a PR with fixes.
+description: Daily check that blueprint annotations match the Lean source, with a PR for any fixes.
 on:
-  schedule: weekly on monday
+  schedule: daily on weekdays
   workflow_dispatch:
 
 permissions:
@@ -49,109 +49,89 @@ safe-outputs:
 
 # Blueprint ↔ Lean Sync
 
-Keep the blueprint `.tex` annotations (`\lean{}`, `\leanok`) in sync with the actual Lean 4 source code in `TNLean/`.
+Verify that every `\lean{Name}` and `\leanok` annotation in the blueprint `.tex` files corresponds to an existing declaration in `TNLean/`, and vice versa.
 
-## Background
+## Context
 
-This project uses the **leanblueprint** system. Each theorem/definition/lemma in the blueprint `.tex` files (under `blueprint/src/chapter/`) can carry:
+The blueprint (under `blueprint/src/chapter/`) is a mathematical document whose theorems, definitions, and lemmas carry annotations linking them to their Lean counterparts:
 
-- `\lean{FullyQualifiedName}` — links the statement to a Lean declaration.
-- `\leanok` — asserts the statement (or proof) has been formalized in Lean.
-- `\uses{label1, label2}` — declares dependencies on other blueprint items.
+- `\lean{Name}` — the fully-qualified Lean declaration for this statement.
+- `\leanok` — this statement (or its proof) has a complete Lean formalization.
+- `\uses{label1, label2}` — dependency on other blueprint items.
 
-The file `blueprint/lean_decls` lists all declaration names referenced from `.tex` files.
+The file `blueprint/lean_decls` lists every declaration name referenced across all `.tex` files.
 
 ## Goal
 
-Detect and fix mismatches between the blueprint annotations and the Lean source tree, then open a pull request with only those fixes.
+Find and fix annotation mismatches, then open a PR with the corrections.
 
-## Required process
+## Process
 
-### Step 1: Run the sync checker
+### Step 1 — Run the sync checker
 
 ```bash
 python3 scripts/blueprint_lean_sync.py --root . --report /tmp/sync_report.json
 ```
 
-Review the output carefully. It will report:
-- Blueprint `\lean{X}` refs whose Lean declaration cannot be found.
-- `\leanok` tags on items whose declaration is missing from Lean source.
-- Stale entries in `blueprint/lean_decls`.
-- Blueprint refs missing from `lean_decls`.
+This reports:
+- `\lean{X}` references with no matching declaration in `TNLean/`.
+- `\leanok` on items whose declaration does not exist.
+- Stale or missing entries in `blueprint/lean_decls`.
 
-### Step 2: Investigate each mismatch
+### Step 2 — Diagnose each mismatch
 
-For each reported issue, determine the root cause:
+For every broken reference, determine the cause:
 
-1. **Renamed declaration**: The Lean decl was renamed but the `.tex` wasn't updated.
-   - Search for likely matches: `grep -rn "partial_old_name" TNLean/`
-   - Update the `\lean{OldName}` to `\lean{NewName}` in the `.tex` file.
+1. **Renamed declaration.** Search for the new name (`grep -rn "old_name" TNLean/`) and update `\lean{}`.
+2. **Moved namespace.** Search broadly and update the qualified name.
+3. **Removed declaration.** Strip the `\lean{}` and `\leanok` tags. Do not delete the mathematical content.
+4. **Comma-separated references** (e.g. `\lean{Foo, Bar}`). Check each name individually.
+5. **`lean_decls` drift.** If the `.tex` refs are correct, regenerate via `python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls`.
 
-2. **Moved to different namespace**: The declaration moved namespaces.
-   - Search broadly: `grep -rn "short_name" TNLean/`
-   - Update the fully-qualified name in `\lean{}`.
-
-3. **Deleted declaration**: The Lean declaration was intentionally removed.
-   - Remove the `\lean{}` and `\leanok` annotations from the `.tex` file.
-   - If the entire blueprint item is obsolete, note it but do NOT delete the math content.
-
-4. **Multi-declaration references**: Some `\lean{}` tags list multiple declarations separated by commas (e.g., `\lean{Foo, Bar}`). Each must be checked individually.
-
-5. **lean_decls drift**: If the `.tex` refs are correct but `lean_decls` is stale:
-   - Run `python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls`
-
-### Step 3: Verify fixes
-
-After making changes, re-run the sync checker to confirm all issues are resolved:
+### Step 3 — Verify
 
 ```bash
 python3 scripts/blueprint_lean_sync.py --root . --ci
 ```
 
-### Step 4: Check for new formalizations
+### Step 4 — Check for newly formalized results
 
-Look at recent commits (last 14 days) that added new Lean declarations:
+Inspect recent commits (last 7 days) for new or completed Lean declarations:
 
 ```bash
-git log --since="14 days ago" --name-only --pretty=format: -- 'TNLean/**/*.lean' | sort -u
+git log --since="7 days ago" --name-only --pretty=format: -- 'TNLean/**/*.lean' | sort -u
 ```
 
-For each new `.lean` file or significantly changed file, check if corresponding blueprint items should gain `\leanok` or `\lean{}` annotations. Specifically:
+- If a blueprint item has `\lean{X}` but no `\leanok`, and the declaration `X` now exists without `sorry`, add `\leanok`.
+- If a new declaration corresponds to an un-annotated blueprint item, add `\lean{NewDecl}`.
 
-- If a blueprint item has `\lean{X}` but no `\leanok`, and the Lean declaration `X` now exists and is fully proven (not `sorry`), add `\leanok`.
-- If a new Lean declaration matches a blueprint item that has no `\lean{}` yet, add the `\lean{NewDecl}` annotation.
-
-To check for `sorry` in declarations:
+Verify no `sorry` remains:
 ```bash
 grep -n "sorry" TNLean/path/to/file.lean
 ```
 
-## Scope rules
+## Scope
 
-- Only modify files under `blueprint/src/chapter/` and `blueprint/lean_decls`.
-- Do NOT modify Lean source files.
-- Do NOT change mathematical content in `.tex` files — only update `\lean{}`, `\leanok`, and `\uses{}` annotations.
-- Preserve the existing `.tex` formatting and style exactly.
+- Only modify `blueprint/src/chapter/*.tex` and `blueprint/lean_decls`.
+- Do not modify Lean source files.
+- Do not alter mathematical content — only annotations.
 
-## Pull request requirements
+## PR contents
 
-When you make updates, create a PR that includes:
+- Table of mismatches found and how each was resolved.
+- List of modified `.tex` files.
+- Current formalization progress (from the checker output).
 
-- A summary table of sync issues found and how each was resolved
-- Which `.tex` files were modified
-- Whether `lean_decls` was updated
-- The current formalization progress (from the sync checker output)
+## Constraints
 
-## Safety and quality constraints
+- Never add `\leanok` unless the declaration exists and contains no `sorry`.
+- Never remove mathematical statements or proofs from `.tex` files.
+- When a rename is ambiguous, leave the annotation unchanged and note it in the PR.
+- If there are too many issues for one PR, fix the clear cases and list the rest.
+- If you lack enough information, call `missing-data`.
 
-- Never add `\leanok` unless you have confirmed the Lean declaration exists AND does not contain `sorry`.
-- Never remove mathematical content from `.tex` files.
-- When unsure about a rename, prefer leaving the annotation as-is and noting it in the PR description rather than guessing.
-- If too many issues exist to safely resolve in one PR, fix the clear cases and note the ambiguous ones.
-- If information is missing to make a safe update, call `missing-data`.
-
-**Important**: If no action is needed after completing your analysis, you **MUST** call the `noop` safe-output tool with a brief explanation. Failing to call any safe-output tool is the most common cause of safe-output workflow failures.
+**Important**: If everything is already in sync, you **must** call `noop`:
 
 ```json
-{"noop": {"message": "No action needed: blueprint annotations are in sync with Lean source code."}}
+{"noop": {"message": "All blueprint annotations match the Lean source."}}
 ```

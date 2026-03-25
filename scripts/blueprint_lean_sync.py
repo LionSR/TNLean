@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 r"""
-Blueprint ↔ Lean code synchronisation checker.
+Blueprint ↔ Lean synchronisation checker.
 
-Parses the blueprint .tex files for \lean{DeclName} and \leanok annotations,
-then greps the Lean source tree for matching declarations.  Reports:
+Cross-references \lean{} and \leanok annotations in the blueprint .tex
+files against the declarations in the Lean source tree.  Reports:
 
-  1. Blueprint references whose Lean declaration cannot be found.
-  2. \leanok tags on items whose declaration is missing from the Lean source.
-  3. lean_decls entries that don't appear in any .tex file (stale entries).
-  4. \lean{} refs that are not listed in lean_decls (missing entries).
-  5. Summary statistics (formalization progress per chapter).
+  1. Broken references — \lean{X} where X is not a Lean declaration.
+  2. Incorrect \leanok — marked as formalized but no declaration found.
+  3. Stale lean_decls entries — listed in lean_decls but absent from .tex.
+  4. Missing lean_decls entries — present in .tex but not in lean_decls.
+  5. Per-chapter formalization progress.
 
-Exit code 0  → everything in sync (or --ci not passed).
-Exit code 1  → mismatches found AND --ci flag is active.
+Exit code 0 when in sync (or --ci not passed); 1 otherwise.
 """
 
 from __future__ import annotations
@@ -61,7 +60,7 @@ _TEX_PROOF_END_RE = re.compile(r"\\end\{proof\}")
 
 @dataclass
 class BlueprintEntry:
-    """A single blueprint environment that references a Lean declaration."""
+    """A blueprint theorem/definition/lemma linked to a Lean declaration."""
     file: str
     line: int
     env_type: str          # definition, theorem, lemma, …
@@ -73,7 +72,7 @@ class BlueprintEntry:
 
 @dataclass
 class LeanDecl:
-    """A Lean declaration found in the source tree."""
+    """A declaration (def/theorem/lemma/…) found in the Lean source."""
     file: str
     line: int
     fqn: str  # fully-qualified name including namespace
@@ -308,14 +307,14 @@ def run_sync(
     report = SyncReport()
 
     # 1. Collect Lean declarations
-    print("Scanning Lean source tree …")
+    print("Scanning Lean source …")
     report.lean_decls = collect_lean_decls(lean_root)
-    print(f"  Found {len(report.lean_decls)} declarations in Lean source")
+    print(f"  {len(report.lean_decls)} declarations")
 
     # 2. Collect blueprint entries
-    print("Scanning blueprint .tex files …")
+    print("Scanning blueprint .tex …")
     report.blueprint_entries = collect_blueprint_entries(blueprint_src)
-    print(f"  Found {len(report.blueprint_entries)} \\lean{{}} references in blueprint")
+    print(f"  {len(report.blueprint_entries)} \\lean{{}} references")
 
     # 3. Cross-reference
     blueprint_decl_names: set[str] = set()
@@ -382,7 +381,7 @@ def _print_report(report: SyncReport, root: Path) -> None:
     # Per-chapter stats
     stats = _chapter_stats(report)
     print()
-    print("Per-chapter formalization progress:")
+    print("Formalization progress by chapter:")
     print(f"  {'Chapter':<50} {'Done':>5} / {'Total':>5}  {'%':>6}")
     print("  " + "-" * 68)
     total_done = 0
@@ -398,22 +397,22 @@ def _print_report(report: SyncReport, root: Path) -> None:
     print("  " + "-" * 68)
     print(f"  {'TOTAL':<50} {total_done:>5} / {total_all:>5}  {pct:>5.1f}%")
 
-    # Missing in Lean
+    # Broken references
     if report.missing_in_lean:
         print()
-        print(f"Blueprint refs with NO matching Lean declaration ({len(report.missing_in_lean)}):")
+        print(f"Broken references ({len(report.missing_in_lean)}):")
         seen: set[str] = set()
         for entry in report.missing_in_lean:
             if entry.lean_decl not in seen:
                 seen.add(entry.lean_decl)
-                ok_tag = " [has \\leanok!]" if entry.has_leanok else ""
-                print(f"  ✗ {entry.lean_decl}{ok_tag}")
+                tag = " [\\leanok]" if entry.has_leanok else ""
+                print(f"  ✗ {entry.lean_decl}{tag}")
                 print(f"    {entry.file}:{entry.line} ({entry.env_type})")
 
-    # leanok but missing
+    # Incorrect \leanok
     if report.leanok_but_missing:
         print()
-        print(f"WARNING: \\leanok on items whose Lean decl is MISSING ({len(report.leanok_but_missing)}):")
+        print(f"Incorrect \\leanok — declaration not found ({len(report.leanok_but_missing)}):")
         seen2: set[str] = set()
         for entry in report.leanok_but_missing:
             if entry.lean_decl not in seen2:
@@ -423,28 +422,28 @@ def _print_report(report: SyncReport, root: Path) -> None:
     # Stale lean_decls
     if report.stale_lean_decls:
         print()
-        print(f"Stale entries in lean_decls (not in any .tex) ({len(report.stale_lean_decls)}):")
+        print(f"Stale lean_decls entries ({len(report.stale_lean_decls)}):")
         for name in report.stale_lean_decls:
             print(f"  − {name}")
 
     # Missing from lean_decls
     if report.missing_from_lean_decls_file:
         print()
-        print(f"Blueprint refs missing from lean_decls file ({len(report.missing_from_lean_decls_file)}):")
+        print(f"Missing from lean_decls ({len(report.missing_from_lean_decls_file)}):")
         for name in report.missing_from_lean_decls_file:
             print(f"  + {name}")
 
     # Summary
     print()
     if report.ok:
-        print("✓ Blueprint and Lean code are in sync.")
+        print("✓ In sync.")
     else:
         problems = (
             len(report.missing_in_lean)
             + len(report.stale_lean_decls)
             + len(report.missing_from_lean_decls_file)
         )
-        print(f"✗ Found {problems} sync issue(s). See details above.")
+        print(f"✗ {problems} issue(s) found.")
     print()
 
 
@@ -475,7 +474,7 @@ def _write_json_report(report: SyncReport, path: Path, root: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Check synchronisation between blueprint .tex and Lean source."
+        description="Check that blueprint annotations match the Lean source."
     )
     parser.add_argument(
         "--root",
