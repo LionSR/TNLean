@@ -38,6 +38,9 @@ jobs:
           use-mathlib-cache: true
           build: false
 
+      - name: Install graphviz headers (needed by pygraphviz)
+        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
+
       - name: Install leanblueprint
         run: pipx install leanblueprint
 
