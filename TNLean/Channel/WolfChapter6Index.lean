@@ -17,6 +17,7 @@ import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.QPF.Assembly
 import TNLean.Wielandt.Primitivity.Equivalence
+import TNLean.Channel.WolfChapter6Wrappers
 
 /-!
 # Wolf Chapter 6 — Spectral Properties: Public Theorem Index
@@ -125,6 +126,7 @@ Uses Brouwer's fixed-point theorem on density matrices (proved in
 * Full Wolf form `T' = c C⁻¹ T(C · C†) C⁻†`:
   `isIrreducibleMap_full_similarity` (and the stronger
   `isIrreducibleMap_similarity_smul`) — `TNLean.Channel.Irreducible.Similarity`
+* Numbered wrapper: `Kraus.wolf_prop_6_6` — `TNLean.Channel.WolfChapter6Wrappers`
 
 ### Wolf Theorem 6.6 (Peripheral spectrum of irreducible Schwarz maps)
 
@@ -234,6 +236,7 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 ### Wolf Proposition 6.8 (Positive fixed-points)
 
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
+* Numbered wrapper: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
 
 ### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — PARTIALLY FORMALIZED
 
@@ -251,6 +254,8 @@ In `TNLean.Channel.FixedPoint.ConditionalExpectation`:
   `T*(E_σ(X)) = E_σ(X)` when `T` is TP.
 * `Kraus.scalarConditionalExpectation_isConditionalExpectation` —
   bundles everything into `IsConditionalExpectation` for the scalar case.
+* Numbered wrapper: `Kraus.wolf_theorem_6_15_scalar` —
+  `TNLean.Channel.WolfChapter6Wrappers`.
 
 The general irreducible case with period `h > 1` requires Wedderburn blocks
 (Wolf Theorem 6.14, issue #27).
