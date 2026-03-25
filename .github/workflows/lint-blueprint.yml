@@ -2,6 +2,8 @@ name: Lint blueprint
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'blueprint/src/**'
   pull_request:
