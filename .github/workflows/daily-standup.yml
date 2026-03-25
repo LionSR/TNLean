@@ -214,4 +214,4 @@ jobs:
 
           claude_args: |
             --model claude-opus-4-6
-            --allowed-tools "Read,Glob,Grep,Bash(git log *),Bash(git diff *),Bash(git show *),Bash(gh issue create *),Bash(gh issue list *),Bash(gh label create *),Bash(gh pr list *),Bash(gh pr view *)"
+            --allowed-tools "Read,Glob,Grep,Bash(git log *),Bash(git diff *),Bash(git show *),Bash(gh issue create *),Bash(gh issue list *),Bash(gh issue edit *),Bash(gh issue comment *),Bash(gh label create *),Bash(gh pr list *),Bash(gh pr view *)"
