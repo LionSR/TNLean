@@ -1,0 +1,59 @@
+name: Formalization Task
+description: A specific theorem, definition, or lemma to formalize in Lean
+labels: ["formalization"]
+body:
+  - type: input
+    id: statement
+    attributes:
+      label: Mathematical statement
+      description: Name and source of the result to formalize
+      placeholder: "e.g., Wolf Thm 6.15: conditional expectation from faithful fixed point"
+    validations:
+      required: true
+
+  - type: input
+    id: reference
+    attributes:
+      label: Reference
+      description: Paper or textbook citation
+      placeholder: "e.g., arXiv:1804.04964 Theorem 3.2, Wolf Lecture Notes Prop 7.4"
+    validations:
+      required: true
+
+  - type: input
+    id: lean_target
+    attributes:
+      label: Target Lean declaration
+      description: Expected Lean name and file path
+      placeholder: "e.g., MPSTensor.fundamentalTheorem in TNLean/MPS/FundamentalTheorem.lean"
+    validations:
+      required: false
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Existing Lean declarations or issues this depends on
+      placeholder: |
+        - `MPSTensor.transferMap` (exists)
+        - #191 (ground space definitions, in progress)
+    validations:
+      required: false
+
+  - type: textarea
+    id: sketch
+    attributes:
+      label: Proof sketch / approach
+      description: Brief outline of the formalization strategy
+      placeholder: Optional
+    validations:
+      required: false
+
+  - type: input
+    id: tracking
+    attributes:
+      label: Tracking issue
+      description: Parent tracking issue if applicable
+      placeholder: "e.g., #190"
+    validations:
+      required: false
