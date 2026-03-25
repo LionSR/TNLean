@@ -88,6 +88,7 @@ Schrödinger map uses adjoints in the opposite order. -/
 theorem stinespring_dual_representation {r : ℕ}
     (K : Fin r → Matrix (Fin D) (Fin D) ℂ) (A : Matrix (Fin D) (Fin D) ℂ) :
     (stinespringV K)ᴴ *
+      -- This is `stinespringPi A` (defined below); kept inline to avoid forward reference.
       (kroneckerMap (· * ·) A (1 : Matrix (Fin r) (Fin r) ℂ)) *
       stinespringV K =
       ∑ j : Fin r, (K j)ᴴ * A * K j := by
