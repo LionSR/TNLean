@@ -11,8 +11,8 @@ then greps the Lean source tree for matching declarations.  Reports:
   4. \lean{} refs that are not listed in lean_decls (missing entries).
   5. Summary statistics (formalization progress per chapter).
 
-Exit code 0  → everything in sync.
-Exit code 1  → mismatches found (details on stdout / in report file).
+Exit code 0  → everything in sync (or --ci not passed).
+Exit code 1  → mismatches found AND --ci flag is active.
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ _LEAN_DECL_RE = re.compile(
 )
 
 _NAMESPACE_OPEN_RE = re.compile(r"^\s*namespace\s+([\w.]+)", re.MULTILINE)
-_SECTION_OPEN_RE = re.compile(r"^\s*section\s+([\w.]+)", re.MULTILINE)
+_SECTION_OPEN_RE = re.compile(r"^\s*(?:noncomputable\s+)?section\s+([\w.]+)", re.MULTILINE)
 _NAMESPACE_CLOSE_RE = re.compile(r"^\s*end\s+([\w.]+)", re.MULTILINE)
 
 _TEX_LEAN_RE = re.compile(r"\\lean\{([^}]+)\}")
@@ -220,7 +220,10 @@ def collect_blueprint_entries(blueprint_src: Path) -> list[BlueprintEntry]:
                     ))
                 env["_entry_start"] = env_entry_start
                 env["_entry_end"] = len(entries)
-                last_env = env
+                # Only track as last_env if it produced lean entries, so an
+                # intervening remark without \lean{} doesn't steal the proof.
+                if env_entry_start < len(entries):
+                    last_env = env
                 continue
 
             # Proof begin
@@ -292,6 +295,11 @@ def run_sync(
     lean_root = root / "TNLean"
     blueprint_src = root / "blueprint" / "src"
     lean_decls_path = root / "blueprint" / "lean_decls"
+
+    if not lean_root.is_dir():
+        raise FileNotFoundError(f"Lean source directory not found: {lean_root}")
+    if not blueprint_src.is_dir():
+        raise FileNotFoundError(f"Blueprint source directory not found: {blueprint_src}")
 
     report = SyncReport()
 
