@@ -21,24 +21,17 @@ variable {D : ℕ}
 private abbrev CLM (D : ℕ) :=
   Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
 
-/-- Resolvent of a semigroup generator (`R(z,L) = (z • 1 - L)⁻¹`). -/
-abbrev generatorResolventCLM (L : CLM D) (z : ℂ) : CLM D :=
-  resolvent L z
-
-@[simp] theorem generatorResolventCLM_eq_mathlib (L : CLM D) (z : ℂ) :
-    generatorResolventCLM L z = resolvent L z := rfl
-
 /-- Neumann-series specialization at `z = 1`:
 if `‖L‖ < 1`, then `R(1,L) = ∑ₙ L^n`. -/
-theorem generatorResolventCLM_one_neumann
+theorem resolvent_one_neumann
     (L : CLM D) (hL : ‖L‖ < 1) :
-    generatorResolventCLM L (1 : ℂ) = ∑' n : ℕ, L ^ n := by
-  simpa [generatorResolventCLM, resolvent, Algebra.algebraMap_eq_smul_one, one_smul] using
+    resolvent L (1 : ℂ) = ∑' n : ℕ, L ^ n := by
+  simpa [resolvent, Algebra.algebraMap_eq_smul_one, one_smul] using
     (NormedRing.inverse_one_sub L hL)
 
 /-- Euler resolvent step `(λ R(λ,L))`. -/
 def eulerResolventStep (L : CLM D) (lam : ℂ) : CLM D :=
-  lam • generatorResolventCLM L lam
+  lam • resolvent L lam
 
 /-- Finite-`n` Euler approximation term `((n/t)R(n/t,L))^n`. -/
 def eulerResolventApprox (L : CLM D) (t : ℝ) (n : ℕ) : CLM D :=
