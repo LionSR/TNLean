@@ -1,4 +1,5 @@
 import TNLean.MPS.Irreducible.FormII
+import TNLean.MPS.Irreducible.PeriodicBlocking
 import TNLean.MPS.Chain.Defs
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.CyclicDecomposition
