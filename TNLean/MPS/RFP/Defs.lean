@@ -30,6 +30,11 @@ See arXiv:1606.00608, Definition 3.2. -/
 def IsRFP (A : MPSTensor d D) : Prop :=
   transferMap A ∘ₗ transferMap A = transferMap A
 
+/-- The idempotence equation packaged as a projection lemma. -/
+theorem IsRFP.idempotent {A : MPSTensor d D} (h : IsRFP A) :
+    transferMap A ∘ₗ transferMap A = transferMap A :=
+  h
+
 /-- The RFP condition is equivalent to a Kraus-level condition: there exists
 an isometry `V : Fin d × Fin d → Fin d → ℂ` (i.e. a `(d²×d)` matrix) such
 that `A i₁ * A i₂ = ∑ j, V (i₁, i₂) j • A j` for all `i₁ i₂`.
@@ -38,12 +43,21 @@ are related by an isometry on the physical index.
 See arXiv:1606.00608, Theorem 3.1.
 
 TODO: prove the equivalence. -/
-theorem isRFP_iff_kraus (A : MPSTensor d D) :
+theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
     IsRFP A ↔
       ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
         V.conjTranspose * V = 1 ∧
         ∀ i₁ i₂ : Fin d,
           A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j := by
   sorry
+
+/-- Backwards-compatible name for `isRFP_iff_kraus_isometry`. -/
+theorem isRFP_iff_kraus (A : MPSTensor d D) :
+    IsRFP A ↔
+      ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
+        V.conjTranspose * V = 1 ∧
+        ∀ i₁ i₂ : Fin d,
+          A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j :=
+  isRFP_iff_kraus_isometry A
 
 end MPSTensor
