@@ -543,7 +543,7 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
 (i.e.\ word products of \emph{exactly} one length span all matrices).
 
 \begin{definition}[Fixed-length vector span]\label{def:vector_spread_span}
-    \lean{MPSTensor.vectorSpreadSpan}
+    \lean{MPSTensor.vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector}
     \leanok
     \uses{def:mps_tensor, def:eval_word}
     The \emph{fixed-length vector span} at length~$n$ is
@@ -668,7 +668,7 @@ This section extends the Lemma~2(b) infrastructure to the
 used to produce rank-one elements.
 
 \begin{theorem}[Blocking preserves normality]\label{thm:isNormal_blockTensor}
-    \lean{MPSTensor.isNormal_blockTensor}
+    \lean{MPSTensor.isNormal_blockTensor_of_isNormal}
     \leanok
     \uses{def:normal, def:blocked_tensor}
     If $A$ is normal and $L > 0$, then the blocked tensor
@@ -728,7 +728,7 @@ used to produce rank-one elements.
 \end{proof}
 
 \begin{theorem}[Wielandt blocked assembly]\label{thm:wielandt_blocked_assembly}
-    \lean{MPSTensor.wielandt_blocked_assembly}
+    \lean{MPSTensor.wielandt_blocked_assembly_complete}
     \leanok
     \uses{def:word_span, def:normal, def:blocked_tensor}
     Suppose $A$ is normal and $L > 0$, and we have:
