@@ -1,0 +1,164 @@
+name: PR Cleanup (AI-generated)
+
+on:
+  pull_request:
+    types: [opened]
+
+concurrency:
+  group: pr-cleanup-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  cleanup:
+    if: |
+      startsWith(github.event.pull_request.head.ref, 'claude/') ||
+      startsWith(github.event.pull_request.head.ref, 'codex/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Clean up AI-generated PR
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            You are a PR-cleanup bot. Your job is to bring AI-generated pull requests
+            into compliance with this project's conventions. Do NOT touch code — only
+            update PR metadata (title, body, labels) and comment on the linked issue.
+
+            ─── CONTEXT ───
+            PR_NUMBER:  ${{ github.event.pull_request.number }}
+            PR_TITLE:   ${{ github.event.pull_request.title }}
+            BRANCH:     ${{ github.event.pull_request.head.ref }}
+            REPO:       ${{ github.repository }}
+
+            PR_BODY (may contain Cursor Bugbot notes — preserve them as-is):
+            ${{ github.event.pull_request.body }}
+
+            ─── STEP 1: EXTRACT ISSUE NUMBER ───
+            Find the linked issue number from (in priority order):
+              a. Branch name pattern `claude/issue-{N}-*` → issue N
+              b. PR body references: `Refs #N`, `Addresses #N`, `Closes #N`,
+                 `Fixes #N`, `Partially addresses #N` → issue N
+              c. PR title suffix `(#N)` → issue N
+            If none found, skip issue-dependent steps and note it in a PR comment.
+
+            ─── STEP 2: FETCH ISSUE DETAILS ───
+            Run: `gh issue view <N> --repo ${{ github.repository }} --json title,labels,body`
+            Save the issue title, labels, and body for later steps.
+
+            ─── STEP 3: FIX TITLE ───
+            The title MUST follow conventional-commit format:
+              type(scope): short description
+
+            Types: feat | fix | refactor | docs | ci | chore
+            Scope: shortened module path (omit TNLean/ prefix).
+              Examples: MPS/Symmetry, Channel, blueprint, MPS/Core, PEPS
+
+            Rules:
+            - If the current title already matches `type(scope): ...`, keep it as-is.
+            - Otherwise, infer the type from the change content:
+              • New definitions/lemmas/theorems → feat
+              • Bug fixes, broken proofs → fix
+              • Blueprint/doc-only changes → docs (if only .tex files) or fix(blueprint) (if fixing tags)
+              • Restructuring → refactor
+              • CI changes → ci
+              • Dependency bumps → chore
+            - Infer the scope from the files changed or the issue title.
+              Run `gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --json files` to see changed files.
+            - Keep the description part concise (under ~60 chars after the prefix).
+            - Strip brackets like [PEPS follow-up], [Wolf Ch6], etc. — fold that
+              info into the scope.
+            - If the title already includes `(#N)` issue ref suffix, keep it.
+
+            ─── STEP 4: FIX BODY ───
+            The body MUST contain these three sections followed by an issue reference.
+            Rewrite the body to match this template, extracting info from the original:
+
+            ```
+            ### Motivation
+            <!-- Why this change is needed (1--3 bullets). -->
+
+            - <extract from original body, issue description, or infer from context>
+
+            ### Description
+            <!-- What was changed: files added/modified, definitions introduced, lemmas proved. -->
+
+            - <extract from original body — list files, definitions, theorems>
+
+            ### Testing
+            <!-- What was verified and how. -->
+
+            - <extract from original body — look for mentions of `lake build`, tests, etc.>
+            - <if nothing mentioned, write: `lake build` passes>
+
+            ---
+            Addresses #<N>
+            ```
+
+            Rules:
+            - If `### Motivation`, `### Description`, `### Testing` sections already
+              exist and are filled in, keep their content — just ensure all three are present.
+            - Use `Addresses #N` (not `Refs`, `Closes`, or `Fixes`) so the issue stays
+              open but is linked. If the original body says "Closes" or "Fixes",
+              preserve that verb instead.
+            - If there's a Cursor Bugbot `> [!NOTE]` block at the end, preserve it
+              after the `Addresses` line.
+            - If there's a "Generated with Claude Code" line, remove it (redundant
+              with the `codex` label and branch name).
+            - Remove any `## Summary` or `## Test plan` sections — fold their content
+              into the matching template section.
+
+            ─── STEP 5: APPLY LABELS ───
+            Collect labels to apply:
+              a. If branch starts with `codex/` → add label `codex`
+              b. If branch starts with `claude/` → add label `codex`
+                 (the `codex` label means "AI-generated", per CONTRIBUTING.md)
+              c. Copy ALL labels from the linked issue (the ones from Step 2).
+              d. If the PR touches only `.tex` files → also add `documentation`.
+              e. If the PR touches only `.yml` files under `.github/` → also add `ci`.
+
+            Apply with: `gh pr edit ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --add-label "label1,label2,..."`
+
+            ─── STEP 6: UPDATE PR ───
+            Apply the new title and body:
+            ```
+            gh pr edit <NUMBER> --repo <REPO> --title "<new title>" --body "<new body>"
+            ```
+            Use a heredoc for the body to preserve formatting.
+
+            ─── STEP 7: TAG THE ISSUE ───
+            If an issue was found, post a comment on it:
+            ```
+            gh issue comment <N> --repo <REPO> --body "🤖 PR #<PR_NUMBER> has been opened to address this issue.
+
+            **Branch:** \`<BRANCH>\`
+            **Title:** <new title>
+
+            <one-line summary of what the PR does>"
+            ```
+
+            ─── OUTPUT ───
+            After completing all steps, post a PR comment summarizing what was changed:
+            ```
+            gh pr comment <NUMBER> --repo <REPO> --body "🧹 **PR Cleanup Bot**
+
+            - **Title:** <old> → <new> (or: unchanged)
+            - **Body:** restructured to match PR template (or: already compliant)
+            - **Labels:** added <list>
+            - **Issue:** linked to #<N> (or: no issue found)
+            "
+            ```
+
+          claude_args: |
+            --model claude-sonnet-4-6
+            --allowedTools "Bash(gh pr:*),Bash(gh issue:*),Bash(gh api:*)"
