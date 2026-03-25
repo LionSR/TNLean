@@ -164,8 +164,8 @@ theorem exists_stinespring_dilation
     ∃ (r : ℕ) (K : Fin r → Matrix (Fin D) (Fin D) ℂ),
       ∀ A, E A = (stinespringV K)ᴴ * stinespringPi (r := r) A * stinespringV K := by
   rcases hE with ⟨r, K, hK⟩
-  -- We return `fun j => (K j)ᴴ` so the witness matches the Heisenberg identity
-  -- `Φ(X) = ∑ j, Kⱼᴴ * X * Kⱼ` rather than the Schrödinger Kraus orientation.
+  -- Witness convention: we return the conjugate-transposed family `fun j => (K j)ᴴ`
+  -- so the theorem matches the Heisenberg-form identity `Φ(X) = ∑ j, Kⱼᴴ * X * Kⱼ`.
   refine ⟨r, fun j => (K j)ᴴ, ?_⟩
   intro A
   calc
