@@ -104,7 +104,6 @@ import TNLean.MPS.Chain.FundamentalTheorem
 import TNLean.MPS.Chain.BlockedChainFT
 import TNLean.MPS.Chain.SameStateBridge
 import TNLean.MPS.Chain.TranslationInvariance
-import TNLean.MPS.Chain.SymmetricMPS
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Overlap.Basic
@@ -121,6 +120,8 @@ import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.FundamentalTheorem.Applications
+-- Symmetry
+import TNLean.MPS.Symmetry.Defs
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
