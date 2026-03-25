@@ -102,14 +102,14 @@ to a follow-up PR.
 
 \begin{definition}[Parent interaction]\label{def:parent_interaction}
   \lean{MPSTensor.parentInteraction}
-  \leanok
   \uses{def:ground_space_parent}
-  At this stage, \lean{parentInteraction} is the placeholder local interaction
-  operator used by the API; the intended target is
+  The parent interaction at range $L$ is the orthogonal projector
   \[
     h_L(A) := \Pi_{G_L(A)^\perp},
   \]
   on the local $L$-site space.
+  \textbf{Note:} the Lean definition is currently a zero placeholder;
+  \texttt{\textbackslash leanok} will be added once the projector is implemented.
 \end{definition}
 
 For a periodic chain of length $N$, the parent Hamiltonian is the sum of
@@ -117,10 +117,11 @@ translated copies of the local interaction.
 
 \begin{definition}[Translated local term]\label{def:local_term_parent}
   \lean{MPSTensor.localTerm}
-  \leanok
   \uses{def:parent_interaction}
-  For each site index $i \in \Fin N$, the translated local term is denoted
-  $h_i$ and acts on the full $N$-site coefficient-function space.
+  For each site index $i \in \Fin N$, the translated local term $h_i$ embeds
+  the parent interaction into the full $N$-site space at position~$i$ (with
+  periodic boundary conditions).
+  \textbf{Note:} the Lean definition is currently a zero placeholder.
 \end{definition}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
@@ -145,7 +146,6 @@ translated copies of the local interaction.
 
 \begin{lemma}[Parent Hamiltonian annihilates the MPV]\label{lem:parent_hamiltonian_annihilates}
   \lean{MPSTensor.parentHamiltonian_annihilates}
-  \leanok
   \uses{def:parent_hamiltonian, def:mpv}
   For every $N$, the MPV state satisfies
   \[
@@ -155,7 +155,6 @@ translated copies of the local interaction.
 
 \begin{lemma}[Frustration-freeness of the MPV]\label{lem:parent_hamiltonian_ff}
   \lean{MPSTensor.parentHamiltonian_frustrationFree}
-  \leanok
   \uses{def:is_frustration_free, def:mpv}
   The MPV state is frustration-free for the parent model.
 \end{lemma}

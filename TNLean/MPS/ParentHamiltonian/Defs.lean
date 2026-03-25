@@ -48,14 +48,4 @@ candidate state. -/
 def IsFrustrationFree (A : MPSTensor d D) (L N : ℕ) (ψ : NSiteSpace d N) : Prop :=
   ∀ i : Fin N, localTerm A L N i ψ = 0
 
-lemma localTerm_apply (A : MPSTensor d D) (L N : ℕ) (i : Fin N)
-    (ψ : NSiteSpace d N) :
-    localTerm A L N i ψ = 0 := by
-  simp [localTerm]
-
-lemma parentHamiltonian_apply (A : MPSTensor d D) (L N : ℕ)
-    (ψ : NSiteSpace d N) :
-    parentHamiltonian A L N ψ = 0 := by
-  simp [parentHamiltonian, localTerm]
-
 end MPSTensor

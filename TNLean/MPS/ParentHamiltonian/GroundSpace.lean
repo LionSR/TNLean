@@ -52,7 +52,7 @@ lemma groundSpace_finrank_le (A : MPSTensor d D) (L : ℕ) :
               simpa using (Module.finrank_matrix ℂ ℂ (Fin D) (Fin D))
       _ = D * D := by simp
       _ = D ^ 2 := by simp [pow_two]
-  exact hRange.trans (by simpa [hMatrix])
+  exact hRange.trans (by simp [hMatrix])
 
 /-- The ambient local space has dimension `d^L`. -/
 lemma nSiteSpace_finrank (d L : ℕ) :
@@ -60,7 +60,7 @@ lemma nSiteSpace_finrank (d L : ℕ) :
   calc
     Module.finrank ℂ (NSiteSpace d L)
         = Fintype.card (Cfg d L) := by
-            simpa [NSiteSpace] using (Module.finrank_fintype_fun_eq_card ℂ (η := Cfg d L))
+            simp [NSiteSpace, Module.finrank_fintype_fun_eq_card]
     _ = d ^ L := by simp
 
 /-- If `d^L > D^2`, then `G_L(A)` is a proper subspace. -/
@@ -69,9 +69,7 @@ lemma groundSpace_ne_top (A : MPSTensor d D) (L : ℕ) (hDim : d ^ L > D ^ 2) :
   intro hTop
   have hLe' : Module.finrank ℂ (groundSpace A L) ≤ D ^ 2 := groundSpace_finrank_le A L
   rw [hTop] at hLe'
-  have hLe : d ^ L ≤ D ^ 2 := by
-    simpa [nSiteSpace_finrank] using hLe'
-  have hNotLe : ¬ d ^ L ≤ D ^ 2 := Nat.not_le.mpr hDim
-  exact hNotLe hLe
+  have hLe : d ^ L ≤ D ^ 2 := by simpa [nSiteSpace_finrank] using hLe'
+  omega
 
 end MPSTensor
