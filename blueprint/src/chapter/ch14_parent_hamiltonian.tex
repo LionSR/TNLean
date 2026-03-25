@@ -7,7 +7,7 @@ We follow the standard setup from
 with the project convention that the $N$-site Hilbert space is represented as
 coefficient functions
 \[
-  (\Fin N \to \Fin d) \to \C,
+  \{0,\dots,d{-}1\}^N \to \C,
 \]
 rather than as an explicit tensor product.
 
@@ -19,7 +19,7 @@ For a word $w = (i_1,\dots,i_L)$, write
 $A^w := A^{i_1}\cdots A^{i_L}$.
 The local ground-space map is
 \[
-  \Gamma_L : \MN{D} \to ((\Fin L \to \Fin d) \to \C),
+  \Gamma_L : \MN{D} \to \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr),
   \qquad
   \Gamma_L(X)(\sigma) := \tr\!\bigl(A^{\sigma} X\bigr),
 \]
@@ -32,7 +32,7 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
   \uses{def:eval_word}
   The map $\Gamma_L$ above is implemented as a $\C$-linear map
   \[
-    \Gamma_L : \MN{D} \to ((\Fin L \to \Fin d) \to \C).
+    \Gamma_L : \MN{D} \to \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr).
   \]
 \end{definition}
 
@@ -43,7 +43,7 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
   The \emph{local ground space} is the image
   \[
     G_L(A) := \mathrm{im}(\Gamma_L)
-    \subseteq ((\Fin L \to \Fin d) \to \C).
+    \subseteq \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr).
   \]
 \end{definition}
 
@@ -70,7 +70,7 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
   \leanok
   The coefficient-function model satisfies
   \[
-    \dim\!\bigl(((\Fin L \to \Fin d) \to \C)\bigr)=d^L.
+    \dim\!\bigl(\{0,\dots,d{-}1\}^L \to \C\bigr)=d^L.
   \]
 \end{lemma}
 
@@ -81,7 +81,7 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
   If $d^L > D^2$, then $G_L(A)$ is a proper subspace of the local Hilbert
   space:
   \[
-    G_L(A) \neq ((\Fin L \to \Fin d) \to \C).
+    G_L(A) \neq \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr).
   \]
 \end{lemma}
 
@@ -118,9 +118,9 @@ translated copies of the local interaction.
 \begin{definition}[Translated local term]\label{def:local_term_parent}
   \lean{MPSTensor.localTerm}
   \uses{def:parent_interaction}
-  For each site index $i \in \Fin N$, the translated local term $h_i$ embeds
-  the parent interaction into the full $N$-site space at position~$i$ (with
-  periodic boundary conditions).
+  For each site index $i \in \{0,\dots,N{-}1\}$, the translated local term
+  $h_i$ embeds the parent interaction into the full $N$-site space at
+  position~$i$ (with periodic boundary conditions).
   \textbf{Note:} the Lean definition is currently a zero placeholder.
 \end{definition}
 
@@ -130,7 +130,7 @@ translated copies of the local interaction.
   \uses{def:local_term_parent}
   The chain Hamiltonian is
   \[
-    H_N(A,L) := \sum_{i \in \Fin N} h_i.
+    H_N(A,L) := \sum_{i=0}^{N-1} h_i.
   \]
 \end{definition}
 
@@ -140,7 +140,7 @@ translated copies of the local interaction.
   \uses{def:local_term_parent}
   A state $\psi$ is frustration-free if each local term annihilates it:
   \[
-    \forall i \in \Fin N,\quad h_i \psi = 0.
+    \forall\, i \in \{0,\dots,N{-}1\},\quad h_i \psi = 0.
   \]
 \end{definition}
 
