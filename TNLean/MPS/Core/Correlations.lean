@@ -12,8 +12,8 @@ import Mathlib.Analysis.SpecialFunctions.Log.Basic
 /-!
 # Correlations for normal MPS in the thermodynamic limit
 
-This file records the parent-Hamiltonian-facing interface for connected
-correlations of a (normalized) MPS tensor. We express one-point and two-point
+This file defines connected correlations for a (normalized) MPS tensor
+in the thermodynamic limit. We express one-point and two-point
 observables through the transfer map `transferMap`, and package the standard
 sum-of-exponentials / exponential-decay statements in a form that downstream
 chapters can consume.
@@ -29,7 +29,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-abbrev Mat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
+private abbrev Mat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
 
 /-- One-site expectation value in terms of a chosen right fixed point `ρR`.
 
@@ -79,8 +79,8 @@ theorem connectedCorrelator_eq_sum
         ∑ j : Fin (D * D - 1), c j * (lam j) ^ n) :
     ∀ n : ℕ,
       connectedCorrelator (d := d) (D := D) A ρR X Y n =
-        ∑ j : Fin (D * D - 1), c j * (lam j) ^ n := by
-  sorry
+        ∑ j : Fin (D * D - 1), c j * (lam j) ^ n :=
+  hdecomp
 
 /--
 Exponential bound for connected correlations once the subleading spectral radius
@@ -92,8 +92,8 @@ theorem connectedCorrelator_bound
     (hbound : ∀ n : ℕ,
       ‖connectedCorrelator (d := d) (D := D) A ρR X Y n‖ ≤ CXY * ‖lam₂‖ ^ n) :
     ∀ n : ℕ,
-      ‖connectedCorrelator (d := d) (D := D) A ρR X Y n‖ ≤ CXY * ‖lam₂‖ ^ n := by
-  sorry
+      ‖connectedCorrelator (d := d) (D := D) A ρR X Y n‖ ≤ CXY * ‖lam₂‖ ^ n :=
+  hbound
 
 /-- Correlation length associated with a chosen subleading eigenvalue `λ₂`. -/
 noncomputable def correlationLength (lam₂ : ℂ) : ℝ :=
