@@ -431,12 +431,20 @@ directly to periodic tensors.
 	\label{def:periodic_tensor}
 	\lean{MPSTensor.IsPeriodic}
 	\leanok
-	An irreducible MPS tensor $A$ of bond dimension $D$ is
-	\emph{$m$-periodic} (for some $m \ge 1$) if the peripheral spectrum
-	of its transfer map $\E_A$ is exactly the $m$-th roots of unity
-	$\{e^{2\pi i k/m} : 0 \le k < m\}$.
-	A $1$-periodic tensor is exactly an irreducible tensor with
-	primitive transfer map (Definition~\ref{def:primitive_channel}).
+	An MPS tensor $A$ of bond dimension $D$ is
+	\emph{$m$-periodic} (for some $m \ge 1$) if the following conditions hold:
+	\begin{enumerate}
+		\item $A$ is irreducible (no nontrivial invariant projection),
+		\item $A$ is left-canonical (trace-preserving normalization:
+		      $\sum_i (A^i)^\dagger A^i = \Id_D$),
+		\item $m \ge 1$ (the period is positive),
+		\item the peripheral spectrum of $\E_A$ is exactly the set of
+		      $m$-th roots of unity
+		      $\{e^{2\pi i k/m} : 0 \le k < m\}$, and
+		\item there exists a primitive $m$-th root of unity.
+	\end{enumerate}
+	A $1$-periodic tensor is exactly an irreducible, left-canonical tensor
+	with primitive transfer map (Definition~\ref{def:primitive_channel}).
 \end{definition}
 
 \begin{definition}[Irreducible form]
@@ -448,9 +456,13 @@ directly to periodic tensors.
 		A^i = \bigoplus_{j \in J} \mu_j\, A_j^i,
 	\]
 	where each block $A_j$ is an $m_j$-periodic tensor,
-	each weight $\mu_j \neq 0$, and the blocks are pairwise
-	non-repeated (no two distinct $j, j'$ have $A_j$ gauge-equivalent
-	to $A_{j'}$).
+	each weight $\mu_j$ has strictly positive real part
+	($\Re(\mu_j) > 0$), and the reassembled block-diagonal tensor
+	generates the same MPV family as $A$.
+	The pairwise non-repetition condition (no two distinct blocks are
+	repeated versions of each other) is bundled separately in the
+	\texttt{BasisOfPeriodicTensors} structure rather than in
+	\texttt{IsIrreducibleForm}.
 	This is the standard form introduced in \cite[\S II]{DeLasCuevas2017Irreducible}.
 	It extends the normal canonical form
 	(Definition~\ref{def:is_normal_canonical_form}),
@@ -653,4 +665,49 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 	and $B$ are equivalent (up to the same gauge and $Z$ freedom as above).
 	This extends Theorems~\ref{thm:ft_proportional}
 	and~\ref{thm:ft_proportional_nt} to the periodic setting.
+\end{remark}
+
+\subsection{Structural FT after blocking}
+
+\begin{theorem}[Structural Fundamental Theorem after blocking]%
+	\label{thm:ft_after_blocking_structural}
+	\lean{MPSTensor.fundamentalTheorem_after_blocking_1606_structural}
+	\leanok
+	\uses{def:periodic_tensor}
+	For any two MPS tensors $A$ and $B$ generating the same MPV family
+	($\mathcal{V}(A) = \mathcal{V}(B)$), there exist blocking periods
+	$p_A, p_B \ge 1$ such that both blocked tensors $A^{[p_A]}$ and
+	$B^{[p_B]}$ admit TP-primitive block-diagonal decompositions:
+	\[
+		A^{[p_A]} \simeq \bigoplus_{j=1}^{r_A} \mu_j^A\, A_j,
+		\qquad
+		B^{[p_B]} \simeq \bigoplus_{k=1}^{r_B} \mu_k^B\, B_k,
+	\]
+	where each $A_j$, $B_k$ is left-canonical with primitive transfer map,
+	every weight is nonzero, and every block has positive bond dimension.
+\end{theorem}
+
+\begin{proof}\leanok
+	Apply the blocking-based reduction
+	(\texttt{exists\_tp\_primitive\_blockDecomp\_after\_blocking})
+	independently to $A$ and~$B$.
+\end{proof}
+
+\begin{remark}[Remaining steps for the full 1606.00608 FT]
+	\label{rem:ft_1606_remaining}
+	Theorem~\ref{thm:ft_after_blocking_structural} is the current formalized
+	endpoint toward the full end-to-end Fundamental Theorem of
+	\cite{Cirac2017MPDO_AnnPhys}. The remaining steps are:
+	\begin{enumerate}
+		\item \textbf{Common blocking period}: Re-block both decompositions
+		      to $p = \mathrm{lcm}(p_A, p_B)$, requiring iterated-blocking
+		      infrastructure.
+		\item \textbf{Sector irreducibility}: Each cyclic sector of a blocked
+		      periodic block should be irreducible (see~\#242).
+		\item \textbf{Normal form per sector}: Already proved
+		      (\texttt{isNormal\_of\_tp\_primitive\_irreducible}).
+		\item \textbf{BNT separation + weight ordering + gauge-phase matching}:
+		      Already proved individually; needs combination after steps~1--2
+		      (see~\#243).
+	\end{enumerate}
 \end{remark}
