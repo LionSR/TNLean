@@ -467,9 +467,10 @@ canonical-form separation arguments.
 \begin{definition}[Conditional expectation predicate]\label{def:is_conditional_expectation}
     \lean{Kraus.IsConditionalExpectation}
     \leanok
-    A linear map $P : \MN{D} \to \MN{D}$ is a conditional expectation
-    (for a Kraus family) if it is idempotent, unital, has range in the
-    adjoint fixed-point space, and fixes scalar multiples of the identity.
+    Given a $*$-subalgebra $S \subseteq \MN{D}$, a linear map
+    $P : \MN{D} \to \MN{D}$ is a conditional expectation onto $S$ if it is
+    idempotent, unital, has range contained in $S$, and satisfies
+    $P(X)=X$ for all $X \in S$.
 \end{definition}
 
 \begin{definition}[Scalar conditional expectation]\label{def:scalar_conditional_expectation}
@@ -520,8 +521,8 @@ canonical-form separation arguments.
 \begin{theorem}[Absorbs the adjoint map]\label{thm:scalar_conditional_expectation_absorbs_adjointMap}
     \lean{Kraus.scalarConditionalExpectation_absorbs_adjointMap}
     \leanok
-    \uses{def:scalar_conditional_expectation, def:tp_kraus}
-    If $T^*(\sigma)=\sigma$ and $T$ is trace-preserving, then
+    \uses{def:scalar_conditional_expectation}
+    If $T(\sigma)=\sigma$, then
     $E_\sigma\circ T^* = E_\sigma$.
 \end{theorem}
 
@@ -530,7 +531,7 @@ canonical-form separation arguments.
     \lean{Kraus.adjointMap_absorbs_scalarConditionalExpectation}
     \leanok
     \uses{def:scalar_conditional_expectation, def:tp_kraus}
-    If $T^*(\sigma)=\sigma$ and $T$ is trace-preserving, then
+    If $T$ is trace-preserving, then
     $T^*\circ E_\sigma = E_\sigma$.
 \end{theorem}
 
@@ -544,15 +545,18 @@ canonical-form separation arguments.
 
 \begin{theorem}[Scalar map is a conditional expectation]
     \label{thm:scalar_conditional_expectation_isConditionalExpectation}
-    \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
     \leanok
     \uses{def:is_conditional_expectation, def:scalar_conditional_expectation,
+          def:tp_kraus,
           thm:scalar_conditional_expectation_unital,
           thm:scalar_conditional_expectation_idempotent,
           lem:scalar_conditional_expectation_mem_adjointFixedPoints,
           lem:scalar_conditional_expectation_fixes_scalar}
-    Under the same hypotheses, $E_\sigma$ satisfies
-    \texttt{IsConditionalExpectation}.
+    Let $K$ be trace-preserving, let $\rho>0$ be a positive-definite fixed
+    point of the associated map $T\coloneqq \map K$ (so $T(\rho)=\rho$), and
+    assume every adjoint fixed point of $T^*$ is a scalar multiple of $\Id$.
+    Then $E_\rho$ is a conditional expectation onto the adjoint fixed-point
+    $*$-subalgebra.
 \end{theorem}
 
 \section{Stationary support (Wolf \S6.4)}
