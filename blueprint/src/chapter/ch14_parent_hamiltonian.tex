@@ -1,0 +1,163 @@
+\chapter{Parent Hamiltonians}\label{ch:parent_hamiltonian}
+
+This chapter introduces the local ground-space construction and the parent
+interaction for translation-invariant periodic MPS.
+We follow the standard setup from
+\cite{Cirac2021Matrix, PerezGarcia2007Matrix} and align the Lean definitions
+with the project convention that the $N$-site Hilbert space is represented as
+coefficient functions
+\[
+  (\Fin N \to \Fin d) \to \C,
+\]
+rather than as an explicit tensor product.
+
+\section{Local ground space $G_L(A)$}\label{sec:ground_space_parent}
+
+Fix an MPS tensor $A = \{A^i\}_{i=0}^{d-1}$ with $A^i \in \MN{D}$ and a block
+length $L \ge 1$.
+For a word $w = (i_1,\dots,i_L)$, write
+$A^w := A^{i_1}\cdots A^{i_L}$.
+The local ground-space map is
+\[
+  \Gamma_L : \MN{D} \to ((\Fin L \to \Fin d) \to \C),
+  \qquad
+  \Gamma_L(X)(\sigma) := \tr\!\bigl(A^{\sigma} X\bigr),
+\]
+where $A^{\sigma}$ abbreviates
+$A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
+
+\begin{definition}[Ground-space map]\label{def:ground_space_map}
+  \lean{MPSTensor.groundSpaceMap}
+  \leanok
+  \uses{def:eval_word}
+  The map $\Gamma_L$ above is implemented as a $\C$-linear map
+  \[
+    \Gamma_L : \MN{D} \to ((\Fin L \to \Fin d) \to \C).
+  \]
+\end{definition}
+
+\begin{definition}[Local ground space]\label{def:ground_space_parent}
+  \lean{MPSTensor.groundSpace}
+  \leanok
+  \uses{def:ground_space_map}
+  The \emph{local ground space} is the image
+  \[
+    G_L(A) := \mathrm{im}(\Gamma_L)
+    \subseteq ((\Fin L \to \Fin d) \to \C).
+  \]
+\end{definition}
+
+\begin{lemma}[Dimension bound]\label{lem:ground_space_finrank_le}
+  \lean{MPSTensor.groundSpace_finrank_le}
+  \leanok
+  \uses{def:ground_space_parent}
+  For every $L$,
+  \[
+    \dim G_L(A) \le D^2.
+  \]
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Since $G_L(A)$ is the range of a linear map from $\MN{D}$,
+  \[
+    \dim G_L(A) \le \dim \MN{D} = D^2.
+  \]
+\end{proof}
+
+\begin{lemma}[Ambient-space dimension]\label{lem:nsite_space_finrank}
+  \lean{MPSTensor.nSiteSpace_finrank}
+  \leanok
+  The coefficient-function model satisfies
+  \[
+    \dim\!\bigl(((\Fin L \to \Fin d) \to \C)\bigr)=d^L.
+  \]
+\end{lemma}
+
+\begin{lemma}[Nontriviality criterion]\label{lem:ground_space_ne_top}
+  \lean{MPSTensor.groundSpace_ne_top}
+  \leanok
+  \uses{lem:ground_space_finrank_le, lem:nsite_space_finrank}
+  If $d^L > D^2$, then $G_L(A)$ is a proper subspace of the local Hilbert
+  space:
+  \[
+    G_L(A) \neq ((\Fin L \to \Fin d) \to \C).
+  \]
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  If $G_L(A)$ were the whole space, its dimension would be $d^L$ by
+  Lemma~\ref{lem:nsite_space_finrank};
+  Lemma~\ref{lem:ground_space_finrank_le} gives the contradiction
+  $d^L \le D^2$.
+\end{proof}
+
+\section{Parent interaction and chain Hamiltonian}\label{sec:parent_interaction_defs}
+
+Conceptually, the parent interaction at range $L$ is the orthogonal projector
+onto $G_L(A)^\perp$. In the current Lean installment, the chain-level operator
+API is introduced first, and the concrete projector implementation is deferred
+to a follow-up PR.
+
+\begin{definition}[Parent interaction]\label{def:parent_interaction}
+  \lean{MPSTensor.parentInteraction}
+  \uses{def:ground_space_parent}
+  The parent interaction at range $L$ is the orthogonal projector
+  \[
+    h_L(A) := \Pi_{G_L(A)^\perp},
+  \]
+  on the local $L$-site space.
+  \textbf{Note:} the Lean definition is currently a zero placeholder;
+  \texttt{\textbackslash leanok} will be added once the projector is implemented.
+\end{definition}
+
+For a periodic chain of length $N$, the parent Hamiltonian is the sum of
+translated copies of the local interaction.
+
+\begin{definition}[Translated local term]\label{def:local_term_parent}
+  \lean{MPSTensor.localTerm}
+  \uses{def:parent_interaction}
+  For each site index $i \in \Fin N$, the translated local term $h_i$ embeds
+  the parent interaction into the full $N$-site space at position~$i$ (with
+  periodic boundary conditions).
+  \textbf{Note:} the Lean definition is currently a zero placeholder.
+\end{definition}
+
+\begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
+  \lean{MPSTensor.parentHamiltonian}
+  \leanok
+  \uses{def:local_term_parent}
+  The chain Hamiltonian is
+  \[
+    H_N(A,L) := \sum_{i \in \Fin N} h_i.
+  \]
+\end{definition}
+
+\begin{definition}[Frustration-free condition]\label{def:is_frustration_free}
+  \lean{MPSTensor.IsFrustrationFree}
+  \leanok
+  \uses{def:local_term_parent}
+  A state $\psi$ is frustration-free if each local term annihilates it:
+  \[
+    \forall i \in \Fin N,\quad h_i \psi = 0.
+  \]
+\end{definition}
+
+\begin{lemma}[Parent Hamiltonian annihilates the MPV]\label{lem:parent_hamiltonian_annihilates}
+  \lean{MPSTensor.parentHamiltonian_annihilates}
+  \uses{def:parent_hamiltonian, def:mpv}
+  For every $N$, the MPV state satisfies
+  \[
+    H_N(A,L)\,V^{(N)}(A) = 0.
+  \]
+\end{lemma}
+
+\begin{lemma}[Frustration-freeness of the MPV]\label{lem:parent_hamiltonian_ff}
+  \lean{MPSTensor.parentHamiltonian_frustrationFree}
+  \uses{def:is_frustration_free, def:mpv}
+  The MPV state is frustration-free for the parent model.
+\end{lemma}
+
+Sections on injective tensors, gap criteria, and uniqueness of ground states are
+postponed to later installments.
