@@ -28,20 +28,16 @@ variable {V : Type*} [Fintype V] [DecidableEq V] [LinearOrder V]
 abbrev Edge (G : SimpleGraph V) : Type _ :=
   { uv : V × V // uv.1 < uv.2 ∧ G.Adj uv.1 uv.2 }
 
-instance instFintypeEdge (G : SimpleGraph V) [DecidableRel G.Adj] : Fintype (Edge G) := by
-  classical
-  unfold Edge
-  infer_instance
+instance instFintypeEdge (G : SimpleGraph V) [DecidableRel G.Adj] : Fintype (Edge G) :=
+  inferInstance
 
 /-- Edges incident to a vertex `v`. -/
 abbrev IncidentEdge (G : SimpleGraph V) (v : V) : Type _ :=
   { e : Edge G // e.1.1 = v ∨ e.1.2 = v }
 
 instance instFintypeIncidentEdge (G : SimpleGraph V) [DecidableRel G.Adj] (v : V) :
-    Fintype (IncidentEdge G v) := by
-  classical
-  unfold IncidentEdge
-  infer_instance
+    Fintype (IncidentEdge G v) :=
+  inferInstance
 
 /-- A PEPS tensor family with one physical index per vertex and edge-dependent
 virtual bond dimensions. -/
