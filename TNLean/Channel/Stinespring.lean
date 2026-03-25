@@ -75,6 +75,20 @@ theorem stinespringV_isometry_iff_kraus_normalized {r : ℕ}
       ∑ j : Fin r, (K j)ᴴ * K j = 1 := by
   rw [stinespringV_conjTranspose_mul]
 
+/-! ### `π` as a concrete `*`-representation -/
+
+/-- The concrete representation `π(A) = A ⊗ 𝟙_r` used in the finite-dimensional
+Stinespring construction. -/
+noncomputable def stinespringPi {r : ℕ}
+    (A : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix (Fin D × Fin r) (Fin D × Fin r) ℂ :=
+  kroneckerMap (· * ·) A (1 : Matrix (Fin r) (Fin r) ℂ)
+
+@[simp]
+theorem stinespringPi_apply {r : ℕ}
+    (A : Matrix (Fin D) (Fin D) ℂ) (i j : Fin D) (a b : Fin r) :
+    stinespringPi (r := r) A (i, a) (j, b) = A i j * (1 : Matrix (Fin r) (Fin r) ℂ) a b := rfl
+
 /-! ### Stinespring representation of the dual and Schrödinger maps -/
 
 /-- **Stinespring representation, Heisenberg picture** (Wolf Thm 2.2):
@@ -87,14 +101,11 @@ In this file, `T*` is the Heisenberg dual acting on observables, while the
 Schrödinger map uses adjoints in the opposite order. -/
 theorem stinespring_dual_representation {r : ℕ}
     (K : Fin r → Matrix (Fin D) (Fin D) ℂ) (A : Matrix (Fin D) (Fin D) ℂ) :
-    (stinespringV K)ᴴ *
-      -- This is `stinespringPi A` (defined below); kept inline to avoid forward reference.
-      (kroneckerMap (· * ·) A (1 : Matrix (Fin r) (Fin r) ℂ)) *
-      stinespringV K =
+    (stinespringV K)ᴴ * stinespringPi (r := r) A * stinespringV K =
       ∑ j : Fin r, (K j)ᴴ * A * K j := by
   ext a b
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    stinespringV_apply, kroneckerMap_apply, Matrix.one_apply,
+    stinespringV_apply, stinespringPi, kroneckerMap_apply, Matrix.one_apply,
     Matrix.sum_apply, Fintype.sum_prod_type,
     mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   rw [Finset.sum_comm]
@@ -115,19 +126,7 @@ theorem stinespring_schrodinger_representation {r : ℕ}
   simp only [Matrix.mul_apply, Matrix.sum_apply,
     stinespringV_apply, Matrix.conjTranspose_apply]
 
-/-! ### `π` as a concrete `*`-representation and existential Stinespring statements -/
-
-/-- The concrete representation `π(A) = A ⊗ 𝟙_r` used in the finite-dimensional
-Stinespring construction. -/
-noncomputable def stinespringPi {r : ℕ}
-    (A : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix (Fin D × Fin r) (Fin D × Fin r) ℂ :=
-  kroneckerMap (· * ·) A (1 : Matrix (Fin r) (Fin r) ℂ)
-
-@[simp]
-theorem stinespringPi_apply {r : ℕ}
-    (A : Matrix (Fin D) (Fin D) ℂ) (i j : Fin D) (a b : Fin r) :
-    stinespringPi (r := r) A (i, a) (j, b) = A i j * (1 : Matrix (Fin r) (Fin r) ℂ) a b := rfl
+/-! ### Existential Stinespring statements -/
 
 @[simp]
 theorem stinespringPi_one {r : ℕ} :
@@ -156,6 +155,10 @@ theorem stinespringPi_conjTranspose {r : ℕ}
 every CP map `E` admits an ancilla dimension `r`, a Kraus family `K`,
 and the concrete `*`-representation `π(A) = A ⊗ 𝟙_r` such that
 `E(A) = V† π(A) V` with `V = stinespringV K`.
+
+Note: the Kraus witness appears in conjugation form `V† (A ⊗ 𝟙) V`, not
+mere left multiplication — this is the key structural content of
+Stinespring's theorem.
 
 Convention: the returned witness `K` is in the Heisenberg orientation
 (i.e. conjugated relative to a Schrödinger-form Kraus family). -/
