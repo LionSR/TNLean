@@ -159,6 +159,13 @@ import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.PiAlgebra.BlockSeparation
 
+-- Layer 5b: Renormalization fixed points (RFP) — pure-state scaffolding
+import TNLean.MPS.RFP.Defs
+import TNLean.MPS.RFP.ZeroCorrelationLength
+import TNLean.MPS.RFP.StructuralForm
+import TNLean.MPS.RFP.Convergence
+import TNLean.MPS.RFP.Assembly
+
 -- Layer 6a: Quantum Wielandt backend / span-growth infrastructure
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.SpanGrowth.NonzeroTraceProduct
