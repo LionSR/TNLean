@@ -34,7 +34,7 @@ gives overlap convergence), the wrapper here reduces the hypothesis count from
   Entangled Pair States*, arXiv:2011.12127, Theorem 4.4
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 open Filter
 
 namespace MPSTensor
