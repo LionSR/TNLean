@@ -15,12 +15,11 @@ a lower bound on `1 - ρ`).
 
 ## Main results
 
-* `spectral_gap_lower_bound_primitive` — for a primitive TP tensor,
-  `ρ(E - P) ≤ 1 - 1/D^(2D²)` where `P` is the fixed-point projection
-* `mixing_time_upper_bound` — explicit bound on how many iterations are
-  needed for the channel to be ε-close to its fixed point
-* `exponential_convergence_rate` — the convergence `E^n → P` is exponential
-  with an explicit rate
+* `exponential_convergence_of_primitive` — for a primitive TP channel,
+  `‖E^n(X) - P(X)‖ ≤ C · (1-δ)^n · ‖X‖` (convergence to fixed-point projection)
+* `correlation_length_bound` — exponential decay of traceless iterates
+* `spectral_gap_from_wielandt` — explicit spectral gap `δ > 0` with
+  all non-unit eigenvalues satisfying `|μ| ≤ 1 - δ`
 
 ## Mathematical content
 
@@ -66,22 +65,29 @@ variable {d D : ℕ}
 
 /-- **Exponential convergence of primitive channels.**
 
-For a primitive TP channel `E` with spectral gap `δ > 0` (meaning all
-eigenvalues of `E` other than 1 have modulus `≤ 1 - δ`), the iterates
-`E^n` converge exponentially to the fixed-point projection.
+For a primitive TP channel `E` with unique fixed point `ρ_∞`, the iterates
+`E^n(X)` converge exponentially to the fixed-point projection `P(X)`:
 
-This makes the convergence rate explicit: `‖E^n - P‖ ≤ C · (1-δ)^n`
-where `C` is a constant depending on the Jordan structure. -/
+  `‖E^n(X) - P(X)‖ ≤ C · (1-δ)^n · ‖X‖`
+
+where `P(X) = tr(X) · ρ_∞ / tr(ρ_∞)` is the projection onto the fixed state,
+`δ > 0` is the spectral gap, and `C` depends on the Jordan structure.
+
+Note: `P` is the rank-one projection defined by `fixedPointProj` in the
+existing codebase. The convergence is in operator norm on `M_D(ℂ)`. -/
 theorem exponential_convergence_of_primitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitive (transferMap (d := d) (D := D) A))
-    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
+    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))
+    (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
+    (hρ_ne : ρ ≠ 0) (htr : Matrix.trace ρ ≠ 0) :
     ∃ (C : ℝ) (δ : ℝ),
       0 < C ∧ 0 < δ ∧ δ ≤ 1 ∧
       ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
         ‖((transferMap (d := d) (D := D) A)^[n]) X -
-          ((transferMap (d := d) (D := D) A)^[n + 1]) X‖ ≤
+          fixedPointProj ρ htr X‖ ≤
           C * (1 - δ) ^ n * ‖X‖ := by
   -- The spectral gap exists by primitivity.
   -- All eigenvalues other than 1 have |λ| < 1 (by compl_eigenvalue_norm_lt_one_of_primitive).

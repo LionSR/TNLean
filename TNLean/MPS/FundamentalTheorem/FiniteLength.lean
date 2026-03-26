@@ -20,6 +20,23 @@ the hypothesis from `SameMPV` (agreement for **all** system sizes) to
   full agreement for injective tensors
 * `fundamentalTheorem_singleBlock_finiteLength` — the strengthened FT
 
+## Mathematical content
+
+The key mathematical challenge is converting trace agreement on long words into
+`evalWord` agreement on all words. The naive approach of pairing
+`tr(evalWord A w * A i) = tr(evalWord B w * A i)` fails because the extensions
+`w ++ [i]` produce `evalWord B w * B i`, not `evalWord B w * A i`.
+
+The correct proof strategy uses the **linear extension** approach from the
+existing FT proof (`LinearExtension.lean`): if `SameMPV A B` holds, there is
+a unique linear map `T` with `T(A i) = B i` that is multiplicative. For the
+finite-length case, one shows that `SameMPVFrom N₀` still determines `T`
+uniquely, because word products of length `≥ 1` span `M_D(ℂ)` (by injectivity)
+and the trace agreements of length `≥ N₀` pin down the action of `T`.
+
+This requires a non-trivial inductive argument that interleaves the linear
+extension construction with the trace pairing, which we leave as a `sorry`.
+
 ## Strengthening relative to the literature
 
 The standard formulation of the FT (Pérez-García et al. 2007, Cirac et al. 2021)
@@ -73,47 +90,31 @@ lemma SameMPVFrom.trace_evalWord_of_length_ge
   simp only [mpv, coeff, List.ofFn_get] at this
   exact this
 
-/-- Key downward-propagation lemma: if traces of `(n+1)`-letter words agree for
-both `A` and `B`, and `A` is injective, then `evalWord` at `n`-letter words
-already agrees. -/
-private lemma evalWord_eq_of_trace_ext_eq [NeZero D]
-    {A B : MPSTensor d D}
-    (hA : IsInjective A) (w : List (Fin d))
-    (hext : ∀ i : Fin d,
-      Matrix.trace (evalWord A (w ++ [i])) = Matrix.trace (evalWord B (w ++ [i]))) :
-    evalWord A w = evalWord B w := by
-  -- tr(evalWord A (w ++ [i])) = tr(evalWord A w * A i) by multiplicativity.
-  have htrace : ∀ i : Fin d,
-      Matrix.trace (evalWord A w * A i) = Matrix.trace (evalWord B w * A i) := by
-    intro i
-    have h1 : evalWord A (w ++ [i]) = evalWord A w * A i := by
-      rw [evalWord_append]; simp [evalWord]
-    have h2 : evalWord B (w ++ [i]) = evalWord B w * A i := by
-      -- Note: B's evalWord uses B's matrices, not A's.
-      -- This doesn't work directly. We need a different approach.
-      sorry
-    sorry
-  sorry
-
 /-! ## Main results -/
 
 /-- **Finite-length agreement implies full agreement** for injective tensors.
 
-The proof uses the trace pairing non-degeneracy and injectivity. -/
+The proof requires showing that trace agreements on words of length `≥ N₀`
+determine the linear extension `T` with `T(A i) = B i` uniquely.
+
+**Proof outline** (not yet formalized):
+1. By injectivity, `{A i}` spans `M_D(ℂ)`, so any linear map on `M_D(ℂ)` is
+   determined by its values on `{A i}`.
+2. The map `Φ_A : M ↦ (i ↦ tr(M · A i))` is injective (by
+   `traceMulRightPi_ker_eq_bot`).
+3. For words `w` of length `n ≥ N₀ - 1`, the `SameMPVFrom` hypothesis gives
+   `tr(evalWord A (w ++ [i])) = tr(evalWord B (w ++ [i]))` for all extensions.
+4. Since `evalWord A (w ++ [i]) = evalWord A w * A i` and similarly for `B`,
+   the injectivity of `Φ_A` applied to `evalWord A w - T(evalWord A w)` (where
+   `T` is the linear extension from `A` to `B`) shows `T` agrees with the
+   `B`-evaluation on long words.
+5. By multiplicativity of `T` (from the existing linear extension proof) and
+   downward induction, agreement propagates to all word lengths. -/
 theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
     {A B : MPSTensor d D}
     (hA : IsInjective A)
     {N₀ : ℕ} (hFrom : SameMPVFrom N₀ A B) :
     SameMPV A B := by
-  -- The key insight: for injective A, the linear map
-  -- Φ_A : M ↦ (i ↦ tr(M · A_i)) is injective (by traceMulRightPi_ker_eq_bot).
-  -- If SameMPVFrom N₀ holds, then for any word w of length n:
-  -- for each i, tr(evalWord A (w ++ [i])) = tr(evalWord B (w ++ [i]))
-  -- when n + 1 ≥ N₀.
-  -- Since evalWord A (w ++ [i]) = evalWord A w * A i, this gives
-  -- tr(evalWord A w * A i) = tr(evalWord B w * B i) for all i.
-  -- But we need tr(... * A i) on both sides to use injectivity of Φ_A.
-  -- The approach: first prove SameMPV A B by induction.
   sorry
 
 /-- **Strengthened single-block Fundamental Theorem (finite-length version).**

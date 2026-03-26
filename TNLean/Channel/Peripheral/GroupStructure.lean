@@ -165,11 +165,19 @@ theorem peripheral_eigenvalue_multiplicity_one
       (Module.End.eigenspace (MPSTensor.transferMap (d := r) (D := D) K) γ) = 1 := by
   sorry
 
-/-- The period `m` divides `D` (the bond dimension).
+/-- The **minimal** period `m` divides `D` (the bond dimension).
 
-This follows from the cyclic projections: the `m` mutually orthogonal
-projections `P_0, ..., P_{m-1}` summing to `I` in `M_D(ℂ)` force
-`D = m · (D/m)`, i.e., `m | D`. -/
+Here `m` is required to be the exact order of the peripheral eigenvalue group,
+characterized by `IsPrimitiveRoot γ m` for some generator `γ`. This ensures
+`m` is minimal: it is the smallest positive integer with `γ^m = 1`.
+
+Without minimality, the statement would be false: e.g., `D = 4` with
+peripheral eigenvalues `{1, -1}` (period 2) satisfies `γ^6 = 1` for all
+peripheral `γ`, but `6 ∤ 4`.
+
+The proof follows from the cyclic projections: the `m` mutually orthogonal
+projections `P_0, ..., P_{m-1}` summing to `I` in `M_D(ℂ)` force each
+`P_k` to have rank `D/m`, hence `m | D`. -/
 theorem channel_period_divides_dim
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -177,8 +185,8 @@ theorem channel_period_divides_dim
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
-    (m : ℕ) (hm : 0 < m)
-    (hperiod : ∀ γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K),
-      γ ^ m = 1) :
+    {m : ℕ} {γ : ℂ} (hm : 0 < m)
+    (hγprim : IsPrimitiveRoot γ m)
+    (hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
     m ∣ D := by
   sorry
