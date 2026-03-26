@@ -207,8 +207,6 @@ needs `\lean{}` / `\leanok` tags.
 |------------------|------------------------------------------------|
 | `tracking`       | Tracking issue for a formalization area         |
 | `blueprint-sync` | Blueprint out of sync with Lean code            |
-| `codex`          | Created or modified by OpenAI Codex              |
-| `claude`         | Created or modified by Claude                    |
 | `automation`     | Automated documentation/sync PR                 |
 
 ### Standard GitHub labels
