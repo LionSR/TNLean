@@ -33,11 +33,16 @@ jobs:
 
       - name: Attach to PR branch
         run: |
+          # Checkout put us in detached HEAD at the exact failing SHA.
+          # Create a local branch tracking the PR branch so pushes work.
           git checkout -B "${{ github.event.workflow_run.head_branch }}"
 
       - name: Check for previous auto-fix attempts
         id: loop_guard
         run: |
+          # Abort if the last commit was already an auto-fix to prevent infinite loops.
+          # GITHUB_TOKEN pushes don't normally re-trigger workflows, but this guards
+          # against PAT or app-token configurations that do.
           LAST_MSG=$(git log -1 --pretty=%s)
           if echo "$LAST_MSG" | grep -q '\[claude-auto-fix\]'; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
@@ -79,13 +84,17 @@ jobs:
                 repo: context.repo.repo,
                 job_id: job.id
               });
+              // Take the LAST 10000 chars — build errors appear at the end of logs,
+              // not the beginning (which is setup/checkout noise).
               const rawLog = logs.data;
               let trimmedLog = rawLog.length > 10000
                 ? rawLog.substring(rawLog.length - 10000)
                 : rawLog;
+              // Sanitize: strip characters that could be used for prompt injection
+              // and collapse any instruction-like patterns from untrusted log output.
               trimmedLog = trimmedLog
-                .replace(/[^\x20-\x7E\n\r\t]/g, '')
-                .replace(/```/g, '​`​`​`');
+                .replace(/[^\x20-\x7E\n\r\t]/g, '') // strip non-printable/non-ASCII
+                .replace(/```/g, '​`​`​`'); // break fenced code markers
               errorLogs.push({
                 jobName: job.name,
                 logs: trimmedLog
