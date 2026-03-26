@@ -179,12 +179,13 @@ theorem kadison_schwarz_2positive
   -- TODO (#22): factor out Schur complement step from KadisonSchwarz.lean and reuse
   sorry
 
-/-- The existing Kadison–Schwarz for Kraus maps is a corollary of the 2-positive
-version, since CP maps are 2-positive.
+/-- **Placeholder**: once `kadison_schwarz_2positive` is proved, the existing
+Kraus-based KS inequality becomes a corollary via:
+  `IsCPMap → Is2PositiveMap → kadison_schwarz_2positive`
 
-This provides the logical connection: the existing concrete proof in
-`KadisonSchwarz.lean` is a direct Kraus-based argument, while this
-corollary shows it follows from the more general 2-positive result. -/
+Currently this just delegates to the existing direct proof. When the sorry in
+`kadison_schwarz_2positive` is filled, this should be rerouted through the
+2-positive path to demonstrate the logical subsumption. -/
 theorem kadison_schwarz_from_2positive
     {d D : ℕ}
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -192,5 +193,6 @@ theorem kadison_schwarz_from_2positive
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (KadisonSchwarz.krausMap K (Xᴴ * X) -
       (KadisonSchwarz.krausMap K X)ᴴ * KadisonSchwarz.krausMap K X).PosSemidef :=
-  -- Use the existing direct proof (which is already verified).
+  -- TODO (#22): reroute through kadison_schwarz_2positive once it's proved.
+  -- For now, use the existing direct Kraus-based proof.
   KadisonSchwarz.kadison_schwarz K h_unital X
