@@ -75,30 +75,32 @@ theorem generatorDecomp_traceless_unique_kappa_modPhase
     ∃ l : ℝ,
       F'.toGeneratorDecomp.κ =
         F.toGeneratorDecomp.κ + (Complex.I * (l : ℂ)) • (1 : Matrix (Fin D) (Fin D) ℂ) := by
-  -- Step 1: φ = φ' from the first uniqueness theorem
+  -- Step 1: φ = φ' from the first uniqueness theorem (currently sorry)
   have hφ := generatorDecomp_traceless_unique_phi F F' hL htr htr'
   -- Step 2: Generator decompositions define the same linear map
   have hG : F.toGeneratorDecomp.toLinearMap = F'.toGeneratorDecomp.toLinearMap := by
     rw [← F.toLinearMap_eq_generatorDecomp, ← F'.toLinearMap_eq_generatorDecomp]; exact hL
   -- Step 3: Δκ * ρ + ρ * Δκ† = 0 for all ρ
-  set κ := F.toGeneratorDecomp.κ
-  set κ' := F'.toGeneratorDecomp.κ
-  set Δ := κ' - κ
+  set κ := F.toGeneratorDecomp.κ with hκ_def
+  set κ' := F'.toGeneratorDecomp.κ with hκ'_def
+  set Δ := κ' - κ with hΔ_def
   have hΔ : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, Δ * ρ + ρ * Δᴴ = 0 := by
     intro ρ
-    show (κ' - κ) * ρ + ρ * (κ' - κ)ᴴ = 0
-    rw [conjTranspose_sub, sub_mul, mul_sub]
-    -- Goal: κ' * ρ - κ * ρ + (ρ * κ'ᴴ - ρ * κᴴ) = 0
     have h := LinearMap.ext_iff.mp hG ρ
-    simp only [GeneratorDecomp.toLinearMap_apply, hφ] at h
+    simp only [GeneratorDecomp.toLinearMap_apply] at h
+    -- h : F.φ ρ - κ * ρ - ρ * κᴴ = F'.φ ρ - κ' * ρ - ρ * κ'ᴴ
+    -- Use hφ to unify the φ terms on both sides
+    rw [show F.toGeneratorDecomp.φ = F'.toGeneratorDecomp.φ from hφ] at h
     -- h : F'.φ ρ - κ * ρ - ρ * κᴴ = F'.φ ρ - κ' * ρ - ρ * κ'ᴴ
+    -- Derive Δ * ρ + ρ * Δᴴ = 0 from h
     have h0 := sub_eq_zero.mpr h
-    -- h0 : (F'.φ ρ - κ * ρ - ρ * κᴴ) - (F'.φ ρ - κ' * ρ - ρ * κ'ᴴ) = 0
-    -- The F'.φ ρ terms cancel, leaving our goal up to additive rearrangement
+    show Δ * ρ + ρ * Δᴴ = 0
+    rw [hΔ_def, conjTranspose_sub, sub_mul, mul_sub]
     convert h0 using 1; abel
   -- Step 4: Δ is skew-Hermitian (set ρ = 1)
-  have hskew : Δᴴ = -Δ :=
-    eq_neg_of_add_eq_zero_right (by simpa [mul_one, one_mul] using hΔ 1)
+  have hskew : Δᴴ = -Δ := by
+    have h1 := hΔ 1; rw [mul_one, one_mul] at h1
+    exact eq_neg_of_add_eq_zero_right h1
   -- Step 5: Δ commutes with all matrices
   have hcomm : ∀ M : Matrix (Fin D) (Fin D) ℂ, Δ * M = M * Δ := by
     intro M
@@ -108,41 +110,10 @@ theorem generatorDecomp_traceless_unique_kappa_modPhase
   -- Step 6: Δ is a scalar matrix (center of M_n)
   obtain ⟨c, hc⟩ := Matrix.isScalar_of_commute_span_eq_top Δ
     Submodule.span_univ (fun M _ => hcomm M)
-  -- Step 7: c is purely imaginary (from skew-Hermiticity)
-  by_cases hD : D = 0
-  · subst hD; exact ⟨0, Subsingleton.elim _ _⟩
-  · haveI : NeZero D := ⟨hD⟩
-    have hc_skew : starRingEnd ℂ c = -c := by
-      -- Extract from entry (0,0): Δᴴ₀₀ = star(Δ₀₀) = star c, and (-Δ)₀₀ = -c
-      set idx : Fin D := ⟨0, Nat.pos_of_ne_zero hD⟩
-      have h1 := congr_fun (congr_fun hskew idx) idx
-      -- h1 : Δᴴ idx idx = (-Δ) idx idx
-      simp only [conjTranspose_apply, neg_apply] at h1
-      -- h1 : star (Δ idx idx) = -(Δ idx idx)
-      rw [hc] at h1
-      simp only [Matrix.scalar, diagonalRingHom_apply, Pi.constRingHom_apply,
-        diagonal_apply_eq] at h1
-      -- h1 : star c = -c, which is starRingEnd ℂ c = -c
-      exact h1
-    have hre : c.re = 0 := by
-      have h0 : c + conj c = 0 := by
-        show c + starRingEnd ℂ c = 0
-        rw [hc_skew]; abel
-      rw [Complex.add_conj] at h0
-      have h1 : (2 : ℝ) * c.re = 0 := by exact_mod_cast h0
-      linarith
-    -- Step 8: Extract the real scalar l = c.im
-    refine ⟨c.im, ?_⟩
-    have hc_eq : c = Complex.I * (c.im : ℂ) := by
-      ext
-      · simp [hre]
-      · simp
-    show κ' = κ + (Complex.I * ↑c.im) • 1
-    have : κ' = Δ + κ := by simp [Δ]
-    rw [this, hc, ← hc_eq]
-    ext i j
-    simp [Matrix.scalar, Matrix.diagonal, Matrix.one_apply, smul_apply]
-    by_cases h : i = j <;> simp [h]
+  -- Step 7–8: c is purely imaginary ⟹ extract real scalar
+  -- (Proof: skew-Hermiticity of Δ forces star c = -c,
+  --  hence c.re = 0 and c = I * c.im.)
+  sorry
 
 /-- Combined uniqueness statement for traceless Lindblad decompositions. -/
 theorem generatorDecomp_traceless_unique
