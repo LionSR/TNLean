@@ -57,9 +57,13 @@ blueprint/print/
 blueprint/lean_decls
 blueprint/src/web.paux
 
+blueprint/src/print.xdv
+
 # Local scratch / experiments
 Scratch/
 
 # Nested Lake artifacts in vendored local packages
 External/**/.lake/
 External/**/lake-manifest.json
+
+MeetingNotes/
