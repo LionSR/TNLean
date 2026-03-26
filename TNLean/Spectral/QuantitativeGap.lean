@@ -92,12 +92,12 @@ theorem correlation_length_bound [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : IsInjective A) :
-    ∃ (ξ : ℝ),
-      0 < ξ ∧
+    ∃ (C : ℝ) (ξ : ℝ),
+      0 < C ∧ 0 < ξ ∧
       ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
         Matrix.trace X = 0 →
         ‖((transferMap (d := d) (D := D) A)^[n]) X‖ ≤
-          Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
+          C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
   -- TODO (#22): ξ = -1/log(ρ₂) where ρ₂ is second-largest eigenvalue modulus
   sorry
 
