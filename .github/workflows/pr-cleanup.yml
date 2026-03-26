@@ -75,7 +75,7 @@ jobs:
 
             ─── STEP 1: EXTRACT ISSUE NUMBER ───
             Find the linked issue number. Be thorough — check ALL of these sources:
-              a. Branch name: `*/issue-{N}-*` (e.g. `claude/issue-{N}-*`, `codex/issue-{N}-*`) → issue N
+              a. Branch name: `*/issue-{N}-*` or `*/{type}-{N}-*` (e.g. `claude/issue-88-improve-naming`, `codex/issue-42-fix-bug`) → issue N
               b. PR body references: `Refs #N`, `Addresses #N`, `Closes #N`,
                  `Fixes #N`, `Partially addresses #N` → issue N
               c. PR title: suffix `(#N)` or inline `#N` → issue N
