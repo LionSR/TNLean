@@ -97,10 +97,12 @@ jobs:
           # Check if there are review comments from the latest review cycle.
           # Only count comments created after the triggering workflow_run started,
           # so we don't re-process already-fixed items from prior cycles.
+          # Note: --paginate --jq applies the filter per page, so we use
+          # --paginate --slurp | jq to aggregate across all pages.
           RUN_CREATED="${{ github.event.workflow_run.created_at }}"
           COMMENTS=$(gh api "repos/${{ github.repository }}/pulls/${PR_NUMBER}/comments" \
-            --paginate \
-            --jq "[.[] | select(
+            --paginate --slurp \
+            | jq "[.[][] | select(
               (.user.login == \"github-actions[bot]\" or .user.login == \"claude[bot]\" or .user.login == \"claude\") and
               .in_reply_to_id == null and
               .created_at >= \"${RUN_CREATED}\"
