@@ -61,7 +61,7 @@ representations of quantum channels.
 
 * `transferMatrix_tp_iff` — **Prop 2.6**: TP ↔ column-diagonal sums = δ ✅
 * `transferMatrix_unital_iff` — **Prop 2.6**: unital ↔ row-diagonal sums = δ ✅
-* `transferMatrix_hermPreserving_iff` — **Prop 2.5**: HP ↔ conjugation
+* `transferMatrix_hermiticityPreserving_iff` — **Prop 2.5**: HP ↔ conjugation
   symmetry of transfer matrix entries ✅
 * `unitaryConjLM` — unitary conjugation map `Ad_U(X) = U X U†` ✅
 * `transferMatrix_unitaryConj` — **Prop 2.7 ingredient**: `(Ad_U)^ = Ū ⊗ₖ U` ✅

@@ -246,8 +246,6 @@ end MPSTensor
 
 section TransferMatrixChar
 
-variable {D : ℕ}
-
 /-- **Prop 2.6 (TP via transfer matrix)**: `T` is trace-preserving iff
 the column-diagonal sums of the transfer matrix give `δ_{kl}`:
 `∑_i T̂_{(i,i),(l,k)} = δ_{kl}`.
@@ -315,7 +313,7 @@ theorem transferMatrix_unital_iff
     have := h i j; simp only [transferMatrix_apply] at this; exact this
 
 /-- `(Matrix.single k l 1)ᴴ = Matrix.single l k 1` over `ℂ`. -/
-private lemma conjTranspose_single' (k l : Fin D) :
+lemma conjTranspose_single' (k l : Fin D) :
     (Matrix.single k l (1 : ℂ))ᴴ = Matrix.single l k 1 := by
   ext i j
   simp only [Matrix.conjTranspose_apply, Matrix.single_apply]
@@ -324,7 +322,7 @@ private lemma conjTranspose_single' (k l : Fin D) :
 /-- **Prop 2.5 (Hermiticity-preserving via transfer matrix)**:
 `T` preserves Hermiticity (`(T X)ᴴ = T Xᴴ` for all `X`) iff
 `T̂_{(j,i),(k,l)} = conj(T̂_{(i,j),(l,k)})` for all indices. -/
-theorem transferMatrix_hermPreserving_iff
+theorem transferMatrix_hermiticityPreserving_iff
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     (∀ X : Matrix (Fin D) (Fin D) ℂ, (T X)ᴴ = T Xᴴ) ↔
       ∀ i j k l : Fin D, transferMatrix T (j, i) (k, l) =
@@ -367,10 +365,12 @@ left/right multiplication — the algebraic engine behind normal forms. -/
 
 section UnitaryConjugation
 
-variable {D : ℕ}
-
 /-- The **unitary conjugation map** `Ad_U(X) = U X U†` as a linear map.
-This is a Kraus map with a single Kraus operator `U`. -/
+This is a Kraus map with a single Kraus operator `U`.
+
+Note: this is the unbundled-matrix variant of `unitaryChannel` from `Determinant.lean`,
+which takes a bundled `Matrix.unitaryGroup`. The unbundled signature is needed here
+because `transferMatrix_unitaryConj` holds for arbitrary matrices (not just unitaries). -/
 noncomputable def unitaryConjLM
     (U : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
@@ -433,8 +433,6 @@ shows how unitary conjugation acts on transfer matrices. -/
 
 section NormalForms
 
-variable {D : ℕ}
-
 /-- **Props 2.7-2.8 key identity**: The transfer matrix of `Ad_{U₁} ∘ T ∘ Ad_{U₂}`
 is `(Ū₁ ⊗ U₁) * T̂ * (Ū₂ ⊗ U₂)`.
 
@@ -451,17 +449,13 @@ theorem transferMatrix_unitaryConj_sandwich
   rw [transferMatrix_comp, transferMatrix_comp, transferMatrix_unitaryConj,
       transferMatrix_unitaryConj, ← Matrix.mul_assoc]
 
-/-- **Prop 2.8 component**: The SVD representation of a linear map is captured by
-the trace-pairing expansion `T(ρ) = ∑ᵢⱼ tᵢⱼ σᵢ tr(σⱼ ρ)` from
-`linearMap_expand_tracePairing`, where the coefficient matrix `tᵢⱼ` can be
-factored via SVD. The unitary factors in the SVD correspond to basis rotations,
-which are realized by unitary conjugation on the transfer matrix level via
-`transferMatrix_unitaryConj_sandwich`. -/
-theorem tracePairingCoeff_eq_transferMatrix
+/-- Definitional unfolding of `tracePairingCoeff`: the `(i, j)` coefficient
+is `trace (σ i * T (σ j))`. -/
+theorem tracePairingCoeff_def
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     {ι : Type*} [Fintype ι]
     (σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ))
-    (_hσ : TracePairingSelfDualBasis σ) (i j : ι) :
+    (i j : ι) :
     tracePairingCoeff (D := D) T σ i j = Matrix.trace (σ i * T (σ j)) :=
   rfl
 
