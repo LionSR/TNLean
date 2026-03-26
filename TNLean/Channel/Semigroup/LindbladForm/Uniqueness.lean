@@ -114,11 +114,11 @@ theorem generatorDecomp_traceless_unique_kappa_modPhase
   · haveI : NeZero D := ⟨hD⟩
     have hc_skew : starRingEnd ℂ c = -c := by
       have hΔ_conj : Δᴴ = Matrix.scalar (Fin D) (starRingEnd ℂ c) := by
-        rw [hc, conjTranspose_diagonal]; ext; simp [Matrix.scalar]
-      rw [hskew] at hΔ_conj
+        rw [hc, diagonal_conjTranspose]; ext; simp [Matrix.scalar]
+      rw [hskew, hc] at hΔ_conj
       have h_neg : -Matrix.scalar (Fin D) c = Matrix.scalar (Fin D) (-c) := by
         ext; simp [Matrix.scalar]
-      rw [hc, h_neg] at hΔ_conj
+      rw [h_neg] at hΔ_conj
       have h_inj := congr_fun (congr_fun hΔ_conj ⟨0, Nat.pos_of_ne_zero hD⟩)
         ⟨0, Nat.pos_of_ne_zero hD⟩
       simpa [Matrix.scalar, Matrix.diagonal] using h_inj
@@ -138,7 +138,7 @@ theorem generatorDecomp_traceless_unique_kappa_modPhase
     rw [this, hc, ← hc_eq]
     ext i j
     simp [Matrix.scalar, Matrix.diagonal, Matrix.one_apply, smul_apply]
-    split <;> simp
+    by_cases h : i = j <;> simp [h]
 
 /-- Combined uniqueness statement for traceless Lindblad decompositions. -/
 theorem generatorDecomp_traceless_unique
