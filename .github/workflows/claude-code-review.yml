@@ -45,6 +45,7 @@ jobs:
             lean@leanprover
           prompt: |
             Review this Lean 4 pull request: ${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+            Trigger event: ${{ github.event.action }}
 
             Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
 
@@ -76,5 +77,5 @@ jobs:
 
           claude_args: |
             --model claude-opus-4-6
-            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *)"
+            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__pull_request_read,mcp__github__resolve_review_thread"
             --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Flag any sorry that is not clearly marked as a known TODO."
