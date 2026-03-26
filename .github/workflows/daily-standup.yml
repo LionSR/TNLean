@@ -168,15 +168,16 @@ jobs:
             context, you may read files referenced in PRs/commits (use Read/Glob/Grep).
             Look at git log and diff for the last 24 hours to understand what changed.
 
-            Before creating any issue, use "Bash(gh issue list *)" to check whether a
-            standup issue for today's date already exists (filter by title
-            "Daily Standup — ${{ steps.date.outputs.today }}" and/or the "standup" label).
-            If such an issue exists, DO NOT create a new one — instead, update or comment
-            on the existing issue as appropriate.
+            Before creating any issue, use the mcp__github__search_issues tool to check
+            whether a standup issue for today's date already exists (search for
+            "Daily Standup — ${{ steps.date.outputs.today }}" with the "standup" label).
+            If such an issue exists, DO NOT create a new one — instead, use
+            mcp__github__add_issue_comment to update the existing issue.
 
-            If no such issue exists, create a GitHub issue with the title:
-            "Daily Standup — ${{ steps.date.outputs.today }}" and label it "standup".
-            Create the label first if it does not exist.
+            If no such issue exists, use mcp__github__issue_write to create a GitHub
+            issue with the title: "Daily Standup — ${{ steps.date.outputs.today }}" and
+            label it "standup". Use mcp__github__get_label to check if the label exists
+            first, and create it if needed.
 
             The issue body MUST follow this structure:
 
@@ -214,4 +215,4 @@ jobs:
 
           claude_args: |
             --model claude-opus-4-6
-            --allowed-tools "Read,Glob,Grep,Bash(git log *),Bash(git diff *),Bash(git show *),Bash(gh issue create *),Bash(gh issue list *),Bash(gh issue edit *),Bash(gh issue comment *),Bash(gh label create *),Bash(gh pr list *),Bash(gh pr view *)"
+            --allowed-tools "Read,Glob,Grep,Bash(git log *),Bash(git diff *),Bash(git show *),mcp__github__search_issues,mcp__github__issue_write,mcp__github__issue_read,mcp__github__add_issue_comment,mcp__github__get_label,mcp__github__list_issues,mcp__github__search_pull_requests,mcp__github__list_pull_requests,mcp__github__pull_request_read,mcp__github__list_commits"
