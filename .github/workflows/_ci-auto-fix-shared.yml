@@ -36,6 +36,16 @@ on:
         required: true
         type: string
         description: The --append-system-prompt string for claude_args
+      plugin_marketplaces:
+        required: false
+        type: string
+        default: ''
+        description: Plugin marketplace URLs (newline-separated). Leave empty to disable plugins.
+      plugins:
+        required: false
+        type: string
+        default: ''
+        description: Plugins to load (e.g. lean@leanprover). Leave empty to disable plugins.
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN:
         required: true
@@ -154,8 +164,8 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: 'claude,chatgpt-codex-connector'
           use_github_mcp: true
-          plugin_marketplaces: 'https://github.com/leanprover/skills.git'
-          plugins: 'lean@leanprover'
+          plugin_marketplaces: ${{ inputs.plugin_marketplaces }}
+          plugins: ${{ inputs.plugins }}
           prompt: |
             ${{ inputs.claude_prompt }}
 

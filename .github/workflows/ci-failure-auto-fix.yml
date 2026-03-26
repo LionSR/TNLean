@@ -53,6 +53,8 @@ jobs:
       workflow_run_id: ${{ github.event.workflow_run.id }}
       pr_number: ${{ github.event.workflow_run.pull_requests[0].number }}
       setup_lean: true
+      plugin_marketplaces: 'https://github.com/leanprover/skills.git'
+      plugins: 'lean@leanprover'
       claude_prompt: |
         The Lean CI build failed. Your task is to fix the build errors.
 
