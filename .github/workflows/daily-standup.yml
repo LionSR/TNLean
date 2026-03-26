@@ -44,15 +44,15 @@ jobs:
               per_page: 50
             });
 
-            // Recently closed issues
+            // Recently closed issues (exclude standup issues to avoid self-referential reporting)
             const closedIssues = await github.rest.search.issuesAndPullRequests({
-              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:closed closed:>=${sinceDate}`,
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:closed closed:>=${sinceDate} -label:standup`,
               per_page: 50
             });
 
-            // Recently opened issues
+            // Recently opened issues (exclude standup issues)
             const openedIssues = await github.rest.search.issuesAndPullRequests({
-              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:open created:>=${sinceDate}`,
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:open created:>=${sinceDate} -label:standup`,
               per_page: 50
             });
 
@@ -114,7 +114,7 @@ jobs:
                 title: p.title,
                 user: p.user.login,
                 labels: p.labels.map(l => l.name),
-                draft: p.draft
+                draft: p.pull_request?.draft ?? false
               })),
               closedIssues: closedIssues.data.items.map(i => ({
                 number: i.number,
@@ -177,7 +177,7 @@ jobs:
             If no such issue exists, use mcp__github__issue_write to create a GitHub
             issue with the title: "Daily Standup — ${{ steps.date.outputs.today }}" and
             label it "standup". Use mcp__github__get_label to check if the label exists
-            first, and create it if needed.
+            first, and use Bash(gh label create *) to create it if needed.
 
             The issue body MUST follow this structure:
 
@@ -215,4 +215,4 @@ jobs:
 
           claude_args: |
             --model claude-opus-4-6
-            --allowed-tools "Read,Glob,Grep,Bash(git log *),Bash(git diff *),Bash(git show *),mcp__github__search_issues,mcp__github__issue_write,mcp__github__issue_read,mcp__github__add_issue_comment,mcp__github__get_label,mcp__github__list_issues,mcp__github__search_pull_requests,mcp__github__list_pull_requests,mcp__github__pull_request_read,mcp__github__list_commits"
+            --allowed-tools "Read,Glob,Grep,Bash(git log *),Bash(git diff *),Bash(git show *),Bash(gh label create *),mcp__github__search_issues,mcp__github__issue_write,mcp__github__issue_read,mcp__github__add_issue_comment,mcp__github__get_label,mcp__github__list_issues,mcp__github__search_pull_requests,mcp__github__list_pull_requests,mcp__github__pull_request_read,mcp__github__list_commits"
