@@ -61,6 +61,25 @@ This file adds:
 These structural results are essential for understanding the information-
 preserving properties of quantum channels and for quantum error correction.
 
+## Mathlib dependencies (not yet available)
+
+The proofs in this file require the following Mathlib infrastructure that is
+not yet formalized (as of Mathlib4 v4.28.0):
+
+* **Artin–Wedderburn theorem**: Classification of finite-dimensional semisimple
+  algebras over algebraically closed fields as direct sums of matrix algebras.
+  Partial progress exists in `Mathlib.RingTheory.SimpleModule` and
+  `Mathlib.RingTheory.Artinian`, but the full decomposition theorem is not yet
+  available.
+* **Semisimplicity of `*`-subalgebras of `M_n(ℂ)`**: Every `*`-subalgebra of a
+  finite-dimensional C*-algebra is semisimple. This follows from the general
+  theory but needs explicit formalization.
+* **Hilbert space tensor product decomposition**: The correspondence between
+  `*`-subalgebra block structure and Hilbert space tensor factorization.
+
+Once these become available in Mathlib, the `sorry`s in this file should be
+straightforward to fill.
+
 ## References
 
 * [Koashi, Imoto, *Operations that do not disturb partially known quantum
@@ -117,7 +136,7 @@ theorem exists_wedderburn_data [NeZero D]
     (h_tp : IsTP K)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     Nonempty (WedderburnData K) := by
-  sorry
+  sorry -- TODO (#27): requires Artin–Wedderburn theorem in Mathlib
 
 /-- **Dimension bound for the fixed-point algebra.**
 
@@ -131,7 +150,7 @@ theorem fixedPointAlgebra_dim_le_sq [NeZero D]
     (h_tp : IsTP K)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     Module.finrank ℂ (adjointFixedPointsStarSubalgebra K h_tp hρ hρ_fix) ≤ D ^ 2 := by
-  sorry
+  sorry -- TODO (#27): follows from Wedderburn block sizes ∑ n_k² ≤ (∑ n_k·m_k)²
 
 /-- **Trivial fixed-point algebra ↔ irreducibility.**
 
@@ -146,7 +165,7 @@ theorem fixedPointAlgebra_trivial_iff_irreducible [NeZero D]
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     (∀ X : Mat, adjointMap K X = X → ∃ c : ℂ, X = c • 1) ↔
     IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K) := by
-  sorry
+  sorry -- TODO (#27): Fix(E†) = ℂ·I iff no nontrivial invariant projection
 
 /-- **Maximal abelian subalgebra characterization.**
 
@@ -162,6 +181,6 @@ theorem fixedPointAlgebra_abelian_iff_all_blocks_one [NeZero D]
     (W : WedderburnData K) :
     (∀ X Y : Mat, adjointMap K X = X → adjointMap K Y = Y → X * Y = Y * X) ↔
     (∀ k : Fin W.r, W.blockSize k = 1) := by
-  sorry
+  sorry -- TODO (#27): abelian ↔ all blocks are 1×1 by Wedderburn
 
 end Kraus

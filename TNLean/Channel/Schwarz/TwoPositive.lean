@@ -44,7 +44,8 @@ representation (complete positivity). The generalized version here applies
 to the broader class of 2-positive maps, which includes some positive maps
 that are not CP. For example, the transpose map on 2×2 matrices is positive
 but not 2-positive, so it correctly fails the Kadison–Schwarz inequality.
-The partial transpose on larger systems can be 2-positive without being CP.
+More generally, there exist 2-positive maps that are not completely positive,
+so the theorem here applies strictly beyond the CP case.
 
 ## References
 
@@ -68,7 +69,20 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 
 We represent `M_n(ℂ) ⊗ M_k(ℂ)` as `M_{n×k}(ℂ)` via the Kronecker product
 identification, and the ampliation acts blockwise:
-`(E ⊗ id_k)(X)_{ij} = E(X_{ij})` for block indices `i, j ∈ Fin k`. -/
+`(E ⊗ id_k)(X)_{ij} = E(X_{ij})` for block indices `i, j ∈ Fin k`.
+
+**Encoding choice**: We use a blockwise `Matrix.of` encoding rather than
+`TensorProduct` because it avoids the overhead of tensor product API and
+matches the block-matrix arguments used in `KadisonSchwarz.lean`. A
+`TensorProduct`-based definition would be closer to the mathematical
+definition but would require additional infrastructure to connect with the
+existing Kraus-based proofs.
+
+**Index convention**: We use `(n × Fin k)` indexing where `n` is the inner
+(algebra) index and `Fin k` is the outer (ampliation) index. This is the
+transpose of the standard Kronecker convention `(Fin k × n)`, but is
+mathematically equivalent (PSD-ness is invariant under simultaneous row/column
+permutation). -/
 def IsNPositiveMap (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
   ∀ X : Matrix (n × Fin k) (n × Fin k) ℂ,
     X.PosSemidef →
@@ -107,8 +121,11 @@ theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n 
 
 /-! ## Kadison–Schwarz for 2-positive maps -/
 
-/-- A linear map is **unital** if `E(I) = I`. -/
-def IsUnitalMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
+/-- A linear map is **unital** if `E(I) = I`.
+
+Note: placed in the `KadisonSchwarz` namespace to avoid clashes with other
+unitality notions in the codebase (e.g., `KadisonSchwarz.IsUnitalKraus`). -/
+def KadisonSchwarz.IsUnitalMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
   E 1 = 1
 
 /-- **Kadison–Schwarz inequality for unital 2-positive maps.**
@@ -131,7 +148,7 @@ hypothesis is weakened from "Kraus representation exists" to "2-positive". -/
 theorem kadison_schwarz_2positive
     (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ)
     (h2pos : Is2PositiveMap E)
-    (h_unital : IsUnitalMap E)
+    (h_unital : KadisonSchwarz.IsUnitalMap E)
     (X : Matrix n n ℂ) :
     (E (Xᴴ * X) - (E X)ᴴ * E X).PosSemidef := by
   -- The proof follows the same Schur complement argument as kadison_schwarz,

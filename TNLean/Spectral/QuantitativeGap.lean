@@ -79,7 +79,6 @@ theorem exponential_convergence_of_primitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitive (transferMap (d := d) (D := D) A))
-    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
     (hρ_ne : ρ ≠ 0) (htr : Matrix.trace ρ ≠ 0) :
@@ -126,8 +125,10 @@ word products span `M_D(ℂ)` by step `D²`. This algebraic spanning property
 translates to a spectral gap: the second-largest eigenvalue of the transfer
 map satisfies `|λ₂| < 1`.
 
-The explicit bound is: `1 - |λ₂| ≥ (D² · D!)⁻¹` (a coarse but constructive
-lower bound on the spectral gap).
+The explicit bound is existential: `∃ δ > 0` such that all non-unit
+eigenvalues satisfy `|μ| ≤ 1 - δ`. A concrete (but coarse) bound could be
+derived from the Wielandt spanning at step `D²` combined with compactness,
+but we leave the quantitative estimate to future work.
 
 **Proof idea**: The spanning at step `D²` means the `D²`-fold composition
 `E^{D²}` is strictly positive on the interior of the PSD cone. By
