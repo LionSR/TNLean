@@ -14,11 +14,14 @@ concurrency:
 
 jobs:
   track:
-    # Skip: closed-but-not-completed issues, closed-but-not-merged PRs
+    # Skip: forks (no secrets), closed-but-not-completed issues, closed-but-not-merged PRs
     if: |
-      (github.event_name == 'issues' && (github.event.issue.state_reason == 'completed' || github.event.action == 'reopened')) ||
-      (github.event_name == 'pull_request' && (github.event.action != 'closed' || github.event.pull_request.merged == true)) ||
-      (github.event_name == 'pull_request_review' && github.event.review.state != 'commented')
+      !github.event.pull_request.head.repo.fork &&
+      (
+        (github.event_name == 'issues' && (github.event.issue.state_reason == 'completed' || github.event.action == 'reopened')) ||
+        (github.event_name == 'pull_request' && (github.event.action != 'closed' || github.event.pull_request.merged == true)) ||
+        (github.event_name == 'pull_request_review' && github.event.review.state != 'commented')
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -189,7 +192,12 @@ jobs:
 
             **B2 — Scan for follow-ups**:
             1. Read the PR body, comments, and review threads via MCP tools
-            2. Get the code diff: `git diff <base-sha>..<head-sha>`
+            2. Get the code diff using the MCP tool:
+               `mcp__github__pull_request_read` with method `get_diff`.
+               This is preferred over `git diff` because squash merges may
+               not have the PR head SHA available locally.
+               Fall back to `git diff <base-sha>..<head-sha>` only if the
+               MCP diff is unavailable.
             3. Search the diff for new `sorry` markers (the Lean equivalent of
                TODO — these are unfinished proof obligations), as well as
                TODO/FIXME/HACK/XXX/WORKAROUND comments
