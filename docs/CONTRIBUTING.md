@@ -310,6 +310,7 @@ The following workflows run automatically:
 | **Blueprint Lint** (`lint-blueprint.yml`) | PRs touching blueprint files | Validates LaTeX blueprint for broken labels and references |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
 | **Lean Audit** (`lean-audit.yml`) | On demand | Audits Lean code for style and correctness |
+| **PR Cleanup** (`pr-cleanup.yml`) | AI-generated PR opened (`claude/*` or `codex/*` branches) | Normalizes title to `type(scope): desc`, restructures body to PR template, copies labels from linked issue, adds `Addresses #N` reference, comments on the issue |
 
 ### What CI checks before merge
 
