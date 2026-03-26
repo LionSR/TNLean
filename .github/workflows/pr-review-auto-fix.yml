@@ -72,12 +72,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+          # IMPORTANT: This cap is shared with _ci-auto-fix-shared.yml.
+          # If you change the value or counting regex here, update it there too.
           MAX_BOT_FIX_ITERATIONS: 5
         run: |
           # Count consecutive bot-fix commits (either [claude-auto-fix] or
           # [claude-review-fix]) to cap the combined iteration loop.
           # Both workflows share a single budget so interleaved commits
           # cannot reset each other's counters.
+          # See also: _ci-auto-fix-shared.yml (same logic)
           COUNT=0
           while IFS= read -r MSG; do
             if echo "$MSG" | grep -qE '\[claude-(auto|review)-fix\]'; then
@@ -139,8 +142,8 @@ jobs:
             const prNumber = ${{ github.event.workflow_run.pull_requests[0].number }};
             const runCreatedAt = '${{ github.event.workflow_run.created_at }}';
 
-            // Get all review comments on the PR
-            const comments = await github.rest.pulls.listReviewComments({
+            // Get all review comments on the PR (paginated to handle 100+ comments)
+            const comments = await github.paginate(github.rest.pulls.listReviewComments, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: prNumber,
@@ -152,7 +155,7 @@ jobs:
             // Filter to comments from the latest review cycle only:
             // must be from the bot, top-level (not replies), and created
             // after the triggering workflow_run started.
-            const botComments = comments.data.filter(c =>
+            const botComments = comments.filter(c =>
               (c.user.login === 'github-actions[bot]' ||
                c.user.login === 'claude[bot]' ||
                c.user.login === 'claude') &&

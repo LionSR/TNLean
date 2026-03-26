@@ -70,12 +70,15 @@ jobs:
       - name: Check for previous auto-fix attempts
         id: loop_guard
         env:
+          # IMPORTANT: This cap is shared with pr-review-auto-fix.yml.
+          # If you change the value or counting regex here, update it there too.
           MAX_BOT_FIX_ITERATIONS: 5
         run: |
           # Count consecutive bot-fix commits (either [claude-auto-fix] or
           # [claude-review-fix]) to cap the combined iteration loop.
           # Both CI-fix and review-fix workflows share a single budget so
           # interleaved commits cannot reset each other's counters.
+          # See also: pr-review-auto-fix.yml (same logic)
           COUNT=0
           while IFS= read -r MSG; do
             if echo "$MSG" | grep -qE '\[claude-(auto|review)-fix\]'; then
