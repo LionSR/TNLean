@@ -68,7 +68,7 @@ No new proofs are introduced here; this is a documentation-only index module.
 ## §7.1.2 Quantum dynamical semigroups
 
 ### Wolf Proposition 7.5 (irreducibility implies primitivity for QDS)
-— PARTIALLY FORMALIZED (helper lemmas complete; main theorem has 2 infrastructure gaps)
+— PARTIALLY FORMALIZED (glue logic complete; depends on 13 `sorry` placeholders in `IrreducibleAnalysis.lean`)
 
 * `IsQuantumDynSemigroup` — quantum dynamical semigroup definition
   — `TNLean.Channel.Semigroup.Primitivity`
@@ -113,8 +113,8 @@ No new proofs are introduced here; this is a documentation-only index module.
 * `LindbladForm.isTraceAnnihilating` — Lindblad form is trace-annihilating ✅
 * `GeneratorDecomp.traceAnnihilating_of_traceConstraint` — φ*(1)=κ+κ† ⟹ TA ✅
 * `LindbladForm.toLinearMap_eq_generatorDecomp` — Lindblad = (φ,κ) form ✅
-* `gksl_iff_lindbladForm` — GKSL ↔ Lindblad form (modulo Prop 7.3 sorry inputs) ✅
-* `gksl_iff_ccp_and_traceAnnihilating` — GKSL ↔ CCP + TA (modulo Prop 7.3) ✅
+* `gksl_iff_lindbladForm` — GKSL ↔ Lindblad form (DEPENDS ON Prop 7.3 which has `sorry`)
+* `gksl_iff_ccp_and_traceAnnihilating` — GKSL ↔ CCP + TA (DEPENDS ON Prop 7.3 which has `sorry`)
 * `kossakowski_iff_lindblad` — Kossakowski ↔ Lindblad form: FORMALIZED ✅
 * `isTracePreservingMap_expSemigroup_of_isTraceAnnihilating` — TA → TP semigroup ✅
 * `isTraceAnnihilating_of_isTracePreservingMap_semigroup` — TP semigroup → TA ✅
@@ -132,7 +132,7 @@ No new proofs are introduced here; this is a documentation-only index module.
 * `wolf_prop_7_6_one_iff_two` — (1) ↔ (2): FORMALIZED ✅
 * `generatorPreservesCompression_of_semigroupPreservesCompression` — semigroup→generator: FORMALIZED ✅
 * `sum_conjTranspose_mul_self_eq_zero_imp` — sum-of-squares vanishing: FORMALIZED ✅
-* `wolf_prop_7_6_four_implies_three` — (4) → (3): partially formalized (reduces to two sorry lemmas)
+* `wolf_prop_7_6_four_implies_three` — (4) → (3): glue logic only (reduces to two `sorry` lemmas)
 * `wolf_prop_7_6_three_implies_four` — (3) → (4): SORRY
 
 ---

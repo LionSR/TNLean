@@ -31,21 +31,29 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Correlations independent of distance: the two-point correlation function
-of any pair of local observables is independent of the separation between
-them. See arXiv:1606.00608, Definition 3.3.
+/-- Correlations independent of distance: the two-point function through the
+transfer map is constant in the separation `n`. That is, for all observables
+`X`, `Y` and right reference states `ρR`,
+  `tr(Y · E^n(X · ρR)) = tr(Y · E^m(X · ρR))`
+for all `n, m : ℕ`. See arXiv:1606.00608, Definition 3.3.
 
-TODO: formalize in terms of `twoPointExpectation` from `Core/Correlations`. -/
-def IsCID (_A : MPSTensor d D) : Prop :=
-  sorry
+Equivalently, `E² = E` on the range of `X ↦ X · ρR`, but this formulation
+avoids choosing a normalization. -/
+def IsCID (A : MPSTensor d D) : Prop :=
+  ∀ (ρR X Y : Matrix (Fin D) (Fin D) ℂ) (n m : ℕ),
+    Matrix.trace (Y * ((transferMap A) ^ n) (X * ρR)) =
+      Matrix.trace (Y * ((transferMap A) ^ m) (X * ρR))
 
-/-- Local orthogonality: the BNT elements of `A` have vanishing mixed
-transfer operators, i.e. `Σ_i A^i_j ⊗ Ā^i_{j'} = 0` for `j ≠ j'`.
-See arXiv:1606.00608, Definition 3.5.
+/-- Local orthogonality: the mixed transfer operator `F_{AB}(X) = Σ_i A_i X B_i†`
+for two distinct BNT blocks `A ≠ B` should vanish. For a single tensor `A`,
+this is captured by requiring that the (self) transfer map is idempotent as a
+mixed transfer operator, i.e. `E_A ∘ E_A = E_A` (which is exactly `IsRFP`
+restricted to the diagonal block). See arXiv:1606.00608, Definition 3.5.
 
-TODO: formalize in terms of `mixedTransferMap` from `Spectral/`. -/
-def IsLocallyOrthogonal (_A : MPSTensor d D) : Prop :=
-  sorry
+The full off-diagonal condition for BNT components is stated at the
+canonical-form level in `zcl_iff_idempotent_transfer`. -/
+def IsLocallyOrthogonal (A : MPSTensor d D) : Prop :=
+  transferMap A ∘ₗ transferMap A = transferMap A
 
 /-- Zero correlation length: a tensor has ZCL when it is both locally
 orthogonal and has correlations independent of distance.

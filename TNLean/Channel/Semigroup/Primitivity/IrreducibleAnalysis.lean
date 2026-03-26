@@ -98,23 +98,29 @@ theorem trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel
   exact hV_ne (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
     hE_ch hE_irr V hV_fix htr)
 
-axiom exists_power_fixed_eigenvector_of_peripheral
+/-- **TODO**: Prove that a peripheral eigenvalue of an irreducible QDS has a periodic
+fixed point. Currently a `sorry` placeholder (was previously an `axiom`). -/
+theorem exists_power_fixed_eigenvector_of_peripheral
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
     (hT_irr_all : ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s))
     {t : ℝ} (ht : 0 < t)
     {μ : ℂ} (hμ_eig : Module.End.HasEigenvalue (T t) μ) (hμ_norm : ‖μ‖ = 1) :
-    ∃ p : ℕ, 0 < p ∧ ∃ V : Mat, V ≠ 0 ∧ (T t) V = μ • V ∧ T (↑p * t) V = V
+    ∃ p : ℕ, 0 < p ∧ ∃ V : Mat, V ≠ 0 ∧ (T t) V = μ • V ∧ T (↑p * t) V = V := by
+  sorry
 
-axiom exists_trace_ne_zero_eigenvector_of_peripheral
+/-- **TODO**: Prove that a trace-nonzero eigenvector exists for peripheral eigenvalues.
+Currently a `sorry` placeholder (was previously an `axiom`). -/
+theorem exists_trace_ne_zero_eigenvector_of_peripheral
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
     (hT_irr_all : ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s))
     {t : ℝ} (ht : 0 < t)
     {μ : ℂ} (hμ_eig : Module.End.HasEigenvalue (T t) μ) (hμ_norm : ‖μ‖ = 1) :
-    ∃ V : Mat, V ≠ 0 ∧ (T t) V = μ • V ∧ Matrix.trace V ≠ 0
+    ∃ V : Mat, V ≠ 0 ∧ (T t) V = μ • V ∧ Matrix.trace V ≠ 0 := by
+  sorry
 
 theorem eigenvalue_eq_one_of_trace_preserving_eigenvector
     (E : Mat →ₗ[ℂ] Mat)
@@ -131,21 +137,27 @@ theorem eigenvalue_eq_one_of_trace_preserving_eigenvector
       _ = 0 := by rw [htrV, sub_self]
   exact sub_eq_zero.mp ((mul_eq_zero.mp hzero).resolve_right htrV_ne)
 
-axiom peripheral_eq_one_of_irreducible_all
+/-- **TODO**: Prove that all peripheral eigenvalues equal 1 when all times are
+irreducible. Currently a `sorry` placeholder (was previously an `axiom`). -/
+theorem peripheral_eq_one_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
     (hT_irr_all : ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s))
     {t : ℝ} (ht : 0 < t)
     {μ : ℂ} (hμ_eig : Module.End.HasEigenvalue (T t) μ) (hμ_norm : ‖μ‖ = 1) :
-    μ = 1
+    μ = 1 := by
+  sorry
 
-axiom primitive_of_irreducible_all
+/-- **TODO**: Prove that irreducibility at all times implies primitivity.
+Currently a `sorry` placeholder (was previously an `axiom`). -/
+theorem primitive_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
     (hT_irr_all : ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s)) :
-    ∀ t : ℝ, 0 < t → IsPrimitive (T t)
+    ∀ t : ℝ, 0 < t → IsPrimitive (T t) := by
+  sorry
 
 def residualSliceIndex (u s : ℝ) (n : ℕ) : ℕ :=
   Int.toNat ⌊((n : ℝ) * u) / s⌋
@@ -164,10 +176,14 @@ theorem residualSliceTime_mem_Icc
   · have hlt : Int.fract (((n : ℝ) * u) / s) < 1 := Int.fract_lt_one _
     nlinarith [hlt, hs]
 
-axiom residualSlice_decomp
+/-- **TODO**: Prove the decomposition `n * u = ⌊n*u/s⌋ * s + residual`.
+The proof sketch below needs Mathlib API adjustments. Was previously an `axiom`. -/
+theorem residualSlice_decomp
     (u s : ℝ) (hs : 0 < s) :
-    ∀ n : ℕ, (n : ℝ) * u = (residualSliceIndex u s n : ℝ) * s + residualSliceTime u s n
+    ∀ n : ℕ, (n : ℝ) * u = (residualSliceIndex u s n : ℝ) * s + residualSliceTime u s n := by
+  sorry
 /-
+  Proof sketch (commented out pending Mathlib API adjustments):
   intro n
   have ha : ↑⌊((n : ℝ) * u / s)⌋ + Int.fract (((n : ℝ) * u) / s) = ((n : ℝ) * u) / s :=
     Int.floor_add_fract (((n : ℝ) * u) / s)
@@ -232,11 +248,15 @@ theorem residualSlice_apply_eq_of_fixedPoint
               (mul_nonneg (Nat.cast_nonneg (residualSliceIndex u s n)) (le_of_lt hs))]
     _ = T (residualSliceTime u s n) δ := by rw [hms_fix]
 
-axiom exists_residualSlice_subseq_tendsto
+/-- **TODO**: Prove convergent subsequence exists for residual slice times (compactness).
+Was previously an `axiom`. -/
+theorem exists_residualSlice_subseq_tendsto
     (u s : ℝ) (hs : 0 < s) :
     ∃ a ∈ Set.Icc 0 s, ∃ φ : ℕ ↪o ℕ,
-      Filter.Tendsto (fun k : ℕ => residualSliceTime u s (φ k)) Filter.atTop (nhds a)
+      Filter.Tendsto (fun k : ℕ => residualSliceTime u s (φ k)) Filter.atTop (nhds a) := by
+  sorry
 /-
+  Proof sketch (commented out pending Mathlib API adjustments):
   let r : ℕ → ℝ := residualSliceTime u s
   have hmap_le : Filter.map r Filter.atTop ≤ Filter.principal (Set.Icc 0 s) := by
     rw [Filter.le_principal_iff]
@@ -247,7 +267,9 @@ axiom exists_residualSlice_subseq_tendsto
   exact ⟨a, ha_mem, φ, hφtendsto⟩
 -/
 
-axiom residualSlice_limit_zero_of_fixedPoint
+/-- **TODO**: Prove that the residual slice limit vanishes (continuity + uniqueness of limits).
+Was previously an `axiom`. -/
+theorem residualSlice_limit_zero_of_fixedPoint
     (T : ℝ → Mat →ₗ[ℂ] Mat)
     (hT : IsQuantumDynSemigroup T)
     (u : ℝ)
@@ -258,8 +280,10 @@ axiom residualSlice_limit_zero_of_fixedPoint
     {a : ℝ} (ha_mem : a ∈ Set.Icc 0 s)
     (φ : ℕ ↪o ℕ)
     (hφtendsto : Filter.Tendsto (fun k : ℕ => residualSliceTime u s (φ k)) Filter.atTop (nhds a)) :
-    T a δ = 0
+    T a δ = 0 := by
+  sorry
 /-
+  Proof sketch (commented out pending Mathlib API adjustments):
   have hδ_cont : Continuous (fun t : ℝ => T t δ) := by
     have hEval : Continuous (fun A : Mat →L[ℂ] Mat => A δ) :=
       (ContinuousLinearMap.apply ℂ Mat δ).continuous
@@ -276,7 +300,9 @@ axiom residualSlice_limit_zero_of_fixedPoint
   exact tendsto_nhds_unique hsub_res hsub_res_zero
 -/
 
-axiom exists_residual_time_eq_zero_of_fixedPoint
+/-- **TODO**: Prove that a zero point exists in slice times.
+Was previously an `axiom`. -/
+theorem exists_residual_time_eq_zero_of_fixedPoint
     [NeZero D]
     (T : ℝ → Mat →ₗ[ℂ] Mat)
     (hT : IsQuantumDynSemigroup T)
@@ -285,7 +311,8 @@ axiom exists_residual_time_eq_zero_of_fixedPoint
     {δ : Mat}
     (hδ_decay : Filter.Tendsto (fun n : ℕ => T ((n : ℝ) * u) δ) Filter.atTop (nhds 0))
     (hδ_fix : T s δ = δ) :
-    ∃ a ∈ Set.Icc 0 s, T a δ = 0
+    ∃ a ∈ Set.Icc 0 s, T a δ = 0 := by
+  sorry
 
 theorem eq_zero_of_expSemigroup_apply_eq_zero
     (L : Mat →ₗ[ℂ] Mat) {a : ℝ} {δ : Mat}
@@ -337,7 +364,9 @@ theorem fixedPoint_eq_trace_smul_at_irreducible_time
       (by rw [Matrix.trace_sub, Matrix.trace_smul, hσ_mem.2, smul_eq_mul,
                mul_one, sub_self]))
 
-axiom exists_trace_ne_zero_eigenvector_of_fraction_slice
+/-- **TODO**: Prove eigenvector with nonzero trace for fraction slices.
+Was previously an `axiom`. -/
+theorem exists_trace_ne_zero_eigenvector_of_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     {t₀ u : ℝ} {N : ℕ}
@@ -350,9 +379,12 @@ axiom exists_trace_ne_zero_eigenvector_of_fraction_slice
     {μ : ℂ}
     (hμ_eig : Module.End.HasEigenvalue (T u) μ)
     (hμ_norm : ‖μ‖ = 1) :
-    ∃ X : Mat, X ≠ 0 ∧ T u X = μ • X ∧ Matrix.trace X ≠ 0
+    ∃ X : Mat, X ≠ 0 ∧ T u X = μ • X ∧ Matrix.trace X ≠ 0 := by
+  sorry
 
-axiom peripheral_eq_one_of_fraction_slice
+/-- **TODO**: Prove peripheral eigenvalue equals 1 in fraction slice.
+Was previously an `axiom`. -/
+theorem peripheral_eq_one_of_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     {t₀ u : ℝ} {N : ℕ}
@@ -365,9 +397,12 @@ axiom peripheral_eq_one_of_fraction_slice
     {μ : ℂ}
     (hμ_eig : Module.End.HasEigenvalue (T u) μ)
     (hμ_norm : ‖μ‖ = 1) :
-    μ = 1
+    μ = 1 := by
+  sorry
 
-axiom primitive_of_fraction_slice
+/-- **TODO**: Prove primitivity from fraction slice hypotheses.
+Was previously an `axiom`. -/
+theorem primitive_of_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     {t₀ u : ℝ} {N : ℕ}
@@ -377,7 +412,8 @@ axiom primitive_of_fraction_slice
     (σ : Mat) (hσ_mem : σ ∈ densityMatrices D) (hσ_pd : σ.PosDef)
     (hTu_fix : T u σ = σ)
     (hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X → X = Matrix.trace X • σ) :
-    IsPrimitive (T u)
+    IsPrimitive (T u) := by
+  sorry
 
 theorem irreducible_of_fraction_slice
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -457,7 +493,9 @@ theorem exists_irreducible_fraction_slice
   have hTu_irr : IsIrreducibleMap (T u) := irreducible_of_fraction_slice T hTt₀_eq_pow hirr
   exact ⟨u, hu_pos, hu_nonneg, hTt₀_eq_pow, hTu_ch, hTu_irr, hTu_fix⟩
 
-axiom fixedPoint_eq_trace_smul_of_primitive_slice
+/-- **TODO**: Prove fixed points have trace scalar form.
+Was previously an `axiom`. -/
+theorem fixedPoint_eq_trace_smul_of_primitive_slice
     [NeZero D]
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -472,9 +510,12 @@ axiom fixedPoint_eq_trace_smul_of_primitive_slice
     (hTu_prim : IsPrimitive (T u))
     (s : ℝ) (hs : 0 < s)
     {τ : Mat} (hτ_fix : T s τ = τ) :
-    τ = Matrix.trace τ • σ
+    τ = Matrix.trace τ • σ := by
+  sorry
 
-axiom exists_primitive_fraction_slice
+/-- **TODO**: Prove that a primitive fraction slice exists.
+Was previously an `axiom`. -/
+theorem exists_primitive_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
@@ -484,7 +525,8 @@ axiom exists_primitive_fraction_slice
     (hσ_fix_all : ∀ u : ℝ, 0 ≤ u → T u σ = σ)
     (hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X → X = Matrix.trace X • σ) :
     ∃ u : ℝ, 0 < u ∧ 0 ≤ u ∧ IsChannel (T u) ∧ IsIrreducibleMap (T u) ∧
-      T u σ = σ ∧ IsPrimitive (T u)
+      T u σ = σ ∧ IsPrimitive (T u) := by
+  sorry
 
 theorem irreducible_all_of_irreducible_time
     [NeZero D]
