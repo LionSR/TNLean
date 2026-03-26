@@ -77,9 +77,20 @@ jobs:
               recentCommits = [];
             }
 
-            // PR review comments in the last 24 hours
+            // PR review comments in the last 24 hours (from both open and merged PRs)
             let reviewComments = [];
-            for (const pr of activePRs.data.items.slice(0, 10)) {
+            const allRecentPRs = [
+              ...activePRs.data.items.slice(0, 10),
+              ...mergedPRs.data.items.slice(0, 10)
+            ];
+            // Deduplicate by PR number
+            const seenPRs = new Set();
+            const uniquePRs = allRecentPRs.filter(pr => {
+              if (seenPRs.has(pr.number)) return false;
+              seenPRs.add(pr.number);
+              return true;
+            });
+            for (const pr of uniquePRs.slice(0, 15)) {
               try {
                 const comments = await github.rest.pulls.listReviewComments({
                   owner: context.repo.owner,
