@@ -1,0 +1,267 @@
+name: Daily Standup Summary
+
+on:
+  schedule:
+    - cron: "0 8 * * 1-5"  # Weekdays at 08:00 UTC
+  workflow_dispatch:         # Manual trigger for on-demand summaries
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+  id-token: write
+
+jobs:
+  daily-standup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Compute today's date
+        id: date
+        run: echo "today=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
+      - name: Gather recent activity
+        id: activity
+        uses: actions/github-script@v8
+        with:
+          script: |
+            // On Monday (day 1), look back 72 hours to capture weekend activity.
+            // On other weekdays, look back 24 hours.
+            const now = new Date();
+            const hoursBack = now.getUTCDay() === 1 ? 72 : 24;
+            const since = new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString();
+            const sinceDate = since.split('T')[0];
+
+            // Merged PRs in the lookback window
+            const mergedPRs = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:pr is:merged merged:>=${sinceDate}`,
+              per_page: 50
+            });
+
+            // Open PRs with recent activity
+            const activePRs = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:pr is:open updated:>=${sinceDate}`,
+              per_page: 50
+            });
+
+            // Recently closed issues (exclude standup issues to avoid self-referential reporting)
+            const closedIssues = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:closed closed:>=${sinceDate} -label:standup`,
+              per_page: 50
+            });
+
+            // Recently opened issues (exclude standup issues)
+            const openedIssues = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:open created:>=${sinceDate} -label:standup`,
+              per_page: 50
+            });
+
+            // Recent commits on the default branch
+            let recentCommits = [];
+            try {
+              const commits = await github.rest.repos.listCommits({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                sha: 'main',
+                since: since,
+                per_page: 50
+              });
+              recentCommits = commits.data.map(c => ({
+                sha: c.sha.substring(0, 7),
+                message: c.commit.message.split('\n')[0],
+                author: c.commit.author.name,
+                date: c.commit.author.date
+              }));
+            } catch (e) {
+              core.warning(`Failed to fetch commits: ${e.message}`);
+              recentCommits = [];
+            }
+
+            // PR review comments in the last 24 hours (from both open and merged PRs)
+            let reviewComments = [];
+            const allRecentPRs = [
+              ...activePRs.data.items.slice(0, 10),
+              ...mergedPRs.data.items.slice(0, 10)
+            ];
+            // Deduplicate by PR number
+            const seenPRs = new Set();
+            const uniquePRs = allRecentPRs.filter(pr => {
+              if (seenPRs.has(pr.number)) return false;
+              seenPRs.add(pr.number);
+              return true;
+            });
+            for (const pr of uniquePRs.slice(0, 15)) {
+              try {
+                const comments = await github.rest.pulls.listReviewComments({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  since: since,
+                  per_page: 20
+                });
+                for (const c of comments.data) {
+                  reviewComments.push({
+                    pr: pr.number,
+                    prTitle: pr.title,
+                    body: c.body.substring(0, 300),
+                    author: c.user.login
+                  });
+                }
+              } catch (e) {
+                core.warning(`Failed to fetch review comments for PR #${pr.number}: ${e.message}`);
+              }
+            }
+
+            return {
+              since,
+              hoursBack,
+              mergedPRs: mergedPRs.data.items.map(p => ({
+                number: p.number,
+                title: p.title,
+                user: p.user.login,
+                labels: p.labels.map(l => l.name)
+              })),
+              activePRs: activePRs.data.items.map(p => ({
+                number: p.number,
+                title: p.title,
+                user: p.user.login,
+                labels: p.labels.map(l => l.name),
+                draft: p.pull_request?.draft ?? false
+              })),
+              closedIssues: closedIssues.data.items.map(i => ({
+                number: i.number,
+                title: i.title,
+                labels: i.labels.map(l => l.name)
+              })),
+              openedIssues: openedIssues.data.items.map(i => ({
+                number: i.number,
+                title: i.title,
+                labels: i.labels.map(l => l.name)
+              })),
+              recentCommits,
+              reviewComments: reviewComments.slice(0, 30)
+            };
+
+      - name: Generate standup summary with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            You are a pure mathematician and Lean 4 formalization expert writing a daily
+            standup summary for the TNLean repository (${{ github.repository }}).
+
+            TNLean is a formalization of results in quantum information theory, grounded
+            in the rigorous mathematical framework of operator algebras, tensor products,
+            and finite-dimensional Hilbert spaces. The project covers:
+            - The Fundamental Theorem of Matrix Product States (MPS) and their canonical forms
+            - Quantum Wielandt theory (convergence of quantum channel iterations)
+            - Quantum channel theory following Wolf's "Quantum Channels & Operations"
+            - Spectral theory, PEPS, and algebraic foundations in Mathlib
+
+            Write with the voice of a working mathematician: precise, structurally aware,
+            and attentive to the logical dependencies between results. When discussing
+            proofs, note the key lemmas invoked, the mathematical content of what was
+            shown, and any `sorry` eliminations (which represent open proof obligations
+            finally discharged). Distinguish between scaffolding (imports, refactors,
+            API lemmas) and substantive mathematical progress (new theorems, completed
+            proofs, resolved conjectures).
+
+            Today's date: ${{ steps.date.outputs.today }}
+            Activity window: last ${{ fromJSON(steps.activity.outputs.result).hoursBack }} hours (since ${{ fromJSON(steps.activity.outputs.result).since }})
+
+            === REPOSITORY ACTIVITY DATA ===
+
+            MERGED PULL REQUESTS:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).mergedPRs) }}
+
+            ACTIVE (OPEN) PULL REQUESTS:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).activePRs) }}
+
+            CLOSED ISSUES:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).closedIssues) }}
+
+            NEWLY OPENED ISSUES:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).openedIssues) }}
+
+            RECENT COMMITS ON MAIN:
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).recentCommits) }}
+
+            PR REVIEW COMMENTS (sample):
+            ${{ toJSON(fromJSON(steps.activity.outputs.result).reviewComments) }}
+
+            === INSTRUCTIONS ===
+
+            Analyze the activity above and produce a standup summary. For additional
+            context, read the actual Lean source files changed (use Read/Glob/Grep) to
+            understand the mathematical content of proofs, not just commit messages.
+            Use git log and git diff for the activity window above to see what changed in detail.
+
+            Before creating any issue, use the mcp__github__search_issues tool to check
+            whether a standup issue for today's date already exists (search for
+            "Daily Standup — ${{ steps.date.outputs.today }}" with the "standup" label).
+            If such an issue exists, DO NOT create a new one — instead, use
+            mcp__github__add_issue_comment to update the existing issue.
+
+            If no such issue exists, use mcp__github__issue_write to create a GitHub
+            issue with the title: "Daily Standup — ${{ steps.date.outputs.today }}" and
+            label it "standup". Use mcp__github__get_label to check if the label exists
+            first, and use Bash(gh label create *) to create it if needed.
+
+            The issue body MUST follow this structure:
+
+            ## Theorems & Proofs
+            - What mathematical results were proved, completed, or advanced?
+            - Which `sorry` obligations were discharged, and what was the proof strategy?
+            - Note the key Mathlib lemmas or tactics that made proofs go through
+            - Identify any new definitions, structures, or type classes introduced
+            - Reference the relevant mathematical context (e.g., "proved that the
+              transfer matrix of an injective MPS has full rank, completing Lemma 3.2
+              of the blueprint")
+
+            ## Proof Engineering & Refactors
+            - API lemmas, simp lemmas, or coercions added to smooth future work
+            - Import restructuring, namespace changes, or Mathlib alignment
+            - Performance improvements (proof term simplification, reducing heartbeats)
+
+            ## Mathematical Insights
+            - Observations about proof structure or formalization strategy
+            - Connections discovered between different parts of the formalization
+            - Cases where the formal proof revealed subtleties not apparent on paper
+            - Mathlib gaps identified or upstream contributions prepared
+
+            ## Open Problems & Discussion Points
+            - Proof obligations (`sorry`) that remain and what approaches are being considered
+            - Mathematical questions arising from the formalization
+            - Decisions on proof strategy that need input (e.g., "should we formalize
+              the spectral theorem via Mathlib's eigenvalue API or build directly?")
+            - Dependencies between open tasks
+
+            ## Activity Summary
+            - PRs merged / opened / in review
+            - Issues closed / opened
+            - Commits to main
+            - Current `sorry` count trend if observable
+
+            Guidelines:
+            - Be precise and mathematically literate — this is for a team of
+              mathematicians and formalization experts
+            - Use proper mathematical terminology (e.g., "completely positive map"
+              not "channel function", "tensor product" not "combined space")
+            - Reference PR/issue numbers (e.g., #123) and file paths where relevant
+            - If there was no activity, state so briefly
+            - Prioritize mathematical substance over engineering details
+            - Demand clarity: every claim should be specific and verifiable. Do not
+              write vague summaries like "progress was made on MPS theory". Instead,
+              state exactly which lemma was proved, what it says, and why it matters.
+            - Write the issue as a self-contained document. The reader has no context
+              about how you investigated — they only see the final summary. Do not
+              include your reasoning process, tool calls, or analysis steps. Present
+              only polished conclusions.
+
+          claude_args: |
+            --model claude-opus-4-6
+            --allowed-tools "Read,Glob,Grep,Bash(git log *),Bash(git diff *),Bash(git show *),Bash(gh label create *),mcp__github__search_issues,mcp__github__issue_write,mcp__github__issue_read,mcp__github__add_issue_comment,mcp__github__get_label,mcp__github__list_issues,mcp__github__search_pull_requests,mcp__github__list_pull_requests,mcp__github__pull_request_read,mcp__github__list_commits"
