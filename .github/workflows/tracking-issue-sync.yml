@@ -18,7 +18,7 @@ jobs:
     if: |
       (github.event_name == 'issues' && (github.event.issue.state_reason == 'completed' || github.event.action == 'reopened')) ||
       (github.event_name == 'pull_request' && (github.event.action != 'closed' || github.event.pull_request.merged == true)) ||
-      github.event_name == 'pull_request_review'
+      (github.event_name == 'pull_request_review' && github.event.review.state != 'commented')
     runs-on: ubuntu-latest
     permissions:
       contents: read
