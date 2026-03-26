@@ -22,6 +22,12 @@ not yet formalized in TNLean, so this file does two things:
   statement-only placeholders, ready to be upgraded to proved theorems once the
   Jensen infrastructure is available.
 
+### Note on `sorry` placeholders
+
+The 3 `sorry` placeholders below were originally declared as `axiom`s,
+which bypass Lean's proof-tracking system. They have been converted to
+`theorem ... := by sorry` so that `#print axioms` honestly reports the gaps.
+
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 5.2 and
@@ -69,7 +75,7 @@ theorem matrix_log_le_log
 
 **TODO**: The proof needs the operator-monotone Jensen inequality for positive
 subunital maps (Wolf Thm. 5.13), which is not yet in Mathlib.
-Was previously an `axiom`; converted to `sorry` for honest tracking. -/
+Currently a `sorry` placeholder. -/
 theorem IsPositiveMap.cor52_item1_rpow_of_subunital
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : 1 ≤ p) {A : Mat} (hA : 0 ≤ A) :
@@ -80,7 +86,7 @@ theorem IsPositiveMap.cor52_item1_rpow_of_subunital
 
 **TODO**: The proof needs the operator-monotone Jensen inequality for positive
 subunital maps (Wolf Thm. 5.13), which is not yet in Mathlib.
-Was previously an `axiom`; converted to `sorry` for honest tracking. -/
+Currently a `sorry` placeholder. -/
 theorem IsPositiveMap.cor52_item2_rpow_of_subunital
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (1 / 2 : ℝ) 1) {A : Mat} (hA : A.PosDef) :
@@ -91,7 +97,7 @@ theorem IsPositiveMap.cor52_item2_rpow_of_subunital
 
 **TODO**: The proof needs the operator-monotone Jensen inequality for positive
 subunital maps (Wolf Thm. 5.13) applied to `log`, which is not yet in Mathlib.
-Was previously an `axiom`; converted to `sorry` for honest tracking. -/
+Currently a `sorry` placeholder. -/
 theorem IsPositiveMap.cor52_item3_log_of_subunital
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {A : Mat} (hA : A.PosDef) :

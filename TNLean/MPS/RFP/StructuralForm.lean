@@ -16,9 +16,9 @@ that are renormalization fixed points, following arXiv:1606.00608 §3.4
 
 ## Main results (all `sorry` — statements only)
 
-* **Lemma B.1** (`rfp_nt_structural`): `sorry`
-* **Theorem 3.11** (`rfp_cf_structural`): `sorry`
-* **Corollary 3.12** (`rfp_bnt_structural`): `sorry`
+* **Lemma B.1** (`rfp_nt_structural`): RFP normal tensor implies rank-1 transfer map — `sorry`
+* **Theorem 3.11** (`rfp_cf_structural`): RFP canonical-form block decomposition — `sorry`
+* **Corollary 3.12** (`rfp_bnt_structural`): BNT elements inherit structural form — `sorry`
 
 These state the structural characterisation but none are proved yet.
 -/

@@ -6,7 +6,7 @@ import TNLean.MPS.ParentHamiltonian.GroundSpace
 This file introduces the parent interaction projector, translated local terms,
 and the finite-chain parent Hamiltonian.
 
-⚠️ **Warning**: `parentInteraction` and `localTerm` are currently **zero
+**Warning**: `parentInteraction` and `localTerm` are currently **zero
 placeholders**. All downstream results (annihilation, frustration-freeness)
 are vacuously true until the real projector/embedding definitions are added.
 -/
@@ -19,7 +19,7 @@ variable {d D : ℕ}
 
 /-- **ZERO PLACEHOLDER** — Parent interaction on `L` consecutive sites.
 
-⚠️ This is currently defined as **zero**. The real definition should be the
+**Warning**: This is currently defined as **zero**. The real definition should be the
 orthogonal projector onto `groundSpace A L`ᗮ. Any theorem downstream of this
 definition (e.g. `parentHamiltonian_annihilates`, `parentHamiltonian_frustrationFree`)
 is **vacuously true** until this placeholder is replaced.
@@ -31,7 +31,7 @@ noncomputable def parentInteraction (_A : MPSTensor d D) (L : ℕ) :
 
 /-- **ZERO PLACEHOLDER** — Translated local term on an `N`-site periodic chain.
 
-⚠️ This is currently defined as **zero**. The real definition should embed
+**Warning**: This is currently defined as **zero**. The real definition should embed
 `parentInteraction A L` at site `i` on the periodic chain. Any theorem
 downstream of this definition is **vacuously true** until this placeholder
 is replaced.

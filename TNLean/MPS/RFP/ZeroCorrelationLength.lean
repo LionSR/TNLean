@@ -31,20 +31,22 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Correlations independent of distance: the two-point function through the
-transfer map is constant in the separation. That is, for all matrices
-`X`, `Y`, `ρR`,
-  `tr(Y · E^(n+1)(X · ρR)) = tr(Y · E^(m+1)(X · ρR))`
-for all `n, m : ℕ`. See arXiv:1606.00608, Definition 3.3.
+/-- Correlations independent of distance (arXiv:1606.00608, Definition 3.3):
+the connected two-point correlation function through the transfer map is
+constant in the separation for all local observables.
 
-Note: the exponents use `n + 1` and `m + 1` to avoid the degenerate case
-`E^0 = id`, which would force `E = id` by the non-degeneracy of the trace
-pairing. The physical interpretation is that correlations at distance ≥ 1
-are independent of the separation. -/
-def IsCID (A : MPSTensor d D) : Prop :=
-  ∀ (ρR X Y : Matrix (Fin D) (Fin D) ℂ) (n m : ℕ),
-    Matrix.trace (Y * ((transferMap A) ^ (n + 1)) (X * ρR)) =
-      Matrix.trace (Y * ((transferMap A) ^ (m + 1)) (X * ρR))
+**Status**: `sorry` placeholder. A naive formalization quantifying
+`tr(Y · E^n(X · ρR)) = tr(Y · E^m(X · ρR))` over all matrices `ρR`, `X`, `Y`
+collapses to `IsRFP` by non-degeneracy of the trace pairing (see PR #271
+discussion). The correct definition requires either:
+(a) restricting to a specific fixed-point state and using the *connected*
+    correlator `C(X,Y,n) = tr(Y · Eⁿ(X · ρ)) − tr(X·ρ)·tr(Y·ρ)`, or
+(b) formulating CID at the multi-block BNT level where cross-block transfer
+    operators provide non-trivial content.
+
+TODO: formalize using `twoPointCorrelation` infrastructure once available. -/
+def IsCID (_A : MPSTensor d D) : Prop :=
+  sorry
 
 /-- Local orthogonality for a single BNT block: the self-transfer map is
 idempotent. For a single tensor `A`, this is equivalent to `IsRFP A`
