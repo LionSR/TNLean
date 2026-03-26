@@ -72,7 +72,7 @@ theorem quantum_perron_frobenius_irreducible [DecidableEq (Fin D)]
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       HasUniqueFixedPoint (transferMap (d := d) (D := D) A) ρ := by
   -- Existence of PSD fixed point (via channel theory, does not need injectivity).
-  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := exists_posSemidef_fixedPoint A hNorm hD
+  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := exists_posSemidef_fixedPoint A (by convert hNorm) hD
   -- Positive definiteness under irreducibility.
   have hρ_pd := posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr ρ hρ_psd hρ_ne hρ_fix
   exact ⟨ρ, {

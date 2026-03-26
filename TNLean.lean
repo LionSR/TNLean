@@ -61,12 +61,14 @@ import TNLean.Channel.Schwarz.PositiveOnAbelian
 import TNLean.Channel.Schwarz.SchwarzNormal
 import TNLean.Channel.Schwarz.SchwarzSubnormal
 import TNLean.Channel.Schwarz.SchwarzNotCP
+import TNLean.Channel.Schwarz.TwoPositive
 import TNLean.Channel.Schwarz.MultiplicativeDomain
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.StationarySupport
+import TNLean.Channel.FixedPoint.WedderburnDecomposition
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth
@@ -82,11 +84,13 @@ import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.Conjugation
 import TNLean.Channel.Peripheral.Powers
 import TNLean.Channel.Peripheral.PeriodicityRemoval
+import TNLean.Channel.Peripheral.GroupStructure
 
 -- Layer 2c: Spectral theory (QPF + spectral gap)
 import TNLean.QPF.PosDef
 import TNLean.QPF.Uniqueness
 import TNLean.QPF.Assembly
+import TNLean.QPF.Primitive
 import TNLean.Spectral.MixedTransfer
 import TNLean.Spectral.MPVOverlapTrace
 import TNLean.Spectral.SpectralGap
@@ -94,6 +98,7 @@ import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.SpectralGapRect
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.Spectral.CrossCorrelation
+import TNLean.Spectral.QuantitativeGap
 
 -- Layer 3: MPS core
 import TNLean.MPS.Defs
@@ -125,6 +130,7 @@ import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.FundamentalTheorem.ProportionalPrimitive
 import TNLean.MPS.FundamentalTheorem.Applications
+import TNLean.MPS.FundamentalTheorem.FiniteLength
 -- Symmetry
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.GaugeUniqueness

@@ -80,28 +80,28 @@ theorem peripheral_eigenvalues_closed_under_mul
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
-    {λ μ : ℂ}
-    (hλ : λ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K))
-    (hμ : μ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
-    (λ * μ) ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
-  -- Get unitary eigenvectors U_λ and U_μ.
-  obtain ⟨Uλ, hUλ⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
-    K hUnital ρ hρ hρfix hIrr hλ
-  obtain ⟨Uμ, hUμ⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
-    K hUnital ρ hρ hρfix hIrr hμ
-  -- The product U_λ * U_μ is an eigenvector for λ * μ.
-  -- This uses the multiplicative domain: E(U_λ * U_μ) = E(U_λ) * E(U_μ).
+    {α β : ℂ}
+    (hα : α ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K))
+    (hβ : β ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
+    (α * β) ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
+  -- Get unitary eigenvectors U_α and U_β.
+  obtain ⟨Uα, hUα⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
+    K hUnital ρ hρ hρfix hIrr hα
+  obtain ⟨Uβ, hUβ⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
+    K hUnital ρ hρ hρfix hIrr hβ
+  -- The product U_α * U_β is an eigenvector for α * β.
+  -- This uses the multiplicative domain: E(U_α * U_β) = E(U_α) * E(U_β).
   constructor
-  · -- HasEigenvalue for λ * μ
-    -- U_λ * U_μ ≠ 0 (product of unitaries is invertible)
+  · -- HasEigenvalue for α * β
+    -- U_α * U_β ≠ 0 (product of unitaries is invertible)
     sorry
-  · -- |λ * μ| = |λ| · |μ| = 1
-    rw [Complex.norm_mul, hλ.2, hμ.2, mul_one]
+  · -- |α * β| = |α| · |β| = 1
+    rw [Complex.norm_mul, hα.2, hβ.2, mul_one]
 
 /-- **Peripheral eigenvalues are closed under inversion.**
 
-If `λ` is a peripheral eigenvalue, so is `λ⁻¹ = λ̄` (since `|λ| = 1`).
-The eigenvector is `U_λ†`. -/
+If `α` is a peripheral eigenvalue, so is `α⁻¹ = ᾱ` (since `|α| = 1`).
+The eigenvector is `U_α†`. -/
 theorem peripheral_eigenvalues_closed_under_inv
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -109,12 +109,12 @@ theorem peripheral_eigenvalues_closed_under_inv
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
-    {λ : ℂ}
-    (hλ : λ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
-    λ⁻¹ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
+    {α : ℂ}
+    (hα : α ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
+    α⁻¹ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
   constructor
   · sorry
-  · rw [norm_inv, hλ.2, inv_one]
+  · rw [norm_inv, hα.2, inv_one]
 
 /-! ## Cyclic group structure -/
 

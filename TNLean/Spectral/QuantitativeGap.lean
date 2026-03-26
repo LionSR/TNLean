@@ -80,7 +80,8 @@ theorem exponential_convergence_of_primitive [NeZero D]
     ∃ (C : ℝ) (δ : ℝ),
       0 < C ∧ 0 < δ ∧ δ ≤ 1 ∧
       ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
-        ‖(transferMap (d := d) (D := D) A)^[n] X - (transferMap (d := d) (D := D) A)^[n + 1] X‖ ≤
+        ‖((transferMap (d := d) (D := D) A)^[n]) X -
+          ((transferMap (d := d) (D := D) A)^[n + 1]) X‖ ≤
           C * (1 - δ) ^ n * ‖X‖ := by
   -- The spectral gap exists by primitivity.
   -- All eigenvalues other than 1 have |λ| < 1 (by compl_eigenvalue_norm_lt_one_of_primitive).
@@ -104,10 +105,10 @@ theorem correlation_length_bound [NeZero D]
     (hA : IsInjective A) :
     ∃ (ξ : ℝ),
       0 < ξ ∧
-      ∀ (n : ℕ) (X Y : Matrix (Fin D) (Fin D) ℂ),
+      ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
         Matrix.trace X = 0 →
-        ‖transferMap (d := d) (D := D) A ^[n] X‖ ≤
-          Real.exp (-↑n / ξ) * ‖X‖ := by
+        ‖((transferMap (d := d) (D := D) A)^[n]) X‖ ≤
+          Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
   sorry
 
 /-! ## Explicit gap from Wielandt bound -/
