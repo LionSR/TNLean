@@ -79,25 +79,22 @@ jobs:
               b. PR body references: `Refs #N`, `Addresses #N`, `Closes #N`,
                  `Fixes #N`, `Partially addresses #N` → issue N
               c. PR title: suffix `(#N)` or inline `#N` → issue N
-              d. Commit messages: run `gh pr view ${{ github.event.pull_request.number }}
-                 --repo ${{ github.repository }} --json commits` and scan each
-                 commit message for `#N` references
+              d. Commit messages: use `mcp__github__pull_request_read` to fetch
+                 PR details including commits, and scan each commit message for
+                 `#N` references
               e. Codex task links: if the body contains a Codex Task URL, check
                  if the Codex branch name or task description references an issue
-              f. File-based heuristic: if no issue found yet, run
-                 `gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --json files`
-                 to see which files changed, then search open issues whose body
-                 mentions those files:
-                 `gh issue list --repo ${{ github.repository }} --state open --json number,title,body --limit 50`
-                 and look for matching file paths or definition names.
+              f. File-based heuristic: if no issue found yet, use
+                 `mcp__github__pull_request_read` to see which files changed,
+                 then use `mcp__github__list_issues` (state=OPEN) to search
+                 open issues whose body mentions those files or definition names.
 
             If after all checks no issue is found, note this in the PR comment and
             suggest the author link one manually.
 
             ─── STEP 2: FETCH ISSUE DETAILS ───
-            If an issue was found, run:
-              `gh issue view <N> --repo ${{ github.repository }} --json title,labels,body`
-            Save the issue title, labels, and body for later steps.
+            If an issue was found, use `mcp__github__issue_read` to fetch the
+            issue's title, labels, and body. Save these for later steps.
 
             ─── STEP 3: FIX TITLE ───
             The title MUST follow conventional-commit format (see docs/CONTRIBUTING.md §1):
@@ -118,8 +115,8 @@ jobs:
             Rules:
             - If the current title already matches `type(scope): ...`, keep it as-is.
             - Otherwise, determine the correct type and scope:
-              • Run `gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --json files`
-                to see changed files. Derive the scope from the common path prefix.
+              • Use `mcp__github__pull_request_read` to see changed files.
+                Derive the scope from the common path prefix.
               • New definitions/lemmas/theorems → feat
               • Bug fixes, broken proofs, wrong identifiers → fix
               • Blueprint-only `.tex` changes → docs(blueprint) or fix(blueprint)
@@ -194,36 +191,27 @@ jobs:
                  - `MPS/RFP/` or `MPS/CanonicalForm/` → check for `rfp-mpdo`
                    or `algebraic-FT`
 
-            Apply with:
-              `gh pr edit ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --add-label "label1,label2,..."`
-
             ─── STEP 6: UPDATE PR ───
-            Apply the new title and body:
-              `gh pr edit <NUMBER> --repo <REPO> --title "<new title>"`
-            And for the body, use a heredoc:
-              ```
-              gh pr edit <NUMBER> --repo <REPO> --body "$(cat <<'PREOF'
-              <new body content>
-              PREOF
-              )"
-              ```
+            Use `mcp__github__update_pull_request` to apply all changes at once:
+              - Set `title` to the new conventional-commit title
+              - Set `body` to the restructured body
+              - Set `labels` to the full list of labels (existing + new)
 
             ─── STEP 7: TAG THE ISSUE ───
-            If an issue was found, post a comment on it:
-              ```
-              gh issue comment <N> --repo <REPO> --body "🤖 PR #<PR_NUMBER> has been opened to address this issue.
+            If an issue was found, use `mcp__github__add_issue_comment` to post
+            a comment on the issue:
+              "🤖 PR #<PR_NUMBER> has been opened to address this issue.
 
-              **Branch:** \`<BRANCH>\`
+              **Branch:** `<BRANCH>`
               **Title:** <new title>
 
               <one-line summary of what the PR does>"
-              ```
 
             ─── OUTPUT ───
-            After completing all steps, post a PR comment summarizing what was changed:
-              ```
-              gh pr comment <NUMBER> --repo <REPO> --body "$(cat <<'CEOF'
-              🧹 **PR Cleanup Bot**
+            After completing all steps, use `mcp__github__add_issue_comment` on
+            the PR number to post a summary comment:
+
+              "🧹 **PR Cleanup Bot**
 
               | Field | Before | After |
               |-------|--------|-------|
@@ -232,11 +220,8 @@ jobs:
               | **Labels** | added: `<list>` |
               | **Issue** | linked to #<N> / no issue found |
 
-              _Conventions: [CONTRIBUTING.md](../blob/main/docs/CONTRIBUTING.md)_
-              CEOF
-              )"
-              ```
+              _Conventions: [CONTRIBUTING.md](../blob/main/docs/CONTRIBUTING.md)_"
 
           claude_args: |
             --model claude-opus-4-6
-            --allowedTools "Read,Glob,Grep,Bash(gh pr:*),Bash(gh issue:*)"
+            --allowedTools "Read,Glob,Grep,mcp__github__pull_request_read,mcp__github__update_pull_request,mcp__github__issue_read,mcp__github__list_issues,mcp__github__add_issue_comment"
