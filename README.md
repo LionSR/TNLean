@@ -24,6 +24,12 @@ Done in Lean today:
 - blocked normal-chain FT endpoint via `IsNBlkInjective` bridge (`isNBlkInjective_iff_blockTensor_isInjective`)
 - physical-rotation symmetry corollary: physical `u`-action on MPS implies virtual Z-gauge equivalence (`gaugeEquiv_of_sameMPV_rotatePhysical`; Corollary 4.1 of [arXiv:1708.00029](https://arxiv.org/abs/1708.00029))
 - SameState-to-SameMPV bridge interface for injective chains (`SameStateBridgeHyp`), providing `fundamentalTheorem_injective_chain_of_sameState` as a weaker-hypothesis chain FT endpoint; the actual proof that `SameState` implies `SameMPV` is packaged as an abstract hypothesis rather than a completed argument
+- `physRealize_mul` for general injective tensors: the physical realization map is multiplicative
+- periodic blocking helper API in `MPS/Irreducible/PeriodicBlocking.lean` (`periodicBlockCount`, `periodicBlockPeriod`, `orbitSumProjection`, `blockedSectorProjection`; Lemma 2.4–2.5 bookkeeping infrastructure)
+- on-site symmetry definitions (`IsOnSiteSymmetric`, `twistedTensor`) and gauge uniqueness for injective tensors (`gauge_unique_up_to_scalar`: two gauge equivalences of the same injective tensor are related by a scalar)
+- renormalization fixed-point definitions (`IsRFP` from arXiv:1606.00608 Def 3.2) and the statement `isRFP_iff_kraus_isometry` (Thm 3.1); structural-form and assembly theorems scaffolded but not yet proved
+- parent Hamiltonian scaffold (`parentHamiltonian`, `IsFrustrationFree`, `localTerm`; ground-space projector deferred)
+- exploratory PEPS definitions on finite simple graphs (`TNLean/PEPS/Defs.lean`): `Tensor`, `stateCoeff`, `SameState`, `IsVertexInjective`
 
 Still not assembled end-to-end:
 
@@ -33,12 +39,12 @@ Still not assembled end-to-end:
 
 Complementary channel-side milestones now in Lean:
 
-- Choi, Kraus, and Stinespring representation results from Wolf Chapter 2
+- Choi, Kraus, and Stinespring representation results from Wolf Chapter 2, including existential Stinespring dilation theorems (`exists_stinespring_dilation`, `exists_stinespring_isometry_of_cptp`; Wolf Thm 2.2 in both Heisenberg and Schrödinger pictures)
 - Wolf Proposition 5.1, Theorems 5.5–5.7, and Example 5.3 in the Schwarz package
-- Wolf Theorem 6.1 together with substantial Chapter-6 spectral / fixed-point theory, including Theorems 6.12–6.13, the stationary-support package (Lemma 6.4, Proposition 6.9, `stationaryState`, `stationarySupport`), and the full bidirectional equivalence for Wolf Theorem 6.2 item 3 (irreducibility ↔ exponential semigroup strict positivity, `irreducible_iff_exp_posDef_forall`)
+- Wolf Theorem 6.1 together with substantial Chapter-6 spectral / fixed-point theory, including Theorems 6.12–6.13, the stationary-support package (Lemma 6.4, Proposition 6.9, `stationaryState`, `stationarySupport`), the full bidirectional equivalence for Wolf Theorem 6.2 item 3 (irreducibility ↔ exponential semigroup strict positivity, `irreducible_iff_exp_posDef_forall`), Propositions 6.6/6.8 (similarity invariance of irreducibility, Hermitian fixed-point decomposition; `wolf_prop_6_6`, `wolf_prop_6_8`), and Theorem 6.15 scalar conditional expectation (`Kraus.wolf_theorem_6_15_scalar`)
 - Wolf Chapter-7 semigroup / GKSL package through Proposition 7.6 and Theorem 7.2, Proposition 7.5 (irreducible implies primitive for QDS), and a partial non-reducibility criterion for Corollary 7.2; the full convergence statement of Corollary 7.2 remains unformalized
 
-### Wolf channel-side snapshot (audit of 2026-03-23)
+### Wolf channel-side snapshot (audit of 2026-03-25)
 
 | Wolf chapter | Topic | Estimated theorem-level coverage |
 |---|---|---:|
@@ -138,7 +144,7 @@ Requires Lean 4 v4.28.0 (managed via `lean-toolchain`).
 
 ## Blueprint
 
-The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the channel-side Wolf material. As of 2026-03-23, the blueprint chapters `ch04_channels.tex`, `ch05_schwarz.tex`, `ch06_spectral.tex`, `ch11_assembly.tex`, `ch12_semigroup.tex`, and `ch13_algebraic_ft.tex` have been synchronized to reflect current Lean status, including the stationary-support package, periodic tensor definitions, semigroup sorry closures, and chain FT declarations.
+The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the channel-side Wolf material. As of 2026-03-25, the blueprint chapters `ch04_channels.tex`, `ch05_schwarz.tex`, `ch06_spectral.tex`, `ch07_wielandt.tex`, `ch08_canonical.tex`, `ch11_assembly.tex`, `ch12_semigroup.tex`, and `ch13_algebraic_ft.tex` have been synchronized to reflect current Lean status, including the stationary-support package, periodic tensor definitions, semigroup sorry closures, and chain FT declarations.
 
 Typical blueprint commands:
 
