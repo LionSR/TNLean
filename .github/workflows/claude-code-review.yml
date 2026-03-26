@@ -10,6 +10,10 @@ on:
       - "lean-toolchain"
       - "blueprint/src/**/*.tex"
 
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   claude-review:
     runs-on: ubuntu-latest
