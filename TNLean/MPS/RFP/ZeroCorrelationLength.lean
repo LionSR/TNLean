@@ -32,28 +32,36 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- Correlations independent of distance: the two-point function through the
-transfer map is constant in the separation `n`. That is, for all observables
-`X`, `Y` and right reference states `ρR`,
-  `tr(Y · E^n(X · ρR)) = tr(Y · E^m(X · ρR))`
+transfer map is constant in the separation. That is, for all matrices
+`X`, `Y`, `ρR`,
+  `tr(Y · E^(n+1)(X · ρR)) = tr(Y · E^(m+1)(X · ρR))`
 for all `n, m : ℕ`. See arXiv:1606.00608, Definition 3.3.
 
-Equivalently, `E² = E` on the range of `X ↦ X · ρR`, but this formulation
-avoids choosing a normalization. -/
+Note: the exponents use `n + 1` and `m + 1` to avoid the degenerate case
+`E^0 = id`, which would force `E = id` by the non-degeneracy of the trace
+pairing. The physical interpretation is that correlations at distance ≥ 1
+are independent of the separation. -/
 def IsCID (A : MPSTensor d D) : Prop :=
   ∀ (ρR X Y : Matrix (Fin D) (Fin D) ℂ) (n m : ℕ),
-    Matrix.trace (Y * ((transferMap A) ^ n) (X * ρR)) =
-      Matrix.trace (Y * ((transferMap A) ^ m) (X * ρR))
+    Matrix.trace (Y * ((transferMap A) ^ (n + 1)) (X * ρR)) =
+      Matrix.trace (Y * ((transferMap A) ^ (m + 1)) (X * ρR))
 
-/-- Local orthogonality: the mixed transfer operator `F_{AB}(X) = Σ_i A_i X B_i†`
-for two distinct BNT blocks `A ≠ B` should vanish. For a single tensor `A`,
-this is captured by requiring that the (self) transfer map is idempotent as a
-mixed transfer operator, i.e. `E_A ∘ E_A = E_A` (which is exactly `IsRFP`
-restricted to the diagonal block). See arXiv:1606.00608, Definition 3.5.
+/-- Local orthogonality for a single BNT block: the self-transfer map is
+idempotent. For a single tensor `A`, this is equivalent to `IsRFP A`
+(see `isLocallyOrthogonal_iff_isRFP`). See arXiv:1606.00608, Definition 3.5.
 
-The full off-diagonal condition for BNT components is stated at the
-canonical-form level in `zcl_iff_idempotent_transfer`. -/
+In the full BNT setting, local orthogonality additionally requires that
+the *mixed* transfer operators `F_{jk}` vanish for `j ≠ k`. That
+off-diagonal condition is captured at the canonical-form level in
+`zcl_iff_idempotent_transfer`. -/
 def IsLocallyOrthogonal (A : MPSTensor d D) : Prop :=
-  transferMap A ∘ₗ transferMap A = transferMap A
+  IsRFP A
+
+/-- `IsLocallyOrthogonal` is definitionally equal to `IsRFP` for a single
+BNT block. This lemma bridges the two views. -/
+lemma isLocallyOrthogonal_iff_isRFP (A : MPSTensor d D) :
+    IsLocallyOrthogonal A ↔ IsRFP A :=
+  Iff.rfl
 
 /-- Zero correlation length: a tensor has ZCL when it is both locally
 orthogonal and has correlations independent of distance.

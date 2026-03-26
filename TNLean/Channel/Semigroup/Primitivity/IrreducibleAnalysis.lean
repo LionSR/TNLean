@@ -16,7 +16,15 @@ attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-! ## Prop 7.5: Irreducibility implies primitivity for QDS -/
+/-! ## Prop 7.5: Irreducibility implies primitivity for QDS
+
+### Note on `sorry` placeholders
+
+The 13 `sorry` placeholders in this file were originally declared as `axiom`s,
+which bypass Lean's proof-tracking system. They have been converted to
+`theorem ... := by sorry` so that `#print axioms` honestly reports the gaps.
+Each placeholder has a `TODO` docstring describing the missing proof argument.
+-/
 
 theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
     (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (hIrr : IsIrreducibleMap E)
@@ -99,7 +107,7 @@ theorem trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel
     hE_ch hE_irr V hV_fix htr)
 
 /-- **TODO**: Prove that a peripheral eigenvalue of an irreducible QDS has a periodic
-fixed point. Currently a `sorry` placeholder (was previously an `axiom`). -/
+fixed point. Currently a `sorry` placeholder. -/
 theorem exists_power_fixed_eigenvector_of_peripheral
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -111,7 +119,7 @@ theorem exists_power_fixed_eigenvector_of_peripheral
   sorry
 
 /-- **TODO**: Prove that a trace-nonzero eigenvector exists for peripheral eigenvalues.
-Currently a `sorry` placeholder (was previously an `axiom`). -/
+Currently a `sorry` placeholder. -/
 theorem exists_trace_ne_zero_eigenvector_of_peripheral
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -138,7 +146,7 @@ theorem eigenvalue_eq_one_of_trace_preserving_eigenvector
   exact sub_eq_zero.mp ((mul_eq_zero.mp hzero).resolve_right htrV_ne)
 
 /-- **TODO**: Prove that all peripheral eigenvalues equal 1 when all times are
-irreducible. Currently a `sorry` placeholder (was previously an `axiom`). -/
+irreducible. Currently a `sorry` placeholder. -/
 theorem peripheral_eq_one_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -150,7 +158,7 @@ theorem peripheral_eq_one_of_irreducible_all
   sorry
 
 /-- **TODO**: Prove that irreducibility at all times implies primitivity.
-Currently a `sorry` placeholder (was previously an `axiom`). -/
+Currently a `sorry` placeholder. -/
 theorem primitive_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -177,7 +185,7 @@ theorem residualSliceTime_mem_Icc
     nlinarith [hlt, hs]
 
 /-- **TODO**: Prove the decomposition `n * u = ⌊n*u/s⌋ * s + residual`.
-The proof sketch below needs Mathlib API adjustments. Was previously an `axiom`. -/
+The proof sketch below needs Mathlib API adjustments. Currently a `sorry` placeholder. -/
 theorem residualSlice_decomp
     (u s : ℝ) (hs : 0 < s) :
     ∀ n : ℕ, (n : ℝ) * u = (residualSliceIndex u s n : ℝ) * s + residualSliceTime u s n := by
@@ -249,7 +257,7 @@ theorem residualSlice_apply_eq_of_fixedPoint
     _ = T (residualSliceTime u s n) δ := by rw [hms_fix]
 
 /-- **TODO**: Prove convergent subsequence exists for residual slice times (compactness).
-Was previously an `axiom`. -/
+Currently a `sorry` placeholder. -/
 theorem exists_residualSlice_subseq_tendsto
     (u s : ℝ) (hs : 0 < s) :
     ∃ a ∈ Set.Icc 0 s, ∃ φ : ℕ ↪o ℕ,
@@ -268,7 +276,7 @@ theorem exists_residualSlice_subseq_tendsto
 -/
 
 /-- **TODO**: Prove that the residual slice limit vanishes (continuity + uniqueness of limits).
-Was previously an `axiom`. -/
+Currently a `sorry` placeholder. -/
 theorem residualSlice_limit_zero_of_fixedPoint
     (T : ℝ → Mat →ₗ[ℂ] Mat)
     (hT : IsQuantumDynSemigroup T)
@@ -301,7 +309,7 @@ theorem residualSlice_limit_zero_of_fixedPoint
 -/
 
 /-- **TODO**: Prove that a zero point exists in slice times.
-Was previously an `axiom`. -/
+Currently a `sorry` placeholder. -/
 theorem exists_residual_time_eq_zero_of_fixedPoint
     [NeZero D]
     (T : ℝ → Mat →ₗ[ℂ] Mat)
@@ -365,7 +373,7 @@ theorem fixedPoint_eq_trace_smul_at_irreducible_time
                mul_one, sub_self]))
 
 /-- **TODO**: Prove eigenvector with nonzero trace for fraction slices.
-Was previously an `axiom`. -/
+Currently a `sorry` placeholder. -/
 theorem exists_trace_ne_zero_eigenvector_of_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -383,7 +391,7 @@ theorem exists_trace_ne_zero_eigenvector_of_fraction_slice
   sorry
 
 /-- **TODO**: Prove peripheral eigenvalue equals 1 in fraction slice.
-Was previously an `axiom`. -/
+Currently a `sorry` placeholder. -/
 theorem peripheral_eq_one_of_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -401,7 +409,7 @@ theorem peripheral_eq_one_of_fraction_slice
   sorry
 
 /-- **TODO**: Prove primitivity from fraction slice hypotheses.
-Was previously an `axiom`. -/
+Currently a `sorry` placeholder. -/
 theorem primitive_of_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -494,7 +502,7 @@ theorem exists_irreducible_fraction_slice
   exact ⟨u, hu_pos, hu_nonneg, hTt₀_eq_pow, hTu_ch, hTu_irr, hTu_fix⟩
 
 /-- **TODO**: Prove fixed points have trace scalar form.
-Was previously an `axiom`. -/
+Currently a `sorry` placeholder. -/
 theorem fixedPoint_eq_trace_smul_of_primitive_slice
     [NeZero D]
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -514,7 +522,7 @@ theorem fixedPoint_eq_trace_smul_of_primitive_slice
   sorry
 
 /-- **TODO**: Prove that a primitive fraction slice exists.
-Was previously an `axiom`. -/
+Currently a `sorry` placeholder. -/
 theorem exists_primitive_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
