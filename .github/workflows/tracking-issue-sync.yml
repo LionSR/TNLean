@@ -9,7 +9,7 @@ on:
     types: [submitted]
 
 concurrency:
-  group: issue-tracker-${{ github.event.pull_request.number || github.event.issue.number }}
+  group: issue-tracker
   cancel-in-progress: false
 
 jobs:
