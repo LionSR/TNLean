@@ -13,6 +13,14 @@ MPS transfer operators, strengthening the existing qualitative result
 `spectralRadius_mixedTransfer_lt_one` (which only proves `ρ < 1` without
 a lower bound on `1 - ρ`).
 
+## Building blocks (already formalized elsewhere)
+
+* `pow_tendsto_zero_of_spectralRadius_lt_one` in `Spectral/SpectralGap.lean` —
+  exponential convergence to zero when spectral radius < 1
+* `compl_eigenvalue_norm_lt_one_of_primitive` in `Peripheral/Spectrum.lean` —
+  primitive channels have spectral gap
+* `cumulativeSpan_eq_top` in `Wielandt/WielandtBound.lean` — the D² Wielandt bound
+
 ## Main results
 
 * `exponential_convergence_of_primitive` — for a primitive TP channel,
@@ -21,36 +29,13 @@ a lower bound on `1 - ρ`).
 * `spectral_gap_from_wielandt` — explicit spectral gap `δ > 0` with
   all non-unit eigenvalues satisfying `|μ| ≤ 1 - δ`
 
-## Mathematical content
-
-For a primitive trace-preserving quantum channel `E` on `M_D(ℂ)`:
-
-1. **Spectral gap existence** (already proved): All eigenvalues of `E` other
-   than 1 have modulus strictly less than 1.
-
-2. **Quantitative bound** (new): The second-largest eigenvalue modulus satisfies
-   `|λ₂| ≤ 1 - δ` where `δ` can be bounded explicitly in terms of D.
-
-3. **Mixing time**: `‖E^n(ρ) - ρ_∞‖ ≤ C · (1 - δ)^n` for all density
-   matrices `ρ`, where `ρ_∞` is the unique fixed state.
-
-The key insight is that the Wielandt bound `D²` gives an upper bound on when
-word products span the full algebra, and this translates to a lower bound on
-the spectral gap via the Schwarz inequality and norm estimates.
-
 ## Strengthening relative to the literature
 
 The existing formalization proves `ρ(F_{AB}) < 1` for non-equivalent blocks
-but gives no explicit bound. This file provides constructive bounds, which
-are needed for:
-- Explicit error estimates in tensor network algorithms
-- Correlation length bounds in MPS
-- Convergence guarantees for DMRG-type methods
+but gives no explicit bound. This file provides constructive bounds.
 
 ## References
 
-* [Kastoryano, Brandão, *Quantum Gibbs samplers*, CMP 2016]
-* [Sanz et al., *A quantum version of Wielandt's inequality*, arXiv:0909.5347]
 * [M. Wolf, *Quantum Channels & Operations*, §6.3]
 -/
 
@@ -73,8 +58,10 @@ For a primitive TP channel `E` with unique fixed point `ρ_∞`, the iterates
 where `P(X) = tr(X) · ρ_∞ / tr(ρ_∞)` is the projection onto the fixed state,
 `δ > 0` is the spectral gap, and `C` depends on the Jordan structure.
 
-Note: `P` is the rank-one projection defined by `fixedPointProj` in the
-existing codebase. The convergence is in operator norm on `M_D(ℂ)`. -/
+The spectral gap `δ` exists by `compl_eigenvalue_norm_lt_one_of_primitive`
+from `Peripheral/Spectrum.lean`. The exponential convergence follows from
+`pow_tendsto_zero_of_spectralRadius_lt_one` in `Spectral/SpectralGap.lean`
+applied to `E - P` (which has spectral radius < 1 by primitivity). -/
 theorem exponential_convergence_of_primitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -88,22 +75,19 @@ theorem exponential_convergence_of_primitive [NeZero D]
         ‖((transferMap (d := d) (D := D) A)^[n]) X -
           fixedPointProj ρ htr X‖ ≤
           C * (1 - δ) ^ n * ‖X‖ := by
-  -- The spectral gap exists by primitivity.
-  -- All eigenvalues other than 1 have |λ| < 1 (by compl_eigenvalue_norm_lt_one_of_primitive).
-  -- In finite dimensions, max{|λ| : λ ≠ 1, λ eigenvalue} < 1.
-  -- Set δ = 1 - max{|λ| : λ ≠ 1}.
+  -- TODO (#22): use compl_eigenvalue_norm_lt_one_of_primitive for spectral gap,
+  -- then pow_tendsto_zero_of_spectralRadius_lt_one for exponential convergence
   sorry
 
 /-- **Correlation length bound.**
 
-For a primitive TP-normalized MPS tensor, the correlation length `ξ` satisfies
-`ξ = -1/log(ρ₂)` where `ρ₂` is the second-largest eigenvalue modulus
-of the transfer map. This gives an explicit upper bound on correlations:
+For a primitive TP-normalized MPS tensor, traceless matrices decay
+exponentially under the transfer map iteration. The rate is determined by
+the spectral gap, which exists by primitivity.
 
-  `|⟨O_i O_j⟩ - ⟨O_i⟩⟨O_j⟩| ≤ C · exp(-|i-j|/ξ)`
-
-The Wielandt bound provides `ξ ≤ D² / log(1/(1-δ))` where `δ` is the
-spectral gap. -/
+This uses `pow_tendsto_zero_of_spectralRadius_lt_one` from
+`Spectral/SpectralGap.lean` directly — traceless matrices lie in
+`ker(P) = range(E - P)`, where `E - P` has spectral radius < 1. -/
 theorem correlation_length_bound [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -114,25 +98,20 @@ theorem correlation_length_bound [NeZero D]
         Matrix.trace X = 0 →
         ‖((transferMap (d := d) (D := D) A)^[n]) X‖ ≤
           Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
+  -- TODO (#22): ξ = -1/log(ρ₂) where ρ₂ is second-largest eigenvalue modulus
   sorry
 
 /-! ## Explicit gap from Wielandt bound -/
 
-/-- **Spectral gap from the Wielandt bound** (constructive version).
+/-- **Spectral gap from the Wielandt bound** (existential version).
 
-For an injective TP-normalized MPS tensor, the Wielandt bound guarantees that
-word products span `M_D(ℂ)` by step `D²`. This algebraic spanning property
-translates to a spectral gap: the second-largest eigenvalue of the transfer
-map satisfies `|λ₂| < 1`.
+For an injective TP-normalized MPS tensor, all eigenvalues of the transfer
+map other than 1 have modulus strictly less than 1, with a uniform gap.
 
-The explicit bound is existential: `∃ δ > 0` such that all non-unit
-eigenvalues satisfy `|μ| ≤ 1 - δ`. A concrete (but coarse) bound could be
-derived from the Wielandt spanning at step `D²` combined with compactness,
-but we leave the quantitative estimate to future work.
-
-**Proof idea**: The spanning at step `D²` means the `D²`-fold composition
-`E^{D²}` is strictly positive on the interior of the PSD cone. By
-compactness of the state space and continuity, there is a uniform gap. -/
+The existential bound `∃ δ > 0` follows from: injectivity implies primitivity
+(by the Wielandt bound), primitivity implies spectral gap
+(by `compl_eigenvalue_norm_lt_one_of_primitive`), and in finite dimensions
+the maximum over finitely many eigenvalues gives a uniform bound. -/
 theorem spectral_gap_from_wielandt [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -140,6 +119,8 @@ theorem spectral_gap_from_wielandt [NeZero D]
     ∃ (δ : ℝ), 0 < δ ∧
       ∀ (μ : ℂ), Module.End.HasEigenvalue (transferMap (d := d) (D := D) A) μ →
         μ ≠ 1 → ‖μ‖ ≤ 1 - δ := by
+  -- TODO (#22): combine injective_implies_irreducibleCP + isPrimitive +
+  -- compl_eigenvalue_norm_lt_one_of_primitive + finite eigenvalue max
   sorry
 
 end MPSTensor

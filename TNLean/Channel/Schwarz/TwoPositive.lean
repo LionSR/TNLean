@@ -104,6 +104,7 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
   obtain ⟨r, K, hK⟩ := hCP
   -- The ampliation E ⊗ id_k has Kraus operators K_i ⊗ I_k,
   -- so (E ⊗ id_k)(X) = ∑_i (K_i ⊗ I_k) X (K_i ⊗ I_k)†, which is PSD.
+  -- TODO: block-diagonal Kraus operators on (n × Fin k) space
   sorry
 
 /-- CP maps are 2-positive. -/
@@ -117,6 +118,7 @@ Apply the definition with `k = 1` embedded into `k = 2` (or directly:
 2-positive ⊇ 1-positive = positive). -/
 theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (h : Is2PositiveMap E) : IsPositiveMap E := by
+  -- TODO: embed M_n ↪ M_n ⊗ M_2 via diag(X, 0) and apply 2-positivity
   sorry
 
 /-! ## Kadison–Schwarz for 2-positive maps -/
@@ -158,6 +160,7 @@ theorem kadison_schwarz_2positive
   -- Step 2: Apply E ⊗ id₂ (which preserves PSD-ness by 2-positivity).
   -- Step 3: The result is [[E(X†X), E(X)†], [E(X), I]] (using unitality for the (2,2) block).
   -- Step 4: Schur complement: E(X†X) - E(X)† · I⁻¹ · E(X) ≥ 0.
+  -- TODO: factor out Schur complement step from KadisonSchwarz.lean and reuse
   sorry
 
 /-- The existing Kadison–Schwarz for Kraus maps is a corollary of the 2-positive

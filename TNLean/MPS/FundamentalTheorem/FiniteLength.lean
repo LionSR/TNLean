@@ -115,6 +115,7 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
     (hA : IsInjective A)
     {N₀ : ℕ} (hFrom : SameMPVFrom N₀ A B) :
     SameMPV A B := by
+  -- TODO: downward induction via trace pairing injectivity (traceMulRightPi_ker_eq_bot)
   sorry
 
 /-- **Strengthened single-block Fundamental Theorem (finite-length version).**

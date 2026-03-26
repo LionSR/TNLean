@@ -68,7 +68,6 @@ import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.StationarySupport
-import TNLean.Channel.FixedPoint.WedderburnDecomposition
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth
