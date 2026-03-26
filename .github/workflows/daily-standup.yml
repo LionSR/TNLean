@@ -36,7 +36,7 @@ jobs:
             const since = new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString();
             const sinceDate = since.split('T')[0];
 
-            // Merged PRs in the last 24 hours
+            // Merged PRs in the lookback window
             const mergedPRs = await github.rest.search.issuesAndPullRequests({
               q: `repo:${context.repo.owner}/${context.repo.repo} is:pr is:merged merged:>=${sinceDate}`,
               per_page: 50
@@ -118,6 +118,7 @@ jobs:
 
             return {
               since,
+              hoursBack,
               mergedPRs: mergedPRs.data.items.map(p => ({
                 number: p.number,
                 title: p.title,
@@ -170,7 +171,7 @@ jobs:
             proofs, resolved conjectures).
 
             Today's date: ${{ steps.date.outputs.today }}
-            Activity window: last 24 hours (since ${{ fromJSON(steps.activity.outputs.result).since }})
+            Activity window: last ${{ fromJSON(steps.activity.outputs.result).hoursBack }} hours (since ${{ fromJSON(steps.activity.outputs.result).since }})
 
             === REPOSITORY ACTIVITY DATA ===
 
@@ -197,7 +198,7 @@ jobs:
             Analyze the activity above and produce a standup summary. For additional
             context, read the actual Lean source files changed (use Read/Glob/Grep) to
             understand the mathematical content of proofs, not just commit messages.
-            Use git log and git diff for the last 24 hours to see what changed in detail.
+            Use git log and git diff for the activity window above to see what changed in detail.
 
             Before creating any issue, use the mcp__github__search_issues tool to check
             whether a standup issue for today's date already exists (search for
