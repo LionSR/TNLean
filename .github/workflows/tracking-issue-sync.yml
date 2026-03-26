@@ -2,7 +2,7 @@ name: Issue Tracker
 
 on:
   issues:
-    types: [closed]
+    types: [closed, reopened]
   pull_request:
     types: [closed, opened]
   pull_request_review:
@@ -16,7 +16,7 @@ jobs:
   track:
     # Skip: closed-but-not-completed issues, closed-but-not-merged PRs
     if: |
-      (github.event_name == 'issues' && github.event.issue.state_reason == 'completed') ||
+      (github.event_name == 'issues' && (github.event.issue.state_reason == 'completed' || github.event.action == 'reopened')) ||
       (github.event_name == 'pull_request' && (github.event.action != 'closed' || github.event.pull_request.merged == true)) ||
       github.event_name == 'pull_request_review'
     runs-on: ubuntu-latest
@@ -39,7 +39,7 @@ jobs:
           allowed_bots: '*'
           claude_args: |
             --model claude-opus-4-6
-            --allowedTools "mcp__github__*" "Bash(git diff:*)" "Bash(git log:*)" "Bash(git show:*)"
+            --allowedTools "mcp__github__*,Bash(git diff *),Bash(git log *),Bash(git show *)"
 
           prompt: |
             You are the issue tracker agent for the TNLean repository — a Lean 4
@@ -156,6 +156,19 @@ jobs:
             4. If ALL items are now checked:
                - Add the `all-resolved` label
                - Comment: "🎉 All tasks complete — this tracking issue can be closed."
+
+            ---
+
+            ### Playbook A2: Issue Reopened
+
+            **When**: `issues` / `reopened`
+
+            1. Search for tracking issues (label `tracking`) that reference
+               the reopened issue by `#number` in their tasklist
+            2. For each match, uncheck the item: `- [x] #N` → `- [ ] #N`
+            3. Remove the `all-resolved` label if present (ignore errors)
+            4. Comment on the tracking issue:
+               "🔄 #N (*title*) has been reopened. Unchecked in tasklist. [X/Y tasks complete]"
 
             ---
 
