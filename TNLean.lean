@@ -123,6 +123,7 @@ import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
+import TNLean.MPS.FundamentalTheorem.ProportionalPrimitive
 import TNLean.MPS.FundamentalTheorem.Applications
 -- Symmetry
 import TNLean.MPS.Symmetry.Defs
