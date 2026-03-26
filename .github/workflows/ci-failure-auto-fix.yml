@@ -38,6 +38,10 @@ jobs:
         The Lean CI build failed. Your task is to fix the build errors.
 
         Instructions:
+        0. Use your judgment on whether Mathlib scouting is needed for this fix. For proof-level
+           failures (sorry, tactic errors, type mismatches in proofs), read PR/issue comments for
+           existing **Mathlib Scouting Reports** and use them to inform your fix. For simple failures
+           (import errors, syntax issues, naming), skip scouting and fix directly.
         1. Read the error logs carefully to identify the failing Lean files and error messages.
         2. Common Lean build failures and how to fix them:
            - `sorry` left in proof: Fully close the lemma/theorem — replace `sorry` with a complete proof. Do NOT leave `sorry` behind or add TODO comments as a workaround.
