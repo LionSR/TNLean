@@ -29,7 +29,11 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+            // On Monday (day 1), look back 72 hours to capture weekend activity.
+            // On other weekdays, look back 24 hours.
+            const now = new Date();
+            const hoursBack = now.getUTCDay() === 1 ? 72 : 24;
+            const since = new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString();
             const sinceDate = since.split('T')[0];
 
             // Merged PRs in the last 24 hours
