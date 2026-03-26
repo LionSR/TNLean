@@ -107,23 +107,27 @@ theorem generatorDecomp_traceless_unique_kappa_modPhase
     exact sub_eq_zero.mp hM
   -- Step 6: Δ is a scalar matrix (center of M_n)
   obtain ⟨c, hc⟩ := Matrix.isScalar_of_commute_span_eq_top Δ
-    (Submodule.span_univ ℂ) (fun M _ => hcomm M)
+    Submodule.span_univ (fun M _ => hcomm M)
   -- Step 7: c is purely imaginary (from skew-Hermiticity)
   by_cases hD : D = 0
   · subst hD; exact ⟨0, Subsingleton.elim _ _⟩
   · haveI : NeZero D := ⟨hD⟩
     have hc_skew : starRingEnd ℂ c = -c := by
-      have hΔ_conj : Δᴴ = Matrix.scalar (Fin D) (starRingEnd ℂ c) := by
-        rw [hc, diagonal_conjTranspose]; ext; simp [Matrix.scalar]
-      rw [hskew, hc] at hΔ_conj
-      have h_neg : -Matrix.scalar (Fin D) c = Matrix.scalar (Fin D) (-c) := by
-        ext; simp [Matrix.scalar]
-      rw [h_neg] at hΔ_conj
-      have h_inj := congr_fun (congr_fun hΔ_conj ⟨0, Nat.pos_of_ne_zero hD⟩)
-        ⟨0, Nat.pos_of_ne_zero hD⟩
-      simpa [Matrix.scalar, Matrix.diagonal] using h_inj
+      -- Extract from entry (0,0): Δᴴ₀₀ = star(Δ₀₀) = star c, and (-Δ)₀₀ = -c
+      set idx : Fin D := ⟨0, Nat.pos_of_ne_zero hD⟩
+      have h1 := congr_fun (congr_fun hskew idx) idx
+      -- h1 : Δᴴ idx idx = (-Δ) idx idx
+      simp only [conjTranspose_apply, neg_apply] at h1
+      -- h1 : star (Δ idx idx) = -(Δ idx idx)
+      rw [hc] at h1
+      simp only [Matrix.scalar, diagonalRingHom_apply, Pi.constRingHom_apply,
+        diagonal_apply_eq] at h1
+      -- h1 : star c = -c, which is starRingEnd ℂ c = -c
+      exact h1
     have hre : c.re = 0 := by
-      have h0 : c + starRingEnd ℂ c = 0 := by rw [hc_skew]; abel
+      have h0 : c + conj c = 0 := by
+        show c + starRingEnd ℂ c = 0
+        rw [hc_skew]; abel
       rw [Complex.add_conj] at h0
       have h1 : (2 : ℝ) * c.re = 0 := by exact_mod_cast h0
       linarith
