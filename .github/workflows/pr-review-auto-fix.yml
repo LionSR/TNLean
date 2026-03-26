@@ -197,9 +197,10 @@ jobs:
             ${{ toJSON(fromJSON(steps.review_comments.outputs.result).comments) }}
 
             Instructions:
-            0. First, read all comments on this PR (and any linked issues) using the GitHub MCP tools.
-               Look for existing **Mathlib Scouting Reports** — these list relevant Mathlib lemmas,
-               definitions, and suggested approaches. Use them to inform your fix.
+            0. Use your judgment on whether Mathlib scouting is needed for this fix. For review
+               comments about proofs (sorry removal, tactic suggestions, proof restructuring), read
+               PR/issue comments for existing **Mathlib Scouting Reports** and use them to inform
+               your fix. For cosmetic comments (naming, docstrings, style), skip scouting and fix directly.
             1. Read each review comment and understand the issue being raised.
             2. Fix each issue in the relevant file at the indicated line.
             3. If the review state is "APPROVED" with no actionable comments, do nothing.
@@ -215,12 +216,11 @@ jobs:
             8. Commit and push your fix to the current branch. Prefix commit messages with `[claude-review-fix]`.
             9. After pushing, use the GitHub MCP tools to post a comment on the PR with:
                - A summary of which review items were addressed.
-               - A **Mathlib Audit** section listing which Mathlib lemmas/definitions you used or
-                 discovered during the fix (name, module path, and how it was used). If you found
-                 useful Mathlib lemmas that weren't in an existing scouting report, include them
-                 so future work benefits.
+               - If you used or discovered Mathlib lemmas during the fix, include a **Mathlib Audit**
+                 section (name, module path, and how it was used). Skip this section for trivial fixes
+                 that didn't involve Mathlib.
 
           claude_args: |
             --model claude-opus-4-6
             --allowed-tools "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
-            --append-system-prompt "This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review. Prefer minimal diffs. IMPORTANT — before writing or modifying any proof, first scout Mathlib for relevant lemmas: use exact?, apply?, rw?, and simp? to discover what is already available; grep Mathlib source files for related definitions and theorems; read the relevant Mathlib module docs. Only after this scouting phase should you attempt to write a proof, reusing Mathlib lemmas wherever possible rather than reproving things from scratch. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR."
+            --append-system-prompt "This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review. Prefer minimal diffs. Use your judgment on when Mathlib scouting is warranted — it is essential when closing sorrys or rewriting proofs, but unnecessary for naming fixes, docstrings, or style changes. When scouting IS needed, use exact?, apply?, rw?, simp?, and grep Mathlib source files. Reuse Mathlib lemmas rather than reproving from scratch. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR."

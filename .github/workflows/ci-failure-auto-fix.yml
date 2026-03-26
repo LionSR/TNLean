@@ -38,9 +38,10 @@ jobs:
         The Lean CI build failed. Your task is to fix the build errors.
 
         Instructions:
-        0. First, read all comments on this PR (and any linked issues) using the GitHub MCP tools.
-           Look for existing **Mathlib Scouting Reports** — these list relevant Mathlib lemmas,
-           definitions, and suggested approaches. Use them to inform your fix.
+        0. Use your judgment on whether Mathlib scouting is needed for this fix. For proof-level
+           failures (sorry, tactic errors, type mismatches in proofs), read PR/issue comments for
+           existing **Mathlib Scouting Reports** and use them to inform your fix. For simple failures
+           (import errors, syntax issues, naming), skip scouting and fix directly.
         1. Read the error logs carefully to identify the failing Lean files and error messages.
         2. Common Lean build failures and how to fix them:
            - `sorry` left in proof: Fully close the lemma/theorem — replace `sorry` with a complete proof. Do NOT leave `sorry` behind or add TODO comments as a workaround.
@@ -52,11 +53,6 @@ jobs:
         4. Run `lake build` to verify your fix compiles with zero errors and zero `sorry`s.
         5. Make minimal, targeted fixes. Do not refactor unrelated code.
         6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
-        7. After pushing, use the GitHub MCP tools to post a comment on the PR with:
-           - A summary of what was fixed.
-           - A **Mathlib Audit** section listing which Mathlib lemmas/definitions you used or
-             discovered during the fix (name, module path, and how it was used). If you found
-             useful Mathlib lemmas that weren't in an existing scouting report, include them
-             so future work benefits.
+        7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
       claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
       claude_system_prompt: "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
