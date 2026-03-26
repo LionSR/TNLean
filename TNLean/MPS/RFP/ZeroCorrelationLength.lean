@@ -31,21 +31,39 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Correlations independent of distance: the two-point correlation function
-of any pair of local observables is independent of the separation between
-them. See arXiv:1606.00608, Definition 3.3.
+/-- Correlations independent of distance (arXiv:1606.00608, Definition 3.3):
+the connected two-point correlation function through the transfer map is
+constant in the separation for all local observables.
 
-TODO: formalize in terms of `twoPointExpectation` from `Core/Correlations`. -/
+**Status**: `sorry` placeholder. A naive formalization quantifying
+`tr(Y · E^n(X · ρR)) = tr(Y · E^m(X · ρR))` over all matrices `ρR`, `X`, `Y`
+collapses to `IsRFP` by non-degeneracy of the trace pairing (see PR #271
+discussion). The correct definition requires either:
+(a) restricting to a specific fixed-point state and using the *connected*
+    correlator `C(X,Y,n) = tr(Y · Eⁿ(X · ρ)) − tr(X·ρ)·tr(Y·ρ)`, or
+(b) formulating CID at the multi-block BNT level where cross-block transfer
+    operators provide non-trivial content.
+
+TODO: formalize using `twoPointCorrelation` infrastructure once available. -/
 def IsCID (_A : MPSTensor d D) : Prop :=
   sorry
 
-/-- Local orthogonality: the BNT elements of `A` have vanishing mixed
-transfer operators, i.e. `Σ_i A^i_j ⊗ Ā^i_{j'} = 0` for `j ≠ j'`.
-See arXiv:1606.00608, Definition 3.5.
+/-- Local orthogonality for a single BNT block: the self-transfer map is
+idempotent. For a single tensor `A`, this is equivalent to `IsRFP A`
+(see `isLocallyOrthogonal_iff_isRFP`). See arXiv:1606.00608, Definition 3.5.
 
-TODO: formalize in terms of `mixedTransferMap` from `Spectral/`. -/
-def IsLocallyOrthogonal (_A : MPSTensor d D) : Prop :=
-  sorry
+In the full BNT setting, local orthogonality additionally requires that
+the *mixed* transfer operators `F_{jk}` vanish for `j ≠ k`. That
+off-diagonal condition is captured at the canonical-form level in
+`zcl_iff_idempotent_transfer`. -/
+def IsLocallyOrthogonal (A : MPSTensor d D) : Prop :=
+  IsRFP A
+
+/-- `IsLocallyOrthogonal` is definitionally equal to `IsRFP` for a single
+BNT block. This lemma bridges the two views. -/
+lemma isLocallyOrthogonal_iff_isRFP (A : MPSTensor d D) :
+    IsLocallyOrthogonal A ↔ IsRFP A :=
+  Iff.rfl
 
 /-- Zero correlation length: a tensor has ZCL when it is both locally
 orthogonal and has correlations independent of distance.

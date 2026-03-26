@@ -14,19 +14,13 @@ This file states the structural characterisation theorems for MPS tensors
 that are renormalization fixed points, following arXiv:1606.00608 §3.4
 (Cirac–Pérez-García–Schuch–Verstraete) and Appendix B.
 
-## Main results
+## Main results (all `sorry` — statements only)
 
-* **Lemma B.1** (`rfp_nt_structural`): For a normal tensor that is RFP,
-  `E² = E` forces the transfer map to be rank-1, giving the decomposition
-  `A^i = X Λ U^i X⁻¹` with `Λ` diagonal positive (`tr(Λ) = 1`) and `U`
-  an isometry on the physical index.
+* **Lemma B.1** (`rfp_nt_structural`): RFP normal tensor implies rank-1 transfer map — `sorry`
+* **Theorem 3.11** (`rfp_cf_structural`): RFP canonical-form block decomposition — `sorry`
+* **Corollary 3.12** (`rfp_bnt_structural`): BNT elements inherit structural form — `sorry`
 
-* **Theorem 3.11** (`rfp_cf_structural`): For a canonical-form tensor that
-  is RFP, the full block decomposition
-  `A^i = ⊕_{j,q} μ_{j,q} X_{j,q} Λ_j U^i_j X_{j,q}⁻¹`.
-
-* **Corollary 3.12** (`rfp_bnt_structural`): BNT elements of an RFP tensor
-  inherit the structural form from Lemma B.1.
+These state the structural characterisation but none are proved yet.
 -/
 
 open scoped Matrix

@@ -38,7 +38,8 @@ If two Lindblad forms induce the same generator and both Kraus families are
 traceless, then their CP parts in Wolf's `(φ, κ)` decomposition agree.
 
 This is the Choi-projection uniqueness step in Wolf Prop. 7.4 (item 2).
--/
+
+**Status**: `sorry` — needs projected Choi matrix orthogonality argument. -/
 theorem generatorDecomp_traceless_unique_phi
     (F F' : LindbladForm D)
     (hL : F.toLinearMap = F'.toLinearMap)
@@ -57,7 +58,8 @@ traceless, then their drift matrices differ only by an imaginary scalar:
 
 This is the Hamiltonian uniqueness modulo global energy shift in Wolf Prop. 7.4
 (item 2).
--/
+
+**Status**: `sorry` — needs residual-map analysis after φ-uniqueness. -/
 theorem generatorDecomp_traceless_unique_kappa_modPhase
     (F F' : LindbladForm D)
     (hL : F.toLinearMap = F'.toLinearMap)

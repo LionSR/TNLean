@@ -53,7 +53,10 @@ and `T_t σ' = μ σ'`.  Trace preservation forces `μ = 1`.
 
 The helper lemmas `eigenvalue_exp_of_eigenvalue_generator`,
 `eq_zero_of_exp_mul_I_isRootOfUnity`, and `re_eq_zero_of_peripheral_generator`
-are fully proved. Step A still requires additional formalization.
+are fully proved. Step A (generator irreducibility ↔ semigroup irreducibility)
+is formalized via `irreducible_all_of_irreducible_time` in
+`IrreducibleAnalysis.lean`, but that theorem transitively depends on 13
+`sorry` placeholders (formerly `axiom` declarations).
 
 ## References
 
