@@ -99,6 +99,7 @@ jobs:
           # so we don't re-process already-fixed items from prior cycles.
           RUN_CREATED="${{ github.event.workflow_run.created_at }}"
           COMMENTS=$(gh api "repos/${{ github.repository }}/pulls/${PR_NUMBER}/comments" \
+            --paginate \
             --jq "[.[] | select(
               (.user.login == \"github-actions[bot]\" or .user.login == \"claude[bot]\" or .user.login == \"claude\") and
               .in_reply_to_id == null and
