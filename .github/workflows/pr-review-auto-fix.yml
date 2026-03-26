@@ -197,6 +197,9 @@ jobs:
             ${{ toJSON(fromJSON(steps.review_comments.outputs.result).comments) }}
 
             Instructions:
+            0. First, read all comments on this PR (and any linked issues) using the GitHub MCP tools.
+               Look for existing **Mathlib Scouting Reports** — these list relevant Mathlib lemmas,
+               definitions, and suggested approaches. Use them to inform your fix.
             1. Read each review comment and understand the issue being raised.
             2. Fix each issue in the relevant file at the indicated line.
             3. If the review state is "APPROVED" with no actionable comments, do nothing.
@@ -210,7 +213,12 @@ jobs:
             6. Run `lake build` to verify your fixes compile with zero errors and zero `sorry`s.
             7. Make minimal, targeted fixes. Do not refactor unrelated code.
             8. Commit and push your fix to the current branch. Prefix commit messages with `[claude-review-fix]`.
-            9. After pushing, use the GitHub MCP tools to post a summary comment on the PR noting which review items were addressed.
+            9. After pushing, use the GitHub MCP tools to post a comment on the PR with:
+               - A summary of which review items were addressed.
+               - A **Mathlib Audit** section listing which Mathlib lemmas/definitions you used or
+                 discovered during the fix (name, module path, and how it was used). If you found
+                 useful Mathlib lemmas that weren't in an existing scouting report, include them
+                 so future work benefits.
 
           claude_args: |
             --model claude-opus-4-6
