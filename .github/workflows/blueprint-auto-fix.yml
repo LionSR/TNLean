@@ -53,5 +53,5 @@ jobs:
         5. Make minimal, targeted fixes. Do not refactor unrelated LaTeX.
         6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
         7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
-      claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(pip install *),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+      claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
       claude_system_prompt: "This is a Lean 4 math formalization project with a leanblueprint documentation system. The blueprint uses LaTeX files in blueprint/src/chapter/ with special commands: \\lean{DeclName}, \\leanok, \\uses{label}, \\label{...}. Fix only the blueprint compilation errors. Prefer minimal diffs. Validate with leanblueprint web before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
