@@ -148,9 +148,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: prNumber,
-              per_page: 100,
-              sort: 'created',
-              direction: 'desc'
+              per_page: 100
             });
 
             // Filter to comments from the latest review cycle only:

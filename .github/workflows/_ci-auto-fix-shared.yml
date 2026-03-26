@@ -64,8 +64,12 @@ jobs:
       - name: Attach to PR branch
         run: |
           # Checkout put us in detached HEAD at the exact failing SHA.
-          # Create a local branch tracking the PR branch so pushes work.
-          git checkout -B "${{ inputs.head_branch }}"
+          # Fetch the remote branch ref (not available after SHA checkout)
+          # and create a local branch tracking it so pushes work.
+          BRANCH="${{ inputs.head_branch }}"
+          git fetch origin "$BRANCH"
+          git checkout -B "$BRANCH" "origin/$BRANCH"
+          git branch --set-upstream-to="origin/$BRANCH" "$BRANCH"
 
       - name: Check for previous auto-fix attempts
         id: loop_guard
