@@ -48,6 +48,47 @@ jobs:
 
             Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
 
+            ## Step 1: Resolve previously addressed comments
+
+            Before reviewing, check if any of your previous review comments have been addressed by the latest push.
+
+            Fetch review threads via GraphQL:
+            ```
+            gh api graphql -f query='
+              query {
+                repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
+                  pullRequest(number: ${{ github.event.pull_request.number }}) {
+                    reviewThreads(first: 100) {
+                      nodes {
+                        id
+                        isResolved
+                        isOutdated
+                        path
+                        line
+                        comments(first: 10) {
+                          nodes {
+                            author { login }
+                            body
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }'
+            ```
+
+            For each UNRESOLVED thread authored by "claude[bot]" or "github-actions[bot]":
+            - Read the current code at that location to check if the concern was addressed.
+            - If addressed, resolve it:
+              ```
+              gh api graphql -f query='mutation { resolveReviewThread(input: {threadId: "THREAD_ID"}) { thread { isResolved } } }'
+              ```
+            - Never resolve threads authored by human reviewers.
+            - Be conservative — only resolve if clearly addressed.
+
+            ## Step 2: Review the new changes
+
             Focus your review on:
             1. **Proof correctness**: Are there any `sorry`s introduced? Are proof terms well-structured?
             2. **Mathlib style**: Does the code follow Mathlib conventions (naming, tactic style, imports)?
@@ -58,8 +99,9 @@ jobs:
 
             For each issue found, post an inline comment on the relevant line using the GitHub CLI.
             At the end, post a summary comment on the PR with your overall assessment.
+            If you resolved any previous threads, mention how many in the summary.
 
           claude_args: |
             --model claude-opus-4-6
-            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *)"
+            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api *),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *)"
             --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Flag any sorry that is not clearly marked as a known TODO."
