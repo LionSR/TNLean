@@ -101,32 +101,20 @@ RFP/MPDO 2/5 Commuting parent Hamiltonians and decorrelation theorem
 ...
 ```
 
-The tracking issue lists each sub-issue using a **native GitHub tasklist** block
-so that child issues display "Tracked by #N" in their sidebar:
-
-````markdown
-```[tasklist]
-### Tasks
-- [ ] #101
-- [ ] #102
-- [ ] #103
-```
-````
-
-**Important:** Each `- [ ]` line must contain *only* the issue reference (`#N`).
-Do not add descriptions on the same line — put those in the sub-issue titles or
-in prose above the tasklist block. Items that are not issue references (plain text
-TODOs) cannot go inside the tasklist block; list them as ordinary checkboxes
-outside it.
+The tracking issue uses **native GitHub subissues** to track child tasks. Add
+each sub-issue via the "Add sub-issue" button in the tracking issue's sidebar.
+Each child issue automatically displays "Tracked by #N" in its own sidebar,
+and the parent shows a progress bar of open vs. closed subissues.
 
 ### Tracking issues
 
 Use the **Tracking Issue** template (`.github/ISSUE_TEMPLATE/tracking-issue.yml`).
 Label with `tracking`. The `tracking-issue-sync` workflow will automatically:
 
-- Check boxes when referenced issues are closed or PRs are merged.
-- Uncheck boxes when issues are reopened or PRs are closed without merging.
-- Add the `all-resolved` label when every task is complete.
+- Comment when subissues are closed or reopened with progress counts.
+- Add the `all-resolved` label when every subissue is closed.
+- Remove the `all-resolved` label if a subissue is reopened.
+- Attach follow-up issues from merged PRs as native subissues.
 
 ### Pinned issues
 
@@ -306,7 +294,7 @@ The following workflows run automatically:
 |----------|---------|-------------|
 | **Lean CI** (`lean_action_ci.yml`) | Push to `main`, PRs touching `.lean`/`lakefile.toml`/`lean-toolchain` | Runs `lake build` with Mathlib cache |
 | **Claude Code Review** (`claude-code-review.yml`) | PR opened/synced/reopened touching `.lean`, `.tex`, `lakefile.toml`, `lean-toolchain` | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation |
-| **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened; review submitted | Updates tracking-issue checkboxes (checks on close, unchecks on reopen), scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues with `follow-up` label, adds `all-resolved` when all tasks complete |
+| **Issue Tracker** (`tracking-issue-sync.yml`) | Issue closed/reopened; PR merged/opened; review submitted | Monitors native subissues on tracking issues, comments with progress when subissues close/reopen, scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), creates follow-up issues as native subissues with `follow-up` label, adds `all-resolved` when all subissues are closed |
 | **Blueprint Lint** (`lint-blueprint.yml`) | PRs touching blueprint files | Validates LaTeX blueprint for broken labels and references |
 | **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
 | **Lean Audit** (`lean-audit.yml`) | On demand | Audits Lean code for style and correctness |

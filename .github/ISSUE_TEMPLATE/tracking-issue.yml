@@ -6,8 +6,14 @@ body:
     attributes:
       value: |
         ## Tracking Issue
-        Use this template to create an issue that tracks progress across multiple related issues and PRs.
-        List each sub-task inside a native tasklist block so GitHub shows "Tracked by" on child issues.
+        Use this template to create an umbrella issue that tracks progress across multiple related sub-tasks.
+
+        After creating this issue, add child issues as **native GitHub subissues** using the
+        "Add sub-issue" button in the sidebar. Each child issue will show "Tracked by #N" automatically.
+
+        The `tracking-issue-sync` workflow will monitor subissue state and:
+        - Comment when subissues are closed or reopened
+        - Add the `all-resolved` label when every subissue is complete
 
   - type: input
     id: area
@@ -28,28 +34,19 @@ body:
       required: true
 
   - type: textarea
-    id: tasks
+    id: initial-subissues
     attributes:
-      label: Tracked Tasks
+      label: Initial Sub-issues
       description: |
-        List issues/PRs to track using a native tasklist block.
-        Each line must contain only the issue reference (no descriptions).
-        The workflow will automatically update checkboxes when issues are closed or PRs are merged.
-      value: |
-        ```[tasklist]
-        ### Tasks
-        - [ ] #
-        - [ ] #
-        - [ ] #
-        ```
+        List issue numbers to attach as subissues after creation (one per line).
+        The automation will attach these as native subissues.
+        You can also add subissues manually via the GitHub UI after creation.
       placeholder: |
-        ```[tasklist]
-        ### Tasks
-        - [ ] #42
-        - [ ] #43
-        ```
+        #42
+        #43
+        #44
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: notes
