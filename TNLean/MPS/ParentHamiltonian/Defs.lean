@@ -4,8 +4,11 @@ import TNLean.MPS.ParentHamiltonian.GroundSpace
 # Parent interaction and parent Hamiltonian (definitions)
 
 This file introduces the parent interaction projector, translated local terms,
-and the finite-chain parent Hamiltonian. The current chain-level translation
-layer is intentionally lightweight and will be refined in later PRs.
+and the finite-chain parent Hamiltonian.
+
+⚠️ **Warning**: `parentInteraction` and `localTerm` are currently **zero
+placeholders**. All downstream results (annihilation, frustration-freeness)
+are vacuously true until the real projector/embedding definitions are added.
 -/
 
 open scoped Matrix BigOperators
@@ -14,27 +17,28 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Parent interaction on `L` consecutive sites.
+/-- **ZERO PLACEHOLDER** — Parent interaction on `L` consecutive sites.
 
-This is currently represented by a linear operator placeholder; in the full
-construction this will be refined to the orthogonal projector onto `G_L(A)ᗮ`. -/
+⚠️ This is currently defined as **zero**. The real definition should be the
+orthogonal projector onto `groundSpace A L`ᗮ. Any theorem downstream of this
+definition (e.g. `parentHamiltonian_annihilates`, `parentHamiltonian_frustrationFree`)
+is **vacuously true** until this placeholder is replaced.
+
+TODO(parent-hamiltonian): replace with the orthogonal projector. -/
 noncomputable def parentInteraction (_A : MPSTensor d D) (L : ℕ) :
     NSiteSpace d L →ₗ[ℂ] NSiteSpace d L :=
-  -- TODO(parent-hamiltonian): replace this zero placeholder with the orthogonal
-  -- projector onto `groundSpace A L`ᗮ once the geometric construction is added.
-  -- TODO(parent-hamiltonian): consumed by `localTerm` and then by
-  -- `parentHamiltonian_annihilates`/`parentHamiltonian_frustrationFree`.
   0
 
-/-- Placeholder translated local term on an `N`-site periodic chain.
+/-- **ZERO PLACEHOLDER** — Translated local term on an `N`-site periodic chain.
 
-The geometric embedding of the `L`-site interaction into the full `N`-site
-space is introduced in a later installment; for now this is the zero term,
-which still gives the expected algebraic API for summing translated terms. -/
+⚠️ This is currently defined as **zero**. The real definition should embed
+`parentInteraction A L` at site `i` on the periodic chain. Any theorem
+downstream of this definition is **vacuously true** until this placeholder
+is replaced.
+
+TODO(parent-hamiltonian): replace with the translated embedding. -/
 noncomputable def localTerm (_A : MPSTensor d D) (_L N : ℕ) (_i : Fin N) :
     NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
-  -- TODO(parent-hamiltonian): replace this zero placeholder with the translated
-  -- embedding of `parentInteraction A L` at site `i` on the periodic chain.
   0
 
 /-- Parent Hamiltonian on an `N`-site periodic chain:
