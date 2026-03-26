@@ -240,5 +240,5 @@ jobs:
 
           claude_args: |
             --model claude-opus-4-6
-            --allowed-tools "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
+            --allowedTools "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
             --append-system-prompt "This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review. Prefer minimal diffs. Use your judgment on when Mathlib scouting is warranted — it is essential when closing sorrys or rewriting proofs, but unnecessary for naming fixes, docstrings, or style changes. When scouting IS needed, use exact?, apply?, rw?, simp?, and grep Mathlib source files. Reuse Mathlib lemmas rather than reproving from scratch. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR."
