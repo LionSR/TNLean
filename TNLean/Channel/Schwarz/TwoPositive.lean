@@ -108,6 +108,16 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
   -- TODO: add IsNPositiveMap_congr_perm for future Mathlib upstreaming
   sorry
 
+/-- **Monotonicity sanity check**: `(k+1)`-positive implies `k`-positive.
+
+This is a basic structural property of the n-positivity hierarchy. If this
+were not provable, the definition of `IsNPositiveMap` would be wrong.
+The proof embeds `M_n ⊗ M_k ↪ M_n ⊗ M_{k+1}` via padding with zeros. -/
+theorem IsNPositiveMap.mono {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    (h : IsNPositiveMap (k + 1) E) : IsNPositiveMap k E := by
+  -- TODO: embed (n × Fin k) ↪ (n × Fin (k+1)) via padding, apply h
+  sorry
+
 /-- CP maps are 2-positive. -/
 theorem IsCPMap.is2PositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hCP : IsCPMap E) : Is2PositiveMap E :=
