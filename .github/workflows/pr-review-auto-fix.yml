@@ -67,20 +67,13 @@ jobs:
           git checkout -B "$BRANCH" "origin/$BRANCH"
           git branch --set-upstream-to="origin/$BRANCH" "$BRANCH"
 
-      - name: Check iteration count and review comments
+      - name: Check iteration count
         id: guard
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
           # IMPORTANT: This cap is shared with _ci-auto-fix-shared.yml.
           # If you change the value or counting regex here, update it there too.
           MAX_BOT_FIX_ITERATIONS: 5
         run: |
-          # Count consecutive bot-fix commits (either [claude-auto-fix] or
-          # [claude-review-fix]) to cap the combined iteration loop.
-          # Both workflows share a single budget so interleaved commits
-          # cannot reset each other's counters.
-          # See also: _ci-auto-fix-shared.yml (same logic)
           COUNT=0
           while IFS= read -r MSG; do
             if echo "$MSG" | grep -qE '\[claude-(auto|review)-fix\]'; then
@@ -96,30 +89,9 @@ jobs:
           if [ "$COUNT" -ge "$MAX_BOT_FIX_ITERATIONS" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             echo "::warning::Reached max combined bot-fix iterations ($MAX_BOT_FIX_ITERATIONS). Stopping."
-            exit 0
-          fi
-
-          # Check if there are review comments from the latest review cycle.
-          # Only count comments created after the triggering workflow_run started,
-          # so we don't re-process already-fixed items from prior cycles.
-          # Note: --paginate --jq applies the filter per page, so we use
-          # --paginate --slurp | jq to aggregate across all pages.
-          RUN_CREATED="${{ github.event.workflow_run.created_at }}"
-          COMMENTS=$(gh api "repos/${{ github.repository }}/pulls/${PR_NUMBER}/comments" \
-            --paginate --slurp \
-            | jq "[.[][] | select(
-              (.user.login == \"github-actions[bot]\" or .user.login == \"claude[bot]\" or .user.login == \"claude\") and
-              .in_reply_to_id == null and
-              .created_at >= \"${RUN_CREATED}\"
-            )] | length")
-
-          if [ "$COMMENTS" -eq 0 ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "::notice::No review comments to fix. Fixed point reached!"
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
-            echo "comment_count=$COMMENTS" >> "$GITHUB_OUTPUT"
-            echo "::notice::Found $COMMENTS review comments to address (iteration $((COUNT + 1)))"
+            echo "::notice::Bot-fix iteration $((COUNT + 1)) of $MAX_BOT_FIX_ITERATIONS"
           fi
 
       - name: Setup git identity
@@ -143,8 +115,8 @@ jobs:
           script: |
             const prNumber = ${{ github.event.workflow_run.pull_requests[0].number }};
             const runCreatedAt = '${{ github.event.workflow_run.created_at }}';
+            const BOT_LOGINS = ['github-actions[bot]', 'claude[bot]', 'claude'];
 
-            // Get all review comments on the PR (paginated to handle 100+ comments)
             const comments = await github.paginate(github.rest.pulls.listReviewComments, {
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -152,19 +124,20 @@ jobs:
               per_page: 100
             });
 
-            // Filter to comments from the latest review cycle only:
-            // must be from the bot, top-level (not replies), and created
-            // after the triggering workflow_run started.
             const botComments = comments.filter(c =>
-              (c.user.login === 'github-actions[bot]' ||
-               c.user.login === 'claude[bot]' ||
-               c.user.login === 'claude') &&
+              BOT_LOGINS.includes(c.user.login) &&
               !c.in_reply_to_id &&
               c.created_at >= runCreatedAt
             );
 
-            // Also get the latest PR review summary comment.
-            // Paginate to ensure we don't miss reviews on PRs with 30+ reviews.
+            // No actionable comments → fixed point reached
+            if (botComments.length === 0) {
+              core.notice('No review comments to fix. Fixed point reached!');
+              return { skip: true, comments: [], reviewSummary: null, reviewState: null };
+            }
+
+            core.notice(`Found ${botComments.length} review comments to address`);
+
             const allReviews = await github.paginate(github.rest.pulls.listReviews, {
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -173,23 +146,19 @@ jobs:
             });
 
             const botReviews = allReviews.filter(r =>
-              (r.user.login === 'github-actions[bot]' ||
-               r.user.login === 'claude[bot]' ||
-               r.user.login === 'claude') &&
+              BOT_LOGINS.includes(r.user.login) &&
               r.submitted_at >= runCreatedAt
             );
 
-            const latestReview = botReviews.length > 0
-              ? botReviews[botReviews.length - 1]
-              : null;
+            const latestReview = botReviews.at(-1) ?? null;
 
-            // Sanitize: strip non-printable chars and break fenced code markers
-            // to reduce prompt-injection surface from untrusted review text.
+            // Sanitize untrusted review text to reduce prompt-injection surface.
             const sanitize = (s) => s
               .replace(/[^\x20-\x7E\n\r\t]/g, '')
               .replace(/```/g, '\u200B`\u200B`\u200B`');
 
-            const result = {
+            return {
+              skip: false,
               comments: botComments.slice(0, 20).map(c => ({
                 path: c.path,
                 line: c.original_line || c.line,
@@ -201,14 +170,14 @@ jobs:
               reviewState: latestReview ? latestReview.state : null
             };
 
-            return result;
-
       - name: Fix review comments with Claude
-        if: steps.guard.outputs.skip != 'true'
+        if: |
+          steps.guard.outputs.skip != 'true' &&
+          fromJSON(steps.review_comments.outputs.result).skip != true
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          allowed_bots: 'claude,chatgpt-codex-connector'
+          allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           plugin_marketplaces: 'https://github.com/leanprover/skills.git'
           plugins: 'lean@leanprover'
           prompt: |
