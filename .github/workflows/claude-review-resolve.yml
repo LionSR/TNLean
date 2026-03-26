@@ -1,0 +1,116 @@
+name: Resolve Addressed Review Comments
+
+on:
+  pull_request:
+    types: [synchronize]
+    paths:
+      - "TNLean/**/*.lean"
+      - "TNLean.lean"
+      - "lakefile.toml"
+      - "lean-toolchain"
+      - "blueprint/src/**/*.tex"
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: read
+  id-token: write
+
+concurrency:
+  group: review-resolve-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  resolve-comments:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Lean toolchain and cache
+        uses: leanprover/lean-action@v1
+        with:
+          use-mathlib-cache: true
+          build: false
+
+      - name: Resolve addressed review comments
+        id: claude-resolve
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          allowed_bots: 'claude,chatgpt-codex-connector'
+          plugin_marketplaces: |
+            https://github.com/anthropics/claude-code.git
+            https://github.com/leanprover/skills.git
+          plugins: |
+            lean@leanprover
+          prompt: |
+            A new commit was pushed to PR #${{ github.event.pull_request.number }} in ${{ github.repository }}.
+
+            Your task is to check whether previously posted review comments have been addressed by the new changes, and resolve the threads that are now satisfied.
+
+            Steps:
+            1. Fetch all review threads on the PR:
+               ```
+               gh api graphql -f query='
+                 query {
+                   repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
+                     pullRequest(number: ${{ github.event.pull_request.number }}) {
+                       reviewThreads(first: 100) {
+                         nodes {
+                           id
+                           isResolved
+                           isOutdated
+                           path
+                           line
+                           comments(first: 10) {
+                             nodes {
+                               author { login }
+                               body
+                               createdAt
+                             }
+                           }
+                         }
+                       }
+                     }
+                   }
+                 }'
+               ```
+
+            2. Filter to only UNRESOLVED threads where the original comment author is "claude[bot]" or "github-actions[bot]".
+               Skip threads that are already resolved or where the author is a human reviewer.
+
+            3. For each unresolved Claude-authored thread:
+               a. Read the comment body to understand what issue was raised.
+               b. Look at the file and line referenced by the thread.
+               c. Check the current state of the code at that location (use `Read` tool).
+               d. Compare with the diff to see if the new push addressed the concern.
+               e. Use `gh pr diff ${{ github.event.pull_request.number }}` to see what changed.
+
+            4. If a review comment has been addressed:
+               - Resolve the thread using:
+                 ```
+                 gh api graphql -f query='mutation { resolveReviewThread(input: {threadId: "THREAD_NODE_ID"}) { thread { isResolved } } }'
+                 ```
+               - Post a brief reply on the thread confirming it's been addressed, e.g.:
+                 "Addressed in the latest push. Resolving."
+
+            5. If a comment has NOT been addressed, leave it unresolved. Do not post a new comment.
+
+            6. After processing all threads, post a single summary comment on the PR listing:
+               - How many threads were resolved
+               - How many remain unresolved
+               Only post this summary if at least one thread was resolved.
+
+            Important:
+            - Only resolve threads authored by Claude / the bot. Never resolve human reviewer threads.
+            - Be conservative: only resolve if the concern is clearly addressed. When in doubt, leave it unresolved.
+            - Do NOT re-review the code or post new review comments. This workflow is only for resolving old ones.
+
+          claude_args: |
+            --model claude-opus-4-6
+            --allowedTools "Read,Glob,Grep,Bash(gh api *),Bash(gh pr diff *),Bash(gh pr comment *),Bash(gh pr view *),Bash(git diff *),Bash(git log *),Bash(cat *)"
+            --append-system-prompt "This is a Lean 4 / Mathlib formalization project. Your only job is to check if previous review comments have been addressed and resolve them. Do NOT post new review comments or re-review the code."
