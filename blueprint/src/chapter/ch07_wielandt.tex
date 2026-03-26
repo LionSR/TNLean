@@ -1258,20 +1258,24 @@ The gap is closed by an aperiodicity hypothesis.
     aperiodicity hypothesis, $A$ is normal.
 \end{proof}
 
-\begin{theorem}[Primitive + positive definite fixed point + aperiodicity imply normality]%
+\begin{theorem}[Primitive + positive definite fixed point imply normality]%
     \label{thm:primitive_posDef_aperiodic_normal}
     \lean{MPSTensor.isNormal_of_isPrimitiveMPS_of_posDef}
     \leanok
-    \uses{def:primitive_mps, def:normal, def:word_span}
-    If $A$ is a primitive MPS tensor with fixed point $\rho$,
-    $\rho$ is positive definite, and $\Id \in S_1(A)$, then $A$ is normal.
+    \uses{def:primitive_mps, def:normal}
+    If $A$ is a primitive MPS tensor with fixed point $\rho$ and
+    $\rho$ is positive definite, then $A$ is normal.
+    No aperiodicity assumption is needed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:primitive_implies_irreducible, thm:irred_tensor_aperiodic_normal}
-    By Theorem~\ref{thm:primitive_implies_irreducible},
-    $A$ is an irreducible tensor.
-    Apply Theorem~\ref{thm:irred_tensor_aperiodic_normal}.
+    \uses{thm:primitive_implies_strongly_irreducible, thm:strongly_irred_to_full_rank}
+    The proof factors through strong irreducibility: from
+    $\mathrm{IsPrimitiveMPS}(A,\rho)$ and $\rho \succ 0$ one gets
+    $\mathrm{IsStronglyIrreduciblePaper}(A)$, which packages peripheral
+    spectrum $\{1\}$ (hence aperiodicity) together with irreducibility.
+    The Proposition~3\,(c)$\to$(b) backend then yields eventual full Kraus
+    rank, giving normality without a separate aperiodicity hypothesis.
 \end{proof}
 
 \begin{remark}[The normal-canonical route bypasses the aperiodicity bridge]\label{rem:d1_bypasses_aperiodicity}

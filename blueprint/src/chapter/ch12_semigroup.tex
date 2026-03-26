@@ -502,8 +502,9 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.4, item 2: drift uniqueness modulo phase]
     \label{thm:generatorDecomp_traceless_unique_kappa}
-    \lean{generatorDecomp_traceless_unique_kappa_modPhase}\notready
-    \uses{def:lindblad_form, def:has_traceless_kraus, def:generator_decomp}
+    \lean{generatorDecomp_traceless_unique_kappa_modPhase}\leanok
+    \uses{def:lindblad_form, def:has_traceless_kraus, def:generator_decomp,
+          thm:generatorDecomp_traceless_unique_phi}
     If two Lindblad forms $F, F'$ induce the same generator and
     both have traceless Kraus operators, then their drift matrices
     differ by an imaginary scalar: $\kappa' = \kappa + i\lambda\,\Id$
@@ -511,12 +512,17 @@ which shows that such generators have the standard Lindblad form.
     This is part of \cite[Prop.~7.4, item~2]{Wolf2012Quantum}.
 \end{theorem}
 
-\begin{proof}\notready
-    After identifying $\phi = \phi'$, the residual map is
-    $\rho \mapsto -(\Delta\kappa)\rho - \rho(\Delta\kappa)^\dagger$;
-    equality to zero forces $\Delta\kappa$ to be a scalar multiple
-    of the identity, and the Hermiticity/trace constraints force that
-    scalar to be purely imaginary.
+\begin{proof}\leanok
+    \uses{thm:generatorDecomp_traceless_unique_phi}
+    After identifying $\phi = \phi'$
+    (Theorem~\ref{thm:generatorDecomp_traceless_unique_phi}),
+    the generator equality forces
+    $\Delta\kappa \cdot \rho + \rho \cdot (\Delta\kappa)^\dagger = 0$
+    for all~$\rho$. Setting $\rho = \Id$ gives $\Delta\kappa + (\Delta\kappa)^\dagger = 0$
+    (skew-Hermiticity), which converts the equation to
+    $[\Delta\kappa, \rho] = 0$ for all~$\rho$.
+    The scalar commutant lemma gives $\Delta\kappa = c \cdot \Id$,
+    and skew-Hermiticity forces $c = i\lambda$ for some $\lambda \in \R$.
 \end{proof}
 
 \begin{theorem}[Prop.~7.4, item 2: combined uniqueness]
