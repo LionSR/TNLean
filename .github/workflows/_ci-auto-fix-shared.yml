@@ -171,7 +171,6 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: 'claude,chatgpt-codex-connector'
-          use_github_mcp: true
           plugin_marketplaces: ${{ inputs.plugin_marketplaces }}
           plugins: ${{ inputs.plugins }}
           prompt: |
