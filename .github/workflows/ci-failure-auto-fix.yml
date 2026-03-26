@@ -14,14 +14,36 @@ permissions:
   id-token: write
 
 concurrency:
-  group: auto-fix-${{ github.event.workflow_run.head_branch }}
+  group: bot-fix-${{ github.event.workflow_run.head_branch }}
   cancel-in-progress: true
 
 jobs:
-  auto-fix:
+  check-label:
     if: |
       github.event.workflow_run.conclusion == 'failure' &&
-      github.event.workflow_run.pull_requests[0]
+      github.event.workflow_run.pull_requests[0] &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      has_label: ${{ steps.label.outputs.has_label }}
+    steps:
+      - name: Check for auto-fix label
+        id: label
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+        run: |
+          LABELS=$(gh api "repos/${{ github.repository }}/pulls/${PR_NUMBER}" --jq '.labels[].name')
+          if echo "$LABELS" | grep -q '^auto-fix$'; then
+            echo "has_label=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_label=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::PR #${PR_NUMBER} does not have the 'auto-fix' label. Skipping."
+          fi
+
+  auto-fix:
+    needs: check-label
+    if: needs.check-label.outputs.has_label == 'true'
     uses: ./.github/workflows/_ci-auto-fix-shared.yml
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -37,14 +59,15 @@ jobs:
         Instructions:
         1. Read the error logs carefully to identify the failing Lean files and error messages.
         2. Common Lean build failures and how to fix them:
-           - `sorry` left in proof: Complete the proof or add a clear TODO comment.
+           - `sorry` left in proof: Fully close the lemma/theorem — replace `sorry` with a complete proof. Do NOT leave `sorry` behind or add TODO comments as a workaround.
            - Type mismatch: Check expected vs actual types and fix the proof term.
            - Unknown identifier / import error: Add the correct `import` statement.
            - Tactic failure: Try alternative tactics (`simp`, `exact`, `apply`, `omega`, etc.).
            - Timeout: Simplify the proof or break it into helper lemmas.
-        3. Run `lake build` to verify your fix compiles.
-        4. Make minimal, targeted fixes. Do not refactor unrelated code.
-        5. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
-        6. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
+        3. Your goal is to fully close every incomplete lemma/theorem, not just silence errors. Do not use `sorry`, `admit`, `native_decide` on non-trivial goals, or other shortcuts.
+        4. Run `lake build` to verify your fix compiles with zero errors and zero `sorry`s.
+        5. Make minimal, targeted fixes. Do not refactor unrelated code.
+        6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
+        7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
       claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
-      claude_system_prompt: "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. Do not introduce new sorrys. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
+      claude_system_prompt: "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
