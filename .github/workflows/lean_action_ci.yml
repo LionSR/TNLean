@@ -4,7 +4,17 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**.lean'
+      - 'lakefile.*'
+      - 'lean-toolchain'
+      - 'lake-manifest.json'
   pull_request:
+    paths:
+      - '**.lean'
+      - 'lakefile.*'
+      - 'lean-toolchain'
+      - 'lake-manifest.json'
   workflow_dispatch:
 
 jobs:
