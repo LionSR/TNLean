@@ -1,64 +1,184 @@
-name: Tracking Issue Sync
+name: Issue Tracker
 
 on:
   issues:
-    types: [closed, reopened, labeled]
+    types: [closed]
   pull_request:
-    types: [closed, reopened]
+    types: [closed, opened, edited, labeled, review_requested]
+  pull_request_review:
+    types: [submitted]
 
 concurrency:
-  group: tracking-issue-sync
+  group: issue-tracker-${{ github.event.pull_request.number || github.event.issue.number }}
   cancel-in-progress: false
 
 jobs:
-  sync:
+  track:
+    # Skip: closed-but-not-completed issues, closed-but-not-merged PRs
     if: |
-      (github.event.action == 'closed' || github.event.action == 'reopened') ||
-      (github.event.action == 'labeled' && github.event.label.name == 'tracking')
+      (github.event_name == 'issues' && github.event.issue.state_reason == 'completed') ||
+      (github.event_name == 'pull_request' && (github.event.action != 'closed' || github.event.pull_request.merged == true)) ||
+      github.event_name == 'pull_request_review'
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      issues: write
       pull-requests: read
+      issues: write
       id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
-      - name: Sync tracking issues
+      - name: Run Claude Code
+        id: claude
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          prompt: |
-            EVENT: ${{ github.event_name }}
-            ACTION: ${{ github.event.action }}
-            REPO: ${{ github.repository }}
-            NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
-            TITLE: ${{ github.event.issue.title || github.event.pull_request.title }}
-            MERGED: ${{ github.event.pull_request.merged }}
-            LABEL: ${{ github.event.label.name }}
-
-            You manage tracking issues in this repo. Tracking issues have the "tracking" label and contain checklists like `- [ ] #123`.
-
-            **If ACTION is "labeled" and LABEL is "tracking":**
-            - Read the issue body, find all `#N` references in checklist items
-            - Add the "tracked" label to each referenced issue: `gh issue edit N --add-label tracked`
-
-            **If ACTION is "closed" or "reopened":**
-            - Find tracking issues that reference #NUMBER:
-              `gh issue list --label tracking --state all --json number,body --limit 50`
-            - For each tracking issue containing `#NUMBER` in a checklist:
-              - If the item was closed (issues) or merged (PRs): check the box `[x]`
-              - If closed but not merged (PR): uncheck `[ ]`
-              - If reopened: uncheck `[ ]`
-              - Update the body: `gh issue edit <tracker> --body "..."`
-            - Post a short progress comment: `gh issue comment <tracker> --body "..."`
-              Include: what happened, progress (X/Y done), what remains
-            - If all tasks complete: add "all-resolved" label
-            - If not all complete: remove "all-resolved" label (ignore errors)
-
           claude_args: |
-            --model claude-sonnet-4-6
-            --allowedTools "Bash(gh issue:*),Bash(gh pr:*)"
+            --model claude-opus-4-6
+            --allowedTools "mcp__github__*" "Bash(git diff:*)" "Bash(git log:*)" "Bash(git show:*)"
+
+          prompt: |
+            You are the issue tracker agent for this repository. A GitHub event just
+            occurred. Determine what happened and take the appropriate actions.
+
+            Use the GitHub MCP tools (not gh CLI) for all GitHub operations.
+
+            ## Event Context
+
+            - **Event**: ${{ github.event_name }} / ${{ github.event.action }}
+            - **Repository**: ${{ github.repository }}
+            - **Triggered by**: ${{ github.event.sender.login }}
+
+            ${{ github.event_name == 'issues' && format('- **Issue number**: #{0}', github.event.issue.number) || '' }}
+            ${{ github.event_name == 'issues' && format('- **Issue title**: {0}', github.event.issue.title) || '' }}
+            ${{ github.event_name == 'issues' && format('- **Issue labels**: {0}', join(github.event.issue.labels.*.name, ', ')) || '' }}
+
+            ${{ github.event_name != 'issues' && format('- **PR number**: #{0}', github.event.pull_request.number) || '' }}
+            ${{ github.event_name != 'issues' && format('- **PR title**: {0}', github.event.pull_request.title) || '' }}
+            ${{ github.event_name != 'issues' && format('- **PR labels**: {0}', join(github.event.pull_request.labels.*.name, ', ')) || '' }}
+            ${{ github.event_name != 'issues' && format('- **PR state**: {0}', github.event.pull_request.state) || '' }}
+            ${{ github.event_name != 'issues' && format('- **PR draft**: {0}', github.event.pull_request.draft) || '' }}
+            ${{ github.event_name != 'issues' && format('- **Author**: {0}', github.event.pull_request.user.login) || '' }}
+            ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && format('- **Merged by**: {0}', github.event.pull_request.merged_by.login) || '' }}
+            ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && format('- **Base branch**: {0}', github.event.pull_request.base.ref) || '' }}
+            ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && format('- **Head branch**: {0}', github.event.pull_request.head.ref) || '' }}
+            ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && format('- **Base SHA**: {0}', github.event.pull_request.base.sha) || '' }}
+            ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && format('- **Head SHA**: {0}', github.event.pull_request.head.sha) || '' }}
+            ${{ github.event_name == 'pull_request_review' && format('- **Review state**: {0}', github.event.review.state) || '' }}
+            ${{ github.event_name == 'pull_request_review' && format('- **Reviewer**: {0}', github.event.review.user.login) || '' }}
+
+            ---
+
+            ## What To Do
+
+            Based on the event, follow the appropriate playbook below.
+
+            ### Finding Tracking Issues
+
+            For all playbooks, you'll need to find tracking issues. These are open issues
+            that have a "tracking" label, or titles starting with "Tracking:", "Epic:",
+            or "Meta:", and contain task lists (checkboxes `- [ ]` / `- [x]`).
+
+            ---
+
+            ### Playbook A: Issue Closed as Completed
+
+            **When**: `issues` / `closed` with state_reason `completed`
+
+            1. Find tracking issues that reference the closed issue (by `#number`,
+               URL, or title keyword in task list items)
+            2. Check off matching items: `- [ ]` → `- [x]`
+            3. Comment: "✅ #N (title) has been resolved. Updated checklist."
+            4. If ALL items are now checked, suggest closing the tracking issue
+
+            ---
+
+            ### Playbook B: PR Merged
+
+            **When**: `pull_request` / `closed` with `merged == true`
+
+            Do TWO things:
+
+            **B1 — Update tracking checklists** (same as Playbook A but for the PR):
+            1. Find tracking issues referencing this PR
+            2. Check off matching items
+            3. Comment with resolution summary
+
+            **B2 — Scan for follow-ups**:
+            1. Read the PR body, comments, review threads, and linked issues via MCP tools
+            2. Get the code diff: `git diff <base-sha>..<head-sha>`
+            3. Search the diff for new TODO/FIXME/HACK/XXX/WORKAROUND markers
+
+            Identify actionable follow-ups. **Prioritize human reviewer suggestions** —
+            comments from real people (not bots) carry the most weight. Bot accounts
+            typically have `[bot]` in their username or are known services (dependabot,
+            renovate, copilot, cursor, codex, etc.).
+
+            Look for:
+            - Human reviewer feedback that was acknowledged but deferred (highest priority)
+            - Explicit TODOs or deferred scope ("out of scope", "follow-up", "separate PR",
+              "later", "Phase 2")
+            - New TODO/FIXME/HACK comments in the diff (not pre-existing ones)
+            - Unresolved review threads or open questions
+            - Roadmap implications for tracked work
+
+            Do NOT create issues for:
+            - Work already completed in this PR
+            - Pre-existing TODOs not introduced by this PR
+            - Nitpick-level comments (style, naming)
+            - Speculative future work not discussed in the PR
+            - Bot suggestions already addressed or dismissed
+
+            For each genuine follow-up, create an issue:
+            - **Title**: Short, imperative (e.g. "Add error handling for X")
+            - **Body**:
+              ```
+              ## Context
+              Follow-up from #<PR-number> (<PR title>).
+
+              <Why this work is needed>
+
+              ## Details
+              <What needs to be done>
+
+              ## References
+              - PR: #<PR-number>
+              - <Related issues or review comments>
+              ```
+            - **Labels**: "follow-up" plus any relevant labels ("bug", "enhancement",
+              "tech-debt", "documentation")
+
+            Then add new issues to relevant tracking issue checklists:
+            - Append `- [ ] #<issue> - <title>` to the relevant section
+            - Comment: "📋 Added follow-up issues from #<PR>: #<issue1>, #<issue2>, ..."
+
+            **Be conservative.** Only create issues for genuine, actionable follow-ups.
+            When in doubt, skip it. False positives create noise.
+
+            ---
+
+            ### Playbook C: PR Activity (opened, edited, labeled, review submitted)
+
+            **When**: Any PR event that isn't a merge/close
+
+            This is lightweight — most events need no action.
+
+            1. Find tracking issues referencing this PR or related issues
+            2. Only act if the event is meaningful for tracking:
+               - PR opened for a tracked task → comment "🔄 #<PR> opened to address this"
+               - PR approved → comment "✅ #<PR> approved, ready to merge"
+               - Changes requested → comment "⚠️ Changes requested on #<PR>"
+            3. Skip everything else silently (edits, labels, etc. are usually not worth a comment)
+
+            ---
+
+            ## Final Report
+
+            Summarize what you did:
+            - Which playbook(s) you followed
+            - What tracking issues were updated
+            - What follow-up issues were created (if any)
+            - Or note that no action was needed
