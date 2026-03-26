@@ -15,7 +15,7 @@ permissions:
   contents: write
   pull-requests: write
   actions: read
-  issues: read
+  issues: write
   id-token: write
 
 concurrency:
