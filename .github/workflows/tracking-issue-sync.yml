@@ -112,7 +112,7 @@ jobs:
             **Paper**: `0802.0447`, `1606.00608`, `1708.00029`, `1804.04964`, `2011.12127`
             **Topic**: `parent-hamiltonian`, `correlation-decay`, `symmetry-SPT`,
               `rfp-mpdo`, `algebraic-FT`, `wolf-ch1` through `wolf-ch7`
-            **Workflow**: `tracking`, `blueprint-sync`, `codex`, `automation`
+            **Workflow**: `tracking`, `blueprint-sync`, `ai-generated`, `automation`
             **Follow-ups**: use `follow-up` label (create it if it doesn't exist)
 
             ### Issue Linking

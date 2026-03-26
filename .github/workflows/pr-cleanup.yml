@@ -170,7 +170,7 @@ jobs:
             - If there's a Cursor Bugbot `> [!NOTE]` block at the end, preserve it
               verbatim after the `Addresses` line (separated by blank lines).
             - Remove any "Generated with [Claude Code]" lines — redundant with the
-              `codex` label and branch name.
+              `ai-generated` label and branch name.
             - Fold `## Summary` / `## Test plan` content into the matching template
               sections, then remove those non-standard headings.
             - When filling in Motivation, reference the linked issue context if
@@ -179,7 +179,7 @@ jobs:
 
             ─── STEP 5: APPLY LABELS ───
             Collect labels to apply (see docs/CONTRIBUTING.md §4 for full taxonomy):
-              a. Always add `codex` (means "AI-generated" per label taxonomy).
+              a. Always add `ai-generated` (means "Created or modified by an AI coding agent" per label taxonomy).
               b. Copy ALL labels from the linked issue (from Step 2).
               c. Infer additional area labels from changed files:
                  - Only `.tex` files → add `documentation`
