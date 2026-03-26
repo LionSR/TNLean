@@ -45,6 +45,7 @@ jobs:
             lean@leanprover
           prompt: |
             Review this Lean 4 pull request: ${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+            Trigger event: ${{ github.event.action }}
 
             Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
 
@@ -59,7 +60,22 @@ jobs:
             For each issue found, post an inline comment on the relevant line using the GitHub CLI.
             At the end, post a summary comment on the PR with your overall assessment.
 
+            **Reading existing review threads:**
+            Before posting new comments, read all existing review threads on this PR using the GitHub MCP tools.
+            This includes threads from previous review cycles and any replies from @claude or human reviewers.
+            Use this context to:
+            - Avoid re-raising issues that have already been discussed, acknowledged, or fixed.
+            - Understand any ongoing conversation or decisions made in earlier threads.
+
+            **Resolving previous review comments:**
+            When this review is triggered by a `synchronize` event (new push to the PR):
+            1. For each unresolved review thread that was authored by you (the bot), check whether the new changes address the issue raised in that comment.
+            2. If a previous comment has been addressed by the new commits, resolve that review thread using the `mcp__github__resolve_review_thread` tool.
+            3. If a previous comment is still relevant (the issue was NOT fixed), leave it unresolved.
+            4. Only resolve your own (bot) threads — never resolve threads authored by humans.
+            This prevents stale bot comments from accumulating across review cycles.
+
           claude_args: |
             --model claude-opus-4-6
-            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *)"
+            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*"
             --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Flag any sorry that is not clearly marked as a known TODO."
