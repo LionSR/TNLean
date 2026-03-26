@@ -160,14 +160,16 @@ jobs:
               c.created_at >= runCreatedAt
             );
 
-            // Also get the latest PR review summary comment
-            const reviews = await github.rest.pulls.listReviews({
+            // Also get the latest PR review summary comment.
+            // Paginate to ensure we don't miss reviews on PRs with 30+ reviews.
+            const allReviews = await github.paginate(github.rest.pulls.listReviews, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: prNumber
+              pull_number: prNumber,
+              per_page: 100
             });
 
-            const botReviews = reviews.data.filter(r =>
+            const botReviews = allReviews.filter(r =>
               (r.user.login === 'github-actions[bot]' ||
                r.user.login === 'claude[bot]' ||
                r.user.login === 'claude') &&
