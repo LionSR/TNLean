@@ -47,6 +47,8 @@ open Matrix Finset Complex
 
 variable {D : ℕ}
 
+namespace PeripheralSpectrum
+
 /-! ## Closure under multiplication -/
 
 /-- **Peripheral eigenvalues are closed under multiplication.**
@@ -73,7 +75,7 @@ theorem peripheral_eigenvalues_closed_under_mul
   constructor
   · -- HasEigenvalue for α * β: product of unitaries is nonzero, and
     -- E(U_α U_β) = α β · U_α U_β by the multiplicative domain.
-    sorry -- TODO: use Kraus.mul_mem_multiplicativeDomain (MultiplicativeDomainFull.lean:250)
+    sorry -- TODO (#22): use Kraus.mul_mem_multiplicativeDomain (MultiplicativeDomainFull.lean:250)
            -- + ks_equality_of_peripheral_eigenvector_of_fixedPoint for U_α, U_β
   · rw [Complex.norm_mul, hα.2, hβ.2, mul_one]
 
@@ -91,7 +93,7 @@ theorem peripheral_eigenvalues_closed_under_inv
     (hα : α ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
     α⁻¹ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
   constructor
-  · sorry -- TODO: use conjTranspose of unitary eigenvector
+  · sorry -- TODO (#22): use conjTranspose of unitary eigenvector
   · rw [norm_inv, hα.2, inv_one]
 
 /-! ## Cyclic group structure
@@ -131,7 +133,7 @@ theorem peripheral_eigenvalues_form_cyclic_group
   -- Step 3: Apply rootsOfUnity.isCyclic from Mathlib.
   -- Step 4: Extract primitive root and period.
   -- Step 5: Period divides D via cyclic projections (CyclicDecomposition.lean).
-  sorry -- TODO: connect ClosureFixedPoint + Mathlib rootsOfUnity.isCyclic
+  sorry -- TODO (#22): connect ClosureFixedPoint + Mathlib rootsOfUnity.isCyclic
 
 /-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Thm 6.6).
 
@@ -151,7 +153,7 @@ theorem peripheral_eigenvalue_multiplicity_one
     Module.finrank ℂ
       (Module.End.eigenspace (MPSTensor.transferMap (d := r) (D := D) K) γ) = 1 := by
   -- Use fixed_eq_scalar_of_irreducible_unital from CyclicDecomposition.lean
-  sorry -- TODO: restrict E^m to cyclic sector, apply scalar-fixed-point lemma
+  sorry -- TODO (#22): restrict E^m to cyclic sector, apply scalar-fixed-point lemma
 
 /-- The **period** of the channel divides `D` (the bond dimension).
 
@@ -176,4 +178,6 @@ theorem channel_period_divides_dim
       {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)}) :
     m ∣ D := by
   -- Use exists_cyclic_projections_of_peripheral_unitary from CyclicDecomposition.lean
-  sorry -- TODO: m orthogonal projections summing to I force rank D/m each
+  sorry -- TODO (#22): m orthogonal projections summing to I force rank D/m each
+
+end PeripheralSpectrum
