@@ -68,7 +68,7 @@ No new proofs are introduced here; this is a documentation-only index module.
 ## §7.1.2 Quantum dynamical semigroups
 
 ### Wolf Proposition 7.5 (irreducibility implies primitivity for QDS)
-— PARTIALLY FORMALIZED (helper lemmas complete; main theorem has 2 infrastructure gaps)
+— PARTIALLY FORMALIZED (glue logic complete; depends on 13 `sorry` placeholders in `IrreducibleAnalysis.lean`)
 
 * `IsQuantumDynSemigroup` — quantum dynamical semigroup definition
   — `TNLean.Channel.Semigroup.Primitivity`
@@ -95,33 +95,33 @@ No new proofs are introduced here; this is a documentation-only index module.
 * `IsGKSLGenerator` — generates a CPTP semigroup
   — `TNLean.Channel.Semigroup.LindbladForm`
 
-**Wolf Proposition 7.2** (conditional complete positivity) — PARTIALLY FORMALIZED
+**Wolf Proposition 7.2** (conditional complete positivity) — FORMALIZED ✅
 * `GeneratorDecomp.isCCP` — CCP definition via (φ,κ) form ✅
-* `ccp_implies_choi_projected_posSemidef` — 1→2 direction: STUB
-* `choi_projected_posSemidef_implies_ccp` — 2→1 direction: SORRY
+* `ccp_implies_choi_projected_posSemidef` — 1→2 direction: FORMALIZED ✅
+* `choi_projected_posSemidef_implies_ccp` — 2→1 direction: FORMALIZED ✅
 
-**Wolf Proposition 7.3** (CP semigroup ↔ CCP generator) — SORRY
-* `cp_semigroup_iff_ccp_generator` — equivalence statement: FORMALIZED
-* `cp_semigroup_implies_ccp_generator` — forward direction: SORRY
-* `ccp_generator_implies_cp_semigroup` — reverse direction (Lie-Trotter): SORRY
+**Wolf Proposition 7.3** (CP semigroup ↔ CCP generator) — FORMALIZED ✅
+* `cp_semigroup_iff_ccp_generator` — equivalence statement: FORMALIZED ✅
+* `cp_semigroup_implies_ccp_generator` — forward direction: FORMALIZED ✅
+* `ccp_generator_implies_cp_semigroup` — reverse direction (Lie-Trotter): FORMALIZED ✅
 
 **Wolf Proposition 7.4** (freedom in generator representation) — FORMALIZED ✅
 * `generator_shift_invariance` — shift invariance: FORMALIZED ✅
 * `exists_traceless_kraus_shift` — traceless Kraus operators exist: FORMALIZED ✅
 
-**Wolf Theorem 7.1** (GKSL/Lindblad generator) — PARTIALLY FORMALIZED
+**Wolf Theorem 7.1** (GKSL/Lindblad generator) — FORMALIZED ✅
 * `LindbladForm.isTraceAnnihilating` — Lindblad form is trace-annihilating ✅
 * `GeneratorDecomp.traceAnnihilating_of_traceConstraint` — φ*(1)=κ+κ† ⟹ TA ✅
 * `LindbladForm.toLinearMap_eq_generatorDecomp` — Lindblad = (φ,κ) form ✅
-* `gksl_iff_lindbladForm` — GKSL ↔ Lindblad form (modulo Prop 7.3 sorry inputs) ✅
-* `gksl_iff_ccp_and_traceAnnihilating` — GKSL ↔ CCP + TA (modulo Prop 7.3) ✅
+* `gksl_iff_lindbladForm` — GKSL ↔ Lindblad form ✅
+* `gksl_iff_ccp_and_traceAnnihilating` — GKSL ↔ CCP + TA ✅
 * `kossakowski_iff_lindblad` — Kossakowski ↔ Lindblad form: FORMALIZED ✅
 * `isTracePreservingMap_expSemigroup_of_isTraceAnnihilating` — TA → TP semigroup ✅
 * `isTraceAnnihilating_of_isTracePreservingMap_semigroup` — TP semigroup → TA ✅
 
 ---
 
-### Wolf Proposition 7.6 (reducible QDS) — PARTIALLY FORMALIZED
+### Wolf Proposition 7.6 (reducible QDS) — FORMALIZED ✅
 
 * `IsReducibleQDS` — reducible QDS definition
   — `TNLean.Channel.Semigroup.ReducibleQDS`
@@ -132,8 +132,8 @@ No new proofs are introduced here; this is a documentation-only index module.
 * `wolf_prop_7_6_one_iff_two` — (1) ↔ (2): FORMALIZED ✅
 * `generatorPreservesCompression_of_semigroupPreservesCompression` — semigroup→generator: FORMALIZED ✅
 * `sum_conjTranspose_mul_self_eq_zero_imp` — sum-of-squares vanishing: FORMALIZED ✅
-* `wolf_prop_7_6_four_implies_three` — (4) → (3): partially formalized (reduces to two sorry lemmas)
-* `wolf_prop_7_6_three_implies_four` — (3) → (4): SORRY
+* `wolf_prop_7_6_four_implies_three` — (4) → (3): FORMALIZED ✅
+* `wolf_prop_7_6_three_implies_four` — (3) → (4): FORMALIZED ✅
 
 ---
 
