@@ -153,7 +153,11 @@ theorem peripheral_eigenvalue_multiplicity_one
   -- Use fixed_eq_scalar_of_irreducible_unital from CyclicDecomposition.lean
   sorry -- TODO: restrict E^m to cyclic sector, apply scalar-fixed-point lemma
 
-/-- The **minimal** period `m` divides `D` (the bond dimension).
+/-- The **period** of the channel divides `D` (the bond dimension).
+
+Here `m` is the order of the peripheral eigenvalue group: `γ` is a primitive
+`m`-th root of unity that generates **all** peripheral eigenvalues via `hgen`.
+Without `hgen`, the statement would be trivially satisfiable with `m=1, γ=1`.
 
 Follows from `exists_cyclic_projections_of_peripheral_unitary` in
 `CyclicDecomposition.lean`: the `m` mutually orthogonal projections summing
@@ -167,7 +171,9 @@ theorem channel_period_divides_dim
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
     {m : ℕ} {γ : ℂ} (hm : 0 < m)
     (hγprim : IsPrimitiveRoot γ m)
-    (hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
+    (hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K))
+    (hgen : peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
+      {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)}) :
     m ∣ D := by
   -- Use exists_cyclic_projections_of_peripheral_unitary from CyclicDecomposition.lean
   sorry -- TODO: m orthogonal projections summing to I force rank D/m each

@@ -66,14 +66,13 @@ theorem exponential_convergence_of_primitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitive (transferMap (d := d) (D := D) A))
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
-    (hρ_ne : ρ ≠ 0) (htr : Matrix.trace ρ ≠ 0) :
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
+    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
     ∃ (C : ℝ) (δ : ℝ),
       0 < C ∧ 0 < δ ∧ δ ≤ 1 ∧
       ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
         ‖((transferMap (d := d) (D := D) A)^[n]) X -
-          fixedPointProj ρ htr X‖ ≤
+          fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) X‖ ≤
           C * (1 - δ) ^ n * ‖X‖ := by
   -- TODO (#22): use compl_eigenvalue_norm_lt_one_of_primitive for spectral gap,
   -- then pow_tendsto_zero_of_spectralRadius_lt_one for exponential convergence
