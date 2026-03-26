@@ -105,6 +105,7 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
   -- The ampliation E ⊗ id_k has Kraus operators K_i ⊗ I_k,
   -- so (E ⊗ id_k)(X) = ∑_i (K_i ⊗ I_k) X (K_i ⊗ I_k)†, which is PSD.
   -- TODO: block-diagonal Kraus operators on (n × Fin k) space
+  -- TODO: add IsNPositiveMap_congr_perm for future Mathlib upstreaming
   sorry
 
 /-- CP maps are 2-positive. -/
@@ -125,8 +126,13 @@ theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n 
 
 /-- A linear map is **unital** if `E(I) = I`.
 
+This is intentionally separate from `KadisonSchwarz.IsUnitalKraus` (which
+requires `∑ Kᵢ Kᵢ† = I` for a Kraus family): `IsUnitalMap` applies to any
+linear map without requiring a Kraus decomposition, which is the right
+generality for 2-positive maps that may not be CP.
+
 Note: placed in the `KadisonSchwarz` namespace to avoid clashes with other
-unitality notions in the codebase (e.g., `KadisonSchwarz.IsUnitalKraus`). -/
+unitality notions in the codebase. -/
 def KadisonSchwarz.IsUnitalMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
   E 1 = 1
 

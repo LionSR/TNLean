@@ -73,7 +73,8 @@ theorem peripheral_eigenvalues_closed_under_mul
   constructor
   · -- HasEigenvalue for α * β: product of unitaries is nonzero, and
     -- E(U_α U_β) = α β · U_α U_β by the multiplicative domain.
-    sorry -- TODO: use Kraus.mul_mem_multiplicativeDomain for peripheral unitaries
+    sorry -- TODO: use Kraus.mul_mem_multiplicativeDomain (MultiplicativeDomainFull.lean:250)
+           -- + ks_equality_of_peripheral_eigenvector_of_fixedPoint for U_α, U_β
   · rw [Complex.norm_mul, hα.2, hβ.2, mul_one]
 
 /-- **Peripheral eigenvalues are closed under inversion.**
