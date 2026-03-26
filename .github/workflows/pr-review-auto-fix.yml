@@ -3,7 +3,7 @@ name: Auto Fix Review Comments (Lean)
 # Fixed-point iteration: Review → Fix → Review → Fix → ... until convergence.
 # Triggers after Claude Code Review completes, reads review comments,
 # and pushes fixes. The push re-triggers review via `synchronize`.
-# Only runs on PRs with the "auto-fix" label.
+# Only runs on PRs with the "auto-fix-Claude" label.
 
 on:
   workflow_run:
@@ -39,11 +39,11 @@ jobs:
           PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
         run: |
           LABELS=$(gh api "repos/${{ github.repository }}/pulls/${PR_NUMBER}" --jq '.labels[].name')
-          if echo "$LABELS" | grep -q '^auto-fix$'; then
+          if echo "$LABELS" | grep -q '^auto-fix-Claude$'; then
             echo "has_label=true" >> "$GITHUB_OUTPUT"
           else
             echo "has_label=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::PR #${PR_NUMBER} does not have the 'auto-fix' label. Skipping."
+            echo "::notice::PR #${PR_NUMBER} does not have the 'auto-fix-Claude' label. Skipping."
           fi
 
   auto-fix-review:
