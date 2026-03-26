@@ -4,7 +4,7 @@ on:
   issues:
     types: [closed]
   pull_request:
-    types: [closed, opened, edited, labeled, review_requested]
+    types: [closed, opened]
   pull_request_review:
     types: [submitted]
 
@@ -36,6 +36,7 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          allowed_bots: '*'
           claude_args: |
             --model claude-opus-4-6
             --allowedTools "mcp__github__*" "Bash(git diff:*)" "Bash(git log:*)" "Bash(git show:*)"
@@ -111,18 +112,31 @@ jobs:
             **Workflow**: `tracking`, `blueprint-sync`, `codex`, `automation`
             **Follow-ups**: use `follow-up` label (create it if it doesn't exist)
 
-            ### PR Title Format
-
-            PRs follow conventional-commit style: `type(scope): description`
-            Types: `feat`, `fix`, `refactor`, `docs`, `ci`, `chore`
-            Scope: shortened module path (e.g., `MPS/Symmetry`, `Channel`,
-            `blueprint`, `PEPS`)
-
             ### Issue Linking
 
             PRs use `Addresses #N` (keeps issue open) or `Closes #N` (auto-closes).
             Check the PR body footer and branch name (`claude/issue-N-*`,
             `codex/issue-N-*`) to find linked issues.
+
+            ---
+
+            ## Other Workflows (Avoid Duplication)
+
+            This repository has several other automation workflows. Be aware of
+            them so you do not post duplicate comments or take redundant actions:
+
+            - **PR Cleanup** (`pr-cleanup.yml`): When a PR opens from a `claude/*`
+              or `codex/*` branch, this workflow already comments on the linked
+              issue ("🤖 PR #X has been opened to address this issue"). Do NOT
+              duplicate that comment for AI-generated PRs.
+            - **Claude Code Review** (`claude-code-review.yml`): Posts inline code
+              review comments on PRs. This workflow handles code quality — you
+              handle tracking metadata only.
+            - **Daily Standup** (`daily-standup.yml`): Creates daily summary issues.
+              These are separate from follow-up issues you may create.
+            - **CI/Blueprint Auto-Fix** workflows: May push fix commits that
+              trigger PR events. Treat these as normal activity — no special
+              handling needed.
 
             ---
 
@@ -231,24 +245,27 @@ jobs:
 
             ---
 
-            ### Playbook C: PR Activity (opened, edited, labeled, review submitted)
+            ### Playbook C: PR Opened or Review Submitted
 
-            **When**: Any PR event that isn't a merge/close
+            **When**: PR opened (not a merge), or a review is submitted
 
             This is lightweight — most events need no action.
 
             1. Find the linked issue from the PR body (`Addresses #N`) or
                branch name (`*/issue-N-*`)
             2. Find tracking issues referencing that linked issue or the PR
-            3. Only act if the event is meaningful for tracking:
-               - PR opened for a tracked task →
-                 comment "🔄 #<PR> opened to address #<issue>"
-               - PR approved (review state `approved`) →
+            3. Only act if the event is meaningful for tracking AND has not
+               already been handled by another workflow:
+               - **PR opened for a tracked task** — but ONLY if the branch
+                 does NOT start with `claude/` or `codex/` (the PR Cleanup
+                 workflow already comments on those). For human-authored PRs,
+                 comment on the tracking issue:
+                 "🔄 #<PR> opened to address #<issue>"
+               - **Review approved** (review state `approved`) →
                  comment "✅ #<PR> approved, ready to merge"
-               - Changes requested (review state `changes_requested`) →
+               - **Changes requested** (review state `changes_requested`) →
                  comment "⚠️ Changes requested on #<PR> by @<reviewer>"
-            4. Skip everything else silently (edits, labels, draft changes,
-               `review_requested` are usually not worth a comment)
+            4. Skip everything else silently
 
             ---
 
