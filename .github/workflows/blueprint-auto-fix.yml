@@ -105,6 +105,7 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: 'claude,chatgpt-codex-connector'
+          use_github_mcp: true
           prompt: |
             The blueprint compilation (leanblueprint web) failed. Your task is to fix the blueprint errors.
 
@@ -134,8 +135,9 @@ jobs:
                Check that no ERROR lines appear in the output.
             5. Make minimal, targeted fixes. Do not refactor unrelated LaTeX.
             6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
+            7. After pushing, use the GitHub MCP tools to post a comment on PR #${{ github.event.workflow_run.pull_requests[0].number }} summarizing what was fixed.
 
           claude_args: |
             --model claude-opus-4-6
-            --allowed-tools "Edit,Write,Read,Glob,Grep,Bash(pip install *),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr comment *)"
-            --append-system-prompt "This is a Lean 4 math formalization project with a leanblueprint documentation system. The blueprint uses LaTeX files in blueprint/src/chapter/ with special commands: \lean{DeclName}, \leanok, \uses{label}, \label{...}. Fix only the blueprint compilation errors. Prefer minimal diffs. Validate with leanblueprint web before committing."
+            --allowed-tools "Edit,Write,Read,Glob,Grep,Bash(pip install *),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+            --append-system-prompt "This is a Lean 4 math formalization project with a leanblueprint documentation system. The blueprint uses LaTeX files in blueprint/src/chapter/ with special commands: \lean{DeclName}, \leanok, \uses{label}, \label{...}. Fix only the blueprint compilation errors. Prefer minimal diffs. Validate with leanblueprint web before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
