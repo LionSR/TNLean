@@ -40,9 +40,14 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+private abbrev invMat (Y : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
+  ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+
 /-! ### Virtual representation theorem -/
 
 section VirtualRep
+
+open TNLean.Algebra
 
 variable {G : Type*} [Group G]
 
@@ -51,11 +56,9 @@ private lemma twistedTensor_gaugeEquiv
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (Y : GL (Fin D) ℂ) (g : G) :
     twistedTensor (fun j =>
-      (Y : Matrix (Fin D) (Fin D) ℂ) * A j *
-        ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) U g =
+      (Y : Matrix (Fin D) (Fin D) ℂ) * A j * invMat Y) U g =
       fun i =>
-        (Y : Matrix (Fin D) (Fin D) ℂ) * twistedTensor A U g i *
-          ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+        (Y : Matrix (Fin D) (Fin D) ℂ) * twistedTensor A U g i * invMat Y := by
   funext i
   simp only [twistedTensor]
   rw [Finset.mul_sum, Finset.sum_mul]
@@ -68,22 +71,19 @@ private lemma gauge_product_intertwines
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (X : G → GL (Fin D) ℂ)
     (hX : ∀ g i, twistedTensor A U g i =
-      (X g : Matrix (Fin D) (Fin D) ℂ) * A i *
-        ((X g)⁻¹ : GL (Fin D) ℂ))
+      (X g : Matrix (Fin D) (Fin D) ℂ) * A i * invMat (X g))
     (g h : G) (i : Fin d) :
     twistedTensor A U (g * h) i =
       ((X h * X g : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
-        (((X h * X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+        invMat (X h * X g) := by
   rw [twistedTensor_mul]
   conv_lhs =>
     rw [show twistedTensor A U h = fun j =>
-      (X h : Matrix (Fin D) (Fin D) ℂ) * A j *
-        ((X h)⁻¹ : GL (Fin D) ℂ) from funext (hX h)]
+      (X h : Matrix (Fin D) (Fin D) ℂ) * A j * invMat (X h) from funext (hX h)]
   rw [twistedTensor_gaugeEquiv A U (X h) g]
   simp only
   rw [hX g i]
-  simp only [Matrix.GeneralLinearGroup.coe_mul, Matrix.GeneralLinearGroup.coe_inv,
-    mul_inv_rev, Matrix.mul_assoc]
+  simp only [invMat, Matrix.GeneralLinearGroup.coe_mul, mul_inv_rev, Matrix.mul_assoc]
 
 /-- **Virtual representation theorem for injective MPS with on-site symmetry.**
 
@@ -100,11 +100,11 @@ theorem virtual_rep_of_symmetric_injective
     (hA : IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetric A U) :
-    ∃ ω : TNLean.Algebra.ScalarCocycle G,
-      ∃ ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω,
+    ∃ ω : ScalarCocycle G,
+      ∃ ρ : ProjectiveRepresentation (D := D) ω,
         ∀ g i, twistedTensor A U g i =
           (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
-            (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+            invMat (ρ.X (g⁻¹)) := by
   have hGauge : ∀ g : G, GaugeEquiv A (twistedTensor A U g) :=
     gaugeEquiv_twistedTensor_of_injective A hA U hSymm
   choose X hX using fun g => (hGauge g)
@@ -121,7 +121,7 @@ theorem virtual_rep_of_symmetric_injective
     refine ⟨u, ?_⟩
     simpa [Matrix.GeneralLinearGroup.coe_mul] using hu
   choose ω hω using fun g h => hScalar (h⁻¹) (g⁻¹)
-  let ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω := {
+  let ρ : ProjectiveRepresentation (D := D) ω := {
     X := fun g => X (g⁻¹)
     map_mul' := by
       intro g h
@@ -130,6 +130,26 @@ theorem virtual_rep_of_symmetric_injective
   refine ⟨ω, ρ, ?_⟩
   intro g i
   simpa [ρ] using hX g i
+
+/-- For positive bond dimension, the factor system obtained from
+`virtual_rep_of_symmetric_injective` satisfies the 2-cocycle identity. -/
+theorem virtual_rep_of_symmetric_injective_cocycle
+    (A : MPSTensor d D)
+    (hA : IsInjective A)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hSymm : IsOnSiteSymmetric A U)
+    (hD : 0 < D) :
+    ∃ ω : ScalarCocycle G,
+      ∃ ρ : ProjectiveRepresentation (D := D) ω,
+        (∀ g i, twistedTensor A U g i =
+          (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i * invMat (ρ.X (g⁻¹))) ∧
+        ∀ g h k : G,
+          (ω g h : ℂ) * (ω (g * h) k : ℂ) =
+            (ω g (h * k) : ℂ) * (ω h k : ℂ) := by
+  rcases virtual_rep_of_symmetric_injective A hA U hSymm with ⟨ω, ρ, hρ⟩
+  refine ⟨ω, ρ, hρ, ?_⟩
+  intro g h k
+  exact ρ.cocycle_of_assoc (D := D) hD g h k
 
 end VirtualRep
 
