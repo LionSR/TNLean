@@ -32,7 +32,7 @@ with the periodic boundary condition:
 * `MPSTensor.mpvSubmodule` — the subspace spanned by the MPV
 * `MPSTensor.mpv_mem_groundSpace` — the MPV lies in the ground space
 * `MPSTensor.chainGroundSpace` — the periodic-chain ground space interface
-  (axiomatized until the window embedding API lands)
+  (scaffolded with `sorry` until the window embedding API lands)
 * `MPSTensor.groundSpace_unique_periodic` — uniqueness on the periodic chain
 * `MPSTensor.parentHamiltonian_unique_gs_injective` — uniqueness for `2L₀` sites
 * `MPSTensor.parentHamiltonian_unique_gs_normal` — optimal uniqueness for `L₀+1` sites
@@ -81,7 +81,8 @@ sites lies in `G_L(A)`.
 
 The full periodic-chain window restriction still depends on the chain-level
 embedding API. We therefore keep the intended interface explicit here and leave
-its implementation axiomatized until the local operator formalization lands. -/
+its implementation as a `sorry`-backed scaffold until the local operator
+formalization lands. -/
 
 /-- Extract the physical index at a cyclically shifted position on the periodic chain.
 `cyclicIndex i k N` computes `(i + k) mod N`. -/
@@ -94,21 +95,24 @@ position `i` if, for every choice of the `N - L` sites outside the window
 
 This is the coefficient-function analogue of `h_i ψ = 0` for the parent
 interaction projector `h_i`. -/
-axiom InCyclicWindowGround (A : MPSTensor d D) (L N : ℕ) (hN : 0 < N)
-    (i : Fin N) (ψ : NSiteSpace d N) : Prop
+def InCyclicWindowGround (A : MPSTensor d D) (L N : ℕ) (hN : 0 < N)
+    (i : Fin N) (ψ : NSiteSpace d N) : Prop := by
+  sorry
 
 /-- The periodic chain ground space: the set of states satisfying the local
 ground-space condition at every position on the periodic chain.
 
-**Current status**: this is axiomatized until the chain-level window embedding
+**Current status**: this is scaffolded with `sorry` until the chain-level window embedding
 API is implemented. The intended eventual definition is the intersection of the
 window ground submodules, equivalently `LinearMap.ker (parentHamiltonian A L N)`. -/
-axiom chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
-    Submodule ℂ (NSiteSpace d N)
+noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
+    Submodule ℂ (NSiteSpace d N) := by
+  sorry
 
 /-- The MPV state is in the chain ground space. -/
-axiom mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
-    (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N
+theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
+    (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
+  sorry
 
 /-! ### Unique ground state -/
 
@@ -123,7 +127,22 @@ theorem hasUniqueGroundState_iff_proportional {V : Type*} [AddCommGroup V] [Modu
     {S : Submodule ℂ V} :
     HasUniqueGroundState S ↔
       ∃ ψ₀ : S, ψ₀ ≠ 0 ∧ ∀ ψ : S, ∃ c : ℂ, ψ = c • ψ₀ := by
-  sorry
+  constructor
+  · intro hS
+    have hpos : 0 < Module.finrank ℂ S := by
+      rw [hS]
+      norm_num
+    obtain ⟨ψ₀, hψ₀⟩ := Module.finrank_pos_iff_exists_ne_zero.mp hpos
+    refine ⟨ψ₀, hψ₀, ?_⟩
+    have hgen : ∀ ψ : S, ∃ c : ℂ, c • ψ₀ = ψ :=
+      (finrank_eq_one_iff_of_nonzero' ψ₀ hψ₀).mp hS
+    intro ψ
+    obtain ⟨c, hc⟩ := hgen ψ
+    exact ⟨c, hc.symm⟩
+  · rintro ⟨ψ₀, hψ₀, hgen⟩
+    exact (finrank_eq_one_iff_of_nonzero' ψ₀ hψ₀).2 fun ψ => by
+      obtain ⟨c, hc⟩ := hgen ψ
+      exact ⟨c, hc.symm⟩
 
 /-! ### Uniqueness theorems -/
 

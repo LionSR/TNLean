@@ -117,26 +117,6 @@ def restrictFirst {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (i : Fin d) : NSiteSpa
     (i : Fin d) (σ : Fin L → Fin d) :
     restrictFirst ψ i σ = ψ (Fin.cons i σ) := rfl
 
-/-- `restrictLast` is linear in `ψ`. -/
-theorem restrictLast_add {d L : ℕ} (ψ₁ ψ₂ : NSiteSpace d (L + 1)) (j : Fin d) :
-    restrictLast (ψ₁ + ψ₂) j = restrictLast ψ₁ j + restrictLast ψ₂ j := by
-  simpa [restrictLast] using (restrictLastₗ (L := L) j).map_add ψ₁ ψ₂
-
-/-- `restrictLast` respects scalar multiplication. -/
-theorem restrictLast_smul {d L : ℕ} (c : ℂ) (ψ : NSiteSpace d (L + 1)) (j : Fin d) :
-    restrictLast (c • ψ) j = c • restrictLast ψ j := by
-  simpa [restrictLast] using (restrictLastₗ (L := L) j).map_smulₛₗ c ψ
-
-/-- `restrictFirst` is linear in `ψ`. -/
-theorem restrictFirst_add {d L : ℕ} (ψ₁ ψ₂ : NSiteSpace d (L + 1)) (i : Fin d) :
-    restrictFirst (ψ₁ + ψ₂) i = restrictFirst ψ₁ i + restrictFirst ψ₂ i := by
-  simpa [restrictFirst] using (restrictFirstₗ (L := L) i).map_add ψ₁ ψ₂
-
-/-- `restrictFirst` respects scalar multiplication. -/
-theorem restrictFirst_smul {d L : ℕ} (c : ℂ) (ψ : NSiteSpace d (L + 1)) (i : Fin d) :
-    restrictFirst (c • ψ) i = c • restrictFirst ψ i := by
-  simpa [restrictFirst] using (restrictFirstₗ (L := L) i).map_smulₛₗ c ψ
-
 /-! ### Ground space membership via restrictions -/
 
 /-- A state on `L+1` sites has its left restriction in `G_L(A)`: for each value of the
