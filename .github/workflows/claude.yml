@@ -85,12 +85,12 @@ jobs:
 
           echo "Looking for branches matching claude/issue-${ISSUE_NUMBER}-*"
 
-          # Find the most recently pushed branch for this issue
-          BRANCH=$(git ls-remote --heads origin "refs/heads/claude/issue-${ISSUE_NUMBER}-*" \
-            | awk '{print $2}' \
-            | sed 's|refs/heads/||' \
-            | sort -t'-' -k4 -r \
-            | head -1)
+          # Fetch matching remote refs so we can sort by committer date
+          git fetch origin --no-tags "refs/heads/claude/issue-${ISSUE_NUMBER}-*:refs/remotes/origin/claude/issue-${ISSUE_NUMBER}-*" 2>/dev/null || true
+
+          # Pick the most recently committed branch
+          BRANCH=$(git for-each-ref --sort=-committerdate --format='%(refname:lstrip=3)' \
+            "refs/remotes/origin/claude/issue-${ISSUE_NUMBER}-*" | head -1)
 
           if [ -z "$BRANCH" ]; then
             echo "No branch found for issue #${ISSUE_NUMBER} — Claude likely just replied without code changes."
