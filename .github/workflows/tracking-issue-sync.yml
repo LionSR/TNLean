@@ -149,8 +149,10 @@ jobs:
             3. **No duplicate comments.** Before commenting, consider whether
                another workflow already covers this event (see above).
 
-            4. **If no tracking issue or linked issue is found, skip silently.**
-               Not every event needs action.
+            4. **If neither a tracking issue nor a linked issue is found,
+               skip silently.** But if only one is found, still act on it
+               — e.g., a PR with `Addresses #N` but no tracking issue
+               should still get the linked-issue progress comment.
 
             ---
 
@@ -198,8 +200,9 @@ jobs:
             1. **Find linked issues.** Check the PR body for `Addresses #N`,
                `Partially addresses #N`, `Closes #N`, `Fixes #N`. Also check
                the branch name for `*/issue-{N}-*`.
-            2. **Find tracking issues** (label `tracking`) whose tasklist
-               references the PR number or any linked issue number.
+            2. **Find tracking issues** (label `tracking`) whose body
+               references the PR number, or whose tasklist references any
+               linked issue number.
             3. **Comment on each tracking issue** with a summary: the PR
                title, what it accomplished, and current task progress.
             4. **Comment on each linked issue that stays open** (i.e., the

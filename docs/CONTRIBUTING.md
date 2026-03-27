@@ -124,8 +124,8 @@ outside it.
 Use the **Tracking Issue** template (`.github/ISSUE_TEMPLATE/tracking-issue.yml`).
 Label with `tracking`. The `tracking-issue-sync` workflow will automatically:
 
-- Check boxes when referenced issues are closed or PRs are merged.
-- Uncheck boxes when issues are reopened or PRs are closed without merging.
+- Check boxes when referenced issues are closed (including auto-closure by merged PRs).
+- Uncheck boxes when referenced issues are reopened.
 - Post progress comments on linked issues when PRs are merged (what was done, what remains).
 - Add the `all-resolved` label when every task is complete.
 
