@@ -110,10 +110,7 @@ jobs:
 
       - name: Set up Lean toolchain and cache
         if: inputs.setup_lean && steps.loop_guard.outputs.skip != 'true'
-        uses: leanprover/lean-action@v1
-        with:
-          use-mathlib-cache: true
-          build: false
+        uses: ./.github/actions/setup-lean
 
       - name: Get CI failure details
         if: steps.loop_guard.outputs.skip != 'true'

@@ -31,10 +31,7 @@ jobs:
           fetch-depth: 1
 
       - name: Set up Lean toolchain and cache
-        uses: leanprover/lean-action@v1
-        with:
-          use-mathlib-cache: true
-          build: false
+        uses: ./.github/actions/setup-lean
 
       - name: Sanitize issue content
         id: sanitize
