@@ -241,3 +241,203 @@ theorem transferMatrix_eq (A : MPSTensor d D) :
   transferMatrix_kraus A _ (fun X => by simp [transferMap_apply])
 
 end MPSTensor
+
+/-! ### Props 2.5-2.6: Transfer matrix characterizations of TP, unital, and HP maps -/
+
+section TransferMatrixChar
+
+/-- **Prop 2.6 (TP via transfer matrix)**: `T` is trace-preserving iff
+the column-diagonal sums of the transfer matrix give `δ_{kl}`:
+`∑_i T̂_{(i,i),(l,k)} = δ_{kl}`.
+
+This expresses the TP condition as a partial-trace constraint on `T̂`. -/
+theorem transferMatrix_tp_iff
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    IsTracePreservingMap T ↔
+      ∀ k l : Fin D, ∑ i : Fin D, transferMatrix T (i, i) (l, k) =
+        if k = l then 1 else 0 := by
+  constructor
+  · intro htp k l
+    simp only [transferMatrix_apply]
+    change ∑ i, (T (Matrix.single k l 1)) i i = _
+    rw [show ∑ i, (T (Matrix.single k l 1)) i i =
+        Matrix.trace (T (Matrix.single k l 1)) from rfl, htp]
+    by_cases hkl : k = l
+    · subst hkl; rw [if_pos rfl]; exact Matrix.trace_single_eq_same k (1 : ℂ)
+    · rw [Matrix.trace_single_eq_of_ne k l (1 : ℂ) hkl, if_neg hkl]
+  · intro h X
+    have key : ∀ k l : Fin D,
+        Matrix.trace (T (Matrix.single k l 1)) =
+          Matrix.trace (Matrix.single k l (1 : ℂ)) := by
+      intro k l
+      trans (if k = l then (1 : ℂ) else 0)
+      · change ∑ i, (T (Matrix.single k l 1)) i i = _
+        have := h k l; simp only [transferMatrix_apply] at this; exact this
+      · by_cases hkl : k = l
+        · subst hkl; rw [if_pos rfl]; exact (Matrix.trace_single_eq_same k (1 : ℂ)).symm
+        · rw [if_neg hkl, Matrix.trace_single_eq_of_ne k l (1 : ℂ) hkl]
+    calc Matrix.trace (T X)
+        = Matrix.trace (T (∑ k, ∑ l, X k l • Matrix.single k l 1)) := by
+            rw [← sum_smul_single_eq X]
+      _ = ∑ k, ∑ l, X k l • Matrix.trace (T (Matrix.single k l 1)) := by
+            simp_rw [map_sum, LinearMap.map_smul, Matrix.trace_sum, Matrix.trace_smul]
+      _ = ∑ k, ∑ l, X k l • Matrix.trace (Matrix.single k l (1 : ℂ)) := by
+            simp_rw [key]
+      _ = Matrix.trace X := by
+            simp_rw [← Matrix.trace_smul, ← Matrix.trace_sum]; rw [← sum_smul_single_eq X]
+
+/-- **Prop 2.6 (Unital via transfer matrix)**: `T` is unital (`T 1 = 1`) iff
+the row-diagonal sums of the transfer matrix give `δ_{ij}`:
+`∑_k T̂_{(j,i),(k,k)} = δ_{ij}`. -/
+theorem transferMatrix_unital_iff
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    T 1 = 1 ↔
+      ∀ i j : Fin D, ∑ k : Fin D, transferMatrix T (j, i) (k, k) =
+        if i = j then 1 else 0 := by
+  have one_eq : (1 : Matrix (Fin D) (Fin D) ℂ) = ∑ k, Matrix.single k k 1 := by
+    ext i j
+    simp only [Matrix.one_apply, Matrix.sum_apply, Matrix.single_apply]
+    by_cases hij : i = j
+    · subst hij; simp [Finset.sum_ite_eq']
+    · rw [if_neg hij]; symm; exact Finset.sum_eq_zero fun k _ => by
+        rw [if_neg]; exact fun ⟨h1, h2⟩ => hij (h1.symm.trans h2)
+  constructor
+  · intro hunit i j
+    simp only [transferMatrix_apply]
+    have key : ∑ k, (T (Matrix.single k k 1)) i j = (T 1) i j := by
+      rw [one_eq, map_sum]; simp only [Matrix.sum_apply]
+    rw [key, hunit, Matrix.one_apply]
+  · intro h
+    ext i j; rw [Matrix.one_apply, one_eq, map_sum]
+    simp only [Matrix.sum_apply]
+    have := h i j; simp only [transferMatrix_apply] at this; exact this
+
+/-- **Prop 2.5 (Hermiticity-preserving via transfer matrix)**:
+`T` preserves Hermiticity (`(T X)ᴴ = T Xᴴ` for all `X`) iff
+`T̂_{(j,i),(k,l)} = conj(T̂_{(i,j),(l,k)})` for all indices. -/
+theorem transferMatrix_hermiticityPreserving_iff
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    (∀ X : Matrix (Fin D) (Fin D) ℂ, (T X)ᴴ = T Xᴴ) ↔
+      ∀ i j k l : Fin D, transferMatrix T (j, i) (k, l) =
+        starRingEnd ℂ (transferMatrix T (i, j) (l, k)) := by
+  constructor
+  · intro hHP i j k l
+    simp only [transferMatrix_apply]
+    -- Need: (T (single l k 1)) i j = starRingEnd ℂ ((T (single k l 1)) j i)
+    have h := congr_fun (congr_fun (hHP (Matrix.single k l 1)) i) j
+    simpa using h.symm
+  · intro h X
+    have basis_eq : ∀ k l : Fin D,
+        (T (Matrix.single k l 1))ᴴ = T (Matrix.single l k 1) := by
+      intro k l; ext i j
+      simp only [Matrix.conjTranspose_apply]
+      -- Need: star ((T (single k l 1)) j i) = (T (single l k 1)) i j
+      have := h j i l k; simp only [transferMatrix_apply] at this
+      -- this : (T (single k l 1)) j i = starRingEnd ℂ ((T (single l k 1)) i j)
+      rw [this, starRingEnd_apply, star_star]
+    conv_lhs => rw [sum_smul_single_eq X]
+    simp_rw [map_sum, LinearMap.map_smul, Matrix.conjTranspose_sum,
+      Matrix.conjTranspose_smul, basis_eq]
+    have hXconj : Xᴴ = ∑ k : Fin D, ∑ l : Fin D,
+        star (X l k) • Matrix.single k l 1 := by
+      conv_lhs => rw [sum_smul_single_eq Xᴴ]
+      simp_rw [Matrix.conjTranspose_apply]
+    rw [hXconj]; simp_rw [map_sum, LinearMap.map_smul]
+    rw [Finset.sum_comm]
+
+end TransferMatrixChar
+
+/-! ### Unitary conjugation maps (Wolf §2.3, preparation for Props 2.7-2.8)
+
+The unitary conjugation `Ad_U(X) = U X U†` is the basic building block for
+the Lorentz normal form (Prop 2.7). Its transfer matrix is `Ū ⊗ₖ U`,
+and composing with unitary conjugations transforms the transfer matrix by
+left/right multiplication — the algebraic engine behind normal forms. -/
+
+section UnitaryConjugation
+
+/-- The **unitary conjugation map** `Ad_U(X) = U X U†` as a linear map.
+This is a Kraus map with a single Kraus operator `U`.
+
+Note: this is the unbundled-matrix variant of `unitaryChannel` from `Determinant.lean`,
+which takes a bundled `Matrix.unitaryGroup`. The unbundled signature is needed here
+because `transferMatrix_unitaryConj` holds for arbitrary matrices (not just unitaries). -/
+noncomputable def unitaryConjLM
+    (U : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
+  toFun X := U * X * Uᴴ
+  map_add' X Y := by rw [mul_add, add_mul]
+  map_smul' c X := by
+    simp only [RingHom.id_apply]
+    rw [mul_smul_comm, smul_mul_assoc]
+
+@[simp]
+theorem unitaryConjLM_apply (U : Matrix (Fin D) (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    unitaryConjLM U X = U * X * Uᴴ := rfl
+
+/-- **Transfer matrix of unitary conjugation** (Wolf Prop 2.7 ingredient):
+`(Ad_U)^ = Ū ⊗ₖ U`, the Kronecker product of the entrywise conjugate
+of `U` with `U`. -/
+theorem transferMatrix_unitaryConj (U : Matrix (Fin D) (Fin D) ℂ) :
+    transferMatrix (unitaryConjLM U) = U.map (starRingEnd ℂ) ⊗ₖ U := by
+  have := transferMatrix_kraus (fun _ : Fin 1 => U) (unitaryConjLM U)
+    (fun X => by change U * X * Uᴴ = _; simp only [Fin.sum_univ_one])
+  simpa only [Fin.sum_univ_one] using this
+
+/-- Unitary conjugation `Ad_U` is completely positive (single Kraus operator). -/
+theorem unitaryConjLM_isCPMap (U : Matrix (Fin D) (Fin D) ℂ) :
+    IsCPMap (unitaryConjLM U) :=
+  ⟨1, fun _ : Fin 1 => U, fun X => by
+    show unitaryConjLM U X = _; rw [unitaryConjLM_apply]; simp only [Fin.sum_univ_one]⟩
+
+/-- Unitary conjugation by a unitary matrix is trace-preserving. -/
+theorem unitaryConjLM_isTP_of_unitary (U : Matrix (Fin D) (Fin D) ℂ)
+    (hU : Uᴴ * U = 1) :
+    IsTracePreservingMap (unitaryConjLM U) := by
+  intro X
+  change Matrix.trace (U * X * Uᴴ) = Matrix.trace X
+  rw [Matrix.trace_mul_comm, ← Matrix.mul_assoc, hU, one_mul]
+
+/-- Unitary conjugation by a unitary matrix is a quantum channel. -/
+theorem unitaryConjLM_isChannel_of_unitary (U : Matrix (Fin D) (Fin D) ℂ)
+    (hU : Uᴴ * U = 1) :
+    IsChannel (unitaryConjLM U) :=
+  ⟨unitaryConjLM_isCPMap U, unitaryConjLM_isTP_of_unitary U hU⟩
+
+end UnitaryConjugation
+
+/-! ### Props 2.7-2.8: Normal form decomposition via transfer matrix
+
+**Prop 2.7** (Lorentz normal form): For any channel `T`, composing with
+unitary conjugations `Ad_{U₁}` and `Ad_{U₂}` yields a transfer matrix
+`(Ū₁ ⊗ U₁) * T̂ * (Ū₂ ⊗ U₂)`. By choosing `U₁, U₂` to diagonalize
+the 3×3 block (for qubits), one obtains the Lorentz normal form.
+
+**Prop 2.8** (SVD representation): The singular value decomposition of
+the coefficient matrix `[tᵢⱼ]` in the trace-pairing expansion
+`T(ρ) = ∑ᵢⱼ tᵢⱼ σᵢ tr(σⱼ ρ)` yields the SVD representation
+`T(ρ) = ∑ₖ sₖ uₖ tr(vₖ ρ)` with orthonormal `{uₖ}`, `{vₖ}`.
+
+The key algebraic tool is `transferMatrix_unitaryConj_sandwich`, which
+shows how unitary conjugation acts on transfer matrices. -/
+
+section NormalForms
+
+/-- **Props 2.7-2.8 key identity**: The transfer matrix of `Ad_{U₁} ∘ T ∘ Ad_{U₂}`
+is `(Ū₁ ⊗ U₁) * T̂ * (Ū₂ ⊗ U₂)`.
+
+This is the algebraic engine behind the Lorentz normal form (Prop 2.7)
+and the SVD representation (Prop 2.8): by choosing unitaries `U₁, U₂`
+appropriately (e.g. via SVD of `T̂`), the transfer matrix can be brought
+to a diagonal or block-diagonal normal form. -/
+theorem transferMatrix_unitaryConj_sandwich
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (U₁ U₂ : Matrix (Fin D) (Fin D) ℂ) :
+    transferMatrix (unitaryConjLM U₁ ∘ₗ T ∘ₗ unitaryConjLM U₂) =
+      (U₁.map (starRingEnd ℂ) ⊗ₖ U₁) * transferMatrix T *
+        (U₂.map (starRingEnd ℂ) ⊗ₖ U₂) := by
+  rw [transferMatrix_comp, transferMatrix_comp, transferMatrix_unitaryConj,
+      transferMatrix_unitaryConj, ← Matrix.mul_assoc]
+
+end NormalForms
