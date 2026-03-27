@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Schwarz.SchwarzNormal
+import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 import Mathlib.Analysis.SpecificLimits.Basic
@@ -197,42 +198,6 @@ def IsSubnormal (A : Mat) : Prop :=
         let N : Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ := Matrix.fromBlocks A B 0 C
         Nᴴ * N = N * Nᴴ
 
-private lemma posSemidef_fromBlocks_diag {E : ℕ}
-    {X : Mat} {Y : Matrix (Fin E) (Fin E) ℂ}
-    (hX : X.PosSemidef) (hY : Y.PosSemidef) :
-    (Matrix.fromBlocks X 0 0 Y : Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ).PosSemidef := by
-  letI : CStarAlgebra (Matrix (Fin E) (Fin E) ℂ) :=
-    { toNormedRing := Matrix.instL2OpNormedRing
-      toStarRing := inferInstance
-      toCompleteSpace := inferInstance
-      toCStarRing := Matrix.instCStarRing
-      toNormedAlgebra := Matrix.instL2OpNormedAlgebra
-      toStarModule := inferInstance }
-  obtain ⟨CX, hCX⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
-    ((Matrix.nonneg_iff_posSemidef).mpr hX)
-  obtain ⟨CY, hCY⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
-    ((Matrix.nonneg_iff_posSemidef).mpr hY)
-  have hCX' : X = CX * CXᴴ := by
-    simpa [Matrix.star_eq_conjTranspose] using hCX
-  have hCY' : Y = CY * CYᴴ := by
-    simpa [Matrix.star_eq_conjTranspose] using hCY
-  let C : Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ := Matrix.fromBlocks CX 0 0 CY
-  have hC : Matrix.fromBlocks X 0 0 Y = C * Cᴴ := by
-    simp [C, hCX', hCY', Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
-  rw [hC]
-  exact Matrix.posSemidef_self_mul_conjTranspose C
-
-private lemma reindex_conjTranspose {m n : Type*}
-    (e : m ≃ n) (M : Matrix m m ℂ) :
-    Matrix.reindex e e Mᴴ = (Matrix.reindex e e M)ᴴ := by
-  ext i j
-  simp [Matrix.reindex_apply, Matrix.conjTranspose_apply, Matrix.submatrix_apply]
-
-private lemma posSemidef_reindex {m n : Type*} {M : Matrix m m ℂ}
-    (hM : M.PosSemidef) (e : m ≃ n) :
-    (Matrix.reindex e e M).PosSemidef := by
-  simpa [Matrix.reindex_apply] using hM.submatrix e.symm
-
 private noncomputable def nwExtendLinearMap (T : Mat →ₗ[ℂ] Mat) (E : ℕ) :
     Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ →ₗ[ℂ]
       Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ where
@@ -254,7 +219,7 @@ private lemma nwExtendLinearMap_isPositiveMap (T : Mat →ₗ[ℂ] Mat)
     (hPos : IsPositiveMap T) (E : ℕ) :
     IsPositiveMap (nwExtendLinearMap (D := D) T E) := by
   intro M hM
-  refine posSemidef_fromBlocks_diag ?_ Matrix.PosSemidef.zero
+  refine Matrix.PosSemidef.fromBlocks_diag ?_ Matrix.PosSemidef.zero
   exact hPos _ (by simpa [Matrix.toBlocks₁₁, Matrix.submatrix_apply] using hM.submatrix Sum.inl)
 
 private lemma nwExtendLinearMap_subunital (T : Mat →ₗ[ℂ] Mat)
@@ -266,7 +231,7 @@ private lemma nwExtendLinearMap_subunital (T : Mat →ₗ[ℂ] Mat)
     simpa [Matrix.le_iff] using hSub
   have hDiag :
       (Matrix.fromBlocks (1 - T 1) 0 0 (1 : Matrix (Fin E) (Fin E) ℂ)).PosSemidef :=
-    posSemidef_fromBlocks_diag (D := D) (E := E) hTop Matrix.PosSemidef.one
+    Matrix.PosSemidef.fromBlocks_diag hTop Matrix.PosSemidef.one
   have hOne11 : (1 : Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ).toBlocks₁₁ = (1 : Mat) := by
     ext i j
     simp [Matrix.toBlocks₁₁, Matrix.one_apply]
@@ -310,7 +275,7 @@ private theorem topLeft_schwarz_of_normal_extension
     have hM' : (Matrix.reindex e.symm e.symm M).PosSemidef := by
       simpa [Matrix.reindex_apply] using hM.submatrix e
     have hSM : (S (Matrix.reindex e.symm e.symm M)).PosSemidef := hPosS _ hM'
-    simpa using posSemidef_reindex hSM e
+    simpa using hSM.reindex e
   have hSubSf : Sf 1 ≤ (1 : Matrix (Fin (D + E)) (Fin (D + E)) ℂ) := by
     rw [Matrix.le_iff] at hSubS ⊢
     have hEq :
@@ -318,28 +283,28 @@ private theorem topLeft_schwarz_of_normal_extension
           Matrix.reindex e e ((1 : Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ) - S 1) := by
       ext i j
       simp [Sf, ρ, Matrix.reindexLinearEquiv_apply, Matrix.one_apply]
-    simpa [hEq] using posSemidef_reindex hSubS e
+    simpa [hEq] using hSubS.reindex e
   have hNormalf : Nfᴴ * Nf = Nf * Nfᴴ := by
     change (Matrix.reindex e e N)ᴴ * Matrix.reindex e e N =
       Matrix.reindex e e N * (Matrix.reindex e e N)ᴴ
     calc
       (Matrix.reindex e e N)ᴴ * Matrix.reindex e e N =
           Matrix.reindex e e Nᴴ * Matrix.reindex e e N := by
-            rw [reindex_conjTranspose e N]
+            rw [Matrix.reindex_conjTranspose e N]
       _ = Matrix.reindex e e (Nᴴ * N) := by
         convert (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e Nᴴ N) using 1
       _ = Matrix.reindex e e (N * Nᴴ) := by rw [hNormal]
       _ = Matrix.reindex e e N * Matrix.reindex e e Nᴴ := by
         convert (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e N Nᴴ).symm using 1
       _ = Matrix.reindex e e N * (Matrix.reindex e e N)ᴴ := by
-        rw [reindex_conjTranspose e N]
+        rw [Matrix.reindex_conjTranspose e N]
   have hLeftf : (Sf (Nfᴴ * Nf) - Sf Nfᴴ * Sf Nf).PosSemidef :=
     schwarz_inequality_normal_operator (D := D + E) Sf hPosSf hSubSf Nf hNormalf
   have hLeftSum : (S (Nᴴ * N) - S Nᴴ * S N).PosSemidef := by
     have h :
         ((S (Nᴴ * N)).submatrix e.symm e.symm -
           (S Nᴴ * S N).submatrix e.symm e.symm).PosSemidef := by
-      simpa [Sf, Nf, ρ, reindex_conjTranspose e N,
+      simpa [Sf, Nf, ρ, Matrix.reindex_conjTranspose e N,
         Matrix.reindexLinearEquiv_apply, Matrix.reindexLinearEquiv_mul,
         Matrix.submatrix_sub] using hLeftf
     simpa [Matrix.submatrix_submatrix, Matrix.submatrix_sub] using h.submatrix e
@@ -352,7 +317,7 @@ private theorem topLeft_schwarz_of_normal_extension
     have h :
         ((S (N * Nᴴ)).submatrix e.symm e.symm -
           (S N * S Nᴴ).submatrix e.symm e.symm).PosSemidef := by
-      simpa [Sf, Nf, ρ, reindex_conjTranspose e N,
+      simpa [Sf, Nf, ρ, Matrix.reindex_conjTranspose e N,
         Matrix.reindexLinearEquiv_apply, Matrix.reindexLinearEquiv_mul,
         conjTranspose_conjTranspose, Matrix.submatrix_sub] using hRightf
     simpa [Matrix.submatrix_submatrix, Matrix.submatrix_sub] using h.submatrix e
@@ -533,7 +498,7 @@ private lemma intertwine_sqrt_of_mul_eq
       simp [M, J, Matrix.fromBlocks_multiply]
   have hM_nonneg : (0 : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ) ≤ M := by
     rw [Matrix.nonneg_iff_posSemidef]
-    exact posSemidef_fromBlocks_diag (D := D) (E := D)
+    exact Matrix.PosSemidef.fromBlocks_diag
       ((Matrix.nonneg_iff_posSemidef).mp hP) ((Matrix.nonneg_iff_posSemidef).mp hQ)
   have hSJ : Commute (CFC.sqrt M) J := (Commute.cfcₙ_nnreal hMJ NNReal.sqrt)
   have hSK : Commute (CFC.sqrt M) K := (Commute.cfcₙ_nnreal hMK NNReal.sqrt)

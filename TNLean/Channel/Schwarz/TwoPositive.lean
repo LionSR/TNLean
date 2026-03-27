@@ -65,43 +65,29 @@ open Matrix Finset
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-attribute [local instance] Matrix.instL2OpNormedAddCommGroup
-attribute [local instance] Matrix.instL2OpNormedRing
-attribute [local instance] Matrix.instL2OpNormedAlgebra
+private noncomputable def finTwoSumEquiv (α : Type*) : α × Fin 2 ≃ α ⊕ α :=
+  (((Equiv.prodCongr (Equiv.refl α)
+      ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm)).trans
+    (Equiv.prodSumDistrib α (Fin 1) (Fin 1))).trans
+    (Equiv.sumCongr (Equiv.prodUnique α (Fin 1)) (Equiv.prodUnique α (Fin 1))))
 
-noncomputable local instance matrixCStarAlgebra (m : Type*) [Fintype m] [DecidableEq m] :
-    CStarAlgebra (Matrix m m ℂ) where
-  toNormedRing := Matrix.instL2OpNormedRing
-  toStarRing := inferInstance
-  toCompleteSpace := inferInstance
-  toCStarRing := Matrix.instCStarRing
-  toNormedAlgebra := Matrix.instL2OpNormedAlgebra
-  toStarModule := inferInstance
+@[simp] private theorem finTwoSumEquiv_apply_zero {α : Type*} (a : α) :
+    finTwoSumEquiv α (a, 0) = Sum.inl a := by
+  change Sum.map Prod.fst Prod.fst
+      ((Equiv.prodSumDistrib α (Fin 1) (Fin 1))
+        (a, ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm 0))) = Sum.inl a
+  rw [show (0 : Fin 2) = Fin.castSucc (0 : Fin 1) by rfl]
+  rw [finSumFinEquiv_symm_apply_castSucc]
+  simp
 
-private lemma posSemidef_fromBlocks_diag {m o : Type*}
-    [Fintype m] [Fintype o] [DecidableEq m] [DecidableEq o]
-    {A : Matrix m m ℂ} {D : Matrix o o ℂ}
-    (hA : A.PosSemidef) (hD : D.PosSemidef) :
-    (Matrix.fromBlocks A 0 0 D : Matrix (m ⊕ o) (m ⊕ o) ℂ).PosSemidef := by
-  obtain ⟨CA, hCA⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
-    ((Matrix.nonneg_iff_posSemidef).mpr hA)
-  obtain ⟨CD, hCD⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
-    ((Matrix.nonneg_iff_posSemidef).mpr hD)
-  have hCA' : A = CA * CAᴴ := by
-    simpa [Matrix.star_eq_conjTranspose] using hCA
-  have hCD' : D = CD * CDᴴ := by
-    simpa [Matrix.star_eq_conjTranspose] using hCD
-  let C : Matrix (m ⊕ o) (m ⊕ o) ℂ := Matrix.fromBlocks CA 0 0 CD
-  have hC : Matrix.fromBlocks A 0 0 D = C * Cᴴ := by
-    simp [C, hCA', hCD', Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
-  rw [hC]
-  exact Matrix.posSemidef_self_mul_conjTranspose C
-
-private lemma posSemidef_reindex {m o : Type*}
-    [Fintype m] [Fintype o] {M : Matrix m m ℂ}
-    (hM : M.PosSemidef) (e : m ≃ o) :
-    (Matrix.reindex e e M).PosSemidef := by
-  simpa [Matrix.reindex_apply] using hM.submatrix e.symm
+@[simp] private theorem finTwoSumEquiv_apply_one {α : Type*} (a : α) :
+    finTwoSumEquiv α (a, 1) = Sum.inr a := by
+  change Sum.map Prod.fst Prod.fst
+      ((Equiv.prodSumDistrib α (Fin 1) (Fin 1))
+        (a, ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm 1))) = Sum.inr a
+  rw [show (1 : Fin 2) = Fin.last 1 by rfl]
+  rw [finSumFinEquiv_symm_last]
+  simp
 
 /-! ## Definitions of n-positivity -/
 
@@ -146,7 +132,7 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
   obtain ⟨r, K, hK⟩ := hCP
   let e : n × Fin k ≃ Fin k × n := Equiv.prodComm n (Fin k)
   let Xswap : Matrix (Fin k × n) (Fin k × n) ℂ := Matrix.reindex e e X
-  have hXswap : Xswap.PosSemidef := posSemidef_reindex hX e
+  have hXswap : Xswap.PosSemidef := hX.reindex e
   let Xblk : Matrix (Fin k) (Fin k) (Matrix n n ℂ) :=
     (Matrix.compRingEquiv (Fin k) n ℂ).symm Xswap
   let D : Fin r → Matrix (Fin k) (Fin k) (Matrix n n ℂ) :=
@@ -194,7 +180,7 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
       Xblk p q = Matrix.of fun i j => X (i, p) (j, q) := by
     ext i j
     simp [Xblk, Xswap, e, Matrix.reindex_apply]
-  convert posSemidef_reindex hYswap e.symm using 1
+  convert hYswap.reindex e.symm using 1
   ext ip jq
   rw [hYblk]
   simp only [of_apply, Matrix.reindex_apply, Equiv.symm_symm, Matrix.submatrix_apply]
@@ -225,8 +211,8 @@ theorem IsNPositiveMap.mono {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {k :
     rw [finSumFinEquiv_symm_apply_castSucc]
     simp
   have hX' : X'.PosSemidef := by
-    exact posSemidef_reindex
-      (posSemidef_fromBlocks_diag hX (Matrix.PosSemidef.zero (n := n) (R := ℂ))) e.symm
+    exact (Matrix.PosSemidef.fromBlocks_diag hX (Matrix.PosSemidef.zero (n := n) (R := ℂ))).reindex
+      e.symm
   -- Apply (k+1)-positivity
   have hY' := h X' hX'
   -- Extract the k-block from the result
@@ -249,28 +235,17 @@ theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n 
     (h : Is2PositiveMap E) : IsPositiveMap E := by
   intro X hX
   let e : n × Fin 2 ≃ n ⊕ n :=
-    (((Equiv.prodCongr (Equiv.refl n)
-        ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm)).trans
-      (Equiv.prodSumDistrib n (Fin 1) (Fin 1))).trans
-      (Equiv.sumCongr (Equiv.prodUnique n (Fin 1)) (Equiv.prodUnique n (Fin 1))))
+    finTwoSumEquiv n
   let X' : Matrix (n × Fin 2) (n × Fin 2) ℂ :=
     Matrix.reindex e.symm e.symm (Matrix.fromBlocks X 0 0 (0 : Matrix n n ℂ))
-  have he_zero (i : n) : e (i, 0) = Sum.inl i := by
-    change Sum.map Prod.fst Prod.fst
-        ((Equiv.prodSumDistrib n (Fin 1) (Fin 1))
-          (i, ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm 0))) =
-        Sum.inl i
-    rw [show (0 : Fin 2) = Fin.castSucc (0 : Fin 1) by rfl]
-    rw [finSumFinEquiv_symm_apply_castSucc]
-    simp
   have hX' : X'.PosSemidef := by
-    exact posSemidef_reindex
-      (posSemidef_fromBlocks_diag hX (Matrix.PosSemidef.zero (n := n) (R := ℂ))) e.symm
+    exact (Matrix.PosSemidef.fromBlocks_diag hX (Matrix.PosSemidef.zero (n := n) (R := ℂ))).reindex
+      e.symm
   -- Apply 2-positivity to X'
   have hY' := h X' hX'
   -- The (0,0)-block of the result is E(X), which is PSD as a principal submatrix
   let emb : n → n × Fin 2 := fun i => (i, 0)
-  simpa [emb, X', Matrix.reindex_apply, he_zero] using hY'.submatrix emb
+  simpa [emb, X', Matrix.reindex_apply] using hY'.submatrix emb
 
 /-! ## Kadison–Schwarz for 2-positive maps -/
 
@@ -303,33 +278,13 @@ is PSD. The Schur complement of the (2,2)-block `I` gives the result.
 
 This is exactly the same argument as in `KadisonSchwarz.lean`, but the
 hypothesis is weakened from "Kraus representation exists" to "2-positive". -/
-theorem kadison_schwarz_2positive
+  theorem kadison_schwarz_2positive
     (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ)
     (h2pos : Is2PositiveMap E)
     (h_unital : KadisonSchwarz.IsUnitalMap E)
     (X : Matrix n n ℂ) :
     (E (Xᴴ * X) - (E X)ᴴ * E X).PosSemidef := by
-  let e : n × Fin 2 ≃ n ⊕ n :=
-    (((Equiv.prodCongr (Equiv.refl n)
-        ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm)).trans
-      (Equiv.prodSumDistrib n (Fin 1) (Fin 1))).trans
-      (Equiv.sumCongr (Equiv.prodUnique n (Fin 1)) (Equiv.prodUnique n (Fin 1))))
-  have he_zero (i : n) : e (i, 0) = Sum.inl i := by
-    change Sum.map Prod.fst Prod.fst
-        ((Equiv.prodSumDistrib n (Fin 1) (Fin 1))
-          (i, ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm 0))) =
-        Sum.inl i
-    rw [show (0 : Fin 2) = Fin.castSucc (0 : Fin 1) by rfl]
-    rw [finSumFinEquiv_symm_apply_castSucc]
-    simp
-  have he_one (i : n) : e (i, 1) = Sum.inr i := by
-    change Sum.map Prod.fst Prod.fst
-        ((Equiv.prodSumDistrib n (Fin 1) (Fin 1))
-          (i, ((finSumFinEquiv : Fin 1 ⊕ Fin 1 ≃ Fin 2).symm 1))) =
-        Sum.inr i
-    rw [show (1 : Fin 2) = Fin.last 1 by rfl]
-    rw [finSumFinEquiv_symm_last]
-    simp
+  let e : n × Fin 2 ≃ n ⊕ n := finTwoSumEquiv n
   let P : Matrix (n ⊕ n) (n ⊕ n) ℂ :=
     Matrix.fromBlocks (Xᴴ * X) Xᴴ X 1
   have hP : P.PosSemidef := by
@@ -338,7 +293,7 @@ theorem kadison_schwarz_2positive
     simpa [A, P, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
       using Matrix.posSemidef_self_mul_conjTranspose A
   let P' : Matrix (n × Fin 2) (n × Fin 2) ℂ := Matrix.reindex e.symm e.symm P
-  have hP' : P'.PosSemidef := posSemidef_reindex hP e.symm
+  have hP' : P'.PosSemidef := hP.reindex e.symm
   have hY' := h2pos P' hP'
   have hPos : IsPositiveMap E := h2pos.isPositiveMap
   have hBlock :
@@ -353,30 +308,30 @@ theorem kadison_schwarz_2positive
       change E (Matrix.of fun i' j' => P' (i', 0) (j', 0)) i j = E (Xᴴ * X) i j
       rw [show (Matrix.of fun i' j' => P' (i', 0) (j', 0)) = Xᴴ * X by
         ext a b
-        simp [P', Matrix.reindex_apply, P, he_zero]]
+        simp [P', Matrix.reindex_apply, P, e]]
     · simp only [Matrix.reindex_apply]
       change E (Matrix.of fun i' j' => P' (i', 0) (j', 1)) i j = (starRingEnd ℂ) (E X j i)
       rw [show (Matrix.of fun i' j' => P' (i', 0) (j', 1)) = Xᴴ by
         ext a b
-        simp [P', Matrix.reindex_apply, P, he_zero, he_one]]
+        simp [P', Matrix.reindex_apply, P, e]]
       simpa [Matrix.conjTranspose_apply] using
         congr_fun (congr_fun (IsPositiveMap.map_conjTranspose hPos X) i) j
     · simp only [Matrix.reindex_apply]
       change E (Matrix.of fun i' j' => P' (i', 1) (j', 0)) i j = (((E X)ᴴ)ᴴ) i j
       rw [show (Matrix.of fun i' j' => P' (i', 1) (j', 0)) = X by
         ext a b
-        simp [P', Matrix.reindex_apply, P, he_one, he_zero]]
+        simp [P', Matrix.reindex_apply, P, e]]
       simp [Matrix.conjTranspose_apply]
     · simp only [Matrix.reindex_apply]
       change E (Matrix.of fun i' j' => P' (i', 1) (j', 1)) i j = (1 : Matrix n n ℂ) i j
       rw [show (Matrix.of fun i' j' => P' (i', 1) (j', 1)) = (1 : Matrix n n ℂ) by
         ext a b
-        simp [P', Matrix.reindex_apply, P, he_one]]
+        simp [P', Matrix.reindex_apply, P, e]]
       simpa [KadisonSchwarz.IsUnitalMap] using congr_fun (congr_fun h_unital i) j
   have hBlockPsD :
       (Matrix.fromBlocks (E (Xᴴ * X)) ((E X)ᴴ)
         (((E X)ᴴ)ᴴ) (1 : Matrix n n ℂ)).PosSemidef := by
-    simpa [hBlock] using posSemidef_reindex hY' e
+    simpa [hBlock] using hY'.reindex e
   haveI : Invertible (1 : Matrix n n ℂ) := invertibleOne
   simpa [inv_one, Matrix.mul_assoc, conjTranspose_conjTranspose] using
     (Matrix.PosDef.fromBlocks₂₂ (A := E (Xᴴ * X)) (B := (E X)ᴴ)
