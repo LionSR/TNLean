@@ -248,10 +248,113 @@ This is the "invert-and-regrow" step. The proof proceeds as follows:
 
 The formal overlap argument uses the `(L - 1)`-site intersection, so we record
 the theorem with the honest hypothesis `1 < L`. -/
-axiom groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
+theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
     {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)}
     (hLeft : InLeftGround A L ψ) (hRight : InRightGround A L ψ) :
-    ψ ∈ groundSpace A (L + 1)
+    ψ ∈ groundSpace A (L + 1) := by
+  classical
+  have hL0 : 0 < L := by omega
+  obtain ⟨K, hKeq⟩ := Nat.exists_eq_add_of_lt hL0
+  rw [zero_add] at hKeq
+  subst hKeq
+  have hK : 0 < K := by omega
+  have hRight' :
+      ∀ i : Fin d, ∃ Y : Matrix (Fin D) (Fin D) ℂ,
+        restrictFirst ψ i = groundSpaceMap A (K + 1) Y := by
+    intro i
+    have hi := hRight i
+    rw [groundSpace, LinearMap.mem_range] at hi
+    rcases hi with ⟨Y, hY⟩
+    exact ⟨Y, hY.symm⟩
+  choose Y hY using hRight'
+  have hLeft' :
+      ∀ j : Fin d, ∃ Z : Matrix (Fin D) (Fin D) ℂ,
+        restrictLast ψ j = groundSpaceMap A (K + 1) Z := by
+    intro j
+    have hj := hLeft j
+    rw [groundSpace, LinearMap.mem_range] at hj
+    rcases hj with ⟨Z, hZ⟩
+    exact ⟨Z, hZ.symm⟩
+  choose Z hZ using hLeft'
+  have hCompat : ∀ i j, A j * Y i = Z j * A i := by
+    intro i j
+    apply groundSpaceMap_injective hA hK
+    ext σ
+    have hYi :
+        groundSpaceMap A K (A j * Y i) σ = ψ (Fin.cons i (Fin.snoc σ j)) := by
+      calc
+        groundSpaceMap A K (A j * Y i) σ
+            = Matrix.trace (evalWord A (List.ofFn σ) * (A j * Y i)) := by
+                simp [groundSpaceMap_apply]
+        _ = Matrix.trace (evalWord A (List.ofFn (Fin.snoc σ j)) * Y i) := by
+              rw [evalWord_ofFn_snoc]
+              simp [Matrix.mul_assoc]
+        _ = ψ (Fin.cons i (Fin.snoc σ j)) := by
+              simpa [restrictFirst_apply, groundSpaceMap_apply] using
+                (congrArg (fun φ => φ (Fin.snoc σ j)) (hY i)).symm
+    have hZj :
+        groundSpaceMap A K (Z j * A i) σ = ψ (Fin.snoc (Fin.cons i σ) j) := by
+      calc
+        groundSpaceMap A K (Z j * A i) σ
+            = Matrix.trace (evalWord A (List.ofFn σ) * (Z j * A i)) := by
+                simp [groundSpaceMap_apply]
+        _ = Matrix.trace (evalWord A (List.ofFn (Fin.cons i σ)) * Z j) := by
+              simpa [evalWord_ofFn_cons, Matrix.mul_assoc] using
+                Matrix.trace_mul_cycle' (evalWord A (List.ofFn σ)) (Z j) (A i)
+        _ = ψ (Fin.snoc (Fin.cons i σ) j) := by
+              simpa [restrictLast_apply, groundSpaceMap_apply] using
+                (congrArg (fun φ => φ (Fin.cons i σ)) (hZ j)).symm
+    have hψeq :
+        ψ (Fin.cons i (Fin.snoc σ j)) = ψ (Fin.snoc (Fin.cons i σ) j) := by
+      rw [Fin.cons_snoc_eq_snoc_cons]
+    exact hYi.trans (hψeq.trans hZj.symm)
+  let X : Matrix (Fin D) (Fin D) ℂ := ∑ j, decompositionMap hA 1 j • Z j
+  have hY_eq : ∀ i, Y i = X * A i := by
+    intro i
+    calc
+      Y i = (1 : Matrix (Fin D) (Fin D) ℂ) * Y i := by simp
+      _ = (∑ j, decompositionMap hA 1 j • A j) * Y i := by
+            rw [decompositionMap_sum hA 1]
+      _ = ∑ j, (decompositionMap hA 1 j • A j) * Y i := by
+            rw [Finset.sum_mul]
+      _ = ∑ j, decompositionMap hA 1 j • (A j * Y i) := by
+            refine Finset.sum_congr rfl ?_
+            intro j hj
+            rw [smul_mul_assoc]
+      _ = ∑ j, decompositionMap hA 1 j • (Z j * A i) := by
+            refine Finset.sum_congr rfl ?_
+            intro j hj
+            rw [hCompat i j]
+      _ = (∑ j, decompositionMap hA 1 j • Z j) * A i := by
+            symm
+            rw [Finset.sum_mul]
+            refine Finset.sum_congr rfl ?_
+            intro j hj
+            rw [smul_mul_assoc]
+      _ = X * A i := rfl
+  rw [groundSpace, LinearMap.mem_range]
+  refine ⟨X, ?_⟩
+  ext τ
+  have hτ :
+      ψ (Fin.cons (τ 0) (Fin.tail τ)) =
+        Matrix.trace (evalWord A (List.ofFn (Fin.tail τ)) * Y (τ 0)) := by
+    simpa [restrictFirst_apply, groundSpaceMap_apply] using
+      congrArg (fun φ => φ (Fin.tail τ)) (hY (τ 0))
+  calc
+    groundSpaceMap A (K + 2) X τ
+        = Matrix.trace (evalWord A (List.ofFn (Fin.cons (τ 0) (Fin.tail τ))) * X) := by
+            rw [← Fin.cons_self_tail τ]
+            simp [groundSpaceMap_apply]
+    _ = Matrix.trace (A (τ 0) * evalWord A (List.ofFn (Fin.tail τ)) * X) := by
+          rw [evalWord_ofFn_cons, Matrix.mul_assoc]
+    _ = Matrix.trace (evalWord A (List.ofFn (Fin.tail τ)) * (X * A (τ 0))) := by
+          simpa [Matrix.mul_assoc] using
+            (Matrix.trace_mul_cycle' (evalWord A (List.ofFn (Fin.tail τ))) X (A (τ 0))).symm
+    _ = Matrix.trace (evalWord A (List.ofFn (Fin.tail τ)) * Y (τ 0)) := by
+          rw [hY_eq (τ 0)]
+    _ = ψ (Fin.cons (τ 0) (Fin.tail τ)) := hτ.symm
+    _ = ψ τ := by
+          rw [Fin.cons_self_tail τ]
 
 /-- The ground space on `L+1` sites is characterized by the intersection property:
 `ψ ∈ G_{L+1}(A)` iff both the left and right `L`-site restrictions lie in `G_L(A)`. -/
