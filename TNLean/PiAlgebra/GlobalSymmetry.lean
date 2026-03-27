@@ -54,14 +54,31 @@ theorem gauge_ratio_commutes {A B : MPSTensor d D}
   have h : (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) =
       (Y : Matrix _ _ ℂ) * A i * ((Y⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
     rw [← hX i, ← hY i]
+  let Xmat : Matrix (Fin D) (Fin D) ℂ := X
+  let Ymat : Matrix (Fin D) (Fin D) ℂ := Y
+  let Xinv : Matrix (Fin D) (Fin D) ℂ := ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)
+  let Yinv : Matrix (Fin D) (Fin D) ℂ := ((Y⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)
+  have hXX : Xinv * Xmat = 1 := by
+    simp [Xinv, Xmat]
+  have hYY : Yinv * Ymat = 1 := by
+    simp [Yinv, Ymat]
   have key := congr_arg
-    (fun M => ((Y⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ)) h
-  simp only [Matrix.mul_assoc] at key
-  simp at key
-  rw [Matrix.mul_assoc]
-  convert key using 2
-  · simp [Matrix.GeneralLinearGroup.coe_inv]
-  · simp [Matrix.GeneralLinearGroup.coe_inv]
+    (fun M => Yinv * M * Xmat) h
+  calc
+    Yinv * Xmat * A i = Yinv * Xmat * A i * 1 := by
+      simp [Matrix.mul_assoc]
+    _ = Yinv * Xmat * A i * (Xinv * Xmat) := by
+      rw [hXX]
+    _ = Yinv * ((Xmat * A i * Xinv)) * Xmat := by
+      simp [Xinv, Xmat, Matrix.mul_assoc]
+    _ = Yinv * ((Ymat * A i * Yinv)) * Xmat := by
+      simpa [Xinv, Xmat, Yinv, Ymat] using key
+    _ = (Yinv * Ymat) * A i * Yinv * Xmat := by
+      simp [Yinv, Ymat, Xmat, Matrix.mul_assoc]
+    _ = 1 * A i * Yinv * Xmat := by
+      rw [hYY]
+    _ = A i * (Yinv * Xmat) := by
+      simp [Yinv, Xmat, Matrix.mul_assoc]
 
 /-- If `X` and `Y` both conjugate an injective `A` to the same tensor `B`,
 then `Y⁻¹ · X` is a scalar matrix. -/
@@ -144,10 +161,7 @@ theorem gaugeMatrix_projective_mul
         intro j; simp [Matrix.mul_assoc]
       simp_rw [distrib, ← Finset.sum_mul, ← Finset.mul_sum]
     rw [step1, step2, hX g i]
-    change (Xh : Matrix _ _ ℂ) * ((Xg : Matrix _ _ ℂ) * A i *
-        ((Xg⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) * ((Xh⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) =
-      (Ygl : Matrix _ _ ℂ) * A i * ((Ygl⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)
-    simp [Ygl, Matrix.mul_assoc, mul_inv_rev]
+    simp [Xg, Xh, Ygl, Matrix.mul_assoc, mul_inv_rev]
   -- Apply scalar commutant
   obtain ⟨c, hc⟩ := gauge_ratio_isScalar hA Ygl Xgh hComp (hX (g * h))
   -- hc : Xgh⁻¹ * Ygl = scalar c
@@ -156,14 +170,8 @@ theorem gaugeMatrix_projective_mul
   have hval : Ygl.1 = (Xh : Matrix _ _ ℂ) * (Xg : Matrix _ _ ℂ) := by
     simp [Ygl]
   have key : Ygl.1 = Xgh.1 * (((Xgh⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * Ygl.1) := by
-    simp [Matrix.mul_assoc]
+    simp
   rw [← hval, key, hc]
-  -- Goal: ↑Xgh * Matrix.scalar c = c • ↑Xgh
-  -- Matrix.scalar c = c • 1, so M * (c • 1) = c • M
-  rw [Matrix.scalar_apply]
-  have hdiag : (Matrix.diagonal fun _ : Fin D => c) = c • (1 : Matrix _ _ ℂ) := by
-    ext i j
-    simp [Matrix.diagonal, Matrix.one_apply]
-  rw [hdiag, Algebra.mul_smul_comm, mul_one]
+  simpa [Matrix.scalar_apply] using (Matrix.smul_eq_mul_diagonal (M := Xgh.1) c).symm
 
 end MPSTensor
