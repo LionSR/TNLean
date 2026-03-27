@@ -115,8 +115,30 @@ were not provable, the definition of `IsNPositiveMap` would be wrong.
 The proof embeds `M_n ⊗ M_k ↪ M_n ⊗ M_{k+1}` via padding with zeros. -/
 theorem IsNPositiveMap.mono {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (h : IsNPositiveMap (k + 1) E) : IsNPositiveMap k E := by
-  -- TODO (#22): embed (n × Fin k) ↪ (n × Fin (k+1)) via padding, apply h
-  sorry
+  intro X hX
+  -- Embed X into the larger space (n × Fin (k+1)) by padding with zeros
+  let emb : Fin k → Fin (k + 1) := Fin.castSucc
+  let X' : Matrix (n × Fin (k + 1)) (n × Fin (k + 1)) ℂ :=
+    Matrix.of fun ip jq =>
+      if h₁ : ip.2.val < k then
+        if h₂ : jq.2.val < k then
+          X (ip.1, ⟨ip.2.val, h₁⟩) (jq.1, ⟨jq.2.val, h₂⟩)
+        else 0
+      else 0
+  -- X' is PSD: for any v, v†X'v = w†Xw where w is the restriction of v
+  have hX' : X'.PosSemidef := by
+    constructor
+    · intro ip jq
+      simp only [X', Matrix.of_apply, Matrix.conjTranspose_apply, starRingEnd_apply]
+      split <;> split <;> simp_all [hX.1]
+    · intro v
+      simp only [X', Matrix.of_apply, Matrix.dotProduct, Matrix.mulVec,
+        Finset.sum_apply]
+      sorry -- TODO (#280): inner product calculation for padded matrix
+  -- Apply (k+1)-positivity
+  have hY' := h X' hX'
+  -- Extract the k-block from the result
+  sorry -- TODO (#280): extract principal submatrix from ampliation result
 
 /-- CP maps are 2-positive. -/
 theorem IsCPMap.is2PositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
@@ -125,12 +147,34 @@ theorem IsCPMap.is2PositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
 
 /-- 2-positive maps are positive.
 
-Apply the definition with `k = 1` embedded into `k = 2` (or directly:
-2-positive ⊇ 1-positive = positive). -/
+Apply the definition with `k = 1` embedded into `k = 2`: given PSD `X`,
+embed it as `diag(X, 0)` in `M_n ⊗ M_2`, apply 2-positivity to get PSD
+output, then extract the (0,0)-block which equals `E(X)`. -/
 theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (h : Is2PositiveMap E) : IsPositiveMap E := by
-  -- TODO (#22): embed M_n ↪ M_n ⊗ M_2 via diag(X, 0) and apply 2-positivity
-  sorry
+  intro X hX
+  -- Embed X as the (0,0) block of a (n × Fin 2) × (n × Fin 2) PSD matrix
+  let X' : Matrix (n × Fin 2) (n × Fin 2) ℂ :=
+    Matrix.of fun ip jq =>
+      if ip.2 = 0 ∧ jq.2 = 0 then X ip.1 jq.1 else 0
+  have hX' : X'.PosSemidef := by
+    constructor
+    · -- Hermiticity: X'ᴴ = X'
+      intro ip jq
+      simp only [X', Matrix.of_apply, Matrix.conjTranspose_apply, starRingEnd_apply]
+      split
+      · next h => rw [h.1, h.2]; simp [hX.1]
+      · next h₁ =>
+        split
+        · next h₂ => simp only [star_zero]; rw [h₂.1, h₂.2] at h₁; exact absurd ⟨h₂.2, h₂.1⟩ h₁
+        · simp [star_zero]
+    · -- Inner product: v†X'v ≥ 0
+      intro v
+      sorry -- TODO (#280): v†X'v = w†Xw where w i = v (i, 0), then use hX
+  -- Apply 2-positivity to X'
+  have hY' := h X' hX'
+  -- The (0,0)-block of the result is E(X), which is PSD as a principal submatrix
+  sorry -- TODO (#280): extract E(X) as principal submatrix of PSD ampliation
 
 /-! ## Kadison–Schwarz for 2-positive maps -/
 
