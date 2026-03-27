@@ -126,18 +126,27 @@ theorem IsNPositiveMap.mono {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {k :
       else 0
   -- X' is PSD: for any v, v†X'v = w†Xw where w is the restriction of v
   have hX' : X'.PosSemidef := by
-    constructor
-    · intro ip jq
-      simp only [X', Matrix.of_apply, Matrix.conjTranspose_apply, starRingEnd_apply]
-      split <;> split <;> simp_all [hX.1]
+    refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg ?_ ?_
+    · ext ip jq
+      by_cases hip : ip.2.val < k
+      · by_cases hjq : jq.2.val < k
+        · have hherm :=
+            congr_fun (congr_fun hX.1 (ip.1, ⟨ip.2.val, hip⟩)) (jq.1, ⟨jq.2.val, hjq⟩)
+          simpa [X', hip, hjq, Matrix.conjTranspose_apply] using hherm
+        · simp [X', hip, hjq, Matrix.conjTranspose_apply]
+      · by_cases hjq : jq.2.val < k
+        · simp [X', hip, hjq, Matrix.conjTranspose_apply]
+        · simp [X', hip, hjq, Matrix.conjTranspose_apply]
     · intro v
-      simp only [X', Matrix.of_apply, Matrix.dotProduct, Matrix.mulVec,
-        Finset.sum_apply]
+      simp only [X', Matrix.of_apply, dotProduct, Matrix.mulVec]
       sorry -- TODO (#280): inner product calculation for padded matrix
   -- Apply (k+1)-positivity
   have hY' := h X' hX'
   -- Extract the k-block from the result
-  sorry -- TODO (#280): extract principal submatrix from ampliation result
+  let emb : n × Fin k → n × Fin (k + 1) := fun ip => (ip.1, Fin.castSucc ip.2)
+  convert hY'.submatrix emb using 1
+  ext ip jq
+  simp [emb, X']
 
 /-- CP maps are 2-positive. -/
 theorem IsCPMap.is2PositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
@@ -157,23 +166,25 @@ theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n 
     Matrix.of fun ip jq =>
       if ip.2 = 0 ∧ jq.2 = 0 then X ip.1 jq.1 else 0
   have hX' : X'.PosSemidef := by
-    constructor
+    refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg ?_ ?_
     · -- Hermiticity: X'ᴴ = X'
-      intro ip jq
-      simp only [X', Matrix.of_apply, Matrix.conjTranspose_apply, starRingEnd_apply]
-      split
-      · next h => rw [h.1, h.2]; simp [hX.1]
-      · next h₁ =>
-        split
-        · next h₂ => simp only [star_zero]; rw [h₂.1, h₂.2] at h₁; exact absurd ⟨h₂.2, h₂.1⟩ h₁
-        · simp [star_zero]
+      ext ip jq
+      by_cases h00 : ip.2 = 0 ∧ jq.2 = 0
+      · have hswap : jq.2 = 0 ∧ ip.2 = 0 := ⟨h00.2, h00.1⟩
+        have hherm := congr_fun (congr_fun hX.1 ip.1) jq.1
+        simpa [X', h00, hswap, Matrix.conjTranspose_apply] using hherm
+      · by_cases hswap : jq.2 = 0 ∧ ip.2 = 0
+        · exfalso
+          exact h00 ⟨hswap.2, hswap.1⟩
+        · simp [X', h00, hswap, Matrix.conjTranspose_apply]
     · -- Inner product: v†X'v ≥ 0
       intro v
       sorry -- TODO (#280): v†X'v = w†Xw where w i = v (i, 0), then use hX
   -- Apply 2-positivity to X'
   have hY' := h X' hX'
   -- The (0,0)-block of the result is E(X), which is PSD as a principal submatrix
-  sorry -- TODO (#280): extract E(X) as principal submatrix of PSD ampliation
+  let emb : n → n × Fin 2 := fun i => (i, 0)
+  simpa [emb, X'] using hY'.submatrix emb
 
 /-! ## Kadison–Schwarz for 2-positive maps -/
 
