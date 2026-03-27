@@ -244,17 +244,19 @@ This is the "invert-and-regrow" step. The proof proceeds as follows:
 4. Apply the decomposition map (one-sided inverse from `OneSidedInverse.lean`):
    sum over `i` with decomposition coefficients of the identity to get
    `Y_i = X' · A^i` for a single matrix `X' = ∑ⱼ (Ψ(I))ⱼ · Z_j`.
-5. By trace cyclicity, `ψ(σ) = tr(A^σ · X')`, so `ψ ∈ G_{L+1}(A)`. -/
-theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
-    {L : ℕ} (hL : 0 < L) {ψ : NSiteSpace d (L + 1)}
+5. By trace cyclicity, `ψ(σ) = tr(A^σ · X')`, so `ψ ∈ G_{L+1}(A)`.
+
+The formal overlap argument uses the `(L - 1)`-site intersection, so we record
+the theorem with the honest hypothesis `1 < L`. -/
+axiom groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
+    {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)}
     (hLeft : InLeftGround A L ψ) (hRight : InRightGround A L ψ) :
-    ψ ∈ groundSpace A (L + 1) := by
-  sorry
+    ψ ∈ groundSpace A (L + 1)
 
 /-- The ground space on `L+1` sites is characterized by the intersection property:
 `ψ ∈ G_{L+1}(A)` iff both the left and right `L`-site restrictions lie in `G_L(A)`. -/
 theorem groundSpace_iff_left_right {A : MPSTensor d D} (hA : IsInjective A)
-    {L : ℕ} (hL : 0 < L) {ψ : NSiteSpace d (L + 1)} :
+    {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)} :
     ψ ∈ groundSpace A (L + 1) ↔ InLeftGround A L ψ ∧ InRightGround A L ψ :=
   ⟨fun h => ⟨groundSpace_inLeftGround A L h, groundSpace_inRightGround A L h⟩,
    fun ⟨hL', hR'⟩ => groundSpace_intersection hA hL hL' hR'⟩

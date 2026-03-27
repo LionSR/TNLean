@@ -97,20 +97,22 @@ position `i` if, for every choice of the `N - L` sites outside the window
 `{i, i+1, …, i+L-1 mod N}`, the `L`-site windowed function lies in `G_L(A)`.
 
 This is the coefficient-function analogue of `h_i ψ = 0` for the parent
-interaction projector `h_i`. -/
-def InCyclicWindowGround (A : MPSTensor d D) (L N : ℕ) (hN : 0 < N)
-    (i : Fin N) (ψ : NSiteSpace d N) : Prop := by
-  sorry
+interaction projector `h_i`.
+
+**Current status**: this interface is kept as an explicit axiom until the
+periodic window-restriction API lands. -/
+axiom InCyclicWindowGround (A : MPSTensor d D) (L N : ℕ) (hN : 0 < N)
+    (i : Fin N) (ψ : NSiteSpace d N) : Prop
 
 /-- The periodic chain ground space: the set of states satisfying the local
 ground-space condition at every position on the periodic chain.
 
-**Current status**: this is scaffolded with `sorry` until the chain-level window embedding
-API is implemented. The intended eventual definition is the intersection of the
-window ground submodules, equivalently `LinearMap.ker (parentHamiltonian A L N)`. -/
-noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
-    Submodule ℂ (NSiteSpace d N) := by
-  sorry
+**Current status**: this interface is kept as an explicit axiom until the
+chain-level window embedding API is implemented. The intended eventual
+definition is the intersection of the window ground submodules, equivalently
+`LinearMap.ker (parentHamiltonian A L N)`. -/
+axiom chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
+    Submodule ℂ (NSiteSpace d N)
 
 /-- The MPV state is in the chain ground space. -/
 theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :

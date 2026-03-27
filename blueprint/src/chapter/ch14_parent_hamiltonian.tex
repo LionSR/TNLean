@@ -269,7 +269,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \lean{MPSTensor.groundSpace_intersection}
   \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
         def:ground_space_parent}
-  If $A$ is injective and $L \ge 1$, then a state $\psi$ on $L+1$ sites
+  If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
   satisfying both the left and right ground conditions lies in $G_{L+1}(A)$:
   \[
     \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}
@@ -303,7 +303,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \lean{MPSTensor.groundSpace_iff_left_right}
   \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground,
         thm:ground_space_intersection}
-  For injective $A$ and $L \ge 1$:
+  For injective $A$ and $L \ge 2$:
   $\psi \in G_{L+1}(A) \iff \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}$.
 \end{theorem}
 
