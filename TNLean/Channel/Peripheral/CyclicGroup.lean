@@ -49,7 +49,7 @@ of `peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint`.
 -/
 
 /-- A peripheral eigenvector of an irreducible unital Kraus map (with PD adjoint-fixed
-point) is a matrix unit. -/
+point) is a unit (i.e., an invertible matrix). -/
 theorem isUnit_peripheral_eigenvector [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
@@ -90,7 +90,7 @@ theorem isUnit_peripheral_eigenvector [NeZero D]
             simp [conjTranspose_smul, smul_smul, mul_comm]
       _ = Xᴴ * X := by
             have hμ_starRingEnd_mul : ((starRingEnd ℂ) μ) * μ = 1 := by
-              simpa [Complex.star_def] using hμ_star_mul
+              simpa using hμ_star_mul
             simp [hμ_starRingEnd_mul]
   have hfix_transfer : MPSTensor.transferMap (d := d) (D := D) K (Xᴴ * X) = Xᴴ * X := by
     simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using hfix_kraus

@@ -1097,23 +1097,23 @@ into primitive sectors.
 See Issue #242 for tracking. -/
 theorem exists_tp_sector_decomp_after_blocking_via_cyclic [NeZero D] (hDpos : 0 < D)
     (A : MPSTensor d D) :
-    ∃ (p : ℕ) (_ : 0 < p) (zeroTailDim : ℕ)
-      (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
+    ∃ (p : ℕ) (_ : 0 < p)
+      (r : ℕ) (dim : Fin r → ℕ)
       (sectors : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k)),
       -- Sectors are left-canonical (TP)
       (∀ k, ∑ i : Fin (blockPhysDim d p), (sectors k i)ᴴ * sectors k i = 1) ∧
-      -- Nonzero weights
-      (∀ k, μ k ≠ 0) ∧
       -- Positive bond dimensions
       (∀ k, 0 < dim k) := by
   -- Step 1: Get the TP-gauged irreducible blocks.
-  obtain ⟨zeroTailDim, r₀, dim₀, μ₀, blocks₀, hIrr₀, hTP₀, hμNe₀, hDim₀, _hMPV₀⟩ :=
+  obtain ⟨_zeroTailDim, r₀, dim₀, _μ₀, blocks₀, hIrr₀, hTP₀, _hμNe₀, hDim₀, _hMPV₀⟩ :=
     exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D) A
   -- Step 2: For each block, apply cyclic sector decomposition.
   -- Each irreducible TP block decomposes into m_k TP sectors after blocking by m_k.
   -- We use a common blocking period p = ∏ m_k (or lcm).
   -- For this initial version, we demonstrate the per-block decomposition.
   -- A full assembly with common blocking period requires iterated-blocking infrastructure.
+  -- TODO(#242): Assemble per-block cyclic decompositions under a common blocking
+  -- period p = lcm(m_k). Requires iterated-blocking compatibility infrastructure.
   sorry
 
 end CyclicSectorBridgeMPS
