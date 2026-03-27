@@ -65,22 +65,78 @@ jobs:
             For each issue found, post an inline comment on the relevant line using the GitHub CLI.
             At the end, post a summary comment on the PR with your overall assessment.
 
-            **Reading existing review threads:**
-            Before posting new comments, read all existing review threads on this PR using the GitHub MCP tools.
-            This includes threads from previous review cycles and any replies from @claude or human reviewers.
+            **Reading existing feedback:**
+            Before posting new comments, read ALL existing feedback on this PR using the GitHub MCP tools:
+            1. Read **inline review threads** via `get_review_comments` — these are code-level comments from previous review cycles.
+            2. Read **PR conversation comments** via `get_comments` — bots and humans often post feedback, summaries,
+               and discussion directly on the PR thread (not as inline review comments). These are equally important.
+            This includes threads from previous review cycles and any replies from @claude, other bots, or human reviewers.
             Use this context to:
-            - Avoid re-raising issues that have already been discussed, acknowledged, or fixed.
-            - Understand any ongoing conversation or decisions made in earlier threads.
+            - Avoid re-raising issues that have already been discussed, acknowledged, or fixed in either location.
+            - Understand any ongoing conversation or decisions made in earlier threads or PR comments.
 
             **Resolving previous review comments:**
             When this review is triggered by a `synchronize` event (new push to the PR):
-            1. For each unresolved review thread that was authored by you (the bot), check whether the new changes address the issue raised in that comment.
-            2. If a previous comment has been addressed by the new commits, resolve that review thread using the `mcp__github__resolve_review_thread` tool.
-            3. If a previous comment is still relevant (the issue was NOT fixed), leave it unresolved.
-            4. Only resolve your own (bot) threads — never resolve threads authored by humans.
+            1. First, fetch all review threads **with their GraphQL node IDs** using `gh api graphql`.
+               The `get_review_comments` MCP method does NOT return thread IDs, so you MUST use GraphQL.
+            2. For each unresolved thread where the author login starts with `claude`, `copilot-pull-request-reviewer`, or `chatgpt-codex-connector`
+               (note: GitHub may append `[bot]` to app logins — match the base name as a prefix to handle both forms),
+               check whether the new changes address the issue raised in that comment.
+               Do NOT resolve threads from `cursor`/Bugbot — that bot manages its own thread resolution.
+            3. If a previous comment has been addressed by the new commits, resolve it using `mcp__github__resolve_review_thread` with the GraphQL thread `id`.
+            4. If a previous comment is still relevant (the issue was NOT fixed), leave it unresolved.
+            5. Only resolve bot threads — never resolve threads authored by human reviewers.
             This prevents stale bot comments from accumulating across review cycles.
+
+            **Example: How to fetch thread IDs and resolve them**
+
+            Step 1 — Query thread IDs via GraphQL (returns up to 100 threads; see Step 3 for pagination):
+            ```bash
+            gh api graphql -f query='
+            {
+              repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
+                pullRequest(number: ${{ github.event.pull_request.number }}) {
+                  reviewThreads(first: 100) {
+                    nodes {
+                      id
+                      isResolved
+                      isOutdated
+                      comments(first: 1) {
+                        nodes {
+                          author { login }
+                          body
+                        }
+                      }
+                    }
+                    pageInfo { hasNextPage endCursor }
+                  }
+                }
+              }
+            }'
+            ```
+            This returns thread objects with `id` fields like `"PRRT_kwDON..."`. Use pagination if `hasNextPage` is true.
+
+            Step 2 — For each unresolved bot thread whose issue is now fixed, resolve it:
+            ```
+            mcp__github__resolve_review_thread(threadId: "PRRT_kwDON...")
+            ```
+
+            Step 3 — If there are more than 100 threads, paginate:
+            ```bash
+            gh api graphql -f query='
+            {
+              repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
+                pullRequest(number: ${{ github.event.pull_request.number }}) {
+                  reviewThreads(first: 100, after: "CURSOR_FROM_PREVIOUS_PAGE") {
+                    nodes { id isResolved isOutdated comments(first: 1) { nodes { author { login } body } } }
+                    pageInfo { hasNextPage endCursor }
+                  }
+                }
+              }
+            }'
+            ```
 
           claude_args: |
             --model claude-opus-4-6
-            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*"
+            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*"
             --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Flag any sorry that is not clearly marked as a known TODO."
