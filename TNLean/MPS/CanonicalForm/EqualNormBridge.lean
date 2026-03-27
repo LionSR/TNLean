@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.Overlap.CastLemmas
+import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.MPS.Structure.PrimitivityBridge
 
 open scoped Matrix BigOperators
@@ -121,11 +122,12 @@ theorem gaugePhaseEquiv_of_equal_norm_blocks
     (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
     (hμne : ∀ k, μ k ≠ 0)
-    (hDim : ∀ k, 0 < dim k)
     (j k : Fin r) (hjk : j ≠ k) (hNorm : ‖μ j‖ = ‖μ k‖) :
     ∃ hdim : dim j = dim k,
       GaugePhaseEquiv (d := d)
         (cast (congr_arg (MPSTensor d) hdim) (blocks j)) (blocks k) := by
+  -- TODO(#243): prove the proportionality step needed to upgrade equal-norm
+  -- TP-normalized irreducible primitive blocks to gauge-phase equivalence.
   sorry
 
 /-! ### §2. Norm of gauge phase is one -/
@@ -144,7 +146,7 @@ theorem norm_gaugePhase_eq_one_of_irr_TP_primitive
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hA_prim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
     (hB_prim : _root_.IsPrimitive (transferMap (d := d) (D := D) B))
-    (X : GL (Fin D) ℂ) (ζ : ℂ) (_hζne : ζ ≠ 0)
+    (X : GL (Fin D) ℂ) (ζ : ℂ)
     (hX : ∀ i : Fin d,
       B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
         ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :
@@ -156,14 +158,8 @@ theorem norm_gaugePhase_eq_one_of_irr_TP_primitive
   -- Self-overlap of B scales from self-overlap of A.
   have hScale : ∀ N,
       mpvOverlap (d := d) B B N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N := by
-    intro N
-    simp only [mpvOverlap]
-    rw [Finset.mul_sum]
-    congr 1; ext σ
-    rw [hmpv N σ]
-    simp [star_mul, mul_pow, star_pow]
-    ring
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N :=
+    mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := A) (B := B) (ζ := ζ) hmpv
   -- Both blocks have self-overlap → 1 (from primitivity).
   have hA_pf : HasPrimitiveFixedPoint A :=
     hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hA_irr hA_norm hA_prim
@@ -201,8 +197,6 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hμne : ∀ k, μ k ≠ 0)
-    -- Equal-norm blocks have the same dimension.
-    (_hDimEq : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ → dim j = dim k)
     -- Equal-norm blocks are gauge-phase equivalent with unit-norm phase.
     (hGPE : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ →
       ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
@@ -213,78 +207,32 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
       StrictAnti (fun j : Fin P.basisCount =>
         ‖P.sectors.weight j ⟨0, P.sectors.copies_pos j⟩‖) := by
   classical
-  -- ── Step 1: Set up the norm image and a strictly-decreasing listing ─────
-  let normImage : Finset ℝ := Finset.univ.image (fun k : Fin r => ‖μ k‖)
-  let g := normImage.card
-  let vals : Fin g → ℝ := fun j => normImage.orderEmbOfFin rfl (Fin.rev j)
-  have hvals_anti : StrictAnti vals :=
-    (normImage.orderEmbOfFin rfl).strictMono.comp_strictAnti Fin.rev_strictAnti
-  have hvals_inj : Function.Injective vals := hvals_anti.injective
-  have hvals_mem : ∀ j, vals j ∈ normImage :=
-    fun j => Finset.orderEmbOfFin_mem normImage rfl (Fin.rev j)
-  -- ── Step 2: Norm classes ──────────────────────────────────────────────────
-  let normClass : Fin g → Finset (Fin r) :=
-    fun j => Finset.univ.filter (fun k => ‖μ k‖ = vals j)
-  have hClass_nonempty : ∀ j, (normClass j).Nonempty := by
-    intro j
-    have hmem := hvals_mem j
-    simp only [normImage, Finset.mem_image, Finset.mem_univ, true_and] at hmem
-    obtain ⟨k, hk⟩ := hmem
-    exact ⟨k, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hk⟩⟩
-  have hClass_disj :
-      Set.PairwiseDisjoint (↑(Finset.univ : Finset (Fin g)) : Set (Fin g)) normClass := by
-    intro j₁ _ j₂ _ hne
-    apply Finset.disjoint_left.mpr
-    intro k hk1 hk2
-    exact hne (hvals_inj
-      ((Finset.mem_filter.mp hk1).2.symm.trans (Finset.mem_filter.mp hk2).2))
-  have hClass_cover : Finset.biUnion Finset.univ normClass = Finset.univ := by
-    ext k
-    simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, iff_true]
-    have hmem : ‖μ k‖ ∈ normImage :=
-      Finset.mem_image.mpr ⟨k, Finset.mem_univ _, rfl⟩
-    rw [← Finset.image_orderEmbOfFin_univ normImage rfl] at hmem
-    obtain ⟨i, _, hi⟩ := Finset.mem_image.mp hmem
-    refine ⟨Fin.rev i, ?_⟩
-    change k ∈ Finset.univ.filter (fun k => ‖μ k‖ = vals (Fin.rev i))
-    rw [Finset.mem_filter]
-    refine ⟨Finset.mem_univ _, ?_⟩
-    change ‖μ k‖ = normImage.orderEmbOfFin rfl (Fin.rev (Fin.rev i))
-    rw [Fin.rev_rev]
-    exact hi.symm
-  -- ── Step 3: Enumeration ───────────────────────────────────────────────────
-  let copiesFn : Fin g → ℕ := fun j => (normClass j).card
-  have hcopies_pos : ∀ j, 0 < copiesFn j :=
-    fun j => Finset.card_pos.mpr (hClass_nonempty j)
-  let enumFn : (j : Fin g) → Fin (copiesFn j) → Fin r :=
-    fun j => (normClass j).orderEmbOfFin rfl
-  have hEnum_norm : ∀ j q, ‖μ (enumFn j q)‖ = vals j := fun j q =>
-    (Finset.mem_filter.mp ((normClass j).orderEmbOfFin_mem rfl q)).2
-  let reprFn : Fin g → Fin r := fun j => enumFn j ⟨0, hcopies_pos j⟩
-  have hRepr_norm : ∀ j, ‖μ (reprFn j)‖ = vals j :=
-    fun j => hEnum_norm j ⟨0, hcopies_pos j⟩
-  -- ── Step 4: Extract gauge-phase data ──────────────────────────────────────
+  let classes := normClassGroupingData μ
+  let reprFn : Fin classes.g → Fin r := fun j => classes.enum j ⟨0, classes.copies_pos j⟩
+  have hRepr_norm : ∀ j, ‖μ (reprFn j)‖ = classes.vals j :=
+    fun j => classes.enum_norm j ⟨0, classes.copies_pos j⟩
+  -- ── Step 1: Extract gauge-phase data for each norm class ─────────────────
   have hGPE_repr : ∀ j q,
       ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (blocks (enumFn j q)) σ = ζ ^ N * mpv (blocks (reprFn j)) σ :=
-    fun j q => hGPE (reprFn j) (enumFn j q)
-      (hRepr_norm j |>.trans (hEnum_norm j q).symm)
-  let ζFn : (j : Fin g) → Fin (copiesFn j) → ℂ :=
+        mpv (blocks (classes.enum j q)) σ = ζ ^ N * mpv (blocks (reprFn j)) σ :=
+    fun j q => hGPE (reprFn j) (classes.enum j q)
+      (hRepr_norm j |>.trans (classes.enum_norm j q).symm)
+  let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
     fun j q => (hGPE_repr j q).choose
   have hζ_ne : ∀ j q, ζFn j q ≠ 0 := fun j q => (hGPE_repr j q).choose_spec.1
   have hζ_norm : ∀ j q, ‖ζFn j q‖ = 1 := fun j q => (hGPE_repr j q).choose_spec.2.1
-  have hζ_mpv : ∀ j (q : Fin (copiesFn j)) (N : ℕ) (σ : Fin N → Fin d),
-      mpv (blocks (enumFn j q)) σ = (ζFn j q) ^ N * mpv (blocks (reprFn j)) σ :=
+  have hζ_mpv : ∀ j (q : Fin (classes.copies j)) (N : ℕ) (σ : Fin N → Fin d),
+      mpv (blocks (classes.enum j q)) σ = (ζFn j q) ^ N * mpv (blocks (reprFn j)) σ :=
     fun j q N σ => (hGPE_repr j q).choose_spec.2.2 N σ
-  -- ── Step 5: Build the SectorDecomposition ────────────────────────────────
-  let sectors : SectorWeightData g := {
-    copies         := copiesFn
-    copies_pos     := hcopies_pos
-    weight         := fun j q => ζFn j q * μ (enumFn j q)
-    weight_ne_zero := fun j q => mul_ne_zero (hζ_ne j q) (hμne (enumFn j q))
+  -- ── Step 2: Build the SectorDecomposition ────────────────────────────────
+  let sectors : SectorWeightData classes.g := {
+    copies         := classes.copies
+    copies_pos     := classes.copies_pos
+    weight         := fun j q => ζFn j q * μ (classes.enum j q)
+    weight_ne_zero := fun j q => mul_ne_zero (hζ_ne j q) (hμne (classes.enum j q))
   }
   let P : SectorDecomposition d := {
-    basisCount := g
+    basisCount := classes.g
     basisDim   := fun j => dim (reprFn j)
     basis      := fun j => blocks (reprFn j)
     sectors    := sectors
@@ -292,30 +240,16 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
   refine ⟨P, ?_, ?_⟩
   · -- ── SameMPV₂ proof ──────────────────────────────────────────────────────
     intro N σ
-    have hRegroup : ∀ (f : Fin r → ℂ),
-        ∑ j : Fin g, ∑ q : Fin (copiesFn j), f (enumFn j q) = ∑ k : Fin r, f k := by
-      intro f
-      have inner_eq : ∀ j : Fin g,
-          ∑ q : Fin (copiesFn j), f (enumFn j q) = ∑ k ∈ normClass j, f k := by
-        intro j
-        rw [← Finset.map_orderEmbOfFin_univ (normClass j) rfl, Finset.sum_map]
-        rfl
-      simp_rw [inner_eq]
-      calc ∑ j : Fin g, ∑ k ∈ normClass j, f k
-          = ∑ k ∈ Finset.biUnion Finset.univ normClass, f k :=
-              (Finset.sum_biUnion hClass_disj).symm
-        _ = ∑ k ∈ Finset.univ, f k := by rw [hClass_cover]
-        _ = ∑ k : Fin r, f k := rfl
     calc mpv P.toTensor σ
         = ∑ j : Fin P.basisCount,
             ∑ q : Fin (P.copies j), (P.weight j q) ^ N * mpv (P.basis j) σ :=
             P.mpv_toTensor_eq_sum_sectors σ
-      _ = ∑ j : Fin g,
-            ∑ q : Fin (copiesFn j),
-              (ζFn j q * μ (enumFn j q)) ^ N * mpv (blocks (reprFn j)) σ := rfl
-      _ = ∑ j : Fin g,
-            ∑ q : Fin (copiesFn j),
-              (μ (enumFn j q)) ^ N * mpv (blocks (enumFn j q)) σ := by
+      _ = ∑ j : Fin classes.g,
+            ∑ q : Fin (classes.copies j),
+              (ζFn j q * μ (classes.enum j q)) ^ N * mpv (blocks (reprFn j)) σ := rfl
+      _ = ∑ j : Fin classes.g,
+            ∑ q : Fin (classes.copies j),
+              (μ (classes.enum j q)) ^ N * mpv (blocks (classes.enum j q)) σ := by
               refine Finset.sum_congr rfl (fun j _ =>
                 Finset.sum_congr rfl (fun q _ => ?_))
               rw [mul_pow]
@@ -325,17 +259,18 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
               rw [hζ_mpv j q N σ]
               ring
       _ = ∑ k : Fin r, (μ k) ^ N * mpv (blocks k) σ :=
-            hRegroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
+            classes.regroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
       _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
               symm
               simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
   · -- ── StrictAnti proof ────────────────────────────────────────────────────
     intro i j hij
-    change ‖ζFn j ⟨0, hcopies_pos j⟩ * μ (enumFn j ⟨0, hcopies_pos j⟩)‖ <
-      ‖ζFn i ⟨0, hcopies_pos i⟩ * μ (enumFn i ⟨0, hcopies_pos i⟩)‖
+    change ‖ζFn j ⟨0, classes.copies_pos j⟩ * μ (classes.enum j ⟨0, classes.copies_pos j⟩)‖ <
+      ‖ζFn i ⟨0, classes.copies_pos i⟩ * μ (classes.enum i ⟨0, classes.copies_pos i⟩)‖
     simp only [norm_mul, hζ_norm, one_mul]
-    rw [hEnum_norm j ⟨0, hcopies_pos j⟩, hEnum_norm i ⟨0, hcopies_pos i⟩]
-    exact hvals_anti hij
+    rw [classes.enum_norm j ⟨0, classes.copies_pos j⟩,
+      classes.enum_norm i ⟨0, classes.copies_pos i⟩]
+    exact classes.vals_strictAnti hij
 
 /-! ### §4. Pipeline connection -/
 
@@ -356,8 +291,7 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
     (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
     (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hμne : ∀ k, μ k ≠ 0)
-    (hDim : ∀ k, 0 < dim k) :
+    (hμne : ∀ k, μ k ≠ 0) :
     ∃ P : SectorDecomposition d,
       SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
       StrictAnti (fun j : Fin P.basisCount =>
@@ -368,14 +302,8 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
         GaugePhaseEquiv (d := d)
           (cast (congr_arg (MPSTensor d) hdim) (blocks j)) (blocks k) := by
     intro j k hjk hNorm
-    exact gaugePhaseEquiv_of_equal_norm_blocks μ blocks hTP hIrr hPrim hμne hDim j k hjk hNorm
-  -- Step 2: Derive the dimension equality hypothesis for all equal-norm blocks.
-  have hDimEq : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ → dim j = dim k := by
-    intro j k hNorm
-    by_cases hjk : j = k
-    · exact congr_arg dim hjk
-    · exact (hGPE_raw j k hjk hNorm).choose
-  -- Step 3: Derive GPE data with unit-norm phase for the grouping theorem.
+    exact gaugePhaseEquiv_of_equal_norm_blocks μ blocks hTP hIrr hPrim hμne j k hjk hNorm
+  -- Step 2: Derive GPE data with unit-norm phase for the grouping theorem.
   have hGPEζ : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ →
       ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
         ∀ (N : ℕ) (σ : Fin N → Fin d),
@@ -406,9 +334,9 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
           (hTP k)
           ((isPrimitive_transferMap_cast_dim hdim (blocks j)).mpr (hPrim j))
           (hPrim k)
-          X ζ hζne hX
+          X ζ hX
       exact ⟨ζ, hζne, hζ_norm, hmpv⟩
-  -- Step 4: Apply the gauge-phase-aware BNT grouping theorem.
-  exact exists_bnt_grouping_of_gaugePhaseEquiv μ blocks hμne hDimEq hGPEζ
+  -- Step 3: Apply the gauge-phase-aware BNT grouping theorem.
+  exact exists_bnt_grouping_of_gaugePhaseEquiv μ blocks hμne hGPEζ
 
 end MPSTensor
