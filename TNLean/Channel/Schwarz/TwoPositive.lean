@@ -65,25 +65,24 @@ open Matrix Finset
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
+attribute [local instance] Matrix.instL2OpNormedAddCommGroup
+attribute [local instance] Matrix.instL2OpNormedRing
+attribute [local instance] Matrix.instL2OpNormedAlgebra
+
+noncomputable local instance matrixCStarAlgebra (m : Type*) [Fintype m] [DecidableEq m] :
+    CStarAlgebra (Matrix m m ℂ) where
+  toNormedRing := Matrix.instL2OpNormedRing
+  toStarRing := inferInstance
+  toCompleteSpace := inferInstance
+  toCStarRing := Matrix.instCStarRing
+  toNormedAlgebra := Matrix.instL2OpNormedAlgebra
+  toStarModule := inferInstance
+
 private lemma posSemidef_fromBlocks_diag {m o : Type*}
     [Fintype m] [Fintype o] [DecidableEq m] [DecidableEq o]
     {A : Matrix m m ℂ} {D : Matrix o o ℂ}
     (hA : A.PosSemidef) (hD : D.PosSemidef) :
     (Matrix.fromBlocks A 0 0 D : Matrix (m ⊕ o) (m ⊕ o) ℂ).PosSemidef := by
-  letI : CStarAlgebra (Matrix m m ℂ) :=
-    { toNormedRing := Matrix.instL2OpNormedRing
-      toStarRing := inferInstance
-      toCompleteSpace := inferInstance
-      toCStarRing := Matrix.instCStarRing
-      toNormedAlgebra := Matrix.instL2OpNormedAlgebra
-      toStarModule := inferInstance }
-  letI : CStarAlgebra (Matrix o o ℂ) :=
-    { toNormedRing := Matrix.instL2OpNormedRing
-      toStarRing := inferInstance
-      toCompleteSpace := inferInstance
-      toCStarRing := Matrix.instCStarRing
-      toNormedAlgebra := Matrix.instL2OpNormedAlgebra
-      toStarModule := inferInstance }
   obtain ⟨CA, hCA⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
     ((Matrix.nonneg_iff_posSemidef).mpr hA)
   obtain ⟨CD, hCD⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
@@ -240,7 +239,8 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
   have hDterm (a : Fin r) :
       D a * Xblk * (D a)ᴴ = Matrix.of fun p q => K a * Xblk p q * (K a)ᴴ := by
     ext p q i j
-    simp [D, Matrix.diagonal_mul, Matrix.mul_diagonal, Matrix.mul_assoc, Matrix.star_eq_conjTranspose]
+    simp [D, Matrix.diagonal_mul, Matrix.mul_diagonal,
+      Matrix.mul_assoc, Matrix.star_eq_conjTranspose]
   have hYblk :
       Yblk = Matrix.of fun p q => E (Xblk p q) := by
     ext p q i j
@@ -254,7 +254,7 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
   convert posSemidef_reindex hYswap e.symm using 1
   ext ip jq
   rw [hYblk]
-  simp [Matrix.reindex_apply, e]
+  simp only [of_apply, Matrix.reindex_apply, Equiv.symm_symm, Matrix.submatrix_apply]
   change E (Matrix.of fun i j => X (i, ip.2) (j, jq.2)) ip.1 jq.1 =
       E (Xblk ip.2 jq.2) ip.1 jq.1
   rw [hXblk_apply ip.2 jq.2]
@@ -459,13 +459,12 @@ theorem kadison_schwarz_2positive
     (Matrix.PosDef.fromBlocks₂₂ (A := E (Xᴴ * X)) (B := (E X)ᴴ)
       (D := (1 : Matrix n n ℂ)) Matrix.PosDef.one).1 hBlockPsD
 
-/-- **Placeholder**: once `kadison_schwarz_2positive` is proved, the existing
-Kraus-based KS inequality becomes a corollary via:
-  `IsCPMap → Is2PositiveMap → kadison_schwarz_2positive`
+/-- The existing Kraus-based Kadison-Schwarz inequality.
 
-Currently this just delegates to the existing direct proof. When the sorry in
-`kadison_schwarz_2positive` is filled, this should be rerouted through the
-2-positive path to demonstrate the logical subsumption. -/
+This theorem still delegates to the direct proof in `KadisonSchwarz.lean`.
+A follow-up cleanup can reroute it through
+`IsCPMap → Is2PositiveMap → kadison_schwarz_2positive`
+to make the logical subsumption explicit. -/
 theorem kadison_schwarz_from_2positive
     {d D : ℕ}
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
