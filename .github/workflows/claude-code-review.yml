@@ -57,8 +57,9 @@ jobs:
             Focus your review on:
             1. **Proof integrity / cheating detection**: Read `.github/PROOF_INTEGRITY.md` for the complete
                list of proof integrity rules (blockers, warnings, circular reasoning, castle-in-the-air patterns).
-               Apply ALL blockers and warnings listed there. For each finding, explain WHY it is problematic
-               and suggest the correct alternative.
+               Flag **blockers** as must-fix issues that should block merge. Flag **warnings** as advisory —
+               note them for the author's attention but acknowledge they may be acceptable with justification.
+               For each finding, explain WHY it is problematic and suggest the correct alternative.
             2. **Proof correctness**: Are proof terms well-structured?
             3. **Mathlib style**: Does the code follow Mathlib conventions (naming, tactic style, imports)?
             4. **Type safety**: Any type mismatches, universe issues, or coercion problems?
