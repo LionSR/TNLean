@@ -181,14 +181,23 @@ jobs:
 
             Do TWO things:
 
-            **B1 — Update tracking checklists**:
+            **B1 — Update tracking checklists and linked issues**:
             1. Find the issue(s) this PR addresses:
-               - Check PR body for `Addresses #N`, `Closes #N`, `Fixes #N`
+               - Check PR body for `Addresses #N`, `Closes #N`, `Fixes #N`,
+                 `Partially addresses #N`
                - Check branch name for `*/issue-{N}-*` pattern
             2. Find tracking issues referencing either the PR (`#PR`) or the
                linked issue(s) (`#N`)
             3. Check off matching items in the tasklist
-            4. Comment with resolution summary including the PR title
+            4. Comment on each tracking issue with resolution summary
+               including the PR title
+            5. **Comment on the linked issue(s)** themselves with a progress
+               update. For `Addresses`/`Partially addresses` (issue stays
+               open), summarize what the PR accomplished and what remains.
+               For `Closes`/`Fixes` (issue will auto-close), post a brief
+               resolution note. Example:
+               "📦 PR #X (*title*) has been merged. <summary of what was
+               done>. Remaining: <what's left, if issue stays open>."
 
             **B2 — Scan for follow-ups**:
             1. Read the PR body, comments, and review threads via MCP tools
