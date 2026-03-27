@@ -297,7 +297,6 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{theorem}[Intersection characterization]\label{thm:ground_space_iff}
   \lean{MPSTensor.groundSpace_iff_left_right}
-  \leanok
   \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground,
         thm:ground_space_intersection}
   For injective $A$ and $L \ge 1$:
@@ -310,7 +309,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \lean{MPSTensor.mpvSubmodule}
   \leanok
   \uses{def:mpv}
-  The one-dimensional subspace spanned by the MPV state
+  The subspace spanned by the MPV state
   $V^{(N)}(A)(\sigma) = \tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}})$.
 \end{definition}
 
@@ -329,7 +328,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{definition}[Unique ground state]\label{def:has_unique_ground_state}
   \lean{MPSTensor.HasUniqueGroundState}
   \leanok
-  A submodule $S$ has a unique ground state if $\dim S \le 1$.
+  A submodule $S$ has a unique ground state if $\dim S = 1$.
 \end{definition}
 
 \begin{theorem}[Unique ground state on the periodic chain]%

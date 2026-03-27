@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.Chain.OneSidedInverse
+import TNLean.Algebra.TracePairing
+import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!
 # Intersection and closure properties of MPS ground spaces
@@ -40,25 +42,29 @@ of the parent Hamiltonian (see `UniqueGroundState.lean`).
 
 open scoped Matrix BigOperators
 
+namespace List
+
+/-- `List.ofFn` distributes over `Fin.snoc`: appending one element to a function
+yields the corresponding list concatenation. -/
+theorem ofFn_snoc {α : Type*} {n : ℕ} (f : Fin n → α) (x : α) :
+    List.ofFn (Fin.snoc f x) = List.ofFn f ++ [x] := by
+  conv_lhs => rw [List.ofFn_succ' (Fin.snoc f x)]
+  simp [Fin.snoc_castSucc, Fin.snoc_last]
+
+end List
+
 namespace MPSTensor
 
 variable {d D : ℕ}
 
 /-! ### Helper lemmas for `List.ofFn` with `Fin.snoc` and `Fin.cons` -/
 
-/-- `List.ofFn` distributes over `Fin.snoc`: appending one element to a function
-yields the corresponding list concatenation. -/
-theorem list_ofFn_snoc {α : Type*} {n : ℕ} (f : Fin n → α) (x : α) :
-    List.ofFn (Fin.snoc f x) = List.ofFn f ++ [x] := by
-  conv_lhs => rw [List.ofFn_succ' (Fin.snoc f x)]
-  simp [Fin.snoc_castSucc, Fin.snoc_last]
-
 /-- Evaluating a word obtained by snoc: peel off the last letter. -/
 theorem evalWord_ofFn_snoc (A : MPSTensor d D) {L : ℕ}
     (σ : Fin L → Fin d) (j : Fin d) :
     evalWord A (List.ofFn (Fin.snoc σ j)) =
       evalWord A (List.ofFn σ) * A j := by
-  rw [list_ofFn_snoc, evalWord_append]
+  rw [List.ofFn_snoc, evalWord_append]
   simp [evalWord]
 
 /-- Evaluating a word obtained by cons: peel off the first letter. -/
@@ -73,13 +79,35 @@ theorem evalWord_ofFn_cons (A : MPSTensor d D) {L : ℕ}
 
 /-- Restrict an `(L+1)`-site state to the first `L` sites by fixing the last
 physical index to `j` (using `Fin.snoc`). -/
+def restrictLastₗ {d L : ℕ} (j : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] NSiteSpace d L where
+  toFun ψ := fun σ => ψ (Fin.snoc σ j)
+  map_add' ψ₁ ψ₂ := by
+    ext σ
+    simp
+  map_smul' c ψ := by
+    ext σ
+    simp
+
+/-- Restrict an `(L+1)`-site state to the first `L` sites by fixing the last
+physical index to `j` (using `Fin.snoc`). -/
 def restrictLast {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (j : Fin d) : NSiteSpace d L :=
-  fun σ => ψ (Fin.snoc σ j)
+  restrictLastₗ j ψ
+
+/-- Restrict an `(L+1)`-site state to the last `L` sites by fixing the first
+physical index to `i` (using `Fin.cons`). -/
+def restrictFirstₗ {d L : ℕ} (i : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] NSiteSpace d L where
+  toFun ψ := fun σ => ψ (Fin.cons i σ)
+  map_add' ψ₁ ψ₂ := by
+    ext σ
+    simp
+  map_smul' c ψ := by
+    ext σ
+    simp
 
 /-- Restrict an `(L+1)`-site state to the last `L` sites by fixing the first
 physical index to `i` (using `Fin.cons`). -/
 def restrictFirst {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (i : Fin d) : NSiteSpace d L :=
-  fun σ => ψ (Fin.cons i σ)
+  restrictFirstₗ i ψ
 
 @[simp] theorem restrictLast_apply {d L : ℕ} (ψ : NSiteSpace d (L + 1))
     (j : Fin d) (σ : Fin L → Fin d) :
@@ -92,22 +120,22 @@ def restrictFirst {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (i : Fin d) : NSiteSpa
 /-- `restrictLast` is linear in `ψ`. -/
 theorem restrictLast_add {d L : ℕ} (ψ₁ ψ₂ : NSiteSpace d (L + 1)) (j : Fin d) :
     restrictLast (ψ₁ + ψ₂) j = restrictLast ψ₁ j + restrictLast ψ₂ j := by
-  ext σ; simp [restrictLast]
+  simpa [restrictLast] using (restrictLastₗ (L := L) j).map_add ψ₁ ψ₂
 
 /-- `restrictLast` respects scalar multiplication. -/
 theorem restrictLast_smul {d L : ℕ} (c : ℂ) (ψ : NSiteSpace d (L + 1)) (j : Fin d) :
     restrictLast (c • ψ) j = c • restrictLast ψ j := by
-  ext σ; simp [restrictLast]
+  simpa [restrictLast] using (restrictLastₗ (L := L) j).map_smulₛₗ c ψ
 
 /-- `restrictFirst` is linear in `ψ`. -/
 theorem restrictFirst_add {d L : ℕ} (ψ₁ ψ₂ : NSiteSpace d (L + 1)) (i : Fin d) :
     restrictFirst (ψ₁ + ψ₂) i = restrictFirst ψ₁ i + restrictFirst ψ₂ i := by
-  ext σ; simp [restrictFirst]
+  simpa [restrictFirst] using (restrictFirstₗ (L := L) i).map_add ψ₁ ψ₂
 
 /-- `restrictFirst` respects scalar multiplication. -/
 theorem restrictFirst_smul {d L : ℕ} (c : ℂ) (ψ : NSiteSpace d (L + 1)) (i : Fin d) :
     restrictFirst (c • ψ) i = c • restrictFirst ψ i := by
-  ext σ; simp [restrictFirst]
+  simpa [restrictFirst] using (restrictFirstₗ (L := L) i).map_smulₛₗ c ψ
 
 /-! ### Ground space membership via restrictions -/
 
@@ -151,8 +179,7 @@ theorem groundSpace_inRightGround (A : MPSTensor d D) (L : ℕ)
   refine ⟨X * A i, ?_⟩
   ext σ
   simp only [restrictFirst_apply, groundSpaceMap_apply, evalWord_ofFn_cons, Matrix.mul_assoc]
-  -- Goal: tr(evalWord * (X * A i)) = tr(A i * (evalWord * X))
-  -- Use: tr(M * N) = tr(N * M) twice, plus associativity
+  -- Cycle the leading `A i` to the end of the product under the trace.
   rw [← Matrix.mul_assoc, Matrix.trace_mul_comm]
 
 /-! ### Injectivity of the ground-space map -/
@@ -166,7 +193,43 @@ then nondegeneracy of the trace pairing gives `X = 0`. -/
 theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
     {L : ℕ} (hL : 0 < L) :
     Function.Injective (groundSpaceMap A L) := by
-  sorry
+  have hker : (groundSpaceMap A L).ker = ⊥ := by
+    apply (LinearMap.ker_eq_bot').2
+    intro X hX
+    have hword1 : wordSpan A 1 = ⊤ := by
+      have hRange :
+          Set.range (fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = Set.range A := by
+        ext M
+        constructor
+        · rintro ⟨σ, rfl⟩
+          exact ⟨σ 0, by simp [evalWord]⟩
+        · rintro ⟨i, rfl⟩
+          exact ⟨fun _ => i, by simp [evalWord]⟩
+      change Submodule.span ℂ (Set.range fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = ⊤
+      rw [hRange]
+      exact hA
+    have hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1 := by
+      rw [hword1]
+      exact Submodule.mem_top
+    have hwordL : wordSpan A L = ⊤ := by
+      have hmono : wordSpan A 1 ≤ wordSpan A L :=
+        wordSpan_mono'_of_one_mem_wordSpan_one A hone (by omega)
+      exact eq_top_iff.mpr (by simpa [hword1] using hmono)
+    have hφ :
+        (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
+      apply LinearMap.ext_on_range
+        (v := fun σ : Fin L → Fin d => evalWord A (List.ofFn σ))
+      · simpa [wordSpan] using hwordL
+      · intro σ
+        simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
+          congrArg (fun ψ => ψ σ) hX
+    exact trace_mul_right_eq_zero fun N => by
+      have hNX : Matrix.trace (N * X) = 0 := by
+        simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
+      calc
+        Matrix.trace (X * N) = Matrix.trace (N * X) := Matrix.trace_mul_comm X N
+        _ = 0 := hNX
+  exact LinearMap.ker_eq_bot.mp hker
 
 /-- For an injective tensor, the ground space has dimension exactly `D²` for `L ≥ 1`.
 
@@ -175,7 +238,16 @@ dimension `D²`) together with the dimension upper bound `dim G_L(A) ≤ D²`. -
 theorem groundSpace_finrank_eq {A : MPSTensor d D} (hA : IsInjective A)
     {L : ℕ} (hL : 0 < L) :
     Module.finrank ℂ ↥(groundSpace A L) = D ^ 2 := by
-  sorry
+  let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] groundSpace A L :=
+    LinearEquiv.ofInjective (groundSpaceMap A L) (groundSpaceMap_injective hA hL)
+  calc
+    Module.finrank ℂ ↥(groundSpace A L)
+        = Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := by
+            simpa [groundSpace] using (LinearEquiv.finrank_eq e).symm
+    _ = (Fintype.card (Fin D) * Fintype.card (Fin D)) * Module.finrank ℂ ℂ := by
+          simpa using (Module.finrank_matrix ℂ ℂ (Fin D) (Fin D))
+    _ = D * D := by simp
+    _ = D ^ 2 := by simp [pow_two]
 
 /-! ### The intersection property -/
 
