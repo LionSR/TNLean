@@ -1,0 +1,182 @@
+name: CI/CD Failure Analyzer
+
+# Unified CI/CD failure analyzer that detects what failed and routes to
+# the right fix strategy via the shared auto-fix template.
+#
+# Supported failure sources:
+#   - Lean Action CI      → Lean build fix (lake build errors)
+#   - Lint blueprint      → Blueprint compilation fix (LaTeX / leanblueprint errors)
+#   - Compile blueprint   → Full blueprint + Lean build fix
+#
+# To add a new CI workflow: add its name to the `workflows` list below
+# and add a corresponding job that calls the shared template.
+
+on:
+  workflow_run:
+    workflows:
+      - "Lean Action CI"
+      - "Lint blueprint"
+      - "Compile blueprint"
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+  issues: write
+  id-token: write
+
+concurrency:
+  group: cicd-fix-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Step 1: Classify the failure ──────────────────────────────────────
+  classify:
+    if: |
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.pull_requests[0] &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      failure_type: ${{ steps.classify.outputs.failure_type }}
+    steps:
+      - name: Classify failure type
+        id: classify
+        run: |
+          WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
+          case "$WORKFLOW_NAME" in
+            "Lean Action CI")
+              echo "failure_type=lean_build" >> "$GITHUB_OUTPUT"
+              echo "::notice::Classified as Lean build failure"
+              ;;
+            "Lint blueprint")
+              echo "failure_type=blueprint_lint" >> "$GITHUB_OUTPUT"
+              echo "::notice::Classified as blueprint lint failure"
+              ;;
+            "Compile blueprint")
+              echo "failure_type=blueprint_compile" >> "$GITHUB_OUTPUT"
+              echo "::notice::Classified as full blueprint compile failure"
+              ;;
+            *)
+              echo "failure_type=unknown" >> "$GITHUB_OUTPUT"
+              echo "::warning::Unknown workflow: $WORKFLOW_NAME"
+              ;;
+          esac
+
+  # ── Step 2a: Fix Lean build failures ──────────────────────────────────
+  fix-lean-build:
+    needs: classify
+    if: needs.classify.outputs.failure_type == 'lean_build'
+    uses: ./.github/workflows/_ci-auto-fix-shared.yml
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+    with:
+      head_sha: ${{ github.event.workflow_run.head_sha }}
+      head_branch: ${{ github.event.workflow_run.head_branch }}
+      workflow_run_id: ${{ github.event.workflow_run.id }}
+      pr_number: ${{ github.event.workflow_run.pull_requests[0].number }}
+      setup_lean: true
+      plugin_marketplaces: 'https://github.com/leanprover/skills.git'
+      plugins: 'lean@leanprover'
+      claude_prompt: |
+        The Lean CI build failed. Your task is to fix the build errors.
+
+        Instructions:
+        0. Use your judgment on whether Mathlib scouting is needed for this fix. For proof-level
+           failures (sorry, tactic errors, type mismatches in proofs), read PR/issue comments for
+           existing **Mathlib Scouting Reports** and use them to inform your fix. For simple failures
+           (import errors, syntax issues, naming), skip scouting and fix directly.
+        1. Read the error logs carefully to identify the failing Lean files and error messages.
+        2. Common Lean build failures and how to fix them:
+           - `sorry` left in proof: Fully close the lemma/theorem — replace `sorry` with a complete proof. Do NOT leave `sorry` behind or add TODO comments as a workaround.
+           - Type mismatch: Check expected vs actual types and fix the proof term.
+           - Unknown identifier / import error: Add the correct `import` statement.
+           - Tactic failure: Try alternative tactics (`simp`, `exact`, `apply`, `omega`, etc.).
+           - Timeout: Simplify the proof or break it into helper lemmas.
+        3. Your goal is to fully close every incomplete lemma/theorem, not just silence errors. Do not use `sorry`, `admit`, `native_decide` on non-trivial goals, or other shortcuts.
+        4. Run `lake build` to verify your fix compiles with zero errors and zero `sorry`s.
+        5. Make minimal, targeted fixes. Do not refactor unrelated code.
+        6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
+        7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
+      claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+      claude_system_prompt: "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
+
+  # ── Step 2b: Fix blueprint lint failures ──────────────────────────────
+  fix-blueprint-lint:
+    needs: classify
+    if: needs.classify.outputs.failure_type == 'blueprint_lint'
+    uses: ./.github/workflows/_ci-auto-fix-shared.yml
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+    with:
+      head_sha: ${{ github.event.workflow_run.head_sha }}
+      head_branch: ${{ github.event.workflow_run.head_branch }}
+      workflow_run_id: ${{ github.event.workflow_run.id }}
+      pr_number: ${{ github.event.workflow_run.pull_requests[0].number }}
+      setup_lean: false
+      claude_prompt: |
+        The blueprint compilation (leanblueprint web) failed. Your task is to fix the blueprint errors.
+
+        Instructions:
+        1. Read the error logs carefully to identify the failing .tex files and error messages.
+        2. Common blueprint compilation failures and how to fix them:
+           - Unresolved \ref or \label: Check for typos in label names (e.g. \uses{def:foo} where the label is actually def:bar). Search the .tex files for the correct label.
+           - Duplicate labels: Two environments share the same \label{...}. Rename one to be unique.
+           - Mismatched \begin/\end environments: Ensure every \begin{theorem} has a matching \end{theorem}, etc.
+           - Invalid \lean{DeclName}: The declaration name in \lean{} must match a real Lean declaration. Check TNLean/ source files for the correct name.
+           - Malformed LaTeX: Missing closing braces, unescaped special characters, etc.
+           - plasTeX parse errors: These often point to unsupported LaTeX commands. Simplify or wrap in \ifplastex guards.
+           - ERROR lines about unresolved references: Find the \uses{} or \ref{} that references a non-existent label and fix the label name.
+        3. The blueprint .tex files are in blueprint/src/chapter/. The blueprint config is in blueprint/src/.
+        4. You can test your fix locally by running:
+           pip install leanblueprint plastex
+           cd blueprint && leanblueprint web
+           Check that no ERROR lines appear in the output.
+        5. Make minimal, targeted fixes. Do not refactor unrelated LaTeX.
+        6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
+        7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
+      claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+      claude_system_prompt: "This is a Lean 4 math formalization project with a leanblueprint documentation system. The blueprint uses LaTeX files in blueprint/src/chapter/ with special commands: \\lean{DeclName}, \\leanok, \\uses{label}, \\label{...}. Fix only the blueprint compilation errors. Prefer minimal diffs. Validate with leanblueprint web before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
+
+  # ── Step 2c: Fix full blueprint compile failures ──────────────────────
+  # This workflow builds Lean AND compiles blueprint docs, so failures
+  # could be in either layer. Claude gets tools for both.
+  fix-blueprint-compile:
+    needs: classify
+    if: needs.classify.outputs.failure_type == 'blueprint_compile'
+    uses: ./.github/workflows/_ci-auto-fix-shared.yml
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+    with:
+      head_sha: ${{ github.event.workflow_run.head_sha }}
+      head_branch: ${{ github.event.workflow_run.head_branch }}
+      workflow_run_id: ${{ github.event.workflow_run.id }}
+      pr_number: ${{ github.event.workflow_run.pull_requests[0].number }}
+      setup_lean: true
+      plugin_marketplaces: 'https://github.com/leanprover/skills.git'
+      plugins: 'lean@leanprover'
+      claude_prompt: |
+        The full blueprint compilation workflow failed. This workflow builds the Lean project AND compiles the blueprint documentation. Failures could be in either layer.
+
+        Instructions:
+        1. Read the error logs carefully. Determine whether the failure is:
+           a) A Lean build failure (lake build errors) — fix the .lean files
+           b) A blueprint/documentation failure (leanblueprint/docgen errors) — fix the .tex files
+           c) Both — fix Lean first, then blueprint
+        2. For Lean build failures:
+           - `sorry` left in proof: Fully close the lemma/theorem with a complete proof.
+           - Type mismatch: Check expected vs actual types and fix the proof term.
+           - Unknown identifier / import error: Add the correct `import` statement.
+           - Tactic failure: Try alternative tactics (`simp`, `exact`, `apply`, `omega`, etc.).
+        3. For blueprint failures:
+           - Unresolved \ref or \label: Check for typos in label names.
+           - Invalid \lean{DeclName}: Must match a real Lean declaration name.
+           - plasTeX parse errors: Simplify unsupported LaTeX.
+        4. Run `lake build` to verify Lean changes compile.
+        5. Make minimal, targeted fixes. Do not refactor unrelated code.
+        6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
+        7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
+      claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+      claude_system_prompt: "This is a Lean 4 / Mathlib repository with a leanblueprint documentation system. The failure may be in Lean source (.lean) or blueprint documentation (.tex). Diagnose which layer failed and fix accordingly. Prefer minimal diffs. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
