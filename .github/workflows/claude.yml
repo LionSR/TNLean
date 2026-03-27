@@ -112,9 +112,7 @@ jobs:
           echo "Creating PR from $BRANCH → main for issue #${ISSUE_NUMBER}"
 
           # Create the PR — pr-cleanup.yml will reformat title/body/labels
-          PR_BODY="Addresses #${ISSUE_NUMBER}
-
-          Auto-created by Claude Code action."
+          PR_BODY=$'Addresses #'"${ISSUE_NUMBER}"$'\n\nAuto-created by Claude Code action.'
 
           gh pr create \
             --repo "$REPO" \
