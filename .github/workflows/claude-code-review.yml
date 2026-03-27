@@ -65,12 +65,15 @@ jobs:
             For each issue found, post an inline comment on the relevant line using the GitHub CLI.
             At the end, post a summary comment on the PR with your overall assessment.
 
-            **Reading existing review threads:**
-            Before posting new comments, read all existing review threads on this PR using the GitHub MCP tools.
-            This includes threads from previous review cycles and any replies from @claude or human reviewers.
+            **Reading existing feedback:**
+            Before posting new comments, read ALL existing feedback on this PR using the GitHub MCP tools:
+            1. Read **inline review threads** via `get_review_comments` — these are code-level comments from previous review cycles.
+            2. Read **PR conversation comments** via `get_comments` — bots and humans often post feedback, summaries,
+               and discussion directly on the PR thread (not as inline review comments). These are equally important.
+            This includes threads from previous review cycles and any replies from @claude, other bots, or human reviewers.
             Use this context to:
-            - Avoid re-raising issues that have already been discussed, acknowledged, or fixed.
-            - Understand any ongoing conversation or decisions made in earlier threads.
+            - Avoid re-raising issues that have already been discussed, acknowledged, or fixed in either location.
+            - Understand any ongoing conversation or decisions made in earlier threads or PR comments.
 
             **Resolving previous review comments:**
             When this review is triggered by a `synchronize` event (new push to the PR):
