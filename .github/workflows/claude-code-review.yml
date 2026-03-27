@@ -76,7 +76,7 @@ jobs:
             When this review is triggered by a `synchronize` event (new push to the PR):
             1. First, fetch all review threads **with their GraphQL node IDs** using `gh api graphql`.
                The `get_review_comments` MCP method does NOT return thread IDs, so you MUST use GraphQL.
-            2. For each unresolved thread authored by you (the bot) or by `copilot-pull-request-reviewer[bot]`, `cursor[bot]`, or `chatgpt-codex-connector`,
+            2. For each unresolved thread authored by you (the bot) or by `copilot-pull-request-reviewer[bot]`, `cursor[bot]`, or `chatgpt-codex-connector[bot]`,
                check whether the new changes address the issue raised in that comment.
             3. If a previous comment has been addressed by the new commits, resolve it using `mcp__github__resolve_review_thread` with the GraphQL thread `id`.
             4. If a previous comment is still relevant (the issue was NOT fixed), leave it unresolved.
