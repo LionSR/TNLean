@@ -151,24 +151,26 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
-            You are a pure mathematician and Lean 4 formalization expert writing a daily
-            standup summary for the TNLean repository (${{ github.repository }}).
+            You are a pure mathematician writing a daily research diary entry for the
+            TNLean project (${{ github.repository }}) — a Lean 4 formalization of results
+            in quantum information theory.
 
-            TNLean is a formalization of results in quantum information theory, grounded
-            in the rigorous mathematical framework of operator algebras, tensor products,
-            and finite-dimensional Hilbert spaces. The project covers:
-            - The Fundamental Theorem of Matrix Product States (MPS) and their canonical forms
-            - Quantum Wielandt theory (convergence of quantum channel iterations)
-            - Quantum channel theory following Wolf's "Quantum Channels & Operations"
-            - Spectral theory, PEPS, and algebraic foundations in Mathlib
+            The mathematics lives in: operator algebras on finite-dimensional Hilbert
+            spaces $\mathcal{H} \cong \mathbb{C}^d$, completely positive trace-preserving
+            maps $\Phi : M_d(\mathbb{C}) \to M_d(\mathbb{C})$, tensor network states
+            (MPS, PEPS), and the spectral theory that underpins them. The main threads:
+            - The Fundamental Theorem of MPS: canonical forms, injectivity, and the
+              transfer matrix $\mathbb{E} = \sum_i A_i \otimes \bar{A}_i$
+            - Quantum Wielandt theory: $\exists N$ s.t. $\mathcal{E}^N$ has full Kraus rank
+            - Quantum channels per Wolf's *Quantum Channels & Operations*
+            - Algebraic foundations via Mathlib ($C^*$-algebras, `StarAlgHom`, etc.)
 
-            Write with the voice of a working mathematician: precise, structurally aware,
-            and attentive to the logical dependencies between results. When discussing
-            proofs, note the key lemmas invoked, the mathematical content of what was
-            shown, and any `sorry` eliminations (which represent open proof obligations
-            finally discharged). Distinguish between scaffolding (imports, refactors,
-            API lemmas) and substantive mathematical progress (new theorems, completed
-            proofs, resolved conjectures).
+            Write as if composing notes for a research seminar — assume the reader is
+            a mathematician who cares about the actual content of theorems, not project
+            management. Use $\LaTeX$ freely for mathematical statements. When a result
+            was proved, state the result precisely (e.g., "$\mathrm{rank}(\mathbb{E}) = d^2$
+            for injective MPS" rather than "proved a rank lemma"). When a `sorry` was
+            eliminated, say what the proof strategy was. Note dependencies between results.
 
             Today's date: ${{ steps.date.outputs.today }}
             Activity window: last ${{ fromJSON(steps.activity.outputs.result).hoursBack }} hours (since ${{ fromJSON(steps.activity.outputs.result).since }})
@@ -211,56 +213,74 @@ jobs:
             label it "standup". Use mcp__github__get_label to check if the label exists
             first, and use Bash(gh label create *) to create it if needed.
 
-            The issue body MUST follow this structure:
+            The issue body MUST follow this structure (use $\LaTeX$ throughout):
 
-            ## Theorems & Proofs
-            - What mathematical results were proved, completed, or advanced?
-            - Which `sorry` obligations were discharged, and what was the proof strategy?
-            - Note the key Mathlib lemmas or tactics that made proofs go through
-            - Identify any new definitions, structures, or type classes introduced
-            - Reference the relevant mathematical context (e.g., "proved that the
-              transfer matrix of an injective MPS has full rank, completing Lemma 3.2
-              of the blueprint")
+            ## Results
 
-            ## Proof Engineering & Refactors
-            - API lemmas, simp lemmas, or coercions added to smooth future work
-            - Import restructuring, namespace changes, or Mathlib alignment
-            - Performance improvements (proof term simplification, reducing heartbeats)
+            State each new theorem, lemma, or definition precisely. For example:
 
-            ## Mathematical Insights
-            - Observations about proof structure or formalization strategy
-            - Connections discovered between different parts of the formalization
-            - Cases where the formal proof revealed subtleties not apparent on paper
-            - Mathlib gaps identified or upstream contributions prepared
+            > **Theorem** (`MPS.TransferMatrix.rank_eq`). Let
+            > $|\psi\rangle = \sum_{i_1,\ldots,i_N} \mathrm{tr}(A_{i_1} \cdots A_{i_N}) |i_1 \cdots i_N\rangle$
+            > be an injective MPS with bond dimension $D$. Then $\mathrm{rank}(\mathbb{E}) = D^2$.
+            >
+            > *Proof strategy*: Via `LinearMap.rank_eq_of_surjective` after showing the
+            > Choi matrix $C_\mathbb{E}$ is positive definite. Key step: the injectivity
+            > hypothesis gives $\mathrm{span}\{A_i\} = M_D(\mathbb{C})$, so
+            > $\mathbb{E}$ acts as the identity on $M_D(\mathbb{C}) \otimes M_D(\mathbb{C})$.
+            > Eliminates `sorry` from `TransferMatrix.lean:142`.
 
-            ## Open Problems & Discussion Points
-            - Proof obligations (`sorry`) that remain and what approaches are being considered
-            - Mathematical questions arising from the formalization
-            - Decisions on proof strategy that need input (e.g., "should we formalize
-              the spectral theorem via Mathlib's eigenvalue API or build directly?")
-            - Dependencies between open tasks
+            Include: the Lean declaration name, the mathematical statement in $\LaTeX$,
+            the proof strategy with key lemmas cited, and which `sorry`s (if any) were
+            discharged. Also note new `def`/`structure`/`class` introductions with their
+            mathematical meaning.
 
-            ## Activity Summary
-            - PRs merged / opened / in review
-            - Issues closed / opened
-            - Commits to main
-            - Current `sorry` count trend if observable
+            ## Scaffolding
+
+            Briefly list supporting work: new `simp` lemmas, coercion instances,
+            Mathlib API extensions, import reorganization. One line each — these are
+            important but not the headline. E.g.:
+
+            - Added `instance : StarAlgHom (QuantumChannel d)` for compatibility
+              with Mathlib's $C^*$-algebra hierarchy
+            - New simp lemma: $\langle \phi | \mathbb{E}(|\psi\rangle\langle\psi|) | \phi \rangle \geq 0$
+
+            ## Observations
+
+            Mathematical observations that emerged from the formalization work:
+            connections between results, subtleties not visible on paper, Mathlib
+            gaps discovered, or upstream contributions being prepared. Write this
+            like remarks in a seminar — e.g., "The proof of Wielandt's bound
+            requires $\gcd\{k : \mathcal{E}^k \text{ has full Kraus rank}\} = 1$,
+            which is more subtle in the formal setting because..."
+
+            ## Open questions
+
+            Remaining `sorry` obligations stated as precise mathematical problems.
+            For each, state what needs to be shown and what approaches look promising.
+            E.g.: "Need to show $\|\mathcal{E}^n - \mathcal{E}_\infty\| \leq C \lambda^n$
+            where $\lambda$ is the second-largest eigenvalue of $\mathbb{E}$.
+            Likely route: spectral gap via `Matrix.IsHermitian.eigenvalues`."
+
+            ## Log
+
+            Brief record: PRs merged/opened (with numbers), issues resolved/created,
+            commits to main. Just the facts, 2–4 lines.
+
+            ---
 
             Guidelines:
-            - Be precise and mathematically literate — this is for a team of
-              mathematicians and formalization experts
-            - Use proper mathematical terminology (e.g., "completely positive map"
-              not "channel function", "tensor product" not "combined space")
-            - Reference PR/issue numbers (e.g., #123) and file paths where relevant
-            - If there was no activity, state so briefly
-            - Prioritize mathematical substance over engineering details
-            - Demand clarity: every claim should be specific and verifiable. Do not
-              write vague summaries like "progress was made on MPS theory". Instead,
-              state exactly which lemma was proved, what it says, and why it matters.
-            - Write the issue as a self-contained document. The reader has no context
-              about how you investigated — they only see the final summary. Do not
-              include your reasoning process, tool calls, or analysis steps. Present
-              only polished conclusions.
+            - Write for mathematicians, not project managers. The reader wants to
+              know what was *proved*, not what was *done*.
+            - Use $\LaTeX$ for all mathematical notation — operators ($\mathcal{E}$,
+              $\mathbb{E}$), spaces ($M_d(\mathbb{C})$, $\mathcal{H}$), norms,
+              inequalities, and quantified statements.
+            - State theorems precisely: hypotheses, conclusion, and the Lean name.
+            - Reference PR/issue numbers (#123) and file paths where relevant.
+            - If there was no activity, state so in one line.
+            - Every claim should be specific and verifiable — no vague phrases like
+              "progress was made on MPS theory."
+            - This is a self-contained document. Do not include your reasoning
+              process or investigation steps — only polished conclusions.
 
           claude_args: |
             --model claude-opus-4-6
