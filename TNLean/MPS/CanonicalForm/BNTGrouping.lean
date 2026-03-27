@@ -283,6 +283,90 @@ theorem exists_trivialSectorDecomp_of_sorted_distinct_norms
 
 /-! ### §5. BNT grouping for blocks with possibly equal norms -/
 
+/-- Shared norm-class enumeration used by the BNT grouping constructions. -/
+structure NormClassGroupingData {r : ℕ} (μ : Fin r → ℂ) where
+  g : ℕ
+  vals : Fin g → ℝ
+  vals_strictAnti : StrictAnti vals
+  copies : Fin g → ℕ
+  copies_pos : ∀ j, 0 < copies j
+  enum : (j : Fin g) → Fin (copies j) → Fin r
+  enum_norm : ∀ j q, ‖μ (enum j q)‖ = vals j
+  regroup : ∀ f : Fin r → ℂ, ∑ j : Fin g, ∑ q : Fin (copies j), f (enum j q) = ∑ k : Fin r, f k
+
+/-- Enumerate the norm classes of `μ` in strictly decreasing order of norm. -/
+noncomputable def normClassGroupingData {r : ℕ} (μ : Fin r → ℂ) :
+    NormClassGroupingData μ := by
+  classical
+  let normImage : Finset ℝ := Finset.univ.image (fun k : Fin r => ‖μ k‖)
+  let g := normImage.card
+  let vals : Fin g → ℝ := fun j => normImage.orderEmbOfFin rfl (Fin.rev j)
+  have hvals_anti : StrictAnti vals :=
+    (normImage.orderEmbOfFin rfl).strictMono.comp_strictAnti Fin.rev_strictAnti
+  have hvals_inj : Function.Injective vals := hvals_anti.injective
+  have hvals_mem : ∀ j, vals j ∈ normImage :=
+    fun j => Finset.orderEmbOfFin_mem normImage rfl (Fin.rev j)
+  let normClass : Fin g → Finset (Fin r) :=
+    fun j => Finset.univ.filter (fun k => ‖μ k‖ = vals j)
+  have hClass_nonempty : ∀ j, (normClass j).Nonempty := by
+    intro j
+    have hmem := hvals_mem j
+    simp only [normImage, Finset.mem_image, Finset.mem_univ, true_and] at hmem
+    obtain ⟨k, hk⟩ := hmem
+    exact ⟨k, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hk⟩⟩
+  have hClass_disj :
+      Set.PairwiseDisjoint (↑(Finset.univ : Finset (Fin g)) : Set (Fin g)) normClass := by
+    intro j₁ _ j₂ _ hne
+    apply Finset.disjoint_left.mpr
+    intro k hk1 hk2
+    exact hne (hvals_inj
+      ((Finset.mem_filter.mp hk1).2.symm.trans (Finset.mem_filter.mp hk2).2))
+  have hClass_cover : Finset.biUnion Finset.univ normClass = Finset.univ := by
+    ext k
+    simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, iff_true]
+    have hmem : ‖μ k‖ ∈ normImage :=
+      Finset.mem_image.mpr ⟨k, Finset.mem_univ _, rfl⟩
+    rw [← Finset.image_orderEmbOfFin_univ normImage rfl] at hmem
+    obtain ⟨i, _, hi⟩ := Finset.mem_image.mp hmem
+    refine ⟨Fin.rev i, ?_⟩
+    change k ∈ Finset.univ.filter (fun k => ‖μ k‖ = vals (Fin.rev i))
+    rw [Finset.mem_filter]
+    refine ⟨Finset.mem_univ _, ?_⟩
+    change ‖μ k‖ = normImage.orderEmbOfFin rfl (Fin.rev (Fin.rev i))
+    rw [Fin.rev_rev]
+    exact hi.symm
+  let copiesFn : Fin g → ℕ := fun j => (normClass j).card
+  have hcopies_pos : ∀ j, 0 < copiesFn j :=
+    fun j => Finset.card_pos.mpr (hClass_nonempty j)
+  let enumFn : (j : Fin g) → Fin (copiesFn j) → Fin r :=
+    fun j => (normClass j).orderEmbOfFin rfl
+  have hEnum_norm : ∀ j q, ‖μ (enumFn j q)‖ = vals j := fun j q =>
+    (Finset.mem_filter.mp ((normClass j).orderEmbOfFin_mem rfl q)).2
+  have hRegroup : ∀ (f : Fin r → ℂ),
+      ∑ j : Fin g, ∑ q : Fin (copiesFn j), f (enumFn j q) = ∑ k : Fin r, f k := by
+    intro f
+    have inner_eq : ∀ j : Fin g,
+        ∑ q : Fin (copiesFn j), f (enumFn j q) = ∑ k ∈ normClass j, f k := by
+      intro j
+      rw [← Finset.map_orderEmbOfFin_univ (normClass j) rfl, Finset.sum_map]
+      rfl
+    simp_rw [inner_eq]
+    calc ∑ j : Fin g, ∑ k ∈ normClass j, f k
+        = ∑ k ∈ Finset.biUnion Finset.univ normClass, f k :=
+            (Finset.sum_biUnion hClass_disj).symm
+      _ = ∑ k ∈ Finset.univ, f k := by rw [hClass_cover]
+      _ = ∑ k : Fin r, f k := rfl
+  exact {
+    g := g
+    vals := vals
+    vals_strictAnti := hvals_anti
+    copies := copiesFn
+    copies_pos := hcopies_pos
+    enum := enumFn
+    enum_norm := hEnum_norm
+    regroup := hRegroup
+  }
+
 /-- **BNT grouping step (equal-norm case, proved via norm-class enumeration).**
 
 Given a weighted block family `(μ, blocks)` where some blocks may share the same norm
@@ -340,76 +424,18 @@ theorem exists_bnt_grouping
       StrictAnti (fun j : Fin P.basisCount =>
         ‖P.sectors.weight j ⟨0, P.sectors.copies_pos j⟩‖) := by
   classical
-  -- ── Step 1: Set up the norm image and a strictly-decreasing listing ─────
-  -- S = image of ‖μ·‖ in ℝ, g = #S.
-  let normImage : Finset ℝ := Finset.univ.image (fun k : Fin r => ‖μ k‖)
-  let g := normImage.card
-  -- vals j = (j-th largest norm) via orderEmbOfFin ∘ Fin.rev.
-  let vals : Fin g → ℝ := fun j => normImage.orderEmbOfFin rfl (Fin.rev j)
-  have hvals_anti : StrictAnti vals :=
-    (normImage.orderEmbOfFin rfl).strictMono.comp_strictAnti Fin.rev_strictAnti
-  have hvals_inj : Function.Injective vals := hvals_anti.injective
-  have hvals_mem : ∀ j, vals j ∈ normImage :=
-    fun j => Finset.orderEmbOfFin_mem normImage rfl (Fin.rev j)
-  -- ── Step 2: Norm classes ──────────────────────────────────────────────────
-  -- normClass j = {k | ‖μ k‖ = vals j}.
-  let normClass : Fin g → Finset (Fin r) :=
-    fun j => Finset.univ.filter (fun k => ‖μ k‖ = vals j)
-  -- Each class is nonempty (vals j is in the image of ‖μ·‖).
-  have hClass_nonempty : ∀ j, (normClass j).Nonempty := by
-    intro j
-    have hmem := hvals_mem j
-    simp only [normImage, Finset.mem_image, Finset.mem_univ, true_and] at hmem
-    obtain ⟨k, hk⟩ := hmem
-    -- hk : ‖μ k‖ = vals j, which is exactly what normClass j requires.
-    exact ⟨k, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hk⟩⟩
-  -- Classes are pairwise disjoint (different j → different norm value).
-  have hClass_disj :
-      Set.PairwiseDisjoint (↑(Finset.univ : Finset (Fin g)) : Set (Fin g)) normClass := by
-    intro j₁ _ j₂ _ hne
-    apply Finset.disjoint_left.mpr
-    intro k hk1 hk2
-    exact hne (hvals_inj
-      ((Finset.mem_filter.mp hk1).2.symm.trans (Finset.mem_filter.mp hk2).2))
-  -- Classes cover Fin r (every k has ‖μ k‖ = vals j for some j).
-  have hClass_cover : Finset.biUnion Finset.univ normClass = Finset.univ := by
-    ext k
-    simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, iff_true]
-    have hmem : ‖μ k‖ ∈ normImage :=
-      Finset.mem_image.mpr ⟨k, Finset.mem_univ _, rfl⟩
-    rw [← Finset.image_orderEmbOfFin_univ normImage rfl] at hmem
-    obtain ⟨i, _, hi⟩ := Finset.mem_image.mp hmem
-    -- Provide j = Fin.rev i and prove k ∈ normClass (Fin.rev i).
-    refine ⟨Fin.rev i, ?_⟩
-    change k ∈ Finset.univ.filter (fun k => ‖μ k‖ = vals (Fin.rev i))
-    rw [Finset.mem_filter]
-    refine ⟨Finset.mem_univ _, ?_⟩
-    -- vals (Fin.rev i) = orderEmbOfFin rfl (Fin.rev (Fin.rev i)) = orderEmbOfFin rfl i = ‖μ k‖.
-    change ‖μ k‖ = normImage.orderEmbOfFin rfl (Fin.rev (Fin.rev i))
-    rw [Fin.rev_rev]
-    exact hi.symm
-  -- ── Step 3: Enumeration ───────────────────────────────────────────────────
-  let copiesFn : Fin g → ℕ := fun j => (normClass j).card
-  have hcopies_pos : ∀ j, 0 < copiesFn j :=
-    fun j => Finset.card_pos.mpr (hClass_nonempty j)
-  -- enumFn j : Fin (copiesFn j) ↪o Fin r, image = normClass j.
-  let enumFn : (j : Fin g) → Fin (copiesFn j) → Fin r :=
-    fun j => (normClass j).orderEmbOfFin rfl
-  have hEnum_norm : ∀ j q, ‖μ (enumFn j q)‖ = vals j := fun j q =>
-    (Finset.mem_filter.mp ((normClass j).orderEmbOfFin_mem rfl q)).2
-  -- Representative = the 0th element in each class.
-  let reprFn : Fin g → Fin r := fun j => enumFn j ⟨0, hcopies_pos j⟩
-  have hRepr_norm : ∀ j, ‖μ (reprFn j)‖ = vals j :=
-    fun j => hEnum_norm j ⟨0, hcopies_pos j⟩
-  -- ── Step 4: Build the SectorDecomposition ────────────────────────────────
-  let sectors : SectorWeightData g := {
-    copies         := copiesFn
-    copies_pos     := hcopies_pos
-    weight         := fun j q => μ (enumFn j q)
-    weight_ne_zero := fun j q => hμne (enumFn j q)
+  let classes := normClassGroupingData μ
+  let reprFn : Fin classes.g → Fin r := fun j => classes.enum j ⟨0, classes.copies_pos j⟩
+  have hRepr_norm : ∀ j, ‖μ (reprFn j)‖ = classes.vals j :=
+    fun j => classes.enum_norm j ⟨0, classes.copies_pos j⟩
+  let sectors : SectorWeightData classes.g := {
+    copies         := classes.copies
+    copies_pos     := classes.copies_pos
+    weight         := fun j q => μ (classes.enum j q)
+    weight_ne_zero := fun j q => hμne (classes.enum j q)
   }
   let P : SectorDecomposition d := {
-    basisCount := g
+    basisCount := classes.g
     basisDim   := fun j => dim (reprFn j)
     basis      := fun j => blocks (reprFn j)
     sectors    := sectors
@@ -418,23 +444,6 @@ theorem exists_bnt_grouping
   · -- ── SameMPV₂ proof ──────────────────────────────────────────────────────
     -- We show mpv P.toTensor σ = mpv (toTensorFromBlocks μ blocks) σ for all N, σ.
     intro N σ
-    -- Helper: regroup a double sum ∑ j ∑ q, f (enumFn j q) into ∑ k : Fin r, f k.
-    have hRegroup : ∀ (f : Fin r → ℂ),
-        ∑ j : Fin g, ∑ q : Fin (copiesFn j), f (enumFn j q) = ∑ k : Fin r, f k := by
-      intro f
-      -- Inner sum: ∑ q, f (enumFn j q) = ∑ k ∈ normClass j, f k.
-      have inner_eq : ∀ j : Fin g,
-          ∑ q : Fin (copiesFn j), f (enumFn j q) = ∑ k ∈ normClass j, f k := by
-        intro j
-        rw [← Finset.map_orderEmbOfFin_univ (normClass j) rfl, Finset.sum_map]
-        rfl
-      simp_rw [inner_eq]
-      -- Sum over j then over normClass j = sum over biUnion = sum over Fin r.
-      calc ∑ j : Fin g, ∑ k ∈ normClass j, f k
-          = ∑ k ∈ Finset.biUnion Finset.univ normClass, f k :=
-              (Finset.sum_biUnion hClass_disj).symm
-        _ = ∑ k ∈ Finset.univ, f k := by rw [hClass_cover]
-        _ = ∑ k : Fin r, f k := rfl
     -- Main calculation using the decomposition formula.
     calc mpv P.toTensor σ
         -- Expand via sector decomposition formula.
@@ -442,22 +451,22 @@ theorem exists_bnt_grouping
             ∑ q : Fin (P.copies j), (P.weight j q) ^ N * mpv (P.basis j) σ :=
             P.mpv_toTensor_eq_sum_sectors σ
       -- Unfold P fields (definitional equalities via let-bindings).
-      _ = ∑ j : Fin g,
-            ∑ q : Fin (copiesFn j),
-              (μ (enumFn j q)) ^ N * mpv (blocks (reprFn j)) σ := rfl
+      _ = ∑ j : Fin classes.g,
+            ∑ q : Fin (classes.copies j),
+              (μ (classes.enum j q)) ^ N * mpv (blocks (reprFn j)) σ := rfl
       -- Replace mpv (blocks (reprFn j)) by mpv (blocks (enumFn j q)) using hMPVEq.
-      _ = ∑ j : Fin g,
-            ∑ q : Fin (copiesFn j),
-              (μ (enumFn j q)) ^ N * mpv (blocks (enumFn j q)) σ := by
+      _ = ∑ j : Fin classes.g,
+            ∑ q : Fin (classes.copies j),
+              (μ (classes.enum j q)) ^ N * mpv (blocks (classes.enum j q)) σ := by
               refine Finset.sum_congr rfl (fun j _ =>
                 Finset.sum_congr rfl (fun q _ => ?_))
               congr 1
               -- Both reprFn j and enumFn j q have norm vals j.
-              exact hMPVEq (reprFn j) (enumFn j q)
-                (hRepr_norm j |>.trans (hEnum_norm j q).symm) N σ
+              exact hMPVEq (reprFn j) (classes.enum j q)
+                (hRepr_norm j |>.trans (classes.enum_norm j q).symm) N σ
       -- Regroup the double sum over (j, q) into a single sum over Fin r.
       _ = ∑ k : Fin r, (μ k) ^ N * mpv (blocks k) σ :=
-            hRegroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
+            classes.regroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
       -- Recognize as mpv of toTensorFromBlocks.
       _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
               symm
@@ -466,8 +475,10 @@ theorem exists_bnt_grouping
     -- P.sectors.weight j ⟨0, _⟩ = μ (enumFn j ⟨0, _⟩) (definitional), with norm vals j.
     intro i j hij
     -- Unfold definitionally: P.sectors.weight j q = μ (enumFn j q).
-    change ‖μ (enumFn j ⟨0, hcopies_pos j⟩)‖ < ‖μ (enumFn i ⟨0, hcopies_pos i⟩)‖
-    rw [hEnum_norm j ⟨0, hcopies_pos j⟩, hEnum_norm i ⟨0, hcopies_pos i⟩]
-    exact hvals_anti hij
+    change ‖μ (classes.enum j ⟨0, classes.copies_pos j⟩)‖ <
+      ‖μ (classes.enum i ⟨0, classes.copies_pos i⟩)‖
+    rw [classes.enum_norm j ⟨0, classes.copies_pos j⟩,
+      classes.enum_norm i ⟨0, classes.copies_pos i⟩]
+    exact classes.vals_strictAnti hij
 
 end MPSTensor
