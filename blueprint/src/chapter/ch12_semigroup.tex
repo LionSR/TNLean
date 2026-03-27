@@ -711,10 +711,10 @@ which shows that such generators have the standard Lindblad form.
 %% ---------------------------------------------------------
 
 %% Wolf §7.1, Prop 7.5
-\begin{remark}[Status note]\leanok
+\begin{remark}[Status note]\notready
     The Lean declarations for Proposition~7.5 are currently implemented via
-    axioms to keep CI/elaboration time manageable; accordingly these results are
-    tracked in Lean without local `sorry` placeholders in this chapter section.
+    axioms to keep CI/elaboration time manageable; accordingly, these results are
+    marked \texttt{notready} in the blueprint until full proofs are restored.
     The Proposition~7.6 implication (4)$\to$(2) sorry was closed in PR~\#85,
     so the full equivalence chain is now complete.
 \end{remark}
@@ -722,7 +722,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.5: Irreducible semigroup implies primitive]
     \label{thm:irreducible_semigroup_implies_primitive}
-    \lean{irreducible_semigroup_implies_primitive}\leanok
+    \lean{irreducible_semigroup_implies_primitive}\notready
     \uses{def:exp_semigroup_ch12}
     Let $T_t = e^{tL}$ be a quantum dynamical semigroup.
     If $T_{t_0}$ is irreducible for some $t_0 > 0$, then
@@ -731,7 +731,7 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{proof}
-    \leanok
+    \notready
     The unique faithful density fixed point $\sigma$ of $T_{t_0}$
     is also fixed by all $T_u$ (semigroup commutativity), so by
     uniqueness it is the common fixed point.
@@ -745,7 +745,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.5: Irreducibility iff primitivity for QDS]
     \label{thm:qds_irreducible_iff_primitive}
-    \lean{qds_irreducible_iff_primitive}\leanok
+    \lean{qds_irreducible_iff_primitive}\notready
     \uses{thm:irreducible_semigroup_implies_primitive}
     For a quantum dynamical semigroup $T_t = e^{tL}$:
     \[
@@ -757,7 +757,7 @@ which shows that such generators have the standard Lindblad form.
 \end{theorem}
 
 \begin{proof}
-    \leanok
+    \notready
     \uses{thm:irreducible_semigroup_implies_primitive}
     Forward: apply Theorem~\ref{thm:irreducible_semigroup_implies_primitive}.
     Reverse: take $t_0 = 1$ (or any positive time); primitivity
