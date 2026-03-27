@@ -312,13 +312,6 @@ theorem transferMatrix_unital_iff
     simp only [Matrix.sum_apply]
     have := h i j; simp only [transferMatrix_apply] at this; exact this
 
-/-- `(Matrix.single k l 1)ᴴ = Matrix.single l k 1` over `ℂ`. -/
-lemma conjTranspose_single' (k l : Fin D) :
-    (Matrix.single k l (1 : ℂ))ᴴ = Matrix.single l k 1 := by
-  ext i j
-  simp only [Matrix.conjTranspose_apply, Matrix.single_apply]
-  split <;> simp_all [and_comm]
-
 /-- **Prop 2.5 (Hermiticity-preserving via transfer matrix)**:
 `T` preserves Hermiticity (`(T X)ᴴ = T Xᴴ` for all `X`) iff
 `T̂_{(j,i),(k,l)} = conj(T̂_{(i,j),(l,k)})` for all indices. -/
@@ -332,9 +325,7 @@ theorem transferMatrix_hermiticityPreserving_iff
     simp only [transferMatrix_apply]
     -- Need: (T (single l k 1)) i j = starRingEnd ℂ ((T (single k l 1)) j i)
     have h := congr_fun (congr_fun (hHP (Matrix.single k l 1)) i) j
-    simp only [Matrix.conjTranspose_apply, conjTranspose_single'] at h
-    -- h : star ((T (single k l 1)) j i) = (T (single l k 1)) i j
-    rw [← h, ← starRingEnd_apply (R := ℂ)]
+    simpa using h.symm
   · intro h X
     have basis_eq : ∀ k l : Fin D,
         (T (Matrix.single k l 1))ᴴ = T (Matrix.single l k 1) := by
@@ -405,7 +396,7 @@ theorem unitaryConjLM_isTP_of_unitary (U : Matrix (Fin D) (Fin D) ℂ)
     (hU : Uᴴ * U = 1) :
     IsTracePreservingMap (unitaryConjLM U) := by
   intro X
-  show Matrix.trace (U * X * Uᴴ) = Matrix.trace X
+  change Matrix.trace (U * X * Uᴴ) = Matrix.trace X
   rw [Matrix.trace_mul_comm, ← Matrix.mul_assoc, hU, one_mul]
 
 /-- Unitary conjugation by a unitary matrix is a quantum channel. -/
@@ -448,15 +439,5 @@ theorem transferMatrix_unitaryConj_sandwich
         (U₂.map (starRingEnd ℂ) ⊗ₖ U₂) := by
   rw [transferMatrix_comp, transferMatrix_comp, transferMatrix_unitaryConj,
       transferMatrix_unitaryConj, ← Matrix.mul_assoc]
-
-/-- Definitional unfolding of `tracePairingCoeff`: the `(i, j)` coefficient
-is `trace (σ i * T (σ j))`. -/
-theorem tracePairingCoeff_def
-    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    {ι : Type*} [Fintype ι]
-    (σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ))
-    (i j : ι) :
-    tracePairingCoeff (D := D) T σ i j = Matrix.trace (σ i * T (σ j)) :=
-  rfl
 
 end NormalForms
