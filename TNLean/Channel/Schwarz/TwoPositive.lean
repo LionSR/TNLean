@@ -161,47 +161,6 @@ private noncomputable def finTwoBlockEquiv (α : Type*) : α × Fin 2 ≃ α ⊕
   apply (finTwoBlockEquiv α).injective
   simp
 
-private theorem IsPositiveMap.map_conjTranspose'
-    {m : Type*} [Fintype m] [DecidableEq m]
-    {T : Matrix m m ℂ →ₗ[ℂ] Matrix m m ℂ} (hT : IsPositiveMap T) (A : Matrix m m ℂ) :
-    T Aᴴ = (T A)ᴴ := by
-  let B : Matrix m m ℂ := (1 / 2 : ℝ) • (A + Aᴴ)
-  let C : Matrix m m ℂ := (1 / 2 : ℝ) • (Complex.I • (Aᴴ - A))
-  have hB : B.IsHermitian := by
-    ext i j
-    simp [B, add_comm]
-  have hC : C.IsHermitian := by
-    ext i j
-    simp [C, sub_eq_add_neg, add_comm]
-  have hmulI (z : ℂ) : Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * z)) = -((2 : ℂ)⁻¹ * z) := by
-    calc
-      Complex.I * ((2 : ℂ)⁻¹ * (Complex.I * z)) = (Complex.I * Complex.I) * ((2 : ℂ)⁻¹ * z) := by
-        ring
-      _ = -((2 : ℂ)⁻¹ * z) := by norm_num [Complex.I_sq]
-  have hIC : Complex.I • C = (1 / 2 : ℝ) • (A - Aᴴ) := by
-    ext i j
-    simp [C, sub_eq_add_neg, mul_add, hmulI, add_comm]
-  have hNegIC : -(Complex.I • C) = (1 / 2 : ℝ) • (Aᴴ - A) := by
-    ext i j
-    simp [C, sub_eq_add_neg, hmulI, add_comm]
-  have hA_decomp : A = B + Complex.I • C := by
-    rw [hIC]
-    ext i j
-    simp [B, sub_eq_add_neg]
-    ring
-  have hAstar_decomp : Aᴴ = B - Complex.I • C := by
-    rw [sub_eq_add_neg, hNegIC]
-    ext i j
-    simp [B, sub_eq_add_neg]
-    ring
-  have hTB : (T B).IsHermitian := hT.map_isHermitian hB
-  have hTC : (T C).IsHermitian := hT.map_isHermitian hC
-  have hTA_decomp : T A = T B + Complex.I • T C := by
-    rw [hA_decomp]
-    simp
-  rw [hAstar_decomp, hTA_decomp]
-  simp [sub_eq_add_neg, hTB.eq, hTC.eq, Matrix.conjTranspose_add, Matrix.conjTranspose_smul]
-
 /-! ## Definitions of n-positivity -/
 
 /-- A linear map `E : M_n(ℂ) → M_n(ℂ)` is **k-positive** if the ampliation
@@ -484,7 +443,7 @@ theorem kadison_schwarz_2positive
         ext a b
         rfl]
       simpa [Matrix.conjTranspose_apply] using
-        congr_fun (congr_fun (IsPositiveMap.map_conjTranspose' hPos X) i) j
+        congr_fun (congr_fun (IsPositiveMap.map_conjTranspose hPos X) i) j
     · have hId : (Matrix.of fun i' j' => X i' j') = X := by
         ext a b
         rfl

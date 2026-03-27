@@ -38,10 +38,11 @@ theorem IsPositiveMap.map_le_map
 
 /-- Positive maps preserve adjoints. -/
 theorem IsPositiveMap.map_conjTranspose
-    {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (A : Mat) :
+    {m : Type*} [Fintype m] [DecidableEq m]
+    {T : Matrix m m ℂ →ₗ[ℂ] Matrix m m ℂ} (hT : IsPositiveMap T) (A : Matrix m m ℂ) :
     T Aᴴ = (T A)ᴴ := by
-  let B : Mat := (1 / 2 : ℝ) • (A + Aᴴ)
-  let C : Mat := (1 / 2 : ℝ) • (Complex.I • (Aᴴ - A))
+  let B : Matrix m m ℂ := (1 / 2 : ℝ) • (A + Aᴴ)
+  let C : Matrix m m ℂ := (1 / 2 : ℝ) • (Complex.I • (Aᴴ - A))
   have hB : B.IsHermitian := by
     ext i j
     simp [B, add_comm]
