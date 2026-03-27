@@ -97,7 +97,7 @@ theorem IsPositiveMap.map_conjTranspose
   rw [hAstar_decomp, hTA_decomp]
   simp [sub_eq_add_neg, hTB.eq, hTC.eq, Matrix.conjTranspose_add, Matrix.conjTranspose_smul]
 
-/-- A block diagonal matrix is PSD iff its diagonal blocks are PSD. -/
+/-- A block diagonal matrix with PSD diagonal blocks is PSD. -/
 theorem Matrix.PosSemidef.fromBlocks_diag
     {m o : Type*} [Finite m] [Finite o]
     {A : Matrix m m ℂ} {D : Matrix o o ℂ}

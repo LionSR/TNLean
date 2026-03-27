@@ -127,7 +127,6 @@ and `E ⊗ id_k` applied to a PSD matrix yields a PSD matrix (by the same
 Kraus-based argument as `IsCPMap.isPositiveMap`). -/
 theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
     (hCP : IsCPMap E) (k : ℕ) : IsNPositiveMap k E := by
-  classical
   intro X hX
   obtain ⟨r, K, hK⟩ := hCP
   let e : n × Fin k ≃ Fin k × n := Equiv.prodComm n (Fin k)
@@ -278,7 +277,7 @@ is PSD. The Schur complement of the (2,2)-block `I` gives the result.
 
 This is exactly the same argument as in `KadisonSchwarz.lean`, but the
 hypothesis is weakened from "Kraus representation exists" to "2-positive". -/
-  theorem kadison_schwarz_2positive
+theorem kadison_schwarz_2positive
     (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ)
     (h2pos : Is2PositiveMap E)
     (h_unital : KadisonSchwarz.IsUnitalMap E)
