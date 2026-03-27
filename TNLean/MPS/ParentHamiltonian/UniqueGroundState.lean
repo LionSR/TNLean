@@ -90,14 +90,18 @@ formalization lands. -/
 /-- The periodic chain ground space: the set of states satisfying the local
 ground-space condition at every position on the periodic chain.
 
-**Current status**: this interface is kept as an explicit axiom until the
-chain-level window embedding API is implemented. The intended eventual
-definition is the intersection of the window ground submodules, equivalently
-`LinearMap.ker (parentHamiltonian A L N)`. -/
-axiom chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
+**Current status**: this interface is kept as a `sorry`-backed placeholder
+until the chain-level window embedding API is implemented. The intended
+eventual definition is the intersection of the window ground submodules,
+equivalently `LinearMap.ker (parentHamiltonian A L N)`. -/
+noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
     Submodule ℂ (NSiteSpace d N)
+    := by
+  sorry
 
 /-- The MPV state is in the chain ground space. -/
+-- TODO(parent-hamiltonian): prove from the eventual cyclic-window definition
+-- of `chainGroundSpace` once the periodic window embedding API lands.
 theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
     (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
   sorry
@@ -135,6 +139,8 @@ theorem hasUniqueGroundState_iff_proportional {V : Type*} [AddCommGroup V] [Modu
 
 /-- On a periodic chain, the injective parent-Hamiltonian ground space should
 coincide with the span of the MPV. -/
+-- TODO(parent-hamiltonian): derive this from the cyclic-window definition of
+-- `chainGroundSpace` and the proved open-chain intersection property.
 theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 0 < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
@@ -156,6 +162,8 @@ The proof uses the intersection property iteratively:
 **Status**: The proof requires the periodic window condition to be fully formalized.
 The intersection property (`groundSpace_intersection`) provides the key "invert-and-regrow"
 step; the remaining ingredient is the periodic boundary argument. -/
+-- TODO(parent-hamiltonian): finish after the periodic window embedding API
+-- makes the wrapping-window condition available in `chainGroundSpace`.
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
     {L N : ℕ} (hN : 2 ≤ N) (hL : 0 < L) (hLN : L ≤ N) :
     HasUniqueGroundState (chainGroundSpace A L N) := by
@@ -170,6 +178,8 @@ interaction range `2L₀` on the periodic chain has a unique ground state.
 **Status**: Depends on `groundSpace_unique_periodic` and the connection between
 `chainGroundSpace` and `LinearMap.ker (parentHamiltonian A (2 * L₀) N)`, which
 will be established when the operator API lands. -/
+-- TODO(parent-hamiltonian): reduce this to `groundSpace_unique_periodic`
+-- after connecting `chainGroundSpace` with the parent-Hamiltonian kernel.
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
@@ -184,6 +194,8 @@ to `L₀ + 1` using the structure theory of normal MPS.
 
 **Status**: Requires the normal-form analysis from the canonical form theory in
 addition to the periodic boundary argument. -/
+-- TODO(parent-hamiltonian): combine the normal-form range reduction with the
+-- periodic uniqueness theorem once that theorem is formalized.
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
