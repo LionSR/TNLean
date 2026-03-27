@@ -46,9 +46,9 @@ theorem generatorDecomp_traceless_unique_phi
     (htr : F.HasTracelessKraus)
     (htr' : F'.HasTracelessKraus) :
     F.toGeneratorDecomp.φ = F'.toGeneratorDecomp.φ := by
-  -- Proof strategy (Wolf): compare projected Choi matrices and use Choi injectivity.
-  -- Infrastructure for the final projection/orthogonality argument is developed in
-  -- `ChoiJamiolkowski` and related Lindblad files.
+  -- TODO (#13): compare projected Choi matrices and use Choi injectivity.
+  -- The projection/orthogonality argument infrastructure is in `ChoiJamiolkowski`
+  -- and related Lindblad files.
   sorry
 
 /--
@@ -68,7 +68,7 @@ theorem generatorDecomp_traceless_unique_kappa_modPhase
     ∃ l : ℝ,
       F'.toGeneratorDecomp.κ =
         F.toGeneratorDecomp.κ + (Complex.I * (l : ℂ)) • (1 : Matrix (Fin D) (Fin D) ℂ) := by
-  -- Proof strategy (Wolf): after identifying `φ = φ'`, the residual map is
+  -- TODO (#13): after identifying `φ = φ'`, the residual map is
   -- `ρ ↦ -(Δκ)ρ - ρ(Δκ)†`; equality to zero forces `Δκ` to be a scalar multiple
   -- of identity, and trace/Hermiticity constraints force that scalar to be purely
   -- imaginary.
