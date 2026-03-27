@@ -183,4 +183,39 @@ theorem GaugeEquiv.trans {A B C : MPSTensor d D}
   rw [hY i, hX i]
   simp [Matrix.mul_assoc, mul_inv_rev]
 
+/-- Gauge equivalent of an injective tensor is injective. -/
+theorem isInjective_of_gaugeEquiv {A B : MPSTensor d D}
+    (hA : IsInjective A) (hGauge : GaugeEquiv A B) :
+    IsInjective B := by
+  obtain ⟨X, hX⟩ := hGauge
+  rw [IsInjective, eq_top_iff]
+  intro M _
+  have hM' : ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ) ∈
+      Submodule.span ℂ (Set.range A) := hA ▸ Submodule.mem_top
+  have hConj : ∀ N ∈ Submodule.span ℂ (Set.range A),
+      (X : Matrix _ _ ℂ) * N * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) ∈
+        Submodule.span ℂ (Set.range B) := by
+    intro N hN
+    induction hN using Submodule.span_induction with
+    | mem x hx =>
+      obtain ⟨i, rfl⟩ := hx
+      rw [← hX i]
+      exact Submodule.subset_span (Set.mem_range.mpr ⟨i, rfl⟩)
+    | zero => simp
+    | add x y _ _ hx hy =>
+      simp only [Matrix.mul_add, Matrix.add_mul]
+      exact Submodule.add_mem _ hx hy
+    | smul c x _ hx =>
+      have : (X : Matrix _ _ ℂ) * (c • x) * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) =
+          c • ((X : Matrix _ _ ℂ) * x * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) := by
+        simp [Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
+      rw [this]
+      exact Submodule.smul_mem _ c hx
+  have key := hConj _ hM'
+  have : (X : Matrix _ _ ℂ) *
+      (((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ)) *
+      ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) = M := by
+    simp [Matrix.mul_assoc]
+  rwa [this] at key
+
 end MPSTensor
