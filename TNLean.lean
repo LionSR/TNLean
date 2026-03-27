@@ -166,6 +166,8 @@ import TNLean.MPS.Structure.BlockPermutation
 import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.PiAlgebra.BlockSeparation
+import TNLean.PiAlgebra.TIReduction
+import TNLean.PiAlgebra.GlobalSymmetry
 
 -- Layer 5b: Renormalization fixed points (RFP) — pure-state scaffolding
 import TNLean.MPS.RFP.Defs
