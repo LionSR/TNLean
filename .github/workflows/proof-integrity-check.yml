@@ -1,0 +1,160 @@
+name: Lean Proof Integrity Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+    paths:
+      - "TNLean/**/*.lean"
+      - "TNLean.lean"
+
+concurrency:
+  group: proof-integrity-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  proof-integrity:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Scan for proof cheating patterns (full repo)
+        id: full-scan
+        run: |
+          chmod +x .github/scripts/lean-proof-check.sh
+          .github/scripts/lean-proof-check.sh TNLean/ > full-report.md 2>&1 || true
+
+      - name: Scan changed files only (diff-based)
+        id: diff-scan
+        run: |
+          # Get list of changed .lean files in this PR
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMR \
+            origin/${{ github.event.pull_request.base.ref }}...HEAD \
+            -- 'TNLean/**/*.lean' 'TNLean.lean' || true)
+
+          if [[ -z "$CHANGED_FILES" ]]; then
+            echo "No Lean files changed in this PR."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
+
+          # Check each changed file individually for blockers
+          BLOCKERS=0
+          WARNINGS=0
+          REPORT="## Proof Integrity: Changed Files\n\n"
+
+          while IFS= read -r file; do
+            [[ -f "$file" ]] || continue
+
+            issues=""
+
+            # Tier 1: sorry / admit
+            sorry_hits=$(grep -nE '\bsorry\b' "$file" 2>/dev/null || true)
+            admit_hits=$(grep -nE '\badmit\b' "$file" 2>/dev/null || true)
+
+            # Tier 2: Kernel bypasses
+            native_hits=$(grep -nE '\bnative_decide\b' "$file" 2>/dev/null || true)
+            unsafe_cast_hits=$(grep -nE '\bunsafeCast\b|\bunsafeCoerce\b' "$file" 2>/dev/null || true)
+            lcproof_hits=$(grep -nE '\blcProof\b' "$file" 2>/dev/null || true)
+            reduce_hits=$(grep -nE '\bofReduceBool\b|\bofReduceNat\b' "$file" 2>/dev/null || true)
+
+            # Tier 3: Axiom smuggling
+            axiom_hits=$(grep -nE '^\s*axiom\s+' "$file" 2>/dev/null || true)
+            constant_hits=$(grep -nE '^\s*constant\s+.*:\s*Prop' "$file" 2>/dev/null || true)
+
+            # Tier 4: Scaffolding
+            search_hits=$(grep -nE '\bexact\?\b|\bapply\?\b|\blibrary_search\b' "$file" 2>/dev/null || true)
+            impl_hits=$(grep -nE '\bimplemented_by\b|\bimplementedBy\b' "$file" 2>/dev/null || true)
+
+            # Tier 5: Suspicious options
+            heartbeat_hits=$(grep -nE 'set_option\s+maxHeartbeats\s+0\b' "$file" 2>/dev/null || true)
+
+            # Tier 6: Unsafe/partial defs
+            unsafe_def_hits=$(grep -nE '^\s*unsafe\s+def\b' "$file" 2>/dev/null || true)
+            partial_def_hits=$(grep -nE '^\s*partial\s+def\b' "$file" 2>/dev/null || true)
+
+            # Collect blockers
+            for hits_var in sorry_hits admit_hits native_hits unsafe_cast_hits lcproof_hits reduce_hits axiom_hits constant_hits; do
+              hits="${!hits_var}"
+              if [[ -n "$hits" ]]; then
+                issues+="$hits"$'\n'
+                BLOCKERS=$((BLOCKERS + $(echo "$hits" | wc -l)))
+              fi
+            done
+
+            # Collect warnings
+            for hits_var in search_hits impl_hits heartbeat_hits unsafe_def_hits partial_def_hits; do
+              hits="${!hits_var}"
+              if [[ -n "$hits" ]]; then
+                issues+="$hits"$'\n'
+                WARNINGS=$((WARNINGS + $(echo "$hits" | wc -l)))
+              fi
+            done
+
+            if [[ -n "$issues" ]]; then
+              REPORT+="### \`${file}\`\n\`\`\`\n${issues}\`\`\`\n\n"
+            fi
+          done <<< "$CHANGED_FILES"
+
+          REPORT+="\n**Summary:** ${BLOCKERS} blocker(s), ${WARNINGS} warning(s) in changed files.\n"
+
+          echo -e "$REPORT" > diff-report.md
+
+          echo "blockers=$BLOCKERS" >> "$GITHUB_OUTPUT"
+          echo "warnings=$WARNINGS" >> "$GITHUB_OUTPUT"
+
+      - name: Post PR comment with results
+        if: steps.diff-scan.outputs.has_changes == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const diffReport = fs.readFileSync('diff-report.md', 'utf8');
+            const blockers = parseInt('${{ steps.diff-scan.outputs.blockers }}') || 0;
+            const warnings = parseInt('${{ steps.diff-scan.outputs.warnings }}') || 0;
+
+            // Find and update existing comment, or create new one
+            const marker = '<!-- proof-integrity-check -->';
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body.includes(marker));
+
+            let icon = '✅';
+            if (blockers > 0) icon = '🚫';
+            else if (warnings > 0) icon = '⚠️';
+
+            const body = `${marker}\n# ${icon} Lean Proof Integrity Check\n\n${diffReport}\n\n---\n*This check runs automatically on every push. Blockers must be resolved before merge.*`;
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      - name: Fail if blockers found in changed files
+        if: steps.diff-scan.outputs.blockers != '0' && steps.diff-scan.outputs.blockers != ''
+        run: |
+          echo "::error::Proof integrity blockers found in changed files. See PR comment for details."
+          exit 1

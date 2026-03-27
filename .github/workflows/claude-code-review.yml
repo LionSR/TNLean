@@ -56,11 +56,28 @@ jobs:
 
             Focus your review on:
             1. **Proof correctness**: Are there any `sorry`s introduced? Are proof terms well-structured?
-            2. **Mathlib style**: Does the code follow Mathlib conventions (naming, tactic style, imports)?
-            3. **Type safety**: Any type mismatches, universe issues, or coercion problems?
-            4. **Performance**: Will any proofs cause timeouts? Are there unnecessarily expensive tactics (e.g., `decide` on large types)?
-            5. **Modularity**: Are new lemmas general enough? Could any be upstreamed to Mathlib?
-            6. **Documentation**: Do new definitions/theorems have docstrings where appropriate?
+            2. **Proof integrity / cheating detection**: Flag ANY of the following patterns as BLOCKERS:
+               - `sorry`, `admit` — direct proof holes
+               - `native_decide` — kernel bypass, unsound in general (banned in Mathlib)
+               - `unsafeCast`, `unsafeCoerce` — type system bypass, can fabricate any proof
+               - `lcProof` — low-level proof fabrication primitive
+               - `ofReduceBool`, `ofReduceNat` — kernel primitives exploitable for unsound proofs
+               - `axiom` declarations — introduces unproven assumptions (must be justified)
+               - `constant ... : Prop` — equivalent to an axiom
+               Also flag as WARNINGS:
+               - `implemented_by` / `implementedBy` — can decouple runtime from spec
+               - `exact?`, `apply?`, `library_search`, `suggest` — placeholder search tactics
+               - `unsafe def`, `partial def` — bypass safety/termination checks
+               - `set_option maxHeartbeats 0` — disables timeout, hides non-termination
+               - `set_option maxHeartbeats` with values >= 10,000,000
+               - `dbg_trace`, `stop` — debug aids left in code
+               - `#check`, `#eval`, `#print` commands in proof files
+               For each finding, explain WHY it is problematic and suggest the correct alternative.
+            3. **Mathlib style**: Does the code follow Mathlib conventions (naming, tactic style, imports)?
+            4. **Type safety**: Any type mismatches, universe issues, or coercion problems?
+            5. **Performance**: Will any proofs cause timeouts? Are there unnecessarily expensive tactics (e.g., `decide` on large types)?
+            6. **Modularity**: Are new lemmas general enough? Could any be upstreamed to Mathlib?
+            7. **Documentation**: Do new definitions/theorems have docstrings where appropriate?
 
             For each issue found, post an inline comment on the relevant line using the GitHub CLI.
             At the end, post a summary comment on the PR with your overall assessment.
