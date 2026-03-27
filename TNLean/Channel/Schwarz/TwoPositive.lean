@@ -113,11 +113,10 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
 This is a basic structural property of the n-positivity hierarchy. If this
 were not provable, the definition of `IsNPositiveMap` would be wrong.
 The proof embeds `M_n ⊗ M_k ↪ M_n ⊗ M_{k+1}` via padding with zeros. -/
-theorem IsNPositiveMap.mono {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+theorem IsNPositiveMap.mono {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {k : ℕ}
     (h : IsNPositiveMap (k + 1) E) : IsNPositiveMap k E := by
   intro X hX
   -- Embed X into the larger space (n × Fin (k+1)) by padding with zeros
-  let emb : Fin k → Fin (k + 1) := Fin.castSucc
   let X' : Matrix (n × Fin (k + 1)) (n × Fin (k + 1)) ℂ :=
     Matrix.of fun ip jq =>
       if h₁ : ip.2.val < k then
