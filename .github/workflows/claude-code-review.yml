@@ -55,17 +55,28 @@ jobs:
             Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
 
             Focus your review on:
-            1. **Proof integrity / cheating detection**: Read `.github/PROOF_INTEGRITY.md` for the complete
-               list of proof integrity rules (blockers, warnings, circular reasoning, castle-in-the-air patterns).
-               Flag **blockers** as must-fix issues that should block merge. Flag **warnings** as advisory —
-               note them for the author's attention but acknowledge they may be acceptable with justification.
+            1. **Proof integrity**: Read `.github/PROOF_INTEGRITY.md` for the complete list of proof
+               integrity rules. Flag **blockers** as must-fix issues that should block merge. Flag
+               **warnings** as advisory — note them but acknowledge they may be acceptable with justification.
                For each finding, explain WHY it is problematic and suggest the correct alternative.
-            2. **Proof correctness**: Are proof terms well-structured?
-            3. **Mathlib style**: Does the code follow Mathlib conventions (naming, tactic style, imports)?
-            4. **Type safety**: Any type mismatches, universe issues, or coercion problems?
-            5. **Performance**: Will any proofs cause timeouts? Are there unnecessarily expensive tactics (e.g., `decide` on large types)?
+            2. **Proof correctness**: Are proof terms well-structured? Do tactic proofs follow a logical
+               strategy, or are they brute-forced with `simp` / `omega` / `ring` chains? Are `calc` blocks
+               and `conv` rewrites correctly chained? Are hypotheses used or dangling?
+            3. **Mathlib style**: Does the code follow Mathlib conventions? Check naming (`camelCase` for
+               defs, `snake_case` for lemmas), tactic style (prefer `exact` over `apply` + `rfl` when
+               equivalent), import hygiene (no unnecessary `open`s, minimal imports), and lemma placement.
+            4. **Type safety**: Any type mismatches, universe issues, or coercion problems? Check for
+               universe polymorphism issues, missing `[DecidableEq]` or `[Fintype]` instances, and
+               coercion chains that may cause unification failures.
+            5. **Performance**: Will any proofs cause timeouts? Watch for `decide` on large types,
+               `simp` with unbounded lemma sets, deep `rw` chains, and `norm_num` on symbolic expressions.
+               Suggest alternatives like `omega`, `positivity`, or explicit `calc` steps.
             6. **Modularity**: Are new lemmas general enough? Could any be upstreamed to Mathlib?
-            7. **Documentation**: Do new definitions/theorems have docstrings where appropriate?
+               Are there lemmas that are overly specialized to the local context but could be stated
+               more generally? Is the file structure consistent with the existing module hierarchy?
+            7. **Documentation**: Do new definitions and key theorems have docstrings? Are module-level
+               doc comments present for new files? Do docstrings explain mathematical meaning, not just
+               Lean syntax?
 
             For each issue found, post an inline comment on the relevant line using the GitHub CLI.
             At the end, post a summary comment on the PR with your overall assessment.
