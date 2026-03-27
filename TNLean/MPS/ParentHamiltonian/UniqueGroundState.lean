@@ -80,29 +80,12 @@ is the set of states whose restriction to every cyclic window of `L` consecutive
 sites lies in `G_L(A)`.
 
 The full periodic-chain window restriction still depends on the chain-level
-embedding API. We therefore keep the intended interface explicit here and leave
-its implementation as a `sorry`-backed scaffold until the local operator
+embedding API. We therefore expose only the chain ground-space interface for
+now, and will define it from local window constraints once the operator
 formalization lands. -/
 
--- TODO(parent-hamiltonian): `chainGroundSpace A L N` should package the states
--- satisfying `InCyclicWindowGround A L N hN i` at every cyclic position `i`.
-
-/-- Extract the physical index at a cyclically shifted position on the periodic chain.
-`cyclicIndex i k N` computes `(i + k) mod N`. -/
-def cyclicIndex (i : ℕ) (k : Fin L) (hN : 0 < N) : Fin N :=
-  ⟨(i + k.val) % N, Nat.mod_lt _ hN⟩
-
-/-- A state `ψ` on `N` sites satisfies the periodic ground-space condition at
-position `i` if, for every choice of the `N - L` sites outside the window
-`{i, i+1, …, i+L-1 mod N}`, the `L`-site windowed function lies in `G_L(A)`.
-
-This is the coefficient-function analogue of `h_i ψ = 0` for the parent
-interaction projector `h_i`.
-
-**Current status**: this interface is kept as an explicit axiom until the
-periodic window-restriction API lands. -/
-axiom InCyclicWindowGround (A : MPSTensor d D) (L N : ℕ) (hN : 0 < N)
-    (i : Fin N) (ψ : NSiteSpace d N) : Prop
+-- TODO(parent-hamiltonian): define `chainGroundSpace` as the intersection of
+-- cyclic window ground submodules once the periodic window embedding API lands.
 
 /-- The periodic chain ground space: the set of states satisfying the local
 ground-space condition at every position on the periodic chain.
