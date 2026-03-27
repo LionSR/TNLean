@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
 
 /-!
@@ -29,19 +30,38 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+attribute [local instance] Matrix.instL2OpNormedAddCommGroup
+attribute [local instance] Matrix.instL2OpNormedRing
+attribute [local instance] Matrix.instL2OpNormedAlgebra
+
+noncomputable local instance matrixCStarAlgebra (m : Type*) [Fintype m] [DecidableEq m] :
+    CStarAlgebra (Matrix m m ℂ) where
+  toNormedRing := Matrix.instL2OpNormedRing
+  toStarRing := inferInstance
+  toCompleteSpace := inferInstance
+  toCStarRing := Matrix.instCStarRing
+  toNormedAlgebra := Matrix.instL2OpNormedAlgebra
+  toStarModule := inferInstance
+
 /-- A positive map is monotone for the matrix Loewner order. -/
 theorem IsPositiveMap.map_le_map
-    {T : Mat →ₗ[ℂ] Mat} {A B : Mat}
+    {m : Type*} [Finite m]
+    {T : Matrix m m ℂ →ₗ[ℂ] Matrix m m ℂ} {A B : Matrix m m ℂ}
     (hT : IsPositiveMap T) (hAB : A ≤ B) : T A ≤ T B := by
+  classical
+  letI := Fintype.ofFinite m
   rw [Matrix.le_iff] at hAB ⊢
   simpa [map_sub] using hT (B - A) hAB
 
 /-- Positive maps preserve adjoints. -/
 theorem IsPositiveMap.map_conjTranspose
-    {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (A : Mat) :
+    {m : Type*} [Finite m]
+    {T : Matrix m m ℂ →ₗ[ℂ] Matrix m m ℂ} (hT : IsPositiveMap T) (A : Matrix m m ℂ) :
     T Aᴴ = (T A)ᴴ := by
-  let B : Mat := (1 / 2 : ℝ) • (A + Aᴴ)
-  let C : Mat := (1 / 2 : ℝ) • (Complex.I • (Aᴴ - A))
+  classical
+  letI := Fintype.ofFinite m
+  let B : Matrix m m ℂ := (1 / 2 : ℝ) • (A + Aᴴ)
+  let C : Matrix m m ℂ := (1 / 2 : ℝ) • (Complex.I • (Aᴴ - A))
   have hB : B.IsHermitian := by
     ext i j
     simp [B, add_comm]
@@ -76,6 +96,31 @@ theorem IsPositiveMap.map_conjTranspose
     simp
   rw [hAstar_decomp, hTA_decomp]
   simp [sub_eq_add_neg, hTB.eq, hTC.eq, Matrix.conjTranspose_add, Matrix.conjTranspose_smul]
+
+/-- A block diagonal matrix with PSD diagonal blocks is PSD. -/
+theorem Matrix.PosSemidef.fromBlocks_diag
+    {m o : Type*} [Finite m] [Finite o]
+    {A : Matrix m m ℂ} {B : Matrix o o ℂ}
+    (hA : A.PosSemidef) (hB : B.PosSemidef) :
+    (Matrix.fromBlocks A 0 0 B : Matrix (m ⊕ o) (m ⊕ o) ℂ).PosSemidef := by
+  classical
+  letI := Fintype.ofFinite m
+  letI := Fintype.ofFinite o
+  letI : CStarAlgebra (Matrix m m ℂ) := matrixCStarAlgebra m
+  letI : CStarAlgebra (Matrix o o ℂ) := matrixCStarAlgebra o
+  obtain ⟨CA, hCA⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
+    ((Matrix.nonneg_iff_posSemidef).mpr hA)
+  obtain ⟨CB, hCB⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
+    ((Matrix.nonneg_iff_posSemidef).mpr hB)
+  have hCA' : A = CA * CAᴴ := by
+    simpa [Matrix.star_eq_conjTranspose] using hCA
+  have hCB' : B = CB * CBᴴ := by
+    simpa [Matrix.star_eq_conjTranspose] using hCB
+  let C : Matrix (m ⊕ o) (m ⊕ o) ℂ := Matrix.fromBlocks CA 0 0 CB
+  have hC : Matrix.fromBlocks A 0 0 B = C * Cᴴ := by
+    simp [C, hCA', hCB', Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
+  rw [hC]
+  exact Matrix.posSemidef_self_mul_conjTranspose C
 
 /-- If `T` is positive and subunital, then it preserves order intervals `[a • 1, b • 1]`
 whenever `0 ∈ [a,b]`. -/
