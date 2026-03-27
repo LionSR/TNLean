@@ -166,8 +166,8 @@ jobs:
 
             **When**: `issues` / `reopened`
 
-            1. Search for tracking issues (label `tracking`) that reference
-               the reopened issue by `#number` in their tasklist
+            1. Search for tracking issues (label `tracking`, any state) that
+               reference the reopened issue by `#number` in their tasklist
             2. For each match, uncheck the item: `- [x] #N` → `- [ ] #N`
             3. Remove the `all-resolved` label if present (ignore errors)
             4. Comment on the tracking issue:
@@ -188,16 +188,29 @@ jobs:
                - Check branch name for `*/issue-{N}-*` pattern
             2. Find tracking issues referencing either the PR (`#PR`) or the
                linked issue(s) (`#N`)
-            3. Check off matching items in the tasklist
+            3. Check off items in the tasklist **only when the item is
+               actually resolved**:
+               - If the PR number itself is listed (e.g. `- [ ] #PR`),
+                 check it off — the PR is merged and done.
+               - If a linked issue number is listed (e.g. `- [ ] #N`) and
+                 the PR uses `Closes`/`Fixes #N`, do NOT check it off here
+                 — GitHub will auto-close the issue, which fires Playbook A
+                 to handle the checkbox. Avoid a race condition.
+               - If the PR uses `Addresses`/`Partially addresses #N`, do
+                 NOT check off `#N` — the issue is still open.
             4. Comment on each tracking issue with resolution summary
-               including the PR title
-            5. **Comment on the linked issue(s)** themselves with a progress
-               update. For `Addresses`/`Partially addresses` (issue stays
-               open), summarize what the PR accomplished and what remains.
-               For `Closes`/`Fixes` (issue will auto-close), post a brief
-               resolution note. Example:
+               including the PR title and what progress was made.
+            5. If ALL items in a tracking issue are now checked, add the
+               `all-resolved` label and comment:
+               "🎉 All tasks complete — this tracking issue can be closed."
+            6. **Comment on linked issues that remain open** (i.e., the PR
+               used `Addresses`/`Partially addresses`, not `Closes`/`Fixes`)
+               with a progress update summarizing what the PR accomplished
+               and what remains. Example:
                "📦 PR #X (*title*) has been merged. <summary of what was
-               done>. Remaining: <what's left, if issue stays open>."
+               done>. Remaining: <what's left>."
+               Do NOT comment on issues that will be auto-closed by the PR
+               — Playbook A handles those, and double-commenting is noisy.
 
             **B2 — Scan for follow-ups**:
             1. Read the PR body, comments, and review threads via MCP tools
@@ -285,16 +298,19 @@ jobs:
                branch name (`*/issue-N-*`)
             2. Find tracking issues referencing that linked issue or the PR
             3. Only act if the event is meaningful for tracking AND has not
-               already been handled by another workflow:
+               already been handled by another workflow. All comments below
+               go on the **tracking issue** (not the PR or linked issue):
                - **PR opened for a tracked task** — but ONLY if the branch
                  does NOT start with `claude/` or `codex/` (the PR Cleanup
                  workflow already comments on those). For human-authored PRs,
                  comment on the tracking issue:
                  "🔄 #<PR> opened to address #<issue>"
                - **Review approved** (review state `approved`) →
-                 comment "✅ #<PR> approved, ready to merge"
+                 comment on the tracking issue:
+                 "✅ #<PR> approved, ready to merge"
                - **Changes requested** (review state `changes_requested`) →
-                 comment "⚠️ Changes requested on #<PR> by @<reviewer>"
+                 comment on the tracking issue:
+                 "⚠️ Changes requested on #<PR> by @<reviewer>"
             4. Skip everything else silently
 
             ---
