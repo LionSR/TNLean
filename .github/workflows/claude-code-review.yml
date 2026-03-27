@@ -73,7 +73,7 @@ jobs:
                - `dbg_trace`, `stop` — debug aids left in code
                - `#check`, `#eval`, `#print` commands in proof files
                For each finding, explain WHY it is problematic and suggest the correct alternative.
-            3. **Circular reasoning detection (循环论证)**: This is critical. Look for:
+            3. **Circular reasoning detection**: This is critical. Look for:
                - A `private` or local lemma whose proof references itself (direct self-reference)
                - Mutual recursion cycles: lemma A uses lemma B, lemma B uses lemma A (or longer chains)
                - A helper lemma declared in the same file that essentially restates the goal it is used to prove
@@ -81,7 +81,7 @@ jobs:
                - Run `#print axioms <theorem_name>` mentally: if a theorem's dependency graph contains itself, it is circular
                - Watch for patterns where a `have` or `let` binding introduces a local hypothesis that is just the goal rephrased
                Flag circular proofs as BLOCKERS — they compile but prove nothing.
-            4. **Castle-in-the-air detection (空中楼阁)**: Look for proofs that avoid grounding in Mathlib:
+            4. **Castle-in-the-air detection**: Look for proofs that avoid grounding in Mathlib:
                - Custom re-declarations of standard Mathlib lemmas (e.g., re-proving commutativity of addition instead of using `add_comm`)
                - New `axiom` or `sorry`-based helper lemmas for facts that already exist in Mathlib — search Mathlib for the equivalent
                - A chain of custom lemmas that never bottoms out in Mathlib or Lean core — the proof should ultimately be rooted in established results
