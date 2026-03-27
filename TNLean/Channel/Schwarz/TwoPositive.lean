@@ -330,12 +330,6 @@ theorem kadison_schwarz_2positive
     rw [show (1 : Fin 2) = Fin.last 1 by rfl]
     rw [finSumFinEquiv_symm_last]
     simp
-  have he_symm_left (i : n) : e.symm (Sum.inl i) = (i, 0) := by
-    apply e.injective
-    simp [he_zero]
-  have he_symm_right (i : n) : e.symm (Sum.inr i) = (i, 1) := by
-    apply e.injective
-    simp [he_one]
   let P : Matrix (n ⊕ n) (n ⊕ n) ℂ :=
     Matrix.fromBlocks (Xᴴ * X) Xᴴ X 1
   have hP : P.PosSemidef := by
@@ -401,6 +395,6 @@ theorem kadison_schwarz_from_2positive
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (KadisonSchwarz.krausMap K (Xᴴ * X) -
       (KadisonSchwarz.krausMap K X)ᴴ * KadisonSchwarz.krausMap K X).PosSemidef :=
-  -- TODO (#22): reroute through kadison_schwarz_2positive once it's proved.
-  -- For now, use the existing direct Kraus-based proof.
+  -- TODO (#22): reroute through kadison_schwarz_2positive via
+  -- IsCPMap → Is2PositiveMap → kadison_schwarz_2positive.
   KadisonSchwarz.kadison_schwarz K h_unital X
