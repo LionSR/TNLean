@@ -59,7 +59,9 @@ jobs:
         with:
           ref: ${{ inputs.head_sha }}
           fetch-depth: 10
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Use a non-GITHUB_TOKEN so the push triggers pull_request:synchronize,
+          # which re-triggers CI and review workflows for the fix loop.
+          token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Attach to PR branch
         run: |
