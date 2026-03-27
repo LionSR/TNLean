@@ -55,10 +55,9 @@ jobs:
             Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
 
             Focus your review on:
-            1. **Proof correctness**: Are there any `sorry`s introduced? Are proof terms well-structured?
-            2. **Proof integrity / cheating detection**: Flag ANY of the following patterns as BLOCKERS:
+            1. **Proof integrity / cheating detection**: Flag ANY of the following patterns as BLOCKERS:
                - `sorry`, `admit` — direct proof holes
-               - `native_decide` — kernel bypass, unsound in general (banned in Mathlib)
+               - `native_decide` — relies on trusted native evaluation / compiler and is banned in Mathlib for soundness and process reasons
                - `unsafeCast`, `unsafeCoerce` — type system bypass, can fabricate any proof
                - `lcProof` — low-level proof fabrication primitive
                - `ofReduceBool`, `ofReduceNat` — kernel primitives exploitable for unsound proofs
@@ -73,21 +72,24 @@ jobs:
                - `dbg_trace`, `stop` — debug aids left in code
                - `#check`, `#eval`, `#print` commands in proof files
                For each finding, explain WHY it is problematic and suggest the correct alternative.
-            3. **Circular reasoning detection**: This is critical. Look for:
-               - A `private` or local lemma whose proof references itself (direct self-reference)
-               - Mutual recursion cycles: lemma A uses lemma B, lemma B uses lemma A (or longer chains)
-               - A helper lemma declared in the same file that essentially restates the goal it is used to prove
-               - `theorem foo := foo` or similar trivial self-applications
-               - Run `#print axioms <theorem_name>` mentally: if a theorem's dependency graph contains itself, it is circular
-               - Watch for patterns where a `have` or `let` binding introduces a local hypothesis that is just the goal rephrased
-               Flag circular proofs as BLOCKERS — they compile but prove nothing.
-            4. **Castle-in-the-air detection**: Look for proofs that avoid grounding in Mathlib:
+            2. **Circular reasoning detection**: This is critical. Lean's kernel forbids literal declaration cycles, so focus on *mathematical* circularity instead. Look for:
+               - Proofs that assume (or trivially reintroduce) the statement being proved as a local hypothesis, then immediately close the goal from that hypothesis
+               - Helper lemmas declared in the same file that essentially restate the main goal and are only used to prove that goal
+               - Local `have`/`let` bindings that are just the goal rephrased, and are then used to solve the goal without any real argument
+               - Use of newly introduced `axiom` / `constant : Prop` (or similar) that make a difficult statement provable without connecting to existing Mathlib / core theorems
+               - Abuse of `unsafe` features or non-computational tricks to fabricate proofs instead of giving a genuine derivation
+               - Tactics or patterns like `by exact h` where `h` is essentially the same as the goal and itself came from an unjustified assumption
+               Flag such circular or vacuous proofs as BLOCKERS — Lean may accept them syntactically, but they do not constitute a valid mathematical argument.
+            3. **Castle-in-the-air detection**: Look for proofs that avoid grounding in Mathlib:
                - Custom re-declarations of standard Mathlib lemmas (e.g., re-proving commutativity of addition instead of using `add_comm`)
                - New `axiom` or `sorry`-based helper lemmas for facts that already exist in Mathlib — search Mathlib for the equivalent
                - A chain of custom lemmas that never bottoms out in Mathlib or Lean core — the proof should ultimately be rooted in established results
                - `private` helper lemmas that duplicate Mathlib API (e.g., custom matrix transpose lemmas when `Matrix.transpose_*` exists)
                - Overly long proof chains that could be replaced by a single Mathlib lemma
-               For each finding, name the Mathlib lemma/definition that should be used instead.
+               For each finding, perform an actual lookup (e.g., grep, `#find?`, `exact?`, `library_search`):
+                 - If you find an equivalent, name the Mathlib lemma/definition and, when possible, cite its module path or a concrete reference.
+                 - If no equivalent is found, state "no equivalent found" and briefly describe the search you performed.
+            4. **Proof correctness**: Are proof terms well-structured?
             5. **Mathlib style**: Does the code follow Mathlib conventions (naming, tactic style, imports)?
             6. **Type safety**: Any type mismatches, universe issues, or coercion problems?
             7. **Performance**: Will any proofs cause timeouts? Are there unnecessarily expensive tactics (e.g., `decide` on large types)?
