@@ -55,7 +55,7 @@ jobs:
             Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
 
             Focus your review on:
-            1. **Proof integrity**: Read `.github/PROOF_INTEGRITY.md` for the complete list of proof
+            1. **Proof integrity**: Read `docs/PROOF_INTEGRITY.md` for the complete list of proof
                integrity rules. Flag **blockers** as must-fix issues that should block merge. Flag
                **warnings** as advisory — note them but acknowledge they may be acceptable with justification.
                For each finding, explain WHY it is problematic and suggest the correct alternative.

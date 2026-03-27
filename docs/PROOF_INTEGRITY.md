@@ -111,7 +111,7 @@ These should be flagged for review but may be acceptable with justification.
 
 **In CI review prompts**: Reference this file instead of inlining the rules:
 ```
-Read `.github/PROOF_INTEGRITY.md` for the complete list of proof integrity
+Read `docs/PROOF_INTEGRITY.md` for the complete list of proof integrity
 rules. Flag blockers as must-fix issues that should block merge.
 Flag warnings as advisory — note them but acknowledge they may be
 acceptable with justification.
