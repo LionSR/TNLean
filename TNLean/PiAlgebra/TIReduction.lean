@@ -3,14 +3,13 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.PiAlgebra.FundamentalTheoremComplete
-import TNLean.MPS.Chain.TranslationInvariance
 import TNLean.MPS.Chain.SameStateBridge
 
 /-!
 # TI Reduction Corollary (Section 5, arXiv:1804.04964)
 
-If an injective non-TI MPS chain produces a translation-invariant state, then a
-TI injective MPS description with the same bond dimension exists.
+Given two constant (TI) chains with the same combined tensor span, the
+Fundamental Theorem forces them to be gauge equivalent via a single matrix.
 
 More precisely: given a constant (TI) chain `fun _ => A` with `A` injective, and
 another constant chain `fun _ => B` whose combined tensor generates the same MPV
@@ -25,7 +24,7 @@ description.
   equivalence plus injectivity of `B`.
 * `ti_reduction_of_sameState` — from `SameState` (via the blocking bridge
   hypothesis): same conclusion.
-* `ti_gaugeEquiv_isInjective` — gauge equivalent of an injective tensor is
+* `isInjective_of_gaugeEquiv` — gauge equivalent of an injective tensor is
   injective.
 
 ## References
@@ -61,14 +60,14 @@ theorem isInjective_of_gaugeEquiv {A B : MPSTensor d D}
       obtain ⟨i, rfl⟩ := hx
       rw [← hX i]
       exact Submodule.subset_span (Set.mem_range.mpr ⟨i, rfl⟩)
-    | zero => simp [Submodule.zero_mem]
+    | zero => simp
     | add x y _ _ hx hy =>
       simp only [Matrix.mul_add, Matrix.add_mul]
       exact Submodule.add_mem _ hx hy
     | smul c x _ hx =>
       have : (X : Matrix _ _ ℂ) * (c • x) * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) =
           c • ((X : Matrix _ _ ℂ) * x * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) := by
-        simp [mul_comm c, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
+        simp [Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
       rw [this]
       exact Submodule.smul_mem _ c hx
   have key := hConj _ hM'

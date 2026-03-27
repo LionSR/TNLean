@@ -9,9 +9,9 @@ import TNLean.Algebra.ScalarCommutant
 # Global Symmetry Corollary (Section 5, arXiv:1804.04964)
 
 For an injective MPS tensor `A` with on-site symmetry under a group
-representation `U : G →* GL(d)`, the Fundamental Theorem provides virtual gauge
-matrices `X(g)` for each group element. These satisfy a projective
-multiplication law up to a scalar cocycle.
+representation `U : G →* Matrix (Fin d) (Fin d) ℂ`, the Fundamental Theorem
+provides virtual gauge matrices `X(g)` for each group element. These satisfy a
+projective multiplication law up to a scalar factor.
 
 The composition law for the twisted tensor:
 `twistedTensor A U (g * h) = twistedTensor (twistedTensor A U h) U g`
@@ -93,7 +93,6 @@ theorem gaugeMatrix_projective_mul
     (A : MPSTensor d D)
     (hA : IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (_hSymm : IsOnSiteSymmetric A U)
     (X : G → GL (Fin D) ℂ)
     (hX : ∀ g : G, ∀ i : Fin d,
       twistedTensor A U g i =
