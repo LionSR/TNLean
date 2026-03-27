@@ -100,9 +100,9 @@ theorem IsPositiveMap.map_conjTranspose
 /-- A block diagonal matrix with PSD diagonal blocks is PSD. -/
 theorem Matrix.PosSemidef.fromBlocks_diag
     {m o : Type*} [Finite m] [Finite o]
-    {A : Matrix m m ℂ} {D : Matrix o o ℂ}
-    (hA : A.PosSemidef) (hD : D.PosSemidef) :
-    (Matrix.fromBlocks A 0 0 D : Matrix (m ⊕ o) (m ⊕ o) ℂ).PosSemidef := by
+    {A : Matrix m m ℂ} {B : Matrix o o ℂ}
+    (hA : A.PosSemidef) (hB : B.PosSemidef) :
+    (Matrix.fromBlocks A 0 0 B : Matrix (m ⊕ o) (m ⊕ o) ℂ).PosSemidef := by
   classical
   letI := Fintype.ofFinite m
   letI := Fintype.ofFinite o
@@ -110,34 +110,17 @@ theorem Matrix.PosSemidef.fromBlocks_diag
   letI : CStarAlgebra (Matrix o o ℂ) := matrixCStarAlgebra o
   obtain ⟨CA, hCA⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
     ((Matrix.nonneg_iff_posSemidef).mpr hA)
-  obtain ⟨CD, hCD⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
-    ((Matrix.nonneg_iff_posSemidef).mpr hD)
+  obtain ⟨CB, hCB⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
+    ((Matrix.nonneg_iff_posSemidef).mpr hB)
   have hCA' : A = CA * CAᴴ := by
     simpa [Matrix.star_eq_conjTranspose] using hCA
-  have hCD' : D = CD * CDᴴ := by
-    simpa [Matrix.star_eq_conjTranspose] using hCD
-  let C : Matrix (m ⊕ o) (m ⊕ o) ℂ := Matrix.fromBlocks CA 0 0 CD
-  have hC : Matrix.fromBlocks A 0 0 D = C * Cᴴ := by
-    simp [C, hCA', hCD', Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
+  have hCB' : B = CB * CBᴴ := by
+    simpa [Matrix.star_eq_conjTranspose] using hCB
+  let C : Matrix (m ⊕ o) (m ⊕ o) ℂ := Matrix.fromBlocks CA 0 0 CB
+  have hC : Matrix.fromBlocks A 0 0 B = C * Cᴴ := by
+    simp [C, hCA', hCB', Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
   rw [hC]
   exact Matrix.posSemidef_self_mul_conjTranspose C
-
-/-- Reindexing commutes with the conjugate transpose of a matrix. -/
-theorem Matrix.reindex_conjTranspose {m o : Type*}
-    (e : m ≃ o) (M : Matrix m m ℂ) :
-    Matrix.reindex e e Mᴴ = (Matrix.reindex e e M)ᴴ := by
-  ext i j
-  simp [Matrix.reindex_apply, Matrix.conjTranspose_apply, Matrix.submatrix_apply]
-
-/-- Reindexing preserves positive semidefiniteness. -/
-theorem Matrix.PosSemidef.reindex
-    {m o : Type*} [Finite m] [Finite o] {M : Matrix m m ℂ}
-    (hM : M.PosSemidef) (e : m ≃ o) :
-    (Matrix.reindex e e M).PosSemidef := by
-  classical
-  letI := Fintype.ofFinite m
-  letI := Fintype.ofFinite o
-  simpa [Matrix.reindex_apply] using hM.submatrix e.symm
 
 /-- If `T` is positive and subunital, then it preserves order intervals `[a • 1, b • 1]`
 whenever `0 ∈ [a,b]`. -/

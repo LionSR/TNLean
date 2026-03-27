@@ -131,7 +131,8 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
   obtain ⟨r, K, hK⟩ := hCP
   let e : n × Fin k ≃ Fin k × n := Equiv.prodComm n (Fin k)
   let Xswap : Matrix (Fin k × n) (Fin k × n) ℂ := Matrix.reindex e e X
-  have hXswap : Xswap.PosSemidef := hX.reindex e
+  have hXswap : Xswap.PosSemidef := by
+    simpa [Xswap, Matrix.reindex_apply] using hX.submatrix e.symm
   let Xblk : Matrix (Fin k) (Fin k) (Matrix n n ℂ) :=
     (Matrix.compRingEquiv (Fin k) n ℂ).symm Xswap
   let D : Fin r → Matrix (Fin k) (Fin k) (Matrix n n ℂ) :=
@@ -179,7 +180,9 @@ theorem IsCPMap.isNPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
       Xblk p q = Matrix.of fun i j => X (i, p) (j, q) := by
     ext i j
     simp [Xblk, Xswap, e, Matrix.reindex_apply]
-  convert hYswap.reindex e.symm using 1
+  have hY : (Matrix.reindex e.symm e.symm (F Yblk)).PosSemidef := by
+    simpa [Matrix.reindex_apply] using hYswap.submatrix e
+  convert hY using 1
   ext ip jq
   rw [hYblk]
   simp only [of_apply, Matrix.reindex_apply, Equiv.symm_symm, Matrix.submatrix_apply]
@@ -210,8 +213,8 @@ theorem IsNPositiveMap.mono {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} {k :
     rw [finSumFinEquiv_symm_apply_castSucc]
     simp
   have hX' : X'.PosSemidef := by
-    exact (Matrix.PosSemidef.fromBlocks_diag hX (Matrix.PosSemidef.zero (n := n) (R := ℂ))).reindex
-      e.symm
+    simpa [X', Matrix.reindex_apply] using
+      (Matrix.PosSemidef.fromBlocks_diag hX (Matrix.PosSemidef.zero (n := n) (R := ℂ))).submatrix e
   -- Apply (k+1)-positivity
   have hY' := h X' hX'
   -- Extract the k-block from the result
@@ -238,8 +241,8 @@ theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n 
   let X' : Matrix (n × Fin 2) (n × Fin 2) ℂ :=
     Matrix.reindex e.symm e.symm (Matrix.fromBlocks X 0 0 (0 : Matrix n n ℂ))
   have hX' : X'.PosSemidef := by
-    exact (Matrix.PosSemidef.fromBlocks_diag hX (Matrix.PosSemidef.zero (n := n) (R := ℂ))).reindex
-      e.symm
+    simpa [X', Matrix.reindex_apply] using
+      (Matrix.PosSemidef.fromBlocks_diag hX (Matrix.PosSemidef.zero (n := n) (R := ℂ))).submatrix e
   -- Apply 2-positivity to X'
   have hY' := h X' hX'
   -- The (0,0)-block of the result is E(X), which is PSD as a principal submatrix
@@ -292,9 +295,31 @@ theorem kadison_schwarz_2positive
     simpa [A, P, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose]
       using Matrix.posSemidef_self_mul_conjTranspose A
   let P' : Matrix (n × Fin 2) (n × Fin 2) ℂ := Matrix.reindex e.symm e.symm P
-  have hP' : P'.PosSemidef := hP.reindex e.symm
+  have hP' : P'.PosSemidef := by
+    simpa [P', Matrix.reindex_apply] using hP.submatrix e
   have hY' := h2pos P' hP'
   have hPos : IsPositiveMap E := h2pos.isPositiveMap
+  have hP'Block (p q : Fin 2) :
+      Matrix.of (fun i j => P' (i, p) (j, q)) =
+        match p, q with
+        | 0, 0 => Xᴴ * X
+        | 0, 1 => Xᴴ
+        | 1, 0 => X
+        | 1, 1 => (1 : Matrix n n ℂ) := by
+    fin_cases p <;> fin_cases q <;>
+      ext a b <;> simp [P', Matrix.reindex_apply, P, e]
+  have hEBlock (p q : Fin 2) :
+      E (Matrix.of fun i j => P' (i, p) (j, q)) =
+        match p, q with
+        | 0, 0 => E (Xᴴ * X)
+        | 0, 1 => (E X)ᴴ
+        | 1, 0 => ((E X)ᴴ)ᴴ
+        | 1, 1 => (1 : Matrix n n ℂ) := by
+    fin_cases p <;> fin_cases q
+    · simpa using congrArg E (hP'Block 0 0)
+    · exact (congrArg E (hP'Block 0 1)).trans (IsPositiveMap.map_conjTranspose hPos X)
+    · exact (congrArg E (hP'Block 1 0)).trans (by simp)
+    · exact (congrArg E (hP'Block 1 1)).trans (by simpa [KadisonSchwarz.IsUnitalMap] using h_unital)
   have hBlock :
       Matrix.reindex e e
         (Matrix.of fun (ip : n × Fin 2) (jq : n × Fin 2) =>
@@ -303,34 +328,18 @@ theorem kadison_schwarz_2positive
           (((E X)ᴴ)ᴴ) (1 : Matrix n n ℂ) := by
     ext ip jq
     rcases ip with i | i <;> rcases jq with j | j
-    · simp only [Matrix.reindex_apply]
-      change E (Matrix.of fun i' j' => P' (i', 0) (j', 0)) i j = E (Xᴴ * X) i j
-      rw [show (Matrix.of fun i' j' => P' (i', 0) (j', 0)) = Xᴴ * X by
-        ext a b
-        simp [P', Matrix.reindex_apply, P, e]]
-    · simp only [Matrix.reindex_apply]
-      change E (Matrix.of fun i' j' => P' (i', 0) (j', 1)) i j = (starRingEnd ℂ) (E X j i)
-      rw [show (Matrix.of fun i' j' => P' (i', 0) (j', 1)) = Xᴴ by
-        ext a b
-        simp [P', Matrix.reindex_apply, P, e]]
-      simpa [Matrix.conjTranspose_apply] using
-        congr_fun (congr_fun (IsPositiveMap.map_conjTranspose hPos X) i) j
-    · simp only [Matrix.reindex_apply]
-      change E (Matrix.of fun i' j' => P' (i', 1) (j', 0)) i j = (((E X)ᴴ)ᴴ) i j
-      rw [show (Matrix.of fun i' j' => P' (i', 1) (j', 0)) = X by
-        ext a b
-        simp [P', Matrix.reindex_apply, P, e]]
-      simp [Matrix.conjTranspose_apply]
-    · simp only [Matrix.reindex_apply]
-      change E (Matrix.of fun i' j' => P' (i', 1) (j', 1)) i j = (1 : Matrix n n ℂ) i j
-      rw [show (Matrix.of fun i' j' => P' (i', 1) (j', 1)) = (1 : Matrix n n ℂ) by
-        ext a b
-        simp [P', Matrix.reindex_apply, P, e]]
-      simpa [KadisonSchwarz.IsUnitalMap] using congr_fun (congr_fun h_unital i) j
+    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 0 0) i) j
+    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 0 1) i) j
+    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 1 0) i) j
+    · simpa [Matrix.reindex_apply] using congr_fun (congr_fun (hEBlock 1 1) i) j
   have hBlockPsD :
       (Matrix.fromBlocks (E (Xᴴ * X)) ((E X)ᴴ)
         (((E X)ᴴ)ᴴ) (1 : Matrix n n ℂ)).PosSemidef := by
-    simpa [hBlock] using hY'.reindex e
+    have hYsum : (Matrix.reindex e e
+        (Matrix.of fun (ip : n × Fin 2) (jq : n × Fin 2) =>
+          (E (Matrix.of fun i j => P' (i, ip.2) (j, jq.2))) ip.1 jq.1)).PosSemidef := by
+      simpa [Matrix.reindex_apply] using hY'.submatrix e.symm
+    simpa [hBlock] using hYsum
   haveI : Invertible (1 : Matrix n n ℂ) := invertibleOne
   simpa [inv_one, Matrix.mul_assoc, conjTranspose_conjTranspose] using
     (Matrix.PosDef.fromBlocks₂₂ (A := E (Xᴴ * X)) (B := (E X)ᴴ)

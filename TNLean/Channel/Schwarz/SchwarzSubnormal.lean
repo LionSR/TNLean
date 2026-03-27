@@ -275,7 +275,7 @@ private theorem topLeft_schwarz_of_normal_extension
     have hM' : (Matrix.reindex e.symm e.symm M).PosSemidef := by
       simpa [Matrix.reindex_apply] using hM.submatrix e
     have hSM : (S (Matrix.reindex e.symm e.symm M)).PosSemidef := hPosS _ hM'
-    simpa using hSM.reindex e
+    simpa [Matrix.reindex_apply] using hSM.submatrix e.symm
   have hSubSf : Sf 1 ≤ (1 : Matrix (Fin (D + E)) (Fin (D + E)) ℂ) := by
     rw [Matrix.le_iff] at hSubS ⊢
     have hEq :
@@ -283,28 +283,28 @@ private theorem topLeft_schwarz_of_normal_extension
           Matrix.reindex e e ((1 : Matrix (Fin D ⊕ Fin E) (Fin D ⊕ Fin E) ℂ) - S 1) := by
       ext i j
       simp [Sf, ρ, Matrix.reindexLinearEquiv_apply, Matrix.one_apply]
-    simpa [hEq] using hSubS.reindex e
+    simpa [hEq, Matrix.reindex_apply] using hSubS.submatrix e.symm
   have hNormalf : Nfᴴ * Nf = Nf * Nfᴴ := by
     change (Matrix.reindex e e N)ᴴ * Matrix.reindex e e N =
       Matrix.reindex e e N * (Matrix.reindex e e N)ᴴ
     calc
       (Matrix.reindex e e N)ᴴ * Matrix.reindex e e N =
           Matrix.reindex e e Nᴴ * Matrix.reindex e e N := by
-            rw [Matrix.reindex_conjTranspose e N]
+            rw [Matrix.conjTranspose_reindex]
       _ = Matrix.reindex e e (Nᴴ * N) := by
         convert (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e Nᴴ N) using 1
       _ = Matrix.reindex e e (N * Nᴴ) := by rw [hNormal]
       _ = Matrix.reindex e e N * Matrix.reindex e e Nᴴ := by
         convert (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e N Nᴴ).symm using 1
       _ = Matrix.reindex e e N * (Matrix.reindex e e N)ᴴ := by
-        rw [Matrix.reindex_conjTranspose e N]
+        rw [Matrix.conjTranspose_reindex]
   have hLeftf : (Sf (Nfᴴ * Nf) - Sf Nfᴴ * Sf Nf).PosSemidef :=
     schwarz_inequality_normal_operator (D := D + E) Sf hPosSf hSubSf Nf hNormalf
   have hLeftSum : (S (Nᴴ * N) - S Nᴴ * S N).PosSemidef := by
     have h :
         ((S (Nᴴ * N)).submatrix e.symm e.symm -
           (S Nᴴ * S N).submatrix e.symm e.symm).PosSemidef := by
-      simpa [Sf, Nf, ρ, Matrix.reindex_conjTranspose e N,
+      simpa [Sf, Nf, ρ, Matrix.conjTranspose_reindex e e N,
         Matrix.reindexLinearEquiv_apply, Matrix.reindexLinearEquiv_mul,
         Matrix.submatrix_sub] using hLeftf
     simpa [Matrix.submatrix_submatrix, Matrix.submatrix_sub] using h.submatrix e
@@ -317,7 +317,7 @@ private theorem topLeft_schwarz_of_normal_extension
     have h :
         ((S (N * Nᴴ)).submatrix e.symm e.symm -
           (S N * S Nᴴ).submatrix e.symm e.symm).PosSemidef := by
-      simpa [Sf, Nf, ρ, Matrix.reindex_conjTranspose e N,
+      simpa [Sf, Nf, ρ, Matrix.conjTranspose_reindex e e N,
         Matrix.reindexLinearEquiv_apply, Matrix.reindexLinearEquiv_mul,
         conjTranspose_conjTranspose, Matrix.submatrix_sub] using hRightf
     simpa [Matrix.submatrix_submatrix, Matrix.submatrix_sub] using h.submatrix e
