@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Defs
 import TNLean.MPS.Overlap.Basic
+import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.SpectralGapNT
 import TNLean.Topology.TendstoHelpers
@@ -128,6 +129,40 @@ theorem norm_eq_one_of_selfOverlap_scale
         with ⟨n, hn1, hn2⟩
       exact not_lt_of_ge hn1 hn2
   nlinarith [norm_nonneg ζ]
+
+/-- The gauge phase `ζ` in a gauge-phase equivalence between two TP-normalized irreducible
+primitive blocks has unit norm. -/
+theorem norm_gaugePhase_eq_one_of_irr_TP_primitive
+    {D : ℕ} [NeZero D]
+    (A B : MPSTensor d D)
+    (hA_irr : IsIrreducibleTensor A)
+    (hB_irr : IsIrreducibleTensor B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hA_prim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
+    (hB_prim : _root_.IsPrimitive (transferMap (d := d) (D := D) B))
+    (X : GL (Fin D) ℂ) (ζ : ℂ)
+    (hX : ∀ i : Fin d,
+      B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
+        ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :
+    ‖ζ‖ = 1 := by
+  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ :=
+    mpv_eq_pow_mul_of_gaugePhase A B X ζ hX
+  have hScale : ∀ N,
+      mpvOverlap (d := d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N :=
+    mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := A) (B := B) (ζ := ζ) hmpv
+  have hA_pf : HasPrimitiveFixedPoint A :=
+    hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hA_irr hA_norm hA_prim
+  have hB_pf : HasPrimitiveFixedPoint B :=
+    hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible B hB_irr hB_norm hB_prim
+  have hAA : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1) := by
+    convert hA_pf.overlap_tendsto_one.norm using 1
+    simp
+  have hBB : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop (nhds 1) := by
+    convert hB_pf.overlap_tendsto_one.norm using 1
+    simp
+  exact norm_eq_one_of_selfOverlap_scale hAA hBB hScale
 
 /-! ## Easy direction: gauge-phase ⇒ proportional MPV -/
 
