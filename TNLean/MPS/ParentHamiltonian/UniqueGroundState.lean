@@ -179,14 +179,14 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
 /-- **Unique ground state for `N`-block-injective tensors on `2N` sites**.
 
 If `A` is `L₀`-block-injective (i.e., the blocked tensor `A^{[L₀]}` is injective),
-then the parent Hamiltonian with interaction range `2L₀` on the periodic chain has
-a unique ground state.
+with a nontrivial block length `L₀ > 0`, then the parent Hamiltonian with
+interaction range `2L₀` on the periodic chain has a unique ground state.
 
 **Status**: Depends on `groundSpace_unique_periodic` and the connection between
 `chainGroundSpace` and `LinearMap.ker (parentHamiltonian A (2 * L₀) N)`, which
 will be established when the operator API lands. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hA : IsNBlkInjective A L₀)
+    {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
   sorry
@@ -194,13 +194,13 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
 /-- **Optimal unique ground state for normal tensors on `L₀ + 1` sites**.
 
 If `A` is normal (hence `L₀`-block-injective for some `L₀`) and the blocked tensor
-is in normal form, the interaction range can be reduced from `2L₀` to `L₀ + 1`
-using the structure theory of normal MPS.
+is in normal form with `L₀ > 0`, the interaction range can be reduced from `2L₀`
+to `L₀ + 1` using the structure theory of normal MPS.
 
 **Status**: Requires the normal-form analysis from the canonical form theory in
 addition to the periodic boundary argument. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀)
+    {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
   sorry

@@ -351,15 +351,15 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \label{thm:unique_gs_injective}
   \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
   \uses{thm:ground_space_unique_periodic}
-  If $A$ is $L_0$-block-injective, the parent Hamiltonian with interaction
-  range $2L_0$ has a unique ground state on the periodic chain.
+  If $A$ is $L_0$-block-injective with $L_0 > 0$, the parent Hamiltonian
+  with interaction range $2L_0$ has a unique ground state on the periodic chain.
 \end{theorem}
 
 \begin{theorem}[Optimal unique ground state for normal tensors]%
   \label{thm:unique_gs_normal}
   \lean{MPSTensor.parentHamiltonian_unique_gs_normal}
   \uses{thm:unique_gs_injective}
-  If $A$ is normal (hence $L_0$-block-injective for some $L_0$) and
+  If $A$ is normal (hence $L_0$-block-injective for some $L_0 > 0$) and
   in normal form, the interaction range can be reduced to $L_0 + 1$.
 \end{theorem}
 
