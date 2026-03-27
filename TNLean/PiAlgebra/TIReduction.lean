@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.MPS.Chain.SameStateBridge
+import TNLean.MPS.Chain.TranslationInvariance
 
 /-!
 # TI Reduction Corollary (Section 5, arXiv:1804.04964)
@@ -32,12 +33,6 @@ can pass to a TI injective description.
 
 open scoped Matrix
 
-namespace MPSTensor
-
-variable {d D : ℕ}
-
-end MPSTensor
-
 namespace MPSChainTensor
 
 variable {d D n : ℕ}
@@ -60,15 +55,7 @@ theorem ti_reduction_corollary
     (∃ X : GL (Fin D) ℂ, ∀ i : Fin d,
       B i = (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) ∧
     MPSTensor.IsInjective B := by
-  have hCombinedInj :
-      MPSTensor.IsInjective (MPSTensor.chainCombinedTensor (fun _ : Fin n => A)) :=
-    MPSTensor.chainCombinedTensor_isInjective _ ⟨0, hn⟩ hA
-  obtain ⟨X, hX⟩ := MPSTensor.fundamentalTheorem_singleBlock hCombinedInj hMPV
-  have hGauge : ∀ i : Fin d,
-      B i = (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
-    intro i
-    have := hX (finProdFinEquiv (⟨0, hn⟩, i))
-    simpa [MPSTensor.chainCombinedTensor_apply] using this
+  obtain ⟨X, hGauge⟩ := ti_tensors_single_gauge A B hn hA hMPV
   constructor
   · exact ⟨X, hGauge⟩
   · exact MPSTensor.isInjective_of_gaugeEquiv hA ⟨X, hGauge⟩

@@ -35,6 +35,7 @@ Thumbs.db
 
 # Editor/tool local settings
 .claude/settings.local.json
+.claude/worktrees/
 
 # Intermediate / generated analysis docs
 FINAL_STATUS.md
@@ -56,6 +57,10 @@ blueprint/web/
 blueprint/print/
 blueprint/lean_decls
 blueprint/src/web.paux
+blueprint/src/*.xdv
+
+# Local notes / mail exports
+MeetingNotes/*.eml
 
 # Local scratch / experiments
 Scratch/

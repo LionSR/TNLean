@@ -169,8 +169,18 @@ theorem gaugeMatrix_projective_mul
   change (Xh : Matrix _ _ ℂ) * (Xg : Matrix _ _ ℂ) = c • Xgh.1
   have hval : Ygl.1 = (Xh : Matrix _ _ ℂ) * (Xg : Matrix _ _ ℂ) := by
     simp [Ygl]
+  have hXgh_mul_inv : Xgh.1 * (((Xgh⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) = 1 := by
+    change (((Xgh * Xgh⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) = 1
+    exact congrArg
+      (fun Z : GL (Fin D) ℂ => (Z : Matrix (Fin D) (Fin D) ℂ))
+      (mul_inv_cancel Xgh)
   have key : Ygl.1 = Xgh.1 * (((Xgh⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * Ygl.1) := by
-    simp
+    calc
+      Ygl.1 = 1 * Ygl.1 := by rw [one_mul]
+      _ = (Xgh.1 * (((Xgh⁻¹ : GL _ ℂ) : Matrix _ _ ℂ))) * Ygl.1 := by
+        rw [← hXgh_mul_inv]
+      _ = Xgh.1 * (((Xgh⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * Ygl.1) := by
+        rw [Matrix.mul_assoc]
   rw [← hval, key, hc]
   simpa [Matrix.scalar_apply] using (Matrix.smul_eq_mul_diagonal (M := Xgh.1) c).symm
 
