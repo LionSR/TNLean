@@ -238,11 +238,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{theorem}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
   \lean{MPSTensor.groundSpaceMap_injective}
+  \leanok
   \uses{def:ground_space_map, def:is_injective}
   If $A$ is injective and $L \ge 1$, then $\Gamma_L$ is injective.
 \end{theorem}
 
 \begin{proof}
+  \leanok
   If $\Gamma_L(X) = 0$ then $\tr(A^\sigma X) = 0$ for every length-$L$ word
   $\sigma$.  Since $A$ is injective, the products $\{A^\sigma\}_\sigma$ span
   $\MN{D}$, so the trace pairing gives $X = 0$.
@@ -250,11 +252,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{theorem}[Ground-space dimension]\label{thm:ground_space_finrank_eq}
   \lean{MPSTensor.groundSpace_finrank_eq}
+  \leanok
   \uses{thm:ground_space_map_injective, lem:ground_space_finrank_le}
   If $A$ is injective and $L \ge 1$, then $\dim G_L(A) = D^2$.
 \end{theorem}
 
 \begin{proof}
+  \leanok
   The upper bound $\dim G_L(A) \le D^2$ is Lemma~\ref{lem:ground_space_finrank_le}.
   Injectivity of $\Gamma_L$ gives $\dim G_L(A) = \dim \MN{D} = D^2$.
 \end{proof}
