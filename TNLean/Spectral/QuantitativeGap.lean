@@ -29,7 +29,7 @@ a lower bound on `1 - ρ`).
 * `exponential_convergence_of_primitive` — for a primitive TP channel,
   `‖E^n(X) - P(X)‖ ≤ C · (1-δ)^n · ‖X‖` (convergence to fixed-point projection)
 * `correlation_length_bound` — exponential decay of traceless iterates
-* `spectral_gap_from_wielandt` — explicit spectral gap `δ > 0` with
+* `spectral_gap_of_injective` — explicit spectral gap `δ > 0` with
   all non-unit eigenvalues satisfying `|μ| ≤ 1 - δ`
 
 ## Strengthening relative to the literature
@@ -119,18 +119,20 @@ theorem correlation_length_bound [NeZero D]
   -- TODO (#22): ξ = -1/log(ρ₂) where ρ₂ is second-largest eigenvalue modulus
   sorry
 
-/-! ## Explicit gap from Wielandt bound -/
+/-! ## Explicit gap from injectivity -/
 
-/-- **Spectral gap from the Wielandt bound** (existential version).
+/-- **Spectral gap from injectivity** (existential version).
 
 For an injective TP-normalized MPS tensor, all eigenvalues of the transfer
 map other than 1 have modulus strictly less than 1, with a uniform gap.
 
-The existential bound `∃ δ > 0` follows from: injectivity implies primitivity
-(by the Wielandt bound), primitivity implies spectral gap
-(by `compl_eigenvalue_norm_lt_one_of_primitive`), and in finite dimensions
-the maximum over finitely many eigenvalues gives a uniform bound. -/
-theorem spectral_gap_from_wielandt [NeZero D]
+The existential bound `∃ δ > 0` follows from: injectivity implies
+`HasEventuallyFullKrausRank` (at index 1), which implies primitivity
+(via `IsPrimitivePaper → IsPeripherallyPrimitive`), primitivity implies
+spectral gap (by `compl_eigenvalue_norm_lt_one_of_primitive`), and in
+finite dimensions the maximum over finitely many eigenvalues gives a
+uniform bound. -/
+theorem spectral_gap_of_injective [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : IsInjective A) :
@@ -141,30 +143,22 @@ theorem spectral_gap_from_wielandt [NeZero D]
   set E := transferMap (d := d) (D := D) A
   -- Step 1: IsInjective → IsPrimitive (transferMap A)
   -- Chain: IsInjective → HasEventuallyFullKrausRank → IsPrimitivePaper → IsPeripherallyPrimitive
+  have hWord : wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
+    simp only [wordSpan]
+    congr 1; ext y; constructor
+    · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
+    · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
   have hFullKraus : HasEventuallyFullKrausRank A := by
-    refine ⟨1, ?_⟩
-    -- wordSpan A 1 = span of {evalWord A [i] | i : Fin d} = span of {A i | i} = ⊤
-    rw [eq_top_iff]
-    intro x _
-    rw [wordSpan]
-    -- range A ⊆ range (fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ))
-    -- since span(range A) = ⊤ by IsInjective
-    have hle : Submodule.span ℂ (Set.range A) ≤
-        Submodule.span ℂ (Set.range fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) := by
-      apply Submodule.span_mono
-      intro y hy
-      obtain ⟨i, rfl⟩ := hy
-      exact ⟨fun _ => i, by simp [evalWord]⟩
-    exact hle (hA ▸ Submodule.mem_top)
+    exact ⟨1, by rw [hWord, hA]⟩
   have hPrimPaper : IsPrimitivePaper A :=
     isPrimitivePaper_of_hasEventuallyFullKrausRank A hFullKraus
   have hPrim : _root_.IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm hPrimPaper
   -- Step 2: every eigenvalue has ‖μ‖ ≤ 1
+  have hE_eq : E = mixedTransferMap A A := (mixedTransferMap_self A).symm
   have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by
     intro μ hμ
-    exact eigenvalue_norm_le_one A A hNorm hNorm μ
-      (by rwa [show E = mixedTransferMap A A from (mixedTransferMap_self A).symm] at hμ)
+    exact eigenvalue_norm_le_one A A hNorm hNorm μ (hE_eq ▸ hμ)
   -- Step 3: non-1 eigenvalues have ‖μ‖ < 1 (from IsPrimitive + eigenvalue bound)
   have hlt : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ < 1 := by
     intro μ hμ hne

@@ -176,19 +176,20 @@ All three results below are stubs in the formalization (TODO~\#22).
     $\xi = -1/\log\rho(\E_A - P)$.
 \end{theorem}
 
-\begin{theorem}[Spectral gap from the Wielandt bound]%
+\begin{theorem}[Spectral gap from injectivity]%
     \label{thm:spectral_gap_wielandt}
-    \lean{MPSTensor.spectral_gap_from_wielandt}
+    \lean{MPSTensor.spectral_gap_of_injective}
     \notready
     \uses{thm:primitive_compl_lt_one, thm:wielandt_bound}
     For an injective trace-preserving MPS tensor, there exists
     $\delta > 0$ such that every eigenvalue $\mu \neq 1$ of the
     transfer map satisfies $|\mu| \le 1 - \delta$.
 
-    The proof combines: injectivity implies primitivity (via the
-    Wielandt bound, Theorem~\ref{thm:wielandt_bound}), primitivity
-    implies a spectral gap on the complementary map, and the finite
-    number of eigenvalues gives a uniform bound.
+    The proof combines: injectivity implies \texttt{HasEventuallyFullKrausRank}
+    (at index~1), which implies primitivity (via
+    \texttt{IsPrimitivePaper} $\to$ \texttt{IsPeripherallyPrimitive}),
+    primitivity implies a spectral gap on the complementary map, and the
+    finite number of eigenvalues gives a uniform bound.
 \end{theorem}
 
 \begin{remark}[Status of quantitative bounds]\label{rem:quantitative_status}
