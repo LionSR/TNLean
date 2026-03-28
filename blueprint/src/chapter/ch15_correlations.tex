@@ -94,12 +94,13 @@ their spectral decomposition, and quantitative bounds on decay rates.
 
 \begin{remark}[Spectral hypothesis and the spectral gap]%
     \label{rem:spectral_hypothesis}
-    \uses{thm:correlator_exponential_bound, thm:spectral_gap}
+    \uses{thm:correlator_exponential_bound, thm:primitive_compl_lt_one}
     The hypothesis ``$|\lambda_2| < 1$'' in
     Theorem~\ref{thm:correlator_exponential_bound} is precisely the
     \emph{spectral gap} condition for the transfer map $\E_A$.
-    For injective tensors, the strict spectral gap is established in
-    Theorem~\ref{thm:spectral_gap} (Chapter~\ref{ch:spectral});
+    For primitive channels, the complementary spectral gap
+    $\rho(\E_A - P) < 1$ is established in
+    Theorem~\ref{thm:primitive_compl_lt_one} (Chapter~\ref{ch:channels});
     for irreducible trace-preserving tensors, the analogous result is
     Theorem~\ref{thm:spectral_gap_irr_tp}.
     Thus the exponential decay of connected correlations follows
@@ -132,16 +133,17 @@ their spectral decomposition, and quantitative bounds on decay rates.
 
 \section{Quantitative spectral gap bounds}
 
-The spectral gap theorems in Chapter~\ref{ch:spectral} establish
-$\rho(F_{AB}) < 1$ qualitatively.  This section records the
-\emph{quantitative} refinements that give explicit constants and rates.
+The spectral gap theorems in Chapter~\ref{ch:channels} establish
+$\rho(\E_A - P) < 1$ for primitive channels qualitatively.  This section
+records the \emph{quantitative} refinements that give explicit constants
+and rates for the single-tensor transfer map $\E_A$.
 All three results below are stubs in the formalization (TODO~\#22).
 
 \begin{theorem}[Exponential convergence of primitive channels]%
     \label{thm:exponential_convergence_primitive}
     \lean{MPSTensor.exponential_convergence_of_primitive}
     \notready
-    \uses{thm:spectral_gap, def:fixed_point_proj,
+    \uses{thm:primitive_compl_lt_one, def:fixed_point_proj,
           thm:primitive_overlap}
     Let $A$ be a primitive trace-preserving MPS tensor with positive
     definite fixed point $\rho$ and fixed-point projection
@@ -153,7 +155,7 @@ All three results below are stubs in the formalization (TODO~\#22).
         \;\le\; C\,(1-\delta)^n\,\|X\|.
     \]
     The spectral gap $\delta$ exists by primitivity
-    (Theorem~\ref{thm:spectral_gap} applied to the complementary map).
+    (Theorem~\ref{thm:primitive_compl_lt_one}, the complementary spectral gap).
 \end{theorem}
 
 \begin{theorem}[Correlation length bound]\label{thm:correlation_length_bound}
@@ -178,7 +180,7 @@ All three results below are stubs in the formalization (TODO~\#22).
     \label{thm:spectral_gap_wielandt}
     \lean{MPSTensor.spectral_gap_from_wielandt}
     \notready
-    \uses{thm:spectral_gap, thm:wielandt_bound}
+    \uses{thm:primitive_compl_lt_one, thm:wielandt_bound}
     For an injective trace-preserving MPS tensor, there exists
     $\delta > 0$ such that every eigenvalue $\mu \neq 1$ of the
     transfer map satisfies $|\mu| \le 1 - \delta$.
