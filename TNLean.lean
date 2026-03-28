@@ -134,6 +134,7 @@ import TNLean.MPS.FundamentalTheorem.FiniteLength
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.OnSiteSymmetry
+import TNLean.MPS.Symmetry.VirtualRepresentation
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
