@@ -239,14 +239,16 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   \uses{lem:ground_space_intersection, lem:ground_space_mono,
         lem:parent_hamiltonian_annihilates}
   \notready
-  After blocking $L_0$ sites, $A^{[L_0]}$ is injective.
-  The interaction range $L_0{+}1$ ensures adjacent windows overlap in
-  $L_0$ sites, which is enough for the blocked tensor to be injective
-  on the overlap.
-  Iterate the intersection property
-  (Lemma~\ref{lem:ground_space_intersection}) across the chain: each
-  step extends the ground-space window by one site.
-  After $N - L_0$ iterations the window wraps around the periodic chain.
+  The proof proceeds in unblocked (original-site) coordinates to avoid
+  any divisibility assumption on $N$.
+  Since $A$ is $L_0$-block injective, the map $\Gamma_{L_0}$ is
+  injective, so Lemma~\ref{lem:ground_space_intersection} applies to
+  windows of length $\ge L_0{+}1$.
+  Starting from an $(L_0{+}1)$-site window, iterate the intersection
+  property: each step extends the ground-space window by one original
+  site to the right.
+  After $N - (L_0{+}1)$ iterations the window spans all $N$ sites and
+  wraps around the periodic chain.
   Comparing the two descriptions of a ground state on the closed chain
   shows that the boundary matrix $X$ must commute with every word matrix
   $A^{[L_0],\sigma}$.
@@ -377,7 +379,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
   The intersection identity shows that $\ker(h_i) \cap \ker(h_j)$ is
   exactly $G_{[i,j+L-1]}(A)$; in particular there is no non-trivial
   vector in one kernel that is orthogonal to the other yet lies in both.
-  Hence the Friedrichs angle $\theta_{|i-j|}$ between $\ker(h_i)$ and
+  Hence the Friedrichs angle $\theta_{d_N(i,j)}$ between $\ker(h_i)$ and
   $\ker(h_j)$ is strictly positive (for the fixed injective tensor
   $A$).  Because the angle depends only on the overlap pattern
   $d_N(i,j) \in \{1,\dots,L-1\}$ and not on the absolute position,
@@ -509,9 +511,12 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   (the canonical form ensures that distinct blocks have orthogonal
   images under $\Gamma_L$ for $L \ge L_0$, so the sum is in fact
   direct for sufficiently long windows).
-  Iterating the intersection property
-  (Lemma~\ref{lem:ground_space_intersection}) across the chain for
-  each block $A_k$ independently, and using
+  Each normal block $A_k$ has injectivity length $L_k \le L_0$, so
+  the $L_k$-blocked tensor $A_k^{[L_k]}$ is injective.
+  Applying Lemma~\ref{lem:ground_space_intersection} to this injective
+  blocked tensor (in unblocked coordinates, as in
+  Theorem~\ref{thm:unique_gs_injective}) and iterating across the
+  chain for each block independently, and using
   Theorem~\ref{thm:unique_gs_normal} for each normal block, the
   component of $\psi$ associated with block $A_k$ must be proportional
   to $V^{(N)}(A_k)$.
