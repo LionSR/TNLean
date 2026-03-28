@@ -116,23 +116,7 @@ jobs:
 
           echo "Creating PR from $BRANCH → main for issue #${ISSUE_NUMBER}"
 
-          # Create the PR — pr-cleanup.yml will reformat title/body/labels
-          PR_BODY=$'Addresses #'"${ISSUE_NUMBER}"$'\n\nAuto-created by Claude Code action.'
-
-          PR_URL=$(gh pr create \
-            --repo "$REPO" \
-            --head "$BRANCH" \
-            --base main \
-            --title "feat: ${ISSUE_TITLE}" \
-            --body "$PR_BODY")
-
-          echo "PR created successfully: $PR_URL"
-
-          # Extract PR number from the URL
-          PR_NUM=$(echo "$PR_URL" | grep -oE '[0-9]+$')
-
-          # Check if the triggering text contains autofix keywords.
-          # If so, add 'auto-fix-claude' label to enable the review auto-fix workflow.
+          # Check if the triggering text contains autofix keywords
           TRIGGER_TEXT=""
           if [ "${{ github.event_name }}" = "issue_comment" ]; then
             TRIGGER_TEXT="$COMMENT_BODY"
@@ -140,7 +124,21 @@ jobs:
             TRIGGER_TEXT="$ISSUE_BODY $EVENT_ISSUE_TITLE"
           fi
 
+          LABEL_FLAG=""
           if echo "$TRIGGER_TEXT" | grep -qiE 'auto[- ]?fix|autofix'; then
-            echo "Autofix keyword detected — adding 'auto-fix-claude' label to PR #${PR_NUM}"
-            gh pr edit "$PR_NUM" --repo "$REPO" --add-label "auto-fix-claude" || true
+            echo "Autofix keyword detected — will add 'auto-fix-claude' label"
+            LABEL_FLAG="--label auto-fix-claude"
           fi
+
+          # Create the PR — pr-cleanup.yml will reformat title/body/labels
+          PR_BODY=$'Addresses #'"${ISSUE_NUMBER}"$'\n\nAuto-created by Claude Code action.'
+
+          gh pr create \
+            --repo "$REPO" \
+            --head "$BRANCH" \
+            --base main \
+            --title "feat: ${ISSUE_TITLE}" \
+            --body "$PR_BODY" \
+            $LABEL_FLAG
+
+          echo "PR created successfully."
