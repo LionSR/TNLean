@@ -349,7 +349,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
   \notready
   \uses{thm:martingale_criterion, def:parent_interaction,
         def:local_term_parent, lem:ground_space_intersection, def:injective}
-  Let $A$ be injective and fix an interaction range $L$ as in
+  Let $A$ be injective and fix an interaction range $L \ge 2$ as in
   Definition~\ref{def:parent_interaction}.  Let $h_L(A) := \Pi_{G_L(A)^\perp}$
   be the $L$-site parent interaction, and for each chain length and site $i$
   let $h_i$ denote its translate as in Definition~\ref{def:local_term_parent}.
@@ -357,6 +357,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
   $0 < |i - j| < L$ (i.e.\ whose $L$-site supports share at least one site),
   the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
   constants $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
+  (When $L = 1$ the interaction terms have disjoint supports, so there are no
+  overlapping pairs and the spectral gap follows directly without the
+  martingale machinery.)
 \end{lemma}
 
 \begin{proof}
@@ -380,25 +383,38 @@ Lucia~\cite{Kastoryano2018Martingale}.
   worst-case cosine of the Friedrichs angles.
 
   \textbf{Row-sum bound.}
-  Each site $i$ overlaps with at most $2(L-1)$ neighbours
-  (those $j$ with $0 < |i-j| < L$).
+  Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
+  neighbours (those $j$ with $0 < |i-j| < L$).
   Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
   and $c_{ij} := 0$ otherwise.
   Then
   $\sum_{j \ne i} c_{ij} \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
   satisfying the row-sum hypothesis of
   Theorem~\ref{thm:martingale_criterion}.
+
+  \textbf{Positivity of $\gamma$.}
   The Friedrichs angle bound gives, for each overlapping pair,
-  $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$,
-  so the martingale inequality holds whenever
-  $c_{ij}(1-\gamma) \ge \alpha$, i.e.\
-  $\gamma \le 1 - 2(L-1)\alpha$.
+  $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$.
+  The martingale inequality holds with
+  $\gamma = 1 - 2(L-1)\alpha$,
+  which requires $c_{ij}(1-\gamma) = \tfrac{\alpha}{1} \cdot 1 = \alpha$
+  (matching the Friedrichs bound exactly when
+  $c_{ij} = \tfrac{1}{2(L-1)}$).
+  Since $\alpha < 1$ (the Friedrichs angle is strictly positive),
+  it remains to show $\gamma > 0$, i.e.\ $\alpha < \tfrac{1}{2(L-1)}$.
   In the blocked picture of
-  Theorem~\ref{thm:parent_hamiltonian_gapped}, $L = 2$ (so the
-  interaction graph has degree~$2$) and the quantitative gap
-  $\gamma > 0$ follows from the Nachtergaele finite-size
-  criterion~\cite{Nachtergaele1996Spectral}; the constants depend
-  only on $A$ and are independent
+  Theorem~\ref{thm:parent_hamiltonian_gapped}, $L = 2$ and each site
+  overlaps with at most $2$ neighbours, so the condition reduces to
+  $\alpha < \tfrac{1}{2}$, which is guaranteed by the
+  Nachtergaele finite-size criterion~\cite{Nachtergaele1996Spectral}
+  applied to the injective blocked tensor.
+  For general $L > 2$, the stronger bound
+  $\alpha < \tfrac{1}{2(L-1)}$ follows from the exponential decay of
+  correlations in the injective MPS transfer operator
+  (the Friedrichs cosine $\alpha_s$ for overlap $L - s$ decays
+  exponentially in $s$, so the sum $2(L-1)\alpha$ remains bounded
+  below $1$).
+  In all cases, the constants depend only on $A$ and are independent
   of~$N$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
 \end{proof}
 
