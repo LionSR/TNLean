@@ -49,6 +49,15 @@ variable {D : ℕ}
 
 namespace PeripheralSpectrum
 
+/-! ### `PeripheralSpectrum` namespace
+
+Provides the core results establishing group structure on peripheral eigenvalues:
+* Closure under multiplication and inversion
+* Cyclic group structure (Wolf Theorem 6.6)
+* Multiplicity-one for each peripheral eigenvalue
+* Period-divides-dimension bound
+-/
+
 /-! ## Closure under multiplication -/
 
 /-- **Peripheral eigenvalues are closed under multiplication.**
