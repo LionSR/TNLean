@@ -116,12 +116,14 @@ jobs:
             const prNumber = ${{ github.event.workflow_run.pull_requests[0].number }};
             // Use GraphQL to get unresolved review threads with full
             // conversation context (REST API doesn't expose resolved status).
-            const query = `query($owner: String!, $repo: String!, $pr: Int!) {
+            // Paginate to handle PRs with >100 threads.
+            const query = `query($owner: String!, $repo: String!, $pr: Int!, $cursor: String) {
               repository(owner: $owner, name: $repo) {
                 pullRequest(number: $pr) {
-                  reviewThreads(first: 100) {
+                  reviewThreads(first: 100, after: $cursor) {
                     nodes {
                       isResolved
+                      isOutdated
                       comments(first: 20) {
                         nodes {
                           author { login }
@@ -132,21 +134,31 @@ jobs:
                         }
                       }
                     }
+                    pageInfo { hasNextPage endCursor }
                   }
                 }
               }
             }`;
 
-            const result = await github.graphql(query, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pr: prNumber
-            });
+            let allThreads = [];
+            let cursor = null;
+            do {
+              const result = await github.graphql(query, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pr: prNumber,
+                cursor: cursor
+              });
+              const page = result.repository.pullRequest.reviewThreads;
+              allThreads.push(...page.nodes);
+              cursor = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null;
+            } while (cursor);
 
-            const threads = result.repository.pullRequest.reviewThreads.nodes;
-            // Collect all unresolved threads (from any reviewer, not just bots).
-            const unresolvedThreads = threads.filter(t =>
-              !t.isResolved && t.comments.nodes.length > 0
+            // Collect unresolved, non-outdated threads (from any reviewer).
+            // Outdated threads refer to diff hunks that have since changed —
+            // auto-fixing them causes churn on code that may already be correct.
+            const unresolvedThreads = allThreads.filter(t =>
+              !t.isResolved && !t.isOutdated && t.comments.nodes.length > 0
             );
 
             // No actionable threads → fixed point reached
