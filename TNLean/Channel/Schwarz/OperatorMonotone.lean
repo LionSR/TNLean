@@ -18,6 +18,11 @@ Mathlib already proves operator monotonicity of `x ↦ x^p` for `p ∈ [0,1]` an
 Corollary 5.2 from the operator Jensen inequality
 (`OperatorConvexity.lean`).
 
+**Status note:** The Cor. 5.2 theorems in this file depend on Jensen-type lemmas
+imported from `OperatorConvexity.lean` that are currently `sorry` placeholders.
+They should be understood as conditional on those axioms and are not yet fully
+verified Lean theorems.
+
 ### Proof strategy for Corollary 5.2
 
 Each item reduces to an instance of the operator Jensen inequality applied
@@ -90,9 +95,9 @@ theorem IsPositiveMap.cor52_item1_rpow_of_subunital
   have h1p_le1 : 1 / p ≤ 1 := by rwa [div_le_one₀ hp_pos]
   -- (A ^ p) ^ (1 / p) = A via CFC power composition
   have hcomp : (A ^ p) ^ (1 / p) = A := by
-    rw [CFC.rpow_rpow_of_exponent_nonneg A p (1 / p) hp_nn h1p_nn]
+    rw [CFC.rpow_rpow_of_exponent_nonneg A p (1 / p) hp_nn h1p_nn (ha₂ := hA)]
     rw [show p * (1 / p) = (1 : ℝ) from by field_simp [ne_of_gt hp_pos]]
-    exact CFC.rpow_one A
+    exact CFC.rpow_one A (ha := hA)
   -- Concave Jensen for rpow with exponent 1/p ∈ [0, 1] applied to A ^ p
   have hJ : T ((A ^ p) ^ (1 / p)) ≤ (T (A ^ p)) ^ (1 / p) :=
     hT.rpow_concave_jensen hSub ⟨h1p_nn, h1p_le1⟩ CFC.rpow_nonneg
@@ -131,15 +136,16 @@ theorem IsPositiveMap.cor52_item2_rpow_of_subunital
 
 /-- Wolf Cor. 5.2(3) in matrix form.
 
-For a positive subunital map `T` and positive-definite `A`:
+For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.
 
 This is a direct instance of the concave Jensen inequality for `log`
-(from `OperatorConvexity.lean`). -/
+(from `OperatorConvexity.lean`). Note: requires unitality (`T 1 = 1`),
+not merely subunitality. -/
 theorem IsPositiveMap.cor52_item3_log_of_subunital
-    {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
+    {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
     {A : Mat} (hA : A.PosDef) :
     T (CFC.log A) ≤ CFC.log (T A) :=
-  hT.log_concave_jensen hSub hA
+  hT.log_concave_jensen hUnit hA
 
 end

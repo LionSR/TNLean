@@ -32,6 +32,9 @@ The **operator Jensen inequality** for a positive subunital map `T`
 * **convex** `f`: `f(T(A)) ≤ T(f(A))`;
 * **concave** `f`: `T(f(A)) ≤ f(T(A))`.
 
+Note: the `log` variant requires unitality (`T(1) = 1`), not merely
+subunitality, because `log` is unbounded below.
+
 ### Status
 
 The three Jensen instances below are `sorry` placeholders. Their proofs
@@ -60,14 +63,20 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-private local instance : NormedRing Mat := Matrix.instL2OpNormedRing
-private local instance : NormedAlgebra ℂ Mat := Matrix.instL2OpNormedAlgebra
-private local instance : CStarRing Mat := Matrix.instCStarRing
-private local instance : PartialOrder Mat := Matrix.instPartialOrder
-private local instance : StarOrderedRing Mat := Matrix.instStarOrderedRing
-private local instance : NonnegSpectrumClass ℝ Mat :=
+private local instance instOperatorConvexityNormedRing : NormedRing Mat :=
+  Matrix.instL2OpNormedRing
+private local instance instOperatorConvexityNormedAlgebra : NormedAlgebra ℂ Mat :=
+  Matrix.instL2OpNormedAlgebra
+private local instance instOperatorConvexityCStarRing : CStarRing Mat :=
+  Matrix.instCStarRing
+private local instance instOperatorConvexityPartialOrder : PartialOrder Mat :=
+  Matrix.instPartialOrder
+private local instance instOperatorConvexityStarOrderedRing : StarOrderedRing Mat :=
+  Matrix.instStarOrderedRing
+private local instance instOperatorConvexityNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
   Matrix.instNonnegSpectrumClass
-private local instance : CStarAlgebra Mat := CStarAlgebra.mk
+private local instance instOperatorConvexityCStarAlgebra : CStarAlgebra Mat :=
+  CStarAlgebra.mk
 
 /-- **Operator Jensen for concave `rpow`** (Wolf Thm. 5.1 applied to
 `x ↦ x ^ p` for `p ∈ [0, 1]`).
@@ -109,17 +118,18 @@ theorem IsPositiveMap.rpow_convex_jensen
 
 /-- **Operator Jensen for concave `log`** (Wolf Thm. 5.1 applied to `log`).
 
-For a positive subunital map `T` and positive-definite `A`:
+For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.
 
 This follows from operator concavity of `log` on `(0, ∞)`, combined
 with the concave version of the operator Jensen inequality for positive
-subunital maps.
+unital maps. Note: unlike the `rpow` variants, the `log` Jensen inequality
+requires unitality (`T 1 = 1`), not merely subunitality (`T 1 ≤ 1`).
 
 **TODO**: prove operator concavity of `log` (see Mathlib `CFC.ExpLog.Order`
 TODO) and the general operator Jensen inequality for positive maps. -/
 theorem IsPositiveMap.log_concave_jensen
-    {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
+    {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
     {A : Mat} (hA : A.PosDef) :
     T (CFC.log A) ≤ CFC.log (T A) := by
   sorry

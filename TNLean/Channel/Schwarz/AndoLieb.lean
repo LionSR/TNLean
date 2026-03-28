@@ -15,9 +15,9 @@ convexity/concavity consequences for matrix power functions.
 
 ## Main results (sorry placeholders)
 
-* `trace_rpow_concaveOn` — `A ↦ Re Tr(A ^ p)` is concave on PSD
+* `trace_rpow_concave` — `A ↦ Re Tr(A ^ p)` is concave on PSD
   matrices for `p ∈ [0, 1]`.
-* `trace_rpow_convexOn` — `A ↦ Re Tr(A ^ p)` is convex on PSD
+* `trace_rpow_convex` — `A ↦ Re Tr(A ^ p)` is convex on PSD
   matrices for `p ∈ [1, 2]`.
 * `lieb_concavity` — For `s ∈ [0, 1]` and fixed `K`, the map
   `(A, B) ↦ Tr(K† A^s K B^{1−s})` is jointly concave on PD matrices.
@@ -51,14 +51,20 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-private local instance : NormedRing Mat := Matrix.instL2OpNormedRing
-private local instance : NormedAlgebra ℂ Mat := Matrix.instL2OpNormedAlgebra
-private local instance : CStarRing Mat := Matrix.instCStarRing
-private local instance : PartialOrder Mat := Matrix.instPartialOrder
-private local instance : StarOrderedRing Mat := Matrix.instStarOrderedRing
-private local instance : NonnegSpectrumClass ℝ Mat :=
+private local instance instAndoLiebNormedRing : NormedRing Mat :=
+  Matrix.instL2OpNormedRing
+private local instance instAndoLiebNormedAlgebra : NormedAlgebra ℂ Mat :=
+  Matrix.instL2OpNormedAlgebra
+private local instance instAndoLiebCStarRing : CStarRing Mat :=
+  Matrix.instCStarRing
+private local instance instAndoLiebPartialOrder : PartialOrder Mat :=
+  Matrix.instPartialOrder
+private local instance instAndoLiebStarOrderedRing : StarOrderedRing Mat :=
+  Matrix.instStarOrderedRing
+private local instance instAndoLiebNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat :=
   Matrix.instNonnegSpectrumClass
-private local instance : CStarAlgebra Mat := CStarAlgebra.mk
+private local instance instAndoLiebCStarAlgebra : CStarAlgebra Mat :=
+  CStarAlgebra.mk
 
 /-! ## Trace convexity and concavity of matrix powers -/
 
