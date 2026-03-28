@@ -368,21 +368,6 @@ jobs:
               Example: "Next: discharge the remaining 2 sorrys in
               `Foo.lean`, which depend on `bar_lemma` from Mathlib."
 
-            ### Mathlib scouting
-
-            The Mathlib Scout workflow (`mathlib-scout.yml`) automatically
-            posts a scouting report on new `formalization` issues. When
-            suggesting a next task, check whether the recommended issue
-            already has a Mathlib scouting report comment. If it does not,
-            append a note: "💡 Consider adding the `formalization` label
-            to trigger a Mathlib scouting report first." This is especially
-            valuable for issues that pre-date the scout workflow or that
-            were created without the `formalization` label.
-
-            When B2 creates follow-up issues for sorry discharges or new
-            formalization work, ensure they get the `formalization` label
-            so the scout runs automatically.
-
             ### Format
 
             Keep suggestions to 1–2 sentences. Be specific — reference
