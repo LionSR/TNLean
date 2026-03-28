@@ -159,5 +159,248 @@ translated copies of the local interaction.
   The MPV state is frustration-free for the parent model.
 \end{lemma}
 
-Sections on injective tensors, gap criteria, and uniqueness of ground states are
-postponed to later installments.
+\section{Uniqueness of the ground state}\label{sec:unique_ground_state}
+
+For an injective MPS tensor, the ground space of the parent Hamiltonian is
+one-dimensional: the MPV is the unique ground state.
+The argument rests on two structural lemmas — closure and intersection —
+which together force the ground space to collapse as the chain length
+grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
+
+\begin{lemma}[Closure under extension]\label{lem:ground_space_mono}
+  \notready
+  \uses{def:ground_space_parent}
+  For every $L \ge 1$,
+  \[
+    G_L(A) \hookrightarrow G_{L+1}(A)
+  \]
+  via the natural embedding that pads a coefficient function on $L$ sites to
+  $L{+}1$ sites by summing over the extra index.
+  Concretely, if $\phi \in G_L(A)$ with $\phi(\sigma) = \tr(A^\sigma X)$, then
+  $\tilde\phi \in G_{L+1}(A)$ with
+  $\tilde\phi(\sigma,j) = \tr(A^\sigma A^j X)$.
+\end{lemma}
+
+\begin{proof}
+  \uses{lem:ground_space_mono}
+  \notready
+  Direct from the definition: if $\phi = \Gamma_L(X)$ then
+  $\tilde\phi = \Gamma_{L+1}(X)$ when the extra site carries a free
+  summation.
+\end{proof}
+
+\begin{lemma}[Intersection property]\label{lem:ground_space_intersection}
+  \notready
+  \uses{def:ground_space_parent, def:injective}
+  Let $A$ be injective (Definition~\ref{def:injective}).
+  For overlapping windows of lengths $L$ starting at adjacent sites,
+  the ground spaces satisfy
+  \[
+    G_{[1,L+1]}(A) \cap G_{[2,L+2]}(A)
+    = G_{[1,L+2]}(A),
+  \]
+  where $G_{[a,b]}$ denotes the ground space on sites $a$ through $b$.
+\end{lemma}
+
+\begin{proof}
+  \uses{lem:ground_space_intersection, def:injective}
+  \notready
+  The inclusion $\supseteq$ follows from
+  Lemma~\ref{lem:ground_space_mono}.
+  For $\subseteq$: take
+  $\phi \in G_{[1,L+1]}(A) \cap G_{[2,L+2]}(A)$.
+  From the first membership, $\phi(\sigma) = \tr(A^\sigma X)$ for some
+  $X \in \MN{D}$.
+  From the second, $\phi(\sigma) = \tr(A^{\sigma'} Y)$ for some $Y$,
+  where $\sigma'$ is the shifted window.
+  On the overlap (sites $2$ through $L{+}1$), injectivity provides a
+  left inverse for the map $X \mapsto \{A^\sigma X\}_\sigma$.
+  This forces $X$ (hence $Y$) to be uniquely determined, and $\phi$
+  extends to $G_{[1,L+2]}(A)$.
+\end{proof}
+
+\begin{theorem}[Unique ground state — injective case]\label{thm:unique_gs_injective}
+  \notready
+  \uses{lem:ground_space_intersection, lem:ground_space_mono,
+        def:parent_hamiltonian, def:injective, def:l_blk_injective}
+  Let $A$ be $L_0$-block injective (Definition~\ref{def:l_blk_injective}).
+  For a periodic chain of length $N \ge 2L_0$, the parent Hamiltonian
+  $H_N(A,L_0)$ has a unique ground state, which is the MPV
+  $\ket{V^{(N)}(A)}$.
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:unique_gs_injective, lem:ground_space_intersection,
+        lem:ground_space_mono, lem:parent_hamiltonian_annihilates}
+  \notready
+  After blocking $L_0$ sites, $A^{[L_0]}$ is injective.
+  Iterate the intersection property
+  (Lemma~\ref{lem:ground_space_intersection}) across the chain: each
+  step extends the ground-space window by one site.
+  After $N - L_0$ iterations the window wraps around the periodic chain.
+  Injectivity forces the boundary matrix $X$ to satisfy
+  $X = A^{[L_0],\sigma} X (A^{[L_0],\sigma'})^{-1}$ for all words,
+  leaving a one-dimensional space.
+  By Lemma~\ref{lem:parent_hamiltonian_annihilates}, the MPV lies in this
+  space.
+\end{proof}
+
+\begin{theorem}[Unique ground state — normal case]\label{thm:unique_gs_normal}
+  \notready
+  \uses{lem:ground_space_intersection, lem:ground_space_mono,
+        def:parent_hamiltonian, def:normal}
+  Let $A$ be normal with injectivity length $L_0$
+  (Definition~\ref{def:normal}).
+  For a periodic chain of length $N \ge L_0 + 1$, the parent Hamiltonian
+  $H_N(A,L_0{+}1)$ has a unique ground state.
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:unique_gs_normal, lem:ground_space_intersection,
+        lem:ground_space_mono}
+  \notready
+  A refined version of the argument for
+  Theorem~\ref{thm:unique_gs_injective}.
+  Normality gives injectivity of $A^{[L_0]}$, and the interaction
+  range $L_0{+}1$ provides enough overlap for a single intersection
+  step to grow the window.
+  The chain wraps in $N - 1$ steps, yielding uniqueness for
+  $N \ge L_0 + 1$~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
+\end{proof}
+
+\section{Spectral gap}\label{sec:spectral_gap}
+
+A frustration-free Hamiltonian is \emph{gapped} if the first excited
+eigenvalue is bounded away from zero uniformly in the chain length $N$.
+For MPS parent Hamiltonians, the spectral gap follows from a martingale
+criterion due to Kastoryano and
+Lucia~\cite{Kastoryano2018Martingale}.
+
+\begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
+  \notready
+  \uses{def:is_frustration_free}
+  Let $H = \sum_{i=1}^n h_i$ be a frustration-free Hamiltonian with
+  projector interaction terms ($h_i^2 = h_i$).
+  Suppose that for every pair of overlapping terms $h_i, h_j$ there
+  exist constants $c_{ij} \ge 0$ and $\gamma > 0$ satisfying
+  \[
+    h_i h_j + h_j h_i
+    \ge -c_{ij}(1-\gamma)(h_i + h_j),
+  \]
+  with $\sum_{j:\,j \ne i} c_{ij} \le 1$ for every $i$.
+  Then the smallest positive eigenvalue of $H$ satisfies
+  $\lambda_{\min}^+(H) \ge \gamma$.
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:martingale_criterion}
+  \notready
+  From $h_i^2 = h_i$,
+  \[
+    H^2 = \sum_i h_i + \sum_{\substack{i < j \\ \text{overlapping}}}
+    (h_i h_j + h_j h_i)
+    + \sum_{\substack{i < j \\ \text{non-overlapping}}}
+    (h_i h_j + h_j h_i).
+  \]
+  Non-overlapping terms commute and each product is PSD, so the last sum
+  is $\ge 0$.
+  The martingale condition bounds the overlapping sum from below:
+  \[
+    \sum_{\text{overlap}} (h_i h_j + h_j h_i)
+    \ge -(1-\gamma) \sum_i \Bigl(\sum_{j \ne i} c_{ij}\Bigr) h_i
+    \ge -(1-\gamma) H.
+  \]
+  Combining: $H^2 \ge H - (1-\gamma)H = \gamma H$.
+  For any eigenvector with $H\psi = \lambda\psi$ and $\lambda > 0$,
+  this gives $\lambda^2 \ge \gamma\lambda$, hence
+  $\lambda \ge \gamma$~\cite{Kastoryano2018Martingale}.
+\end{proof}
+
+\begin{lemma}[Martingale condition for MPS]\label{lem:martingale_mps}
+  \notready
+  \uses{thm:martingale_criterion, def:parent_interaction,
+        lem:ground_space_intersection, def:injective}
+  Let $A$ be injective.
+  The parent interaction terms $h_i = \Pi_{G_L(A)^\perp}$ at adjacent
+  sites satisfy the martingale condition of
+  Theorem~\ref{thm:martingale_criterion} with constants $c_{ij}$ and
+  $\gamma > 0$ depending only on $A$ (not on $N$).
+\end{lemma}
+
+\begin{proof}
+  \uses{lem:martingale_mps, lem:ground_space_intersection, def:injective}
+  \notready
+  Injectivity bounds the angle between $\ker(h_i)$ and $\ker(h_j)$
+  away from zero: the intersection property
+  (Lemma~\ref{lem:ground_space_intersection}) shows that overlapping
+  ground spaces intersect in a controlled way.
+  This provides the required lower bound on
+  $h_i h_j + h_j h_i$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
+\end{proof}
+
+\begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
+  \notready
+  \uses{thm:martingale_criterion, lem:martingale_mps,
+        def:parent_hamiltonian}
+  For an injective MPS tensor $A$, there exists $\gamma > 0$ such that
+  for all $N$ sufficiently large,
+  \[
+    \lambda_{\min}^+\bigl(H_N(A,L)\bigr) \ge \gamma,
+  \]
+  i.e.\ the parent Hamiltonian is uniformly gapped.
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:parent_hamiltonian_gapped, thm:martingale_criterion,
+        lem:martingale_mps}
+  \notready
+  Apply Theorem~\ref{thm:martingale_criterion} with the constants from
+  Lemma~\ref{lem:martingale_mps}.
+  Since the constants are independent of $N$, the gap $\gamma$ is
+  uniform~\cite{Fannes1992Finitely, Nachtergaele1996Spectral}.
+\end{proof}
+
+\section{Ground space of non-injective MPS}\label{sec:degenerate_ground_space}
+
+For a general (non-injective) MPS tensor in block-diagonal canonical form,
+the ground space is no longer one-dimensional.
+Instead, it is spanned by the MPVs of the individual normal blocks —
+the basis of normal tensors (BNT) from
+Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
+
+\begin{theorem}[Ground space equals span of BNT]\label{thm:gs_eq_bnt_span}
+  \notready
+  \uses{def:parent_hamiltonian, def:bnt, def:normal_cf_bnt,
+        thm:unique_gs_normal, def:ground_space_parent}
+  Let $A = \bigoplus_{k=1}^g \mu_k A_k$ be in canonical form with BNT
+  separation (Definition~\ref{def:normal_cf_bnt}), where
+  $\{A_1,\ldots,A_g\}$ is a basis of normal tensors
+  (Definition~\ref{def:bnt}).
+  For $N \ge L_0 + 1$ (where $L_0$ is the maximum injectivity length of
+  the blocks), the ground space of the parent Hamiltonian satisfies
+  \[
+    \ker\bigl(H_N(A,L_0{+}1)\bigr)
+    = \spn\bigl\{\ket{V^{(N)}(A_k)} : k = 1,\ldots,g\bigr\}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:gs_eq_bnt_span, thm:unique_gs_normal,
+        lem:ground_space_intersection, def:bnt}
+  \notready
+  \textbf{$\supseteq$}: Each $A_k$ is normal, so
+  Lemma~\ref{lem:parent_hamiltonian_annihilates} (applied to the
+  block-diagonal structure) gives
+  $H_N(A,L_0{+}1)\ket{V^{(N)}(A_k)} = 0$.
+  Linearity of the kernel yields the inclusion.
+
+  \textbf{$\subseteq$}: Take $\psi \in \ker(H_N)$.
+  The block-diagonal structure of $A$ decomposes the local ground spaces:
+  $G_L(A) = \bigoplus_k G_L(A_k)$ (the off-diagonal blocks do not
+  contribute due to the block structure of the transfer map).
+  Restricting $\psi$ to any injective block $A_k$, the intersection
+  property forces $\psi$ to lie in $\spn\{\ket{V^{(N)}(A_k)}\}$ by
+  Theorem~\ref{thm:unique_gs_normal}.
+  Summing over blocks gives the
+  inclusion~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
+\end{proof}
