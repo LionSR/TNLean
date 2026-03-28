@@ -209,7 +209,7 @@ jobs:
   # always() ensures this job runs even when auto-fix-ci is skipped.
   auto-fix-blueprint:
     needs: [setup, auto-fix-ci]
-    if: always() && needs.setup.result == 'success' && needs.setup.outputs.run_blueprint_fix == 'true'
+    if: "!cancelled() && needs.setup.result == 'success' && needs.setup.outputs.run_blueprint_fix == 'true'"
     concurrency:
       group: bot-fix-${{ needs.setup.outputs.head_branch }}
       cancel-in-progress: true
@@ -252,7 +252,7 @@ jobs:
   # Serialized after blueprint fix to avoid parallel pushes to the same branch.
   auto-fix-review:
     needs: [setup, auto-fix-blueprint]
-    if: always() && needs.setup.result == 'success' && needs.setup.outputs.run_review_fix == 'true'
+    if: "!cancelled() && needs.setup.result == 'success' && needs.setup.outputs.run_review_fix == 'true'"
     runs-on: ubuntu-latest
     concurrency:
       group: bot-fix-${{ needs.setup.outputs.head_branch }}
