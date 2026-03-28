@@ -137,27 +137,34 @@ jobs:
               }
 
               // Check for unresolved review threads (use first:100 to match
-              // the downstream query scope — first:5 could miss unresolved threads)
-              const query = `query($owner: String!, $repo: String!, $pr: Int!) {
-                repository(owner: $owner, name: $repo) {
-                  pullRequest(number: $pr) {
-                    reviewThreads(first: 100) {
-                      nodes { isResolved }
+              // the downstream query scope — first:5 could miss unresolved threads).
+              // Wrapped in try/catch so a GraphQL failure doesn't block CI/blueprint fixes.
+              let hasUnresolvedReviews = false;
+              try {
+                const query = `query($owner: String!, $repo: String!, $pr: Int!) {
+                  repository(owner: $owner, name: $repo) {
+                    pullRequest(number: $pr) {
+                      reviewThreads(first: 100) {
+                        nodes { isResolved }
+                      }
                     }
                   }
-                }
-              }`;
-              const result = await github.graphql(query, {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pr: pr.number
-              });
-              const threads = result.repository.pullRequest.reviewThreads.nodes;
-              if (threads.some(t => !t.isResolved)) {
+                }`;
+                const result = await github.graphql(query, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pr: pr.number
+                });
+                const threads = result.repository.pullRequest.reviewThreads.nodes;
+                hasUnresolvedReviews = threads.some(t => !t.isResolved);
+              } catch (e) {
+                core.warning(`Could not query review threads: ${e.message}`);
+              }
+              if (hasUnresolvedReviews) {
                 core.setOutput('run_review_fix', 'true');
               }
 
-              core.notice(`Label trigger — CI fix: ${!!ciRunId}, Blueprint fix: ${!!blueprintRunId}, Review fix: ${threads.some(t => !t.isResolved)}`);
+              core.notice(`Label trigger — CI fix: ${!!ciRunId}, Blueprint fix: ${!!blueprintRunId}, Review fix: ${hasUnresolvedReviews}`);
             }
 
   # ──────────────────────────────────────────────────────
