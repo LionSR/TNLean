@@ -317,25 +317,28 @@ Lucia~\cite{Kastoryano2018Martingale}.
   Non-overlapping projectors commute ($h_i h_j = h_j h_i$), so their
   product $h_i h_j$ is itself a projector and hence PSD; thus the last
   sum is $\ge 0$.
-  For the overlapping sum, the martingale condition gives, for each
-  ordered pair $(i,j)$ with $i \ne j$ and overlapping supports,
+  For the overlapping sum, the martingale condition gives
   $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$.
-  Since $h_i h_j + h_j h_i$ is symmetric in $i,j$, summing over
-  unordered pairs $\{i,j\}$ yields
+  Since both sides are symmetric in $i,j$, we may assume
+  $c_{ij} = c_{ji}$ without loss of generality (the same
+  symmetric expression is bounded by the same constant regardless
+  of the ordering of the pair).
+  Summing over unordered pairs $\{i,j\}$:
   \[
     \sum_{\{i,j\},\,\text{overlap}} (h_i h_j + h_j h_i)
-    \ge -\tfrac{1}{2}(1-\gamma) \sum_{\substack{i,j \\ i \ne j,\,\text{overlap}}}
-    (c_{ij} + c_{ji})(h_i + h_j).
+    \ge -(1-\gamma) \sum_{\{i,j\},\,\text{overlap}}
+    c_{ij}(h_i + h_j).
   \]
-  Rearranging the right-hand side by collecting terms for each $h_i$:
+  Collecting terms for each $h_i$ (using $c_{ij} = c_{ji}$, so
+  that summing over unordered pairs containing $i$ gives
+  $\sum_{j \ne i} c_{ij}$):
   \[
     = -(1-\gamma) \sum_i \Bigl(\sum_{j \ne i,\,\text{overlap}}
     c_{ij}\Bigr) h_i
     \ge -(1-\gamma) H,
   \]
   where the last step uses the row-sum hypothesis
-  $\sum_{j \ne i} c_{ij} \le 1$ (applied to the original,
-  unsymmetrised constants).
+  $\sum_{j \ne i} c_{ij} \le 1$.
   Combining: $H^2 \ge H - (1-\gamma)H = \gamma H$.
   For any eigenvector with $H\psi = \lambda\psi$ and $\lambda > 0$,
   this gives $\lambda^2 \ge \gamma\lambda$, hence
@@ -368,15 +371,35 @@ Lucia~\cite{Kastoryano2018Martingale}.
   The intersection identity shows that $\ker(h_i) \cap \ker(h_j)$ is
   exactly $G_{[i,j+L-1]}(A)$; in particular there is no non-trivial
   vector in one kernel that is orthogonal to the other yet lies in both.
-  Hence the Friedrichs angle $\theta$ between $\ker(h_i)$ and
+  Hence the Friedrichs angle $\theta_{|i-j|}$ between $\ker(h_i)$ and
   $\ker(h_j)$ is strictly positive (for the fixed injective tensor
-  $A$).  Since $\theta > 0$, there exist constants $c_{ij} \ge 0$ and
-  $\gamma > 0$, depending only on $A$ and the pair $(i,j)$, such that
-  $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$.
-  Because the number of distinct overlap patterns is bounded by $L-1$
-  (independent of~$N$), the constants can be chosen uniformly for all
-  overlapping
-  pairs~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
+  $A$).  Because the angle depends only on the overlap pattern
+  $|i-j| \in \{1,\dots,L-1\}$ and not on the absolute position,
+  the number of distinct angles is at most $L-1$.
+  Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
+  worst-case cosine of the Friedrichs angles.
+
+  \textbf{Row-sum bound.}
+  Each site $i$ overlaps with at most $2(L-1)$ neighbours
+  (those $j$ with $0 < |i-j| < L$).
+  Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
+  and $c_{ij} := 0$ otherwise.
+  Then
+  $\sum_{j \ne i} c_{ij} \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
+  satisfying the row-sum hypothesis of
+  Theorem~\ref{thm:martingale_criterion}.
+  The Friedrichs angle bound gives, for each overlapping pair,
+  $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$,
+  so the martingale inequality holds whenever
+  $c_{ij}(1-\gamma) \ge \alpha$, i.e.\
+  $\gamma \le 1 - 2(L-1)\alpha$.
+  In the blocked picture of
+  Theorem~\ref{thm:parent_hamiltonian_gapped}, $L = 2$ (so the
+  interaction graph has degree~$2$) and the quantitative gap
+  $\gamma > 0$ follows from the Nachtergaele finite-size
+  criterion~\cite{Nachtergaele1996Spectral}; the constants depend
+  only on $A$ and are independent
+  of~$N$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
