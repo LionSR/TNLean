@@ -106,8 +106,8 @@ theorem trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel
   exact hV_ne (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
     hE_ch hE_irr V hV_fix htr)
 
-/-- **TODO**: Prove that a peripheral eigenvalue of an irreducible QDS has a periodic
-fixed point. Currently a `sorry` placeholder. -/
+/-- A peripheral eigenvalue of an irreducible QDS has a periodic fixed point:
+there exists `p > 0` and a nonzero eigenvector `V` such that `T(p * t) V = V`. -/
 theorem exists_power_fixed_eigenvector_of_peripheral
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -134,8 +134,7 @@ theorem exists_power_fixed_eigenvector_of_peripheral
   refine ⟨p, hp_pos, V, hV_ne, hEV, ?_⟩
   rw [hpt_eq, pow_apply_eigenvector (T t) V μ p hEV, hμp, one_smul]
 
-/-- **TODO**: Prove that a trace-nonzero eigenvector exists for peripheral eigenvalues.
-Currently a `sorry` placeholder. -/
+/-- A trace-nonzero eigenvector exists for peripheral eigenvalues of an irreducible QDS. -/
 theorem exists_trace_ne_zero_eigenvector_of_peripheral
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -166,8 +165,7 @@ theorem eigenvalue_eq_one_of_trace_preserving_eigenvector
       _ = 0 := by rw [htrV, sub_self]
   exact sub_eq_zero.mp ((mul_eq_zero.mp hzero).resolve_right htrV_ne)
 
-/-- **TODO**: Prove that all peripheral eigenvalues equal 1 when all times are
-irreducible. Currently a `sorry` placeholder. -/
+/-- All peripheral eigenvalues equal 1 when the QDS is irreducible at all positive times. -/
 theorem peripheral_eq_one_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -181,8 +179,7 @@ theorem peripheral_eq_one_of_irreducible_all
   exact eigenvalue_eq_one_of_trace_preserving_eigenvector
     (T t) (hT.channel t (le_of_lt ht)).tp hEV htrV
 
-/-- **TODO**: Prove that irreducibility at all times implies primitivity.
-Currently a `sorry` placeholder. -/
+/-- Irreducibility at all positive times implies primitivity for a QDS. -/
 theorem primitive_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
