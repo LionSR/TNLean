@@ -97,7 +97,7 @@ theorem isRFP_of_kraus_isometry (A : MPSTensor d D)
   apply Finset.sum_congr rfl; intro j _
   simp_rw [← Finset.sum_smul]
   simp_rw [hV_entry j]
-  simp
+  simp only [ite_smul, one_smul, zero_smul, sum_ite_eq', mem_univ, ↓reduceIte]
 
 /-- The RFP condition is equivalent to a Kraus-level condition: there exists
 an isometry `V : Fin d × Fin d → Fin d → ℂ` (i.e. a `(d²×d)` matrix) such
@@ -113,7 +113,12 @@ theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
         V.conjTranspose * V = 1 ∧
         ∀ i₁ i₂ : Fin d,
           A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j := by
-  sorry
+  constructor
+  · -- Forward direction: TODO (requires rectangular Kraus freedom)
+    sorry
+  · -- Backward direction: proved as `isRFP_of_kraus_isometry`
+    rintro ⟨V, hV, hprod⟩
+    exact isRFP_of_kraus_isometry A V hV hprod
 
 /-- Backwards-compatible name for `isRFP_iff_kraus_isometry`. -/
 theorem isRFP_iff_kraus (A : MPSTensor d D) :
