@@ -35,6 +35,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
+          token: ${{ secrets.BOT_PAT || github.token }}
 
       - name: Set up Lean toolchain and cache
         uses: leanprover/lean-action@v1
