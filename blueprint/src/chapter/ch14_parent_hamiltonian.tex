@@ -169,16 +169,17 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 
 \begin{lemma}[Closure under extension]\label{lem:ground_space_mono}
   \notready
-  \uses{def:ground_space_parent}
-  For every $L \ge 1$,
+  \uses{def:ground_space_parent, def:l_blk_injective}
+  Let $A$ be $L$-block injective (i.e.\ $\Gamma_L$ is injective).
+  Then there is a well-defined embedding
   \[
     G_L(A) \hookrightarrow G_{L+1}(A)
   \]
-  via a natural embedding that extends a coefficient function on $L$ sites to
+  that extends a coefficient function on $L$ sites to
   $L{+}1$ sites by one site on the right.
-  Concretely, if $\phi \in G_L(A)$ with $\phi(\sigma) = \tr(A^\sigma X)$
-  for a unique $X$ (which requires $\Gamma_L$ to be injective, e.g.\ when
-  $A$ is $L$-block injective), then $\tilde\phi \in G_{L+1}(A)$ with
+  Concretely, since $\Gamma_L$ is injective, every $\phi \in G_L(A)$
+  has a unique preimage $X$ with $\phi(\sigma) = \tr(A^\sigma X)$,
+  and the extension is $\tilde\phi \in G_{L+1}(A)$ with
   \[
     \tilde\phi(\sigma,j) = \tr(A^\sigma A^j X).
   \]
@@ -189,7 +190,7 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   \uses{def:ground_space_parent}
   \notready
   If $\phi = \Gamma_L(X)$ then $\tilde\phi = \Gamma_{L+1}(X)$.
-  When $\Gamma_L$ is injective, $X$ is uniquely determined by $\phi$,
+  By $L$-block injectivity, $X$ is uniquely determined by $\phi$,
   so the extension map is well-defined and independent of choices.
 \end{proof}
 
@@ -267,7 +268,8 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}
-  \uses{lem:ground_space_intersection, lem:ground_space_mono}
+  \uses{lem:ground_space_intersection, lem:ground_space_mono,
+        lem:parent_hamiltonian_annihilates}
   \notready
   Normality gives injectivity of $A^{[L_0]}$.
   The interaction range $L_0{+}1$ provides enough overlap ($L_0$ sites)
@@ -338,20 +340,24 @@ Lucia~\cite{Kastoryano2018Martingale}.
   Definition~\ref{def:parent_interaction}.  Let $h_L(A) := \Pi_{G_L(A)^\perp}$
   be the $L$-site parent interaction, and for each chain length and site $i$
   let $h_i$ denote its translate as in Definition~\ref{def:local_term_parent}.
-  Then the adjacent interaction terms $h_i$ and $h_{i+1}$ satisfy the
-  martingale condition of Theorem~\ref{thm:martingale_criterion} with constants
-  $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
+  Then for every pair of overlapping terms $h_i$ and $h_j$ with
+  $0 < |i - j| < L$ (i.e.\ whose $L$-site supports share at least one site),
+  the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
+  constants $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
 \end{lemma}
 
 \begin{proof}
   \uses{lem:ground_space_intersection, def:injective}
   \notready
-  Injectivity bounds the angle between $\ker(h_i)$ and $\ker(h_j)$
-  away from zero: the intersection property
-  (Lemma~\ref{lem:ground_space_intersection}) shows that overlapping
-  ground spaces intersect in a controlled way.
+  Two terms $h_i, h_j$ with $0 < |i-j| < L$ have supports overlapping
+  in $L - |i-j|$ sites.  Since $A$ is injective, the intersection property
+  (Lemma~\ref{lem:ground_space_intersection}) bounds the angle between
+  $\ker(h_i)$ and $\ker(h_j)$ away from zero for any such overlap.
+  (When $|i-j| = 1$ the overlap is $L-1$ sites; for larger separations the
+  overlap shrinks but injectivity still controls the intersection.)
   This provides the required lower bound on
-  $h_i h_j + h_j h_i$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
+  $h_i h_j + h_j h_i$ for every overlapping
+  pair~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
