@@ -64,6 +64,19 @@ quantum channels:
   divides the bond dimension `D`.
 -/
 
+/-- On the unit circle, complex conjugation equals inversion: `conj α = α⁻¹` when `‖α‖ = 1`. -/
+lemma Complex.conj_eq_inv_of_norm_eq_one {α : ℂ} (h : ‖α‖ = 1) :
+    starRingEnd ℂ α = α⁻¹ := by
+  have hα_ne : α ≠ 0 := norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)
+  have hconj_mul : starRingEnd ℂ α * α = 1 := by
+    have hnormSq : Complex.normSq α = 1 := by
+      rw [Complex.normSq_eq_norm_sq]; simp [h]
+    calc starRingEnd ℂ α * α
+        = (↑(Complex.normSq α) : ℂ) := by
+          simpa using (Complex.normSq_eq_conj_mul_self (z := α)).symm
+      _ = 1 := by simp [hnormSq]
+  exact mul_right_cancel₀ hα_ne (by rw [hconj_mul, inv_mul_cancel₀ hα_ne])
+
 /-! ## Closure under multiplication -/
 
 /-- **Peripheral eigenvalues are closed under multiplication.**
@@ -164,17 +177,8 @@ theorem peripheral_eigenvalues_closed_under_inv
     have hUα_map : Kraus.map K (Uα : MatrixAlg D) = α • (Uα : MatrixAlg D) := by
       simpa [Kraus.map, MPSTensor.transferMap_apply] using hUα
     -- ᾱ = α⁻¹ when |α| = 1
-    have hα_ne : α ≠ 0 := norm_ne_zero_iff.mp (by rw [hα.2]; exact one_ne_zero)
-    have hconj_eq_inv : starRingEnd ℂ α = α⁻¹ := by
-      have hnormSq : Complex.normSq α = 1 := by
-        rw [Complex.normSq_eq_norm_sq]; simp [hα.2]
-      have hconj_mul : starRingEnd ℂ α * α = 1 := by
-        calc starRingEnd ℂ α * α
-            = (↑(Complex.normSq α) : ℂ) := by
-              simpa using (Complex.normSq_eq_conj_mul_self (z := α)).symm
-          _ = 1 := by simp [hnormSq]
-      exact mul_right_cancel₀ hα_ne
-        (by rw [hconj_mul, inv_mul_cancel₀ hα_ne])
+    have hconj_eq_inv : starRingEnd ℂ α = α⁻¹ :=
+      Complex.conj_eq_inv_of_norm_eq_one hα.2
     have hmap_conj : Kraus.map K (Uα : MatrixAlg D)ᴴ =
         α⁻¹ • (Uα : MatrixAlg D)ᴴ := by
       rw [← Kraus.map_conjTranspose, hUα_map, conjTranspose_smul]
