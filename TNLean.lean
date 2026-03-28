@@ -164,6 +164,7 @@ import TNLean.MPS.CanonicalForm.Assembly
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Periodic.Defs
+import TNLean.MPS.FundamentalTheorem.PeriodicOverlap
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Structure.BlockPermutation
