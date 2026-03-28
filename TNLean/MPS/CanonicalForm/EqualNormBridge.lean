@@ -3,10 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.BNTGrouping
-import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Overlap.CastDecay
-import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Spectral.SpectralGapNT
 
 open scoped Matrix BigOperators
@@ -49,28 +47,24 @@ For block k gauge-phase equivalent to representative block j via `(X, ζ)`:
   TP + irreducible blocks implies equal bond dimensions and gauge-phase equivalence.
   Uses the spectral dichotomy from `SpectralGap.lean`.  **Fully proved.**
 
-* `nonDecaying_overlap_of_equal_norm_blocks` — Equal-norm blocks from the same
-  canonical-form decomposition have non-decaying cross-overlaps.  **Contains one sorry**
-  (the BNT expansion argument from CPGSV17 Appendix A, §1b).
-
-* `gaugePhaseEquiv_of_equal_norm_blocks` — Equal-norm blocks from the same TP +
-  primitive + irreducible decomposition are gauge-phase equivalent.  **Proved** by
-  combining the above two results (sorry flows from
-  `nonDecaying_overlap_of_equal_norm_blocks`).
-
 * `exists_bnt_grouping_of_gaugePhaseEquiv` — BNT grouping theorem taking gauge-phase
   equivalence data (rather than `SameMPV₂`) for equal-norm blocks.  **Fully proved.**
 
 * `exists_sectorDecomp_of_tp_primitive_irr_blocks` — Pipeline endpoint connecting
-  the reduction output to a BNT-grouped `SectorDecomposition`.  **Proved modulo**
-  the sorry in `nonDecaying_overlap_of_equal_norm_blocks`.
+  the reduction output to a BNT-grouped `SectorDecomposition`.  Takes gauge-phase
+  equivalence data for equal-norm blocks as input.  **Fully proved.**
 
-## Remaining gap
+## Gauge-phase equivalence for equal-norm blocks
 
-The one remaining `sorry` is in `nonDecaying_overlap_of_equal_norm_blocks` (§1b).
-This requires the BNT coefficient extraction argument from the canonical-form
-decomposition structure, specifically showing that the linear independence of the BNT
-family combined with equal growth rates forces non-decaying cross-overlaps.
+The pipeline requires that equal-norm blocks from the same decomposition are
+gauge-phase equivalent.  This is a property of the canonical-form **construction**
+(transfer-map eigenspace analysis, CPGSV17 §2.3), not a consequence of the MPV
+decomposition identity alone.  It must be established by the caller (Assembly pipeline)
+which has access to the transfer-map algebraic structure.
+
+Note: a previous version attempted to prove this from just the MPV decomposition
+(`hFullTensor`), but this is insufficient — a counterexample exists with two
+non-GPE blocks sharing a common MPV decomposition with equal weight norms.
 
 ## References
 
@@ -82,16 +76,6 @@ family combined with equal growth rates forces non-decaying cross-overlaps.
 namespace MPSTensor
 
 variable {d : ℕ}
-
-/-! ### Auxiliary cast lemma -/
-
-/-- Casting the bond dimension preserves the primitivity of the transfer map. -/
-private lemma isPrimitive_transferMap_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂)
-    (A : MPSTensor d D₁) :
-    _root_.IsPrimitive (transferMap (d := d) (D := D₂)
-      (cast (congr_arg (MPSTensor d) h) A)) ↔
-    _root_.IsPrimitive (transferMap (d := d) (D := D₁) A) := by
-  subst h; rfl
 
 /-! ### §1. Gauge-phase equivalence from non-decaying overlaps -/
 
@@ -108,8 +92,8 @@ The proof uses the **spectral dichotomy** (proved in `SpectralGap.lean` and
 If the overlap does NOT decay, we are in the second case. Dimension equality
 follows from `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` (contrapositive).
 
-This factored-out lemma replaces the previous monolithic sorry in
-`gaugePhaseEquiv_of_equal_norm_blocks`. -/
+This factored-out lemma is used when the caller already has non-decay evidence
+(e.g., from the transfer-map eigenspace analysis in the canonical form construction). -/
 theorem gaugePhaseEquiv_of_nonDecaying_overlap
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -132,82 +116,6 @@ theorem gaugePhaseEquiv_of_nonDecaying_overlap
     (mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       hdim A B hA_irr hB_irr hA_TP hB_TP hNotGPE)
 
-/-! ### §1b. Non-decaying overlap from canonical-form structure (remaining gap) -/
-
-/-- **Non-decaying overlap for equal-norm blocks from a canonical-form decomposition.**
-
-When blocks are obtained from the canonical-form decomposition of an MPS tensor,
-blocks with equal weight norms have non-decaying cross-overlaps.
-
-**Paper argument (CPGSV17, Appendix A, Corollary A.43):** The BNT expansion of the
-full tensor expresses its MPV as `∑_k μ_k^N * V(A_k)`. Taking the inner product
-with `V(A_j)` and using the asymptotic orthonormality of non-gauge-phase-equivalent
-blocks isolates the contribution from the norm class of block j. If all equal-norm
-blocks had decaying cross-overlaps with block j, the coefficient of `V(A_j)` in the
-BNT expansion would vanish for large N, contradicting the non-degeneracy of the
-decomposition.
-
-This argument requires the blocks to be connected through the full tensor's
-BNT structure — it is NOT provable from the individual block properties alone
-(TP, irreducible, primitive). The `hFullTensor` hypothesis captures the connection
-between the blocks and a parent tensor.
-
-NOTE: This sorry is the precise remaining gap from issue #243/#299.
-Once proved, `exists_sectorDecomp_of_tp_primitive_irr_blocks` becomes sorry-free. -/
-theorem nonDecaying_overlap_of_equal_norm_blocks
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hμne : ∀ k, μ k ≠ 0)
-    -- The blocks come from decomposing a single tensor: the MPV of the full tensor
-    -- is the weighted sum of the block MPVs. This connects the blocks through the
-    -- BNT structure and is automatically satisfied by `toTensorFromBlocks`.
-    {D_total : ℕ} (A_total : MPSTensor d D_total)
-    (hFullTensor : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        N > 0 → mpv A_total σ = ∑ k, (μ k) ^ N * mpv (blocks k) σ)
-    (j k : Fin r) (hjk : j ≠ k) (hNorm : ‖μ j‖ = ‖μ k‖) :
-    ¬ Tendsto (fun N => mpvOverlap (d := d) (blocks j) (blocks k) N) atTop (nhds 0) := by
-  -- TODO(#299): This requires the full BNT expansion argument from CPGSV17 Appendix A.
-  -- The proof needs to extract the non-vanishing of the j-th BNT coefficient from
-  -- the full tensor's MPV decomposition, using:
-  -- 1. Asymptotic orthonormality of non-GPE blocks (from spectral gap)
-  -- 2. Non-degeneracy of the decomposition (from hFullTensor + hμne)
-  -- 3. Equal growth rates from ‖μ j‖ = ‖μ k‖
-  sorry
-
-/-- **Equal-norm blocks from the same decomposition are gauge-phase equivalent.**
-
-Given a family of TP + primitive + irreducible blocks with nonzero weights
-that decompose a total tensor's MPV, two blocks j, k with `‖μ j‖ = ‖μ k‖`
-and `j ≠ k` must have equal bond dimensions and be gauge-phase equivalent.
-
-This combines `nonDecaying_overlap_of_equal_norm_blocks` (which shows the
-cross-overlap doesn't decay, using the canonical-form structure) with
-`gaugePhaseEquiv_of_nonDecaying_overlap` (which converts non-decaying overlap
-to gauge-phase equivalence via the spectral dichotomy). -/
-theorem gaugePhaseEquiv_of_equal_norm_blocks
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hμne : ∀ k, μ k ≠ 0)
-    {D_total : ℕ} (A_total : MPSTensor d D_total)
-    (hFullTensor : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        N > 0 → mpv A_total σ = ∑ k, (μ k) ^ N * mpv (blocks k) σ)
-    (j k : Fin r) (hjk : j ≠ k) (hNorm : ‖μ j‖ = ‖μ k‖) :
-    ∃ hdim : dim j = dim k,
-      GaugePhaseEquiv (d := d)
-        (cast (congr_arg (MPSTensor d) hdim) (blocks j)) (blocks k) :=
-  gaugePhaseEquiv_of_nonDecaying_overlap
-    (blocks j) (blocks k)
-    (hIrr j) (hIrr k) (hTP j) (hTP k)
-    (nonDecaying_overlap_of_equal_norm_blocks μ blocks hTP hIrr hPrim hμne
-      A_total hFullTensor j k hjk hNorm)
 
 /-! ### §2. BNT grouping with gauge-phase equivalence -/
 
@@ -312,75 +220,33 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
 
 /-! ### §3. Pipeline connection -/
 
-/-- **Pipeline endpoint: from TP + primitive + irreducible blocks to BNT-grouped
-`SectorDecomposition`.**
+/-- **Pipeline endpoint: from TP + primitive + irreducible blocks with GPE data
+to BNT-grouped `SectorDecomposition`.**
 
 This theorem connects the output of the existence reduction pipeline
 (`exists_tp_primitive_blockDecomp_after_blocking` in `Assembly.lean`) to a
 `SectorDecomposition` with strictly decreasing BNT-level norms.
 
-The `hFullTensor` hypothesis connects the blocks to a parent tensor, which is
-needed for the equal-norm bridge (the cross-overlap non-decay argument uses
-the BNT structure of the full decomposition).
-
-The one remaining `sorry` is in `nonDecaying_overlap_of_equal_norm_blocks`. -/
+The `hGPE` hypothesis provides gauge-phase equivalence data for equal-norm blocks.
+This must be established by the caller from the transfer-map eigenspace structure
+of the canonical form construction (CPGSV17 §2.3).  **Fully proved.** -/
 theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
     (hμne : ∀ k, μ k ≠ 0)
-    {D_total : ℕ} (A_total : MPSTensor d D_total)
-    (hFullTensor : ∀ (N : ℕ) (σ : Fin N → Fin d),
-        N > 0 → mpv A_total σ = ∑ k, (μ k) ^ N * mpv (blocks k) σ) :
+    -- Gauge-phase equivalence for equal-norm blocks.
+    -- In the canonical-form construction, this follows from the transfer-map
+    -- eigenspace analysis: blocks with equal eigenvalue modulus are related
+    -- by gauge transformations (CPGSV17 §2.3).
+    (hGPE : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ →
+      ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
+        ∀ (N : ℕ) (σ : Fin N → Fin d),
+          mpv (blocks k) σ = ζ ^ N * mpv (blocks j) σ) :
     ∃ P : SectorDecomposition d,
       SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
       StrictAnti (fun j : Fin P.basisCount =>
-        ‖P.sectors.weight j ⟨0, P.sectors.copies_pos j⟩‖) := by
-  -- Step 1: Derive gauge-phase equivalence for equal-norm blocks.
-  have hGPE_raw : ∀ j k : Fin r, j ≠ k → ‖μ j‖ = ‖μ k‖ →
-      ∃ hdim : dim j = dim k,
-        GaugePhaseEquiv (d := d)
-          (cast (congr_arg (MPSTensor d) hdim) (blocks j)) (blocks k) := by
-    intro j k hjk hNorm
-    exact gaugePhaseEquiv_of_equal_norm_blocks μ blocks hTP hIrr hPrim hμne
-      A_total hFullTensor j k hjk hNorm
-  -- Step 2: Derive GPE data with unit-norm phase for the grouping theorem.
-  have hGPEζ : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ →
-      ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
-        ∀ (N : ℕ) (σ : Fin N → Fin d),
-          mpv (blocks k) σ = ζ ^ N * mpv (blocks j) σ := by
-    intro j k hNorm
-    by_cases hjk : j = k
-    · -- Self-case: ζ = 1.
-      subst hjk
-      exact ⟨1, one_ne_zero, norm_one, fun N σ => by simp⟩
-    · -- Different blocks: use gauge-phase equivalence data.
-      obtain ⟨hdim, X, ζ, hζne, hX⟩ := hGPE_raw j k hjk hNorm
-      have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
-          mpv (blocks k) σ = ζ ^ N * mpv (blocks j) σ := by
-        intro N σ
-        rw [mpv_eq_pow_mul_of_gaugePhase
-          (A := cast (congr_arg (MPSTensor d) hdim) (blocks j))
-          (B := blocks k) X ζ hX N σ,
-          mpv_cast_dim hdim (blocks j) N σ]
-      -- Show ‖ζ‖ = 1 using the overlap analysis.
-      -- Cast blocks j to have dimension dim k (using hdim).
-      have hζ_norm : ‖ζ‖ = 1 := by
-        exact norm_gaugePhase_eq_one_of_irr_TP_primitive
-          (cast (congr_arg (MPSTensor d) hdim) (blocks j))
-          (blocks k)
-          ((isIrreducibleTensor_cast_dim hdim (blocks j)).mpr (hIrr j))
-          (hIrr k)
-          ((leftCanonical_cast_dim hdim (blocks j)).mpr (hTP j))
-          (hTP k)
-          ((isPrimitive_transferMap_cast_dim hdim (blocks j)).mpr (hPrim j))
-          (hPrim k)
-          X ζ hX
-      exact ⟨ζ, hζne, hζ_norm, hmpv⟩
-  -- Step 3: Apply the gauge-phase-aware BNT grouping theorem.
-  exact exists_bnt_grouping_of_gaugePhaseEquiv μ blocks hμne hGPEζ
+        ‖P.sectors.weight j ⟨0, P.sectors.copies_pos j⟩‖) :=
+  exists_bnt_grouping_of_gaugePhaseEquiv μ blocks hμne hGPE
 
 end MPSTensor
