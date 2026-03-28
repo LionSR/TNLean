@@ -331,7 +331,11 @@ jobs:
             ## §5 — Follow-up Suggestions
 
             When a playbook asks you to "suggest next steps", generate a
-            brief, actionable recommendation for what to work on next.
+            brief, actionable recommendation. Think beyond the immediate
+            next task — consider what this completion unblocks downstream,
+            how it fits into the broader formalization roadmap, and whether
+            preparatory work (scouting, blueprint review) would de-risk
+            the next step.
 
             ### Tracking-issue variant (Playbooks A, A2, B1, B2)
 
@@ -353,6 +357,9 @@ jobs:
                first.
             5. If **all tasks are complete**, suggest closing the tracking
                issue.
+            6. Note downstream impact: briefly mention what completing
+               the suggested task would unblock (other tasks, other
+               tracking issues, or milestones in the broader project).
 
             ### Linked-issue variant (Playbooks A2, B1 step 5)
 
@@ -368,13 +375,45 @@ jobs:
               Example: "Next: discharge the remaining 2 sorrys in
               `Foo.lean`, which depend on `bar_lemma` from Mathlib."
 
+            ### Scouting and source review
+
+            For tasks that are mathematically complex or involve new
+            Mathlib API surface, suggest preparatory scouting before
+            diving into the proof:
+
+            - **Mathlib scouting**: If the recommended issue involves
+              heavy Mathlib dependencies and does not already have a
+              Mathlib scouting report in its comments, suggest running
+              one (the Mathlib Scout workflow triggers on issues with
+              the `formalization` label). Rescouting may also be
+              warranted when Mathlib has been bumped since the last
+              report — new lemmas may simplify the approach.
+            - **Blueprint / paper review**: If the task formalizes a
+              specific theorem or section from a paper, suggest
+              reviewing the corresponding blueprint LaTeX source
+              (`blueprint/src/chapter/*.tex`) to check the proof
+              sketch, `\lean{}` / `\leanok` status, and any gap
+              annotations. The paper's original proof structure often
+              reveals dependencies or intermediate lemmas that are
+              not yet tracked as issues.
+
+            Skip scouting suggestions for straightforward tasks
+            (cleanup, simple sorry discharges with known proof paths,
+            infrastructure work).
+
             ### Format
 
-            Keep suggestions to 1–2 sentences. Be specific — reference
-            issue numbers and titles. Example:
+            Keep the primary suggestion to 1–2 sentences. Be specific
+            — reference issue numbers and titles. Add a brief
+            downstream note and scouting hint only when warranted.
+
+            Example:
             "**Suggested next:** #138 (*Discharge sorry in
-            OperatorMonotone.lean*) — all dependencies resolved, and it
-            is the last remaining task."
+            OperatorMonotone.lean*) — all dependencies resolved and
+            it is the last Ch5 task; completing it would let #21
+            (Wolf Ch5 Tracking) close. Consider a Mathlib rescouting
+            report first — the Lowner's theorem API may have landed
+            since the last Mathlib bump."
 
             ---
 
