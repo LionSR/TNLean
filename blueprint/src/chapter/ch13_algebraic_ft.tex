@@ -541,6 +541,144 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     $B^i = \lambda\, V^{-1}\, A^i\, V$ for all~$i$.
 \end{proof}
 
+\subsection{Virtual representation theorem}
+
+With a full group of on-site symmetries (rather than just a single
+unitary), the individual gauges can be assembled into a projective
+representation on the bond space.
+
+\begin{definition}[Twisted tensor]\label{def:twisted_tensor}
+    \lean{MPSTensor.twistedTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a group representation $U : G \to \GL_d(\C)$ on the physical
+    index, the \emph{$g$-twisted tensor} is
+    \[
+        \widetilde{A}_g^i \;:=\; \sum_{j=0}^{d-1} U(g)_{ij}\, A^j
+        \qquad \text{for each } i \in \{0,\ldots,d{-}1\}.
+    \]
+\end{definition}
+
+\begin{definition}[On-site symmetry]\label{def:on_site_symmetric}
+    \lean{MPSTensor.IsOnSiteSymmetric}
+    \leanok
+    \uses{def:twisted_tensor, def:same_mpv}
+    A tensor $A$ is \emph{on-site symmetric} under a group
+    representation $U : G \to \GL_d(\C)$ if $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$
+    for every $g \in G$.
+\end{definition}
+
+\begin{lemma}[Functoriality of twisting]\label{lem:twisted_tensor_mul}
+    \lean{MPSTensor.twistedTensor_mul}
+    \leanok
+    \uses{def:twisted_tensor}
+    The twisted tensor satisfies the composition law
+    \[
+        \widetilde{A}_{gh} \;=\; \widetilde{(\widetilde{A}_h)}_g,
+    \]
+    i.e.\ twisting by $gh$ is the same as first twisting by~$h$
+    and then by~$g$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:twisted_tensor}
+    Expanding both sides using $U(gh) = U(g)\, U(h)$, then swapping
+    the order of summation.
+\end{proof}
+
+\begin{lemma}[Gauge uniqueness up to scalar]\label{lem:gauge_unique_up_to_scalar}
+    \lean{MPSTensor.gauge_unique_up_to_scalar}
+    \leanok
+    \uses{def:injective, def:gauge_equiv, lem:center_scalar}
+    Let $A$ be an injective tensor.
+    If $X, Y \in \GL_D(\C)$ both satisfy
+    $B^i = X\, A^i\, X^{-1} = Y\, A^i\, Y^{-1}$
+    for all~$i$, then there exists a nonzero scalar $u \in \C^{\times}$
+    such that $Y = u \cdot X$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:injective, lem:center_scalar}
+    The matrix $Z = Y^{-1} X$ commutes with every $A^i$.
+    Since $A$ is injective, $\{A^i\}$ spans $\MN{D}$, so $Z$
+    lies in the centre of $\MN{D}$.
+    By Lemma~\ref{lem:center_scalar}, $Z$ is a scalar matrix.
+    Since $Z$ is invertible, that scalar is nonzero, and
+    $Y = u \cdot X$.
+\end{proof}
+
+\begin{theorem}[Virtual representation theorem for injective MPS]%
+    \label{thm:virtual_rep_injective}
+    \lean{MPSTensor.virtual_rep_of_symmetric_injective}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric,
+          lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
+    Let $A$ be an injective MPS tensor that is on-site symmetric
+    under a group representation $U : G \to \GL_d(\C)$.
+    Then there exist:
+    \begin{enumerate}
+        \item a unit-valued 2-cochain
+              $\omega : G \times G \to \C^{\times}$, and
+        \item a map $\rho : G \to \GL_D(\C)$ satisfying
+              \[
+                  \rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh)
+                  \qquad \text{for all } g, h \in G,
+              \]
+    \end{enumerate}
+    such that, defining the gauge matrices $X(g) := \rho(g^{-1})$,
+    one has
+    \[
+        \widetilde{A}_g^i \;=\; X(g)\, A^i\, X(g)^{-1}
+        \qquad \text{for every } g \in G,\; i \in \{0,\ldots,d{-}1\}.
+    \]
+    In particular, $\rho$ is a projective representation of $G$ on the
+    bond space $\C^D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:on_site_symmetric, lem:gauge_unique_up_to_scalar,
+          lem:twisted_tensor_mul}
+    Since $A$ is injective and on-site symmetric, each twisted tensor
+    $\widetilde{A}_g$ is gauge equivalent to~$A$
+    (Corollary~\ref{cor:symmetry_virtual_gauge}).
+    Choose $X(g) \in \GL_D(\C)$ with
+    $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+
+    By functoriality (Lemma~\ref{lem:twisted_tensor_mul}), the product
+    $X(h)\, X(g)$ also intertwines $A$ with $\widetilde{A}_{gh}$.
+    Since $X(gh)$ does the same, gauge uniqueness
+    (Lemma~\ref{lem:gauge_unique_up_to_scalar}) gives a unit scalar
+    $\omega'(h,g)$ with $X(h)\, X(g) = \omega'(h,g)\, X(gh)$.
+
+    Defining $\rho(g) := X(g^{-1})$ converts this to the standard law:
+    $\rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh)$
+    where $\omega(g,h) := \omega'(h^{-1}, g^{-1})$.
+\end{proof}
+
+\begin{corollary}[2-cocycle identity for the factor system]%
+    \label{cor:virtual_rep_cocycle}
+    \lean{MPSTensor.virtual_rep_of_symmetric_injective_cocycle}
+    \leanok
+    \uses{thm:virtual_rep_injective}
+    If $D > 0$, the factor system $\omega$ from
+    Theorem~\ref{thm:virtual_rep_injective} satisfies the
+    2-cocycle identity:
+    \[
+        \omega(g, h)\, \omega(gh, k)
+        = \omega(g, hk)\, \omega(h, k)
+        \qquad \text{for all } g, h, k \in G.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:virtual_rep_injective}
+    Follows from associativity of $\GL_D(\C)$: expanding
+    $\rho(g)\,(\rho(h)\,\rho(k))$ and $(\rho(g)\,\rho(h))\,\rho(k)$
+    using the projective multiplication law and comparing the
+    scalar factors. The hypothesis $D > 0$ ensures $\GL_D(\C)$ has
+    faithful matrix entries.
+\end{proof}
+
 \subsection{Normal MPS (blocked injectivity)}
 
 \begin{corollary}[Normal MPS Fundamental Theorem]%
