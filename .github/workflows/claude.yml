@@ -73,7 +73,7 @@ jobs:
       - name: Auto-create PR for completed issue work
         # Only run for issue events (not PR comments), and only if Claude succeeded
         if: |
-          always() &&
+          !cancelled() &&
           steps.claude.outcome == 'success' &&
           (github.event_name == 'issues' ||
            (github.event_name == 'issue_comment' && !github.event.issue.pull_request))
@@ -106,7 +106,7 @@ jobs:
           echo "Found branch: $BRANCH"
 
           # Check if a PR already exists for this branch
-          EXISTING=$(gh pr list --repo "$REPO" --head "$BRANCH" --json number --jq 'length')
+          EXISTING=$(gh pr list --repo "$REPO" --head "$BRANCH" --state all --json number --jq 'length')
           if [ "$EXISTING" -gt 0 ]; then
             echo "PR already exists for branch $BRANCH — skipping."
             exit 0
