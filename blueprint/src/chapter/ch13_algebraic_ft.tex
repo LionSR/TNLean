@@ -773,7 +773,7 @@ basis states rather than by a general linear map.
     Given on-site symmetry data $(u, \sigma)$, the
     \emph{permutation-twisted tensor} at group element $g$ is
     \[
-        A^{\sigma_g}_i \;:=\; A^{\sigma(g)(i)}.
+        (A^{\sigma_g})^i \;:=\; A^{\sigma(g)(i)}.
     \]
 \end{definition}
 
@@ -781,12 +781,20 @@ basis states rather than by a general linear map.
     \lean{MPSTensor.TwistedTensor_one}
     \leanok
     \uses{def:perm_twisted_tensor}
-    If $\sigma(1) = \mathrm{id}$, then $A^{\sigma_1} = A$.
+    If $\sigma(1) = \mathrm{id}$, then $(A^{\sigma_1})^i = A^i$ for all~$i$.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:perm_twisted_tensor}
     Immediate from $\sigma(1)(i) = i$ for all~$i$.
 \end{proof}
+
+\noindent\textbf{Remark on composition order.}
+The linear-combination twist (Lemma~\ref{lem:twisted_tensor_mul}) composes as
+$\widetilde{(\widetilde{A}_h)}_g = \widetilde{A}_{gh}$, applying $h$ first
+then~$g$.  The permutation twist below uses the same left-action convention
+$\sigma(gh) = \sigma(g) \circ \sigma(h)$, so
+$(A^{\sigma_g})^{\sigma_h} = A^{\sigma_{gh}}$; the inner permutation $\sigma(h)$
+acts first on the index.
 
 \begin{lemma}[Composition of permutation twists]\label{lem:perm_twisted_mul}
     \lean{MPSTensor.TwistedTensor_mul}
@@ -801,7 +809,7 @@ basis states rather than by a general linear map.
 
 \begin{proof}\leanok\uses{def:perm_twisted_tensor}
     Expanding both sides:
-    $A^{\sigma_{gh}}_i = A^{\sigma(g)(\sigma(h)(i))} = (A^{\sigma_g})^{\sigma_h}_i$.
+    $(A^{\sigma_{gh}})^i = A^{\sigma(g)(\sigma(h)(i))} = ((A^{\sigma_g})^{\sigma_h})^i$.
 \end{proof}
 
 \subsection{Normal MPS (blocked injectivity)}
