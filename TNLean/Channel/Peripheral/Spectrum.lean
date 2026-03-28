@@ -96,6 +96,14 @@ theorem norm_inv_eq_one_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
 theorem ne_zero_of_norm_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) : μ ≠ 0 := by
   intro h; simp [h] at hμ
 
+/-- For a unit-norm complex number, conjugation equals inversion: `star γ = γ⁻¹`. -/
+theorem Complex.conj_eq_inv_of_norm_eq_one {γ : ℂ} (hγ : ‖γ‖ = 1) : star γ = γ⁻¹ := by
+  have hγ_star_mul : star γ * γ = 1 := by
+    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
+    simp [Complex.normSq_eq_norm_sq, hγ]
+  have hγ_mul_star : γ * star γ = 1 := by simpa [mul_comm] using hγ_star_mul
+  exact eq_inv_of_mul_eq_one_right hγ_mul_star
+
 /-- Definitional helper: peripheral eigenvalues lie on the unit circle. -/
 theorem peripheralEigenvalues_subset_unit_circle
     {V : Type*} [AddCommGroup V] [Module ℂ V]

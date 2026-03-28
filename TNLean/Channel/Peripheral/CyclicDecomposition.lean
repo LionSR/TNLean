@@ -283,8 +283,7 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
       K hUnital' hρ hρfix X γ hEig_map hγ_norm
   have hγ_star_mul : star γ * γ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp [Complex.normSq_eq_norm_sq, hγ_norm]
+    rw [Complex.conj_eq_inv_of_norm_eq_one hγ_norm]; exact inv_mul_cancel₀ (ne_zero_of_norm_eq_one hγ_norm)
   have hγ_starRing_mul : (starRingEnd ℂ) γ * γ = 1 := by
     simpa [Complex.star_def] using hγ_star_mul
   have hXX_fix_map : Kraus.map K (Xᴴ * X) = Xᴴ * X := by
@@ -538,13 +537,9 @@ theorem exists_cyclic_projections_of_peripheral_unitary
   have honeIdx_mem : oneIdx ∈ Finset.range m := by
     simp [honeIdx_lt]
   have hγ_norm : ‖γ‖ = 1 := Complex.norm_eq_one_of_pow_eq_one hγprim.pow_eq_one hm0
-  have hγ_star_mul : star γ * γ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp [Complex.normSq_eq_norm_sq, hγ_norm]
-  have hγ_mul_star : γ * star γ = 1 := by
-    simpa [mul_comm] using hγ_star_mul
-  have hγ_star_eq_inv : star γ = γ⁻¹ := by
-    exact eq_inv_of_mul_eq_one_right hγ_mul_star
+  have hγ_star_eq_inv : star γ = γ⁻¹ := Complex.conj_eq_inv_of_norm_eq_one hγ_norm
+  have hγ_star_mul : star γ * γ = 1 := by rw [hγ_star_eq_inv]; exact inv_mul_cancel₀ (ne_zero_of_norm_eq_one hγ_norm)
+  have hγ_mul_star : γ * star γ = 1 := by simpa [mul_comm] using hγ_star_mul
   have hγinv_prim : IsPrimitiveRoot (γ⁻¹) m := hγprim.inv
   have hγpow_mul_starpow (n : ℕ) : γ ^ n * (star γ) ^ n = 1 := by
     simpa [mul_pow] using congrArg (fun z : ℂ => z ^ n) hγ_mul_star
