@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Defs
 import TNLean.MPS.Core.Transfer
 import TNLean.Channel.Stinespring
+import TNLean.Channel.KrausFreedom
 
 /-!
 # Pure-state renormalization fixed point (RFP) — definitions
@@ -41,9 +42,7 @@ theorem IsRFP.idempotent {A : MPSTensor d D} (h : IsRFP A) :
 decompose via a rectangular isometry `V` (with `V†V = 1`), then the
 transfer map is idempotent.
 
-The forward direction (idempotence → existence of such a `V`) requires the
-rectangular Kraus freedom theorem (Wolf Thm 2.1 item 4, needs Choi-matrix
-PSD factorisation) and is left for a future PR. -/
+See `isRFP_iff_kraus_isometry` for the full equivalence (both directions). -/
 theorem isRFP_of_kraus_isometry (A : MPSTensor d D)
     (V : Matrix (Fin d × Fin d) (Fin d) ℂ)
     (hV : V.conjTranspose * V = 1)
@@ -102,11 +101,15 @@ theorem isRFP_of_kraus_isometry (A : MPSTensor d D)
 /-- The RFP condition is equivalent to a Kraus-level condition: there exists
 an isometry `V : Fin d × Fin d → Fin d → ℂ` (i.e. a `(d²×d)` matrix) such
 that `A i₁ * A i₂ = ∑ j, V (i₁, i₂) j • A j` for all `i₁ i₂`.
-This follows from Stinespring: two Kraus representations of the same CPM
-are related by an isometry on the physical index.
-See arXiv:1606.00608, Theorem 3.1.
 
-TODO: prove the forward direction (requires rectangular Kraus freedom). -/
+**Forward direction**: `E² = E` means the product Kraus family `{Aᵢ₁ Aᵢ₂}`
+and the single family `{Aⱼ}` define the same CPM. By rectangular Kraus freedom
+(`kraus_rectangular_freedom'` from `KrausFreedom.lean`), they are related by a
+rectangular isometry `V` with `V†V = 1`.
+
+**Backward direction**: proved as `isRFP_of_kraus_isometry`.
+
+See arXiv:1606.00608, Theorem 3.1 and Wolf Thm 2.1 item 4. -/
 theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
     IsRFP A ↔
       ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
@@ -114,8 +117,30 @@ theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
         ∀ i₁ i₂ : Fin d,
           A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j := by
   constructor
-  · -- Forward direction: TODO (requires rectangular Kraus freedom)
-    sorry
+  · -- Forward direction: E² = E ⟹ product Kraus family = single Kraus family,
+    -- then rectangular Kraus freedom gives the isometry V.
+    intro hRFP
+    -- Step 1: Extract the Kraus map equality from E² = E.
+    -- LHS = ∑ i₁ i₂, (A i₁ * A i₂) * X * (A i₁ * A i₂)†
+    -- RHS = ∑ j, A j * X * (A j)†
+    have hmap : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+        ∑ p : Fin d × Fin d, (A p.1 * A p.2) * X * (A p.1 * A p.2)ᴴ =
+        ∑ j : Fin d, A j * X * (A j)ᴴ := by
+      intro X
+      have h := congr_fun (congr_arg DFunLike.coe hRFP) X
+      simp only [LinearMap.comp_apply, transferMap_apply] at h
+      rw [← h]
+      rw [show ∑ p : Fin d × Fin d, (A p.1 * A p.2) * X * (A p.1 * A p.2)ᴴ =
+          ∑ i₁ : Fin d, ∑ i₂ : Fin d,
+            (A i₁ * A i₂) * X * (A i₁ * A i₂)ᴴ from Fintype.sum_prod_type _]
+      apply Finset.sum_congr rfl; intro i₁ _
+      simp_rw [Finset.mul_sum, Finset.sum_mul]
+      apply Finset.sum_congr rfl; intro i₂ _
+      rw [Matrix.conjTranspose_mul]; simp only [Matrix.mul_assoc]
+    -- Step 2: Apply rectangular Kraus freedom (Wolf Thm 2.1 item 4).
+    obtain ⟨V, hV_iso, hV_decomp⟩ := kraus_rectangular_freedom'
+      (fun p : Fin d × Fin d => A p.1 * A p.2) A hmap
+    exact ⟨V, hV_iso, fun i₁ i₂ => hV_decomp (i₁, i₂)⟩
   · -- Backward direction: proved as `isRFP_of_kraus_isometry`
     rintro ⟨V, hV, hprod⟩
     exact isRFP_of_kraus_isometry A V hV hprod
