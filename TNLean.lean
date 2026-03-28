@@ -155,6 +155,7 @@ import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 import TNLean.MPS.FundamentalTheorem.CoefficientConvergence
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
+import TNLean.MPS.FundamentalTheorem.Periodic
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.CanonicalForm.Existence
