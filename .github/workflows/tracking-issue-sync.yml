@@ -183,7 +183,8 @@ jobs:
             **When**: `issues` / `reopened`
 
             1. Search for tracking issues (label `tracking`, **any state**
-               — a closed tracking issue still needs its checkbox fixed).
+               — a closed tracking issue still needs its checkbox fixed)
+               whose tasklist contains `#N` (the reopened issue number).
             2. For each match, uncheck: `- [x] #N` → `- [ ] #N`
             3. Apply the `all-resolved` rule (see Key Rules §2).
             4. Read the reopened issue to understand why it was reopened
@@ -412,7 +413,7 @@ jobs:
             OperatorMonotone.lean*) — all dependencies resolved and
             it is the last Ch5 task; completing it would let #21
             (Wolf Ch5 Tracking) close. Consider a Mathlib rescouting
-            report first — the Lowner's theorem API may have landed
+            report first — the Loewner's theorem API may have landed
             since the last Mathlib bump."
 
             ---
