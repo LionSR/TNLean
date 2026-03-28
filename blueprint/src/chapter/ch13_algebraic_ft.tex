@@ -719,6 +719,439 @@ representation on the bond space.
 \end{proof}
 
 %% ---------------------------------------------------------
+\section{Product algebra construction and per-block gauge}%
+\label{sec:pi_algebra}
+%% ---------------------------------------------------------
+
+The chain Fundamental Theorem (Theorem~\ref{thm:fundamentalTheorem_injective_chain})
+handles non-TI periodic chains.
+A parallel line of argument addresses block-diagonal tensors:
+given a family of injective block tensors $\{A_k^i\}_{k=0}^{r-1}$
+with block dimensions $D_k$ and a second family $\{B_k^i\}$ with
+per-block $\mc{V}(A_k) = \mc{V}(B_k)$, one seeks per-block gauge
+equivalence $B_k^i = X_k\, A_k^i\, X_k^{-1}$ for each~$k$
+independently, and a global block-permutation plus inner-automorphism
+decomposition.
+
+\subsection{Per-block linear extension}
+
+\begin{definition}[Per-block linear extension]%
+    \label{def:perBlockLinearExtension}
+    \lean{MPSTensor.perBlockLinearExtension}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    Let $A_k, B_k$ be MPS tensors of bond dimension $D_k$ with
+    $A_k$ injective and $\mc{V}(A_k) = \mc{V}(B_k)$ for each block
+    $k \in \{0, \dots, r{-}1\}$.
+    The \emph{per-block linear extension} $T_k : \MN{D_k} \to \MN{D_k}$
+    is the unique $\C$-linear map satisfying $T_k(A_k^i) = B_k^i$
+    for every physical index~$i$.
+\end{definition}
+
+\begin{lemma}[Per-block multiplicativity]%
+    \label{lem:perBlockLinearExtension_mul}
+    \lean{MPSTensor.perBlockLinearExtension_mul}
+    \leanok
+    \uses{def:perBlockLinearExtension}
+    For each block~$k$, the per-block linear extension $T_k$ is
+    multiplicative:
+    $T_k(MN) = T_k(M)\, T_k(N)$ for all $M, N \in \MN{D_k}$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perBlockLinearExtension}
+    Since $\{A_k^i\}$ spans $\MN{D_k}$, it suffices to check on spanning
+    elements, where the result follows from the MPV identity.
+\end{proof}
+
+\begin{lemma}[Per-block bijectivity]%
+    \label{lem:perBlockLinearExtension_bijective}
+    \lean{MPSTensor.perBlockLinearExtension_bijective}
+    \leanok
+    \uses{lem:perBlockLinearExtension_mul}
+    Each $T_k$ is bijective.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:perBlockLinearExtension_mul}
+    A nonzero multiplicative linear endomorphism of $\MN{D_k}$ is
+    automatically bijective: surjectivity follows from the simplicity
+    of $\MN{D_k}$, and injectivity from finite dimension.
+    Non-vanishing of $T_k$ is established via the trace pairing: if
+    $T_k = 0$, then all $B_k^i = 0$, contradicting the non-vanishing
+    of the trace pairing for injective tensors.
+\end{proof}
+
+\subsection{Product algebra automorphism}
+
+\begin{definition}[Product algebra automorphism]%
+    \label{def:piAlgEquiv}
+    \lean{MPSTensor.piAlgEquiv}
+    \leanok
+    \uses{def:perBlockLinearExtension, lem:perBlockLinearExtension_mul,
+          lem:perBlockLinearExtension_bijective}
+    The \emph{product algebra automorphism} is the $\C$-algebra
+    equivalence
+    \[
+        T : \prod_{k=0}^{r-1} \MN{D_k}
+        \;\xrightarrow{\;\sim\;}\;
+        \prod_{k=0}^{r-1} \MN{D_k}
+    \]
+    defined by $T(M)_k = T_k(M_k)$, where each $T_k$ is the per-block
+    linear extension.
+    It is an algebra automorphism since each $T_k$ is a multiplicative,
+    unital, bijective linear map.
+\end{definition}
+
+\begin{theorem}[Block-permutation decomposition]%
+    \label{thm:piAlgEquiv_decomposition}
+    \lean{MPSTensor.piAlgEquiv_decomposition}
+    \leanok
+    \uses{def:piAlgEquiv, thm:skolem_noether}
+    The product algebra automorphism $T$ decomposes as a block
+    permutation composed with per-block inner automorphisms: there exist
+    a permutation $\sigma \in S_r$ (with $D_{\sigma(k)} = D_k$ for
+    all~$k$) and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that
+    \[
+        T_{\sigma(k)}(M) = X_k\, M\, X_k^{-1}
+    \]
+    for all $M \in \MN{D_k}$ and all $k$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:piAlgEquiv, thm:skolem_noether}
+    The automorphism $T$ permutes the block ideals of $\prod_k \MN{D_k}$
+    (each block ideal is simple, and an automorphism sends simple ideals
+    to simple ideals of the same dimension).
+    This gives the permutation $\sigma$.
+    On each block, the restricted map is a $\C$-algebra automorphism of
+    $\MN{D_k}$; by Skolem--Noether (Theorem~\ref{thm:skolem_noether}),
+    it is inner.
+\end{proof}
+
+\subsection{Nondegeneracy of the product trace pairing}
+
+\begin{lemma}[Nondegeneracy of the product trace pairing]%
+    \label{lem:piTrace_mul_right_eq_zero}
+    \lean{MPSTensor.piTrace_mul_right_eq_zero}
+    \leanok
+    Let $M = (M_0, \dots, M_{r-1}) \in \prod_{k} \MN{D_k}$.
+    If $\sum_{k} \tr(M_k N_k) = 0$ for all
+    $N = (N_0, \dots, N_{r-1})$, then $M = 0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose $N$ supported on a single block~$k$ (all other components
+    zero).
+    The hypothesis reduces to $\tr(M_k N_k) = 0$ for all $N_k$, so
+    $M_k = 0$ by nondegeneracy of the matrix trace pairing on
+    $\MN{D_k}$.
+    Since $k$ was arbitrary, $M = 0$.
+\end{proof}
+
+\begin{lemma}[Injectivity of the product Gram map]%
+    \label{lem:piTraceMulRightPi_ker_eq_bot}
+    \lean{MPSTensor.piTraceMulRightPi_ker_eq_bot}
+    \leanok
+    \uses{def:injective}
+    Let $\{A_k\}$ be a family of injective block tensors.
+    The product Gram map
+    $M \mapsto \bigl(k, i \mapsto \tr(M_k \cdot A_k^i)\bigr)$
+    is injective.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:injective}
+    Reduces to per-block injectivity of the Gram map
+    $M_k \mapsto (i \mapsto \tr(M_k \cdot A_k^i))$, which holds by
+    injectivity of $A_k$ (the matrices $\{A_k^i\}$ span $\MN{D_k}$,
+    so the trace pairing against them separates points).
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{The multi-block Fundamental Theorem}%
+\label{sec:multi_block_ft}
+%% ---------------------------------------------------------
+
+\begin{theorem}[Multi-block Fundamental Theorem]%
+    \label{thm:fundamentalTheorem_multiBlock_full}
+    \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
+    \leanok
+    \uses{def:injective, def:same_mpv, def:gauge_equiv,
+          lem:perBlockLinearExtension_bijective}
+    Let $\{A_k\}_{k=0}^{r-1}$ and $\{B_k\}_{k=0}^{r-1}$ be two families
+    of MPS tensors with block dimensions $D_k$, each $A_k$ injective, and
+    $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$.
+    Then:
+    \begin{enumerate}
+        \item Per-block gauge equivalence:
+              $B_k^i = X_k\, A_k^i\, X_k^{-1}$ for some
+              $X_k \in \GL_{D_k}(\C)$, for every $k$ and $i$.
+        \item Global gauge equivalence: the block-diagonal tensors
+              $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are
+              gauge equivalent.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:perBlockLinearExtension_bijective,
+    thm:piAlgEquiv_decomposition}
+    Per-block gauge equivalence follows from applying the single-block
+    Fundamental Theorem (existing) to each block, using injectivity of
+    $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
+    Global gauge equivalence is assembled from the per-block gauges via
+    the block-diagonal structure.
+\end{proof}
+
+\begin{theorem}[Per-block SameMPV $\Leftrightarrow$ per-block gauge equivalence]%
+    \label{thm:perBlock_sameMPV_iff_gaugeEquiv}
+    \lean{MPSTensor.perBlock_sameMPV_iff_gaugeEquiv}
+    \leanok
+    \uses{def:injective, def:same_mpv, def:gauge_equiv}
+    Let $\{A_k\}$ be a family of injective block tensors.
+    Then $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$ if and only if
+    $A_k$ and $B_k$ are gauge equivalent for all~$k$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:gauge_equiv}
+    The forward direction is the single-block Fundamental Theorem applied
+    blockwise.
+    The reverse direction holds because gauge equivalence preserves all
+    traces of word evaluations.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Block separation from canonical form}%
+\label{sec:block_separation}
+%% ---------------------------------------------------------
+
+The multi-block Fundamental Theorem
+(Theorem~\ref{thm:fundamentalTheorem_multiBlock_full}) assumes per-block
+$\mc{V}(A_k) = \mc{V}(B_k)$.
+In practice, one starts from the weaker global hypothesis that the
+block-diagonal tensors satisfy the same MPV family:
+$\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr) =
+\mc{V}\!\bigl(\bigoplus_k \mu_k B_k\bigr)$.
+Block separation extracts the per-block identities from the global one
+under canonical-form normalization.
+
+\begin{definition}[Canonical form]\label{def:canonical_form}
+    \lean{MPSTensor.IsCanonicalForm}
+    \leanok
+    \uses{def:injective}
+    A family of block tensors $\{A_k\}_{k=0}^{r-1}$ with scaling
+    weights $\mu_0, \dots, \mu_{r-1} \in \C^{\times}$ is in
+    \emph{canonical form} if:
+    \begin{enumerate}
+        \item each $A_k$ is injective,
+        \item each $A_k$ is left-canonical:
+              $\sum_i (A_k^i)^{\dagger}\, A_k^i = \Id_{D_k}$,
+        \item the weights are strictly ordered by norm:
+              $\|\mu_0\| > \|\mu_1\| > \cdots > \|\mu_{r-1}\| > 0$,
+        \item the self-overlaps are normalised:
+              $O_{A_k A_k}(N) \to 1$ as $N \to \infty$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}[Normal canonical form]\label{def:normal_canonical_form}
+    \lean{MPSTensor.IsNormalCanonicalForm}
+    \leanok
+    \uses{def:canonical_form}
+    A family is in \emph{normal canonical form} if it satisfies the
+    canonical-form conditions with each block additionally
+    \emph{irreducible} (no nontrivial invariant projection) and
+    \emph{primitive} (the transfer map has spectral gap).
+\end{definition}
+
+\begin{theorem}[Block separation from canonical form]%
+    \label{thm:per_block_sameMPV_of_canonical_form}
+    \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
+    \leanok
+    \uses{def:canonical_form, def:same_mpv}
+    Let $\{A_k\}$ be in canonical form with weights $\{\mu_k\}$, and
+    let $\{B_k\}$ be another family with each $B_k$ injective and
+    left-canonical.
+    If $\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr)
+    = \mc{V}\!\bigl(\bigoplus_k \mu_k B_k\bigr)$,
+    then $\mc{V}(A_k) = \mc{V}(B_k)$ for each block~$k$ individually.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:canonical_form}
+    The proof proceeds by strong induction on the number of blocks~$r$.
+    For $r = 1$, the weighted sum degenerates and the result is
+    immediate after cancelling $\mu_0^N \ne 0$.
+
+    For $r \ge 2$, the global identity
+    $\sum_k \mu_k^N\, \bigl(V^{(N)}(A_k)_\sigma
+    - V^{(N)}(B_k)_\sigma\bigr) = 0$
+    holds for all $N$ and $\sigma$.
+    Multiplying by the MPV components of $A_0$ and summing over $\sigma$
+    converts this to an overlap identity.
+    Dividing by $|\mu_0|^{2N}$ and using the strict norm ordering
+    $\|\mu_1\| / \|\mu_0\| < 1$, the tail terms
+    $(k \ge 1)$ decay geometrically with ratio
+    $\rho = \|\mu_1\| / \|\mu_0\|$.
+    The leading term ($k = 0$) therefore converges:
+    $O_{A_0 B_0}(N) \to 1$ as $N \to \infty$.
+    Combined with the normalised self-overlap
+    $O_{A_0 A_0}(N) \to 1$, this gives
+    $\mc{V}(A_0) = \mc{V}(B_0)$ via the gauge-phase equivalence
+    criterion.
+    Subtracting the leading block and applying the inductive hypothesis
+    yields $\mc{V}(A_k) = \mc{V}(B_k)$ for all remaining $k$.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem from canonical form]%
+    \label{thm:fundamentalTheorem_canonicalForm}
+    \lean{MPSTensor.fundamentalTheorem_canonicalForm}
+    \leanok
+    \uses{thm:per_block_sameMPV_of_canonical_form,
+          thm:fundamentalTheorem_multiBlock_full}
+    Under the hypotheses of
+    Theorem~\ref{thm:per_block_sameMPV_of_canonical_form},
+    every block pair $A_k, B_k$ is gauge equivalent, and the
+    block-diagonal tensors are globally gauge equivalent.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:per_block_sameMPV_of_canonical_form,
+          thm:fundamentalTheorem_multiBlock_full}
+    Theorem~\ref{thm:per_block_sameMPV_of_canonical_form} gives per-block
+    $\mc{V}(A_k) = \mc{V}(B_k)$.
+    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full} converts this
+    to per-block and global gauge equivalence.
+\end{proof}
+
+\begin{theorem}[Explicit gauge from canonical form]%
+    \label{thm:fundamentalTheorem_canonicalForm_explicit}
+    \lean{MPSTensor.fundamentalTheorem_canonicalForm_explicit}
+    \leanok
+    \uses{thm:fundamentalTheorem_canonicalForm}
+    Under the same hypotheses, there exist invertible matrices
+    $X_k \in \GL_{D_k}(\C)$ such that
+    $B_k^i = X_k\, A_k^i\, X_k^{-1}$
+    for every block $k$ and physical index $i$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:fundamentalTheorem_canonicalForm}
+    Extract the gauge matrices from
+    Theorem~\ref{thm:fundamentalTheorem_canonicalForm} by choice.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{TI reduction corollary}%
+\label{sec:ti_reduction}
+%% ---------------------------------------------------------
+
+\begin{theorem}[TI reduction corollary]%
+    \label{thm:ti_reduction_corollary}
+    \lean{MPSChainTensor.ti_reduction_corollary}
+    \leanok
+    \uses{def:injective, def:same_mpv, cor:ft_ti_chain}
+    Let $A$ and $B$ be MPS tensors of bond dimension $D$ with $A$
+    injective.
+    Consider the two constant (translation-invariant) chains
+    $(A, \dots, A)$ and $(B, \dots, B)$ of length $n \ge 1$.
+    If the combined tensors of the two chains generate the same MPV
+    family, then:
+    \begin{enumerate}
+        \item $B$ is gauge equivalent to $A$: there exists
+              $X \in \GL_D(\C)$ with $B^i = X\, A^i\, X^{-1}$ for
+              all~$i$.
+        \item $B$ is injective.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok\uses{cor:ft_ti_chain}
+    The SameMPV hypothesis on the combined tensors, combined with
+    translation invariance, forces the per-site gauge matrices to
+    collapse to a single matrix $X$ (by the TI chain gauge collapse).
+    Injectivity of $B$ follows from gauge equivalence to the
+    injective tensor $A$.
+\end{proof}
+
+\begin{theorem}[TI reduction from same state]%
+    \label{thm:ti_reduction_of_sameState}
+    \lean{MPSChainTensor.ti_reduction_of_sameState}
+    \leanok
+    \uses{thm:ti_reduction_corollary, thm:fundamentalTheorem_injective_chain}
+    Under the same setup, if $n \ge 3$ and the two constant chains
+    generate the same chain state (rather than the same MPV family on the
+    combined tensor), the same conclusion holds, provided the blocking
+    bridge hypothesis (\texttt{SameStateBridgeHyp}) is available to
+    upgrade same-state to same-MPV on the combined tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ti_reduction_corollary}
+    The bridge hypothesis converts same-state at chain length $n \ge 3$
+    to SameMPV on the combined tensor.
+    Then Theorem~\ref{thm:ti_reduction_corollary} applies.
+\end{proof}
+
+\subsection{Global symmetry via gauge composition}
+
+The virtual representation theorem
+(Theorem~\ref{thm:virtual_rep_injective}) relies on the fact that
+composing two gauge transformations yields another gauge up to a
+scalar factor.
+
+\begin{lemma}[Gauge ratio commutes with tensor matrices]%
+    \label{lem:gauge_ratio_commutes}
+    \lean{MPSTensor.gauge_ratio_commutes}
+    \leanok
+    \uses{def:gauge_equiv}
+    If $X, Y \in \GL_D(\C)$ both conjugate an MPS tensor $A$ to the same
+    tensor $B$ (i.e.\ $B^i = X A^i X^{-1} = Y A^i Y^{-1}$ for all $i$),
+    then $Y^{-1} X$ commutes with every $A^i$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Direct matrix calculation: conjugating both gauge relations and
+    composing gives $(Y^{-1} X) A^i = A^i (Y^{-1} X)$.
+\end{proof}
+
+\begin{lemma}[Gauge ratio is scalar for injective tensors]%
+    \label{lem:gauge_ratio_isScalar}
+    \lean{MPSTensor.gauge_ratio_isScalar}
+    \leanok
+    \uses{lem:gauge_ratio_commutes, def:injective, lem:center_scalar}
+    Under the same hypotheses, if $A$ is additionally injective, then
+    $Y^{-1} X = \lambda \Id_D$ for some scalar $\lambda \in \C$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:gauge_ratio_commutes, lem:center_scalar}
+    By Lemma~\ref{lem:gauge_ratio_commutes}, $Y^{-1}X$ commutes with
+    all $A^i$.
+    Since $\{A^i\}$ spans $\MN{D}$, the matrix $Y^{-1}X$ commutes
+    with all of $\MN{D}$.
+    By Lemma~\ref{lem:center_scalar}, it is a scalar matrix.
+\end{proof}
+
+\begin{theorem}[Projective multiplication law for gauge matrices]%
+    \label{thm:gaugeMatrix_projective_mul}
+    \lean{MPSTensor.gaugeMatrix_projective_mul}
+    \leanok
+    \uses{lem:gauge_ratio_isScalar, def:injective,
+          def:on_site_symmetric, lem:twisted_tensor_mul}
+    Let $A$ be an injective MPS tensor with on-site symmetry under a
+    group representation $U : G \to \GL_d(\C)$.
+    For each $g \in G$, let $X(g) \in \GL_D(\C)$ satisfy
+    $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+    Then for all $g, h \in G$, there exists $c(g,h) \in \C^{\times}$
+    such that
+    \[
+        X(h)\, X(g) = c(g,h)\, X(g \cdot h).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_ratio_isScalar, lem:twisted_tensor_mul}
+    By the composition law $\widetilde{A}_{gh} = \widetilde{(\widetilde{A}_h)}_g$
+    (Lemma~\ref{lem:twisted_tensor_mul}), both $X(h)\,X(g)$ and $X(gh)$
+    conjugate $A$ to $\widetilde{A}_{gh}$.
+    Lemma~\ref{lem:gauge_ratio_isScalar} then gives the scalar factor.
+\end{proof}
+
+%% ---------------------------------------------------------
 \section{Closing remarks}%
 \label{sec:closing}
 %% ---------------------------------------------------------
