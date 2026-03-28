@@ -1093,9 +1093,8 @@ sector decomposition (`exists_cyclic_sector_decomp_of_irr_tp`) splits the blocke
 into primitive sectors.
 
 **Note**: This theorem depends on `peripheralEigenvalues_eq_range_primitiveRoot`
-(in `CyclicGroup.lean`), which has a sorry for the Lagrange/finite-subgroup step.
-See Issue #242 for tracking. -/
-theorem exists_tp_sector_decomp_after_blocking_via_cyclic [NeZero D] (hDpos : 0 < D)
+(in `CyclicGroup.lean`). See Issue #242 for tracking. -/
+theorem exists_tp_sector_decomp_after_blocking_via_cyclic [NeZero D]
     (A : MPSTensor d D) :
     ∃ (p : ℕ) (_ : 0 < p)
       (r : ℕ) (dim : Fin r → ℕ)
@@ -1104,6 +1103,7 @@ theorem exists_tp_sector_decomp_after_blocking_via_cyclic [NeZero D] (hDpos : 0 
       (∀ k, ∑ i : Fin (blockPhysDim d p), (sectors k i)ᴴ * sectors k i = 1) ∧
       -- Positive bond dimensions
       (∀ k, 0 < dim k) := by
+  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   -- Step 1: Get the TP-gauged irreducible blocks.
   obtain ⟨_zeroTailDim, r₀, dim₀, _μ₀, blocks₀, hIrr₀, hTP₀, _hμNe₀, hDim₀, _hMPV₀⟩ :=
     exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D) A
