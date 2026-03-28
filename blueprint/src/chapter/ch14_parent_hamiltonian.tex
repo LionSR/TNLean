@@ -364,17 +364,19 @@ Lucia~\cite{Kastoryano2018Martingale}.
   (Lemma~\ref{lem:ground_space_intersection}) gives the qualitative identity
   $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
   Because the local Hilbert space is finite-dimensional, the subspaces
-  $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space,
-  and the Friedrichs angle between them is a continuous function of $A$.
-  The intersection identity excludes the degenerate case where the
-  angle is zero (which would require a non-trivial vector in one kernel
-  that is orthogonal to the other yet lies in both), so by
-  compactness (the angle depends continuously on $A$ over a compact
-  parameter space for fixed $d,D$) the angle is bounded away from zero.
-  This lower bound on the angle translates into the required operator
-  inequality $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$
-  for every overlapping
-  pair~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
+  $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space.
+  The intersection identity shows that $\ker(h_i) \cap \ker(h_j)$ is
+  exactly $G_{[i,j+L-1]}(A)$; in particular there is no non-trivial
+  vector in one kernel that is orthogonal to the other yet lies in both.
+  Hence the Friedrichs angle $\theta$ between $\ker(h_i)$ and
+  $\ker(h_j)$ is strictly positive (for the fixed injective tensor
+  $A$).  Since $\theta > 0$, there exist constants $c_{ij} \ge 0$ and
+  $\gamma > 0$, depending only on $A$ and the pair $(i,j)$, such that
+  $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$.
+  Because the number of distinct overlap patterns is bounded by $L-1$
+  (independent of~$N$), the constants can be chosen uniformly for all
+  overlapping
+  pairs~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
 \end{proof}
 
 \begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
@@ -382,8 +384,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
   \uses{thm:martingale_criterion, lem:martingale_mps,
         def:parent_hamiltonian}
   For an $L_0$-block injective MPS tensor $A$, let
-  $L := L_0 + 1$ be the interaction range.
-  There exists $\gamma > 0$ such that for all $N \ge 2L$,
+  $L := 2L_0$ be the interaction range (two blocked sites in the
+  $L_0$-blocked picture).
+  There exists $\gamma > 0$ such that for all $N \ge 2L$ with
+  $L_0 \mid N$,
   \[
     \lambda_{\min}^+\bigl(H_N(A,L)\bigr) \ge \gamma,
   \]
@@ -394,12 +398,16 @@ Lucia~\cite{Kastoryano2018Martingale}.
   \uses{thm:martingale_criterion, lem:martingale_mps}
   \notready
   Since $A$ is $L_0$-block injective, the blocked tensor
-  $A^{[L_0]}$ is injective.  The parent interaction for $A$ with range
-  $L = L_0 + 1$ can be expressed in terms of $A^{[L_0]}$ with range $2$
-  (two blocked sites).  Apply Lemma~\ref{lem:martingale_mps} to the
-  injective tensor $A^{[L_0]}$ to obtain the martingale constants
-  $c_{ij}$ and $\gamma > 0$.  These constants depend only on $A^{[L_0]}$
-  (hence only on $A$ and $L_0$), not on $N$.
+  $A^{[L_0]}$ is injective with physical dimension $d^{L_0}$ and bond
+  dimension $D$.  Each blocked site represents $L_0$ original sites,
+  so the range-$L = 2L_0$ interaction on the original chain corresponds
+  exactly to a range-$2$ interaction on the blocked chain (two blocked
+  sites).  The divisibility condition $L_0 \mid N$ ensures the blocking
+  is compatible with the periodic chain.
+  Apply Lemma~\ref{lem:martingale_mps} to the
+  injective tensor $A^{[L_0]}$ with range $2$ to obtain the martingale
+  constants $c_{ij}$ and $\gamma > 0$.  These constants depend only on
+  $A^{[L_0]}$ (hence only on $A$ and $L_0$), not on $N$.
   Theorem~\ref{thm:martingale_criterion} then gives the uniform gap
   $\lambda_{\min}^+(H_N) \ge \gamma$~\cite{Fannes1992Finitely,
   Nachtergaele1996Spectral}.
