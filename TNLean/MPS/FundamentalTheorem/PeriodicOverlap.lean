@@ -22,7 +22,7 @@ dichotomy for periodic MPS tensors.
 
 ### Self-overlap
 * `periodicSelfOverlap_tendsto` — for a periodic tensor `A` with period `m`,
-  `lim_{N→∞} ⟨V_N(A)|V_N(A)⟩ = m` (along multiples of `m`).
+  `⟨V_{mk}(A)|V_{mk}(A)⟩ → m` as `k → ∞`.
 
 ### Cross-overlap dichotomy
 * `periodicOverlap_tendsto_zero_of_ne_period` — (Case 1) different periods
@@ -50,6 +50,12 @@ propagate by translation to all sectors, define sector-restricted tensors,
 establish blocked proportionality, use injectivity contraction via the
 decomposition map to extract per-site proportionality, absorb phases, and
 assemble the global gauge unitary.
+
+## Status
+
+The main theorems in this file are currently stated with `sorry` proofs.
+This module serves as a skeleton / proof sketch and should not yet be
+relied on as a completed formalization of Proposition 3.3.
 
 ## References
 
@@ -91,7 +97,7 @@ This is the first displayed equation of Appendix A. -/
 theorem periodicSelfOverlap_tendsto
     [NeZero D] (A : MPSTensor d D) {m : ℕ}
     (hP : IsPeriodic m A) :
-    ∀ᶠ k in atTop, mpvOverlap A A (m * k) = (m : ℂ) := by
+    Tendsto (fun k => mpvOverlap A A (m * k)) atTop (nhds (m : ℂ)) := by
   sorry
 
 /-! ## Case 1: Different periods → orthogonal (Appendix A, first case) -/
@@ -123,7 +129,7 @@ theorem periodicOverlap_tendsto_zero_of_ne_period
 /-- Two-sided sector restriction is "normal" when the original blocked tensor has
 the appropriate cyclic-sector structure. This packages the consequence of
 Lemma 2.4: each `P_u A^(m)` is a normal tensor. -/
-theorem sectorBlocked_isNormal_of_isPeriodic
+lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     (P : Fin m → MatrixAlg D)
@@ -164,7 +170,7 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
 Given one matching sector pair `P_ũ A^(m) ≈ e^{iλ} V Q_ṽ B^(m) V†`,
 applying the translation operator `T^l` for `l = 1, …, m-1` yields
 matching for all sector pairs `(u, u+q)` where `q = ṽ - ũ`. -/
-theorem sectorMatch_propagation
+lemma sectorMatch_propagation
     [NeZero D]
     (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
@@ -176,16 +182,18 @@ theorem sectorMatch_propagation
       (leftSectorTensor (PA u₀) (blockTensor A m))
       (leftSectorTensor (QB v₀) (blockTensor B m))) :
     ∀ l : Fin m,
-      ∃ (phase : ℂ) (gauge : MatrixAlg D),
+      ∃ (phase : ℂ) (gauge : GL (Fin D) ℂ),
         ∀ σ : Fin m → Fin d,
           PA (u₀ + l) * evalWord A (List.ofFn σ) =
-            phase • (gauge * (QB (v₀ + l) * evalWord B (List.ofFn σ)) * gaugeᴴ) := by
+            phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
+              (QB (v₀ + l) * evalWord B (List.ofFn σ)) *
+              ((gauge⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
   sorry
 
 /-- **Per-site proportionality** (Eq. A.14 of arXiv:1708.00029):
 After injectivity contraction, the sector-restricted tensors satisfy
 `A_u^i = κ_v · e^{iη/m} · B_v^i` with `∏ κ_v = 1` and `|κ_v| = 1`. -/
-theorem sectorTensor_proportional_of_blockedMatch
+lemma sectorTensor_proportional_of_blockedMatch
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (P Q : Fin m → MatrixAlg D)
@@ -194,14 +202,14 @@ theorem sectorTensor_proportional_of_blockedMatch
     (hP_comm : ∀ u (i : Fin d), P u * A i = A i * P (u + 1))
     (hQ_comm : ∀ v (i : Fin d), Q v * B i = B i * Q (v + 1))
     (hBlockMatch : ∀ u : Fin m,
-      ∃ (phase : ℂ) (gauge : MatrixAlg D),
+      ∃ (phase : ℂ) (gauge : GL (Fin D) ℂ),
         ∀ σ : Fin m → Fin d,
           P u * evalWord A (List.ofFn σ) =
-            phase • (gauge * (Q u * evalWord B (List.ofFn σ)) * gaugeᴴ))
+            phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
+              (Q u * evalWord B (List.ofFn σ)) *
+              ((gauge⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
     (hNormal : ∀ u, IsNormal (leftSectorTensor (P u) (blockTensor A m))) :
-    ∃ (ξ : ℂ) (U : Matrix (Fin D) (Fin D) ℂ),
-      ‖ξ‖ = 1 ∧
-      ∀ i : Fin d, A i = ξ • (U * B i * Uᴴ) := by
+    RepeatedBlocks A B := by
   -- Step 1: Each blocked sector product is normal, so after N₀ repetitions
   --   it becomes injective.
   -- Step 2: The decomposition map Ω_u exists for each sector.
@@ -224,6 +232,10 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
     (PA QB : Fin m → MatrixAlg D)
     (hPA_proj : ∀ u, PA u * PA u = PA u)
     (hQB_proj : ∀ v, QB v * QB v = QB v)
+    (hPA_complete : ∑ u, PA u = 1)
+    (hQB_complete : ∑ v, QB v = 1)
+    (hPA_ortho : ∀ u v, u ≠ v → PA u * PA v = 0)
+    (hQB_ortho : ∀ u v, u ≠ v → QB u * QB v = 0)
     (hPA_comm : ∀ u (i : Fin d), PA u * A i = A i * PA (u + 1))
     (hQB_comm : ∀ v (i : Fin d), QB v * B i = B i * QB (v + 1))
     (hSomeMatch : ∃ u v,
@@ -266,9 +278,12 @@ theorem periodicOverlapDichotomy
     sorry
 
 /-- **Eventual linear independence** (Corollary of Proposition 3.3):
-Given a basis of periodic tensors `{A_j}`, there exists `N₀` such that
-for all `N ≥ N₀`, the nonzero vectors `{|V_N(A_j)⟩}` are linearly
-independent.
+Given a family of periodic tensors `{A_j}` whose periods all divide a common
+period `p`, there exists `N₀` such that for all `N ≥ N₀` that are multiples
+of `p`, the vectors `{|V_N(A_j)⟩}` are linearly independent.
+
+The common-period restriction ensures all `mpvState (A k) N` are nonzero
+simultaneously (a zero vector would prevent `LinearIndependent` from holding).
 
 This is the "consequence" stated at the end of Proposition 3.3. -/
 theorem periodicBasis_eventuallyLinearlyIndependent
@@ -276,11 +291,13 @@ theorem periodicBasis_eventuallyLinearlyIndependent
     (A : (k : Fin r) → MPSTensor d (dim k))
     (period : Fin r → ℕ)
     (hPer : ∀ k, IsPeriodic (period k) (A k))
+    (p : ℕ) [NeZero p]
+    (hDiv : ∀ k, period k ∣ p)
     (hNonrep : ∀ i j, i ≠ j →
       ∀ (hdim : dim i = dim j),
         ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
-      LinearIndependent ℂ (fun k => mpvState (A k) N) := by
+      LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
   -- Use the dichotomy: pairwise non-repeated ⟹ pairwise decaying overlap.
   -- Self-overlaps converge to periods (bounded away from 0).
   -- By the epsilon-linear-independence lemma (Lemma 3.4 / Lem1 in the paper),
