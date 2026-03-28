@@ -81,6 +81,11 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT_PAT || github.token }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           REPO: ${{ github.repository }}
+          # Pass user-controlled text via env vars to avoid script injection
+          COMMENT_BODY: ${{ github.event.comment.body || '' }}
+          ISSUE_BODY: ${{ github.event.issue.body || '' }}
+          EVENT_ISSUE_TITLE: ${{ github.event.issue.title || '' }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
           set -euo pipefail
 
@@ -112,14 +117,30 @@ jobs:
 
           echo "Creating PR from $BRANCH → main for issue #${ISSUE_NUMBER}"
 
+          # Check if the triggering text contains autofix keywords
+          TRIGGER_TEXT=""
+          if [ "$EVENT_NAME" = "issue_comment" ]; then
+            TRIGGER_TEXT="$COMMENT_BODY"
+          else
+            TRIGGER_TEXT="$ISSUE_BODY $EVENT_ISSUE_TITLE"
+          fi
+
           # Create the PR — pr-cleanup.yml will reformat title/body/labels
           PR_BODY=$'Addresses #'"${ISSUE_NUMBER}"$'\n\nAuto-created by Claude Code action.'
 
-          gh pr create \
+          PR_URL=$(gh pr create \
             --repo "$REPO" \
             --head "$BRANCH" \
             --base main \
             --title "feat: ${ISSUE_TITLE}" \
-            --body "$PR_BODY"
+            --body "$PR_BODY")
 
-          echo "PR created successfully."
+          echo "PR created successfully: $PR_URL"
+          PR_NUM=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+
+          # If the triggering text contains autofix keywords, add the label.
+          # Done as a separate step so a missing label doesn't break PR creation.
+          if echo "$TRIGGER_TEXT" | grep -qiE 'auto[_ -]?fix'; then
+            echo "Autofix keyword detected — adding 'auto-fix-claude' label to PR #${PR_NUM}"
+            gh pr edit "$PR_NUM" --repo "$REPO" --add-label "auto-fix-claude" || true
+          fi
