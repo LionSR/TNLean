@@ -185,9 +185,14 @@ jobs:
                whose tasklist contains `#N` (the reopened issue number).
             2. For each match, uncheck: `- [x] #N` → `- [ ] #N`
             3. Apply the `all-resolved` rule (see Key Rules §2).
-            4. Comment on the tracking issue:
+            4. Read the reopened issue to understand why it was reopened
+               (check recent comments, linked PRs). Suggest what needs
+               to happen to re-resolve it (see §5, linked-issue variant).
+            5. Comment on the tracking issue:
                "🔄 #N (*title*) has been reopened. Unchecked in tasklist.
-               [X/Y tasks complete]"
+               [X/Y tasks complete]
+
+               **Suggested next:** <why it was reopened + what to do>"
 
             ---
 
@@ -282,6 +287,8 @@ jobs:
             Then add each new issue to relevant tracking issue checklists:
             - Append `- [ ] #<issue>` inside the tasklist block
             - Comment: "📋 Added follow-up issues from #<PR>: #<issue1>, …"
+            - If multiple follow-ups were created, suggest which one to
+              tackle first (see §5, tracking-issue variant).
 
             **Be conservative.** Only create issues for genuine, actionable
             follow-ups. When in doubt, skip. False positives create noise.
@@ -316,13 +323,15 @@ jobs:
             When a playbook asks you to "suggest next steps", generate a
             brief, actionable recommendation for what to work on next.
 
-            **How to choose a suggestion:**
+            ### Tracking-issue variant (Playbooks A, A2, B1, B2)
 
             1. Read the tracking issue body to find **remaining unchecked
                tasks** (`- [ ] #N`).
-            2. For each unchecked task, read the issue to check its
-               **dependencies** (look for "Depends on", "Blocked by",
-               "Dependencies" sections, or references to other issues).
+            2. Check dependencies. First look at the tracking issue body
+               itself — it often lists a suggested order or dependency
+               notes. If that's sufficient, use it. Otherwise, read the
+               unchecked issues to check their **dependencies** ("Depends
+               on", "Blocked by", or references to other open issues).
             3. Recommend a task whose dependencies are all resolved
                (checked in the tracking issue or closed). If multiple
                tasks are unblocked, prefer:
@@ -335,16 +344,27 @@ jobs:
             5. If **all tasks are complete**, suggest closing the tracking
                issue.
 
-            **Format:** Keep it to 1–2 sentences. Be specific — reference
-            the issue number and title. Example:
+            ### Linked-issue variant (Playbooks A2, B1 step 5)
+
+            For a specific issue (not the tracking issue), suggest the
+            concrete next action based on available context:
+            - **After a PR merges** (B1): look at what the PR changed,
+              what remains in the issue scope, and what specific files,
+              declarations, or proof obligations to tackle next.
+            - **After a reopen** (A2): look at recent comments or the
+              close/reopen history to understand what broke or changed,
+              and suggest how to re-resolve it.
+            - Be specific about files, declarations, or proof steps.
+              Example: "Next: discharge the remaining 2 sorrys in
+              `Foo.lean`, which depend on `bar_lemma` from Mathlib."
+
+            ### Format
+
+            Keep suggestions to 1–2 sentences. Be specific — reference
+            issue numbers and titles. Example:
             "**Suggested next:** #138 (*Discharge sorry in
             OperatorMonotone.lean*) — all dependencies resolved, and it
             is the last remaining task."
-
-            **For linked issues** (B1 step 5), suggest the concrete next
-            action for that specific issue based on the PR diff and what
-            remains (e.g., "Next: discharge the remaining 2 sorrys in
-            `Foo.lean`, which depend on `bar_lemma` from Mathlib.").
 
             ---
 
