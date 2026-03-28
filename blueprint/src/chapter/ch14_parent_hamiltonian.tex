@@ -3,8 +3,8 @@
 This chapter introduces the local ground-space construction and the parent
 interaction for translation-invariant periodic MPS.
 We follow the standard setup from
-\cite{Cirac2021Matrix, PerezGarcia2007Matrix} and align the Lean definitions
-with the project convention that the $N$-site Hilbert space is represented as
+\cite{Cirac2021Matrix, PerezGarcia2007Matrix} and use the project convention
+that the $N$-site Hilbert space is represented as
 coefficient functions
 \[
   \{0,\dots,d{-}1\}^N \to \C,
@@ -96,9 +96,7 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
 \section{Parent interaction and chain Hamiltonian}\label{sec:parent_interaction_defs}
 
 Conceptually, the parent interaction at range $L$ is the orthogonal projector
-onto $G_L(A)^\perp$. In the current Lean installment, the chain-level operator
-API is introduced first, and the concrete projector implementation is deferred
-to a follow-up PR.
+onto $G_L(A)^\perp$.
 
 \begin{definition}[Parent interaction]\label{def:parent_interaction}
   \lean{MPSTensor.parentInteraction}
@@ -108,8 +106,8 @@ to a follow-up PR.
     h_L(A) := \Pi_{G_L(A)^\perp},
   \]
   on the local $L$-site space.
-  \textbf{Note:} the Lean definition is currently a zero placeholder;
-  \texttt{\textbackslash leanok} will be added once the projector is implemented.
+  \textbf{Note:} this object is currently recorded as a placeholder pending
+  the explicit projector construction.
 \end{definition}
 
 For a periodic chain of length $N$, the parent Hamiltonian is the sum of
@@ -121,7 +119,7 @@ translated copies of the local interaction.
   For each site index $i \in \{0,\dots,N{-}1\}$, the translated local term
   $h_i$ embeds the parent interaction into the full $N$-site space at
   position~$i$ (with periodic boundary conditions).
-  \textbf{Note:} the Lean definition is currently a zero placeholder.
+  \textbf{Note:} this object is currently recorded as a placeholder.
 \end{definition}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}

@@ -188,10 +188,9 @@ operation on the physical indices.
     all of $\MN{D}$.
 \end{proof}
 
-\begin{remark}[Lean formalisation note]
+\begin{remark}[Blocking formulation note]
     \label{rem:blocking_vs_combined}
-    The Lean proof uses a combined tensor approach
-    (\lean{MPSTensor.chainCombinedTensor_isInjective}) rather than
+    The proof uses a combined tensor approach rather than
     literal tensor blocking: it shows that if any site tensor is injective,
     the combined tensor (union of all site matrices) spans $\MN{D}$.
     This serves the same role in the chain fundamental theorem proof.
@@ -394,24 +393,20 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     of Lemma~\ref{lem:virtual_bond_gauge}.
 \end{proof}
 
-\begin{remark}[Stronger hypothesis in the Lean formalisation]
+\begin{remark}[Stronger hypothesis in the current formulation]
     \label{rem:ft_chain_sameMPV}
     \uses{thm:fundamentalTheorem_injective_chain}
-    The Lean theorem \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
-    assumes \texttt{SameMPV} on the combined tensor (trace agreement for
-    mixed-site words of \emph{all} lengths), which is stronger than the
-    paper's \texttt{SameState} (trace agreement at a single chain length
-    $n \ge 3$).
+    The current theorem statement assumes trace agreement for mixed-site
+    words of \emph{all} lengths on the combined tensor, which is stronger
+    than the paper's fixed-length hypothesis (trace agreement at a single
+    chain length $n \ge 3$).
     The paper bridges this gap via a blocking argument requiring $n \ge 3$.
-    This bridging step is now packaged as an abstract interface
-    \lean{MPSChainTensor.SameStateBridgeHyp}: a \texttt{structure} that
+    This bridging step is now packaged as an abstract interface that
     encapsulates the blocking hypothesis.
-    Given this bridge, the theorem
-    \lean{MPSChainTensor.fundamentalTheorem_injective_chain_of_sameState}
-    delivers the chain FT endpoint under the weaker \texttt{SameState}
-    hypothesis; however, the actual proof that \texttt{SameState} implies
-    \texttt{SameMPV} (i.e.\ the content of the bridge) has not yet been
-    established in the formalization.
+    Given this bridge, one obtains the chain FT endpoint under the weaker
+    fixed-length hypothesis; however, the actual proof that fixed-length
+    agreement implies all-length mixed-word agreement (i.e.\ the content of
+    the bridge) has not yet been established in the formalization.
 \end{remark}
 
 \begin{remark}[Relationship to the translation-invariant all-sizes theorem]
