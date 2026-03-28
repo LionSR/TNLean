@@ -55,6 +55,9 @@ jobs:
             core.setOutput('run_ci_fix', 'false');
             core.setOutput('run_blueprint_fix', 'false');
             core.setOutput('run_review_fix', 'false');
+            // NB: ci_run_id / blueprint_run_id are only consumed when the
+            // corresponding run_*_fix flag is 'true', so the default is unused.
+            // We still set it so fromJSON doesn't choke on undefined.
             core.setOutput('ci_run_id', '0');
             core.setOutput('blueprint_run_id', '0');
 
@@ -92,6 +95,9 @@ jobs:
               core.setOutput('head_branch', pr.head.ref);
               core.setOutput('pr_number', String(pr.number));
 
+              // NB: workflow_run triggers match by workflow *name* (line 11),
+              // but this API queries by *filename*. If a workflow file is renamed,
+              // update both places.
               async function findFailedRun(workflowFile) {
                 try {
                   const runs = await github.rest.actions.listWorkflowRuns({
@@ -123,11 +129,12 @@ jobs:
                 core.setOutput('blueprint_run_id', String(blueprintRunId));
               }
 
-              // Check for unresolved review threads
+              // Check for unresolved review threads (use first:100 to match
+              // the downstream query scope — first:5 could miss unresolved threads)
               const query = `query($owner: String!, $repo: String!, $pr: Int!) {
                 repository(owner: $owner, name: $repo) {
                   pullRequest(number: $pr) {
-                    reviewThreads(first: 5) {
+                    reviewThreads(first: 100) {
                       nodes { isResolved }
                     }
                   }
