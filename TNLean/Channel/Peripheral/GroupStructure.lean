@@ -90,8 +90,57 @@ theorem peripheral_eigenvalues_closed_under_mul
   constructor
   · -- HasEigenvalue for α * β: product of unitaries is nonzero, and
     -- E(U_α U_β) = α β · U_α U_β by the multiplicative domain.
-    sorry -- TODO (#22): use Kraus.mul_mem_multiplicativeDomain (MultiplicativeDomainFull.lean:250)
-           -- + ks_equality_of_peripheral_eigenvector_of_fixedPoint for U_α, U_β
+    have hUnital' : Kraus.IsUnital K := by
+      simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using hUnital
+    -- Convert eigenvector eq for Uβ to Kraus.map, then get KS equality
+    have hUβ_map : Kraus.map K (Uβ : MatrixAlg D) = β • (Uβ : MatrixAlg D) := by
+      simpa [Kraus.map, MPSTensor.transferMap_apply] using hUβ
+    have hKSβ_map :=
+      Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
+        K hUnital' hρ hρfix _ β hUβ_map hβ.2
+    have hKSβ : KadisonSchwarz.krausMap K ((Uβ : MatrixAlg D)ᴴ * (Uβ : MatrixAlg D)) =
+        (KadisonSchwarz.krausMap K (Uβ : MatrixAlg D))ᴴ *
+          KadisonSchwarz.krausMap K (Uβ : MatrixAlg D) := by
+      simpa [Kraus.map, KadisonSchwarz.krausMap] using hKSβ_map
+    -- multiplicative_domain_right: E(Uα · Uβ) = E(Uα) · E(Uβ)
+    have hprod_kraus : KadisonSchwarz.krausMap K ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) =
+        KadisonSchwarz.krausMap K (Uα : MatrixAlg D) *
+          KadisonSchwarz.krausMap K (Uβ : MatrixAlg D) :=
+      KadisonSchwarz.multiplicative_domain_right K hUnital
+        (Uβ : MatrixAlg D) hKSβ (Uα : MatrixAlg D)
+    -- Compute: E(Uα) · E(Uβ) = (α · Uα)(β · Uβ) = αβ · (Uα · Uβ)
+    have hUα_kraus : KadisonSchwarz.krausMap K (Uα : MatrixAlg D) =
+        α • (Uα : MatrixAlg D) := by
+      simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using hUα
+    have hUβ_kraus : KadisonSchwarz.krausMap K (Uβ : MatrixAlg D) =
+        β • (Uβ : MatrixAlg D) := by
+      simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using hUβ
+    have hprod_transfer : MPSTensor.transferMap (d := r) (D := D) K
+        ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) =
+        (α * β) • ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) := by
+      have : KadisonSchwarz.krausMap K ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) =
+          (α * β) • ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) := by
+        rw [hprod_kraus, hUα_kraus, hUβ_kraus, smul_mul_assoc, mul_smul_comm, smul_smul]
+      simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using this
+    -- Product of unitaries is nonzero (left-cancel by Uα†)
+    have hprod_ne : (Uα : MatrixAlg D) * (Uβ : MatrixAlg D) ≠ 0 := by
+      intro h
+      have hUα_inv : (Uα : MatrixAlg D)ᴴ * (Uα : MatrixAlg D) = 1 := by
+        have h := Matrix.UnitaryGroup.star_mul_self Uα
+        rwa [star_eq_conjTranspose] at h
+      have hUβ_inv : (Uβ : MatrixAlg D)ᴴ * (Uβ : MatrixAlg D) = 1 := by
+        have h := Matrix.UnitaryGroup.star_mul_self Uβ
+        rwa [star_eq_conjTranspose] at h
+      have hUβ_zero : (Uβ : MatrixAlg D) = 0 := by
+        calc (Uβ : MatrixAlg D)
+            = 1 * (Uβ : MatrixAlg D) := (one_mul _).symm
+          _ = (Uα : MatrixAlg D)ᴴ * (Uα : MatrixAlg D) * (Uβ : MatrixAlg D) := by
+                rw [hUα_inv]
+          _ = (Uα : MatrixAlg D)ᴴ * ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) := by
+                rw [mul_assoc]
+          _ = 0 := by rw [h, mul_zero]
+      exact one_ne_zero (by rw [← hUβ_inv, hUβ_zero, mul_zero])
+    exact hasEigenvalue_of_eigenvector_eq _ _ _ hprod_transfer hprod_ne
   · rw [Complex.norm_mul, hα.2, hβ.2, mul_one]
 
 /-- **Peripheral eigenvalues are closed under inversion.**
@@ -108,7 +157,38 @@ theorem peripheral_eigenvalues_closed_under_inv
     (hα : α ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
     α⁻¹ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
   constructor
-  · sorry -- TODO (#22): use conjTranspose of unitary eigenvector
+  · -- HasEigenvalue for α⁻¹: Uα† is the eigenvector
+    obtain ⟨Uα, hUα⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
+      K hUnital ρ hρ hρfix hIrr hα
+    -- E(Uα†) = (E(Uα))† = (α · Uα)† = ᾱ · Uα† = α⁻¹ · Uα†
+    have hUα_map : Kraus.map K (Uα : MatrixAlg D) = α • (Uα : MatrixAlg D) := by
+      simpa [Kraus.map, MPSTensor.transferMap_apply] using hUα
+    -- ᾱ = α⁻¹ when |α| = 1
+    have hα_ne : α ≠ 0 := norm_ne_zero_iff.mp (by rw [hα.2]; exact one_ne_zero)
+    have hconj_eq_inv : starRingEnd ℂ α = α⁻¹ := by
+      have hnormSq : Complex.normSq α = 1 := by
+        rw [Complex.normSq_eq_norm_sq]; simp [hα.2]
+      have hconj_mul : starRingEnd ℂ α * α = 1 := by
+        calc starRingEnd ℂ α * α
+            = (↑(Complex.normSq α) : ℂ) := by
+              simpa using (Complex.normSq_eq_conj_mul_self (z := α)).symm
+          _ = 1 := by simp [hnormSq]
+      exact mul_right_cancel₀ hα_ne
+        (by rw [hconj_mul, inv_mul_cancel₀ hα_ne])
+    have hmap_conj : Kraus.map K (Uα : MatrixAlg D)ᴴ =
+        α⁻¹ • (Uα : MatrixAlg D)ᴴ := by
+      rw [← Kraus.map_conjTranspose, hUα_map, conjTranspose_smul]
+      simp only [Complex.star_def, hconj_eq_inv]
+    have hconj_transfer : MPSTensor.transferMap (d := r) (D := D) K (Uα : MatrixAlg D)ᴴ =
+        α⁻¹ • (Uα : MatrixAlg D)ᴴ := by
+      simpa [Kraus.map, MPSTensor.transferMap_apply] using hmap_conj
+    -- Uα† is nonzero
+    have hUα_conj_ne : (Uα : MatrixAlg D)ᴴ ≠ 0 := by
+      intro h
+      have h1 := Matrix.UnitaryGroup.star_mul_self Uα
+      rw [star_eq_conjTranspose, h, zero_mul] at h1
+      exact one_ne_zero h1.symm
+    exact hasEigenvalue_of_eigenvector_eq _ _ _ hconj_transfer hUα_conj_ne
   · rw [norm_inv, hα.2, inv_one]
 
 /-! ## Cyclic group structure
