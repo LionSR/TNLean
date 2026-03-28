@@ -1,4 +1,3 @@
-ChainGaugeEquiv
 Channel.stationaryState
 Channel.stationarySupport
 Channel.stationarySupport_eq_one
@@ -28,7 +27,6 @@ IsChannel.posSemidef_parts_of_hermitian_fixedPoint
 IsContinuousDynSemigroup
 IsDynSemigroup
 IsGKSLGenerator
-IsInjectiveChain
 IsIrreducibleMap
 IsPositiveMap
 IsPositiveMap.image_bounded
@@ -95,7 +93,11 @@ LindbladForm.isTraceAnnihilating
 LindbladForm.mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState
 LindbladForm.toLinearMap_eq_generatorDecomp
 MPSChainTensor
+MPSChainTensor.GaugeEquiv
+MPSChainTensor.IsInjective
+MPSChainTensor.SameState
 MPSChainTensor.SameStateBridgeHyp
+MPSChainTensor.coeff
 MPSChainTensor.fundamentalTheorem_injective_chain
 MPSChainTensor.fundamentalTheorem_injective_chain_of_sameState
 MPSChainTensor.ti_tensors_collapse_to_single_gauge
@@ -344,13 +346,13 @@ MPSTensor.zGaugeEntry_mul_right
 MPSTensor.zGaugeEntry_pow_eq_one_of_pow_eq
 MPSTensor.zeroMPSTensor
 Matrix.charpoly_eq_of_forall_trace_pow_eq
+Matrix.isScalar_of_commute_span_eq_top
 Matrix.omegaProj
 Matrix.sum_pow_eq_implies_multiset_eq
 Matrix.tensorMapId
 Matrix.traceLeft
 Matrix.traceRight
 Matrix.trace_mul_right_eq_zero_iff
-SameChainState
 TracePairingSelfDualBasis
 Wielandt.FittingDecomposition
 Wielandt.fittingDecomposition
@@ -416,7 +418,6 @@ kraus_sum_conjTranspose_mul_of_tp
 kraus_tp_of_sum_conjTranspose_mul
 kraus_transition_unitary_of_hs_orthonormal
 linearMap_expand_tracePairing
-mpsChainCoeff
 one_mem_peripheralEigenvalues
 orthogonal_trace_pos_of_irreducible_cp
 peripheralEigenvalues

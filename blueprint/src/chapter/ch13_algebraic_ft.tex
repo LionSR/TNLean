@@ -198,7 +198,8 @@ operation on the physical indices.
 \end{remark}
 
 \begin{lemma}[Centre of $\MN{D}$]\label{lem:center_scalar}
-    \notready
+    \lean{Matrix.isScalar_of_commute_span_eq_top}
+    \leanok
     If $Z \in \MN{D}$ commutes with every element of $\MN{D}$, then
     $Z = \lambda \Id_D$ for some $\lambda \in \C$.
 \end{lemma}
@@ -398,19 +399,19 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     \label{rem:ft_chain_sameMPV}
     \uses{thm:fundamentalTheorem_injective_chain}
     The Lean theorem \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
-    assumes \texttt{SameMPV} on the combined tensor (trace agreement for
+    assumes the equal-MPV condition on the combined tensor (trace agreement for
     mixed-site words of \emph{all} lengths), which is stronger than the
-    paper's \texttt{SameState} (trace agreement at a single chain length
+    paper's equal-state condition (trace agreement at a single chain length
     $n \ge 3$).
-    The paper bridges this gap via a blocking argument requiring $n \ge 3$.
-    This bridging step is now packaged as an abstract interface
-    \lean{MPSChainTensor.SameStateBridgeHyp}: a \texttt{structure} that
+    The paper closes this gap via a blocking argument requiring $n \ge 3$.
+    This reduction step is now packaged as an abstract interface
+    \lean{MPSChainTensor.SameStateBridgeHyp} that
     encapsulates the blocking hypothesis.
-    Given this bridge, the theorem
+    Given this reduction, the theorem
     \lean{MPSChainTensor.fundamentalTheorem_injective_chain_of_sameState}
-    delivers the chain FT endpoint under the weaker \texttt{SameState}
-    hypothesis; however, the actual proof that \texttt{SameState} implies
-    \texttt{SameMPV} (i.e.\ the content of the bridge) has not yet been
+    delivers the chain FT endpoint under the weaker equal-state
+    hypothesis; however, the actual proof that the equal-state condition implies
+    equal MPV (i.e.\ the content of this reduction) has not yet been
     established in the formalization.
 \end{remark}
 
