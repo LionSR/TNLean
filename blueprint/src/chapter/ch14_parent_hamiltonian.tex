@@ -187,7 +187,7 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
-  \uses{def:ground_space_parent}
+  \uses{def:ground_space_parent, def:l_blk_injective}
   \notready
   If $\phi = \Gamma_L(X)$ then $\tilde\phi = \Gamma_{L+1}(X)$.
   By $L$-block injectivity, $X$ is uniquely determined by $\phi$,
@@ -364,7 +364,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
   \notready
   \uses{thm:martingale_criterion, lem:martingale_mps,
         def:parent_hamiltonian}
-  For an injective MPS tensor $A$ with injectivity length $L_0$, let
+  For an $L_0$-block injective MPS tensor $A$, let
   $L := L_0 + 1$ be the interaction range.
   There exists $\gamma > 0$ such that for all $N \ge 2L$,
   \[
