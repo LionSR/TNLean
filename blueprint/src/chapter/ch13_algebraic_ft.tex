@@ -586,6 +586,35 @@ representation on the bond space.
     the order of summation.
 \end{proof}
 
+\begin{lemma}[Identity twist]\label{lem:twisted_tensor_one}
+    \lean{MPSTensor.twistedTensor_one}
+    \leanok
+    \uses{def:twisted_tensor}
+    Twisting by the identity group element is trivial:
+    $\widetilde{A}_1 = A$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:twisted_tensor}
+    Since $U(1) = I_d$, each component reduces to
+    $\sum_j \delta_{ij}\, A^j = A^i$.
+\end{proof}
+
+\begin{lemma}[Symmetric twists are gauge equivalent]%
+    \label{lem:gauge_equiv_twisted}
+    \lean{MPSTensor.gaugeEquiv_twistedTensor_of_injective}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric}
+    If $A$ is injective and on-site symmetric under $U$, then
+    for every $g \in G$ the twisted tensor $\widetilde{A}_g$ is
+    gauge equivalent to~$A$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:on_site_symmetric}
+    On-site symmetry gives
+    $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$, and equal MPV
+    for injective tensors implies gauge equivalence.
+\end{proof}
+
 \begin{lemma}[Gauge uniqueness up to scalar]\label{lem:gauge_unique_up_to_scalar}
     \lean{MPSTensor.gauge_unique_up_to_scalar}
     \leanok
@@ -606,12 +635,53 @@ representation on the bond space.
     $Y = u \cdot X$.
 \end{proof}
 
+\begin{definition}[Scalar 2-cochain]\label{def:scalar_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle}
+    \leanok
+    A \emph{scalar 2-cochain} on a group $G$ is a function
+    $\omega : G \times G \to \C^{\times}$.
+\end{definition}
+
+\begin{definition}[Projective representation]\label{def:projective_rep}
+    \lean{TNLean.Algebra.ProjectiveRepresentation}
+    \leanok
+    \uses{def:scalar_cocycle}
+    Given a scalar 2-cochain $\omega$, a \emph{projective representation}
+    of $G$ on $\C^D$ is a map $\rho : G \to \GL_D(\C)$ satisfying
+    \[
+        \rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh)
+        \qquad \text{for all } g, h \in G.
+    \]
+\end{definition}
+
+\begin{lemma}[Associativity forces the cocycle condition]%
+    \label{lem:cocycle_of_assoc}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.cocycle_of_assoc}
+    \leanok
+    \uses{def:projective_rep, def:scalar_cocycle}
+    If $\rho$ is a projective representation with factor system $\omega$
+    and $D > 0$, then $\omega$ satisfies the 2-cocycle identity:
+    \[
+        \omega(g, h)\, \omega(gh, k)
+        = \omega(g, hk)\, \omega(h, k).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:projective_rep}
+    Expanding $\rho(g)\,(\rho(h)\,\rho(k))$ and
+    $(\rho(g)\,\rho(h))\,\rho(k)$ using the projective
+    multiplication law and equating via matrix associativity.
+    The hypothesis $D > 0$ allows cancellation of the
+    invertible matrix factor.
+\end{proof}
+
 \begin{theorem}[Virtual representation theorem for injective MPS]%
     \label{thm:virtual_rep_injective}
     \lean{MPSTensor.virtual_rep_of_symmetric_injective}
     \leanok
-    \uses{def:injective, def:on_site_symmetric,
-          lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
+    \uses{def:injective, def:on_site_symmetric, def:projective_rep,
+          def:scalar_cocycle, lem:gauge_unique_up_to_scalar,
+          lem:twisted_tensor_mul}
     Let $A$ be an injective MPS tensor that is on-site symmetric
     under a group representation $U : G \to \GL_d(\C)$.
     Then there exist:
@@ -636,11 +706,11 @@ representation on the bond space.
 
 \begin{proof}
     \leanok
-    \uses{def:on_site_symmetric, lem:gauge_unique_up_to_scalar,
-          lem:twisted_tensor_mul}
+    \uses{def:on_site_symmetric, lem:gauge_equiv_twisted,
+          lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
     Since $A$ is injective and on-site symmetric, each twisted tensor
     $\widetilde{A}_g$ is gauge equivalent to~$A$
-    (Corollary~\ref{cor:symmetry_virtual_gauge}).
+    (Lemma~\ref{lem:gauge_equiv_twisted}).
     Choose $X(g) \in \GL_D(\C)$ with
     $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
 
@@ -659,7 +729,7 @@ representation on the bond space.
     \label{cor:virtual_rep_cocycle}
     \lean{MPSTensor.virtual_rep_of_symmetric_injective_cocycle}
     \leanok
-    \uses{thm:virtual_rep_injective}
+    \uses{thm:virtual_rep_injective, lem:cocycle_of_assoc}
     If $D > 0$, the factor system $\omega$ from
     Theorem~\ref{thm:virtual_rep_injective} satisfies the
     2-cocycle identity:
@@ -672,12 +742,66 @@ representation on the bond space.
 
 \begin{proof}
     \leanok
-    \uses{thm:virtual_rep_injective}
-    Follows from associativity of $\GL_D(\C)$: expanding
-    $\rho(g)\,(\rho(h)\,\rho(k))$ and $(\rho(g)\,\rho(h))\,\rho(k)$
-    using the projective multiplication law and comparing the
-    scalar factors. The hypothesis $D > 0$ ensures $\GL_D(\C)$ has
-    faithful matrix entries.
+    \uses{thm:virtual_rep_injective, lem:cocycle_of_assoc}
+    Theorem~\ref{thm:virtual_rep_injective} gives $\rho$ and $\omega$.
+    By Lemma~\ref{lem:cocycle_of_assoc}, the cocycle identity follows
+    from associativity of matrix multiplication and invertibility of
+    the representation matrices.
+\end{proof}
+
+\subsection{Permutation-based physical symmetry}
+
+The linear-combination twist $\widetilde{A}_g^i = \sum_j U(g)_{ij}\, A^j$
+is the standard form used in the virtual representation theorem.
+An alternative formulation replaces the matrix action by a permutation of the
+physical index; this is useful when the symmetry acts by reordering
+basis states rather than by a general linear map.
+
+\begin{definition}[Permutation symmetry data]\label{def:on_site_symmetry_perm}
+    \lean{MPSTensor.OnSiteSymmetry}
+    \leanok
+    An \emph{on-site symmetry datum} for a group $G$ on a physical
+    space of dimension $d$ consists of a matrix-valued map
+    $u : G \to \MN{d}$ and a physical-index action
+    $\sigma : G \to \mathrm{End}(\{0,\ldots,d{-}1\})$.
+\end{definition}
+
+\begin{definition}[Permutation-twisted tensor]\label{def:perm_twisted_tensor}
+    \lean{MPSTensor.TwistedTensor}
+    \leanok
+    \uses{def:on_site_symmetry_perm, def:mps_tensor}
+    Given on-site symmetry data $(u, \sigma)$, the
+    \emph{permutation-twisted tensor} at group element $g$ is
+    \[
+        A^{\sigma_g}_i \;:=\; A^{\sigma(g)(i)}.
+    \]
+\end{definition}
+
+\begin{lemma}[Identity permutation twist]\label{lem:perm_twisted_one}
+    \lean{MPSTensor.TwistedTensor_one}
+    \leanok
+    \uses{def:perm_twisted_tensor}
+    If $\sigma(1) = \mathrm{id}$, then $A^{\sigma_1} = A$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perm_twisted_tensor}
+    Immediate from $\sigma(1)(i) = i$ for all~$i$.
+\end{proof}
+
+\begin{lemma}[Composition of permutation twists]\label{lem:perm_twisted_mul}
+    \lean{MPSTensor.TwistedTensor_mul}
+    \leanok
+    \uses{def:perm_twisted_tensor}
+    If $\sigma(gh) = \sigma(g) \circ \sigma(h)$ for all $g, h \in G$,
+    then
+    \[
+        A^{\sigma_{gh}} \;=\; (A^{\sigma_g})^{\sigma_h}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perm_twisted_tensor}
+    Expanding both sides:
+    $A^{\sigma_{gh}}_i = A^{\sigma(g)(\sigma(h)(i))} = (A^{\sigma_g})^{\sigma_h}_i$.
 \end{proof}
 
 \subsection{Normal MPS (blocked injectivity)}
