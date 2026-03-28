@@ -197,6 +197,54 @@ mixed transfer power.
     $A^\sigma (B^\sigma)^\dagger$.
 \end{proof}
 
+\section{Frobenius norm infrastructure}
+
+The spectral-gap proofs use the Frobenius (Hilbert--Schmidt) norm
+as the natural norm for the finite-dimensional matrix algebra.
+We record the squared version and an isometric embedding into
+Euclidean space.
+
+\begin{definition}[Frobenius norm squared]\label{def:frob_sq}
+    \lean{MPSTensor.frobSq}
+    \leanok
+    For a (possibly rectangular) matrix $X \in M_{m \times n}(\C)$,
+    the \emph{Frobenius norm squared} is
+    \[
+        \|X\|_F^2 := \sum_{i=0}^{m-1}\sum_{j=0}^{n-1} |X_{ij}|^2.
+    \]
+\end{definition}
+
+\begin{lemma}[Trace formula for Frobenius norm]\label{lem:frob_sq_trace}
+    \lean{MPSTensor.frobSq_trace}
+    \leanok
+    \uses{def:frob_sq}
+    $\|X\|_F^2 = \operatorname{Re}\tr(X^\dagger X)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the matrix product and trace entry by entry.
+\end{proof}
+
+\begin{definition}[Euclidean-space embedding]\label{def:mat_to_es}
+    \lean{MPSTensor.matToES}
+    \leanok
+    \uses{def:frob_sq}
+    The map $\mathrm{vec} : M_{m \times n}(\C) \to \C^{mn}$ that
+    flattens matrix entries is an isometric embedding with respect
+    to the Frobenius norm: $\|\mathrm{vec}(X)\|^2 = \|X\|_F^2$.
+\end{definition}
+
+\begin{lemma}[Norm of embedded matrix]\label{lem:norm_mat_to_es}
+    \lean{MPSTensor.norm_matToES_sq}
+    \leanok
+    \uses{def:mat_to_es, def:frob_sq}
+    $\|\mathrm{vec}(X)\|^2 = \|X\|_F^2$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand both sides as sums over entries and use $|z|^2 = \bar{z}z$.
+\end{proof}
+
 \section{Eigenvalue bound and spectral gap}
 
 The eigenvalue bound comes from a uniform Frobenius-norm estimate
@@ -461,6 +509,135 @@ canonical-form separation arguments.
     In particular this applies to the distinguished QPF fixed point from
     Theorem~\ref{thm:qpf}.
 \end{remark}
+
+\section{Spectral gap under irreducible-TP hypotheses}
+
+The preceding spectral-gap results require \emph{injectivity} of both
+tensors.  The following variants weaken this to \emph{irreducibility}
+combined with trace-preserving normalization
+($\sum_i (A^i)^\dagger A^i = \Id$), following Cirac et
+al.~\cite{Cirac2017MatrixProductUnitaries}.  The argument replaces the
+Kraus-commutation step with a Cauchy--Schwarz rigidity argument for
+the Perron--Frobenius fixed point.
+
+\begin{theorem}[Gauge-equivalence from irreducible-TP spectral
+    radius]\label{thm:modulus_one_gauge_irr_tp}
+    \lean{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP}
+    \leanok
+    \uses{def:mixed_transfer, def:gauge_phase_equiv,
+          def:irreducible_tensor, thm:eigenvalue_bound}
+    Let $A, B$ be irreducible trace-preserving normalized MPS tensors
+    of bond dimension~$D$.
+    If $\rho(F_{AB}) \ge 1$, then $A$ and $B$ are gauge-phase equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:spectral_radius_le_one, thm:eigenvalue_bound, thm:qpf}
+    Choose a modulus-one eigenvector as in
+    Theorem~\ref{thm:modulus_one_gauge}.
+    Instead of requiring injectivity to deduce invertibility of the
+    intertwiner, one uses the Perron--Frobenius fixed points
+    (Theorem~\ref{thm:qpf}), which are positive definite under
+    irreducibility.
+    The Kadison--Schwarz--Cauchy--Schwarz chain then yields a
+    positive-definite intertwiner, and the Skolem--Noether argument
+    concludes as before.
+\end{proof}
+
+\begin{theorem}[Strict spectral gap (irreducible-TP)]%
+    \label{thm:spectral_gap_irr_tp}
+    \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one_of_irreducible_TP}
+    \leanok
+    \uses{def:gauge_phase_equiv, def:irreducible_tensor,
+          def:mixed_transfer}
+    Let $A, B$ be irreducible trace-preserving normalized MPS tensors
+    of the same bond dimension that are not gauge-phase equivalent.
+    Then $\rho(F_{AB}) < 1$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:spectral_radius_le_one,
+    thm:modulus_one_gauge_irr_tp}
+    Contrapositive of
+    Theorem~\ref{thm:modulus_one_gauge_irr_tp}, combined with
+    $\rho(F_{AB}) \le 1$
+    (Theorem~\ref{thm:spectral_radius_le_one}).
+\end{proof}
+
+\begin{theorem}[Transfer power decay (irreducible-TP)]%
+    \label{thm:transfer_pow_zero_irr_tp}
+    \lean{MPSTensor.mixedTransfer_pow_tendsto_zero_of_irreducible_TP}
+    \leanok
+    \uses{def:mixed_transfer, def:gauge_phase_equiv,
+          def:irreducible_tensor}
+    Under the hypotheses of
+    Theorem~\ref{thm:spectral_gap_irr_tp},
+    $F_{AB}^n(X) \to 0$ for every $X \in \MN{D}$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:spectral_gap_irr_tp}
+    By the Gelfand formula,
+    $\rho(F_{AB}) < 1$ implies $\|F_{AB}^n\|_{\mathrm{op}} \to 0$.
+\end{proof}
+
+\begin{theorem}[Overlap decay (irreducible-TP)]%
+    \label{thm:overlap_decay_irr_tp}
+    \lean{MPSTensor.mpvOverlap_tendsto_zero_of_irreducible_TP}
+    \leanok
+    \uses{def:mpv_overlap, def:gauge_phase_equiv,
+          def:irreducible_tensor}
+    Let $A, B$ be irreducible trace-preserving normalized tensors of
+    the same bond dimension that are not gauge-phase equivalent.
+    Then $O_{AB}(N) \to 0$ as $N \to \infty$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:spectral_gap_irr_tp, thm:overlap_trace}
+    Combine the spectral gap
+    (Theorem~\ref{thm:spectral_gap_irr_tp})
+    with the overlap--trace identity
+    (Theorem~\ref{thm:overlap_trace}).
+\end{proof}
+
+\begin{theorem}[Rectangular spectral gap (irreducible-TP)]%
+    \label{thm:spectral_gap_rect_irr_tp}
+    \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP}
+    \leanok
+    \uses{def:mixed_transfer_rect, def:irreducible_tensor}
+    Let $A$ (bond dimension $D_1$) and $B$ (bond dimension $D_2$) be
+    irreducible trace-preserving normalized tensors with
+    $D_1 \neq D_2$.
+    Then $\rho(F_{AB}^{\mathrm{rect}}) < 1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:eigenvalue_bound}
+    Assume for contradiction that $\rho = 1$.
+    Choose a modulus-one eigenvector $X \in M_{D_1 \times D_2}(\C)$.
+    The Cauchy--Schwarz rigidity argument produces an intertwiner
+    $X'$ with $A'^i X' = X' B'^i$ for all~$i$.
+    Since $\{B'^i\}$ spans $M_{D_2}(\C)$ (irreducibility), the kernel
+    of $X'$ is a $B'$-invariant subspace, forced to be $\{0\}$;
+    similarly for $X'^\dagger$.
+    This gives $D_1 = D_2$, contradicting the hypothesis.
+\end{proof}
+
+\begin{theorem}[Rectangular overlap decay (irreducible-TP)]%
+    \label{thm:overlap_decay_rect_irr_tp}
+    \lean{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP}
+    \leanok
+    \uses{def:mpv_overlap, def:irreducible_tensor}
+    If $D_1 \neq D_2$ and both tensors are irreducible and
+    trace-preserving normalized, then
+    $O_{AB}(N) \to 0$ as $N \to \infty$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:spectral_gap_rect_irr_tp,
+    thm:overlap_trace_rect}
+    Combine
+    Theorem~\ref{thm:spectral_gap_rect_irr_tp} with
+    Theorem~\ref{thm:overlap_trace_rect}.
+\end{proof}
 
 \section{Conditional expectation from a faithful fixed point (Wolf Thm.~6.15)}
 
