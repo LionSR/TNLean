@@ -354,7 +354,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
   be the $L$-site parent interaction, and for each chain length and site $i$
   let $h_i$ denote its translate as in Definition~\ref{def:local_term_parent}.
   Then for every pair of overlapping terms $h_i$ and $h_j$ with
-  $0 < |i - j| < L$ (i.e.\ whose $L$-site supports share at least one site),
+  $0 < d_N(i,j) < L$, where $d_N(i,j) := \min(|i-j|,\, N-|i-j|)$ is the
+  cyclic distance on the ring (i.e.\ whose $L$-site supports share at
+  least one site under periodic boundary conditions),
   the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
   constants $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
   (When $L = 1$ the interaction terms have disjoint supports, so there are no
@@ -365,8 +367,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{proof}
   \uses{lem:ground_space_intersection, def:injective}
   \notready
-  Two terms $h_i, h_j$ with $0 < |i-j| < L$ have supports overlapping
-  in $L - |i-j|$ sites.  Since $A$ is injective, the intersection property
+  Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
+  in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
+  the $N$-site ring).  Since $A$ is injective, the intersection property
   (Lemma~\ref{lem:ground_space_intersection}) gives the qualitative identity
   $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
   Because the local Hilbert space is finite-dimensional, the subspaces
@@ -377,14 +380,14 @@ Lucia~\cite{Kastoryano2018Martingale}.
   Hence the Friedrichs angle $\theta_{|i-j|}$ between $\ker(h_i)$ and
   $\ker(h_j)$ is strictly positive (for the fixed injective tensor
   $A$).  Because the angle depends only on the overlap pattern
-  $|i-j| \in \{1,\dots,L-1\}$ and not on the absolute position,
+  $d_N(i,j) \in \{1,\dots,L-1\}$ and not on the absolute position,
   the number of distinct angles is at most $L-1$.
   Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
   worst-case cosine of the Friedrichs angles.
 
   \textbf{Row-sum bound.}
   Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
-  neighbours (those $j$ with $0 < |i-j| < L$).
+  neighbours (those $j$ with $0 < d_N(i,j) < L$).
   Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
   and $c_{ij} := 0$ otherwise.
   Then
@@ -411,7 +414,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
   For general $L > 2$, the uniform constants $c_{ij} = \tfrac{1}{2(L-1)}$
   make the condition $\alpha < \tfrac{1}{2(L-1)}$ increasingly restrictive
   as $L$ grows.  A more refined choice of separation-dependent constants
-  $c_{ij} = c_{|i-j|}$ that weight small-separation (large-overlap) pairs
+  $c_{ij} = c_{d_N(i,j)}$ that weight small-separation (large-overlap) pairs
   more heavily can exploit the exponential decay of the Friedrichs cosine
   $\alpha_s$ in $s$ to satisfy the row-sum constraint.
   However, this refinement is not needed for the main result: in
