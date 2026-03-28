@@ -46,6 +46,7 @@ import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.KrausFreedom
 import TNLean.Channel.Stinespring
 import TNLean.Channel.TransferMatrix
 
