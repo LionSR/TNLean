@@ -36,77 +36,84 @@ theorem IsRFP.idempotent {A : MPSTensor d D} (h : IsRFP A) :
     transferMap A ∘ₗ transferMap A = transferMap A :=
   h
 
+/-- The backward direction of the RFP ↔ Kraus-isometry characterisation
+(arXiv:1606.00608, Theorem 3.1): if the Kraus operators of an MPS tensor
+decompose via a rectangular isometry `V` (with `V†V = 1`), then the
+transfer map is idempotent.
+
+The forward direction (idempotence → existence of such a `V`) requires the
+rectangular Kraus freedom theorem (Wolf Thm 2.1 item 4, needs Choi-matrix
+PSD factorisation) and is left for a future PR. -/
+theorem isRFP_of_kraus_isometry (A : MPSTensor d D)
+    (V : Matrix (Fin d × Fin d) (Fin d) ℂ)
+    (hV : V.conjTranspose * V = 1)
+    (hprod : ∀ i₁ i₂ : Fin d,
+      A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j) :
+    IsRFP A := by
+  -- Extract the orthogonality relation from V†V = 1.
+  have hV_entry : ∀ j k : Fin d,
+      ∑ x₁ : Fin d, ∑ x₂ : Fin d,
+        V (x₁, x₂) j * star (V (x₁, x₂) k) =
+        if k = j then 1 else 0 := by
+    intro j k
+    have h := congrFun (congrFun hV k) j
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
+      Fintype.sum_prod_type, RCLike.star_def] at h
+    simp_rw [mul_comm] at h
+    exact h
+  change transferMap A ∘ₗ transferMap A = transferMap A
+  apply LinearMap.ext; intro X
+  simp only [LinearMap.comp_apply, transferMap_apply]
+  -- Step 1: Distribute the outer sum and rewrite products using conjTranspose_mul.
+  -- LHS = ∑ i₁ i₂, (A i₁ * A i₂) * X * (A i₁ * A i₂)†
+  have step1 : ∀ (i₁ i₂ : Fin d),
+      A i₁ * (A i₂ * X * (A i₂)ᴴ) * (A i₁)ᴴ =
+      (A i₁ * A i₂) * X * (A i₁ * A i₂)ᴴ := by
+    intro i₁ i₂; rw [Matrix.conjTranspose_mul]; simp only [Matrix.mul_assoc]
+  -- Step 2: Substitute hprod and show both Kraus families give the same sum.
+  -- This follows the pattern of `kraus_same_map_of_unitary_combination`.
+  suffices h : ∑ i₁ : Fin d, ∑ i₂ : Fin d,
+      (A i₁ * A i₂) * X * (A i₁ * A i₂)ᴴ =
+      ∑ j : Fin d, A j * X * (A j)ᴴ by
+    simp_rw [Finset.mul_sum, Finset.sum_mul, step1]; exact h
+  -- Substitute hprod into LHS
+  simp_rw [hprod]
+  -- Expand the product of sums
+  simp_rw [Matrix.sum_mul, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul,
+    Matrix.mul_sum, smul_mul_assoc, mul_smul_comm, Matrix.mul_assoc, smul_smul]
+  -- Now LHS = ∑ i₁ i₂ j k, (V(i₁,i₂) j * star(V(i₁,i₂) k)) • (A j * (X * (A k)ᴴ))
+  -- Rearrange sums: bring j, k outside and i₁, i₂ inside
+  -- Step 1: Inside ∑ i₁, swap i₂ ↔ j
+  conv_lhs => arg 2; ext; rw [Finset.sum_comm]
+  -- Step 2: Swap i₁ ↔ j at outermost level
+  rw [Finset.sum_comm]
+  -- Now: ∑ j i₁ i₂ k, ...
+  -- Step 3: Inside ∑ j ∑ i₁, swap i₂ ↔ k
+  conv_lhs => arg 2; ext; arg 2; ext; rw [Finset.sum_comm]
+  -- Step 4: Inside ∑ j, swap i₁ ↔ k
+  conv_lhs => arg 2; ext; rw [Finset.sum_comm]
+  -- Now: ∑ j k i₁ i₂, (V(i₁,i₂) j * star(V(i₁,i₂) k)) • (A j * (X * (A k)ᴴ))
+  -- Inside ∑ j: factor scalar from i₁, i₂ sums, apply V†V = 1, simplify
+  apply Finset.sum_congr rfl; intro j _
+  simp_rw [← Finset.sum_smul]
+  simp_rw [hV_entry j]
+  simp
+
 /-- The RFP condition is equivalent to a Kraus-level condition: there exists
 an isometry `V : Fin d × Fin d → Fin d → ℂ` (i.e. a `(d²×d)` matrix) such
 that `A i₁ * A i₂ = ∑ j, V (i₁, i₂) j • A j` for all `i₁ i₂`.
 This follows from Stinespring: two Kraus representations of the same CPM
 are related by an isometry on the physical index.
-See arXiv:1606.00608, Theorem 3.1. -/
+See arXiv:1606.00608, Theorem 3.1.
+
+TODO: prove the forward direction (requires rectangular Kraus freedom). -/
 theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
     IsRFP A ↔
       ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
         V.conjTranspose * V = 1 ∧
         ∀ i₁ i₂ : Fin d,
           A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j := by
-  constructor
-  · -- Forward: IsRFP A → ∃ V isometry, products decompose
-    -- Requires the rectangular Kraus freedom theorem (Wolf Thm 2.1 item 4):
-    -- two Kraus families defining the same CP map are related by a rectangular
-    -- isometry. This needs Choi matrix PSD factorization, not yet available.
-    sorry
-  · -- Backward: ∃ V isometry → IsRFP A
-    -- The isometric mixing condition implies the two Kraus families
-    -- {A i₁ * A i₂}_{(i₁,i₂)} and {A j}_j define the same CP map,
-    -- generalising `kraus_same_map_of_unitary_combination` to rectangular V.
-    rintro ⟨V, hV, hprod⟩
-    -- Extract the orthogonality relation from V†V = 1.
-    have hV_entry : ∀ j k : Fin d,
-        ∑ x₁ : Fin d, ∑ x₂ : Fin d,
-          V (x₁, x₂) j * star (V (x₁, x₂) k) =
-          if k = j then 1 else 0 := by
-      intro j k
-      have h := congrFun (congrFun hV k) j
-      simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
-        Fintype.sum_prod_type, RCLike.star_def] at h
-      simp_rw [mul_comm] at h
-      exact h
-    change transferMap A ∘ₗ transferMap A = transferMap A
-    apply LinearMap.ext; intro X
-    simp only [LinearMap.comp_apply, transferMap_apply]
-    -- Step 1: Distribute the outer sum and rewrite products using conjTranspose_mul.
-    -- LHS = ∑ i₁ i₂, (A i₁ * A i₂) * X * (A i₁ * A i₂)†
-    have step1 : ∀ (i₁ i₂ : Fin d),
-        A i₁ * (A i₂ * X * (A i₂)ᴴ) * (A i₁)ᴴ =
-        (A i₁ * A i₂) * X * (A i₁ * A i₂)ᴴ := by
-      intro i₁ i₂; rw [Matrix.conjTranspose_mul]; simp only [Matrix.mul_assoc]
-    -- Step 2: Substitute hprod and show both Kraus families give the same sum.
-    -- This follows the pattern of `kraus_same_map_of_unitary_combination`.
-    suffices h : ∑ i₁ : Fin d, ∑ i₂ : Fin d,
-        (A i₁ * A i₂) * X * (A i₁ * A i₂)ᴴ =
-        ∑ j : Fin d, A j * X * (A j)ᴴ by
-      simp_rw [Finset.mul_sum, Finset.sum_mul, step1]; exact h
-    -- Substitute hprod into LHS
-    simp_rw [hprod]
-    -- Expand the product of sums
-    simp_rw [Matrix.sum_mul, Matrix.conjTranspose_sum, Matrix.conjTranspose_smul,
-      Matrix.mul_sum, smul_mul_assoc, mul_smul_comm, Matrix.mul_assoc, smul_smul]
-    -- Now LHS = ∑ i₁ i₂ j k, (V(i₁,i₂) j * star(V(i₁,i₂) k)) • (A j * (X * (A k)ᴴ))
-    -- Rearrange sums: bring j, k outside and i₁, i₂ inside
-    -- Step 1: Inside ∑ i₁, swap i₂ ↔ j
-    conv_lhs => arg 2; ext; rw [Finset.sum_comm]
-    -- Step 2: Swap i₁ ↔ j at outermost level
-    rw [Finset.sum_comm]
-    -- Now: ∑ j i₁ i₂ k, ...
-    -- Step 3: Inside ∑ j ∑ i₁, swap i₂ ↔ k
-    conv_lhs => arg 2; ext; arg 2; ext; rw [Finset.sum_comm]
-    -- Step 4: Inside ∑ j, swap i₁ ↔ k
-    conv_lhs => arg 2; ext; rw [Finset.sum_comm]
-    -- Now: ∑ j k i₁ i₂, (V(i₁,i₂) j * star(V(i₁,i₂) k)) • (A j * (X * (A k)ᴴ))
-    -- Inside ∑ j: factor scalar from i₁, i₂ sums, apply V†V = 1, simplify
-    apply Finset.sum_congr rfl; intro j _
-    simp_rw [← Finset.sum_smul]
-    simp_rw [hV_entry j]
-    simp
+  sorry
 
 /-- Backwards-compatible name for `isRFP_iff_kraus_isometry`. -/
 theorem isRFP_iff_kraus (A : MPSTensor d D) :
