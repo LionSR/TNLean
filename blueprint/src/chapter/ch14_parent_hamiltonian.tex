@@ -248,15 +248,21 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   Re-interpreting each blocked site as $L_0$ original sites, this
   yields intersection identities for windows whose lengths are
   multiples of $L_0$.  To handle windows at single-site granularity
-  (needed since $N$ may not be divisible by $L_0$), we use
-  Lemma~\ref{lem:ground_space_mono}: closure under extension allows
-  growing a blocked-site window by one \emph{original} site at a time,
-  since $L_0$-block injectivity provides the required left inverse
-  at each step.
+  (needed since $N$ may not be divisible by $L_0$), we first note
+  that $L_0$-block injectivity implies $m$-block injectivity for
+  every $m \ge L_0$: if $\Gamma_{L_0}$ is injective then
+  $\Gamma_m = (\Gamma_{L_0} \otimes \mathrm{id}^{\otimes(m-L_0)})
+  \circ \Delta$ for an appropriate reshuffling $\Delta$, so
+  $\Gamma_m$ inherits injectivity.  In particular, the hypothesis of
+  Lemma~\ref{lem:ground_space_mono} (requiring injectivity of
+  $\Gamma_m$) is satisfied at every window length $m \ge L_0$
+  encountered during the iteration.
   Starting from an $(L_0{+}1)$-site window, iterate: each step
   extends the ground-space window by one original site to the right,
   using either the blocked intersection property (when the window
-  length is a multiple of $L_0$) or the closure lemma (otherwise).
+  length is a multiple of $L_0$) or the closure lemma
+  (Lemma~\ref{lem:ground_space_mono}, whose injectivity hypothesis
+  holds by the observation above).
   After $N - (L_0{+}1)$ iterations the window spans all $N$ sites and
   wraps around the periodic chain.
   Comparing the two descriptions of a ground state on the closed chain
@@ -541,13 +547,14 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   Linearity of the kernel yields the inclusion.
 
   \textbf{$\subseteq$}: Take $\psi \in \ker(H_N)$.
-  The block-diagonal structure of $A$ gives the containment
-  $G_L(A) \subseteq \sum_k G_L(A_k)$: any local ground state of $A$
-  on $L$ sites is a sum of local ground states of the individual
-  blocks, because the off-diagonal blocks vanish in the transfer map
-  (the canonical form ensures that distinct blocks have orthogonal
-  images under $\Gamma_L$ for $L \ge L_0$, so the sum is in fact
-  direct for sufficiently long windows).
+  The block-diagonal structure of $A$ gives, at the interaction
+  range $L_0{+}1$ used in the Hamiltonian, the containment
+  $G_{L_0+1}(A) \subseteq \sum_k G_{L_0+1}(A_k)$: any local ground
+  state of $A$ on $L_0{+}1$ sites is a sum of local ground states of
+  the individual blocks, because the off-diagonal blocks vanish in
+  the transfer map (the canonical form ensures that distinct blocks
+  have orthogonal images under $\Gamma_{L_0+1}$ for
+  $L_0{+}1 \ge L_0$, so the sum is in fact direct).
   Each normal block $A_k$ has injectivity length $L_k \le L_0$, so
   the $L_k$-blocked tensor $A_k^{[L_k]}$ is injective.
   Applying Lemma~\ref{lem:ground_space_intersection} to this injective
