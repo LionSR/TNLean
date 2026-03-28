@@ -164,13 +164,17 @@ jobs:
 
             **When**: `issues` / `closed` with state_reason `completed`
 
-            1. Search for open tracking issues (label `tracking`) whose
+            1. Search for **open** tracking issues (label `tracking`) whose
                tasklist contains `#N` (the closed issue number).
             2. For each match, update the body: `- [ ] #N` → `- [x] #N`
-            3. Comment on the tracking issue:
+            3. Apply the `all-resolved` rule (see Key Rules §2).
+            4. Suggest next steps (see §5 below).
+            5. Comment on the tracking issue (check recent comments first
+               to avoid duplicates — Key Rules §3):
                "✅ #N (*title*) has been resolved. Updated checklist.
-               [X/Y tasks complete]"
-            4. Apply the `all-resolved` rule (see Key Rules §2).
+               [X/Y tasks complete]
+
+               **Suggested next:** <one-line recommendation from §5>"
 
             ---
 
@@ -178,13 +182,20 @@ jobs:
 
             **When**: `issues` / `reopened`
 
-            1. Search for tracking issues (label `tracking`, **any state**)
+            1. Search for tracking issues (label `tracking`, **any state**
+               — a closed tracking issue still needs its checkbox fixed)
                whose tasklist contains `#N` (the reopened issue number).
             2. For each match, uncheck: `- [x] #N` → `- [ ] #N`
             3. Apply the `all-resolved` rule (see Key Rules §2).
-            4. Comment on the tracking issue:
+            4. Read the reopened issue to understand why it was reopened
+               (check recent comments, linked PRs). Suggest what needs
+               to happen to re-resolve it (see §5, linked-issue variant).
+            5. Comment on the tracking issue (check recent comments first
+               to avoid duplicates — Key Rules §3):
                "🔄 #N (*title*) has been reopened. Unchecked in tasklist.
-               [X/Y tasks complete]"
+               [X/Y tasks complete]
+
+               **Suggested next:** <why it was reopened + what to do>"
 
             ---
 
@@ -200,16 +211,28 @@ jobs:
             1. **Find linked issues.** Check the PR body for `Addresses #N`,
                `Partially addresses #N`, `Closes #N`, `Fixes #N`. Also check
                the branch name for `*/issue-{N}-*`.
-            2. **Find tracking issues** (label `tracking`) whose body
-               references the PR number, or whose tasklist references any
-               linked issue number.
-            3. **Comment on each tracking issue** with a summary: the PR
-               title, what it accomplished, and current task progress.
-            4. **Comment on each linked issue that stays open** (i.e., the
-               PR used `Addresses` or `Partially addresses`). Summarize
-               what the PR accomplished and what remains. Example:
+            2. **Find tracking issues** (label `tracking`, **open**) whose
+               body references the PR number, or whose tasklist references
+               any linked issue number.
+            3. Suggest next steps for each tracking issue (see §5 below).
+            4. **Comment on each tracking issue** (check recent comments
+               first to avoid duplicates — Key Rules §3) with a summary:
+               the PR title, what it accomplished, current task progress,
+               and a follow-up suggestion. Example:
+               "📦 PR #X (*title*) merged. <what was done>. [X/Y tasks
+               complete]
+
+               **Suggested next:** <one-line recommendation from §5>"
+            5. **Comment on each linked issue that stays open** (i.e., the
+               PR used `Addresses` or `Partially addresses`). Check recent
+               comments first to avoid duplicates (Key Rules §3). Summarize
+               what the PR accomplished and what remains. Include a
+               follow-up suggestion for what to tackle next on that issue.
+               Example:
                "📦 PR #X (*title*) has been merged. <what was done>.
-               Remaining: <what's left>."
+               Remaining: <what's left>.
+
+               **Suggested next step:** <concrete action for this issue>"
 
             Do NOT comment on issues that will be auto-closed by the PR
             (`Closes`/`Fixes`) — the auto-close fires Playbook A, which
@@ -266,9 +289,16 @@ jobs:
               copied from the PR. Add `formalization` for sorry follow-ups,
               `blueprint-sync` for missing tags, `bug` for correctness issues.
 
-            Then add each new issue to relevant tracking issue checklists:
+            Then add each new issue to the relevant **open** tracking
+            issue checklists:
             - Append `- [ ] #<issue>` inside the tasklist block
-            - Comment: "📋 Added follow-up issues from #<PR>: #<issue1>, …"
+            - If the tracking issue had the `all-resolved` label, remove
+              it (new unchecked items mean it's no longer all-resolved).
+            - Comment (check recent comments first — Key Rules §3):
+              "📋 Added follow-up issues from #<PR>: #<issue1>, …
+              [X/Y tasks complete]"
+            - If multiple follow-ups were created, suggest which one to
+              tackle first (see §5, tracking-issue variant).
 
             **Be conservative.** Only create issues for genuine, actionable
             follow-ups. When in doubt, skip. False positives create noise.
@@ -284,7 +314,8 @@ jobs:
             This is lightweight — most events need no action.
 
             1. Find the linked issue from the PR body or branch name.
-            2. Find tracking issues referencing that issue or the PR.
+            2. Find **open** tracking issues (label `tracking`) referencing
+               that issue or the PR.
             3. Only act if meaningful AND not already handled by another
                workflow. All comments go on the **tracking issue**:
                - **PR opened** — only for branches that do NOT start with
@@ -298,6 +329,95 @@ jobs:
 
             ---
 
+            ## §5 — Follow-up Suggestions
+
+            When a playbook asks you to "suggest next steps", generate a
+            brief, actionable recommendation. Think beyond the immediate
+            next task — consider what this completion unblocks downstream,
+            how it fits into the broader formalization roadmap, and whether
+            preparatory work (scouting, blueprint review) would de-risk
+            the next step.
+
+            ### Tracking-issue variant (Playbooks A, A2, B1, B2)
+
+            1. Read the tracking issue body to find **remaining unchecked
+               tasks** (`- [ ] #N`).
+            2. Check dependencies. First look at the tracking issue body
+               itself — it often lists a suggested order or dependency
+               notes. If that's sufficient, use it. Otherwise, read the
+               unchecked issues to check their **dependencies** ("Depends
+               on", "Blocked by", or references to other open issues).
+            3. Recommend a task whose dependencies are all resolved
+               (checked in the tracking issue or closed). If multiple
+               tasks are unblocked, prefer:
+               - Tasks explicitly marked as high-priority or foundational
+               - Tasks that unblock the most other tasks
+               - Tasks with lower estimated difficulty
+            4. If **no tasks are unblocked** (all have open dependencies),
+               say so and recommend the dependency that should be tackled
+               first.
+            5. If **all tasks are complete**, suggest closing the tracking
+               issue.
+            6. Note downstream impact: briefly mention what completing
+               the suggested task would unblock (other tasks, other
+               tracking issues, or milestones in the broader project).
+
+            ### Linked-issue variant (Playbooks A2, B1 step 5)
+
+            For a specific issue (not the tracking issue), suggest the
+            concrete next action based on available context:
+            - **After a PR merges** (B1): look at what the PR changed,
+              what remains in the issue scope, and what specific files,
+              declarations, or proof obligations to tackle next.
+            - **After a reopen** (A2): look at recent comments or the
+              close/reopen history to understand what broke or changed,
+              and suggest how to re-resolve it.
+            - Be specific about files, declarations, or proof steps.
+              Example: "Next: discharge the remaining 2 sorrys in
+              `Foo.lean`, which depend on `bar_lemma` from Mathlib."
+
+            ### Scouting and source review
+
+            For tasks that are mathematically complex or involve new
+            Mathlib API surface, suggest preparatory scouting before
+            diving into the proof:
+
+            - **Mathlib scouting**: If the recommended issue involves
+              heavy Mathlib dependencies and does not already have a
+              Mathlib scouting report in its comments, suggest running
+              one (the Mathlib Scout workflow triggers on issues with
+              the `formalization` label). Rescouting may also be
+              warranted when Mathlib has been bumped since the last
+              report — new lemmas may simplify the approach.
+            - **Blueprint / paper review**: If the task formalizes a
+              specific theorem or section from a paper, suggest
+              reviewing the corresponding blueprint LaTeX source
+              (`blueprint/src/chapter/*.tex`) to check the proof
+              sketch, `\lean{}` / `\leanok` status, and any gap
+              annotations. The paper's original proof structure often
+              reveals dependencies or intermediate lemmas that are
+              not yet tracked as issues.
+
+            Skip scouting suggestions for straightforward tasks
+            (cleanup, simple sorry discharges with known proof paths,
+            infrastructure work).
+
+            ### Format
+
+            Keep the primary suggestion to 1–2 sentences. Be specific
+            — reference issue numbers and titles. Add a brief
+            downstream note and scouting hint only when warranted.
+
+            Example:
+            "**Suggested next:** #138 (*Discharge sorry in
+            OperatorMonotone.lean*) — all dependencies resolved and
+            it is the last Ch5 task; completing it would let #21
+            (Wolf Ch5 Tracking) close. Consider a Mathlib rescouting
+            report first — the Loewner's theorem API may have landed
+            since the last Mathlib bump."
+
+            ---
+
             ## Final Report
 
             After executing a playbook, summarize what you did:
@@ -305,5 +425,7 @@ jobs:
             - What tracking issues were updated (with task counts)
             - What linked issues were commented on
             - What follow-up issues were created (if any)
+            - What was suggested as next steps
             - Whether `all-resolved` was added/removed
+            - Whether any comments were skipped to avoid duplication
             - Or note that no action was needed
