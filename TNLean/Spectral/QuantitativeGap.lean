@@ -4,6 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Spectral.SpectralGap
 import TNLean.Channel.Peripheral.Spectrum
+import TNLean.Wielandt.Primitivity.EasyDirections
+import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
+import Mathlib.LinearAlgebra.Eigenspace.Minpoly
 
 /-!
 # Quantitative spectral gap bounds for MPS transfer operators
@@ -74,8 +77,24 @@ theorem exponential_convergence_of_primitive [NeZero D]
         ‖((transferMap (d := d) (D := D) A)^[n]) X -
           fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) X‖ ≤
           C * (1 - δ) ^ n * ‖X‖ := by
-  -- TODO (#22): use compl_eigenvalue_norm_lt_one_of_primitive for spectral gap,
-  -- then pow_tendsto_zero_of_spectralRadius_lt_one for exponential convergence
+  -- TODO (#22): Two adapter lemmas needed before this can be wired:
+  --
+  -- (1) `huniq_fp`: the hypothesis `IsPrimitive (transferMap A)` does NOT directly
+  --     give unique trace-zero fixed points. The abstract
+  --     `compl_eigenvalue_norm_lt_one_of_primitive` requires
+  --     `huniq_fp : ∀ X, E X = X → trace X = 0 → X = 0` as a parameter.
+  --     For channels (CPTP maps), this follows from primitivity + CP structure, but
+  --     the adapter `channel_primitive_implies_unique_trace_zero_fixedPoint` is not yet
+  --     formalized. The existing `transferMap_fixedPoint_eq_zero_of_trace_eq_zero` in
+  --     `PeripheralToSpectralGap.lean` requires `IsInjective A`, which is stronger than
+  --     `IsPrimitive (transferMap A)`.
+  --
+  -- (2) Geometric bound from spectral radius: once `spectralRadius(E - P) < 1` is
+  --     established, converting to `∃ C r, ‖(E-P)^n‖ ≤ C * r^n` requires a
+  --     lemma `geometric_bound_of_spectralRadius_lt_one`:
+  --       spectralRadius T < 1 → ∃ C r, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ n, ‖T^n‖ ≤ C * r^n
+  --     The Gelfand formula gives this eventually; packaging for all n requires
+  --     a finite correction factor.
   sorry
 
 /-- **Correlation length bound.**
@@ -118,8 +137,62 @@ theorem spectral_gap_from_wielandt [NeZero D]
     ∃ (δ : ℝ), 0 < δ ∧
       ∀ (μ : ℂ), Module.End.HasEigenvalue (transferMap (d := d) (D := D) A) μ →
         μ ≠ 1 → ‖μ‖ ≤ 1 - δ := by
-  -- TODO (#22): combine injective_implies_irreducibleCP + isPrimitive +
-  -- compl_eigenvalue_norm_lt_one_of_primitive + finite eigenvalue max
-  sorry
+  classical
+  set E := transferMap (d := d) (D := D) A
+  -- Step 1: IsInjective → IsPrimitive (transferMap A)
+  -- Chain: IsInjective → HasEventuallyFullKrausRank → IsPrimitivePaper → IsPeripherallyPrimitive
+  have hFullKraus : HasEventuallyFullKrausRank A := by
+    refine ⟨1, ?_⟩
+    -- wordSpan A 1 = span of {evalWord A [i] | i : Fin d} = span of {A i | i} = ⊤
+    rw [eq_top_iff]
+    intro x _
+    rw [wordSpan]
+    -- range A ⊆ range (fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ))
+    -- since span(range A) = ⊤ by IsInjective
+    have hle : Submodule.span ℂ (Set.range A) ≤
+        Submodule.span ℂ (Set.range fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) := by
+      apply Submodule.span_mono
+      intro y hy
+      obtain ⟨i, rfl⟩ := hy
+      exact ⟨fun _ => i, by simp [evalWord]⟩
+    exact hle (hA ▸ Submodule.mem_top)
+  have hPrimPaper : IsPrimitivePaper A :=
+    isPrimitivePaper_of_hasEventuallyFullKrausRank A hFullKraus
+  have hPrim : _root_.IsPrimitive E :=
+    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm hPrimPaper
+  -- Step 2: every eigenvalue has ‖μ‖ ≤ 1
+  have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by
+    intro μ hμ
+    exact eigenvalue_norm_le_one A A hNorm hNorm μ
+      (by rwa [show E = mixedTransferMap A A from (mixedTransferMap_self A).symm] at hμ)
+  -- Step 3: non-1 eigenvalues have ‖μ‖ < 1 (from IsPrimitive + eigenvalue bound)
+  have hlt : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ < 1 := by
+    intro μ hμ hne
+    exact lt_of_le_of_ne (hbound μ hμ) fun h => hne (hPrim.unique_peripheral μ hμ h)
+  -- Step 4: uniform gap from finite eigenvalue set
+  -- The eigenvalue set is finite (roots of minimal polynomial in finite dimensions)
+  have hfin : Set.Finite {μ : ℂ | Module.End.HasEigenvalue E μ} :=
+    Module.End.finite_hasEigenvalue E
+  let S := {μ : ℂ | Module.End.HasEigenvalue E μ ∧ μ ≠ 1}
+  have hSfin : S.Finite := hfin.subset fun μ hμ => hμ.1
+  by_cases hS : S.Nonempty
+  · -- Nonempty: take δ = 1 - max{‖μ‖ | μ ∈ S}
+    let norms := hSfin.toFinset.image (fun μ => ‖μ‖)
+    have hnorms_ne : norms.Nonempty := by
+      obtain ⟨μ₀, hμ₀⟩ := hS
+      exact ⟨‖μ₀‖, Finset.mem_image.mpr ⟨μ₀, hSfin.mem_toFinset.mpr hμ₀, rfl⟩⟩
+    set r := norms.max' hnorms_ne with r_def
+    have hr_lt : r < 1 := by
+      rw [r_def, Finset.max'_lt_iff]
+      intro x hx
+      obtain ⟨μ, hμS, rfl⟩ := Finset.mem_image.mp hx
+      exact hlt μ (hSfin.mem_toFinset.mp hμS).1 (hSfin.mem_toFinset.mp hμS).2
+    refine ⟨1 - r, by linarith, fun μ hμ hne => ?_⟩
+    have hμS : μ ∈ S := ⟨hμ, hne⟩
+    have hμ_norm_mem : ‖μ‖ ∈ norms :=
+      Finset.mem_image.mpr ⟨μ, hSfin.mem_toFinset.mpr hμS, rfl⟩
+    linarith [Finset.le_max' norms ‖μ‖ hμ_norm_mem]
+  · -- Empty: no non-1 eigenvalues, δ = 1 works vacuously
+    exact ⟨1, one_pos, fun μ hμ hne => absurd ⟨μ, hμ, hne⟩ hS⟩
 
 end MPSTensor
