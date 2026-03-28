@@ -125,7 +125,7 @@ jobs:
           fi
 
           LABEL_FLAG=""
-          if echo "$TRIGGER_TEXT" | grep -qiE 'auto[- ]?fix|autofix'; then
+          if echo "$TRIGGER_TEXT" | grep -qiE 'auto[_ -]?fix'; then
             echo "Autofix keyword detected — will add 'auto-fix-claude' label"
             LABEL_FLAG="--label auto-fix-claude"
           fi
