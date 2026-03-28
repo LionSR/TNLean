@@ -241,12 +241,22 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   \notready
   The proof proceeds in unblocked (original-site) coordinates to avoid
   any divisibility assumption on $N$.
-  Since $A$ is $L_0$-block injective, the map $\Gamma_{L_0}$ is
-  injective, so Lemma~\ref{lem:ground_space_intersection} applies to
-  windows of length $\ge L_0{+}1$.
-  Starting from an $(L_0{+}1)$-site window, iterate the intersection
-  property: each step extends the ground-space window by one original
-  site to the right.
+  Since $A$ is $L_0$-block injective, the blocked tensor
+  $A^{[L_0]}$ is injective (Definition~\ref{def:injective}).
+  Lemma~\ref{lem:ground_space_intersection} applies to $A^{[L_0]}$,
+  giving intersection identities for windows of blocked sites.
+  Re-interpreting each blocked site as $L_0$ original sites, this
+  yields intersection identities for windows whose lengths are
+  multiples of $L_0$.  To handle windows at single-site granularity
+  (needed since $N$ may not be divisible by $L_0$), we use
+  Lemma~\ref{lem:ground_space_mono}: closure under extension allows
+  growing a blocked-site window by one \emph{original} site at a time,
+  since $L_0$-block injectivity provides the required left inverse
+  at each step.
+  Starting from an $(L_0{+}1)$-site window, iterate: each step
+  extends the ground-space window by one original site to the right,
+  using either the blocked intersection property (when the window
+  length is a multiple of $L_0$) or the closure lemma (otherwise).
   After $N - (L_0{+}1)$ iterations the window spans all $N$ sites and
   wraps around the periodic chain.
   Comparing the two descriptions of a ground state on the closed chain
@@ -273,7 +283,16 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   \uses{lem:ground_space_intersection, lem:ground_space_mono,
         lem:parent_hamiltonian_annihilates}
   \notready
-  Normality gives injectivity of $A^{[L_0]}$.
+  Normality gives injectivity of $A^{[L_0]}$
+  (Definition~\ref{def:injective}).
+  Since $A^{[L_0]}$ is injective,
+  Lemma~\ref{lem:ground_space_intersection} applies to it directly,
+  providing intersection identities for windows measured in blocked
+  sites.  As in Theorem~\ref{thm:unique_gs_injective}, re-interpret
+  these in original-site coordinates: each blocked site corresponds to
+  $L_0$ original sites, and the closure lemma
+  (Lemma~\ref{lem:ground_space_mono}) extends windows at single-site
+  granularity using the $L_0$-block injectivity.
   The interaction range $L_0{+}1$ provides enough overlap ($L_0$ sites)
   for a single intersection step to grow the window by one site.
   Iterating across the periodic chain of length $N \ge 2(L_0+1)$ ensures
@@ -321,10 +340,16 @@ Lucia~\cite{Kastoryano2018Martingale}.
   sum is $\ge 0$.
   For the overlapping sum, the martingale condition gives
   $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$.
-  Since both sides are symmetric in $i,j$, we may assume
-  $c_{ij} = c_{ji}$ without loss of generality (the same
-  symmetric expression is bounded by the same constant regardless
-  of the ordering of the pair).
+  Since $h_i h_j + h_j h_i$ is symmetric in $i,j$, we may replace
+  $c_{ij}$ and $c_{ji}$ by $\bar{c}_{ij} := \max(c_{ij}, c_{ji})$;
+  the pairwise bounds are preserved.
+  In the MPS application the constants $c_{ij} = 1/(2(L-1))$ depend
+  only on the cyclic distance $d_N(i,j)$ and are therefore already
+  symmetric, so symmetrization does not affect the row-sum bound.
+  (In general, replacing $c$ by the symmetrized $\bar{c}$ may inflate
+  row sums; the abstract statement should either assume symmetric
+  constants or verify that symmetrization preserves the row-sum
+  hypothesis.)
   Summing over unordered pairs $\{i,j\}$:
   \[
     \sum_{\{i,j\},\,\text{overlap}} (h_i h_j + h_j h_i)
@@ -410,9 +435,21 @@ Lucia~\cite{Kastoryano2018Martingale}.
   In the blocked picture of
   Theorem~\ref{thm:parent_hamiltonian_gapped}, $L = 2$ and each site
   overlaps with at most $2$ neighbours, so the condition reduces to
-  $\alpha < \tfrac{1}{2}$, which is guaranteed by the
-  Nachtergaele finite-size criterion~\cite{Nachtergaele1996Spectral}
-  applied to the injective blocked tensor.
+  $\alpha < \tfrac{1}{2}$.  For $L = 2$ with an injective tensor,
+  the two projectors $h_i$ and $h_{i+1}$ act on a finite-dimensional
+  space, and the intersection property
+  (Lemma~\ref{lem:ground_space_intersection}) guarantees that
+  $\ker(h_i) \cap \ker(h_{i+1})$ is exactly $G_{[i,i+2]}(A)$;
+  hence $\|P_i P_{i+1}\| < 1$ (the Friedrichs cosine is strictly
+  less than~1).  On a finite-dimensional space with two projectors,
+  the Friedrichs cosine satisfies the quantitative bound
+  $\alpha \le 1 - c_{\min}$ where $c_{\min} > 0$ depends on the
+  minimal principal angle between the two kernels.  The bound
+  $\alpha < \tfrac{1}{2}$ then follows from the
+  Nachtergaele finite-size criterion~\cite{Nachtergaele1996Spectral},
+  which establishes that the overlap $\|P_i P_{i+1}\|$ for injective
+  MPS is bounded away from $1$ by a constant depending only on the
+  tensor~$A$.
   For general $L > 2$, the uniform constants $c_{ij} = \tfrac{1}{2(L-1)}$
   make the condition $\alpha < \tfrac{1}{2(L-1)}$ increasingly restrictive
   as $L$ grows.  A more refined choice of separation-dependent constants
