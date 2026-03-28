@@ -1031,10 +1031,9 @@ The proof derives all channel-level hypotheses from the MPS-level hypotheses:
 - Peripheral spectrum characterization (from `peripheralEigenvalues_eq_range_primitiveRoot`)
 
 **Note**: This theorem depends on `peripheralEigenvalues_eq_range_primitiveRoot`
-(in `CyclicGroup.lean`), which has a sorry for the Lagrange/finite-subgroup step.
-See Issue #242 for details. -/
+(in `CyclicGroup.lean`). See Issue #242 for tracking. -/
 theorem exists_cyclic_sector_decomp_of_irr_tp [NeZero D]
-    (A : MPSTensor d D) (hDpos : 0 < D)
+    (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hIrr : IsIrreducibleTensor A) :
     ∃ (m : ℕ) (_ : 0 < m)
@@ -1044,6 +1043,7 @@ theorem exists_cyclic_sector_decomp_of_irr_tp [NeZero D]
       -- SameMPV₂ relationship
       SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) := by
   classical
+  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   -- Step 1: Derive channel-level hypotheses from MPS-level hypotheses.
   -- Work with the conjugate-transposed Kraus family K i = (A i)ᴴ.
   let K : MPSTensor d D := fun i => (A i)ᴴ

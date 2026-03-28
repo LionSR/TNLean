@@ -242,20 +242,33 @@ theorem peripheralEigenvalues_eq_range_primitiveRoot [NeZero D]
       exact mul_right_cancel₀ hμ_ne (by rw [key, key2])
     rw [this]
     exact hpow μ hμ (p - 1)
-  -- Core algebraic step: S is a finite multiplicative group of roots of unity in ℂ,
-  -- hence cyclic. Every element has order dividing m = |S|, so S ⊆ {m-th roots of unity}.
-  -- Since |{m-th roots of unity in ℂ}| = m = |S|, we get S = {m-th roots of unity}.
-  --
-  -- The Lagrange step (every element's order divides |S|) follows from the fact that
-  -- S is a finite subgroup of ℂˣ. In a finite group G, the order of every element
-  -- divides |G| (Lagrange's theorem / `orderOf_dvd_card`).
-  --
-  -- TODO(#242): Complete the group-theoretic packaging via Mathlib's `Subgroup` API
-  -- and `rootsOfUnity.isCyclic`. The mathematical content (product closure, inverse
-  -- closure, finiteness) is fully established above; the remaining work is
-  -- API plumbing to apply `orderOf_dvd_card` in the `ℂˣ` setting.
+  -- Lagrange step: every element of S satisfies μ^m = 1.
+  -- Proof: for μ ∈ S, the bijection ν ↦ μ * ν permutes S, so ∏ S = μ^m * ∏ S.
+  -- Cancelling the nonzero product gives μ^m = 1.
   have hall_mth_root : ∀ μ, μ ∈ S → μ ^ m = 1 := by
-    sorry
+    intro μ hμ
+    -- Every element of S is nonzero (root of unity).
+    have hne : ∀ ν, ν ∈ S → ν ≠ 0 := by
+      intro ν hν habs
+      obtain ⟨p, hp_pos, hp_one⟩ := hroot ν hν
+      rw [habs, zero_pow (Nat.pos_iff_ne_zero.mp hp_pos)] at hp_one
+      exact zero_ne_one hp_one
+    have hμ_ne : μ ≠ 0 := hne μ hμ
+    have hP_ne : ∏ ν ∈ S, ν ≠ 0 := prod_ne_zero_iff.mpr fun ν hν => hne ν hν
+    -- The bijection ν ↦ μ * ν permutes S, so ∏_{ν ∈ S} (μ * ν) = ∏_{ν ∈ S} ν.
+    have hperm : ∏ ν ∈ S, (μ * ν) = ∏ ν ∈ S, ν :=
+      Finset.prod_bij' (fun ν _ => μ * ν) (fun ν _ => μ⁻¹ * ν)
+        (fun ν hν => hmul μ ν hμ hν) (fun ν hν => hmul _ ν (hinv μ hμ) hν)
+        (fun ν _ => inv_mul_cancel_left₀ hμ_ne ν)
+        (fun ν _ => mul_inv_cancel_left₀ hμ_ne ν)
+        (fun _ _ => rfl)
+    -- Also ∏_{ν ∈ S} (μ * ν) = μ^m * ∏_{ν ∈ S} ν (by distributivity + prod_const).
+    have hsplit : ∏ ν ∈ S, (μ * ν) = μ ^ m * ∏ ν ∈ S, ν := by
+      rw [Finset.prod_mul_distrib, Finset.prod_const]
+    -- Combine: μ^m * P = P, cancel P ≠ 0 to get μ^m = 1.
+    have h_eq : μ ^ m * ∏ ν ∈ S, ν = 1 * ∏ ν ∈ S, ν := by
+      rw [one_mul]; exact hsplit.symm.trans hperm
+    exact mul_right_cancel₀ hP_ne h_eq
   -- With all elements being m-th roots, use IsPrimitiveRoot to get the range form.
   have hm_ne : m ≠ 0 := Nat.pos_iff_ne_zero.mp hm_pos
   haveI : NeZero m := ⟨hm_ne⟩
@@ -273,15 +286,18 @@ theorem peripheralEigenvalues_eq_range_primitiveRoot [NeZero D]
     exact ⟨⟨i, hi_lt⟩, hi_eq⟩
   · -- (←) μ ∈ range → μ ∈ peripheralEigenvalues E
     rintro ⟨j, rfl⟩
-    -- γ^j is a power of an element of S (once we show γ ∈ S).
-    -- Since S has m elements, all are m-th roots, and there are exactly m distinct
-    -- m-th roots in ℂ, the injection S ↪ {m-th roots} is a bijection, so γ ∈ S.
-    --
-    -- TODO(#242): Complete by showing S = {m-th roots of unity} via cardinality.
-    -- The key fact: |S| = m = |{z ∈ ℂ | z^m = 1}|, and S ⊆ {z | z^m = 1} (from
-    -- `hall_mth_root`), hence S = {z | z^m = 1}, hence γ ∈ S.
+    -- S ⊆ {m-th roots of unity} (from hall_mth_root) and |S| = m = |{m-th roots}|
+    -- (from IsPrimitiveRoot.card_nthRootsFinset), so S = {m-th roots}, hence γ ∈ S.
     have hγ_mem : γ ∈ S := by
-      sorry
+      have hS_sub : S ⊆ Polynomial.nthRootsFinset m (1 : ℂ) := by
+        intro ν hν
+        exact (Polynomial.mem_nthRootsFinset hm_pos (1 : ℂ)).mpr (hall_mth_root ν hν)
+      have hcard_roots : #(Polynomial.nthRootsFinset m (1 : ℂ)) = m :=
+        hγ.card_nthRootsFinset
+      have hS_eq : S = Polynomial.nthRootsFinset m (1 : ℂ) :=
+        Finset.eq_of_subset_of_card_le hS_sub (by omega)
+      rw [hS_eq]
+      exact (Polynomial.mem_nthRootsFinset hm_pos (1 : ℂ)).mpr hγ.pow_eq_one
     exact hfin.mem_toFinset.mp (hpow γ hγ_mem j)
 
 end MPSTensor
