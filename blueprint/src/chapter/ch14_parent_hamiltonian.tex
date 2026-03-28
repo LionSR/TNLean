@@ -317,15 +317,25 @@ Lucia~\cite{Kastoryano2018Martingale}.
   Non-overlapping projectors commute ($h_i h_j = h_j h_i$), so their
   product $h_i h_j$ is itself a projector and hence PSD; thus the last
   sum is $\ge 0$.
-  For the overlapping sum, apply the martingale condition to each
-  ordered pair $(i,j)$ with $i < j$. Summing over $i < j$ and using
-  $c_{ij} = c_{ji}$ (which may be assumed WLOG by symmetrising), the
-  bound becomes
+  For the overlapping sum, the martingale condition gives, for each
+  ordered pair $(i,j)$ with $i \ne j$ and overlapping supports,
+  $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$.
+  Since $h_i h_j + h_j h_i$ is symmetric in $i,j$, summing over
+  unordered pairs $\{i,j\}$ yields
   \[
-    \sum_{i < j,\,\text{overlap}} (h_i h_j + h_j h_i)
-    \ge -(1-\gamma) \sum_i \Bigl(\sum_{j \ne i} c_{ij}\Bigr) h_i
-    \ge -(1-\gamma) H.
+    \sum_{\{i,j\},\,\text{overlap}} (h_i h_j + h_j h_i)
+    \ge -\tfrac{1}{2}(1-\gamma) \sum_{\substack{i,j \\ i \ne j,\,\text{overlap}}}
+    (c_{ij} + c_{ji})(h_i + h_j).
   \]
+  Rearranging the right-hand side by collecting terms for each $h_i$:
+  \[
+    = -(1-\gamma) \sum_i \Bigl(\sum_{j \ne i,\,\text{overlap}}
+    c_{ij}\Bigr) h_i
+    \ge -(1-\gamma) H,
+  \]
+  where the last step uses the row-sum hypothesis
+  $\sum_{j \ne i} c_{ij} \le 1$ (applied to the original,
+  unsymmetrised constants).
   Combining: $H^2 \ge H - (1-\gamma)H = \gamma H$.
   For any eigenvector with $H\psi = \lambda\psi$ and $\lambda > 0$,
   this gives $\lambda^2 \ge \gamma\lambda$, hence
@@ -351,12 +361,19 @@ Lucia~\cite{Kastoryano2018Martingale}.
   \notready
   Two terms $h_i, h_j$ with $0 < |i-j| < L$ have supports overlapping
   in $L - |i-j|$ sites.  Since $A$ is injective, the intersection property
-  (Lemma~\ref{lem:ground_space_intersection}) bounds the angle between
-  $\ker(h_i)$ and $\ker(h_j)$ away from zero for any such overlap.
-  (When $|i-j| = 1$ the overlap is $L-1$ sites; for larger separations the
-  overlap shrinks but injectivity still controls the intersection.)
-  This provides the required lower bound on
-  $h_i h_j + h_j h_i$ for every overlapping
+  (Lemma~\ref{lem:ground_space_intersection}) gives the qualitative identity
+  $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
+  Because the local Hilbert space is finite-dimensional, the subspaces
+  $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space,
+  and the Friedrichs angle between them is a continuous function of $A$.
+  The intersection identity excludes the degenerate case where the
+  angle is zero (which would require a non-trivial vector in one kernel
+  that is orthogonal to the other yet lies in both), so by
+  compactness (the angle depends continuously on $A$ over a compact
+  parameter space for fixed $d,D$) the angle is bounded away from zero.
+  This lower bound on the angle translates into the required operator
+  inequality $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$
+  for every overlapping
   pair~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
 \end{proof}
 
@@ -376,10 +393,16 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{proof}
   \uses{thm:martingale_criterion, lem:martingale_mps}
   \notready
-  Apply Theorem~\ref{thm:martingale_criterion} with the constants from
-  Lemma~\ref{lem:martingale_mps}.
-  Since the constants are independent of $N$, the gap $\gamma$ is
-  uniform~\cite{Fannes1992Finitely, Nachtergaele1996Spectral}.
+  Since $A$ is $L_0$-block injective, the blocked tensor
+  $A^{[L_0]}$ is injective.  The parent interaction for $A$ with range
+  $L = L_0 + 1$ can be expressed in terms of $A^{[L_0]}$ with range $2$
+  (two blocked sites).  Apply Lemma~\ref{lem:martingale_mps} to the
+  injective tensor $A^{[L_0]}$ to obtain the martingale constants
+  $c_{ij}$ and $\gamma > 0$.  These constants depend only on $A^{[L_0]}$
+  (hence only on $A$ and $L_0$), not on $N$.
+  Theorem~\ref{thm:martingale_criterion} then gives the uniform gap
+  $\lambda_{\min}^+(H_N) \ge \gamma$~\cite{Fannes1992Finitely,
+  Nachtergaele1996Spectral}.
 \end{proof}
 
 \section{Ground space of non-injective MPS}\label{sec:degenerate_ground_space}
@@ -417,12 +440,19 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   Linearity of the kernel yields the inclusion.
 
   \textbf{$\subseteq$}: Take $\psi \in \ker(H_N)$.
-  The block-diagonal structure of $A$ decomposes the local ground spaces:
-  $G_L(A) = \bigoplus_k G_L(A_k)$ (the off-diagonal blocks do not
-  contribute due to the block structure of the transfer map).
-  Restricting $\psi$ to any normal block $A_k$, the intersection
-  property forces $\psi$ to lie in $\spn\{V^{(N)}(A_k)\}$ by
-  Theorem~\ref{thm:unique_gs_normal}.
-  Summing over blocks gives the
+  The block-diagonal structure of $A$ gives the containment
+  $G_L(A) \subseteq \sum_k G_L(A_k)$: any local ground state of $A$
+  on $L$ sites is a sum of local ground states of the individual
+  blocks, because the off-diagonal blocks vanish in the transfer map
+  (the canonical form ensures that distinct blocks have orthogonal
+  images under $\Gamma_L$ for $L \ge L_0$, so the sum is in fact
+  direct for sufficiently long windows).
+  Iterating the intersection property
+  (Lemma~\ref{lem:ground_space_intersection}) across the chain for
+  each block $A_k$ independently, and using
+  Theorem~\ref{thm:unique_gs_normal} for each normal block, the
+  component of $\psi$ associated with block $A_k$ must be proportional
+  to $V^{(N)}(A_k)$.
+  This gives the
   inclusion~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{proof}
