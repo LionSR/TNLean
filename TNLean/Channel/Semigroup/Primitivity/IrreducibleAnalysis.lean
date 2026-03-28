@@ -184,7 +184,10 @@ theorem residualSliceTime_mem_Icc
   · have hlt : Int.fract (((n : ℝ) * u) / s) < 1 := Int.fract_lt_one _
     nlinarith [hlt, hs]
 
-/-- The decomposition `n * u = ⌊n*u/s⌋ * s + residual`. -/
+/-- For `u ≥ 0` and `s > 0`, we decompose
+`n * u = (residualSliceIndex u s n : ℝ) * s + residualSliceTime u s n`,
+where `residualSliceIndex u s n = Int.toNat ⌊((n : ℝ) * u) / s⌋` agrees with the
+(nonnegative) floor `⌊(n*u)/s⌋`. -/
 theorem residualSlice_decomp
     (u s : ℝ) (hs : 0 < s) (hu : 0 ≤ u) :
     ∀ n : ℕ, (n : ℝ) * u = (residualSliceIndex u s n : ℝ) * s + residualSliceTime u s n := by
