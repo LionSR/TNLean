@@ -137,7 +137,8 @@ The spectral gap theorems in Chapter~\ref{ch:channels} establish
 $\rho(\E_A - P) < 1$ for primitive channels qualitatively.  This section
 records the \emph{quantitative} refinements that give explicit constants
 and rates for the single-tensor transfer map $\E_A$.
-All three results below are stubs in the formalization (TODO~\#22).
+Two of the three results below are stubs in the formalization (TODO~\#22);
+the spectral gap from injectivity is fully proved.
 
 \begin{theorem}[Exponential convergence of primitive channels]%
     \label{thm:exponential_convergence_primitive}
@@ -179,8 +180,7 @@ All three results below are stubs in the formalization (TODO~\#22).
 \begin{theorem}[Spectral gap from injectivity]%
     \label{thm:spectral_gap_wielandt}
     \lean{MPSTensor.spectral_gap_of_injective}
-    \notready
-    \uses{thm:primitive_compl_lt_one, thm:wielandt_bound}
+    \uses{thm:spectral_gap, thm:wielandt_bound}
     For an injective trace-preserving MPS tensor, there exists
     $\delta > 0$ such that every eigenvalue $\mu \neq 1$ of the
     transfer map satisfies $|\mu| \le 1 - \delta$.
@@ -194,11 +194,10 @@ All three results below are stubs in the formalization (TODO~\#22).
 
 \begin{remark}[Status of quantitative bounds]\label{rem:quantitative_status}
     \uses{thm:exponential_convergence_primitive,
-          thm:correlation_length_bound,
-          thm:spectral_gap_wielandt}
-    The three theorems above are formalized as stubs (with
+          thm:correlation_length_bound}
+    Two of the three theorems above are formalized as stubs (with
     \texttt{sorry}) in \texttt{TNLean/Spectral/QuantitativeGap.lean},
-    tagged TODO~\#22.
+    tagged TODO~\#22; the spectral gap from injectivity is fully proved.
     The qualitative results they refine --- spectral gap existence,
     overlap decay, and correlation convergence --- are fully proved in
     Chapter~\ref{ch:spectral}.
