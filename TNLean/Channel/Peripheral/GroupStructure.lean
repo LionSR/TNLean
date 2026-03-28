@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import Mathlib.RingTheory.RootsOfUnity.Basic
+import Mathlib.GroupTheory.SpecificGroups.Cyclic
 
 /-!
 # Peripheral eigenvalue group structure (Wolf Theorem 6.6)
@@ -227,12 +228,152 @@ theorem peripheral_eigenvalues_form_cyclic_group
       m ∣ D ∧
       peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
         {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)} := by
-  -- Step 1: Each peripheral eigenvalue is a root of unity (ClosureFixedPoint.lean).
-  -- Step 2: Embed into rootsOfUnity (lcm of periods) in ℂ.
-  -- Step 3: Apply rootsOfUnity.isCyclic from Mathlib.
-  -- Step 4: Extract primitive root and period.
-  -- Step 5: Period divides D via cyclic projections (CyclicDecomposition.lean).
-  sorry -- TODO (#22): connect ClosureFixedPoint + Mathlib rootsOfUnity.isCyclic
+  classical
+  set E := MPSTensor.transferMap (d := r) (D := D) K with hE_def
+  -- E is unital: E(1) = 1
+  have hE_unital : E 1 = 1 := by
+    simp only [hE_def, MPSTensor.transferMap_apply]
+    exact KadisonSchwarz.krausMap_one_of_unital K hUnital
+  -- 1 is a peripheral eigenvalue (since E(1) = 1 and 1 ≠ 0)
+  have hone_mem : (1 : ℂ) ∈ peripheralEigenvalues E :=
+    one_mem_peripheralEigenvalues E 1 hE_unital one_ne_zero
+  -- Peripheral eigenvalues are finite (finite-dimensional endomorphism)
+  have hfin : (peripheralEigenvalues E).Finite := peripheralEigenvalues_finite E
+  -- Elements of peripheralEigenvalues are nonzero (they have norm 1)
+  have hne_zero : ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → μ ≠ 0 := by
+    intro μ ⟨_, hμ_norm⟩
+    exact norm_ne_zero_iff.mp (by rw [hμ_norm]; exact one_ne_zero)
+  -- Step 1: Construct a finite subgroup of ℂˣ from peripheral eigenvalues
+  let periphSubgroup : Subgroup ℂˣ :=
+    { carrier := {u : ℂˣ | (u : ℂ) ∈ peripheralEigenvalues E}
+      one_mem' := by change ((1 : ℂˣ) : ℂ) ∈ peripheralEigenvalues E; simpa using hone_mem
+      mul_mem' := fun {a b} (ha : (a : ℂ) ∈ peripheralEigenvalues E)
+          (hb : (b : ℂ) ∈ peripheralEigenvalues E) => by
+        change (↑(a * b) : ℂ) ∈ peripheralEigenvalues E
+        rw [Units.val_mul]
+        exact peripheral_eigenvalues_closed_under_mul K hUnital ρ hρ hρfix hIrr ha hb
+      inv_mem' := fun {a} (ha : (a : ℂ) ∈ peripheralEigenvalues E) => by
+        change (↑(a⁻¹) : ℂ) ∈ peripheralEigenvalues E
+        rw [Units.val_inv_eq_inv_val]
+        exact peripheral_eigenvalues_closed_under_inv K hUnital ρ hρ hρfix hIrr ha }
+  -- Step 2: The subgroup is finite (image in ℂ lands in a finite set)
+  have hFinS : Finite ↥periphSubgroup := by
+    have : Set.Finite {u : ℂˣ | (u : ℂ) ∈ peripheralEigenvalues E} := by
+      have hinj : Set.InjOn Units.val (Units.val ⁻¹' (peripheralEigenvalues E)) :=
+        fun _ _ _ _ h => Units.val_injective h
+      exact hfin.preimage hinj
+    exact this.to_subtype
+  -- Step 3: Finite subgroups of ℂˣ are cyclic (Mathlib's subgroup_units_cyclic)
+  haveI : IsCyclic ↥periphSubgroup := subgroup_units_cyclic periphSubgroup
+  -- Step 4: Extract a generator g with orderOf g = |S| = m
+  obtain ⟨g, hg_order⟩ := isCyclic_iff_exists_orderOf_eq_natCard.mp ‹IsCyclic ↥periphSubgroup›
+  set m := Nat.card ↥periphSubgroup with hm_def
+  set γ := (g.val : ℂ) with hγ_def
+  -- m > 0 (the subgroup contains at least 1)
+  have hm_pos : 0 < m := Nat.card_pos
+  -- Step 5: IsPrimitiveRoot γ m
+  have hγ_prim : IsPrimitiveRoot γ m := by
+    constructor
+    · -- γ^m = 1: g has order m, so g^m = 1
+      have hgm : g ^ m = 1 := by rw [← hg_order]; exact pow_orderOf_eq_one g
+      change (g.val : ℂ) ^ m = 1
+      have : ((g ^ m : ↥periphSubgroup).val : ℂ) = ((1 : ↥periphSubgroup).val : ℂ) :=
+        congr_arg (fun x => ((x : ↥periphSubgroup).val : ℂ)) hgm
+      simp only [SubgroupClass.coe_pow, OneMemClass.coe_one] at this
+      exact this
+    · -- ∀ l, γ^l = 1 → m ∣ l
+      intro l hl
+      -- Lift (g.val : ℂ)^l = 1 to g.val^l = 1 in ℂˣ
+      have hunits : g.val ^ l = 1 := by
+        apply Units.val_injective; push_cast; exact hl
+      -- Lift to g^l = 1 in periphSubgroup
+      have hgroup : g ^ l = 1 := by
+        apply Subtype.val_injective; exact hunits
+      rw [← hg_order]
+      exact orderOf_dvd_of_pow_eq_one hgroup
+  -- Step 6: peripheralEigenvalues E = {z | ∃ k : Fin m, z = γ ^ k}
+  have hset_eq : peripheralEigenvalues E =
+      {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)} := by
+    ext μ; constructor
+    · -- (⊆): each peripheral eigenvalue is a power of γ
+      intro hμ
+      -- Lift μ to a unit in ℂˣ
+      have hμ_ne := hne_zero μ hμ
+      set u : ℂˣ := Units.mk0 μ hμ_ne with hu_def
+      -- u ∈ periphSubgroup
+      have hu_mem : u ∈ periphSubgroup := by
+        change (u : ℂ) ∈ peripheralEigenvalues E
+        simp only [hu_def, Units.val_mk0]; exact hμ
+      -- Since g generates periphSubgroup, u ∈ zpowers g
+      have hg_top : Subgroup.zpowers g = ⊤ :=
+        Subgroup.eq_top_of_card_eq _ (by rw [Nat.card_zpowers, hg_order])
+      have hu_zpow : (⟨u, hu_mem⟩ : ↥periphSubgroup) ∈ Subgroup.zpowers g := by
+        rw [hg_top]; exact Subgroup.mem_top _
+      obtain ⟨z, hz⟩ := hu_zpow
+      -- Convert integer power to natural number power mod m
+      -- g^z = g^(z % m) since g has order m, then z % m ≥ 0 so toNat works
+      have hg_eq : (⟨u, hu_mem⟩ : ↥periphSubgroup) = g ^ z := hz.symm
+      have hg_mod : g ^ z = g ^ (z % ↑m).toNat := by
+        have hm_ne : (m : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
+        have hord : g ^ (m : ℤ) = 1 := by
+          rw [zpow_natCast, ← hg_order]; exact pow_orderOf_eq_one g
+        conv_lhs => rw [← Int.emod_add_mul_ediv z m]
+        rw [_root_.zpow_add, _root_.zpow_mul, hord, _root_.one_zpow, mul_one]
+        rw [show z % ↑m = ↑(z % ↑m).toNat from
+          (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm]
+        exact zpow_natCast g _
+      have hz_val : u = g.val ^ (z % ↑m).toNat := by
+        have : (⟨u, hu_mem⟩ : ↥periphSubgroup).val = (g ^ (z % ↑m).toNat).val := by
+          rw [hg_eq, hg_mod]
+        simpa using this
+      have hk_lt : (z % ↑m).toNat < m := by
+        have hm_ne : (m : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
+        have h1 := Int.emod_lt_of_pos z (by omega : (0 : ℤ) < m)
+        omega
+      refine ⟨⟨(z % ↑m).toNat, hk_lt⟩, ?_⟩
+      simp only [hγ_def]
+      calc μ = (u : ℂ) := by simp [hu_def]
+        _ = (g.val ^ (z % ↑m).toNat : ℂˣ).val := by rw [hz_val]
+        _ = ((g.val : ℂ)) ^ (z % ↑m).toNat := by push_cast; rfl
+    · -- (⊇): each γ^k is a peripheral eigenvalue
+      rintro ⟨k, rfl⟩
+      -- g^k ∈ periphSubgroup, so (g^k).val.val ∈ peripheralEigenvalues E
+      have hgk_mem : g ^ (k : ℕ) ∈ Subgroup.zpowers g := by
+        exact ⟨↑k, by push_cast; rfl⟩
+      have hgk_sub : (g ^ (k : ℕ)).val ∈ periphSubgroup := by
+        exact (g ^ (k : ℕ)).property
+      change ((g.val : ℂ)) ^ (k : ℕ) ∈ peripheralEigenvalues E
+      have : ((g ^ (k : ℕ)).val : ℂ) ∈ peripheralEigenvalues E := hgk_sub
+      simp only [SubgroupClass.coe_pow, Units.val_pow_eq_pow_val] at this
+      exact this
+  -- Step 7: m ∣ D via cyclic decomposition
+  have hm_dvd : m ∣ D := by
+    -- γ is a peripheral eigenvalue (it's γ^1)
+    have hγ_mem : γ ∈ peripheralEigenvalues E := by
+      rw [hset_eq]
+      by_cases hm1 : m = 1
+      · have hγ1 : γ = 1 := by have := hγ_prim.pow_eq_one; rw [hm1] at this; simpa using this
+        exact ⟨⟨0, by omega⟩, by simp [hγ1]⟩
+      · exact ⟨⟨1, by omega⟩, by simp⟩
+    -- Convert set representation to Set.range form
+    have hperiph_range : peripheralEigenvalues E =
+        Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
+      rw [hset_eq]; ext x; simp [Set.mem_range, eq_comm]
+    haveI : NeZero m := ⟨by omega⟩
+    -- Get cyclic decomposition: m orthogonal projections summing to identity
+    obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, _⟩ :=
+      MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
+        K hUnital ρ hρ hρfix hIrr hγ_prim hperiph_range
+    -- The ρ-weighted trace τ(X) = tr(ρ X) is preserved by E
+    -- From hρfix: ∑ Kᵢ† ρ Kᵢ = ρ, so τ(E(X)) = τ(X)
+    -- This gives τ(Pₖ) = τ(1)/m = tr(ρ)/m > 0 for all k
+    -- Hence all Pₖ ≠ 0, so rank(Pₖ) ≥ 1 and ∑ rank(Pₖ) = D
+    -- The ρ-trace equality forces all ranks equal: m ∣ D
+    -- m | D from orthogonal projections summing to identity
+    -- Each nonzero orthogonal projection has trace ≥ 1 (natural number rank)
+    -- Sum of traces = tr(I) = D, and by ρ-trace preservation all Pₖ are nonzero
+    sorry -- TODO(#22): m orthogonal projections + ρ-trace argument → m ∣ D
+  exact ⟨m, γ, hm_pos, hγ_prim, hm_dvd, hset_eq⟩
 
 /-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Thm 6.6).
 
