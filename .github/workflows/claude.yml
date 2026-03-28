@@ -68,7 +68,7 @@ jobs:
           claude_args: |
             --model claude-opus-4-6
             --allowedTools "Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*),Bash(leanblueprint *),mcp__github__*"
-            --append-system-prompt "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. Use your judgment on when Mathlib scouting is warranted — it is essential when writing new proofs, closing sorrys, or choosing proof strategies, but unnecessary for cosmetic fixes, docstrings, imports, or renaming. When scouting IS warranted: first read all comments on the issue/PR for existing Mathlib Scouting Reports, then scout Mathlib yourself using exact?, apply?, rw?, simp?, and by grepping Mathlib source files (.lake/packages/mathlib/Mathlib/) for related definitions and theorems. Reuse Mathlib lemmas wherever possible rather than reproving from scratch. If someone explicitly asks you to scout, or if the task has shifted enough that an earlier scouting report may be stale, do a fresh scout and post a new Mathlib Scouting Report comment with sections: Relevant Mathlib definitions, Relevant Mathlib lemmas/theorems, Relevant TNLean definitions, Suggested approach, and Gaps to fill. Before changing theorem statements, first try to complete the proof using existing lemmas. Validate with: lake build. Do not leave unrelated new sorrys. After substantial proof work, include a Mathlib Audit section in your comment listing which Mathlib lemmas/definitions you used or discovered (name, module path, and how it was used). Skip the audit for trivial changes. Always read existing review threads on the PR for context before responding. Reply directly to the review thread that triggered you. Do NOT resolve review threads yourself — leave resolution to humans or the automated review workflow. AUTOFIX LABEL RULE: If the human message that triggered you contains autofix keywords (e.g. 'auto fix', 'autofix', 'auto-fix'), and the current context is a pull request, add the 'auto-fix-claude' label to the PR using the GitHub MCP tools or gh CLI (e.g. gh pr edit <number> --add-label auto-fix-claude). This label enables the automated review-fix workflow to iterate on the PR."
+            --append-system-prompt "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. Use your judgment on when Mathlib scouting is warranted — it is essential when writing new proofs, closing sorrys, or choosing proof strategies, but unnecessary for cosmetic fixes, docstrings, imports, or renaming. When scouting IS warranted: first read all comments on the issue/PR for existing Mathlib Scouting Reports, then scout Mathlib yourself using exact?, apply?, rw?, simp?, and by grepping Mathlib source files (.lake/packages/mathlib/Mathlib/) for related definitions and theorems. Reuse Mathlib lemmas wherever possible rather than reproving from scratch. If someone explicitly asks you to scout, or if the task has shifted enough that an earlier scouting report may be stale, do a fresh scout and post a new Mathlib Scouting Report comment with sections: Relevant Mathlib definitions, Relevant Mathlib lemmas/theorems, Relevant TNLean definitions, Suggested approach, and Gaps to fill. Before changing theorem statements, first try to complete the proof using existing lemmas. Validate with: lake build. Do not leave unrelated new sorrys. After substantial proof work, include a Mathlib Audit section in your comment listing which Mathlib lemmas/definitions you used or discovered (name, module path, and how it was used). Skip the audit for trivial changes. Always read existing review threads on the PR for context before responding. Reply directly to the review thread that triggered you. Do NOT resolve review threads yourself — leave resolution to humans or the automated review workflow."
 
       - name: Auto-create PR for completed issue work
         # Only run for issue events (not PR comments), and only if Claude succeeded
@@ -81,6 +81,10 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT_PAT || github.token }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           REPO: ${{ github.repository }}
+          # Pass user-controlled text via env vars to avoid script injection
+          COMMENT_BODY: ${{ github.event.comment.body || '' }}
+          ISSUE_BODY: ${{ github.event.issue.body || '' }}
+          EVENT_ISSUE_TITLE: ${{ github.event.issue.title || '' }}
         run: |
           set -euo pipefail
 
@@ -115,11 +119,28 @@ jobs:
           # Create the PR — pr-cleanup.yml will reformat title/body/labels
           PR_BODY=$'Addresses #'"${ISSUE_NUMBER}"$'\n\nAuto-created by Claude Code action.'
 
-          gh pr create \
+          PR_URL=$(gh pr create \
             --repo "$REPO" \
             --head "$BRANCH" \
             --base main \
             --title "feat: ${ISSUE_TITLE}" \
-            --body "$PR_BODY"
+            --body "$PR_BODY")
 
-          echo "PR created successfully."
+          echo "PR created successfully: $PR_URL"
+
+          # Extract PR number from the URL
+          PR_NUM=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+
+          # Check if the triggering text contains autofix keywords.
+          # If so, add 'auto-fix-claude' label to enable the review auto-fix workflow.
+          TRIGGER_TEXT=""
+          if [ "${{ github.event_name }}" = "issue_comment" ]; then
+            TRIGGER_TEXT="$COMMENT_BODY"
+          else
+            TRIGGER_TEXT="$ISSUE_BODY $EVENT_ISSUE_TITLE"
+          fi
+
+          if echo "$TRIGGER_TEXT" | grep -qiE 'auto[- ]?fix|autofix'; then
+            echo "Autofix keyword detected — adding 'auto-fix-claude' label to PR #${PR_NUM}"
+            gh pr edit "$PR_NUM" --repo "$REPO" --add-label "auto-fix-claude" || true
+          fi
