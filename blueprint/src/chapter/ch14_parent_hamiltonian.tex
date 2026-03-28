@@ -397,9 +397,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
   $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$.
   The martingale inequality holds with
   $\gamma = 1 - 2(L-1)\alpha$,
-  which requires $c_{ij}(1-\gamma) = \tfrac{\alpha}{1} \cdot 1 = \alpha$
-  (matching the Friedrichs bound exactly when
-  $c_{ij} = \tfrac{1}{2(L-1)}$).
+  which requires
+  $c_{ij}(1-\gamma) = \tfrac{1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha$
+  (matching the Friedrichs bound exactly).
   Since $\alpha < 1$ (the Friedrichs angle is strictly positive),
   it remains to show $\gamma > 0$, i.e.\ $\alpha < \tfrac{1}{2(L-1)}$.
   In the blocked picture of
@@ -408,12 +408,15 @@ Lucia~\cite{Kastoryano2018Martingale}.
   $\alpha < \tfrac{1}{2}$, which is guaranteed by the
   Nachtergaele finite-size criterion~\cite{Nachtergaele1996Spectral}
   applied to the injective blocked tensor.
-  For general $L > 2$, the stronger bound
-  $\alpha < \tfrac{1}{2(L-1)}$ follows from the exponential decay of
-  correlations in the injective MPS transfer operator
-  (the Friedrichs cosine $\alpha_s$ for overlap $L - s$ decays
-  exponentially in $s$, so the sum $2(L-1)\alpha$ remains bounded
-  below $1$).
+  For general $L > 2$, the uniform constants $c_{ij} = \tfrac{1}{2(L-1)}$
+  make the condition $\alpha < \tfrac{1}{2(L-1)}$ increasingly restrictive
+  as $L$ grows.  A more refined choice of separation-dependent constants
+  $c_{ij} = c_{|i-j|}$ that weight small-separation (large-overlap) pairs
+  more heavily can exploit the exponential decay of the Friedrichs cosine
+  $\alpha_s$ in $s$ to satisfy the row-sum constraint.
+  However, this refinement is not needed for the main result: in
+  Theorem~\ref{thm:parent_hamiltonian_gapped} below, the argument is
+  applied only with $L = 2$ in the blocked picture.
   In all cases, the constants depend only on $A$ and are independent
   of~$N$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
 \end{proof}
@@ -441,7 +444,16 @@ Lucia~\cite{Kastoryano2018Martingale}.
   dimension $D$.  Each blocked site represents $L_0$ original sites,
   so the range-$L = 2L_0$ interaction on the original chain corresponds
   exactly to a range-$2$ interaction on the blocked chain (two blocked
-  sites).  The divisibility condition $L_0 \mid N$ ensures the blocking
+  sites).
+  \emph{Remark on interaction range:}
+  Theorem~\ref{thm:unique_gs_injective} establishes ground-state
+  uniqueness at range $L_0{+}1$, whereas here we use range $2L_0$.
+  The ground spaces are nested: increasing the interaction range can
+  only shrink (or preserve) the ground space, so uniqueness at range
+  $L_0{+}1$ implies uniqueness at range $2L_0$.  The larger range is
+  needed here so that, after $L_0$-blocking, each blocked interaction
+  term spans exactly $2$ blocked sites, enabling the martingale
+  machinery with $L = 2$.  The divisibility condition $L_0 \mid N$ ensures the blocking
   is compatible with the periodic chain.
   Apply Lemma~\ref{lem:martingale_mps} to the
   injective tensor $A^{[L_0]}$ with range $2$ to obtain the martingale
