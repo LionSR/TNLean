@@ -96,20 +96,4 @@ theorem wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic
   exact eq_top_iff.mpr <| by
     simpa [hN] using wordSpan_mono'_of_one_mem_wordSpan_one A hAper hn
 
-/-- Legacy compatibility alias for
-`wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic`.
-
-The historical name suggests the existential spectral-gap wrapper from
-`PrimitivityBridge.lean`, but the theorem still takes the fixed-point witness `ρ`
-explicitly through `IsPrimitiveMPS A ρ`. Prefer the more precise theorem name
-above, or `isNormal_of_isPrimitiveMPS_of_posDef` when the `IsNormal` conclusion
-itself is the desired API. -/
-theorem isNormal_of_isPrimitive_of_posDef
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hPrim : IsPrimitiveMPS A ρ)
-    (hPD : ρ.PosDef)
-    (hAper : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
-    ∃ N : ℕ, ∀ n : ℕ, N ≤ n → wordSpan A n = ⊤ :=
-  wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic hPrim hPD hAper
-
 end MPSTensor

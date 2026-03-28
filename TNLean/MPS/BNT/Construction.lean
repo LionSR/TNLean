@@ -303,7 +303,10 @@ variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 /-- **Cross-overlap decay for CF-BNT blocks**: distinct blocks have
 `mpvOverlap (A j) (A k) N → 0` as `N → ∞`.
 
-This legacy theorem now delegates to `cross_overlap_tendsto_zero_of_separated_CFBNT_data`. -/
+This legacy theorem now delegates to `cross_overlap_tendsto_zero_of_separated_CFBNT_data`.
+
+TODO: remove this alias once callers in `FundamentalTheorem/Full.lean` are updated
+to use `cross_overlap_tendsto_zero_of_separated_CFBNT_data` directly. -/
 theorem cross_overlap_tendsto_zero
     [∀ k, NeZero (dim k)]
     (hCF : IsCanonicalFormBNT μ A) (j k : Fin r) (hjk : j ≠ k) :
@@ -319,7 +322,10 @@ theorem cross_overlap_tendsto_zero
 /-- A canonical-form decomposition into a basis of normal tensors yields a valid `IsBNT`
 structure.
 
-This legacy theorem now delegates to `isBNT_of_separated_CFBNT_data`. -/
+This legacy theorem now delegates to `isBNT_of_separated_CFBNT_data`.
+
+TODO: remove this alias once callers in `FundamentalTheorem/Full.lean` are updated
+to use `isBNT_of_separated_CFBNT_data` directly. -/
 theorem isBNT [∀ k, NeZero (dim k)]
     (hCF : IsCanonicalFormBNT μ A) :
     IsBNT (toTensorFromBlocks μ A) r dim A :=
@@ -530,7 +536,10 @@ If two families of tensors in canonical-form BNT give rise to proportional MPVs
 of blocks, and blocks match up to permutation, dimension equality, and gauge-phase
 equivalence.
 
-This legacy theorem now delegates to `fundamentalTheorem_of_separated_CFBNT_data`. -/
+This legacy theorem now delegates to `fundamentalTheorem_of_separated_CFBNT_data`.
+
+TODO: remove this alias once callers in `FundamentalTheorem/Full.lean` are updated
+to use `fundamentalTheorem_of_separated_CFBNT_data` directly. -/
 theorem fundamentalTheorem_of_IsCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
