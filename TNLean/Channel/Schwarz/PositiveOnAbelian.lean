@@ -69,6 +69,17 @@ def IsPositiveOnCommuting
     PairwiseCommuteImages T a →
     ∀ ψ : Fin n → Fin D → ℂ, 0 ≤ blockQuadraticForm T a ψ
 
+/-- Multiplicativity of `Matrix.toEuclideanLin`: composition of Euclidean-space
+linear maps corresponds to matrix multiplication. Used in several simultaneous-
+diagonalisation arguments below to lift commutativity from matrices to linear maps. -/
+private lemma toEuclideanLin_mul {D : ℕ} (A B : Matrix (Fin D) (Fin D) ℂ) :
+    (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
+      Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := by
+  simp only [Matrix.toEuclideanLin_eq_toLin_orthonormal]
+  exact (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
+
 section NormalGenerators
 
 variable {A : Matrix (Fin D) (Fin D) ℂ}
@@ -481,13 +492,7 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     | inr ij =>
         rcases ij with ⟨i, j⟩
         simpa [T] using (Matrix.isHermitian_iff_isSymmetric (A := K i j)).mp (hK i j)
-  have hEuclMul : ∀ (A B : Matrix (Fin D) (Fin D) ℂ),
-      (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
-        Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := fun A B => by
-      simp only [Matrix.toEuclideanLin_eq_toLin_orthonormal]
-      exact (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-        (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-        (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
+  have hEuclMul := toEuclideanLin_mul (D := D)
   have htoEuclComm {A B : Matrix (Fin D) (Fin D) ℂ} (hAB : Commute A B) :
       Commute (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D))
         (Matrix.toEuclideanLin B) :=
@@ -865,14 +870,7 @@ private lemma exists_diagonal_family_of_normal
     simpa [Hlin] using ((Matrix.isHermitian_iff_isSymmetric (A := H)).mp hH)
   have hKlin : Klin.IsSymmetric := by
     simpa [Klin] using ((Matrix.isHermitian_iff_isSymmetric (A := K)).mp hK)
-  -- Multiplicativity of toEuclideanLin: used to lift commutativity from matrices to linear maps.
-  have hEuclMul : ∀ (A B : Mat),
-      (Matrix.toEuclideanLin A : E →ₗ[ℂ] E) * Matrix.toEuclideanLin B =
-        Matrix.toEuclideanLin (A * B) := fun A B => by
-    simp only [Matrix.toEuclideanLin_eq_toLin_orthonormal]
-    exact (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
+  have hEuclMul := toEuclideanLin_mul (D := D)
   have hHKlin : Commute Hlin Klin :=
     hEuclMul H K |>.trans (congrArg Matrix.toEuclideanLin hHKmat.eq) |>.trans (hEuclMul K H).symm
   -- Factor out the eigenspace-invariance proof for Klin once, then use it for
