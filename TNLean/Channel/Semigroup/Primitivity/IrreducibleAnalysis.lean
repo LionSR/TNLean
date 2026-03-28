@@ -292,8 +292,8 @@ theorem residualSlice_limit_zero_of_fixedPoint
     exact hsub_decay.congr' (Filter.Eventually.of_forall (fun k => hres_eq (φ k)))
   exact tendsto_nhds_unique hsub_res hsub_res_zero
 
-/-- **TODO**: Prove that a zero point exists in slice times.
-Currently a `sorry` placeholder. -/
+/-- A zero point exists among residual slice times: by compactness of `[0, s]` there is a
+convergent subsequence of residual times whose limit satisfies `T a δ = 0`. -/
 theorem exists_residual_time_eq_zero_of_fixedPoint
     [NeZero D]
     (T : ℝ → Mat →ₗ[ℂ] Mat)
@@ -304,7 +304,9 @@ theorem exists_residual_time_eq_zero_of_fixedPoint
     (hδ_decay : Filter.Tendsto (fun n : ℕ => T ((n : ℝ) * u) δ) Filter.atTop (nhds 0))
     (hδ_fix : T s δ = δ) :
     ∃ a ∈ Set.Icc 0 s, T a δ = 0 := by
-  sorry
+  obtain ⟨a, ha_mem, φ, hφtendsto⟩ := exists_residualSlice_subseq_tendsto u s hs
+  exact ⟨a, ha_mem, residualSlice_limit_zero_of_fixedPoint T hT u hs hδ_decay
+    (residualSlice_apply_eq_of_fixedPoint T hT u _hu_nonneg s hs hδ_fix) ha_mem φ hφtendsto⟩
 
 theorem eq_zero_of_expSemigroup_apply_eq_zero
     (L : Mat →ₗ[ℂ] Mat) {a : ℝ} {δ : Mat}
