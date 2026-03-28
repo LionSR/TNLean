@@ -184,14 +184,13 @@ theorem residualSliceTime_mem_Icc
   · have hlt : Int.fract (((n : ℝ) * u) / s) < 1 := Int.fract_lt_one _
     nlinarith [hlt, hs]
 
-/-- **TODO**: Prove the decomposition `n * u = ⌊n*u/s⌋ * s + residual`.
-The proof sketch below needs Mathlib API adjustments. Currently a `sorry` placeholder. -/
+/-- For `u ≥ 0` and `s > 0`, we decompose
+`n * u = (residualSliceIndex u s n : ℝ) * s + residualSliceTime u s n`,
+where `residualSliceIndex u s n = Int.toNat ⌊((n : ℝ) * u) / s⌋` agrees with the
+(nonnegative) floor `⌊(n*u)/s⌋`. -/
 theorem residualSlice_decomp
-    (u s : ℝ) (hs : 0 < s) :
+    (u s : ℝ) (hs : 0 < s) (hu : 0 ≤ u) :
     ∀ n : ℕ, (n : ℝ) * u = (residualSliceIndex u s n : ℝ) * s + residualSliceTime u s n := by
-  sorry
-/-
-  Proof sketch (commented out pending Mathlib API adjustments):
   intro n
   have ha : ↑⌊((n : ℝ) * u / s)⌋ + Int.fract (((n : ℝ) * u) / s) = ((n : ℝ) * u) / s :=
     Int.floor_add_fract (((n : ℝ) * u) / s)
@@ -201,19 +200,14 @@ theorem residualSlice_decomp
   have htoNat : ((residualSliceIndex u s n : ℕ) : ℝ) = ↑⌊((n : ℝ) * u / s)⌋ := by
     dsimp [residualSliceIndex]
     exact_mod_cast Int.toNat_of_nonneg hfloor_nonneg
-  have hmulha :
-      s * (↑⌊((n : ℝ) * u / s)⌋ + Int.fract (((n : ℝ) * u) / s)) =
-        s * (((n : ℝ) * u) / s) := by
-    exact congrArg (fun x : ℝ => s * x) ha
   calc
     (n : ℝ) * u = s * (((n : ℝ) * u) / s) := by field_simp [hs.ne']
     _ = s * (↑⌊((n : ℝ) * u / s)⌋ + Int.fract (((n : ℝ) * u) / s)) := by
-          exact hmulha.symm
+          congr 1; exact ha.symm
     _ = ((residualSliceIndex u s n : ℕ) : ℝ) * s + residualSliceTime u s n := by
           dsimp [residualSliceTime]
           rw [mul_add, htoNat]
           ring
--/
 
 theorem fixedPoint_at_nat_mul
     (T : ℝ → Mat →ₗ[ℂ] Mat)
@@ -236,7 +230,7 @@ theorem fixedPoint_at_nat_mul
 theorem residualSlice_apply_eq_of_fixedPoint
     (T : ℝ → Mat →ₗ[ℂ] Mat)
     (hT : IsQuantumDynSemigroup T)
-    (u : ℝ)
+    (u : ℝ) (hu : 0 ≤ u)
     (s : ℝ) (hs : 0 < s)
     {δ : Mat}
     (hδ_fix : T s δ = δ) :
@@ -247,7 +241,7 @@ theorem residualSlice_apply_eq_of_fixedPoint
   calc
     T ((n : ℝ) * u) δ =
         T (residualSliceTime u s n + ((residualSliceIndex u s n : ℕ) : ℝ) * s) δ := by
-          rw [residualSlice_decomp u s hs n, add_comm]
+          rw [residualSlice_decomp u s hs hu n, add_comm]
     _ = T (residualSliceTime u s n) (T (((residualSliceIndex u s n : ℕ) : ℝ) * s) δ) := by
           simp [LinearMap.comp_apply,
             hT.semigroup.semigroup.comp (residualSliceTime u s n)
@@ -256,57 +250,47 @@ theorem residualSlice_apply_eq_of_fixedPoint
               (mul_nonneg (Nat.cast_nonneg (residualSliceIndex u s n)) (le_of_lt hs))]
     _ = T (residualSliceTime u s n) δ := by rw [hms_fix]
 
-/-- **TODO**: Prove convergent subsequence exists for residual slice times (compactness).
-Currently a `sorry` placeholder. -/
+/-- A convergent subsequence exists for residual slice times (by compactness of `[0, s]`). -/
 theorem exists_residualSlice_subseq_tendsto
     (u s : ℝ) (hs : 0 < s) :
     ∃ a ∈ Set.Icc 0 s, ∃ φ : ℕ ↪o ℕ,
       Filter.Tendsto (fun k : ℕ => residualSliceTime u s (φ k)) Filter.atTop (nhds a) := by
-  sorry
-/-
-  Proof sketch (commented out pending Mathlib API adjustments):
   let r : ℕ → ℝ := residualSliceTime u s
   have hmap_le : Filter.map r Filter.atTop ≤ Filter.principal (Set.Icc 0 s) := by
-    rw [Filter.le_principal_iff]
-    show r ⁻¹' Set.Icc 0 s ∈ Filter.atTop
-    exact Filter.Eventually.of_forall (residualSliceTime_mem_Icc u s hs)
-  obtain ⟨a, ha_mem, hcluster⟩ := (isCompact_Icc (a := 0) (b := s)).exists_clusterPt hmap_le
-  obtain ⟨φ, _hφmono, hφtendsto⟩ := TopologicalSpace.FirstCountableTopology.tendsto_subseq hcluster
-  exact ⟨a, ha_mem, φ, hφtendsto⟩
--/
+    rw [Filter.le_principal_iff, Filter.mem_map]
+    exact Filter.univ_mem' (residualSliceTime_mem_Icc u s hs)
+  obtain ⟨a, ha_mem, hcluster⟩ := isCompact_Icc.exists_clusterPt hmap_le
+  obtain ⟨ψ, hψ_mono, hψ_tendsto⟩ :=
+    TopologicalSpace.FirstCountableTopology.tendsto_subseq hcluster
+  exact ⟨a, ha_mem, OrderEmbedding.ofStrictMono ψ hψ_mono, hψ_tendsto⟩
 
-/-- **TODO**: Prove that the residual slice limit vanishes (continuity + uniqueness of limits).
-Currently a `sorry` placeholder. -/
+/-- The residual slice limit vanishes (by continuity and uniqueness of limits). -/
 theorem residualSlice_limit_zero_of_fixedPoint
     (T : ℝ → Mat →ₗ[ℂ] Mat)
     (hT : IsQuantumDynSemigroup T)
     (u : ℝ)
-    {s : ℝ} (hs : 0 < s)
+    {s : ℝ} (_hs : 0 < s)
     {δ : Mat}
     (hδ_decay : Filter.Tendsto (fun n : ℕ => T ((n : ℝ) * u) δ) Filter.atTop (nhds 0))
     (hres_eq : ∀ n : ℕ, T ((n : ℝ) * u) δ = T (residualSliceTime u s n) δ)
-    {a : ℝ} (ha_mem : a ∈ Set.Icc 0 s)
+    {a : ℝ} (_ha_mem : a ∈ Set.Icc 0 s)
     (φ : ℕ ↪o ℕ)
     (hφtendsto : Filter.Tendsto (fun k : ℕ => residualSliceTime u s (φ k)) Filter.atTop (nhds a)) :
     T a δ = 0 := by
-  sorry
-/-
-  Proof sketch (commented out pending Mathlib API adjustments):
   have hδ_cont : Continuous (fun t : ℝ => T t δ) := by
     have hEval : Continuous (fun A : Mat →L[ℂ] Mat => A δ) :=
       (ContinuousLinearMap.apply ℂ Mat δ).continuous
     simpa using hEval.comp hT.semigroup.continuous
-  have hsub_decay : Filter.Tendsto (fun k : ℕ => T (((φ k : ℝ)) * u) δ) Filter.atTop (nhds 0) :=
+  have hsub_decay : Filter.Tendsto (fun k : ℕ => T ((↑(φ k) : ℝ) * u) δ)
+      Filter.atTop (nhds 0) :=
     hδ_decay.comp φ.strictMono.tendsto_atTop
-  have hsub_res : Filter.Tendsto (fun k : ℕ => T (residualSliceTime u s (φ k)) δ) Filter.atTop
-      (nhds (T a δ)) :=
+  have hsub_res : Filter.Tendsto (fun k : ℕ => T (residualSliceTime u s (φ k)) δ)
+      Filter.atTop (nhds (T a δ)) :=
     (hδ_cont.tendsto a).comp hφtendsto
   have hsub_res_zero : Filter.Tendsto (fun k : ℕ => T (residualSliceTime u s (φ k)) δ)
       Filter.atTop (nhds 0) := by
-    refine hsub_decay.congr' ?_
-    exact Filter.Eventually.of_forall (fun k => hres_eq (φ k))
+    exact hsub_decay.congr' (Filter.Eventually.of_forall (fun k => hres_eq (φ k)))
   exact tendsto_nhds_unique hsub_res hsub_res_zero
--/
 
 /-- **TODO**: Prove that a zero point exists in slice times.
 Currently a `sorry` placeholder. -/
