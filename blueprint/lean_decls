@@ -160,6 +160,7 @@ MPSTensor.connectedCorrelator
 MPSTensor.connectedCorrelator_bound
 MPSTensor.connectedCorrelator_eq_sum
 MPSTensor.correlationLength
+MPSTensor.correlationLength_pos
 MPSTensor.cross_correlation_tendsto_zero
 MPSTensor.cumulativeSpan
 MPSTensor.cumulativeSpan_eq_top

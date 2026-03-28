@@ -6,23 +6,31 @@ The key mechanism is spectral: after removing the leading eigenvalue
 contribution, the connected part is governed by subleading eigenvalues of the
 transfer map.
 
+When the MPS tensor generates a parent Hamiltonian
+(Chapter~\ref{ch:parent_hamiltonian}), the correlator quantifies spatial
+correlations in the ground state.  The exponential decay rate is set by the
+spectral properties of the transfer map, i.e.\ by the modulus of its
+subleading eigenvalues.
+
 \section{Connected correlators from the transfer map}
 
-\begin{definition}[One-point expectation]
+\begin{definition}[One-point expectation]\label{def:one_point_expectation}
     \lean{MPSTensor.onePointExpectation}
     \leanok
-    \uses{def:transfer_map}
-    Fix an MPS tensor $A$ and a right fixed point $\rho^R$ of its transfer map.
+    \uses{def:transfer_map, thm:qpf}
+    Fix an MPS tensor $A$ and a right fixed point $\rho^R$ of its transfer map
+    (whose existence, and uniqueness up to scaling under the hypotheses of
+    Theorem~\ref{thm:qpf}, are guaranteed by the quantum Perron--Frobenius theorem).
     For a local observable $X \in \MN{D}$ define
     \[
         \langle X_0 \rangle := \tr(X\rho^R).
     \]
 \end{definition}
 
-\begin{definition}[Two-point expectation at distance $n$]
+\begin{definition}[Two-point expectation at distance $n$]\label{def:two_point_expectation}
     \lean{MPSTensor.twoPointExpectation}
     \leanok
-    \uses{def:transfer_map}
+    \uses{def:transfer_map, def:one_point_expectation}
     For observables $X,Y \in \MN{D}$ and $n\ge 0$,
     \[
         \langle X_0 Y_n \rangle
@@ -32,10 +40,10 @@ transfer map.
     $Y$ and take the trace.
 \end{definition}
 
-\begin{definition}[Connected correlator]
+\begin{definition}[Connected correlator]\label{def:connected_correlator}
     \lean{MPSTensor.connectedCorrelator}
     \leanok
-    \uses{def:transfer_map}
+    \uses{def:two_point_expectation, def:one_point_expectation}
     The connected two-point function is
     \[
         C(X,Y;n) := \langle X_0Y_n\rangle - \langle X_0\rangle\langle Y_0\rangle.
@@ -44,10 +52,10 @@ transfer map.
 
 \section{Spectral expansion and exponential decay}
 
-\begin{theorem}[Sum of exponentials]
+\begin{theorem}[Sum of exponentials]\label{thm:correlator_sum_exponentials}
     \lean{MPSTensor.connectedCorrelator_eq_sum}
     \leanok
-    \uses{def:transfer_map}
+    \uses{def:connected_correlator, thm:spectral_radius_le_one, thm:qpf}
     For a normal MPS, the connected correlator admits a spectral expansion of
     the form
     \[
@@ -62,10 +70,10 @@ transfer map.
     Apply spectral decomposition to $\E_A^n$.
 \end{proof}
 
-\begin{theorem}[Exponential decay bound]
+\begin{theorem}[Exponential decay bound]\label{thm:correlator_exponential_bound}
     \lean{MPSTensor.connectedCorrelator_bound}
     \leanok
-    \uses{thm:spectral_radius_le_one}
+    \uses{thm:correlator_sum_exponentials}
     If $|\lambda_j| \le |\lambda_2| < 1$ for all subleading eigenvalues, then
     there exists $C_{XY}\ge 0$ such that
     \[
@@ -77,17 +85,44 @@ transfer map.
     Combine the sum-of-exponentials expansion with the triangle inequality.
 \end{proof}
 
-\begin{definition}[Correlation length]
+\begin{definition}[Correlation length]\label{def:correlation_length}
     \lean{MPSTensor.correlationLength}
     \leanok
+    \uses{thm:correlator_exponential_bound}
     The correlation length associated with $\lambda_2$ is
     \[
         \xi := -\frac{1}{\log|\lambda_2|}.
     \]
 \end{definition}
 
-\begin{remark}
-    \uses{thm:spectral_radius_le_one}
+\begin{lemma}[Correlation length is positive]\label{lem:correlation_length_pos}
+    \lean{MPSTensor.correlationLength_pos}
+    \leanok
+    \uses{def:correlation_length}
+    If $|\lambda_2| < 1$ and $\lambda_2 \ne 0$, then $\xi > 0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $0 < |\lambda_2| < 1$, we have $\log|\lambda_2| < 0$, so
+    $\xi = -1/\log|\lambda_2| > 0$.
+\end{proof}
+
+\section{Relation to parent Hamiltonians}
+
+\begin{remark}\label{rem:correlations_parent_hamiltonian}
+    \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates,
+          def:correlation_length, thm:correlator_exponential_bound}
+    When the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
+    (Definition~\ref{def:parent_hamiltonian}) whose ground state is the
+    matrix product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}),
+    the exponential decay bound
+    (Theorem~\ref{thm:correlator_exponential_bound}) shows that ground-state
+    correlations decay with a finite correlation length $\xi$.
+\end{remark}
+
+\begin{remark}\label{rem:zero_correlation_length}
+    \uses{thm:spectral_radius_le_one, def:correlation_length}
     The identity $\E^2=\E$ is equivalent to vanishing subleading spectrum;
     equivalently, $\xi=0$ and connected correlations vanish at nonzero
     separation.
