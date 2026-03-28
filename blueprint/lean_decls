@@ -344,6 +344,7 @@ MPSTensor.zGaugeEntry_mul_right
 MPSTensor.zGaugeEntry_pow_eq_one_of_pow_eq
 MPSTensor.zeroMPSTensor
 Matrix.charpoly_eq_of_forall_trace_pow_eq
+Matrix.isScalar_of_commute_span_eq_top
 Matrix.omegaProj
 Matrix.sum_pow_eq_implies_multiset_eq
 Matrix.tensorMapId
