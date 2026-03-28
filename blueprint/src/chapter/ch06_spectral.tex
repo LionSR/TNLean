@@ -201,6 +201,8 @@ mixed transfer power.
 
 The spectral-gap proofs use the Frobenius (Hilbert--Schmidt) norm
 as the natural norm for the finite-dimensional matrix algebra.
+We write $\|{\cdot}\|_F$ throughout; this coincides with the
+Hilbert--Schmidt norm $\|{\cdot}\|_{HS}$ on finite-dimensional spaces.
 We record the squared version and an isometric embedding into
 Euclidean space.
 
@@ -228,7 +230,6 @@ Euclidean space.
 \begin{definition}[Euclidean-space embedding]\label{def:mat_to_es}
     \lean{MPSTensor.matToES}
     \leanok
-    \uses{def:frob_sq}
     The map $\mathrm{vec} : M_{m \times n}(\C) \to \C^{mn}$ that
     flattens matrix entries is an isometric embedding with respect
     to the Frobenius norm: $\|\mathrm{vec}(X)\|^2 = \|X\|_F^2$.
