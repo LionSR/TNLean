@@ -2,7 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.ParentHamiltonian.IntersectionProperty
+import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.ParentHamiltonian.Defs
 
 /-!
@@ -31,8 +31,8 @@ with the periodic boundary condition:
 
 * `MPSTensor.mpvSubmodule` — the subspace spanned by the MPV
 * `MPSTensor.mpv_mem_groundSpace` — the MPV lies in the ground space
-* `MPSTensor.chainGroundSpace` — the periodic-chain ground space interface
-  (scaffolded with `sorry` until the window embedding API lands)
+* `MPSTensor.chainGroundSpace` — the periodic-chain ground space as intersection
+  of cyclic window ground submodules
 * `MPSTensor.groundSpace_unique_periodic` — uniqueness on the periodic chain
 * `MPSTensor.parentHamiltonian_unique_gs_injective` — uniqueness for `2L₀` sites
 * `MPSTensor.parentHamiltonian_unique_gs_normal` — optimal uniqueness for `L₀+1` sites
@@ -87,23 +87,34 @@ formalization lands. -/
 -- TODO(parent-hamiltonian): define `chainGroundSpace` as the intersection of
 -- cyclic window ground submodules once the periodic window embedding API lands.
 
-/-- The periodic chain ground space: the set of states satisfying the local
-ground-space condition at every position on the periodic chain.
+/-- The periodic chain ground space: the set of states `ψ` on `N` sites such
+that every cyclic window of `L` consecutive sites restricts into `G_L(A)`.
 
-**Current status**: this interface is kept as a `sorry`-backed placeholder
-until the chain-level window embedding API is implemented. The intended
-eventual definition is the intersection of the window ground submodules,
-equivalently `LinearMap.ker (parentHamiltonian A L N)`. -/
+When `N = 0` or `L > N`, we return `⊤` as a degenerate convention. -/
 noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
-    Submodule ℂ (NSiteSpace d N)
-    := by
-  sorry
+    Submodule ℂ (NSiteSpace d N) :=
+  if hN : 0 < N ∧ L ≤ N then
+    ⨅ (i : Fin N) (τ : Fin N → Fin d),
+      (groundSpace A L).comap (cyclicRestrictₗ hN.1 L i τ)
+  else ⊤
 
-/-- The MPV state is in the chain ground space. -/
--- TODO(parent-hamiltonian): prove from the eventual cyclic-window definition
--- of `chainGroundSpace` once the periodic window embedding API lands.
-theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
+/-- The MPV state is in the chain ground space.
+
+The proof uses trace cyclicity: for each cyclic window at position `i`, the
+restriction of the MPV to that window equals `groundSpaceMap A L X_τ` where
+`X_τ` is the product of `A`-matrices at outside positions.
+
+**Status**: requires cyclic list decomposition and trace cyclicity argument. -/
+theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
+    (hN : 0 < N) (hLN : L ≤ N) :
     (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
+  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩]
+  simp only [Submodule.mem_iInf, Submodule.mem_comap]
+  intro i τ
+  -- We need: cyclicRestrictₗ hN L i τ (mpv A) ∈ groundSpace A L
+  -- This follows from trace cyclicity: rotating the N-site product to start
+  -- at the window position gives evalWord(σ-part) * evalWord(outside-part).
+  rw [groundSpace, LinearMap.mem_range]
   sorry
 
 /-! ### Unique ground state -/
