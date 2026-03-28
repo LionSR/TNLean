@@ -315,13 +315,10 @@ theorem peripheral_eigenvalues_form_cyclic_group
       have hg_eq : (⟨u, hu_mem⟩ : ↥periphSubgroup) = g ^ z := hz.symm
       have hg_mod : g ^ z = g ^ (z % ↑m).toNat := by
         have hm_ne : (m : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
-        have hord : g ^ (m : ℤ) = 1 := by
-          rw [zpow_natCast, ← hg_order]; exact pow_orderOf_eq_one g
-        conv_lhs => rw [← Int.emod_add_mul_ediv z m]
-        rw [_root_.zpow_add, _root_.zpow_mul, hord, _root_.one_zpow, mul_one]
+        conv_lhs => rw [← zpow_mod_orderOf g z, hg_order]
         rw [show z % ↑m = ↑(z % ↑m).toNat from
-          (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm]
-        exact zpow_natCast g _
+          (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm, zpow_natCast]
+        rfl
       have hz_val : u = g.val ^ (z % ↑m).toNat := by
         have : (⟨u, hu_mem⟩ : ↥periphSubgroup).val = (g ^ (z % ↑m).toNat).val := by
           rw [hg_eq, hg_mod]
@@ -338,8 +335,6 @@ theorem peripheral_eigenvalues_form_cyclic_group
     · -- (⊇): each γ^k is a peripheral eigenvalue
       rintro ⟨k, rfl⟩
       -- g^k ∈ periphSubgroup, so (g^k).val.val ∈ peripheralEigenvalues E
-      have hgk_mem : g ^ (k : ℕ) ∈ Subgroup.zpowers g := by
-        exact ⟨↑k, by push_cast; rfl⟩
       have hgk_sub : (g ^ (k : ℕ)).val ∈ periphSubgroup := by
         exact (g ^ (k : ℕ)).property
       change ((g.val : ℂ)) ^ (k : ℕ) ∈ peripheralEigenvalues E
