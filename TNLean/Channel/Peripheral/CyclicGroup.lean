@@ -43,75 +43,9 @@ variable {d D : ℕ}
 /-!
 ## Invertibility of peripheral eigenvectors
 
-For an irreducible unital Kraus map with a PD adjoint-fixed point, any
-peripheral eigenvector is invertible. This is extracted from the proof
-of `peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint`.
+This file reuses `isUnit_peripheral_eigenvector` from
+`TNLean/Channel/Peripheral/ClosureFixedPoint.lean`.
 -/
-
-/-- A peripheral eigenvector of an irreducible unital Kraus map (with PD adjoint-fixed
-point) is a unit (i.e., an invertible matrix). -/
-theorem isUnit_peripheral_eigenvector [NeZero D]
-    (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
-    (hfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K))
-    (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
-    (hEig : MPSTensor.transferMap (d := d) (D := D) K X = μ • X)
-    (hμ : ‖μ‖ = 1) (hX_ne : X ≠ 0) :
-    IsUnit X := by
-  -- KS equality at X.
-  have hEig_map : Kraus.map K X = μ • X := by
-    simpa [Kraus.map, MPSTensor.transferMap_apply] using hEig
-  have h_unital' : Kraus.IsUnital K := by
-    simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using h_unital
-  have hKS_map :
-      Kraus.map K (Xᴴ * X) = (Kraus.map K X)ᴴ * Kraus.map K X :=
-    Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
-      K h_unital' hρ hfix X μ hEig_map hμ
-  -- X†X is a PSD fixed point.
-  have hμ_star_mul : star μ * μ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp [Complex.normSq_eq_norm_sq, hμ]
-  have hfix_kraus : KadisonSchwarz.krausMap (d := d) (D := D) K (Xᴴ * X) = Xᴴ * X := by
-    have hKS :
-        KadisonSchwarz.krausMap (d := d) (D := D) K (Xᴴ * X)
-          = (KadisonSchwarz.krausMap (d := d) (D := D) K X)ᴴ
-              * KadisonSchwarz.krausMap (d := d) (D := D) K X := by
-      simpa [Kraus.map, KadisonSchwarz.krausMap] using hKS_map
-    have hEig_kraus : KadisonSchwarz.krausMap (d := d) (D := D) K X = μ • X := by
-      simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using hEig
-    calc
-      KadisonSchwarz.krausMap (d := d) (D := D) K (Xᴴ * X)
-          = (KadisonSchwarz.krausMap (d := d) (D := D) K X)ᴴ
-              * KadisonSchwarz.krausMap (d := d) (D := D) K X := hKS
-      _ = (μ • X)ᴴ * (μ • X) := by simp [hEig_kraus]
-      _ = (star μ * μ) • (Xᴴ * X) := by
-            simp [conjTranspose_smul, smul_smul, mul_comm]
-      _ = Xᴴ * X := by
-            have hμ_starRingEnd_mul : ((starRingEnd ℂ) μ) * μ = 1 := by
-              simpa using hμ_star_mul
-            simp [hμ_starRingEnd_mul]
-  have hfix_transfer : MPSTensor.transferMap (d := d) (D := D) K (Xᴴ * X) = Xᴴ * X := by
-    simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using hfix_kraus
-  have hρ_psd : (Xᴴ * X).PosSemidef := by
-    simpa using Matrix.posSemidef_conjTranspose_mul_self X
-  have hρ_ne : Xᴴ * X ≠ 0 := by
-    intro h; exact hX_ne (Matrix.conjTranspose_mul_self_eq_zero.mp h)
-  -- Irreducibility gives PosDef → IsUnit.
-  have hρ_posdef : (Xᴴ * X).PosDef :=
-    MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible (A := K) (d := d) (D := D)
-      hIrr (ρ := Xᴴ * X) hρ_psd hρ_ne hfix_transfer
-  have hUnit_rho : IsUnit (Xᴴ * X) := Matrix.PosDef.isUnit hρ_posdef
-  have hUnit_det_rho : IsUnit ((Xᴴ * X).det) :=
-    (Matrix.isUnit_iff_isUnit_det (Xᴴ * X)).1 hUnit_rho
-  have hdet_rho_eq : (Xᴴ * X).det = star X.det * X.det := by
-    calc (Xᴴ * X).det = (Xᴴ).det * X.det := Matrix.det_mul _ _
-      _ = star X.det * X.det := by simp [Matrix.det_conjTranspose]
-  have hdetX_ne : X.det ≠ 0 := by
-    intro hdetX0
-    exact hUnit_det_rho.ne_zero (by simp [hdet_rho_eq, hdetX0])
-  exact (Matrix.isUnit_iff_isUnit_det X).2 ((isUnit_iff_ne_zero).2 hdetX_ne)
 
 /-!
 ## Product closure of peripheral eigenvalues
