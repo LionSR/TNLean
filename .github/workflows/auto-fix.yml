@@ -1,10 +1,16 @@
-name: Auto Fix on Label
+name: Auto Fix (Lean)
 
-# Triggers auto-fix workflows when the "auto-fix-claude" label is added to a PR.
-# This complements the workflow_run-triggered auto-fix workflows by allowing
-# users to manually kick off auto-fix by labeling a PR.
+# Unified auto-fix workflow. Triggers on:
+# 1. CI failure (Lean Action CI)        → fix build errors
+# 2. Blueprint failure (Lint blueprint) → fix blueprint compilation
+# 3. Review completion (Claude Code Review) with "auto-fix-claude" label → fix review comments
+# 4. Label addition ("auto-fix-claude") → retroactively fix any of the above
 
 on:
+  workflow_run:
+    workflows: ["Lean Action CI", "Lint blueprint", "Claude Code Review (Lean)"]
+    types:
+      - completed
   pull_request:
     types: [labeled]
 
@@ -15,84 +21,145 @@ permissions:
   issues: write
   id-token: write
 
+concurrency:
+  group: bot-fix-${{ github.event.workflow_run.head_branch || github.event.pull_request.head.ref }}
+  cancel-in-progress: true
+
 jobs:
-  find-failed-runs:
-    if: github.event.label.name == 'auto-fix-claude'
+  # ──────────────────────────────────────────────────────────────
+  # Setup: determine which fixes to run based on the trigger event
+  # ──────────────────────────────────────────────────────────────
+  setup:
+    if: |
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.pull_requests[0] &&
+       github.event.workflow_run.head_repository.full_name == github.repository) ||
+      (github.event_name == 'pull_request' && github.event.label.name == 'auto-fix-claude')
     runs-on: ubuntu-latest
     outputs:
-      failed_ci_run_id: ${{ steps.lookup.outputs.failed_ci_run_id }}
-      failed_blueprint_run_id: ${{ steps.lookup.outputs.failed_blueprint_run_id }}
-      has_failed_ci: ${{ steps.lookup.outputs.has_failed_ci }}
-      has_failed_blueprint: ${{ steps.lookup.outputs.has_failed_blueprint }}
-      has_review_threads: ${{ steps.lookup.outputs.has_review_threads }}
+      run_ci_fix: ${{ steps.resolve.outputs.run_ci_fix }}
+      run_blueprint_fix: ${{ steps.resolve.outputs.run_blueprint_fix }}
+      run_review_fix: ${{ steps.resolve.outputs.run_review_fix }}
+      ci_run_id: ${{ steps.resolve.outputs.ci_run_id }}
+      blueprint_run_id: ${{ steps.resolve.outputs.blueprint_run_id }}
+      head_sha: ${{ steps.resolve.outputs.head_sha }}
+      head_branch: ${{ steps.resolve.outputs.head_branch }}
+      pr_number: ${{ steps.resolve.outputs.pr_number }}
     steps:
-      - name: Find latest failed workflow runs for this PR
-        id: lookup
+      - name: Resolve event context
+        id: resolve
         uses: actions/github-script@v8
         with:
           script: |
-            const headSha = context.payload.pull_request.head.sha;
+            // Defaults
+            core.setOutput('run_ci_fix', 'false');
+            core.setOutput('run_blueprint_fix', 'false');
+            core.setOutput('run_review_fix', 'false');
+            core.setOutput('ci_run_id', '0');
+            core.setOutput('blueprint_run_id', '0');
 
-            // Helper: find latest run for a workflow file at this SHA
-            async function findFailedRun(workflowFile) {
-              try {
-                const runs = await github.rest.actions.listWorkflowRuns({
+            if (context.eventName === 'workflow_run') {
+              const wr = context.payload.workflow_run;
+              const prNumber = wr.pull_requests[0].number;
+              core.setOutput('head_sha', wr.head_sha);
+              core.setOutput('head_branch', wr.head_branch);
+              core.setOutput('pr_number', String(prNumber));
+
+              if (wr.name === 'Lean Action CI' && wr.conclusion === 'failure') {
+                core.setOutput('run_ci_fix', 'true');
+                core.setOutput('ci_run_id', String(wr.id));
+              } else if (wr.name === 'Lint blueprint' && wr.conclusion === 'failure') {
+                core.setOutput('run_blueprint_fix', 'true');
+                core.setOutput('blueprint_run_id', String(wr.id));
+              } else if (wr.name === 'Claude Code Review (Lean)' && wr.conclusion === 'success') {
+                // Review fix requires the "auto-fix-claude" label
+                const { data: pr } = await github.rest.pulls.get({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  workflow_id: workflowFile,
-                  head_sha: headSha,
-                  status: 'failure',
-                  per_page: 1
+                  pull_number: prNumber
                 });
-                if (runs.data.workflow_runs.length > 0) {
-                  return runs.data.workflow_runs[0].id;
+                if (pr.labels.some(l => l.name === 'auto-fix-claude')) {
+                  core.setOutput('run_review_fix', 'true');
+                } else {
+                  core.notice(`PR #${prNumber} does not have the 'auto-fix-claude' label. Skipping review fix.`);
                 }
-              } catch (e) {
-                core.warning(`Could not query runs for ${workflowFile}: ${e.message}`);
               }
-              return null;
-            }
+            } else if (context.eventName === 'pull_request') {
+              // Label was added — look up latest failed runs for this PR
+              const pr = context.payload.pull_request;
+              const headSha = pr.head.sha;
+              core.setOutput('head_sha', headSha);
+              core.setOutput('head_branch', pr.head.ref);
+              core.setOutput('pr_number', String(pr.number));
 
-            const ciRunId = await findFailedRun('lean_action_ci.yml');
-            const blueprintRunId = await findFailedRun('lint-blueprint.yml');
+              async function findFailedRun(workflowFile) {
+                try {
+                  const runs = await github.rest.actions.listWorkflowRuns({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    workflow_id: workflowFile,
+                    head_sha: headSha,
+                    status: 'failure',
+                    per_page: 1
+                  });
+                  if (runs.data.workflow_runs.length > 0) {
+                    return runs.data.workflow_runs[0].id;
+                  }
+                } catch (e) {
+                  core.warning(`Could not query runs for ${workflowFile}: ${e.message}`);
+                }
+                return null;
+              }
 
-            core.setOutput('failed_ci_run_id', ciRunId ? String(ciRunId) : '');
-            core.setOutput('failed_blueprint_run_id', blueprintRunId ? String(blueprintRunId) : '');
-            core.setOutput('has_failed_ci', ciRunId ? 'true' : 'false');
-            core.setOutput('has_failed_blueprint', blueprintRunId ? 'true' : 'false');
+              const ciRunId = await findFailedRun('lean_action_ci.yml');
+              if (ciRunId) {
+                core.setOutput('run_ci_fix', 'true');
+                core.setOutput('ci_run_id', String(ciRunId));
+              }
 
-            // Check for unresolved review threads
-            const query = `query($owner: String!, $repo: String!, $pr: Int!) {
-              repository(owner: $owner, name: $repo) {
-                pullRequest(number: $pr) {
-                  reviewThreads(first: 5) {
-                    nodes { isResolved }
+              const blueprintRunId = await findFailedRun('lint-blueprint.yml');
+              if (blueprintRunId) {
+                core.setOutput('run_blueprint_fix', 'true');
+                core.setOutput('blueprint_run_id', String(blueprintRunId));
+              }
+
+              // Check for unresolved review threads
+              const query = `query($owner: String!, $repo: String!, $pr: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequest(number: $pr) {
+                    reviewThreads(first: 5) {
+                      nodes { isResolved }
+                    }
                   }
                 }
+              }`;
+              const result = await github.graphql(query, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pr: pr.number
+              });
+              const threads = result.repository.pullRequest.reviewThreads.nodes;
+              if (threads.some(t => !t.isResolved)) {
+                core.setOutput('run_review_fix', 'true');
               }
-            }`;
-            const result = await github.graphql(query, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pr: context.payload.pull_request.number
-            });
-            const threads = result.repository.pullRequest.reviewThreads.nodes;
-            const hasUnresolved = threads.some(t => !t.isResolved);
-            core.setOutput('has_review_threads', hasUnresolved ? 'true' : 'false');
 
-            core.notice(`CI failed: ${!!ciRunId}, Blueprint failed: ${!!blueprintRunId}, Unresolved reviews: ${hasUnresolved}`);
+              core.notice(`Label trigger — CI fix: ${!!ciRunId}, Blueprint fix: ${!!blueprintRunId}, Review fix: ${threads.some(t => !t.isResolved)}`);
+            }
 
+  # ──────────────────────────────────────────────────────
+  # CI failure auto-fix (Lean build errors)
+  # ──────────────────────────────────────────────────────
   auto-fix-ci:
-    needs: find-failed-runs
-    if: needs.find-failed-runs.outputs.has_failed_ci == 'true'
+    needs: setup
+    if: needs.setup.outputs.run_ci_fix == 'true'
     uses: ./.github/workflows/_ci-auto-fix-shared.yml
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
     with:
-      head_sha: ${{ github.event.pull_request.head.sha }}
-      head_branch: ${{ github.event.pull_request.head.ref }}
-      workflow_run_id: ${{ fromJSON(needs.find-failed-runs.outputs.failed_ci_run_id) }}
-      pr_number: ${{ github.event.pull_request.number }}
+      head_sha: ${{ needs.setup.outputs.head_sha }}
+      head_branch: ${{ needs.setup.outputs.head_branch }}
+      workflow_run_id: ${{ fromJSON(needs.setup.outputs.ci_run_id) }}
+      pr_number: ${{ fromJSON(needs.setup.outputs.pr_number) }}
       setup_lean: true
       plugin_marketplaces: 'https://github.com/leanprover/skills.git'
       plugins: 'lean@leanprover'
@@ -119,17 +186,20 @@ jobs:
       claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
       claude_system_prompt: "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
 
+  # ──────────────────────────────────────────────────────
+  # Blueprint compilation auto-fix
+  # ──────────────────────────────────────────────────────
   auto-fix-blueprint:
-    needs: find-failed-runs
-    if: needs.find-failed-runs.outputs.has_failed_blueprint == 'true'
+    needs: setup
+    if: needs.setup.outputs.run_blueprint_fix == 'true'
     uses: ./.github/workflows/_ci-auto-fix-shared.yml
     secrets:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
     with:
-      head_sha: ${{ github.event.pull_request.head.sha }}
-      head_branch: ${{ github.event.pull_request.head.ref }}
-      workflow_run_id: ${{ fromJSON(needs.find-failed-runs.outputs.failed_blueprint_run_id) }}
-      pr_number: ${{ github.event.pull_request.number }}
+      head_sha: ${{ needs.setup.outputs.head_sha }}
+      head_branch: ${{ needs.setup.outputs.head_branch }}
+      workflow_run_id: ${{ fromJSON(needs.setup.outputs.blueprint_run_id) }}
+      pr_number: ${{ fromJSON(needs.setup.outputs.pr_number) }}
       setup_lean: false
       claude_prompt: |
         The blueprint compilation (leanblueprint web) failed. Your task is to fix the blueprint errors.
@@ -155,25 +225,25 @@ jobs:
       claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
       claude_system_prompt: "This is a Lean 4 math formalization project with a leanblueprint documentation system. The blueprint uses LaTeX files in blueprint/src/chapter/ with special commands: \\lean{DeclName}, \\leanok, \\uses{label}, \\label{...}. Fix only the blueprint compilation errors. Prefer minimal diffs. Validate with leanblueprint web before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
 
+  # ──────────────────────────────────────────────────────
+  # Review comments auto-fix
+  # ──────────────────────────────────────────────────────
   auto-fix-review:
-    needs: find-failed-runs
-    if: needs.find-failed-runs.outputs.has_review_threads == 'true'
+    needs: setup
+    if: needs.setup.outputs.run_review_fix == 'true'
     runs-on: ubuntu-latest
-    concurrency:
-      group: bot-fix-${{ github.event.pull_request.head.ref }}
-      cancel-in-progress: true
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ needs.setup.outputs.head_sha }}
           fetch-depth: 10
           token: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Attach to PR branch
         run: |
-          BRANCH="${{ github.event.pull_request.head.ref }}"
+          BRANCH="${{ needs.setup.outputs.head_branch }}"
           git fetch origin "$BRANCH"
           git checkout -B "$BRANCH" "origin/$BRANCH"
           git branch --set-upstream-to="origin/$BRANCH" "$BRANCH"
@@ -181,6 +251,8 @@ jobs:
       - name: Check iteration count
         id: guard
         env:
+          # IMPORTANT: This cap is shared with _ci-auto-fix-shared.yml.
+          # If you change the value or counting regex here, update it there too.
           MAX_BOT_FIX_ITERATIONS: 5
         run: |
           COUNT=0
@@ -222,7 +294,7 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            const prNumber = ${{ github.event.pull_request.number }};
+            const prNumber = ${{ needs.setup.outputs.pr_number }};
             const query = `query($owner: String!, $repo: String!, $pr: Int!) {
               repository(owner: $owner, name: $repo) {
                 pullRequest(number: $pr) {
@@ -271,6 +343,7 @@ jobs:
 
             const latestReview = allReviews.at(-1) ?? null;
 
+            // Sanitize untrusted review text to reduce prompt-injection surface.
             const sanitize = (s) => s
               .replace(/[^\x20-\x7E\n\r\t]/g, '')
               .replace(/```/g, '\u200B`\u200B`\u200B`');
@@ -304,8 +377,8 @@ jobs:
           prompt: |
             The automated code review found issues in this PR. Your task is to fix them.
 
-            PR Number: ${{ github.event.pull_request.number }}
-            Branch: ${{ github.event.pull_request.head.ref }}
+            PR Number: ${{ needs.setup.outputs.pr_number }}
+            Branch: ${{ needs.setup.outputs.head_branch }}
             Repository: ${{ github.repository }}
             Review-fix iteration: ${{ steps.guard.outputs.next_iteration }} (combined bot-fix cap: ${{ steps.guard.outputs.max_iterations }})
 
@@ -334,9 +407,10 @@ jobs:
                - Improve proof structure as suggested.
             6. Your goal is to fully close every incomplete lemma/theorem, not just address surface-level comments. Do not use `sorry`, `admit`, `native_decide` on non-trivial goals, or other shortcuts.
             7. Run `lake build` to verify your fixes compile with zero errors and zero `sorry`s.
-            8. Make minimal, targeted fixes. Do not refactor unrelated code.
-            9. Commit and push your fix to the current branch. Prefix commit messages with `[claude-review-fix]`.
-            10. After pushing, use the GitHub MCP tools to post a comment on the PR with:
+            8. When your fixes add or complete (remove sorry from) theorems, lemmas, or definitions, update the corresponding blueprint entry in `blueprint/src/chapter/` — add `\lean{DeclarationName}` and `\leanok` tags for new results, or add `\leanok` to `\begin{proof}` for newly proven results.
+            9. Make minimal, targeted fixes. Do not refactor unrelated code.
+            10. Commit and push your fix to the current branch. Prefix commit messages with `[claude-review-fix]`.
+            11. After pushing, use the GitHub MCP tools to post a comment on the PR with:
                - A summary of which review items were addressed.
                - If you used or discovered Mathlib lemmas during the fix, include a **Mathlib Audit**
                  section (name, module path, and how it was used). Skip this section for trivial fixes
@@ -345,4 +419,4 @@ jobs:
           claude_args: |
             --model claude-opus-4-6
             --allowedTools "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
-            --append-system-prompt "This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review. Prefer minimal diffs. Use your judgment on when Mathlib scouting is warranted — it is essential when closing sorrys or rewriting proofs, but unnecessary for naming fixes, docstrings, or style changes. When scouting IS needed, use exact?, apply?, rw?, simp?, and grep Mathlib source files. Reuse Mathlib lemmas rather than reproving from scratch. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR."
+            --append-system-prompt "This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review. Prefer minimal diffs. Use your judgment on when Mathlib scouting is warranted — it is essential when closing sorrys or rewriting proofs, but unnecessary for naming fixes, docstrings, or style changes. When scouting IS needed, use exact?, apply?, rw?, simp?, and grep Mathlib source files. Reuse Mathlib lemmas rather than reproving from scratch. If a mathematical result looks wrong, too strong, or suspiciously general, scout the LaTeX sources in Papers/ and WolfNotes/ where the original theorems and proofs are stored — read the relevant sections, compare hypotheses and conclusions, and cite the specific paper/section when flagging a discrepancy. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR."
