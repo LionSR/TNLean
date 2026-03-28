@@ -773,8 +773,9 @@ decomposition.
 
 \begin{proof}\leanok\uses{lem:perBlockLinearExtension_mul}
     A nonzero multiplicative linear endomorphism of $\MN{D_k}$ is
-    automatically bijective: surjectivity follows from the simplicity
-    of $\MN{D_k}$, and injectivity from finite dimension.
+    automatically bijective: injectivity follows from the simplicity
+    of $\MN{D_k}$ (the kernel is a proper ideal, hence zero), and
+    surjectivity from finite dimension.
     Non-vanishing of $T_k$ is established via the trace pairing: if
     $T_k = 0$, then all $B_k^i = 0$, contradicting the non-vanishing
     of the trace pairing for injective tensors.
@@ -811,9 +812,10 @@ decomposition.
     a permutation $\sigma \in S_r$ (with $D_{\sigma(k)} = D_k$ for
     all~$k$) and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that
     \[
-        T_{\sigma(k)}(M) = X_k\, M\, X_k^{-1}
+        (T(M))_{\sigma(k)} = X_k\, M\, X_k^{-1}
     \]
-    for all $M \in \MN{D_k}$ and all $k$.
+    for all $M \in \MN{D_k}$ (viewed as supported in block~$k$) and
+    all~$k$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:piAlgEquiv, thm:skolem_noether}
@@ -930,7 +932,7 @@ $\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr) =
 Block separation extracts the per-block identities from the global one
 under canonical-form normalization.
 
-\begin{definition}[Canonical form]\label{def:canonical_form}
+\begin{definition}[Canonical form]\label{def:isCanonicalForm}
     \lean{MPSTensor.IsCanonicalForm}
     \leanok
     \uses{def:injective}
@@ -942,7 +944,7 @@ under canonical-form normalization.
         \item each $A_k$ is left-canonical:
               $\sum_i (A_k^i)^{\dagger}\, A_k^i = \Id_{D_k}$,
         \item the weights are strictly ordered by norm:
-              $\|\mu_0\| > \|\mu_1\| > \cdots > \|\mu_{r-1}\| > 0$,
+              $|\mu_0| > |\mu_1| > \cdots > |\mu_{r-1}| > 0$,
         \item the self-overlaps are normalised:
               $O_{A_k A_k}(N) \to 1$ as $N \to \infty$.
     \end{enumerate}
@@ -951,7 +953,7 @@ under canonical-form normalization.
 \begin{definition}[Normal canonical form]\label{def:normal_canonical_form}
     \lean{MPSTensor.IsNormalCanonicalForm}
     \leanok
-    \uses{def:canonical_form}
+    \uses{def:isCanonicalForm}
     A family is in \emph{normal canonical form} if it satisfies the
     canonical-form conditions with each block additionally
     \emph{irreducible} (no nontrivial invariant projection) and
@@ -962,7 +964,7 @@ under canonical-form normalization.
     \label{thm:per_block_sameMPV_of_canonical_form}
     \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
     \leanok
-    \uses{def:canonical_form, def:same_mpv}
+    \uses{def:isCanonicalForm, def:same_mpv}
     Let $\{A_k\}$ be in canonical form with weights $\{\mu_k\}$, and
     let $\{B_k\}$ be another family with each $B_k$ injective and
     left-canonical.
@@ -973,7 +975,7 @@ under canonical-form normalization.
 
 \begin{proof}
     \leanok
-    \uses{def:canonical_form}
+    \uses{def:isCanonicalForm}
     The proof proceeds by strong induction on the number of blocks~$r$.
     For $r = 1$, the weighted sum degenerates and the result is
     immediate after cancelling $\mu_0^N \ne 0$.
@@ -985,9 +987,9 @@ under canonical-form normalization.
     Multiplying by the MPV components of $A_0$ and summing over $\sigma$
     converts this to an overlap identity.
     Dividing by $|\mu_0|^{2N}$ and using the strict norm ordering
-    $\|\mu_1\| / \|\mu_0\| < 1$, the tail terms
+    $|\mu_1| / |\mu_0| < 1$, the tail terms
     $(k \ge 1)$ decay geometrically with ratio
-    $\rho = \|\mu_1\| / \|\mu_0\|$.
+    $\rho = |\mu_1| / |\mu_0|$.
     The leading term ($k = 0$) therefore converges:
     $O_{A_0 B_0}(N) \to 1$ as $N \to \infty$.
     Combined with the normalised self-overlap
@@ -1136,11 +1138,14 @@ scalar factor.
     group representation $U : G \to \GL_d(\C)$.
     For each $g \in G$, let $X(g) \in \GL_D(\C)$ satisfy
     $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
-    Then for all $g, h \in G$, there exists $c(g,h) \in \C^{\times}$
+    Then for all $g, h \in G$, there exists $c(g,h) \in \C$
     such that
     \[
         X(h)\, X(g) = c(g,h)\, X(g \cdot h).
     \]
+    (In fact $c(g,h) \ne 0$ since both sides are invertible, so
+    $c(g,h) \in \C^{\times}$; the Lean statement records the
+    existential without the nonzero assertion.)
 \end{theorem}
 
 \begin{proof}\leanok
