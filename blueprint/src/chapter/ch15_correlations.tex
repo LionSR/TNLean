@@ -9,8 +9,8 @@ transfer map.
 When the MPS tensor generates a parent Hamiltonian
 (Chapter~\ref{ch:parent_hamiltonian}), the correlator quantifies spatial
 correlations in the ground state.  The exponential decay rate is set by the
-spectral gap of the transfer map established in
-Chapter~\ref{ch:spectral}.
+spectral properties of the transfer map, i.e.\ by the modulus of its
+subleading eigenvalues.
 
 \section{Connected correlators from the transfer map}
 
@@ -19,8 +19,8 @@ Chapter~\ref{ch:spectral}.
     \leanok
     \uses{def:transfer_map, thm:qpf}
     Fix an MPS tensor $A$ and a right fixed point $\rho^R$ of its transfer map
-    (whose existence and uniqueness for injective $A$ is guaranteed by
-    the quantum Perron--Frobenius theorem, Theorem~\ref{thm:qpf}).
+    (whose existence, and uniqueness up to scaling under the hypotheses of
+    Theorem~\ref{thm:qpf}, are guaranteed by the quantum Perron--Frobenius theorem).
     For a local observable $X \in \MN{D}$ define
     \[
         \langle X_0 \rangle := \tr(X\rho^R).
@@ -73,7 +73,7 @@ Chapter~\ref{ch:spectral}.
 \begin{theorem}[Exponential decay bound]\label{thm:correlator_exponential_bound}
     \lean{MPSTensor.connectedCorrelator_bound}
     \leanok
-    \uses{thm:correlator_sum_exponentials, thm:spectral_gap}
+    \uses{thm:correlator_sum_exponentials}
     If $|\lambda_j| \le |\lambda_2| < 1$ for all subleading eigenvalues, then
     there exists $C_{XY}\ge 0$ such that
     \[
@@ -98,7 +98,7 @@ Chapter~\ref{ch:spectral}.
 \begin{lemma}[Correlation length is positive]\label{lem:correlation_length_pos}
     \lean{MPSTensor.correlationLength_pos}
     \leanok
-    \uses{def:correlation_length, thm:spectral_gap}
+    \uses{def:correlation_length}
     If $|\lambda_2| < 1$ and $\lambda_2 \ne 0$, then $\xi > 0$.
 \end{lemma}
 
