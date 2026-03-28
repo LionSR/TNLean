@@ -174,49 +174,54 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   \[
     G_L(A) \hookrightarrow G_{L+1}(A)
   \]
-  via the natural embedding that pads a coefficient function on $L$ sites to
-  $L{+}1$ sites by summing over the extra index.
-  Concretely, if $\phi \in G_L(A)$ with $\phi(\sigma) = \tr(A^\sigma X)$, then
-  $\tilde\phi \in G_{L+1}(A)$ with
-  $\tilde\phi(\sigma,j) = \tr(A^\sigma A^j X)$.
+  via a natural embedding that extends a coefficient function on $L$ sites to
+  $L{+}1$ sites by one site on the right.
+  Concretely, if $\phi \in G_L(A)$ with $\phi(\sigma) = \tr(A^\sigma X)$
+  for a unique $X$ (which requires $\Gamma_L$ to be injective, e.g.\ when
+  $A$ is $L$-block injective), then $\tilde\phi \in G_{L+1}(A)$ with
+  \[
+    \tilde\phi(\sigma,j) = \tr(A^\sigma A^j X).
+  \]
+  A symmetric statement holds for extension by one site on the left.
 \end{lemma}
 
 \begin{proof}
-  \uses{lem:ground_space_mono}
+  \uses{def:ground_space_parent}
   \notready
-  Direct from the definition: if $\phi = \Gamma_L(X)$ then
-  $\tilde\phi = \Gamma_{L+1}(X)$ when the extra site carries a free
-  summation.
+  If $\phi = \Gamma_L(X)$ then $\tilde\phi = \Gamma_{L+1}(X)$.
+  When $\Gamma_L$ is injective, $X$ is uniquely determined by $\phi$,
+  so the extension map is well-defined and independent of choices.
 \end{proof}
 
 \begin{lemma}[Intersection property]\label{lem:ground_space_intersection}
   \notready
   \uses{def:ground_space_parent, def:injective}
   Let $A$ be injective (Definition~\ref{def:injective}).
-  For overlapping windows of lengths $L$ starting at adjacent sites,
+  For overlapping windows of $L{+}1$ sites starting at adjacent positions,
   the ground spaces satisfy
   \[
-    G_{[1,L+1]}(A) \cap G_{[2,L+2]}(A)
-    = G_{[1,L+2]}(A),
+    G_{[0,L]}(A) \cap G_{[1,L+1]}(A)
+    = G_{[0,L+1]}(A),
   \]
-  where $G_{[a,b]}$ denotes the ground space on sites $a$ through $b$.
+  where $G_{[a,b]}$ denotes the ground space on sites $a$ through $b$
+  (a window of $b - a + 1$ sites).
 \end{lemma}
 
 \begin{proof}
-  \uses{lem:ground_space_intersection, def:injective}
+  \uses{lem:ground_space_mono, def:injective}
   \notready
   The inclusion $\supseteq$ follows from
   Lemma~\ref{lem:ground_space_mono}.
   For $\subseteq$: take
-  $\phi \in G_{[1,L+1]}(A) \cap G_{[2,L+2]}(A)$.
+  $\phi \in G_{[0,L]}(A) \cap G_{[1,L+1]}(A)$.
   From the first membership, $\phi(\sigma) = \tr(A^\sigma X)$ for some
   $X \in \MN{D}$.
   From the second, $\phi(\sigma) = \tr(A^{\sigma'} Y)$ for some $Y$,
   where $\sigma'$ is the shifted window.
-  On the overlap (sites $2$ through $L{+}1$), injectivity provides a
+  On the overlap (sites $1$ through $L$), injectivity provides a
   left inverse for the map $X \mapsto \{A^\sigma X\}_\sigma$.
   This forces $X$ (hence $Y$) to be uniquely determined, and $\phi$
-  extends to $G_{[1,L+2]}(A)$.
+  extends to $G_{[0,L+1]}(A)$.
 \end{proof}
 
 \begin{theorem}[Unique ground state — injective case]\label{thm:unique_gs_injective}
@@ -225,22 +230,28 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         def:parent_hamiltonian, def:injective, def:l_blk_injective}
   Let $A$ be $L_0$-block injective (Definition~\ref{def:l_blk_injective}).
   For a periodic chain of length $N \ge 2L_0$, the parent Hamiltonian
-  $H_N(A,L_0)$ has a unique ground state, which is the MPV
-  $\ket{V^{(N)}(A)}$.
+  $H_N(A,L_0{+}1)$ has a unique ground state, which is the MPV
+  $V^{(N)}(A)$.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:unique_gs_injective, lem:ground_space_intersection,
-        lem:ground_space_mono, lem:parent_hamiltonian_annihilates}
+  \uses{lem:ground_space_intersection, lem:ground_space_mono,
+        lem:parent_hamiltonian_annihilates}
   \notready
   After blocking $L_0$ sites, $A^{[L_0]}$ is injective.
+  The interaction range $L_0{+}1$ ensures adjacent windows overlap in
+  $L_0$ sites, which is enough for the blocked tensor to be injective
+  on the overlap.
   Iterate the intersection property
   (Lemma~\ref{lem:ground_space_intersection}) across the chain: each
   step extends the ground-space window by one site.
   After $N - L_0$ iterations the window wraps around the periodic chain.
-  Injectivity forces the boundary matrix $X$ to satisfy
-  $X = A^{[L_0],\sigma} X (A^{[L_0],\sigma'})^{-1}$ for all words,
-  leaving a one-dimensional space.
+  Comparing the two descriptions of a ground state on the closed chain
+  shows that the boundary matrix $X$ must commute with every word matrix
+  $A^{[L_0],\sigma}$.
+  By injectivity, the matrices $\{A^{[L_0],\sigma}\}$ generate all of
+  $\MN{D}$, so their commutant consists only of scalar multiples of the
+  identity; hence $X$ is scalar and the ground space is one-dimensional.
   By Lemma~\ref{lem:parent_hamiltonian_annihilates}, the MPV lies in this
   space.
 \end{proof}
@@ -251,21 +262,21 @@ grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         def:parent_hamiltonian, def:normal}
   Let $A$ be normal with injectivity length $L_0$
   (Definition~\ref{def:normal}).
-  For a periodic chain of length $N \ge L_0 + 1$, the parent Hamiltonian
+  For a periodic chain of length $N \ge 2(L_0 + 1)$, the parent Hamiltonian
   $H_N(A,L_0{+}1)$ has a unique ground state.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:unique_gs_normal, lem:ground_space_intersection,
-        lem:ground_space_mono}
+  \uses{lem:ground_space_intersection, lem:ground_space_mono}
   \notready
-  A refined version of the argument for
-  Theorem~\ref{thm:unique_gs_injective}.
-  Normality gives injectivity of $A^{[L_0]}$, and the interaction
-  range $L_0{+}1$ provides enough overlap for a single intersection
-  step to grow the window.
-  The chain wraps in $N - 1$ steps, yielding uniqueness for
-  $N \ge L_0 + 1$~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
+  Normality gives injectivity of $A^{[L_0]}$.
+  The interaction range $L_0{+}1$ provides enough overlap ($L_0$ sites)
+  for a single intersection step to grow the window by one site.
+  Iterating across the periodic chain of length $N \ge 2(L_0+1)$ ensures
+  enough room for the windows to wrap around and close, yielding
+  uniqueness by the same commutant argument as in
+  Theorem~\ref{thm:unique_gs_injective}~\cite{Fannes1992Finitely,
+  PerezGarcia2007Matrix}.
 \end{proof}
 
 \section{Spectral gap}\label{sec:spectral_gap}
@@ -293,7 +304,6 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:martingale_criterion}
   \notready
   From $h_i^2 = h_i$,
   \[
@@ -302,11 +312,15 @@ Lucia~\cite{Kastoryano2018Martingale}.
     + \sum_{\substack{i < j \\ \text{non-overlapping}}}
     (h_i h_j + h_j h_i).
   \]
-  Non-overlapping terms commute and each product is PSD, so the last sum
-  is $\ge 0$.
-  The martingale condition bounds the overlapping sum from below:
+  Non-overlapping projectors commute ($h_i h_j = h_j h_i$), so their
+  product $h_i h_j$ is itself a projector and hence PSD; thus the last
+  sum is $\ge 0$.
+  For the overlapping sum, apply the martingale condition to each
+  ordered pair $(i,j)$ with $i < j$. Summing over $i < j$ and using
+  $c_{ij} = c_{ji}$ (which may be assumed WLOG by symmetrising), the
+  bound becomes
   \[
-    \sum_{\text{overlap}} (h_i h_j + h_j h_i)
+    \sum_{i < j,\,\text{overlap}} (h_i h_j + h_j h_i)
     \ge -(1-\gamma) \sum_i \Bigl(\sum_{j \ne i} c_{ij}\Bigr) h_i
     \ge -(1-\gamma) H.
   \]
@@ -319,16 +333,18 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{lemma}[Martingale condition for MPS]\label{lem:martingale_mps}
   \notready
   \uses{thm:martingale_criterion, def:parent_interaction,
-        lem:ground_space_intersection, def:injective}
-  Let $A$ be injective.
-  The parent interaction terms $h_i = \Pi_{G_L(A)^\perp}$ at adjacent
-  sites satisfy the martingale condition of
-  Theorem~\ref{thm:martingale_criterion} with constants $c_{ij}$ and
-  $\gamma > 0$ depending only on $A$ (not on $N$).
+        def:local_term_parent, lem:ground_space_intersection, def:injective}
+  Let $A$ be injective and fix an interaction range $L$ as in
+  Definition~\ref{def:parent_interaction}.  Let $h_L(A) := \Pi_{G_L(A)^\perp}$
+  be the $L$-site parent interaction, and for each chain length and site $i$
+  let $h_i$ denote its translate as in Definition~\ref{def:local_term_parent}.
+  Then the adjacent interaction terms $h_i$ and $h_{i+1}$ satisfy the
+  martingale condition of Theorem~\ref{thm:martingale_criterion} with constants
+  $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
 \end{lemma}
 
 \begin{proof}
-  \uses{lem:martingale_mps, lem:ground_space_intersection, def:injective}
+  \uses{lem:ground_space_intersection, def:injective}
   \notready
   Injectivity bounds the angle between $\ker(h_i)$ and $\ker(h_j)$
   away from zero: the intersection property
@@ -342,8 +358,9 @@ Lucia~\cite{Kastoryano2018Martingale}.
   \notready
   \uses{thm:martingale_criterion, lem:martingale_mps,
         def:parent_hamiltonian}
-  For an injective MPS tensor $A$, there exists $\gamma > 0$ such that
-  for all $N$ sufficiently large,
+  For an injective MPS tensor $A$ with injectivity length $L_0$, let
+  $L := L_0 + 1$ be the interaction range.
+  There exists $\gamma > 0$ such that for all $N \ge 2L$,
   \[
     \lambda_{\min}^+\bigl(H_N(A,L)\bigr) \ge \gamma,
   \]
@@ -351,8 +368,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:parent_hamiltonian_gapped, thm:martingale_criterion,
-        lem:martingale_mps}
+  \uses{thm:martingale_criterion, lem:martingale_mps}
   \notready
   Apply Theorem~\ref{thm:martingale_criterion} with the constants from
   Lemma~\ref{lem:martingale_mps}.
@@ -376,30 +392,30 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   separation (Definition~\ref{def:normal_cf_bnt}), where
   $\{A_1,\ldots,A_g\}$ is a basis of normal tensors
   (Definition~\ref{def:bnt}).
-  For $N \ge L_0 + 1$ (where $L_0$ is the maximum injectivity length of
+  For $N \ge 2(L_0 + 1)$ (where $L_0$ is the maximum injectivity length of
   the blocks), the ground space of the parent Hamiltonian satisfies
   \[
     \ker\bigl(H_N(A,L_0{+}1)\bigr)
-    = \spn\bigl\{\ket{V^{(N)}(A_k)} : k = 1,\ldots,g\bigr\}.
+    = \spn\bigl\{V^{(N)}(A_k) : k = 1,\ldots,g\bigr\}.
   \]
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:gs_eq_bnt_span, thm:unique_gs_normal,
-        lem:ground_space_intersection, def:bnt}
+  \uses{thm:unique_gs_normal, lem:ground_space_intersection, def:bnt,
+        lem:parent_hamiltonian_annihilates}
   \notready
   \textbf{$\supseteq$}: Each $A_k$ is normal, so
   Lemma~\ref{lem:parent_hamiltonian_annihilates} (applied to the
   block-diagonal structure) gives
-  $H_N(A,L_0{+}1)\ket{V^{(N)}(A_k)} = 0$.
+  $H_N(A,L_0{+}1)\,V^{(N)}(A_k) = 0$.
   Linearity of the kernel yields the inclusion.
 
   \textbf{$\subseteq$}: Take $\psi \in \ker(H_N)$.
   The block-diagonal structure of $A$ decomposes the local ground spaces:
   $G_L(A) = \bigoplus_k G_L(A_k)$ (the off-diagonal blocks do not
   contribute due to the block structure of the transfer map).
-  Restricting $\psi$ to any injective block $A_k$, the intersection
-  property forces $\psi$ to lie in $\spn\{\ket{V^{(N)}(A_k)}\}$ by
+  Restricting $\psi$ to any normal block $A_k$, the intersection
+  property forces $\psi$ to lie in $\spn\{V^{(N)}(A_k)\}$ by
   Theorem~\ref{thm:unique_gs_normal}.
   Summing over blocks gives the
   inclusion~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
