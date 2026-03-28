@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Overlap.Basic
+import Mathlib.Analysis.SpecificLimits.Normed
 
 /-!
 # Convergence helpers for MPV overlap arguments
@@ -108,8 +109,6 @@ lemma geometric_mul_inner_tendsto_zero {D₁ D₂ : ℕ} (c : ℂ)
   -- Cauchy-Schwarz + AM-GM gives ‖mpvInner X Y N‖ ≤ (C_X + C_Y) / 2.
   apply geometric_mul_bounded_tendsto_zero c _ ((C_X + C_Y) / 2) hc
   intro N
-  have hx := norm_nonneg (mpvState (d := d) X N)
-  have hy := norm_nonneg (mpvState (d := d) Y N)
   have h_cs : ‖mpvInner (d := d) X Y N‖ ≤
       ‖mpvState (d := d) X N‖ * ‖mpvState (d := d) Y N‖ := by
     unfold mpvInner; exact norm_inner_le_norm _ _
@@ -125,7 +124,7 @@ lemma geometric_mul_inner_tendsto_zero {D₁ D₂ : ℕ} (c : ℂ)
 `g j₀ N → 1`, while all other ratios have norm `< 1` and their `g j N → 0`, the whole
 sum → 1. -/
 lemma sum_tendsto_one_of_diag
-    {r : ℕ} {μ : Fin r → ℂ} {μ0 : ℂ} {hμ0 : μ0 ≠ 0}
+    {r : ℕ} {μ : Fin r → ℂ} {μ0 : ℂ} (hμ0 : μ0 ≠ 0)
     {j0 : Fin r} {g : Fin r → ℕ → ℂ}
     (hμj0 : μ j0 = μ0)
     (hdiag : Tendsto (g j0) atTop (nhds 1))
