@@ -25,24 +25,6 @@ for reusability.
 open scoped Matrix BigOperators
 open Filter
 
-namespace MPSTensor
-
-variable {d : ℕ}
-
-/-- `mpvOverlap → 0` implies `mpvInner → 0`, via the relation
-`mpvOverlap = star ∘ mpvInner`. -/
-lemma tendsto_inner_zero {D₁ D₂ : ℕ} (X : MPSTensor d D₁) (Y : MPSTensor d D₂)
-    (hOv : Tendsto (fun N => mpvOverlap (d := d) X Y N) atTop (nhds 0)) :
-    Tendsto (fun N => mpvInner (d := d) X Y N) atTop (nhds 0) := by
-  simpa [mpvOverlap_eq_star_mpvInner] using hOv.star
-
-/-- `mpvOverlap X X → 1` (self-overlap) implies `mpvInner X X → 1`, via the relation
-`mpvOverlap = star ∘ mpvInner`. -/
-lemma tendsto_inner_one {D : ℕ} (X : MPSTensor d D)
-    (hOv : Tendsto (fun N => mpvOverlap (d := d) X X N) atTop (nhds 1)) :
-    Tendsto (fun N => mpvInner (d := d) X X N) atTop (nhds 1) := by
-  simpa [mpvOverlap_eq_star_mpvInner] using hOv.star
-
 /-- If `‖c‖ ≤ 1` and `f N → 0`, then `c ^ N * f N → 0`. -/
 lemma bounded_mul_tendsto_zero
     (c : ℂ) (f : ℕ → ℂ) (hc : ‖c‖ ≤ 1)
@@ -71,6 +53,52 @@ lemma geometric_mul_bounded_tendsto_zero
   calc ‖c ^ N * f N‖ = ‖c ^ N‖ * ‖f N‖ := norm_mul _ _
     _ ≤ ‖c ^ N‖ * C := mul_le_mul_of_nonneg_left (hbound N) (norm_nonneg _)
     _ = ‖c‖ ^ N * C := by rw [norm_pow]
+
+/-- In a weighted sum `∑ j, (μ j / μ₀) ^ N * g j N` where the `j₀`-th term has ratio 1 and
+`g j₀ N → 1`, while all other ratios have norm `< 1` and their `g j N → 0`, the whole
+sum → 1. -/
+lemma sum_tendsto_one_of_diag
+    {r : ℕ} {μ : Fin r → ℂ} {μ0 : ℂ} (hμ0 : μ0 ≠ 0)
+    {j0 : Fin r} {g : Fin r → ℕ → ℂ}
+    (hμj0 : μ j0 = μ0)
+    (hdiag : Tendsto (g j0) atTop (nhds 1))
+    (hratio : ∀ j, j ≠ j0 → ‖μ j / μ0‖ < 1)
+    (hcross : ∀ j, j ≠ j0 → Tendsto (g j) atTop (nhds 0)) :
+    Tendsto (fun N => ∑ j : Fin r, (μ j / μ0) ^ N * g j N) atTop (nhds 1) := by
+  have hsplit : ∀ N, ∑ j, (μ j / μ0) ^ N * g j N =
+      (μ j0 / μ0) ^ N * g j0 N +
+      ∑ j ∈ Finset.univ.erase j0, (μ j / μ0) ^ N * g j N := by
+    intro N; rw [← Finset.add_sum_erase _ _ (Finset.mem_univ j0)]
+  simp_rw [hsplit]
+  have h1 : Tendsto (fun N => (μ j0 / μ0) ^ N * g j0 N) atTop (nhds 1) := by
+    simp only [hμj0, div_self hμ0, one_pow, one_mul]; exact hdiag
+  have h2 : Tendsto (fun N => ∑ j ∈ Finset.univ.erase j0,
+      (μ j / μ0) ^ N * g j N) atTop (nhds (0 : ℂ)) := by
+    have := tendsto_finset_sum (Finset.univ.erase j0)
+      (fun (j : Fin r) (hj : j ∈ Finset.univ.erase j0) =>
+        (tendsto_pow_atTop_nhds_zero_of_norm_lt_one
+          (hratio j (Finset.ne_of_mem_erase hj))).mul
+        (hcross j (Finset.ne_of_mem_erase hj)))
+    simpa using this
+  convert h1.add h2 using 1; simp only [add_zero]
+
+namespace MPSTensor
+
+variable {d : ℕ}
+
+/-- `mpvOverlap → 0` implies `mpvInner → 0`, via the relation
+`mpvOverlap = star ∘ mpvInner`. -/
+lemma tendsto_inner_zero {D₁ D₂ : ℕ} (X : MPSTensor d D₁) (Y : MPSTensor d D₂)
+    (hOv : Tendsto (fun N => mpvOverlap (d := d) X Y N) atTop (nhds 0)) :
+    Tendsto (fun N => mpvInner (d := d) X Y N) atTop (nhds 0) := by
+  simpa [mpvOverlap_eq_star_mpvInner] using hOv.star
+
+/-- `mpvOverlap X X → 1` (self-overlap) implies `mpvInner X X → 1`, via the relation
+`mpvOverlap = star ∘ mpvInner`. -/
+lemma tendsto_inner_one {D : ℕ} (X : MPSTensor d D)
+    (hOv : Tendsto (fun N => mpvOverlap (d := d) X X N) atTop (nhds 1)) :
+    Tendsto (fun N => mpvInner (d := d) X X N) atTop (nhds 1) := by
+  simpa [mpvOverlap_eq_star_mpvInner] using hOv.star
 
 /-- Geometric factor with `‖c‖ < 1` times a Cauchy-Schwarz-bounded inner product tends to
 zero, given that both self-overlaps converge to 1. -/
@@ -119,33 +147,5 @@ lemma geometric_mul_inner_tendsto_zero {D₁ D₂ : ℕ} (c : ℂ)
     _ = (‖mpvInner (d := d) X X N‖ + ‖mpvInner (d := d) Y Y N‖) / 2 := by
           rw [hXX_sq N, hYY_sq N]
     _ ≤ (C_X + C_Y) / 2 := by linarith [hXX_bdd N, hYY_bdd N]
-
-/-- In a weighted sum `∑ j, (μ j / μ₀) ^ N * g j N` where the `j₀`-th term has ratio 1 and
-`g j₀ N → 1`, while all other ratios have norm `< 1` and their `g j N → 0`, the whole
-sum → 1. -/
-lemma sum_tendsto_one_of_diag
-    {r : ℕ} {μ : Fin r → ℂ} {μ0 : ℂ} (hμ0 : μ0 ≠ 0)
-    {j0 : Fin r} {g : Fin r → ℕ → ℂ}
-    (hμj0 : μ j0 = μ0)
-    (hdiag : Tendsto (g j0) atTop (nhds 1))
-    (hratio : ∀ j, j ≠ j0 → ‖μ j / μ0‖ < 1)
-    (hcross : ∀ j, j ≠ j0 → Tendsto (g j) atTop (nhds 0)) :
-    Tendsto (fun N => ∑ j : Fin r, (μ j / μ0) ^ N * g j N) atTop (nhds 1) := by
-  have hsplit : ∀ N, ∑ j, (μ j / μ0) ^ N * g j N =
-      (μ j0 / μ0) ^ N * g j0 N +
-      ∑ j ∈ Finset.univ.erase j0, (μ j / μ0) ^ N * g j N := by
-    intro N; rw [← Finset.add_sum_erase _ _ (Finset.mem_univ j0)]
-  simp_rw [hsplit]
-  have h1 : Tendsto (fun N => (μ j0 / μ0) ^ N * g j0 N) atTop (nhds 1) := by
-    simp only [hμj0, div_self hμ0, one_pow, one_mul]; exact hdiag
-  have h2 : Tendsto (fun N => ∑ j ∈ Finset.univ.erase j0,
-      (μ j / μ0) ^ N * g j N) atTop (nhds (0 : ℂ)) := by
-    have := tendsto_finset_sum (Finset.univ.erase j0)
-      (fun (j : Fin r) (hj : j ∈ Finset.univ.erase j0) =>
-        (tendsto_pow_atTop_nhds_zero_of_norm_lt_one
-          (hratio j (Finset.ne_of_mem_erase hj))).mul
-        (hcross j (Finset.ne_of_mem_erase hj)))
-    simpa using this
-  convert h1.add h2 using 1; simp only [add_zero]
 
 end MPSTensor
