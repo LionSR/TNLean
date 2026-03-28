@@ -118,7 +118,7 @@ Here is exactly what happens:
 1. You push code to a PR branch.
 2. **Claude Code Review** runs and posts inline comments (e.g., "this proof uses `sorry`", "naming doesn't follow Mathlib conventions").
 3. If the PR has the `auto-fix-claude` label, **pr-review-auto-fix** triggers. It:
-   - Reads only the review comments from this cycle (filtered by timestamp)
+   - Reads all unresolved, non-outdated review threads on the PR
    - Passes them to Claude, which fixes each issue
    - Runs `lake build` to verify the fix compiles
    - Pushes a commit tagged `[claude-review-fix]`
