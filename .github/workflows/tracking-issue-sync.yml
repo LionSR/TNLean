@@ -167,10 +167,13 @@ jobs:
             1. Search for open tracking issues (label `tracking`) whose
                tasklist contains `#N` (the closed issue number).
             2. For each match, update the body: `- [ ] #N` → `- [x] #N`
-            3. Comment on the tracking issue:
+            3. Suggest next steps (see §5 below).
+            4. Comment on the tracking issue:
                "✅ #N (*title*) has been resolved. Updated checklist.
-               [X/Y tasks complete]"
-            4. Apply the `all-resolved` rule (see Key Rules §2).
+               [X/Y tasks complete]
+
+               **Suggested next:** <one-line recommendation from §5>"
+            5. Apply the `all-resolved` rule (see Key Rules §2).
 
             ---
 
@@ -203,13 +206,23 @@ jobs:
             2. **Find tracking issues** (label `tracking`) whose body
                references the PR number, or whose tasklist references any
                linked issue number.
-            3. **Comment on each tracking issue** with a summary: the PR
-               title, what it accomplished, and current task progress.
-            4. **Comment on each linked issue that stays open** (i.e., the
+            3. Suggest next steps for each tracking issue (see §5 below).
+            4. **Comment on each tracking issue** with a summary: the PR
+               title, what it accomplished, current task progress, and a
+               follow-up suggestion. Example:
+               "📦 PR #X (*title*) merged. <what was done>. [X/Y tasks
+               complete]
+
+               **Suggested next:** <one-line recommendation from §5>"
+            5. **Comment on each linked issue that stays open** (i.e., the
                PR used `Addresses` or `Partially addresses`). Summarize
-               what the PR accomplished and what remains. Example:
+               what the PR accomplished and what remains. Include a
+               follow-up suggestion for what to tackle next on that issue.
+               Example:
                "📦 PR #X (*title*) has been merged. <what was done>.
-               Remaining: <what's left>."
+               Remaining: <what's left>.
+
+               **Suggested next step:** <concrete action for this issue>"
 
             Do NOT comment on issues that will be auto-closed by the PR
             (`Closes`/`Fixes`) — the auto-close fires Playbook A, which
@@ -295,6 +308,43 @@ jobs:
                - **Changes requested** (state `changes_requested`):
                  "⚠️ Changes requested on #<PR> by @<reviewer>"
             4. Skip everything else silently.
+
+            ---
+
+            ## §5 — Follow-up Suggestions
+
+            When a playbook asks you to "suggest next steps", generate a
+            brief, actionable recommendation for what to work on next.
+
+            **How to choose a suggestion:**
+
+            1. Read the tracking issue body to find **remaining unchecked
+               tasks** (`- [ ] #N`).
+            2. For each unchecked task, read the issue to check its
+               **dependencies** (look for "Depends on", "Blocked by",
+               "Dependencies" sections, or references to other issues).
+            3. Recommend a task whose dependencies are all resolved
+               (checked in the tracking issue or closed). If multiple
+               tasks are unblocked, prefer:
+               - Tasks explicitly marked as high-priority or foundational
+               - Tasks that unblock the most other tasks
+               - Tasks with lower estimated difficulty
+            4. If **no tasks are unblocked** (all have open dependencies),
+               say so and recommend the dependency that should be tackled
+               first.
+            5. If **all tasks are complete**, suggest closing the tracking
+               issue.
+
+            **Format:** Keep it to 1–2 sentences. Be specific — reference
+            the issue number and title. Example:
+            "**Suggested next:** #138 (*Discharge sorry in
+            OperatorMonotone.lean*) — all dependencies resolved, and it
+            is the last remaining task."
+
+            **For linked issues** (B1 step 5), suggest the concrete next
+            action for that specific issue based on the PR diff and what
+            remains (e.g., "Next: discharge the remaining 2 sorrys in
+            `Foo.lean`, which depend on `bar_lemma` from Mathlib.").
 
             ---
 
