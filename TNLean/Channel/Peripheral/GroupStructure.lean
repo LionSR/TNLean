@@ -126,11 +126,11 @@ theorem peripheral_eigenvalues_closed_under_mul
     have hprod_ne : (Uα : MatrixAlg D) * (Uβ : MatrixAlg D) ≠ 0 := by
       intro h
       have hUα_inv : (Uα : MatrixAlg D)ᴴ * (Uα : MatrixAlg D) = 1 := by
-        have h := Matrix.UnitaryGroup.star_mul_self Uα
-        rwa [star_eq_conjTranspose] at h
+        have hstar_α := Matrix.UnitaryGroup.star_mul_self Uα
+        rwa [star_eq_conjTranspose] at hstar_α
       have hUβ_inv : (Uβ : MatrixAlg D)ᴴ * (Uβ : MatrixAlg D) = 1 := by
-        have h := Matrix.UnitaryGroup.star_mul_self Uβ
-        rwa [star_eq_conjTranspose] at h
+        have hstar_β := Matrix.UnitaryGroup.star_mul_self Uβ
+        rwa [star_eq_conjTranspose] at hstar_β
       have hUβ_zero : (Uβ : MatrixAlg D) = 0 := by
         calc (Uβ : MatrixAlg D)
             = 1 * (Uβ : MatrixAlg D) := (one_mul _).symm
