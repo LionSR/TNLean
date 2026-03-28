@@ -68,9 +68,12 @@ For block k gauge-phase equivalent to representative block j via `(X, ζ)`:
 ## Remaining gap
 
 The one remaining `sorry` is in `nonDecaying_overlap_of_equal_norm_blocks` (§1b).
-This requires the BNT coefficient extraction argument from the canonical-form
-decomposition structure, specifically showing that the linear independence of the BNT
-family combined with equal growth rates forces non-decaying cross-overlaps.
+**The current `hFullTensor` hypothesis appears insufficient** to prove this theorem —
+a counterexample exists (see the theorem's docstring for details). The proof
+architecture may need to be restructured: either strengthen the hypotheses to encode
+transfer-map-level structure from the canonical form construction, or bypass
+non-decaying overlap and prove gauge-phase equivalence of equal-norm blocks directly
+using BNT permutation rigidity. See issue #299 for discussion.
 
 ## References
 
@@ -139,20 +142,51 @@ theorem gaugePhaseEquiv_of_nonDecaying_overlap
 When blocks are obtained from the canonical-form decomposition of an MPS tensor,
 blocks with equal weight norms have non-decaying cross-overlaps.
 
-**Paper argument (CPGSV17, Appendix A, Corollary A.43):** The BNT expansion of the
-full tensor expresses its MPV as `∑_k μ_k^N * V(A_k)`. Taking the inner product
-with `V(A_j)` and using the asymptotic orthonormality of non-gauge-phase-equivalent
-blocks isolates the contribution from the norm class of block j. If all equal-norm
-blocks had decaying cross-overlaps with block j, the coefficient of `V(A_j)` in the
-BNT expansion would vanish for large N, contradicting the non-degeneracy of the
-decomposition.
+### Status: Hypothesis likely insufficient — see NOTE below
 
-This argument requires the blocks to be connected through the full tensor's
-BNT structure — it is NOT provable from the individual block properties alone
-(TP, irreducible, primitive). The `hFullTensor` hypothesis captures the connection
-between the blocks and a parent tensor.
+**NOTE (issue #299, 2026-03-28):** The `hFullTensor` hypothesis alone appears
+insufficient to prove this theorem. A concrete counterexample shows the gap:
+take any two non-gauge-phase-equivalent TP + irreducible + primitive blocks
+`A₁, A₂ : MPSTensor d D` and form `A_total := toTensorFromBlocks μ blocks` with
+`‖μ₁‖ = ‖μ₂‖`. Then all hypotheses are satisfied (hFullTensor follows from the
+block-diagonal MPV decomposition), but `mpvOverlap A₁ A₂ N → 0` by the spectral
+dichotomy, violating the conclusion. Such non-GPE pairs exist generically.
 
-NOTE: This sorry is the precise remaining gap from issue #243/#299.
+The `hFullTensor` condition captures only the MPV-level identity
+`mpv(A_total)(σ) = ∑_k μ_k^N * mpv(blocks k)(σ)`, which is satisfied by ANY
+block-diagonal tensor regardless of cross-overlap behavior. It does not encode
+the transfer-map-level structure needed to constrain the mixed transfer operators.
+
+### Proposed fixes (any one would suffice)
+
+1. **Strengthen hypotheses:** Replace `hFullTensor` with the transfer-map-level
+   condition that `A_total`'s transfer map has specific eigenspace structure
+   forcing equal-norm blocks to share eigenspaces (from the canonical form
+   construction). This is the structure used in CPGSV17 §2.3.
+
+2. **Restructure the proof architecture:** Bypass non-decaying overlap entirely
+   and prove `gaugePhaseEquiv_of_equal_norm_blocks` directly using BNT
+   permutation rigidity (`thm:bnt_perm_prop` from Ch10 of the blueprint).
+   The key obstacle is that the permutation rigidity theorem requires
+   coefficients that converge (Remark `rem:bnt_perm_prop_canonical`), which
+   fails for equal-norm blocks where coefficients `(μ_k/μ_j)^N` oscillate
+   on the unit circle rather than decaying.
+
+3. **Add algebraic hypothesis:** Require the blocks to come from the
+   eigenspace decomposition of `A_total`'s transfer-map algebra (not just
+   any decomposition with the same MPVs). This captures the essential
+   constraint that equal-norm blocks correspond to eigenvalues on the same
+   spectral circle, which forces gauge-phase equivalence via the
+   Perron–Frobenius theory for completely positive maps.
+
+### What the paper actually proves
+
+In CPGSV17 §2.3, the result that equal-norm blocks are GPE follows from the
+*canonical form construction itself*: blocks are obtained by decomposing the
+transfer map into irreducible sectors, and sectors with the same spectral
+radius are related by gauge transformations. This is a property of the
+*construction procedure*, not a consequence of the MPV identity alone.
+
 Once proved, `exists_sectorDecomp_of_tp_primitive_irr_blocks` becomes sorry-free. -/
 theorem nonDecaying_overlap_of_equal_norm_blocks
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -170,12 +204,24 @@ theorem nonDecaying_overlap_of_equal_norm_blocks
         N > 0 → mpv A_total σ = ∑ k, (μ k) ^ N * mpv (blocks k) σ)
     (j k : Fin r) (hjk : j ≠ k) (hNorm : ‖μ j‖ = ‖μ k‖) :
     ¬ Tendsto (fun N => mpvOverlap (d := d) (blocks j) (blocks k) N) atTop (nhds 0) := by
-  -- TODO(#299): This requires the full BNT expansion argument from CPGSV17 Appendix A.
-  -- The proof needs to extract the non-vanishing of the j-th BNT coefficient from
-  -- the full tensor's MPV decomposition, using:
-  -- 1. Asymptotic orthonormality of non-GPE blocks (from spectral gap)
-  -- 2. Non-degeneracy of the decomposition (from hFullTensor + hμne)
-  -- 3. Equal growth rates from ‖μ j‖ = ‖μ k‖
+  -- BLOCKED (#299, 2026-03-28): Theorem statement likely needs stronger hypotheses.
+  --
+  -- The `hFullTensor` hypothesis (MPV-level identity) does not constrain the mixed
+  -- transfer maps F_{blocks j, blocks k}. For any two non-GPE TP+irr+prim blocks,
+  -- forming A_total := toTensorFromBlocks μ blocks satisfies all hypotheses, yet
+  -- mpvOverlap(blocks j, blocks k, N) → 0 by the spectral dichotomy.
+  --
+  -- A proof attempt using the identity
+  --   mpvOverlap(A_total, blocks j, N) = ∑_m μ_m^N * mpvOverlap(blocks m, blocks j, N)
+  -- (from `mpvOverlap_eq_sum_of_decomp_left` in PermutationRigidity.lean) fails because:
+  -- (a) Terms with |μ_m| > |μ_j| grow faster and dominate, preventing isolation of
+  --     equal-norm contributions.
+  -- (b) Even restricting to the dominant norm class, the LHS grows as μ_j^N which is
+  --     consistent with both the GPE and non-GPE cases.
+  --
+  -- Fixing this requires either strengthening the hypotheses to encode transfer-map
+  -- structure, or restructuring the proof to use BNT uniqueness directly.
+  -- See the docstring above for proposed fixes.
   sorry
 
 /-- **Equal-norm blocks from the same decomposition are gauge-phase equivalent.**
