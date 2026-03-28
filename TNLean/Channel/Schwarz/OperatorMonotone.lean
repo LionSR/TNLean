@@ -142,7 +142,7 @@ For a positive **unital** map `T` and positive-definite `A`:
 This is a direct instance of the concave Jensen inequality for `log`
 (from `OperatorConvexity.lean`). Note: requires unitality (`T 1 = 1`),
 not merely subunitality. -/
-theorem IsPositiveMap.cor52_item3_log_of_subunital
+theorem IsPositiveMap.cor52_item3_log_of_unital
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
     {A : Mat} (hA : A.PosDef) :
     T (CFC.log A) ≤ CFC.log (T A) :=

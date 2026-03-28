@@ -9,7 +9,7 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Order
 
 /-!
-# Operator Jensen inequality for positive subunital maps
+# Operator Jensen inequality for positive (sub)unital maps
 
 This file states the **operator Jensen inequality** (also known as the
 Choi--Davis--Jensen or Hansen--Pedersen inequality) specialized to the

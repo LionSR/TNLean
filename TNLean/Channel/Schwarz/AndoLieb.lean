@@ -119,9 +119,9 @@ theorem lieb_concavity
     (hA₁ : A₁.PosDef) (hA₂ : A₂.PosDef)
     (hB₁ : B₁.PosDef) (hB₂ : B₂.PosDef)
     {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
-    t * (trace (Kᴴ * A₁ ^ s * K * B₁ ^ (1 - s))).re +
-      (1 - t) * (trace (Kᴴ * A₂ ^ s * K * B₂ ^ (1 - s))).re ≤
-    (trace (Kᴴ * (t • A₁ + (1 - t) • A₂) ^ s * K *
+    t * (trace ((Kᴴ * A₁ ^ s * K) * B₁ ^ (1 - s))).re +
+      (1 - t) * (trace ((Kᴴ * A₂ ^ s * K) * B₂ ^ (1 - s))).re ≤
+    (trace ((Kᴴ * (t • A₁ + (1 - t) • A₂) ^ s * K) *
       (t • B₁ + (1 - t) • B₂) ^ (1 - s))).re := by
   sorry
 
