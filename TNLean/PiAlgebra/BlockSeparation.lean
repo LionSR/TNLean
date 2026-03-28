@@ -173,7 +173,7 @@ Accordingly, this file currently only provides the trustworthy helper lemmas
 and `sameMPV₂_repeated_word`.
 
 A checked counterexample to the naive full separation statement is retained in
-`TNLean.Scratch.BlockSepCounterexample`.
+`TNLean.Archive.BlockSepCounterexample`.
 
 For end-to-end results from `SameMPV₂`, use
 `fundamentalTheorem_multiBlock_fromSameMPV₂` (in
