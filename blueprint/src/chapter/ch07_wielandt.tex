@@ -214,7 +214,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \uses{def:cumulative_span, def:normal}
     If $A$ is normal, then
     $T_{D^2 - d' + 1}(A) = \MN{D}$,
-    where $d' = \dim S_1(A) = \operatorname{krausRank}(A)$.
+    where $d' = \dim S_1(A) = \krausrk(A)$.
     This is the sharp form of \cite[Lemma~1]{Sanz2010Quantum}:
     the cumulative span already reaches $\MN{D}$ by index
     $D^2 - d' + 1 \le D^2$.
@@ -239,7 +239,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \leanok
     \uses{def:normal}
     If $A$ is normal, then there exists a word $w$ of length
-    $\le D^2 - \operatorname{krausRank}(A) + 1$ such that
+    $\le D^2 - \krausrk(A) + 1$ such that
     $\tr(A^w) \neq 0$.
     This is \cite[Lemma~1]{Sanz2010Quantum} with the sharp
     length bound.
@@ -261,7 +261,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \leanok
     \uses{def:normal}
     If $A$ is normal and $D \ge 2$, then there exists a word~$w$
-    of \emph{positive} length $1 \le |w| \le D^2 - \operatorname{krausRank}(A) + 1$
+    of \emph{positive} length $1 \le |w| \le D^2 - \krausrk(A) + 1$
     such that $\tr(A^w) \neq 0$.
     This strengthens
     Theorem~\ref{thm:nonzero_trace_word_sharp} by requiring
@@ -280,7 +280,7 @@ The results follow~\cite{Sanz2010Quantum}.
     $V_{D^2 - d' + 1} = \MN{D}$:
     if $V_n$ stabilises and is not $\MN{D}$, then
     $V_n$ is closed under left-multiplication by each $A^i$,
-    so $\operatorname{wordSpan}(A, N) \subseteq V_n \neq \MN{D}$
+    so $\wordspn{N}{A} \subseteq V_n \neq \MN{D}$
     for all $N \ge 1$, contradicting normality.
     Since $V_{D^2-d'+1} = \MN{D}$, the identity $\mathbf{1}$ lies in
     $V_{D^2-d'+1}$ and is therefore a linear combination of word products of
@@ -486,7 +486,7 @@ The results follow~\cite{Sanz2010Quantum}.
     Then
     \[
         \iota(A) \;\le\;
-        (D^2 - \operatorname{krausRank}(A) + 1) \cdot D^2,
+        (D^2 - \krausrk(A) + 1) \cdot D^2,
     \]
     where $\iota(A) = \min\{n : S_n(A) = \MN{D}\}$ is the full-Kraus-rank index.
     This is \cite[Theorem~1, case~(1)]{Sanz2010Quantum}.
@@ -502,7 +502,7 @@ The results follow~\cite{Sanz2010Quantum}.
         By Theorem~\ref{thm:nonzero_trace_word_sharp_pos},
         there exists a \emph{positive-length} word~$w$ with
         $|w| \le D^2 - d' + 1$ and $\tr(A^w) \neq 0$,
-        where $d' = \operatorname{krausRank}(A)$.
+        where $d' = \krausrk(A)$.
         The matrix $A^w$ has nonzero trace,
         hence a nonzero eigenvalue $\mu$ and eigenvector $\varphi$
         (Theorem~\ref{thm:eigenvector_from_trace}).
@@ -523,7 +523,7 @@ The results follow~\cite{Sanz2010Quantum}.
         In the invertible case, the invertible Kraus operator $B^{i_0}$ allows
         direct dimension growth, giving
         $S_{D^2-k_B+1}(B) = \MN{D}$ where
-        $k_B = \operatorname{krausRank}(B)$.
+        $k_B = \krausrk(B)$.
         In the non-invertible case, the bound $S_{D^2}(B) = \MN{D}$ follows
         from tracking indices through the rank-one extraction argument of
         \cite[Lemma~2(b)]{Sanz2010Quantum};
@@ -983,7 +983,7 @@ spectral gap. It is connected to normality through the following results.
         \;\Rightarrow\;
         \text{irreducible}
         \;\Rightarrow\;
-        \operatorname{algSpan}(A) = \MN{D}
+        \algspn(A) = \MN{D}
         \;\Rightarrow\;
         \text{normal}.
     \]
@@ -1151,7 +1151,7 @@ The gap is closed by an aperiodicity hypothesis.
     \label{rem:cumspan_counterexample}\leanok
     In $\MN{2}$, let $A^0 = E_{12}$ and $A^1 = E_{21}$
     (the off-diagonal matrix units).
-    Then $\operatorname{algSpan}(A) = \MN{2}$ and $T_2(A) = \MN{2}$,
+    Then $\algspn(A) = \MN{2}$ and $T_2(A) = \MN{2}$,
     but the word spans alternate:
     $S_n(A)$ contains only off-diagonal matrices for odd~$n$
     and only diagonal matrices for even~$n$.
@@ -1210,12 +1210,12 @@ The gap is closed by an aperiodicity hypothesis.
     \lean{MPSTensor.isNormal_of_algSpan_eq_top_of_aperiodic}
     \leanok
     \uses{def:normal, def:alg_span, def:word_span}
-    If $\operatorname{algSpan}(A) = \MN{D}$ and $\Id \in S_1(A)$,
+    If $\algspn(A) = \MN{D}$ and $\Id \in S_1(A)$,
     then $A$ is normal.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:cumspan_to_normal}
-    Since $\operatorname{algSpan}(A) = \MN{D}$,
+    Since $\algspn(A) = \MN{D}$,
     there exists $N$ with $T_N(A) = \MN{D}$
     (by the ascending chain condition on finite-dimensional subspaces).
     Apply Theorem~\ref{thm:cumspan_to_normal}.
@@ -1234,7 +1234,7 @@ The gap is closed by an aperiodicity hypothesis.
         \;\xrightarrow{\ref{thm:irreducible_tensor_to_action}}\;
         \text{irreducible action}
         \;\xrightarrow{\text{Burnside}}\;
-        \operatorname{algSpan} = \MN{D}
+        \algspn = \MN{D}
         \;\xrightarrow{\ref{thm:algspan_to_normal}}\;
         \text{normal}.
     \]
@@ -1253,7 +1253,7 @@ The gap is closed by an aperiodicity hypothesis.
     By Theorem~\ref{thm:irreducible_tensor_to_action},
     $A$ acts irreducibly on $\C^D$.
     By Theorem~\ref{thm:burnside_matrix},
-    $\operatorname{algSpan}(A) = \MN{D}$.
+    $\algspn(A) = \MN{D}$.
     By Theorem~\ref{thm:algspan_to_normal} with the
     aperiodicity hypothesis, $A$ is normal.
 \end{proof}
@@ -1278,7 +1278,7 @@ The gap is closed by an aperiodicity hypothesis.
     rank, giving normality without a separate aperiodicity hypothesis.
 \end{proof}
 
-\begin{remark}[The normal-canonical route bypasses the aperiodicity bridge]\label{rem:d1_bypasses_aperiodicity}
+\begin{remark}[The normal-canonical route bypasses the aperiodicity argument]\label{rem:d1_bypasses_aperiodicity}
     The aperiodicity results in \S\ref{sec:cumspan_to_wordspan} are needed only for the
     block-injective route through Definition~\ref{def:normal}, where one upgrades cumulative
     spanning to eventual block injectivity. The normal-canonical route used later in

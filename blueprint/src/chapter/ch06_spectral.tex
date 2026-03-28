@@ -564,7 +564,7 @@ canonical-form separation arguments.
 This section records the channel-side support-projection infrastructure
 behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
 The formalized results are in
-\texttt{TNLean/Channel/FixedPoint/StationarySupport.lean}.
+\lean{Channel.support_proj_fixed}.
 
 \begin{theorem}[Support projection invariance (Wolf Lemma~6.4)]%
     \label{thm:support_proj_fixed}
@@ -633,8 +633,8 @@ The formalized results are in
 
 \begin{remark}[Props.~6.10--6.11: non-trivial formulations]%
     \label{rem:stationary_support_todo}
-    The original Lean declarations \texttt{irreducible\_iff\_support\_full}
-    and \texttt{stationary\_support\_minimal} were removed in PR~\#102
+    The original Lean declarations for ``irreducible iff support is full''
+    and ``stationary support minimality'' were removed in PR~\#102
     because their previous formulations were vacuous (they followed
     trivially from the irreducibility hypothesis alone).
     The correct non-trivial statements are:
