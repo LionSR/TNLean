@@ -334,6 +334,7 @@ jobs:
                   reviewThreads(first: 100) {
                     nodes {
                       isResolved
+                      isOutdated
                       comments(first: 20) {
                         nodes {
                           author { login }
@@ -356,8 +357,10 @@ jobs:
             });
 
             const threads = result.repository.pullRequest.reviewThreads.nodes;
+            // Exclude outdated threads — they refer to diff hunks that have
+            // since changed; auto-fixing them causes churn on already-modified code.
             const unresolvedThreads = threads.filter(t =>
-              !t.isResolved && t.comments.nodes.length > 0
+              !t.isResolved && !t.isOutdated && t.comments.nodes.length > 0
             );
 
             if (unresolvedThreads.length === 0) {
@@ -377,7 +380,7 @@ jobs:
             const latestReview = allReviews.at(-1) ?? null;
 
             // Sanitize untrusted review text to reduce prompt-injection surface.
-            const sanitize = (s) => s
+            const sanitize = (s) => (s || '')
               .replace(/[^\x20-\x7E\n\r\t]/g, '')
               .replace(/```/g, '\u200B`\u200B`\u200B`');
 
@@ -387,7 +390,7 @@ jobs:
                 path: t.comments.nodes[0].path,
                 line: t.comments.nodes[0].originalLine || t.comments.nodes[0].line,
                 conversation: t.comments.nodes.map(c => ({
-                  author: c.author.login,
+                  author: c.author?.login ?? 'ghost',
                   body: sanitize(c.body).substring(0, 1000)
                 }))
               })),
