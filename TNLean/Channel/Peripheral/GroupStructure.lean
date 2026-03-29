@@ -257,7 +257,7 @@ theorem peripheral_eigenvalues_form_cyclic_group
         rw [Units.val_inv_eq_inv_val]
         exact peripheral_eigenvalues_closed_under_inv K hUnital ρ hρ hρfix hIrr ha }
   -- Step 2: The subgroup is finite (image in ℂ lands in a finite set)
-  have hFinS : Finite ↥periphSubgroup := by
+  haveI hFinS : Finite ↥periphSubgroup := by
     have : Set.Finite {u : ℂˣ | (u : ℂ) ∈ peripheralEigenvalues E} := by
       have hinj : Set.InjOn Units.val (Units.val ⁻¹' (peripheralEigenvalues E)) :=
         fun _ _ _ _ h => Units.val_injective h
