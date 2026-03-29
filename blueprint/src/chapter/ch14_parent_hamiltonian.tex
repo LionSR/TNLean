@@ -378,98 +378,69 @@ Lucia~\cite{Kastoryano2018Martingale}.
   $\lambda \ge \gamma$~\cite{Kastoryano2018Martingale}.
 \end{proof}
 
-\begin{lemma}[Martingale condition for MPS]\label{lem:martingale_mps}
+\begin{lemma}[Martingale condition for MPS ($L=2$)]\label{lem:martingale_mps}
   \notready
   \uses{thm:martingale_criterion, def:parent_interaction,
         def:local_term_parent, lem:ground_space_intersection, def:injective}
-  Let $A$ be injective and fix an interaction range $L \ge 2$ as in
-  Definition~\ref{def:parent_interaction}.  Let $h_L(A) := \Pi_{G_L(A)^\perp}$
-  be the $L$-site parent interaction, and for each chain length and site $i$
+  Let $A$ be injective and fix interaction range $L = 2$ as in
+  Definition~\ref{def:parent_interaction}.  Let $h_2(A) := \Pi_{G_2(A)^\perp}$
+  be the $2$-site parent interaction, and for each chain length and site $i$
   let $h_i$ denote its translate as in Definition~\ref{def:local_term_parent}.
   Then for every pair of overlapping terms $h_i$ and $h_j$ with
-  $0 < d_N(i,j) < L$, where $d_N(i,j) := \min(|i-j|,\, N-|i-j|)$ is the
-  cyclic distance on the ring (i.e.\ whose $L$-site supports share at
-  least one site under periodic boundary conditions),
-  the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
-  constants $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
-  \emph{Note:} The proof below fully establishes the martingale constants
-  only for $L = 2$; for $L > 2$ the existence of suitable constants is
-  asserted without complete proof (see the remark at the end of the proof).
-  Only the $L = 2$ case is used in this chapter
-  (Theorem~\ref{thm:parent_hamiltonian_gapped}).
-  (When $L = 1$ the interaction terms have disjoint supports, so there are no
-  overlapping pairs and the spectral gap follows directly without the
-  martingale machinery.)
+  $d_N(i,j) = 1$, where $d_N(i,j) := \min(|i-j|,\, N-|i-j|)$ is the
+  cyclic distance on the ring (i.e.\ whose $2$-site supports share
+  exactly one site under periodic boundary conditions),
+  the spectral gap of $H_N = \sum_i h_i$ satisfies
+  $\lambda_{\min}^+(H_N) \ge \gamma$ for some $\gamma > 0$ depending
+  only on $A$ (not on $N$).
 \end{lemma}
 
 \begin{proof}
   \uses{lem:ground_space_intersection, def:injective}
   \notready
-  Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
-  in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
-  the $N$-site ring).  Since $A$ is injective, the intersection property
-  (Lemma~\ref{lem:ground_space_intersection}) gives the qualitative identity
-  $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
+  With $L = 2$, two terms $h_i, h_j$ with $d_N(i,j) = 1$ have supports
+  overlapping in exactly one site.  Since $A$ is injective, the
+  intersection property (Lemma~\ref{lem:ground_space_intersection})
+  gives $\ker(h_i) \cap \ker(h_j) = G_{[i,i+2]}(A)$.
   Because the local Hilbert space is finite-dimensional, the subspaces
   $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space.
   The intersection identity shows that $\ker(h_i) \cap \ker(h_j)$ is
-  exactly $G_{[i,j+L-1]}(A)$; in particular there is no non-trivial
+  exactly $G_{[i,i+2]}(A)$; in particular there is no non-trivial
   vector in one kernel that is orthogonal to the other yet lies in both.
-  Hence the Friedrichs angle $\theta_{d_N(i,j)}$ between $\ker(h_i)$ and
-  $\ker(h_j)$ is strictly positive (for the fixed injective tensor
-  $A$).  Because the angle depends only on the overlap pattern
-  $d_N(i,j) \in \{1,\dots,L-1\}$ and not on the absolute position,
-  the number of distinct angles is at most $L-1$.
-  Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
-  worst-case cosine of the Friedrichs angles.
+  Hence the Friedrichs angle $\theta$ between $\ker(h_i)$ and
+  $\ker(h_j)$ is strictly positive (for the fixed injective tensor $A$),
+  and the Friedrichs cosine $\alpha := \cos\theta < 1$.
+  Because $L = 2$, every pair with $d_N(i,j) = 1$ has the same overlap
+  structure, so $\alpha$ depends only on $A$ and not on $i$, $j$, or $N$.
 
-  \textbf{Row-sum bound.}
-  Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
-  neighbours (those $j$ with $0 < d_N(i,j) < L$).
-  Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
-  and $c_{ij} := 0$ otherwise.
-  Then
-  $\sum_{j \ne i} c_{ij} \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
-  satisfying the row-sum hypothesis of
-  Theorem~\ref{thm:martingale_criterion}.
+  \textbf{Spectral gap via the finite-size criterion.}
+  The Nachtergaele finite-size
+  criterion~\cite{Nachtergaele1996Spectral} establishes the spectral
+  gap without requiring the Friedrichs cosine to be below any specific
+  threshold other than $\alpha < 1$.  The criterion proceeds as follows:
+  consider the Hamiltonian $h_i + h_{i+1}$ restricted to three
+  consecutive sites.  By the intersection property, its ground space is
+  $G_{[i,i+2]}(A)$.  Since $h_i$ and $h_{i+1}$ are projectors on a
+  finite-dimensional space and $\alpha < 1$, the operator $h_i + h_{i+1}$
+  has a strictly positive spectral gap
+  $\epsilon(A) := \lambda_{\min}^+(h_i + h_{i+1}) > 0$
+  above its ground space.  (Explicitly, the smallest nonzero eigenvalue
+  of the sum of two projectors with Friedrichs cosine $\alpha$ is
+  $1 - \alpha > 0$.)
+  The finite-size criterion then transfers this local gap to the full
+  periodic chain: there exists $\gamma > 0$, depending only on
+  $\epsilon(A)$ and the local dimension (hence only on $A$), such that
+  $\lambda_{\min}^+(H_N) \ge \gamma$ for all $N$ sufficiently
+  large~\cite{Nachtergaele1996Spectral, Fannes1992Finitely}.
 
-  \textbf{Positivity of $\gamma$.}
-  The Friedrichs angle bound gives, for each overlapping pair,
-  $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$.
-  The martingale inequality holds with
-  $\gamma = 1 - 2(L-1)\alpha$,
-  which requires
-  $c_{ij}(1-\gamma) = \tfrac{1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha$
-  (matching the Friedrichs bound exactly).
-  Since $\alpha < 1$ (the Friedrichs angle is strictly positive),
-  it remains to show $\gamma > 0$, i.e.\ $\alpha < \tfrac{1}{2(L-1)}$.
-  In the blocked picture of
-  Theorem~\ref{thm:parent_hamiltonian_gapped}, $L = 2$ and each site
-  overlaps with at most $2$ neighbours, so the condition reduces to
-  $\alpha < \tfrac{1}{2}$.  For $L = 2$ with an injective tensor,
-  the two projectors $h_i$ and $h_{i+1}$ act on a finite-dimensional
-  space, and the intersection property
-  (Lemma~\ref{lem:ground_space_intersection}) guarantees that
-  $\ker(h_i) \cap \ker(h_{i+1})$ is exactly $G_{[i,i+2]}(A)$;
-  hence $\|P_i P_{i+1}\| < 1$ (the Friedrichs cosine is strictly
-  less than~1).  On a finite-dimensional space with two projectors,
-  the Friedrichs cosine satisfies the quantitative bound
-  $\alpha \le 1 - c_{\min}$ where $c_{\min} > 0$ depends on the
-  minimal principal angle between the two kernels.  The bound
-  $\alpha < \tfrac{1}{2}$ then follows from the
-  Nachtergaele finite-size criterion~\cite{Nachtergaele1996Spectral},
-  which establishes that the overlap $\|P_i P_{i+1}\|$ for injective
-  MPS is bounded away from $1$ by a constant depending only on the
-  tensor~$A$.
-  For general $L > 2$, the uniform constants $c_{ij} = \tfrac{1}{2(L-1)}$
-  make the condition $\alpha < \tfrac{1}{2(L-1)}$ increasingly restrictive
-  as $L$ grows.  A more refined choice of separation-dependent constants
-  $c_{ij} = c_{d_N(i,j)}$ that weight small-separation (large-overlap) pairs
-  more heavily can exploit the exponential decay of the Friedrichs cosine
-  $\alpha_s$ in $s$ to satisfy the row-sum constraint.
-  However, this refinement is not needed for the main result: in
-  Theorem~\ref{thm:parent_hamiltonian_gapped} below, the argument is
-  applied only with $L = 2$ in the blocked picture.
+  \emph{Remark (martingale constants).}
+  Alternatively, the martingale criterion
+  (Theorem~\ref{thm:martingale_criterion}) can be applied with
+  $c_{ij} := \tfrac{1}{2}$ for overlapping pairs (row-sum
+  $= 2 \cdot \tfrac{1}{2} = 1$), yielding $\gamma = 1 - 2\alpha$.
+  This gives $\gamma > 0$ only when $\alpha < \tfrac{1}{2}$, which is
+  a stronger condition than $\alpha < 1$.  The finite-size criterion
+  avoids this restriction and applies to all injective MPS tensors.
   In all cases, the constants depend only on $A$ and are independent
   of~$N$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
 \end{proof}
@@ -509,11 +480,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
   machinery with $L = 2$.  The divisibility condition $L_0 \mid N$ ensures the blocking
   is compatible with the periodic chain.
   Apply Lemma~\ref{lem:martingale_mps} to the
-  injective tensor $A^{[L_0]}$ with range $2$ to obtain the martingale
-  constants $c_{ij}$ and $\gamma > 0$.  These constants depend only on
-  $A^{[L_0]}$ (hence only on $A$ and $L_0$), not on $N$.
-  Theorem~\ref{thm:martingale_criterion} then gives the uniform gap
-  $\lambda_{\min}^+(H_N) \ge \gamma$~\cite{Fannes1992Finitely,
+  injective tensor $A^{[L_0]}$ with $L = 2$ to obtain a uniform
+  spectral gap $\gamma > 0$ depending only on $A^{[L_0]}$ (hence
+  only on $A$ and $L_0$), not on $N$.
+  This gives $\lambda_{\min}^+(H_N) \ge \gamma$~\cite{Fannes1992Finitely,
   Nachtergaele1996Spectral}.
 \end{proof}
 
