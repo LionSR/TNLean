@@ -86,6 +86,7 @@ jobs:
             5. 🟡 **Performance**: Will any proofs cause timeouts? Watch for `decide` on large types,
                `simp` with unbounded lemma sets, deep `rw` chains, and `norm_num` on symbolic expressions.
                Suggest alternatives like `omega`, `positivity`, or explicit `calc` steps.
+               Performance issues that will likely cause timeouts must be fixed before approval.
             6. 🟡 **Modularity & duplication**: Are new lemmas general enough? Could any be upstreamed to
                Mathlib? Are there lemmas that are overly specialized to the local context but could be
                stated more generally? Is the file structure consistent with the existing module hierarchy?
@@ -99,7 +100,7 @@ jobs:
                same PR. This means adding `\lean{DeclarationName}` and `\leanok` tags (and
                `\uses{...}` dependencies) for new results, or adding `\leanok` to the `\begin{proof}`
                when a previously `sorry`-d result is now fully proven. Flag any PR that adds or completes
-               Lean declarations without updating the blueprint.
+               Lean declarations without updating the blueprint. Blueprint sync must be done before approval.
 
             ---
 
