@@ -58,34 +58,34 @@ complement sites — exactly the structure of `groundSpaceMap A L`.
 Dependencies: needs round-trip / decomposition lemmas for `extractWindow`/`replaceWindow`
 relating `List.ofFn (replaceWindow L i σ τ)` to `List.ofFn τ` and complement indices.
 Requires `L ≤ N` hypothesis (or `N`-periodicity argument). -/
-lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ)
+lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     (i : Fin N) (σ : Cfg d N) :
-    (fun τ => mpv A (replaceWindow L i σ τ)) ∈ groundSpace A L := by
+    (fun τ => mpv A (replaceWindow L hLN i σ τ)) ∈ groundSpace A L := by
   sorry
 
 /-- Each local term annihilates the MPV state. -/
-lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (i : Fin N) :
+lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
     localTerm A L N i (mpv A) = 0 := by
   ext σ
-  simp only [localTerm, LinearMap.pi_apply, LinearMap.comp_apply, LinearMap.proj_apply,
-    Pi.zero_apply]
-  have hmem := mpv_window_mem_groundSpace A L N i σ
+  simp only [localTerm, hLN, ↓reduceDIte, LinearMap.pi_apply, LinearMap.comp_apply,
+    LinearMap.proj_apply, Pi.zero_apply]
+  have hmem := mpv_window_mem_groundSpace A L N hLN i σ
   have hkill := parentInteraction_apply_mem_groundSpace A L _ hmem
-  change (parentInteraction A L (fun τ => mpv A (replaceWindow L i σ τ)))
+  change (parentInteraction A L (fun τ => mpv A (replaceWindow L hLN i σ τ)))
     (extractWindow L i σ) = 0
   rw [hkill]
   rfl
 
 /-- The parent Hamiltonian annihilates the MPV state: `H_N |ψ(A)⟩ = 0`. -/
-lemma parentHamiltonian_annihilates (A : MPSTensor d D) (L N : ℕ) :
+lemma parentHamiltonian_annihilates (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) :
     parentHamiltonian A L N (mpv A) = 0 := by
   simp only [parentHamiltonian, LinearMap.sum_apply]
-  exact Finset.sum_eq_zero fun i _ => localTerm_annihilates_mpv A L N i
+  exact Finset.sum_eq_zero fun i _ => localTerm_annihilates_mpv A L N hLN i
 
 /-- The parent Hamiltonian model is frustration-free on the MPV state:
 each local term individually annihilates `mpv A`. -/
-lemma parentHamiltonian_frustrationFree (A : MPSTensor d D) (L N : ℕ) :
+lemma parentHamiltonian_frustrationFree (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) :
     IsFrustrationFree A L N (mpv A) :=
-  fun i => localTerm_annihilates_mpv A L N i
+  fun i => localTerm_annihilates_mpv A L N hLN i
 
 end MPSTensor

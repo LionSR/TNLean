@@ -30,7 +30,7 @@ and the finite-chain parent Hamiltonian.
   annihilates `ψ`.
 -/
 
-open scoped Matrix BigOperators
+open scoped BigOperators
 
 namespace MPSTensor
 
@@ -76,14 +76,17 @@ def extractWindow (L : ℕ) {N : ℕ} {α : Type*} (i : Fin N) (σ : Fin N → �
   have hN : 0 < N := i.val.zero_le.trans_lt i.isLt
   fun j => σ ⟨(i.val + j.val) % N, Nat.mod_lt _ hN⟩
 
+variable {N : ℕ}
+
 /-- Replace `L` consecutive values in an `N`-periodic sequence `σ`,
 starting at position `i`, with values from `τ` (periodic boundary conditions).
 
-Note: when `L > N`, positions beyond index `N-1` in `τ` are silently
-ignored because `offset` is always `< N`. The intended use case is `L ≤ N`. -/
-def replaceWindow (L : ℕ) {N : ℕ} {α : Type*} (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
+Requires `L ≤ N` to ensure the `L`-site window is represented faithfully. -/
+def replaceWindow (L : ℕ) (hLN : L ≤ N) {α : Type*}
+    (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
     Fin N → α :=
   fun k =>
+    let _hLN : L ≤ N := hLN
     let offset := (k.val + N - i.val) % N
     if h : offset < L then τ ⟨offset, h⟩ else σ k
 
@@ -100,11 +103,13 @@ For `f : NSiteSpace d N` and output configuration `σ`:
 ``` -/
 noncomputable def localTerm (A : MPSTensor d D) (L N : ℕ) (i : Fin N) :
     NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
+  if hLN : L ≤ N then
   LinearMap.pi fun σ =>
     (LinearMap.proj (extractWindow L i σ) : NSiteSpace d L →ₗ[ℂ] ℂ).comp
       ((parentInteraction A L).comp
         (LinearMap.pi fun τ =>
-          (LinearMap.proj (replaceWindow L i σ τ) : NSiteSpace d N →ₗ[ℂ] ℂ)))
+          (LinearMap.proj (replaceWindow L hLN i σ τ) : NSiteSpace d N →ₗ[ℂ] ℂ)))
+  else 0
 
 /-- Parent Hamiltonian on an `N`-site periodic chain:
 sum of translated local interaction terms. -/
