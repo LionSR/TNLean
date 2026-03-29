@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import Mathlib.RingTheory.RootsOfUnity.Basic
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
+import Mathlib.Analysis.Matrix.Spectrum
 
 /-!
 # Peripheral eigenvalue group structure (Wolf Theorem 6.6)
@@ -64,6 +65,74 @@ quantum channels:
 * **Period-divides-dimension bound** — the period (order of the cyclic group)
   divides the bond dimension `D`.
 -/
+
+/-! ## Helper lemmas for the divisibility proof -/
+
+/-- The transfer map preserves the matrix trace when the Kraus family is trace-preserving
+(i.e., `∑ᵢ Kᵢ† Kᵢ = I`). -/
+private lemma trace_transferMap_of_tp
+    {r : ℕ}
+    (K : Fin r → MatrixAlg D)
+    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
+    (X : MatrixAlg D) :
+    Matrix.trace (MPSTensor.transferMap (d := r) (D := D) K X) = Matrix.trace X := by
+  simp only [MPSTensor.transferMap_apply, Matrix.trace_sum]
+  conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
+  rw [← Matrix.trace_sum, ← Finset.sum_mul,
+    show ∑ i : Fin r, (K i)ᴴ * K i = 1 from hTP, one_mul]
+
+/-- The trace of an orthogonal projection (Hermitian idempotent matrix) over `ℂ` is a natural
+number — it equals the number of unit eigenvalues. -/
+private lemma exists_natCast_eq_trace_of_orthogonal_projection
+    (P : Matrix (Fin D) (Fin D) ℂ) (hP : IsOrthogonalProjection P) :
+    ∃ n : ℕ, Matrix.trace P = (n : ℂ) := by
+  classical
+  have hH := hP.1
+  -- Eigenvalues of P satisfy λ² = λ (from P² = P and the spectral decomposition)
+  have heig_sq : ∀ i : Fin D, (hH.eigenvalues i) ^ 2 = hH.eigenvalues i := by
+    intro i
+    -- The spectral theorem: P = U diag(λ) U⁻¹
+    have hspec := hH.spectral_theorem
+    -- P * P expressed via spectral decomposition:
+    -- P * P = U diag(λ²) U⁻¹
+    open Unitary in
+    have hP2 : P * P = (conjStarAlgAut ℂ _ hH.eigenvectorUnitary)
+        (Matrix.diagonal (fun j => ((hH.eigenvalues j : ℂ) ^ 2))) := by
+      have : P * P =
+          (conjStarAlgAut ℂ _ hH.eigenvectorUnitary)
+            (Matrix.diagonal (RCLike.ofReal ∘ hH.eigenvalues)) *
+          (conjStarAlgAut ℂ _ hH.eigenvectorUnitary)
+            (Matrix.diagonal (RCLike.ofReal ∘ hH.eigenvalues)) := by
+        exact congr_arg₂ (· * ·) hspec hspec
+      rw [this, ← map_mul, Matrix.diagonal_mul_diagonal]
+      congr 1; ext j; simp [Function.comp, sq]
+    -- P * P = P, so diag(λ²) = diag(λ), hence λ_i² = λ_i
+    open Unitary in
+    have hdiag_eq := (conjStarAlgAut ℂ _ hH.eigenvectorUnitary).injective
+        (hP2.symm.trans (hP.2.trans hspec))
+    have hi := congr_fun (congr_fun hdiag_eq i) i
+    simp only [Matrix.diagonal_apply_eq, Function.comp_apply] at hi
+    -- hi : (↑(eigenvalues i))^2 = ↑(eigenvalues i), goal: eigenvalues i ^ 2 = eigenvalues i
+    have hinj : Function.Injective (RCLike.ofReal (K := ℂ)) := RCLike.ofReal_injective
+    apply hinj; push_cast; exact hi
+  -- Eigenvalues are 0 or 1 (from λ² = λ, i.e., λ(λ-1) = 0)
+  have heig : ∀ i : Fin D, hH.eigenvalues i = 0 ∨ hH.eigenvalues i = 1 := by
+    intro i
+    have h := heig_sq i
+    have : hH.eigenvalues i * (hH.eigenvalues i - 1) = 0 := by nlinarith
+    rcases mul_eq_zero.mp this with h0 | h1
+    · left; exact h0
+    · right; linarith
+  -- Trace = sum of eigenvalues = count of eigenvalues equal to 1
+  rw [hH.trace_eq_sum_eigenvalues]
+  refine ⟨(Finset.univ.filter (fun i => hH.eigenvalues i = 1)).card, ?_⟩
+  have hif : ∀ i ∈ Finset.univ, (hH.eigenvalues i : ℂ) =
+      if hH.eigenvalues i = 1 then (1 : ℂ) else 0 := by
+    intro i _; rcases heig i with h | h <;> simp [h]
+  trans (∑ i : Fin D, if hH.eigenvalues i = 1 then (1 : ℂ) else 0)
+  · exact Finset.sum_congr rfl hif
+  · rw [Finset.sum_ite, Finset.sum_const_zero, add_zero,
+      Finset.sum_const, nsmul_eq_mul, mul_one]
 
 /-- On the unit circle, complex conjugation equals inversion: `conj α = α⁻¹` when `‖α‖ = 1`. -/
 lemma Complex.conj_eq_inv_of_norm_eq_one {α : ℂ} (h : ‖α‖ = 1) :
@@ -219,6 +288,7 @@ theorem peripheral_eigenvalues_form_cyclic_group
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
+    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K)) :
@@ -356,18 +426,40 @@ theorem peripheral_eigenvalues_form_cyclic_group
       rw [hset_eq]; ext x; simp [Set.mem_range, eq_comm]
     haveI : NeZero m := ⟨by omega⟩
     -- Get cyclic decomposition: m orthogonal projections summing to identity
-    obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, _⟩ :=
+    obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, hcyclic⟩ :=
       MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
         K hUnital ρ hρ hρfix hIrr hγ_prim hperiph_range
-    -- The ρ-weighted trace τ(X) = tr(ρ X) is preserved by E
-    -- From hρfix: ∑ Kᵢ† ρ Kᵢ = ρ, so τ(E(X)) = τ(X)
-    -- This gives τ(Pₖ) = τ(1)/m = tr(ρ)/m > 0 for all k
-    -- Hence all Pₖ ≠ 0, so rank(Pₖ) ≥ 1 and ∑ rank(Pₖ) = D
-    -- The ρ-trace equality forces all ranks equal: m ∣ D
-    -- m | D from orthogonal projections summing to identity
-    -- Each nonzero orthogonal projection has trace ≥ 1 (natural number rank)
-    -- Sum of traces = tr(I) = D, and by ρ-trace preservation all Pₖ are nonzero
-    sorry -- TODO(#22): m orthogonal projections + ρ-trace argument → m ∣ D
+    -- Step 7a: Trace preservation gives equal traces for all projections
+    have htrace_pres := trace_transferMap_of_tp K hTP
+    have htrace_step : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P (k + 1)) := by
+      intro k
+      calc Matrix.trace (P k)
+          = Matrix.trace (E (P (k + 1))) := by rw [← hcyclic k]
+        _ = Matrix.trace (P (k + 1)) := htrace_pres _
+    -- Step 7b: All projections have the same trace as P 0
+    have htrace_eq : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P 0) := by
+      intro ⟨k, hk⟩
+      induction k with
+      | zero => rfl
+      | succ n ih =>
+        have hn : n < m := by omega
+        have hfin : (⟨n, hn⟩ : Fin m) + 1 = ⟨n + 1, hk⟩ := by
+          ext; simp [Fin.val_add, Nat.mod_eq_of_lt hk]
+        rw [← hfin, ← htrace_step ⟨n, hn⟩]
+        exact ih hn
+    -- Step 7c: m * trace(P 0) = trace(I) = D
+    have hsum_trace : ∑ k : Fin m, Matrix.trace (P k) = (D : ℂ) := by
+      rw [← Matrix.trace_sum, hPsum, Matrix.trace_one, Fintype.card_fin]
+    have hmul_trace : (m : ℂ) * Matrix.trace (P 0) = (D : ℂ) := by
+      rw [← hsum_trace]
+      trans (∑ _k : Fin m, Matrix.trace (P 0))
+      · rw [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin]
+      · exact Finset.sum_congr rfl (fun k _ => (htrace_eq k).symm)
+    -- Step 7d: trace(P 0) is a natural number (eigenvalues of projection are 0 or 1)
+    obtain ⟨n, hn⟩ := exists_natCast_eq_trace_of_orthogonal_projection (P 0) (hPproj 0)
+    -- Step 7e: m * n = D in ℕ, hence m ∣ D
+    have : (↑(m * n) : ℂ) = (↑D : ℂ) := by push_cast; rw [← hn]; exact hmul_trace
+    exact ⟨n, (Nat.cast_injective this).symm⟩
   exact ⟨m, γ, hm_pos, hγ_prim, hm_dvd, hset_eq⟩
 
 /-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Thm 6.6).
@@ -403,16 +495,53 @@ theorem channel_period_divides_dim
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
+    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
     {m : ℕ} {γ : ℂ} (hm : 0 < m)
     (hγprim : IsPrimitiveRoot γ m)
-    (hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K))
+    (_hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K))
     (hgen : peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
       {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)}) :
     m ∣ D := by
-  -- Use exists_cyclic_projections_of_peripheral_unitary from CyclicDecomposition.lean
-  sorry -- TODO (#22): m orthogonal projections summing to I force rank D/m each
+  -- Get cyclic decomposition
+  set E := MPSTensor.transferMap (d := r) (D := D) K
+  haveI : NeZero m := ⟨by omega⟩
+  have hperiph_range : peripheralEigenvalues E =
+      Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
+    rw [hgen]; ext x; simp [Set.mem_range, eq_comm]
+  obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, hcyclic⟩ :=
+    MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
+      K hUnital ρ hρ hρfix hIrr hγprim hperiph_range
+  -- Trace preservation gives equal traces for all projections
+  have htrace_pres := trace_transferMap_of_tp K hTP
+  have htrace_step : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P (k + 1)) := by
+    intro k
+    calc Matrix.trace (P k)
+        = Matrix.trace (E (P (k + 1))) := by rw [← hcyclic k]
+      _ = Matrix.trace (P (k + 1)) := htrace_pres _
+  have htrace_eq : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P 0) := by
+    intro ⟨k, hk⟩
+    induction k with
+    | zero => rfl
+    | succ n ih =>
+      have hn : n < m := by omega
+      have hfin : (⟨n, hn⟩ : Fin m) + 1 = ⟨n + 1, hk⟩ := by
+        ext; simp [Fin.val_add, Nat.mod_eq_of_lt hk]
+      rw [← hfin, ← htrace_step ⟨n, hn⟩]
+      exact ih hn
+  -- m * trace(P 0) = D
+  have hsum_trace : ∑ k : Fin m, Matrix.trace (P k) = (D : ℂ) := by
+    rw [← Matrix.trace_sum, hPsum, Matrix.trace_one, Fintype.card_fin]
+  have hmul_trace : (m : ℂ) * Matrix.trace (P 0) = (D : ℂ) := by
+    rw [← hsum_trace]
+    trans (∑ _k : Fin m, Matrix.trace (P 0))
+    · rw [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin]
+    · exact Finset.sum_congr rfl (fun k _ => (htrace_eq k).symm)
+  -- trace(P 0) ∈ ℕ, hence m | D
+  obtain ⟨n, hn⟩ := exists_natCast_eq_trace_of_orthogonal_projection (P 0) (hPproj 0)
+  have : (↑(m * n) : ℂ) = (↑D : ℂ) := by push_cast; rw [← hn]; exact hmul_trace
+  exact ⟨n, (Nat.cast_injective this).symm⟩
 
 end PeripheralSpectrum
