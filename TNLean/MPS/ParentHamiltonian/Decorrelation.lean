@@ -49,7 +49,7 @@ useful elsewhere.
 
 section CommutingProjectors
 
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+variable {E : Type*} [AddCommGroup E] [Module ℂ E]
 
 /-- If two idempotent linear maps commute, their composition is idempotent. -/
 theorem comp_idempotent_of_comm_of_idempotent
@@ -77,9 +77,7 @@ theorem comp_idempotent_of_comm_of_idempotent
 `P ∘ R = R`. -/
 theorem left_absorb_of_comm_idempotent
     {P Q : E →ₗ[ℂ] E}
-    (hP : P ∘ₗ P = P)
-    (_hQ : Q ∘ₗ Q = Q)
-    (_hcomm : P ∘ₗ Q = Q ∘ₗ P) :
+    (hP : P ∘ₗ P = P) :
     P ∘ₗ (P ∘ₗ Q) = P ∘ₗ Q := by
   rw [← LinearMap.comp_assoc, hP]
 
@@ -87,7 +85,6 @@ theorem left_absorb_of_comm_idempotent
 `Q ∘ R = R`. -/
 theorem right_absorb_of_comm_idempotent
     {P Q : E →ₗ[ℂ] E}
-    (_hP : P ∘ₗ P = P)
     (hQ : Q ∘ₗ Q = Q)
     (hcomm : P ∘ₗ Q = Q ∘ₗ P) :
     Q ∘ₗ (P ∘ₗ Q) = P ∘ₗ Q := by
