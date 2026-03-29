@@ -72,9 +72,10 @@ jobs:
             2. 🔴 **Proof correctness**: Are proof terms well-structured? Do tactic proofs follow a logical
                strategy, or are they brute-forced with `simp` / `omega` / `ring` chains? Are `calc` blocks
                and `conv` rewrites correctly chained? Are hypotheses used or dangling?
-               If a mathematical result looks wrong, too strong, or suspiciously general, cross-check it
-               against the LaTeX sources in `Papers/` and `WolfNotes/` where the original theorems and
-               proofs are stored. Cite the relevant paper/section when flagging a discrepancy.
+               If a mathematical result looks wrong, too strong, or suspiciously general, **scout** the
+               LaTeX sources in `Papers/` and `WolfNotes/` where the original theorems and proofs are
+               stored. Read the relevant sections, compare hypotheses and conclusions, and cite the
+               specific paper/section when flagging a discrepancy.
             3. 🟡 **Mathlib style**: Does the code follow Mathlib conventions? Check naming (`camelCase` for
                defs, `snake_case` for lemmas), tactic style (prefer `exact` over `apply` + `rfl` when
                equivalent), import hygiene (no unnecessary `open`s, minimal imports), and lemma placement.
