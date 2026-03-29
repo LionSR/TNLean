@@ -11,11 +11,13 @@ import Mathlib.LinearAlgebra.Projection
 # Decorrelation and commuting parent Hamiltonians
 
 This file defines the notion of **decorrelation** for a subspace with
-respect to two disjoint regions, and proves the dimension-independent
-equivalence: a subspace corresponds to a commuting parent Hamiltonian
-if and only if the two regions are decorrelated.
+respect to two disjoint regions, and proves the backward direction of the
+decorrelation–commuting-parent-Hamiltonian equivalence: a commuting parent
+Hamiltonian implies decorrelation when observables respect locality.
 
-This is Proposition D.1 from arXiv:1606.00608, Appendix D.2.
+This is the backward direction of Proposition D.1 from arXiv:1606.00608,
+Appendix D.2. The forward direction requires tensor-product infrastructure
+and is deferred.
 
 ## Main definitions
 
@@ -28,8 +30,8 @@ This is Proposition D.1 from arXiv:1606.00608, Appendix D.2.
 
 ## Main results
 
-* `decorrelated_iff_commutingHam` — decorrelation ⟺ commuting parent
-  Hamiltonian (Proposition D.1)
+* `commutingHam_isDecorrelated` — commuting parent Hamiltonian →
+  decorrelation (Proposition D.1, backward direction)
 
 ## References
 
@@ -37,122 +39,6 @@ This is Proposition D.1 from arXiv:1606.00608, Appendix D.2.
 -/
 
 open scoped BigOperators
-
-/-!
-### Abstract operator-algebraic formulation
-
-We work in an abstract setting with finite-dimensional Hilbert spaces
-`H_A`, `H_X`, `H_B` and a subspace `K ≤ H_A ⊗ H_X ⊗ H_B`.
-
-Since the full formalization of the tensor product of Hilbert spaces is
-not yet available in Mathlib, we state the main definitions and the
-equivalence theorem using abstract idempotent endomorphisms on a
-finite-dimensional inner product space.
--/
-
-section AbstractDecorrelation
-
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-
-/-- **Decorrelation**: given an idempotent endomorphism `P_K` (projecting onto a
-subspace K) and families of operators `O_A` and `O_B` representing observables
-on regions A and B, regions A and B are **decorrelated** w.r.t. K when
-`P_K ∘ O_A ∘ (1 - P_K) ∘ O_B ∘ P_K = 0` for all observables `O_A`, `O_B`.
-
-See arXiv:1606.00608, Appendix D.2, Definition before Proposition D.1. -/
-def IsDecorrelated (P_K : E →ₗ[ℂ] E)
-    (ObsA ObsB : Set (E →ₗ[ℂ] E)) : Prop :=
-  ∀ O_A ∈ ObsA, ∀ O_B ∈ ObsB,
-    P_K ∘ₗ O_A ∘ₗ (LinearMap.id - P_K) ∘ₗ O_B ∘ₗ P_K = 0
-
-/-- **Commuting parent Hamiltonian structure**: a subspace (given by its
-idempotent endomorphism `P_K`) corresponds to a commuting parent Hamiltonian
-if there exist idempotent endomorphisms `P_AX` and `P_XB` (acting on regions
-AX and XB respectively) that commute and whose intersection recovers `P_K`.
-
-Formally: `[Q_AX, Q_XB] = 0` where `Q = 1 - P`, and
-`K = (K_AX ⊗ H_B) ∩ (H_A ⊗ K_XB)`, which in projector language means
-`P_AX ∘ P_XB = P_K`.
-
-Note: this definition only requires idempotence and commutativity, not
-orthogonality / self-adjointness. Locality (that `P_AX` acts on the AX
-tensor factor and `P_XB` on XB) is not enforced in this abstract setting;
-it will be added once tensor-product Hilbert space infrastructure is
-available.
-
-See arXiv:1606.00608, Appendix D.2, Definition before Proposition D.1. -/
-def HasCommutingParentHam (P_K : E →ₗ[ℂ] E) : Prop :=
-  ∃ P_AX P_XB : E →ₗ[ℂ] E,
-    -- P_AX, P_XB are idempotent (projectors)
-    P_AX ∘ₗ P_AX = P_AX ∧
-    P_XB ∘ₗ P_XB = P_XB ∧
-    -- The complementary projectors commute: [1 - P_AX, 1 - P_XB] = 0,
-    -- equivalently [P_AX, P_XB] = 0
-    P_AX ∘ₗ P_XB = P_XB ∘ₗ P_AX ∧
-    -- P_K projects onto the intersection: P_AX ∘ P_XB = P_K
-    P_AX ∘ₗ P_XB = P_K ∧
-    -- P_K is contained in both: P_α ∘ P_K = P_K
-    P_AX ∘ₗ P_K = P_K ∧
-    P_XB ∘ₗ P_K = P_K
-
-set_option linter.unusedSectionVars false in
-/-- **Proposition D.1** (arXiv:1606.00608, Appendix D.2):
-A subspace K_{AXB} corresponds to a commuting parent Hamiltonian
-if and only if regions A and B are decorrelated w.r.t. K.
-
-## Current limitations
-
-The `hA_comm` and `hB_comm` hypotheses are stronger than the mathematical
-statement requires: they demand commutation with *every* linear map, not
-just the witnessing projector from the commuting-parent-Hamiltonian
-decomposition. In a tensor-product setting, observables on region A would
-only need to commute with operators on the complementary region XB.
-
-These hypotheses will be tightened to commutation with specific witnessing
-projectors once tensor-product Hilbert space infrastructure is available
-in Mathlib.
-
-## Proof outline
-
-**(→ IsDecorrelated → HasCommutingParentHam):**
-We exhibit the trivial witness `P_AX = P_XB = P_K`.
-
-**(← HasCommutingParentHam → IsDecorrelated):**
-Since `O_B` commutes with `P_K` (by `hB_comm`), we have
-`(1 - P_K) ∘ O_B ∘ P_K = 0` by idempotence of `P_K`, which kills the
-entire five-fold composition.
--/
-theorem decorrelated_iff_commutingHam
-    (P_K : E →ₗ[ℂ] E)
-    (hP_idem : P_K ∘ₗ P_K = P_K)
-    (ObsA ObsB : Set (E →ₗ[ℂ] E))
-    (_hA_comm : ∀ O_A ∈ ObsA, ∀ P_XB : E →ₗ[ℂ] E,
-      P_XB ∘ₗ O_A = O_A ∘ₗ P_XB)
-    (hB_comm : ∀ O_B ∈ ObsB, ∀ P_AX : E →ₗ[ℂ] E,
-      P_AX ∘ₗ O_B = O_B ∘ₗ P_AX) :
-    IsDecorrelated P_K ObsA ObsB ↔ HasCommutingParentHam P_K := by
-  constructor
-  · -- (→) IsDecorrelated → HasCommutingParentHam
-    -- Witness: P_AX = P_XB = P_K. All six conditions follow from hP_idem.
-    intro _
-    exact ⟨P_K, P_K, hP_idem, hP_idem, rfl, hP_idem, hP_idem, hP_idem⟩
-  · -- (←) HasCommutingParentHam → IsDecorrelated
-    -- Key: (id - P_K) ∘ O_B ∘ P_K = 0, since O_B commutes with P_K
-    -- (from hB_comm) and P_K is idempotent.
-    intro _ O_A _ O_B hO_B
-    -- O_B commutes with every operator, in particular P_K
-    have hOB_PK : P_K ∘ₗ O_B = O_B ∘ₗ P_K := hB_comm O_B hO_B P_K
-    -- Extract pointwise versions
-    have hPQ : ∀ y, P_K (O_B y) = O_B (P_K y) := LinearMap.ext_iff.mp hOB_PK
-    have hPP : ∀ y, P_K (P_K y) = P_K y := LinearMap.ext_iff.mp hP_idem
-    -- Show the five-fold composition is zero pointwise
-    ext x
-    simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply,
-      LinearMap.zero_apply]
-    -- Goal: P_K (O_A (O_B (P_K x) - P_K (O_B (P_K x)))) = 0
-    rw [hPQ (P_K x), hPP, sub_self, map_zero, map_zero]
-
-end AbstractDecorrelation
 
 /-!
 ### Auxiliary lemmas for commuting projectors
@@ -238,3 +124,150 @@ theorem comp_complement_comm_zero
   rw [hPP]
 
 end CommutingProjectors
+
+/-!
+### Abstract operator-algebraic formulation
+
+We work in an abstract setting with finite-dimensional Hilbert spaces
+`H_A`, `H_X`, `H_B` and a subspace `K ≤ H_A ⊗ H_X ⊗ H_B`.
+
+Since the full formalization of the tensor product of Hilbert spaces is
+not yet available in Mathlib, we state the main definitions and the
+equivalence theorem using abstract idempotent endomorphisms on a
+finite-dimensional inner product space.
+-/
+
+section AbstractDecorrelation
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
+
+/-- **Decorrelation**: given an idempotent endomorphism `P_K` (projecting onto a
+subspace K) and families of operators `O_A` and `O_B` representing observables
+on regions A and B, regions A and B are **decorrelated** w.r.t. K when
+`P_K ∘ O_A ∘ (1 - P_K) ∘ O_B ∘ P_K = 0` for all observables `O_A`, `O_B`.
+
+See arXiv:1606.00608, Appendix D.2, Definition before Proposition D.1. -/
+def IsDecorrelated (P_K : E →ₗ[ℂ] E)
+    (ObsA ObsB : Set (E →ₗ[ℂ] E)) : Prop :=
+  ∀ O_A ∈ ObsA, ∀ O_B ∈ ObsB,
+    P_K ∘ₗ O_A ∘ₗ (LinearMap.id - P_K) ∘ₗ O_B ∘ₗ P_K = 0
+
+/-- **Commuting parent Hamiltonian structure**: a subspace (given by its
+idempotent endomorphism `P_K`) corresponds to a commuting parent Hamiltonian
+if there exist idempotent endomorphisms `P_AX` and `P_XB` (acting on regions
+AX and XB respectively) that commute and whose intersection recovers `P_K`.
+
+Formally: `[Q_AX, Q_XB] = 0` where `Q = 1 - P`, and
+`K = (K_AX ⊗ H_B) ∩ (H_A ⊗ K_XB)`, which in projector language means
+`P_AX ∘ P_XB = P_K`.
+
+Note: this definition only requires idempotence and commutativity, not
+orthogonality / self-adjointness. Locality (that `P_AX` acts on the AX
+tensor factor and `P_XB` on XB) is not enforced in this abstract setting;
+it will be added once tensor-product Hilbert space infrastructure is
+available. In particular, the trivial witness `P_AX = P_XB = P_K` always
+satisfies this predicate for any idempotent `P_K`; non-trivial content
+arises only when combined with locality constraints (see
+`commutingHam_isDecorrelated`).
+
+See arXiv:1606.00608, Appendix D.2, Definition before Proposition D.1. -/
+def HasCommutingParentHam (P_K : E →ₗ[ℂ] E) : Prop :=
+  ∃ P_AX P_XB : E →ₗ[ℂ] E,
+    -- P_AX, P_XB are idempotent (projectors)
+    P_AX ∘ₗ P_AX = P_AX ∧
+    P_XB ∘ₗ P_XB = P_XB ∧
+    -- The complementary projectors commute: [1 - P_AX, 1 - P_XB] = 0,
+    -- equivalently [P_AX, P_XB] = 0
+    P_AX ∘ₗ P_XB = P_XB ∘ₗ P_AX ∧
+    -- P_K projects onto the intersection: P_AX ∘ P_XB = P_K
+    P_AX ∘ₗ P_XB = P_K
+
+omit [FiniteDimensional ℂ E] in
+/-- If `P_K` has a commuting parent Hamiltonian with witnesses `P_AX`, `P_XB`,
+then `P_AX ∘ P_K = P_K` (the left witness absorbs `P_K`). -/
+theorem HasCommutingParentHam.left_absorb {P_K : E →ₗ[ℂ] E}
+    (h : HasCommutingParentHam P_K) :
+    ∃ P_AX P_XB : E →ₗ[ℂ] E, P_AX ∘ₗ P_XB = P_K ∧ P_AX ∘ₗ P_K = P_K := by
+  obtain ⟨P_AX, P_XB, hAX, _, _, hK⟩ := h
+  exact ⟨P_AX, P_XB, hK, by rw [← hK, ← LinearMap.comp_assoc, hAX]⟩
+
+omit [FiniteDimensional ℂ E] in
+/-- If `P_K` has a commuting parent Hamiltonian with witnesses `P_AX`, `P_XB`,
+then `P_XB ∘ P_K = P_K` (the right witness absorbs `P_K`). -/
+theorem HasCommutingParentHam.right_absorb {P_K : E →ₗ[ℂ] E}
+    (h : HasCommutingParentHam P_K) :
+    ∃ P_AX P_XB : E →ₗ[ℂ] E, P_AX ∘ₗ P_XB = P_K ∧ P_XB ∘ₗ P_K = P_K := by
+  obtain ⟨P_AX, P_XB, _, hXB, hcomm, hK⟩ := h
+  exact ⟨P_AX, P_XB, hK, by rw [← hK, ← LinearMap.comp_assoc, ← hcomm,
+    LinearMap.comp_assoc, hXB]⟩
+
+omit [FiniteDimensional ℂ E] in
+/-- **Proposition D.1, backward direction** (arXiv:1606.00608, Appendix D.2):
+If a subspace K has a commuting parent Hamiltonian decomposition
+`P_K = P_AX ∘ P_XB` with `[P_AX, P_XB] = 0`, and observables on region A
+commute with `P_XB` while observables on region B commute with `P_AX`, then
+regions A and B are decorrelated w.r.t. K.
+
+The commutation hypotheses are scoped to the *specific* witnessing projectors
+`P_AX` and `P_XB`, not all linear maps. This captures the locality structure:
+A-observables commute with the XB-projector and vice versa.
+
+## Proof outline
+
+The key identity is `P_XB ∘ (1 - P_AX ∘ P_XB) ∘ P_AX = 0` (see
+`comp_complement_comm_zero`). Using the commutation hypotheses to slide
+`O_A` past `P_XB` and `O_B` past `P_AX`, the five-fold composition
+`P_K ∘ O_A ∘ (1 - P_K) ∘ O_B ∘ P_K` factors as
+`P_AX ∘ O_A ∘ [P_XB ∘ (1 - P_AX ∘ P_XB) ∘ P_AX] ∘ O_B ∘ P_XB = 0`.
+
+## Note on the forward direction
+
+The converse (IsDecorrelated → HasCommutingParentHam) requires constructing
+*local* projectors `P_AX` and `P_XB` on the AX and XB tensor factors.
+In this abstract (non-tensor-product) setting, `HasCommutingParentHam` is
+trivially satisfiable by `P_AX = P_XB = P_K`, so an abstract iff would be
+vacuous. The forward direction is deferred to the tensor-product setting.
+
+See arXiv:1606.00608, Appendix D.2, Proposition D.1. -/
+theorem commutingHam_isDecorrelated
+    (P_K P_AX P_XB : E →ₗ[ℂ] E)
+    (hAX_idem : P_AX ∘ₗ P_AX = P_AX)
+    (hXB_idem : P_XB ∘ₗ P_XB = P_XB)
+    (hcomm : P_AX ∘ₗ P_XB = P_XB ∘ₗ P_AX)
+    (hK : P_AX ∘ₗ P_XB = P_K)
+    (ObsA ObsB : Set (E →ₗ[ℂ] E))
+    (hA_comm : ∀ O_A ∈ ObsA, O_A ∘ₗ P_XB = P_XB ∘ₗ O_A)
+    (hB_comm : ∀ O_B ∈ ObsB, O_B ∘ₗ P_AX = P_AX ∘ₗ O_B) :
+    IsDecorrelated P_K ObsA ObsB := by
+  intro O_A hOA O_B hOB
+  -- Substitute P_K = P_AX ∘ P_XB
+  rw [← hK]
+  -- Key cancellation: P_XB ∘ (id - P_AX ∘ P_XB) ∘ P_AX = 0
+  have key := comp_complement_comm_zero hAX_idem hXB_idem hcomm
+  -- Extract pointwise commutativity
+  have hA : ∀ y, O_A (P_XB y) = P_XB (O_A y) :=
+    LinearMap.ext_iff.mp (hA_comm O_A hOA)
+  have hB : ∀ y, O_B (P_AX y) = P_AX (O_B y) :=
+    LinearMap.ext_iff.mp (hB_comm O_B hOB)
+  -- Pointwise key: P_XB (P_AX w - P_AX (P_XB (P_AX w))) = 0
+  have key_pw : ∀ w, P_XB (P_AX w - P_AX (P_XB (P_AX w))) = 0 := by
+    intro w
+    have h := LinearMap.ext_iff.mp key w
+    simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply,
+      LinearMap.zero_apply] at h
+    exact h
+  -- Work pointwise
+  ext x
+  simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply,
+    LinearMap.zero_apply]
+  -- Goal: P_AX (P_XB (O_A (O_B (P_AX (P_XB x)) - P_AX (P_XB (O_B (P_AX (P_XB x))))))) = 0
+  -- Step 1: Slide O_B past P_AX using hB
+  rw [hB (P_XB x)]
+  -- Goal: P_AX (P_XB (O_A (P_AX (O_B (P_XB x)) - P_AX (P_XB (P_AX (O_B (P_XB x))))))) = 0
+  -- Step 2: Slide P_XB past O_A using hA (reversed)
+  rw [(hA _).symm]
+  -- Goal: P_AX (O_A (P_XB (P_AX (O_B (P_XB x)) - P_AX (P_XB (P_AX (O_B (P_XB x))))))) = 0
+  -- Step 3: Apply key cancellation (P_XB kills the middle)
+  rw [key_pw, map_zero, map_zero]
+
+end AbstractDecorrelation
