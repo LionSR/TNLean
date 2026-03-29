@@ -318,6 +318,20 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \subsection{Unique ground state}
 
+\begin{lemma}[Iterated contiguous-window intersection]\label{lem:contiguous_mem_ground_space}
+  \lean{MPSTensor.contiguous_mem_groundSpace}
+  \leanok
+  \uses{thm:ground_space_intersection}
+  If an $N$-site state satisfies the $L$-site ground condition on every
+  non-wrapping contiguous window (with $L \ge 2$), then it lies in $G_N(A)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Strong induction on window size, combining adjacent windows via
+  Theorem~\ref{thm:ground_space_intersection} at each step.
+\end{proof}
+
 \begin{definition}[MPV submodule]\label{def:mpv_submodule}
   \lean{MPSTensor.mpvSubmodule}
   \leanok
@@ -342,6 +356,29 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \lean{MPSTensor.HasUniqueGroundState}
   \leanok
   A submodule $S$ has a unique ground state if $\dim S = 1$.
+\end{definition}
+
+\begin{theorem}[One-dimensionality criterion]\label{thm:has_unique_ground_state_iff_proportional}
+  \lean{MPSTensor.hasUniqueGroundState_iff_proportional}
+  \leanok
+  \uses{def:has_unique_ground_state}
+  For finite-dimensional $S$, $\dim S = 1$ iff there exists a nonzero
+  $\psi_0 \in S$ such that every $\psi \in S$ is of the form $c\,\psi_0$.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  Apply the Mathlib characterization
+  \texttt{finrank\_eq\_one\_iff\_of\_nonzero'} in both directions.
+\end{proof}
+
+\begin{definition}[Periodic chain ground space]\label{def:chain_ground_space}
+  \lean{MPSTensor.chainGroundSpace}
+  \leanok
+  \uses{def:ground_space_parent}
+  For $N>0$ and $L \le N$, this is the intersection over cyclic window
+  positions and outside configurations of comaps of $G_L(A)$ under the cyclic
+  restriction maps; otherwise it is set to $\top$ by convention.
 \end{definition}
 
 \begin{theorem}[Unique ground state on the periodic chain]%

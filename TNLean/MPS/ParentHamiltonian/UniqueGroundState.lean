@@ -153,7 +153,7 @@ coincide with the span of the MPV. -/
 -- TODO(parent-hamiltonian): derive this from the cyclic-window definition of
 -- `chainGroundSpace` and the proved open-chain intersection property.
 theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
-    (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 0 < L) (hLN : L ≤ N) :
+    (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
   sorry
 
@@ -176,7 +176,7 @@ step; the remaining ingredient is the periodic boundary argument. -/
 -- TODO(parent-hamiltonian): finish after the periodic window embedding API
 -- makes the wrapping-window condition available in `chainGroundSpace`.
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
-    {L N : ℕ} (hN : 2 ≤ N) (hL : 0 < L) (hLN : L ≤ N) :
+    {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     HasUniqueGroundState (chainGroundSpace A L N) := by
   sorry
 
