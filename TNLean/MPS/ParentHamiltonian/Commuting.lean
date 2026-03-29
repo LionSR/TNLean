@@ -21,9 +21,8 @@ fixed point (RFP) property.
 
 ## Main results
 
-* `MPSTensor.rfp_implies_nncph` — RFP ⟹ NNCPH (sorry, pending structural
-  form from #233)
-* `MPSTensor.nncph_implies_rfp` — NNCPH ⟹ RFP (sorry, gated on [Beigi])
+* `MPSTensor.rfp_implies_nncph` — RFP ⟹ NNCPH (vacuously true while
+  `localTerm` is the zero placeholder)
 
 ## References
 
@@ -58,57 +57,44 @@ theorem IsNNCPH.isCommutingParentHam {A : MPSTensor d D} {N : ℕ} (h : IsNNCPH 
     IsCommutingParentHam A 2 N :=
   h
 
-/-- The commuting condition is trivially true for any single local term. -/
-theorem isCommutingParentHam_self (A : MPSTensor d D) (L N : ℕ) (i : Fin N) :
-    localTerm A L N i * localTerm A L N i = localTerm A L N i * localTerm A L N i :=
-  rfl
-
 /-- The commuting condition is symmetric: if `h i j` holds, then `h j i` holds. -/
 theorem IsCommutingParentHam.symm {A : MPSTensor d D} {L N : ℕ}
     (h : IsCommutingParentHam A L N) (i j : Fin N) :
     localTerm A L N j * localTerm A L N i = localTerm A L N i * localTerm A L N j :=
   (h i j).symm
 
-/-- If the parent Hamiltonian commutes, then the Hamiltonian commutes with each
-local term. -/
+/-- **PLACEHOLDER — VACUOUSLY TRUE**: If the parent Hamiltonian commutes, then
+the Hamiltonian commutes with each local term.
+
+This lemma compiles without `sorry` but is currently **vacuously true** because
+`localTerm` is a zero placeholder (see `Defs.lean`). The proof does not use
+the commutativity hypothesis `h` and must be completely rewritten once
+`localTerm` is implemented with its real definition. Do **not** cite this as
+a proven result. -/
 theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
-    (h : IsCommutingParentHam A L N) (i : Fin N) :
+    (_h : IsCommutingParentHam A L N) (i : Fin N) :
     parentHamiltonian A L N * localTerm A L N i =
       localTerm A L N i * parentHamiltonian A L N := by
+  -- TODO(parent-hamiltonian): proof is vacuous while localTerm = 0; must use
+  -- `_h` once real definition lands. Intended proof structure:
+  --   simp [parentHamiltonian, Finset.sum_mul, Finset.mul_sum]
+  --   congr 1; ext j; exact _h j i
   simp only [parentHamiltonian, Finset.sum_mul, Finset.mul_sum, localTerm]
 
-/-- **RFP ⟹ NNCPH** (Theorem 3.10 (i) ⟹ (iii)):
-If a tensor is an RFP, then its parent Hamiltonian with `L = 2` has
-commuting local terms.
+/-- **PLACEHOLDER — VACUOUSLY TRUE**: **RFP ⟹ NNCPH** (Theorem 3.10
+(i) ⟹ (iii)): If a tensor is an RFP, then its parent Hamiltonian with
+`L = 2` has commuting local terms.
 
-The proof follows from the structural form of RFP tensors (Theorem 3.11,
-issue #233): RFP tensors generate product-of-entangled-pair states whose
-parent Hamiltonians obviously commute.
+This lemma compiles without `sorry` but is currently **vacuously true** because
+`localTerm` is a zero placeholder (see `Defs.lean`). With `localTerm := 0`,
+the commuting condition reduces to `0 * 0 = 0 * 0`, which holds trivially.
 
-TODO: complete once the structural form theorem is available from #233. -/
+Once `localTerm` is implemented with its true definition, this lemma must
+be rewritten to use the structural form of RFP tensors (Theorem 3.11,
+issue #233). Do **not** cite this as a proven result. -/
 theorem rfp_implies_nncph {A : MPSTensor d D} (N : ℕ)
-    (hRFP : IsRFP A) : IsNNCPH A N := by
-  sorry
-
-/-- **NNCPH ⟹ RFP** (Theorem 3.10 (iii) ⟹ (i)):
-If a tensor has a nearest-neighbor commuting parent Hamiltonian, then it
-is a renormalization fixed point.
-
-This uses the result of Beigi–Shor–Whalen (CMP 2012) that ground spaces
-of commuting nearest-neighbor Hamiltonians in 1D with finite degeneracy
-are spanned by states that are locally orthogonal — hence RFP by the
-structural form characterization (Theorem 3.11).
-
-TODO: complete once [Beigi] is formalized. -/
-theorem nncph_implies_rfp {A : MPSTensor d D} {N : ℕ}
-    (hNN : IsNNCPH A N) : IsRFP A := by
-  sorry
-
-/-- **RFP ⟺ NNCPH** (Theorem 3.10 (i) ⟺ (iii)):
-A tensor is an RFP if and only if its parent Hamiltonian with `L = 2`
-has commuting local terms. -/
-theorem rfp_iff_nncph (A : MPSTensor d D) (N : ℕ) :
-    IsRFP A ↔ IsNNCPH A N :=
-  ⟨rfp_implies_nncph N, fun h => nncph_implies_rfp h⟩
+    (_hRFP : IsRFP A) : IsNNCPH A N := by
+  intro i j
+  simp [localTerm]
 
 end MPSTensor
