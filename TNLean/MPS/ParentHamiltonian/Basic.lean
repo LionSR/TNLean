@@ -41,26 +41,37 @@ lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
   rw [hkill, map_zero]
 
 /-- The MPS state restricted to any window of `L` sites lies in `groundSpace A L`.
-This is because `mpv A (replaceWindow L i σ τ)` has the form
-`tr(evalWord A (List.ofFn τ) * X)` where `X` is the product of matrices on the
-complement sites — exactly the structure of `groundSpaceMap A L`.
 
-**Status: sorry** — Proof strategy (trace cyclicity argument):
-1. Show `List.ofFn (replaceWindow L i σ τ)` decomposes into window and complement
-   segments via `List.ofFn_fin_append` / periodic reindexing.
-2. Apply `evalWord_append` to factor the matrix product into window × complement.
-3. Use `Matrix.trace_mul_comm` (trace cyclicity) to rewrite
-   `tr(M_before * M_window * M_after)` as `tr(M_window * M_after * M_before)`.
-4. Identify the result as `groundSpaceMap A L X τ` where
-   `X = evalWord A (complement_after) * evalWord A (complement_before)`.
-5. Conclude via `LinearMap.mem_range`.
+The witness is the "complement matrix": the product of `A`-matrices on sites
+outside the `L`-site window, cyclically ordered starting from `i + L`:
+`X = evalWord A [σ(i+L), σ(i+L+1), …, σ(i-1)]` (indices mod `N`).
 
-Dependencies: needs round-trip / decomposition lemmas for `extractWindow`/`replaceWindow`
-relating `List.ofFn (replaceWindow L i σ τ)` to `List.ofFn τ` and complement indices.
-Requires `L ≤ N` hypothesis (or `N`-periodicity argument). -/
+Then `groundSpaceMap A L X τ = tr(evalWord A (List.ofFn τ) * X)`, and we need
+this to equal `mpv A (replaceWindow L hLN i σ τ) = tr(evalWord A (List.ofFn (replaceWindow …)))`.
+
+**Status: sorry** — The remaining proof obligation is:
+```
+tr(evalWord A (List.ofFn τ) * complementMatrix) = tr(evalWord A (List.ofFn (replaceWindow …)))
+```
+which follows from:
+1. `List.ofFn (replaceWindow L hLN i σ τ)` decomposes as `before_σ ++ List.ofFn τ ++ after_σ`
+   (non-wrapping case; wrapping case needs periodic reindexing).
+2. `evalWord_append` factors the matrix product into three pieces.
+3. `Matrix.trace_mul_cycle` rewrites `tr(before * window * after)` as
+   `tr(window * after * before)`.
+4. `after ++ before` is exactly the complement list. -/
 lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     (i : Fin N) (σ : Cfg d N) :
     (fun τ => mpv A (replaceWindow L hLN i σ τ)) ∈ groundSpace A L := by
+  rw [groundSpace, LinearMap.mem_range]
+  -- Witness: product of A-matrices on complement sites (i+L to i-1 cyclically)
+  refine ⟨evalWord A (List.ofFn fun (j : Fin (N - L)) =>
+    σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ (by have := i.isLt; omega)⟩), ?_⟩
+  ext τ
+  simp only [groundSpaceMap_apply, mpv, coeff]
+  -- Remaining: tr(evalWord A (List.ofFn τ) * complementMatrix)
+  --          = tr(evalWord A (List.ofFn (replaceWindow L hLN i σ τ)))
+  -- Requires list decomposition + trace cyclicity (see docstring).
   sorry
 
 /-- Each local term annihilates the MPV state. -/

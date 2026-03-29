@@ -82,13 +82,31 @@ variable {N : ℕ}
 starting at position `i`, with values from `τ` (periodic boundary conditions).
 
 Requires `L ≤ N` to ensure the `L`-site window is represented faithfully. -/
-def replaceWindow (L : ℕ) (hLN : L ≤ N) {α : Type*}
+def replaceWindow (L : ℕ) (_hLN : L ≤ N) {α : Type*}
     (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
     Fin N → α :=
   fun k =>
-    let _hLN : L ≤ N := hLN
     let offset := (k.val + N - i.val) % N
     if h : offset < L then τ ⟨offset, h⟩ else σ k
+
+private lemma offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
+    ((a + b) % N + N - a) % N = b := by
+  rcases lt_or_ge (a + b) N with hab | hab
+  · rw [Nat.mod_eq_of_lt hab, show a + b + N - a = b + N from by omega,
+      Nat.add_mod_right, Nat.mod_eq_of_lt hb]
+  · rw [Nat.mod_eq_sub_mod hab, Nat.mod_eq_of_lt (by omega : a + b - N < N),
+      show a + b - N + N - a = b from by omega, Nat.mod_eq_of_lt hb]
+
+/-- Extracting a window after replacing it recovers the replacement values. -/
+@[simp] lemma extractWindow_replaceWindow (L : ℕ) (hLN : L ≤ N) {α : Type*}
+    (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
+    extractWindow L i (replaceWindow L hLN i σ τ) = τ := by
+  funext ⟨j, hj⟩
+  unfold extractWindow replaceWindow
+  have key : ((i.val + j) % N + N - i.val) % N = j :=
+    offset_mod_eq i.isLt (Nat.lt_of_lt_of_le hj hLN)
+  rw [dif_pos (show ((i.val + j) % N + N - i.val) % N < L by rw [key]; exact hj)]
+  exact congr_arg τ (Fin.ext key)
 
 /-! ### Local term (site embedding) -/
 
