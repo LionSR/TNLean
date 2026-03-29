@@ -6,7 +6,6 @@ import TNLean.Spectral.SpectralGap
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
-import Mathlib.LinearAlgebra.Eigenspace.Minpoly
 
 /-!
 # Quantitative spectral gap bounds for MPS transfer operators
@@ -119,6 +118,21 @@ theorem correlation_length_bound [NeZero D]
   -- TODO (#22): ξ = -1/log(ρ₂) where ρ₂ is second-largest eigenvalue modulus
   sorry
 
+/-! ## Helper lemmas -/
+
+/-- The word span at length 1 equals the span of the Kraus operators. -/
+theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
+    wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
+  simp only [wordSpan]
+  congr 1; ext y; constructor
+  · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
+  · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
+
+/-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
+theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
+    (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
+  ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
+
 /-! ## Explicit gap from injectivity -/
 
 /-- **Spectral gap from injectivity** (existential version).
@@ -139,54 +153,20 @@ theorem spectral_gap_of_injective [NeZero D]
     ∃ (δ : ℝ), 0 < δ ∧
       ∀ (μ : ℂ), Module.End.HasEigenvalue (transferMap (d := d) (D := D) A) μ →
         μ ≠ 1 → ‖μ‖ ≤ 1 - δ := by
-  classical
   set E := transferMap (d := d) (D := D) A
   -- Step 1: IsInjective → IsPrimitive (transferMap A)
-  -- Chain: IsInjective → HasEventuallyFullKrausRank → IsPrimitivePaper → IsPeripherallyPrimitive
-  have hWord : wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
-    simp only [wordSpan]
-    congr 1; ext y; constructor
-    · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
-    · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
-  have hFullKraus : HasEventuallyFullKrausRank A := by
-    exact ⟨1, by rw [hWord, hA]⟩
-  have hPrimPaper : IsPrimitivePaper A :=
-    isPrimitivePaper_of_hasEventuallyFullKrausRank A hFullKraus
   have hPrim : _root_.IsPrimitive E :=
-    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm hPrimPaper
+    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
+      (isPrimitivePaper_of_hasEventuallyFullKrausRank A
+        (hasEventuallyFullKrausRank_of_injective A hA))
   -- Step 2: every eigenvalue has ‖μ‖ ≤ 1
   have hE_eq : E = mixedTransferMap A A := (mixedTransferMap_self A).symm
   have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by
     intro μ hμ
     exact eigenvalue_norm_le_one A A hNorm hNorm μ (hE_eq ▸ hμ)
-  -- Step 3: non-1 eigenvalues have ‖μ‖ < 1 (from IsPrimitive + eigenvalue bound)
-  have hlt : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ < 1 := by
-    intro μ hμ hne
-    exact lt_of_le_of_ne (hbound μ hμ) fun h => hne (hPrim.unique_peripheral μ hμ h)
-  -- Step 4: uniform gap from finite eigenvalue set
-  -- The eigenvalue set is finite (roots of minimal polynomial in finite dimensions)
-  have hfin : Set.Finite {μ : ℂ | Module.End.HasEigenvalue E μ} :=
-    Module.End.finite_hasEigenvalue E
-  let S := {μ : ℂ | Module.End.HasEigenvalue E μ ∧ μ ≠ 1}
-  have hSfin : S.Finite := hfin.subset fun μ hμ => hμ.1
-  by_cases hS : S.Nonempty
-  · -- Nonempty: take δ = 1 - max{‖μ‖ | μ ∈ S}
-    let norms := hSfin.toFinset.image (fun μ => ‖μ‖)
-    have hnorms_ne : norms.Nonempty := by
-      obtain ⟨μ₀, hμ₀⟩ := hS
-      exact ⟨‖μ₀‖, Finset.mem_image.mpr ⟨μ₀, hSfin.mem_toFinset.mpr hμ₀, rfl⟩⟩
-    set r := norms.max' hnorms_ne with r_def
-    have hr_lt : r < 1 := by
-      rw [r_def, Finset.max'_lt_iff]
-      intro x hx
-      obtain ⟨μ, hμS, rfl⟩ := Finset.mem_image.mp hx
-      exact hlt μ (hSfin.mem_toFinset.mp hμS).1 (hSfin.mem_toFinset.mp hμS).2
-    refine ⟨1 - r, by linarith, fun μ hμ hne => ?_⟩
-    have hμS : μ ∈ S := ⟨hμ, hne⟩
-    have hμ_norm_mem : ‖μ‖ ∈ norms :=
-      Finset.mem_image.mpr ⟨μ, hSfin.mem_toFinset.mpr hμS, rfl⟩
-    linarith [Finset.le_max' norms ‖μ‖ hμ_norm_mem]
-  · -- Empty: no non-1 eigenvalues, δ = 1 works vacuously
-    exact ⟨1, one_pos, fun μ hμ hne => absurd ⟨μ, hμ, hne⟩ hS⟩
+  -- Step 3: non-1 eigenvalues have ‖μ‖ < 1, then extract uniform gap
+  exact uniform_spectral_gap_of_finite_lt_one (Module.End.finite_hasEigenvalue E)
+    fun μ hμ hne => lt_of_le_of_ne (hbound μ hμ)
+      fun h => hne (hPrim.unique_peripheral μ hμ h)
 
 end MPSTensor
