@@ -66,10 +66,8 @@ theorem rfp_nt_structural (A : MPSTensor d D)
 RFP, each block admits an invertible `X_k`, positive diagonal `Λ_k` with
 `tr(Λ_k) = 1`, and isometries `U_k` from Lemma B.1.
 
-Note: the full structural form in the paper also includes phase weights
-`μ_k` and the representation equation `A^i_k = μ_k X_k Λ_k U^i_k X_k⁻¹`;
-these are already captured by `IsCanonicalForm` and `rfp_nt_structural`
-respectively, so this theorem only re-exports the `X, Λ, U` portion.
+The conclusion includes the representation equation
+`A^i_k = X_k Λ_k U^i_k X_k⁻¹` from Lemma B.1 for each block `k`.
 
 Proved by reducing to `rfp_nt_structural`: each CF block is injective
 (from `IsCanonicalForm`), hence normal (via `IsInjective.isNormal`). -/
@@ -82,11 +80,12 @@ theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
       IsUnit X ∧
       (∀ j, 0 ≤ Λ j) ∧
       (∑ j, (Λ j : ℂ) = 1) ∧
-      (∀ i, (U i).conjTranspose * U i = 1) := by
+      (∀ i, (U i).conjTranspose * U i = 1) ∧
+      ∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) *
+        U i * Ring.inverse X := by
   intro k
   have hNormal : IsNormal (A k) := (hCF.block_injective k).isNormal
-  obtain ⟨X, Λ, U, hX, hΛ, htr, hU, _⟩ := rfp_nt_structural (A k) hNormal (hRFP k)
-  exact ⟨X, Λ, U, hX, hΛ, htr, hU⟩
+  exact rfp_nt_structural (A k) hNormal (hRFP k)
 
 /-- **Corollary 3.12** (arXiv:1606.00608): The BNT elements of an RFP tensor
 each have the form `A_j^i = X_j Λ_j U^i_j X_j⁻¹` from Lemma B.1.
