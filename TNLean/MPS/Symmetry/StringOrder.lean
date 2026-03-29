@@ -156,9 +156,15 @@ def IsLocalSymmetry (A : MPSTensor d D)
   ∀ L : ℕ,
     stringOrderParam A u Λ L = stringOrderParam A 1 Λ L
 
-/-- String order exists for `u` if the string order parameter does
-not vanish in the limit, i.e. there exists a positive lower bound
-for all `L`. -/
+/-- String order exists for `u` if the string order parameter is
+uniformly bounded below by a positive constant for all `L`.
+
+This is a stronger condition than mere non-vanishing of the limit
+`lim_{L→∞} R_L(u)`. The uniform bound is chosen because for
+injective MPS the string order parameter converges exponentially,
+so both formulations are equivalent in the injective setting. The
+uniform version is more convenient for formal proofs as it avoids
+filter/limit machinery. -/
 def HasStringOrder (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
@@ -222,15 +228,22 @@ commutation.
 Both sides express the same identity
 `∑_i A_i (V X V†) A_i† = V (∑_i A_i X A_i†) V†`. C2 reads
 right-to-left and C3 rearranges the left side using conjugated
-Kraus operators `V A_i V†`. -/
-theorem condC2_iff_condC3
-    (_hV : V * Vᴴ = 1) (_hVc : Vᴴ * V = 1) :
+Kraus operators `V A_i V†`.
+
+Note: This equivalence holds for any `V`, not just unitaries,
+since `CondC2` and `CondC3` are literally `∀ X, P = Q` vs
+`∀ X, Q = P`. -/
+theorem condC2_iff_condC3 :
     CondC2 A V ↔ CondC3 A V :=
   forall_congr' fun _ => eq_comm
 
 /-- Unitary mixing of Kraus operators preserves the channel:
-if `u` is unitary then `∑_i (∑_j u_{ij} A_j) X (∑_j u_{ij} A_j)† = ∑_i A_i X A_i†`. -/
-private lemma unitary_kraus_mixing
+if `u` is unitary then `∑_i (∑_j u_{ij} A_j) X (∑_j u_{ij} A_j)† = ∑_i A_i X A_i†`.
+
+This is a general result about unitary equivalence of Kraus
+representations (Theorem 2.18 in Wolf's "Quantum Channels &
+Operations"). -/
+lemma unitary_kraus_mixing
     (A : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1)
     (Y : Matrix (Fin D) (Fin D) ℂ) :
@@ -307,21 +320,23 @@ end ConditionEquivalences
 section MainTheorems
 
 /-- **Spectral radius bound** (Lemma 1 of arXiv:0802.0447):
-For a pure FCS (with `Λ > 0` and `ℰ` having unique fixed point
-`𝟙`), the spectral radius of the twisted transfer map satisfies
-`ρ(ℰ_u) ≤ 1`.
+For an injective (pure) FCS with stationary state `Λ > 0` and
+unique fixed point `𝟙` for the transfer map, the spectral radius
+of the twisted transfer map satisfies `ρ(ℰ_u) ≤ 1`.
 
 The proof uses Cauchy-Schwarz, unitarity of `u`, and the unitality
-(Heisenberg-picture normalization) `ℰ(𝟙) = 𝟙`. This requires spectral theory for
-completely positive maps beyond what is currently available in
-Mathlib. -/
+(Heisenberg-picture normalization) `ℰ(𝟙) = 𝟙`. The `IsInjective`
+hypothesis ensures the unique fixed point property needed for the
+bound. This requires spectral theory for completely positive maps
+beyond what is currently available in Mathlib. -/
 theorem twistedTransfer_spectralRadius_le_one
     (A : MPSTensor d D)
+    (hA : IsInjective A)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (hNorm : transferMap A 1 = 1)
-    (hΛ : ∃ Λ : Matrix (Fin D) (Fin D) ℂ,
-      Λ.PosSemidef ∧ Matrix.trace Λ = 1)
+    (Λ : Matrix (Fin D) (Fin D) ℂ)
+    (hΛpos : Λ.PosSemidef) (hΛtr : Matrix.trace Λ = 1)
     (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
     (hV : V ≠ 0)
     (hEig : twistedTransferMap A u V = ev • V) :
