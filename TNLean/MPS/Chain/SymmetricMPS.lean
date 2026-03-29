@@ -48,17 +48,14 @@ match the general form expected by downstream projective-representation
 arguments (arXiv:0802.0447 Condition C1, issue #76).
 
 **Implementation note:** the proof extracts the `GL` witness from
-`GaugeEquiv`, which unfolds to `∃ X : GL, ∀ i, B i = X * A i * X⁻¹`.
+`GaugeEquiv`, then packages the result as `GaugePhaseEquiv` with phase `φ = 1`.
 If `GaugeEquiv` is refactored (e.g., to use `MulEquiv` or change the
 conjugation convention), this proof will need updating. -/
 theorem virtual_symmetry_eq
     {G : Type*} [Monoid G]
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hA : IsInjective A) (hSym : IsSymmetricMPS G A U) (g : G) :
-    ∃ (X : GL (Fin D) ℂ) (φ : ℂ), φ ≠ 0 ∧ ∀ i,
-      ∑ j, U g i j • A j =
-        φ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
-          ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :=
+    GaugePhaseEquiv A (fun i => ∑ j, U g i j • A j) :=
   let ⟨X, hX⟩ := virtual_symmetry_gaugeEquiv A U hA hSym g
   ⟨X, 1, one_ne_zero, fun i => by rw [one_smul]; exact hX i⟩
 
