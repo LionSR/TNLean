@@ -106,8 +106,8 @@ theorem trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel
   exact hV_ne (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
     hE_ch hE_irr V hV_fix htr)
 
-/-- **TODO**: Prove that a peripheral eigenvalue of an irreducible QDS has a periodic
-fixed point. Currently a `sorry` placeholder. -/
+/-- A peripheral eigenvalue of an irreducible QDS has a periodic fixed point:
+there exists `p > 0` and a nonzero eigenvector `V` such that `T(p * t) V = V`. -/
 theorem exists_power_fixed_eigenvector_of_peripheral
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -116,10 +116,25 @@ theorem exists_power_fixed_eigenvector_of_peripheral
     {t : ℝ} (ht : 0 < t)
     {μ : ℂ} (hμ_eig : Module.End.HasEigenvalue (T t) μ) (hμ_norm : ‖μ‖ = 1) :
     ∃ p : ℕ, 0 < p ∧ ∃ V : Mat, V ≠ 0 ∧ (T t) V = μ • V ∧ T (↑p * t) V = V := by
-  sorry
+  have hTt_ch : IsChannel (T t) := hT.channel t (le_of_lt ht)
+  have hTt_irr : IsIrreducibleMap (T t) := hT_irr_all t ht
+  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  obtain ⟨σ, _, hσ_pd, hσ_fix, _⟩ :=
+    IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := T t) hTt_ch hTt_irr hD
+  have hμ_periph : μ ∈ peripheralEigenvalues (T t) := ⟨hμ_eig, hμ_norm⟩
+  have hpow_closed := peripheral_powers_closed_of_irreducible_channel_with_fixed
+    (T t) hTt_ch hTt_irr σ hσ_pd hσ_fix hμ_periph
+  obtain ⟨p, hp_pos, _, hμp⟩ :=
+    bounded_root_of_peripheral_closed_powers (T t) μ hμ_periph hpow_closed
+  obtain ⟨V, hV⟩ := hμ_eig.exists_hasEigenvector
+  have hV_ne : V ≠ 0 := hV.2
+  have hEV : (T t) V = μ • V := Module.End.mem_eigenspace_iff.mp hV.1
+  have hpt_eq : T (↑p * t) = (T t) ^ p :=
+    semigroup_pow T hT.semigroup.semigroup t (le_of_lt ht) p
+  refine ⟨p, hp_pos, V, hV_ne, hEV, ?_⟩
+  rw [hpt_eq, pow_apply_eigenvector (T t) V μ p hEV, hμp, one_smul]
 
-/-- **TODO**: Prove that a trace-nonzero eigenvector exists for peripheral eigenvalues.
-Currently a `sorry` placeholder. -/
+/-- A trace-nonzero eigenvector exists for peripheral eigenvalues of an irreducible QDS. -/
 theorem exists_trace_ne_zero_eigenvector_of_peripheral
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -128,7 +143,12 @@ theorem exists_trace_ne_zero_eigenvector_of_peripheral
     {t : ℝ} (ht : 0 < t)
     {μ : ℂ} (hμ_eig : Module.End.HasEigenvalue (T t) μ) (hμ_norm : ‖μ‖ = 1) :
     ∃ V : Mat, V ≠ 0 ∧ (T t) V = μ • V ∧ Matrix.trace V ≠ 0 := by
-  sorry
+  obtain ⟨p, hp_pos, V, hV_ne, hEV, hVfix⟩ :=
+    exists_power_fixed_eigenvector_of_peripheral T hT hT_irr_all ht hμ_eig hμ_norm
+  have hpt_pos : 0 < (↑p : ℝ) * t := mul_pos (Nat.cast_pos.mpr hp_pos) ht
+  exact ⟨V, hV_ne, hEV,
+    trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel
+      (T (↑p * t)) (hT.channel _ (le_of_lt hpt_pos)) (hT_irr_all _ hpt_pos) hVfix hV_ne⟩
 
 theorem eigenvalue_eq_one_of_trace_preserving_eigenvector
     (E : Mat →ₗ[ℂ] Mat)
@@ -145,8 +165,7 @@ theorem eigenvalue_eq_one_of_trace_preserving_eigenvector
       _ = 0 := by rw [htrV, sub_self]
   exact sub_eq_zero.mp ((mul_eq_zero.mp hzero).resolve_right htrV_ne)
 
-/-- **TODO**: Prove that all peripheral eigenvalues equal 1 when all times are
-irreducible. Currently a `sorry` placeholder. -/
+/-- All peripheral eigenvalues equal 1 when the QDS is irreducible at all positive times. -/
 theorem peripheral_eq_one_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -155,17 +174,28 @@ theorem peripheral_eq_one_of_irreducible_all
     {t : ℝ} (ht : 0 < t)
     {μ : ℂ} (hμ_eig : Module.End.HasEigenvalue (T t) μ) (hμ_norm : ‖μ‖ = 1) :
     μ = 1 := by
-  sorry
+  obtain ⟨V, _, hEV, htrV⟩ :=
+    exists_trace_ne_zero_eigenvector_of_peripheral T hT hT_irr_all ht hμ_eig hμ_norm
+  exact eigenvalue_eq_one_of_trace_preserving_eigenvector
+    (T t) (hT.channel t (le_of_lt ht)).tp hEV htrV
 
-/-- **TODO**: Prove that irreducibility at all times implies primitivity.
-Currently a `sorry` placeholder. -/
+/-- Irreducibility at all positive times implies primitivity for a QDS. -/
 theorem primitive_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
     (hT_irr_all : ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s)) :
     ∀ t : ℝ, 0 < t → IsPrimitive (T t) := by
-  sorry
+  intro t ht
+  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hTt_ch : IsChannel (T t) := hT.channel t (le_of_lt ht)
+  have hTt_irr : IsIrreducibleMap (T t) := hT_irr_all t ht
+  obtain ⟨σ, hσ_mem, _, hσ_fix, _⟩ :=
+    IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := T t) hTt_ch hTt_irr hD
+  have hσ_ne := ne_zero_of_mem_densityMatrices' hσ_mem
+  exact isPrimitive_of_unique_norm_one (T t) σ hσ_fix hσ_ne
+    (fun μ hμ_eig hμ_norm =>
+      peripheral_eq_one_of_irreducible_all T hT hT_irr_all ht hμ_eig hμ_norm)
 
 def residualSliceIndex (u s : ℝ) (n : ℕ) : ℕ :=
   Int.toNat ⌊((n : ℝ) * u) / s⌋
