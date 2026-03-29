@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Peripheral.CyclicDecomposition
+import TNLean.Algebra.MatrixAux
 import Mathlib.RingTheory.RootsOfUnity.Basic
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.Analysis.Matrix.Spectrum
@@ -177,19 +178,6 @@ private lemma period_dvd_dim_of_cyclic_projections
   obtain ⟨n, hn⟩ := exists_natCast_eq_trace_of_orthogonal_projection (P 0) (hPproj 0)
   have : (↑(m * n) : ℂ) = (↑D : ℂ) := by push_cast; rw [← hn]; exact hmul_trace
   exact ⟨n, (Nat.cast_injective this).symm⟩
-
-/-- On the unit circle, complex conjugation equals inversion: `conj α = α⁻¹` when `‖α‖ = 1`. -/
-lemma Complex.conj_eq_inv_of_norm_eq_one {α : ℂ} (h : ‖α‖ = 1) :
-    starRingEnd ℂ α = α⁻¹ := by
-  have hα_ne : α ≠ 0 := norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)
-  have hconj_mul : starRingEnd ℂ α * α = 1 := by
-    have hnormSq : Complex.normSq α = 1 := by
-      rw [Complex.normSq_eq_norm_sq]; simp [h]
-    calc starRingEnd ℂ α * α
-        = (↑(Complex.normSq α) : ℂ) := by
-          simpa using (Complex.normSq_eq_conj_mul_self (z := α)).symm
-      _ = 1 := by simp [hnormSq]
-  exact mul_right_cancel₀ hα_ne (by rw [hconj_mul, inv_mul_cancel₀ hα_ne])
 
 /-! ## Closure under multiplication -/
 

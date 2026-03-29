@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.PiAlgebra.BlockSeparation
 import TNLean.PiAlgebra.FundamentalTheoremComplete
+import TNLean.Algebra.MatrixAux
 import TNLean.Spectral.SpectralGap
 import TNLean.Spectral.SpectralGapNT
 import TNLean.Spectral.MPVOverlapDecay
@@ -389,47 +390,6 @@ theorem toIsNormalCanonicalForm
   dim_pos := hDim
 
 end IsCanonicalForm
-
-/-! ### Auxiliary algebraic lemmas -/
-
-section AlgebraicLemmas
-
-lemma scalar_mul_sub_smul {n : Type*} [DecidableEq n] [Fintype n]
-    (c z : ℂ) (M : Matrix n n ℂ) :
-    Matrix.scalar n (c * z) - c • M = c • (Matrix.scalar n z - M) := by
-  ext i j
-  simp [Matrix.scalar, Matrix.smul_apply, Matrix.sub_apply, Matrix.diagonal_apply, smul_eq_mul]
-  split <;> ring
-
-lemma eval_charpoly_smul_mul {n : Type*} [DecidableEq n] [Fintype n]
-    (c z : ℂ) (M : Matrix n n ℂ) :
-    (c • M).charpoly.eval (c * z) = c ^ Fintype.card n * M.charpoly.eval z := by
-  rw [Matrix.eval_charpoly, Matrix.eval_charpoly, scalar_mul_sub_smul, Matrix.det_smul]
-
-theorem charpoly_eq_of_smul_charpoly_eq {n : Type*} [DecidableEq n] [Fintype n]
-    (c : ℂ) (hc : c ≠ 0) (T U : Matrix n n ℂ)
-    (h : (c • T).charpoly = (c • U).charpoly) :
-    T.charpoly = U.charpoly := by
-  have hcn : c ^ Fintype.card n ≠ 0 := pow_ne_zero _ hc
-  apply Polynomial.funext
-  intro z
-  have h1 := eval_charpoly_smul_mul c z T
-  have h2 := eval_charpoly_smul_mul c z U
-  have h3 : (c • T).charpoly.eval (c * z) = (c • U).charpoly.eval (c * z) := by rw [h]
-  rw [h1] at h3; rw [h2] at h3
-  exact mul_left_cancel₀ hcn h3
-
-theorem trace_eq_of_charpoly_eq
-    {D : ℕ} [NeZero D]
-    (T U : Matrix (Fin D) (Fin D) ℂ)
-    (h : T.charpoly = U.charpoly) :
-    Matrix.trace T = Matrix.trace U := by
-  have : Nonempty (Fin D) := Fin.pos_iff_nonempty.mp (NeZero.pos D)
-  have hT := Matrix.trace_eq_neg_charpoly_coeff T
-  have hU := Matrix.trace_eq_neg_charpoly_coeff U
-  rw [hT, hU, h]
-
-end AlgebraicLemmas
 
 /-! ### MPV overlap bounds from left-canonical normalization
 

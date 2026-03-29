@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.Basic
 import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
@@ -103,39 +104,6 @@ theorem idPlusE_posDef
   hA.add_posSemidef (hE A hA.posSemidef)
 
 end Preservation
-
-/-! ## Kernel intersection for PSD matrices -/
-
-section KernelPSD
-
-/-- For PSD matrices `A` and `B`, `ker(A + B) ⊆ ker(A)`.
-Proof: `v†(A+B)v = v†Av + v†Bv = 0` with both nonneg implies `v†Av = 0`. -/
-theorem ker_add_psd_left
-    {A B : Matrix (Fin D) (Fin D) ℂ}
-    (hA : A.PosSemidef) (hB : B.PosSemidef)
-    (v : Fin D → ℂ) (hv : (A + B) *ᵥ v = 0) :
-    A *ᵥ v = 0 := by
-  have hqf : star v ⬝ᵥ ((A + B) *ᵥ v) = 0 := by rw [hv]; simp
-  rw [add_mulVec, dotProduct_add] at hqf
-  have h1_re := hA.re_dotProduct_nonneg v
-  have h2_re := hB.re_dotProduct_nonneg v
-  have h3_re : (star v ⬝ᵥ (A *ᵥ v)).re + (star v ⬝ᵥ (B *ᵥ v)).re = 0 := by
-    have := congr_arg Complex.re hqf; simpa using this
-  change 0 ≤ (star v ⬝ᵥ (A *ᵥ v)).re at h1_re
-  change 0 ≤ (star v ⬝ᵥ (B *ᵥ v)).re at h2_re
-  have hre : (star v ⬝ᵥ (A *ᵥ v)).re = 0 := by linarith
-  exact (hA.dotProduct_mulVec_zero_iff v).mp
-    (Complex.ext hre (hA.isHermitian.im_star_dotProduct_mulVec_self v))
-
-/-- For PSD matrices `A` and `B`, `ker(A + B) ⊆ ker(B)`. -/
-theorem ker_add_psd_right
-    {A B : Matrix (Fin D) (Fin D) ℂ}
-    (hA : A.PosSemidef) (hB : B.PosSemidef)
-    (v : Fin D → ℂ) (hv : (A + B) *ᵥ v = 0) :
-    B *ᵥ v = 0 := by
-  exact ker_add_psd_left hB hA v (by simpa [add_comm] using hv)
-
-end KernelPSD
 
 /-! ## One-step structural lemma -/
 
