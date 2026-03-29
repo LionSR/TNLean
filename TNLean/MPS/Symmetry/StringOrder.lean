@@ -52,6 +52,7 @@ The condition equivalences (`condC2_iff_condC3`, `condC1_imp_condC2`) are fully
 proved. The following theorems require spectral theory of completely positive
 maps beyond what is currently available in Mathlib and are marked `sorry`:
 
+* `condC2_imp_condC1_of_injective` — needs spanning/injectivity argument
 * `twistedTransfer_spectralRadius_le_one` — needs CP map spectral theory
 * `localSymmetry_iff_spectralRadius_one` — needs CP map spectral theory
 * `stringOrder_iff_localSymmetry` — needs CP map spectral theory
@@ -327,6 +328,22 @@ theorem condC1_imp_condC2
   -- Step 3: Apply unitary Kraus mixing
   exact unitary_kraus_mixing A u hu (V * X * Vᴴ)
 
+/-- C2 → C1 (under injectivity): If `V` is unitary and C2 holds,
+then there exists a unitary `u` satisfying C1.
+
+This is the reverse direction of `condC1_imp_condC2`, completing
+the equivalence C1 ↔ C2 for injective MPS (Lemma 1 of
+arXiv:0802.0447). The proof uses the spanning property of
+`{A_i}` (injectivity) to extract the matrix entries of `u` from
+the transfer-map covariance relation. -/
+theorem condC2_imp_condC1_of_injective
+    (hA : IsInjective A)
+    (hV : V * Vᴴ = 1)
+    (hC2 : CondC2 A V) :
+    ∃ u : Matrix (Fin d) (Fin d) ℂ, u * uᴴ = 1 ∧ CondC1 A u V := by
+  -- TODO(sorry): requires the spanning/injectivity argument; see Status section
+  sorry
+
 end ConditionEquivalences
 
 /-! ### Main equivalence theorems -/
@@ -359,7 +376,13 @@ theorem twistedTransfer_spectralRadius_le_one
   sorry
 
 /-- **Theorem 2** (arXiv:0802.0447): For a pure finitely correlated
-state, `u` is a local symmetry if and only if `ρ(ℰ_u) = 1`.
+state, `u` is a local symmetry if and only if the twisted transfer
+map `ℰ_u` has a unitary eigenvector with unit-modulus eigenvalue.
+
+The right-hand side is the witness form of `ρ(ℰ_u) = 1`:
+combined with `twistedTransfer_spectralRadius_le_one` (all
+eigenvalues satisfy `|λ| ≤ 1`), existence of an eigenvalue with
+`|μ| = 1` is equivalent to `spectralRadius(ℰ_u) = 1`.
 
 The forward direction uses the fact that local symmetry implies
 `tr(ρ²) = tr[ρ u^{⊗N} ρ u^{†⊗N}]` is bounded below.
