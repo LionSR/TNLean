@@ -35,21 +35,6 @@ def LindbladForm.HasTracelessKraus (F : LindbladForm D) : Prop :=
 
 /-! ### Private helpers for the uniqueness proofs -/
 
-/-- Re-derivation of the `(i₂, j₂)`-slice of `|Ω⟩⟨Ω|` as a scaled matrix unit. -/
-private theorem omegaSlice_eq_single (i₂ j₂ : Fin D) :
-    Matrix.bipartiteSlice (Matrix.omegaProj D) i₂ j₂ =
-      Matrix.single i₂ j₂
-        (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
-          star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ))) := by
-  ext a b
-  simp only [Matrix.bipartiteSlice_apply, Matrix.omegaProj_apply, Matrix.omegaVec_apply,
-    Matrix.single_apply]
-  by_cases ha : a = i₂ <;> by_cases hb : b = j₂
-  · subst ha hb; simp
-  · subst ha; simp [hb, show ¬(j₂ = b) from Ne.symm hb]
-  · subst hb; simp [ha, show ¬(i₂ = a) from Ne.symm ha]
-  · simp [ha, hb, show ¬(i₂ = a) from Ne.symm ha, show ¬(j₂ = b) from Ne.symm hb]
-
 /-- Key tracelessness helper:
 `choiMatrix(φ) *ᵥ ω = 0` when all Kraus operators are traceless. -/
 private theorem choi_phi_mulVec_omega_eq_zero
@@ -71,8 +56,8 @@ private theorem choi_phi_mulVec_omega_eq_zero
     lhs; arg 2; ext j₂; arg 2; ext j₁
     rw [mul_ite, mul_zero]
   simp_rw [Finset.sum_ite_eq, Finset.mem_univ, if_true]
-  -- Rewrite bipartiteSlice using omegaSlice_eq_single
-  simp_rw [omegaSlice_eq_single]
+  -- Rewrite bipartiteSlice using ChoiJamiolkowski.omegaSlice_eq_single
+  simp_rw [ChoiJamiolkowski.omegaSlice_eq_single]
   -- Unfold G.φ (Kraus sum)
   change ∑ j₂ : Fin D, (∑ k : Fin F.r, F.L k * Matrix.single i₂ j₂ α * (F.L k)ᴴ) i₁ j₂ *
     (1 / ↑(Real.sqrt ↑D)) = 0
@@ -101,18 +86,16 @@ private theorem choi_phi_mulVec_omega_eq_zero
         exact Finset.sum_eq_zero fun x _ => by
           rw [Matrix.single_apply, if_neg (by tauto), zero_mul]
     simp_rw [hinner]
-    -- Goal: ∑ a, F.L k i₁ a * if a = i₂ then α * star (F.L k j a) else 0 = ...
-    -- Wait: hinner is ∀ a, inner_sum a = if a = i₂ then ... else 0
-    -- After simp_rw, the variable `a` in the if-body might still be free
-    -- Use Finset.sum_eq_single
+    -- Collapse to single i₂ term via Finset.sum_eq_single
     rw [Finset.sum_eq_single i₂]
     · simp; ring
     · intro a _ ha; simp [ha]
     · exact absurd (Finset.mem_univ _)
   simp_rw [hentry]
-  rw [show ∑ j : Fin D, F.L k i₁ i₂ * α * star (F.L k j j) * c =
-      α * c * F.L k i₁ i₂ * ∑ j : Fin D, star (F.L k j j) from by
-    rw [Finset.mul_sum]; congr 1; ext j; ring]
+  -- Factor out common terms and collapse to trace
+  conv_lhs => arg 2; ext j; rw [show F.L k i₁ i₂ * α * star (F.L k j j) * c =
+      α * c * F.L k i₁ i₂ * star (F.L k j j) from by ring]
+  rw [← Finset.mul_sum]
   rw [show ∑ j : Fin D, star (F.L k j j) = star (trace (F.L k)) from by
     simp [Matrix.trace, star_sum]]
   rw [htr k, star_zero, mul_zero]
