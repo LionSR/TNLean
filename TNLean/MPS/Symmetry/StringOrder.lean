@@ -341,7 +341,9 @@ theorem condC2_imp_condC1_of_injective
     (hV : V * Vᴴ = 1)
     (hC2 : CondC2 A V) :
     ∃ u : Matrix (Fin d) (Fin d) ℂ, u * uᴴ = 1 ∧ CondC1 A u V := by
-  -- TODO(sorry): requires the spanning/injectivity argument; see Status section
+  -- TODO(sorry): requires the spanning/injectivity argument; see Status section.
+  -- Dependency chain: `IsInjective A` → `{A_i}` spans `M_D(ℂ)` → extract matrix
+  -- entries of `u` from the transfer-map covariance relation `CondC2`.
   sorry
 
 end ConditionEquivalences
@@ -372,7 +374,13 @@ theorem twistedTransfer_spectralRadius_le_one
     (hV : V ≠ 0)
     (hEig : twistedTransferMap A u V = ev • V) :
     ‖ev‖ ≤ 1 := by
-  -- TODO(sorry): requires CP map spectral theory; see Status section
+  -- TODO(sorry): requires CP map spectral theory; see Status section.
+  -- Dependency chain: `IsInjective A` → `{A_i}` spans `M_D(ℂ)` → transfer map is
+  -- primitive → `𝟙` is the unique fixed point of `transferMap A` (up to scalar)
+  -- (Perron-Frobenius for CP maps) → Cauchy-Schwarz argument gives `‖ev‖ ≤ 1`.
+  -- When filling this sorry, either derive uniqueness from `IsInjective` via
+  -- `CPPrimitive.lean`, or add an explicit hypothesis
+  -- `hUnique : ∀ X, transferMap A X = X → ∃ c, X = c • 1`.
   sorry
 
 /-- **Theorem 2** (arXiv:0802.0447): For a pure finitely correlated
@@ -402,7 +410,9 @@ theorem localSymmetry_iff_spectralRadius_one
         V * Vᴴ = 1 ∧ Vᴴ * V = 1 ∧
         ∃ μ : ℂ, ‖μ‖ = 1 ∧
           twistedTransferMap A u V = μ • V := by
-  -- TODO(sorry): requires CP map spectral theory; see Status section
+  -- TODO(sorry): requires CP map spectral theory; see Status section.
+  -- Dependency: needs unique fixed point of transfer map (from `IsInjective`)
+  -- and Perron-Frobenius for CP maps; see `twistedTransfer_spectralRadius_le_one`.
   sorry
 
 /-- **Theorem 1** (arXiv:0802.0447, simplified): String order
@@ -426,7 +436,9 @@ theorem stringOrder_iff_localSymmetry
     (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
     (hNorm : transferMap A 1 = 1) :
     HasStringOrder A u Λ ↔ IsLocalSymmetry A u Λ := by
-  -- TODO(sorry): requires CP map spectral theory; see Status section
+  -- TODO(sorry): requires CP map spectral theory; see Status section.
+  -- Dependency: needs unique fixed point of transfer map (from `IsInjective`)
+  -- and Perron-Frobenius for CP maps; see `twistedTransfer_spectralRadius_le_one`.
   sorry
 
 /-- **Virtual symmetry from string order**: If string order exists
@@ -451,7 +463,9 @@ theorem virtualUnitary_of_stringOrder
       V * Vᴴ = 1 ∧ Vᴴ * V = 1 ∧ ‖μ‖ = 1 ∧
       ∀ i : Fin d,
         ∑ j : Fin d, u i j • A j = μ • (V * A i * Vᴴ) := by
-  -- TODO(sorry): requires CP map spectral theory; see Status section
+  -- TODO(sorry): requires CP map spectral theory; see Status section.
+  -- Dependency: needs unique fixed point of transfer map (from `IsInjective`)
+  -- and Perron-Frobenius for CP maps; see `twistedTransfer_spectralRadius_le_one`.
   sorry
 
 end MainTheorems
