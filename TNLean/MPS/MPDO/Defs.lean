@@ -84,12 +84,9 @@ noncomputable def evalWord (M : MPOTensor d D) :
 
 /-! ### The MPO operator family -/
 
-/-- The matrix element of the MPO operator for system size `N`:
-for ket configuration `σ` and bra configuration `τ`, this returns
-`tr(M^{σ₀ τ₀} * M^{σ₁ τ₁} * ⋯ * M^{σ_{N-1} τ_{N-1}})`.
-
-This gives the `(σ, τ)` entry of the density operator `ρ^{(N)}(M)`. -/
-noncomputable def mpoCoeff (M : MPOTensor d D) {N : ℕ}
+/-- The `(σ, τ)` matrix entry of the MPO density operator for system size `N`:
+`tr(M^{σ₀ τ₀} * M^{σ₁ τ₁} * ⋯ * M^{σ_{N-1} τ_{N-1}})`. -/
+noncomputable def mpoMatrixEntry (M : MPOTensor d D) {N : ℕ}
     (σ τ : Fin N → Fin d) : ℂ :=
   Matrix.trace (evalWord M (List.ofFn σ) (List.ofFn τ))
 
@@ -100,11 +97,11 @@ noncomputable def mpoCoeff (M : MPOTensor d D) {N : ℕ}
 This is the `d^N × d^N` matrix indexed by `Fin N → Fin d`. -/
 noncomputable def mpo (M : MPOTensor d D) (N : ℕ) :
     Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
-  Matrix.of fun σ τ => mpoCoeff M σ τ
+  Matrix.of fun σ τ => mpoMatrixEntry M σ τ
 
 @[simp] lemma mpo_apply (M : MPOTensor d D) (N : ℕ)
     (σ τ : Fin N → Fin d) :
-    mpo M N σ τ = mpoCoeff M σ τ := rfl
+    mpo M N σ τ = mpoMatrixEntry M σ τ := rfl
 
 /-! ### Hermiticity -/
 
@@ -127,15 +124,20 @@ lemma transferMap_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
   classical
   simp [transferMap, Matrix.mul_assoc]
 
+/-- The MPO transfer map equals the MPS transfer map of the doubled-index tensor. -/
+lemma transferMap_eq_toMPSTensor (M : MPOTensor d D) :
+    transferMap M = MPSTensor.transferMap (toMPSTensor M) := by
+  refine LinearMap.ext fun X => ?_
+  simp only [transferMap_apply, MPSTensor.transferMap_apply, toMPSTensor]
+  rw [← Fintype.sum_prod_type']
+  exact (finProdFinEquiv.symm.sum_comp _).symm
+
 /-- The transfer map of an MPO preserves positive semidefiniteness. -/
 theorem transferMap_pos (M : MPOTensor d D)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.PosSemidef) :
     (transferMap M X).PosSemidef := by
-  classical
-  simp only [transferMap_apply]
-  apply Matrix.posSemidef_sum; intro i _
-  apply Matrix.posSemidef_sum; intro j _
-  simpa [Matrix.mul_assoc] using hX.mul_mul_conjTranspose_same (B := M i j)
+  rw [transferMap_eq_toMPSTensor]
+  exact MPSTensor.transferMap_pos (toMPSTensor M) hX
 
 /-! ### MPDO: global positivity -/
 
@@ -168,9 +170,8 @@ theorem IsLPDO.isHermitian {M : MPOTensor d D} (h : IsLPDO M) :
     IsHermitian M := by
   obtain ⟨dK, A, hA⟩ := h
   intro i j
-  rw [hA i j, hA j i]
-  rw [Matrix.conjTranspose_sum]
-  congr 1; ext k
-  rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+  rw [hA i j, hA j i, Matrix.conjTranspose_sum]
+  exact Finset.sum_congr rfl fun k _ => by
+    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
 
 end MPOTensor
