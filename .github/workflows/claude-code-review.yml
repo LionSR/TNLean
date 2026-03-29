@@ -54,8 +54,8 @@ jobs:
 
             Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
 
-            Focus your review on the categories below. Each category has a severity level
-            that determines whether the PR can be approved with outstanding issues.
+            Focus your review on the categories below. Each category has a maximum severity
+            level that determines whether the PR can be approved with outstanding issues.
 
             **Severity levels:**
             - 🔴 **Blocker** — must be fixed before merge. Request changes if any are found.
@@ -63,11 +63,21 @@ jobs:
               Do NOT approve the PR while issues in this category remain unresolved.
             - ℹ️ **Advisory** — flag for awareness, acceptable with justification.
 
+            **Output formatting rules:**
+            - In your summary, show each category header with the severity of its WORST finding.
+            - If a category has NO findings, show it as ✅ (e.g., "✅ **Proof integrity** — No issues found.").
+              Do NOT use 🔴 or 🟡 next to "No issues found" — that is contradictory and alarming.
+            - If a category has only ℹ️ advisory findings, show the header as ℹ️, not 🔴.
+            - Only show 🔴 or 🟡 on a category header when there are actual blocker/required-change findings.
+
             ---
 
             1. 🔴 **Proof integrity**: Read `docs/PROOF_INTEGRITY.md` for the complete list of proof
                integrity rules. Flag **blockers** as must-fix issues that should block merge. Flag
                **warnings** as advisory — note them but acknowledge they may be acceptable with justification.
+               **Important**: `sorry`s that are clearly marked as known TODOs (with a `-- TODO(...)` comment
+               explaining the pending dependency) are ℹ️ advisory, NOT 🔴 blockers. Only flag unmarked or
+               unjustified sorrys as blockers.
                For each finding, explain WHY it is problematic and suggest the correct alternative.
             2. 🔴 **Proof correctness**: Are proof terms well-structured? Do tactic proofs follow a logical
                strategy, or are they brute-forced with `simp` / `omega` / `ring` chains? Are `calc` blocks
@@ -189,4 +199,4 @@ jobs:
           claude_args: |
             --model claude-opus-4-6
             --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*"
-            --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Flag any sorry that is not clearly marked as a known TODO."
+            --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Sorrys marked with TODO comments are known incomplete proofs — flag them as advisory (ℹ️), not blockers (🔴). Only flag unmarked/unjustified sorrys as blockers."

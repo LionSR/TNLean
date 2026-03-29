@@ -16,8 +16,14 @@ These patterns **must** be resolved before merging.
 
 | Pattern | Risk |
 |---------|------|
-| `sorry` | Axiomatically closes any goal — the proof is incomplete |
-| `admit` | Tactic alias for `sorry` |
+| `sorry` (unmarked) | Axiomatically closes any goal — the proof is incomplete |
+| `admit` (unmarked) | Tactic alias for `sorry` |
+
+**Exception — known TODO sorrys**: A `sorry` that is clearly marked as a known
+TODO (e.g., preceded by a `-- TODO(...)` comment explaining the dependency or
+missing infrastructure) is **not a blocker**. These should be flagged as
+**ℹ️ advisory** instead, noting the pending dependency. Only flag a sorry as a
+🔴 blocker if it appears without any TODO annotation or justification.
 
 ### Kernel / type system bypasses
 
