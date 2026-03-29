@@ -311,13 +311,14 @@ For a pure FCS (with `Λ > 0` and `ℰ` having unique fixed point
 `𝟙`), the spectral radius of the twisted transfer map satisfies
 `ρ(ℰ_u) ≤ 1`.
 
-The proof uses Cauchy-Schwarz and the unitality (Heisenberg-picture
-normalization) `ℰ(𝟙) = 𝟙`. This requires spectral theory for
+The proof uses Cauchy-Schwarz, unitarity of `u`, and the unitality
+(Heisenberg-picture normalization) `ℰ(𝟙) = 𝟙`. This requires spectral theory for
 completely positive maps beyond what is currently available in
 Mathlib. -/
 theorem twistedTransfer_spectralRadius_le_one
     (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
     (hNorm : transferMap A 1 = 1)
     (hΛ : ∃ Λ : Matrix (Fin D) (Fin D) ℂ,
       Λ.PosSemidef ∧ Matrix.trace Λ = 1)
