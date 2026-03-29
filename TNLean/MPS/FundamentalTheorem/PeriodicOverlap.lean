@@ -178,11 +178,18 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
 Given one matching sector pair `P_ũ A^(m) ≈ e^{iλ} V Q_ṽ B^(m) V†`,
 applying the translation operator `T^l` for `l = 1, …, m-1` yields
 matching for all sector pairs `(u₀ + l, v₀ + l)` with the *same* gauge `V`
-(transported by the transfer operator). The phase may vary per `l`. -/
+(transported by the transfer operator). The phase may vary per `l`.
+
+The left-canonical hypotheses (`hA_lc`, `hB_lc`) ensure the propagated phases
+are unit-modulus: the transfer operator preserves the trace-preserving condition,
+so the scaling factor remains on the unit circle at each step. Without
+normalization, the initial `GaugePhaseEquiv` allows arbitrary nonzero ζ,
+and propagation would not constrain the phase magnitude. -/
 lemma sectorMatch_propagation
     [NeZero D]
     (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
+    (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
     (PA QB : Fin m → MatrixAlg D)
     (hPA_comm : ∀ u (i : Fin d), PA u * A i = A i * PA (u + 1))
     (hQB_comm : ∀ v (i : Fin d), QB v * B i = B i * QB (v + 1))
@@ -205,10 +212,16 @@ After injectivity contraction, the sector-restricted tensors satisfy
 
 The offset `q` accounts for the cyclic shift between sector labelings of `A`
 and `B`: propagation from a match at `(u₀, v₀)` yields pairs `(u, u + q)`
-where `q = v₀ - u₀`. -/
+where `q = v₀ - u₀`.
+
+The left-canonical hypotheses (`hA_lc`, `hB_lc`) are essential: they force
+the gauge-proportionality phases to have unit modulus, which is required by
+`RepeatedBlocks`. Without normalization, one can have `A 0 = 2 • B 0` with
+phase 2, satisfying the block match but not `RepeatedBlocks`. -/
 lemma sectorTensor_proportional_of_blockedMatch
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
+    (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
     (P Q : Fin m → MatrixAlg D)
     (hP_proj : ∀ u, P u * P u = P u)
     (hQ_proj : ∀ v, Q v * Q v = Q v)
@@ -216,7 +229,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     (hQ_comm : ∀ v (i : Fin d), Q v * B i = B i * Q (v + 1))
     (q : Fin m)
     (gauge : GL (Fin D) ℂ)
-    (hBlockMatch : ∀ u : Fin m, ∃ (phase : ℂ),
+    (hBlockMatch : ∀ u : Fin m, ∃ (phase : ℂ), ‖phase‖ = 1 ∧
         ∀ σ : Fin m → Fin d,
           P u * evalWord A (List.ofFn σ) =
             phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
@@ -308,8 +321,12 @@ theorem periodicOverlapDichotomy
     case pos =>
       subst hdim
       -- Same period, same bond dimension.
-      -- Need sector projections from the cyclic decomposition.
-      -- Case split on whether any sector pair matches.
+      -- Extract cyclic-sector projections PA, QB from IsPeriodic.
+      -- Case split on whether any sector pair (P_u A^(m), Q_v B^(m)) matches:
+      --   • No match → periodicOverlap_tendsto_zero_of_no_sector_match
+      --   • Some match → sectorMatch_propagation (using hA.leftCanonical,
+      --     hB.leftCanonical for unit-modulus phases), then
+      --     sectorTensor_proportional_of_blockedMatch → RepeatedBlocks
       sorry
 
 /-- **Eventual linear independence** (Corollary of Proposition 3.3):
