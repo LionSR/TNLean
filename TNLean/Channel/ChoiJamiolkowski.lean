@@ -154,7 +154,7 @@ theorem projectedChoiMatrix_sub
 `|i₂⟩⟨j₂|`. Specifically:
 
   `bipartiteSlice (|Ω⟩⟨Ω|) i₂ j₂ = (1/D) · E_{i₂,j₂}` -/
-private theorem omegaSlice_eq_single (i₂ j₂ : Fin D) :
+theorem omegaSlice_eq_single (i₂ j₂ : Fin D) :
     Matrix.bipartiteSlice (Matrix.omegaProj D) i₂ j₂ =
       Matrix.single i₂ j₂
         (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
