@@ -3,7 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib.Analysis.SpecificLimits.Normed
-import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.Complex.Basic
 
 /-!
 # General-purpose convergence helpers
@@ -18,7 +18,7 @@ These are used in the fundamental theorem proof chain but are fully general.
 - `sum_tendsto_one_of_diag`: diagonal-dominant weighted sum → 1
 -/
 
-open scoped Matrix BigOperators
+open scoped BigOperators
 open Filter
 
 /-- If `‖c‖ ≤ 1` and `f N → 0`, then `c ^ N * f N → 0`. -/

@@ -22,8 +22,7 @@ Extracted from various files for reusability.
 
 - `Matrix.sum_mul_mul`: pull fixed left/right factors through a finite sum
 - `Matrix.dim_le_of_mulVec_injective`: injective mulVec implies dimension bound
-- `ker_add_psd_left/right`: kernel containment for PSD matrix sums
-- `Complex.conj_eq_inv_of_norm_eq_one`: conjugation = inversion on the unit circle
+- `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -67,13 +66,15 @@ end Matrix
 
 section KernelPSD
 
-open Matrix Finset
+open Matrix
 
 variable {D : ℕ}
 
+namespace Matrix.PosSemidef
+
 /-- For PSD matrices `A` and `B`, `ker(A + B) ⊆ ker(A)`.
 Proof: `v†(A+B)v = v†Av + v†Bv = 0` with both nonneg implies `v†Av = 0`. -/
-theorem ker_add_psd_left
+theorem mulVec_eq_zero_left
     {A B : Matrix (Fin D) (Fin D) ℂ}
     (hA : A.PosSemidef) (hB : B.PosSemidef)
     (v : Fin D → ℂ) (hv : (A + B) *ᵥ v = 0) :
@@ -91,29 +92,16 @@ theorem ker_add_psd_left
     (Complex.ext hre (hA.isHermitian.im_star_dotProduct_mulVec_self v))
 
 /-- For PSD matrices `A` and `B`, `ker(A + B) ⊆ ker(B)`. -/
-theorem ker_add_psd_right
+theorem mulVec_eq_zero_right
     {A B : Matrix (Fin D) (Fin D) ℂ}
     (hA : A.PosSemidef) (hB : B.PosSemidef)
     (v : Fin D → ℂ) (hv : (A + B) *ᵥ v = 0) :
     B *ᵥ v = 0 := by
-  exact ker_add_psd_left hB hA v (by simpa [add_comm] using hv)
+  exact mulVec_eq_zero_left hB hA v (by simpa [add_comm] using hv)
+
+end Matrix.PosSemidef
 
 end KernelPSD
-
-/-! ## Unit circle conjugation -/
-
-/-- On the unit circle, complex conjugation equals inversion: `conj α = α⁻¹` when `‖α‖ = 1`. -/
-lemma Complex.conj_eq_inv_of_norm_eq_one {α : ℂ} (h : ‖α‖ = 1) :
-    starRingEnd ℂ α = α⁻¹ := by
-  have hα_ne : α ≠ 0 := norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)
-  have hconj_mul : starRingEnd ℂ α * α = 1 := by
-    have hnormSq : Complex.normSq α = 1 := by
-      rw [Complex.normSq_eq_norm_sq]; simp [h]
-    calc starRingEnd ℂ α * α
-        = (↑(Complex.normSq α) : ℂ) := by
-          simpa using (Complex.normSq_eq_conj_mul_self (z := α)).symm
-      _ = 1 := by simp [hnormSq]
-  exact mul_right_cancel₀ hα_ne (by rw [hconj_mul, inv_mul_cancel₀ hα_ne])
 
 /-! ## Characteristic polynomial lemmas -/
 

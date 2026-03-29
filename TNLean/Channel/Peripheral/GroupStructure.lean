@@ -280,7 +280,7 @@ theorem peripheral_eigenvalues_closed_under_inv
       simpa [Kraus.map, MPSTensor.transferMap_apply] using hUα
     -- ᾱ = α⁻¹ when |α| = 1
     have hconj_eq_inv : starRingEnd ℂ α = α⁻¹ :=
-      Complex.conj_eq_inv_of_norm_eq_one hα.2
+      (Complex.inv_eq_conj hα.2).symm
     have hmap_conj : Kraus.map K (Uα : MatrixAlg D)ᴴ =
         α⁻¹ • (Uα : MatrixAlg D)ᴴ := by
       rw [← Kraus.map_conjTranspose, hUα_map, conjTranspose_smul]

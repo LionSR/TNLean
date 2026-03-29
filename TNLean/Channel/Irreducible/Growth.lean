@@ -308,7 +308,7 @@ end OneStep
 section KernelDecrease
 
 /-- For PSD `B` and positive `E`, `ker(B + E(B)) ⊆ ker(B)` as submodules.
-Immediate consequence of `ker_add_psd_left`; used in the strict kernel-decrease lemma. -/
+Immediate consequence of `Matrix.PosSemidef.mulVec_eq_zero_left`; used in the strict kernel-decrease lemma. -/
 private lemma mulVecLin_ker_idPlusE_le
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hE : IsPositiveMap E)
@@ -317,13 +317,13 @@ private lemma mulVecLin_ker_idPlusE_le
   intro v hv
   rw [LinearMap.mem_ker] at hv ⊢
   -- hv : (B + E B).mulVecLin v = 0, which is (B + E B) *ᵥ v = 0
-  exact ker_add_psd_left hB (hE B hB) v hv
+  exact Matrix.PosSemidef.mulVec_eq_zero_left hB (hE B hB) v hv
 
 /-- **Strict kernel decrease for irreducible CP maps**:
 If `E` is CP irreducible and `B` is PSD, nonzero, not PosDef,
 then `ker(B + E(B)) < ker(B)` (strict containment as submodules).
 
-Proof: containment `⊆` is `ker_add_psd_left`; strictness follows from
+Proof: containment `⊆` is `Matrix.PosSemidef.mulVec_eq_zero_left`; strictness follows from
 `posDef_of_ker_subset_irreducible_cp` — equality of kernels would force `B` PD. -/
 theorem mulVecLin_ker_idPlusE_lt_of_not_posDef
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
