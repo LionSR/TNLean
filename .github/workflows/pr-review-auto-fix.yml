@@ -242,9 +242,10 @@ jobs:
                - Improve proof structure as suggested.
             6. Your goal is to fully close every incomplete lemma/theorem, not just address surface-level comments. Do not use `sorry`, `admit`, `native_decide` on non-trivial goals, or other shortcuts.
             7. Run `lake build` to verify your fixes compile with zero errors and zero `sorry`s.
-            8. Make minimal, targeted fixes. Do not refactor unrelated code.
-            9. Commit and push your fix to the current branch. Prefix commit messages with `[claude-review-fix]`.
-            10. After pushing, use the GitHub MCP tools to post a comment on the PR with:
+            8. When your fixes add or complete (remove sorry from) theorems, lemmas, or definitions, update the corresponding blueprint entry in `blueprint/src/chapter/` — add `\lean{DeclarationName}` and `\leanok` tags for new results, or add `\leanok` to `\begin{proof}` for newly proven results.
+            9. Make minimal, targeted fixes. Do not refactor unrelated code.
+            10. Commit and push your fix to the current branch. Prefix commit messages with `[claude-review-fix]`.
+            11. After pushing, use the GitHub MCP tools to post a comment on the PR with:
                - A summary of which review items were addressed.
                - If you used or discovered Mathlib lemmas during the fix, include a **Mathlib Audit**
                  section (name, module path, and how it was used). Skip this section for trivial fixes

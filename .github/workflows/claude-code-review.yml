@@ -94,6 +94,12 @@ jobs:
             7. 🟡 **Documentation**: Do new definitions and key theorems have docstrings? Are module-level
                doc comments present for new files? Do docstrings explain mathematical meaning, not just
                Lean syntax? Missing documentation must be added before approval.
+            8. 🟡 **Blueprint sync**: When new theorems, lemmas, or definitions are added or proven in
+               Lean, the corresponding blueprint entry in `blueprint/src/chapter/` must be updated in the
+               same PR. This means adding `\lean{DeclarationName}` and `\leanok` tags (and
+               `\uses{...}` dependencies) for new results, or adding `\leanok` to the `\begin{proof}`
+               when a previously `sorry`-d result is now fully proven. Flag any PR that adds or completes
+               Lean declarations without updating the blueprint.
 
             ---
 
