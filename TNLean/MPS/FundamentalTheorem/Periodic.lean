@@ -11,16 +11,18 @@ open scoped Matrix BigOperators
 /-!
 # Periodic Fundamental Theorem of MPS (arXiv:1708.00029, §3)
 
-This file formalizes the two main theorems of arXiv:1708.00029 §3:
+This file formalizes the periodic fundamental theorem of arXiv:1708.00029 §3 and the
+Z-gauge infrastructure used in its equal-case strengthening:
 
-* **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): If two irreducible-form MPS
-  generate proportional families of MPVs, their bases of periodic tensors match up to a
-  bijection with per-block `RepeatedBlocks` equivalence.
+* **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): If two non-repeating
+  block families have proportional total MPVs and the periodic overlap dichotomy holds,
+  their bases of periodic tensors match up to a bijection with per-block `RepeatedBlocks`
+  equivalence.
 
-* **Theorem 3.8**: The equal-case strengthening produces per-block Z-gauge data (diagonal Z
-  with Z^m = 1) from the Newton-Girard identity on sector weights. The Z-gauge construction
-  helpers (`zgauge_construction`, `perBlock_zgauge_of_power_eq`) compose the infrastructure
-  from PR #94 into ready-to-use form.
+* **Infrastructure for Theorem 3.8**: The equal-case strengthening produces per-block
+  Z-gauge data (diagonal Z with Z^m = 1) from the Newton–Girard identity on sector weights.
+  The Z-gauge construction helpers (`zgauge_construction`, `perBlock_zgauge_of_power_eq`)
+  compose the infrastructure from PR #94 into ready-to-use form.
 
 ## Dependency on #81
 
@@ -118,7 +120,7 @@ variable {rA rB : ℕ}
 
 /-- **Theorem 3.4 (Proportional case, arXiv:1708.00029).**
 
-If two irreducible-form decompositions have proportional total MPVs, and the periodic
+If two non-repeating block families have proportional total MPVs, and the periodic
 overlap dichotomy holds, then the bases of periodic tensors match: equal block counts, a
 bijection, and per-block `HetRepeatedBlocks` equivalence.
 
