@@ -133,9 +133,7 @@ theorem kraus_rectangular_freedom
 
 /-- Variant of `kraus_rectangular_freedom` with general index types. -/
 theorem kraus_rectangular_freedom'
-    {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
-    -- Note: `[DecidableEq ι₁]` may be needed when filling the sorry (e.g., for
-    -- constructing `V` entry-wise). Add it to the signature at that point.
+    {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₁] [DecidableEq ι₂]
     (B : ι₁ → Matrix (Fin D) (Fin D) ℂ)
     (A : ι₂ → Matrix (Fin D) (Fin D) ℂ)
     (h : ∀ X : Matrix (Fin D) (Fin D) ℂ,
