@@ -137,7 +137,7 @@ lemma transferMap_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
   simp [transferMap, Matrix.mul_assoc]
 
 /-- The MPO transfer map equals the MPS transfer map of the doubled-index tensor. -/
-lemma transferMap_eq_toMPSTensor (M : MPOTensor d D) :
+@[simp] lemma transferMap_eq_toMPSTensor (M : MPOTensor d D) :
     transferMap M = MPSTensor.transferMap (toMPSTensor M) := by
   refine LinearMap.ext fun X => ?_
   simp only [transferMap_apply, MPSTensor.transferMap_apply, toMPSTensor]
@@ -185,10 +185,5 @@ theorem IsLPDO.isHermitian {M : MPOTensor d D} (h : IsLPDO M) :
   rw [hA i j, hA j i, Matrix.conjTranspose_sum]
   exact Finset.sum_congr rfl fun k _ => by
     rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
-
-/-- **TODO** (part 4/5): LPDO implies MPDO. The proof uses the LPDO
-decomposition to write `ρ^{(N)}` as `∑_k |ψ_k⟩⟨ψ_k|`, hence PSD. -/
-theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
-  sorry
 
 end MPOTensor
