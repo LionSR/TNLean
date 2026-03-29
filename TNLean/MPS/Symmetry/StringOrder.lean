@@ -105,25 +105,27 @@ lemma twistedTransferMap_one (A : MPSTensor d D)
 
 /-! ### Iterated twisted transfer map -/
 
-/-- The `N`-fold iterate of the twisted transfer map. -/
+/-- The `N`-fold iterate of the twisted transfer map, defined via
+the `Monoid` instance on `Module.End` so that `pow_zero`,
+`pow_succ`, and `pow_add` are available for free. -/
 noncomputable def twistedTransferIter (A : MPSTensor d D)
-    (u : Matrix (Fin d) (Fin d) ℂ) :
-    ℕ → (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
-      Matrix (Fin D) (Fin D) ℂ)
-  | 0 => LinearMap.id
-  | n + 1 => (twistedTransferMap A u).comp
-      (twistedTransferIter A u n)
+    (u : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
+      Matrix (Fin D) (Fin D) ℂ :=
+  (twistedTransferMap A u) ^ N
 
 @[simp]
 lemma twistedTransferIter_zero (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) :
-    twistedTransferIter A u 0 = LinearMap.id := rfl
+    twistedTransferIter A u 0 = LinearMap.id :=
+  pow_zero _
 
 lemma twistedTransferIter_succ (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
     twistedTransferIter A u (N + 1) =
       (twistedTransferMap A u).comp
-        (twistedTransferIter A u N) := rfl
+        (twistedTransferIter A u N) :=
+  pow_succ' _ _
 
 /-! ### String order parameter -/
 
@@ -149,7 +151,17 @@ language this is expressed as:
 $$\forall L,\; R_L(u) = R_L(\mathbf{1})$$
 
 i.e. the string order parameter for `u` equals that for the
-identity. -/
+identity.
+
+**Convention**: This definition requires *exact* equality of the
+string order parameters, not equality up to a global phase. The
+paper (arXiv:0802.0447, Definition 3) defines local symmetry via
+reduced density matrix invariance, which would allow a global
+phase factor `e^{iφ}`. The exact-equality formulation is chosen
+here because for injective MPS the stationary state `Λ > 0`
+makes the string order parameter real and positive at `u = 1`,
+so any phase freedom is absorbed. For non-injective or
+degenerate cases, this definition may need to be relaxed. -/
 def IsLocalSymmetry (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
@@ -235,35 +247,9 @@ Note: This equivalence holds for any `V`, not just unitaries,
 since `CondC2` and `CondC3` are literally `∀ X, P = Q` vs
 `∀ X, Q = P`. -/
 theorem condC2_iff_condC3 :
-    CondC2 A V ↔ CondC3 A V :=
-by
-  constructor
-  · intro hC2 X
-    have htwX :
-        twistedTransferMap A 1 X = transferMap A X :=
-      twistedTransferMap_one (A := A) (X := X)
-    have htwV :
-        twistedTransferMap A 1 (V * X * Vᴴ) =
-          transferMap A (V * X * Vᴴ) :=
-      twistedTransferMap_one (A := A) (X := V * X * Vᴴ)
-    calc
-      V * twistedTransferMap A 1 X * Vᴴ
-          = V * transferMap A X * Vᴴ := by simpa [htwX]
-      _ = transferMap A (V * X * Vᴴ) := (hC2 X).symm
-      _ = twistedTransferMap A 1 (V * X * Vᴴ) := by simpa [htwV]
-  · intro hC3 X
-    have htwX :
-        twistedTransferMap A 1 X = transferMap A X :=
-      twistedTransferMap_one (A := A) (X := X)
-    have htwV :
-        twistedTransferMap A 1 (V * X * Vᴴ) =
-          transferMap A (V * X * Vᴴ) :=
-      twistedTransferMap_one (A := A) (X := V * X * Vᴴ)
-    calc
-      transferMap A (V * X * Vᴴ)
-          = twistedTransferMap A 1 (V * X * Vᴴ) := by simpa [htwV]
-      _ = V * twistedTransferMap A 1 X * Vᴴ := (hC3 X).symm
-      _ = V * transferMap A X * Vᴴ := by simpa [htwX]
+    CondC2 A V ↔ CondC3 A V := by
+  simp only [CondC2, CondC3, twistedTransferMap_one]
+  exact forall_congr' fun _ => eq_comm
 
 /-- Unitary mixing of Kraus operators preserves the channel:
 if `u` is unitary then `∑_i (∑_j u_{ij} A_j) X (∑_j u_{ij} A_j)† = ∑_i A_i X A_i†`.
@@ -364,11 +350,12 @@ theorem twistedTransfer_spectralRadius_le_one
     (hu : u * uᴴ = 1)
     (hNorm : transferMap A 1 = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hΛpos : Λ.PosSemidef) (hΛtr : Matrix.trace Λ = 1)
+    (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
     (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
     (hV : V ≠ 0)
     (hEig : twistedTransferMap A u V = ev • V) :
     ‖ev‖ ≤ 1 := by
+  -- TODO(sorry): requires CP map spectral theory; see Status section
   sorry
 
 /-- **Theorem 2** (arXiv:0802.0447): For a pure finitely correlated
@@ -385,13 +372,14 @@ theorem localSymmetry_iff_spectralRadius_one
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hΛpos : Λ.PosSemidef) (hΛtr : Matrix.trace Λ = 1)
+    (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
     (hNorm : transferMap A 1 = 1) :
     IsLocalSymmetry A u Λ ↔
       ∃ V : Matrix (Fin D) (Fin D) ℂ,
         V * Vᴴ = 1 ∧ Vᴴ * V = 1 ∧
         ∃ μ : ℂ, ‖μ‖ = 1 ∧
           twistedTransferMap A u V = μ • V := by
+  -- TODO(sorry): requires CP map spectral theory; see Status section
   sorry
 
 /-- **Theorem 1** (arXiv:0802.0447, simplified): String order
@@ -412,29 +400,35 @@ theorem stringOrder_iff_localSymmetry
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hΛpos : Λ.PosSemidef) (hΛtr : Matrix.trace Λ = 1)
+    (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
     (hNorm : transferMap A 1 = 1) :
     HasStringOrder A u Λ ↔ IsLocalSymmetry A u Λ := by
+  -- TODO(sorry): requires CP map spectral theory; see Status section
   sorry
 
 /-- **Virtual symmetry from string order**: If string order exists
-for `u`, then there exists a virtual unitary `V` satisfying C1,
-i.e. intertwining `u` with `V` at the level of MPS matrices.
+for `u`, then there exists a virtual unitary `V` and a
+unit-modulus scalar `μ` satisfying a phased intertwining relation
+`∑_j u_{ij} A_j = μ • (V A_i V†)`.
 
-This connects string order to the projective representation from
-`VirtualRepresentation.lean`. -/
+The phase `μ` is necessary: for `u = e^{iθ} · 1` (a global
+phase), string order holds but `CondC1` (without phase) would
+force `e^{iθ} = 1`. The phased form matches the projective
+symmetry statement from `VirtualRepresentation.lean`. -/
 theorem virtualUnitary_of_stringOrder
     (A : MPSTensor d D)
     (hA : IsInjective A)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hΛpos : Λ.PosSemidef) (hΛtr : Matrix.trace Λ = 1)
+    (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
     (hNorm : transferMap A 1 = 1)
     (hSO : HasStringOrder A u Λ) :
-    ∃ V : Matrix (Fin D) (Fin D) ℂ,
-      V * Vᴴ = 1 ∧ Vᴴ * V = 1 ∧
-      CondC1 A u V := by
+    ∃ V : Matrix (Fin D) (Fin D) ℂ, ∃ μ : ℂ,
+      V * Vᴴ = 1 ∧ Vᴴ * V = 1 ∧ ‖μ‖ = 1 ∧
+      ∀ i : Fin d,
+        ∑ j : Fin d, u i j • A j = μ • (V * A i * Vᴴ) := by
+  -- TODO(sorry): requires CP map spectral theory; see Status section
   sorry
 
 end MainTheorems
@@ -455,7 +449,7 @@ is available, this file should state and prove:
       (hSymmA : IsOnSiteSymmetric A U)
       (hSymmB : IsOnSiteSymmetric B U)
       (Λ_A Λ_B : Matrix (Fin D) (Fin D) ℂ)
-      (hΛA : Λ_A.PosSemidef) (hΛB : Λ_B.PosSemidef)
+      (hΛA : Λ_A.PosDef) (hΛB : Λ_B.PosDef)
       (hNormA : transferMap A 1 = 1)
       (hNormB : transferMap B 1 = 1)
       (hSamePhase : IsCohomologous ...) :
