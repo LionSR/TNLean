@@ -2,10 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
-import Mathlib.LinearAlgebra.Projection
 
 /-!
 # Decorrelation and commuting parent Hamiltonians
@@ -73,16 +70,14 @@ theorem comp_idempotent_of_comm_of_idempotent
   --   = P(Qx)            by hQQ
   rw [hPQ, hPP, ← hPQ, hQQ]
 
-/-- If `P` and `Q` are commuting idempotents and `R = P ∘ Q`, then
-`P ∘ R = R`. -/
+/-- If `P` is idempotent, then `P ∘ (P ∘ Q) = P ∘ Q`. -/
 theorem left_absorb_of_comm_idempotent
     {P Q : E →ₗ[ℂ] E}
     (hP : P ∘ₗ P = P) :
     P ∘ₗ (P ∘ₗ Q) = P ∘ₗ Q := by
   rw [← LinearMap.comp_assoc, hP]
 
-/-- If `P` and `Q` are commuting idempotents and `R = P ∘ Q`, then
-`Q ∘ R = R`. -/
+/-- If `Q` is idempotent and `P ∘ Q = Q ∘ P`, then `Q ∘ (P ∘ Q) = P ∘ Q`. -/
 theorem right_absorb_of_comm_idempotent
     {P Q : E →ₗ[ℂ] E}
     (hQ : Q ∘ₗ Q = Q)
