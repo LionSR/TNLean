@@ -54,29 +54,52 @@ jobs:
 
             Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
 
-            Focus your review on:
-            1. **Proof integrity**: Read `docs/PROOF_INTEGRITY.md` for the complete list of proof
+            Focus your review on the categories below. Each category has a severity level
+            that determines whether the PR can be approved with outstanding issues.
+
+            **Severity levels:**
+            - 🔴 **Blocker** — must be fixed before merge. Request changes if any are found.
+            - 🟡 **Requires changes** — must be addressed before approval. These are NOT nits.
+              Do NOT approve the PR while issues in this category remain unresolved.
+            - ℹ️ **Advisory** — flag for awareness, acceptable with justification.
+
+            ---
+
+            1. 🔴 **Proof integrity**: Read `docs/PROOF_INTEGRITY.md` for the complete list of proof
                integrity rules. Flag **blockers** as must-fix issues that should block merge. Flag
                **warnings** as advisory — note them but acknowledge they may be acceptable with justification.
                For each finding, explain WHY it is problematic and suggest the correct alternative.
-            2. **Proof correctness**: Are proof terms well-structured? Do tactic proofs follow a logical
+            2. 🔴 **Proof correctness**: Are proof terms well-structured? Do tactic proofs follow a logical
                strategy, or are they brute-forced with `simp` / `omega` / `ring` chains? Are `calc` blocks
                and `conv` rewrites correctly chained? Are hypotheses used or dangling?
-            3. **Mathlib style**: Does the code follow Mathlib conventions? Check naming (`camelCase` for
+            3. 🟡 **Mathlib style**: Does the code follow Mathlib conventions? Check naming (`camelCase` for
                defs, `snake_case` for lemmas), tactic style (prefer `exact` over `apply` + `rfl` when
                equivalent), import hygiene (no unnecessary `open`s, minimal imports), and lemma placement.
-            4. **Type safety**: Any type mismatches, universe issues, or coercion problems? Check for
+               Style violations are NOT nits — they must be fixed before approval.
+            4. 🔴 **Type safety**: Any type mismatches, universe issues, or coercion problems? Check for
                universe polymorphism issues, missing `[DecidableEq]` or `[Fintype]` instances, and
                coercion chains that may cause unification failures.
-            5. **Performance**: Will any proofs cause timeouts? Watch for `decide` on large types,
+            5. 🟡 **Performance**: Will any proofs cause timeouts? Watch for `decide` on large types,
                `simp` with unbounded lemma sets, deep `rw` chains, and `norm_num` on symbolic expressions.
                Suggest alternatives like `omega`, `positivity`, or explicit `calc` steps.
-            6. **Modularity**: Are new lemmas general enough? Could any be upstreamed to Mathlib?
-               Are there lemmas that are overly specialized to the local context but could be stated
-               more generally? Is the file structure consistent with the existing module hierarchy?
-            7. **Documentation**: Do new definitions and key theorems have docstrings? Are module-level
+            6. 🟡 **Modularity & duplication**: Are new lemmas general enough? Could any be upstreamed to
+               Mathlib? Are there lemmas that are overly specialized to the local context but could be
+               stated more generally? Is the file structure consistent with the existing module hierarchy?
+               Flag duplicated logic or lemmas that restate existing Mathlib results.
+               Modularity and duplication issues must be fixed before approval.
+            7. 🟡 **Documentation**: Do new definitions and key theorems have docstrings? Are module-level
                doc comments present for new files? Do docstrings explain mathematical meaning, not just
-               Lean syntax?
+               Lean syntax? Missing documentation must be added before approval.
+
+            ---
+
+            **Review verdict rules:**
+            - If ANY 🔴 or 🟡 issues are found, submit the review as **REQUEST_CHANGES**.
+              Do NOT approve while these issues remain unresolved.
+            - Only **APPROVE** when all 🔴 and 🟡 issues have been addressed.
+            - ℹ️ advisory items alone do not block approval.
+            - Do NOT label issues as "Nit" or "non-blocking" if they fall under a 🟡 or 🔴 category.
+              Use clear language: "This must be fixed before merge" or "Requires changes".
 
             For each issue found, post an inline comment on the relevant line using the GitHub CLI.
             At the end, post a summary comment on the PR with your overall assessment.
