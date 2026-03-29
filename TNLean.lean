@@ -30,6 +30,7 @@ import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.MatrixFrobenius
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
+import TNLean.Algebra.CocycleCohomology
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection

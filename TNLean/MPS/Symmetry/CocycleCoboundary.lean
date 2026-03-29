@@ -3,26 +3,18 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Symmetry.VirtualRepresentation
+import TNLean.Algebra.CocycleCohomology
 
 /-!
-# Cocycle coboundary equivalence for SPT classification
+# Gauge independence of the cocycle class for SPT classification
 
-This file defines coboundary equivalence of multiplicative `U(1)`-valued 2-cocycles
-and proves the cohomology class `H²(G, U(1))` is independent of the gauge choice
-for the virtual representation matrices `X(g)`.
-
-## Main definitions
-
-* `ScalarCocycle.IsCoboundary` : a cocycle `ω` is a coboundary if
-  `ω(g,h) = φ(g) * φ(h) * φ(g*h)⁻¹` for some `φ : G → ℂˣ`
-* `ScalarCocycle.CohomologousTo` : two cocycles are cohomologous if their ratio
-  is a coboundary
+This file proves that the cohomology class `H²(G, U(1))` associated to an
+injective symmetric MPS tensor is independent of the gauge choice for the
+virtual representation matrices `X(g)`.
 
 ## Main results
 
-* `ScalarCocycle.CohomologousTo.equivalence` : cohomologous-to is an equivalence
-  relation
-* `cocycle_class_gauge_independent` : different gauge choices for `X(g)` on an
+* `MPSTensor.cohomologousTo_of_isInjective` : different gauge choices for `X(g)` on an
   injective symmetric MPS tensor produce cohomologous cocycles
 
 ## References
@@ -34,65 +26,6 @@ for the virtual representation matrices `X(g)`.
 -/
 
 open scoped Matrix
-
-namespace TNLean.Algebra
-
-variable {G : Type*} [Group G]
-
-/-! ### Coboundary and cohomologous definitions -/
-
-/-- A scalar 2-cocycle `ω` is a coboundary if there exists `φ : G → ℂˣ` such that
-`ω(g,h) = φ(g) * φ(h) * φ(g*h)⁻¹` for all `g, h`. -/
-def ScalarCocycle.IsCoboundary (ω : ScalarCocycle G) : Prop :=
-  ∃ φ : G → Units ℂ, ∀ g h, ω g h = φ g * φ h * (φ (g * h))⁻¹
-
-/-- Two cocycles `ω₁` and `ω₂` are cohomologous if their ratio is a coboundary,
-i.e., `ω₁(g,h) = φ(g) * φ(h) * φ(g*h)⁻¹ * ω₂(g,h)` for some `φ : G → ℂˣ`. -/
-def ScalarCocycle.CohomologousTo (ω₁ ω₂ : ScalarCocycle G) : Prop :=
-  ∃ φ : G → Units ℂ, ∀ g h, ω₁ g h = φ g * φ h * (φ (g * h))⁻¹ * ω₂ g h
-
-/-! ### Equivalence relation -/
-
-namespace ScalarCocycle.CohomologousTo
-
-/-- Cohomologous-to is reflexive: every cocycle is cohomologous to itself. -/
-theorem refl (ω : ScalarCocycle G) : CohomologousTo ω ω :=
-  ⟨fun _ => 1, fun _ _ => by simp⟩
-
-/-- Cohomologous-to is symmetric. -/
-theorem symm {ω₁ ω₂ : ScalarCocycle G} (h : CohomologousTo ω₁ ω₂) :
-    CohomologousTo ω₂ ω₁ := by
-  obtain ⟨φ, hφ⟩ := h
-  refine ⟨fun g => (φ g)⁻¹, fun g h => ?_⟩
-  simp only [inv_inv]
-  rw [hφ g h]
-  rw [show (φ g)⁻¹ * (φ h)⁻¹ * (φ (g * h)) * (φ g * φ h * (φ (g * h))⁻¹ * ω₂ g h) =
-    ((φ g)⁻¹ * φ g) * ((φ h)⁻¹ * φ h) * (φ (g * h) * (φ (g * h))⁻¹) * ω₂ g h from by
-    simp only [mul_assoc, mul_comm, mul_left_comm]]
-  simp
-
-/-- Cohomologous-to is transitive. -/
-theorem trans {ω₁ ω₂ ω₃ : ScalarCocycle G}
-    (h₁₂ : CohomologousTo ω₁ ω₂) (h₂₃ : CohomologousTo ω₂ ω₃) :
-    CohomologousTo ω₁ ω₃ := by
-  obtain ⟨φ, hφ⟩ := h₁₂
-  obtain ⟨ψ, hψ⟩ := h₂₃
-  refine ⟨fun g => φ g * ψ g, fun g h => ?_⟩
-  rw [hφ g h, hψ g h, mul_inv_rev]
-  simp only [mul_assoc, mul_comm, mul_left_comm]
-
-/-- Cohomologous-to is an equivalence relation. -/
-theorem equivalence : Equivalence (CohomologousTo (G := G)) :=
-  ⟨refl, symm, trans⟩
-
-end ScalarCocycle.CohomologousTo
-
-/-- The setoid on scalar cocycles induced by cohomologous-to. -/
-instance scalarCocycleSetoid : Setoid (ScalarCocycle G) where
-  r := ScalarCocycle.CohomologousTo
-  iseqv := ScalarCocycle.CohomologousTo.equivalence
-
-end TNLean.Algebra
 
 /-! ### Gauge independence of the cocycle class -/
 
@@ -112,7 +45,7 @@ Concretely, if `X₁(g⁻¹)` and `X₂(g⁻¹)` both intertwine `A` with the `g
 tensor, then by gauge uniqueness `X₂(g⁻¹) = f(g) · X₁(g⁻¹)` for some scalar
 `f(g) ∈ ℂˣ`. Substituting into the projective multiplication law yields
 `ω₂(g,h) = f(g) * f(h) * f(g*h)⁻¹ * ω₁(g,h)`. -/
-theorem cocycle_class_gauge_independent
+theorem cohomologousTo_of_isInjective
     (A : MPSTensor d D)
     (hA : IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
@@ -168,5 +101,24 @@ theorem cocycle_class_gauge_independent
   rw [eq_comm] at h_scalar_eq
   rw [← mul_inv_cancel_right₀ hne (ω₂ g h : ℂ), h_scalar_eq]
   ring
+
+/-- Backward-compatible alias for `cohomologousTo_of_isInjective`. -/
+@[deprecated cohomologousTo_of_isInjective (since := "2026-03-29")]
+theorem cocycle_class_gauge_independent
+    (A : MPSTensor d D)
+    (hA : IsInjective A)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hD : 0 < D)
+    {ω₁ ω₂ : ScalarCocycle G}
+    {ρ₁ : ProjectiveRepresentation (D := D) ω₁}
+    {ρ₂ : ProjectiveRepresentation (D := D) ω₂}
+    (hρ₁ : ∀ g i, twistedTensor A U g i =
+      (ρ₁.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+    (hρ₂ : ∀ g i, twistedTensor A U g i =
+      (ρ₂.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((ρ₂.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
+    ScalarCocycle.CohomologousTo ω₂ ω₁ :=
+  cohomologousTo_of_isInjective A hA U hD hρ₁ hρ₂
 
 end MPSTensor
