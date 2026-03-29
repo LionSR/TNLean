@@ -204,13 +204,14 @@ def CondC2 : Prop :=
 The doubled transfer matrix `E = ∑_j A_j ⊗ Ā_j` commutes with
 `V ⊗ V̄`.
 
-In the channel picture, `(V ⊗ V̄) E` acts as `X ↦ V ℰ(X) V†`
-while `E (V ⊗ V̄)` acts as `X ↦ ℰ(V X V†)`. Their equality is
-the operator-level statement of `[E, V ⊗ V̄] = 0`. -/
+We express this via the transfer-map channel written in the
+`twistedTransferMap` formalism (with twist `u = 1`):
+`ℰ = ℰ_1`. In channel form this is
+`V ℰ(X) V† = ℰ(V X V†)`, i.e. `[E, V ⊗ V̄] = 0`. -/
 def CondC3 : Prop :=
   ∀ X : Matrix (Fin D) (Fin D) ℂ,
-    V * transferMap A X * Vᴴ =
-      transferMap A (V * X * Vᴴ)
+    V * twistedTransferMap A 1 X * Vᴴ =
+      twistedTransferMap A 1 (V * X * Vᴴ)
 
 end Conditions
 
@@ -235,7 +236,34 @@ since `CondC2` and `CondC3` are literally `∀ X, P = Q` vs
 `∀ X, Q = P`. -/
 theorem condC2_iff_condC3 :
     CondC2 A V ↔ CondC3 A V :=
-  forall_congr' fun _ => eq_comm
+by
+  constructor
+  · intro hC2 X
+    have htwX :
+        twistedTransferMap A 1 X = transferMap A X :=
+      twistedTransferMap_one (A := A) (X := X)
+    have htwV :
+        twistedTransferMap A 1 (V * X * Vᴴ) =
+          transferMap A (V * X * Vᴴ) :=
+      twistedTransferMap_one (A := A) (X := V * X * Vᴴ)
+    calc
+      V * twistedTransferMap A 1 X * Vᴴ
+          = V * transferMap A X * Vᴴ := by simpa [htwX]
+      _ = transferMap A (V * X * Vᴴ) := (hC2 X).symm
+      _ = twistedTransferMap A 1 (V * X * Vᴴ) := by simpa [htwV]
+  · intro hC3 X
+    have htwX :
+        twistedTransferMap A 1 X = transferMap A X :=
+      twistedTransferMap_one (A := A) (X := X)
+    have htwV :
+        twistedTransferMap A 1 (V * X * Vᴴ) =
+          transferMap A (V * X * Vᴴ) :=
+      twistedTransferMap_one (A := A) (X := V * X * Vᴴ)
+    calc
+      transferMap A (V * X * Vᴴ)
+          = twistedTransferMap A 1 (V * X * Vᴴ) := by simpa [htwV]
+      _ = V * twistedTransferMap A 1 X * Vᴴ := (hC3 X).symm
+      _ = V * transferMap A X * Vᴴ := by simpa [htwX]
 
 /-- Unitary mixing of Kraus operators preserves the channel:
 if `u` is unitary then `∑_i (∑_j u_{ij} A_j) X (∑_j u_{ij} A_j)† = ∑_i A_i X A_i†`.
