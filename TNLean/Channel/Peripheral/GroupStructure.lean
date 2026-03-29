@@ -134,6 +134,50 @@ private lemma exists_natCast_eq_trace_of_orthogonal_projection
   · rw [Finset.sum_ite, Finset.sum_const_zero, add_zero,
       Finset.sum_const, nsmul_eq_mul, mul_one]
 
+/-- Period divides dimension from cyclic projections with trace-preserving map.
+
+Given `m` orthogonal projections summing to the identity that are cyclically permuted by a
+trace-preserving map `E`, we have `m ∣ D`. The argument: trace preservation forces all projections
+to have equal trace, so `m * tr(P₀) = tr(I) = D`; since `tr(P₀) ∈ ℕ` for any orthogonal
+projection, `m ∣ D`. -/
+private lemma period_dvd_dim_of_cyclic_projections
+    {r : ℕ} [NeZero D]
+    (K : Fin r → MatrixAlg D)
+    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
+    {m : ℕ} [NeZero m]
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k, P k = 1)
+    (hcyclic : ∀ k, MPSTensor.transferMap (d := r) (D := D) K (P (k + 1)) = P k) :
+    m ∣ D := by
+  set E := MPSTensor.transferMap (d := r) (D := D) K
+  have htrace_pres := trace_transferMap_of_tp K hTP
+  have htrace_step : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P (k + 1)) := by
+    intro k
+    calc Matrix.trace (P k)
+        = Matrix.trace (E (P (k + 1))) := by rw [← hcyclic k]
+      _ = Matrix.trace (P (k + 1)) := htrace_pres _
+  have htrace_eq : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P 0) := by
+    intro ⟨k, hk⟩
+    induction k with
+    | zero => rfl
+    | succ n ih =>
+      have hn : n < m := by omega
+      have hfin : (⟨n, hn⟩ : Fin m) + 1 = ⟨n + 1, hk⟩ := by
+        ext; simp [Fin.val_add, Nat.mod_eq_of_lt hk]
+      rw [← hfin, ← htrace_step ⟨n, hn⟩]
+      exact ih hn
+  have hsum_trace : ∑ k : Fin m, Matrix.trace (P k) = (D : ℂ) := by
+    rw [← Matrix.trace_sum, hPsum, Matrix.trace_one, Fintype.card_fin]
+  have hmul_trace : (m : ℂ) * Matrix.trace (P 0) = (D : ℂ) := by
+    rw [← hsum_trace]
+    trans (∑ _k : Fin m, Matrix.trace (P 0))
+    · rw [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin]
+    · exact Finset.sum_congr rfl (fun k _ => (htrace_eq k).symm)
+  obtain ⟨n, hn⟩ := exists_natCast_eq_trace_of_orthogonal_projection (P 0) (hPproj 0)
+  have : (↑(m * n) : ℂ) = (↑D : ℂ) := by push_cast; rw [← hn]; exact hmul_trace
+  exact ⟨n, (Nat.cast_injective this).symm⟩
+
 /-- On the unit circle, complex conjugation equals inversion: `conj α = α⁻¹` when `‖α‖ = 1`. -/
 lemma Complex.conj_eq_inv_of_norm_eq_one {α : ℂ} (h : ‖α‖ = 1) :
     starRingEnd ℂ α = α⁻¹ := by
@@ -429,37 +473,7 @@ theorem peripheral_eigenvalues_form_cyclic_group
     obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, hcyclic⟩ :=
       MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
         K hUnital ρ hρ hρfix hIrr hγ_prim hperiph_range
-    -- Step 7a: Trace preservation gives equal traces for all projections
-    have htrace_pres := trace_transferMap_of_tp K hTP
-    have htrace_step : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P (k + 1)) := by
-      intro k
-      calc Matrix.trace (P k)
-          = Matrix.trace (E (P (k + 1))) := by rw [← hcyclic k]
-        _ = Matrix.trace (P (k + 1)) := htrace_pres _
-    -- Step 7b: All projections have the same trace as P 0
-    have htrace_eq : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P 0) := by
-      intro ⟨k, hk⟩
-      induction k with
-      | zero => rfl
-      | succ n ih =>
-        have hn : n < m := by omega
-        have hfin : (⟨n, hn⟩ : Fin m) + 1 = ⟨n + 1, hk⟩ := by
-          ext; simp [Fin.val_add, Nat.mod_eq_of_lt hk]
-        rw [← hfin, ← htrace_step ⟨n, hn⟩]
-        exact ih hn
-    -- Step 7c: m * trace(P 0) = trace(I) = D
-    have hsum_trace : ∑ k : Fin m, Matrix.trace (P k) = (D : ℂ) := by
-      rw [← Matrix.trace_sum, hPsum, Matrix.trace_one, Fintype.card_fin]
-    have hmul_trace : (m : ℂ) * Matrix.trace (P 0) = (D : ℂ) := by
-      rw [← hsum_trace]
-      trans (∑ _k : Fin m, Matrix.trace (P 0))
-      · rw [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin]
-      · exact Finset.sum_congr rfl (fun k _ => (htrace_eq k).symm)
-    -- Step 7d: trace(P 0) is a natural number (eigenvalues of projection are 0 or 1)
-    obtain ⟨n, hn⟩ := exists_natCast_eq_trace_of_orthogonal_projection (P 0) (hPproj 0)
-    -- Step 7e: m * n = D in ℕ, hence m ∣ D
-    have : (↑(m * n) : ℂ) = (↑D : ℂ) := by push_cast; rw [← hn]; exact hmul_trace
-    exact ⟨n, (Nat.cast_injective this).symm⟩
+    exact period_dvd_dim_of_cyclic_projections K hTP P hPproj hPsum hcyclic
   exact ⟨m, γ, hm_pos, hγ_prim, hm_dvd, hset_eq⟩
 
 /-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Thm 6.6).
@@ -514,34 +528,6 @@ theorem channel_period_divides_dim
   obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, hcyclic⟩ :=
     MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
       K hUnital ρ hρ hρfix hIrr hγprim hperiph_range
-  -- Trace preservation gives equal traces for all projections
-  have htrace_pres := trace_transferMap_of_tp K hTP
-  have htrace_step : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P (k + 1)) := by
-    intro k
-    calc Matrix.trace (P k)
-        = Matrix.trace (E (P (k + 1))) := by rw [← hcyclic k]
-      _ = Matrix.trace (P (k + 1)) := htrace_pres _
-  have htrace_eq : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P 0) := by
-    intro ⟨k, hk⟩
-    induction k with
-    | zero => rfl
-    | succ n ih =>
-      have hn : n < m := by omega
-      have hfin : (⟨n, hn⟩ : Fin m) + 1 = ⟨n + 1, hk⟩ := by
-        ext; simp [Fin.val_add, Nat.mod_eq_of_lt hk]
-      rw [← hfin, ← htrace_step ⟨n, hn⟩]
-      exact ih hn
-  -- m * trace(P 0) = D
-  have hsum_trace : ∑ k : Fin m, Matrix.trace (P k) = (D : ℂ) := by
-    rw [← Matrix.trace_sum, hPsum, Matrix.trace_one, Fintype.card_fin]
-  have hmul_trace : (m : ℂ) * Matrix.trace (P 0) = (D : ℂ) := by
-    rw [← hsum_trace]
-    trans (∑ _k : Fin m, Matrix.trace (P 0))
-    · rw [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin]
-    · exact Finset.sum_congr rfl (fun k _ => (htrace_eq k).symm)
-  -- trace(P 0) ∈ ℕ, hence m | D
-  obtain ⟨n, hn⟩ := exists_natCast_eq_trace_of_orthogonal_projection (P 0) (hPproj 0)
-  have : (↑(m * n) : ℂ) = (↑D : ℂ) := by push_cast; rw [← hn]; exact hmul_trace
-  exact ⟨n, (Nat.cast_injective this).symm⟩
+  exact period_dvd_dim_of_cyclic_projections K hTP P hPproj hPsum hcyclic
 
 end PeripheralSpectrum
