@@ -11,7 +11,7 @@ This module currently contains two layers:
 
 1. A lightweight **single-block** symmetry wrapper (`rotatePhysical` +
    `gaugeEquiv_of_sameMPV_rotatePhysical`).
-2. A **periodic-form assembly lemma** (`cor41_of_periodic_equal_case`) that isolates the
+2. A **periodic-form assembly lemma** (`zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical`) that isolates the
    only missing input for the full Corollary 4.1 of arXiv:1708.00029 §4:
    the equal-case periodic FT theorem (`SameMPV` in irreducible form II ⇒ `ZGaugeEquiv`).
 
@@ -69,7 +69,7 @@ some period `m > 0`. Then the symmetry corollary follows immediately for
 
 This theorem intentionally packages the current dependency boundary: no additional overlap
 arguments are needed *here* beyond the periodic equal-case FT input. -/
-theorem cor41_of_periodic_equal_case
+theorem zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical
     (u : Matrix (Fin d) (Fin d) ℂ)
     (A : MPSTensor d D)
     (hA : IsIrreducibleForm A)
