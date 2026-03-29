@@ -170,12 +170,26 @@ theorem nonDecaying_overlap_of_equal_norm_blocks
         N > 0 → mpv A_total σ = ∑ k, (μ k) ^ N * mpv (blocks k) σ)
     (j k : Fin r) (hjk : j ≠ k) (hNorm : ‖μ j‖ = ‖μ k‖) :
     ¬ Tendsto (fun N => mpvOverlap (d := d) (blocks j) (blocks k) N) atTop (nhds 0) := by
-  -- TODO(#299): This requires the full BNT expansion argument from CPGSV17 Appendix A.
-  -- The proof needs to extract the non-vanishing of the j-th BNT coefficient from
-  -- the full tensor's MPV decomposition, using:
-  -- 1. Asymptotic orthonormality of non-GPE blocks (from spectral gap)
-  -- 2. Non-degeneracy of the decomposition (from hFullTensor + hμne)
-  -- 3. Equal growth rates from ‖μ j‖ = ‖μ k‖
+  -- TODO(#299): Remaining Appendix-A extraction step.
+  --
+  -- Current status:
+  -- * The spectral half is already available via
+  --   `gaugePhaseEquiv_of_nonDecaying_overlap`.
+  -- * This theorem is the complementary "non-decay from equal norm" half.
+  --
+  -- Planned formal route (matching CPGSV17 Appendix A and the BNT infrastructure):
+  -- 1. Normalize coefficients by a dominant representative and use
+  --    `HasStrictOrderedNonzeroWeights.coeff_ratio_tendsto` / the canonical-form
+  --    wrappers in `FundamentalTheorem/CoefficientConvergence.lean`.
+  -- 2. Pair `hFullTensor` with overlap-expansion lemmas from
+  --    `BNT/PermutationRigidity.lean` to extract the contribution of a fixed block.
+  -- 3. Use equal growth (`hNorm`) plus nonzero limits (`hμne`) to rule out complete
+  --    cancellation of all equal-norm cross terms.
+  -- 4. Conclude that assuming decay of the (j,k)-overlap contradicts the extracted
+  --    nonzero limit.
+  --
+  -- Note: the hypotheses `hTP`, `hIrr`, and `hPrim` are intentionally retained here;
+  -- they provide the overlap dichotomy tools needed immediately downstream.
   sorry
 
 /-- **Equal-norm blocks from the same decomposition are gauge-phase equivalent.**
