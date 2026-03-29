@@ -117,12 +117,20 @@ the appropriate cyclic-sector structure. This packages the consequence of
 Lemma 2.4: each `P_u A^(m)` is a normal tensor.
 
 The nontriviality hypothesis `P u ≠ 0` is required because the zero projector
-would yield the zero tensor, which is not normal (it cannot be block-injective). -/
+would yield the zero tensor, which is not normal (it cannot be block-injective).
+
+The completeness and orthogonality hypotheses ensure that `P` forms a genuine
+cyclic-sector decomposition (resolution of the identity into pairwise orthogonal
+idempotents), not merely any commuting idempotent family. Without these, the
+statement would be too strong: e.g., `P u = 1` for all `u` satisfies idempotence
+and commutation but does not yield a normal sector tensor in general. -/
 lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     (P : Fin m → MatrixAlg D)
     (hProj : ∀ u, P u * P u = P u)
+    (hComplete : ∑ u, P u = 1)
+    (hOrtho : ∀ u v, u ≠ v → P u * P v = 0)
     (hComm : ∀ u (i : Fin d), P u * A i = A i * P (u + 1))
     (u : Fin m) (hNonzero : P u ≠ 0) :
     IsNormal (leftSectorTensor (P u) (blockTensor A m)) := by
@@ -183,7 +191,7 @@ lemma sectorMatch_propagation
       (leftSectorTensor (PA u₀) (blockTensor A m))
       (leftSectorTensor (QB v₀) (blockTensor B m))) :
     ∃ (gauge : GL (Fin D) ℂ),
-      ∀ l : Fin m, ∃ (phase : ℂ),
+      ∀ l : Fin m, ∃ (phase : ℂ), ‖phase‖ = 1 ∧
         ∀ σ : Fin m → Fin d,
           PA (u₀ + l) * evalWord A (List.ofFn σ) =
             phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
@@ -262,13 +270,9 @@ theorem periodicOverlap_tendsto_zero_of_ne_dim
     {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hdim : D₁ ≠ D₂) :
-    Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
-  -- The cross-transfer operator E_{A,B} : M(D₁×D₂) → M(D₁×D₂) has
-  -- spectral radius < 1 because the peripheral eigenvalue condition
-  -- for periodic tensors requires D₁ = D₂ for any eigenvalue of
-  -- modulus 1 to exist. With spectral radius < 1, the overlap
-  -- tr(E_{A,B}^N) → 0.
-  sorry
+    Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) :=
+  mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP A B
+    hA.irreducible hB.irreducible hA.leftCanonical hB.leftCanonical hdim
 
 /-! ## Main dichotomy (Proposition 3.3) -/
 
@@ -296,9 +300,17 @@ theorem periodicOverlapDichotomy
     exact Or.inl (periodicOverlap_tendsto_zero_of_ne_period A B hA hB hm)
   case pos =>
     subst hm
-    -- Need sector projections from the cyclic decomposition.
-    -- Case split on whether any sector pair matches.
-    sorry
+    -- Case split on whether bond dimensions match.
+    by_cases hdim : D₁ = D₂
+    case neg =>
+      -- Different bond dimensions → orthogonal.
+      exact Or.inl (periodicOverlap_tendsto_zero_of_ne_dim A B hA hB hdim)
+    case pos =>
+      subst hdim
+      -- Same period, same bond dimension.
+      -- Need sector projections from the cyclic decomposition.
+      -- Case split on whether any sector pair matches.
+      sorry
 
 /-- **Eventual linear independence** (Corollary of Proposition 3.3):
 Given a family of periodic tensors `{A_j}` whose periods all divide a common
