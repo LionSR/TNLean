@@ -94,6 +94,13 @@ lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
     congr 1
     exact ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
 
+/-- `List.ofFn` inputs always have equal length, so `evalWord` reduces to the
+non-commutative word product branch. -/
+lemma evalWord_ofFn_length (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
+    evalWord M (List.ofFn σ) (List.ofFn τ) =
+      (List.ofFn fun i : Fin N => M (σ i) (τ i)).prod :=
+  evalWord_ofFn M σ τ
+
 /-! ### The MPO operator family -/
 
 /-- The `(σ, τ)` matrix entry of the MPO density operator for system size `N`:
@@ -185,5 +192,9 @@ theorem IsLPDO.isHermitian {M : MPOTensor d D} (h : IsLPDO M) :
   rw [hA i j, hA j i, Matrix.conjTranspose_sum]
   exact Finset.sum_congr rfl fun k _ => by
     rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+
+/-- **TODO** (part 4/5): LPDO implies MPDO. -/
+theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
+  sorry
 
 end MPOTensor
