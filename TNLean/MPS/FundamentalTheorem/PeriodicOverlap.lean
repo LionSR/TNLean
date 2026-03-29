@@ -27,8 +27,10 @@ dichotomy for periodic MPS tensors.
 ### Cross-overlap dichotomy
 * `periodicOverlap_tendsto_zero_of_ne_period` — (Case 1) different periods
   imply orthogonality.
-* `periodicOverlap_tendsto_zero_of_no_sector_match` — (Case 2) same period
-  but no sector match implies orthogonality.
+* `periodicOverlap_tendsto_zero_of_no_sector_match` — (Case 2) same period,
+  same bond dimension, but no sector match implies orthogonality.
+* `periodicOverlap_tendsto_zero_of_ne_dim` — different bond dimensions
+  imply orthogonality (cross-transfer spectral gap).
 * `periodicOverlap_gaugeEquiv_of_sector_match` — (Case 3) same period with
   a sector match forces gauge-phase equivalence `A^i = e^{iξ} U B^i U†`.
 
@@ -71,22 +73,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Sector-restricted tensor (Eq. A.5–A.6) -/
-
-/-- Two-sided sector restriction: `P_u * A^i * P_{u+1}`, where indices are
-cyclic mod `m`. This is the tensor `A_u` from Eq. (A.5) of arXiv:1708.00029. -/
-noncomputable def sectorRestrictedTensor
-    {m : ℕ} [NeZero m] (P : Fin m → MatrixAlg D) (A : MPSTensor d D) (u : Fin m) :
-    MPSTensor d D :=
-  fun i => P u * A i * P (u + 1)
-
-/-- Left multiplication by a sector projection recovers the sector-restricted tensor. -/
-lemma sectorRestrictedTensor_eq_left_mul_right
-    {m : ℕ} [NeZero m] (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
-    (u : Fin m) (i : Fin d) :
-    sectorRestrictedTensor P A u i = P u * A i * P (u + 1) :=
-  rfl
-
 /-! ## Self-overlap (first paragraph of Appendix A) -/
 
 /-- Self-overlap of a periodic tensor: `⟨V_N(A)|V_N(A)⟩ = tr(E_A^N)`, and
@@ -128,20 +114,28 @@ theorem periodicOverlap_tendsto_zero_of_ne_period
 
 /-- Two-sided sector restriction is "normal" when the original blocked tensor has
 the appropriate cyclic-sector structure. This packages the consequence of
-Lemma 2.4: each `P_u A^(m)` is a normal tensor. -/
+Lemma 2.4: each `P_u A^(m)` is a normal tensor.
+
+The nontriviality hypothesis `P u ≠ 0` is required because the zero projector
+would yield the zero tensor, which is not normal (it cannot be block-injective). -/
 lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
     (P : Fin m → MatrixAlg D)
     (hProj : ∀ u, P u * P u = P u)
     (hComm : ∀ u (i : Fin d), P u * A i = A i * P (u + 1))
-    (u : Fin m) :
+    (u : Fin m) (hNonzero : P u ≠ 0) :
     IsNormal (leftSectorTensor (P u) (blockTensor A m)) := by
   sorry
 
 /-- If two periodic tensors have the same period `m` but no sector pair
 `(P_u A^(m), Q_v B^(m))` is gauge-phase equivalent, then their overlap
 decays to zero.
+
+The hypotheses require that `PA` and `QB` form genuine cyclic-sector
+decompositions: completeness (they sum to 1), mutual orthogonality, and
+commutation with the tensor (interleaving with cyclic shift). These ensure
+the overlap decomposes as a sum over sector pairs.
 
 This is the "first case" of the same-period argument in Appendix A:
 block by `m`, decompose into normal sectors, and observe that all
@@ -153,6 +147,12 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
     (PA QB : Fin m → MatrixAlg D)
     (hPA_proj : ∀ u, PA u * PA u = PA u)
     (hQB_proj : ∀ v, QB v * QB v = QB v)
+    (hPA_complete : ∑ u, PA u = 1)
+    (hQB_complete : ∑ v, QB v = 1)
+    (hPA_ortho : ∀ u v, u ≠ v → PA u * PA v = 0)
+    (hQB_ortho : ∀ u v, u ≠ v → QB u * QB v = 0)
+    (hPA_comm : ∀ u (i : Fin d), PA u * A i = A i * PA (u + 1))
+    (hQB_comm : ∀ v (i : Fin d), QB v * B i = B i * QB (v + 1))
     (hNoMatch : ∀ u v,
       ¬ GaugePhaseEquiv
         (leftSectorTensor (PA u) (blockTensor A m))
@@ -169,7 +169,8 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
 /-- **Translation propagation** (Eq. A.8 of arXiv:1708.00029):
 Given one matching sector pair `P_ũ A^(m) ≈ e^{iλ} V Q_ṽ B^(m) V†`,
 applying the translation operator `T^l` for `l = 1, …, m-1` yields
-matching for all sector pairs `(u, u+q)` where `q = ṽ - ũ`. -/
+matching for all sector pairs `(u₀ + l, v₀ + l)` with the *same* gauge `V`
+(transported by the transfer operator). The phase may vary per `l`. -/
 lemma sectorMatch_propagation
     [NeZero D]
     (A B : MPSTensor d D)
@@ -181,8 +182,8 @@ lemma sectorMatch_propagation
     (hMatch : GaugePhaseEquiv
       (leftSectorTensor (PA u₀) (blockTensor A m))
       (leftSectorTensor (QB v₀) (blockTensor B m))) :
-    ∀ l : Fin m,
-      ∃ (phase : ℂ) (gauge : GL (Fin D) ℂ),
+    ∃ (gauge : GL (Fin D) ℂ),
+      ∀ l : Fin m, ∃ (phase : ℂ),
         ∀ σ : Fin m → Fin d,
           PA (u₀ + l) * evalWord A (List.ofFn σ) =
             phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
@@ -192,7 +193,11 @@ lemma sectorMatch_propagation
 
 /-- **Per-site proportionality** (Eq. A.14 of arXiv:1708.00029):
 After injectivity contraction, the sector-restricted tensors satisfy
-`A_u^i = κ_v · e^{iη/m} · B_v^i` with `∏ κ_v = 1` and `|κ_v| = 1`. -/
+`A_u^i = κ_v · e^{iη/m} · B_v^i` with `∏ κ_v = 1` and `|κ_v| = 1`.
+
+The offset `q` accounts for the cyclic shift between sector labelings of `A`
+and `B`: propagation from a match at `(u₀, v₀)` yields pairs `(u, u + q)`
+where `q = v₀ - u₀`. -/
 lemma sectorTensor_proportional_of_blockedMatch
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
@@ -201,12 +206,13 @@ lemma sectorTensor_proportional_of_blockedMatch
     (hQ_proj : ∀ v, Q v * Q v = Q v)
     (hP_comm : ∀ u (i : Fin d), P u * A i = A i * P (u + 1))
     (hQ_comm : ∀ v (i : Fin d), Q v * B i = B i * Q (v + 1))
-    (hBlockMatch : ∀ u : Fin m,
-      ∃ (phase : ℂ) (gauge : GL (Fin D) ℂ),
+    (q : Fin m)
+    (gauge : GL (Fin D) ℂ)
+    (hBlockMatch : ∀ u : Fin m, ∃ (phase : ℂ),
         ∀ σ : Fin m → Fin d,
           P u * evalWord A (List.ofFn σ) =
             phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
-              (Q u * evalWord B (List.ofFn σ)) *
+              (Q (u + q) * evalWord B (List.ofFn σ)) *
               ((gauge⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
     (hNormal : ∀ u, IsNormal (leftSectorTensor (P u) (blockTensor A m))) :
     RepeatedBlocks A B := by
@@ -245,6 +251,23 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
     RepeatedBlocks A B := by
   -- Use translation propagation to get matching for all sectors,
   -- then apply per-site proportionality extraction.
+  sorry
+
+/-- When `D₁ ≠ D₂`, no `RepeatedBlocks` relation can hold (the types don't
+match), so the overlap must decay. This covers the `D₁ ≠ D₂` subcase of
+the main dichotomy regardless of period matching. -/
+theorem periodicOverlap_tendsto_zero_of_ne_dim
+    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    {m_a m_b : ℕ}
+    (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
+    (hdim : D₁ ≠ D₂) :
+    Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
+  -- The cross-transfer operator E_{A,B} : M(D₁×D₂) → M(D₁×D₂) has
+  -- spectral radius < 1 because the peripheral eigenvalue condition
+  -- for periodic tensors requires D₁ = D₂ for any eigenvalue of
+  -- modulus 1 to exist. With spectral radius < 1, the overlap
+  -- tr(E_{A,B}^N) → 0.
   sorry
 
 /-! ## Main dichotomy (Proposition 3.3) -/
