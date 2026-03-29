@@ -180,17 +180,21 @@ applying the translation operator `T^l` for `l = 1, …, m-1` yields
 matching for all sector pairs `(u₀ + l, v₀ + l)` with the *same* gauge `V`
 (transported by the transfer operator). The phase may vary per `l`.
 
-The left-canonical hypotheses (`hA_lc`, `hB_lc`) ensure the propagated phases
-are unit-modulus: the transfer operator preserves the trace-preserving condition,
-so the scaling factor remains on the unit circle at each step. Without
-normalization, the initial `GaugePhaseEquiv` allows arbitrary nonzero ζ,
-and propagation would not constrain the phase magnitude. -/
+The idempotence hypotheses (`hPA_proj`, `hQB_proj`) are essential: without them,
+`PA 0 = 2·I` and `QB 0 = I` satisfy all other hypotheses but force `phase = 2`,
+violating `‖phase‖ = 1`. The left-canonical hypotheses (`hA_lc`, `hB_lc`) ensure
+the propagated phases are unit-modulus: the transfer operator preserves the
+trace-preserving condition, so the scaling factor remains on the unit circle at
+each step. Without normalization, the initial `GaugePhaseEquiv` allows arbitrary
+nonzero ζ, and propagation would not constrain the phase magnitude. -/
 lemma sectorMatch_propagation
     [NeZero D]
     (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
     (PA QB : Fin m → MatrixAlg D)
+    (hPA_proj : ∀ u, PA u * PA u = PA u)
+    (hQB_proj : ∀ v, QB v * QB v = QB v)
     (hPA_comm : ∀ u (i : Fin d), PA u * A i = A i * PA (u + 1))
     (hQB_comm : ∀ v (i : Fin d), QB v * B i = B i * QB (v + 1))
     {u₀ : Fin m} {v₀ : Fin m}
