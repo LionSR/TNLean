@@ -3,34 +3,75 @@ import TNLean.MPS.ParentHamiltonian.Defs
 /-!
 # Basic parent-Hamiltonian properties
 
-Initial API lemmas: the MPV is annihilated by the parent Hamiltonian and the
-model is frustration-free on that state.
+The parent interaction is the orthogonal projector onto `(groundSpace A L)ᗮ`.
+It therefore annihilates any vector in the ground space. The MPS state `mpv A`
+lies in the ground space at every window, which gives frustration-freeness.
 -/
+
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **PLACEHOLDER — VACUOUSLY TRUE**: The parent Hamiltonian annihilates the MPV state.
+/-! ### Key lemma: parent interaction kills ground space elements -/
 
-This lemma compiles without `sorry` but is currently **vacuously true** because
-`parentInteraction` and `localTerm` are zero placeholders (see `Defs.lean`).
-The proof is literally `0 = 0` and must be completely rewritten once the real
-projector and embedding implementations replace the zero definitions. Do **not**
-cite this as a proven result. -/
+/-- The parent interaction annihilates any vector in the ground space.
+This is the core property: `parentInteraction A L` is the orthogonal projector
+onto `(groundSpace A L)ᗮ`, so it kills everything in `groundSpace A L`. -/
+lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
+    (v : NSiteSpace d L) (hv : v ∈ groundSpace A L) :
+    parentInteraction A L v = 0 := by
+  -- v ∈ groundSpace means e.symm v ∈ groundSpaceES
+  have hmem : (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v ∈ groundSpaceES A L := by
+    simp only [groundSpaceES, Submodule.mem_map]
+    exact ⟨v, hv, rfl⟩
+  -- The starProjection of Vᗮ kills elements of V:
+  -- Uᗮ.starProjection = 1 - U.starProjection, and U.starProjection fixes members of U.
+  have hkill : (groundSpaceES A L)ᗮ.starProjection
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v) = 0 := by
+    rw [Submodule.starProjection_orthogonal']
+    simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply]
+    rw [sub_eq_zero]
+    exact (Submodule.starProjection_eq_self_iff.mpr hmem).symm
+  -- parentInteraction unfolds to e ∘ starProjection.toLinearMap ∘ e⁻¹
+  change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
+    ((groundSpaceES A L)ᗮ.starProjection
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)) = 0
+  rw [hkill, map_zero]
+
+/-- The MPS state restricted to any window of `L` sites lies in `groundSpace A L`.
+This is because `mpv A (replaceWindow L i σ τ)` has the form
+`tr(evalWord A (List.ofFn τ) * X)` where `X` is the product of matrices on the
+complement sites — exactly the structure of `groundSpaceMap A L`. -/
+lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ)
+    (i : Fin N) (σ : Cfg d N) :
+    (fun τ => mpv A (replaceWindow L i σ τ)) ∈ groundSpace A L := by
+  sorry
+
+/-- Each local term annihilates the MPV state. -/
+lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (i : Fin N) :
+    localTerm A L N i (mpv A) = 0 := by
+  ext σ
+  simp only [localTerm, LinearMap.pi_apply, LinearMap.comp_apply, LinearMap.proj_apply,
+    Pi.zero_apply]
+  have hmem := mpv_window_mem_groundSpace A L N i σ
+  have hkill := parentInteraction_apply_mem_groundSpace A L _ hmem
+  change (parentInteraction A L (fun τ => mpv A (replaceWindow L i σ τ)))
+    (extractWindow L i σ) = 0
+  rw [hkill]
+  rfl
+
+/-- The parent Hamiltonian annihilates the MPV state: `H_N |ψ(A)⟩ = 0`. -/
 lemma parentHamiltonian_annihilates (A : MPSTensor d D) (L N : ℕ) :
     parentHamiltonian A L N (mpv A) = 0 := by
-  simp [parentHamiltonian, localTerm]
+  simp only [parentHamiltonian, LinearMap.sum_apply]
+  exact Finset.sum_eq_zero fun i _ => localTerm_annihilates_mpv A L N i
 
-/-- **PLACEHOLDER — VACUOUSLY TRUE**: The parent Hamiltonian model is frustration-free
-on the MPV state.
-
-This lemma compiles without `sorry` but is currently **vacuously true** because
-`localTerm` is a zero placeholder (see `Defs.lean`). Do **not** cite this as a
-proven result. -/
+/-- The parent Hamiltonian model is frustration-free on the MPV state:
+each local term individually annihilates `mpv A`. -/
 lemma parentHamiltonian_frustrationFree (A : MPSTensor d D) (L N : ℕ) :
-    IsFrustrationFree A L N (mpv A) := by
-  intro i
-  simp [localTerm]
+    IsFrustrationFree A L N (mpv A) :=
+  fun i => localTerm_annihilates_mpv A L N i
 
 end MPSTensor

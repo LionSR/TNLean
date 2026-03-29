@@ -1,14 +1,33 @@
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 
+import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+
 /-!
 # Parent interaction and parent Hamiltonian (definitions)
 
 This file introduces the parent interaction projector, translated local terms,
 and the finite-chain parent Hamiltonian.
 
-**Warning**: `parentInteraction` and `localTerm` are currently **zero
-placeholders**. All downstream results (annihilation, frustration-freeness)
-are vacuously true until the real projector/embedding definitions are added.
+## Main definitions
+
+* `MPSTensor.parentInteraction A L` — the orthogonal projector onto `(groundSpace A L)ᗮ`,
+  as a linear map on `NSiteSpace d L`. This is a PSD operator whose kernel is the
+  ground space `G_L(A)`.
+
+* `MPSTensor.extractWindow L i σ` — extracts `L` consecutive site values from an `N`-site
+  configuration `σ` starting at position `i` (with periodic boundary conditions).
+
+* `MPSTensor.replaceWindow L i σ τ` — replaces the `L` consecutive site values in `σ`
+  starting at position `i` with values from `τ`.
+
+* `MPSTensor.localTerm A L N i` — the parent interaction embedded at site `i` on the
+  `N`-site periodic chain, acting as `parentInteraction` on the window
+  `{i, i+1, …, i+L-1 mod N}` and as the identity on the complement.
+
+* `MPSTensor.parentHamiltonian A L N` — the parent Hamiltonian `H = ∑ᵢ hᵢ`.
+
+* `MPSTensor.IsFrustrationFree A L N ψ` — frustration-freeness: every local term
+  annihilates `ψ`.
 -/
 
 open scoped Matrix BigOperators
@@ -17,29 +36,66 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **ZERO PLACEHOLDER** — Parent interaction on `L` consecutive sites.
+/-! ### Transport between `NSiteSpace` and `EuclideanSpace`
 
-**Warning**: This is currently defined as **zero**. The real definition should be the
-orthogonal projector onto `groundSpace A L`ᗮ. Any theorem downstream of this
-definition (e.g. `parentHamiltonian_annihilates`, `parentHamiltonian_frustrationFree`)
-is **vacuously true** until this placeholder is replaced.
+`NSiteSpace d L = Cfg d L → ℂ` and `EuclideanSpace ℂ (Cfg d L) = PiLp 2 (fun _ => ℂ)`
+are definitionally the same type with the same module structure. We use
+`WithLp.linearEquiv` to transport the ground space to `EuclideanSpace`, where
+Mathlib provides `InnerProductSpace` and orthogonal projection. -/
 
-TODO(parent-hamiltonian): replace with the orthogonal projector. -/
-noncomputable def parentInteraction (_A : MPSTensor d D) (L : ℕ) :
+/-- The ground space of `A` on `L` sites, viewed as a submodule of
+`EuclideanSpace ℂ (Cfg d L)` (same underlying submodule, different typeclass
+instances for inner product). -/
+noncomputable def groundSpaceES (A : MPSTensor d D) (L : ℕ) :
+    Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) :=
+  (groundSpace A L).map (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toLinearMap
+
+/-! ### Parent interaction -/
+
+/-- Parent interaction on `L` consecutive sites: the orthogonal projector onto
+`(groundSpace A L)ᗮ` in the `L`-site Hilbert space.
+
+Mathematically, `parentInteraction A L = 𝟙 - P_{G_L(A)}`, where `P_{G_L(A)}` is the
+orthogonal projector onto the ground space. This is a PSD operator with
+`ker(parentInteraction A L) = groundSpace A L`. -/
+noncomputable def parentInteraction (A : MPSTensor d D) (L : ℕ) :
     NSiteSpace d L →ₗ[ℂ] NSiteSpace d L :=
-  0
+  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
+  e.toLinearMap.comp ((groundSpaceES A L)ᗮ.starProjection.toLinearMap.comp e.symm.toLinearMap)
 
-/-- **ZERO PLACEHOLDER** — Translated local term on an `N`-site periodic chain.
+/-! ### Window extraction and replacement (periodic boundary conditions) -/
 
-**Warning**: This is currently defined as **zero**. The real definition should embed
-`parentInteraction A L` at site `i` on the periodic chain. Any theorem
-downstream of this definition is **vacuously true** until this placeholder
-is replaced.
+/-- Extract `L` consecutive site values from an `N`-site configuration `σ`,
+starting at position `i` with periodic boundary conditions. -/
+def extractWindow (L : ℕ) {N : ℕ} (i : Fin N) (σ : Cfg d N) : Cfg d L :=
+  have hN : 0 < N := i.val.zero_le.trans_lt i.isLt
+  fun j => σ ⟨(i.val + j.val) % N, Nat.mod_lt _ hN⟩
 
-TODO(parent-hamiltonian): replace with the translated embedding. -/
-noncomputable def localTerm (_A : MPSTensor d D) (_L N : ℕ) (_i : Fin N) :
+/-- Replace `L` consecutive site values in an `N`-site configuration `σ`,
+starting at position `i`, with values from `τ` (periodic boundary conditions). -/
+def replaceWindow (L : ℕ) {N : ℕ} (i : Fin N) (σ : Cfg d N) (τ : Cfg d L) : Cfg d N :=
+  fun k =>
+    let offset := (k.val + N - i.val) % N
+    if h : offset < L then τ ⟨offset, h⟩ else σ k
+
+/-! ### Local term (site embedding) -/
+
+/-- Translated local term on an `N`-site periodic chain: embeds
+`parentInteraction A L` at site `i`, acting on the window
+`{i, i+1, …, i+L-1 mod N}` and as identity on the complement.
+
+For `f : NSiteSpace d N` and output configuration `σ`:
+```
+(localTerm A L N i f)(σ) = (parentInteraction A L (fun τ ↦ f (replaceWindow L i σ τ)))
+                             (extractWindow L i σ)
+``` -/
+noncomputable def localTerm (A : MPSTensor d D) (L N : ℕ) (i : Fin N) :
     NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
-  0
+  LinearMap.pi fun σ =>
+    (LinearMap.proj (extractWindow L i σ) : NSiteSpace d L →ₗ[ℂ] ℂ).comp
+      ((parentInteraction A L).comp
+        (LinearMap.pi fun τ =>
+          (LinearMap.proj (replaceWindow (d := d) L i σ τ) : NSiteSpace d N →ₗ[ℂ] ℂ)))
 
 /-- Parent Hamiltonian on an `N`-site periodic chain:
 sum of translated local interaction terms. -/
