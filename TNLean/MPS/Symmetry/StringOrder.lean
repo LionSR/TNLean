@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Core.Transfer
+import TNLean.Channel.KrausRepresentation
 
 /-!
 # String order parameters and local symmetry equivalence
@@ -149,35 +150,44 @@ noncomputable def stringOrderParam (A : MPSTensor d D)
 leaves all reduced density matrices invariant. In the MPS/FCS
 language this is expressed as:
 
-$$\forall L,\; R_L(u) = R_L(\mathbf{1})$$
+$$\forall L,\; \|R_L(u)\| = \|R_L(\mathbf{1})\|$$
 
-i.e. the string order parameter for `u` equals that for the
-identity.
+i.e. the norm of the string order parameter for `u` equals that
+for the identity.
 
-**Convention**: This definition requires *exact* equality of the
-string order parameters, not equality up to a global phase. The
-paper (arXiv:0802.0447, Definition 3) defines local symmetry via
-reduced density matrix invariance, which would allow a global
-phase factor `e^{iφ}`. The exact-equality formulation is chosen
-here because for injective MPS the stationary state `Λ > 0`
-makes the string order parameter real and positive at `u = 1`,
-so any phase freedom is absorbed. For non-injective or
-degenerate cases, this definition may need to be relaxed. -/
+**Convention**: This definition uses *norm* equality of the string
+order parameters rather than exact complex equality, matching the
+paper's density-matrix formulation (arXiv:0802.0447, Definition 3).
+Reduced density matrix invariance allows a global phase factor
+`e^{iφL}` in the state vector, so only `|R_L(u)| = |R_L(1)|` is
+required. For injective MPS the stationary state `Λ > 0` makes
+`R_L(1)` real and positive, and the spectral gap ensures the
+sequence converges, so this norm-based definition captures the
+correct physical notion. -/
 def IsLocalSymmetry (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ L : ℕ,
-    stringOrderParam A u Λ L = stringOrderParam A 1 Λ L
+    ‖stringOrderParam A u Λ L‖ = ‖stringOrderParam A 1 Λ L‖
 
 /-- String order exists for `u` if the string order parameter is
 uniformly bounded below by a positive constant for all `L`.
 
 This is a stronger condition than mere non-vanishing of the limit
 `lim_{L→∞} R_L(u)`. The uniform bound is chosen because for
-injective MPS the string order parameter converges exponentially,
-so both formulations are equivalent in the injective setting. The
-uniform version is more convenient for formal proofs as it avoids
-filter/limit machinery. -/
+injective MPS the string order parameter converges exponentially
+(due to the spectral gap of the transfer map), so both
+formulations are equivalent in the injective setting. The uniform
+version is more convenient for formal proofs as it avoids
+filter/limit machinery.
+
+**Edge case**: For a trivial-phase twist `u = ζ · 1` with
+`|ζ| = 1`, `ζ ≠ 1`, the norm `‖R_L(u)‖ = 1` for all `L` so
+`HasStringOrder` holds, but the complex sequence `R_L(u) = ζ^L`
+need not converge (e.g. for irrational `arg ζ`). For injective
+MPS the spectral gap ensures exponential convergence of the
+dominant term, making the uniform bound and limit-based
+definitions agree for the cases of physical interest. -/
 def HasStringOrder (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
@@ -255,9 +265,9 @@ theorem condC2_iff_condC3 :
 /-- Unitary mixing of Kraus operators preserves the channel:
 if `u` is unitary then `∑_i (∑_j u_{ij} A_j) X (∑_j u_{ij} A_j)† = ∑_i A_i X A_i†`.
 
-This is a general result about unitary equivalence of Kraus
-representations (Theorem 2.18 in Wolf's "Quantum Channels &
-Operations"). -/
+This is a thin adapter over `kraus_same_map_of_unitary_combination` from
+`TNLean.Channel.KrausRepresentation` (Theorem 2.18 in Wolf's "Quantum
+Channels & Operations"). -/
 lemma unitary_kraus_mixing
     (A : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1)
@@ -265,35 +275,8 @@ lemma unitary_kraus_mixing
     ∑ i : Fin d,
       (∑ j : Fin d, u i j • A j) * Y *
         (∑ j : Fin d, u i j • A j)ᴴ =
-    ∑ i : Fin d, A i * Y * (A i)ᴴ := by
-  have huc : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  -- Column orthogonality: ∑_i u_{ij} * star(u_{ik}) = δ_{jk}
-  have hcol : ∀ j k : Fin d,
-      ∑ i : Fin d, u i j * star (u i k) =
-        if j = k then 1 else 0 := by
-    intro j k
-    have h := congr_fun (congr_fun huc k) j
-    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] at h
-    -- h : ∑ i, star (u i k) * u i j = if k = j then 1 else 0
-    rw [show (if k = j then (1 : ℂ) else 0) = if j = k then 1 else 0 from
-      if_congr eq_comm rfl rfl] at h
-    convert h using 1
-    apply Finset.sum_congr rfl; intro i _; exact mul_comm _ _
-  -- Expand conjugate transpose of sum and smul
-  simp_rw [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul]
-  -- Distribute sums over multiplication
-  simp_rw [Finset.sum_mul, Finset.mul_sum]
-  -- Pull scalars through multiplication
-  simp_rw [smul_mul_assoc, mul_smul_comm, smul_smul]
-  -- Rearrange triple sum: ∑ i ∑ j ∑ k → ∑ j ∑ k ∑ i
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl; intro j _
-  rw [Finset.sum_comm]
-  -- Factor out the matrix part and apply orthogonality
-  conv_lhs => arg 2; ext k; rw [← Finset.sum_smul, hcol j k]
-  -- Collapse: ∑ k, (if j = k then 1 else 0) • (A j * Y * (A k)ᴴ) = A j * Y * (A j)ᴴ
-  simp only [ite_smul, one_smul, zero_smul,
-    Finset.sum_ite_eq, Finset.mem_univ, ite_true]
+    ∑ i : Fin d, A i * Y * (A i)ᴴ :=
+  kraus_same_map_of_unitary_combination _ A u (mul_eq_one_comm.mp hu) (fun _ => rfl) Y
 
 /-- C1 → C2: The intertwining condition implies transfer-map
 covariance.
