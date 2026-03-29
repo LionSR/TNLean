@@ -170,7 +170,11 @@ satisfies this predicate for any idempotent `P_K`; non-trivial content
 arises only when combined with locality constraints (see
 `commutingHam_isDecorrelated`).
 
-See arXiv:1606.00608, Appendix D.2, Definition before Proposition D.1. -/
+See arXiv:1606.00608, Appendix D.2, Definition before Proposition D.1.
+
+TODO(tensor-product): add locality constraints requiring `P_AX` to act on
+`H_A ⊗ H_X` and `P_XB` to act on `H_X ⊗ H_B`. Without these, the predicate
+is trivially satisfiable by `P_AX = P_XB = P_K`. -/
 def HasCommutingParentHam (P_K : E →ₗ[ℂ] E) : Prop :=
   ∃ P_AX P_XB : E →ₗ[ℂ] E,
     -- P_AX, P_XB are idempotent (projectors)
