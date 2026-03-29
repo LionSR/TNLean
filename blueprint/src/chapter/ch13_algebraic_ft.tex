@@ -430,6 +430,69 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     full generality.
 \end{remark}
 
+\subsection{Finite-length MPV agreement}
+
+\begin{definition}[Finite-length MPV agreement]\label{def:same_mpv_from}
+    \lean{MPSTensor.SameMPVFrom}
+    \leanok
+    \uses{def:same_mpv}
+    Two tensors $A$ and $B$ of the same bond dimension satisfy
+    \emph{$\mathrm{SameMPVFrom}(N_0)$} if they generate the same MPV
+    family for all system sizes $N \ge N_0$:
+    \[
+        \mathrm{mpv}(A, \sigma) = \mathrm{mpv}(B, \sigma)
+        \qquad \text{for all } N \ge N_0,\;\sigma \in [d]^N.
+    \]
+\end{definition}
+
+\begin{theorem}[Finite-length agreement implies full agreement]%
+    \label{thm:sameMPV_of_sameMPVFrom}
+    \lean{MPSTensor.sameMPV_of_sameMPVFrom_of_injective}
+    \leanok
+    \uses{def:same_mpv_from, def:injective, def:same_mpv}
+    Let $A$ be an injective tensor and $B$ a tensor of the same bond
+    dimension.  If $\mathrm{SameMPVFrom}(N_0, A, B)$ holds for some
+    $N_0$, then $\mathrm{SameMPV}(A, B)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:same_mpv_from, def:injective}
+    Write $1 = \sum_i c_i A^i$ (by injectivity) and set
+    $S = \sum_i c_i B^i$.
+    \begin{enumerate}
+        \item Show $\mathrm{wordSpan}(B, N_0) = \MN{D}$ via the
+              composition identity
+              $\Phi_A \circ \ell_A = \Phi_B \circ \ell_B$
+              (from trace agreement at length $N_0 + 1$)
+              and a finrank transfer argument.
+        \item Derive $S = 1$ by trace nondegeneracy: for every
+              $M \in \MN{D}$, $\tr(M(S - 1)) = 0$.
+        \item Downward induction on $k = N_0 - |w|$: decompose
+              $\tr(w_A)$ and $\tr(w_B)$ using $1 = \sum c_i A^i$
+              and $S = 1$ respectively, then apply the inductive
+              hypothesis at length $|w| + 1$.
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}[Strengthened single-block FT (finite-length)]%
+    \label{thm:ft_singleBlock_finiteLength}
+    \lean{MPSTensor.fundamentalTheorem_singleBlock_finiteLength}
+    \leanok
+    \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single, def:gauge_equiv}
+    If $A$ is injective and $A$, $B$ agree on all MPV coefficients for
+    system sizes $N \ge N_0$ (for any threshold $N_0$), then $A$ and $B$
+    are gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single}
+    Apply Theorem~\ref{thm:sameMPV_of_sameMPVFrom} to obtain
+    $\mathrm{SameMPV}(A, B)$, then invoke the single-block FT
+    (Theorem~\ref{thm:ft_single}).
+\end{proof}
+
 %% ---------------------------------------------------------
 \section{Corollaries}%
 \label{sec:ft_corollaries}
