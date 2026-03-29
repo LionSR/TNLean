@@ -15,9 +15,9 @@ This file formalizes the periodic fundamental theorem of arXiv:1708.00029 §3 an
 Z-gauge infrastructure used in its equal-case strengthening:
 
 * **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): If two non-repeating
-  block families have proportional total MPVs and the periodic overlap dichotomy holds,
-  their bases of periodic tensors match up to a bijection with per-block `RepeatedBlocks`
-  equivalence.
+  block families satisfy the periodic overlap dichotomy, their bases of periodic tensors
+  match up to a bijection with per-block `RepeatedBlocks` equivalence. (In the paper,
+  proportional MPVs imply the dichotomy; here it is a direct hypothesis.)
 
 * **Infrastructure for Theorem 3.8**: The equal-case strengthening produces per-block
   Z-gauge data (diagonal Z with Z^m = 1) from the Newton–Girard identity on sector weights.
@@ -120,9 +120,12 @@ variable {rA rB : ℕ}
 
 /-- **Theorem 3.4 (Proportional case, arXiv:1708.00029).**
 
-If two non-repeating block families have proportional total MPVs, and the periodic
-overlap dichotomy holds, then the bases of periodic tensors match: equal block counts, a
-bijection, and per-block `HetRepeatedBlocks` equivalence.
+If two non-repeating block families satisfy the periodic overlap dichotomy, then
+their bases of periodic tensors match: equal block counts, a bijection, and per-block
+`HetRepeatedBlocks` equivalence.
+
+In the paper, proportional MPVs imply the overlap dichotomy; here the dichotomy is
+taken as a direct hypothesis via `PeriodicOverlapHypothesis`.
 
 The proof mirrors `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean`:
 1. Non-decaying overlap → `HetRepeatedBlocks` matching for each block.
@@ -238,17 +241,6 @@ theorem weight_multisets_eq_of_power_sums_eq
     (h : ∀ k : ℕ, 0 < k → ∑ i : Fin r, μ i ^ k = ∑ i : Fin r, ν i ^ k) :
     Finset.univ.val.map μ = Finset.univ.val.map ν :=
   power_sum_eq_implies_multiset_eq r μ ν h
-
-/-- **Diagonal matrices commute (`[A^i, Z] = 0` core for Theorem 3.8).**
-
-The Z-gauge diagonal commutes with any diagonal matrix. In the assembled block-diagonal
-structure, Z acts on the multiplicity index and the block tensor is constant within each
-multiplicity copy, so their matrices (diagonal in the multiplicity space) commute. -/
-theorem diagonal_commute
-    {n : Type*} [Fintype n] [DecidableEq n]
-    (z r : n → ℂ) :
-    Matrix.diagonal z * Matrix.diagonal r = Matrix.diagonal r * Matrix.diagonal z := by
-  simp [Matrix.diagonal_mul_diagonal, mul_comm]
 
 /-- **Full Z-gauge pipeline (Theorem 3.8, steps 5–7 composed).**
 
