@@ -22,57 +22,87 @@ onto `(groundSpace A L)ᗮ`, so it kills everything in `groundSpace A L`. -/
 lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
     (v : NSiteSpace d L) (hv : v ∈ groundSpace A L) :
     parentInteraction A L v = 0 := by
-  -- v ∈ groundSpace means e.symm v ∈ groundSpaceES
   have hmem : (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v ∈ groundSpaceES A L := by
     simp only [groundSpaceES, Submodule.mem_map]
     exact ⟨v, hv, rfl⟩
-  -- The starProjection of Vᗮ kills elements of V:
-  -- Uᗮ.starProjection = 1 - U.starProjection, and U.starProjection fixes members of U.
   have hkill : (groundSpaceES A L)ᗮ.starProjection
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v) = 0 := by
     rw [Submodule.starProjection_orthogonal']
     simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply]
     rw [sub_eq_zero]
     exact (Submodule.starProjection_eq_self_iff.mpr hmem).symm
-  -- parentInteraction unfolds to e ∘ starProjection.toLinearMap ∘ e⁻¹
   change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
     ((groundSpaceES A L)ᗮ.starProjection
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)) = 0
   rw [hkill, map_zero]
 
+/-! ### Cyclic trace invariance -/
+
+/-- Trace of evalWord is invariant under cyclic swap of concatenated words. -/
+private lemma trace_evalWord_append_comm (A : MPSTensor d D) (w₁ w₂ : List (Fin d)) :
+    Matrix.trace (evalWord A (w₁ ++ w₂)) = Matrix.trace (evalWord A (w₂ ++ w₁)) := by
+  rw [evalWord_append, evalWord_append, Matrix.trace_mul_comm]
+
+/-! ### MPS window membership -/
+
 /-- The MPS state restricted to any window of `L` sites lies in `groundSpace A L`.
 
 The witness is the "complement matrix": the product of `A`-matrices on sites
-outside the `L`-site window, cyclically ordered starting from `i + L`:
-`X = evalWord A [σ(i+L), σ(i+L+1), …, σ(i-1)]` (indices mod `N`).
-
-Then `groundSpaceMap A L X τ = tr(evalWord A (List.ofFn τ) * X)`, and we need
-this to equal `mpv A (replaceWindow L hLN i σ τ) = tr(evalWord A (List.ofFn (replaceWindow …)))`.
-
-**Status: sorry** — The remaining proof obligation is:
-```
-tr(evalWord A (List.ofFn τ) * complementMatrix) = tr(evalWord A (List.ofFn (replaceWindow …)))
-```
-which follows from:
-1. `List.ofFn (replaceWindow L hLN i σ τ)` decomposes as `before_σ ++ List.ofFn τ ++ after_σ`
-   (non-wrapping case; wrapping case needs periodic reindexing).
-2. `evalWord_append` factors the matrix product into three pieces.
-3. `Matrix.trace_mul_cycle` rewrites `tr(before * window * after)` as
-   `tr(window * after * before)`.
-4. `after ++ before` is exactly the complement list. -/
+outside the `L`-site window, cyclically ordered starting from `i + L`. The proof
+uses trace cyclicity to rotate the full `N`-site product so that the window
+indices come first, matching the `groundSpaceMap` definition. -/
 lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     (i : Fin N) (σ : Cfg d N) :
     (fun τ => mpv A (replaceWindow L hLN i σ τ)) ∈ groundSpace A L := by
   rw [groundSpace, LinearMap.mem_range]
-  -- Witness: product of A-matrices on complement sites (i+L to i-1 cyclically)
+  have hN : 0 < N := Nat.lt_of_lt_of_le (Fin.pos i) le_rfl
   refine ⟨evalWord A (List.ofFn fun (j : Fin (N - L)) =>
-    σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ (by have := i.isLt; omega)⟩), ?_⟩
+    σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ (by omega)⟩), ?_⟩
   ext τ
   simp only [groundSpaceMap_apply, mpv, coeff]
-  -- Remaining: tr(evalWord A (List.ofFn τ) * complementMatrix)
-  --          = tr(evalWord A (List.ofFn (replaceWindow L hLN i σ τ)))
-  -- Requires list decomposition + trace cyclicity (see docstring).
-  sorry
+  rw [← evalWord_append]
+  -- Goal: tr(evalWord A (List.ofFn τ ++ compList))
+  --     = tr(evalWord A (List.ofFn (replaceWindow L hLN i σ τ)))
+  set compList := List.ofFn fun (j : Fin (N - L)) =>
+    σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ (by omega)⟩
+  -- Rotate the RHS by i positions using trace cyclicity
+  suffices hlist :
+      (List.ofFn (replaceWindow L hLN i σ τ)).rotate i.val =
+      List.ofFn τ ++ compList by
+    have hle : i.val ≤ (List.ofFn (replaceWindow L hLN i σ τ)).length := by
+      simp [List.length_ofFn]
+    rw [← hlist, List.rotate_eq_drop_append_take hle,
+        trace_evalWord_append_comm, List.take_append_drop]
+  -- Prove the rotated list equals τ ++ complement elementwise
+  apply List.ext_getElem
+  · have : compList.length = N - L := by simp [compList, List.length_ofFn]
+    simp only [List.length_rotate, List.length_append, List.length_ofFn]
+    omega
+  · intro k hk1 hk2
+    have hkN : k < N := by simp only [List.length_rotate, List.length_ofFn] at hk1; exact hk1
+    simp only [List.getElem_rotate, List.getElem_ofFn, List.length_ofFn]
+    -- Unfold replaceWindow at position ⟨(k + i) % N, _⟩
+    change (if h : ((k + i.val) % N + N - i.val) % N < L
+      then τ ⟨((k + i.val) % N + N - i.val) % N, h⟩
+      else σ ⟨(k + i.val) % N, Nat.mod_lt _ hN⟩) = _
+    -- The offset always equals k (regardless of wrapping)
+    have hoffset : ((k + i.val) % N + N - i.val) % N = k := by
+      rcases lt_or_ge (k + i.val) N with h | h
+      · rw [Nat.mod_eq_of_lt h, show k + i.val + N - i.val = k + N from by omega,
+            Nat.add_mod_right, Nat.mod_eq_of_lt hkN]
+      · rw [Nat.mod_eq_sub_mod h, Nat.mod_eq_of_lt (by omega : k + i.val - N < N),
+            show k + i.val - N + N - i.val = k from by omega, Nat.mod_eq_of_lt hkN]
+    rw [hoffset]
+    by_cases hkL : k < L
+    · -- Window part → τ
+      rw [dif_pos hkL, List.getElem_append_left (by simp only [List.length_ofFn]; exact hkL),
+          List.getElem_ofFn]
+    · -- Complement part → σ
+      rw [dif_neg hkL, List.getElem_append_right (by simp; omega), List.getElem_ofFn]
+      simp only [List.length_ofFn]
+      congr 1; apply Fin.ext
+      change (k + i.val) % N = (i.val + L + (k - L)) % N
+      rw [show i.val + L + (k - L) = k + i.val from by omega]
 
 /-- Each local term annihilates the MPV state. -/
 lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :

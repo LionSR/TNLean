@@ -114,6 +114,9 @@ private lemma offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
 `parentInteraction A L` at site `i`, acting on the window
 `{i, i+1, …, i+L-1 mod N}` and as identity on the complement.
 
+When `L > N` the definition returns `0`; all lemmas in `Basic.lean`
+carry the hypothesis `hLN : L ≤ N` so this branch is never reached.
+
 For `f : NSiteSpace d N` and output configuration `σ`:
 ```
 (localTerm A L N i f)(σ) = (parentInteraction A L (fun τ ↦ f (replaceWindow L i σ τ)))
