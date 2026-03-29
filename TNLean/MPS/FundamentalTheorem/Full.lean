@@ -81,7 +81,7 @@ coefficient data it needs as explicit hypotheses.
 -/
 
 open scoped Matrix BigOperators
-open Filter
+open Filter TNLean.Convergence
 
 namespace MPSTensor
 
@@ -673,16 +673,16 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
   -- ── Diagonal / off-diagonal inner product limits ──
   have hA_inner_diag : ∀ j : Fin rA,
       Tendsto (fun N => mpvInner (d := d) (A j) (A j) N) atTop (nhds 1) :=
-    fun j => tendsto_inner_one (A j) (hA_self j)
+    fun j => tendsto_mpvInner_one (A j) (hA_self j)
   have hA_inner_off : ∀ i j : Fin rA, i ≠ j →
       Tendsto (fun N => mpvInner (d := d) (A i) (A j) N) atTop (nhds 0) :=
-    fun i j hij => tendsto_inner_zero (A i) (A j) (hA_cross i j hij)
+    fun i j hij => tendsto_mpvInner_zero (A i) (A j) (hA_cross i j hij)
   have hB_inner_diag : ∀ k : Fin rB,
       Tendsto (fun N => mpvInner (d := d) (B k) (B k) N) atTop (nhds 1) :=
-    fun k => tendsto_inner_one (B k) (hB_self k)
+    fun k => tendsto_mpvInner_one (B k) (hB_self k)
   have hB_inner_off : ∀ i j : Fin rB, i ≠ j →
       Tendsto (fun N => mpvInner (d := d) (B i) (B j) N) atTop (nhds 0) :=
-    fun i j hij => tendsto_inner_zero (B i) (B j) (hB_cross i j hij)
+    fun i j hij => tendsto_mpvInner_zero (B i) (B j) (hB_cross i j hij)
   -- ── Step A: ‖μA 0‖ = ‖μB 0‖ ──
   have hμA_ne : μA ⟨0, hrA_pos⟩ ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero _
   have hμB_ne : μB ⟨0, hrB_pos⟩ ≠ 0 := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero _
@@ -702,9 +702,11 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
   have hμB_le : ∀ k : Fin rB, ‖μB k‖ ≤ ‖μB ⟨0, hrB_pos⟩‖ := by
     intro k; exact hB.toIsCanonicalForm.mu_strict_anti.antitone
       (show (⟨0, hrB_pos⟩ : Fin rB) ≤ k from Fin.mk_le_mk.mpr (Nat.zero_le _))
-  -- Convergence helpers (`tendsto_inner_zero`, `tendsto_inner_one`,
-  -- `bounded_mul_tendsto_zero`, `geometric_mul_bounded_tendsto_zero`,
-  -- `geometric_mul_inner_tendsto_zero`, `sum_tendsto_one_of_diag`) are in
+  -- Convergence helpers (`MPSTensor.tendsto_mpvInner_zero`, `MPSTensor.tendsto_mpvInner_one`,
+  -- `TNLean.Convergence.bounded_mul_tendsto_zero`,
+  -- `TNLean.Convergence.geometric_mul_bounded_tendsto_zero`,
+  -- `MPSTensor.geometric_mul_inner_tendsto_zero`,
+  -- `TNLean.Convergence.sum_tendsto_one_of_diag`) are in
   -- `TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux`.
   -- ── Step A: Prove ‖μA 0‖ = ‖μB 0‖. ──
   have mu0_norm_eq : ‖μA ⟨0, hrA_pos⟩‖ = ‖μB ⟨0, hrB_pos⟩‖ := by
@@ -772,7 +774,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       False := by
     intro hall
     have hall_inner : ∀ k, Tendsto (fun N => mpvInner (d := d) (A a0) (B k) N)
-        atTop (nhds 0) := fun k => tendsto_inner_zero _ _ (hall k)
+        atTop (nhds 0) := fun k => tendsto_mpvInner_zero _ _ (hall k)
     have h_eq := normalized_identity (A a0) (μA a0) hμA_ne
     have hRHS : Tendsto (fun N => ∑ k, (μB k / μA a0) ^ N *
         mpvInner (d := d) (A a0) (B k) N) atTop (nhds 0) := by
@@ -800,7 +802,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     have hall_inner : ∀ j, Tendsto (fun N => mpvInner (d := d) (B b0) (A j) N)
         atTop (nhds 0) := by
       intro j
-      have h1 := tendsto_inner_zero _ _ (hall j)
+      have h1 := tendsto_mpvInner_zero _ _ (hall j)
       have h2 : (fun N => mpvInner (d := d) (B b0) (A j) N) =
           (fun N => star (mpvInner (d := d) (A j) (B b0) N)) := by
         ext N; simp [mpvInner, inner_conj_symm]
@@ -1057,7 +1059,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       have hInner_other : ∀ j, j ≠ j₁ →
           Tendsto (fun N => mpvInner (d := d) (B b0) (A j) N) atTop (nhds 0) := by
         intro j hj
-        have h1 := tendsto_inner_zero _ _ (huniq j hj)
+        have h1 := tendsto_mpvInner_zero _ _ (huniq j hj)
         have h2 : (fun N => mpvInner (d := d) (B b0) (A j) N) =
             (fun N => star (mpvInner (d := d) (A j) (B b0) N)) := by
           ext N; simp [mpvInner, inner_conj_symm]
