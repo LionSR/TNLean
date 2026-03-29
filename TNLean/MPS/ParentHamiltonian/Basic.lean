@@ -8,7 +8,7 @@ It therefore annihilates any vector in the ground space. The MPS state `mpv A`
 lies in the ground space at every window, which gives frustration-freeness.
 -/
 
-open scoped Matrix BigOperators
+open scoped BigOperators
 
 namespace MPSTensor
 
@@ -43,7 +43,21 @@ lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
 /-- The MPS state restricted to any window of `L` sites lies in `groundSpace A L`.
 This is because `mpv A (replaceWindow L i σ τ)` has the form
 `tr(evalWord A (List.ofFn τ) * X)` where `X` is the product of matrices on the
-complement sites — exactly the structure of `groundSpaceMap A L`. -/
+complement sites — exactly the structure of `groundSpaceMap A L`.
+
+**Status: sorry** — Proof strategy (trace cyclicity argument):
+1. Show `List.ofFn (replaceWindow L i σ τ)` decomposes into window and complement
+   segments via `List.ofFn_fin_append` / periodic reindexing.
+2. Apply `evalWord_append` to factor the matrix product into window × complement.
+3. Use `Matrix.trace_mul_comm` (trace cyclicity) to rewrite
+   `tr(M_before * M_window * M_after)` as `tr(M_window * M_after * M_before)`.
+4. Identify the result as `groundSpaceMap A L X τ` where
+   `X = evalWord A (complement_after) * evalWord A (complement_before)`.
+5. Conclude via `LinearMap.mem_range`.
+
+Dependencies: needs round-trip / decomposition lemmas for `extractWindow`/`replaceWindow`
+relating `List.ofFn (replaceWindow L i σ τ)` to `List.ofFn τ` and complement indices.
+Requires `L ≤ N` hypothesis (or `N`-periodicity argument). -/
 lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ)
     (i : Fin N) (σ : Cfg d N) :
     (fun τ => mpv A (replaceWindow L i σ τ)) ∈ groundSpace A L := by

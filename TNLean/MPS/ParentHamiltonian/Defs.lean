@@ -38,10 +38,11 @@ variable {d D : ℕ}
 
 /-! ### Transport between `NSiteSpace` and `EuclideanSpace`
 
-`NSiteSpace d L = Cfg d L → ℂ` and `EuclideanSpace ℂ (Cfg d L) = PiLp 2 (fun _ => ℂ)`
-are definitionally the same type with the same module structure. We use
-`WithLp.linearEquiv` to transport the ground space to `EuclideanSpace`, where
-Mathlib provides `InnerProductSpace` and orthogonal projection. -/
+`NSiteSpace d L = Cfg d L → ℂ` and `EuclideanSpace ℂ (Cfg d L)` is the same underlying
+function space equipped with the ℓ²-structure via `WithLp 2` (concretely,
+`EuclideanSpace ℂ (Cfg d L) = WithLp 2 (Cfg d L → ℂ)`). We use
+`WithLp.linearEquiv` to transport the ground space to `EuclideanSpace`, where Mathlib
+provides `InnerProductSpace` and orthogonal projection. -/
 
 /-- The ground space of `A` on `L` sites, viewed as a submodule of
 `EuclideanSpace ℂ (Cfg d L)` (same underlying submodule, different typeclass
@@ -65,15 +66,23 @@ noncomputable def parentInteraction (A : MPSTensor d D) (L : ℕ) :
 
 /-! ### Window extraction and replacement (periodic boundary conditions) -/
 
-/-- Extract `L` consecutive site values from an `N`-site configuration `σ`,
-starting at position `i` with periodic boundary conditions. -/
-def extractWindow (L : ℕ) {N : ℕ} (i : Fin N) (σ : Cfg d N) : Cfg d L :=
+/-- Extract `L` consecutive values from an `N`-periodic sequence `σ`,
+starting at position `i` with periodic boundary conditions.
+
+Note: when `L > N`, indices wrap and may revisit the same positions. The
+intended use case is `L ≤ N` (e.g., the window size is at most the chain
+length). -/
+def extractWindow (L : ℕ) {N : ℕ} {α : Type*} (i : Fin N) (σ : Fin N → α) : Fin L → α :=
   have hN : 0 < N := i.val.zero_le.trans_lt i.isLt
   fun j => σ ⟨(i.val + j.val) % N, Nat.mod_lt _ hN⟩
 
-/-- Replace `L` consecutive site values in an `N`-site configuration `σ`,
-starting at position `i`, with values from `τ` (periodic boundary conditions). -/
-def replaceWindow (L : ℕ) {N : ℕ} (i : Fin N) (σ : Cfg d N) (τ : Cfg d L) : Cfg d N :=
+/-- Replace `L` consecutive values in an `N`-periodic sequence `σ`,
+starting at position `i`, with values from `τ` (periodic boundary conditions).
+
+Note: when `L > N`, positions beyond index `N-1` in `τ` are silently
+ignored because `offset` is always `< N`. The intended use case is `L ≤ N`. -/
+def replaceWindow (L : ℕ) {N : ℕ} {α : Type*} (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
+    Fin N → α :=
   fun k =>
     let offset := (k.val + N - i.val) % N
     if h : offset < L then τ ⟨offset, h⟩ else σ k
@@ -95,7 +104,7 @@ noncomputable def localTerm (A : MPSTensor d D) (L N : ℕ) (i : Fin N) :
     (LinearMap.proj (extractWindow L i σ) : NSiteSpace d L →ₗ[ℂ] ℂ).comp
       ((parentInteraction A L).comp
         (LinearMap.pi fun τ =>
-          (LinearMap.proj (replaceWindow (d := d) L i σ τ) : NSiteSpace d N →ₗ[ℂ] ℂ)))
+          (LinearMap.proj (replaceWindow L i σ τ) : NSiteSpace d N →ₗ[ℂ] ℂ)))
 
 /-- Parent Hamiltonian on an `N`-site periodic chain:
 sum of translated local interaction terms. -/
