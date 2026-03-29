@@ -82,6 +82,18 @@ noncomputable def evalWord (M : MPOTensor d D) :
     (i j : Fin d) (is js : List (Fin d)) :
     evalWord M (i :: is) (j :: js) = M i j * evalWord M is js := rfl
 
+/-- Word evaluation on `List.ofFn` equals a non-commutative product:
+`evalWord M (ofFn σ) (ofFn τ) = (ofFn (fun i => M (σ i) (τ i))).prod`. -/
+lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
+    evalWord M (List.ofFn σ) (List.ofFn τ) =
+      (List.ofFn fun i : Fin N => M (σ i) (τ i)).prod := by
+  induction N with
+  | zero => simp
+  | succ n ih =>
+    simp only [List.ofFn_succ, evalWord_cons, List.prod_cons]
+    congr 1
+    exact ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
+
 /-! ### The MPO operator family -/
 
 /-- The `(σ, τ)` matrix entry of the MPO density operator for system size `N`:
@@ -173,5 +185,10 @@ theorem IsLPDO.isHermitian {M : MPOTensor d D} (h : IsLPDO M) :
   rw [hA i j, hA j i, Matrix.conjTranspose_sum]
   exact Finset.sum_congr rfl fun k _ => by
     rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+
+/-- **TODO** (part 4/5): LPDO implies MPDO. The proof uses the LPDO
+decomposition to write `ρ^{(N)}` as `∑_k |ψ_k⟩⟨ψ_k|`, hence PSD. -/
+theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
+  sorry
 
 end MPOTensor
