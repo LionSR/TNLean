@@ -75,11 +75,8 @@ theorem kraus_dual_eq_of_map_eq
   simp_rw [Finset.sum_mul, Matrix.trace_sum]
   have trace_cycle : ∀ K : Matrix (Fin D) (Fin D) ℂ,
       trace (Kᴴ * Y * K * X) = trace (K * X * Kᴴ * Y) := fun K => by
-    rw [show Kᴴ * Y * K * X = (Kᴴ * Y) * (K * X) from by
-        simp only [Matrix.mul_assoc],
-      Matrix.trace_mul_comm,
-      show (K * X) * (Kᴴ * Y) = K * X * Kᴴ * Y from by
-        simp only [Matrix.mul_assoc]]
+    rw [Matrix.mul_assoc (Kᴴ * Y) K X, Matrix.trace_mul_comm,
+        ← Matrix.mul_assoc (K * X) Kᴴ Y]
   simp_rw [trace_cycle]
   rw [← Matrix.trace_sum, ← Matrix.trace_sum,
       ← Finset.sum_mul, ← Finset.sum_mul]
