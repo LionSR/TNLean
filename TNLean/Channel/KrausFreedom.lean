@@ -10,15 +10,17 @@ import TNLean.Algebra.TracePairing
 /-!
 # Rectangular Kraus freedom (Wolf Thm 2.1 item 4, necessary direction)
 
-This file proves the **necessary direction** of the Kraus freedom theorem:
-if two Kraus families define the same completely positive map, they are related
-by a rectangular isometry.
+This file **states** the necessary direction of the Kraus freedom theorem
+and proves helper lemmas towards it: if two Kraus families define the same
+completely positive map, they are related by a rectangular isometry.
 
 ## Main results
 
+* `kraus_dual_eq_of_map_eq` — dual map equality from primal map equality ✅
+* `kraus_conjTranspose_mul_eq_of_map_eq` — equal Stinespring Gramians ✅
 * `kraus_rectangular_freedom` — two Kraus families `{Bα}` and `{Aj}` with
   `∑ Bα X Bα† = ∑ Aj X Aj†` are related by a rectangular isometry `V` satisfying
-  `V†V = 1` and `Bα = ∑j Vαj • Aj`
+  `V†V = 1` and `Bα = ∑j Vαj • Aj` (statement only, proof TODO)
 
 ## Proof outline (Wolf Thm 2.1 item 4)
 
