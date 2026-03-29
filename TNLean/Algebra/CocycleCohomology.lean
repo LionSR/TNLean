@@ -87,7 +87,7 @@ theorem equivalence : Equivalence (CohomologousTo (G := G)) :=
 end ScalarCocycle.CohomologousTo
 
 /-- The setoid on scalar cocycles induced by cohomologous-to. -/
-instance scalarCocycleSetoid : Setoid (ScalarCocycle G) where
+scoped instance scalarCocycleSetoid : Setoid (ScalarCocycle G) where
   r := ScalarCocycle.CohomologousTo
   iseqv := ScalarCocycle.CohomologousTo.equivalence
 
@@ -95,6 +95,7 @@ instance scalarCocycleSetoid : Setoid (ScalarCocycle G) where
 lemma ScalarCocycle.isCoboundary_iff_cohomologousTo_one (ω : ScalarCocycle G) :
     ω.IsCoboundary ↔ CohomologousTo ω (fun _ _ => 1) := by
   constructor
+  -- Both directions: `mul_one` absorbs or introduces the trivial cocycle `1`
   · rintro ⟨φ, hφ⟩
     exact ⟨φ, fun g h => by rw [hφ g h]; simp [mul_one]⟩
   · rintro ⟨φ, hφ⟩

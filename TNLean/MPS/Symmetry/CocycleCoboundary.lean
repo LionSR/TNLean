@@ -102,23 +102,4 @@ theorem cohomologousTo_of_isInjective
   rw [← mul_inv_cancel_right₀ hne (ω₂ g h : ℂ), h_scalar_eq]
   ring
 
-/-- Backward-compatible alias for `cohomologousTo_of_isInjective`. -/
-@[deprecated cohomologousTo_of_isInjective (since := "2026-03-29")]
-theorem cocycle_class_gauge_independent
-    (A : MPSTensor d D)
-    (hA : IsInjective A)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hD : 0 < D)
-    {ω₁ ω₂ : ScalarCocycle G}
-    {ρ₁ : ProjectiveRepresentation (D := D) ω₁}
-    {ρ₂ : ProjectiveRepresentation (D := D) ω₂}
-    (hρ₁ : ∀ g i, twistedTensor A U g i =
-      (ρ₁.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
-        (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
-    (hρ₂ : ∀ g i, twistedTensor A U g i =
-      (ρ₂.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
-        (((ρ₂.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
-    ScalarCocycle.CohomologousTo ω₂ ω₁ :=
-  cohomologousTo_of_isInjective A hA U hD hρ₁ hρ₂
-
 end MPSTensor
