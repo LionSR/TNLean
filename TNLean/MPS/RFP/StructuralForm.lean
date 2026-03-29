@@ -37,8 +37,8 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- **Lemma B.1** (arXiv:1606.00608, Appendix B): A normal tensor `A` is RFP
-iff there exist an invertible matrix `X`, a positive diagonal matrix `Λ`
+/-- **Lemma B.1** (arXiv:1606.00608, Appendix B): If a normal tensor `A` is RFP,
+then there exist an invertible matrix `X`, a positive diagonal matrix `Λ`
 with `tr(Λ) = 1`, and an isometry `U` on the physical index such that
 `A i = X * Λ * U i * X⁻¹` for all `i`.
 
@@ -63,10 +63,13 @@ theorem rfp_nt_structural (A : MPSTensor d D)
   sorry
 
 /-- **Theorem 3.11** (arXiv:1606.00608): For a canonical-form tensor that is
-RFP, the full block-diagonal structural form holds:
-`A^i_k = μ_k X_k Λ_k U^i_k X_k⁻¹`
-with `|μ_k| = 1` for `k ≥ 1`, `Λ_k` diagonal positive, `tr(Λ_k) = 1`,
-and `U_k` isometries satisfying the orthogonality condition (eq. 19).
+RFP, each block admits an invertible `X_k`, positive diagonal `Λ_k` with
+`tr(Λ_k) = 1`, and isometries `U_k` from Lemma B.1.
+
+Note: the full structural form in the paper also includes phase weights
+`μ_k` and the representation equation `A^i_k = μ_k X_k Λ_k U^i_k X_k⁻¹`;
+these are already captured by `IsCanonicalForm` and `rfp_nt_structural`
+respectively, so this theorem only re-exports the `X, Λ, U` portion.
 
 Proved by reducing to `rfp_nt_structural`: each CF block is injective
 (from `IsCanonicalForm`), hence normal (via `IsInjective.isNormal`). -/
