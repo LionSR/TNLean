@@ -21,8 +21,8 @@ Z-gauge infrastructure used in its equal-case strengthening:
 
 * **Infrastructure for Theorem 3.8**: The equal-case strengthening produces per-block
   Z-gauge data (diagonal Z with Z^m = 1) from the Newton–Girard identity on sector weights.
-  The Z-gauge construction helpers (`zgauge_construction`, `perBlock_zgauge_of_power_eq`)
-  compose the infrastructure from PR #94 into ready-to-use form.
+  The Z-gauge construction helper (`zgauge_construction`) composes the infrastructure
+  from PR #94 into ready-to-use form.
 
 ## Dependency on #81
 
@@ -218,19 +218,6 @@ theorem zgauge_construction
   ⟨zGaugeDiagonal μ ν,
    zGaugeDiagonal_pow_eq_one m μ ν hpow hν,
    zGaugeDiagonal_mul_diagonal μ ν hν⟩
-
-/-- **Per-block Z-gauge (Theorem 3.8, step 7 instantiated for `Fin r`).**
-
-Convenience wrapper: given matched sector weights indexed by `Fin r` whose `m`-th powers
-agree and whose denominators are nonzero, produces the diagonal Z-gauge matrix. -/
-theorem perBlock_zgauge_of_power_eq
-    {r : ℕ} (m : ℕ) (μ ν : Fin r → ℂ)
-    (hpow : ∀ i, μ i ^ m = ν i ^ m)
-    (hν : ∀ i, ν i ≠ 0) :
-    ∃ Z : Matrix (Fin r) (Fin r) ℂ,
-      Z ^ m = 1 ∧
-      Z * Matrix.diagonal ν = Matrix.diagonal μ :=
-  zgauge_construction m μ ν hpow hν
 
 /-- **Weight multiset recovery via Newton-Girard (Theorem 3.8, step 6).**
 
