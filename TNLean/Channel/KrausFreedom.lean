@@ -73,15 +73,14 @@ theorem kraus_dual_eq_of_map_eq
   intro X
   rw [sub_mul, Matrix.trace_sub]
   simp_rw [Finset.sum_mul, Matrix.trace_sum]
-  simp_rw [show ∀ (K : Matrix (Fin D) (Fin D) ℂ),
-    trace (Kᴴ * Y * K * X) = trace (K * X * Kᴴ * Y) from fun K => by
-      conv_lhs =>
-        rw [show Kᴴ * Y * K * X = (Kᴴ * Y) * (K * X) from by
-          simp only [Matrix.mul_assoc]]
-      rw [Matrix.trace_mul_comm]
-      conv_lhs =>
-        rw [show (K * X) * (Kᴴ * Y) = K * X * Kᴴ * Y from by
-          simp only [Matrix.mul_assoc]]]
+  have trace_cycle : ∀ K : Matrix (Fin D) (Fin D) ℂ,
+      trace (Kᴴ * Y * K * X) = trace (K * X * Kᴴ * Y) := fun K => by
+    rw [show Kᴴ * Y * K * X = (Kᴴ * Y) * (K * X) from by
+        simp only [Matrix.mul_assoc],
+      Matrix.trace_mul_comm,
+      show (K * X) * (Kᴴ * Y) = K * X * Kᴴ * Y from by
+        simp only [Matrix.mul_assoc]]
+  simp_rw [trace_cycle]
   rw [← Matrix.trace_sum, ← Matrix.trace_sum,
       ← Finset.sum_mul, ← Finset.sum_mul]
   rw [h X]; ring
@@ -107,13 +106,13 @@ if two Kraus families of sizes `r₁` and `r₂` define the same CPM, then the
 first family is a linear combination of the second via a rectangular isometry
 `V : r₁ × r₂` with `V†V = 1`.
 
-Concretely: if `∑α Bα X Bα† = ∑j Aj X Aj†` for all `X`, then there exists
-`V` with `V†V = 1` and `Bα = ∑j Vαj • Aj` for all `α`.
+Concretely: if `∑α Bα X Bα† = ∑j Aj X Aj†` for all `X` and `r₂ ≤ r₁`, then
+there exists `V` with `V†V = 1` and `Bα = ∑j Vαj • Aj` for all `α`.
 
 **Proof sketch**: The map equality forces the "Stinespring vectors"
 `f(a,b)_j = (Aj)_{ab}` and `g(a,b)_α = (Bα)_{ab}` to have equal Gram matrices.
 The linear map `f(a,b) ↦ g(a,b)` therefore preserves inner products on the span
-of `{f(a,b)}`. Since `r₁ ≥ r₂` in the intended applications, this partial isometry
+of `{f(a,b)}`. The hypothesis `r₂ ≤ r₁` ensures that this partial isometry
 extends to a full isometry `V : ℂ^{r₂} → ℂ^{r₁}` whose matrix satisfies `V†V = 1`.
 
 **Status**: The inner-product preservation is established by the helper lemmas above.
@@ -125,7 +124,8 @@ theorem kraus_rectangular_freedom
     (A : Fin r₂ → Matrix (Fin D) (Fin D) ℂ)
     (h : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       ∑ α : Fin r₁, B α * X * (B α)ᴴ =
-      ∑ j : Fin r₂, A j * X * (A j)ᴴ) :
+      ∑ j : Fin r₂, A j * X * (A j)ᴴ)
+    (hCard : r₂ ≤ r₁) :
     ∃ V : Matrix (Fin r₁) (Fin r₂) ℂ,
       V.conjTranspose * V = 1 ∧
       ∀ α : Fin r₁, B α = ∑ j : Fin r₂, V α j • A j := by
@@ -134,11 +134,14 @@ theorem kraus_rectangular_freedom
 /-- Variant of `kraus_rectangular_freedom` with general index types. -/
 theorem kraus_rectangular_freedom'
     {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
+    -- Note: `[DecidableEq ι₁]` may be needed when filling the sorry (e.g., for
+    -- constructing `V` entry-wise). Add it to the signature at that point.
     (B : ι₁ → Matrix (Fin D) (Fin D) ℂ)
     (A : ι₂ → Matrix (Fin D) (Fin D) ℂ)
     (h : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       ∑ α, B α * X * (B α)ᴴ =
-      ∑ j, A j * X * (A j)ᴴ) :
+      ∑ j, A j * X * (A j)ᴴ)
+    (hCard : Fintype.card ι₂ ≤ Fintype.card ι₁) :
     ∃ V : Matrix ι₁ ι₂ ℂ,
       V.conjTranspose * V = 1 ∧
       ∀ α, B α = ∑ j, V α j • A j := by

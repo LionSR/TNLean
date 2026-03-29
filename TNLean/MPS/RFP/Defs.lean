@@ -140,6 +140,7 @@ theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
     -- Step 2: Apply rectangular Kraus freedom (Wolf Thm 2.1 item 4).
     obtain ⟨V, hV_iso, hV_decomp⟩ := kraus_rectangular_freedom'
       (fun p : Fin d × Fin d => A p.1 * A p.2) A hmap
+      (by simp only [Fintype.card_fin, Fintype.card_prod]; exact Nat.le_mul_self d)
     exact ⟨V, hV_iso, fun i₁ i₂ => hV_decomp (i₁, i₂)⟩
   · -- Backward direction: proved as `isRFP_of_kraus_isometry`
     rintro ⟨V, hV, hprod⟩
