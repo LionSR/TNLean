@@ -267,6 +267,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{theorem}[Intersection property]\label{thm:ground_space_intersection}
   \lean{MPSTensor.groundSpace_intersection}
+  \leanok
   \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
         def:ground_space_parent}
   If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
@@ -279,6 +280,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \end{theorem}
 
 \begin{proof}
+  \leanok
   The ``invert-and-regrow'' argument:
   \begin{enumerate}
     \item From the right ground condition, for each physical index~$i$ there
@@ -301,11 +303,18 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{theorem}[Intersection characterization]\label{thm:ground_space_iff}
   \lean{MPSTensor.groundSpace_iff_left_right}
+  \leanok
   \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground,
         thm:ground_space_intersection}
   For injective $A$ and $L \ge 2$:
   $\psi \in G_{L+1}(A) \iff \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}$.
 \end{theorem}
+
+\begin{proof}
+  \leanok
+  Immediate from the two forward-direction lemmas and
+  Theorem~\ref{thm:ground_space_intersection}.
+\end{proof}
 
 \subsection{Unique ground state}
 
