@@ -122,10 +122,10 @@ theorem cocycle_class_gauge_independent
     {ρ₂ : ProjectiveRepresentation (D := D) ω₂}
     (hρ₁ : ∀ g i, twistedTensor A U g i =
       (ρ₁.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
-        ((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D) ℂ))
+        (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
     (hρ₂ : ∀ g i, twistedTensor A U g i =
       (ρ₂.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
-        ((ρ₂.X (g⁻¹))⁻¹ : GL (Fin D) ℂ)) :
+        (((ρ₂.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
     ScalarCocycle.CohomologousTo ω₂ ω₁ := by
   -- Step 1: For each g, the two gauge matrices differ by a scalar
   have hScalar : ∀ g : G, ∃ u : Units ℂ,
