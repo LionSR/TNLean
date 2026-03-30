@@ -27,10 +27,11 @@ Done in Lean today:
 - `physRealize_mul` for general injective tensors: the physical realization map is multiplicative
 - periodic blocking helper API in `MPS/Irreducible/PeriodicBlocking.lean` (`periodicBlockCount`, `periodicBlockPeriod`, `orbitSumProjection`, `blockedSectorProjection`; Lemma 2.4–2.5 bookkeeping infrastructure)
 - on-site symmetry definitions (`IsOnSiteSymmetric`, `twistedTensor`) and gauge uniqueness for injective tensors (`gauge_unique_up_to_scalar`: two gauge equivalences of the same injective tensor are related by a scalar)
-- renormalization fixed-point definitions (`IsRFP` from arXiv:1606.00608 Def 3.2) and the statement `isRFP_iff_kraus_isometry` (Thm 3.1); structural-form and assembly theorems scaffolded but not yet proved
-- parent Hamiltonian scaffold (`parentHamiltonian`, `IsFrustrationFree`, `localTerm`; ground-space projector deferred)
+- renormalization fixed-point definitions (`IsRFP` from arXiv:1606.00608 Def 3.2) and the statement `isRFP_iff_kraus_isometry` (Thm 3.1); structural-form theorems `rfp_cf_structural` (Thm 3.11) and `rfp_bnt_structural` (Cor 3.12) proved from `rfp_nt_structural` (Lemma B.1, which carries a sorry pending rank-1 characterization of idempotent CP maps); zero-correlation-length equivalence scaffolded
+- periodic FT proportional (Thm 3.4) and equal-case Z-gauge pipeline (Thm 3.8 infrastructure) for the irreducible-form theory (`MPS/FundamentalTheorem/Periodic.lean`; `fundamentalTheorem_periodic_proportional` is fully proved; `PeriodicOverlapHypothesis` depends on the periodic overlap dichotomy)
+- parent Hamiltonian scaffold (`parentHamiltonian`, `IsFrustrationFree`, `localTerm`; ground-space projector deferred); ground-space window restriction maps and intersection property (`IntersectionProperty.lean`); unique ground state definitions and chain ground space (`UniqueGroundState.lean`); cyclic window extraction (`CyclicWindow.lean`; uniqueness proof stubs pending trace-pairing nondegeneracy)
 - exploratory PEPS definitions on finite simple graphs (`TNLean/PEPS/Defs.lean`): `Tensor`, `stateCoeff`, `SameState`, `IsVertexInjective`
-- finite-length FT variant: for injective tensors, `SameMPV` can be weakened to `SameMPVFrom N₀` for any finite threshold N₀ (`MPS/FundamentalTheorem/FiniteLength.lean`; core propagation proof carries a sorry)
+- finite-length FT variant: for injective tensors, `SameMPV` can be weakened to `SameMPVFrom N₀` for any finite threshold N₀ (`MPS/FundamentalTheorem/FiniteLength.lean`; core propagation proof is fully proved)
 - QPF with relaxed injectivity: quantum Perron-Frobenius holds under `IsIrreducibleMap (transferMap A)`, not just `IsInjective A`, exposing the natural generality of Wolf Theorem 6.3 and applying to blocked tensors (`QPF/Primitive.lean`)
 - primitive proportional FT convenience wrapper: `gaugePhaseEquiv_of_proportionalMPV₂_of_isPrimitiveMPS` reduces the 7-hypothesis proportional form to 4 by composing irreducibility, left-canonicality, and overlap-convergence from `IsPrimitiveMPS` (`MPS/FundamentalTheorem/ProportionalPrimitive.lean`)
 
@@ -45,12 +46,12 @@ Complementary channel-side milestones now in Lean:
 - Choi, Kraus, and Stinespring representation results from Wolf Chapter 2, including existential Stinespring dilation theorems (`exists_stinespring_dilation`, `exists_stinespring_isometry_of_cptp`; Wolf Thm 2.2 in both Heisenberg and Schrödinger pictures)
 - Wolf Proposition 5.1, Theorems 5.5–5.7, and Example 5.3 in the Schwarz package
 - Wolf Theorem 6.1 together with substantial Chapter-6 spectral / fixed-point theory, including Theorems 6.12–6.13, the stationary-support package (Lemma 6.4, Proposition 6.9, `stationaryState`, `stationarySupport`), the full bidirectional equivalence for Wolf Theorem 6.2 item 3 (irreducibility ↔ exponential semigroup strict positivity, `irreducible_iff_exp_posDef_forall`), Propositions 6.6/6.8 (similarity invariance of irreducibility, Hermitian fixed-point decomposition; `wolf_prop_6_6`, `wolf_prop_6_8`), and Theorem 6.15 scalar conditional expectation (`Kraus.wolf_theorem_6_15_scalar`)
-- Wolf Chapter-7 semigroup / GKSL package through Proposition 7.6 and Theorem 7.2, Proposition 7.5 (irreducible implies primitive for QDS), and a partial non-reducibility criterion for Corollary 7.2; the full convergence statement of Corollary 7.2 remains unformalized
+- Wolf Chapter-7 semigroup / GKSL package through Proposition 7.6 and Theorem 7.2; Proposition 7.4 Lindblad decomposition uniqueness (both sorrys in Uniqueness.lean discharged); Proposition 7.5 (irreducible implies primitive for QDS, including peripheral eigenvalue analysis: `peripheral_eq_one_of_irreducible_all` and `primitive_of_irreducible_all` fully proved); a partial non-reducibility criterion for Corollary 7.2; the full convergence statement of Corollary 7.2 remains unformalized
 - `IsNPositiveMap` hierarchy (n-positive maps) and `kadison_schwarz_2positive` for unital 2-positive maps (Kadison 1952, Choi 1974), generalizing the CP-based Kadison–Schwarz result (`Channel/Schwarz/TwoPositive.lean`; connection from CP through 2-positive to Kadison–Schwarz carries partial sorry stubs)
-- peripheral eigenvalue group structure (`PeripheralSpectrum` namespace, `Channel/Peripheral/GroupStructure.lean`): peripheral eigenvalues of irreducible channels form a cyclic group (Wolf Thm 6.6), with multiplicity-one and period-divides-dimension results; partial sorry stubs building on existing `ClosureFixedPoint` and `CyclicDecomposition` infrastructure
-- spectral gap bounds and exponential convergence rates for primitive channels (`Spectral/QuantitativeGap.lean`); partial sorry stubs building on existing `SpectralGap` and `Spectrum` modules
+- peripheral eigenvalue group structure (`PeripheralSpectrum` namespace, `Channel/Peripheral/GroupStructure.lean`): peripheral eigenvalues of irreducible channels form a cyclic group (Wolf Thm 6.6), cyclic group structure and period-divides-dimension are fully proved; the multiplicity-one sorry remains
+- spectral gap bounds and exponential convergence rates for primitive channels (`Spectral/QuantitativeGap.lean`); `spectral_gap_of_injective` (uniform gap δ > 0 for all non-unit eigenvalues of injective transfer maps) is fully proved; two sorrys remain (`exponential_convergence_of_primitive` and `correlation_length_bound`)
 
-### Wolf channel-side snapshot (audit of 2026-03-26)
+### Wolf channel-side snapshot (audit of 2026-03-26; Ch7 coverage extended further by subsequent sorry discharges)
 
 | Wolf chapter | Topic | Estimated theorem-level coverage |
 |---|---|---:|
@@ -150,7 +151,7 @@ Requires Lean 4 v4.28.0 (managed via `lean-toolchain`).
 
 ## Blueprint
 
-The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the channel-side Wolf material. As of 2026-03-26, the blueprint chapters `ch04_channels.tex`, `ch05_schwarz.tex`, `ch06_spectral.tex`, `ch07_wielandt.tex`, `ch08_canonical.tex`, `ch11_assembly.tex`, `ch12_semigroup.tex`, and `ch13_algebraic_ft.tex` have been synchronized to reflect current Lean status, including the stationary-support package, periodic tensor definitions, semigroup sorry closures, and chain FT declarations.
+The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the channel-side Wolf material. As of 2026-03-30, the blueprint chapters `ch04_channels.tex`, `ch05_schwarz.tex`, `ch06_spectral.tex`, `ch07_wielandt.tex`, `ch08_canonical.tex`, `ch11_assembly.tex`, `ch12_semigroup.tex`, `ch13_algebraic_ft.tex`, `ch14_parent_hamiltonian.tex`, and `ch15_correlations.tex` have been synchronized to reflect current Lean status, including the stationary-support package, periodic tensor definitions, semigroup sorry closures, chain FT declarations, parent Hamiltonian intersection property, and spectral gap results.
 
 Typical blueprint commands:
 
