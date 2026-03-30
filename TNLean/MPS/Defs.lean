@@ -126,6 +126,24 @@ def IsNormal (A : MPSTensor d D) : Prop :=
 @[simp] lemma isNormal_iff (A : MPSTensor d D) :
     IsNormal A ↔ ∃ N, IsNBlkInjective A N := Iff.rfl
 
+/-- Algebraic injectivity (1-block) implies normality (eventual block injectivity).
+This is the trivial direction: injectivity is `IsNBlkInjective 1`. -/
+lemma IsInjective.isNormal {A : MPSTensor d D} (h : IsInjective A) : IsNormal A := by
+  refine ⟨1, ?_⟩
+  unfold IsNBlkInjective
+  have hrange : (Set.range fun σ : Fin 1 → Fin d =>
+      evalWord A (List.ofFn σ)) = Set.range A := by
+    ext M; simp only [Set.mem_range]; constructor
+    · rintro ⟨σ, hσ⟩
+      exact ⟨σ 0, by
+        simp only [List.ofFn_succ, List.ofFn_zero,
+          evalWord_cons, evalWord_nil, mul_one] at hσ; exact hσ⟩
+    · rintro ⟨i, hi⟩
+      exact ⟨fun _ => i, by
+        simp only [List.ofFn_succ, List.ofFn_zero,
+          evalWord_cons, evalWord_nil, mul_one]; exact hi⟩
+  rw [hrange]; exact h
+
 /-! ### Gauge invariance -/
 
 section GaugeInvariance

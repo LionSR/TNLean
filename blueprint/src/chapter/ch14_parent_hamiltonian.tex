@@ -159,5 +159,517 @@ translated copies of the local interaction.
   The MPV state is frustration-free for the parent model.
 \end{lemma}
 
-Sections on injective tensors, gap criteria, and uniqueness of ground states are
-postponed to later installments.
+\section{Intersection property and unique ground state}\label{sec:intersection_unique}
+
+This section develops the intersection property of local ground spaces for
+injective MPS and the resulting uniqueness of the ground state on the periodic
+chain.
+
+\subsection{Restriction maps}
+
+Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
+\begin{definition}[Left restriction]\label{def:restrict_last}
+  \lean{MPSTensor.restrictLast}
+  \leanok
+  Fix the last physical index $j$:
+  \[
+    (\mathrm{restrictLast}\;\psi\;j)(\sigma) := \psi(\sigma_1,\dots,\sigma_L,j).
+  \]
+\end{definition}
+
+\begin{definition}[Right restriction]\label{def:restrict_first}
+  \lean{MPSTensor.restrictFirst}
+  \leanok
+  Fix the first physical index $i$:
+  \[
+    (\mathrm{restrictFirst}\;\psi\;i)(\sigma) := \psi(i,\sigma_1,\dots,\sigma_L).
+  \]
+\end{definition}
+
+\begin{definition}[Left ground membership]\label{def:in_left_ground}
+  \lean{MPSTensor.InLeftGround}
+  \leanok
+  \uses{def:restrict_last, def:ground_space_parent}
+  A state $\psi$ on $L+1$ sites satisfies the left ground condition if
+  $\mathrm{restrictLast}\;\psi\;j \in G_L(A)$ for every $j$.
+\end{definition}
+
+\begin{definition}[Right ground membership]\label{def:in_right_ground}
+  \lean{MPSTensor.InRightGround}
+  \leanok
+  \uses{def:restrict_first, def:ground_space_parent}
+  A state $\psi$ on $L+1$ sites satisfies the right ground condition if
+  $\mathrm{restrictFirst}\;\psi\;i \in G_L(A)$ for every $i$.
+\end{definition}
+
+\subsection{Forward direction: ground space restricts}
+
+\begin{lemma}[Left restriction]\label{lem:ground_space_in_left_ground}
+  \lean{MPSTensor.groundSpace_inLeftGround}
+  \leanok
+  \uses{def:ground_space_parent, def:in_left_ground}
+  If $\psi \in G_{L+1}(A)$, i.e.\ $\psi(\sigma) = \tr(A^\sigma X)$ for some~$X$,
+  then $\mathrm{restrictLast}\;\psi\;j \in G_L(A)$ with witness $A^j X$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Direct computation:
+  $\psi(\sigma_1,\dots,\sigma_L,j) = \tr(A^{\sigma_1}\cdots A^{\sigma_L} \cdot A^j \cdot X)
+   = \Gamma_L(A^j X)(\sigma)$.
+\end{proof}
+
+\begin{lemma}[Right restriction]\label{lem:ground_space_in_right_ground}
+  \lean{MPSTensor.groundSpace_inRightGround}
+  \leanok
+  \uses{def:ground_space_parent, def:in_right_ground}
+  If $\psi \in G_{L+1}(A)$ with $\psi(\sigma) = \tr(A^\sigma X)$, then
+  $\mathrm{restrictFirst}\;\psi\;i \in G_L(A)$ with witness $X A^i$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  By trace cyclicity:
+  $\psi(i,\sigma_1,\dots,\sigma_L) = \tr(A^i A^{\sigma} X)
+   = \tr(A^{\sigma} \cdot X A^i) = \Gamma_L(X A^i)(\sigma)$.
+\end{proof}
+
+\subsection{Injectivity of the ground-space map}
+
+\begin{theorem}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
+  \lean{MPSTensor.groundSpaceMap_injective}
+  \leanok
+  \uses{def:ground_space_map, def:is_injective}
+  If $A$ is injective and $L \ge 1$, then $\Gamma_L$ is injective.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  If $\Gamma_L(X) = 0$ then $\tr(A^\sigma X) = 0$ for every length-$L$ word
+  $\sigma$.  Since $A$ is injective, the products $\{A^\sigma\}_\sigma$ span
+  $\MN{D}$, so the trace pairing gives $X = 0$.
+\end{proof}
+
+\begin{theorem}[Ground-space dimension]\label{thm:ground_space_finrank_eq}
+  \lean{MPSTensor.groundSpace_finrank_eq}
+  \leanok
+  \uses{thm:ground_space_map_injective, lem:ground_space_finrank_le}
+  If $A$ is injective and $L \ge 1$, then $\dim G_L(A) = D^2$.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  The upper bound $\dim G_L(A) \le D^2$ is Lemma~\ref{lem:ground_space_finrank_le}.
+  Injectivity of $\Gamma_L$ gives $\dim G_L(A) = \dim \MN{D} = D^2$.
+\end{proof}
+
+\subsection{The intersection property}
+
+\begin{theorem}[Intersection property]\label{thm:ground_space_intersection}
+  \lean{MPSTensor.groundSpace_intersection}
+  \leanok
+  \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
+        def:ground_space_parent}
+  If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
+  satisfying both the left and right ground conditions lies in $G_{L+1}(A)$:
+  \[
+    \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}
+    \;\Longrightarrow\;
+    \psi \in G_{L+1}(A).
+  \]
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  The ``invert-and-regrow'' argument:
+  \begin{enumerate}
+    \item From the right ground condition, for each physical index~$i$ there
+      exists a unique $Y_i \in \MN{D}$ (by injectivity of $\Gamma_L$) such
+      that $\psi(i,\sigma) = \tr(A^\sigma Y_i)$.
+    \item Similarly, from the left ground condition, for each~$j$ there exists
+      a unique $Z_j$ with $\psi(\sigma,j) = \tr(A^\sigma Z_j)$.
+    \item Matching on the $(L{-}1)$-site overlap and using nondegeneracy of
+      the trace pairing:
+      $A^j Y_i = Z_j A^i$ for all $i,j$.
+    \item Apply the decomposition map (one-sided inverse,
+      Theorem~\ref{thm:one_sided_inverse}): summing over~$i$ with the
+      decomposition coefficients of the identity yields
+      $Y_i = X' A^i$ for a single matrix
+      $X' = \sum_j \Psi(\mathbf{1})_j \cdot Z_j$.
+    \item By trace cyclicity,
+      $\psi(\sigma) = \tr(A^\sigma X')$, so $\psi \in G_{L+1}(A)$.
+  \end{enumerate}
+\end{proof}
+
+\begin{theorem}[Intersection characterization]\label{thm:ground_space_iff}
+  \lean{MPSTensor.groundSpace_iff_left_right}
+  \leanok
+  \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground,
+        thm:ground_space_intersection}
+  For injective $A$ and $L \ge 2$:
+  $\psi \in G_{L+1}(A) \iff \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}$.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  Immediate from the two forward-direction lemmas and
+  Theorem~\ref{thm:ground_space_intersection}.
+\end{proof}
+
+\subsection{Unique ground state}
+
+\begin{lemma}[Iterated contiguous-window intersection]\label{lem:contiguous_mem_ground_space}
+  \lean{MPSTensor.contiguous_mem_groundSpace}
+  \leanok
+  \uses{thm:ground_space_intersection}
+  If an $N$-site state satisfies the $L$-site ground condition on every
+  non-wrapping contiguous window (with $L \ge 2$), then it lies in $G_N(A)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Strong induction on window size, combining adjacent windows via
+  Theorem~\ref{thm:ground_space_intersection} at each step.
+\end{proof}
+
+\begin{definition}[MPV submodule]\label{def:mpv_submodule}
+  \lean{MPSTensor.mpvSubmodule}
+  \leanok
+  \uses{def:mpv}
+  The subspace spanned by the MPV state
+  $V^{(N)}(A)(\sigma) = \tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}})$.
+\end{definition}
+
+\begin{lemma}[MPV lies in the ground space]\label{lem:mpv_mem_ground_space}
+  \lean{MPSTensor.mpv_mem_groundSpace}
+  \leanok
+  \uses{def:ground_space_parent, def:mpv}
+  $V^{(N)}(A) \in G_N(A)$ for every $N$, with boundary matrix $X = I$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  $V^{(N)}(A)(\sigma) = \tr(A^\sigma) = \tr(A^\sigma \cdot I) = \Gamma_N(I)(\sigma)$.
+\end{proof}
+
+\begin{definition}[Unique ground state]\label{def:has_unique_ground_state}
+  \lean{MPSTensor.HasUniqueGroundState}
+  \leanok
+  A submodule $S$ has a unique ground state if $\dim S = 1$.
+\end{definition}
+
+\begin{theorem}[One-dimensionality criterion]\label{thm:has_unique_ground_state_iff_proportional}
+  \lean{MPSTensor.hasUniqueGroundState_iff_proportional}
+  \leanok
+  \uses{def:has_unique_ground_state}
+  For finite-dimensional $S$, $\dim S = 1$ iff there exists a nonzero
+  $\psi_0 \in S$ such that every $\psi \in S$ is of the form $c\,\psi_0$.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  Apply the Mathlib characterization
+  \texttt{finrank\_eq\_one\_iff\_of\_nonzero'} in both directions.
+\end{proof}
+
+\begin{definition}[Periodic chain ground space]\label{def:chain_ground_space}
+  \lean{MPSTensor.chainGroundSpace}
+  \leanok
+  \uses{def:ground_space_parent}
+  For $N>0$ and $L \le N$, this is the intersection over cyclic window
+  positions and outside configurations of comaps of $G_L(A)$ under the cyclic
+  restriction maps; otherwise it is set to $\top$ by convention.
+\end{definition}
+
+\begin{theorem}[Unique ground state on the periodic chain]%
+  \label{thm:ground_space_unique_periodic}
+  \lean{MPSTensor.groundSpace_unique_periodic}
+  \uses{thm:ground_space_intersection, def:has_unique_ground_state,
+        lem:mpv_mem_ground_space}
+  For an injective tensor~$A$ on a periodic chain of $N \ge 2$ sites with
+  interaction range~$L$, the chain ground space is one-dimensional, spanned
+  by the MPV.  The proof iterates the intersection property across the chain
+  and uses the periodic boundary condition to constrain the boundary matrix
+  $X$ to a scalar multiple of~$I$.
+\end{theorem}
+
+\begin{theorem}[Unique ground state for block-injective tensors]%
+  \label{thm:unique_gs_injective}
+  \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
+  \uses{thm:ground_space_unique_periodic}
+  If $A$ is $L_0$-block-injective with $L_0 > 0$, the parent Hamiltonian
+  with interaction range $2L_0$ has a unique ground state on the periodic chain.
+\end{theorem}
+
+\begin{theorem}[Optimal unique ground state for normal tensors]%
+  \label{thm:unique_gs_normal}
+  \lean{MPSTensor.parentHamiltonian_unique_gs_normal}
+  \uses{thm:unique_gs_injective}
+  If $A$ is normal (hence $L_0$-block-injective for some $L_0 > 0$) and
+  in normal form, the interaction range can be reduced to $L_0 + 1$.
+\end{theorem}
+
+\section{Spectral gap}\label{sec:spectral_gap}
+
+A frustration-free Hamiltonian is \emph{gapped} if the first excited
+eigenvalue is bounded away from zero uniformly in the chain length $N$.
+For MPS parent Hamiltonians, the spectral gap follows from a martingale
+criterion due to Kastoryano and
+Lucia~\cite{Kastoryano2018Martingale}.
+
+\begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
+  \notready
+  \uses{def:is_frustration_free}
+  Let $H = \sum_{i=1}^n h_i$ be a frustration-free Hamiltonian with
+  projector interaction terms ($h_i^2 = h_i$).
+  Suppose that for every pair of overlapping terms $h_i, h_j$ there
+  exist constants $c_{ij} \ge 0$ and $\gamma > 0$ satisfying
+  \[
+    h_i h_j + h_j h_i
+    \ge -c_{ij}(1-\gamma)(h_i + h_j),
+  \]
+  with $\sum_{j:\,j \ne i} c_{ij} \le 1$ for every $i$.
+  Then the smallest positive eigenvalue of $H$ satisfies
+  $\lambda_{\min}^+(H) \ge \gamma$.
+\end{theorem}
+
+\begin{proof}
+  \notready
+  From $h_i^2 = h_i$,
+  \[
+    H^2 = \sum_i h_i + \sum_{\substack{i < j \\ \text{overlapping}}}
+    (h_i h_j + h_j h_i)
+    + \sum_{\substack{i < j \\ \text{non-overlapping}}}
+    (h_i h_j + h_j h_i).
+  \]
+  Non-overlapping projectors commute ($h_i h_j = h_j h_i$), so their
+  product $h_i h_j$ is itself a projector and hence PSD; thus the last
+  sum is $\ge 0$.
+  For the overlapping sum, the martingale condition gives
+  $h_i h_j + h_j h_i \ge -c_{ij}(1-\gamma)(h_i + h_j)$.
+  Since $h_i h_j + h_j h_i$ is symmetric in $i,j$, we may replace
+  $c_{ij}$ and $c_{ji}$ by $\bar{c}_{ij} := \max(c_{ij}, c_{ji})$;
+  the pairwise bounds are preserved.
+  In the MPS application the constants $c_{ij} = 1/(2(L-1))$ depend
+  only on the cyclic distance $d_N(i,j)$ and are therefore already
+  symmetric, so symmetrization does not affect the row-sum bound.
+  (In general, replacing $c$ by the symmetrized $\bar{c}$ may inflate
+  row sums; the abstract statement should either assume symmetric
+  constants or verify that symmetrization preserves the row-sum
+  hypothesis.)
+  Summing over unordered pairs $\{i,j\}$:
+  \[
+    \sum_{\{i,j\},\,\text{overlap}} (h_i h_j + h_j h_i)
+    \ge -(1-\gamma) \sum_{\{i,j\},\,\text{overlap}}
+    c_{ij}(h_i + h_j).
+  \]
+  Collecting terms for each $h_i$ (using $c_{ij} = c_{ji}$, so
+  that summing over unordered pairs containing $i$ gives
+  $\sum_{j \ne i} c_{ij}$):
+  \[
+    = -(1-\gamma) \sum_i \Bigl(\sum_{j \ne i,\,\text{overlap}}
+    c_{ij}\Bigr) h_i
+    \ge -(1-\gamma) H,
+  \]
+  where the last step uses the row-sum hypothesis
+  $\sum_{j \ne i} c_{ij} \le 1$.
+  Combining: $H^2 \ge H - (1-\gamma)H = \gamma H$.
+  For any eigenvector with $H\psi = \lambda\psi$ and $\lambda > 0$,
+  this gives $\lambda^2 \ge \gamma\lambda$, hence
+  $\lambda \ge \gamma$~\cite{Kastoryano2018Martingale}.
+\end{proof}
+
+\begin{lemma}[Martingale condition for MPS]\label{lem:martingale_mps}
+  \notready
+  \uses{thm:martingale_criterion, def:parent_interaction,
+        def:local_term_parent, lem:ground_space_intersection, def:injective}
+  Let $A$ be injective and fix an interaction range $L \ge 2$ as in
+  Definition~\ref{def:parent_interaction}.  Let $h_L(A) := \Pi_{G_L(A)^\perp}$
+  be the $L$-site parent interaction, and for each chain length and site $i$
+  let $h_i$ denote its translate as in Definition~\ref{def:local_term_parent}.
+  Then for every pair of overlapping terms $h_i$ and $h_j$ with
+  $0 < d_N(i,j) < L$, where $d_N(i,j) := \min(|i-j|,\, N-|i-j|)$ is the
+  cyclic distance on the ring (i.e.\ whose $L$-site supports share at
+  least one site under periodic boundary conditions),
+  the martingale condition of Theorem~\ref{thm:martingale_criterion} holds with
+  constants $c_{ij}$ and $\gamma > 0$ depending only on $A$ (not on $N$).
+  \emph{Note:} The proof below fully establishes the martingale constants
+  only for $L = 2$; for $L > 2$ the existence of suitable constants is
+  asserted without complete proof (see the remark at the end of the proof).
+  Only the $L = 2$ case is used in this chapter
+  (Theorem~\ref{thm:parent_hamiltonian_gapped}).
+  (When $L = 1$ the interaction terms have disjoint supports, so there are no
+  overlapping pairs and the spectral gap follows directly without the
+  martingale machinery.)
+\end{lemma}
+
+\begin{proof}
+  \uses{lem:ground_space_intersection, def:injective}
+  \notready
+  Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
+  in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
+  the $N$-site ring).  Since $A$ is injective, the intersection property
+  (Lemma~\ref{lem:ground_space_intersection}) gives the qualitative identity
+  $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
+  Because the local Hilbert space is finite-dimensional, the subspaces
+  $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space.
+  The intersection identity shows that $\ker(h_i) \cap \ker(h_j)$ is
+  exactly $G_{[i,j+L-1]}(A)$; in particular there is no non-trivial
+  vector in one kernel that is orthogonal to the other yet lies in both.
+  Hence the Friedrichs angle $\theta_{d_N(i,j)}$ between $\ker(h_i)$ and
+  $\ker(h_j)$ is strictly positive (for the fixed injective tensor
+  $A$).  Because the angle depends only on the overlap pattern
+  $d_N(i,j) \in \{1,\dots,L-1\}$ and not on the absolute position,
+  the number of distinct angles is at most $L-1$.
+  Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
+  worst-case cosine of the Friedrichs angles.
+
+  \textbf{Row-sum bound.}
+  Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
+  neighbours (those $j$ with $0 < d_N(i,j) < L$).
+  Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
+  and $c_{ij} := 0$ otherwise.
+  Then
+  $\sum_{j \ne i} c_{ij} \le 2(L-1)\cdot\tfrac{1}{2(L-1)} = 1$,
+  satisfying the row-sum hypothesis of
+  Theorem~\ref{thm:martingale_criterion}.
+
+  \textbf{Positivity of $\gamma$.}
+  The Friedrichs angle bound gives, for each overlapping pair,
+  $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$.
+  The martingale inequality holds with
+  $\gamma = 1 - 2(L-1)\alpha$,
+  which requires
+  $c_{ij}(1-\gamma) = \tfrac{1}{2(L-1)} \cdot 2(L-1)\alpha = \alpha$
+  (matching the Friedrichs bound exactly).
+  Since $\alpha < 1$ (the Friedrichs angle is strictly positive),
+  it remains to show $\gamma > 0$, i.e.\ $\alpha < \tfrac{1}{2(L-1)}$.
+  In the blocked picture of
+  Theorem~\ref{thm:parent_hamiltonian_gapped}, $L = 2$ and each site
+  overlaps with at most $2$ neighbours, so the condition reduces to
+  $\alpha < \tfrac{1}{2}$.  For $L = 2$ with an injective tensor,
+  the two projectors $h_i$ and $h_{i+1}$ act on a finite-dimensional
+  space, and the intersection property
+  (Lemma~\ref{lem:ground_space_intersection}) guarantees that
+  $\ker(h_i) \cap \ker(h_{i+1})$ is exactly $G_{[i,i+2]}(A)$;
+  hence $\|P_i P_{i+1}\| < 1$ (the Friedrichs cosine is strictly
+  less than~1).  On a finite-dimensional space with two projectors,
+  the Friedrichs cosine satisfies the quantitative bound
+  $\alpha \le 1 - c_{\min}$ where $c_{\min} > 0$ depends on the
+  minimal principal angle between the two kernels.  The bound
+  $\alpha < \tfrac{1}{2}$ then follows from the
+  Nachtergaele finite-size criterion~\cite{Nachtergaele1996Spectral},
+  which establishes that the overlap $\|P_i P_{i+1}\|$ for injective
+  MPS is bounded away from $1$ by a constant depending only on the
+  tensor~$A$.
+  For general $L > 2$, the uniform constants $c_{ij} = \tfrac{1}{2(L-1)}$
+  make the condition $\alpha < \tfrac{1}{2(L-1)}$ increasingly restrictive
+  as $L$ grows.  A more refined choice of separation-dependent constants
+  $c_{ij} = c_{d_N(i,j)}$ that weight small-separation (large-overlap) pairs
+  more heavily can exploit the exponential decay of the Friedrichs cosine
+  $\alpha_s$ in $s$ to satisfy the row-sum constraint.
+  However, this refinement is not needed for the main result: in
+  Theorem~\ref{thm:parent_hamiltonian_gapped} below, the argument is
+  applied only with $L = 2$ in the blocked picture.
+  In all cases, the constants depend only on $A$ and are independent
+  of~$N$~\cite{Fannes1992Finitely, Kastoryano2018Martingale}.
+\end{proof}
+
+\begin{theorem}[Spectral gap for MPS parent Hamiltonians]\label{thm:parent_hamiltonian_gapped}
+  \notready
+  \uses{thm:martingale_criterion, lem:martingale_mps,
+        def:parent_hamiltonian}
+  For an $L_0$-block injective MPS tensor $A$, let
+  $L := 2L_0$ be the interaction range (two blocked sites in the
+  $L_0$-blocked picture).
+  There exists $\gamma > 0$ such that for all $N \ge 2L$ with
+  $L_0 \mid N$,
+  \[
+    \lambda_{\min}^+\bigl(H_N(A,L)\bigr) \ge \gamma,
+  \]
+  i.e.\ the parent Hamiltonian is uniformly gapped.
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:martingale_criterion, lem:martingale_mps}
+  \notready
+  Since $A$ is $L_0$-block injective, the blocked tensor
+  $A^{[L_0]}$ is injective with physical dimension $d^{L_0}$ and bond
+  dimension $D$.  Each blocked site represents $L_0$ original sites,
+  so the range-$L = 2L_0$ interaction on the original chain corresponds
+  exactly to a range-$2$ interaction on the blocked chain (two blocked
+  sites).
+  \emph{Remark on interaction range:}
+  Theorem~\ref{thm:unique_gs_injective} establishes ground-state
+  uniqueness at range $L_0{+}1$, whereas here we use range $2L_0$.
+  The ground spaces are nested: increasing the interaction range can
+  only shrink (or preserve) the ground space, so uniqueness at range
+  $L_0{+}1$ implies uniqueness at range $2L_0$.  The larger range is
+  needed here so that, after $L_0$-blocking, each blocked interaction
+  term spans exactly $2$ blocked sites, enabling the martingale
+  machinery with $L = 2$.  The divisibility condition $L_0 \mid N$ ensures the blocking
+  is compatible with the periodic chain.
+  Apply Lemma~\ref{lem:martingale_mps} to the
+  injective tensor $A^{[L_0]}$ with range $2$ to obtain the martingale
+  constants $c_{ij}$ and $\gamma > 0$.  These constants depend only on
+  $A^{[L_0]}$ (hence only on $A$ and $L_0$), not on $N$.
+  Theorem~\ref{thm:martingale_criterion} then gives the uniform gap
+  $\lambda_{\min}^+(H_N) \ge \gamma$~\cite{Fannes1992Finitely,
+  Nachtergaele1996Spectral}.
+\end{proof}
+
+\section{Ground space of non-injective MPS}\label{sec:degenerate_ground_space}
+
+For a general (non-injective) MPS tensor in block-diagonal canonical form,
+the ground space is no longer one-dimensional.
+Instead, it is spanned by the MPVs of the individual normal blocks —
+the basis of normal tensors (BNT) from
+Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
+
+\begin{theorem}[Ground space equals span of BNT]\label{thm:gs_eq_bnt_span}
+  \notready
+  \uses{def:parent_hamiltonian, def:bnt, def:normal_cf_bnt,
+        thm:unique_gs_normal, def:ground_space_parent}
+  Let $A = \bigoplus_{k=1}^g \mu_k A_k$ be in canonical form with BNT
+  separation (Definition~\ref{def:normal_cf_bnt}), where
+  $\{A_1,\ldots,A_g\}$ is a basis of normal tensors
+  (Definition~\ref{def:bnt}).
+  For $N \ge 2(L_0 + 1)$ (where $L_0$ is the maximum injectivity length of
+  the blocks), the ground space of the parent Hamiltonian satisfies
+  \[
+    \ker\bigl(H_N(A,L_0{+}1)\bigr)
+    = \spn\bigl\{V^{(N)}(A_k) : k = 1,\ldots,g\bigr\}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:unique_gs_normal, lem:ground_space_intersection, def:bnt,
+        lem:parent_hamiltonian_annihilates}
+  \notready
+  \textbf{$\supseteq$}: Each $A_k$ is normal, so
+  Lemma~\ref{lem:parent_hamiltonian_annihilates} (applied to the
+  block-diagonal structure) gives
+  $H_N(A,L_0{+}1)\,V^{(N)}(A_k) = 0$.
+  Linearity of the kernel yields the inclusion.
+
+  \textbf{$\subseteq$}: Take $\psi \in \ker(H_N)$.
+  The block-diagonal structure of $A$ gives, at the interaction
+  range $L_0{+}1$ used in the Hamiltonian, the containment
+  $G_{L_0+1}(A) \subseteq \sum_k G_{L_0+1}(A_k)$: any local ground
+  state of $A$ on $L_0{+}1$ sites is a sum of local ground states of
+  the individual blocks, because the off-diagonal blocks vanish in
+  the transfer map (the canonical form ensures that distinct blocks
+  have orthogonal images under $\Gamma_{L_0+1}$ for
+  $L_0{+}1 \ge L_0$, so the sum is in fact direct).
+  Each normal block $A_k$ has injectivity length $L_k \le L_0$, so
+  the $L_k$-blocked tensor $A_k^{[L_k]}$ is injective.
+  Applying Lemma~\ref{lem:ground_space_intersection} to this injective
+  blocked tensor (in unblocked coordinates, as in
+  Theorem~\ref{thm:unique_gs_injective}) and iterating across the
+  chain for each block independently, and using
+  Theorem~\ref{thm:unique_gs_normal} for each normal block, the
+  component of $\psi$ associated with block $A_k$ must be proportional
+  to $V^{(N)}(A_k)$.
+  This gives the
+  inclusion~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
+\end{proof}
