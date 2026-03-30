@@ -605,6 +605,34 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     $B^i = \lambda\, V^{-1}\, A^i\, V$ for all~$i$.
 \end{proof}
 
+\begin{definition}[Physical-index rotation]%
+    \label{def:rotate_physical}
+    \lean{MPSTensor.rotatePhysical}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a matrix $u \in M_d(\C)$ and an MPS tensor~$A$,
+    the \emph{physical-index rotation} is the tensor
+    $(\operatorname{rotatePhysical}\, u\, A)^i := \sum_j u_{ij}\, A^j$.
+\end{definition}
+
+\begin{corollary}[Periodic symmetry corollary --- assembly step]%
+    \label{cor:symmetry_periodic_assembly}
+    \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:irreducible_form, def:same_mpv, thm:periodic_ft}
+    Let $A$ be in irreducible form~II and let $u$ be a matrix such that
+    $B := \operatorname{rotatePhysical}\, u\, A$ is also in irreducible
+    form~II and $\mathcal{V}(A) = \mathcal{V}(B)$.
+    Then there exists $m > 0$ such that $A$ and~$B$ are
+    $\Z_m$-gauge equivalent.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_ft}
+    Direct application of the periodic equal-case fundamental theorem
+    (Theorem~\ref{thm:periodic_ft}) to~$A$ and~$B$.
+\end{proof}
+
 \subsection{Virtual representation theorem}
 
 With a full group of on-site symmetries (rather than just a single
