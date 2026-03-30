@@ -884,11 +884,33 @@ This section records declaration wrappers used in cross-chapter references.
 
 \section{Peripheral eigenvalue group structure (Wolf Thm.~6.6)}
 
+\begin{theorem}[Peripheral eigenvalues: cyclic structure]%
+    \label{thm:peripheral_cyclic_structure}
+    \lean{PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure}
+    \leanok
+    \uses{thm:ks_peripheral}
+    Let $E$ be an irreducible unital Schwarz map on $\MN{D}$ with a
+    positive-definite adjoint fixed point (trace-preservation is \emph{not}
+    required).
+    Then there exist $m \ge 1$ and a primitive $m$-th root of unity
+    $\gamma$ such that the peripheral eigenvalues of $E$ are exactly
+    $\{1, \gamma, \gamma^2, \ldots, \gamma^{m-1}\}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The peripheral eigenvalues form a finite subset of $\C$,
+    contain $1$, and are closed under multiplication and inversion,
+    so they form a finite subgroup of $\C^\times$.
+    By Mathlib's \texttt{subgroup\_units\_cyclic}, this subgroup is cyclic.
+    The generator $\gamma$ has order $m = |\text{peripheral spectrum}|$.
+\end{proof}
+
 \begin{theorem}[Peripheral eigenvalues form a cyclic group]%
     \label{thm:peripheral_cyclic_group}
     \lean{PeripheralSpectrum.peripheral_eigenvalues_form_cyclic_group}
     \leanok
-    \uses{thm:ks_peripheral}
+    \uses{thm:peripheral_cyclic_structure}
     Let $E$ be an irreducible unital trace-preserving Schwarz map on
     $\MN{D}$ with a positive-definite adjoint fixed point.
     Then there exist $m \ge 1$ and a primitive $m$-th root of unity
@@ -898,14 +920,11 @@ This section records declaration wrappers used in cross-chapter references.
 
 \begin{proof}
     \leanok
-    The peripheral eigenvalues are roots of unity (by
-    \texttt{peripheral\_isRootOfUnity}) and hence embed into a finite
-    subgroup of $\C^\times$.  By Mathlib's
-    \texttt{subgroup\_units\_cyclic}, this subgroup is cyclic.
-    The generator $\gamma$ has order $m = |\text{peripheral spectrum}|$.
-    Divisibility $m \mid D$ follows from the cyclic decomposition:
-    $m$ mutually orthogonal projections summing to $\Id$ each have
-    equal trace (by trace preservation), so
+    \uses{thm:peripheral_cyclic_structure}
+    Apply Theorem~\ref{thm:peripheral_cyclic_structure} for the cyclic
+    structure.  Divisibility $m \mid D$ follows from the cyclic
+    decomposition: $m$ mutually orthogonal projections summing to $\Id$
+    each have equal trace (by trace preservation), so
     $m \cdot \tr(P_0) = D$ with $\tr(P_0) \in \N$.
 \end{proof}
 

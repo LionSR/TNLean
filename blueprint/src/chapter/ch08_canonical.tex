@@ -1036,6 +1036,28 @@ The following results separate the zero blocks from the
 	Apply Theorem~\ref{thm:blockdecomp_commuting_projs}.
 \end{proof}
 
+\begin{theorem}[Cyclic sector decomposition for irreducible TP tensors]%
+	\label{thm:cyclic_sector_decomp_irr_tp}
+	\lean{MPSTensor.exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor}
+	\leanok
+	\uses{def:irreducible_tensor, thm:blockdecomp_adjoint_fixed}
+	Let $A$ be a left-canonical MPS tensor with irreducible transfer map.
+	Then there exist $m \ge 1$ and left-canonical blocks
+	$(C_k)_{k=1}^m$ such that the $m$-blocked tensor $A^{[m]}$
+	decomposes as $\bigoplus_{k=1}^m C_k$ (with unit weights).
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:blockdecomp_adjoint_fixed}
+	Derive the conjugate-transposed Kraus family $K_i = (A^i)^\dagger$,
+	its unitality and irreducibility, and a positive-definite fixed point
+	$\rho$ of the transfer map.
+	Apply the cyclic structure theorem
+	(peripheral eigenvalues form a cyclic group of order~$m$)
+	to obtain $m$ cyclic spectral projections.
+	Feed into Theorem~\ref{thm:blockdecomp_adjoint_fixed}.
+\end{proof}
+
 \section{Reduction to primitive blocks}%
 \label{sec:assembly_pipeline}
 

@@ -323,23 +323,23 @@ The proof strategy uses Mathlib's `rootsOfUnity.isCyclic`:
    `CyclicDecomposition.lean`.
 -/
 
-/-- **The peripheral eigenvalues form a cyclic group** (Wolf Thm 6.6).
+/-- **The peripheral eigenvalues form a cyclic group** (Wolf Thm 6.6, without divisibility).
 
-Combines `peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint`
-(peripheral eigenvalues are roots of unity) with Mathlib's
-`rootsOfUnity.isCyclic` (finite subgroups of `ℂ*` are cyclic). -/
-theorem peripheral_eigenvalues_form_cyclic_group
+The peripheral eigenvalues form a finite subset of `ℂ`, contain `1`, and are
+closed under multiplication and inversion, so they form a finite subgroup of
+`ℂˣ`, which is cyclic. This lemma extracts the cyclic structure without
+requiring `IsTPKraus` (the divisibility `m ∣ D` needs trace-preservation
+separately; see `peripheral_eigenvalues_form_cyclic_group`). -/
+theorem peripheral_eigenvalues_cyclic_structure
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
-    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K)) :
     ∃ (m : ℕ) (γ : ℂ),
       0 < m ∧
       IsPrimitiveRoot γ m ∧
-      m ∣ D ∧
       peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
         {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)} := by
   classical
@@ -455,17 +455,40 @@ theorem peripheral_eigenvalues_form_cyclic_group
       have : ((g ^ (k : ℕ)).val : ℂ) ∈ peripheralEigenvalues E := hgk_sub
       simp only [SubgroupClass.coe_pow, Units.val_pow_eq_pow_val] at this
       exact this
-  -- Step 7: m ∣ D via cyclic decomposition
+  exact ⟨m, γ, hm_pos, hγ_prim, hset_eq⟩
+
+/-- **The peripheral eigenvalues form a cyclic group** (Wolf Thm 6.6).
+
+Combines `peripheral_eigenvalues_cyclic_structure` (cyclic group without
+trace-preservation) with `channel_period_divides_dim` to additionally
+establish `m ∣ D`. -/
+theorem peripheral_eigenvalues_form_cyclic_group
+    {r : ℕ} [NeZero D]
+    (K : Fin r → MatrixAlg D)
+    (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
+    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
+    (ρ : MatrixAlg D) (hρ : ρ.PosDef)
+    (hρfix : Kraus.adjointMap K ρ = ρ)
+    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K)) :
+    ∃ (m : ℕ) (γ : ℂ),
+      0 < m ∧
+      IsPrimitiveRoot γ m ∧
+      m ∣ D ∧
+      peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
+        {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)} := by
+  obtain ⟨m, γ, hm_pos, hγ_prim, hset_eq⟩ :=
+    peripheral_eigenvalues_cyclic_structure K hUnital ρ hρ hρfix hIrr
+  -- m ∣ D via cyclic decomposition
   have hm_dvd : m ∣ D := by
     -- γ is a peripheral eigenvalue (it's γ^1)
-    have hγ_mem : γ ∈ peripheralEigenvalues E := by
+    have hγ_mem : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
       rw [hset_eq]
       by_cases hm1 : m = 1
       · have hγ1 : γ = 1 := by have := hγ_prim.pow_eq_one; rw [hm1] at this; simpa using this
         exact ⟨⟨0, by omega⟩, by simp [hγ1]⟩
       · exact ⟨⟨1, by omega⟩, by simp⟩
     -- Convert set representation to Set.range form
-    have hperiph_range : peripheralEigenvalues E =
+    have hperiph_range : peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
         Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
       rw [hset_eq]; ext x; simp [Set.mem_range, eq_comm]
     haveI : NeZero m := ⟨by omega⟩
