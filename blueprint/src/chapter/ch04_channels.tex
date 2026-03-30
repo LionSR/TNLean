@@ -914,6 +914,14 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     $B_\alpha = \sum_j V_{\alpha j}\,A_j$.
 \end{theorem}
 
+\begin{proof}
+    \leanok
+    Pad the smaller family to size $r_1$, establish Gram matrix equality
+    $M_B^\dagger M_B = M_{A'}^\dagger M_{A'}$ from dual map equality,
+    construct a partial isometry via inner product preservation on the
+    range, and extend to a full isometry $V$ with $V^\dagger V = \Id$.
+\end{proof}
+
 \begin{theorem}[Thm.~2.1 item 4: Rectangular Kraus freedom (general index variant)]\label{thm:kraus_rectangular_freedom'}
     \lean{kraus_rectangular_freedom'}
     \leanok
@@ -922,6 +930,12 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     finite index types $\iota_1, \iota_2$ in place of $\mathrm{Fin}\,r_1,
     \mathrm{Fin}\,r_2$.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    Reindex via equivalences to $\mathrm{Fin}$ and apply
+    \Cref{thm:kraus_rectangular_freedom}.
+\end{proof}
 
 %% =========================================================
 \section{Stinespring dilation (Wolf Thm.~2.2)}
