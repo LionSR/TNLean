@@ -289,7 +289,7 @@ theorem kraus_rectangular_freedom
 set_option maxHeartbeats 6400000 in
 /-- Variant of `kraus_rectangular_freedom` with general index types. -/
 theorem kraus_rectangular_freedom'
-    {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₁] [DecidableEq ι₂]
+    {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
     (B : ι₁ → Matrix (Fin D) (Fin D) ℂ)
     (A : ι₂ → Matrix (Fin D) (Fin D) ℂ)
     (h : ∀ X : Matrix (Fin D) (Fin D) ℂ,
