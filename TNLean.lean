@@ -144,7 +144,7 @@ import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.OnSiteSymmetry
 import TNLean.MPS.Symmetry.VirtualRepresentation
-import TNLean.MPS.Chain.SymmetricMPS
+import TNLean.MPS.Symmetry.SymmetricMPS
 import TNLean.MPS.Symmetry.StringOrder
 
 -- Layer 5: Multi-block
