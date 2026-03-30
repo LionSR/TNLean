@@ -179,7 +179,7 @@ jobs:
             const latestReview = allReviews.at(-1) ?? null;
 
             // Sanitize untrusted review text to reduce prompt-injection surface.
-            const sanitize = (s) => s
+            const sanitize = (s) => (s || '')
               .replace(/[^\x20-\x7E\n\r\t]/g, '')
               .replace(/```/g, '\u200B`\u200B`\u200B`');
 
@@ -189,7 +189,7 @@ jobs:
                 path: t.comments.nodes[0].path,
                 line: t.comments.nodes[0].originalLine || t.comments.nodes[0].line,
                 conversation: t.comments.nodes.map(c => ({
-                  author: c.author.login,
+                  author: c.author?.login ?? 'ghost',
                   body: sanitize(c.body).substring(0, 1000)
                 }))
               })),
@@ -242,9 +242,10 @@ jobs:
                - Improve proof structure as suggested.
             6. Your goal is to fully close every incomplete lemma/theorem, not just address surface-level comments. Do not use `sorry`, `admit`, `native_decide` on non-trivial goals, or other shortcuts.
             7. Run `lake build` to verify your fixes compile with zero errors and zero `sorry`s.
-            8. Make minimal, targeted fixes. Do not refactor unrelated code.
-            9. Commit and push your fix to the current branch. Prefix commit messages with `[claude-review-fix]`.
-            10. After pushing, use the GitHub MCP tools to post a comment on the PR with:
+            8. When your fixes add or complete (remove sorry from) theorems, lemmas, or definitions, update the corresponding blueprint entry in `blueprint/src/chapter/` — add `\lean{DeclarationName}` and `\leanok` tags for new results, or add `\leanok` to `\begin{proof}` for newly proven results.
+            9. Make minimal, targeted fixes. Do not refactor unrelated code.
+            10. Commit and push your fix to the current branch. Prefix commit messages with `[claude-review-fix]`.
+            11. After pushing, use the GitHub MCP tools to post a comment on the PR with:
                - A summary of which review items were addressed.
                - If you used or discovered Mathlib lemmas during the fix, include a **Mathlib Audit**
                  section (name, module path, and how it was used). Skip this section for trivial fixes
@@ -253,4 +254,4 @@ jobs:
           claude_args: |
             --model claude-opus-4-6
             --allowedTools "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
-            --append-system-prompt "This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review. Prefer minimal diffs. Use your judgment on when Mathlib scouting is warranted — it is essential when closing sorrys or rewriting proofs, but unnecessary for naming fixes, docstrings, or style changes. When scouting IS needed, use exact?, apply?, rw?, simp?, and grep Mathlib source files. Reuse Mathlib lemmas rather than reproving from scratch. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR."
+            --append-system-prompt "This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review. Prefer minimal diffs. Use your judgment on when Mathlib scouting is warranted — it is essential when closing sorrys or rewriting proofs, but unnecessary for naming fixes, docstrings, or style changes. When scouting IS needed, use exact?, apply?, rw?, simp?, and grep Mathlib source files. Reuse Mathlib lemmas rather than reproving from scratch. If a mathematical result looks wrong, too strong, or suspiciously general, scout the LaTeX sources in Papers/ and WolfNotes/ where the original theorems and proofs are stored — read the relevant sections, compare hypotheses and conclusions, and cite the specific paper/section when flagging a discrepancy. You MUST fully close every lemma and theorem — never leave sorry, admit, or any placeholder. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR."

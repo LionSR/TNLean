@@ -1,0 +1,216 @@
+/-
+Copyright (c) 2025 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.ParentHamiltonian.Defs
+
+/-!
+# Unique ground state for injective MPS parent Hamiltonians
+
+For an injective MPS tensor `A` on a periodic chain, the expected parent-Hamiltonian
+ground space is spanned by the MPV state
+`σ ↦ tr(A^{σ₀} ⋯ A^{σ_{N-1}})`.
+
+## Overview
+
+The proof combines the intersection property from `IntersectionProperty.lean`
+with the periodic boundary condition:
+
+1. **Open chain**: By iterated application of the intersection property,
+   any state satisfying all local ground-space conditions has the form
+   `ψ(σ) = tr(A^σ · X)` for some boundary matrix `X ∈ M_D(ℂ)`.
+   This yields a `D²`-dimensional space.
+
+2. **Periodic chain**: The wrapping window condition (connecting the last and
+   first sites) constrains `X`. For injective `A`, the matrices `{A^i}` span
+   `M_D(ℂ)`, so the commutation condition forces `X ∝ I`, yielding a
+   one-dimensional ground space spanned by the MPV.
+
+## Main results
+
+* `MPSTensor.mpvSubmodule` — the subspace spanned by the MPV
+* `MPSTensor.mpv_mem_groundSpace` — the MPV lies in the ground space
+* `MPSTensor.chainGroundSpace` — the periodic-chain ground space as intersection
+  of cyclic window ground submodules
+* `MPSTensor.groundSpace_unique_periodic` — uniqueness on the periodic chain
+* `MPSTensor.parentHamiltonian_unique_gs_injective` — uniqueness for `2L₀` sites
+* `MPSTensor.parentHamiltonian_unique_gs_normal` — optimal uniqueness for `L₀+1` sites
+
+## References
+
+* [CPGSV21] arXiv:2011.12127, lines 2013–2094 (full argument)
+* [FNW92] Sections 3–4
+* [PGVWC07] arXiv:quant-ph/0608197, Sections 5–6
+-/
+
+open scoped Matrix BigOperators
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-! ### The MPV submodule -/
+
+/-- The submodule spanned by the MPV state.
+
+On the periodic chain, the MPV state is `σ ↦ tr(A^{σ₀} ⋯ A^{σ_{N-1}})`,
+which corresponds to the ground-space map applied to the identity:
+`mpv A = groundSpaceMap A N 1`. -/
+noncomputable def mpvSubmodule (A : MPSTensor d D) (N : ℕ) :
+    Submodule ℂ (NSiteSpace d N) :=
+  Submodule.span ℂ {mpv A}
+
+/-- The MPV is the ground-space map applied to the identity matrix. -/
+theorem mpv_eq_groundSpaceMap_one (A : MPSTensor d D) (N : ℕ) :
+    (mpv A : NSiteSpace d N) = groundSpaceMap A N 1 := by
+  ext σ
+  simp [mpv, coeff, groundSpaceMap_apply]
+
+/-- The MPV state lies in the ground space `G_N(A)` for any `N`. -/
+theorem mpv_mem_groundSpace (A : MPSTensor d D) (N : ℕ) :
+    (mpv A : NSiteSpace d N) ∈ groundSpace A N := by
+  rw [groundSpace, LinearMap.mem_range]
+  exact ⟨1, by ext σ; simp [groundSpaceMap_apply, mpv, coeff]⟩
+
+/-! ### Periodic chain ground space
+
+On a periodic chain of `N` sites, the ground space of the parent Hamiltonian
+is the set of states whose restriction to every cyclic window of `L` consecutive
+sites lies in `G_L(A)`.
+
+The full periodic-chain window restriction still depends on the chain-level
+embedding API. We therefore expose only the chain ground-space interface for
+now, and will define it from local window constraints once the operator
+formalization lands. -/
+
+-- TODO(parent-hamiltonian): define `chainGroundSpace` as the intersection of
+-- cyclic window ground submodules once the periodic window embedding API lands.
+
+/-- The periodic chain ground space: the set of states `ψ` on `N` sites such
+that every cyclic window of `L` consecutive sites restricts into `G_L(A)`.
+
+When `N = 0` or `L > N`, we return `⊤` as a degenerate convention. -/
+noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
+    Submodule ℂ (NSiteSpace d N) :=
+  if hN : 0 < N ∧ L ≤ N then
+    ⨅ (i : Fin N) (τ : Fin N → Fin d),
+      (groundSpace A L).comap (cyclicRestrictₗ hN.1 L i τ)
+  else ⊤
+
+/-- The MPV state is in the chain ground space.
+
+The proof uses trace cyclicity: for each cyclic window at position `i`, the
+restriction of the MPV to that window equals `groundSpaceMap A L X_τ` where
+`X_τ` is the product of `A`-matrices at outside positions.
+
+**Status**: requires cyclic list decomposition and trace cyclicity argument. -/
+theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
+    (hN : 0 < N) (hLN : L ≤ N) :
+    (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
+  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩]
+  simp only [Submodule.mem_iInf, Submodule.mem_comap]
+  intro i τ
+  -- We need: cyclicRestrictₗ hN L i τ (mpv A) ∈ groundSpace A L
+  -- This follows from trace cyclicity: rotating the N-site product to start
+  -- at the window position gives evalWord(σ-part) * evalWord(outside-part).
+  rw [groundSpace, LinearMap.mem_range]
+  sorry
+
+/-! ### Unique ground state -/
+
+/-- A submodule has a unique ground state (up to scalar) if its dimension is exactly 1. -/
+def HasUniqueGroundState {V : Type*} [AddCommGroup V] [Module ℂ V]
+    (S : Submodule ℂ V) : Prop :=
+  Module.finrank ℂ S = 1
+
+/-- Characterization: a unique ground state is generated by a single nonzero vector. -/
+theorem hasUniqueGroundState_iff_proportional {V : Type*} [AddCommGroup V] [Module ℂ V]
+    {S : Submodule ℂ V} [FiniteDimensional ℂ S] :
+    HasUniqueGroundState S ↔
+      ∃ ψ₀ : S, ψ₀ ≠ 0 ∧ ∀ ψ : S, ∃ c : ℂ, ψ = c • ψ₀ := by
+  constructor
+  · intro hS
+    have hpos : 0 < Module.finrank ℂ S := by
+      rw [hS]
+      norm_num
+    obtain ⟨ψ₀, hψ₀⟩ := Module.finrank_pos_iff_exists_ne_zero.mp hpos
+    refine ⟨ψ₀, hψ₀, ?_⟩
+    have hgen : ∀ ψ : S, ∃ c : ℂ, c • ψ₀ = ψ :=
+      (finrank_eq_one_iff_of_nonzero' ψ₀ hψ₀).mp hS
+    intro ψ
+    obtain ⟨c, hc⟩ := hgen ψ
+    exact ⟨c, hc.symm⟩
+  · rintro ⟨ψ₀, hψ₀, hgen⟩
+    exact (finrank_eq_one_iff_of_nonzero' ψ₀ hψ₀).2 fun ψ => by
+      obtain ⟨c, hc⟩ := hgen ψ
+      exact ⟨c, hc.symm⟩
+
+/-! ### Uniqueness theorems -/
+
+/-- On a periodic chain, the injective parent-Hamiltonian ground space should
+coincide with the span of the MPV. -/
+-- TODO(parent-hamiltonian): derive this from the cyclic-window definition of
+-- `chainGroundSpace` and the proved open-chain intersection property.
+theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
+    (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
+    chainGroundSpace A L N = mpvSubmodule A N := by
+  sorry
+
+/-- **Unique ground state on the periodic chain** for injective MPS.
+
+For an injective tensor `A` on a periodic chain of `N ≥ 2` sites, the chain ground
+space is one-dimensional, spanned by the MPV.
+
+The proof uses the intersection property iteratively:
+1. From the intersection property, any state in the chain ground space has the form
+   `ψ(σ) = tr(A^σ · X)` for some `X ∈ M_D(ℂ)`.
+2. The wrapping window condition (window crossing the periodic boundary) constrains
+   `X` to commute with all `A^i`.
+3. For injective `A`, the center of `span{A^i} = M_D(ℂ)` consists only of scalars,
+   so `X = c · I` and `ψ = c · mpv A`.
+
+**Status**: The proof requires the periodic window condition to be fully formalized.
+The intersection property (`groundSpace_intersection`) provides the key "invert-and-regrow"
+step; the remaining ingredient is the periodic boundary argument. -/
+-- TODO(parent-hamiltonian): finish after the periodic window embedding API
+-- makes the wrapping-window condition available in `chainGroundSpace`.
+theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
+    {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
+    HasUniqueGroundState (chainGroundSpace A L N) := by
+  sorry
+
+/-- **Unique ground state for `N`-block-injective tensors on `2N` sites**.
+
+If `A` is `L₀`-block-injective (i.e., the blocked tensor `A^{[L₀]}` is injective),
+with a nontrivial block length `L₀ > 0`, then the parent Hamiltonian with
+interaction range `2L₀` on the periodic chain has a unique ground state.
+
+**Status**: Depends on `groundSpace_unique_periodic` and the connection between
+`chainGroundSpace` and `LinearMap.ker (parentHamiltonian A (2 * L₀) N)`, which
+will be established when the operator API lands. -/
+-- TODO(parent-hamiltonian): reduce this to `groundSpace_unique_periodic`
+-- after connecting `chainGroundSpace` with the parent-Hamiltonian kernel.
+theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
+    {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {N : ℕ} (hN : 2 * L₀ ≤ N) :
+    HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
+  sorry
+
+/-- **Optimal unique ground state for normal tensors on `L₀ + 1` sites**.
+
+If `A` is normal (hence `L₀`-block-injective for some `L₀`) and the blocked tensor
+is in normal form with `L₀ > 0`, the interaction range can be reduced from `2L₀`
+to `L₀ + 1` using the structure theory of normal MPS.
+
+**Status**: Requires the normal-form analysis from the canonical form theory in
+addition to the periodic boundary argument. -/
+-- TODO(parent-hamiltonian): combine the normal-form range reduction with the
+-- periodic uniqueness theorem once that theorem is formalized.
+theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
+    {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {N : ℕ} (hN : L₀ + 1 ≤ N) :
+    HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
+  sorry
+
+end MPSTensor
