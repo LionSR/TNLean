@@ -496,7 +496,7 @@ theorem sameMPV_of_charpoly_eq_all_words
     SameMPV A B := by
   intro N σ
   simp only [mpv, coeff]
-  exact trace_eq_of_charpoly_eq _ _ (h (List.ofFn σ))
+  exact Matrix.trace_eq_of_charpoly_eq _ _ (h (List.ofFn σ))
 
 /-- Block separation for all blocks: a direct consequence of the core lemma.
 Under canonical form hypotheses, the summed identity implies per-block SameMPV.

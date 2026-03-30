@@ -7,6 +7,7 @@ import TNLean.Spectral.FrobeniusNorm
 import TNLean.QPF.Assembly
 import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.Schwarz.Basic
+import TNLean.Algebra.MatrixAux
 import Mathlib.Data.Matrix.Block
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 import Mathlib.Analysis.SpecificLimits.Normed
@@ -37,41 +38,6 @@ to zero. This is the mechanism by which the mixed transfer operator
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
-
-namespace Matrix
-
-/-- Pull fixed left and right matrix factors through a finite sum indexed by `Fin d`. -/
-theorem sum_mul_mul {α : Type*} [NonUnitalNonAssocSemiring α]
-    {d l m n r : ℕ} (L : Matrix (Fin l) (Fin m) α)
-    (M : Fin d → Matrix (Fin m) (Fin n) α) (R : Matrix (Fin n) (Fin r) α) :
-    ∑ i : Fin d, L * M i * R = L * (∑ i : Fin d, M i) * R := by
-  calc
-    ∑ i : Fin d, L * M i * R = (∑ i : Fin d, L * M i) * R := by
-      simpa [Matrix.mul_assoc] using
-        (Matrix.sum_mul (s := (Finset.univ : Finset (Fin d)))
-          (f := fun i : Fin d => L * M i) (M := R)).symm
-    _ = (L * ∑ i : Fin d, M i) * R := by
-      exact congrArg (fun T => T * R) <|
-        (Matrix.mul_sum (s := (Finset.univ : Finset (Fin d)))
-          (f := fun i : Fin d => M i) (M := L)).symm
-
-/-- If multiplication by a rectangular matrix has trivial kernel, then the source dimension is at
-most the target dimension. -/
-theorem dim_le_of_mulVec_injective {D₁ D₂ : ℕ} [NeZero D₂]
-    (X : Matrix (Fin D₁) (Fin D₂) ℂ)
-    (h_inj : ∀ v : Fin D₂ → ℂ, X *ᵥ v = 0 → v = 0) :
-    D₂ ≤ D₁ := by
-  let f : (Fin D₂ → ℂ) →ₗ[ℂ] (Fin D₁ → ℂ) := Matrix.toLin' X
-  have hf_inj : Function.Injective f := by
-    intro u v huv
-    have h_sub : f (u - v) = 0 := by
-      simpa using congrArg (fun w => w - f v) huv
-    exact sub_eq_zero.mp <| h_inj _ h_sub
-  have hfinrank : Module.finrank ℂ (Fin D₂ → ℂ) ≤ Module.finrank ℂ (Fin D₁ → ℂ) :=
-    LinearMap.finrank_le_finrank_of_injective hf_inj
-  simpa [Module.finrank_fintype_fun_eq_card, Fintype.card_fin] using hfinrank
-
-end Matrix
 
 namespace MPSTensor
 
