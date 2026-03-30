@@ -21,7 +21,7 @@ fixed point (RFP) property.
 
 ## Main results
 
-* `MPSTensor.rfp_implies_nncph` — RFP ⟹ NNCPH (vacuously true while
+* `MPSTensor.isNNCPH_of_isRFP` — RFP ⟹ NNCPH (vacuously true while
   `localTerm` is the zero placeholder)
 
 ## References
@@ -31,7 +31,7 @@ fixed point (RFP) property.
   commuting nearest-neighbor Hamiltonians in 1D
 -/
 
-open scoped Matrix BigOperators
+open scoped BigOperators
 
 namespace MPSTensor
 
@@ -92,7 +92,7 @@ the commuting condition reduces to `0 * 0 = 0 * 0`, which holds trivially.
 Once `localTerm` is implemented with its true definition, this lemma must
 be rewritten to use the structural form of RFP tensors (Theorem 3.11,
 issue #233). Do **not** cite this as a proven result. -/
-theorem rfp_implies_nncph {A : MPSTensor d D} (N : ℕ)
+theorem isNNCPH_of_isRFP {A : MPSTensor d D} (N : ℕ)
     (_hRFP : IsRFP A) : IsNNCPH A N := by
   intro i j
   simp [localTerm]
