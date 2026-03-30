@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Spectral.SpectralGap
 import TNLean.Channel.Peripheral.Spectrum
+import TNLean.Wielandt.Primitivity.EasyDirections
+import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 
 /-!
 # Quantitative spectral gap bounds for MPS transfer operators
@@ -26,7 +28,7 @@ a lower bound on `1 - ρ`).
 * `exponential_convergence_of_primitive` — for a primitive TP channel,
   `‖E^n(X) - P(X)‖ ≤ C · (1-δ)^n · ‖X‖` (convergence to fixed-point projection)
 * `correlation_length_bound` — exponential decay of traceless iterates
-* `spectral_gap_from_wielandt` — explicit spectral gap `δ > 0` with
+* `spectral_gap_of_injective` — explicit spectral gap `δ > 0` with
   all non-unit eigenvalues satisfying `|μ| ≤ 1 - δ`
 
 ## Strengthening relative to the literature
@@ -74,8 +76,24 @@ theorem exponential_convergence_of_primitive [NeZero D]
         ‖((transferMap (d := d) (D := D) A)^[n]) X -
           fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) X‖ ≤
           C * (1 - δ) ^ n * ‖X‖ := by
-  -- TODO (#22): use compl_eigenvalue_norm_lt_one_of_primitive for spectral gap,
-  -- then pow_tendsto_zero_of_spectralRadius_lt_one for exponential convergence
+  -- TODO (#22): Two adapter lemmas needed before this can be wired:
+  --
+  -- (1) `huniq_fp`: the hypothesis `IsPrimitive (transferMap A)` does NOT directly
+  --     give unique trace-zero fixed points. The abstract
+  --     `compl_eigenvalue_norm_lt_one_of_primitive` requires
+  --     `huniq_fp : ∀ X, E X = X → trace X = 0 → X = 0` as a parameter.
+  --     For channels (CPTP maps), this follows from primitivity + CP structure, but
+  --     the adapter `channel_primitive_implies_unique_trace_zero_fixedPoint` is not yet
+  --     formalized. The existing `transferMap_fixedPoint_eq_zero_of_trace_eq_zero` in
+  --     `PeripheralToSpectralGap.lean` requires `IsInjective A`, which is stronger than
+  --     `IsPrimitive (transferMap A)`.
+  --
+  -- (2) Geometric bound from spectral radius: once `spectralRadius(E - P) < 1` is
+  --     established, converting to `∃ C r, ‖(E-P)^n‖ ≤ C * r^n` requires a
+  --     lemma `geometric_bound_of_spectralRadius_lt_one`:
+  --       spectralRadius T < 1 → ∃ C r, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ n, ‖T^n‖ ≤ C * r^n
+  --     The Gelfand formula gives this eventually; packaging for all n requires
+  --     a finite correction factor.
   sorry
 
 /-- **Correlation length bound.**
@@ -100,26 +118,55 @@ theorem correlation_length_bound [NeZero D]
   -- TODO (#22): ξ = -1/log(ρ₂) where ρ₂ is second-largest eigenvalue modulus
   sorry
 
-/-! ## Explicit gap from Wielandt bound -/
+/-! ## Helper lemmas -/
 
-/-- **Spectral gap from the Wielandt bound** (existential version).
+/-- The word span at length 1 equals the span of the Kraus operators. -/
+theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
+    wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
+  simp only [wordSpan]
+  congr 1; ext y; constructor
+  · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
+  · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
+
+/-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
+theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
+    (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
+  ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
+
+/-! ## Explicit gap from injectivity -/
+
+/-- **Spectral gap from injectivity** (existential version).
 
 For an injective TP-normalized MPS tensor, all eigenvalues of the transfer
 map other than 1 have modulus strictly less than 1, with a uniform gap.
 
-The existential bound `∃ δ > 0` follows from: injectivity implies primitivity
-(by the Wielandt bound), primitivity implies spectral gap
-(by `compl_eigenvalue_norm_lt_one_of_primitive`), and in finite dimensions
-the maximum over finitely many eigenvalues gives a uniform bound. -/
-theorem spectral_gap_from_wielandt [NeZero D]
+The existential bound `∃ δ > 0` follows from: injectivity implies
+`HasEventuallyFullKrausRank` (at index 1), which implies primitivity
+(via `IsPrimitivePaper → IsPeripherallyPrimitive`), primitivity implies
+spectral gap (by `compl_eigenvalue_norm_lt_one_of_primitive`), and in
+finite dimensions the maximum over finitely many eigenvalues gives a
+uniform bound. -/
+theorem spectral_gap_of_injective [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : IsInjective A) :
     ∃ (δ : ℝ), 0 < δ ∧
       ∀ (μ : ℂ), Module.End.HasEigenvalue (transferMap (d := d) (D := D) A) μ →
         μ ≠ 1 → ‖μ‖ ≤ 1 - δ := by
-  -- TODO (#22): combine injective_implies_irreducibleCP + isPrimitive +
-  -- compl_eigenvalue_norm_lt_one_of_primitive + finite eigenvalue max
-  sorry
+  set E := transferMap (d := d) (D := D) A
+  -- Step 1: IsInjective → IsPrimitive (transferMap A)
+  have hPrim : _root_.IsPrimitive E :=
+    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
+      (isPrimitivePaper_of_hasEventuallyFullKrausRank A
+        (hasEventuallyFullKrausRank_of_injective A hA))
+  -- Step 2: every eigenvalue has ‖μ‖ ≤ 1
+  have hE_eq : E = mixedTransferMap A A := (mixedTransferMap_self A).symm
+  have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by
+    intro μ hμ
+    exact eigenvalue_norm_le_one A A hNorm hNorm μ (hE_eq ▸ hμ)
+  -- Step 3: non-1 eigenvalues have ‖μ‖ < 1, then extract uniform gap
+  exact uniform_spectral_gap_of_finite_lt_one (Module.End.finite_hasEigenvalue E)
+    fun μ hμ hne => lt_of_le_of_ne (hbound μ hμ)
+      fun h => hne (hPrim.unique_peripheral μ hμ h)
 
 end MPSTensor
