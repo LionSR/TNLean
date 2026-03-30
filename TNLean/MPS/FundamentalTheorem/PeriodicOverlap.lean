@@ -174,19 +174,22 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
 
 /-! ## Case 3: Same period, sector match → gauge-equivalent (Appendix A, main case) -/
 
-/-- **Translation propagation** (Eq. A.8 of arXiv:1708.00029):
+/-- **Translation propagation** (Eq. A.8 / blockedABprop of arXiv:1708.00029):
 Given one matching sector pair `P_ũ A^(m) ≈ e^{iλ} V Q_ṽ B^(m) V†`,
 applying the translation operator `T^l` for `l = 1, …, m-1` yields
-matching for all sector pairs `(u₀ + l, v₀ + l)` with the *same* gauge `V`
-(transported by the transfer operator). The phase may vary per `l`.
+matching for all sector pairs `(u₀ + l, v₀ + l)`. Each offset `l` gets
+its own gauge `U_{ṽ+l}` (the paper's Eq. blockedABprop produces a different
+unitary at each sector, not a single transported gauge). The phase also
+varies per `l`.
 
-The idempotence hypotheses (`hPA_proj`, `hQB_proj`) are essential: without them,
-`PA 0 = 2·I` and `QB 0 = I` satisfy all other hypotheses but force `phase = 2`,
-violating `‖phase‖ = 1`. The left-canonical hypotheses (`hA_lc`, `hB_lc`) ensure
-the propagated phases are unit-modulus: the transfer operator preserves the
-trace-preserving condition, so the scaling factor remains on the unit circle at
-each step. Without normalization, the initial `GaugePhaseEquiv` allows arbitrary
-nonzero ζ, and propagation would not constrain the phase magnitude. -/
+The completeness and orthogonality hypotheses ensure `PA`/`QB` form genuine
+cyclic-sector decompositions (resolution of identity into pairwise orthogonal
+idempotents). Without completeness, the overlap decomposition into sector
+contributions is invalid (identity-resolution steps fail).
+
+The left-canonical hypotheses (`hA_lc`, `hB_lc`) ensure the propagated phases
+are unit-modulus: the transfer operator preserves the trace-preserving
+condition, so the scaling factor remains on the unit circle at each step. -/
 lemma sectorMatch_propagation
     [NeZero D]
     (A B : MPSTensor d D)
@@ -195,19 +198,22 @@ lemma sectorMatch_propagation
     (PA QB : Fin m → MatrixAlg D)
     (hPA_proj : ∀ u, PA u * PA u = PA u)
     (hQB_proj : ∀ v, QB v * QB v = QB v)
+    (hPA_complete : ∑ u, PA u = 1)
+    (hQB_complete : ∑ v, QB v = 1)
+    (hPA_ortho : ∀ u v, u ≠ v → PA u * PA v = 0)
+    (hQB_ortho : ∀ u v, u ≠ v → QB u * QB v = 0)
     (hPA_comm : ∀ u (i : Fin d), PA u * A i = A i * PA (u + 1))
     (hQB_comm : ∀ v (i : Fin d), QB v * B i = B i * QB (v + 1))
     {u₀ : Fin m} {v₀ : Fin m}
     (hMatch : GaugePhaseEquiv
       (leftSectorTensor (PA u₀) (blockTensor A m))
       (leftSectorTensor (QB v₀) (blockTensor B m))) :
-    ∃ (gauge : GL (Fin D) ℂ),
-      ∀ l : Fin m, ∃ (phase : ℂ), ‖phase‖ = 1 ∧
-        ∀ σ : Fin m → Fin d,
-          PA (u₀ + l) * evalWord A (List.ofFn σ) =
-            phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
-              (QB (v₀ + l) * evalWord B (List.ofFn σ)) *
-              ((gauge⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+    ∀ l : Fin m, ∃ (phase : ℂ) (gauge : GL (Fin D) ℂ), ‖phase‖ = 1 ∧
+      ∀ σ : Fin m → Fin d,
+        PA (u₀ + l) * evalWord A (List.ofFn σ) =
+          phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
+            (QB (v₀ + l) * evalWord B (List.ofFn σ)) *
+            ((gauge⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
   sorry
 
 /-- **Per-site proportionality** (Eq. A.14 of arXiv:1708.00029):
@@ -217,6 +223,11 @@ After injectivity contraction, the sector-restricted tensors satisfy
 The offset `q` accounts for the cyclic shift between sector labelings of `A`
 and `B`: propagation from a match at `(u₀, v₀)` yields pairs `(u, u + q)`
 where `q = v₀ - u₀`.
+
+Each sector `u` has its own gauge `gauge u` (as produced by translation
+propagation, which yields a different unitary at each sector offset). The
+injectivity contraction argument then shows these per-sector gauges are
+compatible and combine into a single global gauge for `RepeatedBlocks`.
 
 The left-canonical hypotheses (`hA_lc`, `hB_lc`) are essential: they force
 the gauge-proportionality phases to have unit modulus, which is required by
@@ -229,11 +240,15 @@ lemma sectorTensor_proportional_of_blockedMatch
     (P Q : Fin m → MatrixAlg D)
     (hP_proj : ∀ u, P u * P u = P u)
     (hQ_proj : ∀ v, Q v * Q v = Q v)
+    (hP_complete : ∑ u, P u = 1)
+    (hQ_complete : ∑ v, Q v = 1)
+    (hP_ortho : ∀ u v, u ≠ v → P u * P v = 0)
+    (hQ_ortho : ∀ u v, u ≠ v → Q u * Q v = 0)
     (hP_comm : ∀ u (i : Fin d), P u * A i = A i * P (u + 1))
     (hQ_comm : ∀ v (i : Fin d), Q v * B i = B i * Q (v + 1))
     (q : Fin m)
-    (gauge : GL (Fin D) ℂ)
-    (hBlockMatch : ∀ u : Fin m, ∃ (phase : ℂ), ‖phase‖ = 1 ∧
+    (hBlockMatch : ∀ u : Fin m, ∃ (phase : ℂ) (gauge : GL (Fin D) ℂ),
+        ‖phase‖ = 1 ∧
         ∀ σ : Fin m → Fin d,
           P u * evalWord A (List.ofFn σ) =
             phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
