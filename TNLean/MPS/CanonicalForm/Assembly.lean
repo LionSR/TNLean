@@ -75,7 +75,7 @@ decomposes each periodic block into primitive sectors before blocking.
 
 The per-block bridge is now complete:
 
-* `exists_cyclic_sector_decomp_of_irr_tp`: For each irreducible TP block,
+* `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`: For each irreducible TP block,
   derives all channel-level hypotheses automatically and produces cyclic
   sector blocks via `exists_cyclic_sector_decomp_after_blocking`.
 
@@ -907,10 +907,10 @@ spectrum structure) automatically.
 
 The proof follows the same pattern as
 `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor` in
-`BlockingViaAdjoint.lean`, but uses `peripheral_eigenvalues_form_cyclic_group`
-from `GroupStructure.lean` (proved in #353) to obtain the explicit cyclic
-structure needed by `exists_cyclic_sector_decomp_after_blocking`. -/
-theorem exists_cyclic_sector_decomp_of_irr_tp
+`BlockingViaAdjoint.lean`, but re-derives the cyclic peripheral-spectrum
+structure directly and feeds it into
+`exists_cyclic_sector_decomp_after_blocking`. -/
+theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -944,118 +944,10 @@ theorem exists_cyclic_sector_decomp_of_irr_tp
   have h_adjfix : Kraus.adjointMap K ρ = ρ := by
     simpa [K, Kraus.adjointMap, transferMap_apply, Matrix.conjTranspose_conjTranspose,
       Matrix.mul_assoc] using hρ_fix
-  -- Step 5: Peripheral eigenvalues are roots of unity; extract cyclic structure.
-  -- We build the cyclic group structure from first principles using the same
-  -- ingredients as `peripheral_eigenvalues_form_cyclic_group`, but without
-  -- needing `IsTPKraus K` (which would require `IsUnitalKraus A`).
-  -- The key ingredients: peripheral eigenvalues are roots of unity (from
-  -- `peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint`),
-  -- and they form a subgroup of ℂˣ (from closure under mul/inv).
-  set E := transferMap (d := d) (D := D) K with hE_def
-  have hfin : (peripheralEigenvalues E).Finite := peripheralEigenvalues_finite (f := E)
-  -- 1 ∈ peripheral (from unitality of K)
-  have hE_unital : E 1 = 1 := by
-    simp only [hE_def, MPSTensor.transferMap_apply]
-    exact krausMap_one_of_unital K h_unitalK
-  have hone_mem : (1 : ℂ) ∈ peripheralEigenvalues E :=
-    one_mem_peripheralEigenvalues E 1 hE_unital one_ne_zero
-  -- Nonzero
-  have hne_zero : ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → μ ≠ 0 := by
-    intro μ ⟨_, hμ_norm⟩
-    exact norm_ne_zero_iff.mp (by rw [hμ_norm]; exact one_ne_zero)
-  -- Closure under mul and inv (from PeripheralSpectrum)
-  have hmul_closed : ∀ μ ν : ℂ, μ ∈ peripheralEigenvalues E → ν ∈ peripheralEigenvalues E →
-      μ * ν ∈ peripheralEigenvalues E :=
-    fun μ ν hμ hν =>
-      PeripheralSpectrum.peripheral_eigenvalues_closed_under_mul K h_unitalK ρ hρ_pd h_adjfix
-        hIrrK hμ hν
-  have hinv_closed : ∀ μ : ℂ, μ ∈ peripheralEigenvalues E →
-      μ⁻¹ ∈ peripheralEigenvalues E :=
-    fun μ hμ =>
-      PeripheralSpectrum.peripheral_eigenvalues_closed_under_inv K h_unitalK ρ hρ_pd h_adjfix
-        hIrrK hμ
-  -- Build the subgroup of ℂˣ
-  let periphSubgroup : Subgroup ℂˣ :=
-    { carrier := {u : ℂˣ | (u : ℂ) ∈ peripheralEigenvalues E}
-      one_mem' := by change ((1 : ℂˣ) : ℂ) ∈ peripheralEigenvalues E; simpa using hone_mem
-      mul_mem' := fun {a b} (ha : (a : ℂ) ∈ peripheralEigenvalues E)
-          (hb : (b : ℂ) ∈ peripheralEigenvalues E) => by
-        change (↑(a * b) : ℂ) ∈ peripheralEigenvalues E
-        rw [Units.val_mul]
-        exact hmul_closed _ _ ha hb
-      inv_mem' := fun {a} (ha : (a : ℂ) ∈ peripheralEigenvalues E) => by
-        change (↑(a⁻¹) : ℂ) ∈ peripheralEigenvalues E
-        rw [Units.val_inv_eq_inv_val]
-        exact hinv_closed _ ha }
-  haveI hFinS : Finite ↥periphSubgroup := by
-    have : Set.Finite {u : ℂˣ | (u : ℂ) ∈ peripheralEigenvalues E} := by
-      have hinj : Set.InjOn Units.val (Units.val ⁻¹' (peripheralEigenvalues E)) :=
-        fun _ _ _ _ h => Units.val_injective h
-      exact hfin.preimage hinj
-    exact this.to_subtype
-  haveI : IsCyclic ↥periphSubgroup := subgroup_units_cyclic periphSubgroup
-  obtain ⟨g, hg_order⟩ := isCyclic_iff_exists_orderOf_eq_natCard.mp ‹IsCyclic ↥periphSubgroup›
-  set m := Nat.card ↥periphSubgroup with hm_def
-  set γ := (g.val : ℂ) with hγ_def
-  have hm_pos : 0 < m := Nat.card_pos
-  -- IsPrimitiveRoot γ m
-  have hγ_prim : IsPrimitiveRoot γ m := by
-    constructor
-    · have hgm : g ^ m = 1 := by rw [← hg_order]; exact pow_orderOf_eq_one g
-      change (g.val : ℂ) ^ m = 1
-      have : ((g ^ m : ↥periphSubgroup).val : ℂ) = ((1 : ↥periphSubgroup).val : ℂ) :=
-        congr_arg (fun x => ((x : ↥periphSubgroup).val : ℂ)) hgm
-      simp only [SubgroupClass.coe_pow, OneMemClass.coe_one] at this
-      exact this
-    · intro l hl
-      have hunits : g.val ^ l = 1 := by
-        apply Units.val_injective; push_cast; exact hl
-      have hgroup : g ^ l = 1 := by
-        apply Subtype.val_injective; exact hunits
-      rw [← hg_order]
-      exact orderOf_dvd_of_pow_eq_one hgroup
-  -- Peripheral eigenvalues = {γ^k | k ∈ Fin m}
-  have hperiph_set : peripheralEigenvalues E =
-      {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)} := by
-    ext μ; constructor
-    · intro hμ
-      have hμ_ne := hne_zero μ hμ
-      set u : ℂˣ := Units.mk0 μ hμ_ne with hu_def
-      have hu_mem : u ∈ periphSubgroup := by
-        change (u : ℂ) ∈ peripheralEigenvalues E
-        simp only [hu_def, Units.val_mk0]; exact hμ
-      have hg_top : Subgroup.zpowers g = ⊤ :=
-        Subgroup.eq_top_of_card_eq _ (by rw [Nat.card_zpowers, hg_order])
-      have hu_zpow : (⟨u, hu_mem⟩ : ↥periphSubgroup) ∈ Subgroup.zpowers g := by
-        rw [hg_top]; exact Subgroup.mem_top _
-      obtain ⟨z, hz⟩ := hu_zpow
-      have hg_eq : (⟨u, hu_mem⟩ : ↥periphSubgroup) = g ^ z := hz.symm
-      have hg_mod : g ^ z = g ^ (z % ↑m).toNat := by
-        have hm_ne : (m : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
-        conv_lhs => rw [← zpow_mod_orderOf g z, hg_order]
-        rw [show z % ↑m = ↑(z % ↑m).toNat from
-          (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm, zpow_natCast]
-        rfl
-      have hz_val : u = g.val ^ (z % ↑m).toNat := by
-        have : (⟨u, hu_mem⟩ : ↥periphSubgroup).val = (g ^ (z % ↑m).toNat).val := by
-          rw [hg_eq, hg_mod]
-        simpa using this
-      have hk_lt : (z % ↑m).toNat < m := by
-        have hm_ne : (m : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
-        have h1 := Int.emod_lt_of_pos z (by omega : (0 : ℤ) < m)
-        omega
-      refine ⟨⟨(z % ↑m).toNat, hk_lt⟩, ?_⟩
-      simp only [hγ_def]
-      calc μ = (u : ℂ) := by simp [hu_def]
-        _ = (g.val ^ (z % ↑m).toNat : ℂˣ).val := by rw [hz_val]
-        _ = ((g.val : ℂ)) ^ (z % ↑m).toNat := by push_cast; rfl
-    · rintro ⟨k, rfl⟩
-      have hgk_sub : (g ^ (k : ℕ)).val ∈ periphSubgroup := by
-        exact (g ^ (k : ℕ)).property
-      change ((g.val : ℂ)) ^ (k : ℕ) ∈ peripheralEigenvalues E
-      have : ((g ^ (k : ℕ)).val : ℂ) ∈ peripheralEigenvalues E := hgk_sub
-      simp only [SubgroupClass.coe_pow, Units.val_pow_eq_pow_val] at this
-      exact this
+  -- Step 5: Extract cyclic peripheral structure via
+  -- `peripheral_eigenvalues_cyclic_structure` from `GroupStructure.lean`.
+  obtain ⟨m, γ, hm_pos, hγ_prim, hperiph_set⟩ :=
+    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure K h_unitalK ρ hρ_pd h_adjfix hIrrK
   -- Step 6: Convert set representation to range form.
   have hperiph_range :
       peripheralEigenvalues (transferMap (d := d) (D := D) K) =
