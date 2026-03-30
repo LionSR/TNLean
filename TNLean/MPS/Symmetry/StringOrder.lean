@@ -209,7 +209,7 @@ lemma stringOrderParam_one_eq_one
       ext X i j
       exact congrArg (fun M => M i j) (twistedTransferMap_one (A := A) X)
     simpa [htwisted_eq] using hpow_one
-  simpa [stringOrderParam, twistedTransferIter, htwisted_pow_one, hΛtr]
+  simp [stringOrderParam, twistedTransferIter, htwisted_pow_one, hΛtr]
 
 /-- If the continuous linear operator underlying the twisted transfer map has
 spectral radius `< 1`, then the string order parameter tends to `0`. -/
@@ -240,7 +240,7 @@ lemma stringOrderParam_tendsto_zero_of_spectralRadius_lt_one
     have hpow_eq :
         (((Module.End.toContinuousLinearMap V) (twistedTransferMap A u)) ^ L) =
           (Module.End.toContinuousLinearMap V) ((twistedTransferMap A u) ^ L) := by
-      simpa using (map_pow (Module.End.toContinuousLinearMap V) (twistedTransferMap A u) L).symm
+      exact (map_pow (Module.End.toContinuousLinearMap V) (twistedTransferMap A u) L).symm
     exact congrArg (fun T => T (1 : V)) hpow_eq
   let φ : V →ₗ[ℂ] ℂ :=
     (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ Λ)
@@ -249,7 +249,7 @@ lemma stringOrderParam_tendsto_zero_of_spectralRadius_lt_one
       Filter.atTop (nhds 0) := by
     rw [show (0 : ℂ) = φ 0 by simp]
     exact hφ_cont.continuousAt.tendsto.comp hIter0
-  simpa [stringOrderParam, twistedTransferIter, φ, LinearMap.mulLeft_apply, Matrix.mul_assoc] using hφ0
+  simpa [stringOrderParam, twistedTransferIter, φ] using hφ0
 
 /-! ### Local symmetry -/
 
@@ -554,7 +554,7 @@ lemma gaugePhaseEquiv_of_gaugeEquiv_left_right
       simp [Matrix.mul_assoc]
     _ = Z⁻¹ * (ζ • (Y * A' i * Y⁻¹)) * Z := by rw [hY i]
     _ = ζ • (Z⁻¹ * (Y * A' i * Y⁻¹) * Z) := by
-          simp [Matrix.mul_assoc, smul_mul_assoc, mul_smul_comm]
+          simp [Matrix.mul_assoc]
     _ = ζ • (Z⁻¹ * (Y * (X * A i * X⁻¹) * Y⁻¹) * Z) := by rw [hX i]
     _ = ζ • (((Z⁻¹ * Y * X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
           (((((Z⁻¹ * Y * X : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ)) : Matrix (Fin D) (Fin D) ℂ))) := by
@@ -806,7 +806,11 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     simpa [Matrix.det_conjTranspose] using IsUnit.star hS_det
   have hS_hMul_inv : Sᴴ * (Sᴴ)⁻¹ = 1 := Matrix.mul_nonsing_inv Sᴴ hS_detT
   have hS_hInv_eq : (Sᴴ)⁻¹ = S⁻¹ := by
-    simpa [hS_herm] using (Matrix.conjTranspose_nonsing_inv S).symm
+    have htmp : (Sᴴ)⁻¹ = (S⁻¹)ᴴ := by
+      simpa using (Matrix.conjTranspose_nonsing_inv S).symm
+    have htmp' : (S⁻¹)ᴴ = S⁻¹ := by
+      simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
+    exact htmp.trans htmp'
   have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
     simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
   let A' := tpGauge (d := d) (D := D) A σ
@@ -1070,9 +1074,9 @@ theorem virtualUnitary_of_stringOrder
       V * Vᴴ = 1 ∧ Vᴴ * V = 1 ∧ ‖μ‖ = 1 ∧
       ∀ i : Fin d,
         ∑ j : Fin d, u i j • A j = μ • (V * A i * Vᴴ) := by
-  -- TODO(sorry): requires CP map spectral theory; see Status section.
-  -- Dependency: needs unique fixed point of transfer map (from `IsInjective`)
-  -- and Perron-Frobenius for CP maps; see `twistedTransfer_spectralRadius_le_one`.
+  -- TODO(sorry): requires the modulus-one gauge-phase witness to be normalized to
+  -- a unitary virtual intertwiner. The current branch proves the reuse-heavy
+  -- `GaugePhaseEquiv` bridge, but the final scalar-collapse step is still open.
   sorry
 
 end MainTheorems
