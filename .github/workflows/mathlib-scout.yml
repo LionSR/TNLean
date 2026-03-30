@@ -39,7 +39,7 @@ jobs:
 
       - name: Sanitize issue content
         id: sanitize
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const sanitize = (s) => (s || '')
@@ -53,7 +53,6 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          use_claude_code_oauth: true
 
           prompt: |
             A new formalization issue has been opened. Your job is to scout Mathlib

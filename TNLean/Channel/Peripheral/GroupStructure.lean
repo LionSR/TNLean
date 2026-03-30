@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import Mathlib.RingTheory.RootsOfUnity.Basic
+import Mathlib.GroupTheory.SpecificGroups.Cyclic
+import Mathlib.Analysis.Matrix.Spectrum
 
 /-!
 # Peripheral eigenvalue group structure (Wolf Theorem 6.6)
@@ -64,6 +66,131 @@ quantum channels:
   divides the bond dimension `D`.
 -/
 
+/-! ## Helper lemmas for the divisibility proof -/
+
+/-- The transfer map preserves the matrix trace when the Kraus family is trace-preserving
+(i.e., `∑ᵢ Kᵢ† Kᵢ = I`). -/
+private lemma trace_transferMap_of_tp
+    {r : ℕ}
+    (K : Fin r → MatrixAlg D)
+    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
+    (X : MatrixAlg D) :
+    Matrix.trace (MPSTensor.transferMap (d := r) (D := D) K X) = Matrix.trace X := by
+  simp only [MPSTensor.transferMap_apply, Matrix.trace_sum]
+  conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
+  rw [← Matrix.trace_sum, ← Finset.sum_mul,
+    show ∑ i : Fin r, (K i)ᴴ * K i = 1 from hTP, one_mul]
+
+/-- The trace of an orthogonal projection (Hermitian idempotent matrix) over `ℂ` is a natural
+number — it equals the number of unit eigenvalues. -/
+private lemma exists_natCast_eq_trace_of_orthogonal_projection
+    (P : Matrix (Fin D) (Fin D) ℂ) (hP : IsOrthogonalProjection P) :
+    ∃ n : ℕ, Matrix.trace P = (n : ℂ) := by
+  classical
+  have hH := hP.1
+  -- Eigenvalues of P satisfy λ² = λ (from P² = P and the spectral decomposition)
+  have heig_sq : ∀ i : Fin D, (hH.eigenvalues i) ^ 2 = hH.eigenvalues i := by
+    intro i
+    -- The spectral theorem: P = U diag(λ) U⁻¹
+    have hspec := hH.spectral_theorem
+    -- P * P expressed via spectral decomposition:
+    -- P * P = U diag(λ²) U⁻¹
+    open Unitary in
+    have hP2 : P * P = (conjStarAlgAut ℂ _ hH.eigenvectorUnitary)
+        (Matrix.diagonal (fun j => ((hH.eigenvalues j : ℂ) ^ 2))) := by
+      have : P * P =
+          (conjStarAlgAut ℂ _ hH.eigenvectorUnitary)
+            (Matrix.diagonal (RCLike.ofReal ∘ hH.eigenvalues)) *
+          (conjStarAlgAut ℂ _ hH.eigenvectorUnitary)
+            (Matrix.diagonal (RCLike.ofReal ∘ hH.eigenvalues)) := by
+        exact congr_arg₂ (· * ·) hspec hspec
+      rw [this, ← map_mul, Matrix.diagonal_mul_diagonal]
+      congr 1; ext j; simp [Function.comp, sq]
+    -- P * P = P, so diag(λ²) = diag(λ), hence λ_i² = λ_i
+    open Unitary in
+    have hdiag_eq := (conjStarAlgAut ℂ _ hH.eigenvectorUnitary).injective
+        (hP2.symm.trans (hP.2.trans hspec))
+    have hi := congr_fun (congr_fun hdiag_eq i) i
+    simp only [Matrix.diagonal_apply_eq, Function.comp_apply] at hi
+    -- hi : (↑(eigenvalues i))^2 = ↑(eigenvalues i), goal: eigenvalues i ^ 2 = eigenvalues i
+    have hinj : Function.Injective (RCLike.ofReal (K := ℂ)) := RCLike.ofReal_injective
+    apply hinj; push_cast; exact hi
+  -- Eigenvalues are 0 or 1 (from λ² = λ, i.e., λ(λ-1) = 0)
+  have heig : ∀ i : Fin D, hH.eigenvalues i = 0 ∨ hH.eigenvalues i = 1 := by
+    intro i
+    have h := heig_sq i
+    have : hH.eigenvalues i * (hH.eigenvalues i - 1) = 0 := by nlinarith
+    rcases mul_eq_zero.mp this with h0 | h1
+    · left; exact h0
+    · right; linarith
+  -- Trace = sum of eigenvalues = count of eigenvalues equal to 1
+  rw [hH.trace_eq_sum_eigenvalues]
+  refine ⟨(Finset.univ.filter (fun i => hH.eigenvalues i = 1)).card, ?_⟩
+  have hif : ∀ i ∈ Finset.univ, (hH.eigenvalues i : ℂ) =
+      if hH.eigenvalues i = 1 then (1 : ℂ) else 0 := by
+    intro i _; rcases heig i with h | h <;> simp [h]
+  trans (∑ i : Fin D, if hH.eigenvalues i = 1 then (1 : ℂ) else 0)
+  · exact Finset.sum_congr rfl hif
+  · rw [Finset.sum_ite, Finset.sum_const_zero, add_zero,
+      Finset.sum_const, nsmul_eq_mul, mul_one]
+
+/-- Period divides dimension from cyclic projections with trace-preserving map.
+
+Given `m` orthogonal projections summing to the identity that are cyclically permuted by a
+trace-preserving map `E`, we have `m ∣ D`. The argument: trace preservation forces all projections
+to have equal trace, so `m * tr(P₀) = tr(I) = D`; since `tr(P₀) ∈ ℕ` for any orthogonal
+projection, `m ∣ D`. -/
+private lemma period_dvd_dim_of_cyclic_projections
+    {r : ℕ} [NeZero D]
+    (K : Fin r → MatrixAlg D)
+    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
+    {m : ℕ} [NeZero m]
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k, P k = 1)
+    (hcyclic : ∀ k, MPSTensor.transferMap (d := r) (D := D) K (P (k + 1)) = P k) :
+    m ∣ D := by
+  set E := MPSTensor.transferMap (d := r) (D := D) K
+  have htrace_pres := trace_transferMap_of_tp K hTP
+  have htrace_step : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P (k + 1)) := by
+    intro k
+    calc Matrix.trace (P k)
+        = Matrix.trace (E (P (k + 1))) := by rw [← hcyclic k]
+      _ = Matrix.trace (P (k + 1)) := htrace_pres _
+  have htrace_eq : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P 0) := by
+    intro ⟨k, hk⟩
+    induction k with
+    | zero => rfl
+    | succ n ih =>
+      have hn : n < m := by omega
+      have hfin : (⟨n, hn⟩ : Fin m) + 1 = ⟨n + 1, hk⟩ := by
+        ext; simp [Fin.val_add, Nat.mod_eq_of_lt hk]
+      rw [← hfin, ← htrace_step ⟨n, hn⟩]
+      exact ih hn
+  have hsum_trace : ∑ k : Fin m, Matrix.trace (P k) = (D : ℂ) := by
+    rw [← Matrix.trace_sum, hPsum, Matrix.trace_one, Fintype.card_fin]
+  have hmul_trace : (m : ℂ) * Matrix.trace (P 0) = (D : ℂ) := by
+    rw [← hsum_trace]
+    trans (∑ _k : Fin m, Matrix.trace (P 0))
+    · rw [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin]
+    · exact Finset.sum_congr rfl (fun k _ => (htrace_eq k).symm)
+  obtain ⟨n, hn⟩ := exists_natCast_eq_trace_of_orthogonal_projection (P 0) (hPproj 0)
+  have : (↑(m * n) : ℂ) = (↑D : ℂ) := by push_cast; rw [← hn]; exact hmul_trace
+  exact ⟨n, (Nat.cast_injective this).symm⟩
+
+/-- On the unit circle, complex conjugation equals inversion: `conj α = α⁻¹` when `‖α‖ = 1`. -/
+lemma Complex.conj_eq_inv_of_norm_eq_one {α : ℂ} (h : ‖α‖ = 1) :
+    starRingEnd ℂ α = α⁻¹ := by
+  have hα_ne : α ≠ 0 := norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)
+  have hconj_mul : starRingEnd ℂ α * α = 1 := by
+    have hnormSq : Complex.normSq α = 1 := by
+      rw [Complex.normSq_eq_norm_sq]; simp [h]
+    calc starRingEnd ℂ α * α
+        = (↑(Complex.normSq α) : ℂ) := by
+          simpa using (Complex.normSq_eq_conj_mul_self (z := α)).symm
+      _ = 1 := by simp [hnormSq]
+  exact mul_right_cancel₀ hα_ne (by rw [hconj_mul, inv_mul_cancel₀ hα_ne])
+
 /-! ## Closure under multiplication -/
 
 /-- **Peripheral eigenvalues are closed under multiplication.**
@@ -90,8 +217,57 @@ theorem peripheral_eigenvalues_closed_under_mul
   constructor
   · -- HasEigenvalue for α * β: product of unitaries is nonzero, and
     -- E(U_α U_β) = α β · U_α U_β by the multiplicative domain.
-    sorry -- TODO (#22): use Kraus.mul_mem_multiplicativeDomain (MultiplicativeDomainFull.lean:250)
-           -- + ks_equality_of_peripheral_eigenvector_of_fixedPoint for U_α, U_β
+    have hUnital' : Kraus.IsUnital K := by
+      simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using hUnital
+    -- Convert eigenvector eq for Uβ to Kraus.map, then get KS equality
+    have hUβ_map : Kraus.map K (Uβ : MatrixAlg D) = β • (Uβ : MatrixAlg D) := by
+      simpa [Kraus.map, MPSTensor.transferMap_apply] using hUβ
+    have hKSβ_map :=
+      Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
+        K hUnital' hρ hρfix _ β hUβ_map hβ.2
+    have hKSβ : KadisonSchwarz.krausMap K ((Uβ : MatrixAlg D)ᴴ * (Uβ : MatrixAlg D)) =
+        (KadisonSchwarz.krausMap K (Uβ : MatrixAlg D))ᴴ *
+          KadisonSchwarz.krausMap K (Uβ : MatrixAlg D) := by
+      simpa [Kraus.map, KadisonSchwarz.krausMap] using hKSβ_map
+    -- multiplicative_domain_right: E(Uα · Uβ) = E(Uα) · E(Uβ)
+    have hprod_kraus : KadisonSchwarz.krausMap K ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) =
+        KadisonSchwarz.krausMap K (Uα : MatrixAlg D) *
+          KadisonSchwarz.krausMap K (Uβ : MatrixAlg D) :=
+      KadisonSchwarz.multiplicative_domain_right K hUnital
+        (Uβ : MatrixAlg D) hKSβ (Uα : MatrixAlg D)
+    -- Compute: E(Uα) · E(Uβ) = (α · Uα)(β · Uβ) = αβ · (Uα · Uβ)
+    have hUα_kraus : KadisonSchwarz.krausMap K (Uα : MatrixAlg D) =
+        α • (Uα : MatrixAlg D) := by
+      simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using hUα
+    have hUβ_kraus : KadisonSchwarz.krausMap K (Uβ : MatrixAlg D) =
+        β • (Uβ : MatrixAlg D) := by
+      simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using hUβ
+    have hprod_transfer : MPSTensor.transferMap (d := r) (D := D) K
+        ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) =
+        (α * β) • ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) := by
+      have : KadisonSchwarz.krausMap K ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) =
+          (α * β) • ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) := by
+        rw [hprod_kraus, hUα_kraus, hUβ_kraus, smul_mul_assoc, mul_smul_comm, smul_smul]
+      simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using this
+    -- Product of unitaries is nonzero (left-cancel by Uα†)
+    have hprod_ne : (Uα : MatrixAlg D) * (Uβ : MatrixAlg D) ≠ 0 := by
+      intro h
+      have hUα_inv : (Uα : MatrixAlg D)ᴴ * (Uα : MatrixAlg D) = 1 := by
+        have hstar_α := Matrix.UnitaryGroup.star_mul_self Uα
+        rwa [star_eq_conjTranspose] at hstar_α
+      have hUβ_inv : (Uβ : MatrixAlg D)ᴴ * (Uβ : MatrixAlg D) = 1 := by
+        have hstar_β := Matrix.UnitaryGroup.star_mul_self Uβ
+        rwa [star_eq_conjTranspose] at hstar_β
+      have hUβ_zero : (Uβ : MatrixAlg D) = 0 := by
+        calc (Uβ : MatrixAlg D)
+            = 1 * (Uβ : MatrixAlg D) := (one_mul _).symm
+          _ = (Uα : MatrixAlg D)ᴴ * (Uα : MatrixAlg D) * (Uβ : MatrixAlg D) := by
+                rw [hUα_inv]
+          _ = (Uα : MatrixAlg D)ᴴ * ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) := by
+                rw [mul_assoc]
+          _ = 0 := by rw [h, mul_zero]
+      exact one_ne_zero (by rw [← hUβ_inv, hUβ_zero, mul_zero])
+    exact hasEigenvalue_of_eigenvector_eq _ _ _ hprod_transfer hprod_ne
   · rw [Complex.norm_mul, hα.2, hβ.2, mul_one]
 
 /-- **Peripheral eigenvalues are closed under inversion.**
@@ -108,7 +284,29 @@ theorem peripheral_eigenvalues_closed_under_inv
     (hα : α ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
     α⁻¹ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
   constructor
-  · sorry -- TODO (#22): use conjTranspose of unitary eigenvector
+  · -- HasEigenvalue for α⁻¹: Uα† is the eigenvector
+    obtain ⟨Uα, hUα⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
+      K hUnital ρ hρ hρfix hIrr hα
+    -- E(Uα†) = (E(Uα))† = (α · Uα)† = ᾱ · Uα† = α⁻¹ · Uα†
+    have hUα_map : Kraus.map K (Uα : MatrixAlg D) = α • (Uα : MatrixAlg D) := by
+      simpa [Kraus.map, MPSTensor.transferMap_apply] using hUα
+    -- ᾱ = α⁻¹ when |α| = 1
+    have hconj_eq_inv : starRingEnd ℂ α = α⁻¹ :=
+      Complex.conj_eq_inv_of_norm_eq_one hα.2
+    have hmap_conj : Kraus.map K (Uα : MatrixAlg D)ᴴ =
+        α⁻¹ • (Uα : MatrixAlg D)ᴴ := by
+      rw [← Kraus.map_conjTranspose, hUα_map, conjTranspose_smul]
+      simp only [Complex.star_def, hconj_eq_inv]
+    have hconj_transfer : MPSTensor.transferMap (d := r) (D := D) K (Uα : MatrixAlg D)ᴴ =
+        α⁻¹ • (Uα : MatrixAlg D)ᴴ := by
+      simpa [Kraus.map, MPSTensor.transferMap_apply] using hmap_conj
+    -- Uα† is nonzero
+    have hUα_conj_ne : (Uα : MatrixAlg D)ᴴ ≠ 0 := by
+      intro h
+      have h1 := Matrix.UnitaryGroup.star_mul_self Uα
+      rw [star_eq_conjTranspose, h, zero_mul] at h1
+      exact one_ne_zero h1.symm
+    exact hasEigenvalue_of_eigenvector_eq _ _ _ hconj_transfer hUα_conj_ne
   · rw [norm_inv, hα.2, inv_one]
 
 /-! ## Cyclic group structure
@@ -134,6 +332,7 @@ theorem peripheral_eigenvalues_form_cyclic_group
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
+    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K)) :
@@ -143,12 +342,139 @@ theorem peripheral_eigenvalues_form_cyclic_group
       m ∣ D ∧
       peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
         {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)} := by
-  -- Step 1: Each peripheral eigenvalue is a root of unity (ClosureFixedPoint.lean).
-  -- Step 2: Embed into rootsOfUnity (lcm of periods) in ℂ.
-  -- Step 3: Apply rootsOfUnity.isCyclic from Mathlib.
-  -- Step 4: Extract primitive root and period.
-  -- Step 5: Period divides D via cyclic projections (CyclicDecomposition.lean).
-  sorry -- TODO (#22): connect ClosureFixedPoint + Mathlib rootsOfUnity.isCyclic
+  classical
+  set E := MPSTensor.transferMap (d := r) (D := D) K with hE_def
+  -- E is unital: E(1) = 1
+  have hE_unital : E 1 = 1 := by
+    simp only [hE_def, MPSTensor.transferMap_apply]
+    exact KadisonSchwarz.krausMap_one_of_unital K hUnital
+  -- 1 is a peripheral eigenvalue (since E(1) = 1 and 1 ≠ 0)
+  have hone_mem : (1 : ℂ) ∈ peripheralEigenvalues E :=
+    one_mem_peripheralEigenvalues E 1 hE_unital one_ne_zero
+  -- Peripheral eigenvalues are finite (finite-dimensional endomorphism)
+  have hfin : (peripheralEigenvalues E).Finite := peripheralEigenvalues_finite E
+  -- Elements of peripheralEigenvalues are nonzero (they have norm 1)
+  have hne_zero : ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → μ ≠ 0 := by
+    intro μ ⟨_, hμ_norm⟩
+    exact norm_ne_zero_iff.mp (by rw [hμ_norm]; exact one_ne_zero)
+  -- Step 1: Construct a finite subgroup of ℂˣ from peripheral eigenvalues
+  let periphSubgroup : Subgroup ℂˣ :=
+    { carrier := {u : ℂˣ | (u : ℂ) ∈ peripheralEigenvalues E}
+      one_mem' := by change ((1 : ℂˣ) : ℂ) ∈ peripheralEigenvalues E; simpa using hone_mem
+      mul_mem' := fun {a b} (ha : (a : ℂ) ∈ peripheralEigenvalues E)
+          (hb : (b : ℂ) ∈ peripheralEigenvalues E) => by
+        change (↑(a * b) : ℂ) ∈ peripheralEigenvalues E
+        rw [Units.val_mul]
+        exact peripheral_eigenvalues_closed_under_mul K hUnital ρ hρ hρfix hIrr ha hb
+      inv_mem' := fun {a} (ha : (a : ℂ) ∈ peripheralEigenvalues E) => by
+        change (↑(a⁻¹) : ℂ) ∈ peripheralEigenvalues E
+        rw [Units.val_inv_eq_inv_val]
+        exact peripheral_eigenvalues_closed_under_inv K hUnital ρ hρ hρfix hIrr ha }
+  -- Step 2: The subgroup is finite (image in ℂ lands in a finite set)
+  haveI hFinS : Finite ↥periphSubgroup := by
+    have : Set.Finite {u : ℂˣ | (u : ℂ) ∈ peripheralEigenvalues E} := by
+      have hinj : Set.InjOn Units.val (Units.val ⁻¹' (peripheralEigenvalues E)) :=
+        fun _ _ _ _ h => Units.val_injective h
+      exact hfin.preimage hinj
+    exact this.to_subtype
+  -- Step 3: Finite subgroups of ℂˣ are cyclic (Mathlib's subgroup_units_cyclic)
+  haveI : IsCyclic ↥periphSubgroup := subgroup_units_cyclic periphSubgroup
+  -- Step 4: Extract a generator g with orderOf g = |S| = m
+  obtain ⟨g, hg_order⟩ := isCyclic_iff_exists_orderOf_eq_natCard.mp ‹IsCyclic ↥periphSubgroup›
+  set m := Nat.card ↥periphSubgroup with hm_def
+  set γ := (g.val : ℂ) with hγ_def
+  -- m > 0 (the subgroup contains at least 1)
+  have hm_pos : 0 < m := Nat.card_pos
+  -- Step 5: IsPrimitiveRoot γ m
+  have hγ_prim : IsPrimitiveRoot γ m := by
+    constructor
+    · -- γ^m = 1: g has order m, so g^m = 1
+      have hgm : g ^ m = 1 := by rw [← hg_order]; exact pow_orderOf_eq_one g
+      change (g.val : ℂ) ^ m = 1
+      have : ((g ^ m : ↥periphSubgroup).val : ℂ) = ((1 : ↥periphSubgroup).val : ℂ) :=
+        congr_arg (fun x => ((x : ↥periphSubgroup).val : ℂ)) hgm
+      simp only [SubgroupClass.coe_pow, OneMemClass.coe_one] at this
+      exact this
+    · -- ∀ l, γ^l = 1 → m ∣ l
+      intro l hl
+      -- Lift (g.val : ℂ)^l = 1 to g.val^l = 1 in ℂˣ
+      have hunits : g.val ^ l = 1 := by
+        apply Units.val_injective; push_cast; exact hl
+      -- Lift to g^l = 1 in periphSubgroup
+      have hgroup : g ^ l = 1 := by
+        apply Subtype.val_injective; exact hunits
+      rw [← hg_order]
+      exact orderOf_dvd_of_pow_eq_one hgroup
+  -- Step 6: peripheralEigenvalues E = {z | ∃ k : Fin m, z = γ ^ k}
+  have hset_eq : peripheralEigenvalues E =
+      {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)} := by
+    ext μ; constructor
+    · -- (⊆): each peripheral eigenvalue is a power of γ
+      intro hμ
+      -- Lift μ to a unit in ℂˣ
+      have hμ_ne := hne_zero μ hμ
+      set u : ℂˣ := Units.mk0 μ hμ_ne with hu_def
+      -- u ∈ periphSubgroup
+      have hu_mem : u ∈ periphSubgroup := by
+        change (u : ℂ) ∈ peripheralEigenvalues E
+        simp only [hu_def, Units.val_mk0]; exact hμ
+      -- Since g generates periphSubgroup, u ∈ zpowers g
+      have hg_top : Subgroup.zpowers g = ⊤ :=
+        Subgroup.eq_top_of_card_eq _ (by rw [Nat.card_zpowers, hg_order])
+      have hu_zpow : (⟨u, hu_mem⟩ : ↥periphSubgroup) ∈ Subgroup.zpowers g := by
+        rw [hg_top]; exact Subgroup.mem_top _
+      obtain ⟨z, hz⟩ := hu_zpow
+      -- Convert integer power to natural number power mod m
+      -- g^z = g^(z % m) since g has order m, then z % m ≥ 0 so toNat works
+      have hg_eq : (⟨u, hu_mem⟩ : ↥periphSubgroup) = g ^ z := hz.symm
+      have hg_mod : g ^ z = g ^ (z % ↑m).toNat := by
+        have hm_ne : (m : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
+        conv_lhs => rw [← zpow_mod_orderOf g z, hg_order]
+        rw [show z % ↑m = ↑(z % ↑m).toNat from
+          (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm, zpow_natCast]
+        rfl
+      have hz_val : u = g.val ^ (z % ↑m).toNat := by
+        have : (⟨u, hu_mem⟩ : ↥periphSubgroup).val = (g ^ (z % ↑m).toNat).val := by
+          rw [hg_eq, hg_mod]
+        simpa using this
+      have hk_lt : (z % ↑m).toNat < m := by
+        have hm_ne : (m : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
+        have h1 := Int.emod_lt_of_pos z (by omega : (0 : ℤ) < m)
+        omega
+      refine ⟨⟨(z % ↑m).toNat, hk_lt⟩, ?_⟩
+      simp only [hγ_def]
+      calc μ = (u : ℂ) := by simp [hu_def]
+        _ = (g.val ^ (z % ↑m).toNat : ℂˣ).val := by rw [hz_val]
+        _ = ((g.val : ℂ)) ^ (z % ↑m).toNat := by push_cast; rfl
+    · -- (⊇): each γ^k is a peripheral eigenvalue
+      rintro ⟨k, rfl⟩
+      -- g^k ∈ periphSubgroup, so (g^k).val.val ∈ peripheralEigenvalues E
+      have hgk_sub : (g ^ (k : ℕ)).val ∈ periphSubgroup := by
+        exact (g ^ (k : ℕ)).property
+      change ((g.val : ℂ)) ^ (k : ℕ) ∈ peripheralEigenvalues E
+      have : ((g ^ (k : ℕ)).val : ℂ) ∈ peripheralEigenvalues E := hgk_sub
+      simp only [SubgroupClass.coe_pow, Units.val_pow_eq_pow_val] at this
+      exact this
+  -- Step 7: m ∣ D via cyclic decomposition
+  have hm_dvd : m ∣ D := by
+    -- γ is a peripheral eigenvalue (it's γ^1)
+    have hγ_mem : γ ∈ peripheralEigenvalues E := by
+      rw [hset_eq]
+      by_cases hm1 : m = 1
+      · have hγ1 : γ = 1 := by have := hγ_prim.pow_eq_one; rw [hm1] at this; simpa using this
+        exact ⟨⟨0, by omega⟩, by simp [hγ1]⟩
+      · exact ⟨⟨1, by omega⟩, by simp⟩
+    -- Convert set representation to Set.range form
+    have hperiph_range : peripheralEigenvalues E =
+        Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
+      rw [hset_eq]; ext x; simp [Set.mem_range, eq_comm]
+    haveI : NeZero m := ⟨by omega⟩
+    -- Get cyclic decomposition: m orthogonal projections summing to identity
+    obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, hcyclic⟩ :=
+      MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
+        K hUnital ρ hρ hρfix hIrr hγ_prim hperiph_range
+    exact period_dvd_dim_of_cyclic_projections K hTP P hPproj hPsum hcyclic
+  exact ⟨m, γ, hm_pos, hγ_prim, hm_dvd, hset_eq⟩
 
 /-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Thm 6.6).
 
@@ -183,16 +509,25 @@ theorem channel_period_divides_dim
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
+    (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
     {m : ℕ} {γ : ℂ} (hm : 0 < m)
     (hγprim : IsPrimitiveRoot γ m)
-    (hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K))
+    (_hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K))
     (hgen : peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
       {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)}) :
     m ∣ D := by
-  -- Use exists_cyclic_projections_of_peripheral_unitary from CyclicDecomposition.lean
-  sorry -- TODO (#22): m orthogonal projections summing to I force rank D/m each
+  -- Get cyclic decomposition
+  set E := MPSTensor.transferMap (d := r) (D := D) K
+  haveI : NeZero m := ⟨by omega⟩
+  have hperiph_range : peripheralEigenvalues E =
+      Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
+    rw [hgen]; ext x; simp [Set.mem_range, eq_comm]
+  obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, hcyclic⟩ :=
+    MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
+      K hUnital ρ hρ hρfix hIrr hγprim hperiph_range
+  exact period_dvd_dim_of_cyclic_projections K hTP P hPproj hPsum hcyclic
 
 end PeripheralSpectrum
