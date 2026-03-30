@@ -2,7 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+import Mathlib.Data.Complex.Basic
+import Mathlib.LinearAlgebra.Projection
 
 /-!
 # Decorrelation and commuting parent Hamiltonians
@@ -12,8 +13,8 @@ respect to two disjoint regions, and proves the backward direction of the
 decorrelation–commuting-parent-Hamiltonian equivalence: a commuting parent
 Hamiltonian implies decorrelation when observables respect locality.
 
-This is the backward direction of Proposition D.1 from arXiv:1606.00608,
-Appendix D.2. The forward direction requires tensor-product infrastructure
+This is the backward direction of Proposition D.3 from arXiv:1606.00608,
+Appendix D, §D.2. The forward direction requires tensor-product infrastructure
 and is deferred.
 
 ## Main definitions
@@ -28,19 +29,19 @@ and is deferred.
 ## Main results
 
 * `commutingHam_isDecorrelated` — commuting parent Hamiltonian →
-  decorrelation (Proposition D.1, backward direction)
+  decorrelation (Proposition D.3, backward direction)
 
 ## References
 
-* arXiv:1606.00608, Appendix D.2 (lines 2181–2290)
+* arXiv:1606.00608, Appendix D, §D.2 (lines 2181–2290). The definitions
+  are numbered D.1 (decorrelated) and D.2 (parent commuting Hamiltonian);
+  the equivalence proposition is D.3.
 -/
-
-open scoped BigOperators
 
 /-!
 ### Auxiliary lemmas for commuting projectors
 
-These lemmas are used in the proof of Proposition D.1 and may be
+These lemmas are used in the proof of Proposition D.3 and may be
 useful elsewhere.
 -/
 
@@ -86,7 +87,7 @@ theorem right_absorb_of_comm_idempotent
   rw [← LinearMap.comp_assoc, ← hcomm, LinearMap.comp_assoc, hQ]
 
 /-- For commuting idempotents, `Q ∘ (1 - P ∘ Q) ∘ P = 0`. This is the
-key cancellation used in the "only if" direction of Prop D.1:
+key cancellation used in the "only if" direction of Prop D.3:
 `P_XB ∘ P_K^⊥ ∘ P_AX = 0`. -/
 theorem comp_complement_comm_zero
     {P Q : E →ₗ[ℂ] E}
@@ -131,14 +132,14 @@ finite-dimensional inner product space.
 
 section AbstractDecorrelation
 
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
+variable {E : Type*} [AddCommGroup E] [Module ℂ E]
 
 /-- **Decorrelation**: given an idempotent endomorphism `P_K` (projecting onto a
 subspace K) and families of operators `O_A` and `O_B` representing observables
 on regions A and B, regions A and B are **decorrelated** w.r.t. K when
 `P_K ∘ O_A ∘ (1 - P_K) ∘ O_B ∘ P_K = 0` for all observables `O_A`, `O_B`.
 
-See arXiv:1606.00608, Appendix D.2, Definition before Proposition D.1. -/
+See arXiv:1606.00608, Appendix D, §D.2, Definition D.1. -/
 def IsDecorrelated (P_K : E →ₗ[ℂ] E)
     (ObsA ObsB : Set (E →ₗ[ℂ] E)) : Prop :=
   ∀ O_A ∈ ObsA, ∀ O_B ∈ ObsB,
@@ -162,7 +163,7 @@ satisfies this predicate for any idempotent `P_K`; non-trivial content
 arises only when combined with locality constraints (see
 `commutingHam_isDecorrelated`).
 
-See arXiv:1606.00608, Appendix D.2, Definition before Proposition D.1.
+See arXiv:1606.00608, Appendix D, §D.2, Definition D.2.
 
 TODO(tensor-product): add locality constraints requiring `P_AX` to act on
 `H_A ⊗ H_X` and `P_XB` to act on `H_X ⊗ H_B`. Without these, the predicate
@@ -178,27 +179,23 @@ def HasCommutingParentHam (P_K : E →ₗ[ℂ] E) : Prop :=
     -- P_K projects onto the intersection: P_AX ∘ P_XB = P_K
     P_AX ∘ₗ P_XB = P_K
 
-omit [FiniteDimensional ℂ E] in
-/-- If `P_K` has a commuting parent Hamiltonian with witnesses `P_AX`, `P_XB`,
-then `P_AX ∘ P_K = P_K` (the left witness absorbs `P_K`). -/
-theorem HasCommutingParentHam.left_absorb {P_K : E →ₗ[ℂ] E}
-    (h : HasCommutingParentHam P_K) :
-    ∃ P_AX P_XB : E →ₗ[ℂ] E, P_AX ∘ₗ P_XB = P_K ∧ P_AX ∘ₗ P_K = P_K := by
-  obtain ⟨P_AX, P_XB, hAX, _, _, hK⟩ := h
-  exact ⟨P_AX, P_XB, hK, by rw [← hK, ← LinearMap.comp_assoc, hAX]⟩
+/-- If `P_AX` is idempotent and `P_AX ∘ P_XB = P_K`, then `P_AX ∘ P_K = P_K`
+(the left witness absorbs `P_K`). -/
+theorem left_absorb_of_idem_intersection {P_K P_AX P_XB : E →ₗ[ℂ] E}
+    (hAX : P_AX ∘ₗ P_AX = P_AX) (hK : P_AX ∘ₗ P_XB = P_K) :
+    P_AX ∘ₗ P_K = P_K := by
+  rw [← hK, ← LinearMap.comp_assoc, hAX]
 
-omit [FiniteDimensional ℂ E] in
-/-- If `P_K` has a commuting parent Hamiltonian with witnesses `P_AX`, `P_XB`,
-then `P_XB ∘ P_K = P_K` (the right witness absorbs `P_K`). -/
-theorem HasCommutingParentHam.right_absorb {P_K : E →ₗ[ℂ] E}
-    (h : HasCommutingParentHam P_K) :
-    ∃ P_AX P_XB : E →ₗ[ℂ] E, P_AX ∘ₗ P_XB = P_K ∧ P_XB ∘ₗ P_K = P_K := by
-  obtain ⟨P_AX, P_XB, _, hXB, hcomm, hK⟩ := h
-  exact ⟨P_AX, P_XB, hK, by rw [← hK, ← LinearMap.comp_assoc, ← hcomm,
-    LinearMap.comp_assoc, hXB]⟩
+/-- If `P_XB` is idempotent, `P_AX ∘ P_XB = P_XB ∘ P_AX`, and
+`P_AX ∘ P_XB = P_K`, then `P_XB ∘ P_K = P_K` (the right witness
+absorbs `P_K`). -/
+theorem right_absorb_of_idem_intersection {P_K P_AX P_XB : E →ₗ[ℂ] E}
+    (hXB : P_XB ∘ₗ P_XB = P_XB) (hcomm : P_AX ∘ₗ P_XB = P_XB ∘ₗ P_AX)
+    (hK : P_AX ∘ₗ P_XB = P_K) :
+    P_XB ∘ₗ P_K = P_K := by
+  rw [← hK, ← LinearMap.comp_assoc, ← hcomm, LinearMap.comp_assoc, hXB]
 
-omit [FiniteDimensional ℂ E] in
-/-- **Proposition D.1, backward direction** (arXiv:1606.00608, Appendix D.2):
+/-- **Proposition D.3, backward direction** (arXiv:1606.00608, Appendix D, §D.2):
 If a subspace K has a commuting parent Hamiltonian decomposition
 `P_K = P_AX ∘ P_XB` with `[P_AX, P_XB] = 0`, and observables on region A
 commute with `P_XB` while observables on region B commute with `P_AX`, then
@@ -224,7 +221,7 @@ In this abstract (non-tensor-product) setting, `HasCommutingParentHam` is
 trivially satisfiable by `P_AX = P_XB = P_K`, so an abstract iff would be
 vacuous. The forward direction is deferred to the tensor-product setting.
 
-See arXiv:1606.00608, Appendix D.2, Proposition D.1. -/
+See arXiv:1606.00608, Appendix D, §D.2, Proposition D.3. -/
 theorem commutingHam_isDecorrelated
     (P_K P_AX P_XB : E →ₗ[ℂ] E)
     (hAX_idem : P_AX ∘ₗ P_AX = P_AX)
