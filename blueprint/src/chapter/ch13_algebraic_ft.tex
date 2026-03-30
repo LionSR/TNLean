@@ -706,6 +706,22 @@ representation on the bond space.
     for injective tensors implies gauge equivalence.
 \end{proof}
 
+\begin{theorem}[Virtual symmetry equation]\label{thm:virtual_symmetry_eq}
+    \lean{MPSTensor.virtual_symmetry_eq}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric, lem:gauge_equiv_twisted}
+    If $A$ is injective and on-site symmetric under $U$, then
+    for every $g \in G$ there exist an invertible matrix $X(g) \in \GL_D(\C)$
+    and a nonzero scalar $\varphi(g) \in \C^{\times}$ (in fact $\varphi = 1$
+    in the single-block case) such that
+    $\widetilde{A}_g^{\,i} = \varphi(g)\, X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:gauge_equiv_twisted}
+    Apply Lemma~\ref{lem:gauge_equiv_twisted} to obtain $X(g)$, then
+    set $\varphi(g) = 1$.
+\end{proof}
+
 \begin{lemma}[Gauge uniqueness up to scalar]\label{lem:gauge_unique_up_to_scalar}
     \lean{MPSTensor.gauge_unique_up_to_scalar}
     \leanok
