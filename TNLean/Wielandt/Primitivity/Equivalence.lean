@@ -140,19 +140,6 @@ theorem isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank [NeZero D]
     IsStronglyIrreduciblePaper A :=
   prop3_ac A hNorm (prop3_ba A hA)
 
-/-- Legacy compatibility alias for
-`isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank`.
-
-The older theorem name suggested a hypothesis `IsPrimitivePaper A`, but the
-actual assumption is `HasEventuallyFullKrausRank A`. Prefer the more explicit
-name above in new code. -/
-theorem primitivePaper_implies_stronglyIrreducible [NeZero D]
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hA : HasEventuallyFullKrausRank A) :
-    IsStronglyIrreduciblePaper A :=
-  isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm hA
-
 /-- **Proposition 3 (b)→(c)**, `IsNormal` version.
 
 If `A` is normal and normalized, then `A` is strongly irreducible.
