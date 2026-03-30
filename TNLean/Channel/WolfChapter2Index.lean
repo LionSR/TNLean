@@ -43,7 +43,7 @@ representations of quantum channels.
   - `kraus_dual_eq_of_map_eq` — dual map equality from primal map equality ✅
   - `kraus_conjTranspose_mul_eq_of_map_eq` — equal Stinespring Gramians ✅
   - `kraus_rectangular_freedom` / `kraus_rectangular_freedom'`
-    — rectangular Kraus freedom (necessary direction) — statement only, proof TODO
+    — rectangular Kraus freedom (necessary direction) ✅
 
 * **Thm 2.2** (Stinespring dilation):
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
@@ -97,7 +97,7 @@ representations of quantum channels.
 | Prop 2.2 (decomp into CP) | Straightforward from CJ |
 | Prop 2.3 (no info w/o disturbance) | Needs pure state uniqueness |
 | Prop 2.4 (equiv of ensembles) | Needs purification/Schmidt decomp |
-| Thm 2.1 item 4 (rectangular Kraus freedom, necessary direction) | `kraus_rectangular_freedom` — stated (with cardinality hypothesis), proof needs Choi eigendecomp / isometry extension |
+| Thm 2.1 item 4 (rectangular Kraus freedom, necessary direction) | `kraus_rectangular_freedom` / `kraus_rectangular_freedom'` — fully proved ✅ |
 | Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
