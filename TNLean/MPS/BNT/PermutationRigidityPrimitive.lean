@@ -1,5 +1,6 @@
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
+import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 import TNLean.Spectral.SpectralGapRect
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.CastLemmas
@@ -42,22 +43,6 @@ open scoped BigOperators Matrix InnerProductSpace
 open Filter Finset
 
 namespace MPSTensor
-
-/-! ## Overlap ↔ inner product conversion -/
-
-private lemma tendsto_mpvInner_zero_of_overlap_zero
-    {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (h : Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds (0 : ℂ))) :
-    Tendsto (fun N => mpvInner (d := d) A B N) atTop (nhds (0 : ℂ)) := by
-  have h' := h.star
-  simpa only [mpvOverlap_eq_star_mpvInner, star_star, star_zero] using h'
-
-private lemma tendsto_mpvInner_one_of_overlap_one
-    {d D : ℕ} (A : MPSTensor d D)
-    (h : Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ))) :
-    Tendsto (fun N => mpvInner (d := d) A A N) atTop (nhds (1 : ℂ)) := by
-  have h' := h.star
-  simpa only [mpvOverlap_eq_star_mpvInner, star_star, star_one] using h'
 
 /-! ## Main theorem -/
 
@@ -119,11 +104,11 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
   -- ═══════════════════════════════════════════════════════════════════════════
   have hA_inner_diag : ∀ i : Fin g,
       Tendsto (fun N => mpvInner (d := d) (A i) (A i) N) atTop (nhds (1 : ℂ)) :=
-    fun i => tendsto_mpvInner_one_of_overlap_one (A i) (hA_self i)
+    fun i => tendsto_mpvInner_one (A i) (hA_self i)
   --
   have hA_inner_off : ∀ i j : Fin g, i ≠ j →
       Tendsto (fun N => mpvInner (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ)) :=
-    fun i j hij => tendsto_mpvInner_zero_of_overlap_zero (A i) (A j) (hA_off i j hij)
+    fun i j hij => tendsto_mpvInner_zero (A i) (A j) (hA_off i j hij)
   --
   let GA : ℕ → Matrix (Fin g) (Fin g) ℂ := fun N i j => mpvInner (d := d) (A i) (A j) N
   --
@@ -161,7 +146,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     push_neg at hall
     have hall_inner : ∀ i : Fin g,
         Tendsto (fun N => mpvInner (d := d) (A i) (B j) N) atTop (nhds (0 : ℂ)) :=
-      fun i => tendsto_mpvInner_zero_of_overlap_zero (A i) (B j) (hall i)
+      fun i => tendsto_mpvInner_zero (A i) (B j) (hall i)
     --
     let u : ℕ → Fin g → ℂ := fun N i => U N i j
     let v : ℕ → Fin g → ℂ := fun N k => mpvInner (d := d) (A k) (B j) N
@@ -230,7 +215,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     --
     have hBj_inner_one :
         Tendsto (fun N => mpvInner (d := d) (B j) (B j) N) atTop (nhds (1 : ℂ)) :=
-      tendsto_mpvInner_one_of_overlap_one (B j) (hB_self j)
+      tendsto_mpvInner_one (B j) (hB_self j)
     --
     exact zero_ne_one (tendsto_nhds_unique hBj_inner_zero hBj_inner_one)
   --
