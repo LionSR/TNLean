@@ -31,6 +31,7 @@ import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.MatrixFrobenius
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
+import TNLean.Algebra.CocycleCohomology
 
 -- Layer 0b: General analysis
 import TNLean.Analysis.ConvergenceHelpers
@@ -144,6 +145,7 @@ import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.OnSiteSymmetry
 import TNLean.MPS.Symmetry.VirtualRepresentation
+import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.SymmetricMPS
 import TNLean.MPS.Symmetry.StringOrder
 
