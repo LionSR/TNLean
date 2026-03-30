@@ -57,15 +57,16 @@ arXiv:0802.0447):
 
 ## Status
 
-The condition equivalences (`condC2_iff_condC3`, `condC1_imp_condC2`) are fully
-proved. The following theorems require spectral theory of completely positive
-maps beyond what is currently available in Mathlib and are marked `sorry`:
+The condition equivalences and the basic spectral-radius bound are now proved.
+The following downstream theorems still require additional Perron-Frobenius
+input for completely positive maps and are marked `sorry`:
 
-* `condC2_imp_condC1_of_injective` — needs spanning/injectivity argument
-* `twistedTransfer_spectralRadius_le_one` — needs CP map spectral theory
-* `localSymmetry_iff_spectralRadius_one` — needs CP map spectral theory
-* `stringOrder_iff_localSymmetry` — needs CP map spectral theory
-* `virtualUnitary_of_stringOrder` — needs CP map spectral theory
+* `localSymmetry_iff_spectralRadius_one` — needs the modulus-one case of the
+  peripheral spectral theory
+* `stringOrder_iff_localSymmetry` — depends on the local-symmetry/spectral-radius
+  equivalence
+* `virtualUnitary_of_stringOrder` — depends on the same peripheral-eigenvalue
+  analysis
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -119,6 +120,9 @@ noncomputable def twistedMixedCompanion (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) : MPSTensor d D :=
   fun n => ∑ n' : Fin d, (starRingEnd ℂ) (u n' n) • A n'
 
+/-- The twisted transfer map is the mixed transfer map for `A` and its
+unitary-mixed companion family. In symbols, `ℰ_u = F_{A,B}` with
+`B := twistedMixedCompanion A u`. -/
 lemma twistedTransferMap_eq_mixedTransfer (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) :
     twistedTransferMap A u = mixedTransferMap A (twistedMixedCompanion A u) := by
@@ -338,16 +342,18 @@ then there exists a unitary `u` satisfying C1.
 
 This is the reverse direction of `condC1_imp_condC2`, completing
 the equivalence C1 ↔ C2 for injective MPS (Lemma 1 of
-arXiv:0802.0447). The proof uses the spanning property of
-`{A_i}` (injectivity) to extract the matrix entries of `u` from
-the transfer-map covariance relation. -/
+arXiv:0802.0447). The present formal proof is slightly stronger
+than the paper-facing statement: it derives C1 from C2 by
+identifying `V A_i V†` as an alternative Kraus family for the same
+channel and applying rectangular Kraus freedom, so the explicit
+injectivity hypothesis is retained only to match the paper's API. -/
 theorem condC2_imp_condC1_of_injective
-    (_hA : IsInjective A)
+    (hA : IsInjective A)
     (hV : V * Vᴴ = 1)
     (hC2 : CondC2 A V) :
     ∃ u : Matrix (Fin d) (Fin d) ℂ, u * uᴴ = 1 ∧ CondC1 A u V := by
+  let _ := hA
   let B : MPSTensor d D := fun i => V * A i * Vᴴ
-  have hV' : Vᴴ * V = 1 := mul_eq_one_comm.mp hV
   have hB_eq : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       transferMap B X = transferMap A X := by
     intro X
@@ -379,23 +385,20 @@ end ConditionEquivalences
 section MainTheorems
 
 /-- **Spectral radius bound** (Lemma 1 of arXiv:0802.0447):
-For an injective (pure) FCS with stationary state `Λ > 0` and
-unique fixed point `𝟙` for the transfer map, the spectral radius
-of the twisted transfer map satisfies `ρ(ℰ_u) ≤ 1`.
+for an injective pure FCS, every eigenvalue of the twisted
+transfer map `ℰ_u` has modulus at most `1`.
 
-The proof uses Cauchy-Schwarz, unitarity of `u`, and the unitality
-(Heisenberg-picture normalization) `ℰ(𝟙) = 𝟙`. The `IsInjective`
-hypothesis ensures the unique fixed point property needed for the
-bound. This requires spectral theory for completely positive maps
-beyond what is currently available in Mathlib. -/
+The proof follows a TP-gauge reduction: rewrite `ℰ_u` as a mixed
+transfer map, pass to a common positive-definite fixed point of the
+adjoint channels, gauge both Kraus families into trace-preserving
+form, and invoke the existing mixed-transfer eigenvalue bound
+`eigenvalue_norm_le_one`. -/
 theorem twistedTransfer_spectralRadius_le_one
     (A : MPSTensor d D)
     (hA : IsInjective A)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (hNorm : transferMap A 1 = 1)
-    (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
     (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
     (hV : V ≠ 0)
     (hEig : twistedTransferMap A u V = ev • V) :
