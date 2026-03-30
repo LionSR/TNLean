@@ -31,8 +31,6 @@ fixed point (RFP) property.
   commuting nearest-neighbor Hamiltonians in 1D
 -/
 
-open scoped BigOperators
-
 namespace MPSTensor
 
 variable {d D : ℕ}
