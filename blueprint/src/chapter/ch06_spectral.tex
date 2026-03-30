@@ -201,6 +201,8 @@ mixed transfer power.
 
 The spectral-gap proofs use the Frobenius (Hilbert--Schmidt) norm
 as the natural norm for the finite-dimensional matrix algebra.
+We write $\|{\cdot}\|_F$ for this norm; it coincides with, and we use it
+interchangeably with, the Hilbert--Schmidt norm $\|{\cdot}\|_{\mathrm{HS}}$ on finite-dimensional spaces.
 We record the squared version and an isometric embedding into
 Euclidean space.
 
@@ -228,7 +230,6 @@ Euclidean space.
 \begin{definition}[Euclidean-space embedding]\label{def:mat_to_es}
     \lean{MPSTensor.matToES}
     \leanok
-    \uses{def:frob_sq}
     The map $\mathrm{vec} : M_{m \times n}(\C) \to \C^{mn}$ that
     flattens matrix entries is an isometric embedding with respect
     to the Frobenius norm: $\|\mathrm{vec}(X)\|^2 = \|X\|_F^2$.
@@ -880,6 +881,52 @@ This section records declaration wrappers used in cross-chapter references.
     $X \mapsto \frac{\tr(\rho X)}{\tr(\rho)}\Id$ is a conditional
     expectation onto the adjoint fixed-point $*$-subalgebra.
 \end{theorem}
+
+\section{Peripheral eigenvalue group structure (Wolf Thm.~6.6)}
+
+\begin{theorem}[Peripheral eigenvalues form a cyclic group]%
+    \label{thm:peripheral_cyclic_group}
+    \lean{PeripheralSpectrum.peripheral_eigenvalues_form_cyclic_group}
+    \leanok
+    \uses{thm:ks_peripheral}
+    Let $E$ be an irreducible unital trace-preserving Schwarz map on
+    $\MN{D}$ with a positive-definite adjoint fixed point.
+    Then there exist $m \ge 1$ and a primitive $m$-th root of unity
+    $\gamma$ such that $m \mid D$ and the peripheral eigenvalues of $E$
+    are exactly $\{1, \gamma, \gamma^2, \ldots, \gamma^{m-1}\}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The peripheral eigenvalues are roots of unity (by
+    \texttt{peripheral\_isRootOfUnity}) and hence embed into a finite
+    subgroup of $\C^\times$.  By Mathlib's
+    \texttt{subgroup\_units\_cyclic}, this subgroup is cyclic.
+    The generator $\gamma$ has order $m = |\text{peripheral spectrum}|$.
+    Divisibility $m \mid D$ follows from the cyclic decomposition:
+    $m$ mutually orthogonal projections summing to $\Id$ each have
+    equal trace (by trace preservation), so
+    $m \cdot \tr(P_0) = D$ with $\tr(P_0) \in \N$.
+\end{proof}
+
+\begin{theorem}[Period divides bond dimension]%
+    \label{thm:channel_period_divides_dim}
+    \lean{PeripheralSpectrum.channel_period_divides_dim}
+    \leanok
+    \uses{thm:peripheral_cyclic_group}
+    Let $E$ be as in Theorem~\ref{thm:peripheral_cyclic_group},
+    and let $\gamma$ be a primitive $m$-th root of unity generating
+    the peripheral eigenvalues.
+    Then $m \mid D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peripheral_cyclic_group}
+    Follows from the cyclic projection decomposition and
+    trace preservation, as in the final step of
+    Theorem~\ref{thm:peripheral_cyclic_group}.
+\end{proof}
 
 \section{Primitive overlap convergence (spectral-gap form)}
 
