@@ -15,7 +15,7 @@ such that the rotated tensor equals A conjugated by X(g).
 * arXiv:0802.0447 (PGWSVC 2008), Condition C1
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix
 
 namespace MPSTensor
 
