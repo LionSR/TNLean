@@ -210,4 +210,26 @@ theorem commutingHam_isDecorrelated
   rw [key_pw, map_zero, map_zero]
 
 
+/-- Convenience wrapper that consumes `HasCommutingParentHam` directly.
+
+The witnessing projectors `P_AX`, `P_XB` are extracted from the existential
+via `Exists.choose`; the locality hypotheses are stated in terms of these
+chosen witnesses. See `commutingHam_isDecorrelated` for the version with
+explicit witnesses. -/
+theorem HasCommutingParentHam.isDecorrelated
+    {P_K : E →ₗ[ℂ] E}
+    (hCPH : HasCommutingParentHam P_K)
+    (ObsA ObsB : Set (E →ₗ[ℂ] E))
+    (hA_comm : ∀ O_A ∈ ObsA,
+      O_A ∘ₗ hCPH.choose_spec.choose = hCPH.choose_spec.choose ∘ₗ O_A)
+    (hB_comm : ∀ O_B ∈ ObsB,
+      O_B ∘ₗ hCPH.choose = hCPH.choose ∘ₗ O_B) :
+    IsDecorrelated P_K ObsA ObsB := by
+  exact commutingHam_isDecorrelated P_K hCPH.choose hCPH.choose_spec.choose
+    hCPH.choose_spec.choose_spec.1
+    hCPH.choose_spec.choose_spec.2.1
+    hCPH.choose_spec.choose_spec.2.2.1
+    hCPH.choose_spec.choose_spec.2.2.2
+    ObsA ObsB hA_comm hB_comm
+
 end AbstractDecorrelation

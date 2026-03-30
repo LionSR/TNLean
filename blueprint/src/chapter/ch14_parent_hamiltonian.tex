@@ -474,7 +474,7 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
   \label{thm:commuting_ham_is_decorrelated}
   \lean{commutingHam_isDecorrelated}
   \leanok
-  \uses{def:is_decorrelated}
+  \uses{def:is_decorrelated, def:has_commuting_parent_ham}
   If a subspace $K$ has a commuting parent Hamiltonian decomposition
   $P_K = P_{AX} \circ P_{XB}$ with $[P_{AX}, P_{XB}] = 0$, and
   $A$-observables commute with $P_{XB}$ while $B$-observables commute
@@ -489,6 +489,17 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
   Using the commutation hypotheses to slide $O_A$ past $P_{XB}$ and $O_B$
   past $P_{AX}$, the five-fold composition factors through this zero term.
 \end{proof}
+
+\begin{theorem}[Commuting parent Hamiltonian implies decorrelation (bundled)]%
+  \label{thm:has_commuting_parent_ham_is_decorrelated}
+  \lean{HasCommutingParentHam.isDecorrelated}
+  \leanok
+  \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
+  Convenience wrapper: if $P_K$ satisfies \texttt{HasCommutingParentHam}
+  and observables respect locality, then regions $A$ and $B$ are
+  decorrelated w.r.t.\ $K$. Delegates to
+  Theorem~\ref{thm:commuting_ham_is_decorrelated}.
+\end{theorem}
 
 \section{Spectral gap}\label{sec:spectral_gap}
 
