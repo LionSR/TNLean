@@ -39,52 +39,14 @@ and is deferred.
 -/
 
 /-!
-### Auxiliary lemmas for commuting projectors
+### Auxiliary lemma for commuting projectors
 
-These lemmas are used in the proof of Proposition D.3 and may be
-useful elsewhere.
+The key cancellation lemma used in the proof of Proposition D.3.
 -/
 
 section CommutingProjectors
 
 variable {E : Type*} [AddCommGroup E] [Module ℂ E]
-
-/-- If two idempotent linear maps commute, their composition is idempotent. -/
-theorem comp_idempotent_of_comm_of_idempotent
-    {P Q : E →ₗ[ℂ] E}
-    (hP : P ∘ₗ P = P)
-    (hQ : Q ∘ₗ Q = Q)
-    (hcomm : P ∘ₗ Q = Q ∘ₗ P) :
-    (P ∘ₗ Q) ∘ₗ (P ∘ₗ Q) = P ∘ₗ Q := by
-  -- Pointwise: P(Q(P(Qx))) = P(Qx)
-  ext x; simp only [LinearMap.comp_apply]
-  -- Use hcomm pointwise: P(Qy) = Q(Py)
-  have hPQ : ∀ y, P (Q y) = Q (P y) := LinearMap.ext_iff.mp hcomm
-  -- Use hQ pointwise: Q(Qy) = Qy
-  have hQQ : ∀ y, Q (Q y) = Q y := LinearMap.ext_iff.mp hQ
-  -- Use hP pointwise: P(Py) = Py
-  have hPP : ∀ y, P (P y) = P y := LinearMap.ext_iff.mp hP
-  -- P(Q(P(Qx)))
-  --   = Q(P(P(Qx)))    by hPQ
-  --   = Q(P(Qx))        by hPP
-  --   = P(Q(Qx))        by hPQ⁻¹
-  --   = P(Qx)            by hQQ
-  rw [hPQ, hPP, ← hPQ, hQQ]
-
-/-- If `P` is idempotent, then `P ∘ (P ∘ Q) = P ∘ Q`. -/
-theorem left_absorb_of_comm_idempotent
-    {P Q : E →ₗ[ℂ] E}
-    (hP : P ∘ₗ P = P) :
-    P ∘ₗ (P ∘ₗ Q) = P ∘ₗ Q := by
-  rw [← LinearMap.comp_assoc, hP]
-
-/-- If `Q` is idempotent and `P ∘ Q = Q ∘ P`, then `Q ∘ (P ∘ Q) = P ∘ Q`. -/
-theorem right_absorb_of_comm_idempotent
-    {P Q : E →ₗ[ℂ] E}
-    (hQ : Q ∘ₗ Q = Q)
-    (hcomm : P ∘ₗ Q = Q ∘ₗ P) :
-    Q ∘ₗ (P ∘ₗ Q) = P ∘ₗ Q := by
-  rw [← LinearMap.comp_assoc, ← hcomm, LinearMap.comp_assoc, hQ]
 
 /-- For commuting idempotents, `Q ∘ (1 - P ∘ Q) ∘ P = 0`. This is the
 key cancellation used in the "only if" direction of Prop D.3:
@@ -179,22 +141,6 @@ def HasCommutingParentHam (P_K : E →ₗ[ℂ] E) : Prop :=
     -- P_K projects onto the intersection: P_AX ∘ P_XB = P_K
     P_AX ∘ₗ P_XB = P_K
 
-/-- If `P_AX` is idempotent and `P_AX ∘ P_XB = P_K`, then `P_AX ∘ P_K = P_K`
-(the left witness absorbs `P_K`). -/
-theorem left_absorb_of_idem_intersection {P_K P_AX P_XB : E →ₗ[ℂ] E}
-    (hAX : P_AX ∘ₗ P_AX = P_AX) (hK : P_AX ∘ₗ P_XB = P_K) :
-    P_AX ∘ₗ P_K = P_K := by
-  rw [← hK, ← LinearMap.comp_assoc, hAX]
-
-/-- If `P_XB` is idempotent, `P_AX ∘ P_XB = P_XB ∘ P_AX`, and
-`P_AX ∘ P_XB = P_K`, then `P_XB ∘ P_K = P_K` (the right witness
-absorbs `P_K`). -/
-theorem right_absorb_of_idem_intersection {P_K P_AX P_XB : E →ₗ[ℂ] E}
-    (hXB : P_XB ∘ₗ P_XB = P_XB) (hcomm : P_AX ∘ₗ P_XB = P_XB ∘ₗ P_AX)
-    (hK : P_AX ∘ₗ P_XB = P_K) :
-    P_XB ∘ₗ P_K = P_K := by
-  rw [← hK, ← LinearMap.comp_assoc, ← hcomm, LinearMap.comp_assoc, hXB]
-
 /-- **Proposition D.3, backward direction** (arXiv:1606.00608, Appendix D, §D.2):
 If a subspace K has a commuting parent Hamiltonian decomposition
 `P_K = P_AX ∘ P_XB` with `[P_AX, P_XB] = 0`, and observables on region A
@@ -262,5 +208,6 @@ theorem commutingHam_isDecorrelated
   -- Goal: P_AX (O_A (P_XB (P_AX (O_B (P_XB x)) - P_AX (P_XB (P_AX (O_B (P_XB x))))))) = 0
   -- Step 3: Apply key cancellation (P_XB kills the middle)
   rw [key_pw, map_zero, map_zero]
+
 
 end AbstractDecorrelation
