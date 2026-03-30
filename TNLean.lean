@@ -24,12 +24,16 @@ import TNLean.Algebra.BlockPermutation
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.MatrixFrobenius
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
+
+-- Layer 0b: General analysis
+import TNLean.Analysis.ConvergenceHelpers
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
@@ -56,7 +60,9 @@ import TNLean.Axioms.BrouwerFixedPoint
 import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import TNLean.Channel.Schwarz.Douglas
+import TNLean.Channel.Schwarz.OperatorConvexity
 import TNLean.Channel.Schwarz.OperatorMonotone
+import TNLean.Channel.Schwarz.AndoLieb
 import TNLean.Channel.Schwarz.PositiveOnAbelian
 import TNLean.Channel.Schwarz.SchwarzNormal
 import TNLean.Channel.Schwarz.SchwarzSubnormal
@@ -122,6 +128,9 @@ import TNLean.MPS.Core.Correlations
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.Basic
+import TNLean.MPS.ParentHamiltonian.IntersectionProperty
+import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 
 -- Layer 4: Fundamental theorem (single block)
 import TNLean.MPS.Structure.LinearExtension
@@ -134,6 +143,9 @@ import TNLean.MPS.FundamentalTheorem.FiniteLength
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.OnSiteSymmetry
+import TNLean.MPS.Symmetry.VirtualRepresentation
+import TNLean.MPS.Symmetry.SymmetricMPS
+import TNLean.MPS.Symmetry.StringOrder
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
@@ -148,9 +160,11 @@ import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.MPS.CanonicalForm.FromPrimitive
 import TNLean.MPS.FundamentalTheorem.Full
+import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 import TNLean.MPS.FundamentalTheorem.CoefficientConvergence
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
+import TNLean.MPS.FundamentalTheorem.Periodic
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.CanonicalForm.Existence
@@ -160,12 +174,18 @@ import TNLean.MPS.CanonicalForm.Assembly
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Periodic.Defs
+import TNLean.MPS.FundamentalTheorem.PeriodicOverlap
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Structure.BlockPermutation
 import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.PiAlgebra.BlockSeparation
+import TNLean.PiAlgebra.TIReduction
+import TNLean.PiAlgebra.GlobalSymmetry
+
+-- Layer 3b: MPO / MPDO / LPDO foundations
+import TNLean.MPS.MPDO.Defs
 
 -- Layer 5b: Renormalization fixed points (RFP) — pure-state scaffolding
 import TNLean.MPS.RFP.Defs

@@ -198,7 +198,8 @@ operation on the physical indices.
 \end{remark}
 
 \begin{lemma}[Centre of $\MN{D}$]\label{lem:center_scalar}
-    \leanno
+    \lean{Matrix.isScalar_of_commute_span_eq_top}
+    \leanok
     If $Z \in \MN{D}$ commutes with every element of $\MN{D}$, then
     $Z = \lambda \Id_D$ for some $\lambda \in \C$.
 \end{lemma}
@@ -398,19 +399,19 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     \label{rem:ft_chain_sameMPV}
     \uses{thm:fundamentalTheorem_injective_chain}
     The Lean theorem \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
-    assumes \texttt{SameMPV} on the combined tensor (trace agreement for
+    assumes the equal-MPV condition on the combined tensor (trace agreement for
     mixed-site words of \emph{all} lengths), which is stronger than the
-    paper's \texttt{SameState} (trace agreement at a single chain length
+    paper's equal-state condition (trace agreement at a single chain length
     $n \ge 3$).
-    The paper bridges this gap via a blocking argument requiring $n \ge 3$.
-    This bridging step is now packaged as an abstract interface
-    \lean{MPSChainTensor.SameStateBridgeHyp}: a \texttt{structure} that
+    The paper closes this gap via a blocking argument requiring $n \ge 3$.
+    This reduction step is now packaged as an abstract interface
+    \lean{MPSChainTensor.SameStateBridgeHyp} that
     encapsulates the blocking hypothesis.
-    Given this bridge, the theorem
+    Given this reduction, the theorem
     \lean{MPSChainTensor.fundamentalTheorem_injective_chain_of_sameState}
-    delivers the chain FT endpoint under the weaker \texttt{SameState}
-    hypothesis; however, the actual proof that \texttt{SameState} implies
-    \texttt{SameMPV} (i.e.\ the content of the bridge) has not yet been
+    delivers the chain FT endpoint under the weaker equal-state
+    hypothesis; however, the actual proof that the equal-state condition implies
+    equal MPV (i.e.\ the content of this reduction) has not yet been
     established in the formalization.
 \end{remark}
 
@@ -428,6 +429,69 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     The two results are complementary and neither implies the other in
     full generality.
 \end{remark}
+
+\subsection{Finite-length MPV agreement}
+
+\begin{definition}[Finite-length MPV agreement]\label{def:same_mpv_from}
+    \lean{MPSTensor.SameMPVFrom}
+    \leanok
+    \uses{def:same_mpv}
+    Two tensors $A$ and $B$ of the same bond dimension satisfy
+    \emph{$\mathrm{SameMPVFrom}(N_0)$} if they generate the same MPV
+    family for all system sizes $N \ge N_0$:
+    \[
+        \mathrm{mpv}(A, \sigma) = \mathrm{mpv}(B, \sigma)
+        \qquad \text{for all } N \ge N_0,\;\sigma \in [d]^N.
+    \]
+\end{definition}
+
+\begin{theorem}[Finite-length agreement implies full agreement]%
+    \label{thm:sameMPV_of_sameMPVFrom}
+    \lean{MPSTensor.sameMPV_of_sameMPVFrom_of_injective}
+    \leanok
+    \uses{def:same_mpv_from, def:injective, def:same_mpv}
+    Let $A$ be an injective tensor and $B$ a tensor of the same bond
+    dimension.  If $\mathrm{SameMPVFrom}(N_0, A, B)$ holds for some
+    $N_0$, then $\mathrm{SameMPV}(A, B)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:same_mpv_from, def:injective}
+    Write $1 = \sum_i c_i A^i$ (by injectivity) and set
+    $S = \sum_i c_i B^i$.
+    \begin{enumerate}
+        \item Show $\mathrm{wordSpan}(B, N_0) = \MN{D}$ via the
+              composition identity
+              $\Phi_A \circ \ell_A = \Phi_B \circ \ell_B$
+              (from trace agreement at length $N_0 + 1$)
+              and a finrank transfer argument.
+        \item Derive $S = 1$ by trace nondegeneracy: for every
+              $M \in \MN{D}$, $\tr(M(S - 1)) = 0$.
+        \item Downward induction on $k = N_0 - |w|$: decompose
+              $\tr(w_A)$ and $\tr(w_B)$ using $1 = \sum c_i A^i$
+              and $S = 1$ respectively, then apply the inductive
+              hypothesis at length $|w| + 1$.
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}[Strengthened single-block FT (finite-length)]%
+    \label{thm:ft_singleBlock_finiteLength}
+    \lean{MPSTensor.fundamentalTheorem_singleBlock_finiteLength}
+    \leanok
+    \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single, def:gauge_equiv}
+    If $A$ is injective and $A$, $B$ agree on all MPV coefficients for
+    system sizes $N \ge N_0$ (for any threshold $N_0$), then $A$ and $B$
+    are gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single}
+    Apply Theorem~\ref{thm:sameMPV_of_sameMPVFrom} to obtain
+    $\mathrm{SameMPV}(A, B)$, then invoke the single-block FT
+    (Theorem~\ref{thm:ft_single}).
+\end{proof}
 
 %% ---------------------------------------------------------
 \section{Corollaries}%
@@ -541,6 +605,508 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     $B^i = \lambda\, V^{-1}\, A^i\, V$ for all~$i$.
 \end{proof}
 
+\begin{definition}[Physical-index rotation]%
+    \label{def:rotate_physical}
+    \lean{MPSTensor.rotatePhysical}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a matrix $u \in M_d(\C)$ and an MPS tensor~$A$,
+    the \emph{physical-index rotation} is the tensor
+    $(\operatorname{rotatePhysical}\, u\, A)^i := \sum_j u_{ij}\, A^j$.
+\end{definition}
+
+\begin{corollary}[Periodic symmetry corollary --- assembly step]%
+    \label{cor:symmetry_periodic_assembly}
+    \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:irreducible_form, def:same_mpv, thm:periodic_ft}
+    Let $A$ be in irreducible form~II and let $u$ be a matrix such that
+    $B := \operatorname{rotatePhysical}\, u\, A$ is also in irreducible
+    form~II and $\mathcal{V}(A) = \mathcal{V}(B)$.
+    Then there exists $m > 0$ such that $A$ and~$B$ are
+    $\Z_m$-gauge equivalent.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_ft}
+    Direct application of the periodic equal-case fundamental theorem
+    (Theorem~\ref{thm:periodic_ft}) to~$A$ and~$B$.
+\end{proof}
+
+\subsection{Virtual representation theorem}
+
+With a full group of on-site symmetries (rather than just a single
+unitary), the individual gauges can be assembled into a projective
+representation on the bond space.
+
+\begin{definition}[Twisted tensor]\label{def:twisted_tensor}
+    \lean{MPSTensor.twistedTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a group representation $U : G \to \GL_d(\C)$ on the physical
+    index, the \emph{$g$-twisted tensor} is
+    \[
+        \widetilde{A}_g^i \;:=\; \sum_{j=0}^{d-1} U(g)_{ij}\, A^j
+        \qquad \text{for each } i \in \{0,\ldots,d{-}1\}.
+    \]
+\end{definition}
+
+\begin{definition}[On-site symmetry]\label{def:on_site_symmetric}
+    \lean{MPSTensor.IsOnSiteSymmetric}
+    \leanok
+    \uses{def:twisted_tensor, def:same_mpv}
+    A tensor $A$ is \emph{on-site symmetric} under a group
+    representation $U : G \to \GL_d(\C)$ if $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$
+    for every $g \in G$.
+\end{definition}
+
+\begin{lemma}[Functoriality of twisting]\label{lem:twisted_tensor_mul}
+    \lean{MPSTensor.twistedTensor_mul}
+    \leanok
+    \uses{def:twisted_tensor}
+    The twisted tensor satisfies the composition law
+    \[
+        \widetilde{A}_{gh} \;=\; \widetilde{(\widetilde{A}_h)}_g,
+    \]
+    i.e.\ twisting by $gh$ is the same as first twisting by~$h$
+    and then by~$g$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:twisted_tensor}
+    Expanding both sides using $U(gh) = U(g)\, U(h)$, then swapping
+    the order of summation.
+\end{proof}
+
+\begin{lemma}[Identity twist]\label{lem:twisted_tensor_one}
+    \lean{MPSTensor.twistedTensor_one}
+    \leanok
+    \uses{def:twisted_tensor}
+    Twisting by the identity group element is trivial:
+    $\widetilde{A}_1 = A$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:twisted_tensor}
+    Since $U(1) = I_d$, each component reduces to
+    $\sum_j \delta_{ij}\, A^j = A^i$.
+\end{proof}
+
+\begin{lemma}[Symmetric twists are gauge equivalent]%
+    \label{lem:gauge_equiv_twisted}
+    \lean{MPSTensor.gaugeEquiv_twistedTensor_of_injective}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric}
+    If $A$ is injective and on-site symmetric under $U$, then
+    for every $g \in G$ the twisted tensor $\widetilde{A}_g$ is
+    gauge equivalent to~$A$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:on_site_symmetric}
+    On-site symmetry gives
+    $\mc{V}(A) = \mc{V}(\widetilde{A}_g)$, and equal MPV
+    for injective tensors implies gauge equivalence.
+\end{proof}
+
+\begin{theorem}[Virtual symmetry equation]\label{thm:virtual_symmetry_eq}
+    \lean{MPSTensor.virtual_symmetry_eq}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric, lem:gauge_equiv_twisted}
+    If $A$ is injective and on-site symmetric under $U$, then
+    for every $g \in G$ there exist an invertible matrix $X(g) \in \GL_D(\C)$
+    and a nonzero scalar $\varphi(g) \in \C^{\times}$ (in fact $\varphi = 1$
+    in the single-block case) such that
+    $\widetilde{A}_g^{\,i} = \varphi(g)\, X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:gauge_equiv_twisted}
+    Apply Lemma~\ref{lem:gauge_equiv_twisted} to obtain $X(g)$, then
+    set $\varphi(g) = 1$.
+\end{proof}
+
+\begin{lemma}[Gauge uniqueness up to scalar]\label{lem:gauge_unique_up_to_scalar}
+    \lean{MPSTensor.gauge_unique_up_to_scalar}
+    \leanok
+    \uses{def:injective, def:gauge_equiv, lem:center_scalar}
+    Let $A$ be an injective tensor.
+    If $X, Y \in \GL_D(\C)$ both satisfy
+    $B^i = X\, A^i\, X^{-1} = Y\, A^i\, Y^{-1}$
+    for all~$i$, then there exists a nonzero scalar $u \in \C^{\times}$
+    such that $Y = u \cdot X$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:injective, lem:center_scalar}
+    The matrix $Z = Y^{-1} X$ commutes with every $A^i$.
+    Since $A$ is injective, $\{A^i\}$ spans $\MN{D}$, so $Z$
+    lies in the centre of $\MN{D}$.
+    By Lemma~\ref{lem:center_scalar}, $Z$ is a scalar matrix.
+    Since $Z$ is invertible, that scalar is nonzero, and
+    $Y = u \cdot X$.
+\end{proof}
+
+\begin{definition}[Scalar 2-cochain]\label{def:scalar_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle}
+    \leanok
+    A \emph{scalar 2-cochain} on a group $G$ is a function
+    $\omega : G \times G \to \C^{\times}$.
+\end{definition}
+
+\begin{definition}[Projective representation]\label{def:projective_rep}
+    \lean{TNLean.Algebra.ProjectiveRepresentation}
+    \leanok
+    \uses{def:scalar_cocycle}
+    Given a scalar 2-cochain $\omega$, a \emph{projective representation}
+    of $G$ on $\C^D$ is a map $\rho : G \to \GL_D(\C)$ satisfying
+    \[
+        \rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh)
+        \qquad \text{for all } g, h \in G.
+    \]
+\end{definition}
+
+\begin{lemma}[Associativity forces the cocycle condition]%
+    \label{lem:cocycle_of_assoc}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.cocycle_of_assoc}
+    \leanok
+    \uses{def:projective_rep, def:scalar_cocycle}
+    If $\rho$ is a projective representation with factor system $\omega$
+    and $D > 0$, then $\omega$ satisfies the 2-cocycle identity:
+    \[
+        \omega(g, h)\, \omega(gh, k)
+        = \omega(g, hk)\, \omega(h, k).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:projective_rep}
+    Expanding $\rho(g)\,(\rho(h)\,\rho(k))$ and
+    $(\rho(g)\,\rho(h))\,\rho(k)$ using the projective
+    multiplication law and equating via matrix associativity.
+    The hypothesis $D > 0$ allows cancellation of the
+    invertible matrix factor.
+\end{proof}
+
+\begin{theorem}[Virtual representation theorem for injective MPS]%
+    \label{thm:virtual_rep_injective}
+    \lean{MPSTensor.virtual_rep_of_symmetric_injective}
+    \leanok
+    \uses{def:injective, def:on_site_symmetric, def:projective_rep,
+          def:scalar_cocycle, lem:gauge_unique_up_to_scalar,
+          lem:twisted_tensor_mul}
+    Let $A$ be an injective MPS tensor that is on-site symmetric
+    under a group representation $U : G \to \GL_d(\C)$.
+    Then there exist:
+    \begin{enumerate}
+        \item a unit-valued 2-cochain
+              $\omega : G \times G \to \C^{\times}$, and
+        \item a map $\rho : G \to \GL_D(\C)$ satisfying
+              \[
+                  \rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh)
+                  \qquad \text{for all } g, h \in G,
+              \]
+    \end{enumerate}
+    such that, defining the gauge matrices $X(g) := \rho(g^{-1})$,
+    one has
+    \[
+        \widetilde{A}_g^i \;=\; X(g)\, A^i\, X(g)^{-1}
+        \qquad \text{for every } g \in G,\; i \in \{0,\ldots,d{-}1\}.
+    \]
+    In particular, $\rho$ is a projective representation of $G$ on the
+    bond space $\C^D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:on_site_symmetric, lem:gauge_equiv_twisted,
+          lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
+    Since $A$ is injective and on-site symmetric, each twisted tensor
+    $\widetilde{A}_g$ is gauge equivalent to~$A$
+    (Lemma~\ref{lem:gauge_equiv_twisted}).
+    Choose $X(g) \in \GL_D(\C)$ with
+    $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+
+    By functoriality (Lemma~\ref{lem:twisted_tensor_mul}), the product
+    $X(h)\, X(g)$ also intertwines $A$ with $\widetilde{A}_{gh}$.
+    Since $X(gh)$ does the same, gauge uniqueness
+    (Lemma~\ref{lem:gauge_unique_up_to_scalar}) gives a unit scalar
+    $\omega'(h,g)$ with $X(h)\, X(g) = \omega'(h,g)\, X(gh)$.
+
+    Defining $\rho(g) := X(g^{-1})$ converts this to the standard law:
+    $\rho(g)\, \rho(h) = \omega(g,h)\, \rho(gh)$
+    where $\omega(g,h) := \omega'(h^{-1}, g^{-1})$.
+\end{proof}
+
+\begin{corollary}[2-cocycle identity for the factor system]%
+    \label{cor:virtual_rep_cocycle}
+    \lean{MPSTensor.virtual_rep_of_symmetric_injective_cocycle}
+    \leanok
+    \uses{thm:virtual_rep_injective, lem:cocycle_of_assoc}
+    If $D > 0$, the factor system $\omega$ from
+    Theorem~\ref{thm:virtual_rep_injective} satisfies the
+    2-cocycle identity:
+    \[
+        \omega(g, h)\, \omega(gh, k)
+        = \omega(g, hk)\, \omega(h, k)
+        \qquad \text{for all } g, h, k \in G.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:virtual_rep_injective, lem:cocycle_of_assoc}
+    Theorem~\ref{thm:virtual_rep_injective} gives $\rho$ and $\omega$.
+    By Lemma~\ref{lem:cocycle_of_assoc}, the cocycle identity follows
+    from associativity of matrix multiplication and invertibility of
+    the representation matrices.
+\end{proof}
+
+\subsection{Permutation-based physical symmetry}
+
+The linear-combination twist $\widetilde{A}_g^i = \sum_j U(g)_{ij}\, A^j$
+is the standard form used in the virtual representation theorem.
+An alternative formulation replaces the matrix action by a permutation of the
+physical index; this is useful when the symmetry acts by reordering
+basis states rather than by a general linear map.
+
+\begin{definition}[Permutation symmetry data]\label{def:on_site_symmetry_perm}
+    \lean{MPSTensor.OnSiteSymmetry}
+    \leanok
+    An \emph{on-site symmetry datum} for a group $G$ on a physical
+    space of dimension $d$ consists of a matrix-valued map
+    $u : G \to \MN{d}$ and a physical-index action
+    $\sigma : G \to \mathrm{End}(\{0,\ldots,d{-}1\})$.
+\end{definition}
+
+\begin{definition}[Permutation-twisted tensor]\label{def:perm_twisted_tensor}
+    \lean{MPSTensor.TwistedTensor}
+    \leanok
+    \uses{def:on_site_symmetry_perm, def:mps_tensor}
+    Given on-site symmetry data $(u, \sigma)$, the
+    \emph{permutation-twisted tensor} at group element $g$ is
+    \[
+        (A^{\sigma_g})^i \;:=\; A^{\sigma(g)(i)}.
+    \]
+\end{definition}
+
+\begin{lemma}[Identity permutation twist]\label{lem:perm_twisted_one}
+    \lean{MPSTensor.TwistedTensor_one}
+    \leanok
+    \uses{def:perm_twisted_tensor}
+    If $\sigma(1) = \mathrm{id}$, then $(A^{\sigma_1})^i = A^i$ for all~$i$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perm_twisted_tensor}
+    Immediate from $\sigma(1)(i) = i$ for all~$i$.
+\end{proof}
+
+\noindent\textbf{Remark on composition order.}
+The linear-combination twist (Lemma~\ref{lem:twisted_tensor_mul}) composes as
+$\widetilde{(\widetilde{A}_h)}_g = \widetilde{A}_{gh}$, applying $h$ first
+then~$g$.  The permutation twist below uses the same left-action convention
+$\sigma(gh) = \sigma(g) \circ \sigma(h)$, so
+$(A^{\sigma_g})^{\sigma_h} = A^{\sigma_{gh}}$; the inner permutation $\sigma(h)$
+acts first on the index.
+
+\begin{lemma}[Composition of permutation twists]\label{lem:perm_twisted_mul}
+    \lean{MPSTensor.TwistedTensor_mul}
+    \leanok
+    \uses{def:perm_twisted_tensor}
+    If $\sigma(gh) = \sigma(g) \circ \sigma(h)$ for all $g, h \in G$,
+    then
+    \[
+        A^{\sigma_{gh}} \;=\; (A^{\sigma_g})^{\sigma_h}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perm_twisted_tensor}
+    Expanding both sides:
+    $(A^{\sigma_{gh}})^i = A^{\sigma(g)(\sigma(h)(i))} = ((A^{\sigma_g})^{\sigma_h})^i$.
+\end{proof}
+
+\subsection{String order and local symmetry equivalence}
+
+The string order parameter \cite{PerezGarcia2008StringOrder} detects
+whether an on-site unitary $u$ acts as a local symmetry on the state
+generated by an injective MPS tensor.
+
+\begin{definition}[Twisted transfer map]\label{def:twisted_transfer_map}
+    \lean{MPSTensor.twistedTransferMap}
+    \leanok
+    \uses{def:mps_tensor}
+    Given an MPS tensor $A$ and a physical-index matrix $u$, the
+    \emph{twisted transfer map} is
+    \[
+        \E_u(X) \;:=\; \sum_{n,n'} \langle n'|u|n\rangle\,
+        A_n\, X\, A_{n'}^\dagger.
+    \]
+\end{definition}
+
+\begin{definition}[String order parameter]\label{def:string_order_param}
+    \lean{MPSTensor.stringOrderParam}
+    \leanok
+    \uses{def:twisted_transfer_map}
+    The \emph{string order parameter} for twist $u$ and stationary
+    state $\Lambda$ at length $L$ is
+    \[
+        R_L(u) \;:=\; \tr\!\bigl(\Lambda \cdot \E_u^L(\Id)\bigr).
+    \]
+\end{definition}
+
+\begin{definition}[Local symmetry]\label{def:local_symmetry}
+    \lean{MPSTensor.IsLocalSymmetry}
+    \leanok
+    \uses{def:string_order_param}
+    A state has \emph{local symmetry} under $u$ if
+    $\|R_L(u)\| = \|R_L(\Id)\|$ for all $L$.
+\end{definition}
+
+\begin{definition}[String order]\label{def:has_string_order}
+    \lean{MPSTensor.HasStringOrder}
+    \leanok
+    \uses{def:string_order_param}
+    String order \emph{exists} for $u$ if there is a positive
+    constant $c > 0$ such that $c \le \|R_L(u)\|$ for all $L$.
+\end{definition}
+
+\begin{definition}[Condition C1 (intertwining)]\label{def:condC1}
+    \lean{MPSTensor.CondC1}
+    \leanok
+    \uses{def:mps_tensor}
+    \textbf{Condition C1}: for each physical index $i$,
+    $\sum_j u_{ij}\, A^j = V\, A^i\, V^\dagger$.
+\end{definition}
+
+\begin{definition}[Condition C2 (covariance)]\label{def:condC2}
+    \lean{MPSTensor.CondC2}
+    \leanok
+    \uses{def:transfer_map}
+    \textbf{Condition C2}: the transfer map commutes with virtual
+    conjugation: $\E(V X V^\dagger) = V\, \E(X)\, V^\dagger$.
+\end{definition}
+
+\begin{definition}[Condition C3 (doubled commutation)]\label{def:condC3}
+    \lean{MPSTensor.CondC3}
+    \leanok
+    \uses{def:twisted_transfer_map}
+    \textbf{Condition C3}: the doubled transfer matrix commutes with
+    $V \otimes \bar V$, expressed as
+    $V\, \E_1(X)\, V^\dagger = \E_1(V X V^\dagger)$.
+\end{definition}
+
+\begin{theorem}[C2 $\Leftrightarrow$ C3]\label{thm:condC2_iff_condC3}
+    \lean{MPSTensor.condC2_iff_condC3}
+    \leanok
+    \uses{def:condC2, def:condC3}
+    Conditions C2 and C3 are equivalent for any matrix $V$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both sides express the same identity with opposite orientation;
+    the equivalence is \texttt{eq\_comm}.
+\end{proof}
+
+\begin{lemma}[Unitary Kraus mixing]\label{lem:unitary_kraus_mixing}
+    \lean{MPSTensor.unitary_kraus_mixing}
+    \leanok
+    If $u$ is unitary, then replacing Kraus operators $\{A_i\}$ by
+    their unitary mixtures $\{\sum_j u_{ij} A_j\}$ preserves the
+    channel: $\sum_i (\sum_j u_{ij} A_j)\, Y\, (\sum_j u_{ij} A_j)^\dagger
+    = \sum_i A_i\, Y\, A_i^\dagger$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Thin adapter over \texttt{kraus\_same\_map\_of\_unitary\_combination}
+    from \S\ref{sec:kraus_representation}.
+\end{proof}
+
+\begin{theorem}[C1 $\Rightarrow$ C2]\label{thm:condC1_imp_condC2}
+    \lean{MPSTensor.condC1_imp_condC2}
+    \leanok
+    \uses{def:condC1, def:condC2, lem:unitary_kraus_mixing}
+    If $V$ and $u$ are unitary and C1 holds, then C2 holds.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:unitary_kraus_mixing}
+    Insert $V^\dagger V = \Id$ to extract conjugated Kraus operators,
+    apply C1, then invoke unitary Kraus mixing.
+\end{proof}
+
+\begin{theorem}[C2 $\Rightarrow$ C1 (injective)]%
+    \label{thm:condC2_imp_condC1_of_injective}
+    \lean{MPSTensor.condC2_imp_condC1_of_injective}
+    \uses{def:condC2, def:condC1, def:injective}
+    For an injective MPS, if $V$ is unitary and C2 holds, then
+    there exists a unitary $u$ satisfying C1.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:condC2_iff_condC3, thm:condC1_imp_condC2}
+    Requires the spanning property of $\{A_i\}$ (injectivity) to
+    extract $u$ from the transfer-map covariance relation.
+    Requires CP map spectral theory; see Status section of the
+    Lean module.
+\end{proof}
+
+\begin{theorem}[Spectral radius bound]\label{thm:spectral_radius_le_one}
+    \lean{MPSTensor.twistedTransfer_spectralRadius_le_one}
+    \uses{def:twisted_transfer_map, def:injective}
+    For an injective MPS with unitary twist $u$, every eigenvalue
+    $\lambda$ of $\E_u$ satisfies $|\lambda| \le 1$.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:condC2_iff_condC3, thm:condC1_imp_condC2}
+    Requires Cauchy--Schwarz for CP maps and the unique fixed-point
+    property of the transfer map (Perron--Frobenius for CP maps).
+    See Status section of the Lean module.
+\end{proof}
+
+\begin{theorem}[Local symmetry $\Leftrightarrow$ spectral radius one]%
+    \label{thm:local_symmetry_iff_spectral_radius}
+    \lean{MPSTensor.localSymmetry_iff_spectralRadius_one}
+    \uses{def:local_symmetry, def:twisted_transfer_map, def:injective}
+    For a pure FCS, $u$ is a local symmetry iff $\rho(\E_u) = 1$.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:spectral_radius_le_one}
+    Requires spectral theory of completely positive maps
+    (Perron--Frobenius for CP maps). See Status section of the
+    Lean module.
+\end{proof}
+
+\begin{theorem}[String order $\Leftrightarrow$ local symmetry]%
+    \label{thm:string_order_iff_local_symmetry}
+    \lean{MPSTensor.stringOrder_iff_localSymmetry}
+    \uses{def:has_string_order, def:local_symmetry, def:injective}
+    For an injective MPS, string order for $u$ exists iff $u$ is a
+    local symmetry.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:local_symmetry_iff_spectral_radius}
+    Requires spectral theory of completely positive maps
+    (Perron--Frobenius for CP maps). See Status section of the
+    Lean module.
+\end{proof}
+
+\begin{theorem}[Virtual unitary from string order]%
+    \label{thm:virtual_unitary_of_string_order}
+    \lean{MPSTensor.virtualUnitary_of_stringOrder}
+    \uses{def:has_string_order, def:condC1, def:injective}
+    If string order exists for $u$ in an injective MPS, then there
+    exists a virtual unitary $V$ and a unit-modulus scalar $\mu$
+    such that $\sum_j u_{ij} A^j = \mu\, V A^i V^\dagger$ for all~$i$.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:string_order_iff_local_symmetry,
+          thm:local_symmetry_iff_spectral_radius}
+    Requires spectral theory of completely positive maps
+    (Perron--Frobenius for CP maps). See Status section of the
+    Lean module.
+\end{proof}
+
 \subsection{Normal MPS (blocked injectivity)}
 
 \begin{corollary}[Normal MPS Fundamental Theorem]%
@@ -577,6 +1143,444 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     Applying Lemma~\ref{lem:tensor_proportional} within each $L$-block
     then decomposes the blocked gauge equivalence into site-by-site
     gauges, yielding $Z_0, \dots, Z_{n-1}$ for the original tensors.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Product algebra construction and per-block gauge}%
+\label{sec:pi_algebra}
+%% ---------------------------------------------------------
+
+The chain Fundamental Theorem (Theorem~\ref{thm:fundamentalTheorem_injective_chain})
+handles non-TI periodic chains.
+A parallel line of argument addresses block-diagonal tensors:
+given a family of injective block tensors $\{A_k^i\}_{k=0}^{r-1}$
+with block dimensions $D_k$ and a second family $\{B_k^i\}$ with
+per-block $\mc{V}(A_k) = \mc{V}(B_k)$, one seeks per-block gauge
+equivalence $B_k^i = X_k\, A_k^i\, X_k^{-1}$ for each~$k$
+independently, and a global block-permutation plus inner-automorphism
+decomposition.
+
+\subsection{Per-block linear extension}
+
+\begin{definition}[Per-block linear extension]%
+    \label{def:perBlockLinearExtension}
+    \lean{MPSTensor.perBlockLinearExtension}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    Let $A_k, B_k$ be MPS tensors of bond dimension $D_k$ with
+    $A_k$ injective and $\mc{V}(A_k) = \mc{V}(B_k)$ for each block
+    $k \in \{0, \dots, r{-}1\}$.
+    The \emph{per-block linear extension} $T_k : \MN{D_k} \to \MN{D_k}$
+    is the unique $\C$-linear map satisfying $T_k(A_k^i) = B_k^i$
+    for every physical index~$i$.
+\end{definition}
+
+\begin{lemma}[Per-block multiplicativity]%
+    \label{lem:perBlockLinearExtension_mul}
+    \lean{MPSTensor.perBlockLinearExtension_mul}
+    \leanok
+    \uses{def:perBlockLinearExtension}
+    For each block~$k$, the per-block linear extension $T_k$ is
+    multiplicative:
+    $T_k(MN) = T_k(M)\, T_k(N)$ for all $M, N \in \MN{D_k}$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:perBlockLinearExtension}
+    Since $\{A_k^i\}$ spans $\MN{D_k}$, it suffices to check on spanning
+    elements, where the result follows from the MPV identity.
+\end{proof}
+
+\begin{lemma}[Per-block bijectivity]%
+    \label{lem:perBlockLinearExtension_bijective}
+    \lean{MPSTensor.perBlockLinearExtension_bijective}
+    \leanok
+    \uses{lem:perBlockLinearExtension_mul}
+    Each $T_k$ is bijective.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:perBlockLinearExtension_mul}
+    A nonzero multiplicative linear endomorphism of $\MN{D_k}$ is
+    automatically bijective: injectivity follows from the simplicity
+    of $\MN{D_k}$ (the kernel is a proper ideal, hence zero), and
+    surjectivity from finite dimension.
+    Non-vanishing of $T_k$ is established via the trace pairing: if
+    $T_k = 0$, then all $B_k^i = 0$, contradicting the non-vanishing
+    of the trace pairing for injective tensors.
+\end{proof}
+
+\subsection{Product algebra automorphism}
+
+\begin{definition}[Product algebra automorphism]%
+    \label{def:piAlgEquiv}
+    \lean{MPSTensor.piAlgEquiv}
+    \leanok
+    \uses{def:perBlockLinearExtension, lem:perBlockLinearExtension_mul,
+          lem:perBlockLinearExtension_bijective}
+    The \emph{product algebra automorphism} is the $\C$-algebra
+    equivalence
+    \[
+        T : \prod_{k=0}^{r-1} \MN{D_k}
+        \;\xrightarrow{\;\sim\;}\;
+        \prod_{k=0}^{r-1} \MN{D_k}
+    \]
+    defined by $T(M)_k = T_k(M_k)$, where each $T_k$ is the per-block
+    linear extension.
+    It is an algebra automorphism since each $T_k$ is a multiplicative,
+    unital, bijective linear map.
+\end{definition}
+
+\begin{theorem}[Block-permutation decomposition]%
+    \label{thm:piAlgEquiv_decomposition}
+    \lean{MPSTensor.piAlgEquiv_decomposition}
+    \leanok
+    \uses{def:piAlgEquiv, thm:skolem_noether}
+    The product algebra automorphism $T$ decomposes as a block
+    permutation composed with per-block inner automorphisms: there exist
+    a permutation $\sigma \in S_r$ (with $D_{\sigma(k)} = D_k$ for
+    all~$k$) and invertible matrices $X_k \in \GL_{D_k}(\C)$ such that
+    \[
+        (T(M))_{\sigma(k)} = X_k\, M\, X_k^{-1}
+    \]
+    for all $M \in \MN{D_k}$ (viewed as supported in block~$k$) and
+    all~$k$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:piAlgEquiv, thm:skolem_noether}
+    The automorphism $T$ permutes the block ideals of $\prod_k \MN{D_k}$
+    (each block ideal is simple, and an automorphism sends simple ideals
+    to simple ideals of the same dimension).
+    This gives the permutation $\sigma$.
+    On each block, the restricted map is a $\C$-algebra automorphism of
+    $\MN{D_k}$; by Skolem--Noether (Theorem~\ref{thm:skolem_noether}),
+    it is inner.
+\end{proof}
+
+\subsection{Nondegeneracy of the product trace pairing}
+
+\begin{lemma}[Nondegeneracy of the product trace pairing]%
+    \label{lem:piTrace_mul_right_eq_zero}
+    \lean{MPSTensor.piTrace_mul_right_eq_zero}
+    \leanok
+    Let $M = (M_0, \dots, M_{r-1}) \in \prod_{k} \MN{D_k}$.
+    If $\sum_{k} \tr(M_k N_k) = 0$ for all
+    $N = (N_0, \dots, N_{r-1})$, then $M = 0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose $N$ supported on a single block~$k$ (all other components
+    zero).
+    The hypothesis reduces to $\tr(M_k N_k) = 0$ for all $N_k$, so
+    $M_k = 0$ by nondegeneracy of the matrix trace pairing on
+    $\MN{D_k}$.
+    Since $k$ was arbitrary, $M = 0$.
+\end{proof}
+
+\begin{lemma}[Injectivity of the product Gram map]%
+    \label{lem:piTraceMulRightPi_ker_eq_bot}
+    \lean{MPSTensor.piTraceMulRightPi_ker_eq_bot}
+    \leanok
+    \uses{def:injective}
+    Let $\{A_k\}$ be a family of injective block tensors.
+    The product Gram map
+    $M \mapsto \bigl(k, i \mapsto \tr(M_k \cdot A_k^i)\bigr)$
+    is injective.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:injective}
+    Reduces to per-block injectivity of the Gram map
+    $M_k \mapsto (i \mapsto \tr(M_k \cdot A_k^i))$, which holds by
+    injectivity of $A_k$ (the matrices $\{A_k^i\}$ span $\MN{D_k}$,
+    so the trace pairing against them separates points).
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{The multi-block Fundamental Theorem}%
+\label{sec:multi_block_ft}
+%% ---------------------------------------------------------
+
+\begin{theorem}[Multi-block Fundamental Theorem]%
+    \label{thm:fundamentalTheorem_multiBlock_full}
+    \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
+    \leanok
+    \uses{def:injective, def:same_mpv, def:gauge_equiv,
+          lem:perBlockLinearExtension_bijective}
+    Let $\{A_k\}_{k=0}^{r-1}$ and $\{B_k\}_{k=0}^{r-1}$ be two families
+    of MPS tensors with block dimensions $D_k$, each $A_k$ injective, and
+    $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$.
+    Then:
+    \begin{enumerate}
+        \item Per-block gauge equivalence:
+              $B_k^i = X_k\, A_k^i\, X_k^{-1}$ for some
+              $X_k \in \GL_{D_k}(\C)$, for every $k$ and $i$.
+        \item Global gauge equivalence: the block-diagonal tensors
+              $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are
+              gauge equivalent.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:perBlockLinearExtension_bijective,
+    thm:piAlgEquiv_decomposition}
+    Per-block gauge equivalence follows from applying the single-block
+    Fundamental Theorem (existing) to each block, using injectivity of
+    $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
+    Global gauge equivalence is assembled from the per-block gauges via
+    the block-diagonal structure.
+\end{proof}
+
+\begin{theorem}[Per-block SameMPV $\Leftrightarrow$ per-block gauge equivalence]%
+    \label{thm:perBlock_sameMPV_iff_gaugeEquiv}
+    \lean{MPSTensor.perBlock_sameMPV_iff_gaugeEquiv}
+    \leanok
+    \uses{def:injective, def:same_mpv, def:gauge_equiv}
+    Let $\{A_k\}$ be a family of injective block tensors.
+    Then $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$ if and only if
+    $A_k$ and $B_k$ are gauge equivalent for all~$k$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:gauge_equiv}
+    The forward direction is the single-block Fundamental Theorem applied
+    blockwise.
+    The reverse direction holds because gauge equivalence preserves all
+    traces of word evaluations.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Block separation from canonical form}%
+\label{sec:block_separation}
+%% ---------------------------------------------------------
+
+The multi-block Fundamental Theorem
+(Theorem~\ref{thm:fundamentalTheorem_multiBlock_full}) assumes per-block
+$\mc{V}(A_k) = \mc{V}(B_k)$.
+In practice, one starts from the weaker global hypothesis that the
+block-diagonal tensors satisfy the same MPV family:
+$\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr) =
+\mc{V}\!\bigl(\bigoplus_k \mu_k B_k\bigr)$.
+Block separation extracts the per-block identities from the global one
+under canonical-form normalization.
+
+\begin{definition}[Canonical form]\label{def:isCanonicalForm}
+    \lean{MPSTensor.IsCanonicalForm}
+    \leanok
+    \uses{def:injective}
+    A family of block tensors $\{A_k\}_{k=0}^{r-1}$ with scaling
+    weights $\mu_0, \dots, \mu_{r-1} \in \C^{\times}$ is in
+    \emph{canonical form} if:
+    \begin{enumerate}
+        \item each $A_k$ is injective,
+        \item each $A_k$ is left-canonical:
+              $\sum_i (A_k^i)^{\dagger}\, A_k^i = \Id_{D_k}$,
+        \item the weights are strictly ordered by norm:
+              $|\mu_0| > |\mu_1| > \cdots > |\mu_{r-1}| > 0$,
+        \item the self-overlaps are normalised:
+              $O_{A_k A_k}(N) \to 1$ as $N \to \infty$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}[Normal canonical form]\label{def:normal_canonical_form}
+    \lean{MPSTensor.IsNormalCanonicalForm}
+    \leanok
+    \uses{def:isCanonicalForm}
+    A family is in \emph{normal canonical form} if it satisfies the
+    canonical-form conditions with each block additionally
+    \emph{irreducible} (no nontrivial invariant projection) and
+    \emph{primitive} (the transfer map has spectral gap).
+\end{definition}
+
+\begin{theorem}[Block separation from canonical form]%
+    \label{thm:per_block_sameMPV_of_canonical_form}
+    \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
+    \leanok
+    \uses{def:isCanonicalForm, def:same_mpv}
+    Let $\{A_k\}$ be in canonical form with weights $\{\mu_k\}$, and
+    let $\{B_k\}$ be another family with each $B_k$ injective and
+    left-canonical.
+    If $\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr)
+    = \mc{V}\!\bigl(\bigoplus_k \mu_k B_k\bigr)$,
+    then $\mc{V}(A_k) = \mc{V}(B_k)$ for each block~$k$ individually.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:isCanonicalForm}
+    The proof proceeds by strong induction on the number of blocks~$r$.
+    For $r = 1$, the weighted sum degenerates and the result is
+    immediate after cancelling $\mu_0^N \ne 0$.
+
+    For $r \ge 2$, the global identity
+    $\sum_k \mu_k^N\, \bigl(V^{(N)}(A_k)_\sigma
+    - V^{(N)}(B_k)_\sigma\bigr) = 0$
+    holds for all $N$ and $\sigma$.
+    Multiplying by the MPV components of $A_0$ and summing over $\sigma$
+    converts this to an overlap identity.
+    Dividing by $|\mu_0|^{2N}$ and using the strict norm ordering
+    $|\mu_1| / |\mu_0| < 1$, the tail terms
+    $(k \ge 1)$ decay geometrically with ratio
+    $\rho = |\mu_1| / |\mu_0|$.
+    The leading term ($k = 0$) therefore converges:
+    $O_{A_0 B_0}(N) \to 1$ as $N \to \infty$.
+    Combined with the normalised self-overlap
+    $O_{A_0 A_0}(N) \to 1$, this gives
+    $\mc{V}(A_0) = \mc{V}(B_0)$ via the gauge-phase equivalence
+    criterion.
+    Subtracting the leading block and applying the inductive hypothesis
+    yields $\mc{V}(A_k) = \mc{V}(B_k)$ for all remaining $k$.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem from canonical form]%
+    \label{thm:fundamentalTheorem_canonicalForm}
+    \lean{MPSTensor.fundamentalTheorem_canonicalForm}
+    \leanok
+    \uses{thm:per_block_sameMPV_of_canonical_form,
+          thm:fundamentalTheorem_multiBlock_full}
+    Under the hypotheses of
+    Theorem~\ref{thm:per_block_sameMPV_of_canonical_form},
+    every block pair $A_k, B_k$ is gauge equivalent, and the
+    block-diagonal tensors are globally gauge equivalent.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:per_block_sameMPV_of_canonical_form,
+          thm:fundamentalTheorem_multiBlock_full}
+    Theorem~\ref{thm:per_block_sameMPV_of_canonical_form} gives per-block
+    $\mc{V}(A_k) = \mc{V}(B_k)$.
+    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full} converts this
+    to per-block and global gauge equivalence.
+\end{proof}
+
+\begin{theorem}[Explicit gauge from canonical form]%
+    \label{thm:fundamentalTheorem_canonicalForm_explicit}
+    \lean{MPSTensor.fundamentalTheorem_canonicalForm_explicit}
+    \leanok
+    \uses{thm:fundamentalTheorem_canonicalForm}
+    Under the same hypotheses, there exist invertible matrices
+    $X_k \in \GL_{D_k}(\C)$ such that
+    $B_k^i = X_k\, A_k^i\, X_k^{-1}$
+    for every block $k$ and physical index $i$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:fundamentalTheorem_canonicalForm}
+    Extract the gauge matrices from
+    Theorem~\ref{thm:fundamentalTheorem_canonicalForm} by choice.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{TI reduction corollary}%
+\label{sec:ti_reduction}
+%% ---------------------------------------------------------
+
+\begin{theorem}[TI reduction corollary]%
+    \label{thm:ti_reduction_corollary}
+    \lean{MPSChainTensor.ti_reduction_corollary}
+    \leanok
+    \uses{def:injective, def:same_mpv, cor:ft_ti_chain}
+    Let $A$ and $B$ be MPS tensors of bond dimension $D$ with $A$
+    injective.
+    Consider the two constant (translation-invariant) chains
+    $(A, \dots, A)$ and $(B, \dots, B)$ of length $n \ge 1$.
+    If the combined tensors of the two chains generate the same MPV
+    family, then:
+    \begin{enumerate}
+        \item $B$ is gauge equivalent to $A$: there exists
+              $X \in \GL_D(\C)$ with $B^i = X\, A^i\, X^{-1}$ for
+              all~$i$.
+        \item $B$ is injective.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok\uses{cor:ft_ti_chain}
+    The SameMPV hypothesis on the combined tensors, combined with
+    translation invariance, forces the per-site gauge matrices to
+    collapse to a single matrix $X$ (by the TI chain gauge collapse).
+    Injectivity of $B$ follows from gauge equivalence to the
+    injective tensor $A$.
+\end{proof}
+
+\begin{theorem}[TI reduction from same state]%
+    \label{thm:ti_reduction_of_sameState}
+    \lean{MPSChainTensor.ti_reduction_of_sameState}
+    \leanok
+    \uses{thm:ti_reduction_corollary, thm:fundamentalTheorem_injective_chain}
+    Under the same setup, if $n \ge 3$ and the two constant chains
+    generate the same chain state (rather than the same MPV family on the
+    combined tensor), the same conclusion holds, provided the blocking
+    bridge hypothesis (\texttt{SameStateBridgeHyp}) is available to
+    upgrade same-state to same-MPV on the combined tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ti_reduction_corollary}
+    The bridge hypothesis converts same-state at chain length $n \ge 3$
+    to SameMPV on the combined tensor.
+    Then Theorem~\ref{thm:ti_reduction_corollary} applies.
+\end{proof}
+
+\subsection{Global symmetry via gauge composition}
+
+The virtual representation theorem
+(Theorem~\ref{thm:virtual_rep_injective}) relies on the fact that
+composing two gauge transformations yields another gauge up to a
+scalar factor.
+
+\begin{lemma}[Gauge ratio commutes with tensor matrices]%
+    \label{lem:gauge_ratio_commutes}
+    \lean{MPSTensor.gauge_ratio_commutes}
+    \leanok
+    \uses{def:gauge_equiv}
+    If $X, Y \in \GL_D(\C)$ both conjugate an MPS tensor $A$ to the same
+    tensor $B$ (i.e.\ $B^i = X A^i X^{-1} = Y A^i Y^{-1}$ for all $i$),
+    then $Y^{-1} X$ commutes with every $A^i$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Direct matrix calculation: conjugating both gauge relations and
+    composing gives $(Y^{-1} X) A^i = A^i (Y^{-1} X)$.
+\end{proof}
+
+\begin{lemma}[Gauge ratio is scalar for injective tensors]%
+    \label{lem:gauge_ratio_isScalar}
+    \lean{MPSTensor.gauge_ratio_isScalar}
+    \leanok
+    \uses{lem:gauge_ratio_commutes, def:injective, lem:center_scalar}
+    Under the same hypotheses, if $A$ is additionally injective, then
+    $Y^{-1} X = \lambda \Id_D$ for some scalar $\lambda \in \C$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:gauge_ratio_commutes, lem:center_scalar}
+    By Lemma~\ref{lem:gauge_ratio_commutes}, $Y^{-1}X$ commutes with
+    all $A^i$.
+    Since $\{A^i\}$ spans $\MN{D}$, the matrix $Y^{-1}X$ commutes
+    with all of $\MN{D}$.
+    By Lemma~\ref{lem:center_scalar}, it is a scalar matrix.
+\end{proof}
+
+\begin{theorem}[Projective multiplication law for gauge matrices]%
+    \label{thm:gaugeMatrix_projective_mul}
+    \lean{MPSTensor.gaugeMatrix_projective_mul}
+    \leanok
+    \uses{lem:gauge_ratio_isScalar, def:injective,
+          def:on_site_symmetric, lem:twisted_tensor_mul}
+    Let $A$ be an injective MPS tensor with on-site symmetry under a
+    group representation $U : G \to \GL_d(\C)$.
+    For each $g \in G$, let $X(g) \in \GL_D(\C)$ satisfy
+    $\widetilde{A}_g^i = X(g)\, A^i\, X(g)^{-1}$ for all~$i$.
+    Then for all $g, h \in G$, there exists $c(g,h) \in \C$
+    such that
+    \[
+        X(h)\, X(g) = c(g,h)\, X(g \cdot h).
+    \]
+    (In fact $c(g,h) \ne 0$ since both sides are invertible, so
+    $c(g,h) \in \C^{\times}$; the Lean statement records the
+    existential without the nonzero assertion.)
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_ratio_isScalar, lem:twisted_tensor_mul}
+    By the composition law $\widetilde{A}_{gh} = \widetilde{(\widetilde{A}_h)}_g$
+    (Lemma~\ref{lem:twisted_tensor_mul}), both $X(h)\,X(g)$ and $X(gh)$
+    conjugate $A$ to $\widetilde{A}_{gh}$.
+    Lemma~\ref{lem:gauge_ratio_isScalar} then gives the scalar factor.
 \end{proof}
 
 %% ---------------------------------------------------------

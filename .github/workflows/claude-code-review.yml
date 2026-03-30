@@ -54,33 +54,139 @@ jobs:
 
             Use `gh pr diff ${{ github.event.pull_request.number }}` to see the changes.
 
-            Focus your review on:
-            1. **Proof correctness**: Are there any `sorry`s introduced? Are proof terms well-structured?
-            2. **Mathlib style**: Does the code follow Mathlib conventions (naming, tactic style, imports)?
-            3. **Type safety**: Any type mismatches, universe issues, or coercion problems?
-            4. **Performance**: Will any proofs cause timeouts? Are there unnecessarily expensive tactics (e.g., `decide` on large types)?
-            5. **Modularity**: Are new lemmas general enough? Could any be upstreamed to Mathlib?
-            6. **Documentation**: Do new definitions/theorems have docstrings where appropriate?
+            Focus your review on the categories below. Each category has a severity level
+            that determines whether the PR can be approved with outstanding issues.
+
+            **Severity levels:**
+            - 🔴 **Blocker** — must be fixed before merge. Request changes if any are found.
+            - 🟡 **Requires changes** — must be addressed before approval. These are NOT nits.
+              Do NOT approve the PR while issues in this category remain unresolved.
+            - ℹ️ **Advisory** — flag for awareness, acceptable with justification.
+
+            ---
+
+            1. 🔴 **Proof integrity**: Read `docs/PROOF_INTEGRITY.md` for the complete list of proof
+               integrity rules. Flag **blockers** as must-fix issues that should block merge. Flag
+               **warnings** as advisory — note them but acknowledge they may be acceptable with justification.
+               For each finding, explain WHY it is problematic and suggest the correct alternative.
+            2. 🔴 **Proof correctness**: Are proof terms well-structured? Do tactic proofs follow a logical
+               strategy, or are they brute-forced with `simp` / `omega` / `ring` chains? Are `calc` blocks
+               and `conv` rewrites correctly chained? Are hypotheses used or dangling?
+               If a mathematical result looks wrong, too strong, or suspiciously general, **scout** the
+               LaTeX sources in `Papers/` and `WolfNotes/` where the original theorems and proofs are
+               stored. Read the relevant sections, compare hypotheses and conclusions, and cite the
+               specific paper/section when flagging a discrepancy.
+            3. 🟡 **Mathlib style**: Does the code follow Mathlib conventions? Check naming (`camelCase` for
+               defs, `snake_case` for lemmas), tactic style (prefer `exact` over `apply` + `rfl` when
+               equivalent), import hygiene (no unnecessary `open`s, minimal imports), and lemma placement.
+               Style violations are NOT nits — they must be fixed before approval.
+            4. 🔴 **Type safety**: Any type mismatches, universe issues, or coercion problems? Check for
+               universe polymorphism issues, missing `[DecidableEq]` or `[Fintype]` instances, and
+               coercion chains that may cause unification failures.
+            5. 🟡 **Performance**: Will any proofs cause timeouts? Watch for `decide` on large types,
+               `simp` with unbounded lemma sets, deep `rw` chains, and `norm_num` on symbolic expressions.
+               Suggest alternatives like `omega`, `positivity`, or explicit `calc` steps.
+               Performance issues that will likely cause timeouts must be fixed before approval.
+            6. 🟡 **Modularity & duplication**: Are new lemmas general enough? Could any be upstreamed to
+               Mathlib? Are there lemmas that are overly specialized to the local context but could be
+               stated more generally? Is the file structure consistent with the existing module hierarchy?
+               Flag duplicated logic or lemmas that restate existing Mathlib results.
+               Modularity and duplication issues must be fixed before approval.
+            7. 🟡 **Documentation**: Do new definitions and key theorems have docstrings? Are module-level
+               doc comments present for new files? Do docstrings explain mathematical meaning, not just
+               Lean syntax? Missing documentation must be added before approval.
+            8. 🟡 **Blueprint sync**: When new theorems, lemmas, or definitions are added or proven in
+               Lean, the corresponding blueprint entry in `blueprint/src/chapter/` must be updated in the
+               same PR. This means adding `\lean{DeclarationName}` and `\leanok` tags (and
+               `\uses{...}` dependencies) for new results, or adding `\leanok` to the `\begin{proof}`
+               when a previously `sorry`-d result is now fully proven. Flag any PR that adds or completes
+               Lean declarations without updating the blueprint. Blueprint sync must be done before approval.
+
+            ---
+
+            **Review verdict rules:**
+            - If ANY 🔴 or 🟡 issues are found, submit the review as **REQUEST_CHANGES**.
+              Do NOT approve while these issues remain unresolved.
+            - Only **APPROVE** when all 🔴 and 🟡 issues have been addressed.
+            - ℹ️ advisory items alone do not block approval.
+            - Do NOT label issues as "Nit" or "non-blocking" if they fall under a 🟡 or 🔴 category.
+              Use clear language: "This must be fixed before merge" or "Requires changes".
 
             For each issue found, post an inline comment on the relevant line using the GitHub CLI.
             At the end, post a summary comment on the PR with your overall assessment.
 
-            **Reading existing review threads:**
-            Before posting new comments, read all existing review threads on this PR using the GitHub MCP tools.
-            This includes threads from previous review cycles and any replies from @claude or human reviewers.
+            **Reading existing feedback:**
+            Before posting new comments, read ALL existing feedback on this PR using the GitHub MCP tools:
+            1. Read **inline review threads** via `get_review_comments` — these are code-level comments from previous review cycles.
+            2. Read **PR conversation comments** via `get_comments` — bots and humans often post feedback, summaries,
+               and discussion directly on the PR thread (not as inline review comments). These are equally important.
+            This includes threads from previous review cycles and any replies from @claude, other bots, or human reviewers.
             Use this context to:
-            - Avoid re-raising issues that have already been discussed, acknowledged, or fixed.
-            - Understand any ongoing conversation or decisions made in earlier threads.
+            - Avoid re-raising issues that have already been discussed, acknowledged, or fixed in either location.
+            - Understand any ongoing conversation or decisions made in earlier threads or PR comments.
 
             **Resolving previous review comments:**
             When this review is triggered by a `synchronize` event (new push to the PR):
-            1. For each unresolved review thread that was authored by you (the bot), check whether the new changes address the issue raised in that comment.
-            2. If a previous comment has been addressed by the new commits, resolve that review thread using the `mcp__github__resolve_review_thread` tool.
-            3. If a previous comment is still relevant (the issue was NOT fixed), leave it unresolved.
-            4. Only resolve your own (bot) threads — never resolve threads authored by humans.
+            1. First, fetch all review threads **with their GraphQL node IDs** using `gh api graphql`.
+               The `get_review_comments` MCP method does NOT return thread IDs, so you MUST use GraphQL.
+            2. For each unresolved thread where the author login starts with `claude`, `copilot-pull-request-reviewer`, or `chatgpt-codex-connector`
+               (note: GitHub may append `[bot]` to app logins — match the base name as a prefix to handle both forms),
+               check whether the new changes address the issue raised in that comment.
+               Do NOT resolve threads from `cursor`/Bugbot — that bot manages its own thread resolution.
+            3. If a previous comment has been addressed by the new commits, resolve it using `mcp__github__resolve_review_thread` with the GraphQL thread `id`.
+            4. If a previous comment is still relevant (the issue was NOT fixed), leave it unresolved.
+            5. Only resolve bot threads — never resolve threads authored by human reviewers.
             This prevents stale bot comments from accumulating across review cycles.
+
+            **Example: How to fetch thread IDs and resolve them**
+
+            Step 1 — Query thread IDs via GraphQL (returns up to 100 threads; see Step 3 for pagination):
+            ```bash
+            gh api graphql -f query='
+            {
+              repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
+                pullRequest(number: ${{ github.event.pull_request.number }}) {
+                  reviewThreads(first: 100) {
+                    nodes {
+                      id
+                      isResolved
+                      isOutdated
+                      comments(first: 1) {
+                        nodes {
+                          author { login }
+                          body
+                        }
+                      }
+                    }
+                    pageInfo { hasNextPage endCursor }
+                  }
+                }
+              }
+            }'
+            ```
+            This returns thread objects with `id` fields like `"PRRT_kwDON..."`. Use pagination if `hasNextPage` is true.
+
+            Step 2 — For each unresolved bot thread whose issue is now fixed, resolve it:
+            ```
+            mcp__github__resolve_review_thread(threadId: "PRRT_kwDON...")
+            ```
+
+            Step 3 — If there are more than 100 threads, paginate:
+            ```bash
+            gh api graphql -f query='
+            {
+              repository(owner: "${{ github.repository_owner }}", name: "${{ github.event.repository.name }}") {
+                pullRequest(number: ${{ github.event.pull_request.number }}) {
+                  reviewThreads(first: 100, after: "CURSOR_FROM_PREVIOUS_PAGE") {
+                    nodes { id isResolved isOutdated comments(first: 1) { nodes { author { login } body } } }
+                    pageInfo { hasNextPage endCursor }
+                  }
+                }
+              }
+            }'
+            ```
 
           claude_args: |
             --model claude-opus-4-6
-            --allowed-tools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*"
+            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*"
             --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Review with mathematical rigor. Flag any sorry that is not clearly marked as a known TODO."

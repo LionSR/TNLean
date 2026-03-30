@@ -106,8 +106,8 @@ theorem trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel
   exact hV_ne (fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
     hE_ch hE_irr V hV_fix htr)
 
-/-- **TODO**: Prove that a peripheral eigenvalue of an irreducible QDS has a periodic
-fixed point. Currently a `sorry` placeholder. -/
+/-- A peripheral eigenvalue of an irreducible QDS has a periodic fixed point:
+there exists `p > 0` and a nonzero eigenvector `V` such that `T(p * t) V = V`. -/
 theorem exists_power_fixed_eigenvector_of_peripheral
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -116,10 +116,25 @@ theorem exists_power_fixed_eigenvector_of_peripheral
     {t : ℝ} (ht : 0 < t)
     {μ : ℂ} (hμ_eig : Module.End.HasEigenvalue (T t) μ) (hμ_norm : ‖μ‖ = 1) :
     ∃ p : ℕ, 0 < p ∧ ∃ V : Mat, V ≠ 0 ∧ (T t) V = μ • V ∧ T (↑p * t) V = V := by
-  sorry
+  have hTt_ch : IsChannel (T t) := hT.channel t (le_of_lt ht)
+  have hTt_irr : IsIrreducibleMap (T t) := hT_irr_all t ht
+  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  obtain ⟨σ, _, hσ_pd, hσ_fix, _⟩ :=
+    IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := T t) hTt_ch hTt_irr hD
+  have hμ_periph : μ ∈ peripheralEigenvalues (T t) := ⟨hμ_eig, hμ_norm⟩
+  have hpow_closed := peripheral_powers_closed_of_irreducible_channel_with_fixed
+    (T t) hTt_ch hTt_irr σ hσ_pd hσ_fix hμ_periph
+  obtain ⟨p, hp_pos, _, hμp⟩ :=
+    bounded_root_of_peripheral_closed_powers (T t) μ hμ_periph hpow_closed
+  obtain ⟨V, hV⟩ := hμ_eig.exists_hasEigenvector
+  have hV_ne : V ≠ 0 := hV.2
+  have hEV : (T t) V = μ • V := Module.End.mem_eigenspace_iff.mp hV.1
+  have hpt_eq : T (↑p * t) = (T t) ^ p :=
+    semigroup_pow T hT.semigroup.semigroup t (le_of_lt ht) p
+  refine ⟨p, hp_pos, V, hV_ne, hEV, ?_⟩
+  rw [hpt_eq, pow_apply_eigenvector (T t) V μ p hEV, hμp, one_smul]
 
-/-- **TODO**: Prove that a trace-nonzero eigenvector exists for peripheral eigenvalues.
-Currently a `sorry` placeholder. -/
+/-- A trace-nonzero eigenvector exists for peripheral eigenvalues of an irreducible QDS. -/
 theorem exists_trace_ne_zero_eigenvector_of_peripheral
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -128,7 +143,12 @@ theorem exists_trace_ne_zero_eigenvector_of_peripheral
     {t : ℝ} (ht : 0 < t)
     {μ : ℂ} (hμ_eig : Module.End.HasEigenvalue (T t) μ) (hμ_norm : ‖μ‖ = 1) :
     ∃ V : Mat, V ≠ 0 ∧ (T t) V = μ • V ∧ Matrix.trace V ≠ 0 := by
-  sorry
+  obtain ⟨p, hp_pos, V, hV_ne, hEV, hVfix⟩ :=
+    exists_power_fixed_eigenvector_of_peripheral T hT hT_irr_all ht hμ_eig hμ_norm
+  have hpt_pos : 0 < (↑p : ℝ) * t := mul_pos (Nat.cast_pos.mpr hp_pos) ht
+  exact ⟨V, hV_ne, hEV,
+    trace_ne_zero_of_nonzero_fixedPoint_of_irreducible_channel
+      (T (↑p * t)) (hT.channel _ (le_of_lt hpt_pos)) (hT_irr_all _ hpt_pos) hVfix hV_ne⟩
 
 theorem eigenvalue_eq_one_of_trace_preserving_eigenvector
     (E : Mat →ₗ[ℂ] Mat)
@@ -145,8 +165,7 @@ theorem eigenvalue_eq_one_of_trace_preserving_eigenvector
       _ = 0 := by rw [htrV, sub_self]
   exact sub_eq_zero.mp ((mul_eq_zero.mp hzero).resolve_right htrV_ne)
 
-/-- **TODO**: Prove that all peripheral eigenvalues equal 1 when all times are
-irreducible. Currently a `sorry` placeholder. -/
+/-- All peripheral eigenvalues equal 1 when the QDS is irreducible at all positive times. -/
 theorem peripheral_eq_one_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -155,17 +174,28 @@ theorem peripheral_eq_one_of_irreducible_all
     {t : ℝ} (ht : 0 < t)
     {μ : ℂ} (hμ_eig : Module.End.HasEigenvalue (T t) μ) (hμ_norm : ‖μ‖ = 1) :
     μ = 1 := by
-  sorry
+  obtain ⟨V, _, hEV, htrV⟩ :=
+    exists_trace_ne_zero_eigenvector_of_peripheral T hT hT_irr_all ht hμ_eig hμ_norm
+  exact eigenvalue_eq_one_of_trace_preserving_eigenvector
+    (T t) (hT.channel t (le_of_lt ht)).tp hEV htrV
 
-/-- **TODO**: Prove that irreducibility at all times implies primitivity.
-Currently a `sorry` placeholder. -/
+/-- Irreducibility at all positive times implies primitivity for a QDS. -/
 theorem primitive_of_irreducible_all
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hT : IsQuantumDynSemigroup T)
     (hT_irr_all : ∀ s : ℝ, 0 < s → IsIrreducibleMap (T s)) :
     ∀ t : ℝ, 0 < t → IsPrimitive (T t) := by
-  sorry
+  intro t ht
+  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hTt_ch : IsChannel (T t) := hT.channel t (le_of_lt ht)
+  have hTt_irr : IsIrreducibleMap (T t) := hT_irr_all t ht
+  obtain ⟨σ, hσ_mem, _, hσ_fix, _⟩ :=
+    IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := T t) hTt_ch hTt_irr hD
+  have hσ_ne := ne_zero_of_mem_densityMatrices' hσ_mem
+  exact isPrimitive_of_unique_norm_one (T t) σ hσ_fix hσ_ne
+    (fun μ hμ_eig hμ_norm =>
+      peripheral_eq_one_of_irreducible_all T hT hT_irr_all ht hμ_eig hμ_norm)
 
 def residualSliceIndex (u s : ℝ) (n : ℕ) : ℕ :=
   Int.toNat ⌊((n : ℝ) * u) / s⌋
@@ -184,14 +214,13 @@ theorem residualSliceTime_mem_Icc
   · have hlt : Int.fract (((n : ℝ) * u) / s) < 1 := Int.fract_lt_one _
     nlinarith [hlt, hs]
 
-/-- **TODO**: Prove the decomposition `n * u = ⌊n*u/s⌋ * s + residual`.
-The proof sketch below needs Mathlib API adjustments. Currently a `sorry` placeholder. -/
+/-- For `u ≥ 0` and `s > 0`, we decompose
+`n * u = (residualSliceIndex u s n : ℝ) * s + residualSliceTime u s n`,
+where `residualSliceIndex u s n = Int.toNat ⌊((n : ℝ) * u) / s⌋` agrees with the
+(nonnegative) floor `⌊(n*u)/s⌋`. -/
 theorem residualSlice_decomp
-    (u s : ℝ) (hs : 0 < s) :
+    (u s : ℝ) (hs : 0 < s) (hu : 0 ≤ u) :
     ∀ n : ℕ, (n : ℝ) * u = (residualSliceIndex u s n : ℝ) * s + residualSliceTime u s n := by
-  sorry
-/-
-  Proof sketch (commented out pending Mathlib API adjustments):
   intro n
   have ha : ↑⌊((n : ℝ) * u / s)⌋ + Int.fract (((n : ℝ) * u) / s) = ((n : ℝ) * u) / s :=
     Int.floor_add_fract (((n : ℝ) * u) / s)
@@ -201,19 +230,14 @@ theorem residualSlice_decomp
   have htoNat : ((residualSliceIndex u s n : ℕ) : ℝ) = ↑⌊((n : ℝ) * u / s)⌋ := by
     dsimp [residualSliceIndex]
     exact_mod_cast Int.toNat_of_nonneg hfloor_nonneg
-  have hmulha :
-      s * (↑⌊((n : ℝ) * u / s)⌋ + Int.fract (((n : ℝ) * u) / s)) =
-        s * (((n : ℝ) * u) / s) := by
-    exact congrArg (fun x : ℝ => s * x) ha
   calc
     (n : ℝ) * u = s * (((n : ℝ) * u) / s) := by field_simp [hs.ne']
     _ = s * (↑⌊((n : ℝ) * u / s)⌋ + Int.fract (((n : ℝ) * u) / s)) := by
-          exact hmulha.symm
+          congr 1; exact ha.symm
     _ = ((residualSliceIndex u s n : ℕ) : ℝ) * s + residualSliceTime u s n := by
           dsimp [residualSliceTime]
           rw [mul_add, htoNat]
           ring
--/
 
 theorem fixedPoint_at_nat_mul
     (T : ℝ → Mat →ₗ[ℂ] Mat)
@@ -236,7 +260,7 @@ theorem fixedPoint_at_nat_mul
 theorem residualSlice_apply_eq_of_fixedPoint
     (T : ℝ → Mat →ₗ[ℂ] Mat)
     (hT : IsQuantumDynSemigroup T)
-    (u : ℝ)
+    (u : ℝ) (hu : 0 ≤ u)
     (s : ℝ) (hs : 0 < s)
     {δ : Mat}
     (hδ_fix : T s δ = δ) :
@@ -247,7 +271,7 @@ theorem residualSlice_apply_eq_of_fixedPoint
   calc
     T ((n : ℝ) * u) δ =
         T (residualSliceTime u s n + ((residualSliceIndex u s n : ℕ) : ℝ) * s) δ := by
-          rw [residualSlice_decomp u s hs n, add_comm]
+          rw [residualSlice_decomp u s hs hu n, add_comm]
     _ = T (residualSliceTime u s n) (T (((residualSliceIndex u s n : ℕ) : ℝ) * s) δ) := by
           simp [LinearMap.comp_apply,
             hT.semigroup.semigroup.comp (residualSliceTime u s n)
@@ -256,71 +280,63 @@ theorem residualSlice_apply_eq_of_fixedPoint
               (mul_nonneg (Nat.cast_nonneg (residualSliceIndex u s n)) (le_of_lt hs))]
     _ = T (residualSliceTime u s n) δ := by rw [hms_fix]
 
-/-- **TODO**: Prove convergent subsequence exists for residual slice times (compactness).
-Currently a `sorry` placeholder. -/
+/-- A convergent subsequence exists for residual slice times (by compactness of `[0, s]`). -/
 theorem exists_residualSlice_subseq_tendsto
     (u s : ℝ) (hs : 0 < s) :
     ∃ a ∈ Set.Icc 0 s, ∃ φ : ℕ ↪o ℕ,
       Filter.Tendsto (fun k : ℕ => residualSliceTime u s (φ k)) Filter.atTop (nhds a) := by
-  sorry
-/-
-  Proof sketch (commented out pending Mathlib API adjustments):
   let r : ℕ → ℝ := residualSliceTime u s
   have hmap_le : Filter.map r Filter.atTop ≤ Filter.principal (Set.Icc 0 s) := by
-    rw [Filter.le_principal_iff]
-    show r ⁻¹' Set.Icc 0 s ∈ Filter.atTop
-    exact Filter.Eventually.of_forall (residualSliceTime_mem_Icc u s hs)
-  obtain ⟨a, ha_mem, hcluster⟩ := (isCompact_Icc (a := 0) (b := s)).exists_clusterPt hmap_le
-  obtain ⟨φ, _hφmono, hφtendsto⟩ := TopologicalSpace.FirstCountableTopology.tendsto_subseq hcluster
-  exact ⟨a, ha_mem, φ, hφtendsto⟩
--/
+    rw [Filter.le_principal_iff, Filter.mem_map]
+    exact Filter.univ_mem' (residualSliceTime_mem_Icc u s hs)
+  obtain ⟨a, ha_mem, hcluster⟩ := isCompact_Icc.exists_clusterPt hmap_le
+  obtain ⟨ψ, hψ_mono, hψ_tendsto⟩ :=
+    TopologicalSpace.FirstCountableTopology.tendsto_subseq hcluster
+  exact ⟨a, ha_mem, OrderEmbedding.ofStrictMono ψ hψ_mono, hψ_tendsto⟩
 
-/-- **TODO**: Prove that the residual slice limit vanishes (continuity + uniqueness of limits).
-Currently a `sorry` placeholder. -/
+/-- The residual slice limit vanishes (by continuity and uniqueness of limits). -/
 theorem residualSlice_limit_zero_of_fixedPoint
     (T : ℝ → Mat →ₗ[ℂ] Mat)
     (hT : IsQuantumDynSemigroup T)
     (u : ℝ)
-    {s : ℝ} (hs : 0 < s)
+    {s : ℝ} (_hs : 0 < s)
     {δ : Mat}
     (hδ_decay : Filter.Tendsto (fun n : ℕ => T ((n : ℝ) * u) δ) Filter.atTop (nhds 0))
     (hres_eq : ∀ n : ℕ, T ((n : ℝ) * u) δ = T (residualSliceTime u s n) δ)
-    {a : ℝ} (ha_mem : a ∈ Set.Icc 0 s)
+    {a : ℝ} (_ha_mem : a ∈ Set.Icc 0 s)
     (φ : ℕ ↪o ℕ)
     (hφtendsto : Filter.Tendsto (fun k : ℕ => residualSliceTime u s (φ k)) Filter.atTop (nhds a)) :
     T a δ = 0 := by
-  sorry
-/-
-  Proof sketch (commented out pending Mathlib API adjustments):
   have hδ_cont : Continuous (fun t : ℝ => T t δ) := by
     have hEval : Continuous (fun A : Mat →L[ℂ] Mat => A δ) :=
       (ContinuousLinearMap.apply ℂ Mat δ).continuous
     simpa using hEval.comp hT.semigroup.continuous
-  have hsub_decay : Filter.Tendsto (fun k : ℕ => T (((φ k : ℝ)) * u) δ) Filter.atTop (nhds 0) :=
+  have hsub_decay : Filter.Tendsto (fun k : ℕ => T ((↑(φ k) : ℝ) * u) δ)
+      Filter.atTop (nhds 0) :=
     hδ_decay.comp φ.strictMono.tendsto_atTop
-  have hsub_res : Filter.Tendsto (fun k : ℕ => T (residualSliceTime u s (φ k)) δ) Filter.atTop
-      (nhds (T a δ)) :=
+  have hsub_res : Filter.Tendsto (fun k : ℕ => T (residualSliceTime u s (φ k)) δ)
+      Filter.atTop (nhds (T a δ)) :=
     (hδ_cont.tendsto a).comp hφtendsto
   have hsub_res_zero : Filter.Tendsto (fun k : ℕ => T (residualSliceTime u s (φ k)) δ)
       Filter.atTop (nhds 0) := by
-    refine hsub_decay.congr' ?_
-    exact Filter.Eventually.of_forall (fun k => hres_eq (φ k))
+    exact hsub_decay.congr' (Filter.Eventually.of_forall (fun k => hres_eq (φ k)))
   exact tendsto_nhds_unique hsub_res hsub_res_zero
--/
 
-/-- **TODO**: Prove that a zero point exists in slice times.
-Currently a `sorry` placeholder. -/
+/-- By compactness of `[0, s]`, the residual slice times admit a convergent subsequence
+whose limit `a` satisfies `T a δ = 0`. -/
 theorem exists_residual_time_eq_zero_of_fixedPoint
     [NeZero D]
     (T : ℝ → Mat →ₗ[ℂ] Mat)
     (hT : IsQuantumDynSemigroup T)
-    (u : ℝ) (_hu_nonneg : 0 ≤ u)
+    (u : ℝ) (hu_nonneg : 0 ≤ u)
     (s : ℝ) (hs : 0 < s)
     {δ : Mat}
     (hδ_decay : Filter.Tendsto (fun n : ℕ => T ((n : ℝ) * u) δ) Filter.atTop (nhds 0))
     (hδ_fix : T s δ = δ) :
     ∃ a ∈ Set.Icc 0 s, T a δ = 0 := by
-  sorry
+  obtain ⟨a, ha_mem, φ, hφtendsto⟩ := exists_residualSlice_subseq_tendsto u s hs
+  exact ⟨a, ha_mem, residualSlice_limit_zero_of_fixedPoint T hT u hs hδ_decay
+    (residualSlice_apply_eq_of_fixedPoint T hT u hu_nonneg s hs hδ_fix) ha_mem φ hφtendsto⟩
 
 theorem eq_zero_of_expSemigroup_apply_eq_zero
     (L : Mat →ₗ[ℂ] Mat) {a : ℝ} {δ : Mat}

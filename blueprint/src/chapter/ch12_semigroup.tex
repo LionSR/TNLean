@@ -488,7 +488,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.4, item 2: CP-part uniqueness]
     \label{thm:generatorDecomp_traceless_unique_phi}
-    \lean{generatorDecomp_traceless_unique_phi}\notready
+    \lean{generatorDecomp_traceless_unique_phi}\leanok
     \uses{def:lindblad_form, def:has_traceless_kraus, def:generator_decomp}
     If two Lindblad forms $F, F'$ induce the same generator and
     both have traceless Kraus operators, then their CP parts agree:
@@ -496,7 +496,7 @@ which shows that such generators have the standard Lindblad form.
     This is part of \cite[Prop.~7.4, item~2]{Wolf2012Quantum}.
 \end{theorem}
 
-\begin{proof}\notready
+\begin{proof}\leanok
     Compare projected Choi matrices and use Choi injectivity.
 \end{proof}
 
@@ -512,7 +512,7 @@ which shows that such generators have the standard Lindblad form.
     This is part of \cite[Prop.~7.4, item~2]{Wolf2012Quantum}.
 \end{theorem}
 
-\begin{proof}\notready
+\begin{proof}\leanok
     \uses{thm:generatorDecomp_traceless_unique_phi}
     After identifying $\phi = \phi'$
     (Theorem~\ref{thm:generatorDecomp_traceless_unique_phi}),
@@ -527,7 +527,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{theorem}[Prop.~7.4, item 2: combined uniqueness]
     \label{thm:generatorDecomp_traceless_unique}
-    \lean{generatorDecomp_traceless_unique}\notready
+    \lean{generatorDecomp_traceless_unique}\leanok
     \uses{thm:generatorDecomp_traceless_unique_phi,
           thm:generatorDecomp_traceless_unique_kappa}
     If two Lindblad forms $F, F'$ induce the same generator and
@@ -535,7 +535,7 @@ which shows that such generators have the standard Lindblad form.
     $\kappa' = \kappa + i\lambda\,\Id$ for some $\lambda \in \R$.
 \end{theorem}
 
-\begin{proof}\notready
+\begin{proof}\leanok
     \uses{thm:generatorDecomp_traceless_unique_phi,
           thm:generatorDecomp_traceless_unique_kappa}
     Combine Theorems~\ref{thm:generatorDecomp_traceless_unique_phi}
@@ -713,7 +713,7 @@ which shows that such generators have the standard Lindblad form.
 %% Wolf §7.1, Prop 7.5
 \begin{remark}[Status note]\notready
     The Lean declarations for Proposition~7.5 are currently implemented via
-    axioms to keep CI/elaboration time manageable; accordingly these results are
+    axioms to keep CI/elaboration time manageable; accordingly, these results are
     marked \texttt{notready} in the blueprint until full proofs are restored.
     The Proposition~7.6 implication (4)$\to$(2) sorry was closed in PR~\#85,
     so the full equivalence chain is now complete.

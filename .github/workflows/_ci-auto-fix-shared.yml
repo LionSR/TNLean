@@ -31,7 +31,7 @@ on:
       claude_allowed_tools:
         required: true
         type: string
-        description: The --allowed-tools string for claude_args
+        description: The --allowedTools string for claude_args
       claude_system_prompt:
         required: true
         type: string
@@ -118,7 +118,7 @@ jobs:
       - name: Get CI failure details
         if: steps.loop_guard.outputs.skip != 'true'
         id: failure_details
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const run = await github.rest.actions.getWorkflowRun({
@@ -189,5 +189,5 @@ jobs:
 
           claude_args: |
             --model claude-opus-4-6
-            --allowed-tools "${{ inputs.claude_allowed_tools }}"
+            --allowedTools "${{ inputs.claude_allowed_tools }}"
             --append-system-prompt "${{ inputs.claude_system_prompt }}"

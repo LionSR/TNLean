@@ -6,23 +6,38 @@ The key mechanism is spectral: after removing the leading eigenvalue
 contribution, the connected part is governed by subleading eigenvalues of the
 transfer map.
 
+When the MPS tensor generates a parent Hamiltonian
+(Chapter~\ref{ch:parent_hamiltonian}), the correlator quantifies spatial
+correlations in the ground state.  The exponential decay rate is set by the
+spectral properties of the transfer map, i.e.\ by the modulus of its
+subleading eigenvalues.
+
+The spectral analysis of the transfer map and the mixed transfer operator,
+including the eigenvalue bound $\rho(F_{AB}) \le 1$, the strict spectral
+gap $\rho(F_{AB}) < 1$ for non-equivalent blocks, and the resulting
+overlap decay, is developed in Chapter~\ref{ch:spectral}.  This chapter
+focuses on the \emph{correlator} side: one-point and two-point expectations,
+their spectral decomposition, and quantitative bounds on decay rates.
+
 \section{Connected correlators from the transfer map}
 
-\begin{definition}[One-point expectation]
+\begin{definition}[One-point expectation]\label{def:one_point_expectation}
     \lean{MPSTensor.onePointExpectation}
     \leanok
-    \uses{def:transfer_map}
-    Fix an MPS tensor $A$ and a right fixed point $\rho^R$ of its transfer map.
+    \uses{def:transfer_map, thm:qpf}
+    Fix an MPS tensor $A$ and a right fixed point $\rho^R$ of its transfer map
+    (whose existence, and uniqueness up to scaling under the hypotheses of
+    Theorem~\ref{thm:qpf}, are guaranteed by the quantum Perron--Frobenius theorem).
     For a local observable $X \in \MN{D}$ define
     \[
         \langle X_0 \rangle := \tr(X\rho^R).
     \]
 \end{definition}
 
-\begin{definition}[Two-point expectation at distance $n$]
+\begin{definition}[Two-point expectation at distance $n$]\label{def:two_point_expectation}
     \lean{MPSTensor.twoPointExpectation}
     \leanok
-    \uses{def:transfer_map}
+    \uses{def:transfer_map, def:one_point_expectation}
     For observables $X,Y \in \MN{D}$ and $n\ge 0$,
     \[
         \langle X_0 Y_n \rangle
@@ -32,10 +47,10 @@ transfer map.
     $Y$ and take the trace.
 \end{definition}
 
-\begin{definition}[Connected correlator]
+\begin{definition}[Connected correlator]\label{def:connected_correlator}
     \lean{MPSTensor.connectedCorrelator}
     \leanok
-    \uses{def:transfer_map}
+    \uses{def:two_point_expectation, def:one_point_expectation}
     The connected two-point function is
     \[
         C(X,Y;n) := \langle X_0Y_n\rangle - \langle X_0\rangle\langle Y_0\rangle.
@@ -44,10 +59,10 @@ transfer map.
 
 \section{Spectral expansion and exponential decay}
 
-\begin{theorem}[Sum of exponentials]
+\begin{theorem}[Sum of exponentials]\label{thm:correlator_sum_exponentials}
     \lean{MPSTensor.connectedCorrelator_eq_sum}
     \leanok
-    \uses{def:transfer_map}
+    \uses{def:connected_correlator, thm:spectral_radius_le_one, thm:qpf}
     For a normal MPS, the connected correlator admits a spectral expansion of
     the form
     \[
@@ -62,10 +77,10 @@ transfer map.
     Apply spectral decomposition to $\E_A^n$.
 \end{proof}
 
-\begin{theorem}[Exponential decay bound]
+\begin{theorem}[Exponential decay bound]\label{thm:correlator_exponential_bound}
     \lean{MPSTensor.connectedCorrelator_bound}
     \leanok
-    \uses{thm:spectral_radius_le_one}
+    \uses{thm:correlator_sum_exponentials}
     If $|\lambda_j| \le |\lambda_2| < 1$ for all subleading eigenvalues, then
     there exists $C_{XY}\ge 0$ such that
     \[
@@ -77,17 +92,137 @@ transfer map.
     Combine the sum-of-exponentials expansion with the triangle inequality.
 \end{proof}
 
-\begin{definition}[Correlation length]
+\begin{remark}[Spectral hypothesis and the spectral gap]%
+    \label{rem:spectral_hypothesis}
+    \uses{thm:correlator_exponential_bound, thm:primitive_compl_lt_one}
+    The hypothesis ``$|\lambda_2| < 1$'' in
+    Theorem~\ref{thm:correlator_exponential_bound} is precisely the
+    \emph{spectral gap} condition for the transfer map $\E_A$.
+    For primitive channels, the complementary spectral gap
+    $\rho(\E_A - P) < 1$ is established in
+    Theorem~\ref{thm:primitive_compl_lt_one} (Chapter~\ref{ch:channels});
+    for irreducible trace-preserving tensors, the analogous result is
+    Theorem~\ref{thm:spectral_gap_irr_tp}.
+    Thus the exponential decay of connected correlations follows
+    directly from the block separation theory once the spectral
+    decomposition is in hand.
+\end{remark}
+
+\begin{definition}[Correlation length]\label{def:correlation_length}
     \lean{MPSTensor.correlationLength}
     \leanok
+    \uses{thm:correlator_exponential_bound}
     The correlation length associated with $\lambda_2$ is
     \[
         \xi := -\frac{1}{\log|\lambda_2|}.
     \]
 \end{definition}
 
-\begin{remark}
-    \uses{thm:spectral_radius_le_one}
+\begin{lemma}[Correlation length is positive]\label{lem:correlation_length_pos}
+    \lean{MPSTensor.correlationLength_pos}
+    \leanok
+    \uses{def:correlation_length}
+    If $|\lambda_2| < 1$ and $\lambda_2 \ne 0$, then $\xi > 0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $0 < |\lambda_2| < 1$, we have $\log|\lambda_2| < 0$, so
+    $\xi = -1/\log|\lambda_2| > 0$.
+\end{proof}
+
+\section{Quantitative spectral gap bounds}
+
+The spectral gap theorems in Chapter~\ref{ch:channels} establish
+$\rho(\E_A - P) < 1$ for primitive channels qualitatively.  This section
+records the \emph{quantitative} refinements that give explicit constants
+and rates for the single-tensor transfer map $\E_A$.
+Two of the three results below are stubs in the formalization (TODO~\#22);
+the spectral gap from injectivity is fully proved.
+
+\begin{theorem}[Exponential convergence of primitive channels]%
+    \label{thm:exponential_convergence_primitive}
+    \lean{MPSTensor.exponential_convergence_of_primitive}
+    \notready
+    \uses{thm:primitive_compl_lt_one, def:fixed_point_proj,
+          thm:primitive_overlap}
+    Let $A$ be a primitive trace-preserving MPS tensor with positive
+    definite fixed point $\rho$ and fixed-point projection
+    $P(X) = \frac{\tr(X)}{\tr(\rho)}\rho$.
+    Then there exist $C > 0$ and $0 < \delta \le 1$ such that for all
+    $n \ge 0$ and $X \in \MN{D}$,
+    \[
+        \|\E_A^n(X) - P(X)\|
+        \;\le\; C\,(1-\delta)^n\,\|X\|.
+    \]
+    The spectral gap $\delta$ exists by primitivity
+    (Theorem~\ref{thm:primitive_compl_lt_one}, the complementary spectral gap).
+\end{theorem}
+
+\begin{theorem}[Correlation length bound]\label{thm:correlation_length_bound}
+    \lean{MPSTensor.correlation_length_bound}
+    \notready
+    \uses{def:correlation_length, thm:exponential_convergence_primitive,
+          def:injective}
+    For an injective trace-preserving MPS tensor, there exist
+    $C > 0$ and $\xi > 0$ such that for all $n \ge 0$ and all
+    traceless $X \in \MN{D}$ (i.e.\ $\tr(X) = 0$),
+    \[
+        \|\E_A^n(X)\|
+        \;\le\; C\,e^{-n/\xi}\,\|X\|.
+    \]
+    Traceless matrices lie in $\ker P$, where $P$ is the fixed-point
+    projection.  Since $\E_A - P$ has spectral radius strictly less
+    than~$1$, the Gelfand formula gives exponential decay at rate
+    $\xi = -1/\log\rho(\E_A - P)$.
+\end{theorem}
+
+\begin{theorem}[Spectral gap from injectivity]%
+    \label{thm:spectral_gap_wielandt}
+    \lean{MPSTensor.spectral_gap_of_injective}
+    \leanok
+    \uses{thm:spectral_gap, thm:wielandt_bound}
+    For an injective trace-preserving MPS tensor, there exists
+    $\delta > 0$ such that every eigenvalue $\mu \neq 1$ of the
+    transfer map satisfies $|\mu| \le 1 - \delta$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The proof combines: injectivity implies \texttt{HasEventuallyFullKrausRank}
+    (at index~1), which implies primitivity (via
+    \texttt{IsPrimitivePaper} $\to$ \texttt{IsPeripherallyPrimitive}),
+    primitivity implies a spectral gap on the complementary map, and the
+    finite number of eigenvalues gives a uniform bound.
+\end{proof}
+
+\begin{remark}[Status of quantitative bounds]\label{rem:quantitative_status}
+    \uses{thm:exponential_convergence_primitive,
+          thm:correlation_length_bound}
+    Two of the three theorems above are formalized as stubs (with
+    \texttt{sorry}) in \texttt{TNLean/Spectral/QuantitativeGap.lean},
+    tagged TODO~\#22; the spectral gap from injectivity is fully proved.
+    The qualitative results they refine --- spectral gap existence,
+    overlap decay, and correlation convergence --- are fully proved in
+    Chapter~\ref{ch:spectral}.
+    Discharging the sorrys requires extracting explicit constants from
+    the Jordan normal form and the Wielandt-bound argument.
+\end{remark}
+
+\section{Relation to parent Hamiltonians}
+
+\begin{remark}\label{rem:correlations_parent_hamiltonian}
+    \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates,
+          def:correlation_length, thm:correlator_exponential_bound}
+    When the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
+    (Definition~\ref{def:parent_hamiltonian}) whose ground state is the
+    matrix product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}),
+    the exponential decay bound
+    (Theorem~\ref{thm:correlator_exponential_bound}) shows that ground-state
+    correlations decay with a finite correlation length $\xi$.
+\end{remark}
+
+\begin{remark}\label{rem:zero_correlation_length}
+    \uses{thm:spectral_radius_le_one, def:correlation_length}
     The identity $\E^2=\E$ is equivalent to vanishing subleading spectrum;
     equivalently, $\xi=0$ and connected correlations vanish at nonzero
     separation.

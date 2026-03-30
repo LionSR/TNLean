@@ -1,4 +1,3 @@
-ChainGaugeEquiv
 Channel.stationaryState
 Channel.stationarySupport
 Channel.stationarySupport_eq_one
@@ -28,7 +27,6 @@ IsChannel.posSemidef_parts_of_hermitian_fixedPoint
 IsContinuousDynSemigroup
 IsDynSemigroup
 IsGKSLGenerator
-IsInjectiveChain
 IsIrreducibleMap
 IsPositiveMap
 IsPositiveMap.image_bounded
@@ -95,9 +93,15 @@ LindbladForm.isTraceAnnihilating
 LindbladForm.mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState
 LindbladForm.toLinearMap_eq_generatorDecomp
 MPSChainTensor
+MPSChainTensor.GaugeEquiv
+MPSChainTensor.IsInjective
+MPSChainTensor.SameState
 MPSChainTensor.SameStateBridgeHyp
+MPSChainTensor.coeff
 MPSChainTensor.fundamentalTheorem_injective_chain
 MPSChainTensor.fundamentalTheorem_injective_chain_of_sameState
+MPSChainTensor.ti_reduction_corollary
+MPSChainTensor.ti_reduction_of_sameState
 MPSChainTensor.ti_tensors_collapse_to_single_gauge
 MPSTensor
 MPSTensor.CanonicalForm
@@ -160,6 +164,7 @@ MPSTensor.connectedCorrelator
 MPSTensor.connectedCorrelator_bound
 MPSTensor.connectedCorrelator_eq_sum
 MPSTensor.correlationLength
+MPSTensor.correlationLength_pos
 MPSTensor.cross_correlation_tendsto_zero
 MPSTensor.cumulativeSpan
 MPSTensor.cumulativeSpan_eq_top
@@ -210,6 +215,7 @@ MPSTensor.exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
 MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
 MPSTensor.exists_word_eigenvector
 MPSTensor.fundamentalTheorem_canonicalForm
+MPSTensor.fundamentalTheorem_canonicalForm_explicit
 MPSTensor.fundamentalTheorem_equalMPV_CFBNT
 MPSTensor.fundamentalTheorem_equalMPV_full
 MPSTensor.fundamentalTheorem_multiBlock_blocks
@@ -218,7 +224,10 @@ MPSTensor.fundamentalTheorem_multiBlock_global
 MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT
 MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT
 MPSTensor.fundamentalTheorem_singleBlock
+MPSTensor.gaugeMatrix_projective_mul
 MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
+MPSTensor.gauge_ratio_commutes
+MPSTensor.gauge_ratio_isScalar
 MPSTensor.groundSpace
 MPSTensor.groundSpaceMap
 MPSTensor.groundSpace_finrank_le
@@ -280,6 +289,9 @@ MPSTensor.parentHamiltonian_annihilates
 MPSTensor.parentHamiltonian_frustrationFree
 MPSTensor.parentInteraction
 MPSTensor.perBlockLinearExtension
+MPSTensor.perBlockLinearExtension_bijective
+MPSTensor.perBlockLinearExtension_mul
+MPSTensor.perBlock_sameMPV_iff_gaugeEquiv
 MPSTensor.per_block_sameMPV_of_canonical_form
 MPSTensor.per_block_sameMPV_of_normal_canonical_form
 MPSTensor.peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
@@ -289,6 +301,8 @@ MPSTensor.physRealize_mul
 MPSTensor.physRealize_spec
 MPSTensor.piAlgEquiv
 MPSTensor.piAlgEquiv_decomposition
+MPSTensor.piTraceMulRightPi_ker_eq_bot
+MPSTensor.piTrace_mul_right_eq_zero
 MPSTensor.posSemidef_fixedPoint_isPosDef
 MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible
 MPSTensor.posSemidef_fixedPoint_unique
@@ -343,13 +357,13 @@ MPSTensor.zGaugeEntry_mul_right
 MPSTensor.zGaugeEntry_pow_eq_one_of_pow_eq
 MPSTensor.zeroMPSTensor
 Matrix.charpoly_eq_of_forall_trace_pow_eq
+Matrix.isScalar_of_commute_span_eq_top
 Matrix.omegaProj
 Matrix.sum_pow_eq_implies_multiset_eq
 Matrix.tensorMapId
 Matrix.traceLeft
 Matrix.traceRight
 Matrix.trace_mul_right_eq_zero_iff
-SameChainState
 TracePairingSelfDualBasis
 Wielandt.FittingDecomposition
 Wielandt.fittingDecomposition
@@ -415,7 +429,6 @@ kraus_sum_conjTranspose_mul_of_tp
 kraus_tp_of_sum_conjTranspose_mul
 kraus_transition_unitary_of_hs_orthonormal
 linearMap_expand_tracePairing
-mpsChainCoeff
 one_mem_peripheralEigenvalues
 orthogonal_trace_pos_of_irreducible_cp
 peripheralEigenvalues

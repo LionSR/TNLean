@@ -7,6 +7,7 @@ import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.KrausFreedom
 import TNLean.Channel.Stinespring
 import TNLean.Channel.TransferMatrix
 
@@ -39,6 +40,10 @@ representations of quantum channels.
     — bundled/existential unitary-witness wrappers for reuse in the converse roadmap ✅
   - `kraus_transition_unitary_of_hs_orthonormal`
     — converse linear-algebra core: orthonormal Kraus frames force unitary transition ✅
+  - `kraus_dual_eq_of_map_eq` — dual map equality from primal map equality ✅
+  - `kraus_conjTranspose_mul_eq_of_map_eq` — equal Stinespring Gramians ✅
+  - `kraus_rectangular_freedom` / `kraus_rectangular_freedom'`
+    — rectangular Kraus freedom (necessary direction) ✅
 
 * **Thm 2.2** (Stinespring dilation):
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✅
@@ -57,6 +62,18 @@ representations of quantum channels.
 * `MPSTensor.transferMatrix_eq` — MPS bridge:
   `E_A` has transfer matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ` ✅
 
+### §2.2–2.3 Transfer matrix characterizations & normal forms (Props 2.5-2.8)
+
+* `transferMatrix_tp_iff` — **Prop 2.6**: TP ↔ column-diagonal sums = δ ✅
+* `transferMatrix_unital_iff` — **Prop 2.6**: unital ↔ row-diagonal sums = δ ✅
+* `transferMatrix_hermiticityPreserving_iff` — **Prop 2.5**: HP ↔ conjugation
+  symmetry of transfer matrix entries ✅
+* `unitaryConjLM` — unitary conjugation map `Ad_U(X) = U X U†` ✅
+* `transferMatrix_unitaryConj` — **Prop 2.7 ingredient**: `(Ad_U)^ = Ū ⊗ₖ U` ✅
+* `unitaryConjLM_isChannel_of_unitary` — `Ad_U` is a channel for unitary `U` ✅
+* `transferMatrix_unitaryConj_sandwich` — **Props 2.7-2.8 key identity**:
+  `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) T̂ (Ū₂⊗U₂)` ✅
+
 ### Infrastructure
 
 | Definition | File | Lean name |
@@ -70,6 +87,7 @@ representations of quantum channels.
 | Choi matrix | `ChoiJamiolkowski.lean` | `ChoiJamiolkowski.choiMatrix` |
 | Stinespring isometry | `Stinespring.lean` | `stinespringV` |
 | Transfer matrix | `TransferMatrix.lean` | `transferMatrix` |
+| Unitary conjugation | `TransferMatrix.lean` | `unitaryConjLM` |
 | Vectorization | `Mathlib.LinearAlgebra.Matrix.Vec` | `Matrix.vec` |
 
 ### Not yet formalized
@@ -79,12 +97,13 @@ representations of quantum channels.
 | Prop 2.2 (decomp into CP) | Straightforward from CJ |
 | Prop 2.3 (no info w/o disturbance) | Needs pure state uniqueness |
 | Prop 2.4 (equiv of ensembles) | Needs purification/Schmidt decomp |
-| Thm 2.1 item 4 (unitary freedom, necessary direction) | Needs Choi eigendecomp |
+| Thm 2.1 item 4 (rectangular Kraus freedom, necessary direction) | `kraus_rectangular_freedom` / `kraus_rectangular_freedom'` — fully proved ✅ |
 | Thm 2.3 (ordered CP-maps) | Needs Stinespring + contraction |
 | Thm 2.4 (Radon-Nikodym) | Follows from Thm 2.3 |
 | Thm 2.5 (open-system representation) | Embedding into unitary |
 | Thm 2.6 (Neumark's theorem) | POVM embedding |
-| §2.3 (normal forms) | Lorentz normal form etc. |
+| §2.3 Lorentz normal form (existence) | Needs SVD of transfer matrix |
+| §2.3 SVD representation (existence) | Needs Mathlib SVD |
 
 ## References
 

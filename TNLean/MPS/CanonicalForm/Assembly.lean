@@ -9,6 +9,7 @@ import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.CyclicGroup
+import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.RectangularSpan.Basic
@@ -71,15 +72,26 @@ full `IsNormalCanonicalForm` from arbitrary input is:
 Both gaps are addressed by the paper's cyclic sector decomposition, which
 decomposes each periodic block into primitive sectors before blocking.
 
-### Possible resolutions
+### Progress on cyclic sector decomposition (#242)
 
-1. **Cyclic sector decomposition** (paper §2.3): decompose each periodic block into
-   primitive cyclic sectors. This is the mathematically correct approach (~800-1200 LOC).
+The per-block bridge is now complete:
 
-2. **Direct route for the primitive case**: If a block happens to already be primitive
-   (period 1), then `p = 1` suffices and `isIrreducibleTensor_blockTensor_one`
-   gives irreducibility directly. The
-   `exists_normalCanonicalForm_of_primitive_blockDecomp` theorem handles this.
+* `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`: For each irreducible TP block,
+  derives all channel-level hypotheses automatically and produces cyclic
+  sector blocks via `exists_cyclic_sector_decomp_after_blocking`.
+
+Remaining work for the full pipeline integration:
+
+* **Common period assembly**: Combining per-block cyclic sectors into a
+  single global decomposition with a common blocking period. Requires
+  iterated-blocking infrastructure (`blockTensor (blockTensor A p) q ≃
+  blockTensor A (p * q)`).
+
+* **Sector irreducibility**: Each cyclic sector should inherit irreducibility
+  from `isIrreducible_restriction_of_cyclic_decomp`. The orbit-sum lift from
+  corner restriction to compressed tensor is not yet formalized.
+
+* **BNT grouping** (#243): Weight norm separation after sector decomposition.
 
 ## References
 
@@ -866,6 +878,102 @@ theorem exists_cyclic_sector_decomp_after_blocking
     (blockTensor A m) P hPproj hPsum hTP_blocked hFix
 
 end CyclicSectorBridge
+
+/-!
+## Bridge: MPS hypotheses → cyclic sector decomposition
+
+For an irreducible TP tensor, all channel-level hypotheses needed by
+`exists_cyclic_sector_decomp_after_blocking` can be derived automatically:
+
+1. `IsIrreducibleTensor A` → `IsIrreducibleMap (transferMap (fun i => (A i)ᴴ))`
+2. TP + irreducible → ∃ ρ.PosDef fixed by `transferMap A` = `Kraus.adjointMap K`
+3. `peripheral_eigenvalues_cyclic_structure` → `(m, γ, IsPrimitiveRoot γ m, periph = {γ^k})`
+4. Feed all into `exists_cyclic_sector_decomp_after_blocking`
+-/
+
+section CyclicSectorFromMPS
+
+open KadisonSchwarz
+
+/-- From an irreducible TP tensor, derive the conjugate-transposed Kraus family `K`,
+its unitality and irreducibility, and a `PosDef` fixed point `ρ` of `Kraus.adjointMap K`.
+
+This bundles the common setup shared by `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
+and `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`. -/
+theorem conjTranspose_kraus_setup
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A) :
+    ∃ (K : MPSTensor d D)
+      (_ : IsUnitalKraus (d := d) (D := D) K)
+      (_ : IsIrreducibleMap (transferMap (d := d) (D := D) K))
+      (ρ : Matrix (Fin D) (Fin D) ℂ)
+      (_ : ρ.PosDef)
+      (_ : Kraus.adjointMap K ρ = ρ),
+      K = fun i => (A i)ᴴ := by
+  classical
+  have hDpos : 0 < D := NeZero.pos D
+  let K : MPSTensor d D := fun i => (A i)ᴴ
+  have hTP' : IsTPKraus (d := d) (D := D) A := by
+    simpa [IsTPKraus] using hTP
+  have h_unitalK : IsUnitalKraus (d := d) (D := D) K :=
+    isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTP'
+  have hIrrK : IsIrreducibleMap (transferMap (d := d) (D := D) K) :=
+    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (d := d) (D := D) A hIrr
+  have hCh : IsChannel (transferMap (d := d) (D := D) A) :=
+    transferMap_isChannel (d := d) (D := D) A (by simpa using hTP)
+  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
+    hCh.exists_posSemidef_fixedPoint (E := transferMap (d := d) (D := D) A) hDpos
+  have hIrrAmap : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
+    isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) A hIrr
+  have hρ_pd : ρ.PosDef :=
+    posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (d := d) (D := D)
+      hIrrAmap ρ hρ_psd hρ_ne hρ_fix
+  have h_adjfix : Kraus.adjointMap K ρ = ρ := by
+    simpa [K, Kraus.adjointMap, transferMap_apply, Matrix.conjTranspose_conjTranspose,
+      Matrix.mul_assoc] using hρ_fix
+  exact ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩
+
+/-- **Bridge: irreducible TP tensor → cyclic sector decomposition.**
+
+For an irreducible TP tensor `A` with `0 < D`, there exists a period `m > 0`
+such that after blocking by `m`, the blocked tensor admits a decomposition
+into `m` left-canonical (TP) blocks via cyclic spectral projections.
+
+This bridges the MPS-level hypotheses (`IsIrreducibleTensor` + TP) to the
+channel-level cyclic decomposition, deriving all intermediate hypotheses
+(`ρ.PosDef`, `Kraus.adjointMap` fixed point, `IsIrreducibleMap`, peripheral
+spectrum structure) automatically via `conjTranspose_kraus_setup`. -/
+theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+    {d D : ℕ} [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : IsIrreducibleTensor A) :
+    ∃ (m : ℕ) (_ : 0 < m)
+      (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
+      (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) := by
+  -- Use shared setup to get conjugate Kraus family and PosDef fixed point.
+  obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
+    conjTranspose_kraus_setup A hTP hIrr
+  -- Extract cyclic peripheral structure via
+  -- `peripheral_eigenvalues_cyclic_structure` from `GroupStructure.lean`.
+  obtain ⟨m, γ, hm_pos, hγ_prim, hperiph_set⟩ :=
+    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix hIrrK
+  -- Convert set representation to range form.
+  have hperiph_range :
+      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+        Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
+    rw [hperiph_set]; ext x; simp [Set.mem_range, eq_comm]
+  -- Apply exists_cyclic_sector_decomp_after_blocking.
+  haveI : NeZero m := ⟨by omega⟩
+  obtain ⟨dim, blocks, hTP_blocks, hSame⟩ :=
+    exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
+      hperiph_range
+  exact ⟨m, hm_pos, dim, blocks, hTP_blocks, hSame⟩
+
+end CyclicSectorFromMPS
 
 /-!
 ## Fundamental Theorem of MPS (arXiv:1606.00608, after blocking)
