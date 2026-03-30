@@ -21,8 +21,8 @@ fixed point (RFP) property.
 
 ## Main results
 
-* `MPSTensor.isNNCPH_of_isRFP` — RFP ⟹ NNCPH (vacuously true while
-  `localTerm` is the zero placeholder)
+* `MPSTensor.isNNCPH_of_isRFP` — RFP ⟹ NNCPH (currently vacuously true
+  because `parentInteraction` simplifies to zero; see advisory below)
 
 ## References
 
@@ -63,14 +63,15 @@ theorem IsCommutingParentHam.symm {A : MPSTensor d D} {L N : ℕ}
     localTerm A L N j * localTerm A L N i = localTerm A L N i * localTerm A L N j :=
   (h i j).symm
 
-/-- **PLACEHOLDER — VACUOUSLY TRUE**: If the parent Hamiltonian commutes, then
-the Hamiltonian commutes with each local term.
+/-- If the parent Hamiltonian commutes, then the Hamiltonian commutes with
+each local term.
 
-This lemma compiles without `sorry` but is currently **vacuously true** because
-`localTerm` is a zero placeholder (see `Defs.lean`). The proof does not use
-the commutativity hypothesis `h` and must be completely rewritten once
-`localTerm` is implemented with its real definition. Do **not** cite this as
-a proven result. -/
+**Advisory**: this lemma is currently **vacuously true** because
+`parentInteraction A L` simplifies to zero under `simp` (a pre-existing bug
+in how `starProjection` interacts with `WithLp.linearEquiv`), making
+`localTerm = 0`. The proof does not use the commutativity hypothesis `_h`
+and must be rewritten once `parentInteraction` is fixed. Do **not** cite
+this as a proven result. -/
 theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
     (_h : IsCommutingParentHam A L N) (i : Fin N) :
     parentHamiltonian A L N * localTerm A L N i =
@@ -81,16 +82,14 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
   --   congr 1; ext j; exact _h j i
   simp only [parentHamiltonian, Finset.sum_mul, Finset.mul_sum, localTerm]
 
-/-- **PLACEHOLDER — VACUOUSLY TRUE**: **RFP ⟹ NNCPH** (Theorem 3.10
-(i) ⟹ (iii)): If a tensor is an RFP, then its parent Hamiltonian with
-`L = 2` has commuting local terms.
+/-- **RFP ⟹ NNCPH** (Theorem 3.10 (i) ⟹ (iii)): If a tensor is an RFP,
+then its parent Hamiltonian with `L = 2` has commuting local terms.
 
-This lemma compiles without `sorry` but is currently **vacuously true** because
-`localTerm` is a zero placeholder (see `Defs.lean`). With `localTerm := 0`,
-the commuting condition reduces to `0 * 0 = 0 * 0`, which holds trivially.
-
-Once `localTerm` is implemented with its true definition, this lemma must
-be rewritten to use the structural form of RFP tensors (Theorem 3.11,
+**Advisory**: this lemma is currently **vacuously true** because
+`parentInteraction A L` simplifies to zero under `simp` (a pre-existing bug),
+so `localTerm = 0` and the commuting condition reduces to `0 * 0 = 0 * 0`.
+The `_hRFP` hypothesis is unused. Once `parentInteraction` is fixed, this
+must be rewritten to use the structural form of RFP tensors (Theorem 3.11,
 issue #233). Do **not** cite this as a proven result. -/
 theorem isNNCPH_of_isRFP {A : MPSTensor d D} (N : ℕ)
     (_hRFP : IsRFP A) : IsNNCPH A N := by
