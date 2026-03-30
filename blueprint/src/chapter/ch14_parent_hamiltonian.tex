@@ -34,6 +34,13 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
   \[
     \Gamma_L : \MN{D} \to \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr).
   \]
+  In tensor-network notation,
+  \[
+    \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X}
+  \]
+  the upper chain denotes the word tensor $A^\sigma$ with open physical
+  indices $\sigma_1,\dots,\sigma_L$, and the lower box denotes the boundary
+  matrix $X$ inserted on the virtual bond before taking the trace.
 \end{definition}
 
 \begin{definition}[Local ground space]\label{def:ground_space_parent}
@@ -132,7 +139,12 @@ translated copies of the local interaction.
   \uses{def:parent_interaction}
   For each site index $i \in \{0,\dots,N{-}1\}$, the translated local term
   $h_i$ embeds the parent interaction into the full $N$-site space at
-  position~$i$ (with periodic boundary conditions).
+  position~$i$ (with periodic boundary conditions). Diagrammatically,
+  \[
+    \TNLocalTermWindow{\sigma_i}{\sigma_{i+L-1}}{L}{N}{h_i}
+  \]
+  the dashed window marks the $L$ consecutive sites on which the local
+  projector acts, while the surrounding chain is left unchanged.
 \end{definition}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
@@ -229,6 +241,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \]
 \end{definition}
 
+% Lean jargons to be eliminated: `restrictLastₗ`, `restrictFirstₗ`
+
 \begin{definition}[Right restriction]\label{def:restrict_first}
   \lean{MPSTensor.restrictFirst}
   \leanok
@@ -291,7 +305,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{theorem}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
   \lean{MPSTensor.groundSpaceMap_injective}
   \leanok
-  \uses{def:ground_space_map, def:is_injective}
+  \uses{def:ground_space_map, def:injective}
   If $A$ is injective and $L \ge 1$, then $\Gamma_L$ is injective.
 \end{theorem}
 
@@ -626,7 +640,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{lemma}[Martingale condition for MPS]\label{lem:martingale_mps}
   \notready
   \uses{thm:martingale_criterion, def:parent_interaction,
-        def:local_term_parent, lem:ground_space_intersection, def:injective}
+        def:local_term_parent, thm:ground_space_intersection, def:injective}
   Let $A$ be injective and fix an interaction range $L \ge 2$ as in
   Definition~\ref{def:parent_interaction}.  Let $h_L(A) := \Pi_{G_L(A)^\perp}$
   be the $L$-site parent interaction, and for each chain length and site $i$
@@ -648,12 +662,12 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \end{lemma}
 
 \begin{proof}
-  \uses{lem:ground_space_intersection, def:injective}
+  \uses{thm:ground_space_intersection, def:injective}
   \notready
   Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
   in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
   the $N$-site ring).  Since $A$ is injective, the intersection property
-  (Lemma~\ref{lem:ground_space_intersection}) gives the qualitative identity
+  (Theorem~\ref{thm:ground_space_intersection}) gives the qualitative identity
   $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
   Because the local Hilbert space is finite-dimensional, the subspaces
   $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space.
@@ -694,7 +708,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
   $\alpha < \tfrac{1}{2}$.  For $L = 2$ with an injective tensor,
   the two projectors $h_i$ and $h_{i+1}$ act on a finite-dimensional
   space, and the intersection property
-  (Lemma~\ref{lem:ground_space_intersection}) guarantees that
+  (Theorem~\ref{thm:ground_space_intersection}) guarantees that
   $\ker(h_i) \cap \ker(h_{i+1})$ is exactly $G_{[i,i+2]}(A)$;
   hence $\|P_i P_{i+1}\| < 1$ (the Friedrichs cosine is strictly
   less than~1).  On a finite-dimensional space with two projectors,
@@ -787,7 +801,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:unique_gs_normal, lem:ground_space_intersection, def:bnt,
+  \uses{thm:unique_gs_normal, thm:ground_space_intersection, def:bnt,
         lem:parent_hamiltonian_annihilates}
   \notready
   \textbf{$\supseteq$}: Each $A_k$ is normal, so
@@ -807,7 +821,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   $L_0{+}1 \ge L_0$, so the sum is in fact direct).
   Each normal block $A_k$ has injectivity length $L_k \le L_0$, so
   the $L_k$-blocked tensor $A_k^{[L_k]}$ is injective.
-  Applying Lemma~\ref{lem:ground_space_intersection} to this injective
+  Applying Theorem~\ref{thm:ground_space_intersection} to this injective
   blocked tensor (in unblocked coordinates, as in
   Theorem~\ref{thm:unique_gs_injective}) and iterating across the
   chain for each block independently, and using

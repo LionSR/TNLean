@@ -106,6 +106,11 @@ operation on the physical indices.
     \]
     so that row~$i$ of $O_A(X)$ contains the decomposition coefficients
     of $A^i X$ in the spanning set $\{A^j\}$.
+    Diagrammatically, the inserted virtual matrix is re-expressed as a
+    physical operation on the same local tensor:
+    \[
+        \TNPhysicalRealization{X}{O_A(X)}
+    \]
     The map $X \mapsto O_A(X)$ is $\C$-linear.
 \end{definition}
 
@@ -244,7 +249,15 @@ inner automorphism.
     chain.
     Equivalently, inserting $X$ on bond~$k$ in the $\mathbf{A}$-chain
     gives the same physical operation as inserting $Z_k^{-1} X Z_k$ on
-    bond~$k$ in the $\mathbf{B}$-chain.
+    bond~$k$ in the $\mathbf{B}$-chain. After blocking to three sites,
+    the coefficient-level relation formalized in Lean by
+    \lean{MPSTensor.virtualInsertCoeff} is the equality between the
+    blocked $\mathbf{A}$-chain contraction
+    \[
+        \TNVirtualInsertion{\sigma_0}{\sigma_1}{\sigma_2}{X}
+    \]
+    and the corresponding blocked $\mathbf{B}$-chain contraction with
+    $X$ replaced by $Z_k^{-1} X Z_k$.
 \end{lemma}
 
 \begin{proof}
@@ -260,6 +273,10 @@ inner automorphism.
     Since both chains generate the same state, for every $X \in \MN{D}$
     there is a unique $Y \in \MN{D}$ with $O_{A,k}(X) = O_{B,k}(Y)$;
     set $T(X) = Y$.
+    In the Lean proof, this step is carried out on the blocked
+    three-site coefficient function \lean{MPSTensor.virtualInsertCoeff}
+    and the combined-tensor linear extension, rather than by treating
+    $O_{A,k}$ and $O_{B,k}$ as primitive black boxes.
     Linearity of $O_{A,k}$ and $O_{B,k}$ and uniqueness of $Y$ make $T$
     $\C$-linear, and since both maps are algebra homomorphisms, $T$ is
     multiplicative.
@@ -271,6 +288,8 @@ inner automorphism.
     $\operatorname{Ad}(Z)$ and $\operatorname{Ad}(Z')$ agree iff
     $Z' Z^{-1}$ is central (Lemma~\ref{lem:center_scalar}).
 \end{proof}
+
+% Sirui: very bad LLM names here and more: Aligned gauges force proportionality
 
 %% ---------------------------------------------------------
 \section{Aligned gauges force proportionality}%
@@ -302,11 +321,18 @@ forces the local tensors to be proportional.
         \qquad \text{for all } i, j.
         \label{eq:external_bond}
     \end{align}
-    (Here \eqref{eq:internal_bond} says: inserting $X$ on the bond
-    between sites $1$ and $2$ gives the same trace -- i.e.\ the same
-    contribution to the state amplitude -- in both chains.
-    Condition~\eqref{eq:external_bond} says the same for the
-    external bond, with $Y$ inserted and the cyclic order reversed.)
+    Diagrammatically, \eqref{eq:internal_bond} is the equality obtained
+    by inserting $X$ on the bond between the two sites,
+    \[
+        \TNInternalTraceInsertion{i}{j}{X}
+    \]
+    while \eqref{eq:external_bond} is the corresponding equality with
+    the insertion $Y$ on the outer trace bond,
+    \[
+        \TNExternalTraceInsertion{i}{j}{Y}
+    \]
+    so the two hypotheses distinguish the internal and external virtual
+    loops of the two-site periodic chain.
 
     Then there exists a nonzero scalar $\lambda \in \C^{\times}$ such
     that
@@ -330,6 +356,9 @@ forces the local tensors to be proportional.
         A_1^{i} A_2^{j} = B_1^{i} B_2^{j}
         \qquad\text{for all } i, j.
     \]
+    In Lean, these two trace-to-product reductions are isolated as the
+    helper lemmas \lean{MPSTensor.internal_products_eq} and
+    \lean{MPSTensor.external_products_eq}.
     Write $\Id_D = \sum_j c_j A_2^j$ using the decomposition map
     $\Psi_{A_2}$, and define $Z := \sum_j c_j B_2^j \in \MN{D}$.
     The first product identity gives $A_1^i = Z B_1^i$, and the second
@@ -394,6 +423,24 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     Uniqueness up to a common scalar follows from the uniqueness clause
     of Lemma~\ref{lem:virtual_bond_gauge}.
 \end{proof}
+
+\begin{remark}[Lean proof route]
+    \label{rem:ft_chain_lean_route}
+    \uses{thm:fundamentalTheorem_injective_chain, thm:ft_single}
+    The formal theorem
+    \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
+    does not currently implement the bond-by-bond proof sketched above.
+    Instead, it packages the whole chain into the combined tensor
+    \lean{MPSTensor.chainCombinedTensor} and applies the single-block
+    fundamental theorem to obtain one uniform gauge matrix $X$ acting on
+    every combined-site matrix:
+    \[
+        \TNGaugeConjugation{X}{(k,i)}{X^{-1}}
+    \]
+    for each site index $k$ and physical index $i$.
+    The resulting uniform gauge is then read as a special case of cyclic
+    gauge equivalence by using the same virtual gauge on every bond.
+\end{remark}
 
 \begin{remark}[Stronger hypothesis in the Lean formalisation]
     \label{rem:ft_chain_sameMPV}
@@ -519,7 +566,8 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
 
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain} to the
+    The blueprint-level derivation applies
+    Theorem~\ref{thm:fundamentalTheorem_injective_chain} to the
     two constant chains to obtain $Z_0, \dots, Z_{n-1}$ with
     $B^i = Z_k^{-1} A^i Z_{k+1}$ for all $k$ and $i$.
     Setting $G_k = Z_k Z_0^{-1}$, the relation
@@ -530,6 +578,12 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     Hence $Z_k = \mu_k Z_0$, and the cyclic condition $Z_n = Z_0$ forces
     $(\mu_1)^n = 1$.
     Setting $Z = Z_0$ and $\lambda = \mu_1$ yields the result.
+    The current Lean proof route is more direct: the theorem
+    \lean{MPSChainTensor.ti_tensors_single_gauge} obtains one uniform
+    gauge on the combined tensor immediately, and
+    \lean{MPSChainTensor.ti_tensors_collapse_to_single_gauge} then
+    packages the result with the scalar parameter $\lambda$, realized in
+    the checked proof by $\lambda = 1$.
 \end{proof}
 
 \subsection{Non-TI descriptions of TI states}
@@ -807,6 +861,13 @@ representation on the bond space.
         \widetilde{A}_g^i \;=\; X(g)\, A^i\, X(g)^{-1}
         \qquad \text{for every } g \in G,\; i \in \{0,\ldots,d{-}1\}.
     \]
+    In tensor-network notation, for each fixed~$g$ this is the local gauge
+    relation
+    \[
+        \TNGaugeConjugation{X(g)}{i}{X(g)^{-1}}
+    \]
+    with the black node denoting the tensor named in the surrounding
+    formula and the two side nodes acting on the virtual legs.
     In particular, $\rho$ is a projective representation of $G$ on the
     bond space $\C^D$.
 \end{theorem}
@@ -860,7 +921,7 @@ representation on the bond space.
 
 Two cocycles may differ by a coboundary yet represent the same
 projective-representation class.  The following definitions and results
-make this precise and establish the quotient $H^2(G,\U(1))$.
+make this precise and establish the quotient $H^2(G,\mathrm{U}(1))$.
 
 \begin{definition}[Coboundary]\label{def:is_coboundary}
     \lean{TNLean.Algebra.ScalarCocycle.IsCoboundary}
@@ -935,8 +996,15 @@ make this precise and establish the quotient $H^2(G,\U(1))$.
           def:cohomologous_to}
     For each $g$, gauge uniqueness gives a unit scalar $f(g)$ with
     $X_2(g^{-1}) = f(g)\,X_1(g^{-1})$.
-    Substituting into the projective multiplication law and cancelling
-    the invertible matrix $X_1(g\cdot h)$ yields
+    Equivalently, for each fixed $g$ the two local gauges
+    \[
+        \TNGaugeConjugation{X_1(g^{-1})}{i}{X_1(g^{-1})^{-1}}
+        \qquad\text{and}\qquad
+        \TNGaugeConjugation{X_2(g^{-1})}{i}{X_2(g^{-1})^{-1}}
+    \]
+    describe the same twisted tensor, so they differ by a scalar.
+    Substituting into the projective law and cancelling $X_1(g\cdot h)$
+    yields
     $\omega_2(g,h) = f(g)\,f(h)\,f(gh)^{-1}\,\omega_1(g,h)$.
 \end{proof}
 
@@ -1281,6 +1349,7 @@ generated by an injective MPS tensor.
 \begin{corollary}[Normal MPS Fundamental Theorem]%
     \label{cor:normal_mps_ft}
     \notready
+    \lean{MPSChainTensor.fundamentalTheorem_blockedChain}
     \uses{thm:fundamentalTheorem_injective_chain, def:injective,
           def:blocked_tensor, def:normal,
           lem:blocking_preserves_injectivity}
@@ -1297,6 +1366,18 @@ generated by an injective MPS tensor.
     with $Z_n = Z_0$.
     That is, gauge equivalence holds for the \emph{original} (unblocked)
     tensors.
+    The reduction to the injective case proceeds by grouping the chain
+    into consecutive length-$L$ blocks,
+    \[
+        \TNBlockedChain{L}{m}
+    \]
+    and then applying the injective-chain theorem to the blocked local
+    tensors. The checked Lean endpoint currently stops at the blocked
+    chain: \lean{MPSChainTensor.fundamentalTheorem_blockedChain}
+    proves gauge equivalence for the constant chain of blocked tensors,
+    while the passage back to the original unblocked site tensors is
+    still blueprint-level and is the reason this corollary remains
+    marked \notready.
 \end{corollary}
 
 \begin{proof}
@@ -1309,6 +1390,10 @@ generated by an injective MPS tensor.
     Theorem~\ref{thm:fundamentalTheorem_injective_chain} gives
     invertible gauges $\widehat{Z}_0, \dots, \widehat{Z}_{m-1}$ with
     $(B^{[L]})_k = \widehat{Z}_k^{-1}\, (A^{[L]})_k\, \widehat{Z}_{k+1}$.
+    In the formalization, this blocked endpoint is packaged as
+    \lean{MPSChainTensor.fundamentalTheorem_blockedChain}, which
+    reduces directly to the injective-chain theorem on the blocked
+    constant chain.
     Applying Lemma~\ref{lem:tensor_proportional} within each $L$-block
     then decomposes the blocked gauge equivalence into site-by-site
     gauges, yielding $Z_0, \dots, Z_{n-1}$ for the original tensors.
@@ -1396,6 +1481,9 @@ decomposition.
     linear extension.
     It is an algebra automorphism since each $T_k$ is a multiplicative,
     unital, bijective linear map.
+    Diagrammatically, this is the blockwise map on the product algebra
+    obtained by applying the corresponding per-block extension to each
+    summand.
 \end{definition}
 
 \begin{theorem}[Block-permutation decomposition]%
@@ -1412,6 +1500,14 @@ decomposition.
     \]
     for all $M \in \MN{D_k}$ (viewed as supported in block~$k$) and
     all~$k$.
+    The picture is that the product-algebra automorphism first
+    permutes the simple matrix blocks and then acts inside each block
+    by an inner conjugation,
+    \[
+        \TNBlockPermutation{\sigma}{X}
+    \]
+    where the permutation reindexes the block ideals and the labels
+    $X_k$ denote the resulting inner automorphisms.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:piAlgEquiv, thm:skolem_noether}
@@ -1421,7 +1517,11 @@ decomposition.
     This gives the permutation $\sigma$.
     On each block, the restricted map is a $\C$-algebra automorphism of
     $\MN{D_k}$; by Skolem--Noether (Theorem~\ref{thm:skolem_noether}),
-    it is inner.
+    it is inner. In Lean, this is exactly the call to
+    \lean{algEquiv_pi_matrix_decomposition} inside
+    \lean{MPSTensor.piAlgEquiv_decomposition}; the tensor-network
+    picture records the same split into permutation of block ideals
+    followed by inner conjugation on each surviving block.
 \end{proof}
 
 \subsection{Nondegeneracy of the product trace pairing}
@@ -1485,6 +1585,13 @@ decomposition.
               $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are
               gauge equivalent.
     \end{enumerate}
+    The second clause is assembled from the first by putting the
+    per-block gauges on the diagonal,
+    \[
+        \TNBlockDiagonalGauge{X}
+    \]
+    which is exactly the separation between the two conclusions in
+    \lean{MPSTensor.fundamentalTheorem_multiBlock_full}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{lem:perBlockLinearExtension_bijective,
@@ -1493,7 +1600,9 @@ decomposition.
     Fundamental Theorem (existing) to each block, using injectivity of
     $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
     Global gauge equivalence is assembled from the per-block gauges via
-    the block-diagonal structure.
+    the block-diagonal structure. The Lean theorem returns these two
+    outputs as an explicit pair: pointwise gauge equivalence of the
+    blocks and gauge equivalence of the weighted direct-sum tensors.
 \end{proof}
 
 \begin{theorem}[Per-block SameMPV $\Leftrightarrow$ per-block gauge equivalence]%
@@ -1527,6 +1636,12 @@ $\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr) =
 \mc{V}\!\bigl(\bigoplus_k \mu_k B_k\bigr)$.
 Block separation extracts the per-block identities from the global one
 under canonical-form normalization.
+The first formal reduction is the weighted block-sum identity furnished
+by \lean{MPSTensor.sameMPV₂_summed_blocks}:
+\[
+    \TNSummedBlocks{\mu}{N}
+\]
+This is then combined with overlap estimates and the leading-block peel.
 
 \begin{definition}[Canonical form]\label{def:isCanonicalForm}
     \lean{MPSTensor.IsCanonicalForm}
@@ -1567,6 +1682,12 @@ under canonical-form normalization.
     If $\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr)
     = \mc{V}\!\bigl(\bigoplus_k \mu_k B_k\bigr)$,
     then $\mc{V}(A_k) = \mc{V}(B_k)$ for each block~$k$ individually.
+    The proof move is to isolate the leading block and treat the
+    remaining blocks as an exponentially decaying tail:
+    \[
+        \TNLeadingBlockPeeling{\mu}{\rho}
+    \]
+    with $\rho = |\mu_1|/|\mu_0| < 1$.
 \end{theorem}
 
 \begin{proof}
@@ -1575,6 +1696,9 @@ under canonical-form normalization.
     The proof proceeds by strong induction on the number of blocks~$r$.
     For $r = 1$, the weighted sum degenerates and the result is
     immediate after cancelling $\mu_0^N \ne 0$.
+    In Lean this one-block base case is packaged separately as
+    \lean{MPSTensor.sameMPV₂_single_block} and then absorbed into the
+    canonical-form wrapper.
 
     For $r \ge 2$, the global identity
     $\sum_k \mu_k^N\, \bigl(V^{(N)}(A_k)_\sigma
@@ -1594,6 +1718,13 @@ under canonical-form normalization.
     criterion.
     Subtracting the leading block and applying the inductive hypothesis
     yields $\mc{V}(A_k) = \mc{V}(B_k)$ for all remaining $k$.
+    In Lean this is not a Vandermonde argument: the core induction is
+    \lean{MPSTensor.block_separation_core}, whose leading-block step is
+    \lean{leading_block_sameMPV_of_crossOverlap_tendsto_one} and whose
+    geometric estimate comes from
+    \lean{peeling_exponential_bound}. The weighted identity itself comes
+    from \lean{MPSTensor.sameMPV₂_summed_blocks}. The diagrams above are
+    meant to track that checked route, not a different proof strategy.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem from canonical form]%
@@ -1659,11 +1790,17 @@ under canonical-form normalization.
 \end{theorem}
 
 \begin{proof}\leanok\uses{cor:ft_ti_chain}
-    The SameMPV hypothesis on the combined tensors, combined with
-    translation invariance, forces the per-site gauge matrices to
-    collapse to a single matrix $X$ (by the TI chain gauge collapse).
-    Injectivity of $B$ follows from gauge equivalence to the
-    injective tensor $A$.
+    The formal proof does not first derive a family of bond gauges and
+    then collapse them. Instead, it packages the constant chain into
+    the combined tensor, applies the single-block Fundamental Theorem to
+    obtain one uniform gauge
+    \[
+        \TNGaugeConjugation{X}{(k,i)}{X^{-1}}
+    \]
+    on the combined-site index $(k,i)$, and then reads that back as a
+    site tensor gauge via
+    \lean{MPSChainTensor.ti_tensors_single_gauge}. Injectivity of $B$
+    follows from gauge equivalence to the injective tensor $A$.
 \end{proof}
 
 \begin{theorem}[TI reduction from same state]%
@@ -1697,6 +1834,14 @@ scalar factor.
     \lean{MPSTensor.gauge_ratio_commutes}
     \leanok
     \uses{def:gauge_equiv}
+    Diagrammatically, the hypothesis is that the two local gauges
+    \[
+        \TNGaugeConjugation{X}{i}{X^{-1}}
+        \qquad\text{and}\qquad
+        \TNGaugeConjugation{Y}{i}{Y^{-1}}
+    \]
+    produce the same target tensor $B^i$ from the same source tensor
+    $A^i$.
     If $X, Y \in \GL_D(\C)$ both conjugate an MPS tensor $A$ to the same
     tensor $B$ (i.e.\ $B^i = X A^i X^{-1} = Y A^i Y^{-1}$ for all $i$),
     then $Y^{-1} X$ commutes with every $A^i$.
@@ -1717,6 +1862,8 @@ scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok\uses{lem:gauge_ratio_commutes, lem:center_scalar}
+    The same two-gauge picture shows that the ratio $Y^{-1}X$ acts
+    invisibly on the local tensor.
     By Lemma~\ref{lem:gauge_ratio_commutes}, $Y^{-1}X$ commutes with
     all $A^i$.
     Since $\{A^i\}$ spans $\MN{D}$, the matrix $Y^{-1}X$ commutes
@@ -1741,7 +1888,13 @@ scalar factor.
     \]
     (In fact $c(g,h) \ne 0$ since both sides are invertible, so
     $c(g,h) \in \C^{\times}$; the Lean statement records the
-    existential without the nonzero assertion.)
+    existential without the nonzero assertion.) Diagrammatically, both
+    \[
+        \TNGaugeConjugation{X(h)\,X(g)}{i}{(X(h)\,X(g))^{-1}}
+        \qquad\text{and}\qquad
+        \TNGaugeConjugation{X(gh)}{i}{X(gh)^{-1}}
+    \]
+    conjugate $A^i$ to the same twisted tensor $\widetilde{A}_{gh}^i$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1750,6 +1903,11 @@ scalar factor.
     (Lemma~\ref{lem:twisted_tensor_mul}), both $X(h)\,X(g)$ and $X(gh)$
     conjugate $A$ to $\widetilde{A}_{gh}$.
     Lemma~\ref{lem:gauge_ratio_isScalar} then gives the scalar factor.
+    The checked Lean theorem in
+    \texttt{TNLean/PiAlgebra/GlobalSymmetry.lean} follows this exact route:
+    it first proves that the ratio
+    of the two gauges commutes with every $A^i$, then promotes that
+    commutant statement to a scalar using injectivity.
 \end{proof}
 
 %% ---------------------------------------------------------

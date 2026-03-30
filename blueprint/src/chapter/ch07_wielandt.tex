@@ -1269,13 +1269,12 @@ The gap is closed by an aperiodicity hypothesis.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:primitive_implies_strongly_irreducible, thm:strongly_irred_to_full_rank}
-    The proof factors through strong irreducibility: from
-    $\mathrm{IsPrimitiveMPS}(A,\rho)$ and $\rho \succ 0$ one gets
-    $\mathrm{IsStronglyIrreduciblePaper}(A)$, which packages peripheral
-    spectrum $\{1\}$ (hence aperiodicity) together with irreducibility.
-    The Proposition~3\,(c)$\to$(b) backend then yields eventual full Kraus
-    rank, giving normality without a separate aperiodicity hypothesis.
+    \uses{thm:strongly_irred_from_primitive, thm:irred_tensor_aperiodic_normal}
+    By Theorem~\ref{thm:strongly_irred_from_primitive},
+    $A$ is strongly irreducible. In particular, $A$ is irreducible and the
+    peripheral spectrum of $\E_A$ is $\{1\}$, so $A$ is aperiodic.
+    Theorem~\ref{thm:irred_tensor_aperiodic_normal} then gives normality,
+    hence eventually full Kraus rank.
 \end{proof}
 
 \begin{remark}[The normal-canonical route bypasses the aperiodicity argument]\label{rem:d1_bypasses_aperiodicity}
