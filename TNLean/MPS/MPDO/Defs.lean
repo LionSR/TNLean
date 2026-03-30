@@ -94,13 +94,6 @@ lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
     congr 1
     exact ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
 
-/-- `List.ofFn` inputs always have equal length, so `evalWord` reduces to the
-non-commutative word product branch. -/
-lemma evalWord_ofFn_length (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
-    evalWord M (List.ofFn σ) (List.ofFn τ) =
-      (List.ofFn fun i : Fin N => M (σ i) (τ i)).prod :=
-  evalWord_ofFn M σ τ
-
 /-! ### The MPO operator family -/
 
 /-- The `(σ, τ)` matrix entry of the MPO density operator for system size `N`:
@@ -137,7 +130,6 @@ noncomputable def transferMap (M : MPOTensor d D) :
   ∑ i : Fin d, ∑ j : Fin d,
     (LinearMap.mulLeft ℂ (M i j)).comp (LinearMap.mulRight ℂ (M i j)ᴴ)
 
-@[simp]
 lemma transferMap_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
     transferMap M X = ∑ i : Fin d, ∑ j : Fin d, M i j * X * (M i j)ᴴ := by
   classical
