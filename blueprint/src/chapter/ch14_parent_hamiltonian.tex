@@ -461,6 +461,98 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   in normal form, the interaction range can be reduced to $L_0 + 1$.
 \end{theorem}
 
+\section{Commuting parent Hamiltonians}\label{sec:commuting_parent_ham}
+
+A parent Hamiltonian has \emph{commuting} local terms when all translated
+interaction projectors commute with each other.
+
+\begin{definition}[Commuting parent Hamiltonian]\label{def:is_commuting_parent_ham}
+  \lean{MPSTensor.IsCommutingParentHam}
+  \leanok
+  \uses{def:local_term_parent}
+  The parent Hamiltonian with block length~$L$ on $N$ sites has
+  \emph{commuting} local terms if
+  $h_i h_j = h_j h_i$ for all $i,j \in \{0,\dots,N{-}1\}$.
+  See \cite[Definition~3.9]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{definition}[Nearest-neighbor commuting parent Hamiltonian]\label{def:is_nncph}
+  \lean{MPSTensor.IsNNCPH}
+  \leanok
+  \uses{def:is_commuting_parent_ham}
+  A \emph{nearest-neighbor commuting parent Hamiltonian} (NNCPH) is a
+  commuting parent Hamiltonian with block length $L = 2$.
+  See \cite[Definition~3.9]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[RFP implies NNCPH]\label{thm:rfp_implies_nncph}
+  \lean{MPSTensor.isNNCPH_of_isRFP}
+  \uses{def:is_nncph}
+  If $A$ is a renormalization fixed point (RFP), then its parent
+  Hamiltonian with $L = 2$ has commuting local terms.
+  \textbf{Note:} the Lean proof is currently vacuously true because
+  \texttt{parentInteraction} simplifies to zero (a pre-existing bug); do
+  not cite this as a proven result.
+  See \cite[Theorem~3.10]{Cirac2021Matrix}.
+\end{theorem}
+
+\section{Decorrelation and commuting parent Hamiltonians}%
+\label{sec:decorrelation}
+
+This section develops the abstract operator-algebraic formulation of
+decorrelation and its connection to commuting parent Hamiltonians, following
+Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
+
+\begin{definition}[Decorrelation]\label{def:is_decorrelated}
+  \lean{Decorrelation.IsDecorrelated}
+  \leanok
+  Given an idempotent endomorphism $P_K$ and sets of observables
+  $\mathcal{O}_A$, $\mathcal{O}_B$, regions $A$ and $B$ are
+  \emph{decorrelated} w.r.t.\ $K$ when
+  $P_K \circ O_A \circ (1 - P_K) \circ O_B \circ P_K = 0$
+  for all $O_A \in \mathcal{O}_A$, $O_B \in \mathcal{O}_B$.
+\end{definition}
+
+\begin{definition}[Commuting parent Hamiltonian structure]\label{def:has_commuting_parent_ham}
+  \lean{Decorrelation.HasCommutingParentHam}
+  \leanok
+  A subspace $K$ (given by its idempotent endomorphism $P_K$) has a
+  \emph{commuting parent Hamiltonian structure} if there exist idempotent
+  endomorphisms $P_{AX}$ and $P_{XB}$ that commute and satisfy
+  $P_{AX} \circ P_{XB} = P_K$.
+\end{definition}
+
+\begin{theorem}[Commuting parent Hamiltonian implies decorrelation]%
+  \label{thm:commuting_ham_is_decorrelated}
+  \lean{Decorrelation.commutingHam_isDecorrelated}
+  \leanok
+  \uses{def:is_decorrelated, def:has_commuting_parent_ham}
+  If a subspace $K$ has a commuting parent Hamiltonian decomposition
+  $P_K = P_{AX} \circ P_{XB}$ with $[P_{AX}, P_{XB}] = 0$, and
+  $A$-observables commute with $P_{XB}$ while $B$-observables commute
+  with $P_{AX}$, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
+  This is the backward direction of Proposition~D.3
+  from~\cite{Cirac2021Matrix}, Appendix~D, \S D.2.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  The key identity is $P_{XB} \circ (1 - P_{AX} \circ P_{XB}) \circ P_{AX} = 0$.
+  Using the commutation hypotheses to slide $O_A$ past $P_{XB}$ and $O_B$
+  past $P_{AX}$, the five-fold composition factors through this zero term.
+\end{proof}
+
+\begin{theorem}[Commuting parent Hamiltonian implies decorrelation (bundled)]%
+  \label{thm:has_commuting_parent_ham_is_decorrelated}
+  \lean{Decorrelation.HasCommutingParentHam.isDecorrelated}
+  \leanok
+  \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
+  Convenience wrapper: if $P_K$ satisfies \texttt{HasCommutingParentHam}
+  and observables respect locality, then regions $A$ and $B$ are
+  decorrelated w.r.t.\ $K$. Delegates to
+  Theorem~\ref{thm:commuting_ham_is_decorrelated}.
+\end{theorem}
+
 \section{Spectral gap}\label{sec:spectral_gap}
 
 A frustration-free Hamiltonian is \emph{gapped} if the first excited
