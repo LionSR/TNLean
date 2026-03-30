@@ -452,7 +452,7 @@ decorrelation and its connection to commuting parent Hamiltonians, following
 Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
 
 \begin{definition}[Decorrelation]\label{def:is_decorrelated}
-  \lean{IsDecorrelated}
+  \lean{Decorrelation.IsDecorrelated}
   \leanok
   Given an idempotent endomorphism $P_K$ and sets of observables
   $\mathcal{O}_A$, $\mathcal{O}_B$, regions $A$ and $B$ are
@@ -462,7 +462,7 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
 \end{definition}
 
 \begin{definition}[Commuting parent Hamiltonian structure]\label{def:has_commuting_parent_ham}
-  \lean{HasCommutingParentHam}
+  \lean{Decorrelation.HasCommutingParentHam}
   \leanok
   A subspace $K$ (given by its idempotent endomorphism $P_K$) has a
   \emph{commuting parent Hamiltonian structure} if there exist idempotent
@@ -472,7 +472,7 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
 
 \begin{theorem}[Commuting parent Hamiltonian implies decorrelation]%
   \label{thm:commuting_ham_is_decorrelated}
-  \lean{commutingHam_isDecorrelated}
+  \lean{Decorrelation.commutingHam_isDecorrelated}
   \leanok
   \uses{def:is_decorrelated, def:has_commuting_parent_ham}
   If a subspace $K$ has a commuting parent Hamiltonian decomposition
@@ -492,7 +492,7 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
 
 \begin{theorem}[Commuting parent Hamiltonian implies decorrelation (bundled)]%
   \label{thm:has_commuting_parent_ham_is_decorrelated}
-  \lean{HasCommutingParentHam.isDecorrelated}
+  \lean{Decorrelation.HasCommutingParentHam.isDecorrelated}
   \leanok
   \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
   Convenience wrapper: if $P_K$ satisfies \texttt{HasCommutingParentHam}
