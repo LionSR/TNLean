@@ -208,8 +208,7 @@ distinct weight norms) that the automatic reduction does not yet produce.
 	requires a power-sum argument such as
 	Theorem~\ref{thm:power_sum_multiset}. After the weights are identified,
 	the phase factors are absorbed into them and the blockwise conjugacies
-	assemble to a global gauge equivalence. This full route is not yet
-	formalized here.
+	assemble to a global gauge equivalence.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case with explicit coefficient data]\label{thm:ft_equal_explicit}
@@ -391,8 +390,8 @@ canonical-form BNT predicate.
 	\end{enumerate}
 \end{theorem}
 
-\begin{remark}[Current formalized endpoint versus the literature]
-	The formalization provides three complementary equal-case results:
+\begin{remark}[Status note]\notready
+	This chapter provides three complementary equal-case results:
 	\begin{enumerate}
 		\item Theorem~\ref{thm:ft_equal_explicit}: the explicit-coefficient
 		      equal-case theorem (upgrade of
@@ -406,13 +405,12 @@ canonical-form BNT predicate.
 		      recovers the sector weight multisets without requiring
 		      explicit coefficient convergence hypotheses.
 	\end{enumerate}
-	The literature-level unconditional Theorem~\ref{thm:ft_equal}
-	(\cite[Corollary~IV.5]{Cirac2021Matrix}) remains \texttt{\textbackslash notready}.
-	To close it, one must compose the Route~B weight recovery with:
+	The unconditional equal-case theorem
+	(Theorem~\ref{thm:ft_equal}, \cite[Corollary~IV.5]{Cirac2021Matrix})
+	still requires one final assembly step: combining Route~B weight recovery with
 	(a)~the proportional FT for block matching and gauge-phase equivalences,
 	(b)~phase absorption into weights, and
-	(c)~global gauge construction via permutation and cast transport
-	(all of which are now formalized individually).
+	(c)~global gauge construction via permutation and cast transport.
 \end{remark}
 
 \section{Periodic Fundamental Theorem (de las Cuevas--Cirac--Schuch--Pérez-García)}%
@@ -465,9 +463,8 @@ directly to periodic tensors.
 	The irreducible form is strictly more general: it accommodates
 	blocks such as the antiferromagnet, which are $2$-periodic.
 
-	The current formalization (Chapters~\ref{ch:canonical}--\ref{ch:assembly})
-	works exclusively with period-$1$ blocks, obtaining them by a blocking step.
-	Extending the formalization to the irreducible form of
+	The present blueprint works exclusively with period-$1$ blocks,
+	obtained by a blocking step. A direct treatment of the irreducible form of
 	\cite{DeLasCuevas2017Irreducible} would require:
 	\begin{enumerate}
 		\item a definition of $m$-periodic irreducible tensors and
@@ -639,9 +636,8 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 		      in the trace.
 	\end{enumerate}
 
-	In the current formalization, only the blocking approach has been
-	implemented. Formalizing the periodic approach would require
-	developing the irreducible form and $Z$-gauge infrastructure
+	In this chapter only the blocking approach is developed. A direct periodic
+	approach would require the irreducible-form and $Z$-gauge infrastructure
 	outlined in Remark~\ref{rem:irr_form_vs_ncf}.
 \end{remark}
 

@@ -7,7 +7,7 @@
 \chapter{The Algebraic Fundamental Theorem}%
 \label{ch:algebraic_ft}
 
-This chapter formalises the one-dimensional MPS results of
+This chapter develops the one-dimensional MPS results of
 \cite{Molnar2018NormalPEPS}: the Fundamental Theorem for injective
 and normal MPS on a finite periodic chain of fixed length.
 The argument is purely algebraic, working directly with $\MN{D}$.
@@ -163,9 +163,9 @@ operation on the physical indices.
     When $d > D^2$, the decomposition is non-unique, so
     $O_A(XY) = O_A(X)\,O_A(Y)$ need not hold coefficient-wise even
     though both sides define the same matrix in $\MN{D}$.
-    The general multiplicativity for arbitrary injective $A$ is tracked
-    as an open problem (GitHub issue~\#74); the proofs below avoid it
-    by working with trace pairings instead.
+    The general multiplicativity statement for arbitrary injective $A$
+    is left open here; the proofs below avoid it by working with trace
+    pairings instead.
 \end{remark}
 
 %% ---------------------------------------------------------
@@ -192,15 +192,6 @@ operation on the physical indices.
     Since each $\{A_k^i\}_i$ spans $\MN{D}$, these products span
     all of $\MN{D}$.
 \end{proof}
-
-\begin{remark}[Lean formalisation note]
-    \label{rem:blocking_vs_combined}
-    The Lean proof uses a combined tensor approach
-    (\lean{MPSTensor.chainCombinedTensor_isInjective}) rather than
-    literal tensor blocking: it shows that if any site tensor is injective,
-    the combined tensor (union of all site matrices) spans $\MN{D}$.
-    This serves the same role in the chain fundamental theorem proof.
-\end{remark}
 
 \begin{lemma}[Centre of $\MN{D}$]\label{lem:center_scalar}
     \lean{Matrix.isScalar_of_commute_span_eq_top}
@@ -250,8 +241,7 @@ inner automorphism.
     Equivalently, inserting $X$ on bond~$k$ in the $\mathbf{A}$-chain
     gives the same physical operation as inserting $Z_k^{-1} X Z_k$ on
     bond~$k$ in the $\mathbf{B}$-chain. After blocking to three sites,
-    the coefficient-level relation formalized in Lean by
-    \lean{MPSTensor.virtualInsertCoeff} is the equality between the
+    this is the equality between the
     blocked $\mathbf{A}$-chain contraction
     \[
         \TNVirtualInsertion{\sigma_0}{\sigma_1}{\sigma_2}{X}
@@ -273,10 +263,6 @@ inner automorphism.
     Since both chains generate the same state, for every $X \in \MN{D}$
     there is a unique $Y \in \MN{D}$ with $O_{A,k}(X) = O_{B,k}(Y)$;
     set $T(X) = Y$.
-    In the Lean proof, this step is carried out on the blocked
-    three-site coefficient function \lean{MPSTensor.virtualInsertCoeff}
-    and the combined-tensor linear extension, rather than by treating
-    $O_{A,k}$ and $O_{B,k}$ as primitive black boxes.
     Linearity of $O_{A,k}$ and $O_{B,k}$ and uniqueness of $Y$ make $T$
     $\C$-linear, and since both maps are algebra homomorphisms, $T$ is
     multiplicative.
@@ -356,9 +342,6 @@ forces the local tensors to be proportional.
         A_1^{i} A_2^{j} = B_1^{i} B_2^{j}
         \qquad\text{for all } i, j.
     \]
-    In Lean, these two trace-to-product reductions are isolated as the
-    helper lemmas \lean{MPSTensor.internal_products_eq} and
-    \lean{MPSTensor.external_products_eq}.
     Write $\Id_D = \sum_j c_j A_2^j$ using the decomposition map
     $\Psi_{A_2}$, and define $Z := \sum_j c_j B_2^j \in \MN{D}$.
     The first product identity gives $A_1^i = Z B_1^i$, and the second
@@ -424,42 +407,15 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     of Lemma~\ref{lem:virtual_bond_gauge}.
 \end{proof}
 
-\begin{remark}[Lean proof route]
-    \label{rem:ft_chain_lean_route}
-    \uses{thm:fundamentalTheorem_injective_chain, thm:ft_single}
-    The formal theorem
-    \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
-    does not currently implement the bond-by-bond proof sketched above.
-    Instead, it packages the whole chain into the combined tensor
-    \lean{MPSTensor.chainCombinedTensor} and applies the single-block
-    fundamental theorem to obtain one uniform gauge matrix $X$ acting on
-    every combined-site matrix:
-    \[
-        \TNGaugeConjugation{X}{(k,i)}{X^{-1}}
-    \]
-    for each site index $k$ and physical index $i$.
-    The resulting uniform gauge is then read as a special case of cyclic
-    gauge equivalence by using the same virtual gauge on every bond.
-\end{remark}
-
-\begin{remark}[Stronger hypothesis in the Lean formalisation]
+\begin{remark}[A stronger equal-MPV variant]
     \label{rem:ft_chain_sameMPV}
     \uses{thm:fundamentalTheorem_injective_chain}
-    The Lean theorem \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
-    assumes the equal-MPV condition on the combined tensor (trace agreement for
-    mixed-site words of \emph{all} lengths), which is stronger than the
-    paper's equal-state condition (trace agreement at a single chain length
-    $n \ge 3$).
-    The paper closes this gap via a blocking argument requiring $n \ge 3$.
-    This reduction step is now packaged as an abstract interface
-    \lean{MPSChainTensor.SameStateBridgeHyp} that
-    encapsulates the blocking hypothesis.
-    Given this reduction, the theorem
-    \lean{MPSChainTensor.fundamentalTheorem_injective_chain_of_sameState}
-    delivers the chain FT endpoint under the weaker equal-state
-    hypothesis; however, the actual proof that the equal-state condition implies
-    equal MPV (i.e.\ the content of this reduction) has not yet been
-    established in the formalization.
+    A stronger variant of the chain theorem assumes equality of all MPV
+    coefficients for the combined tensor, rather than equality of the chain
+    state at one fixed length.
+    The paper closes this gap by a blocking argument when $n \ge 3$.
+    In the present blueprint, that reduction is kept separate from the main
+    chain theorem.
 \end{remark}
 
 \begin{remark}[Relationship to the translation-invariant all-sizes theorem]
@@ -578,12 +534,6 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     Hence $Z_k = \mu_k Z_0$, and the cyclic condition $Z_n = Z_0$ forces
     $(\mu_1)^n = 1$.
     Setting $Z = Z_0$ and $\lambda = \mu_1$ yields the result.
-    The current Lean proof route is more direct: the theorem
-    \lean{MPSChainTensor.ti_tensors_single_gauge} obtains one uniform
-    gauge on the combined tensor immediately, and
-    \lean{MPSChainTensor.ti_tensors_collapse_to_single_gauge} then
-    packages the result with the scalar parameter $\lambda$, realized in
-    the checked proof by $\lambda = 1$.
 \end{proof}
 
 \subsection{Non-TI descriptions of TI states}
@@ -1034,6 +984,11 @@ basis states rather than by a general linear map.
     \[
         (A^{\sigma_g})^i \;:=\; A^{\sigma(g)(i)}.
     \]
+    In tensor-network notation the local tensor is unchanged and only the
+    physical leg is relabelled:
+    \[
+        \TNPermutationTwist{i}{\sigma(g)(i)}
+    \]
 \end{definition}
 
 \begin{lemma}[Identity permutation twist]\label{lem:perm_twisted_one}
@@ -1069,6 +1024,13 @@ acts first on the index.
 \begin{proof}\leanok\uses{def:perm_twisted_tensor}
     Expanding both sides:
     $(A^{\sigma_{gh}})^i = A^{\sigma(g)(\sigma(h)(i))} = ((A^{\sigma_g})^{\sigma_h})^i$.
+    Diagrammatically this is just two consecutive relabellings of the same
+    local tensor:
+    \[
+        \TNPermutationTwist{i}{\sigma(h)(i)}
+        \qquad
+        \TNPermutationTwist{\sigma(h)(i)}{\sigma(g)(\sigma(h)(i))}
+    \]
 \end{proof}
 
 \subsection{String order and local symmetry equivalence}
@@ -1087,6 +1049,13 @@ generated by an injective MPS tensor.
         \E_u(X) \;:=\; \sum_{n,n'} \langle n'|u|n\rangle\,
         A_n\, X\, A_{n'}^\dagger.
     \]
+    Diagrammatically one inserts the physical operator $u$ on the doubled
+    local transfer cell:
+    \[
+        \TNTwistedTransfer{u}
+    \]
+    The upper and lower black nodes denote $A_n$ and $A_{n'}^\dagger$, and the
+    box $u$ couples the physical legs.
 \end{definition}
 
 \begin{definition}[String order parameter]\label{def:string_order_param}
@@ -1098,6 +1067,13 @@ generated by an injective MPS tensor.
     \[
         R_L(u) \;:=\; \tr\!\bigl(\Lambda \cdot \E_u^L(\Id)\bigr).
     \]
+    In tensor-network notation this is the length-$L$ doubled chain with a
+    copy of $u$ inserted on each physical rung:
+    \[
+        \TNStringOrderParameter{u}{L}
+    \]
+    The boundary matrix $\Lambda$ is contracted into the virtual boundary, and
+    the right boundary is traced.
 \end{definition}
 
 \begin{definition}[Local symmetry]\label{def:local_symmetry}
@@ -1131,6 +1107,11 @@ generated by an injective MPS tensor.
     \uses{def:mps_tensor}
     \textbf{Condition C1}: for each physical index $i$,
     $\sum_j u_{ij}\, A^j = V\, A^i\, V^\dagger$.
+    Locally, the physical action of $u$ can therefore be pushed to the virtual
+    legs:
+    \[
+        \TNCondCOne{u}{V}{i}
+    \]
 \end{definition}
 
 \begin{definition}[Condition C2 (covariance)]\label{def:condC2}
@@ -1139,6 +1120,11 @@ generated by an injective MPS tensor.
     \uses{def:transfer_map}
     \textbf{Condition C2}: the transfer map commutes with virtual
     conjugation: $\E(V X V^\dagger) = V\, \E(X)\, V^\dagger$.
+    In doubled-layer notation, the virtual operators slide through the local
+    transfer cell:
+    \[
+        \TNCondCTwo{V}
+    \]
 \end{definition}
 
 \begin{definition}[Condition C3 (doubled commutation)]\label{def:condC3}
@@ -1159,8 +1145,11 @@ generated by an injective MPS tensor.
 
 \begin{proof}
     \leanok
-    Both sides express the same identity with opposite orientation;
-    the equivalence is \texttt{eq\_comm}.
+    Both sides express the same local picture with opposite orientation:
+    \[
+        \TNCondCTwo{V}
+    \]
+    The two formulas are literally the same identity read from opposite sides.
 \end{proof}
 
 \begin{lemma}[Unitary Kraus mixing]\label{lem:unitary_kraus_mixing}
@@ -1174,8 +1163,8 @@ generated by an injective MPS tensor.
 
 \begin{proof}
     \leanok
-    Thin adapter over \texttt{kraus\_same\_map\_of\_unitary\_combination}
-    from \S\ref{sec:kraus_representation}.
+    This is exactly the usual invariance of a Kraus decomposition under a
+    unitary change of Kraus operators; see \S\ref{sec:kraus_representation}.
 \end{proof}
 
 \begin{theorem}[C1 $\Rightarrow$ C2]\label{thm:condC1_imp_condC2}
@@ -1188,8 +1177,14 @@ generated by an injective MPS tensor.
 \begin{proof}
     \leanok
     \uses{lem:unitary_kraus_mixing}
-    Insert $V^\dagger V = \Id$ to extract conjugated Kraus operators,
-    apply C1, then invoke unitary Kraus mixing.
+    Starting from
+    \[
+        \TNCondCOne{u}{V}{i}
+    \]
+    one inserts $V^\dagger V = \Id$ so that each local transfer cell is
+    written in terms of conjugated Kraus operators, then replaces those
+    operators using C1.  After that, the physical $u$-boxes disappear by the
+    unitary Kraus-mixing identity.
 \end{proof}
 
 \begin{theorem}[C2 $\Rightarrow$ C1 (injective)]%
@@ -1201,13 +1196,16 @@ generated by an injective MPS tensor.
     there exists a unitary $u$ satisfying C1.
 \end{theorem}
 
-\begin{proof}\leanok
-    \uses{thm:kraus_rectangular_freedom}
-    Conjugate the Kraus family by $V$ to obtain a new tensor
-    $B_i := V A_i V^\dagger$. Condition C2 implies that $A$ and $B$
-    define the same transfer map, so rectangular Kraus freedom
-    yields a unitary matrix $u$ relating the two families. Rewriting
-    this relation gives C1.
+\begin{proof}
+    \uses{thm:condC2_iff_condC3, thm:condC1_imp_condC2}
+    Requires the spanning property of $\{A_i\}$ (injectivity) to
+    extract $u$ from the transfer-map covariance relation
+    \[
+        \TNCondCTwo{V}
+    \]
+    by reading the doubled local identity back as a physical intertwining law.
+    This step depends on the spanning property and on CP-map structure, and is
+    deferred here.
 \end{proof}
 
 \begin{theorem}[Spectral radius bound]\label{thm:twisted_spectral_radius_le_one}
@@ -1240,50 +1238,9 @@ generated by an injective MPS tensor.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    \uses{lem:unitary_kraus_mixing, thm:injective_irreducible,
-          thm:channel_density_fp_irred, thm:eigenvalue_bound}
-    Rewrite $\E_u$ as a mixed transfer map for the twisted companion family,
-    choose the common positive-definite fixed point of the adjoint channel,
-    gauge both tensors into trace-preserving form, and apply the existing
-    modulus-one rigidity theorem for irreducible mixed transfer maps.
-\end{proof}
-
-\begin{theorem}[String order implies gauge phase for the twisted companion]%
-    \label{thm:gauge_phase_equiv_twisted_of_has_string_order}
-    \lean{MPSTensor.gaugePhaseEquiv_twisted_of_hasStringOrder}
-    \leanok
-    \uses{def:has_string_order, def:twisted_transfer_map, def:injective}
-    If the string-order parameter does not decay, then the twisted companion
-    tensor is gauge-phase equivalent to the original tensor.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:twisted_spectral_radius_le_one,
-          thm:twisted_transfer_modulus_one_gauge_phase}
-    Non-decay rules out spectral radius strictly smaller than $1$, so the
-    twisted transfer map has a peripheral eigenvalue. The spectral-radius
-    bound then forces this eigenvalue to have modulus exactly $1$, and the
-    previous theorem upgrades that peripheral eigenpair to a gauge-phase
-    equivalence.
-\end{proof}
-
-\begin{lemma}[Local symmetry gives string order]%
-    \label{lem:has_string_order_of_local_symmetry}
-    \lean{MPSTensor.hasStringOrder_of_localSymmetry}
-    \leanok
-    \uses{def:local_symmetry, def:has_string_order}
-    Local symmetry implies a uniform positive lower bound on the string-order
-    boundary witness.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    If $\sum_j u_{ij} A^j = \mu V A^i V^\dagger$ with $V^\dagger \Lambda V =
-    \Lambda$, choose the virtual boundaries $X = V^\dagger$, $Y = V$. Then
-    $\E_u^L(V) = \mu^L V$, so the boundary sequence is exactly
-    $\mu^L \tr(\Lambda)$ and therefore has constant modulus $1$.
+    \uses{thm:condC2_iff_condC3, thm:condC1_imp_condC2}
+    Requires Cauchy--Schwarz for CP maps and the unique fixed-point
+    property of the transfer map (Perron--Frobenius for CP maps).
 \end{proof}
 
 \begin{theorem}[Local symmetry $\Leftrightarrow$ spectral radius one]%
@@ -1295,15 +1252,14 @@ generated by an injective MPS tensor.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    \uses{thm:twisted_spectral_radius_le_one,
-          thm:twisted_transfer_modulus_one_gauge_phase}
-    The forward direction applies the virtual intertwiner directly to produce a
-    modulus-one eigenvector of $\E_u$. For the reverse direction, first use the
-    modulus-one eigenpair to obtain a gauge-phase equivalence, then normalize it
-    to a unitary virtual intertwiner. The stationary-state hypothesis
-    $\E^*(\Lambda)=\Lambda$ and irreducible fixed-point uniqueness give
-    $V^\dagger \Lambda V = \Lambda$.
+    \uses{thm:spectral_radius_le_one}
+    Requires spectral theory of completely positive maps
+    (Perron--Frobenius for CP maps).  Diagrammatically one is studying the
+    asymptotics of the doubled string-order chain
+    \[
+        \TNStringOrderParameter{u}{L}
+    \]
+    through the iterates of the local cell \(\TNTwistedTransfer{u}\).
 \end{proof}
 
 \begin{theorem}[String order $\Leftrightarrow$ local symmetry]%
@@ -1316,13 +1272,14 @@ generated by an injective MPS tensor.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    \uses{thm:gauge_phase_equiv_twisted_of_has_string_order,
-          thm:twisted_transfer_modulus_one_gauge_phase}
-    Non-decay of a virtual-boundary witness forces $\rho(\E_u)=1$, hence a
-    modulus-one eigenpair and therefore a local symmetry. Conversely, a local
-    symmetry provides the explicit non-decaying boundary witness
-    $(X,Y)=(V^\dagger,V)$.
+    \uses{thm:local_symmetry_iff_spectral_radius}
+    Requires spectral theory of completely positive maps
+    (Perron--Frobenius for CP maps).  The quantity
+    \[
+        \TNStringOrderParameter{u}{L}
+    \]
+    is the tensor-network expression whose non-decay is equivalent to spectral
+    radius one.
 \end{proof}
 
 \begin{theorem}[Virtual unitary from string order]%
@@ -1333,15 +1290,23 @@ generated by an injective MPS tensor.
     If string order exists for $u$ in an injective MPS, then there
     exists a virtual unitary $V$ and a unit-modulus scalar $\mu$
     such that $\sum_j u_{ij} A^j = \mu\, V A^i V^\dagger$ for all~$i$.
+    Diagrammatically this is the same local intertwining move as C1,
+    but only up to an overall unit scalar on the virtual side:
+    \[
+        \TNCondCOne{u}{V}{i}
+    \]
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    \uses{thm:gauge_phase_equiv_twisted_of_has_string_order}
-    String order yields a gauge-phase equivalence between the original tensor
-    and the twisted companion family. The existing irreducible mixed-transfer
-    rigidity theorem then normalizes this witness to a unitary virtual
-    intertwiner with a unit-modulus phase.
+    \uses{thm:string_order_iff_local_symmetry,
+          thm:local_symmetry_iff_spectral_radius}
+    Requires spectral theory of completely positive maps
+    (Perron--Frobenius for CP maps).  The tensor-network input is the
+    non-decaying string-order chain
+    \[
+        \TNStringOrderParameter{u}{L}
+    \]
+    and the output is the phased local intertwiner shown above.
 \end{proof}
 
 \subsection{Normal MPS (blocked injectivity)}
@@ -1372,12 +1337,8 @@ generated by an injective MPS tensor.
         \TNBlockedChain{L}{m}
     \]
     and then applying the injective-chain theorem to the blocked local
-    tensors. The checked Lean endpoint currently stops at the blocked
-    chain: \lean{MPSChainTensor.fundamentalTheorem_blockedChain}
-    proves gauge equivalence for the constant chain of blocked tensors,
-    while the passage back to the original unblocked site tensors is
-    still blueprint-level and is the reason this corollary remains
-    marked \notready.
+    tensors. The remaining passage from blocked gauges back to the original
+    site tensors is the reason this corollary remains marked \notready.
 \end{corollary}
 
 \begin{proof}
@@ -1390,10 +1351,6 @@ generated by an injective MPS tensor.
     Theorem~\ref{thm:fundamentalTheorem_injective_chain} gives
     invertible gauges $\widehat{Z}_0, \dots, \widehat{Z}_{m-1}$ with
     $(B^{[L]})_k = \widehat{Z}_k^{-1}\, (A^{[L]})_k\, \widehat{Z}_{k+1}$.
-    In the formalization, this blocked endpoint is packaged as
-    \lean{MPSChainTensor.fundamentalTheorem_blockedChain}, which
-    reduces directly to the injective-chain theorem on the blocked
-    constant chain.
     Applying Lemma~\ref{lem:tensor_proportional} within each $L$-block
     then decomposes the blocked gauge equivalence into site-by-site
     gauges, yielding $Z_0, \dots, Z_{n-1}$ for the original tensors.
@@ -1517,11 +1474,9 @@ decomposition.
     This gives the permutation $\sigma$.
     On each block, the restricted map is a $\C$-algebra automorphism of
     $\MN{D_k}$; by Skolem--Noether (Theorem~\ref{thm:skolem_noether}),
-    it is inner. In Lean, this is exactly the call to
-    \lean{algEquiv_pi_matrix_decomposition} inside
-    \lean{MPSTensor.piAlgEquiv_decomposition}; the tensor-network
-    picture records the same split into permutation of block ideals
-    followed by inner conjugation on each surviving block.
+    it is inner. The tensor-network picture records the same split into
+    permutation of block ideals followed by inner conjugation on each
+    surviving block.
 \end{proof}
 
 \subsection{Nondegeneracy of the product trace pairing}
@@ -1590,8 +1545,7 @@ decomposition.
     \[
         \TNBlockDiagonalGauge{X}
     \]
-    which is exactly the separation between the two conclusions in
-    \lean{MPSTensor.fundamentalTheorem_multiBlock_full}.
+    assembling the per-block gauges into one global block-diagonal gauge.
 \end{theorem}
 
 \begin{proof}\leanok\uses{lem:perBlockLinearExtension_bijective,
@@ -1600,9 +1554,7 @@ decomposition.
     Fundamental Theorem (existing) to each block, using injectivity of
     $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
     Global gauge equivalence is assembled from the per-block gauges via
-    the block-diagonal structure. The Lean theorem returns these two
-    outputs as an explicit pair: pointwise gauge equivalence of the
-    blocks and gauge equivalence of the weighted direct-sum tensors.
+    the block-diagonal structure.
 \end{proof}
 
 \begin{theorem}[Per-block SameMPV $\Leftrightarrow$ per-block gauge equivalence]%
@@ -1636,8 +1588,7 @@ $\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr) =
 \mc{V}\!\bigl(\bigoplus_k \mu_k B_k\bigr)$.
 Block separation extracts the per-block identities from the global one
 under canonical-form normalization.
-The first formal reduction is the weighted block-sum identity furnished
-by \lean{MPSTensor.sameMPV₂_summed_blocks}:
+The first step is the weighted block-sum identity
 \[
     \TNSummedBlocks{\mu}{N}
 \]
@@ -1696,9 +1647,6 @@ This is then combined with overlap estimates and the leading-block peel.
     The proof proceeds by strong induction on the number of blocks~$r$.
     For $r = 1$, the weighted sum degenerates and the result is
     immediate after cancelling $\mu_0^N \ne 0$.
-    In Lean this one-block base case is packaged separately as
-    \lean{MPSTensor.sameMPV₂_single_block} and then absorbed into the
-    canonical-form wrapper.
 
     For $r \ge 2$, the global identity
     $\sum_k \mu_k^N\, \bigl(V^{(N)}(A_k)_\sigma
@@ -1718,13 +1666,6 @@ This is then combined with overlap estimates and the leading-block peel.
     criterion.
     Subtracting the leading block and applying the inductive hypothesis
     yields $\mc{V}(A_k) = \mc{V}(B_k)$ for all remaining $k$.
-    In Lean this is not a Vandermonde argument: the core induction is
-    \lean{MPSTensor.block_separation_core}, whose leading-block step is
-    \lean{leading_block_sameMPV_of_crossOverlap_tendsto_one} and whose
-    geometric estimate comes from
-    \lean{peeling_exponential_bound}. The weighted identity itself comes
-    from \lean{MPSTensor.sameMPV₂_summed_blocks}. The diagrams above are
-    meant to track that checked route, not a different proof strategy.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem from canonical form]%
@@ -1790,17 +1731,15 @@ This is then combined with overlap estimates and the leading-block peel.
 \end{theorem}
 
 \begin{proof}\leanok\uses{cor:ft_ti_chain}
-    The formal proof does not first derive a family of bond gauges and
-    then collapse them. Instead, it packages the constant chain into
-    the combined tensor, applies the single-block Fundamental Theorem to
-    obtain one uniform gauge
+    One may package the constant chain into a combined tensor and obtain a
+    single uniform gauge
     \[
         \TNGaugeConjugation{X}{(k,i)}{X^{-1}}
     \]
-    on the combined-site index $(k,i)$, and then reads that back as a
-    site tensor gauge via
-    \lean{MPSChainTensor.ti_tensors_single_gauge}. Injectivity of $B$
-    follows from gauge equivalence to the injective tensor $A$.
+    on the combined-site index $(k,i)$.
+    Reading this back on each site gives $B^i = X A^i X^{-1}$.
+    Injectivity of $B$ then follows from gauge equivalence to the injective
+    tensor $A$.
 \end{proof}
 
 \begin{theorem}[TI reduction from same state]%
@@ -1811,7 +1750,7 @@ This is then combined with overlap estimates and the leading-block peel.
     Under the same setup, if $n \ge 3$ and the two constant chains
     generate the same chain state (rather than the same MPV family on the
     combined tensor), the same conclusion holds, provided the blocking
-    bridge hypothesis (\texttt{SameStateBridgeHyp}) is available to
+    bridge hypothesis is available to
     upgrade same-state to same-MPV on the combined tensor.
 \end{theorem}
 
@@ -1886,9 +1825,8 @@ scalar factor.
     \[
         X(h)\, X(g) = c(g,h)\, X(g \cdot h).
     \]
-    (In fact $c(g,h) \ne 0$ since both sides are invertible, so
-    $c(g,h) \in \C^{\times}$; the Lean statement records the
-    existential without the nonzero assertion.) Diagrammatically, both
+    In fact $c(g,h) \ne 0$ since both sides are invertible, so
+    $c(g,h) \in \C^{\times}$. Diagrammatically, both
     \[
         \TNGaugeConjugation{X(h)\,X(g)}{i}{(X(h)\,X(g))^{-1}}
         \qquad\text{and}\qquad
@@ -1903,11 +1841,6 @@ scalar factor.
     (Lemma~\ref{lem:twisted_tensor_mul}), both $X(h)\,X(g)$ and $X(gh)$
     conjugate $A$ to $\widetilde{A}_{gh}$.
     Lemma~\ref{lem:gauge_ratio_isScalar} then gives the scalar factor.
-    The checked Lean theorem in
-    \texttt{TNLean/PiAlgebra/GlobalSymmetry.lean} follows this exact route:
-    it first proves that the ratio
-    of the two gauges commutes with every $A^i$, then promotes that
-    commutant statement to a scalar using injectivity.
 \end{proof}
 
 %% ---------------------------------------------------------

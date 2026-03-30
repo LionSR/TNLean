@@ -230,6 +230,137 @@
   \end{tikzpicture}%
 }
 
+\newcommand{\TNPermutationTwist}[2]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@leftleg{tnL}{0.65}
+    \TN@rightleg{tnL}{0.65}
+    \TN@upleg{tnL}{0.55}
+    \TN@uplabel{tnL}{0.85}{#1}
+    \node at (1.55,0) {$\xrightarrow{\ \sigma_g\ }$};
+    \TN@tensordot{tnR}{(3.30,0)}
+    \TN@leftleg{tnR}{0.65}
+    \TN@rightleg{tnR}{0.65}
+    \TN@upleg{tnR}{0.55}
+    \TN@uplabel{tnR}{0.85}{#2}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNTwistedTransfer}[1]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnUp}{(0,0.62)}
+    \TN@tensordot{tnDn}{(0,-0.62)}
+    \draw[tn leg] ($(tnUp.west)+(-0.80,0)$) -- (tnUp.west);
+    \draw[tn leg] ($(tnDn.west)+(-0.80,0)$) -- (tnDn.west);
+    \draw[tn leg] (tnUp.east) -- ++(0.80,0);
+    \draw[tn leg] (tnDn.east) -- ++(0.80,0);
+    \TN@tensorboxwide{tnu}{(0,0)}{}{0.50cm}
+    \node at (tnu) {$#1$};
+    \draw[tn phys leg] (tnUp.south) -- (tnu.north);
+    \draw[tn phys leg] (tnu.south) -- (tnDn.north);
+    \node at (-1.25,0) {$X$};
+    \node at (1.52,0) {$\E_{#1}(X)$};
+    \node at ($(tnUp.north)+(0,0.28)$) {$n$};
+    \node at ($(tnDn.south)+(0,-0.28)$) {$n'$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNCondCOne}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@leftleg{tnL}{0.65}
+    \TN@rightleg{tnL}{0.65}
+    \TN@upleg{tnL}{0.32}
+    \TN@tensorboxwide{tnu}{(0,0.78)}{}{0.50cm}
+    \node at (tnu) {$#1$};
+    \draw[tn phys leg] (tnL.north) -- (tnu.south);
+    \node at ($(tnu.north)+(0,0.24)$) {$#3$};
+    \node at (1.65,0) {$=$};
+    \TN@tensordot{tnXl}{(3.15,0)}
+    \TN@tensordot{tnA}{(4.20,0)}
+    \TN@tensordot{tnXr}{(5.25,0)}
+    \draw[tn leg] (tnXl.west) -- ++(-0.55,0);
+    \draw[tn leg] (tnXl.east) -- (tnA.west);
+    \draw[tn leg] (tnA.east) -- (tnXr.west);
+    \draw[tn leg] (tnXr.east) -- ++(0.55,0);
+    \TN@upleg{tnA}{0.55}
+    \TN@uplabel{tnA}{0.85}{#3}
+    \node at ($(tnXl.south)+(0,-0.35)$) {$#2$};
+    \node at ($(tnXr.south)+(0,-0.35)$) {$#2^\dagger$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNCondCTwo}[1]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensorboxwide{tnVL}{(-1.15,0.58)}{}{0.52cm}
+    \TN@tensorboxwide{tnVdL}{(-1.15,-0.58)}{}{0.68cm}
+    \node at (tnVL) {$#1$};
+    \node at (tnVdL) {$#1^\dagger$};
+    \TN@tensordot{tnLUp}{(0,0.58)}
+    \TN@tensordot{tnLDn}{(0,-0.58)}
+    \draw[tn leg] (tnVL.west) -- ++(-0.45,0);
+    \draw[tn leg] (tnVdL.west) -- ++(-0.45,0);
+    \draw[tn leg] (tnVL.east) -- (tnLUp.west);
+    \draw[tn leg] (tnVdL.east) -- (tnLDn.west);
+    \draw[tn leg] (tnLUp.east) -- ++(0.55,0);
+    \draw[tn leg] (tnLDn.east) -- ++(0.55,0);
+    \draw[tn phys leg] (tnLUp.south) -- (tnLDn.north);
+    \node at (1.55,0) {$=$};
+    \TN@tensordot{tnRUp}{(3.10,0.58)}
+    \TN@tensordot{tnRDn}{(3.10,-0.58)}
+    \TN@tensorboxwide{tnVR}{(4.25,0.58)}{}{0.52cm}
+    \TN@tensorboxwide{tnVdR}{(4.25,-0.58)}{}{0.68cm}
+    \node at (tnVR) {$#1$};
+    \node at (tnVdR) {$#1^\dagger$};
+    \draw[tn leg] (tnRUp.west) -- ++(-0.55,0);
+    \draw[tn leg] (tnRDn.west) -- ++(-0.55,0);
+    \draw[tn leg] (tnRUp.east) -- (tnVR.west);
+    \draw[tn leg] (tnRDn.east) -- (tnVdR.west);
+    \draw[tn leg] (tnVR.east) -- ++(0.45,0);
+    \draw[tn leg] (tnVdR.east) -- ++(0.45,0);
+    \draw[tn phys leg] (tnRUp.south) -- (tnRDn.north);
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNStringOrderParameter}[2]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensorboxwide{tnLam}{(-1.15,0)}{}{0.62cm}
+    \node at (tnLam) {$\Lambda$};
+    \TN@tensordot{tnU1}{(0,0.62)}
+    \TN@tensordot{tnD1}{(0,-0.62)}
+    \TN@tensordot{tnU2}{(1.55,0.62)}
+    \TN@tensordot{tnD2}{(1.55,-0.62)}
+    \TN@tensordot{tnU3}{(4.30,0.62)}
+    \TN@tensordot{tnD3}{(4.30,-0.62)}
+    \TN@tensorboxwide{tnuA}{(0,0)}{}{0.50cm}
+    \TN@tensorboxwide{tnuB}{(1.55,0)}{}{0.50cm}
+    \TN@tensorboxwide{tnuC}{(4.30,0)}{}{0.50cm}
+    \node at (tnuA) {$#1$};
+    \node at (tnuB) {$#1$};
+    \node at (tnuC) {$#1$};
+    \draw[tn leg] (tnLam.east) -- (tnU1.west);
+    \draw[tn leg] (tnLam.east) -- (tnD1.west);
+    \draw[tn leg] (tnU1.east) -- (tnU2.west);
+    \draw[tn leg] (tnD1.east) -- (tnD2.west);
+    \draw[tn leg] (tnU2.east) -- ++(0.62,0);
+    \draw[tn leg] (tnD2.east) -- ++(0.62,0);
+    \draw[tn leg] ($(tnU3.west)+(-0.62,0)$) -- (tnU3.west);
+    \draw[tn leg] ($(tnD3.west)+(-0.62,0)$) -- (tnD3.west);
+    \draw[tn leg] (tnU3.east) -- ++(0.70,0);
+    \draw[tn leg] (tnD3.east) -- ++(0.70,0);
+    \draw[tn phys leg] (tnU1.south) -- (tnuA.north);
+    \draw[tn phys leg] (tnuA.south) -- (tnD1.north);
+    \draw[tn phys leg] (tnU2.south) -- (tnuB.north);
+    \draw[tn phys leg] (tnuB.south) -- (tnD2.north);
+    \draw[tn phys leg] (tnU3.south) -- (tnuC.north);
+    \draw[tn phys leg] (tnuC.south) -- (tnD3.north);
+    \node at (2.92,0.62) {$\cdots$};
+    \node at (2.92,-0.62) {$\cdots$};
+    \node at (5.55,0) {$\operatorname{tr}$};
+    \node at (2.92,-1.25) {$#2$};
+  \end{tikzpicture}%
+}
+
 \newcommand{\TNVirtualInsertion}[4]{%
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{tnL}{(0,0)}

@@ -742,8 +742,6 @@ the Perron--Frobenius fixed point.
 
 This section records the channel-side support-projection infrastructure
 behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
-The main formalized statement is
-\texttt{Channel.support\_proj\_fixed}.
 
 \begin{theorem}[Support projection invariance (Wolf Lemma~6.4)]%
     \label{thm:support_proj_fixed}
@@ -812,11 +810,7 @@ The main formalized statement is
 
 \begin{remark}[Props.~6.10--6.11: non-trivial formulations]%
     \label{rem:stationary_support_todo}
-    The original Lean declarations for ``irreducible iff support is full''
-    and ``stationary support minimality'' were removed in PR~\#102
-    because their previous formulations were vacuous (they followed
-    trivially from the irreducibility hypothesis alone).
-    The correct non-trivial statements are:
+    The non-trivial formulations needed here are:
     \begin{itemize}
         \item \textbf{Prop.~6.10} (converse of Prop.~6.9):
             if the support projection of \emph{every} PSD fixed point
@@ -824,7 +818,7 @@ The main formalized statement is
         \item \textbf{Prop.~6.11}: minimality of the stationary support
             among invariant projections, without assuming irreducibility.
     \end{itemize}
-    These remain TODO in the formalization.
+    These statements are deferred in the present chapter.
 \end{remark}
 
 \section{Additional Wolf Chapter~6 declaration wrappers}
@@ -939,7 +933,7 @@ This section records declaration wrappers used in cross-chapter references.
     The peripheral eigenvalues form a finite subset of $\C$,
     contain $1$, and are closed under multiplication and inversion,
     so they form a finite subgroup of $\C^\times$.
-    By Mathlib's \texttt{subgroup\_units\_cyclic}, this subgroup is cyclic.
+    Any finite subgroup of $\C^\times$ is cyclic.
     The generator $\gamma$ has order $m = |\text{peripheral spectrum}|$.
 \end{proof}
 

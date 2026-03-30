@@ -94,6 +94,58 @@
   \end{array}%
 }
 
+\newcommand{\TNPermutationTwist}[2]{%
+  \begin{array}{ccccc}
+    #1 &&&& #2 \\
+    \vert &&&& \vert \\
+    \bullet && \xrightarrow{\ \sigma_g\ } && \bullet
+  \end{array}%
+}
+
+\newcommand{\TNTwistedTransfer}[1]{%
+  \begin{array}{ccc}
+    X & \text{---} & \E_{#1}(X) \\
+    & \bullet & \\
+    & \vert & \\
+    & \fbox{$#1$} & \\
+    & \vert & \\
+    & \bullet & \\
+    & n,\;n' &
+  \end{array}%
+}
+
+\newcommand{\TNCondCOne}[3]{%
+  \begin{array}{ccccccc}
+    && #3 &&&& #3 \\
+    && \vert &&&& \vert \\
+    && \fbox{$#1$} &&&& \bullet \\
+    && \vert && = && \\
+    \bullet & \text{---} & \bullet & && \bullet & \text{---} & \bullet \\
+    &&&&&& #2 && #2^\dagger
+  \end{array}%
+}
+
+\newcommand{\TNCondCTwo}[1]{%
+  \begin{array}{ccccccc}
+    \fbox{$#1$} & \text{---} & \bullet && = && \bullet & \text{---} & \fbox{$#1$} \\
+    && \vert &&&& \vert \\
+    \fbox{$#1^\dagger$} & \text{---} & \bullet && = && \bullet & \text{---} & \fbox{$#1^\dagger$}
+  \end{array}%
+}
+
+\newcommand{\TNStringOrderParameter}[2]{%
+  \begin{array}{ccccccccc}
+    &&&&&& \operatorname{tr} \\
+    \fbox{$\Lambda$} & \text{---} &
+    \begin{array}{c}\bullet\\ \vert\\ \fbox{$#1$}\\ \vert\\ \bullet\end{array}
+    & \text{---} &
+    \begin{array}{c}\bullet\\ \vert\\ \fbox{$#1$}\\ \vert\\ \bullet\end{array}
+    & \text{---} & \cdots & \text{---} &
+    \begin{array}{c}\bullet\\ \vert\\ \fbox{$#1$}\\ \vert\\ \bullet\end{array} \\
+    &&&& #2
+  \end{array}%
+}
+
 \newcommand{\TNVirtualInsertion}[4]{%
   \begin{array}{ccccccc}
     #1 && #2 && #3 && \\

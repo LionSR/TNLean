@@ -137,8 +137,8 @@ The spectral gap theorems in Chapter~\ref{ch:channels} establish
 $\rho(\E_A - P) < 1$ for primitive channels qualitatively.  This section
 records the \emph{quantitative} refinements that give explicit constants
 and rates for the single-tensor transfer map $\E_A$.
-Two of the three results below are stubs in the formalization (TODO~\#22);
-the spectral gap from injectivity is fully proved.
+Two of the three results below remain deferred because they require explicit
+constants, while the spectral-gap statement from injectivity is already available.
 
 \begin{theorem}[Exponential convergence of primitive channels]%
     \label{thm:exponential_convergence_primitive}
@@ -188,24 +188,22 @@ the spectral gap from injectivity is fully proved.
 \end{theorem}
 \begin{proof}
     \leanok
-    The proof combines: injectivity implies \texttt{HasEventuallyFullKrausRank}
-    (at index~1), which implies primitivity (via
-    \texttt{IsPrimitivePaper} $\to$ \texttt{IsPeripherallyPrimitive}),
-    primitivity implies a spectral gap on the complementary map, and the
-    finite number of eigenvalues gives a uniform bound.
+    Injectivity implies eventual full Kraus rank. This yields primitivity,
+    hence a spectral gap for the complementary map. Since the transfer map has
+    only finitely many eigenvalues, one may choose a uniform
+    $\delta > 0$ separating $1$ from the remaining spectrum.
 \end{proof}
 
 \begin{remark}[Status of quantitative bounds]\label{rem:quantitative_status}
     \uses{thm:exponential_convergence_primitive,
           thm:correlation_length_bound}
-    Two of the three theorems above are formalized as stubs (with
-    \texttt{sorry}) in \texttt{TNLean/Spectral/QuantitativeGap.lean},
-    tagged TODO~\#22; the spectral gap from injectivity is fully proved.
+    Two of the three theorems above remain open at the quantitative level,
+    while the spectral gap from injectivity is already established.
     The qualitative results they refine --- spectral gap existence,
     overlap decay, and correlation convergence --- are fully proved in
     Chapter~\ref{ch:spectral}.
-    Discharging the sorrys requires extracting explicit constants from
-    the Jordan normal form and the Wielandt-bound argument.
+    The missing step is to extract explicit constants from the Jordan-form
+    analysis and the Wielandt-bound argument.
 \end{remark}
 
 \section{Relation to parent Hamiltonians}

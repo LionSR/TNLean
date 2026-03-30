@@ -3,8 +3,7 @@
 This chapter introduces the local ground-space construction and the parent
 interaction for translation-invariant periodic MPS.
 We follow the standard setup from
-\cite{Cirac2021Matrix, PerezGarcia2007Matrix} and align the Lean definitions
-with the project convention that the $N$-site Hilbert space is represented as
+\cite{Cirac2021Matrix, PerezGarcia2007Matrix}, with the $N$-site Hilbert space represented as
 coefficient functions
 \[
   \{0,\dots,d{-}1\}^N \to \C,
@@ -220,7 +219,7 @@ translated copies of the local interaction.
 
 \begin{proof}
   \leanok
-  Immediate from \texttt{localTerm\_annihilates\_mpv}.
+  Immediate from Lemma~\ref{lem:local_term_annihilates_mpv}.
 \end{proof}
 
 \section{Intersection property and unique ground state}\label{sec:intersection_unique}
@@ -240,8 +239,6 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     (\mathrm{restrictLast}\;\psi\;j)(\sigma) := \psi(\sigma_1,\dots,\sigma_L,j).
   \]
 \end{definition}
-
-% Lean jargons to be eliminated: `restrictLastₗ`, `restrictFirstₗ`
 
 \begin{definition}[Right restriction]\label{def:restrict_first}
   \lean{MPSTensor.restrictFirst}
@@ -434,8 +431,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
-  Apply the Mathlib characterization
-  \texttt{finrank\_eq\_one\_iff\_of\_nonzero'} in both directions.
+  Apply the standard finite-dimensional criterion that a nonzero space has
+  dimension one exactly when all of its vectors are proportional to a single
+  nonzero vector.
 \end{proof}
 
 \begin{definition}[Periodic chain ground space]\label{def:chain_ground_space}
