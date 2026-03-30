@@ -271,19 +271,7 @@ theorem isBNT_of_separated_CFBNT_data [∀ k, NeZero (dim k)]
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsBNT (toTensorFromBlocks μ A) r dim A where
-  normal := fun j => by
-    refine ⟨1, ?_⟩
-    have hAj_inj := hInj.block_injective j
-    have hkey : ∀ σ : Fin 1 → Fin d, evalWord (A j) (List.ofFn σ) = A j (σ 0) := by
-      intro σ
-      simp [List.ofFn_succ, List.ofFn_zero, evalWord]
-    suffices h : Set.range (fun σ : Fin 1 → Fin d => evalWord (A j) (List.ofFn σ)) =
-        Set.range (A j) by
-      rw [IsNBlkInjective, h]
-      exact hAj_inj
-    ext M
-    simp only [Set.mem_range, hkey]
-    exact ⟨fun ⟨σ, hσ⟩ => ⟨σ 0, hσ⟩, fun ⟨i, hi⟩ => ⟨fun _ => i, hi⟩⟩
+  normal := fun j => (hInj.block_injective j).isNormal
   spans_mpv := spans_mpv_toTensorFromBlocks μ A
   eventually_li :=
     eventually_li_of_overlap_limits A

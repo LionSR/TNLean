@@ -18,7 +18,7 @@ equivalence from arXiv:1606.00608, Theorem 3.10 (partial):
 The NNCPH (nearest-neighbour commuting parent Hamiltonian) direction of
 Theorem 3.10 is deferred to a later module.
 
-This is a sorry placeholder.
+This reduces directly to `zcl_iff_idempotent_transfer` (Theorem 3.8).
 -/
 
 open scoped Matrix
@@ -33,12 +33,11 @@ tensor, RFP is equivalent to ZCL.
 The full theorem also includes equivalence with the NNCPH condition; that
 direction is deferred.
 
-TODO: assemble the proof from `zcl_iff_idempotent_transfer` and the
-structural form results. -/
+Proved by `zcl_iff_idempotent_transfer.symm`. -/
 theorem rfp_iff_zcl {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalForm μ A) (k : Fin r) :
-    IsRFP (A k) ↔ IsZCL (A k) := by
-  sorry
+    IsRFP (A k) ↔ IsZCL (A k) :=
+  (zcl_iff_idempotent_transfer μ A hCF k).symm
 
 end MPSTensor
