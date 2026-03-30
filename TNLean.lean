@@ -91,6 +91,7 @@ import TNLean.Channel.Peripheral.Conjugation
 import TNLean.Channel.Peripheral.Powers
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.GroupStructure
+import TNLean.Channel.Peripheral.CyclicGroup
 
 -- Layer 2c: Spectral theory (QPF + spectral gap)
 import TNLean.QPF.PosDef

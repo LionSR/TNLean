@@ -884,6 +884,43 @@ This section records declaration wrappers used in cross-chapter references.
 
 \section{Peripheral eigenvalue group structure (Wolf Thm.~6.6)}
 
+\begin{lemma}[Peripheral eigenvectors are invertible]%
+    \label{lem:isUnit_peripheral_eigenvector}
+    \lean{MPSTensor.isUnit_peripheral_eigenvector}
+    \leanok
+    \uses{thm:ks_peripheral}
+    Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
+    positive-definite adjoint fixed point.
+    If $X \ne 0$ satisfies $E(X) = \mu X$ with $|\mu| = 1$,
+    then $X$ is invertible.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The KS equality gives $E(X^\dagger X) = X^\dagger X$, so $X^\dagger X$
+    is a nonzero PSD fixed point.  Irreducibility upgrades it to positive
+    definite, hence invertible, so $\det(X) \ne 0$.
+\end{proof}
+
+\begin{lemma}[Peripheral eigenvalues: product closure]%
+    \label{lem:peripheral_mul_closure}
+    \lean{MPSTensor.peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint}
+    \leanok
+    \uses{lem:isUnit_peripheral_eigenvector,thm:ks_peripheral}
+    Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
+    positive-definite adjoint fixed point.
+    If $\mu, \nu$ are peripheral eigenvalues of $E$, then so is $\mu\nu$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Take eigenvectors $X, Y$ for $\mu, \nu$.  The KS equality at $X$
+    puts $X$ in the multiplicative domain, so
+    $E(YX) = E(Y)E(X) = (\nu\mu)(YX)$.  Since $X, Y$ are units
+    (Lemma~\ref{lem:isUnit_peripheral_eigenvector}), $YX \ne 0$ and
+    $|\mu\nu| = 1$.
+\end{proof}
+
 \begin{theorem}[Peripheral eigenvalues: cyclic structure]%
     \label{thm:peripheral_cyclic_structure}
     \lean{PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure}
@@ -908,7 +945,7 @@ This section records declaration wrappers used in cross-chapter references.
 
 \begin{theorem}[Peripheral eigenvalues form a cyclic group]%
     \label{thm:peripheral_cyclic_group}
-    \lean{PeripheralSpectrum.peripheral_eigenvalues_form_cyclic_group}
+    \lean{MPSTensor.peripheralEigenvalues_eq_range_primitiveRoot}
     \leanok
     \uses{thm:peripheral_cyclic_structure}
     Let $E$ be an irreducible unital trace-preserving Schwarz map on
