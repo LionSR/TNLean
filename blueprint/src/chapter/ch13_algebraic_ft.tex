@@ -856,6 +856,90 @@ representation on the bond space.
     the representation matrices.
 \end{proof}
 
+\subsection{Coboundary equivalence and cohomology classes}
+
+Two cocycles may differ by a coboundary yet represent the same
+projective-representation class.  The following definitions and results
+make this precise and establish the quotient $H^2(G,\U(1))$.
+
+\begin{definition}[Coboundary]\label{def:is_coboundary}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCoboundary}
+    \leanok
+    \uses{def:scalar_cocycle}
+    A scalar 2-cocycle $\omega$ is a \emph{coboundary} if there exists
+    $\varphi \colon G \to \C^\times$ such that
+    \[
+        \omega(g,h)
+        = \varphi(g)\,\varphi(h)\,\varphi(gh)^{-1}
+        \qquad\text{for all } g,h\in G.
+    \]
+\end{definition}
+
+\begin{definition}[Cohomologous cocycles]\label{def:cohomologous_to}
+    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo}
+    \leanok
+    \uses{def:scalar_cocycle}
+    Two cocycles $\omega_1,\omega_2$ are \emph{cohomologous}
+    (written $\omega_1 \sim \omega_2$) if there exists
+    $\varphi\colon G\to\C^\times$ with
+    \[
+        \omega_1(g,h)
+        = \varphi(g)\,\varphi(h)\,\varphi(gh)^{-1}\,\omega_2(g,h)
+        \qquad\text{for all } g,h\in G.
+    \]
+\end{definition}
+
+\begin{theorem}[Cohomologous-to is an equivalence relation]%
+    \label{thm:cohomologous_equivalence}
+    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo.equivalence}
+    \leanok
+    \uses{def:cohomologous_to}
+    The relation ``cohomologous to'' is reflexive, symmetric, and
+    transitive on the set of scalar 2-cocycles.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:cohomologous_to}
+    Reflexivity: take $\varphi = 1$.
+    Symmetry: replace $\varphi$ by $\varphi^{-1}$.
+    Transitivity: compose the witnesses $\varphi$ and $\psi$ pointwise.
+\end{proof}
+
+\begin{lemma}[Coboundary iff cohomologous to the trivial cocycle]%
+    \label{lem:coboundary_iff_cohomologous_one}
+    \lean{TNLean.Algebra.ScalarCocycle.isCoboundary_iff_cohomologousTo_one}
+    \leanok
+    \uses{def:is_coboundary, def:cohomologous_to}
+    A cocycle $\omega$ is a coboundary if and only if
+    $\omega \sim \mathbf{1}$, where $\mathbf{1}(g,h)=1$ for all $g,h$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
+    Both directions follow by absorbing or introducing the factor
+    $\mathbf{1}(g,h)=1$ via $x\cdot 1 = x$.
+\end{proof}
+
+\begin{theorem}[Gauge independence of the cocycle class]%
+    \label{thm:cocycle_gauge_independence}
+    \lean{MPSTensor.cohomologousTo_of_isInjective}
+    \leanok
+    \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar,
+          def:cohomologous_to}
+    If two projective representations $\rho_1,\rho_2$ (with cocycles
+    $\omega_1,\omega_2$) both arise as virtual representations of the
+    same injective MPS tensor $A$ under an on-site symmetry~$U$, then
+    $\omega_1 \sim \omega_2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar,
+          def:cohomologous_to}
+    For each $g$, gauge uniqueness gives a unit scalar $f(g)$ with
+    $X_2(g^{-1}) = f(g)\,X_1(g^{-1})$.
+    Substituting into the projective multiplication law and cancelling
+    the invertible matrix $X_1(g\cdot h)$ yields
+    $\omega_2(g,h) = f(g)\,f(h)\,f(gh)^{-1}\,\omega_1(g,h)$.
+\end{proof}
+
 \subsection{Permutation-based physical symmetry}
 
 The linear-combination twist $\widetilde{A}_g^i = \sum_j U(g)_{ij}\, A^j$
