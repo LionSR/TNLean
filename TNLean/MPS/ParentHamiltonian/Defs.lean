@@ -81,7 +81,11 @@ variable {N : ℕ}
 /-- Replace `L` consecutive values in an `N`-periodic sequence `σ`,
 starting at position `i`, with values from `τ` (periodic boundary conditions).
 
-Requires `L ≤ N` to ensure the `L`-site window is represented faithfully. -/
+Requires `L ≤ N` to ensure the `L`-site window is represented faithfully.
+
+Note: the offset logic mirrors `cyclicCfg` in `CyclicWindow.lean`, but this
+function is type-generic (`α` instead of `Fin d`) and *replaces* a window
+rather than *assembling* a configuration. -/
 def replaceWindow (L : ℕ) (_hLN : L ≤ N) {α : Type*}
     (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
     Fin N → α :=
@@ -114,8 +118,10 @@ private lemma offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
 `parentInteraction A L` at site `i`, acting on the window
 `{i, i+1, …, i+L-1 mod N}` and as identity on the complement.
 
-When `L > N` the definition returns `0`; all lemmas in `Basic.lean`
-carry the hypothesis `hLN : L ≤ N` so this branch is never reached.
+**Important:** When `L > N` the definition returns `0`, which makes
+`parentHamiltonian` trivially zero and `IsFrustrationFree` vacuously true.
+All meaningful lemmas in `Basic.lean` carry an explicit `hLN : L ≤ N`
+hypothesis, so this degenerate branch is never reached in verified results.
 
 For `f : NSiteSpace d N` and output configuration `σ`:
 ```

@@ -31,6 +31,8 @@ lemma parentInteraction_apply_mem_groundSpace (A : MPSTensor d D) (L : ℕ)
     simp only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.one_apply]
     rw [sub_eq_zero]
     exact (Submodule.starProjection_eq_self_iff.mpr hmem).symm
+  -- Unfold `parentInteraction` to expose the equiv ∘ projection ∘ equiv⁻¹ structure.
+  -- This `change` is definitional; update it if `parentInteraction` is refactored.
   change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
     ((groundSpaceES A L)ᗮ.starProjection
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)) = 0
