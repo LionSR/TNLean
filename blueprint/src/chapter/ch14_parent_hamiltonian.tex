@@ -95,33 +95,44 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
 
 \section{Parent interaction and chain Hamiltonian}\label{sec:parent_interaction_defs}
 
-Conceptually, the parent interaction at range $L$ is the orthogonal projector
-onto $G_L(A)^\perp$. In the current Lean installment, the chain-level operator
-API is introduced first, and the concrete projector implementation is deferred
-to a follow-up PR.
+The parent interaction at range $L$ is the orthogonal projector
+onto $G_L(A)^\perp$, implemented via the star-projection (orthogonal
+complement projection) in the $L$-site Euclidean space.
 
 \begin{definition}[Parent interaction]\label{def:parent_interaction}
   \lean{MPSTensor.parentInteraction}
+  \leanok
   \uses{def:ground_space_parent}
   The parent interaction at range $L$ is the orthogonal projector
   \[
     h_L(A) := \Pi_{G_L(A)^\perp},
   \]
   on the local $L$-site space.
-  \textbf{Note:} the Lean definition is currently a zero placeholder;
-  \texttt{\textbackslash leanok} will be added once the projector is implemented.
 \end{definition}
+
+\begin{lemma}[Parent interaction kills ground-space elements]\label{lem:parent_interaction_apply_mem_ground_space}
+  \lean{MPSTensor.parentInteraction_apply_mem_groundSpace}
+  \leanok
+  \uses{def:parent_interaction, def:ground_space_parent}
+  For any $v \in G_L(A)$, we have $h_L(A)\,v = 0$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Since $h_L(A)$ is the star-projection onto $G_L(A)^\perp$, it
+  annihilates every element of $G_L(A)$.
+\end{proof}
 
 For a periodic chain of length $N$, the parent Hamiltonian is the sum of
 translated copies of the local interaction.
 
 \begin{definition}[Translated local term]\label{def:local_term_parent}
   \lean{MPSTensor.localTerm}
+  \leanok
   \uses{def:parent_interaction}
   For each site index $i \in \{0,\dots,N{-}1\}$, the translated local term
   $h_i$ embeds the parent interaction into the full $N$-site space at
   position~$i$ (with periodic boundary conditions).
-  \textbf{Note:} the Lean definition is currently a zero placeholder.
 \end{definition}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
@@ -144,20 +155,61 @@ translated copies of the local interaction.
   \]
 \end{definition}
 
+\begin{lemma}[MPV window membership]\label{lem:mpv_window_mem_ground_space}
+  \lean{MPSTensor.mpv_window_mem_groundSpace}
+  \leanok
+  \uses{def:ground_space_parent, def:mpv}
+  For any window of $L$ consecutive sites starting at position~$i$ in an
+  $N$-site periodic chain ($L \le N$), the restriction of the MPV state to
+  that window lies in $G_L(A)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  The witness is the product of $A$-matrices on the complement sites.
+  Trace cyclicity rotates the full $N$-site product so that window
+  indices come first, matching the ground-space map definition.
+\end{proof}
+
+\begin{lemma}[Local term annihilates the MPV]\label{lem:local_term_annihilates_mpv}
+  \lean{MPSTensor.localTerm_annihilates_mpv}
+  \leanok
+  \uses{def:local_term_parent, def:mpv, lem:mpv_window_mem_ground_space, lem:parent_interaction_apply_mem_ground_space}
+  For each site $i$, $h_i\,V^{(N)}(A) = 0$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Combines MPV window membership with the fact that the parent
+  interaction kills ground-space elements.
+\end{proof}
+
 \begin{lemma}[Parent Hamiltonian annihilates the MPV]\label{lem:parent_hamiltonian_annihilates}
   \lean{MPSTensor.parentHamiltonian_annihilates}
-  \uses{def:parent_hamiltonian, def:mpv}
+  \leanok
+  \uses{def:parent_hamiltonian, def:mpv, lem:local_term_annihilates_mpv}
   For every $N$, the MPV state satisfies
   \[
     H_N(A,L)\,V^{(N)}(A) = 0.
   \]
 \end{lemma}
 
+\begin{proof}
+  \leanok
+  Sum of zeros, since each local term annihilates the MPV.
+\end{proof}
+
 \begin{lemma}[Frustration-freeness of the MPV]\label{lem:parent_hamiltonian_ff}
   \lean{MPSTensor.parentHamiltonian_frustrationFree}
-  \uses{def:is_frustration_free, def:mpv}
+  \leanok
+  \uses{def:is_frustration_free, def:mpv, lem:local_term_annihilates_mpv}
   The MPV state is frustration-free for the parent model.
 \end{lemma}
+
+\begin{proof}
+  \leanok
+  Immediate from \texttt{localTerm\_annihilates\_mpv}.
+\end{proof}
 
 \section{Intersection property and unique ground state}\label{sec:intersection_unique}
 

@@ -24,6 +24,7 @@ import TNLean.Algebra.BlockPermutation
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
@@ -31,6 +32,9 @@ import TNLean.Algebra.MatrixFrobenius
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.CocycleCohomology
+
+-- Layer 0b: General analysis
+import TNLean.Analysis.ConvergenceHelpers
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
@@ -142,6 +146,8 @@ import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.OnSiteSymmetry
 import TNLean.MPS.Symmetry.VirtualRepresentation
 import TNLean.MPS.Symmetry.CocycleCoboundary
+import TNLean.MPS.Symmetry.SymmetricMPS
+import TNLean.MPS.Symmetry.StringOrder
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
@@ -170,6 +176,7 @@ import TNLean.MPS.CanonicalForm.Assembly
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Periodic.Defs
+import TNLean.MPS.FundamentalTheorem.PeriodicOverlap
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Structure.BlockPermutation
@@ -178,6 +185,9 @@ import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.PiAlgebra.BlockSeparation
 import TNLean.PiAlgebra.TIReduction
 import TNLean.PiAlgebra.GlobalSymmetry
+
+-- Layer 3b: MPO / MPDO / LPDO foundations
+import TNLean.MPS.MPDO.Defs
 
 -- Layer 5b: Renormalization fixed points (RFP) — pure-state scaffolding
 import TNLean.MPS.RFP.Defs
