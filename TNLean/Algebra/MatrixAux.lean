@@ -23,6 +23,7 @@ Extracted from various files for reusability.
 - `Matrix.sum_mul_mul`: pull fixed left/right factors through a finite sum
 - `Matrix.dim_le_of_mulVec_injective`: injective mulVec implies dimension bound
 - `Matrix.PosSemidef.mulVec_eq_zero_left/right`: kernel containment for PSD matrix sums
+- `Matrix.trace_eq_of_charpoly_eq`: equal characteristic polynomials imply equal traces
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -107,33 +108,11 @@ end KernelPSD
 
 section CharpolyAux
 
-open Polynomial
+namespace Matrix
 
-lemma scalar_mul_sub_smul {n : Type*} [DecidableEq n] [Fintype n]
-    (c z : ℂ) (M : Matrix n n ℂ) :
-    Matrix.scalar n (c * z) - c • M = c • (Matrix.scalar n z - M) := by
-  ext i j
-  simp [Matrix.scalar, Matrix.smul_apply, Matrix.sub_apply, Matrix.diagonal_apply, smul_eq_mul]
-  split <;> ring
-
-lemma eval_charpoly_smul_mul {n : Type*} [DecidableEq n] [Fintype n]
-    (c z : ℂ) (M : Matrix n n ℂ) :
-    (c • M).charpoly.eval (c * z) = c ^ Fintype.card n * M.charpoly.eval z := by
-  rw [Matrix.eval_charpoly, Matrix.eval_charpoly, scalar_mul_sub_smul, Matrix.det_smul]
-
-theorem charpoly_eq_of_smul_charpoly_eq {n : Type*} [DecidableEq n] [Fintype n]
-    (c : ℂ) (hc : c ≠ 0) (T U : Matrix n n ℂ)
-    (h : (c • T).charpoly = (c • U).charpoly) :
-    T.charpoly = U.charpoly := by
-  have hcn : c ^ Fintype.card n ≠ 0 := pow_ne_zero _ hc
-  apply Polynomial.funext
-  intro z
-  have h1 := eval_charpoly_smul_mul c z T
-  have h2 := eval_charpoly_smul_mul c z U
-  have h3 : (c • T).charpoly.eval (c * z) = (c • U).charpoly.eval (c * z) := by rw [h]
-  rw [h1] at h3; rw [h2] at h3
-  exact mul_left_cancel₀ hcn h3
-
+/-- If two square matrices over `ℂ` have the same characteristic polynomial, they have the same
+trace. This follows from the fact that the trace is the negation of the next-to-leading coefficient
+of the characteristic polynomial. -/
 theorem trace_eq_of_charpoly_eq
     {D : ℕ} [NeZero D]
     (T U : Matrix (Fin D) (Fin D) ℂ)
@@ -143,5 +122,7 @@ theorem trace_eq_of_charpoly_eq
   have hT := Matrix.trace_eq_neg_charpoly_coeff T
   have hU := Matrix.trace_eq_neg_charpoly_coeff U
   rw [hT, hU, h]
+
+end Matrix
 
 end CharpolyAux
