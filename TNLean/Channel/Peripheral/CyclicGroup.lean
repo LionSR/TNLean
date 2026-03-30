@@ -88,8 +88,7 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
   -- KS equality at X.
   have hEig_X_map : Kraus.map K X = μ • X := by
     simpa [Kraus.map, MPSTensor.transferMap_apply] using hEig_X
-  have h_unital' : Kraus.IsUnital K := by
-    simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using h_unital
+  have h_unital' : Kraus.IsUnital K := h_unital.toIsUnital
   have hKS_X_map :
       Kraus.map K (Xᴴ * X) = (Kraus.map K X)ᴴ * Kraus.map K X :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint

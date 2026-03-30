@@ -33,6 +33,17 @@ import surface.
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex
 
+namespace KadisonSchwarz
+
+/-- Bridge between the `KadisonSchwarz.IsUnitalKraus` and `Kraus.IsUnital` APIs.
+Both express `∑ᵢ Kᵢ Kᵢ† = I` but live in different namespaces. -/
+theorem IsUnitalKraus.toIsUnital {d D : ℕ}
+    {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (h : IsUnitalKraus (d := d) (D := D) K) : Kraus.IsUnital K := by
+  simpa [Kraus.IsUnital, IsUnitalKraus] using h
+
+end KadisonSchwarz
+
 namespace MPSTensor
 
 
@@ -53,8 +64,7 @@ theorem isUnit_peripheral_eigenvector
     simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using hEig
   have hEig_map : Kraus.map K X = μ • X := by
     simpa [Kraus.map, MPSTensor.transferMap_apply] using hEig
-  have h_unital' : Kraus.IsUnital K := by
-    simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using h_unital
+  have h_unital' : Kraus.IsUnital K := h_unital.toIsUnital
   have hKS_map :
       Kraus.map K (Xᴴ * X) = (Kraus.map K X)ᴴ * Kraus.map K X :=
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
@@ -134,8 +144,7 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoin
     simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using hEig_transfer
   have hEig_map : Kraus.map K X = μ • X := by
     simpa [Kraus.map, MPSTensor.transferMap_apply] using hEig_transfer
-  have h_unital' : Kraus.IsUnital K := by
-    simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using h_unital
+  have h_unital' : Kraus.IsUnital K := h_unital.toIsUnital
   -- KS equality holds at peripheral eigenvectors under the adjoint fixed-point hypothesis.
   have hKS_map :
       Kraus.map K (Xᴴ * X) = (Kraus.map K X)ᴴ * Kraus.map K X :=
