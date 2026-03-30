@@ -159,154 +159,255 @@ translated copies of the local interaction.
   The MPV state is frustration-free for the parent model.
 \end{lemma}
 
-\section{Uniqueness of the ground state}\label{sec:unique_ground_state}
+\section{Intersection property and unique ground state}\label{sec:intersection_unique}
 
-For an injective MPS tensor, the ground space of the parent Hamiltonian is
-one-dimensional: the MPV is the unique ground state.
-The argument rests on two structural lemmas — closure and intersection —
-which together force the ground space to collapse as the chain length
-grows~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
+This section develops the intersection property of local ground spaces for
+injective MPS and the resulting uniqueness of the ground state on the periodic
+chain.
 
-\begin{lemma}[Closure under extension]\label{lem:ground_space_mono}
-  \notready
-  \uses{def:ground_space_parent, def:l_blk_injective}
-  Let $A$ be $L$-block injective (i.e.\ $\Gamma_L$ is injective).
-  Then there is a well-defined embedding
+\subsection{Restriction maps}
+
+Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
+\begin{definition}[Left restriction]\label{def:restrict_last}
+  \lean{MPSTensor.restrictLast}
+  \leanok
+  Fix the last physical index $j$:
   \[
-    G_L(A) \hookrightarrow G_{L+1}(A)
+    (\mathrm{restrictLast}\;\psi\;j)(\sigma) := \psi(\sigma_1,\dots,\sigma_L,j).
   \]
-  that extends a coefficient function on $L$ sites to
-  $L{+}1$ sites by one site on the right.
-  Concretely, since $\Gamma_L$ is injective, every $\phi \in G_L(A)$
-  has a unique preimage $X$ with $\phi(\sigma) = \tr(A^\sigma X)$,
-  and the extension is $\tilde\phi \in G_{L+1}(A)$ with
+\end{definition}
+
+\begin{definition}[Right restriction]\label{def:restrict_first}
+  \lean{MPSTensor.restrictFirst}
+  \leanok
+  Fix the first physical index $i$:
   \[
-    \tilde\phi(\sigma,j) = \tr(A^\sigma A^j X).
+    (\mathrm{restrictFirst}\;\psi\;i)(\sigma) := \psi(i,\sigma_1,\dots,\sigma_L).
   \]
-  A symmetric statement holds for extension by one site on the left.
+\end{definition}
+
+\begin{definition}[Left ground membership]\label{def:in_left_ground}
+  \lean{MPSTensor.InLeftGround}
+  \leanok
+  \uses{def:restrict_last, def:ground_space_parent}
+  A state $\psi$ on $L+1$ sites satisfies the left ground condition if
+  $\mathrm{restrictLast}\;\psi\;j \in G_L(A)$ for every $j$.
+\end{definition}
+
+\begin{definition}[Right ground membership]\label{def:in_right_ground}
+  \lean{MPSTensor.InRightGround}
+  \leanok
+  \uses{def:restrict_first, def:ground_space_parent}
+  A state $\psi$ on $L+1$ sites satisfies the right ground condition if
+  $\mathrm{restrictFirst}\;\psi\;i \in G_L(A)$ for every $i$.
+\end{definition}
+
+\subsection{Forward direction: ground space restricts}
+
+\begin{lemma}[Left restriction]\label{lem:ground_space_in_left_ground}
+  \lean{MPSTensor.groundSpace_inLeftGround}
+  \leanok
+  \uses{def:ground_space_parent, def:in_left_ground}
+  If $\psi \in G_{L+1}(A)$, i.e.\ $\psi(\sigma) = \tr(A^\sigma X)$ for some~$X$,
+  then $\mathrm{restrictLast}\;\psi\;j \in G_L(A)$ with witness $A^j X$.
 \end{lemma}
 
 \begin{proof}
-  \uses{def:ground_space_parent, def:l_blk_injective}
-  \notready
-  If $\phi = \Gamma_L(X)$ then $\tilde\phi = \Gamma_{L+1}(X)$.
-  By $L$-block injectivity, $X$ is uniquely determined by $\phi$,
-  so the extension map is well-defined and independent of choices.
+  \leanok
+  Direct computation:
+  $\psi(\sigma_1,\dots,\sigma_L,j) = \tr(A^{\sigma_1}\cdots A^{\sigma_L} \cdot A^j \cdot X)
+   = \Gamma_L(A^j X)(\sigma)$.
 \end{proof}
 
-\begin{lemma}[Intersection property]\label{lem:ground_space_intersection}
-  \notready
-  \uses{def:ground_space_parent, def:injective}
-  Let $A$ be injective (Definition~\ref{def:injective}).
-  For overlapping windows of $L{+}1$ sites starting at adjacent positions,
-  the ground spaces satisfy
-  \[
-    G_{[0,L]}(A) \cap G_{[1,L+1]}(A)
-    = G_{[0,L+1]}(A),
-  \]
-  where $G_{[a,b]}$ denotes the ground space on sites $a$ through $b$
-  (a window of $b - a + 1$ sites).
+\begin{lemma}[Right restriction]\label{lem:ground_space_in_right_ground}
+  \lean{MPSTensor.groundSpace_inRightGround}
+  \leanok
+  \uses{def:ground_space_parent, def:in_right_ground}
+  If $\psi \in G_{L+1}(A)$ with $\psi(\sigma) = \tr(A^\sigma X)$, then
+  $\mathrm{restrictFirst}\;\psi\;i \in G_L(A)$ with witness $X A^i$.
 \end{lemma}
 
 \begin{proof}
-  \uses{lem:ground_space_mono, def:injective}
-  \notready
-  The inclusion $\supseteq$ follows from
-  Lemma~\ref{lem:ground_space_mono}.
-  For $\subseteq$: take
-  $\phi \in G_{[0,L]}(A) \cap G_{[1,L+1]}(A)$.
-  From the first membership, $\phi(\sigma) = \tr(A^\sigma X)$ for some
-  $X \in \MN{D}$.
-  From the second, $\phi(\sigma) = \tr(A^{\sigma'} Y)$ for some $Y$,
-  where $\sigma'$ is the shifted window.
-  On the overlap (sites $1$ through $L$), injectivity provides a
-  left inverse for the map $X \mapsto \{A^\sigma X\}_\sigma$.
-  This forces $X$ (hence $Y$) to be uniquely determined, and $\phi$
-  extends to $G_{[0,L+1]}(A)$.
+  \leanok
+  By trace cyclicity:
+  $\psi(i,\sigma_1,\dots,\sigma_L) = \tr(A^i A^{\sigma} X)
+   = \tr(A^{\sigma} \cdot X A^i) = \Gamma_L(X A^i)(\sigma)$.
 \end{proof}
 
-\begin{theorem}[Unique ground state — injective case]\label{thm:unique_gs_injective}
-  \notready
-  \uses{lem:ground_space_intersection, lem:ground_space_mono,
-        def:parent_hamiltonian, def:injective, def:l_blk_injective}
-  Let $A$ be $L_0$-block injective (Definition~\ref{def:l_blk_injective}).
-  For a periodic chain of length $N \ge 2L_0$, the parent Hamiltonian
-  $H_N(A,L_0{+}1)$ has a unique ground state, which is the MPV
-  $V^{(N)}(A)$.
+\subsection{Injectivity of the ground-space map}
+
+\begin{theorem}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
+  \lean{MPSTensor.groundSpaceMap_injective}
+  \leanok
+  \uses{def:ground_space_map, def:is_injective}
+  If $A$ is injective and $L \ge 1$, then $\Gamma_L$ is injective.
 \end{theorem}
 
 \begin{proof}
-  \uses{lem:ground_space_intersection, lem:ground_space_mono,
-        lem:parent_hamiltonian_annihilates}
-  \notready
-  The proof proceeds in unblocked (original-site) coordinates to avoid
-  any divisibility assumption on $N$.
-  Since $A$ is $L_0$-block injective, the blocked tensor
-  $A^{[L_0]}$ is injective (Definition~\ref{def:injective}).
-  Lemma~\ref{lem:ground_space_intersection} applies to $A^{[L_0]}$,
-  giving intersection identities for windows of blocked sites.
-  Re-interpreting each blocked site as $L_0$ original sites, this
-  yields intersection identities for windows whose lengths are
-  multiples of $L_0$.  To handle windows at single-site granularity
-  (needed since $N$ may not be divisible by $L_0$), we first note
-  that $L_0$-block injectivity implies $m$-block injectivity for
-  every $m \ge L_0$: if $\Gamma_{L_0}$ is injective then
-  $\Gamma_m = (\Gamma_{L_0} \otimes \mathrm{id}^{\otimes(m-L_0)})
-  \circ \Delta$ for an appropriate reshuffling $\Delta$, so
-  $\Gamma_m$ inherits injectivity.  In particular, the hypothesis of
-  Lemma~\ref{lem:ground_space_mono} (requiring injectivity of
-  $\Gamma_m$) is satisfied at every window length $m \ge L_0$
-  encountered during the iteration.
-  Starting from an $(L_0{+}1)$-site window, iterate: each step
-  extends the ground-space window by one original site to the right,
-  using either the blocked intersection property (when the window
-  length is a multiple of $L_0$) or the closure lemma
-  (Lemma~\ref{lem:ground_space_mono}, whose injectivity hypothesis
-  holds by the observation above).
-  After $N - (L_0{+}1)$ iterations the window spans all $N$ sites and
-  wraps around the periodic chain.
-  Comparing the two descriptions of a ground state on the closed chain
-  shows that the boundary matrix $X$ must commute with every word matrix
-  $A^{[L_0],\sigma}$.
-  By injectivity, the matrices $\{A^{[L_0],\sigma}\}$ generate all of
-  $\MN{D}$, so their commutant consists only of scalar multiples of the
-  identity; hence $X$ is scalar and the ground space is one-dimensional.
-  By Lemma~\ref{lem:parent_hamiltonian_annihilates}, the MPV lies in this
-  space.
+  \leanok
+  If $\Gamma_L(X) = 0$ then $\tr(A^\sigma X) = 0$ for every length-$L$ word
+  $\sigma$.  Since $A$ is injective, the products $\{A^\sigma\}_\sigma$ span
+  $\MN{D}$, so the trace pairing gives $X = 0$.
 \end{proof}
 
-\begin{theorem}[Unique ground state — normal case]\label{thm:unique_gs_normal}
-  \notready
-  \uses{lem:ground_space_intersection, lem:ground_space_mono,
-        def:parent_hamiltonian, def:normal}
-  Let $A$ be normal with injectivity length $L_0$
-  (Definition~\ref{def:normal}).
-  For a periodic chain of length $N \ge 2(L_0 + 1)$, the parent Hamiltonian
-  $H_N(A,L_0{+}1)$ has a unique ground state.
+\begin{theorem}[Ground-space dimension]\label{thm:ground_space_finrank_eq}
+  \lean{MPSTensor.groundSpace_finrank_eq}
+  \leanok
+  \uses{thm:ground_space_map_injective, lem:ground_space_finrank_le}
+  If $A$ is injective and $L \ge 1$, then $\dim G_L(A) = D^2$.
 \end{theorem}
 
 \begin{proof}
-  \uses{lem:ground_space_intersection, lem:ground_space_mono,
-        lem:parent_hamiltonian_annihilates}
-  \notready
-  Normality gives injectivity of $A^{[L_0]}$
-  (Definition~\ref{def:injective}).
-  Since $A^{[L_0]}$ is injective,
-  Lemma~\ref{lem:ground_space_intersection} applies to it directly,
-  providing intersection identities for windows measured in blocked
-  sites.  As in Theorem~\ref{thm:unique_gs_injective}, re-interpret
-  these in original-site coordinates: each blocked site corresponds to
-  $L_0$ original sites, and the closure lemma
-  (Lemma~\ref{lem:ground_space_mono}) extends windows at single-site
-  granularity using the $L_0$-block injectivity.
-  The interaction range $L_0{+}1$ provides enough overlap ($L_0$ sites)
-  for a single intersection step to grow the window by one site.
-  Iterating across the periodic chain of length $N \ge 2(L_0+1)$ ensures
-  enough room for the windows to wrap around and close, yielding
-  uniqueness by the same commutant argument as in
-  Theorem~\ref{thm:unique_gs_injective}~\cite{Fannes1992Finitely,
-  PerezGarcia2007Matrix}.
+  \leanok
+  The upper bound $\dim G_L(A) \le D^2$ is Lemma~\ref{lem:ground_space_finrank_le}.
+  Injectivity of $\Gamma_L$ gives $\dim G_L(A) = \dim \MN{D} = D^2$.
 \end{proof}
+
+\subsection{The intersection property}
+
+\begin{theorem}[Intersection property]\label{thm:ground_space_intersection}
+  \lean{MPSTensor.groundSpace_intersection}
+  \leanok
+  \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
+        def:ground_space_parent}
+  If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
+  satisfying both the left and right ground conditions lies in $G_{L+1}(A)$:
+  \[
+    \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}
+    \;\Longrightarrow\;
+    \psi \in G_{L+1}(A).
+  \]
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  The ``invert-and-regrow'' argument:
+  \begin{enumerate}
+    \item From the right ground condition, for each physical index~$i$ there
+      exists a unique $Y_i \in \MN{D}$ (by injectivity of $\Gamma_L$) such
+      that $\psi(i,\sigma) = \tr(A^\sigma Y_i)$.
+    \item Similarly, from the left ground condition, for each~$j$ there exists
+      a unique $Z_j$ with $\psi(\sigma,j) = \tr(A^\sigma Z_j)$.
+    \item Matching on the $(L{-}1)$-site overlap and using nondegeneracy of
+      the trace pairing:
+      $A^j Y_i = Z_j A^i$ for all $i,j$.
+    \item Apply the decomposition map (one-sided inverse,
+      Theorem~\ref{thm:one_sided_inverse}): summing over~$i$ with the
+      decomposition coefficients of the identity yields
+      $Y_i = X' A^i$ for a single matrix
+      $X' = \sum_j \Psi(\mathbf{1})_j \cdot Z_j$.
+    \item By trace cyclicity,
+      $\psi(\sigma) = \tr(A^\sigma X')$, so $\psi \in G_{L+1}(A)$.
+  \end{enumerate}
+\end{proof}
+
+\begin{theorem}[Intersection characterization]\label{thm:ground_space_iff}
+  \lean{MPSTensor.groundSpace_iff_left_right}
+  \leanok
+  \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground,
+        thm:ground_space_intersection}
+  For injective $A$ and $L \ge 2$:
+  $\psi \in G_{L+1}(A) \iff \psi \in G_L^{\mathrm{left}} \cap G_L^{\mathrm{right}}$.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  Immediate from the two forward-direction lemmas and
+  Theorem~\ref{thm:ground_space_intersection}.
+\end{proof}
+
+\subsection{Unique ground state}
+
+\begin{lemma}[Iterated contiguous-window intersection]\label{lem:contiguous_mem_ground_space}
+  \lean{MPSTensor.contiguous_mem_groundSpace}
+  \leanok
+  \uses{thm:ground_space_intersection}
+  If an $N$-site state satisfies the $L$-site ground condition on every
+  non-wrapping contiguous window (with $L \ge 2$), then it lies in $G_N(A)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Strong induction on window size, combining adjacent windows via
+  Theorem~\ref{thm:ground_space_intersection} at each step.
+\end{proof}
+
+\begin{definition}[MPV submodule]\label{def:mpv_submodule}
+  \lean{MPSTensor.mpvSubmodule}
+  \leanok
+  \uses{def:mpv}
+  The subspace spanned by the MPV state
+  $V^{(N)}(A)(\sigma) = \tr(A^{\sigma_0}\cdots A^{\sigma_{N-1}})$.
+\end{definition}
+
+\begin{lemma}[MPV lies in the ground space]\label{lem:mpv_mem_ground_space}
+  \lean{MPSTensor.mpv_mem_groundSpace}
+  \leanok
+  \uses{def:ground_space_parent, def:mpv}
+  $V^{(N)}(A) \in G_N(A)$ for every $N$, with boundary matrix $X = I$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  $V^{(N)}(A)(\sigma) = \tr(A^\sigma) = \tr(A^\sigma \cdot I) = \Gamma_N(I)(\sigma)$.
+\end{proof}
+
+\begin{definition}[Unique ground state]\label{def:has_unique_ground_state}
+  \lean{MPSTensor.HasUniqueGroundState}
+  \leanok
+  A submodule $S$ has a unique ground state if $\dim S = 1$.
+\end{definition}
+
+\begin{theorem}[One-dimensionality criterion]\label{thm:has_unique_ground_state_iff_proportional}
+  \lean{MPSTensor.hasUniqueGroundState_iff_proportional}
+  \leanok
+  \uses{def:has_unique_ground_state}
+  For finite-dimensional $S$, $\dim S = 1$ iff there exists a nonzero
+  $\psi_0 \in S$ such that every $\psi \in S$ is of the form $c\,\psi_0$.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  Apply the Mathlib characterization
+  \texttt{finrank\_eq\_one\_iff\_of\_nonzero'} in both directions.
+\end{proof}
+
+\begin{definition}[Periodic chain ground space]\label{def:chain_ground_space}
+  \lean{MPSTensor.chainGroundSpace}
+  \leanok
+  \uses{def:ground_space_parent}
+  For $N>0$ and $L \le N$, this is the intersection over cyclic window
+  positions and outside configurations of comaps of $G_L(A)$ under the cyclic
+  restriction maps; otherwise it is set to $\top$ by convention.
+\end{definition}
+
+\begin{theorem}[Unique ground state on the periodic chain]%
+  \label{thm:ground_space_unique_periodic}
+  \lean{MPSTensor.groundSpace_unique_periodic}
+  \uses{thm:ground_space_intersection, def:has_unique_ground_state,
+        lem:mpv_mem_ground_space}
+  For an injective tensor~$A$ on a periodic chain of $N \ge 2$ sites with
+  interaction range~$L$, the chain ground space is one-dimensional, spanned
+  by the MPV.  The proof iterates the intersection property across the chain
+  and uses the periodic boundary condition to constrain the boundary matrix
+  $X$ to a scalar multiple of~$I$.
+\end{theorem}
+
+\begin{theorem}[Unique ground state for block-injective tensors]%
+  \label{thm:unique_gs_injective}
+  \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
+  \uses{thm:ground_space_unique_periodic}
+  If $A$ is $L_0$-block-injective with $L_0 > 0$, the parent Hamiltonian
+  with interaction range $2L_0$ has a unique ground state on the periodic chain.
+\end{theorem}
+
+\begin{theorem}[Optimal unique ground state for normal tensors]%
+  \label{thm:unique_gs_normal}
+  \lean{MPSTensor.parentHamiltonian_unique_gs_normal}
+  \uses{thm:unique_gs_injective}
+  If $A$ is normal (hence $L_0$-block-injective for some $L_0 > 0$) and
+  in normal form, the interaction range can be reduced to $L_0 + 1$.
+\end{theorem}
 
 \section{Spectral gap}\label{sec:spectral_gap}
 
