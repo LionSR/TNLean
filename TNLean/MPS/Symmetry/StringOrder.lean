@@ -482,6 +482,8 @@ end ConditionEquivalences
 
 section MainTheorems
 
+/-- The transfer map of a TP-gauged tensor is the similarity transform of the
+original transfer map by the positive square root of the adjoint fixed point. -/
 lemma transferMap_tpGauge_eq_similarityMap
     (A : MPSTensor d D)
     (σ : Matrix (Fin D) (Fin D) ℂ)
@@ -514,6 +516,8 @@ lemma transferMap_tpGauge_eq_similarityMap
               Matrix.mul_assoc]
   exact congrFun (congrFun hcalc i) j
 
+/-- TP gauging preserves irreducibility when the original transfer map is
+irreducible. -/
 lemma isIrreducibleTensor_tpGauge_of_isIrreducibleMap [NeZero D]
     (A : MPSTensor d D)
     (σ : Matrix (Fin D) (Fin D) ℂ)
@@ -536,6 +540,8 @@ lemma isIrreducibleTensor_tpGauge_of_isIrreducibleMap [NeZero D]
     simpa [hEq] using hIrrSim
   exact isIrreducibleTensor_of_isIrreducibleMap _ hIrr'
 
+/-- Gauge equivalence on the left and right transports a gauge-phase
+equivalence back to the original tensors. -/
 lemma gaugePhaseEquiv_of_gaugeEquiv_left_right
     {A A' B B' : MPSTensor d D}
     (hAA' : GaugeEquiv A A')
@@ -560,6 +566,127 @@ lemma gaugePhaseEquiv_of_gaugeEquiv_left_right
           (((((Z⁻¹ * Y * X : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ)) : Matrix (Fin D) (Fin D) ℂ))) := by
           simp [Matrix.mul_assoc, mul_inv_rev]
 
+private structure TwistedTPGaugeSetup [NeZero D]
+    (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ) where
+  B : MPSTensor d D
+  hB_def : B = twistedMixedCompanion A u
+  hB_eq : ∀ X : Matrix (Fin D) (Fin D) ℂ, transferMap B X = transferMap A X
+  σ : Matrix (Fin D) (Fin D) ℂ
+  hσ_pd : σ.PosDef
+  hσ_fixB : transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ = σ
+  S : Matrix (Fin D) (Fin D) ℂ
+  hS_def : S = CFC.sqrt σ
+  hS_herm : Sᴴ = S
+  hS_mul_inv : S * S⁻¹ = 1
+  hS_inv_mul : S⁻¹ * S = 1
+  hS_hMul_inv : Sᴴ * (Sᴴ)⁻¹ = 1
+  hS_inv_herm : (S⁻¹)ᴴ = S⁻¹
+  A' : MPSTensor d D
+  hA'_def : A' = tpGauge (d := d) (D := D) A σ
+  B' : MPSTensor d D
+  hB'_def : B' = tpGauge (d := d) (D := D) B σ
+  hA'TP : ∑ i : Fin d, (A' i)ᴴ * A' i = 1
+  hB'TP : ∑ i : Fin d, (B' i)ᴴ * B' i = 1
+  hIrrA' : IsIrreducibleTensor (d := d) (D := D) A'
+  hIrrB' : IsIrreducibleTensor (d := d) (D := D) B'
+
+private noncomputable def twistedTPGaugeSetup [NeZero D]
+    (A : MPSTensor d D)
+    (hA : IsInjective A)
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (hNorm : transferMap A 1 = 1) :
+    TwistedTPGaugeSetup (d := d) (D := D) A u := by
+  classical
+  let B : MPSTensor d D := twistedMixedCompanion A u
+  have hB_eq : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      transferMap B X = transferMap A X := by
+    intro X
+    simpa [B, transferMap_apply] using
+      kraus_same_map_of_unitary_combination B A uᴴ
+        (by simpa using hu)
+        (fun j => by
+          simp [B, twistedMixedCompanion, Matrix.conjTranspose_apply])
+        X
+  have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
+    injective_implies_irreducibleCP A hA
+  have hEqBA : transferMap B = transferMap A := LinearMap.ext hB_eq
+  have hIrrB : IsIrreducibleMap (transferMap (d := d) (D := D) B) := by
+    simpa [hEqBA] using hIrrA
+  have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
+    isIrreducibleTensor_of_isIrreducibleMap A hIrrA
+  have hIrrAdj : IsIrreducibleMap (transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
+    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrrTensor
+  have hAadjNorm : ∑ i : Fin d, (((fun i => (A i)ᴴ) i)ᴴ) * ((fun i => (A i)ᴴ) i) = 1 := by
+    simpa using
+      kraus_sum_mul_conjTranspose_of_unital A (transferMap A)
+        (fun X => by simp [transferMap_apply]) hNorm
+  have hChAdj : IsChannel (transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
+    transferMap_isChannel (A := fun i => (A i)ᴴ) hAadjNorm
+  let hσ_exists :=
+    IsChannel.exists_unique_density_fixedPoint_of_irreducible
+      (E := transferMap (d := d) (D := D) fun i => (A i)ᴴ) hChAdj hIrrAdj (NeZero.pos D)
+  let σ := Classical.choose hσ_exists
+  have hσ_spec := Classical.choose_spec hσ_exists
+  have hσ_pd : σ.PosDef := hσ_spec.2.1
+  have hσ_fixA : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ := hσ_spec.2.2.1
+  have hσ_fixB : transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ = σ := by
+    calc
+      transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ
+          = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ := by
+              simpa [B, transferMap_apply, Matrix.mul_assoc] using
+                kraus_dual_eq_of_map_eq B A
+                  (fun X => by simpa [transferMap_apply] using hB_eq X) σ
+      _ = σ := hσ_fixA
+  let S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ
+  have hS_herm : Sᴴ = S := by
+    simpa [S] using conjTranspose_cfc_sqrt (D := D) σ
+  have hS_det : IsUnit (Matrix.det S) := by
+    simpa [S] using isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ_pd
+  have hS_mul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hS_det
+  have hS_inv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hS_det
+  have hS_detT : IsUnit (Matrix.det Sᴴ) := by
+    simpa [Matrix.det_conjTranspose] using IsUnit.star hS_det
+  have hS_hMul_inv : Sᴴ * (Sᴴ)⁻¹ = 1 := Matrix.mul_nonsing_inv Sᴴ hS_detT
+  have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
+    simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
+  let A' := tpGauge (d := d) (D := D) A σ
+  let B' := tpGauge (d := d) (D := D) B σ
+  have hA'TP : ∑ i : Fin d, (A' i)ᴴ * A' i = 1 := by
+    simpa [A'] using
+      tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint (A := A) (ρ := σ) hσ_pd hσ_fixA
+  have hB'TP : ∑ i : Fin d, (B' i)ᴴ * B' i = 1 := by
+    simpa [B'] using
+      tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint (A := B) (ρ := σ) hσ_pd hσ_fixB
+  have hIrrA' : IsIrreducibleTensor (d := d) (D := D) A' := by
+    simpa [A'] using isIrreducibleTensor_tpGauge_of_isIrreducibleMap
+      (A := A) (σ := σ) hσ_pd hIrrA
+  have hIrrB' : IsIrreducibleTensor (d := d) (D := D) B' := by
+    simpa [B'] using isIrreducibleTensor_tpGauge_of_isIrreducibleMap
+      (A := B) (σ := σ) hσ_pd hIrrB
+  exact
+    { B := B
+      hB_def := rfl
+      hB_eq := hB_eq
+      σ := σ
+      hσ_pd := hσ_pd
+      hσ_fixB := hσ_fixB
+      S := S
+      hS_def := rfl
+      hS_herm := hS_herm
+      hS_mul_inv := hS_mul_inv
+      hS_inv_mul := hS_inv_mul
+      hS_hMul_inv := hS_hMul_inv
+      hS_inv_herm := hS_inv_herm
+      A' := A'
+      hA'_def := rfl
+      B' := B'
+      hB'_def := rfl
+      hA'TP := hA'TP
+      hB'TP := hB'TP
+      hIrrA' := hIrrA'
+      hIrrB' := hIrrB' }
+
 /-- **Spectral radius bound** (Lemma 1 of arXiv:0802.0447):
 for an injective pure FCS, every eigenvalue of the twisted
 transfer map `ℰ_u` has modulus at most `1`.
@@ -579,18 +706,6 @@ theorem twistedTransfer_spectralRadius_le_one
     (hV : V ≠ 0)
     (hEig : twistedTransferMap A u V = ev • V) :
     ‖ev‖ ≤ 1 := by
-  let B : MPSTensor d D := twistedMixedCompanion A u
-  have hEigMixed : mixedTransferMap A B V = ev • V := by
-    simpa [B, twistedTransferMap_eq_mixedTransfer] using hEig
-  have hB_eq : ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      transferMap B X = transferMap A X := by
-    intro X
-    simpa [B, transferMap_apply] using
-      kraus_same_map_of_unitary_combination B A uᴴ
-        (by simpa using hu)
-        (fun j => by
-          simp [B, twistedMixedCompanion, Matrix.conjTranspose_apply])
-        X
   have hDpos : 0 < D := by
     by_contra hD
     have hD0 : D = 0 := Nat.eq_zero_of_not_pos hD
@@ -599,145 +714,110 @@ theorem twistedTransfer_spectralRadius_le_one
     ext i j
     exact Fin.elim0 i
   haveI : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
-  have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-    injective_implies_irreducibleCP A hA
-  have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
-    isIrreducibleTensor_of_isIrreducibleMap A hIrrA
-  have hIrrAdj : IsIrreducibleMap (transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
-    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrrTensor
-  have hAadjNorm : ∑ i : Fin d, (((fun i => (A i)ᴴ) i)ᴴ) * ((fun i => (A i)ᴴ) i) = 1 := by
-    simpa using
-      kraus_sum_mul_conjTranspose_of_unital A (transferMap A)
-        (fun X => by simp [transferMap_apply]) hNorm
-  have hChAdj : IsChannel (transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
-    transferMap_isChannel (A := fun i => (A i)ᴴ) hAadjNorm
-  obtain ⟨σ, hσ_mem, hσ_pd, hσ_fixA, _⟩ :=
-    IsChannel.exists_unique_density_fixedPoint_of_irreducible
-      (E := transferMap (d := d) (D := D) fun i => (A i)ᴴ) hChAdj hIrrAdj hDpos
-  have hσ_fixB : transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ = σ := by
-    calc
-      transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ
-          = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ := by
-              simpa [B, transferMap_apply, Matrix.mul_assoc] using
-                kraus_dual_eq_of_map_eq B A
-                  (fun X => by simpa [transferMap_apply] using hB_eq X) σ
-      _ = σ := hσ_fixA
-  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ with hS_def
-  have hS_herm : Sᴴ = S := by
-    simpa [hS_def] using conjTranspose_cfc_sqrt (D := D) σ
-  have hS_det : IsUnit (Matrix.det S) := by
-    simpa [hS_def] using isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ_pd
-  have hS_mul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hS_det
-  have hS_inv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hS_det
-  have hS_detT : IsUnit (Matrix.det Sᴴ) := by
-    simpa [Matrix.det_conjTranspose] using IsUnit.star hS_det
-  have hS_hMul_inv : Sᴴ * (Sᴴ)⁻¹ = 1 := Matrix.mul_nonsing_inv Sᴴ hS_detT
-  have hS_hInv_mul : (Sᴴ)⁻¹ * Sᴴ = 1 := Matrix.nonsing_inv_mul Sᴴ hS_detT
-  have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
-    simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
-  have hA'TP :
-      ∑ i : Fin d,
-        (tpGauge (d := d) (D := D) A σ i)ᴴ * tpGauge (d := d) (D := D) A σ i = 1 :=
-    tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint (A := A) (ρ := σ) hσ_pd hσ_fixA
-  have hB'TP :
-      ∑ i : Fin d,
-        (tpGauge (d := d) (D := D) B σ i)ᴴ * tpGauge (d := d) (D := D) B σ i = 1 :=
-    tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint (A := B) (ρ := σ) hσ_pd hσ_fixB
+  let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
+  have hEigMixed : mixedTransferMap A setup.B V = ev • V := by
+    simpa [setup.hB_def, twistedTransferMap_eq_mixedTransfer] using hEig
   have hEigGauge :
-      mixedTransferMap (tpGauge (d := d) (D := D) A σ)
-        (tpGauge (d := d) (D := D) B σ) (S * V * Sᴴ) =
-        ev • (S * V * Sᴴ) := by
+      mixedTransferMap setup.A' setup.B' (setup.S * V * setup.Sᴴ) =
+        ev • (setup.S * V * setup.Sᴴ) := by
     have hTerm :
         ∀ i : Fin d,
-          tpGauge (d := d) (D := D) A σ i * (S * V * Sᴴ) *
-            (tpGauge (d := d) (D := D) B σ i)ᴴ =
-          S * (A i * V * (B i)ᴴ) * Sᴴ := by
+          setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ =
+            setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
       intro i
-      have hAeq : tpGauge (d := d) (D := D) A σ i = S * A i * S⁻¹ := by
-        simp [tpGauge, hS_def]
-      have hSsqrt_herm : (CFC.sqrt σ)ᴴ = CFC.sqrt σ := by
-        simpa [hS_def] using hS_herm
+      have hAeq : setup.A' i = setup.S * A i * setup.S⁻¹ := by
+        simp [setup.hA'_def, tpGauge, setup.hS_def]
       have hBstar :
-          (tpGauge (d := d) (D := D) B σ i)ᴴ = S⁻¹ * (B i)ᴴ * S := by
-        rw [tpGauge, Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-          Matrix.conjTranspose_nonsing_inv]
-        simp [hS_def, hSsqrt_herm, Matrix.mul_assoc]
+          (setup.B' i)ᴴ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
+        calc
+          (setup.B' i)ᴴ
+              = ((setup.S * setup.B i * setup.S⁻¹ : Matrix (Fin D) (Fin D) ℂ))ᴴ := by
+                  simp [setup.hB'_def, tpGauge, setup.hS_def]
+          _ = (setup.S⁻¹)ᴴ * (setup.B i)ᴴ * setup.Sᴴ := by
+                simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
+          _ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
+                simp [setup.hS_herm, setup.hS_inv_herm]
       calc
-        tpGauge (d := d) (D := D) A σ i * (S * V * Sᴴ) *
-            (tpGauge (d := d) (D := D) B σ i)ᴴ
-            = (S * A i * S⁻¹) * (S * V * S) * (S⁻¹ * (B i)ᴴ * S) := by
-                rw [hAeq, hBstar, hS_herm]
-        _ = S * (A i * V * (B i)ᴴ) * S := by
+        setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ
+            = (setup.S * A i * setup.S⁻¹) * (setup.S * V * setup.S) *
+                (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
+                  rw [hAeq, hBstar, setup.hS_herm]
+        _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.S := by
               calc
-                (S * A i * S⁻¹) * (S * V * S) * (S⁻¹ * (B i)ᴴ * S)
-                    = S * A i * (S⁻¹ * (S * V * S)) * (S⁻¹ * (B i)ᴴ * S) := by
+                (setup.S * A i * setup.S⁻¹) * (setup.S * V * setup.S) *
+                    (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
+                    = setup.S * A i * (setup.S⁻¹ * (setup.S * V * setup.S)) *
+                        (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
                         simp [Matrix.mul_assoc]
-                _ = S * A i * (V * S) * (S⁻¹ * (B i)ᴴ * S) := by
-                      rw [show S⁻¹ * (S * V * S) = V * S by
+                _ = setup.S * A i * (V * setup.S) *
+                      (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
+                      rw [show setup.S⁻¹ * (setup.S * V * setup.S) = V * setup.S by
                         calc
-                          S⁻¹ * (S * V * S) = (S⁻¹ * S) * V * S := by
+                          setup.S⁻¹ * (setup.S * V * setup.S)
+                              = (setup.S⁻¹ * setup.S) * V * setup.S := by
                             simp [Matrix.mul_assoc]
-                          _ = V * S := by simp [hS_inv_mul]]
-                _ = S * A i * (V * (B i)ᴴ * S) := by
+                          _ = V * setup.S := by simp [setup.hS_inv_mul]]
+                _ = setup.S * A i * (V * (setup.B i)ᴴ * setup.S) := by
                       calc
-                        S * A i * (V * S) * (S⁻¹ * (B i)ᴴ * S)
-                            = S * A i * ((V * S) * (S⁻¹ * (B i)ᴴ * S)) := by
+                        setup.S * A i * (V * setup.S) *
+                            (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
+                            = setup.S * A i *
+                                ((V * setup.S) * (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)) := by
                                 simp [Matrix.mul_assoc]
-                        _ = S * A i * (V * (B i)ᴴ * S) := by
+                        _ = setup.S * A i * (V * (setup.B i)ᴴ * setup.S) := by
                               congr 1
                               calc
-                                (V * S) * (S⁻¹ * (B i)ᴴ * S)
-                                    = V * (S * S⁻¹) * (B i)ᴴ * S := by
+                                (V * setup.S) * (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
+                                    = V * (setup.S * setup.S⁻¹) * (setup.B i)ᴴ * setup.S := by
                                         simp [Matrix.mul_assoc]
-                                _ = V * (B i)ᴴ * S := by
-                                      simp [hS_mul_inv, Matrix.mul_assoc]
-                _ = S * (A i * V * (B i)ᴴ) * S := by
+                                _ = V * (setup.B i)ᴴ * setup.S := by
+                                      simp [setup.hS_mul_inv, Matrix.mul_assoc]
+                _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.S := by
                       simp [Matrix.mul_assoc]
-        _ = S * (A i * V * (B i)ᴴ) * Sᴴ := by simp [hS_herm]
+        _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
+              simp [setup.hS_herm]
     calc
-      mixedTransferMap (tpGauge (d := d) (D := D) A σ)
-          (tpGauge (d := d) (D := D) B σ) (S * V * Sᴴ)
+      mixedTransferMap setup.A' setup.B' (setup.S * V * setup.Sᴴ)
           = ∑ i : Fin d,
-              tpGauge (d := d) (D := D) A σ i * (S * V * Sᴴ) *
-                (tpGauge (d := d) (D := D) B σ i)ᴴ := by
+              setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ := by
                   simp [mixedTransferMap_apply]
-      _ = ∑ i : Fin d, S * (A i * V * (B i)ᴴ) * Sᴴ := by
+      _ = ∑ i : Fin d, setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
             simp [hTerm]
-      _ = S * (∑ i : Fin d, A i * V * (B i)ᴴ) * Sᴴ := by
+      _ = setup.S * (∑ i : Fin d, A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
             simpa using
               (Matrix.sum_mul_mul
-                (L := S) (M := fun i : Fin d => A i * V * (B i)ᴴ) (R := Sᴴ))
-      _ = ev • (S * V * Sᴴ) := by
+                (L := setup.S) (M := fun i : Fin d => A i * V * (setup.B i)ᴴ) (R := setup.Sᴴ))
+      _ = ev • (setup.S * V * setup.Sᴴ) := by
             simpa [mixedTransferMap_apply, Matrix.mul_assoc] using
-              congrArg (fun M => S * M * Sᴴ) hEigMixed
-  have hGauge_ne : S * V * Sᴴ ≠ 0 := by
+              congrArg (fun M => setup.S * M * setup.Sᴴ) hEigMixed
+  have hGauge_ne : setup.S * V * setup.Sᴴ ≠ 0 := by
     intro hZero
     apply hV
-    have h' : S⁻¹ * (S * V * Sᴴ) * (Sᴴ)⁻¹ = 0 := by
+    have h' : setup.S⁻¹ * (setup.S * V * setup.Sᴴ) * (setup.Sᴴ)⁻¹ = 0 := by
       simp [hZero]
-    have h'' : S⁻¹ * (S * V) = 0 := by
-      simpa [Matrix.mul_assoc, hS_hMul_inv] using h'
-    have h''' : (S⁻¹ * S) * V = 0 := by
+    have h'' : setup.S⁻¹ * (setup.S * V) = 0 := by
+      simpa [Matrix.mul_assoc, setup.hS_hMul_inv] using h'
+    have h''' : (setup.S⁻¹ * setup.S) * V = 0 := by
       simpa [Matrix.mul_assoc] using h''
-    simpa [hS_inv_mul] using h'''
+    simpa [setup.hS_inv_mul] using h'''
   have hHas : Module.End.HasEigenvalue
-      (mixedTransferMap (tpGauge (d := d) (D := D) A σ)
-        (tpGauge (d := d) (D := D) B σ)) ev := by
+      (mixedTransferMap setup.A' setup.B') ev := by
     rw [Module.End.hasEigenvalue_iff]
     intro hBot
     have hMem :
-        S * V * Sᴴ ∈ Module.End.eigenspace
-          (mixedTransferMap (tpGauge (d := d) (D := D) A σ)
-            (tpGauge (d := d) (D := D) B σ)) ev :=
+        setup.S * V * setup.Sᴴ ∈ Module.End.eigenspace
+          (mixedTransferMap setup.A' setup.B') ev :=
       Module.End.mem_eigenspace_iff.mpr hEigGauge
-    have : S * V * Sᴴ ∈ (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+    have : setup.S * V * setup.Sᴴ ∈ (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
       simpa [hBot] using hMem
     exact hGauge_ne (Submodule.mem_bot ℂ |>.mp this)
   exact eigenvalue_norm_le_one
-    (A := tpGauge (d := d) (D := D) A σ)
-    (B := tpGauge (d := d) (D := D) B σ)
-    hA'TP hB'TP ev hHas
+    (A := setup.A') (B := setup.B') setup.hA'TP setup.hB'TP ev hHas
 
+/-- A modulus-one eigenvalue of the twisted transfer map forces the twisted
+companion tensor to be gauge-phase equivalent to the original tensor. The proof
+reuses the irreducible TP mixed-transfer rigidity theorem after passing both
+families to a common TP gauge. -/
 theorem twistedTransfer_modulus_one_implies_gaugePhase
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -749,18 +829,6 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     (hEig : twistedTransferMap A u V = ev • V)
     (hev : ‖ev‖ = 1) :
     GaugePhaseEquiv A (twistedMixedCompanion A u) := by
-  let B : MPSTensor d D := twistedMixedCompanion A u
-  have hEigMixed : mixedTransferMap A B V = ev • V := by
-    simpa [B, twistedTransferMap_eq_mixedTransfer] using hEig
-  have hB_eq : ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      transferMap B X = transferMap A X := by
-    intro X
-    simpa [B, transferMap_apply] using
-      kraus_same_map_of_unitary_combination B A uᴴ
-        (by simpa using hu)
-        (fun j => by
-          simp [B, twistedMixedCompanion, Matrix.conjTranspose_apply])
-        X
   have hDpos : 0 < D := by
     by_contra hD
     have hD0 : D = 0 := Nat.eq_zero_of_not_pos hD
@@ -769,146 +837,102 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     ext i j
     exact Fin.elim0 i
   haveI : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
-  have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-    injective_implies_irreducibleCP A hA
-  have hEqBA : transferMap B = transferMap A := LinearMap.ext hB_eq
-  have hIrrB : IsIrreducibleMap (transferMap (d := d) (D := D) B) := by
-    simpa [hEqBA] using hIrrA
-  have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
-    isIrreducibleTensor_of_isIrreducibleMap A hIrrA
-  have hIrrAdj : IsIrreducibleMap (transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
-    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrrTensor
-  have hAadjNorm : ∑ i : Fin d, (((fun i => (A i)ᴴ) i)ᴴ) * ((fun i => (A i)ᴴ) i) = 1 := by
-    simpa using
-      kraus_sum_mul_conjTranspose_of_unital A (transferMap A)
-        (fun X => by simp [transferMap_apply]) hNorm
-  have hChAdj : IsChannel (transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
-    transferMap_isChannel (A := fun i => (A i)ᴴ) hAadjNorm
-  obtain ⟨σ, hσ_mem, hσ_pd, hσ_fixA, _⟩ :=
-    IsChannel.exists_unique_density_fixedPoint_of_irreducible
-      (E := transferMap (d := d) (D := D) fun i => (A i)ᴴ) hChAdj hIrrAdj hDpos
-  have hσ_fixB : transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ = σ := by
-    calc
-      transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ
-          = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ := by
-              simpa [B, transferMap_apply, Matrix.mul_assoc] using
-                kraus_dual_eq_of_map_eq B A
-                  (fun X => by simpa [transferMap_apply] using hB_eq X) σ
-      _ = σ := hσ_fixA
-  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ with hS_def
-  have hS_herm : Sᴴ = S := by
-    simpa [hS_def] using conjTranspose_cfc_sqrt (D := D) σ
-  have hS_det : IsUnit (Matrix.det S) := by
-    simpa [hS_def] using isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ_pd
-  have hS_mul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hS_det
-  have hS_inv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hS_det
-  have hS_detT : IsUnit (Matrix.det Sᴴ) := by
-    simpa [Matrix.det_conjTranspose] using IsUnit.star hS_det
-  have hS_hMul_inv : Sᴴ * (Sᴴ)⁻¹ = 1 := Matrix.mul_nonsing_inv Sᴴ hS_detT
-  have hS_hInv_eq : (Sᴴ)⁻¹ = S⁻¹ := by
-    have htmp : (Sᴴ)⁻¹ = (S⁻¹)ᴴ := by
-      simpa using (Matrix.conjTranspose_nonsing_inv S).symm
-    have htmp' : (S⁻¹)ᴴ = S⁻¹ := by
-      simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
-    exact htmp.trans htmp'
-  have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
-    simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
-  let A' := tpGauge (d := d) (D := D) A σ
-  let B' := tpGauge (d := d) (D := D) B σ
-  have hA'TP :
-      ∑ i : Fin d, (A' i)ᴴ * A' i = 1 := by
-    simpa [A'] using
-      tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint (A := A) (ρ := σ) hσ_pd hσ_fixA
-  have hB'TP :
-      ∑ i : Fin d, (B' i)ᴴ * B' i = 1 := by
-    simpa [B'] using
-      tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint (A := B) (ρ := σ) hσ_pd hσ_fixB
-  have hIrrA' : IsIrreducibleTensor (d := d) (D := D) A' := by
-    simpa [A'] using isIrreducibleTensor_tpGauge_of_isIrreducibleMap
-      (A := A) (σ := σ) hσ_pd hIrrA
-  have hIrrB' : IsIrreducibleTensor (d := d) (D := D) B' := by
-    simpa [B'] using isIrreducibleTensor_tpGauge_of_isIrreducibleMap
-      (A := B) (σ := σ) hσ_pd hIrrB
+  let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
+  have hEigMixed : mixedTransferMap A setup.B V = ev • V := by
+    simpa [setup.hB_def, twistedTransferMap_eq_mixedTransfer] using hEig
   have hEigGauge :
-      mixedTransferMap A' B' (S * V * Sᴴ) = ev • (S * V * Sᴴ) := by
+      mixedTransferMap setup.A' setup.B' (setup.S * V * setup.Sᴴ) =
+        ev • (setup.S * V * setup.Sᴴ) := by
     have hTerm :
         ∀ i : Fin d,
-          A' i * (S * V * Sᴴ) * (B' i)ᴴ =
-            S * (A i * V * (B i)ᴴ) * Sᴴ := by
+          setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ =
+            setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
       intro i
-      have hAeq : A' i = S * A i * S⁻¹ := by simp [A', tpGauge, hS_def]
-      have hBstar : (B' i)ᴴ = S⁻¹ * (B i)ᴴ * S := by
+      have hAeq : setup.A' i = setup.S * A i * setup.S⁻¹ := by
+        simp [setup.hA'_def, tpGauge, setup.hS_def]
+      have hBstar : (setup.B' i)ᴴ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
         calc
-          (B' i)ᴴ = ((S * B i * S⁻¹ : Matrix (Fin D) (Fin D) ℂ))ᴴ := by
-            simp [B', tpGauge, hS_def]
-          _ = (S⁻¹)ᴴ * (B i)ᴴ * Sᴴ := by
+          (setup.B' i)ᴴ = ((setup.S * setup.B i * setup.S⁻¹ : Matrix (Fin D) (Fin D) ℂ))ᴴ := by
+            simp [setup.hB'_def, tpGauge, setup.hS_def]
+          _ = (setup.S⁻¹)ᴴ * (setup.B i)ᴴ * setup.Sᴴ := by
                 simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
-          _ = S⁻¹ * (B i)ᴴ * S := by
-                simp [hS_herm, hS_inv_herm]
+          _ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
+                simp [setup.hS_herm, setup.hS_inv_herm]
       calc
-        A' i * (S * V * Sᴴ) * (B' i)ᴴ
-            = (S * A i * S⁻¹) * (S * V * S) * (S⁻¹ * (B i)ᴴ * S) := by
-                rw [hAeq, hBstar, hS_herm]
-        _ = S * (A i * V * (B i)ᴴ) * S := by
+        setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ
+            = (setup.S * A i * setup.S⁻¹) * (setup.S * V * setup.S) *
+                (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
+                  rw [hAeq, hBstar, setup.hS_herm]
+        _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.S := by
               calc
-                (S * A i * S⁻¹) * (S * V * S) * (S⁻¹ * (B i)ᴴ * S)
-                    = S * A i * (S⁻¹ * (S * V * S)) * (S⁻¹ * (B i)ᴴ * S) := by
+                (setup.S * A i * setup.S⁻¹) * (setup.S * V * setup.S) *
+                    (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
+                    = setup.S * A i * (setup.S⁻¹ * (setup.S * V * setup.S)) *
+                        (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
                         simp [Matrix.mul_assoc]
-                _ = S * A i * (V * S) * (S⁻¹ * (B i)ᴴ * S) := by
-                      rw [show S⁻¹ * (S * V * S) = V * S by
+                _ = setup.S * A i * (V * setup.S) *
+                      (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
+                      rw [show setup.S⁻¹ * (setup.S * V * setup.S) = V * setup.S by
                         calc
-                          S⁻¹ * (S * V * S) = (S⁻¹ * S) * V * S := by
+                          setup.S⁻¹ * (setup.S * V * setup.S)
+                              = (setup.S⁻¹ * setup.S) * V * setup.S := by
                             simp [Matrix.mul_assoc]
-                          _ = V * S := by simp [hS_inv_mul]]
-                _ = S * A i * (V * (B i)ᴴ * S) := by
+                          _ = V * setup.S := by simp [setup.hS_inv_mul]]
+                _ = setup.S * A i * (V * (setup.B i)ᴴ * setup.S) := by
                       calc
-                        S * A i * (V * S) * (S⁻¹ * (B i)ᴴ * S)
-                            = S * A i * ((V * S) * (S⁻¹ * (B i)ᴴ * S)) := by
+                        setup.S * A i * (V * setup.S) *
+                            (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
+                            = setup.S * A i *
+                                ((V * setup.S) * (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)) := by
                                 simp [Matrix.mul_assoc]
-                        _ = S * A i * (V * (B i)ᴴ * S) := by
+                        _ = setup.S * A i * (V * (setup.B i)ᴴ * setup.S) := by
                               congr 1
                               calc
-                                (V * S) * (S⁻¹ * (B i)ᴴ * S)
-                                    = V * (S * S⁻¹) * (B i)ᴴ * S := by
+                                (V * setup.S) * (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
+                                    = V * (setup.S * setup.S⁻¹) * (setup.B i)ᴴ * setup.S := by
                                         simp [Matrix.mul_assoc]
-                                _ = V * (B i)ᴴ * S := by
-                                      simp [hS_mul_inv, Matrix.mul_assoc]
-                _ = S * (A i * V * (B i)ᴴ) * S := by simp [Matrix.mul_assoc]
-        _ = S * (A i * V * (B i)ᴴ) * Sᴴ := by simp [hS_herm]
+                                _ = V * (setup.B i)ᴴ * setup.S := by
+                                      simp [setup.hS_mul_inv, Matrix.mul_assoc]
+                _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.S := by
+                      simp [Matrix.mul_assoc]
+        _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
+              simp [setup.hS_herm]
     calc
-      mixedTransferMap A' B' (S * V * Sᴴ)
-          = ∑ i : Fin d, A' i * (S * V * Sᴴ) * (B' i)ᴴ := by
+      mixedTransferMap setup.A' setup.B' (setup.S * V * setup.Sᴴ)
+          = ∑ i : Fin d, setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ := by
               simp [mixedTransferMap_apply]
-      _ = ∑ i : Fin d, S * (A i * V * (B i)ᴴ) * Sᴴ := by simp [hTerm]
-      _ = S * (∑ i : Fin d, A i * V * (B i)ᴴ) * Sᴴ := by
+      _ = ∑ i : Fin d, setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by simp [hTerm]
+      _ = setup.S * (∑ i : Fin d, A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
             simpa using
-              (Matrix.sum_mul_mul (L := S) (M := fun i : Fin d => A i * V * (B i)ᴴ) (R := Sᴴ))
-      _ = ev • (S * V * Sᴴ) := by
+              (Matrix.sum_mul_mul
+                (L := setup.S) (M := fun i : Fin d => A i * V * (setup.B i)ᴴ) (R := setup.Sᴴ))
+      _ = ev • (setup.S * V * setup.Sᴴ) := by
             simpa [mixedTransferMap_apply, Matrix.mul_assoc] using
-              congrArg (fun M => S * M * Sᴴ) hEigMixed
-  have hGauge_ne : S * V * Sᴴ ≠ 0 := by
+              congrArg (fun M => setup.S * M * setup.Sᴴ) hEigMixed
+  have hGauge_ne : setup.S * V * setup.Sᴴ ≠ 0 := by
     intro hZero
     apply hV
-    have h' : S⁻¹ * (S * V * Sᴴ) * (Sᴴ)⁻¹ = 0 := by simp [hZero]
-    have h'' : S⁻¹ * (S * V) = 0 := by
-      simpa [Matrix.mul_assoc, hS_hMul_inv] using h'
-    have h''' : (S⁻¹ * S) * V = 0 := by simpa [Matrix.mul_assoc] using h''
-    simpa [hS_inv_mul] using h'''
-  have hHas : Module.End.HasEigenvalue (mixedTransferMap A' B') ev := by
+    have h' : setup.S⁻¹ * (setup.S * V * setup.Sᴴ) * (setup.Sᴴ)⁻¹ = 0 := by simp [hZero]
+    have h'' : setup.S⁻¹ * (setup.S * V) = 0 := by
+      simpa [Matrix.mul_assoc, setup.hS_hMul_inv] using h'
+    have h''' : (setup.S⁻¹ * setup.S) * V = 0 := by simpa [Matrix.mul_assoc] using h''
+    simpa [setup.hS_inv_mul] using h'''
+  have hHas : Module.End.HasEigenvalue (mixedTransferMap setup.A' setup.B') ev := by
     rw [Module.End.hasEigenvalue_iff]
     intro hBot
-    have hMem : S * V * Sᴴ ∈ Module.End.eigenspace (mixedTransferMap A' B') ev :=
+    have hMem : setup.S * V * setup.Sᴴ ∈ Module.End.eigenspace
+        (mixedTransferMap setup.A' setup.B') ev :=
       Module.End.mem_eigenspace_iff.mpr hEigGauge
-    have : S * V * Sᴴ ∈ (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+    have : setup.S * V * setup.Sᴴ ∈ (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
       simpa [hBot] using hMem
     exact hGauge_ne (Submodule.mem_bot ℂ |>.mp this)
   let Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
-  have hspec : ev ∈ spectrum ℂ (Φ (mixedTransferMap A' B')) := by
+  have hspec : ev ∈ spectrum ℂ (Φ (mixedTransferMap setup.A' setup.B')) := by
     rw [AlgEquiv.spectrum_eq Φ]
     exact hHas.mem_spectrum
-  have hRadGe : mixedTransferSpectralRadius A' B' ≥ 1 := by
+  have hRadGe : mixedTransferSpectralRadius setup.A' setup.B' ≥ 1 := by
     rw [mixedTransferSpectralRadius_eq]
     have hnorm_ev_nn : (1 : NNReal) = ‖ev‖₊ := by
       apply Subtype.ext
@@ -916,15 +940,16 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     have hnorm_ev : (1 : ENNReal) = ‖ev‖₊ := by
       exact congrArg (fun r : NNReal => (r : ENNReal)) hnorm_ev_nn
     rw [ge_iff_le, hnorm_ev]
-    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (Φ (mixedTransferMap A' B'))) _
+    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (Φ (mixedTransferMap setup.A' setup.B'))) _
       (fun k _ => (‖k‖₊ : ENNReal)) ev hspec
-  have hGauge' : GaugePhaseEquiv A' B' :=
+  have hGauge' : GaugePhaseEquiv setup.A' setup.B' :=
     modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
-      A' B' hIrrA' hIrrB' hA'TP hB'TP hRadGe
-  simpa [B] using gaugePhaseEquiv_of_gaugeEquiv_left_right
-    (gaugeEquiv_tpGauge (A := A) (ρ := σ) hσ_pd)
+      setup.A' setup.B' setup.hIrrA' setup.hIrrB' setup.hA'TP setup.hB'TP hRadGe
+  simpa [setup.hA'_def, setup.hB'_def, setup.hB_def] using
+    gaugePhaseEquiv_of_gaugeEquiv_left_right
+    (gaugeEquiv_tpGauge (A := A) (ρ := setup.σ) setup.hσ_pd)
     hGauge'
-    (gaugeEquiv_tpGauge (A := B) (ρ := σ) hσ_pd)
+    (gaugeEquiv_tpGauge (A := setup.B) (ρ := setup.σ) setup.hσ_pd)
 
 /-- A non-decaying string-order parameter forces the twisted companion family to be
 gauge-phase equivalent to the original tensor. This is the reuse-heavy bridge from
