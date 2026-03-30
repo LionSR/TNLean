@@ -870,6 +870,73 @@ of~\cite[Ch.~2]{Wolf2012Quantum}.
     $U U^\dagger = \Id_r$, hence also $U^\dagger U = \Id_r$.
 \end{proof}
 
+\begin{theorem}[Thm.~2.1: Dual map equality from primal map equality]\label{thm:kraus_dual_eq_of_map_eq}
+    \lean{kraus_dual_eq_of_map_eq}
+    \leanok
+    \uses{def:cp_map}
+    If two Kraus families satisfy
+    $\sum_\alpha B_\alpha X B_\alpha^\dagger = \sum_j A_j X A_j^\dagger$
+    for all $X$, then
+    $\sum_\alpha B_\alpha^\dagger Y B_\alpha = \sum_j A_j^\dagger Y A_j$
+    for all $Y$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Use the trace pairing: for all $X$,
+    $\operatorname{tr}(X^\dagger (\sum B_\alpha^\dagger Y B_\alpha))
+     = \operatorname{tr}((\sum B_\alpha X^\dagger B_\alpha^\dagger) Y)
+     = \operatorname{tr}((\sum A_j X^\dagger A_j^\dagger) Y)
+     = \operatorname{tr}(X^\dagger (\sum A_j^\dagger Y A_j))$.
+    Nondegeneracy of the trace pairing gives the result.
+\end{proof}
+
+\begin{theorem}[Thm.~2.1: Equal Stinespring Gramians]\label{thm:kraus_conjTranspose_mul_eq_of_map_eq}
+    \lean{kraus_conjTranspose_mul_eq_of_map_eq}
+    \leanok
+    \uses{thm:kraus_dual_eq_of_map_eq}
+    If two Kraus families define the same CPM, then
+    $\sum_\alpha B_\alpha^\dagger B_\alpha = \sum_j A_j^\dagger A_j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Specialise \texttt{kraus\_dual\_eq\_of\_map\_eq} at $Y = \Id$.
+\end{proof}
+
+\begin{theorem}[Thm.~2.1 item 4: Rectangular Kraus freedom (necessary direction)]\label{thm:kraus_rectangular_freedom}
+    \lean{kraus_rectangular_freedom}
+    \leanok
+    \uses{thm:kraus_dual_eq_of_map_eq, thm:kraus_conjTranspose_mul_eq_of_map_eq}
+    If $\sum_\alpha B_\alpha X B_\alpha^\dagger = \sum_j A_j X A_j^\dagger$
+    for all $X$ and $r_2 \le r_1$, then there exists a rectangular isometry
+    $V$ ($r_1 \times r_2$, $V^\dagger V = \Id$) such that
+    $B_\alpha = \sum_j V_{\alpha j}\,A_j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Pad the smaller family to size $r_1$, establish Gram matrix equality
+    $M_B^\dagger M_B = M_{A'}^\dagger M_{A'}$ from dual map equality,
+    construct a partial isometry via inner product preservation on the
+    range, and extend to a full isometry $V$ with $V^\dagger V = \Id$.
+\end{proof}
+
+\begin{theorem}[Thm.~2.1 item 4: Rectangular Kraus freedom (general index variant)]\label{thm:kraus_rectangular_freedom'}
+    \lean{kraus_rectangular_freedom'}
+    \leanok
+    \uses{thm:kraus_rectangular_freedom}
+    Variant of \Cref{thm:kraus_rectangular_freedom} with general
+    finite index types $\iota_1, \iota_2$ in place of $\mathrm{Fin}\,r_1,
+    \mathrm{Fin}\,r_2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Reindex via equivalences to $\mathrm{Fin}$ and apply
+    \Cref{thm:kraus_rectangular_freedom}.
+\end{proof}
+
 %% =========================================================
 \section{Stinespring dilation (Wolf Thm.~2.2)}
 \label{sec:stinespring}
