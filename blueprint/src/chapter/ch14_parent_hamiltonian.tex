@@ -332,7 +332,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \lean{MPSTensor.groundSpace_intersection}
   \leanok
   \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
-        def:ground_space_parent}
+        def:ground_space_parent, lem:exists_decomposition}
   If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
   satisfying both the left and right ground conditions lies in $G_{L+1}(A)$:
   \[
@@ -354,9 +354,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \item Matching on the $(L{-}1)$-site overlap and using nondegeneracy of
       the trace pairing:
       $A^j Y_i = Z_j A^i$ for all $i,j$.
-    \item Apply the decomposition map (one-sided inverse,
-      Theorem~\ref{thm:one_sided_inverse}): summing over~$i$ with the
-      decomposition coefficients of the identity yields
+    \item Apply the decomposition property
+      (Lemma~\ref{lem:exists_decomposition}): writing the identity as a
+      linear combination of the matrices $A^j$ yields
       $Y_i = X' A^i$ for a single matrix
       $X' = \sum_j \Psi(\mathbf{1})_j \cdot Z_j$.
     \item By trace cyclicity,
