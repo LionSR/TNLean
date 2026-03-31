@@ -953,6 +953,24 @@ The following results separate the zero blocks from the
 	Apply Theorem~\ref{thm:primitive_pow} with $\E = \E_{A^{[p]}}$.
 \end{proof}
 
+\begin{theorem}[Iterated blocking multiplies periods at the transfer-map level]%
+	\label{thm:iterated_blocking_transfer}
+	\lean{MPSTensor.transferMap_blockTensor_blockTensor}
+	\leanok
+	\uses{def:blocked_tensor}
+	For any MPS tensor $A$ and integers $m,n \ge 0$,
+	\[
+		\E_{(A^{[m]})^{[n]}} = \E_{A^{[mn]}}.
+	\]
+\end{theorem}
+
+\begin{proof}\leanok
+	Rewrite the outer blocked transfer map as the $n$-th power of
+	$\E_{A^{[m]}}$, then rewrite $\E_{A^{[m]}}$ as $\E_A^m$.
+	This gives $(\E_A^m)^n$, which simplifies to $\E_A^{mn}$.
+	Finally rewrite $\E_A^{mn}$ back as the transfer map of $A^{[mn]}$.
+\end{proof}
+
 \begin{theorem}[Common blocking period for a block family]%
 	\label{thm:common_blocking_period}
 	\lean{MPSTensor.exists_common_blocking_all_primitive}

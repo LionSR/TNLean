@@ -89,7 +89,7 @@ theorem transferMap_blockTensor_fixedPoint
 
 /-- Iterated physical blocking is compatible with one-shot blocking by the multiplied period,
 at the transfer-map level. -/
-theorem blockTensor_blockTensor
+theorem transferMap_blockTensor_blockTensor
     (A : MPSTensor d D) (m n : ℕ) :
     transferMap (d := blockPhysDim (blockPhysDim d m) n) (D := D)
         (blockTensor (d := blockPhysDim d m) (D := D)
