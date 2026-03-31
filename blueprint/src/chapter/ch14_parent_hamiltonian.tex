@@ -38,8 +38,10 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
     \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X}
   \]
   the upper chain denotes the word tensor $A^\sigma$ with open physical
-  indices $\sigma_1,\dots,\sigma_L$, and the lower box denotes the boundary
-  matrix $X$ inserted on the virtual bond before taking the trace.
+  indices $\sigma_1,\dots,\sigma_L$, and the lower red node denotes the boundary
+  matrix $X$ inserted on the closing virtual bond before taking the trace.
+  The chain length~$L$ is fixed by the surrounding formula, not by an extra
+  label inside the diagram.
 \end{definition}
 
 \begin{definition}[Local ground space]\label{def:ground_space_parent}
@@ -143,7 +145,8 @@ translated copies of the local interaction.
     \TNLocalTermWindow{\sigma_i}{\sigma_{i+L-1}}{L}{N}{h_i}
   \]
   the dashed window marks the $L$ consecutive sites on which the local
-  projector acts, while the surrounding chain is left unchanged.
+  projector acts, while the surrounding chain is left unchanged. The range
+  $L$ and ambient chain length~$N$ are carried by the surrounding notation.
 \end{definition}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
@@ -479,6 +482,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \[
     \TNPeriodicGauge{N}{X}{1}
   \]
+  that is, the boundary operator sits on the closing virtual bond. The
+  periodicity and the conclusion that $X$ must be scalar are expressed in the
+  surrounding argument, not by extra labels inside the picture.
 \end{theorem}
 
 \begin{theorem}[Unique ground state for block-injective tensors]%

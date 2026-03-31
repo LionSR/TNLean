@@ -20,14 +20,13 @@
 }
 
 \newcommand{\TNMPV}[4]{%
-  \begin{array}{c}
-    \begin{array}{ccccccc}
-      #2 &&&&&& #3 \\
-      \vert && \vert && \cdots && \vert \\
-      \bullet & \text{---} & \bullet & \text{---} &
-      \cdots & \text{---} & \bullet
-    \end{array}\\[-0.2ex]
-    \operatorname{Tr}\; #4
+  \begin{array}{ccccccc}
+    #2 &&&&&& #3 \\
+    \vert && \vert && \cdots && \vert \\
+    \bullet & \text{---} & \bullet & \text{---} &
+    \cdots & \text{---} & \bullet \\
+    \vert &&&&&& \vert \\
+    \multicolumn{7}{c}{\text{---}\,\cdots\,\text{---}}
   \end{array}%
 }
 
@@ -79,18 +78,18 @@
   \begin{array}{ccccc}
     && #2 && \\
     && \vert && \\
-    \bullet & \text{---} & \bullet & \text{---} & \bullet \\
+    \textcolor{red}{\bullet} & \text{---} & \bullet & \text{---} & \textcolor{red}{\bullet} \\
     #1 &&&& #3
   \end{array}%
 }
 
 \newcommand{\TNPhysicalRealization}[2]{%
   \begin{array}{ccccccc}
-    &&&& #2 && \\
-    &&&& \vert && \\
-    \bullet & \text{---} & \bullet & & = & & \bullet \\
-    &&&& \vert && \\
-    &&&& #1 &&
+    && #1 &&&& #2 && \\
+    &&&&&& \vert && \\
+    \bullet & \text{---} & \textcolor{red}{\bullet} & & = & & \bullet \\
+    &&&&&& \vert && \\
+    &&&&&& \textcolor{red}{\bullet} &&
   \end{array}%
 }
 
@@ -107,7 +106,7 @@
     X & \text{---} & \E_{#1}(X) \\
     & \bullet & \\
     & \vert & \\
-    & \fbox{$#1$} & \\
+    #1 & \textcolor{red}{\bullet} & \\
     & \vert & \\
     & \bullet & \\
     & n,\;n' &
@@ -118,18 +117,20 @@
   \begin{array}{ccccccc}
     && #3 &&&& #3 \\
     && \vert &&&& \vert \\
-    && \fbox{$#1$} &&&& \bullet \\
+    #1 && \textcolor{red}{\bullet} &&&& \bullet \\
     && \vert && = && \\
-    \bullet & \text{---} & \bullet && \bullet & \text{---} & \bullet \\
+    \bullet & \text{---} & \bullet && \textcolor{red}{\bullet} & \text{---} & \textcolor{red}{\bullet} \\
     &&&& #2 && #2^\dagger
   \end{array}%
 }
 
 \newcommand{\TNCondCTwo}[1]{%
   \begin{array}{ccccccccc}
-    \fbox{$#1$} & \text{---} & \bullet && = && \bullet & \text{---} & \fbox{$#1$} \\
+    #1 &&&&&&&& #1 \\
+    \textcolor{red}{\bullet} & \text{---} & \bullet && = && \bullet & \text{---} & \textcolor{red}{\bullet} \\
     && \vert &&&& \vert && \\
-    \fbox{$#1^\dagger$} & \text{---} & \bullet && = && \bullet & \text{---} & \fbox{$#1^\dagger$}
+    \textcolor{red}{\bullet} & \text{---} & \bullet && = && \bullet & \text{---} & \textcolor{red}{\bullet} \\
+    #1^\dagger &&&&&&&& #1^\dagger
   \end{array}%
 }
 
@@ -137,11 +138,12 @@
   \begin{array}{ccccccccc}
     \multicolumn{9}{c}{\operatorname{tr}} \\
     \fbox{$\Lambda$} & \text{---} &
-    \begin{array}{c}\bullet\\ \vert\\ \fbox{$#1$}\\ \vert\\ \bullet\end{array}
+    \begin{array}{c}\bullet\\ \vert\\ \textcolor{red}{\bullet}\\ \vert\\ \bullet\end{array}
     & \text{---} &
-    \begin{array}{c}\bullet\\ \vert\\ \fbox{$#1$}\\ \vert\\ \bullet\end{array}
+    \begin{array}{c}\bullet\\ \vert\\ \textcolor{red}{\bullet}\\ \vert\\ \bullet\end{array}
     & \text{---} & \cdots & \text{---} &
-    \begin{array}{c}\bullet\\ \vert\\ \fbox{$#1$}\\ \vert\\ \bullet\end{array} \\
+    \begin{array}{c}\bullet\\ \vert\\ \textcolor{red}{\bullet}\\ \vert\\ \bullet\end{array} \\
+    \multicolumn{9}{c}{#1} \\
     \multicolumn{9}{c}{#2}
   \end{array}%
 }
@@ -150,7 +152,7 @@
   \begin{array}{ccccccc}
     #1 && #2 && #3 && \\
     \vert && \vert && \vert && \\
-    \bullet & \text{---} & \bullet & \text{---} & \bullet && \\
+    \bullet & \text{---} & \textcolor{red}{\bullet} & \text{---} & \bullet && \\
     && #4 &&&&
   \end{array}%
 }
@@ -159,7 +161,7 @@
   \begin{array}{ccccc}
     #1 &&&& #2 \\
     \vert &&&& \vert \\
-    \bullet & \text{---} & \bullet & \text{---} & \bullet \\
+    \bullet & \text{---} & \textcolor{red}{\bullet} & \text{---} & \bullet \\
     && #3 && \\
     && \operatorname{Tr} &&
   \end{array}%
@@ -170,8 +172,8 @@
     #1 &&&& #2 \\
     \vert &&&& \vert \\
     \bullet & \text{---} & \bullet && \\
-    && #3 && \\
-    && \bullet &&
+    && \textcolor{red}{\bullet} && \\
+    && #3 &&
   \end{array}%
 }
 
@@ -205,7 +207,8 @@
   \begin{array}{ccccccc}
     #2 &&&&&& #3 \\
     \vert && \vert && \vert && \\
-    \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \fbox{$#1$} \\
+    \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \textcolor{red}{\bullet} \\
+    &&&&&& #1 \\
     \multicolumn{7}{c}{#4}
   \end{array}%
 }
@@ -214,9 +217,10 @@
   \begin{array}{ccccccccccc}
     && #3 &&&&&& #3 && \\
     && \vert &&&&&& \vert && \\
-    \bullet & \text{---} & \fbox{$#1$} & \text{---} & \bullet
+    \bullet & \text{---} & \textcolor{red}{\bullet} & \text{---} & \bullet
     & = &
-    \bullet & \text{---} & \fbox{$#2$} & \text{---} & \bullet
+    \bullet & \text{---} & \textcolor{red}{\bullet} & \text{---} & \bullet \\
+    && #1 &&&&&& #2 &&
   \end{array}%
 }
 
@@ -237,8 +241,9 @@
 \newcommand{\TNPeriodicGauge}[3]{%
   \begin{array}{ccc}
     \bullet & \text{---} & \bullet \\
-    \multicolumn{3}{c}{\fbox{$#2$}} \\
-    \multicolumn{3}{c}{$#1$-periodic,\; #2^{#3}=\Id$}
+    \vert && \vert \\
+    \multicolumn{3}{c}{\textcolor{red}{\bullet}} \\
+    \multicolumn{3}{c}{#2}
   \end{array}%
 }
 
@@ -292,8 +297,9 @@
     \vert && \vert && \cdots && \vert \\
     \bullet & \text{---} & \bullet & \text{---} &
     \cdots & \text{---} & \bullet \\
-    \multicolumn{7}{c}{#4} \\
-    \multicolumn{7}{c}{\fbox{$#5$}}
+    \vert &&&&&& \vert \\
+    \multicolumn{7}{c}{\textcolor{red}{\bullet}} \\
+    \multicolumn{7}{c}{#5}
   \end{array}%
 }
 
@@ -303,8 +309,6 @@
     && \vert &&&& \vert && \\
     \cdots & \text{---} & \bullet & \text{---} & \bullet & \text{---} &
     \bullet & \text{---} & \cdots \\
-    &&&& #3 &&&& \\
-    &&&& #4 &&&& \\
     &&&& #5 &&&&
   \end{array}%
 }

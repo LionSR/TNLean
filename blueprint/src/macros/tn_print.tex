@@ -22,6 +22,10 @@
     shape=circle,
     inner sep=0.055cm
   },
+  tn operator dot/.style={
+    tn tensor dot,
+    red
+  },
   tn tensor box/.style={
     draw,
     fill=white,
@@ -40,6 +44,26 @@
 
 \newcommand{\TN@tensordot}[2]{%
   \node[tn tensor dot] (#1) at #2 {};%
+}
+
+\newcommand{\TN@opdot}[2]{%
+  \node[tn operator dot] (#1) at #2 {};%
+}
+
+\newcommand{\TN@opdotabove}[3]{%
+  \node[tn operator dot, label=above:$#3$] (#1) at #2 {};%
+}
+
+\newcommand{\TN@opdotbelow}[3]{%
+  \node[tn operator dot, label=below:$#3$] (#1) at #2 {};%
+}
+
+\newcommand{\TN@opdotleft}[3]{%
+  \node[tn operator dot, label=left:$#3$] (#1) at #2 {};%
+}
+
+\newcommand{\TN@opdotright}[3]{%
+  \node[tn operator dot, label=right:$#3$] (#1) at #2 {};%
 }
 
 \newcommand{\TN@tensorbox}[3]{%
@@ -116,13 +140,8 @@
     \TN@upleg{tnR}{0.55}
     \TN@uplabel{tnL}{0.85}{#2}
     \TN@uplabel{tnR}{0.85}{#3}
-    \draw[tn leg] (tnL.east) -- (tnM.west);
-    \draw[tn leg] (tnM.east) -- ++(0.62,0);
-    \draw[tn leg] ($(tnR.west)+(-0.62,0)$) -- (tnR.west);
+    \draw[tn leg] (-0.48,0) rectangle (4.68,-0.56);
     \node at (2.82,0) {$\cdots$};
-    \draw[tn leg] (tnL.west) .. controls +(-0.95,-1.05) and +(0.95,-1.05) .. (tnR.east);
-    \node at (2.10,-1.18) {$\operatorname{Tr}$};
-    \node at (3.05,-1.18) {$#4$};
   \end{tikzpicture}%
 }
 
@@ -197,17 +216,15 @@
 
 \newcommand{\TNGaugeConjugation}[3]{%
   \begin{tikzpicture}[tn picture]
-    \TN@tensordot{tnXl}{(-1.10,0)}
+    \TN@opdotabove{tnXl}{(-1.10,0)}{#1}
     \TN@tensordot{tnA}{(0,0)}
-    \TN@tensordot{tnXr}{(1.10,0)}
+    \TN@opdotabove{tnXr}{(1.10,0)}{#3}
     \draw[tn leg] (tnXl.west) -- ++(-0.55,0);
     \draw[tn leg] (tnXl.east) -- (tnA.west);
     \draw[tn leg] (tnA.east) -- (tnXr.west);
     \draw[tn leg] (tnXr.east) -- ++(0.55,0);
     \TN@upleg{tnA}{0.55}
     \TN@uplabel{tnA}{0.85}{#2}
-    \node at ($(tnXl.south)+(0,-0.35)$) {$#1$};
-    \node at ($(tnXr.south)+(0,-0.35)$) {$#3$};
   \end{tikzpicture}%
 }
 
@@ -217,16 +234,14 @@
     \draw[tn leg] (tnA1.west) -- ++(-0.65,0);
     \draw[tn leg] (tnA1.east) -- ++(0.65,0);
     \TN@upleg{tnA1}{0.55}
-    \TN@tensordot{tnX}{(0.78,0)}
-    \node at ($(tnX.north)+(0,0.30)$) {$#1$};
+    \TN@opdotabove{tnX}{(0.78,0)}{#1}
     \node at (1.78,0) {$=$};
     \TN@tensordot{tnA2}{(2.65,0)}
     \draw[tn leg] (tnA2.west) -- ++(-0.65,0);
     \draw[tn leg] (tnA2.east) -- ++(0.65,0);
     \TN@upleg{tnA2}{0.55}
-    \TN@tensordot{tnO}{(2.65,0.92)}
+    \TN@opdotleft{tnO}{(2.65,0.92)}{#2}
     \draw[tn phys leg] (tnA2.north) -- (tnO.south);
-    \node at ($(tnO.east)+(0.55,0)$) {$#2$};
   \end{tikzpicture}%
 }
 
@@ -254,8 +269,7 @@
     \draw[tn leg] ($(tnDn.west)+(-0.80,0)$) -- (tnDn.west);
     \draw[tn leg] (tnUp.east) -- ++(0.80,0);
     \draw[tn leg] (tnDn.east) -- ++(0.80,0);
-    \TN@tensorboxwide{tnu}{(0,0)}{}{0.50cm}
-    \node at (tnu) {$#1$};
+    \TN@opdotleft{tnu}{(0,0)}{#1}
     \draw[tn phys leg] (tnUp.south) -- (tnu.north);
     \draw[tn phys leg] (tnu.south) -- (tnDn.north);
     \node at (-1.25,0) {$X$};
@@ -271,31 +285,26 @@
     \TN@leftleg{tnL}{0.65}
     \TN@rightleg{tnL}{0.65}
     \TN@upleg{tnL}{0.32}
-    \TN@tensorboxwide{tnu}{(0,0.78)}{}{0.50cm}
-    \node at (tnu) {$#1$};
+    \TN@opdotleft{tnu}{(0,0.78)}{#1}
     \draw[tn phys leg] (tnL.north) -- (tnu.south);
     \node at ($(tnu.north)+(0,0.24)$) {$#3$};
     \node at (1.65,0) {$=$};
-    \TN@tensordot{tnXl}{(3.15,0)}
+    \TN@opdotabove{tnXl}{(3.15,0)}{#2}
     \TN@tensordot{tnA}{(4.20,0)}
-    \TN@tensordot{tnXr}{(5.25,0)}
+    \TN@opdotabove{tnXr}{(5.25,0)}{#2^\dagger}
     \draw[tn leg] (tnXl.west) -- ++(-0.55,0);
     \draw[tn leg] (tnXl.east) -- (tnA.west);
     \draw[tn leg] (tnA.east) -- (tnXr.west);
     \draw[tn leg] (tnXr.east) -- ++(0.55,0);
     \TN@upleg{tnA}{0.55}
     \TN@uplabel{tnA}{0.85}{#3}
-    \node at ($(tnXl.south)+(0,-0.35)$) {$#2$};
-    \node at ($(tnXr.south)+(0,-0.35)$) {$#2^\dagger$};
   \end{tikzpicture}%
 }
 
 \newcommand{\TNCondCTwo}[1]{%
   \begin{tikzpicture}[tn picture]
-    \TN@tensorboxwide{tnVL}{(-1.15,0.58)}{}{0.52cm}
-    \TN@tensorboxwide{tnVdL}{(-1.15,-0.58)}{}{0.68cm}
-    \node at (tnVL) {$#1$};
-    \node at (tnVdL) {$#1^\dagger$};
+    \TN@opdotabove{tnVL}{(-1.15,0.58)}{#1}
+    \TN@opdotbelow{tnVdL}{(-1.15,-0.58)}{#1^\dagger}
     \TN@tensordot{tnLUp}{(0,0.58)}
     \TN@tensordot{tnLDn}{(0,-0.58)}
     \draw[tn leg] (tnVL.west) -- ++(-0.45,0);
@@ -308,10 +317,8 @@
     \node at (1.55,0) {$=$};
     \TN@tensordot{tnRUp}{(3.10,0.58)}
     \TN@tensordot{tnRDn}{(3.10,-0.58)}
-    \TN@tensorboxwide{tnVR}{(4.25,0.58)}{}{0.52cm}
-    \TN@tensorboxwide{tnVdR}{(4.25,-0.58)}{}{0.68cm}
-    \node at (tnVR) {$#1$};
-    \node at (tnVdR) {$#1^\dagger$};
+    \TN@opdotabove{tnVR}{(4.25,0.58)}{#1}
+    \TN@opdotbelow{tnVdR}{(4.25,-0.58)}{#1^\dagger}
     \draw[tn leg] (tnRUp.west) -- ++(-0.55,0);
     \draw[tn leg] (tnRDn.west) -- ++(-0.55,0);
     \draw[tn leg] (tnRUp.east) -- (tnVR.west);
@@ -332,12 +339,9 @@
     \TN@tensordot{tnD2}{(1.55,-0.62)}
     \TN@tensordot{tnU3}{(4.30,0.62)}
     \TN@tensordot{tnD3}{(4.30,-0.62)}
-    \TN@tensorboxwide{tnuA}{(0,0)}{}{0.50cm}
-    \TN@tensorboxwide{tnuB}{(1.55,0)}{}{0.50cm}
-    \TN@tensorboxwide{tnuC}{(4.30,0)}{}{0.50cm}
-    \node at (tnuA) {$#1$};
-    \node at (tnuB) {$#1$};
-    \node at (tnuC) {$#1$};
+    \TN@opdotleft{tnuA}{(0,0)}{#1}
+    \TN@opdotleft{tnuB}{(1.55,0)}{#1}
+    \TN@opdotleft{tnuC}{(4.30,0)}{#1}
     \draw[tn leg] (tnLam.east) -- (tnU1.west);
     \draw[tn leg] (tnLam.east) -- (tnD1.west);
     \draw[tn leg] (tnU1.east) -- (tnU2.west);
@@ -376,15 +380,14 @@
     \draw[tn leg] (tnL.east) -- (tnM.west);
     \draw[tn leg] (tnM.east) -- (tnR.west);
     \draw[tn leg] (tnR.east) -- ++(0.65,0);
-    \TN@tensordot{tnX}{(0.72,0)}
-    \node at ($(tnX.north)+(0,0.30)$) {$#4$};
+    \TN@opdotabove{tnX}{(0.72,0)}{#4}
   \end{tikzpicture}%
 }
 
 \newcommand{\TNInternalTraceInsertion}[3]{%
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{tnL}{(0,0)}
-    \TN@tensordot{tnX}{(0.80,0)}
+    \TN@opdotabove{tnX}{(0.80,0)}{#3}
     \TN@tensordot{tnR}{(1.60,0)}
     \TN@upleg{tnL}{0.55}
     \TN@upleg{tnR}{0.55}
@@ -393,7 +396,6 @@
     \draw[tn leg] (tnL.east) -- (tnX.west);
     \draw[tn leg] (tnX.east) -- (tnR.west);
     \draw[tn leg] (tnL.west) .. controls +(-0.65,-0.95) and +(0.65,-0.95) .. (tnR.east);
-    \node at ($(tnX.north)+(0,0.30)$) {$#3$};
     \node at (0.80,-1.05) {$\operatorname{Tr}$};
   \end{tikzpicture}%
 }
@@ -402,7 +404,7 @@
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{tnL}{(0,0)}
     \TN@tensordot{tnR}{(1.60,0)}
-    \TN@tensordot{tnY}{(0.80,-0.95)}
+    \TN@opdotbelow{tnY}{(0.80,-0.95)}{#3}
     \TN@upleg{tnL}{0.55}
     \TN@upleg{tnR}{0.55}
     \TN@uplabel{tnL}{0.85}{#1}
@@ -410,7 +412,6 @@
     \draw[tn leg] (tnL.east) -- (tnR.west);
     \draw[tn leg] (tnL.west) .. controls +(-0.30,-0.55) and +(-0.30,0.55) .. (tnY.west);
     \draw[tn leg] (tnY.east) .. controls +(0.30,0.55) and +(0.30,-0.55) .. (tnR.east);
-    \node at ($(tnY.south)+(0,-0.30)$) {$#3$};
   \end{tikzpicture}%
 }
 
@@ -498,13 +499,12 @@
     \TN@tensordot{rA}{(0,0)}
     \TN@tensordot{rB}{(1.05,0)}
     \TN@tensordot{rC}{(2.10,0)}
-    \TN@tensorboxwide{rX}{(3.55,0)}{}{0.62cm}
+    \TN@opdotabove{rX}{(3.55,0)}{#1}
     \foreach \n in {rA,rB,rC} {
       \TN@upleg{\n}{0.50}
     }
     \TN@uplabel{rA}{0.78}{#2}
     \TN@uplabel{rC}{0.78}{#3}
-    \node at (rX) {$#1$};
     \draw[tn leg] (rA.west) -- ++(-0.50,0);
     \draw[tn leg] (rA.east) -- (rB.west);
     \draw[tn leg] (rB.east) -- (rC.west);
@@ -517,22 +517,20 @@
 \newcommand{\TNLocalEqualityStep}[3]{%
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{lA}{(0,0)}
-    \TN@tensorboxwide{lX}{(0.82,0)}{}{0.60cm}
+    \TN@opdotabove{lX}{(0.82,0)}{#1}
     \TN@tensordot{lB}{(1.65,0)}
     \TN@upleg{lB}{0.50}
     \TN@uplabel{lB}{0.78}{#3}
-    \node at (lX) {$#1$};
     \draw[tn leg] (lA.west) -- ++(-0.50,0);
     \draw[tn leg] (lA.east) -- (lX.west);
     \draw[tn leg] (lX.east) -- (lB.west);
     \draw[tn leg] (lB.east) -- ++(0.50,0);
     \node at (2.85,0) {$=$};
     \TN@tensordot{rA}{(4.10,0)}
-    \TN@tensorboxwide{rX}{(4.92,0)}{}{0.70cm}
+    \TN@opdotabove{rX}{(4.92,0)}{#2}
     \TN@tensordot{rB}{(5.75,0)}
     \TN@upleg{rB}{0.50}
     \TN@uplabel{rB}{0.78}{#3}
-    \node at (rX) {$#2$};
     \draw[tn leg] (rA.west) -- ++(-0.50,0);
     \draw[tn leg] (rA.east) -- (rX.west);
     \draw[tn leg] (rX.east) -- (rB.west);
@@ -570,16 +568,13 @@
 \newcommand{\TNPeriodicGauge}[3]{%
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{pA}{(0,0)}
-    \TN@tensordot{pB}{(1.25,0)}
-    \TN@tensorboxwide{pZ}{(0.62,-0.92)}{}{0.54cm}
-    \draw[tn leg] (pA.east) -- (pB.west);
+    \TN@tensordot{pB}{(1.10,0)}
+    \TN@opdotbelow{pZ}{(0.55,-0.88)}{#2}
+    \draw[tn leg] (-0.45,0) -- (1.55,0);
     \TN@upleg{pA}{0.48}
     \TN@upleg{pB}{0.48}
-    \draw[tn leg] (pA.west) -- ++(-0.42,0) -- ++(0,-0.92) -- (pZ.west);
-    \draw[tn leg] (pZ.east) -- ++(1.02,0) -- ++(0,0.92) -- (pB.east);
-    \node at (pZ) {$#2$};
-    \node at (0.62,-1.46) {$#1$-periodic};
-    \node at (2.15,-0.92) {$#2^{#3}=\Id$};
+    \draw[tn leg] (-0.45,0) -- (-0.45,-0.88) -- (pZ.west);
+    \draw[tn leg] (pZ.east) -- (1.55,-0.88) -- (1.55,0);
   \end{tikzpicture}%
 }
 
@@ -682,22 +677,18 @@
 \newcommand{\TNGroundSpaceMap}[5]{%
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{tnL}{(0,0)}
-    \TN@tensordot{tnM}{(1.45,0)}
-    \TN@tensordot{tnR}{(4.20,0)}
+    \TN@tensordot{tnM}{(1.15,0)}
+    \TN@tensordot{tnR}{(2.95,0)}
     \TN@upleg{tnL}{0.55}
     \TN@upleg{tnM}{0.55}
     \TN@upleg{tnR}{0.55}
     \TN@uplabel{tnL}{0.85}{#2}
     \TN@uplabel{tnR}{0.85}{#3}
-    \draw[tn leg] (tnL.east) -- (tnM.west);
-    \draw[tn leg] (tnM.east) -- ++(0.62,0);
-    \draw[tn leg] ($(tnR.west)+(-0.62,0)$) -- (tnR.west);
-    \node at (2.82,0) {$\cdots$};
-    \node at (2.82,-0.72) {$#4$};
-    \TN@tensorboxwide{tnX}{(2.10,-1.35)}{}{0.55cm}
-    \node at (tnX) {$#5$};
-    \draw[tn leg] (tnL.west) .. controls +(-0.60,-0.95) and +(-0.60,0.45) .. (tnX.west);
-    \draw[tn leg] (tnR.east) .. controls +(0.60,-0.95) and +(0.60,0.45) .. (tnX.east);
+    \draw[tn leg] (-0.45,0) -- (3.40,0);
+    \node at (2.05,0) {$\cdots$};
+    \TN@opdotbelow{tnX}{(1.48,-1.02)}{#5}
+    \draw[tn leg] (-0.45,0) -- (-0.45,-1.02) -- (tnX.west);
+    \draw[tn leg] (tnX.east) -- (3.40,-1.02) -- (3.40,0);
   \end{tikzpicture}%
 }
 
@@ -719,8 +710,6 @@
     \node at (4.40,0) {$\cdots$};
     \draw[dashed] (0.45,0.78) rectangle (3.75,-0.38);
     \node at (2.10,1.10) {$#5$};
-    \node at (2.10,-0.72) {$#3$};
-    \node at (2.10,-1.05) {$#4$};
   \end{tikzpicture}%
 }
 
