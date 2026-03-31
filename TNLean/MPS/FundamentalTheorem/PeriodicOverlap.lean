@@ -55,9 +55,9 @@ assemble the global gauge unitary.
 
 ## Status
 
-The main theorems in this file are currently stated with `sorry` proofs.
-This module serves as a skeleton / proof sketch and should not yet be
-relied on as a completed formalization of Proposition 3.3.
+This module is an active formalization scaffold for Proposition 3.3.
+Several core theorems remain placeholders (`sorry`) and are intended to be
+discharged incrementally in the order outlined in the section comments.
 
 ## References
 
