@@ -13,9 +13,9 @@ Wolf Corollary 7.2, each funneled through the already formalized bridge
 `¬ HasBlockUpperTriangularLindblad L → ¬ IsReducibleQDS L`.
 
 The conversion from each algebraic hypothesis to
-`¬ HasBlockUpperTriangularLindblad` is provided by dedicated assumptions
+`¬ HasBlockUpperTriangularLindblad` is recorded as theorem placeholders
 (`*_implies_no_blockUpperTriangular`) so downstream files can use uniform
-non-reducibility consequences immediately.
+non-reducibility consequences while CI continues to track unfinished proofs.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
@@ -44,37 +44,41 @@ def LindbladSpanTrivialCommutant (F : LindbladForm D) : Prop :=
     (∀ j : Fin F.r, A * F.L j = F.L j * A) →
       ∃ c : ℂ, A = c • (1 : Mat)
 
-/-- A rank proxy used to formulate the large-Kossakowski-rank condition. -/
-def kossakowskiRank (F : LindbladForm D) : ℕ := F.r
+/-- The minimal Lindblad family size across all Lindblad representations of `L`. -/
+def kossakowskiRank (L : Mat →ₗ[ℂ] Mat) : ℕ :=
+  sInf {n : ℕ | ∃ F : LindbladForm D, F.toLinearMap = L ∧ F.r = n}
 
 /--
 Condition (1): full algebra generation forbids block-upper-triangular
 Lindblad decompositions.
 -/
-axiom full_algebra_generation_implies_no_blockUpperTriangular
+theorem full_algebra_generation_implies_no_blockUpperTriangular
     (F : LindbladForm D)
     (hGen : Algebra.adjoin ℂ (Set.range F.L ∪ ({F.H} : Set Mat)) = ⊤) :
-    ¬ HasBlockUpperTriangularLindblad F.toLinearMap
+    ¬ HasBlockUpperTriangularLindblad F.toLinearMap := by
+  sorry
 
 /--
 Condition (2): Hermitian closure of the Lindblad span together with trivial
 commutant forbids block-upper-triangular Lindblad decompositions.
 -/
-axiom hermitian_span_trivial_commutant_implies_no_blockUpperTriangular
+theorem hermitian_span_trivial_commutant_implies_no_blockUpperTriangular
     (F : LindbladForm D)
     (hHerm : LindbladSpanHermitianClosed F)
     (hComm : LindbladSpanTrivialCommutant F) :
-    ¬ HasBlockUpperTriangularLindblad F.toLinearMap
+    ¬ HasBlockUpperTriangularLindblad F.toLinearMap := by
+  sorry
 
 /--
 Condition (3): sufficiently large Kossakowski rank forbids
 block-upper-triangular Lindblad decompositions.
 -/
-axiom large_kossakowski_rank_implies_no_blockUpperTriangular
+theorem large_kossakowski_rank_implies_no_blockUpperTriangular
     (F : LindbladForm D)
-    (hRank : dite (D = 0) (fun _ => kossakowskiRank F ≥ 0)
-      (fun _ => kossakowskiRank F ≥ D ^ 2 - 1)) :
-    ¬ HasBlockUpperTriangularLindblad F.toLinearMap
+    (hRank : dite (D = 0) (fun _ => kossakowskiRank F.toLinearMap ≥ 0)
+      (fun _ => kossakowskiRank F.toLinearMap ≥ D ^ 2 - 1)) :
+    ¬ HasBlockUpperTriangularLindblad F.toLinearMap := by
+  sorry
 
 /--
 If a GKSL generator has no block-upper-triangular Lindblad decomposition,
@@ -114,8 +118,8 @@ non-reducibility. -/
 theorem not_isReducible_of_kossakowski_rank_ge
     (F : LindbladForm D)
     (hGKSL : IsGKSLGenerator F.toLinearMap)
-    (hRank : dite (D = 0) (fun _ => kossakowskiRank F ≥ 0)
-      (fun _ => kossakowskiRank F ≥ D ^ 2 - 1)) :
+    (hRank : dite (D = 0) (fun _ => kossakowskiRank F.toLinearMap ≥ 0)
+      (fun _ => kossakowskiRank F.toLinearMap ≥ D ^ 2 - 1)) :
     ¬ IsReducibleQDS F.toLinearMap := by
   apply not_isReducibleQDS_of_no_blockUpperTriangular_lindblad hGKSL
   exact large_kossakowski_rank_implies_no_blockUpperTriangular F hRank
