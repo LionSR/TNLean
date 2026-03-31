@@ -131,6 +131,20 @@ lemma twistedTransferMap_eq_mixedTransfer (A : MPSTensor d D)
     Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, Matrix.mul_sum, Matrix.mul_smul,
     starRingEnd_apply, star_star, Matrix.mul_assoc]
 
+/-- Unitary mixing of the Kraus family does not change the associated transfer
+map, so the twisted companion tensor defines the same channel as `A`. -/
+lemma transferMap_twistedMixedCompanion_eq (A : MPSTensor d D)
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    transferMap (twistedMixedCompanion A u) X = transferMap A X := by
+  simpa [transferMap_apply] using
+    kraus_same_map_of_unitary_combination (twistedMixedCompanion A u) A uᴴ
+      (by simpa using hu)
+      (fun j => by
+        simp [twistedMixedCompanion, Matrix.conjTranspose_apply])
+      X
+
 /-! ### Iterated twisted transfer map -/
 
 /-- The `N`-fold iterate of the twisted transfer map, defined via
@@ -206,46 +220,6 @@ lemma stringOrderParam_one_eq_one
       exact congrArg (fun M => M i j) (twistedTransferMap_one (A := A) X)
     simpa [htwisted_eq] using hpow_one
   simp [stringOrderParam, twistedTransferIter, htwisted_pow_one, hΛtr]
-
-/-- If the continuous linear operator underlying the twisted transfer map has
-spectral radius `< 1`, then the string order parameter tends to `0`. -/
-lemma stringOrderParam_tendsto_zero_of_spectralRadius_lt_one
-    (A : MPSTensor d D)
-    (u : Matrix (Fin d) (Fin d) ℂ)
-    (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hsr :
-      spectralRadius ℂ
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (twistedTransferMap A u)) < 1) :
-    Filter.Tendsto (fun L => stringOrderParam A u Λ L) Filter.atTop (nhds 0) := by
-  let V := Matrix (Fin D) (Fin D) ℂ
-  let F' : V →L[ℂ] V :=
-    (Module.End.toContinuousLinearMap V) (twistedTransferMap A u)
-  have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) :=
-    pow_tendsto_zero_of_spectralRadius_lt_one F' <| by
-      simpa [F'] using hsr
-  have hEval := (ContinuousLinearMap.apply ℂ V (1 : V)).continuous.tendsto (0 : V →L[ℂ] V)
-  rw [map_zero] at hEval
-  have hIter0 :
-      Filter.Tendsto (fun L => ((twistedTransferMap A u) ^ L) (1 : V))
-        Filter.atTop (nhds 0) := by
-    have hEval0 : Filter.Tendsto (fun L => (F' ^ L) (1 : V)) Filter.atTop (nhds 0) :=
-      hEval.comp hpow
-    refine hEval0.congr' ?_
-    filter_upwards with L
-    have hpow_eq :
-        (((Module.End.toContinuousLinearMap V) (twistedTransferMap A u)) ^ L) =
-          (Module.End.toContinuousLinearMap V) ((twistedTransferMap A u) ^ L) := by
-      exact (map_pow (Module.End.toContinuousLinearMap V) (twistedTransferMap A u) L).symm
-    exact congrArg (fun T => T (1 : V)) hpow_eq
-  let φ : V →ₗ[ℂ] ℂ :=
-    (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ Λ)
-  have hφ_cont : Continuous φ := LinearMap.continuous_of_finiteDimensional φ
-  have hφ0 : Filter.Tendsto (fun L => φ (((twistedTransferMap A u) ^ L) (1 : V)))
-      Filter.atTop (nhds 0) := by
-    rw [show (0 : ℂ) = φ 0 by simp]
-    exact hφ_cont.continuousAt.tendsto.comp hIter0
-  simpa [stringOrderParam, twistedTransferIter, φ] using hφ0
 
 /-! ### Boundary string order and local symmetry -/
 
@@ -638,12 +612,7 @@ private noncomputable def twistedTPGaugeSetup [NeZero D]
   have hB_eq : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       transferMap B X = transferMap A X := by
     intro X
-    simpa [B, transferMap_apply] using
-      kraus_same_map_of_unitary_combination B A uᴴ
-        (by simpa using hu)
-        (fun j => by
-          simp [B, twistedMixedCompanion, Matrix.conjTranspose_apply])
-        X
+    simpa [B] using transferMap_twistedMixedCompanion_eq (A := A) (u := u) hu X
   have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
     injective_implies_irreducibleCP A hA
   have hEqBA : transferMap B = transferMap A := LinearMap.ext hB_eq
@@ -995,12 +964,7 @@ private theorem virtualUnitary_of_gaugePhaseEquiv_twisted
     simp [X, Xin]
   have hB_eq : ∀ Y : Matrix (Fin D) (Fin D) ℂ, transferMap B Y = transferMap A Y := by
     intro Y
-    simpa [B, transferMap_apply] using
-      kraus_same_map_of_unitary_combination B A uᴴ
-        (by simpa using hu)
-        (fun j => by
-          simp [B, twistedMixedCompanion, Matrix.conjTranspose_apply])
-        Y
+    simpa [B] using transferMap_twistedMixedCompanion_eq (A := A) (u := u) hu Y
   let Q : Matrix (Fin D) (Fin D) ℂ := X * Xᴴ
   have hQ_psd : Q.PosSemidef := by
     simpa [Q] using Matrix.posSemidef_self_mul_conjTranspose X
@@ -1411,12 +1375,7 @@ private theorem boundaryState_invariant_of_virtualUnitary
   have hB_eq :
       ∀ X : Matrix (Fin D) (Fin D) ℂ, transferMap B X = transferMap A X := by
     intro X
-    simpa [B, transferMap_apply] using
-      kraus_same_map_of_unitary_combination B A uᴴ
-        (by simpa using hu)
-        (fun j => by
-          simp [B, twistedMixedCompanion, Matrix.conjTranspose_apply])
-        X
+    simpa [B] using transferMap_twistedMixedCompanion_eq (A := A) (u := u) hu X
   have hBfix : transferMap (fun i => (B i)ᴴ) Λ = Λ := by
     calc
       transferMap (fun i => (B i)ᴴ) Λ
