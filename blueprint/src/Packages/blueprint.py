@@ -8,12 +8,11 @@ strings for list items, and the stock package calls `.strip()` directly.
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 
+import leanblueprint
 from plasTeX import Command
 
 
-_UPSTREAM = Path(
-    "/Users/siruilu/miniforge3/lib/python3.13/site-packages/leanblueprint/Packages/blueprint.py"
-)
+_UPSTREAM = Path(leanblueprint.__file__).parent / "Packages" / "blueprint.py"
 _SPEC = spec_from_file_location("_tnlean_upstream_blueprint", _UPSTREAM)
 _MODULE = module_from_spec(_SPEC)
 assert _SPEC is not None and _SPEC.loader is not None

@@ -10,12 +10,11 @@ from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 import pickle
 
+import plastexdepgraph
 from plasTeX import Command
 
 
-_UPSTREAM = Path(
-    "/Users/siruilu/miniforge3/lib/python3.13/site-packages/plastexdepgraph/Packages/depgraph.py"
-)
+_UPSTREAM = Path(plastexdepgraph.__file__).parent / "Packages" / "depgraph.py"
 _SPEC = spec_from_file_location("_tnlean_upstream_depgraph", _UPSTREAM)
 _MODULE = module_from_spec(_SPEC)
 assert _SPEC is not None and _SPEC.loader is not None

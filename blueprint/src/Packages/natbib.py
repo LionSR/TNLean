@@ -8,12 +8,11 @@ the generated ``.bbl`` file are recognized reliably while it is being loaded.
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 
+import plasTeX
 from plasTeX import Base
 
 
-_UPSTREAM = Path(
-    "/Users/siruilu/.local/lib/python3.13/site-packages/plasTeX/Packages/natbib.py"
-)
+_UPSTREAM = Path(plasTeX.__file__).parent / "Packages" / "natbib.py"
 _SPEC = spec_from_file_location("_tnlean_upstream_natbib", _UPSTREAM)
 _MODULE = module_from_spec(_SPEC)
 assert _SPEC is not None and _SPEC.loader is not None
