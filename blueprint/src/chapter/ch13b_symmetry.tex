@@ -402,6 +402,45 @@ make this precise and establish the quotient $H^2(G,\mathrm{U}(1))$.
     $\omega_2(g,h) = f(g)\,f(h)\,f(gh)^{-1}\,\omega_1(g,h)$.
 \end{proof}
 
+\begin{definition}[Second cohomology quotient]\label{def:h2_u1}
+    \lean{TNLean.Algebra.H2}
+    \leanok
+    \uses{def:cohomologous_to}
+    The second cohomology set is the quotient
+    \[
+        H^2(G,\mathrm{U}(1))
+        := Z^2(G,\mathrm{U}(1))/{\sim},
+    \]
+    where $\sim$ is the coboundary-equivalence relation.
+\end{definition}
+
+\begin{definition}[Projective equivalence]\label{def:projectively_equivalent}
+    \lean{TNLean.Algebra.ProjectivelyEquivalent}
+    \leanok
+    \uses{def:projective_rep, def:cohomologous_to}
+    Two projective representations are \emph{projectively equivalent}
+    when their factor systems are cohomologous.
+\end{definition}
+
+\begin{theorem}[Projective equivalence and cohomologous cocycles]%
+    \label{thm:projrep_equiv_iff_cohomologous}
+    \lean{TNLean.Algebra.projRep_equiv_iff_cohomologous}
+    \leanok
+    \uses{def:projectively_equivalent, def:cohomologous_to}
+    Let $\rho_1,\rho_2$ be projective representations with factor systems
+    $\omega_1,\omega_2$. Then
+    \[
+      \rho_1 \sim_{\mathrm{proj}} \rho_2
+      \iff
+      \omega_1 \sim \omega_2.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:projectively_equivalent}
+    This is immediate from the definition of projective equivalence as
+    cohomology-class equality for factor systems.
+\end{proof}
+
 \section{Permutation-Based Physical Symmetry}
 
 The linear-combination twist $\widetilde{A}_g^i = \sum_j U(g)_{ij}\, A^j$
