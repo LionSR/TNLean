@@ -58,6 +58,8 @@ blueprint/print/
 blueprint/lean_decls
 blueprint/src/web.paux
 blueprint/src/*.xdv
+blueprint/src/ch13_more-*.png
+blueprint/src/Packages/__pycache__/
 
 # Local notes / mail exports
 MeetingNotes/*.eml
