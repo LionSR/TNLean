@@ -62,7 +62,7 @@ def ProcessOptions(options, document):
         for decl in document.userdata.get("lean_decls", []):
             normalized = replacements.get(decl, decl)
             if normalized != decl and (decl, normalized) not in logged_replacements:
-                log.warning(
+                _MODULE.log.warning(
                     "Normalizing mangled \\lean declaration '%s' to '%s'; "
                     "this works around a plasTeX underscore-parsing bug.",
                     decl,
