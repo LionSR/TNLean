@@ -145,7 +145,7 @@ def _proxy_from_paux(doc, label: str):
     if not entry:
         return None
 
-    status = _label_status_from_source(doc, label)
+    status = dict(_label_status_from_source(doc, label))
     return _LabelProxy(
         label=label,
         url=entry.get("url", ""),
@@ -154,6 +154,22 @@ def _proxy_from_paux(doc, label: str):
         title=entry.get("title", ""),
         userdata=status,
     )
+
+
+def _resolve_label(doc, label: str, *, report_missing: bool = False):
+    labels_dict = doc.context.labels
+    target = _lookup_label(labels_dict, label)
+    if target is None:
+        target = _find_label_node(doc, label)
+        if target is not None:
+            labels_dict[label] = target
+    if target is None:
+        target = _proxy_from_paux(doc, label)
+        if target is not None:
+            labels_dict[label] = target
+    if target is None and report_missing:
+        _MODULE.log.error("Label '" + label + "' could not be resolved")
+    return target
 
 
 class uses(_MODULE.uses):
@@ -166,21 +182,10 @@ class uses(_MODULE.uses):
         labels = [_normalize_label(label) for label in self.attributes["labels"]]
 
         def update_used():
-            labels_dict = doc.context.labels
             used = []
             for label in labels:
-                target = _lookup_label(labels_dict, label)
-                if target is None:
-                    target = _find_label_node(doc, label)
-                    if target is not None:
-                        labels_dict[label] = target
-                if target is None:
-                    target = _proxy_from_paux(doc, label)
-                    if target is not None:
-                        labels_dict[label] = target
-                if target is None:
-                    _MODULE.log.error("Label '" + label + "' could not be resolved")
-                else:
+                target = _resolve_label(doc, label, report_missing=True)
+                if target is not None:
                     used.append(target)
             node.setUserData("uses", used)
 
@@ -197,18 +202,9 @@ class alsoIn(_MODULE.alsoIn):
         labels = [_normalize_label(label) for label in self.attributes["labels"]]
 
         def update_incls():
-            labels_dict = doc.context.labels
             alsoin = []
             for label in labels:
-                target = _lookup_label(labels_dict, label)
-                if target is None:
-                    target = _find_label_node(doc, label)
-                    if target is not None:
-                        labels_dict[label] = target
-                if target is None:
-                    target = _proxy_from_paux(doc, label)
-                    if target is not None:
-                        labels_dict[label] = target
+                target = _resolve_label(doc, label)
                 if target is not None:
                     alsoin.append(target)
             incls = doc.userdata.setdefault("graph_includes", dict())
@@ -228,16 +224,7 @@ class proves(_MODULE.proves):
         label = _normalize_label(self.attributes["label"])
 
         def update_proved() -> None:
-            labels_dict = doc.context.labels
-            proved = _lookup_label(labels_dict, label)
-            if proved is None:
-                proved = _find_label_node(doc, label)
-                if proved is not None:
-                    labels_dict[label] = proved
-            if proved is None:
-                proved = _proxy_from_paux(doc, label)
-                if proved is not None:
-                    labels_dict[label] = proved
+            proved = _resolve_label(doc, label, report_missing=True)
             if proved:
                 node.setUserData("proves", proved)
                 proved.userdata["proved_by"] = node

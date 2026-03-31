@@ -34,7 +34,11 @@ class lean(_MODULE.lean):
             getattr(dec, "source", getattr(dec, "textContent", str(dec))).strip()
             for dec in raw_decls
         ]
-        self.parentNode.setUserData("leandecls", decls)
+        existing = list(self.parentNode.userdata.get("leandecls", []))
+        for decl in decls:
+            if decl and decl not in existing:
+                existing.append(decl)
+        self.parentNode.setUserData("leandecls", existing)
         all_decls = self.ownerDocument.userdata.setdefault("lean_decls", [])
         all_decls.extend(decls)
 
@@ -43,6 +47,9 @@ def ProcessOptions(options, document):
     _MODULE.ProcessOptions(options, document)
 
     def normalize_lean_decls() -> None:
+        # plasTeX can strip underscores from some declaration names while
+        # digesting \lean{...}. Keep this workaround local and minimal until
+        # the upstream parser bug is fixed.
         replacements = {
             "MPSTensor.weakFundamentalTheoremconditional":
                 "MPSTensor.weakFundamentalTheorem_conditional",
@@ -57,7 +64,7 @@ def ProcessOptions(options, document):
                 seen.add(normalized)
                 decls.append(normalized)
         document.userdata["lean_decls"] = decls
-        lean_decls_path = Path(document.userdata["working-dir"]).parent / "lean_decls"
+        lean_decls_path = Path(document.userdata.get("working-dir", ".")).parent / "lean_decls"
         lean_decls_path.write_text("\n".join(decls) + ("\n" if decls else ""))
 
     document.addPostParseCallbacks(151, normalize_lean_decls)

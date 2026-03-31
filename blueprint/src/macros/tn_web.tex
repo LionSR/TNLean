@@ -84,10 +84,10 @@
 }
 
 \newcommand{\TNPhysicalRealization}[2]{%
-  \begin{array}{ccccccc}
-    && #1 &&&& #2 && \\
+  \begin{array}{ccccccccc}
+    \multicolumn{3}{c}{#1} &&& \multicolumn{3}{c}{#2} \\
     &&&&&& \vert && \\
-    \bullet & \text{---} & \textcolor{red}{\bullet} & & = & & \bullet \\
+    \bullet & \text{---} & \textcolor{red}{\bullet} && = && \bullet & & \\
     &&&&&& \vert && \\
     &&&&&& \textcolor{red}{\bullet} &&
   \end{array}%

@@ -29,7 +29,9 @@ class bibliography(_MODULE.bibliography):
         doc = self.ownerDocument
         doc.userdata.setPath("bibliography/bibcites", {})
 
-        aux_path = Path(f"{tex.jobname}.aux")
+        working_dir = Path(doc.userdata.get("working-dir", "."))
+        jobname = doc.userdata.get("jobname", getattr(tex, "jobname", "web"))
+        aux_path = working_dir / f"{jobname}.aux"
         if aux_path.exists():
             self.ownerDocument.context.push(self)
             self.ownerDocument.context["setcounter"] = self.setcounter
