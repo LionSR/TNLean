@@ -28,10 +28,35 @@ class lean(_MODULE.lean):
     r"""\lean{decl list}"""
 
     def digest(self, tokens):
+        replacements = {
+            "MPSTensor.weakFundamentalTheoremconditional":
+                "MPSTensor.weakFundamentalTheorem_conditional",
+            "MPSTensor.exponentialconvergenceofprimitive":
+                "MPSTensor.exponential_convergence_of_primitive",
+        }
+
+        def normalize_decl(decl: str) -> str:
+            normalized = replacements.get(decl, decl)
+            if normalized != decl:
+                logged = self.ownerDocument.userdata.setdefault(
+                    "_tnlean_logged_replacements", set()
+                )
+                if (decl, normalized) not in logged:
+                    _MODULE.log.warning(
+                        "Normalizing mangled \\lean declaration '%s' to '%s'; "
+                        "this works around a plasTeX underscore-parsing bug.",
+                        decl,
+                        normalized,
+                    )
+                    logged.add((decl, normalized))
+            return normalized
+
         Command.digest(self, tokens)
         raw_decls = self.attributes["decls"]
         decls = [
-            getattr(dec, "source", getattr(dec, "textContent", str(dec))).strip()
+            normalize_decl(
+                getattr(dec, "source", getattr(dec, "textContent", str(dec))).strip()
+            )
             for dec in raw_decls
         ]
         existing = list(self.parentNode.userdata.get("leandecls", []))
@@ -40,40 +65,6 @@ class lean(_MODULE.lean):
                 existing.append(decl)
         self.parentNode.setUserData("leandecls", existing)
         all_decls = self.ownerDocument.userdata.setdefault("lean_decls", [])
-        all_decls.extend(decls)
-
-
-def ProcessOptions(options, document):
-    _MODULE.ProcessOptions(options, document)
-
-    def normalize_lean_decls() -> None:
-        # plasTeX can strip underscores from some declaration names while
-        # digesting \lean{...}. Keep this workaround local and minimal until
-        # the upstream parser bug is fixed.
-        replacements = {
-            "MPSTensor.weakFundamentalTheoremconditional":
-                "MPSTensor.weakFundamentalTheorem_conditional",
-            "MPSTensor.exponentialconvergenceofprimitive":
-                "MPSTensor.exponential_convergence_of_primitive",
-        }
-        seen = set()
-        logged_replacements = set()
-        decls = []
-        for decl in document.userdata.get("lean_decls", []):
-            normalized = replacements.get(decl, decl)
-            if normalized != decl and (decl, normalized) not in logged_replacements:
-                _MODULE.log.warning(
-                    "Normalizing mangled \\lean declaration '%s' to '%s'; "
-                    "this works around a plasTeX underscore-parsing bug.",
-                    decl,
-                    normalized,
-                )
-                logged_replacements.add((decl, normalized))
-            if normalized and normalized not in seen:
-                seen.add(normalized)
-                decls.append(normalized)
-        document.userdata["lean_decls"] = decls
-        lean_decls_path = Path(document.userdata.get("working-dir", ".")).parent / "lean_decls"
-        lean_decls_path.write_text("\n".join(decls) + ("\n" if decls else ""))
-
-    document.addPostParseCallbacks(151, normalize_lean_decls)
+        for decl in decls:
+            if decl and decl not in all_decls:
+                all_decls.append(decl)
