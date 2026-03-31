@@ -710,6 +710,81 @@ which shows that such generators have the standard Lindblad form.
 %% ---------------------------------------------------------
 
 %% Wolf §7.1, Prop 7.5
+\subsection{Auxiliary spectral and semigroup lemmas}
+
+\begin{theorem}[Semigroup power identity]
+    \lean{semigroup_pow}\leanok
+    \uses{def:exp_semigroup_ch12}
+    For $t\ge 0$ and $n\in\N$, one has
+    $T_{nt} = (T_t)^n$.
+\end{theorem}
+
+\begin{theorem}[Eigenvector propagation under powers]
+    \lean{pow_apply_eigenvector}\leanok
+    If $E(v)=\mu v$, then $E^n(v)=\mu^n v$ for all $n\in\N$.
+\end{theorem}
+
+\begin{lemma}[Density matrices are nonzero]
+    \lean{ne_zero_of_mem_densityMatrices'}\leanok
+    Every density matrix is nonzero.
+\end{lemma}
+
+\begin{theorem}[Compression invariance is stable under powers]
+    \lean{compression_preserved_by_pow}\leanok
+    If a corner compression is invariant under $E$, it remains invariant under
+    every power $E^n$.
+\end{theorem}
+
+\begin{theorem}[Generator eigenvectors along the exponential semigroup]
+    \lean{expSemigroup_apply_eigenvector}\leanok
+    If $L(X)=\mu X$, then
+    $e^{tL}(X)=e^{t\mu}X$ for all $t\in\R$.
+\end{theorem}
+
+\begin{theorem}[Spectral mapping for semigroup generators]
+    \lean{eigenvalue_exp_of_eigenvalue_generator}\leanok
+    If $\mu$ is in the spectrum of $L$, then $e^{t\mu}$ is in the spectrum
+    of $e^{tL}$.
+\end{theorem}
+
+\begin{theorem}[Root-of-unity rigidity for phases]
+    \lean{eq_zero_of_exp_mul_I_isRootOfUnity}\leanok
+    If $e^{it\theta}$ is a root of unity for every $t>0$, then $\theta=0$.
+\end{theorem}
+
+\begin{theorem}[Peripheral generator eigenvalues are purely imaginary]
+    \lean{re_eq_zero_of_peripheral_generator}\leanok
+    Peripheral spectral points of the generator have vanishing real part.
+\end{theorem}
+
+\begin{theorem}[Peripheral cardinality bound]
+    \lean{peripheral_card_le_finrank}\leanok
+    The number of peripheral eigenvalues is bounded by $\dim(\MN{D})$.
+\end{theorem}
+
+\begin{theorem}[Bounded order under peripheral power-closure]
+    \lean{bounded_root_of_peripheral_closed_powers}\leanok
+    If all powers of a peripheral eigenvalue remain peripheral, then some
+    positive power not exceeding $\dim(\MN{D})$ equals $1$.
+\end{theorem}
+
+\begin{theorem}[Peripheral powers stay peripheral under irreducibility]
+    \lean{peripheral_powers_closed_of_irreducible_channel_with_fixed}\leanok
+    For an irreducible channel with faithful fixed point, every power of a
+    peripheral eigenvalue is again peripheral.
+\end{theorem}
+
+\begin{theorem}[Continuous-linear-map power evaluation]
+    \lean{toContinuousLinearMap_pow_apply}\leanok
+    Evaluating powers of a linear map agrees with powers in its continuous
+    linear realization.
+\end{theorem}
+
+\begin{theorem}[Spectral-radius criterion from eigenvalue bounds]
+    \lean{spectralRadius_lt_one_of_eigenvalues_lt_one}\leanok
+    If all eigenvalues satisfy $|\lambda|<1$, then the spectral radius is $<1$.
+\end{theorem}
+
 \begin{remark}[Remaining gap in the semigroup irreducible/primitive equivalence]\notready
     To obtain the semigroup analogue of the irreducible/primitive
     equivalence, it remains to pass from the qualitative spectral
