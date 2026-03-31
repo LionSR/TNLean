@@ -34,17 +34,25 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 def lindbladSpan (F : LindbladForm D) : Submodule ℂ Mat :=
   Submodule.span ℂ (Set.range F.L)
 
-/-- Hermitian closure of the Lindblad span. -/
-def LindbladSpanHermitianClosed (F : LindbladForm D) : Prop :=
+/-- The Lindblad span is closed under Hermitian conjugation, i.e. the `ℂ`-span
+of the Lindblad operators `{Lⱼ}` forms a `*`-subspace of `Mₐ(ℂ)`:
+for every `X = ∑ xⱼ Lⱼ` there exist `yⱼ` such that `X† = ∑ yⱼ Lⱼ`.
+This is the Hermiticity condition appearing in Wolf Corollary 7.2(2). -/
+def IsLindbladSpanHermitianClosed (F : LindbladForm D) : Prop :=
   ∀ A : Mat, A ∈ lindbladSpan F → Aᴴ ∈ lindbladSpan F
 
-/-- Trivial commutant for the Lindblad family (`ℂ • 1` only). -/
-def LindbladSpanTrivialCommutant (F : LindbladForm D) : Prop :=
+/-- The commutant of the Lindblad family contains only scalar multiples of the
+identity: `{Lⱼ}' = ℂ · 𝟙`.  This means the Lindblad operators act
+irreducibly on the matrix algebra `Mₐ(ℂ)`.
+This is the trivial-commutant condition appearing in Wolf Corollary 7.2(2). -/
+def HasLindbladSpanTrivialCommutant (F : LindbladForm D) : Prop :=
   ∀ A : Mat,
     (∀ j : Fin F.r, A * F.L j = F.L j * A) →
       ∃ c : ℂ, A = c • (1 : Mat)
 
-/-- The minimal Lindblad family size across all Lindblad representations of `L`. -/
+/-- The minimal number of Lindblad operators across all GKSL representations
+of `L`.  This equals the rank of the Kossakowski matrix in the
+orthonormal-basis representation (Wolf §7.1). -/
 def kossakowskiRank (L : Mat →ₗ[ℂ] Mat) : ℕ :=
   sInf {n : ℕ | ∃ F : LindbladForm D, F.toLinearMap = L ∧ F.r = n}
 
@@ -52,6 +60,8 @@ def kossakowskiRank (L : Mat →ₗ[ℂ] Mat) : ℕ :=
 Condition (1): full algebra generation forbids block-upper-triangular
 Lindblad decompositions.
 -/
+-- TODO: prove that full algebra generation forbids block-upper-triangular
+-- decompositions — see Wolf Cor. 7.2(1) and proof sketch via Prop 7.6.
 theorem full_algebra_generation_implies_no_blockUpperTriangular
     (F : LindbladForm D)
     (hGen : Algebra.adjoin ℂ (Set.range F.L ∪ ({F.H} : Set Mat)) = ⊤) :
@@ -62,21 +72,27 @@ theorem full_algebra_generation_implies_no_blockUpperTriangular
 Condition (2): Hermitian closure of the Lindblad span together with trivial
 commutant forbids block-upper-triangular Lindblad decompositions.
 -/
+-- TODO: prove that Hermitian closure + trivial commutant forbids
+-- block-upper-triangular decompositions — see Wolf Cor. 7.2(2).
 theorem hermitian_span_trivial_commutant_implies_no_blockUpperTriangular
     (F : LindbladForm D)
-    (hHerm : LindbladSpanHermitianClosed F)
-    (hComm : LindbladSpanTrivialCommutant F) :
+    (hHerm : IsLindbladSpanHermitianClosed F)
+    (hComm : HasLindbladSpanTrivialCommutant F) :
     ¬ HasBlockUpperTriangularLindblad F.toLinearMap := by
   sorry
 
 /--
-Condition (3): sufficiently large Kossakowski rank forbids
-block-upper-triangular Lindblad decompositions.
+Condition (3): Kossakowski rank `> d² − d` forbids block-upper-triangular
+Lindblad decompositions (Wolf Cor. 7.2(3)).
+
+The hypothesis is stated using addition (`rank + D ≥ D² + 1`) to avoid
+natural-number subtraction issues; this is equivalent to `rank > D² − D`.
 -/
+-- TODO: prove that rank(C) > d² − d forbids block-upper-triangular
+-- decompositions — see Wolf Cor. 7.2(3) and proof via Prop 7.6.
 theorem large_kossakowski_rank_implies_no_blockUpperTriangular
     (F : LindbladForm D)
-    (hRank : dite (D = 0) (fun _ => kossakowskiRank F.toLinearMap ≥ 0)
-      (fun _ => kossakowskiRank F.toLinearMap ≥ D ^ 2 - 1)) :
+    (hRank : kossakowskiRank F.toLinearMap + D ≥ D ^ 2 + 1) :
     ¬ HasBlockUpperTriangularLindblad F.toLinearMap := by
   sorry
 
@@ -107,8 +123,8 @@ commutant implies non-reducibility. -/
 theorem not_isReducible_of_hermitian_span_trivial_commutant
     (F : LindbladForm D)
     (hGKSL : IsGKSLGenerator F.toLinearMap)
-    (hHerm : LindbladSpanHermitianClosed F)
-    (hComm : LindbladSpanTrivialCommutant F) :
+    (hHerm : IsLindbladSpanHermitianClosed F)
+    (hComm : HasLindbladSpanTrivialCommutant F) :
     ¬ IsReducibleQDS F.toLinearMap := by
   apply not_isReducibleQDS_of_no_blockUpperTriangular_lindblad hGKSL
   exact hermitian_span_trivial_commutant_implies_no_blockUpperTriangular F hHerm hComm
@@ -118,8 +134,7 @@ non-reducibility. -/
 theorem not_isReducible_of_kossakowski_rank_ge
     (F : LindbladForm D)
     (hGKSL : IsGKSLGenerator F.toLinearMap)
-    (hRank : dite (D = 0) (fun _ => kossakowskiRank F.toLinearMap ≥ 0)
-      (fun _ => kossakowskiRank F.toLinearMap ≥ D ^ 2 - 1)) :
+    (hRank : kossakowskiRank F.toLinearMap + D ≥ D ^ 2 + 1) :
     ¬ IsReducibleQDS F.toLinearMap := by
   apply not_isReducibleQDS_of_no_blockUpperTriangular_lindblad hGKSL
   exact large_kossakowski_rank_implies_no_blockUpperTriangular F hRank
