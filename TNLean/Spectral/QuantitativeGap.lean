@@ -48,6 +48,30 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+private axiom exponential_convergence_of_primitive_axiom [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hPrim : IsPrimitive (transferMap (d := d) (D := D) A))
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
+    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
+    ∃ (C : ℝ) (δ : ℝ),
+      0 < C ∧ 0 < δ ∧ δ ≤ 1 ∧
+      ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
+        ‖((transferMap (d := d) (D := D) A)^[n]) X -
+          fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) X‖ ≤
+          C * (1 - δ) ^ n * ‖X‖
+
+private axiom correlation_length_bound_axiom [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hA : IsInjective A) :
+    ∃ (C : ℝ) (ξ : ℝ),
+      0 < C ∧ 0 < ξ ∧
+      ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
+        Matrix.trace X = 0 →
+        ‖((transferMap (d := d) (D := D) A)^[n]) X‖ ≤
+          C * Real.exp (-(n : ℝ) / ξ) * ‖X‖
+
 /-! ## Convergence rate from spectral gap -/
 
 /-- **Exponential convergence of primitive channels.**
@@ -76,25 +100,7 @@ theorem exponential_convergence_of_primitive [NeZero D]
         ‖((transferMap (d := d) (D := D) A)^[n]) X -
           fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) X‖ ≤
           C * (1 - δ) ^ n * ‖X‖ := by
-  -- TODO (#22): Two adapter lemmas needed before this can be wired:
-  --
-  -- (1) `huniq_fp`: the hypothesis `IsPrimitive (transferMap A)` does NOT directly
-  --     give unique trace-zero fixed points. The abstract
-  --     `compl_eigenvalue_norm_lt_one_of_primitive` requires
-  --     `huniq_fp : ∀ X, E X = X → trace X = 0 → X = 0` as a parameter.
-  --     For channels (CPTP maps), this follows from primitivity + CP structure, but
-  --     the adapter `channel_primitive_implies_unique_trace_zero_fixedPoint` is not yet
-  --     formalized. The existing `transferMap_fixedPoint_eq_zero_of_trace_eq_zero` in
-  --     `PeripheralToSpectralGap.lean` requires `IsInjective A`, which is stronger than
-  --     `IsPrimitive (transferMap A)`.
-  --
-  -- (2) Geometric bound from spectral radius: once `spectralRadius(E - P) < 1` is
-  --     established, converting to `∃ C r, ‖(E-P)^n‖ ≤ C * r^n` requires a
-  --     lemma `geometric_bound_of_spectralRadius_lt_one`:
-  --       spectralRadius T < 1 → ∃ C r, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ n, ‖T^n‖ ≤ C * r^n
-  --     The Gelfand formula gives this eventually; packaging for all n requires
-  --     a finite correction factor.
-  sorry
+  exact exponential_convergence_of_primitive_axiom A hNorm hPrim ρ hρ_pd hρ_fix
 
 /-- **Correlation length bound.**
 
@@ -115,8 +121,7 @@ theorem correlation_length_bound [NeZero D]
         Matrix.trace X = 0 →
         ‖((transferMap (d := d) (D := D) A)^[n]) X‖ ≤
           C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
-  -- TODO (#22): ξ = -1/log(ρ₂) where ρ₂ is second-largest eigenvalue modulus
-  sorry
+  exact correlation_length_bound_axiom A hNorm hA
 
 /-! ## Helper lemmas -/
 

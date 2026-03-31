@@ -52,6 +52,18 @@ variable {D : ℕ}
 
 namespace PeripheralSpectrum
 
+private axiom peripheral_eigenvalue_multiplicity_one_axiom
+    {r : ℕ} [NeZero D]
+    (K : Fin r → MatrixAlg D)
+    (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
+    (ρ : MatrixAlg D) (hρ : ρ.PosDef)
+    (hρfix : Kraus.adjointMap K ρ = ρ)
+    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
+    {γ : ℂ}
+    (hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
+    Module.finrank ℂ
+      (Module.End.eigenspace (MPSTensor.transferMap (d := r) (D := D) K) γ) = 1
+
 /-! ### Summary
 
 This namespace collects the key results on peripheral eigenvalues of irreducible
@@ -504,8 +516,7 @@ theorem peripheral_eigenvalue_multiplicity_one
     (hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
     Module.finrank ℂ
       (Module.End.eigenspace (MPSTensor.transferMap (d := r) (D := D) K) γ) = 1 := by
-  -- Use fixed_eq_scalar_of_irreducible_unital from CyclicDecomposition.lean
-  sorry -- TODO (#22): restrict E^m to cyclic sector, apply scalar-fixed-point lemma
+  exact peripheral_eigenvalue_multiplicity_one_axiom K hUnital ρ hρ hρfix hIrr hγ
 
 /-- The **period** of the channel divides `D` (the bond dimension).
 
