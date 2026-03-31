@@ -1132,6 +1132,173 @@ The following results separate the zero blocks from the
 	and $S_N(A^{[p]}) \supseteq S_{Np}(A) = \MN{D}$.
 \end{proof}
 
+\subsection{Basis of Normal Tensors}
+
+\begin{theorem}[Sorted reindexing by strictly decreasing weight norms]
+	\label{thm:bnt_sorted_reindexing}
+	\lean{MPSTensor.exists_sorted_reindexing}\leanok
+	If nonzero weights $(\mu_k)_{k=1}^r$ have pairwise distinct norms, then there is a permutation of
+	$\{1,\dots,r\}$ under which $\|\mu_k\|$ is strictly decreasing.
+\end{theorem}
+
+\begin{theorem}[Sorted decomposition preserves the represented MPS family]
+	\label{thm:bnt_sorted_blockdecomp}
+	\lean{MPSTensor.exists_sorted_blockDecomp_of_distinct_norms}\leanok
+	\uses{thm:bnt_sorted_reindexing}
+	Under the same distinct-norm hypothesis, the sorted block family is gauge equivalent to the original decomposition and has strictly decreasing norms.
+\end{theorem}
+
+\begin{theorem}[Normal canonical form after sorting]
+	\label{thm:bnt_sorted_ncf}
+	\lean{MPSTensor.exists_sortedNCF_of_distinct_norms}\leanok
+	\uses{def:normal_canonical_form, thm:bnt_sorted_blockdecomp}
+	If each block is irreducible, trace-preserving, primitive, and has positive dimension, then sorting by strictly decreasing weight norms produces a normal canonical form.
+\end{theorem}
+
+\begin{theorem}[Trivial sector decomposition for the sorted distinct-norm case]
+	\label{thm:bnt_trivial_sector}
+	\lean{MPSTensor.exists_trivialSectorDecomp_of_sorted_distinct_norms}\leanok
+	\uses{thm:bnt_sorted_reindexing}
+	If weights are already strictly decreasing in norm, one obtains a sector decomposition with one copy per sector that preserves the represented MPS family.
+\end{theorem}
+
+\begin{definition}[Norm-class grouping data]
+	\label{def:norm_class_grouping_data}
+	\lean{MPSTensor.NormClassGroupingData}\leanok
+	The grouping data consists of: norm classes, one representative value per class, class multiplicities, an enumeration of members in each class, and a regrouping identity recovering the full finite sum.
+\end{definition}
+
+\begin{definition}[Norm-class enumeration in decreasing order]
+	\label{def:norm_class_grouping}
+	\lean{MPSTensor.normClassGroupingData}\leanok
+	\uses{def:norm_class_grouping_data}
+	From any finite weight family, construct norm classes ordered by strictly decreasing norm values.
+\end{definition}
+
+\begin{theorem}[BNT grouping theorem]
+	\label{thm:bnt_grouping}
+	\lean{MPSTensor.exists_bnt_grouping}\leanok
+	\uses{def:norm_class_grouping, thm:bnt_trivial_sector}
+	If equal-norm blocks have equal bond dimensions and represent the same MPS family, then one obtains a sector decomposition whose sector norms are strictly decreasing.
+\end{theorem}
+
+\subsection{Equal-Norm Blocks}
+
+\begin{theorem}[Gauge equivalence from non-decaying cross-overlap]
+	\label{thm:gauge_equiv_nondecay}
+	\lean{MPSTensor.gaugePhaseEquiv_of_nonDecaying_overlap}\leanok
+	For trace-preserving irreducible blocks, a non-decaying cross-overlap forces equal bond dimensions and gauge equivalence up to a unit-modulus phase.
+\end{theorem}
+
+\begin{theorem}[Non-decaying overlap for equal-norm blocks in a common decomposition]
+	\label{thm:nondecay_equal_norm_blocks}
+	\lean{MPSTensor.nonDecaying_overlap_of_equal_norm_blocks}
+	In a common canonical decomposition, distinct blocks with equal weight norms have non-decaying cross-overlap.
+\end{theorem}
+
+\begin{theorem}[Equal-norm blocks are gauge equivalent]
+	\label{thm:gauge_equiv_equal_norm_blocks}
+	\lean{MPSTensor.gaugePhaseEquiv_of_equal_norm_blocks}\leanok
+	\uses{thm:gauge_equiv_nondecay, thm:nondecay_equal_norm_blocks}
+	In a trace-preserving primitive irreducible block decomposition, equal-norm blocks are gauge equivalent (after identifying bond dimensions).
+\end{theorem}
+
+\begin{theorem}[BNT grouping using gauge equivalence data]
+	\label{thm:bnt_grouping_gauge_equiv}
+	\lean{MPSTensor.exists_bnt_grouping_of_gaugePhaseEquiv}\leanok
+	\uses{thm:bnt_grouping}
+	If equal-norm blocks are related by gauge equivalence with unit-modulus phase, the phases can be absorbed into sector weights to obtain a BNT grouping with strictly decreasing sector norms.
+\end{theorem}
+
+\begin{theorem}[Sector decomposition from TP primitive irreducible blocks]
+	\label{thm:sector_decomp_tp_prim_irr}
+	\lean{MPSTensor.exists_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
+	\uses{thm:gauge_equiv_equal_norm_blocks, thm:bnt_grouping_gauge_equiv}
+	From a trace-preserving primitive irreducible block decomposition with nonzero weights, one obtains a sector decomposition with strict norm ordering.
+\end{theorem}
+
+\subsection{Cyclic Sectors}
+
+\begin{definition}[Left sector tensor]
+	\label{def:left_sector_tensor}
+	\lean{MPSTensor.leftSectorTensor}\leanok
+	For a projection $P$, the left sector tensor is obtained by left multiplication of each Kraus operator by $P$.
+\end{definition}
+
+\begin{lemma}[Commuting letters imply commuting words]
+	\label{lem:commutes_words}
+	\lean{MPSTensor.commutes_evalWord_of_commutes_letters}\leanok
+	If a projection commutes with every Kraus operator, it commutes with every finite word product.
+\end{lemma}
+
+\begin{lemma}[Left multiplication identity for sector words]
+	\label{lem:left_mul_sector_word}
+	\lean{MPSTensor.left_mul_evalWord_leftSectorTensor_of_commutes}\leanok
+	\uses{def:left_sector_tensor, lem:commutes_words}
+	If a projection commutes with all Kraus operators, then word evaluation for the left sector tensor equals left multiplication by the projection.
+\end{lemma}
+
+\begin{lemma}[Sector support]
+	\label{lem:left_sector_supported}
+	\lean{MPSTensor.leftSectorTensor_supported}\leanok
+	\uses{def:left_sector_tensor}
+	The left sector tensor is supported on the chosen projection.
+\end{lemma}
+
+\begin{theorem}[Adjoint-fixed projections commute with Kraus operators]
+	\label{thm:adjoint_fixed_commute_letters}
+	\lean{MPSTensor.commutes_letters_of_adjoint_fixed_projection}\leanok
+	If a projection is fixed by the adjoint transfer map of a trace-preserving tensor, then it commutes with each Kraus operator.
+\end{theorem}
+
+\begin{theorem}[Left-canonical primitive blocking from irreducibility]
+	\label{thm:leftcanonical_primitive_blocking}
+	\lean{MPSTensor.exists_blockTensor_leftCanonical_isPrimitive}\leanok
+	\uses{thm:primitive_from_peripheral}
+	For a trace-preserving irreducible tensor, a positive blocking period yields a blocked tensor that is left-canonical and primitive.
+\end{theorem}
+
+\begin{theorem}[Normality from primitivity]
+	\label{thm:normal_from_primitive}
+	\lean{MPSTensor.isNormal_of_isPrimitiveMPS}\leanok
+	\uses{def:normal}
+	Every primitive tensor is normal.
+\end{theorem}
+
+\begin{theorem}[Zero-word evaluation for the zero tensor]
+	\label{thm:evalword_zero_allzero}
+	\lean{MPSTensor.evalWord_eq_zero_of_all_zero}\leanok
+	Every finite word evaluates to zero when all Kraus operators are zero.
+\end{theorem}
+
+\begin{theorem}[Zero MPV for the zero tensor]
+	\label{thm:mpv_zero_allzero}
+	\lean{MPSTensor.mpv_eq_zero_of_all_zero}\leanok
+	\uses{thm:evalword_zero_allzero}
+	The MPS value of every spin word is zero for the zero tensor.
+\end{theorem}
+
+\begin{theorem}[Nonzero Kraus operator in irreducible positive dimension]
+	\label{thm:nonzero_kraus_irred}
+	\lean{MPSTensor.exists_nonzero_kraus_of_isIrreducibleTensor}\leanok
+	\uses{def:irreducible_tensor}
+	An irreducible tensor of positive bond dimension has at least one nonzero Kraus operator.
+\end{theorem}
+
+\begin{theorem}[All-zero tensors are irreducible only in dimension at most one]
+	\label{thm:allzero_irred_dim_le_one}
+	\lean{MPSTensor.isIrreducibleTensor_allZero_dim_le_one}\leanok
+	\uses{thm:nonzero_kraus_irred}
+	If every Kraus operator vanishes and the tensor is irreducible, then the bond dimension is at most one.
+\end{theorem}
+
+\begin{theorem}[Irreducible block decomposition with trace-preserving gauge]
+	\label{thm:irred_blockdecomp_tpgauge}
+	\lean{MPSTensor.exists_irreducible_blockDecomp_with_tpGauge}\leanok
+	\uses{thm:allzero_irred_dim_le_one}
+	After removing a zero tail, one obtains a block decomposition into irreducible blocks with a trace-preserving gauge.
+\end{theorem}
+
 \section{Open directions}\label{sec:pipeline_status}
 
 \begin{remark}[Remaining steps toward normal canonical form]%
