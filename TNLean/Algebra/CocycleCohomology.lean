@@ -53,6 +53,10 @@ i.e., `ω₁(g,h) = φ(g) * φ(h) * φ(g*h)⁻¹ * ω₂(g,h)` for some `φ : G 
 def ScalarCocycle.CohomologousTo (ω₁ ω₂ : ScalarCocycle G) : Prop :=
   ∃ φ : G → Units ℂ, ∀ g h, ω₁ g h = φ g * φ h * (φ (g * h))⁻¹ * ω₂ g h
 
+/-- Multiplicative 2-cocycle condition. -/
+def ScalarCocycle.IsCocycle (ω : ScalarCocycle G) : Prop :=
+  ∀ g h k : G, ω g h * ω (g * h) k = ω g (h * k) * ω h k
+
 /-! ### Equivalence relation -/
 
 namespace ScalarCocycle.CohomologousTo
@@ -99,26 +103,34 @@ scoped instance scalarCocycleSetoid : Setoid (ScalarCocycle G) where
 /-- A canonical (non-scoped) name for the cohomology setoid on scalar cocycles. -/
 instance ScalarCocycle.instSetoid : Setoid (ScalarCocycle G) := scalarCocycleSetoid
 
+/-- Cohomology setoid restricted to genuine cocycles. -/
+instance ScalarCocycle.IsCocycle.instSetoid :
+    Setoid {ω : ScalarCocycle G // ScalarCocycle.IsCocycle ω} where
+  r ω₁ ω₂ := ScalarCocycle.CohomologousTo ω₁.1 ω₂.1
+  iseqv := ⟨
+    fun ω => ScalarCocycle.CohomologousTo.refl ω.1,
+    fun h => ScalarCocycle.CohomologousTo.symm h,
+    fun h₁₂ h₂₃ => ScalarCocycle.CohomologousTo.trans h₁₂ h₂₃⟩
+
 /-- The second cohomology quotient `H²(G, U(1))` modelled by scalar 2-cocycles. -/
-def H2 (G : Type*) [Group G] := Quotient (ScalarCocycle.instSetoid (G := G))
+def H2 (G : Type*) [Group G] :=
+  Quotient (ScalarCocycle.IsCocycle.instSetoid (G := G))
 
 /-- Projective-equivalence at the level of factor-system cohomology classes. -/
 def ProjectivelyEquivalent
-    {ω₁ ω₂ : ScalarCocycle G}
-    (ρ₁ : ProjectiveRepresentation (D := D) ω₁)
-    (ρ₂ : ProjectiveRepresentation (D := D) ω₂) : Prop :=
+    {D₁ D₂ : ℕ} {ω₁ ω₂ : ScalarCocycle G}
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
+    (ρ₂ : ProjectiveRepresentation (D := D₂) ω₂) : Prop :=
   ScalarCocycle.CohomologousTo (ρ₁.cocycle_of) (ρ₂.cocycle_of)
 
 /-- Two projective representations are projectively equivalent iff their cocycles are
 cohomologous (after identifying the explicit cocycle names). -/
 theorem projRep_equiv_iff_cohomologous
-    {ω₁ ω₂ : ScalarCocycle G}
-    (ρ₁ : ProjectiveRepresentation (D := D) ω₁)
-    (ρ₂ : ProjectiveRepresentation (D := D) ω₂)
-    (hω₁ : ρ₁.cocycle_of = ω₁)
-    (hω₂ : ρ₂.cocycle_of = ω₂) :
+    {D₁ D₂ : ℕ} {ω₁ ω₂ : ScalarCocycle G}
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
+    (ρ₂ : ProjectiveRepresentation (D := D₂) ω₂) :
     ProjectivelyEquivalent ρ₁ ρ₂ ↔ ScalarCocycle.CohomologousTo ω₁ ω₂ := by
-  simpa [ProjectivelyEquivalent, hω₁, hω₂]
+  rfl
 
 /-- A cocycle is a coboundary iff it is cohomologous to the trivial cocycle `fun _ _ => 1`. -/
 lemma ScalarCocycle.isCoboundary_iff_cohomologousTo_one (ω : ScalarCocycle G) :
