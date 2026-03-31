@@ -49,6 +49,8 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- If `E` is a primitive channel with fixed point `ρ` and unique trace-zero fixed points,
+then `spectralRadius(E - P) < 1` where `P` is the fixed-point projection. -/
 private theorem spectralRadius_compl_lt_one_of_primitive_fixedPoint [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -115,6 +117,8 @@ private theorem spectralRadius_compl_lt_one_of_primitive_fixedPoint [NeZero D]
     exact (NNReal.coe_lt_one).1 this
   exact ⟨htrρ, by simpa [E] using hgap⟩
 
+/-- Gelfand's formula: if `spectralRadius(T) < 1`, then `‖T ^ n‖ ≤ C · r ^ n`
+for some `C > 0` and `0 < r < 1`, uniformly in `n`. -/
 private theorem geometric_bound_of_spectralRadius_lt_one
     {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [CompleteSpace V]
     (T : V →L[ℂ] V)
@@ -170,6 +174,8 @@ private theorem geometric_bound_of_spectralRadius_lt_one
       _ ≤ C * (r : ℝ) ^ n := by
         gcongr
 
+/-- Pointwise version of `geometric_bound_of_spectralRadius_lt_one`:
+if `spectralRadius(T) < 1`, then `‖T ^ n x‖ ≤ C · r ^ n · ‖x‖`. -/
 private theorem geometric_apply_bound_of_spectralRadius_lt_one
     {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [CompleteSpace V]
     (T : V →L[ℂ] V)
@@ -280,6 +286,21 @@ theorem exponential_convergence_of_primitive [NeZero D]
         gcongr
       _ = C * (1 - (1 - r)) ^ n * ‖X‖ := by simp
 
+/-! ## Helper lemmas -/
+
+/-- The word span at length 1 equals the span of the Kraus operators. -/
+theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
+    wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
+  simp only [wordSpan]
+  congr 1; ext y; constructor
+  · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
+  · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
+
+/-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
+theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
+    (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
+  ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
+
 /-- **Correlation length bound.**
 
 For a primitive TP-normalized MPS tensor, traceless matrices decay
@@ -305,19 +326,8 @@ theorem correlation_length_bound [NeZero D]
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   have hPrim : _root_.IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
-      (isPrimitivePaper_of_hasEventuallyFullKrausRank A <| by
-        refine ⟨1, ?_⟩
-        have hword :
-            wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
-          simp only [wordSpan]
-          congr 1
-          ext y
-          constructor
-          · rintro ⟨σ, rfl⟩
-            exact ⟨σ 0, by simp [evalWord]⟩
-          · rintro ⟨i, rfl⟩
-            exact ⟨fun _ => i, by simp [evalWord]⟩
-        rw [hword, hA])
+      (isPrimitivePaper_of_hasEventuallyFullKrausRank A
+        (hasEventuallyFullKrausRank_of_injective A hA))
   rcases spectralRadius_compl_lt_one_of_peripheralPrimitive
       (A := A) hA hNorm hPrim with
     ⟨ρ, _hρ_psd, _hρ_ne, hρ_fix, htrρ, hgap⟩
@@ -385,21 +395,6 @@ theorem correlation_length_bound [NeZero D]
       _ ≤ C * r ^ n * ‖X‖ := by
         gcongr
       _ = C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by rw [hr_exp n]
-
-/-! ## Helper lemmas -/
-
-/-- The word span at length 1 equals the span of the Kraus operators. -/
-theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
-    wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
-  simp only [wordSpan]
-  congr 1; ext y; constructor
-  · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
-  · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
-
-/-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
-theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
-    (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
-  ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
 
 /-! ## Explicit gap from injectivity -/
 
