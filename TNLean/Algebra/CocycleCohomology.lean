@@ -61,7 +61,8 @@ i.e., `ω₁(g,h) = φ(g) * φ(h) * φ(g*h)⁻¹ * ω₂(g,h)` for some `φ : G 
 def ScalarCocycle.CohomologousTo (ω₁ ω₂ : ScalarCocycle G) : Prop :=
   ∃ φ : G → Units ℂ, ∀ g h, ω₁ g h = φ g * φ h * (φ (g * h))⁻¹ * ω₂ g h
 
-/-- Multiplicative 2-cocycle condition. -/
+/-- A scalar 2-cochain `ω : G → G → ℂˣ` satisfies the multiplicative 2-cocycle condition if
+`ω g h * ω (g * h) k = ω g (h * k) * ω h k` for all `g h k : G`. -/
 def ScalarCocycle.IsCocycle (ω : ScalarCocycle G) : Prop :=
   ∀ g h k : G, ω g h * ω (g * h) k = ω g (h * k) * ω h k
 
@@ -129,7 +130,7 @@ def ProjectivelyEquivalent
   ScalarCocycle.CohomologousTo (ρ₁.cocycle) (ρ₂.cocycle)
 
 /-- Two projective representations are projectively equivalent iff their cocycles are
-cohomologous (after identifying the explicit cocycle names). -/
+cohomologous. -/
 theorem projRep_equiv_iff_cohomologous
     {D₁ D₂ : ℕ} {ω₁ ω₂ : ScalarCocycle G}
     (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
