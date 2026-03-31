@@ -517,7 +517,7 @@ The preceding spectral-gap results require \emph{injectivity} of both
 tensors.  The following variants weaken this to \emph{irreducibility}
 combined with trace-preserving normalization
 ($\sum_i (A^i)^\dagger A^i = \Id$), following Cirac et
-al.~\cite{Cirac2017MatrixProductUnitaries}.  The argument replaces the
+al.~\cite{Cirac2017Annals}.  The argument replaces the
 Kraus-commutation step with a Cauchy--Schwarz rigidity argument for
 the Perron--Frobenius fixed point.
 
@@ -742,8 +742,6 @@ the Perron--Frobenius fixed point.
 
 This section records the channel-side support-projection infrastructure
 behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
-The main formalized statement is
-\texttt{Channel.support\_proj\_fixed}.
 
 \begin{theorem}[Support projection invariance (Wolf Lemma~6.4)]%
     \label{thm:support_proj_fixed}
@@ -812,11 +810,7 @@ The main formalized statement is
 
 \begin{remark}[Props.~6.10--6.11: non-trivial formulations]%
     \label{rem:stationary_support_todo}
-    The original Lean declarations for ``irreducible iff support is full''
-    and ``stationary support minimality'' were removed in PR~\#102
-    because their previous formulations were vacuous (they followed
-    trivially from the irreducibility hypothesis alone).
-    The correct non-trivial statements are:
+    The non-trivial formulations needed here are:
     \begin{itemize}
         \item \textbf{Prop.~6.10} (converse of Prop.~6.9):
             if the support projection of \emph{every} PSD fixed point
@@ -824,12 +818,13 @@ The main formalized statement is
         \item \textbf{Prop.~6.11}: minimality of the stationary support
             among invariant projections, without assuming irreducibility.
     \end{itemize}
-    These remain TODO in the formalization.
+    These statements are deferred in the present chapter.
 \end{remark}
 
-\section{Additional Wolf Chapter~6 declaration wrappers}
+\section{Additional Wolf Chapter~6 equivalences}
 
-This section records declaration wrappers used in cross-chapter references.
+This section records several equivalences from Wolf's Chapter~6 that are
+used later in the blueprint.
 
 \begin{theorem}[Wolf Thm.~6.2(3): exponential positivity condition]%
     \label{thm:wolf_6_2_item_3}
@@ -848,28 +843,28 @@ This section records declaration wrappers used in cross-chapter references.
     \lean{MPSTensor.wolf_theorem_6_8_kraus_span}
     \leanok
     \uses{def:primitive_channel}
-    Under normalization, paper primitivity is equivalent to eventual
+    Under normalization, primitivity in Wolf's sense is equivalent to eventual
     full Kraus rank.
 \end{theorem}
 
-\begin{theorem}[Wolf Thm.~6.8: conjunction wrapper]%
+\begin{theorem}[Wolf Thm.~6.8: combined equivalence]%
     \label{thm:wolf_6_8_conjunction}
     \lean{MPSTensor.wolf_theorem_6_8_conjunction}
     \leanok
     \uses{thm:wolf_6_8_kraus_span}
-    Under normalization, paper primitivity is equivalent to the conjunction
+    Under normalization, primitivity in Wolf's sense is equivalent to the conjunction
     of eventual full Kraus rank, normality, and strong irreducibility.
 \end{theorem}
 
-\begin{remark}[Wolf Thm.~6.8 pairwise equivalence declarations]
+\begin{remark}[Wolf Thm.~6.8: pairwise equivalences]
     \label{rem:wolf_6_8_pairwise}
     \lean{MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank}
     \lean{MPSTensor.primitivePaper_iff_stronglyIrreducible}
     \lean{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible}
     \lean{MPSTensor.hasEventuallyFullKrausRank_iff_isNormal}
     \leanok
-    These are the pairwise equivalence declarations referenced by the
-    packaged Wolf Thm.~6.8 wrappers.
+    These are the pairwise equivalences appearing in Wolf's
+    Theorem~6.8.
 \end{remark}
 
 \begin{theorem}[Wolf Thm.~6.15 (scalar fixed-point algebra case)]
@@ -939,7 +934,7 @@ This section records declaration wrappers used in cross-chapter references.
     The peripheral eigenvalues form a finite subset of $\C$,
     contain $1$, and are closed under multiplication and inversion,
     so they form a finite subgroup of $\C^\times$.
-    By Mathlib's \texttt{subgroup\_units\_cyclic}, this subgroup is cyclic.
+    Any finite subgroup of $\C^\times$ is cyclic.
     The generator $\gamma$ has order $m = |\text{peripheral spectrum}|$.
 \end{proof}
 

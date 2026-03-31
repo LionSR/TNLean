@@ -1,0 +1,495 @@
+% Tensor-network TikZ styles adapted from
+% Papers/1804.04964/paper_normal.tex (Andras Molnar et al.)
+% and kept visually close to the diagram language used there and in
+% Papers/2011.12127/TN-Review-main.tex.
+%
+% Layout policy:
+% - Public \TN... macros are chapter-facing and semantically named.
+% - Private \TN@... helpers provide the atomic drawing vocabulary.
+% - Public diagrams default to unlabeled tensor glyphs; the surrounding
+%   formula/prose carries the tensor names.
+\usetikzlibrary{calc}
+
+\tikzset{
+  tn picture/.style={
+    baseline=-0.1cm,
+    transform shape,
+    font=\scriptsize
+  },
+  tn tensor dot/.style={
+    draw,
+    fill,
+    shape=circle,
+    inner sep=0.055cm
+  },
+  tn operator dot/.style={
+    tn tensor dot,
+    red
+  },
+  tn leg/.style={line width=0.4pt},
+  tn phys leg/.style={line width=0.7pt}
+}
+
+\makeatletter
+
+\def\TN@physleglen{0.42}
+\def\TN@physlabeloff{0.68}
+\def\TN@doublelayersep{0.50}
+
+% ---------- Atomic helpers ----------
+
+\newcommand{\TN@tensordot}[2]{%
+  \node[tn tensor dot] (#1) at #2 {};%
+}
+
+\newcommand{\TN@opdot}[2]{%
+  \node[tn operator dot] (#1) at #2 {};%
+}
+
+\newcommand{\TN@opdotabove}[3]{%
+  \node[tn operator dot, label=above:$#3$] (#1) at #2 {};%
+}
+
+\newcommand{\TN@opdotbelow}[3]{%
+  \node[tn operator dot, label=below:$#3$] (#1) at #2 {};%
+}
+
+\newcommand{\TN@opdotleft}[3]{%
+  \node[tn operator dot, label=left:$#3$] (#1) at #2 {};%
+}
+
+\newcommand{\TN@opdotright}[3]{%
+  \node[tn operator dot, label=right:$#3$] (#1) at #2 {};%
+}
+
+\newcommand{\TN@leftleg}[2]{%
+  \draw[tn leg] (#1.west) -- ++(-#2,0);%
+}
+
+\newcommand{\TN@rightleg}[2]{%
+  \draw[tn leg] (#1.east) -- ++(#2,0);%
+}
+
+\newcommand{\TN@upleg}[2]{%
+  \draw[tn phys leg] (#1.north) -- ++(0,#2);%
+}
+
+\newcommand{\TN@downleg}[2]{%
+  \draw[tn phys leg] (#1.south) -- ++(0,-#2);%
+}
+
+\newcommand{\TN@uplabel}[3]{%
+  \node at ($(#1.north)+(0,#2)$) {$#3$};%
+}
+
+\newcommand{\TN@downlabel}[3]{%
+  \node at ($(#1.south)+(0,-#2)$) {$#3$};%
+}
+
+% ---------- Public semantic macros ----------
+
+\newcommand{\TNMPSLocal}[2]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnA}{(0,0)}
+    \TN@leftleg{tnA}{0.8}
+    \TN@rightleg{tnA}{0.8}
+    \TN@upleg{tnA}{\TN@physleglen}
+    \TN@uplabel{tnA}{\TN@physlabeloff}{#2}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNMPSWord}[4]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@tensordot{tnM}{(1.45,0)}
+    \TN@tensordot{tnR}{(4.20,0)}
+    \TN@upleg{tnL}{\TN@physleglen}
+    \TN@upleg{tnM}{\TN@physleglen}
+    \TN@upleg{tnR}{\TN@physleglen}
+    \TN@uplabel{tnL}{\TN@physlabeloff}{#2}
+    \TN@uplabel{tnR}{\TN@physlabeloff}{#3}
+    \TN@leftleg{tnL}{0.8}
+    \draw[tn leg] (tnL.east) -- (tnM.west);
+    \draw[tn leg] (tnM.east) -- ++(0.62,0);
+    \draw[tn leg] ($(tnR.west)+(-0.62,0)$) -- (tnR.west);
+    \TN@rightleg{tnR}{0.8}
+    \node at (2.82,0) {$\cdots$};
+    \node at (2.82,-0.56) {$#4$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNMPV}[4]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@tensordot{tnM}{(1.45,0)}
+    \TN@tensordot{tnR}{(4.20,0)}
+    \TN@upleg{tnL}{\TN@physleglen}
+    \TN@upleg{tnM}{\TN@physleglen}
+    \TN@upleg{tnR}{\TN@physleglen}
+    \TN@uplabel{tnL}{\TN@physlabeloff}{#2}
+    \TN@uplabel{tnR}{\TN@physlabeloff}{#3}
+    \draw[tn leg] (-0.48,0) rectangle (4.68,-0.44);
+    \node at (2.82,0) {$\cdots$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNTransferMap}[1]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnUp}{(0,0.44)}
+    \TN@tensordot{tnDn}{(0,-0.44)}
+    \draw[tn leg] ($(tnUp.west)+(-0.75,0)$) -- (tnUp.west);
+    \draw[tn leg] ($(tnDn.west)+(-0.75,0)$) -- (tnDn.west);
+    \draw[tn leg] (tnUp.east) -- ++(0.75,0);
+    \draw[tn leg] (tnDn.east) -- ++(0.75,0);
+    \draw[tn phys leg] (tnUp.south) -- (tnDn.north);
+    \node at (-1.18,0) {$X$};
+    \node at (1.36,0) {$\E_{#1}(X)$};
+    \node at ($(tnUp.south)!0.5!(tnDn.north)+(0.24,0)$) {$i$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNMPOCell}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnM}{(0,0)}
+    \TN@leftleg{tnM}{0.8}
+    \TN@rightleg{tnM}{0.8}
+    \TN@upleg{tnM}{\TN@physleglen}
+    \TN@downleg{tnM}{\TN@physleglen}
+    \TN@uplabel{tnM}{\TN@physlabeloff}{#2}
+    \TN@downlabel{tnM}{\TN@physlabeloff}{#3}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNMPOChain}[6]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@tensordot{tnM}{(1.45,0)}
+    \TN@tensordot{tnR}{(4.20,0)}
+    \TN@upleg{tnL}{\TN@physleglen}
+    \TN@downleg{tnL}{\TN@physleglen}
+    \TN@upleg{tnM}{\TN@physleglen}
+    \TN@downleg{tnM}{\TN@physleglen}
+    \TN@upleg{tnR}{\TN@physleglen}
+    \TN@downleg{tnR}{\TN@physleglen}
+    \TN@uplabel{tnL}{\TN@physlabeloff}{#2}
+    \TN@downlabel{tnL}{\TN@physlabeloff}{#3}
+    \TN@uplabel{tnR}{\TN@physlabeloff}{#4}
+    \TN@downlabel{tnR}{\TN@physlabeloff}{#5}
+    \TN@leftleg{tnL}{0.8}
+    \draw[tn leg] (tnL.east) -- (tnM.west);
+    \draw[tn leg] (tnM.east) -- ++(0.62,0);
+    \draw[tn leg] ($(tnR.west)+(-0.62,0)$) -- (tnR.west);
+    \TN@rightleg{tnR}{0.8}
+    \node at (2.82,0) {$\cdots$};
+    \node at (2.82,-1.02) {$#6$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNLPDO}[5]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnA}{(0,\TN@doublelayersep)}
+    \TN@tensordot{tnB}{(0,-\TN@doublelayersep)}
+    \TN@leftleg{tnA}{0.8}
+    \TN@leftleg{tnB}{0.8}
+    \TN@rightleg{tnA}{0.8}
+    \TN@rightleg{tnB}{0.8}
+    \TN@upleg{tnA}{\TN@physleglen}
+    \TN@downleg{tnB}{\TN@physleglen}
+    \TN@uplabel{tnA}{\TN@physlabeloff}{#4}
+    \TN@downlabel{tnB}{\TN@physlabeloff}{#5}
+    \draw[tn leg] (tnA.south) -- (tnB.north);
+    \node at ($(tnA.south)!0.5!(tnB.north)+(0.28,0)$) {$#3$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNGaugeConjugation}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@opdotabove{tnXl}{(-1.10,0)}{#1}
+    \TN@tensordot{tnA}{(0,0)}
+    \TN@opdotabove{tnXr}{(1.10,0)}{#3}
+    \draw[tn leg] (tnXl.west) -- ++(-0.55,0);
+    \draw[tn leg] (tnXl.east) -- (tnA.west);
+    \draw[tn leg] (tnA.east) -- (tnXr.west);
+    \draw[tn leg] (tnXr.east) -- ++(0.55,0);
+    \TN@upleg{tnA}{\TN@physleglen}
+    \TN@uplabel{tnA}{\TN@physlabeloff}{#2}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPhysicalRealization}[2]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnA1}{(0,0)}
+    \draw[tn leg] (tnA1.west) -- ++(-0.65,0);
+    \draw[tn leg] (tnA1.east) -- ++(0.65,0);
+    \TN@upleg{tnA1}{\TN@physleglen}
+    \TN@opdotabove{tnX}{(0.78,0)}{#1}
+    \node at (1.78,0) {$=$};
+    \TN@tensordot{tnA2}{(2.65,0)}
+    \draw[tn leg] (tnA2.west) -- ++(-0.65,0);
+    \draw[tn leg] (tnA2.east) -- ++(0.65,0);
+    \TN@upleg{tnA2}{\TN@physleglen}
+    \TN@opdotleft{tnO}{(2.65,0.74)}{#2}
+    \draw[tn phys leg] (tnA2.north) -- (tnO.south);
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPermutationTwist}[2]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@leftleg{tnL}{0.65}
+    \TN@rightleg{tnL}{0.65}
+    \TN@upleg{tnL}{\TN@physleglen}
+    \TN@uplabel{tnL}{\TN@physlabeloff}{#1}
+    \node at (1.55,0) {$\xrightarrow{\ \sigma_g\ }$};
+    \TN@tensordot{tnR}{(3.30,0)}
+    \TN@leftleg{tnR}{0.65}
+    \TN@rightleg{tnR}{0.65}
+    \TN@upleg{tnR}{\TN@physleglen}
+    \TN@uplabel{tnR}{\TN@physlabeloff}{#2}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNTwistedTransfer}[1]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnUp}{(0,\TN@doublelayersep)}
+    \TN@tensordot{tnDn}{(0,-\TN@doublelayersep)}
+    \draw[tn leg] ($(tnUp.west)+(-0.80,0)$) -- (tnUp.west);
+    \draw[tn leg] ($(tnDn.west)+(-0.80,0)$) -- (tnDn.west);
+    \draw[tn leg] (tnUp.east) -- ++(0.80,0);
+    \draw[tn leg] (tnDn.east) -- ++(0.80,0);
+    \TN@opdotleft{tnu}{(0,0)}{#1}
+    \draw[tn phys leg] (tnUp.south) -- (tnu.north);
+    \draw[tn phys leg] (tnu.south) -- (tnDn.north);
+    \node at (-1.25,0) {$X$};
+    \node at (1.52,0) {$\E_{#1}(X)$};
+    \node at ($(tnUp.north)+(0,0.28)$) {$n$};
+    \node at ($(tnDn.south)+(0,-0.28)$) {$n'$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNCondCOne}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@leftleg{tnL}{0.65}
+    \TN@rightleg{tnL}{0.65}
+    \TN@upleg{tnL}{0.26}
+    \TN@opdotleft{tnu}{(0,0.64)}{#1}
+    \draw[tn phys leg] (tnL.north) -- (tnu.south);
+    \node at ($(tnu.north)+(0,0.18)$) {$#3$};
+    \node at (1.65,0) {$=$};
+    \TN@opdotabove{tnXl}{(3.15,0)}{#2}
+    \TN@tensordot{tnA}{(4.20,0)}
+    \TN@opdotabove{tnXr}{(5.25,0)}{#2^\dagger}
+    \draw[tn leg] (tnXl.west) -- ++(-0.55,0);
+    \draw[tn leg] (tnXl.east) -- (tnA.west);
+    \draw[tn leg] (tnA.east) -- (tnXr.west);
+    \draw[tn leg] (tnXr.east) -- ++(0.55,0);
+    \TN@upleg{tnA}{\TN@physleglen}
+    \TN@uplabel{tnA}{\TN@physlabeloff}{#3}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNCondCTwo}[1]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@opdotabove{tnVL}{(-1.15,0.48)}{#1}
+    \TN@opdotbelow{tnVdL}{(-1.15,-0.48)}{#1^\dagger}
+    \TN@tensordot{tnLUp}{(0,0.48)}
+    \TN@tensordot{tnLDn}{(0,-0.48)}
+    \draw[tn leg] (tnVL.west) -- ++(-0.45,0);
+    \draw[tn leg] (tnVdL.west) -- ++(-0.45,0);
+    \draw[tn leg] (tnVL.east) -- (tnLUp.west);
+    \draw[tn leg] (tnVdL.east) -- (tnLDn.west);
+    \draw[tn leg] (tnLUp.east) -- ++(0.55,0);
+    \draw[tn leg] (tnLDn.east) -- ++(0.55,0);
+    \draw[tn phys leg] (tnLUp.south) -- (tnLDn.north);
+    \node at (1.55,0) {$=$};
+    \TN@tensordot{tnRUp}{(3.10,0.48)}
+    \TN@tensordot{tnRDn}{(3.10,-0.48)}
+    \TN@opdotabove{tnVR}{(4.25,0.48)}{#1}
+    \TN@opdotbelow{tnVdR}{(4.25,-0.48)}{#1^\dagger}
+    \draw[tn leg] (tnRUp.west) -- ++(-0.55,0);
+    \draw[tn leg] (tnRDn.west) -- ++(-0.55,0);
+    \draw[tn leg] (tnRUp.east) -- (tnVR.west);
+    \draw[tn leg] (tnRDn.east) -- (tnVdR.west);
+    \draw[tn leg] (tnVR.east) -- ++(0.45,0);
+    \draw[tn leg] (tnVdR.east) -- ++(0.45,0);
+    \draw[tn phys leg] (tnRUp.south) -- (tnRDn.north);
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNStringOrderParameter}[2]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnLam}{(-1.15,0)}
+    \node at ($(tnLam.south)+(0,-0.28)$) {$\Lambda$};
+    \TN@tensordot{tnU1}{(0,\TN@doublelayersep)}
+    \TN@tensordot{tnD1}{(0,-\TN@doublelayersep)}
+    \TN@tensordot{tnU2}{(1.55,\TN@doublelayersep)}
+    \TN@tensordot{tnD2}{(1.55,-\TN@doublelayersep)}
+    \TN@tensordot{tnU3}{(4.30,\TN@doublelayersep)}
+    \TN@tensordot{tnD3}{(4.30,-\TN@doublelayersep)}
+    \TN@opdotleft{tnuA}{(0,0)}{#1}
+    \TN@opdotleft{tnuB}{(1.55,0)}{#1}
+    \TN@opdotleft{tnuC}{(4.30,0)}{#1}
+    \draw[tn leg] (tnLam.east) -- (tnU1.west);
+    \draw[tn leg] (tnLam.east) -- (tnD1.west);
+    \draw[tn leg] (tnU1.east) -- (tnU2.west);
+    \draw[tn leg] (tnD1.east) -- (tnD2.west);
+    \draw[tn leg] (tnU2.east) -- ++(0.62,0);
+    \draw[tn leg] (tnD2.east) -- ++(0.62,0);
+    \draw[tn leg] ($(tnU3.west)+(-0.62,0)$) -- (tnU3.west);
+    \draw[tn leg] ($(tnD3.west)+(-0.62,0)$) -- (tnD3.west);
+    \draw[tn leg] (tnU3.east) -- ++(0.70,0);
+    \draw[tn leg] (tnD3.east) -- ++(0.70,0);
+    \draw[tn phys leg] (tnU1.south) -- (tnuA.north);
+    \draw[tn phys leg] (tnuA.south) -- (tnD1.north);
+    \draw[tn phys leg] (tnU2.south) -- (tnuB.north);
+    \draw[tn phys leg] (tnuB.south) -- (tnD2.north);
+    \draw[tn phys leg] (tnU3.south) -- (tnuC.north);
+    \draw[tn phys leg] (tnuC.south) -- (tnD3.north);
+    \node at (2.92,\TN@doublelayersep) {$\cdots$};
+    \node at (2.92,-\TN@doublelayersep) {$\cdots$};
+    \node at (5.55,0) {$\operatorname{tr}$};
+    \node at (2.92,-1.02) {$#2$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNVirtualInsertion}[4]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@tensordot{tnM}{(1.45,0)}
+    \TN@tensordot{tnR}{(2.90,0)}
+    \TN@upleg{tnL}{\TN@physleglen}
+    \TN@upleg{tnM}{\TN@physleglen}
+    \TN@upleg{tnR}{\TN@physleglen}
+    \TN@uplabel{tnL}{\TN@physlabeloff}{#1}
+    \TN@uplabel{tnM}{\TN@physlabeloff}{#2}
+    \TN@uplabel{tnR}{\TN@physlabeloff}{#3}
+    \draw[tn leg] (tnL.west) -- ++(-0.65,0);
+    \draw[tn leg] (tnL.east) -- (tnM.west);
+    \draw[tn leg] (tnM.east) -- (tnR.west);
+    \draw[tn leg] (tnR.east) -- ++(0.65,0);
+    \TN@opdotabove{tnX}{(0.72,0)}{#4}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNInternalTraceInsertion}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@opdotabove{tnX}{(0.80,0)}{#3}
+    \TN@tensordot{tnR}{(1.60,0)}
+    \TN@upleg{tnL}{\TN@physleglen}
+    \TN@upleg{tnR}{\TN@physleglen}
+    \TN@uplabel{tnL}{\TN@physlabeloff}{#1}
+    \TN@uplabel{tnR}{\TN@physlabeloff}{#2}
+    \draw[tn leg] (tnL.east) -- (tnX.west);
+    \draw[tn leg] (tnX.east) -- (tnR.west);
+    \draw[tn leg] (tnL.west) .. controls +(-0.60,-0.80) and +(0.60,-0.80) .. (tnR.east);
+    \node at (0.80,-0.88) {$\operatorname{Tr}$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNExternalTraceInsertion}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@tensordot{tnR}{(1.60,0)}
+    \TN@opdotbelow{tnY}{(0.80,-0.78)}{#3}
+    \TN@upleg{tnL}{\TN@physleglen}
+    \TN@upleg{tnR}{\TN@physleglen}
+    \TN@uplabel{tnL}{\TN@physlabeloff}{#1}
+    \TN@uplabel{tnR}{\TN@physlabeloff}{#2}
+    \draw[tn leg] (tnL.east) -- (tnR.west);
+    \draw[tn leg] (tnL.west) .. controls +(-0.30,-0.55) and +(-0.30,0.55) .. (tnY.west);
+    \draw[tn leg] (tnY.east) .. controls +(0.30,0.55) and +(0.30,-0.55) .. (tnR.east);
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNBoundaryRegrow}[4]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{rA}{(0,0)}
+    \TN@tensordot{rB}{(1.05,0)}
+    \TN@tensordot{rC}{(2.10,0)}
+    \TN@opdotabove{rX}{(3.55,0)}{#1}
+    \foreach \n in {rA,rB,rC} {
+      \TN@upleg{\n}{0.44}
+    }
+    \TN@uplabel{rA}{0.66}{#2}
+    \TN@uplabel{rC}{0.66}{#3}
+    \draw[tn leg] (rA.west) -- ++(-0.50,0);
+    \draw[tn leg] (rA.east) -- (rB.west);
+    \draw[tn leg] (rB.east) -- (rC.west);
+    \draw[tn leg] (rC.east) -- (rX.west);
+    \draw[tn leg] (rX.east) -- ++(0.45,0);
+    \node at (1.78,-0.58) {$#4$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNLocalEqualityStep}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{lA}{(0,0)}
+    \TN@opdotabove{lX}{(0.82,0)}{#1}
+    \TN@tensordot{lB}{(1.65,0)}
+    \TN@upleg{lB}{0.44}
+    \TN@uplabel{lB}{0.66}{#3}
+    \draw[tn leg] (lA.west) -- ++(-0.50,0);
+    \draw[tn leg] (lA.east) -- (lX.west);
+    \draw[tn leg] (lX.east) -- (lB.west);
+    \draw[tn leg] (lB.east) -- ++(0.50,0);
+    \node at (2.85,0) {$=$};
+    \TN@tensordot{rA}{(4.10,0)}
+    \TN@opdotabove{rX}{(4.92,0)}{#2}
+    \TN@tensordot{rB}{(5.75,0)}
+    \TN@upleg{rB}{0.44}
+    \TN@uplabel{rB}{0.66}{#3}
+    \draw[tn leg] (rA.west) -- ++(-0.50,0);
+    \draw[tn leg] (rA.east) -- (rX.west);
+    \draw[tn leg] (rX.east) -- (rB.west);
+    \draw[tn leg] (rB.east) -- ++(0.50,0);
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPeriodicGauge}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{pA}{(0,0)}
+    \TN@tensordot{pB}{(1.10,0)}
+    \TN@opdotbelow{pZ}{(0.55,-0.72)}{#2}
+    \draw[tn leg] (-0.45,0) -- (1.55,0);
+    \TN@upleg{pA}{0.38}
+    \TN@upleg{pB}{0.38}
+    \draw[tn leg] (-0.45,0) -- (-0.45,-0.72) -- (pZ.west);
+    \draw[tn leg] (pZ.east) -- (1.55,-0.72) -- (1.55,0);
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNGroundSpaceMap}[5]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{tnL}{(0,0)}
+    \TN@tensordot{tnM}{(1.15,0)}
+    \TN@tensordot{tnR}{(2.95,0)}
+    \TN@upleg{tnL}{\TN@physleglen}
+    \TN@upleg{tnM}{\TN@physleglen}
+    \TN@upleg{tnR}{\TN@physleglen}
+    \TN@uplabel{tnL}{\TN@physlabeloff}{#2}
+    \TN@uplabel{tnR}{\TN@physlabeloff}{#3}
+    \draw[tn leg] (-0.45,0) -- (3.40,0);
+    \node at (2.05,0) {$\cdots$};
+    \TN@opdotbelow{tnX}{(1.48,-0.82)}{#5}
+    \draw[tn leg] (-0.45,0) -- (-0.45,-0.82) -- (tnX.west);
+    \draw[tn leg] (tnX.east) -- (3.40,-0.82) -- (3.40,0);
+  \end{tikzpicture}%
+}
+
+% ---------- Compatibility wrappers ----------
+
+\newcommand{\TNMPOCellDiagram}[3]{%
+  \TNMPOCell{#1}{#2}{#3}%
+}
+
+\newcommand{\TNMPOChainDiagram}{%
+  \TNMPOChain{M}{\sigma_1}{\tau_1}{\sigma_N}{\tau_N}{N}%
+}
+
+\newcommand{\TNLPDODiagram}{%
+  \TNLPDO{A}{A^\dagger}{k}{i}{j}%
+}
+
+\makeatother

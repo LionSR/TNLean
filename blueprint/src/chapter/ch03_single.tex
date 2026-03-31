@@ -252,7 +252,7 @@ transform.
 
 The proof above treats a single translation-invariant tensor and equality of
 the full MPV family for all system sizes.
-The alternative algebraic route of \cite{Molnar2018NormalPEPS} instead keeps a
+The alternative algebraic proof of \cite{Molnar2018NormalPEPS} instead keeps a
 fixed periodic chain length and allows the local tensors to vary from site to
 site.
 The first step is therefore a separate bookkeeping layer for finite
@@ -285,7 +285,14 @@ non-translation-invariant chains.
         B_k^i = Z_k A_k^i Z_{k+1}^{-1}
     \]
     for every site $k$ and physical index $i$, with indices understood modulo
-    $n$ so that $Z_n = Z_0$.
+    $n$ so that $Z_n = Z_0$. Locally, this gauge relation is
+    represented by
+    \[
+        \TNGaugeConjugation{Z_k}{i}{Z_{k+1}^{-1}}
+    \]
+    where the black node denotes the site tensor named in the surrounding
+    formula and the two red side nodes denote the bond gauges on the
+    neighboring virtual legs.
 \end{definition}
 
 \begin{lemma}[Cyclic gauge equivalence is an equivalence relation]
