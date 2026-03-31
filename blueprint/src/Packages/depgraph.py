@@ -77,6 +77,7 @@ class _LabelProxy:
         self.ref = ref
         self.title = title
         self.userdata = userdata
+        self.parentNode = None
 
     def __hash__(self):
         return hash((self.id, self.url))
@@ -183,7 +184,7 @@ class uses(_MODULE.uses):
                     used.append(target)
             node.setUserData("uses", used)
 
-        doc.addPostParseCallbacks(140, update_used)
+        doc.addPostParseCallbacks(10, update_used)
 
 
 class alsoIn(_MODULE.alsoIn):
@@ -214,7 +215,7 @@ class alsoIn(_MODULE.alsoIn):
             for decl in alsoin:
                 incls.setdefault(decl, []).append(node)
 
-        doc.addPostParseCallbacks(140, update_incls)
+        doc.addPostParseCallbacks(10, update_incls)
 
 
 class proves(_MODULE.proves):
@@ -241,4 +242,4 @@ class proves(_MODULE.proves):
                 node.setUserData("proves", proved)
                 proved.userdata["proved_by"] = node
 
-        doc.addPostParseCallbacks(140, update_proved)
+        doc.addPostParseCallbacks(10, update_proved)

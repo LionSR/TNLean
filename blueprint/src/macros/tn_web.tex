@@ -15,7 +15,7 @@
     \vert && \vert && \cdots && \vert \\
     \bullet & \text{---} & \bullet & \text{---} &
     \cdots & \text{---} & \bullet \\
-    &&&& #4
+    \multicolumn{7}{c}{#4}
   \end{array}%
 }
 
@@ -59,7 +59,7 @@
     \cdots & \text{---} & \bullet \\
     \vert && \vert && \cdots && \vert \\
     #3 &&&&&& #5 \\
-    &&&& #6
+    \multicolumn{7}{c}{#6}
   \end{array}%
 }
 
@@ -135,14 +135,14 @@
 
 \newcommand{\TNStringOrderParameter}[2]{%
   \begin{array}{ccccccccc}
-    &&&&&& \operatorname{tr} \\
+    \multicolumn{9}{c}{\operatorname{tr}} \\
     \fbox{$\Lambda$} & \text{---} &
     \begin{array}{c}\bullet\\ \vert\\ \fbox{$#1$}\\ \vert\\ \bullet\end{array}
     & \text{---} &
     \begin{array}{c}\bullet\\ \vert\\ \fbox{$#1$}\\ \vert\\ \bullet\end{array}
     & \text{---} & \cdots & \text{---} &
     \begin{array}{c}\bullet\\ \vert\\ \fbox{$#1$}\\ \vert\\ \bullet\end{array} \\
-    &&&& #2
+    \multicolumn{9}{c}{#2}
   \end{array}%
 }
 
@@ -206,7 +206,7 @@
     #2 &&&&&& #3 \\
     \vert && \vert && \vert && \\
     \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \fbox{$#1$} \\
-    &&&& #4
+    \multicolumn{7}{c}{#4}
   \end{array}%
 }
 
@@ -222,7 +222,7 @@
 
 \newcommand{\TNDirectSumAssembly}[3]{%
   \begin{array}{ccccc}
-    \fbox{$#1$} & \xrightarrow{\ #3\ } & \fbox{$#2$}
+    \multicolumn{5}{c}{\fbox{$#1$} \xrightarrow{\ #3\ } \fbox{$#2$}}
   \end{array}%
 }
 
@@ -279,7 +279,7 @@
 
 \newcommand{\TNSummedBlocks}[2]{%
   \begin{array}{ccccc}
-    \fbox{$\sum_k #1_k^{#2} V(A_k)$} & = & \fbox{$\sum_k #1_k^{#2} V(B_k)$} \\
+    \multicolumn{5}{c}{\fbox{$\sum_k #1_k^{#2} V(A_k)$} = \fbox{$\sum_k #1_k^{#2} V(B_k)$}} \\
     \fbox{$#1_0^{#2} V(A_0)$} & + & \fbox{$\sum_{k\ge1} #1_k^{#2} V(A_k)$} &
     = &
     \fbox{$#1_0^{#2} V(B_0)$} + \fbox{$\sum_{k\ge1} #1_k^{#2} V(B_k)$}
@@ -292,8 +292,8 @@
     \vert && \vert && \cdots && \vert \\
     \bullet & \text{---} & \bullet & \text{---} &
     \cdots & \text{---} & \bullet \\
-    &&&& #4 \\
-    &&& \fbox{$#5$}
+    \multicolumn{7}{c}{#4} \\
+    \multicolumn{7}{c}{\fbox{$#5$}}
   \end{array}%
 }
 
