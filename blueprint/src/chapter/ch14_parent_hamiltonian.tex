@@ -140,13 +140,8 @@ translated copies of the local interaction.
   \uses{def:parent_interaction}
   For each site index $i \in \{0,\dots,N{-}1\}$, the translated local term
   $h_i$ embeds the parent interaction into the full $N$-site space at
-  position~$i$ (with periodic boundary conditions). Diagrammatically,
-  \[
-    \TNLocalTermWindow{\sigma_i}{\sigma_{i+L-1}}{L}{N}{h_i}
-  \]
-  the dashed window marks the $L$ consecutive sites on which the local
-  projector acts, while the surrounding chain is left unchanged. The range
-  $L$ and ambient chain length~$N$ are carried by the surrounding notation.
+  position~$i$ (with periodic boundary conditions). Thus $h_i$ acts on the
+  cyclic interval $[i,i+L-1]$ and as the identity outside that interval.
 \end{definition}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
@@ -356,10 +351,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
-  The ``invert-and-regrow'' argument:
+  The ``invert-and-regrow'' argument compares the left and right
+  restrictions on their common $(L-1)$-site overlap and then reconstructs the
+  full $(L+1)$-site word from a single boundary matrix:
   \[
-    \TNWindowOverlap{[1,L]}{[2,L+1]}{[2,L]}
-    \qquad
     \TNBoundaryRegrow{X'}{\sigma_1}{\sigma_{L+1}}{L+1}
   \]
   \begin{enumerate}
@@ -408,13 +403,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
-  The induction repeatedly merges two neighbouring admissible windows into
-  a larger one:
-  \[
-    \TNWindowHighlight{\sigma_i}{\sigma_{i+L-1}}{[i,i+L-1]}{N}
-    \qquad
-    \TNWindowOverlap{[i,i+L-1]}{[i+1,i+L]}{[i+1,i+L-1]}
-  \]
+  The induction repeatedly merges two neighbouring admissible windows
+  $[i,i+L-1]$ and $[i+1,i+L]$ into the larger window $[i,i+L]$ by applying
+  Theorem~\ref{thm:ground_space_intersection} to their common overlap
+  $[i+1,i+L-1]$.
   Strong induction on window size, combining adjacent windows via
   Theorem~\ref{thm:ground_space_intersection} at each step.
 \end{proof}
@@ -624,12 +616,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
   \notready
-  The relevant geometry is a family of overlapping local windows:
-  \[
-    \TNMartingaleWindow{L}{i}{n}
-    \qquad
-    \TNWindowOverlap{[i,i+L-1]}{[j,j+L-1]}{d_N(i,j)}
-  \]
+  The relevant geometry is a family of translated length-$L$ projector
+  windows on the ring; two terms $h_i$ and $h_j$ interact only when their
+  supports overlap, equivalently when the cyclic distance $d_N(i,j)$ is
+  smaller than $L$.
   From $h_i^2 = h_i$,
   \[
     H^2 = \sum_i h_i + \sum_{\substack{i < j \\ \text{overlapping}}}
@@ -701,12 +691,6 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{proof}
   \uses{thm:ground_space_intersection, def:injective}
   \notready
-  The local picture is again an overlap of two translated projector windows:
-  \[
-    \TNMartingaleWindow{L}{i}{N}
-    \qquad
-    \TNWindowOverlap{[i,i+L-1]}{[j,j+L-1]}{L-d_N(i,j)}
-  \]
   Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
   in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
   the $N$-site ring).  Since $A$ is injective, the intersection property
@@ -799,14 +783,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
   dimension $D$.  Each blocked site represents $L_0$ original sites,
   so the range-$L = 2L_0$ interaction on the original chain corresponds
   exactly to a range-$2$ interaction on the blocked chain (two blocked
-  sites).
-  Diagrammatically the proof passes to the blocked chain and then applies
-  the martingale window estimate at range~$2$:
-  \[
-    \TNBlockedChain{L_0}{N/L_0}
-    \qquad
-    \TNMartingaleWindow{2}{j}{N/L_0}
-  \]
+  sites).  Thus one passes to the blocked chain and applies the martingale
+  estimate there with interaction range~$2$.
   \emph{Remark on interaction range:}
   Theorem~\ref{thm:unique_gs_injective} establishes ground-state
   uniqueness at range $L_0{+}1$, whereas here we use range $2L_0$.

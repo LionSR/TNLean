@@ -253,12 +253,9 @@ inner automorphism.
     \leanok
     \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether,
           lem:blocking_preserves_injectivity}
-    Block the sites on either side of bond~$k$ into a three-site chain;
-    diagrammatically one isolates the relevant window and compares the
-    same local insertion across the two blocked chains:
+    Block the sites on either side of bond~$k$ into a three-site chain and
+    compare the same local insertion across the two blocked chains:
     \[
-        \TNWindowHighlight{\sigma_{k-1}}{\sigma_{k+1}}{[k-1,k+1]}{n}
-        \qquad
         \TNLocalEqualityStep{X}{Z_k^{-1} X Z_k}{\sigma_k}
     \]
     The remaining sites are compressed into an effective boundary matrix,
@@ -407,11 +404,9 @@ Lemma~\ref{lem:tensor_proportional} yields the main theorem of
     Redefine $\widetilde{B}_k^i := Z_k B_k^i Z_{k+1}^{-1}$; the
     virtual insertion operations of $\mathbf{A}$ and
     $\widetilde{\mathbf{B}}$ then agree on every bond.
-    After the bond gauges have been aligned, the ring is reduced to the
+    After the bond gauges have been aligned, the argument reduces to the
     same local replacement step repeated around the chain:
     \[
-        \TNBlockedChain{2}{n}
-        \qquad
         \TNLocalEqualityStep{\lambda_k}{\Id}{\sigma_k}
     \]
     For each adjacent pair $(k, k{+}1)$, block the remaining sites into
@@ -627,11 +622,7 @@ Chapter~\ref{ch:symmetry}.
     That is, gauge equivalence holds for the \emph{original} (unblocked)
     tensors.
     The reduction to the injective case proceeds by grouping the chain
-    into consecutive length-$L$ blocks,
-    \[
-        \TNBlockedChain{L}{m}
-    \]
-    and then applying the injective-chain theorem to the blocked local
+    into consecutive length-$L$ blocks and then applying the injective-chain theorem to the blocked local
     tensors. The remaining passage from blocked gauges back to the original
     site tensors is the reason this corollary remains marked \notready.
 \end{corollary}
@@ -752,14 +743,9 @@ decomposition.
     \]
     for all $M \in \MN{D_k}$ (viewed as supported in block~$k$) and
     all~$k$.
-    The picture is that the product-algebra automorphism first
-    permutes the simple matrix blocks and then acts inside each block
-    by an inner conjugation,
-    \[
-        \TNBlockPermutation{\sigma}{X}
-    \]
-    where the permutation reindexes the block ideals and the labels
-    $X_k$ denote the resulting inner automorphisms.
+    Equivalently, the product-algebra automorphism first permutes the
+    simple matrix blocks and then acts inside each block by an inner
+    conjugation.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:piAlgEquiv, thm:skolem_noether}
@@ -767,15 +753,10 @@ decomposition.
     (each block ideal is simple, and an automorphism sends simple ideals
     to simple ideals of the same dimension).
     This gives the permutation $\sigma$.
-    At the assembled level this is the direct-sum map
-    \[
-        \TNDirectSumAssembly{\bigoplus_k \MN{D_k}}{\bigoplus_k \MN{D_{\sigma(k)}}}{\operatorname{diag}(X_k)}.
-    \]
     On each block, the restricted map is a $\C$-algebra automorphism of
     $\MN{D_k}$; by Skolem--Noether (Theorem~\ref{thm:skolem_noether}),
-    it is inner. The tensor-network picture records the same split into
-    permutation of block ideals followed by inner conjugation on each
-    surviving block.
+    it is inner. Thus $T$ splits algebraically into the permutation of
+    block ideals followed by inner conjugation on each surviving block.
 \end{proof}
 
 \subsection{Nondegeneracy of the product trace pairing}
@@ -839,12 +820,8 @@ decomposition.
               $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are
               gauge equivalent.
     \end{enumerate}
-    The second clause is assembled from the first by putting the
-    per-block gauges on the diagonal,
-    \[
-        \TNDirectSumAssembly{\bigoplus_k \mu_k A_k}{\bigoplus_k \mu_k B_k}{\bigoplus_k X_k}
-    \]
-    assembling the per-block gauges into one global block-diagonal gauge.
+    The second clause is obtained from the first by assembling the
+    per-block gauges into one block-diagonal gauge.
 \end{theorem}
 
 \begin{proof}\leanok\uses{lem:perBlockLinearExtension_bijective,
@@ -889,9 +866,11 @@ Block separation extracts the per-block identities from the global one
 under canonical-form normalization.
 The first step is the weighted block-sum identity
 \[
-    \TNSummedBlocks{\mu}{N}
+    \sum_k \mu_k^N V^{(N)}(A_k)_\sigma
+    =
+    \sum_k \mu_k^N V^{(N)}(B_k)_\sigma,
 \]
-This is then combined with overlap estimates and the leading-block peel.
+which is then combined with overlap estimates and the leading-block peel.
 
 \begin{definition}[Canonical form]\label{def:isCanonicalForm}
     \lean{MPSTensor.IsCanonicalForm}
@@ -932,12 +911,9 @@ This is then combined with overlap estimates and the leading-block peel.
     If $\mc{V}\!\bigl(\bigoplus_k \mu_k A_k\bigr)
     = \mc{V}\!\bigl(\bigoplus_k \mu_k B_k\bigr)$,
     then $\mc{V}(A_k) = \mc{V}(B_k)$ for each block~$k$ individually.
-    The proof move is to isolate the leading block and treat the
-    remaining blocks as an exponentially decaying tail:
-    \[
-        \TNBlockTailEstimate{\mu_0^N V(A_0)}{\rho^N}
-    \]
-    with $\rho = |\mu_1|/|\mu_0| < 1$.
+    The proof isolates the leading block and treats the remaining blocks
+    as an exponentially decaying tail with
+    $\rho = |\mu_1|/|\mu_0| < 1$.
 \end{theorem}
 
 \begin{proof}
@@ -951,14 +927,14 @@ This is then combined with overlap estimates and the leading-block peel.
     $\sum_k \mu_k^N\, \bigl(V^{(N)}(A_k)_\sigma
     - V^{(N)}(B_k)_\sigma\bigr) = 0$
     holds for all $N$ and $\sigma$.
-    The weighted block sum is first compared as
     \[
-        \TNSummedBlocks{\mu}{N}
+        \mu_0^N \bigl(V^{(N)}(A_0)_\sigma - V^{(N)}(B_0)_\sigma\bigr)
+        =
+        - \sum_{k \ge 1} \mu_k^N
+        \bigl(V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma\bigr).
     \]
-    and then reduced to the leading-block estimate
-    \[
-        \TNBlockTailEstimate{\mu_0^N V(A_0)}{\rho^N}.
-    \]
+    Dividing by $\mu_0^N$ shows that the right-hand side is
+    $O(\rho^N)$ with $\rho = |\mu_1|/|\mu_0| < 1$.
     Multiplying by the MPV components of $A_0$ and summing over $\sigma$
     converts this to an overlap identity.
     Dividing by $|\mu_0|^{2N}$ and using the strict norm ordering
@@ -1040,15 +1016,11 @@ This is then combined with overlap estimates and the leading-block peel.
 \begin{proof}\leanok\uses{cor:ft_ti_chain}
     Block the constant chain into a combined tensor and apply
     Corollary~\ref{cor:ft_ti_chain} to obtain a single uniform gauge.
-    Diagrammatically one first blocks the constant chain and then reads
-    the same gauge back on each local leg:
+    On the combined-site index $(k,i)$ this is the local relation
     \[
-        \TNBlockedChain{n}{N}
-        \qquad
         \TNGaugeConjugation{X}{(k,i)}{X^{-1}}
     \]
-    on the combined-site index $(k,i)$.
-    Reading this back on each site gives $B^i = X A^i X^{-1}$.
+    and reading this back on each site gives $B^i = X A^i X^{-1}$.
     Injectivity of $B$ then follows from gauge equivalence to the injective
     tensor $A$.
 \end{proof}

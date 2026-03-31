@@ -28,11 +28,8 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	we write
 	$\bigoplus_{k=1}^r \mu_k A_k$
 	for the tensor of total bond dimension $D = \sum_k D_k$ whose Kraus
-	operators are $A^i = \bigoplus_{k=1}^r \mu_k A_k^i$.
-	Diagrammatically this is the block-diagonal construction
-	\[
-		\TNDirectSumAssembly{\bigoplus_k \mu_k A_k^i}{A^i}{\operatorname{diag}}.
-	\]
+	operators are $A^i = \bigoplus_{k=1}^r \mu_k A_k^i$, obtained by
+	placing the scaled block Kraus operators on the diagonal.
 \end{definition}
 
 \begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
@@ -248,12 +245,10 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	Theorem~\ref{thm:fp_inv_proj} gives
 	$(\Id - P) A^i P = 0$ for all~$i$.
 	A unitary change of basis that block-diagonalizes $P$ puts
-	$A^i$ in upper-triangular block form
-	\[
-		\TNDirectSumAssembly{A^i}{B_{11}^i \oplus B_{22}^i}{U}
-	\]
-	(Theorem~\ref{thm:samempv_unitary} ensures the MPV
-	is preserved by the conjugation).
+	$A^i$ in upper-triangular block form, with diagonal blocks
+	$B_{11}^i$ and $B_{22}^i$.
+	Theorem~\ref{thm:samempv_unitary} ensures the MPV is preserved by the
+	conjugation.
 	The trace of the upper-triangular product equals the sum
 	of the diagonal-block traces, so the block-diagonal tensor
 	obtained by discarding the off-diagonal blocks has the same MPV
@@ -294,10 +289,8 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	block-diagonal tensor obtained by discarding the off-diagonal part
 	has the same MPV family as~$A$, and the two diagonal blocks have
 	strictly smaller bond dimensions.
-	The iterated reduction therefore has the repeated shape
-	\[
-		\TNDirectSumAssembly{A}{\bigoplus_k A_k}{\operatorname{iterate}}.
-	\]
+	Iterating this splitting produces a block-diagonal tensor
+	$\bigoplus_k A_k$ whose blocks are irreducible.
 	Apply the induction hypothesis to each block and concatenate.
 	(If one prefers a positive-eigenvector argument without assuming TP
 	normalization, the correct replacement for the channel-specific
@@ -540,10 +533,8 @@ removing it as an independent assumption.
 		\uses{thm:qpf, thm:eigenvalue_bound, thm:psd_fp_unique,
 			thm:primitive_compl_lt_one, thm:primitive_overlap}
 	Fix a block $k$ and write $E := \E_{A_k}$.
-	The reduction turns primitive blocks into canonical-form data:
-	\[
-		\TNDirectSumAssembly{\text{primitive blocks}}{\text{canonical form}}{\operatorname{diag}}.
-	\]
+	We check that each primitive block already satisfies the defining
+	properties of the canonical form predicate.
 	By injectivity and TP normalization, Theorem~\ref{thm:qpf} provides a
 	nonzero positive definite fixed point for~$E$.
 	To apply the spectral-gap criterion
@@ -596,9 +587,7 @@ removing it as an independent assumption.
 	\uses{thm:peripheral_roots_irred_fp, thm:peripheral_finite,
 		lem:common_power_eq_one, lem:peripheral_pow_singleton}
 	The period-$p$ blocking step is the diagrammatic move
-	\[
-		\TNBlockedChain{p}{N}.
-	\]
+	of grouping the chain into consecutive blocks of length~$p$.
 	Pass to the conjugate-transposed Kraus family $K_i := (A^i)^\dagger$.
 	The TP normalization of $A$ makes $K$ unital, and irreducibility of $A$
 	gives irreducibility of the associated Kraus map.

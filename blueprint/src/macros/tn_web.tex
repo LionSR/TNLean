@@ -137,12 +137,13 @@
 \newcommand{\TNStringOrderParameter}[2]{%
   \begin{array}{ccccccccc}
     \multicolumn{9}{c}{\operatorname{tr}} \\
-    \fbox{$\Lambda$} & \text{---} &
+    \bullet & \text{---} &
     \begin{array}{c}\bullet\\ \vert\\ \textcolor{red}{\bullet}\\ \vert\\ \bullet\end{array}
     & \text{---} &
     \begin{array}{c}\bullet\\ \vert\\ \textcolor{red}{\bullet}\\ \vert\\ \bullet\end{array}
     & \text{---} & \cdots & \text{---} &
     \begin{array}{c}\bullet\\ \vert\\ \textcolor{red}{\bullet}\\ \vert\\ \bullet\end{array} \\
+    \Lambda &&&&&&&& \\
     \multicolumn{9}{c}{#1} \\
     \multicolumn{9}{c}{#2}
   \end{array}%
@@ -177,32 +178,6 @@
   \end{array}%
 }
 
-\newcommand{\TNBlockedChain}[2]{%
-  \begin{array}{ccccccccc}
-    \bullet & \text{---} & \bullet && \bullet & \text{---} & \bullet && \cdots \\
-    \multicolumn{3}{c}{#1} && \multicolumn{3}{c}{#1} && #2
-  \end{array}%
-}
-
-\newcommand{\TNWindowHighlight}[4]{%
-  \begin{array}{ccccccccc}
-    #1 &&&&&&&& #2 \\
-    \vert && \vert && \vert && \vert && \vert \\
-    \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet \\
-    \multicolumn{9}{c}{\fbox{$#3$}} \\
-    \multicolumn{9}{c}{#4}
-  \end{array}%
-}
-
-\newcommand{\TNWindowOverlap}[3]{%
-  \begin{array}{ccccccccc}
-    \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet \\
-    \multicolumn{5}{c}{\fbox{$#1$}} & \multicolumn{4}{c}{} \\
-    \multicolumn{4}{c}{} & \multicolumn{5}{c}{\fbox{$#2$}} \\
-    \multicolumn{9}{c}{#3}
-  \end{array}%
-}
-
 \newcommand{\TNBoundaryRegrow}[4]{%
   \begin{array}{ccccccc}
     #2 &&&&&& #3 \\
@@ -224,70 +199,12 @@
   \end{array}%
 }
 
-\newcommand{\TNDirectSumAssembly}[3]{%
-  \begin{array}{ccccc}
-    \multicolumn{5}{c}{\fbox{$#1$} \xrightarrow{\ #3\ } \fbox{$#2$}}
-  \end{array}%
-}
-
-\newcommand{\TNBlockTailEstimate}[2]{%
-  \begin{array}{ccccc}
-    \fbox{$#1$} & + & \fbox{$O(#2)$} & = & \fbox{$#1$} + \fbox{$O(#2)$} \\
-    && \Downarrow && \\
-    && V_{\mathrm{lead}}(A)=V_{\mathrm{lead}}(B) &&
-  \end{array}%
-}
-
 \newcommand{\TNPeriodicGauge}[3]{%
   \begin{array}{ccc}
     \bullet & \text{---} & \bullet \\
     \vert && \vert \\
     \multicolumn{3}{c}{\textcolor{red}{\bullet}} \\
     \multicolumn{3}{c}{#2}
-  \end{array}%
-}
-
-\newcommand{\TNMartingaleWindow}[3]{%
-  \begin{array}{ccccccccc}
-    \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet \\
-    \multicolumn{9}{c}{\fbox{$h_{#2}$ on an $L=#1$ window}} \\
-    \multicolumn{9}{c}{$N=#3$}
-  \end{array}%
-}
-
-\newcommand{\TNBlockPermutation}[2]{%
-  \begin{array}{ccccccc}
-    \fbox{$A_0$} & \fbox{$A_1$} & \cdots & \fbox{$A_{r-1}$}
-    & \xrightarrow{\ #1\ } &
-    \fbox{$#2_0$} & \fbox{$#2_{r-1}$}
-  \end{array}%
-}
-
-\newcommand{\TNBlockDiagonalGauge}[1]{%
-  \begin{array}{ccccccc}
-    \fbox{$\mu_0 A_0$} & \fbox{$\mu_1 A_1$} & \cdots & \fbox{$\mu_{r-1} A_{r-1}$}
-    & \xrightarrow{\ \operatorname{diag}(#1_k)\ } &
-    \fbox{$\mu_0 B_0$} & \fbox{$\mu_{r-1} B_{r-1}$}
-  \end{array}%
-}
-
-\newcommand{\TNLeadingBlockPeeling}[2]{%
-  \begin{array}{ccccc}
-    \fbox{$#1_0^N V(A_0)$} & + & \fbox{$\sum_{k\ge 1} #1_k^N V(A_k)$}
-    & = &
-    \fbox{$#1_0^N V(B_0)$} + \fbox{$\sum_{k\ge 1} #1_k^N V(B_k)$} \\
-    && O(#2^N) && \\
-    && \Downarrow && \\
-    && V(A_0)=V(B_0) &&
-  \end{array}%
-}
-
-\newcommand{\TNSummedBlocks}[2]{%
-  \begin{array}{ccccc}
-    \multicolumn{5}{c}{\fbox{$\sum_k #1_k^{#2} V(A_k)$} = \fbox{$\sum_k #1_k^{#2} V(B_k)$}} \\
-    \fbox{$#1_0^{#2} V(A_0)$} & + & \fbox{$\sum_{k\ge1} #1_k^{#2} V(A_k)$} &
-    = &
-    \fbox{$#1_0^{#2} V(B_0)$} + \fbox{$\sum_{k\ge1} #1_k^{#2} V(B_k)$}
   \end{array}%
 }
 
@@ -300,16 +217,6 @@
     \vert &&&&&& \vert \\
     \multicolumn{7}{c}{\textcolor{red}{\bullet}} \\
     \multicolumn{7}{c}{#5}
-  \end{array}%
-}
-
-\newcommand{\TNLocalTermWindow}[5]{%
-  \begin{array}{ccccccccc}
-    && #1 &&&& #2 && \\
-    && \vert &&&& \vert && \\
-    \cdots & \text{---} & \bullet & \text{---} & \bullet & \text{---} &
-    \bullet & \text{---} & \cdots \\
-    &&&& #5 &&&&
   \end{array}%
 }
 

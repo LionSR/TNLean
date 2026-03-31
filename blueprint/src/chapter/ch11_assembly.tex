@@ -102,11 +102,8 @@ distinct weight norms) that the automatic reduction does not yet produce.
 	\uses{thm:cross_overlap_zero, thm:bnt_perm_prop}
 	Apply Theorem~\ref{thm:bnt_perm_prop} to the two canonical-form
 	decompositions with BNT separation.
-	At the block level this is the matching step
-	\[
-		\TNBlockPermutation{\pi}{X}
-	\]
-	that reindexes the separated sectors before comparing them one by one.
+	This yields the permutation $\pi$ that reindexes the separated sectors
+	before comparing them one by one.
 	These hypotheses provide injectivity, TP normalization,
 	diagonal overlap limits, and off-diagonal decay via
 	Theorem~\ref{thm:cross_overlap_zero}.
@@ -285,12 +282,7 @@ distinct weight norms) that the automatic reduction does not yet produce.
 		\mu_j^A = \mu_{\pi(j)}^B \zeta_j.
 	\]
 	Thus the phase factors can be absorbed into the weights, and the
-	resulting global conjugacy is assembled as
-	\[
-		\TNDirectSumAssembly{\bigoplus_j \mu_j^A A_j}{\bigoplus_j \mu_{\pi(j)}^B B_{\pi(j)}}{\bigoplus_j X_j}
-	\]
-	so the
-	blockwise conjugacies assemble to a gauge equivalence of the reindexed
+	resulting blockwise conjugacies assemble to a gauge equivalence of the reindexed
 	weighted block-diagonal tensors.
 \end{proof}
 
@@ -315,10 +307,6 @@ distinct weight norms) that the automatic reduction does not yet produce.
 	\uses{thm:ft_canonical}
 	Since both families share the canonical form data, the BNT separation
 	condition is not needed.
-	The common-structure case is therefore already in block-diagonal form:
-	\[
-		\TNDirectSumAssembly{\bigoplus_k \mu_k A_k}{\bigoplus_k \mu_k B_k}{\bigoplus_k X_k}.
-	\]
 	The canonical-form fundamental theorem
 	(Theorem~\ref{thm:ft_canonical}) then applies directly to this
 	common $(g, D_k, \mu_k)$ structure, yielding per-block gauge
@@ -403,12 +391,10 @@ single weighted block.
 		\item Newton--Girard $\Rightarrow$ equal weight multisets
 		      (Theorem~\ref{thm:power_sum_multiset}).
 	\end{enumerate}
-	At the level of block contributions, the comparison is still the same
-	weighted sector sum:
-	\[
-		\TNSummedBlocks{\mu}{N}
-	\]
-	with the coefficients now aggregated over the multiplicity layers.
+	At the level of block contributions, one compares the weighted sector sums
+	$\sum_j \mathrm{coeff}_A(N,j)\,V^{(N)}(A_j)$ and
+	$\sum_j \mathrm{coeff}_B(N,j)\,V^{(N)}(B_j)$, with the coefficients
+	now aggregated over the multiplicity layers.
 \end{theorem}
 
 \begin{remark}[Remaining step in the unconditional equal-case theorem]\notready
