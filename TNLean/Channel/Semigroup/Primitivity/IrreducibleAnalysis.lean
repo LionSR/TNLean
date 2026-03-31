@@ -16,15 +16,7 @@ attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-! ## Prop 7.5: Irreducibility implies primitivity for QDS
-
-### Note on `sorry` placeholders
-
-The 13 `sorry` placeholders in this file were originally declared as `axiom`s,
-which bypass Lean's proof-tracking system. They have been converted to
-`theorem ... := by sorry` so that `#print axioms` honestly reports the gaps.
-Each placeholder has a `TODO` docstring describing the missing proof argument.
--/
+/-! ## Prop 7.5: Irreducibility implies primitivity for QDS -/
 
 theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
     (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (hIrr : IsIrreducibleMap E)
@@ -388,56 +380,83 @@ theorem fixedPoint_eq_trace_smul_at_irreducible_time
       (by rw [Matrix.trace_sub, Matrix.trace_smul, hσ_mem.2, smul_eq_mul,
                mul_one, sub_self]))
 
-/-- **TODO**: Prove eigenvector with nonzero trace for fraction slices.
-Currently a `sorry` placeholder. -/
+/-- A fraction slice has a peripheral eigenvector with nonzero trace. -/
 theorem exists_trace_ne_zero_eigenvector_of_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    {t₀ u : ℝ} {N : ℕ}
-    (hTt₀_eq_pow : T t₀ = (T u) ^ N)
+    {t₀ u : ℝ}
+    (hTt₀_eq_pow : T t₀ = (T u) ^ Nat.factorial (Module.finrank ℂ Mat))
     (hTu_ch : IsChannel (T u))
     (hTu_irr : IsIrreducibleMap (T u))
-    (σ : Mat) (hσ_mem : σ ∈ densityMatrices D) (hσ_pd : σ.PosDef)
+    (σ : Mat) (hσ_pd : σ.PosDef)
     (hTu_fix : T u σ = σ)
     (hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X → X = Matrix.trace X • σ)
     {μ : ℂ}
     (hμ_eig : Module.End.HasEigenvalue (T u) μ)
     (hμ_norm : ‖μ‖ = 1) :
     ∃ X : Mat, X ≠ 0 ∧ T u X = μ • X ∧ Matrix.trace X ≠ 0 := by
-  sorry
+  have hμ_periph : μ ∈ peripheralEigenvalues (T u) := ⟨hμ_eig, hμ_norm⟩
+  have hpow_closed := peripheral_powers_closed_of_irreducible_channel_with_fixed
+    (T u) hTu_ch hTu_irr σ hσ_pd hTu_fix hμ_periph
+  obtain ⟨p, hp_pos, hp_le, hμp⟩ :=
+    bounded_root_of_peripheral_closed_powers (T u) μ hμ_periph hpow_closed
+  obtain ⟨X, hXev⟩ := hμ_eig.exists_hasEigenvector
+  have hX_ne : X ≠ 0 := hXev.2
+  have hX_eig : T u X = μ • X := Module.End.mem_eigenspace_iff.mp hXev.1
+  have hp_dvd : p ∣ Nat.factorial (Module.finrank ℂ Mat) := Nat.dvd_factorial hp_pos hp_le
+  obtain ⟨k, hk⟩ := hp_dvd
+  have hμN : μ ^ Nat.factorial (Module.finrank ℂ Mat) = 1 := by
+    rw [hk, pow_mul, hμp, one_pow]
+  refine ⟨X, hX_ne, hX_eig, ?_⟩
+  by_contra htrX
+  have hX_fix_t₀ : T t₀ X = X := by
+    calc
+      T t₀ X = ((T u) ^ Nat.factorial (Module.finrank ℂ Mat)) X := by rw [hTt₀_eq_pow]
+      _ = μ ^ Nat.factorial (Module.finrank ℂ Mat) • X := by
+        exact pow_apply_eigenvector (T u) X μ (Nat.factorial (Module.finrank ℂ Mat)) hX_eig
+      _ = X := by simpa [hμN]
+  have hX_span : X = Matrix.trace X • σ := hfixed_1d X hX_fix_t₀
+  have : X = 0 := by simpa [htrX] using hX_span
+  exact hX_ne this
 
-/-- **TODO**: Prove peripheral eigenvalue equals 1 in fraction slice.
-Currently a `sorry` placeholder. -/
+/-- Peripheral eigenvalues of a fraction slice are equal to `1`. -/
 theorem peripheral_eq_one_of_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    {t₀ u : ℝ} {N : ℕ}
-    (hTt₀_eq_pow : T t₀ = (T u) ^ N)
+    {t₀ u : ℝ}
+    (hTt₀_eq_pow : T t₀ = (T u) ^ Nat.factorial (Module.finrank ℂ Mat))
     (hTu_ch : IsChannel (T u))
     (hTu_irr : IsIrreducibleMap (T u))
-    (σ : Mat) (hσ_mem : σ ∈ densityMatrices D) (hσ_pd : σ.PosDef)
+    (σ : Mat) (hσ_pd : σ.PosDef)
     (hTu_fix : T u σ = σ)
     (hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X → X = Matrix.trace X • σ)
     {μ : ℂ}
     (hμ_eig : Module.End.HasEigenvalue (T u) μ)
     (hμ_norm : ‖μ‖ = 1) :
     μ = 1 := by
-  sorry
+  obtain ⟨X, _, hX_eig, htrX_ne⟩ :=
+    exists_trace_ne_zero_eigenvector_of_fraction_slice
+      T hTt₀_eq_pow hTu_ch hTu_irr σ hσ_pd hTu_fix hfixed_1d hμ_eig hμ_norm
+  exact eigenvalue_eq_one_of_trace_preserving_eigenvector
+    (T u) hTu_ch.tp hX_eig htrX_ne
 
-/-- **TODO**: Prove primitivity from fraction slice hypotheses.
-Currently a `sorry` placeholder. -/
+/-- Fraction-slice hypotheses imply primitivity of the slice. -/
 theorem primitive_of_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    {t₀ u : ℝ} {N : ℕ}
-    (hTt₀_eq_pow : T t₀ = (T u) ^ N)
+    {t₀ u : ℝ}
+    (hTt₀_eq_pow : T t₀ = (T u) ^ Nat.factorial (Module.finrank ℂ Mat))
     (hTu_ch : IsChannel (T u))
     (hTu_irr : IsIrreducibleMap (T u))
     (σ : Mat) (hσ_mem : σ ∈ densityMatrices D) (hσ_pd : σ.PosDef)
     (hTu_fix : T u σ = σ)
     (hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X → X = Matrix.trace X • σ) :
     IsPrimitive (T u) := by
-  sorry
+  have hσ_ne := ne_zero_of_mem_densityMatrices' hσ_mem
+  exact isPrimitive_of_unique_norm_one (T u) σ hTu_fix hσ_ne
+    (fun μ hμ_eig hμ_norm =>
+      peripheral_eq_one_of_fraction_slice
+        T hTt₀_eq_pow hTu_ch hTu_irr σ hσ_pd hTu_fix hfixed_1d hμ_eig hμ_norm)
 
 theorem irreducible_of_fraction_slice
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -517,8 +536,7 @@ theorem exists_irreducible_fraction_slice
   have hTu_irr : IsIrreducibleMap (T u) := irreducible_of_fraction_slice T hTt₀_eq_pow hirr
   exact ⟨u, hu_pos, hu_nonneg, hTt₀_eq_pow, hTu_ch, hTu_irr, hTu_fix⟩
 
-/-- **TODO**: Prove fixed points have trace scalar form.
-Currently a `sorry` placeholder. -/
+/-- For a primitive fraction slice, fixed points are trace multiples of `σ`. -/
 theorem fixedPoint_eq_trace_smul_of_primitive_slice
     [NeZero D]
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -535,10 +553,19 @@ theorem fixedPoint_eq_trace_smul_of_primitive_slice
     (s : ℝ) (hs : 0 < s)
     {τ : Mat} (hτ_fix : T s τ = τ) :
     τ = Matrix.trace τ • σ := by
-  sorry
+  have hτ_tr0 : Matrix.trace (τ - Matrix.trace τ • σ) = 0 := by
+    rw [Matrix.trace_sub, Matrix.trace_smul, hσ_mem.2, smul_eq_mul, mul_one, sub_self]
+  have hτ_fix' : T s (τ - Matrix.trace τ • σ) = τ - Matrix.trace τ • σ := by
+    rw [map_sub, map_smul, hτ_fix, hσ_fix_all s (le_of_lt hs)]
+  have hdecay :=
+    trace_zero_fixedPoint_tendsto_zero_of_primitive_slice
+      T hT σ hσ_mem u hu_nonneg hTu_ch hTu_irr hTu_fix hTu_prim hτ_tr0
+  have hzero :=
+    fixedPoint_eq_zero_of_trace_zero_of_primitive_slice
+      L T hT hexp u hu_nonneg s hs hdecay hτ_fix'
+  exact sub_eq_zero.mp hzero
 
-/-- **TODO**: Prove that a primitive fraction slice exists.
-Currently a `sorry` placeholder. -/
+/-- There exists a primitive slice at a positive rational fraction of `t₀`. -/
 theorem exists_primitive_fraction_slice
     [NeZero D]
     (T : ℝ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -550,7 +577,11 @@ theorem exists_primitive_fraction_slice
     (hfixed_1d : ∀ X : Matrix (Fin D) (Fin D) ℂ, T t₀ X = X → X = Matrix.trace X • σ) :
     ∃ u : ℝ, 0 < u ∧ 0 ≤ u ∧ IsChannel (T u) ∧ IsIrreducibleMap (T u) ∧
       T u σ = σ ∧ IsPrimitive (T u) := by
-  sorry
+  obtain ⟨u, hu_pos, hu_nonneg, hTt₀_eq_pow, hTu_ch, hTu_irr, hTu_fix⟩ :=
+    exists_irreducible_fraction_slice T hT t₀ ht₀ hirr σ hσ_fix_all
+  refine ⟨u, hu_pos, hu_nonneg, hTu_ch, hTu_irr, hTu_fix, ?_⟩
+  exact primitive_of_fraction_slice
+    T hTt₀_eq_pow hTu_ch hTu_irr σ hσ_mem hσ_pd hTu_fix hfixed_1d
 
 theorem irreducible_all_of_irreducible_time
     [NeZero D]
