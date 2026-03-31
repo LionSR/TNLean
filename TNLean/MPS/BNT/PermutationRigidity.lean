@@ -39,8 +39,10 @@ namespace MPSTensor
 /-! ## Overlap algebra for decompositions -/
 
 /-- If `V(A_total)` expands in a finite family `A j`, then the overlap with `B` expands
-with the same coefficients. -/
-private lemma mpvOverlap_eq_sum_of_decomp_left
+with the same coefficients.
+
+This helper is reused by canonical-form bridge arguments (e.g. `EqualNormBridge`). -/
+lemma mpvOverlap_eq_sum_of_decomp_left
     {d : ℕ} {Dtot : ℕ} {g : ℕ} {dim : Fin g → ℕ}
     (A_total : MPSTensor d Dtot)
     (A : (j : Fin g) → MPSTensor d (dim j))
