@@ -14,8 +14,8 @@ from plasTeX import Base
 
 _UPSTREAM = Path(plasTeX.__file__).parent / "Packages" / "natbib.py"
 _SPEC = spec_from_file_location("_tnlean_upstream_natbib", _UPSTREAM)
-_MODULE = module_from_spec(_SPEC)
 assert _SPEC is not None and _SPEC.loader is not None
+_MODULE = module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_MODULE)
 
 for _name in dir(_MODULE):

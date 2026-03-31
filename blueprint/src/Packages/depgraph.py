@@ -16,8 +16,8 @@ from plasTeX import Command
 
 _UPSTREAM = Path(plastexdepgraph.__file__).parent / "Packages" / "depgraph.py"
 _SPEC = spec_from_file_location("_tnlean_upstream_depgraph", _UPSTREAM)
-_MODULE = module_from_spec(_SPEC)
 assert _SPEC is not None and _SPEC.loader is not None
+_MODULE = module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_MODULE)
 
 for _name in dir(_MODULE):

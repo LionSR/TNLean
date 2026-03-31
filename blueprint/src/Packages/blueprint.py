@@ -14,8 +14,8 @@ from plasTeX import Command
 
 _UPSTREAM = Path(leanblueprint.__file__).parent / "Packages" / "blueprint.py"
 _SPEC = spec_from_file_location("_tnlean_upstream_blueprint", _UPSTREAM)
-_MODULE = module_from_spec(_SPEC)
 assert _SPEC is not None and _SPEC.loader is not None
+_MODULE = module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_MODULE)
 
 for _name in dir(_MODULE):
@@ -30,7 +30,34 @@ class lean(_MODULE.lean):
     def digest(self, tokens):
         Command.digest(self, tokens)
         raw_decls = self.attributes["decls"]
-        decls = [getattr(dec, "textContent", str(dec)).strip() for dec in raw_decls]
+        decls = [
+            getattr(dec, "source", getattr(dec, "textContent", str(dec))).strip()
+            for dec in raw_decls
+        ]
         self.parentNode.setUserData("leandecls", decls)
         all_decls = self.ownerDocument.userdata.setdefault("lean_decls", [])
         all_decls.extend(decls)
+
+
+def ProcessOptions(options, document):
+    _MODULE.ProcessOptions(options, document)
+
+    def normalize_lean_decls() -> None:
+        replacements = {
+            "MPSTensor.weakFundamentalTheoremconditional":
+                "MPSTensor.weakFundamentalTheorem_conditional",
+            "MPSTensor.exponentialconvergenceofprimitive":
+                "MPSTensor.exponential_convergence_of_primitive",
+        }
+        seen = set()
+        decls = []
+        for decl in document.userdata.get("lean_decls", []):
+            normalized = replacements.get(decl, decl)
+            if normalized and normalized not in seen:
+                seen.add(normalized)
+                decls.append(normalized)
+        document.userdata["lean_decls"] = decls
+        lean_decls_path = Path(document.userdata["working-dir"]).parent / "lean_decls"
+        lean_decls_path.write_text("\n".join(decls) + ("\n" if decls else ""))
+
+    document.addPostParseCallbacks(151, normalize_lean_decls)

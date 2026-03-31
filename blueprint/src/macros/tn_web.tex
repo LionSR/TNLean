@@ -120,7 +120,7 @@
     && \vert &&&& \vert \\
     && \fbox{$#1$} &&&& \bullet \\
     && \vert && = && \\
-    \bullet & \text{---} & \bullet & && \bullet & \text{---} & \bullet \\
+    \bullet & \text{---} & \bullet && \bullet & \text{---} & \bullet \\
     &&&& #2 && #2^\dagger
   \end{array}%
 }
@@ -211,9 +211,9 @@
 }
 
 \newcommand{\TNLocalEqualityStep}[3]{%
-  \begin{array}{ccccccccc}
-    && #3 &&&& #3 && \\
-    && \vert &&&& \vert && \\
+  \begin{array}{ccccccccccc}
+    && #3 &&&&&& #3 && \\
+    && \vert &&&&&& \vert && \\
     \bullet & \text{---} & \fbox{$#1$} & \text{---} & \bullet
     & = &
     \bullet & \text{---} & \fbox{$#2$} & \text{---} & \bullet
