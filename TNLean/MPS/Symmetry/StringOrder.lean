@@ -185,7 +185,7 @@ noncomputable def stringOrderParam (A : MPSTensor d D)
 
 /-- `stringOrderParam` is the weighted trace pairing of the `L`-th mixed-transfer
 iterate for `A` and the twisted Kraus companion family. -/
-lemma stringOrderParam_eq_trace_mixedTransfer (A : MPSTensor d D)
+private lemma stringOrderParam_eq_trace_mixedTransfer (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     stringOrderParam A u Λ L =
@@ -195,7 +195,7 @@ lemma stringOrderParam_eq_trace_mixedTransfer (A : MPSTensor d D)
 
 /-- For a unital transfer map and trace-one boundary state, the untwisted string
 order parameter is constantly `1`. -/
-lemma stringOrderParam_one_eq_one
+private lemma stringOrderParam_one_eq_one
     (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛtr : Matrix.trace Λ = 1)
@@ -238,7 +238,7 @@ noncomputable def stringOrderBoundaryParam (A : MPSTensor d D)
 
 /-- The original one-sided string-order parameter is the boundary expression with
 trivial boundaries `X = Y = 1`. -/
-lemma stringOrderBoundaryParam_one_one (A : MPSTensor d D)
+private lemma stringOrderBoundaryParam_one_one (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     stringOrderBoundaryParam A u Λ 1 1 L = stringOrderParam A u Λ L := by

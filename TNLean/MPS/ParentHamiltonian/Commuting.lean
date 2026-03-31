@@ -12,20 +12,20 @@ parent Hamiltonians (NNCPH).
 
 ## Main definitions
 
-* `MPSTensor.IsCommutingParentHam A L N` -- the local terms of the parent
+* `MPSTensor.IsCommutingParentHam A L N` — the local terms of the parent
   Hamiltonian on `N` sites with block length `L` mutually commute.
-* `MPSTensor.IsNNCPH A N` -- nearest-neighbor commuting parent Hamiltonian
+* `MPSTensor.IsNNCPH A N` — nearest-neighbor commuting parent Hamiltonian
   (`L = 2`).
 
 ## Main results
 
-* `MPSTensor.IsCommutingParentHam.ham_comm_localTerm` -- if local terms commute,
+* `MPSTensor.IsCommutingParentHam.ham_comm_localTerm` — if local terms commute,
   the full Hamiltonian commutes with each local term.
 
 ## References
 
-* arXiv:1606.00608, SS3.3 Definition 3.9, Theorem 3.10
-* [Beigi-Shor-Whalen, CMP 2012] -- ground-space characterization for
+* arXiv:1606.00608, §3.3 Definition 3.9, Theorem 3.10
+* [Beigi–Shor–Whalen, CMP 2012] — ground-space characterization for
   commuting nearest-neighbor Hamiltonians in 1D
 -/
 
