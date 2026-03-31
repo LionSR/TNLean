@@ -821,9 +821,10 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     These statements are deferred in the present chapter.
 \end{remark}
 
-\section{Additional Wolf Chapter~6 declaration wrappers}
+\section{Additional Wolf Chapter~6 equivalences}
 
-This section records declaration wrappers used in cross-chapter references.
+This section records several equivalences from Wolf's Chapter~6 that are
+used later in the blueprint.
 
 \begin{theorem}[Wolf Thm.~6.2(3): exponential positivity condition]%
     \label{thm:wolf_6_2_item_3}
@@ -842,28 +843,28 @@ This section records declaration wrappers used in cross-chapter references.
     \lean{MPSTensor.wolf_theorem_6_8_kraus_span}
     \leanok
     \uses{def:primitive_channel}
-    Under normalization, paper primitivity is equivalent to eventual
+    Under normalization, primitivity in Wolf's sense is equivalent to eventual
     full Kraus rank.
 \end{theorem}
 
-\begin{theorem}[Wolf Thm.~6.8: conjunction wrapper]%
+\begin{theorem}[Wolf Thm.~6.8: combined equivalence]%
     \label{thm:wolf_6_8_conjunction}
     \lean{MPSTensor.wolf_theorem_6_8_conjunction}
     \leanok
     \uses{thm:wolf_6_8_kraus_span}
-    Under normalization, paper primitivity is equivalent to the conjunction
+    Under normalization, primitivity in Wolf's sense is equivalent to the conjunction
     of eventual full Kraus rank, normality, and strong irreducibility.
 \end{theorem}
 
-\begin{remark}[Wolf Thm.~6.8 pairwise equivalence declarations]
+\begin{remark}[Wolf Thm.~6.8: pairwise equivalences]
     \label{rem:wolf_6_8_pairwise}
     \lean{MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank}
     \lean{MPSTensor.primitivePaper_iff_stronglyIrreducible}
     \lean{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible}
     \lean{MPSTensor.hasEventuallyFullKrausRank_iff_isNormal}
     \leanok
-    These are the pairwise equivalence declarations referenced by the
-    packaged Wolf Thm.~6.8 wrappers.
+    These are the pairwise equivalences appearing in Wolf's
+    Theorem~6.8.
 \end{remark}
 
 \begin{theorem}[Wolf Thm.~6.15 (scalar fixed-point algebra case)]

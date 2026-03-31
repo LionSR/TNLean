@@ -3,14 +3,14 @@
 This chapter introduces the local ground-space construction and the parent
 interaction for translation-invariant periodic MPS.
 We follow the standard setup from
-\cite{Cirac2021Matrix, PerezGarcia2007Matrix}, with the $N$-site Hilbert space represented as
+\cite{Cirac2021Matrix, PerezGarcia2007Matrix}, with the $N$-site Hilbert space modelled as
 coefficient functions
 \[
   \{0,\dots,d{-}1\}^N \to \C,
 \]
 rather than as an explicit tensor product.
 
-\section{Local ground space $G_L(A)$}\label{sec:ground_space_parent}
+\section{\texorpdfstring{Local ground space $G_L(A)$}{Local ground space G\_L(A)}}\label{sec:ground_space_parent}
 
 Fix an MPS tensor $A = \{A^i\}_{i=0}^{d-1}$ with $A^i \in \MN{D}$ and a block
 length $L \ge 1$.
@@ -277,6 +277,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
+  The restriction simply absorbs the last tensor into the boundary matrix:
+  \[
+    \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{A^j X}
+  \]
   Direct computation:
   $\psi(\sigma_1,\dots,\sigma_L,j) = \tr(A^{\sigma_1}\cdots A^{\sigma_L} \cdot A^j \cdot X)
    = \Gamma_L(A^j X)(\sigma)$.
@@ -292,6 +296,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
+  On the right restriction one first rotates the trace and then reads the
+  resulting boundary matrix on the shortened window:
+  \[
+    \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X A^i}
+  \]
   By trace cyclicity:
   $\psi(i,\sigma_1,\dots,\sigma_L) = \tr(A^i A^{\sigma} X)
    = \tr(A^{\sigma} \cdot X A^i) = \Gamma_L(X A^i)(\sigma)$.
@@ -345,6 +354,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
   \leanok
   The ``invert-and-regrow'' argument:
+  \[
+    \TNWindowOverlap{[1,L]}{[2,L+1]}{[2,L]}
+    \qquad
+    \TNBoundaryRegrow{X'}{\sigma_1}{\sigma_{L+1}}{L+1}
+  \]
   \begin{enumerate}
     \item From the right ground condition, for each physical index~$i$ there
       exists a unique $Y_i \in \MN{D}$ (by injectivity of $\Gamma_L$) such
@@ -391,6 +405,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
+  The induction repeatedly merges two neighbouring admissible windows into
+  a larger one:
+  \[
+    \TNWindowHighlight{\sigma_i}{\sigma_{i+L-1}}{[i,i+L-1]}{N}
+    \qquad
+    \TNWindowOverlap{[i,i+L-1]}{[i+1,i+L]}{[i+1,i+L-1]}
+  \]
   Strong induction on window size, combining adjacent windows via
   Theorem~\ref{thm:ground_space_intersection} at each step.
 \end{proof}
@@ -454,7 +475,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   interaction range~$L$, the chain ground space is one-dimensional, spanned
   by the MPV.  The proof iterates the intersection property across the chain
   and uses the periodic boundary condition to constrain the boundary matrix
-  $X$ to a scalar multiple of~$I$.
+  $X$ to a scalar multiple of~$I$:
+  \[
+    \TNPeriodicGauge{N}{X}{1}
+  \]
 \end{theorem}
 
 \begin{theorem}[Unique ground state for block-injective tensors]%
@@ -576,8 +600,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
   \notready
   \uses{def:is_frustration_free}
-  Let $H = \sum_{i=1}^n h_i$ be a frustration-free Hamiltonian with
-  projector interaction terms ($h_i^2 = h_i$).
+  Consider a frustration-free Hamiltonian
+  \[
+    H = \sum_{i=1}^n h_i
+  \]
+  with projector interaction terms ($h_i^2 = h_i$).
   Suppose that for every pair of overlapping terms $h_i, h_j$ there
   exist constants $c_{ij} \ge 0$ and $\gamma > 0$ satisfying
   \[
@@ -591,6 +618,12 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
   \notready
+  The relevant geometry is a family of overlapping local windows:
+  \[
+    \TNMartingaleWindow{L}{i}{n}
+    \qquad
+    \TNWindowOverlap{[i,i+L-1]}{[j,j+L-1]}{d_N(i,j)}
+  \]
   From $h_i^2 = h_i$,
   \[
     H^2 = \sum_i h_i + \sum_{\substack{i < j \\ \text{overlapping}}}
@@ -662,6 +695,12 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{proof}
   \uses{thm:ground_space_intersection, def:injective}
   \notready
+  The local picture is again an overlap of two translated projector windows:
+  \[
+    \TNMartingaleWindow{L}{i}{N}
+    \qquad
+    \TNWindowOverlap{[i,i+L-1]}{[j,j+L-1]}{L-d_N(i,j)}
+  \]
   Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
   in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
   the $N$-site ring).  Since $A$ is injective, the intersection property
@@ -680,7 +719,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
   Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
   worst-case cosine of the Friedrichs angles.
 
-  \textbf{Row-sum bound.}
+  \emph{Row-sum bound.}
   Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
   neighbours (those $j$ with $0 < d_N(i,j) < L$).
   Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
@@ -690,7 +729,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
   satisfying the row-sum hypothesis of
   Theorem~\ref{thm:martingale_criterion}.
 
-  \textbf{Positivity of $\gamma$.}
+  \emph{Positivity of $\gamma$.}
   The Friedrichs angle bound gives, for each overlapping pair,
   $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$.
   The martingale inequality holds with
@@ -755,6 +794,13 @@ Lucia~\cite{Kastoryano2018Martingale}.
   so the range-$L = 2L_0$ interaction on the original chain corresponds
   exactly to a range-$2$ interaction on the blocked chain (two blocked
   sites).
+  Diagrammatically the proof passes to the blocked chain and then applies
+  the martingale window estimate at range~$2$:
+  \[
+    \TNBlockedChain{L_0}{N/L_0}
+    \qquad
+    \TNMartingaleWindow{2}{j}{N/L_0}
+  \]
   \emph{Remark on interaction range:}
   Theorem~\ref{thm:unique_gs_injective} establishes ground-state
   uniqueness at range $L_0{+}1$, whereas here we use range $2L_0$.
@@ -802,13 +848,13 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   \uses{thm:unique_gs_normal, thm:ground_space_intersection, def:bnt,
         lem:parent_hamiltonian_annihilates}
   \notready
-  \textbf{$\supseteq$}: Each $A_k$ is normal, so
+  \emph{$\supseteq$.} Each $A_k$ is normal, so
   Lemma~\ref{lem:parent_hamiltonian_annihilates} (applied to the
   block-diagonal structure) gives
   $H_N(A,L_0{+}1)\,V^{(N)}(A_k) = 0$.
   Linearity of the kernel yields the inclusion.
 
-  \textbf{$\subseteq$}: Take $\psi \in \ker(H_N)$.
+  \emph{$\subseteq$.} Take $\psi \in \ker(H_N)$.
   The block-diagonal structure of $A$ gives, at the interaction
   range $L_0{+}1$ used in the Hamiltonian, the containment
   $G_{L_0+1}(A) \subseteq \sum_k G_{L_0+1}(A_k)$: any local ground

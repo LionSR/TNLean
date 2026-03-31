@@ -25,9 +25,10 @@ their spectral decomposition, and quantitative bounds on decay rates.
     \lean{MPSTensor.onePointExpectation}
     \leanok
     \uses{def:transfer_map, thm:qpf}
-    Fix an MPS tensor $A$ and a right fixed point $\rho^R$ of its transfer map
-    (whose existence, and uniqueness up to scaling under the hypotheses of
-    Theorem~\ref{thm:qpf}, are guaranteed by the quantum Perron--Frobenius theorem).
+    Fix an MPS tensor and a right fixed point of its transfer map.
+    Write the tensor as $A$ and the fixed point as $\rho^R$.
+    Under the hypotheses of Theorem~\ref{thm:qpf}, that fixed point exists
+    and is unique up to scaling.
     For a local observable $X \in \MN{D}$ define
     \[
         \langle X_0 \rangle := \tr(X\rho^R).
@@ -146,9 +147,13 @@ constants, while the spectral-gap statement from injectivity is already availabl
     \notready
     \uses{thm:primitive_compl_lt_one, def:fixed_point_proj,
           thm:primitive_overlap}
-    Let $A$ be a primitive trace-preserving MPS tensor with positive
-    definite fixed point $\rho$ and fixed-point projection
-    $P(X) = \frac{\tr(X)}{\tr(\rho)}\rho$.
+    Fix a primitive trace-preserving MPS tensor $A$ with positive
+    definite fixed point $\rho$.
+    Let
+    \[
+        P(X) = \frac{\tr(X)}{\tr(\rho)}\rho
+    \]
+    be the corresponding fixed-point projection.
     Then there exist $C > 0$ and $0 < \delta \le 1$ such that for all
     $n \ge 0$ and $X \in \MN{D}$,
     \[

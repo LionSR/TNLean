@@ -2,8 +2,8 @@
 
 This chapter proves the Fundamental Theorem of Matrix Product States.
 We state the Fundamental Theorem in two versions: one for block-injective
-tensors in canonical form with basis of normal tensors (BNT) separation
-(CF-BNT), and one for the normal-canonical variant.
+tensors in canonical form with BNT separation, and one for the
+normal-canonical variant.
 We then treat the equal-MPV case, including the common-block-structure
 specialization that deduces gauge equivalence.
 The results combine the canonical form reduction
@@ -58,7 +58,7 @@ distinct weight norms) that the automatic reduction does not yet produce.
 
 \begin{proof}\leanok
     \uses{thm:ft_proportional_nt}
-    This packages the normal-canonical-form Fundamental Theorem
+    This is exactly the normal-canonical-form Fundamental Theorem
     (Theorem~\ref{thm:ft_proportional_nt}).
     The normal canonical form data provide the BNT separation
     and overlap convergence hypotheses;
@@ -100,9 +100,14 @@ distinct weight norms) that the automatic reduction does not yet produce.
 \begin{proof}
 	\leanok
 	\uses{thm:cross_overlap_zero, thm:bnt_perm_prop}
-	Apply Theorem~\ref{thm:bnt_perm_prop} to the two CF-BNT
-	decompositions.
-	The CF-BNT hypotheses provide injectivity, TP normalization,
+	Apply Theorem~\ref{thm:bnt_perm_prop} to the two canonical-form
+	decompositions with BNT separation.
+	At the block level this is the matching step
+	\[
+		\TNBlockPermutation{\pi}{X}
+	\]
+	that reindexes the separated sectors before comparing them one by one.
+	These hypotheses provide injectivity, TP normalization,
 	diagonal overlap limits, and off-diagonal decay via
 	Theorem~\ref{thm:cross_overlap_zero}.
 	With the supplied decomposition identities and convergence
@@ -111,7 +116,7 @@ distinct weight norms) that the automatic reduction does not yet produce.
 	equivalence.
 \end{proof}
 
-\begin{remark}[Coefficient arrays in the CF-BNT setting]
+\begin{remark}[Coefficient arrays for canonical-form decompositions]
 	In applications the coefficient arrays in
 	Theorem~\ref{thm:ft_proportional} come from the block-diagonal
 	decomposition itself. If
@@ -136,7 +141,7 @@ distinct weight norms) that the automatic reduction does not yet produce.
 	Theorem~\ref{thm:bnt_perm_prop} is formulated in that abstract form.
 \end{remark}
 
-\begin{theorem}[Fundamental Theorem --- proportional MPV case, NT route]\label{thm:ft_proportional_nt}
+\begin{theorem}[Fundamental Theorem for normal canonical form in the proportional case]\label{thm:ft_proportional_nt}
 		\lean{MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT}\leanok
 		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
 		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
@@ -171,7 +176,7 @@ distinct weight norms) that the automatic reduction does not yet produce.
 		Theorem~\ref{thm:nt_modulus_one_gauge} supplies the leading-block
 		identification step: a nondecaying mixed overlap forces the
 		corresponding comparison block to be gauge-phase equivalent.
-		The same peeling argument as in the injective CF-BNT case therefore
+		The same peeling argument as in the block-injective case therefore
 		yields the block permutation and gauge-phase equivalence.
 		Remark~\ref{rem:normalcf_bnt_gap} explains why the argument stops at
 		this separated normal-canonical level.
@@ -199,8 +204,8 @@ distinct weight norms) that the automatic reduction does not yet produce.
 
 \begin{proof}
 	\uses{thm:ft_proportional, thm:mpv_decomposition, thm:power_sum_multiset}
-	The intended literature route begins by applying
-	Theorem~\ref{thm:ft_proportional} with $c_N = 1$, which yields a
+	Begin by applying Theorem~\ref{thm:ft_proportional} with $c_N = 1$,
+	which yields a
 	permutation of the matched blocks and blockwise gauge-phase equivalences.
 	One then compares the resulting MPV expansions from
 	Theorem~\ref{thm:mpv_decomposition}. In the general equal case the
@@ -208,7 +213,7 @@ distinct weight norms) that the automatic reduction does not yet produce.
 	requires a power-sum argument such as
 	Theorem~\ref{thm:power_sum_multiset}. After the weights are identified,
 	the phase factors are absorbed into them and the blockwise conjugacies
-	assemble to a global gauge equivalence.
+	combine to a global gauge equivalence.
 \end{proof}
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case with explicit coefficient data]\label{thm:ft_equal_explicit}
@@ -280,6 +285,11 @@ distinct weight norms) that the automatic reduction does not yet produce.
 		\mu_j^A = \mu_{\pi(j)}^B \zeta_j.
 	\]
 	Thus the phase factors can be absorbed into the weights, and the
+	resulting global conjugacy is assembled as
+	\[
+		\TNDirectSumAssembly{\bigoplus_j \mu_j^A A_j}{\bigoplus_j \mu_{\pi(j)}^B B_{\pi(j)}}{\bigoplus_j X_j}
+	\]
+	so the
 	blockwise conjugacies assemble to a gauge equivalence of the reindexed
 	weighted block-diagonal tensors.
 \end{proof}
@@ -296,7 +306,7 @@ distinct weight norms) that the automatic reduction does not yet produce.
 	If the block-diagonal tensors
 	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
 	generate the same MPV family, then each pair $(A_k, B_k)$ is
-	gauge equivalent, and hence the assembled block-diagonal tensors
+	gauge equivalent, and hence the corresponding block-diagonal tensors
 	are gauge equivalent.
 \end{theorem}
 
@@ -305,38 +315,43 @@ distinct weight norms) that the automatic reduction does not yet produce.
 	\uses{thm:ft_canonical}
 	Since both families share the canonical form data, the BNT separation
 	condition is not needed.
+	The common-structure case is therefore already in block-diagonal form:
+	\[
+		\TNDirectSumAssembly{\bigoplus_k \mu_k A_k}{\bigoplus_k \mu_k B_k}{\bigoplus_k X_k}.
+	\]
 	The canonical-form fundamental theorem
 	(Theorem~\ref{thm:ft_canonical}) then applies directly to this
 	common $(g, D_k, \mu_k)$ structure, yielding per-block gauge
 	equivalence and hence global gauge equivalence.
 \end{proof}
 
-\subsection{Route~B: Paper-faithful multiplicity layer}%
+\subsection{Multiplicity data with repeated blocks}%
 \label{sec:route_b}
 
-The paper-faithful multiplicity interface keeps the literature's
-per-block-copy structure separate from the merged
-canonical-form BNT predicate.
+This subsection records the multiplicity data in which repeated copies
+of the same basis block are kept separate rather than merged into a
+single weighted block.
 
-\begin{definition}[Paper sector data and decomposition]%
+\begin{definition}[Sector data and sector decomposition]%
 \label{def:paper_sector_data}
 	\lean{MPSTensor.SectorWeightData, MPSTensor.SectorDecomposition}
 	\leanok
-	A \emph{paper sector data} over $g$ basis blocks specifies:
+	A \emph{sector datum} over $g$ basis blocks specifies:
 	multiplicities $r_j > 0$, sector weights
 	$\mu_{j,q} \neq 0$ for $q \in \{1,\dotsc,r_j\}$, and the
-	\emph{paper coefficient}
+	\emph{sector coefficient}
 	$\mathrm{coeff}(N,j) := \sum_{q=1}^{r_j} \mu_{j,q}^N$.
-	A \emph{paper decomposition} bundles the basis blocks $(A_j)_{j=1}^g$
-	with their sector data.
+	A \emph{sector decomposition} consists of the basis blocks
+	$(A_j)_{j=1}^g$ together with their sector data.
 \end{definition}
 
-\begin{theorem}[Paper decomposition formula]%
+\begin{theorem}[Sector decomposition formula]%
 \label{thm:paper_decomp_formula}
 	\lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_coeff}
 	\leanok
 	\uses{def:paper_sector_data}
-	For a paper decomposition $P$, the MPV of the assembled tensor satisfies
+	For a sector decomposition $P$, the MPV of the associated tensor
+	satisfies
 	\[
 		V^{(N)}(P.\mathrm{toTensor})_\sigma
 		= \sum_{j=1}^{g} \mathrm{coeff}(N,j) \cdot V^{(N)}(A_j)_\sigma.
@@ -367,18 +382,18 @@ canonical-form BNT predicate.
 	recurrence.
 \end{theorem}
 
-\begin{theorem}[Route~B equal-case corollary: weight multiset recovery]%
+\begin{theorem}[Weight multiset recovery from multiplicity data]%
 \label{thm:route_b_equal}
 	\lean{MPSTensor.SectorWeightData.weight_multiset_eq_of_sameMPV_bnt}
 	\leanok
 	\uses{thm:coeff_eventually_eq, thm:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
-	Let $S$ and $T$ be two paper sector data over the same basis with
+	Let $S$ and $T$ be two sector data over the same basis with
 	the same multiplicities ($r_j^S = r_j^T$ for all~$j$).
 	If the basis is eventually linearly independent and the total MPVs
 	of $S$ and $T$ agree, then for each basis block~$j$ the sector weight
 	multisets $\{\mu_{j,q}^S\}$ and $\{\mu_{j,q}^T\}$ are equal.
 
-	The proof chains:
+	The argument proceeds as follows:
 	\begin{enumerate}
 		\item BNT LI $+$ equal MPVs $\Rightarrow$ eventual coefficient
 		      equality (Theorem~\ref{thm:coeff_eventually_eq});
@@ -388,9 +403,15 @@ canonical-form BNT predicate.
 		\item Newton--Girard $\Rightarrow$ equal weight multisets
 		      (Theorem~\ref{thm:power_sum_multiset}).
 	\end{enumerate}
+	At the level of block contributions, the comparison is still the same
+	weighted sector sum:
+	\[
+		\TNSummedBlocks{\mu}{N}
+	\]
+	with the coefficients now aggregated over the multiplicity layers.
 \end{theorem}
 
-\begin{remark}[Status note]\notready
+\begin{remark}[Remaining step in the unconditional equal-case theorem]\notready
 	This chapter provides three complementary equal-case results:
 	\begin{enumerate}
 		\item Theorem~\ref{thm:ft_equal_explicit}: the explicit-coefficient
@@ -400,14 +421,15 @@ canonical-form BNT predicate.
 		      weighted block-diagonal tensors.
 		\item Theorem~\ref{thm:ft_equal_same_structure}: the common
 		      block-structure special case.
-		\item Theorem~\ref{thm:route_b_equal}: the Route~B equal-case
-		      corollary, which from the paper's richer multiplicity data
+		\item Theorem~\ref{thm:route_b_equal}: the equal-case multiplicity
+		      corollary, which from the richer multiplicity data
 		      recovers the sector weight multisets without requiring
 		      explicit coefficient convergence hypotheses.
 	\end{enumerate}
 	The unconditional equal-case theorem
 	(Theorem~\ref{thm:ft_equal}, \cite[Corollary~IV.5]{Cirac2021Matrix})
-	still requires one final assembly step: combining Route~B weight recovery with
+	still requires one final global gauge-construction step: combining the
+	weight-recovery result above with
 	(a)~the proportional FT for block matching and gauge-phase equivalences,
 	(b)~phase absorption into weights, and
 	(c)~global gauge construction via permutation and cast transport.
@@ -463,7 +485,7 @@ directly to periodic tensors.
 	The irreducible form is strictly more general: it accommodates
 	blocks such as the antiferromagnet, which are $2$-periodic.
 
-	The present blueprint works exclusively with period-$1$ blocks,
+	The arguments in this chapter work exclusively with period-$1$ blocks,
 	obtained by a blocking step. A direct treatment of the irreducible form of
 	\cite{DeLasCuevas2017Irreducible} would require:
 	\begin{enumerate}
@@ -602,6 +624,11 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 		Z_j\, A_j^i = Y_j\, B_{\pi(j)}^i\, Y_j^{-1}
 		\quad\text{for all physical indices } i.
 	\]
+	For each periodic block, the extra freedom is encoded by
+	\[
+		\TNPeriodicGauge{m_j}{Z_j}{m_j}
+	\]
+	rather than by an ordinary aperiodic gauge alone.
 	Equivalently, setting $Y = \bigoplus_j Y_j \otimes \Id_{r_j}$
 	and $Z = \bigoplus_j Z_j \otimes \Id_{r_j}$, one has
 	$Z A^i = Y B^i Y^{-1}$ for all $i$,
@@ -616,7 +643,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 	different levels:
 
 	\begin{enumerate}
-		\item \textbf{Blocking approach} (Theorem~\ref{thm:ft_equal},
+		\item \emph{Blocking approach} (Theorem~\ref{thm:ft_equal},
 		      following \cite{Cirac2017MPDO_AnnPhys}):
 		      Block both $A$ and $B$ by a common period $p$ so that all
 		      blocks of $A^{[p]}$ and $B^{[p]}$ are primitive
@@ -625,7 +652,7 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 		      $B^{[p]}$ are gauge equivalent. The $Z$-gauge freedom
 		      does not appear because blocking absorbs the periodicity.
 
-		\item \textbf{Periodic approach} (Theorem~\ref{thm:periodic_ft},
+		\item \emph{Periodic approach} (Theorem~\ref{thm:periodic_ft},
 		      following \cite{DeLasCuevas2017Irreducible}):
 		      Work directly with the periodic blocks of $A$ and $B$.
 		      The conclusion includes an extra $Z$-gauge transformation

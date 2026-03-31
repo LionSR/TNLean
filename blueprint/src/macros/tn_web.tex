@@ -121,14 +121,14 @@
     && \fbox{$#1$} &&&& \bullet \\
     && \vert && = && \\
     \bullet & \text{---} & \bullet & && \bullet & \text{---} & \bullet \\
-    &&&&&& #2 && #2^\dagger
+    &&&& #2 && #2^\dagger
   \end{array}%
 }
 
 \newcommand{\TNCondCTwo}[1]{%
-  \begin{array}{ccccccc}
+  \begin{array}{ccccccccc}
     \fbox{$#1$} & \text{---} & \bullet && = && \bullet & \text{---} & \fbox{$#1$} \\
-    && \vert &&&& \vert \\
+    && \vert &&&& \vert && \\
     \fbox{$#1^\dagger$} & \text{---} & \bullet && = && \bullet & \text{---} & \fbox{$#1^\dagger$}
   \end{array}%
 }
@@ -179,6 +179,74 @@
   \begin{array}{ccccccccc}
     \bullet & \text{---} & \bullet && \bullet & \text{---} & \bullet && \cdots \\
     \multicolumn{3}{c}{#1} && \multicolumn{3}{c}{#1} && #2
+  \end{array}%
+}
+
+\newcommand{\TNWindowHighlight}[4]{%
+  \begin{array}{ccccccccc}
+    #1 &&&&&&&& #2 \\
+    \vert && \vert && \vert && \vert && \vert \\
+    \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet \\
+    \multicolumn{9}{c}{\fbox{$#3$}} \\
+    \multicolumn{9}{c}{#4}
+  \end{array}%
+}
+
+\newcommand{\TNWindowOverlap}[3]{%
+  \begin{array}{ccccccccc}
+    \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet \\
+    \multicolumn{5}{c}{\fbox{$#1$}} & \multicolumn{4}{c}{} \\
+    \multicolumn{4}{c}{} & \multicolumn{5}{c}{\fbox{$#2$}} \\
+    \multicolumn{9}{c}{#3}
+  \end{array}%
+}
+
+\newcommand{\TNBoundaryRegrow}[4]{%
+  \begin{array}{ccccccc}
+    #2 &&&&&& #3 \\
+    \vert && \vert && \vert && \\
+    \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \fbox{$#1$} \\
+    &&&& #4
+  \end{array}%
+}
+
+\newcommand{\TNLocalEqualityStep}[3]{%
+  \begin{array}{ccccccccc}
+    && #3 &&&& #3 && \\
+    && \vert &&&& \vert && \\
+    \bullet & \text{---} & \fbox{$#1$} & \text{---} & \bullet
+    & = &
+    \bullet & \text{---} & \fbox{$#2$} & \text{---} & \bullet
+  \end{array}%
+}
+
+\newcommand{\TNDirectSumAssembly}[3]{%
+  \begin{array}{ccccc}
+    \fbox{$#1$} & \xrightarrow{\ #3\ } & \fbox{$#2$}
+  \end{array}%
+}
+
+\newcommand{\TNBlockTailEstimate}[2]{%
+  \begin{array}{ccccc}
+    \fbox{$#1$} & + & \fbox{$O(#2)$} & = & \fbox{$#1$} + \fbox{$O(#2)$} \\
+    && \Downarrow && \\
+    && V_{\mathrm{lead}}(A)=V_{\mathrm{lead}}(B) &&
+  \end{array}%
+}
+
+\newcommand{\TNPeriodicGauge}[3]{%
+  \begin{array}{ccc}
+    \bullet & \text{---} & \bullet \\
+    \multicolumn{3}{c}{\fbox{$#2$}} \\
+    \multicolumn{3}{c}{$#1$-periodic,\; #2^{#3}=\Id$}
+  \end{array}%
+}
+
+\newcommand{\TNMartingaleWindow}[3]{%
+  \begin{array}{ccccccccc}
+    \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet & \text{---} & \bullet \\
+    \multicolumn{9}{c}{\fbox{$h_{#2}$ on an $L=#1$ window}} \\
+    \multicolumn{9}{c}{$N=#3$}
   \end{array}%
 }
 

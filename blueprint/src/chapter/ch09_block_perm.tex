@@ -27,6 +27,11 @@ gap---is the approach adopted in this chapter.
     Each block ideal $I_k = \{x : x_j = 0 \text{ for } j \neq k\}$
     is an atom in the lattice of two-sided ideals
     (since $R_k$ is simple).
+    Diagrammatically the ring isomorphism can only reshuffle these
+    indecomposable ideals:
+    \[
+        \TNBlockPermutation{\pi}{\Id}
+    \]
     A ring isomorphism preserves the ideal lattice and hence
     permutes the atoms.
     Injectivity of the induced map on atoms gives the
@@ -81,6 +86,10 @@ gap---is the approach adopted in this chapter.
     \uses{thm:ring_perm, thm:dim_preserved, thm:skolem_noether}
     Theorem~\ref{thm:ring_perm} gives the permutation $\pi$.
     Theorem~\ref{thm:dim_preserved} gives $D_{\pi(k)} = D_k$.
+    At the assembled level this is the direct-sum transport
+    \[
+        \TNDirectSumAssembly{\bigoplus_k \MN{D_k}}{\bigoplus_k \MN{D_{\pi(k)}}}{\operatorname{diag}(X_k)}.
+    \]
     The restriction of $T$ to the $k$-th block ideal yields a $\C$-algebra
     isomorphism $\MN{D_k} \cong \MN{D_{\pi(k)}}$; after
     Theorem~\ref{thm:dim_preserved} identifies the two matrix sizes,
@@ -234,7 +243,7 @@ We use this notation throughout the block-separation argument.
 
 \begin{remark}[Normal-canonical companion]\label{rem:normal_cf_companion}
     Definition~\ref{def:is_canonical_form} is the block-injective predicate.
-    The normal-canonical route instead uses
+    The normal-canonical analogue instead uses
     Definition~\ref{def:is_normal_canonical_form}: injectivity and the explicit
     self-overlap hypothesis are replaced by irreducibility, TP normalization,
     and primitive transfer maps. Theorem~\ref{thm:ncf_overlap_tendsto_one}
@@ -257,8 +266,8 @@ We use this notation throughout the block-separation argument.
 \end{proof}
 
 \begin{remark}
-    Theorem~\ref{thm:vandermonde_sep} is not used in the current proof chain.
-    It is retained for potential alternative routes; the current path to
+    Theorem~\ref{thm:vandermonde_sep} is not used in the proofs given here.
+    It is retained for potential alternative arguments; the proof of
     Theorem~12.5 uses BNT linear independence (Chapter~11) rather than
     Newton--Girard identities to match the weight multiset.
 \end{remark}
@@ -318,6 +327,11 @@ We use this notation throughout the block-separation argument.
     \uses{lem:block_sep_core}
     Apply Lemma~\ref{lem:block_sep_core} to the identity obtained from the
     equality of the two block-diagonal MPV families.
+    The induction peels off the dominant block and treats the remainder as
+    a decaying tail:
+    \[
+        \TNBlockTailEstimate{\mu_1^N V(A_1)}{\bigl|\mu_2/\mu_1\bigr|^N}.
+    \]
     The canonical form predicate supplies injectivity, TP normalization,
     strict nonzero weights, and self-overlap convergence for $(A_k)$, while
     the hypotheses on $(B_k)$ supply the comparison injectivity and
@@ -363,6 +377,10 @@ We use this notation throughout the block-separation argument.
     \leanok
     \uses{thm:block_sep, thm:per_block_gauge}
     Theorem~\ref{thm:block_sep} gives per-block same MPV.
+    The final step is the block-diagonal gauge construction
+    \[
+        \TNDirectSumAssembly{\bigoplus_k \mu_k A_k}{\bigoplus_k \mu_k B_k}{\bigoplus_k X_k}.
+    \]
     Theorem~\ref{thm:per_block_gauge} converts this to
     per-block gauge equivalence and then to global gauge equivalence
     of the block-diagonal tensors.
@@ -374,5 +392,5 @@ We use this notation throughout the block-separation argument.
     of~\cite{Cirac2021Matrix}.
     The proof technique used here---an induction on the number of blocks
     driven by the spectral gap of the mixed transfer operators---is the
-    route adopted here.
+    method used here.
 \end{remark}

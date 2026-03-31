@@ -445,6 +445,165 @@
   \end{tikzpicture}%
 }
 
+\newcommand{\TNWindowHighlight}[4]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{wA}{(0,0)}
+    \TN@tensordot{wB}{(0.95,0)}
+    \TN@tensordot{wC}{(1.90,0)}
+    \TN@tensordot{wD}{(2.85,0)}
+    \TN@tensordot{wE}{(3.80,0)}
+    \foreach \n in {wA,wB,wC,wD,wE} {
+      \TN@upleg{\n}{0.50}
+    }
+    \TN@uplabel{wA}{0.78}{#1}
+    \TN@uplabel{wE}{0.78}{#2}
+    \draw[tn leg] (wA.west) -- ++(-0.55,0);
+    \draw[tn leg] (wA.east) -- (wB.west);
+    \draw[tn leg] (wB.east) -- (wC.west);
+    \draw[tn leg] (wC.east) -- (wD.west);
+    \draw[tn leg] (wD.east) -- (wE.west);
+    \draw[tn leg] (wE.east) -- ++(0.55,0);
+    \draw[dashed] (0.58,0.82) rectangle (3.22,-0.34);
+    \node at (1.90,-0.68) {$#3$};
+    \node at (1.90,-1.12) {$#4$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNWindowOverlap}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{oA}{(0,0)}
+    \TN@tensordot{oB}{(0.95,0)}
+    \TN@tensordot{oC}{(1.90,0)}
+    \TN@tensordot{oD}{(2.85,0)}
+    \TN@tensordot{oE}{(3.80,0)}
+    \foreach \n in {oA,oB,oC,oD,oE} {
+      \TN@upleg{\n}{0.42}
+    }
+    \draw[tn leg] (oA.west) -- ++(-0.45,0);
+    \draw[tn leg] (oA.east) -- (oB.west);
+    \draw[tn leg] (oB.east) -- (oC.west);
+    \draw[tn leg] (oC.east) -- (oD.west);
+    \draw[tn leg] (oD.east) -- (oE.west);
+    \draw[tn leg] (oE.east) -- ++(0.45,0);
+    \draw[dashed] (-0.22,0.74) rectangle (2.12,-0.30);
+    \draw[dashed] (1.68,0.74) rectangle (4.02,-0.30);
+    \node at (0.95,-0.66) {$#1$};
+    \node at (2.85,-0.66) {$#2$};
+    \node at (1.90,1.02) {$#3$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNBoundaryRegrow}[4]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{rA}{(0,0)}
+    \TN@tensordot{rB}{(1.05,0)}
+    \TN@tensordot{rC}{(2.10,0)}
+    \TN@tensorboxwide{rX}{(3.55,0)}{}{0.62cm}
+    \foreach \n in {rA,rB,rC} {
+      \TN@upleg{\n}{0.50}
+    }
+    \TN@uplabel{rA}{0.78}{#2}
+    \TN@uplabel{rC}{0.78}{#3}
+    \node at (rX) {$#1$};
+    \draw[tn leg] (rA.west) -- ++(-0.50,0);
+    \draw[tn leg] (rA.east) -- (rB.west);
+    \draw[tn leg] (rB.east) -- (rC.west);
+    \draw[tn leg] (rC.east) -- (rX.west);
+    \draw[tn leg] (rX.east) -- ++(0.45,0);
+    \node at (1.78,-0.72) {$#4$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNLocalEqualityStep}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{lA}{(0,0)}
+    \TN@tensorboxwide{lX}{(0.82,0)}{}{0.60cm}
+    \TN@tensordot{lB}{(1.65,0)}
+    \TN@upleg{lB}{0.50}
+    \TN@uplabel{lB}{0.78}{#3}
+    \node at (lX) {$#1$};
+    \draw[tn leg] (lA.west) -- ++(-0.50,0);
+    \draw[tn leg] (lA.east) -- (lX.west);
+    \draw[tn leg] (lX.east) -- (lB.west);
+    \draw[tn leg] (lB.east) -- ++(0.50,0);
+    \node at (2.85,0) {$=$};
+    \TN@tensordot{rA}{(4.10,0)}
+    \TN@tensorboxwide{rX}{(4.92,0)}{}{0.70cm}
+    \TN@tensordot{rB}{(5.75,0)}
+    \TN@upleg{rB}{0.50}
+    \TN@uplabel{rB}{0.78}{#3}
+    \node at (rX) {$#2$};
+    \draw[tn leg] (rA.west) -- ++(-0.50,0);
+    \draw[tn leg] (rA.east) -- (rX.west);
+    \draw[tn leg] (rX.east) -- (rB.west);
+    \draw[tn leg] (rB.east) -- ++(0.50,0);
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNDirectSumAssembly}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensorboxwide{dsL}{(0,0)}{}{2.10cm}
+    \TN@tensorboxwide{dsR}{(5.10,0)}{}{2.10cm}
+    \node at (dsL) {$#1$};
+    \node at (dsR) {$#2$};
+    \node at (2.55,0) {$\xrightarrow{\ #3\ }$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNBlockTailEstimate}[2]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensorboxwide{leadAgen}{(0,0)}{}{1.25cm}
+    \TN@tensorboxwide{tailAgen}{(2.25,0)}{}{1.35cm}
+    \node at (leadAgen) {$#1$};
+    \node at (tailAgen) {$O(#2)$};
+    \node at (3.95,0) {$=$};
+    \TN@tensorboxwide{leadBgen}{(5.35,0)}{}{1.25cm}
+    \TN@tensorboxwide{tailBgen}{(7.60,0)}{}{1.35cm}
+    \node at (leadBgen) {$#1$};
+    \node at (tailBgen) {$O(#2)$};
+    \draw[->, tn leg] (tailAgen.south) .. controls +(0,-0.42) and +(0,-0.42) .. (leadAgen.south);
+    \draw[->, tn leg] (tailBgen.south) .. controls +(0,-0.42) and +(0,-0.42) .. (leadBgen.south);
+    \node at (5.35,0.82) {$V_{\mathrm{lead}}(A)=V_{\mathrm{lead}}(B)$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPeriodicGauge}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{pA}{(0,0)}
+    \TN@tensordot{pB}{(1.25,0)}
+    \TN@tensorboxwide{pZ}{(0.62,-0.92)}{}{0.54cm}
+    \draw[tn leg] (pA.east) -- (pB.west);
+    \TN@upleg{pA}{0.48}
+    \TN@upleg{pB}{0.48}
+    \draw[tn leg] (pA.west) -- ++(-0.42,0) -- ++(0,-0.92) -- (pZ.west);
+    \draw[tn leg] (pZ.east) -- ++(1.02,0) -- ++(0,0.92) -- (pB.east);
+    \node at (pZ) {$#2$};
+    \node at (0.62,-1.46) {$#1$-periodic};
+    \node at (2.15,-0.92) {$#2^{#3}=\Id$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNMartingaleWindow}[3]{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{mA}{(0,0)}
+    \TN@tensordot{mB}{(0.95,0)}
+    \TN@tensordot{mC}{(1.90,0)}
+    \TN@tensordot{mD}{(2.85,0)}
+    \TN@tensordot{mE}{(3.80,0)}
+    \draw[tn leg] (mA.west) -- ++(-0.55,0);
+    \draw[tn leg] (mA.east) -- (mB.west);
+    \draw[tn leg] (mB.east) -- (mC.west);
+    \draw[tn leg] (mC.east) -- (mD.west);
+    \draw[tn leg] (mD.east) -- (mE.west);
+    \draw[tn leg] (mE.east) -- ++(0.55,0);
+    \draw[dashed] (0.60,0.78) rectangle (3.20,-0.30);
+    \TN@tensorboxwide{mh}{(1.90,1.18)}{}{0.62cm}
+    \node at (mh) {$h_{#2}$};
+    \node at (1.90,-0.64) {$L=#1$};
+    \node at (1.90,-1.06) {$N=#3$};
+  \end{tikzpicture}%
+}
+
 \newcommand{\TNBlockPermutation}[2]{%
   \begin{tikzpicture}[tn picture]
     \TN@tensorboxwide{blkA1}{(0,0)}{}{0.75cm}
