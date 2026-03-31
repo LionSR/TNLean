@@ -1,0 +1,38 @@
+name: to
+{{ obj.source }}
+
+name: -
+{{ obj.source }}
+
+name: mathbb mathcal mathrm operatorname text
+{{ obj }}
+
+name: log ker cos min max in
+{{ obj.source }}
+
+name: cdots
+⋯
+
+name: xrightarrow frac tfrac overline bar pmod
+{{ obj.source }}
+
+name: bigoplus
+⊕
+
+name: Downarrow
+⇓
+
+name: langle
+⟨
+
+name: rangle
+⟩
+
+name: bigl bigr
+{{ obj.source }}
+
+name: active::&
+&amp;
+
+name: |
+|

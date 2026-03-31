@@ -408,7 +408,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \leanok
     \uses{def:mps_tensor, def:normal}
     A \emph{Wielandt analysis} for a normal MPS tensor~$A$
-    packages:
+    consists of:
     a word $w_0$ of length $\le D^2$,
     a nonzero eigenvalue $\mu$,
     and a nonzero eigenvector $\varphi$
@@ -594,7 +594,7 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     The reverse inclusion $H_n \le K_n$ is immediate.
 \end{proof}
 
-\begin{theorem}[Vector spanning to matrix spanning (assembly step)]%
+\begin{theorem}[Fixed-length vector spanning implies matrix spanning]%
     \label{thm:lemma2b_assembly}
     \lean{MPSTensor.wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis}
     \leanok
@@ -651,7 +651,7 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
 
 \begin{remark}[Relation with Lemma~2(b)]\label{rem:lemma2b_status}\leanok
     In~\cite{Sanz2010Quantum}, Lemma~2(b) combines a rank-one
-    extraction for fixed-length spans with an assembly
+    extraction for fixed-length spans with a product
     argument turning fixed-length vector spanning into fixed-length
     matrix spanning.
     Theorem~\ref{thm:lemma2b_assembly} is the second step.
@@ -727,7 +727,7 @@ used to produce rank-one elements.
     By definition, $(A^{[L]})^{j_0} = A^{w_0}$.
 \end{proof}
 
-\begin{theorem}[Wielandt blocked assembly]\label{thm:wielandt_blocked_assembly}
+\begin{theorem}[Blocked fixed-length matrix spanning]\label{thm:wielandt_blocked_assembly}
     \lean{MPSTensor.wielandt_blocked_assembly_complete}
     \leanok
     \uses{def:word_span, def:normal, def:blocked_tensor}
@@ -752,8 +752,7 @@ used to produce rank-one elements.
     \uses{thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector,
           thm:eigenvector_spreading, lem:blocking_transfer,
           thm:lemma2b_assembly}
-    Apply the conditional Lemma~2(b) assembly
-    (Theorem~\ref{thm:lemma2b_assembly}) to the
+    Apply Theorem~\ref{thm:lemma2b_assembly} to the
     blocked tensor $A^{[L]}$,
     which is normal by Theorem~\ref{thm:isNormal_blockTensor}.
     The eigenvector and transpose eigenvector are transferred
@@ -830,12 +829,12 @@ used to produce rank-one elements.
     $S_{((D-1) + m + (D-1)) \cdot N_0}(A) = \MN{D}$.
 \end{proof}
 
-\begin{remark}[Blocking route to fixed-length spanning]%
+\begin{remark}[Blocking argument for fixed-length spanning]%
     \label{rem:blocked_lemma2b_gap}\leanok
     Theorem~\ref{thm:wielandt_lemma2b} is obtained by first extracting a
     rank-one operator in a blocked tensor
     (Theorem~\ref{thm:rankone_extraction_blockTensor}) and then
-    applying the fixed-length assembly step
+    applying the fixed-length matrix-spanning theorem
     (Theorem~\ref{thm:wielandt_blocked_assembly}).
     Thus the fixed-length span of $A$ is reached through a blocked
     auxiliary tensor rather than by a direct unblocked argument.
@@ -1109,7 +1108,7 @@ projection onto the fixed-point subspace.
 
     This is the key connection between the spectral-gap
     primitivity of Definition~\ref{def:primitive_mps} and
-    normality, filling the gap that the aperiodicity-based route
+    normality, filling the gap that the aperiodicity-based argument
     in \S\ref{sec:cumspan_to_wordspan} leaves open.
 \end{theorem}
 
@@ -1269,23 +1268,22 @@ The gap is closed by an aperiodicity hypothesis.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:primitive_implies_strongly_irreducible, thm:strongly_irred_to_full_rank}
-    The proof factors through strong irreducibility: from
-    $\mathrm{IsPrimitiveMPS}(A,\rho)$ and $\rho \succ 0$ one gets
-    $\mathrm{IsStronglyIrreduciblePaper}(A)$, which packages peripheral
-    spectrum $\{1\}$ (hence aperiodicity) together with irreducibility.
-    The Proposition~3\,(c)$\to$(b) backend then yields eventual full Kraus
-    rank, giving normality without a separate aperiodicity hypothesis.
+    \uses{thm:strongly_irred_from_primitive, thm:irred_tensor_aperiodic_normal}
+    By Theorem~\ref{thm:strongly_irred_from_primitive},
+    $A$ is strongly irreducible. In particular, $A$ is irreducible and the
+    peripheral spectrum of $\E_A$ is $\{1\}$, so $A$ is aperiodic.
+    Theorem~\ref{thm:irred_tensor_aperiodic_normal} then gives normality,
+    hence eventually full Kraus rank.
 \end{proof}
 
-\begin{remark}[The normal-canonical route bypasses the aperiodicity argument]\label{rem:d1_bypasses_aperiodicity}
+\begin{remark}[Normal canonical form avoids the aperiodicity step]\label{rem:d1_bypasses_aperiodicity}
     The aperiodicity results in \S\ref{sec:cumspan_to_wordspan} are needed only for the
-    block-injective route through Definition~\ref{def:normal}, where one upgrades cumulative
-    spanning to eventual block injectivity. The normal-canonical route used later in
+    block-injective argument through Definition~\ref{def:normal}, where one upgrades cumulative
+    spanning to eventual block injectivity. The normal-canonical theory used later in
     Chapters~\ref{ch:canonical}--\ref{ch:bnt} does not pass through this step:
     it works directly with irreducible TP-normalized blocks whose blocked transfer maps
     are primitive and, once the corresponding weighted block data are available,
-    packages them as normal canonical form in the sense of
+    places them in normal canonical form in the sense of
     \cite{Cirac2017MPDO_AnnPhys}. There are analogous cumulative-span lemmas for
     blocked irreducible tensors and eigenvector-spreading arguments, but they are
     auxiliary here and we do not list them separately.

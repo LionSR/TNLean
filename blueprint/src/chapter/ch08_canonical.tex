@@ -2,14 +2,14 @@
 
 This chapter reduces a general MPS tensor to block-diagonal data via iterated
 invariant-subspace decomposition. Two reduction schemes are relevant.
-The block-injective route aims at injective TP-normalized blocks and the
+The block-injective reduction aims at injective TP-normalized blocks and the
 canonical form predicate of Chapter~\ref{ch:block_perm}. The normal-canonical
-route packages a weighted family of irreducible TP-normalized blocks with
+reduction uses a weighted family of irreducible TP-normalized blocks with
 primitive transfer maps and pairwise distinct nonzero weight moduli, in the
 sense of \cite{Cirac2017MPDO_AnnPhys}.
 The Perron--Frobenius eigenvector existence and TP-gauge construction
 are in Chapter~\ref{ch:qpf}; this chapter uses them to produce
-CFII data and the normal canonical form packaging.
+CFII data and the normal canonical form data.
 The reduction draws on
 \cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
 and~\cite[Ch.~6]{Wolf2012Quantum}.
@@ -28,7 +28,8 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	we write
 	$\bigoplus_{k=1}^r \mu_k A_k$
 	for the tensor of total bond dimension $D = \sum_k D_k$ whose Kraus
-	operators are $A^i = \bigoplus_{k=1}^r \mu_k A_k^i$.
+	operators are $A^i = \bigoplus_{k=1}^r \mu_k A_k^i$, obtained by
+	placing the scaled block Kraus operators on the diagonal.
 \end{definition}
 
 \begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
@@ -68,16 +69,16 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	\lean{MPSTensor.fundamentalTheorem_multiBlock_global}
 	\leanok
 	\uses{def:tensor_from_blocks, def:injective, def:same_mpv, thm:multi_block_ft}
-	If each block $A_k$ is injective and each pair $(A_k, B_k)$ has
-	$\mathrm{SameMPV}(A_k, B_k)$, then the block-diagonal tensors
+	If each block $A_k$ is injective and each pair $(A_k, B_k)$ generates
+	the same MPV family, then the block-diagonal tensors
 	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are gauge equivalent.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:multi_block_ft}
 	Apply the per-block single-block fundamental theorem
 	(Theorem~\ref{thm:multi_block_ft}) to obtain blockwise gauge
-	equivalences from injectivity plus SameMPV, then assemble them into a
-	global gauge for the block-diagonal tensors.
+	equivalences from injectivity and equality of MPV families, then
+	combine them into a global gauge for the block-diagonal tensors.
 \end{proof}
 
 \section{Transfer map normalization}
@@ -244,9 +245,10 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	Theorem~\ref{thm:fp_inv_proj} gives
 	$(\Id - P) A^i P = 0$ for all~$i$.
 	A unitary change of basis that block-diagonalizes $P$ puts
-	$A^i$ in upper-triangular block form
-	(Theorem~\ref{thm:samempv_unitary} ensures the MPV
-	is preserved by the conjugation).
+	$A^i$ in upper-triangular block form, with diagonal blocks
+	$B_{11}^i$ and $B_{22}^i$.
+	Theorem~\ref{thm:samempv_unitary} ensures the MPV is preserved by the
+	conjugation.
 	The trace of the upper-triangular product equals the sum
 	of the diagonal-block traces, so the block-diagonal tensor
 	obtained by discarding the off-diagonal blocks has the same MPV
@@ -287,8 +289,10 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	block-diagonal tensor obtained by discarding the off-diagonal part
 	has the same MPV family as~$A$, and the two diagonal blocks have
 	strictly smaller bond dimensions.
+	Iterating this splitting produces a block-diagonal tensor
+	$\bigoplus_k A_k$ whose blocks are irreducible.
 	Apply the induction hypothesis to each block and concatenate.
-	(If one prefers a positive-eigenvector route without assuming TP
+	(If one prefers a positive-eigenvector argument without assuming TP
 	normalization, the correct replacement for the channel-specific
 	Ces\`aro theorem is Theorem~\ref{thm:pf_eigenvector_existence};
 	the induction itself needs only the invariant projection.)
@@ -297,7 +301,7 @@ and~\cite[Ch.~6]{Wolf2012Quantum}.
 	canonical form'') and~\cite{Cirac2021Matrix} (§IV.A.1)
 	obtain the block decomposition by the same
 	invariant-projection splitting used here.
-	An alternative route, developed
+	An alternative derivation, developed
 	in~\cite[Thm.~6.14]{Wolf2012Quantum},
 	characterises the fixed-point set of a quantum channel
 	as a $*$-algebra and then applies the
@@ -413,10 +417,9 @@ For Burnside-style arguments it is more natural to work with invariant
 
 \begin{remark}\leanok
 	This Burnside/Jacobson-density step is a substantial external algebraic
-	dependency for the formalization. In the current project it is formalized
-	directly as the theorem tagged above, rather than imported from Mathlib;
-	if Mathlib later acquires a suitable finite-dimensional Burnside theorem,
-	this chapter could be retargeted to that library result.
+	input in the chapter. We use it here as the finite-dimensional complex
+	Burnside theorem, namely the statement that an irreducible matrix algebra
+	action already generates the full endomorphism algebra.
 \end{remark}
 
 \begin{theorem}[Irreducible action implies eventual cumulative spanning]%
@@ -530,6 +533,8 @@ removing it as an independent assumption.
 		\uses{thm:qpf, thm:eigenvalue_bound, thm:psd_fp_unique,
 			thm:primitive_compl_lt_one, thm:primitive_overlap}
 	Fix a block $k$ and write $E := \E_{A_k}$.
+	We check that each primitive block already satisfies the defining
+	properties of the canonical form predicate.
 	By injectivity and TP normalization, Theorem~\ref{thm:qpf} provides a
 	nonzero positive definite fixed point for~$E$.
 	To apply the spectral-gap criterion
@@ -581,6 +586,8 @@ removing it as an independent assumption.
 \begin{proof}\leanok
 	\uses{thm:peripheral_roots_irred_fp, thm:peripheral_finite,
 		lem:common_power_eq_one, lem:peripheral_pow_singleton}
+	The period-$p$ blocking step is the diagrammatic move
+	of grouping the chain into consecutive blocks of length~$p$.
 	Pass to the conjugate-transposed Kraus family $K_i := (A^i)^\dagger$.
 	The TP normalization of $A$ makes $K$ unital, and irreducibility of $A$
 	gives irreducibility of the associated Kraus map.
@@ -733,7 +740,7 @@ for a discussion of that extension.
 	family (Theorem~\ref{thm:samempv_unitary}).
 \end{proof}
 
-\begin{theorem}[CFII continuation after irreducible block decomposition]%
+\begin{theorem}[Irreducible block decomposition with CFII data]%
 	\label{thm:pipeline_handoff}
 	\lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII}
 	\leanok
@@ -744,8 +751,8 @@ for a discussion of that extension.
 	if that block has already been placed in TP gauge and $D_k > 0$,
 	one obtains CFII data (unitary, diagonal PD fixed point,
 	MPV preservation).
-	The conclusion is CFII data; the normal-canonical-form
-	packaging requires additional downstream steps.
+	The conclusion is CFII data; further arguments are needed to obtain
+	normal canonical form.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -782,7 +789,7 @@ for a discussion of that extension.
 		No new blocking is needed here: the input blocks are already primitive,
 		so one may take $p = 1$.
 		The theorem is stated with a blocking length because earlier reduction
-		steps may require a common blocking period; under the present hypotheses
+		steps may require a common blocking period; under these hypotheses
 		that period can be chosen to be $1$.
 		Since the moduli $|\mu_k|$ are pairwise distinct, there is a reordering
 		of the blocks for which they become strictly decreasing.
@@ -1054,7 +1061,12 @@ The following results separate the zero blocks from the
 	$\rho$ of the transfer map.
 	Apply the cyclic structure theorem
 	(peripheral eigenvalues form a cyclic group of order~$m$)
-	to obtain $m$ cyclic spectral projections.
+	to obtain $m$ cyclic spectral projections:
+	\[
+		\TNPeriodicGauge{m}{Z}{m}.
+	\]
+	Here the operator $Z$ is inserted on the closing virtual bond, while the
+	order-$m$ periodicity is part of the accompanying algebraic statement.
 	Feed into Theorem~\ref{thm:blockdecomp_adjoint_fixed}.
 \end{proof}
 
@@ -1122,20 +1134,19 @@ The following results separate the zero blocks from the
 
 \section{Open directions}\label{sec:pipeline_status}
 
-\begin{remark}[Canonical form reduction: current status]%
+\begin{remark}[Remaining steps toward normal canonical form]%
 	\label{rem:canonical_pipeline_gaps}
 	\leanok
-	The core reduction steps are in place.
 	The arbitrary-input reduction
-	(Theorem~\ref{thm:tp_gauge_arbitrary}) produces a zero tail plus
-	left-canonical live blocks. After a common blocking step
+	(Theorem~\ref{thm:tp_gauge_arbitrary}) produces a zero tail together
+	with left-canonical live blocks. After a common blocking step
 	(Theorem~\ref{thm:tp_primitive_blockdecomp}), the blocked blocks
 	have primitive transfer maps.
 
-	The remaining steps to full normal canonical form require:
-	establishing tensor irreducibility for each blocked block
-	(blocking does not in general preserve tensor irreducibility),
-	and establishing pairwise distinct weight norms.
+	To conclude full normal canonical form, two further ingredients are
+	still needed: tensor irreducibility for each blocked block
+	(blocking does not in general preserve tensor irreducibility), and
+	pairwise distinct weight norms.
 	The cyclic-sector decomposition
 	(Theorems~\ref{thm:blockdecomp_commuting_projs}
 	and~\ref{thm:blockdecomp_adjoint_fixed}) provides the infrastructure

@@ -3,15 +3,14 @@
 This chapter introduces the local ground-space construction and the parent
 interaction for translation-invariant periodic MPS.
 We follow the standard setup from
-\cite{Cirac2021Matrix, PerezGarcia2007Matrix} and align the Lean definitions
-with the project convention that the $N$-site Hilbert space is represented as
+\cite{Cirac2021Matrix, PerezGarcia2007Matrix}, with the $N$-site Hilbert space modelled as
 coefficient functions
 \[
   \{0,\dots,d{-}1\}^N \to \C,
 \]
 rather than as an explicit tensor product.
 
-\section{Local ground space $G_L(A)$}\label{sec:ground_space_parent}
+\section{\texorpdfstring{Local ground space $G_L(A)$}{Local ground space G\_L(A)}}\label{sec:ground_space_parent}
 
 Fix an MPS tensor $A = \{A^i\}_{i=0}^{d-1}$ with $A^i \in \MN{D}$ and a block
 length $L \ge 1$.
@@ -34,6 +33,15 @@ $A^{\sigma(0)}\cdots A^{\sigma(L-1)}$.
   \[
     \Gamma_L : \MN{D} \to \bigl(\{0,\dots,d{-}1\}^L \to \C\bigr).
   \]
+  In tensor-network notation,
+  \[
+    \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X}
+  \]
+  the upper chain denotes the word tensor $A^\sigma$ with open physical
+  indices $\sigma_1,\dots,\sigma_L$, and the lower red node denotes the boundary
+  matrix $X$ inserted on the closing virtual bond before taking the trace.
+  The chain length~$L$ is fixed by the surrounding formula, not by an extra
+  label inside the diagram.
 \end{definition}
 
 \begin{definition}[Local ground space]\label{def:ground_space_parent}
@@ -132,7 +140,8 @@ translated copies of the local interaction.
   \uses{def:parent_interaction}
   For each site index $i \in \{0,\dots,N{-}1\}$, the translated local term
   $h_i$ embeds the parent interaction into the full $N$-site space at
-  position~$i$ (with periodic boundary conditions).
+  position~$i$ (with periodic boundary conditions). Thus $h_i$ acts on the
+  cyclic interval $[i,i+L-1]$ and as the identity outside that interval.
 \end{definition}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
@@ -208,7 +217,7 @@ translated copies of the local interaction.
 
 \begin{proof}
   \leanok
-  Immediate from \texttt{localTerm\_annihilates\_mpv}.
+  Immediate from Lemma~\ref{lem:local_term_annihilates_mpv}.
 \end{proof}
 
 \section{Intersection property and unique ground state}\label{sec:intersection_unique}
@@ -266,6 +275,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
+  The restriction simply absorbs the last tensor into the boundary matrix:
+  \[
+    \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{A^j X}
+  \]
   Direct computation:
   $\psi(\sigma_1,\dots,\sigma_L,j) = \tr(A^{\sigma_1}\cdots A^{\sigma_L} \cdot A^j \cdot X)
    = \Gamma_L(A^j X)(\sigma)$.
@@ -281,6 +294,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
+  On the right restriction one first rotates the trace and then reads the
+  resulting boundary matrix on the shortened window:
+  \[
+    \TNGroundSpaceMap{A}{\sigma_1}{\sigma_L}{L}{X A^i}
+  \]
   By trace cyclicity:
   $\psi(i,\sigma_1,\dots,\sigma_L) = \tr(A^i A^{\sigma} X)
    = \tr(A^{\sigma} \cdot X A^i) = \Gamma_L(X A^i)(\sigma)$.
@@ -291,7 +309,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{theorem}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
   \lean{MPSTensor.groundSpaceMap_injective}
   \leanok
-  \uses{def:ground_space_map, def:is_injective}
+  \uses{def:ground_space_map, def:injective}
   If $A$ is injective and $L \ge 1$, then $\Gamma_L$ is injective.
 \end{theorem}
 
@@ -321,7 +339,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   \lean{MPSTensor.groundSpace_intersection}
   \leanok
   \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground,
-        def:ground_space_parent}
+        def:ground_space_parent, lem:exists_decomposition}
   If $A$ is injective and $L \ge 2$, then a state $\psi$ on $L+1$ sites
   satisfying both the left and right ground conditions lies in $G_{L+1}(A)$:
   \[
@@ -333,7 +351,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
-  The ``invert-and-regrow'' argument:
+  The ``invert-and-regrow'' argument compares the left and right
+  restrictions on their common $(L-1)$-site overlap and then reconstructs the
+  full $(L+1)$-site word from a single boundary matrix:
+  \[
+    \TNBoundaryRegrow{X'}{\sigma_1}{\sigma_{L+1}}{L+1}
+  \]
   \begin{enumerate}
     \item From the right ground condition, for each physical index~$i$ there
       exists a unique $Y_i \in \MN{D}$ (by injectivity of $\Gamma_L$) such
@@ -343,9 +366,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \item Matching on the $(L{-}1)$-site overlap and using nondegeneracy of
       the trace pairing:
       $A^j Y_i = Z_j A^i$ for all $i,j$.
-    \item Apply the decomposition map (one-sided inverse,
-      Theorem~\ref{thm:one_sided_inverse}): summing over~$i$ with the
-      decomposition coefficients of the identity yields
+    \item Apply the decomposition property
+      (Lemma~\ref{lem:exists_decomposition}): writing the identity as a
+      linear combination of the matrices $A^j$ yields
       $Y_i = X' A^i$ for a single matrix
       $X' = \sum_j \Psi(\mathbf{1})_j \cdot Z_j$.
     \item By trace cyclicity,
@@ -380,6 +403,10 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
+  The induction repeatedly merges two neighbouring admissible windows
+  $[i,i+L-1]$ and $[i+1,i+L]$ into the larger window $[i,i+L]$ by applying
+  Theorem~\ref{thm:ground_space_intersection} to their common overlap
+  $[i+1,i+L-1]$.
   Strong induction on window size, combining adjacent windows via
   Theorem~\ref{thm:ground_space_intersection} at each step.
 \end{proof}
@@ -420,8 +447,9 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{proof}
   \leanok
-  Apply the Mathlib characterization
-  \texttt{finrank\_eq\_one\_iff\_of\_nonzero'} in both directions.
+  Apply the standard finite-dimensional criterion that a nonzero space has
+  dimension one exactly when all of its vectors are proportional to a single
+  nonzero vector.
 \end{proof}
 
 \begin{definition}[Periodic chain ground space]\label{def:chain_ground_space}
@@ -442,7 +470,13 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   interaction range~$L$, the chain ground space is one-dimensional, spanned
   by the MPV.  The proof iterates the intersection property across the chain
   and uses the periodic boundary condition to constrain the boundary matrix
-  $X$ to a scalar multiple of~$I$.
+  $X$ to a scalar multiple of~$I$:
+  \[
+    \TNPeriodicGauge{N}{X}{1}
+  \]
+  that is, the boundary operator sits on the closing virtual bond. The
+  periodicity and the conclusion that $X$ must be scalar are expressed in the
+  surrounding argument, not by extra labels inside the picture.
 \end{theorem}
 
 \begin{theorem}[Unique ground state for block-injective tensors]%
@@ -564,8 +598,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
   \notready
   \uses{def:is_frustration_free}
-  Let $H = \sum_{i=1}^n h_i$ be a frustration-free Hamiltonian with
-  projector interaction terms ($h_i^2 = h_i$).
+  Consider a frustration-free Hamiltonian
+  \[
+    H = \sum_{i=1}^n h_i
+  \]
+  with projector interaction terms ($h_i^2 = h_i$).
   Suppose that for every pair of overlapping terms $h_i, h_j$ there
   exist constants $c_{ij} \ge 0$ and $\gamma > 0$ satisfying
   \[
@@ -579,6 +616,10 @@ Lucia~\cite{Kastoryano2018Martingale}.
 
 \begin{proof}
   \notready
+  The relevant geometry is a family of translated length-$L$ projector
+  windows on the ring; two terms $h_i$ and $h_j$ interact only when their
+  supports overlap, equivalently when the cyclic distance $d_N(i,j)$ is
+  smaller than $L$.
   From $h_i^2 = h_i$,
   \[
     H^2 = \sum_i h_i + \sum_{\substack{i < j \\ \text{overlapping}}}
@@ -626,7 +667,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \begin{lemma}[Martingale condition for MPS]\label{lem:martingale_mps}
   \notready
   \uses{thm:martingale_criterion, def:parent_interaction,
-        def:local_term_parent, lem:ground_space_intersection, def:injective}
+        def:local_term_parent, thm:ground_space_intersection, def:injective}
   Let $A$ be injective and fix an interaction range $L \ge 2$ as in
   Definition~\ref{def:parent_interaction}.  Let $h_L(A) := \Pi_{G_L(A)^\perp}$
   be the $L$-site parent interaction, and for each chain length and site $i$
@@ -648,12 +689,12 @@ Lucia~\cite{Kastoryano2018Martingale}.
 \end{lemma}
 
 \begin{proof}
-  \uses{lem:ground_space_intersection, def:injective}
+  \uses{thm:ground_space_intersection, def:injective}
   \notready
   Two terms $h_i, h_j$ with $0 < d_N(i,j) < L$ have supports overlapping
   in $L - d_N(i,j)$ sites (where $d_N$ is the cyclic distance on
   the $N$-site ring).  Since $A$ is injective, the intersection property
-  (Lemma~\ref{lem:ground_space_intersection}) gives the qualitative identity
+  (Theorem~\ref{thm:ground_space_intersection}) gives the qualitative identity
   $\ker(h_i) \cap \ker(h_j) = G_{[i,j+L-1]}(A)$.
   Because the local Hilbert space is finite-dimensional, the subspaces
   $\ker(h_i)$ and $\ker(h_j)$ live in a fixed finite-dimensional space.
@@ -668,7 +709,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
   Let $\alpha := \max_{1 \le s < L} \cos\theta_s < 1$ be the
   worst-case cosine of the Friedrichs angles.
 
-  \textbf{Row-sum bound.}
+  \emph{Row-sum bound.}
   Since $L \ge 2$, each site $i$ overlaps with at most $2(L-1)$
   neighbours (those $j$ with $0 < d_N(i,j) < L$).
   Set $c_{ij} := \tfrac{1}{2(L-1)}$ for every overlapping pair
@@ -678,7 +719,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
   satisfying the row-sum hypothesis of
   Theorem~\ref{thm:martingale_criterion}.
 
-  \textbf{Positivity of $\gamma$.}
+  \emph{Positivity of $\gamma$.}
   The Friedrichs angle bound gives, for each overlapping pair,
   $h_i h_j + h_j h_i \ge -\alpha\,(h_i + h_j)$.
   The martingale inequality holds with
@@ -694,7 +735,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
   $\alpha < \tfrac{1}{2}$.  For $L = 2$ with an injective tensor,
   the two projectors $h_i$ and $h_{i+1}$ act on a finite-dimensional
   space, and the intersection property
-  (Lemma~\ref{lem:ground_space_intersection}) guarantees that
+  (Theorem~\ref{thm:ground_space_intersection}) guarantees that
   $\ker(h_i) \cap \ker(h_{i+1})$ is exactly $G_{[i,i+2]}(A)$;
   hence $\|P_i P_{i+1}\| < 1$ (the Friedrichs cosine is strictly
   less than~1).  On a finite-dimensional space with two projectors,
@@ -742,7 +783,8 @@ Lucia~\cite{Kastoryano2018Martingale}.
   dimension $D$.  Each blocked site represents $L_0$ original sites,
   so the range-$L = 2L_0$ interaction on the original chain corresponds
   exactly to a range-$2$ interaction on the blocked chain (two blocked
-  sites).
+  sites).  Thus one passes to the blocked chain and applies the martingale
+  estimate there with interaction range~$2$.
   \emph{Remark on interaction range:}
   Theorem~\ref{thm:unique_gs_injective} establishes ground-state
   uniqueness at range $L_0{+}1$, whereas here we use range $2L_0$.
@@ -787,16 +829,16 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:unique_gs_normal, lem:ground_space_intersection, def:bnt,
+  \uses{thm:unique_gs_normal, thm:ground_space_intersection, def:bnt,
         lem:parent_hamiltonian_annihilates}
   \notready
-  \textbf{$\supseteq$}: Each $A_k$ is normal, so
+  \emph{$\supseteq$.} Each $A_k$ is normal, so
   Lemma~\ref{lem:parent_hamiltonian_annihilates} (applied to the
   block-diagonal structure) gives
   $H_N(A,L_0{+}1)\,V^{(N)}(A_k) = 0$.
   Linearity of the kernel yields the inclusion.
 
-  \textbf{$\subseteq$}: Take $\psi \in \ker(H_N)$.
+  \emph{$\subseteq$.} Take $\psi \in \ker(H_N)$.
   The block-diagonal structure of $A$ gives, at the interaction
   range $L_0{+}1$ used in the Hamiltonian, the containment
   $G_{L_0+1}(A) \subseteq \sum_k G_{L_0+1}(A_k)$: any local ground
@@ -807,7 +849,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
   $L_0{+}1 \ge L_0$, so the sum is in fact direct).
   Each normal block $A_k$ has injectivity length $L_k \le L_0$, so
   the $L_k$-blocked tensor $A_k^{[L_k]}$ is injective.
-  Applying Lemma~\ref{lem:ground_space_intersection} to this injective
+  Applying Theorem~\ref{thm:ground_space_intersection} to this injective
   blocked tensor (in unblocked coordinates, as in
   Theorem~\ref{thm:unique_gs_injective}) and iterating across the
   chain for each block independently, and using

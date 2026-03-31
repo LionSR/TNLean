@@ -1,6 +1,5 @@
 %% =========================================================
 %% Chapter: Quantum Dynamical Semigroups and GKSL Generators
-%% Covers: TNLean/Channel/Semigroup/{Basic,Perturbation,GeneratorDefs,LindbladForm,KossakowskiForm}.lean
 %% Wolf reference: Chapter 7
 %% =========================================================
 
@@ -686,7 +685,7 @@ which shows that such generators have the standard Lindblad form.
           \bigr).
     \]
     In Wolf's formula one takes $\{F_k\}$ to be a basis of traceless matrices;
-    the Lean structure keeps only the algebraic data needed for the conversion to
+    here we keep only the algebraic data needed for the conversion to
     Lindblad form.
 \end{definition}
 
@@ -711,12 +710,11 @@ which shows that such generators have the standard Lindblad form.
 %% ---------------------------------------------------------
 
 %% Wolf §7.1, Prop 7.5
-\begin{remark}[Status note]\notready
-    The Lean declarations for Proposition~7.5 are currently implemented via
-    axioms to keep CI/elaboration time manageable; accordingly, these results are
-    marked \texttt{notready} in the blueprint until full proofs are restored.
-    The Proposition~7.6 implication (4)$\to$(2) sorry was closed in PR~\#85,
-    so the full equivalence chain is now complete.
+\begin{remark}[Remaining gap in the semigroup irreducible/primitive equivalence]\notready
+    To obtain the semigroup analogue of the irreducible/primitive
+    equivalence, it remains to pass from the qualitative spectral
+    theory of a single time slice to a uniform statement for the whole
+    semigroup.
 \end{remark}
 
 
