@@ -633,7 +633,7 @@ the remaining declarations are scaffolded with incomplete proofs.
 	\lean{MPSTensor.periodicSelfOverlap_tendsto}
 	\uses{def:periodic_tensor}
 	If $A$ is $m$-periodic, then the self-overlap along multiples of $m$
-	converges to $m$.
+	converges to $m$ (the period, viewed as a scalar).
 \end{theorem}
 
 \begin{theorem}[Different periods imply asymptotic orthogonality]\label{thm:periodic_overlap_zero_ne_period}
@@ -689,7 +689,7 @@ the remaining declarations are scaffolded with incomplete proofs.
 \begin{theorem}[Periodic overlap dichotomy]\label{thm:periodic_overlap_dichotomy}
 	\lean{MPSTensor.periodicOverlapDichotomy}
 	\uses{thm:periodic_overlap_zero_ne_period, thm:periodic_overlap_zero_no_sector_match, thm:periodic_overlap_zero_ne_dim, thm:periodic_overlap_gauge_equiv_sector_match}
-	Let $A$ and $B$ be periodic tensors. Then exactly one of the following
+	Let $A$ and $B$ be periodic tensors. Then at least one of the following
 	alternatives holds:
 	\begin{enumerate}
 		\item $\langle V_N(A), V_N(B)\rangle \to 0$ as $N\to\infty$;
