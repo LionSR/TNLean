@@ -220,7 +220,10 @@ theorem perturbation_bound_unit_norm
         rw [Real.volume_Icc, ENNReal.toReal_ofReal (by linarith : (0 : ℝ) ≤ t - 0)]
         ring
 
-/-! ## Dyson-Phillips iterates -/
+/-! ## Dyson-Phillips iterates
+
+This section currently provides the recursive iterates and the one-step norm control
+used in later induction arguments. -/
 
 /-- Recursive Dyson-Phillips terms built from the unperturbed semigroup `L`
 and perturbation `L' - L`. -/
