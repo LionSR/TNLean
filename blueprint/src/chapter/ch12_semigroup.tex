@@ -790,7 +790,45 @@ which shows that such generators have the standard Lindblad form.
     equivalence, it remains to pass from the qualitative spectral
     theory of a single time slice to a uniform statement for the whole
     semigroup.
+\begin{remark}[Fraction-slice bridge for Proposition~7.5]\leanok
+    The fraction-slice component of the argument is now formalized in
+    Lean.  Starting from one irreducible time $t_0$, we construct a
+    positive slice $u=t_0/N$ with
+    $T_{t_0}=(T_u)^N$, prove peripheral eigenvalue collapse at time~$u$,
+    and deduce primitivity of $T_u$.
 \end{remark}
+
+\begin{theorem}[Fraction-slice eigenvector has nonzero trace]
+    \lean{exists_trace_ne_zero_eigenvector_of_fraction_slice}\leanok
+    Under the fraction-slice hypotheses
+    $T_{t_0} = (T_u)^{(\dim \MN{D})!}$, if
+    $\mu$ is a peripheral eigenvalue of $T_u$, then $T_u$ admits a
+    $\mu$-eigenvector with nonzero trace.
+\end{theorem}
+
+\begin{theorem}[Fraction-slice peripheral collapse]
+    \lean{peripheral_eq_one_of_fraction_slice}\leanok
+    Under the same hypotheses, every peripheral eigenvalue of $T_u$
+    equals $1$.
+\end{theorem}
+
+\begin{theorem}[Fraction-slice primitivity]
+    \lean{primitive_of_fraction_slice}\leanok
+    Under the same hypotheses, $T_u$ is primitive.
+\end{theorem}
+
+\begin{theorem}[Primitive-slice fixed points are trace-scalars]
+    \lean{fixedPoint_eq_trace_smul_of_primitive_slice}\leanok
+    If $T_u$ is primitive and $\sigma$ is the common fixed density, then
+    every fixed point of any positive-time slice $T_s$ has the form
+    $\tau = \tr(\tau)\,\sigma$.
+\end{theorem}
+
+\begin{theorem}[Existence of a primitive fraction slice]
+    \lean{exists_primitive_fraction_slice}\leanok
+    If $T_{t_0}$ is irreducible for some $t_0>0$, then there exists a
+    fraction slice $u \in (0,t_0]$ such that $T_u$ is primitive.
+\end{theorem}
 
 
 \begin{theorem}[Prop.~7.5: Irreducible semigroup implies primitive]
