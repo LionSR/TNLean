@@ -483,11 +483,10 @@ identifying `V A_i V†` as an alternative Kraus family for the same
 channel and applying rectangular Kraus freedom, so the explicit
 injectivity hypothesis is retained only to match the paper's API. -/
 theorem condC2_imp_condC1_of_injective
-    (hA : IsInjective A)
+    (_hA : IsInjective A)
     (hV : V * Vᴴ = 1)
     (hC2 : CondC2 A V) :
     ∃ u : Matrix (Fin d) (Fin d) ℂ, u * uᴴ = 1 ∧ CondC1 A u V := by
-  let _ := hA
   let B : MPSTensor d D := fun i => V * A i * Vᴴ
   have hB_eq : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       transferMap B X = transferMap A X := by
@@ -1609,15 +1608,12 @@ theorem virtualUnitary_of_stringOrder
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
     (hNorm : transferMap A 1 = 1)
     (hSO : HasStringOrder A u Λ) :
     ∃ V : Matrix (Fin D) (Fin D) ℂ, ∃ μ : ℂ,
       V * Vᴴ = 1 ∧ Vᴴ * V = 1 ∧ ‖μ‖ = 1 ∧
       ∀ i : Fin d,
         ∑ j : Fin d, u i j • A j = μ • (V * A i * Vᴴ) := by
-  let _ := hΛpos
-  let _ := hΛtr
   have hGauge : GaugePhaseEquiv A (twistedMixedCompanion A u) :=
     gaugePhaseEquiv_twisted_of_hasStringOrder A hA u hu Λ hNorm hSO
   exact virtualUnitary_of_gaugePhaseEquiv_twisted A hA u hu hNorm hGauge
