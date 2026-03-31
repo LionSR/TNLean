@@ -134,6 +134,42 @@ theorem gaugePhaseEquiv_of_nonDecaying_overlap
 
 /-! ### §1b. Non-decaying overlap from canonical-form structure (remaining gap) -/
 
+/-- Overlap expansion along a finite MPV decomposition on the left.
+
+This local helper mirrors the overlap-expansion infrastructure used in
+`BNT/PermutationRigidity.lean`, specialized for this bridge file. -/
+private lemma mpvOverlap_eq_sum_of_decomp_left
+    {Dtot : ℕ} {r : ℕ} {dim : Fin r → ℕ}
+    (A_total : MPSTensor d Dtot)
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    {N : ℕ} (c : Fin r → ℂ)
+    (hdecomp : ∀ (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin r, c j * mpv (A j) σ)
+    {D' : ℕ} (B : MPSTensor d D') :
+    mpvOverlap (d := d) A_total B N =
+      ∑ j : Fin r, c j * mpvOverlap (d := d) (A j) B N := by
+  classical
+  calc
+    mpvOverlap (d := d) A_total B N =
+        ∑ σ : Cfg d N, (∑ j : Fin r, c j * mpv (A j) σ) * star (mpv B σ) := by
+          simp only [mpvOverlap]
+          congr 1; ext σ; rw [hdecomp σ]
+    _ = ∑ σ : Cfg d N, ∑ j : Fin r, c j * (mpv (A j) σ * star (mpv B σ)) := by
+          congr 1; ext σ; rw [Finset.sum_mul]; congr 1; ext j; ring
+    _ = ∑ j : Fin r, ∑ σ : Cfg d N, c j * (mpv (A j) σ * star (mpv B σ)) := by
+          simpa using
+            (Finset.sum_comm (s := (Finset.univ : Finset (Cfg d N)))
+              (t := (Finset.univ : Finset (Fin r)))
+              (f := fun σ j => c j * (mpv (A j) σ * star (mpv B σ))))
+    _ = ∑ j : Fin r, c j * ∑ σ : Cfg d N, mpv (A j) σ * star (mpv B σ) := by
+          refine Finset.sum_congr rfl ?_
+          intro j _
+          simpa [mul_assoc] using
+            (Finset.mul_sum (s := (Finset.univ : Finset (Cfg d N)))
+              (f := fun σ : Cfg d N => mpv (A j) σ * star (mpv B σ)) (a := c j)).symm
+    _ = ∑ j : Fin r, c j * mpvOverlap (d := d) (A j) B N := by
+          simp [mpvOverlap]
+
 /-- **Non-decaying overlap for equal-norm blocks from a canonical-form decomposition.**
 
 When blocks are obtained from the canonical-form decomposition of an MPS tensor,
