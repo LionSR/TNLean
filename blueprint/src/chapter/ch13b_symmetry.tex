@@ -402,10 +402,21 @@ make this precise and establish the quotient $H^2(G,\mathrm{U}(1))$.
     $\omega_2(g,h) = f(g)\,f(h)\,f(gh)^{-1}\,\omega_1(g,h)$.
 \end{proof}
 
+\begin{definition}[Multiplicative 2-cocycle condition]\label{def:is_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle}
+    \leanok
+    A scalar 2-cochain $\omega\colon G\times G\to\mathrm{U}(1)$ is a
+    \emph{2-cocycle} if it satisfies
+    \[
+        \omega(g,h)\,\omega(gh,k) = \omega(g,hk)\,\omega(h,k)
+        \qquad\text{for all } g,h,k\in G.
+    \]
+\end{definition}
+
 \begin{definition}[Second cohomology quotient]\label{def:h2_u1}
     \lean{TNLean.Algebra.H2}
     \leanok
-    \uses{def:cohomologous_to}
+    \uses{def:cohomologous_to, def:is_cocycle}
     The second cohomology set is the quotient
     \[
         H^2(G,\mathrm{U}(1))
