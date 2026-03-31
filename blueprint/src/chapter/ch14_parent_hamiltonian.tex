@@ -486,13 +486,13 @@ interaction projectors commute with each other.
 \end{definition}
 
 \begin{theorem}[RFP implies NNCPH]\label{thm:rfp_implies_nncph}
-  \lean{MPSTensor.isNNCPH_of_isRFP}
   \uses{def:is_nncph}
   If $A$ is a renormalization fixed point (RFP), then its parent
   Hamiltonian with $L = 2$ has commuting local terms.
-  \textbf{Note:} the Lean proof is currently vacuously true because
-  \texttt{parentInteraction} simplifies to zero (a pre-existing bug); do
-  not cite this as a proven result.
+  \textbf{Status:} not yet formalized in Lean. The previous declaration
+  \texttt{MPSTensor.isNNCPH\_of\_isRFP} was removed after its proof was found
+  to be incorrect; this theorem will return once the RFP structural-form
+  infrastructure needed for Theorem~3.10 is in place.
   See \cite[Theorem~3.10]{Cirac2021Matrix}.
 \end{theorem}
 
