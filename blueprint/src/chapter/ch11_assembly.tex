@@ -510,7 +510,7 @@ directly to periodic tensors.
 	\label{thm:common_period_blocking_primitive}
 	\lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
 	\leanok
-	\uses{def:common_period_blocking}
+	\uses{def:common_period_blocking, thm:primitive_blocking_divisible}
 	If each tensor $B_i$ has a primitive transfer map after blocking by its own
 	positive period $p_i$, then every tensor in the family
 	\texttt{commonPeriodBlocking} applied to $(B_i)$ and $(p_i)$ also has
