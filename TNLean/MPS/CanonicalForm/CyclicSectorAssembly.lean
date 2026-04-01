@@ -37,7 +37,8 @@ noncomputable def commonPeriodBlocking
 /-- If each block has a primitive transfer map at its own period, then blocking the whole family
 to the common LCM period preserves that primitivity witness for every member. -/
 theorem isPrimitive_transferMap_commonPeriodBlocking
-    {dim : Fin k → ℕ} [∀ i, NeZero (dim i)]
+    {dim : Fin k → ℕ}
+    (hDim : ∀ i, 0 < dim i)
     (blocks : (i : Fin k) → MPSTensor d (dim i)) (periods : Fin k → ℕ)
     (hPeriodsPos : ∀ i, 0 < periods i)
     (hPrim : ∀ i,
@@ -48,23 +49,21 @@ theorem isPrimitive_transferMap_commonPeriodBlocking
       _root_.IsPrimitive
         (transferMap (d := blockPhysDim d (lcmPeriod periods)) (D := dim i)
           (commonPeriodBlocking (d := d) blocks periods i)) := by
+  intro i
+  letI : NeZero (dim i) := ⟨Nat.ne_of_gt (hDim i)⟩
   have hlcmPos : 0 < lcmPeriod periods := by
     have hne : lcmPeriod periods ≠ 0 := by
       refine Finset.lcm_ne_zero_iff.2 ?_
-      intro i _
-      exact Nat.ne_of_gt (hPeriodsPos i)
+      intro j _
+      exact Nat.ne_of_gt (hPeriodsPos j)
     exact Nat.pos_of_ne_zero hne
-  intro i
   have hi_dvd : periods i ∣ lcmPeriod periods := Finset.dvd_lcm (Finset.mem_univ i)
-  obtain ⟨m, hm⟩ := hi_dvd
-  have hm_pos : 0 < m := by
-    have hmul : 0 < periods i * m := by simpa [hm] using hlcmPos
-    exact Nat.pos_of_mul_pos_left hmul
-  rw [show commonPeriodBlocking (d := d) blocks periods i =
-      blockTensor (d := d) (D := dim i) (blocks i) (lcmPeriod periods) from rfl, hm]
-  rw [← transferMap_blockTensor_blockTensor (A := blocks i) (m := periods i) (n := m)]
-  rw [transferMap_blockTensor]
-  exact isPrimitive_pow_of_isPrimitive _ m hm_pos (hPrim i)
+  simpa [commonPeriodBlocking] using
+    isPrimitive_transferMap_blockTensor_of_dvd
+      (d := d) (D := dim i)
+      (A := blocks i)
+      (p := periods i) (q := lcmPeriod periods)
+      hi_dvd hlcmPos (hPrim i)
 
 /-- The common-period blocked family has the expected physical dimension. -/
 theorem commonPeriodBlocking_apply
