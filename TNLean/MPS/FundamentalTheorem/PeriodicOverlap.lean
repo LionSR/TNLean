@@ -58,8 +58,17 @@ assemble the global gauge unitary.
 
 ## Status
 
-The main theorems in this file are currently stated with `sorry` proofs.
-This module serves as a skeleton / proof sketch and should not yet be
+The main theorems in this file are currently stated with `sorry` proofs, and
+some of the same-period statements are intentionally **provisional**. The live
+cyclic-sector API in `CanonicalForm/CyclicSectors.lean` and
+`CanonicalForm/Assembly.lean` naturally produces **compressed sector tensors**
+living on the corner bond spaces, whereas several statements below are still
+phrased in terms of the ambient tensors `leftSectorTensor (P u) (blockTensor A m)`.
+That ambient formulation is convenient for the paper sketch, but it is stronger
+than the currently formalized infrastructure and is the main blocker for the
+first unfinished proofs in Case 2.
+
+This module therefore serves as a skeleton / proof sketch and should not yet be
 relied on as a completed formalization of Proposition 3.3.
 
 ## References
@@ -115,9 +124,16 @@ theorem periodicOverlap_tendsto_zero_of_ne_period
 
 /-! ## Case 2: Same period, no sector match → orthogonal (Appendix A, second case) -/
 
-/-- Two-sided sector restriction is "normal" when the original blocked tensor has
-the appropriate cyclic-sector structure. This packages the consequence of
-Lemma 2.4: each `P_u A^(m)` is a normal tensor.
+/-- Provisional Case-2 helper for the blocked sector tensors.
+
+The intended mathematical content is Lemma 2.4: after blocking by the period,
+each cyclic sector is a normal tensor. In the current file this statement is
+still phrased for the ambient tensor `leftSectorTensor (P u) (blockTensor A m)`.
+However, the live API more naturally gives a **compressed** tensor on the corner
+bond space via `exists_compressedTensor_of_supported_projection`, together with
+primitivity / irreducibility data for the corner restriction of the blocked
+transfer map. Future proof work should likely reformulate this lemma using that
+compressed sector tensor rather than the ambient one.
 
 The nontriviality hypothesis `P u ≠ 0` is required because the zero projector
 would yield the zero tensor, which is not normal (it cannot be block-injective).
@@ -139,9 +155,13 @@ lemma sectorBlocked_isNormal_of_isPeriodic
     IsNormal (leftSectorTensor (P u) (blockTensor A m)) := by
   sorry
 
-/-- If two periodic tensors have the same period `m` but no sector pair
-`(P_u A^(m), Q_v B^(m))` is gauge-phase equivalent, then their overlap
-decays to zero.
+/-- Provisional same-period / no-match statement.
+
+If two periodic tensors have the same period `m` but no sector pair matches,
+their overlap should decay to zero. As above, the current statement uses the
+ambient sector tensors `leftSectorTensor (P u) (blockTensor A m)`. The live
+cyclic-sector machinery instead produces compressed sector tensors, and the
+eventual proof will likely be cleaner when stated for those compressed blocks.
 
 The hypotheses require that `PA` and `QB` form genuine cyclic-sector
 decompositions: completeness (they sum to 1), mutual orthogonality, and
