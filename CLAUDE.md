@@ -9,6 +9,9 @@ TNLean is a Lean 4 formalization of the **Fundamental Theorem of Matrix Product 
 ## Build Commands
 
 ```bash
+# Fetch pre-built Mathlib oleans (run once, or after toolchain/dependency updates)
+lake exe cache get
+
 # Full build
 lake build
 
