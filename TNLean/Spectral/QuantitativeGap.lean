@@ -47,13 +47,12 @@ but gives no explicit bound. This file provides constructive bounds.
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix Finset
 
-namespace MPSTensor
-
-variable {d D : ℕ}
-
 /-! ## Quantitative decay from a spectral-radius gap -/
 
-/-- Convert `spectralRadius T < 1` into a global exponential bound for the powers of `T`. -/
+/-- Convert `spectralRadius T < 1` into a global exponential bound for the powers of `T`.
+
+This is a general result about any continuous linear map on a normed space;
+it does not depend on MPS tensors or quantum channels. -/
 theorem exponential_bound_of_spectralRadius_lt_one
     {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [CompleteSpace V]
     (T : V →L[ℂ] V) (hT : spectralRadius ℂ T < 1) :
@@ -61,7 +60,7 @@ theorem exponential_bound_of_spectralRadius_lt_one
       0 < C ∧ 0 < ξ ∧
       ∀ (n : ℕ) (X : V), ‖(T ^ n) X‖ ≤ C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
   have hpow0 : Filter.Tendsto (fun n => T ^ n) Filter.atTop (nhds 0) :=
-    pow_tendsto_zero_of_spectralRadius_lt_one T hT
+    MPSTensor.pow_tendsto_zero_of_spectralRadius_lt_one T hT
   have hnorm0 : Filter.Tendsto (fun n => ‖T ^ n‖) Filter.atTop (nhds 0) := by
     simpa using (continuous_norm.tendsto 0).comp hpow0
   have hsmall : ∀ᶠ n : ℕ in Filter.atTop, 0 < n ∧ ‖T ^ n‖ < 1 / 2 := by
@@ -182,6 +181,10 @@ theorem exponential_bound_of_spectralRadius_lt_one
     _ = C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
       dsimp [C]
       ring
+
+namespace MPSTensor
+
+variable {d D : ℕ}
 
 /-! ## Convergence rate from spectral gap -/
 
