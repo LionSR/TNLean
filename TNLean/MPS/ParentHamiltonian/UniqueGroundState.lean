@@ -2,8 +2,8 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
-import TNLean.MPS.ParentHamiltonian.Defs
 
 /-!
 # Unique ground state for injective MPS parent Hamiltonians
@@ -111,11 +111,8 @@ theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
   rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
-  -- We need: cyclicRestrictₗ hN L i τ (mpv A) ∈ groundSpace A L
-  -- This follows from trace cyclicity: rotating the N-site product to start
-  -- at the window position gives evalWord(σ-part) * evalWord(outside-part).
-  rw [groundSpace, LinearMap.mem_range]
-  sorry
+  simpa [cyclicRestrictₗ_apply, cyclicCfg, replaceWindow] using
+    mpv_window_mem_groundSpace A L N hLN i τ
 
 /-! ### Unique ground state -/
 
@@ -178,7 +175,17 @@ step; the remaining ingredient is the periodic boundary argument. -/
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
     {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     HasUniqueGroundState (chainGroundSpace A L N) := by
-  sorry
+  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hA hN hL hLN]
+  have hmpv : (mpv A : NSiteSpace d N) ≠ 0 := by
+    intro hzero
+    have hEq :
+        groundSpaceMap A N (1 : Matrix (Fin D) (Fin D) ℂ) =
+          groundSpaceMap A N (0 : Matrix (Fin D) (Fin D) ℂ) := by
+      simpa [mpv_eq_groundSpaceMap_one A N] using hzero
+    have h10 : (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
+      (groundSpaceMap_injective hA (by omega : 0 < N)) hEq
+    exact one_ne_zero h10
+  simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
 /-- **Unique ground state for `N`-block-injective tensors on `2N` sites**.
 
