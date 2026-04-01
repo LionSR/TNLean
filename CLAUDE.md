@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding assistants working with code in this repository.
 
 ## Project Overview
 
@@ -41,7 +41,7 @@ cd blueprint && leanblueprint pdf
 
 ## Architecture
 
-The source lives in `TNLean/` and is organized into **6 semantic layers** (see `TNLean.lean` for the full import graph):
+The source lives in `TNLean/` and is organized into **layers 0-6 with sublayers** (see `TNLean.lean` for the full import graph):
 
 | Layer | Modules | Content |
 |-------|---------|---------|
