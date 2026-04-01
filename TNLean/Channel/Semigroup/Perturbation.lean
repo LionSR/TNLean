@@ -293,4 +293,12 @@ lemma summable_dysonTerm_of_factorial_bound
   simpa [mul_div_assoc, mul_comm, mul_left_comm, mul_assoc] using
     (Real.summable_pow_div_factorial (t * ‖L' - L‖ * M)).mul_left M
 
+/-- Consumer lemma for the Dyson-series convergence pipeline:
+`factorial bound → summable Dyson terms`. -/
+lemma dysonSeries_summable
+    (L L' : CLM D) {t M : ℝ}
+    (hbound : ∀ n, ‖dysonTerm L L' t n‖ ≤ M * ((t * ‖L' - L‖ * M) ^ n / (Nat.factorial n))) :
+    Summable (fun n => dysonTerm L L' t n) :=
+  summable_dysonTerm_of_factorial_bound (L := L) (L' := L') hbound
+
 end -- noncomputable section
