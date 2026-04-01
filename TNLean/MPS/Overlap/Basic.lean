@@ -65,4 +65,18 @@ lemma mpvOverlap_eq_star_mpvInner {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B 
   -- Expand `mpvInner` as a sum, then take `star` termwise.
   simp [mpvOverlap, mpvInner_eq_sum, star_sum, mul_comm]
 
+/-- Positive-length MPV equality on both sides upgrades to positive-length overlap equality. -/
+theorem mpvOverlap_eq_of_pos_mpv_eq
+    {d D₁ D₁' D₂ D₂' : ℕ}
+    {A : MPSTensor d D₁} {A' : MPSTensor d D₁'}
+    {B : MPSTensor d D₂} {B' : MPSTensor d D₂'}
+    (hA : ∀ {N : ℕ}, 0 < N → ∀ σ : Cfg d N, mpv A σ = mpv A' σ)
+    (hB : ∀ {N : ℕ}, 0 < N → ∀ σ : Cfg d N, mpv B σ = mpv B' σ) :
+    ∀ {N : ℕ}, 0 < N → mpvOverlap (d := d) A B N = mpvOverlap (d := d) A' B' N := by
+  intro N hN
+  simp only [mpvOverlap]
+  refine Finset.sum_congr rfl ?_
+  intro σ _
+  rw [hA hN σ, hB hN σ]
+
 end MPSTensor
