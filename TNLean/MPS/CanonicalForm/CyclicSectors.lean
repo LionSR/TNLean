@@ -468,9 +468,9 @@ theorem exists_compressedTensor_of_supported_projection_pos_mpv
       ((n : ℂ) = Matrix.trace P) ∧
       (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
       (∀ {N : ℕ}, 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = mpv C σ) := by
-  obtain ⟨n, C, hn, hCtp, hCmpv⟩ :=
+  obtain ⟨dim, C, hdim, hCtp, hCmpv⟩ :=
     exists_compressedTensor_of_supported_projection A P hP hSupp hTP
-  refine ⟨n, C, hn, hCtp, ?_⟩
+  refine ⟨dim, C, hdim, hCtp, ?_⟩
   have hleft : ∀ i : Fin d, P * A i = A i := by
     intro i
     calc
@@ -494,7 +494,7 @@ theorem exists_compressedTensor_of_supported_projection_pos_mpv
   cases N with
   | zero =>
       cases Nat.not_lt_zero _ hN
-  | succ n =>
+  | succ n' =>
       have hPw :
           P * evalWord A (List.ofFn σ) = evalWord A (List.ofFn σ) := by
         apply hword
@@ -503,7 +503,7 @@ theorem exists_compressedTensor_of_supported_projection_pos_mpv
         mpv A σ = Matrix.trace (evalWord A (List.ofFn σ)) := by rfl
         _ = Matrix.trace (P * evalWord A (List.ofFn σ)) := by
               exact congrArg Matrix.trace hPw.symm
-        _ = mpv C σ := (hCmpv (N := n.succ) σ).symm
+        _ = mpv C σ := (hCmpv (N := n'.succ) σ).symm
 
 end CompressionPositiveMPV
 
