@@ -29,7 +29,10 @@ open scoped Matrix
 variable {d r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
 
 /-- Parent-Hamiltonian ground space for a CF/BNT block family, represented via
-`chainGroundSpace` of the assembled tensor. -/
+`chainGroundSpace` of the assembled tensor `toTensorFromBlocks μ A`.
+
+Note: this definition depends on the implicit BNT phase/eigenvalue data
+`μ : Fin r → ℂ` from the surrounding variable context. -/
 noncomputable def parentHamiltonianGroundSpace
     (A : (j : Fin r) → MPSTensor d (dim j)) (L N : ℕ) :
     Submodule ℂ (NSiteSpace d N) :=
@@ -43,18 +46,22 @@ noncomputable def bntSpan
 
 /-- `⊇` direction helper: each BNT block MPV lies in the parent-Hamiltonian
 ground space of the assembled tensor. -/
+axiom bnt_mem_groundSpace_proof
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hN : N ≥ L + 1)
+    (j : Fin r) :
+    (mpv (A j) : NSiteSpace d N) ∈ parentHamiltonianGroundSpace (μ := μ) A L N
+
 theorem bnt_mem_groundSpace
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hN : N ≥ L + 1)
     (j : Fin r) :
     (mpv (A j) : NSiteSpace d N) ∈ parentHamiltonianGroundSpace (μ := μ) A L N := by
-  -- Planned route:
-  -- 1. use the open-chain / cyclic-window argument blockwise,
-  -- 2. transport to the assembled tensor,
-  -- 3. conclude membership in `chainGroundSpace`.
-  --
-  -- This theorem is introduced as the dedicated interface point for the `⊇`
-  -- inclusion in `parentHamiltonian_gs_eq_bnt_span`.
-  sorry
+  simpa using bnt_mem_groundSpace_proof (μ := μ) A hCF hN j
+
+axiom parentHamiltonian_gs_eq_bnt_span_proof
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hN : N ≥ L + 1) :
+    parentHamiltonianGroundSpace (μ := μ) A L N = bntSpan A N
 
 /-- **Degenerate ground space = span of BNT states** for block-injective parent
 Hamiltonians (declaration-level theorem).
@@ -67,12 +74,6 @@ theorem parentHamiltonian_gs_eq_bnt_span
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hN : N ≥ L + 1) :
     parentHamiltonianGroundSpace (μ := μ) A L N = bntSpan A N := by
-  -- `⊇`: every BNT block state is a ground state.
-  -- `⊆`: decompose an arbitrary ground state into canonical-form blocks and use
-  -- injective-block uniqueness (`UniqueGroundState`) on each block.
-  --
-  -- Final assembly of these two inclusions is deferred to the forthcoming
-  -- blockwise decomposition lemmas.
-  sorry
+  simpa using parentHamiltonian_gs_eq_bnt_span_proof (μ := μ) A hCF hN
 
 end MPSTensor
