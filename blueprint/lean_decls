@@ -58,6 +58,9 @@ MPSChainTensor.coeff
 MPSChainTensor.SameState
 MPSChainTensor.IsInjective
 MPSChainTensor.GaugeEquiv
+MPSChainTensor.GaugeEquiv.refl
+MPSChainTensor.GaugeEquiv.symm
+MPSChainTensor.GaugeEquiv.trans
 IsPositiveMap
 IsTracePreservingMap
 IsCPMap
