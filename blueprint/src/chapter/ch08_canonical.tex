@@ -1151,7 +1151,7 @@ The following results separate the zero blocks from the
 \begin{theorem}[Normal canonical form after sorting]
 	\label{thm:bnt_sorted_ncf}
 	\lean{MPSTensor.exists_sortedNCF_of_distinct_norms}\leanok
-	\uses{def:normal_canonical_form, thm:bnt_sorted_blockdecomp}
+	\uses{def:is_normal_canonical_form, thm:bnt_sorted_blockdecomp}
 	If each block is irreducible, trace-preserving, primitive, and has positive dimension, then sorting by strictly decreasing weight norms produces a normal canonical form.
 \end{theorem}
 
@@ -1258,31 +1258,31 @@ The following results separate the zero blocks from the
 	For a trace-preserving irreducible tensor, a positive blocking period yields a blocked tensor that is left-canonical and primitive.
 \end{theorem}
 
-\begin{theorem}[Normality from primitivity]
+\begin{theorem}[Normality from primitivity and a positive-definite fixed point]
 	\label{thm:normal_from_primitive}
 	\lean{MPSTensor.isNormal_of_isPrimitiveMPS}\leanok
 	\uses{def:normal}
-	Every primitive tensor is normal.
+	A primitive tensor admitting a positive-definite fixed point of its transfer map is normal.
 \end{theorem}
 
 \begin{theorem}[Zero-word evaluation for the zero tensor]
 	\label{thm:evalword_zero_allzero}
 	\lean{MPSTensor.evalWord_eq_zero_of_all_zero}\leanok
-	Every finite word evaluates to zero when all Kraus operators are zero.
+	Every nonempty finite word evaluates to zero when all Kraus operators are zero.
 \end{theorem}
 
 \begin{theorem}[Zero MPV for the zero tensor]
 	\label{thm:mpv_zero_allzero}
 	\lean{MPSTensor.mpv_eq_zero_of_all_zero}\leanok
 	\uses{thm:evalword_zero_allzero}
-	The MPS value of every spin word is zero for the zero tensor.
+	For a nonempty spin chain, the MPS value of every spin word is zero for the zero tensor.
 \end{theorem}
 
-\begin{theorem}[Nonzero Kraus operator in irreducible positive dimension]
+\begin{theorem}[Nonzero Kraus operator in irreducible dimension at least two]
 	\label{thm:nonzero_kraus_irred}
 	\lean{MPSTensor.exists_nonzero_kraus_of_isIrreducibleTensor}\leanok
 	\uses{def:irreducible_tensor}
-	An irreducible tensor of positive bond dimension has at least one nonzero Kraus operator.
+	An irreducible tensor of bond dimension at least two has at least one nonzero Kraus operator.
 \end{theorem}
 
 \begin{theorem}[All-zero tensors are irreducible only in dimension at most one]
