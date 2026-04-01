@@ -193,6 +193,21 @@ private theorem geometric_apply_bound_of_spectralRadius_lt_one
       exact mul_le_mul_of_nonneg_right (hpow n) (norm_nonneg x)
     _ = C * r ^ n * ‖x‖ := by ring
 
+/-! ## Helper lemmas -/
+
+/-- The word span at length 1 equals the span of the Kraus operators. -/
+theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
+    wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
+  simp only [wordSpan]
+  congr 1; ext y; constructor
+  · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
+  · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
+
+/-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
+theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
+    (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
+  ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
+
 /-! ## Convergence rate from spectral gap -/
 
 /-- **Exponential convergence of injective primitive channels.**
@@ -212,7 +227,6 @@ theorem exponential_convergence_of_primitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : IsInjective A)
-    (hPrim : IsPrimitive (transferMap (d := d) (D := D) A))
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
     (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
     ∃ (C : ℝ) (δ : ℝ),
@@ -227,6 +241,10 @@ theorem exponential_convergence_of_primitive [NeZero D]
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ (ne_of_gt hρ_pd.trace_pos)
   let N : V →ₗ[ℂ] V := E - P
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
+  have hPrim : IsPrimitive E :=
+    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
+      (isPrimitivePaper_of_hasEventuallyFullKrausRank A
+        (hasEventuallyFullKrausRank_of_injective A hA))
   have huniq_fp :
       ∀ X : V, E X = X → Matrix.trace X = 0 → X = 0 := by
     intro X hXfix htrX
@@ -285,21 +303,6 @@ theorem exponential_convergence_of_primitive [NeZero D]
       _ ≤ C * r ^ n * ‖X‖ := by
         gcongr
       _ = C * (1 - (1 - r)) ^ n * ‖X‖ := by simp
-
-/-! ## Helper lemmas -/
-
-/-- The word span at length 1 equals the span of the Kraus operators. -/
-theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
-    wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
-  simp only [wordSpan]
-  congr 1; ext y; constructor
-  · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
-  · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
-
-/-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
-theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
-    (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
-  ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
 
 /-- **Correlation length bound.**
 
