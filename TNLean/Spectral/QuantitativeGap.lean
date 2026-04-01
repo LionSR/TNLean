@@ -195,10 +195,10 @@ For a primitive TP channel `E` with unique fixed point `ρ_∞`, the iterates
 where `P(X) = tr(X) · ρ_∞ / tr(ρ_∞)` is the projection onto the fixed state,
 `δ > 0` is the spectral gap, and `C` depends on the Jordan structure.
 
-The spectral gap `δ` exists by `compl_eigenvalue_norm_lt_one_of_primitive`
-from `Peripheral/Spectrum.lean`. The exponential convergence follows from
-`pow_tendsto_zero_of_spectralRadius_lt_one` in `Spectral/SpectralGap.lean`
-applied to `E - P` (which has spectral radius < 1 by primitivity). -/
+Note: both primitivity and irreducibility of the tensor are required.
+Primitivity gives the spectral gap, while irreducibility is used by the
+channel-specific adapter `compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel`
+to bridge to the unique trace-zero fixed-point property. -/
 theorem exponential_convergence_of_primitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -225,7 +225,7 @@ theorem exponential_convergence_of_primitive [NeZero D]
       isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) A hIrr
   have hρ_ne : ρ ≠ 0 := by
     intro hρ0
-    exact (ne_of_gt hρ_pd.trace_pos) (by simpa [hρ0])
+    exact (ne_of_gt hρ_pd.trace_pos) (by simp [hρ0])
   have hcompl :
       ∀ ν : ℂ, Module.End.HasEigenvalue N ν → ‖ν‖ < 1 := by
     intro ν hν
@@ -308,11 +308,24 @@ theorem exponential_convergence_of_primitive [NeZero D]
     exact hmain
   simpa [E, P, Module.End.pow_apply] using hmain'
 
+/-- The word span at length 1 equals the span of the Kraus operators. -/
+theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
+    wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
+  simp only [wordSpan]
+  congr 1; ext y; constructor
+  · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
+  · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
+
+/-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
+theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
+    (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
+  ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
+
 /-- **Correlation length bound.**
 
-For a primitive TP-normalized MPS tensor, traceless matrices decay
+For an injective TP-normalized MPS tensor, traceless matrices decay
 exponentially under the transfer map iteration. The rate is determined by
-the spectral gap, which exists by primitivity.
+the spectral gap, which exists because injectivity implies primitivity.
 
 This uses `pow_tendsto_zero_of_spectralRadius_lt_one` from
 `Spectral/SpectralGap.lean` directly — traceless matrices lie in
@@ -328,22 +341,11 @@ theorem correlation_length_bound [NeZero D]
         ‖((transferMap (d := d) (D := D) A)^[n]) X‖ ≤
           C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
   set E := transferMap (d := d) (D := D) A
-  have hword :
-      wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
-    simp only [wordSpan]
-    congr 1
-    ext y
-    constructor
-    · rintro ⟨σ, rfl⟩
-      exact ⟨σ 0, by simp [evalWord]⟩
-    · rintro ⟨i, rfl⟩
-      exact ⟨fun _ => i, by simp [evalWord]⟩
-  have hFull : HasEventuallyFullKrausRank A := by
-    refine ⟨1, by rw [hword, hA]⟩
   have hPrim : PeripheralSpectrum.IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
-      (isPrimitivePaper_of_hasEventuallyFullKrausRank A hFull)
-  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix, htr, hgap⟩ :=
+      (isPrimitivePaper_of_hasEventuallyFullKrausRank A
+        (hasEventuallyFullKrausRank_of_injective A hA))
+  obtain ⟨ρ, _, _, hρ_fix, htr, hgap⟩ :=
     spectralRadius_compl_lt_one_of_peripheralPrimitive
       (A := A) hA hNorm hPrim
   let P : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ := fixedPointProj ρ htr
@@ -375,21 +377,6 @@ theorem correlation_length_bound [NeZero D]
         rw [hpow_eq]
         simpa [toContinuousLinearMap_pow_apply] using hbound (n + 1) X
       simpa [E, Module.End.pow_apply] using hmain
-
-/-! ## Helper lemmas -/
-
-/-- The word span at length 1 equals the span of the Kraus operators. -/
-theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
-    wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
-  simp only [wordSpan]
-  congr 1; ext y; constructor
-  · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
-  · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
-
-/-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
-theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
-    (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
-  ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
 
 /-! ## Explicit gap from injectivity -/
 
