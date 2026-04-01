@@ -11,6 +11,7 @@ import TNLean.MPS.Core.Blocking
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.Spectral.SpectralGapNT
 
+import TNLean.Algebra.GramMatrixLI
 import Mathlib.Analysis.InnerProductSpace.l2Space
 
 /-!
@@ -416,37 +417,13 @@ theorem periodicBasis_eventuallyLinearlyIndependent
     simp only [v]
     rw [lp.inner_single_left, lp.single_apply_self]
   have hLI_emb : ∀ᶠ N in atTop, LinearIndependent ℂ (fun k => v k N) := by
-    let G : ℕ → Matrix (Fin r) (Fin r) ℂ := fun N i j => ⟪v i N, v j N⟫_ℂ
-    have hG : Tendsto G atTop (nhds (Matrix.diagonal fun k : Fin r => (period k : ℂ))) := by
-      rw [tendsto_pi_nhds]
-      intro i
-      rw [tendsto_pi_nhds]
-      intro j
-      simpa [G, Matrix.diagonal_apply] using hgram i j
-    have hdet : Tendsto (fun N => (G N).det) atTop (nhds (∏ k : Fin r, (period k : ℂ))) := by
-      have hcont : Continuous (fun M : Matrix (Fin r) (Fin r) ℂ => M.det) := continuous_id.matrix_det
-      simpa [Matrix.det_diagonal] using
-        ((hcont.tendsto (Matrix.diagonal fun k : Fin r => (period k : ℂ))).comp hG)
-    have hdet_ne : ∀ᶠ N in atTop, (G N).det ≠ 0 := by
-      apply hdet.eventually_ne
+    refine eventually_linearIndependent_of_gram_tendsto_nondegenerate v
+      (Matrix.diagonal fun k : Fin r => (period k : ℂ)) ?_ ?_
+    · rw [Matrix.det_diagonal]
       exact Finset.prod_ne_zero_iff.mpr fun k _ => by
         exact_mod_cast Nat.ne_of_gt (hPer k).period_pos
-    exact hdet_ne.mono fun N hN => by
-      rw [Fintype.linearIndependent_iff]
-      intro c hc
-      have hmul : (G N).mulVec c = 0 := by
-        ext j
-        have key : (G N).mulVec c j = ⟪v j N, ∑ i : Fin r, c i • v i N⟫_ℂ := by
-          change ∑ i, ⟪v j N, v i N⟫_ℂ * c i = ⟪v j N, ∑ i : Fin r, c i • v i N⟫_ℂ
-          rw [inner_sum]
-          apply Finset.sum_congr rfl
-          intro i _
-          rw [inner_smul_right]
-          ring
-        simp [key, hc]
-      have hc0 : c = 0 := Matrix.eq_zero_of_mulVec_eq_zero hN hmul
-      intro i
-      exact congr_fun hc0 i
+    · intro i j
+      simpa [Matrix.diagonal_apply] using hgram i j
   have hLI : ∀ᶠ N in atTop, LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
     refine hLI_emb.mono ?_
     intro N hN
