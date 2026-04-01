@@ -102,6 +102,88 @@ convenience.
     Apply Theorem~\ref{thm:kadison_schwarz} to $\{K_i^\dagger\}$.
 \end{proof}
 
+\subsection{Two-positive maps and the generalized Schwarz inequality}
+
+\begin{definition}[$k$-positive map]
+    \lean{IsNPositiveMap}
+    \leanok
+    A linear map $E : \MN{D}\to\MN{D}$ is $k$-positive if
+    $E\otimes \Id_k$ is positive on $\MN{D}\otimes \MN{k}$.
+\end{definition}
+
+\begin{definition}[Two-positive map]
+    \lean{Is2PositiveMap}
+    \leanok
+    A linear map is \emph{two-positive} if it is $2$-positive.
+\end{definition}
+
+\begin{theorem}[Completely positive maps are $k$-positive]
+    \lean{IsCPMap.isNPositiveMap}
+    \leanok
+    \uses{def:cp_map}
+    Every completely positive map is $k$-positive for all $k\ge 1$.
+\end{theorem}
+
+\begin{theorem}[$(k\!+\!1)$-positive implies $k$-positive]
+    \lean{IsNPositiveMap.mono}
+    \leanok
+    Positivity under amplification is monotone in $k$.
+\end{theorem}
+
+\begin{theorem}[Completely positive implies two-positive]
+    \lean{IsCPMap.is2PositiveMap}
+    \leanok
+    \uses{def:cp_map}
+    Every completely positive map is two-positive.
+\end{theorem}
+
+\begin{theorem}[Two-positive implies positive]
+    \lean{Is2PositiveMap.isPositiveMap}
+    \leanok
+    Every two-positive map is positive.
+\end{theorem}
+
+\begin{definition}[Unital linear map]
+    \lean{KadisonSchwarz.IsUnitalMap}
+    \leanok
+    A linear map $E$ is unital if $E(\Id)=\Id$.
+\end{definition}
+
+\begin{theorem}[Kadison--Schwarz for unital two-positive maps]
+    \lean{kadison_schwarz_2positive}
+    \leanok
+    \uses{thm:kadison_schwarz}
+    If $E$ is unital and two-positive, then
+    \[
+        E(X^\dagger X) \ge E(X)^\dagger E(X)
+    \]
+    for all $X\in \MN{D}$.
+\end{theorem}
+
+\begin{theorem}[Kraus-form Kadison--Schwarz as a special case]
+    \lean{kadison_schwarz_from_2positive}
+    \leanok
+    \uses{thm:kadison_schwarz}
+    The Kraus-map Kadison--Schwarz inequality is recovered from the
+    two-positive formulation.
+\end{theorem}
+
+\subsection{Douglas-type factorization lemmas}
+
+\begin{theorem}[Range inclusion implies right factorization]
+    \lean{Douglas.factorization_of_range_mulVecLin_le}
+    \leanok
+    If $\operatorname{ran}(A)\subseteq \operatorname{ran}(B)$, then
+    there exists $C$ such that $A=BC$.
+\end{theorem}
+
+\begin{theorem}[Vectorwise range criterion implies factorization]
+    \lean{Douglas.factorization_of_forall_mulVec_mem_range}
+    \leanok
+    If $Av\in\operatorname{ran}(B)$ for every vector $v$, then
+    there exists $C$ with $A=BC$.
+\end{theorem}
+
 \begin{theorem}[Hilbert--Schmidt contraction]\label{thm:hs_contraction}
     \lean{KadisonSchwarz.hilbertSchmidt_contraction}
     \leanok

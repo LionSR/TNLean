@@ -979,6 +979,129 @@ used later in the blueprint.
     Theorem~\ref{thm:peripheral_cyclic_group}.
 \end{proof}
 
+\subsection{Cyclic decomposition declarations}
+
+\begin{definition}[Corner preservation]
+    \lean{PreservesCorner}
+    \leanok
+    For an orthogonal projection $P$ and linear map $E$, the corner
+    $P\MN{D}P$ is preserved if $E(PXP)=PE(PXP)P$ for all $X$.
+\end{definition}
+
+\begin{definition}[Corner subspace]
+    \lean{cornerSubmodule}
+    \leanok
+    The corner subspace associated with $P$ is
+    $\{PXP : X\in \MN{D}\}$.
+\end{definition}
+
+\begin{definition}[Restricted corner map]
+    \lean{cornerRestriction}
+    \leanok
+    The restriction of $E$ to an invariant corner $P\MN{D}P$.
+\end{definition}
+
+\begin{definition}[Irreducible restriction on a corner]
+    \lean{IsIrreducibleOnCorner}
+    \leanok
+    Irreducibility of the corner-restricted map.
+\end{definition}
+
+\begin{theorem}[Peripheral unitary eigenvector]
+    \lean{MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz}
+    \leanok
+    \uses{thm:ks_peripheral}
+    For an irreducible unital Schwarz map with faithful adjoint fixed point,
+    each peripheral eigenvalue admits a unitary eigenvector.
+\end{theorem}
+
+\begin{theorem}[Powers on a peripheral-unitary orbit]
+    \lean{MPSTensor.map_powers_of_peripheral_unitary}
+    \leanok
+    \uses{thm:ks_peripheral}
+    If $E(U)=\mu U$ with $|\mu|=1$ and $U$ unitary, then
+    $E(U^n)=\mu^n U^n$ for all $n$.
+\end{theorem}
+
+\begin{theorem}[Normalized peripheral unitary]
+    \lean{MPSTensor.exists_normalized_peripheral_unitary_of_irreducible_schwarz}
+    \leanok
+    \uses{thm:ks_peripheral}
+    Peripheral unitary eigenvectors can be normalized compatibly with
+    the faithful fixed-point state.
+\end{theorem}
+
+\begin{theorem}[Cyclic projections from a peripheral unitary]
+    \lean{exists_cyclic_projections_of_peripheral_unitary}
+    \leanok
+    \uses{thm:channel_period_divides_dim}
+    A primitive $m$-th peripheral root yields $m$ orthogonal projections
+    summing to $\Id$ and cyclically permuted by the channel.
+\end{theorem}
+
+\begin{theorem}[Cyclic decomposition for irreducible Schwarz maps]
+    \lean{MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz}
+    \leanok
+    \uses{thm:peripheral_cyclic_group}
+    Under irreducibility and faithful fixed point hypotheses, there is a
+    full cyclic projection decomposition realizing the peripheral period.
+\end{theorem}
+
+\begin{theorem}[Power maps preserve each cyclic sector]
+    \lean{preserves_corner_pow_of_cyclic_decomp}
+    \leanok
+    Appropriate powers of the channel preserve each sector corner.
+\end{theorem}
+
+\begin{theorem}[Irreducibility of restricted sector dynamics]
+    \lean{isIrreducible_restriction_of_cyclic_decomp}
+    \leanok
+    Each sector restriction is irreducible.
+\end{theorem}
+
+\begin{theorem}[Primitivity of restricted sector dynamics]
+    \lean{isPrimitive_restriction_of_cyclic_decomp}
+    \leanok
+    Each sector restriction is primitive.
+\end{theorem}
+
+\begin{theorem}[Corner invariance at the period]
+    \lean{preserves_corner_pow_orderOf_of_perm_decomp}
+    \leanok
+    The channel raised to the period preserves every cyclic corner.
+\end{theorem}
+
+\subsection{Peripheral group-structure declarations}
+
+\begin{theorem}[Peripheral product closure]
+    \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_mul}
+    \leanok
+    \uses{lem:peripheral_mul_closure}
+    The product of two peripheral eigenvalues is peripheral.
+\end{theorem}
+
+\begin{theorem}[Peripheral inverse closure]
+    \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_inv}
+    \leanok
+    \uses{thm:peripheral_cyclic_structure}
+    The inverse of a peripheral eigenvalue is peripheral.
+\end{theorem}
+
+\begin{theorem}[Peripheral cyclic group with period divisibility]
+    \lean{PeripheralSpectrum.peripheral_eigenvalues_form_cyclic_group}
+    \leanok
+    \uses{thm:peripheral_cyclic_group}
+    The peripheral eigenvalues form a finite cyclic group whose order
+    divides the dimension.
+\end{theorem}
+
+\begin{theorem}[Peripheral eigenvalue multiplicity one]
+    \lean{PeripheralSpectrum.peripheral_eigenvalue_multiplicity_one}
+    \uses{thm:peripheral_cyclic_group}
+    Each peripheral eigenvalue has algebraic multiplicity one.
+    \textbf{Status:} proof pending (\texttt{sorry}).
+\end{theorem}
+
 \section{Primitive overlap convergence (spectral-gap form)}
 
 The theorems in this section are stated directly in terms of the
