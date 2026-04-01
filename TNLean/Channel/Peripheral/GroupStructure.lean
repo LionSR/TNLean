@@ -489,10 +489,11 @@ theorem peripheral_eigenvalues_form_cyclic_group
 
 /-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Thm 6.6).
 
-Follows from `fixed_eq_scalar_of_irreducible_unital` in
-`CyclicDecomposition.lean`: if `E(X) = X` with `E` irreducible and unital,
-then `X = c · I`. Applied to `E^m` restricted to a cyclic sector, this
-forces one-dimensional eigenspaces. -/
+Given a peripheral unitary eigenvector `U` with `E(U) = γU`, for any
+`γ`-eigenvector `X` the multiplicative-domain identity gives
+`E(X · U†) = E(X) · E(U†) = X · U†`, so `X · U†` is a fixed point.
+By `fixed_eq_scalar_of_irreducible_unital`, `X · U† = c · I`, hence
+`X = c · U`, and the eigenspace is one-dimensional. -/
 theorem peripheral_eigenvalue_multiplicity_one
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -526,11 +527,6 @@ theorem peripheral_eigenvalue_multiplicity_one
     simpa using congrArg Subtype.val hzero
   have hU_map : Kraus.map K (U : MatrixAlg D) = γ • (U : MatrixAlg D) := by
     simpa [Kraus.map, E, MPSTensor.transferMap_apply] using hU
-  have hKSU_map :
-      Kraus.map K ((U : MatrixAlg D)ᴴ * (U : MatrixAlg D)) =
-        (Kraus.map K (U : MatrixAlg D))ᴴ * Kraus.map K (U : MatrixAlg D) := by
-    exact Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
-      K hUnital' hρ hρfix (U : MatrixAlg D) γ hU_map hγ.2
   have hγ_inv : starRingEnd ℂ γ = γ⁻¹ :=
     (Complex.inv_eq_conj hγ.2).symm
   have hUstar_map : Kraus.map K ((U : MatrixAlg D)ᴴ) = γ⁻¹ • ((U : MatrixAlg D)ᴴ) := by
