@@ -293,4 +293,8 @@ lemma summable_dysonTerm_of_factorial_bound
   simpa [mul_div_assoc, mul_comm, mul_left_comm, mul_assoc] using
     (Real.summable_pow_div_factorial (t * ‖L' - L‖ * M)).mul_left M
 
+-- TODO(#14): combine `norm_dysonTerm_zero_le`/`norm_dysonTerm_succ_le` into a factorial
+-- majorant theorem and apply `summable_dysonTerm_of_factorial_bound` in the final
+-- Dyson-series convergence/identity statement.
+
 end -- noncomputable section
