@@ -662,11 +662,14 @@ The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducibl
 
 The next ten declarations formalize the overlap dichotomy machinery from
 Appendix~A and Proposition~3.3 of \cite{DeLasCuevas2017Irreducible}.
-At this stage, only the bond-dimension-mismatch lemma is fully proved;
-the remaining declarations are scaffolded with incomplete proofs.
+At this stage, the bond-dimension-mismatch theorem is fully proved, and
+the eventual linear-independence corollary is complete modulo the
+upstream sorry-backed lemmas it depends on; the remaining eight
+declarations are scaffolded with incomplete proofs.
 
 \begin{theorem}[Self-overlap along period multiples]\label{thm:periodic_self_overlap_tendsto}
 	\lean{MPSTensor.periodicSelfOverlap_tendsto}
+	\notready
 	\uses{def:periodic_tensor}
 	If $A$ is $m$-periodic, then the self-overlap along multiples of $m$
 	converges to $m$ (the period, viewed as a scalar).
@@ -674,6 +677,7 @@ the remaining declarations are scaffolded with incomplete proofs.
 
 \begin{theorem}[Different periods imply asymptotic orthogonality]\label{thm:periodic_overlap_zero_ne_period}
 	\lean{MPSTensor.periodicOverlap_tendsto_zero_of_ne_period}
+	\notready
 	\uses{def:periodic_tensor}
 	If $A$ and $B$ are periodic with different periods, then
 	$\langle V_N(A), V_N(B)\rangle \to 0$ as $N\to\infty$.
@@ -681,6 +685,7 @@ the remaining declarations are scaffolded with incomplete proofs.
 
 \begin{lemma}[Sector-block normality for periodic tensors]\label{lem:sector_blocked_normal_periodic}
 	\lean{MPSTensor.sectorBlocked_isNormal_of_isPeriodic}
+	\notready
 	\uses{def:periodic_tensor}
 	For a periodic tensor equipped with a cyclic sector decomposition,
 	each nonzero blocked sector tensor is normal.
@@ -688,6 +693,7 @@ the remaining declarations are scaffolded with incomplete proofs.
 
 \begin{theorem}[No sector match implies asymptotic orthogonality]\label{thm:periodic_overlap_zero_no_sector_match}
 	\lean{MPSTensor.periodicOverlap_tendsto_zero_of_no_sector_match}
+	\notready
 	\uses{def:periodic_tensor, lem:sector_blocked_normal_periodic}
 	If two periodic tensors with the same period admit no gauge-phase
 	matching sector pair after blocking, then their overlap tends to zero.
@@ -695,6 +701,7 @@ the remaining declarations are scaffolded with incomplete proofs.
 
 \begin{lemma}[Sector-match propagation under translation]\label{lem:sector_match_propagation}
 	\lean{MPSTensor.sectorMatch_propagation}
+	\notready
 	\uses{def:periodic_tensor}
 	A single gauge-phase match between blocked sectors propagates to all
 	cyclic translates of that sector pair.
@@ -702,6 +709,7 @@ the remaining declarations are scaffolded with incomplete proofs.
 
 \begin{lemma}[Per-site proportionality from blocked sector match]\label{lem:sector_tensor_proportional_blocked_match}
 	\lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
+	\notready
 	\uses{lem:sector_match_propagation}
 	If all aligned blocked sectors match up to gauge and phase, then the
 	original tensors are related by repeated-block proportionality.
@@ -709,6 +717,7 @@ the remaining declarations are scaffolded with incomplete proofs.
 
 \begin{theorem}[Sector match yields repeated-block equivalence]\label{thm:periodic_overlap_gauge_equiv_sector_match}
 	\lean{MPSTensor.periodicOverlap_gaugeEquiv_of_sector_match}
+	\notready
 	\uses{lem:sector_match_propagation, lem:sector_tensor_proportional_blocked_match}
 	For periodic tensors of the same period, existence of one matching
 	sector pair implies repeated-block equivalence.
@@ -724,6 +733,7 @@ the remaining declarations are scaffolded with incomplete proofs.
 
 \begin{theorem}[Periodic overlap dichotomy]\label{thm:periodic_overlap_dichotomy}
 	\lean{MPSTensor.periodicOverlapDichotomy}
+	\notready
 	\uses{thm:periodic_overlap_zero_ne_period, thm:periodic_overlap_zero_no_sector_match, thm:periodic_overlap_zero_ne_dim, thm:periodic_overlap_gauge_equiv_sector_match}
 	Let $A$ and $B$ be periodic tensors. Then at least one of the following
 	alternatives holds:
