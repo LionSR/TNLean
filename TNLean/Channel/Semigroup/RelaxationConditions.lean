@@ -166,8 +166,6 @@ theorem full_algebra_generation_implies_no_blockUpperTriangular
 Condition (2): Hermitian closure of the Lindblad span together with trivial
 commutant forbids block-upper-triangular Lindblad decompositions.
 -/
--- TODO: prove that Hermitian closure + trivial commutant forbids
--- block-upper-triangular decompositions — see Wolf Cor. 7.2(2).
 theorem hermitian_span_trivial_commutant_implies_no_blockUpperTriangular
     (F : LindbladForm D)
     (hHerm : IsLindbladSpanHermitianClosed F)
