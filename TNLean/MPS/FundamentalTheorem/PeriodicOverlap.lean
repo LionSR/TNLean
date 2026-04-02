@@ -141,8 +141,7 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
           star μ ∈ peripheralEigenvalues (transferMap (d := d) (D := D) A) := by
         simpa [hP.peripheral_eq] using hpowStar
       have hEigAdj :
-          Module.End.HasEigenvalue ((transferMap (d := d) (D := D) A).adjoint) μ :=
-        by
+          Module.End.HasEigenvalue ((transferMap (d := d) (D := D) A).adjoint) μ := by
           simpa [star_star] using
             (Module.End.hasEigenvalue_adjoint_iff
               (E := transferMap (d := d) (D := D) A) (μ := star μ)).1 hStarMem.1
