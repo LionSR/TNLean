@@ -24,7 +24,7 @@ The final quantitative assembly is left as future work.
 ## Main results
 
 * `parentHamiltonian_gapped` — spectral gap: vectors in the orthogonal complement
-  of the ground space satisfy `⟨v, Hv⟩ ≥ γ ⟨v, v⟩` with a uniform gap `γ > 0`.
+  of the ground space satisfy `‖H v‖ ≥ γ ‖v‖` with a uniform gap `γ > 0`.
 -/
 
 namespace MPSTensor
