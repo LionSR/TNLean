@@ -105,16 +105,9 @@ theorem exponential_bound_of_spectralRadius_lt_one
     simpa [Nat.mul_comm] using (Nat.div_add_mod n N).symm
   have hpow_le : ∀ j : ℕ, ‖(T ^ N) ^ j‖ ≤ ‖T ^ N‖ ^ j := by
     intro j
-    induction j with
-    | zero =>
-        simpa using (ContinuousLinearMap.norm_id_le (𝕜 := ℂ) (E := V))
-    | succ j ih =>
-        calc
-          ‖(T ^ N) ^ (j + 1)‖ = ‖(T ^ N) ^ j * (T ^ N)‖ := by rw [pow_succ]
-          _ ≤ ‖(T ^ N) ^ j‖ * ‖T ^ N‖ := norm_mul_le _ _
-          _ ≤ ‖T ^ N‖ ^ j * ‖T ^ N‖ := by
-            gcongr
-          _ = ‖T ^ N‖ ^ (j + 1) := by rw [pow_succ]
+    rcases Nat.eq_zero_or_pos j with rfl | hj
+    · simpa using (ContinuousLinearMap.norm_id_le (𝕜 := ℂ) (E := V))
+    · exact norm_pow_le' (T ^ N) hj
   have hnorm_pow : ‖T ^ n‖ ≤ ‖T ^ m‖ * (1 / 2 : ℝ) ^ k := by
     calc
       ‖T ^ n‖ = ‖(T ^ N) ^ k * T ^ m‖ := by
