@@ -37,6 +37,9 @@ Concretely, the missing MPS/channel lemmas are the following three pieces:
   `T^[l](Q)` is again an orthogonal projection;
 * `orbitSumProjection_eq_one_of_full_sector`:
   for `Q = P_k`, the orbit sum is the full identity.
+
+TODO: sync the four theorems in this file with blueprint `\lean{...}` /
+`\notready` tags.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -65,7 +68,7 @@ theorem pairwise_mul_zero_of_orthogonalProjection_sum_one
     have hiii : P i * P i * P i = P i := by
       simp [Matrix.mul_assoc, (hPproj i).2]
     rw [hiii] at hsum_i
-    exact add_right_cancel (by simpa using hsum_i)
+    exact add_right_cancel (by simpa [zero_add] using hsum_i)
   let B : Fin m → MatrixAlg D := fun k => if k = i then 0 else P i * P k
   have hsum_B : ∑ k : Fin m, B k * (B k)ᴴ = 0 := by
     classical
@@ -112,7 +115,7 @@ theorem preservesCorner_of_adjoint_fixed_projection
         = (P * (A i)ᴴ) * (P * X * P) * (A i * P) := by
             simp [Matrix.mul_assoc]
     _ = ((A i)ᴴ * P) * (P * X * P) * (P * A i) := by
-          rw [hCommAdj i, hComm i]
+          rw [hCommAdj i, ← hComm i]
     _ = (A i)ᴴ * (P * X * P) * A i := by
           simp [Matrix.mul_assoc, (hP.2)]
 
@@ -137,7 +140,7 @@ theorem orbitSumProjection_fixed_of_pow_fix
       Finset.sum (Finset.range (m - 1)) (fun j : ℕ => f (j + 1)) + f m =
         Finset.sum (Finset.range m) (fun j : ℕ => f (j + 1)) := by
     simpa [hm_pred_succ, f] using
-      (Finset.sum_range_succ' (fun j : ℕ => f (j + 1)) (m - 1)).symm
+      (Finset.sum_range_succ (fun j : ℕ => f (j + 1)) (m - 1)).symm
   have hshift :
       Finset.sum (Finset.range m) (fun j : ℕ => f (j + 1)) =
         Finset.sum (Finset.range m) (fun j : ℕ => f j) := by
