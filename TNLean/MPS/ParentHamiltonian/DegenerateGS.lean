@@ -38,6 +38,11 @@ noncomputable def parentHamiltonianGroundSpace
     Submodule ℂ (NSiteSpace d N) :=
   chainGroundSpace (toTensorFromBlocks μ A) L N
 
+@[simp] lemma parentHamiltonianGroundSpace_eq
+    (A : (j : Fin r) → MPSTensor d (dim j)) (L N : ℕ) :
+    parentHamiltonianGroundSpace (μ := μ) A L N =
+      chainGroundSpace (toTensorFromBlocks μ A) L N := rfl
+
 /-- Span of BNT block MPV states (as `N`-site coefficient functions). -/
 noncomputable def bntSpan
     (A : (j : Fin r) → MPSTensor d (dim j)) (N : ℕ) :
@@ -51,7 +56,7 @@ TODO(#195): prove via trace cyclicity and the local ground-space membership
 lemma `mpv_window_mem_groundSpace`. -/
 theorem bnt_mem_groundSpace
     (A : (j : Fin r) → MPSTensor d (dim j))
-    (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hN : N ≥ L + 1)
+    (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1)
     (j : Fin r) :
     (mpv (A j) : NSiteSpace d N) ∈ parentHamiltonianGroundSpace (μ := μ) A L N := by
   sorry
@@ -66,7 +71,7 @@ TODO(#195): prove by combining `bnt_mem_groundSpace` (⊇ direction) with
 block-injective uniqueness from `UniqueGroundState` (⊆ direction). -/
 theorem parentHamiltonian_gs_eq_bnt_span
     (A : (j : Fin r) → MPSTensor d (dim j))
-    (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hN : N ≥ L + 1) :
+    (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1) :
     parentHamiltonianGroundSpace (μ := μ) A L N = bntSpan A N := by
   sorry
 
