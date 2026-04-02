@@ -306,9 +306,9 @@ theorem exponential_convergence_of_primitive [NeZero D]
 
 /-- **Correlation length bound.**
 
-For a primitive TP-normalized MPS tensor, traceless matrices decay
+For an injective TP-normalized MPS tensor, traceless matrices decay
 exponentially under the transfer map iteration. The rate is determined by
-the spectral gap, which exists by primitivity.
+the spectral gap, which exists because injectivity implies primitivity.
 
 This uses `pow_tendsto_zero_of_spectralRadius_lt_one` from
 `Spectral/SpectralGap.lean` directly — traceless matrices lie in
