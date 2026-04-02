@@ -11,6 +11,9 @@ import TNLean.MPS.Core.Blocking
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.Spectral.SpectralGapNT
 
+import TNLean.Algebra.GramMatrixLI
+import Mathlib.Analysis.InnerProductSpace.l2Space
+
 /-!
 # Periodic overlap dichotomy (Proposition 3.3, arXiv:1708.00029)
 
@@ -66,7 +69,7 @@ relied on as a completed formalization of Proposition 3.3.
   and Appendix A.
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter Matrix
 
 namespace MPSTensor
@@ -369,10 +372,68 @@ theorem periodicBasis_eventuallyLinearlyIndependent
         ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
-  -- Use the dichotomy: pairwise non-repeated ⟹ pairwise decaying overlap.
-  -- Self-overlaps converge to periods (bounded away from 0).
-  -- By the epsilon-linear-independence lemma (Lemma 3.4 / Lem1 in the paper),
-  -- for N large enough the vectors are linearly independent.
-  sorry
+  classical
+  let V : Type := lp (fun N : ℕ => MPVSpace d (p * N)) 2
+  let v : Fin r → ℕ → V := fun k N => lp.single 2 N (mpvState (A k) (p * N))
+  have hself_overlap : ∀ k,
+      Tendsto (fun N => mpvOverlap (A k) (A k) (p * N)) atTop (nhds (period k : ℂ)) := by
+    intro k
+    rcases hDiv k with ⟨q, hq⟩
+    have hq_pos : 0 < q := by
+      apply Nat.pos_of_ne_zero
+      intro hq0
+      have : p = 0 := by simp [hq, hq0]
+      exact NeZero.ne p this
+    simpa [hq, Nat.mul_assoc] using
+      (periodicSelfOverlap_tendsto (A := A k) (m := period k) (hP := hPer k)).comp
+        (tendsto_id.nsmul_atTop hq_pos)
+  have hcross_overlap : ∀ i j, i ≠ j →
+      Tendsto (fun N => mpvOverlap (A i) (A j) (p * N)) atTop (nhds 0) := by
+    intro i j hij
+    have hbase : Tendsto (fun N => mpvOverlap (A i) (A j) N) atTop (nhds 0) := by
+      rcases periodicOverlapDichotomy (A := A i) (B := A j) (hA := hPer i) (hB := hPer j) with
+        hzero | hrep
+      · exact hzero
+      · rcases hrep with ⟨hdim, hrep⟩
+        exact False.elim (hNonrep i j hij hdim hrep)
+    simpa [nsmul_eq_mul] using
+      hbase.comp (tendsto_id.nsmul_atTop (Nat.pos_of_ne_zero (NeZero.ne p)))
+  have hInnerState : ∀ i j : Fin r,
+      Tendsto (fun N => ⟪mpvState (A i) (p * N), mpvState (A j) (p * N)⟫_ℂ)
+        atTop (nhds (if i = j then (period i : ℂ) else 0)) := by
+    intro i j
+    by_cases hij : i = j
+    · subst j
+      simpa [if_pos rfl, mpvInner, mpvOverlap_eq_star_mpvInner] using
+        (hself_overlap i).star
+    · simpa [if_neg hij, mpvInner, mpvOverlap_eq_star_mpvInner] using
+        (hcross_overlap i j hij).star
+  have hgram : ∀ i j : Fin r,
+      Tendsto (fun N : ℕ => ⟪v i N, v j N⟫_ℂ) atTop
+        (nhds (if i = j then (period i : ℂ) else 0)) := by
+    intro i j
+    refine (hInnerState i j).congr ?_
+    intro N
+    simp only [v]
+    rw [lp.inner_single_left, lp.single_apply_self]
+  have hLI_emb : ∀ᶠ N in atTop, LinearIndependent ℂ (fun k => v k N) := by
+    refine eventually_linearIndependent_of_gram_tendsto_nondegenerate v
+      (Matrix.diagonal fun k : Fin r => (period k : ℂ)) ?_ ?_
+    · rw [Matrix.det_diagonal]
+      exact Finset.prod_ne_zero_iff.mpr fun k _ => by
+        exact_mod_cast Nat.ne_of_gt (hPer k).period_pos
+    · intro i j
+      simpa [Matrix.diagonal_apply] using hgram i j
+  have hLI : ∀ᶠ N in atTop, LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
+    refine hLI_emb.mono ?_
+    intro N hN
+    let fN : MPVSpace d (p * N) →ₗ[ℂ] V :=
+      lp.lsingle (𝕜 := ℂ) (E := fun M : ℕ => MPVSpace d (p * M)) 2 N
+    have hN' :
+        LinearIndependent ℂ (fun k : Fin r => fN (mpvState (A k) (p * N))) := by
+      simpa [v, fN, lp.lsingle_apply] using hN
+    exact LinearIndependent.of_comp fN hN'
+  obtain ⟨N₀, hN₀⟩ := Filter.eventually_atTop.1 hLI
+  exact ⟨N₀, hN₀⟩
 
 end MPSTensor
