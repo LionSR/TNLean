@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.Basic
-import TNLean.MPS.ParentHamiltonian.UniqueGroundState
-import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 
 /-!
 # Martingale-method spectral-gap scaffolding for parent Hamiltonians
@@ -51,9 +49,9 @@ noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
 **Spectral gap for MPS parent Hamiltonians.**
 
 For an injective MPS tensor `A` and interaction range `L > 1`, there exists
-a uniform gap `γ > 0` (independent of system size `N`) such that every
-vector in the orthogonal complement of the ground space satisfies
-`‖H_ES v‖ ≥ γ * ‖v‖`.
+a uniform gap `γ > 0` (independent of system size `N`) such that for all
+`N ≥ 2L`, every vector in the orthogonal complement of the ground space
+satisfies `‖H_ES v‖ ≥ γ * ‖v‖`.
 
 The orthogonal complement is computed in the `EuclideanSpace` structure
 on `NSiteSpace d N ≃ Cfg d N → ℂ`.
@@ -61,7 +59,7 @@ on `NSiteSpace d N ≃ Cfg d N → ℂ`.
 TODO: prove via martingale estimate (Nachtergaele / Kastoryano–Lucia). -/
 theorem parentHamiltonian_gapped
     (A : MPSTensor d D) (hA : IsInjective A) (L : ℕ) (hL : 1 < L) :
-    ∃ γ > 0, ∀ (N : ℕ) (hLN : L ≤ N)
+    ∃ γ > 0, ∀ (N : ℕ) (hLN : 2 * L ≤ N)
       (v : EuclideanSpace ℂ (Cfg d N)),
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ‖parentHamiltonianES A L N v‖ ≥ γ * ‖v‖ := by
