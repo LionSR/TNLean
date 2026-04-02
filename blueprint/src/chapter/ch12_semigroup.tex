@@ -179,6 +179,23 @@ and proves the GKSL theorem.
     (Theorem~\ref{thm:duhamel_formula_ch12}).
 \end{proof}
 
+\begin{lemma}[Dyson-series summability from factorial majorant]
+    \label{lem:summable_dyson_factorial_ch12}
+    \lean{summable_dysonTerm_of_factorial_bound}\leanok
+    Assume a factorial majorant of Dyson--Phillips iterates:
+    \[
+      \|\mathrm{dysonTerm}_n(t)\|
+      \le M\,\frac{(t\,\|L'-L\|\,M)^n}{n!}.
+    \]
+    Then the Dyson series is summable in operator norm.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    This is the Weierstrass M-test step, using the scalar convergence of
+    $\sum_n a^n/n!$ and lifting via norm-bounded summability.
+\end{proof}
+
 %% ---------------------------------------------------------
 \section{GKSL/Lindblad generators}
 \label{sec:gksl_generators}
