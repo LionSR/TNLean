@@ -88,8 +88,9 @@ theorem transferMap_blockTensor_fixedPoint
   simpa [transferMap_blockTensor_apply (A := A) (L := L) (X := X)] using hpow
 
 /-- Iterated physical blocking is compatible with one-shot blocking by the multiplied period,
-at the transfer-map level. -/
-theorem transferMap_blockTensor_blockTensor
+at the transfer-map level:
+`transferMap(block(block(A, m), n)) = transferMap(block(A, m * n))`. -/
+theorem transferMap_blockTensor_mul
     (A : MPSTensor d D) (m n : ℕ) :
     transferMap (d := blockPhysDim (blockPhysDim d m) n) (D := D)
         (blockTensor (d := blockPhysDim d m) (D := D)

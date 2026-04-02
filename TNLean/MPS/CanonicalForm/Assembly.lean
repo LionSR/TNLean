@@ -85,7 +85,7 @@ Remaining work for the full pipeline integration:
 * **Common period assembly**: The shared-period helper layer is now available
   via `lcmPeriod`, `commonPeriodBlocking`,
   `isPrimitive_transferMap_commonPeriodBlocking`, and
-  `transferMap_blockTensor_blockTensor`. What still remains is the full
+  `transferMap_blockTensor_mul`. What still remains is the full
   sector-level assembly theorem that packages the cyclic decomposition data
   into a single global direct-sum decomposition.
 
