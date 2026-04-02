@@ -39,7 +39,7 @@ Concretely:
 * arXiv:1606.00608, §3 (application to RFP characterisation)
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder InnerProductSpace
 open Matrix Finset BigOperators
 
 variable {D : ℕ}
@@ -117,12 +117,24 @@ private lemma sum_pad_zeros {r₁ r₂ : ℕ} {β : Type*} [AddCommMonoid β]
     exact ⟨⟨α.val, hα'⟩, Finset.mem_coe.mpr (Finset.mem_univ _), Fin.ext rfl⟩
   · intro j _; simp [dif_pos j.isLt, Fin.eta]
 
+private abbrev KrausCoeffSpace (r : ℕ) := EuclideanSpace ℂ (Fin r)
+
+private abbrev KrausEntrySpace (D : ℕ) := EuclideanSpace ℂ (Fin D × Fin D)
+
 set_option synthInstance.maxHeartbeats 16000000 in
 /-- Cached `InnerProductSpace` instance for `EuclideanSpace` to avoid synthesis timeout. -/
 private noncomputable def euclideanIPS (ι : Type*) [Fintype ι] :
     InnerProductSpace ℂ (EuclideanSpace ℂ ι) := inferInstance
 
-set_option maxHeartbeats 6400000 in
+/-- Rewrite a `toEuclideanLin` composition as matrix multiplication. -/
+private lemma toEuclideanLin_conjTranspose_mul_apply
+    {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
+    (M : Matrix m n ℂ) (w : EuclideanSpace ℂ n) :
+    Mᴴ.toEuclideanLin (M.toEuclideanLin w) = (Mᴴ * M).toEuclideanLin w := by
+  change (Mᴴ.toEuclideanLin.comp M.toEuclideanLin) w = _
+  rw [← toLpLin_mul_same]
+
+set_option maxHeartbeats 1600000 in
 /-- **Rectangular Kraus freedom** (Wolf Thm 2.1 item 4, necessary direction):
 if two Kraus families of sizes `r₁` and `r₂` define the same CPM, then the
 first family is a linear combination of the second via a rectangular isometry
@@ -192,14 +204,13 @@ theorem kraus_rectangular_freedom
     rw [collapse, collapse] at h_entry
     exact h_entry
   -- ===== Phase 3: Construct the isometry =====
-  letI := euclideanIPS (Fin r₁)
-  letI := euclideanIPS (Fin D × Fin D)
-  let fB := Matrix.toEuclideanLin MB
-  let fA' := Matrix.toEuclideanLin MA'
+  letI : InnerProductSpace ℂ (KrausCoeffSpace r₁) := euclideanIPS (Fin r₁)
+  letI : InnerProductSpace ℂ (KrausEntrySpace D) := euclideanIPS (Fin D × Fin D)
+  let fB : KrausEntrySpace D →ₗ[ℂ] KrausCoeffSpace r₁ := Matrix.toEuclideanLin MB
+  let fA' : KrausEntrySpace D →ₗ[ℂ] KrausCoeffSpace r₁ := Matrix.toEuclideanLin MA'
   -- Inner product preservation from Gram equality
-  have hinner : ∀ v w : EuclideanSpace ℂ (Fin D × Fin D),
-      @inner ℂ (EuclideanSpace ℂ (Fin r₁)) _ (fB v) (fB w) =
-      @inner ℂ (EuclideanSpace ℂ (Fin r₁)) _ (fA' v) (fA' w) := by
+  have hinner : ∀ v w : KrausEntrySpace D,
+      ⟪fB v, fB w⟫_ℂ = ⟪fA' v, fA' w⟫_ℂ := by
     intro v w
     rw [← LinearMap.adjoint_inner_right fB v (fB w),
         ← LinearMap.adjoint_inner_right fA' v (fA' w)]
@@ -207,11 +218,8 @@ theorem kraus_rectangular_freedom
     show fB.adjoint (fB w) = fA'.adjoint (fA' w)
     rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint MB,
         ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint MA']
-    have hcomp : ∀ (M : Matrix (Fin r₁) (Fin D × Fin D) ℂ),
-        Mᴴ.toEuclideanLin (M.toEuclideanLin w) = (Mᴴ * M).toEuclideanLin w := by
-      intro M; change (Mᴴ.toEuclideanLin.comp M.toEuclideanLin) w = _
-      rw [← toLpLin_mul_same]
-    rw [hcomp MB, hcomp MA', hGram]
+    rw [toEuclideanLin_conjTranspose_mul_apply MB,
+      toEuclideanLin_conjTranspose_mul_apply MA', hGram]
   -- Kernel inclusion
   have hker : LinearMap.ker fA' ≤ LinearMap.ker fB := by
     intro v hv; rw [LinearMap.mem_ker] at hv ⊢
@@ -219,7 +227,7 @@ theorem kraus_rectangular_freedom
     simp only [hv, inner_zero_left] at h0
     exact inner_self_eq_zero.mp h0
   -- Construct partial isometry L on range(fA')
-  let L_lm : (LinearMap.range fA') →ₗ[ℂ] EuclideanSpace ℂ (Fin r₁) :=
+  let L_lm : LinearMap.range fA' →ₗ[ℂ] KrausCoeffSpace r₁ :=
     ((LinearMap.ker fA').liftQ fB hker).comp
       fA'.quotKerEquivRange.symm.toLinearMap
   -- Key: L sends fA'(v) to fB(v)
@@ -231,8 +239,7 @@ theorem kraus_rectangular_freedom
     exact Submodule.liftQ_apply _ _ _
   -- L preserves inner products
   have hL_inner : ∀ x y : LinearMap.range fA',
-      @inner ℂ (EuclideanSpace ℂ (Fin r₁)) _ (L_lm x) (L_lm y) =
-      @inner ℂ _ _ x y := by
+      ⟪L_lm x, L_lm y⟫_ℂ = ⟪x, y⟫_ℂ := by
     intro ⟨_, hx⟩ ⟨_, hy⟩
     obtain ⟨v, rfl⟩ := hx; obtain ⟨w, rfl⟩ := hy
     rw [hL_apply, hL_apply, hinner, Submodule.coe_inner]
@@ -286,7 +293,6 @@ theorem kraus_rectangular_freedom
     · simp only [Fin.eta, Fin.castLE]
     · simp only [Matrix.zero_apply, mul_zero]
 
-set_option maxHeartbeats 6400000 in
 /-- Variant of `kraus_rectangular_freedom` with general index types. -/
 theorem kraus_rectangular_freedom'
     {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
@@ -300,12 +306,13 @@ theorem kraus_rectangular_freedom'
       V.conjTranspose * V = 1 ∧
       ∀ α, B α = ∑ j, V α j • A j := by
   -- Reindex to Fin using Fintype.equivFin
-  let e₁ := Fintype.equivFin ι₁
-  let e₂ := Fintype.equivFin ι₂
-  let B' := B ∘ e₁.symm
-  let A' := A ∘ e₂.symm
-  have h' : ∀ X, ∑ α : Fin _, B' α * X * (B' α)ᴴ =
-      ∑ j : Fin _, A' j * X * (A' j)ᴴ := by
+  let e₁ : ι₁ ≃ Fin (Fintype.card ι₁) := Fintype.equivFin ι₁
+  let e₂ : ι₂ ≃ Fin (Fintype.card ι₂) := Fintype.equivFin ι₂
+  let B' : Fin (Fintype.card ι₁) → Matrix (Fin D) (Fin D) ℂ := B ∘ e₁.symm
+  let A' : Fin (Fintype.card ι₂) → Matrix (Fin D) (Fin D) ℂ := A ∘ e₂.symm
+  have h' : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      ∑ α : Fin (Fintype.card ι₁), B' α * X * (B' α)ᴴ =
+      ∑ j : Fin (Fintype.card ι₂), A' j * X * (A' j)ᴴ := by
     intro X
     show ∑ α, B (e₁.symm α) * X * (B (e₁.symm α))ᴴ =
         ∑ j, A (e₂.symm j) * X * (A (e₂.symm j))ᴴ
