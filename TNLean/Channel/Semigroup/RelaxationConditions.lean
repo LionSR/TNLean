@@ -87,14 +87,13 @@ private theorem lindblad_block_of_generatorPreservesCompression
     exact sub_eq_zero.mp hQ_LP
   have hsum_zero :
       ∑ j : Fin F.r, ((1 - P) * F.L j * P) * ((1 - P) * F.L j * P)ᴴ = 0 := by
+    have hPP' : P * (1 - P) = 0 := by
+      rw [mul_sub, mul_one, hPP, sub_self]
     suffices hLHS :
         ∑ j : Fin F.r, ((1 - P) * F.L j * P) * ((1 - P) * F.L j * P)ᴴ =
         (1 - P) * (∑ j : Fin F.r, F.L j * P * (F.L j)ᴴ) * (1 - P) by
       rw [hLHS, hQ_phi_eq_Q_kappa]
-      simp only [Matrix.mul_assoc]
-      rw [show κ * P * (1 - P) = κ * (P * (1 - P)) by simp only [Matrix.mul_assoc]]
-      rw [show P * (1 - P) = 0 by rw [mul_sub, mul_one, hPP, sub_self]]
-      simp
+      simp [Matrix.mul_assoc, hPP']
     rw [mul_sum, Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro j _
@@ -115,23 +114,24 @@ private theorem lower_left_block_vanishes_on_lindbladSpan
     (hblock : ∀ j : Fin F.r, (1 - P) * F.L j * P = 0) :
     ∀ A : Mat, A ∈ lindbladSpan F → (1 - P) * A * P = 0 := by
   intro A hA
-  refine Submodule.span_induction hA ?_ ?_ ?_ ?_
-  · intro B hB
-    rcases hB with ⟨j, rfl⟩
-    exact hblock j
-  · simp
-  · intro A B hA hB
-    rw [Matrix.mul_add, Matrix.add_mul, hA, hB]
-    simp
-  · intro c A hA
-    rw [smul_mul_assoc, Matrix.mul_smul_comm, hA, smul_zero]
+  induction hA using Submodule.span_induction with
+  | mem B hB =>
+      rcases hB with ⟨j, rfl⟩
+      exact hblock j
+  | zero =>
+      simp
+  | add A B _ _ hA hB =>
+      rw [Matrix.mul_add, Matrix.add_mul, hA, hB]
+      simp
+  | smul c A _ hA =>
+      rw [smul_mul_assoc, Matrix.mul_smul_comm, hA, smul_zero]
 
 private theorem not_isNontrivialProjection_of_eq_smul_one
     {P : Mat} (hP_nt : IsNontrivialProjection P) {c : ℂ}
     (hP : P = c • (1 : Mat)) : False := by
   by_cases hD : D = 0
   · subst hD
-    exact hP_nt.2 (Subsingleton.elim _ _)
+    exact hP_nt.2.1 (Subsingleton.elim _ _)
   · haveI : NeZero D := ⟨hD⟩
     have hIdem : (c • (1 : Mat)) * (c • (1 : Mat)) = c • (1 : Mat) := by
       simpa [hP] using hP_nt.1.2
@@ -147,8 +147,8 @@ private theorem not_isNontrivialProjection_of_eq_smul_one
       · exact Or.inl hc0
       · exact Or.inr (sub_eq_zero.mp hc1)
     rcases hc01 with hc0 | hc1
-    · exact hP_nt.2 (by rw [hP, hc0, zero_smul])
-    · exact hP_nt.3 (by rw [hP, hc1, one_smul])
+    · exact hP_nt.2.1 (by rw [hP, hc0, zero_smul])
+    · exact hP_nt.2.2 (by rw [hP, hc1, one_smul])
 
 /--
 Condition (1): full algebra generation forbids block-upper-triangular
@@ -183,6 +183,8 @@ theorem hermitian_span_trivial_commutant_implies_no_blockUpperTriangular
   have hblock_span : ∀ A : Mat, A ∈ lindbladSpan F → (1 - P) * A * P = 0 :=
     lower_left_block_vanishes_on_lindbladSpan F hblock
   have hP_herm : Pᴴ = P := hP_nt.1.1
+  have hP_add_compl : P + (1 - P) = (1 : Mat) := by
+    abel
   have hcommP : ∀ j : Fin F.r, P * F.L j = F.L j * P := by
     intro j
     have hLj_mem : F.L j ∈ lindbladSpan F := by
@@ -197,14 +199,14 @@ theorem hermitian_span_trivial_commutant_implies_no_blockUpperTriangular
       calc
         P * F.L j = P * F.L j * 1 := by simp
         _ = P * F.L j * (P + (1 - P)) := by
-          rw [show (1 : Mat) = P + (1 - P) by abel]
+          rw [hP_add_compl]
         _ = P * F.L j * P + P * F.L j * (1 - P) := by rw [Matrix.mul_add]
         _ = P * F.L j * P := by rw [hPAQ, add_zero]
     have hright : F.L j * P = P * F.L j * P := by
       calc
         F.L j * P = 1 * (F.L j * P) := by simp
         _ = (P + (1 - P)) * (F.L j * P) := by
-          rw [show (1 : Mat) = P + (1 - P) by abel]
+          rw [hP_add_compl]
         _ = P * (F.L j * P) + (1 - P) * (F.L j * P) := by rw [Matrix.add_mul]
         _ = P * F.L j * P + (1 - P) * F.L j * P := by simp [Matrix.mul_assoc]
         _ = P * F.L j * P := by rw [hblock j, add_zero]
