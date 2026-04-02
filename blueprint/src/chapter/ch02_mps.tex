@@ -544,3 +544,12 @@ boundary conditions (PBC).
     while the inner product sums $\overline{V_\sigma} \, W_\sigma$.
     Complex conjugation swaps these.
 \end{proof}
+
+\begin{lemma}[Overlap determined by positive-length MPV]%
+    \label{lem:overlap_eq_of_pos_mpv}
+    \lean{MPSTensor.mpvOverlap_eq_of_pos_mpv_eq}\leanok
+    \uses{def:mpv_overlap}
+    If $V^{(N)}(A)_\sigma = V^{(N)}(B)_\sigma$ for all $N > 0$
+    and all $\sigma$, then $O_{AC}(N) = O_{BC}(N)$ for all
+    positive $N$ and any third tensor $C$.
+\end{lemma}
