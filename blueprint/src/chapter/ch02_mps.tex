@@ -52,7 +52,8 @@ boundary conditions (PBC).
     $A^{w_1 \cdot w_2} = A^{w_1} \, A^{w_2}$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{def:eval_word}
+\begin{proof}\leanok
+    \uses{def:eval_word}
     Immediate from the definition of $A^w$.
 \end{proof}
 
@@ -217,7 +218,8 @@ boundary conditions (PBC).
     where $|w|$ is the length of~$w$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{def:eval_word}
+\begin{proof}\leanok
+    \uses{def:eval_word}
     Induction on $w$: the base case gives $\zeta^0 = 1$,
     and each step picks up one factor of $\zeta$.
 \end{proof}
@@ -252,7 +254,8 @@ boundary conditions (PBC).
     \]
 \end{lemma}
 
-\begin{proof}\leanok\uses{def:eval_word}
+\begin{proof}\leanok
+    \uses{def:eval_word}
     Induction on the word length, using $X X^{-1} = \Id$.
 \end{proof}
 
@@ -264,8 +267,7 @@ boundary conditions (PBC).
     MPV family.
 \end{theorem}
 
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{lem:eval_word_gauge}
     Let $B^i = X A^i X^{-1}$.
     By Lemma~\ref{lem:eval_word_gauge}, $B^w = X \, A^w \, X^{-1}$
@@ -390,8 +392,7 @@ boundary conditions (PBC).
     \]
 \end{theorem}
 
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{def:block_diagonal_tensor, def:mpv, lem:eval_word_smul}
     For each physical index~$i$, the block-diagonal tensor
     $A^i = \bigoplus_k \mu_k A_k^i$ is a block-diagonal matrix.
@@ -434,7 +435,8 @@ boundary conditions (PBC).
     \]
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:eval_word_append}
+\begin{proof}\leanok
+    \uses{lem:eval_word_append}
     Induct on the blocked word $w$ and split off the first block word.
     Lemma~\ref{lem:eval_word_append} turns concatenation of blocks into
     multiplication of the corresponding evaluations.
@@ -456,7 +458,8 @@ boundary conditions (PBC).
     \]
 \end{lemma}
 
-\begin{proof}\leanok\uses{def:blocked_tensor, def:mpv, lem:eval_word_block}
+\begin{proof}\leanok
+    \uses{def:blocked_tensor, def:mpv, lem:eval_word_block}
     Concatenate the block words and apply the blocked word evaluation
     lemma (Lemma~\ref{lem:eval_word_block}).
 \end{proof}
@@ -470,8 +473,7 @@ boundary conditions (PBC).
     also generate the same MPV family.
 \end{theorem}
 
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{lem:mpv_block}
     By Lemma~\ref{lem:mpv_block},
     each MPV coefficient of the blocked tensor $A^{[L]}$ equals
@@ -539,7 +541,8 @@ boundary conditions (PBC).
     $O_{AB}(N) = \overline{\braket{V^{(N)}(A)}{V^{(N)}(B)}}$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{def:mpv_overlap, def:mpv_inner}
+\begin{proof}\leanok
+    \uses{def:mpv_overlap, def:mpv_inner}
     The overlap sums $V_\sigma \, \overline{W_\sigma}$
     while the inner product sums $\overline{V_\sigma} \, W_\sigma$.
     Complex conjugation swaps these.
@@ -553,7 +556,8 @@ boundary conditions (PBC).
     and all $\sigma$, then $O_{AC}(N) = O_{BC}(N)$ for all
     positive $N$ and any third tensor $C$.
 \end{lemma}
-\begin{proof}\leanok\uses{def:mpv_overlap}
+\begin{proof}\leanok
+    \uses{def:mpv_overlap}
     Direct pointwise rewriting: if the MPV coefficients agree for
     all positive chain lengths, the overlap sums are identical.
 \end{proof}
