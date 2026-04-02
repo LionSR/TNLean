@@ -13,11 +13,16 @@ import TNLean.MPS.Irreducible.PeriodicBlocking
 This file isolates the remaining channel-to-MPS bridge for cyclic-sector
 irreducibility.
 
-At present it provides:
+## General results (outside `MPSTensor` namespace)
 
-* a reusable orthogonality lemma for orthogonal projections summing to `1`;
-* a corner-preservation lemma for adjoint transfer maps fixed on an orthogonal
-  projection;
+* `pairwise_mul_zero_of_orthogonalProjection_sum_one`: orthogonal projections
+  summing to `1` are pairwise orthogonal (`P_i P_j = 0` for `i ≠ j`).
+* `preservesCorner_of_adjoint_fixed_projection`: if an orthogonal projection is
+  fixed by the adjoint transfer map of a TP tensor, then the corresponding
+  corner algebra is invariant.
+
+## MPS-specific results
+
 * the easy orbit-sum fixed-point calculation `T (∑ₗ T^[l](Q)) = ∑ₗ T^[l](Q)`;
 * an MPS-level wrapper reducing sector irreducibility to the `hLift`
   hypothesis required by
@@ -37,19 +42,21 @@ Concretely, the missing MPS/channel lemmas are the following three pieces:
   `T^[l](Q)` is again an orthogonal projection;
 * `orbitSumProjection_eq_one_of_full_sector`:
   for `Q = P_k`, the orbit sum is the full identity.
-
-TODO: sync the four theorems in this file with blueprint `\lean{...}` /
-`\notready` tags.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Matrix Finset Complex
 
-namespace MPSTensor
+/-! ### Orthogonal-projection pairwise orthogonality -/
 
-variable {d D m : ℕ}
+variable {D m : ℕ}
 
-/-- Orthogonal projections summing to `1` are pairwise orthogonal. -/
+/-- If a finite family of orthogonal projections sums to the identity, then
+distinct projections are orthogonal: `P i * P j = 0` for `i ≠ j`.
+
+This is a standard fact about orthogonal decompositions of the identity. The
+proof sandwiches the sum between `P i` to isolate the diagonal, then extracts
+each off-diagonal term via positivity (`B B* = 0 → B = 0`). -/
 theorem pairwise_mul_zero_of_orthogonalProjection_sum_one
     (P : Fin m → MatrixAlg D)
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
@@ -102,23 +109,32 @@ theorem pairwise_mul_zero_of_orthogonalProjection_sum_one
     · simpa [B, hji] using hB_zero j
   exact hPiPj
 
-/-- If an orthogonal projection is fixed by the adjoint transfer map of a TP
-tensor, then the corresponding corner is invariant. -/
+/-! ### Corner preservation from adjoint fixed projections -/
+
+variable {d : ℕ}
+
+/-- If an orthogonal projection `P` is fixed by the adjoint transfer map
+`T†(·) = ∑ᵢ Aᵢ† · Aᵢ` of a TP tensor, then `T†` preserves the corner
+algebra `P · M_D(ℂ) · P`.
+
+The proof derives `[P, Aᵢ] = 0` from
+`MPSTensor.commutes_letters_of_adjoint_fixed_projection`, then threads the
+idempotent relation `P² = P` through the corner sandwich. -/
 theorem preservesCorner_of_adjoint_fixed_projection
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {P : MatrixAlg D}
     (hP : IsOrthogonalProjection P)
-    (hFix : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) P = P) :
-    PreservesCorner P (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) := by
+    (hFix : MPSTensor.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) P = P) :
+    PreservesCorner P (MPSTensor.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) := by
   have hComm : ∀ i : Fin d, P * A i = A i * P :=
-    commutes_letters_of_adjoint_fixed_projection (A := A) hTP (hP := hP) hFix
+    MPSTensor.commutes_letters_of_adjoint_fixed_projection (A := A) hTP (hP := hP) hFix
   have hCommAdj : ∀ i : Fin d, P * (A i)ᴴ = (A i)ᴴ * P := by
     intro i
     have h := congrArg Matrix.conjTranspose (hComm i)
     simpa [Matrix.conjTranspose_mul, hP.1.eq] using h.symm
   intro X
-  simp only [transferMap_apply, Finset.mul_sum, Finset.sum_mul,
+  simp only [MPSTensor.transferMap_apply, Finset.mul_sum, Finset.sum_mul,
     Matrix.conjTranspose_conjTranspose]
   refine Finset.sum_congr rfl ?_
   intro i _
@@ -139,6 +155,10 @@ theorem preservesCorner_of_adjoint_fixed_projection
                     simp [Matrix.mul_assoc]
             _ = (A i)ᴴ * (P * X * P) * A i := by
                     simp [Matrix.mul_assoc, hP.2]
+
+namespace MPSTensor
+
+variable {d D m : ℕ}
 
 /-- The orbit sum `∑ₗ T^[l](Q)` is fixed by `T` as soon as `Q` is fixed by
 `T^[m]`. -/
