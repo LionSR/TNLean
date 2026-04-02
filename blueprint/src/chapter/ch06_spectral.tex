@@ -1096,11 +1096,19 @@ used later in the blueprint.
 \end{theorem}
 
 \begin{theorem}[Peripheral eigenvalue multiplicity one]
+    \label{thm:peripheral_multiplicity_one}
     \lean{PeripheralSpectrum.peripheral_eigenvalue_multiplicity_one}
+    \leanok
     \uses{thm:peripheral_cyclic_group}
     Each peripheral eigenvalue has algebraic multiplicity one.
-    \textbf{Status:} proof pending (\texttt{sorry}).
 \end{theorem}
+\begin{proof}\leanok
+    Given a peripheral unitary eigenvector $U$ for $\gamma$, the
+    multiplicative-domain identity gives $E(X U^\dagger) = X U^\dagger$
+    for any $\gamma$-eigenvector $X$. By the scalar fixed-point lemma
+    for irreducible unital maps, $X U^\dagger = c \cdot I$, hence
+    $X = c \cdot U$ and the eigenspace is one-dimensional.
+\end{proof}
 
 \section{Primitive overlap convergence (spectral-gap form)}
 
