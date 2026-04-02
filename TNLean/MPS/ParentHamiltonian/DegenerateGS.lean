@@ -32,7 +32,7 @@ variable {d r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
 `chainGroundSpace` of the assembled tensor `toTensorFromBlocks μ A`.
 
 Note: this definition depends on the implicit BNT phase/eigenvalue data
-`μ : Fin r → ℂ` from the surrounding variable context. -/
+`μ : Fin r → ℂ` via `toTensorFromBlocks`. -/
 noncomputable def parentHamiltonianGroundSpace
     (A : (j : Fin r) → MPSTensor d (dim j)) (L N : ℕ) :
     Submodule ℂ (NSiteSpace d N) :=
@@ -44,36 +44,30 @@ noncomputable def bntSpan
     Submodule ℂ (NSiteSpace d N) :=
   Submodule.span ℂ (Set.range fun j : Fin r => (mpv (A j) : NSiteSpace d N))
 
-/-- `⊇` direction helper: each BNT block MPV lies in the parent-Hamiltonian
-ground space of the assembled tensor. -/
-axiom bnt_mem_groundSpace_proof
-    (A : (j : Fin r) → MPSTensor d (dim j))
-    (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hN : N ≥ L + 1)
-    (j : Fin r) :
-    (mpv (A j) : NSiteSpace d N) ∈ parentHamiltonianGroundSpace (μ := μ) A L N
+/-- `⊇` direction: each BNT block MPV lies in the parent-Hamiltonian ground
+space of the assembled tensor.
 
+TODO(#195): prove via trace cyclicity and the local ground-space membership
+lemma `mpv_window_mem_groundSpace`. -/
 theorem bnt_mem_groundSpace
+    (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hN : N ≥ L + 1)
     (j : Fin r) :
     (mpv (A j) : NSiteSpace d N) ∈ parentHamiltonianGroundSpace (μ := μ) A L N := by
-  simpa using bnt_mem_groundSpace_proof (μ := μ) A hCF hN j
-
-axiom parentHamiltonian_gs_eq_bnt_span_proof
-    (A : (j : Fin r) → MPSTensor d (dim j))
-    (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hN : N ≥ L + 1) :
-    parentHamiltonianGroundSpace (μ := μ) A L N = bntSpan A N
+  sorry
 
 /-- **Degenerate ground space = span of BNT states** for block-injective parent
-Hamiltonians (declaration-level theorem).
+Hamiltonians.
 
-Main statement requested in PR #5/5: the periodic parent-Hamiltonian ground
-space of a canonical-form/BNT tensor equals the span of the individual BNT
-block MPV states.
--/
+The periodic parent-Hamiltonian ground space of a canonical-form/BNT tensor
+equals the span of the individual BNT block MPV states.
+
+TODO(#195): prove by combining `bnt_mem_groundSpace` (⊇ direction) with
+block-injective uniqueness from `UniqueGroundState` (⊆ direction). -/
 theorem parentHamiltonian_gs_eq_bnt_span
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hN : N ≥ L + 1) :
     parentHamiltonianGroundSpace (μ := μ) A L N = bntSpan A N := by
-  simpa using parentHamiltonian_gs_eq_bnt_span_proof (μ := μ) A hCF hN
+  sorry
 
 end MPSTensor
