@@ -283,4 +283,18 @@ lemma norm_dysonTerm_succ_le
     _ = t * (⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖) * ‖L' - L‖ * K := by
         simp [M, mul_left_comm, mul_comm]
 
+/-- Summability criterion for Dyson terms from a factorial majorant.
+This packages the M-test step independently of the inductive norm proof. -/
+lemma summable_dysonTerm_of_factorial_bound
+    (L L' : CLM D) {t M : ℝ}
+    (hbound : ∀ n, ‖dysonTerm L L' t n‖ ≤ M * ((t * ‖L' - L‖ * M) ^ n / ↑(n.factorial))) :
+    Summable (fun n => dysonTerm L L' t n) := by
+  refine Summable.of_norm_bounded ?_ hbound
+  simpa [mul_div_assoc, mul_comm, mul_left_comm, mul_assoc] using
+    (Real.summable_pow_div_factorial (t * ‖L' - L‖ * M)).mul_left M
+
+-- TODO(#14): combine `norm_dysonTerm_zero_le`/`norm_dysonTerm_succ_le` into a factorial
+-- majorant theorem and apply `summable_dysonTerm_of_factorial_bound` in the final
+-- Dyson-series convergence/identity statement.
+
 end -- noncomputable section
