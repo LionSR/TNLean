@@ -39,7 +39,7 @@ Concretely:
 * arXiv:1606.00608, §3 (application to RFP characterisation)
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder InnerProductSpace
 open Matrix Finset BigOperators
 
 variable {D : ℕ}
@@ -210,7 +210,7 @@ theorem kraus_rectangular_freedom
   let fA' : KrausEntrySpace D →ₗ[ℂ] KrausCoeffSpace r₁ := Matrix.toEuclideanLin MA'
   -- Inner product preservation from Gram equality
   have hinner : ∀ v w : KrausEntrySpace D,
-      inner (fB v) (fB w) = inner (fA' v) (fA' w) := by
+      ⟪fB v, fB w⟫_ℂ = ⟪fA' v, fA' w⟫_ℂ := by
     intro v w
     rw [← LinearMap.adjoint_inner_right fB v (fB w),
         ← LinearMap.adjoint_inner_right fA' v (fA' w)]
@@ -239,7 +239,7 @@ theorem kraus_rectangular_freedom
     exact Submodule.liftQ_apply _ _ _
   -- L preserves inner products
   have hL_inner : ∀ x y : LinearMap.range fA',
-      inner (L_lm x) (L_lm y) = inner x y := by
+      ⟪L_lm x, L_lm y⟫_ℂ = ⟪x, y⟫_ℂ := by
     intro ⟨_, hx⟩ ⟨_, hy⟩
     obtain ⟨v, rfl⟩ := hx; obtain ⟨w, rfl⟩ := hy
     rw [hL_apply, hL_apply, hinner, Submodule.coe_inner]
