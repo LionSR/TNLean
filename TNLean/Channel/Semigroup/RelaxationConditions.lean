@@ -124,7 +124,7 @@ private theorem lower_left_block_vanishes_on_lindbladSpan
       rw [Matrix.mul_add, Matrix.add_mul, hA, hB]
       simp
   | smul c A _ hA =>
-      rw [smul_mul_assoc, Matrix.mul_smul_comm, hA, smul_zero]
+      rw [mul_smul_comm, smul_mul_assoc, hA, smul_zero]
 
 private theorem not_isNontrivialProjection_of_eq_smul_one
     {P : Mat} (hP_nt : IsNontrivialProjection P) {c : ℂ}
