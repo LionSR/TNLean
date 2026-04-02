@@ -493,7 +493,7 @@ directly to periodic tensors.
 	\lean{MPSTensor.lcmPeriod}
 	\leanok
 	Given a finite family of blocking periods $(p_i)$ indexed by a finite set,
-	\texttt{lcmPeriod} is their least common multiple.
+	their least common multiple serves as the shared blocking period.
 \end{definition}
 
 \begin{definition}[Common-period blocked family]
@@ -502,8 +502,8 @@ directly to periodic tensors.
 	\leanok
 	\uses{def:lcm_period, def:blocked_tensor}
 	Given a finite family of tensors $(B_i)$ with designated periods $(p_i)$,
-	\texttt{commonPeriodBlocking} blocks each $B_i$ to the shared period
-	$\operatorname{lcm}(p_i)$, so every block lives in the same physical space.
+	block each $B_i$ to the shared period $\operatorname{lcm}(p_i)$, so
+	every block lives in the same physical space.
 \end{definition}
 
 \begin{theorem}[Common-period blocking preserves transfer-map primitivity]
@@ -512,9 +512,8 @@ directly to periodic tensors.
 	\leanok
 	\uses{def:common_period_blocking, thm:iterated_blocking_transfer, thm:primitive_blocking_divisible}
 	If each tensor $B_i$ has a primitive transfer map after blocking by its own
-	positive period $p_i$, then every tensor in the family
-	\texttt{commonPeriodBlocking} applied to $(B_i)$ and $(p_i)$ also has
-	primitive transfer maps blockwise.
+	positive period $p_i$, then blocking the entire family to the common
+	LCM period preserves primitivity of each member's transfer map.
 \end{theorem}
 
 \begin{proof}\leanok
