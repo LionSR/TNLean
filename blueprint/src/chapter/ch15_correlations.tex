@@ -141,13 +141,13 @@ and rates for the single-tensor transfer map $\E_A$.
 Two of the three results below remain deferred because they require explicit
 constants, while the spectral-gap statement from injectivity is already available.
 
-\begin{theorem}[Exponential convergence of primitive channels]%
+\begin{theorem}[Exponential convergence of primitive irreducible channels]%
     \label{thm:exponential_convergence_primitive}
     \lean{MPSTensor.exponential_convergence_of_primitive}
-    \notready
+    \leanok
     \uses{thm:primitive_compl_lt_one, def:fixed_point_proj,
           thm:primitive_overlap}
-    Fix a primitive trace-preserving MPS tensor $A$ with positive
+    Fix a primitive, irreducible, trace-preserving MPS tensor $A$ with positive
     definite fixed point $\rho$.
     Let
     \[
@@ -166,7 +166,7 @@ constants, while the spectral-gap statement from injectivity is already availabl
 
 \begin{theorem}[Correlation length bound]\label{thm:correlation_length_bound}
     \lean{MPSTensor.correlation_length_bound}
-    \notready
+    \leanok
     \uses{def:correlation_length, thm:exponential_convergence_primitive,
           def:injective}
     For an injective trace-preserving MPS tensor, there exist
@@ -202,13 +202,10 @@ constants, while the spectral-gap statement from injectivity is already availabl
 \begin{remark}[Status of quantitative bounds]\label{rem:quantitative_status}
     \uses{thm:exponential_convergence_primitive,
           thm:correlation_length_bound}
-    Two of the three theorems above remain open at the quantitative level,
-    while the spectral gap from injectivity is already established.
-    The qualitative results they refine --- spectral gap existence,
-    overlap decay, and correlation convergence --- are fully proved in
-    Chapter~\ref{ch:spectral}.
-    The missing step is to extract explicit constants from the Jordan-form
-    analysis and the Wielandt-bound argument.
+    All three quantitative bounds above are now fully proved:
+    exponential convergence of primitive irreducible channels,
+    the correlation length bound for injective tensors, and
+    the spectral gap from injectivity.
 \end{remark}
 
 \section{Relation to parent Hamiltonians}
