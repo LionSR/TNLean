@@ -1,3 +1,7 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
@@ -16,34 +20,51 @@ The intended proof route is:
 4. a martingale estimate (Nachtergaele / Kastoryano–Lucia).
 
 The final quantitative assembly is left as future work.
+
+## Main results
+
+* `parentHamiltonian_gapped` — spectral gap: vectors in the orthogonal complement
+  of the ground space satisfy `⟨v, Hv⟩ ≥ γ ⟨v, v⟩` with a uniform gap `γ > 0`.
 -/
 
 namespace MPSTensor
 
-open scoped BigOperators
+open scoped BigOperators InnerProductSpace
 
 variable {d D : ℕ}
-variable (L N : ℕ)
 
-/-- Ground-space submodule for the finite-size parent Hamiltonian. -/
-noncomputable def parentHamiltonianGroundSpace (A : MPSTensor d D) : Submodule ℂ (NSiteSpace d N) :=
-  LinearMap.ker (parentHamiltonian A L N)
+/-- Ground-space submodule for the finite-size parent Hamiltonian,
+transported to the `EuclideanSpace` (inner-product) setting so that
+orthogonal complements are available. -/
+noncomputable def parentHamiltonianGroundSpaceES (A : MPSTensor d D)
+    (L N : ℕ) : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) :=
+  (LinearMap.ker (parentHamiltonian A L N)).map
+    (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap
+
+/-- The parent Hamiltonian transported to `EuclideanSpace`. -/
+noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
+    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
+  e.symm.toLinearMap.comp ((parentHamiltonian A L N).comp e.toLinearMap)
 
 /--
-A norm-form spectral-gap statement for the parent Hamiltonian.
+**Spectral gap for MPS parent Hamiltonians.**
 
-This is the endpoint produced by the martingale method: vectors orthogonal to the
-ground space are uniformly penalized by the Hamiltonian.
--/
+For an injective MPS tensor `A` and interaction range `L > 1`, there exists
+a uniform gap `γ > 0` (independent of system size `N`) such that every
+vector in the orthogonal complement of the ground space satisfies
+`‖H_ES v‖ ≥ γ * ‖v‖`.
+
+The orthogonal complement is computed in the `EuclideanSpace` structure
+on `NSiteSpace d N ≃ Cfg d N → ℂ`.
+
+TODO: prove via martingale estimate (Nachtergaele / Kastoryano–Lucia). -/
 theorem parentHamiltonian_gapped
-    (A : MPSTensor d D) (hA : IsInjective A) (hL : 1 < L) (hLN : L ≤ N) :
-    ∃ γ > 0, ∀ v, v ∉ parentHamiltonianGroundSpace (L := L) (N := N) A →
-      ‖parentHamiltonian A L N v‖ ≥ γ * ‖v‖ := by
-  -- Ingredients available on `main`:
-  -- * `groundSpace_intersection`
-  -- * frustration-freeness of parent Hamiltonians on MPS vectors
-  -- * projector structure of local terms
-  -- The quantitative martingale estimate still needs to be assembled.
+    (A : MPSTensor d D) (hA : IsInjective A) (L : ℕ) (hL : 1 < L) :
+    ∃ γ > 0, ∀ (N : ℕ) (hLN : L ≤ N)
+      (v : EuclideanSpace ℂ (Cfg d N)),
+      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
+        ‖parentHamiltonianES A L N v‖ ≥ γ * ‖v‖ := by
   sorry
 
 end MPSTensor
