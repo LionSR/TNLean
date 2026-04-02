@@ -489,10 +489,11 @@ theorem peripheral_eigenvalues_form_cyclic_group
 
 /-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Thm 6.6).
 
-Follows from `fixed_eq_scalar_of_irreducible_unital` in
-`CyclicDecomposition.lean`: if `E(X) = X` with `E` irreducible and unital,
-then `X = c · I`. Applied to `E^m` restricted to a cyclic sector, this
-forces one-dimensional eigenspaces. -/
+Given a peripheral unitary eigenvector `U` with `E(U) = γU`, for any
+`γ`-eigenvector `X` the multiplicative-domain identity gives
+`E(X · U†) = E(X) · E(U†) = X · U†`, so `X · U†` is a fixed point.
+By `fixed_eq_scalar_of_irreducible_unital`, `X · U† = c · I`, hence
+`X = c · U`, and the eigenspace is one-dimensional. -/
 theorem peripheral_eigenvalue_multiplicity_one
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -504,8 +505,88 @@ theorem peripheral_eigenvalue_multiplicity_one
     (hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
     Module.finrank ℂ
       (Module.End.eigenspace (MPSTensor.transferMap (d := r) (D := D) K) γ) = 1 := by
-  -- Use fixed_eq_scalar_of_irreducible_unital from CyclicDecomposition.lean
-  sorry -- TODO (#22): restrict E^m to cyclic sector, apply scalar-fixed-point lemma
+  classical
+  let E := MPSTensor.transferMap (d := r) (D := D) K
+  obtain ⟨U, hU⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
+    K hUnital ρ hρ hρfix hIrr hγ
+  have hUnital' : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using hUnital
+  have hU_mem : (U : MatrixAlg D) ∈ Module.End.eigenspace E γ := by
+    exact (Module.End.mem_eigenspace_iff).2 (by simpa [E] using hU)
+  have hU_star_mul : ((U : MatrixAlg D)ᴴ * (U : MatrixAlg D)) = 1 := by
+    have hstar := Matrix.UnitaryGroup.star_mul_self U
+    rwa [star_eq_conjTranspose] at hstar
+  have hU_mat_ne : (U : MatrixAlg D) ≠ 0 := by
+    intro hU_zero
+    have hUU := hU_star_mul
+    rw [hU_zero] at hUU
+    simp at hUU
+  have hU_ne : (⟨(U : MatrixAlg D), hU_mem⟩ : Module.End.eigenspace E γ) ≠ 0 := by
+    intro hzero
+    apply hU_mat_ne
+    simpa using congrArg Subtype.val hzero
+  have hU_map : Kraus.map K (U : MatrixAlg D) = γ • (U : MatrixAlg D) := by
+    simpa [Kraus.map, E, MPSTensor.transferMap_apply] using hU
+  have hγ_inv : starRingEnd ℂ γ = γ⁻¹ :=
+    (Complex.inv_eq_conj hγ.2).symm
+  have hUstar_map : Kraus.map K ((U : MatrixAlg D)ᴴ) = γ⁻¹ • ((U : MatrixAlg D)ᴴ) := by
+    rw [← Kraus.map_conjTranspose, hU_map, conjTranspose_smul]
+    simp [hγ_inv]
+  have hγinv_norm : ‖γ⁻¹‖ = 1 := by
+    rw [norm_inv, hγ.2, inv_one]
+  have hKSUstar :
+      KadisonSchwarz.krausMap K (((U : MatrixAlg D)ᴴ)ᴴ * (U : MatrixAlg D)ᴴ) =
+        (KadisonSchwarz.krausMap K ((U : MatrixAlg D)ᴴ))ᴴ *
+          KadisonSchwarz.krausMap K ((U : MatrixAlg D)ᴴ) := by
+    have hKSUstar_map :
+        Kraus.map K (((U : MatrixAlg D)ᴴ)ᴴ * (U : MatrixAlg D)ᴴ) =
+          (Kraus.map K ((U : MatrixAlg D)ᴴ))ᴴ *
+            Kraus.map K ((U : MatrixAlg D)ᴴ) := by
+      exact Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
+        K hUnital' hρ hρfix ((U : MatrixAlg D)ᴴ) γ⁻¹ hUstar_map hγinv_norm
+    simpa [Kraus.map, KadisonSchwarz.krausMap] using hKSUstar_map
+  refine finrank_eq_one ⟨(U : MatrixAlg D), hU_mem⟩ hU_ne ?_
+  intro X
+  have hX_eq : E X.1 = γ • X.1 :=
+    (Module.End.mem_eigenspace_iff).1 X.2
+  have hX_map : Kraus.map K X.1 = γ • X.1 := by
+    simpa [Kraus.map, E, MPSTensor.transferMap_apply] using hX_eq
+  have hXUstar_fix_map : Kraus.map K (X.1 * (U : MatrixAlg D)ᴴ) = X.1 * (U : MatrixAlg D)ᴴ := by
+    have hmul :
+        KadisonSchwarz.krausMap K (X.1 * (U : MatrixAlg D)ᴴ) =
+          KadisonSchwarz.krausMap K X.1 *
+            KadisonSchwarz.krausMap K ((U : MatrixAlg D)ᴴ) :=
+      KadisonSchwarz.multiplicative_domain_right K hUnital ((U : MatrixAlg D)ᴴ) hKSUstar X.1
+    have hmul_map :
+        Kraus.map K (X.1 * (U : MatrixAlg D)ᴴ) =
+          Kraus.map K X.1 * Kraus.map K ((U : MatrixAlg D)ᴴ) := by
+      simpa [Kraus.map, KadisonSchwarz.krausMap] using hmul
+    have hγ_ne_zero : γ ≠ 0 := by
+      intro hγ_zero
+      have : ‖(0 : ℂ)‖ = 1 := by simpa [hγ_zero] using hγ.2
+      norm_num at this
+    calc
+      Kraus.map K (X.1 * (U : MatrixAlg D)ᴴ)
+          = Kraus.map K X.1 * Kraus.map K ((U : MatrixAlg D)ᴴ) := hmul_map
+      _ = (γ • X.1) * (γ⁻¹ • ((U : MatrixAlg D)ᴴ)) := by
+            rw [hX_map, hUstar_map]
+      _ = X.1 * (U : MatrixAlg D)ᴴ := by
+            simp [smul_smul, hγ_ne_zero]
+  have hXUstar_fix : E (X.1 * (U : MatrixAlg D)ᴴ) = X.1 * (U : MatrixAlg D)ᴴ := by
+    simpa [Kraus.map, E, MPSTensor.transferMap_apply] using hXUstar_fix_map
+  obtain ⟨c, hc⟩ := MPSTensor.fixed_eq_scalar_of_irreducible_unital
+    (K := K) hUnital hIrr (X.1 * (U : MatrixAlg D)ᴴ) hXUstar_fix
+  have hX_scalar : X.1 = c • (U : MatrixAlg D) := by
+    calc
+      X.1 = X.1 * (1 : MatrixAlg D) := by simp
+      _ = X.1 * (((U : MatrixAlg D)ᴴ) * (U : MatrixAlg D)) := by
+            rw [← hU_star_mul]
+      _ = (X.1 * (U : MatrixAlg D)ᴴ) * (U : MatrixAlg D) := by
+            rw [Matrix.mul_assoc]
+      _ = (c • (1 : MatrixAlg D)) * (U : MatrixAlg D) := by rw [hc]
+      _ = c • (U : MatrixAlg D) := by simp
+  refine ⟨c, ?_⟩
+  exact Subtype.ext hX_scalar.symm
 
 /-- The **period** of the channel divides `D` (the bond dimension).
 
