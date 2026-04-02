@@ -28,16 +28,9 @@ jobs:
           fetch-depth: 1
 
       - name: Set up Lean toolchain and cache
-        uses: leanprover/lean-action@v1
+        uses: ./.github/actions/setup-lean
         with:
-          use-mathlib-cache: true
-          build: false
-
-      - name: Install graphviz headers (needed by pygraphviz)
-        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
-
-      - name: Install leanblueprint
-        run: pipx install leanblueprint
+          install-blueprint: 'true'
 
       - name: Run Lean Audit
         uses: anthropics/claude-code-action@v1

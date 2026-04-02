@@ -1,0 +1,27 @@
+name: 'Setup Lean Toolchain'
+description: 'Set up Lean toolchain with Mathlib cache and optional blueprint tools'
+
+inputs:
+  install-blueprint:
+    description: 'Also install graphviz and leanblueprint (for blueprint workflows)'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Lean toolchain and cache
+      uses: leanprover/lean-action@v1
+      with:
+        use-mathlib-cache: true
+        build: false
+
+    - name: Install graphviz headers (needed by pygraphviz)
+      if: inputs.install-blueprint == 'true'
+      shell: bash
+      run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
+
+    - name: Install leanblueprint
+      if: inputs.install-blueprint == 'true'
+      shell: bash
+      run: pipx install leanblueprint
