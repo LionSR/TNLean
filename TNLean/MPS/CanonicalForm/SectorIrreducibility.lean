@@ -62,27 +62,38 @@ theorem pairwise_mul_zero_of_orthogonalProjection_sum_one
           = P i * (∑ k : Fin m, P k) * P i := by
               simp [Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
       _ = P i * 1 * P i := by rw [hPsum]
-      _ = P i := by simp [Matrix.mul_assoc, (hPproj i).2]
-  have hsum_erase : ∑ k in Finset.univ.erase i, P i * P k * P i = 0 := by
-    rw [Finset.sum_erase_add _ (Finset.mem_univ i)] at hsum_i
+      _ = P i := by simp [(hPproj i).2]
+  have hsum_erase : ∑ k ∈ Finset.univ.erase i, P i * P k * P i = 0 := by
+    rw [← Finset.sum_erase_add Finset.univ (fun k => P i * P k * P i) (Finset.mem_univ i)] at hsum_i
     have hiii : P i * P i * P i = P i := by
-      simp [Matrix.mul_assoc, (hPproj i).2]
+      simp [(hPproj i).2]
     rw [hiii] at hsum_i
-    exact add_right_cancel (by simpa [zero_add] using hsum_i)
+    simpa using hsum_i
   let B : Fin m → MatrixAlg D := fun k => if k = i then 0 else P i * P k
   have hsum_B : ∑ k : Fin m, B k * (B k)ᴴ = 0 := by
     classical
-    rw [Finset.sum_erase_add _ (Finset.mem_univ i)]
+    rw [← Finset.sum_erase_add Finset.univ (fun k => B k * (B k)ᴴ) (Finset.mem_univ i)]
     have hzero_i : B i * (B i)ᴴ = 0 := by simp [B]
     rw [hzero_i, add_zero]
     calc
-      ∑ k in Finset.univ.erase i, B k * (B k)ᴴ
-          = ∑ k in Finset.univ.erase i, P i * P k * P i := by
+      ∑ k ∈ Finset.univ.erase i, B k * (B k)ᴴ
+          = ∑ k ∈ Finset.univ.erase i, P i * P k * P i := by
               refine Finset.sum_congr rfl ?_
               intro k hk
               have hki : k ≠ i := by
                 exact Finset.mem_erase.mp hk |>.1
-              simp [B, hki, Matrix.mul_assoc, (hPproj i).1.eq, (hPproj k).1.eq, (hPproj k).2]
+              calc
+                B k * (B k)ᴴ = (P i * P k) * ((P i * P k)ᴴ) := by
+                  simp [B, hki]
+                _ = P i * P k * P i := by
+                  calc
+                    (P i * P k) * ((P i * P k)ᴴ)
+                        = P i * (P k * (P k * P i)) := by
+                            simp [Matrix.conjTranspose_mul, Matrix.mul_assoc, (hPproj i).1.eq,
+                              (hPproj k).1.eq]
+                    _ = P i * ((P k * P k) * P i) := by simp [Matrix.mul_assoc]
+                    _ = P i * (P k * P i) := by rw [(hPproj k).2]
+                    _ = P i * P k * P i := by simp [Matrix.mul_assoc]
       _ = 0 := hsum_erase
   have hB_zero := eq_zero_of_sum_mul_conjTranspose_eq_zero B hsum_B
   have hPiPj : P i * P j = 0 := by
@@ -105,19 +116,29 @@ theorem preservesCorner_of_adjoint_fixed_projection
   have hCommAdj : ∀ i : Fin d, P * (A i)ᴴ = (A i)ᴴ * P := by
     intro i
     have h := congrArg Matrix.conjTranspose (hComm i)
-    simpa [Matrix.conjTranspose_mul] using h.symm
+    simpa [Matrix.conjTranspose_mul, hP.1.eq] using h.symm
   intro X
-  simp only [transferMap_apply, Finset.mul_sum, Finset.sum_mul]
-  congr 1
-  ext i
+  simp only [transferMap_apply, Finset.mul_sum, Finset.sum_mul,
+    Matrix.conjTranspose_conjTranspose]
+  refine Finset.sum_congr rfl ?_
+  intro i _
   calc
     P * ((A i)ᴴ * (P * X * P) * A i) * P
         = (P * (A i)ᴴ) * (P * X * P) * (A i * P) := by
             simp [Matrix.mul_assoc]
     _ = ((A i)ᴴ * P) * (P * X * P) * (P * A i) := by
           rw [hCommAdj i, ← hComm i]
+    _ = (A i)ᴴ * ((P * P) * X * P) * (P * A i) := by
+          simp [Matrix.mul_assoc]
+    _ = (A i)ᴴ * (P * X * P) * (P * A i) := by
+          simp [Matrix.mul_assoc, hP.2]
     _ = (A i)ᴴ * (P * X * P) * A i := by
-          simp [Matrix.mul_assoc, (hP.2)]
+          calc
+            (A i)ᴴ * (P * X * P) * (P * A i)
+                = (A i)ᴴ * ((P * X * P) * P) * A i := by
+                    simp [Matrix.mul_assoc]
+            _ = (A i)ᴴ * (P * X * P) * A i := by
+                    simp [Matrix.mul_assoc, hP.2]
 
 /-- The orbit sum `∑ₗ T^[l](Q)` is fixed by `T` as soon as `Q` is fixed by
 `T^[m]`. -/
@@ -144,19 +165,25 @@ theorem orbitSumProjection_fixed_of_pow_fix
   have hshift :
       Finset.sum (Finset.range m) (fun j : ℕ => f (j + 1)) =
         Finset.sum (Finset.range m) (fun j : ℕ => f j) := by
-    rw [← hdecomp_left, ← hdecomp_right, hQfix]
-    simp [f]
+    rw [← hdecomp_left, ← hdecomp_right]
+    simp [f, hQfix]
+  change T (∑ l : Fin m, (T ^ (l : ℕ)) Q) = ∑ l : Fin m, (T ^ (l : ℕ)) Q
   calc
-    ∑ l : Fin m, T (((T ^ (l : ℕ)) Q))
-        = ∑ l : Fin m, (T ^ ((l : ℕ) + 1)) Q := by
-            congr 1
-            ext l
+    T (∑ l : Fin m, (T ^ (l : ℕ)) Q)
+        = ∑ l : Fin m, T (((T ^ (l : ℕ)) Q)) := by
+            rw [map_sum]
+    _ = ∑ l : Fin m, (T ^ ((l : ℕ) + 1)) Q := by
+            refine Finset.sum_congr rfl ?_
+            intro l _
             simp [pow_succ']
-    _ = ∑ j in Finset.range m, f (j + 1) := by
-          simp [Fin.sum_univ_eq_sum_range, f]
-    _ = ∑ j in Finset.range m, f j := hshift
+    _ = ∑ j ∈ Finset.range m, f (j + 1) := by
+          simpa [f] using
+            (Fin.sum_univ_eq_sum_range (fun n : ℕ => (T ^ (n + 1)) Q) m)
+    _ = ∑ j ∈ Finset.range m, f j := by
+          simpa using hshift
     _ = ∑ l : Fin m, (T ^ (l : ℕ)) Q := by
-          simp [Fin.sum_univ_eq_sum_range, f]
+          simpa [f] using
+            (Fin.sum_univ_eq_sum_range (fun n : ℕ => (T ^ n) Q) m).symm
 
 /-- MPS-specialized wrapper: once the orbit-sum lift is constructed in the
 shape required by `isIrreducible_restriction_of_cyclic_decomp`, sector
