@@ -1024,6 +1024,12 @@ The following results separate the zero blocks from the
 	compressed tensor $C$ additionally satisfies
 	$V^{(N)}(C)_\sigma = V^{(N)}(A)_\sigma$ for all positive chain
 	lengths $N > 0$.
+\begin{proof}\leanok\uses{thm:compressed_sector}
+    For $N > 0$ the word $A^{i_1} \cdots A^{i_N}$ is nonempty, so $P$
+    acts as the identity on the left by idempotence and the support
+    hypothesis.  The MPV identity then follows from trace cyclicity
+    via Theorem~\ref{thm:compressed_sector}.
+\end{proof}
 \end{corollary}
 
 \begin{theorem}[Block decomposition from commuting projections]%
