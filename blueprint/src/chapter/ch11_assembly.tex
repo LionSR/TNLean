@@ -486,6 +486,42 @@ directly to periodic tensors.
 	\end{enumerate}
 \end{remark}
 
+\subsection{Common-period assembly helpers}
+
+\begin{definition}[LCM period for a finite block family]
+	\label{def:lcm_period}
+	\lean{MPSTensor.lcmPeriod}
+	\leanok
+	Given a finite family of blocking periods $(p_i)$ indexed by a finite set,
+	their least common multiple serves as the shared blocking period.
+\end{definition}
+
+\begin{definition}[Common-period blocked family]
+	\label{def:common_period_blocking}
+	\lean{MPSTensor.commonPeriodBlocking}
+	\leanok
+	\uses{def:lcm_period, def:blocked_tensor}
+	Given a finite family of tensors $(B_i)$ with designated periods $(p_i)$,
+	block each $B_i$ to the shared period $\operatorname{lcm}(p_i)$, so
+	every block lives in the same physical space.
+\end{definition}
+
+\begin{theorem}[Common-period blocking preserves transfer-map primitivity]
+	\label{thm:common_period_blocking_primitive}
+	\lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
+	\leanok
+	\uses{def:common_period_blocking, thm:iterated_blocking_transfer, thm:primitive_blocking_divisible}
+	If each tensor $B_i$ has a primitive transfer map after blocking by its own
+	positive period $p_i$, then blocking the entire family to the common
+	LCM period preserves primitivity of each member's transfer map.
+\end{theorem}
+
+\begin{proof}\leanok
+	Each $p_i$ divides $\operatorname{lcm}(p_i)$.
+	Apply the divisibility monotonicity theorem for primitive blocked transfer maps
+	to each family member separately.
+\end{proof}
+
 \subsection{The \texorpdfstring{$Z$}{Z}-gauge degree of freedom}
 
 \begin{definition}[Entrywise periodic \(Z\)-gauge ratio]\label{def:z_gauge_entry}

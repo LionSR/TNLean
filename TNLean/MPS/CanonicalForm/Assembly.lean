@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
+import TNLean.MPS.CanonicalForm.CyclicSectorAssembly
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.FundamentalTheorem.Full
@@ -81,10 +82,12 @@ The per-block bridge is now complete:
 
 Remaining work for the full pipeline integration:
 
-* **Common period assembly**: Combining per-block cyclic sectors into a
-  single global decomposition with a common blocking period. Requires
-  iterated-blocking infrastructure (`blockTensor (blockTensor A p) q ≃
-  blockTensor A (p * q)`).
+* **Common period assembly**: The shared-period helper layer is now available
+  via `lcmPeriod`, `commonPeriodBlocking`,
+  `isPrimitive_transferMap_commonPeriodBlocking`, and
+  `transferMap_blockTensor_mul`. What still remains is the full
+  sector-level assembly theorem that packages the cyclic decomposition data
+  into a single global direct-sum decomposition.
 
 * **Sector irreducibility**: Each cyclic sector should inherit irreducibility
   from `isIrreducible_restriction_of_cyclic_decomp`. The orbit-sum lift from
