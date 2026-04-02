@@ -102,10 +102,7 @@ jobs:
 
       - name: Set up Lean toolchain and cache
         if: steps.guard.outputs.skip != 'true'
-        uses: leanprover/lean-action@v1
-        with:
-          use-mathlib-cache: true
-          build: false
+        uses: ./.github/actions/setup-lean
 
       - name: Fetch review comments
         if: steps.guard.outputs.skip != 'true'
