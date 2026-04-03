@@ -24,7 +24,6 @@ the basic quantum entropy infrastructure needed for MPDO / RFP applications.
 ## Main results
 
 * `vonNeumannEntropy_nonneg`: `S(ρ) ≥ 0` for density matrices
-* `mutualInformation_nonneg`: `I(A:B) ≥ 0` (requires `TNLean.Axioms.Entropy`)
 
 ## Status
 
@@ -126,7 +125,38 @@ theorem vonNeumannEntropy_le_log_dim
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D)
     (hD : 0 < D) :
     vonNeumannEntropy ρ hρ.1.isHermitian ≤ Real.log D := by
-  sorry
+  have hJensen := Real.concaveOn_negMulLog.le_map_sum
+      (t := (Finset.univ : Finset (Fin D)))
+      (w := fun _ : Fin D => ((D : ℝ)⁻¹))
+      (p := fun i : Fin D => hρ.1.isHermitian.eigenvalues i)
+      (by
+        intro i hi
+        positivity)
+      (by
+        simp [hD.ne'])
+      (by
+        intro i hi
+        exact hρ.1.eigenvalues_nonneg i)
+  have hsum : ∑ i : Fin D, hρ.1.isHermitian.eigenvalues i = 1 :=
+    densityMatrix_eigenvalues_sum_one hρ
+  have havg :
+      ∑ i : Fin D, (D : ℝ)⁻¹ * hρ.1.isHermitian.eigenvalues i = (D : ℝ)⁻¹ := by
+    rw [← Finset.mul_sum]
+    simp [hsum]
+  have hscaled :
+      ((D : ℝ)⁻¹) * vonNeumannEntropy ρ hρ.1.isHermitian ≤
+      Real.negMulLog ((D : ℝ)⁻¹) := by
+    simpa [vonNeumannEntropy, Finset.mul_sum, Finset.sum_mul, havg, mul_assoc, mul_left_comm,
+      mul_comm] using hJensen
+  have hD' : (0 : ℝ) < D := by exact_mod_cast hD
+  have hmul := mul_le_mul_of_nonneg_left hscaled (le_of_lt hD')
+  have hentropy :
+      vonNeumannEntropy ρ hρ.1.isHermitian ≤
+      (D : ℝ) * Real.negMulLog ((D : ℝ)⁻¹) := by
+    simpa [hD.ne', mul_assoc, inv_mul_cancel₀, one_mul] using hmul
+  have hlog : (D : ℝ) * Real.negMulLog ((D : ℝ)⁻¹) = Real.log D := by
+    simp [Real.negMulLog, hD.ne', Real.log_inv]
+  simpa [hlog] using hentropy
 
 end VonNeumannEntropyFinD
 
