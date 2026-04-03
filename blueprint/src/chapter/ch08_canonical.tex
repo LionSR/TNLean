@@ -1358,15 +1358,6 @@ The following results separate the zero blocks from the
 	For trace-preserving irreducible blocks, a non-decaying cross-overlap forces equal bond dimensions and gauge equivalence up to a unit-modulus phase.
 \end{theorem}
 
-\begin{theorem}[Blocks with non-decaying overlap are gauge equivalent]
-	\label{thm:gauge_equiv_equal_norm_blocks}
-	\lean{MPSTensor.gaugePhaseEquiv_of_equal_norm_blocks}\leanok
-	\uses{thm:gauge_equiv_nondecay}
-	Given trace-preserving irreducible blocks with a non-decaying cross-overlap, they have equal bond dimensions and are gauge equivalent up to a unit-modulus phase.
-	The non-decaying-overlap hypothesis is an additional assumption, typically derived from structural properties of the decomposition (cyclic-sector origin, Fundamental Theorem matching, etc.).
-	Note: the MPV-level hypothesis connecting blocks through a parent tensor is \emph{not} sufficient on its own (see issue \#299 for a counter-example).
-\end{theorem}
-
 \begin{theorem}[BNT grouping using gauge equivalence data]
 	\label{thm:bnt_grouping_gauge_equiv}
 	\lean{MPSTensor.exists_bnt_grouping_of_gaugePhaseEquiv}\leanok
@@ -1377,7 +1368,7 @@ The following results separate the zero blocks from the
 \begin{theorem}[Sector decomposition from TP primitive irreducible blocks]
 	\label{thm:sector_decomp_tp_prim_irr}
 	\lean{MPSTensor.exists_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
-	\uses{thm:gauge_equiv_equal_norm_blocks, thm:bnt_grouping_gauge_equiv}
+	\uses{thm:gauge_equiv_nondecay, thm:bnt_grouping_gauge_equiv}
 	From a trace-preserving primitive irreducible block decomposition with nonzero weights and non-decaying cross-overlaps for equal-norm blocks, one obtains a sector decomposition with strict norm ordering.
 \end{theorem}
 

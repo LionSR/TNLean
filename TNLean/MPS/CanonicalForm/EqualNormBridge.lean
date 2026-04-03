@@ -59,10 +59,6 @@ Theorem matching, etc.).
   TP + irreducible blocks implies equal bond dimensions and gauge-phase equivalence.
   Uses the spectral dichotomy from `SpectralGap.lean`.  **Fully proved.**
 
-* `gaugePhaseEquiv_of_equal_norm_blocks` — Two TP + irreducible blocks with a
-  non-decaying cross-overlap are gauge-phase equivalent.  **Fully proved.**
-  The non-decay hypothesis is an additional assumption.
-
 * `exists_bnt_grouping_of_gaugePhaseEquiv` — BNT grouping theorem taking gauge-phase
   equivalence data (rather than `SameMPV₂`) for equal-norm blocks.  **Fully proved.**
 
@@ -131,48 +127,6 @@ theorem gaugePhaseEquiv_of_nonDecaying_overlap
   exact hNonDecay
     (mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       hdim A B hA_irr hB_irr hA_TP hB_TP hNotGPE)
-
-/-- **Blocks with non-decaying cross-overlaps are gauge-phase equivalent.**
-
-Given a family of TP + irreducible blocks, if two blocks `j` and `k`
-have a cross-overlap that does not decay to zero, they must have equal bond
-dimensions and be gauge-phase equivalent.
-
-The non-decay hypothesis is not automatic from the block properties alone —
-it requires structural knowledge about where the blocks came from.
-Typical sources:
-
-* **Cyclic-sector origin**: blocks from the cyclic-sector decomposition of a single
-  irreducible block are rotated copies of each other and have non-decaying
-  cross-overlaps.
-* **Fundamental Theorem matching**: when two canonical-form decompositions of the
-  same tensor are compared, the matching blocks have non-decaying cross-overlaps.
-
-**Important**: The MPV-level hypothesis `hFullTensor` (connecting blocks through a
-parent tensor's MPV expansion) alone is NOT sufficient — see issue #299 for a
-counter-example with `d = 2`, `D = 1` showing two TP + primitive + irreducible
-blocks satisfying `hFullTensor` whose cross-overlap decays (spectral radius
-`1/√2 < 1` for the mixed transfer map).  The BNT of a tensor (CPGSV17,
-Proposition A.6) is constructed so that all BNT element pairs have decaying
-cross-overlaps, including equal-norm pairs. -/
-theorem gaugePhaseEquiv_of_equal_norm_blocks
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (j k : Fin r)
-    -- The non-decay hypothesis is not automatic from the block properties alone —
-    -- it requires structural knowledge about where the blocks came from
-    -- (cyclic-sector decomposition, Fundamental Theorem matching, etc.).
-    (hNonDecay :
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (blocks j) (blocks k) N) atTop (nhds 0)) :
-    ∃ hdim : dim j = dim k,
-      GaugePhaseEquiv (d := d)
-        (cast (congr_arg (MPSTensor d) hdim) (blocks j)) (blocks k) :=
-  gaugePhaseEquiv_of_nonDecaying_overlap
-    (blocks j) (blocks k)
-    (hIrr j) (hIrr k) (hTP j) (hTP k)
-    hNonDecay
 
 /-! ### §2. BNT grouping with gauge-phase equivalence -/
 
@@ -313,7 +267,8 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
         GaugePhaseEquiv (d := d)
           (cast (congr_arg (MPSTensor d) hdim) (blocks j)) (blocks k) := by
     intro j k hjk hNorm
-    exact gaugePhaseEquiv_of_equal_norm_blocks blocks hTP hIrr j k
+    exact gaugePhaseEquiv_of_nonDecaying_overlap
+      (blocks j) (blocks k) (hIrr j) (hIrr k) (hTP j) (hTP k)
       (hNonDecay j k hjk hNorm)
   -- Step 2: Derive GPE data with unit-norm phase for the grouping theorem.
   have hGPEζ : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ →
