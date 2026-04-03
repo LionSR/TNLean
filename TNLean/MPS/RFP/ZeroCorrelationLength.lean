@@ -32,20 +32,21 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- Correlations independent of distance (arXiv:1606.00608, Definition 3.3):
-the transfer map powers stabilize, meaning `E^{n+2} = E^{n+1}` for all `n`.
+the connected two-point correlation function through the transfer map is
+constant in the separation for all local observables.
 
-For canonical-form tensors (where each block is injective), this algebraic
-condition captures the physical property that two-point correlation functions
-do not depend on the separation distance: injectivity ensures that physical
-observables span the full matrix algebra, so the transfer-map-level condition
-is equivalent to the observable-level one.
+**Status**: `sorry` placeholder. A naive formalization quantifying
+`tr(Y · E^n(X · ρR)) = tr(Y · E^m(X · ρR))` over all matrices `ρR`, `X`, `Y`
+collapses to `IsRFP` by non-degeneracy of the trace pairing (see PR #271
+discussion). The correct definition requires either:
+(a) restricting to a specific fixed-point state and using the *connected*
+    correlator `C(X,Y,n) = tr(Y · Eⁿ(X · ρ)) − tr(X·ρ)·tr(Y·ρ)`, or
+(b) formulating CID at the multi-block BNT level where cross-block transfer
+    operators provide non-trivial content.
 
-This is equivalent to `IsRFP A` (transfer map idempotence). The equivalence
-follows from Mathlib's `IsIdempotentElem.pow_succ_eq`: if `E² = E` then
-`E^{n+1} = E` for all `n`, hence consecutive powers agree.
-See arXiv:1606.00608, Definition 3.3 and Theorem 3.8. -/
-def IsCID (A : MPSTensor d D) : Prop :=
-  ∀ n : ℕ, (transferMap A) ^ (n + 2) = (transferMap A) ^ (n + 1)
+TODO: formalize using `twoPointCorrelation` infrastructure once available. -/
+def IsCID (_A : MPSTensor d D) : Prop :=
+  sorry
 
 /-- Local orthogonality for a single BNT block: the self-transfer map is
 idempotent. For a single tensor `A`, this is equivalent to `IsRFP A`
@@ -73,22 +74,16 @@ def IsZCL (A : MPSTensor d D) : Prop :=
 /-- **Theorem 3.8** (arXiv:1606.00608): For a canonical-form MPS tensor,
 ZCL is equivalent to the transfer map being idempotent (i.e. `IsRFP`).
 
-Forward (`IsZCL → IsRFP`): `IsZCL = IsLocallyOrthogonal ∧ IsCID`, and
-`IsLocallyOrthogonal` is definitionally `IsRFP`, so just project.
+Forward: `E² = E` implies CID (from the correlation formula) and LO
+(from spectral gap of mixed transfer).
+Reverse: if `E² ≠ E`, block-injectivity constructs observables detecting
+a subleading eigenvalue; Newton–Girard handles the μ-coefficient phases.
 
-Reverse (`IsRFP → IsZCL`): `IsLocallyOrthogonal` is immediate.
-For `IsCID`, `E² = E` means `transferMap A` is idempotent in the
-`Module.End` monoid; by `IsIdempotentElem.pow_succ_eq`, all powers
-`E^{n+1} = E`, so consecutive powers agree. -/
+TODO: prove both directions. -/
 theorem zcl_iff_idempotent_transfer {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (_hCF : IsCanonicalForm μ A) (k : Fin r) :
+    (hCF : IsCanonicalForm μ A) (k : Fin r) :
     IsZCL (A k) ↔ IsRFP (A k) := by
-  constructor
-  · exact fun h => h.1
-  · intro hRFP
-    refine ⟨hRFP, fun n => ?_⟩
-    have hIdem : IsIdempotentElem (transferMap (A k)) := hRFP
-    rw [hIdem.pow_succ_eq, hIdem.pow_succ_eq]
+  sorry
 
 end MPSTensor
