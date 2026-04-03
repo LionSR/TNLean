@@ -1160,9 +1160,8 @@ The following results separate the zero blocks from the
 
 \begin{lemma}[Orbit iterate supported on shifted sector]%
 	\label{lem:orbit_iterate_shifted_sector}
-	\lean{orbit_iterate_supported_on_shifted_sector}
+	\lean{MPSTensor.orbit_iterate_supported_on_shifted_sector}
 	\leanok
-	\uses{lem:orbit_sum_fixed}
 	Let $(P_k)_{k=1}^m$ be orthogonal projections with cyclic shift
 	$T(P_{k+1}) = P_k$, and suppose $T$ is multiplicative on each sector
 	corner.
@@ -1180,7 +1179,7 @@ The following results separate the zero blocks from the
 
 \begin{lemma}[Orbit iterate preserves orthogonal projection]%
 	\label{lem:orbit_iterate_proj}
-	\lean{orbit_iterate_isOrthogonalProjection}
+	\lean{MPSTensor.orbit_iterate_isOrthogonalProjection}
 	\leanok
 	\uses{lem:orbit_iterate_shifted_sector}
 	Under the same cyclic shift and multiplicative-domain hypotheses as
@@ -1201,7 +1200,7 @@ The following results separate the zero blocks from the
 
 \begin{lemma}[Orbit sum of a full sector projection]%
 	\label{lem:orbit_sum_full_sector}
-	\lean{orbitSumProjection_eq_one_of_full_sector}
+	\lean{MPSTensor.orbitSumProjection_eq_one_of_full_sector}
 	\leanok
 	\uses{lem:orbit_sum_fixed}
 	Let $(P_k)_{k=1}^m$ be orthogonal projections with
