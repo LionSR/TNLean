@@ -49,9 +49,9 @@ already groups gauge-equivalent blocks together; remaining blocks are pairwise
 non-gauge-equivalent.  See issue #299 for the counter-example showing that the
 MPV-level hypothesis `hFullTensor` alone cannot force non-decaying cross-overlaps.
 
-Callers that need GPE for equal-norm blocks should derive it from structural
-properties of the decomposition (cyclic-sector origin, Fundamental Theorem matching,
-etc.) and supply it via the `hNonDecay` hypothesis.
+To obtain GPE for equal-norm blocks, one must derive the non-decay property from
+structural properties of the decomposition (cyclic-sector origin, Fundamental
+Theorem matching, etc.) and pass it as the `hNonDecay` hypothesis.
 
 ## Main results
 
@@ -59,14 +59,14 @@ etc.) and supply it via the `hNonDecay` hypothesis.
   TP + irreducible blocks implies equal bond dimensions and gauge-phase equivalence.
   Uses the spectral dichotomy from `SpectralGap.lean`.  **Fully proved.**
 
-* `gaugePhaseEquiv_of_equal_norm_blocks` — Equal-norm blocks that are known to have
-  non-decaying cross-overlaps are gauge-phase equivalent.  **Fully proved.**
-  The caller supplies the `hNonDecay` hypothesis.
+* `gaugePhaseEquiv_of_equal_norm_blocks` — Two distinct TP + irreducible blocks with a
+  non-decaying cross-overlap are gauge-phase equivalent.  **Fully proved.**
+  The non-decay hypothesis is an additional assumption.
 
 * `exists_bnt_grouping_of_gaugePhaseEquiv` — BNT grouping theorem taking gauge-phase
   equivalence data (rather than `SameMPV₂`) for equal-norm blocks.  **Fully proved.**
 
-* `exists_sectorDecomp_of_tp_primitive_irr_blocks` — Pipeline endpoint connecting
+* `exists_sectorDecomp_of_tp_primitive_irr_blocks` — Construction connecting
   the reduction output to a BNT-grouped `SectorDecomposition`.  **Fully proved.**
   Requires a `hNonDecay` hypothesis for equal-norm blocks.
 
@@ -132,14 +132,14 @@ theorem gaugePhaseEquiv_of_nonDecaying_overlap
     (mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       hdim A B hA_irr hB_irr hA_TP hB_TP hNotGPE)
 
-/-- **Equal-norm blocks with non-decaying cross-overlaps are gauge-phase equivalent.**
+/-- **Blocks with non-decaying cross-overlaps are gauge-phase equivalent.**
 
-Given a family of TP + irreducible blocks with nonzero weights, if two blocks
-`j` and `k` with `‖μ j‖ = ‖μ k‖` have a cross-overlap that does not decay to zero,
-they must have equal bond dimensions and be gauge-phase equivalent.
+Given a family of TP + irreducible blocks, if two distinct blocks `j` and `k`
+have a cross-overlap that does not decay to zero, they must have equal bond
+dimensions and be gauge-phase equivalent.
 
-The `hNonDecay` hypothesis must be supplied by the caller based on structural
-properties of the decomposition.  Typical sources:
+The `hNonDecay` hypothesis is an additional assumption that must be derived from
+structural properties of the decomposition.  Typical sources:
 
 * **Cyclic-sector origin**: blocks from the cyclic-sector decomposition of a single
   irreducible block are rotated copies of each other and have non-decaying
@@ -277,16 +277,16 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
 
 /-! ### §3. Pipeline connection -/
 
-/-- **Pipeline endpoint: from TP + primitive + irreducible blocks to BNT-grouped
+/-- **From TP + primitive + irreducible blocks to BNT-grouped
 `SectorDecomposition`.**
 
-This theorem connects the output of the existence reduction pipeline
+This theorem connects the output of the existence reduction
 (`exists_tp_primitive_blockDecomp_after_blocking` in `Assembly.lean`) to a
 `SectorDecomposition` with strictly decreasing BNT-level norms.
 
 The `hNonDecay` hypothesis states that equal-norm blocks have non-decaying
 cross-overlaps.  This is NOT automatic from the block properties alone (see
-issue #299 for counter-example).  Callers must derive it from structural
+issue #299 for counter-example).  It must be derived from structural
 properties of the decomposition, such as:
 
 * Blocks originating from cyclic-sector decomposition of a single irreducible
