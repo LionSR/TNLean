@@ -9,6 +9,7 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Mathlib.Analysis.ODE.Gronwall
+import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 
 /-!
 # Perturbation bound for dynamical semigroups — Wolf Lemma 7.1 and Corollary 7.1
@@ -293,8 +294,91 @@ lemma summable_dysonTerm_of_factorial_bound
   simpa [mul_div_assoc, mul_comm, mul_left_comm, mul_assoc] using
     (Real.summable_pow_div_factorial (t * ‖L' - L‖ * M)).mul_left M
 
--- TODO(#14): combine `norm_dysonTerm_zero_le`/`norm_dysonTerm_succ_le` into a factorial
--- majorant theorem and apply `summable_dysonTerm_of_factorial_bound` in the final
--- Dyson-series convergence/identity statement.
+/-- Factorial norm bound for Dyson–Phillips iterates (Wolf Eq. 7.13 estimate).
+For `s ∈ [0, t]` and `M = sup_{u ∈ [0,t]} ‖exp(uL)‖`:
+`‖T̃ⁿ(s)‖ ≤ M · (s · ‖Δ‖ · M)ⁿ / n!`. -/
+theorem norm_dysonTerm_le (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) (n : ℕ)
+    {s : ℝ} (hs : s ∈ Set.Icc 0 t) :
+    ‖dysonTerm L L' s n‖ ≤
+      (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖) *
+      ((s * ‖L' - L‖ * (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖)) ^ n /
+        ↑(n.factorial)) := by
+  induction n generalizing s with
+  | zero =>
+    simp only [dysonTerm_zero, pow_zero, Nat.factorial_zero,
+      Nat.cast_one, div_one, mul_one]
+    exact norm_expSemigroup_le_biSup L ht hs
+  | succ n ih =>
+    rw [dysonTerm_succ]
+    set M := ⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖ with hM_def
+    have hs0 : (0 : ℝ) ≤ s := hs.1
+    have hst : s ≤ t := hs.2
+    have hM_nn : 0 ≤ M :=
+      le_trans (norm_nonneg _)
+        (norm_expSemigroup_le_biSup L ht (Set.left_mem_Icc.mpr ht))
+    -- Constant factor in the pointwise bound
+    set C : ℝ := M * ‖L' - L‖ * M * (‖L' - L‖ * M) ^ n / ↑(n.factorial)
+      with hC_def
+    -- Pointwise bound: ‖integrand(u)‖ ≤ C · uⁿ for u ∈ [0, s]
+    have hpw : ∀ u ∈ Set.Icc 0 s,
+        ‖expSemigroupCLM L (s - u) * (L' - L) * dysonTerm L L' u n‖ ≤
+          C * u ^ n := by
+      intro u hu
+      have hu_t : u ∈ Set.Icc 0 t := ⟨hu.1, le_trans hu.2 hst⟩
+      have hsu_t : s - u ∈ Set.Icc 0 t :=
+        ⟨sub_nonneg.mpr hu.2, le_trans (sub_le_self s hu.1) hst⟩
+      calc ‖expSemigroupCLM L (s - u) * (L' - L) * dysonTerm L L' u n‖
+          ≤ ‖expSemigroupCLM L (s - u)‖ * ‖L' - L‖ *
+              ‖dysonTerm L L' u n‖ := by
+            calc _ ≤ ‖expSemigroupCLM L (s - u) * (L' - L)‖ *
+                      ‖dysonTerm L L' u n‖ := norm_mul_le _ _
+              _ ≤ _ := mul_le_mul_of_nonneg_right
+                    (norm_mul_le _ _) (norm_nonneg _)
+        _ ≤ M * ‖L' - L‖ *
+              (M * ((u * ‖L' - L‖ * M) ^ n / ↑(n.factorial))) := by
+            apply mul_le_mul
+            · exact mul_le_mul_of_nonneg_right
+                (norm_expSemigroup_le_biSup L ht hsu_t) (norm_nonneg _)
+            · exact ih hu_t
+            · exact norm_nonneg _
+            · exact mul_nonneg hM_nn (norm_nonneg _)
+        _ = C * u ^ n := by simp only [hC_def, mul_pow]; ring
+    -- Convert set integral to interval integral
+    rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le hs0]
+    -- Integrability of the bound function
+    have hCu_int : IntervalIntegrable (fun u => C * u ^ n) volume 0 s :=
+      (continuous_const.mul (continuous_pow n)).intervalIntegrable 0 s
+    -- Bound norm of interval integral, then compute
+    calc ‖∫ u in (0 : ℝ)..s, expSemigroupCLM L (s - u) * (L' - L) *
+            dysonTerm L L' u n‖
+        ≤ ∫ u in (0 : ℝ)..s, C * u ^ n :=
+          intervalIntegral.norm_integral_le_of_norm_le hs0
+            (ae_of_all _ fun u hu =>
+              hpw u (Set.Ioc_subset_Icc_self hu)) hCu_int
+      _ = C * (s ^ (n + 1) / ((n : ℝ) + 1)) := by
+          rw [intervalIntegral.integral_const_mul, integral_pow,
+              zero_pow (Nat.succ_ne_zero n), sub_zero]
+      _ = M * ((s * ‖L' - L‖ * M) ^ (n + 1) /
+            ↑((n + 1).factorial)) := by
+          rw [hC_def, Nat.factorial_succ, Nat.cast_mul, Nat.cast_succ]
+          have : (↑(n.factorial) : ℝ) ≠ 0 :=
+            Nat.cast_ne_zero.mpr (Nat.factorial_ne_zero n)
+          have : (↑n : ℝ) + 1 ≠ 0 := by positivity
+          field_simp
+          ring
+
+/-- Factorial norm bound specialised to `s = t`. -/
+theorem norm_dysonTerm_le_at (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) (n : ℕ) :
+    ‖dysonTerm L L' t n‖ ≤
+      (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖) *
+      ((t * ‖L' - L‖ * (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖)) ^ n /
+        ↑(n.factorial)) :=
+  norm_dysonTerm_le L L' ht n (Set.right_mem_Icc.mpr ht)
+
+/-- The Dyson–Phillips series `∑ₙ T̃ⁿ(t)` converges in operator norm. -/
+theorem summable_dysonTerm (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) :
+    Summable (fun n => dysonTerm L L' t n) :=
+  summable_dysonTerm_of_factorial_bound L L'
+    (fun n => norm_dysonTerm_le_at L L' ht n)
 
 end -- noncomputable section
