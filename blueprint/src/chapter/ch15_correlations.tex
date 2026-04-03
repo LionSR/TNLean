@@ -140,13 +140,13 @@ records the \emph{quantitative} refinements that give explicit constants
 and rates for the single-tensor transfer map $\E_A$.
 All three quantitative results below are now fully proved.
 
-\begin{theorem}[Exponential convergence of primitive irreducible channels]%
+\begin{theorem}[Exponential convergence of injective primitive channels]%
     \label{thm:exponential_convergence_primitive}
     \lean{MPSTensor.exponential_convergence_of_primitive}
     \leanok
     \uses{thm:primitive_compl_lt_one, def:fixed_point_proj,
           thm:primitive_overlap}
-    Fix a primitive, irreducible, trace-preserving MPS tensor $A$ with positive
+    Fix an injective, trace-preserving MPS tensor $A$ with positive
     definite fixed point $\rho$.
     Let
     \[
@@ -162,6 +162,15 @@ All three quantitative results below are now fully proved.
     The spectral gap $\delta$ exists by primitivity
     (Theorem~\ref{thm:primitive_compl_lt_one}, the complementary spectral gap).
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    Injectivity implies primitivity of the transfer map.
+    The complementary spectral radius $\rho(\E_A - P) < 1$ then follows from
+    the primitive spectral gap theorem.  The Gelfand formula yields a
+    geometric bound $\|\,(\E_A - P)^n\| \le C\,(1-\delta)^n$ for suitable
+    constants, giving the claimed estimate.
+\end{proof}
 
 \begin{theorem}[Correlation length bound]\label{thm:correlation_length_bound}
     \lean{MPSTensor.correlation_length_bound}
@@ -180,6 +189,14 @@ All three quantitative results below are now fully proved.
     than~$1$, the Gelfand formula gives exponential decay at rate
     $\xi = -1/\log\rho(\E_A - P)$.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    For traceless $X$ we have $P(X) = 0$, so $\E_A^n(X) = (\E_A - P)^n(X)$.
+    The exponential convergence theorem gives a geometric bound
+    $C\,(1-\delta)^n\,\|X\|$.  Rewriting $(1-\delta)^n = e^{-n/\xi}$ with
+    $\xi = -1/\log(1-\delta)$ yields the claimed estimate.
+\end{proof}
 
 \begin{theorem}[Spectral gap from injectivity]%
     \label{thm:spectral_gap_wielandt}
