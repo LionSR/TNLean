@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Defs
 import TNLean.MPS.Core.Transfer
 import Mathlib.LinearAlgebra.Matrix.PosDef
+import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
 # MPO, MPDO, and LPDO — basic definitions
@@ -18,7 +19,9 @@ Verstraete):
 * **MPDO** (Matrix Product Density Operator): an MPO whose operator family
   `mpo M N` is positive semidefinite for every system size `N`.
 * **LPDO** (Locally Purifiable Density Operator): an MPO that admits a
-  local MPS purification `M^{ij} = ∑_k A^{(i,k)} (A^{(j,k)})†`.
+  local purification tensor with Kronecker structure,
+  `M^{ij} = (∑_k A^{(i,k)} ⊗ₖ conj(A^{(j,k)})).submatrix ↑e ↑e`,
+  for an identification `e : Fin D ≃ Fin D' × Fin D'` of the bond index.
 
 ## Main definitions
 
@@ -42,7 +45,7 @@ Verstraete):
 * [ZV04] Zwolak, Vidal, PRL 93, 207205 (2004)
 -/
 
-open scoped Matrix ComplexOrder BigOperators
+open scoped Matrix ComplexOrder BigOperators Kronecker
 open Matrix Finset
 
 /-- A (periodic, translation-invariant) **Matrix Product Operator** tensor:
@@ -163,30 +166,114 @@ def IsMPDO (M : MPOTensor d D) : Prop :=
 /-! ### LPDO: local purification -/
 
 /-- An MPO tensor `M` is an **LPDO** (Locally Purifiable Density Operator) if
-there exists an MPS tensor `A` with an enlarged physical index `Fin d × Fin dK`
-(where `dK` is the Kraus/ancilla dimension) such that
+there exists a purifying MPS tensor `A` with ancilla/Kraus dimension `dK`
+and inner bond dimension `D'`, together with an equivalence
+`Fin D ≃ Fin D' × Fin D'`, such that
 
-  `M^{ij} = ∑_k A^{(i,k)} (A^{(j,k)})†`
+  `M^{ij} = ∑_k A^{(i,k)} ⊗ₖ conj(A^{(j,k)})`
 
-for all physical indices `i, j`. This is the local purification condition
-of Verstraete–Garcia-Ripoll–Cirac (2004).
+where `⊗ₖ` is the Kronecker product and `conj` denotes entrywise complex
+conjugation, and where the resulting matrix on `Fin D' × Fin D'` is
+reindexed back to `Fin D` via the chosen equivalence `e` (implemented by
+`.submatrix ↑e ↑e`). This is the local purification condition following
+arXiv:1606.00608 §4.3 (Cirac–Pérez-García–Schuch–Verstraete), where the
+auxiliary purification space factors as a tensor product.
 
 Not every MPDO is an LPDO (De las Cuevas et al. 2016). -/
 def IsLPDO (M : MPOTensor d D) : Prop :=
-  ∃ (dK : ℕ) (A : Fin d → Fin dK → Matrix (Fin D) (Fin D) ℂ),
-    ∀ i j : Fin d, M i j = ∑ k : Fin dK, A i k * (A j k)ᴴ
+  ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
+    (e : Fin D ≃ Fin D' × Fin D'),
+    ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+      (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e
 
-/-- An LPDO tensor is automatically Hermitian. -/
-theorem IsLPDO.isHermitian {M : MPOTensor d D} (h : IsLPDO M) :
-    IsHermitian M := by
-  obtain ⟨dK, A, hA⟩ := h
-  intro i j
-  rw [hA i j, hA j i, Matrix.conjTranspose_sum]
-  exact Finset.sum_congr rfl fun k _ => by
-    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+/-- The list product of LPDO tensor entries decomposes via Kronecker products
+of the purifying tensor. This is the key technical lemma for `IsLPDO.isMPDO`:
+the product of Kronecker sums expands as a Kronecker sum of products, using
+the mixed-product property `(A ⊗ B)(C ⊗ D) = (AC) ⊗ (BD)`. -/
+private lemma lpdo_prod_decomp {dK D' : ℕ}
+    (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
+    (e : Fin D ≃ Fin D' × Fin D')
+    {M : MPOTensor d D}
+    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+      (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
+    {N : ℕ} (σ τ : Fin N → Fin d) :
+    (List.ofFn fun l => M (σ l) (τ l)).prod =
+      (∑ κ : Fin N → Fin dK,
+        (List.ofFn fun l => A (σ l) (κ l)).prod ⊗ₖ
+        ((List.ofFn fun l => A (τ l) (κ l)).prod).map
+          (starRingEnd ℂ)).submatrix ↑e ↑e := by
+  induction N with
+  | zero =>
+    simp only [List.ofFn_zero, List.prod_nil, Fintype.sum_unique]
+    have h1 : (1 : Matrix (Fin D') (Fin D') ℂ).map ⇑(starRingEnd ℂ) = 1 :=
+      (starRingEnd ℂ).mapMatrix.map_one
+    rw [h1, Matrix.kroneckerMap_one_one (· * ·) (fun _ => zero_mul _)
+      (fun _ => mul_zero _) (one_mul 1), Matrix.submatrix_one_equiv]
+  | succ n ih =>
+    simp only [List.ofFn_succ, List.prod_cons]
+    rw [hM (σ 0) (τ 0)]
+    have ih_step := ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
+    simp only [Function.comp_def] at ih_step
+    rw [ih_step, Matrix.submatrix_mul_equiv _ _ (↑e) e (↑e)]
+    -- Strip the submatrix to work at the (Fin D' × Fin D') level
+    congr 1
+    -- Expand LHS product of sums
+    rw [Finset.sum_mul]
+    simp_rw [Finset.mul_sum]
+    -- Apply mixed product property
+    simp_rw [← Matrix.mul_kronecker_mul]
+    -- Combine the conjugated matrices: map star (A) * map star (B) = map star (A * B)
+    have map_star_mul : ∀ (P Q : Matrix (Fin D') (Fin D') ℂ),
+        P.map ⇑(starRingEnd ℂ) * Q.map ⇑(starRingEnd ℂ) =
+        (P * Q).map ⇑(starRingEnd ℂ) :=
+      fun P Q => ((starRingEnd ℂ).mapMatrix.map_mul P Q).symm
+    simp_rw [map_star_mul]
+    -- Reindex RHS: ∑ κ : Fin(n+1) → Fin dK = ∑ k, ∑ κ'
+    have reindex : ∀ (F : (Fin (n + 1) → Fin dK) →
+        Matrix (Fin D' × Fin D') (Fin D' × Fin D') ℂ),
+      ∑ κ, F κ = ∑ k : Fin dK, ∑ κ' : Fin n → Fin dK,
+        F (Fin.cons k κ') := fun F => by
+          rw [← Fintype.sum_prod_type']
+          exact ((Fin.consEquiv (fun _ : Fin (n + 1) => Fin dK)).sum_comp F).symm
+    symm
+    rw [reindex]
+    simp only [Fin.cons_zero, Fin.cons_succ]
 
-/-- **TODO** (part 4/5): LPDO implies MPDO. -/
+/-- **LPDO implies MPDO**: every LPDO tensor generates positive semidefinite
+density operators for all system sizes.
+
+The proof uses the Kronecker product structure: the N-site density matrix
+decomposes as `ρ^{(N)} = ∑_κ |ψ_κ⟩⟨ψ_κ|` where each `ψ_κ` is an MPS
+vector built from the purifying tensor, giving a manifestly PSD sum of
+rank-1 positive semidefinite matrices.
+
+See arXiv:1606.00608, §4.3. -/
 theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
-  sorry
+  obtain ⟨dK, D', A, e, hM⟩ := h
+  intro N
+  -- Define the MPS coefficient vectors from the purifying tensor
+  set ψ : (Fin N → Fin dK) → (Fin N → Fin d) → ℂ :=
+    fun κ σ => Matrix.trace ((List.ofFn fun l => A (σ l) (κ l)).prod) with hψ
+  -- Show mpo M N = ∑ κ, |ψ_κ⟩⟨ψ_κ|, then conclude PSD
+  suffices hmpo : mpo M N = ∑ κ : Fin N → Fin dK,
+      Matrix.vecMulVec (ψ κ) (star (ψ κ)) by
+    rw [hmpo]
+    exact Matrix.posSemidef_sum _ fun κ _ => Matrix.posSemidef_vecMulVec_self_star _
+  -- Prove the matrix equality entry-by-entry
+  ext σ τ
+  simp only [mpo_apply, mpoMatrixEntry, hψ, evalWord_ofFn]
+  -- Apply the Kronecker product decomposition
+  rw [lpdo_prod_decomp A e hM σ τ]
+  -- trace of submatrix = trace (via equiv reindexing)
+  have trace_sub : ∀ (X : Matrix (Fin D' × Fin D') (Fin D' × Fin D') ℂ),
+      Matrix.trace (X.submatrix (↑e) (↑e)) = Matrix.trace X := by
+    intro X; simp only [Matrix.trace, Matrix.diag, Matrix.submatrix_apply]
+    exact e.sum_comp (fun p => X p p)
+  rw [trace_sub, Matrix.trace_sum]
+  simp_rw [Matrix.trace_kronecker]
+  -- trace of entrywise conjugate = conjugate of trace: trace(A.map star) = star(trace A)
+  simp_rw [← AddMonoidHom.map_trace (starRingEnd ℂ)]
+  -- Push σ τ application inside the sum on the RHS, expand vecMulVec
+  erw [Fintype.sum_apply σ, Fintype.sum_apply τ]; congr 1
 
 end MPOTensor

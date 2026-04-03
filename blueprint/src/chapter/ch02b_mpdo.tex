@@ -144,45 +144,46 @@ legs cyclically and taking the resulting trace.
     \lean{MPOTensor.IsLPDO}
     \leanok
     \uses{def:mpo_tensor}
-    An MPO tensor is an \emph{LPDO} if there exist an ancilla dimension $d_K$
-    and matrices $A^{(i,k)} \in \MN{D}$ such that
+    An MPO tensor is an \emph{LPDO} if there exist an ancilla dimension $d_K$,
+    an inner bond dimension $D'$, an identification of bond indices
+    $e : \Fin D \simeq \Fin {D'} \times \Fin {D'}$ (equivalently, $D$ and $(D')^2$
+    have the same cardinality), and matrices $A^{(i,k)} \in \MN{D'}$ such that
     \[
-        M^{ij} = \sum_{k=0}^{d_K-1} A^{(i,k)} (A^{(j,k)})^\dagger
-        \qquad \text{for all } i,j.
+        M^{ij}
+        = \Bigl(\sum_{k=0}^{d_K-1} A^{(i,k)} \otimes \overline{A^{(j,k)}}\Bigr)_{e,e}
+        \qquad \text{for all } i,j,
     \]
+    where $\otimes$ denotes the Kronecker product, $\overline{(\cdot)}$
+    denotes entrywise complex conjugation, and $(\cdot)_{e,e}$ denotes
+    reindexing along $e$ from $\Fin {D'} \times \Fin {D'}$ back to $\Fin D$.
     This is the local purification form of \cite[\S4.3]{Cirac2017MPDO_AnnPhys}.
-    Diagrammatically, the local LPDO structure is
-    \[
-        \TNLPDO{A}{A^\dagger}{k}{i}{j}
-    \]
-    where the upper node denotes $A^{(i,k)}$, the lower node denotes
-    $(A^{(j,k)})^\dagger$, the ancilla leg $k$ is contracted vertically,
-    and the left and right outer legs are the MPO virtual legs.
 \end{definition}
 
-\begin{theorem}[LPDOs are Hermitian]\label{thm:lpdo_hermitian}
-    \lean{MPOTensor.IsLPDO.isHermitian}
+\begin{theorem}[LPDOs are MPDOs]\label{thm:lpdo_is_mpdo}
+    \lean{MPOTensor.IsLPDO.isMPDO}
     \leanok
-    \uses{def:lpdo, def:mpo_hermitian}
-    Every LPDO tensor is Hermitian.
+    \uses{def:lpdo, def:mpdo}
+    Every LPDO tensor is an MPDO.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:lpdo}
-    Write
-    $M^{ij} = \sum_k A^{(i,k)} (A^{(j,k)})^\dagger$.
-    Then
-    \[
-        (M^{ji})^\dagger
-        = \sum_k \left(A^{(j,k)} (A^{(i,k)})^\dagger\right)^\dagger
-        = \sum_k A^{(i,k)} (A^{(j,k)})^\dagger
-        = M^{ij}.
-    \]
-\end{proof}
-
-\begin{theorem}[LPDOs are MPDOs]\label{thm:lpdo_is_mpdo}\notready
-    \lean{MPOTensor.IsLPDO.isMPDO}
     \uses{def:lpdo, def:mpdo}
-    Every LPDO tensor is an MPDO.
-\end{theorem}
+    By the mixed-product property
+    $(A \otimes B)(C \otimes D) = (AC) \otimes (BD)$, the $N$-site product
+    decomposes as
+    \[
+        M^{\sigma_1 \tau_1} \cdots M^{\sigma_N \tau_N}
+        = \sum_{\kappa} P_\kappa \otimes \overline{Q_\kappa},
+    \]
+    where $P_\kappa = A^{(\sigma_1,\kappa_1)} \cdots A^{(\sigma_N,\kappa_N)}$
+    and $Q_\kappa = A^{(\tau_1,\kappa_1)} \cdots A^{(\tau_N,\kappa_N)}$.
+    Taking the trace and using $\tr(X \otimes Y) = \tr(X)\tr(Y)$,
+    \[
+        \rho^{(N)}(M)_{\sigma,\tau}
+        = \sum_\kappa \tr(P_\kappa)\,\overline{\tr(Q_\kappa)}
+        = \sum_\kappa \psi_\kappa(\sigma)\,\overline{\psi_\kappa(\tau)},
+    \]
+    where $\psi_\kappa(\sigma) = \tr(P_\kappa)$.
+    Hence $\rho^{(N)}(M) = \sum_\kappa \ketbra{\psi_\kappa}{\psi_\kappa} \ge 0$.
+\end{proof}
