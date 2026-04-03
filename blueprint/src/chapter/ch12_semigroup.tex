@@ -196,6 +196,39 @@ and proves the GKSL theorem.
     $\sum_n a^n/n!$ and lifting via norm-bounded summability.
 \end{proof}
 
+\begin{theorem}[Factorial norm bound for Dyson iterates]
+    \label{thm:norm_dysonTerm_le_ch12}
+    \lean{norm_dysonTerm_le}\leanok
+    For $s \in [0,t]$ and $M = \sup_{u \in [0,t]} \|e^{uL}\|$,
+    \[
+      \|\widetilde{T}^{(n)}_s\|
+      \le M\,\frac{(s\,\|\Delta\|\,M)^n}{n!}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induction on $n$. The base case uses the semigroup supremum bound.
+    The inductive step bounds the integrand pointwise by
+    $M\|\Delta\| \cdot M(u\|\Delta\|M)^n/n!$ and integrates
+    $\int_0^s u^n\,du = s^{n+1}/(n+1)$, recovering the factorial.
+\end{proof}
+
+\begin{corollary}[Dyson series summability]
+    \label{cor:summable_dysonTerm_ch12}
+    \lean{summable_dysonTerm}\leanok
+    The Dyson--Phillips series $\sum_n \widetilde{T}^{(n)}_t$
+    converges in operator norm for every $t \ge 0$.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Compose the factorial norm bound
+    (Theorem~\ref{thm:norm_dysonTerm_le_ch12}) with the
+    Weierstrass M-test step
+    (Lemma~\ref{lem:summable_dyson_factorial_ch12}).
+\end{proof}
+
 %% ---------------------------------------------------------
 \section{GKSL/Lindblad generators}
 \label{sec:gksl_generators}
