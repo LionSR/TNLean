@@ -200,6 +200,7 @@ import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.RFP.StructuralForm
 import TNLean.MPS.RFP.Convergence
 import TNLean.MPS.RFP.Assembly
+import TNLean.MPS.RFP.Decorrelation
 
 -- Layer 6a: Quantum Wielandt backend / span-growth infrastructure
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
