@@ -58,12 +58,19 @@ finite-dimensional quantum systems.
 
 \begin{theorem}[Entropy upper bound]\label{thm:entropy_le_log_dim}
     \lean{vonNeumannEntropy_le_log_dim}
+    \leanok
     \uses{def:von_neumann_entropy}
     For a density matrix $\rho \in \MN{D}$ with $D \ge 1$,
     \[
         S(\rho) \le \log D.
     \]
 \end{theorem}
+
+\begin{proof}\leanok
+    By Jensen's inequality applied to the concave function $-x \log x$,
+    the entropy is maximized when all eigenvalues equal $1/D$.
+    \uses{lem:density_eigenvalues_sum, thm:density_eigenvalues_le_one}
+\end{proof}
 
 \section{Tripartite partial traces}
 
