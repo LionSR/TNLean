@@ -1016,6 +1016,23 @@ The following results separate the zero blocks from the
 	the MPV identity follows from trace cyclicity.
 \end{proof}
 
+\begin{corollary}[Compression preserves positive-length MPV coefficients]%
+	\label{cor:compressed_sector_pos_mpv}
+	\lean{MPSTensor.exists_compressedTensor_of_supported_projection_pos_mpv}\leanok
+	\uses{thm:compressed_sector}
+	Under the hypotheses of Theorem~\ref{thm:compressed_sector}, the
+	compressed tensor $C$ additionally satisfies
+	$V^{(N)}(C)_\sigma = V^{(N)}(A)_\sigma$ for all positive chain
+	lengths $N > 0$.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:compressed_sector}
+    For $N > 0$ the word $A^{i_1} \cdots A^{i_N}$ is nonempty, so $P$
+    acts as the identity on the left by idempotence and the support
+    hypothesis.  The MPV identity then follows from trace cyclicity
+    via Theorem~\ref{thm:compressed_sector}.
+\end{proof}
+
 \begin{theorem}[Block decomposition from commuting projections]%
 	\label{thm:blockdecomp_commuting_projs}
 	\lean{MPSTensor.exists_blockDecomp_of_commuting_projections}
