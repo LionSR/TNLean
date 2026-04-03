@@ -51,7 +51,7 @@ MPV-level hypothesis `hFullTensor` alone cannot force non-decaying cross-overlap
 
 To obtain GPE for equal-norm blocks, one must derive the non-decay property from
 structural properties of the decomposition (cyclic-sector origin, Fundamental
-Theorem matching, etc.) and pass it as the `hNonDecay` hypothesis.
+Theorem matching, etc.).
 
 ## Main results
 
@@ -59,7 +59,7 @@ Theorem matching, etc.) and pass it as the `hNonDecay` hypothesis.
   TP + irreducible blocks implies equal bond dimensions and gauge-phase equivalence.
   Uses the spectral dichotomy from `SpectralGap.lean`.  **Fully proved.**
 
-* `gaugePhaseEquiv_of_equal_norm_blocks` — Two distinct TP + irreducible blocks with a
+* `gaugePhaseEquiv_of_equal_norm_blocks` — Two TP + irreducible blocks with a
   non-decaying cross-overlap are gauge-phase equivalent.  **Fully proved.**
   The non-decay hypothesis is an additional assumption.
 
@@ -134,12 +134,13 @@ theorem gaugePhaseEquiv_of_nonDecaying_overlap
 
 /-- **Blocks with non-decaying cross-overlaps are gauge-phase equivalent.**
 
-Given a family of TP + irreducible blocks, if two distinct blocks `j` and `k`
+Given a family of TP + irreducible blocks, if two blocks `j` and `k`
 have a cross-overlap that does not decay to zero, they must have equal bond
 dimensions and be gauge-phase equivalent.
 
-The `hNonDecay` hypothesis is an additional assumption that must be derived from
-structural properties of the decomposition.  Typical sources:
+The non-decay hypothesis is not automatic from the block properties alone —
+it requires structural knowledge about where the blocks came from.
+Typical sources:
 
 * **Cyclic-sector origin**: blocks from the cyclic-sector decomposition of a single
   irreducible block are rotated copies of each other and have non-decaying
@@ -159,11 +160,10 @@ theorem gaugePhaseEquiv_of_equal_norm_blocks
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
     (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (j k : Fin r) (hjk : j ≠ k)
-    -- The caller must prove that blocks j and k have a non-decaying cross-overlap.
-    -- This is NOT automatic from the block properties alone — it requires structural
-    -- knowledge about where the blocks came from (cyclic-sector decomposition,
-    -- Fundamental Theorem matching, etc.).
+    (j k : Fin r)
+    -- The non-decay hypothesis is not automatic from the block properties alone —
+    -- it requires structural knowledge about where the blocks came from
+    -- (cyclic-sector decomposition, Fundamental Theorem matching, etc.).
     (hNonDecay :
       ¬ Tendsto (fun N => mpvOverlap (d := d) (blocks j) (blocks k) N) atTop (nhds 0)) :
     ∃ hdim : dim j = dim k,
@@ -275,7 +275,7 @@ theorem exists_bnt_grouping_of_gaugePhaseEquiv
       classes.enum_norm i ⟨0, classes.copies_pos i⟩]
     exact classes.vals_strictAnti hij
 
-/-! ### §3. Pipeline connection -/
+/-! ### §3. Construction of sector decomposition -/
 
 /-- **From TP + primitive + irreducible blocks to BNT-grouped
 `SectorDecomposition`.**
@@ -300,7 +300,7 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
     (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
     (hμne : ∀ k, μ k ≠ 0)
-    -- The caller must prove that equal-norm blocks have non-decaying cross-overlaps.
+    -- The non-decay hypothesis is not automatic from the block properties alone.
     (hNonDecay : ∀ j k : Fin r, j ≠ k → ‖μ j‖ = ‖μ k‖ →
       ¬ Tendsto (fun N => mpvOverlap (d := d) (blocks j) (blocks k) N) atTop (nhds 0)) :
     ∃ P : SectorDecomposition d,
@@ -313,7 +313,7 @@ theorem exists_sectorDecomp_of_tp_primitive_irr_blocks
         GaugePhaseEquiv (d := d)
           (cast (congr_arg (MPSTensor d) hdim) (blocks j)) (blocks k) := by
     intro j k hjk hNorm
-    exact gaugePhaseEquiv_of_equal_norm_blocks blocks hTP hIrr j k hjk
+    exact gaugePhaseEquiv_of_equal_norm_blocks blocks hTP hIrr j k
       (hNonDecay j k hjk hNorm)
   -- Step 2: Derive GPE data with unit-norm phase for the grouping theorem.
   have hGPEζ : ∀ j k : Fin r, ‖μ j‖ = ‖μ k‖ →
