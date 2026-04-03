@@ -35,7 +35,6 @@ import TNLean.Algebra.CocycleCohomology
 
 -- Layer 0b: General analysis
 import TNLean.Analysis.ConvergenceHelpers
-import TNLean.Analysis.Entropy
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
