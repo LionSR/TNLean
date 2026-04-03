@@ -309,13 +309,13 @@ theorem IsDecorrelated.mono_obsB {P_K : E →ₗ[ℂ] E}
 theorem IsDecorrelated.empty_obsA {P_K : E →ₗ[ℂ] E}
     (ObsB : Set (E →ₗ[ℂ] E)) :
     IsDecorrelated P_K ∅ ObsB := by
-  intro _ hOA; simp at hOA
+  intro _ hOA; exact hOA.elim
 
 /-- Decorrelation holds trivially when the B-observable set is empty. -/
 theorem IsDecorrelated.empty_obsB {P_K : E →ₗ[ℂ] E}
     (ObsA : Set (E →ₗ[ℂ] E)) :
     IsDecorrelated P_K ObsA ∅ := by
-  intro _ _ _ hOB; simp at hOB
+  intro _ _ _ hOB; exact hOB.elim
 
 /-- Decorrelation holds trivially when `P_K = 0`. -/
 theorem IsDecorrelated.of_pK_zero

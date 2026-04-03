@@ -587,6 +587,69 @@ Appendix~D, \S D.2 of~\cite{Cirac2021Matrix}.
   Theorem~\ref{thm:commuting_ham_is_decorrelated}.
 \end{theorem}
 
+\begin{lemma}[Frustration-free identity]\label{lem:frustration_free_ham_eq}
+  \lean{LinearMap.frustrationFree_ham_eq}
+  \leanok
+  For any endomorphisms $P$ and $Q$,
+  \[
+    (1-P) + (1-Q) - (1-P)\circ(1-Q) = 1 - P\circ Q.
+  \]
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Expanding the left-hand side and cancelling gives the result.
+\end{proof}
+
+\begin{theorem}[Commuting parent Hamiltonian identity]%
+  \label{thm:hamiltonian_eq}
+  \lean{Decorrelation.HasCommutingParentHam.hamiltonian_eq}
+  \leanok
+  \uses{def:has_commuting_parent_ham, lem:frustration_free_ham_eq}
+  If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+  decomposition, then
+  \[
+    Q_{AX} + Q_{XB} - Q_{AX} \circ Q_{XB} = 1 - P_K,
+  \]
+  where $Q_{AX} = 1 - P_{AX}$ and $Q_{XB} = 1 - P_{XB}$ are the
+  complementary projectors.
+  This is the frustration-free form of the parent Hamiltonian from
+  \cite{Cirac2021Matrix}, Appendix~D, \S D.2.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  \uses{lem:frustration_free_ham_eq}
+  Applying Lemma~\ref{lem:frustration_free_ham_eq} to $P_{AX}$ and
+  $P_{XB}$, and substituting $P_{AX} \circ P_{XB} = P_K$.
+\end{proof}
+
+\begin{theorem}[Ground-space membership]\label{thm:mem_ground_iff}
+  \lean{Decorrelation.HasCommutingParentHam.mem_ground_iff}
+  \leanok
+  \uses{def:has_commuting_parent_ham}
+  If $P_K = P_{AX} \circ P_{XB}$ is a commuting parent Hamiltonian
+  decomposition, then
+  \[
+    P_K v = v
+    \quad\Longleftrightarrow\quad
+    P_{AX} v = v \;\text{ and }\; P_{XB} v = v.
+  \]
+  This is the algebraic form of equation~(D.2) from
+  \cite{Cirac2021Matrix}:
+  $K_{AXB} = (K_{AX} \otimes H_B) \cap (H_A \otimes K_{XB})$.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  \uses{def:has_commuting_parent_ham}
+  ($\Rightarrow$) If $P_K v = v$, then $P_{AX}(P_K v) = (P_{AX} \circ P_K) v
+  = P_K v = v$ by left absorption, and similarly for $P_{XB}$.
+
+  ($\Leftarrow$) If $P_{AX} v = v$ and $P_{XB} v = v$, then
+  $P_K v = (P_{AX} \circ P_{XB}) v = P_{AX}(P_{XB} v) = P_{AX} v = v$.
+\end{proof}
+
 \section{Spectral gap}\label{sec:spectral_gap}
 
 A frustration-free Hamiltonian is \emph{gapped} if the first excited
