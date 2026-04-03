@@ -34,7 +34,7 @@ All results are fully proved (no `sorry`).
 * `comm_idem_cross_absorb_right` — `Q ∘ (P ∘ Q) = P ∘ Q` when `[P, Q] = 0`
 * `complement_comm_of_comm` — `[P, Q] = 0 → [1 − P, 1 − Q] = 0`
 * `comm_of_complement_comm` — `[1 − P, 1 − Q] = 0 → [P, Q] = 0`
-* `frustrationFree_ham_eq` — `(1−P) + (1−Q) − (1−P)∘(1−Q) = 1 − P∘Q`
+* `frustration_free_ham_eq` — `(1−P) + (1−Q) − (1−P)∘(1−Q) = 1 − P∘Q`
 
 ### `Decorrelation.HasCommutingParentHam` API
 
@@ -138,7 +138,7 @@ needed): `(1 − P) + (1 − Q) − (1 − P) ∘ (1 − Q) = 1 − P ∘ Q`.
 For commuting parent Hamiltonians, this shows that the "Hamiltonian"
 `Q_AX + Q_XB − Q_AX ∘ Q_XB` (with `Q = 1 − P`) equals `1 − P_K`.
 See arXiv:1606.00608, Appendix D, §D.2. -/
-theorem frustrationFree_ham_eq
+theorem frustration_free_ham_eq
     {P Q : E →ₗ[ℂ] E} :
     (id - P) + (id - Q) - (id - P) ∘ₗ (id - Q) = id - P ∘ₗ Q := by
   simp only [comp_sub, sub_comp, comp_id, id_comp]
@@ -235,7 +235,7 @@ theorem HasCommutingParentHam.hamiltonian_eq {P_K : E →ₗ[ℂ] E}
   have : (LinearMap.id - h.P_AX) + (LinearMap.id - h.P_XB) -
       (LinearMap.id - h.P_AX) ∘ₗ (LinearMap.id - h.P_XB) =
       LinearMap.id - h.P_AX ∘ₗ h.P_XB :=
-    LinearMap.frustrationFree_ham_eq
+    LinearMap.frustration_free_ham_eq
   rwa [h.hK] at this
 
 /-- Ground-space membership: `P_K v = v` iff both `P_AX v = v` and
