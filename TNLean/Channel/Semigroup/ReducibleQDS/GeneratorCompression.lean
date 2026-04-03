@@ -23,11 +23,62 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+/-! ## Projection complement lemmas -/
+
+/-- `(1 - P) * P = 0` for an orthogonal projection `P`. -/
+theorem orthogonalProjection_complement_mul
+    {P : Mat} (hP : IsOrthogonalProjection P) :
+    (1 - P) * P = 0 := by
+  rw [sub_mul, one_mul, hP.2, sub_self]
+
+/-- `P * (1 - P) = 0` for an orthogonal projection `P`. -/
+theorem orthogonalProjection_mul_complement
+    {P : Mat} (hP : IsOrthogonalProjection P) :
+    P * (1 - P) = 0 := by
+  rw [mul_sub, mul_one, hP.2, sub_self]
+
 /-! ## (3) → (4): Invariant compression → block-upper-triangular Lindblad
 
 The key algebraic step: if `T_t` preserves the compressed algebra `P M_d P`,
 then the Lindblad operators and κ must be block-upper-triangular.
 -/
+
+/-- If the generator preserves the compression and all Lindblad operators
+satisfy `(1-P)*Lⱼ*P = 0`, then the effective Hamiltonian `κ` also satisfies
+`(1-P)*κ*P = 0`. This is a shared step used in both Wolf Prop 7.6 and
+Cor 7.2(1). -/
+theorem kappa_block_of_generatorPreservesCompression
+    {P : Mat} (hP : IsOrthogonalProjection P) (F : LindbladForm D)
+    (hgen : GeneratorPreservesCompression F.toLinearMap P)
+    (hblock : ∀ j : Fin F.r, (1 - P) * F.L j * P = 0) :
+    (1 - P) * F.toGeneratorDecomp.κ * P = 0 := by
+  have hQP := orthogonalProjection_complement_mul hP
+  have hLP_compress : P * F.toLinearMap P * P = F.toLinearMap P := by
+    have h1 := hgen 1; simp only [mul_one] at h1; rwa [hP.2] at h1
+  have hQ_LP : (1 - P) * F.toLinearMap P = 0 := by
+    calc (1 - P) * F.toLinearMap P = (1 - P) * (P * F.toLinearMap P * P) := by
+          rw [hLP_compress]
+      _ = ((1 - P) * P) * (F.toLinearMap P * P) := by simp only [Matrix.mul_assoc]
+      _ = 0 := by rw [hQP, Matrix.zero_mul]
+  set κ : Mat := F.toGeneratorDecomp.κ
+  have hQ_phi_eq_Q_kappa :
+      (1 - P) * (∑ j : Fin F.r, F.L j * P * (F.L j)ᴴ) = (1 - P) * (κ * P) := by
+    rw [F.toLinearMap_eq_generatorDecomp] at hQ_LP
+    simp only [GeneratorDecomp.toLinearMap_apply] at hQ_LP
+    rw [Matrix.mul_sub, Matrix.mul_sub] at hQ_LP
+    have hQPκ : (1 - P) * (P * F.toGeneratorDecomp.κᴴ) = 0 := by
+      rw [← Matrix.mul_assoc, hQP, Matrix.zero_mul]
+    rw [hQPκ, sub_zero] at hQ_LP
+    change (1 - P) * (∑ j : Fin F.r, F.L j * P * (F.L j)ᴴ) = (1 - P) * (κ * P)
+    exact sub_eq_zero.mp hQ_LP
+  have : (1 - P) * (κ * P) = 0 := by
+    rw [← hQ_phi_eq_Q_kappa, mul_sum]
+    apply Finset.sum_eq_zero; intro j _
+    simp only [Matrix.mul_assoc]
+    rw [show (1 - P) * (F.L j * (P * (F.L j)ᴴ)) =
+        ((1 - P) * F.L j * P) * (F.L j)ᴴ from by simp [Matrix.mul_assoc]]
+    rw [hblock j, Matrix.zero_mul]
+  simpa [κ, Matrix.mul_assoc] using this
 
 /-- If the semigroup preserves the compression, then the generator does too.
 This follows from differentiating `(1-P) T_t(PXP) = 0` at `t = 0`. -/
@@ -93,8 +144,8 @@ theorem hasBlockUpperTriangularLindblad_of_hasInvariantCompression
   have hP := hP_nt.1
   have hPP : P * P = P := hP.2
   have hP_herm : Pᴴ = P := hP.1
-  have hQP : (1 - P) * P = 0 := by rw [sub_mul, one_mul, hPP, sub_self]
-  have hPQ : P * (1 - P) = 0 := by rw [mul_sub, mul_one, hPP, sub_self]
+  have hQP := orthogonalProjection_complement_mul hP
+  have hPQ := orthogonalProjection_mul_complement hP
   have hgen : GeneratorPreservesCompression L P :=
     generatorPreservesCompression_of_semigroupPreservesCompression hP hT
   -- P * L(P) * P = L(P) from hgen with X = 1
@@ -148,17 +199,9 @@ theorem hasBlockUpperTriangularLindblad_of_hasInvariantCompression
   have hL_block : ∀ j : Fin F.r, (1 - P) * F.L j * P = 0 :=
     eq_zero_of_sum_mul_conjTranspose_eq_zero _ hsum_zero
   -- (1-P)*κ*P = 0
-  have hκ_block : (1 - P) * κ * P = 0 := by
-    have : (1 - P) * (κ * P) = 0 := by
-      rw [← hQ_phi_eq_Q_kappa, mul_sum]
-      apply Finset.sum_eq_zero; intro j _
-      simp only [Matrix.mul_assoc]
-      rw [show (1 - P) * (F.L j * (P * (F.L j)ᴴ)) =
-          ((1 - P) * F.L j * P) * (F.L j)ᴴ from by simp [Matrix.mul_assoc]]
-      rw [hL_block j, Matrix.zero_mul]
-    rwa [← Matrix.mul_assoc] at this
-  refine ⟨P, F, hP_nt, hL_eq, hL_block, ?_⟩
-  exact hκ_block
+  have hκ_block : (1 - P) * κ * P = 0 :=
+    kappa_block_of_generatorPreservesCompression hP F (hL_eq ▸ hgen) hL_block
+  exact ⟨P, F, hP_nt, hL_eq, hL_block, hκ_block⟩
 
 /-! ## (4) → (3): Block-upper-triangular → invariant compression -/
 
@@ -174,8 +217,8 @@ theorem generator_preserves_compression_of_blockUpperTriangular
   set κ : Mat := Complex.I • F.H + (1/2 : ℂ) • ∑ j : Fin F.r, (F.L j)ᴴ * F.L j
   have hPP : P * P = P := hP.2
   have hP_herm : Pᴴ = P := hP.1
-  have hQP : (1 - P) * P = 0 := by rw [sub_mul, one_mul, hPP, sub_self]
-  have hPQ : P * (1 - P) = 0 := by rw [mul_sub, mul_one, hPP, sub_self]
+  have hQP := orthogonalProjection_complement_mul hP
+  have hPQ := orthogonalProjection_mul_complement hP
   have hL_block_ct : ∀ j : Fin F.r, P * (F.L j)ᴴ * (1 - P) = 0 := by
     intro j
     have h := congrArg Matrix.conjTranspose (hL_block j)

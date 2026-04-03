@@ -62,7 +62,8 @@ private theorem lindblad_block_of_generatorPreservesCompression
     ∀ j : Fin F.r, (1 - P) * F.L j * P = 0 := by
   have hPP : P * P = P := hP.2
   have hP_herm : Pᴴ = P := hP.1
-  have hQP : (1 - P) * P = 0 := by rw [sub_mul, one_mul, hPP, sub_self]
+  have hQP := orthogonalProjection_complement_mul hP
+  have hPQ := orthogonalProjection_mul_complement hP
   have hLP_compress : P * F.toLinearMap P * P = F.toLinearMap P := by
     have h1 := hgen 1
     simp only [mul_one] at h1
@@ -87,13 +88,11 @@ private theorem lindblad_block_of_generatorPreservesCompression
     exact sub_eq_zero.mp hQ_LP
   have hsum_zero :
       ∑ j : Fin F.r, ((1 - P) * F.L j * P) * ((1 - P) * F.L j * P)ᴴ = 0 := by
-    have hPP' : P * (1 - P) = 0 := by
-      rw [mul_sub, mul_one, hPP, sub_self]
     suffices hLHS :
         ∑ j : Fin F.r, ((1 - P) * F.L j * P) * ((1 - P) * F.L j * P)ᴴ =
         (1 - P) * (∑ j : Fin F.r, F.L j * P * (F.L j)ᴴ) * (1 - P) by
       rw [hLHS, hQ_phi_eq_Q_kappa]
-      simp [Matrix.mul_assoc, hPP']
+      simp [Matrix.mul_assoc, hPQ]
     rw [mul_sum, Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro j _
@@ -154,9 +153,7 @@ private theorem lower_left_block_vanishes_on_adjoin
     {P : Mat} (hP : IsOrthogonalProjection P) (S : Set Mat)
     (hS : ∀ A : Mat, A ∈ S → (1 - P) * A * P = 0) :
     ∀ A : Mat, A ∈ Algebra.adjoin ℂ S → (1 - P) * A * P = 0 := by
-  have hPP : P * P = P := hP.2
-  have hQP : (1 - P) * P = 0 := by
-    rw [sub_mul, one_mul, hPP, sub_self]
+  have hQP := orthogonalProjection_complement_mul hP
   have hblock_mul :
       ∀ A B : Mat,
         (1 - P) * A * P = 0 →
@@ -185,8 +182,8 @@ private theorem lower_left_block_vanishes_on_adjoin
         (1 - P) * algebraMap ℂ Mat c * P = (1 - P) * (c • (1 : Mat)) * P := by
           rw [Algebra.algebraMap_eq_smul_one]
         _ = c • ((1 - P) * (1 : Mat) * P) := by
-          simp [Matrix.mul_assoc]
-        _ = 0 := by simp [Matrix.mul_assoc, hQP]
+          simp
+        _ = 0 := by simp [hQP]
   | add A B _ _ hA hB =>
       rw [Matrix.mul_add, Matrix.add_mul, hA, hB]
       simp
@@ -210,42 +207,8 @@ theorem full_algebra_generation_implies_no_blockUpperTriangular
     generatorPreservesCompression_of_semigroupPreservesCompression hP_nt.1 hT
   have hblock : ∀ j : Fin F.r, (1 - P) * F.L j * P = 0 :=
     lindblad_block_of_generatorPreservesCompression hP_nt.1 F hgen
-  have hκ_block : (1 - P) * F.toGeneratorDecomp.κ * P = 0 := by
-    have hPP : P * P = P := hP_nt.1.2
-    have hLP_compress : P * F.toLinearMap P * P = F.toLinearMap P := by
-      have h1 := hgen 1
-      simp only [mul_one] at h1
-      rwa [hPP] at h1
-    have hQ_LP : (1 - P) * F.toLinearMap P = 0 := by
-      calc
-        (1 - P) * F.toLinearMap P = (1 - P) * (P * F.toLinearMap P * P) := by
-          rw [hLP_compress]
-        _ = ((1 - P) * P) * (F.toLinearMap P * P) := by
-          simp [Matrix.mul_assoc]
-        _ = 0 := by
-          have hQP : (1 - P) * P = 0 := by rw [sub_mul, one_mul, hPP, sub_self]
-          rw [hQP, Matrix.zero_mul]
-    set κ : Mat := F.toGeneratorDecomp.κ
-    have hQ_phi_eq_Q_kappa :
-        (1 - P) * (∑ j : Fin F.r, F.L j * P * (F.L j)ᴴ) = (1 - P) * (κ * P) := by
-      rw [F.toLinearMap_eq_generatorDecomp] at hQ_LP
-      simp only [GeneratorDecomp.toLinearMap_apply] at hQ_LP
-      rw [Matrix.mul_sub, Matrix.mul_sub] at hQ_LP
-      have hQPκ : (1 - P) * (P * F.toGeneratorDecomp.κᴴ) = 0 := by
-        have hQP : (1 - P) * P = 0 := by rw [sub_mul, one_mul, hPP, sub_self]
-        rw [← Matrix.mul_assoc, hQP, Matrix.zero_mul]
-      rw [hQPκ, sub_zero] at hQ_LP
-      change (1 - P) * (∑ j : Fin F.r, F.L j * P * (F.L j)ᴴ) = (1 - P) * (κ * P)
-      exact sub_eq_zero.mp hQ_LP
-    have : (1 - P) * (κ * P) = 0 := by
-      rw [← hQ_phi_eq_Q_kappa, mul_sum]
-      apply Finset.sum_eq_zero
-      intro j _
-      simp only [Matrix.mul_assoc]
-      rw [show (1 - P) * (F.L j * (P * (F.L j)ᴴ)) =
-          ((1 - P) * F.L j * P) * (F.L j)ᴴ by simp [Matrix.mul_assoc]]
-      rw [hblock j, Matrix.zero_mul]
-    simpa [κ, Matrix.mul_assoc] using this
+  have hκ_block : (1 - P) * F.toGeneratorDecomp.κ * P = 0 :=
+    kappa_block_of_generatorPreservesCompression hP_nt.1 F hgen hblock
   have hblock_adjoin :
       ∀ A : Mat, A ∈ Algebra.adjoin ℂ
         (Set.range F.L ∪ ({F.toGeneratorDecomp.κ} : Set Mat)) →
