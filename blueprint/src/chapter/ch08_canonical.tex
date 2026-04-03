@@ -1105,6 +1105,80 @@ The following results separate the zero blocks from the
 	Feed into Theorem~\ref{thm:blockdecomp_adjoint_fixed}.
 \end{proof}
 
+\subsection{Sector irreducibility helpers}%
+\label{sec:sector_irreducibility_helpers}
+
+\begin{lemma}[Pairwise orthogonality from projection sum]%
+	\label{lem:pairwise_ortho_proj_sum}
+	\lean{pairwise_mul_zero_of_orthogonalProjection_sum_one}
+	\leanok
+	Let $(P_k)_{k=1}^m$ be orthogonal projections summing to the identity:
+	$\sum_k P_k = \Id$.
+	Then for $i \neq j$ we have $P_i P_j = 0$.
+\end{lemma}
+
+\begin{proof}\leanok
+	Sandwich the sum between $P_i$ to get
+	$\sum_k P_i P_k P_i = P_i$.
+	Since the $i$-th summand equals $P_i$ by idempotence,
+	all other summands vanish.
+	Positivity ($B B^* = 0 \Rightarrow B = 0$) then gives
+	$P_i P_k = 0$ for each $k \neq i$.
+\end{proof}
+
+\begin{lemma}[Corner preservation from adjoint-fixed projection]%
+	\label{lem:corner_preserv_adjoint_fixed}
+	\lean{preservesCorner_of_adjoint_fixed_projection}
+	\leanok
+	\uses{thm:kraus_commute}
+	Let $A$ be a left-canonical MPS tensor and let $P$ be an orthogonal
+	projection fixed by $\E_A^\dagger$.
+	Then $\E_A^\dagger$ preserves the corner algebra
+	$P \cdot M_D(\mathbb{C}) \cdot P$.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{thm:kraus_commute}
+	The fixed-point condition and the Kadison--Schwarz equality
+	imply $[P, A_i] = 0$ for every Kraus operator.
+	Thread the idempotent relation $P^2 = P$ through the corner sandwich.
+\end{proof}
+
+\begin{lemma}[Orbit-sum fixed point]%
+	\label{lem:orbit_sum_fixed}
+	\lean{MPSTensor.orbitSumProjection_fixed_of_pow_fix}
+	\leanok
+	Let $T$ be a linear endomorphism and $Q$ a matrix satisfying $T^m(Q) = Q$.
+	Then the orbit sum $\sum_{l=0}^{m-1} T^l(Q)$ is a fixed point of $T$.
+\end{lemma}
+
+\begin{proof}\leanok
+	Telescoping: $T$ shifts each summand $T^l(Q) \mapsto T^{l+1}(Q)$
+	and the periodicity condition $T^m(Q) = Q$ wraps the last term
+	$T^{m-1}(Q) \mapsto T^m(Q) = Q$ back to the first.
+\end{proof}
+
+\begin{theorem}[Sector irreducibility from orbit-sum lift]%
+	\label{thm:sector_irred_orbit_lift}
+	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift}
+	\leanok
+	\uses{thm:cyclic_sector_decomp_irr_tp}
+	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
+	map, and let $(P_k)_{k=1}^m$ be the cyclic sector projections.
+	Suppose the orbit-sum lift hypothesis holds: for every sector $k$ and
+	every subprojection $Q \le P_k$ fixed by $(\E_A^\dagger)^m$, there exists
+	a global projection $R$ that is invariant under $\E_A^\dagger$ and
+	faithfully reflects triviality ($Q = 0 \Leftrightarrow R = 0$,
+	$Q = P_k \Leftrightarrow R = \Id$).
+	Then $(\E_A^\dagger)^m$ is irreducible on each corner $P_k$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:cyclic_sector_decomp_irr_tp}
+	Direct application of the cyclic-decomposition irreducibility
+	theorem from spectral theory.
+\end{proof}
+
 \section{Reduction to primitive blocks}%
 \label{sec:assembly_pipeline}
 
