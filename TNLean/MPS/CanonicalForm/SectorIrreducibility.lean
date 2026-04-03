@@ -28,13 +28,7 @@ irreducibility.
   hypothesis required by
   `Channel.Peripheral.CyclicDecomposition.isIrreducible_restriction_of_cyclic_decomp`.
 
-What still remains for the full orbit-sum lift is the genuinely missing part:
-showing that, for a cyclic sector subprojection `Q`, the orbit iterates
-`T^[l](Q)` stay orthogonal projections in the shifted sectors. Once those
-sublemmas are available, the wrapper theorem here immediately yields sector
-irreducibility for the MPS adjoint transfer map.
-
-Concretely, the missing MPS/channel lemmas are the following three pieces:
+The orbit-sum lift sublemmas completing the `hLift` construction are:
 
 * `orbit_iterate_supported_on_shifted_sector`:
   `T^[l](Q)` lies in the expected cyclic sector;
@@ -42,6 +36,9 @@ Concretely, the missing MPS/channel lemmas are the following three pieces:
   `T^[l](Q)` is again an orthogonal projection;
 * `orbitSumProjection_eq_one_of_full_sector`:
   for `Q = P_k`, the orbit sum is the full identity.
+
+Together with the orbit-sum fixed-point calculation and the MPS wrapper,
+these yield sector irreducibility for the MPS adjoint transfer map.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
