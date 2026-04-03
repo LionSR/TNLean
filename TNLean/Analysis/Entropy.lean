@@ -9,7 +9,7 @@ import TNLean.Channel.Basic
 import TNLean.Channel.PartialTrace
 
 /-!
-# Von Neumann entropy, strong subadditivity, and mutual information
+# Von Neumann entropy, partial traces, and mutual information
 
 This file defines the von Neumann entropy for density matrices and develops
 the basic quantum entropy infrastructure needed for MPDO / RFP applications.
@@ -17,21 +17,26 @@ the basic quantum entropy infrastructure needed for MPDO / RFP applications.
 ## Main definitions
 
 * `vonNeumannEntropy`: `S(ρ) = ∑ᵢ negMulLog(λᵢ)` where `λᵢ` are eigenvalues
+* `traceA_ABC`, `traceC_ABC`, `traceAC_ABC`: tripartite partial traces
 * `mutualInformation`: `I(A:B) = S(ρ_A) + S(ρ_B) - S(ρ_AB)`
+* `IsSSAEquality`: predicate for equality in strong subadditivity
 
 ## Main results
 
 * `vonNeumannEntropy_nonneg`: `S(ρ) ≥ 0` for density matrices
-* `vonNeumannEntropy_le_log_dim`: `S(ρ) ≤ log D` for `D × D` density matrices
-* `strong_subadditivity`: `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)` (axiom)
-* `subadditivity`: `S(ρ_AB) ≤ S(ρ_A) + S(ρ_B)` (axiom)
-* `mutualInformation_nonneg`: `I(A:B) ≥ 0`
+* `mutualInformation_nonneg`: `I(A:B) ≥ 0` (requires `TNLean.Axioms.Entropy`)
+
+## Status
+
+The following results are **not proved** in this module:
+* `vonNeumannEntropy_le_log_dim` — `sorry` placeholder (Jensen's inequality
+  via `ConcaveOn.le_map_sum` applied to `concaveOn_negMulLog`).
+
+The axiomatized strong subadditivity and derived subadditivity live in
+`TNLean.Axioms.Entropy`, which is **not** re-exported from `TNLean.lean`.
+See issue #239 for the deferred proof plan.
 
 ## Implementation notes
-
-Strong subadditivity (SSA) and subadditivity are axiomatized following Option B
-from issue #239. The full proof from Klein's inequality and Lieb concavity is
-deferred; the axioms are marked with TODOs for future replacement.
 
 The entropy definition uses the eigenvalue-based formula via
 `Matrix.IsHermitian.eigenvalues` and Mathlib's `Real.negMulLog`. The index
@@ -80,7 +85,7 @@ section VonNeumannEntropyFinD
 variable {D : ℕ}
 
 /-- The eigenvalues of a density matrix sum to 1 (real version). -/
-theorem densityMatrix_eigenvalues_sum_one [DecidableEq (Fin D)]
+theorem densityMatrix_eigenvalues_sum_one
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D) :
     ∑ i : Fin D, hρ.1.isHermitian.eigenvalues i = 1 := by
   have h := hρ.1.isHermitian.trace_eq_sum_eigenvalues
@@ -90,7 +95,7 @@ theorem densityMatrix_eigenvalues_sum_one [DecidableEq (Fin D)]
   exact_mod_cast key
 
 /-- The eigenvalues of a density matrix lie in `[0, 1]`. -/
-theorem densityMatrix_eigenvalues_le_one [DecidableEq (Fin D)]
+theorem densityMatrix_eigenvalues_le_one
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D)
     (i : Fin D) : hρ.1.isHermitian.eigenvalues i ≤ 1 := by
   have h_nonneg := hρ.1.eigenvalues_nonneg
@@ -102,7 +107,7 @@ theorem densityMatrix_eigenvalues_le_one [DecidableEq (Fin D)]
 
 Each eigenvalue `λᵢ` of a density matrix satisfies `0 ≤ λᵢ ≤ 1`, and
 `negMulLog` is nonneg on `[0, 1]`. -/
-theorem vonNeumannEntropy_nonneg [DecidableEq (Fin D)]
+theorem vonNeumannEntropy_nonneg
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D) :
     0 ≤ vonNeumannEntropy ρ hρ.1.isHermitian := by
   apply Finset.sum_nonneg
@@ -117,7 +122,7 @@ is maximized when all eigenvalues are equal to `1/D` (maximally mixed state),
 giving `S(ρ) ≤ D · negMulLog(1/D) = log D`.
 
 TODO: Prove via `ConcaveOn.le_map_sum` applied to `concaveOn_negMulLog`. -/
-theorem vonNeumannEntropy_le_log_dim [DecidableEq (Fin D)]
+theorem vonNeumannEntropy_le_log_dim
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D)
     (hD : 0 < D) :
     vonNeumannEntropy ρ hρ.1.isHermitian ≤ Real.log D := by
@@ -164,86 +169,11 @@ noncomputable def traceAC_ABC
 
 end TripartiteTrace
 
-/-! ## Strong subadditivity (axiom)
-
-Strong subadditivity is axiomatized as described in issue #239 (Option B).
-The full proof via Klein's inequality and joint convexity of relative entropy
-is deferred.
-
-TODO: Replace this axiom with a proof from Klein's inequality and
-Lieb concavity (Lieb–Ruskai 1973). This requires:
-1. Quantum relative entropy `D(ρ‖σ) = tr(ρ(log ρ - log σ))`
-2. Klein's inequality: `D(ρ‖σ) ≥ 0`
-3. Joint convexity of relative entropy
-4. Monotonicity of relative entropy under partial trace -/
-
-section StrongSubadditivity
-
-variable {dA dB dC : ℕ}
-
-/-- **Strong subadditivity** (Lieb–Ruskai 1973).
-
-For a tripartite density matrix `ρ_ABC` on `A ⊗ B ⊗ C`:
-  `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`
-
-This is axiomatized; see the module docstring for the deferred proof plan.
-
-References:
-* Lieb, Ruskai, JMP 14, 1938 (1973) -/
-axiom strong_subadditivity
-    [DecidableEq (Fin dA × Fin dB × Fin dC)]
-    [DecidableEq (Fin dA × Fin dB)]
-    [DecidableEq (Fin dB × Fin dC)]
-    [DecidableEq (Fin dB)]
-    (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
-      (Fin dA × Fin dB × Fin dC) ℂ)
-    (hρ_ABC : ρ_ABC.IsHermitian)
-    (hρ_dm : ρ_ABC.PosSemidef ∧ ρ_ABC.trace = 1)
-    (hρ_B : (traceAC_ABC ρ_ABC).IsHermitian)
-    (hρ_AB : (traceC_ABC ρ_ABC).IsHermitian)
-    (hρ_BC : (traceA_ABC ρ_ABC).IsHermitian) :
-    vonNeumannEntropy ρ_ABC hρ_ABC
-      + vonNeumannEntropy (traceAC_ABC ρ_ABC) hρ_B
-    ≤ vonNeumannEntropy (traceC_ABC ρ_ABC) hρ_AB
-      + vonNeumannEntropy (traceA_ABC ρ_ABC) hρ_BC
-
-end StrongSubadditivity
-
-/-! ## Subadditivity (axiom)
-
-Subadditivity follows from strong subadditivity with a trivial system C
-(dimension 1). We axiomatize it separately for ergonomic use with bipartite
-states.
-
-TODO: Prove from `strong_subadditivity` by specializing `dC = 1`. -/
-
-section Subadditivity
-
-variable {dA dB : ℕ}
-
-/-- **Subadditivity** of von Neumann entropy.
-
-For a bipartite density matrix `ρ_AB` on `A ⊗ B`:
-  `S(ρ_AB) ≤ S(ρ_A) + S(ρ_B)` -/
-axiom subadditivity
-    [DecidableEq (Fin dA × Fin dB)]
-    [DecidableEq (Fin dA)] [DecidableEq (Fin dB)]
-    (ρ_AB : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
-    (hρ_AB : ρ_AB.IsHermitian)
-    (hρ_dm : ρ_AB.PosSemidef ∧ ρ_AB.trace = 1)
-    (hρ_A : (Matrix.traceRight ρ_AB).IsHermitian)
-    (hρ_B : (Matrix.traceLeft ρ_AB).IsHermitian) :
-    vonNeumannEntropy ρ_AB hρ_AB
-    ≤ vonNeumannEntropy (Matrix.traceRight ρ_AB) hρ_A
-      + vonNeumannEntropy (Matrix.traceLeft ρ_AB) hρ_B
-
-end Subadditivity
-
 /-! ## SSA equality condition
 
 The Hayashi (2003) characterization of equality in strong subadditivity is
 defined as a predicate. The characterization theorem (equality ↔ recovery map
-condition) is axiomatized.
+condition) is deferred.
 
 TODO: Replace with a proof following Hayashi, "Quantum Information: An
 Introduction", Springer 2006, Theorem 5.24. -/
@@ -255,10 +185,6 @@ variable {dA dB dC : ℕ}
 /-- Predicate asserting that equality holds in strong subadditivity for a
 tripartite state `ρ_ABC`. -/
 def IsSSAEquality
-    [DecidableEq (Fin dA × Fin dB × Fin dC)]
-    [DecidableEq (Fin dA × Fin dB)]
-    [DecidableEq (Fin dB × Fin dC)]
-    [DecidableEq (Fin dB)]
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
     (hρ_ABC : ρ_ABC.IsHermitian)
@@ -284,8 +210,6 @@ variable {dA dB : ℕ}
 
 Measures the total correlations (classical + quantum) between A and B. -/
 noncomputable def mutualInformation
-    [DecidableEq (Fin dA × Fin dB)]
-    [DecidableEq (Fin dA)] [DecidableEq (Fin dB)]
     (ρ_AB : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
     (hρ_AB : ρ_AB.IsHermitian)
     (hρ_A : (Matrix.traceRight ρ_AB).IsHermitian)
@@ -293,40 +217,5 @@ noncomputable def mutualInformation
   vonNeumannEntropy (Matrix.traceRight ρ_AB) hρ_A
     + vonNeumannEntropy (Matrix.traceLeft ρ_AB) hρ_B
     - vonNeumannEntropy ρ_AB hρ_AB
-
-/-- Mutual information is nonneg: `I(A:B) ≥ 0`.
-
-This follows directly from subadditivity: `S(ρ_AB) ≤ S(ρ_A) + S(ρ_B)`. -/
-theorem mutualInformation_nonneg
-    [DecidableEq (Fin dA × Fin dB)]
-    [DecidableEq (Fin dA)] [DecidableEq (Fin dB)]
-    (ρ_AB : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
-    (hρ_AB : ρ_AB.IsHermitian)
-    (hρ_dm : ρ_AB.PosSemidef ∧ ρ_AB.trace = 1)
-    (hρ_A : (Matrix.traceRight ρ_AB).IsHermitian)
-    (hρ_B : (Matrix.traceLeft ρ_AB).IsHermitian) :
-    0 ≤ mutualInformation ρ_AB hρ_AB hρ_A hρ_B := by
-  unfold mutualInformation
-  linarith [subadditivity ρ_AB hρ_AB hρ_dm hρ_A hρ_B]
-
-/-- **Area law** for mutual information of MPDO states.
-
-For an MPDO with bond dimension `D`, the mutual information across any cut
-satisfies `I(A:B) ≤ 4 * log D`.
-
-TODO: Prove from the bond-dimension structure of MPDO transfer matrices.
-
-References:
-* arXiv:1606.00608 §4.4 -/
-theorem mutualInformation_area_law
-    [DecidableEq (Fin dA × Fin dB)]
-    [DecidableEq (Fin dA)] [DecidableEq (Fin dB)]
-    (ρ_AB : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
-    (hρ_AB : ρ_AB.IsHermitian)
-    (hρ_A : (Matrix.traceRight ρ_AB).IsHermitian)
-    (hρ_B : (Matrix.traceLeft ρ_AB).IsHermitian)
-    (bondDim : ℕ) (hD : 0 < bondDim) :
-    mutualInformation ρ_AB hρ_AB hρ_A hρ_B ≤ 4 * Real.log bondDim := by
-  sorry
 
 end MutualInformation
