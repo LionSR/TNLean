@@ -1158,6 +1158,65 @@ The following results separate the zero blocks from the
 	$T^{m-1}(Q) \mapsto T^m(Q) = Q$ back to the first.
 \end{proof}
 
+\begin{lemma}[Orbit iterate supported on shifted sector]%
+	\label{lem:orbit_iterate_shifted_sector}
+	\lean{MPSTensor.orbit_iterate_supported_on_shifted_sector}
+	\leanok
+	Let $(P_k)_{k=1}^m$ be orthogonal projections with cyclic shift
+	$T(P_{k+1}) = P_k$, and suppose $T$ is multiplicative on each sector
+	corner.
+	If $Q$ is supported on sector $P_k$ (i.e.\ $QP_k = Q = P_k Q$), then
+	for each $0 \le l < m$ the iterate $T^l(Q)$ is supported on the
+	shifted sector $P_{k-l}$.
+\end{lemma}
+
+\begin{proof}\leanok
+	Induction on $l$.  The base case is the hypothesis $QP_k = Q = P_k Q$.
+	For the inductive step, the multiplicative-domain identities and the
+	cyclic shift relation $T(P_j) = P_{j-1}$ transfer the support from
+	sector $P_j$ to sector $P_{j-1}$.
+\end{proof}
+
+\begin{lemma}[Orbit iterate preserves orthogonal projection]%
+	\label{lem:orbit_iterate_proj}
+	\lean{MPSTensor.orbit_iterate_isOrthogonalProjection}
+	\leanok
+	\uses{lem:orbit_iterate_shifted_sector}
+	Under the same cyclic shift and multiplicative-domain hypotheses as
+	Lemma~\ref{lem:orbit_iterate_shifted_sector}, suppose additionally
+	that $T$ maps every orthogonal projection supported on a single
+	sector to an orthogonal projection.
+	If $Q$ is an orthogonal projection supported on $P_k$, then
+	$T^l(Q)$ is an orthogonal projection for each $0 \le l < m$.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:orbit_iterate_shifted_sector}
+	Induction on $l$.  The base case is the hypothesis on $Q$.
+	At each step, Lemma~\ref{lem:orbit_iterate_shifted_sector}
+	guarantees that $T^n(Q)$ is supported on a single sector,
+	so the one-step preservation hypothesis applies.
+\end{proof}
+
+\begin{lemma}[Orbit sum of a full sector projection]%
+	\label{lem:orbit_sum_full_sector}
+	\lean{MPSTensor.orbitSumProjection_eq_one_of_full_sector}
+	\leanok
+	\uses{lem:orbit_sum_fixed}
+	Let $(P_k)_{k=1}^m$ be orthogonal projections with
+	$\sum_k P_k = \Id$ and cyclic shift $T(P_{k+1}) = P_k$.
+	Then for every sector index $k$,
+	\[
+		\sum_{l=0}^{m-1} T^l(P_k) \;=\; \Id.
+	\]
+\end{lemma}
+
+\begin{proof}\leanok
+	By induction, $T^l(P_k) = P_{k-l}$ for each $l$.
+	The orbit sum therefore runs over all distinct sectors, and the
+	reindexing $l \mapsto k - l$ recovers $\sum_j P_j = \Id$.
+\end{proof}
+
 \begin{theorem}[Sector irreducibility from orbit-sum lift]%
 	\label{thm:sector_irred_orbit_lift}
 	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift}

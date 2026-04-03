@@ -28,13 +28,7 @@ irreducibility.
   hypothesis required by
   `Channel.Peripheral.CyclicDecomposition.isIrreducible_restriction_of_cyclic_decomp`.
 
-What still remains for the full orbit-sum lift is the genuinely missing part:
-showing that, for a cyclic sector subprojection `Q`, the orbit iterates
-`T^[l](Q)` stay orthogonal projections in the shifted sectors. Once those
-sublemmas are available, the wrapper theorem here immediately yields sector
-irreducibility for the MPS adjoint transfer map.
-
-Concretely, the missing MPS/channel lemmas are the following three pieces:
+The orbit-sum lift sublemmas completing the `hLift` construction are:
 
 * `orbit_iterate_supported_on_shifted_sector`:
   `T^[l](Q)` lies in the expected cyclic sector;
@@ -42,6 +36,9 @@ Concretely, the missing MPS/channel lemmas are the following three pieces:
   `T^[l](Q)` is again an orthogonal projection;
 * `orbitSumProjection_eq_one_of_full_sector`:
   for `Q = P_k`, the orbit sum is the full identity.
+
+Together with the orbit-sum fixed-point calculation and the MPS wrapper,
+these yield sector irreducibility for the MPS adjoint transfer map.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -204,6 +201,175 @@ theorem orbitSumProjection_fixed_of_pow_fix
     _ = ∑ l : Fin m, (T ^ (l : ℕ)) Q := by
           simpa [f] using
             (Fin.sum_univ_eq_sum_range (fun n : ℕ => (T ^ n) Q) m).symm
+
+/-- If `Q` is supported on the cyclic sector `P k`, then its `l`-th orbit iterate is supported
+on the shifted sector `P (k - l)`.
+
+The proof is a direct induction on `l`, using the same left/right multiplicative-domain
+identities that appear in `preserves_corner_pow_of_cyclic_decomp`. -/
+theorem orbit_iterate_supported_on_shifted_sector
+    [NeZero m]
+    {T : MatrixEnd D}
+    (P : Fin m → MatrixAlg D)
+    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k)
+    (hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
+    (hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k))
+    {k : Fin m} {Q : MatrixAlg D}
+    (hQP : Q * P k = Q)
+    (hPQ : P k * Q = Q) :
+    ∀ l : Fin m,
+      ((T ^ (l : ℕ)) Q) * P (k - l) = ((T ^ (l : ℕ)) Q) ∧
+      P (k - l) * ((T ^ (l : ℕ)) Q) = ((T ^ (l : ℕ)) Q) := by
+  suffices hmain :
+      ∀ n : ℕ, ∀ hn : n < m,
+        ((T ^ n) Q) * P (k - ⟨n, hn⟩) = ((T ^ n) Q) ∧
+        P (k - ⟨n, hn⟩) * ((T ^ n) Q) = ((T ^ n) Q) by
+    intro l
+    simpa using hmain (l : ℕ) l.is_lt
+  intro n
+  induction n with
+  | zero =>
+      intro _hn
+      simpa using And.intro hQP hPQ
+  | succ n ih =>
+      intro hn1
+      have hn : n < m := Nat.lt_of_succ_lt hn1
+      let j : Fin m := k - ⟨n, hn⟩
+      have hsupp := ih hn
+      have hright_j : ((T ^ n) Q) * P j = ((T ^ n) Q) := by
+        simpa [j] using hsupp.1
+      have hleft_j : P j * ((T ^ n) Q) = ((T ^ n) Q) := by
+        simpa [j] using hsupp.2
+      have hcyclic_j : T (P j) = P (j - 1) := by
+        simpa [j] using hcyclic (j - 1)
+      have hright :
+          ((T ^ (n + 1)) Q) * P (j - 1) = ((T ^ (n + 1)) Q) := by
+        calc
+          ((T ^ (n + 1)) Q) * P (j - 1)
+              = T (((T ^ n) Q)) * P (j - 1) := by
+                  simp [pow_succ']
+          _ = T (((T ^ n) Q)) * T (P j) := by rw [hcyclic_j]
+          _ = T (((T ^ n) Q) * P j) := by
+                rw [← hMulRight j ((T ^ n) Q)]
+          _ = T (((T ^ n) Q)) := by rw [hright_j]
+          _ = ((T ^ (n + 1)) Q) := by
+                simp [pow_succ']
+      have hleft :
+          P (j - 1) * ((T ^ (n + 1)) Q) = ((T ^ (n + 1)) Q) := by
+        calc
+          P (j - 1) * ((T ^ (n + 1)) Q)
+              = T (P j) * T (((T ^ n) Q)) := by
+                  rw [hcyclic_j]
+                  simp [pow_succ']
+          _ = T (P j * ((T ^ n) Q)) := by
+                rw [← hMulLeft j ((T ^ n) Q)]
+          _ = T (((T ^ n) Q)) := by rw [hleft_j]
+          _ = ((T ^ (n + 1)) Q) := by
+                simp [pow_succ']
+      have hsucc_fin : (⟨n, hn⟩ : Fin m) + 1 = ⟨n + 1, hn1⟩ := by
+        ext
+        simp [Fin.val_add, Nat.mod_eq_of_lt hn1]
+      have hshift : j - 1 = k - ⟨n + 1, hn1⟩ := by
+        calc
+          j - 1 = k - (⟨n, hn⟩ : Fin m) - 1 := by rfl
+          _ = k - ((⟨n, hn⟩ : Fin m) + 1) := by abel
+          _ = k - ⟨n + 1, hn1⟩ := by rw [hsucc_fin]
+      simpa [hshift] using And.intro hright hleft
+
+/-- Iterating a one-step projection-preservation statement along the cyclic sectors.
+
+For a general linear map, corner preservation alone does not imply that the image of an
+orthogonal projection is again an orthogonal projection. The hypothesis `hProjStep` isolates the
+one-step input actually needed for the orbit induction. -/
+theorem orbit_iterate_isOrthogonalProjection
+    [NeZero m]
+    {T : MatrixEnd D}
+    (P : Fin m → MatrixAlg D)
+    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k)
+    (hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X)
+    (hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k))
+    (hProjStep :
+      ∀ k : Fin m, ∀ X : MatrixAlg D,
+        IsOrthogonalProjection X →
+        X * P k = X →
+        P k * X = X →
+        IsOrthogonalProjection (T X))
+    {k : Fin m} {Q : MatrixAlg D}
+    (hQproj : IsOrthogonalProjection Q)
+    (hQP : Q * P k = Q)
+    (hPQ : P k * Q = Q) :
+    ∀ l : Fin m, IsOrthogonalProjection ((T ^ (l : ℕ)) Q) := by
+  have hsupp :=
+    orbit_iterate_supported_on_shifted_sector
+      (P := P) hcyclic hMulLeft hMulRight (k := k) (Q := Q) hQP hPQ
+  suffices hmain : ∀ n : ℕ, ∀ hn : n < m, IsOrthogonalProjection ((T ^ n) Q) by
+    intro l
+    simpa using hmain (l : ℕ) l.is_lt
+  intro n
+  induction n with
+  | zero =>
+      intro _hn
+      simpa using hQproj
+  | succ n ih =>
+      intro hn1
+      have hn : n < m := Nat.lt_of_succ_lt hn1
+      have hproj_n : IsOrthogonalProjection ((T ^ n) Q) := ih hn
+      have hsupp_n := hsupp ⟨n, hn⟩
+      simpa [pow_succ'] using
+        hProjStep (k - ⟨n, hn⟩) ((T ^ n) Q) hproj_n hsupp_n.1 hsupp_n.2
+
+/-- The orbit sum of a full cyclic sector projection is the identity. -/
+theorem orbitSumProjection_eq_one_of_full_sector
+    [NeZero m]
+    {T : MatrixEnd D}
+    (P : Fin m → MatrixAlg D)
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hcyclic : ∀ k : Fin m, T (P (k + 1)) = P k)
+    (k : Fin m) :
+    orbitSumProjection (D := D) (m := m) T (P k) = 1 := by
+  have hiter :
+      ∀ l : Fin m, (T ^ (l : ℕ)) (P k) = P (k - l) := by
+    suffices hmain :
+        ∀ n : ℕ, ∀ hn : n < m,
+          (T ^ n) (P k) = P (k - ⟨n, hn⟩) by
+      intro l
+      simpa using hmain (l : ℕ) l.is_lt
+    intro n
+    induction n with
+    | zero =>
+        intro _hn
+        simp
+    | succ n ih =>
+        intro hn1
+        have hn : n < m := Nat.lt_of_succ_lt hn1
+        let j : Fin m := k - ⟨n, hn⟩
+        have hcyclic_j : T (P j) = P (j - 1) := by
+          simpa [j] using hcyclic (j - 1)
+        have hsucc_fin : (⟨n, hn⟩ : Fin m) + 1 = ⟨n + 1, hn1⟩ := by
+          ext
+          simp [Fin.val_add, Nat.mod_eq_of_lt hn1]
+        have hshift : j - 1 = k - ⟨n + 1, hn1⟩ := by
+          calc
+            j - 1 = k - (⟨n, hn⟩ : Fin m) - 1 := by rfl
+            _ = k - ((⟨n, hn⟩ : Fin m) + 1) := by abel
+            _ = k - ⟨n + 1, hn1⟩ := by rw [hsucc_fin]
+        calc
+          (T ^ (n + 1)) (P k) = T ((T ^ n) (P k)) := by
+              simp [pow_succ']
+          _ = T (P j) := by rw [ih hn]
+          _ = P (j - 1) := hcyclic_j
+          _ = P (k - ⟨n + 1, hn1⟩) := by rw [hshift]
+  calc
+    orbitSumProjection (D := D) (m := m) T (P k)
+        = ∑ l : Fin m, P (k - l) := by
+            refine Finset.sum_congr rfl ?_
+            intro l _
+            exact hiter l
+    _ = ∑ j : Fin m, P j := by
+          refine Fintype.sum_equiv (Equiv.subLeft k) (fun l : Fin m => P (k - l)) P ?_
+          intro l
+          simp [Equiv.subLeft_apply]
+    _ = 1 := hPsum
 
 /-- MPS-specialized wrapper: once the orbit-sum lift is constructed in the
 shape required by `isIrreducible_restriction_of_cyclic_decomp`, sector
