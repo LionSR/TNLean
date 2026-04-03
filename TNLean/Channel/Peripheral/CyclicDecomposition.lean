@@ -183,6 +183,8 @@ private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
     _ = d • 1 + (c0 : ℂ) • 1 := by rw [hd]
     _ = (d + c0) • 1 := by simp [add_smul]
 
+/-- For an irreducible unital Kraus map, every fixed point is a scalar multiple
+of the identity matrix. -/
 theorem fixed_eq_scalar_of_irreducible_unital
     {r D : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)

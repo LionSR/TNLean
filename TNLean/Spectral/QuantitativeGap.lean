@@ -4,11 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Spectral.SpectralGap
 import TNLean.Channel.Peripheral.Spectrum
-import TNLean.Channel.Peripheral.IrreducibleChannel
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
-import TNLean.Channel.Semigroup.Primitivity.Helpers
 import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
+import TNLean.MPS.Overlap.PeripheralToSpectralGap
 
 /-!
 # Quantitative spectral gap bounds for MPS transfer operators
@@ -28,7 +26,7 @@ a lower bound on `1 - ρ`).
 
 ## Main results
 
-* `exponential_convergence_of_primitive` — for a primitive TP channel,
+* `exponential_convergence_of_primitive` — for an injective primitive TP channel,
   `‖E^n(X) - P(X)‖ ≤ C · (1-δ)^n · ‖X‖` (convergence to fixed-point projection)
 * `correlation_length_bound` — exponential decay of traceless iterates
 * `spectral_gap_of_injective` — explicit spectral gap `δ > 0` with
@@ -47,262 +45,155 @@ but gives no explicit bound. This file provides constructive bounds.
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix Finset
 
-/-! ## Quantitative decay from a spectral-radius gap -/
-
-/-- Convert `spectralRadius T < 1` into a global exponential bound for the powers of `T`.
-
-This is a general result about any continuous linear map on a normed space;
-it does not depend on MPS tensors or quantum channels. -/
-theorem exponential_bound_of_spectralRadius_lt_one
-    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [CompleteSpace V]
-    (T : V →L[ℂ] V) (hT : spectralRadius ℂ T < 1) :
-    ∃ (C ξ : ℝ),
-      0 < C ∧ 0 < ξ ∧
-      ∀ (n : ℕ) (X : V), ‖(T ^ n) X‖ ≤ C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
-  have hpow0 : Filter.Tendsto (fun n => T ^ n) Filter.atTop (nhds 0) :=
-    MPSTensor.pow_tendsto_zero_of_spectralRadius_lt_one T hT
-  have hnorm0 : Filter.Tendsto (fun n => ‖T ^ n‖) Filter.atTop (nhds 0) := by
-    simpa using (continuous_norm.tendsto 0).comp hpow0
-  have hsmall : ∀ᶠ n : ℕ in Filter.atTop, 0 < n ∧ ‖T ^ n‖ < 1 / 2 := by
-    filter_upwards [Filter.eventually_gt_atTop 0,
-      hnorm0.eventually (eventually_lt_nhds (show (0 : ℝ) < 1 / 2 by norm_num))] with n hn hTn
-    exact ⟨hn, hTn⟩
-  rcases Filter.Eventually.exists hsmall with ⟨N, hNpos, hNsmall⟩
-  have hN_ne : N ≠ 0 := Nat.ne_of_gt hNpos
-  have hN_real_pos : (0 : ℝ) < N := by exact_mod_cast hNpos
-  have hN_real_ne : (N : ℝ) ≠ 0 := by exact_mod_cast hN_ne
-  have hlog2_pos : 0 < Real.log 2 := Real.log_pos (by norm_num)
-  let Ms : Finset ℝ := (Finset.range N).image fun m => ‖T ^ m‖
-  have hMs_nonempty : Ms.Nonempty := by
-    refine Finset.image_nonempty.mpr ?_
-    exact Finset.nonempty_range_iff.mpr hN_ne
-  let M : ℝ := Ms.max' hMs_nonempty
-  have hM_nonneg : 0 ≤ M := by
-    have h0_mem : ‖T ^ 0‖ ∈ Ms := by
-      refine Finset.mem_image.mpr ?_
-      exact ⟨0, Finset.mem_range.mpr hNpos, rfl⟩
-    have h0_le : ‖T ^ 0‖ ≤ M := Finset.le_max' Ms ‖T ^ 0‖ h0_mem
-    exact le_trans (norm_nonneg _) h0_le
-  let C : ℝ := 2 * (1 + M)
-  let ξ : ℝ := (N : ℝ) / Real.log 2
-  refine ⟨C, ξ, by
-    dsimp [C]
-    positivity, by
-    dsimp [ξ]
-    positivity, ?_⟩
-  intro n X
-  let k := n / N
-  let m := n % N
-  have hm_lt : m < N := by
-    dsimp [m]
-    exact Nat.mod_lt _ hNpos
-  have hm_mem : ‖T ^ m‖ ∈ Ms := by
-    refine Finset.mem_image.mpr ?_
-    exact ⟨m, Finset.mem_range.mpr hm_lt, rfl⟩
-  have hTm_le_M : ‖T ^ m‖ ≤ M := Finset.le_max' Ms ‖T ^ m‖ hm_mem
-  have hn_decomp : n = k * N + m := by
-    dsimp [k, m]
-    simpa [Nat.mul_comm] using (Nat.div_add_mod n N).symm
-  have hpow_le : ∀ j : ℕ, ‖(T ^ N) ^ j‖ ≤ ‖T ^ N‖ ^ j := by
-    intro j
-    rcases Nat.eq_zero_or_pos j with rfl | hj
-    · simpa using (ContinuousLinearMap.norm_id_le (𝕜 := ℂ) (E := V))
-    · exact norm_pow_le' (T ^ N) hj
-  have hnorm_pow : ‖T ^ n‖ ≤ ‖T ^ m‖ * (1 / 2 : ℝ) ^ k := by
-    calc
-      ‖T ^ n‖ = ‖(T ^ N) ^ k * T ^ m‖ := by
-        rw [hn_decomp, pow_add, pow_mul']
-      _ ≤ ‖(T ^ N) ^ k‖ * ‖T ^ m‖ := norm_mul_le _ _
-      _ ≤ ‖T ^ N‖ ^ k * ‖T ^ m‖ := by
-        gcongr
-        exact hpow_le k
-      _ ≤ (1 / 2 : ℝ) ^ k * ‖T ^ m‖ := by
-        gcongr
-      _ = ‖T ^ m‖ * (1 / 2 : ℝ) ^ k := by ring
-  have hk_floor : (n : ℝ) / N ≤ (k : ℝ) + 1 := by
-    have hn_div : (n : ℝ) / N = (k : ℝ) + (m : ℝ) / N := by
-      have hn_cast : (n : ℝ) = (k : ℝ) * N + m := by
-        exact_mod_cast hn_decomp
-      rw [hn_cast, add_div, mul_div_cancel_right₀ _ hN_real_ne]
-    have hm_div_lt : (m : ℝ) / N < 1 := by
-      refine (div_lt_one hN_real_pos).2 ?_
-      exact_mod_cast hm_lt
-    rw [hn_div]
-    linarith
-  have hhalf_exp : (1 / 2 : ℝ) ^ k ≤ 2 * Real.exp (-(n : ℝ) / ξ) := by
-    have hleft : (1 / 2 : ℝ) ^ k = Real.exp (-(k : ℝ) * Real.log 2) := by
-      calc
-        (1 / 2 : ℝ) ^ k = (Real.exp (Real.log (1 / 2 : ℝ))) ^ k := by
-          rw [Real.exp_log (by positivity : 0 < (1 / 2 : ℝ))]
-        _ = Real.exp ((k : ℝ) * Real.log (1 / 2 : ℝ)) := by
-          rw [← Real.exp_nat_mul]
-        _ = Real.exp (-(k : ℝ) * Real.log 2) := by
-          rw [show Real.log (1 / 2 : ℝ) = -Real.log 2 by
-            rw [one_div, Real.log_inv]]
-          ring
-    have hright :
-        2 * Real.exp (-(n : ℝ) / ξ) = Real.exp (Real.log 2 - (n : ℝ) / ξ) := by
-      calc
-        2 * Real.exp (-(n : ℝ) / ξ) =
-            Real.exp (Real.log 2) * Real.exp (-(n : ℝ) / ξ) := by
-              rw [Real.exp_log (by positivity : 0 < (2 : ℝ))]
-        _ = Real.exp (Real.log 2 - (n : ℝ) / ξ) := by
-          rw [← Real.exp_add]
-          ring
-    have hξ_formula : (n : ℝ) / ξ = (n : ℝ) * Real.log 2 / N := by
-      calc
-        (n : ℝ) / ξ = (n : ℝ) / ((N : ℝ) / Real.log 2) := by rfl
-        _ = (n : ℝ) * Real.log 2 / N := by
-            field_simp [hN_real_ne, hlog2_pos.ne']
-    have hk_floor' :
-        (n : ℝ) * Real.log 2 / N ≤ ((k : ℝ) + 1) * Real.log 2 := by
-      simpa [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm] using
-        (mul_le_mul_of_nonneg_right hk_floor hlog2_pos.le)
-    rw [hleft, hright]
-    apply Real.exp_le_exp.mpr
-    rw [hξ_formula]
-    nlinarith
-  calc
-    ‖(T ^ n) X‖ ≤ ‖T ^ n‖ * ‖X‖ := ContinuousLinearMap.le_opNorm _ _
-    _ ≤ (‖T ^ m‖ * (1 / 2 : ℝ) ^ k) * ‖X‖ := by
-      gcongr
-    _ ≤ ((1 + M) * (1 / 2 : ℝ) ^ k) * ‖X‖ := by
-      gcongr
-      linarith
-    _ ≤ ((1 + M) * (2 * Real.exp (-(n : ℝ) / ξ))) * ‖X‖ := by
-      gcongr
-    _ = C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
-      dsimp [C]
-      ring
-
 namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Convergence rate from spectral gap -/
-
-/-- **Exponential convergence of primitive irreducible channels.**
-
-For a primitive TP channel `E` with unique fixed point `ρ_∞`, the iterates
-`E^n(X)` converge exponentially to the fixed-point projection `P(X)`:
-
-  `‖E^n(X) - P(X)‖ ≤ C · (1-δ)^n · ‖X‖`
-
-where `P(X) = tr(X) · ρ_∞ / tr(ρ_∞)` is the projection onto the fixed state,
-`δ > 0` is the spectral gap, and `C` depends on the Jordan structure.
-
-Note: both primitivity and irreducibility of the tensor are required.
-Primitivity gives the spectral gap, while irreducibility is used by the
-channel-specific adapter `compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel`
-to bridge to the unique trace-zero fixed-point property. -/
-theorem exponential_convergence_of_primitive [NeZero D]
+/-- If `E` is a primitive channel with fixed point `ρ` and unique trace-zero fixed points,
+then `spectralRadius(E - P) < 1` where `P` is the fixed-point projection. -/
+private theorem spectralRadius_compl_lt_one_of_primitive_fixedPoint [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitive (transferMap (d := d) (D := D) A))
-    (hIrr : IsIrreducibleTensor A)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
-    ∃ (C : ℝ) (δ : ℝ),
-      0 < C ∧ 0 < δ ∧ δ ≤ 1 ∧
-      ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
-        ‖((transferMap (d := d) (D := D) A)^[n]) X -
-          fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) X‖ ≤
-          C * (1 - δ) ^ n * ‖X‖ := by
+    (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (hρ_psd : ρ.PosSemidef)
+    (hρ_ne : ρ ≠ 0)
+    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
+    (huniq_fp :
+      ∀ X : Matrix (Fin D) (Fin D) ℂ,
+        transferMap (d := d) (D := D) A X = X →
+        Matrix.trace X = 0 →
+        X = 0) :
+    ∃ htr : Matrix.trace ρ ≠ 0,
+      spectralRadius ℂ
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          ((transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ htr)) < 1 := by
   set E := transferMap (d := d) (D := D) A
-  have htr : Matrix.trace ρ ≠ 0 := ne_of_gt hρ_pd.trace_pos
-  let P : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ := fixedPointProj ρ htr
-  let N : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ := E - P
-  let Pₗ :
-      Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-    Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) P
-  have hCh : IsChannel E := transferMap_isChannel A hNorm
-  have hIrrMap : IsIrreducibleMap E := by
-    simpa [E] using
-      isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) A hIrr
-  have hρ_ne : ρ ≠ 0 := by
-    intro hρ0
-    exact (ne_of_gt hρ_pd.trace_pos) (by simp [hρ0])
+  have hCh : IsChannel E := transferMap_isChannel (A := A) hNorm
+  have hρ_fixE : E ρ = ρ := by
+    simpa [E] using hρ_fix
+  have htrρ : Matrix.trace ρ ≠ 0 := by
+    intro htr0
+    exact hρ_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0)
+  have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by
+    intro μ hμ
+    have hμ' : Module.End.HasEigenvalue (mixedTransferMap A A) μ := by
+      simpa [E, mixedTransferMap_self] using hμ
+    simpa [E, mixedTransferMap_self] using
+      eigenvalue_norm_le_one (A := A) (B := A) hNorm hNorm μ hμ'
+  have huniq_fpE :
+      ∀ X : Matrix (Fin D) (Fin D) ℂ,
+        E X = X → Matrix.trace X = 0 → X = 0 := by
+    intro X hXfix htrX
+    exact huniq_fp X (by simpa [E] using hXfix) htrX
   have hcompl :
-      ∀ ν : ℂ, Module.End.HasEigenvalue N ν → ‖ν‖ < 1 := by
+      ∀ ν : ℂ,
+        Module.End.HasEigenvalue (E - fixedPointProj (D := D) ρ htrρ) ν → ‖ν‖ < 1 := by
     intro ν hν
-    exact compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel
-      E hCh hIrrMap ρ hρ_fix hρ_ne htr hPrim ν (by simpa [N, P] using hν)
+    exact _root_.compl_eigenvalue_norm_lt_one_of_primitive
+      (E := E) (ρ := ρ) hρ_fixE hρ_ne htrρ hCh.tp hPrim hbound huniq_fpE ν hν
   have hgap :
       spectralRadius ℂ
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) N) < 1 :=
-    spectralRadius_lt_one_of_eigenvalues_lt_one (D := D) N hcompl
-  obtain ⟨C₀, ξ, hC₀_pos, hξ_pos, hbound⟩ :=
-    exponential_bound_of_spectralRadius_lt_one
-      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) N) hgap
-  let C : ℝ := C₀ * (1 + ‖Pₗ‖)
-  let δ : ℝ := 1 - Real.exp (-1 / ξ)
-  have hδ_pos : 0 < δ := by
-    have hexp_lt : Real.exp (-1 / ξ) < 1 := by
-      have hpos : 0 < 1 / ξ := by positivity
-      have hneg : -1 / ξ < 0 := by rw [neg_div]; linarith
-      exact Real.exp_lt_one_iff.mpr hneg
-    dsimp [δ]
-    linarith
-  have hδ_le : δ ≤ 1 := by
-    dsimp [δ]
-    nlinarith [Real.exp_pos (-1 / ξ)]
-  refine ⟨C, δ, by
-    dsimp [C]
-    positivity, hδ_pos, hδ_le, ?_⟩
-  intro n X
-  let Y : Matrix (Fin D) (Fin D) ℂ := X - P X
-  have hY_bound : ‖Y‖ ≤ (1 + ‖Pₗ‖) * ‖X‖ := by
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          (E - fixedPointProj (D := D) ρ htrρ)) < 1 := by
+    have h_spec :
+        spectrum ℂ
+            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+              (E - fixedPointProj (D := D) ρ htrρ)) =
+          spectrum ℂ (E - fixedPointProj (D := D) ρ htrρ) :=
+      AlgEquiv.spectrum_eq (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (E - fixedPointProj (D := D) ρ htrρ)
+    refine (spectrum.spectralRadius_lt_of_forall_lt
+      (a := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (E - fixedPointProj (D := D) ρ htrρ))
+      (r := (1 : NNReal)) ?_)
+    intro z hz
+    have hz' : z ∈ spectrum ℂ (E - fixedPointProj (D := D) ρ htrρ) := by
+      exact h_spec ▸ hz
+    have hEig : Module.End.HasEigenvalue (E - fixedPointProj (D := D) ρ htrρ) z :=
+      Module.End.hasEigenvalue_iff_mem_spectrum.mpr hz'
+    have hz_norm : ‖z‖ < 1 := hcompl z hEig
+    have : ((‖z‖₊ : ℝ) < 1) := by simpa using hz_norm
+    exact (NNReal.coe_lt_one).1 this
+  exact ⟨htrρ, by simpa [E] using hgap⟩
+
+/-- Gelfand's formula: if `spectralRadius(T) < 1`, then `‖T ^ n‖ ≤ C · r ^ n`
+for some `C > 0` and `0 < r < 1`, uniformly in `n`. -/
+private theorem geometric_bound_of_spectralRadius_lt_one
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [CompleteSpace V]
+    (T : V →L[ℂ] V)
+    (hT : spectralRadius ℂ T < 1) :
+    ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧
+      ∀ n : ℕ, ‖T ^ n‖ ≤ C * r ^ n := by
+  obtain ⟨r, hr_above, hr_below⟩ := ENNReal.lt_iff_exists_nnreal_btwn.mp hT
+  have hr_lt_one : (r : ℝ) < 1 := by
+    exact_mod_cast hr_below
+  have hr_pos : 0 < (r : ℝ) := by
+    exact_mod_cast (lt_of_le_of_lt (show (0 : ℝ≥0∞) ≤ spectralRadius ℂ T from bot_le) hr_above)
+  have hev :
+      ∀ᶠ n in Filter.atTop, ‖T ^ n‖₊ < r ^ n := by
+    have gelfand := spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius T
+    filter_upwards [gelfand.eventually (eventually_lt_nhds hr_above),
+      Filter.eventually_gt_atTop 0] with n hn hn_pos
+    rw [one_div, ENNReal.rpow_inv_lt_iff (Nat.cast_pos.mpr hn_pos)] at hn
+    rw [ENNReal.rpow_natCast] at hn
+    exact_mod_cast hn
+  obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp hev
+  let S : ℝ := Finset.sum (Finset.range N) fun k => ‖T ^ k‖ / (r : ℝ) ^ k
+  let C : ℝ := S + 1
+  refine ⟨C, r, by positivity, hr_pos, hr_lt_one, ?_⟩
+  intro n
+  by_cases hn : N ≤ n
+  · have hnorm : ‖T ^ n‖ ≤ (r : ℝ) ^ n := by
+      exact_mod_cast (hN n hn).le
+    have hC_ge_one : 1 ≤ C := by
+      have hS_nonneg : 0 ≤ S := by
+        dsimp [S]
+        positivity
+      dsimp [C]
+      linarith
     calc
-      ‖Y‖ = ‖X - P X‖ := rfl
-      _ ≤ ‖X‖ + ‖P X‖ := norm_sub_le _ _
-      _ ≤ ‖X‖ + ‖Pₗ‖ * ‖X‖ := by
+      ‖T ^ n‖ ≤ (r : ℝ) ^ n := hnorm
+      _ = 1 * (r : ℝ) ^ n := by ring
+      _ ≤ C * (r : ℝ) ^ n := by
         gcongr
-        exact ContinuousLinearMap.le_opNorm Pₗ X
-      _ = (1 + ‖Pₗ‖) * ‖X‖ := by ring_nf
-  have hdecomp :
-      (E ^ n) X - P X = (N ^ n) Y := by
-    cases n with
-    | zero =>
-        simp [Y]
-    | succ n =>
-        have hpow :
-            E ^ (n + 1) = P + N ^ (n + 1) :=
-          pow_succ_eq_fixedPointProj_add_compl_pow
-            (E := E) (ρ := ρ) (htr := htr) hCh.tp hρ_fix n
-        have hNpowP : (N ^ (n + 1)) * P = 0 := by
-          simpa [N, P] using
-            compl_pow_succ_mul_fixedPointProj (E := E) (ρ := ρ) (htr := htr) hρ_fix n
-        have hNpowPX : (N ^ (n + 1)) (P X) = 0 := by
-          have h := LinearMap.congr_fun hNpowP X
-          simpa [Module.End.mul_apply] using h
-        calc
-          (E ^ (n + 1)) X - P X = ((P + N ^ (n + 1)) : Module.End ℂ _) X - P X := by
-            rw [hpow]
-          _ = (N ^ (n + 1)) X := by simp [LinearMap.add_apply]
-          _ = (N ^ (n + 1)) Y := by
-            dsimp [Y]
-            rw [map_sub, hNpowPX, sub_zero]
-  have hmain :
-      ‖(E ^ n) X - P X‖ ≤ C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
+  · have hn_lt : n < N := Nat.lt_of_not_ge hn
+    have hterm : ‖T ^ n‖ / (r : ℝ) ^ n ≤ S := by
+      dsimp [S]
+      exact Finset.single_le_sum
+        (f := fun k => ‖T ^ k‖ / (r : ℝ) ^ k)
+        (by intro k hk; positivity)
+        (Finset.mem_range.mpr hn_lt)
+    have hterm' : ‖T ^ n‖ ≤ S * (r : ℝ) ^ n := by
+      exact (div_le_iff₀ (pow_pos hr_pos n)).1 hterm
+    have hS_le_C : S ≤ C := by
+      dsimp [C]
+      linarith
     calc
-      ‖(E ^ n) X - P X‖ = ‖(N ^ n) Y‖ := by rw [hdecomp]
-      _ ≤ C₀ * Real.exp (-(n : ℝ) / ξ) * ‖Y‖ := by
-        simpa [toContinuousLinearMap_pow_apply] using hbound n Y
-      _ ≤ C₀ * Real.exp (-(n : ℝ) / ξ) * ((1 + ‖Pₗ‖) * ‖X‖) := by
+      ‖T ^ n‖ ≤ S * (r : ℝ) ^ n := hterm'
+      _ ≤ C * (r : ℝ) ^ n := by
         gcongr
-      _ = C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
-        dsimp [C]
-        ring_nf
-  have hexp_eq_pow : Real.exp (-(n : ℝ) / ξ) = (1 - δ) ^ n := by
-    calc
-      Real.exp (-(n : ℝ) / ξ) = Real.exp ((n : ℝ) * (-1 / ξ)) := by ring
-      _ = (Real.exp (-1 / ξ)) ^ n := by rw [← Real.exp_nat_mul]
-      _ = (1 - δ) ^ n := by simp [δ]
-  have hmain' :
-      ‖(E ^ n) X - P X‖ ≤ C * (1 - δ) ^ n * ‖X‖ := by
-    rw [← hexp_eq_pow]
-    exact hmain
-  simpa [E, P, Module.End.pow_apply] using hmain'
+
+/-- Pointwise version of `geometric_bound_of_spectralRadius_lt_one`:
+if `spectralRadius(T) < 1`, then `‖T ^ n x‖ ≤ C · r ^ n · ‖x‖`. -/
+private theorem geometric_apply_bound_of_spectralRadius_lt_one
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [CompleteSpace V]
+    (T : V →L[ℂ] V)
+    (hT : spectralRadius ℂ T < 1) :
+    ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧
+      ∀ n : ℕ, ∀ x : V, ‖(T ^ n) x‖ ≤ C * r ^ n * ‖x‖ := by
+  rcases geometric_bound_of_spectralRadius_lt_one T hT with
+    ⟨C, r, hC, hr_pos, hr_lt_one, hpow⟩
+  refine ⟨C, r, hC, hr_pos, hr_lt_one, ?_⟩
+  intro n x
+  calc
+    ‖(T ^ n) x‖ ≤ ‖T ^ n‖ * ‖x‖ := by
+      simpa using (ContinuousLinearMap.le_opNorm (T ^ n) x)
+    _ ≤ (C * r ^ n) * ‖x‖ := by
+      exact mul_le_mul_of_nonneg_right (hpow n) (norm_nonneg x)
+    _ = C * r ^ n * ‖x‖ := by ring
+
+/-! ## Helper lemmas -/
 
 /-- The word span at length 1 equals the span of the Kraus operators. -/
 theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
@@ -316,6 +207,102 @@ theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
 theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
     (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
   ⟨1, by rw [wordSpan_one_eq_span_range, hA]⟩
+
+/-! ## Convergence rate from spectral gap -/
+
+/-- **Exponential convergence of injective primitive channels.**
+
+For an injective primitive TP channel `E` with fixed point projection `P`, the iterates
+`E^n(X)` converge exponentially to the fixed-point projection `P(X)`:
+
+  `‖E^n(X) - P(X)‖ ≤ C · (1-δ)^n · ‖X‖`
+
+where `P(X) = tr(X) · ρ_∞ / tr(ρ_∞)` is the projection onto the fixed state,
+`δ > 0` is the spectral gap, and `C` depends on the Jordan structure.
+
+The extra injectivity hypothesis is what supplies the needed uniqueness of
+trace-zero fixed points, so that the complementary map `E - P` has spectral
+radius `< 1`. The convergence estimate then follows from Gelfand's formula. -/
+theorem exponential_convergence_of_primitive [NeZero D]
+    (A : MPSTensor d D)
+    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hA : IsInjective A)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
+    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
+    ∃ (C : ℝ) (δ : ℝ),
+      0 < C ∧ 0 < δ ∧ δ ≤ 1 ∧
+      ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
+        ‖((transferMap (d := d) (D := D) A)^[n]) X -
+          fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) X‖ ≤
+          C * (1 - δ) ^ n * ‖X‖ := by
+  classical
+  let V := Matrix (Fin D) (Fin D) ℂ
+  let E : V →ₗ[ℂ] V := transferMap (d := d) (D := D) A
+  let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ (ne_of_gt hρ_pd.trace_pos)
+  let N : V →ₗ[ℂ] V := E - P
+  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
+  have hPrim : IsPrimitive E :=
+    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
+      (isPrimitivePaper_of_hasEventuallyFullKrausRank A
+        (hasEventuallyFullKrausRank_of_injective A hA))
+  have huniq_fp :
+      ∀ X : V, E X = X → Matrix.trace X = 0 → X = 0 := by
+    intro X hXfix htrX
+    dsimp [E] at hXfix
+    exact transferMap_fixedPoint_eq_zero_of_trace_eq_zero (A := A) hA hNorm X hXfix htrX
+  obtain ⟨htrρ, hgap⟩ :=
+    spectralRadius_compl_lt_one_of_primitive_fixedPoint
+      (A := A) hNorm hPrim ρ hρ_pd.posSemidef
+      (by
+        intro hρ0
+        have htr0 : Matrix.trace ρ = 0 := by simp [hρ0]
+        exact (ne_of_gt hρ_pd.trace_pos) htr0)
+      hρ_fix huniq_fp
+  rcases geometric_apply_bound_of_spectralRadius_lt_one (T := Φ N) hgap with
+    ⟨C₀, r, hC₀_pos, hr_pos, hr_lt_one, hgeom⟩
+  let P' : V →L[ℂ] V := Φ P
+  let C : ℝ := C₀ + (1 + ‖P'‖)
+  refine ⟨C, 1 - r, by positivity, sub_pos.mpr hr_lt_one, by linarith, ?_⟩
+  intro n X
+  have hC₀_le_C : C₀ ≤ C := by
+    dsimp [C]
+    nlinarith [norm_nonneg P']
+  have hPnorm : ‖P X‖ ≤ ‖P'‖ * ‖X‖ := by
+    change ‖(Φ P) X‖ ≤ ‖Φ P‖ * ‖X‖
+    exact ContinuousLinearMap.le_opNorm (Φ P) X
+  have hgeomN : ∀ m : ℕ, ‖(N ^ m) X‖ ≤ C₀ * r ^ m * ‖X‖ := by
+    intro m
+    have hpow : ((Φ N) ^ m : V →L[ℂ] V) = Φ (N ^ m) := (map_pow Φ N m).symm
+    calc
+      ‖(N ^ m) X‖ = ‖((Φ N) ^ m) X‖ := by rw [hpow]; rfl
+      _ ≤ C₀ * r ^ m * ‖X‖ := hgeom m X
+  by_cases hn : n = 0
+  · subst hn
+    have hC_ge_one_plus : 1 + ‖P'‖ ≤ C := by
+      dsimp [C]
+      linarith
+    calc
+      ‖((E^[0]) X) - P X‖ = ‖X - P X‖ := by simp [E]
+      _ ≤ ‖X‖ + ‖P X‖ := norm_sub_le _ _
+      _ ≤ ‖X‖ + ‖P'‖ * ‖X‖ := by gcongr
+      _ = (1 + ‖P'‖) * ‖X‖ := by ring
+      _ ≤ C * ‖X‖ := by
+        exact mul_le_mul_of_nonneg_right hC_ge_one_plus (norm_nonneg X)
+      _ = C * (1 - (1 - r)) ^ 0 * ‖X‖ := by simp
+  · have hn1 : 1 ≤ n := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hn)
+    have hpowEq :=
+      pow_eq_fixedPointProj_add_compl_pow (D := D) (E := E) (ρ := ρ) htrρ
+        (transferMap_isChannel (A := A) hNorm).tp hρ_fix hn1
+    calc
+      ‖((E^[n]) X) - P X‖ = ‖(E ^ n) X - P X‖ := by simp [E, Module.End.pow_apply]
+      _ = ‖(P + N ^ n) X - P X‖ := by rw [hpowEq]
+      _ = ‖(N ^ n) X‖ := by
+        change ‖P X + (N ^ n) X - P X‖ = ‖(N ^ n) X‖
+        simp
+      _ ≤ C₀ * r ^ n * ‖X‖ := hgeomN n
+      _ ≤ C * r ^ n * ‖X‖ := by
+        gcongr
+      _ = C * (1 - (1 - r)) ^ n * ‖X‖ := by simp
 
 /-- **Correlation length bound.**
 
@@ -336,43 +323,81 @@ theorem correlation_length_bound [NeZero D]
         Matrix.trace X = 0 →
         ‖((transferMap (d := d) (D := D) A)^[n]) X‖ ≤
           C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
-  set E := transferMap (d := d) (D := D) A
-  have hPrim : PeripheralSpectrum.IsPrimitive E :=
+  classical
+  let V := Matrix (Fin D) (Fin D) ℂ
+  let E : V →ₗ[ℂ] V := transferMap (d := d) (D := D) A
+  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
+  have hPrim : _root_.IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
         (hasEventuallyFullKrausRank_of_injective A hA))
-  obtain ⟨ρ, _, _, hρ_fix, htr, hgap⟩ :=
-    spectralRadius_compl_lt_one_of_peripheralPrimitive
-      (A := A) hA hNorm hPrim
-  let P : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ := fixedPointProj ρ htr
-  let N : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ := E - P
-  have hCh : IsChannel E := transferMap_isChannel A hNorm
-  obtain ⟨C, ξ, hC_pos, hξ_pos, hbound⟩ :=
-    exponential_bound_of_spectralRadius_lt_one
-      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) N) hgap
-  refine ⟨C, ξ, hC_pos, hξ_pos, ?_⟩
-  intro n X htrX
-  cases n with
-  | zero =>
-      simpa [E, Module.End.pow_apply] using hbound 0 X
-  | succ n =>
-      have hPX : P X = 0 := by
-        simp [P, fixedPointProj, htrX]
-      have hpow :
-          E ^ (n + 1) = P + N ^ (n + 1) :=
-        pow_succ_eq_fixedPointProj_add_compl_pow
-          (E := E) (ρ := ρ) (htr := htr) hCh.tp hρ_fix n
-      have hpow_eq : (E ^ (n + 1)) X = (N ^ (n + 1)) X := by
+  rcases spectralRadius_compl_lt_one_of_peripheralPrimitive
+      (A := A) hA hNorm hPrim with
+    ⟨ρ, _hρ_psd, _hρ_ne, hρ_fix, htrρ, hgap⟩
+  let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ htrρ
+  let N : V →ₗ[ℂ] V := E - P
+  rcases geometric_apply_bound_of_spectralRadius_lt_one (T := Φ N) hgap with
+    ⟨C₀, r, hC₀_pos, hr_pos, hr_lt_one, hgeom⟩
+  let C : ℝ := C₀ + 1
+  let ξ : ℝ := 1 / (-Real.log r)
+  have hξ_pos : 0 < ξ := by
+    have hlog_neg : Real.log r < 0 := Real.log_neg hr_pos hr_lt_one
+    have hneg_log_pos : 0 < -Real.log r := by linarith
+    dsimp [ξ]
+    positivity
+  have hr_exp : ∀ n : ℕ, r ^ n = Real.exp (-(n : ℝ) / ξ) := by
+    intro n
+    calc
+      r ^ n = Real.exp ((n : ℝ) * Real.log r) := by
         calc
-          (E ^ (n + 1)) X = ((P + N ^ (n + 1)) : Module.End ℂ _) X := by
-            rw [hpow]
-          _ = P X + (N ^ (n + 1)) X := LinearMap.add_apply P (N ^ (n + 1)) X
-          _ = (N ^ (n + 1)) X := by simp [hPX]
-      have hmain :
-          ‖(E ^ (n + 1)) X‖ ≤ C * Real.exp (-((n + 1 : ℕ) : ℝ) / ξ) * ‖X‖ := by
-        rw [hpow_eq]
-        simpa [toContinuousLinearMap_pow_apply] using hbound (n + 1) X
-      simpa [E, Module.End.pow_apply] using hmain
+          r ^ n = (Real.exp (Real.log r)) ^ n := by rw [Real.exp_log hr_pos]
+          _ = Real.exp ((n : ℝ) * Real.log r) := by
+            simpa [mul_comm] using (Real.exp_nat_mul (Real.log r) n).symm
+      _ = Real.exp (-(n : ℝ) / ξ) := by
+        congr 1
+        dsimp [ξ]
+        rw [one_div, div_eq_mul_inv, inv_inv]
+        ring
+  have hC₀_le_C : C₀ ≤ C := by
+    dsimp [C]
+    linarith
+  have hgeomN : ∀ n : ℕ, ∀ X : V, ‖(N ^ n) X‖ ≤ C₀ * r ^ n * ‖X‖ := by
+    intro n X
+    have hpow : ((Φ N) ^ n : V →L[ℂ] V) = Φ (N ^ n) := (map_pow Φ N n).symm
+    calc
+      ‖(N ^ n) X‖ = ‖((Φ N) ^ n) X‖ := by rw [hpow]; rfl
+      _ ≤ C₀ * r ^ n * ‖X‖ := hgeom n X
+  refine ⟨C, ξ, by positivity, hξ_pos, ?_⟩
+  intro n X htrX
+  have hPX : P X = 0 := by
+    change (Matrix.trace X / Matrix.trace ρ) • ρ = 0
+    rw [htrX]
+    simp
+  by_cases hn : n = 0
+  · subst hn
+    have hC_ge_one : 1 ≤ C := by
+      dsimp [C]
+      linarith
+    have hzero : ‖X‖ ≤ C * ‖X‖ := by
+      calc
+        ‖X‖ ≤ 1 * ‖X‖ := by simp
+        _ ≤ C * ‖X‖ := by
+          exact mul_le_mul_of_nonneg_right hC_ge_one (norm_nonneg X)
+    have hexp0 : Real.exp (-((0 : ℕ) : ℝ) / ξ) = 1 := by
+      norm_num
+    simpa [E, hexp0] using hzero
+  · have hn1 : 1 ≤ n := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hn)
+    have hpowEq :=
+      pow_eq_fixedPointProj_add_compl_pow (D := D) (E := E) (ρ := ρ) htrρ
+        (transferMap_isChannel (A := A) hNorm).tp hρ_fix hn1
+    calc
+      ‖((E^[n]) X)‖ = ‖(E ^ n) X‖ := by simp [E, Module.End.pow_apply]
+      _ = ‖(P + N ^ n) X‖ := by rw [hpowEq]
+      _ = ‖(N ^ n) X‖ := by simp [LinearMap.add_apply, hPX]
+      _ ≤ C₀ * r ^ n * ‖X‖ := hgeomN n X
+      _ ≤ C * r ^ n * ‖X‖ := by
+        gcongr
+      _ = C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by rw [hr_exp n]
 
 /-! ## Explicit gap from injectivity -/
 
@@ -406,8 +431,7 @@ theorem spectral_gap_of_injective [NeZero D]
     intro μ hμ
     exact eigenvalue_norm_le_one A A hNorm hNorm μ (hE_eq ▸ hμ)
   -- Step 3: non-1 eigenvalues have ‖μ‖ < 1, then extract uniform gap
-  exact _root_.uniform_spectral_gap_of_finite_lt_one
-    (Module.End.finite_hasEigenvalue E)
+  exact uniform_spectral_gap_of_finite_lt_one (Module.End.finite_hasEigenvalue E)
     fun μ hμ hne => lt_of_le_of_ne (hbound μ hμ)
       fun h => hne (hPrim.unique_peripheral μ hμ h)
 
