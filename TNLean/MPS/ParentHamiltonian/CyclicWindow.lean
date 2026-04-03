@@ -238,4 +238,99 @@ theorem cyclicRestrictₗ_eq_contiguousRestrictₗ {N : ℕ} (hN : 0 < N)
   ext σ
   simp [cyclicCfg_eq_contiguousCfg hN hLN hi]
 
+/-! ### One-step rotation -/
+
+/-- Rotate an `N`-site configuration one step to the left:
+`(σ₀, σ₁, ..., σ_{N-1}) ↦ (σ₁, ..., σ_{N-1}, σ₀)`. -/
+def rotateLeftCfg {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin d) : Fin N → Fin d :=
+  fun k => σ ⟨(k.val + 1) % N, Nat.mod_lt _ hN⟩
+
+/-- Rotate an `N`-site state one step to the left by precomposing with
+`rotateLeftCfg`. -/
+def rotateLeftState {N : ℕ} (hN : 0 < N) : NSiteSpace d N →ₗ[ℂ] NSiteSpace d N where
+  toFun ψ := fun σ => ψ (rotateLeftCfg hN σ)
+  map_add' _ _ := by ext; simp [rotateLeftCfg]
+  map_smul' _ _ := by ext; simp [rotateLeftCfg]
+
+@[simp] theorem rotateLeftState_apply {N : ℕ} (hN : 0 < N)
+    (ψ : NSiteSpace d N) (σ : Fin N → Fin d) :
+    rotateLeftState hN ψ σ = ψ (rotateLeftCfg hN σ) := rfl
+
+/-- Rotating a `Fin.cons` configuration left gives the corresponding `Fin.snoc`. -/
+theorem rotateLeftCfg_cons {N : ℕ} (i : Fin d) (σ : Fin N → Fin d) :
+    rotateLeftCfg (N := N + 1) (Nat.succ_pos _) (Fin.cons i σ) = Fin.snoc σ i := by
+  ext k
+  rcases Fin.eq_last_or_eq_castSucc k with rfl | ⟨k, rfl⟩
+  · simp [rotateLeftCfg]
+  · simp [rotateLeftCfg]
+
+/-- Contiguous windows of the left-rotated state are exactly the cyclic windows
+of the original state, with shifted start index. -/
+theorem contiguousRestrictₗ_rotateLeftState_eq_cyclicRestrictₗ {N : ℕ} (hN : 0 < N)
+    {L : ℕ} (hL : 0 < L) (s : ℕ) (hs : s + L ≤ N)
+    (τ : Fin N → Fin d) (ψ : NSiteSpace d N) :
+    contiguousRestrictₗ s L hs τ (rotateLeftState hN ψ) =
+      cyclicRestrictₗ hN L ⟨s + 1, by omega⟩ (rotateLeftCfg hN τ) ψ := by
+  ext σ
+  simp only [contiguousRestrictₗ_apply, cyclicRestrictₗ_apply, rotateLeftState_apply]
+  congr 1
+  ext ⟨k, hk⟩
+  simp only [rotateLeftCfg, contiguousCfg, cyclicCfg]
+  by_cases hwrap : k + 1 = N
+  · have hk_last : k = N - 1 := by omega
+    subst hk_last
+    have hs_ne : s + L ≠ N + 1 := by omega
+    by_cases hwin : s ≤ N - 1 ∧ N - 1 < s + L
+    · have hs_eq : s + L = N := by omega
+      have hoff : (N - 1 + N - (s + 1)) % N = L - 1 := by
+        rw [show N - 1 + N - (s + 1) = N + (L - 1) from by omega, Nat.add_mod_right]
+        exact Nat.mod_eq_of_lt (by omega)
+      rw [dif_pos hwin, dif_pos (show (N - 1 + N - (s + 1)) % N < L by
+        rw [hoff]; omega)]
+      congr 1
+      ext
+      simp [hoff]
+    · have hnot : ¬((N - 1 + N - (s + 1)) % N < L) := by
+        rw [show N - 1 + N - (s + 1) = 2 * N - s - 2 by omega]
+        have hs_lt : s + L < N := by
+          omega
+        have hoff' : (2 * N - s - 2) % N = N - s - 2 := by
+          have hlt : N - s - 2 < N := by omega
+          exact Nat.mod_eq_of_lt hlt
+        rw [hoff']
+        omega
+      rw [dif_neg hwin, dif_neg hnot]
+      simp [rotateLeftCfg, hwrap]
+  · have hk_lt : k + 1 < N := by omega
+    have hmod : (k + 1) % N = k + 1 := Nat.mod_eq_of_lt hk_lt
+    by_cases hwin : s ≤ k + 1 ∧ k + 1 < s + L
+    · have hoff : (k + N - (s + 1)) % N = k + 1 - (s + 1) := by
+        have hlt : k + N - (s + 1) < N := by
+          omega
+        rw [Nat.mod_eq_of_lt hlt]
+        omega
+      rw [dif_pos (by simpa [hmod] using hwin), dif_pos (by
+        rw [hoff]
+        omega)]
+      congr 1
+      ext
+      simp [hmod, hoff]
+    · have hnot : ¬((k + N - (s + 1)) % N < L) := by
+        intro hkL
+        apply hwin
+        constructor
+        · by_contra hs'
+          have hlt : k + N - (s + 1) < N := by omega
+          rw [Nat.mod_eq_of_lt hlt] at hkL
+          omega
+        · have hle : s + 1 ≤ k + 1 := by omega
+          have hoff : (k + N - (s + 1)) % N = k + 1 - (s + 1) := by
+            have hlt : k + N - (s + 1) < N := by omega
+            rw [Nat.mod_eq_of_lt hlt]
+            omega
+          rw [hoff] at hkL
+          omega
+      rw [dif_neg hwin, dif_neg hnot]
+      simp [rotateLeftCfg, hmod]
+
 end MPSTensor

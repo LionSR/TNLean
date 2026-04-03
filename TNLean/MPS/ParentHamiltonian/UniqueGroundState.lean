@@ -4,9 +4,36 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.Algebra.ScalarCommutant
 
 /-!
 # Unique ground state for injective MPS parent Hamiltonians
+
+## Scouting report for Issue #386
+
+After reading `UniqueGroundState.lean`, `CyclicWindow.lean`,
+`IntersectionProperty.lean`, `GroundSpace.lean`, and `Martingale.lean`,
+the current infrastructure appears to support only the following pieces:
+
+1. `chainGroundSpace A L N` is literally the intersection of the cyclic-window
+   pullbacks of `groundSpace A L`.
+2. `mpv_mem_chainGroundSpace` already gives the easy inclusion
+   `mpvSubmodule A N ≤ chainGroundSpace A L N`.
+3. `contiguous_mem_groundSpace` plus the non-wrapping cyclic/contiguous
+   comparison control the open-chain part of the argument.
+
+What is still missing for the periodic uniqueness step is a *compatibility*
+statement relating the witness matrices coming from different cyclic windows.
+`groundSpace_intersection` only regrows adjacent non-wrapping windows; it does
+not identify the boundary matrix obtained from one window with the boundary
+matrix obtained from a wrapping window. That missing relation is exactly what
+one needs to derive the commutation constraint `A i * X = X * A i`, and only
+after that can `ScalarCommutant.isScalar_of_commute_span_eq_top` collapse
+`X` to a scalar.
+
+So the present gap is not the scalar-commutant step itself; it is the absence
+of a periodic boundary-compatibility lemma connecting the cyclic-window
+conditions in `chainGroundSpace` to a single global boundary matrix.
 
 For an injective MPS tensor `A` on a periodic chain, the expected parent-Hamiltonian
 ground space is spanned by the MPV state
@@ -152,7 +179,110 @@ coincide with the span of the MPV. -/
 theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
-  sorry
+  have hN0 : 0 < N := by omega
+  have hd : d ≠ 0 := by
+    intro hd0
+    have hrange : Set.range A = (∅ : Set (Matrix (Fin D) (Fin D) ℂ)) := by
+      ext M
+      simp [hd0]
+    have hspan : (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) = ⊤ := by
+      simpa [IsInjective, hrange] using hA
+    have h10 : (1 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
+      have hmem : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
+          (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+        rw [hspan]
+        exact Submodule.mem_top
+      simpa using hmem
+    exact one_ne_zero h10
+  haveI : NeZero d := ⟨hd⟩
+  apply le_antisymm
+  · intro ψ hψ
+    rw [chainGroundSpace, dif_pos ⟨hN0, hLN⟩] at hψ
+    simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
+    have hopen : ψ ∈ groundSpace A N := by
+      apply contiguous_mem_groundSpace hA hL hLN
+      intro s hs τ
+      have hcyc :
+          cyclicRestrictₗ hN0 L ⟨s, by omega⟩ τ ψ ∈ groundSpace A L :=
+        hψ ⟨s, by omega⟩ τ
+      rwa [cyclicRestrictₗ_eq_contiguousRestrictₗ hN0 hLN
+        (i := ⟨s, by omega⟩) hs τ ψ] at hcyc
+    rw [groundSpace, LinearMap.mem_range] at hopen
+    obtain ⟨X, hX⟩ := hopen
+    have hψX : ψ = groundSpaceMap A N X := hX.symm
+    have hrot_window :
+        ∀ (s : ℕ) (hs : s + L ≤ N) (τ : Fin N → Fin d),
+          contiguousRestrictₗ s L hs τ (rotateLeftState hN0 ψ) ∈ groundSpace A L := by
+      intro s hs τ
+      have hs1 : s + 1 < N := by omega
+      have hcyc :
+          cyclicRestrictₗ hN0 L ⟨s + 1, hs1⟩ (rotateLeftCfg hN0 τ) ψ ∈ groundSpace A L :=
+        hψ ⟨s + 1, hs1⟩ (rotateLeftCfg hN0 τ)
+      rwa [← contiguousRestrictₗ_rotateLeftState_eq_cyclicRestrictₗ hN0
+        (show 0 < L by omega) s hs τ ψ] at hcyc
+    have hrot : rotateLeftState hN0 ψ ∈ groundSpace A N :=
+      contiguous_mem_groundSpace hA hL hLN hrot_window
+    rw [groundSpace, LinearMap.mem_range] at hrot
+    obtain ⟨Y, hY⟩ := hrot
+    have hrotY : rotateLeftState hN0 ψ = groundSpaceMap A N Y := hY.symm
+    have hCompat : ∀ i : Fin d, Y * A i = A i * X := by
+      intro i
+      apply groundSpaceMap_injective hA (by omega : 0 < N - 1)
+      ext σ
+      calc
+        groundSpaceMap A (N - 1) (Y * A i) σ
+            = restrictFirst (rotateLeftState hN0 ψ) i σ := by
+                rw [hrotY]
+                simp only [restrictFirst_apply, groundSpaceMap_apply, evalWord_ofFn_cons]
+                simpa [Matrix.mul_assoc] using
+                  Matrix.trace_mul_cycle' (A i) (evalWord A (List.ofFn σ)) Y
+        _ = groundSpaceMap A (N - 1) (A i * X) σ := by
+              rw [rotateLeftState_apply, hψX, rotateLeftCfg_cons]
+              simp [restrictFirst_apply, groundSpaceMap_apply, evalWord_ofFn_snoc,
+                Matrix.mul_assoc]
+    have hYX_span :
+        ∀ M ∈ Submodule.span ℂ (Set.range A), Y * M = M * X := by
+      intro M hM
+      induction hM using Submodule.span_induction with
+      | mem M hM =>
+          rcases hM with ⟨i, rfl⟩
+          exact hCompat i
+      | zero => simp
+      | add M₁ M₂ _ _ h₁ h₂ =>
+          rw [Matrix.mul_add, add_mul, h₁, h₂]
+      | smul c M _ hM =>
+          simp [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, hM]
+    have hYX : Y = X := by
+      have hone : Y * (1 : Matrix (Fin D) (Fin D) ℂ) = (1 : Matrix (Fin D) (Fin D) ℂ) * X :=
+        hYX_span 1 (hA.span_eq_top ▸ Submodule.mem_top)
+      simpa using hone
+    have hcomm : ∀ i : Fin d, X * A i = A i * X := by
+      intro i
+      simpa [hYX] using hCompat i
+    obtain ⟨c, hXscalar⟩ := Matrix.isScalar_of_commute_span_eq_top
+      (Z := X) hA.span_eq_top (fun M hM => by
+        rcases hM with ⟨i, rfl⟩
+        exact hcomm i)
+    have hXsmul : X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+      rw [hXscalar]
+      ext i j
+      by_cases hij : i = j
+      · subst hij
+        simp [Matrix.scalar_apply]
+      · simp [Matrix.scalar_apply, hij]
+    have hψ_eq : ψ = c • (mpv A : NSiteSpace d N) := by
+      calc
+        ψ = groundSpaceMap A N X := hψX
+        _ = groundSpaceMap A N (c • (1 : Matrix (Fin D) (Fin D) ℂ)) := by rw [hXsmul]
+        _ = c • groundSpaceMap A N 1 := by simp
+        _ = c • (mpv A : NSiteSpace d N) := by
+              simp [mpv_eq_groundSpaceMap_one]
+    exact Submodule.mem_span_singleton.mpr ⟨c, hψ_eq.symm⟩
+  · rw [mpvSubmodule]
+    refine Submodule.span_le.mpr ?_
+    intro ψ hψ
+    rcases hψ with rfl
+    exact mpv_mem_chainGroundSpace A L N hN0 hLN
 
 /-- **Unique ground state on the periodic chain** for injective MPS.
 
