@@ -19,7 +19,9 @@ Verstraete):
 * **MPDO** (Matrix Product Density Operator): an MPO whose operator family
   `mpo M N` is positive semidefinite for every system size `N`.
 * **LPDO** (Locally Purifiable Density Operator): an MPO that admits a
-  local MPS purification `M^{ij} = ∑_k A^{(i,k)} (A^{(j,k)})†`.
+  local purification tensor with Kronecker structure,
+  `M^{ij} = (∑_k A^{(i,k)} ⊗ₖ conj(A^{(j,k)})).submatrix ↑e ↑e`,
+  for an identification `e : Fin D ≃ Fin D' × Fin D'` of the bond index.
 
 ## Main definitions
 
@@ -171,10 +173,11 @@ and inner bond dimension `D'`, together with an equivalence
   `M^{ij} = ∑_k A^{(i,k)} ⊗ₖ conj(A^{(j,k)})`
 
 where `⊗ₖ` is the Kronecker product and `conj` denotes entrywise complex
-conjugation. This is the local purification condition following
-arXiv:1606.00608 §4.3 (Cirac–Pérez-García–Schuch–Verstraete), using the
-Kronecker product to correctly capture the tensor product structure of the
-purifying space.
+conjugation, and where the resulting matrix on `Fin D' × Fin D'` is
+reindexed back to `Fin D` via the chosen equivalence `e` (implemented by
+`.submatrix ↑e ↑e`). This is the local purification condition following
+arXiv:1606.00608 §4.3 (Cirac–Pérez-García–Schuch–Verstraete), where the
+auxiliary purification space factors as a tensor product.
 
 Not every MPDO is an LPDO (De las Cuevas et al. 2016). -/
 def IsLPDO (M : MPOTensor d D) : Prop :=
@@ -226,13 +229,14 @@ private lemma lpdo_prod_decomp {dK D' : ℕ}
       fun P Q => ((starRingEnd ℂ).mapMatrix.map_mul P Q).symm
     simp_rw [map_star_mul]
     -- Reindex RHS: ∑ κ : Fin(n+1) → Fin dK = ∑ k, ∑ κ'
-    symm
-    rw [show ∀ (F : (Fin (n + 1) → Fin dK) →
+    have reindex : ∀ (F : (Fin (n + 1) → Fin dK) →
         Matrix (Fin D' × Fin D') (Fin D' × Fin D') ℂ),
       ∑ κ, F κ = ∑ k : Fin dK, ∑ κ' : Fin n → Fin dK,
-        F (Fin.cons k κ') from fun F => by
+        F (Fin.cons k κ') := fun F => by
           rw [← Fintype.sum_prod_type']
-          exact ((Fin.consEquiv (fun _ : Fin (n + 1) => Fin dK)).sum_comp F).symm]
+          exact ((Fin.consEquiv (fun _ : Fin (n + 1) => Fin dK)).sum_comp F).symm
+    symm
+    rw [reindex]
     simp only [Fin.cons_zero, Fin.cons_succ]
 
 /-- **LPDO implies MPDO**: every LPDO tensor generates positive semidefinite
