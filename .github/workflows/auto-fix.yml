@@ -152,7 +152,7 @@ jobs:
                   repository(owner: $owner, name: $repo) {
                     pullRequest(number: $pr) {
                       reviewThreads(first: 100) {
-                        nodes { isResolved }
+                        nodes { isResolved isOutdated }
                       }
                     }
                   }
@@ -163,7 +163,7 @@ jobs:
                   pr: pr.number
                 });
                 const threads = result.repository.pullRequest.reviewThreads.nodes;
-                hasUnresolvedReviews = threads.some(t => !t.isResolved);
+                hasUnresolvedReviews = threads.some(t => !t.isResolved && !t.isOutdated);
               } catch (e) {
                 core.warning(`Could not query review threads: ${e.message}`);
               }
