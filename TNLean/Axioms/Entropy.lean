@@ -13,7 +13,8 @@ so that it does not pollute the stable import surface `TNLean.lean`.
 ## Status
 
 * `strong_subadditivity` is an **axiom** (proof deferred; see TODO below).
-* `subadditivity` is **derived** from `strong_subadditivity` with `dC = 1`.
+* A `subadditivity` result can be derived from `strong_subadditivity` by
+  specializing `dC = 1`; this is left for downstream modules.
 
 ## TODO
 

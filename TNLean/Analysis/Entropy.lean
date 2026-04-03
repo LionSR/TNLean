@@ -27,13 +27,9 @@ the basic quantum entropy infrastructure needed for MPDO / RFP applications.
 
 ## Status
 
-The following results are **not proved** in this module:
-* `vonNeumannEntropy_le_log_dim` — `sorry` placeholder (Jensen's inequality
-  via `ConcaveOn.le_map_sum` applied to `concaveOn_negMulLog`).
-
-The axiomatized strong subadditivity and derived subadditivity live in
-`TNLean.Axioms.Entropy`, which is **not** re-exported from `TNLean.lean`.
-See issue #239 for the deferred proof plan.
+All results in this module are fully proved. The axiomatized strong
+subadditivity lives in `TNLean.Axioms.Entropy`, which is **not** re-exported
+from `TNLean.lean`. See issue #239 for the deferred proof plan.
 
 ## Implementation notes
 
@@ -116,11 +112,9 @@ theorem vonNeumannEntropy_nonneg
 
 /-- Von Neumann entropy is bounded above by `log D`.
 
-By Jensen's inequality applied to the concave function `negMulLog`, the entropy
-is maximized when all eigenvalues are equal to `1/D` (maximally mixed state),
-giving `S(ρ) ≤ D · negMulLog(1/D) = log D`.
-
-TODO: Prove via `ConcaveOn.le_map_sum` applied to `concaveOn_negMulLog`. -/
+Proved via Jensen's inequality (`ConcaveOn.le_map_sum` applied to
+`concaveOn_negMulLog`): the entropy is maximized when all eigenvalues
+are equal to `1/D`, giving `S(ρ) ≤ D · negMulLog(1/D) = log D`. -/
 theorem vonNeumannEntropy_le_log_dim
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D)
     (hD : 0 < D) :
