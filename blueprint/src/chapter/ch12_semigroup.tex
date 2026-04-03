@@ -1136,7 +1136,7 @@ The four equivalent reducibility conditions of
 
 \begin{theorem}[Cor.~7.2(1): full algebra generation implies non-reducibility]
     \label{thm:not_isReducible_of_generates_full_algebra}
-    \lean{not_isReducible_of_generates_full_algebra}\notready
+    \lean{not_isReducible_of_generates_full_algebra}\leanok
     \uses{def:is_gksl_generator, def:lindblad_form,
           def:has_block_upper_triangular_lindblad,
           thm:wolf_prop_7_6_three_iff_four}
@@ -1144,6 +1144,13 @@ The four equivalent reducibility conditions of
     matrix algebra $M_d(\CC)$, then the QDS is not reducible.
     This is \cite[Cor.~7.2, condition~1]{Wolf2012Quantum}.
 \end{theorem}
+\begin{proof}\leanok
+    Assume for contradiction that a block-upper-triangular Lindblad
+    decomposition exists.  Extract a nontrivial invariant projection $P$,
+    show $(1-P)A P = 0$ for every generator via Algebra.adjoin induction,
+    and derive a contradiction with the hypothesis that the generated
+    algebra is all of $M_d(\CC)$.
+\end{proof}
 
 \begin{theorem}[Cor.~7.2(2): Hermitian span + trivial commutant implies non-reducibility]
     \label{thm:not_isReducible_of_hermitian_span_trivial_commutant}

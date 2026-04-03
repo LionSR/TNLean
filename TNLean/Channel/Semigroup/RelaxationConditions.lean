@@ -56,58 +56,6 @@ orthonormal-basis representation (Wolf §7.1). -/
 def kossakowskiRank (L : Mat →ₗ[ℂ] Mat) : ℕ :=
   sInf {n : ℕ | ∃ F : LindbladForm D, F.toLinearMap = L ∧ F.r = n}
 
-private theorem lindblad_block_of_generatorPreservesCompression
-    {P : Mat} (hP : IsOrthogonalProjection P) (F : LindbladForm D)
-    (hgen : GeneratorPreservesCompression F.toLinearMap P) :
-    ∀ j : Fin F.r, (1 - P) * F.L j * P = 0 := by
-  have hPP : P * P = P := hP.2
-  have hP_herm : Pᴴ = P := hP.1
-  have hQP := orthogonalProjection_complement_mul hP
-  have hPQ := orthogonalProjection_mul_complement hP
-  have hLP_compress : P * F.toLinearMap P * P = F.toLinearMap P := by
-    have h1 := hgen 1
-    simp only [mul_one] at h1
-    rwa [hPP] at h1
-  have hQ_LP : (1 - P) * F.toLinearMap P = 0 := by
-    calc
-      (1 - P) * F.toLinearMap P = (1 - P) * (P * F.toLinearMap P * P) := by
-        rw [hLP_compress]
-      _ = ((1 - P) * P) * (F.toLinearMap P * P) := by
-        simp only [Matrix.mul_assoc]
-      _ = 0 := by rw [hQP, Matrix.zero_mul]
-  set κ : Mat := F.toGeneratorDecomp.κ
-  have hQ_phi_eq_Q_kappa :
-      (1 - P) * (∑ j : Fin F.r, F.L j * P * (F.L j)ᴴ) = (1 - P) * (κ * P) := by
-    rw [F.toLinearMap_eq_generatorDecomp] at hQ_LP
-    simp only [GeneratorDecomp.toLinearMap_apply] at hQ_LP
-    rw [Matrix.mul_sub, Matrix.mul_sub] at hQ_LP
-    have hQPκ : (1 - P) * (P * F.toGeneratorDecomp.κᴴ) = 0 := by
-      rw [← Matrix.mul_assoc, hQP, Matrix.zero_mul]
-    rw [hQPκ, sub_zero] at hQ_LP
-    change (1 - P) * (∑ j : Fin F.r, F.L j * P * (F.L j)ᴴ) = (1 - P) * (κ * P)
-    exact sub_eq_zero.mp hQ_LP
-  have hsum_zero :
-      ∑ j : Fin F.r, ((1 - P) * F.L j * P) * ((1 - P) * F.L j * P)ᴴ = 0 := by
-    suffices hLHS :
-        ∑ j : Fin F.r, ((1 - P) * F.L j * P) * ((1 - P) * F.L j * P)ᴴ =
-        (1 - P) * (∑ j : Fin F.r, F.L j * P * (F.L j)ᴴ) * (1 - P) by
-      rw [hLHS, hQ_phi_eq_Q_kappa]
-      simp [Matrix.mul_assoc, hPQ]
-    rw [mul_sum, Finset.sum_mul]
-    apply Finset.sum_congr rfl
-    intro j _
-    calc
-      ((1 - P) * F.L j * P) * ((1 - P) * F.L j * P)ᴴ
-          = (1 - P) * (F.L j * (P * (P * ((F.L j)ᴴ * (1 - P))))) := by
-              simp [Matrix.conjTranspose_mul, Matrix.conjTranspose_sub,
-                Matrix.conjTranspose_one, hP_herm, Matrix.mul_assoc]
-      _ = (1 - P) * (F.L j * (P * ((F.L j)ᴴ * (1 - P)))) := by
-              congr 2
-              rw [← Matrix.mul_assoc, hPP]
-      _ = (1 - P) * (F.L j * P * (F.L j)ᴴ) * (1 - P) := by
-              simp [Matrix.mul_assoc]
-  exact eq_zero_of_sum_mul_conjTranspose_eq_zero _ hsum_zero
-
 private theorem lower_left_block_vanishes_on_lindbladSpan
     {P : Mat} (F : LindbladForm D)
     (hblock : ∀ j : Fin F.r, (1 - P) * F.L j * P = 0) :
