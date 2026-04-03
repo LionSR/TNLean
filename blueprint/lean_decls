@@ -591,7 +591,6 @@ MPSTensor.leftSectorTensor
 MPSTensor.leftSectorTensor_supported
 MPSTensor.left_mul_evalWord_leftSectorTensor_of_commutes
 MPSTensor.mpv_eq_zero_of_all_zero
-MPSTensor.nonDecaying_overlap_of_equal_norm_blocks
 MPSTensor.normClassGroupingData
 IsNPositiveMap
 Is2PositiveMap
