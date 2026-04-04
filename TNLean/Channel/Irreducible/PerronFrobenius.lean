@@ -193,7 +193,7 @@ theorem eigenvalue_unique_of_irreducible_cp
     exact hρ_ne ((smul_eq_zero.mp hρ_zero).resolve_left hr₁_ne)
   have hK_nonzero : ∃ i : Fin n, K i ≠ 0 := by
     by_contra hK_zero
-    push_neg at hK_zero
+    push Not at hK_zero
     have htransfer_zero : MPSTensor.transferMap (d := n) (D := D) K = 0 :=
       LinearMap.ext fun X => by
         simp [MPSTensor.transferMap_apply, hK_zero]

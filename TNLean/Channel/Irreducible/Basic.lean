@@ -125,7 +125,7 @@ lemma proj_zero_or_one_of_sandwich [DecidableEq (Fin D)]
   · exact .inl hP
   · right; symm; rw [← sub_eq_zero]
     obtain ⟨l₀, j₀, hlj⟩ : ∃ l₀ j₀, P l₀ j₀ ≠ 0 := by
-      by_contra h_all; push_neg at h_all
+      by_contra h_all; push Not at h_all
       exact hP (Matrix.ext fun i j => h_all i j)
     ext i k
     have h_eq := mul_single_mul_eq (1 - P) P k l₀
