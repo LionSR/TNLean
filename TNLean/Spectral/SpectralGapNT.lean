@@ -56,6 +56,12 @@ local instance instSpectralGapNTCompleteSpaceMatrixCLM (m n : ℕ) :
   FiniteDimensional.complete ℂ
     (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
 
+attribute [local instance]
+  instSpectralGapNTFiniteDimensionalMatrixCLM
+  instSpectralGapNTNormedAddCommGroupMatrixCLM
+  instSpectralGapNTNormedRingMatrixCLM
+  instSpectralGapNTCompleteSpaceMatrixCLM
+
 private lemma norm_starRingEnd_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
     ‖(starRingEnd ℂ) μ‖ = 1 := by
   simpa [Complex.norm_conj] using hμ
@@ -613,26 +619,12 @@ theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
   · exact ⟨1, 1, one_ne_zero, fun i => by ext a; exact a.elim0⟩
   haveI : NeZero D := ⟨hD⟩
   let V := Matrix (Fin D) (Fin D) ℂ
-  letI : CompleteSpace (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instSpectralGapNTCompleteSpaceMatrixCLM D D
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
   haveI : Nontrivial V := by
     haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
     exact Matrix.nonempty
   haveI : Nontrivial (V →L[ℂ] V) := ContinuousLinearMap.instNontrivialId
-  letI : NormedAddCommGroup
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instSpectralGapNTNormedAddCommGroupMatrixCLM D D
-  letI : NormedRing
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instSpectralGapNTNormedRingMatrixCLM D D
-  letI : FiniteDimensional ℂ
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instSpectralGapNTFiniteDimensionalMatrixCLM D D
-  letI : CompleteSpace
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instSpectralGapNTCompleteSpaceMatrixCLM D D
   obtain ⟨μ, hμ_spec, hμ_norm⟩ := spectrum.exists_nnnorm_eq_spectralRadius F'
   have h_spec_eq := AlgEquiv.spectrum_eq Φ (mixedTransferMap A B)
   have hμ_spec_end : μ ∈ spectrum ℂ (mixedTransferMap A B) := h_spec_eq ▸ hμ_spec
@@ -678,28 +670,14 @@ theorem mixedTransfer_pow_tendsto_zero_of_irreducible_TP
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
     (hB_irr : IsIrreducibleTensor (d := d) (D := D) B)
     (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+  (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
   (hAB : ¬ GaugePhaseEquiv A B)
   (X : Matrix (Fin D) (Fin D) ℂ) :
   Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X)
     Filter.atTop (nhds 0) := by
   let V := Matrix (Fin D) (Fin D) ℂ
-  letI : CompleteSpace (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instSpectralGapNTCompleteSpaceMatrixCLM D D
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
-  letI : NormedAddCommGroup
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instSpectralGapNTNormedAddCommGroupMatrixCLM D D
-  letI : NormedRing
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instSpectralGapNTNormedRingMatrixCLM D D
-  letI : FiniteDimensional ℂ
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instSpectralGapNTFiniteDimensionalMatrixCLM D D
-  letI : CompleteSpace
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    instSpectralGapNTCompleteSpaceMatrixCLM D D
   have h_clm : Filter.Tendsto (fun n => F' ^ n) Filter.atTop (nhds 0) :=
     pow_tendsto_zero_of_spectralRadius_lt_one F' <| by
       simpa [F', Φ, mixedTransferSpectralRadius] using
@@ -1238,10 +1216,6 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
   refine lt_of_le_of_ne hle ?_
   intro hEq
   rw [MPSTensor.mixedTransferSpectralRadius₂_eq] at hEq
-  letI :
-      CompleteSpace
-        (Matrix (Fin D₁) (Fin D₂) ℂ →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    instSpectralGapNTCompleteSpaceMatrixCLM D₁ D₂
   set F : (Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=
     (Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
       (mixedTransferMap₂ A B)
@@ -1251,20 +1225,6 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
       ((Matrix (Fin D₁) (Fin D₂) ℂ) →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) ≃ₐ[ℂ]
         ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
     Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)
-  letI : NormedAddCommGroup
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    instSpectralGapNTNormedAddCommGroupMatrixCLM D₁ D₂
-  letI : NormedRing
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    instSpectralGapNTNormedRingMatrixCLM D₁ D₂
-  letI : FiniteDimensional ℂ
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    instSpectralGapNTFiniteDimensionalMatrixCLM D₁ D₂
-  letI : CompleteSpace
-      ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
-    by
-      exact FiniteDimensional.complete ℂ
-        ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ)
   obtain ⟨μ, hμ_spec, hμ_rad⟩ := spectrum.exists_nnnorm_eq_spectralRadius (a := F)
   have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := by
     simpa [hEqF] using hμ_rad
