@@ -4,7 +4,7 @@ This file provides guidance to AI coding assistants working with code in this re
 
 ## Project Overview
 
-TNLean is a Lean 4 formalization of the **Fundamental Theorem of Matrix Product States**, **Quantum Wielandt theory**, and finite-dimensional **quantum-channel theory** (following Wolf's *Quantum Channels & Operations*). Built on Mathlib v4.28.0.
+TNLean is a Lean 4 formalization of the **Fundamental Theorem of Matrix Product States**, **Quantum Wielandt theory**, and finite-dimensional **quantum-channel theory** (following Wolf's *Quantum Channels & Operations*). Built on Mathlib v4.29.0.
 
 ## Build Commands
 
@@ -31,8 +31,8 @@ cd blueprint && leanblueprint pdf
 
 ## Lean Toolchain & Dependencies
 
-- **Lean**: v4.28.0 (pinned in `lean-toolchain`)
-- **Mathlib**: v4.28.0
+- **Lean**: v4.29.0 (pinned in `lean-toolchain`)
+- **Mathlib**: v4.29.0
 - **checkdecls**: Blueprint declaration checker (PatrickMassot/checkdecls)
 - **Gametheory**: Custom Brouwer fixed-point theorem library (LionSR/Brouwer)
 
