@@ -115,7 +115,7 @@ theorem posDef_sum_vecMulVec_of_span_eq_top {ι : Type*} [Fintype ι]
     · intro i _; positivity
     · -- There exists i with ⟨v i, x⟩ ≠ 0
       by_contra hall
-      push_neg at hall
+      push Not at hall
       have horth : ∀ i, star x ⬝ᵥ v i = 0 := by
         intro i
         have h1 := hall i (Finset.mem_univ i)
@@ -143,7 +143,7 @@ theorem posDef_sum_vecMulVec_of_span_eq_top {ι : Type*} [Fintype ι]
         rw [Complex.mul_conj]
       rw [hxx_real] at hxx
       have hne : ∃ j, x j ≠ 0 := by
-        by_contra h; push_neg at h; exact hx (funext h)
+        by_contra h; push Not at h; exact hx (funext h)
       obtain ⟨j, hj⟩ := hne
       have hpos : (0 : ℝ) < ∑ k : Fin D, Complex.normSq (x k) :=
         Finset.sum_pos' (fun k _ => Complex.normSq_nonneg _)
@@ -217,7 +217,7 @@ theorem posDef_fixedPoint_of_isPrimitivePaper
   -- Step 2: Since ρ ≠ 0, find j with v j ≠ 0
   have hv_ne : ∃ j : Fin m, v j ≠ 0 := by
     by_contra hall
-    push_neg at hall
+    push Not at hall
     apply hne
     rw [hρ_eq]
     apply Finset.sum_eq_zero
@@ -298,7 +298,7 @@ theorem transferMap_pow_positivity_improving
     (((transferMap (d := d) (D := D) A) ^ q) ρ).PosDef := by
   obtain ⟨m, v, hρ_eq⟩ := Matrix.posSemidef_iff_eq_sum_vecMulVec.mp hpsd
   have hv_ne : ∃ j : Fin m, v j ≠ 0 := by
-    by_contra hall; push_neg at hall
+    by_contra hall; push Not at hall
     exact hne (by rw [hρ_eq]; exact Finset.sum_eq_zero fun i _ => by simp [hall i])
   obtain ⟨j, hj⟩ := hv_ne
   rw [hρ_eq, map_sum]
@@ -506,7 +506,7 @@ private lemma vectorSpreadSpan_ne_top_of_hasInvariantProj
   -- Find φ ≠ 0 in range(P): since P ≠ 0, some column is nonzero
   have ⟨i, j, hij⟩ : ∃ i j, P i j ≠ 0 := by
     by_contra h
-    push_neg at h
+    push Not at h
     exact hP_ne0 (Matrix.ext fun a b => by simpa using h a b)
   set φ := P *ᵥ (Pi.single j (1 : ℂ)) with hφ_def
   have hφ_ne : φ ≠ 0 := by
@@ -627,7 +627,7 @@ theorem vectorSpreadSpan_mul_eq_top
       have ⟨ψ, hψ_mem, hψ_ne⟩ : ∃ ψ : Fin D → ℂ,
           ψ ∈ vectorSpreadSpan A φ (p * q) ∧ ψ ≠ 0 := by
         by_contra hall
-        push_neg at hall
+        push Not at hall
         have h_bot : vectorSpreadSpan A φ (p * q) = ⊥ := by
           rw [Submodule.eq_bot_iff]
           exact fun x hx => hall x hx
@@ -822,7 +822,7 @@ private lemma hermitianParts_not_both_zero
     {X : Matrix (Fin D) (Fin D) ℂ} (hne : X ≠ 0) :
     X + Xᴴ ≠ 0 ∨ Complex.I • (Xᴴ - X) ≠ 0 := by
   by_contra h
-  push_neg at h
+  push Not at h
   obtain ⟨h1, h2⟩ := h
   apply hne
   -- From i(X† - X) = 0 and i ≠ 0: X† = X
@@ -910,7 +910,7 @@ theorem exists_neg_eigenvalue_of_hermitian_ne_zero_trace_zero
   rw [hH.posSemidef_iff_eigenvalues_nonneg] at hnotpsd
   -- hnotpsd : ¬(0 ≤ hH.eigenvalues), where ≤ is the Pi ordering
   by_contra hall
-  push_neg at hall  -- hall : ∀ i, 0 ≤ hH.eigenvalues i
+  push Not at hall  -- hall : ∀ i, 0 ≤ hH.eigenvalues i
   exact hnotpsd (Pi.le_def.mpr (fun i => hall i))
 
 /-- **Affine combination of `E^p`-fixed points is an `E^p`-fixed point.** -/

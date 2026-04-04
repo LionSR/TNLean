@@ -45,7 +45,7 @@ theorem exists_consecutive_eq_of_monotone_bounded'
     (ha_bound : ∀ n, a n ≤ B) :
     ∃ n ≤ B, a n = a (n + 1) := by
   by_contra h
-  push_neg at h
+  push Not at h
   have hstrict : ∀ n ≤ B, a n < a (n + 1) := by
     intro n hn
     exact lt_of_le_of_ne (ha_mono n) (h n hn)
