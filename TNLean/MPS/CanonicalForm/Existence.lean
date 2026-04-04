@@ -227,7 +227,7 @@ theorem exists_nonzero_kraus_of_isIrreducibleTensor
     ∃ i : Fin d, A i ≠ 0 := by
   classical
   by_contra hA
-  push_neg at hA
+  push Not at hA
   let i0 : Fin D := ⟨0, lt_trans Nat.zero_lt_one hD⟩
   let i1 : Fin D := ⟨1, hD⟩
   let P : Matrix (Fin D) (Fin D) ℂ :=
@@ -482,7 +482,7 @@ theorem exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :
       (Finset.mem_filter.mp hMem).2
     rcases hLive with ⟨i, hi⟩
     by_contra h
-    push_neg at h
+    push Not at h
     have hd0 : dim k = 0 := Nat.le_zero.mp h
     have hEmpty : IsEmpty (Fin (dim k)) := by rw [hd0]; infer_instance
     have hzero : newBlocks k i = 0 := by ext a b; exact (hEmpty.false a).elim
@@ -532,7 +532,7 @@ theorem exists_irreducible_blockDecomp_liveBlocks (A : MPSTensor d D) :
         intro k hk
         have hkz : ∀ i, blocks₀ k i = 0 := by
           by_contra hne
-          push_neg at hne
+          push Not at hne
           have hkLive : k ∈ liveSet :=
             Finset.mem_filter.mpr ⟨Finset.mem_univ k, hne⟩
           exact absurd hkLive (Finset.disjoint_right.mp hDisj hk)
