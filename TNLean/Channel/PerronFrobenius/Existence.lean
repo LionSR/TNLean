@@ -160,7 +160,7 @@ theorem exists_posSemidef_eigenvector_general
       exists_posSemidef_eigenvector E hpos (hNZ := fun hpsd hne => hNZ _ hpsd hne)
     exact ⟨ρ, r, hρ_psd, hρ_ne, hr_pos.le, hEig⟩
   · -- E kills some nonzero PSD matrix → eigenvalue 0.
-    push_neg at hNZ
+    push Not at hNZ
     obtain ⟨ρ₀, hρ₀_psd, hρ₀_ne, hEρ₀⟩ := hNZ
     exact ⟨ρ₀, 0, hρ₀_psd, hρ₀_ne, le_refl 0, by simp [hEρ₀]⟩
 

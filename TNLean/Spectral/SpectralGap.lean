@@ -211,7 +211,7 @@ theorem eigenvalue_norm_le_one [NeZero D]
     ‖μ‖ ≤ 1 := by
   obtain ⟨v, hv_mem, hv_ne⟩ := hμ.exists_hasEigenvector
   have hFv := Module.End.mem_eigenspace_iff.mp hv_mem
-  by_contra h_gt; push_neg at h_gt
+  by_contra h_gt; push Not at h_gt
   have h_pos := frobSq_pos_of_ne_zero v hv_ne
   have h_bound : ∀ n : ℕ, ‖μ‖ ^ (2 * n) ≤ (D : ℝ) ^ 2 := fun n => by
     have h1 := hs_contraction_mixedTransfer A B v hA_norm hB_norm n
@@ -314,7 +314,7 @@ private lemma det_ne_zero_of_ker_all [NeZero D]
     intro w
     -- find some k with v k ≠ 0
     have ⟨k, hk⟩ : ∃ k, v k ≠ 0 := by
-      by_contra h_all_zero; push_neg at h_all_zero
+      by_contra h_all_zero; push Not at h_all_zero
       exact hv_ne (funext h_all_zero)
     let c : Fin D → ℂ := fun j => if j = k then (v k)⁻¹ else 0
     have hMv : (Matrix.vecMulVec w c) *ᵥ v = w := by
