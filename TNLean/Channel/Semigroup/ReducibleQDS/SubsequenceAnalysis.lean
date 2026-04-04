@@ -27,13 +27,6 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-local instance instSubsequenceAnalysisUniformityCountablyGenerated :
-    (_root_.uniformity Mat).IsCountablyGenerated := by
-  exact EMetric.instIsCountablyGeneratedUniformity
-
-local instance instSubsequenceAnalysisFirstCountableMat : FirstCountableTopology Mat :=
-  @UniformSpace.firstCountableTopology _ _ instSubsequenceAnalysisUniformityCountablyGenerated
-
 /-! ## (4) → (2): Block-upper-triangular → rank-deficient kernel element -/
 
 /-- A nonzero orthogonal projection has nonzero trace. -/
@@ -118,7 +111,6 @@ private theorem channel_fixedPoint_in_PMP
     refine congrArg ((1 / ↑(N + 1 : ℕ) : ℂ) • ·) ?_
     exact Finset.sum_congr rfl (fun n _ => h_iter_PMP n)
   -- Extract convergent subsequence
-  haveI : FirstCountableTopology Mat := by infer_instance
   obtain ⟨ρ, hρ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hσ_dm
   -- ρ is in PMP (limit of PMP elements, PMP is closed)

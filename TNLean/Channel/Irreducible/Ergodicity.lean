@@ -38,15 +38,6 @@ section Ergodicity
 
 variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
-local instance :
-    (_root_.uniformity (Matrix (Fin D) (Fin D) ℂ)).IsCountablyGenerated := by
-  letI : (nhds (0 : Matrix (Fin D) (Fin D) ℂ)).IsCountablyGenerated := by
-    infer_instance
-  exact IsUniformAddGroup.uniformity_countably_generated
-
-local instance : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) :=
-  @UniformSpace.firstCountableTopology _ _ inferInstance
-
 /-- A density matrix is nonzero. -/
 private lemma ne_zero_of_mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ρ ∈ densityMatrices D) :
