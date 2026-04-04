@@ -173,7 +173,7 @@ theorem isPrimitive_transferMap_blockTensor_of_dvd
   obtain ⟨m, rfl⟩ := hpq
   -- p > 0 since p * m > 0
   have hp : 0 < p := by
-    by_contra h; push_neg at h; interval_cases p; simp at hq
+    by_contra h; push Not at h; interval_cases p; simp at hq
   -- m > 0 since p * m > 0 and p > 0
   have hm : 0 < m := Nat.pos_of_mul_pos_left hq
   -- Rewrite transfer maps as iterates of the original transfer map.
