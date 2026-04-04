@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.MPS.Core.Transfer
+import TNLean.Algebra.MatrixFunctionalCalculus
 
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order
@@ -27,11 +28,12 @@ open Matrix Finset Complex
 
 variable {d D : ℕ}
 
-local instance : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-  ContinuousFunctionalCalculus.toNonUnital
+local instance :
+    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
+  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin D)
 
 local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.instNonnegSpectrumClass
+  TNLean.matrixNonnegSpectrumClass (n := Fin D)
 
 /-! ## Helper lemmas about `CFC.sqrt` for positive definite matrices -/
 
