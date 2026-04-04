@@ -621,7 +621,7 @@ theorem per_block_sameMPV_of_separated_canonical_data
     ∀ k, SameMPV (A k) (B k) := by
   by_cases hr : r ≤ 1
   · exact per_block_sameMPV_of_sameMPV₂_of_card_le_one μ A B hWeights.mu_ne_zero hr hSame₂
-  · push_neg at hr
+  · push Not at hr
     exact block_separation_all_words μ A B hWeights.mu_strict_anti hWeights.mu_ne_zero
       hA_inj.block_injective hB_inj.block_injective hA_left.leftCanonical hB_left.leftCanonical
       hA_overlap.overlap_tendsto_one
@@ -666,7 +666,7 @@ theorem per_block_sameMPV_of_normal_canonical_form
     ∀ k, SameMPV (A k) (B k) := by
   by_cases hr : r ≤ 1
   · exact per_block_sameMPV_of_sameMPV₂_of_card_le_one μ A B hA.mu_ne_zero hr hSame₂
-  · push_neg at hr
+  · push Not at hr
     intro k
     exact block_separation_all_words_of_irreducible_TP μ A B
       hA.mu_strict_anti hA.mu_ne_zero hA.block_irreducible hB_irr hA.leftCanonical hB_lc
