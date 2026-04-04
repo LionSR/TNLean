@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.CStarMatrix
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
+import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 
@@ -25,6 +26,14 @@ local instance : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin 
 
 local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.instNonnegSpectrumClass
+
+noncomputable local instance :
+    ContinuousFunctionalCalculus ℝ (CStarMatrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
+  IsSelfAdjoint.instContinuousFunctionalCalculus
+
+noncomputable local instance :
+    IsometricContinuousFunctionalCalculus ℝ (CStarMatrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
+  IsSelfAdjoint.instIsometricContinuousFunctionalCalculus
 
 /-- The Hermitian part of a matrix. -/
 noncomputable def hermitianPart (A : Matrix (Fin D) (Fin D) ℂ) :
@@ -77,7 +86,27 @@ noncomputable def matrixAbs (A : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (F
   CFC.abs A
 
 theorem continuous_matrixAbs : Continuous (matrixAbs (D := D)) := by
-  sorry
+  let g : CStarMatrix (Fin D) (Fin D) ℂ → CStarMatrix (Fin D) (Fin D) ℂ :=
+    fun A ↦ star A * A
+  have hg : Continuous g := continuous_star.mul continuous_id
+  have hsqrtC : Continuous fun A : CStarMatrix (Fin D) (Fin D) ℂ ↦ cfc Real.sqrt (g A) :=
+    (Continuous.cfc_of_mem_nhdsSet (A := CStarMatrix (Fin D) (Fin D) ℂ) (p := IsSelfAdjoint)
+      (f := Real.sqrt) (s := Set.univ) Filter.univ_mem hg
+      (ha' := by
+        intro A
+        exact IsSelfAdjoint.star_mul_self A)
+      (hf := by
+        simpa using Real.continuous_sqrt))
+  have hsqrtM : Continuous (fun A : Matrix (Fin D) (Fin D) ℂ ↦ cfc Real.sqrt (star A * A)) := by
+    simpa [g] using
+      CStarMatrix.ofMatrixL.symm.continuous.comp (hsqrtC.comp CStarMatrix.ofMatrixL.continuous)
+  have hEq :
+      matrixAbs (D := D) = fun A : Matrix (Fin D) (Fin D) ℂ ↦ cfc Real.sqrt (star A * A) := by
+    funext A
+    rw [matrixAbs, CFC.abs, CFC.sqrt_eq_real_sqrt (a := star A * A)]
+    exact cfcₙ_eq_cfc (a := star A * A) (f := Real.sqrt)
+  rw [hEq]
+  exact hsqrtM
 
 @[simp]
 theorem matrixAbs_eq_self_of_posSemidef
