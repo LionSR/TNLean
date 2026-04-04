@@ -38,9 +38,6 @@ section Ergodicity
 
 variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
-local instance : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) :=
-  @UniformSpace.firstCountableTopology _ _ inferInstance
-
 /-- A density matrix is nonzero. -/
 private lemma ne_zero_of_mem_densityMatrices {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ρ ∈ densityMatrices D) :

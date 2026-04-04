@@ -13,13 +13,10 @@ This file defines `IsReducibleQDS` and proves the full four-way equivalence
 of Wolf Proposition 7.6.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix Finset
 
 noncomputable section
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 

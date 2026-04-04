@@ -80,7 +80,7 @@ theorem vectorSpreadSpan_eq_top_of_wordSpan_eq_top
   -- Since φ ≠ 0, there exists k with φ k ≠ 0
   obtain ⟨k, hk⟩ : ∃ k : Fin D, φ k ≠ 0 := by
     by_contra hall
-    push_neg at hall
+    push Not at hall
     exact hφ (funext fun i => hall i)
   -- Construct M with M *ᵥ φ = v
   refine ⟨∑ j, Matrix.single j k (v j * (φ k)⁻¹), ?_⟩

@@ -36,15 +36,12 @@ These statements are the semigroup-side kernel/fixed-point bridges needed for
 Wolf Chapter 7.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal
+open scoped Matrix ComplexOrder BigOperators NNReal TNOperatorSpace
 open Matrix Finset NormedSpace
 
 noncomputable section
 
 variable {D : ℕ}
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 

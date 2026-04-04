@@ -6,6 +6,7 @@ import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.SpectralRadius
 import TNLean.Channel.Irreducible.TraceAdjoint
+import TNLean.Algebra.MatrixOperatorSpace
 
 /-!
 # Irreducibility from spectral properties (Wolf Theorem 6.4)
@@ -39,7 +40,7 @@ since the competing fixed point produced from a reducible channel is again
 positive semidefinite.
 -/
 
-open scoped Matrix MatrixOrder Pointwise ComplexOrder BigOperators NNReal ENNReal
+open scoped Matrix MatrixOrder Pointwise ComplexOrder BigOperators NNReal ENNReal TNOperatorSpace
 open Matrix Finset
 
 variable {D : ℕ}
@@ -209,7 +210,7 @@ theorem hasSpectralProperties_of_irreducible_cp
     MPSTensor.isIrreducibleTensor_of_isIrreducibleMap K hIrrK_map
   have hK_nonzero : ∃ i : Fin n, K i ≠ 0 := by
     by_contra hK_zero
-    push_neg at hK_zero
+    push Not at hK_zero
     have htransfer_zero : MPSTensor.transferMap (d := n) (D := D) K = 0 :=
       LinearMap.ext fun X => by
         simp [MPSTensor.transferMap_apply, hK_zero]
@@ -227,13 +228,15 @@ theorem hasSpectralProperties_of_irreducible_cp
   have hscalar : (r : ℂ) * Matrix.trace (σ * ρ) = (t : ℂ) * Matrix.trace (σ * ρ) := by
     calc
       (r : ℂ) * Matrix.trace (σ * ρ)
-          = Matrix.trace (σ * ((r : ℂ) • ρ)) := by simp
+          = Matrix.trace (σ * ((r : ℂ) • ρ)) := by
+              rw [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
       _ = Matrix.trace (σ * E ρ) := by rw [hρ_eig]
       _ = Matrix.trace
             (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * ρ) :=
             htrace ρ
       _ = Matrix.trace (((t : ℂ) • σ) * ρ) := by rw [hσ_eig]
-      _ = (t : ℂ) * Matrix.trace (σ * ρ) := by simp
+      _ = (t : ℂ) * Matrix.trace (σ * ρ) := by
+            rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
   have hr_eq_t : r = t := by
     have hcomplex : (r : ℂ) = (t : ℂ) := mul_right_cancel₀ htr_ne hscalar
     have hreal := congrArg Complex.re hcomplex
@@ -370,6 +373,8 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
 
 /-! ## Reverse implication: spectral properties ⇒ irreducible -/
 
+-- Lean 4.29 `unusedTactic` linter false-positives on the final `have`/`rw`/`exact` block
+set_option linter.unusedTactic false in
 /-- **Wolf Theorem 6.4, reverse direction** for CP maps.
 
 Starting from a positive-definite right eigenvector and a positive-definite left
@@ -437,7 +442,11 @@ theorem isIrreducibleMap_of_hasSpectralProperties
       MPSTensor.transferMap (d := n) (D := D) B X
           = ∑ i : Fin n,
               (S * (d • K i) * S⁻¹) * X * (S * (d • K i) * S⁻¹)ᴴ := by
-                simp [MPSTensor.transferMap_apply, hB_def, MPSTensor.tpGauge, hA'_def, hS_def]
+                subst B
+                subst A'
+                subst S
+                simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge]
+                rfl
       _ = ∑ i : Fin n,
               (↑r : ℂ)⁻¹ • (S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
             refine Finset.sum_congr rfl ?_

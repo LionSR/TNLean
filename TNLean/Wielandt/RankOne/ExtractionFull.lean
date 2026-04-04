@@ -207,7 +207,7 @@ theorem exists_nonzero_trace_word_of_wordSpan_eq_top [NeZero D]
     (A : MPSTensor d D) {N : ℕ} (htop : wordSpan A N = ⊤) :
     ∃ σ : Fin N → Fin d, (evalWord A (List.ofFn σ)).trace ≠ 0 := by
   by_contra hall
-  push_neg at hall
+  push Not at hall
   have hall' : ∀ σ : Fin N → Fin d, (evalWord A (List.ofFn σ)).trace = 0 := hall
   have hI : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A N := htop ▸ Submodule.mem_top
   -- The trace linear map kills all generators, hence kills the span

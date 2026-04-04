@@ -115,7 +115,7 @@ theorem sameMPV₂_repeated_word
     fun i => flat.get (Fin.cast hlen.symm i) with σ_def
   have hofFn : List.ofFn σ = flat := by
     rw [σ_def]
-    conv_rhs => rw [← List.ofFn_getElem flat]
+    conv_rhs => rw [← List.ofFn_getElem (xs := flat)]
     apply List.ofFn_congr (by omega)
   have hsummed := sameMPV₂_summed_blocks μ A B hSame (w.length * L) σ
   simp only [mpv, coeff, hofFn, flat_def, evalWord_flatten_replicate] at hsummed

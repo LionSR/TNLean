@@ -63,15 +63,12 @@ is formalized via `irreducible_all_of_irreducible_time` in
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1, Prop 7.5][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal
+open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal TNOperatorSpace
 open Matrix Finset NormedSpace
 
 noncomputable section
 
 variable {D : ℕ}
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
@@ -99,6 +96,15 @@ theorem eigenvalue_exp_of_eigenvalue_generator
     (L : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (μ : ℂ) (hμ : μ ∈ spectrum ℂ L) (t : ℂ) :
     Complex.exp (t * μ) ∈ spectrum ℂ (NormedSpace.exp (t • L)) := by
+  let hFinite :
+      FiniteDimensional ℂ (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    (endEquiv (D := D)).toLinearEquiv.finiteDimensional
+  let hComplete :
+      CompleteSpace (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := by
+    letI : FiniteDimensional ℂ
+        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := hFinite
+    exact FiniteDimensional.complete ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
   have hnt : Nontrivial (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := by
     by_contra h
     rw [not_nontrivial_iff_subsingleton] at h
@@ -117,7 +123,10 @@ theorem eigenvalue_exp_of_eigenvalue_generator
     · have hu : IsUnit t := isUnit_iff_ne_zero.mpr ht
       simpa [smul_eq_mul] using
         (spectrum.smul_mem_smul_iff (a := L) (r := hu.unit)).mpr hμ
-  simpa [Complex.exp_eq_exp_ℂ] using (spectrum.exp_mem_exp (a := t • L) htmul)
+  simpa [Complex.exp_eq_exp_ℂ] using
+    (@spectrum.exp_mem_exp ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+      inferInstance inferInstance inferInstance hComplete (t • L) (z := t * μ) htmul)
 
 /-! ## Key lemma: exp(itθ) root of unity for all t > 0 implies θ = 0
 

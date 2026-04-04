@@ -82,7 +82,7 @@ theorem exists_nonzero_trace_word_of_cumulativeSpan_eq_top [NeZero D]
     (A : MPSTensor d D) {N : ℕ} (hcs : cumulativeSpan A N = ⊤) :
     ∃ (w : List (Fin d)), w.length ≤ N ∧ Matrix.trace (evalWord A w) ≠ 0 := by
   by_contra hall
-  push_neg at hall
+  push Not at hall
   -- Set up the trace linear map.
   set trMap : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
   -- All generators of cumulativeSpan have zero trace → the whole span is in ker(tr).

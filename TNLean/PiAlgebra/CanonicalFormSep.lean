@@ -473,8 +473,7 @@ theorem summed_identity_for_word
   set σ : Fin (M * L) → Fin d := fun i =>
     ((List.replicate L w).flatten).get (Fin.cast hlen.symm i)
   have hofFn : List.ofFn σ = (List.replicate L w).flatten := by
-    conv_rhs => rw [← List.ofFn_getElem ((List.replicate L w).flatten)]
-    apply List.ofFn_congr (by omega)
+    simpa [σ, hlen] using (List.ofFn_getElem (xs := (List.replicate L w).flatten))
   have hsummed := h_summed (M * L) σ
   simp only [mpv, coeff, hofFn, evalWord_flatten_replicate, mul_sub] at hsummed
   rw [Finset.sum_sub_distrib, sub_eq_zero] at hsummed
@@ -622,7 +621,7 @@ theorem per_block_sameMPV_of_separated_canonical_data
     ∀ k, SameMPV (A k) (B k) := by
   by_cases hr : r ≤ 1
   · exact per_block_sameMPV_of_sameMPV₂_of_card_le_one μ A B hWeights.mu_ne_zero hr hSame₂
-  · push_neg at hr
+  · push Not at hr
     exact block_separation_all_words μ A B hWeights.mu_strict_anti hWeights.mu_ne_zero
       hA_inj.block_injective hB_inj.block_injective hA_left.leftCanonical hB_left.leftCanonical
       hA_overlap.overlap_tendsto_one
@@ -667,7 +666,7 @@ theorem per_block_sameMPV_of_normal_canonical_form
     ∀ k, SameMPV (A k) (B k) := by
   by_cases hr : r ≤ 1
   · exact per_block_sameMPV_of_sameMPV₂_of_card_le_one μ A B hA.mu_ne_zero hr hSame₂
-  · push_neg at hr
+  · push Not at hr
     intro k
     exact block_separation_all_words_of_irreducible_TP μ A B
       hA.mu_strict_anti hA.mu_ne_zero hA.block_irreducible hB_irr hA.leftCanonical hB_lc

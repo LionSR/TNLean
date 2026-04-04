@@ -7,6 +7,7 @@ import TNLean.Spectral.SpectralGap
 import TNLean.Spectral.MPVOverlapTrace
 
 import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.Normed.Operator.CompleteCodomain
 
 /-!
 # Primitive overlap limit (spectral-gap formulation)
@@ -65,7 +66,11 @@ lemma tendsto_trace_pow_of_tendsto_zero
   have hcont : Continuous (traceCLM (D := D)) :=
     LinearMap.continuous_of_finiteDimensional (traceCLM (D := D))
   have h := (hcont.tendsto (0 : V →L[ℂ] V)).comp hF
-  simpa [traceCLM] using h
+  have hzero : traceCLM (D := D) (0 : V →L[ℂ] V) = 0 := by
+    simp [traceCLM]
+  change Tendsto ((fun G : V →L[ℂ] V => LinearMap.trace ℂ V G) ∘ fun n => F ^ n)
+      atTop (nhds (0 : ℂ))
+  simpa [traceCLM, Function.comp_apply, hzero] using h
 
 /-- **Trace convergence from a spectral gap.**
 
@@ -85,17 +90,29 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
     Filter.Tendsto (fun n => (LinearMap.trace ℂ V) (E ^ n)) Filter.atTop (nhds (1 : ℂ)) := by
   classical
   -- Notations
+  letI : FiniteDimensional ℂ V := by infer_instance
+  letI : CompleteSpace V := FiniteDimensional.complete ℂ V
+  letI : Nontrivial V := by infer_instance
+  letI : SeparatingDual ℂ V := by infer_instance
+  have hCompleteCLM : CompleteSpace (V →L[ℂ] V) := by
+    exact
+      (SeparatingDual.completeSpace_continuousLinearMap_iff
+        (𝕜 := ℂ) (E := V) (F := V)).2 inferInstance
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ htr
   let N : V →ₗ[ℂ] V := E - P
   -- Step 1: show `trace(N^n) → 0` from the spectral radius assumption.
   have hNpow_clm : Filter.Tendsto (fun n => (Φ N) ^ n) Filter.atTop (nhds 0) :=
-    pow_tendsto_zero_of_spectralRadius_lt_one (a := (Φ N)) (by simpa [N, P] using hSpect)
+    by
+      exact
+        @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V) _ hCompleteCLM _ (Φ N)
+          (by simpa [N, P] using hSpect)
   have hNtrace0' :
       Filter.Tendsto
         (fun n => LinearMap.trace ℂ V ((Φ N) ^ n : V →L[ℂ] V))
         Filter.atTop (nhds (0 : ℂ)) :=
-    tendsto_trace_pow_of_tendsto_zero (D := D) (F := Φ N) hNpow_clm
+    by
+      exact tendsto_trace_pow_of_tendsto_zero (D := D) (F := Φ N) hNpow_clm
   -- Convert `trace((Φ N)^n)` to `trace(N^n)` via `map_pow` and the definitional coercion.
   have hNtrace0 :
       Filter.Tendsto (fun n => LinearMap.trace ℂ V (N ^ n)) Filter.atTop (nhds (0 : ℂ)) := by

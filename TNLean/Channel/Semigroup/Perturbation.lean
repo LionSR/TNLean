@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.Basic
 
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
@@ -9,6 +10,7 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Mathlib.Analysis.ODE.Gronwall
+import Mathlib.Analysis.Calculus.Deriv.Shift
 
 /-!
 # Perturbation bound for dynamical semigroups — Wolf Lemma 7.1 and Corollary 7.1
@@ -23,70 +25,73 @@ import Mathlib.Analysis.ODE.Gronwall
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal
-open Matrix Finset NormedSpace MeasureTheory
+open scoped Matrix ComplexOrder BigOperators NNReal TNOperatorSpace
+open Matrix Finset NormedSpace MeasureTheory TNLean
 
 noncomputable section
 
 variable {D : ℕ}
 
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
-
-private abbrev CLM (D : ℕ) :=
-  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
-
 /-! ## Derivative of the semigroup product -/
 
+set_option maxHeartbeats 800000 in
+-- The product-derivative proof combines semigroup differentiation, a translated parameter,
+-- and CLM multiplication; 4.29 elaboration needs a higher heartbeat budget here.
 /-- HasDerivAt for `s ↦ exp((t-s)•L) * exp(s•L')` with derivative
-`exp((t-s)•L) * (L' - L) * exp(s•L')`. Both derivatives go through ℂ
-to ensure instance consistency. -/
+`exp((t-s)•L) * (L' - L) * exp(s•L')`. -/
 private theorem hasDerivAt_semigroup_product
-    (L L' : CLM D) (t s : ℝ) :
+    (L L' : MatrixCLM (Fin D)) (t s : ℝ) :
     HasDerivAt (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
       (expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s) s := by
-  simp only [expSemigroupCLM]
-  -- Cast lemma
-  have hcast : ∀ u : ℝ, ((t - u : ℝ) : ℂ) = (t : ℂ) - (u : ℂ) := by
-    intro u; push_cast; ring
-  -- Inner maps ℝ → ℂ
-  have h_ofReal : HasDerivAt (fun u : ℝ => (u : ℂ)) (1 : ℂ) s :=
-    Complex.ofRealCLM.hasDerivAt
-  have h_tsub : HasDerivAt (fun u : ℝ => (t : ℂ) - (u : ℂ)) (-1 : ℂ) s :=
-    h_ofReal.const_sub (t : ℂ)
-  -- Outer maps ℂ → CLM
-  have hexp_L := hasDerivAt_exp_smul_const (𝕂 := ℂ) L ((t : ℂ) - (s : ℂ))
-  have hexp_L' := hasDerivAt_exp_smul_const (𝕂 := ℂ) L' (s : ℂ)
-  -- Chain rule: compose ℝ → ℂ → CLM
-  have hg := hexp_L.scomp s h_tsub
-  have hh := hexp_L'.scomp s h_ofReal
-  simp only [Function.comp_def, neg_smul, one_smul] at hg hh
-  -- Rewrite cast
-  simp_rw [hcast] at hg ⊢
-  -- Product rule (both hg and hh now use consistent instances)
-  have hprod := hg.mul hh
+  have hg :
+      HasDerivAt (fun u => expSemigroupCLM L (t - u))
+        (-(expSemigroupCLM L (t - s) * L)) s := by
+    have hbase :
+        HasDerivAt (fun u : ℝ => expSemigroupCLM L u)
+          (expSemigroupCLM L (t - s) * L) (t - s) :=
+      hasDerivAt_expSemigroupCLM L (t - s)
+    simpa [neg_one_smul] using
+      (HasDerivAt.comp_const_sub
+        (𝕜 := ℝ)
+        (f := fun u : ℝ => expSemigroupCLM L u)
+        (a := t) (x := s) hbase)
+  have hh :
+      HasDerivAt (fun u => expSemigroupCLM L' u)
+        (expSemigroupCLM L' s * L') s :=
+    hasDerivAt_expSemigroupCLM L' s
+  let c : ℝ → MatrixCLM (Fin D) := fun u => expSemigroupCLM L (t - u)
+  let d : ℝ → MatrixCLM (Fin D) := fun u => expSemigroupCLM L' u
+  have hc : HasDerivAt c (-(expSemigroupCLM L (t - s) * L)) s := hg
+  have hd : HasDerivAt d (expSemigroupCLM L' s * L') s := hh
+  have hprod : HasDerivAt
+      (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
+      (-(expSemigroupCLM L (t - s) * L) * expSemigroupCLM L' s +
+        expSemigroupCLM L (t - s) * (expSemigroupCLM L' s * L')) s := by
+    simpa [c, d, mul_assoc] using
+      (HasDerivAt.mul (𝕜 := ℝ) (𝔸 := MatrixCLM (Fin D)) hc hd)
   -- The derivative from product rule is: -(exp(...)* L) * exp(...) + exp(...) * (exp(...) * L')
   -- We need: exp(...) * (L' - L) * exp(...)
   suffices heq :
-      -(NormedSpace.exp (((t : ℂ) - (s : ℂ)) • L) * L) * NormedSpace.exp ((s : ℂ) • L') +
-      NormedSpace.exp (((t : ℂ) - (s : ℂ)) • L) * (NormedSpace.exp ((s : ℂ) • L') * L') =
-      NormedSpace.exp (((t : ℂ) - (s : ℂ)) • L) * (L' - L) * NormedSpace.exp ((s : ℂ) • L') by
+      -(expSemigroupCLM L (t - s) * L) * expSemigroupCLM L' s +
+      expSemigroupCLM L (t - s) * (expSemigroupCLM L' s * L') =
+      expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s by
     rwa [heq] at hprod
   -- Commutativity: L' * exp(s•L') = exp(s•L') * L'
-  have hcomm_smul : Commute L' ((s : ℂ) • L') := by
-    ext v
-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.smul_apply, map_smul]
-  have hcomm : L' * NormedSpace.exp ((s : ℂ) • L') =
-      NormedSpace.exp ((s : ℂ) • L') * L' :=
-    hcomm_smul.exp_right.eq
+  have hcomm : L' * expSemigroupCLM L' s =
+      expSemigroupCLM L' s * L' :=
+    by
+      have hcomm_smul : Commute ((s : ℂ) • L') L' := by
+        ext v
+        simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.smul_apply, map_smul]
+      simpa [expSemigroupCLM] using hcomm_smul.exp_left.eq.symm
   -- Prove the algebra at the pointwise level (avoids CLM instance diamonds with neg_mul)
   apply ContinuousLinearMap.ext; intro v
   -- Expand both sides using CLM operations
   simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.neg_apply,
     ContinuousLinearMap.add_apply, ContinuousLinearMap.sub_apply, map_sub]
   -- Use hcomm: L'(exp v) = exp(L' v), rearranged to exp(L' v) = L'(exp v)
-  have hcomm_v : NormedSpace.exp ((s : ℂ) • L') (L' v) =
-      L' (NormedSpace.exp ((s : ℂ) • L') v) :=
+  have hcomm_v : expSemigroupCLM L' s (L' v) =
+      L' (expSemigroupCLM L' s v) :=
     (DFunLike.congr_fun hcomm v).symm
   rw [hcomm_v]
   -- Goal: -(A(L(Cv))) + A(L'(Cv)) = A(L'(Cv)) - A(L(Cv))
@@ -95,7 +100,7 @@ private theorem hasDerivAt_semigroup_product
 
 /-- **Lemma 7.1** (Duhamel formula for matrix semigroups). -/
 theorem duhamel_formula
-    (L L' : CLM D) (t : ℝ) (ht : 0 ≤ t) :
+    (L L' : MatrixCLM (Fin D)) (t : ℝ) (ht : 0 ≤ t) :
     expSemigroupCLM L' t - expSemigroupCLM L t =
       ∫ s in Set.Icc 0 t,
         expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s := by
@@ -105,29 +110,30 @@ theorem duhamel_formula
       HasDerivAt (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
         (expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s) s :=
     fun s _ => hasDerivAt_semigroup_product L L' t s
+  have hcont :
+      Continuous (fun s => expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s) := by
+    apply Continuous.mul
+    · apply Continuous.mul
+      · exact (expSemigroupCLM_continuous L).comp (continuous_const.sub continuous_id)
+      · exact continuous_const
+    · exact expSemigroupCLM_continuous L'
   -- Step 2: Integrability of the derivative (continuous → integrable)
   have hintble : IntervalIntegrable
       (fun s => expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s)
       MeasureTheory.volume 0 t := by
-    apply ContinuousOn.intervalIntegrable
-    apply ContinuousOn.mul
-    · apply ContinuousOn.mul
-      · -- expSemigroupCLM L (t - ·) is continuous
-        exact (expSemigroupCLM_continuous L).continuousOn.comp
-          (continuous_const.sub continuous_id).continuousOn (Set.mapsTo_univ _ _)
-      · exact continuousOn_const
-    · exact (expSemigroupCLM_continuous L').continuousOn
+    rw [intervalIntegrable_iff_integrableOn_Icc_of_le ht]
+    exact hcont.continuousOn.integrableOn_Icc
   -- Step 3: Apply FTC-2: ∫₀ᵗ f'(s) ds = f(t) - f(0)
   -- where f(s) = expSemigroupCLM L (t - s) * expSemigroupCLM L' s
   rw [intervalIntegral.integral_eq_sub_of_hasDerivAt hderiv hintble]
   -- Simplify f(t) - f(0):
   -- f(t) = expSemigroupCLM L (t - t) * expSemigroupCLM L' t = 1 * T' t = T' t
   -- f(0) = expSemigroupCLM L (t - 0) * expSemigroupCLM L' 0 = T t * 1 = T t
-  simp only [sub_self, sub_zero, expSemigroupCLM_zero, one_mul, mul_one]
+  simpa [sub_self, sub_zero, expSemigroupCLM_zero, one_mul, mul_one]
 
 /-! ## Helper for biSup bounds -/
 
-private lemma norm_expSemigroup_le_biSup (L : CLM D) {t : ℝ} (ht : 0 ≤ t)
+private lemma norm_expSemigroup_le_biSup (L : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t)
     {x : ℝ} (hx : x ∈ Set.Icc 0 t) :
     ‖expSemigroupCLM L x‖ ≤ ⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖ := by
   have hbdd : BddAbove ((fun s => ‖expSemigroupCLM L s‖) '' Set.Icc 0 t) :=
@@ -156,7 +162,7 @@ private lemma norm_expSemigroup_le_biSup (L : CLM D) {t : ℝ} (ht : 0 ≤ t)
 
 /-- **Corollary 7.1** (perturbation of generators). -/
 theorem perturbation_bound
-    (L L' : CLM D) (t : ℝ) (ht : 0 ≤ t) :
+    (L L' : MatrixCLM (Fin D)) (t : ℝ) (ht : 0 ≤ t) :
     ‖expSemigroupCLM L' t - expSemigroupCLM L t‖ ≤
       t * ‖L' - L‖ *
         (⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖) *
@@ -192,7 +198,7 @@ theorem perturbation_bound
 /-- Simplified perturbation bound for quantum channels (where ‖T_s‖ ≤ 1):
 `‖T'_t - T_t‖ ≤ t · ‖Δ‖`. -/
 theorem perturbation_bound_unit_norm
-    (L L' : CLM D) (t : ℝ) (ht : 0 ≤ t)
+    (L L' : MatrixCLM (Fin D)) (t : ℝ) (ht : 0 ≤ t)
     (hT : ∀ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖ ≤ 1)
     (hT' : ∀ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L' s‖ ≤ 1) :
     ‖expSemigroupCLM L' t - expSemigroupCLM L t‖ ≤ t * ‖L' - L‖ := by
@@ -225,23 +231,23 @@ theorem perturbation_bound_unit_norm
 /-- Recursive Dyson-Phillips terms built from the unperturbed semigroup `L`
 and perturbation `L' - L`. -/
 noncomputable def dysonTerm
-    (L L' : CLM D) (t : ℝ) : ℕ → CLM D
+    (L L' : MatrixCLM (Fin D)) (t : ℝ) : ℕ → MatrixCLM (Fin D)
   | 0 => expSemigroupCLM L t
   | n + 1 =>
       ∫ s in Set.Icc 0 t,
         expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n
 
-@[simp] lemma dysonTerm_zero (L L' : CLM D) (t : ℝ) :
+@[simp] lemma dysonTerm_zero (L L' : MatrixCLM (Fin D)) (t : ℝ) :
     dysonTerm L L' t 0 = expSemigroupCLM L t := rfl
 
-@[simp] lemma dysonTerm_succ (L L' : CLM D) (t : ℝ) (n : ℕ) :
+@[simp] lemma dysonTerm_succ (L L' : MatrixCLM (Fin D)) (t : ℝ) (n : ℕ) :
     dysonTerm L L' t (n + 1) =
       ∫ s in Set.Icc 0 t,
         expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n := rfl
 
 /-- Zeroth Dyson term is controlled by the same compact-interval `iSup` used above. -/
 lemma norm_dysonTerm_zero_le
-    (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) :
+    (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
     ‖dysonTerm L L' t 0‖ ≤ ⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖ := by
   simpa [dysonTerm] using
     (norm_expSemigroup_le_biSup (L := L) (t := t) ht (x := t) (Set.right_mem_Icc.mpr ht))
@@ -249,7 +255,7 @@ lemma norm_dysonTerm_zero_le
 /-- One-step norm estimate for the Dyson recursion.
 This is the inductive estimate used to bootstrap higher-order bounds. -/
 lemma norm_dysonTerm_succ_le
-    (L L' : CLM D) {t K : ℝ} (ht : 0 ≤ t) (n : ℕ)
+    (L L' : MatrixCLM (Fin D)) {t K : ℝ} (ht : 0 ≤ t) (n : ℕ)
     (hK : ∀ s ∈ Set.Icc 0 t, ‖dysonTerm L L' s n‖ ≤ K) :
     ‖dysonTerm L L' t (n + 1)‖ ≤
       t *
@@ -286,7 +292,7 @@ lemma norm_dysonTerm_succ_le
 /-- Summability criterion for Dyson terms from a factorial majorant.
 This packages the M-test step independently of the inductive norm proof. -/
 lemma summable_dysonTerm_of_factorial_bound
-    (L L' : CLM D) {t M : ℝ}
+    (L L' : MatrixCLM (Fin D)) {t M : ℝ}
     (hbound : ∀ n, ‖dysonTerm L L' t n‖ ≤ M * ((t * ‖L' - L‖ * M) ^ n / ↑(n.factorial))) :
     Summable (fun n => dysonTerm L L' t n) := by
   refine Summable.of_norm_bounded ?_ hbound

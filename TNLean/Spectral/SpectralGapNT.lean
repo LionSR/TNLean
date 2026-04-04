@@ -30,6 +30,38 @@ namespace MPSTensor
 
 variable {d D D₁ D₂ : ℕ}
 
+private noncomputable abbrev endEquivMatrixCLM (m n : ℕ) :
+    (Matrix (Fin m) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin n) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  Module.End.toContinuousLinearMap (Matrix (Fin m) (Fin n) ℂ)
+
+local instance instSpectralGapNTFiniteDimensionalMatrixCLM (m n : ℕ) :
+    FiniteDimensional ℂ
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  (endEquivMatrixCLM m n).toLinearEquiv.finiteDimensional
+
+noncomputable local instance instSpectralGapNTNormedAddCommGroupMatrixCLM (m n : ℕ) :
+    NormedAddCommGroup
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  ContinuousLinearMap.toNormedAddCommGroup
+
+noncomputable local instance instSpectralGapNTNormedRingMatrixCLM (m n : ℕ) :
+    NormedRing
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  ContinuousLinearMap.toNormedRing
+
+local instance instSpectralGapNTCompleteSpaceMatrixCLM (m n : ℕ) :
+    CompleteSpace
+      (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ) :=
+  FiniteDimensional.complete ℂ
+    (Matrix (Fin m) (Fin n) ℂ →L[ℂ] Matrix (Fin m) (Fin n) ℂ)
+
+attribute [local instance]
+  instSpectralGapNTFiniteDimensionalMatrixCLM
+  instSpectralGapNTNormedAddCommGroupMatrixCLM
+  instSpectralGapNTNormedRingMatrixCLM
+  instSpectralGapNTCompleteSpaceMatrixCLM
+
 private lemma norm_starRingEnd_eq_one {μ : ℂ} (hμ : ‖μ‖ = 1) :
     ‖(starRingEnd ℂ) μ‖ = 1 := by
   simpa [Complex.norm_conj] using hμ
@@ -570,6 +602,9 @@ private theorem eigenvector_gives_gauge_of_irreducible_TP [NeZero D]
     simp only [A', Ymat, Yinv, Matrix.mul_assoc]
   simpa [Ygl] using this
 
+-- The spectral-radius extraction below still makes 4.29 spend extra time finding
+-- the local `CompleteSpace` instances for continuous endomorphisms of matrix spaces.
+set_option synthInstance.maxHeartbeats 200000 in
 /-- If the mixed transfer spectral radius of two irreducible left-canonical tensors is at least
 `1`, then the tensors are gauge-phase equivalent. -/
 theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
@@ -624,6 +659,8 @@ theorem spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
   exact hAB <| modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
     A B hA_irr hB_irr hA_left hB_left hEq.ge
 
+-- The CLM power-decay argument uses the same finite-dimensional endomorphism instances.
+set_option synthInstance.maxHeartbeats 200000 in
 /--
 **Power decay** for the mixed transfer operator of distinct irreducible left-canonical
 blocks of the same bond dimension.
@@ -633,11 +670,11 @@ theorem mixedTransfer_pow_tendsto_zero_of_irreducible_TP
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
     (hB_irr : IsIrreducibleTensor (d := d) (D := D) B)
     (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (hAB : ¬ GaugePhaseEquiv A B)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X)
-      Filter.atTop (nhds 0) := by
+  (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+  (hAB : ¬ GaugePhaseEquiv A B)
+  (X : Matrix (Fin D) (Fin D) ℂ) :
+  Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X)
+    Filter.atTop (nhds 0) := by
   let V := Matrix (Fin D) (Fin D) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap A B)
@@ -1154,6 +1191,7 @@ private theorem dim_eq_of_modulus_one_eigenvector_of_irreducible_TP
     Matrix.dim_le_of_mulVec_injective X'ᴴ hX'hinj
   exact le_antisymm h_D₁_le h_D₂_le
 
+set_option synthInstance.maxHeartbeats 200000 in
 /--
 **Rectangular strict spectral gap** for irreducible left-canonical blocks of different bond
 sizes.
@@ -1183,6 +1221,10 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
       (mixedTransferMap₂ A B)
   have hEqF : spectralRadius ℂ F = 1 := by
     simpa [F] using hEq
+  let Φ :
+      ((Matrix (Fin D₁) (Fin D₂) ℂ) →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) ≃ₐ[ℂ]
+        ((Matrix (Fin D₁) (Fin D₂) ℂ) →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)
   obtain ⟨μ, hμ_spec, hμ_rad⟩ := spectrum.exists_nnnorm_eq_spectralRadius (a := F)
   have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := by
     simpa [hEqF] using hμ_rad

@@ -160,7 +160,7 @@ theorem exists_posSemidef_eigenvector_general
       exists_posSemidef_eigenvector E hpos (hNZ := fun hpsd hne => hNZ _ hpsd hne)
     exact ⟨ρ, r, hρ_psd, hρ_ne, hr_pos.le, hEig⟩
   · -- E kills some nonzero PSD matrix → eigenvalue 0.
-    push_neg at hNZ
+    push Not at hNZ
     obtain ⟨ρ₀, hρ₀_psd, hρ₀_ne, hEρ₀⟩ := hNZ
     exact ⟨ρ₀, 0, hρ₀_psd, hρ₀_ne, le_refl 0, by simp [hEρ₀]⟩
 
@@ -365,7 +365,7 @@ theorem exists_tp_data_of_irreducible
   refine ⟨B, r, σ, hσ_pd, hr_pos, ?_, hB_tp, ?_⟩
   -- Explicit form of B.
   · intro i
-    simp only [hB_def, tpGauge, hA'_def, hc_def]
+    rfl
   -- GaugeEquiv: A' matches the stated rescaled tensor.
   · convert hB_gauge using 1
 

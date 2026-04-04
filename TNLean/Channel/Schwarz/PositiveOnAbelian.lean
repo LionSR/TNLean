@@ -26,7 +26,7 @@ normal generators `{A, Aᴴ, Aᴴ * A, 1}` are proved and are intended to suppor
 later refinements toward Wolf Proposition 5.1.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators
+open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
 open Matrix Finset Complex Module.End
 
 namespace PositiveOnAbelian

@@ -828,10 +828,10 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
   -- ── Step B: Dominant cases (existence) ──
   have domA : ∃ k₀, ¬ Tendsto (fun N => mpvOverlap (d := d) (A a0) (B k₀) N)
       atTop (nhds 0) := by
-    by_contra h; push_neg at h; exact dominant_A_contra h
+    by_contra h; push Not at h; exact dominant_A_contra h
   have domB : ∃ j₀, ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B b0) N)
       atTop (nhds 0) := by
-    by_contra h; push_neg at h; exact dominant_B_contra h
+    by_contra h; push Not at h; exact dominant_B_contra h
   -- ── Step C: Uniqueness of the match (BNT cross-overlap → 0 vs → 1 contradiction) ──
   have hA_inj_local := hA.toHasInjectiveBlocks.block_injective
   have hB_inj_local := hB.toHasInjectiveBlocks.block_injective
@@ -1313,7 +1313,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
   -- Both directions proved simultaneously by contradiction + tail reduction.
   refine ⟨fun j₀ => ?_, fun k₀ => ?_⟩
   -- ── A-direction: ∃ k₀, ¬ overlap(A j₀, B k₀) → 0 ──
-  · by_contra hall; push_neg at hall
+  · by_contra hall; push Not at hall
     have hj0_ne : j₀ ≠ a0 := by
       intro h; subst h; exact match_A0_is_B0 (hall b0)
     have hj0_pos : 0 < j₀.val := Nat.pos_of_ne_zero (fun h => hj0_ne (Fin.ext h))
@@ -1358,7 +1358,7 @@ private lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
         (A (succA j₀')) (B (succB k')) N) atTop (nhds 0)
       rw [hj0_eq]; exact hall (succB k')
   -- ── B-direction: ∃ j₀, ¬ overlap(A j₀, B k₀) → 0 ──
-  · by_contra hall; push_neg at hall
+  · by_contra hall; push Not at hall
     have hk0_ne : k₀ ≠ b0 := by
       intro h; subst h; exact match_B0_is_A0 (hall a0)
     have hk0_pos : 0 < k₀.val := Nat.pos_of_ne_zero (fun h => hk0_ne (Fin.ext h))

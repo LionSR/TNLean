@@ -169,7 +169,7 @@ lemma supportProj_mul (hρ_psd : ρ.PosSemidef) :
     split
     · simp
     · rename_i hi
-      push_neg at hi
+      push Not at hi
       -- PSD implies eigenvalues are nonnegative, so `¬(0 < λ)` forces `λ = 0`.
       have hnonneg : 0 ≤ hH.eigenvalues i :=
         (hH.posSemidef_iff_eigenvalues_nonneg.mp hρ_psd) i

@@ -181,7 +181,7 @@ theorem eigenvalue_norm_le_one₂ [NeZero D₁] [NeZero D₂]
     ‖μ‖ ≤ 1 := by
   obtain ⟨v, hv_mem, hv_ne⟩ := hμ.exists_hasEigenvector
   have hFv := Module.End.mem_eigenspace_iff.mp hv_mem
-  by_contra h_gt; push_neg at h_gt
+  by_contra h_gt; push Not at h_gt
   have h_pos := frobSq_pos_of_ne_zero v hv_ne
   have h_bound : ∀ n : ℕ, ‖μ‖ ^ (2 * n) ≤ (D₁ : ℝ) ^ 2 := fun n => by
     have h1 := hs_contraction_rect A B v hA_norm hB_norm n
@@ -236,7 +236,7 @@ private lemma injective_of_ker_all [NeZero D₂]
   by_contra hv_ne
   -- v ≠ 0, Xv = 0; show Xw = 0 for all w, hence X = 0
   have ⟨k, hk⟩ : ∃ k, v k ≠ 0 := by
-    by_contra h_all_zero; push_neg at h_all_zero
+    by_contra h_all_zero; push Not at h_all_zero
     exact hv_ne (funext h_all_zero)
   have h_surj : ∀ w : Fin D₂ → ℂ, X *ᵥ w = 0 := by
     intro w

@@ -308,7 +308,7 @@ theorem compl_eigenvalue_norm_lt_one_of_primitive
       hasEigenvalue_of_eigenvector_eq E ν X hEX' hX_ne
     have hν_le : ‖ν‖ ≤ 1 := hbound ν hν_eig_E
     by_contra hν_not_lt
-    push_neg at hν_not_lt
+    push Not at hν_not_lt
     have hν_eq : ‖ν‖ = 1 := le_antisymm hν_le hν_not_lt
     have hν_one : ν = 1 := hprim.unique_peripheral ν hν_eig_E hν_eq
     rw [hν_one, one_smul] at hEX'

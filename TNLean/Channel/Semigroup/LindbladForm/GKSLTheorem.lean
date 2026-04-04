@@ -18,14 +18,10 @@ This file proves the GKSL theorem characterizing generators of CPTP semigroups.
 * `gksl_iff_lindbladForm` — **Thm 7.1**: GKSL ↔ Lindblad form.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix
 
 noncomputable section
-
--- Local instances needed for NormedAddCommGroup on Matrix (for CLM infrastructure)
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 
@@ -84,6 +80,8 @@ theorem generator_shift_invariance
           ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) +
             (S + (-((2 : ℂ)⁻¹)) • S + (-((2 : ℂ)⁻¹)) • S) := by abel
     rw [hrearr, hScancel, add_zero]
+  have hX : - -X = X := by exact neg_neg X
+  rw [hX]
   simpa [neg_smul] using hgoal
 
 /-- **Wolf Proposition 7.4 (item 2 — existence of traceless Kraus operators)**:

@@ -132,7 +132,7 @@ private lemma not_posDef_of_conj_projection_ne_one
     exact (sub_eq_zero.mp h1Q).symm
   obtain ⟨i, j, hij⟩ : ∃ i j, (1 - Q) i j ≠ 0 := by
     by_contra hzero
-    push_neg at hzero
+    push Not at hzero
     exact h1Q_ne (Matrix.ext hzero)
   let w : Fin D → ℂ := (1 - Q) *ᵥ (Pi.single j 1)
   have hw_ne : w ≠ 0 := by

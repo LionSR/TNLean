@@ -23,7 +23,7 @@ arXiv:1606.00608, Appendix A.
 No fixed-point theorem is assumed here.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators
+open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
 open Matrix Finset
 
 variable {D : ℕ}
