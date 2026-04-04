@@ -634,6 +634,8 @@ end OrthogonalTrace
 
 /-! ## Exponential condition (Wolf Theorem 6.2, item 3) -/
 
+noncomputable section
+
 section Exponential
 
 open scoped Matrix.Norms.Frobenius
@@ -658,12 +660,30 @@ noncomputable local instance :
     NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.frobeniusNormedAlgebra
 
+private abbrev CLM (D : ℕ) :=
+  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
+
+noncomputable local instance instGrowthNormedAddCommGroupCLM :
+    NormedAddCommGroup (CLM D) :=
+  ContinuousLinearMap.toNormedAddCommGroup
+
+noncomputable local instance instGrowthNormedRingCLM : NormedRing (CLM D) :=
+  ContinuousLinearMap.toNormedRing
+
+local instance instGrowthFiniteDimensionalCLM : FiniteDimensional ℂ (CLM D) :=
+  (endEquiv (D := D)).toLinearEquiv.finiteDimensional
+
+local instance instGrowthCompleteSpaceCLM : CompleteSpace (CLM D) :=
+  FiniteDimensional.complete ℂ (CLM D)
+
 private theorem isPositiveMap_smul_nonneg
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hE : IsPositiveMap E) {c : ℝ} (hc : 0 ≤ c) :
     IsPositiveMap ((c : ℂ) • E) := by
   intro X hX
-  simpa using (hE X hX).smul (by exact_mod_cast hc)
+  have hcC : 0 ≤ (c : ℂ) := by
+    exact_mod_cast hc
+  simpa [smul_apply] using (hE X hX).smul hcC
 
 private lemma inv_factorial_nonneg (n : ℕ) :
     0 ≤ ((n.factorial : ℂ)⁻¹) := by
@@ -802,19 +822,22 @@ theorem exp_posDef_of_irreducible_cp
     rfl
   have hterm_psd : ∀ n : ℕ, (term n).PosSemidef := by
     intro n
-    simpa [term, hpow_apply n] using (iterate_posSemidef hF_pos hA n).smul (inv_factorial_nonneg n)
+    change (((n.factorial : ℂ)⁻¹) • ((Φ ^ n) A)).PosSemidef
+    rw [hpow_apply n]
+    exact (iterate_posSemidef hF_pos hA n).smul (inv_factorial_nonneg n)
   have htrunc_pd : (∑ k ∈ Finset.range D, term k).PosDef := by
     simpa [term, hpow_apply] using exp_truncation_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne ht
   have hseries_ops : Summable (fun n : ℕ => ((n.factorial : ℂ)⁻¹) • (Φ ^ n)) := by
-    simpa [NormedSpace.expSeries_apply_eq] using
-      (NormedSpace.expSeries_summable
-        (𝕂 := ℂ)
-        (𝔸 := (Matrix (Fin D) (Fin D) ℂ) →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-        Φ)
+    let hs :
+        Summable (fun n : ℕ => ‖((n.factorial : ℂ)⁻¹) • (Φ ^ n)‖) :=
+      NormedSpace.norm_expSeries_summable' (𝕂 := ℂ) (𝔸 := CLM D) Φ
+    exact Summable.of_norm hs
   let evA : ((Matrix (Fin D) (Fin D) ℂ) →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℂ]
       Matrix (Fin D) (Fin D) ℂ := (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ)) A
   have hseries : Summable term := by
     simpa [term, evA, ContinuousLinearMap.apply_apply, hpow_apply] using evA.summable hseries_ops
+  letI : FiniteDimensional ℂ (CLM D) := instGrowthFiniteDimensionalCLM (D := D)
+  letI : CompleteSpace (CLM D) := FiniteDimensional.complete ℂ (CLM D)
   have hexp_eq :
       (NormedSpace.exp Φ) A = ∑' n, term n := by
     have hExp :
@@ -945,3 +968,5 @@ theorem irreducible_iff_exp_posDef_forall
       exact Or.inr (by simpa [eq_comm] using sub_eq_zero.mp h_compl_eq_zero)
 
 end Exponential
+
+end

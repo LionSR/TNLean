@@ -5,10 +5,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Basic
 
 import Mathlib.Analysis.Normed.Algebra.Exponential
+import Mathlib.Analysis.Normed.Operator.Basic
+import Mathlib.Analysis.Normed.Operator.Mul
 import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.Analysis.ODE.Gronwall
 import Mathlib.Topology.Algebra.Module.FiniteDimension
 import Mathlib.Analysis.Calculus.Deriv.Mul
+import Mathlib.Analysis.Calculus.Deriv.Shift
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-!
@@ -92,10 +95,36 @@ theorem norm_exp_sub_one_sub_self_le
 
 variable {D : ℕ}
 
+private abbrev CLM (D : ℕ) := Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
+
 /-! ## Normed algebra instances for matrices -/
 
 attribute [local instance] Matrix.linftyOpNormedRing
 attribute [local instance] Matrix.linftyOpNormedAlgebra
+
+local instance : NormedSpace ℝ (Matrix (Fin D) (Fin D) ℂ) :=
+  NormedSpace.restrictScalars ℝ ℂ (Matrix (Fin D) (Fin D) ℂ)
+
+local instance : NormedSpace ℝ (CLM D) :=
+  NormedSpace.restrictScalars ℝ ℂ (CLM D)
+
+local instance : DistribSMul ℝ (CLM D) := by infer_instance
+
+local instance : Module ℝ (CLM D) := by infer_instance
+
+local instance : IsScalarTower ℂ (CLM D) (CLM D) := by
+  refine ⟨fun z T U => ?_⟩
+  ext X i j
+  simp [ContinuousLinearMap.mul_apply]
+
+local instance : SMulCommClass ℂ (CLM D) (CLM D) := by
+  refine ⟨fun z T U => ?_⟩
+  ext X i j
+  simp [ContinuousLinearMap.mul_apply]
+
+local instance : LinearMap.CompatibleSMul
+    (Matrix (Fin D) (Fin D) ℂ) (Matrix (Fin D) (Fin D) ℂ) ℝ ℂ :=
+  LinearMap.IsScalarTower.compatibleSMul
 
 /-! ## Abbreviations -/
 
@@ -139,36 +168,44 @@ def expSemigroupCLM
 
 /-! ### Semigroup law for exp -/
 
-/-- Helper: any element is in the infinite-radius convergence ball of the
-exponential series (over `ℂ`). -/
-private theorem mem_exp_ball
-    (x : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :
-    x ∈ Metric.eball (0 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-      (NormedSpace.expSeries ℂ
-        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)).radius := by
+/-- Any element of a complex Banach algebra lies in the convergence ball of the exponential
+series. -/
+private theorem mem_exp_ball {A : Type*}
+    [NormedRing A] [NormedAlgebra ℂ A] [CompleteSpace A] (x : A) :
+    x ∈ Metric.eball (0 : A) (NormedSpace.expSeries ℂ A).radius := by
   rw [NormedSpace.expSeries_radius_eq_top]
   exact edist_lt_top _ _
 
 /-- `(t : ℂ) • L` commutes with `(s : ℂ) • L`. -/
 private theorem smul_comm_CLM
-    (L : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (L : CLM D)
     (t s : ℂ) : Commute (t • L) (s • L) :=
-  (Commute.refl L).smul_right s |>.smul_left t
+  by
+    ext X i j
+    simp [ContinuousLinearMap.mul_apply, mul_assoc, mul_left_comm, mul_comm]
 
 theorem expSemigroupCLM_add
-    (L : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (L : CLM D)
     (t s : ℝ) :
     expSemigroupCLM L (t + s) = expSemigroupCLM L t * expSemigroupCLM L s := by
-  simp only [expSemigroupCLM]
   have hcast : ((t + s : ℝ) : ℂ) = (t : ℂ) + (s : ℂ) := by push_cast; ring
-  rw [hcast, add_smul]
-  exact NormedSpace.exp_add_of_commute_of_mem_ball
-    (smul_comm_CLM L t s) (mem_exp_ball _) (mem_exp_ball _)
+  have hsum : (((t : ℂ) + (s : ℂ)) • L) = (t : ℂ) • L + (s : ℂ) • L := by
+    simpa using add_smul (t : ℂ) (s : ℂ) L
+  rw [expSemigroupCLM, hcast, hsum]
+  exact
+    (NormedSpace.exp_add_of_commute_of_mem_ball
+      (x := (t : ℂ) • L) (y := (s : ℂ) • L)
+      (smul_comm_CLM L t s) (mem_exp_ball _) (mem_exp_ball _))
 
 theorem expSemigroupCLM_zero
-    (L : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    (L : CLM D) :
     expSemigroupCLM L 0 = 1 := by
-  simp [expSemigroupCLM]
+  have hz : (0 : ℂ) • L = (0 : CLM D) := by
+    ext X i j
+    simp
+  rw [expSemigroupCLM, Complex.ofReal_zero]
+  rw [hz]
+  simpa using (NormedSpace.exp_zero : NormedSpace.exp (0 : CLM D) = 1)
 
 /-! ### Continuity of the exponential semigroup -/
 
@@ -191,9 +228,15 @@ theorem expSemigroupCLM_continuous
 /-- The derivative of `t ↦ exp(t • L)` at `t` is `exp(t • L) * L`.
 This is Wolf Eq. (7.2): `d/dt T_t = L · T_t`. -/
 theorem hasDerivAt_expSemigroupCLM
-    (L : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) (t : ℝ) :
+    (L : CLM D) (t : ℝ) :
     HasDerivAt (fun u : ℝ => expSemigroupCLM L u)
       (expSemigroupCLM L t * L) t := by
+  letI : IsScalarTower ℝ ℂ
+      (CLM D) :=
+    ⟨fun r z T => by
+      ext X i j
+      simp only [ContinuousLinearMap.smul_apply, Pi.smul_apply]
+      simpa using smul_assoc r z (T X i j)⟩
   simp only [expSemigroupCLM]
   -- Chain rule: compose exp(· • L) : ℂ → CLM with ofReal : ℝ → ℂ
   have hexp := hasDerivAt_exp_smul_const (𝕂 := ℂ) L (t : ℂ)
@@ -205,11 +248,10 @@ theorem hasDerivAt_expSemigroupCLM
 
 /-- At `t = 0`, the derivative of the exponential semigroup is `L`. -/
 theorem hasDerivAt_expSemigroupCLM_zero
-    (L : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    (L : CLM D) :
     HasDerivAt (fun u : ℝ => expSemigroupCLM L u) L 0 := by
   have h := hasDerivAt_expSemigroupCLM L 0
-  simp only [expSemigroupCLM, Complex.ofReal_zero, zero_smul, NormedSpace.exp_zero, one_mul] at h
-  exact h
+  simpa [expSemigroupCLM_zero] using h
 
 /-! ## Semigroup properties lifted to linear maps -/
 
@@ -224,17 +266,6 @@ theorem expSemigroup_toCLM
     endEquiv (expSemigroup L t) = expSemigroupCLM (endEquiv L) t := by
   simp [expSemigroup, AlgEquiv.apply_symm_apply]
 
-/-- The bilinear restricted-scalars evaluation map used for differentiating
-the semigroup applied to a fixed matrix. -/
-abbrev applyCLMReal :
-    (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℝ]
-    Matrix (Fin D) (Fin D) ℂ →L[ℝ] Matrix (Fin D) (Fin D) ℂ :=
-  (ContinuousLinearMap.flip
-      (ContinuousLinearMap.apply ℂ (Matrix (Fin D) (Fin D) ℂ) :
-        Matrix (Fin D) (Fin D) ℂ →L[ℂ]
-        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℂ]
-        Matrix (Fin D) (Fin D) ℂ)).bilinearRestrictScalars ℝ
-
 set_option maxHeartbeats 1000000 in
 -- The derivative proof combines CLM-valued differentiation with a restricted-
 -- scalars bilinear evaluation map; elaboration is otherwise too expensive.
@@ -243,28 +274,53 @@ theorem hasDerivAt_expSemigroup_apply
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) (t : ℝ) :
     HasDerivAt (fun u : ℝ => expSemigroup L u X) (expSemigroup L t (L X)) t := by
+  letI : IsScalarTower ℝ ℂ (CLM D) :=
+    ⟨fun r z T => by
+      ext Y i j
+      simp only [ContinuousLinearMap.smul_apply, Pi.smul_apply]
+      simpa using smul_assoc r z (T Y i j)⟩
   have hCLM :
       HasDerivAt
         (fun u : ℝ => expSemigroupCLM (endEquiv L) u)
         (expSemigroupCLM (endEquiv L) t * endEquiv L) t :=
     hasDerivAt_expSemigroupCLM (endEquiv L) t
+  let evalXₗ : CLM D →ₗ[ℝ] Matrix (Fin D) (Fin D) ℂ :=
+    { toFun := fun T => T X
+      map_add' := by intro T₁ T₂; simp
+      map_smul' := by
+        intro r T
+        change ((r • T) X) = r • (T X)
+        rfl }
+  let evalX : CLM D →L[ℝ] Matrix (Fin D) (Fin D) ℂ :=
+    evalXₗ.mkContinuous ‖X‖ fun T =>
+      by simpa [mul_comm] using ContinuousLinearMap.le_opNorm T X
+  have hEval : HasFDerivAt evalX evalX (expSemigroupCLM (endEquiv L) t) :=
+    evalX.hasFDerivAt
+  have hCLM_F :
+      HasFDerivAt
+        (fun u : ℝ => expSemigroupCLM (endEquiv L) u)
+        (ContinuousLinearMap.toSpanSingleton ℝ
+          (expSemigroupCLM (endEquiv L) t * endEquiv L))
+        t := hCLM
+  have hApplyF :
+      HasFDerivAt
+        (fun u : ℝ => evalX (expSemigroupCLM (endEquiv L) u))
+        (evalX.comp (ContinuousLinearMap.toSpanSingleton ℝ
+          (expSemigroupCLM (endEquiv L) t * endEquiv L)))
+        t := by
+    simpa [Function.comp, ContinuousLinearMap.comp_apply] using
+      (HasFDerivAt.comp
+        (f := fun u : ℝ => expSemigroupCLM (endEquiv L) u)
+        (g := fun T : CLM D => evalX T)
+        (x := t)
+        hEval hCLM_F)
   have hApply :
       HasDerivAt
-        (fun u : ℝ => applyCLMReal (D := D) (expSemigroupCLM (endEquiv L) u) X)
-        (applyCLMReal (D := D) (expSemigroupCLM (endEquiv L) t) 0 +
-          applyCLMReal (D := D)
-            (expSemigroupCLM (endEquiv L) t * endEquiv L) X)
+        (fun u : ℝ => evalX (expSemigroupCLM (endEquiv L) u))
+        (evalX (expSemigroupCLM (endEquiv L) t * endEquiv L))
         t := by
-    simpa using
-      (ContinuousLinearMap.hasDerivAt_of_bilinear
-        (B := applyCLMReal (D := D))
-        (u := fun u : ℝ => expSemigroupCLM (endEquiv L) u)
-        (v := fun _ : ℝ => X)
-        (u' := expSemigroupCLM (endEquiv L) t * endEquiv L)
-        (v' := 0)
-        hCLM (hasDerivAt_const t X))
-  simpa [applyCLMReal, expSemigroup_toCLM,
-    ContinuousLinearMap.bilinearRestrictScalars_apply_apply] using hApply
+    simpa [ContinuousLinearMap.comp_apply] using hApplyF.hasDerivAt
+  simpa [evalX, evalXₗ, expSemigroup_toCLM] using hApply
 
 theorem expSemigroup_comp
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -296,6 +352,7 @@ theorem expSemigroup_isContinuousDynSemigroup
 
 /-! ## Proposition 7.1: Continuous semigroup → exp(tL) -/
 
+set_option maxHeartbeats 1200000 in
 /-- In a finite-dimensional normed algebra, the Bochner integral `(1/ε) • ∫₀^ε S(t) dt`
 is close to `S(0) = 1` for small `ε`, hence invertible. From this and the semigroup
 property, `S` is right-differentiable at `0`.
@@ -329,10 +386,15 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
     -- Step 1: Extract the o(h) bound from HasDerivAt
     have hlo : ∀ᶠ h in nhds (0 : ℝ),
         ‖P h - h • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] _)‖ ≤ 1/2 * |h| := by
-      have := (hP_deriv_zero.isLittleO.norm_left).def (by positivity : (0:ℝ) < 1/2)
-      simp only [hP_zero, sub_zero, Real.norm_eq_abs,
-        ContinuousLinearMap.toSpanSingleton_apply] at this
-      exact this.mono (fun x hx => le_trans (le_abs_self _) hx)
+      have hP_fderiv_zero :
+          HasFDerivAt P (ContinuousLinearMap.toSpanSingleton ℝ (1 : CLM D)) 0 := by
+        simpa using (show HasDerivAt P (1 : CLM D) 0 from hP_deriv_zero)
+      have hbound :
+          ∀ᶠ h in nhds (0 : ℝ),
+            ‖P h - P 0 - (h - 0) • (1 : CLM D)‖ ≤ (1 / 2 : ℝ) * ‖h - 0‖ := by
+        simpa [ContinuousLinearMap.toSpanSingleton_apply] using
+          (hP_fderiv_zero.isLittleO.norm_left.bound (by positivity : (0 : ℝ) < 1 / 2))
+      simpa [hP_zero, Real.norm_eq_abs] using hbound
     -- Step 2: Get explicit δ
     obtain ⟨δ, hδ_pos, hδ_ball⟩ := Metric.eventually_nhds_iff.mp hlo
     -- Step 3: Pick ε = δ/2
@@ -355,8 +417,11 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
         _ < 1 := by norm_num
     -- Step 5: (δ/2)⁻¹ • P(δ/2) is a unit
     have hu1 : IsUnit ((δ/2)⁻¹ • P (δ/2)) := by
-      rw [show (δ/2)⁻¹ • P (δ/2) = 1 - (1 - (δ/2)⁻¹ • P (δ/2)) from by abel]
-      exact isUnit_one_sub_of_norm_lt_one hnear
+      simpa using
+        (isUnit_one_sub_of_norm_lt_one
+          (R := CLM D)
+          (x := (1 : CLM D) - (δ / 2)⁻¹ • P (δ / 2))
+          hnear)
     -- Step 6: (δ/2) • 1 is a unit (algebraMap of nonzero scalar)
     have hu2 : IsUnit ((δ/2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ]
         Matrix (Fin D) (Fin D) ℂ)) := by
@@ -377,17 +442,27 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
     intro h
     have h1 : HasDerivAt (fun h => P (h + ε)) (S (h + ε)) h := by
       -- Direct FTC at h+ε composed with shift
-      have hftc := intervalIntegral.integral_hasDerivAt_right
-        (hS_cont.intervalIntegrable 0 (h + ε))
-        (hS_cont.stronglyMeasurableAtFilter _ _)
-        hS_cont.continuousAt
+      have hftc :
+          HasDerivAt (fun u : ℝ => intervalIntegral S 0 u MeasureTheory.volume) (S (h + ε))
+            (h + ε) :=
+        intervalIntegral.integral_hasDerivAt_right
+          (Continuous.intervalIntegrable (μ := MeasureTheory.volume) (u := S) hS_cont 0 (h + ε))
+          (Continuous.stronglyMeasurableAtFilter
+            (f := S) hS_cont MeasureTheory.volume (nhds (h + ε)))
+          (hS_cont.continuousAt)
       -- hftc : HasDerivAt (fun u => ∫₀^u S) (S(h+ε)) (h+ε)
-      have hshift := (hasDerivAt_id h).add_const ε
-      have hftc' : HasDerivAt (fun u => intervalIntegral S 0 u MeasureTheory.volume)
-          (S (h + ε)) (id h + ε) := hftc
-      have := hftc'.scomp h hshift
-      simp only [Function.comp_def, id, one_smul] at this; exact this
-    exact h1.sub (hP_deriv h)
+      simpa using
+        (HasDerivAt.comp_add_const
+          (f := fun u : ℝ => intervalIntegral S 0 u MeasureTheory.volume)
+          (𝕜 := ℝ) (x := h) (a := ε) hftc)
+    have h2 : HasDerivAt P (S h) h := hP_deriv h
+    have hsub : HasDerivAt (fun x : ℝ => P (x + ε) - P x) (S (h + ε) - S h) h := by
+      exact HasDerivAt.sub
+        (𝕜 := ℝ)
+        (f := fun x : ℝ => P (x + ε))
+        (g := P)
+        h1 h2
+    simpa [Q] using hsub
   -- At h = 0: Q'(0) = S(ε) - 1
   have hQ_deriv_zero : HasDerivAt Q (S ε - 1) 0 := by
     convert hQ_deriv 0 using 1; rw [zero_add, hS_zero]
@@ -400,8 +475,25 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
     -- Pull S(h) out of integral
     have hpull : S h * intervalIntegral S 0 ε MeasureTheory.volume =
         intervalIntegral (fun t => S h * S t) 0 ε MeasureTheory.volume := by
-      exact (ContinuousLinearMap.intervalIntegral_comp_comm
-        ((ContinuousLinearMap.mul ℂ _) (S h)) (hS_cont.intervalIntegrable 0 ε)).symm
+      ext X i j
+      rw [ContinuousLinearMap.mul_apply]
+      rw [ContinuousLinearMap.intervalIntegral_apply
+        (φ := S)
+        (hφ := Continuous.intervalIntegrable (μ := MeasureTheory.volume) (u := S) hS_cont 0 ε)
+        X]
+      rw [ContinuousLinearMap.intervalIntegral_apply
+        (φ := fun t => S h * S t)
+        (hφ := Continuous.intervalIntegrable
+          (μ := MeasureTheory.volume)
+          (u := fun t => S h * S t)
+          (continuous_const.mul hS_cont) 0 ε)
+        X]
+      have hSX_cont : Continuous (fun t : ℝ => S t X) := hS_cont.clm_apply continuous_const
+      have hSX_int : IntervalIntegrable (fun t : ℝ => S t X) MeasureTheory.volume 0 ε :=
+        Continuous.intervalIntegrable (μ := MeasureTheory.volume) (u := fun t => S t X) hSX_cont 0 ε
+      exact congrArg (fun M => M i j) <|
+        (ContinuousLinearMap.intervalIntegral_comp_comm (L := S h) (μ := MeasureTheory.volume)
+          (f := fun t : ℝ => S t X) (a := 0) (b := ε) hSX_int).symm
     -- Apply semigroup property pointwise
     have hsg : intervalIntegral (fun t => S h * S t) 0 ε MeasureTheory.volume =
         intervalIntegral (fun t => S (h + t)) 0 ε MeasureTheory.volume :=
@@ -420,7 +512,8 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
           intervalIntegral S 0 h MeasureTheory.volume := by
       have := intervalIntegral.integral_add_adjacent_intervals
         (μ := MeasureTheory.volume)
-        (hS_cont.intervalIntegrable 0 h) (hS_cont.intervalIntegrable h (h + ε))
+        (Continuous.intervalIntegrable (μ := MeasureTheory.volume) (u := S) hS_cont 0 h)
+        (Continuous.intervalIntegrable (μ := MeasureTheory.volume) (u := S) hS_cont h (h + ε))
       change intervalIntegral S 0 h MeasureTheory.volume +
         intervalIntegral S h (h + ε) MeasureTheory.volume =
         intervalIntegral S 0 (h + ε) MeasureTheory.volume at this
@@ -432,7 +525,7 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
   refine ⟨(S ε - 1) * ↑Pε_unit⁻¹, ?_⟩
   -- HasDerivAt (fun h => Q(h) * ↑Pε_unit⁻¹) at 0
   have hder : HasDerivAt (fun h => Q h * ↑Pε_unit⁻¹) ((S ε - 1) * ↑Pε_unit⁻¹) 0 :=
-    hQ_deriv_zero.mul_const ↑Pε_unit⁻¹
+    HasDerivAt.mul_const hQ_deriv_zero (↑Pε_unit⁻¹ : CLM D)
   -- On Set.Ici 0, S(h) = Q(h) * P(ε)⁻¹
   have hS_eq : ∀ h ∈ Set.Ici (0 : ℝ), S h = Q h * ↑Pε_unit⁻¹ := by
     intro h hh
@@ -443,6 +536,7 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
     rwa [mul_assoc, Units.mul_inv, mul_one] at hmul
   exact hder.hasDerivWithinAt.congr hS_eq (hS_eq 0 (Set.mem_Ici.mpr (le_refl 0)))
 
+set_option maxHeartbeats 800000 in
 /-- **Wolf Proposition 7.1** (continuous semigroup → exponential form):
 Every norm-continuous dynamical semigroup on the finite-dimensional algebra
 `M_D(ℂ)` is of the form `T_t = exp(t • L)` for a unique generator `L`. -/
@@ -508,13 +602,13 @@ theorem continuousDynSemigroup_eq_exp
   have hmul : HasDerivWithinAt (fun v => S u * S (v - u))
       (S u * L_CLM) (Set.Ici u) u :=
     HasDerivWithinAt.const_mul (S u) hcomp
-  exact hmul.congr
+  exact HasDerivWithinAt.congr (f₁ := S) hmul
     (fun v hv => by
-      have hvt : u ≤ v := hv
-      conv_lhs => rw [show v = u + (v - u) from by ring]
-      exact hS_add u (v - u) hu (sub_nonneg.mpr hvt))
-    (by simp only [sub_self, hS_zero, mul_one])
+      have hvt : 0 ≤ v - u := sub_nonneg.mpr hv
+      simpa [show u + (v - u) = v by ring] using hS_add u (v - u) hu hvt)
+    (by simpa [hS_zero])
 
+set_option maxHeartbeats 800000 in
 /-- Uniqueness of the generator: if `exp(t•L) = exp(t•L')` for all `t ≥ 0`,
 then `L = L'`. Proof: both CLM semigroups agree on `[0,∞)`, hence their
 derivatives within `[0,∞)` at `t = 0` agree. Since `[0,∞)` has unique
@@ -534,16 +628,28 @@ theorem generator_unique
     simp only [expSemigroup_toCLM] at this
     exact this
   -- Both have derivatives at 0
-  have hd1 : HasDerivWithinAt (expSemigroupCLM (endEquiv L)) (endEquiv L)
-      (Set.Ici 0) 0 :=
-    (hasDerivAt_expSemigroupCLM_zero (endEquiv L)).hasDerivWithinAt
+  have hd1 : HasDerivWithinAt
+      (fun t : ℝ => expSemigroupCLM (endEquiv L) t) (endEquiv L) (Set.Ici 0) 0 := by
+    have hd1' : HasDerivAt (fun t : ℝ => expSemigroupCLM (endEquiv L) t) (endEquiv L) 0 :=
+      hasDerivAt_expSemigroupCLM_zero (endEquiv L)
+    exact HasDerivAt.hasDerivWithinAt
+      (𝕜 := ℝ)
+      (s := Set.Ici (0 : ℝ))
+      (f := fun t : ℝ => expSemigroupCLM (endEquiv L) t)
+      (f' := endEquiv L) (x := 0) hd1'
   -- Congr: since the functions agree on Ici 0, f₂ also has derivative L within Ici 0
-  have hd2 : HasDerivWithinAt (expSemigroupCLM (endEquiv L)) (endEquiv L')
+  have hd2 : HasDerivWithinAt (fun t : ℝ => expSemigroupCLM (endEquiv L) t) (endEquiv L')
       (Set.Ici 0) 0 := by
-    have hd2' : HasDerivWithinAt (expSemigroupCLM (endEquiv L')) (endEquiv L')
-        (Set.Ici 0) 0 :=
-      (hasDerivAt_expSemigroupCLM_zero (endEquiv L')).hasDerivWithinAt
-    exact hd2'.congr (fun x hx => (hCLM x hx)) (by simp [expSemigroupCLM])
+    have hd2' : HasDerivWithinAt
+        (fun t : ℝ => expSemigroupCLM (endEquiv L') t) (endEquiv L') (Set.Ici 0) 0 := by
+      have hd2'' : HasDerivAt (fun t : ℝ => expSemigroupCLM (endEquiv L') t) (endEquiv L') 0 :=
+        hasDerivAt_expSemigroupCLM_zero (endEquiv L')
+      exact HasDerivAt.hasDerivWithinAt
+        (𝕜 := ℝ)
+        (s := Set.Ici (0 : ℝ))
+        (f := fun t : ℝ => expSemigroupCLM (endEquiv L') t)
+        (f' := endEquiv L') (x := 0) hd2''
+    exact hd2'.congr (fun x hx => hCLM x hx) (by simpa using hCLM 0 (by simp))
   -- Ici 0 has unique differentials at 0
   exact (uniqueDiffWithinAt_Ici 0).eq_deriv _ hd1 hd2
 

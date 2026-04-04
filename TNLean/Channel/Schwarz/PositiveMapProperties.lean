@@ -34,6 +34,10 @@ attribute [local instance] Matrix.instL2OpNormedAddCommGroup
 attribute [local instance] Matrix.instL2OpNormedRing
 attribute [local instance] Matrix.instL2OpNormedAlgebra
 
+local instance : PosSMulMono ℝ ℂ :=
+  PosSMulMono.of_smul_nonneg fun a ha b hb => by
+    simpa using smul_nonneg ha hb
+
 noncomputable local instance matrixCStarAlgebra (m : Type*) [Fintype m] [DecidableEq m] :
     CStarAlgebra (Matrix m m ℂ) where
   toNormedRing := Matrix.instL2OpNormedRing
@@ -77,8 +81,10 @@ theorem IsPositiveMap.map_conjTranspose
     ext i j
     simp [C, sub_eq_add_neg, mul_add, hmulI, add_comm]
   have hNegIC : -(Complex.I • C) = (1 / 2 : ℝ) • (Aᴴ - A) := by
+    rw [hIC]
     ext i j
-    simp [C, sub_eq_add_neg, hmulI, add_comm]
+    simp [sub_eq_add_neg]
+    ring
   have hA_decomp : A = B + Complex.I • C := by
     rw [hIC]
     ext i j
@@ -147,6 +153,7 @@ theorem IsPositiveMap.image_bounded
     have hEq : (b : ℝ) • I - T ((b : ℝ) • I) = (b : ℝ) • (I - T I) := by
       ext i j
       simp [I, sub_eq_add_neg]
+      ring
     rw [hEq]
     exact hSub_psd.smul hb0
   refine ⟨?_, ?_⟩

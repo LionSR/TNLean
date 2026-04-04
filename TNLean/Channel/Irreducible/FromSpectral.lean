@@ -227,13 +227,15 @@ theorem hasSpectralProperties_of_irreducible_cp
   have hscalar : (r : ℂ) * Matrix.trace (σ * ρ) = (t : ℂ) * Matrix.trace (σ * ρ) := by
     calc
       (r : ℂ) * Matrix.trace (σ * ρ)
-          = Matrix.trace (σ * ((r : ℂ) • ρ)) := by simp
+          = Matrix.trace (σ * ((r : ℂ) • ρ)) := by
+              rw [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
       _ = Matrix.trace (σ * E ρ) := by rw [hρ_eig]
       _ = Matrix.trace
             (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * ρ) :=
             htrace ρ
       _ = Matrix.trace (((t : ℂ) • σ) * ρ) := by rw [hσ_eig]
-      _ = (t : ℂ) * Matrix.trace (σ * ρ) := by simp
+      _ = (t : ℂ) * Matrix.trace (σ * ρ) := by
+            rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
   have hr_eq_t : r = t := by
     have hcomplex : (r : ℂ) = (t : ℂ) := mul_right_cancel₀ htr_ne hscalar
     have hreal := congrArg Complex.re hcomplex
@@ -437,7 +439,11 @@ theorem isIrreducibleMap_of_hasSpectralProperties
       MPSTensor.transferMap (d := n) (D := D) B X
           = ∑ i : Fin n,
               (S * (d • K i) * S⁻¹) * X * (S * (d • K i) * S⁻¹)ᴴ := by
-                simp [MPSTensor.transferMap_apply, hB_def, MPSTensor.tpGauge, hA'_def, hS_def]
+                subst B
+                subst A'
+                subst S
+                simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge]
+                rfl
       _ = ∑ i : Fin n,
               (↑r : ℂ)⁻¹ • (S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
             refine Finset.sum_congr rfl ?_

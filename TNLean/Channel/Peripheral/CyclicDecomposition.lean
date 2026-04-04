@@ -104,8 +104,20 @@ private lemma diagonal_sub_smul_one {D : ℕ} (v : Fin D → ℝ) (c : ℝ) :
     Matrix.diagonal (fun j => (↑(v j) : ℂ)) - (↑c : ℂ) • (1 : MatrixAlg D) =
       Matrix.diagonal (fun j => (↑(v j - c) : ℂ)) := by
   ext i j
-  simp [Matrix.diagonal_apply, Matrix.smul_apply, Matrix.one_apply]
-  split <;> simp
+  by_cases h : i = j
+  · subst h
+    have hone : ((↑c : ℂ) • (1 : MatrixAlg D)) i i = ↑c := by
+      change ((↑c : ℂ) • ((1 : MatrixAlg D) i)) i = ↑c
+      rw [Pi.smul_apply, Matrix.one_apply_eq]
+      simp
+    rw [Matrix.sub_apply, Matrix.diagonal_apply_eq, Matrix.diagonal_apply_eq, hone]
+    simp
+  · have hone : ((↑c : ℂ) • (1 : MatrixAlg D)) i j = 0 := by
+      change ((↑c : ℂ) • ((1 : MatrixAlg D) i)) j = 0
+      rw [Pi.smul_apply, Matrix.one_apply_ne h]
+      simp
+    rw [Matrix.sub_apply, Matrix.diagonal_apply_ne _ h, Matrix.diagonal_apply_ne _ h, hone]
+    simp
 
 private lemma hermitian_sub_scalar_spectral
     {D : ℕ} {H : MatrixAlg D} (hH : H.IsHermitian) (c : ℝ) :
@@ -169,8 +181,12 @@ private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
       transferMap (d := r) (D := D) K (H - (c0 : ℂ) • 1) = H - (c0 : ℂ) • 1 := by
     calc
       transferMap (d := r) (D := D) K (H - (c0 : ℂ) • 1)
-          = transferMap (d := r) (D := D) K H - (c0 : ℂ) • transferMap (d := r) (D := D) K 1 := by
-              simpa using (transferMap (d := r) (D := D) K).map_sub H ((c0 : ℂ) • (1 : MatrixAlg D))
+          = transferMap (d := r) (D := D) K H -
+              transferMap (d := r) (D := D) K ((c0 : ℂ) • (1 : MatrixAlg D)) := by
+              rw [LinearMap.map_sub]
+      _ = transferMap (d := r) (D := D) K H -
+            (c0 : ℂ) • transferMap (d := r) (D := D) K 1 := by
+              rw [LinearMap.map_smul]
       _ = H - (c0 : ℂ) • 1 := by simp [hfix, hone_fix]
   have hone_psd : (1 : MatrixAlg D).PosSemidef := by
     simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
@@ -221,7 +237,9 @@ theorem fixed_eq_scalar_of_irreducible_unital
   have hHerm_herm : (X + Xᴴ).IsHermitian := by
     simp [Matrix.IsHermitian, add_comm]
   have hSkew_herm : (Complex.I • (X - Xᴴ)).IsHermitian := by
-    simp [Matrix.IsHermitian, sub_eq_add_neg, add_comm]
+    ext i j
+    simp [Matrix.IsHermitian, sub_eq_add_neg]
+    ring
   rcases hermitian_fixed_eq_scalar_of_irreducible_unital
       (K := K) hUnital hIrr (X + Xᴴ) hHerm_herm hHerm_fix with ⟨a, ha⟩
   rcases hermitian_fixed_eq_scalar_of_irreducible_unital

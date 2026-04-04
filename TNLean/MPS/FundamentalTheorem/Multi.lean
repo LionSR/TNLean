@@ -94,9 +94,9 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
   let XBDinv : Matrix α α ℂ :=
     Matrix.blockDiagonal' fun k => ((X k)⁻¹ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
   have htoA : toTensorFromBlocks (d := d) (μ := μ) A i = f (BD A) := by
-    simp [toTensorFromBlocks, BD, f, e]; rfl
+    simp [toTensorFromBlocks, BD, f, e]
   have htoB : toTensorFromBlocks (d := d) (μ := μ) B i = f (BD B) := by
-    simp [toTensorFromBlocks, BD, f, e]; rfl
+    simp [toTensorFromBlocks, BD, f, e]
   have hBD : BD B = XBD * BD A * XBDinv := by
     simp only [BD, XBD, XBDinv]
     have : (fun k : Fin r => (μ k) • B k i) =

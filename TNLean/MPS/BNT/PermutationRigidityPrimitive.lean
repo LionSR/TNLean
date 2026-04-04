@@ -128,11 +128,14 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
   let GA : ℕ → Matrix (Fin g) (Fin g) ℂ := fun N i j => mpvInner (d := d) (A i) (A j) N
   --
   have hGA_tendsto : Tendsto GA atTop (nhds (1 : Matrix (Fin g) (Fin g) ℂ)) := by
-    rw [tendsto_pi_nhds]; intro i; rw [tendsto_pi_nhds]; intro j
-    simp only [Matrix.one_apply]
-    split_ifs with h
-    · subst h; exact hA_inner_diag i
-    · exact hA_inner_off i j h
+    refine tendsto_pi_nhds.2 ?_
+    intro i
+    refine tendsto_pi_nhds.2 ?_
+    intro j
+    by_cases h : i = j
+    · subst j
+      simpa [GA, Matrix.one_apply] using hA_inner_diag i
+    · simpa [GA, Matrix.one_apply, h] using hA_inner_off i j h
   --
   have hGA_inv_tendsto :
       Tendsto (fun N => (GA N)⁻¹) atTop (nhds (1 : Matrix (Fin g) (Fin g) ℂ)) := by

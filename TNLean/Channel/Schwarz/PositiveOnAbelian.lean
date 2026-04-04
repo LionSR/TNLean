@@ -33,6 +33,15 @@ namespace PositiveOnAbelian
 
 variable {D : ℕ}
 
+local instance instPositiveOnAbelianMatrixCFC :
+    NonUnitalContinuousFunctionalCalculus ℝ
+      (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
+  ContinuousFunctionalCalculus.toNonUnital
+
+local instance instPositiveOnAbelianMatrixNonnegSpectrum :
+    NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
+  Matrix.instNonnegSpectrumClass
+
 /-- Multiplicativity of `Matrix.toEuclideanLin`: lifting matrix multiplication to the
 Euclidean linear map level. -/
 private lemma toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :

@@ -175,7 +175,7 @@ theorem finrank_range_mulLeft
           simp [Module.finrank_pi_fintype, Fintype.card_fin]
     _ = D * Matrix.rank P := by
           -- `Matrix.rank P` is by definition the `finrank` of `range (Matrix.toLin' P)`.
-          simp [Matrix.rank, Matrix.toLin'_apply']
+          rw [Matrix.rank, Matrix.toLin'_apply']
 
 /-! ## Right multiplication -/
 

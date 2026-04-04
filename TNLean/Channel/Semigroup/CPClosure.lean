@@ -129,18 +129,14 @@ theorem isCPMap_smul_id_nonneg {c : ℝ}
     IsCPMap (((c : ℂ) •
       (LinearMap.id : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ))) := by
   classical
-  refine ⟨1, fun _ => (Real.sqrt c : ℂ) • (1 : Matrix n n ℂ), ?_⟩
+  refine ⟨1, fun _ => (Real.sqrt c : ℝ) • (1 : Matrix n n ℂ), ?_⟩
   intro X
   ext i j
   have hsqR : Real.sqrt c * Real.sqrt c = c := by
     nlinarith [Real.sq_sqrt hc]
   have hsqC : (c : ℂ) = (Real.sqrt c : ℂ) * (Real.sqrt c : ℂ) := by
     exact_mod_cast hsqR.symm
-  simp only [Complex.coe_smul, LinearMap.smul_apply, LinearMap.id_coe, id_eq, smul_apply,
-    Complex.real_smul, univ_unique, Fin.default_eq_zero, Fin.isValue, Algebra.smul_mul_assoc,
-    one_mul, conjTranspose_smul, star_trivial, conjTranspose_one, Algebra.mul_smul_comm, mul_one,
-    sum_const, card_singleton, one_smul]
-  rw [hsqC, mul_assoc]
+  simp [LinearMap.smul_apply, hsqC, mul_assoc]
 
 /-- Completely positive maps are closed under nonnegative scalar multiples. -/
 theorem IsCPMap.smul_nonneg

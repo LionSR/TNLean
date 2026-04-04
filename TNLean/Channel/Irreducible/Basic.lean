@@ -152,7 +152,7 @@ lemma eq_zero_of_sum_mul_conjTranspose_eq_zero {ι : Type*} [Fintype ι]
     intro k c
     have h_diag_eq : ∑ k' : ι, (B k' * (B k')ᴴ) c c = 0 := by
       have := congr_fun (congr_fun h c) c
-      rwa [Finset.sum_apply, Finset.sum_apply, Matrix.zero_apply] at this
+      simpa [Matrix.sum_apply, Matrix.zero_apply] using this
     simp_rw [diagonal_mul_conjTranspose_eq_normSq_sum] at h_diag_eq ⊢
     have h_nonneg : ∀ k', (0 : ℝ) ≤ ∑ x, Complex.normSq (B k' c x) :=
       fun k' => Finset.sum_nonneg (fun x _ => Complex.normSq_nonneg _)

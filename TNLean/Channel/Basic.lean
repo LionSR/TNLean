@@ -6,6 +6,7 @@ import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.Matrix.Normed
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.PosPart.Basic
 import Mathlib.Analysis.RCLike.Lemmas
 import Mathlib.Topology.Algebra.Module.FiniteDimension
@@ -112,6 +113,9 @@ theorem IsPositiveMap.map_isHermitian
     (E X).IsHermitian := by
   classical
   letI := Fintype.ofFinite n
+  letI : NonUnitalContinuousFunctionalCalculus ℝ (Matrix n n ℂ) IsSelfAdjoint :=
+    ContinuousFunctionalCalculus.toNonUnital
+  letI : NonnegSpectrumClass ℝ (Matrix n n ℂ) := Matrix.instNonnegSpectrumClass
   have h_decomp := CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)
   have h_pos_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X)
   have h_neg_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg X)
@@ -125,6 +129,12 @@ end PositiveMapHermitian
 section DensityMatrices
 
 variable {D : ℕ}
+
+local instance : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
+  ContinuousFunctionalCalculus.toNonUnital
+
+local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
+  Matrix.instNonnegSpectrumClass
 
 open scoped Matrix.Norms.Frobenius
 
@@ -274,8 +284,16 @@ Trace is linear: `trace(a • ρ + b • σ) = a * 1 + b * 1 = 1` when `a + b = 
 theorem densityMatrices_isConvex :
     Convex ℝ (densityMatrices D) := by
   intro ρ ⟨hρ_psd, hρ_tr⟩ σ ⟨hσ_psd, hσ_tr⟩ a b ha hb hab
-  exact ⟨(hρ_psd.smul ha).add (hσ_psd.smul hb),
-    by simp only [trace_add, trace_smul, hρ_tr, hσ_tr, ← add_smul, hab, one_smul]⟩
+  have haC : (0 : ℂ) ≤ a := by exact_mod_cast ha
+  have hbC : (0 : ℂ) ≤ b := by exact_mod_cast hb
+  have htraceρ : (a • ρ).trace = a • ρ.trace := Matrix.trace_smul a ρ
+  have htraceσ : (b • σ).trace = b • σ.trace := Matrix.trace_smul b σ
+  have hpsd : (((a : ℂ) • ρ) + ((b : ℂ) • σ)).PosSemidef :=
+    (hρ_psd.smul haC).add (hσ_psd.smul hbC)
+  exact ⟨by simpa using hpsd,
+    by
+      rw [trace_add, htraceρ, htraceσ, hρ_tr, hσ_tr]
+      simpa [smul_eq_mul] using congrArg (fun t : ℝ => (t : ℂ)) hab⟩
 
 /-- The set of density matrices is nonempty when D > 0.
 

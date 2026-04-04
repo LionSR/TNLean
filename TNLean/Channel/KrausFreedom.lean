@@ -115,7 +115,7 @@ private lemma sum_pad_zeros {r₁ r₂ : ℕ} {β : Type*} [AddCommMonoid β]
   · intro α hα
     have hα' := (Finset.mem_filter.mp (Finset.mem_coe.mp hα)).2
     exact ⟨⟨α.val, hα'⟩, Finset.mem_coe.mpr (Finset.mem_univ _), Fin.ext rfl⟩
-  · intro j _; simp [dif_pos j.isLt, Fin.eta]
+  · intro j _; simp [Fin.eta]
 
 private abbrev KrausCoeffSpace (r : ℕ) := EuclideanSpace ℂ (Fin r)
 
@@ -123,8 +123,14 @@ private abbrev KrausEntrySpace (D : ℕ) := EuclideanSpace ℂ (Fin D × Fin D)
 
 set_option synthInstance.maxHeartbeats 16000000 in
 /-- Cached `InnerProductSpace` instance for `EuclideanSpace` to avoid synthesis timeout. -/
-private noncomputable def euclideanIPS (ι : Type*) [Fintype ι] :
+private noncomputable abbrev euclideanIPS (ι : Type*) [Fintype ι] :
     InnerProductSpace ℂ (EuclideanSpace ℂ ι) := inferInstance
+
+/-- `EuclideanSpace` is finite-dimensional via its standard basis. -/
+private noncomputable abbrev euclideanFiniteDimensional (ι : Type*) [Fintype ι] :
+    FiniteDimensional ℂ (EuclideanSpace ℂ ι) :=
+  Module.Basis.finiteDimensional_of_finite
+    ((Pi.basisFun ℂ ι).map (EuclideanSpace.equiv ι ℂ).symm.toLinearEquiv)
 
 /-- Rewrite a `toEuclideanLin` composition as matrix multiplication. -/
 private lemma toEuclideanLin_conjTranspose_mul_apply
@@ -135,6 +141,7 @@ private lemma toEuclideanLin_conjTranspose_mul_apply
   rw [← toLpLin_mul_same]
 
 set_option maxHeartbeats 1600000 in
+-- The partial-isometry extension proof drives higher-order typeclass search in 4.29.
 /-- **Rectangular Kraus freedom** (Wolf Thm 2.1 item 4, necessary direction):
 if two Kraus families of sizes `r₁` and `r₂` define the same CPM, then the
 first family is a linear combination of the second via a rectangular isometry
@@ -206,6 +213,8 @@ theorem kraus_rectangular_freedom
   -- ===== Phase 3: Construct the isometry =====
   letI : InnerProductSpace ℂ (KrausCoeffSpace r₁) := euclideanIPS (Fin r₁)
   letI : InnerProductSpace ℂ (KrausEntrySpace D) := euclideanIPS (Fin D × Fin D)
+  letI : FiniteDimensional ℂ (KrausCoeffSpace r₁) := euclideanFiniteDimensional (Fin r₁)
+  letI : FiniteDimensional ℂ (KrausEntrySpace D) := euclideanFiniteDimensional (Fin D × Fin D)
   let fB : KrausEntrySpace D →ₗ[ℂ] KrausCoeffSpace r₁ := Matrix.toEuclideanLin MB
   let fA' : KrausEntrySpace D →ₗ[ℂ] KrausCoeffSpace r₁ := Matrix.toEuclideanLin MA'
   -- Inner product preservation from Gram equality
@@ -244,14 +253,17 @@ theorem kraus_rectangular_freedom
     obtain ⟨v, rfl⟩ := hx; obtain ⟨w, rfl⟩ := hy
     rw [hL_apply, hL_apply, hinner, Submodule.coe_inner]
   -- Extend to full isometry
-  let L_iso := L_lm.isometryOfInner hL_inner
+  let L_iso : LinearMap.range fA' →ₗᵢ[ℂ] KrausCoeffSpace r₁ :=
+    by
+      exact LinearMap.isometryOfInner L_lm hL_inner
   let U := L_iso.extend
   -- U ∘ fA' = fB
   have hU_eq : ∀ v, U (fA' v) = fB v := by
     intro v
     have : U (fA' v) = L_iso ⟨fA' v, LinearMap.mem_range_self fA' v⟩ :=
       LinearIsometry.extend_apply L_iso ⟨fA' v, LinearMap.mem_range_self fA' v⟩
-    rw [this]; exact hL_apply v
+    rw [this]
+    simpa [L_iso] using hL_apply v
   -- ===== Phase 4: Extract V =====
   let U_mat : Matrix (Fin r₁) (Fin r₁) ℂ :=
     Matrix.toEuclideanLin.symm U.toLinearMap

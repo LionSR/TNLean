@@ -29,6 +29,54 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+private abbrev CLM (D : ℕ) := Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
+
+local instance instSubsequenceAnalysisNormedSpaceRealMat : NormedSpace ℝ Mat :=
+  NormedSpace.restrictScalars ℝ ℂ Mat
+
+local instance instSubsequenceAnalysisModuleRealMat : Module ℝ Mat := by
+  infer_instance
+
+local instance instSubsequenceAnalysisSMulCommClassComplexRealMat :
+    SMulCommClass ℂ ℝ Mat where
+  smul_comm z r A := by
+    ext i j
+    simp [Complex.real_smul, mul_assoc, mul_left_comm, mul_comm]
+
+local instance instSubsequenceAnalysisScalarTowerRealComplexMat :
+    IsScalarTower ℝ ℂ Mat where
+  smul_assoc r z A := by
+    ext i j
+    simp [Complex.real_smul, mul_assoc]
+
+local instance instSubsequenceAnalysisNormedSpaceRealCLM : NormedSpace ℝ (CLM D) :=
+  NormedSpace.restrictScalars ℝ ℂ (CLM D)
+
+local instance instSubsequenceAnalysisModuleRealCLM : Module ℝ (CLM D) := by
+  infer_instance
+
+local instance instSubsequenceAnalysisNormedAddCommGroupCLM :
+    NormedAddCommGroup (CLM D) :=
+  ContinuousLinearMap.toNormedAddCommGroup
+
+local instance instSubsequenceAnalysisNormedRingCLM : NormedRing (CLM D) :=
+  ContinuousLinearMap.toNormedRing
+
+local instance instSubsequenceAnalysisFiniteDimensionalCLM :
+    FiniteDimensional ℂ (CLM D) :=
+  (endEquiv (D := D)).toLinearEquiv.finiteDimensional
+
+local instance instSubsequenceAnalysisCompleteSpaceCLM :
+    CompleteSpace (CLM D) :=
+  FiniteDimensional.complete ℂ (CLM D)
+
+local instance instSubsequenceAnalysisUniformityCountablyGenerated :
+    (_root_.uniformity Mat).IsCountablyGenerated := by
+  exact EMetric.instIsCountablyGeneratedUniformity
+
+local instance instSubsequenceAnalysisFirstCountableMat : FirstCountableTopology Mat :=
+  @UniformSpace.firstCountableTopology _ _ instSubsequenceAnalysisUniformityCountablyGenerated
+
 /-! ## (4) → (2): Block-upper-triangular → rank-deficient kernel element -/
 
 /-- A nonzero orthogonal projection has nonzero trace. -/
@@ -113,7 +161,7 @@ private theorem channel_fixedPoint_in_PMP
     refine congrArg ((1 / ↑(N + 1 : ℕ) : ℂ) • ·) ?_
     exact Finset.sum_congr rfl (fun n _ => h_iter_PMP n)
   -- Extract convergent subsequence
-  haveI : FirstCountableTopology Mat := @UniformSpace.firstCountableTopology _ _ inferInstance
+  haveI : FirstCountableTopology Mat := by infer_instance
   obtain ⟨ρ, hρ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hσ_dm
   -- ρ is in PMP (limit of PMP elements, PMP is closed)
@@ -288,12 +336,21 @@ private theorem generator_vanishes_at_limit
     have h_eq_clm :
         (s : ℂ) • (endEquiv L) (ρ_shift (φ n)) =
           -(((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n))) := by
+      let x := ρ_shift (φ n)
       have h_eval :
-          ((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n)) =
-            (expSemigroupCLM E s) (ρ_shift (φ n)) - ρ_shift (φ n) -
-              (s : ℂ) • E (ρ_shift (φ n)) := by
-        simp [ContinuousLinearMap.sub_apply]
-      rw [h_eval, hfp_clm, sub_self, zero_sub, neg_neg]
+          ((expSemigroupCLM E s) - 1 - (s : ℂ) • E) x =
+            (expSemigroupCLM E s) x - x - ((s : ℂ) • E) x := by
+        rfl
+      calc
+        (s : ℂ) • (endEquiv L) x = (s : ℂ) • E x := by simp [E, x]
+        _ = -(((expSemigroupCLM E s) - 1 - (s : ℂ) • E) x) := by
+            rw [h_eval]
+            have hfp_x : (expSemigroupCLM E s) x = x := by
+              simpa [x] using hfp_clm
+            rw [hfp_x, sub_self, zero_sub]
+            change (s • E) x = - - ((s • E) x)
+            exact (neg_neg ((s • E) x)).symm
+        _ = -(((expSemigroupCLM E s) - 1 - (s : ℂ) • E) (ρ_shift (φ n))) := by simp [x]
     have h_norm_smul_clm : ‖(s : ℂ) • (endEquiv L) (ρ_shift (φ n))‖ ≤
         s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
       have hTaylor :
@@ -312,13 +369,13 @@ private theorem generator_vanishes_at_limit
             exact mul_le_mul_of_nonneg_right
               hTaylor'
               (norm_nonneg _)
-    have h_norm_smul : ‖s • L (ρ_shift (φ n))‖ ≤
+    have h_norm_smul : ‖(s : ℂ) • L (ρ_shift (φ n))‖ ≤
         s ^ 2 * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
       simpa [hE_apply] using h_norm_smul_clm
     have hs_pos : 0 < s := by
       dsimp [s, m]
       positivity
-    rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg hs_nonneg] at h_norm_smul
+    rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs_nonneg] at h_norm_smul
     have hL_norm : ‖L (ρ_shift (φ n))‖ ≤
         s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := by
       have hmul : s * ‖L (ρ_shift (φ n))‖ ≤
@@ -368,7 +425,10 @@ theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
   have hT_pres := semigroup_preserves_compression_of_generator hP_nt.1 hgen
   obtain ⟨ρ_shift, hρ_mem, hρ_PMP, hρ_fix⟩ :=
     exists_fixed_point_sequence_in_PMP hP_nt.1 hP_ne hGKSL hT_pres
-  haveI : FirstCountableTopology Mat := @UniformSpace.firstCountableTopology _ _ inferInstance
+  haveI : FirstCountableTopology Mat := by infer_instance
+  haveI : (nhds (0 : Mat)).IsCountablyGenerated := by infer_instance
+  haveI : (_root_.uniformity Mat).IsCountablyGenerated :=
+    IsUniformAddGroup.uniformity_countably_generated
   obtain ⟨ρ, hρ_dm, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hρ_mem
   have hρ_PMP_lim : P * ρ * P = ρ :=

@@ -219,7 +219,7 @@ theorem mpv_toTensor_eq_sum_sectors (P : SectorDecomposition d) {N : ℕ}
               = ∑ s : Fin P.totalCopies,
                   (P.weight (e.symm s).1 (e.symm s).2) ^ N *
                     mpv (P.basis (e.symm s).1) σ := by
-                      simp [SectorDecomposition.flatWeight, SectorDecomposition.flatBasis, e]
+                      rfl
             _ = ∑ x : ((j : Fin P.basisCount) × Fin (P.copies j)),
                   (P.weight x.1 x.2) ^ N * mpv (P.basis x.1) σ := by
                       let f : ((j : Fin P.basisCount) × Fin (P.copies j)) → ℂ :=

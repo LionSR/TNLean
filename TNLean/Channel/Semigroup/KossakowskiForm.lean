@@ -36,6 +36,14 @@ attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 
+local instance instKossakowskiNonUnitalCFCMatrix (n : ℕ) :
+    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin n) (Fin n) ℂ) IsSelfAdjoint :=
+  ContinuousFunctionalCalculus.toNonUnital
+
+local instance instKossakowskiNonnegSpectrumMatrix (n : ℕ) :
+    NonnegSpectrumClass ℝ (Matrix (Fin n) (Fin n) ℂ) :=
+  Matrix.instNonnegSpectrumClass
+
 section KossakowskiForms
 
 /-! ## Wolf Theorem 7.1, Form (ii): Kossakowski matrix form (Eq. 7.23) -/

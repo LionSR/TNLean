@@ -31,6 +31,64 @@ variable {D : ℕ}
 
 section LindbladForms
 
+local instance : NormedSpace ℝ (Matrix (Fin D) (Fin D) ℂ) :=
+  NormedSpace.restrictScalars ℝ ℂ (Matrix (Fin D) (Fin D) ℂ)
+
+local instance : Module ℝ (Matrix (Fin D) (Fin D) ℂ) := by infer_instance
+
+local instance : SMulCommClass ℂ ℝ (Matrix (Fin D) (Fin D) ℂ) where
+  smul_comm z r A := by
+    ext i j
+    simp [Complex.real_smul, mul_assoc, mul_left_comm, mul_comm]
+
+local instance : IsScalarTower ℝ ℂ (Matrix (Fin D) (Fin D) ℂ) where
+  smul_assoc r z A := by
+    ext i j
+    simp [Complex.real_smul, mul_assoc]
+
+private abbrev CLM (D : ℕ) :=
+  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
+
+local instance instTraceBridgeNormedAddCommGroupCLM : NormedAddCommGroup (CLM D) :=
+  ContinuousLinearMap.toNormedAddCommGroup
+
+local instance instTraceBridgeNormedRingCLM : NormedRing (CLM D) :=
+  ContinuousLinearMap.toNormedRing
+
+local instance instTraceBridgeNormedSpaceRealCLM : NormedSpace ℝ (CLM D) :=
+  NormedSpace.restrictScalars ℝ ℂ (CLM D)
+
+local instance instTraceBridgeModuleRealCLM : Module ℝ (CLM D) := by infer_instance
+
+local instance instTraceBridgeScalarTowerRealComplexCLM : IsScalarTower ℝ ℂ (CLM D) where
+  smul_assoc r z T := by
+    ext X i j
+    exact congrArg (fun A : Matrix (Fin D) (Fin D) ℂ => A i j) (smul_assoc r z (T X))
+
+local instance :
+    LinearMap.CompatibleSMul
+      (Matrix (Fin D) (Fin D) ℂ) (Matrix (Fin D) (Fin D) ℂ) ℝ ℂ :=
+  LinearMap.IsScalarTower.compatibleSMul
+
+local instance :
+    LinearMap.CompatibleSMul
+      (Matrix (Fin D) (Fin D) ℂ) ℂ ℝ ℂ :=
+  by
+    refine ⟨fun f r A => ?_⟩
+    simpa [Complex.real_smul, mul_assoc] using f.map_smul ((r : ℂ)) A
+
+local instance :
+    LinearMap.CompatibleSMul
+      (CLM D) (Matrix (Fin D) (Fin D) ℂ) ℝ ℂ where
+  map_smul f r T := by
+    simpa using f.map_smul ((r : ℂ)) T
+
+local instance :
+    LinearMap.CompatibleSMul
+      (CLM D) ℂ ℝ ℂ where
+  map_smul f r T := by
+    simpa using f.map_smul ((r : ℂ)) T
+
 /-! ## Trace pairing non-degeneracy -/
 
 /-- Non-degeneracy of the trace pairing: if `trace(A * B) = 0` for all `B`,
@@ -48,18 +106,28 @@ theorem Matrix.eq_zero_of_forall_trace_mul_eq_zero
 
 /-! ## Bridge: trace-annihilating ↔ trace-preserving semigroup -/
 
+/-- The trace-evaluation functional as an ℝ-linear map:
+`T ↦ trace(T(ρ))` for a fixed matrix `ρ`. -/
+private def traceEvalLM (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →ₗ[ℝ] ℂ where
+  toFun T := trace (T ρ)
+  map_add' T S := by simp
+  map_smul' r T := by
+    change trace (((r : ℂ) • T ρ)) = r • trace (T ρ)
+    rw [Matrix.trace_smul]
+    simp [Complex.real_smul]
+
 /-- The trace-evaluation functional as an ℝ-continuous linear map:
 `T ↦ trace(T(ρ))` for a fixed matrix `ρ`. -/
 private def traceEvalCLM (ρ : Matrix (Fin D) (Fin D) ℂ) :
     (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℝ] ℂ :=
-  ((Matrix.traceLinearMap (Fin D) ℂ ℂ).toContinuousLinearMap.comp
-    (ContinuousLinearMap.apply ℂ _ ρ)).restrictScalars ℝ
+  ⟨traceEvalLM ρ, (traceEvalLM ρ).continuous_of_finiteDimensional⟩
 
 private lemma traceEvalCLM_apply
     (T : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) :
     traceEvalCLM ρ T = trace (T ρ) := by
-  simp [traceEvalCLM, Matrix.traceLinearMap_apply]
+  rfl
 
 /-- `exp(tL) * L = L * exp(tL)` in the CLM algebra, because `L` commutes with `tL`. -/
 private lemma expSemigroupCLM_mul_comm_local
@@ -69,7 +137,7 @@ private lemma expSemigroupCLM_mul_comm_local
   unfold expSemigroupCLM
   have hc : Commute ((s : ℂ) • L_CLM) L_CLM := by
     ext X i j
-    simp
+    simp [ContinuousLinearMap.mul_apply]
   exact hc.exp_left.eq
 
 /-- `trace(Lⁿ(ρ)) = 0` for `n ≥ 1` when `L` is trace-annihilating.
@@ -100,8 +168,7 @@ private lemma trace_expSemigroupCLM_eq
     have h0 : f 0 = trace ρ := by
       simp only [f, g, traceEvalCLM_apply, expSemigroupCLM_zero,
         ContinuousLinearMap.one_apply]
-    change f t = trace ρ
-    exact (hsuff t 0).trans h0
+    simpa [f, g, traceEvalCLM_apply] using (hsuff t 0).trans h0
   apply is_const_of_deriv_eq_zero
   · -- Differentiable
     intro s
