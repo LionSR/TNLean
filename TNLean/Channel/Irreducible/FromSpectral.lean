@@ -6,6 +6,7 @@ import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.SpectralRadius
 import TNLean.Channel.Irreducible.TraceAdjoint
+import TNLean.Algebra.MatrixOperatorSpace
 
 /-!
 # Irreducibility from spectral properties (Wolf Theorem 6.4)
@@ -39,7 +40,7 @@ since the competing fixed point produced from a reducible channel is again
 positive semidefinite.
 -/
 
-open scoped Matrix MatrixOrder Pointwise ComplexOrder BigOperators NNReal ENNReal
+open scoped Matrix MatrixOrder Pointwise ComplexOrder BigOperators NNReal ENNReal TNOperatorSpace
 open Matrix Finset
 
 variable {D : ℕ}

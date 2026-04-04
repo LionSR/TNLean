@@ -39,6 +39,8 @@ noncomputable section
 namespace TNOperatorSpace
 
 attribute [scoped instance]
+  Matrix.linftyOpNormedAddCommGroup
+  Matrix.linftyOpNormedSpace
   Matrix.linftyOpNormedRing
   Matrix.linftyOpNormedAlgebra
 

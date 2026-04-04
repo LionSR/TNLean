@@ -53,8 +53,6 @@ attribute [local instance] Matrix.instL2OpNormedAddCommGroup
 attribute [local instance] Matrix.instL2OpNormedRing
 attribute [local instance] Matrix.instL2OpNormedAlgebra
 
-local instance : PosSMulMono ℝ ℂ := TNOperatorSpace.complexPosSMulMonoDef
-
 noncomputable local instance : CStarAlgebra Mat where
   toNormedRing := Matrix.instL2OpNormedRing
   toStarRing := inferInstance

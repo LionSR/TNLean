@@ -31,8 +31,6 @@ attribute [local instance] Matrix.instL2OpNormedAddCommGroup
 attribute [local instance] Matrix.instL2OpNormedRing
 attribute [local instance] Matrix.instL2OpNormedAlgebra
 
-local instance : PosSMulMono ℝ ℂ := TNOperatorSpace.complexPosSMulMonoDef
-
 variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
