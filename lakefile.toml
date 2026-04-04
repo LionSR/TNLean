@@ -10,11 +10,6 @@ weak.linter.mathlibStandardSet = true
 maxSynthPendingDepth = 3
 
 [[require]]
-name = "mathlib"
-scope = "leanprover-community"
-rev = "v4.29.0"
-
-[[require]]
 name = "checkdecls"
 git = "https://github.com/PatrickMassot/checkdecls.git"
 
@@ -22,6 +17,11 @@ git = "https://github.com/PatrickMassot/checkdecls.git"
 name = "Gametheory"
 git = "https://github.com/LionSR/Brouwer.git"
 rev = "main"
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.29.0"
 
 [[lean_lib]]
 name = "TNLean"

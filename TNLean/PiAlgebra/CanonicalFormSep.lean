@@ -473,8 +473,7 @@ theorem summed_identity_for_word
   set σ : Fin (M * L) → Fin d := fun i =>
     ((List.replicate L w).flatten).get (Fin.cast hlen.symm i)
   have hofFn : List.ofFn σ = (List.replicate L w).flatten := by
-    conv_rhs => rw [← List.ofFn_getElem ((List.replicate L w).flatten)]
-    apply List.ofFn_congr (by omega)
+    simpa [σ, hlen] using (List.ofFn_getElem (xs := (List.replicate L w).flatten))
   have hsummed := h_summed (M * L) σ
   simp only [mpv, coeff, hofFn, evalWord_flatten_replicate, mul_sub] at hsummed
   rw [Finset.sum_sub_distrib, sub_eq_zero] at hsummed

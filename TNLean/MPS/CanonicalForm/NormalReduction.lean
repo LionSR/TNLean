@@ -32,6 +32,14 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+local instance instNormalReductionNonUnitalCFCMatrix (n : ℕ) :
+    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin n) (Fin n) ℂ) IsSelfAdjoint :=
+  ContinuousFunctionalCalculus.toNonUnital
+
+local instance instNormalReductionNonnegSpectrumMatrix (n : ℕ) :
+    NonnegSpectrumClass ℝ (Matrix (Fin n) (Fin n) ℂ) :=
+  Matrix.instNonnegSpectrumClass
+
 /-- Nonzero scalar rescaling preserves tensor irreducibility. -/
 private theorem isIrreducibleTensor_smul
     {D : ℕ} {c : ℂ} (hc : c ≠ 0)

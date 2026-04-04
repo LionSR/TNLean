@@ -31,6 +31,12 @@ open Matrix Finset
 
 variable {D : ℕ}
 
+local instance : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
+  ContinuousFunctionalCalculus.toNonUnital
+
+local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
+  Matrix.instNonnegSpectrumClass
+
 /-! ## Wolf Proposition 6.8: Decomposition of fixed points -/
 
 section FixedPointDecomposition

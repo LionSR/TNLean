@@ -84,6 +84,8 @@ theorem generator_shift_invariance
           ∑ x, K x * (ρ * (K x)ᴴ) + -(κ * ρ) + -(ρ * κᴴ) +
             (S + (-((2 : ℂ)⁻¹)) • S + (-((2 : ℂ)⁻¹)) • S) := by abel
     rw [hrearr, hScancel, add_zero]
+  have hX : - -X = X := by exact neg_neg X
+  rw [hX]
   simpa [neg_smul] using hgoal
 
 /-- **Wolf Proposition 7.4 (item 2 — existence of traceless Kraus operators)**:

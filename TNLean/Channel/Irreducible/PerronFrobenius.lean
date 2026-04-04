@@ -216,14 +216,14 @@ theorem eigenvalue_unique_of_irreducible_cp
       calc
         (s : ℂ) * Matrix.trace (τ * X)
             = Matrix.trace (τ * ((s : ℂ) • X)) := by
-                simp
+                rw [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
         _ = Matrix.trace (τ * E X) := by rw [hX_eig]
         _ = Matrix.trace
               (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) τ * X) :=
               htrace X
         _ = Matrix.trace (((t : ℂ) • τ) * X) := by rw [hτ_eig]
         _ = (t : ℂ) * Matrix.trace (τ * X) := by
-              simp
+              rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
     have hs_eq_t_complex : (s : ℂ) = (t : ℂ) :=
       mul_right_cancel₀ htr_ne hscalar
     have hs_eq_t : s = t := by

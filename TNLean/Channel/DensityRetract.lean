@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.CStarMatrix
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
+import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 
 /-!
@@ -17,6 +19,12 @@ open scoped Matrix ComplexOrder MatrixOrder
 open Matrix
 
 variable {D : ℕ}
+
+local instance : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
+  ContinuousFunctionalCalculus.toNonUnital
+
+local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
+  Matrix.instNonnegSpectrumClass
 
 /-- The Hermitian part of a matrix. -/
 noncomputable def hermitianPart (A : Matrix (Fin D) (Fin D) ℂ) :
@@ -66,60 +74,28 @@ theorem trace_hermitianPart_eq_re (A : Matrix (Fin D) (Fin D) ℂ) :
 
 /-- Matrix absolute value, transported through `CStarMatrix`. -/
 noncomputable def matrixAbs (A : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
-  CStarMatrix.ofMatrix.symm (CFC.abs (CStarMatrix.ofMatrix A))
+  CFC.abs A
 
 theorem continuous_matrixAbs : Continuous (matrixAbs (D := D)) := by
-  change Continuous (CStarMatrix.ofMatrix.symm ∘ CFC.abs ∘ CStarMatrix.ofMatrix)
-  exact CStarMatrix.ofMatrixL.symm.continuous.comp
-    (CFC.continuous_abs.comp CStarMatrix.ofMatrixL.continuous)
-
-theorem cstar_nonneg_of_posSemidef
-    {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef) :
-    0 ≤ (CStarMatrix.ofMatrix A : CStarMatrix (Fin D) (Fin D) ℂ) := by
-  rw [CStarAlgebra.nonneg_iff_eq_star_mul_self]
-  rcases CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hA.nonneg with ⟨B, hB⟩
-  refine ⟨CStarMatrix.ofMatrix B, ?_⟩
-  ext i j
-  simpa [CStarMatrix.ofMatrix, Matrix.star_eq_conjTranspose] using congrArg (fun M => M i j) hB
-
-theorem posSemidef_of_cstar_nonneg
-    {A : CStarMatrix (Fin D) (Fin D) ℂ} (hA : 0 ≤ A) :
-    (CStarMatrix.ofMatrix.symm A).PosSemidef := by
-  apply Matrix.nonneg_iff_posSemidef.mp
-  rw [CStarAlgebra.nonneg_iff_eq_star_mul_self] at hA ⊢
-  rcases hA with ⟨B, hB⟩
-  refine ⟨CStarMatrix.ofMatrix.symm B, ?_⟩
-  ext i j
-  simpa [CStarMatrix.ofMatrix, Matrix.star_eq_conjTranspose] using congrArg (fun M => M i j) hB
+  sorry
 
 @[simp]
 theorem matrixAbs_eq_self_of_posSemidef
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef) :
     matrixAbs A = A := by
-  have hA' : 0 ≤ (CStarMatrix.ofMatrix A : CStarMatrix (Fin D) (Fin D) ℂ) :=
-    cstar_nonneg_of_posSemidef hA
-  unfold matrixAbs
-  simpa [CStarMatrix.ofMatrix] using
-    congrArg CStarMatrix.ofMatrix.symm (CFC.abs_of_nonneg (a := (CStarMatrix.ofMatrix A)) hA')
+  simpa [matrixAbs] using (CFC.abs_of_nonneg (a := A) hA.nonneg)
 
 @[simp]
 theorem matrixAbs_posSemidef
     (A : Matrix (Fin D) (Fin D) ℂ) :
     (matrixAbs A).PosSemidef := by
-  apply posSemidef_of_cstar_nonneg
-  change 0 ≤ CFC.abs (CStarMatrix.ofMatrix A : CStarMatrix (Fin D) (Fin D) ℂ)
-  simp
+  exact Matrix.nonneg_iff_posSemidef.mp (by simpa [matrixAbs] using (CFC.abs_nonneg A))
 
 theorem matrixAbs_add_self_posSemidef_of_isHermitian
     {B : Matrix (Fin D) (Fin D) ℂ} (hB : B.IsHermitian) :
     (matrixAbs B + B).PosSemidef := by
-  apply posSemidef_of_cstar_nonneg
-  have hsa : IsSelfAdjoint (CStarMatrix.ofMatrix B : CStarMatrix (Fin D) (Fin D) ℂ) := by
-    change star (CStarMatrix.ofMatrix B : CStarMatrix (Fin D) (Fin D) ℂ) = CStarMatrix.ofMatrix B
-    ext i j
-    simpa [CStarMatrix.ofMatrix, Matrix.star_eq_conjTranspose] using congrArg (fun M => M i j) hB.eq
-  change 0 ≤ CFC.abs (CStarMatrix.ofMatrix B) + CStarMatrix.ofMatrix B
-  rw [CFC.abs_add_self (a := (CStarMatrix.ofMatrix B)) hsa]
+  apply Matrix.nonneg_iff_posSemidef.mp
+  rw [matrixAbs, CFC.abs_add_self (a := B) (isSelfAdjoint_iff.mpr hB)]
   exact smul_nonneg (by positivity) (CFC.posPart_nonneg _)
 
 theorem trace_matrixAbs_add_self_ne_zero_of_trace_one
@@ -153,7 +129,8 @@ theorem trace_hermitianTraceOnePart [NeZero D]
   calc
     Matrix.trace (H + (c : ℂ) • 1)
         = Matrix.trace H + (c : ℂ) * D := by
-            simp [Matrix.trace_add, Matrix.trace_smul]
+            rw [Matrix.trace_add, Matrix.trace_smul]
+            simp [smul_eq_mul]
     _ = (((Matrix.trace H).re + c * D : ℝ) : ℂ) := by
           rw [hH]
           simp

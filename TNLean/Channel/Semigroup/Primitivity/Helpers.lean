@@ -16,6 +16,28 @@ attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+local instance : NormedSpace ℝ Mat :=
+  NormedSpace.restrictScalars ℝ ℂ Mat
+
+local instance instPrimitivityHelpersModuleRealMat : Module ℝ Mat := by
+  infer_instance
+
+local instance instPrimitivityHelpersSMulCommClassComplexRealMat : SMulCommClass ℂ ℝ Mat where
+  smul_comm z r A := by
+    ext i j
+    simp [Complex.real_smul, mul_left_comm, mul_comm]
+
+local instance instPrimitivityHelpersScalarTowerRealComplexMat : IsScalarTower ℝ ℂ Mat where
+  smul_assoc r z A := by
+    ext i j
+    simp [Complex.real_smul, mul_assoc]
+
+local instance : ContinuousSMul ℝ ℂ :=
+  show ContinuousSMul ℝ (RestrictScalars ℝ ℂ ℂ) from inferInstance
+
+local instance : ContinuousSMul ℝ Mat :=
+  show ContinuousSMul ℝ (RestrictScalars ℝ ℂ Mat) from inferInstance
+
 /-! ## Helper lemmas for the primitivity proof -/
 
 /-- Semigroup iteration: `T (n * t) = (T t) ^ n` for nonneg `t`. -/
@@ -82,9 +104,11 @@ theorem expSemigroup_apply_eigenvector
     (L : Mat →ₗ[ℂ] Mat) (X : Mat) (μ : ℂ)
     (hX : L X = μ • X) (t : ℝ) :
     expSemigroup L t X = Complex.exp ((t : ℂ) * μ) • X := by
+  letI : IsScalarTower ℝ ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    instPrimitivityHelpersScalarTowerRealComplexMat (D := D)
   let c : ℝ → ℂ := fun u => Complex.exp (-((u : ℂ) * μ))
-  let g : ℝ → Mat := fun u => expSemigroup L u X
-  let f : ℝ → Mat := fun u => c u • g u
+  let g : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => expSemigroup L u X
+  let f : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => c u • g u
   have hdiff : Differentiable ℝ f := by
     intro u
     have hmul : HasDerivAt (fun u : ℝ => (u : ℂ) * μ) ((1 : ℂ) * μ) u :=
@@ -95,7 +119,13 @@ theorem expSemigroup_apply_eigenvector
     have hg : HasDerivAt g (μ • g u) u := by
       dsimp [g]
       simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply (D := D) L X u
-    exact (hc.smul hg).differentiableAt
+    have hf := by
+      have h :
+          HasDerivAt (c • g) (c u • (μ • g u) + (-(c u * μ)) • g u) u :=
+        @HasDerivAt.smul ℝ _ Mat _ _ g (μ • g u) u ℂ _ _ _ _ 
+          (instPrimitivityHelpersScalarTowerRealComplexMat (D := D)) c (-(c u * μ)) hc hg
+      simpa using h
+    simpa [f, c, g] using hf.differentiableAt
   have hderiv : ∀ u : ℝ, deriv f u = 0 := by
     intro u
     have hmul : HasDerivAt (fun u : ℝ => (u : ℂ) * μ) ((1 : ℂ) * μ) u :=
@@ -106,15 +136,19 @@ theorem expSemigroup_apply_eigenvector
     have hg : HasDerivAt g (μ • g u) u := by
       dsimp [g]
       simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply (D := D) L X u
-    have hf : HasDerivAt f (c u • (μ • g u) + (-(c u * μ)) • g u) u := by
-      simpa [f, c, g] using hc.smul hg
+    have hf := by
+      have h :
+          HasDerivAt (c • g) (c u • (μ • g u) + (-(c u * μ)) • g u) u :=
+        @HasDerivAt.smul ℝ _ Mat _ _ g (μ • g u) u ℂ _ _ _ _ 
+          (instPrimitivityHelpersScalarTowerRealComplexMat (D := D)) c (-(c u * μ)) hc hg
+      simpa [f, c, g] using h
     have hz : c u • (μ • g u) + (-(c u * μ)) • g u = 0 := by
       calc
         c u • (μ • g u) + (-(c u * μ)) • g u
             = (c u * μ) • g u + (-(c u * μ)) • g u := by
                 simp [smul_smul]
         _ = 0 := by simp
-    rw [hf.deriv, hz]
+    simpa [hz, smul_smul, mul_assoc] using hf.deriv
   have hconst := is_const_of_deriv_eq_zero hdiff hderiv 0 t
   have hft0 : f 0 = X := by
     simp [f, c, g, expSemigroup_zero]
@@ -370,7 +404,19 @@ theorem spectralRadius_lt_one_of_eigenvalues_lt_one [NeZero D]
     spectralRadius ℂ ((Module.End.toContinuousLinearMap Mat) F) < 1 := by
   let Φ : (Mat →ₗ[ℂ] Mat) ≃ₐ[ℂ] (Mat →L[ℂ] Mat) := Module.End.toContinuousLinearMap Mat
   haveI : Nontrivial (Mat →L[ℂ] Mat) := ContinuousLinearMap.instNontrivialId
-  obtain ⟨μ, hμ_spec, hμ_norm⟩ := spectrum.exists_nnnorm_eq_spectralRadius (Φ F)
+  let hFinite : FiniteDimensional ℂ (Mat →L[ℂ] Mat) :=
+    (endEquiv (D := D)).toLinearEquiv.finiteDimensional
+  have hF_nonempty : (spectrum ℂ (Φ F)).Nonempty :=
+    spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ (Φ F)
+  have hcompact : IsCompact (spectrum ℂ (Φ F)) := by
+    letI : FiniteDimensional ℂ (Mat →L[ℂ] Mat) := hFinite
+    let hComplete : CompleteSpace (Mat →L[ℂ] Mat) := FiniteDimensional.complete ℂ (Mat →L[ℂ] Mat)
+    exact @spectrum.isCompact ℂ (Mat →L[ℂ] Mat)
+      inferInstance inferInstance inferInstance hComplete inferInstance (Φ F)
+  obtain ⟨μ, hμ_spec, hμ_max⟩ :=
+    hcompact.exists_isMaxOn hF_nonempty continuous_nnnorm.continuousOn
+  have hμ_norm : (‖μ‖₊ : ENNReal) = spectralRadius ℂ (Φ F) := by
+    exact le_antisymm (le_iSup₂ (α := ENNReal) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
   have hμ_spec_end : μ ∈ spectrum ℂ F := by
     rw [AlgEquiv.spectrum_eq Φ] at hμ_spec
     exact hμ_spec

@@ -365,7 +365,7 @@ theorem exists_tp_data_of_irreducible
   refine ⟨B, r, σ, hσ_pd, hr_pos, ?_, hB_tp, ?_⟩
   -- Explicit form of B.
   · intro i
-    simp only [hB_def, tpGauge, hA'_def, hc_def]
+    rfl
   -- GaugeEquiv: A' matches the stated rescaled tensor.
   · convert hB_gauge using 1
 

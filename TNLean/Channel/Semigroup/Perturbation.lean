@@ -9,6 +9,7 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Mathlib.Analysis.ODE.Gronwall
+import Mathlib.Analysis.Calculus.Deriv.Shift
 
 /-!
 # Perturbation bound for dynamical semigroups — Wolf Lemma 7.1 and Corollary 7.1
@@ -36,57 +37,91 @@ attribute [local instance] Matrix.linftyOpNormedAlgebra
 private abbrev CLM (D : ℕ) :=
   Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
 
+local instance : SMulCommClass ℂ ℝ (Matrix (Fin D) (Fin D) ℂ) where
+  smul_comm z r A := by
+    ext i j
+    simp [Complex.real_smul, mul_assoc, mul_left_comm, mul_comm]
+
+local instance : NormedAddCommGroup (CLM D) :=
+  ContinuousLinearMap.toNormedAddCommGroup
+
+local instance : NormedRing (CLM D) :=
+  ContinuousLinearMap.toNormedRing
+
+local instance : NormedSpace ℝ (CLM D) :=
+  NormedSpace.restrictScalars ℝ ℂ (CLM D)
+
+local instance : Module ℝ (CLM D) := by infer_instance
+
+local instance : NormedAlgebra ℝ (CLM D) := by infer_instance
+
+local instance : IsScalarTower ℝ ℂ (CLM D) where
+  smul_assoc r z T := by
+    ext X i j
+    exact congrArg (fun A : Matrix (Fin D) (Fin D) ℂ => A i j) (smul_assoc r z (T X))
+
+local instance : CompleteSpace (CLM D) := by infer_instance
+
 /-! ## Derivative of the semigroup product -/
 
+set_option maxHeartbeats 800000 in
+-- The product-derivative proof combines semigroup differentiation, a translated parameter,
+-- and CLM multiplication; 4.29 elaboration needs a higher heartbeat budget here.
 /-- HasDerivAt for `s ↦ exp((t-s)•L) * exp(s•L')` with derivative
-`exp((t-s)•L) * (L' - L) * exp(s•L')`. Both derivatives go through ℂ
-to ensure instance consistency. -/
+`exp((t-s)•L) * (L' - L) * exp(s•L')`. -/
 private theorem hasDerivAt_semigroup_product
     (L L' : CLM D) (t s : ℝ) :
     HasDerivAt (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
       (expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s) s := by
-  simp only [expSemigroupCLM]
-  -- Cast lemma
-  have hcast : ∀ u : ℝ, ((t - u : ℝ) : ℂ) = (t : ℂ) - (u : ℂ) := by
-    intro u; push_cast; ring
-  -- Inner maps ℝ → ℂ
-  have h_ofReal : HasDerivAt (fun u : ℝ => (u : ℂ)) (1 : ℂ) s :=
-    Complex.ofRealCLM.hasDerivAt
-  have h_tsub : HasDerivAt (fun u : ℝ => (t : ℂ) - (u : ℂ)) (-1 : ℂ) s :=
-    h_ofReal.const_sub (t : ℂ)
-  -- Outer maps ℂ → CLM
-  have hexp_L := hasDerivAt_exp_smul_const (𝕂 := ℂ) L ((t : ℂ) - (s : ℂ))
-  have hexp_L' := hasDerivAt_exp_smul_const (𝕂 := ℂ) L' (s : ℂ)
-  -- Chain rule: compose ℝ → ℂ → CLM
-  have hg := hexp_L.scomp s h_tsub
-  have hh := hexp_L'.scomp s h_ofReal
-  simp only [Function.comp_def, neg_smul, one_smul] at hg hh
-  -- Rewrite cast
-  simp_rw [hcast] at hg ⊢
-  -- Product rule (both hg and hh now use consistent instances)
-  have hprod := hg.mul hh
+  have hg :
+      HasDerivAt (fun u => expSemigroupCLM L (t - u))
+        (-(expSemigroupCLM L (t - s) * L)) s := by
+    have hbase :
+        HasDerivAt (fun u : ℝ => expSemigroupCLM L u)
+          (expSemigroupCLM L (t - s) * L) (t - s) :=
+      hasDerivAt_expSemigroupCLM L (t - s)
+    simpa [neg_one_smul] using
+      (HasDerivAt.comp_const_sub
+        (𝕜 := ℝ)
+        (f := fun u : ℝ => expSemigroupCLM L u)
+        (a := t) (x := s) hbase)
+  have hh :
+      HasDerivAt (fun u => expSemigroupCLM L' u)
+        (expSemigroupCLM L' s * L') s :=
+    hasDerivAt_expSemigroupCLM L' s
+  let c : ℝ → CLM D := fun u => expSemigroupCLM L (t - u)
+  let d : ℝ → CLM D := fun u => expSemigroupCLM L' u
+  have hc : HasDerivAt c (-(expSemigroupCLM L (t - s) * L)) s := hg
+  have hd : HasDerivAt d (expSemigroupCLM L' s * L') s := hh
+  have hprod : HasDerivAt
+      (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
+      (-(expSemigroupCLM L (t - s) * L) * expSemigroupCLM L' s +
+        expSemigroupCLM L (t - s) * (expSemigroupCLM L' s * L')) s := by
+    simpa [c, d, mul_assoc] using
+      (HasDerivAt.mul (𝕜 := ℝ) (𝔸 := CLM D) hc hd)
   -- The derivative from product rule is: -(exp(...)* L) * exp(...) + exp(...) * (exp(...) * L')
   -- We need: exp(...) * (L' - L) * exp(...)
   suffices heq :
-      -(NormedSpace.exp (((t : ℂ) - (s : ℂ)) • L) * L) * NormedSpace.exp ((s : ℂ) • L') +
-      NormedSpace.exp (((t : ℂ) - (s : ℂ)) • L) * (NormedSpace.exp ((s : ℂ) • L') * L') =
-      NormedSpace.exp (((t : ℂ) - (s : ℂ)) • L) * (L' - L) * NormedSpace.exp ((s : ℂ) • L') by
+      -(expSemigroupCLM L (t - s) * L) * expSemigroupCLM L' s +
+      expSemigroupCLM L (t - s) * (expSemigroupCLM L' s * L') =
+      expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s by
     rwa [heq] at hprod
   -- Commutativity: L' * exp(s•L') = exp(s•L') * L'
-  have hcomm_smul : Commute L' ((s : ℂ) • L') := by
-    ext v
-    simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.smul_apply, map_smul]
-  have hcomm : L' * NormedSpace.exp ((s : ℂ) • L') =
-      NormedSpace.exp ((s : ℂ) • L') * L' :=
-    hcomm_smul.exp_right.eq
+  have hcomm : L' * expSemigroupCLM L' s =
+      expSemigroupCLM L' s * L' :=
+    by
+      have hcomm_smul : Commute ((s : ℂ) • L') L' := by
+        ext v
+        simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.smul_apply, map_smul]
+      simpa [expSemigroupCLM] using hcomm_smul.exp_left.eq.symm
   -- Prove the algebra at the pointwise level (avoids CLM instance diamonds with neg_mul)
   apply ContinuousLinearMap.ext; intro v
   -- Expand both sides using CLM operations
   simp only [ContinuousLinearMap.mul_apply, ContinuousLinearMap.neg_apply,
     ContinuousLinearMap.add_apply, ContinuousLinearMap.sub_apply, map_sub]
   -- Use hcomm: L'(exp v) = exp(L' v), rearranged to exp(L' v) = L'(exp v)
-  have hcomm_v : NormedSpace.exp ((s : ℂ) • L') (L' v) =
-      L' (NormedSpace.exp ((s : ℂ) • L') v) :=
+  have hcomm_v : expSemigroupCLM L' s (L' v) =
+      L' (expSemigroupCLM L' s v) :=
     (DFunLike.congr_fun hcomm v).symm
   rw [hcomm_v]
   -- Goal: -(A(L(Cv))) + A(L'(Cv)) = A(L'(Cv)) - A(L(Cv))
@@ -105,25 +140,26 @@ theorem duhamel_formula
       HasDerivAt (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
         (expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s) s :=
     fun s _ => hasDerivAt_semigroup_product L L' t s
+  have hcont :
+      Continuous (fun s => expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s) := by
+    apply Continuous.mul
+    · apply Continuous.mul
+      · exact (expSemigroupCLM_continuous L).comp (continuous_const.sub continuous_id)
+      · exact continuous_const
+    · exact expSemigroupCLM_continuous L'
   -- Step 2: Integrability of the derivative (continuous → integrable)
   have hintble : IntervalIntegrable
       (fun s => expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s)
       MeasureTheory.volume 0 t := by
-    apply ContinuousOn.intervalIntegrable
-    apply ContinuousOn.mul
-    · apply ContinuousOn.mul
-      · -- expSemigroupCLM L (t - ·) is continuous
-        exact (expSemigroupCLM_continuous L).continuousOn.comp
-          (continuous_const.sub continuous_id).continuousOn (Set.mapsTo_univ _ _)
-      · exact continuousOn_const
-    · exact (expSemigroupCLM_continuous L').continuousOn
+    rw [intervalIntegrable_iff_integrableOn_Icc_of_le ht]
+    exact hcont.continuousOn.integrableOn_Icc
   -- Step 3: Apply FTC-2: ∫₀ᵗ f'(s) ds = f(t) - f(0)
   -- where f(s) = expSemigroupCLM L (t - s) * expSemigroupCLM L' s
   rw [intervalIntegral.integral_eq_sub_of_hasDerivAt hderiv hintble]
   -- Simplify f(t) - f(0):
   -- f(t) = expSemigroupCLM L (t - t) * expSemigroupCLM L' t = 1 * T' t = T' t
   -- f(0) = expSemigroupCLM L (t - 0) * expSemigroupCLM L' 0 = T t * 1 = T t
-  simp only [sub_self, sub_zero, expSemigroupCLM_zero, one_mul, mul_one]
+  simpa [sub_self, sub_zero, expSemigroupCLM_zero, one_mul, mul_one]
 
 /-! ## Helper for biSup bounds -/
 

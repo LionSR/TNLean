@@ -58,33 +58,60 @@ private lemma derivative_det_eq_sum (A : Matrix n n R[X]) :
     derivative A.det =
     ∑ j : n, (A.updateCol j (fun k => derivative (A k j))).det := by
   rw [det_apply]
-  simp only [map_sum, Polynomial.derivative_smul]
-  have hprod : ∀ σ : Equiv.Perm n, derivative (∏ i : n, A (σ i) i) =
-      ∑ j ∈ Finset.univ, (∏ k ∈ Finset.univ.erase j, A (σ k) k) * derivative (A (σ j) j) := by
-    intro σ; exact derivative_prod_finset
-  simp_rw [hprod]
-  simp_rw [Finset.smul_sum]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro j _
-  rw [det_apply]
-  apply Finset.sum_congr rfl
-  intro σ _
-  congr 1
-  symm
-  calc ∏ i : n, (A.updateCol j (fun k => derivative (A k j))) (σ i) i
-      = ∏ i ∈ Finset.univ, (A.updateCol j (fun k => derivative (A k j))) (σ i) i := rfl
-    _ = (∏ i ∈ Finset.univ.erase j,
-          (A.updateCol j (fun k => derivative (A k j))) (σ i) i) *
-        (A.updateCol j (fun k => derivative (A k j))) (σ j) j :=
-          (Finset.prod_erase_mul _ _ (Finset.mem_univ j)).symm
-    _ = (∏ i ∈ Finset.univ.erase j, A (σ i) i) * derivative (A (σ j) j) := by
-        rw [updateCol_self]
-        congr 1
-        apply Finset.prod_congr rfl
-        intro i hi
-        rw [Finset.mem_erase] at hi
-        rw [updateCol_ne hi.1]
+  simp only [map_sum]
+  trans ∑ σ : Equiv.Perm n, Equiv.Perm.sign σ •
+      ∑ j ∈ Finset.univ, (∏ k ∈ Finset.univ.erase j, A (σ k) k) * derivative (A (σ j) j)
+  · apply Finset.sum_congr rfl
+    intro σ _
+    calc
+      derivative (Equiv.Perm.sign σ • ∏ i : n, A (σ i) i)
+          = Equiv.Perm.sign σ • derivative (∏ i : n, A (σ i) i) := by
+            simpa using
+              (Polynomial.derivative_smul (Equiv.Perm.sign σ) (∏ i : n, A (σ i) i))
+      _ = Equiv.Perm.sign σ •
+            ∑ j ∈ Finset.univ, (∏ k ∈ Finset.univ.erase j, A (σ k) k) *
+              derivative (A (σ j) j) := by
+            exact congrArg (fun p ↦ Equiv.Perm.sign σ • p) derivative_prod_finset
+  · trans ∑ j : n, ∑ σ : Equiv.Perm n, Equiv.Perm.sign σ •
+        ((∏ k ∈ Finset.univ.erase j, A (σ k) k) * derivative (A (σ j) j))
+    · trans ∑ σ : Equiv.Perm n, ∑ j : n, Equiv.Perm.sign σ •
+          ((∏ k ∈ Finset.univ.erase j, A (σ k) k) * derivative (A (σ j) j))
+      · apply Finset.sum_congr rfl
+        intro σ _
+        simpa using
+          (Finset.smul_sum
+            (r := Equiv.Perm.sign σ)
+            (s := Finset.univ)
+            (f := fun j : n =>
+              (∏ k ∈ Finset.univ.erase j, A (σ k) k) * derivative (A (σ j) j)))
+      · simpa using
+          (Finset.sum_comm :
+            (∑ σ : Equiv.Perm n, ∑ j : n,
+              Equiv.Perm.sign σ •
+                ((∏ k ∈ Finset.univ.erase j, A (σ k) k) * derivative (A (σ j) j))) =
+            ∑ j : n, ∑ σ : Equiv.Perm n,
+              Equiv.Perm.sign σ •
+                ((∏ k ∈ Finset.univ.erase j, A (σ k) k) * derivative (A (σ j) j)))
+    · apply Finset.sum_congr rfl
+      intro j _
+      rw [det_apply]
+      apply Finset.sum_congr rfl
+      intro σ _
+      congr 2
+      symm
+      calc ∏ i : n, (A.updateCol j (fun k => derivative (A k j))) (σ i) i
+          = ∏ i ∈ Finset.univ, (A.updateCol j (fun k => derivative (A k j))) (σ i) i := rfl
+        _ = (∏ i ∈ Finset.univ.erase j,
+              (A.updateCol j (fun k => derivative (A k j))) (σ i) i) *
+            (A.updateCol j (fun k => derivative (A k j))) (σ j) j :=
+              (Finset.prod_erase_mul _ _ (Finset.mem_univ j)).symm
+        _ = (∏ i ∈ Finset.univ.erase j, A (σ i) i) * derivative (A (σ j) j) := by
+            rw [updateCol_self]
+            congr 1
+            apply Finset.prod_congr rfl
+            intro i hi
+            rw [Finset.mem_erase] at hi
+            rw [updateCol_ne hi.1]
 
 private lemma det_updateCol_eq_adjugate_mulVec (A : Matrix n n R[X]) (j : n) (b : n → R[X]) :
     (A.updateCol j b).det = ∑ k : n, A.adjugate j k * b k := by

@@ -37,6 +37,100 @@ variable {D : ℕ}
 
 section LindbladForms
 
+local instance instEulerStepNormedSpaceRealMatrix : NormedSpace ℝ
+    (Matrix (Fin D) (Fin D) ℂ) :=
+  NormedSpace.restrictScalars ℝ ℂ (Matrix (Fin D) (Fin D) ℂ)
+
+local instance instEulerStepModuleRealMatrix : Module ℝ (Matrix (Fin D) (Fin D) ℂ) := by
+  infer_instance
+
+local instance instEulerStepSMulCommClassComplexRealMatrix :
+    SMulCommClass ℂ ℝ (Matrix (Fin D) (Fin D) ℂ) where
+  smul_comm z r A := by
+    ext i j
+    simp [Complex.real_smul, mul_left_comm, mul_comm]
+
+local instance instEulerStepScalarTowerRealComplexMatrix :
+    IsScalarTower ℝ ℂ (Matrix (Fin D) (Fin D) ℂ) where
+  smul_assoc r z A := by
+    ext i j
+    simp [Complex.real_smul, mul_assoc]
+
+private abbrev CLMReal (D : ℕ) :=
+  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
+
+private abbrev MatChoi (D : ℕ) :=
+  Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ
+
+local instance instEulerStepNormedAddCommGroupCLMReal : NormedAddCommGroup (CLMReal D) :=
+  ContinuousLinearMap.toNormedAddCommGroup
+
+local instance instEulerStepNormedRingCLMReal : NormedRing (CLMReal D) :=
+  ContinuousLinearMap.toNormedRing
+
+local instance instEulerStepNormedSpaceRealCLMReal : NormedSpace ℝ (CLMReal D) :=
+  NormedSpace.restrictScalars ℝ ℂ (CLMReal D)
+
+local instance instEulerStepModuleRealCLMReal : Module ℝ (CLMReal D) := by infer_instance
+
+local instance instEulerStepScalarTowerRealComplexCLMReal : IsScalarTower ℝ ℂ (CLMReal D) where
+  smul_assoc r z T := by
+    ext X i j
+    exact congrArg (fun A : Matrix (Fin D) (Fin D) ℂ => A i j) (smul_assoc r z (T X))
+
+local instance instEulerStepCompatibleSmulCLMRealMatChoi :
+    LinearMap.CompatibleSMul
+      (CLMReal D) (Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) ℝ ℂ where
+  map_smul f r T := by
+    simpa [Complex.real_smul, mul_assoc] using f.map_smul ((r : ℂ)) T
+
+local instance instEulerStepNormedSpaceRealMatChoi : NormedSpace ℝ (MatChoi D) :=
+  NormedSpace.restrictScalars ℝ ℂ (MatChoi D)
+
+local instance instEulerStepModuleRealMatChoi : Module ℝ (MatChoi D) := by infer_instance
+
+local instance instEulerStepSMulCommClassComplexRealMatChoi :
+    SMulCommClass ℂ ℝ (MatChoi D) where
+  smul_comm z r A := by
+    ext i j
+    simp [Complex.real_smul, mul_left_comm, mul_comm]
+
+local instance instEulerStepScalarTowerRealComplexMatChoi : IsScalarTower ℝ ℂ (MatChoi D) where
+  smul_assoc r z A := by
+    ext i j
+    simp [Complex.real_smul, mul_assoc]
+
+local instance instEulerStepCompatibleSmulMatChoiMatChoi :
+    LinearMap.CompatibleSMul (MatChoi D) (MatChoi D) ℝ ℂ where
+  map_smul f r A := by
+    simpa [Complex.real_smul, mul_assoc] using f.map_smul ((r : ℂ)) A
+
+private def choiRCLM (D : ℕ) : CLMReal D →L[ℝ] MatChoi D :=
+  ⟨{
+      toFun := fun T => ChoiJamiolkowski.choiCLM (D := D) T
+      map_add' := by intro T S; simp
+      map_smul' := by intro r T; rfl
+    }, ({
+      toFun := fun T => ChoiJamiolkowski.choiCLM (D := D) T
+      map_add' := by intro T S; simp
+      map_smul' := by intro r T; rfl
+    } : CLMReal D →ₗ[ℝ] MatChoi D).continuous_of_finiteDimensional⟩
+
+private def sandRCLM (D : ℕ) (P : MatChoi D) : MatChoi D →L[ℝ] MatChoi D :=
+  ⟨{
+      toFun := fun X => P * X * P
+      map_add' := by intro X Y; simp [Matrix.mul_add, add_mul, Matrix.mul_assoc]
+      map_smul' := by
+        intro r X
+        simp [Complex.real_smul, Matrix.smul_mul, Matrix.mul_smul, Matrix.mul_assoc]
+    }, ({
+      toFun := fun X => P * X * P
+      map_add' := by intro X Y; simp [Matrix.mul_add, add_mul, Matrix.mul_assoc]
+      map_smul' := by
+        intro r X
+        simp [Complex.real_smul, Matrix.smul_mul, Matrix.mul_smul, Matrix.mul_assoc]
+    } : MatChoi D →ₗ[ℝ] MatChoi D).continuous_of_finiteDimensional⟩
+
 /-! ## Prop 7.3: CP semigroup ↔ CCP generator (Wolf Proposition 7.3) -/
 
 set_option maxHeartbeats 2000000 in
@@ -69,35 +163,24 @@ theorem cp_semigroup_implies_ccp_generator
   · haveI : NeZero D := ⟨hD⟩
     let L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
       (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) L
-    let MatChoi := Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ
-    let P : MatChoi := 1 - Matrix.omegaProj D
-    let choiR :
-        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℝ] MatChoi :=
-      (ChoiJamiolkowski.choiCLM (D := D)).restrictScalars ℝ
-    let projR :
-        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℝ] MatChoi :=
-      ((ContinuousLinearMap.mulLeftRight ℂ MatChoi P P).comp
-        (ChoiJamiolkowski.choiCLM (D := D))).restrictScalars ℝ
-    let sandR : MatChoi →L[ℝ] MatChoi :=
-      (ContinuousLinearMap.mulLeftRight ℂ MatChoi P P).restrictScalars ℝ
-    let g : ℝ → MatChoi := fun t => choiR (expSemigroupCLM L_CLM t)
-    let gp : ℝ → MatChoi := fun t => projR (expSemigroupCLM L_CLM t)
+    let P : MatChoi D := 1 - Matrix.omegaProj D
+    let choiR : CLMReal D →L[ℝ] MatChoi D := choiRCLM D
+    let sandR : MatChoi D →L[ℝ] MatChoi D := sandRCLM D P
+    let projR : CLMReal D →L[ℝ] MatChoi D := sandR.comp choiR
+    let g : ℝ → MatChoi D := fun t => choiR (expSemigroupCLM L_CLM t)
+    let gp : ℝ → MatChoi D := fun t => projR (expSemigroupCLM L_CLM t)
     have hchoi_eq (t : ℝ) :
         g t = ChoiJamiolkowski.choiMatrix (expSemigroup L t) := by
       have h := congrArg (fun T => ChoiJamiolkowski.choiCLM (D := D) T)
         (expSemigroup_toCLM L t)
-      simpa [g, choiR, L_CLM] using h.symm
+      simpa [g, choiR, choiRCLM, L_CLM] using h.symm
     have hgp_sandwich (t : ℝ) :
         gp t = sandR (g t) := by
-      change P * ChoiJamiolkowski.choiCLM (expSemigroupCLM L_CLM t) * P =
-        P * g t * P
-      rw [show g t = ChoiJamiolkowski.choiCLM (expSemigroupCLM L_CLM t) by rfl]
+      simp [gp, projR, g, ContinuousLinearMap.comp_apply]
     have hproj_eq (t : ℝ) :
         gp t = ChoiJamiolkowski.projectedChoiMatrix (expSemigroup L t) := by
       rw [hgp_sandwich t, hchoi_eq t]
-      change P * ChoiJamiolkowski.choiMatrix (expSemigroup L t) * P =
-        ChoiJamiolkowski.projectedChoiMatrix (expSemigroup L t)
-      simp [ChoiJamiolkowski.projectedChoiMatrix, P]
+      simp [sandR, sandRCLM, ChoiJamiolkowski.projectedChoiMatrix, P]
     have hg_deriv : HasDerivAt g (ChoiJamiolkowski.choiMatrix L) 0 := by
       have hchoi0 : HasFDerivAt choiR choiR (expSemigroupCLM L_CLM 0) := choiR.hasFDerivAt
       simpa [g, choiR, L_CLM] using
@@ -121,14 +204,15 @@ theorem cp_semigroup_implies_ccp_generator
         rw [hfun]
         exact haux
       change HasDerivAt gp (P * ChoiJamiolkowski.choiMatrix L * P) 0
-      simpa [sandR, ContinuousLinearMap.mulLeftRight_apply, Matrix.mul_assoc] using haux'
+      simpa [sandR, sandRCLM, Matrix.mul_assoc] using haux'
     have hg0 : g 0 = Matrix.omegaProj D := by
       rw [hchoi_eq 0, expSemigroup_zero, ChoiJamiolkowski.choiMatrix_id]
     have hgp0 : gp 0 = 0 := by
       rw [hgp_sandwich 0, hg0]
-      change ((1 : MatChoi) - Matrix.omegaProj D) * Matrix.omegaProj D *
-          ((1 : MatChoi) - Matrix.omegaProj D) = 0
-      rw [Matrix.one_sub_omegaProj_mul_omegaProj, zero_mul]
+      change P * Matrix.omegaProj D * P = 0
+      have hPω : P * Matrix.omegaProj D = 0 := by
+        simpa [P] using Matrix.one_sub_omegaProj_mul_omegaProj (d := D)
+      simpa [Matrix.mul_assoc, hPω]
     rw [hasDerivAt_iff_tendsto_slope] at hg_deriv hgp_deriv
     have hg_slope :
         Filter.Tendsto (slope g 0) (nhdsWithin 0 (Set.Ioi 0))
@@ -149,12 +233,22 @@ theorem cp_semigroup_implies_ccp_generator
         exact ChoiJamiolkowski.projectedChoiPosSemidef_of_cp (hCP t (le_of_lt ht))
       have hscale : 0 ≤ (t - 0)⁻¹ := by
         exact inv_nonneg.mpr (sub_nonneg.mpr (le_of_lt ht))
-      simpa [slope, hgp0] using hpsd.smul hscale
+      have hscaleC : (0 : ℂ) ≤ ((t - 0)⁻¹ : ℂ) := by
+        exact_mod_cast hscale
+      have hscaledC : (((t - 0)⁻¹ : ℂ) • gp t).PosSemidef := by
+        simpa using hpsd.smul hscaleC
+      have hcast : ((↑t : ℂ)⁻¹) = ((t⁻¹ : ℝ) : ℂ) := by
+        simpa using (map_inv₀ (algebraMap ℝ ℂ) t)
+      have hscaled : (t⁻¹ • gp t).PosSemidef := by
+        change ((((t⁻¹ : ℝ) : ℂ)) • gp t).PosSemidef
+        rw [← hcast]
+        simpa using hscaledC
+      simpa [slope, hgp0] using hscaled
     have hproj_psd : (ChoiJamiolkowski.projectedChoiMatrix L).PosSemidef := by
       haveI : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
       exact matrix_isClosed_posSemidef.mem_of_tendsto hgp_slope hslope_proj_psd
-    have hclosed_herm : IsClosed {X : MatChoi | X.IsHermitian} := by
-      change IsClosed {X : MatChoi | star X = X}
+    have hclosed_herm : IsClosed {X : MatChoi D | X.IsHermitian} := by
+      change IsClosed {X : MatChoi D | star X = X}
       exact isClosed_eq continuous_star continuous_id
     have hslope_choi_herm :
         ∀ᶠ t in nhdsWithin (0 : ℝ) (Set.Ioi 0), (slope g 0 t).IsHermitian := by
@@ -212,20 +306,39 @@ set_option maxHeartbeats 800000 in
 -- needs extra normalization heartbeats, but only in this local theorem.
 private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D) :
     eulerStep G s ρ =
-      ρ + (s : ℂ) • (G.toLinearMap ρ) + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ := by
+      ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * ρ * G.κᴴ) := by
   change Kraus.mapLM (fun _ : Fin 1 => (1 : sgMat D) - (s : ℂ) • G.κ) ρ + (s : ℂ) • G.φ ρ =
-    ρ + (s : ℂ) • (G.toLinearMap ρ) + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ
+    ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * ρ * G.κᴴ)
   simp only [Complex.coe_smul, Kraus.mapLM_apply, Kraus.map_apply, Finset.univ_unique,
     Fin.default_eq_zero, Fin.isValue, Finset.sum_const, Finset.card_singleton, one_smul,
     GeneratorDecomp.toLinearMap_apply, quadMap_apply, pow_two,
     sub_eq_add_neg]
-  have hconj : ((1 : sgMat D) + -(s • G.κ))ᴴ = 1 + -(s • G.κᴴ) := by
+  have hconj : (1 + -(s • G.κ))ᴴ = 1 + -(s • G.κᴴ) := by
     simp
-  rw [hconj]
-  simp only [Matrix.mul_add, add_mul, Matrix.mul_one, Matrix.one_mul, smul_mul_assoc,
-    mul_smul_comm, smul_add, smul_smul, mul_assoc, neg_mul, mul_neg, smul_neg,
-    neg_add_rev, neg_neg]
-  abel
+  calc
+    (1 + -(s • G.κ)) * ρ * (1 + -(s • G.κ))ᴴ + s • G.φ ρ =
+        (1 + -(s • G.κ)) * ρ * (1 + -(s • G.κᴴ)) + s • G.φ ρ := by
+          rw [hconj]
+    _ = ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * ρ * G.κᴴ) := by
+          simp only [Matrix.mul_add, add_mul, Matrix.mul_one, Matrix.one_mul, smul_mul_assoc,
+            mul_assoc, neg_mul, mul_neg, smul_neg]
+          have hρκ : ρ * (s • G.κᴴ) = s • (ρ * G.κᴴ) := by
+            simp
+          have hκρκ : G.κ * (s • (ρ * G.κᴴ)) = s • (G.κ * (ρ * G.κᴴ)) := by
+            simp [smul_mul_assoc, mul_assoc]
+          rw [hρκ, hκρκ]
+          have hrhs :
+              ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * (ρ * G.κᴴ)) =
+                ρ + (s • G.φ ρ + -(s • (G.κ * ρ)) + -(s • (ρ * G.κᴴ))) +
+                  (s * s) • (G.κ * (ρ * G.κᴴ)) := by
+            ext i j
+            simp [Complex.real_smul, add_assoc]
+            ring
+          rw [hrhs]
+          ext i j
+          simp [Complex.real_smul]
+          ring
+    
 
 private theorem eulerStep_cp (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
     IsCPMap (eulerStep G s) := by
@@ -240,6 +353,19 @@ private theorem eulerStep_toCLM_eq (G : GeneratorDecomp D) (s : ℝ) :
   change (eulerStep G s ρ) i j =
     (ρ + (s : ℂ) • G.toLinearMap ρ + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ) i j
   rw [eulerStep_apply]
+  simp [Complex.real_smul, sub_eq_add_neg, quadMap_apply, GeneratorDecomp.toLinearMap_apply,
+    pow_two]
+  have hrhs :
+      (s • G.φ ρ) i j + -(s • (G.κ * ρ)) i j + -(s • (ρ * G.κᴴ)) i j =
+        (↑s : ℂ) * G.φ ρ i j + -((↑s : ℂ) * (G.κ * ρ) i j) + -((↑s : ℂ) * (ρ * G.κᴴ) i j) := by
+    simp [Complex.real_smul]
+  calc
+    ↑s * (G.φ ρ i j + -(G.κ * ρ) i j + -(ρ * G.κᴴ) i j) =
+        (↑s : ℂ) * G.φ ρ i j + -((↑s : ℂ) * (G.κ * ρ) i j) +
+          -((↑s : ℂ) * (ρ * G.κᴴ) i j) := by
+            ring
+    _ = (s • G.φ ρ) i j + -(s • (G.κ * ρ)) i j + -(s • (ρ * G.κᴴ)) i j := by
+          exact hrhs.symm
 
 set_option maxHeartbeats 1000000 in
 -- The specialization of the generic exponential remainder estimate to CLM endomorphisms

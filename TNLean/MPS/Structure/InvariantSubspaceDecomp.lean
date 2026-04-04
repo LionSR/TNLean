@@ -553,18 +553,19 @@ theorem exists_twoBlock_decomp_of_lowerZero
             ((1 : ℂ) ^ N •
               mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ (Fin.succ 0)) σ) := by
           simp [Fin.sum_univ_succ]
+          rfl
       _ = mpv A₁ σ + mpv A₂ σ := by
           have h0 :
               (1 : ℂ) ^ N • mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ 0) σ =
                 mpv A₁ σ := by
             -- Reduce the `Fin.cases` at `0` without rewriting `Fin.succ 0`.
-            simp only [one_pow, one_smul, twoBlockBlocks, Fin.cases_zero]
+            simp [twoBlockBlocks]
           have h1 :
               (1 : ℂ) ^ N •
                   mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ (Fin.succ 0)) σ =
                 mpv A₂ σ := by
-            -- Reduce the nested `Fin.cases` at `Fin.succ 0`.
             simp only [one_pow, one_smul, twoBlockBlocks, Fin.cases_succ, Fin.cases_zero]
+            rfl
           -- Combine the two identities.
           -- Avoid rewriting `Fin.succ 0` into `1` (which breaks dependent `Fin.cases` reductions).
           simp only [h0, h1]
@@ -849,8 +850,10 @@ theorem exists_twoBlock_decomp_of_lowerZero_strict
       _ = ((1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ 0) σ) +
             ((1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ (Fin.succ 0)) σ) := by
           simp [Fin.sum_univ_succ]
+          rfl
       _ = mpv A₁ σ + mpv A₂ σ := by
           simp only [one_pow, one_smul, twoBlockBlocks, Fin.cases_zero, Fin.cases_succ]
+          rfl
   -- Chain all steps.
   calc mpv A σ = mpv Aconj σ := hA_Aconj
     _ = mpv (diagPart Aconj Pdiag) σ := hAconj_diag

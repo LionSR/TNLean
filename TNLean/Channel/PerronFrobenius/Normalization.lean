@@ -30,6 +30,13 @@ variable {D : ℕ}
 
 namespace PerronFrobeniusNormalization
 
+local instance : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ)
+    IsSelfAdjoint :=
+  ContinuousFunctionalCalculus.toNonUnital
+
+local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
+  Matrix.instNonnegSpectrumClass
+
 /-- A small helper: rewrite the spectral theorem in `U * diagonal * Uᴴ` form. -/
 private lemma spectral_decomp_eq [DecidableEq (Fin D)]
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
@@ -160,6 +167,9 @@ theorem IsIrreducibleMap.map_posSemidef_ne_zero
     (hE : E ≠ 0) :
     ∀ {ρ : Matrix (Fin D) (Fin D) ℂ}, ρ.PosSemidef → ρ ≠ 0 → E ρ ≠ 0 := by
   classical
+  letI : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
+    ContinuousFunctionalCalculus.toNonUnital
+  letI : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) := Matrix.instNonnegSpectrumClass
   intro ρ hρ_psd hρ_ne hEρ
   obtain ⟨r, K, hK⟩ := hcp
   obtain ⟨B, hB⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hρ_psd.nonneg

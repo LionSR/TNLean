@@ -40,8 +40,23 @@ private abbrev Mat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
 private abbrev LM (D : ℕ) := Mat D →ₗ[ℂ] Mat D
 private abbrev CLM (D : ℕ) := Mat D →L[ℂ] Mat D
 
+local instance instDissipativeNormedAddCommGroupCLM : NormedAddCommGroup (CLM D) :=
+  ContinuousLinearMap.toNormedAddCommGroup
+
+local instance instDissipativeNormedRingCLM : NormedRing (CLM D) :=
+  ContinuousLinearMap.toNormedRing
+
+local instance instDissipativeNormedAlgebraRatCLM : NormedAlgebra ℚ (CLM D) :=
+  NormedAlgebra.restrictScalars ℚ ℂ (CLM D)
+
 private abbrev endEquivD (D : ℕ) : LM D ≃ₐ[ℂ] CLM D :=
   Module.End.toContinuousLinearMap (Mat D)
+
+local instance instDissipativeFiniteDimensionalCLM : FiniteDimensional ℂ (CLM D) :=
+  (endEquivD D).toLinearEquiv.finiteDimensional
+
+local instance instDissipativeCompleteSpaceCLM : CompleteSpace (CLM D) :=
+  FiniteDimensional.complete ℂ (CLM D)
 
 /-- The linear drift generator `ρ ↦ -κρ - ρκ†`. -/
 abbrev dissipativeDrift (κ : Mat D) : LM D :=
@@ -165,6 +180,8 @@ private theorem exp_rightMulCLM
     continuous_rightMulCLMAlgHom (MulOpposite.op A) (mem_exp_ball _)
   simpa [NormedSpace.exp_op] using h.symm
 
+set_option synthInstance.maxHeartbeats 200000 in
+-- `exp_add_of_commute` on CLMs triggers deep completeness search under Lean 4.29.
 /-- The dissipative drift semigroup is explicit:
 `exp(t · (ρ ↦ -κρ - ρκ†))(ρ) = e^{-tκ} ρ e^{-tκ†}`. -/
 theorem expSemigroup_dissipativeDrift_apply
@@ -191,6 +208,8 @@ theorem expSemigroup_dissipativeDrift_apply
       · simpa [smul_neg] using
           (map_smul (rightMulCLMAlgHom D) (t : ℂ) (MulOpposite.op (-κᴴ))).symm
     have hcomm := left_right_commute (D := D) (-(t : ℂ) • κ) (-(t : ℂ) • κᴴ)
+    letI : CompleteSpace (Mat D →L[ℂ] Mat D) :=
+      FiniteDimensional.complete ℂ (Mat D →L[ℂ] Mat D)
     have hsum :
         NormedSpace.exp
             (leftMulCLMAlgHom D (-(t : ℂ) • κ) +
@@ -199,16 +218,20 @@ theorem expSemigroup_dissipativeDrift_apply
             NormedSpace.exp
               (rightMulCLMAlgHom D (MulOpposite.op (-(t : ℂ) • κᴴ))) := by
       simpa using
-        (NormedSpace.exp_add_of_commute_of_mem_ball
+        (NormedSpace.exp_add_of_commute
           (x := leftMulCLMAlgHom D (-(t : ℂ) • κ))
           (y := rightMulCLMAlgHom D (MulOpposite.op (-(t : ℂ) • κᴴ)))
-          hcomm (mem_exp_ball _) (mem_exp_ball _))
+          hcomm)
     rw [expSemigroupCLM, hsplit, hsum, exp_leftMulCLM, exp_rightMulCLM]
   change expSemigroupCLM (endEquivD D (dissipativeDrift κ)) t ρ = _
   rw [hκ]
   have hconj : NormedSpace.exp (-(t : ℂ) • κᴴ) =
       (NormedSpace.exp (-(t : ℂ) • κ))ᴴ := by
-    simpa using Matrix.exp_conjTranspose (A := (-(t : ℂ)) • κ)
+    calc
+      NormedSpace.exp (-(t : ℂ) • κᴴ) = NormedSpace.exp (((-(t : ℂ)) • κ)ᴴ) := by
+        rw [Matrix.conjTranspose_smul]
+        simp
+      _ = (NormedSpace.exp (-(t : ℂ) • κ))ᴴ := Matrix.exp_conjTranspose (A := (-(t : ℂ)) • κ)
   rw [hconj]
   change
     leftMulCLMAlgHom D (NormedSpace.exp (-(t : ℂ) • κ))

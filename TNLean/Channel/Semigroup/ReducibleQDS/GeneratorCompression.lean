@@ -23,6 +23,30 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+private abbrev CLM (D : ℕ) := Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
+
+local instance instGeneratorCompressionNormedSpaceRealMat : NormedSpace ℝ Mat :=
+  NormedSpace.restrictScalars ℝ ℂ Mat
+
+local instance instGeneratorCompressionCompatibleSmul :
+    LinearMap.CompatibleSMul Mat Mat ℝ ℂ :=
+  LinearMap.IsScalarTower.compatibleSMul
+
+local instance instGeneratorCompressionNormedAddCommGroupCLM :
+    NormedAddCommGroup (CLM D) :=
+  ContinuousLinearMap.toNormedAddCommGroup
+
+local instance instGeneratorCompressionNormedRingCLM : NormedRing (CLM D) :=
+  ContinuousLinearMap.toNormedRing
+
+local instance instGeneratorCompressionFiniteDimensionalCLM :
+    FiniteDimensional ℂ (CLM D) :=
+  (endEquiv (D := D)).toLinearEquiv.finiteDimensional
+
+local instance instGeneratorCompressionCompleteSpaceCLM :
+    CompleteSpace (CLM D) :=
+  FiniteDimensional.complete ℂ (CLM D)
+
 /-! ## (3) → (4): Invariant compression → block-upper-triangular Lindblad
 
 The key algebraic step: if `T_t` preserves the compressed algebra `P M_d P`,
@@ -46,9 +70,15 @@ theorem generatorPreservesCompression_of_semigroupPreservesCompression
     exact h.hasDerivWithinAt
   -- The compression map M ↦ P * M * P is a continuous ℝ-linear map
   let compress : Mat →ₗ[ℝ] Mat :=
-    ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ P)).restrictScalars ℝ
+    { toFun := fun M => P * M * P
+      map_add' := by
+        intro M N
+        simp [mul_add, add_mul, Matrix.mul_assoc]
+      map_smul' := by
+        intro r M
+        simp [Complex.real_smul, Matrix.mul_assoc] }
   have hcompress_apply : ∀ M : Mat, compress M = P * M * P := fun M => by
-    simp [compress, LinearMap.mulLeft, LinearMap.mulRight, Matrix.mul_assoc]
+    rfl
   -- Build a CLM from compress
   let compressCLM : Mat →L[ℝ] Mat :=
     ⟨compress, LinearMap.continuous_of_finiteDimensional compress⟩
@@ -273,6 +303,8 @@ theorem semigroup_preserves_compression_of_generator
   let compressCLM : Mat →L[ℂ] Mat :=
     ⟨compress, LinearMap.continuous_of_finiteDimensional compress⟩
   have hcompress_clm : ∀ M : Mat, compressCLM M = P * M * P := hcompress
+  letI : CompleteSpace (Mat →L[ℂ] Mat) :=
+    FiniteDimensional.complete ℂ (Mat →L[ℂ] Mat)
   have hexp_sum : HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n)
       (NormedSpace.exp ((t : ℂ) • E)) :=
     NormedSpace.exp_series_hasSum_exp' ((t : ℂ) • E)
