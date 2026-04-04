@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.IrreducibleTensorAction
+import TNLean.Algebra.MatrixFunctionalCalculus
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.FundamentalTheorem.TransferNormalization
@@ -34,11 +35,11 @@ variable {d D : ℕ}
 
 local instance instNormalReductionNonUnitalCFCMatrix (n : ℕ) :
     NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin n) (Fin n) ℂ) IsSelfAdjoint :=
-  ContinuousFunctionalCalculus.toNonUnital
+  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin n)
 
 local instance instNormalReductionNonnegSpectrumMatrix (n : ℕ) :
     NonnegSpectrumClass ℝ (Matrix (Fin n) (Fin n) ℂ) :=
-  Matrix.instNonnegSpectrumClass
+  TNLean.matrixNonnegSpectrumClass (n := Fin n)
 
 /-- Nonzero scalar rescaling preserves tensor irreducibility. -/
 private theorem isIrreducibleTensor_smul

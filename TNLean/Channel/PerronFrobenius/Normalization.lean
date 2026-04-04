@@ -30,12 +30,13 @@ variable {D : ℕ}
 
 namespace PerronFrobeniusNormalization
 
-local instance : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ)
-    IsSelfAdjoint :=
-  ContinuousFunctionalCalculus.toNonUnital
+local instance :
+    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ)
+      IsSelfAdjoint :=
+  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin D)
 
 local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.instNonnegSpectrumClass
+  TNLean.matrixNonnegSpectrumClass (n := Fin D)
 
 /-- A small helper: rewrite the spectral theorem in `U * diagonal * Uᴴ` form. -/
 private lemma spectral_decomp_eq [DecidableEq (Fin D)]
@@ -168,8 +169,9 @@ theorem IsIrreducibleMap.map_posSemidef_ne_zero
     ∀ {ρ : Matrix (Fin D) (Fin D) ℂ}, ρ.PosSemidef → ρ ≠ 0 → E ρ ≠ 0 := by
   classical
   letI : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-    ContinuousFunctionalCalculus.toNonUnital
-  letI : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) := Matrix.instNonnegSpectrumClass
+    TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin D)
+  letI : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
+    TNLean.matrixNonnegSpectrumClass (n := Fin D)
   intro ρ hρ_psd hρ_ne hEρ
   obtain ⟨r, K, hK⟩ := hcp
   obtain ⟨B, hB⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hρ_psd.nonneg

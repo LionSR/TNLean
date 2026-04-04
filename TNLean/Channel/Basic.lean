@@ -2,6 +2,8 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixFunctionalCalculus
+
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.Spectrum
@@ -113,9 +115,11 @@ theorem IsPositiveMap.map_isHermitian
     (E X).IsHermitian := by
   classical
   letI := Fintype.ofFinite n
+  letI := Classical.decEq n
   letI : NonUnitalContinuousFunctionalCalculus ℝ (Matrix n n ℂ) IsSelfAdjoint :=
-    ContinuousFunctionalCalculus.toNonUnital
-  letI : NonnegSpectrumClass ℝ (Matrix n n ℂ) := Matrix.instNonnegSpectrumClass
+    TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := n)
+  letI : NonnegSpectrumClass ℝ (Matrix n n ℂ) :=
+    TNLean.matrixNonnegSpectrumClass (n := n)
   have h_decomp := CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)
   have h_pos_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X)
   have h_neg_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg X)
@@ -130,11 +134,12 @@ section DensityMatrices
 
 variable {D : ℕ}
 
-local instance : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-  ContinuousFunctionalCalculus.toNonUnital
+local instance :
+    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
+  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin D)
 
 local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.instNonnegSpectrumClass
+  TNLean.matrixNonnegSpectrumClass (n := Fin D)
 
 open scoped Matrix.Norms.Frobenius
 

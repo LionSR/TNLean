@@ -21,11 +21,12 @@ open Matrix
 
 variable {D : ℕ}
 
-local instance : NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-  ContinuousFunctionalCalculus.toNonUnital
+local instance :
+    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
+  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin D)
 
 local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.instNonnegSpectrumClass
+  TNLean.matrixNonnegSpectrumClass (n := Fin D)
 
 noncomputable local instance :
     ContinuousFunctionalCalculus ℝ (CStarMatrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=

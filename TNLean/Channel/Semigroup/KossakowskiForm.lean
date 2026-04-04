@@ -38,11 +38,11 @@ variable {D : ℕ}
 
 local instance instKossakowskiNonUnitalCFCMatrix (n : ℕ) :
     NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin n) (Fin n) ℂ) IsSelfAdjoint :=
-  ContinuousFunctionalCalculus.toNonUnital
+  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin n)
 
 local instance instKossakowskiNonnegSpectrumMatrix (n : ℕ) :
     NonnegSpectrumClass ℝ (Matrix (Fin n) (Fin n) ℂ) :=
-  Matrix.instNonnegSpectrumClass
+  TNLean.matrixNonnegSpectrumClass (n := Fin n)
 
 section KossakowskiForms
 
