@@ -1,0 +1,118 @@
+import Mathlib.Analysis.Matrix.Normed
+import Mathlib.Analysis.Normed.Operator.Mul
+import Mathlib.Topology.Algebra.Module.FiniteDimension
+
+open scoped NormedSpace Matrix.Norms.Operator
+
+namespace TNLean
+
+noncomputable section
+
+/-- Complex continuous endomorphisms of square matrices. -/
+abbrev MatrixCLM (n : Type*) [Fintype n] [DecidableEq n] :=
+  Matrix n n ℂ →L[ℂ] Matrix n n ℂ
+
+/-- The finite-dimensional equivalence between linear and continuous matrix endomorphisms. -/
+abbrev matrixEndEquiv (n : Type*) [Fintype n] [DecidableEq n] :
+    (Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) ≃ₐ[ℂ] MatrixCLM n :=
+  Module.End.toContinuousLinearMap (Matrix n n ℂ)
+
+end
+end TNLean
+
+noncomputable section
+namespace TNOperatorSpace
+
+attribute [scoped instance]
+  Matrix.linftyOpNormedRing
+  Matrix.linftyOpNormedAlgebra
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    NormedSpace ℝ (Matrix n n ℂ) :=
+  NormedSpace.restrictScalars ℝ ℂ (Matrix n n ℂ)
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    SMulCommClass ℂ ℝ (Matrix n n ℂ) where
+  smul_comm z r A := by
+    ext i j
+    simp [Complex.real_smul, mul_assoc, mul_left_comm, mul_comm]
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    IsScalarTower ℝ ℂ (Matrix n n ℂ) where
+  smul_assoc r z A := by
+    ext i j
+    simp [Complex.real_smul, mul_assoc]
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    LinearMap.CompatibleSMul (Matrix n n ℂ) (Matrix n n ℂ) ℝ ℂ :=
+  LinearMap.IsScalarTower.compatibleSMul
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    LinearMap.CompatibleSMul (Matrix n n ℂ) ℂ ℝ ℂ where
+  map_smul f r A := by
+    simpa [Complex.real_smul, mul_assoc] using f.map_smul ((r : ℂ)) A
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    NormedAddCommGroup (TNLean.MatrixCLM n) :=
+  ContinuousLinearMap.toNormedAddCommGroup
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    NormedRing (TNLean.MatrixCLM n) :=
+  ContinuousLinearMap.toNormedRing
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    NormedSpace ℝ (TNLean.MatrixCLM n) :=
+  NormedSpace.restrictScalars ℝ ℂ (TNLean.MatrixCLM n)
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    Module ℝ (TNLean.MatrixCLM n) := by
+  infer_instance
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    NormedAlgebra ℝ (TNLean.MatrixCLM n) := by
+  infer_instance
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    NormedAlgebra ℚ (TNLean.MatrixCLM n) :=
+  NormedAlgebra.restrictScalars ℚ ℂ (TNLean.MatrixCLM n)
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    IsScalarTower ℂ (TNLean.MatrixCLM n) (TNLean.MatrixCLM n) where
+  smul_assoc z T U := by
+    ext X i j
+    simp [ContinuousLinearMap.mul_apply]
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    SMulCommClass ℂ (TNLean.MatrixCLM n) (TNLean.MatrixCLM n) where
+  smul_comm z T U := by
+    ext X i j
+    simp [ContinuousLinearMap.mul_apply]
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    IsScalarTower ℝ ℂ (TNLean.MatrixCLM n) where
+  smul_assoc r z T := by
+    ext X i j
+    exact congrArg (fun A : Matrix n n ℂ => A i j) (smul_assoc r z (T X))
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    FiniteDimensional ℂ (TNLean.MatrixCLM n) :=
+  (TNLean.matrixEndEquiv n).toLinearEquiv.finiteDimensional
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    CompleteSpace (TNLean.MatrixCLM n) :=
+  FiniteDimensional.complete ℂ (TNLean.MatrixCLM n)
+
+scoped instance
+    (n m : Type*) [Fintype n] [DecidableEq n] [Fintype m] [DecidableEq m] :
+    LinearMap.CompatibleSMul (TNLean.MatrixCLM n) (Matrix m m ℂ) ℝ ℂ where
+  map_smul f r A := by
+    simpa using f.map_smul ((r : ℂ)) A
+
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
+    LinearMap.CompatibleSMul (TNLean.MatrixCLM n) ℂ ℝ ℂ where
+  map_smul f r A := by
+    simpa using f.map_smul ((r : ℂ)) A
+
+end TNOperatorSpace
+
+end

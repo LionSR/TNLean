@@ -26,17 +26,10 @@ statements are for channels (`IsChannel`) which carry a CP hypothesis.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 6][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder TNMatrixCFC
 open Matrix Finset
 
 variable {D : ℕ}
-
-local instance :
-    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin D)
-
-local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
-  TNLean.matrixNonnegSpectrumClass (n := Fin D)
 
 /-! ## Wolf Proposition 6.8: Decomposition of fixed points -/
 

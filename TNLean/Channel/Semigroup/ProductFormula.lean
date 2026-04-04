@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.Basic
 import Mathlib.Analysis.SpecificLimits.Normed
 
@@ -27,20 +28,17 @@ convergence theorem, but that convergence statement itself is not yet included
 here.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
-open Matrix
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
+open Matrix TNLean
 
 noncomputable section
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 section ProductFormulaHelpers
 
 variable {D : ℕ}
 
 private abbrev CLM (D : ℕ) :=
-  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
+  MatrixCLM (Fin D)
 
 /-- The norm of an operator exponential is bounded by the scalar exponential of the norm. -/
 theorem norm_exp_le_real_exp_norm {A : Type*}

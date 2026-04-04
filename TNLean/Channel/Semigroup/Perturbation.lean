@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.Basic
 
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
@@ -24,43 +25,12 @@ import Mathlib.Analysis.Calculus.Deriv.Shift
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal
-open Matrix Finset NormedSpace MeasureTheory
+open scoped Matrix ComplexOrder BigOperators NNReal TNOperatorSpace
+open Matrix Finset NormedSpace MeasureTheory TNLean
 
 noncomputable section
 
 variable {D : ℕ}
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
-
-private abbrev CLM (D : ℕ) :=
-  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
-
-local instance : SMulCommClass ℂ ℝ (Matrix (Fin D) (Fin D) ℂ) where
-  smul_comm z r A := by
-    ext i j
-    simp [Complex.real_smul, mul_assoc, mul_left_comm, mul_comm]
-
-local instance : NormedAddCommGroup (CLM D) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-
-local instance : NormedRing (CLM D) :=
-  ContinuousLinearMap.toNormedRing
-
-local instance : NormedSpace ℝ (CLM D) :=
-  NormedSpace.restrictScalars ℝ ℂ (CLM D)
-
-local instance : Module ℝ (CLM D) := by infer_instance
-
-local instance : NormedAlgebra ℝ (CLM D) := by infer_instance
-
-local instance : IsScalarTower ℝ ℂ (CLM D) where
-  smul_assoc r z T := by
-    ext X i j
-    exact congrArg (fun A : Matrix (Fin D) (Fin D) ℂ => A i j) (smul_assoc r z (T X))
-
-local instance : CompleteSpace (CLM D) := by infer_instance
 
 /-! ## Derivative of the semigroup product -/
 
@@ -70,7 +40,7 @@ set_option maxHeartbeats 800000 in
 /-- HasDerivAt for `s ↦ exp((t-s)•L) * exp(s•L')` with derivative
 `exp((t-s)•L) * (L' - L) * exp(s•L')`. -/
 private theorem hasDerivAt_semigroup_product
-    (L L' : CLM D) (t s : ℝ) :
+    (L L' : MatrixCLM (Fin D)) (t s : ℝ) :
     HasDerivAt (fun u => expSemigroupCLM L (t - u) * expSemigroupCLM L' u)
       (expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s) s := by
   have hg :
@@ -89,8 +59,8 @@ private theorem hasDerivAt_semigroup_product
       HasDerivAt (fun u => expSemigroupCLM L' u)
         (expSemigroupCLM L' s * L') s :=
     hasDerivAt_expSemigroupCLM L' s
-  let c : ℝ → CLM D := fun u => expSemigroupCLM L (t - u)
-  let d : ℝ → CLM D := fun u => expSemigroupCLM L' u
+  let c : ℝ → MatrixCLM (Fin D) := fun u => expSemigroupCLM L (t - u)
+  let d : ℝ → MatrixCLM (Fin D) := fun u => expSemigroupCLM L' u
   have hc : HasDerivAt c (-(expSemigroupCLM L (t - s) * L)) s := hg
   have hd : HasDerivAt d (expSemigroupCLM L' s * L') s := hh
   have hprod : HasDerivAt
@@ -98,7 +68,7 @@ private theorem hasDerivAt_semigroup_product
       (-(expSemigroupCLM L (t - s) * L) * expSemigroupCLM L' s +
         expSemigroupCLM L (t - s) * (expSemigroupCLM L' s * L')) s := by
     simpa [c, d, mul_assoc] using
-      (HasDerivAt.mul (𝕜 := ℝ) (𝔸 := CLM D) hc hd)
+      (HasDerivAt.mul (𝕜 := ℝ) (𝔸 := MatrixCLM (Fin D)) hc hd)
   -- The derivative from product rule is: -(exp(...)* L) * exp(...) + exp(...) * (exp(...) * L')
   -- We need: exp(...) * (L' - L) * exp(...)
   suffices heq :
@@ -130,7 +100,7 @@ private theorem hasDerivAt_semigroup_product
 
 /-- **Lemma 7.1** (Duhamel formula for matrix semigroups). -/
 theorem duhamel_formula
-    (L L' : CLM D) (t : ℝ) (ht : 0 ≤ t) :
+    (L L' : MatrixCLM (Fin D)) (t : ℝ) (ht : 0 ≤ t) :
     expSemigroupCLM L' t - expSemigroupCLM L t =
       ∫ s in Set.Icc 0 t,
         expSemigroupCLM L (t - s) * (L' - L) * expSemigroupCLM L' s := by
@@ -163,7 +133,7 @@ theorem duhamel_formula
 
 /-! ## Helper for biSup bounds -/
 
-private lemma norm_expSemigroup_le_biSup (L : CLM D) {t : ℝ} (ht : 0 ≤ t)
+private lemma norm_expSemigroup_le_biSup (L : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t)
     {x : ℝ} (hx : x ∈ Set.Icc 0 t) :
     ‖expSemigroupCLM L x‖ ≤ ⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖ := by
   have hbdd : BddAbove ((fun s => ‖expSemigroupCLM L s‖) '' Set.Icc 0 t) :=
@@ -192,7 +162,7 @@ private lemma norm_expSemigroup_le_biSup (L : CLM D) {t : ℝ} (ht : 0 ≤ t)
 
 /-- **Corollary 7.1** (perturbation of generators). -/
 theorem perturbation_bound
-    (L L' : CLM D) (t : ℝ) (ht : 0 ≤ t) :
+    (L L' : MatrixCLM (Fin D)) (t : ℝ) (ht : 0 ≤ t) :
     ‖expSemigroupCLM L' t - expSemigroupCLM L t‖ ≤
       t * ‖L' - L‖ *
         (⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖) *
@@ -228,7 +198,7 @@ theorem perturbation_bound
 /-- Simplified perturbation bound for quantum channels (where ‖T_s‖ ≤ 1):
 `‖T'_t - T_t‖ ≤ t · ‖Δ‖`. -/
 theorem perturbation_bound_unit_norm
-    (L L' : CLM D) (t : ℝ) (ht : 0 ≤ t)
+    (L L' : MatrixCLM (Fin D)) (t : ℝ) (ht : 0 ≤ t)
     (hT : ∀ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖ ≤ 1)
     (hT' : ∀ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L' s‖ ≤ 1) :
     ‖expSemigroupCLM L' t - expSemigroupCLM L t‖ ≤ t * ‖L' - L‖ := by
@@ -261,23 +231,23 @@ theorem perturbation_bound_unit_norm
 /-- Recursive Dyson-Phillips terms built from the unperturbed semigroup `L`
 and perturbation `L' - L`. -/
 noncomputable def dysonTerm
-    (L L' : CLM D) (t : ℝ) : ℕ → CLM D
+    (L L' : MatrixCLM (Fin D)) (t : ℝ) : ℕ → MatrixCLM (Fin D)
   | 0 => expSemigroupCLM L t
   | n + 1 =>
       ∫ s in Set.Icc 0 t,
         expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n
 
-@[simp] lemma dysonTerm_zero (L L' : CLM D) (t : ℝ) :
+@[simp] lemma dysonTerm_zero (L L' : MatrixCLM (Fin D)) (t : ℝ) :
     dysonTerm L L' t 0 = expSemigroupCLM L t := rfl
 
-@[simp] lemma dysonTerm_succ (L L' : CLM D) (t : ℝ) (n : ℕ) :
+@[simp] lemma dysonTerm_succ (L L' : MatrixCLM (Fin D)) (t : ℝ) (n : ℕ) :
     dysonTerm L L' t (n + 1) =
       ∫ s in Set.Icc 0 t,
         expSemigroupCLM L (t - s) * (L' - L) * dysonTerm L L' s n := rfl
 
 /-- Zeroth Dyson term is controlled by the same compact-interval `iSup` used above. -/
 lemma norm_dysonTerm_zero_le
-    (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) :
+    (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
     ‖dysonTerm L L' t 0‖ ≤ ⨆ s ∈ Set.Icc 0 t, ‖expSemigroupCLM L s‖ := by
   simpa [dysonTerm] using
     (norm_expSemigroup_le_biSup (L := L) (t := t) ht (x := t) (Set.right_mem_Icc.mpr ht))
@@ -285,7 +255,7 @@ lemma norm_dysonTerm_zero_le
 /-- One-step norm estimate for the Dyson recursion.
 This is the inductive estimate used to bootstrap higher-order bounds. -/
 lemma norm_dysonTerm_succ_le
-    (L L' : CLM D) {t K : ℝ} (ht : 0 ≤ t) (n : ℕ)
+    (L L' : MatrixCLM (Fin D)) {t K : ℝ} (ht : 0 ≤ t) (n : ℕ)
     (hK : ∀ s ∈ Set.Icc 0 t, ‖dysonTerm L L' s n‖ ≤ K) :
     ‖dysonTerm L L' t (n + 1)‖ ≤
       t *
@@ -322,7 +292,7 @@ lemma norm_dysonTerm_succ_le
 /-- Summability criterion for Dyson terms from a factorial majorant.
 This packages the M-test step independently of the inductive norm proof. -/
 lemma summable_dysonTerm_of_factorial_bound
-    (L L' : CLM D) {t M : ℝ}
+    (L L' : MatrixCLM (Fin D)) {t M : ℝ}
     (hbound : ∀ n, ‖dysonTerm L L' t n‖ ≤ M * ((t * ‖L' - L‖ * M) ^ n / ↑(n.factorial))) :
     Summable (fun n => dysonTerm L L' t n) := by
   refine Summable.of_norm_bounded ?_ hbound

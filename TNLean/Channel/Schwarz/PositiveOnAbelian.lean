@@ -26,20 +26,12 @@ normal generators `{A, Aᴴ, Aᴴ * A, 1}` are proved and are intended to suppor
 later refinements toward Wolf Proposition 5.1.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators
+open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
 open Matrix Finset Complex Module.End
 
 namespace PositiveOnAbelian
 
 variable {D : ℕ}
-
-local instance :
-    NonUnitalContinuousFunctionalCalculus ℝ
-      (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin D)
-
-local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
-  TNLean.matrixNonnegSpectrumClass (n := Fin D)
 
 /-- Multiplicativity of `Matrix.toEuclideanLin`: lifting matrix multiplication to the
 Euclidean linear map level. -/

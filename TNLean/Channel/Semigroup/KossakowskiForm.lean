@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.LindbladForm
 
 /-!
@@ -25,24 +26,12 @@ generator (Wolf Eq. 7.23) and proves its equivalence with the Lindblad form.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1.2, Thm 7.1, Eq. 7.23]
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
-open Matrix
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNMatrixCFC TNOperatorSpace
+open Matrix TNLean
 
 noncomputable section
 
--- Local instances needed for NormedAddCommGroup on Matrix (for CLM infrastructure)
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
-
 variable {D : ℕ}
-
-local instance instKossakowskiNonUnitalCFCMatrix (n : ℕ) :
-    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin n) (Fin n) ℂ) IsSelfAdjoint :=
-  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin n)
-
-local instance instKossakowskiNonnegSpectrumMatrix (n : ℕ) :
-    NonnegSpectrumClass ℝ (Matrix (Fin n) (Fin n) ℂ) :=
-  TNLean.matrixNonnegSpectrumClass (n := Fin n)
 
 section KossakowskiForms
 

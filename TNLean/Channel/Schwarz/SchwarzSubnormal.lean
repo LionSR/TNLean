@@ -664,10 +664,12 @@ theorem schwarz_inequality_commuting_dominant_operator
         (hDom_add ε hε.le)
     refine ⟨?_, ?_⟩
     · calc T Aᴴ * T A ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.1
-        _ = T Dom + (ε : ℂ) • T 1 := by simpa using congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
+        _ = T Dom + (ε : ℂ) • T 1 := by
+            simpa using congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
     · calc T A * T Aᴴ ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.2
-        _ = T Dom + (ε : ℂ) • T 1 := by simpa using congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
+        _ = T Dom + (ε : ℂ) • T 1 := by
+            simpa using congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
   exact ⟨le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).1,
          le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).2⟩

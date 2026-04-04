@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.LindbladForm.Basic
 import Mathlib.Analysis.Calculus.MeanValue
 
@@ -18,76 +19,14 @@ trace-preserving semigroups.
 * `isTraceAnnihilating_of_isTracePreservingMap_semigroup` — TP semigroup → TA.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
-open Matrix
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
+open Matrix TNLean
 
 noncomputable section
-
--- Local instances needed for NormedAddCommGroup on Matrix (for CLM infrastructure)
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 
 section LindbladForms
-
-local instance : NormedSpace ℝ (Matrix (Fin D) (Fin D) ℂ) :=
-  NormedSpace.restrictScalars ℝ ℂ (Matrix (Fin D) (Fin D) ℂ)
-
-local instance : Module ℝ (Matrix (Fin D) (Fin D) ℂ) := by infer_instance
-
-local instance : SMulCommClass ℂ ℝ (Matrix (Fin D) (Fin D) ℂ) where
-  smul_comm z r A := by
-    ext i j
-    simp [Complex.real_smul, mul_assoc, mul_left_comm, mul_comm]
-
-local instance : IsScalarTower ℝ ℂ (Matrix (Fin D) (Fin D) ℂ) where
-  smul_assoc r z A := by
-    ext i j
-    simp [Complex.real_smul, mul_assoc]
-
-private abbrev CLM (D : ℕ) :=
-  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
-
-local instance instTraceBridgeNormedAddCommGroupCLM : NormedAddCommGroup (CLM D) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-
-local instance instTraceBridgeNormedRingCLM : NormedRing (CLM D) :=
-  ContinuousLinearMap.toNormedRing
-
-local instance instTraceBridgeNormedSpaceRealCLM : NormedSpace ℝ (CLM D) :=
-  NormedSpace.restrictScalars ℝ ℂ (CLM D)
-
-local instance instTraceBridgeModuleRealCLM : Module ℝ (CLM D) := by infer_instance
-
-local instance instTraceBridgeScalarTowerRealComplexCLM : IsScalarTower ℝ ℂ (CLM D) where
-  smul_assoc r z T := by
-    ext X i j
-    exact congrArg (fun A : Matrix (Fin D) (Fin D) ℂ => A i j) (smul_assoc r z (T X))
-
-local instance :
-    LinearMap.CompatibleSMul
-      (Matrix (Fin D) (Fin D) ℂ) (Matrix (Fin D) (Fin D) ℂ) ℝ ℂ :=
-  LinearMap.IsScalarTower.compatibleSMul
-
-local instance :
-    LinearMap.CompatibleSMul
-      (Matrix (Fin D) (Fin D) ℂ) ℂ ℝ ℂ :=
-  by
-    refine ⟨fun f r A => ?_⟩
-    simpa [Complex.real_smul, mul_assoc] using f.map_smul ((r : ℂ)) A
-
-local instance :
-    LinearMap.CompatibleSMul
-      (CLM D) (Matrix (Fin D) (Fin D) ℂ) ℝ ℂ where
-  map_smul f r T := by
-    simpa using f.map_smul ((r : ℂ)) T
-
-local instance :
-    LinearMap.CompatibleSMul
-      (CLM D) ℂ ℝ ℂ where
-  map_smul f r T := by
-    simpa using f.map_smul ((r : ℂ)) T
 
 /-! ## Trace pairing non-degeneracy -/
 

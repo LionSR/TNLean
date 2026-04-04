@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
 import TNLean.Channel.Irreducible.Basic
 
@@ -17,58 +18,14 @@ The proof combines:
 3. Generator vanishing via Taylor remainder bounds
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
-open Matrix Finset
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
+open Matrix Finset TNLean
 
 noncomputable section
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
-
-private abbrev CLM (D : ℕ) := Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
-
-local instance instSubsequenceAnalysisNormedSpaceRealMat : NormedSpace ℝ Mat :=
-  NormedSpace.restrictScalars ℝ ℂ Mat
-
-local instance instSubsequenceAnalysisModuleRealMat : Module ℝ Mat := by
-  infer_instance
-
-local instance instSubsequenceAnalysisSMulCommClassComplexRealMat :
-    SMulCommClass ℂ ℝ Mat where
-  smul_comm z r A := by
-    ext i j
-    simp [Complex.real_smul, mul_assoc, mul_left_comm, mul_comm]
-
-local instance instSubsequenceAnalysisScalarTowerRealComplexMat :
-    IsScalarTower ℝ ℂ Mat where
-  smul_assoc r z A := by
-    ext i j
-    simp [Complex.real_smul, mul_assoc]
-
-local instance instSubsequenceAnalysisNormedSpaceRealCLM : NormedSpace ℝ (CLM D) :=
-  NormedSpace.restrictScalars ℝ ℂ (CLM D)
-
-local instance instSubsequenceAnalysisModuleRealCLM : Module ℝ (CLM D) := by
-  infer_instance
-
-local instance instSubsequenceAnalysisNormedAddCommGroupCLM :
-    NormedAddCommGroup (CLM D) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-
-local instance instSubsequenceAnalysisNormedRingCLM : NormedRing (CLM D) :=
-  ContinuousLinearMap.toNormedRing
-
-local instance instSubsequenceAnalysisFiniteDimensionalCLM :
-    FiniteDimensional ℂ (CLM D) :=
-  (endEquiv (D := D)).toLinearEquiv.finiteDimensional
-
-local instance instSubsequenceAnalysisCompleteSpaceCLM :
-    CompleteSpace (CLM D) :=
-  FiniteDimensional.complete ℂ (CLM D)
 
 local instance instSubsequenceAnalysisUniformityCountablyGenerated :
     (_root_.uniformity Mat).IsCountablyGenerated := by
@@ -106,7 +63,7 @@ private lemma normalizedProj_in_PMP'
 private lemma pos_dim_of_nontrivialProjection
     {P : Mat} (hP_nt : IsNontrivialProjection P) : 0 < D := by
   by_contra hD_le
-  push_neg at hD_le
+  push Not at hD_le
   interval_cases D
   exact hP_nt.2.1 (Subsingleton.elim P 0)
 
