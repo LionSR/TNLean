@@ -210,7 +210,7 @@ theorem hasSpectralProperties_of_irreducible_cp
     MPSTensor.isIrreducibleTensor_of_isIrreducibleMap K hIrrK_map
   have hK_nonzero : ∃ i : Fin n, K i ≠ 0 := by
     by_contra hK_zero
-    push_neg at hK_zero
+    push Not at hK_zero
     have htransfer_zero : MPSTensor.transferMap (d := n) (D := D) K = 0 :=
       LinearMap.ext fun X => by
         simp [MPSTensor.transferMap_apply, hK_zero]

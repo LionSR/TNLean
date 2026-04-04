@@ -162,7 +162,7 @@ theorem posDef_of_ker_subset_irreducible_cp
   have hH := hA_psd.isHermitian
   have h_not_all_pos : ¬∀ i, 0 < hH.eigenvalues i :=
     fun h => hA_not_pd (hH.posDef_iff_eigenvalues_pos.mpr h)
-  push_neg at h_not_all_pos
+  push Not at h_not_all_pos
   obtain ⟨j₀, hj₀⟩ := h_not_all_pos
   have hj₀_eq : hH.eigenvalues j₀ = 0 :=
     le_antisymm hj₀ (hH.posSemidef_iff_eigenvalues_nonneg.mp hA_psd j₀)
@@ -179,7 +179,7 @@ theorem posDef_of_ker_subset_irreducible_cp
       (fun j => (↑(hH.eigenvalues j) : ℂ)) := by
     ext i; simp only [sgnEig, Pi.mul_apply]; split
     · simp
-    · rename_i h; push_neg at h
+    · rename_i h; push Not at h
       simp [le_antisymm h (hH.posSemidef_iff_eigenvalues_nonneg.mp hA_psd i)]
   have hQ_herm : Q.IsHermitian := by
     change (U * Matrix.diagonal sgnEig * Uᴴ)ᴴ = U * Matrix.diagonal sgnEig * Uᴴ
@@ -419,7 +419,7 @@ theorem growth_posDef_of_irreducible_cp
     have h_range_pos : 0 < Module.finrank ℂ (LinearMap.range A.mulVecLin) := by
       rw [Module.finrank_pos_iff_exists_ne_zero]
       obtain ⟨i, j, hij⟩ : ∃ i j, A i j ≠ 0 := by
-        by_contra hall; push_neg at hall; exact hA_ne (Matrix.ext fun i j => hall i j)
+        by_contra hall; push Not at hall; exact hA_ne (Matrix.ext fun i j => hall i j)
       refine ⟨⟨A.mulVecLin (Pi.single j 1), ⟨_, rfl⟩⟩, ?_⟩
       simp only [ne_eq]
       intro h0
