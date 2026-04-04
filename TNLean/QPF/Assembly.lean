@@ -120,7 +120,7 @@ theorem injective_transfer_unique_fixed_point' [DecidableEq (Fin D)]
       HasUniqueFixedPoint (transferMap (d := d) (D := D) A) ρ := by
   by_cases hD : 0 < D
   · exact quantum_perron_frobenius A hA hNorm hD
-  · push_neg at hD
+  · push Not at hD
     interval_cases D
     exact ⟨0, {
       fixed := by ext i; exact Fin.elim0 i
