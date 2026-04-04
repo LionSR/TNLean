@@ -39,10 +39,7 @@ noncomputable section
 private abbrev LM (D : ℕ) :=
   Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ
 
-private abbrev CLM (D : ℕ) :=
-  MatrixCLM (Fin D)
-
-private abbrev endEquivD (D : ℕ) : LM D ≃ₐ[ℂ] CLM D :=
+private abbrev endEquivD (D : ℕ) : LM D ≃ₐ[ℂ] MatrixCLM (Fin D) :=
   matrixEndEquiv (Fin D)
 
 section GenericCPClosure
@@ -215,7 +212,7 @@ namespace ChoiJamiolkowski
 variable {D : ℕ}
 
 private noncomputable def choiLinearOnCLM :
-    CLM D →ₗ[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
+    MatrixCLM (Fin D) →ₗ[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
   toFun := fun T => choiMatrix T.toLinearMap
   map_add' T S := by
     ext ij kl
@@ -230,7 +227,7 @@ private noncomputable def choiLinearOnCLM :
 
 /-- The Choi matrix as a continuous linear map on continuous endomorphisms. -/
 noncomputable def choiCLM :
-    CLM D →L[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
+    MatrixCLM (Fin D) →L[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
   toLinearMap := choiLinearOnCLM
   cont := choiLinearOnCLM.continuous_of_finiteDimensional
 
@@ -242,8 +239,8 @@ variable {D : ℕ}
 
 /-- In fixed positive finite dimension, the set of CP continuous endomorphisms is closed. -/
 theorem isClosed_setOf_isCPMap [NeZero D] :
-    IsClosed {T : CLM D | IsCPMap T.toLinearMap} := by
-  have hset : {T : CLM D | IsCPMap T.toLinearMap}
+    IsClosed {T : MatrixCLM (Fin D) | IsCPMap T.toLinearMap} := by
+  have hset : {T : MatrixCLM (Fin D) | IsCPMap T.toLinearMap}
       = {T | (ChoiJamiolkowski.choiCLM (D := D) T).PosSemidef} := by
     ext T
     change IsCPMap T.toLinearMap ↔ (ChoiJamiolkowski.choiMatrix T.toLinearMap).PosSemidef

@@ -35,13 +35,10 @@ equivalent conditions holds:
 * `IsReducibleQDS` — the semigroup is reducible (= has invariant compression).
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix Finset
 
 noncomputable section
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 
