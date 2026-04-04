@@ -154,6 +154,9 @@ lake build
 
 Requires Lean 4 v4.29.0 (managed via `lean-toolchain`).
 
+For repository-specific migration notes about the Lean/Mathlib 4.29 upgrade, see
+[docs/upgrade_4_29.md](docs/upgrade_4_29.md).
+
 ## Blueprint
 
 The repository ships a LeanBlueprint in `blueprint/` covering both the MPS development and the channel-side Wolf material. As of 2026-04-03, the blueprint chapters `ch02b_mpdo.tex`, `ch04_channels.tex`, `ch05_schwarz.tex`, `ch06_spectral.tex`, `ch07_wielandt.tex`, `ch08_canonical.tex`, `ch11_assembly.tex`, `ch12_semigroup.tex`, `ch13_algebraic_ft.tex`, `ch13b_symmetry.tex`, `ch14_parent_hamiltonian.tex`, and `ch15_correlations.tex` have been synchronized to reflect current Lean status, including the stationary-support package, periodic tensor definitions, semigroup sorry closures, MPDO foundations, symmetry / string-order / coboundary entries, chain FT declarations, and quantitative spectral gap / correlation decay results.
