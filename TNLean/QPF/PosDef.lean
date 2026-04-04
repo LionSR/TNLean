@@ -132,7 +132,7 @@ theorem posSemidef_fixedPoint_isPosDef
   have h_surj : ∀ v : Fin D → ℂ, ρ *ᵥ v = 0 := by
     intro v
     have ⟨k, hk⟩ : ∃ k, x k ≠ 0 := by
-      by_contra h_all_zero; push_neg at h_all_zero
+      by_contra h_all_zero; push Not at h_all_zero
       exact hx (funext h_all_zero)
     let M : Matrix (Fin D) (Fin D) ℂ := Matrix.of (fun i j => if j = k then v i * (x k)⁻¹ else 0)
     have hMx : M *ᵥ x = v := by
@@ -164,7 +164,7 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
   have hH := hρ_psd.isHermitian
   have h_not_all_pos : ¬∀ i, 0 < hH.eigenvalues i :=
     fun h => hρ_not_pd (hH.posDef_iff_eigenvalues_pos.mpr h)
-  push_neg at h_not_all_pos
+  push Not at h_not_all_pos
   obtain ⟨j₀, hj₀⟩ := h_not_all_pos
   have hj₀_eq : hH.eigenvalues j₀ = 0 :=
     le_antisymm hj₀ (hH.posSemidef_iff_eigenvalues_nonneg.mp hρ_psd j₀)
@@ -181,7 +181,7 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
       (fun j => (↑(hH.eigenvalues j) : ℂ)) := by
     ext i; simp only [sgnEig, Pi.mul_apply]; split
     · simp
-    · rename_i h; push_neg at h
+    · rename_i h; push Not at h
       simp [le_antisymm h (hH.posSemidef_iff_eigenvalues_nonneg.mp hρ_psd i)]
   have hQ_herm : Q.IsHermitian := by
     change (U * Matrix.diagonal sgnEig * Uᴴ)ᴴ = U * Matrix.diagonal sgnEig * Uᴴ
