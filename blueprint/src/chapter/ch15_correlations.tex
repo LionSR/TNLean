@@ -237,8 +237,30 @@ All three quantitative results below are now fully proved.
     correlations decay with a finite correlation length $\xi$.
 \end{remark}
 
+\section{Renormalization fixed points and zero correlation length}
+
+\begin{definition}[Renormalization fixed point]\label{def:is_rfp}
+    \lean{MPSTensor.IsRFP}
+    \leanok
+    \uses{def:transfer_map}
+    An MPS tensor $A$ is a \emph{renormalization fixed point} (RFP) when its
+    transfer map is idempotent, $\E_A \circ \E_A = \E_A$.
+    See \cite[Definition~3.2]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{definition}[Local orthogonality]\label{def:is_locally_orthogonal}
+    \lean{MPSTensor.IsLocallyOrthogonal}
+    \leanok
+    \uses{def:is_rfp}
+    A single BNT block is \emph{locally orthogonal} when its self-transfer map
+    is idempotent. For a single tensor this coincides with the RFP condition
+    (Definition~\ref{def:is_rfp}); in the full multi-block BNT setting, local
+    orthogonality additionally requires that mixed transfer operators vanish.
+    See \cite[Definition~3.5]{Cirac2021Matrix}.
+\end{definition}
+
 \begin{remark}\label{rem:zero_correlation_length}
-    \uses{thm:spectral_radius_le_one, def:correlation_length}
+    \uses{thm:spectral_radius_le_one, def:correlation_length, def:is_rfp}
     The identity $\E^2=\E$ is equivalent to vanishing subleading spectrum;
     equivalently, $\xi=0$ and connected correlations vanish at nonzero
     separation.

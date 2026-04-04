@@ -54,8 +54,13 @@ import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Stinespring
 import TNLean.Channel.TransferMatrix
 
+-- Layer 2: Quantum entropy infrastructure (depends on Channel.Basic, Channel.PartialTrace)
+import TNLean.Analysis.Entropy
+
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPoint
+-- Layer 2a: Axiomatized entropy inequalities (strong subadditivity)
+import TNLean.Axioms.Entropy
 
 -- Layer 2b: Quantum channels (general theory)
 import TNLean.Channel.Schwarz.KadisonSchwarz
@@ -200,6 +205,7 @@ import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.RFP.StructuralForm
 import TNLean.MPS.RFP.Convergence
 import TNLean.MPS.RFP.Assembly
+import TNLean.MPS.RFP.Decorrelation
 
 -- Layer 6a: Quantum Wielandt backend / span-growth infrastructure
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
