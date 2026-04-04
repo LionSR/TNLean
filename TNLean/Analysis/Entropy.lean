@@ -24,6 +24,10 @@ the basic quantum entropy infrastructure needed for MPDO / RFP applications.
 ## Main results
 
 * `vonNeumannEntropy_nonneg`: `S(ρ) ≥ 0` for density matrices
+* `traceA_ABC_isHermitian`, `traceC_ABC_isHermitian`, `traceAC_ABC_isHermitian`:
+  tripartite partial traces preserve Hermiticity
+* `Matrix.traceLeft_isHermitian`, `Matrix.traceRight_isHermitian`:
+  bipartite partial traces preserve Hermiticity
 
 ## Status
 
@@ -191,7 +195,67 @@ noncomputable def traceAC_ABC
     Matrix (Fin dB) (Fin dB) ℂ :=
   fun b₁ b₂ => ∑ a : Fin dA, ∑ c : Fin dC, ρ (a, b₁, c) (a, b₂, c)
 
+/-! ### Hermiticity preservation for partial traces -/
+
+/-- Partial trace over A preserves Hermiticity. -/
+theorem traceA_ABC_isHermitian
+    {ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ}
+    (hρ : ρ.IsHermitian) : (traceA_ABC ρ).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro bc₁ bc₂
+  simp only [traceA_ABC, star_sum]
+  exact Finset.sum_congr rfl fun a _ => hρ.apply (a, bc₁) (a, bc₂)
+
+/-- Partial trace over C preserves Hermiticity. -/
+theorem traceC_ABC_isHermitian
+    {ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ}
+    (hρ : ρ.IsHermitian) : (traceC_ABC ρ).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro ab₁ ab₂
+  simp only [traceC_ABC, star_sum]
+  exact Finset.sum_congr rfl fun c _ =>
+    hρ.apply (ab₁.1, ab₁.2, c) (ab₂.1, ab₂.2, c)
+
+/-- Partial trace over AC preserves Hermiticity. -/
+theorem traceAC_ABC_isHermitian
+    {ρ : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ}
+    (hρ : ρ.IsHermitian) : (traceAC_ABC ρ).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro b₁ b₂
+  simp only [traceAC_ABC, star_sum]
+  exact Finset.sum_congr rfl fun a _ =>
+    Finset.sum_congr rfl fun c _ => hρ.apply (a, b₁, c) (a, b₂, c)
+
 end TripartiteTrace
+
+/-! ## Bipartite partial trace Hermiticity preservation -/
+
+section BipartiteHermiticity
+
+variable {dA dB : ℕ}
+
+/-- `Matrix.traceLeft` (partial trace over A) preserves Hermiticity. -/
+theorem Matrix.traceLeft_isHermitian
+    {ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
+    (hρ : ρ.IsHermitian) : (Matrix.traceLeft ρ).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro b₁ b₂
+  simp only [Matrix.traceLeft, star_sum]
+  exact Finset.sum_congr rfl fun a _ => hρ.apply (a, b₁) (a, b₂)
+
+/-- `Matrix.traceRight` (partial trace over B) preserves Hermiticity. -/
+theorem Matrix.traceRight_isHermitian
+    {ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
+    (hρ : ρ.IsHermitian) : (Matrix.traceRight ρ).IsHermitian := by
+  apply Matrix.IsHermitian.ext
+  intro a₁ a₂
+  simp only [Matrix.traceRight, star_sum]
+  exact Finset.sum_congr rfl fun b _ => hρ.apply (a₁, b) (a₂, b)
+
+end BipartiteHermiticity
 
 /-! ## SSA equality condition
 
@@ -207,18 +271,16 @@ section SSAEquality
 variable {dA dB dC : ℕ}
 
 /-- Predicate asserting that equality holds in strong subadditivity for a
-tripartite state `ρ_ABC`. -/
+tripartite state `ρ_ABC`. Hermiticity of reduced states is derived
+automatically from `hρ_ABC` via partial-trace preservation lemmas. -/
 def IsSSAEquality
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
-    (hρ_ABC : ρ_ABC.IsHermitian)
-    (hρ_B : (traceAC_ABC ρ_ABC).IsHermitian)
-    (hρ_AB : (traceC_ABC ρ_ABC).IsHermitian)
-    (hρ_BC : (traceA_ABC ρ_ABC).IsHermitian) : Prop :=
+    (hρ_ABC : ρ_ABC.IsHermitian) : Prop :=
   vonNeumannEntropy ρ_ABC hρ_ABC
-    + vonNeumannEntropy (traceAC_ABC ρ_ABC) hρ_B
-  = vonNeumannEntropy (traceC_ABC ρ_ABC) hρ_AB
-    + vonNeumannEntropy (traceA_ABC ρ_ABC) hρ_BC
+    + vonNeumannEntropy (traceAC_ABC ρ_ABC) (traceAC_ABC_isHermitian hρ_ABC)
+  = vonNeumannEntropy (traceC_ABC ρ_ABC) (traceC_ABC_isHermitian hρ_ABC)
+    + vonNeumannEntropy (traceA_ABC ρ_ABC) (traceA_ABC_isHermitian hρ_ABC)
 
 end SSAEquality
 
@@ -232,14 +294,14 @@ variable {dA dB : ℕ}
 
 `I(A:B) = S(ρ_A) + S(ρ_B) - S(ρ_AB)`
 
-Measures the total correlations (classical + quantum) between A and B. -/
+Measures the total correlations (classical + quantum) between A and B.
+Hermiticity of reduced states is derived from `hρ_AB` via partial-trace
+preservation lemmas. -/
 noncomputable def mutualInformation
     (ρ_AB : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
-    (hρ_AB : ρ_AB.IsHermitian)
-    (hρ_A : (Matrix.traceRight ρ_AB).IsHermitian)
-    (hρ_B : (Matrix.traceLeft ρ_AB).IsHermitian) : ℝ :=
-  vonNeumannEntropy (Matrix.traceRight ρ_AB) hρ_A
-    + vonNeumannEntropy (Matrix.traceLeft ρ_AB) hρ_B
+    (hρ_AB : ρ_AB.IsHermitian) : ℝ :=
+  vonNeumannEntropy (Matrix.traceRight ρ_AB) (Matrix.traceRight_isHermitian hρ_AB)
+    + vonNeumannEntropy (Matrix.traceLeft ρ_AB) (Matrix.traceLeft_isHermitian hρ_AB)
     - vonNeumannEntropy ρ_AB hρ_AB
 
 end MutualInformation

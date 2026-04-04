@@ -107,6 +107,21 @@ finite-dimensional quantum systems.
     \]
 \end{definition}
 
+\begin{lemma}[Partial trace preserves Hermiticity]\label{lem:trace_isHermitian}
+    \lean{traceA_ABC_isHermitian}
+    \leanok
+    \uses{def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    If $\rho_{ABC}$ is Hermitian, then $\tr_A(\rho_{ABC})$,
+    $\tr_C(\rho_{ABC})$, and $\tr_{AC}(\rho_{ABC})$ are all Hermitian.
+    The same holds for bipartite partial traces $\tr_A(\rho_{AB})$ and
+    $\tr_B(\rho_{AB})$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Follows from $\overline{\rho_{ji}} = \rho_{ij}$ applied entry-wise
+    inside the summation defining each partial trace.
+\end{proof}
+
 \section{Strong subadditivity}
 
 \begin{theorem}[Strong subadditivity]\label{thm:strong_subadditivity}
