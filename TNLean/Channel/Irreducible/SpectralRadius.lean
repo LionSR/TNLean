@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.TraceAdjoint
@@ -36,29 +37,10 @@ The proof uses a TP-gauge reduction. Starting from a positive-definite right
   [Wolf2012QChannels]
 -/
 
-open scoped Matrix MatrixOrder Pointwise ComplexOrder BigOperators NNReal ENNReal
+open scoped Matrix MatrixOrder Pointwise ComplexOrder BigOperators NNReal ENNReal TNOperatorSpace
 open Matrix Finset
 
 variable {D : ℕ}
-
-noncomputable instance : NormedRing (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.linftyOpNormedRing
-
-noncomputable instance : NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.linftyOpNormedAlgebra
-
-/-! ## Private infrastructure -/
-
-private abbrev CLM (D : ℕ) :=
-  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
-
-private noncomputable instance instSpectralRadiusFiniteDimensionalCLM [NeZero D] :
-    FiniteDimensional ℂ (CLM D) :=
-  (endEquiv (D := D)).toLinearEquiv.finiteDimensional
-
-private noncomputable instance instSpectralRadiusCompleteSpaceCLM [NeZero D] :
-    CompleteSpace (CLM D) :=
-  FiniteDimensional.complete ℂ (CLM D)
 
 /-! ## Spectral radius identity (Wolf 6.3(4)) -/
 
@@ -158,7 +140,7 @@ private lemma spectralRadius_smul
     spectralRadius ℂ (c • F) = (‖c‖₊ : ℝ≥0∞) * spectralRadius ℂ F := by
   letI : FiniteDimensional ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    (endEquiv (D := D)).toLinearEquiv.finiteDimensional
+    (TNLean.matrixEndEquiv (Fin D)).toLinearEquiv.finiteDimensional
   have hF_nonempty : (spectrum ℂ F).Nonempty :=
     spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ F
   have hspec : spectrum ℂ (c • F) = c • spectrum ℂ F := by
@@ -251,7 +233,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     exact hρ_ne ((smul_eq_zero.mp hρ_zero).resolve_left hr_ne)
   have hK_nonzero : ∃ i : Fin n, K i ≠ 0 := by
     by_contra hK_zero
-    push_neg at hK_zero
+    push Not at hK_zero
     have htransfer_zero : MPSTensor.transferMap (d := n) (D := D) K = 0 :=
       LinearMap.ext fun X => by
         simp [MPSTensor.transferMap_apply, hK_zero]

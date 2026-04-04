@@ -274,13 +274,9 @@ theorem exists_residualSlice_subseq_tendsto
     (u s : ℝ) (hs : 0 < s) :
     ∃ a ∈ Set.Icc 0 s, ∃ φ : ℕ ↪o ℕ,
       Filter.Tendsto (fun k : ℕ => residualSliceTime u s (φ k)) Filter.atTop (nhds a) := by
-  let r : ℕ → ℝ := residualSliceTime u s
-  have hmap_le : Filter.map r Filter.atTop ≤ Filter.principal (Set.Icc 0 s) := by
-    rw [Filter.le_principal_iff, Filter.mem_map]
-    exact Filter.univ_mem' (residualSliceTime_mem_Icc u s hs)
-  obtain ⟨a, ha_mem, hcluster⟩ := isCompact_Icc.exists_clusterPt hmap_le
-  obtain ⟨ψ, hψ_mono, hψ_tendsto⟩ :=
-    TopologicalSpace.FirstCountableTopology.tendsto_subseq hcluster
+  obtain ⟨a, ha_mem, ψ, hψ_mono, hψ_tendsto⟩ :=
+    isCompact_Icc.tendsto_subseq (x := fun n : ℕ => residualSliceTime u s n)
+      (residualSliceTime_mem_Icc u s hs)
   exact ⟨a, ha_mem, OrderEmbedding.ofStrictMono ψ hψ_mono, hψ_tendsto⟩
 
 /-- The residual slice limit vanishes (by continuity and uniqueness of limits). -/
@@ -411,7 +407,7 @@ theorem exists_trace_ne_zero_eigenvector_of_fraction_slice
       T t₀ X = ((T u) ^ Nat.factorial (Module.finrank ℂ Mat)) X := by rw [hTt₀_eq_pow]
       _ = μ ^ Nat.factorial (Module.finrank ℂ Mat) • X := by
         exact pow_apply_eigenvector (T u) X μ (Nat.factorial (Module.finrank ℂ Mat)) hX_eig
-      _ = X := by simpa [hμN]
+      _ = X := by simp [hμN]
   have hX_span : X = Matrix.trace X • σ := hfixed_1d X hX_fix_t₀
   have : X = 0 := by simpa [htrX] using hX_span
   exact hX_ne this
