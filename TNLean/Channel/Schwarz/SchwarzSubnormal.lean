@@ -37,7 +37,7 @@ general PSD case follows by approximating `D` with `D + ε · I`.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorems 5.5 and 5.6][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder TNOperatorSpace
 open Matrix
 
 /-! ### C*-algebra infrastructure for matrices -/
@@ -53,9 +53,7 @@ attribute [local instance] Matrix.instL2OpNormedAddCommGroup
 attribute [local instance] Matrix.instL2OpNormedRing
 attribute [local instance] Matrix.instL2OpNormedAlgebra
 
-noncomputable local instance : PosSMulMono ℝ ℂ :=
-  PosSMulMono.of_smul_nonneg fun a ha b hb => by
-    simpa using smul_nonneg ha hb
+local instance : PosSMulMono ℝ ℂ := TNOperatorSpace.complexPosSMulMonoDef
 
 noncomputable local instance : CStarAlgebra Mat where
   toNormedRing := Matrix.instL2OpNormedRing

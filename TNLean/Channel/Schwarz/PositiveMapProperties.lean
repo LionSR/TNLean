@@ -2,6 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
@@ -23,16 +24,14 @@ The spectrum theorem is stated for `spectrum ℝ A`, which is the natural spectr
 for Hermitian complex matrices in Mathlib.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder TNOperatorSpace
 open Matrix
 
 attribute [local instance] Matrix.instL2OpNormedAddCommGroup
 attribute [local instance] Matrix.instL2OpNormedRing
 attribute [local instance] Matrix.instL2OpNormedAlgebra
 
-local instance : PosSMulMono ℝ ℂ :=
-  PosSMulMono.of_smul_nonneg fun a ha b hb => by
-    simpa using smul_nonneg ha hb
+local instance : PosSMulMono ℝ ℂ := TNOperatorSpace.complexPosSMulMonoDef
 
 variable {D : ℕ}
 

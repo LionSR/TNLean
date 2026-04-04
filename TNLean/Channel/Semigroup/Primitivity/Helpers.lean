@@ -4,39 +4,22 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Semigroup.Primitivity.Basic
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal
+open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal TNOperatorSpace
 open Matrix Finset NormedSpace
 
 noncomputable section
 
 variable {D : ℕ}
 
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
-
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-local instance : NormedSpace ℝ Mat :=
-  NormedSpace.restrictScalars ℝ ℂ Mat
-
-local instance instPrimitivityHelpersModuleRealMat : Module ℝ Mat := by
-  infer_instance
-
-local instance instPrimitivityHelpersSMulCommClassComplexRealMat : SMulCommClass ℂ ℝ Mat where
-  smul_comm z r A := by
-    ext i j
-    simp [Complex.real_smul, mul_left_comm, mul_comm]
-
-local instance instPrimitivityHelpersScalarTowerRealComplexMat : IsScalarTower ℝ ℂ Mat where
-  smul_assoc r z A := by
-    ext i j
-    simp [Complex.real_smul, mul_assoc]
-
-local instance : ContinuousSMul ℝ ℂ :=
-  show ContinuousSMul ℝ (RestrictScalars ℝ ℂ ℂ) from inferInstance
+local instance : ContinuousSMul ℝ ℂ := TNOperatorSpace.complexContinuousSMulReal
 
 local instance : ContinuousSMul ℝ Mat :=
-  show ContinuousSMul ℝ (RestrictScalars ℝ ℂ Mat) from inferInstance
+  TNOperatorSpace.matrixContinuousSMulReal (n := Fin D)
+
+local instance : IsScalarTower ℝ ℂ Mat :=
+  TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)
 
 /-! ## Helper lemmas for the primitivity proof -/
 
@@ -104,8 +87,7 @@ theorem expSemigroup_apply_eigenvector
     (L : Mat →ₗ[ℂ] Mat) (X : Mat) (μ : ℂ)
     (hX : L X = μ • X) (t : ℝ) :
     expSemigroup L t X = Complex.exp ((t : ℂ) * μ) • X := by
-  letI : IsScalarTower ℝ ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-    instPrimitivityHelpersScalarTowerRealComplexMat (D := D)
+  letI : IsScalarTower ℝ ℂ Mat := by infer_instance
   let c : ℝ → ℂ := fun u => Complex.exp (-((u : ℂ) * μ))
   let g : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => expSemigroup L u X
   let f : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => c u • g u
@@ -123,7 +105,7 @@ theorem expSemigroup_apply_eigenvector
       have h :
           HasDerivAt (c • g) (c u • (μ • g u) + (-(c u * μ)) • g u) u :=
         @HasDerivAt.smul ℝ _ Mat _ _ g (μ • g u) u ℂ _ _ _ _ 
-          (instPrimitivityHelpersScalarTowerRealComplexMat (D := D)) c (-(c u * μ)) hc hg
+          (TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)) c (-(c u * μ)) hc hg
       simpa using h
     simpa [f, c, g] using hf.differentiableAt
   have hderiv : ∀ u : ℝ, deriv f u = 0 := by
@@ -140,7 +122,7 @@ theorem expSemigroup_apply_eigenvector
       have h :
           HasDerivAt (c • g) (c u • (μ • g u) + (-(c u * μ)) • g u) u :=
         @HasDerivAt.smul ℝ _ Mat _ _ g (μ • g u) u ℂ _ _ _ _ 
-          (instPrimitivityHelpersScalarTowerRealComplexMat (D := D)) c (-(c u * μ)) hc hg
+          (TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)) c (-(c u * μ)) hc hg
       simpa [f, c, g] using h
     have hz : c u • (μ • g u) + (-(c u * μ)) • g u = 0 := by
       calc

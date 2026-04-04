@@ -34,13 +34,12 @@ variable {D : ℕ}
 
 section LindbladForms
 
-private abbrev CLMReal (D : ℕ) :=
-  MatrixCLM (Fin D)
-
 private abbrev MatChoi (D : ℕ) :=
   Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ
 
-private def choiRCLM (D : ℕ) : CLMReal D →L[ℝ] MatChoi D :=
+-- These are real-restricted CLMs because the derivative arguments in Prop 7.3
+-- run over `ℝ`, while the source endomorphisms are naturally `ℂ`-linear.
+private def choiRCLM (D : ℕ) : MatrixCLM (Fin D) →L[ℝ] MatChoi D :=
   ⟨{
       toFun := fun T => ChoiJamiolkowski.choiCLM (D := D) T
       map_add' := by intro T S; simp
@@ -49,7 +48,7 @@ private def choiRCLM (D : ℕ) : CLMReal D →L[ℝ] MatChoi D :=
       toFun := fun T => ChoiJamiolkowski.choiCLM (D := D) T
       map_add' := by intro T S; simp
       map_smul' := by intro r T; rfl
-    } : CLMReal D →ₗ[ℝ] MatChoi D).continuous_of_finiteDimensional⟩
+    } : MatrixCLM (Fin D) →ₗ[ℝ] MatChoi D).continuous_of_finiteDimensional⟩
 
 private def sandRCLM (D : ℕ) (P : MatChoi D) : MatChoi D →L[ℝ] MatChoi D :=
   ⟨{
@@ -99,9 +98,9 @@ theorem cp_semigroup_implies_ccp_generator
     let L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
       (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) L
     let P : MatChoi D := 1 - Matrix.omegaProj D
-    let choiR : CLMReal D →L[ℝ] MatChoi D := choiRCLM D
+    let choiR : MatrixCLM (Fin D) →L[ℝ] MatChoi D := choiRCLM D
     let sandR : MatChoi D →L[ℝ] MatChoi D := sandRCLM D P
-    let projR : CLMReal D →L[ℝ] MatChoi D := sandR.comp choiR
+    let projR : MatrixCLM (Fin D) →L[ℝ] MatChoi D := sandR.comp choiR
     let g : ℝ → MatChoi D := fun t => choiR (expSemigroupCLM L_CLM t)
     let gp : ℝ → MatChoi D := fun t => projR (expSemigroupCLM L_CLM t)
     have hchoi_eq (t : ℝ) :

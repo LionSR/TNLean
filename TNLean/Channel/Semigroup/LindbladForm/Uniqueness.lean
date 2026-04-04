@@ -16,14 +16,10 @@ use traceless Kraus operators, then
 * the drift matrices agree up to an imaginary scalar multiple of the identity.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix
 
 noncomputable section
-
--- Local instances needed for NormedAddCommGroup on Matrix (for CLM infrastructure)
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 

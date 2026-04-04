@@ -18,27 +18,24 @@ open scoped TNOperatorSpace
 
 variable {D : ℕ}
 
-private abbrev CLM (D : ℕ) :=
-  MatrixCLM (Fin D)
-
 /-- Neumann-series specialization at `z = 1`:
 if `‖L‖ < 1`, then `R(1,L) = ∑ₙ L^n`. -/
 theorem resolvent_one_neumann
-    (L : CLM D) (hL : ‖L‖ < 1) :
+    (L : MatrixCLM (Fin D)) (hL : ‖L‖ < 1) :
     resolvent L (1 : ℂ) = ∑' n : ℕ, L ^ n := by
   simpa [resolvent, Algebra.algebraMap_eq_smul_one, one_smul] using
     (NormedRing.inverse_one_sub L hL)
 
 /-- Euler resolvent step `(λ R(λ,L))`. -/
-def eulerResolventStep (L : CLM D) (lam : ℂ) : CLM D :=
+def eulerResolventStep (L : MatrixCLM (Fin D)) (lam : ℂ) : MatrixCLM (Fin D) :=
   lam • resolvent L lam
 
 /-- Finite-`n` Euler approximation term `((n/t)R(n/t,L))^n`. -/
-def eulerResolventApprox (L : CLM D) (t : ℝ) (n : ℕ) : CLM D :=
+def eulerResolventApprox (L : MatrixCLM (Fin D)) (t : ℝ) (n : ℕ) : MatrixCLM (Fin D) :=
   (eulerResolventStep L ((n : ℂ) / (t : ℂ))) ^ n
 
 /-- Axiomatized Euler limit statement (Wolf Eq. (7.9)) in the present finite-dimensional setting. -/
-def HasEulerResolventLimit (L : CLM D) (t : ℝ) : Prop :=
+def HasEulerResolventLimit (L : MatrixCLM (Fin D)) (t : ℝ) : Prop :=
   Filter.Tendsto (fun n : ℕ => eulerResolventApprox L t n) Filter.atTop
     (nhds (expSemigroupCLM L t))
 

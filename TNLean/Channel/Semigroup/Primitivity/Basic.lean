@@ -63,15 +63,12 @@ is formalized via `irreducible_all_of_irreducible_time` in
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §7.1, Prop 7.5][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal
+open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal TNOperatorSpace
 open Matrix Finset NormedSpace
 
 noncomputable section
 
 variable {D : ℕ}
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 

@@ -17,14 +17,10 @@ This file proves the Choi-side characterization of CCP maps.
 * `choi_projected_posSemidef_implies_ccp` — **Prop 7.2** (projected Choi PSD → CCP).
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix
 
 noncomputable section
-
--- Local instances needed for NormedAddCommGroup on Matrix (for CLM infrastructure)
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 
