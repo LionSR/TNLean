@@ -1,0 +1,159 @@
+%% =========================================================
+%% Chapter: Quantum Entropy
+%% Von Neumann entropy, strong subadditivity, and mutual information.
+%% =========================================================
+
+\chapter{Quantum Entropy}\label{ch:entropy}
+
+This chapter develops the von Neumann entropy and its basic properties for
+finite-dimensional quantum systems.
+
+\section{Von Neumann entropy}
+
+\begin{definition}[Von Neumann entropy]\label{def:von_neumann_entropy}
+    \lean{vonNeumannEntropy}
+    \leanok
+    For a Hermitian matrix $\rho \in \MN{D}$ with eigenvalues
+    $\lambda_0, \ldots, \lambda_{D-1}$, the \emph{von Neumann entropy} is
+    \[
+        S(\rho) = -\sum_{i=0}^{D-1} \lambda_i \log \lambda_i,
+    \]
+    where $0 \log 0 := 0$.
+\end{definition}
+
+\begin{theorem}[Entropy is non-negative]\label{thm:entropy_nonneg}
+    \lean{vonNeumannEntropy_nonneg}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For any density matrix $\rho$, $S(\rho) \ge 0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each eigenvalue $\lambda_i$ of a density matrix satisfies
+    $0 \le \lambda_i \le 1$, and $-x \log x \ge 0$ on $[0, 1]$.
+    \uses{thm:density_eigenvalues_le_one}
+\end{proof}
+
+\begin{lemma}[Eigenvalue sum]\label{lem:density_eigenvalues_sum}
+    \lean{densityMatrices_eigenvalues_sum_one}
+    \leanok
+    The eigenvalues of a density matrix sum to $1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Follows from $\tr(\rho) = \sum_i \lambda_i = 1$.
+\end{proof}
+
+\begin{theorem}[Eigenvalue bound]\label{thm:density_eigenvalues_le_one}
+    \lean{densityMatrices_eigenvalues_le_one}
+    \leanok
+    \uses{lem:density_eigenvalues_sum}
+    Each eigenvalue of a density matrix lies in $[0, 1]$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Non-negativity comes from positive semidefiniteness. The upper bound
+    follows because the eigenvalues are non-negative and sum to $1$.
+\end{proof}
+
+\begin{theorem}[Entropy upper bound]\label{thm:entropy_le_log_dim}
+    \lean{vonNeumannEntropy_le_log_dim}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    For a density matrix $\rho \in \MN{D}$ with $D \ge 1$,
+    \[
+        S(\rho) \le \log D.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    By Jensen's inequality applied to the concave function $-x \log x$,
+    the entropy is maximized when all eigenvalues equal $1/D$.
+    \uses{lem:density_eigenvalues_sum, thm:density_eigenvalues_le_one}
+\end{proof}
+
+\section{Tripartite partial traces}
+
+\begin{definition}[Partial trace over $A$]\label{def:traceA_ABC}
+    \lean{Matrix.traceA_ABC}
+    \leanok
+    For a tripartite matrix $\rho_{ABC}$ on
+    $\mathbb{C}^{d_A} \otimes \mathbb{C}^{d_B} \otimes \mathbb{C}^{d_C}$,
+    the partial trace over $A$ is
+    \[
+        (\tr_A \rho_{ABC})_{(b_1, c_1)(b_2, c_2)}
+        = \sum_{a=0}^{d_A - 1} (\rho_{ABC})_{(a, b_1, c_1)(a, b_2, c_2)}.
+    \]
+\end{definition}
+
+\begin{definition}[Partial trace over $C$]\label{def:traceC_ABC}
+    \lean{Matrix.traceC_ABC}
+    \leanok
+    The partial trace over $C$:
+    \[
+        (\tr_C \rho_{ABC})_{(a_1, b_1)(a_2, b_2)}
+        = \sum_{c=0}^{d_C - 1} (\rho_{ABC})_{(a_1, b_1, c)(a_2, b_2, c)}.
+    \]
+\end{definition}
+
+\begin{definition}[Partial trace over $AC$]\label{def:traceAC_ABC}
+    \lean{Matrix.traceAC_ABC}
+    \leanok
+    The partial trace over $A$ and $C$:
+    \[
+        (\tr_{AC} \rho_{ABC})_{b_1 b_2}
+        = \sum_{a=0}^{d_A - 1} \sum_{c=0}^{d_C - 1}
+          (\rho_{ABC})_{(a, b_1, c)(a, b_2, c)}.
+    \]
+\end{definition}
+
+\begin{lemma}[Partial trace preserves Hermiticity]\label{lem:trace_isHermitian}
+    \lean{Matrix.traceA_ABC_isHermitian}
+    \leanok
+    \uses{def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    If $\rho_{ABC}$ is Hermitian, then $\tr_A(\rho_{ABC})$,
+    $\tr_C(\rho_{ABC})$, and $\tr_{AC}(\rho_{ABC})$ are all Hermitian.
+    The same holds for bipartite partial traces $\tr_A(\rho_{AB})$ and
+    $\tr_B(\rho_{AB})$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Follows from $\overline{\rho_{ji}} = \rho_{ij}$ applied entry-wise
+    inside the summation defining each partial trace.
+\end{proof}
+
+\section{Strong subadditivity}
+
+\begin{theorem}[Strong subadditivity]\label{thm:strong_subadditivity}
+    \lean{strong_subadditivity}
+    \uses{def:von_neumann_entropy, def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
+    For a tripartite density matrix $\rho_{ABC}$,
+    \[
+        S(\rho_{ABC}) + S(\rho_B)
+        \le S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+\end{theorem}
+
+\begin{definition}[SSA equality]\label{def:ssa_equality}
+    \lean{IsSSAEquality}
+    \leanok
+    \uses{thm:strong_subadditivity}
+    A tripartite density matrix $\rho_{ABC}$ satisfies
+    \emph{SSA equality} if
+    \[
+        S(\rho_{ABC}) + S(\rho_B) = S(\rho_{AB}) + S(\rho_{BC}).
+    \]
+\end{definition}
+
+\section{Mutual information}
+
+\begin{definition}[Mutual information]\label{def:mutual_information}
+    \lean{mutualInformation}
+    \leanok
+    \uses{def:von_neumann_entropy}
+    The \emph{quantum mutual information} of a bipartite state
+    $\rho_{AB}$ is
+    \[
+        I(A{:}B) = S(\rho_A) + S(\rho_B) - S(\rho_{AB}).
+    \]
+\end{definition}
