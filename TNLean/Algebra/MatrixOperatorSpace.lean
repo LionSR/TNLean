@@ -52,7 +52,7 @@ instance (n : Type*) [Fintype n] [DecidableEq n] :
     SMulCommClass ℂ ℝ (Matrix n n ℂ) where
   smul_comm z r A := by
     ext i j
-    simp [Complex.real_smul, mul_assoc, mul_left_comm, mul_comm]
+    simp [Complex.real_smul, mul_left_comm, mul_comm]
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     IsScalarTower ℝ ℂ (Matrix n n ℂ) where
@@ -88,7 +88,7 @@ instance (n : Type*) [Fintype n] [DecidableEq n] :
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     LinearMap.CompatibleSMul (Matrix n n ℂ) ℂ ℝ ℂ where
   map_smul f r A := by
-    simpa [Complex.real_smul, mul_assoc] using f.map_smul ((r : ℂ)) A
+    exact f.map_smul ((r : ℂ)) A
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     NormedAddCommGroup (TNLean.MatrixCLM n) :=
@@ -118,13 +118,13 @@ instance (n : Type*) [Fintype n] [DecidableEq n] :
     IsScalarTower ℂ (TNLean.MatrixCLM n) (TNLean.MatrixCLM n) where
   smul_assoc z T U := by
     ext X i j
-    simp [ContinuousLinearMap.mul_apply]
+    simp
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     SMulCommClass ℂ (TNLean.MatrixCLM n) (TNLean.MatrixCLM n) where
   smul_comm z T U := by
     ext X i j
-    simp [ContinuousLinearMap.mul_apply]
+    simp
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     IsScalarTower ℝ ℂ (TNLean.MatrixCLM n) where
@@ -144,12 +144,12 @@ instance
     (n m : Type*) [Fintype n] [DecidableEq n] [Fintype m] [DecidableEq m] :
     LinearMap.CompatibleSMul (TNLean.MatrixCLM n) (Matrix m m ℂ) ℝ ℂ where
   map_smul f r A := by
-    simpa using f.map_smul ((r : ℂ)) A
+    exact f.map_smul ((r : ℂ)) A
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     LinearMap.CompatibleSMul (TNLean.MatrixCLM n) ℂ ℝ ℂ where
   map_smul f r A := by
-    simpa using f.map_smul ((r : ℂ)) A
+    exact f.map_smul ((r : ℂ)) A
 
 end TNOperatorSpace
 
