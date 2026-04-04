@@ -35,7 +35,7 @@ finite-dimensional quantum systems.
 \end{proof}
 
 \begin{lemma}[Eigenvalue sum]\label{lem:density_eigenvalues_sum}
-    \lean{densityMatrix_eigenvalues_sum_one}
+    \lean{densityMatrices_eigenvalues_sum_one}
     \leanok
     The eigenvalues of a density matrix sum to $1$.
 \end{lemma}
@@ -45,7 +45,7 @@ finite-dimensional quantum systems.
 \end{proof}
 
 \begin{theorem}[Eigenvalue bound]\label{thm:density_eigenvalues_le_one}
-    \lean{densityMatrix_eigenvalues_le_one}
+    \lean{densityMatrices_eigenvalues_le_one}
     \leanok
     \uses{lem:density_eigenvalues_sum}
     Each eigenvalue of a density matrix lies in $[0, 1]$.
@@ -75,7 +75,7 @@ finite-dimensional quantum systems.
 \section{Tripartite partial traces}
 
 \begin{definition}[Partial trace over $A$]\label{def:traceA_ABC}
-    \lean{traceA_ABC}
+    \lean{Matrix.traceA_ABC}
     \leanok
     For a tripartite matrix $\rho_{ABC}$ on
     $\mathbb{C}^{d_A} \otimes \mathbb{C}^{d_B} \otimes \mathbb{C}^{d_C}$,
@@ -87,7 +87,7 @@ finite-dimensional quantum systems.
 \end{definition}
 
 \begin{definition}[Partial trace over $C$]\label{def:traceC_ABC}
-    \lean{traceC_ABC}
+    \lean{Matrix.traceC_ABC}
     \leanok
     The partial trace over $C$:
     \[
@@ -97,7 +97,7 @@ finite-dimensional quantum systems.
 \end{definition}
 
 \begin{definition}[Partial trace over $AC$]\label{def:traceAC_ABC}
-    \lean{traceAC_ABC}
+    \lean{Matrix.traceAC_ABC}
     \leanok
     The partial trace over $A$ and $C$:
     \[
@@ -108,7 +108,7 @@ finite-dimensional quantum systems.
 \end{definition}
 
 \begin{lemma}[Partial trace preserves Hermiticity]\label{lem:trace_isHermitian}
-    \lean{traceA_ABC_isHermitian}
+    \lean{Matrix.traceA_ABC_isHermitian}
     \leanok
     \uses{def:traceA_ABC, def:traceC_ABC, def:traceAC_ABC}
     If $\rho_{ABC}$ is Hermitian, then $\tr_A(\rho_{ABC})$,

@@ -32,8 +32,8 @@ the basic quantum entropy infrastructure needed for MPDO / RFP applications.
 ## Status
 
 All results in this module are fully proved. The axiomatized strong
-subadditivity lives in `TNLean.Axioms.Entropy`, which is **not** re-exported
-from `TNLean.lean`. See issue #239 for the deferred proof plan.
+subadditivity lives in `TNLean.Axioms.Entropy`, which is imported from
+`TNLean.lean` for CI validation. See issue #239 for the deferred proof plan.
 
 ## Implementation notes
 
@@ -84,7 +84,7 @@ section VonNeumannEntropyFinD
 variable {D : ℕ}
 
 /-- The eigenvalues of a density matrix sum to 1 (real version). -/
-theorem densityMatrix_eigenvalues_sum_one
+theorem densityMatrices_eigenvalues_sum_one
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D) :
     ∑ i : Fin D, hρ.1.isHermitian.eigenvalues i = 1 := by
   have h := hρ.1.isHermitian.trace_eq_sum_eigenvalues
@@ -94,11 +94,11 @@ theorem densityMatrix_eigenvalues_sum_one
   exact_mod_cast key
 
 /-- The eigenvalues of a density matrix lie in `[0, 1]`. -/
-theorem densityMatrix_eigenvalues_le_one
+theorem densityMatrices_eigenvalues_le_one
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D)
     (i : Fin D) : hρ.1.isHermitian.eigenvalues i ≤ 1 := by
   have h_nonneg := hρ.1.eigenvalues_nonneg
-  have h_sum := densityMatrix_eigenvalues_sum_one hρ
+  have h_sum := densityMatrices_eigenvalues_sum_one hρ
   nlinarith [Finset.single_le_sum (f := fun j => hρ.1.isHermitian.eigenvalues j)
     (fun j _ => h_nonneg j) (Finset.mem_univ i)]
 
@@ -112,7 +112,7 @@ theorem vonNeumannEntropy_nonneg
   apply Finset.sum_nonneg
   intro i _
   exact negMulLog_nonneg (hρ.1.eigenvalues_nonneg i)
-    (densityMatrix_eigenvalues_le_one hρ i)
+    (densityMatrices_eigenvalues_le_one hρ i)
 
 /-- Von Neumann entropy is bounded above by `log D`.
 
@@ -136,7 +136,7 @@ theorem vonNeumannEntropy_le_log_dim
         intro i hi
         exact hρ.1.eigenvalues_nonneg i)
   have hsum : ∑ i : Fin D, hρ.1.isHermitian.eigenvalues i = 1 :=
-    densityMatrix_eigenvalues_sum_one hρ
+    densityMatrices_eigenvalues_sum_one hρ
   have havg :
       ∑ i : Fin D, (D : ℝ)⁻¹ * hρ.1.isHermitian.eigenvalues i = (D : ℝ)⁻¹ := by
     rw [← Finset.mul_sum]
@@ -167,6 +167,8 @@ summation over the traced-out indices. The tripartite state is indexed by
 section TripartiteTrace
 
 variable {dA dB dC : ℕ}
+
+namespace Matrix
 
 /-- Partial trace over A: `ρ_BC = tr_A(ρ_ABC)`.
 
@@ -228,6 +230,8 @@ theorem traceAC_ABC_isHermitian
   simp only [traceAC_ABC, star_sum]
   exact Finset.sum_congr rfl fun a _ =>
     Finset.sum_congr rfl fun c _ => hρ.apply (a, b₁, c) (a, b₂, c)
+
+end Matrix
 
 end TripartiteTrace
 
