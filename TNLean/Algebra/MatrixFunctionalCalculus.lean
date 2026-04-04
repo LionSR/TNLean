@@ -16,13 +16,15 @@ end TNLean
 
 namespace TNMatrixCFC
 
-scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
-    NonUnitalContinuousFunctionalCalculus ℝ (Matrix n n ℂ) IsSelfAdjoint :=
-  ContinuousFunctionalCalculus.toNonUnital
+scoped instance (n : Type*) [Fintype n] :
+    NonUnitalContinuousFunctionalCalculus ℝ (Matrix n n ℂ) IsSelfAdjoint := by
+  classical
+  exact ContinuousFunctionalCalculus.toNonUnital
 
 /-- Scoped real nonnegative-spectrum instance for complex matrices. -/
-scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
-    NonnegSpectrumClass ℝ (Matrix n n ℂ) :=
-  Matrix.instNonnegSpectrumClass
+scoped instance (n : Type*) [Fintype n] :
+    NonnegSpectrumClass ℝ (Matrix n n ℂ) := by
+  classical
+  exact Matrix.instNonnegSpectrumClass
 
 end TNMatrixCFC
