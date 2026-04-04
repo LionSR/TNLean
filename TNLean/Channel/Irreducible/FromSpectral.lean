@@ -373,6 +373,8 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
 
 /-! ## Reverse implication: spectral properties ⇒ irreducible -/
 
+-- Lean 4.29 `unusedTactic` linter false-positives on the final `have`/`rw`/`exact` block
+set_option linter.unusedTactic false in
 /-- **Wolf Theorem 6.4, reverse direction** for CP maps.
 
 Starting from a positive-definite right eigenvector and a positive-definite left
