@@ -162,8 +162,10 @@ private theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_hermitian_zer
     simp [Y₁, Matrix.IsHermitian, Matrix.conjTranspose_add,
       Matrix.conjTranspose_conjTranspose, add_comm]
   have hY₂_herm : Y₂.IsHermitian := by
+    ext i j
     simp [Y₂, Matrix.IsHermitian, Matrix.conjTranspose_smul,
-      Matrix.conjTranspose_conjTranspose, sub_eq_add_neg, add_comm]
+      Matrix.conjTranspose_conjTranspose, sub_eq_add_neg]
+    ring
   have hY₁_fix : E Y₁ = Y₁ := by
     simp [E, Y₁, hXfix, hXstar, map_add]
   have hY₂_fix : E Y₂ = Y₂ := by

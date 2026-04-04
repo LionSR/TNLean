@@ -37,7 +37,7 @@ general PSD case follows by approximating `D` with `D + ε · I`.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorems 5.5 and 5.6][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder TNOperatorSpace
 open Matrix
 
 /-! ### C*-algebra infrastructure for matrices -/
@@ -103,8 +103,7 @@ private lemma commuting_dominant_right_bound_posDef
   obtain ⟨u, hu⟩ : ∃ u : Matˣ, (u : Mat) = S := by
     have hS_unit : IsUnit S := by
       dsimp [S]
-      rw [CFC.isUnit_sqrt_iff Dom hDom_nonneg]
-      exact hPD.isUnit
+      exact (CFC.isUnit_sqrt_iff Dom hDom_nonneg).2 hPD.isUnit
     simpa using hS_unit
   have hU_selfAdjoint : IsSelfAdjoint u := by
     refine Units.ext ?_
@@ -168,22 +167,22 @@ private lemma le_of_forall_le_add_pos_smul_one (B D : Mat)
     (h : ∀ ε : ℝ, 0 < ε → B ≤ D + (ε : ℂ) • (1 : Mat)) :
     B ≤ D := by
   rw [Matrix.le_iff]
-  let g : ℕ → Mat := fun n => (D - B) + ((1 / ((n : ℝ) + 1)) : ℝ) • (1 : Mat)
+  let g : ℕ → Mat := fun n => (D - B) + ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • (1 : Mat)
   have hg_tendsto : Filter.Tendsto g Filter.atTop (nhds (D - B)) := by
-    have hzero : Filter.Tendsto (fun n : ℕ => ((1 / ((n : ℝ) + 1)) : ℝ) • (1 : Mat))
+    have hε :
+        Filter.Tendsto (fun n : ℕ => ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)))
+          Filter.atTop (nhds (0 : ℂ)) := by
+      exact (Complex.continuous_ofReal.tendsto 0).comp tendsto_one_div_add_atTop_nhds_zero_nat
+    have hzero :
+        Filter.Tendsto
+          (fun n : ℕ => ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • (1 : Mat))
         Filter.atTop (nhds (0 : Mat)) := by
-      rw [show (0 : Mat) = (0 : ℝ) • (1 : Mat) from by simp]
-      exact (tendsto_one_div_add_atTop_nhds_zero_nat.smul_const (1 : Mat))
+      simpa using hε.smul_const (1 : Mat)
     simpa [g, add_zero] using hzero.const_add (D - B)
   have hg_nonneg : ∀ n, 0 ≤ g n := by
     intro n
-    have h_smul : ((1 / ((n : ℝ) + 1)) : ℝ) • (1 : Mat) =
-        ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • (1 : Mat) := by
-      ext i j
-      simp [Matrix.smul_apply, smul_eq_mul, Complex.real_smul]
     have hg_eq : g n = (D + ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • 1) - B := by
-      change (D - B) + ((1 / ((n : ℝ) + 1)) : ℝ) • 1 = _
-      rw [h_smul]
+      change (D - B) + ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • 1 = _
       abel
     rw [hg_eq, Matrix.le_iff]
     simpa using h (1 / ((n : ℝ) + 1)) (by positivity)
@@ -608,7 +607,7 @@ private lemma schwarz_commuting_dominant_posDef
     · calc
         DL * A + (-A) * DR = DL * A - A * DR := by simp [sub_eq_add_neg]
         _ = 0 := by rw [hInter]; simp
-    · simp [L, hDL_sq]
+    · simp [L, hDL_sq, sub_eq_add_neg]
   have hNNstar : N * Nᴴ = Matrix.fromBlocks Dom 0 0 Dom := by
     dsimp [N]
     rw [hNstar, Matrix.fromBlocks_multiply]
@@ -620,7 +619,7 @@ private lemma schwarz_commuting_dominant_posDef
     · calc
         DR * Aᴴ + (-Aᴴ) * DL = DR * Aᴴ - Aᴴ * DL := by simp [sub_eq_add_neg]
         _ = 0 := by rw [hInterAdj]; simp
-    · simp [R, hDR_sq]
+    · simp [R, hDR_sq, sub_eq_add_neg]
   have hNormal : Nᴴ * N = N * Nᴴ := hNstarN.trans hNNstar.symm
   have hBlock := topLeft_schwarz_of_normal_extension (D := D) T hPos hSub N hNormal
   have hN11 : N.toBlocks₁₁ = A := by simp [N]
@@ -661,10 +660,12 @@ theorem schwarz_inequality_commuting_dominant_operator
         (hDom_add ε hε.le)
     refine ⟨?_, ?_⟩
     · calc T Aᴴ * T A ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.1
-        _ = T Dom + (ε : ℂ) • T 1 := by simp [map_add]
+        _ = T Dom + (ε : ℂ) • T 1 := by
+            simpa using congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
     · calc T A * T Aᴴ ≤ T (Dom + (ε : ℂ) • 1) := hPD_result.2
-        _ = T Dom + (ε : ℂ) • T 1 := by simp [map_add]
+        _ = T Dom + (ε : ℂ) • T 1 := by
+            simpa using congrArg (fun X => T Dom + X) (T.map_smul (ε : ℂ) (1 : Mat))
         _ ≤ T Dom + (ε : ℂ) • 1 := by gcongr
   exact ⟨le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).1,
          le_of_forall_le_add_pos_smul_one _ _ fun ε hε => (hApprox ε hε).2⟩

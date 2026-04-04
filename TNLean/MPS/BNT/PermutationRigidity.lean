@@ -140,7 +140,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp
   classical
   intro k
   by_contra hall
-  push_neg at hall
+  push Not at hall
   -- Step 1: show `mpvOverlap A_total (B k) → 0` using the A-decomposition.
   have hA0 : Tendsto (fun N => mpvOverlap (d := d) A_total (B k) N) atTop (nhds (0 : ℂ)) := by
     -- Expand the overlap at each N as a finite sum over j.
@@ -270,7 +270,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
   classical
   intro j
   by_contra hall
-  push_neg at hall
+  push Not at hall
   -- Convert the hypothesis to the opposite overlap orientation (needed for the B-decomposition).
   have hall_swap : ∀ k : Fin gB,
       Tendsto (fun N => mpvOverlap (d := d) (B k) (A j) N) atTop (nhds 0) := by

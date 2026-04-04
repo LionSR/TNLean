@@ -281,7 +281,7 @@ theorem nilpIndex_pos_of_not_isUnit
     (f : End K V) (hf : ¬IsUnit f) :
     0 < nilpIndex f := by
   by_contra h
-  push_neg at h
+  push Not at h
   have h0 : nilpIndex f = 0 := Nat.eq_zero_of_le_zero h
   have hW : f.maxGenEigenspace 0 = ⊥ := by
     rw [maxGenEigenspace_zero_eq_ker_pow_nilpIndex f, h0, pow_zero]

@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.Basic
 import Mathlib.Analysis.SpecificLimits.Normed
 
@@ -27,20 +28,14 @@ convergence theorem, but that convergence statement itself is not yet included
 here.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
-open Matrix
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
+open Matrix TNLean
 
 noncomputable section
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 section ProductFormulaHelpers
 
 variable {D : ℕ}
-
-private abbrev CLM (D : ℕ) :=
-  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
 
 /-- The norm of an operator exponential is bounded by the scalar exponential of the norm. -/
 theorem norm_exp_le_real_exp_norm {A : Type*}
@@ -73,7 +68,7 @@ theorem norm_exp_le_real_exp_norm {A : Type*}
 
 /-- Norm bound for the semigroup exponential on `End(M_D)`. -/
 theorem norm_expSemigroupCLM_le [NeZero D]
-    (A : CLM D) (t : ℝ) (ht : 0 ≤ t) :
+    (A : MatrixCLM (Fin D)) (t : ℝ) (ht : 0 ≤ t) :
     ‖expSemigroupCLM A t‖ ≤ Real.exp (t * ‖A‖) := by
   have h := norm_exp_le_real_exp_norm (((t : ℂ) • A))
   have habs : |t| = t := abs_of_nonneg ht
@@ -81,7 +76,7 @@ theorem norm_expSemigroupCLM_le [NeZero D]
 
 /-- A single Lie--Trotter step has the expected operator-norm bound. -/
 theorem norm_trotter_step_le [NeZero D]
-    (A B : CLM D) (t : ℝ) (ht : 0 ≤ t) :
+    (A B : MatrixCLM (Fin D)) (t : ℝ) (ht : 0 ≤ t) :
     ‖expSemigroupCLM A t * expSemigroupCLM B t‖
       ≤ Real.exp (t * ‖A‖) * Real.exp (t * ‖B‖) := by
   calc
@@ -105,7 +100,7 @@ theorem expSemigroupCLM_mul_comm
 
 /-- Powers of a fixed semigroup element collapse to one exponential. -/
 theorem expSemigroupCLM_pow_eq
-    (A : CLM D) (s : ℝ) :
+    (A : MatrixCLM (Fin D)) (s : ℝ) :
     ∀ m : ℕ, (expSemigroupCLM A s) ^ m = expSemigroupCLM A ((m : ℝ) * s)
   | 0 => by
       simp [expSemigroupCLM_zero]
@@ -118,7 +113,7 @@ theorem expSemigroupCLM_pow_eq
 
 /-- Telescope estimate for powers in a normed algebra under uniform norm bounds. -/
 theorem norm_pow_sub_pow_le_of_norm_le [NeZero D]
-    {A B : CLM D} {M : ℝ} (hM : 1 ≤ M) (hA : ‖A‖ ≤ M) (hB : ‖B‖ ≤ M) :
+    {A B : MatrixCLM (Fin D)} {M : ℝ} (hM : 1 ≤ M) (hA : ‖A‖ ≤ M) (hB : ‖B‖ ≤ M) :
     ∀ m : ℕ, ‖A ^ m - B ^ m‖ ≤ (m : ℝ) * M ^ m * ‖A - B‖
   | 0 => by simp
   | m + 1 => by
@@ -149,15 +144,15 @@ theorem norm_pow_sub_pow_le_of_norm_le [NeZero D]
 
 /-- Quantitative Lie--Trotter error from a one-step bound at mesh size `t/(n+1)`. -/
 theorem norm_trotter_pow_sub_exp_le_of_step [NeZero D]
-    (A B : CLM D) (t : ℝ) (n : ℕ) (ht : 0 ≤ t) {δ : ℝ}
+    (A B : MatrixCLM (Fin D)) (t : ℝ) (n : ℕ) (ht : 0 ≤ t) {δ : ℝ}
     (hδ : ‖expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))
           - expSemigroupCLM (A + B) (t / (n + 1))‖ ≤ δ) :
     ‖(expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))) ^ (n + 1)
       - expSemigroupCLM (A + B) t‖
       ≤ ((n + 1 : ℕ) : ℝ) * Real.exp (t * (‖A‖ + ‖B‖)) * δ := by
   let s : ℝ := t / (n + 1)
-  let E : CLM D := expSemigroupCLM A s * expSemigroupCLM B s
-  let S : CLM D := expSemigroupCLM (A + B) s
+  let E : MatrixCLM (Fin D) := expSemigroupCLM A s * expSemigroupCLM B s
+  let S : MatrixCLM (Fin D) := expSemigroupCLM (A + B) s
   have hs_nonneg : 0 ≤ s := by
     dsimp [s]
     positivity
@@ -205,7 +200,7 @@ theorem norm_trotter_pow_sub_exp_le_of_step [NeZero D]
 
 /-- If the one-step defect has a quadratic mesh bound, the global Trotter error is `O(1/n)`. -/
 theorem norm_trotter_pow_sub_exp_le_of_quadratic_step [NeZero D]
-    (A B : CLM D) (t : ℝ) (n : ℕ) (ht : 0 ≤ t) {C : ℝ}
+    (A B : MatrixCLM (Fin D)) (t : ℝ) (n : ℕ) (ht : 0 ≤ t) {C : ℝ}
     (hstep :
       ‖expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))
         - expSemigroupCLM (A + B) (t / (n + 1))‖
@@ -259,7 +254,7 @@ theorem norm_trotter_pow_sub_exp_le_of_quadratic_step [NeZero D]
 
 /-- Suzuki/Wolf-style global bound from a one-step constant `2*(‖A‖+‖B‖)^2`. -/
 theorem lie_trotter_suzuki_bound_of_step [NeZero D]
-    (A B : CLM D) (t : ℝ) (n : ℕ) (ht : 0 ≤ t)
+    (A B : MatrixCLM (Fin D)) (t : ℝ) (n : ℕ) (ht : 0 ≤ t)
     (hstep :
       ‖expSemigroupCLM A (t / (n + 1)) * expSemigroupCLM B (t / (n + 1))
         - expSemigroupCLM (A + B) (t / (n + 1))‖

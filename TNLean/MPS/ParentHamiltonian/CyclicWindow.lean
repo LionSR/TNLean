@@ -146,7 +146,7 @@ theorem contiguous_mem_groundSpace {A : MPSTensor d D} (hA : IsInjective A)
       subst this
       exact hwindow s hs τ
     · -- M ≥ L, so intersection property applies
-      push_neg at hbase
+      push Not at hbase
       apply groundSpace_intersection hA (show 1 < M from by omega)
       · -- InLeftGround: restrict the last site
         intro j
@@ -207,18 +207,18 @@ theorem cyclicCfg_eq_contiguousCfg {N : ℕ} (hN : 0 < N) {L : ℕ} (hLN : L ≤
       apply hh
       constructor
       · by_contra hlt
-        push_neg at hlt
+        push Not at hlt
         -- k < i, so (k + N - i) % N = k + N - i ≥ N - i ≥ L
         have : k + N - i.val < N := by omega
         rw [Nat.mod_eq_of_lt this] at habs
         omega
       · by_contra hge
-        push_neg at hge
+        push Not at hge
         -- i ≤ k (since ¬(k < i) would be handled above)
         -- and k ≥ i + L
         have hile : i.val ≤ k := by
           by_contra hlt
-          push_neg at hlt
+          push Not at hlt
           have : k + N - i.val < N := by omega
           rw [Nat.mod_eq_of_lt this] at habs
           omega

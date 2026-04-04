@@ -365,8 +365,8 @@ theorem peripheral_eigenvalues_cyclic_structure
         fun _ _ _ _ h => Units.val_injective h
       exact hfin.preimage hinj
     exact this.to_subtype
-  -- Step 3: Finite subgroups of ℂˣ are cyclic (Mathlib's subgroup_units_cyclic)
-  haveI : IsCyclic ↥periphSubgroup := subgroup_units_cyclic periphSubgroup
+  -- Step 3: Finite subgroups of ℂˣ are cyclic.
+  haveI : IsCyclic ↥periphSubgroup := isCyclic_subgroup_units periphSubgroup
   -- Step 4: Extract a generator g with orderOf g = |S| = m
   obtain ⟨g, hg_order⟩ := isCyclic_iff_exists_orderOf_eq_natCard.mp ‹IsCyclic ↥periphSubgroup›
   set m := Nat.card ↥periphSubgroup with hm_def

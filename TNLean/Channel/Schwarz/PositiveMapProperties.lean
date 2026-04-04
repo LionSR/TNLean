@@ -2,6 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
@@ -23,16 +24,16 @@ The spectrum theorem is stated for `spectrum ℝ A`, which is the natural spectr
 for Hermitian complex matrices in Mathlib.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder TNOperatorSpace
 open Matrix
-
-variable {D : ℕ}
-
-local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 attribute [local instance] Matrix.instL2OpNormedAddCommGroup
 attribute [local instance] Matrix.instL2OpNormedRing
 attribute [local instance] Matrix.instL2OpNormedAlgebra
+
+variable {D : ℕ}
+
+local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 noncomputable local instance matrixCStarAlgebra (m : Type*) [Fintype m] [DecidableEq m] :
     CStarAlgebra (Matrix m m ℂ) where
@@ -77,8 +78,10 @@ theorem IsPositiveMap.map_conjTranspose
     ext i j
     simp [C, sub_eq_add_neg, mul_add, hmulI, add_comm]
   have hNegIC : -(Complex.I • C) = (1 / 2 : ℝ) • (Aᴴ - A) := by
+    rw [hIC]
     ext i j
-    simp [C, sub_eq_add_neg, hmulI, add_comm]
+    simp [sub_eq_add_neg]
+    ring
   have hA_decomp : A = B + Complex.I • C := by
     rw [hIC]
     ext i j
@@ -147,6 +150,7 @@ theorem IsPositiveMap.image_bounded
     have hEq : (b : ℝ) • I - T ((b : ℝ) • I) = (b : ℝ) • (I - T I) := by
       ext i j
       simp [I, sub_eq_add_neg]
+      ring
     rw [hEq]
     exact hSub_psd.smul hb0
   refine ⟨?_, ?_⟩

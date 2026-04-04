@@ -644,8 +644,7 @@ lemma leftCanonical_evalWord_trace_bound
   -- Express w' as List.ofFn σ₀ for a specific σ₀
   set σ₀ : Fin n → Fin d := fun i => w'.get (Fin.cast hlen.symm i)
   have hofFn : List.ofFn σ₀ = w' := by
-    conv_rhs => rw [← List.ofFn_getElem w']
-    apply List.ofFn_congr (by omega)
+    simpa [σ₀, hlen] using (List.ofFn_getElem (xs := w'))
   rw [← hofFn]
   -- word_conjTranspose_mul_sum: ∑_σ (evalWord A (ofFn σ))† (evalWord A (ofFn σ)) = I
   have h_sum := word_conjTranspose_mul_sum (fun i => A i) hA_lc n

@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.LindbladForm.Basic
 import Mathlib.Analysis.Calculus.MeanValue
 
@@ -18,14 +19,10 @@ trace-preserving semigroups.
 * `isTraceAnnihilating_of_isTracePreservingMap_semigroup` — TP semigroup → TA.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
-open Matrix
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
+open Matrix TNLean
 
 noncomputable section
-
--- Local instances needed for NormedAddCommGroup on Matrix (for CLM infrastructure)
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 
@@ -48,18 +45,28 @@ theorem Matrix.eq_zero_of_forall_trace_mul_eq_zero
 
 /-! ## Bridge: trace-annihilating ↔ trace-preserving semigroup -/
 
+/-- The trace-evaluation functional as an ℝ-linear map:
+`T ↦ trace(T(ρ))` for a fixed matrix `ρ`. -/
+private def traceEvalLM (ρ : Matrix (Fin D) (Fin D) ℂ) :
+    (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →ₗ[ℝ] ℂ where
+  toFun T := trace (T ρ)
+  map_add' T S := by simp
+  map_smul' r T := by
+    change trace (((r : ℂ) • T ρ)) = r • trace (T ρ)
+    rw [Matrix.trace_smul]
+    simp [Complex.real_smul]
+
 /-- The trace-evaluation functional as an ℝ-continuous linear map:
 `T ↦ trace(T(ρ))` for a fixed matrix `ρ`. -/
 private def traceEvalCLM (ρ : Matrix (Fin D) (Fin D) ℂ) :
     (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →L[ℝ] ℂ :=
-  ((Matrix.traceLinearMap (Fin D) ℂ ℂ).toContinuousLinearMap.comp
-    (ContinuousLinearMap.apply ℂ _ ρ)).restrictScalars ℝ
+  ⟨traceEvalLM ρ, (traceEvalLM ρ).continuous_of_finiteDimensional⟩
 
 private lemma traceEvalCLM_apply
     (T : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) :
     traceEvalCLM ρ T = trace (T ρ) := by
-  simp [traceEvalCLM, Matrix.traceLinearMap_apply]
+  rfl
 
 /-- `exp(tL) * L = L * exp(tL)` in the CLM algebra, because `L` commutes with `tL`. -/
 private lemma expSemigroupCLM_mul_comm_local
@@ -69,7 +76,7 @@ private lemma expSemigroupCLM_mul_comm_local
   unfold expSemigroupCLM
   have hc : Commute ((s : ℂ) • L_CLM) L_CLM := by
     ext X i j
-    simp
+    simp [ContinuousLinearMap.mul_apply]
   exact hc.exp_left.eq
 
 /-- `trace(Lⁿ(ρ)) = 0` for `n ≥ 1` when `L` is trace-annihilating.
@@ -100,8 +107,7 @@ private lemma trace_expSemigroupCLM_eq
     have h0 : f 0 = trace ρ := by
       simp only [f, g, traceEvalCLM_apply, expSemigroupCLM_zero,
         ContinuousLinearMap.one_apply]
-    change f t = trace ρ
-    exact (hsuff t 0).trans h0
+    simpa [f, g, traceEvalCLM_apply] using (hsuff t 0).trans h0
   apply is_const_of_deriv_eq_zero
   · -- Differentiable
     intro s

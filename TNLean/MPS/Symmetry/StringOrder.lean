@@ -260,9 +260,17 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
   let V := Matrix (Fin D) (Fin D) ℂ
   let F' : V →L[ℂ] V :=
     (Module.End.toContinuousLinearMap V) (twistedTransferMap A u)
+  haveI : FiniteDimensional ℂ (V →L[ℂ] V) :=
+    (Module.End.toContinuousLinearMap V).toLinearEquiv.finiteDimensional
   have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) :=
-    pow_tendsto_zero_of_spectralRadius_lt_one F' <| by
-      simpa [F'] using hsr
+    by
+      let hFinite : FiniteDimensional ℂ (V →L[ℂ] V) :=
+        (Module.End.toContinuousLinearMap V).toLinearEquiv.finiteDimensional
+      letI : FiniteDimensional ℂ (V →L[ℂ] V) := hFinite
+      let hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
+      exact @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+        inferInstance hComplete inferInstance F' <| by
+          simpa [F'] using hsr
   have hEval := (ContinuousLinearMap.apply ℂ V Y).continuous.tendsto (0 : V →L[ℂ] V)
   rw [map_zero] at hEval
   have hIter0 :
@@ -492,8 +500,10 @@ end ConditionEquivalences
 
 section MainTheorems
 
-/-- The transfer map of a TP-gauged tensor is the similarity transform of the
-original transfer map by the positive square root of the adjoint fixed point. -/
+-- The transfer map of a TP-gauged tensor is the similarity transform of the
+-- original transfer map by the positive square root of the adjoint fixed point.
+set_option maxHeartbeats 800000 in
+-- Expanding `tpGauge`, `transferMap`, and CFC adjoint identities is kernel-expensive here.
 lemma transferMap_tpGauge_eq_similarityMap
     (A : MPSTensor d D)
     (σ : Matrix (Fin D) (Fin D) ℂ)
@@ -514,13 +524,16 @@ lemma transferMap_tpGauge_eq_similarityMap
         similarityMap (D := D) S⁻¹ (transferMap A) X := by
     calc
       transferMap (tpGauge (d := d) (D := D) A σ) X
-          = ∑ i : Fin d, S * (A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
-              simp [transferMap_apply, tpGauge, S, hS_herm, hS_inv_herm, Matrix.mul_assoc]
+          = ∑ i : Fin d, (S * A i * S⁻¹) * X * (S * A i * S⁻¹)ᴴ := by
+              simp [transferMap_apply, tpGauge, S]
+              rfl
+      _ = ∑ i : Fin d, S * (A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
+            refine Finset.sum_congr rfl ?_
+            intro x _
+            rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv]
+            simp [Matrix.mul_assoc, hS_inv_herm', hS_herm]
       _ = S * (∑ i : Fin d, A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
-            simpa [Matrix.mul_assoc] using
-              (Matrix.sum_mul_mul (L := S)
-                (M := fun i : Fin d => A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ))
-                (R := S))
+            rw [Matrix.sum_mul_mul]
       _ = similarityMap (D := D) S⁻¹ (transferMap A) X := by
             simp [similarityMap, transferMap_apply, S, hS_inv_inv, hS_inv_herm',
               Matrix.mul_assoc]
@@ -711,13 +724,15 @@ private theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
             setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
       intro i
       have hAeq : setup.A' i = setup.S * A i * setup.S⁻¹ := by
-        simp [setup.hA'_def, tpGauge, setup.hS_def]
+        rw [setup.hA'_def, tpGauge, setup.hS_def]
+        rfl
       have hBstar :
           (setup.B' i)ᴴ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
         calc
           (setup.B' i)ᴴ
               = ((setup.S * setup.B i * setup.S⁻¹ : Matrix (Fin D) (Fin D) ℂ))ᴴ := by
-                  simp [setup.hB'_def, tpGauge, setup.hS_def]
+                  rw [setup.hB'_def, tpGauge, setup.hS_def]
+                  rfl
           _ = (setup.S⁻¹)ᴴ * (setup.B i)ᴴ * setup.Sᴴ := by
                 simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
           _ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
@@ -912,7 +927,17 @@ theorem gaugePhaseEquiv_twisted_of_hasStringOrder
     haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
     exact Matrix.nonempty
   haveI : Nontrivial (V →L[ℂ] V) := ContinuousLinearMap.instNontrivialId
-  obtain ⟨μ, hμ_spec, hμ_rad⟩ := spectrum.exists_nnnorm_eq_spectralRadius F'
+  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  have hF'_nonempty : (spectrum ℂ F').Nonempty :=
+    spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ F'
+  have hcompact : IsCompact (spectrum ℂ F') := by
+    let hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
+    exact @spectrum.isCompact ℂ (V →L[ℂ] V)
+      inferInstance inferInstance inferInstance hComplete inferInstance F'
+  obtain ⟨μ, hμ_spec, hμ_max⟩ :=
+    hcompact.exists_isMaxOn hF'_nonempty continuous_nnnorm.continuousOn
+  have hμ_rad : (‖μ‖₊ : ENNReal) = spectralRadius ℂ F' := by
+    exact le_antisymm (le_iSup₂ (α := ENNReal) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
   have hμ_spec_end : μ ∈ spectrum ℂ (twistedTransferMap A u) := by
     rw [← AlgEquiv.spectrum_eq Φ]
     exact hμ_spec

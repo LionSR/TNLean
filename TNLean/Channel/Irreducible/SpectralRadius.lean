@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.TraceAdjoint
@@ -36,18 +37,10 @@ The proof uses a TP-gauge reduction. Starting from a positive-definite right
   [Wolf2012QChannels]
 -/
 
-open scoped Matrix MatrixOrder Pointwise ComplexOrder BigOperators NNReal ENNReal
+open scoped Matrix MatrixOrder Pointwise ComplexOrder BigOperators NNReal ENNReal TNOperatorSpace
 open Matrix Finset
 
 variable {D : ℕ}
-
-noncomputable instance : NormedRing (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.linftyOpNormedRing
-
-noncomputable instance : NormedAlgebra ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Matrix.linftyOpNormedAlgebra
-
-/-! ## Private infrastructure -/
 
 /-! ## Spectral radius identity (Wolf 6.3(4)) -/
 
@@ -138,13 +131,20 @@ private lemma spectralRadius_similarity_eq
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E)
   rw [hsim, spectralRadius, hspectrum, spectralRadius]
 
+set_option synthInstance.maxHeartbeats 200000 in
+-- `CompleteSpace` on matrix endomorphism CLMs is finite-dimensional but expensive to synthesize.
 private lemma spectralRadius_smul
     [NeZero D]
     (F : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
     {c : ℂ} (hc : c ≠ 0) :
     spectralRadius ℂ (c • F) = (‖c‖₊ : ℝ≥0∞) * spectralRadius ℂ F := by
+  letI : FiniteDimensional ℂ
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    (TNLean.matrixEndEquiv (Fin D)).toLinearEquiv.finiteDimensional
+  have hF_nonempty : (spectrum ℂ F).Nonempty :=
+    spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ F
   have hspec : spectrum ℂ (c • F) = c • spectrum ℂ F := by
-    simpa using spectrum.smul_eq_smul c F (spectrum.nonempty F)
+    simpa using spectrum.smul_eq_smul c F hF_nonempty
   apply le_antisymm
   · rw [spectralRadius, hspec]
     refine iSup₂_le ?_
@@ -164,7 +164,18 @@ private lemma spectralRadius_smul
           rw [spectralRadius]
           exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ F) _
             (fun k _ => (‖k‖₊ : ENNReal)) (c⁻¹ • z) hμ
-  · obtain ⟨μ, hμ_spec, hμ_rad⟩ := spectrum.exists_nnnorm_eq_spectralRadius F
+  · have hcompact : IsCompact (spectrum ℂ F) := by
+      let hComplete :
+          CompleteSpace (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+        FiniteDimensional.complete ℂ
+          (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+      exact @spectrum.isCompact ℂ
+        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+        inferInstance inferInstance inferInstance hComplete inferInstance F
+    obtain ⟨μ, hμ_spec, hμ_max⟩ :=
+      hcompact.exists_isMaxOn hF_nonempty continuous_nnnorm.continuousOn
+    have hμ_rad : (‖μ‖₊ : ℝ≥0∞) = spectralRadius ℂ F := by
+      exact le_antisymm (le_iSup₂ (α := ℝ≥0∞) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
     have hcμ_spec : c • μ ∈ spectrum ℂ (c • F) := by
       rw [hspec]
       exact Set.smul_mem_smul_set hμ_spec
@@ -222,7 +233,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     exact hρ_ne ((smul_eq_zero.mp hρ_zero).resolve_left hr_ne)
   have hK_nonzero : ∃ i : Fin n, K i ≠ 0 := by
     by_contra hK_zero
-    push_neg at hK_zero
+    push Not at hK_zero
     have htransfer_zero : MPSTensor.transferMap (d := n) (D := D) K = 0 :=
       LinearMap.ext fun X => by
         simp [MPSTensor.transferMap_apply, hK_zero]
@@ -241,14 +252,14 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     calc
       (r : ℂ) * Matrix.trace (σ * ρ)
           = Matrix.trace (σ * ((r : ℂ) • ρ)) := by
-              simp
+              rw [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
       _ = Matrix.trace (σ * E ρ) := by rw [hEig]
       _ = Matrix.trace
             (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * ρ) :=
             htrace ρ
       _ = Matrix.trace (((t : ℂ) • σ) * ρ) := by rw [hσ_eig]
       _ = (t : ℂ) * Matrix.trace (σ * ρ) := by
-            simp
+            rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
   have hr_eq_t : r = t := by
     have hcomplex : (r : ℂ) = (t : ℂ) := mul_right_cancel₀ htr_ne hscalar
     have hreal := congrArg Complex.re hcomplex
@@ -306,7 +317,11 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
       MPSTensor.transferMap (d := n) (D := D) B X
           = ∑ i : Fin n,
               (S * (d • K i) * S⁻¹) * X * (S * (d • K i) * S⁻¹)ᴴ := by
-                simp [MPSTensor.transferMap_apply, hB_def, MPSTensor.tpGauge, hA'_def, hS_def]
+                subst B
+                subst A'
+                subst S
+                simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge]
+                rfl
       _ = ∑ i : Fin n,
               (↑r : ℂ)⁻¹ • (S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
             refine Finset.sum_congr rfl ?_

@@ -11,13 +11,10 @@ This file proves the equivalence between conditions (1) and (2) of Wolf
 Proposition 7.6, and the implication (1) → (3).
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
 open Matrix Finset
 
 noncomputable section
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 

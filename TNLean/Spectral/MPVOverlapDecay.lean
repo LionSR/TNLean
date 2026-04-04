@@ -149,7 +149,12 @@ lemma tendsto_trace_pow_of_tendsto_zero_rect
   have hcont : Continuous (traceCLMRect (D₁ := D₁) (D₂ := D₂)) :=
     LinearMap.continuous_of_finiteDimensional (traceCLMRect (D₁ := D₁) (D₂ := D₂))
   have h := (hcont.tendsto (0 : V →L[ℂ] V)).comp hF
-  simpa [traceCLMRect] using h
+  have hzero : traceCLMRect (D₁ := D₁) (D₂ := D₂) (0 : V →L[ℂ] V) = 0 := by
+    simp [traceCLMRect]
+  change Tendsto
+      ((fun G : V →L[ℂ] V => LinearMap.trace ℂ V ((G : V →ₗ[ℂ] V))) ∘ fun n => F ^ n)
+      atTop (nhds (0 : ℂ))
+  simpa [traceCLMRect, Function.comp_apply, hzero] using h
 
 /-- If the rectangular mixed transfer map has spectral radius `< 1`, then `mpvOverlap → 0`. -/
 theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one

@@ -108,7 +108,7 @@ theorem isIrreducibleCP_transferMap_of_isIrreducibleTensor
   have hLower := invariance_implies_lowerZero A P hProj hInv
   -- If P ≠ 0 and P ≠ 1, then A has a nontrivial invariant projection
   by_contra h_neither
-  push_neg at h_neither
+  push Not at h_neither
   obtain ⟨hP0, hP1⟩ := h_neither
   exact hIrr ⟨P, hProj, hP0, hP1, hLower⟩
 

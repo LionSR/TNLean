@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.MPS.Core.Transfer
+import TNLean.Algebra.MatrixFunctionalCalculus
 
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
@@ -18,7 +20,7 @@ proves the TP normalization theorem
 resulting gauge and MPV invariance statements.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators
+open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
 
 namespace MPSTensor
 

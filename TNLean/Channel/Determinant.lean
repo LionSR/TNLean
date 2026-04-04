@@ -469,12 +469,7 @@ private theorem stdBasis_mul_conjTranspose_self (i j : Fin d) :
 
 private theorem sum_single_diag_one :
     ∑ j : Fin d, Matrix.single j j (1 : ℂ) = (1 : MatrixAlg d) := by
-  ext a b
-  rw [Finset.sum_apply]
-  by_cases hab : a = b
-  · subst hab
-    simp [Matrix.single]
-  · simp [Matrix.single, hab]
+  simpa using (Matrix.sum_single_one (m := Fin d) (α := ℂ))
 
 private theorem sum_stdBasis_mul_conjTranspose :
     ∑ ij : Fin d × Fin d,
@@ -950,8 +945,7 @@ private theorem extract_unitary_from_inner_form [NeZero d]
     Matrix.posSemidef_conjTranspose_mul_self _
   have hc_nonneg : 0 ≤ c := by
     have := hPHP_psd.diag_nonneg (i := (0 : Fin d))
-    rwa [hPHP_smul, Pi.smul_apply, Pi.smul_apply, one_apply_eq,
-      smul_eq_mul, mul_one] at this
+    simpa [hPHP_smul, Matrix.smul_apply, Matrix.one_apply, smul_eq_mul] using this
   -- Step 3: c ≠ 0 (from invertibility of P)
   have hc_ne : c ≠ 0 := by
     intro hc0

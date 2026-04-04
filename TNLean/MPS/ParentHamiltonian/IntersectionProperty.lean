@@ -90,7 +90,8 @@ def restrictLastₗ {d L : ℕ} (j : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] N
 
 /-- Restrict an `(L+1)`-site state to the first `L` sites by fixing the last
 physical index to `j` (using `Fin.snoc`). -/
-def restrictLast {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (j : Fin d) : NSiteSpace d L :=
+noncomputable def restrictLast {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (j : Fin d) :
+    NSiteSpace d L :=
   restrictLastₗ j ψ
 
 /-- Restrict an `(L+1)`-site state to the last `L` sites by fixing the first
@@ -106,7 +107,8 @@ def restrictFirstₗ {d L : ℕ} (i : Fin d) : NSiteSpace d (L + 1) →ₗ[ℂ] 
 
 /-- Restrict an `(L+1)`-site state to the last `L` sites by fixing the first
 physical index to `i` (using `Fin.cons`). -/
-def restrictFirst {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (i : Fin d) : NSiteSpace d L :=
+noncomputable def restrictFirst {d L : ℕ} (ψ : NSiteSpace d (L + 1)) (i : Fin d) :
+    NSiteSpace d L :=
   restrictFirstₗ i ψ
 
 @[simp] theorem restrictLast_apply {d L : ℕ} (ψ : NSiteSpace d (L + 1))

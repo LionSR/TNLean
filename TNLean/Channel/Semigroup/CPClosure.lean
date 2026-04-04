@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.Basic
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.Schwarz.Basic
@@ -30,22 +31,16 @@ continuous-time semigroup arguments in Wolf Chapter 7.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 7][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
-open Matrix Finset
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
+open Matrix Finset TNLean
 
 noncomputable section
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 private abbrev LM (D : ℕ) :=
   Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ
 
-private abbrev CLM (D : ℕ) :=
-  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
-
-private abbrev endEquivD (D : ℕ) : LM D ≃ₐ[ℂ] CLM D :=
-  Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+private abbrev endEquivD (D : ℕ) : LM D ≃ₐ[ℂ] MatrixCLM (Fin D) :=
+  matrixEndEquiv (Fin D)
 
 section GenericCPClosure
 
@@ -129,18 +124,14 @@ theorem isCPMap_smul_id_nonneg {c : ℝ}
     IsCPMap (((c : ℂ) •
       (LinearMap.id : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ))) := by
   classical
-  refine ⟨1, fun _ => (Real.sqrt c : ℂ) • (1 : Matrix n n ℂ), ?_⟩
+  refine ⟨1, fun _ => (Real.sqrt c : ℝ) • (1 : Matrix n n ℂ), ?_⟩
   intro X
   ext i j
   have hsqR : Real.sqrt c * Real.sqrt c = c := by
     nlinarith [Real.sq_sqrt hc]
   have hsqC : (c : ℂ) = (Real.sqrt c : ℂ) * (Real.sqrt c : ℂ) := by
     exact_mod_cast hsqR.symm
-  simp only [Complex.coe_smul, LinearMap.smul_apply, LinearMap.id_coe, id_eq, smul_apply,
-    Complex.real_smul, univ_unique, Fin.default_eq_zero, Fin.isValue, Algebra.smul_mul_assoc,
-    one_mul, conjTranspose_smul, star_trivial, conjTranspose_one, Algebra.mul_smul_comm, mul_one,
-    sum_const, card_singleton, one_smul]
-  rw [hsqC, mul_assoc]
+  simp [LinearMap.smul_apply, hsqC, mul_assoc]
 
 /-- Completely positive maps are closed under nonnegative scalar multiples. -/
 theorem IsCPMap.smul_nonneg
@@ -221,7 +212,7 @@ namespace ChoiJamiolkowski
 variable {D : ℕ}
 
 private noncomputable def choiLinearOnCLM :
-    CLM D →ₗ[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
+    MatrixCLM (Fin D) →ₗ[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
   toFun := fun T => choiMatrix T.toLinearMap
   map_add' T S := by
     ext ij kl
@@ -236,7 +227,7 @@ private noncomputable def choiLinearOnCLM :
 
 /-- The Choi matrix as a continuous linear map on continuous endomorphisms. -/
 noncomputable def choiCLM :
-    CLM D →L[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
+    MatrixCLM (Fin D) →L[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where
   toLinearMap := choiLinearOnCLM
   cont := choiLinearOnCLM.continuous_of_finiteDimensional
 
@@ -248,8 +239,8 @@ variable {D : ℕ}
 
 /-- In fixed positive finite dimension, the set of CP continuous endomorphisms is closed. -/
 theorem isClosed_setOf_isCPMap [NeZero D] :
-    IsClosed {T : CLM D | IsCPMap T.toLinearMap} := by
-  have hset : {T : CLM D | IsCPMap T.toLinearMap}
+    IsClosed {T : MatrixCLM (Fin D) | IsCPMap T.toLinearMap} := by
+  have hset : {T : MatrixCLM (Fin D) | IsCPMap T.toLinearMap}
       = {T | (ChoiJamiolkowski.choiCLM (D := D) T).PosSemidef} := by
     ext T
     change IsCPMap T.toLinearMap ↔ (ChoiJamiolkowski.choiMatrix T.toLinearMap).PosSemidef

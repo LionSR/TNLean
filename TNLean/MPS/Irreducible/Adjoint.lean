@@ -64,7 +64,7 @@ theorem isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
       (invariance_implies_lowerZero (d := d) (D := D) (A := fun i => (A i)ᴴ) P hProj hInv)
   -- If `P` is nontrivial, we build a nontrivial invariant projection for `A`.
   by_contra h_neither
-  push_neg at h_neither
+  push Not at h_neither
   obtain ⟨hP0, hP1⟩ := h_neither
   have hPH : Pᴴ = P := hProj.1.eq
   have h1PH : (1 - P)ᴴ = 1 - P := by
