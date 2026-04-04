@@ -37,33 +37,13 @@ section LindbladForms
 private abbrev MatChoi (D : ℕ) :=
   Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ
 
--- These are real-restricted CLMs because the derivative arguments in Prop 7.3
--- run over `ℝ`, while the source endomorphisms are naturally `ℂ`-linear.
+-- Prop 7.3 differentiates through these maps over `ℝ`, so we use the
+-- corresponding real-restricted CLMs obtained from the ambient `ℂ`-linear maps.
 private def choiRCLM (D : ℕ) : MatrixCLM (Fin D) →L[ℝ] MatChoi D :=
-  ⟨{
-      toFun := fun T => ChoiJamiolkowski.choiCLM (D := D) T
-      map_add' := by intro T S; simp
-      map_smul' := by intro r T; rfl
-    }, ({
-      toFun := fun T => ChoiJamiolkowski.choiCLM (D := D) T
-      map_add' := by intro T S; simp
-      map_smul' := by intro r T; rfl
-    } : MatrixCLM (Fin D) →ₗ[ℝ] MatChoi D).continuous_of_finiteDimensional⟩
+  (ChoiJamiolkowski.choiCLM (D := D)).restrictScalars ℝ
 
 private def sandRCLM (D : ℕ) (P : MatChoi D) : MatChoi D →L[ℝ] MatChoi D :=
-  ⟨{
-      toFun := fun X => P * X * P
-      map_add' := by intro X Y; simp [Matrix.mul_add, add_mul, Matrix.mul_assoc]
-      map_smul' := by
-        intro r X
-        simp [Complex.real_smul, Matrix.smul_mul, Matrix.mul_smul, Matrix.mul_assoc]
-    }, ({
-      toFun := fun X => P * X * P
-      map_add' := by intro X Y; simp [Matrix.mul_add, add_mul, Matrix.mul_assoc]
-      map_smul' := by
-        intro r X
-        simp [Complex.real_smul, Matrix.smul_mul, Matrix.mul_smul, Matrix.mul_assoc]
-    } : MatChoi D →ₗ[ℝ] MatChoi D).continuous_of_finiteDimensional⟩
+  (ContinuousLinearMap.mulLeftRight ℂ (MatChoi D) P P).restrictScalars ℝ
 
 /-! ## Prop 7.3: CP semigroup ↔ CCP generator (Wolf Proposition 7.3) -/
 
@@ -114,7 +94,11 @@ theorem cp_semigroup_implies_ccp_generator
     have hproj_eq (t : ℝ) :
         gp t = ChoiJamiolkowski.projectedChoiMatrix (expSemigroup L t) := by
       rw [hgp_sandwich t, hchoi_eq t]
-      simp [sandR, sandRCLM, ChoiJamiolkowski.projectedChoiMatrix, P]
+      change
+        (1 - Matrix.omegaProj D) * ChoiJamiolkowski.choiMatrix (expSemigroup L t) *
+            (1 - Matrix.omegaProj D) =
+          ChoiJamiolkowski.projectedChoiMatrix (expSemigroup L t)
+      simp [ChoiJamiolkowski.projectedChoiMatrix]
     have hg_deriv : HasDerivAt g (ChoiJamiolkowski.choiMatrix L) 0 := by
       have hchoi0 : HasFDerivAt choiR choiR (expSemigroupCLM L_CLM 0) := choiR.hasFDerivAt
       simpa [g, choiR, L_CLM] using
@@ -272,7 +256,6 @@ private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D)
           ext i j
           simp [Complex.real_smul]
           ring
-    
 
 private theorem eulerStep_cp (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
     IsCPMap (eulerStep G s) := by

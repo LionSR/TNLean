@@ -39,7 +39,7 @@ theorem isIrreducibleAction_of_isIrreducibleTensor
   intro W hW
   -- Assume `W` is a nontrivial proper invariant submodule; derive a contradiction.
   by_contra hWT
-  push_neg at hWT
+  push Not at hWT
   obtain ⟨hW_ne_bot, hW_ne_top⟩ := hWT
   -- Work in the finite-dimensional Hilbert space `EuclideanSpace ℂ (Fin D)`.
   let E := EuclideanSpace ℂ (Fin D)

@@ -91,6 +91,14 @@ theorem expSemigroup_apply_eigenvector
   let c : ℝ → ℂ := fun u => Complex.exp (-((u : ℂ) * μ))
   let g : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => expSemigroup L u X
   let f : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => c u • g u
+  have hsmul_deriv (u : ℝ) (hc : HasDerivAt c (-(c u * μ)) u)
+      (hg : HasDerivAt g (μ • g u) u) :
+      HasDerivAt f (c u • (μ • g u) + (-(c u * μ)) • g u) u := by
+    have h :
+        HasDerivAt (c • g) (c u • (μ • g u) + (-(c u * μ)) • g u) u :=
+      @HasDerivAt.smul ℝ _ Mat _ _ g (μ • g u) u ℂ _ _ _ _
+        (TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)) c (-(c u * μ)) hc hg
+    simpa [f, c, g] using h
   have hdiff : Differentiable ℝ f := by
     intro u
     have hmul : HasDerivAt (fun u : ℝ => (u : ℂ) * μ) ((1 : ℂ) * μ) u :=
@@ -101,12 +109,7 @@ theorem expSemigroup_apply_eigenvector
     have hg : HasDerivAt g (μ • g u) u := by
       dsimp [g]
       simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply (D := D) L X u
-    have hf := by
-      have h :
-          HasDerivAt (c • g) (c u • (μ • g u) + (-(c u * μ)) • g u) u :=
-        @HasDerivAt.smul ℝ _ Mat _ _ g (μ • g u) u ℂ _ _ _ _ 
-          (TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)) c (-(c u * μ)) hc hg
-      simpa using h
+    have hf := hsmul_deriv u hc hg
     simpa [f, c, g] using hf.differentiableAt
   have hderiv : ∀ u : ℝ, deriv f u = 0 := by
     intro u
@@ -118,12 +121,7 @@ theorem expSemigroup_apply_eigenvector
     have hg : HasDerivAt g (μ • g u) u := by
       dsimp [g]
       simpa [hX, smul_smul, mul_assoc] using hasDerivAt_expSemigroup_apply (D := D) L X u
-    have hf := by
-      have h :
-          HasDerivAt (c • g) (c u • (μ • g u) + (-(c u * μ)) • g u) u :=
-        @HasDerivAt.smul ℝ _ Mat _ _ g (μ • g u) u ℂ _ _ _ _ 
-          (TNOperatorSpace.matrixScalarTowerRealComplex (n := Fin D)) c (-(c u * μ)) hc hg
-      simpa [f, c, g] using h
+    have hf := hsmul_deriv u hc hg
     have hz : c u • (μ • g u) + (-(c u * μ)) • g u = 0 := by
       calc
         c u • (μ • g u) + (-(c u * μ)) • g u
