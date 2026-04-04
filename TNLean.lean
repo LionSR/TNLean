@@ -57,6 +57,8 @@ import TNLean.Channel.TransferMatrix
 
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPoint
+-- Layer 0b: Axiomatized entropy inequalities (strong subadditivity)
+import TNLean.Axioms.Entropy
 
 -- Layer 2b: Quantum channels (general theory)
 import TNLean.Channel.Schwarz.KadisonSchwarz

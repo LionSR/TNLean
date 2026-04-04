@@ -8,7 +8,8 @@ import TNLean.Analysis.Entropy
 # Axiomatized entropy inequalities
 
 This module isolates the axiom for **strong subadditivity** (Lieb–Ruskai 1973)
-so that it does not pollute the stable import surface `TNLean.lean`.
+so that the axiom is clearly separated from the proved results.
+It is imported from the root `TNLean.lean` so that CI validates it.
 
 ## Status
 
