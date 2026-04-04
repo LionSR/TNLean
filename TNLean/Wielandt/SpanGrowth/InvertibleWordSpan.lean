@@ -419,7 +419,7 @@ theorem wordSpan_finrank_strict_mono_of_isUnit_of_isNormal
     Module.finrank ℂ (wordSpan A n) <
       Module.finrank ℂ (wordSpan A (n + 1)) := by
   by_contra h
-  push_neg at h
+  push Not at h
   have hmono := wordSpan_finrank_mono_of_isUnit A i₀ hU n
   have hfin : Module.finrank ℂ (wordSpan A n) =
       Module.finrank ℂ (wordSpan A (n + 1)) := by

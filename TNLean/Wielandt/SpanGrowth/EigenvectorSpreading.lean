@@ -269,7 +269,7 @@ theorem cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top
   intro v
   -- φ ≠ 0, so ∃ k, φ k ≠ 0
   obtain ⟨k, hk⟩ : ∃ k : Fin D, φ k ≠ 0 := by
-    by_contra h; push_neg at h
+    by_contra h; push Not at h
     exact hφ (funext fun i => by simp [h i])
   -- Construct M with M *ᵥ φ = v using a sum of Matrix.single's.
   -- Each (Matrix.single j k (v j * (φ k)⁻¹)) *ᵥ φ contributes v j at position j.

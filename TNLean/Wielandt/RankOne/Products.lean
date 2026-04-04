@@ -72,7 +72,7 @@ theorem Multiset.exists_ne_zero_of_sum_ne_zero
     {s : Multiset ℂ} (hs : s.sum ≠ 0) :
     ∃ a ∈ s, a ≠ (0 : ℂ) := by
   by_contra h
-  push_neg at h
+  push Not at h
   exact hs (Multiset.sum_eq_zero (fun x hx => h x hx))
 
 /-! ### Part 2: Nonzero trace → nonzero eigenvalue (for matrices) -/

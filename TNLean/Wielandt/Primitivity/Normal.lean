@@ -86,7 +86,7 @@ theorem exists_nonzero_evalWord_of_isPrimitiveMPS [NeZero D]
     (hP : IsPrimitiveMPS A ρ) (n : ℕ) :
     ∃ σ : Fin n → Fin d, evalWord A (List.ofFn σ) ≠ 0 := by
   by_contra hall
-  push_neg at hall
+  push Not at hall
   have hzero : ∀ σ : Fin n → Fin d, evalWord A (List.ofFn σ) = 0 := hall
   have hsum : ((transferMap (d := d) (D := D) A) ^ n) ρ = 0 := by
     rw [transferMap_pow_apply_eq_sum]

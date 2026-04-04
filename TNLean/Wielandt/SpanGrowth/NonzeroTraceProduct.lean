@@ -186,7 +186,7 @@ theorem exists_nonzero_trace_word [NeZero D]
       w.length ≤ D ^ 2 ∧
         Matrix.trace (evalWord A w) ≠ 0 := by
   by_contra hall
-  push_neg at hall
+  push Not at hall
   have htop := cumulativeSpan_eq_top A hN
   have := trace_one_eq_zero_of_all_traces_zero A htop hall
   exact trace_one_ne_zero this
@@ -362,7 +362,7 @@ theorem exists_nonzero_trace_word_sharp [NeZero D]
       w.length ≤ D ^ 2 - Module.finrank ℂ (wordSpan A 1) + 1 ∧
         Matrix.trace (evalWord A w) ≠ 0 := by
   by_contra hall
-  push_neg at hall
+  push Not at hall
   have htop := cumulativeSpan_eq_top_of_isNormal_sharp A hN
   have := trace_one_eq_zero_of_all_traces_zero A htop hall
   exact trace_one_ne_zero this
@@ -404,7 +404,7 @@ private theorem isNormal_index_pos [NeZero D] (hD : 2 ≤ D)
   have hNtop := (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk
   refine ⟨N, ?_, hNtop⟩
   by_contra hN0
-  push_neg at hN0
+  push Not at hN0
   interval_cases N
   exact wordSpan_zero_ne_top A hD hNtop
 
@@ -425,7 +425,7 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       w.length ≤ D ^ 2 - Module.finrank ℂ (wordSpan A 1) + 1 ∧
         Matrix.trace (evalWord A w) ≠ 0 := by
   by_contra hall
-  push_neg at hall
+  push Not at hall
   -- hall : ∀ w, 1 ≤ |w| → |w| ≤ bound → tr(evalWord A w) = 0
   -- Define the positive-level cumulative span
   set bound := D ^ 2 - Module.finrank ℂ (wordSpan A 1) + 1 with hbound_def
