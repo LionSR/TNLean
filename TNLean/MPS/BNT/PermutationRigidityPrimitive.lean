@@ -161,7 +161,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A i) (B j) N) atTop (nhds (0 : ℂ)) := by
     intro j
     by_contra hall
-    push_neg at hall
+    push Not at hall
     have hall_inner : ∀ i : Fin g,
         Tendsto (fun N => mpvInner (d := d) (A i) (B j) N) atTop (nhds (0 : ℂ)) :=
       fun i => tendsto_mpvInner_zero_of_overlap_zero (A i) (B j) (hall i)
