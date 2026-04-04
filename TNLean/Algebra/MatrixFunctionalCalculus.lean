@@ -1,24 +1,28 @@
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order
 
+/-!
+# Matrix Functional Calculus Scopes
+
+This helper module centralizes the real matrix functional-calculus instances
+used throughout the Lean 4.29 upgrade work, so downstream files can opt into
+them via `open scoped TNMatrixCFC`.
+-/
+
 open scoped MatrixOrder
 
 namespace TNLean
+end TNLean
 
-section
+namespace TNMatrixCFC
 
-variable (n : Type*) [Fintype n] [DecidableEq n]
-
-/-- Shared helper for the nonunital selfadjoint functional calculus on complex matrices. -/
-noncomputable abbrev matrixNonUnitalContinuousFunctionalCalculus :
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
     NonUnitalContinuousFunctionalCalculus ℝ (Matrix n n ℂ) IsSelfAdjoint :=
   ContinuousFunctionalCalculus.toNonUnital
 
-/-- Shared helper for the real nonnegative spectrum structure on complex matrices. -/
-noncomputable abbrev matrixNonnegSpectrumClass :
+/-- Scoped real nonnegative-spectrum instance for complex matrices. -/
+scoped instance (n : Type*) [Fintype n] [DecidableEq n] :
     NonnegSpectrumClass ℝ (Matrix n n ℂ) :=
   Matrix.instNonnegSpectrumClass
 
-end
-
-end TNLean
+end TNMatrixCFC

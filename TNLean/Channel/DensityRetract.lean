@@ -16,17 +16,10 @@ This file begins the explicit retraction route toward Brouwer fixed points on
 `densityMatrices D` by constructing the Hermitian trace-one recentering map.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder TNMatrixCFC
 open Matrix
 
 variable {D : ℕ}
-
-local instance :
-    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin D)
-
-local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
-  TNLean.matrixNonnegSpectrumClass (n := Fin D)
 
 noncomputable local instance :
     ContinuousFunctionalCalculus ℝ (CStarMatrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=

@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.ReducibleQDS.Defs
 
 /-!
@@ -11,41 +12,14 @@ This file proves that the semigroup-level invariant compression implies
 block-upper-triangular Lindblad form ((3) → (4)), and vice versa ((4) → (3)).
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
-open Matrix Finset
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
+open Matrix Finset TNLean
 
 noncomputable section
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
-
-private abbrev CLM (D : ℕ) := Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
-
-local instance instGeneratorCompressionNormedSpaceRealMat : NormedSpace ℝ Mat :=
-  NormedSpace.restrictScalars ℝ ℂ Mat
-
-local instance instGeneratorCompressionCompatibleSmul :
-    LinearMap.CompatibleSMul Mat Mat ℝ ℂ :=
-  LinearMap.IsScalarTower.compatibleSMul
-
-local instance instGeneratorCompressionNormedAddCommGroupCLM :
-    NormedAddCommGroup (CLM D) :=
-  ContinuousLinearMap.toNormedAddCommGroup
-
-local instance instGeneratorCompressionNormedRingCLM : NormedRing (CLM D) :=
-  ContinuousLinearMap.toNormedRing
-
-local instance instGeneratorCompressionFiniteDimensionalCLM :
-    FiniteDimensional ℂ (CLM D) :=
-  (endEquiv (D := D)).toLinearEquiv.finiteDimensional
-
-local instance instGeneratorCompressionCompleteSpaceCLM :
-    CompleteSpace (CLM D) :=
-  FiniteDimensional.complete ℂ (CLM D)
 
 /-! ## Projection complement lemmas -/
 

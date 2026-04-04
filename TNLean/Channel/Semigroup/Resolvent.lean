@@ -2,24 +2,24 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.Basic
 
 import Mathlib.Algebra.Algebra.Spectrum.Basic
 import Mathlib.Analysis.Normed.Ring.Units
 
-open Matrix
+open Matrix TNLean
 
 noncomputable section
 
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
-
 namespace TNLean.Channel.Semigroup
+
+open scoped TNOperatorSpace
 
 variable {D : ℕ}
 
 private abbrev CLM (D : ℕ) :=
-  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
+  MatrixCLM (Fin D)
 
 /-- Neumann-series specialization at `z = 1`:
 if `‖L‖ < 1`, then `R(1,L) = ∑ₙ L^n`. -/

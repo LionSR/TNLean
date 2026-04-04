@@ -26,10 +26,6 @@ for Hermitian complex matrices in Mathlib.
 open scoped Matrix ComplexOrder MatrixOrder
 open Matrix
 
-variable {D : ℕ}
-
-local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
-
 attribute [local instance] Matrix.instL2OpNormedAddCommGroup
 attribute [local instance] Matrix.instL2OpNormedRing
 attribute [local instance] Matrix.instL2OpNormedAlgebra
@@ -37,6 +33,10 @@ attribute [local instance] Matrix.instL2OpNormedAlgebra
 local instance : PosSMulMono ℝ ℂ :=
   PosSMulMono.of_smul_nonneg fun a ha b hb => by
     simpa using smul_nonneg ha hb
+
+variable {D : ℕ}
+
+local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 noncomputable local instance matrixCStarAlgebra (m : Type*) [Fintype m] [DecidableEq m] :
     CStarAlgebra (Matrix m m ℂ) where

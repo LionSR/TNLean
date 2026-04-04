@@ -40,8 +40,8 @@ Chapter 6 of Wolf's lecture notes.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 6][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
-open Matrix Finset
+open scoped Matrix ComplexOrder MatrixOrder TNMatrixCFC
+open Matrix Finset TNLean
 
 /-! ## Positive maps -/
 
@@ -116,10 +116,6 @@ theorem IsPositiveMap.map_isHermitian
   classical
   letI := Fintype.ofFinite n
   letI := Classical.decEq n
-  letI : NonUnitalContinuousFunctionalCalculus ℝ (Matrix n n ℂ) IsSelfAdjoint :=
-    TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := n)
-  letI : NonnegSpectrumClass ℝ (Matrix n n ℂ) :=
-    TNLean.matrixNonnegSpectrumClass (n := n)
   have h_decomp := CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)
   have h_pos_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg X)
   have h_neg_psd := Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg X)
@@ -133,13 +129,6 @@ end PositiveMapHermitian
 section DensityMatrices
 
 variable {D : ℕ}
-
-local instance :
-    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin D)
-
-local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
-  TNLean.matrixNonnegSpectrumClass (n := Fin D)
 
 open scoped Matrix.Norms.Frobenius
 

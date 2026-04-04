@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Semigroup.Basic
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.Schwarz.Basic
@@ -30,22 +31,19 @@ continuous-time semigroup arguments in Wolf Chapter 7.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 7][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder
-open Matrix Finset
+open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
+open Matrix Finset TNLean
 
 noncomputable section
-
-attribute [local instance] Matrix.linftyOpNormedRing
-attribute [local instance] Matrix.linftyOpNormedAlgebra
 
 private abbrev LM (D : ℕ) :=
   Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ
 
 private abbrev CLM (D : ℕ) :=
-  Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ
+  MatrixCLM (Fin D)
 
 private abbrev endEquivD (D : ℕ) : LM D ≃ₐ[ℂ] CLM D :=
-  Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+  matrixEndEquiv (Fin D)
 
 section GenericCPClosure
 

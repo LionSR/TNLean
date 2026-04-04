@@ -94,7 +94,7 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
   letI : CompleteSpace V := FiniteDimensional.complete ℂ V
   letI : Nontrivial V := by infer_instance
   letI : SeparatingDual ℂ V := by infer_instance
-  letI : CompleteSpace (V →L[ℂ] V) := by
+  have hCompleteCLM : CompleteSpace (V →L[ℂ] V) := by
     exact
       (SeparatingDual.completeSpace_continuousLinearMap_iff
         (𝕜 := ℂ) (E := V) (F := V)).2 inferInstance
@@ -104,22 +104,14 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
   -- Step 1: show `trace(N^n) → 0` from the spectral radius assumption.
   have hNpow_clm : Filter.Tendsto (fun n => (Φ N) ^ n) Filter.atTop (nhds 0) :=
     by
-      letI : CompleteSpace (V →L[ℂ] V) := by
-        exact
-          (SeparatingDual.completeSpace_continuousLinearMap_iff
-            (𝕜 := ℂ) (E := V) (F := V)).2 inferInstance
       exact
-        pow_tendsto_zero_of_spectralRadius_lt_one (a := (Φ N))
+        @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V) _ hCompleteCLM _ (Φ N)
           (by simpa [N, P] using hSpect)
   have hNtrace0' :
       Filter.Tendsto
         (fun n => LinearMap.trace ℂ V ((Φ N) ^ n : V →L[ℂ] V))
         Filter.atTop (nhds (0 : ℂ)) :=
     by
-      letI : CompleteSpace (V →L[ℂ] V) := by
-        exact
-          (SeparatingDual.completeSpace_continuousLinearMap_iff
-            (𝕜 := ℂ) (E := V) (F := V)).2 inferInstance
       exact tendsto_trace_pow_of_tendsto_zero (D := D) (F := Φ N) hNpow_clm
   -- Convert `trace((Φ N)^n)` to `trace(N^n)` via `map_pow` and the definitional coercion.
   have hNtrace0 :

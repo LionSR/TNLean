@@ -9,7 +9,7 @@ import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.FundamentalTheorem.TransferNormalization
 import TNLean.PiAlgebra.CanonicalFormSep
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open scoped Matrix BigOperators ComplexOrder MatrixOrder TNMatrixCFC
 
 /-!
 # Normal canonical form packaging for primitive block decompositions
@@ -32,14 +32,6 @@ this is why the file does not state an unconditional wrapper from an arbitrary t
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-local instance instNormalReductionNonUnitalCFCMatrix (n : ℕ) :
-    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin n) (Fin n) ℂ) IsSelfAdjoint :=
-  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin n)
-
-local instance instNormalReductionNonnegSpectrumMatrix (n : ℕ) :
-    NonnegSpectrumClass ℝ (Matrix (Fin n) (Fin n) ℂ) :=
-  TNLean.matrixNonnegSpectrumClass (n := Fin n)
 
 /-- Nonzero scalar rescaling preserves tensor irreducibility. -/
 private theorem isIrreducibleTensor_smul

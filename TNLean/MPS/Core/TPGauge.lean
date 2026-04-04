@@ -20,20 +20,13 @@ proves the TP normalization theorem
 resulting gauge and MPV invariance statements.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators
+open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
 
 namespace MPSTensor
 
 open Matrix Finset Complex
 
 variable {d D : ℕ}
-
-local instance :
-    NonUnitalContinuousFunctionalCalculus ℝ (Matrix (Fin D) (Fin D) ℂ) IsSelfAdjoint :=
-  TNLean.matrixNonUnitalContinuousFunctionalCalculus (n := Fin D)
-
-local instance : NonnegSpectrumClass ℝ (Matrix (Fin D) (Fin D) ℂ) :=
-  TNLean.matrixNonnegSpectrumClass (n := Fin D)
 
 /-! ## Helper lemmas about `CFC.sqrt` for positive definite matrices -/
 
