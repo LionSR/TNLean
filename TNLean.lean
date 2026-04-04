@@ -35,7 +35,6 @@ import TNLean.Algebra.CocycleCohomology
 
 -- Layer 0b: General analysis
 import TNLean.Analysis.ConvergenceHelpers
-import TNLean.Analysis.Entropy
 
 -- Layer 1: Generic convex/topological infrastructure
 import TNLean.Topology.ConvexProjection
@@ -54,6 +53,9 @@ import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Stinespring
 import TNLean.Channel.TransferMatrix
+
+-- Layer 2: Quantum entropy infrastructure (depends on Channel.Basic, Channel.PartialTrace)
+import TNLean.Analysis.Entropy
 
 -- Layer 2a: Density-matrix Brouwer fixed-point theorem used in Perron--Frobenius existence
 import TNLean.Axioms.BrouwerFixedPoint
