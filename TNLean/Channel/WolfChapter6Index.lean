@@ -6,6 +6,7 @@ import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.FixedPoint.StationarySupport
+import TNLean.Channel.FixedPoint.WedderburnDecomp
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Growth
@@ -237,6 +238,26 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
 * Numbered wrapper: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
+
+### Wolf Theorem 6.14 (Wedderburn decomposition of fixed-point algebra) — PARTIALLY FORMALIZED
+
+In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
+
+* `Kraus.FixedPointAlgebra` — type alias for the carrier of the
+  adjoint-fixed-point `StarSubalgebra`.
+* `Kraus.fixedPointAlgebra_isSemisimpleRing` — the fixed-point algebra is
+  semisimple (sorry — needs Jacobson radical argument for `*`-algebras).
+* `Kraus.fixedPointAlgebra_wedderburnArtin` — abstract Wedderburn--Artin:
+  `Fix(T*) ≃ₐ[ℂ] Π i, M_{d_i}(ℂ)` (sorry — depends on semisimplicity).
+* `Kraus.IsWedderburnBlockDecomp` — bundled data for the concrete
+  block-diagonal form `U(⊕_k M_{d_k} ⊗ 1_{m_k})U†` (Wolf Eq. 1.39).
+* `Kraus.adjointFixedPoints_wedderburnDecomp` — the fixed-point algebra
+  admits a Wedderburn block decomposition (sorry — depends on concrete
+  embedding construction).
+
+The concrete unitary embedding (Wolf Eq. 1.39) and the conditional
+expectation with density operators ρ_k (Wolf Eq. 1.40, full Thm 6.14)
+are deferred to future work.
 
 ### Wolf Theorem 6.15 (Conditional expectation onto fixed-point algebra) — PARTIALLY FORMALIZED
 
