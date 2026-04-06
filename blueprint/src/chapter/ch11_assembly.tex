@@ -692,11 +692,18 @@ declarations are scaffolded with incomplete proofs.
 
 \begin{theorem}[Different periods imply asymptotic orthogonality]\label{thm:periodic_overlap_zero_ne_period}
 	\lean{MPSTensor.periodicOverlap_tendsto_zero_of_ne_period}
-	\notready
+	\leanok
 	\uses{def:periodic_tensor}
 	If $A$ and $B$ are periodic with different periods, then
 	$\langle V_N(A), V_N(B)\rangle \to 0$ as $N\to\infty$.
 \end{theorem}
+\begin{proof}\leanok
+	Split on whether the bond dimensions agree. If not, dimension mismatch
+	gives decay. If $D_1 = D_2$, suppose for contradiction that $A$ and $B$
+	are gauge-phase equivalent; Perron--Frobenius eigenvalue uniqueness
+	(Wolf Theorem~6.3) then forces equal periods, contradicting the hypothesis.
+	Hence the tensors are not gauge-phase equivalent, and the overlap decays.
+\end{proof}
 
 \begin{lemma}[Sector-block normality for periodic tensors]\label{lem:sector_blocked_normal_periodic}
 	\lean{MPSTensor.sectorBlocked_isNormal_of_isPeriodic}
