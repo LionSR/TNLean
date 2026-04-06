@@ -249,7 +249,7 @@ In `TNLean.Channel.FixedPoint.WedderburnDecomp`:
   semisimple (sorry — needs Jacobson radical argument for `*`-algebras).
 * `Kraus.fixedPointAlgebra_wedderburnArtin` — abstract Wedderburn--Artin:
   `Fix(T*) ≃ₐ[ℂ] Π i, M_{d_i}(ℂ)` (sorry — depends on semisimplicity).
-* `Kraus.IsWedderburnBlockDecomp` — predicate for the concrete
+* `Kraus.IsWedderburnBlockDecomp` — bundled data for the concrete
   block-diagonal form `U(⊕_k M_{d_k} ⊗ 1_{m_k})U†` (Wolf Eq. 1.39).
 * `Kraus.adjointFixedPoints_wedderburnDecomp` — the fixed-point algebra
   admits a Wedderburn block decomposition (sorry — depends on concrete

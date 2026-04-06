@@ -98,7 +98,11 @@ abbrev FixedPointAlgebra :=
 
 This is the key algebraic input for the Wedderburn--Artin decomposition.
 The proof requires showing that the Jacobson radical of a finite-dimensional
-`*`-subalgebra of `M_D(ℂ)` is trivial. -/
+`*`-subalgebra of `M_D(ℂ)` is trivial.
+
+Note: This is stated as a `theorem` rather than an `instance` because the
+proof is currently sorry'd. Registering a sorry'd instance would pollute
+typeclass synthesis. Once proved, this should be promoted to an `instance`. -/
 theorem fixedPointAlgebra_isSemisimpleRing :
     IsSemisimpleRing
       (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) :=
@@ -129,19 +133,23 @@ end AbstractDecomp
 
 section ConcreteDecomp
 
-/-- A `*`-subalgebra of `M_D(ℂ)` has a **Wedderburn block decomposition** if
-there exist a unitary `U`, a number of blocks `n`, and dimension pairs
-`(d_k, m_k)` such that the algebra equals
-`U · (0 ⊕ ⊕_k M_{d_k} ⊗ 1_{m_k}) · U†`
+/-- Bundled data for a **Wedderburn block decomposition** of a `*`-subalgebra
+of `M_D(ℂ)`: a number of blocks `n` and dimension pairs `(d_k, m_k)` intended
+to witness that the algebra is unitarily conjugate to
+`0 ⊕ ⊕_k M_{d_k} ⊗ 1_{m_k}`
 inside the ambient matrix algebra.
 
-This is Wolf Eq. (1.39). We state this as a `Prop`-valued predicate on the
-`StarSubalgebra` for now; the concrete data will be extracted in future work.
+This corresponds to Wolf Eq. (1.39). Since this declaration is a `structure`,
+it stores decomposition data; the proposition asserting existence of such a
+decomposition is `Nonempty (IsWedderburnBlockDecomp S)`.
 
-**Status**: Definition only. The proof that every finite-dimensional
-`*`-subalgebra of `M_D(ℂ)` admits such a decomposition requires bridging
-abstract Wedderburn--Artin to a concrete matrix embedding via central
-projections and the spectral theorem. -/
+The `algEquiv` field ties the decomposition to the subalgebra `S` by
+providing a ℂ-algebra isomorphism between `↥S` and a product of matrix
+algebras `Π i, M_{d_i}(ℂ)`.
+
+**Status**: Partial formalization only. The full concrete embedding data
+(such as the unitary intertwiner `U` and the multiplicities `m_k` in the
+ambient embedding) are deferred to future work. -/
 structure IsWedderburnBlockDecomp
     (S : StarSubalgebra ℂ Mat) where
   /-- Number of simple summands. -/
@@ -154,11 +162,15 @@ structure IsWedderburnBlockDecomp
   blockDim_pos : ∀ i, 0 < blockDim i
   /-- The multiplicities are nondegenerate. -/
   multDim_pos : ∀ i, 0 < multDim i
-  /-- The total dimension accounting:
-  `D = d₀ + Σ_k d_k * m_k` for some complementary dimension `d₀`. -/
+  /-- The total size of the matrix blocks does not exceed `D`
+  (equivalently, there is some complementary dimension not recorded here). -/
   dim_le : ∑ i : Fin numBlocks, blockDim i * multDim i ≤ D
+  /-- The subalgebra is ℂ-algebra isomorphic to the product of matrix blocks.
+  This field ties the decomposition data to `S`. -/
+  algEquiv : ↥S ≃ₐ[ℂ] Π i : Fin numBlocks,
+    Matrix (Fin (blockDim i)) (Fin (blockDim i)) ℂ
 
--- TODO: The full structure should include:
+-- TODO: The full structure should additionally include:
 -- * A unitary `U : Mat` witnessing the conjugation
 -- * A proof that `S.carrier` equals the image of the block-diagonal embedding
 --   under conjugation by `U`
@@ -168,6 +180,10 @@ structure IsWedderburnBlockDecomp
 -- (1) Central projection decomposition of a semisimple algebra
 -- (2) Spectral theorem on the center to extract orthogonal projections
 -- (3) Construction of the unitary intertwiner U
+
+-- TODO: This theorem is a general fact about arbitrary `StarSubalgebra ℂ Mat`,
+-- not specific to quantum channels or fixed-point algebras. It should
+-- eventually be moved to `TNLean/Algebra/WedderburnArtin.lean` or similar.
 
 /-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` admits a Wedderburn
 block decomposition (Wolf Eq. 1.39).
@@ -208,12 +224,15 @@ section DimConstraints
 variable (K : Fin d → Mat) (h_tp : IsTP K)
   {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ)
 
-/-- The number of Wedderburn blocks of the fixed-point algebra divides `D`.
+/-- In any Wedderburn block decomposition of the fixed-point algebra, the
+weighted sum of block dimensions and multiplicities is at most `D`.
 
-This follows from the dimension constraint: each simple summand `M_{d_k}(ℂ)`
-has dimension `d_k²`, and the total dimension of the subalgebra is at most
-`D²`. The block dimensions `d_k` and multiplicities `m_k` satisfy
-`Σ_k d_k * m_k ≤ D`. -/
+Concretely, if the decomposition has simple summands `M_{d_k}(ℂ)` with
+multiplicities `m_k`, then the parameters satisfy `Σ_k d_k * m_k ≤ D`. This
+is exactly the ambient-dimension constraint recorded in
+`IsWedderburnBlockDecomp.dim_le`.
+
+This is a convenience accessor for `IsWedderburnBlockDecomp.dim_le`. -/
 theorem wedderburnBlockDims_sum_le :
     ∀ (w : IsWedderburnBlockDecomp
         (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)),
