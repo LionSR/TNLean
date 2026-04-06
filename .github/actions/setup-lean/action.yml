@@ -24,4 +24,6 @@ runs:
     - name: Install leanblueprint
       if: inputs.install-blueprint == 'true'
       shell: bash
-      run: pip install leanblueprint
+      run: |
+        pipx install leanblueprint
+        pipx inject leanblueprint plastex

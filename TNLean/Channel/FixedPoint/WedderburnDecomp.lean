@@ -107,7 +107,7 @@ theorem fixedPointAlgebra_isSemisimpleRing
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
     (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     IsSemisimpleRing
-      (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) := by
+      (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) :=
   sorry
 
 /-- **Abstract Wedderburn--Artin decomposition** of the fixed-point algebra.
@@ -128,7 +128,7 @@ theorem fixedPointAlgebra_wedderburnArtin
       (∀ i, NeZero (dims i)) ∧
         Nonempty
           (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix) ≃ₐ[ℂ]
-            Π i : Fin n, Matrix (Fin (dims i)) (Fin (dims i)) ℂ) := by
+            Π i : Fin n, Matrix (Fin (dims i)) (Fin (dims i)) ℂ) :=
   sorry
 
 end AbstractDecomp
@@ -215,10 +215,8 @@ theorem adjointFixedPoints_wedderburnDecomp
     (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     Nonempty
       (IsWedderburnBlockDecomp
-        (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) := by
-  simpa using
-    (starSubalgebra_hasWedderburnBlockDecomp
-      (S := adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix))
+        (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) :=
+  starSubalgebra_hasWedderburnBlockDecomp _
 
 end ConcreteDecomp
 
@@ -240,9 +238,8 @@ theorem wedderburnBlockDims_sum_le
     (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     ∀ (w : IsWedderburnBlockDecomp
         (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)),
-      ∑ i : Fin w.numBlocks, w.blockDim i * w.multDim i ≤ D := by
-  intro w
-  exact w.dim_le
+      ∑ i : Fin w.numBlocks, w.blockDim i * w.multDim i ≤ D :=
+  fun w => w.dim_le
 
 end DimConstraints
 
