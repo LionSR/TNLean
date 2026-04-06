@@ -1756,14 +1756,16 @@ theorem hasStringOrder_of_symmetric_injective
     ⟨W, μ, hW, hW', hμ, hΛinv, hC1μ⟩
 
 /-- **String order is an SPT phase invariant.**  If two injective MPS tensors are
-in the same SPT phase (cohomologous virtual cocycles, which in particular
-witnesses on-site symmetry for both tensors), then string order for any group
-element `g` holds for one iff it holds for the other.
+in the same SPT phase (cohomologous virtual cocycles), then string order for any
+group element `g` holds for one iff it holds for the other.
 
-The `IsSameSPTPhase` hypothesis provides on-site symmetry for both `A` and `B`
-(via `GaugeEquiv.sameMPV` applied to the virtual representation intertwining).
-For canonical finitely correlated states with unitary on-site representation,
-string order then holds universally by `hasStringOrder_of_symmetric_injective`. -/
+The `IsSameSPTPhase` witness is used here to derive on-site symmetry for both
+tensors (via the virtual representation intertwining and `GaugeEquiv.sameMPV`).
+The cohomology condition is not needed for this particular property because,
+for canonical finitely correlated states, string order holds universally for
+injective symmetric MPS by `hasStringOrder_of_symmetric_injective`.  The
+cohomology becomes essential for finer SPT invariants (e.g. string-order
+*parameter* values). -/
 theorem stringOrder_invariant_of_samePhase
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
@@ -1778,8 +1780,10 @@ theorem stringOrder_invariant_of_samePhase
     (hNormB : transferMap B 1 = 1)
     (hSamePhase : IsSameSPTPhase A B U) :
     ∀ g : G, HasStringOrder A (U g) Λ_A ↔ HasStringOrder B (U g) Λ_B := by
-  -- Extract on-site symmetry from the same-phase witness
-  obtain ⟨ωA, ωB, ρA, ρB, hρA, hρB, _⟩ := hSamePhase
+  -- Extract on-site symmetry from the same-phase witness;
+  -- the cohomology condition (hCoh) is not needed for string order existence
+  -- but is retained in the statement for downstream SPT invariant results
+  obtain ⟨_ωA, _ωB, ρA, ρB, hρA, hρB, _hCoh⟩ := hSamePhase
   have hSymmA : IsOnSiteSymmetric A U := fun g =>
     GaugeEquiv.sameMPV ⟨ρA.X (g⁻¹), hρA g⟩
   have hSymmB : IsOnSiteSymmetric B U := fun g =>
