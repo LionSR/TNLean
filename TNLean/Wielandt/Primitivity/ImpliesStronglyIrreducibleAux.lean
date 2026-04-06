@@ -39,8 +39,6 @@ open Matrix MPSTensor Module
 
 namespace MPSTensor
 
-variable {d D : ℕ}
-
 /-! ## Part 9: Spectral perturbation — from peripheral eigenvectors to PSD non-PosDef fixed points
 
 This section develops the spectral-perturbation machinery needed for the paper's case (iii)
