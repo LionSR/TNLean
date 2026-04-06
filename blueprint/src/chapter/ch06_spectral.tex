@@ -821,6 +821,33 @@ behind stationary states, following~\cite[\S6.4]{Wolf2012Quantum}.
     These statements are deferred in the present chapter.
 \end{remark}
 
+\section{Wedderburn decomposition of the fixed-point algebra (Wolf Thm.~6.14)}
+
+\begin{theorem}[Fixed-point algebra is semisimple]%
+    \label{thm:fixedPointAlgebra_isSemisimpleRing}
+    \lean{Kraus.fixedPointAlgebra_isSemisimpleRing}
+    \uses{def:adjoint_fixed_point_star_subalgebra}
+    The adjoint-fixed-point $*$-subalgebra of a trace-preserving
+    Kraus map on $\MN{D}$ is a semisimple ring.
+\end{theorem}
+
+\begin{theorem}[Abstract Wedderburn--Artin decomposition (Wolf Thm.~6.14)]%
+    \label{thm:fixedPointAlgebra_wedderburnArtin}
+    \lean{Kraus.fixedPointAlgebra_wedderburnArtin}
+    \uses{thm:fixedPointAlgebra_isSemisimpleRing}
+    There exist $n\in\N$ and dimensions $d_1,\dots,d_n\ge 1$ such that
+    the adjoint-fixed-point $*$-subalgebra is $\C$-algebra isomorphic to
+    $\prod_{k=1}^{n} M_{d_k}(\C)$.
+\end{theorem}
+
+\begin{theorem}[Fixed-point algebra admits Wedderburn block decomposition]%
+    \label{thm:adjointFixedPoints_wedderburnDecomp}
+    \lean{Kraus.adjointFixedPoints_wedderburnDecomp}
+    \uses{thm:fixedPointAlgebra_wedderburnArtin}
+    The adjoint-fixed-point $*$-subalgebra admits a concrete Wedderburn
+    block decomposition inside the ambient matrix algebra (Wolf Eq.~1.39).
+\end{theorem}
+
 \section{Additional Wolf Chapter~6 equivalences}
 
 This section records several equivalences from Wolf's Chapter~6 that are
