@@ -189,19 +189,10 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
           _ = (ω ^ m) ^ (j : ℕ) := by rw [pow_mul]
           _ = 1 := by simp [hωprim.pow_eq_one]
       simpa [hperiph_roots] using hpow
-  obtain ⟨dim, blocks, hLC, hMPV⟩ := exists_cyclic_sector_decomp_after_blocking
-    A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
-  exact ⟨dim, blocks, hLC, hMPV, by
-    -- The projections P are produced internally by
-    -- `exists_cyclic_decomposition_of_irreducible_schwarz` inside
-    -- `exists_cyclic_sector_decomp_after_blocking`, but are not exposed in
-    -- its return type. Closing this sorry requires either:
-    --   (a) making `transferMap_adjoint_blocked_eq_pow` and
-    --       `adjointTransferMap_pow_fixes_cyclic_projection` public in Assembly.lean, or
-    --   (b) duplicating ~80 lines of proof to re-derive the blocked fixed-point
-    --       property from scratch.
-    -- Both options exceed the scope of this statement-refactoring PR.
-    sorry⟩
+  obtain ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hComm, hTrace⟩ :=
+    exists_cyclic_sector_decomp_after_blocking
+      A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
+  exact ⟨dim, blocks, hLC, hMPV, P, hPproj, hPsum, hComm, hTrace⟩
 
 /-! ## Self-overlap (first paragraph of Appendix A) -/
 
