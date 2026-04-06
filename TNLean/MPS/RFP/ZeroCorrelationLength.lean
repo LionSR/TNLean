@@ -22,8 +22,8 @@ Three predicates are introduced:
   operators.
 * `IsZCL A` — the conjunction of local orthogonality and CID.
 
-The main result (Theorem 3.8) asserts that for a canonical-form tensor,
-`IsZCL` is equivalent to having an idempotent transfer map (`IsRFP`).
+The main result (Theorem 3.8) asserts that `IsZCL` is equivalent to having
+an idempotent transfer map (`IsRFP`).
 -/
 
 open scoped Matrix ComplexOrder
