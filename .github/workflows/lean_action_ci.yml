@@ -10,7 +10,7 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened]
     paths:
       - '**.lean'
       - 'lakefile.*'
