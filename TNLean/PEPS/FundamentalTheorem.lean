@@ -2,6 +2,10 @@ import TNLean.PEPS.Defs
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
+-- This is a **scaffold** file: all theorem proofs are `sorry` placeholders
+-- marking proof obligations to be filled in future PRs (see #128).
+-- No `sorry` here hides an unprovable goal; each is a genuine proof task.
+
 /-!
 # Fundamental Theorem for injective PEPS (scaffold)
 
@@ -135,24 +139,29 @@ provides a left inverse, and `SameState` (contracted over all other vertices)
 constrains the relationship to a linear isomorphism on the virtual indices of
 `v`.
 
-The conclusion indexes gauges by `IncidentEdge G v` (edges incident to `v`).
-Since each edge appears at most once in the incident set, this is equivalent to
-the paper's per-edge formulation restricted to edges touching `v`. -/
+The conclusion gives one `GL` per edge (indexed by `Edge G`), consistent with
+the global gauge type in `gaugeConsistency`. Only the values at edges incident
+to `v` are constrained; the rest are arbitrary. -/
+-- TODO (provability): The factorised per-edge form (independent GL per edge)
+-- requires the virtual-insertion / blocking argument from arXiv:1804.04964 §3
+-- (reducing each star neighbourhood to a 3-site MPS chain and applying the
+-- 1D Fundamental Theorem). A naïve single-vertex argument only yields a
+-- *general* invertible map on the full virtual space of v, not the per-edge
+-- factorisation. This will need substantial infrastructure not yet in TNLean.
 theorem localGauge_exists (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
     (hDim : A.bondDim = B.bondDim) (v : V) :
-    ∃ (Xv : (ie : IncidentEdge G v) →
-        GL (Fin (A.bondDim ie.1)) ℂ),
+    ∃ (Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
       ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
           ∑ η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
-            (∏ ie : IncidentEdge G v, (↑(Xv ie) : Matrix _ _ ℂ) (η ie) (η' ie)) *
+            (∏ ie : IncidentEdge G v,
+              (↑(Xv ie.1) : Matrix _ _ ℂ) (η ie) (η' ie)) *
               A.component v η' σ := by
   -- TODO: use injectivity of A at v to define a left inverse,
   -- then extract the gauge matrix from the SameState condition.
-  -- This requires contracting over all vertices except v and using
-  -- the resulting linear relation on the virtual space of v.
+  -- This requires the virtual-insertion argument (see TODO above).
   sorry
 
 /-! ### Gauge consistency across edges -/
