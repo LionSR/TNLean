@@ -843,22 +843,19 @@ cohomologous~\cite{ChenGuWen2011}.
     \leanok
     \uses{def:is_same_spt_phase,
           thm:has_string_order_of_symmetric_injective}
-    If $A$ and $B$ are injective and both symmetric under the same
-    on-site representation~$U$, and both satisfy the canonical
-    normalisation hypotheses, then for every $g\in G$, string order
-    exists for $A$ with twist $U(g)$ if and only if it exists
-    for~$B$.  In particular, since being in the same SPT phase
-    (Definition~\ref{def:is_same_spt_phase}) implies on-site symmetry
-    via the virtual representation intertwining, the result applies to
-    tensors in the same phase.
+    If $A$ and $B$ are injective and in the same SPT phase
+    (Definition~\ref{def:is_same_spt_phase}), and both satisfy the
+    canonical normalisation hypotheses, then for every $g\in G$,
+    string order exists for $A$ with twist $U(g)$ if and only if it
+    exists for~$B$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:has_string_order_of_symmetric_injective}
-    On-site symmetry for both tensors follows from the virtual
-    representation intertwining: the gauge matrix conjugates each
-    tensor component, hence the twisted and original tensors generate
-    the same matrix product vectors.
+    The same-phase hypothesis supplies on-site symmetry for both
+    tensors via the virtual representation intertwining: the gauge
+    matrix conjugates each tensor component, giving a gauge equivalence
+    and hence equal matrix product vectors.
     Both directions then follow from
     Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which
     shows that string order holds universally for injective symmetric
