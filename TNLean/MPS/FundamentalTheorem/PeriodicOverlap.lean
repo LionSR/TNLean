@@ -401,7 +401,9 @@ The hypotheses mirror the compressed corner API: `blocksA`/`blocksB` are
 the cyclic-sector tensors on corner bond spaces, tied back to the
 original blocked tensors via `SameMPV₂`. The `hSomeMatch` witness
 provides a single matching sector pair `(u₀, v₀)` with compatible
-dimensions.
+dimensions and nonzero bond dimension (`dimA u₀ ≠ 0`), which excludes
+the degenerate case where a zero-dimensional `GaugePhaseEquiv` holds
+vacuously.
 
 This is Eq. (A.17)–(A.18) of arXiv:1708.00029. -/
 theorem periodicOverlap_gaugeEquiv_of_sector_match
@@ -426,7 +428,7 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hSomeMatch : ∃ (u₀ v₀ : Fin m) (hdim : dimA u₀ = dimB v₀),
-      GaugePhaseEquiv
+      dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
         (cast (congr_arg
           (MPSTensor (blockPhysDim d m)) hdim)
           (blocksA u₀))
