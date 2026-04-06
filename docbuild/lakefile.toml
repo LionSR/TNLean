@@ -4,10 +4,10 @@ version = "0.1.0"
 packagesDir = "../.lake/packages"
 
 [[require]]
-name = "TNLean"
-path = "../"
-
-[[require]]
 scope = "leanprover"
 name = "doc-gen4"
 rev = "v4.29.0"
+
+[[require]]
+name = "TNLean"
+path = "../"
