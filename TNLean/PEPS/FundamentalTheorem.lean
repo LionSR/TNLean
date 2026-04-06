@@ -1,5 +1,6 @@
 import TNLean.PEPS.Defs
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
+import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
 /-!
 # Fundamental Theorem for injective PEPS (scaffold)
@@ -36,16 +37,16 @@ open scoped BigOperators Matrix
 namespace TNLean
 namespace PEPS
 
-variable {V : Type*} [Fintype V] [DecidableEq V] [LinearOrder V]
+variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
 /-! ### Gauge matrices at oriented endpoints -/
 
 /-- The gauge matrix to apply at vertex `v` for an incident edge `ie`.
 
-For edge `(u, v)` with `u < v` and gauge `X_e`:
-* at the first endpoint (`v = u`): apply `X_e`,
-* at the second endpoint (`v = v`): apply `(X_e⁻¹)ᵀ`.
+For an edge `(u, w)` with `u < w` and gauge `X_e`:
+* at endpoint `u`: apply `X_e`,
+* at endpoint `w`: apply `(X_e⁻¹)ᵀ`.
 
 This ensures that when contracting the virtual index along `e`, the gauge
 matrices cancel: `∑_j X(i,j) · (X⁻¹)ᵀ(j,k) = δ(i,k)`. -/
@@ -115,15 +116,16 @@ theorem GaugeEquiv.sameState {A B : Tensor G d} (h : GaugeEquiv A B) :
 
 /-! ### Local gauge extraction -/
 
-/-- The local tensor at vertex `v`, viewed as a linear map from the virtual
-index space to the physical/coefficient space. -/
-noncomputable def localTensorMap (A : Tensor G d) (v : V) :
-    ((ie : IncidentEdge G v) → Fin (A.bondDim ie.1) → ℂ) →ₗ[ℂ]
-    (Fin d → ℂ) where
-  toFun f σ := ∑ η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
+/-- The local tensor evaluated at vertex `v` with virtual-index weighting `f`.
+
+This computes `∑_η (∏_{ie} f(ie)(η(ie))) · A_v(η, σ)`. The map is
+*multilinear* in the components of `f` (one factor per incident edge), not
+linear in the full tuple — hence this is a plain function, not a `LinearMap`. -/
+noncomputable def localTensorEval (A : Tensor G d) (v : V)
+    (f : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1) → ℂ)
+    (σ : Fin d) : ℂ :=
+  ∑ η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
     (∏ ie : IncidentEdge G v, f ie (η ie)) * A.component v η σ
-  map_add' := by intros; ext; simp; ring_nf; sorry
-  map_smul' := by intros; ext; simp; ring_nf; sorry
 
 /-- At a single vertex, `SameState` plus injectivity forces a local gauge
 relation between the two tensors.
@@ -133,7 +135,8 @@ provides a left inverse, and `SameState` (contracted over all other vertices)
 constrains the relationship to a linear isomorphism on the virtual indices of
 `v`. -/
 theorem localGauge_exists (A B : Tensor G d)
-    (hA : IsVertexInjective A) (hAB : SameState A B)
+    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hAB : SameState A B)
     (hDim : A.bondDim = B.bondDim) (v : V) :
     ∃ (Xv : (ie : IncidentEdge G v) →
         GL (Fin (A.bondDim ie.1)) ℂ),
@@ -158,7 +161,8 @@ This is the combinatorial heart of the PEPS FT proof. In the MPS case,
 consistency is automatic because there is only one gauge matrix. For PEPS on a
 graph, one must verify that the local gauges "match up" along every edge. -/
 theorem gaugeConsistency (A B : Tensor G d)
-    (hA : IsVertexInjective A) (hAB : SameState A B)
+    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hAB : SameState A B)
     (hDim : A.bondDim = B.bondDim) :
     ∃ (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
       ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
@@ -188,7 +192,8 @@ The proof proceeds in two stages:
 
 In the MPS (1D chain) case, this reduces to `fundamentalTheorem_singleBlock`. -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
-    (hA : IsVertexInjective A) (hAB : SameState A B) :
+    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hAB : SameState A B) :
     GaugeEquiv A B := by
   -- Step 1: Show bond dimensions must agree.
   -- TODO: derive hDim from injectivity + SameState.
@@ -196,26 +201,31 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
   have hDim : A.bondDim = B.bondDim := by
     sorry
   -- Step 2: Extract globally consistent gauges.
-  rcases gaugeConsistency A B hA hAB hDim with ⟨X, hX⟩
+  rcases gaugeConsistency A B hA hB hAB hDim with ⟨X, hX⟩
   exact ⟨hDim, X, hX⟩
 
 /-! ### Uniqueness (up to scalar) -/
 
 /-- The gauge in the Fundamental Theorem is unique up to a global multiplicative
 scalar. If `X` and `Y` are two gauge families relating the same pair of
-injective PEPS, then `X_e = c · Y_e` for some nonzero `c : ℂ` independent
-of `e`.
+injective PEPS on a connected graph, then `X_e = c · Y_e` for some nonzero
+`c : ℂ` independent of `e`.
 
 This is the PEPS analogue of the MPS result that the gauge matrix is unique
-up to scalar (arXiv:1804.04964, Theorem 2, uniqueness clause). -/
+up to scalar (arXiv:1804.04964, Theorem 2, uniqueness clause). The
+connectedness hypothesis is essential: on a disconnected graph, gauges on
+different components can be rescaled independently. -/
 theorem gauge_unique_up_to_scalar (A B : Tensor G d)
+    (hConn : G.Connected)
     (hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim)
     (X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
-    (hX : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+    (hX : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
+        (σ : Fin d),
       B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
         gaugeVertex A X v η σ)
-    (hY : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+    (hY : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
+        (σ : Fin d),
       B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
         gaugeVertex A Y v η σ) :
     ∃ (c : ℂ), c ≠ 0 ∧ ∀ (e : Edge G),
