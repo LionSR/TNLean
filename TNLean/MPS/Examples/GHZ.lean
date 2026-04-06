@@ -35,6 +35,16 @@ open Matrix Finset MPSTensor
 
 namespace MPSTensor
 
+/-! ### Shared helpers for MPS examples -/
+
+/-- The Pauli X (swap / bit-flip) matrix `σx = !![0, 1; 1, 0]`. -/
+def pauliX : Matrix (Fin 2) (Fin 2) ℂ :=
+  Matrix.of fun i j => if i.val + j.val = 1 then 1 else 0
+
+lemma pauliX_sq : pauliX * pauliX = 1 := by
+  ext i j; fin_cases i <;> fin_cases j <;>
+    simp [pauliX, Matrix.of_apply, Matrix.mul_apply, Fin.sum_univ_two]
+
 /-! ### Definition -/
 
 /-- The GHZ MPS tensor: `A i = diagonal (Pi.single i 1)`, i.e.
@@ -88,38 +98,30 @@ theorem ghz_not_isInjective : ¬ IsInjective ghzTensor := by
 
 /-! ### Z₂ on-site symmetry -/
 
-/-- The swap (Pauli X) matrix. -/
-private def swapMat : Matrix (Fin 2) (Fin 2) ℂ :=
-  Matrix.of fun i j => if i.val + j.val = 1 then 1 else 0
-
-private lemma swapMat_sq : swapMat * swapMat = 1 := by
-  ext i j; fin_cases i <;> fin_cases j <;>
-    simp [swapMat, Matrix.of_apply, Matrix.mul_apply, Fin.sum_univ_two]
-
 /-- The Z₂ on-site representation via Pauli X. We use `Multiplicative (ZMod 2)` as the
 group: the identity corresponds to `ofAdd 0` and the generator to `ofAdd 1`.
 `U(0) = 1` (identity), `U(1) = σx` (Pauli X swap). -/
 noncomputable def z2PhysicalAction :
     Multiplicative (ZMod 2) →* Matrix (Fin 2) (Fin 2) ℂ where
-  toFun g := if Multiplicative.toAdd g = 0 then 1 else swapMat
+  toFun g := if Multiplicative.toAdd g = 0 then 1 else pauliX
   map_one' := by simp [toAdd_one]
   map_mul' a b := by
     rcases zmod2_cases a with rfl | rfl <;> rcases zmod2_cases b with rfl | rfl <;>
-      simp [toAdd_ofAdd, zmod2_one_add_one, swapMat_sq]
+      simp [toAdd_ofAdd, zmod2_one_add_one, pauliX_sq]
 
 /-- σx as an element of GL(2,ℂ). -/
 private noncomputable def swapGL : GL (Fin 2) ℂ :=
-  Matrix.GeneralLinearGroup.mkOfDetNeZero swapMat (by
-    simp only [Matrix.det_fin_two, swapMat, Matrix.of_apply]; norm_num)
+  Matrix.GeneralLinearGroup.mkOfDetNeZero pauliX (by
+    simp only [Matrix.det_fin_two, pauliX, Matrix.of_apply]; norm_num)
 
 @[simp] private lemma swapGL_val :
-    (swapGL : Matrix (Fin 2) (Fin 2) ℂ) = swapMat :=
+    (swapGL : Matrix (Fin 2) (Fin 2) ℂ) = pauliX :=
   Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
 
 private lemma swapGL_inv_val :
-    ((swapGL⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = swapMat := by
+    ((swapGL⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = pauliX := by
   have hsq : swapGL * swapGL = 1 := by
-    apply Units.ext; simp only [Units.val_mul, Units.val_one, swapGL_val, swapMat_sq]
+    apply Units.ext; simp only [Units.val_mul, Units.val_one, swapGL_val, pauliX_sq]
   rw [show swapGL⁻¹ = swapGL from inv_eq_of_mul_eq_one_right hsq, swapGL_val]
 
 /-- The Z₂ twist at the generator swaps A⁰ ↔ A¹. -/
@@ -129,7 +131,7 @@ private lemma ghz_twisted_generator_eq (i : Fin 2) :
   simp only [twistedTensor, z2PhysicalAction, MonoidHom.coe_mk, OneHom.coe_mk,
     toAdd_ofAdd, Fin.sum_univ_two]
   fin_cases i <;>
-    ext a b <;> simp [swapMat, Matrix.of_apply, ghzTensor, Matrix.diagonal_apply,
+    ext a b <;> simp [pauliX, Matrix.of_apply, ghzTensor, Matrix.diagonal_apply,
       Pi.single_apply, Fin.rev]
 
 /-- The swapped GHZ tensor is gauge equivalent to the original via σx. -/
@@ -142,7 +144,7 @@ private lemma ghz_gaugeEquiv_twisted :
   ext a b
   simp only [ghzTensor, Matrix.diagonal_apply, Pi.single_apply, Fin.rev]
   fin_cases i <;> fin_cases a <;> fin_cases b <;>
-    simp [swapMat, Matrix.of_apply, Matrix.mul_apply, Fin.sum_univ_two]
+    simp [pauliX, Matrix.of_apply, Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- The GHZ tensor is on-site symmetric under Z₂ = {1, σx}. -/
 theorem ghz_isOnSiteSymmetric_Z2 :

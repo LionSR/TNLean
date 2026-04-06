@@ -206,6 +206,7 @@ import TNLean.MPS.MPDO.Defs
 
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
+import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.ZMod2
 
