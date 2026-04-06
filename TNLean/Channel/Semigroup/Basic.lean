@@ -151,7 +151,7 @@ private theorem smul_comm_CLM
     (t s : ℂ) : Commute (t • L) (s • L) :=
   by
     ext X i j
-    simp [ContinuousLinearMap.mul_apply, mul_assoc, mul_left_comm, mul_comm]
+    simp [mul_left_comm]
 
 theorem expSemigroupCLM_add
     (L : MatrixCLM (Fin D))
@@ -174,7 +174,7 @@ theorem expSemigroupCLM_zero
     simp
   rw [expSemigroupCLM, Complex.ofReal_zero]
   rw [hz]
-  simpa using (NormedSpace.exp_zero : NormedSpace.exp (0 : MatrixCLM (Fin D)) = 1)
+  simp
 
 /-! ### Continuity of the exponential semigroup -/
 
@@ -311,6 +311,7 @@ theorem expSemigroup_isContinuousDynSemigroup
 /-! ## Proposition 7.1: Continuous semigroup → exp(tL) -/
 
 set_option maxHeartbeats 1200000 in
+-- The interval-integral differentiability argument triggers a heavy normalization step.
 /-- In a finite-dimensional normed algebra, the Bochner integral `(1/ε) • ∫₀^ε S(t) dt`
 is close to `S(0) = 1` for small `ε`, hence invertible. From this and the semigroup
 property, `S` is right-differentiable at `0`.
@@ -495,6 +496,7 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
   exact hder.hasDerivWithinAt.congr hS_eq (hS_eq 0 (Set.mem_Ici.mpr (le_refl 0)))
 
 set_option maxHeartbeats 800000 in
+-- The ODE uniqueness step over CLM endomorphisms needs extra heartbeats for elaboration.
 /-- **Wolf Proposition 7.1** (continuous semigroup → exponential form):
 Every norm-continuous dynamical semigroup on the finite-dimensional algebra
 `M_D(ℂ)` is of the form `T_t = exp(t • L)` for a unique generator `L`. -/
@@ -564,9 +566,10 @@ theorem continuousDynSemigroup_eq_exp
     (fun v hv => by
       have hvt : 0 ≤ v - u := sub_nonneg.mpr hv
       simpa [show u + (v - u) = v by ring] using hS_add u (v - u) hu hvt)
-    (by simpa [hS_zero])
+    (by simp [hS_zero])
 
 set_option maxHeartbeats 800000 in
+-- Comparing the one-sided derivatives of two exponential semigroups is elaboration-heavy.
 /-- Uniqueness of the generator: if `exp(t•L) = exp(t•L')` for all `t ≥ 0`,
 then `L = L'`. Proof: both CLM semigroups agree on `[0,∞)`, hence their
 derivatives within `[0,∞)` at `t = 0` agree. Since `[0,∞)` has unique
