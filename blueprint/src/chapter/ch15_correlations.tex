@@ -259,6 +259,31 @@ All three quantitative results below are now fully proved.
     See \cite[Definition~3.5]{Cirac2021Matrix}.
 \end{definition}
 
+\begin{theorem}[RG flow convergence for canonical-form tensors]%
+    \label{thm:rg_flow_converges_of_cf}
+    \lean{MPSTensor.rg_flow_converges_of_cf}
+    \leanok
+    \uses{def:is_canonical_form, def:transfer_map, def:fixed_point_proj,
+          thm:exponential_convergence_primitive}
+    For a tensor in canonical form with blocks $(A_k)$ and weights $(\mu_k)$,
+    the iterated blocking $\E_{A_k}^{2^n}$ converges pointwise to an
+    idempotent linear map $\E_\infty$ as $n\to\infty$.
+    That is, there exists $\E_\infty$ with $\E_\infty^2 = \E_\infty$ such that
+    $\E_{A_k}^{2^n}(\rho) \to \E_\infty(\rho)$ for all density matrices $\rho$.
+    This is \cite[Appendix~B]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    Each block is injective and left-canonical, so its transfer map is a
+    primitive channel with a unique positive-definite fixed point $\rho_0$.
+    The exponential convergence bound
+    $\lVert \E^n(X) - P(X)\rVert \le C(1-\delta)^n \lVert X\rVert$
+    (Theorem~\ref{thm:exponential_convergence_primitive}) then gives
+    pointwise convergence $\E^n(X)\to P(X)$, and composing with the
+    subsequence $2^n\to\infty$ yields the result.
+    The witness $\E_\infty = P$ is the rank-one fixed-point projection,
+    which is idempotent.
+\end{proof}
+
 \begin{remark}\label{rem:zero_correlation_length}
     \uses{thm:spectral_radius_le_one, def:correlation_length, def:is_rfp}
     The identity $\E^2=\E$ is equivalent to vanishing subleading spectrum;
