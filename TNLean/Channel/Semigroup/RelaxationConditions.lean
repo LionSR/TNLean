@@ -13,9 +13,9 @@ Wolf Corollary 7.2, each funneled through the already formalized bridge
 `¬ HasBlockUpperTriangularLindblad L → ¬ IsReducibleQDS L`.
 
 The conversion from each algebraic hypothesis to
-`¬ HasBlockUpperTriangularLindblad` is recorded as theorem placeholders
+`¬ HasBlockUpperTriangularLindblad` is recorded as helper theorems
 (`*_implies_no_blockUpperTriangular`) so downstream files can use uniform
-non-reducibility consequences while CI continues to track unfinished proofs.
+non-reducibility consequences.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace TNMatrixCFC
@@ -458,8 +458,11 @@ private theorem finrank_traceless_blockUT_add_D_le
       · exfalso
         have hi_not : i ∉ Finset.univ.filter (fun j => hP.1.1.eigenvalues j = 1) :=
           Finset.mem_filter.not.mpr (by push Not; intro _; linarith)
-        have : (Finset.univ.filter (fun j => hP.1.1.eigenvalues j = 1)).card < Finset.univ.card :=
-          Finset.card_lt_card ⟨Finset.filter_subset _ _, fun hsub => hi_not (hsub (Finset.mem_univ _))⟩
+        have : (Finset.univ.filter
+            (fun j => hP.1.1.eigenvalues j = 1)).card <
+            Finset.univ.card :=
+          Finset.card_lt_card ⟨Finset.filter_subset _ _,
+            fun hsub => hi_not (hsub (Finset.mem_univ _))⟩
         simp [Fintype.card_fin] at this; omega
       · exact h
     -- All eigenvalues 1 → P = 1 via spectral theorem
@@ -472,35 +475,8 @@ private theorem finrank_traceless_blockUT_add_D_le
     exact hP.2.2 this
   -- k * (D - k) ≥ D - 1 since (k-1)(D-k-1) ≥ 0 and 1 ≤ k ≤ D-1
   have hkDk : k * (D - k) ≥ D - 1 := by
-    -- k ≥ 1 and D - k ≥ 1. Need k*(D-k) ≥ D-1.
-    -- k*(D-k) = kD - k² ≥ D - 1 ⟺ kD - k² - D + 1 ≥ 0
-    -- ⟺ (k-1)(D-k) - (D-k) + (D-k) + 1 - 1 ≥ 0... actually:
-    -- k*(D-k) - (D-1) = (k-1)*(D-k) - (k-1) = (k-1)*(D-k-1) ≥ 0
-    -- since k ≥ 1 and D-k ≥ 1.
-    -- k*(D-k) ≥ D-1 for 1 ≤ k and k < D.
-    -- Equivalently: k*(D-k) + 1 ≥ D, which is (k-1)*(D-k-1) + D ≥ D.
-    -- More directly: since k ≥ 1, k*(D-k) ≥ 1*(D-k) = D-k ≥ 1.
-    -- And since D-k ≥ 1, k*(D-k) ≥ k*1 = k ≥ 1.
-    -- So k*(D-k) ≥ max(k, D-k) ≥ ⌈D/2⌉ ≥ D/2. Not quite enough.
-    -- The clean proof: k*(D-k) ≥ D-1 iff (k-1)*(D-k) ≥ k-1 iff (D-k) ≥ 1 (when k ≥ 1).
-    -- Since D-k ≥ 1 (from k < D), done.
-    -- In Nat: k*(D-k) = (k-1)*(D-k) + (D-k) ≥ 0 + (D-k). And D-k ≥ D-k.
-    -- Also k*(D-k) = k*(D-k-1) + k ≥ 0 + k = k.
-    -- So k*(D-k) ≥ D-k and k*(D-k) ≥ k. Hence k*(D-k) + k*(D-k) ≥ k + (D-k) = D.
-    -- So 2*k*(D-k) ≥ D, hence k*(D-k) ≥ D/2 ≥ (D-1)/2. Still not enough in general.
-    -- The correct proof: D-1 = (k-1) + (D-k) ≤ (k-1)*(D-k) + (D-k) = k*(D-k).
-    -- (k-1)*(D-k) ≥ k-1 because D-k ≥ 1.
-    -- Wait: D-1 = (k-1) + (D-k). And k*(D-k) = (k-1)*(D-k) + (D-k).
-    -- So k*(D-k) - (D-1) = (k-1)*(D-k) + (D-k) - (k-1) - (D-k)
-    --                     = (k-1)*(D-k) - (k-1) = (k-1)*(D-k-1) ≥ 0.
-    -- In Nat: k*(D-k) = (k-1)*(D-k) + 1*(D-k), and (D-1) = (k-1) + (D-k).
-    -- So k*(D-k) - (D-1) = (k-1)*(D-k) + (D-k) - (k-1) - (D-k) = (k-1)*((D-k)-1).
-    -- Since k ≥ 1 and D-k ≥ 1, this is ≥ 0.
-    -- k ≥ 1, D-k ≥ 1. k*(D-k) ≥ D-1.
-    -- Use: k*(D-k) ≥ 1*(D-k) = D-k ≥ 1 and k*(D-k) ≥ k since D-k ≥ 1
-    -- So k*(D-k) ≥ k and k*(D-k) ≥ D-k, thus k*(D-k) ≥ k + (D-k) - 1 = D-1... wrong.
-    -- Instead: use calc.
-    -- k*(D-k) = (k-1)*(D-k) + (D-k) ≥ (k-1) + (D-k) = D-1
+    -- D-1 = (k-1) + (D-k) ≤ (k-1)*(D-k) + (D-k) = k*(D-k)
+    -- since (k-1) ≤ (k-1)*(D-k) when D-k ≥ 1.
     have hDk : 1 ≤ D - k := Nat.sub_pos_of_lt hk_lt_D
     have step1 : k - 1 ≤ (k - 1) * (D - k) := Nat.le_mul_of_pos_right _ hDk
     have step2 : (k - 1) * (D - k) + (D - k) ≤ k * (D - k) := by
@@ -536,7 +512,9 @@ private theorem finrank_traceless_blockUT_add_D_le
           have := congr_arg (· * (U : Mat)) hP_spec
           simp only [Matrix.mul_assoc, hUU, Matrix.mul_one] at this
           exact this
-        have hUsP : (star (U : Mat)) * P = Matrix.diagonal (RCLike.ofReal ∘ eig) * (star (U : Mat)) := by
+        have hUsP : (star (U : Mat)) * P =
+            Matrix.diagonal (RCLike.ofReal ∘ eig) *
+            (star (U : Mat)) := by
           have := congr_arg ((star (U : Mat)) * ·) hP_spec
           simp only [← Matrix.mul_assoc, hUU, Matrix.one_mul] at this
           exact this
