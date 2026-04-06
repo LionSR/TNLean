@@ -36,14 +36,14 @@ variable {d D : ℕ}
 the connected two-point correlation function through the transfer map is
 constant in the separation for all local observables.
 
-For every nonzero positive semidefinite right fixed point `ρR` of the
-transfer map, the connected correlator `C(X,Y;n) = ⟨X₀Yₙ⟩ − ⟨X⟩⟨Y⟩` is the
-same for all separations `n ≥ 1` and all observables `X`, `Y`. Excluding
-`ρR = 0` avoids making the condition vacuous, since `0` is always a fixed
-point of the linear transfer map. -/
+For every positive definite right fixed point `ρR` of the transfer map, the
+connected correlator `C(X,Y;n) = ⟨X₀Yₙ⟩ − ⟨X⟩⟨Y⟩` is the same for all
+separations `n ≥ 1` and all observables `X`, `Y`. Requiring `ρR.PosDef`
+(positive definite) ensures the condition is non-vacuous — CID is only
+meaningful for genuine quantum states, not the zero matrix. -/
 def IsCID (A : MPSTensor d D) : Prop :=
   ∀ (ρR : Matrix (Fin D) (Fin D) ℂ),
-    ρR.PosSemidef → transferMap A ρR = ρR → ρR ≠ 0 →
+    ρR.PosDef → transferMap A ρR = ρR →
     ∀ (X Y : Matrix (Fin D) (Fin D) ℂ) (n m : ℕ),
       1 ≤ n → 1 ≤ m →
       connectedCorrelator A ρR X Y n = connectedCorrelator A ρR X Y m
@@ -82,7 +82,7 @@ theorem zcl_iff_idempotent_transfer (A : MPSTensor d D) :
   constructor
   · exact fun ⟨hLO, _⟩ => hLO
   · intro hRFP
-    refine ⟨hRFP, fun ρR _ _ _ X Y n m hn hm => ?_⟩
+    refine ⟨hRFP, fun ρR _ _ X Y n m hn hm => ?_⟩
     have hIdem : IsIdempotentElem (transferMap A) := hRFP
     have hpow_n : (transferMap A) ^ n = transferMap A :=
       hIdem.pow_eq (by omega)
