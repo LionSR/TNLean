@@ -66,10 +66,8 @@ theorem rg_flow_converges_of_cf {r : ℕ} {dim : Fin r → ℕ}
   -- Handle the degenerate dim k = 0 case (0×0 matrices are a subsingleton).
   by_cases hDk : dim k = 0
   · haveI : IsEmpty (Fin (dim k)) := by rw [hDk]; exact Fin.isEmpty
-    have heq : ∀ (a b : Matrix (Fin (dim k)) (Fin (dim k)) ℂ), a = b :=
-      fun a b => funext fun i => IsEmpty.elim ‹_› i
-    exact ⟨0, LinearMap.ext fun x => heq _ _, fun x =>
-      tendsto_const_nhds.congr fun _ => heq _ _⟩
+    refine ⟨0, LinearMap.ext fun x => Subsingleton.elim _ _, fun x => ?_⟩
+    exact tendsto_const_nhds.congr fun _ => Subsingleton.elim _ _
   · -- Main case: dim k ≥ 1.
     haveI : NeZero (dim k) := ⟨hDk⟩
     have htr : Matrix.trace ρ₀ ≠ 0 := ne_of_gt hufp.pos_def.trace_pos
