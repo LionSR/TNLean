@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Defs
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Algebra.Group.TypeTags.Basic
 
 /-!
 # GHZ state as a Matrix Product State
@@ -89,13 +91,10 @@ theorem ghz_not_isInjective : ¬ IsInjective ghzTensor := by
 
 private lemma zmod2_cases (g : Multiplicative (ZMod 2)) :
     g = 1 ∨ g = Multiplicative.ofAdd 1 := by
-  have : Multiplicative.toAdd g = 0 ∨ Multiplicative.toAdd g = 1 := by
-    rcases Multiplicative.toAdd g with ⟨v, hlt⟩
-    interval_cases v
-    · exact .inl (Fin.ext rfl)
-    · exact .inr (Fin.ext rfl)
-  rcases this with h | h <;> [left; right] <;>
-    exact Multiplicative.toAdd.injective (by simpa using h)
+  rcases Fintype.truncEquivFin (Multiplicative (ZMod 2)) with ⟨e⟩
+  fin_cases g
+  · left; rfl
+  · right; rfl
 
 private lemma zmod2_one_add_one : (1 : ZMod 2) + 1 = 0 := by decide
 
