@@ -5,9 +5,17 @@ on:
     types: [closed, reopened]
   pull_request:
     types: [closed, opened]
-  pull_request_review:
-    types: [submitted]
+  # NOTE: pull_request_review was removed to reduce excessive workflow runs.
+  # Every review submission (including comment-only) triggered a full
+  # checkout + Claude Code invocation, even though the job filter skipped
+  # comment-only reviews. The value (posting "approved" / "changes requested"
+  # notes on tracking issues via Playbook C) did not justify the cost.
+  # Re-enable if lightweight tracking of review states is needed.
 
+# Global concurrency group (not per-PR/issue) because a PR merge with
+# "Closes #N" fires both pull_request/closed and issues/closed, and both
+# may read-modify-write the same tracking issue body. A single queue with
+# cancel-in-progress: false serializes all runs to prevent lost writes.
 concurrency:
   group: issue-tracker
   cancel-in-progress: false
@@ -19,8 +27,7 @@ jobs:
       !github.event.pull_request.head.repo.fork &&
       (
         (github.event_name == 'issues' && (github.event.issue.state_reason == 'completed' || github.event.action == 'reopened')) ||
-        (github.event_name == 'pull_request' && (github.event.action != 'closed' || github.event.pull_request.merged == true)) ||
-        (github.event_name == 'pull_request_review' && github.event.review.state != 'commented')
+        (github.event_name == 'pull_request' && (github.event.action != 'closed' || github.event.pull_request.merged == true))
       )
     runs-on: ubuntu-latest
     permissions:
@@ -73,8 +80,6 @@ jobs:
             ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && format('- **Head branch**: {0}', github.event.pull_request.head.ref) || '' }}
             ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && format('- **Base SHA**: {0}', github.event.pull_request.base.sha) || '' }}
             ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && format('- **Head SHA**: {0}', github.event.pull_request.head.sha) || '' }}
-            ${{ github.event_name == 'pull_request_review' && format('- **Review state**: {0}', github.event.review.state) || '' }}
-            ${{ github.event_name == 'pull_request_review' && format('- **Reviewer**: {0}', github.event.review.user.login) || '' }}
 
             ---
 
@@ -305,11 +310,9 @@ jobs:
 
             ---
 
-            ### Playbook C: PR Opened or Review Submitted
+            ### Playbook C: PR Opened
 
-            **When**: `pull_request` / `opened`, or `pull_request_review` /
-            `submitted` (excluding comment-only reviews, filtered by the
-            workflow `if` condition)
+            **When**: `pull_request` / `opened`
 
             This is lightweight — most events need no action.
 
@@ -321,10 +324,6 @@ jobs:
                - **PR opened** — only for branches that do NOT start with
                  `claude/` or `codex/` (PR Cleanup already handles those):
                  "🔄 #<PR> opened to address #<issue>"
-               - **Review approved** (state `approved`):
-                 "✅ #<PR> approved, ready to merge"
-               - **Changes requested** (state `changes_requested`):
-                 "⚠️ Changes requested on #<PR> by @<reviewer>"
             4. Skip everything else silently.
 
             ---

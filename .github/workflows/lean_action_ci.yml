@@ -10,12 +10,17 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
   pull_request:
+    types: [opened, synchronize, reopened]
     paths:
       - '**.lean'
       - 'lakefile.*'
       - 'lean-toolchain'
       - 'lake-manifest.json'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
