@@ -89,11 +89,15 @@ theorem ghz_not_isInjective : ¬ IsInjective ghzTensor := by
 
 private lemma zmod2_cases (g : Multiplicative (ZMod 2)) :
     g = 1 ∨ g = Multiplicative.ofAdd 1 := by
-  rcases (g : Fin 2) with ⟨v, hlt⟩
-  interval_cases v <;> [left; right] <;> exact Fin.ext rfl
+  have : Multiplicative.toAdd g = 0 ∨ Multiplicative.toAdd g = 1 := by
+    rcases Multiplicative.toAdd g with ⟨v, hlt⟩
+    interval_cases v
+    · exact .inl (Fin.ext rfl)
+    · exact .inr (Fin.ext rfl)
+  rcases this with h | h <;> [left; right] <;>
+    exact Multiplicative.toAdd.injective (by simpa using h)
 
-private lemma zmod2_one_add_one : (1 : ZMod 2) + 1 = 0 := by
-  show (⟨1, by omega⟩ : Fin 2) + ⟨1, by omega⟩ = 0; ext; simp [Fin.add_def]
+private lemma zmod2_one_add_one : (1 : ZMod 2) + 1 = 0 := by decide
 
 /-- The swap (Pauli X) matrix. -/
 private def swapMat : Matrix (Fin 2) (Fin 2) ℂ :=
