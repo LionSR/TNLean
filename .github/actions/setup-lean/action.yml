@@ -24,4 +24,4 @@ runs:
     - name: Install leanblueprint
       if: inputs.install-blueprint == 'true'
       shell: bash
-      run: pipx install leanblueprint
+      run: pip install leanblueprint
