@@ -843,16 +843,20 @@ cohomologous~\cite{ChenGuWen2011}.
     \leanok
     \uses{def:is_same_spt_phase,
           thm:has_string_order_of_symmetric_injective}
-    If $A$ and $B$ are in the same SPT phase
-    (Definition~\ref{def:is_same_spt_phase}) and both satisfy the
+    If $A$ and $B$ are injective and in the same SPT phase
+    (Definition~\ref{def:is_same_spt_phase}), and both satisfy the
     canonical normalisation hypotheses, then for every $g\in G$,
     string order exists for $A$ with twist $U(g)$ if and only if it
-    exists for $B$.
+    exists for $B$.  On-site symmetry of both tensors is derived from
+    the same-phase witness via gauge equivalence.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:has_string_order_of_symmetric_injective}
-    Both directions follow from
+    The same-phase hypothesis provides virtual representation
+    intertwining for both tensors; via gauge equivalence and
+    \texttt{GaugeEquiv.sameMPV} this yields on-site symmetry.
+    Both directions then follow from
     Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which
     shows that string order holds universally for injective symmetric
     tensors with canonical normalisations.
