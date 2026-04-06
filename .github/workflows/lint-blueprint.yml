@@ -5,11 +5,25 @@ on:
     branches:
       - main
     paths:
+      - '**.lean'
+      - 'lakefile.*'
+      - 'lean-toolchain'
+      - 'lake-manifest.json'
+      - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'blueprint/lean_decls'
+      - 'scripts/blueprint_lean_sync.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
+      - '**.lean'
+      - 'lakefile.*'
+      - 'lean-toolchain'
+      - 'lake-manifest.json'
+      - '.github/workflows/lint-blueprint.yml'
       - 'blueprint/src/**'
+      - 'blueprint/lean_decls'
+      - 'scripts/blueprint_lean_sync.py'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -26,13 +40,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
-
-      - name: Install leanblueprint
-        run: |
-          pip install leanblueprint
-          pip install plastex
+      - name: Set up Lean and blueprint tooling
+        uses: ./.github/actions/setup-lean
+        with:
+          install-blueprint: 'true'
 
       - name: Run leanblueprint web and check for errors
         working-directory: blueprint
@@ -56,3 +67,9 @@ jobs:
           if [ "$cmd_status" -ne 0 ]; then
             exit "$cmd_status"
           fi
+
+      - name: Check blueprint and Lean source stay in sync
+        run: python3 scripts/blueprint_lean_sync.py --root . --ci
+
+      - name: Check blueprint Lean declarations
+        run: lake exe checkdecls blueprint/lean_decls
