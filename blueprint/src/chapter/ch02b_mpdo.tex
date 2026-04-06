@@ -146,7 +146,8 @@ legs cyclically and taking the resulting trace.
     \uses{def:mpo_tensor}
     An MPO tensor is an \emph{LPDO} if there exist an ancilla dimension $d_K$,
     an inner bond dimension $D'$, an identification of bond indices
-    $e : \Fin D \simeq \Fin {D'} \times \Fin {D'}$ (equivalently, $D$ and $(D')^2$
+    $e : \{0, \ldots, D - 1\} \simeq \{0, \ldots, D' - 1\} \times \{0, \ldots, D' - 1\}$
+    (equivalently, $D$ and $(D')^2$
     have the same cardinality), and matrices $A^{(i,k)} \in \MN{D'}$ such that
     \[
         M^{ij}
@@ -155,7 +156,8 @@ legs cyclically and taking the resulting trace.
     \]
     where $\otimes$ denotes the Kronecker product, $\overline{(\cdot)}$
     denotes entrywise complex conjugation, and $(\cdot)_{e,e}$ denotes
-    reindexing along $e$ from $\Fin {D'} \times \Fin {D'}$ back to $\Fin D$.
+    reindexing along $e$ from $\{0, \ldots, D' - 1\} \times \{0, \ldots, D' - 1\}$
+    back to $\{0, \ldots, D - 1\}$.
     This is the local purification form of \cite[\S4.3]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
