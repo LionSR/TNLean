@@ -82,12 +82,29 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- The blocks form a **cyclic sector decomposition** of `blockTensor A m`, witnessed by
+orthogonal projections `P` satisfying the cyclic commutation relation
+`P k * (blockTensor A m) i = (blockTensor A m) i * P (k + 1)`. This ties
+the `Fin m` indexing of the compressed blocks to the physical cyclic shift
+structure of the transfer map's peripheral spectrum, and each block is
+MPV-equivalent to the corresponding ambient sector tensor `P k · A^(m)`. -/
+def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
+    {dim : Fin m → ℕ}
+    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)) : Prop :=
+  ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ),
+    (∀ k, IsOrthogonalProjection (P k)) ∧
+    (∑ k : Fin m, P k = 1) ∧
+    (∀ k (i : Fin (blockPhysDim d m)),
+      P k * (blockTensor A m) i = (blockTensor A m) i * P (k + 1)) ∧
+    (∀ k, SameMPV₂ (leftSectorTensor (P k) (blockTensor A m)) (blocks k))
+
 private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) := by
+      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
+      IsCyclicSectorDecomp A blocks := by
   obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
     conjTranspose_kraus_setup A hP.leftCanonical hP.irreducible
   obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
@@ -162,8 +179,12 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
           _ = (ω ^ m) ^ (j : ℕ) := by rw [pow_mul]
           _ = 1 := by simp [hωprim.pow_eq_one]
       simpa [hperiph_roots] using hpow
-  exact exists_cyclic_sector_decomp_after_blocking
+  obtain ⟨dim, blocks, hLC, hMPV⟩ := exists_cyclic_sector_decomp_after_blocking
     A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
+  exact ⟨dim, blocks, hLC, hMPV, by
+    -- The cyclic projections P are produced internally by the cyclic decomposition;
+    -- extracting them requires threading them through the Assembly API.
+    sorry⟩
 
 /-! ## Self-overlap (first paragraph of Appendix A) -/
 
@@ -217,8 +238,9 @@ zero-dimensional "missing sector" case. With the current definitions, an
 assumption is used to focus on genuine nonempty sectors.
 
 The `hBlocks_mpv` hypothesis ties the compressed block decomposition back to
-the original blocked tensor, ensuring the blocks genuinely arise from a
-cyclic-sector decomposition. -/
+the original blocked tensor, and `hCyclic` ensures the block indexing
+follows the cyclic orbit structure of the transfer map's peripheral
+spectrum (see `IsCyclicSectorDecomp`). -/
 lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
@@ -231,6 +253,7 @@ lemma sectorBlocked_isNormal_of_isPeriodic
     (hBlocks_mpv :
       SameMPV₂ (blockTensor A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocks))
+    (hCyclic : IsCyclicSectorDecomp A blocks)
     (u : Fin m) (hNonzero : dim u ≠ 0) :
     IsNormal (blocks u) := by
   sorry
@@ -276,6 +299,8 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
     (hB_mpv :
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     (hNoMatch : ∀ u v (hdim : dimA u = dimB v),
       dimA u ≠ 0 →
       ¬ GaugePhaseEquiv
@@ -299,6 +324,12 @@ translation operator `T^l` for `l = 1, …, m-1` yields matching for all
 sector pairs `(u₀ + l, v₀ + l)`. Each offset `l` gets its own gauge
 (the paper's Eq. blockedABprop produces a different unitary at each
 sector, not a single transported gauge).
+
+The `hA_cyclic`/`hB_cyclic` hypotheses (see `IsCyclicSectorDecomp`)
+tie the `Fin m` block indexing to the cyclic orbit structure of the
+transfer map, which is essential: without them, `SameMPV₂` alone is
+permutation-invariant over blocks and would not justify the shifted
+conclusion `(u₀ + l, v₀ + l)`.
 
 The left-canonical hypotheses (`hA_lc`, `hB_lc`) ensure the propagated
 phases are unit-modulus: the transfer operator preserves the
@@ -326,6 +357,8 @@ lemma sectorMatch_propagation
     (hB_mpv :
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     {u₀ : Fin m} {v₀ : Fin m}
     (hdim₀ : dimA u₀ = dimB v₀)
     (hMatch : GaugePhaseEquiv
@@ -385,6 +418,8 @@ lemma sectorTensor_proportional_of_blockedMatch
     (hB_mpv :
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     (q : Fin m)
     (hBlockMatch : ∀ u : Fin m,
       ∃ (hdim : dimA u = dimB (u + q)),
@@ -412,7 +447,8 @@ transformation with a unit-modulus phase: `A^i = e^{iξ} U B^i U†`.
 
 The hypotheses mirror the compressed corner API: `blocksA`/`blocksB` are
 the cyclic-sector tensors on corner bond spaces, tied back to the
-original blocked tensors via `SameMPV₂`. The `hSomeMatch` witness
+original blocked tensors via `SameMPV₂` and to the cyclic orbit
+structure via `IsCyclicSectorDecomp`. The `hSomeMatch` witness
 provides a single matching sector pair `(u₀, v₀)` with compatible
 dimensions and nonzero bond dimension (`dimA u₀ ≠ 0`), which excludes
 the degenerate case where a zero-dimensional `GaugePhaseEquiv` holds
@@ -440,6 +476,8 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
     (hB_mpv :
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     (hSomeMatch : ∃ (u₀ v₀ : Fin m) (hdim : dimA u₀ = dimB v₀),
       dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
         (cast (congr_arg
