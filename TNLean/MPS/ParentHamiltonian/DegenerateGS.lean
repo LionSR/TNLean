@@ -49,17 +49,80 @@ noncomputable def bntSpan
     Submodule ℂ (NSiteSpace d N) :=
   Submodule.span ℂ (Set.range fun j : Fin r => (mpv (A j) : NSiteSpace d N))
 
+/-- Ground space of any block `A j` is contained in the ground space of the
+assembled tensor `toTensorFromBlocks μ A`, provided `μ j ≠ 0`.
+
+The witness embeds `(μ j)⁻¹ ^ L • Y` into the `j`-th diagonal block of the
+assembled matrix. -/
+private lemma groundSpace_block_le_assembled
+    (μ' : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (j : Fin r) (hμj : μ' j ≠ 0) (L : ℕ) :
+    groundSpace (A j) L ≤ groundSpace (toTensorFromBlocks μ' A) L := by
+  classical
+  intro ψ hψ
+  rw [groundSpace, LinearMap.mem_range] at hψ ⊢
+  obtain ⟨Y, rfl⟩ := hψ
+  let e : ((k : Fin r) × Fin (dim k)) ≃ Fin (∑ k, dim k) := finSigmaFinEquiv
+  let Xblock : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
+    fun k => if h : k = j then h ▸ ((μ' j)⁻¹ ^ L • Y) else 0
+  refine ⟨(Matrix.reindex e e) (Matrix.blockDiagonal' Xblock), ?_⟩
+  ext σ
+  simp only [groundSpaceMap_apply]
+  set w := List.ofFn σ with hw
+  have hwlen : w.length = L := by simp [w]
+  -- Rewrite evalWord of assembled tensor as reindexed block-diagonal
+  let BD := fun i : Fin d =>
+    Matrix.blockDiagonal' (fun k => μ' k • A k i)
+  have hEval : MPSTensor.evalWord (toTensorFromBlocks μ' A) w =
+      (Matrix.reindex e e) (_root_.evalWord BD w) := by
+    simpa [toTensorFromBlocks, BD, e,
+      show (fun i : Fin d => toTensorFromBlocks μ' A i) =
+        fun i => (Matrix.reindex e e) (BD i) from by funext i; rfl]
+      using evalWord_reindex (e := e) (A := BD) w
+  rw [hEval,
+    show Matrix.reindex e e (_root_.evalWord BD w) *
+        Matrix.reindex e e (Matrix.blockDiagonal' Xblock) =
+      Matrix.reindex e e (_root_.evalWord BD w * Matrix.blockDiagonal' Xblock) from by
+      simp [Matrix.reindex_apply, Matrix.submatrix_mul_equiv],
+    Matrix.trace_reindex,
+    show _root_.evalWord BD w = Matrix.blockDiagonal'
+        (fun k => (μ' k) ^ w.length • _root_.evalWord (A k) w) from by
+      simpa [BD] using evalWord_blockDiagonal'_smul μ' A w,
+    ← Matrix.blockDiagonal'_mul, Matrix.trace_blockDiagonal']
+  rw [Finset.sum_eq_single j]
+  · -- j-th term: scalar cancellation μ^L · μ⁻¹^L = 1
+    simp only [Xblock, dif_pos rfl, hwlen]
+    rw [Algebra.smul_mul_assoc, Algebra.mul_smul_comm, smul_smul,
+      show (μ' j) ^ L * (μ' j)⁻¹ ^ L = 1 from by
+        rw [← mul_pow, mul_inv_cancel₀ hμj, one_pow],
+      one_smul, evalWord_aux_eq]
+  · -- k ≠ j: block is zero
+    intro k _ hkj
+    simp [Xblock, hkj]
+  · -- j ∈ Finset.univ
+    intro h; exact absurd (Finset.mem_univ j) h
+
 /-- `⊇` direction: each BNT block MPV lies in the parent-Hamiltonian ground
 space of the assembled tensor.
 
-TODO(#195): prove via trace cyclicity and the local ground-space membership
-lemma `mpv_window_mem_groundSpace`. -/
+The proof lifts `mpv_mem_chainGroundSpace` from the block level to the
+assembled tensor using `groundSpace_block_le_assembled`. -/
 theorem bnt_mem_groundSpace
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hCF : IsCanonicalFormBNT μ A) {L N : ℕ} (hL : 1 < L) (hN : N ≥ L + 1)
     (j : Fin r) :
     (mpv (A j) : NSiteSpace d N) ∈ parentHamiltonianGroundSpace (μ := μ) A L N := by
-  sorry
+  simp only [parentHamiltonianGroundSpace_eq]
+  have hLN : L ≤ N := by omega
+  have hN' : 0 < N := by omega
+  have hμj : μ j ≠ 0 := hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero j
+  -- mpv (A j) ∈ chainGroundSpace (A j) L N by trace cyclicity
+  have hmem := mpv_mem_chainGroundSpace (A j) L N hN' hLN
+  -- Lift: chainGroundSpace (A j) ≤ chainGroundSpace (toTensorFromBlocks μ A)
+  rw [chainGroundSpace, dif_pos ⟨hN', hLN⟩] at hmem ⊢
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hmem ⊢
+  intro i τ
+  exact groundSpace_block_le_assembled μ A j hμj L (hmem i τ)
 
 /-- **Degenerate ground space = span of BNT states** for block-injective parent
 Hamiltonians.
