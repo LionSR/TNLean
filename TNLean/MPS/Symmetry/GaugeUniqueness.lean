@@ -47,7 +47,8 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : IsInjective A)
           rw [← hX i, hY i]
         have hXY' := congrArg
           (fun M : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ =>
-            ((X⁻¹ : GL (Fin (Nat.succ D')) ℂ) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * M *
+            ((X⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
+                Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * M *
               (Y : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) hXY
         simpa [Z, Matrix.mul_assoc] using hXY'.symm
       have hscalar := Matrix.isScalar_of_commute_span_eq_top
@@ -59,20 +60,29 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : IsInjective A)
       have hc_ne : c ≠ 0 := by
         intro hc0
         have hZ0 : (Z : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) = 0 := by
-          simpa [hc0] using hc
+          calc
+            (Z : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
+                = Matrix.scalar (Fin (Nat.succ D')) c := hc
+            _ = 0 := by
+                ext i j
+                simp [hc0]
         have hmul :
             (Z : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
-                (((Z⁻¹ : GL (Fin (Nat.succ D')) ℂ) : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) = 1 := by
+                (((Z⁻¹ : GL (Fin (Nat.succ D')) ℂ) :
+                  Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) = 1 := by
           simp
         rw [hZ0, zero_mul] at hmul
-        exact (one_ne_zero : (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) ≠ 0) hmul.symm
+        exact
+          (one_ne_zero :
+            (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) ≠ 0) hmul.symm
       refine ⟨Units.mk0 c hc_ne, ?_⟩
       calc
         (Y : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)
             = (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
                 (Z : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
               simp [Z]
-        _ = (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) * Matrix.scalar (Fin (Nat.succ D')) c := by
+        _ = (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
+              Matrix.scalar (Fin (Nat.succ D')) c := by
               simp [hc]
         _ = (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) *
               (c • (1 : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ)) := by
@@ -80,7 +90,8 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : IsInjective A)
         _ = c • (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
               ext i j
               simp [Matrix.mul_apply, Matrix.one_apply, mul_comm]
-        _ = ((Units.mk0 c hc_ne : Units ℂ) : ℂ) • (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
+        _ = ((Units.mk0 c hc_ne : Units ℂ) : ℂ) •
+              (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
               simp
 
 /-- A Same-MPV corollary: after obtaining any two gauges from the single-block FT,

@@ -97,6 +97,7 @@ import TNLean.Channel.Peripheral.Powers
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.Channel.Peripheral.CyclicGroup
+import TNLean.Channel.Semigroup.RelaxationConditions
 
 -- Layer 2c: Spectral theory (QPF + spectral gap)
 import TNLean.QPF.PosDef
@@ -182,7 +183,10 @@ import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
+import TNLean.MPS.CanonicalForm.SectorIrreducibility
 import TNLean.MPS.CanonicalForm.Assembly
+import TNLean.MPS.CanonicalForm.BNTGrouping
+import TNLean.MPS.CanonicalForm.EqualNormBridge
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Periodic.Defs

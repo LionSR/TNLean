@@ -130,7 +130,7 @@ theorem cp_semigroup_implies_ccp_generator
       change P * Matrix.omegaProj D * P = 0
       have hPω : P * Matrix.omegaProj D = 0 := by
         simpa [P] using Matrix.one_sub_omegaProj_mul_omegaProj (d := D)
-      simpa [Matrix.mul_assoc, hPω]
+      simp [hPω]
     rw [hasDerivAt_iff_tendsto_slope] at hg_deriv hgp_deriv
     have hg_slope :
         Filter.Tendsto (slope g 0) (nhdsWithin 0 (Set.Ioi 0))
@@ -156,7 +156,7 @@ theorem cp_semigroup_implies_ccp_generator
       have hscaledC : (((t - 0)⁻¹ : ℂ) • gp t).PosSemidef := by
         simpa using hpsd.smul hscaleC
       have hcast : ((↑t : ℂ)⁻¹) = ((t⁻¹ : ℝ) : ℂ) := by
-        simpa using (map_inv₀ (algebraMap ℝ ℂ) t)
+        exact (map_inv₀ (algebraMap ℝ ℂ) t).symm
       have hscaled : (t⁻¹ • gp t).PosSemidef := by
         change ((((t⁻¹ : ℝ) : ℂ)) • gp t).PosSemidef
         rw [← hcast]
@@ -229,7 +229,6 @@ private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D)
     ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * ρ * G.κᴴ)
   simp only [Complex.coe_smul, Kraus.mapLM_apply, Kraus.map_apply, Finset.univ_unique,
     Fin.default_eq_zero, Fin.isValue, Finset.sum_const, Finset.card_singleton, one_smul,
-    GeneratorDecomp.toLinearMap_apply, quadMap_apply, pow_two,
     sub_eq_add_neg]
   have hconj : (1 + -(s • G.κ))ᴴ = 1 + -(s • G.κᴴ) := by
     simp
@@ -239,11 +238,11 @@ private theorem eulerStep_apply (G : GeneratorDecomp D) (s : ℝ) (ρ : sgMat D)
           rw [hconj]
     _ = ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * ρ * G.κᴴ) := by
           simp only [Matrix.mul_add, add_mul, Matrix.mul_one, Matrix.one_mul, smul_mul_assoc,
-            mul_assoc, neg_mul, mul_neg, smul_neg]
+            mul_assoc, neg_mul, mul_neg]
           have hρκ : ρ * (s • G.κᴴ) = s • (ρ * G.κᴴ) := by
             simp
           have hκρκ : G.κ * (s • (ρ * G.κᴴ)) = s • (G.κ * (ρ * G.κᴴ)) := by
-            simp [smul_mul_assoc, mul_assoc]
+            simp
           rw [hρκ, hκρκ]
           have hrhs :
               ρ + s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ)) + (s * s) • (G.κ * (ρ * G.κᴴ)) =
@@ -270,19 +269,15 @@ private theorem eulerStep_toCLM_eq (G : GeneratorDecomp D) (s : ℝ) :
   change (eulerStep G s ρ) i j =
     (ρ + (s : ℂ) • G.toLinearMap ρ + ((s ^ 2 : ℝ) : ℂ) • quadMap G ρ) i j
   rw [eulerStep_apply]
-  simp [Complex.real_smul, sub_eq_add_neg, quadMap_apply, GeneratorDecomp.toLinearMap_apply,
-    pow_two]
-  have hrhs :
-      (s • G.φ ρ) i j + -(s • (G.κ * ρ)) i j + -(s • (ρ * G.κᴴ)) i j =
-        (↑s : ℂ) * G.φ ρ i j + -((↑s : ℂ) * (G.κ * ρ) i j) + -((↑s : ℂ) * (ρ * G.κᴴ) i j) := by
-    simp [Complex.real_smul]
-  calc
-    ↑s * (G.φ ρ i j + -(G.κ * ρ) i j + -(ρ * G.κᴴ) i j) =
-        (↑s : ℂ) * G.φ ρ i j + -((↑s : ℂ) * (G.κ * ρ) i j) +
-          -((↑s : ℂ) * (ρ * G.κᴴ) i j) := by
-            ring
-    _ = (s • G.φ ρ) i j + -(s • (G.κ * ρ)) i j + -(s • (ρ * G.κᴴ)) i j := by
-          exact hrhs.symm
+  rw [quadMap_apply, GeneratorDecomp.toLinearMap_apply]
+  simp only [add_apply, smul_apply, neg_apply, Complex.real_smul, Complex.ofReal_mul,
+    Complex.coe_smul, smul_eq_mul, sub_eq_add_neg, pow_two]
+  have hsmul :
+      (s • (G.φ ρ + -(G.κ * ρ) + -(ρ * G.κᴴ))) i j =
+        ↑s * (G.φ ρ i j + -(G.κ * ρ) i j + -(ρ * G.κᴴ) i j) := by
+    simp only [smul_apply, add_apply, neg_apply, Complex.real_smul]
+  rw [← hsmul]
+  rfl
 
 set_option maxHeartbeats 1000000 in
 -- The specialization of the generic exponential remainder estimate to CLM endomorphisms
