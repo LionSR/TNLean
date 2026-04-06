@@ -823,6 +823,11 @@ private theorem exists_traceless_blockUT_lindblad_form
       simp only [Matrix.traceLinearMap_apply]
       exact hc j
 
+/-- Condition (3): Kossakowski rank `> D * D` forbids block-upper-triangular
+Lindblad decompositions (Wolf Cor. 7.2(3)).
+
+The hypothesis is stated using addition (`rank + D ≥ D ^ 2 + 1`) to avoid
+natural-number subtraction issues; this is equivalent to `rank > D * D`. -/
 theorem large_kossakowski_rank_implies_no_blockUpperTriangular
     (F : LindbladForm D)
     (hRank : kossakowskiRank F.toLinearMap + D ≥ D ^ 2 + 1) :
