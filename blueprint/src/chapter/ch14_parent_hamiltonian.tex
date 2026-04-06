@@ -461,6 +461,18 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   restriction maps; otherwise it is set to $\top$ by convention.
 \end{definition}
 
+\begin{theorem}[MPV nonvanishing for block-injective tensors]%
+  \label{thm:mpv_ne_zero_blk_injective}
+  \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
+  \leanok
+  \uses{def:mpv, def:l_blk_injective}
+  If $A$ is $L_0$-block-injective with $L_0 > 0$ and $N \ge L_0 + 1$,
+  then $\mathrm{mpv}(A) \ne 0$ in the $N$-site space.  The proof uses a
+  descent argument: assuming all traces of length-$N$ products vanish,
+  trace nondegeneracy forces all products of length $N - L_0$ to vanish,
+  and induction reaches a contradiction.
+\end{theorem}
+
 \begin{theorem}[Unique ground state on the periodic chain]%
   \label{thm:ground_space_unique_periodic}
   \lean{MPSTensor.groundSpace_unique_periodic}

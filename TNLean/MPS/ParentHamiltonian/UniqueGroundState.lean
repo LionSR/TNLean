@@ -242,7 +242,7 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
       -- This is a trace of a length-N word product, hence 0.
       have hlen : (List.ofFn σ₁ ++ w₂).length = N := by simp [hw₂]; omega
       let σ' : Fin N → Fin d :=
-        fun i => (List.ofFn σ₁ ++ w₂).get ⟨i.val, hlen ▸ i.isLt⟩
+        fun i => (List.ofFn σ₁ ++ w₂).get ⟨i.val, hlen.symm ▸ i.isLt⟩
       have hw_eq : List.ofFn σ' = List.ofFn σ₁ ++ w₂ := by
         apply List.ext_get
         · simp [hw₂]; omega
@@ -258,16 +258,30 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
 
 /-! ### Uniqueness theorems -/
 
-/-- On a periodic chain, the parent-Hamiltonian ground space coincides with the
-span of the MPV. Generalized to block-injective tensors: if `A` is
-`L₀`-block-injective and the window size satisfies `L > L₀`, the chain ground
-space equals the MPV submodule.
+/-- On a periodic chain, the block-injective parent-Hamiltonian ground space
+coincides with the span of the MPV when the window size satisfies `L ≥ 2L₀`.
 
-When `L₀ = 1`, this recovers the injective case. -/
+For `L₀`-block-injective tensors, the blocked tensor `A^[L₀]` is injective,
+and the standard open-chain intersection argument requires a window of at
+least `2` blocks, giving `L ≥ 2L₀`. -/
 -- TODO(parent-hamiltonian): derive from cyclic-window `chainGroundSpace` definition
 -- and the proved open-chain intersection property.
 theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀)
+    {L N : ℕ} (hN : 2 ≤ N) (hL : 2 * L₀ ≤ L) (hLN : L ≤ N) :
+    chainGroundSpace A L N = mpvSubmodule A N := by
+  sorry
+
+/-- On a periodic chain, the normal parent-Hamiltonian ground space coincides
+with the span of the MPV with the reduced window `L > L₀` (instead of `2L₀`).
+
+The normality hypothesis enables the range reduction from `2L₀` to `L₀ + 1`
+via the structure theory of normal MPS (peripheral spectrum, canonical form).
+See [CPGSV21] arXiv:2011.12127 §IV.C. -/
+-- TODO(parent-hamiltonian): derive using the normal-form range reduction and
+-- the cyclic-window definition of `chainGroundSpace`.
+theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
+    (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
   sorry
@@ -296,7 +310,7 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
       · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
       · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
     rw [hrange]; exact hA
-  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hInj1 hN hL hLN]
+  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hInj1 hN (by omega) hLN]
   have hmpv : (mpv A : NSiteSpace d N) ≠ 0 := by
     intro hzero
     have hEq :
@@ -317,7 +331,8 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
-  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hA (by omega) (by omega) hN]
+  rw [HasUniqueGroundState,
+    chainGroundSpace_eq_mpvSubmodule hA (by omega) (le_refl _) hN]
   have hmpv : (mpv A : NSiteSpace d N) ≠ 0 :=
     mpv_ne_zero_of_isNBlkInjective hA hL₀ (by omega)
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
@@ -328,13 +343,14 @@ If `A` is normal and `L₀`-block-injective with `L₀ > 0`, the interaction ran
 can be reduced from `2L₀` to `L₀ + 1`. The chain ground space with window
 `L₀ + 1` on `N ≥ L₀ + 1` sites has a unique ground state.
 
-The proof reduces to `chainGroundSpace_eq_mpvSubmodule` with `L = L₀ + 1`, then
-shows the MPV submodule is one-dimensional via `mpv_ne_zero_of_isNBlkInjective`. -/
+The proof reduces to `chainGroundSpace_eq_mpvSubmodule_normal` with `L = L₀ + 1`,
+then shows the MPV submodule is one-dimensional via `mpv_ne_zero_of_isNBlkInjective`. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (_hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
-  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hInj (by omega) (by omega) hN]
+  rw [HasUniqueGroundState,
+    chainGroundSpace_eq_mpvSubmodule_normal hA hInj (by omega) (by omega) hN]
   have hmpv : (mpv A : NSiteSpace d N) ≠ 0 :=
     mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
