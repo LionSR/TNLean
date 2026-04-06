@@ -21,7 +21,7 @@ This module contains:
 ## Status for §4 (as of merged periodic FT infrastructure)
 
 * Corollary 4.1 (symmetry corollary): reduced to one call to the periodic
-  equal-case FT, now that `isIrreducibleForm_rotatePhysical` is available.
+  equal-case FT, now that `isIrreducibleForm_rotatePhysical` is fully proven.
 * Theorem 4.1 (`p`-refinement): still needs the periodic-block
   phase-distribution construction from §4.
 -/
@@ -192,21 +192,59 @@ theorem isPeriodic_rotatePhysical (m : ℕ) (A : MPSTensor d D) (u : Matrix (Fin
 
 /-! ### SameMPV₂ preservation under rotation -/
 
+/-- Strengthened induction: for any prefix word `p`, the trace of
+`evalWord A p * evalWord (rotatePhysical u A) w` equals the corresponding
+expression with `B`. This generalises the `coeff` equality needed for
+`sameMPV₂_rotatePhysical`. -/
+private lemma trace_evalWord_rotatePhysical_prefix {D₁ D₂ : ℕ}
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (h : ∀ w : List (Fin d), coeff A w = coeff B w)
+    (p : List (Fin d)) :
+    ∀ w : List (Fin d),
+      Matrix.trace (evalWord A p * evalWord (rotatePhysical u A) w) =
+      Matrix.trace (evalWord B p * evalWord (rotatePhysical u B) w) := by
+  intro w
+  induction w generalizing p with
+  | nil => simp only [evalWord_nil, mul_one, coeff_eq] at *; exact h p
+  | cons i w ih =>
+    simp only [evalWord_cons, rotatePhysical_apply]
+    -- Helper: expand trace(prefix * (∑ j, u i j • C j) * tail) as
+    -- ∑ j, u i j * trace(evalWord C (p ++ [j]) * tail)
+    have expand : ∀ {D' : ℕ} (C : MPSTensor d D'),
+        Matrix.trace (evalWord C p * ((∑ j : Fin d, u i j • C j) *
+          evalWord (rotatePhysical u C) w)) =
+        ∑ j : Fin d, u i j * Matrix.trace (evalWord C (p ++ [j]) *
+          evalWord (rotatePhysical u C) w) := by
+      intro D' C
+      rw [← Matrix.mul_assoc, Matrix.mul_sum]
+      simp_rw [mul_smul_comm, Matrix.sum_mul, smul_mul_assoc,
+        Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul]
+      congr 1; funext j; congr 1; congr 1
+      rw [evalWord_append, evalWord_cons, evalWord_nil, mul_one]
+    rw [expand A, expand B]
+    congr 1; funext j; congr 1
+    exact ih (p ++ [j])
+
 /-- If `A` and `B` generate the same MPV family, so do their physical-index
 rotations `rotatePhysical u A` and `rotatePhysical u B`.
 
-**Proof sketch** (not yet formalized): The MPV coefficient of the rotated tensor
-can be expanded as
-`mpv (rotatePhysical u A) σ = ∑_τ (∏_k u(σ_k, τ_k)) * mpv A τ`,
-which is a linear combination of the original MPV coefficients. Since
-`mpv A τ = mpv B τ` for all τ by hypothesis, the rotated MPVs also agree.
-
-The expansion follows by induction on the word length, distributing each
-`∑_j u_{σ_k, j} • A_j` factor across the product. -/
+The proof uses a strengthened induction with an arbitrary prefix word,
+reducing each step to the `SameMPV₂` hypothesis via word concatenation. -/
 theorem sameMPV₂_rotatePhysical {D₁ D₂ : ℕ} (u : Matrix (Fin d) (Fin d) ℂ)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (h : SameMPV₂ A B) :
     SameMPV₂ (rotatePhysical u A) (rotatePhysical u B) := by
-  sorry
+  -- Convert SameMPV₂ to coeff-level equality for all words
+  have hcoeff : ∀ w : List (Fin d), coeff A w = coeff B w := by
+    intro w
+    have := h w.length w.get
+    simp only [mpv_eq] at this
+    rwa [List.ofFn_get] at this
+  intro N σ
+  simp only [mpv_eq, coeff_eq]
+  -- Apply the prefix lemma with empty prefix
+  have := trace_evalWord_rotatePhysical_prefix u A B hcoeff [] (List.ofFn σ)
+  simpa [evalWord_nil] using this
 
 /-! ### Irreducible form preservation under rotation -/
 
@@ -221,7 +259,15 @@ theorem rotatePhysical_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) :
     rotatePhysical u (toTensorFromBlocks (d := d) μ A) =
     toTensorFromBlocks (d := d) μ (fun k => rotatePhysical u (A k)) := by
-  sorry
+  funext i; ext a b
+  simp only [rotatePhysical_apply, toTensorFromBlocks, Matrix.sum_apply,
+    Matrix.smul_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Matrix.blockDiagonal'_apply, smul_eq_mul]
+  split
+  next h =>
+    rw [Finset.mul_sum]; congr 1; funext j; ring
+  next h =>
+    simp [mul_zero, Finset.sum_const_zero]
 
 /-- `IsIrreducibleForm` is preserved by unitary rotation of the physical index.
 
