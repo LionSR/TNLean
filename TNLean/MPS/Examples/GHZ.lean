@@ -45,12 +45,6 @@ lemma pauliX_sq : pauliX * pauliX = 1 := by
   ext i j; fin_cases i <;> fin_cases j <;>
     simp [pauliX, Matrix.of_apply, Matrix.mul_apply, Fin.sum_univ_two]
 
-lemma zmod2_cases (g : Multiplicative (ZMod 2)) :
-    g = 1 ∨ g = Multiplicative.ofAdd 1 := by
-  fin_cases g <;> simp [Multiplicative.ext_iff] <;> tauto
-
-lemma zmod2_one_add_one : (1 : ZMod 2) + 1 = 0 := by decide
-
 /-! ### Definition -/
 
 /-- The GHZ MPS tensor: `A i = diagonal (Pi.single i 1)`, i.e.
