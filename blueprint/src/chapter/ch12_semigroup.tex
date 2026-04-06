@@ -1269,10 +1269,17 @@ The four equivalent reducibility conditions of
 
 \begin{theorem}[Cor.~7.2(3): large Kossakowski rank implies non-reducibility]
     \label{thm:not_isReducible_of_kossakowski_rank_ge}
-    \lean{not_isReducible_of_kossakowski_rank_ge}\notready
+    \lean{not_isReducible_of_kossakowski_rank_ge}\leanok
     \uses{def:is_gksl_generator, def:kossakowski_rank,
           def:has_block_upper_triangular_lindblad,
           thm:wolf_prop_7_6_three_iff_four}
     If $\rank(C) > d^2 - d$, then the QDS is not reducible.
     This is \cite[Cor.~7.2, condition~3]{Wolf2012Quantum}.
 \end{theorem}
+\begin{proof}\leanok
+    Decompose the Kossakowski matrix spectrally and extract a Lindblad family
+    with rank at most $\finrank(\mathfrak{su}(d))$.  Show that any
+    block-upper-triangular Lindblad family in dimension $d$ with a nontrivial
+    invariant projection of rank $k$ spans a subspace of dimension at most
+    $d^2 - d$, contradicting the rank hypothesis.
+\end{proof}
