@@ -91,10 +91,7 @@ theorem ghz_not_isInjective : ¬ IsInjective ghzTensor := by
 
 private lemma zmod2_cases (g : Multiplicative (ZMod 2)) :
     g = 1 ∨ g = Multiplicative.ofAdd 1 := by
-  rcases Fintype.truncEquivFin (Multiplicative (ZMod 2)) with ⟨e⟩
-  fin_cases g
-  · left; rfl
-  · right; rfl
+  fin_cases g <;> simp [Multiplicative.ext_iff] <;> tauto
 
 private lemma zmod2_one_add_one : (1 : ZMod 2) + 1 = 0 := by decide
 
