@@ -308,7 +308,8 @@ end OneStep
 section KernelDecrease
 
 /-- For PSD `B` and positive `E`, `ker(B + E(B)) ⊆ ker(B)` as submodules.
-Immediate consequence of `Matrix.PosSemidef.mulVec_eq_zero_left`; used in the strict kernel-decrease lemma. -/
+Immediate consequence of `Matrix.PosSemidef.mulVec_eq_zero_left`;
+used in the strict kernel-decrease lemma. -/
 private lemma mulVecLin_ker_idPlusE_le
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hE : IsPositiveMap E)
@@ -449,7 +450,7 @@ theorem growth_posDef_of_irreducible_cp
       apply ih (T B) (hT_psd hB) (hT_ne hB hBne)
       have hTBpd : (T B).PosDef := by rw [hT_eq]; exact idPlusE_posDef hPos hBpd
       rw [ker_bot_of_posDef hTBpd]
-      simp [finrank_bot]
+      simp
     · -- B is not PD → kernel strictly decreases
       apply ih (T B) (hT_psd hB) (hT_ne hB hBne)
       have h_lt : (B + E B).mulVecLin.ker < B.mulVecLin.ker :=
@@ -936,8 +937,7 @@ theorem irreducible_iff_exp_posDef_forall
   constructor
   · intro hIrr t ht A hA hA_ne
     exact exp_posDef_of_irreducible_cp E hCP hIrr A hA hA_ne ht
-  · intro hExp
-    intro P hP hP_inv
+  · intro hExp P hP hP_inv
     by_cases hP0 : P = 0
     · exact Or.inl hP0
     · have hP_psd : P.PosSemidef := isOrthogonalProjection_posSemidef hP
