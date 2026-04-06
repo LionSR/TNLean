@@ -1,0 +1,982 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\input{preamble}
+
+\usetikzlibrary{chains,decorations.pathreplacing,shadows,shapes.symbols,arrows.meta,fit,backgrounds}
+
+% --- Compound colors (match existing presentation) ---
+\colorlet{amberlight}{amber!80!white}
+\colorlet{lglight}{leangreen!70!white}
+\colorlet{srlight}{softred!70}
+\colorlet{mgdark}{mintgreen!80!black}
+\colorlet{srstrong}{softred!80}
+\colorlet{lgfill}{leangreen!15!cardbg}
+\colorlet{lbfill}{leanblue!15!cardbg}
+\colorlet{amfill}{amber!15!cardbg}
+\colorlet{dbfill}{deepblue!15!cardbg}
+\colorlet{srfill}{softred!15!cardbg}
+\colorlet{dwfill}{dimwhite!15!cardbg}
+\colorlet{mgfill}{mintgreen!15!cardbg}
+\colorlet{lgbg}{leangreen!25!cardbg}
+\colorlet{ambg}{amber!20!cardbg}
+\colorlet{lgrow}{leangreen!20!cardbg}
+
+% --- Global TikZ styles ---
+\tikzset{
+  nodebase/.style={rounded corners=4pt, thick, text=white, align=center,
+    font=\footnotesize\bfseries, minimum height=0.8cm, inner sep=5pt},
+  nodebox/.style={rounded corners=5pt, thick, text=white, align=center,
+    font=\small, minimum width=3cm, minimum height=1cm},
+  arrw/.style={-{Stealth}, thick, white},
+  arrg/.style={-{Stealth}, thick, leangreen},
+  arrlb/.style={-{Stealth}, thick, leanblue},
+  arram/.style={-{Stealth}, thick, amber, dashed},
+  arrdw/.style={-{Stealth}, thick, dimwhite, dashed},
+  flownode/.style={rounded corners=4pt, thick, text=white, align=center,
+    font=\tiny\bfseries, minimum height=0.6cm, inner sep=3pt, minimum width=1.6cm},
+}
+
+\title{GitHub Multi-Agent CI/CD for Lean~4 Formalization}
+\subtitle{15 Workflows \quad|\quad 9 Agent Roles \quad|\quad 275+ PRs \quad|\quad Fixed-Point Convergence\\[4pt]
+{\scriptsize Distributed CI agent infrastructure for a 70K+ line Lean~4 project}\\[2pt]
+{\scriptsize \texttt{anthropics/claude-code-action@v1} \quad|\quad GitHub Actions \quad|\quad Lean~4 + Mathlib v4.29.0}}
+\date{April 6, 2026}
+\author{{\small Presented by: the orchestrating agent (human-supervised)}}
+
+\begin{document}
+
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{-2em}
+    \maketitle
+    \vspace{-3em}
+\end{frame}
+}
+
+\begin{frame}{Roadmap}
+    \vspace{-0.4em}
+    \tableofcontents
+\end{frame}
+
+%======================================================================
+\section{Introduction}
+%======================================================================
+
+\begin{frame}{Project at a glance}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[
+        stat/.style={rounded corners=5pt, fill=cardbg, draw=leangreen!50, text=white, minimum width=2.9cm, minimum height=1.6cm, align=center, font=\small},
+    ]
+        \node[stat] at (0,0) {\textcolor{leangreen}{\Large\textbf{15}}\\ workflow files};
+        \node[stat] at (3.6,0) {\textcolor{leangreen}{\Large\textbf{9}}\\ agent roles};
+        \node[stat] at (7.2,0) {\textcolor{leangreen}{\Large\textbf{275+}}\\ pull requests};
+        \node[stat] at (10.8,0) {\textcolor{amber}{\Large\textbf{103}}\\ auto-fix commits};
+        \node[stat] at (0,-2.2) {\textcolor{leangreen}{\Large\textbf{74K}}\\ lines of Lean};
+        \node[stat] at (3.6,-2.2) {\textcolor{amber}{\Large\textbf{2/3}}\\ @claude merged};
+        \node[stat] at (7.2,-2.2) {\textcolor{leangreen}{\Large\textbf{6/9}}\\ @actions merged};
+        \node[stat] at (10.8,-2.2) {\textcolor{softred}{\Large\textbf{5}}\\ iteration cap};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.2em}
+    \textcolor{dimwhite}{\footnotesize 103 auto-fix commits since 2026-03-20. Agents created 17 PRs. The rest of this talk shows how.}
+\end{frame}
+
+\begin{frame}{The Agent Cast}
+    \vspace{-0.2em}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        {\footnotesize
+        \textcolor{leangreen}{\textbf{Reactive (on every PR):}}
+        \begin{itemize}
+            \item \textcolor{leanblue}{\textbf{Code Review}} --- 8-point automated review
+            \item \textcolor{amber}{\textbf{Auto-fix CI}} --- reads build logs, fixes Lean code
+            \item \textcolor{amber}{\textbf{Auto-fix Blueprint}} --- fixes \LaTeX{} compilation
+            \item \textcolor{amber}{\textbf{Auto-fix Review}} --- addresses review comments
+            \item \textcolor{mintgreen}{\textbf{PR Cleanup}} --- normalizes AI-generated metadata
+        \end{itemize}
+        \textcolor{leangreen}{\textbf{On demand (@mention):}}
+        \begin{itemize}
+            \item \textcolor{leangreen}{\textbf{Claude}} --- general-purpose agent
+            \item \textcolor{leanblue}{\textbf{Mathlib Scout}} --- scouts Mathlib on new issues
+        \end{itemize}
+        \textcolor{leangreen}{\textbf{Autonomous:}}
+        \begin{itemize}
+            \item \textcolor{deepblue}{\textbf{Issue Tracker}} --- tracking checklists, follow-ups
+            \item \textcolor{dimwhite}{\textbf{Daily Standup}} --- activity summaries
+        \end{itemize}
+        }
+        \column{0.46\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.72, transform shape]
+            \node[nodebase, draw=white, fill=cardbg, minimum width=3.2cm] (gh) at (0,3) {GitHub Actions};
+            \node[nodebase, draw=leanblue, fill=lbfill, minimum width=2.4cm, font=\tiny\bfseries] (review) at (-2.5,1.5) {Code Review};
+            \node[nodebase, draw=amber, fill=amfill, minimum width=2.4cm, font=\tiny\bfseries] (autofix) at (0,1.5) {Auto-fix $\times 3$};
+            \node[nodebase, draw=leangreen, fill=lgfill, minimum width=2.4cm, font=\tiny\bfseries] (claude) at (2.5,1.5) {@claude};
+            \node[nodebase, draw=deepblue, fill=dbfill, minimum width=2.4cm, font=\tiny\bfseries] (tracker) at (-1.8,0) {Issue Tracker};
+            \node[nodebase, draw=mintgreen, fill=mgfill, minimum width=2.4cm, font=\tiny\bfseries] (cleanup) at (1.8,0) {PR Cleanup};
+            \node[nodebase, draw=dimwhite!60, fill=dwfill, minimum width=2.4cm, font=\tiny\bfseries] (standup) at (0,-1.2) {Daily Standup};
+            \foreach \n in {review,autofix,claude,tracker,cleanup,standup}
+                \draw[arrw, white!50] (gh) -- (\n);
+            \draw[arram] (review) -- node[above,font=\tiny,text=amber]{triggers} (autofix);
+            \node[text=dimwhite, font=\tiny, below=1pt of standup] {All use \texttt{claude-opus-4-6}};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+\section{The PR Lifecycle}
+%======================================================================
+
+\begin{frame}{Full PR journey}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.68, transform shape]
+        % Row 1: creation
+        \node[flownode, draw=dimwhite, fill=dwfill, minimum width=1.5cm] (issue) at (0,2) {Issue\\created};
+        \node[flownode, draw=leanblue, fill=lbfill, minimum width=1.5cm] (scout) at (2.4,2) {Mathlib\\Scout};
+        \node[flownode, draw=leangreen, fill=lgfill, minimum width=1.5cm] (work) at (4.8,2) {@claude\\works};
+        \node[flownode, draw=white, fill=cardbg, minimum width=1.5cm] (propen) at (7.2,2) {PR\\opened};
+        \node[flownode, draw=mintgreen, fill=mgfill, minimum width=1.5cm] (cleanup) at (9.6,2) {PR\\Cleanup};
+
+        % Row 2: CI + fix loop
+        \node[flownode, draw=leanblue, fill=lbfill, minimum width=1.5cm] (build) at (0,0) {Lean\\build};
+        \node[flownode, draw=leanblue, fill=lbfill, minimum width=1.5cm] (blueprint) at (2.4,0) {Blueprint\\lint};
+        \node[flownode, draw=leanblue, fill=lbfill, minimum width=1.8cm] (review) at (4.8,0) {Code\\Review};
+        \node[flownode, draw=amber, fill=amfill, minimum width=1.8cm] (autofix) at (7.5,0) {Auto-fix\\loop};
+        \node[flownode, draw=white, fill=cardbg, minimum width=1.5cm] (human) at (10,0) {Human\\approval};
+
+        % Row 3: post-merge
+        \node[flownode, draw=leangreen, fill=lgfill, minimum width=1.5cm] (merge) at (2.4,-2) {Merge};
+        \node[flownode, draw=deepblue, fill=dbfill, minimum width=1.8cm] (track) at (5.4,-2) {Tracking\\updated};
+        \node[flownode, draw=deepblue, fill=dbfill, minimum width=1.8cm] (followup) at (8.4,-2) {Follow-ups\\created};
+
+        % Arrows row 1
+        \draw[arrw] (issue) -- (scout);
+        \draw[arrw] (scout) -- (work);
+        \draw[arrw] (work) -- (propen);
+        \draw[arrw] (propen) -- (cleanup);
+
+        % Down to row 2
+        \draw[arrw] (cleanup.south) -- ++(0,-0.4) -| (build.north);
+
+        % Parallel CI
+        \draw[arrdw] (build.east) -- (blueprint.west);
+        \draw[arrdw] (blueprint.east) -- (review.west);
+        \draw[arrw] (review) -- (autofix);
+        \draw[-{Stealth}, thick, amber] (autofix.north) to[out=120,in=60,looseness=1.8] node[above,font=\tiny,text=amber]{fix $\to$ re-review} (review.north);
+        \draw[arrw] (autofix) -- (human);
+
+        % Down to row 3
+        \draw[arrg] (human.south) -- ++(0,-0.4) -| (merge.north);
+        \draw[arrw] (merge) -- (track);
+        \draw[arrw] (track) -- (followup);
+
+        % Brace for parallel
+        \draw[decorate, decoration={brace, amplitude=4pt, mirror}, thick, dimwhite]
+          ([yshift=-3pt]build.south west) -- ([yshift=-3pt]review.south east)
+          node[midway, below=5pt, font=\tiny, text=dimwhite]{parallel CI};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.2em}
+    \textcolor{dimwhite}{\footnotesize Amber loop: review $\to$ fix $\to$ push $\to$ re-review. Converges or hits 5-iteration cap.}
+\end{frame}
+
+\begin{frame}{Workflow trigger map}
+    \vspace{-0.4em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.15}
+    {\fontsize{6.5pt}{8pt}\selectfont
+    \begin{tabular}{@{}l l l l@{}}
+        \toprule
+        \textbf{Workflow} & \textbf{Trigger} & \textbf{Concurrency} & \textbf{Action} \\
+        \midrule
+        \textcolor{leanblue}{\texttt{claude-code-review}} & PR opened / synchronized & \texttt{review-\$\{pr\}} & 8-point review, inline comments \\
+        \textcolor{amber}{\texttt{auto-fix}} (CI) & \texttt{lean\_action\_ci} fails & \texttt{bot-fix-\$\{branch\}} & Read logs, fix Lean code \\
+        \textcolor{amber}{\texttt{auto-fix}} (blueprint) & \texttt{lint-blueprint} fails & \texttt{bot-fix-\$\{branch\}} & Fix \LaTeX{} compilation \\
+        \textcolor{amber}{\texttt{auto-fix}} (review) & Review done + \texttt{auto-fix-claude} label & \texttt{bot-fix-\$\{branch\}} & Address review comments \\
+        \textcolor{leangreen}{\texttt{claude}} & \texttt{@claude} in comment & \texttt{respond-\$\{issue\}} & General-purpose agent \\
+        \textcolor{leanblue}{\texttt{mathlib-scout}} & Issue opened with \texttt{formalization} label & per-issue & Scout Mathlib, post report \\
+        \textcolor{mintgreen}{\texttt{pr-cleanup}} & PR from \texttt{claude/*} or \texttt{codex/*} branch & per-PR & Normalize title/body/labels \\
+        \textcolor{deepblue}{\texttt{tracking-issue-sync}} & Issue/PR state changes & \texttt{issue-tracker} (global) & Checkboxes, follow-ups \\
+        \textcolor{dimwhite}{\texttt{daily-standup}} & Cron: weekdays 08:00 UTC & none & Activity summary issue \\
+        \texttt{lean\_action\_ci} & Push to main or PR & per-PR & \texttt{lake build} \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize All auto-fix workflows share the \textbf{same} concurrency group per branch. Within a branch: CI fix $\to$ blueprint fix $\to$ review fix (serialized via \texttt{needs:}).}
+\end{frame}
+
+\begin{frame}{Within-PR serialization}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.85, transform shape]
+        \node[nodebox, draw=dimwhite, fill=dwfill, minimum width=2.2cm, minimum height=0.9cm, font=\footnotesize] (setup) at (0,0)
+          {\textbf{setup}\\{\tiny route triggers}};
+        \node[nodebox, draw=amber, fill=amfill, minimum width=2.5cm, minimum height=0.9cm, font=\footnotesize] (ci) at (3.8,0)
+          {\textbf{auto-fix-ci}\\{\tiny fix build errors}};
+        \node[nodebox, draw=amber, fill=amfill, minimum width=2.5cm, minimum height=0.9cm, font=\footnotesize] (bp) at (7.6,0)
+          {\textbf{auto-fix-blueprint}\\{\tiny fix \LaTeX}};
+        \node[nodebox, draw=amber, fill=amfill, minimum width=2.5cm, minimum height=0.9cm, font=\footnotesize] (rv) at (11.4,0)
+          {\textbf{auto-fix-review}\\{\tiny fix comments}};
+
+        \draw[arrw] (setup) -- node[above, font=\tiny, text=dimwhite]{\texttt{needs:}} (ci);
+        \draw[arrw] (ci) -- node[above, font=\tiny, text=dimwhite]{\texttt{needs:}} (bp);
+        \draw[arrw] (bp) -- node[above, font=\tiny, text=dimwhite]{\texttt{needs:}} (rv);
+
+        % Concurrency label
+        \node[rounded corners=2pt, draw=amber!50, fill=ambg, text=white, font=\tiny, inner sep=3pt] at (5.7,-1.3)
+          {Shared concurrency group: \texttt{bot-fix-\$\{\,branch\,\}}};
+
+        % Push annotation
+        \draw[-{Stealth}, thick, leangreen, dashed] (rv.south) -- ++(0,-0.5) -- ++(-8,0) -- ++(0,0.5)
+          node[midway, below, font=\tiny, text=leangreen]{push \texttt{[claude-review-fix]} $\to$ triggers new review $\to$ loop};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.4em}
+    \begin{itemize}
+        \item Each fix type runs \textbf{only if its trigger fired}: setup job routes the event.
+        \item A \texttt{[claude-auto-fix]} or \texttt{[claude-review-fix]} commit triggers a \textbf{new CI + review cycle}.
+        \item No two auto-fix jobs push to the same branch simultaneously.
+    \end{itemize}
+\end{frame}
+
+%======================================================================
+\section{The Fixed-Point Loop}
+%======================================================================
+
+\begin{frame}{Review $\to$ Fix $\to$ Convergence}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.80, transform shape]
+        % Main loop nodes
+        \node[nodebox, draw=leanblue, fill=lbfill, minimum width=3cm] (r1) at (0,3)
+          {\textbf{Code Review}\\{\tiny finds $N$ issues}};
+        \node[nodebox, draw=amber, fill=amfill, minimum width=3cm] (f1) at (5,3)
+          {\textbf{Auto-fix}\\{\tiny addresses issues}};
+        \node[nodebox, draw=leangreen, fill=lgfill, minimum width=3cm] (p1) at (10,3)
+          {\textbf{Push commit}\\{\tiny \texttt{[claude-review-fix]}}};
+
+        \node[nodebox, draw=leanblue, fill=lbfill, minimum width=3cm] (r2) at (0,0.8)
+          {\textbf{Re-review}\\{\tiny finds $N' < N$ issues}};
+        \node[nodebox, draw=amber, fill=amfill, minimum width=3cm] (f2) at (5,0.8)
+          {\textbf{Auto-fix}\\{\tiny addresses remaining}};
+        \node[nodebox, draw=leangreen, fill=lgfill, minimum width=3cm] (p2) at (10,0.8)
+          {\textbf{Push commit}\\{\tiny iteration 2}};
+
+        % Arrows
+        \draw[arrw] (r1) -- (f1);
+        \draw[arrw] (f1) -- (p1);
+        \draw[arrw] (p1.south) -- ++(0,-0.4) -| (r2.north);
+        \draw[arrw] (r2) -- (f2);
+        \draw[arrw] (f2) -- (p2);
+
+        % Convergence exits
+        \node[nodebox, draw=leangreen, fill=lgbg, minimum width=4cm, font=\footnotesize] (conv) at (2.5,-1.5)
+          {\textcolor{leangreen}{\textbf{``Fixed point reached!''}}\\{\tiny 0 unresolved threads}};
+        \node[nodebox, draw=softred, fill=srfill, minimum width=4cm, font=\footnotesize] (cap) at (8.5,-1.5)
+          {\textcolor{softred}{\textbf{Iteration cap hit (5)}}\\{\tiny human intervention needed}};
+
+        \draw[arrg, dashed] (p2.south) -- ++(0,-0.3) -| (conv.north);
+        \draw[-{Stealth}, thick, softred, dashed] (p2.south) -- ++(0,-0.3) -| (cap.north);
+
+        % Dotted continuation
+        \node[text=dimwhite, font=\scriptsize] at (5,-0.1) {$\cdots$ repeat until $\cdots$};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.2em}
+    \textcolor{dimwhite}{\footnotesize Actual code: \texttt{core.notice('No unresolved review threads. Fixed point reached!')} (\texttt{auto-fix.yml} line 389)}
+\end{frame}
+
+\begin{frame}{Safety mechanisms}
+    \vspace{-0.6em}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        {\small\textcolor{amber}{\textbf{Five layers of protection:}}}
+        \begin{enumerate}\setlength{\itemsep}{1pt}
+            \item \textbf{Iteration cap} --- max 5 consecutive bot commits
+            \item \textbf{Label gate} --- review-fix needs \texttt{auto-fix-claude}
+            \item \textbf{Concurrency groups} --- \texttt{bot-fix-\$\{branch\}}
+            \item \textbf{Fork guard} --- same-repo PRs only
+            \item \textbf{Outdated filter} --- \texttt{!isResolved \&\& !isOutdated}
+        \end{enumerate}
+
+        \column{0.46\textwidth}
+        {\small\textcolor{amber}{\textbf{Iteration counting:}}}
+        \vspace{0.2em}
+
+        {\ttfamily\scriptsize\color{dimwhite}
+        COUNT=0\\
+        while read -r MSG; do\\
+        ~~if echo "\$MSG" |\\
+        ~~~~grep -qE \textquotesingle [claude-(auto|review)-fix]\textquotesingle;\\
+        ~~then COUNT=\$((COUNT + 1))\\
+        ~~else break \# human commit\\
+        ~~fi\\
+        done < <(git log -{}-pretty=\%s -n 5)
+        }
+        \vspace{0.2em}
+
+        {\scriptsize \textcolor{leangreen}{A human commit resets the counter.} Both \texttt{[claude-auto-fix]} and \texttt{[claude-review-fix]} share the budget.}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Fixed-point in practice}
+    \vspace{-0.2em}
+    \textcolor{leangreen}{\textbf{103 auto-fix commits}} since 2026-03-20 across 275+ PRs.
+    \vspace{0.3em}
+
+    \begin{center}
+    \renewcommand{\arraystretch}{1.15}
+    {\footnotesize
+    \begin{tabular}{@{}l r r r l@{}}
+        \toprule
+        \textbf{Iteration} & \textbf{Issues found} & \textbf{Fixed} & \textbf{Remaining} & \textbf{Outcome} \\
+        \midrule
+        Round 1 & 4 & 4 & 0 & \textcolor{leangreen}{Converged} \\
+        \midrule
+        Round 1 & 3 & 3 & 0 & \\
+        Round 2 & 2 (new) & 2 & 0 & \textcolor{leangreen}{Converged (2 rounds)} \\
+        \midrule
+        Round 1 & 4 & 3 & 1 & \\
+        Round 2 & 3 (new) & 2 & 2 & \\
+        Round 3--5 & keeps finding & $\cdots$ & $>0$ & \textcolor{softred}{Cap hit (5 rounds)} \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize Most PRs converge in 1--2 rounds. Bugbot feedback loops on complex PRs can consume the cap: fixing one issue triggers a different issue on the fix commit (seen on PR \#163).}
+\end{frame}
+
+%======================================================================
+\section{Follow-up Chains}
+%======================================================================
+
+\begin{frame}{Playbook B2: automatic follow-up creation}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.80, transform shape]
+        \node[nodebox, draw=leangreen, fill=lgfill, minimum width=2.2cm] (merge) at (0,0)
+          {\textbf{PR merged}};
+        \node[nodebox, draw=leanblue, fill=lbfill, minimum width=2.2cm] (scan) at (3.5,0)
+          {\textbf{Scan diff}};
+        \node[nodebox, draw=softred, fill=srfill, minimum width=2.2cm] (find) at (7,0)
+          {\textbf{Find issues}};
+        \node[nodebox, draw=amber, fill=amfill, minimum width=2.5cm] (create) at (10.8,0)
+          {\textbf{Create issues}\\{\tiny label: \texttt{follow-up}}};
+
+        \draw[arrw] (merge) -- (scan);
+        \draw[arrw] (scan) -- (find);
+        \draw[arrw] (find) -- (create);
+
+        % What B2 scans for
+        \node[rounded corners=3pt, draw=dimwhite!40, fill=cardbg, text=white, font=\scriptsize, align=left, inner sep=5pt, text width=8cm]
+          at (5.4,-2) {
+          B2 scans for:\\[2pt]
+          $\bullet$ New \texttt{sorry} markers in \texttt{.lean} files\\
+          $\bullet$ TODO / FIXME / HACK / XXX comments\\
+          $\bullet$ Missing \texttt{\textbackslash lean\{\}} / \texttt{\textbackslash leanok} blueprint tags\\
+          $\bullet$ Human reviewer feedback deferred (``follow-up'', ``separate PR'')\\
+          $\bullet$ Unresolved review threads from bot reviewers
+          };
+
+        % Arrow to tracking
+        \draw[arrlb, dashed] (create.south) -- ++(0,-0.8) -- ++(1.5,0)
+          node[right, font=\scriptsize, text=leanblue]{$\to$ added to checklist};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Real chain: Issue \#280 $\to$ 6 PRs over 1 week}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape]
+        % Source PR
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=2.5cm] (pr270) at (0,3) {PR \#270\\{\tiny merged}};
+        % Follow-up issue
+        \node[nodebase, draw=softred, fill=srfill, minimum width=3cm] (i280) at (0,1.2) {\#280: 13 sorrys\\{\tiny follow-up}};
+        \draw[arrg] (pr270) -- node[right, font=\tiny, text=dimwhite]{B2 creates} (i280);
+
+        % PRs addressing it
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=1.6cm, font=\tiny\bfseries] (p293) at (-5,-.3) {\#293\\4 sorrys};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=1.6cm, font=\tiny\bfseries] (p353) at (-3,-.3) {\#353\\2 sorrys};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=1.6cm, font=\tiny\bfseries] (p424) at (-1,-.3) {\#424\\1 sorry};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=1.6cm, font=\tiny\bfseries] (p425) at (1,-.3) {\#425\\2 sorrys};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=1.6cm, font=\tiny\bfseries] (p429) at (3,-.3) {\#429\\1 sorry};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=1.6cm, font=\tiny\bfseries] (p434) at (5,-.3) {\#434\\1 sorry};
+
+        \foreach \p in {p293,p353,p424,p425,p429,p434}
+            \draw[arrg, dashed] (i280) -- (\p);
+
+        % Status
+        \node[text=leangreen, font=\scriptsize\bfseries] at (0,-1.5) {12/13 sorrys discharged};
+        \node[text=amber, font=\scriptsize] at (0,-2) {1 remaining: Wolf Cor 7.2(3)};
+
+        % Multi-level chain (right side)
+        \node[nodebase, draw=deepblue, fill=dbfill, minimum width=2cm, font=\tiny\bfseries] (t78) at (8,3) {\#78 Tracking\\{\tiny 1708.00029}};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=1.3cm, font=\tiny\bfseries] (i79) at (6.5,1.5) {\#79 \checkmark};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=1.3cm, font=\tiny\bfseries] (i80) at (8,1.5) {\#80 \checkmark};
+        \node[nodebase, draw=amber, fill=amfill, minimum width=1.3cm, font=\tiny\bfseries] (i81) at (9.5,1.5) {\#81};
+        \node[nodebase, draw=dimwhite!50, fill=dwfill, minimum width=1.3cm, font=\tiny\bfseries] (i82) at (8,0) {\#82};
+        \node[nodebase, draw=dimwhite!50, fill=dwfill, minimum width=1.3cm, font=\tiny\bfseries] (i83) at (9.5,0) {\#83};
+
+        % Sub-issues of #81
+        \node[nodebase, draw=amber!60, fill=amfill, minimum width=1cm, font=\tiny\bfseries] (i447) at (8.5,-1.3) {\#447};
+        \node[nodebase, draw=amber!60, fill=amfill, minimum width=1cm, font=\tiny\bfseries] (i448) at (9.7,-1.3) {\#448};
+        \node[nodebase, draw=amber!60, fill=amfill, minimum width=1cm, font=\tiny\bfseries] (i450) at (10.9,-1.3) {\#450};
+
+        \draw[arrw, white!50] (t78) -- (i79);
+        \draw[arrw, white!50] (t78) -- (i80);
+        \draw[arrw, white!50] (t78) -- (i81);
+        \draw[arrdw] (i81) -- (i82);
+        \draw[arrdw] (i82) -- (i83);
+        \draw[arram] (i81) -- (i447);
+        \draw[arram] (i81) -- (i448);
+        \draw[arram] (i81) -- (i450);
+
+        \node[text=dimwhite, font=\tiny, below=1pt of i450] {sub-tasks};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Tracking issue automation}
+    \vspace{-0.2em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textcolor{deepblue}{\textbf{Playbook A: auto-checkbox}}
+        \vspace{0.3em}
+
+        When a follow-up issue \textbf{closes}:
+        \begin{itemize}
+            \item Find tracking issues containing \texttt{- [ ] \#N}
+            \item Update to \texttt{- [x] \#N}
+            \item Comment: ``\checkmark~\#N resolved''
+            \item If \emph{all} boxes checked $\to$ add \texttt{all-resolved} label
+        \end{itemize}
+        \vspace{0.3em}
+        When a follow-up issue \textbf{reopens}:
+        \begin{itemize}
+            \item Uncheck: \texttt{- [x] \#N} $\to$ \texttt{- [ ] \#N}
+            \item Remove \texttt{all-resolved} label
+        \end{itemize}
+
+        \column{0.50\textwidth}
+        \textcolor{deepblue}{\textbf{Continuous progress commentary}}
+        \vspace{0.3em}
+
+        The tracker comments on \#280 over one week:
+        \vspace{0.2em}
+
+        {\scriptsize\textcolor{dimwhite}{
+        \textbf{Mar 26}: ``Created follow-up from \#270: 13 sorrys''\\[2pt]
+        \textbf{Mar 27}: ``PR \#293 merged --- 4/13 discharged''\\[2pt]
+        \textbf{Mar 29}: ``PR \#353 merged --- 6/13 total''\\[2pt]
+        \textbf{Apr 02}: ``PR \#424: GroupStructure sorry-free''\\[2pt]
+        \textbf{Apr 02}: ``PR \#429 merged --- 11/13 discharged''\\[2pt]
+        \textbf{Apr 03}: ``PR \#425: QuantitativeGap sorry-free''\\[2pt]
+        \textbf{Apr 03}: ``\textbf{12/13 sorrys now discharged}''
+        }}
+        \vspace{0.3em}
+        \textcolor{dimwhite}{\footnotesize Fully automated --- no human posting required.}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+\section{Concurrency Architecture}
+%======================================================================
+
+\begin{frame}{Four concurrency levels}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.80, transform shape]
+        % Level boxes
+        \node[rounded corners=5pt, draw=leanblue, fill=lbfill, thick, text=white, minimum width=13cm, minimum height=1.1cm, align=left, font=\footnotesize] (l1) at (0,3)
+          {\textbf{Level 1: per-PR} \hfill \texttt{claude-review-\$\{pr\_number\}} \hfill \textcolor{leanblue}{cancel old on new push}};
+        \node[rounded corners=5pt, draw=amber, fill=amfill, thick, text=white, minimum width=13cm, minimum height=1.1cm, align=left, font=\footnotesize] (l2) at (0,1.5)
+          {\textbf{Level 2: per-branch} \hfill \texttt{bot-fix-\$\{head\_branch\}} \hfill \textcolor{amber}{cancel old on new trigger}};
+        \node[rounded corners=5pt, draw=leangreen, fill=lgfill, thick, text=white, minimum width=13cm, minimum height=1.1cm, align=left, font=\footnotesize] (l3) at (0,0)
+          {\textbf{Level 3: per-issue} \hfill \texttt{claude-respond-\$\{issue\_number\}} \hfill \textcolor{leangreen}{sequential, no cancel}};
+        \node[rounded corners=5pt, draw=deepblue, fill=dbfill, thick, text=white, minimum width=13cm, minimum height=1.1cm, align=left, font=\footnotesize] (l4) at (0,-1.5)
+          {\textbf{Level 4: global} \hfill \texttt{issue-tracker} \hfill \textcolor{deepblue}{one at a time, globally}};
+
+        % Annotations
+        \node[text=dimwhite, font=\scriptsize, align=left] at (0,-2.8)
+          {Levels 1--2 enable \textbf{cross-PR parallelism}: different PRs/branches never conflict.\\
+           Level 4 serializes \textbf{tracking issue writes} to prevent race conditions on checklists.};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Cross-PR parallelism}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape]
+        % Time axis
+        \draw[-{Stealth}, thick, dimwhite] (-1,-4.5) -- (-1,3) node[above, font=\tiny, text=dimwhite]{time};
+
+        % PR lanes
+        \foreach \x/\pr/\col in {1/\#440/leangreen, 4/\#441/leanblue, 7/\#442/amber, 10/\#443/mintgreen} {
+            \node[rounded corners=3pt, draw=\col, fill=\col!15!cardbg, text=white, font=\scriptsize\bfseries, minimum width=2.2cm] at (\x,3) {PR \pr};
+            % Build
+            \node[rounded corners=2pt, draw=dimwhite!40, fill=cardbg, text=dimwhite, font=\tiny, minimum width=2cm, minimum height=0.5cm] at (\x,2) {build};
+            % Review
+            \node[rounded corners=2pt, draw=\col!60, fill=\col!10!cardbg, text=white, font=\tiny, minimum width=2cm, minimum height=0.5cm] at (\x,1) {review};
+            % Auto-fix
+            \node[rounded corners=2pt, draw=amber!60, fill=amfill, text=white, font=\tiny, minimum width=2cm, minimum height=0.5cm] at (\x,0) {fix};
+            % Re-review
+            \node[rounded corners=2pt, draw=\col!60, fill=\col!10!cardbg, text=white, font=\tiny, minimum width=2cm, minimum height=0.5cm] at (\x,-1) {re-review};
+            % Converge
+            \node[rounded corners=2pt, draw=leangreen!60, fill=lgfill, text=white, font=\tiny, minimum width=2cm, minimum height=0.5cm] at (\x,-2) {converged};
+            % Merge
+            \node[rounded corners=2pt, draw=leangreen, fill=lgbg, text=white, font=\tiny, minimum width=2cm, minimum height=0.5cm] at (\x,-3) {merged};
+            % Arrows
+            \draw[arrw, white!30] (\x,1.7) -- (\x,1.3);
+            \draw[arrw, white!30] (\x,0.7) -- (\x,0.3);
+            \draw[arrw, white!30] (\x,-0.3) -- (\x,-0.7);
+            \draw[arrw, white!30] (\x,-1.3) -- (\x,-1.7);
+            \draw[arrw, white!30] (\x,-2.3) -- (\x,-2.7);
+        }
+
+        % Independence label
+        \node[text=dimwhite, font=\scriptsize] at (5.5,-4.2) {Each branch has its own \texttt{bot-fix-\$\{branch\}} --- fully parallel, zero interference};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{The three comment APIs}
+    \vspace{-0.4em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.2}
+    {\footnotesize
+    \begin{tabular}{@{}l l p{5.5cm}@{}}
+        \toprule
+        \textbf{Type} & \textbf{Endpoint} & \textbf{Contains} \\
+        \midrule
+        \textbf{Inline} & \texttt{pulls/N/comments} & Bugbot, Copilot, Claude inline findings on specific diff lines \\
+        \textbf{PR-level} & \texttt{issues/N/comments} & Claude review summaries, human comments, @codex responses \\
+        \textbf{Reviews} & \texttt{pulls/N/reviews} & Approve / Request Changes verdicts with body \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.4em}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \textcolor{leanblue}{\textbf{GraphQL for resolution status:}}
+        \vspace{0.2em}
+
+        {\scriptsize REST \texttt{line} field is unreliable. Use GraphQL:}
+        \begin{itemize}
+            \item \texttt{isResolved} --- explicitly marked resolved
+            \item \texttt{isOutdated} --- code at that line changed
+            \item \textbf{Unresolved + not outdated} = must fix
+        \end{itemize}
+
+        \column{0.50\textwidth}
+        \textcolor{softred}{\textbf{Lesson from PR \#162:}}
+        \vspace{0.2em}
+
+        {\scriptsize Merged with unaddressed nits because Claude posted inline-style feedback as a \textbf{PR-level comment} (couldn't post inline). Checking ``0 inline comments'' was not enough.}
+        \vspace{0.3em}
+
+        {\scriptsize\textcolor{amber}{Rule: always read \textbf{all three} API endpoints before declaring a PR clean.}}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+\section{@codex vs @claude}
+%======================================================================
+
+\begin{frame}{@codex vs @claude: behavior comparison}
+    \vspace{-0.4em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.2}
+    {\footnotesize
+    \begin{tabular}{@{}l p{5cm} p{5cm}@{}}
+        \toprule
+        & \textbf{@claude} & \textbf{@codex} \\
+        \midrule
+        \textbf{On issue comment} & Creates new branch from main & Creates new branch from main \\
+        \textbf{On PR comment} & Checks out PR branch, pushes fix & Runs on diff, \textbf{can} push fix \\
+        \textbf{Branch naming} & \texttt{claude/issue-N-desc} & \texttt{codex/mention-\{slug\}} \\
+        \textbf{Can rebase?} & \textcolor{softred}{No} & \textcolor{softred}{No} \\
+        \textbf{Can fetch branches?} & \textcolor{leangreen}{Yes} & \textcolor{softred}{No (HTTP 403)} \\
+        \textbf{Typical PR size} & 50--500 lines & \textcolor{amber}{6--60 lines} \\
+        \textbf{Failure mode} & Branch name validation crash & ``Couldn't complete this request'' \\
+        \textbf{Failure rate} & $\sim$33\% & $\sim$50\% \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize Both agents create new PRs from issue comments --- neither can push to an existing PR from an issue. Critical distinction: @codex on \textbf{issues} $\neq$ @codex on \textbf{PRs}.}
+\end{frame}
+
+\begin{frame}{The bracket incompatibility}
+    \vspace{-0.2em}
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textcolor{softred}{\textbf{Root cause:}}
+        \vspace{0.2em}
+        \begin{itemize}
+            \item Issue titles used \texttt{[brackets]}: ``\texttt{[Wolf Ch6] \ldots}''
+            \item @codex generates branch slug from title
+            \item Strips \texttt{[} but \textbf{keeps} \texttt{]}
+            \item Branch: \texttt{codex/wolf-ch5]-schwarz\ldots}
+            \item \texttt{claude-code-action} rejects \texttt{]} in branch names
+            \item \textbf{100\% failure rate} for @claude on codex branches
+        \end{itemize}
+        \vspace{0.3em}
+        \textcolor{leangreen}{\textbf{Solution adopted:}} Bracket-free issue naming.\\
+        {\scriptsize ``Wolf Ch6 ---'' instead of ``[Wolf Ch6]''}
+
+        \column{0.48\textwidth}
+        \textcolor{softred}{\textbf{Other failure patterns:}}
+        \vspace{0.2em}
+        \begin{itemize}
+            \item \textbf{PR proliferation}: every @codex on issue = new PR\\
+              {\scriptsize \#162 $\to$ \#216, \#200 $\to$ \#208, \#165 $\to$ \#215}
+            \item \textbf{Tiny PRs}: 6--60 lines per @codex PR\\
+              {\scriptsize Review overhead disproportionate to changes}
+            \item \textbf{``Couldn't complete''}: 7 documented failures\\
+              {\scriptsize PRs \#212, \#211, \#206, \#201, \#196, \#167, \#91}
+            \item \textbf{Phantom pushes}: @codex says ``committed'' but commit stays in cloud sandbox\\
+              {\scriptsize User must click Codex portal link to finalize}
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{What actually works}
+    \vspace{-0.4em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.2}
+    {\footnotesize
+    \begin{tabular}{@{}p{4cm} p{4.5cm} p{3.5cm}@{}}
+        \toprule
+        \textbf{Scenario} & \textbf{Solution} & \textbf{Why} \\
+        \midrule
+        \rowcolor{lgrow}
+        Fix a PR (any branch) & \textcolor{leangreen}{\textbf{@codex on the PR}} & Can push even to \texttt{]} branches \\
+        Fix a PR (clean branch) & \textcolor{leangreen}{\textbf{@claude on the PR}} & More reliable than @codex \\
+        \rowcolor{lgrow}
+        Review a PR & Bugbot CI + claude-review & Automated, no manual trigger \\
+        Rebase a PR & \textcolor{amber}{\textbf{Do it locally}} & Neither agent can rebase \\
+        \rowcolor{lgrow}
+        Add new code from issue & @claude or @codex on issue & Both create from main \\
+        \midrule
+        \multicolumn{3}{@{}l}{\textcolor{softred}{\textbf{Never do:}}} \\
+        \multicolumn{3}{@{}p{12cm}@{}}{\scriptsize $\bullet$ Don't create issues for nits on existing PRs (spawns replacement PRs) $\bullet$ Don't use @codex on issues to fix existing PRs (creates new PR instead) $\bullet$ Don't retry @codex after ``committed but not pushed'' (duplicates work)} \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+\end{frame}
+
+%======================================================================
+\section{Failure Modes and Safety}
+%======================================================================
+
+\begin{frame}{Known failure modes}
+    \vspace{-0.4em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.15}
+    {\footnotesize
+    \begin{tabular}{@{}p{3cm} l p{6cm}@{}}
+        \toprule
+        \textbf{Failure} & \textbf{Freq.} & \textbf{Mitigation} \\
+        \midrule
+        Iteration cap hit & Moderate & 5-commit cap; human review resumes loop \\
+        Bugbot feedback loops & Rare & Fix introduces new issue $\to$ fix $\to$ new issue $\to$ cap \\
+        Branch name crash & Systemic & Bracket-free naming convention adopted \\
+        Hidden PR-level nits & PR \#162 & Read all 3 comment APIs before merge \\
+        Toolchain upgrade & PR \#441 & Agent code breaks on Lean version bump; manual rebase \\
+        Prompt injection & Theoretical & Sanitize CI logs: strip non-ASCII, break fenced code \\
+        Phantom @codex push & Moderate & Verify commit count; user clicks portal link \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize PR \#441: @claude created a PR for Dyson series, but Lean 4.29 upgrade changed \texttt{CLM D} to \texttt{MatrixCLM (Fin D)} --- agent couldn't handle the type migration. Human created replacement PR \#446.}
+\end{frame}
+
+\begin{frame}{Safety: defense in depth}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.80, transform shape]
+        % Nested rectangles (outermost = first defense)
+        \node[rounded corners=8pt, draw=deepblue, fill=deepblue!8!cardbg, thick,
+              minimum width=12.5cm, minimum height=5.5cm, text=white, font=\footnotesize] (l6) at (0,0) {};
+        \node[anchor=north, text=deepblue, font=\scriptsize\bfseries] at (l6.north) {Layer 6: Human approval before merge};
+
+        \node[rounded corners=7pt, draw=softred!70, fill=softred!6!cardbg, thick,
+              minimum width=10.5cm, minimum height=4.3cm] (l5) at (0,-0.2) {};
+        \node[anchor=north, text=softred!80, font=\scriptsize\bfseries] at (l5.north) {Layer 5: Prompt injection sanitization};
+
+        \node[rounded corners=6pt, draw=amber!70, fill=amber!6!cardbg, thick,
+              minimum width=8.5cm, minimum height=3.2cm] (l4) at (0,-0.3) {};
+        \node[anchor=north, text=amber!80, font=\scriptsize\bfseries] at (l4.north) {Layer 4: Concurrency groups (no parallel pushes)};
+
+        \node[rounded corners=5pt, draw=amber, fill=amber!8!cardbg, thick,
+              minimum width=6.5cm, minimum height=2.2cm] (l3) at (0,-0.3) {};
+        \node[anchor=north, text=amber, font=\scriptsize\bfseries] at (l3.north) {Layer 3: Iteration cap (5 bot commits)};
+
+        \node[rounded corners=4pt, draw=leanblue, fill=leanblue!10!cardbg, thick,
+              minimum width=4.5cm, minimum height=1.2cm] (l2) at (0,-0.3) {};
+        \node[text=leanblue, font=\scriptsize\bfseries] at (l2.center) {Layer 2: Label gate};
+
+        \node[rounded corners=3pt, draw=leangreen, fill=lgbg, thick,
+              minimum width=2.5cm, minimum height=0.6cm] (l1) at (0,-1.3) {};
+        \node[text=leangreen, font=\tiny\bfseries] at (l1.center) {Fork guard};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.2em}
+    \textcolor{dimwhite}{\footnotesize No automation can bypass the outermost layer. Human merge approval is always the final gate.}
+\end{frame}
+
+%======================================================================
+\section{Parallelism in Practice}
+%======================================================================
+
+\begin{frame}{Running 5+ agents simultaneously}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.75, transform shape]
+        % Session header
+        \node[text=leangreen, font=\small\bfseries] at (4,3.5) {Session: April 6, 2026 --- 5 parallel @claude activations};
+
+        % Timeline
+        \draw[-{Stealth}, thick, dimwhite] (0,0) -- (10,0) node[right, font=\tiny, text=dimwhite]{time};
+
+        % 5 parallel tasks
+        \foreach \y/\issue/\desc/\col in {%
+            2.5/\#443/canonical form audit/leanblue,%
+            1.8/\#280/prove Cor 7.2(3)/leangreen,%
+            1.1/\#442/Mathlib scout (Schwarz)/amber,%
+            0.4/\#447/reformulate PeriodicOverlap/mintgreen,%
+            -0.3/\#451/blueprint sync batch/deepblue%
+        } {
+            \node[rounded corners=3pt, draw=\col, fill=\col!15!cardbg, text=white,
+                  font=\tiny\bfseries, minimum width=1.8cm, align=center] at (-1.2,\y) {\issue};
+            \draw[thick, \col] (0.2,\y) -- (8,\y);
+            \node[text=dimwhite, font=\tiny, anchor=west] at (8.2,\y) {\desc};
+            % Start marker
+            \fill[\col] (0.2,\y) circle (2pt);
+        }
+
+        % Independence annotation
+        \node[rounded corners=3pt, draw=dimwhite!40, fill=cardbg, text=dimwhite, font=\scriptsize, inner sep=4pt, align=center]
+          at (4,-1.5) {Each runs on independent branch $\to$ different concurrency group $\to$ \textbf{zero interference}\\
+          Posted in parallel from a single CLI session};
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Blueprint sync as batch operation}
+    \vspace{-0.2em}
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textcolor{leangreen}{\textbf{Parallelizable by chapter:}}
+        \vspace{0.3em}
+        \begin{itemize}
+            \item Blueprint chapters are \textbf{independent} \LaTeX{} files
+            \item One @claude agent per chapter group
+            \item No cross-chapter dependencies for \texttt{\textbackslash lean\{\}} tags
+            \item Each produces its own PR
+        \end{itemize}
+        \vspace{0.3em}
+        \textcolor{dimwhite}{\footnotesize Previous sync batches: \#217 $\to$ PR \#220 (Ch04), \#218 $\to$ PR \#222 (Ch06), \#219 $\to$ PR \#221 (Ch02+Ch11). All ran in parallel.}
+
+        \column{0.48\textwidth}
+        \textcolor{amber}{\textbf{Style enforcement:}}
+        \vspace{0.3em}
+        \begin{itemize}
+            \item @codex leaks Lean jargon into math text
+            \item Must include style rules in every @codex comment:
+            \begin{itemize}
+                \item[$\times$] \texttt{\textbackslash texttt\{LeanName\}} in theorem text
+                \item[$\times$] \texttt{\$\textbackslash operatorname\{Fin\} m\$}
+                \item[$\times$] ``bundled'', ``instance'', ``structure''
+                \item[\checkmark] Pure math: $M_D(\mathbb{C})$, $\{1,\ldots,m\}$
+            \end{itemize}
+            \item Auto-fix review catches remaining jargon
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+%======================================================================
+\section{Metrics and Lessons}
+%======================================================================
+
+\begin{frame}{Metrics dashboard}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[
+        stat/.style={rounded corners=5pt, fill=cardbg, draw=leangreen!50, text=white, minimum width=3.2cm, minimum height=1.6cm, align=center, font=\small},
+    ]
+        \node[stat] at (0,0) {\textcolor{leangreen}{\Large\textbf{103}}\\ auto-fix commits};
+        \node[stat] at (4,0) {\textcolor{leangreen}{\Large\textbf{275+}}\\ total PRs};
+        \node[stat] at (8,0) {\textcolor{leangreen}{\Large\textbf{15}}\\ workflow files};
+
+        \node[stat, draw=amber!50] at (0,-2.2) {\textcolor{amber}{\Large\textbf{2/3}}\\ @claude PRs merged};
+        \node[stat, draw=leangreen!50] at (4,-2.2) {\textcolor{leangreen}{\Large\textbf{1/5}}\\ @copilot merged};
+        \node[stat] at (8,-2.2) {\textcolor{leangreen}{\Large\textbf{6/9}}\\ @actions merged};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.3em}
+    \textcolor{dimwhite}{\footnotesize Data from \texttt{gh pr list --state all --author "app/claude"} etc. Most PRs are human-authored (260+/275). Agent PRs are low volume but test the full auto-fix pipeline end-to-end.}
+\end{frame}
+
+\begin{frame}{Sorry trajectory}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.80, transform shape]
+        % Axes
+        \draw[-{Stealth}, thick, dimwhite] (0,0) -- (12,0) node[right, font=\tiny, text=dimwhite]{date};
+        \draw[-{Stealth}, thick, dimwhite] (0,0) -- (0,5) node[above, font=\tiny, text=dimwhite]{sorry count};
+
+        % Grid
+        \foreach \y in {1,2,3,4}
+            \draw[dimwhite!15] (0,\y) -- (12,\y);
+
+        % Y labels
+        \foreach \y/\l in {1/10,2/20,3/30,4/40}
+            \node[font=\tiny, text=dimwhite, anchor=east] at (-0.2,\y) {\l};
+
+        % X labels
+        \node[font=\tiny, text=dimwhite] at (1,-0.3) {Feb};
+        \node[font=\tiny, text=dimwhite] at (4,-0.3) {Mar 1};
+        \node[font=\tiny, text=dimwhite] at (7,-0.3) {Mar 18};
+        \node[font=\tiny, text=dimwhite] at (9,-0.3) {Mar 24};
+        \node[font=\tiny, text=dimwhite] at (11,-0.3) {Apr 6};
+
+        % Trajectory
+        \draw[thick, leangreen]
+          (0.5,0.3) -- (2,1.5) -- (3,2.5) -- (4,3.5) -- (5,4.2) -- (6,3.8)
+          -- (7,2.5) -- (8,2.0) -- (9,3.2) -- (10,2.8) -- (11,2.8);
+
+        % Annotations
+        \draw[amber, dashed, thick] (5,4.2) -- (5,4.8)
+          node[above, font=\tiny, text=amber, align=center]{peak: expansion\\outpaces closure};
+        \draw[leangreen, dashed, thick] (7,2.5) -- (7,4.8)
+          node[above, font=\tiny, text=leangreen, align=center]{auto-fix\\enabled};
+        \draw[leanblue, dashed, thick] (9,3.2) -- (9,4.5)
+          node[above, font=\tiny, text=leanblue, align=center]{follow-up chains\\activated};
+        \node[font=\scriptsize, text=amber] at (11,3.4) {$\sim$28};
+
+        % Fill under curve
+        \fill[leangreen, opacity=0.05]
+          (0.5,0) -- (0.5,0.3) -- (2,1.5) -- (3,2.5) -- (4,3.5) -- (5,4.2) -- (6,3.8)
+          -- (7,2.5) -- (8,2.0) -- (9,3.2) -- (10,2.8) -- (11,2.8) -- (11,0) -- cycle;
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.2em}
+    \textcolor{dimwhite}{\footnotesize Not monotone: new modules add sorrys faster than closure waves remove them. Trajectory reflects active research, not regression.}
+\end{frame}
+
+\begin{frame}{Lessons learned}
+    \vspace{-0.2em}
+    \begin{enumerate}
+        \item \textcolor{leangreen}{\textbf{The fixed-point loop works}} --- but needs an iteration cap.\\
+          {\scriptsize Most PRs converge in 1--2 rounds. Without a cap, Bugbot feedback loops run forever.}
+        \item \textcolor{leangreen}{\textbf{Never merge without reading all 3 comment APIs.}}\\
+          {\scriptsize Inline, PR-level, and review summaries live in separate endpoints. Miss one $\to$ merge bugs.}
+        \item \textcolor{amber}{\textbf{@codex on issues $\neq$ @codex on PRs.}}\\
+          {\scriptsize Issue comments create new PRs. PR comments push fixes. Confusing the two causes proliferation.}
+        \item \textcolor{amber}{\textbf{Branch naming conventions propagate into CI compatibility.}}\\
+          {\scriptsize \texttt{[brackets]} in issue titles $\to$ \texttt{]} in branch names $\to$ @claude 100\% failure rate.}
+        \item \textcolor{leangreen}{\textbf{Auto-fix is multiplicative.}}\\
+          {\scriptsize One human push triggers cascading improvements: build fix $\to$ blueprint fix $\to$ review fix.}
+        \item \textcolor{leangreen}{\textbf{Tracking issues + follow-up automation = self-maintaining state.}}\\
+          {\scriptsize The project tracks itself. Checklists update, follow-ups spawn, progress is reported automatically.}
+    \end{enumerate}
+\end{frame}
+
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{2em}
+    \begin{center}
+    {\Large\textcolor{leangreen}{\textbf{Thank you}}}
+    \vspace{1.5em}
+
+    \begin{tikzpicture}[
+        stat/.style={rounded corners=5pt, fill=cardbg, draw=leangreen!50, text=white, minimum width=2.6cm, minimum height=1.4cm, align=center, font=\small},
+    ]
+        \node[stat] at (0,0) {\textcolor{leangreen}{\textbf{15}}\\ workflows};
+        \node[stat] at (3.2,0) {\textcolor{leangreen}{\textbf{9}}\\ agent roles};
+        \node[stat] at (6.4,0) {\textcolor{leangreen}{\textbf{275+}}\\ PRs};
+        \node[stat] at (9.6,0) {\textcolor{amber}{\textbf{103}}\\ auto-fix commits};
+    \end{tikzpicture}
+    \vspace{1.5em}
+
+    {\footnotesize\textcolor{dimwhite}{The CI is the team. The team is the CI.}}
+    \vspace{0.5em}
+
+    {\scriptsize\textcolor{dimwhite}{
+    \texttt{anthropics/claude-code-action@v1} \quad|\quad GitHub Actions \quad|\quad Lean~4 + Mathlib v4.29.0\\[2pt]
+    LionSR/TNLean \quad|\quad April 2026
+    }}
+    \end{center}
+\end{frame}
+}
+
+%======================================================================
+\appendix
+%======================================================================
+
+\begin{frame}{Appendix: all workflow files}
+    \vspace{-0.4em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.1}
+    {\fontsize{6pt}{7.5pt}\selectfont
+    \begin{tabular}{@{}l l l@{}}
+        \toprule
+        \textbf{File} & \textbf{Purpose} & \textbf{Key feature} \\
+        \midrule
+        \texttt{claude.yml} & @claude mention handler & General-purpose; creates PRs \\
+        \texttt{claude-code-review.yml} & Automated code review & 8-point checklist; auto-resolves old threads \\
+        \texttt{auto-fix.yml} & Unified auto-fix orchestrator & Routes CI/blueprint/review triggers \\
+        \texttt{\_ci-auto-fix-shared.yml} & Reusable fix template & Iteration cap, fork guard, sanitization \\
+        \texttt{tracking-issue-sync.yml} & Tracking issue management & Playbooks A/B; checkbox automation \\
+        \texttt{pr-cleanup.yml} & AI PR metadata normalization & Title/body/label/link standardization \\
+        \texttt{mathlib-scout.yml} & Mathlib scouting & Posts structured report on formalization issues \\
+        \texttt{daily-standup.yml} & Activity summaries & Weekday cron; math-literate standup issue \\
+        \texttt{lean\_action\_ci.yml} & Lean build CI & \texttt{lake build} with Mathlib cache \\
+        \texttt{lint-blueprint.yml} & Blueprint compilation & \texttt{leanblueprint web} validation \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+\end{frame}
+
+\begin{frame}{Appendix: concurrency group reference}
+    \vspace{-0.4em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.2}
+    {\footnotesize
+    \begin{tabular}{@{}l l l l@{}}
+        \toprule
+        \textbf{Group pattern} & \textbf{Scope} & \textbf{Cancel?} & \textbf{Used by} \\
+        \midrule
+        \texttt{claude-review-\$\{pr\}} & per-PR & Yes & \texttt{claude-code-review} \\
+        \texttt{bot-fix-\$\{branch\}} & per-branch & Yes & \texttt{auto-fix} (all 3 types) \\
+        \texttt{claude-respond-\$\{issue\}} & per-issue & No & \texttt{claude} \\
+        \texttt{issue-tracker} & global & No & \texttt{tracking-issue-sync} \\
+        \texttt{pr-cleanup-\$\{pr\}} & per-PR & Yes & \texttt{pr-cleanup} \\
+        \bottomrule
+    \end{tabular}
+    }
+    \end{center}
+    \vspace{0.5em}
+    \textcolor{dimwhite}{\footnotesize ``Cancel'' = \texttt{cancel-in-progress: true}. New trigger cancels old run. ``No cancel'' = sequential queue; new runs wait.}
+\end{frame}
+
+\end{document}
