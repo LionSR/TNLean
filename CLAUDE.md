@@ -41,6 +41,7 @@ cd blueprint && leanblueprint pdf
 - `relaxedAutoImplicit = false` — strict implicit arguments, no auto-implicit
 - `pp.unicode.fun = true` — pretty-prints `fun a ↦ b`
 - `maxSynthPendingDepth = 3` — typeclass synthesis depth limit
+- `weak.linter.mathlibStandardSet = true` — enables the Mathlib standard linter set
 
 ## Architecture
 
