@@ -61,8 +61,10 @@ arXiv:0802.0447):
   symmetry (for injective MPS)
 * `MPSTensor.hasStringOrder_of_symmetric_injective` — string order holds
   universally for injective symmetric MPS with canonical FCS data
-* `MPSTensor.stringOrder_invariant_of_samePhase` — string order is
-  invariant for injective symmetric MPS
+* `MPSTensor.IsSameSPTPhase.isOnSiteSymmetric_left` — same SPT phase implies
+  on-site symmetry (left tensor)
+* `MPSTensor.stringOrder_invariant_of_samePhase` — string order is an
+  SPT-phase invariant
 
 ## References
 
@@ -1652,6 +1654,24 @@ def IsSameSPTPhase (A B : MPSTensor d D)
         (((ρB.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) ∧
     ScalarCocycle.CohomologousTo ωA ωB
 
+/-- `IsSameSPTPhase` implies on-site symmetry for the first tensor: the virtual
+representation intertwining gives a gauge equivalence between `A` and each
+twisted tensor, which implies `SameMPV`. -/
+theorem IsSameSPTPhase.isOnSiteSymmetric_left
+    {A B : MPSTensor d D} {U : G →* Matrix (Fin d) (Fin d) ℂ}
+    (h : IsSameSPTPhase A B U) : IsOnSiteSymmetric A U := by
+  obtain ⟨_, _, ρA, _, hA, _, _⟩ := h
+  intro g
+  exact GaugeEquiv.sameMPV ⟨ρA.X (g⁻¹), fun i => hA g i⟩
+
+/-- `IsSameSPTPhase` implies on-site symmetry for the second tensor. -/
+theorem IsSameSPTPhase.isOnSiteSymmetric_right
+    {A B : MPSTensor d D} {U : G →* Matrix (Fin d) (Fin d) ℂ}
+    (h : IsSameSPTPhase A B U) : IsOnSiteSymmetric B U := by
+  obtain ⟨_, _, _, ρB, _, hB, _⟩ := h
+  intro g
+  exact GaugeEquiv.sameMPV ⟨ρB.X (g⁻¹), fun i => hB g i⟩
+
 /-- For an injective symmetric MPS with canonical FCS data, the twisted transfer
 map has the virtual representation gauge matrix as a fixed point (eigenvalue 1).
 This is immediate from the virtual representation intertwining relation and the
@@ -1755,23 +1775,21 @@ theorem hasStringOrder_of_symmetric_injective
   exact hasStringOrder_of_localSymmetry A (U g) Λ hΛtr hNorm
     ⟨W, μ, hW, hW', hμ, hΛinv, hC1μ⟩
 
-/-- **String order is invariant under on-site symmetry.**  If two injective MPS
-tensors are both symmetric under the same on-site representation `U` and satisfy
-the canonical normalisation hypotheses, then string order for any group element
-`g` holds for one iff it holds for the other.
+/-- **String order is an SPT-phase invariant.**  If two injective MPS tensors
+are in the same SPT phase (`IsSameSPTPhase`) and satisfy the canonical
+normalisation hypotheses, then string order for any group element `g` holds
+for one iff it holds for the other.
 
-This follows immediately from `hasStringOrder_of_symmetric_injective`, which
-shows that string order holds universally for injective symmetric MPS.  For
-the SPT-phase application, note that `IsSameSPTPhase` implies on-site symmetry
-for both tensors (via the virtual representation intertwining), so this result
-applies in particular to tensors in the same SPT phase. -/
+The `IsSameSPTPhase` hypothesis supplies on-site symmetry for both tensors
+(via `IsSameSPTPhase.isOnSiteSymmetric_left/right`), after which
+`hasStringOrder_of_symmetric_injective` shows that string order holds
+universally for each. -/
 theorem stringOrder_invariant_of_samePhase
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hSymmA : IsOnSiteSymmetric A U)
-    (hSymmB : IsOnSiteSymmetric B U)
     (hUnitary : ∀ g : G, U g * (U g)ᴴ = 1)
+    (hSamePhase : IsSameSPTPhase A B U)
     (Λ_A Λ_B : Matrix (Fin D) (Fin D) ℂ)
     (hΛApos : Λ_A.PosDef) (hΛBpos : Λ_B.PosDef)
     (hΛAtr : Matrix.trace Λ_A = 1) (hΛBtr : Matrix.trace Λ_B = 1)
@@ -1781,9 +1799,11 @@ theorem stringOrder_invariant_of_samePhase
     (hNormB : transferMap B 1 = 1) :
     ∀ g : G, HasStringOrder A (U g) Λ_A ↔ HasStringOrder B (U g) Λ_B := by
   intro g
-  exact ⟨fun _ => hasStringOrder_of_symmetric_injective B hB U hSymmB
+  exact ⟨fun _ => hasStringOrder_of_symmetric_injective B hB U
+              hSamePhase.isOnSiteSymmetric_right
               hUnitary g Λ_B hΛBpos hΛBtr hΛBfix hNormB,
-         fun _ => hasStringOrder_of_symmetric_injective A hA U hSymmA
+         fun _ => hasStringOrder_of_symmetric_injective A hA U
+              hSamePhase.isOnSiteSymmetric_left
               hUnitary g Λ_A hΛApos hΛAtr hΛAfix hNormA⟩
 
 end SPTDetection
