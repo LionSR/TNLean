@@ -61,8 +61,8 @@ arXiv:0802.0447):
   symmetry (for injective MPS)
 * `MPSTensor.hasStringOrder_of_symmetric_injective` — string order holds
   universally for injective symmetric MPS with canonical FCS data
-* `MPSTensor.stringOrder_invariant_of_samePhase` — string order is an
-  SPT phase invariant
+* `MPSTensor.stringOrder_invariant_of_samePhase` — string order is
+  invariant for injective symmetric MPS
 
 ## References
 
@@ -1755,21 +1755,22 @@ theorem hasStringOrder_of_symmetric_injective
   exact hasStringOrder_of_localSymmetry A (U g) Λ hΛtr hNorm
     ⟨W, μ, hW, hW', hμ, hΛinv, hC1μ⟩
 
-/-- **String order is an SPT phase invariant.**  If two injective MPS tensors are
-in the same SPT phase (cohomologous virtual cocycles), then string order for any
-group element `g` holds for one iff it holds for the other.
+/-- **String order is invariant under on-site symmetry.**  If two injective MPS
+tensors are both symmetric under the same on-site representation `U` and satisfy
+the canonical normalisation hypotheses, then string order for any group element
+`g` holds for one iff it holds for the other.
 
-The `IsSameSPTPhase` witness is used here to derive on-site symmetry for both
-tensors (via the virtual representation intertwining and `GaugeEquiv.sameMPV`).
-The cohomology condition is not needed for this particular property because,
-for canonical finitely correlated states, string order holds universally for
-injective symmetric MPS by `hasStringOrder_of_symmetric_injective`.  The
-cohomology becomes essential for finer SPT invariants (e.g. string-order
-*parameter* values). -/
+This follows immediately from `hasStringOrder_of_symmetric_injective`, which
+shows that string order holds universally for injective symmetric MPS.  For
+the SPT-phase application, note that `IsSameSPTPhase` implies on-site symmetry
+for both tensors (via the virtual representation intertwining), so this result
+applies in particular to tensors in the same SPT phase. -/
 theorem stringOrder_invariant_of_samePhase
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hSymmA : IsOnSiteSymmetric A U)
+    (hSymmB : IsOnSiteSymmetric B U)
     (hUnitary : ∀ g : G, U g * (U g)ᴴ = 1)
     (Λ_A Λ_B : Matrix (Fin D) (Fin D) ℂ)
     (hΛApos : Λ_A.PosDef) (hΛBpos : Λ_B.PosDef)
@@ -1777,17 +1778,8 @@ theorem stringOrder_invariant_of_samePhase
     (hΛAfix : transferMap (fun i => (A i)ᴴ) Λ_A = Λ_A)
     (hΛBfix : transferMap (fun i => (B i)ᴴ) Λ_B = Λ_B)
     (hNormA : transferMap A 1 = 1)
-    (hNormB : transferMap B 1 = 1)
-    (hSamePhase : IsSameSPTPhase A B U) :
+    (hNormB : transferMap B 1 = 1) :
     ∀ g : G, HasStringOrder A (U g) Λ_A ↔ HasStringOrder B (U g) Λ_B := by
-  -- Extract on-site symmetry from the same-phase witness;
-  -- the cohomology condition (hCoh) is not needed for string order existence
-  -- but is retained in the statement for downstream SPT invariant results
-  obtain ⟨_ωA, _ωB, ρA, ρB, hρA, hρB, _hCoh⟩ := hSamePhase
-  have hSymmA : IsOnSiteSymmetric A U := fun g =>
-    GaugeEquiv.sameMPV ⟨ρA.X (g⁻¹), hρA g⟩
-  have hSymmB : IsOnSiteSymmetric B U := fun g =>
-    GaugeEquiv.sameMPV ⟨ρB.X (g⁻¹), hρB g⟩
   intro g
   exact ⟨fun _ => hasStringOrder_of_symmetric_injective B hB U hSymmB
               hUnitary g Λ_B hΛBpos hΛBtr hΛBfix hNormB,
