@@ -12,7 +12,6 @@ import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.Assembly
 import TNLean.Spectral.SpectralGapNT
 import TNLean.Channel.Irreducible.PerronFrobenius
-import TNLean.MPS.FundamentalTheorem.TransferNormalization
 
 import TNLean.Algebra.GramMatrixLI
 import Mathlib.Analysis.InnerProductSpace.l2Space
@@ -219,36 +218,14 @@ theorem periodicSelfOverlap_tendsto
 
 /-! ## Case 1: Different periods → orthogonal (Appendix A, first case) -/
 
-/-- `↑(X⁻¹) * ↑X = 1` at the matrix level for GL elements. -/
-private theorem gl_inv_mul_val (X : GL (Fin D) ℂ) :
-    X⁻¹.val * X.val = 1 := by
-  simp
-
-/-- `↑X * ↑(X⁻¹) = 1` at the matrix level for GL elements. -/
-private theorem gl_mul_inv_val (X : GL (Fin D) ℂ) :
-    X.val * X⁻¹.val = 1 := by
-  simp
-
 /-- Cancellation: `X⁻¹ * (X * Y * Xᴴ) * (X⁻¹)ᴴ = Y`. -/
 private theorem gl_conj_cancel (X : GL (Fin D) ℂ)
     (Y : Matrix (Fin D) (Fin D) ℂ) :
     X⁻¹.val * (X.val * Y * X.valᴴ) * X⁻¹.valᴴ = Y := by
-  have h1 : X⁻¹.val * X.val = 1 := gl_inv_mul_val X
+  have h1 : X⁻¹.val * X.val = 1 := Units.inv_mul X
   have h2 : X.valᴴ * X⁻¹.valᴴ = 1 := by
-    rw [← Matrix.conjTranspose_mul, gl_inv_mul_val]; simp
+    rw [← Matrix.conjTranspose_mul, Units.inv_mul]; simp
   calc _ = X⁻¹.val * X.val * Y * (X.valᴴ * X⁻¹.valᴴ) := by
-          simp only [Matrix.mul_assoc]
-      _ = 1 * Y * 1 := by rw [h1, h2]
-      _ = Y := by simp
-
-/-- Reverse cancellation: `X * (X⁻¹ * Y * (X⁻¹)ᴴ) * Xᴴ = Y`. -/
-private theorem gl_conj_cancel' (X : GL (Fin D) ℂ)
-    (Y : Matrix (Fin D) (Fin D) ℂ) :
-    X.val * (X⁻¹.val * Y * X⁻¹.valᴴ) * X.valᴴ = Y := by
-  have h1 : X.val * X⁻¹.val = 1 := gl_mul_inv_val X
-  have h2 : X⁻¹.valᴴ * X.valᴴ = 1 := by
-    rw [← Matrix.conjTranspose_mul, gl_mul_inv_val]; simp
-  calc _ = X.val * X⁻¹.val * Y * (X⁻¹.valᴴ * X.valᴴ) := by
           simp only [Matrix.mul_assoc]
       _ = 1 * Y * 1 := by rw [h1, h2]
       _ = Y := by simp
@@ -262,16 +239,16 @@ private noncomputable def glConjEquiv (X : GL (Fin D) ℂ) :
     (LinearMap.ext fun Y => by
       simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
         LinearMap.mulRight_apply, LinearMap.id_apply, ← Matrix.mul_assoc]
-      rw [gl_mul_inv_val, one_mul, Matrix.mul_assoc Y,
+      rw [Units.mul_inv, one_mul, Matrix.mul_assoc Y,
         show X⁻¹.valᴴ * X.valᴴ = 1 from by
-          rw [← Matrix.conjTranspose_mul, gl_mul_inv_val]; simp,
+          rw [← Matrix.conjTranspose_mul, Units.mul_inv]; simp,
         mul_one])
     (LinearMap.ext fun Y => by
       simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
         LinearMap.mulRight_apply, LinearMap.id_apply, ← Matrix.mul_assoc]
-      rw [gl_inv_mul_val, one_mul, Matrix.mul_assoc Y,
+      rw [Units.inv_mul, one_mul, Matrix.mul_assoc Y,
         show X.valᴴ * X⁻¹.valᴴ = 1 from by
-          rw [← Matrix.conjTranspose_mul, gl_inv_mul_val]; simp,
+          rw [← Matrix.conjTranspose_mul, Units.inv_mul]; simp,
         mul_one])
 
 /-- **GaugePhaseEquiv preserves periods.**
@@ -344,7 +321,7 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
       calc X⁻¹.val * (X.val * A i * X⁻¹.val) * X.val
           = X⁻¹.val * X.val * A i * (X⁻¹.val * X.val) := by
             simp only [Matrix.mul_assoc]
-        _ = 1 * A i * 1 := by rw [gl_inv_mul_val]
+        _ = 1 * A i * 1 := by rw [Units.inv_mul]
         _ = A i := by simp
     rw [hconj, smul_smul, inv_mul_cancel₀ hζ_ne, one_smul]
   -- Peripheral eigenvalue equality via conjugation
