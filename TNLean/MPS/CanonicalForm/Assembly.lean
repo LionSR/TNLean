@@ -837,8 +837,12 @@ theorem transferMap_adjoint_blocked_eq_pow
 
 For an irreducible TP tensor `A` of period `m`, after blocking by `m`, the blocked tensor
 `blockTensor A m` admits a sector decomposition into `m` TP blocks via the cyclic
-spectral projections. Each sector is left-canonical and the direct-sum tensor is
-`SameMPV₂`-equivalent to the blocked tensor. -/
+spectral projections. Returns:
+- `blocks k`: TP sector tensors (each left-canonical),
+- `P k`: orthogonal projections forming a partition of unity (`∑ P k = 1`),
+- commutation: each `P k` commutes with every blocked letter,
+- trace relation: `mpv (blocks k) σ = (P k * evalWord (blockTensor A m) σ).trace`,
+- MPV equivalence: the direct-sum tensor is `SameMPV₂`-equivalent to the blocked tensor. -/
 theorem exists_cyclic_sector_decomp_after_blocking
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
