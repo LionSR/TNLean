@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Defs
-import Mathlib.Data.ZMod.Basic
-import Mathlib.Algebra.Group.TypeTags.Basic
+import TNLean.MPS.Examples.ZMod2
 
 /-!
 # AKLT state as a Matrix Product State
@@ -132,16 +131,12 @@ theorem aklt_transferMap_one :
 
 /-! ### Normality (2-block injectivity) -/
 
-private lemma evalWord_two (A : MPSTensor d D) (i j : Fin d) :
-    evalWord A [i, j] = A i * A j := by
-  simp [evalWord]
-
 private abbrev wordSpan :=
   Submodule.span ℂ (Set.range fun σ : Fin 2 → Fin 3 => evalWord akltTensor (List.ofFn σ))
 
 private lemma product_in_wordSpan (i j : Fin 3) :
     akltTensor i * akltTensor j ∈ wordSpan := by
-  rw [← evalWord_two]
+  rw [show akltTensor i * akltTensor j = evalWord akltTensor [i, j] from by simp [evalWord]]
   have : [i, j] = List.ofFn (![i, j] : Fin 2 → Fin 3) := by
     simp [List.ofFn_succ, List.ofFn_zero]
   rw [this]
@@ -234,22 +229,17 @@ theorem aklt_isNormal : IsNormal akltTensor := ⟨2, aklt_isNBlkInjective_two⟩
 
 /-! ### Z₂ on-site symmetry -/
 
-private lemma zmod2_cases' (g : Multiplicative (ZMod 2)) :
-    g = 1 ∨ g = Multiplicative.ofAdd 1 := by
-  fin_cases g <;> simp [Multiplicative.ext_iff] <;> tauto
-
-private lemma zmod2_one_add_one' : (1 : ZMod 2) + 1 = 0 := by decide
-
-/-- The Z₂ physical action: Rx(π) acts as
-`!![−1, 0, 0; 0, 0, 1; 0, 1, 0]` on the spin-1 basis. -/
+/-- The Z₂ physical action on the spin-1 basis `{|+1⟩, |0⟩, |−1⟩}`:
+the generator `Rx(π)` acts as `diag(−1, 1, 1)` composed with the `|0⟩ ↔ |−1⟩` swap,
+giving the matrix `!![−1, 0, 0; 0, 0, 1; 0, 1, 0]`. -/
 def akltZ2Action :
     Multiplicative (ZMod 2) →* Matrix (Fin 3) (Fin 3) ℂ where
   toFun g := if Multiplicative.toAdd g = 0 then 1
     else Matrix.of !![(-1 : ℂ), 0, 0; 0, 0, 1; 0, 1, 0]
   map_one' := by simp [toAdd_one]
   map_mul' a b := by
-    rcases zmod2_cases' a with rfl | rfl <;> rcases zmod2_cases' b with rfl | rfl <;>
-      simp [toAdd_ofAdd, zmod2_one_add_one']
+    rcases zmod2_cases a with rfl | rfl <;> rcases zmod2_cases b with rfl | rfl <;>
+      simp [toAdd_ofAdd, zmod2_one_add_one]
     ext i j; fin_cases i <;> fin_cases j <;>
       simp [Matrix.mul_apply, Fin.sum_univ_three, Matrix.of_apply,
         Matrix.cons_val_zero, Matrix.cons_val_one]
@@ -311,7 +301,7 @@ private lemma aklt_gaugeEquiv_twisted :
 theorem aklt_isOnSiteSymmetric_Z2 :
     IsOnSiteSymmetric akltTensor akltZ2Action := by
   intro g
-  rcases zmod2_cases' g with rfl | rfl
+  rcases zmod2_cases g with rfl | rfl
   · rw [twistedTensor_one]; exact fun _ _ => rfl
   · exact aklt_gaugeEquiv_twisted.sameMPV
 

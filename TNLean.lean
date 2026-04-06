@@ -207,6 +207,7 @@ import TNLean.MPS.MPDO.Defs
 -- MPS examples
 import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Examples.GHZ
+import TNLean.MPS.Examples.ZMod2
 
 -- Layer 5b: Renormalization fixed points (RFP) — pure-state scaffolding
 import TNLean.MPS.RFP.Defs
