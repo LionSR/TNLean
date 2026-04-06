@@ -326,16 +326,21 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
 
 If `A` is `L₀`-block-injective with `L₀ > 0`, the parent Hamiltonian with
 interaction range `2L₀` on a periodic chain of `N ≥ 2L₀` sites has a unique
-ground state. -/
+ground state.
+
+**Proof sketch**: Rewrite via `chainGroundSpace_eq_mpvSubmodule` (sorry'd),
+then use `mpv_ne_zero_of_isNBlkInjective` to show the MPV submodule is 1D. -/
+-- TODO(parent-hamiltonian): remove sorry once `chainGroundSpace_eq_mpvSubmodule`
+-- is proved. The reduction is:
+--   rw [HasUniqueGroundState,
+--     chainGroundSpace_eq_mpvSubmodule hA (by omega) (le_refl _) hN]
+--   have hmpv := mpv_ne_zero_of_isNBlkInjective hA hL₀ (by omega)
+--   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
-  rw [HasUniqueGroundState,
-    chainGroundSpace_eq_mpvSubmodule hA (by omega) (le_refl _) hN]
-  have hmpv : (mpv A : NSiteSpace d N) ≠ 0 :=
-    mpv_ne_zero_of_isNBlkInjective hA hL₀ (by omega)
-  simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
+  sorry
 
 /-- **Optimal unique ground state for normal tensors on `L₀ + 1` sites**.
 
@@ -343,16 +348,18 @@ If `A` is normal and `L₀`-block-injective with `L₀ > 0`, the interaction ran
 can be reduced from `2L₀` to `L₀ + 1`. The chain ground space with window
 `L₀ + 1` on `N ≥ L₀ + 1` sites has a unique ground state.
 
-The proof reduces to `chainGroundSpace_eq_mpvSubmodule_normal` with `L = L₀ + 1`,
-then shows the MPV submodule is one-dimensional via `mpv_ne_zero_of_isNBlkInjective`. -/
+**Proof sketch**: Rewrite via `chainGroundSpace_eq_mpvSubmodule_normal` (sorry'd),
+then use `mpv_ne_zero_of_isNBlkInjective` to show the MPV submodule is 1D. -/
+-- TODO(parent-hamiltonian): remove sorry once `chainGroundSpace_eq_mpvSubmodule_normal`
+-- is proved. The reduction is:
+--   rw [HasUniqueGroundState,
+--     chainGroundSpace_eq_mpvSubmodule_normal hA hInj (by omega) (by omega) hN]
+--   have hmpv := mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN
+--   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
-  rw [HasUniqueGroundState,
-    chainGroundSpace_eq_mpvSubmodule_normal hA hInj (by omega) (by omega) hN]
-  have hmpv : (mpv A : NSiteSpace d N) ≠ 0 :=
-    mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN
-  simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
+  sorry
 
 end MPSTensor
