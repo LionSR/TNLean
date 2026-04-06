@@ -103,9 +103,11 @@ The proof requires showing that the Jacobson radical of a finite-dimensional
 Note: This is stated as a `theorem` rather than an `instance` because the
 proof is currently sorry'd. Registering a sorry'd instance would pollute
 typeclass synthesis. Once proved, this should be promoted to an `instance`. -/
-theorem fixedPointAlgebra_isSemisimpleRing :
+theorem fixedPointAlgebra_isSemisimpleRing
+    (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
+    (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     IsSemisimpleRing
-      (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) :=
+      (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) := by
   sorry
 
 /-- **Abstract Wedderburn--Artin decomposition** of the fixed-point algebra.
@@ -119,12 +121,14 @@ theorem `IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed`. -/
 -- TODO: Once `fixedPointAlgebra_isSemisimpleRing` is proved, apply
 -- `IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed`.
 -- The carrier type is finite-dimensional over ℂ as a subalgebra of M_D(ℂ).
-theorem fixedPointAlgebra_wedderburnArtin :
+theorem fixedPointAlgebra_wedderburnArtin
+    (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
+    (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     ∃ (n : ℕ) (dims : Fin n → ℕ),
       (∀ i, NeZero (dims i)) ∧
         Nonempty
           (↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix) ≃ₐ[ℂ]
-            Π i : Fin n, Matrix (Fin (dims i)) (Fin (dims i)) ℂ) :=
+            Π i : Fin n, Matrix (Fin (dims i)) (Fin (dims i)) ℂ) := by
   sorry
 
 end AbstractDecomp
@@ -196,9 +200,6 @@ theorem starSubalgebra_hasWedderburnBlockDecomp
     Nonempty (IsWedderburnBlockDecomp S) :=
   sorry
 
-variable (K : Fin d → Mat) (h_tp : IsTP K)
-  {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ)
-
 /-- **Wolf Theorem 6.14** (Heisenberg picture, abstract form).
 
 The adjoint-fixed-point `*`-subalgebra `Fix(T*) = {X | T*(X) = X}` admits a
@@ -209,20 +210,21 @@ Combined with `fixedPointAlgebra_wedderburnArtin`, this gives:
 (concrete).
 
 **Status**: sorry — follows from `starSubalgebra_hasWedderburnBlockDecomp`. -/
-theorem adjointFixedPoints_wedderburnDecomp :
+theorem adjointFixedPoints_wedderburnDecomp
+    (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
+    (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     Nonempty
       (IsWedderburnBlockDecomp
-        (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) :=
-  starSubalgebra_hasWedderburnBlockDecomp _
+        (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)) := by
+  simpa using
+    (starSubalgebra_hasWedderburnBlockDecomp
+      (S := adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix))
 
 end ConcreteDecomp
 
 /-! ## Dimension constraints -/
 
 section DimConstraints
-
-variable (K : Fin d → Mat) (h_tp : IsTP K)
-  {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ)
 
 /-- In any Wedderburn block decomposition of the fixed-point algebra, the
 weighted sum of block dimensions and multiplicities is at most `D`.
@@ -233,11 +235,14 @@ is exactly the ambient-dimension constraint recorded in
 `IsWedderburnBlockDecomp.dim_le`.
 
 This is a convenience accessor for `IsWedderburnBlockDecomp.dim_le`. -/
-theorem wedderburnBlockDims_sum_le :
+theorem wedderburnBlockDims_sum_le
+    (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
+    (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     ∀ (w : IsWedderburnBlockDecomp
         (adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)),
-      ∑ i : Fin w.numBlocks, w.blockDim i * w.multDim i ≤ D :=
-  fun w => w.dim_le
+      ∑ i : Fin w.numBlocks, w.blockDim i * w.multDim i ≤ D := by
+  intro w
+  exact w.dim_le
 
 end DimConstraints
 

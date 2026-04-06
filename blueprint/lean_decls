@@ -261,6 +261,9 @@ Channel.support_proj_fixed
 Channel.stationaryState
 Channel.stationarySupport
 Channel.stationarySupport_eq_one
+Kraus.fixedPointAlgebra_isSemisimpleRing
+Kraus.fixedPointAlgebra_wedderburnArtin
+Kraus.adjointFixedPoints_wedderburnDecomp
 irreducible_iff_exp_posDef_forall
 MPSTensor.wolf_theorem_6_8_kraus_span
 MPSTensor.wolf_theorem_6_8_conjunction
@@ -670,6 +673,9 @@ MPSTensor.mpv_mem_groundSpace
 MPSTensor.HasUniqueGroundState
 MPSTensor.hasUniqueGroundState_iff_proportional
 MPSTensor.chainGroundSpace
+MPSTensor.mpv_ne_zero_of_isNBlkInjective
+MPSTensor.chainGroundSpace_eq_mpvSubmodule
+MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal
 MPSTensor.groundSpace_unique_periodic
 MPSTensor.parentHamiltonian_unique_gs_injective
 MPSTensor.parentHamiltonian_unique_gs_normal
