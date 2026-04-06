@@ -1,0 +1,210 @@
+\chapter{Concrete Examples}\label{ch:examples}
+
+This chapter collects concrete MPS tensors that illustrate the general
+theory developed in earlier chapters.  Each example is specified by its
+physical dimension~$d$, bond dimension~$D$, and explicit matrix
+family~$\{A^i\}$.  Key structural properties (injectivity, RFP status,
+symmetry) are stated as propositions linking back to the general
+definitions.
+
+References follow~\cite{Cirac2021Matrix}, Section~III.
+
+%% ===================================================================
+\section{The GHZ state}\label{sec:ghz}
+%% ===================================================================
+
+The Greenberger--Horne--Zeilinger (GHZ) state is the prototypical
+non-injective, renormalization-fixed-point MPS.
+
+\begin{definition}[GHZ tensor]\label{def:ghz_tensor}
+    \lean{MPSTensor.ghzTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d = D = 2$.  The GHZ tensor is the family
+    $\{A^0, A^1\} \subset \MN{2}$ defined by
+    \[
+        A^0 = \ketbra{0}{0} = \diag(1,0),
+        \qquad
+        A^1 = \ketbra{1}{1} = \diag(0,1).
+    \]
+    For a system of $N$ sites the resulting MPV is the GHZ state
+    \[
+        \ket{\mathrm{GHZ}_N}
+        = \ket{0}^{\otimes N} + \ket{1}^{\otimes N}.
+    \]
+\end{definition}
+
+\begin{theorem}[GHZ transfer map is idempotent]\label{thm:ghz_transfer_idempotent}
+    \lean{MPSTensor.ghz_transferMap_idempotent}
+    \leanok
+    \uses{def:ghz_tensor, def:transfer_map}
+    The transfer map of the GHZ tensor satisfies $\E_A^2 = \E_A$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The transfer map acts by
+    $\E_A(X)_{ij} = \delta_{ij} X_{ij}$
+    (extraction of the diagonal).
+    This operation is manifestly idempotent.
+\end{proof}
+
+\begin{theorem}[GHZ tensor is an RFP]\label{thm:ghz_is_rfp}
+    \lean{MPSTensor.ghz_isRFP}
+    \leanok
+    \uses{def:ghz_tensor, def:is_rfp, thm:ghz_transfer_idempotent}
+    The GHZ tensor is a renormalization fixed point.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ghz_transfer_idempotent}
+    Immediate from Theorem~\ref{thm:ghz_transfer_idempotent}.
+\end{proof}
+
+\begin{theorem}[GHZ tensor is not injective]\label{thm:ghz_not_injective}
+    \lean{MPSTensor.ghz_not_isInjective}
+    \leanok
+    \uses{def:ghz_tensor, def:injective}
+    The GHZ tensor is not injective: $\spn_{\C}\{A^0, A^1\}$ is the
+    two-dimensional space of diagonal matrices in~$\MN{2}$, which does
+    not equal~$\MN{2}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every element of $\spn_{\C}\{A^0, A^1\}$ has zero off-diagonal
+    entries, so the matrix with all entries equal to~$1$ is not in the
+    span.
+\end{proof}
+
+\begin{theorem}[$\Z_2$ on-site symmetry of the GHZ tensor]\label{thm:ghz_z2_symmetric}
+    \lean{MPSTensor.ghz_isOnSiteSymmetric_Z2}
+    \leanok
+    \uses{def:ghz_tensor, def:on_site_symmetric}
+    Let $\Z_2 = \{1, \sigma_x\}$ act on $\C^2$ by the Pauli-$X$
+    matrix~$\sigma_x$.  The GHZ tensor is on-site symmetric under this
+    action: for each $g \in \Z_2$, the twisted tensor is gauge
+    equivalent to $A$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The identity element is trivial.  For the generator
+    $g = \sigma_x$, the twisted tensor satisfies
+    $(A^g)^i = A^{1-i}$, i.e.\ the two matrices are swapped.
+    Conjugation by $\sigma_x$ implements the same swap, giving
+    the required gauge equivalence.
+\end{proof}
+
+%% ===================================================================
+\section{The AKLT state}\label{sec:aklt}
+%% ===================================================================
+
+The Affleck--Kennedy--Lieb--Tasaki (AKLT) state is the canonical
+example of an injective MPS with non-trivial symmetry-protected
+topological (SPT) order.
+
+\begin{definition}[AKLT tensor]\label{def:aklt_tensor}
+    \notready
+    \uses{def:mps_tensor}
+    Set $d = 3$ (spin-1) and $D = 2$.  The AKLT tensor is the family
+    $\{A^0, A^1, A^2\} \subset \MN{2}$ defined via the Pauli matrices by
+    \[
+        A^0 = \frac{1}{\sqrt{2}}\,\sigma_z,
+        \qquad
+        A^1 = \frac{1}{\sqrt{2}}\,\sigma_+,
+        \qquad
+        A^2 = \frac{1}{\sqrt{2}}\,\sigma_-,
+    \]
+    where
+    $\sigma_z = \ketbra{0}{0} - \ketbra{1}{1}$,
+    $\sigma_+ = \sqrt{2}\,\ketbra{0}{1}$, and
+    $\sigma_- = \sqrt{2}\,\ketbra{1}{0}$.
+    Equivalently, the matrices are the Clebsch--Gordan coefficients
+    coupling spin-$1$ and spin-$\tfrac12$ to spin-$\tfrac12$.
+\end{definition}
+
+\begin{theorem}[AKLT tensor is injective]\label{thm:aklt_injective}
+    \notready
+    \uses{def:aklt_tensor, def:injective}
+    The AKLT tensor is injective:
+    $\spn_{\C}\{A^0, A^1, A^2\} = \MN{2}$.
+\end{theorem}
+
+\begin{theorem}[AKLT tensor is normal]\label{thm:aklt_normal}
+    \notready
+    \uses{def:aklt_tensor}
+    The transfer map of the AKLT tensor has a unique eigenvalue of
+    modulus~$1$; in particular the AKLT tensor is normal.
+\end{theorem}
+
+\begin{theorem}[SU(2) on-site symmetry of the AKLT tensor]\label{thm:aklt_su2_symmetric}
+    \notready
+    \uses{def:aklt_tensor, def:on_site_symmetric}
+    The AKLT tensor is on-site symmetric under the spin-$1$
+    representation of $\mathrm{SU}(2)$, with the virtual
+    representation being the fundamental (spin-$\tfrac12$)
+    representation.  The projective phase is the non-trivial
+    element of $H^2(\mathrm{SO}(3),\mathrm{U}(1)) \cong \Z_2$,
+    witnessing a non-trivial SPT phase.
+\end{theorem}
+
+%% ===================================================================
+\section{The cluster state}\label{sec:cluster}
+%% ===================================================================
+
+The cluster state is a universal resource for measurement-based quantum
+computation and provides another example of a non-trivial SPT phase.
+
+\begin{definition}[Cluster-state tensor]\label{def:cluster_tensor}
+    \notready
+    \uses{def:mps_tensor}
+    Set $d = D = 2$.  The cluster-state tensor is the family
+    $\{A^0, A^1\} \subset \MN{2}$ defined by
+    \[
+        A^0 = \frac{1}{\sqrt{2}}\,\Id_2,
+        \qquad
+        A^1 = \frac{1}{\sqrt{2}}\,\sigma_x,
+    \]
+    where $\sigma_x = \ketbra{0}{1} + \ketbra{1}{0}$.
+\end{definition}
+
+\begin{theorem}[Cluster-state tensor is not injective]\label{thm:cluster_not_injective}
+    \notready
+    \uses{def:cluster_tensor, def:injective}
+    The cluster-state tensor is not injective:
+    $\spn_{\C}\{A^0, A^1\} = \spn_{\C}\{\Id_2, \sigma_x\}$
+    has dimension~$2$, not $\dim \MN{2} = 4$.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:cluster_tensor}
+    Since $\sigma_x^2 = \Id_2$, the algebra generated by
+    $\{\Id_2, \sigma_x\}$ is abelian and two-dimensional.
+    Any matrix with distinct diagonal entries (e.g.\ $\sigma_z$)
+    lies outside the span.
+\end{proof}
+
+\begin{remark}\label{rem:cluster_injective_blocked}
+    Although the cluster-state tensor is not injective at length~$1$,
+    it becomes injective after blocking with a suitable basis
+    rotation.  Specifically, if one conjugates by the Hadamard
+    matrix $H = \tfrac{1}{\sqrt{2}}(\sigma_x + \sigma_z)$
+    to obtain $\tilde{A}^i = H A^i H^\dagger$, the resulting
+    tensor has $\tilde{A}^0 = \tfrac{1}{\sqrt{2}} H$ and
+    $\tilde{A}^1 = \tfrac{1}{\sqrt{2}} H \sigma_z$.
+    The blocked tensor at length~$2$ in this basis is injective
+    ($\dim \spn_{\C}\{\tilde{A}^w : |w| = 2\} = 4$).
+\end{remark}
+
+\begin{theorem}[$\Z_2$ on-site symmetry of the cluster-state tensor]\label{thm:cluster_z2_symmetric}
+    \notready
+    \uses{def:cluster_tensor, def:on_site_symmetric}
+    Let $\Z_2 = \{1, \sigma_z\}$ act on $\C^2$ by the Pauli-$Z$
+    matrix.  The cluster-state tensor is on-site symmetric under this
+    action, with virtual representation given by $\sigma_z$.
+    The projective phase is the non-trivial element of
+    $H^2(\Z_2, \mathrm{U}(1)) \cong \Z_2$, witnessing a non-trivial
+    SPT phase.
+\end{theorem}
