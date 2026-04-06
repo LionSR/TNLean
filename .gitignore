@@ -74,3 +74,4 @@ External/**/.lake/
 External/**/lake-manifest.json
 
 MeetingNotes/
+.worktrees/
