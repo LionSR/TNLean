@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**.lean'
+      - 'lakefile.*'
+      - 'lean-toolchain'
+      - 'lake-manifest.json'
+      - 'blueprint/src/**'
+      - 'home_page/**'
   workflow_dispatch:
 
 # Cancel previous runs if a new commit is pushed

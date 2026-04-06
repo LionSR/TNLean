@@ -5,6 +5,10 @@ on:
     - cron: "0 8 * * 1-5"  # Weekdays at 08:00 UTC
   workflow_dispatch:         # Manual trigger for on-demand summaries
 
+concurrency:
+  group: daily-standup
+  cancel-in-progress: true
+
 permissions:
   contents: read
   issues: write
