@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Defs
-import Mathlib.Data.ZMod.Basic
-import Mathlib.Algebra.Group.TypeTags.Basic
+import TNLean.MPS.Examples.ZMod2
 
 /-!
 # GHZ state as a Matrix Product State
@@ -88,12 +87,6 @@ theorem ghz_not_isInjective : ¬ IsInjective ghzTensor := by
   | smul c x _ hx => simp [hx]
 
 /-! ### Z₂ on-site symmetry -/
-
-private lemma zmod2_cases (g : Multiplicative (ZMod 2)) :
-    g = 1 ∨ g = Multiplicative.ofAdd 1 := by
-  fin_cases g <;> simp [Multiplicative.ext_iff] <;> tauto
-
-private lemma zmod2_one_add_one : (1 : ZMod 2) + 1 = 0 := by decide
 
 /-- The swap (Pauli X) matrix. -/
 private def swapMat : Matrix (Fin 2) (Fin 2) ℂ :=
