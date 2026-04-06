@@ -17,7 +17,7 @@ import TNLean.Spectral.SpectralGapNT
 /-!
 # String order: auxiliary lemmas and private proofs
 
-This file contains the TP-gauge setup infrastructure and the long private proofs
+This file contains the TP-gauge setup infrastructure and the long auxiliary proofs
 supporting the main string-order equivalence theorems in
 `TNLean.MPS.Symmetry.StringOrder`.
 
@@ -39,10 +39,10 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
--- The transfer map of a TP-gauged tensor is the similarity transform of the
--- original transfer map by the positive square root of the adjoint fixed point.
 set_option maxHeartbeats 800000 in
--- Expanding `tpGauge`, `transferMap`, and CFC adjoint identities is kernel-expensive here.
+-- Expanding `tpGauge`, `transferMap`, and CFC adjoint identities is kernel-expensive.
+/-- The transfer map of a TP-gauged tensor is the similarity transform of the
+original transfer map by the positive square root of the adjoint fixed point. -/
 lemma transferMap_tpGauge_eq_similarityMap
     (A : MPSTensor d D)
     (σ : Matrix (Fin D) (Fin D) ℂ)
@@ -69,8 +69,9 @@ lemma transferMap_tpGauge_eq_similarityMap
       _ = ∑ i : Fin d, S * (A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
             refine Finset.sum_congr rfl ?_
             intro x _
-            rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv]
-            simp [Matrix.mul_assoc, hS_inv_herm', hS_herm]
+            rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
+              Matrix.conjTranspose_nonsing_inv]
+            simp [Matrix.mul_assoc, hS_herm]
       _ = S * (∑ i : Fin d, A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
             rw [Matrix.sum_mul_mul]
       _ = similarityMap (D := D) S⁻¹ (transferMap A) X := by
@@ -128,6 +129,8 @@ lemma gaugePhaseEquiv_of_gaugeEquiv_left_right
           (((((Z⁻¹ * Y * X : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ)) : Matrix (Fin D) (Fin D) ℂ))) := by
           simp [Matrix.mul_assoc, mul_inv_rev]
 
+/-- Bundled TP-gauge data for a twisted MPS tensor, used to reduce the spectral radius
+bound to the TP-normalized setting in the string-order proofs. -/
 structure TwistedTPGaugeSetup [NeZero D]
     (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ) where
   B : MPSTensor d D
@@ -152,6 +155,8 @@ structure TwistedTPGaugeSetup [NeZero D]
   hIrrA' : IsIrreducibleTensor (d := d) (D := D) A'
   hIrrB' : IsIrreducibleTensor (d := d) (D := D) B'
 
+/-- Constructs a `TwistedTPGaugeSetup` from an injective, normalized MPS tensor and
+a unitary twist matrix `u`. -/
 noncomputable def twistedTPGaugeSetup [NeZero D]
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -244,6 +249,8 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
       hIrrA' := hIrrA'
       hIrrB' := hIrrB' }
 
+/-- An eigenvalue of the twisted transfer map is also an eigenvalue of the mixed
+transfer map in the TP-gauge picture. -/
 theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
     (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
