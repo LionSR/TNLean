@@ -9,7 +9,6 @@ import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.CanonicalForm.CyclicSectors
-import TNLean.MPS.CanonicalForm.SectorIrreducibility
 import TNLean.MPS.CanonicalForm.Assembly
 import TNLean.Spectral.SpectralGapNT
 
@@ -212,8 +211,10 @@ each cyclic sector is a normal tensor. The statement uses the compressed sector
 tensor on the corner bond space, as produced by
 `exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`.
 
-The nontriviality hypothesis `dim u ≠ 0` is required because a
-zero-dimensional sector tensor cannot be block-injective.
+The nontriviality hypothesis `dim u ≠ 0` excludes the degenerate
+zero-dimensional "missing sector" case. With the current definitions, an
+`MPSTensor _ 0` may satisfy block-injectivity/normality vacuously, so this
+assumption is used to focus on genuine nonempty sectors.
 
 The `hBlocks_mpv` hypothesis ties the compressed block decomposition back to
 the original blocked tensor, ensuring the blocks genuinely arise from a
@@ -276,10 +277,11 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
           (blocksA u))
         (blocksB v)) :
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
-  -- Block by m. The overlap decomposes as a sum over sectors:
-  --   ⟨V_{Nm}(A)|V_{Nm}(B)⟩ = ∑_{u,v} ⟨V_N(C_u)|V_N(C'_v)⟩
+  -- Block by m. Writing k for the block-count (so the chain length is m*k),
+  --   ⟨V_{mk}(A)|V_{mk}(B)⟩ = ∑_{u,v} ⟨V_k(C_u)|V_k(C'_v)⟩
   -- Each sector pair has decaying overlap (since no match exists).
   -- A finite sum of sequences tending to 0 also tends to 0.
+  -- The full sequence N ↦ mpvOverlap A B N tends to 0 by reparametrization.
   sorry
 
 /-! ## Case 3: Same period, sector match → gauge-equivalent (Appendix A, main case) -/
@@ -392,27 +394,43 @@ lemma sectorTensor_proportional_of_blockedMatch
   sorry
 
 /-- **Case 3 assembly**: If two periodic tensors have the same period and
-a sector match exists, then they are related by a gauge transformation
-with a unit-modulus phase: `A^i = e^{iξ} U B^i U†`.
+a compressed sector match exists, then they are related by a gauge
+transformation with a unit-modulus phase: `A^i = e^{iξ} U B^i U†`.
+
+The hypotheses mirror the compressed corner API: `blocksA`/`blocksB` are
+the cyclic-sector tensors on corner bond spaces, tied back to the
+original blocked tensors via `SameMPV₂`. The `hSomeMatch` witness
+provides a single matching sector pair `(u₀, v₀)` with compatible
+dimensions.
 
 This is Eq. (A.17)–(A.18) of arXiv:1708.00029. -/
 theorem periodicOverlap_gaugeEquiv_of_sector_match
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
-    (PA QB : Fin m → MatrixAlg D)
-    (hPA_proj : ∀ u, PA u * PA u = PA u)
-    (hQB_proj : ∀ v, QB v * QB v = QB v)
-    (hPA_complete : ∑ u, PA u = 1)
-    (hQB_complete : ∑ v, QB v = 1)
-    (hPA_ortho : ∀ u v, u ≠ v → PA u * PA v = 0)
-    (hQB_ortho : ∀ u v, u ≠ v → QB u * QB v = 0)
-    (hPA_comm : ∀ u (i : Fin d), PA u * A i = A i * PA (u + 1))
-    (hQB_comm : ∀ v (i : Fin d), QB v * B i = B i * QB (v + 1))
-    (hSomeMatch : ∃ u v,
+    {dimA dimB : Fin m → ℕ}
+    (blocksA :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksA k i)ᴴ * blocksA k i = 1)
+    (hB_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksB k i)ᴴ * blocksB k i = 1)
+    (hA_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksA))
+    (hB_mpv :
+      SameMPV₂ (blockTensor B m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hSomeMatch : ∃ (u₀ v₀ : Fin m) (hdim : dimA u₀ = dimB v₀),
       GaugePhaseEquiv
-        (leftSectorTensor (PA u) (blockTensor A m))
-        (leftSectorTensor (QB v) (blockTensor B m))) :
+        (cast (congr_arg
+          (MPSTensor (blockPhysDim d m)) hdim)
+          (blocksA u₀))
+        (blocksB v₀)) :
     RepeatedBlocks A B := by
   -- Use translation propagation to get matching for all sectors,
   -- then apply per-site proportionality extraction.
@@ -465,8 +483,9 @@ theorem periodicOverlapDichotomy
     case pos =>
       subst hdim
       -- Same period, same bond dimension.
-      -- Extract cyclic-sector projections PA, QB from IsPeriodic.
-      -- Case split on whether any sector pair (P_u A^(m), Q_v B^(m)) matches:
+      -- Extract compressed cyclic-sector blocks from IsPeriodic
+      -- (via exists_cyclic_sector_decomp_after_blocking_of_isPeriodic).
+      -- Case split on whether any compressed sector pair matches:
       --   • No match → periodicOverlap_tendsto_zero_of_no_sector_match
       --   • Some match → sectorMatch_propagation (using hA.leftCanonical,
       --     hB.leftCanonical for unit-modulus phases), then
