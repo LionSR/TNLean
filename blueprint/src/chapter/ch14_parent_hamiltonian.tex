@@ -461,6 +461,39 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
   restriction maps; otherwise it is set to $\top$ by convention.
 \end{definition}
 
+\begin{theorem}[MPV nonvanishing for block-injective tensors]%
+  \label{thm:mpv_ne_zero_blk_injective}
+  \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
+  \leanok
+  \uses{def:mpv, def:l_blk_injective}
+  If $A$ is $L_0$-block-injective with $L_0 > 0$ and $N \ge L_0 + 1$,
+  then $\mathrm{mpv}(A) \ne 0$ in the $N$-site space.  The proof uses a
+  descent argument: assuming all traces of length-$N$ products vanish,
+  trace nondegeneracy forces all products of length $N - L_0$ to vanish,
+  and induction reaches a contradiction.
+\end{theorem}
+
+\begin{theorem}[Chain ground space for block-injective tensors]%
+  \label{thm:chain_ground_space_eq_mpv_blk}
+  \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule}
+  \uses{def:chain_ground_space, def:mpv_submodule, def:l_blk_injective}
+  If $A$ is $L_0$-block-injective and the window size satisfies
+  $L \ge 2L_0$, then on the periodic chain with $N \ge 2$ sites,
+  the chain ground space equals the MPV submodule:
+  $\mathcal{G}_L(A) = \operatorname{span}\{\mathrm{mpv}(A)\}$.
+\end{theorem}
+
+\begin{theorem}[Chain ground space for normal tensors]%
+  \label{thm:chain_ground_space_eq_mpv_normal}
+  \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}
+  \uses{def:chain_ground_space, def:mpv_submodule, def:l_blk_injective,
+        def:is_normal}
+  If $A$ is normal and $L_0$-block-injective, the window requirement
+  is reduced from $2L_0$ to $L_0 < L$.  The normality hypothesis enables
+  the range reduction via the structure theory of normal MPS (peripheral
+  spectrum, canonical form).  See~\cite[\S IV.C]{Cirac2021Matrix}.
+\end{theorem}
+
 \begin{theorem}[Unique ground state on the periodic chain]%
   \label{thm:ground_space_unique_periodic}
   \lean{MPSTensor.groundSpace_unique_periodic}
