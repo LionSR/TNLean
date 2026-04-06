@@ -56,6 +56,133 @@ mechanism, and this chapter develops its symmetry consequences.
     $(\operatorname{rotatePhysical}\, u\, A)^i := \sum_j u_{ij}\, A^j$.
 \end{definition}
 
+\begin{theorem}[Transfer map preserved by physical rotation]%
+    \label{thm:transfer_map_rotate_physical}
+    \lean{MPSTensor.transferMap_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:transfer_map}
+    If $u u^\dagger = I$, then the transfer map is invariant under
+    physical-index rotation:
+    $\mathcal{E}_{\operatorname{rotatePhysical}\, u\, A}
+     = \mathcal{E}_A$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:unitary_kraus_mixing}
+    Unitary freedom of the Kraus representation (Theorem~2.18,
+    Wolf \emph{Quantum Channels \& Operations}).
+\end{proof}
+
+\begin{theorem}[Left-canonical preserved by physical rotation]%
+    \label{thm:left_canonical_rotate_physical}
+    \lean{MPSTensor.isLeftCanonical_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical}
+    If $u u^\dagger = I$ and $A$ is left-canonical, then
+    $\operatorname{rotatePhysical}\, u\, A$ is left-canonical.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Expand $\sum_i B_i^\dagger B_i$ where $B_i = \sum_j u_{ij} A_j$,
+    swap sums, apply orthogonality $u^\dagger u = I$, and collapse to
+    $\sum_j A_j^\dagger A_j = I$.
+\end{proof}
+
+\begin{theorem}[Irreducibility preserved by physical rotation]%
+    \label{thm:irreducible_tensor_rotate_physical}
+    \lean{MPSTensor.isIrreducibleTensor_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical}
+    If $u u^\dagger = I$ and $A$ is irreducible, then
+    $\operatorname{rotatePhysical}\, u\, A$ is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Contrapositive: any nontrivial invariant projection~$P$ for the
+    rotated tensor yields $(1-P)\, A_k\, P = 0$ for all~$k$ via the
+    orthogonality of~$u$, contradicting irreducibility of~$A$.
+\end{proof}
+
+\begin{theorem}[Periodicity preserved by physical rotation]%
+    \label{thm:periodic_rotate_physical}
+    \lean{MPSTensor.isPeriodic_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, thm:transfer_map_rotate_physical,
+          thm:left_canonical_rotate_physical,
+          thm:irreducible_tensor_rotate_physical}
+    If $u u^\dagger = I$ and $A$ is periodic with period~$m$, then
+    $\operatorname{rotatePhysical}\, u\, A$ is periodic with the same
+    period.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:transfer_map_rotate_physical,
+          thm:left_canonical_rotate_physical,
+          thm:irreducible_tensor_rotate_physical}
+    Assembles transfer-map invariance, left-canonical preservation, and
+    irreducibility preservation.
+\end{proof}
+
+\begin{theorem}[SameMPV preserved by physical rotation]%
+    \label{thm:same_mpv_rotate_physical}
+    \lean{MPSTensor.sameMPV₂_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    If $\mathcal{V}(A) = \mathcal{V}(B)$, then
+    $\mathcal{V}(\operatorname{rotatePhysical}\, u\, A)
+     = \mathcal{V}(\operatorname{rotatePhysical}\, u\, B)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical, def:same_mpv}
+    Induction on the word length with a strengthened hypothesis
+    carrying an arbitrary prefix matrix, reducing each step to the
+    hypothesis via word concatenation.
+\end{proof}
+
+\begin{theorem}[Physical rotation distributes over block assembly]%
+    \label{thm:rotate_physical_blocks}
+    \lean{MPSTensor.rotatePhysical_toTensorFromBlocks}
+    \leanok
+    \uses{def:rotate_physical}
+    $\operatorname{rotatePhysical}\, u\,
+    (\operatorname{toTensorFromBlocks}\, \mu\, A)
+    = \operatorname{toTensorFromBlocks}\, \mu\,
+    (k \mapsto \operatorname{rotatePhysical}\, u\, (A_k))$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rotate_physical}
+    Pointwise matrix-entry computation using linearity of
+    \texttt{blockDiagonal'} and \texttt{reindex}.
+\end{proof}
+
+\begin{theorem}[Irreducible form preserved by physical rotation]%
+    \label{thm:irreducible_form_rotate_physical}
+    \lean{MPSTensor.isIrreducibleForm_rotatePhysical}
+    \leanok
+    \uses{def:rotate_physical, def:irreducible_form,
+          thm:periodic_rotate_physical,
+          thm:same_mpv_rotate_physical,
+          thm:rotate_physical_blocks}
+    If $u u^\dagger = I$ and $A$ is in irreducible form~II, then
+    $\operatorname{rotatePhysical}\, u\, A$ is in irreducible form~II
+    with the same block structure and rotated blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_rotate_physical,
+          thm:same_mpv_rotate_physical,
+          thm:rotate_physical_blocks}
+    Each block remains periodic by
+    Theorem~\ref{thm:periodic_rotate_physical}, the SameMPV condition
+    transfers via Theorem~\ref{thm:same_mpv_rotate_physical}, and
+    block-assembly compatibility follows from
+    Theorem~\ref{thm:rotate_physical_blocks}.
+\end{proof}
+
 \begin{corollary}[Periodic symmetry yields \(Z\)-gauge equivalence]%
     \label{cor:symmetry_periodic_assembly}
     \lean{MPSTensor.zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical}
