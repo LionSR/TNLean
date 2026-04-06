@@ -205,6 +205,7 @@ import TNLean.PiAlgebra.GlobalSymmetry
 import TNLean.MPS.MPDO.Defs
 
 -- MPS examples
+import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Examples.GHZ
 
 -- Layer 5b: Renormalization fixed points (RFP) — pure-state scaffolding
