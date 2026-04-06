@@ -268,4 +268,152 @@ theorem equalCase_zgauge_pipeline
 
 end ZGaugeAssembly
 
+/-! ## Theorem 3.8 — Equal case assembly (arXiv:1708.00029)
+
+The equal-case Fundamental Theorem of MPS in irreducible form composes:
+
+1. **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): block matching.
+2. **MPV expansion** (`mpv_toTensorFromBlocks_eq_sum`): expands `SameMPV₂` into
+   per-block coefficient identities.
+3. **Linear independence** (`periodicBasis_eventuallyLinearlyIndependent`): extracts
+   per-block coefficient equality from the expansion.
+4. **Z-gauge pipeline** (`equalCase_zgauge_pipeline`): Newton–Girard + Z-gauge diagonal.
+
+**Conditional on #81**: Steps 1 and 3 depend on the periodic overlap dichotomy via
+`PeriodicOverlapHypothesis` and `periodicOverlapDichotomy` (both sorry'd in
+`PeriodicOverlap.lean`).
+-/
+
+section EqualCase
+
+variable {D₁ D₂ : ℕ}
+
+/-- **Theorem 3.8, Step 1: Block matching from equal MPVs.**
+
+If two tensors in irreducible form with non-repeating blocks generate equal MPV families,
+their bases of periodic tensors match: equal block counts, a bijection, and per-block
+`HetRepeatedBlocks` equivalence.
+
+Applies Theorem 3.4 (`fundamentalTheorem_periodic_proportional`).
+
+**Conditional on #81**: Uses `sorry` for `PeriodicOverlapHypothesis`. -/
+theorem fundamentalTheorem_periodic_equalCase_matching
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
+    (hNonRepA : ∀ j₁ j₂ : Fin hA.r, j₁ ≠ j₂ →
+      ¬ HetRepeatedBlocks (hA.blocks j₁) (hA.blocks j₂))
+    (hNonRepB : ∀ k₁ k₂ : Fin hB.r, k₁ ≠ k₂ →
+      ¬ HetRepeatedBlocks (hB.blocks k₁) (hB.blocks k₂))
+    (hSame : SameMPV₂ A B) :
+    PeriodicBlockMatchingWitness (d := d) hA.blocks hB.blocks := by
+  -- Derive SameMPV₂ at the block-assembly level.
+  have _hAssembly : SameMPV₂
+      (toTensorFromBlocks hA.μ hA.blocks)
+      (toTensorFromBlocks hB.μ hB.blocks) := by
+    intro N σ
+    calc mpv (toTensorFromBlocks hA.μ hA.blocks) σ
+        = mpv A σ := (hA.sameMPV N σ).symm
+      _ = mpv B σ := hSame N σ
+      _ = mpv (toTensorFromBlocks hB.μ hB.blocks) σ := hB.sameMPV N σ
+  -- Obtain PeriodicOverlapHypothesis.
+  -- TODO(#81): Replace sorry once the periodic overlap dichotomy is formalized.
+  -- The proof derives the overlap hypothesis from _hAssembly + periodicity data
+  -- (hA.periodic, hB.periodic) via Proposition 3.3 of arXiv:1708.00029.
+  have hOverlap : PeriodicOverlapHypothesis hA.blocks hB.blocks := by
+    sorry -- #81: periodic overlap dichotomy (Proposition 3.3)
+  -- Apply Theorem 3.4.
+  exact fundamentalTheorem_periodic_proportional hA.blocks hB.blocks
+    hNonRepA hNonRepB hOverlap
+
+/-- **Theorem 3.8, Step 2: Per-block weight power-sum equality.**
+
+After block matching (Step 1), the equal-MPV condition combined with the block expansion
+formula and eventual linear independence of block MPV states yields: for each matched
+pair `(j, perm j)`, the weight power sums agree for all positive exponents.
+
+**Proof sketch** (Thm 3.8, steps 2–5 of arXiv:1708.00029):
+1. `SameMPV₂ A B` + `mpv_toTensorFromBlocks_eq_sum` gives
+   `∑_j μA_j^N * mpv(blocksA j) = ∑_j μB_{perm j}^N * ξ_j^N * mpv(blocksA j)`.
+2. `periodicBasis_eventuallyLinearlyIndependent` gives eventual linear independence.
+3. Therefore `μA_j^N = μB_{perm j}^N * ξ_j^N` for all large `N`.
+4. `power_sums_eq_of_eventually_eq` extrapolates to all positive `N`.
+
+**Conditional on #81**: Uses `periodicBasis_eventuallyLinearlyIndependent` which
+depends on `periodicOverlapDichotomy`. -/
+theorem perBlock_weight_powerSum_eq_of_matching
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
+    (hSame : SameMPV₂ A B)
+    (hrAB : hA.r = hB.r)
+    (perm : Fin hA.r ≃ Fin hB.r)
+    (hRep : ∀ j, HetRepeatedBlocks (hA.blocks j) (hB.blocks (perm j))) :
+    ∀ j : Fin hA.r, ∀ N : ℕ, 0 < N →
+      (hA.μ j) ^ N = (hB.μ (perm j)) ^ N := by
+  -- TODO(#81): Derive from MPV expansion + linear independence + phase absorption.
+  -- The proof uses:
+  -- (a) mpv_toTensorFromBlocks_eq_sum to expand both sides,
+  -- (b) HetRepeatedBlocks → mpv equality up to phase ξ_j,
+  -- (c) periodicBasis_eventuallyLinearlyIndependent → per-block coefficient match,
+  -- (d) power_sums_eq_of_eventually_eq → extrapolation to all N > 0.
+  sorry -- #81 + coefficient extraction infrastructure
+
+/-- **Theorem 3.8: Periodic FT, equal case (arXiv:1708.00029).**
+
+If two MPS tensors in irreducible form with non-repeating blocks generate equal MPV
+families, then:
+
+1. **Block matching**: equal block counts, a bijection, and per-block `HetRepeatedBlocks`.
+2. **Per-block Z-gauge**: for each matched pair with period `m_j`, there exists a diagonal
+   `Z_j` with `Z_j^{m_j} = 1` and `Z_j * diag(μB_{perm j}) = diag(μA_j)`.
+3. **Weight multiset equality**: `μA_j` and `μB_{perm j}` determine the same multiset.
+
+This composes Theorem 3.4 with the Z-gauge pipeline from PR #94.
+
+**Conditional on #81**: The block matching and weight extraction use `sorry` for the
+periodic overlap dichotomy and linear independence arguments. The Z-gauge construction
+itself (`equalCase_zgauge_pipeline`) is fully proved. -/
+theorem fundamentalTheorem_periodic_equalCase
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
+    (hNonRepA : ∀ j₁ j₂ : Fin hA.r, j₁ ≠ j₂ →
+      ¬ HetRepeatedBlocks (hA.blocks j₁) (hA.blocks j₂))
+    (hNonRepB : ∀ k₁ k₂ : Fin hB.r, k₁ ≠ k₂ →
+      ¬ HetRepeatedBlocks (hB.blocks k₁) (hB.blocks k₂))
+    (hSame : SameMPV₂ A B)
+    (_hμA_ne : ∀ j, hA.μ j ≠ 0)
+    (hμB_ne : ∀ k, hB.μ k ≠ 0) :
+    -- Block matching:
+    ∃ (_ : hA.r = hB.r) (perm : Fin hA.r ≃ Fin hB.r),
+      -- Per-block HetRepeatedBlocks:
+      (∀ j, HetRepeatedBlocks (hA.blocks j) (hB.blocks (perm j))) ∧
+      -- Per-block Z-gauge + weight multiset equality:
+      (∀ j, ∃ Z : Matrix (Fin 1) (Fin 1) ℂ,
+        Z ^ (hA.period j) = 1 ∧
+        Z * Matrix.diagonal (fun _ : Fin 1 => hB.μ (perm j)) =
+          Matrix.diagonal (fun _ : Fin 1 => hA.μ j) ∧
+        ({hA.μ j} : Multiset ℂ) = {hB.μ (perm j)}) := by
+  -- Step 1: Block matching via Theorem 3.4.
+  obtain ⟨_hrAB, perm, hRep⟩ :=
+    fundamentalTheorem_periodic_equalCase_matching A B hA hB hNonRepA hNonRepB hSame
+  refine ⟨_hrAB, perm, hRep, fun j => ?_⟩
+  -- Step 2: Per-block weight power-sum equality (sorry, #81).
+  have hPowEq : ∀ N : ℕ, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N := by
+    exact perBlock_weight_powerSum_eq_of_matching A B hA hB hSame _hrAB perm hRep j
+  -- Step 3: Z-gauge construction from matched weights.
+  -- For a single weight per block, the Z-gauge is the scalar ratio μA_j / μB_{perm j}.
+  have hPow_period : (hA.μ j) ^ (hA.period j) = (hB.μ (perm j)) ^ (hA.period j) :=
+    hPowEq (hA.period j) (hA.periodic j).period_pos
+  obtain ⟨Z, hZpow, hZmul, hMultiset⟩ :=
+    equalCase_zgauge_pipeline (hA.period j)
+      (fun _ : Fin 1 => hA.μ j) (fun _ : Fin 1 => hB.μ (perm j))
+      (fun _ => hμB_ne (perm j))
+      (fun _ => hPow_period)
+      (fun k hk => by simp [hPowEq k hk])
+  refine ⟨Z, hZpow, hZmul, ?_⟩
+  -- Convert Finset.univ.val.map to multiset singleton equality.
+  simp only [Finset.univ_unique] at hMultiset
+  exact hMultiset
+
+end EqualCase
+
 end MPSTensor
