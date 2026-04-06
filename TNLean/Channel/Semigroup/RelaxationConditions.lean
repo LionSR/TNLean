@@ -530,7 +530,8 @@ private theorem finrank_traceless_blockUT_add_D_le
         -- using algebra: (1-P)*U = U*(1-diag(eig)) = U*diag(1-eig)
         --   and star(U)*P = diag(eig)*star(U)
         -- so = U*diag(1-eig)*E_{ab}*diag(eig)*star(U)
-        -- Now diag(1-eig)*E_{ab}*diag(eig) has (i,j) entry = (1-eig_i)*(if i=a,j=b then 1 else 0)*eig_j
+        -- Now diag(1-eig)*E_{ab}*diag(eig) has (i,j) entry
+        -- = (1-eig_i)*(if i=a,j=b then 1 else 0)*eig_j
         -- When eig_a=0, eig_b=1: this = E_{ab}
         -- So φ(U*E_{ab}*star(U)) = U*E_{ab}*star(U).
         -- Key fact: for eig a = 0, eig b = 1, the matrix U*E_{ab}*U* is a fixed point of φ
