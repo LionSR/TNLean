@@ -841,22 +841,19 @@ cohomologous~\cite{ChenGuWen2011}.
     \label{thm:string_order_invariant_of_same_phase}
     \lean{MPSTensor.stringOrder_invariant_of_samePhase}
     \leanok
-    \uses{def:is_same_spt_phase,
-          thm:has_string_order_of_symmetric_injective}
-    If $A$ and $B$ are injective and in the same SPT phase
-    (Definition~\ref{def:is_same_spt_phase}), and both satisfy the
-    canonical normalisation hypotheses, then for every $g\in G$,
-    string order exists for $A$ with twist $U(g)$ if and only if it
-    exists for~$B$.
+    \uses{thm:has_string_order_of_symmetric_injective}
+    If $A$ and $B$ are injective, both on-site symmetric under $U$,
+    and both satisfy the canonical normalisation hypotheses, then for
+    every $g\in G$, string order exists for $A$ with twist $U(g)$ if
+    and only if it exists for~$B$.  In particular, since
+    Definition~\ref{def:is_same_spt_phase} implies on-site symmetry
+    for both tensors, this theorem applies to tensors in the same SPT
+    phase.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:has_string_order_of_symmetric_injective}
-    The same-phase hypothesis supplies on-site symmetry for both
-    tensors via the virtual representation intertwining: the gauge
-    matrix conjugates each tensor component, giving a gauge equivalence
-    and hence equal matrix product vectors.
-    Both directions then follow from
+    Both directions follow from
     Theorem~\ref{thm:has_string_order_of_symmetric_injective}, which
     shows that string order holds universally for injective symmetric
     tensors with canonical normalisations.
