@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Spectral.SpectralGap
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Wielandt.Primitivity.EasyDirections
-import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
+import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
 
 /-!
