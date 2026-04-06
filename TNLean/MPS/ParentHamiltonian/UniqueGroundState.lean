@@ -143,14 +143,132 @@ theorem hasUniqueGroundState_iff_proportional {V : Type*} [AddCommGroup V] [Modu
       obtain ⟨c, hc⟩ := hgen ψ
       exact ⟨c, hc.symm⟩
 
+/-! ### Helper: MPV nonvanishing for block-injective tensors -/
+
+/-- If all products of some positive length `k` are zero and `A` is `L₀`-block-injective
+with `L₀ > 0`, we reach a contradiction.
+
+**Descent argument**: if `k ≤ L₀`, factor every length-`L₀` word through a zero
+length-`k` prefix; if `k > L₀`, use `wordSpan A L₀ = M_D` with `M = 1` to show
+all length-(`k − L₀`) products are zero, then recurse. -/
+private theorem allZero_contradiction [NeZero D]
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {k : ℕ} (hk : 0 < k)
+    (hzero : ∀ w : List (Fin d), w.length = k → evalWord A w = 0) : False := by
+  have hws : wordSpan A L₀ = ⊤ := (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+  -- Strong induction on k.
+  suffices ∀ k, 0 < k → (∀ w : List (Fin d), w.length = k → evalWord A w = 0) → False from
+    this k hk hzero
+  intro k
+  induction k using Nat.strongRecOn with
+  | ind k ih =>
+    intro hk_pos hk_zero
+    by_cases hkL : k ≤ L₀
+    · -- Case k ≤ L₀: factor every length-L₀ word as (take k) ++ (drop k).
+      have hws_bot : wordSpan A L₀ = ⊥ := by
+        rw [eq_bot_iff, wordSpan]
+        apply Submodule.span_le.mpr
+        rintro _ ⟨σ, rfl⟩
+        rw [SetLike.mem_coe, Submodule.mem_bot]
+        have hsplit := List.take_append_drop k (List.ofFn σ)
+        have htake_len : (List.take k (List.ofFn σ)).length = k := by
+          rw [List.length_take]; simp; omega
+        calc evalWord A (List.ofFn σ)
+            = evalWord A (List.take k (List.ofFn σ) ++
+                List.drop k (List.ofFn σ)) := by rw [hsplit]
+          _ = evalWord A (List.take k (List.ofFn σ)) *
+                evalWord A (List.drop k (List.ofFn σ)) := evalWord_append ..
+          _ = 0 * evalWord A (List.drop k (List.ofFn σ)) := by
+                rw [hk_zero _ htake_len]
+          _ = 0 := zero_mul _
+      exact absurd (hws ▸ hws_bot) top_ne_bot
+    · -- Case k > L₀: use span = M_D and M = 1 to descend to k - L₀.
+      push Not at hkL
+      have hkL₀_pos : 0 < k - L₀ := by omega
+      apply ih (k - L₀) (by omega) hkL₀_pos
+      intro w₂ hw₂
+      -- For each σ₁ of length L₀: evalWord A (ofFn σ₁) * evalWord A w₂ = 0.
+      have hmul_zero : ∀ σ₁ : Fin L₀ → Fin d,
+          evalWord A (List.ofFn σ₁) * evalWord A w₂ = 0 := by
+        intro σ₁
+        have hlen : (List.ofFn σ₁ ++ w₂).length = k := by simp [hw₂]; omega
+        have := hk_zero _ hlen
+        rwa [evalWord_append] at this
+      -- The map M ↦ M * evalWord A w₂ vanishes on wordSpan A L₀ = ⊤.
+      have hright : LinearMap.mulRight ℂ (evalWord A w₂) = 0 := by
+        apply LinearMap.ext_on_range
+          (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+          (hv := by rwa [← wordSpan])
+        intro σ₁
+        simp [LinearMap.mulRight_apply, hmul_zero σ₁]
+      -- Taking M = 1: evalWord A w₂ = 0.
+      have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) * evalWord A w₂ = 0 :=
+        show LinearMap.mulRight ℂ (evalWord A w₂) 1 = 0 by rw [hright]; simp
+      simpa using h1
+
+/-- For a block-injective tensor, the MPV is nonzero on chains of sufficient length.
+
+Assuming `mpv = 0` (all trace products of length `N` vanish), factor through
+`wordSpan A L₀ = M_D` to force all length-(`N − L₀`) products to zero, then
+`allZero_contradiction` gives the contradiction. -/
+theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
+    {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {N : ℕ} (hN : L₀ + 1 ≤ N) :
+    (mpv A : NSiteSpace d N) ≠ 0 := by
+  have hws : wordSpan A L₀ = ⊤ := (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+  intro hzero
+  -- mpv = 0 means tr(evalWord A (List.ofFn σ)) = 0 for all σ : Fin N → Fin d.
+  have htr_zero : ∀ σ : Fin N → Fin d,
+      Matrix.trace (evalWord A (List.ofFn σ)) = 0 := by
+    intro σ; simpa [mpv, coeff] using congrFun hzero σ
+  -- All products of length (N - L₀) are zero by trace nondegeneracy.
+  have hprod_zero : ∀ w₂ : List (Fin d), w₂.length = N - L₀ →
+      evalWord A w₂ = 0 := by
+    intro w₂ hw₂
+    -- Show ∀ M, tr(evalWord A w₂ * M) = 0 to get evalWord A w₂ = 0.
+    apply trace_mul_right_eq_zero
+    intro M
+    -- The functional P ↦ tr(P * evalWord A w₂) vanishes on wordSpan A L₀ = ⊤.
+    have hφ : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
+        (LinearMap.mulRight ℂ (evalWord A w₂)) = 0 := by
+      apply LinearMap.ext_on_range
+        (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+        (hv := by rwa [← wordSpan])
+      intro σ₁
+      simp only [LinearMap.comp_apply, LinearMap.mulRight_apply,
+        Matrix.traceLinearMap_apply]
+      -- tr(evalWord A (List.ofFn σ₁) * evalWord A w₂) = tr(evalWord A (σ₁ ++ w₂))
+      rw [← evalWord_append]
+      -- This is a trace of a length-N word product, hence 0.
+      have hlen : (List.ofFn σ₁ ++ w₂).length = N := by simp [hw₂]; omega
+      let σ' : Fin N → Fin d :=
+        fun i => (List.ofFn σ₁ ++ w₂).get ⟨i.val, hlen ▸ i.isLt⟩
+      have hw_eq : List.ofFn σ' = List.ofFn σ₁ ++ w₂ := by
+        apply List.ext_get
+        · simp [hw₂]; omega
+        · intro i h1 h2; simp [σ']
+      rw [← hw_eq]
+      exact htr_zero σ'
+    -- From hφ: ∀ P, tr(P * evalWord A w₂) = 0. By trace commutativity:
+    calc Matrix.trace (evalWord A w₂ * M)
+        = Matrix.trace (M * evalWord A w₂) := Matrix.trace_mul_comm ..
+      _ = 0 := by
+          simpa [Matrix.traceLinearMap_apply] using congrArg (· M) hφ
+  exact allZero_contradiction hInj hL₀ (by omega : 0 < N - L₀) hprod_zero
+
 /-! ### Uniqueness theorems -/
 
-/-- On a periodic chain, the injective parent-Hamiltonian ground space should
-coincide with the span of the MPV. -/
--- TODO(parent-hamiltonian): derive this from the cyclic-window definition of
--- `chainGroundSpace` and the proved open-chain intersection property.
+/-- On a periodic chain, the parent-Hamiltonian ground space coincides with the
+span of the MPV. Generalized to block-injective tensors: if `A` is
+`L₀`-block-injective and the window size satisfies `L > L₀`, the chain ground
+space equals the MPV submodule.
+
+When `L₀ = 1`, this recovers the injective case. -/
+-- TODO(parent-hamiltonian): derive from cyclic-window `chainGroundSpace` definition
+-- and the proved open-chain intersection property.
 theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
-    (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
+    {L₀ : ℕ} (hA : IsNBlkInjective A L₀)
+    {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
   sorry
 
@@ -165,17 +283,20 @@ The proof uses the intersection property iteratively:
 2. The wrapping window condition (window crossing the periodic boundary) constrains
    `X` to commute with all `A^i`.
 3. For injective `A`, the center of `span{A^i} = M_D(ℂ)` consists only of scalars,
-   so `X = c · I` and `ψ = c · mpv A`.
-
-**Status**: The proof requires the periodic window condition to be fully formalized.
-The intersection property (`groundSpace_intersection`) provides the key "invert-and-regrow"
-step; the remaining ingredient is the periodic boundary argument. -/
--- TODO(parent-hamiltonian): finish after the periodic window embedding API
--- makes the wrapping-window condition available in `chainGroundSpace`.
+   so `X = c · I` and `ψ = c · mpv A`. -/
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
     {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     HasUniqueGroundState (chainGroundSpace A L N) := by
-  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hA hN hL hLN]
+  -- IsInjective A gives IsNBlkInjective A 1 (1-block injectivity).
+  have hInj1 : IsNBlkInjective A 1 := by
+    rw [← wordSpan_eq_top_iff_isNBlkInjective, wordSpan]
+    have hrange : Set.range (fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ))
+        = Set.range A := by
+      ext M; constructor
+      · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
+      · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
+    rw [hrange]; exact hA
+  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hInj1 hN hL hLN]
   have hmpv : (mpv A : NSiteSpace d N) ≠ 0 := by
     intro hzero
     have hEq :
@@ -187,37 +308,35 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
     exact one_ne_zero h10
   simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
-/-- **Unique ground state for `N`-block-injective tensors on `2N` sites**.
+/-- **Unique ground state for `L₀`-block-injective tensors on `2L₀` sites**.
 
-If `A` is `L₀`-block-injective (i.e., the blocked tensor `A^{[L₀]}` is injective),
-with a nontrivial block length `L₀ > 0`, then the parent Hamiltonian with
-interaction range `2L₀` on the periodic chain has a unique ground state.
-
-**Status**: Depends on `groundSpace_unique_periodic` and the connection between
-`chainGroundSpace` and `LinearMap.ker (parentHamiltonian A (2 * L₀) N)`, which
-will be established when the operator API lands. -/
--- TODO(parent-hamiltonian): reduce this to `groundSpace_unique_periodic`
--- after connecting `chainGroundSpace` with the parent-Hamiltonian kernel.
+If `A` is `L₀`-block-injective with `L₀ > 0`, the parent Hamiltonian with
+interaction range `2L₀` on a periodic chain of `N ≥ 2L₀` sites has a unique
+ground state. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
-  sorry
+  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hA (by omega) (by omega) hN]
+  have hmpv : (mpv A : NSiteSpace d N) ≠ 0 :=
+    mpv_ne_zero_of_isNBlkInjective hA hL₀ (by omega)
+  simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
 /-- **Optimal unique ground state for normal tensors on `L₀ + 1` sites**.
 
-If `A` is normal (hence `L₀`-block-injective for some `L₀`) and the blocked tensor
-is in normal form with `L₀ > 0`, the interaction range can be reduced from `2L₀`
-to `L₀ + 1` using the structure theory of normal MPS.
+If `A` is normal and `L₀`-block-injective with `L₀ > 0`, the interaction range
+can be reduced from `2L₀` to `L₀ + 1`. The chain ground space with window
+`L₀ + 1` on `N ≥ L₀ + 1` sites has a unique ground state.
 
-**Status**: Requires the normal-form analysis from the canonical form theory in
-addition to the periodic boundary argument. -/
--- TODO(parent-hamiltonian): combine the normal-form range reduction with the
--- periodic uniqueness theorem once that theorem is formalized.
+The proof reduces to `chainGroundSpace_eq_mpvSubmodule` with `L = L₀ + 1`, then
+shows the MPV submodule is one-dimensional via `mpv_ne_zero_of_isNBlkInjective`. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {L₀ : ℕ} (_hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
-  sorry
+  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hInj (by omega) (by omega) hN]
+  have hmpv : (mpv A : NSiteSpace d N) ≠ 0 :=
+    mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN
+  simpa [mpvSubmodule] using finrank_span_singleton (K := ℂ) hmpv
 
 end MPSTensor
