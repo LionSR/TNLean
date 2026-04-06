@@ -811,15 +811,15 @@ private theorem exists_traceless_blockUT_lindblad_form
       set B := ∑ x, (1 / 2 : ℂ) • starRingEnd ℂ (c x) • G.L x -
                ∑ x, (1 / 2 : ℂ) • c x • (G.L x)ᴴ
       set C := (1 / 2 : ℂ) • ∑ j, (G.L j)ᴴ * G.L j
-      set D := (1 / 2 : ℂ) • ∑ j, starRingEnd ℂ (c j) • G.L j
+      set D_half := (1 / 2 : ℂ) • ∑ j, starRingEnd ℂ (c j) • G.L j
       set E := (1 / 2 : ℂ) • ∑ j, c j • (G.L j)ᴴ
       set F := (1 / 2 : ℂ) • ∑ j, (starRingEnd ℂ (c j) * c j) • (1 : Mat)
       set S := ∑ i, starRingEnd ℂ (c i) • G.L i
-      -- hcancel : B + (D + E) = S
-      -- Goal: A + B + (C + D + E + F) = A + C + S + F
-      -- = A + C + (B + (D + E)) + F (by hcancel)
-      calc A + B + (C + D + E + F)
-          = A + C + (B + (D + E)) + F := by abel
+      -- hcancel : B + (D_half + E) = S
+      -- Goal: A + B + (C + D_half + E + F) = A + C + S + F
+      -- = A + C + (B + (D_half + E)) + F (by hcancel)
+      calc A + B + (C + D_half + E + F)
+          = A + C + (B + (D_half + E)) + F := by abel
         _ = A + C + S + F := by rw [hcancel]
     ext1 ρ
     simp only [GeneratorDecomp.toLinearMap_apply, LindbladForm.toGeneratorDecomp]
