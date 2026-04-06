@@ -71,24 +71,22 @@ See arXiv:1606.00608, Definition 3.6. -/
 def IsZCL (A : MPSTensor d D) : Prop :=
   IsLocallyOrthogonal A ∧ IsCID A
 
-/-- **Theorem 3.8** (arXiv:1606.00608): For a canonical-form MPS tensor,
+/-- **Theorem 3.8** (arXiv:1606.00608): For an MPS tensor,
 ZCL is equivalent to the transfer map being idempotent (i.e. `IsRFP`).
 
 Forward: `IsZCL → IsRFP` is immediate since `IsLocallyOrthogonal = IsRFP`.
 Reverse: `E² = E` implies `Eⁿ = E` for `n ≥ 1` by `IsIdempotentElem.pow_eq`,
 so the connected correlator is independent of separation, giving CID. -/
-theorem zcl_iff_idempotent_transfer {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (_hCF : IsCanonicalForm μ A) (k : Fin r) :
-    IsZCL (A k) ↔ IsRFP (A k) := by
+theorem zcl_iff_idempotent_transfer (A : MPSTensor d D) :
+    IsZCL A ↔ IsRFP A := by
   constructor
   · exact fun ⟨hLO, _⟩ => hLO
   · intro hRFP
     refine ⟨hRFP, fun ρR _ _ _ X Y n m hn hm => ?_⟩
-    have hIdem : IsIdempotentElem (transferMap (A k)) := hRFP
-    have hpow_n : (transferMap (A k)) ^ n = transferMap (A k) :=
+    have hIdem : IsIdempotentElem (transferMap A) := hRFP
+    have hpow_n : (transferMap A) ^ n = transferMap A :=
       hIdem.pow_eq (by omega)
-    have hpow_m : (transferMap (A k)) ^ m = transferMap (A k) :=
+    have hpow_m : (transferMap A) ^ m = transferMap A :=
       hIdem.pow_eq (by omega)
     simp only [connectedCorrelator_def, twoPointExpectation_transfer,
       hpow_n, hpow_m]
