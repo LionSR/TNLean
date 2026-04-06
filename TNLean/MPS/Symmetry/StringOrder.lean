@@ -16,7 +16,7 @@ with the SPT phase classification results.
 
 The core definitions (twisted transfer map, string order parameter, conditions
 C1/C2/C3 and their equivalences) live in `TNLean.MPS.Symmetry.StringOrderDefs`.
-The auxiliary TP-gauge infrastructure and long private proofs live in
+The auxiliary TP-gauge infrastructure and long supporting proofs live in
 `TNLean.MPS.Symmetry.StringOrderAux`.
 
 ## Main definitions
