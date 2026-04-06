@@ -59,15 +59,11 @@ assemble the global gauge unitary.
 
 ## Status
 
-The main theorems in this file are currently stated with `sorry` proofs, and
-some of the same-period statements are intentionally **provisional**. The live
-cyclic-sector API in `CanonicalForm/CyclicSectors.lean` and
-`CanonicalForm/Assembly.lean` naturally produces **compressed sector tensors**
-living on the corner bond spaces, whereas several statements below are still
-phrased in terms of the ambient tensors `leftSectorTensor (P u) (blockTensor A m)`.
-That ambient formulation is convenient for the paper sketch, but it is stronger
-than the currently formalized infrastructure and is the main blocker for the
-first unfinished proofs in Case 2.
+The main theorems in this file are currently stated with `sorry` proofs.
+The same-period sector statements (Case 2 and Case 3 helpers) are formulated
+using **compressed sector tensors** on corner bond spaces, matching the output
+of `exists_cyclic_sector_decomp_after_blocking_of_isPeriodic` and the live
+cyclic-sector API in `CanonicalForm/CyclicSectors.lean`.
 
 This module therefore serves as a skeleton / proof sketch and should not yet be
 relied on as a completed formalization of Proposition 3.3.
@@ -86,12 +82,38 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- The blocks form a **cyclic sector decomposition** of `blockTensor A m`, witnessed by
+orthogonal projections `P` that are fixed by the blocked adjoint transfer map and
+therefore commute with every blocked letter at the **same** index:
+`P k * (blockTensor A m) i = (blockTensor A m) i * P k`.
+
+The projections arise from the peripheral spectrum of the original (unblocked)
+transfer map, where they satisfy the *shifted* relation `E†(P (k+1)) = P k`.
+After blocking by the period `m`, the blocked transfer map `E^m` fixes every
+`P k`, so `commutes_letters_of_adjoint_fixed_projection` gives same-index
+commutation with the blocked letters.
+
+The per-sector trace relation ties each compressed block `blocks k` back to the
+projection `P k` via `mpv (blocks k) σ = tr(P k · evalWord(blockTensor A m)(σ))`,
+which is the defining property of `exists_compressedTensor_of_supported_projection`. -/
+def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
+    {dim : Fin m → ℕ}
+    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)) : Prop :=
+  ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ),
+    (∀ k, IsOrthogonalProjection (P k)) ∧
+    (∑ k : Fin m, P k = 1) ∧
+    (∀ k (i : Fin (blockPhysDim d m)),
+      P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
+    (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+      mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+
 private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) := by
+      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
+      IsCyclicSectorDecomp A blocks := by
   obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
     conjTranspose_kraus_setup A hP.leftCanonical hP.irreducible
   obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
@@ -166,8 +188,19 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
           _ = (ω ^ m) ^ (j : ℕ) := by rw [pow_mul]
           _ = 1 := by simp [hωprim.pow_eq_one]
       simpa [hperiph_roots] using hpow
-  exact exists_cyclic_sector_decomp_after_blocking
+  obtain ⟨dim, blocks, hLC, hMPV⟩ := exists_cyclic_sector_decomp_after_blocking
     A hP.leftCanonical hP.irreducible ρ hρ_pd h_adjfix hIrrK hωprim hperiph_range
+  exact ⟨dim, blocks, hLC, hMPV, by
+    -- The projections P are produced internally by
+    -- `exists_cyclic_decomposition_of_irreducible_schwarz` inside
+    -- `exists_cyclic_sector_decomp_after_blocking`, but are not exposed in
+    -- its return type. Closing this sorry requires either:
+    --   (a) making `transferMap_adjoint_blocked_eq_pow` and
+    --       `adjointTransferMap_pow_fixes_cyclic_projection` public in Assembly.lean, or
+    --   (b) duplicating ~80 lines of proof to re-derive the blocked fixed-point
+    --       property from scratch.
+    -- Both options exceed the scope of this statement-refactoring PR.
+    sorry⟩
 
 /-! ## Self-overlap (first paragraph of Appendix A) -/
 
@@ -208,49 +241,55 @@ theorem periodicOverlap_tendsto_zero_of_ne_period
 
 /-! ## Case 2: Same period, no sector match → orthogonal (Appendix A, second case) -/
 
-/-- Provisional Case-2 helper for the blocked sector tensors.
+/-- Case-2 helper for the compressed blocked sector tensors.
 
 The intended mathematical content is Lemma 2.4: after blocking by the period,
-each cyclic sector is a normal tensor. In the current file this statement is
-still phrased for the ambient tensor `leftSectorTensor (P u) (blockTensor A m)`.
-However, the live API more naturally gives a **compressed** tensor on the corner
-bond space via `exists_compressedTensor_of_supported_projection`, together with
-primitivity / irreducibility data for the corner restriction of the blocked
-transfer map. Future proof work should likely reformulate this lemma using that
-compressed sector tensor rather than the ambient one.
+each cyclic sector is a normal tensor. The statement uses the compressed sector
+tensor on the corner bond space, as produced by
+`exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`.
 
-The nontriviality hypothesis `P u ≠ 0` is required because the zero projector
-would yield the zero tensor, which is not normal (it cannot be block-injective).
+The nontriviality hypothesis `dim u ≠ 0` excludes the degenerate
+zero-dimensional "missing sector" case. With the current definitions, an
+`MPSTensor _ 0` may satisfy block-injectivity/normality vacuously, so this
+assumption is used to focus on genuine nonempty sectors.
 
-The completeness and orthogonality hypotheses ensure that `P` forms a genuine
-cyclic-sector decomposition (resolution of the identity into pairwise orthogonal
-idempotents), not merely any commuting idempotent family. Without these, the
-statement would be too strong: e.g., `P u = 1` for all `u` satisfies idempotence
-and commutation but does not yield a normal sector tensor in general. -/
+The `hBlocks_mpv` hypothesis ties the compressed block decomposition back to
+the original blocked tensor, and `hCyclic` ensures the block indexing
+follows the cyclic orbit structure of the transfer map's peripheral
+spectrum (see `IsCyclicSectorDecomp`). -/
 lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
-    (P : Fin m → MatrixAlg D)
-    (hProj : ∀ u, P u * P u = P u)
-    (hComplete : ∑ u, P u = 1)
-    (hOrtho : ∀ u v, u ≠ v → P u * P v = 0)
-    (hComm : ∀ u (i : Fin d), P u * A i = A i * P (u + 1))
-    (u : Fin m) (hNonzero : P u ≠ 0) :
-    IsNormal (leftSectorTensor (P u) (blockTensor A m)) := by
+    {dim : Fin m → ℕ}
+    (blocks :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+    (hBlocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocks k i)ᴴ * blocks k i = 1)
+    (hBlocks_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocks))
+    (hCyclic : IsCyclicSectorDecomp A blocks)
+    (u : Fin m) (hNonzero : dim u ≠ 0) :
+    IsNormal (blocks u) := by
   sorry
 
-/-- Provisional same-period / no-match statement.
+/-- Same-period / no-match statement using compressed sector tensors.
 
-If two periodic tensors have the same period `m` but no sector pair matches,
-their overlap should decay to zero. As above, the current statement uses the
-ambient sector tensors `leftSectorTensor (P u) (blockTensor A m)`. The live
-cyclic-sector machinery instead produces compressed sector tensors, and the
-eventual proof will likely be cleaner when stated for those compressed blocks.
+If two periodic tensors have the same period `m` but no compressed sector
+pair matches (up to dimension cast and gauge-phase equivalence), their
+overlap decays to zero.
 
-The hypotheses require that `PA` and `QB` form genuine cyclic-sector
-decompositions: completeness (they sum to 1), mutual orthogonality, and
-commutation with the tensor (interleaving with cyclic shift). These ensure
-the overlap decomposes as a sum over sector pairs.
+The `hNoMatch` hypothesis quantifies over nondegenerate dimension
+equalities: for each sector pair `(u, v)` with `dimA u ≠ 0` and any
+proof that `dimA u = dimB v`, the compressed blocks are not gauge-phase
+equivalent. The nondegeneracy guard `dimA u ≠ 0` is essential: when
+`dimA u = 0`, `GaugePhaseEquiv` may hold vacuously for
+`MPSTensor _ 0`, and without this guard `hNoMatch` would be
+unsatisfiable whenever a zero-dimensional sector pair exists. With
+this guard, `hNoMatch` is exactly the negation of `hSomeMatch` in
+`periodicOverlap_gaugeEquiv_of_sector_match`, making the two
+conditions complementary for the dichotomy proof.
 
 This is the "first case" of the same-period argument in Appendix A:
 block by `m`, decompose into normal sectors, and observe that all
@@ -259,142 +298,213 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
-    (PA QB : Fin m → MatrixAlg D)
-    (hPA_proj : ∀ u, PA u * PA u = PA u)
-    (hQB_proj : ∀ v, QB v * QB v = QB v)
-    (hPA_complete : ∑ u, PA u = 1)
-    (hQB_complete : ∑ v, QB v = 1)
-    (hPA_ortho : ∀ u v, u ≠ v → PA u * PA v = 0)
-    (hQB_ortho : ∀ u v, u ≠ v → QB u * QB v = 0)
-    (hPA_comm : ∀ u (i : Fin d), PA u * A i = A i * PA (u + 1))
-    (hQB_comm : ∀ v (i : Fin d), QB v * B i = B i * QB (v + 1))
-    (hNoMatch : ∀ u v,
+    {dimA dimB : Fin m → ℕ}
+    (blocksA :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksA k i)ᴴ * blocksA k i = 1)
+    (hB_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksB k i)ᴴ * blocksB k i = 1)
+    (hA_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksA))
+    (hB_mpv :
+      SameMPV₂ (blockTensor B m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
+    (hNoMatch : ∀ u v (hdim : dimA u = dimB v),
+      dimA u ≠ 0 →
       ¬ GaugePhaseEquiv
-        (leftSectorTensor (PA u) (blockTensor A m))
-        (leftSectorTensor (QB v) (blockTensor B m))) :
+        (cast (congr_arg
+          (MPSTensor (blockPhysDim d m)) hdim)
+          (blocksA u))
+        (blocksB v)) :
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
-  -- Block by m. The overlap decomposes as a sum over sectors:
-  --   ⟨V_{Nm}(A)|V_{Nm}(B)⟩ = ∑_{u,v} ⟨V_N(P_u A^(m))|V_N(Q_v B^(m))⟩
+  -- Block by m. Writing k for the block-count (so the chain length is m*k),
+  --   ⟨V_{mk}(A)|V_{mk}(B)⟩ = ∑_{u,v} ⟨V_k(C_u)|V_k(C'_v)⟩
   -- Each sector pair has decaying overlap (since no match exists).
   -- A finite sum of sequences tending to 0 also tends to 0.
+  -- The full sequence N ↦ mpvOverlap A B N tends to 0 by reparametrization.
   sorry
 
 /-! ## Case 3: Same period, sector match → gauge-equivalent (Appendix A, main case) -/
 
 /-- **Translation propagation** (Eq. A.8 / blockedABprop of arXiv:1708.00029):
-Given one matching sector pair `P_ũ A^(m) ≈ e^{iλ} V Q_ṽ B^(m) V†`,
-applying the translation operator `T^l` for `l = 1, …, m-1` yields
-matching for all sector pairs `(u₀ + l, v₀ + l)`. Each offset `l` gets
-its own gauge `U_{ṽ+l}` (the paper's Eq. blockedABprop produces a different
-unitary at each sector, not a single transported gauge). The phase also
-varies per `l`.
+Given one matching compressed sector pair at `(u₀, v₀)`, applying the
+translation operator `T^l` for `l = 1, …, m-1` yields matching for all
+sector pairs `(u₀ + l, v₀ + l)`. Each offset `l` gets its own gauge
+(the paper's Eq. blockedABprop produces a different unitary at each
+sector, not a single transported gauge).
 
-The completeness and orthogonality hypotheses ensure `PA`/`QB` form genuine
-cyclic-sector decompositions (resolution of identity into pairwise orthogonal
-idempotents). Without completeness, the overlap decomposition into sector
-contributions is invalid (identity-resolution steps fail).
+The `hA_cyclic`/`hB_cyclic` hypotheses (see `IsCyclicSectorDecomp`)
+tie the `Fin m` block indexing to the cyclic orbit structure of the
+transfer map, which is essential: without them, `SameMPV₂` alone is
+permutation-invariant over blocks and would not justify the shifted
+conclusion `(u₀ + l, v₀ + l)`.
 
-The left-canonical hypotheses (`hA_lc`, `hB_lc`) ensure the propagated phases
-are unit-modulus: the transfer operator preserves the trace-preserving
-condition, so the scaling factor remains on the unit circle at each step. -/
+The nondegeneracy hypothesis `dimA u₀ ≠ 0` ensures the initial match
+is substantive: for `MPSTensor _ 0`, `GaugePhaseEquiv` holds vacuously
+and propagation would produce only vacuous matches.
+
+The left-canonical hypotheses (`hA_lc`, `hB_lc`) ensure the propagated
+phases are unit-modulus: the transfer operator preserves the
+trace-preserving condition, so the scaling factor remains on the unit
+circle at each step. -/
 lemma sectorMatch_propagation
     [NeZero D]
     (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
-    (PA QB : Fin m → MatrixAlg D)
-    (hPA_proj : ∀ u, PA u * PA u = PA u)
-    (hQB_proj : ∀ v, QB v * QB v = QB v)
-    (hPA_complete : ∑ u, PA u = 1)
-    (hQB_complete : ∑ v, QB v = 1)
-    (hPA_ortho : ∀ u v, u ≠ v → PA u * PA v = 0)
-    (hQB_ortho : ∀ u v, u ≠ v → QB u * QB v = 0)
-    (hPA_comm : ∀ u (i : Fin d), PA u * A i = A i * PA (u + 1))
-    (hQB_comm : ∀ v (i : Fin d), QB v * B i = B i * QB (v + 1))
+    {dimA dimB : Fin m → ℕ}
+    (blocksA :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksA k i)ᴴ * blocksA k i = 1)
+    (hB_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksB k i)ᴴ * blocksB k i = 1)
+    (hA_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksA))
+    (hB_mpv :
+      SameMPV₂ (blockTensor B m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     {u₀ : Fin m} {v₀ : Fin m}
+    (hdim₀ : dimA u₀ = dimB v₀)
+    (hNondeg : dimA u₀ ≠ 0)
     (hMatch : GaugePhaseEquiv
-      (leftSectorTensor (PA u₀) (blockTensor A m))
-      (leftSectorTensor (QB v₀) (blockTensor B m))) :
-    ∀ l : Fin m, ∃ (phase : ℂ) (gauge : GL (Fin D) ℂ), ‖phase‖ = 1 ∧
-      ∀ σ : Fin m → Fin d,
-        PA (u₀ + l) * evalWord A (List.ofFn σ) =
-          phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
-            (QB (v₀ + l) * evalWord B (List.ofFn σ)) *
-            ((gauge⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+      (cast (congr_arg
+        (MPSTensor (blockPhysDim d m)) hdim₀)
+        (blocksA u₀))
+      (blocksB v₀)) :
+    ∀ l : Fin m,
+      ∃ (hdim : dimA (u₀ + l) = dimB (v₀ + l)),
+        GaugePhaseEquiv
+          (cast (congr_arg
+            (MPSTensor (blockPhysDim d m)) hdim)
+            (blocksA (u₀ + l)))
+          (blocksB (v₀ + l)) := by
   sorry
 
 /-- **Per-site proportionality** (Eq. A.14 of arXiv:1708.00029):
 After injectivity contraction, the sector-restricted tensors satisfy
 `A_u^i = κ_v · e^{iη/m} · B_v^i` with `∏ κ_v = 1` and `|κ_v| = 1`.
 
-The offset `q` accounts for the cyclic shift between sector labelings of `A`
-and `B`: propagation from a match at `(u₀, v₀)` yields pairs `(u, u + q)`
-where `q = v₀ - u₀`.
+The offset `q` accounts for the cyclic shift between sector labelings of
+`A` and `B`: propagation from a match at `(u₀, v₀)` yields pairs
+`(u, u + q)` where `q = v₀ - u₀`.
 
-Each sector `u` has its own gauge `gauge u` (as produced by translation
-propagation, which yields a different unitary at each sector offset). The
-injectivity contraction argument then shows these per-sector gauges are
-compatible and combine into a single global gauge for `RepeatedBlocks`.
+The `hBlockMatch` hypothesis says that for every sector `u`, the
+compressed blocks `blocksA u` and `blocksB (u + q)` are gauge-phase
+equivalent (after dimension cast). The injectivity contraction argument
+shows these per-sector gauges combine into a single global gauge for
+`RepeatedBlocks`.
 
-The left-canonical hypotheses (`hA_lc`, `hB_lc`) are essential: they force
-the gauge-proportionality phases to have unit modulus, which is required by
-`RepeatedBlocks`. Without normalization, one can have `A 0 = 2 • B 0` with
-phase 2, satisfying the block match but not `RepeatedBlocks`. -/
+The nondegeneracy hypothesis `hNondeg` ensures every sector has
+positive bond dimension. Without this, zero-dimensional sectors
+satisfy `IsNormal`, `GaugePhaseEquiv`, and `hBlockMatch` vacuously,
+which would make the conclusion `RepeatedBlocks A B` too strong.
+
+The left-canonical hypotheses (`hA_lc`, `hB_lc`) are essential: they
+force the gauge-proportionality phases to have unit modulus, which is
+required by `RepeatedBlocks`. -/
 lemma sectorTensor_proportional_of_blockedMatch
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
-    (P Q : Fin m → MatrixAlg D)
-    (hP_proj : ∀ u, P u * P u = P u)
-    (hQ_proj : ∀ v, Q v * Q v = Q v)
-    (hP_complete : ∑ u, P u = 1)
-    (hQ_complete : ∑ v, Q v = 1)
-    (hP_ortho : ∀ u v, u ≠ v → P u * P v = 0)
-    (hQ_ortho : ∀ u v, u ≠ v → Q u * Q v = 0)
-    (hP_comm : ∀ u (i : Fin d), P u * A i = A i * P (u + 1))
-    (hQ_comm : ∀ v (i : Fin d), Q v * B i = B i * Q (v + 1))
+    {dimA dimB : Fin m → ℕ}
+    (blocksA :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksA k i)ᴴ * blocksA k i = 1)
+    (hB_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksB k i)ᴴ * blocksB k i = 1)
+    (hA_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksA))
+    (hB_mpv :
+      SameMPV₂ (blockTensor B m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
     (q : Fin m)
-    (hBlockMatch : ∀ u : Fin m, ∃ (phase : ℂ) (gauge : GL (Fin D) ℂ),
-        ‖phase‖ = 1 ∧
-        ∀ σ : Fin m → Fin d,
-          P u * evalWord A (List.ofFn σ) =
-            phase • ((gauge : Matrix (Fin D) (Fin D) ℂ) *
-              (Q (u + q) * evalWord B (List.ofFn σ)) *
-              ((gauge⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
-    (hNormal : ∀ u, IsNormal (leftSectorTensor (P u) (blockTensor A m))) :
+    (hBlockMatch : ∀ u : Fin m,
+      ∃ (hdim : dimA u = dimB (u + q)),
+        GaugePhaseEquiv
+          (cast (congr_arg
+            (MPSTensor (blockPhysDim d m)) hdim)
+            (blocksA u))
+          (blocksB (u + q)))
+    (hNondeg : ∀ u, dimA u ≠ 0)
+    (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
-  -- Step 1: Each blocked sector product is normal, so after N₀ repetitions
-  --   it becomes injective.
+  -- Step 1: Each blocked sector product is normal, so after N₀
+  --   repetitions it becomes injective.
   -- Step 2: The decomposition map Ω_u exists for each sector.
-  -- Step 3: Concatenate A_u F_{u+1} A_{u+1} F_{u+2} ... and apply Ω inverses
-  --   to extract: A_u ⊗ ... ⊗ A_{u+m-1} = e^{iη} B_v ⊗ ... ⊗ B_{v+m-1}
-  -- Step 4: Extract per-site proportionality A_u = κ_v · e^{iη/m} · B_v
+  -- Step 3: Concatenate and apply Ω inverses to extract:
+  --   C_u ⊗ ... ⊗ C_{u+m-1} = e^{iη} C'_v ⊗ ... ⊗ C'_{v+m-1}
+  -- Step 4: Extract per-site proportionality via injectivity
   -- Step 5: |κ_v| = 1 from left-canonical normalization
   -- Step 6: Telescope κ_v = e^{i(φ_v - φ_{v+1})} and assemble U
   sorry
 
 /-- **Case 3 assembly**: If two periodic tensors have the same period and
-a sector match exists, then they are related by a gauge transformation
-with a unit-modulus phase: `A^i = e^{iξ} U B^i U†`.
+a compressed sector match exists, then they are related by a gauge
+transformation with a unit-modulus phase: `A^i = e^{iξ} U B^i U†`.
+
+The hypotheses mirror the compressed corner API: `blocksA`/`blocksB` are
+the cyclic-sector tensors on corner bond spaces, tied back to the
+original blocked tensors via `SameMPV₂` and to the cyclic orbit
+structure via `IsCyclicSectorDecomp`. The `hSomeMatch` witness
+provides a single matching sector pair `(u₀, v₀)` with compatible
+dimensions and nonzero bond dimension (`dimA u₀ ≠ 0`), which excludes
+the degenerate case where a zero-dimensional `GaugePhaseEquiv` holds
+vacuously.
 
 This is Eq. (A.17)–(A.18) of arXiv:1708.00029. -/
 theorem periodicOverlap_gaugeEquiv_of_sector_match
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
-    (PA QB : Fin m → MatrixAlg D)
-    (hPA_proj : ∀ u, PA u * PA u = PA u)
-    (hQB_proj : ∀ v, QB v * QB v = QB v)
-    (hPA_complete : ∑ u, PA u = 1)
-    (hQB_complete : ∑ v, QB v = 1)
-    (hPA_ortho : ∀ u v, u ≠ v → PA u * PA v = 0)
-    (hQB_ortho : ∀ u v, u ≠ v → QB u * QB v = 0)
-    (hPA_comm : ∀ u (i : Fin d), PA u * A i = A i * PA (u + 1))
-    (hQB_comm : ∀ v (i : Fin d), QB v * B i = B i * QB (v + 1))
-    (hSomeMatch : ∃ u v,
-      GaugePhaseEquiv
-        (leftSectorTensor (PA u) (blockTensor A m))
-        (leftSectorTensor (QB v) (blockTensor B m))) :
+    {dimA dimB : Fin m → ℕ}
+    (blocksA :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
+    (blocksB :
+      (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
+    (hA_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksA k i)ᴴ * blocksA k i = 1)
+    (hB_blocks_lc :
+      ∀ k, ∑ i : Fin (blockPhysDim d m),
+        (blocksB k i)ᴴ * blocksB k i = 1)
+    (hA_mpv :
+      SameMPV₂ (blockTensor A m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksA))
+    (hB_mpv :
+      SameMPV₂ (blockTensor B m)
+        (toTensorFromBlocks (μ := fun _ => 1) blocksB))
+    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
+    (hSomeMatch : ∃ (u₀ v₀ : Fin m) (hdim : dimA u₀ = dimB v₀),
+      dimA u₀ ≠ 0 ∧ GaugePhaseEquiv
+        (cast (congr_arg
+          (MPSTensor (blockPhysDim d m)) hdim)
+          (blocksA u₀))
+        (blocksB v₀)) :
     RepeatedBlocks A B := by
   -- Use translation propagation to get matching for all sectors,
   -- then apply per-site proportionality extraction.
@@ -447,8 +557,9 @@ theorem periodicOverlapDichotomy
     case pos =>
       subst hdim
       -- Same period, same bond dimension.
-      -- Extract cyclic-sector projections PA, QB from IsPeriodic.
-      -- Case split on whether any sector pair (P_u A^(m), Q_v B^(m)) matches:
+      -- Extract compressed cyclic-sector blocks from IsPeriodic
+      -- (via exists_cyclic_sector_decomp_after_blocking_of_isPeriodic).
+      -- Case split on whether any compressed sector pair matches:
       --   • No match → periodicOverlap_tendsto_zero_of_no_sector_match
       --   • Some match → sectorMatch_propagation (using hA.leftCanonical,
       --     hB.leftCanonical for unit-modulus phases), then
