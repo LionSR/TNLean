@@ -159,6 +159,8 @@ import TNLean.MPS.Symmetry.OnSiteSymmetry
 import TNLean.MPS.Symmetry.VirtualRepresentation
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.SymmetricMPS
+import TNLean.MPS.Symmetry.StringOrderDefs
+import TNLean.MPS.Symmetry.StringOrderAux
 import TNLean.MPS.Symmetry.StringOrder
 
 -- Layer 5: Multi-block
