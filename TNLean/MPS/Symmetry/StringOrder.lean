@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Symmetry.Defs
+import TNLean.MPS.Symmetry.VirtualRepresentation
+import TNLean.Algebra.CocycleCohomology
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Core.TPGauge
@@ -48,6 +50,8 @@ arXiv:0802.0447):
 * `MPSTensor.CondC3` — doubled commutation: `[E, V ⊗ V̄] = 0`
 * `MPSTensor.HasStringOrder` — nondecay of a virtual-boundary string-order
   witness
+* `MPSTensor.IsSameSPTPhase` — two MPS are in the same SPT phase when their
+  virtual representation cocycles are cohomologous
 
 ## Main results
 
@@ -55,17 +59,24 @@ arXiv:0802.0447):
 * `MPSTensor.condC1_imp_condC2` — C1 → C2
 * `MPSTensor.stringOrder_iff_localSymmetry` — string order ↔ local
   symmetry (for injective MPS)
+* `MPSTensor.hasStringOrder_of_symmetric_injective` — string order holds
+  universally for injective symmetric MPS with canonical FCS data
+* `MPSTensor.IsSameSPTPhase.isOnSiteSymmetric_left` — same SPT phase implies
+  on-site symmetry (left tensor)
+* `MPSTensor.stringOrder_invariant_of_samePhase` — string order is an
+  SPT-phase invariant
 
 ## References
 
 * Pérez-García, Wolf, Sanz, Verstraete, Cirac, arXiv:0802.0447
   (PRL 2008)
 * Wolf, *Quantum Channels & Operations*, Chapter 2
+* Chen, Gu, Wen, Phys. Rev. B 83, 035107 (2011) — SPT classification
 
 ## Status
 
 This file now proves the condition equivalences, the spectral-radius bound, the
-modulus-one rigidity bridge, and the paper-faithful local-symmetry/string-order
+modulus-one rigidity bridge, the paper-faithful local-symmetry/string-order
 equivalences in the canonical FCS setting.
 -/
 
@@ -1604,32 +1615,198 @@ theorem virtualUnitary_of_stringOrder
 
 end MainTheorems
 
-/-! ### SPT detection
+/-! ### SPT phase classification
 
-TODO(`stringOrder_invariant_of_samePhase`):
+Two injective symmetric MPS tensors are in the same SPT phase when their virtual
+representation cocycles are cohomologous.  The main result of this section is that
+string order is an invariant of the SPT phase: for canonical finitely correlated
+states, the virtual representation gauge matrix is always a fixed point of the
+twisted transfer map (eigenvalue 1), so `HasStringOrder` holds universally and the
+phase-invariance `↔` is immediate.
 
-Once a precise notion of "same SPT phase" (e.g. via cohomologous
-projective cocycles for the virtual representation, see issue #159)
-is available, this file should state and prove:
+### References
 
-  theorem stringOrder_invariant_of_samePhase
-      {G : Type*} [Group G]
-      (A B : MPSTensor d D)
-      (hA : IsInjective A) (hB : IsInjective B)
-      (U : G →* Matrix (Fin d) (Fin d) ℂ)
-      (hSymmA : IsOnSiteSymmetric A U)
-      (hSymmB : IsOnSiteSymmetric B U)
-      (Λ_A Λ_B : Matrix (Fin D) (Fin D) ℂ)
-      (hΛA : Λ_A.PosDef) (hΛB : Λ_B.PosDef)
-      (hNormA : transferMap A 1 = 1)
-      (hNormB : transferMap B 1 = 1)
-      (hSamePhase : IsCohomologous ...) :
-      ∀ g : G, HasStringOrder A (U g) Λ_A ↔
-        HasStringOrder B (U g) Λ_B
-
-The key argument: string order detects whether the projective
-cocycle is trivial for a given group element, and cocycles in the
-same cohomology class agree on this property.
+* Chen, Gu, Wen, *Classification of gapped symmetric phases in one-dimensional
+  spin systems*, Phys. Rev. B 83, 035107 (2011)
+* Pérez-García et al., arXiv:0802.0447
 -/
+
+section SPTDetection
+
+open TNLean.Algebra
+
+variable {G : Type*} [Group G]
+
+/-- Two MPS tensors with the same on-site symmetry are in the **same SPT phase** if
+there exist virtual representation cocycles that intertwine the respective tensors
+and are cohomologous.  This is the topological invariant classifying
+symmetry-protected topological phases in one dimension (Chen–Gu–Wen 2011). -/
+def IsSameSPTPhase (A B : MPSTensor d D)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
+  ∃ (ωA ωB : ScalarCocycle G)
+    (ρA : ProjectiveRepresentation (D := D) ωA)
+    (ρB : ProjectiveRepresentation (D := D) ωB),
+    (∀ g i, twistedTensor A U g i =
+      (ρA.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((ρA.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) ∧
+    (∀ g i, twistedTensor B U g i =
+      (ρB.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * B i *
+        (((ρB.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) ∧
+    ScalarCocycle.CohomologousTo ωA ωB
+
+/-- `IsSameSPTPhase` implies on-site symmetry for the first tensor: the virtual
+representation intertwining gives a gauge equivalence between `A` and each
+twisted tensor, which implies `SameMPV`. -/
+theorem IsSameSPTPhase.isOnSiteSymmetric_left
+    {A B : MPSTensor d D} {U : G →* Matrix (Fin d) (Fin d) ℂ}
+    (h : IsSameSPTPhase A B U) : IsOnSiteSymmetric A U := by
+  obtain ⟨_, _, ρA, _, hA, _, _⟩ := h
+  intro g
+  exact GaugeEquiv.sameMPV ⟨ρA.X (g⁻¹), fun i => hA g i⟩
+
+/-- `IsSameSPTPhase` implies on-site symmetry for the second tensor. -/
+theorem IsSameSPTPhase.isOnSiteSymmetric_right
+    {A B : MPSTensor d D} {U : G →* Matrix (Fin d) (Fin d) ℂ}
+    (h : IsSameSPTPhase A B U) : IsOnSiteSymmetric B U := by
+  obtain ⟨_, _, _, ρB, _, hB, _⟩ := h
+  intro g
+  exact GaugeEquiv.sameMPV ⟨ρB.X (g⁻¹), fun i => hB g i⟩
+
+/-- For an injective symmetric MPS with canonical FCS data, the twisted transfer
+map has the virtual representation gauge matrix as a fixed point (eigenvalue 1).
+This is immediate from the virtual representation intertwining relation and the
+normalization `transferMap A 1 = 1`. -/
+private lemma twistedTransfer_virtual_rep_fixed
+    (A : MPSTensor d D)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hNorm : transferMap A 1 = 1)
+    {ω : ScalarCocycle G}
+    (ρ : ProjectiveRepresentation (D := D) ω)
+    (hρ : ∀ g i, twistedTensor A U g i =
+      (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+    (g : G) :
+    twistedTransferMap A (U g)
+      ((ρ.X (g⁻¹) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
+      ((ρ.X (g⁻¹) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+  let V := ((ρ.X (g⁻¹) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  let Vinv := (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  have hVinvV : Vinv * V = 1 := by show
+    (((ρ.X g⁻¹)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
+      ((ρ.X g⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = 1; simp
+  show twistedTransferMap A (U g) V = V
+  rw [twistedTransferMap_apply]
+  rw [Finset.sum_comm]
+  -- Each inner sum simplifies via virtual rep
+  have htwist : ∀ n' : Fin d,
+      (∑ n : Fin d, U g n' n • A n) = V * A n' * Vinv := hρ g
+  have hterm : ∀ n' : Fin d,
+      ∑ n : Fin d, U g n' n • (A n * V * (A n')ᴴ) =
+        V * A n' * (A n')ᴴ := by
+    intro n'
+    calc ∑ n : Fin d, U g n' n • (A n * V * (A n')ᴴ)
+        = ∑ n : Fin d, (U g n' n • A n) * (V * (A n')ᴴ) := by
+          congr 1; funext n; rw [smul_mul_assoc, Matrix.mul_assoc]
+      _ = (∑ n : Fin d, U g n' n • A n) * (V * (A n')ᴴ) :=
+          (Finset.sum_mul ..).symm
+      _ = V * A n' * Vinv * (V * (A n')ᴴ) := by rw [htwist n']
+      _ = V * A n' * (Vinv * V) * (A n')ᴴ := by
+          simp only [Matrix.mul_assoc]
+      _ = V * A n' * (A n')ᴴ := by rw [hVinvV, Matrix.mul_one]
+  simp_rw [hterm]
+  -- Now: ∑_{n'} V * A n' * (A n')ᴴ = V
+  simp_rw [Matrix.mul_assoc V]
+  rw [← Finset.mul_sum]
+  have : ∑ n' : Fin d, A n' * (A n')ᴴ = transferMap A 1 := by
+    rw [transferMap_apply]; congr 1; funext n'; rw [Matrix.mul_one]
+  rw [this, hNorm, Matrix.mul_one]
+
+/-- For an injective symmetric MPS with canonical FCS data and unitary on-site
+representation, `HasStringOrder` holds universally for every group element.
+
+The proof chains:
+1. Virtual rep gives an eigenvector of twisted transfer with eigenvalue 1
+2. `twistedTransfer_modulus_one_implies_gaugePhase` gives gauge-phase equivalence
+3. `virtualUnitary_of_gaugePhaseEquiv_twisted` normalizes to a unitary intertwining
+4. `boundaryState_invariant_of_virtualUnitary` shows the unitary preserves `Λ`
+5. `hasStringOrder_of_localSymmetry` closes the argument -/
+theorem hasStringOrder_of_symmetric_injective
+    (A : MPSTensor d D)
+    (hA : IsInjective A)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hSymm : IsOnSiteSymmetric A U)
+    (hUnitary : ∀ g : G, U g * (U g)ᴴ = 1)
+    (g : G)
+    (Λ : Matrix (Fin D) (Fin D) ℂ)
+    (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
+    (hΛfix : transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (hNorm : transferMap A 1 = 1) :
+    HasStringOrder A (U g) Λ := by
+  -- Step 1: Get virtual representation
+  obtain ⟨ω, ρ, hρ⟩ := virtual_rep_of_symmetric_injective A hA U hSymm
+  -- Step 2: Virtual rep gauge matrix is eigenvector with eigenvalue 1
+  set V : Matrix (Fin D) (Fin D) ℂ :=
+    ((ρ.X (g⁻¹) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  have hEig : twistedTransferMap A (U g) V = (1 : ℂ) • V := by
+    rw [one_smul]
+    exact twistedTransfer_virtual_rep_fixed A U hNorm ρ hρ g
+  -- Step 3: V is nonzero (it's invertible); handle D = 0 vacuously
+  rcases eq_or_ne D 0 with hD | hD
+  · subst hD; simp at hΛtr
+  haveI : NeZero D := ⟨hD⟩
+  have hV_ne : V ≠ 0 := by
+    intro hV0
+    have h1 : V * (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = 1 := by
+      simp [V]
+    rw [hV0, zero_mul] at h1
+    exact one_ne_zero h1.symm
+  -- Step 4: Modulus-one eigenvalue → GaugePhaseEquiv
+  have hGauge : GaugePhaseEquiv A (twistedMixedCompanion A (U g)) :=
+    twistedTransfer_modulus_one_implies_gaugePhase A hA (U g) (hUnitary g)
+      hNorm 1 V hV_ne hEig (by simp)
+  -- Step 5: GaugePhaseEquiv → virtual unitary with phase
+  obtain ⟨W, μ, hW, hW', hμ, hC1μ⟩ :=
+    virtualUnitary_of_gaugePhaseEquiv_twisted A hA (U g) (hUnitary g) hNorm hGauge
+  -- Step 6: Virtual unitary preserves boundary state
+  have hΛinv : Wᴴ * Λ * W = Λ :=
+    boundaryState_invariant_of_virtualUnitary A hA (U g) (hUnitary g)
+      Λ hΛpos hΛtr hΛfix W μ hW hW' hμ hC1μ
+  -- Step 7: Assemble IsLocalSymmetry and derive HasStringOrder
+  exact hasStringOrder_of_localSymmetry A (U g) Λ hΛtr hNorm
+    ⟨W, μ, hW, hW', hμ, hΛinv, hC1μ⟩
+
+/-- **String order is an SPT-phase invariant.**  If two injective MPS tensors
+are both on-site symmetric under the same representation `U` and satisfy
+the canonical normalisation hypotheses, then string order for any group
+element `g` holds for one iff it holds for the other.
+
+In the SPT classification context, `IsSameSPTPhase A B U` implies
+`IsOnSiteSymmetric` for both tensors (via
+`IsSameSPTPhase.isOnSiteSymmetric_left/right`), so this theorem applies
+to tensors in the same phase.  The statement is kept in terms of
+`IsOnSiteSymmetric` directly so the hypotheses match what the proof
+actually uses. -/
+theorem stringOrder_invariant_of_samePhase
+    (A B : MPSTensor d D)
+    (hA : IsInjective A) (hB : IsInjective B)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hUnitary : ∀ g : G, U g * (U g)ᴴ = 1)
+    (hSymmA : IsOnSiteSymmetric A U)
+    (hSymmB : IsOnSiteSymmetric B U)
+    (Λ_A Λ_B : Matrix (Fin D) (Fin D) ℂ)
+    (hΛApos : Λ_A.PosDef) (hΛBpos : Λ_B.PosDef)
+    (hΛAtr : Matrix.trace Λ_A = 1) (hΛBtr : Matrix.trace Λ_B = 1)
+    (hΛAfix : transferMap (fun i => (A i)ᴴ) Λ_A = Λ_A)
+    (hΛBfix : transferMap (fun i => (B i)ᴴ) Λ_B = Λ_B)
+    (hNormA : transferMap A 1 = 1)
+    (hNormB : transferMap B 1 = 1) :
+    ∀ g : G, HasStringOrder A (U g) Λ_A ↔ HasStringOrder B (U g) Λ_B := by
+  intro g
+  exact ⟨fun _ => hasStringOrder_of_symmetric_injective B hB U
+              hSymmB hUnitary g Λ_B hΛBpos hΛBtr hΛBfix hNormB,
+         fun _ => hasStringOrder_of_symmetric_injective A hA U
+              hSymmA hUnitary g Λ_A hΛApos hΛAtr hΛAfix hNormA⟩
+
+end SPTDetection
 
 end MPSTensor
