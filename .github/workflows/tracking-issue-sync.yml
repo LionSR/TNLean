@@ -12,8 +12,12 @@ on:
   # notes on tracking issues via Playbook C) did not justify the cost.
   # Re-enable if lightweight tracking of review states is needed.
 
+# Global concurrency group (not per-PR/issue) because a PR merge with
+# "Closes #N" fires both pull_request/closed and issues/closed, and both
+# may read-modify-write the same tracking issue body. A single queue with
+# cancel-in-progress: false serializes all runs to prevent lost writes.
 concurrency:
-  group: issue-tracker-${{ github.event.pull_request.number || github.event.issue.number }}
+  group: issue-tracker
   cancel-in-progress: false
 
 jobs:
