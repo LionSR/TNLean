@@ -133,7 +133,11 @@ relation between the two tensors.
 This is the PEPS analogue of the MPS linear-extension step: injectivity at `v`
 provides a left inverse, and `SameState` (contracted over all other vertices)
 constrains the relationship to a linear isomorphism on the virtual indices of
-`v`. -/
+`v`.
+
+The conclusion indexes gauges by `IncidentEdge G v` (edges incident to `v`).
+Since each edge appears at most once in the incident set, this is equivalent to
+the paper's per-edge formulation restricted to edges touching `v`. -/
 theorem localGauge_exists (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
