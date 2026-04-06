@@ -7,6 +7,7 @@ on:
     paths:
       - 'blueprint/src/**'
   pull_request:
+    types: [opened, synchronize]
     paths:
       - 'blueprint/src/**'
 
