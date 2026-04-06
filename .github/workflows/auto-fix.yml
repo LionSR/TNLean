@@ -24,6 +24,9 @@ permissions:
   issues: write
   id-token: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 # Concurrency is set per-job (not workflow-level) to avoid a problem where
 # adding any unrelated label to a PR would start a no-op run that cancels
 # an in-progress auto-fix via cancel-in-progress.
