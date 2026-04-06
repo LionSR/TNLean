@@ -303,7 +303,7 @@ lemma summable_dysonTerm_of_factorial_bound
 /-- Factorial norm bound for Dyson–Phillips iterates (Wolf Eq. 7.13 estimate).
 For `s ∈ [0, t]` and `M = sup_{u ∈ [0,t]} ‖exp(uL)‖`:
 `‖T̃ⁿ(s)‖ ≤ M · (s · ‖Δ‖ · M)ⁿ / n!`. -/
-theorem norm_dysonTerm_le (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) (n : ℕ)
+theorem norm_dysonTerm_le (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) (n : ℕ)
     {s : ℝ} (hs : s ∈ Set.Icc 0 t) :
     ‖dysonTerm L L' s n‖ ≤
       (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖) *
@@ -374,7 +374,7 @@ theorem norm_dysonTerm_le (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) (n : ℕ)
           ring
 
 /-- Factorial norm bound specialised to `s = t`. -/
-theorem norm_dysonTerm_le_at (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) (n : ℕ) :
+theorem norm_dysonTerm_le_at (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) (n : ℕ) :
     ‖dysonTerm L L' t n‖ ≤
       (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖) *
       ((t * ‖L' - L‖ * (⨆ u ∈ Set.Icc 0 t, ‖expSemigroupCLM L u‖)) ^ n /
@@ -382,7 +382,7 @@ theorem norm_dysonTerm_le_at (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) (n : ℕ) :
   norm_dysonTerm_le L L' ht n (Set.right_mem_Icc.mpr ht)
 
 /-- The Dyson–Phillips series `∑ₙ T̃ⁿ(t)` converges in operator norm. -/
-theorem summable_dysonTerm (L L' : CLM D) {t : ℝ} (ht : 0 ≤ t) :
+theorem summable_dysonTerm (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
     Summable (fun n => dysonTerm L L' t n) :=
   summable_dysonTerm_of_factorial_bound L L'
     (fun n => norm_dysonTerm_le_at L L' ht n)
