@@ -157,3 +157,15 @@ finite-dimensional quantum systems.
         I(A{:}B) = S(\rho_A) + S(\rho_B) - S(\rho_{AB}).
     \]
 \end{definition}
+
+\begin{theorem}[Mutual information is non-negative]\label{thm:mutual_information_nonneg}
+    \uses{def:mutual_information, thm:strong_subadditivity}
+    For any bipartite density matrix $\rho_{AB}$,
+    $I(A{:}B) \ge 0$.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:strong_subadditivity}
+    Apply strong subadditivity (Theorem~\ref{thm:strong_subadditivity})
+    with trivial $C$.
+\end{proof}
