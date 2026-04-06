@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.FundamentalTheorem.FiniteLength
 import TNLean.Algebra.TracePairing
 import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 
@@ -271,27 +272,6 @@ theorem neZero_d_of_isInjective {A : MPSTensor d D} [NeZero D]
   have hempty : Set.range A = ∅ := Set.range_eq_empty_iff.mpr inferInstance
   rw [IsInjective, hempty, Submodule.span_empty] at hA
   exact bot_ne_top hA
-
-/-! ### Helper: wordSpan monotonicity from injectivity -/
-
-/-- For an injective tensor, `wordSpan A k = ⊤` for all `k ≥ 1`. -/
-theorem wordSpan_eq_top_of_isInjective {A : MPSTensor d D}
-    (hA : IsInjective A) {k : ℕ} (hk : 0 < k) :
-    wordSpan A k = ⊤ := by
-  have hword1 : wordSpan A 1 = ⊤ := by
-    have hRange :
-        Set.range (fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = Set.range A := by
-      ext M
-      constructor
-      · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
-      · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
-    change Submodule.span ℂ (Set.range fun σ : Fin 1 → Fin d =>
-      evalWord A (List.ofFn σ)) = ⊤
-    rw [hRange]; exact hA
-  have hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1 := by
-    rw [hword1]; exact Submodule.mem_top
-  exact eq_top_iff.mpr (by
-    simpa [hword1] using wordSpan_mono'_of_one_mem_wordSpan_one A hone (by omega : 1 ≤ k))
 
 /-! ### Helper: vanishing on all word products implies zero -/
 

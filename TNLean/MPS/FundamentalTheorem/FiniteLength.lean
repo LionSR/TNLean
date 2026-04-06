@@ -96,9 +96,9 @@ lemma SameMPVFrom.trace_evalWord_of_length_ge
 
 Base: `wordSpan A 1 = span(range A) = ⊤`. Step: right-multiply each generator
 by the A-decomposition of `1` to embed `wordSpan A n` into `wordSpan A (n+1)`. -/
-private theorem wordSpan_eq_top_of_isInjective
+theorem wordSpan_eq_top_of_isInjective
     {A : MPSTensor d D} (hA : IsInjective A)
-    {n : ℕ} (hn : 1 ≤ n) : wordSpan A n = ⊤ := by
+    {n : ℕ} (hn : 0 < n) : wordSpan A n = ⊤ := by
   classical
   obtain ⟨c, hc⟩ := hA.exists_decomposition 1
   induction n with
