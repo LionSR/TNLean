@@ -592,11 +592,65 @@ private theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
       exact sub_eq_zero.mp this
   intro j; exact hComm (A j)
 
+/-- On a periodic chain, the injective parent-Hamiltonian ground space
+coincides with the span of the MPV when the window size satisfies `L ≥ 2`.
+
+For injective tensors, the open-chain intersection argument requires only
+a window of at least `2` sites. -/
 theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hA : IsNBlkInjective A L₀)
-    {L N : ℕ} (hN : 2 ≤ N) (hL : 2 * L₀ ≤ L) (hLN : L ≤ N) :
+    (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
-  sorry
+  have hN0 : 0 < N := by omega
+  haveI : NeZero d := neZero_d_of_isInjective hA
+  apply le_antisymm
+  · -- ⊆ direction: chainGroundSpace ≤ mpvSubmodule
+    intro ψ hψ
+    rw [chainGroundSpace, dif_pos ⟨hN0, hLN⟩] at hψ
+    simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
+    -- Step 1: ψ ∈ groundSpace A N (via non-wrapping windows)
+    have hψGS : ψ ∈ groundSpace A N := by
+      apply contiguous_mem_groundSpace hA hL hLN
+      intro s hs τ
+      rw [← cyclicRestrictₗ_eq_contiguousRestrictₗ hN0 hLN (show (⟨s, by omega⟩ : Fin N).val + L ≤ N from hs)]
+      exact hψ ⟨s, by omega⟩ τ
+    -- Step 2: ψ = groundSpaceMap A N X for some X
+    rw [groundSpace, LinearMap.mem_range] at hψGS
+    obtain ⟨X, hX⟩ := hψGS
+    -- Step 3: X commutes with all A j (wrapping window constraint)
+    have hComm : ∀ j : Fin d, X * A j = A j * X := by
+      apply boundary_matrix_commutes hA hN hL hLN
+      intro i τ
+      rw [show groundSpaceMap A N X = ψ from hX]
+      exact hψ i τ
+    -- Step 4: X is scalar (center argument)
+    have hCenter : X ∈ Set.center (Matrix (Fin D) (Fin D) ℂ) := by
+      rw [Semigroup.mem_center_iff]
+      intro M
+      have hext : LinearMap.mulLeft ℂ X = LinearMap.mulRight ℂ X := by
+        apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
+        intro j
+        simp only [LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
+        exact hComm j
+      have := LinearMap.congr_fun hext M
+      simp only [LinearMap.mulLeft_apply, LinearMap.mulRight_apply] at this
+      exact this.symm
+    rw [Matrix.center_eq_range] at hCenter
+    obtain ⟨c, hc⟩ := hCenter
+    have hX_eq : X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+      rw [← hc, Matrix.scalar_apply, ← Matrix.smul_one_eq_diagonal]
+    -- Step 5: ψ = c • mpv A
+    rw [mpvSubmodule]
+    rw [Submodule.mem_span_singleton]
+    refine ⟨c, ?_⟩
+    rw [← hX]
+    ext σ
+    simp only [groundSpaceMap_apply, Pi.smul_apply, smul_eq_mul, mpv, coeff]
+    rw [hX_eq, Algebra.mul_smul_comm, mul_one, Matrix.trace_smul, smul_eq_mul]
+  · -- ⊇ direction: mpvSubmodule ≤ chainGroundSpace
+    intro ψ hψ
+    rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
+    obtain ⟨c, rfl⟩ := hψ
+    exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N hN0 hLN)
 
 /-- On a periodic chain, the normal parent-Hamiltonian ground space coincides
 with the span of the MPV with the reduced window `L > L₀` (instead of `2L₀`).
@@ -627,16 +681,7 @@ The proof uses the intersection property iteratively:
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
     {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     HasUniqueGroundState (chainGroundSpace A L N) := by
-  -- IsInjective A gives IsNBlkInjective A 1 (1-block injectivity).
-  have hInj1 : IsNBlkInjective A 1 := by
-    rw [← wordSpan_eq_top_iff_isNBlkInjective, wordSpan]
-    have hrange : Set.range (fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ))
-        = Set.range A := by
-      ext M; constructor
-      · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
-      · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
-    rw [hrange]; exact hA
-  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hInj1 hN (by omega) hLN]
+  rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hA hN hL hLN]
   have hmpv : (mpv A : NSiteSpace d N) ≠ 0 := by
     intro hzero
     have hEq :
