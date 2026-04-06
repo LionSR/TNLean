@@ -26,4 +26,4 @@ runs:
       shell: bash
       run: |
         pipx install leanblueprint
-        pipx inject leanblueprint plastex
+        pipx inject --include-apps leanblueprint plastex
