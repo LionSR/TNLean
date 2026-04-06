@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Symmetry.Defs
-import TNLean.MPS.Symmetry.CocycleCoboundary
+import TNLean.MPS.Symmetry.VirtualRepresentation
+import TNLean.Algebra.CocycleCohomology
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Core.TPGauge
@@ -1754,21 +1755,20 @@ theorem hasStringOrder_of_symmetric_injective
   exact hasStringOrder_of_localSymmetry A (U g) Λ hΛtr hNorm
     ⟨W, μ, hW, hW', hμ, hΛinv, hC1μ⟩
 
-/-- **String order is an SPT phase invariant.**  If two injective symmetric MPS
-tensors are in the same SPT phase (cohomologous virtual cocycles), then string
-order for any group element `g` holds for one iff it holds for the other.
+/-- **String order is an SPT phase invariant.**  If two injective MPS tensors are
+in the same SPT phase (cohomologous virtual cocycles, which in particular
+witnesses on-site symmetry for both tensors), then string order for any group
+element `g` holds for one iff it holds for the other.
 
-In fact, for canonical finitely correlated states with unitary on-site
-representation, string order holds universally — so both sides of the `↔` are
-true independently.  The content is that string order existence is a property
-of the symmetry class rather than the specific tensor. -/
+The `IsSameSPTPhase` hypothesis provides on-site symmetry for both `A` and `B`
+(via `GaugeEquiv.sameMPV` applied to the virtual representation intertwining).
+For canonical finitely correlated states with unitary on-site representation,
+string order then holds universally by `hasStringOrder_of_symmetric_injective`. -/
 theorem stringOrder_invariant_of_samePhase
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hUnitary : ∀ g : G, U g * (U g)ᴴ = 1)
-    (hSymmA : IsOnSiteSymmetric A U)
-    (hSymmB : IsOnSiteSymmetric B U)
     (Λ_A Λ_B : Matrix (Fin D) (Fin D) ℂ)
     (hΛApos : Λ_A.PosDef) (hΛBpos : Λ_B.PosDef)
     (hΛAtr : Matrix.trace Λ_A = 1) (hΛBtr : Matrix.trace Λ_B = 1)
@@ -1776,8 +1776,14 @@ theorem stringOrder_invariant_of_samePhase
     (hΛBfix : transferMap (fun i => (B i)ᴴ) Λ_B = Λ_B)
     (hNormA : transferMap A 1 = 1)
     (hNormB : transferMap B 1 = 1)
-    (_hSamePhase : IsSameSPTPhase A B U) :
+    (hSamePhase : IsSameSPTPhase A B U) :
     ∀ g : G, HasStringOrder A (U g) Λ_A ↔ HasStringOrder B (U g) Λ_B := by
+  -- Extract on-site symmetry from the same-phase witness
+  obtain ⟨ωA, ωB, ρA, ρB, hρA, hρB, _⟩ := hSamePhase
+  have hSymmA : IsOnSiteSymmetric A U := fun g =>
+    GaugeEquiv.sameMPV ⟨ρA.X (g⁻¹), hρA g⟩
+  have hSymmB : IsOnSiteSymmetric B U := fun g =>
+    GaugeEquiv.sameMPV ⟨ρB.X (g⁻¹), hρB g⟩
   intro g
   exact ⟨fun _ => hasStringOrder_of_symmetric_injective B hB U hSymmB
               hUnitary g Λ_B hΛBpos hΛBtr hΛBfix hNormB,
