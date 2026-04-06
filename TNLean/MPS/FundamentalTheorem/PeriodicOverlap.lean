@@ -241,10 +241,16 @@ If two periodic tensors have the same period `m` but no compressed sector
 pair matches (up to dimension cast and gauge-phase equivalence), their
 overlap decays to zero.
 
-The `hNoMatch` hypothesis quantifies over dimension equalities: for each
-sector pair `(u, v)` and any proof that `dimA u = dimB v`, the compressed
-blocks are not gauge-phase equivalent. When `dimA u ≠ dimB v`, no match
-is possible since `GaugePhaseEquiv` requires equal bond dimension.
+The `hNoMatch` hypothesis quantifies over nondegenerate dimension
+equalities: for each sector pair `(u, v)` with `dimA u ≠ 0` and any
+proof that `dimA u = dimB v`, the compressed blocks are not gauge-phase
+equivalent. The nondegeneracy guard `dimA u ≠ 0` is essential: when
+`dimA u = 0`, `GaugePhaseEquiv` may hold vacuously for
+`MPSTensor _ 0`, and without this guard `hNoMatch` would be
+unsatisfiable whenever a zero-dimensional sector pair exists. With
+this guard, `hNoMatch` is exactly the negation of `hSomeMatch` in
+`periodicOverlap_gaugeEquiv_of_sector_match`, making the two
+conditions complementary for the dichotomy proof.
 
 This is the "first case" of the same-period argument in Appendix A:
 block by `m`, decompose into normal sectors, and observe that all
@@ -271,6 +277,7 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hNoMatch : ∀ u v (hdim : dimA u = dimB v),
+      dimA u ≠ 0 →
       ¬ GaugePhaseEquiv
         (cast (congr_arg
           (MPSTensor (blockPhysDim d m)) hdim)
@@ -349,6 +356,11 @@ equivalent (after dimension cast). The injectivity contraction argument
 shows these per-sector gauges combine into a single global gauge for
 `RepeatedBlocks`.
 
+The nondegeneracy hypothesis `hNondeg` ensures every sector has
+positive bond dimension. Without this, zero-dimensional sectors
+satisfy `IsNormal`, `GaugePhaseEquiv`, and `hBlockMatch` vacuously,
+which would make the conclusion `RepeatedBlocks A B` too strong.
+
 The left-canonical hypotheses (`hA_lc`, `hB_lc`) are essential: they
 force the gauge-proportionality phases to have unit modulus, which is
 required by `RepeatedBlocks`. -/
@@ -381,6 +393,7 @@ lemma sectorTensor_proportional_of_blockedMatch
             (MPSTensor (blockPhysDim d m)) hdim)
             (blocksA u))
           (blocksB (u + q)))
+    (hNondeg : ∀ u, dimA u ≠ 0)
     (hNormal : ∀ u, IsNormal (blocksA u)) :
     RepeatedBlocks A B := by
   -- Step 1: Each blocked sector product is normal, so after N₀
