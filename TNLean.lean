@@ -199,6 +199,9 @@ import TNLean.PiAlgebra.GlobalSymmetry
 -- Layer 3b: MPO / MPDO / LPDO foundations
 import TNLean.MPS.MPDO.Defs
 
+-- MPS examples
+import TNLean.MPS.Examples.GHZ
+
 -- Layer 5b: Renormalization fixed points (RFP) — pure-state scaffolding
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.RFP.ZeroCorrelationLength
