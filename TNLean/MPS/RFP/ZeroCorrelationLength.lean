@@ -86,20 +86,21 @@ theorem isCID_implies_isRFP
     (hCID : IsCID A) : IsRFP A := by
   classical
   change transferMap A ∘ₗ transferMap A = transferMap A
-  have hu := hρ_pd.isUnit
+  obtain ⟨u, rfl⟩ := hρ_pd.isUnit
   apply LinearMap.ext; intro Z
   simp only [LinearMap.comp_apply]
-  -- Write Z = X * ρR using invertibility of ρR (PosDef ⟹ IsUnit)
-  set X := Z * hu.unit⁻¹.val with hX
-  have hZ : Z = X * ρR := by
-    rw [hX, mul_assoc, hu.val_inv_mul, mul_one]
+  -- Write Z = X * ↑u using invertibility of ρR (PosDef ⟹ IsUnit)
+  set X := Z * (↑u⁻¹ : Matrix (Fin D) (Fin D) ℂ) with hX
+  have hZ : Z = X * (u : Matrix (Fin D) (Fin D) ℂ) := by
+    rw [hX, mul_assoc, Units.inv_mul, mul_one]
   rw [hZ]
   -- By trace nondegeneracy, suffices: E(E(X·ρR)) - E(X·ρR) = 0
-  suffices h_diff : transferMap A (transferMap A (X * ρR)) -
-      transferMap A (X * ρR) = 0 from eq_of_sub_eq_zero h_diff
+  suffices h_diff : transferMap A (transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ))) -
+      transferMap A (X * (u : Matrix (Fin D) (Fin D) ℂ)) = 0 from
+    eq_of_sub_eq_zero h_diff
   apply trace_mul_right_eq_zero; intro N
   -- From IsCID with n=2, m=1: correlator equality gives trace equality
-  have h := hCID ρR hρ_pd hρ_fix X N 2 1 (by omega) (by omega)
+  have h := hCID ↑u hρ_pd hρ_fix X N 2 1 (by omega) (by omega)
   simp only [connectedCorrelator_def, twoPointExpectation_transfer] at h
   simp only [pow_succ, pow_zero, one_mul, Module.End.mul_apply] at h
   -- h : tr(N * E(E(X*ρR))) - c = tr(N * E(X*ρR)) - c, so extract equality
