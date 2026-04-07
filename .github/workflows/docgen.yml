@@ -79,11 +79,13 @@ jobs:
           cp -r home_page/assets /tmp/gh-pages/ 2>/dev/null || true
           cp -r home_page/_layouts /tmp/gh-pages/ 2>/dev/null || true
 
-          # Update API docs
-          rm -rf /tmp/gh-pages/docs
-          if [ -d "docbuild/.lake/build/doc" ]; then
-            cp -r docbuild/.lake/build/doc /tmp/gh-pages/docs
+          # Update API docs (fail if not generated)
+          if [ ! -d "docbuild/.lake/build/doc" ]; then
+            echo "::error::API docs were not generated (docbuild/.lake/build/doc missing)"
+            exit 1
           fi
+          rm -rf /tmp/gh-pages/docs
+          cp -r docbuild/.lake/build/doc /tmp/gh-pages/docs
 
           cd /tmp/gh-pages
           git config user.name "github-actions[bot]"
