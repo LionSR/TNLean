@@ -68,6 +68,9 @@ jobs:
             exit "$cmd_status"
           fi
 
+      - name: Generate lean_decls from blueprint .tex files
+        run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
+
       - name: Check blueprint and Lean source stay in sync
         run: python3 scripts/blueprint_lean_sync.py --root . --ci
 
