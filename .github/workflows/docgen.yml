@@ -57,7 +57,6 @@ jobs:
       - name: Generate API docs
         run: |
           cd docbuild
-          lake update
           lake build TNLean:docs
 
       - name: Deploy to gh-pages
