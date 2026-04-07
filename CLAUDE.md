@@ -28,26 +28,7 @@ cd blueprint && leanblueprint checkdecls
 cd blueprint && leanblueprint web
 cd blueprint && leanblueprint pdf
 
-# Deploy blueprint to GitHub Pages (fast, preserves /docs/)
-./scripts/deploy-blueprint.sh
-
-# Deploy blueprint + API docs to GitHub Pages (slow first time, incremental after)
-./scripts/deploy-docs.sh
-
-# Generate API docs only (without deploying)
-cd docbuild && lake build TNLean:docs
 ```
-
-### GitHub Pages Deployment
-
-The site at `sirui-lu.com/TNLean/` is served from the `gh-pages` branch. Two deploy scripts update it incrementally:
-
-- **`scripts/deploy-blueprint.sh`** — builds `leanblueprint pdf/web`, pushes blueprint + homepage to `gh-pages`. Fast (seconds). Does not touch `/docs/`.
-- **`scripts/deploy-docs.sh`** — builds blueprint + API docs (`lake build TNLean:docs` in `docbuild/`), pushes everything to `gh-pages`. Slow on first run (hours), incremental after.
-
-CI also deploys automatically:
-- **Blueprint workflow** (`blueprint.yml`) — runs on every push to `main`, deploys blueprint only.
-- **Docgen workflow** (`docgen.yml`) — runs weekly (Sunday) or manually via `workflow_dispatch`, deploys full site with API docs.
 
 ## Lean Toolchain & Dependencies
 
