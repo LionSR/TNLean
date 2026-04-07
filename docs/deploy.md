@@ -13,6 +13,10 @@ leanblueprint serve        # opens http://localhost:8000
 
 # Build blueprint PDF
 leanblueprint pdf          # output: blueprint/print/print.pdf
+
+# Build and preview API docs locally
+cd docbuild && lake build TNLean:docs
+cd .lake/build/doc && python3 -m http.server 8080   # opens http://localhost:8080
 ```
 
 ## Deploy Blueprint (fast)
