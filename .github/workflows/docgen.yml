@@ -11,17 +11,13 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 jobs:
   build_project:
     runs-on: ubuntu-latest
     name: Build project and generate docs
-    timeout-minutes: 480
-    environment:
-      name: github-pages
+    timeout-minutes: 720
     steps:
       - name: Cleanup to free disk space
         uses: jlumbroso/free-disk-space@main
@@ -44,8 +40,58 @@ jobs:
         with:
           build: true
 
-      - name: Compile blueprint and documentation
-        uses: leanprover-community/docgen-action@main
-        with:
-          blueprint: true
-          homepage: home_page
+      - name: Install graphviz headers
+        run: sudo apt-get update && sudo apt-get install -y graphviz libgraphviz-dev
+
+      - name: Install leanblueprint
+        run: |
+          pipx install leanblueprint
+          pipx inject --include-apps --force leanblueprint plastex
+
+      - name: Build blueprint
+        working-directory: blueprint
+        run: |
+          leanblueprint pdf
+          leanblueprint web
+
+      - name: Generate API docs
+        run: |
+          cd docbuild
+          lake update
+          lake build
+
+      - name: Deploy to gh-pages
+        run: |
+          git clone --branch gh-pages --single-branch --depth 1 \
+            "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" /tmp/gh-pages
+
+          # Update blueprint
+          rm -rf /tmp/gh-pages/blueprint
+          mkdir -p /tmp/gh-pages/blueprint
+          cp -r blueprint/web/* /tmp/gh-pages/blueprint/
+          cp blueprint/print/print.pdf /tmp/gh-pages/blueprint.pdf
+
+          # Update homepage
+          cp home_page/_config.yml /tmp/gh-pages/
+          cp home_page/index.md /tmp/gh-pages/
+          cp home_page/404.html /tmp/gh-pages/ 2>/dev/null || true
+          cp home_page/Gemfile /tmp/gh-pages/ 2>/dev/null || true
+          cp -r home_page/assets /tmp/gh-pages/ 2>/dev/null || true
+          cp -r home_page/_layouts /tmp/gh-pages/ 2>/dev/null || true
+
+          # Update API docs
+          rm -rf /tmp/gh-pages/docs
+          if [ -d "docbuild/.lake/build/doc" ]; then
+            cp -r docbuild/.lake/build/doc /tmp/gh-pages/docs
+          fi
+
+          cd /tmp/gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to deploy."
+          else
+            git commit -m "Full docs update from ${{ github.sha }}"
+            git push origin gh-pages
+          fi
