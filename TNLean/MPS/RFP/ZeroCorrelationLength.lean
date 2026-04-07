@@ -71,6 +71,44 @@ See arXiv:1606.00608, Definition 3.6. -/
 def IsZCL (A : MPSTensor d D) : Prop :=
   IsLocallyOrthogonal A ∧ IsCID A
 
+/-- **CID implies RFP** (arXiv:1606.00608, Theorem 3.8 reverse direction):
+for a tensor with a PosDef fixed point, correlations independent of distance
+implies the transfer map is idempotent.
+
+The proof uses trace nondegeneracy: IsCID forces `tr(Y · Eⁿ(X · ρR))` to be
+constant in `n` for all `X`, `Y`, so `Eⁿ(X · ρR)` is constant. Since `ρR` is
+PosDef (hence invertible), `X · ρR` ranges over all matrices, giving `E² = E`. -/
+theorem isCID_implies_isRFP
+    (A : MPSTensor d D)
+    (ρR : Matrix (Fin D) (Fin D) ℂ)
+    (hρ_pd : ρR.PosDef)
+    (hρ_fix : transferMap A ρR = ρR)
+    (hCID : IsCID A) : IsRFP A := by
+  classical
+  change transferMap A ∘ₗ transferMap A = transferMap A
+  have hu := hρ_pd.isUnit
+  apply LinearMap.ext; intro Z
+  simp only [LinearMap.comp_apply]
+  -- Write Z = X * ρR using invertibility of ρR (PosDef ⟹ IsUnit)
+  set X := Z * hu.unit⁻¹.val with hX
+  have hZ : Z = X * ρR := by
+    rw [hX, mul_assoc, hu.val_inv_mul, mul_one]
+  rw [hZ]
+  -- By trace nondegeneracy, suffices: E(E(X·ρR)) - E(X·ρR) = 0
+  suffices h_diff : transferMap A (transferMap A (X * ρR)) -
+      transferMap A (X * ρR) = 0 from eq_of_sub_eq_zero h_diff
+  apply trace_mul_right_eq_zero; intro N
+  -- From IsCID with n=2, m=1: correlator equality gives trace equality
+  have h := hCID ρR hρ_pd hρ_fix X N 2 1 (by omega) (by omega)
+  simp only [connectedCorrelator_def, twoPointExpectation_transfer] at h
+  simp only [pow_succ, pow_zero, one_mul, Module.End.mul_apply] at h
+  -- h : tr(N * E(E(X*ρR))) - c = tr(N * E(X*ρR)) - c, so extract equality
+  have heq := sub_left_injective h
+  -- Goal: tr((E(E(X*ρR)) - E(X*ρR)) * N) = 0
+  rw [sub_mul, Matrix.trace_sub,
+    Matrix.trace_mul_comm _ N, Matrix.trace_mul_comm _ N]
+  exact sub_eq_zero.mpr heq
+
 /-- **Theorem 3.8** (arXiv:1606.00608): For an MPS tensor,
 ZCL is equivalent to the transfer map being idempotent (i.e. `IsRFP`).
 
