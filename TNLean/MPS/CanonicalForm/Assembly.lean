@@ -716,7 +716,7 @@ private lemma cyclicShift_succ {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) :
 
 /-- Iterating the cyclic relation `E†(P(k+1)) = P_k` exactly `m` times gives
 `(E†)^m (P_k) = P_k`. -/
-private theorem adjointTransferMap_pow_fixes_cyclic_projection
+theorem adjointTransferMap_pow_fixes_cyclic_projection
     {d D m : ℕ} [NeZero m]
     (K : Fin d → MatrixAlg D)
     (P : Fin m → MatrixAlg D)
@@ -791,7 +791,7 @@ This is proved by passing to Frobenius adjoints. First,
 family `blockTensor A m`. Second, `transferMap (blockTensor A m) = (transferMap A)^m` by
 `transferMap_blockTensor`. Finally, adjoint commutes with powers, so
 `((transferMap A)^m).adjoint = ((transferMap A).adjoint)^m`. -/
-private theorem transferMap_adjoint_blocked_eq_pow
+theorem transferMap_adjoint_blocked_eq_pow
     {d D : ℕ} (A : MPSTensor d D) (m : ℕ) (X : MatrixAlg D) :
     transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) X =
       ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X := by
@@ -837,8 +837,12 @@ private theorem transferMap_adjoint_blocked_eq_pow
 
 For an irreducible TP tensor `A` of period `m`, after blocking by `m`, the blocked tensor
 `blockTensor A m` admits a sector decomposition into `m` TP blocks via the cyclic
-spectral projections. Each sector is left-canonical and the direct-sum tensor is
-`SameMPV₂`-equivalent to the blocked tensor. -/
+spectral projections. Returns:
+- `blocks k`: TP sector tensors (each left-canonical),
+- `P k`: orthogonal projections forming a partition of unity (`∑ P k = 1`),
+- commutation: each `P k` commutes with every blocked letter,
+- trace relation: `mpv (blocks k) σ = (P k * evalWord (blockTensor A m) σ).trace`,
+- MPV equivalence: the direct-sum tensor is `SameMPV₂`-equivalent to the blocked tensor. -/
 theorem exists_cyclic_sector_decomp_after_blocking
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
@@ -850,9 +854,16 @@ theorem exists_cyclic_sector_decomp_after_blocking
     {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
     (hperiph : peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
       Set.range (fun j : Fin m => γ ^ (j : ℕ))) :
-    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
+      (P : Fin m → MatrixAlg D),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) := by
+      SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
+      (∀ k, IsOrthogonalProjection (P k)) ∧
+      (∑ k : Fin m, P k = 1) ∧
+      (∀ k (i : Fin (blockPhysDim d m)),
+        P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
+      (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace) := by
   -- Step 1: Get cyclic decomposition data
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hUnital : IsUnitalKraus (d := d) (D := D) K := by
@@ -876,8 +887,16 @@ theorem exists_cyclic_sector_decomp_after_blocking
       (blockTensor A m i)ᴴ * blockTensor A m i = 1 :=
     leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := m) hTP
   -- Step 5: Apply the CyclicSectors decomposition
-  exact exists_blockDecomp_of_adjoint_fixed_projections
+  obtain ⟨dim, blocks, hLC, hMPV_hTrace⟩ := exists_blockDecomp_of_adjoint_fixed_projections
     (blockTensor A m) P hPproj hPsum hTP_blocked hFix
+  obtain ⟨hMPV, hTrace⟩ := hMPV_hTrace
+  -- Step 6: Derive commutation from the adjoint fix property
+  have hComm : ∀ k (i : Fin (blockPhysDim d m)),
+      P k * (blockTensor A m) i = (blockTensor A m) i * P k := by
+    intro k i
+    exact commutes_letters_of_adjoint_fixed_projection
+      (blockTensor A m) hTP_blocked (hP := hPproj k) (hFix := hFix k) i
+  exact ⟨dim, blocks, P, hLC, hMPV, hPproj, hPsum, hComm, hTrace⟩
 
 end CyclicSectorBridge
 
@@ -970,7 +989,7 @@ theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
     rw [hperiph_set]; ext x; simp [Set.mem_range, eq_comm]
   -- Apply exists_cyclic_sector_decomp_after_blocking.
   haveI : NeZero m := ⟨by omega⟩
-  obtain ⟨dim, blocks, hTP_blocks, hSame⟩ :=
+  obtain ⟨dim, blocks, _, hTP_blocks, hSame, _, _, _, _⟩ :=
     exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
       hperiph_range
   exact ⟨m, hm_pos, dim, blocks, hTP_blocks, hSame⟩

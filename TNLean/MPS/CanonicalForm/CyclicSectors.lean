@@ -523,7 +523,9 @@ theorem exists_blockDecomp_of_commuting_projections
     (hComm : ∀ k : Fin m, ∀ i : Fin d, P k * A i = A i * P k) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor d (dim k)),
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) := by
+      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      (∀ k (N : ℕ) (σ : Fin N → Fin d),
+        mpv (blocks k) σ = (P k * evalWord A (List.ofFn σ)).trace) := by
   -- For each k, sector tensor P_k * A_i is P_k-supported
   have hSectorSupp : ∀ k i, P k * (P k * A i) * P k = P k * A i := by
     intro k i
@@ -535,16 +537,22 @@ theorem exists_blockDecomp_of_commuting_projections
     have hterm : ∀ i, (P k * A i)ᴴ * (P k * A i) = (A i)ᴴ * A i * P k := by
       intro i
       rw [Matrix.conjTranspose_mul, Matrix.mul_assoc]
-      -- Goal: (A i)ᴴ * ((P k)ᴴ * (P k * A i)) = (A i)ᴴ * A i * P k
       rw [← Matrix.mul_assoc (P k)ᴴ (P k) (A i), (hPproj k).1.eq, (hPproj k).2]
-      -- Goal: (A i)ᴴ * (P k * A i) = (A i)ᴴ * A i * P k
       rw [hComm k i, ← Matrix.mul_assoc]
     simp_rw [hterm, ← Finset.sum_mul, hLeft, Matrix.one_mul]
   -- Apply compression to each sector
   choose dim blocks hDim hTPblocks hMPVblocks using fun k =>
     exists_compressedTensor_of_supported_projection
       (fun i => P k * A i) (P k) (hPproj k) (hSectorSupp k) (hSectorTP k)
-  refine ⟨dim, blocks, hTPblocks, ?_⟩
+  -- Per-sector trace relation: mpv(blocks k) σ = tr(P_k · evalWord A σ)
+  have hSectorTrace : ∀ k (N : ℕ) (σ : Fin N → Fin d),
+      mpv (blocks k) σ = (P k * evalWord A (List.ofFn σ)).trace := by
+    intro k N σ
+    rw [hMPVblocks k N σ]
+    congr 1
+    exact left_mul_evalWord_leftSectorTensor_of_commutes (P k) A (hPproj k).2 (hComm k) _
+  refine ⟨dim, blocks, hTPblocks, ?_, hSectorTrace⟩
+  -- SameMPV₂ follows from summing per-sector traces over the projection partition
   intro N σ
   rw [mpv_toTensorFromBlocks_eq_sum]; simp only [one_pow, one_smul]
   simp only [mpv, coeff]
@@ -553,27 +561,7 @@ theorem exists_blockDecomp_of_commuting_projections
   rw [show (1 : MatrixAlg D) = ∑ k : Fin m, P k from hPsum.symm]
   rw [Finset.sum_mul, Matrix.trace_sum]
   congr 1; ext k
-  -- Need: tr(P k * evalWord A w) = mpv(blocks k) σ
-  -- hMPVblocks k says: mpv(blocks k) σ = tr(P k * evalWord (fun i => P k * A i) w)
-  -- But evalWord(P k * A_i)(w) = evalWord A_i (w) when P_k commutes with A_i, because
-  -- P_k * A_i₁ * P_k * A_i₂ * ... = P_k * A_i₁ * A_i₂ * ... (using P² = P and commutation)
-  -- Actually, evalWord(P k * A)(w) ≠ P k * evalWord A w in general!
-  -- evalWord(P k * A)(j :: w) = (P k * A j) * evalWord(P k * A)(w)
-  -- For non-empty w with P² = P and P Ai = Ai P:
-  -- evalWord(P * A)(w) = P * A_j * P * ... * P * A_jn
-  -- Using PA = AP: = P^n * A_j * ... * A_jn = P * evalWord A w
-  -- The sector trace can be computed using the left-sector tensor, even for the empty word.
-  have htrace_sector :
-      (P k * evalWord A (List.ofFn σ)).trace =
-        (P k * evalWord (leftSectorTensor (P k) A) (List.ofFn σ)).trace := by
-    congr 1
-    exact
-      (left_mul_evalWord_leftSectorTensor_of_commutes (P k) A (hPproj k).2 (hComm k) _).symm
-  rw [htrace_sector]
-  -- leftSectorTensor (P k) A = fun i => P k * A i by definition
-  change (P k * evalWord (fun i => P k * A i) (List.ofFn σ)).trace =
-      ((blocks k).evalWord (List.ofFn σ)).trace
-  rw [← hMPVblocks k N σ, mpv, coeff]
+  exact (hSectorTrace k N σ).symm
 
 end CommutingProjectionDecomposition
 
@@ -613,7 +601,9 @@ theorem exists_blockDecomp_of_adjoint_fixed_projections
     (hFix : ∀ k : Fin m, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P k) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor d (dim k)),
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) := by
+      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      (∀ k (N : ℕ) (σ : Fin N → Fin d),
+        mpv (blocks k) σ = (P k * evalWord A (List.ofFn σ)).trace) := by
   have hComm : ∀ k : Fin m, ∀ i : Fin d, P k * A i = A i * P k := by
     intro k i
     exact commutes_letters_of_adjoint_fixed_projection
