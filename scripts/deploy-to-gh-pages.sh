@@ -34,15 +34,12 @@ mkdir -p "$WORK_DIR/site/blueprint"
 cp -r "$REPO_ROOT/blueprint/web/"* "$WORK_DIR/site/blueprint/"
 cp "$REPO_ROOT/blueprint/print/print.pdf" "$WORK_DIR/site/blueprint.pdf"
 
-# Update homepage (clean first to remove stale files)
+# Update homepage (remove all homepage files first, then copy fresh)
 echo "==> Updating homepage..."
-rm -rf "$WORK_DIR/site/_layouts" "$WORK_DIR/site/assets"
-cp "$REPO_ROOT/home_page/_config.yml" "$WORK_DIR/site/"
-cp "$REPO_ROOT/home_page/index.md" "$WORK_DIR/site/"
-cp "$REPO_ROOT/home_page/404.html" "$WORK_DIR/site/" 2>/dev/null || true
-cp "$REPO_ROOT/home_page/Gemfile" "$WORK_DIR/site/" 2>/dev/null || true
-cp -r "$REPO_ROOT/home_page/assets" "$WORK_DIR/site/" 2>/dev/null || true
-cp -r "$REPO_ROOT/home_page/_layouts" "$WORK_DIR/site/" 2>/dev/null || true
+rm -rf "$WORK_DIR/site/_layouts" "$WORK_DIR/site/assets" \
+       "$WORK_DIR/site/_config.yml" "$WORK_DIR/site/index.md" \
+       "$WORK_DIR/site/404.html" "$WORK_DIR/site/Gemfile"
+cp -r "$REPO_ROOT/home_page/"* "$WORK_DIR/site/"
 
 # Update API docs (only with --with-docs)
 if [ "$WITH_DOCS" = true ]; then
