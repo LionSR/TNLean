@@ -1045,6 +1045,9 @@ The following results separate the zero blocks from the
 	Then there exist left-canonical blocks $(C_k)_{k=1}^m$
 	with unit weights such that $A$ generates the same MPV family
 	as $\bigoplus_{k=1}^m C_k$.
+	Moreover, each sector satisfies the per-sector trace relation
+	$\operatorname{mpv}(C_k, \sigma) = \operatorname{tr}(P_k \cdot A^{i_1} \cdots A^{i_N})$
+	for every word $\sigma = (i_1, \dots, i_N)$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1067,7 +1070,8 @@ The following results separate the zero blocks from the
 	that are fixed by the adjoint transfer map:
 	$\E_A^\dagger(P_k) = P_k$ for every $k$.
 	Then the same block decomposition conclusion holds as in
-	Theorem~\ref{thm:blockdecomp_commuting_projs}.
+	Theorem~\ref{thm:blockdecomp_commuting_projs}, including the
+	per-sector trace relation.
 \end{theorem}
 
 \begin{proof}\leanok
