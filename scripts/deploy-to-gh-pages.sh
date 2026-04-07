@@ -32,7 +32,7 @@ echo "==> Updating blueprint..."
 rm -rf "$WORK_DIR/site/blueprint"
 mkdir -p "$WORK_DIR/site/blueprint"
 cp -r "$REPO_ROOT/blueprint/web/"* "$WORK_DIR/site/blueprint/"
-cp "$REPO_ROOT/blueprint/print/print.pdf" "$WORK_DIR/site/blueprint.pdf"
+cp "$REPO_ROOT/blueprint/print/print.pdf" "$WORK_DIR/site/blueprint.pdf" 2>/dev/null || true
 
 # Update homepage (remove all homepage files first, then copy fresh)
 echo "==> Updating homepage..."
