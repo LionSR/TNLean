@@ -268,4 +268,105 @@ theorem equalCase_zgauge_pipeline
 
 end ZGaugeAssembly
 
+/-! ## Theorem 3.8 — Equal case assembly (arXiv:1708.00029)
+
+The equal-case Fundamental Theorem of MPS in irreducible form composes:
+
+1. **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): block matching.
+2. **Z-gauge pipeline** (`equalCase_zgauge_pipeline`): Newton–Girard + Z-gauge diagonal.
+
+**Conditional on #81**: The `PeriodicOverlapHypothesis` and per-block weight power
+equality hypotheses will be discharged once the periodic overlap dichotomy (Proposition
+3.3) and coefficient extraction infrastructure are formalized. The Z-gauge construction
+itself is fully proved.
+-/
+
+section EqualCase
+
+variable {D₁ D₂ : ℕ}
+
+/-- **Theorem 3.8, Step 1: Block matching.**
+
+If two tensors in irreducible form with non-repeating blocks satisfy the periodic overlap
+dichotomy, their bases of periodic tensors match: equal block counts, a bijection, and
+per-block `HetRepeatedBlocks` equivalence.
+
+Convenience wrapper around `fundamentalTheorem_periodic_proportional` that extracts block
+families from `IsIrreducibleForm`.
+
+**Conditional on #81**: The `PeriodicOverlapHypothesis` parameter will be discharged once
+the periodic overlap dichotomy (Proposition 3.3) is formalized. -/
+theorem fundamentalTheorem_periodic_equalCase_matching
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
+    (hNonRepA : ∀ j₁ j₂ : Fin hA.r, j₁ ≠ j₂ →
+      ¬ HetRepeatedBlocks (hA.blocks j₁) (hA.blocks j₂))
+    (hNonRepB : ∀ k₁ k₂ : Fin hB.r, k₁ ≠ k₂ →
+      ¬ HetRepeatedBlocks (hB.blocks k₁) (hB.blocks k₂))
+    (hOverlap : PeriodicOverlapHypothesis hA.blocks hB.blocks) :
+    PeriodicBlockMatchingWitness (d := d) hA.blocks hB.blocks :=
+  fundamentalTheorem_periodic_proportional hA.blocks hB.blocks
+    hNonRepA hNonRepB hOverlap
+
+/-- **Theorem 3.8: Periodic FT, equal case (arXiv:1708.00029).**
+
+If two MPS tensors in irreducible form with non-repeating blocks satisfy the periodic
+overlap dichotomy and per-block weight power equality, then:
+
+1. **Block matching**: equal block counts, a bijection, and per-block `HetRepeatedBlocks`.
+2. **Per-block Z-gauge**: for each matched pair with period `m_j`, there exists a diagonal
+   `Z_j` with `Z_j^{m_j} = 1` and `Z_j * diag(μB_{perm j}) = diag(μA_j)`.
+3. **Weight multiset equality**: `μA_j` and `μB_{perm j}` determine the same multiset.
+
+This composes Theorem 3.4 with the Z-gauge pipeline from PR #94.
+
+**Conditional on #81**: The `PeriodicOverlapHypothesis` and `hPowEq` hypotheses will be
+discharged once the periodic overlap dichotomy and coefficient extraction infrastructure
+are formalized. The Z-gauge construction itself (`equalCase_zgauge_pipeline`) is fully
+proved. -/
+theorem fundamentalTheorem_periodic_equalCase
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
+    (hNonRepA : ∀ j₁ j₂ : Fin hA.r, j₁ ≠ j₂ →
+      ¬ HetRepeatedBlocks (hA.blocks j₁) (hA.blocks j₂))
+    (hNonRepB : ∀ k₁ k₂ : Fin hB.r, k₁ ≠ k₂ →
+      ¬ HetRepeatedBlocks (hB.blocks k₁) (hB.blocks k₂))
+    (hOverlap : PeriodicOverlapHypothesis hA.blocks hB.blocks)
+    (hPowEq : ∀ (perm : Fin hA.r ≃ Fin hB.r),
+      (∀ j, HetRepeatedBlocks (hA.blocks j) (hB.blocks (perm j))) →
+      ∀ j N, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N)
+    (hμB_ne : ∀ k, hB.μ k ≠ 0) :
+    -- Block matching:
+    ∃ (_ : hA.r = hB.r) (perm : Fin hA.r ≃ Fin hB.r),
+      -- Per-block HetRepeatedBlocks:
+      (∀ j, HetRepeatedBlocks (hA.blocks j) (hB.blocks (perm j))) ∧
+      -- Per-block Z-gauge + weight multiset equality:
+      (∀ j, ∃ Z : Matrix (Fin 1) (Fin 1) ℂ,
+        Z ^ (hA.period j) = 1 ∧
+        Z * Matrix.diagonal (fun _ : Fin 1 => hB.μ (perm j)) =
+          Matrix.diagonal (fun _ : Fin 1 => hA.μ j) ∧
+        ({hA.μ j} : Multiset ℂ) = {hB.μ (perm j)}) := by
+  -- Step 1: Block matching via Theorem 3.4.
+  obtain ⟨hrAB, perm, hRep⟩ :=
+    fundamentalTheorem_periodic_equalCase_matching A B hA hB hNonRepA hNonRepB hOverlap
+  refine ⟨hrAB, perm, hRep, fun j => ?_⟩
+  -- Step 2: Per-block weight power equality from hypothesis.
+  have hPowEqJ : ∀ N : ℕ, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N :=
+    hPowEq perm hRep j
+  -- Step 3: Z-gauge construction from matched weights.
+  have hPow_period : (hA.μ j) ^ (hA.period j) = (hB.μ (perm j)) ^ (hA.period j) :=
+    hPowEqJ (hA.period j) (hA.periodic j).period_pos
+  obtain ⟨Z, hZpow, hZmul, hMultiset⟩ :=
+    equalCase_zgauge_pipeline (hA.period j)
+      (fun _ : Fin 1 => hA.μ j) (fun _ : Fin 1 => hB.μ (perm j))
+      (fun _ => hμB_ne (perm j))
+      (fun _ => hPow_period)
+      (fun k hk => by simp [hPowEqJ k hk])
+  refine ⟨Z, hZpow, hZmul, ?_⟩
+  -- Convert Finset.univ.val.map to multiset singleton equality.
+  simp only [Finset.univ_unique] at hMultiset
+  exact hMultiset
+
+end EqualCase
+
 end MPSTensor
